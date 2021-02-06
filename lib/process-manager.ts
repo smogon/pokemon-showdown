@@ -560,7 +560,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 		process.process.removeAllListeners('disconnect');
 		process.process.kill();
 		const idx = this.processes.indexOf(process);
-		if (idx > 0) {
+		if (idx >= 0) {
 			this.processes.splice(idx, 1);
 		}
 	}
