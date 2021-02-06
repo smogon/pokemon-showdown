@@ -553,15 +553,16 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 				response => process.send!(`${taskId}\n${JSON.stringify(response)}`)
 			);
 		});
-		process.on('disconnect', () => {
-			process.exit();
-		});
+		process.on('disconnect', () => process.exit());
 	}
 	destroyProcess(process: QueryProcessWrapper<T, U>) {
 		process.destroy();
 		process.process.removeAllListeners('disconnect');
 		process.process.kill();
-		this.processes.splice(this.processes.indexOf(process), 1);
+		const idx = this.processes.indexOf(process);
+		if (idx > 0) {
+			this.processes.splice(idx, 1);
+		}
 	}
 }
 
