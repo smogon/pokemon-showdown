@@ -549,6 +549,16 @@ describe('Modlog conversion script', () => {
 				}
 			);
 		});
+
+		it('should correctly handle trivia', () => {
+			assert.deepEqual(
+				converter.parseModlog(`[2020-09-19T23:25:24.908Z] (trivia) TRIVIAGAME: by snowjy: User one for my baby won the game of Timer mode trivia under the Sub-Category 2 category with no score cap, with 69 points and 19 correct answers Second place: Mystiphox (45 points), third place: Mukund (41 points)`),
+				{
+					action: 'TRIVIAGAME', roomID: 'trivia', isGlobal: false, loggedBy: 'snowjy', time: 1600557924908,
+					alts: [], autoconfirmedID: null, ip: null, note: 'User one for my baby won the game of Timer mode trivia under the Sub-Category 2 category with no score cap, with 69 points and 19 correct answers Second place: Mystiphox (45 points), third place: Mukund (41 points)', userid: null, visualRoomID: '',
+				}
+			);
+		});
 	});
 
 	describe('ModlogEntry to text converter', () => {
