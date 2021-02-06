@@ -14,7 +14,7 @@ const PATH = "config/chat-plugins/net.json";
 const NUM_PROCESSES = {
 	training: 1,
 	main: 1,
-}
+};
 const PM_TIMEOUT = 2 * 60 * 60 * 1000; // training can be _really_ slow
 const WHITELIST = ["mia"];
 
