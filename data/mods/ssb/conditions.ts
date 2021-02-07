@@ -2143,7 +2143,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: "Big Storm Coming Mod",
 		duration: 1,
 		onBasePower() {
-			return this.chainModify([1228, 4096]);
+			return this.chainModify([1229, 4096]);
 		},
 	},
 
