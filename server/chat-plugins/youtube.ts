@@ -333,9 +333,7 @@ export const Twitch = new class {
 					'Content-Type': 'application/json',
 					'Accept': "application/vnd.twitchtv.v5+json",
 				},
-				query: {
-					query: channel,
-				}
+				query: {query: channel},
 			});
 		} catch (e) {
 			throw new Chat.ErrorMessage(`Error retrieving twitch channel: ${e.message}`);
@@ -361,7 +359,7 @@ export const Twitch = new class {
 		buf += '</td></tr></table></div>';
 		return buf;
 	}
-}
+};
 
 export class GroupWatch extends Rooms.RoomGame {
 	url: string;
@@ -439,9 +437,9 @@ export class GroupWatch extends Rooms.RoomGame {
 export class TwitchStream extends Rooms.RoomGame {
 	started = false;
 	data: TwitchChannel;
-	constructor(room: Room, channelData: TwitchChannel) {
+	constructor(room: Room, data: TwitchChannel) {
 		super(room);
-		this.data = channelData;
+		this.data = data;
 	}
 	static async createStreamWatch(room: Room, channel: string) {
 		if ([...Rooms.rooms.values()].some(r => r.roomid.startsWith(`twitch-`))) {
@@ -747,9 +745,9 @@ export const commands: ChatCommands = {
 		async channel(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
 			if (!Config.twitchKey) return this.errorReply(`Twitch is not configured`);
-			const channelData = await Twitch.getChannel(target);
-			if (!channelData) return this.errorReply(`Channel not found`);
-			const html = Twitch.visualizeChannel(channelData);
+			const data = await Twitch.getChannel(target);
+			if (!data) return this.errorReply(`Channel not found`);
+			const html = Twitch.visualizeChannel(data);
 			this.runBroadcast();
 			return this.sendReplyBox(html);
 		},
