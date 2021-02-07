@@ -57,9 +57,6 @@ export const Friends = new class {
 	}
 	async visualizeList(userid: ID) {
 		const friends = await Chat.Friends.getFriends(userid);
-		if (!friends.length) {
-			return `<h3>Your friends:</h3> <h4>None.</h4>`;
-		}
 		const categorized: {[k: string]: string[]} = {
 			online: [],
 			idle: [],

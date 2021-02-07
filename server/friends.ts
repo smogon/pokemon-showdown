@@ -191,7 +191,7 @@ export class FriendsDatabase {
 const statements: {[k: string]: Database.Statement} = {};
 const transactions: {[k: string]: Database.Transaction} = {};
 
-class FriendsProcess implements ProcessManager.ProcessWrapper {
+export class FriendsProcess implements ProcessManager.ProcessWrapper {
 	filename: string;
 	process: ProcessManager.ChildProcess;
 	requests: Map<number, (...args: any) => any>;
@@ -199,6 +199,10 @@ class FriendsProcess implements ProcessManager.ProcessWrapper {
 		this.filename = filename;
 		this.process = child_process.fork(__filename, {env: {filename}});
 		this.requests = new Map();
+		this.listen();
+	}
+	listen() {
+		if (!PM.isParentProcess) return;
 		this.process.on('message', (message: string) => {
 			if (message.startsWith('THROW\n')) {
 				const error = new Error();
@@ -244,6 +248,7 @@ export class FriendsProcessManager extends ProcessManager.ProcessManager {
 		super(module);
 		this.processes = [];
 		this.listen();
+		ProcessManager.processManagers.push(this);
 	}
 	createProcess(file: string = DEFAULT_FILE) {
 		const process = new FriendsProcess(file);
