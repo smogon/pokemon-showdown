@@ -143,7 +143,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 				} else if (roomPermissions[`/${namespace}`]) {
 					// if it's for one command object
 					if (!auth.atLeast(user, roomPermissions[`/${namespace}`])) return false;
-					jurisdiction = target ? 'u' : 'a';
+					jurisdiction = 'u';
 					foundSpecificPermission = true;
 				}
 			}
