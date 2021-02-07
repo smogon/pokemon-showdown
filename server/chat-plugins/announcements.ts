@@ -179,6 +179,6 @@ process.nextTick(() => {
 // should handle restarts and also hotpatches
 for (const room of Rooms.rooms.values()) {
 	if (room.settings.minorActivity?.activityid === 'announcement') {
-		room.setMinorActivity(new Announcement(room, room.settings.minorActivity));
+		room.setMinorActivity(new Announcement(room, room.settings.minorActivity), true);
 	}
 }
