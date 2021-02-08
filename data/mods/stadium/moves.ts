@@ -40,6 +40,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
 	},
+	haze: {
+		haze: {
+		inherit: true,
+		onHit(target, source) {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+				if (pokemon.status !== 'tox') {
+					//This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
+					pokemon.cureStatus();
+					pokemon.recalculateStats();
+				}
+				if (pokemon.status === 'tox') {
+					pokemon.setStatus('psn');
+				}
+				for (const id of Object.keys(pokemon.volatiles)) {
+					if (id === 'residualdmg') {
+						pokemon.volatiles[id].counter = 0;
+					} else {
+						pokemon.removeVolatile(id);
+						this.add('-end', pokemon, id);
+					}
+				}
+			}
+		},
+		target: "self",
+	},
 	highjumpkick: {
 		inherit: true,
 		desc: "If this attack misses the target, the user takes 1 HP of damage.",
