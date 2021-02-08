@@ -1211,7 +1211,7 @@ export const PM = new ProcessManager.StreamProcessManager(module,
 		if (message.startsWith(`SLOW\n`)) {
 			Monitor.slow(message.slice(5));
 		}
-	},
+	}
 );
 
 if (!PM.isParentProcess) {
