@@ -46,24 +46,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
-				if (pokemon.status !== 'tox') {
-					// This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
-					pokemon.cureStatus();
-					target.recalculateStats!();
+				// This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
+				pokemon.cureStatus();
+				target.recalculateStats!();
 				}
-				if (pokemon.status === 'tox') {
-					pokemon.setStatus('psn');
-				}
-				for (const id of Object.keys(pokemon.volatiles)) {
-					if (id === 'residualdmg') {
-						pokemon.volatiles[id].counter = 0;
-					} else {
-						pokemon.removeVolatile(id);
-						this.add('-end', pokemon, id);
-					}
-				}
-			}
-		},
+			},
 		target: "self",
 	},
 	highjumpkick: {
