@@ -117,6 +117,7 @@ interface TriviaData {
 	altLeaderboard?: TriviaLeaderboard;
 	ladder?: TriviaLadder;
 	history?: TriviaGame[];
+	moveEventQuestions?: boolean;
 }
 
 interface TopPlayer {
@@ -706,7 +707,7 @@ export class Trivia extends Rooms.RoomGame {
 		this.setTallyTimeout();
 
 		// Move question categories if needed
-		if (question.category === MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY) {
+		if (triviaData.moveEventQuestions && question.category === MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY) {
 			if (!triviaData.questions![MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY]) {
 				triviaData.questions![MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY] = [];
 			}
@@ -2128,6 +2129,41 @@ const triviaCommands: ChatCommands = {
 		`/trivia casesensitivesearch [type], [query] - Like /trivia search, but is case sensitive (capital letters matter). Requires: + % @ * &`,
 	],
 
+	moveusedevent(target, room, user) {
+		room = this.requireRoom('questionworkshop' as RoomID);
+		const fromCatName = ALL_CATEGORIES[MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY];
+		const toCatName = ALL_CATEGORIES[MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY];
+		if (target) {
+			this.checkCan('editroom', null, room);
+
+			if (this.meansYes(target)) {
+				if (triviaData.moveEventQuestions) throw new Chat.ErrorMessage(`Moving used event questions is already enabled.`);
+				triviaData.moveEventQuestions = true;
+			} else if (this.meansNo(target)) {
+				if (!triviaData.moveEventQuestions) throw new Chat.ErrorMessage(`Moving used event questions is already disabled.`);
+				triviaData.moveEventQuestions = false;
+			} else {
+				return this.parse(`/help trivia moveusedevent`);
+			}
+			writeTriviaData();
+
+			this.modlog(`TRIVIA MOVE USED EVENT QUESTIONS`, null, triviaData.moveEventQuestions ? 'ON' : 'OFF');
+			this.sendReply(
+				`Trivia questions in the ${fromCatName} category will ${triviaData.moveEventQuestions ? 'now' : 'no longer'} be moved to the ${toCatName} category after they are used.`
+			);
+		} else {
+			this.sendReply(
+				triviaData.moveEventQuestions ?
+					`Trivia questions in the ${fromCatName} category will be moved to the ${toCatName} category after use.` :
+					`Moving event questions after usage is currently disabled.`
+			);
+		}
+	},
+	moveusedeventhelp: [
+		`/trivia moveusedevent - Tells you whether or not moving used event questions to a different category is enabled.`,
+		`/trivia moveusedevent [on or off] - Toggles moving used event questions to a different category. Requires: # &`,
+	],
+
 	rank(target, room, user) {
 		room = this.requireRoom('trivia' as RoomID);
 
@@ -2361,6 +2397,8 @@ const triviaCommands: ChatCommands = {
 				`<li><code>/trivia qs</code> - View the distribution of questions in the question database.</li>` +
 				`<li><code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # &</li>` +
 				`<li><code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # &</li>` +
+				`<li><code>/trivia moveusedevent<code> - Tells you whether or not moving used event questions to a different category is enabled.</li>` +
+				`<li><code>/trivia moveusedevent [on or off]</code> - Toggles moving used event questions to a different category. Requires: # &</li>` +
 			`</ul></details>` +
 			`<details><summary><strong>Informational commands</strong></summary><ul>` +
 				`<li><code>/trivia search [type], [query]</code> - Searches for questions based on their type and their query. Valid types: <code>submissions</code>, <code>subs</code>, <code>questions</code>, <code>qs</code>. Requires: + % @ # &</li>` +
