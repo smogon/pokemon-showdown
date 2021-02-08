@@ -49,8 +49,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
 				pokemon.cureStatus();
 				target.recalculateStats!();
-				}
-			},
+			}
+		},
 		target: "self",
 	},
 	highjumpkick: {
