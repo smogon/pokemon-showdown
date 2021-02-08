@@ -41,7 +41,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		// FIXME: onBeforeMove() {},
 	},
 	haze: {
-		haze: {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-clearallboost');
