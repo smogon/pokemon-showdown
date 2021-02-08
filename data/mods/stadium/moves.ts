@@ -48,8 +48,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.clearBoosts();
 				// This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
 				pokemon.cureStatus();
-				pokemon.removeVolatile(id);
-				this.add('-end', pokemon, id);
+				for (const id of Object.keys(pokemon.volatiles)) {
+					pokemon.removeVolatile(id);
+					this.add('-end', pokemon, id);
+				}
 				target.recalculateStats!();
 			}
 		},
