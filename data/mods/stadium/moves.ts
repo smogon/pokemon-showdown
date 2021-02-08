@@ -47,7 +47,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
 				if (pokemon.status !== 'tox') {
-					//This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
+					// This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
 					pokemon.cureStatus();
 					pokemon.recalculateStats();
 				}
