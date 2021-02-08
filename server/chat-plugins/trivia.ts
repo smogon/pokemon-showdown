@@ -2039,6 +2039,46 @@ const triviaCommands: ChatCommands = {
 		`/trivia move [category] | [question] - Change the category of question in the trivia database. Requires: % @ # &`,
 	],
 
+	migrate(target, room, user) {
+		room = this.requireRoom('questionworkshop' as RoomID);
+		this.checkCan('editroom', null, room);
+
+		const [sourceCategory, destinationCategory] = target.split(',').map(toID);
+
+		for (const category of [sourceCategory, destinationCategory]) {
+			if (category in MAIN_CATEGORIES) throw new Chat.ErrorMessage(`Main categories cannot be used with /trivia migrate`);
+			if (!(category in ALL_CATEGORIES)) throw new Chat.ErrorMessage(`"${category}" is not a valid category`);
+		}
+
+		const sourceCategoryName = ALL_CATEGORIES[sourceCategory];
+		const destinationCategoryName = ALL_CATEGORIES[destinationCategory];
+
+		if (!triviaData.questions![sourceCategory]?.length) {
+			throw new Chat.ErrorMessage(`There are no questions in the ${sourceCategoryName} category.`);
+		}
+		if (!triviaData.questions![destinationCategory]) triviaData.questions![destinationCategory] = [];
+
+		const command = `/trivia migrate ${sourceCategory}, ${destinationCategory}`;
+		if (user.lastCommand !== command) {
+			this.sendReply(`Are you SURE that you want to PERMANENTLY move all questions in the category ${sourceCategoryName} to ${destinationCategoryName}?`);
+			this.sendReply(`This cannot be undone.`);
+			this.sendReply(`Type the command again to confirm.`);
+
+			user.lastCommand = command;
+			return;
+		}
+
+		triviaData.questions![destinationCategory] = triviaData.questions![destinationCategory]
+			.concat(triviaData.questions![sourceCategory]);
+		triviaData.questions![sourceCategory] = [];
+
+		this.modlog(`TRIVIAQUESTION MIGRATE`, null, `${sourceCategoryName} to ${destinationCategoryName}`);
+		this.privateModAction(`${user.name} migrated all questions in the category ${sourceCategoryName} to ${destinationCategoryName}.`);
+	},
+	migratehelp: [
+		`/trivia migrate [source category], [destination category] — Moves all questions in a category to another category. Requires: # &`,
+	],
+
 	qs(target, room, user) {
 		room = this.requireRoom('questionworkshop' as RoomID);
 
@@ -2417,6 +2457,7 @@ const triviaCommands: ChatCommands = {
 				`<li><code>/trivia add [category] | [question] | [answer1], [answer2], ... [answern]</code> - Adds question(s) to the question database. Requires: % @ # &</li>` +
 				`<li><code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # &</li>` +
 				`<li><code>/trivia move [category] | [question]</code> - Change the category of question in the trivia database. Requires: % @ # &</li>` +
+				`<li><code>/trivia migrate [source category], [destination category]</code> — Moves all questions in a category to another category. Requires: # &</li>` +
 				`<li><code>/trivia qs</code> - View the distribution of questions in the question database.</li>` +
 				`<li><code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # &</li>` +
 				`<li><code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # &</li>` +
