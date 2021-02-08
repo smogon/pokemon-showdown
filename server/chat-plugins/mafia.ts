@@ -3600,7 +3600,7 @@ export const commands: ChatCommands = {
 			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
 			if (!Mafia.isGameBanned(room, targetUser) && cmd === 'ungameban') {
 				return this.errorReply(`User '${this.targetUsername}' isn't banned from playing mafia games.`);
-			} else if (Punishments.getRoomPunishType(room, this.targetUsername) !== 'HOSTBAN' && cmd === 'unhostban') {
+			} else if (!Mafia.isHostBanned(room, targetUser) && cmd === 'unhostban') {
 				return this.errorReply(`User '${this.targetUsername}' isn't banned from hosting mafia games.`);
 			}
 
