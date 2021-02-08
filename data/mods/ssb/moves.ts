@@ -5288,7 +5288,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Heavy Hailstorm or Hail.",
 		shortDesc: "For 5 turns, damage to allies is halved. Hail-like weather only.",
 		onTryHitSide() {
-			if (!this.field.isWeather(['heavyhailstorm', 'hail'])) return false;
+			if (!this.field.isWeather(['winterhail', 'heavyhailstorm', 'hail'])) return false;
 		},
 	},
 	blizzard: {
@@ -5296,7 +5296,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Has a 10% chance to freeze the target. If the weather is Heavy Hailstorm or Hail, this move does not check accuracy.",
 		shortDesc: "10% freeze foe(s). Can't miss in Hail-like weather.",
 		onModifyMove(move) {
-			if (this.field.isWeather(['heavyhailstorm', 'hail'])) move.accuracy = true;
+			if (this.field.isWeather(['winterhail', 'heavyhailstorm', 'hail'])) move.accuracy = true;
 		},
 	},
 	dig: {
@@ -5304,7 +5304,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (['sandstorm', 'heavyhailstorm', 'hail'].includes(type)) return false;
+				if (['sandstorm', 'winterhail', 'heavyhailstorm', 'hail'].includes(type)) return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['earthquake', 'magnitude'].includes(move.id)) {
@@ -5324,7 +5324,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (['sandstorm', 'heavyhailstorm', 'hail'].includes(type)) return false;
+				if (['sandstorm', 'winterhail', 'heavyhailstorm', 'hail'].includes(type)) return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['surf', 'whirlpool'].includes(move.id)) {
@@ -5387,7 +5387,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Heavy Hailstorm, Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
 		onBasePower(basePower, pokemon, target) {
-			const weathers = ['raindance', 'primordialsea', 'sandstorm', 'heavyhailstorm', 'hail'];
+			const weathers = ['raindance', 'primordialsea', 'sandstorm', 'winterhail', 'heavyhailstorm', 'hail'];
 			if (weathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -5398,7 +5398,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Heavy Hailstorm, Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
 		onBasePower(basePower, pokemon, target) {
-			const weathers = ['raindance', 'primordialsea', 'sandstorm', 'heavyhailstorm', 'hail'];
+			const weathers = ['raindance', 'primordialsea', 'sandstorm', 'winterhail', 'heavyhailstorm', 'hail'];
 			if (weathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);

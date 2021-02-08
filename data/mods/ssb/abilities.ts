@@ -116,7 +116,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
 				const boostTotal = Object.values(pokemon.boosts).reduce((num, add) => num + add);
-				if (boostTotal !== 0) successes++;
+				if (boostTotal !== 0 || pokemon.positiveBoosts()) successes++;
 				pokemon.clearBoosts();
 				if (pokemon.removeVolatile('substitute')) successes++;
 			}
