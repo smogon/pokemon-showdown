@@ -49,7 +49,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.status !== 'tox') {
 					// This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
 					pokemon.cureStatus();
-					target.recalculateStats();
+					target.recalculateStats!();
 				}
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
