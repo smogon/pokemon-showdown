@@ -860,7 +860,7 @@ export class Trivia extends Rooms.RoomGame {
 	getPrizes() {
 		// Reward players more in longer infinite games
 		const multiplier = this.game.length === 'infinite' ? Math.floor(this.questionNumber / 25) || 1 : 1;
-		return (LENGTHS[this.game.length]?.prizes || [5, 3, 2]).map(prize => prize * multiplier);
+		return (LENGTHS[this.game.length]?.prizes || [5, 3, 1]).map(prize => prize * multiplier);
 	}
 
 	getTopPlayers(options: {max: number | null, requirePoints?: boolean} = {max: null, requirePoints: true}): TopPlayer[] {
