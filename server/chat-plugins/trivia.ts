@@ -850,6 +850,7 @@ export class Trivia extends Rooms.RoomGame {
 		});
 
 		if (!triviaData.history) triviaData.history = [];
+		if (typeof this.game.length === 'number') this.game.length = `${this.game.length} questions`;
 		triviaData.history.push(this.game);
 		if (triviaData.history.length > 10) triviaData.history.shift();
 
