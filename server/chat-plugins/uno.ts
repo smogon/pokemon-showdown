@@ -246,10 +246,11 @@ export class UNO extends Rooms.RoomGame {
 				this.sendToRoom(`|raw|${Utils.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
 		}
-		if (this.awaitUno === userid) this.awaitUno = null; 
+		if (this.awaitUno === userid) this.awaitUno = null;
 		if (!this.topCard) {
 			throw new Chat.ErrorMessage(`Unable to disqualify ${name}.`);
 		}
+
 		// put that player's cards into the discard pile to prevent cards from being permanently lost
 		this.discards.push(...this.playerTable[userid].hand);
 
