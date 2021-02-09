@@ -7,7 +7,6 @@
  * @license MIT
  */
 
-import {crashlogger} from '../lib/crashlogger';
 import {TeamValidator} from '../sim/team-validator';
 
 export class TeamValidatorAsync {
@@ -50,7 +49,7 @@ export const PM = new QueryProcessManager<{
 	try {
 		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, options);
 	} catch (err) {
-		crashlogger(err, 'A team validation', {
+		Monitor.crashlog(err, 'A team validation', {
 			formatid,
 			team,
 		});

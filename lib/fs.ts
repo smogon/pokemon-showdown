@@ -505,5 +505,5 @@ function getFs(path: string) {
 }
 
 export const FS = Object.assign(getFs, {
-	FileReadStream,
+	FileReadStream, FSPath,
 });

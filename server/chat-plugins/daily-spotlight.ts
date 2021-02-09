@@ -1,10 +1,14 @@
-import {FS} from '../../lib/fs';
+import {FS, Utils} from '../../lib';
 
 const DAY = 24 * 60 * 60 * 1000;
 const SPOTLIGHT_FILE = 'config/chat-plugins/spotlights.json';
 const NUMBER_REGEX = /^\s*[0-9]+\s*$/;
 
-let spotlights: {[k: string]: {[k: string]: {image?: string, description: string}[]}} = {};
+/** legacy - string = just url, arr is [url, width, height] */
+type StoredImage = string | [string, number, number];
+
+export let spotlights: {[k: string]: {[k: string]: {image?: StoredImage, description: string}[]}} = {};
+
 try {
 	spotlights = JSON.parse(FS(SPOTLIGHT_FILE).readIfExistsSync() || "{}");
 } catch (e) {
@@ -33,22 +37,27 @@ const midnight = new Date();
 midnight.setHours(24, 0, 0, 0);
 let timeout = setTimeout(nextDaily, midnight.valueOf() - Date.now());
 
-async function renderSpotlight(description: string, image?: string) {
+export async function renderSpotlight(roomid: RoomID, key: string, index: number) {
 	let imgHTML = '';
+	const {image, description} = spotlights[roomid][key][index];
 
 	if (image) {
-		try {
-			const [width, height] = await Chat.fitImage(image, 150, 300);
-			imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
-		} catch (err) {}
+		if (Array.isArray(image)) {
+			imgHTML = `<td><img src="${image[0]}" width="${image[1]}" height="${image[2]}" style="vertical-align:middle;"></td>`;
+		} else {
+			// legacy format
+			try {
+				const [width, height] = await Chat.fitImage(image, 150, 300);
+				imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
+				spotlights[roomid][key][index].image = [image, width, height];
+			} catch (err) {}
+		}
 	}
 
 	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true)}</td>${imgHTML}</tr></table>`;
 }
 
-export const destroy = () => {
-	clearTimeout(timeout);
-};
+export const destroy = () => clearTimeout(timeout);
 
 export const pages: PageTable = {
 	async spotlights(query, user, connection) {
@@ -61,10 +70,9 @@ export const pages: PageTable = {
 		} else {
 			for (const key in spotlights[room.roomid]) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-				for (const [i, spotlight] of spotlights[room.roomid][key].entries()) {
-					const html = await renderSpotlight(spotlight.description, spotlight.image);
+				for (const [i] of spotlights[room.roomid][key].entries()) {
+					const html = await renderSpotlight(room.roomid, key, i);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
-					// @ts-ignore room is definitely a proper room here.
 					if (!user.can('announce', null, room)) break;
 				}
 				buf += '</table>';
@@ -163,12 +171,12 @@ export const commands: ChatCommands = {
 
 		this.checkCan('announce', null, room);
 		if (!rest.length) return this.parse('/help daily');
-		let img;
+		let img, height, width;
 		if (rest[0].trim().startsWith('http://') || rest[0].trim().startsWith('https://')) {
 			[img, ...rest] = rest;
 			img = img.trim();
 			try {
-				await Chat.getImageDimensions(img);
+				[width, height] = await Chat.fitImage(img);
 			} catch (e) {
 				return this.errorReply(`Invalid image url: ${img}`);
 			}
@@ -177,6 +185,7 @@ export const commands: ChatCommands = {
 		if (Chat.stripFormatting(desc).length > 500) {
 			return this.errorReply("Descriptions can be at most 500 characters long.");
 		}
+		if (img) img = [img, width, height] as StoredImage;
 		const obj = {image: img, description: desc};
 		if (!spotlights[room.roomid][key]) spotlights[room.roomid][key] = [];
 		if (cmd === 'setdaily') {
@@ -214,9 +223,13 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 
 		const {image, description} = spotlights[room.roomid][key][0];
-		const html = await renderSpotlight(description, image);
+		const html = await renderSpotlight(room.roomid, key, 0);
 
 		this.sendReplyBox(html);
+		if (!this.broadcasting && user.can('ban', null, room, 'daily')) {
+			const code = Utils.escapeHTML(description).replace(/\n/g, '<br />');
+			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/setdaily ${key},${image},${code}</code></details>`);
+		}
 		room.update();
 	},
 	vsl: 'viewspotlights',

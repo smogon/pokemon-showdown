@@ -6,9 +6,7 @@
  * @author mia-pi-git
  */
 
-import {Net} from '../../lib/net';
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {Utils, FS, Net} from '../../lib';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
@@ -475,6 +473,14 @@ export const commands: ChatCommands = {
 				if (!YouTube.interval) return this.errorReply(`The YouTube plugin is not currently running an interval.`);
 				return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime * 60 * 1000)}.`);
 			}
+			if (this.meansNo(target)) {
+				if (!YouTube.interval) return this.errorReply(`The interval is not currently running`);
+				clearInterval(YouTube.interval);
+				delete YouTube.data.intervalTime;
+				YouTube.save();
+				this.privateModAction(`${user.name} turned off the YouTube interval`);
+				return this.modlog(`YOUTUBE INTERVAL`, null, 'OFF');
+			}
 			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 			if (isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
 			YouTube.runInterval(target);
@@ -559,6 +565,7 @@ export const commands: ChatCommands = {
 				`|c|~|/uhtml ${gameRoom.roomid},` +
 				`<button class="button" name="send" value="/j ${gameRoom.roomid}">Join the ongoing group watch!</button>`
 			);
+			room.send(`|tempnotify|youtube|New groupwatch - ${title}!`);
 			this.update();
 			user.joinRoom(gameRoom);
 		},
@@ -576,6 +583,15 @@ export const commands: ChatCommands = {
 			this.checkCan('mute', null, room);
 			const game = this.requireGame(GroupWatch);
 			game.start();
+		},
+		groupwatches() {
+			let buf = `<strong>Ongoing groupwatches:</strong><br />`;
+			for (const curRoom of Rooms.rooms.values()) {
+				if (!curRoom.getGame(GroupWatch)) continue;
+				buf += `<button class="button" name="send" value="/j ${curRoom.roomid}">${curRoom.title}</button>`;
+			}
+			this.runBroadcast();
+			this.sendReplyBox(buf);
 		},
 	},
 	youtubehelp: [

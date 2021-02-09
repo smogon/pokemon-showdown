@@ -111,7 +111,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	static hasPermission(
 		user: User,
 		permission: string,
-		target: User | EffectiveGroupSymbol | null,
+		target: User | EffectiveGroupSymbol | ID | null,
 		room?: BasicRoom | null,
 		cmd?: string
 	): boolean {
@@ -120,7 +120,15 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		const auth: Auth = room ? room.auth : Users.globalAuth;
 
 		const symbol = auth.getEffectiveSymbol(user);
-		let targetSymbol = (typeof target === 'string' || !target) ? target : auth.get(target);
+
+		let targetSymbol: EffectiveGroupSymbol | null;
+		if (!target) {
+			targetSymbol = null;
+		} else if (typeof target === 'string' && !toID(target)) { // empty ID -> target is a group symbol
+			targetSymbol = target as EffectiveGroupSymbol;
+		} else {
+			targetSymbol = auth.get(target as User | ID);
+		}
 		if (!targetSymbol || ['whitelist', 'trusted', 'autoconfirmed'].includes(targetSymbol)) {
 			targetSymbol = Auth.defaultSymbol();
 		}

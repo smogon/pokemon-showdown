@@ -228,6 +228,6 @@ export class NetRequest {
 	}
 }
 
-export function Net(uri: string) {
-	return new NetRequest(uri);
-}
+export const Net = Object.assign((path: string) => new NetRequest(path), {
+	NetRequest, NetStream,
+});

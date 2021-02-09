@@ -1,5 +1,4 @@
-import {Utils} from '../../lib/utils';
-import {FS} from '../../lib/fs';
+import {FS, Utils} from '../../lib';
 
 const STORAGE_PATH = 'config/chat-plugins/quotes.json';
 const MAX_QUOTES = 200;
@@ -104,7 +103,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`${user.name} removed quote indexed at ${index}: "${collapsedQuote}" (originally added by ${removed.userid}).`);
 		this.modlog(`REMOVEQUOTE`, null, collapsedQuote);
 		saveQuotes();
-		if (roomid) this.parse(`/join view-quotes-${targetRoom.roomid}`);
+		this.refreshPage(`quotes-${targetRoom.roomid}`);
 	},
 	removequotehelp: [`/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # &`],
 

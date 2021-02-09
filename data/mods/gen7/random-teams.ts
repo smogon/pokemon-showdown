@@ -2,7 +2,7 @@
 
 import {RandomTeams, TeamData} from '../../random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import {Utils} from '../../../lib/utils';
+import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
 export class RandomGen7Teams extends RandomTeams {

@@ -1,7 +1,7 @@
 
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
@@ -1437,7 +1437,7 @@ const commands: ChatCommands = {
 				return;
 			}
 			const result = await TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.battleSettings.team);
-			if (result.charAt(0) === '1') {
+			if (result.startsWith('1')) {
 				connection.popup("Your team is valid for this tournament.");
 			} else {
 				const formatName = Dex.getFormat(tournament.baseFormat).name;

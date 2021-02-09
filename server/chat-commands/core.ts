@@ -14,7 +14,7 @@
  */
 
 /* eslint no-else-return: "error" */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 import type {UserSettings} from '../users';
 
 const avatarTable = new Set([
@@ -524,7 +524,9 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
-		this.parse(target);
+		// this is to ensure slow commands in pm are logged
+		// but also are not duplicated - a normal `return this.parse(...)` creates dupe messages
+		return Promise.resolve(this.parse(target)).then(() => {});
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
 
@@ -1063,7 +1065,7 @@ export const commands: ChatCommands = {
 			}
 		}
 	},
-	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Requires: \u2606 @ # &`],
+	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Can only be used after 100+ turns have passed. Requires: \u2606 @ # &`],
 
 	rejectdraw: 'rejecttie',
 	rejecttie(target, room, user) {
@@ -1474,7 +1476,7 @@ export const commands: ChatCommands = {
 
 		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team).then(result => {
 			const matchMessage = (originalFormat === format ? "" : this.tr`The format '${originalFormat.name}' was not found.`);
-			if (result.charAt(0) === '1') {
+			if (result.startsWith('1')) {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team is valid for ${format.name}.`}`);
 			} else {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team was rejected for the following reasons:`}\n\n- ${result.slice(1).replace(/\n/g, '\n- ')}`);

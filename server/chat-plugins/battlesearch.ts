@@ -1,10 +1,8 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
-import {QueryProcessManager, exec} from '../../lib/process-manager';
-import {Repl} from '../../lib/repl';
+import {FS, Utils, ProcessManager, Repl} from '../../lib';
+
 import {checkRipgrepAvailability} from '../config-loader';
 
 const BATTLESEARCH_PROCESS_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
@@ -48,7 +46,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		let output;
 		try {
-			output = await exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
+			output = await ProcessManager.exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
 		} catch (error) {
 			return results;
 		}
@@ -368,7 +366,7 @@ export const commands: ChatCommands = {
  * Process manager
  *********************************************************/
 
-export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async data => {
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
 	const {userids, turnLimit, month, tierid} = data;
 	try {
 		return await runBattleSearch(userids, month, tierid, turnLimit);
