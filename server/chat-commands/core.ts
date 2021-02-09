@@ -1673,7 +1673,7 @@ export const commands: ChatCommands = {
 			if (user.tempGroup !== Users.Auth.defaultSymbol()) {
 				this.sendReply(`${this.tr`DRIVER COMMANDS`}: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /modchat, /lock, /weeklock, /unlock, /announce`);
 				this.sendReply(`${this.tr`MODERATOR COMMANDS`}: /globalban, /unglobalban, /ip, /markshared, /unlockip`);
-				this.sendReply(`${this.tr`ADMIN COMMANDS`}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall, /ipsearch`);
+				this.sendReply(`${this.tr`ADMIN COMMANDS`}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /ipsearch`);
 			}
 			this.sendReply(this.tr`For an overview of room commands, use /roomhelp`);
 			this.sendReply(this.tr`For details of a specific command, use something like: /help data`);
