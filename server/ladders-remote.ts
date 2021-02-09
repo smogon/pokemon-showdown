@@ -11,7 +11,6 @@
  *
  * @license MIT
  */
-
 import {Utils} from '../lib';
 
 export class LadderStore {
