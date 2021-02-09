@@ -976,7 +976,7 @@ export class Pokemon {
 			if (this.trapped) data.trapped = true;
 		}
 
-		if (!lockedMove || lockedMove === 'struggle') {
+		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.canZMove(this);
