@@ -2067,6 +2067,7 @@ const triviaCommands: ChatCommands = {
 			user.lastCommand = command;
 			return;
 		}
+		user.lastCommand = '';
 
 		triviaData.questions![destinationCategory] = triviaData.questions![destinationCategory]
 			.concat(triviaData.questions![sourceCategory]);
