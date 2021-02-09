@@ -1110,27 +1110,6 @@ export const commands: ChatCommands = {
 	},
 	unglobalbanhelp: [`/unglobalban [username] - Unban a user. Requires: @ &`],
 
-	unbanall(target, room, user) {
-		this.checkCan('rangeban');
-		if (!target) {
-			user.lastCommand = '/unbanall';
-			this.errorReply("THIS WILL UNBAN AND UNLOCK ALL USERS.");
-			this.errorReply("To confirm, use: /unbanall confirm");
-			return;
-		}
-		if (user.lastCommand !== '/unbanall' || target !== 'confirm') {
-			return this.parse('/help unbanall');
-		}
-		user.lastCommand = '';
-		Punishments.userids.clear();
-		Punishments.ips.clear();
-		Punishments.savePunishments();
-
-		this.addGlobalModAction(`All bans and locks have been lifted by ${user.name}.`);
-		this.modlog('UNBANALL');
-	},
-	unbanallhelp: [`/unbanall - Unban all IP addresses. Requires: &`],
-
 	deroomvoiceall(target, room, user) {
 		room = this.requireRoom();
 		this.checkCan('editroom', null, room);
