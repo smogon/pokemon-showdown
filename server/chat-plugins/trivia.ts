@@ -744,7 +744,7 @@ export class Trivia extends Rooms.RoomGame {
 	sendQuestion(question: TriviaQuestion) {
 		broadcast(
 			this.room,
-			this.room.tr`Question${this.game.length === 'infinite' ? ` ${this.questionNumber}` : ''}: ${question.question}`,
+			this.room.tr`Question ${this.questionNumber}: ${question.question}`,
 			this.room.tr`Category: ${ALL_CATEGORIES[question.category]}`
 		);
 	}
