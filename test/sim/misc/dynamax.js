@@ -108,6 +108,7 @@ describe("Dynamax", function () {
 		]]);
 		battle.makeChoices();
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
+		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
 
 		battle = common.createBattle([[
 			{species: "Feebas", moves: ['splash']},
@@ -117,6 +118,7 @@ describe("Dynamax", function () {
 		battle.makeChoices();
 		battle.makeChoices('move 1', 'auto');
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
+		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
 	});
 
 	it(`should not allow the user to select max moves with 0 base PP remaining`, function () {
