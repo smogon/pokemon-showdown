@@ -23,7 +23,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if ((move as any).igniteBoosted) return this.chainModify([0x1333, 0x1000]);
+			if ((move as any).igniteBoosted) return this.chainModify([4915, 4096]);
 		},
 		name: "Ignite",
 		rating: 4,
@@ -1143,7 +1143,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		},
 		onBasePowerPriority: 7,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.flags['bite']) return this.chainModify([0x0555, 0x1000]);
+			if (move.flags['bite']) return this.chainModify([1365, 4096]);
 		},
 		name: "Savage",
 		rating: 3.5,
@@ -1472,10 +1472,10 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				this.effectData.lastMove = move.id;
 			},
 			onModifyDamage(damage, source, target, move) {
-				const dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
+				const dmgMod = [4096, 4915, 5734, 6553, 7372, 8192];
 				const numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
 				if (['hail'].includes(source.effectiveWeather())) {
-					return this.chainModify([dmgMod[numConsecutive], 0x1000]);
+					return this.chainModify([dmgMod[numConsecutive], 4096]);
 				} else {
 					return damage * (1 + (this.effectData.numConsecutive / 10));
 				}
@@ -1501,7 +1501,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			if (this.field.isWeather('sandstorm') || this.field.isWeather('desertgales')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			}
 		},

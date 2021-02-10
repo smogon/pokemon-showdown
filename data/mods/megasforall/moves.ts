@@ -51,7 +51,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 						}
 					}
 					this.debug('electric terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -110,7 +110,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 						}
 					}
 					this.debug('psychic terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -161,7 +161,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 						}
 					}
 					this.debug('grassy terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -1198,7 +1198,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					}
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Aurora Veil weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -1279,7 +1279,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 						}
 					}
 					this.debug('acidic terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onModifyMovePriority: -5,

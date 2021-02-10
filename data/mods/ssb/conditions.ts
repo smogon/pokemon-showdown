@@ -2143,7 +2143,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: "Big Storm Coming Mod",
 		duration: 1,
 		onBasePower() {
-			return this.chainModify([0x4CC, 0x1000]);
+			return this.chainModify([1229, 4096]);
 		},
 	},
 
@@ -2250,7 +2250,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Aurora Veil weaken');
-					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}
@@ -2281,7 +2281,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Light Screen weaken');
-					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}
@@ -2344,7 +2344,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Reflect weaken');
-					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}

@@ -2,7 +2,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	aerilate: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.aerilateBoosted) return this.chainModify([0x14CD, 0x1000]);
+			if (move.aerilateBoosted) return this.chainModify([5325, 4096]);
 		},
 		rating: 4.5,
 	},
@@ -66,14 +66,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	pixilate: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.pixilateBoosted) return this.chainModify([0x14CD, 0x1000]);
+			if (move.pixilateBoosted) return this.chainModify([5325, 4096]);
 		},
 		rating: 4.5,
 	},
 	refrigerate: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.refrigerateBoosted) return this.chainModify([0x14CD, 0x1000]);
+			if (move.refrigerateBoosted) return this.chainModify([5325, 4096]);
 		},
 		rating: 4.5,
 	},
