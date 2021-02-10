@@ -36,7 +36,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 				this.debug('Desert Gales boost');
 				this.add('-message', `${move.name} was powered up by the desert gales!`);
-				return this.chainModify([0x1333, 0x1000]);
+				return this.chainModify([4915, 4096]);
 			}
 		},
 		onResidual() {

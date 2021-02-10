@@ -573,7 +573,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['sound']) {
 				this.debug('Old Manpa boost');
-				return this.chainModify([0x14CD, 0x1000]);
+				return this.chainModify([5325, 4096]);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -661,7 +661,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			// @ts-ignore
-			if (move.drakeskinBoosted) return this.chainModify([0x1333, 0x1000]);
+			if (move.drakeskinBoosted) return this.chainModify([4915, 4096]);
 		},
 		isNonstandard: "Custom",
 		gen: 8,
@@ -697,7 +697,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (this.field.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sands of Time boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			}
 		},
@@ -887,7 +887,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.refrigerateBoosted) return this.chainModify([0x1333, 0x1000]);
+			if (move.refrigerateBoosted) return this.chainModify([4915, 4096]);
 		},
 		onModifyMovePriority: -2,
 		onModifyMove(move, attacker) {
@@ -1138,7 +1138,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			// @ts-ignore
-			if (move.venomizeBoosted) return this.chainModify([0x1333, 0x1000]);
+			if (move.venomizeBoosted) return this.chainModify([4915, 4096]);
 		},
 		name: "Venomize",
 		isNonstandard: "Custom",
@@ -1348,7 +1348,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.type === 'Electric' && this.field.getWeather().id === 'raindance') {
-				return this.chainModify([0x1333, 0x1000]);
+				return this.chainModify([4915, 4096]);
 			}
 		},
 	},
@@ -2112,7 +2112,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.hasSheerForce) return this.chainModify([0x14CD, 0x1000]);
+			if (move.hasSheerForce) return this.chainModify([5325, 4096]);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Fire') {
