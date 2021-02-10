@@ -32,7 +32,6 @@ export interface MinorActivityData {
 	totalVotes?: number;
 	isQuiz?: boolean;
 	answers: string[] | {name: string, votes: number, correct?: boolean}[];
-	class?: MinorActivity;
 }
 
 // globally Rooms.MinorActivity

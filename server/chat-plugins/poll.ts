@@ -410,7 +410,7 @@ export const commands: ChatCommands = {
 			if (room.minorActivity) {
 				room.queueMinorActivity({
 					// @ts-ignore
-					question: params[0], answers: questions, multiPoll, supportHTML, activityid: 'poll', class: Poll,
+					question: params[0], answers: questions, multiPoll, supportHTML, activityid: 'poll',
 				});
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(room.tr`${user.name} queued a poll.`);
