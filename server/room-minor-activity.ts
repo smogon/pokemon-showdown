@@ -96,10 +96,10 @@ export abstract class MinorActivity {
 			});
 
 			if (!MinorActivityClass) {
-				// hacky fix to make poll queues work with timers
-				const Poll = pollData.class;
-				// @ts-ignore
-				if (pollData.activityid === 'poll') room.setMinorActivity(new Poll(room, pollData));
+				if (pollData.activityid === 'poll') {
+					const {Poll} = require('./chat-plugins/poll');
+					room.setMinorActivity(new Poll(room, pollData));
+				}
 			} else {
 				room.setMinorActivity(new MinorActivityClass(room, pollData));
 			}
