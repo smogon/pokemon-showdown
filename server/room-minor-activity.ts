@@ -95,7 +95,10 @@ export abstract class MinorActivity {
 			});
 
 			if (!MinorActivityClass) {
-				if (pollData.activityid === 'poll') throw new Error('No minorActivity class provided');
+				if (pollData.activityid === 'poll') {
+					const {Poll} = require('./chat-plugins/poll');
+					room.setMinorActivity(new Poll(room, pollData));
+				}
 			} else {
 				room.setMinorActivity(new MinorActivityClass(room, pollData));
 			}
