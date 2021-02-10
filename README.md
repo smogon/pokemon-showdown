@@ -87,7 +87,6 @@ Staff
 - Chris Monsanto [chaos] - Development, Sysadmin
 - Leonard Craft III - Research (game mechanics)
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
-- [The Immortal] - Development
 
 Contributors
 
