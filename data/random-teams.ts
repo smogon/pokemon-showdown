@@ -720,7 +720,7 @@ export class RandomTeams {
 					break;
 
 				// Bad after setup
-				case 'counter': case 'reversal':
+				case 'coaching': case 'counter': case 'reversal':
 					if (counter.setupType) rejected = true;
 					break;
 				case 'firstimpression': case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
@@ -732,9 +732,6 @@ export class RandomTeams {
 				case 'closecombat': case 'flashcannon': case 'pollenpuff':
 					if ((hasMove['substitute'] && !hasType['Fighting']) || hasMove['toxic'] && movePool.includes('substitute')) rejected = true;
 					if (moveid === 'closecombat' && (hasMove['highjumpkick'] || movePool.includes('highjumpkick')) && !counter.setupType) rejected = true;
-					break;
-				case 'coaching':
-					if (counter.setupType) rejected = true;
 					break;
 				case 'defog':
 					if (counter.setupType || hasMove['healbell'] || hasMove['toxicspikes'] || teamDetails.defog) rejected = true;
