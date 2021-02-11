@@ -55,7 +55,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.recalculateStats!();
 			}
 		},
-		target: "self",
 	},
 	highjumpkick: {
 		inherit: true,
