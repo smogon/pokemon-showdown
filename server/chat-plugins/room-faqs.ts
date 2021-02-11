@@ -44,11 +44,12 @@ export const commands: ChatCommands = {
 		text = text.replace(/^>/, '&gt;');
 
 		if (!roomFaqs[room.roomid]) roomFaqs[room.roomid] = {};
+		const exists = topic in roomFaqs[room.roomid];
 		roomFaqs[room.roomid][topic] = text;
 		saveRoomFaqs();
 		this.sendReplyBox(Chat.formatText(text, true));
-		this.privateModAction(`${user.name} added a FAQ for '${topic}'`);
-		this.modlog('RFAQ', null, `added '${topic}'`);
+		this.privateModAction(`${user.name} ${exists ? 'edited' : 'added'} an FAQ for '${topic}'`);
+		this.modlog('RFAQ', null, `${exists ? 'edited' : 'added'} '${topic}'`);
 	},
 	removefaq(target, room, user) {
 		target = target.trim();
