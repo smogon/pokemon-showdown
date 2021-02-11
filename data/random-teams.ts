@@ -752,7 +752,7 @@ export class RandomTeams {
 					if ((counter.setupType && !hasMove['wish'] && !isDoubles) || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (counter.Status < 2 && !hasAbility['Hunger Switch'] && !hasAbility['Speed Boost'] && !isDoubles) rejected = true;
 					if (movePool.includes('leechseed') || movePool.includes('toxic') && !hasMove['wish']) rejected = true;
-					if (isDoubles && (movePool.includes('bellydrum') || movePool.includes('fakeout') || movePool.includes('shellsmash') || movePool.includes('spore') || hasMove['tailwind'] || hasMove['waterspout'])) rejected = true;
+					if (isDoubles && (['bellydrum', 'fakeout', 'shellsmash', 'spore').some(m => movePool.includes(m)) || hasMove['tailwind'] || hasMove['waterspout'])) rejected = true;
 					break;
 				case 'rapidspin':
 					if (hasMove['curse'] || hasMove['nastyplot'] || hasMove['shellsmash'] || teamDetails.rapidSpin) rejected = true;
