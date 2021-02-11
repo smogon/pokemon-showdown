@@ -96,7 +96,7 @@ describe('Lightning Rod', function () {
 		]]);
 		rodCopied = battle.p1.active[1]; // Ditto
 		rodStarts = battle.p2.active[0]; // Manectric
-		battle.makeChoices('move zingzap 1, move sleeptalk', 'move sleeptalk, move thunderbolt 2');
+		battle.makeChoices('move zingzap 2, move sleeptalk', 'move sleeptalk, move thunderbolt 1');
 		assert.statStage(rodCopied, 'spa', 0);
 		assert.statStage(rodStarts, 'spa', 2);
 	});
