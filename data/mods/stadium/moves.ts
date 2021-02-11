@@ -40,6 +40,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
 	},
+	haze: {
+		inherit: true,
+		onHit(target, source) {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+				// This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
+				pokemon.cureStatus();
+				for (const id of Object.keys(pokemon.volatiles)) {
+					pokemon.removeVolatile(id);
+					this.add('-end', pokemon, id);
+				}
+				target.recalculateStats!();
+			}
+		},
+	},
 	highjumpkick: {
 		inherit: true,
 		desc: "If this attack misses the target, the user takes 1 HP of damage.",
