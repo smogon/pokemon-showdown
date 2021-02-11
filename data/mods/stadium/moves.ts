@@ -52,7 +52,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					pokemon.removeVolatile(id);
 					this.add('-end', pokemon, id);
 				}
-				target.recalculateStats!();
+				pokemon.recalculateStats!();
 			}
 		},
 	},
