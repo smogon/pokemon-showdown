@@ -3559,11 +3559,11 @@ export const commands: ChatCommands = {
 
 			const punishment = Punishments.getRoomPunishType(room, this.targetUsername);
 			if (punishment) {
-				if (punishment === `${this.cmd.toUpperCase()}`) {
+				if (punishment === `MAFIA${this.cmd.toUpperCase()}`) {
 					return this.errorReply(`User '${this.targetUsername}' is already ${this.cmd}ned in this room.`);
 				} else if (punishment === 'MAFIAGAMEBAN') {
 					return this.errorReply(`User '${this.targetUsername}' is already gamebanned in this room, which also means they can't host.`);
-				} else {
+				} else if (punishment === 'MAFIAHOSTBAN') {
 					user.sendTo(room, `User '${this.targetUsername}' is already hostbanned in this room, but they will now be gamebanned.`);
 					this.parse(`/mafia unhostban ${this.targetUsername}`);
 				}
@@ -3600,7 +3600,7 @@ export const commands: ChatCommands = {
 			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
 			if (!Mafia.isGameBanned(room, targetUser) && cmd === 'ungameban') {
 				return this.errorReply(`User '${this.targetUsername}' isn't banned from playing mafia games.`);
-			} else if (Punishments.getRoomPunishType(room, this.targetUsername) !== 'HOSTBAN' && cmd === 'unhostban') {
+			} else if (!Mafia.isHostBanned(room, targetUser) && cmd === 'unhostban') {
 				return this.errorReply(`User '${this.targetUsername}' isn't banned from hosting mafia games.`);
 			}
 
