@@ -257,6 +257,7 @@ export const commands: ChatCommands = {
 		create: 'new',
 		new(target, room, user, connection) {
 			room = this.requireRoom();
+			target = target.trim();
 			const text = this.filter(target);
 			if (target !== text) return this.errorReply("You are not allowed to use filtered words in hangmans.");
 			const params = text.split(',');
