@@ -726,20 +726,26 @@ export class RandomTeams {
 		case 'acrobatics': case 'junglehealing':
 			return {cull: !isDoubles && !counter.setupType};
 		case 'destinybond': case 'healbell':
+			// Destiny Bond: Special case for preventing Leftovers Sharpedo
 			return {cull: movePool.includes('protect') || movePool.includes('wish')};
 		case 'dualwingbeat': case 'fly': case 'storedpower':
 			return {cull: !hasType[move.type] && !counter.setupType && counter.Status};
 		case 'fireblast':
+			// Special case for Togekiss, which always wants Aura Sphere
 			return {cull: hasAbility['Serene Grace'] && (!hasMove['trick'] || counter.Status > 1)};
 		case 'firepunch':
+			// Special case for Darmanitan-Zen-Galar, which doesn't always want Fire Punch
 			return {cull: movePool.includes('bellydrum') || (hasMove['earthquake'] && movePool.includes('substitute'))};
 		case 'flamecharge': case 'sacredsword':
+			// Special cases for regular Silvally and Doublade, which don't want these without Swords Dance
 			const fewDamagingMoves = counter.damagingMoves.length < 3 && !counter.setupType;
 			const swordsDance = !hasType['Grass'] && movePool.includes('swordsdance');
 			return {cull: fewDamagingMoves || swordsDance};
 		case 'hypervoice':
+			// Special case for Heliolisk, which always wants Thunderbolt
 			return {cull: hasType['Electric'] && movePool.includes('thunderbolt')};
 		case 'payback': case 'psychocut':
+			// Special case for Type: Null and Malamar, which don't want these + RestTalk
 			return {cull: !counter.Status || hasRestTalk};
 		case 'rest':
 			const bulkySetup = !hasMove['sleeptalk'] && ['bulkup', 'calmmind', 'coil', 'curse'].some(m => movePool.includes(m));
@@ -789,6 +795,7 @@ export class RandomTeams {
 
 		// Bad after setup
 		case 'counter': case 'reversal':
+			// Special case for Alakazam, which doesn't want Counter + Nasty Plot
 			return {cull: !!counter.setupType};
 		case 'firstimpression': case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
 			return {cull: (counter.setupType && !isDoubles) || counter.speedsetup || hasMove['rest']};
@@ -812,6 +819,7 @@ export class RandomTeams {
 		case 'healingwish': case 'memento':
 			return {cull: counter.setupType || counter.recovery || hasMove['substitute'] || hasMove['uturn']};
 		case 'highjumpkick': case 'machpunch':
+			// Special case for Hitmonlee to mostly prevent non-Unburden Curse; 1% chance to fail
 			return {cull: hasMove['curse']};
 		case 'partingshot':
 			return {cull: counter.speedsetup || hasMove['bulkup'] || hasMove['uturn']};
@@ -867,13 +875,16 @@ export class RandomTeams {
 		case 'blazekick':
 			return {cull: counter.Special >= 1};
 		case 'firefang': case 'flamethrower':
+			// Fire Fang: Special case for Garchomp, which doesn't want Fire Fang w/o Swords Dance
 			const otherFireMoves = ['heatwave', 'overheat'].some(m => hasMove[m]);
 			return {cull: (hasMove['fireblast'] && counter.setupType !== 'Physical') || otherFireMoves};
 		case 'overheat':
 			return {cull: hasMove['flareblitz'] || (isDoubles && hasMove['calmmind'])};
-		case 'aquajet': case 'psychicfangs':
-			return {cull: hasMove['rapidspin'] || hasMove['taunt']};
+		case 'psychicfangs':
+			// Special case for Morpeko, which doesn't want 4 attacks Leftovers
+			return {cull: hasMove['rapidspin']};
 		case 'aquatail': case 'flipturn': case 'retaliate':
+			// Retaliate: Special case for Braviary to prevent Retaliate on non-Choice
 			return {cull: hasMove['aquajet'] || counter.Status};
 		case 'hydropump':
 			return {cull: hasMove['scald'] && (
@@ -881,17 +892,21 @@ export class RandomTeams {
 				(species.types.length > 1 && counter.stab < 3)
 			)};
 		case 'scald':
+			// Special case for Clawitzer
 			return {cull: hasMove['waterpulse']};
 		case 'thunderbolt':
+			// Special case for Goodra, which only wants one move to hit Water-types
 			return {cull: hasMove['powerwhip']};
 		case 'gigadrain':
 			return {cull: (!counter.setupType && hasMove['uturn']) || (hasType['Poison'] && !counter.Poison)};
 		case 'leafblade':
+			// Special case for Virizion to prevent Leaf Blade on Assault Vest sets
 			return {cull: (hasMove['leafstorm'] || movePool.includes('leafstorm')) && counter.setupType !== 'Physical'};
 		case 'leafstorm':
 			return {cull: (hasMove['gigadrain'] && counter.Status) || (isDoubles && hasMove['energyball'])};
 		case 'powerwhip':
-			return {cull: hasMove['leechlife'] || (!hasType['Grass'] && counter.Physical > 3 && movePool.includes('uturn'))};
+			// Special case for Centiskorch, which doesn't want Assault Vest
+			return {cull: hasMove['leechlife']};
 		case 'woodhammer':
 			return {cull: hasMove['hornleech'] && counter.Physical < 4};
 		case 'freezedry':
@@ -899,19 +914,25 @@ export class RandomTeams {
 			const preferThunderWave = movePool.includes('thunderwave') && hasType['Electric'];
 			return {cull: betterIceMove || preferThunderWave || movePool.includes('bodyslam')};
 		case 'bodypress':
+			// Partially a special case for Turtonator to make EQ=Smash, Press=Not Smash, never both
 			const eqShellSmashPossible = hasMove['earthquake'] && movePool.includes('shellsmash');
 			return {cull: eqShellSmashPossible || ['shellsmash', 'mirrorcoat', 'whirlwind'].some(m => hasMove[m])};
 		case 'circlethrow':
+			// Part of a special case for Throh to pick one specific Fighting move depending on its set
 			return {cull: hasMove['stormthrow'] && !hasMove['rest']};
 		case 'drainpunch':
 			return {cull: hasMove['closecombat'] || (!hasType['Fighting'] && movePool.includes('swordsdance'))};
 		case 'dynamicpunch': case 'thunderouskick':
+			// Dynamic Punch: Special case for Machamp to better split Guts and No Guard sets
 			return {cull: hasMove['closecombat'] || hasMove['facade']};
 		case 'focusblast':
+			// Special cases for Blastoise and Regice; Blastoise wants Shell Smash, and Regice wants Thunderbolt
 			return {cull: movePool.includes('shellsmash') || hasRestTalk};
 		case 'hammerarm':
+			// Special case for Kangaskhan, which always wants Sucker Punch
 			return {cull: hasMove['fakeout']};
 		case 'stormthrow':
+			// Part of a special case for Throh to pick one specific Fighting move depending on its set
 			return {cull: hasRestTalk};
 		case 'superpower':
 			return {
@@ -928,6 +949,7 @@ export class RandomTeams {
 			const subToxicPossible = hasMove['substitute'] && movePool.includes('toxic');
 			return {cull: movePoolCull || (isDoubles && doublesCull) || subToxicPossible || hasMove['bonemerang']};
 		case 'scorchingsands':
+			// Special cases for Ninetales and Palossand; prevents status redundancy
 			return {cull: hasMove['willowisp'] || hasMove['earthpower'] || (hasMove['toxic'] && movePool.includes('earthpower'))};
 		case 'airslash':
 			return {
@@ -937,12 +959,15 @@ export class RandomTeams {
 					(hasAbility['Simple'] && !!counter.recovery),
 			};
 		case 'bravebird':
+			// Special case for Mew, which only wants Brave Bird with Swords Dance
 			return {cull: hasMove['dragondance']};
 		case 'hurricane':
+			// Special case for Noctowl, which wants Air Slash if Nasty Plot instead
 			return {cull: hasAbility['Tinted Lens'] && counter.setupType && !isDoubles};
 		case 'futuresight':
 			return {cull: hasMove['psyshock'] || hasMove['trick'] || movePool.includes('teleport')};
 		case 'photongeyser':
+			// Special case for Necrozma-DM, which always wants Dragon Dance
 			return {cull: hasMove['morningsun']};
 		case 'psychic':
 			return {cull: hasMove['psyshock'] && (counter.setupType || isDoubles)};
@@ -959,6 +984,7 @@ export class RandomTeams {
 			const rockSlidePlusStatusPossible = counter.Status && movePool.includes('rockslide');
 			return {cull: gutsCullCondition || rockSlidePlusStatusPossible || hasMove['rockblast'] || hasMove['rockslide']};
 		case 'poltergeist':
+			// Special case for Dhelmise in Doubles, which doesn't want both
 			return {cull: hasMove['knockoff']};
 		case 'shadowball':
 			const cull = (
@@ -977,6 +1003,7 @@ export class RandomTeams {
 		case 'suckerpunch':
 			return {cull: hasMove['rest'] || counter.damagingMoves.length < 2 || (counter.Dark > 1 && !hasType['Dark'])};
 		case 'meteormash':
+			// Special case for Lucario, which always wants Extreme Speed
 			return {cull: movePool.includes('extremespeed')};
 		case 'dazzlinggleam':
 			return {cull: ['fleurcannon', 'moonblast', 'petaldance'].some(m => hasMove[m])};
@@ -986,14 +1013,17 @@ export class RandomTeams {
 			const toxicCullCondition = hasMove['toxic'] && !hasType['Normal'];
 			return {cull: hasMove['sludgebomb'] || hasMove['trick'] || movePool.includes('recover') || toxicCullCondition};
 		case 'haze':
+			// Special case for Corsola-Galar, which always wants Will-O-Wisp
 			return {cull: !teamDetails.stealthRock && (hasMove['stealthrock'] || movePool.includes('stealthrock'))};
 		case 'hypnosis':
+			// Special case for Xurkitree to properly split Blunder Policy and Choice item sets
 			return {cull: hasMove['voltswitch']};
 		case 'willowisp': case 'yawn':
 			return {cull: hasMove['thunderwave'] || hasMove['toxic']};
 		case 'painsplit': case 'recover': case 'synthesis':
 			return {cull: hasMove['rest'] || hasMove['wish'] || (move.id === 'synthesis' && hasMove['gigadrain'])};
 		case 'roost':
+			// Special case for Hawlucha, which doesn't want Roost + 3 attacks
 			return {cull: hasMove['throatchop'] || (hasMove['stoneedge'] && !hasType['Rock'])};
 		case 'reflect': case 'lightscreen':
 			return {cull: !!teamDetails.screens};
@@ -1003,6 +1033,7 @@ export class RandomTeams {
 			const calmMindCullCondition = !counter.recovery && movePool.includes('calmmind');
 			return {cull: hasMove['rest'] || moveBasedCull || doublesPowerWhip || calmMindCullCondition};
 		case 'helpinghand':
+			// Special case for Shuckle in Doubles, which doesn't want sets with no method to harm foes
 			return {cull: hasMove['acupressure']};
 		case 'wideguard':
 			return {cull: hasMove['protect']};
