@@ -227,10 +227,10 @@ export class RandomTeams {
 		return this.fastPop(list, index);
 	}
 
-	isBeneficialInSingles(move: Move) {
-		return [
+	skipExtraRejectionInSingles(move: Move) {
+		return (move.category !== 'Status' || !move.flags.heal) && ![
 			'facade', 'lightscreen', 'reflect', 'sleeptalk', 'spore', 'substitute', 'switcheroo', 'teleport', 'toxic', 'trick',
-		].includes(move.id) && (move.category !== 'Status' || !move.flags.heal);
+		].includes(move.id);
 	}
 
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
@@ -1502,7 +1502,7 @@ export class RandomTeams {
 					!rejected && !isSetup && !move.weather && !move.stallingMove && move.category === 'Status' ||
 					!hasType[move.type] ||
 					(isLowBP && !move.multihit && !hasAbility['Technician']) ||
-					(isDoubles || this.isBeneficialInSingles(move)) ||
+					(isDoubles || this.skipExtraRejectionInSingles(move)) ||
 					!counter.setupType || counter.setupType === 'Mixed' ||
 					(move.category !== counter.setupType && move.category !== 'Status') ||
 					(counter[counter.setupType] + counter.Status > 3 && !counter.hazards)
