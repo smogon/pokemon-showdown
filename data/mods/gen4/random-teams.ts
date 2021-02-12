@@ -709,9 +709,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		) {
 			item = 'Focus Sash';
 		} else if (counter.damagingMoves.length >= 4) {
-			item = (counter['Normal'] || counter['Dragon'] > 1 || hasMove['chargebeam'] || hasMove['suckerpunch']) ?
-				'Life Orb' :
-				'Expert Belt';
+			item = (
+				counter['Normal'] || counter['Dragon'] > 1 || hasMove['chargebeam'] || hasMove['suckerpunch']
+			) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.damagingMoves.length >= 3 && !hasMove['superfang'] && !hasMove['metalburst']) {
 			const totalBulk = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
 			item = (

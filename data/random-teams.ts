@@ -183,9 +183,9 @@ export class RandomTeams {
 	}
 
 	getTeam(options?: PlayerOptions | null): PokemonSet[] {
-		const generatorName = (typeof this.format.team === 'string' && this.format.team.startsWith('random') ?
-			this.format.team + 'Team' :
-			'');
+		const generatorName = (
+			typeof this.format.team === 'string' && this.format.team.startsWith('random')
+		 ) ? this.format.team + 'Team' : '';
 		// @ts-ignore
 		return this[generatorName || 'randomTeam'](options);
 	}
@@ -1273,9 +1273,9 @@ export class RandomTeams {
 			(counter.Special >= 4 && (hasType['Dragon'] || hasType['Fighting'] || hasType['Rock'] || hasMove['voltswitch'])) ||
 			((counter.Special >= 3 && (hasMove['flipturn'] || hasMove['uturn'])) && !hasMove['acidspray'] && !hasMove['electroweb'])
 		) {
-			return (species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)) ?
-				'Choice Scarf' :
-				'Choice Specs';
+			return (
+				species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)
+			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (counter.damagingMoves.length >= 4 && defensiveStatTotal >= 280) return 'Assault Vest';
 		if (

@@ -452,9 +452,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		) {
 			item = 'Salac Berry';
 		} else if (hasMove['endure'] || (hasMove['substitute'] && ['endeavor', 'flail', 'reversal'].some(m => hasMove[m]))) {
-			item = (species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']) ?
-				'Salac Berry' :
-				'Liechi Berry';
+			item = (
+				species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']
+			) ? 'Salac Berry' : 'Liechi Berry';
 		} else if (hasMove['substitute'] && counter.Physical >= 3 && species.baseStats.spe >= 120) {
 			item = 'Liechi Berry';
 		} else if ((hasMove['substitute'] || hasMove['raindance']) && counter.Special >= 3) {
