@@ -1,5 +1,3 @@
-/* eslint max-len: ["error", 240] */
-
 import RandomTeams from '../../random-teams';
 
 export class RandomLetsGoTeams extends RandomTeams {
@@ -70,7 +68,9 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 				// Bad after setup
 				case 'dragontail':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['encore'] || hasMove['roar'] || hasMove['whirlwind']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || ['encore', 'roar', 'whirlwind'].some(m => hasMove[m])) {
+						rejected = true;
+					}
 					break;
 				case 'fakeout': case 'uturn':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['substitute']) rejected = true;
@@ -79,7 +79,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['dragontail']) rejected = true;
 					break;
 				case 'protect':
-					if (counter.setupType || hasMove['rest'] || hasMove['lightscreen'] || hasMove['reflect']) rejected = true;
+					if (counter.setupType || ['rest', 'lightscreen', 'reflect'].some(m => hasMove[m])) rejected = true;
 					break;
 				case 'seismictoss':
 					if (counter.damagingMoves.length > 1 || counter.setupType) rejected = true;
@@ -111,7 +111,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 					if (hasMove['blizzard']) rejected = true;
 					break;
 				case 'return':
-					if (hasMove['bodyslam'] || hasMove['facade'] || hasMove['doubleedge']) rejected = true;
+					if (['bodyslam', 'facade', 'doubleedge'].some(m => hasMove[m])) rejected = true;
 					break;
 				case 'psychic':
 					if (hasMove['psyshock']) rejected = true;
@@ -133,14 +133,25 @@ export class RandomLetsGoTeams extends RandomTeams {
 				}
 
 				// This move doesn't satisfy our setup requirements:
-				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
+				if (
+					(move.category === 'Physical' && counter.setupType === 'Special') ||
+					(move.category === 'Special' && counter.setupType === 'Physical')
+				) {
 					// Reject STABs last in case the setup type changes later on
 					if (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2) rejected = true;
 				}
-				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2) {
+				if (
+					!isSetup &&
+					counter.setupType && counter.setupType !== 'Mixed' &&
+					move.category !== counter.setupType &&
+					counter[counter.setupType] < 2
+				) {
 					// Mono-attacking with setup and RestTalk is allowed
 					// Reject Status moves only if there is nothing else to reject
-					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) {
+					if (
+						move.category !== 'Status' ||
+						counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2
+					) {
 						rejected = true;
 					}
 				}
@@ -164,7 +175,12 @@ export class RandomLetsGoTeams extends RandomTeams {
 				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
-						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
+						if (
+							move.category === 'Status' ||
+							!hasType[move.type] ||
+							move.selfSwitch ||
+							move.basePower && move.basePower < 40 && !move.multihit
+						) rejected = true;
 					}
 				}
 
