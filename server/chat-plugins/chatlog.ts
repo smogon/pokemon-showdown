@@ -5,11 +5,14 @@
  * @license MIT
  */
 
-import {Utils, FS, Dashycode, ProcessManager, Repl} from '../../lib';
+import {Utils, FS, Dashycode, ProcessManager, Repl, Streams} from '../../lib';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
 import {Chat} from '../chat';
+import * as child_process from 'child_process';
+import * as pathModule from 'path';
 
+const ROOT = pathModule.resolve(__dirname, '../../');
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_RESULTS = 3000;
 const MAX_MEMORY = 67108864; // 64MB
@@ -27,6 +30,7 @@ interface ChatlogSearch {
 	date: string;
 	limit?: number | null;
 	args?: string[];
+	transformer?: (line: string) => string;
 }
 
 export class LogReaderRoom {
@@ -841,13 +845,14 @@ export class FSLogSearcher extends Searcher {
 
 export class RipgrepLogSearcher extends Searcher {
 	async ripgrepSearchMonth(opts: ChatlogSearch) {
-		let {raw, search, room: roomid, date: month, args} = opts;
+		let {raw, search, room: roomid, date: month, args, transformer, limit} = opts;
 		let results: string[];
 		let count = 0;
 		if (!raw) {
 			search = this.constructSearchRegex(search);
 		}
-		const resultSep = args?.includes('-m') ? '--' : '\n';
+
+		const resultSep = args?.includes('-m') ? '--' : undefined;
 		try {
 			const options = [
 				'-e', search,
@@ -857,23 +862,62 @@ export class RipgrepLogSearcher extends Searcher {
 			if (args) {
 				options.push(...args);
 			}
-			const {stdout} = await ProcessManager.exec(['rg', ...options], {
+			const stream = this.search(options, {
 				maxBuffer: MAX_MEMORY,
-				cwd: `${__dirname}/../../`,
-			});
-			results = stdout.split(resultSep);
+				cwd: ROOT,
+				sep: resultSep,
+			}, transformer);
+
+			const buf = [];
+			for await (const line of stream) {
+				if (limit && buf.length > limit) break;
+				buf.push(line);
+			}
+			return {results: buf, count: buf.length};
 		} catch (e) {
 			if (e.code !== 1 && !e.message.includes('stdout maxBuffer') && !e.message.includes('No such file or directory')) {
 				throw e; // 2 means an error in ripgrep
 			}
 			if (e.stdout) {
-				results = e.stdout.split(resultSep);
+				results = e.stdout.split(resultSep || "\n");
 			} else {
 				results = [];
 			}
 		}
 		count += results.length;
 		return {results, count};
+	}
+	search(
+		args: string[],
+		opts: AnyObject = {cwd: ROOT},
+		transformer: (line: string) => string = line => line
+	) {
+		const stream = new Streams.ObjectReadStream<string>({
+			read() {
+				return this.buf.shift() || "";
+			},
+		});
+		const rg = child_process.spawn(`rg`, args, opts);
+		rg.stdout.on('data', (message: Buffer) => {
+			const data = message.toString();
+			if (opts?.sep) {
+				for (const line of data.split(opts.sep).filter(Boolean)) {
+					const res = transformer(line);
+					if (!res) continue;
+					stream.push(res);
+				}
+			} else {
+				const result = transformer(data);
+				if (!result) return;
+				stream.push(result);
+			}
+		});
+		rg.stderr.on('data', err => {
+			stream.pushError(new Error(err));
+		});
+		rg.on('close', () => stream.pushEnd());
+		rg.on('error', err => stream.pushError(err));
+		return stream;
 	}
 	async searchLogs(
 		roomid: RoomID,
@@ -905,12 +949,37 @@ export class RipgrepLogSearcher extends Searcher {
 				.join('');
 			search = `\\|c\\|${this.constructUserRegex(id)}\\|${rest}`;
 		}
+		const useOriginal = originalSearch && originalSearch !== search;
+		const searchRegex = new RegExp(useOriginal ? search : this.constructSearchRegex(search), "i");
 		while (count < MAX_RESULTS) {
 			const month = months.shift();
 			if (!month) break;
+			let curDate = '';
 			const output = await this.ripgrepSearchMonth({
 				room: roomid, search, date: month,
 				limit, args: [`-m`, `${limit}`, '-C', '3', '--engine=auto'], raw: !!userSearch,
+				transformer(chunk: string) {
+					return chunk.split('\n').map(rawLine => {
+						if (!toID(rawLine)) return ''; // return early so we don't keep sorting
+						const sep = rawLine.includes('.txt-') ? '.txt-' : '.txt:';
+						const [name, text] = rawLine.split(sep);
+						let line = LogViewer.renderLine(text, 'all');
+						if (!line || name.includes('today')) return '';
+						// gets rid of some edge cases / duplicates
+						let lineDate = name.split('/')[4];
+						if (!lineDate) return ''; // ??
+						if (searchRegex.test(rawLine)) {
+							line = `<div class="chat chatmessage highlighted">${line}</div>`;
+						}
+						if (curDate !== lineDate) {
+							curDate = lineDate;
+							lineDate = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${lineDate}">${lineDate}</a>]</summary>`;
+						} else {
+							lineDate = '';
+						}
+						return `${lineDate} ${line}`;
+					}).join('');
+				},
 			});
 			results = results.concat(output.results);
 			count += output.count;
@@ -919,50 +988,20 @@ export class RipgrepLogSearcher extends Searcher {
 			const diff = count - MAX_RESULTS;
 			results = results.slice(0, -diff);
 		}
-		return this.renderSearchResults(results, roomid, search, limit, date, originalSearch);
+		return this.renderSearchResults(results, count, roomid, search, limit, originalSearch);
 	}
 
 	renderSearchResults(
-		results: string[], roomid: RoomID, search: string, limit: number,
-		month?: string | null, originalSearch?: string | null
+		results: string[], count: number, roomid: RoomID,
+		search: string, limit: number, originalSearch?: string | null
 	) {
 		results = results.filter(Boolean);
 		if (results.length < 1) return LogViewer.error('No results found.');
-		let exactMatches = 0;
-		let curDate = '';
 		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
-		const useOriginal = originalSearch && originalSearch !== search;
-		const searchRegex = new RegExp(useOriginal ? search : this.constructSearchRegex(search), "i");
-		const sorted = results.sort((aLine, bLine) => {
-			const [aName] = aLine.split('.txt');
-			const [bName] = bLine.split('.txt');
-			const aDate = new Date(aName.split('/').pop()!);
-			const bDate = new Date(bName.split('/').pop()!);
-			return bDate.getTime() - aDate.getTime();
-		}).map(chunk => chunk.split('\n').map(rawLine => {
-			if (exactMatches > limit || !toID(rawLine)) return null; // return early so we don't keep sorting
-			const sep = rawLine.includes('.txt-') ? '.txt-' : '.txt:';
-			const [name, text] = rawLine.split(sep);
-			let line = LogViewer.renderLine(text, 'all');
-			if (!line || name.includes('today')) return null;
-				 // gets rid of some edge cases / duplicates
-			let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
-			if (searchRegex.test(rawLine)) {
-				if (++exactMatches > limit) return null;
-				line = `<div class="chat chatmessage highlighted">${line}</div>`;
-			}
-			if (curDate !== date) {
-				curDate = date;
-				date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
-			} else {
-				date = '';
-			}
-			return `${date} ${line}`;
-		}).filter(Boolean).join(' ')).filter(Boolean);
 		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${originalSearch ? originalSearch : search}:</strong>`;
-		buf += limit ? ` ${exactMatches} (capped at ${limit})` : '';
+		buf += limit ? ` ${count} (capped at ${limit})` : '';
 		buf += `<hr /></div><blockquote>`;
-		buf += sorted.join('<hr />');
+		buf += results.join('<hr />');
 		if (limit) {
 			buf += `</details></blockquote><div class="pad"><hr /><strong>Capped at ${limit}.</strong><br />`;
 			buf += `<button class="button" name="send" value="/sl ${originalSearch},room:${roomid},limit:${limit + 200}">`;
