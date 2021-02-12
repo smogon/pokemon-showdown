@@ -1646,12 +1646,11 @@ export class RandomTeams {
 		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			const multipleOfFourNecessary = (
-				hasMove['substitute'] ||
+			const multipleOfFourNecessary = (hasMove['substitute'] && (
 				item === 'Sitrus Berry' ||
 				ability === 'Power Construct' ||
 				(hasMove['bellydrum'] && item === 'Salac Berry')
-			);
+			));
 			if (multipleOfFourNecessary) {
 				// Two Substitutes should activate Sitrus Berry
 				if (hp % 4 === 0) break;
