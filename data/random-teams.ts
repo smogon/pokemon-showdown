@@ -26,7 +26,7 @@ const RecoveryMove = [
 	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
 ];
 // Moves that drop stats:
-const StatDroppingMoves = [
+const ContraryMoves = [
 	'closecombat', 'leafstorm', 'overheat', 'superpower', 'vcreate',
 ];
 // Moves that boost Attack:
@@ -648,7 +648,7 @@ export class RandomTeams {
 
 			// Moves that change stats:
 			if (RecoveryMove.includes(moveid)) counter.recovery++;
-			if (StatDroppingMoves.includes(moveid)) counter.contrary++;
+			if (ContraryMoves.includes(moveid)) counter.contrary++;
 			if (PhysicalSetup.includes(moveid)) {
 				counter.physicalsetup++;
 				counter.setupType = 'Physical';
