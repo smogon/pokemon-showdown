@@ -4,8 +4,7 @@
  * Written by bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 
 Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
 

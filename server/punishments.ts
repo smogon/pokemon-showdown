@@ -11,8 +11,7 @@
  * @license MIT license
  */
 
-import {FS} from '../lib/fs';
-import {Utils} from '../lib/utils';
+import {FS, Utils} from '../lib';
 
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
@@ -174,6 +173,10 @@ export const Punishments = new class {
 	/** roomid:timestamp map */
 	readonly lastGroupchatMonitorTime: {[k: string]: number} = {};
 	/**
+	 * Map<userid that has been warned, reason they were warned for>
+	 */
+	readonly offlineWarns: Map<ID, string> = new Map();
+	/**
 	 * punishType is an allcaps string, for global punishments they can be
 	 * anything in the punishmentTypes map.
 	 *
@@ -282,7 +285,7 @@ export const Punishments = new class {
 				buf += Punishments.renderEntry(entry, id);
 			}
 			return buf;
-		});
+		}, {throttle: 5000});
 	}
 
 	saveRoomPunishments() {
@@ -298,7 +301,7 @@ export const Punishments = new class {
 				buf += Punishments.renderEntry(entry, id);
 			}
 			return buf;
-		});
+		}, {throttle: 5000});
 	}
 
 	getEntry(entryId: string) {
@@ -738,7 +741,7 @@ export const Punishments = new class {
 	 *********************************************************/
 
 	async ban(
-		user: User, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
+		user: User | ID, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
 	) {
 		if (!expireTime) expireTime = Date.now() + GLOBALBAN_DURATION;
 		const punishment = ['BAN', id, expireTime, ...reason] as Punishment;
@@ -879,6 +882,10 @@ export const Punishments = new class {
 			user.punishmentTimer = null;
 		}
 
+		// Don't unlock users who have non-time-based locks such as #hostfilter
+		// Optional chaining doesn't seem to work properly in callbacks of setTimeout
+		if (user.locked && user.locked.startsWith('#')) return;
+
 		const [, id, expireTime] = punishment;
 
 		const timeLeft = expireTime - Date.now();
@@ -888,7 +895,8 @@ export const Punishments = new class {
 		}
 		const waitTime = Math.min(timeLeft, MAX_PUNISHMENT_TIMER_LENGTH);
 		user.punishmentTimer = setTimeout(() => {
-			Punishments.checkPunishmentTime(user, punishment);
+			// make sure we're not referencing a pre-hotpatch Punishments instance
+			global.Punishments.checkPunishmentTime(user, punishment);
 		}, waitTime);
 	}
 	async namelock(
@@ -1590,6 +1598,16 @@ export const Punishments = new class {
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
 	}
 
+	isBlacklistedSharedIp(ip: string) {
+		const num = IPTools.ipToNumber(ip);
+		for (const [blacklisted, reason] of this.sharedIpBlacklist) {
+			const range = IPTools.stringToRange(blacklisted);
+			if (!range) throw new Error("Falsy range in sharedIpBlacklist");
+			if (IPTools.checkPattern([range], num)) return reason;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns an array of all room punishments associated with a user.
 	 *
@@ -1647,7 +1665,7 @@ export const Punishments = new class {
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomIps.get(roomid)! : Punishments.ips).forEach((punishment, ip) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
-			if (id.startsWith('#')) return;
+			if (id !== '#rangelock' && id.startsWith('#')) return;
 			let entry = punishmentTable.get(id);
 
 			if (entry) {

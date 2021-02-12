@@ -48,31 +48,121 @@ We strive to be maximally intuitive and accessible. "That's what they all say", 
 
 Some principles we try to design by:
 
-1. Less text is better
-    - The fewer words you use, the less likely someone is to gloss over it, and the easier it is to find the important information. Compare "1234 battles" with "There are currently 1234 active battles being played on this server" - more words are usually only clutter that makes it hard to find the information you want.
+### D1. Less text is better
 
-2. Buttons should say what they do
-    - Buttons and links that say "Click here" or "Look at this" are bad for a number of reasons, but the most important one is probably because it violates the principle that you shouldn't need to read outside the button to know what the button does. The way people use interfaces is by looking for buttons that do what they want, not by reading every word from beginning to end.
+The fewer words you use, the less likely someone is to gloss over it, and the easier it is to find the important information. Compare "1234 battles" with "There are currently 1234 active battles being played on this server" - more words are usually only clutter that makes it hard to find the information you want.
 
-      In addition, blind users in particular navigate by link text, so a blind user will have a much harder time figuring out where a link goes if it only says "click here".
+### D2. Buttons should say what they do
 
-3. Remove unnecessary clicks
-    - Whenever you give a user a button to click, always think "in what situations would a user want to click this? in what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
+Buttons and links that say "Click here" or "Look at this" are bad for a number of reasons, but the most important one is probably because it violates the principle that you shouldn't need to read outside the button to know what the button does. The way people use interfaces is by looking for buttons that do what they want, not by reading every word from beginning to end.
 
-4. Remove unnecessary scrolling and mouse movement
-    - Similar to unnecessary clicks - if a user has a large screen and you show them a lot of text in a tiny scrollable region, that's incredibly user-hostile. Either the user wants to read the text or they don't: the perfect use-case for a "read more" or expand/collapse button.
+In addition, blind users in particular navigate by link text, so a blind user will have a much harder time figuring out where a link goes if it only says "click here".
 
-5. Affordances are important
-    - This is why we depart from flat design: Years of UX research have taught us that it's important for buttons look like buttons. Making clickable things "look 3D and pressable" or underlining them is good practice. We can't always do this (dropdown menus would look pretty ugly if every item was beveled and embossed) but we do what we can.
+### D3. Remove unnecessary clicks
 
-6. Feedback is important
-    - If a button doesn't react instantly, it should be replaced with a "Loading" screen or some other indication that it's doing something. If something's failed, it should come with an error message so the user knows what's wrong.
+Whenever you give a user a button to click, always think "in what situations would a user want to click this? in what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
 
-      There's a famous story of a CEO of a company who clicked the "email everyone" button, but it didn't react, so he clicked it a few more times, accidentally spamming a bunch of users and getting their company marked as spam by a bunch of email services.
+### D4. Remove unnecessary scrolling and mouse movement
+
+Similar to unnecessary clicks - if a user has a large screen and you show them a lot of text in a tiny scrollable region, that's incredibly user-hostile. Either the user wants to read the text or they don't: the perfect use-case for a "read more" or expand/collapse button.
+
+### D5. Affordances are important
+
+This is why we depart from flat design: Years of UX research have taught us that it's important for buttons look like buttons. Making clickable things "look 3D and pressable" or underlining them is good practice. We can't always do this (dropdown menus would look pretty ugly if every item was beveled and embossed) but we do what we can.
+
+### D6. Feedback is important
+
+If a button doesn't react instantly, it should be replaced with a "Loading" screen or some other indication that it's doing something. If something's failed, it should come with an error message so the user knows what's wrong.
+
+There's a famous story of a CEO of a company who clicked the "email everyone" button, but it didn't react, so he clicked it a few more times, accidentally spamming a bunch of users and getting their company marked as spam by a bunch of email services.
 
 
-Commit standards
+Comment standards
 ------------------------------------------------------------------------
+
+### C1. Don't teach JavaScript
+
+The first rule of comments is that they should not document obvious language features.
+
+A common mistake when starting out is to write something like this:
+
+```ts
+// Increase counter by 1.
+counter++;
+```
+
+But this is a lot of visual clutter for someone who already knows JavaScript! Since nearly all of our developers already know JavaScript, this sort of commenting can slow down and distract developers, increasing the number of bugs.
+
+### C2. Document in names if possible
+
+By far the best way to document things is in variable and function names.
+
+BAD:
+
+```ts
+/** move name */
+let value = "Stealth Rock";
+```
+
+GOOD:
+
+```ts
+let moveName = "Stealth Rock";
+```
+
+Good variable and function names can massively increase readability, by much more than comments. Often, this means simply creating a variable so you can give it a name:
+
+BAD:
+
+```ts
+// if ten seconds have passed and the user is staff
+if (now > then + 10_000 && '&@%'.includes(user.tempGroup)) {
+```
+
+GOOD:
+
+```ts
+const tenSecondsPassed = now > then + 10_000;
+const userIsStaff = '&@%'.includes(user.tempGroup);
+if (tenSecondsPassed && userIsStaff) {
+```
+
+### C3. Doc comments
+
+Sometimes, you have information about a variable/function (such as how and when to use it) that doesn't fit in its name. The best place to put this is in a doc comment, like this:
+
+```ts
+/** null = not accepting connections */
+let numConnections: number | null = null;
+```
+
+Doc comments start with `/**` and end with `*/`. In VS Code, doc comments will show up when you hover your mouse over the variable/function name, anywhere it's used. If your information would be useful there, please put it in a doc comment.
+
+### C4. Other comments
+
+The main remaining use of comments is to document confusing code. If the code is doing something that requires understanding more than just JavaScript, it can be a good time for a comment:
+
+```ts
+// for some reason, Chrome won't update unless you do this
+elem.innerHTML = elem.innerHTML;
+```
+
+Remember, the line isn't about whether something is "too obvious" for a comment. "Increase counter by 1" isn't bad because it's "too obvious", it's bad because it's trying to teach JavaScript rather than explain the code.
+
+### C5. Jokes
+
+We allow jokes in comments. You're always allowed to have fun!
+
+```ts
+// GET IT? BECAUSE WE DON'T KNOW WHAT SPECIES IT IS???
+if (!species) species = 'Unown';
+```
+
+
+Commit message standards
+------------------------------------------------------------------------
+
+### CM1. What, not how
 
 Commits should describe what the code _does_, not how it does it.
 
@@ -85,11 +175,15 @@ The details of how you achieve the fix should be left for the second paragraph o
 
 If this is not possible because your code does not make any functionality changes, your commit summary should ideally start with the word "Refactor" (or at least it contain it in some way).
 
+### CM2. Imperative
+
 Commits should usually start with a verb in imperative mood, such as "Add", "Fix", "Refactor", etc (if the verb is there, it should be imperative, but it doesn't have to be there).
 
 - BAD: `Adding namefilter`
 - BAD: `Adds namefilter`
 - GOOD: `Add namefilter`
+
+### CM3. Grammar
 
 The first line of the commit summary should be under 50 characters long.
 
@@ -101,10 +195,14 @@ The commit summary should not end in a period.
 - BAD: `Refactor Users to use classes.`
 - GOOD: `Refactor Users to use classes`
 
+### CM4. Tag
+
 Your commit summary should make it clear what part of the code you're talking about. For instance, if you're editing the Trivia plugin, you might want to add "Trivia: " to the beginning of your commit summary so it's clear.
 
 - BAD: `Ban Genesect`
 - GOOD: `Monotype: Ban Genesect` (notice the uppercase "B")
+
+### CM5. Squashing
 
 OPTIONAL: If you make commits to fix commits in your pull request, you can squash/amend them into one commit. This is no longer required now that GitHub supports squash-merging.
 
@@ -178,54 +276,36 @@ We prefer using `||` instead of `??` for fallback, for a few reasons:
 If, at a future point, TypeScript does allow us to constrain types better, we might consider using `??` for clarity. But for now, I see no reason to use `??` except in very niche situations where the difference matters.
 
 
-ES5 and ES6
+Modern JavaScript/TypeScript syntax convention
 ------------------------------------------------------------------------
 
-In general, use modern features; recent versions of V8 have fixed the performance problems they used to have.
+We care a lot about performance, but also readability. Fortunately, recent versions of V8 usually have both, but here are some exceptions.
 
-- **let, const: ALWAYS** - Supported in Node 4+, good performance.
+In general, we prefer modern ways of writing things as long as they're supported by the most recent LTS release of Node. For instance, we prefer `{...foo}` to `Object.assign({}, foo)`.
 
-- **for-of on Arrays: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
+- `.forEach`: Don't use; we always prefer `for`...`of` for readability as well as perf (others like `map`/`filter` are fine, though)
 
-- **Array#forEach: NEVER** - Poor readability; we prefer `for-of`.
+- Multiline template strings: A frequent source of bugs, so we prefer to explicitly use `\n` and concatenate over multiple lines.
 
-- **for-in on Arrays: NEVER** - Horrible performance, weird bugs due to string keys, poor interaction with Array prototype modification. Everyone tells you never to do it; we're no different. See `for-of`.
+- `async`/`await`: We prefer it for readability, but in certain cases we use raw Promises or even callbacks for performance. Don't worry about it too much; we usually won't nitpick code that uses any async implementation (although we might insist on `async`/`await` if the reability difference is huge).
 
-- **Map, Set: SOMETIMES** - Worse write/iteration performance, better read performance than `Object.create(null)`. Use whatever's faster for your use case.
+- getters/setters/`Proxy`: We are generally very anti-magic. There are certain places in the code we do use magic where it's massively DRYer (or for historical reasons), but we prefer to explicitly mark that setting a variable is actually running a function with many and varied side effects. Please have a better reason than "`.foo` is less visual clutter than `.getFoo()`".
 
-- **for-in on Objects: ALWAYS** - More readable; good performance in Node 8+.
+- Constant Enums: Don't use; we prefer constant union types, like `type Category = 'Physical' | 'Special' | 'Status'`
 
-- **for-of on Maps and Sets: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
-
-- **Map#forEach, Set#forEach: NEVER** - Poor readability; we prefer `for-of`.
-
-- **Object literal functions: ALWAYS** - Supported in Node 4+, good performance.
-
-- **Arrow functions: ALWAYS** - Supported in Node 4+, good performance. Obviously use only for callbacks; don't use in situations where `this` shouldn't be bound.
-
-- **Promises: ALWAYS** - Supported in Node 4+, poor performance but worth the readability.
-
-- **async/await: ALWAYS** - Supported in Node 8+, good performance.
-
-- **Function#bind: NEVER** - Horrible performance. Use arrow functions.
-
-- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+.
-
-- **String#includes: ALWAYS** - Supported in Node 4+, poor performance, but not really noticeable and worth the better readability.
-
-- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over, but be careful not to use them for IDs (follow the String standards). Look at existing uses for guidance.
-
-- **Multiline template strings: NEVER** - Multiline template strings are a frequent source of bugs, so it's better to be explicit with `\n`.
-
-Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".
+- Default Properties: Mediocre performance when compiled with `sucrase`. This is fine for objects that are rarely created, but prefer setting properties directly in a constructor, for objects created in inner loops.
 
 
-TypeScript Features
+Dependencies
 ------------------------------------------------------------------------
 
-- **Constant Enums: NEVER** - Not supported by Sucrase, our current choice of transpiler. We prefer constant union types, anyway (like `type Category = 'Physical' | 'Special' | 'Status'`)
+We oppose the usual JavaScript culture of casually adding dependencies from NPM.
 
-- **Default Properties: SOMETIMES** - Bad performance when used with Sucrase. This is fine for objects that are rarely created, but prefer setting properties directly in a constructor, for objects created in inner loops.
+There are, of course, a lot of libraries like SockJS doing valuable things that we shouldn't reimplement ourselves. However, most libraries on NPM have very different priorities than we do (not caring about performance or bugs in subdependencies).
+
+But in practice, for any dependency we could reimplement in around 30 lines of code, we'll write it ourselves and maintain it in `lib/`. Such maintenance is usually worth avoiding a `left-pad` situation, and also is generally better for performance, and also helps us easily craft the API to be most convenient for our own use-case.
+
+To be clear, we're not _opposed_ to new dependencies and will accept them where they make sense. But we try to avoid them more most than other Node projects do.
 
 
 `package-lock.json`

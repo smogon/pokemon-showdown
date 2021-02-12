@@ -3,7 +3,7 @@
 const assert = require('assert').strict;
 
 global.Ladders = require('../../.server-dist/ladders').Ladders;
-const {Connection, User} = require('../users-utils');
+const {makeUser} = require('../users-utils');
 
 describe('Matchmaker', function () {
 	const FORMATID = 'gen7ou';
@@ -25,15 +25,11 @@ describe('Matchmaker', function () {
 	});
 
 	beforeEach(function () {
-		this.p1 = new User(new Connection('127.0.0.1'));
-		this.p1.forceRename('Morfent', true);
-		this.p1.connected = true;
+		this.p1 = makeUser('Morfent', '192.168.0.1');
 		this.p1.battleSettings.team = 'Gengar||||lick||252,252,4,,,|||||';
 		Users.users.set(this.p1.id, this.p1);
 
-		this.p2 = new User(new Connection('0.0.0.0'));
-		this.p2.forceRename('Mrofnet', true);
-		this.p2.connected = true;
+		this.p2 = makeUser('Mrofnet', '192.168.0.2');
 		this.p2.battleSettings.team = 'Gengar||||lick||252,252,4,,,|||||';
 		Users.users.set(this.p2.id, this.p2);
 	});
@@ -59,6 +55,9 @@ describe('Matchmaker', function () {
 		addSearch(this.p1);
 		addSearch(this.p2);
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+
+		const [roomid] = [...this.p1.games];
+		Rooms.get(roomid).destroy();
 	});
 
 	it('should matchmake users within a reasonable rating range', function () {
@@ -82,6 +81,9 @@ describe('Matchmaker', function () {
 		s2.rating = 1000;
 		Ladders.Ladder.periodicMatch();
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+
+		const [roomid] = [...this.p1.games];
+		Rooms.get(roomid).destroy();
 	});
 
 	it('should create a new battle room after matchmaking', function () {

@@ -4,7 +4,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 import type {RequestState} from './battle';
 import {Pokemon, EffectState} from './pokemon';
 import {State} from './state';
@@ -467,8 +467,8 @@ export class Side {
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
 		} else if (maxMove) {
-			// Dynamaxed; only Taunt and Assault Vest disable Max Guard
-			if (pokemon.maxMoveDisabled(maxMove)) {
+			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
+			if (pokemon.maxMoveDisabled(move)) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${maxMove.name} is disabled`);
 			}
 		} else if (!zMove) {
@@ -528,10 +528,16 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
 		let dynamax = (megaDynaOrZ === 'dynamax');
-		if (dynamax && (this.choice.dynamax || !pokemon.getDynamaxRequest())) {
+		const canDynamax = this.activeRequest?.active[this.active.indexOf(pokemon)].canDynamax;
+		if (dynamax && (this.choice.dynamax || !canDynamax)) {
 			if (pokemon.volatiles['dynamax']) {
 				dynamax = false;
 			} else {
+				if (this.battle.gen < 8) {
+					return this.emitChoiceError(`Can't move: Dynamaxing doesn't exist before Gen 8.`);
+				} else if (pokemon.canDynamax) {
+					return this.emitChoiceError(`Can't move: ${pokemon.name} can't Dynamax now.`);
+				}
 				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 			}
 		}

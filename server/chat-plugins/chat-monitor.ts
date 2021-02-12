@@ -1,5 +1,4 @@
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import type {FilterWord} from '../chat';
 
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
@@ -26,7 +25,7 @@ const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 	m: [
 		"m", "ᗰ", "M", "ⓜ", "Ⓜ", "м", "͏", "₥", "ṃ", "Ṃ", "Ꮇ", "ϻ", "Μ", "ṁ", "Ṁ", "ʍ", "̾", "ｍ", "Ｍ", "ᴍ", "ɯ", "🅜", "𝐦", "𝐌", "𝘮", "𝘔", "𝙢", "𝙈", "𝓂", "𝓶", "𝓜", "𝕞", "𝕂", "𝔪", "𝔍", "𝖒", "𝕸", "🄼", "🅼", "𝑀", "ɱ", "𝚖", "𝙼", "♔", "ⅿ",
 	],
-	n: ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո", "η", "𝙽"],
+	n: ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո", "η", "𝙽", "ƞ"],
 	o: ["o", "0", "ó", "ô", "õ", "ú", "O", "ⓞ", "Ⓞ", "σ", "͏", "Ø", "ö", "Ö", "Ꭷ", "Θ", "ṏ", "Ṏ", "Ꮎ", "օ", "̾", "ｏ", "Ｏ", "ᴏ", "🅞", "𝐨", "𝐎", "𝘰", "𝘖", "𝙤", "𝙊", "ℴ", "𝓸", "𝓞", "𝕠", "𝕄", "𝔬", "𝔏", "𝖔", "𝕺", "🄾", "🅾", "𝑜", "𝒪", "𝚘", "𝙾", "⊙", "ο"],
 	p: ["p", "ᑭ", "P", "ⓟ", "Ⓟ", "ρ", "₱", "ṗ", "Ṗ", "Ꭾ", "Ƥ", "Ꮲ", "ք", "ｐ", "Ｐ", "ᴘ", "🅟", "𝐩", "𝐏", "𝘱", "𝘗", "𝙥", "𝙋", "𝓅", "𝓹", "𝓟", "𝕡", "ℕ", "𝔭", "𝔐", "𝖕", "𝕻", "🄿", "🅿", "𝒫", "𝚙", "𝙿", "р"],
 	q: [
@@ -58,7 +57,11 @@ export function constructEvasionRegex(str: string) {
 	const buf = "\\b" +
 		[...str].map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
 		"\\b";
-	return new RegExp(buf, 'i');
+	return new RegExp(buf, 'iu');
+}
+
+export function stripWordBoundaries(regex: RegExp) {
+	return new RegExp(regex.toString().replace('/\\b', '').replace('\\b/iu', ''), 'iu');
 }
 
 function renderEntry(location: string, word: Chat.FilterWord, punishment: string) {
@@ -102,7 +105,7 @@ export function generateRegex(word: string, isEvasion = false, isShortener = fal
 		if (isEvasion) {
 			return constructEvasionRegex(word);
 		} else {
-			return new RegExp((isShortener ? `\\b${word}` : word), (isReplacement ? 'ig' : 'i'));
+			return new RegExp((isShortener ? `\\b${word}` : word), (isReplacement ? 'igu' : 'iu'));
 		}
 	} catch (e) {
 		throw new Chat.ErrorMessage(
@@ -299,7 +302,7 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 				if (punishment === 'EVASION') {
 					regex = constructEvasionRegex(word);
 				} else {
-					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'ig' : 'i');
+					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'igu' : 'iu');
 				}
 
 				const filterWord: FilterWord = {regex, word, hits: parseInt(times) || 0};
@@ -375,6 +378,10 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 export const namefilter: NameFilter = (name, user) => {
 	const id = toID(name);
 	if (Punishments.namefilterwhitelist.has(id)) return name;
+	if (Monitor.forceRenames.has(id)) {
+		// Don't allow reuse of forcerenamed names
+		return '';
+	}
 	if (id === toID(user.trackRename)) return '';
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
@@ -389,8 +396,10 @@ export const namefilter: NameFilter = (name, user) => {
 
 	for (const list in filterWords) {
 		if (Chat.monitors[list].location === 'BATTLES') continue;
+		const punishment = Chat.monitors[list].punishment;
 		for (const line of filterWords[list]) {
-			if (line.regex.test(lcName)) {
+			const regex = (punishment === 'EVASION' ? stripWordBoundaries(line.regex) : line.regex);
+			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
@@ -407,10 +416,6 @@ export const namefilter: NameFilter = (name, user) => {
 };
 export const loginfilter: LoginFilter = user => {
 	if (user.namelocked) return;
-	if (Monitor.forceRenames.has(user.id) && !Punishments.namefilterwhitelist.has(user.id)) {
-		return '';
-	}
-
 	if (user.trackRename) {
 		const manualForceRename = Monitor.forceRenames.get(toID(user.trackRename));
 		Rooms.global.notifyRooms(
@@ -419,8 +424,13 @@ export const loginfilter: LoginFilter = user => {
 		);
 		user.trackRename = '';
 	}
+	const offlineWarn = Punishments.offlineWarns.get(user.id);
+	if (offlineWarn) {
+		user.send(`|c|~|/warn You were warned while offline: ${offlineWarn}`);
+		Punishments.offlineWarns.delete(user.id);
+	}
 };
-export const nicknamefilter: NameFilter = (name, user) => {
+export const nicknamefilter: NicknameFilter = (name, user) => {
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')
@@ -440,16 +450,18 @@ export const nicknamefilter: NameFilter = (name, user) => {
 				// Evasion banwords by default require whitespace on either side.
 				// If we didn't remove it here, it would be quite easy to evade the filter
 				// and use slurs in Pokémon nicknames.
-				regex = new RegExp(regex.toString().replace('/\\b', '').replace('\\b/i', ''), 'i');
+				regex = stripWordBoundaries(regex);
 			}
 
-			if (regex.test(lcName)) {
+			const match = regex.exec(lcName);
+			if (match) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
 						`${user.name} - using an inappropriate Pokémon nickname: SPOILER: ${name}`, true
 					);
-				} else if (Chat.monitors[list].punishment === 'EVASION') {
+				} else if (Chat.monitors[list].punishment === 'EVASION' && match[0] !== lcName) {
+					// Don't autolock unless it's an evasion regex and they're evading
 					void Punishments.autolock(
 						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname (${name} => ${word})`,
 						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``
@@ -482,10 +494,14 @@ export const statusfilter: StatusFilter = (status, user) => {
 	if (!user.can('lock') && impersonationRegex.test(lcStatus)) return '';
 
 	for (const list in filterWords) {
-		if (Chat.monitors[list].location === 'BATTLES') continue;
+		const punishment = Chat.monitors[list].punishment;
 		for (const line of filterWords[list]) {
-			if (line.regex.test(lcStatus)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+			const regex = (punishment === 'EVASION' ? stripWordBoundaries(line.regex) : line.regex);
+			if (regex.test(lcStatus)) {
+				if (punishment === 'AUTOLOCK') {
+					// I'm only locking for true autolock phrases, not evasion of slurs
+					// because someone might understandably expect a popular slur to be
+					// already registered and therefore try to make the name different from the original slur.
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
 						`${user.name} - using an inappropriate status: SPOILER: ${status}`, true

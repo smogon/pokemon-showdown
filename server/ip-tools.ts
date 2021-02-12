@@ -19,7 +19,7 @@ const HOSTS_FILE = 'config/hosts.csv';
 const PROXIES_FILE = 'config/proxies.csv';
 
 import * as dns from 'dns';
-import {FS} from '../lib/fs';
+import {FS} from '../lib';
 
 export interface AddressRange {
 	minIP: number;
@@ -177,7 +177,10 @@ export const IPTools = new class {
 		const aParts = a.split('.');
 		const bParts = b.split('.');
 		while (diff === 0) {
-			diff = (parseInt(aParts[i]) || 0) - (parseInt(bParts[i]) || 0);
+			const aPart = parseInt(aParts[i]);
+			const bPart = parseInt(bParts[i]);
+			if (isNaN(aPart) || isNaN(bPart)) throw new Error("Invalid IP passed to IPTools.ipSort.");
+			diff = aPart - bPart;
 			i++;
 		}
 		return diff;

@@ -1,6 +1,6 @@
-import {FS, FSPath} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {YouTube} from './youtube';
+import type {FSPath} from '../../lib/fs';
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
@@ -230,7 +230,7 @@ class OtdHandler {
 		const entries = [];
 
 		for (const value of this.nominations.values()) {
-			entries.push(`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
+			entries.push(Utils.html`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
 		}
 
 		if (entries.length > 20) {

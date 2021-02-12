@@ -1,4 +1,4 @@
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 import {BasicEffect} from './dex-data';
 
 /**
@@ -88,6 +88,7 @@ export interface MoveEventMethods {
 	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => void;
 	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon | null, move: ActiveMove) => boolean | void;
 
+	onModifyTarget?: (this: Battle, relayVar: any, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void;
 	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
 	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon | null) => void;
 	onTryMove?: CommonHandlers['ResultSourceMove'];
@@ -110,6 +111,10 @@ export interface MoveEventMethods {
 	) => number | void;
 
 	onAfterSubDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
+	onDamagePriority?: number;
+	onDamage?: (
+		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
+	) => number | boolean | null | void;
 	onHit?: CommonHandlers['ResultMove'];
 	onHitField?: CommonHandlers['ResultMove'];
 	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
@@ -213,8 +218,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihit?: number | number[];
 	multihitType?: string;
 	noDamageVariance?: boolean;
-	/** False Swipe */
-	noFaint?: boolean;
 	nonGhostTarget?: string;
 	pressureTarget?: string;
 	spreadModifier?: number;
@@ -243,7 +246,11 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	baseMove?: string;
 }
 
-export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {inherit: true};
+export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
+	inherit: true,
+	igniteBoosted?: boolean,
+	gen?: number,
+};
 
 export interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move';

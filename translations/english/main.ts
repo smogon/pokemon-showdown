@@ -22,6 +22,7 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "",
 
 		"<strong>Room ranks</strong>": "",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "",
@@ -152,6 +153,8 @@ export const translations: Translations = {
 		"Common misconceptions about our RNG": "",
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "",
 		"Frequently Asked Questions": "",
+
+		"Invalid room.": "",
 
 		"pages/faq": "",
 		"pages/ladderhelp": "",

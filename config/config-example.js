@@ -572,6 +572,7 @@ exports.grouplist = [
 		gdeclare: true,
 		gamemanagement: true,
 		exportinputlog: true,
+		tournaments: true,
 	},
 	{
 		symbol: '#',
@@ -602,6 +603,7 @@ exports.grouplist = [
 		declare: true,
 		modchat: 'a',
 		gamemanagement: true,
+		forcewin: true,
 		tournaments: true,
 		joinbattle: true,
 	},

@@ -7,8 +7,7 @@
  * @author mia-pi-git
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 
@@ -370,8 +369,8 @@ export const commands: ChatCommands = {
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
 			this.modlog('AUTOFILTER REMOVE', null, index);
 			const pages = [`keys`, `pairs`];
-			if (pages.some(p => this.connection.openPages?.has(`autoresponder-${room?.roomid}-${p}`))) {
-				return this.parse(`/ar view keys`);
+			for (const p of pages) {
+				this.refreshPage(`autofilter-${room.roomid}-${p}`);
 			}
 		},
 		ignore(target, room, user) {
@@ -440,12 +439,13 @@ export const pages: PageTable = {
 		const canChange = user.can('ban', null, room);
 		let buf = '';
 		const refresh = (type: string, extra?: string[]) => {
+			if (extra) extra = extra.filter(Boolean);
 			let button = `<button class="button" name="send" value="/join view-autoresponder-${room.roomid}-${type}`;
-			button += `${extra ? `-${extra.join('-')}` : ''}" style="float: right">`;
+			button += `${extra?.length ? `-${extra.join('-')}` : ''}" style="float: right">`;
 			button += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 			return button;
 		};
-		const back = `<br /><a roomid="view-autoresponder-${room.roomid}-">Back to all</a>`;
+		const back = `<br /><a roomid="view-autoresponder-${room.roomid}">Back to all</a>`;
 		switch (args[0]) {
 		case 'stats':
 			args.shift();

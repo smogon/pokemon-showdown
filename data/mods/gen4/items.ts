@@ -16,6 +16,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	brightpowder: {
+		inherit: true,
+		onModifyAccuracyPriority: 5,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('brightpowder - decreasing accuracy');
+			return accuracy * 0.9;
+		},
+	},
 	choiceband: {
 		inherit: true,
 		onStart() { },
@@ -89,7 +98,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	focussash: {
 		inherit: true,
-		desc: "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use.",
 		onDamage() { },
 		onTryHit(target, source, move) {
 			if (target !== source && target.hp === target.maxhp) {
@@ -112,7 +120,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	griseousorb: {
 		inherit: true,
-		desc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
 		onBasePower(basePower, user, target, move) {
 			if (user.species.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
@@ -122,7 +129,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	ironball: {
 		inherit: true,
 		onEffectiveness() {},
-		desc: "Holder's Speed is halved and it becomes grounded.",
 	},
 	kingsrock: {
 		inherit: true,
@@ -137,6 +143,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 					volatileStatus: 'flinch',
 				});
 			}
+		},
+	},
+	laxincense: {
+		inherit: true,
+		onModifyAccuracyPriority: 5,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('lax incense - decreasing accuracy');
+			return accuracy * 0.9;
 		},
 	},
 	lifeorb: {
@@ -193,7 +208,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	mentalherb: {
 		inherit: true,
-		desc: "Holder is cured if it is infatuated. Single use.",
 		fling: {
 			basePower: 10,
 			effect(pokemon) {
@@ -211,7 +225,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	metronome: {
 		inherit: true,
-		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns.",
 		condition: {
 			onStart(pokemon) {
 				this.effectData.numConsecutive = 0;
@@ -232,6 +245,20 @@ export const Items: {[k: string]: ModdedItemData} = {
 			},
 			onModifyDamagePhase2(damage, source, target, move) {
 				return damage * (1 + (this.effectData.numConsecutive / 10));
+			},
+		},
+	},
+	micleberry: {
+		inherit: true,
+		condition: {
+			duration: 2,
+			onSourceModifyAccuracyPriority: 3,
+			onSourceModifyAccuracy(accuracy, target, source) {
+				this.add('-enditem', source, 'Micle Berry');
+				source.removeVolatile('micleberry');
+				if (typeof accuracy === 'number') {
+					return accuracy * 1.2;
+				}
 			},
 		},
 	},
@@ -263,6 +290,25 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.species.name === 'Cubone' || pokemon.species.name === 'Marowak') {
 				return this.chainModify(2);
+			}
+		},
+	},
+	widelens: {
+		inherit: true,
+		onSourceModifyAccuracyPriority: 4,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy === 'number') {
+				return accuracy * 1.1;
+			}
+		},
+	},
+	zoomlens: {
+		inherit: true,
+		onSourceModifyAccuracyPriority: 4,
+		onSourceModifyAccuracy(accuracy, target) {
+			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
+				this.debug('Zoom Lens boosting accuracy');
+				return accuracy * 1.2;
 			}
 		},
 	},

@@ -6,9 +6,7 @@
  * @author mia-pi-git
  */
 
-import {Net} from '../../lib/net';
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {Utils, FS, Net} from '../../lib';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
@@ -104,9 +102,7 @@ export class YoutubeInterface {
 	}
 	async generateChannelDisplay(link: string) {
 		const id = this.getId(link);
-		// url isn't needed but it destructures wrong without it
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const {name, description, url, icon, videos, subs, views, username} = await this.get(id);
+		const {name, description, icon, videos, subs, views, username} = await this.get(id);
 		// credits bumbadadabum for most of the html
 		let buf = `<div class="infobox"><table style="margin:0px;"><tr>`;
 		buf += `<td style="margin:5px;padding:5px;min-width:175px;max-width:160px;text-align:center;border-bottom:0px;">`;
@@ -143,7 +139,7 @@ export class YoutubeInterface {
 			});
 		}
 
-		const id = Utils.shuffle(channels)[0].trim();
+		const id = Utils.shuffle(channels)[0];
 		return this.generateChannelDisplay(id);
 	}
 	get(id: string, username?: string): Promise<ChannelEntry> {
@@ -205,7 +201,7 @@ export class YoutubeInterface {
 			} else if (link.includes('youtu.be')) {
 				id = link.split('/')[3] || '';
 			} else {
-				throw new Chat.ErrorMessage('Invalid YouTube link.');
+				throw new Chat.ErrorMessage('Invalid YouTube channel link.');
 			}
 		} else {
 			id = link.split('channel/')[1] || '';
@@ -214,7 +210,7 @@ export class YoutubeInterface {
 		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
-	async generateVideoDisplay(link: string, fullInfo = false) {
+	async generateVideoDisplay(link: string, fullInfo = true) {
 		if (!Config.youtubeKey) {
 			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
 		}
@@ -284,10 +280,102 @@ export class YoutubeInterface {
 				const room = Rooms.get('youtube');
 				if (!room) return; // do nothing if the room doesn't exist anymore
 				const res = await YouTube.randChannel();
-				room.add(`|html|<div class="infobox">${res}</div>`).update();
+				room.add(`|html|${res}`).update();
 			})();
 		}, interval);
 		return this.interval;
+	}
+	async createGroupWatch(url: string, baseRoom: Room, title: string) {
+		const id = this.getId(url);
+		const videoInfo = await this.getVideoData(id);
+		if (!videoInfo) throw new Chat.ErrorMessage(`Video not found.`);
+		if ([...Rooms.rooms.values()].some(r => r.roomid.startsWith('video-watch-'))) {
+			throw new Chat.ErrorMessage(
+				`A groupwatch is already going on. Please wait until it is done before creating another.`
+			);
+		}
+		const num = baseRoom.nextGameNumber();
+		baseRoom.saveSettings();
+		const gameRoom = Rooms.createGameRoom(`video-watch-${num}` as RoomID, Utils.html`[Group Watch] ${title}`, {
+			isPrivate: 'hidden',
+		});
+		const game = new GroupWatch(gameRoom, url, videoInfo);
+		gameRoom.game = game;
+		gameRoom.setParent(baseRoom);
+		return gameRoom;
+	}
+}
+
+export class GroupWatch extends Rooms.RoomGame {
+	url: string;
+	info: VideoData;
+	started: number | null = null;
+	constructor(room: Room, url: string, videoInfo: VideoData) {
+		super(room);
+		this.url = url;
+		this.info = videoInfo;
+		this.controls(`<h2><i>Waiting to start the video...</i></h2>`);
+	}
+	onJoin(user: User) {
+		const hints = this.hints();
+		for (const hint of hints) {
+			user.sendTo(this.room.roomid, `|html|${hint}`);
+		}
+	}
+	start() {
+		if (this.started) throw new Chat.ErrorMessage(`We've already started.`);
+		this.controls(this.getStatsDisplay());
+		this.field(this.getVideoDisplay());
+		this.started = Date.now();
+		this.add(`|html|<h2>Group Watch!</h2>`);
+	}
+	hints() {
+		const hints = [
+			`To watch, all you need to do is click play on the video once staff have started it!`,
+			`We are currently watching: <a href="${this.url}">${this.info.title}</a>`,
+		];
+		if (this.started) {
+			const diff = Date.now() - this.started;
+			hints.push(`Video is currently at ${Chat.toDurationString(diff)} (${diff / 1000} seconds)`);
+		}
+		return hints;
+	}
+	getStatsDisplay() {
+		let controlsHTML = `<h3>${this.info.title}</h3>`;
+		controlsHTML += `<div class="infobox"><b>Channel:</b> `;
+		controlsHTML += `<a href="https://www.youtube.com/channel/${this.info.channelUrl}">${this.info.channelTitle}</a><br />`;
+		controlsHTML += `<b>Likes:</b> ${this.info.likes} | <b>Dislikes:</b> ${this.info.dislikes}<br />`;
+		controlsHTML += `<b>Uploaded:</b> ${Chat.toTimestamp(new Date(this.info.date))}<br />`;
+		controlsHTML += `<details><summary>Description</summary>${this.info.description.replace(/\n/ig, '<br />')}</details>`;
+		controlsHTML += `</div>`;
+		return controlsHTML;
+	}
+	getVideoDisplay() {
+		let buf = `<p style="background: #e22828; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
+		buf += `<br /><br /><b>${this.info.title}</b><br />`;
+		const id = YouTube.getId(this.url);
+		const url = `https://youtube.com/watch?v=${id}`;
+		buf += `<youtube src="${url}" />`;
+		buf += `<br />`.repeat(4);
+		buf += `</p>`;
+		return buf;
+	}
+	controls(html: string) {
+		this.add(`|controlshtml|<center>${html}</center>`);
+	}
+	field(html: string) {
+		this.add(`|fieldhtml|${html}`);
+	}
+	add(buf: string) {
+		this.room.add(buf).update();
+	}
+	destroy() {
+		this.controls(`<b>The group watch has ended.</b>`);
+		let endBuf = `<center>`;
+		endBuf += this.getStatsDisplay();
+		endBuf += `<br /> Thanks for watching!</center>`;
+		this.field(endBuf);
+		this.room = null!;
 	}
 }
 
@@ -304,7 +392,7 @@ export const commands: ChatCommands = {
 		target = toID(target);
 		this.runBroadcast();
 		const data = await YouTube.randChannel(target);
-		return this.sendReplyBox(data);
+		return this.sendReply(`|html|${data}`);
 	},
 	randchannelhelp: [`/randchannel - View data of a random channel from the YouTube database.`],
 
@@ -313,8 +401,7 @@ export const commands: ChatCommands = {
 		async addchannel(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
 			this.checkCan('mute', null, room);
-			let [id, name] = target.split(',');
-			if (name) name = name.trim();
+			const [id, name] = target.split(',').map(t => t.trim());
 			if (!id) return this.errorReply('Specify a channel ID.');
 			await YouTube.getChannelData(id, name);
 			this.modlog('ADDCHANNEL', null, `${id} ${name ? `username: ${name}` : ''}`);
@@ -342,7 +429,7 @@ export const commands: ChatCommands = {
 			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
 			const data = await YouTube.generateChannelDisplay(channel);
 			this.runBroadcast();
-			return this.sendReplyBox(data);
+			return this.sendReply(`|html|${data}`);
 		},
 		channelhelp: [
 			'/youtube channel - View the data of a specified channel. Can be either channel ID or channel name.',
@@ -350,7 +437,7 @@ export const commands: ChatCommands = {
 		async video(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
 			this.checkCan('mute', null, room);
-			const buffer = await YouTube.generateVideoDisplay(target, true);
+			const buffer = await YouTube.generateVideoDisplay(target);
 			this.runBroadcast();
 			this.sendReplyBox(buffer);
 		},
@@ -385,6 +472,14 @@ export const commands: ChatCommands = {
 			if (!target) {
 				if (!YouTube.interval) return this.errorReply(`The YouTube plugin is not currently running an interval.`);
 				return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime * 60 * 1000)}.`);
+			}
+			if (this.meansNo(target)) {
+				if (!YouTube.interval) return this.errorReply(`The interval is not currently running`);
+				clearInterval(YouTube.interval);
+				delete YouTube.data.intervalTime;
+				YouTube.save();
+				this.privateModAction(`${user.name} turned off the YouTube interval`);
+				return this.modlog(`YOUTUBE INTERVAL`, null, 'OFF');
 			}
 			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 			if (isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
@@ -459,6 +554,45 @@ export const commands: ChatCommands = {
 			this.modlog(`YOUTUBE DECATEGORIZE`, null, target);
 			this.privateModAction(`${user.name} removed the channel ${channel.name} from the category ${category}.`);
 		},
+		async groupwatch(target, room, user) {
+			room = this.requireRoom('youtube' as RoomID);
+			this.checkCan('mute', null, room);
+			const [url, title] = Utils.splitFirst(target, ',').map(p => p.trim());
+			if (!url || !title) return this.errorReply(`You must specify a video to watch and a title for the group watch.`);
+			const gameRoom = await YouTube.createGroupWatch(url, room, title);
+			this.modlog(`YOUTUBE GROUPWATCH`, null, `${url} (${title})`);
+			room.add(
+				`|c|~|/uhtml ${gameRoom.roomid},` +
+				`<button class="button" name="send" value="/j ${gameRoom.roomid}">Join the ongoing group watch!</button>`
+			);
+			room.send(`|tempnotify|youtube|New groupwatch - ${title}!`);
+			this.update();
+			user.joinRoom(gameRoom);
+		},
+		endwatch(target, room, user) {
+			room = this.requireRoom();
+			this.checkCan('mute', null, room);
+			this.requireGame(GroupWatch);
+			room.parent!.modlog({action: `GROUPWATCH END`, loggedBy: user.id});
+			room.parent!.add(`|c|~|/uhtmlchange ${room.roomid},`).update();
+			room.destroy();
+		},
+		startwatch: 'beginwatch',
+		beginwatch(target, room, user) {
+			room = this.requireRoom();
+			this.checkCan('mute', null, room);
+			const game = this.requireGame(GroupWatch);
+			game.start();
+		},
+		groupwatches() {
+			let buf = `<strong>Ongoing groupwatches:</strong><br />`;
+			for (const curRoom of Rooms.rooms.values()) {
+				if (!curRoom.getGame(GroupWatch)) continue;
+				buf += `<button class="button" name="send" value="/j ${curRoom.roomid}">${curRoom.title}</button>`;
+			}
+			this.runBroadcast();
+			this.sendReplyBox(buf);
+		},
 	},
 	youtubehelp: [
 		`YouTube commands:`,
@@ -475,6 +609,9 @@ export const commands: ChatCommands = {
 		`/youtube setcategory [category], [channel name] - Sets the category for [channel] to [category]. Requires: @ # &`,
 		`/youtube decategorize [channel name] - Removes the category for the [channel], if there is one. Requires: @ # &`,
 		`/youtube categores - View all channels sorted by category.`,
+		`/youtube groupwatch [link], [title] - Creates a group watch of the [url] with the given [title]. Requires % @ & #`,
+		`/youtube startwatch - Starts the group watch in the current room, if there is one. Requires % @ & #`,
+		`/youtube stopwatch - Ends the current group watch, if there is one in the current room. Requires % @ & #`,
 	],
 };
 

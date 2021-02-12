@@ -11,11 +11,8 @@
  * @license MIT
  */
 
+import {FS, Repl, ProcessManager} from '../lib';
 import {execSync} from "child_process";
-import {FS} from "../lib/fs";
-import {Utils} from '../lib/utils';
-import {StreamProcessManager} from "../lib/process-manager";
-import {Repl} from "../lib/repl";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
 
@@ -709,6 +706,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		let disconnected = false;
 		try {
 			for await (const next of this.stream) {
+				if (!this.room) return; // room deleted in the middle of simulation
 				this.receive(next.split('\n'));
 			}
 		} catch (err) {
@@ -1088,6 +1086,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 		}
 		this.room.send(`|title|${this.room.title}`);
+		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format];
+		if (suspectTest) {
+			const format = Dex.getFormat(this.format);
+			this.room.add(
+				`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
+				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
+			).update();
+		}
 	}
 
 	clearPlayers() {
@@ -1190,69 +1196,7 @@ export class RoomBattleStream extends BattleStream {
 		if (this.battle) this.battle.sendUpdates();
 		const deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
-			console.log(`[slow battle] ${deltaTime}ms - ${chunk}`);
-		}
-	}
-
-	_writeLine(type: string, message: string) {
-		switch (type) {
-		case 'chat-inputlogonly':
-			this.battle.inputLog.push(`>chat ${message}`);
-			break;
-		case 'chat':
-			this.battle.inputLog.push(`>chat ${message}`);
-			this.battle.add('chat', `${message}`);
-			break;
-		case 'requestlog':
-			this.push(`requesteddata\n${this.battle.inputLog.join('\n')}`);
-			break;
-		case 'eval':
-			const battle = this.battle;
-			battle.inputLog.push(`>${type} ${message}`);
-			message = message.replace(/\f/g, '\n');
-			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
-			try {
-				/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
-				const p1 = battle?.sides[0];
-				const p2 = battle?.sides[1];
-				const p3 = battle?.sides[2];
-				const p4 = battle?.sides[3];
-				const p1active = p1?.active[0];
-				const p2active = p2?.active[0];
-				const p3active = p3?.active[0];
-				const p4active = p4?.active[0];
-				let result = eval(message);
-				/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
-
-				if (result?.then) {
-					result.then((unwrappedResult: any) => {
-						unwrappedResult = Utils.visualize(unwrappedResult);
-						battle.add('', 'Promise -> ' + unwrappedResult);
-						battle.sendUpdates();
-					}, (error: Error) => {
-						battle.add('', '<<< error: ' + error.message);
-						battle.sendUpdates();
-					});
-				} else {
-					result = Utils.visualize(result);
-					result = result.replace(/\n/g, '\n||');
-					battle.add('', '<<< ' + result);
-				}
-			} catch (e) {
-				battle.add('', '<<< error: ' + e.message);
-			}
-			break;
-		case 'requestteam':
-			message = message.trim();
-			const slotNum = parseInt(message.slice(1)) - 1;
-			if (isNaN(slotNum) || slotNum < 0) {
-				throw new Error(`Team requested for slot ${message}, but that slot does not exist.`);
-			}
-			const side = this.battle.sides[slotNum];
-			const team = Dex.packTeam(side.team);
-			this.push(`requesteddata\n${team}`);
-			break;
-		default: super._writeLine(type, message);
+			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk}`);
 		}
 	}
 }
@@ -1261,7 +1205,7 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new StreamProcessManager(module, () => new RoomBattleStream());
+export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream());
 
 if (!PM.isParentProcess) {
 	// This is a child process!

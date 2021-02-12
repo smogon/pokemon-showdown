@@ -22,6 +22,7 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;)：何でもできる。この文章も編集できる。",
 
 		"<strong>Room ranks</strong>": "<strong>日本語部屋のユーザーランク</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "<strong>ボイス</strong>(+)：「!コマンド」を使ってコマンドの結果を部屋に表示することができる。",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "<strong>ドライバー</strong>(%)：上記に加えて警告メッセージを出したりユーザーを短時間喋れなく（ミュート）することができる。",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "<strong>モデレータ</strong>(@)：上記に加えてユーザーを部屋からBANすることができる。",
