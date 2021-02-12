@@ -193,7 +193,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					if (
 						counter.setupType ||
 						hasMove['spikes'] || hasMove['stealthrock'] ||
-						(restTalk) ||
+						restTalk ||
 						teamDetails.defog
 					) rejected = true;
 					break;
@@ -206,7 +206,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 						counter['speedsetup'] ||
 						counter['Dark'] > 2 ||
 						hasMove['clearsmog'] ||
-						(restTalk)
+						restTalk
 					) rejected = true;
 					if (counter.damagingMoves.length - 1 === counter['priority']) rejected = true;
 					break;
@@ -431,7 +431,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					if (hasMove['substitute']) rejected = true;
 					break;
 				case 'hydropump':
-					if (hasMove['razorshell'] || hasMove['waterfall'] || (restTalk)) rejected = true;
+					if (hasMove['razorshell'] || hasMove['waterfall'] || restTalk) rejected = true;
 					if (hasMove['scald'] && (counter.Special < 4 || species.types.length > 1 && counter.stab < 3)) rejected = true;
 					break;
 				case 'originpulse': case 'surf':
@@ -446,7 +446,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					if (hasMove['bodyslam'] || !hasMove['glare']) rejected = true;
 					break;
 				case 'stunspore': case 'thunderwave':
-					if (counter.setupType || !!counter['speedsetup'] || (restTalk)) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || restTalk) rejected = true;
 					if (['discharge', 'spore', 'toxic', 'trickroom', 'yawn'].some(m => hasMove[m])) rejected = true;
 					break;
 				case 'toxic':

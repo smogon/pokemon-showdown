@@ -162,10 +162,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (hasMove['bodyslam'] || hasMove['surf'] || restTalk) rejected = true;
 					break;
 				case 'lovelykiss':
-					if (
-						['healbell', 'moonlight', 'morningsun'].some(m => hasMove[m]) ||
-						(restTalk)
-					) rejected = true;
+					if (['healbell', 'moonlight', 'morningsun'].some(m => hasMove[m]) || restTalk) rejected = true;
 					break;
 				case 'sleeptalk':
 					if (hasMove['curse'] && counter.stab >= 2) rejected = true;

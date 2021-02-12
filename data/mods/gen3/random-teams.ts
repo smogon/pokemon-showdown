@@ -219,7 +219,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (counter.setupType || hasMove['thunderbolt']) rejected = true;
 					break;
 				case 'spikes':
-					if (counter.setupType || hasMove['substitute'] || (restTalk) || teamDetails.spikes) {
+					if (counter.setupType || hasMove['substitute'] || restTalk || teamDetails.spikes) {
 						rejected = true;
 					}
 					break;
@@ -228,7 +228,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (!hasMove['batonpass'] && movePool.includes('calmmind')) rejected = true;
 					break;
 				case 'thunderwave':
-					if (counter.setupType || hasMove['bodyslam'] || hasMove['substitute'] || (restTalk)) {
+					if (counter.setupType || hasMove['bodyslam'] || hasMove['substitute'] || restTalk) {
 						rejected = true;
 					}
 					break;
