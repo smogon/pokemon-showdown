@@ -1228,9 +1228,6 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean
 	) {
-		// Misc item generation logic
-		if (species.evos.length && !hasMove['uturn']) return 'Eviolite';
-
 		// not undefined — we want "no item" not "go find a different item"
 		if (hasMove['acrobatics']) return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
 		if (hasMove['geomancy'] || hasMove['meteorbeam']) return 'Power Herb';
@@ -1256,6 +1253,9 @@ export class RandomTeams {
 		}
 		if (species.name === 'Shuckle' && hasMove['stickyweb']) return 'Mental Herb';
 		if (species.name === 'Unfezant' || hasMove['focusenergy']) return 'Scope Lens';
+
+		// Misc item generation logic
+		if (species.evos.length && !hasMove['uturn']) return 'Eviolite';
 
 		// Ability based logic and miscellaneous logic
 		if (species.name === 'Wobbuffet' || ['Cheek Pouch', 'Harvest', 'Ripen'].includes(ability)) return 'Sitrus Berry';
