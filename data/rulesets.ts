@@ -894,12 +894,13 @@ export const Formats: {[k: string]: FormatData} = {
 		// Hardcoded in gen1/moves.ts
 		// Can't be disabled (no precedent for how else to handle desyncs)
 	},
-	deoxyscamouflagemod: {
-		name: 'Deoxys Camouflage Mod',
+	deoxyscamouflageclause: {
+		effectType: 'Rule',
+		name: 'Deoxys Camouflage Clause',
 		desc: "Reveals the Deoxys forme when it is sent in battle.",
 		// Hardcoded into effect, cannot be disabled.
 		onBegin() {
-			this.add('rule', 'Deoxys Camouflage Mod: Reveals the Deoxys forme when it is sent in battle.');
+			this.add('rule', 'Deoxys Camouflage Clause: Reveals the Deoxys forme when it is sent in battle.');
 		},
 	},
 	freezeclausemod: {
