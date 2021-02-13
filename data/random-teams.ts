@@ -1083,13 +1083,13 @@ export class RandomTeams {
 			return (hasMove['rapidspin'] || species.nfe || isDoubles);
 		case 'Blaze':
 			return (isDoubles && hasAbility['Solar Power']);
-		case 'Bulletproof' || ability === 'Overcoat':
+		case 'Bulletproof': case 'Overcoat':
 			return (counter.setupType && hasAbility['Soundproof']);
 		case 'Chlorophyll':
 			return (species.baseStats.spe > 100 || !counter.Fire && !hasMove['sunnyday'] && !teamDetails.sun);
 		case 'Competitive':
 			return (counter.Special < 2 || (hasMove['rest'] && hasMove['sleeptalk']));
-		case 'Compound Eyes' || ability === 'No Guard':
+		case 'Compound Eyes': case 'No Guard':
 			return !counter.inaccurate;
 		case 'Cursed Body':
 			return hasAbility['Infiltrator'];
@@ -1148,9 +1148,9 @@ export class RandomTeams {
 			return !counter.Normal;
 		case 'Regenerator':
 			return hasAbility['Magic Guard'];
-		case 'Reckless' || ability === 'Rock Head':
+		case 'Reckless': case 'Rock Head':
 			return !counter.recoil || hasMove['curse'];
-		case 'Sand Force' || ability === 'Sand Veil':
+		case 'Sand Force': case 'Sand Veil':
 			return !teamDetails.sand;
 		case 'Sand Rush':
 			return (!teamDetails.sand && (!counter.setupType || !counter.Rock || hasMove['rapidspin']));
