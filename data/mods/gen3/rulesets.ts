@@ -11,8 +11,7 @@ export const Formats: {[k: string]: ModdedFormatData} = {
 		onValidateTeam(team, format) {
 			let deoxysType;
 			for (const set of team) {
-				if (set.species === 'Deoxys' || set.species === 'Deoxys-Attack' ||
-					set.species === 'Deoxys-Defense' || set.species === 'Deoxys-Speed') {
+				if (species.species.startsWith("Deoxys")) {
 					if (!deoxysType) {
 						deoxysType = set.species;
 					} else if (deoxysType && deoxysType !== set.species) {
