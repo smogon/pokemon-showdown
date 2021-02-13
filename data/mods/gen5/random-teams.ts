@@ -339,7 +339,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 						counter[counter.setupType] + counter.Status > 3
 					)) && (
 						(
-							counter.stab &&
+							!counter.stab &&
 							!counter['damage'] &&
 							(
 								species.types.length > 1 ||
