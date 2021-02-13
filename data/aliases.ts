@@ -25,7 +25,10 @@ export const Aliases: {[alias: string]: string} = {
 	stab: "[Gen 8] STABmons",
 	camo: "[Gen 8] Camomons",
 	ts: "[Gen 8] Tier Shift",
+	ph: "[Gen 8] Pure Hackmons",
 	gen7bh: "[Gen 7] Balanced Hackmons",
+	gen6ph: "[Gen 6] Pure Hackmons",
+	gen6hackmons: "[Gen 6] Pure Hackmons",
 	cc1v1: "[Gen 8] Challenge Cup 1v1",
 	cc2v2: "[Gen 8] Challenge Cup 2v2",
 	hc: "[Gen 8] Hackmons Cup",
@@ -520,7 +523,7 @@ export const Aliases: {[alias: string]: string} = {
 	propk1: "Pokestar Black Belt",
 
 	// abilities
-	ph: "Poison Heal",
+	pheal: "Poison Heal",
 	regen: "Regenerator",
 	stag: "Shadow Tag",
 
