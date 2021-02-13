@@ -7,10 +7,12 @@ export const Formats: {[k: string]: ModdedFormatData} = {
 	},
 	obtainable: {
 		inherit: true,
+		// Mostly hardcoded in team-validator.ts
 		onValidateTeam(team, format) {
-			let deoxysType = false;
+			let deoxysType;
 			for (const set of team) {
-				if (set.baseSpecies === 'Deoxys') {
+				if (set.species === 'Deoxys' || set.species === 'Deoxys-Attack' ||
+					set.species === 'Deoxys-Defense' || set.species === 'Deoxys-Speed') {
 					if (!deoxysType) {
 						deoxysType = set.species;
 					} else if (deoxysType && deoxysType !== set.species) {
