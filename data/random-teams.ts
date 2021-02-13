@@ -1529,15 +1529,22 @@ export class RandomTeams {
 
 				// Pokemon should have moves that benefit their types, stats, or ability
 				const isLowBP = move.basePower && move.basePower < 50;
-				if (
-					!rejected && !isSetup && !move.weather && !move.stallingMove && move.category === 'Status' ||
+				const moveNeedsExtraChecks = (
+					move.category === 'Status' ||
 					!hasType[move.type] ||
-					(isLowBP && !move.multihit && !hasAbility['Technician']) ||
-					(isDoubles || this.skipExtraRejectionInSingles(move)) ||
-					!counter.setupType || counter.setupType === 'Mixed' ||
-					(move.category !== counter.setupType && move.category !== 'Status') ||
-					(counter[counter.setupType] + counter.Status > 3 && !counter.hazards)
-				) {
+					(isLowBP && !move.multihit && !hasAbility['Technician'])
+				);
+				const setupTypeRequiresExtraChecks = (
+					!counter.setupType ||
+					counter.setupType === 'Mixed' ||
+					(counter[counter.setupType] + counter.Status > 3 && !counter.hazards) ||
+					(move.category !== counter.setupType && move.category !== 'Status')
+				);
+
+				if (moveNeedsExtraChecks && (
+					!rejected && !isSetup && !move.weather && !move.stallingMove && setupTypeRequiresExtraChecks &&
+					!move.damage && (isDoubles || this.skipExtraRejectionInSingles(move))
+				)) {
 					// This move might not be beneficial
 					if (
 						(!counter.stab && counter.physicalpool + counter.specialpool > 0) ||
@@ -1546,6 +1553,7 @@ export class RandomTeams {
 						(hasAbility['steelworker'] && runRejectionChecker('Steel')) ||
 						(isDoubles ? runRejectionChecker('doubles') : runRejectionChecker('recovery')) ||
 						runRejectionChecker('screens') ||
+						runRejectionChecker('misc') ||
 						(isLead && runRejectionChecker('lead'))
 					) {
 						rejected = true;
@@ -1757,7 +1765,6 @@ export class RandomTeams {
 		// PotD stuff
 		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
 		const potd = usePotD ? this.dex.getSpecies(Config.potd) : null;
-		console.log(Config.potd);
 
 		const baseFormes: {[k: string]: number} = {};
 
