@@ -909,7 +909,11 @@ export class RandomTeams {
 			// Special case for Virizion to prevent Leaf Blade on Assault Vest sets
 			return {cull: (hasMove['leafstorm'] || movePool.includes('leafstorm')) && counter.setupType !== 'Physical'};
 		case 'leafstorm':
-			return {cull: (hasMove['gigadrain'] && counter.Status) || (isDoubles && hasMove['energyball'])};
+			return {cull:
+				(counter.setupType === 'Physical' && movePool.includes('leafblade')) ||
+				(hasMove['gigadrain'] && counter.Status) ||
+				(isDoubles && hasMove['energyball']),
+			};
 		case 'powerwhip':
 			// Special case for Centiskorch, which doesn't want Assault Vest
 			return {cull: hasMove['leechlife']};
@@ -1221,8 +1225,13 @@ export class RandomTeams {
 		counter: {[k: string]: any},
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		isLead: boolean,
 		isDoubles: boolean
 	) {
+		// not undefined — we want "no item" not "go find a different item"
+		if (hasMove['acrobatics']) return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
+		if (hasMove['geomancy'] || hasMove['meteorbeam']) return 'Power Herb';
+		if (hasMove['shellsmash']) return (ability === 'Sturdy' && !isLead && !isDoubles) ? 'Heavy-Duty Boots' : 'White Herb';
 		// Species-specific logic
 		if (
 			['Corsola', 'Garchomp', 'Tangrowth'].includes(species.name) &&
@@ -1267,8 +1276,6 @@ export class RandomTeams {
 				return (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
-		// not undefined — we want "no item" not "go find a different item"
-		if (hasMove['acrobatics']) return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
 		if (hasMove['auroraveil'] || hasMove['lightscreen'] && hasMove['reflect']) return 'Light Clay';
 		if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Shed Skin') return 'Chesto Berry';
 		if (hasMove['hypnosis'] && ability === 'Beast Boost') return 'Blunder Policy';
@@ -1663,17 +1670,17 @@ export class RandomTeams {
 			item = this.sample(species.requiredItems);
 		// First, the extra high-priority items
 		} else {
-			item = this.getHighPriorityItem(ability, hasType, hasMove, counter, teamDetails, species, isDoubles);
-			if (!item && isDoubles) {
+			item = this.getHighPriorityItem(ability, hasType, hasMove, counter, teamDetails, species, isLead, isDoubles);
+			if (item === undefined  && isDoubles) {
 				item = this.getDoublesItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species);
 			}
-			if (!item) item = this.getMediumPriorityItem(ability, hasMove, counter, species, isDoubles);
-			if (!item) {
+			if (item === undefined) item = this.getMediumPriorityItem(ability, hasMove, counter, species, isDoubles);
+			if (item === undefined) {
 				item = this.getLowPriorityItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species, isLead, isDoubles);
 			}
 
 			// fallback
-			if (!item) item = isDoubles ? 'Sitrus Berry' : 'Leftovers';
+			if (item === undefined) item = isDoubles ? 'Sitrus Berry' : 'Leftovers';
 		}
 
 		// For Trick / Switcheroo
