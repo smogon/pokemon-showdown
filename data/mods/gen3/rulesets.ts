@@ -18,7 +18,7 @@ export const Formats: {[k: string]: ModdedFormatData} = {
 					} else if (deoxysType && deoxysType !== set.species) {
 						return [
 							`You cannot have more than one forme of Deoxys.`,
-							`(The forme of Deoxys you get is dependant on the game you own.)`,
+							`(The forme of Deoxys you get is dependent on the game you own.)`,
 						];
 					}
 				}
