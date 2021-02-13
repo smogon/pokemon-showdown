@@ -279,7 +279,7 @@ export class TeamValidator {
 			if (dex.gen === 3 && set.species.startsWith("Deoxys")) {
 				if (!deoxysType) {
 					deoxysType = set.species;
-				} else if (deoxysType && deoxysType !== set.species) {
+				} else if (deoxysType && deoxysType !== set.species && ruleTable.isBanned('nonexistent')) {
 					return [
 						`You cannot have more than one forme of Deoxys.`,
 						`(The forme of Deoxys you get is dependent on the game you own.)`,
