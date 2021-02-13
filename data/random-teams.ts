@@ -799,11 +799,11 @@ export class RandomTeams {
 			return {cull: false, isSetup: !counter.setupType};
 
 		// Bad after setup
-		case 'counter': case 'reversal':
-			// Special case for Alakazam, which doesn't want Counter + Nasty Plot
+		case 'coaching': case 'counter': case 'reversal':
+			// Counter: special case for Alakazam, which doesn't want Counter + Nasty Plot
 			return {cull: !!counter.setupType};
 		case 'firstimpression': case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
-			return {cull: (counter.setupType && !isDoubles) || counter.speedsetup || hasMove['rest']};
+			return {cull: (counter.setupType) || counter.speedsetup || hasMove['rest']};
 		case 'bulletpunch': case 'extremespeed': case 'rockblast':
 			return {cull: counter.speedsetup || counter.damagingMoves.length < 2};
 		case 'closecombat': case 'flashcannon': case 'pollenpuff':
@@ -833,7 +833,7 @@ export class RandomTeams {
 			if (!isDoubles && counter.Status < 2 && !hasAbility['Hunger Switch'] && !hasAbility['Speed Boost']) return {cull: true};
 			if (movePool.includes('leechseed') || (movePool.includes('toxic') && !hasMove['wish'])) return {cull: true};
 			if (isDoubles && (
-				['fakeout', 'shellsmash', 'spore'].some(m => movePool.includes('m')) ||
+				['bellydrum', 'fakeout', 'shellsmash', 'spore'].some(m => movePool.includes('m')) ||
 				hasMove['tailwind'] || hasMove['waterspout']
 			)) return {cull: true};
 			return {cull: false};
@@ -1426,12 +1426,12 @@ export class RandomTeams {
 		) return 'Focus Sash';
 		if (!isDoubles && ability === 'Water Bubble') return 'Mystic Water';
 		if (hasMove['clangoroussoul'] || (hasMove['boomburst'] && counter.speedsetup)) return 'Throat Spray';
-		if (((
+		const rockWeaknessCase = (
 			this.dex.getEffectiveness('Rock', species) >= 1 &&
 			(!teamDetails.defog || ability === 'Intimidate' || hasMove['uturn'] || hasMove['voltswitch'])
-		) ||
-			!isDoubles && (hasMove['rapidspin'] && (ability === 'Regenerator' || !!counter.recovery)))
-		) return 'Heavy-Duty Boots';
+		);
+		const spinnerCase = (hasMove['rapidspin'] && (ability === 'Regenerator' || !!counter.recovery));
+		if (!isDoubles && (rockWeaknessCase || spinnerCase)) return 'Heavy-Duty Boots';
 		if (
 			!isDoubles && this.dex.getEffectiveness('Ground', species) >= 2 && !hasType['Poison'] &&
 			ability !== 'Levitate' && !hasAbility['Iron Barbs']
