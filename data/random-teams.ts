@@ -903,7 +903,8 @@ export class RandomTeams {
 			// Special case for Goodra, which only wants one move to hit Water-types
 			return {cull: hasMove['powerwhip']};
 		case 'gigadrain':
-			return {cull: (!counter.setupType && hasMove['uturn']) || (hasType['Poison'] && !counter.Poison)};
+			const celebiPreferLeafStorm = species.id === 'celebi' && !counter.setupType && hasMove['uturn'];
+			return {cull: celebiPreferLeafStorm || (hasType['Poison'] && !counter.Poison)};
 		case 'leafblade':
 			// Special case for Virizion to prevent Leaf Blade on Assault Vest sets
 			return {cull: (hasMove['leafstorm'] || movePool.includes('leafstorm')) && counter.setupType !== 'Physical'};
@@ -1148,7 +1149,7 @@ export class RandomTeams {
 		case 'Regenerator':
 			return hasAbility['Magic Guard'];
 		case 'Reckless' || ability === 'Rock Head':
-			return !counter.recoil;
+			return !counter.recoil || hasMove['curse'];
 		case 'Sand Force' || ability === 'Sand Veil':
 			return !teamDetails.sand;
 		case 'Sand Rush':
