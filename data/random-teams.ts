@@ -70,7 +70,6 @@ export class RandomTeams {
 	moveRejectionCheckers: {
 		screens: MoveRejectionChecker,
 		recovery: MoveRejectionChecker,
-		doubles: MoveRejectionChecker,
 		lead: MoveRejectionChecker,
 		[k: string]: MoveRejectionChecker,
 	};
@@ -108,9 +107,6 @@ export class RandomTeams {
 				!counter.setupType &&
 				!counter.speedsetup &&
 				!hasMove['substitute']
-			),
-			doubles: (movePool, hasMove, hasAbility, hasType, counter, species) => (
-				species.baseStats.def >= 140 && movePool.includes('bodypress')
 			),
 			Bug: (movePool) => movePool.includes('megahorn'),
 			Dark: (movePool, hasMove, hasAbility, hasType, counter) => {
@@ -227,10 +223,14 @@ export class RandomTeams {
 		return this.fastPop(list, index);
 	}
 
-	skipExtraRejectionInSingles(move: Move) {
+	allowExtraRejectionInSingles(move: Move) {
 		return (move.category !== 'Status' || !move.flags.heal) && ![
 			'facade', 'lightscreen', 'reflect', 'sleeptalk', 'spore', 'substitute', 'switcheroo', 'teleport', 'toxic', 'trick',
 		].includes(move.id);
+	}
+
+	allowExtraRejectionInDoubles(move: Move) {
+		return move.id !== 'bodypress';
 	}
 
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
@@ -719,6 +719,11 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean
 	): {cull: boolean, isSetup?: boolean} {
+		if (isDoubles && species.baseStats.def >= 140 && movePool.includes('bodypress')) {
+			// In Doubles, Pokémon with Defense stats >= 140 should always have body press
+			return {cull: true};
+		}
+
 		const hasRestTalk = hasMove['rest'] && hasMove['sleeptalk'];
 
 		// Reject moves that need support
@@ -1542,8 +1547,8 @@ export class RandomTeams {
 				);
 
 				if (moveNeedsExtraChecks && (
-					!rejected && !isSetup && !move.weather && !move.stallingMove && setupTypeRequiresExtraChecks &&
-					!move.damage && (isDoubles || this.skipExtraRejectionInSingles(move))
+					!rejected && !isSetup && !move.weather && !move.stallingMove && setupTypeRequiresExtraChecks && !move.damage &&
+					(isDoubles ? this.allowExtraRejectionInDoubles(move) : this.allowExtraRejectionInSingles(move))
 				)) {
 					// This move might not be beneficial
 					if (
@@ -1551,7 +1556,7 @@ export class RandomTeams {
 						// I have no idea why Swords Dance shares a rejection checker with Flying types
 						(hasMove['swordsdance'] && runRejectionChecker('Flying')) ||
 						(hasAbility['steelworker'] && runRejectionChecker('Steel')) ||
-						(isDoubles ? runRejectionChecker('doubles') : runRejectionChecker('recovery')) ||
+						(!isDoubles && runRejectionChecker('recovery')) ||
 						runRejectionChecker('screens') ||
 						runRejectionChecker('misc') ||
 						(isLead && runRejectionChecker('lead'))
