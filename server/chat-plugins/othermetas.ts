@@ -59,7 +59,7 @@ export const commands: ChatCommands = {
 			buffer += `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
 			if (!target) return this.sendReplyBox(buffer);
 		}
-		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
+		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'month');
 
 		if (target === 'all') {
 			// Display OMotM formats, with forum thread links as caption
