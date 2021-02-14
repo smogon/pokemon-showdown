@@ -4,7 +4,7 @@
 */
 import {FS, Utils} from '../../lib';
 
-const HANGMAN_FILE = 'config/chat-plugins/hangman.json';
+const HANGMAN_FILE = 'config/chat-plugins/hangman.json';x
 
 const DIACRITICS_AFTER_UNDERSCORE = /_[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/g;
 
@@ -223,9 +223,11 @@ export class Hangman extends Rooms.RoomGame {
 		if (!hangmanData[room]) {
 			hangmanData[room] = {};
 			this.save();
-			throw new Chat.ErrorMessage(`The room ${room} has no saved hangman words.`);
 		}
-		const shuffled = Utils.randomElement(Object.keys(hangmanData[room]));
+		const phrases = Object.keys(hangmanData[room]);
+		if (!phrases.length) throw new Chat.ErrorMessage(`The room ${room} has no saved hangman words.`);
+
+		const shuffled = Utils.randomElement(phrases);
 		const hints = hangmanData[room][shuffled];
 		return {
 			question: shuffled,
