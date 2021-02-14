@@ -101,8 +101,6 @@ export class LadderStore {
 		if (p2) p2.mmrCache[formatid] = +p2NewElo;
 
 		room.update();
-
-
 		const [data, error] = await ladderUpdatePromise;
 		let problem = false;
 
