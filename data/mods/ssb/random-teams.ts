@@ -445,7 +445,7 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Lamp: {
-		species: 'Lampent', ability: 'Soul Heart', item: 'Eviolite', gender: 'M',
+		species: 'Lampent', ability: 'Soul-Heart', item: 'Eviolite', gender: 'M',
 		moves: ['Nasty Plot', 'Searing Shot', 'Recover'],
 		signatureMove: 'Soul Swap',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
@@ -885,8 +885,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (!debug.length) { // Type limits are ignored when debugging
 				const types = this.dex.getSpecies(ssbSet.species).types;
 				const weaknesses = [];
-				for (let type in this.data.TypeChart) {
-					let typeMod = this.getEffectiveness(type, types);
+				for (const type in this.data.TypeChart) {
+					const typeMod = this.getEffectiveness(type, types);
 					if (typeMod > 0) weaknesses.push(type);
 				}
 				let rejected = false;
