@@ -547,7 +547,7 @@ function checkIp(ip: string) {
 for (const room of Rooms.rooms.values()) {
 	if (!room.settings.isHelp || !room.game) continue;
 	const game = room.getGame(HelpTicket)!;
-	if (game.ticket) game.ticket = tickets[game.ticket.userid];
+	if (game.ticket && tickets[game.ticket.userid]) game.ticket = tickets[game.ticket.userid];
 }
 
 const delayWarningPreamble = `Hi! All global staff members are busy right now and we apologize for the delay. `;
