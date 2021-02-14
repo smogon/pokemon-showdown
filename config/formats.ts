@@ -688,9 +688,9 @@ export const Formats: FormatList = [
 				return [`${name} has an illegal set with an ability from ${this.dex.getSpecies(pokemonWithAbility[0]).name}.`];
 			}
 
-			// Protocol: Include the data of the donor species in the `ability` data slot.
-			// Afterwards, we are going to reset the name to what the user intended.
-			set.ability = `${set.ability}0${canonicalSource}`;
+			// Protocol: Include the data of the donor species in the `hpType` data slot.
+			// Afterwards, we are going to reset it. I don't think this slot is used in Gen 8.
+			set.hpType = canonicalSource;
 			return null;
 		},
 		onValidateTeam(team, f, teamHas) {
@@ -722,11 +722,10 @@ export const Formats: FormatList = [
 		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.baseAbility.includes('0')) {
-					const donor = pokemon.baseAbility.split('0')[1];
+				if (pokemon.set.hpType && Dex.getSpecies(pokemon.set.hpType).exists) {
+					const donor = pokemon.set.hpType;
 					pokemon.m.donor = this.toID(donor);
-					pokemon.baseAbility = this.toID(pokemon.baseAbility.split('0')[0]);
-					pokemon.ability = pokemon.baseAbility;
+					pokemon.set.hpType = pokemon.hpType = this.dex.getHiddenPower(pokemon.set.ivs).type;
 				}
 			}
 		},
