@@ -70,8 +70,8 @@ export class LadderStore {
 		const formatid = this.formatid;
 		const p1 = Users.getExact(p1name);
 		const p2 = Users.getExact(p2name);
-		const p1id = p1 ? p1.id : toID(p1name);
-		const p2id = p2 ? p2.id : toID(p2name);
+		const p1id = toID(p1name);
+		const p2id = toID(p2name);
 
 		const ladderUpdatePromise = LoginServer.request('ladderupdate', {
 			p1: p1name,
