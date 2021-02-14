@@ -4,7 +4,7 @@
 */
 import {FS, Utils} from '../../lib';
 
-const HANGMAN_FILE = 'config/chat-plugins/hangman.json';x
+const HANGMAN_FILE = 'config/chat-plugins/hangman.json';
 
 const DIACRITICS_AFTER_UNDERSCORE = /_[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/g;
 
