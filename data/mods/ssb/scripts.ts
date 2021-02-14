@@ -403,7 +403,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 
 		if (move.selfSwitch && this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
-			this.hint(`Self-switching don't trigger when a Pokemon with Skill Drain is active.`);
+			this.hint(`Self-switching doesn't trigger when a Pokemon with Skill Drain is active.`);
 		}
 
 		return true;
