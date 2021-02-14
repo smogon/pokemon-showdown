@@ -477,46 +477,6 @@ export const commands: ChatCommands = {
 	},
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
 
-	us: 'usersearch',
-	usersearch(target) {
-		this.checkCan('lock');
-		target = toID(target);
-		if (!target) {
-			return this.parse(`/help usersearch`);
-		}
-		if (target.length < 3) {
-			return this.errorReply(`That's too short of a term to search for.`);
-		}
-		const results: {offline: string[], online: string[]} = {
-			offline: [],
-			online: [],
-		};
-
-		for (const curUser of Users.users.values()) {
-			if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
-			if (curUser.connected) {
-				results.online.push(Utils.html`${ONLINE_SYMBOL} ${curUser.name}`);
-			} else {
-				results.offline.push(Utils.html`${OFFLINE_SYMBOL} ${curUser.name}`);
-			}
-		}
-		for (const k in results) {
-			Utils.sortBy(results[k as keyof typeof results], result => toID(result));
-		}
-		let resultString = `Users with a name matching '${target}':<br />`;
-		if (!results.offline.length && !results.online.length) {
-			resultString += `No users found.`;
-		} else {
-			resultString += results.online.join('; ');
-			if (results.offline.length) {
-				resultString += `<br /><br />`;
-				resultString += results.offline.join('; ');
-			}
-		}
-		return this.sendReplyBox(resultString);
-	},
-	usersearchhelp: [`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`],
-
 	checkchallenges(target, room, user) {
 		room = this.requireRoom();
 		if (!user.can('addhtml', null, room)) this.checkCan('ban', null, room);
