@@ -71,7 +71,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	blastoisegmax: {
 		randomBattleMoves: ["icebeam", "protect", "rapidspin", "scald", "toxic"],
-		randomBattleLevel: 80,
+		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["fakeout", "flipturn", "followme", "icywind", "lifedew", "muddywater", "protect"],
 		randomDoubleBattleLevel: 80,
 		isNonstandard: "Gigantamax",
@@ -249,7 +249,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	raichu: {
-		randomBattleMoves: ["encore", "focusblast", "grassknot", "nastyplot", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["surf", "focusblast", "grassknot", "nastyplot", "thunderbolt", "voltswitch"],
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["encore", "fakeout", "grassknot", "helpinghand", "nuzzle", "protect", "thunderbolt", "voltswitch"],
 		randomDoubleBattleLevel: 88,
@@ -1826,7 +1826,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	entei: {
-		randomBattleMoves: ["extremespeed", "flareblitz", "stompingtantrum", "stoneedge"],
+		randomBattleMoves: ["extremespeed", "flareblitz", "stompingtantrum", "stoneedge", "sacredfire"],
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["extremespeed", "protect", "sacredfire", "snarl", "stompingtantrum", "stoneedge"],
 		randomDoubleBattleLevel: 82,
@@ -1860,7 +1860,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	lugia: {
-		randomBattleMoves: ["aeroblast", "calmmind", "earthquake", "psyshock", "roost", "substitute", "toxic"],
+		randomBattleMoves: ["aeroblast", "earthquake", "psyshock", "roost", "substitute", "toxic"],
 		randomBattleLevel: 74,
 		randomDoubleBattleMoves: ["aeroblast", "calmmind", "psyshock", "roost", "toxic"],
 		randomDoubleBattleLevel: 72,
@@ -1908,7 +1908,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	blaziken: {
-		randomBattleMoves: ["closecombat", "flareblitz", "knockoff", "swordsdance", "uturn"],
+		randomBattleMoves: ["closecombat", "flareblitz", "knockoff", "swordsdance", "stoneedge"],
 		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["closecombat", "flareblitz", "knockoff", "protect", "swordsdance"],
 		randomDoubleBattleLevel: 78,
@@ -3084,7 +3084,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	rotommow: {
-		randomBattleMoves: ["leafstorm", "thunderbolt", "trick", "voltswitch", "willowisp"],
+		randomBattleMoves: ["leafstorm", "thunderbolt", "trick", "voltswitch", "willowisp", "nastyplot"],
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["electroweb", "leafstorm", "protect", "thunderbolt", "voltswitch", "willowisp"],
 		randomDoubleBattleLevel: 88,
@@ -4316,7 +4316,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	pangoro: {
-		randomBattleMoves: ["closecombat", "darkestlariat", "gunkshot", "icepunch", "partingshot"],
+		randomBattleMoves: ["closecombat", "knockoff", "gunkshot", "icepunch", "partingshot"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["bulletpunch", "closecombat", "drainpunch", "gunkshot", "icepunch", "knockoff", "protect"],
 		randomDoubleBattleLevel: 88,
@@ -4439,7 +4439,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	heliolisk: {
-		randomBattleMoves: ["focusblast", "grassknot", "hypervoice", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["glare", "grassknot", "hypervoice", "surf", "thunderbolt", "voltswitch"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["glare", "grassknot", "hypervoice", "protect", "thunderbolt", "voltswitch"],
 		randomDoubleBattleLevel: 88,
@@ -4604,7 +4604,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	yveltal: {
-		randomBattleMoves: ["defog", "heatwave", "knockoff", "oblivionwing", "roost", "suckerpunch"],
+		randomBattleMoves: ["defog", "heatwave", "knockoff", "oblivionwing", "roost", "suckerpunch", "darkpulse"],
 		randomBattleLevel: 70,
 		randomDoubleBattleMoves: ["darkpulse", "heatwave", "knockoff", "oblivionwing", "roost", "suckerpunch", "tailwind", "uturn"],
 		randomDoubleBattleLevel: 72,
@@ -5845,7 +5845,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	eiscue: {
-		randomBattleMoves: ["bellydrum", "iciclecrash", "liquidation", "reversal", "zenheadbutt"],
+		randomBattleMoves: ["bellydrum", "iciclecrash", "liquidation", "substitute", "zenheadbutt"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["bellydrum", "iciclecrash", "liquidation", "protect", "zenheadbutt"],
 		randomDoubleBattleLevel: 86,

@@ -122,12 +122,14 @@ export class RandomTeams {
 			Electric: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Electric || movePool.includes('thunder'),
 			Fairy: (movePool, hasMove, hasAbility, hasType, counter) => (
 				!counter.Fairy &&
-				['dazzlinggleam', 'moonblast', 'fleurcannon', 'playrough'].some(moveid => movePool.includes(moveid))
+				['dazzlinggleam', 'moonblast', 'fleurcannon', 'playrough', 'strangesteam'].some(moveid => movePool.includes(moveid))
 			),
 			Fighting: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Fighting || !counter.stab,
-			Fire: (movePool, hasMove, hasAbility, hasType, counter) => (
-				!hasMove['bellydrum'] && (!counter.Fire || movePool.includes('flareblitz'))
-			),
+			Fire: (movePool, hasMove, hasAbility, hasType, counter, species) => {
+				// Entei should never reject Extreme Speed even if Flare Blitz could be rolled instead
+				const enteiException = hasMove['extremespeed'] && species.id === 'entei';
+				return !hasMove['bellydrum'] && (!counter.Fire || (!enteiException && movePool.includes('flareblitz')));
+			},
 			Flying: (movePool, hasMove, hasAbility, hasType, counter) => (
 				!counter.Flying && [
 					'airslash', 'bravebird', 'dualwingbeat', 'oblivionwing',
@@ -723,6 +725,10 @@ export class RandomTeams {
 			// In Doubles, Pokémon with Defense stats >= 140 should always have body press
 			return {cull: true};
 		}
+		if (species.id === 'entei' && movePool.includes('extremespeed')) {
+			// Entei should always have Extreme Speed
+			return {cull: true};
+		}
 
 		const hasRestTalk = hasMove['rest'] && hasMove['sleeptalk'];
 
@@ -733,8 +739,10 @@ export class RandomTeams {
 		case 'destinybond': case 'healbell':
 			// Destiny Bond: Special case for preventing Leftovers Sharpedo
 			return {cull: movePool.includes('protect') || movePool.includes('wish')};
-		case 'dualwingbeat': case 'fly': case 'storedpower':
+		case 'dualwingbeat': case 'fly':
 			return {cull: !hasType[move.type] && !counter.setupType && counter.Status};
+		case 'storedpower':
+			return {cull: !counter.setupType || (!hasType[move.type] && counter.Status)};
 		case 'fireblast':
 			// Special case for Togekiss, which always wants Aura Sphere
 			return {cull: hasAbility['Serene Grace'] && (!hasMove['trick'] || counter.Status > 1)};
@@ -769,7 +777,7 @@ export class RandomTeams {
 			return {cull: isLead || webs || counter.damagingMoves.length < 2 || movePool.includes('nastyplot')};
 		case 'zenheadbutt':
 			// Special case for Victini, which should prefer Bolt Strike to Zen Headbutt
-			return {cull: movePool.includes('boltstrike')};
+			return {cull: movePool.includes('boltstrike') || (species.id === 'eiscue' && hasMove['substitute'])};
 
 		// Set up once and only if we have the moves for it
 		case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
@@ -973,7 +981,7 @@ export class RandomTeams {
 			return {cull: hasMove['dragondance']};
 		case 'hurricane':
 			// Special case for Noctowl, which wants Air Slash if Nasty Plot instead
-			return {cull: hasAbility['Tinted Lens'] && counter.setupType && !isDoubles};
+			return {cull: counter.setupType === 'Physical' || (hasAbility['Tinted Lens'] && counter.setupType && !isDoubles)};
 		case 'futuresight':
 			return {cull: hasMove['psyshock'] || hasMove['trick'] || movePool.includes('teleport')};
 		case 'photongeyser':
@@ -1041,12 +1049,16 @@ export class RandomTeams {
 			const moveBasedCull = ['bulkup', 'painsplit', 'roost'].some(m => movePool.includes(m));
 			const doublesPowerWhip = isDoubles && movePool.includes('powerwhip');
 			const calmMindCullCondition = !counter.recovery && movePool.includes('calmmind');
-			return {cull: hasMove['rest'] || moveBasedCull || doublesPowerWhip || calmMindCullCondition};
+			const eiscue = species.id === 'eiscue' && hasMove['zenheadbutt'];
+			return {cull: hasMove['rest'] || moveBasedCull || doublesPowerWhip || calmMindCullCondition || eiscue};
 		case 'helpinghand':
 			// Special case for Shuckle in Doubles, which doesn't want sets with no method to harm foes
 			return {cull: hasMove['acupressure']};
 		case 'wideguard':
 			return {cull: hasMove['protect']};
+		case 'grassknot':
+			// Special case for Raichu
+			return {cull: hasMove['surf']};
 		}
 
 		if (move.id !== 'photongeyser' && (
@@ -1135,7 +1147,7 @@ export class RandomTeams {
 				(hasAbility['Sheer Force'] && counter.sheerforce)
 			);
 		case 'Moxie':
-			return (counter.Physical < 2 || hasMove['stealthrock']);
+			return (counter.Physical < 2 || hasMove['stealthrock'] || hasMove['defog']);
 		case 'Neutralizing Gas':
 			return !hasMove['toxicspikes'];
 		case 'Overgrow':
@@ -1253,6 +1265,7 @@ export class RandomTeams {
 		}
 		if (species.name === 'Shuckle' && hasMove['stickyweb']) return 'Mental Herb';
 		if (species.name === 'Unfezant' || hasMove['focusenergy']) return 'Scope Lens';
+		if (species.name === 'Eiscue' && hasMove['substitute']) return 'Salac Berry';
 
 		// Misc item generation logic
 		if (species.evos.length && !hasMove['uturn']) return 'Eviolite';
@@ -1282,6 +1295,7 @@ export class RandomTeams {
 		if (hasMove['auroraveil'] || hasMove['lightscreen'] && hasMove['reflect']) return 'Light Clay';
 		if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Shed Skin') return 'Chesto Berry';
 		if (hasMove['hypnosis'] && ability === 'Beast Boost') return 'Blunder Policy';
+		if (hasMove['bellydrum']) return 'Sitrus Berry';
 
 		if (this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles) return 'Heavy-Duty Boots';
 	}
@@ -1441,6 +1455,7 @@ export class RandomTeams {
 			counter.damagingMoves.length >= 3 &&
 			!counter.damage &&
 			ability !== 'Sturdy' &&
+			(species.baseStats.spe >= 90 || !hasMove['voltswitch']) &&
 			['foulplay', 'rapidspin', 'substitute', 'uturn'].every(m => !hasMove[m]) && (
 				counter.speedsetup || counter.drain ||
 				hasMove['trickroom'] || hasMove['psystrike'] ||
@@ -1701,8 +1716,8 @@ export class RandomTeams {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			const multipleOfFourNecessary = (hasMove['substitute'] && (
 				item === 'Sitrus Berry' ||
-				ability === 'Power Construct' ||
-				(hasMove['bellydrum'] && item === 'Salac Berry')
+				item === 'Salac Berry' ||
+				ability === 'Power Construct'
 			));
 			if (multipleOfFourNecessary) {
 				// Two Substitutes should activate Sitrus Berry
