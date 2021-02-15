@@ -51,7 +51,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 		if (typeof item !== 'string') item = item[context.random(item.length)];
 		if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
 	}
-	if (!pokemon.m.corrupt) {
+	if (!pokemon.m.datacorrupt) {
 		const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
 		pokemon.moveSlots = newMoves;
 		// @ts-ignore Necessary so pokemon doesn't get 8 moves
