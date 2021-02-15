@@ -1875,7 +1875,12 @@ export const commands: ChatCommands = {
 	groupchatban(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (!target) return this.parse(`/help groupchatban`);
-		this.checkCan('lock');
+		if (!user.can('rangeban')) {
+			return this.errorReply(
+				`/groupchatban has been deprecated.\n` +
+				`For future groupchat misuse, lock the creator, it will take away their trusted status and their ability to make groupchats.`
+			);
+		}
 
 		const reason = this.splitTarget(target);
 		const targetUser = this.targetUser;
