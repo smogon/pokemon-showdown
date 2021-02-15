@@ -812,6 +812,20 @@ export class CommandContext extends MessageContext {
 		}
 		(this.room || Rooms.global).modlog(entry);
 	}
+	parseSpoiler(str: string) {
+		let privateReason;
+		if (!str) return {publicReason: "", privateReason};
+
+		let publicReason = str;
+		const targetLowercase = str.toLowerCase();
+		if (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:')) {
+			const proofIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
+			const bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			privateReason = `(PROOF: ${str.substr(proofIndex + bump, str.length).trim()}) `;
+			publicReason = str.substr(0, proofIndex).trim();
+		}
+		return {publicReason, privateReason};
+	}
 	roomlog(data: string) {
 		if (this.room) this.room.roomlog(data);
 	}
