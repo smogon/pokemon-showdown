@@ -847,7 +847,7 @@ export class RandomTeams {
 			return {cull: false};
 		case 'rapidspin':
 			const setup = ['curse', 'nastyplot', 'shellsmash'].some(m => hasMove[m]);
-			return {cull: teamDetails.rapidSpin || setup || (counter.setupType && counter.Fighting >= 2)};
+			return {cull: !!teamDetails.rapidSpin || setup || (counter.setupType && counter.Fighting >= 2)};
 		case 'shadowsneak':
 			return {cull: hasRestTalk || ['substitute', 'trickroom', 'dualwingbeat', 'toxic'].some(m => hasMove[m])};
 		case 'spikes':
