@@ -782,7 +782,7 @@ export class RandomTeams {
 		// Set up once and only if we have the moves for it
 		case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
 			if (counter.setupType !== 'Physical') return {cull: true}; // if we're not setting up physically this is pointless
-			if (counter.Physical + counter.physicalpool < 2 && hasRestTalk) return {cull: true};
+			if (counter.Physical + counter.physicalpool < 2 && !hasRestTalk) return {cull: true};
 			if (move.id === 'swordsdance' && hasMove['dragondance']) return {cull: true}; // Dragon Dance is judged as better
 
 			return {cull: false, isSetup: true};
@@ -1000,7 +1000,8 @@ export class RandomTeams {
 		case 'stoneedge':
 			const gutsCullCondition = hasAbility['Guts'] && (!hasMove['dynamicpunch'] || hasMove['spikes']);
 			const rockSlidePlusStatusPossible = counter.Status && movePool.includes('rockslide');
-			return {cull: gutsCullCondition || rockSlidePlusStatusPossible || hasMove['rockblast'] || hasMove['rockslide']};
+			const otherRockMove = hasMove['rockblast'] || hasMove['rockslide'];
+			return {cull: gutsCullCondition || (!isDoubles && rockSlidePlusStatusPossible) || otherRockMove};
 		case 'poltergeist':
 			// Special case for Dhelmise in Doubles, which doesn't want both
 			return {cull: hasMove['knockoff']};
@@ -1045,6 +1046,8 @@ export class RandomTeams {
 			return {cull: hasMove['throatchop'] || (hasMove['stoneedge'] && !hasType['Rock'])};
 		case 'reflect': case 'lightscreen':
 			return {cull: !!teamDetails.screens};
+		case 'slackoff':
+			return {cull: species.id === 'slowking' && !hasMove['scald']};
 		case 'substitute':
 			const moveBasedCull = ['bulkup', 'painsplit', 'roost'].some(m => movePool.includes(m));
 			const doublesPowerWhip = isDoubles && movePool.includes('powerwhip');
@@ -1265,7 +1268,7 @@ export class RandomTeams {
 		}
 		if (species.name === 'Shuckle' && hasMove['stickyweb']) return 'Mental Herb';
 		if (species.name === 'Unfezant' || hasMove['focusenergy']) return 'Scope Lens';
-		if (species.name === 'Eiscue' && hasMove['substitute']) return 'Salac Berry';
+		if (hasMove['bellydrum'] && hasMove['substitute']) return 'Salac Berry';
 
 		// Misc item generation logic
 		if (species.evos.length && !hasMove['uturn']) return 'Eviolite';
@@ -1577,8 +1580,8 @@ export class RandomTeams {
 					// This move might not be beneficial
 					if (
 						(!counter.stab && counter.physicalpool + counter.specialpool > 0) ||
-						// I have no idea why Swords Dance shares a rejection checker with Flying types
-						(hasMove['swordsdance'] && runRejectionChecker('Flying')) ||
+						// To make sure Swords Dance Mew gets Brave Bird
+						(hasMove['swordsdance'] && species.id === 'mew' && runRejectionChecker('Flying')) ||
 						(hasAbility['steelworker'] && runRejectionChecker('Steel')) ||
 						(!isDoubles && runRejectionChecker('recovery')) ||
 						runRejectionChecker('screens') ||
