@@ -1574,7 +1574,7 @@ export const commands: ChatCommands = {
 		const week = cmd.includes('w');
 		const force = cmd.includes('force');
 
-		const reason = this.splitTarget(target);
+		target = this.splitTarget(target);
 		const userid = toID(this.targetUsername);
 		const targetUser = this.targetUser;
 
