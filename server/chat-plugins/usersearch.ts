@@ -11,7 +11,7 @@ function searchUsernames(target: string, page = false) {
 	for (const curUser of Users.users.values()) {
 		if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
 		const escapedName = Utils.escapeHTML(curUser.name);
-		const buttonHTML = `<button class="button" name="send" value="/forcerename ${escapedName}&#10;/j view-usersearch-${target}">Forcerename</button>`;
+		const buttonHTML = `<button class="button" name="send" value="/msgroom staff,/fr ${escapedName}&#10;/j view-usersearch-${target}">Forcerename</button>`;
 		if (curUser.connected) {
 			results.online.push(`${ONLINE_SYMBOL} ${page ? `<username>` : ``}${escapedName}${page ? `</username> ${buttonHTML}` : ``}`);
 		} else {
@@ -89,7 +89,7 @@ export const pages: PageTable = {
 	usersearch(query, user) {
 		this.checkCan('lock');
 		if (!query.length) return this.close();
-		this.title = `Usersearch (${query[0]})`;
+		this.title = `[Usersearch] ${query[0]}`;
 		const target = toID(query[0]);
 		return searchUsernames(target, true);
 	},
