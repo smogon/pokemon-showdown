@@ -231,6 +231,26 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should handle Deoxys formes in Gen 3', function () {
+		let team = [
+			{species: 'deoxys', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+			{species: 'deoxys', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen3ubers').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'deoxysattack', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+			{species: 'deoxysdefense', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause,+nonexistent').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should validate Sketch', function () {
 		// Spore is a Gen 5 event move
 		// Sketch itself should still be valid
