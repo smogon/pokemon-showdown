@@ -814,7 +814,7 @@ export class CommandContext extends MessageContext {
 		(this.room || Rooms.global).modlog(entry);
 	}
 	parseSpoiler(str: string) {
-		let privateReason;
+		let privateReason = "";
 		if (!str) return {publicReason: "", privateReason};
 
 		let publicReason = str;
