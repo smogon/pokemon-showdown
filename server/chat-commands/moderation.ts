@@ -1527,7 +1527,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${target}' not found.`);
 		}
 		this.checkCan('forcerename', targetID);
-		const {publicReason, privateReason} = this.parseSpoiler(target);
+		const {publicReason, privateReason} = this.parseSpoiler(reason);
 
 		Monitor.forceRenames.set(targetUser.id, (Monitor.forceRenames.get(targetUser.id) || 0) + 1);
 
