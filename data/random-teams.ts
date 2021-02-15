@@ -999,8 +999,9 @@ export class RandomTeams {
 			break;
 		case 'stoneedge':
 			const gutsCullCondition = hasAbility['Guts'] && (!hasMove['dynamicpunch'] || hasMove['spikes']);
-			const rockSlidePlusStatusPossible = !isDoubles && counter.Status && movePool.includes('rockslide');
-			return {cull: gutsCullCondition || rockSlidePlusStatusPossible || hasMove['rockblast'] || hasMove['rockslide']};
+			const rockSlidePlusStatusPossible = counter.Status && movePool.includes('rockslide');
+			const otherRockMove = hasMove['rockblast'] || hasMove['rockslide'];
+			return {cull: gutsCullCondition || (!isDoubles && rockSlidePlusStatusPossible) || otherRockMove};
 		case 'poltergeist':
 			// Special case for Dhelmise in Doubles, which doesn't want both
 			return {cull: hasMove['knockoff']};
