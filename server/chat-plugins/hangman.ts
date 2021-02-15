@@ -451,13 +451,9 @@ export const pages: PageTable = {
 			buf += `<h3>${t}</h3><hr />`;
 			if (user.can('mute', null, room, 'hangman addrandom')) {
 				buf += roomTerms[t].map(
-					hint => `<button class="button" name="send" value="/hangman rr ${t},${hint},room:${room.roomid}">${hint}</button>`
-				);
-				const button = (
-					`<button style="float:right;" class="button" name="send" value="/hangman rr ${t},room:${room.roomid}">` +
-					`${this.tr`delete`}</button>`
-				);
-				buf += `${button}`;
+					hint => `${hint} <button class="button" name="send" value="/msgroom ${room.roomid}, /hangman rr ${t},${hint}" aria-label="Delete"><i class="fa fa-trash"></i></button>`
+				).join(', ');
+				buf += `<button style="float:right;" class="button" name="send" value="/msgroom ${room.roomid}, /hangman rr ${t}"><i class="fa fa-trash"></i> Delete all terms</button>`;
 			}
 			buf += `</div><br />`;
 		}
