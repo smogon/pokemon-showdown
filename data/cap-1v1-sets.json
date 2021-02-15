@@ -13,12 +13,6 @@
 		"moves": ["Mach Punch", "Aqua Jet", "Earthquake", "Knock Off"]
 	}],
 	"Astrolotl": [{
-		"item": "Air Balloon",
-		"ability": "Vital Spirit",
-		"evs": {"hp": 252, "spd": 32, "spe": 224},
-		"nature": "Jolly",
-		"moves": ["Fire Lash", "Yawn", "Wish", "Protect"]
-	}, {
 		"item": "Life Orb",
 		"ability": "Vital Spirit",
 		"evs": {"hp": 32, "atk": 252, "spe": 224},
