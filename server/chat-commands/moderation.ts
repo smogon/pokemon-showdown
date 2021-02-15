@@ -1537,6 +1537,7 @@ export const commands: ChatCommands = {
 	],
 
 	fr: 'forcerename',
+	frinstaff: 'forcerename',
 	forcerenameinstaff: 'forcerename',
 	forcerename(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help forcerename');
