@@ -5484,6 +5484,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 					pokemon.volatiles['focuspunch'].lostFocus = true;
 				}
 			},
+			onTryAddVolatile(status, pokemon) {
+				if (status.id === 'flinch') return null;
+			},
 		},
 		secondary: null,
 		target: "normal",
