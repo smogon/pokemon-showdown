@@ -848,6 +848,14 @@ export const commands: ChatCommands = {
 			game.onSendHand(user);
 		},
 
+		'c': 'cards',
+		cards(target, room, user) {
+			const game = this.requireGame(UNO);
+			if (!this.runBroadcast()) return false;
+			const players = `<strong>Players (${game.playerCount}):</strong></p>${game.getPlayers(true)}`;
+			this.sendReplyBox(`<tr><td colspan="2" style="vertical-align: top; padding: 0px 5px 5px 5px"><div style="overflow-y: scroll">${players}</div></td></tr></table>`);
+		},
+
 		players: 'getusers',
 		users: 'getusers',
 		getplayers: 'getusers',
@@ -915,6 +923,7 @@ export const commands: ChatCommands = {
 		`/uno start - starts the current game of UNO. Requires: % @ # &`,
 		`/uno disqualify [player] - disqualifies the player from the game. Requires: % @ # &`,
 		`/uno hand - displays your own hand.`,
+		`/uno cards - displays the number of cards each player`,
 		`/uno getusers - displays the players still in the game.`,
 		`/uno [spectate|unspectate] - spectate / unspectate the current private UNO game.`,
 		`/uno suppress [on|off] - Toggles suppression of game messages.`,
