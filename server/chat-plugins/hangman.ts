@@ -411,6 +411,7 @@ export const commands: ChatCommands = {
 			}
 			Hangman.save();
 		},
+		view: 'terms',
 		terms(target, room, user) {
 			room = this.requireRoom();
 			return this.parse(`/j view-hangman-${target || room.roomid}`);
@@ -430,24 +431,34 @@ export const commands: ChatCommands = {
 		`/hangman addrandom [word], [...hints] - Adds an entry for [word] with the [hints] provided to the room's hangman pool. Requires: % @ # &`,
 		`/hangman removerandom [word][, hints] - Removes data from the hangman entry for [word]. If hints are given, removes only those hints.` +
 		` Otherwise it removes the entire entry. Requires: % @ # &`,
+		`/hangman terms - Displays all random hangman in a room. Requires: % @ # &`,
 	],
 };
 
 export const pages: PageTable = {
 	hangman(args, user) {
 		const room = this.requireRoom();
+		this.title = `[Hangman]`;
 		this.checkCan('mute', null, room);
-		let buf = `<div class="pad"><h2>Hangman entries on ${room.title}</h2>`;
+		let buf = `<div class="pad"><button style="float:right;" class="button" name="send" value="/join view-hangman-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button>`;
+		buf += `<div class="pad"><h2>Hangman entries on ${room.title}</h2>`;
 		const roomTerms = hangmanData[room.roomid];
 		if (!roomTerms) {
 			return this.errorReply(`No hangman terms found for ${room.title}.`);
 		}
 		for (const t in roomTerms) {
 			buf += `<div class="infobox">`;
-			buf += `<strong>${t}</strong>:<br />`;
-			buf += roomTerms[t].map(
-				hint => `<button class="button" name="send" value="/hangman rr ${t},${hint},room:${room.roomid}">${hint}</button>`
-			);
+			buf += `<h3>${t}</h3><hr />`;
+			if (user.can('mute', null, room, 'hangman addrandom')) {
+				buf += roomTerms[t].map(
+					hint => `<button class="button" name="send" value="/hangman rr ${t},${hint},room:${room.roomid}">${hint}</button>`
+				);
+				const button = (
+					`<button style="float:right;" class="button" name="send" value="/hangman rr ${t},room:${room.roomid}">` +
+					`${this.tr`delete`}</button>`
+				);
+				buf += `${button}`;
+			}
 			buf += `</div><br />`;
 		}
 		buf += `</div>`;
