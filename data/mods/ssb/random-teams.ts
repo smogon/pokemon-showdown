@@ -445,7 +445,7 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Lamp: {
-		species: 'Lampent', ability: 'Soul Heart', item: 'Eviolite', gender: 'M',
+		species: 'Lampent', ability: 'Soul-Heart', item: 'Eviolite', gender: 'M',
 		moves: ['Nasty Plot', 'Searing Shot', 'Recover'],
 		signatureMove: 'Soul Swap',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
@@ -884,10 +884,15 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			// Enforce typing limits
 			if (!debug.length) { // Type limits are ignored when debugging
 				const types = this.dex.getSpecies(ssbSet.species).types;
+				const weaknesses = [];
+				for (const type in this.dex.data.TypeChart) {
+					const typeMod = this.dex.getEffectiveness(type, types);
+					if (typeMod > 0) weaknesses.push(type);
+				}
 				let rejected = false;
-				for (const type of types) {
+				for (const type of weaknesses) {
 					if (typePool[type] === undefined) typePool[type] = 0;
-					if (typePool[type] >= 2) {
+					if (typePool[type] >= 3) {
 						// Reject
 						rejected = true;
 						break;
@@ -902,7 +907,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				}
 				if (rejected) continue;
 				// Update type counts
-				for (const type of types) {
+				for (const type of weaknesses) {
 					typePool[type]++;
 				}
 			}
