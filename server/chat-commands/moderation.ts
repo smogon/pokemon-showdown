@@ -1537,9 +1537,11 @@ export const commands: ChatCommands = {
 	],
 
 	fr: 'forcerename',
-	forcerename(target, room, user) {
+	forcerenameinstaff: 'forcerename',
+	forcerename(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help forcerename');
 
+		if (cmd.endsWith('staff') && Rooms.search('staff')) room = this.room = Rooms.search('staff')!;
 		const reason = this.splitTarget(target, true);
 		const targetUser = this.targetUser;
 		const targetID = toID(this.targetUsername);
