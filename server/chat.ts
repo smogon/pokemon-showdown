@@ -557,11 +557,12 @@ export class CommandContext extends MessageContext {
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message as string);
+			message = true;
 		}
 
 		this.update();
 
-		return message as boolean;
+		return message;
 	}
 
 	sendChatMessage(message: string) {

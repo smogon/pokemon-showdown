@@ -524,9 +524,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
-		// this is to ensure slow commands in pm are logged
-		// but also are not duplicated - a normal `return this.parse(...)` creates dupe messages
-		return Promise.resolve(this.parse(target)).then(() => {});
+		return this.parse(target);
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
 
