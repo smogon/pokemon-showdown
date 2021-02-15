@@ -485,6 +485,18 @@ export const commands: ChatCommands = {
 	},
 	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
 
+	async msgroom(target, room, user, connection) {
+		const [targetId, message] = Utils.splitFirst(target, ',').map(i => i.trim());
+		if (!targetId || !message) {
+			return this.parse(`/help msgroom`);
+		}
+		const targetRoom = Rooms.search(toID(targetId));
+		if (!targetRoom) return this.errorReply(`Room not found`);
+		const subcontext = new Chat.CommandContext({room: targetRoom, message, user, connection});
+		await subcontext.parse();
+	},
+	msgroomhelp: [`/msgroom [room], [command] - Runs the [command] in the given [room].`],
+
 	r: 'reply',
 	reply(target, room, user) {
 		if (!target) return this.parse('/help reply');
