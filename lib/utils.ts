@@ -230,11 +230,20 @@ export function html(strings: TemplateStringsArray, ...args: any) {
 }
 
 /**
+ * This combines escapeHTML and forceWrap. The combination allows us to use
+ * <wbr /> instead of U+200B, which will make sure the word-wrapping hints
+ * can't be copy/pasted (which would mess up code).
+ */
+export function escapeHTMLForceWrap(text: string): string {
+	return escapeHTML(forceWrap(text)).replace(/\u200B/g, '<wbr />');
+}
+
+/**
  * HTML doesn't support `word-wrap: break-word` in tables, but sometimes it
  * would be really nice if it did. This emulates `word-wrap: break-word` by
- * manually inserting U+200B (zero-width space, the force-wrap character) in long words.
+ * manually inserting U+200B to tell long words to wrap.
  */
-export function forceWrap(text: string) {
+export function forceWrap(text: string): string {
 	return text.replace(/[^\s]{30,}/g, word => {
 		let lastBreak = 0;
 		let brokenWord = '';
