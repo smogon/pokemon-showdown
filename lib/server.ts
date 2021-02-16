@@ -71,7 +71,7 @@ export class NetServer {
 		}
 
 		try {
-			const path = FS(this.dir +  pathname);
+			const path = FS(this.dir + pathname);
 			if (!path.existsSync() || path.isDirectorySync()) {
 				return response.end(this.notFound.readIfExistsSync());
 			}
@@ -85,7 +85,6 @@ export class NetServer {
 			}
 			throw new ServerError(`Error serving request: ${req.url} (${this.dir}) - ${e.message}`);
 		}
-
 	}
 	serveFile(file: string, response: http.ServerResponse, opts: {code?: number, thisDir?: boolean} = {}) {
 		if (opts.code) response.writeHead(opts.code);
