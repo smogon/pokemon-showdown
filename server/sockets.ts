@@ -15,7 +15,7 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
-import {crashlogger, ProcessManager, Streams, Repl} from '../lib';
+import {crashlogger, ProcessManager, Streams, Repl, NetServer} from '../lib';
 import {IPTools} from './ip-tools';
 
 type StreamWorker = ProcessManager.StreamWorker;
@@ -216,17 +216,15 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		// Static server
 		try {
 			if (config.disablenodestatic) throw new Error("disablenodestatic");
-			const StaticServer: typeof import('node-static').Server = require('node-static').Server;
 			const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
-			const cssServer = new StaticServer('./config');
-			const avatarServer = new StaticServer('./config/avatars');
-			const staticServer = new StaticServer('./server/static');
+			const cssServer = new NetServer('./config');
+			const avatarServer = new NetServer('./config/avatars');
+			const staticServer = new NetServer('./server/static');
 			const staticRequestHandler = (req: http.IncomingMessage, res: http.ServerResponse) => {
-				// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
+				Monitor.debug(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
 				req.resume();
 				req.addListener('end', () => {
-					if (config.customhttpresponse &&
-							config.customhttpresponse(req, res)) {
+					if (config.customhttpresponse && config.customhttpresponse(req, res)) {
 						return;
 					}
 
@@ -244,7 +242,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 					server.serve(req, res, e => {
 						if (e && (e as any).status === 404) {
-							staticServer.serveFile('404.html', 404, {}, req, res);
+							staticServer.serveFile('/404.html', res, {code: 404, thisDir: true});
 						}
 					});
 				});
