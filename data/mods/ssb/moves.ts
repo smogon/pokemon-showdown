@@ -504,6 +504,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				possibleMoves.splice(moveIndex, 1);
 			}
 			const newMoveSlots = changeMoves(this, target, newMoves);
+			target.m.datacorrupt = true;
 			target.moveSlots = newMoveSlots;
 			// @ts-ignore
 			target.baseMoveSlots = newMoveSlots;

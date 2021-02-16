@@ -51,10 +51,12 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 		if (typeof item !== 'string') item = item[context.random(item.length)];
 		if (context.toID(item) !== (pokemon.item || pokemon.lastItem)) pokemon.setItem(item);
 	}
-	const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
-	pokemon.moveSlots = newMoves;
-	// @ts-ignore Necessary so pokemon doesn't get 8 moves
-	pokemon.baseMoveSlots = newMoves;
+	if (!pokemon.m.datacorrupt) {
+		const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
+		pokemon.moveSlots = newMoves;
+		// @ts-ignore Necessary so pokemon doesn't get 8 moves
+		pokemon.baseMoveSlots = newMoves;
+	}
 	context.add('-ability', pokemon, `${pokemon.getAbility().name}`);
 	context.add('message', `${pokemon.name} changed form!`);
 }
