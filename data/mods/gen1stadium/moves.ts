@@ -18,12 +18,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// - Counter succeeds if the target used a Counterable move earlier this turn
 
 			const lastMoveThisTurn = target.side.lastMove && target.side.lastMove.id === target.side.lastSelectedMove &&
-				this.dex.getMove(target.side.lastMove.id);
+				!this.queue.willMove(target) && this.dex.getMove(target.side.lastMove.id);
+			if (!lastMoveThisTurn) {
+				this.debug("Stadium 1 Counter: last move was not this turn");
+				this.add('-fail', pokemon);
+				return false;
+			}
+
 			const lastMoveThisTurnIsCounterable = lastMoveThisTurn && lastMoveThisTurn.basePower > 0 &&
 				['Normal', 'Fighting'].includes(lastMoveThisTurn.type) && lastMoveThisTurn.id !== 'counter';
-
-			if (lastMoveThisTurnIsCounterable && !this.queue.willMove(target)) {
-				this.debug("Stadium 1 Counter: last move was not Counterable");
+			if (!lastMoveThisTurnIsCounterable) {
+				this.debug(`Stadium 1 Counter: last move ${lastMoveThisTurn.name} was not Counterable`);
 				this.add('-fail', pokemon);
 				return false;
 			}
