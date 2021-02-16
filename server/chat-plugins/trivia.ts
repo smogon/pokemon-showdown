@@ -822,7 +822,6 @@ export class Trivia extends Rooms.RoomGame {
 		const prizes = this.getPrizes();
 		triviaData.leaderboard![winners[0].id][0] += prizes[0];
 		for (let i = 0; i < winners.length; i++) {
-			triviaData.altLeaderboard![winners[i].id] = [0, 0, 0];
 			triviaData.altLeaderboard![winners[i].id][0] += prizes[i];
 		}
 
