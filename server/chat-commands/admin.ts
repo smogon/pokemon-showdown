@@ -615,10 +615,10 @@ export const commands: ChatCommands = {
 		for (const row of rows) {
 			if (!row.trim()) continue;
 			const [pid, mem, time, ...rest] = row.split(' ').filter(Boolean);
-			const entry: Partial<Process> = {cmd: rest.join(' ')};
+			const entry: Process = {cmd: rest.join(' ')};
 			if (time && time !== '00:00:00') entry.time = time;
 			if (mem && mem !== '0.0') entry.mem = `${mem}%`;
-			processes.set(pid, entry as Process);
+			processes.set(pid, entry);
 		}
 
 		let buf = `<strong>${process.pid}</strong> - Main<br />`;
