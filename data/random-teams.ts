@@ -1746,6 +1746,9 @@ export class RandomTeams {
 			ivs.atk = 0;
 		}
 
+		// Ensure Nihilego's Beast Boost gives it Special Attack boosts instead of Special Defense
+		if (forme === 'Nihilego') evs.spd -= 32;
+
 		if (hasMove['gyroball'] || hasMove['trickroom']) {
 			evs.spe = 0;
 			ivs.spe = 0;
