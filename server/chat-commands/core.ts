@@ -492,7 +492,9 @@ export const commands: ChatCommands = {
 		}
 		const targetRoom = Rooms.search(toID(targetId));
 		if (!targetRoom) return this.errorReply(`Room not found.`);
-		if (message.trim().startsWith('/msgroom')) return this.errorReply(`You may not use /msgroom to parse itself in other rooms.`);
+		if (message.trim().startsWith('/msgroom')) {
+			return this.errorReply(`You may not use /msgroom to parse itself in other rooms.`);
+		}
 		const subcontext = new Chat.CommandContext({room: targetRoom, message, user, connection});
 		await subcontext.parse();
 	},
