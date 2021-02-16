@@ -14,6 +14,12 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import {FS, Utils, ProcessManager} from '../../lib';
 
+interface Process {
+	cmd: string;
+	mem?: string;
+	time?: string;
+}
+
 function bash(command: string, context: CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
 	return new Promise(resolve => {
@@ -602,16 +608,50 @@ export const commands: ChatCommands = {
 			this.checkCan('lockdown');
 		}
 
+		const processes = new Map<string, Process>();
+
+		const psOutput = child_process.execSync('ps -o pid,%mem,time,command', {cwd: `${__dirname}/../..`}).toString();
+		const rows = psOutput.split('\n').slice(1); // first line is the title
+		for (const row of rows) {
+			if (!row.trim()) continue;
+			const [pid, mem, time, ...rest] = row.split(' ').filter(Boolean);
+			const entry: Partial<Process> = {cmd: rest.join(' ')};
+			if (time && time !== '00:00:00') entry.time = time;
+			if (mem && mem !== '0.0') entry.mem = `${mem}%`;
+			processes.set(pid, entry as Process);
+		}
+
 		let buf = `<strong>${process.pid}</strong> - Main<br />`;
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
-				buf += `<strong>${process.getProcess().pid}</strong> - ${manager.basename} ${i} (load ${process.load})<br />`;
+				const pid = process.getProcess().pid;
+				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.load}`;
+				const info = processes.get(`${pid}`)!;
+				if (info.mem) buf += `, CPU: ${info.mem}`;
+				if (info.time) buf += `, time: ${info.time}`;
+				buf += `)<br />`;
+				processes.delete(`${pid}`);
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
-				buf += `<strong>${process.getProcess().pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load})<br />`;
+				const pid = process.getProcess().pid;
+				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load}`;
+				const info = processes.get(`${pid}`)!;
+				if (info.mem) buf += `, CPU: ${info.mem}`;
+				if (info.time) buf += `, time: ${info.time}`;
+				buf += `)<br />`;
+				processes.delete(`${pid}`);
 			}
 		}
+		buf += `<br />`;
 
+		for (const [pid, process] of processes) {
+			buf += `<strong>${pid}</strong> - ${process.cmd} `;
+			if (process.mem) buf += ` (CPU: ${process.mem}`;
+			if (process.time) {
+				buf += `${process.mem ? `, ` : '('}time: ${process.time})`;
+			}
+			buf += `<br />`
+		}
 		this.sendReplyBox(buf);
 	},
 
