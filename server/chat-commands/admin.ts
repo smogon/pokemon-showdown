@@ -650,7 +650,7 @@ export const commands: ChatCommands = {
 			if (process.time) {
 				buf += `${process.mem ? `, ` : '('}time: ${process.time})`;
 			}
-			buf += `<br />`
+			buf += `<br />`;
 		}
 		this.sendReplyBox(buf);
 	},
