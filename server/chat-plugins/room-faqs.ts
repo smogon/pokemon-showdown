@@ -52,37 +52,30 @@ export const commands: ChatCommands = {
 		this.modlog('RFAQ', null, `${exists ? 'edited' : 'added'} '${topic}'`);
 	},
 	removefaq(target, room, user) {
-		target = target.trim();
-		let [topic, roomid] = Utils.splitFirst(target, ',');
-		const targetRoom = roomid ? Rooms.search(roomid) : room;
-		if (!targetRoom) return this.errorReply(`Invalid room.`);
-		if (!targetRoom.persist) {
-			return this.errorReply("This command is unavailable in temporary rooms.");
-		}
-		this.room = targetRoom;
+		room = this.requireRoom();
 		this.checkChat();
-		this.checkCan('ban', null, targetRoom);
-		topic = toID(topic);
+		this.checkCan('ban', null, room);
+		const topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
 
-		if (!(roomFaqs[targetRoom.roomid] && roomFaqs[targetRoom.roomid][topic])) return this.errorReply("Invalid topic.");
+		if (!(roomFaqs[room.roomid] && roomFaqs[room.roomid][topic])) return this.errorReply("Invalid topic.");
 		if (
-			targetRoom.settings.repeats?.length &&
-			targetRoom.settings.repeats.filter(x => x.faq && x.id === (getAlias(targetRoom.roomid, topic) || topic)).length
+			room.settings.repeats?.length &&
+			room.settings.repeats.filter(x => x.faq && x.id === (getAlias(room!.roomid, topic) || topic)).length
 		) {
-			this.parse(`/removerepeat ${getAlias(targetRoom.roomid, topic) || topic},${targetRoom.roomid}`);
+			this.parse(`/msgroom ${room.roomid},/removerepeat ${getAlias(room.roomid, topic) || topic}`);
 		}
-		delete roomFaqs[targetRoom.roomid][topic];
-		Object.keys(roomFaqs[targetRoom.roomid]).filter(
-			val => getAlias(targetRoom.roomid, val) === topic
+		delete roomFaqs[room.roomid][topic];
+		Object.keys(roomFaqs[room.roomid]).filter(
+			val => getAlias(room!.roomid, val) === topic
 		).map(
-			val => delete roomFaqs[targetRoom.roomid][val]
+			val => delete roomFaqs[room!.roomid][val]
 		);
-		if (!Object.keys(roomFaqs[targetRoom.roomid]).length) delete roomFaqs[targetRoom.roomid];
+		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
 		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
-		if (roomid) this.refreshPage(`roomfaqs-${targetRoom.roomid}`);
+		this.refreshPage(`roomfaqs-${room.roomid}`);
 	},
 	addalias(target, room, user) {
 		room = this.requireRoom();
@@ -164,7 +157,7 @@ export const pages: PageTable = {
 				const src = Utils.escapeHTML(topic).replace(/\n/g, `<br />`);
 				buf += `<hr /><details><summary>Raw text</summary>`;
 				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/addfaq ${key}, ${src}</code></details>`;
-				buf += `<hr /><button class="button" name="send" value="/removefaq ${key},${room.roomid}">Delete FAQ</button>`;
+				buf += `<hr /><button class="button" name="send" value="/msgroom ${room.roomid},/removefaq ${key}">Delete FAQ</button>`;
 			}
 			buf += `</div>`;
 		}

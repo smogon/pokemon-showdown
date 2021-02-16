@@ -485,13 +485,15 @@ export const commands: ChatCommands = {
 	},
 	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
 
-	async msgroom(target, room, user, connection) {
+	async msgroom(target, room, user, connection, cmd) {
 		const [targetId, message] = Utils.splitFirst(target, ',').map(i => i.trim());
 		if (!targetId || !message) {
 			return this.parse(`/help msgroom`);
 		}
 		const targetRoom = Rooms.search(toID(targetId));
-		if (!targetRoom) return this.errorReply(`Room not found`);
+		if (!targetRoom) return this.errorReply(`Room not found.`);
+		if (!targetRoom.users[user.id]) return this.errorReply(`You must be in the room "${targetRoom.title}" to message it.`);
+		if (message.startsWith(`/${cmd}`)) return this.errorReply(`You may not use /msgroom to parse itself in other rooms.`);
 		const subcontext = new Chat.CommandContext({room: targetRoom, message, user, connection});
 		await subcontext.parse();
 	},
