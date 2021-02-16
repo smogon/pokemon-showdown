@@ -1274,7 +1274,7 @@ export const Formats: FormatList = [
 				if (target.set.moves.includes('auroraveil')) tier = 'nubl';
 			}
 			const pokemon = this.dex.deepClone(species);
-			pokemon.bst = 0;
+			pokemon.bst = pokemon.baseStats['hp'];
 			const boost = boosts[tier];
 			let statName: StatName;
 			for (statName in pokemon.baseStats as StatsTable) {
