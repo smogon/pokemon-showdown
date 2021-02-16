@@ -3433,7 +3433,7 @@ export const commands: ChatCommands = {
 			} else {
 				if (points > 100 || points < -100) {
 					return this.errorReply(`You cannot give or take more than 100 points at a time.`);
-				}	
+				}
 				// shift out the point count
 				args.shift();
 			}
