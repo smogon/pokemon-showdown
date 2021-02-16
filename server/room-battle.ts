@@ -951,7 +951,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 			`turns, endType, date, format, ladderError, seed, score, p1rating, p2rating) `
 		);
 		query.append(`VALUES (`);
-		query.append(SQL`${roomid}, ${winner}, ${loser}, ${p1id}, ${p2id}, ${p1}, ${p2}, ${logData.p1team}, `);
+		query.append(SQL`${roomid}, ${Chat.toTimestamp(now).split(' ')[0]}, ${winner}, `);
+		query.append(SQL`${loser}, ${p1id}, ${p2id}, ${p1}, ${p2}, ${logData.p1team}, `);
 		query.append(SQL`${logData.p2team}, ${logData.log}, ${logData.inputLog}, `);
 		query.append(SQL`${logData.turns}, ${this.endType}, ${now}, ${format}, `);
 		query.append(SQL`${logData.ladderError}, ${logData.seed}, ${logData.score}, ${logData.p1rating}, ${logData.p2rating}`);
@@ -959,7 +960,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		await Rooms.RoomBattle.logDatabase.query(query);
 
-		const dataQuery = SQL`INSERT INTO battledata (date, format) VALUES (${Chat.toTimestamp(now).split(' ')[0]}, ${format})`;
+		const dataQuery = SQL`INSERT INTO battle_identifiers (format) VALUES (${format})`;
 		dataQuery.append(SQL` ON CONFLICT DO NOTHING`);
 		await Rooms.RoomBattle.logDatabase.query(dataQuery);
 	}
