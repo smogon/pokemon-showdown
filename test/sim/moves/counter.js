@@ -113,6 +113,19 @@ describe('Counter', function () {
 		assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it(`[Gen 1 Stadium] should counter Normal/Fighting moves only`, function () {
+		// should counter Normal/Fighting moves
+		battle = common.mod('gen1stadium').createBattle([[
+			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+		], [
+			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+		]]);
+		battle.makeChoices('move watergun', 'move counter');
+		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move pound', 'move counter');
+		assert.false.fullHP(battle.p1.active[0]);
+	});
 });
 
 describe('Mirror Coat', function () {
