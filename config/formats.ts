@@ -2961,7 +2961,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 1] Stadium OU",
 
-		mod: 'stadium',
+		mod: 'gen1stadium',
 		searchShow: false,
 		ruleset: ['Standard', 'Team Preview'],
 		banlist: ['Uber',
