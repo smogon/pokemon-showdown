@@ -1768,7 +1768,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.boost(oppBoost, target);
 			target.trySetStatus('tox', source);
 			if (source.species.baseSpecies === 'Alcremie') {
-				const newSet = ['Finland', 'Finland-Tsikhe', 'Finland-Nezavisa', 'Finland-Järvilaulu'][this.random(4)];
+				const formes = ['Finland', 'Finland-Tsikhe', 'Finland-Nezavisa', 'Finland-Järvilaulu']
+					.filter(forme => ssbSets[forme].species !== source.species.name);
+				const newSet = this.sample(formes);
 				changeSet(this, source, ssbSets[newSet]);
 			}
 		},
@@ -5105,7 +5107,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(foe, source, move) {
-			const formes = ['Cleric', 'Ninja', 'Dancer', 'Songstress', 'Jester'];
+			const formes = ['Cleric', 'Ninja', 'Dancer', 'Songstress', 'Jester']
+				.filter(forme => ssbSets[forme].species !== source.species.name);
 			source.m.yukiCosplayForme = this.sample(formes);
 			switch (source.m.yukiCosplayForme) {
 			case 'Cleric':
