@@ -5108,7 +5108,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(foe, source, move) {
 			const formes = ['Cleric', 'Ninja', 'Dancer', 'Songstress', 'Jester']
-				.filter(forme => ssbSets[forme].species !== source.species.name);
+				.filter(forme => ssbSets[`yuki-${forme}`].species !== source.species.name);
 			source.m.yukiCosplayForme = this.sample(formes);
 			switch (source.m.yukiCosplayForme) {
 			case 'Cleric':
