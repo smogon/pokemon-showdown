@@ -649,7 +649,7 @@ export const commands: ChatCommands = {
 			}
 		}
 		buf += `<br />`;
-		buf += `<strong>Other processes:</strong><br />`;
+		buf += `<details class="readmore"><summary><strong>Other processes:</strong></summary>`;
 
 		for (const [pid, process] of processes) {
 			buf += `<strong>${pid}</strong> - <code>${process.cmd}</code>`;
@@ -659,6 +659,7 @@ export const commands: ChatCommands = {
 			}
 			buf += `<br />`;
 		}
+		buf += `</details>`;
 		this.sendReplyBox(buf);
 	},
 
