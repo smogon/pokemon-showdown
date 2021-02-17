@@ -996,7 +996,6 @@ export class RandomTeams {
 			return {cull: hasMove['uturn'] && !counter.setupType};
 		case 'leechlife':
 			return {cull: (isDoubles && hasMove['lunge']) || movePool.includes('firstimpression') || movePool.includes('spikes')};
-			break;
 		case 'stoneedge':
 			const gutsCullCondition = hasAbility['Guts'] && (!hasMove['dynamicpunch'] || hasMove['spikes']);
 			const rockSlidePlusStatusPossible = counter.Status && movePool.includes('rockslide');
