@@ -8,7 +8,7 @@
  */
 
 import {Dex, toID} from './dex';
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -257,6 +257,7 @@ export class TeamValidator {
 
 		const teamHas: {[k: string]: number} = {};
 		let lgpeStarterCount = 0;
+		let deoxysType;
 		for (const set of team) {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 
@@ -273,6 +274,16 @@ export class TeamValidator {
 				lgpeStarterCount++;
 				if (lgpeStarterCount === 2 && ruleTable.isBanned('nonexistent')) {
 					problems.push(`You can only have one of Pikachu-Starter or Eevee-Starter on a team.`);
+				}
+			}
+			if (dex.gen === 3 && set.species.startsWith('Deoxys')) {
+				if (!deoxysType) {
+					deoxysType = set.species;
+				} else if (deoxysType !== set.species && ruleTable.isBanned('nonexistent')) {
+					return [
+						`You cannot have more than one type of Deoxys forme.`,
+						`(Each game in Gen 3 supports only one forme of Deoxys.)`,
+					];
 				}
 			}
 			if (setProblems) {
@@ -430,7 +441,7 @@ export class TeamValidator {
 		if (ability.id === 'owntempo' && species.id === 'rockruff') {
 			tierSpecies = outOfBattleSpecies = dex.getSpecies('rockruffdusk');
 		}
-		if (species.id === 'melmetal' && set.gigantamax) {
+		if (species.id === 'melmetal' && set.gigantamax && this.dex.getLearnsetData(species.id).eventData) {
 			setSources.sourcesBefore = 0;
 			setSources.sources = ['8S0 melmetal'];
 		}
@@ -471,7 +482,8 @@ export class TeamValidator {
 			}
 		}
 
-		if (ruleTable.has('obtainableformes') && (dex.gen <= 7 || this.format.id.includes('nationaldex'))) {
+		if (ruleTable.has('obtainableformes')) {
+			const canMegaEvo = dex.gen <= 7 || ruleTable.has('standardnatdex');
 			if (item.megaEvolves === species.name) {
 				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
 				tierSpecies = dex.getSpecies(item.megaStone);
@@ -479,7 +491,7 @@ export class TeamValidator {
 				tierSpecies = dex.getSpecies('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
 				tierSpecies = dex.getSpecies('Kyogre-Primal');
-			} else if (species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
+			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
 				tierSpecies = dex.getSpecies('Rayquaza-Mega');
 			}
 		}
@@ -1862,7 +1874,7 @@ export class TeamValidator {
 			} else if (lsetData.learnset['sketch']) {
 				if (move.noSketch || move.isZ || move.isMax) {
 					cantLearnReason = `can't be Sketched.`;
-				} else if (move.gen > 7 && !this.format.id.includes('nationaldex')) {
+				} else if (move.gen > 7 && !ruleTable.has('standardnatdex')) {
 					cantLearnReason = `can't be Sketched because it's a Gen 8 move and Sketch isn't available in Gen 8.`;
 				} else {
 					if (!lset) sketch = true;

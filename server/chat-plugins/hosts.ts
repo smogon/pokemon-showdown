@@ -4,7 +4,7 @@
  * Original /adddatacenters command written by Zarel
  */
 
-import {Utils} from "../../lib/utils";
+import {Utils} from "../../lib";
 import {AddressRange} from "../ip-tools";
 import {GlobalPermission} from "../user-groups";
 
@@ -402,7 +402,7 @@ export const commands: ChatCommands = {
 		if (!IPTools.ipRegex.test(ip)) return this.errorReply("Please enter a valid IP address.");
 
 		if (Punishments.sharedIps.has(ip)) return this.errorReply("This IP is already marked as shared.");
-		if (Punishments.sharedIpBlacklist.has(ip)) {
+		if (Punishments.isBlacklistedSharedIp(ip)) {
 			return this.errorReply(`This IP is blacklisted from being marked as shared.`);
 		}
 		if (!note) {
@@ -439,29 +439,43 @@ export const commands: ChatCommands = {
 	nomarkshared: {
 		add(target, room, user) {
 			if (!target) return this.parse(`/help nomarkshared`);
-			checkCanPerform(this, user);
+			checkCanPerform(this, user, 'globalban');
 			const [ip, ...reasonArr] = target.split(',');
-			if (!IPTools.ipRegex.test(ip)) return this.errorReply(`Please enter a valid IP address.`);
+			if (!IPTools.ipRangeRegex.test(ip)) return this.errorReply(`Please enter a valid IP address or range.`);
 			if (!reasonArr?.length) {
 				this.errorReply(`A reason is required.`);
 				this.parse(`/help nomarkshared`);
 				return;
 			}
-			if (Punishments.sharedIpBlacklist.has(ip)) {
+			if (Punishments.isBlacklistedSharedIp(ip)) {
 				return this.errorReply(`This IP is already blacklisted from being marked as shared.`);
 			}
-			if (Punishments.sharedIps.has(ip)) this.parse(`/unmarkshared ${ip}`);
+			if (ip.endsWith('*')) { // range
+				if (!user.can('bypassall')) {
+					return this.errorReply(`Only Administrators can add ranges.`);
+				}
+				const range = IPTools.stringToRange(ip);
+				if (!range) return this.errorReply(`Invalid IP range.`);
+				for (const sharedIp of Punishments.sharedIps.keys()) {
+					const ipNum = IPTools.ipToNumber(sharedIp);
+					if (IPTools.checkPattern([range], ipNum)) {
+						this.parse(`/unmarkshared ${sharedIp}`);
+					}
+				}
+			} else {
+				if (Punishments.sharedIps.has(ip)) this.parse(`/unmarkshared ${ip}`);
+			}
 			const reason = reasonArr.join(',');
 
 			Punishments.addBlacklistedSharedIp(ip, reason);
 
 			this.privateGlobalModAction(`The IP '${ip}' was blacklisted from being marked as shared by ${user.name}.`);
-			this.globalModlog('SHAREDIP BLACKLIST', ip, reason.trim());
+			this.globalModlog('SHAREDIP BLACKLIST', null, reason.trim(), ip);
 		},
 		remove(target, room, user) {
 			if (!target) return this.parse(`/help nomarkshared`);
 			checkCanPerform(this, user);
-			if (!IPTools.ipRegex.test(target)) return this.errorReply(`Please enter a valid IP address.`);
+			if (!IPTools.ipRangeRegex.test(target)) return this.errorReply(`Please enter a valid IP address or range.`);
 			if (!Punishments.sharedIpBlacklist.has(target)) {
 				return this.errorReply(`This IP is not blacklisted from being marked as shared.`);
 			}
@@ -469,7 +483,7 @@ export const commands: ChatCommands = {
 			Punishments.removeBlacklistedSharedIp(target);
 
 			this.privateGlobalModAction(`The IP '${target}' was unblacklisted from being marked as shared by ${user.name}.`);
-			this.globalModlog('SHAREDIP UNBLACKLIST', target);
+			this.globalModlog('SHAREDIP UNBLACKLIST', null, null, target);
 		},
 		view() {
 			return this.parse(`/join view-sharedipblacklist`);

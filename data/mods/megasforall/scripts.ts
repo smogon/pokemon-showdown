@@ -16,10 +16,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("lycanroc", ["extremespeed", "spikes"]);
 		newMoves("raichu", ["highjumpkick"]);
 		newMoves("clefable", ["hex", "nastyplot", "shadowsneak", "willowisp"]);
-		newMoves("rillaboom", ["junglehealing", "toxic"]);
+		newMoves("rillaboom", ["toxic"]);
 		newMoves("cinderace", ["energyball"]);
 		newMoves("inteleon", ["taunt", "firstimpression", "encore", "pursuit"]);
-		newMoves("klinklang", ["rapidspin"]);
+		newMoves("klinklang", ["overheat", "rapidspin"]);
 		newMoves("garbodor", ["stealthrock", "knockoff"]);
 		newMoves("jolteon", ["calmmind"]);
 		newMoves("flareon", ["burnup", "morningsun"]);
@@ -34,7 +34,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("talonflame", ["scorchingsands"]);
 		newMoves("staraptor", ["roleplay", "superfang"]);
 		newMoves("bibarel", ["fly"]);
-		newMoves("kricketune", ["drainpunch", "dualwingbeat", "firstimpression", "powertrip", "tripleaxel", "uturn"]);
+		newMoves("kricketune", ["closecombat", "drainpunch", "dualwingbeat", "firstimpression", "powertrip", "tripleaxel", "uturn"]);
 		newMoves("mismagius", ["sludgebomb", "sludgewave", "toxicspikes", "poisonfang", "partingshot", "fling"]);
 		newMoves("murkrow", ["partingshot"]);
 		newMoves("honchkrow", ["partingshot", "dualwingbeat"]);
@@ -49,20 +49,18 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("eelektross", ["recover", "scald"]);
 		newMoves("dragalge", ["acidspray", "gastroacid", "roost", "terrainpulse"]);
 		newMoves("dhelmise", ["flipturn", "superpower"]);
-		newMoves("meganium", ["calmmind", "dragondance", "solarblade", "weatherball"]);
+		newMoves("meganium", ["calmmind", "dragondance", "rockslide", "solarblade", "weatherball"]);
 		newMoves("typhlosion", ["explosion", "headcharge", "honeclaws", "morningsun", "rapidspin"]);
 		newMoves("feraligatr", ["darkpulse", "firefang", "suckerpunch", "thunderfang"]);
 		newMoves("regice", ["teleport", "freezedry"]);
 		newMoves("magcargo", ["firelash", "energyball"]);
 		newMoves("bastiodon", ["earthpower"]);
-		newMoves("leavanny", ["appleacid", "lunge", "quiverdance"]);
+		newMoves("leavanny", ["appleacid", "lunge", "thunderouskick", "quiverdance"]);
 		newMoves("parasect", ["junglehealing", "taunt"]);
 		newMoves("samurott", ["flipturn", "psychocut", "slackoff"]);
 		newMoves("meowstic", ["brickbreak", "foulplay", "knockoff", "partingshot", "pursuit"]);
 		newMoves("meowsticf", ["dazzlinggleam", "drainingkiss", "moonblast", "mysticalfire"]);
-		newMoves("starmie", [
-			"calmmind", "doomdesire", "futuresight", "followme", "lusterpurge", "moonblast", "moonlight", "photongeyser", "prismaticlaser", "storedpower",
-		]);
+		newMoves("starmie", ["calmmind", "futuresight", "followme", "moonblast", "photongeyser", "storedpower"]);
 		newMoves("delibird", ["celebrate", "healingwish", "roost", "swordsdance", "uturn", "wish"]);
 		newMoves("sawsbuck", ["moonblast", "petalblizzard", "playrough"]);
 		newMoves("sawsbucksummer", ["flameburst", "flamethrower", "growth", "leafstorm", "overheat"]);
@@ -71,6 +69,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("flygon", ["extremespeed", "flashcannon", "ironhead"]);
 		newMoves("drapion", ["shoreup"]);
 		newMoves("lurantis", ["moonblast", "moonlight", "playrough", "silverwind"]);
+		newMoves("exploud", ["clangingscales", "dragonpulse", "snarl"]);
+		newMoves("noivern", ["encore"]);
+		newMoves("toxtricity", ["frustration", "gearup", "hiddenpower"]);
+		newMoves("toxtricitylowkey", ["hiddenpower", "return", "slackoff"]);
+		newMoves("cacturne", ["assurance", "knockoff", "strengthsap"]);
+		newMoves("hawlucha", ["partingshot", "stormthrow"]);
+		newMoves("araquanid", ["hypnosis", "lifedew", "painsplit", "purify"]);
 	},
 	canMegaEvo(pokemon) {
 		const altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
@@ -125,6 +130,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		if (item.name === "Sawsbuckite" && pokemon.baseSpecies.name === "Sawsbuck-Winter") {
 			return "Sawsbuck-Winter-Mega";
+		}
+		if (item.name === "Toxtricitite" && pokemon.baseSpecies.name === "Toxtricity-Low-Key") {
+			return "Toxtricity-Low-Key-Mega";
 		}
 		if (item.megaEvolves !== pokemon.baseSpecies.name || item.megaStone === pokemon.species.name) {
 			return null;

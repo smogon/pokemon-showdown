@@ -8,8 +8,7 @@
  * @license MIT license
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {ScavMods, TwistEvent} from './scavenger-games.js';
 import {ChatHandler} from '../chat';
 
@@ -685,7 +684,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				}</td><td>${
 					i + 1 >= qLimit ?
 						`` :
-						Utils.escapeHTML(Utils.forceWrap(q.answer.join(' ; ')))
+						Utils.escapeHTMLForceWrap(q.answer.join(' ; '))
 				}</td></tr>`
 			)).join("") +
 			`</table><div>`
@@ -2542,53 +2541,68 @@ export const commands: ChatCommands = {
 
 		const userCommands = [
 			"<strong>Player commands:</strong>",
-			"- /scavengers - joins the scavengers room.",
-			"- /joinhunt - joins the current scavenger hunt.",
-			"- /leavehunt - leaves the current scavenger hunt.",
-			"- /scavenge <em>[guess]</em> - submits your answer to the current hint.",
-			"- /scavengerstatus - checks your status in the current game.",
-			"- /scavengerhint - views your latest hint in the current game.",
-			"- /scavladder - views the monthly scavenger leaderboard.",
-			"- /scavrank <em>[user]</em> - views the rank of the user on the monthly scavenger leaderboard.  Defaults to the user if no name is provided.",
+			"- /scavengers: Join the scavengers room.",
+			"- /joinhunt: Join the current scavenger hunt.",
+			"- /leavehunt: Leave the current scavenger hunt. Also resets your progress.",
+			"- /viewhunt: Show the ongoing hunt up to where you solved it.",
+			"- /scavenge <em>[guess]</em>: Submit your answer to the current hint.",
+			"- /scavengerstatus  (or /scav status): Check your status in the current hunt.",
+			"- /scavengers queue (or /scav queue): Showcase the hunts currently in queue, with the answers hidden for any hunt that is not yours.",
+			"- /scavengerhint (or /scav hint): View your latest hint in the current game.",
+			"- /scavladder (or /scav top): View the current bimonthly scavengers leaderboard.",
+			"- /scavrank <em>[user]</em>: View the rank of the user on the monthly scavenger leaderboard. Defaults to the user if no name is provided.",
+			"For a more in-depth overview, use /scavhelp staff.",
 		].join('<br />');
 		const staffCommands = [
-			"<strong>Staff commands:</strong>",
-			"- /starthunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt. (Requires: % @ * # &)",
-			"- /start(official/practice/mini/unrated)hunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt, giving points if assigned.  Blitz and wins will count towards the leaderboard. (Requires: % @ * # &)",
-			"- /scav addhint <em>[question number], [value]</em> - adds a hint to a question in the current scavenger hunt. Only the host(s) can add a hint.",
-			"- /scav removehint <em>[question number], [hint number]</em> - removes a hint from a question in the current scavenger hunt. Only the host(s) can remove a hint.",
-			"- /scav edithint <em>[question number], [hint number], [value]</em> - edits a hint to a question in the current scavenger hunt. Only the host(s) can edit a hint.",
-			"- /edithunt <em>[question number], [hint | answer], [value]</em> - edits the current scavenger hunt. Only the host(s) can edit the hunt.",
-			"- /resethunt - resets the current scavenger hunt without revealing the hints and answers. (Requires: % @ * # &)",
-			"- /resethunttoqueue - resets the current scavenger hunt without revealing the hints and answers, and adds it directly to the queue. (Requires: % @ * # &)",
-			"- /endhunt - ends the current scavenger hunt and announces the winners and the answers. (Requires: % @ * # &)",
-			"- /viewhunt - views the current scavenger hunt.  Only the user who started the hunt can use this command. Only the host(s) can view the hunt.",
-			"- /inherithunt - becomes the staff host, gaining staff permissions to the current hunt. (Requires: % @ * # &)",
-			"- /scav timer <em>[minutes | off]</em> - sets a timer to automatically end the current hunt. (Requires: % @ * # &)",
-			"- /scav addpoints <em>[user], [amount]</em> - gives the user the amount of scavenger points towards the monthly ladder. (Requires: % @ * # &)",
-			"- /scav removepoints <em>[user], [amount]</em> - takes the amount of scavenger points from the user towards the monthly ladder. (Requires: % @ * # &)",
-			"- /scav resetladder - resets the monthly scavenger leaderboard. (Requires: # &)",
-			"- /scav setpoints <em>[1st place], [2nd place], [3rd place], [4th place], [5th place], ...</em> - sets the point values for the wins. Use `/scav setpoints` to view what the current point values are. (Requires: # &)",
-			"- /scav setblitz <em>[value]</em> ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # &)",
-			"- /scav queue(rated/unrated) <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # &)",
-			"- /scav queuerecycled <em>[number]</em> - queues a recycled hunt from the database. If number is left blank, then a random hunt is queued.",
-			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # &)",
-			"- /scav defaulttimer <em>[value]</em> - sets the default timer applied to automatically started hunts from the queue.",
-			"- /scav twists - shows a list of all the twists that are available on the server.",
-			"- /scav settwist <em>[twist name]</em> - sets the default twist mode for all official hunts. (Requires: # &)",
-			"- /scav resettwist - resets the default twist mode for all official hunts to nothing. (Requires: # &)",
-			"- /starttwist(hunt/practice/official/mini/unrated) <em>[twist] | [host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em>  - creates a new regular scavenger hunt that uses a twist mode in the specified game type.  This can be used inside a scavenger game mode.",
-			"- /nexthunt - starts the next hunt in the queue.",
-			"- /recycledhunts - Modify the database of recycled hunts and enable/disable autoqueing them. More detailed help can be found in /recycledhuntshelp",
+			"<strong>Staff and auth commands:</strong>",
+			"As a <strong>room voice (+)</strong>, you can use the following Scavengers commands, on top of the regular commands (see /scavhelp):",
+			"- /scav edithunt <em>[question number]</em>, <em>[hint | answer]</em>, <em>[value]</em>: Edit the ongoing scavenger hunt. Only the host(s) can edit the hunt.",
+			"- /scav addhint <em>[question number]</em>, <em>[value]</em>: Add a hint to a question in the ongoing scavenger hunt. Only the host(s) can add a hint.",
+			"- /scav edithint <em>[question number]</em>, <em>[hint number]</em>, <em>[value]</em>: Edit a hint to a question in the ongoing scavenger hunt. Only the host(s) can edit a hint.",
+			"- /scav removehint <em>[question number]</em>, <em>[hint number]<e/m> (or /scav deletehint): Remove a hint from a question in the current scavenger hunt. Only the host(s) can remove a hint.",
+			"- /teamscavshelp: Explains the team scavs plugin.",
+			"<br />As a <strong>room driver (%)</strong>, you can also use the following Scavengers commands:",
+			"- /scav queue (unrated) <em>[host(s)]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | ...: Queue a scavenger hunt to be started after the current hunt is finished.",
+			"- /start(official/practice/mini/unrated)hunt <em>[host]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | </em>[answer]</em> | ...: Create a new (official/practice/mini/unrated) scavenger hunt and start it immediately.",
+			"- /scav viewqueue (or /scav queue): Look at the list of queued scavenger hunts. Now also includes the option to remove hunts from the queue.",
+			"- /resethunt: Reset the current scavenger hunt without revealing the hints and answers, nor giving out points.",
+			"- /resethunttoqueue: Reset the ongoing scavenger hunt without revealing the hints and answers, nor giving out points. Then, add it directly to the queue.",
+			"- /scav timer <em>[minutes]</em>: Set a timer to automatically end the current hunt. Setting [minutes] to 0 turns off the timer.",
+			"- /endhunt: End the current scavenger hunt immediately and announce the winners and the answers.",
+			"- /nexthunt: Start the next hunt in the queue.",
+			"- /viewhunt: View the ongoing scavenger hunt. As a host, you can also view the hunt in its entirety.",
+			"- /inherithunt: Become the staff host, gaining staff permissions to the current hunt.",
+			"- /scav games create <em>[game mode]</em>: start a game of the given mode.",
+			"&nbsp;&nbsp;&nbsp;&nbsp;Game modes include: Jump Start, Point Rally, KO games, Scav games and team scavs.",
+			"- /scav games end: End the game of the given type.",
+			"- /starttwist(hunt / practice / official / mini /unrated) <em>[twist]</em> | <em>[host]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | … : Create and start a new scavenger hunt that uses a specified twist mode. This can be used inside a scavenger game mode.",
+			"- /scav twists: Show a list of all the twists that are available on the server.",
+			"- /scav settwist: View the current default official hunt twist that is in use.",
+			"- /scav setpoints: Show the current point distribution for officials, minis and regular hunts.",
+			"- /scav setblitz: Show the current points awarded for Blitzing an official, mini or regular hunt.",
+			"- /scav defaulttimer: Show the default timer applied to hunts started automatically from the queue.",
+			"- /scav addpoints <em>[user]</em>, <em>[amount]</em>: Give the user the specified amount of points towards the current ladder.",
+			"- /scav removepoints <em>[user]</em>, <em>[amount]</em>: Remove the specified amount of points from the user towards the current ladder.",
+			"- /recycledhunts: Modify the database of recycled hunts and enable/disable autoqueing them.",
+			"- /scav queuerecycled <em>[number]</em>: Queue a recycled hunt from the database. If <em>[number]</em> is left blank, then a random hunt is queued.",
+			"- /recycledhuntshelp: give more info about the recycled hunts.",
+			"<br />As a <strong>room owner (#)</strong>, you can also use the following scavengers commands:",
+			"- /scav resetladder: Reset the monthly scavenger leaderboard.",
+			"- /scav setpoints <em>[1st place]</em>, <em>[2nd place]</em>, <em>[3rd place]</em>, <em>[4th place]</em>, <em>[5th place]</em>, ...: Set the point values for wins of officials, minis and regular hunts.",
+			"- /scav defaulttimer <em>[value]</em>: Set the default timer applied to automatically started hunts from the queue.",
+			"- /scav setblitz <em>[value]</em> ...: Set the blitz award to the given value.",
+			"- /scav settwist <em>[twist name]</em>: Set the default twist mode for all official hunts.",
+			"- /scav resettwist: Reset the default twist mode for all official hunts to nothing.",
+			"- /scav modsettings: Allow or disallow miscellaneous room settings",
 		].join('<br />');
 
 		const gamesCommands = [
 			"<strong>Game commands:</strong>",
-			"- /scav game create <em>[kogames | pointrally | scavengergames]</em> - starts a new scripted scavenger game. (Requires: % @ * # &)",
-			"- /scav game end - ends the current scavenger game. (Requires: % @ * # &)",
-			"- /scav game kick <em>[user]</em> - kicks the user from the current scavenger game. (Requires: % @ * # &)",
-			"- /scav game score - shows the current scoreboard for any game with a leaderboard.",
-			"- /scav game rank <em>[user]</em> - shows a user's rank in the current scavenger game leaderboard.",
+			"- /scav game create <em>[kogames | pointrally | scavengergames | jumpstart | teamscavs]</em>: Start a new scripted scavenger game. (Requires: % @ * # &)",
+			"- /scav game end: End the current scavenger game. (Requires: % @ * # &)",
+			"- /scav game kick <em>[user]</em>: Kick the user from the current scavenger game. (Requires: % @ * # &)",
+			"- /scav game score: Show the current scoreboard for any game with a leaderboard.",
+			"- /scav game rank <em>[user]</em>: Show a user's rank in the current scavenger game leaderboard.",
 		].join('<br />');
 
 		target = toID(target);
@@ -2596,7 +2610,7 @@ export const commands: ChatCommands = {
 		const display = target === 'all' ?
 			`${userCommands}<br /><br />${staffCommands}<br /><br />${gamesCommands}` :
 			(
-				target === 'staff' ? staffCommands :
+				target === 'staff' || target === 'auth' ? staffCommands :
 				target === 'games' || target === 'game' ? gamesCommands : userCommands
 			);
 

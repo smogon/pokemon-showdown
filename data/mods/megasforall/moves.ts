@@ -51,7 +51,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 						}
 					}
 					this.debug('electric terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -110,7 +110,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 						}
 					}
 					this.debug('psychic terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -161,7 +161,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 						}
 					}
 					this.debug('grassy terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -1024,6 +1024,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			case 'sandstorm':
 			case 'desertgales':
 			case 'hail':
+			case 'diamonddust':
 				factor = 0.25;
 				break;
 			}
@@ -1044,6 +1045,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			case 'sandstorm':
 			case 'desertgales':
 			case 'hail':
+			case 'diamonddust':
 				factor = 0.25;
 				break;
 			}
@@ -1060,6 +1062,28 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
 	},
+	solarbeam: {
+		inherit: true,
+		onBasePower(basePower, pokemon, target) {
+			if (
+				['raindance', 'primordialsea', 'sandstorm', 'desertgales', 'hail', 'diamonddust'].includes(pokemon.effectiveWeather())
+			) {
+				this.debug('weakened by weather');
+				return this.chainModify(0.5);
+			}
+		},
+	},
+	solarblade: {
+		inherit: true,
+		onBasePower(basePower, pokemon, target) {
+			if (
+				['raindance', 'primordialsea', 'sandstorm', 'desertgales', 'hail', 'diamonddust'].includes(pokemon.effectiveWeather())
+			) {
+				this.debug('weakened by weather');
+				return this.chainModify(0.5);
+			}
+		},
+	},
 	synthesis: {
 		inherit: true,
 		onHit(pokemon) {
@@ -1074,6 +1098,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			case 'sandstorm':
 			case 'desertgales':
 			case 'hail':
+			case 'diamonddust':
 				factor = 0.25;
 				break;
 			}
@@ -1096,6 +1121,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 				move.type = 'Rock';
 				break;
 			case 'hail':
+			case 'diamonddust':
 				move.type = 'Ice';
 				break;
 			case 'desertgales':
@@ -1117,6 +1143,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 				move.basePower *= 2;
 				break;
 			case 'hail':
+			case 'diamonddust':
 				move.basePower *= 2;
 				break;
 			case 'desertgales':
@@ -1140,6 +1167,87 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			onResidual(pokemon) {
 				this.damage(pokemon.baseMaxhp / 4);
 			},
+		},
+	},
+	auroraveil: {
+		num: 694,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Aurora Veil",
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		sideCondition: 'auroraveil',
+		onTryHitSide() {
+			if (!this.field.isWeather('hail') && !this.field.isWeather('diamonddust')) return false;
+		},
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (source?.hasItem('lightclay')) {
+					return 8;
+				}
+				return 5;
+			},
+			onAnyModifyDamage(damage, source, target, move) {
+				if (target !== source && target.side === this.effectData.target) {
+					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
+							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
+						return;
+					}
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+						this.debug('Aurora Veil weaken');
+						if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
+						return this.chainModify(0.5);
+					}
+				}
+			},
+			onStart(side) {
+				this.add('-sidestart', side, 'move: Aurora Veil');
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 1,
+			onEnd(side) {
+				this.add('-sideend', side, 'move: Aurora Veil');
+			},
+		},
+		secondary: null,
+		target: "allySide",
+		type: "Ice",
+		zMove: {boost: {spe: 1}},
+		contestType: "Beautiful",
+	},
+	blizzard: {
+		num: 59,
+		accuracy: 70,
+		basePower: 110,
+		category: "Special",
+		name: "Blizzard",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyMove(move) {
+			if (this.field.isWeather('hail') || this.field.isWeather('diamonddust')) move.accuracy = true;
+		},
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		target: "allAdjacentFoes",
+		type: "Ice",
+		contestType: "Beautiful",
+	},
+	earthquake: {
+		inherit: true,
+		onModifyMove(move, source, target) {
+			if (source.volatiles['seismicscream']) {
+				if (source.volatiles['specialsound']) {
+					move.category = 'Special';
+				}
+				move.basePower = 60;
+				delete source.volatiles['quakingboom'];
+			}
 		},
 	},
 	acidicterrain: {
@@ -1171,7 +1279,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 						}
 					}
 					this.debug('acidic terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onModifyMovePriority: -5,

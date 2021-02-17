@@ -11,8 +11,7 @@
  * @license MIT license
  */
 
-import {FS} from '../lib/fs';
-import {Utils} from '../lib/utils';
+import {FS, Utils} from '../lib';
 
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
@@ -742,7 +741,7 @@ export const Punishments = new class {
 	 *********************************************************/
 
 	async ban(
-		user: User, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
+		user: User | ID, expireTime: number | null, id: ID | PunishType | null, ignoreAlts: boolean, ...reason: string[]
 	) {
 		if (!expireTime) expireTime = Date.now() + GLOBALBAN_DURATION;
 		const punishment = ['BAN', id, expireTime, ...reason] as Punishment;
@@ -1599,6 +1598,16 @@ export const Punishments = new class {
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
 	}
 
+	isBlacklistedSharedIp(ip: string) {
+		const num = IPTools.ipToNumber(ip);
+		for (const [blacklisted, reason] of this.sharedIpBlacklist) {
+			const range = IPTools.stringToRange(blacklisted);
+			if (!range) throw new Error("Falsy range in sharedIpBlacklist");
+			if (IPTools.checkPattern([range], num)) return reason;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns an array of all room punishments associated with a user.
 	 *
@@ -1656,7 +1665,7 @@ export const Punishments = new class {
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomIps.get(roomid)! : Punishments.ips).forEach((punishment, ip) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
-			if (id.startsWith('#')) return;
+			if (id !== '#rangelock' && id.startsWith('#')) return;
 			let entry = punishmentTable.get(id);
 
 			if (entry) {

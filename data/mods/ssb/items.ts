@@ -23,6 +23,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "If held by a Quagsire with Scorching Sands, it can use Bounty Place.",
 	},
 
+	// instruct
+	sodapop: {
+		name: "Soda Pop",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Satanic Panic",
+		zMoveFrom: "Fake Out",
+		itemUser: ["Riolu"],
+		gen: 1,
+		desc: "If held by a Riolu with Fake Out, it can use Satanic Panic.",
+	},
+
 	// Kalalokki
 	kalalokkiumz: {
 		name: "Kalalokkium Z",
@@ -45,25 +57,5 @@ export const Items: {[k: string]: ModdedItemData} = {
 		itemUser: ["Necrozma-Ultra"],
 		gen: 8,
 		desc: "If held by a Robb576 with Photon Geyser, it can use Integer Overflow.",
-	},
-
-	// xJoelituh
-	rarebone: {
-		onModifyAtkPriority: 2,
-		onModifyAtk() {
-			return this.chainModify(1.5);
-		},
-		onModifyDefPriority: 2,
-		onModifyDef() {
-			return this.chainModify(1.5);
-		},
-		onModifySpDPriority: 2,
-		onModifySpD() {
-			return this.chainModify(1.5);
-		},
-		gen: 4,
-		name: "Rare Bone",
-		desc: "1.5x to Attack, Defense, and Special Defense.",
-		shortDesc: "1.5x to Attack, Defense, and Special Defense.",
 	},
 };

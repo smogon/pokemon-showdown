@@ -560,7 +560,7 @@ export class Pokemon {
 	getActionSpeed() {
 		let speed = this.getStat('spe', false, false);
 		if (this.battle.field.getPseudoWeather('trickroom')) {
-			speed = 0x2710 - speed;
+			speed = 10000 - speed;
 		}
 		return this.battle.trunc(speed, 13);
 	}
@@ -976,7 +976,7 @@ export class Pokemon {
 			if (this.trapped) data.trapped = true;
 		}
 
-		if (!lockedMove || lockedMove === 'struggle') {
+		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.canZMove(this);
@@ -1937,25 +1937,18 @@ export class Pokemon {
 		}
 		if (this.fainted) return false;
 
-		const negateResult = this.battle.runEvent('NegateImmunity', this, type);
-		let isGrounded;
-		if (type === 'Ground') {
-			isGrounded = this.isGrounded(!negateResult);
-			if (isGrounded === null) {
-				if (message) {
-					this.battle.add('-immune', this, '[from] ability: Levitate');
-				}
-				return false;
-			}
+		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
+		const notImmune = type === 'Ground' ?
+			this.isGrounded(negateImmunity) :
+			negateImmunity || this.battle.dex.getImmunity(type, this);
+		if (notImmune) return true;
+		if (!message) return false;
+		if (notImmune === null) {
+			this.battle.add('-immune', this, '[from] ability: Levitate');
+		} else {
+			this.battle.add('-immune', this);
 		}
-		if (!negateResult) return true;
-		if ((isGrounded === undefined && !this.battle.dex.getImmunity(type, this)) || isGrounded === false) {
-			if (message) {
-				this.battle.add('-immune', this);
-			}
-			return false;
-		}
-		return true;
+		return false;
 	}
 
 	runStatusImmunity(type: string, message?: string) {

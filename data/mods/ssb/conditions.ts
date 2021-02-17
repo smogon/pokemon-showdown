@@ -1,8 +1,5 @@
-import {FS} from '../../../lib/fs';
+import {FS} from '../../../lib';
 import {toID} from '../../../sim/dex-data';
-
-// Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail'];
 
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
@@ -148,7 +145,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Andrew')}|purple sus`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Andrew')}|EasyOnTheHills is impostor! He vented in front of me in admin! Vote him out next!`);
+			this.add(`c|${getName('Andrew')}|tidal otter is impostor! He vented in front of me in admin! Vote him out next!`);
 		},
 	},
 	annika: {
@@ -338,6 +335,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('brouha')}|sobL`);
 		},
 	},
+	buffy: {
+		noCopy: true,
+		// No quotes requested
+	},
 	cake: {
 		noCopy: true,
 		innateName: "h",
@@ -402,10 +403,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return false;
 			}
 		},
-	},
-	celestial: {
-		noCopy: true,
-		// No quotes requested
 	},
 	celine: {
 		noCopy: true,
@@ -669,6 +666,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c|${getName('Gimmick')}|I did nothing wrong (but I got on the blacklist)`);
 		},
+		// Unburden Innate
+		onAfterUseItem(item, pokemon) {
+			if (pokemon !== this.effectData.target) return;
+			pokemon.addVolatile('unburden');
+		},
+		onTakeItem(item, pokemon) {
+			pokemon.addVolatile('unburden');
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('unburden');
+		},
+		innateName: "Unburden",
+		desc: "If this Pokemon loses its held item for any reason, its Speed is doubled. This boost is lost if it switches out or gains a new item.",
+		shortDesc: "Speed is doubled on held item loss; boost is lost if it switches or gets new item.",
 	},
 	gmars: {
 		noCopy: true,
@@ -744,17 +755,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	instructuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('INStruct')}|lets drink to a great time!`);
+			this.add(`c|${getName('instruct')}|lets drink to a great time!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Swagn')}|Hey, Instruct. Here's those 15,000 walls of text you ordered. :3`);
-			this.add(`c|${getName('INStruct')}|ya know, why __do__ you always flood my dms?`);
-			this.add(`c|${getName('INStruct')}|whatever im just gonna go get some more coke`);
+			this.add(`c|${getName('Swagn')}|Hey, instruct. Here's those 15,000 walls of text you ordered. :3`);
+			this.add(`c|${getName('instruct')}|ya know, why __do__ you always flood my dms?`);
+			this.add(`c|${getName('instruct')}|whatever im just gonna go get some more coke`);
 		},
 		onFaint() {
-			this.add(`c|${getName('INStruct')}|wait did we run out of coca-cola?`);
-			this.add(`c|${getName('INStruct')}|laaaaaaaaaaame`);
-			this.add(`c|${getName('INStruct')}|yall suck im going home`);
+			this.add(`c|${getName('instruct')}|wait did we run out of coca-cola?`);
+			this.add(`c|${getName('instruct')}|laaaaaaaaaaame`);
+			this.add(`c|${getName('instruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
 		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
@@ -784,7 +795,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					let collateral = this.clampIntRange(foe.baseMaxhp / 2, 1);
 					this.add('-message', `${foe.name} became insane and attacked themselves!`);
 					if (collateral >= foe.hp) collateral = foe.hp - 1;
-					this.directDamage(collateral, foe);
+					foe.hp = foe.hp - collateral;
+					if (foe === source) {
+						this.add('-damage', foe, foe.getHealth);
+					}
 				}
 			}
 		},
@@ -1248,13 +1262,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	partman: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('PartMan')}|${[`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`][this.random(2)]}`);
+			this.add(`c|${getName('PartMan')}|${[`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`, `Greetings, today we are all gathered here to pay respects to - wait, this is only ${source.side.foe.name}'s funeral. Never mind.`, `__I'm on fiiiiiiiiiiire__`, `/me hugs`, `A SACRIFICE FOR SNOM`, `${source.side.name} more like nerd`, `NER`][this.random(8)]}`);
 		},
-		onSwitchOut() {
-			this.add(`c|${getName('PartMan')}|/me flees`);
+		onSwitchOut(source) {
+			this.add(`c|${getName('PartMan')}|Hi ${source.side.name}, I'm PartMan!`);
+			this.add(`c|${getName('PartMan')}|Hi PartMan, I'm PartMan!`);
+			this.add(`c|${getName('PartMan')}|Hi PartMan, I'm PartMan!`);
+			this.add(`c|${getName('Hydro')}|/log PartMan was muted by Hydro for 7 minutes. (flood)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('PartMan')}|B-booli. >.<`);
+			this.add(`c|${getName('PartMan')}|${['B-booli. >.<', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:', '/html <img src="https://allyourmeme.com/wp-content/uploads/2019/05/damn-it-hurts-right-in-my-meow-meow.jpeg" height=50% width=50% />'][this.random(6)]}`);
 		},
 	},
 	peapodc: {
@@ -1403,7 +1420,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	rageuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Rage')}|Hello there`);
+			this.add(`c|${getName('Rage')}|/html <img src="https://media1.tenor.com/images/2eada1bbeb4ed4182079cf00070324a2/tenor.gif" />`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Rage')}|im off, cya lads`);
@@ -1638,8 +1655,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('tiki')}|just tiki.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('tiki')}|`);
-			this.add(`raw|<img src="https://i.imgur.com/0ZRGwvv.png" />`);
+			this.add(`c|${getName('tiki')}|/html <img src="https://i.imgur.com/0ZRGwvv.png" />`);
 		},
 		onFaint() {
 			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
@@ -1660,7 +1676,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	trickster: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Trickster')}|(¤﹏¤).`);
+			this.add(`c|${getName('Trickster')}|(¤﹏¤)`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('Trickster')}|(︶︹︺)`);
@@ -1805,7 +1821,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	heavyhailstorm: {
 		name: 'HeavyHailstorm',
 		effectType: 'Weather',
-		duration: 3,
+		duration: 0,
 		onTryMovePriority: 1,
 		onTryMove(attacker, defender, move) {
 			if (move.type === 'Steel' && move.category !== 'Status') {
@@ -1823,8 +1839,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onStart(battle, source, effect) {
-			this.add('-weather', 'Heavy Hailstorm');
-			this.effectData.source = source;
+			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'The hail became extremely chilling!');
 		},
 		onModifyMove(move, pokemon, target) {
@@ -1841,13 +1856,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				});
 			}
 		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'heavyhailstorm' && !STRONG_WEATHERS.includes(weather.id)) return false;
-		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Heavy Hailstorm', '[upkeep]');
-			this.add('-message', 'Hail is crashing down.');
+			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
@@ -1857,7 +1868,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd() {
 			this.add('-weather', 'none');
-			this.add('-message', 'The Hail ended.');
 		},
 	},
 	// Forever Winter Hail support for piloswine gripado
@@ -1866,11 +1876,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		effectType: 'Weather',
 		duration: 0,
 		onStart(battle, source, effect) {
-			if (effect?.effectType === 'Ability') {
-				this.add('-weather', 'Winter Hail', '[from] ability: ' + effect, '[of] ' + source);
-			} else {
-				this.add('-weather', 'Winter Hail');
-			}
+			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'It became winter!');
 		},
 		onModifySpe(spe, pokemon) {
@@ -1878,8 +1884,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Winter Hail', '[upkeep]');
-			this.add('-message', 'Hail is crashing down.');
+			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('winterhail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
@@ -1888,7 +1893,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd() {
 			this.add('-weather', 'none');
-			this.add('-message', 'The Hail ended.');
 		},
 	},
 	raindrop: {
@@ -1925,30 +1929,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-end', target, 'Raindrop');
 			if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
 				this.hint("Raindrop keeps track of how many times it successfully altered each stat individually.");
-			}
-		},
-	},
-	// Custom status for A Quag To The Past's signature move
-	bounty: {
-		name: 'bounty',
-		effectType: 'Status',
-		onStart(target, source, sourceEffect) {
-			if (sourceEffect.effectType === 'Ability') {
-				this.add('-start', target, 'bounty', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
-			} else {
-				this.add('-start', target, 'bounty');
-			}
-		},
-		onSwitchIn(pokemon) {
-			if (pokemon.status === 'bounty') {
-				this.add('-start', pokemon, 'bounty');
-			}
-		},
-		onFaint(target, source, effect) {
-			if (effect?.effectType !== 'Move') return;
-			if (source) {
-				this.add('-activate', target, 'ability: Bounty');
-				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
 			}
 		},
 	},
@@ -2015,6 +1995,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return this.chainModify(0.5);
 		},
 	},
+	// Kipkluif, needs to end in mod to not trigger aelita/andrew's effect
+	degeneratormod: {
+		onBeforeSwitchOut(pokemon) {
+			let alreadyAdded = false;
+			for (const source of this.effectData.sources) {
+				if (!source.hp || source.volatiles['gastroacid']) continue;
+				if (!alreadyAdded) {
+					const foe = pokemon.side.foe.active[0];
+					if (foe) this.add('-activate', foe, 'ability: Degenerator');
+					alreadyAdded = true;
+				}
+				this.damage((pokemon.baseMaxhp * 33) / 100, pokemon);
+			}
+		},
+	},
 	// For ravioliqueen
 	haunting: {
 		name: 'Haunting',
@@ -2040,7 +2035,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			pokemon.addVolatile('wistfulthinking');
 		},
 	},
-	// boost for LittEleven's move
+	// focus punch effect for litt's move
 	nexthuntcheck: {
 		duration: 1,
 		onStart(pokemon) {
@@ -2088,7 +2083,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Minior-Blue", "[of] " + target);
+				this.add('message', 'Minior is translucent!');
 			}
 		},
 		onFoeTryMove(target, source, move) {
@@ -2148,7 +2143,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: "Big Storm Coming Mod",
 		duration: 1,
 		onBasePower() {
-			return this.chainModify([0x4CC, 0x1000]);
+			return this.chainModify([1229, 4096]);
 		},
 	},
 
@@ -2157,12 +2152,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Turbulence',
 		effectType: 'Weather',
 		duration: 0,
-		onModifyDefPriority: 10,
-		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Flying') && this.field.isWeather('turbulence')) {
-				return this.modify(def, 1.5);
-			}
-		},
 		onStart(battle, source, effect) {
 			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
@@ -2261,7 +2250,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Aurora Veil weaken');
-					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}
@@ -2292,7 +2281,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Light Screen weaken');
-					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}
@@ -2355,7 +2344,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Reflect weaken');
-					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}
@@ -2556,6 +2545,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.queue.cancelMove(pokemon);
 			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.
 			this.hint(`Your move was aborted due to dynamax. Cheater.`);
+		},
+	},
+	echoedvoiceclone: {
+		duration: 2,
+		onStart() {
+			this.effectData.multiplier = 1;
+		},
+		onRestart() {
+			if (this.effectData.duration !== 2) {
+				this.effectData.duration = 2;
+				if (this.effectData.multiplier < 5) {
+					this.effectData.multiplier++;
+				}
+			}
 		},
 	},
 };

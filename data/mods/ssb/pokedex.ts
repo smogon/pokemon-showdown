@@ -115,7 +115,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pichu: {
 		inherit: true,
 		types: ["Electric", "Water"],
-		baseStats: {hp: 70, atk: 80, def: 55, spa: 75, spd: 75, spe: 100},
+		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
 	},
 	// Inactive
 	gyaradosmega: {
@@ -241,7 +241,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pikachubelle: {
 		inherit: true,
 		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
-		abilities: {0: "Tangled Feet"},
+		abilities: {0: "Weak Armor"},
 	},
 	// Zalm
 	weedle: {

@@ -1,5 +1,4 @@
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import type {FilterWord} from '../chat';
 
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';

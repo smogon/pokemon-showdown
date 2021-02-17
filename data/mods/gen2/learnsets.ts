@@ -11590,7 +11590,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		},
 		eventData: [
 			{generation: 2, level: 5, shiny: 1, moves: ["tackle", "growl", "absorb"]},
-			{generation: 2, level: 5, moves: ["tackle", "growl", "encore"]},
+			{generation: 2, level: 5, moves: ["tackle", "growl", "encore"], japan: true},
 		],
 	},
 	donphan: {

@@ -11,7 +11,7 @@
  *
  * @license MIT
  */
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 export class LadderStore {
 	formatid: string;
@@ -70,14 +70,38 @@ export class LadderStore {
 		const formatid = this.formatid;
 		const p1 = Users.getExact(p1name);
 		const p2 = Users.getExact(p2name);
-		room.update();
-		room.send(`||Ladder updating...`);
-		const [data, error] = await LoginServer.request('ladderupdate', {
+		const p1id = toID(p1name);
+		const p2id = toID(p2name);
+
+		const ladderUpdatePromise = LoginServer.request('ladderupdate', {
 			p1: p1name,
 			p2: p2name,
 			score: p1score,
 			format: formatid,
 		});
+
+		// calculate new Elo scores and display to room while loginserver updates the ladder
+		const [p1OldElo, p2OldElo] = (await Promise.all([this.getRating(p1id), this.getRating(p2id)])).map(Math.round);
+		const p1NewElo = Math.round(this.calculateElo(p1OldElo, p1score, p2OldElo));
+		const p2NewElo = Math.round(this.calculateElo(p2OldElo, 1 - p1score, p1OldElo));
+
+		const p1Act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
+		let p1Reasons = `${p1NewElo - p1OldElo} for ${p1Act}`;
+		if (!p1Reasons.startsWith('-')) p1Reasons = '+' + p1Reasons;
+		room.addRaw(Utils.html`${p1name}'s rating: ${p1OldElo} &rarr; <strong>${p1NewElo}</strong><br />(${p1Reasons})`);
+
+		const p2Act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
+		let p2Reasons = `${p2NewElo - p2OldElo} for ${p2Act}`;
+		if (!p2Reasons.startsWith('-'))	p2Reasons = '+' + p2Reasons;
+		room.addRaw(Utils.html`${p2name}'s rating: ${p2OldElo} &rarr; <strong>${p2NewElo}</strong><br />(${p2Reasons})`);
+
+		room.rated = Math.min(p1NewElo, p2NewElo);
+
+		if (p1) p1.mmrCache[formatid] = +p1NewElo;
+		if (p2) p2.mmrCache[formatid] = +p2NewElo;
+
+		room.update();
+		const [data, error] = await ladderUpdatePromise;
 		let problem = false;
 
 		if (error) {
@@ -148,5 +172,35 @@ export class LadderStore {
 	// eslint-disable-next-line @typescript-eslint/require-await
 	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
+	}
+	/**
+	 * Calculates Elo based on a match result
+	 */
+	private calculateElo(previousUserElo: number, score: number, foeElo: number): number {
+		// The K factor determines how much your Elo changes when you win or
+		// lose games. Larger K means more change.
+		// In the "original" Elo, K is constant, but it's common for K to
+		// get smaller as your rating goes up
+		let K = 50;
+
+		// dynamic K-scaling (optional)
+		if (previousUserElo < 1200) {
+			if (score < 0.5) {
+				K = 10 + (previousUserElo - 1000) * 40 / 200;
+			} else if (score > 0.5) {
+				K = 90 - (previousUserElo - 1000) * 40 / 200;
+			}
+		} else if (previousUserElo > 1350 && previousUserElo <= 1600) {
+			K = 40;
+		} else {
+			K = 32;
+		}
+
+		// main Elo formula
+		const E = 1 / (1 + Math.pow(10, (foeElo - previousUserElo) / 400));
+
+		const newElo = previousUserElo + K * (score - E);
+
+		return Math.max(newElo, 1000);
 	}
 }

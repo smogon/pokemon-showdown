@@ -98,7 +98,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	focussash: {
 		inherit: true,
-		desc: "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use.",
 		onDamage() { },
 		onTryHit(target, source, move) {
 			if (target !== source && target.hp === target.maxhp) {
@@ -121,7 +120,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	griseousorb: {
 		inherit: true,
-		desc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
 		onBasePower(basePower, user, target, move) {
 			if (user.species.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
@@ -131,7 +129,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	ironball: {
 		inherit: true,
 		onEffectiveness() {},
-		desc: "Holder's Speed is halved and it becomes grounded.",
 	},
 	kingsrock: {
 		inherit: true,
@@ -211,7 +208,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	mentalherb: {
 		inherit: true,
-		desc: "Holder is cured if it is infatuated. Single use.",
 		fling: {
 			basePower: 10,
 			effect(pokemon) {
@@ -229,7 +225,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	metronome: {
 		inherit: true,
-		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns.",
 		condition: {
 			onStart(pokemon) {
 				this.effectData.numConsecutive = 0;

@@ -121,8 +121,7 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
-import {FS} from '../lib/fs';
-import {Utils} from '../lib/utils';
+import {FS, Utils} from '../lib';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
@@ -558,11 +557,12 @@ export class CommandContext extends MessageContext {
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message as string);
+			message = true;
 		}
 
 		this.update();
 
-		return message as boolean;
+		return message;
 	}
 
 	sendChatMessage(message: string) {
@@ -813,6 +813,20 @@ export class CommandContext extends MessageContext {
 		}
 		(this.room || Rooms.global).modlog(entry);
 	}
+	parseSpoiler(str: string) {
+		let privateReason = "";
+		if (!str) return {publicReason: "", privateReason};
+
+		let publicReason = str;
+		const targetLowercase = str.toLowerCase();
+		if (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:')) {
+			const proofIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
+			const bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			privateReason = `(PROOF: ${str.substr(proofIndex + bump, str.length).trim()}) `;
+			publicReason = str.substr(0, proofIndex).trim();
+		}
+		return {publicReason, privateReason};
+	}
 	roomlog(data: string) {
 		if (this.room) this.room.roomlog(data);
 	}
@@ -835,16 +849,16 @@ export class CommandContext extends MessageContext {
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
 	}
-	checkCan(permission: RoomPermission, target: User | null, room: Room): undefined;
-	checkCan(permission: GlobalPermission, target?: User | null): undefined;
-	checkCan(permission: string, target: User | null = null, room: Room | null = null) {
+	checkCan(permission: RoomPermission, target: User | ID | null, room: Room): undefined;
+	checkCan(permission: GlobalPermission, target?: User | ID | null): undefined;
+	checkCan(permission: string, target: User | ID | null = null, room: Room | null = null) {
 		if (!Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
 			throw new Chat.ErrorMessage(`${this.cmdToken}${this.fullCmd} - Access denied.`);
 		}
 	}
-	privatelyCheckCan(permission: RoomPermission, target: User | null, room: Room): boolean;
-	privatelyCheckCan(permission: GlobalPermission, target?: User | null): boolean;
-	privatelyCheckCan(permission: string, target: User | null = null, room: Room | null = null) {
+	privatelyCheckCan(permission: RoomPermission, target: User | ID | null, room: Room): boolean;
+	privatelyCheckCan(permission: GlobalPermission, target?: User | ID | null): boolean;
+	privatelyCheckCan(permission: string, target: User | ID | null = null, room: Room | null = null) {
 		this.handler!.isPrivate = true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
 			return true;
@@ -1313,6 +1327,18 @@ export class CommandContext extends MessageContext {
 		}
 		return game;
 	}
+	requireMinorActivity<T extends MinorActivity>(constructor: new (...args: any[]) => T) {
+		const room = this.requireRoom();
+		if (!room.minorActivity) {
+			throw new Chat.ErrorMessage(`This command requires a ${constructor.name} (this room has no minor activity).`);
+		}
+		const game = room.getMinorActivity(constructor);
+		// must be a different game
+		if (!game) {
+			throw new Chat.ErrorMessage(`This command requires a ${constructor.name} (this minor activity is a(n) ${room.minorActivity.name}).`);
+		}
+		return game;
+	}
 	commandDoesNotExist(): never {
 		if (this.cmdToken === '!') {
 			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
@@ -1320,6 +1346,11 @@ export class CommandContext extends MessageContext {
 		throw new Chat.ErrorMessage(
 			`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
 		);
+	}
+	refreshPage(pageid: string) {
+		if (this.connection.openPages?.has(pageid)) {
+			this.parse(`/join view-${pageid}`);
+		}
 	}
 }
 
@@ -1612,8 +1643,15 @@ export const Chat = new class {
 
 		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({message, room, user, connection});
+		const start = Date.now();
 		const result = context.parse();
-
+		if (typeof result?.then === 'function') {
+			void result.then(() => {
+				this.logSlowMessage(start, context);
+			});
+		} else {
+			this.logSlowMessage(start, context);
+		}
 		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
 			for (const [handler, numMessages] of room.nthMessageHandlers) {
@@ -1622,6 +1660,19 @@ export const Chat = new class {
 		}
 
 		return result;
+	}
+	logSlowMessage(start: number, context: CommandContext) {
+		const timeUsed = Date.now() - start;
+		if (timeUsed < 1000) return;
+		if (context.cmd === 'search' || context.cmd === 'savereplay') return;
+
+		const logMessage = (
+			`[slow command] ${timeUsed}ms - ${context.user.name} (${context.connection.ip}): ` +
+			`<${context.room ? context.room.roomid : context.pmTarget ? `PM:${context.pmTarget?.name}` : 'CMD'}> ` +
+			`${context.message.replace(/\n/ig, ' ')}`
+		);
+
+		Monitor.slow(logMessage);
 	}
 	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
@@ -2059,10 +2110,10 @@ export const Chat = new class {
 	 */
 	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
 		const params = str.slice(+str.startsWith('\n')).split('\n');
-		const output = [];
+		const output: string[] = [];
 		for (const param of params) {
 			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
-			output.push(Utils.escapeHTML(isCode ? Utils.forceWrap(param) : param));
+			output.push(Utils[isCode ? 'escapeHTMLForceWrap' : 'escapeHTML'](param));
 		}
 
 		if (output.length > cutoff) {

@@ -7,8 +7,7 @@
  * @author mia-pi-git
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 
@@ -370,8 +369,8 @@ export const commands: ChatCommands = {
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
 			this.modlog('AUTOFILTER REMOVE', null, index);
 			const pages = [`keys`, `pairs`];
-			if (pages.some(p => this.connection.openPages?.has(`autoresponder-${room?.roomid}-${p}`))) {
-				return this.parse(`/ar view keys`);
+			for (const p of pages) {
+				this.refreshPage(`autofilter-${room.roomid}-${p}`);
 			}
 		},
 		ignore(target, room, user) {

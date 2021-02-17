@@ -1,14 +1,15 @@
-config/formats.ts @TheImmortal
-data/mods/*/random-teams.ts @TheImmortal
+config/formats.ts @KrisXV
+data/mods/*/random-teams.ts @AnnikaCodes
 data/mods/ssb/ @HoeenCoder @xInstruct
-data/random-teams.ts @TheImmortal
+data/random-teams.ts @AnnikaCodes
 data/text/ @Marty-D
 databases/ @monsanto
 server/chat-plugins/hosts.ts @AnnikaCodes
 server/chat-plugins/mafia.ts @HoeenCoder
-server/chat-plugins/othermetas.ts @KrisXV @TheImmortal
+server/chat-plugins/net-filters.ts @mia-pi-git
+server/chat-plugins/othermetas.ts @KrisXV
 server/chat-plugins/quotes.ts @mia-pi-git @KrisXV
-server/chat-plugins/random-battles.ts @KrisXV @TheImmortal
+server/chat-plugins/random-battles.ts @KrisXV @AnnikaCodes
 server/chat-plugins/repeats.ts @AnnikaCodes
 server/chat-plugins/responder.ts @mia-pi-git
 server/chat-plugins/rock-paper-scissors.ts @mia-pi-git

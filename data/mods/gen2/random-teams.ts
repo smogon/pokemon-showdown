@@ -1,5 +1,3 @@
-/* eslint max-len: ["error", 240] */
-
 import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 
@@ -69,11 +67,15 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				let rejected = false;
 				let isSetup = false;
 
+				const restTalk = hasMove['rest'] && hasMove['sleeptalk'];
+
 				switch (moveid) {
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'curse': case 'meditate': case 'screech': case 'swordsdance':
 					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
-					if (!counter['Physical'] || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) rejected = true;
+					if (!counter['Physical'] || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk']) {
+						rejected = true;
+					}
 					isSetup = true;
 					break;
 
@@ -96,7 +98,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (counter.setupType) rejected = true;
 					break;
 				case 'haze':
-					if (counter.setupType || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (counter.setupType || restTalk) rejected = true;
 					break;
 				case 'reflect': case 'lightscreen':
 					if (counter.setupType || hasMove['rest']) rejected = true;
@@ -110,7 +112,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					if (hasMove['softboiled']) rejected = true;
 					break;
 				case 'extremespeed':
-					if (hasMove['bodyslam'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['bodyslam'] || restTalk) rejected = true;
 					break;
 				case 'hyperbeam':
 					if (hasMove['rockslide']) rejected = true;
@@ -154,13 +156,13 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 				// Status and illegal move rejections
 				case 'confuseray': case 'roar': case 'whirlwind':
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (restTalk) rejected = true;
 					break;
 				case 'encore':
-					if (hasMove['bodyslam'] || hasMove['surf'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['bodyslam'] || hasMove['surf'] || restTalk) rejected = true;
 					break;
 				case 'lovelykiss':
-					if (hasMove['healbell'] || hasMove['moonlight'] || hasMove['morningsun'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (['healbell', 'moonlight', 'morningsun'].some(m => hasMove[m]) || restTalk) rejected = true;
 					break;
 				case 'sleeptalk':
 					if (hasMove['curse'] && counter.stab >= 2) rejected = true;
@@ -187,7 +189,11 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					rejected = true;
 				}
 
-				if ((!rejected && !isSetup && (move.category !== 'Status' || !move.flags.heal) && (counter.setupType || !move.stallingMove) && !['batonpass', 'sleeptalk', 'spikes', 'sunnyday'].includes(moveid)) &&
+				if ((
+					!rejected && !isSetup &&
+					(move.category !== 'Status' || !move.flags.heal) &&
+					(counter.setupType || !move.stallingMove) &&
+					!['batonpass', 'sleeptalk', 'spikes', 'sunnyday'].includes(moveid)) &&
 				(
 					// Pokemon should have moves that benefit their attributes
 					(!counter['stab'] && !counter['damage'] && !hasType['Ghost'] && counter['physicalpool'] + counter['specialpool'] > 0) ||
@@ -211,7 +217,10 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				}
 
 				// Remove rejected moves from the move list
-				if (rejected && (movePool.length - availableHP || availableHP && (moveid === 'hiddenpower' || !hasMove['hiddenpower']))) {
+				if (
+					rejected &&
+					(movePool.length - availableHP || availableHP && (moveid === 'hiddenpower' || !hasMove['hiddenpower']))
+				) {
 					if (move.category !== 'Status' && !move.damage && (moveid !== 'hiddenpower' || !availableHP)) {
 						rejectedPool.push(moves[k]);
 					}
@@ -267,7 +276,12 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			// Medium priority
 		} else if (hasMove['rest'] && !hasMove['sleeptalk']) {
 			item = 'Mint Berry';
-		} else if ((hasMove['bellydrum'] || hasMove['swordsdance']) && species.baseStats.spe >= 60 && !hasType['Ground'] && !hasMove['sleeptalk'] && !hasMove['substitute'] && this.randomChance(1, 2)) {
+		} else if (
+			(hasMove['bellydrum'] || hasMove['swordsdance']) &&
+			species.baseStats.spe >= 60 && !hasType['Ground'] &&
+			!hasMove['sleeptalk'] && !hasMove['substitute'] &&
+			this.randomChance(1, 2)
+		) {
 			item = 'Miracle Berry';
 
 		// Default to Leftovers
@@ -276,9 +290,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		}
 
 		const levelScale: {[k: string]: number} = {
-			NU: 77,
-			NUBL: 73,
-			UU: 71,
+			NU: 73,
+			NUBL: 71,
+			UU: 69,
 			UUBL: 67,
 			OU: 65,
 			Uber: 61,

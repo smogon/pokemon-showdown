@@ -49,7 +49,7 @@ export const ssbSets: SSBSets = {
 	},
 	Aelita: {
 		species: 'Zygarde', ability: 'Scyphozoa', item: 'Focus Sash', gender: 'F',
-		moves: ['Rest', 'Sleep Talk', 'Thousand Arrows'],
+		moves: ['Protect', 'Leech Seed', 'Thousand Arrows'],
 		signatureMove: 'XANA\'s Keys To Lyoko',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful',
 	},
@@ -92,7 +92,7 @@ export const ssbSets: SSBSets = {
 	},
 	Andrew: {
 		species: 'Spectrier', ability: 'Neutralizing Gas', item: 'Choice Specs', gender: 'M',
-		moves: ['Astral Barrage', 'Moonblast', 'Aura Sphere'],
+		moves: ['Moongeist Beam', 'Pollen Puff', 'Trick'],
 		signatureMove: 'Whammer Jammer',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
@@ -174,9 +174,15 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Kinetosis',
 		evs: {hp: 248, def: 8, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
+	Buffy: {
+		species: 'Dragonite', ability: 'Speed Control', item: 'Metal Coat', gender: '',
+		moves: ['Swords Dance', 'Thousand Arrows', 'Double Iron Bash'],
+		signatureMove: 'Pandora\'s Box',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: 2,
+	},
 	Cake: {
 		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Shell Bell', gender: 'M',
-		moves: ['Haze', 'Ingrain', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Refresh', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
+		moves: ['Haze', 'Life Dew', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Refresh', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
 		signatureMove: 'Kevin',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
@@ -185,12 +191,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Quiver Dance', 'Roost', 'Will-O-Wisp'],
 		signatureMove: 'Never Lucky',
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
-	},
-	Celestial: {
-		species: 'Dragonite', ability: 'Speed Control', item: 'Metal Coat', gender: '',
-		moves: ['Swords Dance', 'Thousand Arrows', 'Double Iron Bash'],
-		signatureMove: 'Pandora\'s Box',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: 2,
 	},
 	Celine: {
 		species: 'Lucario', ability: 'Guardian Armor', item: 'Leftovers', gender: 'F',
@@ -243,7 +243,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
 	Emeri: {
-		species: 'Flygon', ability: 'Draco Voice', item: 'Throat Spray', gender: 'M',
+		species: 'Flygon', ability: 'Drake Skin', item: 'Throat Spray', gender: 'M',
 		moves: ['Boomburst', 'Earth Power', 'Agility'],
 		signatureMove: 'Forced Landing',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
@@ -359,10 +359,10 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Paranoia',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	INStruct: {
-		species: 'Riolu', ability: 'Truant', item: 'Heavy-Duty Boots', gender: '',
+	instruct: {
+		species: 'Riolu', ability: 'Truant', item: 'Soda Pop', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
-		signatureMove: 'Soda Break',
+		signatureMove: 'Fake Out',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
 	Iyarito: {
@@ -445,8 +445,8 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Lamp: {
-		species: 'Lampent', ability: 'Candlewax', item: 'Eviolite', gender: 'M',
-		moves: ['Nasty Plot', 'Searing Shot', 'Strength Sap'],
+		species: 'Lampent', ability: 'Soul-Heart', item: 'Eviolite', gender: 'M',
+		moves: ['Nasty Plot', 'Searing Shot', 'Recover'],
 		signatureMove: 'Soul Swap',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
@@ -510,13 +510,13 @@ export const ssbSets: SSBSets = {
 	},
 	Nol: {
 		species: 'Litwick', ability: 'Burning Soul', item: 'Spooky Plate', gender: 'F',
-		moves: ['Shadow Ball', 'Flamethrower', 'Trick Room'],
+		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],
 		signatureMove: 'Mad Hacks',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', shiny: true,
 	},
 	Notater517: {
 		species: 'Jellicent', ability: 'Last-Minute Lag', item: 'Leftovers', gender: 'M',
-		moves: ['Hydro Cannon', 'Blast Burn', 'Toxic Spikes'],
+		moves: ['Hydro Cannon', 'Blast Burn', ['Toxic Spikes', 'Recover']],
 		signatureMove: 'Techno Tuber Transmission',
 		evs: {hp: 236, spa: 252, spe: 20}, ivs: {atk: 0}, nature: 'Modest',
 	},
@@ -747,7 +747,7 @@ export const ssbSets: SSBSets = {
 	},
 	thewaffleman: {
 		species: 'Mr. Rime', ability: 'Prankster', item: 'Kasib Berry', gender: 'M',
-		moves: ['Iron Defense', 'Slack Off', 'Focus Blast'],
+		moves: ['Cotton Guard', 'Slack Off', 'Focus Blast'],
 		signatureMove: 'Ice Press',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
@@ -795,7 +795,7 @@ export const ssbSets: SSBSets = {
 	},
 	yuki: {
 		species: 'Pikachu-Cosplay', ability: 'Combat Training', item: 'Light Ball', gender: 'F',
-		moves: ['Quick Attack'],
+		moves: ['Quick Attack', 'Agility'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
 	},
@@ -808,14 +808,14 @@ export const ssbSets: SSBSets = {
 	},
 	'yuki-Dancer': {
 		species: 'Pikachu-Pop-Star', ability: 'Dancer', item: 'Light Ball', gender: 'F',
-		moves: ['Fiery Dance', 'Revelation Dance', 'Lunar Dance'],
+		moves: ['Fiery Dance', 'Revelation Dance', 'Quiver Dance'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
 		skip: 'yuki',
 	},
 	'yuki-Ninja': {
 		species: 'Pikachu-Libre', ability: 'White Smoke', item: 'Light Ball', gender: 'F',
-		moves: ['Water Shuriken', 'Acrobatics', 'Toxic'],
+		moves: ['Water Shuriken', 'Frost Breath', 'Toxic'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
 		skip: 'yuki',
@@ -828,8 +828,8 @@ export const ssbSets: SSBSets = {
 		skip: 'yuki',
 	},
 	'yuki-Jester': {
-		species: 'Pikachu-Belle', ability: 'Tangled Feet', item: 'Light Ball', gender: 'F',
-		moves: ['Present', 'Metronome', 'Teeter Dance'],
+		species: 'Pikachu-Belle', ability: 'Weak Armor', item: 'Light Ball', gender: 'F',
+		moves: ['Fire Blast', 'Thunder', 'Blizzard'],
 		signatureMove: 'Class Change',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0},
 		skip: 'yuki',
@@ -884,10 +884,15 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			// Enforce typing limits
 			if (!debug.length) { // Type limits are ignored when debugging
 				const types = this.dex.getSpecies(ssbSet.species).types;
+				const weaknesses = [];
+				for (const type in this.dex.data.TypeChart) {
+					const typeMod = this.dex.getEffectiveness(type, types);
+					if (typeMod > 0) weaknesses.push(type);
+				}
 				let rejected = false;
-				for (const type of types) {
+				for (const type of weaknesses) {
 					if (typePool[type] === undefined) typePool[type] = 0;
-					if (typePool[type] >= 2) {
+					if (typePool[type] >= 3) {
 						// Reject
 						rejected = true;
 						break;
@@ -902,7 +907,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				}
 				if (rejected) continue;
 				// Update type counts
-				for (const type of types) {
+				for (const type of weaknesses) {
 					typePool[type]++;
 				}
 			}

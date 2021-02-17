@@ -6,9 +6,7 @@
  * @author Kris
  */
 
-import {FS} from '../../lib/fs';
-import {Net} from '../../lib/net';
-import {Utils} from '../../lib/utils';
+import {FS, Net, Utils} from '../../lib';
 import {YouTube, VideoData} from './youtube';
 
 const LASTFM_DB = 'config/chat-plugins/lastfm.json';

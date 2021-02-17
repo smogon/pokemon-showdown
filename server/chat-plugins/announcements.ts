@@ -3,27 +3,25 @@
  * By Spandamn
  */
 
-import {MinorActivity} from './poll';
-
 export interface AnnouncementOptions {
-	announcementNumber?: number;
+	activityNumber?: number;
 	source: string;
 	timeoutMins?: number;
 	timerEnd?: number;
 }
 
 export interface AnnouncementData extends AnnouncementOptions {
-	readonly activityId: 'announcement';
+	readonly activityid: 'announcement';
 }
 
-export class Announcement extends MinorActivity {
-	readonly activityId: 'announcement';
-	announcementNumber: number;
+export class Announcement extends Rooms.MinorActivity {
+	readonly activityid = 'announcement' as ID;
+	name = 'Announcement';
+	activityNumber: number;
 	source: string;
 	constructor(room: Room, options: AnnouncementOptions) {
 		super(room);
-		this.activityId = 'announcement';
-		this.announcementNumber = options.announcementNumber || room.nextGameNumber();
+		this.activityNumber = options.activityNumber || room.nextGameNumber();
 		this.source = options.source;
 		this.setTimer(options);
 	}
@@ -34,14 +32,14 @@ export class Announcement extends MinorActivity {
 
 	displayTo(user: User, connection: Connection | null = null) {
 		const recipient = connection || user;
-		recipient.sendTo(this.room, `|uhtml|announcement${this.announcementNumber}|${this.generateAnnouncement()}`);
+		recipient.sendTo(this.room, `|uhtml|announcement${this.activityNumber}|${this.generateAnnouncement()}`);
 	}
 
 	display() {
 		const announcement = this.generateAnnouncement();
 		for (const id in this.room.users) {
 			const thisUser = this.room.users[id];
-			thisUser.sendTo(this.room, `|uhtml|announcement${this.announcementNumber}|${announcement}`);
+			thisUser.sendTo(this.room, `|uhtml|announcement${this.activityNumber}|${announcement}`);
 		}
 	}
 
@@ -49,28 +47,24 @@ export class Announcement extends MinorActivity {
 		this.displayTo(user, connection);
 	}
 
-	end() {
-		this.endTimer();
-		this.room.send(`|uhtmlchange|announcement${this.announcementNumber}|<div class="infobox">(${this.room.tr`The announcement has ended.`})</div>`);
-		delete this.room.settings.minorActivity;
-		this.room.minorActivity = null;
-		this.room.saveSettings();
+	destroy() {
+		this.room.send(`|uhtmlchange|announcement${this.activityNumber}|<div class="infobox">(${this.room.tr`The announcement has ended.`})</div>`);
+		this.room.setMinorActivity(null);
 	}
+
 	toJSON(): AnnouncementData {
 		return {
 			source: this.source,
-			announcementNumber: this.announcementNumber,
+			activityNumber: this.activityNumber,
 			timeoutMins: this.timeoutMins,
 			timerEnd: this.timerEnd,
-			activityId: 'announcement',
+			activityid: 'announcement',
 		};
 	}
+
 	save() {
 		this.room.settings.minorActivity = this.toJSON();
 		this.room.saveSettings();
-	}
-	destroy() {
-		this.endTimer();
 	}
 }
 
@@ -98,9 +92,7 @@ export const commands: ChatCommands = {
 
 			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target);
 
-			room.minorActivity = new Announcement(room, {source});
-			room.minorActivity.display();
-			room.minorActivity.save();
+			room.setMinorActivity(new Announcement(room, {source}));
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT');
@@ -110,10 +102,7 @@ export const commands: ChatCommands = {
 
 		timer(target, room, user) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
-				return this.errorReply(this.tr`There is no announcement running in this room.`);
-			}
-			const announcement = room.minorActivity;
+			const announcement = this.requireMinorActivity(Announcement);
 
 			if (target) {
 				this.checkCan('minigame', null, room);
@@ -149,13 +138,10 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
-				return this.errorReply(this.tr`There is no announcement running in this room.`);
-			}
-			const announcement = room.minorActivity;
-			announcement.end();
+			const announcement = this.requireMinorActivity(Announcement);
+			announcement.end(room);
 			this.modlog('ANNOUNCEMENT END');
-			return this.privateModAction(room.tr`The announcement was ended by ${user.name}.`);
+			this.privateModAction(room.tr`The announcement was ended by ${user.name}.`);
 		},
 		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
 
@@ -163,10 +149,7 @@ export const commands: ChatCommands = {
 		display: '',
 		''(target, room, user, connection) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
-				return this.errorReply(this.tr`There is no announcement running in this room.`);
-			}
-			const announcement = room.minorActivity;
+			const announcement = this.requireMinorActivity(Announcement);
 			if (!this.runBroadcast()) return;
 			room.update();
 
@@ -195,8 +178,7 @@ process.nextTick(() => {
 
 // should handle restarts and also hotpatches
 for (const room of Rooms.rooms.values()) {
-	if (room.settings.minorActivity?.activityId === 'announcement') {
-		room.minorActivity?.destroy();
-		room.minorActivity = new Announcement(room, room.settings.minorActivity);
+	if (room.settings.minorActivity?.activityid === 'announcement') {
+		room.setMinorActivity(new Announcement(room, room.settings.minorActivity), true);
 	}
 }

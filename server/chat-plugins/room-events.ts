@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export interface RoomEvent {
 	eventName: string;
@@ -318,9 +318,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 			if (!this.broadcasting && user.can('ban', null, room, 'roomevents view') && events.length === 1) {
 				const event = events[0];
-				this.sendReplyBox(
-					Utils.html`<code>/roomevents add ${event.eventName} | ${event.date} | ${event.desc}</code>`
-				);
+				this.sendReplyBox(Utils.html`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomevents add ${event.eventName} | ${event.date} | ${event.desc}</code></details>`.replace(/\n/g, '<br />'));
 			}
 		},
 

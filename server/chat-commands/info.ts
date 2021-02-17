@@ -10,8 +10,7 @@
  */
 import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
-import {Utils} from '../../lib/utils';
-import {Net} from '../../lib/net';
+import {Net, Utils} from '../../lib';
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
@@ -413,7 +412,7 @@ export const commands: ChatCommands = {
 
 	async host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
-		this.checkCan('ip');
+		this.checkCan('alts');
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		const {dnsbl, host, hostType} = await IPTools.lookup(target);
@@ -477,30 +476,6 @@ export const commands: ChatCommands = {
 		return this.sendReply(results.join('; '));
 	},
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
-
-	usersearch(target) {
-		this.checkCan('lock');
-		const results = [];
-		target = toID(target);
-		if (!target) {
-			return this.parse(`/help usersearch`);
-		}
-		if (target.length < 3) {
-			return this.errorReply(`That's too short of a term to search for.`);
-		}
-		for (const curUser of Users.users.values()) {
-			if (!curUser.id.includes(target)) continue;
-			results.push(
-				Utils.html`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`
-			);
-		}
-		Utils.sortBy(results, name => name.startsWith(ONLINE_SYMBOL));
-		if (!results.length) results.push(`No users found.`);
-		return this.sendReplyBox(
-			`Users with a name matching '${target}':<br />${results.join('; ')}`
-		);
-	},
-	usersearchhelp: [`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`],
 
 	checkchallenges(target, room, user) {
 		room = this.requireRoom();
@@ -1635,7 +1610,6 @@ export const commands: ChatCommands = {
 			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
 			`<strong>weeklock</strong> - Locks a user for a week.`,
 			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
-			`<strong>groupchatban</strong> — Bans a user from creating or joining groupchats for a week or a month.`,
 			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
@@ -1816,6 +1790,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(
 			`An introduction to the Create-A-Pok&eacute;mon project:<br />` +
 			`- <a href="https://www.smogon.com/cap/">CAP project website and description</a><br />` +
+			`- <a href="https://www.smogon.com/forums/forums/66/">CAP project discussion forum</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/48782/">What Pok&eacute;mon have been made?</a><br />` +
 			`- <a href="https://www.smogon.com/forums/forums/477">Talk about the metagame here</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/3671157/">Sample SS CAP teams</a>`
@@ -2095,6 +2070,9 @@ export const commands: ChatCommands = {
 		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
 			buffer.push(this.tr`To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
 		}
+		if (showAll || ['vpn', 'proxy'].includes(target)) {
+			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/proxyhelp`}">${this.tr`Proxy lock help`}</a>`);
+		}
 		if (!buffer.length && target) {
 			this.errorReply(`'${target}' is an invalid FAQ.`);
 			return this.parse(`/help faq`);
@@ -2105,8 +2083,8 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
 	faqhelp: [
-		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
+		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, proxy, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
+		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, proxy, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
 	],
 
 	analysis: 'smogdex',

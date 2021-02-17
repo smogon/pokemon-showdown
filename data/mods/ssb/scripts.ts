@@ -28,6 +28,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'));
 		}
 
+		this.add('-ability', pokemon, `${pokemon.getAbility().name}`);
+
 		return true;
 	},
 
@@ -221,6 +223,32 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
 	},
 
+	// Dollar Store Brand prankster immunity implementation
+	hitStepTryImmunity(targets, pokemon, move) {
+		const hitResults = [];
+		for (const [i, target] of targets.entries()) {
+			if (this.gen >= 6 && move.flags['powder'] && target !== pokemon && !this.dex.getImmunity('powder', target)) {
+				this.debug('natural powder immunity');
+				this.add('-immune', target);
+				hitResults[i] = false;
+			} else if (!this.singleEvent('TryImmunity', move, {}, target, pokemon, move)) {
+				this.add('-immune', target);
+				hitResults[i] = false;
+			} else if (this.gen >= 7 && move.pranksterBoosted &&
+			// eslint-disable-next-line max-len
+			(pokemon.hasAbility('prankster') || pokemon.hasAbility('plausibledeniability') || pokemon.volatiles['nol']) &&
+			targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
+				this.debug('natural prankster immunity');
+				if (!target.illusion) this.hint("Since gen 7, Dark is immune to Prankster moves.");
+				this.add('-immune', target);
+				hitResults[i] = false;
+			} else {
+				hitResults[i] = true;
+			}
+		}
+		return hitResults;
+	},
+
 	// For Jett's The Hunt is On!
 	useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove, maxMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
@@ -374,8 +402,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 
-		if ((move.forceSwitch || move.selfSwitch) && this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
-			this.hint(`Self-switching and force switch moves don't trigger when a Pokemon with Skill Drain is active.`);
+		if (move.selfSwitch && this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
+			this.hint(`Self-switching doesn't trigger when a Pokemon with Skill Drain is active.`);
 		}
 
 		return true;
@@ -846,7 +874,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (item === 'ironball') return true;
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
-			if (this.hasAbility(['levitate', 'candlewax']) && !this.battle.suppressingAttackEvents()) return null;
+			if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
 			if ('magnetrise' in this.volatiles) return false;
 			if ('telekinesis' in this.volatiles) return false;
 			return item !== 'airballoon';
