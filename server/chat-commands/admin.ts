@@ -14,7 +14,7 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import {FS, Utils, ProcessManager} from '../../lib';
 
-interface Process {
+interface ProcessData {
 	cmd: string;
 	mem?: string;
 	time?: string;
@@ -608,20 +608,26 @@ export const commands: ChatCommands = {
 			this.checkCan('lockdown');
 		}
 
-		const processes = new Map<string, Process>();
+		const processes = new Map<string, ProcessData>();
 
 		const psOutput = child_process.execSync('ps -o pid,%mem,time,command', {cwd: `${__dirname}/../..`}).toString();
 		const rows = psOutput.split('\n').slice(1); // first line is the title
 		for (const row of rows) {
 			if (!row.trim()) continue;
 			const [pid, mem, time, ...rest] = row.split(' ').filter(Boolean);
-			const entry: Process = {cmd: rest.join(' ')};
+			const entry: ProcessData = {cmd: rest.join(' ')};
 			if (time && time !== '00:00:00') entry.time = time;
 			if (mem && mem !== '0.0') entry.mem = `${mem}%`;
 			processes.set(pid, entry);
 		}
 
-		let buf = `<strong>${process.pid}</strong> - Main<br />`;
+		let buf = `<strong>${process.pid}</strong> - Main `;
+		const mainProcess = processes.get(`${process.pid}`)!;
+		if (mainProcess.mem) buf += `(CPU ${mainProcess.mem}`;
+		if (mainProcess.time) buf += mainProcess.mem ? `, time: ${mainProcess.time})` : `(time: ${mainProcess.time})`;
+		buf += `<br /><br /><strong>Process managers:</strong><br />`;
+		processes.delete(`${process.pid}`);
+
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
 				const pid = process.getProcess().pid;
@@ -643,12 +649,13 @@ export const commands: ChatCommands = {
 			}
 		}
 		buf += `<br />`;
+		buf += `<strong>Other processes:</strong><br />`;
 
 		for (const [pid, process] of processes) {
-			buf += `<strong>${pid}</strong> - ${process.cmd} `;
+			buf += `<strong>${pid}</strong> - <code>${process.cmd}</code>`;
 			if (process.mem) buf += ` (CPU: ${process.mem}`;
 			if (process.time) {
-				buf += `${process.mem ? `, ` : '('}time: ${process.time})`;
+				buf += `${process.mem ? `, ` : ' ('}time: ${process.time})`;
 			}
 			buf += `<br />`;
 		}
