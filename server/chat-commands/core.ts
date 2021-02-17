@@ -491,7 +491,10 @@ export const commands: ChatCommands = {
 			return this.parse(`/help msgroom`);
 		}
 		const targetRoom = Rooms.search(toID(targetId));
-		if (!targetRoom) return this.errorReply(`Room not found`);
+		if (!targetRoom) return this.errorReply(`Room not found.`);
+		if (message.trim().startsWith('/msgroom ')) {
+			return this.errorReply(`Please do not nest /msgroom inside itself.`);
+		}
 		const subcontext = new Chat.CommandContext({room: targetRoom, message, user, connection});
 		await subcontext.parse();
 	},

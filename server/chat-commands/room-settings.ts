@@ -346,13 +346,7 @@ export const commands: ChatCommands = {
 	permissions: {
 		clear: 'set',
 		set(target, room, user) {
-			let [perm, rank, roomid] = target.split(',').map(item => item.trim().toLowerCase());
-			if (roomid) {
-				const tarRoom = Rooms.search(roomid);
-				if (!tarRoom) return this.errorReply(`Room not found.`);
-				room = tarRoom;
-				this.room = room;
-			}
+			let [perm, rank] = this.splitOne(target);
 			room = this.requireRoom();
 			if (rank === 'default') rank = '';
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
@@ -1586,7 +1580,7 @@ export const pages: PageTable = {
 				buf += roomGroups.map(group => (
 					requiredRank === group ?
 						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :
-						Utils.html`<button class="button" name="send" value="/permissions set ${permission}, ${group}, ${room.roomid}">${group}</button>`
+						Utils.html`<button class="button" name="send" value="/msgroom ${room.roomid},/permissions set ${permission}, ${group}">${group}</button>`
 				)).join(' ');
 			} else {
 				buf += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${requiredRank}</button>`;

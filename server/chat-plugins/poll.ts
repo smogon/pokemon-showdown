@@ -436,26 +436,18 @@ export const commands: ChatCommands = {
 		},
 		viewqueuehelp: [`/viewqueue - view the queue of polls in the room. Requires: % @ # &`],
 
-		deletequeue(target, room, user, connection, cmd) {
+		deletequeue(target, room, user) {
+			room = this.requireRoom();
 			if (!target) return this.parse('/help deletequeue');
-
-			const [slotString, targetRoomid] = target.split(',');
-
-			if (targetRoomid) {
-				room = Rooms.search(targetRoomid)!;
-				if (!room) this.errorReply(this.tr`Room "${targetRoomid}" not found.`);
-			} else {
-				room = this.requireRoom();
-			}
 
 			this.checkCan('mute', null, room);
 			const queue = room.getMinorActivityQueue();
 			if (!queue) {
 				return this.errorReply(this.tr`The queue is already empty.`);
 			}
-			const slot = parseInt(slotString);
+			const slot = parseInt(target);
 			if (isNaN(slot)) {
-				return this.errorReply(this.tr`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
+				return this.errorReply(this.tr`Can't delete poll at slot ${target} - "${target}" is not a number.`);
 			}
 			if (!queue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
 
@@ -627,7 +619,7 @@ export const pages: PageTable = {
 			const number = i + 1; // for translation convienence
 			const button = (
 				`<strong>${this.tr`#${number} in queue`} </strong>` +
-				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid}">` +
+				`<button class="button" name="send" value="/msgroom ${room.roomid},/poll deletequeue ${i + 1}">` +
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
