@@ -4,11 +4,12 @@
  * @author mia-pi-git
  */
 
-import type {Pool} from 'pg';
+// @ts-ignore in case module doesn't exist
+import type * as PG from 'pg'
 import type {SQLStatement} from 'sql-template-strings';
 
 export class PostgresDatabase {
-	private pool: Pool;
+	private pool: PG.Pool;
 	constructor(config = PostgresDatabase.getConfig()) {
 		this.pool = config ? new (require('pg').Pool)(config) : null!;
 	}
@@ -16,8 +17,13 @@ export class PostgresDatabase {
 		if (!this.pool) {
 			throw new Error(`Attempting to use postgres without 'pg' installed`);
 		}
-		const result = await this.pool.query(statement, values);
-		return result?.rows;
+		let result;
+		try {
+			result = await this.pool.query(statement, values);
+		} catch (e) {
+			throw new Error(e.message);
+		}
+		return result?.rows || [];
 	}
 	static getConfig() {
 		let config: AnyObject = {};
@@ -26,5 +32,16 @@ export class PostgresDatabase {
 			if (!config) throw new Error('');
 		} catch (e) {}
 		return config;
+	}
+	async transaction(callback: (conn: PG.PoolClient) => any) {
+		const conn = await this.pool.connect();
+		await conn.query(`BEGIN;`);
+		try {
+			await callback(conn);
+		} catch (e) {
+			await conn.query(`ROLLBACK;`);
+			throw e;
+		}
+		await conn.query(`COMMIT;`);
 	}
 }

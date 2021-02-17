@@ -940,29 +940,32 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const p1id = toID(p1);
 		const p2id = toID(p2);
 		const loser = p1id === winner ? p2id : p1id;
-
+		const format = Dex.getFormat(this.format).id;
+		const now = new Date();
 		const SQL = require('sql-template-strings');
 
-		const now = new Date();
-		const format = Dex.getFormat(this.format).id;
-		const query = SQL`INSERT INTO battle_logs `;
-		query.append(
-			`(roomid, winner, loser, p1id, p2id, p1, p2, p1team, p2team, log, inputLog, ` +
-			`turns, endType, date, format, ladderError, seed, score, p1rating, p2rating) `
-		);
-		query.append(`VALUES (`);
-		query.append(SQL`${roomid}, ${Chat.toTimestamp(now).split(' ')[0]}, ${winner}, `);
-		query.append(SQL`${loser}, ${p1id}, ${p2id}, ${p1}, ${p2}, ${logData.p1team}, `);
-		query.append(SQL`${logData.p2team}, ${logData.log}, ${logData.inputLog}, `);
-		query.append(SQL`${logData.turns}, ${this.endType}, ${now}, ${format}, `);
-		query.append(SQL`${logData.ladderError}, ${logData.seed}, ${logData.score}, ${logData.p1rating}, ${logData.p2rating}`);
-		query.append(`)`);
+		let rowid;
+		await Rooms.RoomBattle.logDatabase.transaction(async worker => {
+			const possibleRows = (await worker.query(SQL`SELECT rowid FROM battle_identifiers WHERE format = ${format}`)).rows;
+			if (!possibleRows.length) {
+				const inserted = await worker.query(SQL`INSERT INTO battle_identifiers (format) VALUES (${format}) RETURNING rowid`);
+				rowid = inserted.rows[0].rowid;
+			} else {
+				rowid = possibleRows[0].rowid;
+			}
+		});
 
-		await Rooms.RoomBattle.logDatabase.query(query);
-
-		const dataQuery = SQL`INSERT INTO battle_identifiers (format) VALUES (${format})`;
-		dataQuery.append(SQL` ON CONFLICT DO NOTHING`);
-		await Rooms.RoomBattle.logDatabase.query(dataQuery);
+		await Rooms.RoomBattle.logDatabase.query(SQL`
+			INSERT INTO battle_logs
+			(roomid, date, winner, loser, p1id, p2id, p1, p2, p1team, p2team, log, inputLog,
+			turns, endType, ladderError, seed, score, p1rating, p2rating, format, battle_identifiers_id)
+			VALUES (
+				${roomid}, ${new Date()}, ${winner}, ${loser}, ${p1id}, ${p2id}, ${p1}, ${p2}, ${logData.p1team},
+				${logData.p2team}, ${logData.log}, ${logData.inputLog}, ${logData.turns}, ${this.endType},
+				${logData.ladderError}, ${logData.seed}, ${logData.score}, ${logData.p1rating}, ${logData.p2rating},
+				${format}, ${rowid}
+			)
+		`);
 	}
 	onConnect(user: User, connection: Connection | null = null) {
 		// this handles joining a battle in which a user is a participant,

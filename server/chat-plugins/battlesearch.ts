@@ -24,6 +24,16 @@ interface BattleSearchResults {
 
 const MAX_BATTLESEARCH_PROCESSES = 1;
 
+function getMonth(day?: string) {
+	if (!day) day = Chat.toTimestamp(new Date()).split(' ')[0];
+	return day.slice(0, 7);
+}
+
+function nextMonth(month: string) {
+	const nextMonth = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
+	return nextMonth.toISOString().slice(0, 7);
+}
+
 export abstract class BattleSearchHandler {
 	usePM?: boolean;
 	abstract runSearch(
@@ -119,7 +129,7 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 		}
 		const results: {[k: string]: BattleSearchResults} = {};
 		// format
-		const rows = await this.database.query(query);
+		const rows = (await this.database.query(query));
 
 		for (const row of rows) {
 			if (turnLimit && row.turns > turnLimit) continue;
@@ -167,23 +177,22 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 		return results;
 	}
 	async listMonths() {
-		const rows = await this.database.query(`SELECT date FROM battledata`);
-		const months: string[] = [];
-		for (const {date} of rows) {
-			const month = Chat.toTimestamp(date).split(' ')[0].slice(0, -3);
-			if (!months.includes(month)) months.push(month);
+		const row = (await this.database.query(
+			`SELECT EXTRACT(EPOCH FROM date) FROM battle_logs ORDER BY date LIMIT 1`
+		))[0];
+		if (!row) return [];
+		// pick earliest and fill from there
+		const earliest = getMonth(Chat.toTimestamp(new Date(Number(row.date_part) * 1000)).split(' ')[0]);
+		const now = getMonth();
+		const months: string[] = [earliest];
+		while (!months.includes(now)) {
+			months.push(nextMonth(months[months.length - 1]));
 		}
 		return months;
 	}
-	async listTiers(month: string) {
-		const results: string[] = [];
-		const rows = await this.database.query(`SELECT format, date FROM battledata`);
-		for (const {date, format} of rows) {
-			const [day] = Chat.toTimestamp(date).split(' ');
-			if (!day.includes(month) || results.includes(format)) continue;
-			results.push(format);
-		}
-		return results;
+	async listTiers() {
+		const rows = await this.database.query(`SELECT format FROM battle_identifiers`);
+		return rows.map(i => i.format) as string[];
 	}
 }
 
