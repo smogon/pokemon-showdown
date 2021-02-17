@@ -16,7 +16,7 @@ import {FS, Utils, ProcessManager} from '../../lib';
 
 interface ProcessData {
 	cmd: string;
-	mem?: string;
+	cpu?: string;
 	time?: string;
 }
 
@@ -611,20 +611,20 @@ export const commands: ChatCommands = {
 		const processes = new Map<string, ProcessData>();
 
 		const psOutput = child_process.execSync('ps -o pid,%cpu,time,command', {cwd: `${__dirname}/../..`}).toString();
-		const rows = psOutput.split('\n').slice(1); // first line is the title
+		const rows = psOutput.split('\n').slice(1); // first line is the table header
 		for (const row of rows) {
 			if (!row.trim()) continue;
-			const [pid, mem, time, ...rest] = row.split(' ').filter(Boolean);
+			const [pid, cpu, time, ...rest] = row.split(' ').filter(Boolean);
 			const entry: ProcessData = {cmd: rest.join(' ')};
 			if (time && time !== '00:00:00') entry.time = time;
-			if (mem && mem !== '0.0') entry.mem = `${mem}%`;
+			if (cpu && cpu !== '0.0') entry.cpu = `${cpu}%`;
 			processes.set(pid, entry);
 		}
 
 		let buf = `<strong>${process.pid}</strong> - Main `;
 		const mainProcess = processes.get(`${process.pid}`)!;
-		if (mainProcess.mem) buf += `(CPU ${mainProcess.mem}`;
-		if (mainProcess.time) buf += mainProcess.mem ? `, time: ${mainProcess.time})` : `(time: ${mainProcess.time})`;
+		if (mainProcess.cpu) buf += `(CPU ${mainProcess.cpu}`;
+		if (mainProcess.time) buf += mainProcess.cpu ? `, time: ${mainProcess.time})` : `(time: ${mainProcess.time})`;
 		buf += `<br /><br /><strong>Process managers:</strong><br />`;
 		processes.delete(`${process.pid}`);
 
@@ -633,7 +633,7 @@ export const commands: ChatCommands = {
 				const pid = process.getProcess().pid;
 				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.load}`;
 				const info = processes.get(`${pid}`)!;
-				if (info.mem) buf += `, CPU: ${info.mem}`;
+				if (info.cpu) buf += `, CPU: ${info.cpu}`;
 				if (info.time) buf += `, time: ${info.time}`;
 				buf += `)<br />`;
 				processes.delete(`${pid}`);
@@ -642,7 +642,7 @@ export const commands: ChatCommands = {
 				const pid = process.getProcess().pid;
 				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load}`;
 				const info = processes.get(`${pid}`)!;
-				if (info.mem) buf += `, CPU: ${info.mem}`;
+				if (info.cpu) buf += `, CPU: ${info.cpu}`;
 				if (info.time) buf += `, time: ${info.time}`;
 				buf += `)<br />`;
 				processes.delete(`${pid}`);
@@ -653,9 +653,9 @@ export const commands: ChatCommands = {
 
 		for (const [pid, process] of processes) {
 			buf += `<strong>${pid}</strong> - <code>${process.cmd}</code>`;
-			if (process.mem) buf += ` (CPU: ${process.mem}`;
+			if (process.cpu) buf += ` (CPU: ${process.cpu}`;
 			if (process.time) {
-				buf += `${process.mem ? `, ` : ' ('}time: ${process.time})`;
+				buf += `${process.cpu ? `, ` : ' ('}time: ${process.time})`;
 			}
 			buf += `<br />`;
 		}
