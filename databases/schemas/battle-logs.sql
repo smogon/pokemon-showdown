@@ -1,4 +1,4 @@
-CREATE TYPE end_types AS enum('forfeit', 'normal', 'forced');
+CREATE TYPE end_types AS enum('forfeit', 'normal', 'forced', 'tie');
 
 CREATE TABLE battle_identifiers (
 	format TEXT NOT NULL,

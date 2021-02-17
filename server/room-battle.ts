@@ -935,13 +935,12 @@ export class RoomBattle extends RoomGames.RoomGame {
 	async logPostgres(logData: AnyObject) {
 		if (!Config.usepostgres) return null;
 		const roomid = Number(this.room.roomid.split('-')[2]);
-		const winner = toID(logData.winner);
+		const winner = this.endType === 'tie' ? '' : toID(logData.winner);
 		const {p1, p2} = logData;
 		const p1id = toID(p1);
 		const p2id = toID(p2);
-		const loser = p1id === winner ? p2id : p1id;
+		const loser = winner ? (p1id === winner ? p2id : p1id) : "";
 		const format = Dex.getFormat(this.format).id;
-		const now = new Date();
 		const SQL = require('sql-template-strings');
 
 		let rowid;
@@ -1057,6 +1056,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		void this.stream.write(`>forcewin ${player.slot}`);
 	}
 	tie() {
+		this.endType = 'tie';
 		void this.stream.write(`>forcetie`);
 	}
 	tiebreak() {

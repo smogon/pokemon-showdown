@@ -10,14 +10,17 @@ interface BattleOutcome {
 	lost: string;
 	won: string;
 	turns: string;
+	tied?: boolean;
 }
 
 interface BattleSearchResults {
 	totalBattles: number;
 	/** Total battle outcomes. Null when only searching for one userid.*/
 	totalOutcomes: BattleOutcome[] | null;
-	totalWins: {[k: string]: number};
-	totalLosses: {[k: string]: number};
+	// battle names[]
+	totalWins: {[k: string]: string[]};
+	// battle names[]
+	totalLosses: {[k: string]: string[]};
 	totalTies: number;
 	timesBattled: {[k: string]: number};
 }
@@ -59,27 +62,35 @@ export abstract class BattleSearchHandler {
 				if (curOutcomes) outcomes.push(...curOutcomes);
 			}
 			buf += `<table><tbody><tr><h3 style="margin: 5px auto">Full summary</h3></tr>`;
-			buf += `<tr><th>Won</th><th>Lost</th><th>Turns</th></tr>`;
+			buf += `<tr><th>Won</th><th>Lost</th><th>Turns</th><th>Tied</th></tr>`;
 			for (const battle of outcomes) {
-				const {won, lost, turns} = battle;
-				buf += `<tr><td>${won}</td><td>${lost}</td><td>${turns}</td></tr>`;
+				const {won, lost, turns, tied} = battle;
+				buf += `<tr><td>${won}</td><td>${lost}</td><td>${turns}</td><td>${!!tied ? 'Yes' : ''}</td></tr>`;
 			}
 		}
 		buf += `</tbody></table><br />`;
 		for (const day in data) {
 			const dayStats = data[day];
 			buf += `<p style="text-align:left">`;
-			const {totalWins, totalLosses} = dayStats;
+			const {totalWins, totalLosses, totalTies} = dayStats;
 			buf += `<table style=""><tbody><tr><th colspan="2"><h3 style="margin: 5px auto">${day}</h3>`;
 			buf += `</th></tr><tr><th>Category</th><th>Number</th></tr>`;
 			buf += `<tr><td>Total Battles</td><td>${dayStats.totalBattles}</td></tr>`;
 			for (const id in totalWins) {
 				// hide userids if we're only searching for 1
-				buf += `<tr><td>Total Wins${userids.length > 1 ? ` (${id}) ` : ''}</td><td>${totalWins[id]}</td></tr>`;
+				buf += `<tr><td><details class="readmore"><summary>Total Wins${userids.length > 1 ? ` (${id}) ` : ''}</summary>`;
+				buf += totalWins[id].map(b => `<a href="/view-battlelog-${b}">${b}</a>`).join('<br />');
+				buf += `</details></td><td>${totalWins[id].length}</td></tr>`;
 			}
 			for (const id in totalLosses) {
-				buf += `<tr><td>Total Losses${userids.length > 1 ? ` (${id}) ` : ''}</td><td>${totalLosses[id]}</td></tr>`;
+				buf += `<tr><td><details class="readmore"><summary>Total Losses${userids.length > 1 ? ` (${id}) ` : ''}</summary>`;
+				buf += totalLosses[id].map(b => `<a href="/view-battlelog-${b}">${b}</a>`).join('<br />');
+				buf += `</details></td><td>${totalLosses[id].length}</td></tr>`;
 			}
+			if (totalTies) {
+				buf += `<tr><td>Total Ties</td><td>${totalTies}</td></tr>`;
+			}
+
 			if (userids.length < 2) {
 				buf += `<tr><th>Opponent</th><th>Times Battled</th></tr>`;
 				const [userid] = userids;
@@ -146,26 +157,28 @@ export class PostgresBattleSearcher extends BattleSearchHandler {
 				};
 			}
 			results[day].totalBattles++;
-			const {p1id, p2id, winner: winnerid} = row;
-			const loser = winnerid === p1id ? p2id : p1id;
+			const {p1id, p2id, winner: winnerid, turns, loser} = row;
 			if (userids.includes(winnerid)) {
-				if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = 0;
-				results[day].totalWins[winnerid]++;
-			} else if (winnerid) {
-				if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = 0;
-				results[day].totalLosses[loser]++;
-			} else {
+				if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = [];
+				results[day].totalWins[winnerid].push(`${tierid}-${row.roomid}`);
+			}
+			if (userids.includes(loser)) {
+				if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = [];
+				results[day].totalLosses[loser].push(`${tierid}-${row.roomid}`);
+			}
+			if (!winnerid) {
 				results[day].totalTies++;
 			}
 			// explicitly state 0 of stats if none
 			for (const id of userids) {
-				if (!results[day].totalLosses[id]) results[day].totalLosses[id] = 0;
-				if (!results[day].totalWins[id]) results[day].totalWins[id] = 0;
+				if (!results[day].totalLosses[id]) results[day].totalLosses[id] = [];
+				if (!results[day].totalWins[id]) results[day].totalWins[id] = [];
 			}
 
 			const outcomes = results[day].totalOutcomes;
 			if (outcomes) {
-				outcomes.push({won: winnerid, lost: loser, turns: row.turns});
+				if (!winnerid) outcomes.push({won: '', lost: '', turns: turns, tied: true});
+				else outcomes.push({won: winnerid, lost: loser, turns: turns});
 			}
 			// we only want foe data for single-userid searches
 			const foe = userids.length > 1 ? null : userids[0] === p1id ? p2id : p1id;
@@ -264,23 +277,24 @@ export class TextBattleSearcher extends BattleSearchHandler {
 				const winnerid = toID(data.winner);
 				const loser = winnerid === p1id ? p2id : p1id;
 				if (userids.includes(winnerid)) {
-					if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = 0;
-					results[day].totalWins[winnerid]++;
+					if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = [];
+					results[day].totalWins[winnerid].push(data.roomid.slice(7));
 				} else if (data.winner) {
-					if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = 0;
-					results[day].totalLosses[loser]++;
+					if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = [];
+					results[day].totalLosses[loser].push(data.roomid.slice(7));
 				} else {
 					results[day].totalTies++;
 				}
 				// explicitly state 0 of stats if none
 				for (const id of userids) {
-					if (!results[day].totalLosses[id]) results[day].totalLosses[id] = 0;
-					if (!results[day].totalWins[id]) results[day].totalWins[id] = 0;
+					if (!results[day].totalLosses[id]) results[day].totalLosses[id] = [];
+					if (!results[day].totalWins[id]) results[day].totalWins[id] = [];
 				}
 
 				const outcomes = results[day].totalOutcomes;
 				if (outcomes) {
-					outcomes.push({won: winnerid, lost: loser, turns: data.turns});
+					if (!winnerid) if (!winnerid) outcomes.push({won: '', lost: '', turns: data.turns, tied: true});
+					else outcomes.push({won: winnerid, lost: loser, turns: data.turns});
 				}
 				// we only want foe data for single-userid searches
 				const foe = userids.length > 1 ? null : userid === toID(data.p1) ? toID(data.p2) : toID(data.p1);
@@ -320,23 +334,24 @@ export class TextBattleSearcher extends BattleSearchHandler {
 				const winnerid = toID(data.winner);
 				const loser = winnerid === p1id ? p2id : p1id;
 				if (userids.includes(winnerid)) {
-					if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = 0;
-					results[day].totalWins[winnerid]++;
+					if (!results[day].totalWins[winnerid]) results[day].totalWins[winnerid] = [];
+					results[day].totalWins[winnerid].push(data.roomid.slice(7));
 				} else if (data.winner) {
-					if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = 0;
-					results[day].totalLosses[loser]++;
+					if (!results[day].totalLosses[loser]) results[day].totalLosses[loser] = [];
+					results[day].totalLosses[loser].push(data.roomid.slice(7));
 				} else {
 					results[day].totalTies++;
 				}
 				// explicitly state 0 of stats if none
 				for (const id of userids) {
-					if (!results[day].totalLosses[id]) results[day].totalLosses[id] = 0;
-					if (!results[day].totalWins[id]) results[day].totalWins[id] = 0;
+					if (!results[day].totalLosses[id]) results[day].totalLosses[id] = [];
+					if (!results[day].totalWins[id]) results[day].totalWins[id] = [];
 				}
 
 				const outcomes = results[day].totalOutcomes;
 				if (outcomes) {
-					outcomes.push({won: winnerid, lost: loser, turns: data.turns});
+					if (!winnerid) outcomes.push({won: '', lost: '', turns: data.turns, tied: true});
+					else outcomes.push({won: winnerid, lost: loser, turns: data.turns});
 				}
 
 				// we don't want foe data if we're searching for 2 userids
@@ -447,7 +462,7 @@ export const pages: PageTable = {
 			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${month} `;
 			buf += `where the ${userids.length > 1 ? `user(s) ${userids.join(', ')} were players` : `the user ${userid} was a player`}`;
 			if (turnLimit) buf += ` and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}`;
-			buf += `?</p><p><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
+			buf += `?</p><p><a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userids.join('-')}--${turnLimit}--${month}" target="replace"><button class="button">No, go back</button></a></p>`;
 			return `${buf}</div>`;
 		}
 
