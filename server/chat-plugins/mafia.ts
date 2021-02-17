@@ -2936,7 +2936,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			const args = target.split(',');
-			const action = toID(args[0]);
+			const action = toID(args.shift());
 			switch (action) {
 			case 'in':
 				if (user.id in game.playerTable) {
