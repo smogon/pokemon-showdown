@@ -610,7 +610,7 @@ export const commands: ChatCommands = {
 
 		const processes = new Map<string, ProcessData>();
 
-		const psOutput = child_process.execSync('ps -o pid,%mem,time,command', {cwd: `${__dirname}/../..`}).toString();
+		const psOutput = child_process.execSync('ps -o pid,%cpu,time,command', {cwd: `${__dirname}/../..`}).toString();
 		const rows = psOutput.split('\n').slice(1); // first line is the title
 		for (const row of rows) {
 			if (!row.trim()) continue;
