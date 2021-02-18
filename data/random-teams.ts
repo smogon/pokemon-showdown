@@ -917,8 +917,10 @@ export class RandomTeams {
 			// Special case for Virizion to prevent Leaf Blade on Assault Vest sets
 			return {cull: (hasMove['leafstorm'] || movePool.includes('leafstorm')) && counter.setupType !== 'Physical'};
 		case 'leafstorm':
+			const leafBladePossible = movePool.includes('leafblade') || hasMove['leafblade'];
 			return {cull:
-				(counter.setupType === 'Physical' && movePool.includes('leafblade')) ||
+				// Virizion should always prefer Leaf Blade to Leaf Storm on Physical sets
+				(counter.setupType === 'Physical' && (species.id === 'virizion' || leafBladePossible)) ||
 				(hasMove['gigadrain'] && counter.Status) ||
 				(isDoubles && hasMove['energyball']),
 			};
