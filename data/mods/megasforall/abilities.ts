@@ -1380,7 +1380,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		num: -1037,
 	},
 	springfever: {
-		desc: "While this Pokémon is active, if any Pokémon uses a Fire-type move, it is prevented from executing and the attacker loses 1/4 of its maximum HP, rounded half up. This effect does not happen if the Fire-type move is prevented by Primordial Sea.​",
+		desc: "While this Pokémon is active, if any Pokémon uses a Fire-type move, it is prevented from executing and the attacker loses 1/4 of its maximum HP, rounded half up. This effect does not happen if the Fire-type move is prevented by Primordial Sea.",
 		shortDesc: "While active, any Pokémon using a Fire move loses 1/4 max HP.",
 		onStart(pokemon) {
 			this.add('-message', `${pokemon.name} fills the air with explosive powder!`);
