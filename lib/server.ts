@@ -2,6 +2,7 @@ import * as http from 'http';
 import * as https from 'https';
 import {FS, FSPath} from './fs';
 import * as Utils from './utils';
+import * as pathModule from 'path';
 
 type FileListener = (this: NetServer, req: http.IncomingMessage, response: http.ServerResponse, body: AnyObject) => any;
 
@@ -71,6 +72,10 @@ export class NetServer {
 		}
 
 		try {
+			(pathname as string | void) = this.checkPath(pathname);
+			if (!pathname) {
+				throw new Error(`Access denied`);
+			}
 			const path = FS(this.dir + pathname);
 			if (!path.existsSync() || path.isDirectorySync()) {
 				return response.end(this.notFound.readIfExistsSync());
@@ -78,13 +83,18 @@ export class NetServer {
 			response.writeHead(200);
 			response.end(path.readSync());
 		} catch (e) {
+			if (e.message === 'Access denied') {
+				response.writeHead(405, "Access denied");
+				response.end();
+				return;
+			}
 			response.writeHead(404);
 			response.end();
 			if (errorCallback) {
 				return errorCallback.call(this, e);
 			}
 			throw new ServerError(`Error serving request: ${req.url} (${this.dir}) - ${e.message}`);
-		}
+ 		}
 	}
 	serveFile(file: string, response: http.ServerResponse, opts: {code?: number, thisDir?: boolean} = {}) {
 		if (opts.code) response.writeHead(opts.code);
@@ -94,5 +104,10 @@ export class NetServer {
 		const filename = opts.thisDir ? this.dir + file : file;
 		const content = FS(filename).readIfExistsSync();
 		response.end(content);
+	}
+	checkPath(pathname: string) {
+		const path = pathModule.basename(pathname);
+		if (path.startsWith('.')) return;
+		return path;
 	}
 }
