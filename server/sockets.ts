@@ -221,7 +221,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			const avatarServer = new NetServer('./config/avatars');
 			const staticServer = new NetServer('./server/static');
 			const staticRequestHandler = (req: http.IncomingMessage, res: http.ServerResponse) => {
-				Monitor.debug(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
+				// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
 				req.resume();
 				req.addListener('end', () => {
 					if (config.customhttpresponse && config.customhttpresponse(req, res)) {
