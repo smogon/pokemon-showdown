@@ -94,7 +94,7 @@ export class NetServer {
 				return errorCallback.call(this, e);
 			}
 			throw new ServerError(`Error serving request: ${req.url} (${this.dir}) - ${e.message}`);
- 		}
+		}
 	}
 	serveFile(file: string, response: http.ServerResponse, opts: {code?: number, thisDir?: boolean} = {}) {
 		if (opts.code) response.writeHead(opts.code);
