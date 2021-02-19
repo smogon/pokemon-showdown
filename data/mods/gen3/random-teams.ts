@@ -277,12 +277,13 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				case 'hiddenpower':
 					if (move.type === 'Grass' && hasMove['sunnyday'] && hasMove['solarbeam']) rejected = true;
-					if (
-						hasType[move.type] &&
-						((hasMove['substitute'] && !counter.setupType && !hasMove['toxic']) ||
+					if (hasType[move.type] && (
+						(hasMove['substitute'] && !counter.setupType && !hasMove['toxic']) ||
 						(hasMove['toxic'] && !hasMove['substitute']) ||
-						restTalk)
-					) rejected = true;
+						restTalk
+					)) {
+						rejected = true;
+					}
 					break;
 				case 'brickbreak': case 'crosschop': case 'highjumpkick': case 'skyuppercut':
 					if (hasMove['substitute'] && (hasMove['focuspunch'] || movePool.includes('focuspunch'))) rejected = true;
