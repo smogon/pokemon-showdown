@@ -826,7 +826,7 @@ class Mafia extends Rooms.RoomGame {
 			const isSpirit = (this.dead[userid] && this.dead[userid].restless);
 			if (isPlayer || isSpirit) {
 				if (isPlayer && this.playerTable[userid].lynching === key || isSpirit && this.dead[userid].lynching === key) {
-					buf += `<button class="button" name="send" value="/mafia unlynch ${this.roomid}">Unlynch ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'}</button>`;
+					buf += `<button class="button" name="send" value="/msgroom ${this.roomid},/mafia unlynch">Unlynch ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'}</button>`;
 				} else if ((this.selfEnabled && !isSpirit) || userid !== key) {
 					buf += `<button class="button" name="send" value="/msgroom ${this.roomid},/mafia lynch ${key}">Lynch ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'}</button>`;
 				}
