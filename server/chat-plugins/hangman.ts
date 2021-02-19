@@ -113,7 +113,7 @@ export class Hangman extends Rooms.RoomGame {
 	}
 
 	guessWord(word: string, guesser: string) {
-		const ourWord = toID(this.word);
+		const ourWord = toID(this.word.replace(/[^A-Za-z ]/g, ''));
 		const guessedWord = toID(word);
 		if (ourWord === guessedWord) {
 			for (const [i, letter] of this.wordSoFar.entries()) {
