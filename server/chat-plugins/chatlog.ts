@@ -220,9 +220,9 @@ export const LogViewer = new class {
 		}
 		const roomid = `battle-${tier}-${number}` as RoomID;
 		context.send(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
-		const log = await (LogSearcher.usePM ? PM.query({
-			queryType: 'battlesearch', roomid: toID(tier), search: number,
-		}) : LogSearcher.findBattleLog(toID(tier), number));
+		tier = toID(tier);
+		const info = {queryType: 'battlesearch', roomid: tier, search: number};
+		const log = await (LogSearcher.usePM ? PM.query(info) : LogSearcher.findBattleLog(tier as ID, number));
 		if (!log) return context.send(this.error("Logs not found."));
 		const {connection} = context;
 		context.close();
@@ -619,9 +619,11 @@ export abstract class Searcher {
 	}
 	async sharedBattles(userids: string[]) {
 		let buf = `Logged shared battles between the users ${userids.join(', ')}`;
-		const results: string[] = await (this.usePM ? PM.query({
-			queryType: 'sharedsearch', search: userids,
-		}) : this.getSharedBattles(userids));
+		const results: string[] = await (
+			this.usePM ?
+				PM.query({queryType: 'sharedsearch', search: userids}) :
+				this.getSharedBattles(userids)
+		);
 		if (!results.length) {
 			buf += `:<br />None found.`;
 			return buf;
@@ -1033,10 +1035,13 @@ export class RipgrepLogSearcher extends Searcher {
 
 export class DatabaseLogSearcher extends Searcher {
 	database: PostgresDatabase;
+	/** This is here because we do not yet support SQL roomlogs. */
+	textSearcher: Searcher;
 	constructor() {
 		super();
 		this.usePM = false;
 		this.database = new PostgresDatabase();
+		this.textSearcher = new (getTextSearcher())();
 	}
 	async findBattleLog(tier: ID, number: number) {
 		const SQL = require('sql-template-strings');
@@ -1059,12 +1064,10 @@ export class DatabaseLogSearcher extends Searcher {
 	}
 	// hacky but we dont support this rn
 	searchLinecounts(roomid: RoomID, month: string, user?: ID) {
-		const CurSearcher = getTextSearcher();
-		return new CurSearcher().searchLinecounts(roomid, month, user);
+		return this.textSearcher.searchLinecounts(roomid, month, user);
 	}
 	searchLogs(roomid: RoomID, search: string, limit?: number | null, date?: string | null) {
-		const CurSearcher = getTextSearcher();
-		return new CurSearcher().searchLogs(roomid, search, limit, date);
+		return this.textSearcher.searchLogs(roomid, search, limit, date);
 	}
 }
 
@@ -1073,6 +1076,7 @@ export const LogSearcher: Searcher = new (Config.usepostgres ? DatabaseLogSearch
 function getTextSearcher() {
 	return Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher;
 }
+
 export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module, async data => {
 	const start = Date.now();
 	try {
