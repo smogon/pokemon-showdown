@@ -529,7 +529,7 @@ export const Formats: {[k: string]: FormatData} = {
 			this.add('rule', '2 Ability Clause: Limit two of each ability');
 		},
 		onValidateTeam(team) {
-			const abilityTable: {[k: string]: number} = {};
+			const abilityTable = new Map<string, number>();
 			const base: {[k: string]: string} = {
 				airlock: 'cloudnine',
 				battlearmor: 'shellarmor',
@@ -542,25 +542,23 @@ export const Formats: {[k: string]: FormatData} = {
 				ironbarbs: 'roughskin',
 				libero: 'protean',
 				minus: 'plus',
+				moxie: 'chillingneigh',
 				powerofalchemy: 'receiver',
+				propellertail: 'stalwart',
 				teravolt: 'moldbreaker',
 				turboblaze: 'moldbreaker',
 			};
 			for (const set of team) {
-				let ability: string = this.toID(set.ability);
+				let ability = this.toID(set.ability);
 				if (!ability) continue;
-				if (ability in base) ability = base[ability];
-				if (ability in abilityTable) {
-					if (abilityTable[ability] >= 2) {
-						return [
-							`You are limited to two of each ability by 2 Ability Clause.`,
-							`(You have more than two ${this.dex.getAbility(ability).name} variants)`,
-						];
-					}
-					abilityTable[ability]++;
-				} else {
-					abilityTable[ability] = 1;
+				if (ability in base) ability = base[ability] as ID;
+				if ((abilityTable.get(ability) || 0) >= 2) {
+					return [
+						`You are limited to two of each ability by 2 Ability Clause.`,
+						`(You have more than two ${this.dex.getAbility(ability).name} variants)`,
+					];
 				}
+				abilityTable.set(ability, (abilityTable.get(ability) || 0) + 1);
 			}
 		},
 	},
