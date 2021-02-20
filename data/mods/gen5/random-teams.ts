@@ -634,7 +634,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Leftovers';
 		} else if (forme === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
-		} else if (counter.damagingMoves.length >= 4) {
+		} else if (counter.damagingMoves.length >= 4 && ability !== 'Sturdy') {
 			item = (forme === 'Deoxys-Attack' || counter['Normal'] || !!counter['priority']) ? 'Life Orb' : 'Expert Belt';
 		} else if (
 			isLead &&
@@ -647,6 +647,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		} else if (
 			counter.damagingMoves.length >= 3 &&
 			species.baseStats.spe >= 40 &&
+			species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 275 &&
 			ability !== 'Sturdy' &&
 			!hasMove['rapidspin'] && !hasMove['uturn']
 		) {

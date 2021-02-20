@@ -498,7 +498,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	tauros: {
-		randomBattleMoves: ["curse", "doubleedge", "earthquake", "quickattack", "rest", "return", "sleeptalk"],
+		randomBattleMoves: ["curse", "doubleedge", "earthquake", "rest", "return", "sleeptalk"],
 		tier: "UUBL",
 	},
 	magikarp: {

@@ -338,12 +338,15 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				case 'shadowclaw':
 					if (hasMove['shadowforce'] || hasMove['suckerpunch'] && !hasType['Ghost']) rejected = true;
 					break;
-				case 'dragonclaw':
-					if (hasMove['outrage']) rejected = true;
-					break;
 				case 'dracometeor':
 					if (hasMove['calmmind'] || restTalk) rejected = true;
 					if (counter.setupType && counter.stab < 2) rejected = true;
+					break;
+				case 'dragonclaw':
+					if (hasMove['outrage']) rejected = true;
+					break;
+				case 'dragonpulse':
+					if (hasMove['dracometeor'] && hasMove['outrage']) rejected = true;
 					break;
 				case 'crunch': case 'nightslash':
 					if (hasMove['suckerpunch']) rejected = true;

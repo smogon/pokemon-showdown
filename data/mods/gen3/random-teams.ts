@@ -236,7 +236,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (
 						counter.setupType ||
 						counter.speedsetup ||
-						['endure', 'raindance', 'substitute', 'yawn', 'hypnosis'].some(m => hasMove[m])
+						['endure', 'focuspunch', 'raindance', 'yawn', 'hypnosis'].some(m => hasMove[m])
 					) rejected = true;
 					break;
 				case 'trick':
@@ -277,7 +277,13 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				case 'hiddenpower':
 					if (move.type === 'Grass' && hasMove['sunnyday'] && hasMove['solarbeam']) rejected = true;
-					if (!hasType[move.type] && (hasMove['substitute'] || hasMove['toxic'] || restTalk)) rejected = true;
+					if (hasType[move.type] && (
+						(hasMove['substitute'] && !counter.setupType && !hasMove['toxic']) ||
+						(hasMove['toxic'] && !hasMove['substitute']) ||
+						restTalk
+					)) {
+						rejected = true;
+					}
 					break;
 				case 'brickbreak': case 'crosschop': case 'highjumpkick': case 'skyuppercut':
 					if (hasMove['substitute'] && (hasMove['focuspunch'] || movePool.includes('focuspunch'))) rejected = true;
@@ -302,7 +308,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					!move.weather &&
 					(move.category !== 'Status' || !move.flags.heal) &&
 					(counter.setupType || !move.stallingMove) &&
-					!['batonpass', 'sleeptalk', 'substitute'].includes(moveid)
+					!['batonpass', 'sleeptalk', 'solarbeam', 'substitute', 'sunnyday'].includes(moveid)
 				) && (
 					// Pokemon should have moves that benefit their attributes
 					(
@@ -325,7 +331,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					(hasType['Water'] && !counter['Water'] && counter.setupType !== 'Physical' && species.baseStats.spa >= 60) ||
 					(movePool.includes('meteormash') || movePool.includes('spore')) ||
 					(hasMove['protect'] && movePool.includes('wish')) ||
-					(hasMove['substitute'] && movePool.includes('morningsun')) ||
+					(hasMove['substitute'] && movePool.includes('morningsun') || movePool.includes('recover')) ||
 					(hasMove['sunnyday'] && movePool.includes('solarbeam'))
 				)) {
 					// Reject Status, non-STAB, or low basepower moves
@@ -459,9 +465,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			item = 'Liechi Berry';
 		} else if ((hasMove['substitute'] || hasMove['raindance']) && counter.Special >= 3) {
 			item = 'Petaya Berry';
-		} else if (counter.Physical >= 4) {
+		} else if (counter.Physical >= 4 && !hasMove['fakeout']) {
 			item = 'Choice Band';
-		} else if (counter.Physical >= 3 && (
+		} else if (counter.Physical >= 3 && !hasMove['rapidspin'] && (
 			['firepunch', 'icebeam', 'overheat'].some(m => hasMove[m]) ||
 			(moves.filter(m => this.dex.data.Moves[m].category === 'Special' && hasType[this.dex.data.Moves[m].type]).length)
 		)) {
