@@ -230,12 +230,9 @@ export class RandomTeams {
 	 * If n is less than or equal to the array's length, returns the array unchanged.
 	 */
 	multipleSamplesNoReplace<T>(list: T[], n: number): T[] {
-		const length = list.length;
-		if (n >= length) return list;
-
 		const samples = [];
-		while (samples.length < n) {
-			const index = this.random(length);
+		while (samples.length < n && list.length) {
+			const index = this.random(list.length);
 			samples.push(this.fastPop(list, index));
 		}
 
