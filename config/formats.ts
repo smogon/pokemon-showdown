@@ -1639,7 +1639,7 @@ export const Formats: FormatList = [
 		mod: 'gen3',
 		// searchShow: false,
 		ruleset: ['Standard', 'NFE Clause'],
-		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain'],
+		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain', 'Baton Pass'],
 		unbanlist: ['Scyther', 'Sand Veil'],
 	},
 	{
@@ -1652,6 +1652,7 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['[Gen 3] UU', '!NFE Clause'],
 		banlist: ['UU'],
+		unbanlist: ['Baton Pass'],
 	},
 	{
 		name: "[Gen 6] Almost Any Ability",
