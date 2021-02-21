@@ -59,7 +59,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		// Bad after setup
 		case 'dragontail':
 			return {cull: counter.setupType || !!counter.speedsetup || ['encore', 'roar', 'whirlwind'].some(m => hasMove[m])};
-		case 'fakeout': case 'uturn':
+		case 'fakeout': case 'uturn': case 'teleport':
 			return {cull: counter.setupType || !!counter.speedsetup || hasMove['substitute']};
 		case 'haze': case 'leechseed': case 'roar': case 'whirlwind':
 			return {cull: counter.setupType || !!counter.speedsetup || hasMove['dragontail']};
