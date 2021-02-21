@@ -225,6 +225,22 @@ export class RandomTeams {
 		return this.fastPop(list, index);
 	}
 
+	/**
+	 * Removes n random elements from an unsorted array and returns them.
+	 */
+	multipleSamplesNoReplace<T>(list: T[], n: number): T[] {
+		const length = list.length;
+		if (n >= length) return list;
+
+		const samples = [];
+		while (samples.length < n) {
+			const index = this.random(length);
+			samples.push(this.fastPop(list, index));
+		}
+
+		return samples;
+	}
+
 	allowExtraRejectionInSingles(move: Move) {
 		return (move.category !== 'Status' || !move.flags.heal) && ![
 			'facade', 'lightscreen', 'reflect', 'sleeptalk', 'spore', 'substitute', 'switcheroo', 'teleport', 'toxic', 'trick',
@@ -289,7 +305,6 @@ export class RandomTeams {
 			const ability: string = this.gen <= 2 ? 'None' : this.sample(abilities);
 
 			// Four random unique moves from the movepool
-			let moves;
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
 				pool = Object.keys(this.dex.data.Moves).filter(moveid => {
@@ -314,16 +329,8 @@ export class RandomTeams {
 					pool = [...new Set(pool.concat(basePool))];
 				}
 			}
-			if (pool.length <= 4) {
-				moves = pool;
-			} else {
-				moves = [
-					this.sampleNoReplace(pool),
-					this.sampleNoReplace(pool),
-					this.sampleNoReplace(pool),
-					this.sampleNoReplace(pool),
-				];
-			}
+
+			const moves = this.multipleSamplesNoReplace(pool, 4);
 
 			// Random EVs
 			const evs: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
