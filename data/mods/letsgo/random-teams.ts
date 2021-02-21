@@ -73,11 +73,11 @@ export class RandomLetsGoTeams extends RandomTeams {
 		// Bit redundant to have both
 		case 'leechlife': case 'substitute':
 			return {cull: hasMove['uturn']};
-		case 'dragonclaw': case 'dragonpulse':
+		case 'dragonpulse':
 			return {cull: hasMove['dragontail'] || hasMove['outrage']};
 		case 'thunderbolt':
 			return {cull: hasMove['thunder']};
-		case 'flareblitz': case 'flamethrower': case 'lavaplume':
+		case 'flareblitz': case 'flamethrower':
 			return {cull: hasMove['fireblast'] || hasMove['firepunch']};
 		case 'megadrain':
 			return {cull: hasMove['petaldance'] || hasMove['powerwhip']};
@@ -85,10 +85,6 @@ export class RandomLetsGoTeams extends RandomTeams {
 			return {cull: hasMove['earthquake']};
 		case 'icebeam':
 			return {cull: hasMove['blizzard']};
-		case 'return':
-			return {cull: ['bodyslam', 'facade', 'doubleedge'].some(m => hasMove[m])};
-		case 'psychic':
-			return {cull: hasMove['psyshock']};
 		case 'rockslide':
 			return {cull: hasMove['stoneedge']};
 		case 'hydropump': case 'willowisp':
@@ -230,7 +226,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!species.randomBattleMoves || !species.randomBattleMoves.length
+				!species.randomBattleMoves?.length
 			) {
 				continue;
 			}
@@ -266,7 +262,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 			if (typeComboCount[typeCombo] >= 1) continue;
 
 			// Okay, the set passes, add it to our team
-			pokemon.push(this.randomSet(species, teamDetails));
+			const set = this.randomSet(species, teamDetails);
+			pokemon.push(set);
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;

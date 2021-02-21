@@ -32,8 +32,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		case 'bellydrum': case 'curse': case 'meditate': case 'screech': case 'swordsdance':
 			return {
 				cull: (
-					(counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) ||
-					(!counter['Physical'] || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk'])
+					(counter.setupType !== 'Physical' || counter.physicalsetup > 1) ||
+					(!counter.Physical || counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['sleeptalk'])
 				),
 				isSetup: true,
 			};

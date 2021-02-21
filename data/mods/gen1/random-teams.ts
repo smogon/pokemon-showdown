@@ -246,7 +246,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		case 'sharpen': case 'swordsdance':
 			return {cull: counter.Special > counter.Physical || !counter.Physical || hasMove['growth']};
 		case 'growth':
-			return {cull: counter.Special < counter.Physical || !counter['Special'] || hasMove['swordsdance']};
+			return {cull: counter.Special < counter.Physical || !counter.Special || hasMove['swordsdance']};
 		case 'poisonpowder': case 'stunspore': case 'sleeppowder': case 'toxic':
 			return {cull: counter.Status > 1};
 		}
