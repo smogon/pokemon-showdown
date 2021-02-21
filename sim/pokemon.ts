@@ -1804,7 +1804,7 @@ export class Pokemon {
 		const ratio = this.hp / this.maxhp;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.reportPercentages) {
+		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
 			// HP Percentage Mod mechanics
 			let percentage = Math.ceil(ratio * 100);
 			if ((percentage === 100) && (ratio < 1.0)) {
