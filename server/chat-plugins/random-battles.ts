@@ -81,7 +81,7 @@ function getLetsGoMoves(species: string | Species) {
 		(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
 	);
 	if (!isLetsGoLegal) return false;
-	if (!species.randomBattleMoves || !species.randomBattleMoves.length) return false;
+	if (!species.randomBattleMoves?.length) return false;
 	return species.randomBattleMoves.map(formatMove).sort().join(`, `);
 }
 

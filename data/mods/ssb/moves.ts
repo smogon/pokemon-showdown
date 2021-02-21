@@ -296,7 +296,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback(source, target, move) {
-			if (!source.volatiles['raindrop'] || !source.volatiles['raindrop'].layers) return move.basePower;
+			if (!source.volatiles['raindrop']?.layers) return move.basePower;
 			return move.basePower + (source.volatiles['raindrop'].layers * 20);
 		},
 		category: "Special",

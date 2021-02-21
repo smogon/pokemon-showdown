@@ -565,7 +565,7 @@ export class Side {
 	}
 
 	updateRequestForPokemon(pokemon: Pokemon, update: (req: AnyObject) => boolean) {
-		if (!this.activeRequest || !this.activeRequest.active) {
+		if (!this.activeRequest?.active) {
 			throw new Error(`Can't update a request without active Pokemon`);
 		}
 		const req = this.activeRequest.active[pokemon.position];

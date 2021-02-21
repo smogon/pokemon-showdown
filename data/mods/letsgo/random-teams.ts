@@ -229,7 +229,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 			const species = this.dex.getSpecies(id);
 			if (
 				species.num < 1 || (species.num > 151 && ![808, 809].includes(species.num)) || species.gen > 7 ||
-				species.nfe || !species.randomBattleMoves || !species.randomBattleMoves.length
+				species.nfe || !species.randomBattleMoves?.length
 			) continue;
 			pokemonPool.push(id);
 		}

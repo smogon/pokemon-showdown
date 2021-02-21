@@ -582,14 +582,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 		let active = true;
 		if (this.ended || !this.started) {
 			active = false;
-		} else if (!this.p1 || !this.p1.active) {
+		} else if (!this.p1?.active) {
 			active = false;
-		} else if (!this.p2 || !this.p2.active) {
+		} else if (!this.p2?.active) {
 			active = false;
 		} else if (this.playerCap > 2) {
-			if (!this.p3 || !this.p3.active) {
+			if (!this.p3?.active) {
 				active = false;
-			} else if (!this.p4 || !this.p4.active) {
+			} else if (!this.p4?.active) {
 				active = false;
 			}
 		}

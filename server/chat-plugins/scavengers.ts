@@ -949,7 +949,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		for (const u of hostArray) {
 			const id = toID(u);
 			const user = Users.getExact(id);
-			if (!allowOffline && (!user || !user.connected || !(user.id in room.users))) continue;
+			if (!allowOffline && (!user?.connected || !(user.id in room.users))) continue;
 
 			if (!user) {
 				// simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
@@ -1260,7 +1260,7 @@ const ScavengerCommands: ChatCommands = {
 					game.announce(`${userid} was removed from "${team.name}."`);
 				} else {
 					const targetUser = Users.getExact(userid);
-					if (!targetUser || !targetUser.connected) {
+					if (!targetUser?.connected) {
 						this.errorReply(`User "${userid}" is not currently online.`);
 						continue;
 					}
@@ -1782,7 +1782,7 @@ const ScavengerCommands: ChatCommands = {
 		}
 		this.checkCan('mute', null, room);
 
-		if (!room.settings.scavQueue || !room.settings.scavQueue.length) {
+		if (!room.settings.scavQueue?.length) {
 			return this.errorReply("The scavenger hunt queue is currently empty.");
 		}
 		if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);

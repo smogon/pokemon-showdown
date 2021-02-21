@@ -908,7 +908,7 @@ export class Tournament extends Rooms.RoomGame {
 		const from = this.playerTable[user.id];
 		const to = this.playerTable[targetUserid];
 		const availableMatches = from.availableMatches;
-		if (!availableMatches || !availableMatches.has(to)) {
+		if (!availableMatches?.has(to)) {
 			output.sendReply('|tournament|error|InvalidMatch');
 			return;
 		}
@@ -956,7 +956,7 @@ export class Tournament extends Rooms.RoomGame {
 
 		const player = this.playerTable[user.id];
 		const challenge = player.pendingChallenge;
-		if (!challenge || !challenge.to) return;
+		if (!challenge?.to) return;
 
 		player.isBusy = false;
 		challenge.to.isBusy = false;
@@ -982,14 +982,14 @@ export class Tournament extends Rooms.RoomGame {
 
 		const player = this.playerTable[user.id];
 		const challenge = player.pendingChallenge;
-		if (!challenge || !challenge.from) return;
+		if (!challenge?.from) return;
 
 		const ready = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour');
 		if (!ready) return;
 
 		// Prevent battles between offline users from starting
 		const from = Users.get(challenge.from.id);
-		if (!from || !from.connected || !user.connected) return;
+		if (!from?.connected || !user.connected) return;
 
 		// Prevent double accepts and users that have been disqualified while between these two functions
 		if (!challenge.from.pendingChallenge) return;
@@ -1010,7 +1010,7 @@ export class Tournament extends Rooms.RoomGame {
 			tour: this,
 			parentid: this.roomid,
 		});
-		if (!room || !room.battle) throw new Error(`Failed to create battle in ${room}`);
+		if (!room?.battle) throw new Error(`Failed to create battle in ${room}`);
 
 		challenge.from.pendingChallenge = null;
 		player.pendingChallenge = null;

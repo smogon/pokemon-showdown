@@ -382,7 +382,7 @@ class Ladder extends LadderStore {
 	getSearcher(search: BattleReady) {
 		const formatid = toID(this.formatid);
 		const user = Users.get(search.userid);
-		if (!user || !user.connected || user.id !== search.userid) {
+		if (!user?.connected || user.id !== search.userid) {
 			const formatTable = Ladders.searches.get(formatid);
 			if (formatTable) formatTable.delete(search.userid);
 			if (user?.connected) {
