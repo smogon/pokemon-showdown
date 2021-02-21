@@ -619,11 +619,8 @@ export abstract class Searcher {
 	}
 	async sharedBattles(userids: string[]) {
 		let buf = `Logged shared battles between the users ${userids.join(', ')}`;
-		const results: string[] = await (
-			this.usePM ?
-				PM.query({queryType: 'sharedsearch', search: userids}) :
-				this.getSharedBattles(userids)
-		);
+		const results: string[] = await (this.usePM ?
+				PM.query({queryType: 'sharedsearch', search: userids}) : this.getSharedBattles(userids));
 		if (!results.length) {
 			buf += `:<br />None found.`;
 			return buf;
@@ -631,6 +628,9 @@ export abstract class Searcher {
 		buf += ` (${results.length}):<br />`;
 		buf += results.map(id => `<a href="view-battlelog-${id}">${id}</a>`).join(', ');
 		return buf;
+	}
+	static getTextSearcher() {
+		return Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher;
 	}
 }
 
@@ -1037,26 +1037,26 @@ export class DatabaseLogSearcher extends Searcher {
 	database: PostgresDatabase;
 	/** This is here because we do not yet support SQL roomlogs. */
 	textSearcher: Searcher;
+	SQL: (...args: any) => import('sql-template-strings').SQLStatement;
 	constructor() {
 		super();
 		this.usePM = false;
 		this.database = new PostgresDatabase();
-		this.textSearcher = new (getTextSearcher())();
+		this.SQL = require('sql-template-strings');
+		this.textSearcher = new (Searcher.getTextSearcher())();
 	}
 	async findBattleLog(tier: ID, number: number) {
-		const SQL = require('sql-template-strings');
 		const results = await this.database.query(
-			SQL`SELECT log FROM battle_logs WHERE roomid = ${number}`
+			this.SQL`SELECT log FROM battle_logs WHERE roomid = ${number}`
 		);
 		if (!results || !results.length) return null;
 		return results[0].log;
 	}
 	async getSharedBattles(userids: string[]) {
-		const SQL = require('sql-template-strings');
-		const query = SQL`SELECT roomid, format FROM battle_logs WHERE `;
-		query.append(SQL`(p1id = ${userids[0]} AND p2id = ${userids[1]})`);
+		const query = this.SQL`SELECT roomid, format FROM battle_logs WHERE `;
+		query.append(this.SQL`(p1id = ${userids[0]} AND p2id = ${userids[1]})`);
 		query.append(` OR `);
-		query.append(SQL`(p1id = ${userids[1]} AND p2id = ${userids[0]})`);
+		query.append(this.SQL`(p1id = ${userids[1]} AND p2id = ${userids[0]})`);
 		const response = await this.database.query(query);
 		return response.map(row => (
 			`${row.format}-${row.roomid}`
@@ -1071,11 +1071,7 @@ export class DatabaseLogSearcher extends Searcher {
 	}
 }
 
-export const LogSearcher: Searcher = new (Config.usepostgres ? DatabaseLogSearcher : getTextSearcher())();
-
-function getTextSearcher() {
-	return Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher;
-}
+export const LogSearcher: Searcher = new (Config.usepostgres ? DatabaseLogSearcher : Searcher.getTextSearcher())();
 
 export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module, async data => {
 	const start = Date.now();
