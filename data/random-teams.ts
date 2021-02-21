@@ -232,8 +232,7 @@ export class RandomTeams {
 	multipleSamplesNoReplace<T>(list: T[], n: number): T[] {
 		const samples = [];
 		while (samples.length < n && list.length) {
-			const index = this.random(list.length);
-			samples.push(this.fastPop(list, index));
+			samples.push(this.sampleNoReplace(list));
 		}
 
 		return samples;
