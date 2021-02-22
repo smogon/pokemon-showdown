@@ -1154,7 +1154,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		weightkg: 39,
 		color: "Red",
 		eggGroups: ["Field"],
-		requiredItem: "Delphoxite",
+		requiredItem: "Delphite",
 	},
 	talonflame: {
 		inherit: true,
