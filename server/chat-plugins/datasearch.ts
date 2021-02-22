@@ -460,8 +460,8 @@ function getMod(target: string) {
 
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
-	const {splitTarget, usedMod, count} = getMod(target);
-	if (count > 1) {
+	const {splitTarget, usedMod, count: c} = getMod(target);
+	if (c > 1) {
 		return {error: `You can't run searches for multiple mods.`};
 	}
 
