@@ -444,16 +444,28 @@ export const commands: ChatCommands = {
 	],
 };
 
-function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
-	const searches: DexOrGroup[] = [];
-	const splitTarget = target.split(',');
-	const usedMod = splitTarget.find(x => {
+function getMod(target: string) {
+	const arr = target.split(',');
+	const usedMod = arr.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
 	})?.split('=')[1];
+	const count = arr.filter(x => {
+		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		return sanitizedStr.startsWith('mod=');
+	}).length;
+	if (usedMod) arr.splice(arr.indexOf('mod=' + usedMod), 1);
+	return {splitTarget: arr, usedMod, count};
+}
+
+function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
+	const searches: DexOrGroup[] = [];
+	const {splitTarget, usedMod, count} = getMod(target);
+	if (count > 1) {
+		return {error: `You can't run searches for multiple mods.`};
+	}
 
 	const mod = Dex.mod(usedMod || 'base');
-	if (usedMod) splitTarget.splice(splitTarget.indexOf('mod=' + usedMod), 1);
 	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -1200,14 +1212,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 function runMovesearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: MoveOrGroup[] = [];
-	const splitTarget = target.split(',');
-	const usedMod = splitTarget.find(x => {
-		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
-		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
-	})?.split('=')[1];
+	const {splitTarget, usedMod, count} = getMod(target);
+	if (count > 1) {
+		return {error: `You can't run searches for multiple mods.`};
+	}
 
 	const mod = Dex.mod(usedMod || 'base');
-	if (usedMod) splitTarget.splice(splitTarget.indexOf('mod=' + usedMod), 1);
 	const allCategories = ['physical', 'special', 'status'];
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
