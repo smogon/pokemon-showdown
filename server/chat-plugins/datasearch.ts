@@ -1104,7 +1104,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (matched) continue;
 
 			const format = Object.entries(Dex.data.Formats).find(([a, f]) => f.mod === usedMod?.split('-')[1]);
-			const validator = TeamValidator.get(`${format || 'gen8ou'}${nationalSearch ? '@@@standardnatdex' : ''}`);
+			const formatStr = format ? format[1].name : 'gen8ou';
+			const validator = TeamValidator.get(
+				`${formatStr}${nationalSearch && !Dex.getRuleTable(Dex.getFormat(formatStr)).has('standardnatdex') ? '@@@standardnatdex' : ''}`
+			);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => mod.getMove(x))) {
 				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
