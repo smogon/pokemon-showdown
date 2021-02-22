@@ -1306,8 +1306,8 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Zoroark, this item allows it to Mega Evolve in battle.",
 	},
-	delphoxite: {
-		name: "Delphoxite",
+	delphite: {
+		name: "Delphite",
 		spritenum: 578,
 		megaStone: "Delphox-Mega",
 		megaEvolves: "Delphox",
