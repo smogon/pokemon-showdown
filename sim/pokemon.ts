@@ -302,7 +302,7 @@ export class Pokemon {
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
-		if (!this.set.moves || !this.set.moves.length) {
+		if (!this.set.moves?.length) {
 			throw new Error(`Set ${this.name} has no moves`);
 		}
 		for (const moveid of this.set.moves) {

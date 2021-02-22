@@ -313,7 +313,7 @@ export const commands: ChatCommands = {
 		if (!userid) return this.errorReply("Please enter a valid username.");
 		const targetUser = Users.get(userid);
 		let buf = Utils.html`<strong class="username">${target}</strong>`;
-		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
+		if (!targetUser?.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
 		const roomauth = room?.auth.getDirect(userid);
 		if (roomauth && Config.groups[roomauth]?.name) {
@@ -444,7 +444,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`Users with host ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
-				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
+				if (!curUser.latestHost?.endsWith(ip)) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
@@ -2477,7 +2477,7 @@ export const commands: ChatCommands = {
 	pickrandomhelp: [`/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.`],
 
 	shuffle(target, room, user) {
-		if (!target || !target.includes(',')) return this.parse('/help shuffle');
+		if (!target?.includes(',')) return this.parse('/help shuffle');
 		const args = target.split(',');
 		if (!this.runBroadcast(true)) return false;
 		const results = Utils.shuffle(args.map(arg => arg.trim()));

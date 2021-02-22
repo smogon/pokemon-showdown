@@ -119,7 +119,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		damageCallback(pokemon, target) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 
 			// Hidden Power counts as physical
 			if (this.getCategory(lastAttackedBy.move) === 'Physical' && target.lastMove?.id !== 'sleeptalk') {
@@ -429,7 +429,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		damageCallback(pokemon, target) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 
 			// Hidden Power counts as physical
 			if (this.getCategory(lastAttackedBy.move) === 'Special' && target.lastMove?.id !== 'sleeptalk') {

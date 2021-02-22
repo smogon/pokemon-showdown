@@ -177,7 +177,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		name: 'trapped',
 		noCopy: true,
 		onTrapPokemon(pokemon) {
-			if (!this.effectData.source || !this.effectData.source.isActive) {
+			if (!this.effectData.source?.isActive) {
 				delete pokemon.volatiles['trapped'];
 				return;
 			}

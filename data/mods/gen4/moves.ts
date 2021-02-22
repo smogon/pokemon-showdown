@@ -878,7 +878,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryHit() {},
 		onHit(pokemon) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.source.lastMove || !lastAttackedBy.move) {
+			if (!lastAttackedBy?.source.lastMove || !lastAttackedBy.move) {
 				 return false;
 			}
 			const noMirror = [

@@ -228,7 +228,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
 			for (const target of pokemon.side.foe.active) {
-				if (!target || !target.hp) continue;
+				if (!target?.hp) continue;
 				if (target.status === 'slp' || target.hasAbility('comatose')) {
 					this.damage(target.baseMaxhp / 8, target, pokemon);
 				}
@@ -1148,7 +1148,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	frisk: {
 		onStart(pokemon) {
 			for (const target of pokemon.side.foe.active) {
-				if (!target || !target.hp) continue;
+				if (!target?.hp) continue;
 				if (target.item) {
 					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
 				}
@@ -2211,7 +2211,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			let noCureCount = 0;
 			for (const curPoke of pokemon.side.active) {
 				// pokemon not statused
-				if (!curPoke || !curPoke.status) {
+				if (!curPoke?.status) {
 					// this.add('-message', "" + curPoke + " skipped: not statused or doesn't exist");
 					continue;
 				}
@@ -2643,7 +2643,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	poisontouch: {
 		// upokecenter says this is implemented as an added secondary effect
 		onModifyMove(move) {
-			if (!move || !move.flags['contact'] || move.target === 'self') return;
+			if (!move?.flags['contact'] || move.target === 'self') return;
 			if (!move.secondaries) {
 				move.secondaries = [];
 			}

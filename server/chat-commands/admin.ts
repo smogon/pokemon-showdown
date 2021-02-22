@@ -281,7 +281,7 @@ export const commands: ChatCommands = {
 		pageid = `${user.id}-${toID(pageid)}`;
 
 		const targetUser = Users.get(targetID)!;
-		if (!targetUser || !targetUser.connected) {
+		if (!targetUser?.connected) {
 			this.errorReply(`User ${this.targetUsername} is not currently online.`);
 			return false;
 		}
@@ -325,7 +325,7 @@ export const commands: ChatCommands = {
 		pageid = `${user.id}-${toID(pageid)}`;
 		if (!userid || !pageid || !target) return this.parse(`/help highlighthtmlpage`);
 		const targetUser = Users.get(userid);
-		if (!targetUser || !targetUser.connected) {
+		if (!targetUser?.connected) {
 			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
 		}
 		if (targetUser.locked && !this.user.can('lock')) {

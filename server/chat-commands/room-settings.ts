@@ -622,7 +622,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 
-			if (!room.settings.banwords || !room.settings.banwords.length) {
+			if (!room.settings.banwords?.length) {
 				return this.sendReply("This room has no banned phrases.");
 			}
 			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.settings.banwords.join(', ')}`);

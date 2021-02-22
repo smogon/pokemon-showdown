@@ -1560,7 +1560,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		desc: "This Pokémon uses Earthquake at 60 base power after using a sound-based move. If the sound-based move is a special attack, the Earthquake that is used is also a special attack.",
 		shortDesc: "Follows up sound moves with an Earthquake of 60 BP.",
 		onSourceHit(target, source, move) {
-			if (!move || !target || !target.hp) return;
+			if (!move || !target?.hp) return;
 			if (target !== source && target.hp && move.flags['sound']) {
 				source.addVolatile('seismicscream');
 				if (move.category === 'Special') {

@@ -1290,7 +1290,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
 			const ticket = tickets[toID(this.inputUsername)];
-			if (!ticket || !ticket.open || (ticket.userid !== user.id && !user.can('lock'))) {
+			if (!ticket?.open || (ticket.userid !== user.id && !user.can('lock'))) {
 				return this.errorReply(this.tr`${this.inputUsername} does not have an open ticket.`);
 			}
 			const helpRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
