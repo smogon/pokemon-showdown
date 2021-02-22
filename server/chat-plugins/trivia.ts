@@ -536,7 +536,7 @@ export class Trivia extends Rooms.RoomGame {
 
 	onConnect(user: User) {
 		const player = this.playerTable[user.id];
-		if (!player || !player.isAbsent) return false;
+		if (!player?.isAbsent) return false;
 
 		player.toggleAbsence();
 		if (++this.playerCount < MINIMUM_PLAYERS) return false;

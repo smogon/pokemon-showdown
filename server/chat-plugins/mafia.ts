@@ -218,7 +218,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 
 	updateHtmlRoom() {
 		const user = Users.get(this.id);
-		if (!user || !user.connected) return;
+		if (!user?.connected) return;
 		if (this.game.ended) return user.send(`>view-mafia-${this.game.room.roomid}\n|deinit`);
 		for (const conn of user.connections) {
 			void Chat.resolvePage(`view-mafia-${this.game.room.roomid}`, user, conn);
@@ -226,7 +226,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	}
 	updateHtmlLynches() {
 		const user = Users.get(this.id);
-		if (!user || !user.connected) return;
+		if (!user?.connected) return;
 		const lynches = this.game.lynchBoxFor(this.id);
 		user.send(`>view-mafia-${this.game.room.roomid}\n|selectorhtml|#mafia-lynches|` + lynches);
 	}
@@ -629,7 +629,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	getPartners(alignment: string, player: MafiaPlayer) {
-		if (!player || !player.role || ['town', 'solo', 'traitor'].includes(player.role.alignment)) return "";
+		if (!player?.role || ['town', 'solo', 'traitor'].includes(player.role.alignment)) return "";
 		const partners = [];
 		for (const p in this.playerTable) {
 			if (p === player.id) continue;
@@ -764,7 +764,7 @@ class Mafia extends Rooms.RoomGame {
 		}
 
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
-		if (!player || !player.lynching) return this.sendUser(userid, `|error|You are not lynching anyone.`);
+		if (!player?.lynching) return this.sendUser(userid, `|error|You are not lynching anyone.`);
 		if (player.lastLynch + 2000 >= Date.now() && !force) {
 			return this.sendUser(
 				userid,
@@ -1218,7 +1218,7 @@ class Mafia extends Rooms.RoomGame {
 		const nextSub = this.subs.shift();
 		if (!nextSub) return;
 		const sub = Users.get(nextSub, true);
-		if (!sub || !sub.connected || !sub.named || !this.room.users[sub.id]) return; // should never happen, just to be safe
+		if (!sub?.connected || !sub.named || !this.room.users[sub.id]) return; // should never happen, just to be safe
 		const toSubOut = userid || this.hostRequestedSub.shift() || this.requestedSub.shift();
 		if (!toSubOut) {
 			// Should never happen
@@ -1319,7 +1319,7 @@ class Mafia extends Rooms.RoomGame {
 	ideaPick(user: User, selection: string[]) {
 		let buf = '';
 		if (this.phase !== 'IDEApicking') return 'The game is not in the IDEA picking phase.';
-		if (!this.IDEA || !this.IDEA.data) {
+		if (!this.IDEA?.data) {
 			return this.sendRoom(`Trying to pick an IDEA role with no module running, target: ${JSON.stringify(selection)}. Please report this to a mod.`);
 		}
 		const player = this.playerTable[user.id];
@@ -1367,7 +1367,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	ideaFinalizePicks() {
-		if (!this.IDEA || !this.IDEA.data) {
+		if (!this.IDEA?.data) {
 			return this.sendRoom(`Tried to finalize IDEA picks with no IDEA module running, please report this to a mod.`);
 		}
 		const randed = [];
@@ -1471,7 +1471,7 @@ class Mafia extends Rooms.RoomGame {
 
 		for (const hostid of hosts) {
 			const host = Users.get(hostid);
-			if (!host || !host.connected) return;
+			if (!host?.connected) return;
 			for (const conn of host.connections) {
 				void Chat.resolvePage(`view-mafia-${this.room.roomid}`, host, conn);
 			}
@@ -1520,7 +1520,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	canJoin(user: User, self = false, force = false) {
-		if (!user || !user.connected) return `User not found.`;
+		if (!user?.connected) return `User not found.`;
 		const targetString = self ? `You are` : `${user.id} is`;
 		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
 		for (const id of [user.id, ...user.previousIDs]) {
@@ -1548,7 +1548,7 @@ class Mafia extends Rooms.RoomGame {
 
 	sendUser(user: User | string | null, message: string) {
 		const userObject = (typeof user === 'string' ? Users.get(user) : user);
-		if (!userObject || !userObject.connected) return;
+		if (!userObject?.connected) return;
 		userObject.sendTo(this.room, message);
 	}
 
@@ -1732,7 +1732,7 @@ export const pages: PageTable = {
 		if (roomid === 'groupchat') roomid += `-${query.shift()}-${query.shift()}`;
 		const room = Rooms.get(roomid);
 		const game = room?.getGame(Mafia);
-		if (!room || !room.users[user.id] || !game || game.ended) {
+		if (!room?.users[user.id] || !game || game.ended) {
 			return this.close();
 		}
 		const isPlayer = user.id in game.playerTable;
@@ -2022,7 +2022,7 @@ export const commands: ChatCommands = {
 				let hostid;
 				while ((hostid = hostQueue.shift())) {
 					this.splitTarget(hostid, true);
-					if (!this.targetUser || !this.targetUser.connected ||
+					if (!this.targetUser?.connected ||
 						!room.users[this.targetUser.id] || Mafia.isHostBanned(room, this.targetUser)) {
 						skipped.push(hostid);
 						this.targetUser = null;
@@ -2044,7 +2044,7 @@ export const commands: ChatCommands = {
 				}
 			}
 
-			if (!this.targetUser || !this.targetUser.connected) {
+			if (!this.targetUser?.connected) {
 				const targetUsername = this.targetUsername;
 				return this.errorReply(`The user "${targetUsername}" was not found.`);
 			}
@@ -2095,7 +2095,7 @@ export const commands: ChatCommands = {
 				}
 				if (!targetUserID) return this.parse(`/help mafia queue`);
 				const targetUser = Users.get(targetUserID);
-				if ((!targetUser || !targetUser.connected) && !command.includes('force')) {
+				if ((!targetUser?.connected) && !command.includes('force')) {
 					return this.errorReply(`User ${targetUserID} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${targetUserID}`);
 				}
 				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
@@ -3086,7 +3086,7 @@ export const commands: ChatCommands = {
 			this.checkCan('mute', null, room);
 			this.splitTarget(target, false);
 			const targetUser = this.targetUser;
-			if (!targetUser || !targetUser.connected) {
+			if (!targetUser?.connected) {
 				const targetUsername = this.targetUsername;
 				return this.errorReply(`The user "${targetUsername}" was not found.`);
 			}

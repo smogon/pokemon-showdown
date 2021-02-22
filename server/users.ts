@@ -676,7 +676,7 @@ export class User extends Chat.MessageContext {
 		if (userid !== this.id) {
 			for (const roomid of this.games) {
 				const room = Rooms.get(roomid);
-				if (!room || !room.game || room.game.ended) {
+				if (!room?.game || room.game.ended) {
 					this.games.delete(roomid);
 					console.log(`desynced roomgame ${roomid} renaming ${this.id} -> ${userid}`);
 					continue;
@@ -1239,7 +1239,7 @@ export class User extends Chat.MessageContext {
 		if (!room && roomid.startsWith('view-')) {
 			return Chat.resolvePage(roomid, this, connection);
 		}
-		if (!room || !room.checkModjoin(this)) {
+		if (!room?.checkModjoin(this)) {
 			if (!this.named) {
 				return Rooms.RETRY_AFTER_LOGIN;
 			} else {

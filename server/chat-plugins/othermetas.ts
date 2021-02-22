@@ -533,7 +533,7 @@ export const commands: ChatCommands = {
 	crossevo: 'crossevolve',
 	crossevolve(target, user, room) {
 		if (!this.runBroadcast()) return;
-		if (!target || !target.includes(',')) return this.parse(`/help crossevo`);
+		if (!target?.includes(',')) return this.parse(`/help crossevo`);
 
 		const pokes = target.split(',');
 		const species = Dex.getSpecies(pokes[0]);

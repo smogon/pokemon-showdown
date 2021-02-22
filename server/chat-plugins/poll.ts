@@ -83,7 +83,7 @@ export class Poll extends Rooms.MinorActivity {
 	deselect(user: User, option: number) {
 		const userid = user.id;
 		const pendingVote = this.pendingVotes[userid];
-		if (!pendingVote || !pendingVote.includes(option)) {
+		if (!pendingVote?.includes(option)) {
 			throw new Chat.ErrorMessage(this.room.tr`That option is not selected.`);
 		}
 		pendingVote.splice(pendingVote.indexOf(option), 1);
