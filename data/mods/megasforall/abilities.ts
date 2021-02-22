@@ -1876,7 +1876,8 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		shortDesc: "Psychic-type moves delayed until two turns later, but only one at a time.",
 		onBeforeMove(source, target, move) {
 			if (
-				move && move.type === 'Psychic' && source.hasAbility('clairvoyance') && source.side.addSlotCondition(source, 'clairvoyance')
+				move && move.type === 'Psychic' && source.hasAbility('clairvoyance') &&
+				source.side.addSlotCondition(source, 'clairvoyance')
 			) {
 				Object.assign(source.side.slotConditions[source.position]['clairvoyance'], {
 					duration: 3,
@@ -1905,7 +1906,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					this.hint(`${move.name} did not hit because there was no target.`);
 					return;
 				}
-	
+
 				this.add(`${this.effectData.source.name}'s ${move.name} took effect!`);
 				data.target.removeVolatile('Protect');
 				data.target.removeVolatile('Endure');
@@ -1920,7 +1921,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					data.moveData.stab = 2;
 				}
 				data.moveData.isFutureMove = true;
-	
+
 				if (move.category === 'Status') {
 					this.useMove(move, target, data.target);
 				} else {
