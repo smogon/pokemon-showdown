@@ -153,7 +153,7 @@ export const commands: ChatCommands = {
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ds or by using the <code>maxgen</code> keyword; e.g. <code>/ds1 normal</code> or <code>/ds normal, maxgen1</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
-			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=ssb, protean</code>. All valid mod names are: <code>${Object.keys(Dex.dexes).filter(x => x !== 'sourceMaps').join('</code>, <code>')}</code><br />` + 
+			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=ssb, protean</code>. All valid mod names are: <code>${Object.keys(Dex.dexes).filter(x => x !== 'sourceMaps').join('</code>, <code>')}</code><br />` +
 			`<code>/dexsearch</code> will search the Galar Pokedex; you can search the National Pokedex by using <code>/nds</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
 			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
@@ -315,7 +315,7 @@ export const commands: ChatCommands = {
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>fire | water</code> searches for all moves that are either Fire type or Water type.<br/>` +
 			`If a Pok\u00e9mon is included as a parameter, only moves from its movepool will be included in the search.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ms; e.g. <code>/ms1 normal</code> searches for all moves that were Normal type in Generation I.<br/>` +
-			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nms mod=ssb, dark, bp=100</code>. All valid mod names are: <code>${Object.keys(Dex.dexes).filter(x => x !== 'sourceMaps').join('</code>, <code>')}</code><br />` + 
+			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nms mod=ssb, dark, bp=100</code>. All valid mod names are: <code>${Object.keys(Dex.dexes).filter(x => x !== 'sourceMaps').join('</code>, <code>')}</code><br />` +
 			`<code>/ms</code> will search the Galar Moves; you can search the National Moves by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`The order of the parameters does not matter.`
 		);
@@ -450,10 +450,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	const usedMod = splitTarget.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
-	});
+	})?.split('=')[1];
 
-	const mod = Dex.mod(usedMod?.split('=')[1] || 'base');
-	if (usedMod) splitTarget.splice(splitTarget.indexOf(usedMod), 1);
+	const mod = Dex.mod(usedMod || 'base');
+	if (usedMod) splitTarget.splice(splitTarget.indexOf('mod=' + usedMod), 1);
 	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -1105,7 +1105,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			const format = Object.entries(Dex.data.Formats).find(([a, f]) => f.mod === usedMod?.split('-')[1]);
+			const format = Object.entries(Dex.data.Formats).find(([a, f]) => f.mod === usedMod);
 			const formatStr = format ? format[1].name : 'gen8ou';
 			const validator = TeamValidator.get(
 				`${formatStr}${nationalSearch && !Dex.getRuleTable(Dex.getFormat(formatStr)).has('standardnatdex') ? '@@@standardnatdex' : ''}`
@@ -1131,6 +1131,15 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (!isRegionalForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
+	}
+
+	if (usedMod === 'letsgo') {
+		results = results.filter(name => {
+			const species = mod.getSpecies(name);
+			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
+			(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
+				species.name !== 'Pikachu-Alola'));
+		});
 	}
 
 	if (randomOutput && randomOutput < results.length) {
@@ -1181,7 +1190,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
 	} else if (results.length === 1) {
-		return {dt: `${results[0]}${usedMod ? `,${usedMod.split('=')[1]}` : ''}`};
+		return {dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}`};
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
@@ -1195,10 +1204,10 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const usedMod = splitTarget.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
-	});
+	})?.split('=')[1];
 
-	const mod = Dex.mod(usedMod?.split('=')[1] || 'base');
-	if (usedMod) splitTarget.splice(splitTarget.indexOf(usedMod), 1);
+	const mod = Dex.mod(usedMod || 'base');
+	if (usedMod) splitTarget.splice(splitTarget.indexOf('mod=' + usedMod), 1);
 	const allCategories = ['physical', 'special', 'status'];
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
@@ -1911,7 +1920,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
 	} else if (results.length === 1) {
-		return {dt: `${results[0]}${usedMod ? `,${usedMod.split('=')[1]}` : ''}`};
+		return {dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}`};
 	} else {
 		resultsStr += "No moves found.";
 	}
