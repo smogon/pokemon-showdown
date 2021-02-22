@@ -1284,8 +1284,8 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		megaEvolves: "Ninetales-Alola",
 		itemUser: ["Ninetales-Alola"],
 		onTakeItem(item, source) {
-			if (source.species === 'Ninetales-Alola') return false;
-			if (source.species === 'Ninetales-Alola-Mega') return false;
+			if (source.species.name === 'Ninetales-Alola') return false;
+			if (source.species.name === 'Ninetales-Alola-Mega') return false;
 			return true;
 		},
 		num: -1078,
