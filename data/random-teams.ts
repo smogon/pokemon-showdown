@@ -227,7 +227,8 @@ export class RandomTeams {
 
 	/**
 	 * Removes n random elements from an unsorted array and returns them.
-	 * If n is less than or equal to the array's length, returns the array unchanged.
+	 * If n is less than the array's length, randomly removes and returns all the elements
+	 * in the array (so the returned array could have length < n).
 	 */
 	multipleSamplesNoReplace<T>(list: T[], n: number): T[] {
 		const samples = [];
