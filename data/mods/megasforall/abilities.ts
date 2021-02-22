@@ -1864,7 +1864,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					this.add('-ability', pokemon, 'Forgery');
 					this.add('-message', `${pokemon.name}'s ${this.dex.getItem(pokemon.item).name} was destroyed!`);
 				}
-				pokemon.item = 'zoroarkite';
+				pokemon.item = 'zoroarkite' as ID;
 			},
 		},
 		name: "Forgery",
