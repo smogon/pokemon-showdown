@@ -1713,7 +1713,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			this.field.weatherData.duration = 0;
 		},
 		onAnySetWeather(target, source, weather) {
-			if (source.hasAbility('everlastingwinter')) return;
+			if (source.hasAbility('everlastingwinter') && weather.id === 'hail') return;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'hail' && !strongWeathers.includes(weather.id)) return false;
 		},
@@ -1738,7 +1738,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			this.field.setWeather('deltastream');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (source.hasAbility('everlastingwinter')) return;
+			if (source.hasAbility('everlastingwinter') && weather.id === 'hail') return;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'deltastream' && !strongWeathers.includes(weather.id)) return false;
 		},
@@ -1763,7 +1763,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			this.field.setWeather('desolateland');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (source.hasAbility('everlastingwinter')) return;
+			if (source.hasAbility('everlastingwinter') && weather.id === 'hail') return;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'desolateland' && !strongWeathers.includes(weather.id)) return false;
 		},
@@ -1788,7 +1788,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			this.field.setWeather('primordialsea');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (source.hasAbility('everlastingwinter')) return;
+			if (source.hasAbility('everlastingwinter') && weather.id === 'hail') return;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'primordialsea' && !strongWeathers.includes(weather.id)) return false;
 		},
