@@ -115,6 +115,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	}
 
 	getItem(
+		ability: string,
 		hasType: {[k: string]: true},
 		hasMove: {[k: string]: true},
 		species: Species,
@@ -301,7 +302,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			ability: 'None',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
 			ivs,
-			item: this.getItem(hasType, hasMove, species),
+			item: this.getItem('None', hasType, hasMove, species),
 			level,
 			// No shiny chance because Gen 2 shinies have bad IVs
 			shiny: false,
