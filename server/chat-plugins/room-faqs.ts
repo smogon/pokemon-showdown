@@ -37,8 +37,12 @@ export const commands: ChatCommands = {
 		if (!(topic && rest.length)) return this.parse('/help roomfaq');
 		let text = rest.join(',').trim();
 		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
-		if (Chat.stripFormatting(text).length > MAX_ROOMFAQ_LENGTH) {
-			return this.errorReply(`FAQ entries should not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+
+		const lengthWithoutFormatting = Chat.stripFormatting(text).length;
+		if (lengthWithoutFormatting > MAX_ROOMFAQ_LENGTH) {
+			return this.errorReply(`FAQ entries must not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+		} else if (lengthWithoutFormatting < 1) {
+			return this.errorReply(`FAQ entries must include at least one character.`);
 		}
 
 		text = text.replace(/^>/, '&gt;');
