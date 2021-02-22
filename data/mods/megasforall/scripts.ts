@@ -189,7 +189,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		let move = baseMove;
 		if (zMove) {
 			if (pokemon.item === 'zoroarkite') { // only part that's changed
-				zMove = false;
+				zMove = undefined;
 			} else {
 				move = this.getActiveZMove(baseMove, pokemon);
 			}
