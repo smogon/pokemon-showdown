@@ -427,6 +427,14 @@ export const commands: ChatCommands = {
 
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
+	const splitTarget = target.split(',');
+	const usedMod = splitTarget.find(x => {
+		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
+	});
+
+	const mod = Dex.mod(usedMod?.split('=')[1] || 'base');
+	if (usedMod) splitTarget.splice(splitTarget.indexOf(usedMod), 1);
 	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -446,7 +454,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		doublesnu: '(DUU)', dnu: '(DUU)',
 	});
 	const allTypes = Object.create(null);
-	for (const i in Dex.data.TypeChart) {
+	for (const i in mod.data.TypeChart) {
 		allTypes[toID(i)] = i;
 	}
 	const allColors = ['green', 'red', 'blue', 'white', 'brown', 'yellow', 'purple', 'pink', 'gray', 'black'];
@@ -483,7 +491,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let fullyEvolvedSearch = null;
 	let singleTypeSearch = null;
 	let randomOutput = 0;
-	let maxGen = 0;
+	let maxGen = mod.gen;
 	const validParameter = (cat: string, param: string, isNotSearch: boolean, input: string) => {
 		const uniqueTraits = ['colors', 'gens'];
 		for (const group of searches) {
@@ -506,7 +514,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		return false;
 	};
 
-	for (const andGroup of target.split(',')) {
+	for (const andGroup of splitTarget) {
 		const orGroup: DexOrGroup = {
 			abilities: {}, tiers: {}, doublesTiers: {}, colors: {}, 'egg groups': {}, formes: {},
 			gens: {}, moves: {}, types: {}, resists: {}, weak: {}, stats: {}, skip: false,
@@ -521,7 +529,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				target = target.substr(1);
 			}
 
-			const targetAbility = Dex.getAbility(target);
+			const targetAbility = mod.getAbility(target);
 			if (targetAbility.exists) {
 				const invalid = validParameter("abilities", targetAbility.id, isNotSearch, targetAbility.name);
 				if (invalid) return {error: invalid};
@@ -559,7 +567,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				continue;
 			}
 
-			const targetMove = Dex.getMove(target);
+			const targetMove = mod.getMove(target);
 			if (targetMove.exists) {
 				const invalid = validParameter("moves", targetMove.id, isNotSearch, target);
 				if (invalid) return {error: invalid};
@@ -736,8 +744,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
-				for (const move in Dex.data.Moves) {
-					const moveData = Dex.getMove(move);
+				for (const move in mod.data.Moves) {
+					const moveData = mod.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) {
 						const invalid = validParameter("moves", move, isNotSearch, target);
@@ -757,14 +765,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 8) === 'resists ') {
 				const targetResist = target.substr(8, 1).toUpperCase() + target.substr(9);
-				if (targetResist in Dex.data.TypeChart) {
+				if (targetResist in mod.data.TypeChart) {
 					const invalid = validParameter("resists", targetResist, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.resists[targetResist] = !isNotSearch;
 					continue;
 				} else {
-					if (toID(targetResist) in Dex.data.Moves) {
-						const move = Dex.getMove(targetResist);
+					if (toID(targetResist) in mod.data.Moves) {
+						const move = mod.getMove(targetResist);
 						if (move.category === 'Status') {
 							return {error: `'${targetResist}' is a status move and can't be used with 'resists'.`};
 						} else {
@@ -781,14 +789,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 5) === 'weak ') {
 				const targetWeak = target.substr(5, 1).toUpperCase() + target.substr(6);
-				if (targetWeak in Dex.data.TypeChart) {
+				if (targetWeak in mod.data.TypeChart) {
 					const invalid = validParameter("weak", targetWeak, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.weak[targetWeak] = !isNotSearch;
 					continue;
 				} else {
-					if (toID(targetWeak) in Dex.data.Moves) {
-						const move = Dex.getMove(targetWeak);
+					if (toID(targetWeak) in mod.data.Moves) {
+						const move = mod.getMove(targetWeak);
 						if (move.category === 'Status') {
 							return {error: `'${targetWeak}' is a status move and can't be used with 'weak'.`};
 						} else {
@@ -812,8 +820,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						return {error: "The parameter 'pivot' cannot have alternative parameters other than 'batonpass'."};
 					}
 				}
-				for (const move in Dex.data.Moves) {
-					const moveData = Dex.getMove(move);
+				for (const move in mod.data.Moves) {
+					const moveData = mod.getMove(move);
 					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
@@ -884,7 +892,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	if (!maxGen) maxGen = 8;
-	const mod = Dex.mod('gen' + maxGen);
 	const dex: {[k: string]: Species} = {};
 	for (const pokemon in mod.data.Pokedex) {
 		const species = mod.getSpecies(pokemon);
@@ -902,7 +909,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			(fullyEvolvedSearch === false && species.nfe)
 		);
 		if (
-			species.gen <= maxGen &&
+			species.gen <= (maxGen || mod.gen) &&
 			(
 				(
 					nationalSearch &&
@@ -962,8 +969,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					alts.tiers.LC &&
 					!dex[mon].prevo &&
 					dex[mon].evos.some(evo => mod.getSpecies(evo).gen <= mod.gen) &&
-					!format.banlist.includes(dex[mon].name) &&
-					!format.banlist.includes(dex[mon].name + "-Base")
+					!Dex.getRuleTable(format).isBannedSpecies(dex[mon])
 				) {
 					const lsetData = mod.getLearnsetData(dex[mon].id);
 					if (lsetData.exists && lsetData.eventData && lsetData.eventOnly) {
@@ -1089,9 +1095,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			const validator = TeamValidator.get(nationalSearch ? `gen8nationaldexag` : `gen${maxGen}ou`);
+			const format = Object.keys(Dex.data.Formats).find(x => Dex.getFormat(x).mod === usedMod);
+			const validator = TeamValidator.get(`${format || 'gen8ou'}${nationalSearch ? '@@@standardnatdex' : ''}`);
 			const pokemonSource = validator.allSources();
-			for (const move of Object.keys(alts.moves).map(x => Dex.getMove(x))) {
+			for (const move of Object.keys(alts.moves).map(x => mod.getMove(x))) {
 				if (move.gen <= maxGen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
