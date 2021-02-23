@@ -67,12 +67,7 @@ export class RandomTeams {
 	 *
 	 * returns true to reject, false otherwise.
 	 */
-	moveRejectionCheckers: {
-		screens: MoveRejectionChecker,
-		recovery: MoveRejectionChecker,
-		lead: MoveRejectionChecker,
-		[k: string]: MoveRejectionChecker,
-	};
+	moveRejectionCheckers: {[k: string]: MoveRejectionChecker};
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.getFormat(format);
