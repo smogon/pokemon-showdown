@@ -1448,6 +1448,13 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 8] Challenge Cup",
+
+		mod: 'gen8',
+		team: 'randomCC',
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause'],
+	},
+	{
 		name: "[Gen 8] Challenge Cup 1v1",
 
 		mod: 'gen8',
@@ -1455,7 +1462,7 @@ export const Formats: FormatList = [
 		teamLength: {
 			battle: 1,
 		},
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause'],
+		ruleset: ['[Gen 8] Challenge Cup', 'Team Preview'],
 	},
 	{
 		name: "[Gen 8] Challenge Cup 2v2",
@@ -1467,7 +1474,7 @@ export const Formats: FormatList = [
 			battle: 2,
 		},
 		searchShow: false,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause'],
+		ruleset: ['[Gen 8] Challenge Cup 1v1'],
 	},
 	{
 		name: "[Gen 8] Hackmons Cup",
