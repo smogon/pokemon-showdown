@@ -2551,6 +2551,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const item = target.takeItem(source);
 			if (item) {
 				this.add('-enditem', target, item.name, '[from] move: Corrosive Gas', '[of] ' + source);
+			} else {
+				this.add('-fail', target, 'move: Corrosive Gas');
 			}
 		},
 		secondary: null,
@@ -17753,7 +17755,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {authentic: 1},
 		onHitField(target, source, move) {
-			let result = false;
+			this.add('-activate', source, 'move: Teatime');
+			let result = null;
 			for (const active of this.getAllActive()) {
 				if (this.runEvent('Invulnerability', active, source, move) === false) {
 					this.add('-miss', source, active);
@@ -17766,6 +17769,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 						result = true;
 					}
 				}
+			}
+			if (!result) {
+				this.add('-fail', source, '[from] ' + move);
 			}
 			return result;
 		},

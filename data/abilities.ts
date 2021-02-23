@@ -573,7 +573,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAnyTryMove(target, source, effect) {
 			if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct'].includes(effect.id)) {
 				this.attrLastMove('[still]');
-				this.add('cant', this.effectData.target, 'ability: Damp', effect, '[of] ' + target);
+				this.add('-block', this.effectData.target, 'ability: Damp', effect, target);
 				return false;
 			}
 		},
@@ -626,7 +626,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const dazzlingHolder = this.effectData.target;
 			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Dazzling', move, '[of] ' + target);
+				this.add('-block', dazzlingHolder, 'ability: Queenly Majesty', move, target);
 				return false;
 			}
 		},
@@ -2830,7 +2830,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const dazzlingHolder = this.effectData.target;
 			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Queenly Majesty', move, '[of] ' + target);
+				this.add('-block', dazzlingHolder, 'ability: Queenly Majesty', move, target);
 				return false;
 			}
 		},
