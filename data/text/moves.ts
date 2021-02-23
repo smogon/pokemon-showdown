@@ -2903,8 +2903,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		},
 
 		activate: "#shadowforce",
-		fail: "But [POKEMON] can't use the move!",
-		failWrongForme: "But [POKEMON] can't use it the way it is now!",
+		fail: "  But [POKEMON] can't use the move!",
+		failWrongForme: "  But [POKEMON] can't use it the way it is now!",
 	},
 	hyperspacehole: {
 		name: "Hyperspace Hole",
