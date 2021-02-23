@@ -1934,7 +1934,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		shortDesc: "This Pokémon's contact moves become special and non-contact.",
 		onModifyMove(move) {
 			if (move.flags['contact']) {
-				move.category = 'Special';
+				if (move.category !== 'Special') move.category = 'Special';
 				delete move.flags['contact'];
 			}
 		},
