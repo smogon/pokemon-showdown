@@ -1277,4 +1277,46 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by an Araquanid, this item allows it to Mega Evolve in battle.",
 	},
+	ninetalesite: {
+		name: "Ninetalesite",
+		spritenum: 578,
+		megaStone: "Ninetales-Alola-Mega",
+		megaEvolves: "Ninetales-Alola",
+		itemUser: ["Ninetales-Alola"],
+		onTakeItem(item, source) {
+			if (source.species.name.startsWith('Ninetales-Alola')) return false;
+			return true;
+		},
+		num: -1078,
+		gen: 8,
+		desc: "If held by a Ninetales, this item allows it to Mega Evolve in battle.",
+	},
+	zoroarkite: {
+		name: "Zoroarkite",
+		spritenum: 578,
+		megaStone: "Zoroark-Mega",
+		megaEvolves: "Zoroark",
+		itemUser: ["Zoroark"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1079,
+		gen: 8,
+		desc: "If held by a Zoroark, this item allows it to Mega Evolve in battle.",
+	},
+	delphite: {
+		name: "Delphite",
+		spritenum: 578,
+		megaStone: "Delphox-Mega",
+		megaEvolves: "Delphox",
+		itemUser: ["Delphox"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1080,
+		gen: 8,
+		desc: "If held by a Delphox, this item allows it to Mega Evolve in battle.",
+	},
 };
