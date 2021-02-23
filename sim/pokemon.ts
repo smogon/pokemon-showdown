@@ -302,7 +302,7 @@ export class Pokemon {
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
-		if (!this.set.moves || !this.set.moves.length) {
+		if (!this.set.moves?.length) {
 			throw new Error(`Set ${this.name} has no moves`);
 		}
 		for (const moveid of this.set.moves) {
@@ -1804,7 +1804,7 @@ export class Pokemon {
 		const ratio = this.hp / this.maxhp;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.reportPercentages) {
+		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
 			// HP Percentage Mod mechanics
 			let percentage = Math.ceil(ratio * 100);
 			if ((percentage === 100) && (ratio < 1.0)) {

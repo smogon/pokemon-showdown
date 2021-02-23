@@ -567,7 +567,7 @@ export class TeamValidator {
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(val => val);
 		}
-		if (!set.moves || !set.moves.length) {
+		if (!set.moves?.length) {
 			problems.push(`${name} has no moves.`);
 			set.moves = [];
 		}

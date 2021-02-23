@@ -581,7 +581,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(pokemon) {
 			const foe = pokemon.side.foe.active[0];
-			if (!foe || !foe.lastMove || foe.lastMove.id === 'mirrormove') {
+			if (!foe?.lastMove || foe.lastMove.id === 'mirrormove') {
 				return false;
 			}
 			this.useMove(foe.lastMove.id, pokemon);

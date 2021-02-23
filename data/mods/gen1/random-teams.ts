@@ -84,7 +84,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
-			let moves;
 			const pool: string[] = [];
 			if (lsetData.learnset) {
 				for (const move in lsetData.learnset) {
@@ -94,19 +93,11 @@ export class RandomGen1Teams extends RandomGen2Teams {
 					}
 				}
 			}
-			if (pool.length <= 4) {
-				moves = pool;
-			} else {
-				moves = [
-					this.sampleNoReplace(pool), this.sampleNoReplace(pool),
-					this.sampleNoReplace(pool), this.sampleNoReplace(pool),
-				];
-			}
 
 			team.push({
 				name: poke,
 				species: species.name,
-				moves: moves,
+				moves: this.multipleSamplesNoReplace(pool, 4),
 				gender: false,
 				ability: 'None',
 				evs: evs,

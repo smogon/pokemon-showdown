@@ -216,7 +216,7 @@ export const commands: ChatCommands = {
 		const key = toID(target);
 		if (!key) return this.parse('/help daily');
 
-		if (!spotlights[room.roomid] || !spotlights[room.roomid][key]) {
+		if (!spotlights[room.roomid]?.[key]) {
 			return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 		}
 
