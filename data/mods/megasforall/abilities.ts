@@ -1632,7 +1632,8 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				if (!pokemon.side.pokemon[i]) continue;
 				const additionalBannedAbilities = [
-					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
+					'noability', 'flowergift', 'forecast', 'hugepower', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas',
+					'powerofalchemy', 'purepower', 'receiver', 'trace', 'wonderguard',
 				];
 				if (
 					pokemon.side.pokemon[i].fainted ||
@@ -1657,7 +1658,8 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				if (!pokemon.side.pokemon[i]) continue;
 				const additionalBannedAbilities = [
-					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
+					'noability', 'flowergift', 'forecast', 'hugepower', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas',
+					'powerofalchemy', 'purepower', 'receiver', 'trace', 'wonderguard',
 				];
 				if (
 					pokemon.side.pokemon[i].fainted ||
