@@ -979,7 +979,7 @@ export class RandomTeams {
 			// Turtonator wants Body Press when it doesn't have Shell Smash
 			const turtQuakeCull = species.id === 'turtonator' && movePool.includes('bodypress') && movePool.includes('shellsmash');
 			const subToxicPossible = hasMove['substitute'] && movePool.includes('toxic');
-			return {cull: turtonatorEQCull || (isDoubles && doublesCull) || subToxicPossible || hasMove['bonemerang']};
+			return {cull: turtQuakeCull || (isDoubles && doublesCull) || subToxicPossible || hasMove['bonemerang']};
 		case 'scorchingsands':
 			// Special cases for Ninetales and Palossand; prevents status redundancy
 			return {cull: hasMove['willowisp'] || hasMove['earthpower'] || (hasMove['toxic'] && movePool.includes('earthpower'))};
