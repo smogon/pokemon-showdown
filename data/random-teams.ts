@@ -841,8 +841,10 @@ export class RandomTeams {
 			return {cull: counter.speedsetup || hasMove['bulkup'] || hasMove['uturn']};
 		case 'protect':
 			if ((counter.setupType && !hasMove['wish'] && !isDoubles) || hasRestTalk) return {cull: true};
-			if (!isDoubles &&
-				counter.Status < 2 && ['Hunger Switch', 'Speed Boost', 'Moody'].every(m => !hasAbility[m])
+			if (
+				!isDoubles &&
+				counter.Status < 2 &&
+				['Hunger Switch', 'Speed Boost', 'Moody'].every(m => !hasAbility[m])
 			) return {cull: true};
 			if (movePool.includes('leechseed') || (movePool.includes('toxic') && !hasMove['wish'])) return {cull: true};
 			if (isDoubles && (
