@@ -13951,7 +13951,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		onTry(source) {
+		onTry(source, target, move) {
 			if (source.status === 'slp' || source.hasAbility('comatose')) return false;
 
 			if (source.hp === source.maxhp) {
@@ -13959,7 +13959,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return null;
 			}
 			if (source.hasAbility(['insomnia', 'vitalspirit'])) {
-				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
+				this.add('-fail', source, move, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
 				return null;
 			}
 		},
