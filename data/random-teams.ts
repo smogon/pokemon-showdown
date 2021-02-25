@@ -895,8 +895,7 @@ export class RandomTeams {
 			const diggersbyCull = counter.Physical > 3 && movePool.includes('uturn');
 			return {cull: counter.speedsetup || (hasType['Rock'] && counter.Status) || diggersbyCull};
 		case 'blazekick':
-			// Special case for Genesect. Remove when Genesect changes
-			return {cull: counter.Special >= 1};
+			return {cull: species.id === 'genesect' && counter.Special >= 1};
 		case 'firefang': case 'flamethrower':
 			// Fire Fang: Special case for Garchomp, which doesn't want Fire Fang w/o Swords Dance
 			const otherFireMoves = ['heatwave', 'overheat'].some(m => hasMove[m]);
