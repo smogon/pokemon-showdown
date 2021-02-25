@@ -3257,14 +3257,23 @@ export const commands: ChatCommands = {
 		],
 
 		winfaction: 'win',
+		unwinfaction: 'win',
+		unwin: 'win',
 		win(target, room, user, connection, cmd) {
+			const isUnwin = cmd.startsWith('unwin');
 			room = this.requireRoom('mafia' as RoomID);
 			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			this.checkCan('mute', null, room);
 			const args = target.split(',');
 			let points = parseInt(args[0]);
+			if (isUnwin) {
+				points *= -1;
+			}
 			if (isNaN(points)) {
 				points = 10;
+				if (isUnwin) {
+					points *= -1;
+				}
 			} else {
 				if (points > 100 || points < -100) {
 					return this.errorReply(`You cannot give or take more than 100 points at a time.`);
@@ -3277,8 +3286,8 @@ export const commands: ChatCommands = {
 			if (!logs.leaderboard[month]) logs.leaderboard[month] = {};
 
 			let toGiveTo = [];
-			let buf = `${points} point${Chat.plural(points, 's were', ' was')} awarded to: `;
-			if (cmd === 'winfaction') {
+			let buf = `${points < 0 ? points * -1 : points} point${Chat.plural(points, 's were', ' was')} ${points <= 0 ? 'taken from ' : 'awarded to '} `;
+			if (cmd === 'winfaction' || cmd === 'unwinfaction') {
 				const game = this.requireGame(Mafia);
 				for (let faction of args) {
 					faction = toID(faction);
@@ -3307,12 +3316,12 @@ export const commands: ChatCommands = {
 			}
 			if (!gavePoints) return this.parse('/help mafia win');
 			writeFile(LOGS_FILE, logs);
-			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(toGiveTo)}`);
+			this.modlog(`MAFIAPOINTS`, null, `${points < 0 ? points * -1 : points} points were ${points < 0 ? 'taken from' : 'awarded to'} ${Chat.toListString(toGiveTo)}`);
 			room.add(buf).update();
 		},
 		winhelp: [
-			`/mafia win (points), [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
-			`/mafia winfaction (points), [faction] - Award the specified points to all the players in the given faction.`,
+			`/mafia (un)win (points), [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
+			`/mafia (un)winfaction (points), [faction] - Award the specified points to all the players in the given faction.`,
 		],
 
 		unmvp: 'mvp',
