@@ -851,7 +851,9 @@ export const commands: ChatCommands = {
 		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
 		this.addGlobalModAction(`${name} was locked from talking${durationMsg} by ${user.name}.` + (publicReason ? ` (${publicReason})` : ""));
 
-		room?.hideText([userid, toID(this.inputUsername)]);
+		if (room && !room.settings.isHelp) {
+			room.hideText([userid, toID(this.inputUsername)]);
+		}
 		const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
 		if (affected.length > 1) {
