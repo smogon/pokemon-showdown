@@ -1501,7 +1501,8 @@ export class RandomTeams {
 		) return 'Life Orb';
 		if (!isDoubles && counter.damagingMoves.length >= 4 && !counter.Dragon && !counter.Normal) return 'Expert Belt';
 		if (
-			!isDoubles && !hasMove['substitute'] &&
+			!isDoubles &&
+			!hasMove['substitute'] &&
 			(hasMove['dragondance'] || hasMove['swordsdance']) &&
 			(hasMove['outrage'] || (
 				['Bug', 'Fire', 'Ground', 'Normal', 'Poison'].every(type => !hasType[type]) &&
