@@ -10157,7 +10157,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 
 			// Additional Gravity check for Z-move variant
 			if (this.field.getPseudoWeather('Gravity')) {
-				this.add('cant', source, 'move: Gravity', move);
+				this.add('-fail', source, 'move: Gravity', move);
 				return null;
 			}
 		},
@@ -12732,7 +12732,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source) {
 			if (source.side === target.side) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
-					this.add('-immune', target);
+					this.add('-fail', target);
 				}
 			}
 		},
@@ -15173,7 +15173,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTryMove(pokemon) {
 			if (!pokemon.volatiles['shelltrap']?.gotHit) {
 				this.attrLastMove('[still]');
-				this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
+				this.add('-fail', pokemon, 'Shell Trap', 'Shell Trap');
 				return null;
 			}
 		},
@@ -16504,7 +16504,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTry(source, target, move) {
 			// Additional Gravity check for Z-move variant
 			if (this.field.getPseudoWeather('Gravity')) {
-				this.add('cant', source, 'move: Gravity', move);
+				this.add('-fail', source, 'move: Gravity', move);
 				return null;
 			}
 		},
@@ -17839,7 +17839,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			// Additional Gravity check for Z-move variant
 			if (this.field.getPseudoWeather('Gravity')) {
 				this.attrLastMove('[still]');
-				this.add('cant', source, 'move: Gravity', move);
+				this.add('-fail', source, 'move: Gravity', move);
 				return null;
 			}
 		},
