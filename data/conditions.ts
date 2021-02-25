@@ -711,7 +711,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
-			this.add('-block', pokemon, 'Dynamax');
+			this.add('-immune', pokemon, 'Dynamax');
 			return null;
 		},
 		onResidualPriority: -100,
