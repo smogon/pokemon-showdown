@@ -208,7 +208,10 @@ class OtdHandler {
 				this.lastPrenom = now;
 			}
 		}
-		this.display(updateOnly);
+
+		if (this.room !== rooms.animeandmanga) {
+			this.display(updateOnly);
+		}
 	}
 
 	generateNomWindow() {
