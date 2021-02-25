@@ -7,7 +7,7 @@
 import {Utils} from '../../lib';
 
 /** map<to, from> */
-export const chessChallenges = Chat.oldPlugins.chess?.chessChallenges || new Map();
+export const chessChallenges: Map<ID, ID> = Chat.oldPlugins.chess?.chessChallenges || new Map();
 
 const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 type Side = 'B' | 'W';
@@ -15,13 +15,14 @@ type Side = 'B' | 'W';
 interface Piece {
 	symbols: {B: string, W: string};
 	name: string;
+	desc: string[];
 	/**
 	 * @param dCol: difference between old column and new column
 	 * @param dRow: difference between new row and old row
 	 * @param hasStarted: has it moved from original position?
 	 */
-	canMove: (dCol: number, dRow: number, hasStarted?: boolean) => boolean;
-	canCapture?: (dCol: number, dRow: number, hasStarted?: boolean) => boolean;
+	canMove: (dCol: number, dRow: number, hasStarted: boolean, side: Side) => boolean;
+	canCapture?: (dCol: number, dRow: number, hasStarted: boolean, side: Side) => boolean;
 	canBeBlocked?: boolean;
 }
 
@@ -33,19 +34,30 @@ export const PIECES: {[letter: string]: Piece} = {
 	P: {
 		symbols: {W: '\u2659', B: '\u265F'},
 		name: "Pawn",
-		canMove: (dCol, dRow, started) => {
+		canMove: (dCol, dRow, started, side) => {
 			let limit = 2;
 			if (!started) limit = 3;
-			return dRow === 0 && limit > Math.abs(dCol);
+			return dRow === 0 && limit > Math.abs(dCol) && (side === 'W' ? dCol > 0 : dCol < 0);
 		},
-		canCapture: (dCol, dRow) => Math.abs(dCol) === 1 && Math.abs(dRow) === 1,
+		canCapture: (dCol, dRow, started, side) => {
+			const isMovingForward = (side === 'W' ? dCol > 0 : dCol < 0);
+			return Math.abs(dCol) === 1 && Math.abs(dRow) === 1 && isMovingForward;
+		},
 		canBeBlocked: true,
+		desc: [
+			`Can be moved only forward, except when capturing, where it can only move diagonally.`,
+			`8 on each side.`,
+		],
 	},
 	B: {
 		symbols: {W: '\u2657', B: '\u265D'},
 		name: "Bishop",
 		canMove: (dCol, dRow) => dCol === dRow || dCol === -dRow,
 		canBeBlocked: true,
+		desc: [
+			`May only move diagonally left or right.`,
+			`Two for each side.`,
+		],
 	},
 	N: {
 		symbols: {B: '\u265E', W: '\u2658'},
@@ -54,6 +66,10 @@ export const PIECES: {[letter: string]: Piece} = {
 			(Math.abs(dCol) === 1 && Math.abs(dRow) === 2) ||
 			(Math.abs(dCol) === 2 && Math.abs(dRow) === 1)
 		),
+		desc: [
+			`May only move in an L-pattern, 3 forward and one left or one right.`,
+			`Two for each side.`,
+		],
 	},
 	Q: {
 		name: 'Queen',
@@ -63,6 +79,10 @@ export const PIECES: {[letter: string]: Piece} = {
 			(Math.abs(dCol) === 0 && Math.abs(dRow) > 0 || Math.abs(dRow) === 0 && Math.abs(dCol) > 0)
 		),
 		canBeBlocked: true,
+		desc: [
+			`May be moved left, right, forward, or backwards in a straight line, and left or right diagonally.`,
+			`One for each player.`,
+		],
 	},
 	K: {
 		name: 'King',
@@ -71,8 +91,12 @@ export const PIECES: {[letter: string]: Piece} = {
 			const col = Math.abs(dCol);
 			const row = Math.abs(dRow);
 			const total = row + col;
-			return col < 2 && row < 2 && total > 1 && total < 2;
+			return col < 2 && row < 2 && total >= 1 && total <= 2;
 		},
+		desc: [
+			`May move all directions, but only one square in that direction.`,
+			`One for each player.`,
+		],
 	},
 	R: {
 		name: 'Rook',
@@ -81,8 +105,54 @@ export const PIECES: {[letter: string]: Piece} = {
 			(Math.abs(dCol) === 0 && Math.abs(dRow) > 0 || Math.abs(dRow) === 0 && Math.abs(dCol) > 0)
 		),
 		canBeBlocked: true,
+		desc: [
+			`May be moved left, right, backwards, or forwards in a straight line.`,
+			`Two for each player.`,
+		],
 	},
 };
+
+export class ChessBoard {
+	strings: string[][];
+	constructor(strings?: string[][]) {
+		this.strings = strings || ChessGame.startingBoard();
+	}
+	copy() {
+		return new ChessBoard(Utils.deepClone([...this.strings]));
+	}
+	format(coords: [number, number] | string): [number, number] {
+		if (Array.isArray(coords)) return coords;
+		return this.formatLoc(coords);
+	}
+	formatLoc(args: string): [number, number] {
+		const [letter, num] = toID(args).split('');
+		const letterIdx = LETTERS.indexOf(letter);
+		if (letterIdx < 0) throw new Chat.ErrorMessage(`Invalid column: ${letter}`);
+		const colIdx = parseInt(num) - 1;
+		const row = this.strings[colIdx];
+		if (!row) {
+			throw new Chat.ErrorMessage(`Invalid row: ${num}`);
+		}
+		return [colIdx, letterIdx];
+	}
+	set(loc: [number, number] | string, item: string) {
+		loc = this.format(loc);
+		this.strings[loc[0]][loc[1]] = item;
+	}
+	entries() {
+		return this.strings.entries();
+	}
+	move(loc: [number, number] | string, to: [number, number] | string) {
+		loc = this.format(loc);
+		to = this.format(to);
+		const piece = this.strings[loc[0]][loc[1]];
+		this.strings[loc[0]][loc[1]] = '';
+		this.set(to, piece.endsWith('.') ? piece : `${piece}.`);
+	}
+	get(col: number, row: number) {
+		return this.strings[col]?.[row];
+	}
+}
 
 export class ChessPlayer extends Rooms.RoomGamePlayer {
 	side: Side;
@@ -90,6 +160,9 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 	user: User;
 	wantsTie = false;
 	stale = false;
+	currentChoice?: string;
+	lastMovedFrom = '';
+	lastMove = '';
 	constructor(user: User, game: ChessGame) {
 		super(user, game);
 		this.game = game;
@@ -109,6 +182,30 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 	sendControls(html: string) {
 		this.send(`|controlshtml|${html}`);
 	}
+	error(message: string): never {
+		this.updateControls(message);
+		throw new Chat.Interruption();
+	}
+	updateControls(error?: string) {
+		const titles: {[k: string]: string} = {
+			B: 'Black',
+			W: 'White',
+		};
+		let buf = `<center>You are the ${titles[this.side]} side!<br />`;
+		buf += `<details class="readmore"><summary>How to play</summary>`;
+		buf += `Use <code>/chess move [location], [newlocation]</code> or click your desired piece to play.`;
+		buf += `</details>`;
+		if (this.currentChoice) {
+			buf += `<br />`;
+			buf += `<button class="button" name="send" value="/msgroom ${this.game.room.roomid},/chess resetchoice">Reset current choice</button>`;
+		}
+		if (error) {
+			buf += `<br />`;
+			buf += `<p class="message-error">${error}</p>`;
+		}
+		buf += `</center>`;
+		this.sendControls(buf);
+	}
 }
 
 
@@ -119,7 +216,7 @@ export class ChessGame extends Rooms.RoomGame {
 	playerTable: {[k: string]: ChessPlayer};
 	players: ChessPlayer[] = [];
 	log: string[] = [];
-	board: string[][];
+	board: ChessBoard;
 	turn!: string;
 	state: string;
 	check: {[side: string]: [number, number][]};
@@ -127,64 +224,150 @@ export class ChessGame extends Rooms.RoomGame {
 		super(room);
 		this.room = room;
 		this.sides = {};
-		this.board = ChessGame.startingBoard();
+		this.board = new ChessBoard();
 		this.state = '';
 		this.check = {};
 		this.playerTable = {};
+
+		if (this.room.expireTimer) clearTimeout(this.room.expireTimer);
 	}
-	copy() {
-		return [...this.board];
-	}
-	parseLocation(args: string): [number, number] {
-		const [letter, num] = toID(args).split('');
-		const letterIdx = LETTERS.indexOf(letter);
-		if (letterIdx < 0) throw new Chat.ErrorMessage(`Invalid column: ${letter}`);
-		const colIdx = parseInt(num) - 1;
-		const row = this.board[colIdx];
-		if (!row) {
-			throw new Chat.ErrorMessage(`Invalid row: ${num}`);
-		}
-		return [colIdx, letterIdx];
+	onChatMessage() {
+		this.room.pokeExpireTimer();
 	}
 	send(player: ChessPlayer, message: string) {
 		return player.user.sendTo(this.room, message);
+	}
+	onJoin(user: User) {
+		this.sendBoardTo(user);
+	}
+	onConnect(user: User) {
+		this.onJoin(user);
+	}
+	sendBoardTo(user: User) {
+		if (this.playerTable[user.id]) {
+			user.sendTo(this.room.roomid, `|fieldhtml|${this.getBoard(this.playerTable[user.id])}`);
+		} else {
+			user.sendTo(this.room.roomid, `|fieldhtml|${this.getBoard()}`);
+		}
 	}
 	addPlayer(user: User) {
 		const player = new ChessPlayer(user, this);
 		this.players.push(player);
 
 		this.playerTable[user.id] = player;
-		const titles: {[k: string]: string} = {
-			B: 'Black',
-			W: 'White',
-		};
 		this.room.auth.set(player.id, Users.PLAYER_SYMBOL);
 		this.sides[player.side] = player;
-		player.sendControls(
-			`<center>You are the ${titles[player.side]} side!<br />` +
-			`Use <code>/chess move [location], [newlocation]</code> to play.</center>`
-		);
+		player.updateControls();
 		if (this.players.length > 1) {
 			this.start();
 		}
 		return player;
 	}
 	sendBoard() {
-		let buf = `<center><div class="ladder pad"><table><tr><th></th><th>`;
-		buf += LETTERS.join(`</th><th>`);
-		for (const [i, str] of this.board.entries()) {
-			buf += `<tr><th>${i + 1}</th><td>`;
-			buf += str.map((p) => {
+		for (const user of Object.values(this.room.users)) {
+			this.sendBoardTo(user);
+		}
+	}
+	formatLoc(loc: string) {
+		return this.board.format(loc);
+	}
+	getBoard(player?: ChessPlayer) {
+		let buf = `<center><div class="ladder pad" style="background-color:#694104;">`;
+		buf += `<table style="border: 5px solid #AFA155;text-align:center;">`;
+		buf += `<thead><th></th><th style="text-align:center;width:30px;">`;
+		buf += LETTERS.join(`</th><th style="text-align:center;width:30px;">`);
+		buf += `</th></thead><tbody>`;
+		const styles = {
+			white: ' style="background-color:white"',
+			grey: ' style="background-color:#cfd5da"',
+			lastmove: ' style="background-color:#feffb1"',
+			lastmovedfrom: ' style="background-color:#feffcc"',
+			check: ' style="background-color:#ff8080"',
+		};
+		let curStyle = styles.white;
+		let count = 1;
+		const opp = player ? this.sides[this.opposite(player.side)] : null;
+
+		for (const [col, str] of this.board.entries()) {
+			buf += `<tr><th style="text-align:center;height:30px;">${col + 1}</th>`;
+			for (const [row, p] of str.entries()) {
+				count++;
+				const curLoc = this.stringLoc([col, row]);
 				const [color, type] = p.split('');
 				const pieceInfo = PIECES[type];
-				if (!pieceInfo) return p;
-				return pieceInfo.symbols[color as Side];
-			}).join(`</td><td>`);
-			buf += `</td></tr>`;
+
+				if (opp?.lastMove === curLoc) {
+					curStyle = styles.lastmove;
+				} else if (opp?.lastMovedFrom === curLoc) {
+					curStyle = styles.lastmovedfrom;
+					opp.lastMovedFrom = '';
+				} else if (player && this.check[player.side]?.some(coords => this.stringLoc(coords) === curLoc)) {
+					curStyle = styles.check;
+				} else if (count % 2 === 0) {
+					curStyle = styles.grey;
+				} else {
+					curStyle = styles.white;
+				}
+
+				if (this.board.get(col, row)) {
+					curStyle = curStyle.slice(0, -1);
+					curStyle += `; font-size:22px"`;
+				}
+				const validMoves = player?.currentChoice ? this.findSpacesForPiece(player.currentChoice) : null;
+				const locationString = this.stringLoc([col, row]);
+				if (!pieceInfo) {
+					buf += `<td${curStyle}>`;
+					if (player?.currentChoice && validMoves?.includes(locationString)) {
+						buf += `<button style="font-size:15px;padding:3px 6px" class="button" name="send" value="/msgroom ${this.room.roomid},/chess completemove ${curLoc}">`;
+						buf += `&nbsp;&nbsp;&nbsp;</button>`;
+					} else {
+						buf += `</td>`;
+					}
+					continue;
+				}
+				buf += `<td${curStyle} title="${pieceInfo.name}&#10;${pieceInfo.desc.join('&#10;')}">`;
+				const icon = `${pieceInfo.symbols[color as Side]}`;
+
+				if (player?.currentChoice) {
+					const loc = this.formatLoc(player.currentChoice);
+					if (loc[0] === col && loc[1] === row) {
+						buf += `<button name="send" value="/msgroom ${this.room.roomid},/chess resetchoice">${icon}</button>`;
+					} else if (validMoves?.includes(locationString)) {
+						buf += `<button class="button" style="font-size:15px;padding:3px 6px" name="send" value="/msgroom ${this.room.roomid},/chess completemove ${curLoc}">`;
+						buf += icon;
+						buf += `</button>`;
+					} else {
+						buf += icon;
+					}
+				 } else if (color === player?.side && this.turn === player.id) {
+					buf += `<button style="font-size:15px;padding:3px 6px" class="button" name="send" value="/msgroom ${this.room.roomid},/chess startmove ${curLoc}">`;
+					buf += icon;
+					buf += `</button>`;
+				} else {
+					buf += icon;
+				}
+				buf += `</td>`;
+			}
+			count++;
+			buf += `</tr>`;
 		}
-		buf += `</center>`;
-		this.sendField(buf);
+		buf += `</tbody></table></center>`;
 		return buf;
+	}
+
+	findSpacesForPiece(loc: string, board: ChessBoard = this.board) {
+		const [cCol, cRow] = board.format(loc);
+		const piece = board.get(cCol, cRow);
+		const results: string[] = [];
+		if (!piece) return results;
+		for (const [col, colEntries] of board.entries()) {
+			for (const [row] of colEntries.entries()) {
+				if (this.checkCanMoveInner(piece, cCol, cRow, col, row, board, false)) {
+					results.push(this.stringLoc([col, row]));
+				}
+			}
+		}
+		return results;
 	}
 
 	sendField(buffer: string) {
@@ -209,16 +392,25 @@ export class ChessGame extends Rooms.RoomGame {
 
 	checkCanMove(
 		piece: string, oldCol: number, oldRow: number,
-		newCol: number, newRow: number, isBlack: boolean, shouldThrow = false, toCheck?: string[][],
+		newCol: number, newRow: number, shouldThrow = false, toCheck?: ChessBoard,
 	) {
-		const pieceLetter = toPieceID(piece).charAt(1);
-		const board = toCheck || this.copy();
+		const board = toCheck || this.board.copy();
 		if (!piece) {
 			if (shouldThrow) throw new Chat.ErrorMessage(`You can't move an empty space!`);
 			return false;
 		}
+		return this.checkCanMoveInner(piece, oldCol, oldRow, newCol, newRow, board, shouldThrow);
+	}
 
-		const isCapture = !!board[newCol][newRow];
+	checkCanMoveInner(
+		piece: string, oldCol: number, oldRow: number, newCol: number, newRow: number,
+		board?: ChessBoard, shouldThrow = false
+	) {
+		if (!board) board = this.board.copy();
+		const pieceLetter = toPieceID(piece).charAt(1);
+		const isBlack = piece.startsWith('B');
+		const targetPiece = board.get(newCol, newRow);
+		const isCapture = !!targetPiece;
 		const dCol = newCol - oldCol;
 		const dRow = (newRow - oldRow) * (isBlack ? -1 : 1);
 
@@ -232,9 +424,21 @@ export class ChessGame extends Rooms.RoomGame {
 			if (shouldThrow) throw new Chat.ErrorMessage(`Piece ${piece} not found.`);
 			return false;
 		}
+
+		if (isCapture && targetPiece.startsWith(piece.charAt(0))) {
+			if (shouldThrow) {
+				throw new Chat.ErrorMessage(`You cannot take your own piece.`);
+			}
+			return false;
+		}
+
 		const canMove = isCapture && pieceInfo.canCapture ? pieceInfo.canCapture : pieceInfo.canMove;
-		if (!canMove(dCol, dRow, !piece.endsWith('.'))) {
-			if (shouldThrow) throw new Chat.ErrorMessage(`You cannot move there.`);
+		if (!canMove(dCol, dRow, piece.endsWith('.'), piece.charAt(0) as Side)) {
+			if (shouldThrow) {
+				throw new Chat.ErrorMessage(
+					`You cannot move your ${pieceInfo.name} from ${this.stringLoc([oldCol, oldRow])} to ${this.stringLoc([newCol, newRow])}.`
+				);
+			}
 			return false;
 		}
 
@@ -251,7 +455,7 @@ export class ChessGame extends Rooms.RoomGame {
 				if (steps > 10) throw new Error("bug in blockfinder");
 
 				if (curRow === newRow && curCol === newCol) return true;
-				if (board[curCol][curRow]) {
+				if (board.get(curCol, curRow)) {
 					if (shouldThrow) {
 						throw new Chat.ErrorMessage(
 							`You're blocked from moving there (${this.stringLoc([curCol, curRow])} blocks you).`
@@ -271,16 +475,15 @@ export class ChessGame extends Rooms.RoomGame {
 		switch (name) {
 		case 'move':
 			const [cur, to] = parts;
-			const [cCol, cRow] = this.parseLocation(cur);
-			const [nCol, nRow] = this.parseLocation(to);
-			const piece = this.board[cCol][cRow];
- 			try {
-				this.checkCanMove(piece, cCol, cRow, nCol, nRow, piece.startsWith('B'));
+			const [cCol, cRow] = this.formatLoc(cur);
+			const [nCol, nRow] = this.formatLoc(to);
+			const piece = this.board.get(cCol, cRow);
+			try {
+				this.checkCanMove(piece, cCol, cRow, nCol, nRow);
 			} catch (e) {
 				throw new Chat.ErrorMessage(`Invalid movement in log line: ${e.message}`);
 			}
-			this.board[cCol][cRow] = '';
-			this.board[nCol][nRow] = (piece.endsWith('.') ? piece : `${piece}.`);
+			this.board.move([cCol, cRow], [nCol, nRow]);
 			this.sendBoard();
 			break;
 		case 'turn':
@@ -303,62 +506,66 @@ export class ChessGame extends Rooms.RoomGame {
 		return player;
 	}
 	move(player: ChessPlayer, currentLoc: string, targetLoc: string) {
+		player.updateControls();
 		if (!this.state) {
-			throw new Chat.ErrorMessage(`The game has not started yet.`);
+			player.error(`The game has not started yet.`);
 		}
 		if (this.turn !== player.id) {
-			throw new Chat.ErrorMessage(`It is not your turn to play!`);
+			player.error(`It is not your turn to play!`);
 		}
 		if (this.state === 'ended') {
-			throw new Chat.ErrorMessage(`The game is over.`);
+			player.error(`The game is over.`);
 		}
-		const [col, row] = this.parseLocation(currentLoc);
-		const [newCol, newRow] = this.parseLocation(targetLoc);
-		const targetPiece = this.board[newCol][newRow];
-		const piece = this.board[col][row];
+		const [col, row] = this.formatLoc(currentLoc);
+		const [newCol, newRow] = this.formatLoc(targetLoc);
+		const targetPiece = this.board.get(newCol, newRow);
+		const piece = this.board.get(col, row);
 		const pieceId = toPieceID(piece);
 		const pieceInfo = PIECES[pieceId.slice(1)];
 		if (!toID(piece).startsWith(toID(player.side))) {
-			throw new Chat.ErrorMessage(`That isn't your piece to move.`);
+			player.error(`That isn't your piece to move.`);
 		}
 		const isBlack = player.side === 'B';
 
 		if (this.check[player.side]) {
 			if (!this.checkWouldBeUnchecked(targetLoc, currentLoc, player.side)) {
-				throw new Chat.ErrorMessage(`You must move your king out of check.`);
+				player.error(`You must move your king out of check.`);
 			}
+			this.check[player.side] = [];
 		}
 
-		if (this.board[newCol][newRow].endsWith('K')) {
-			throw new Chat.ErrorMessage("You cannot capture kings");
-		}
 
 		if (piece.endsWith('K')) {
-			const curBoard = [...this.board];
-			curBoard[newCol][newRow] = piece;
+			const curBoard = this.board.copy();
+			curBoard.set([newCol, newRow], piece);
 
 			const check = this.checkCheck(piece.charAt(0) as Side, curBoard, true);
 			if (check) {
-				throw new Chat.ErrorMessage("You cannot move into check");
+				player.error("You cannot move into check.");
 			}
 		}
 
-		this.checkCanMove(piece, col, row, newCol, newRow, isBlack, true);
+		try {
+			this.checkCanMove(piece, col, row, newCol, newRow, true);
+		} catch (e) {
+			if (!e.name.endsWith('ErrorMessage')) throw e;
+			player.error(e.message);
+		}
 
-		this.board[col][row] = '';
-		this.board[newCol][newRow] = piece.endsWith('.') ? piece : `${piece}.`;
+		this.board.move([col, row], [newCol, newRow]);
+		player.lastMovedFrom = currentLoc;
+		player.lastMove = targetLoc;
 
 		for (const side of Object.keys(this.sides) as Side[]) {
 			if (this.checkCheckmate(side)) {
 				return this.end(Utils.html`Checkmate! ${this.sides[this.opposite(side)].name} won the game!`);
 			}
 			this.checkCheck(side); // check to see if they've moved into check
-			const sidePieces = this.find(side).map(([c, r]) => this.board[c][r]);
+			const sidePieces = this.find(side).map(([c, r]) => this.board.get(c, r));
 			// if this is true, they only have pawns and kings, they can't really win now except with promotion
 			// so this can change
-			this.sides[side].stale = sidePieces.every(p => p.endsWith('P') || p.endsWith('K'))
+			this.sides[side].stale = sidePieces.every(p => p.endsWith('P') || p.endsWith('K'));
 		}
-
 		// stalemate
 		if (this.players.every(p => p.stale)) {
 			return this.end(`Stalemate. No players could win...`);
@@ -367,19 +574,20 @@ export class ChessGame extends Rooms.RoomGame {
 		const targetInfo = PIECES[targetPiece.charAt(1)];
 		this.add(
 			Utils.html`${player.name} moved their ${pieceInfo.name} to ${targetLoc}` +
-			Utils.html`${targetInfo ? ` and took the opponent's ${targetInfo.name} there` : ''}.`
+			Utils.html`${targetInfo ? ` and took ${this.sides[targetPiece.charAt(0)].name}'s ${targetInfo.name} there` : ''}.`
 		);
 
 		this.log.push(
 			`|move|${player.side}|${this.stringLoc([col, row])}|${this.stringLoc([newCol, newRow])}|` +
-			`${targetInfo?.name.charAt(0) || ""}`
+			`${targetPiece}`
 		);
 
 		this.turn = this.sides[isBlack ? 'W' : 'B'].id;
 		this.log.push(`|turn|${this.turn}`);
-		this.add(Utils.html`<h2>It is now ${this.playerTable[this.turn].name}'s turn to choose.</h2>`);
+		this.add(Utils.html`<h2>${this.playerTable[this.turn].name}'s turn:</h2>`);
 		this.playerTable[this.turn].send(`|tempnotify|Make your move!`);
 		this.sendBoard();
+
 		return piece;
 	}
 	add(message: string, isHTML = true) {
@@ -390,10 +598,11 @@ export class ChessGame extends Rooms.RoomGame {
 	}
 	start() {
 		const nameString = Object.keys(this.playerTable).map(p => this.playerTable[p].name).join(' vs ');
-		this.add(Utils.html`<h2>Chess: ${nameString}<h2>`);
-		this.sendBoard();
+		this.add(Utils.html`<h2>Chess: ${nameString}</h2>`);
 		this.state = 'active';
 		this.turn = this.sides['W'].id;
+		this.add(Utils.html`<h2>${this.playerTable[this.turn].name}'s turn:</h2>`);
+		this.sendBoard();
 	}
 	validateLocation(coords: string) {
 		const [letter, num] = [...toID(coords)];
@@ -408,58 +617,64 @@ export class ChessGame extends Rooms.RoomGame {
 	opposite(side: string) {
 		return side === 'W' ? 'B' : 'W';
 	}
-	checkCheck(side: Side, board: string[][] | null = null, noChange = false) {
-		if (!board) board = this.copy();
+	checkCheck(side: Side, board: ChessBoard | null = null, noChange = false) {
+		if (!board) board = this.board.copy();
 
 		const kingLoc = this.find(side + 'K', board)[0];
 		const check = noChange ? {} : this.check;
 		const enemyPieces = this.find(this.opposite(side), board);
 
-		for (const loc of enemyPieces) {
-			const enemy = board[loc[0]][loc[1]];
-			if (this.checkCanMove(enemy, loc[0], loc[1], kingLoc[0], kingLoc[1], side === 'B', false, board)) {
+		for (const [col, row] of enemyPieces) {
+			const enemy = board.get(col, row);
+			if (this.checkCanMoveInner(enemy, col, row, kingLoc[0], kingLoc[1], board, false)) {
 				if (!check[side]) check[side] = [];
-				check[side].push(loc);
+				check[side].push([col, row]);
 			}
 		}
 
 		return check[side];
 	}
-	checkWouldBeUnchecked(targetLoc: string, currentLoc: string, side: Side, board?: string[][]) {
-		if (!board) board = this.copy();
+	checkWouldBeUnchecked(targetLoc: string, currentLoc: string, side: Side, board?: ChessBoard) {
+		if (!board) board = this.board.copy();
 
-		const targetCoords = this.parseLocation(targetLoc);
-		const currentCoords = this.parseLocation(currentLoc);
+		const targetCoords = this.formatLoc(targetLoc);
+		const currentCoords = this.formatLoc(currentLoc);
 
 		const [tCol, tRow] = targetCoords;
 		const [cCol, cRow] = currentCoords;
 
-		const piece = board[cCol][cRow];
-		if (!this.checkCanMove(piece, cCol, cRow, tCol, tRow, side === "B", false, board)) {
+		const piece = board.get(cCol, cRow);
+		if (!this.checkCanMoveInner(piece, cCol, cRow, tCol, tRow, board, false)) {
 			return false;
 		}
 
-		board[cCol][cRow] = '';
-		board[tCol][tRow] = piece;
+		board.move([cCol, cRow], [tCol, tRow]);
 
-		return !this.checkCheck(side, board, true).length;
+		return !(this.checkCheck(side, board, true)?.length);
 	}
 	checkCheckmate(side: Side) {
 		const king = this.find(side + 'K')[0];
 		if (king[0] === undefined) {
 			throw new Error(`Can't find king for ${side}`); // should __always__ exist
 		}
-		const startCheck = this.checkCheck(side, null, true);
+		let curBoard = this.board.copy();
+		const startCheck = this.checkCheck(side, curBoard, true);
 		if (!startCheck || !startCheck.length) return false;
-		const curBoard = this.copy();
-		for (const loc of this.find(side, curBoard)) {
-			const piece = curBoard[loc[0]][loc[1]];
+		const us = this.find(side, curBoard);
+
+		for (const loc of us) {
+			const piece = curBoard.get(loc[0], loc[1]);
 			for (const [c, row] of curBoard.entries()) {
 				for (const [r] of row.entries()) {
-					if (this.checkCanMove(piece, loc[0], loc[1], c, r, side === 'B', false, curBoard)) {
-						if (!this.checkCheck(side, curBoard, true)) {
-							return false;
-						}
+					if (this.checkCanMoveInner(piece, loc[0], loc[1], c, r, curBoard, false)) {
+						curBoard.move(loc, [c, r]);
+						try {
+							if (!this.checkCheck(side, curBoard, true)) {
+								return false;
+							}
+						} catch (e) {}
+						// reset board after each
+						curBoard = this.board.copy();
 					}
 				}
 			}
@@ -474,9 +689,10 @@ export class ChessGame extends Rooms.RoomGame {
 		this.add(`<h2>${endMessage}</h2>`);
 		this.addControls("");
 		this.state = 'ended';
+		this.room.pokeExpireTimer();
 	}
-	find(piece: string, board: string[][] | null = null) {
-		if (!board) board = this.board;
+	find(piece: string, board: ChessBoard | null = null) {
+		if (!board) board = this.board.copy();
 		const result: [number, number][] = [];
 		piece = toPieceID(piece);
 		for (const [col, fullRow] of board.entries()) {
@@ -491,28 +707,27 @@ export class ChessGame extends Rooms.RoomGame {
 	forfeit(user: User) {
 		const player = this.getPlayer(user);
 		this.add(Utils.html`${user.name} forfeited.`);
-		this.log.push(`|forfeit|`);
 		return this.end(Utils.html`${this.sides[this.opposite(player.side)].name} won the game!`);
 	}
 	promote(loc: string, to: string, user: ChessPlayer) {
 		if (this.turn !== user.id) {
-			throw new Chat.ErrorMessage(`It is not your turn.`);
+			user.error(`It is not your turn.`);
 		}
-		const [col, row] = this.parseLocation(loc);
-		const piece = this.board[col][row];
+		const [col, row] = this.formatLoc(loc);
+		const piece = this.board.get(col, row);
 		const validRow = piece.startsWith('B') ? 7 : 0;
-		if (!piece.startsWith(user.side)) throw new Chat.ErrorMessage("Not your piece to promote");
-		if (row !== validRow) throw new Chat.ErrorMessage("You're not in a place you can promote");
+		if (!piece.startsWith(user.side)) user.error("Not your piece to promote");
+		if (row !== validRow) user.error("You're not in a place you can promote");
 		const pieceType = Object.keys(PIECES).find(
 			p => toID(PIECES[p].name) === toID(to) || toID(p) === toID(to)
 		);
 		if (!pieceType) {
-			throw new Chat.ErrorMessage('Piece type not found');
+			user.error('Piece type not found');
 		}
 		if (['K', 'P'].includes(pieceType)) {
-			throw new Chat.ErrorMessage(`Cannot promote to that type.`);
+			user.error(`Cannot promote to that type.`);
 		}
-		this.board[col][row] = `${user.side}${pieceType}`;
+		this.board.set([col, row], `${user.side}${pieceType}`);
 		this.sendBoard();
 		this.add(Utils.html`${user.name} promoted their piece at ${loc} to ${PIECES[pieceType].name}`);
 	}
@@ -545,9 +760,10 @@ export const commands: ChatCommands = {
 			if (!targetUser) return this.errorReply(`User not found.`);
 			const existingRoom = findExistingRoom(user.id, targetUser.id);
 			const options = {
-				modchat: '+', isPrivate: true,
+				modchat: '+', isPrivate: 'hidden',
 			};
 			const roomid = `chess-${targetUser.id}-${user.id}`;
+			if (existingRoom) existingRoom.log.log = [];
 			const gameRoom = existingRoom ? existingRoom : Rooms.createGameRoom(
 				roomid as RoomID, `[Chess] ${user.name} vs ${targetUser.name}`, options
 			);
@@ -562,10 +778,10 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(ChessGame);
 			const player = game.getPlayer(user);
-			if (!target) {
+			const [location, to] = Utils.splitFirst(target, ',').map(p => p.trim());
+			if (!target || !location || !to) {
 				return this.parse(`/chess help`);
 			}
-			const [location, to] = Utils.splitFirst(target, ',');
 			game.move(player, location, to);
 			this.sendReply(`You moved your piece at ${location} to ${to}.`);
 			game.sendBoard();
@@ -585,7 +801,38 @@ export const commands: ChatCommands = {
 			const game = this.requireGame(ChessGame);
 			const player = game.getPlayer(user);
 			const [loc, to] = target.split(',').map(i => i.trim());
+			if (!target || !loc || !to) {
+				return this.parse('/help chess');
+			}
 			game.promote(loc, to, player);
+		},
+		startmove(target, room, user) {
+			const game = this.requireGame(ChessGame);
+			const player = game.getPlayer(user);
+			if (!toID(target)) return this.errorReply(`Invalid choice.`);
+			game.formatLoc(target);
+			player.currentChoice = game.stringLoc(game.formatLoc(target));
+			game.sendBoardTo(user);
+			player.updateControls();
+		},
+		completemove(target, room, user) {
+			const game = this.requireGame(ChessGame);
+			const player = game.getPlayer(user);
+			if (!target.trim()) return this.errorReply(`Invalid choice.`);
+			const choice = player.currentChoice;
+			if (!choice) return this.errorReply(`You don't have a pending choice`);
+			const targetLoc = game.stringLoc(game.formatLoc(target));
+			delete player.currentChoice;
+			game.sendBoardTo(user);
+			game.move(player, choice, targetLoc);
+		},
+		resetchoice() {
+			const game = this.requireGame(ChessGame);
+			const player = game.getPlayer(this.user);
+			if (!player.currentChoice) return this.errorReply("no queued choice");
+			delete player.currentChoice;
+			game.sendBoardTo(this.user);
+			player.updateControls();
 		},
 		exportlog(target, room, user) {
 			this.checkChat();
@@ -599,6 +846,17 @@ export const commands: ChatCommands = {
 				`${game.log.join('<br />')}</details>`
 			);
 		},
+		piece(target, room, user) {
+			target = toID(target);
+			const pieceInfo = PIECES[target] || Object.values(PIECES).find(i => toID(i.name) === target);
+			if (!pieceInfo) return this.errorReply(`Piece not found.`);
+			this.runBroadcast();
+			this.sendReplyBox(
+				`<strong>${pieceInfo.name}</strong><br />` +
+				`${Object.values(pieceInfo.symbols).join(' | ')}<br />` +
+				`${pieceInfo.desc.join('<br />')}`
+			);
+		},
 	},
 	chesshelp: [
 		`/chess challenge [user] - Challenges the [user] to a chess game.`,
@@ -607,5 +865,6 @@ export const commands: ChatCommands = {
 		`/chess accepttie - Accepts the pending tie request in your current chess game, if it exists.`,
 		`/chess promote [location], [type] - If the pawn at the [location] is at the end of the board, promotes it to the [type].`,
 		`/chess move [current space], [new space] - Moves the piece at the [current space] to the [new space]`,
+		`/chess piece [piece] - gives info on the specified chess piece.`,
 	],
 };
