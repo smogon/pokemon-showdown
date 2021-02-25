@@ -4055,7 +4055,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSetStatus(status, target, source, effect) {
 				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
 					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
-						this.add('-activate', target, 'move: Electric Terrain');
+						this.add('-immune', target, 'move: Electric Terrain');
 					}
 					return false;
 				}
@@ -4063,7 +4063,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onTryAddVolatile(status, target) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (status.id === 'yawn') {
-					this.add('-activate', target, 'move: Electric Terrain');
+					this.add('-immune', target, 'move: Electric Terrain');
 					return null;
 				}
 			},
@@ -7046,9 +7046,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		onTryHit(target, source, move) {
+		onTryHit(target, source) {
 			if (target.volatiles['dynamax']) {
-				this.add('-fail', source, 'move: Grass Knot', '[from] Dynamax');
+				this.add('-immune', source, 'Dynamax');
 				this.attrLastMove('[still]');
 				return null;
 			}
@@ -7935,9 +7935,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		onTryHit(target, pokemon, move) {
+		onTryHit(target, source) {
 			if (target.volatiles['dynamax']) {
-				this.add('-fail', pokemon, 'Dynamax');
+				this.add('-immune', source, 'Dynamax');
 				this.attrLastMove('[still]');
 				return null;
 			}
@@ -7992,9 +7992,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		onTryHit(target, pokemon, move) {
+		onTryHit(target, source) {
 			if (target.volatiles['dynamax']) {
-				this.add('-fail', pokemon, 'Dynamax');
+				this.add('-immune', source, 'Dynamax');
 				this.attrLastMove('[still]');
 				return null;
 			}
@@ -9019,7 +9019,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onDragOut(pokemon) {
-				this.add('-activate', pokemon, 'move: Ingrain');
+				this.add('-immune', pokemon, 'move: Ingrain');
 				return null;
 			},
 		},
@@ -9811,9 +9811,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryHit(target, pokemon, move) {
+		onTryHit(target, source) {
 			if (target.volatiles['dynamax']) {
-				this.add('-fail', pokemon, 'Dynamax');
+				this.add('-immune', source, 'Dynamax');
 				this.attrLastMove('[still]');
 				return null;
 			}
@@ -11342,7 +11342,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 						}
 					}
 					if (showMsg && !(effect as ActiveMove).secondaries) {
-						this.add('-activate', target, 'move: Mist');
+						this.add('-immune', target, 'move: Mist');
 					}
 				}
 			},
@@ -11421,14 +11421,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSetStatus(status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (effect && ((effect as Move).status || effect.id === 'yawn')) {
-					this.add('-activate', target, 'move: Misty Terrain');
+					this.add('-immune', target, 'move: Misty Terrain');
 				}
 				return false;
 			},
 			onTryAddVolatile(status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
-					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-immune', target, 'move: Misty Terrain');
 					return null;
 				}
 			},
@@ -14538,7 +14538,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target !== source) {
 					this.debug('interrupting setStatus');
 					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
-						this.add('-activate', target, 'move: Safeguard');
+						this.add('-immune', target, 'move: Safeguard');
 					}
 					return null;
 				}
@@ -14547,7 +14547,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (!effect || !source) return;
 				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
 				if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
-					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-immune', target, 'move: Safeguard');
 					return null;
 				}
 			},
@@ -18742,9 +18742,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onAnySetStatus(status, pokemon) {
 				if (status.id === 'slp') {
 					if (pokemon === this.effectData.target) {
-						this.add('-fail', pokemon, 'slp', '[from] Uproar', '[msg]');
+						this.add('-immune', pokemon, 'slp', '[from] Uproar', '[msg]');
 					} else {
-						this.add('-fail', pokemon, 'slp', '[from] Uproar');
+						this.add('-immune', pokemon, 'slp', '[from] Uproar');
 					}
 					return null;
 				}

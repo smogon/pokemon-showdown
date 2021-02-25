@@ -3694,7 +3694,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	suctioncups: {
 		onDragOutPriority: 1,
 		onDragOut(pokemon) {
-			this.add('-activate', pokemon, 'ability: Suction Cups');
+			this.add('-immune', pokemon, 'ability: Suction Cups');
 			return null;
 		},
 		name: "Suction Cups",
@@ -3843,7 +3843,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	telepathy: {
 		onTryHit(target, source, move) {
 			if (target !== source && target.side === source.side && move.category !== 'Status') {
-				this.add('-activate', target, 'ability: Telepathy');
+				this.add('-immune', target, 'ability: Telepathy');
 				return null;
 			}
 		},
