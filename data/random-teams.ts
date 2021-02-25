@@ -945,7 +945,7 @@ export class RandomTeams {
 			return {cull: betterIceMove || preferThunderWave || movePool.includes('bodyslam')};
 		case 'bodypress':
 			// Turtonator never wants Earthquake + Body Press, and wants EQ+Smash or Press+No Smash
-			const turtonatorCull = hasMove['earthquake'] && movePool.includes('shellsmash');
+			const turtonatorCull = species.id === 'turtonator' && hasMove['earthquake'] && movePool.includes('shellsmash');
 			const pressIncompatible = ['shellsmash', 'mirrorcoat', 'whirlwind'].some(m => hasMove[m]);
 			return {cull: turtonatorCull || pressIncompatible || counter.setupType === 'Special'};
 		case 'circlethrow':
@@ -977,9 +977,9 @@ export class RandomTeams {
 		case 'earthquake':
 			const doublesCull = hasMove['earthpower'] || hasMove['highhorsepower'];
 			// Turtonator wants Body Press when it doesn't have Shell Smash
-			const turtonatorCull2 = movePool.includes('bodypress') && movePool.includes('shellsmash');
+			const turtonatorCull = species.id === 'turtonator' && movePool.includes('bodypress') && movePool.includes('shellsmash');
 			const subToxicPossible = hasMove['substitute'] && movePool.includes('toxic');
-			return {cull: turtonatorCull2 || (isDoubles && doublesCull) || subToxicPossible || hasMove['bonemerang']};
+			return {cull: turtonatorCull || (isDoubles && doublesCull) || subToxicPossible || hasMove['bonemerang']};
 		case 'scorchingsands':
 			// Special cases for Ninetales and Palossand; prevents status redundancy
 			return {cull: hasMove['willowisp'] || hasMove['earthpower'] || (hasMove['toxic'] && movePool.includes('earthpower'))};
