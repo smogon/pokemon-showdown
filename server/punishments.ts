@@ -1407,13 +1407,13 @@ export const Punishments = new class {
 			user.updateIdentity();
 			return;
 		}
-		if (registered && id === 'BAN') {
+		if (id === 'BAN') {
 			user.popup(
 				`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}` +
 				`${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`
 			);
 			user.notified.punishment = true;
-			void Punishments.punish(user, punishment, false);
+			if (registered) void Punishments.punish(user, punishment, false);
 			user.disconnectAll();
 			return;
 		}
