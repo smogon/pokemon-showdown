@@ -107,7 +107,7 @@ export class NetServer {
 	}
 	checkPath(pathname: string) {
 		const path = pathModule.basename(pathname);
-		if (path.startsWith('.')) return;
+		if (path.startsWith('.') || path.includes('../')) return;
 		return path;
 	}
 }
