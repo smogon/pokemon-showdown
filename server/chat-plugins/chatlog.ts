@@ -1246,13 +1246,14 @@ export const commands: ChatCommands = {
 		let date = 'all';
 		const searches: string[] = [];
 		let limit = '500';
+		let targetRoom: RoomID | undefined = room?.roomid;
 		for (const arg of args) {
 			if (arg.startsWith('room:')) {
-				const id = arg.slice(5);
-				room = Rooms.search(id as RoomID) as Room | null;
-				if (!room) {
+				const id = arg.slice(5).trim().toLowerCase() as RoomID;
+				if (!FS(`logs/chat/${id}`).existsSync()) {
 					return this.errorReply(`Room "${id}" not found.`);
 				}
+				targetRoom = id;
 			} else if (arg.startsWith('limit:')) {
 				limit = arg.slice(6);
 			} else if (arg.startsWith('date:')) {
@@ -1263,11 +1264,11 @@ export const commands: ChatCommands = {
 				searches.push(arg);
 			}
 		}
-		if (!room) {
+		if (!targetRoom) {
 			return this.parse(`/help searchlogs`);
 		}
 		return this.parse(
-			`/join view-chatlog-${room.roomid}--${date}--search-` +
+			`/join view-chatlog-${targetRoom}--${date}--search-` +
 			`${Dashycode.encode(searches.join('+'))}--limit-${limit}`
 		);
 	},
