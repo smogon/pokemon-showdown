@@ -1448,6 +1448,24 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 8] Super Staff Bros for Wii U",
+		desc: "",
+		threads: [
+			`&bullet; <a href="http://spo.ink/happybirthdayaeonic">Discussion Thread</a>`,
+		],
+
+		mod: 'ssb',
+		// @ts-ignore hack
+		isAFD: true,
+		team: 'randomStaffBros',
+		ruleset: ['Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+		onBegin() {
+			this.add('message', 'Delphox only');
+			this.add('message', 'No items');
+			this.add('message', 'Final Destination');
+		},
+	},
+	{
 		name: "[Gen 8] Challenge Cup",
 
 		mod: 'gen8',
