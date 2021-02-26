@@ -342,7 +342,7 @@ export class RandomTeams {
 				atk: this.random(32),
 				def: this.random(32),
 				spa: this.random(32),
-				pd: this.random(32),
+				spd: this.random(32),
 				spe: this.random(32),
 			};
 
