@@ -811,4 +811,25 @@ export const commands: ChatCommands = {
 	ssbhelp: [
 		`/ssb [staff member] - Displays a staff member's Super Staff Bros. set and custom features.`,
 	],
+
+	randset: 'randomset',
+	randomset(target, room, user) {
+		const [pokemonString, formatString] = target.split(',');
+		this.runBroadcast();
+
+		const format = Dex.getFormat(formatString || 'gen8randombattle');
+		if (!format.exists) throw new Chat.ErrorMessage(`${formatString} is not a valid format.`);
+
+		const species = Dex.getSpecies(pokemonString);
+		if (!species.exists) {
+			throw new Chat.ErrorMessage(`${pokemonString} is not a valid Pokémon for that format.`);
+		}
+
+		const set = Dex.getTeamGenerator(format.id).randomSet(species.id);
+		const prettyifiedSet = Dex.stringifyTeam([set]).replace(/<br \/>$/, '');
+		this.sendReplyBox(`<details><summary><strong>Random set for ${species.name} in ${format.name}</strong></summary>${prettyifiedSet}</details>`);
+	},
+	randomsethelp: [
+		`/randomset [pokemon], [optional format] - Generates a random set for the given Pokémon in the specified format (or [Gen 8] Random Battle if none is specified).`,
+	],
 };
