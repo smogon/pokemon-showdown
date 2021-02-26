@@ -35,7 +35,7 @@ describe('Gravity', function () {
 		assert.cantMove(() => battle.makeChoices('move gravity', 'move fly'), 'Aerodactyl', 'Fly');
 	});
 
-	it.only(`should allow the use of Z-moves of Gravity-blocked moves, but only apply their Z-effects`, function () {
+	it(`should allow the use of Z-moves of Gravity-blocked moves, but only apply their Z-effects`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'Magikarp', ability: 'protean', item: 'normaliumz', moves: ['splash']},
 		], [
