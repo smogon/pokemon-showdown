@@ -17,6 +17,14 @@ export interface SSBSet {
 }
 interface SSBSets {[k: string]: SSBSet}
 
+const ssbSets: afdSSBSets = {
+	Delphox: {
+		species: 'Delphox', ability: 'Magician', item: '', gender: '',
+		moves: ['Flare Blitz', 'Psybeam', 'Extreme Speed'],
+		signatureMove: 'Mirror Coat',
+	},
+};
+
 export const ssbSets: SSBSets = {
 	/*
 	// Example:
@@ -871,7 +879,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
-		const pool = debug.length ? debug : Object.keys(ssbSets);
+		const pool = debug.length ? debug : this.format.isAFD ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
 		while (pool.length && team.length < 6) {
