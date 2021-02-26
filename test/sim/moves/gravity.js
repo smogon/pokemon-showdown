@@ -35,16 +35,17 @@ describe('Gravity', function () {
 		assert.cantMove(() => battle.makeChoices('move gravity', 'move fly'), 'Aerodactyl', 'Fly');
 	});
 
-	it('should allow the use of Z-moves of Gravity-blocked moves, but only apply their Z-effects', function () {
+	it.only(`should allow the use of Z-moves of Gravity-blocked moves, but only apply their Z-effects`, function () {
 		battle = common.gen(7).createBattle([[
-			{species: "Magikarp", ability: 'protean', item: 'normaliumz', moves: ['splash', 'sleeptalk']},
+			{species: 'Magikarp', ability: 'protean', item: 'normaliumz', moves: ['splash']},
 		], [
-			{species: "Accelgor", moves: ['gravity']},
+			{species: 'Accelgor', moves: ['gravity']},
 		]]);
 
 		battle.makeChoices('move splash zmove', 'move gravity');
-		assert.statStage(battle.p1.active[0], 'atk', 3);
-		assert(battle.log.some(line => line.includes('|cant')));
-		assert(battle.p1.active[0].hasType('Water'), "Z-Splash with Protean changed the user's type when it should not have.");
+		const magikarp = battle.p1.active[0];
+		assert.statStage(magikarp, 'atk', 3);
+		assert(battle.log.some(line => line.includes('|-fail|')));
+		assert(magikarp.hasType('Water'), `Z-Splash with Protean changed the user's type when it should not have.`);
 	});
 });
