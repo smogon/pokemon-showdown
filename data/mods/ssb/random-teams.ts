@@ -17,7 +17,7 @@ export interface SSBSet {
 }
 interface SSBSets {[k: string]: SSBSet}
 
-const ssbSets: afdSSBSets = {
+const afdSSBSets: SSBSets = {
 	Delphox: {
 		species: 'Delphox', ability: 'Magician', item: '', gender: '',
 		moves: ['Flare Blitz', 'Psybeam', 'Extreme Speed'],
@@ -879,6 +879,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
+		// @ts-ignore
 		const pool = debug.length ? debug : this.format.isAFD ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
@@ -886,7 +887,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
 			const name = this.sampleNoReplace(pool);
-			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
+			// @ts-ignore
+			const ssbSet: SSBSet = this.format.isAFD ? this.dex.deepClone(afdSSBSets[name]) : this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits

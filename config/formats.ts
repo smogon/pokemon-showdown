@@ -1448,8 +1448,8 @@ export const Formats: FormatList = [
 		},
 	},
 	{
-		name: "[Gen 8] Super Staff Bros for Wii U",
-		desc: "",
+		name: "[Gen 8] Super Staff Bros 4 (Wii U)",
+		desc: "A more competitive version of the existing Super Staff Bros 4 format!",
 		threads: [
 			`&bullet; <a href="http://spo.ink/happybirthdayaeonic">Discussion Thread</a>`,
 		],
