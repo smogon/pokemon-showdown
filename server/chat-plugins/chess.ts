@@ -21,8 +21,8 @@ interface Piece {
 	 * @param dRow: difference between new row and old row
 	 * @param hasStarted: has it moved from original position?
 	 */
-	canMove: (dCol: number, dRow: number, hasStarted: boolean, side: Side) => boolean;
-	canCapture?: (dCol: number, dRow: number, hasStarted: boolean, side: Side) => boolean;
+	canMove: (this: ChessGame, dCol: number, dRow: number, hasStarted: boolean, side: Side) => boolean;
+	canCapture?: (this: ChessGame, dCol: number, dRow: number, hasStarted: boolean, side: Side) => boolean;
 	canBeBlocked?: boolean;
 }
 
@@ -163,6 +163,7 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 	currentChoice?: string;
 	lastMovedFrom = '';
 	lastMove = '';
+	piecesTaken: string[] = [];
 	constructor(user: User, game: ChessGame) {
 		super(user, game);
 		this.game = game;
@@ -192,6 +193,11 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 			W: 'White',
 		};
 		let buf = `<center>You are the ${titles[this.side]} side!<br />`;
+		if (this.piecesTaken.length) {
+			buf += `<br />`;
+			buf += `<strong>Enemy pieces taken: </strong>`;
+			buf += this.piecesTaken.map(p => PIECES[p.charAt(1)].symbols[p.charAt(0) as Side]).join(', ');
+		}
 		buf += `<details class="readmore"><summary>How to play</summary>`;
 		buf += `Use <code>/chess move [location], [newlocation]</code> or click your desired piece to play.`;
 		buf += `</details>`;
@@ -201,7 +207,7 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 		}
 		if (error) {
 			buf += `<br />`;
-			buf += `<p class="message-error">${error}</p>`;
+			buf += `<strong><p class="message-error">${error}</p></strong>`;
 		}
 		buf += `</center>`;
 		this.sendControls(buf);
@@ -210,6 +216,7 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 
 
 export class ChessGame extends Rooms.RoomGame {
+	checkChat = true;
 	gameid = 'chess' as ID;
 	title = 'Chess';
 	sides: {[side: string]: ChessPlayer};
@@ -296,13 +303,13 @@ export class ChessGame extends Rooms.RoomGame {
 				const [color, type] = p.split('');
 				const pieceInfo = PIECES[type];
 
-				if (opp?.lastMove === curLoc) {
+				if (player && this.check[player.side]?.some(coords => coords[0] === col && coords[1] === row)) {
+					curStyle = styles.check;
+				} else if (opp?.lastMove === curLoc) {
 					curStyle = styles.lastmove;
 				} else if (opp?.lastMovedFrom === curLoc) {
 					curStyle = styles.lastmovedfrom;
 					opp.lastMovedFrom = '';
-				} else if (player && this.check[player.side]?.some(coords => this.stringLoc(coords) === curLoc)) {
-					curStyle = styles.check;
 				} else if (count % 2 === 0) {
 					curStyle = styles.grey;
 				} else {
@@ -433,7 +440,7 @@ export class ChessGame extends Rooms.RoomGame {
 		}
 
 		const canMove = isCapture && pieceInfo.canCapture ? pieceInfo.canCapture : pieceInfo.canMove;
-		if (!canMove(dCol, dRow, piece.endsWith('.'), piece.charAt(0) as Side)) {
+		if (!canMove.call(this, dCol, dRow, piece.endsWith('.'), piece.charAt(0) as Side)) {
 			if (shouldThrow) {
 				throw new Chat.ErrorMessage(
 					`You cannot move your ${pieceInfo.name} from ${this.stringLoc([oldCol, oldRow])} to ${this.stringLoc([newCol, newRow])}.`
@@ -527,22 +534,19 @@ export class ChessGame extends Rooms.RoomGame {
 		}
 		const isBlack = player.side === 'B';
 
-		if (this.check[player.side]) {
-			if (!this.checkWouldBeUnchecked(targetLoc, currentLoc, player.side)) {
+		const curBoard = this.board.copy();
+		const startingCheck = this.checkCheck(player.side);
+		curBoard.move(currentLoc, targetLoc);
+		if (this.checkCheck(player.side, curBoard, true)) {
+			if (startingCheck) {
 				player.error(`You must move your king out of check.`);
+			} else {
+				player.error('You cannot move into check.');
 			}
-			this.check[player.side] = [];
 		}
 
-
-		if (piece.endsWith('K')) {
-			const curBoard = this.board.copy();
-			curBoard.set([newCol, newRow], piece);
-
-			const check = this.checkCheck(piece.charAt(0) as Side, curBoard, true);
-			if (check) {
-				player.error("You cannot move into check.");
-			}
+		if (toPieceID(targetPiece).endsWith('K')) {
+			player.error(`You cannot take kings.`);
 		}
 
 		try {
@@ -552,15 +556,17 @@ export class ChessGame extends Rooms.RoomGame {
 			player.error(e.message);
 		}
 
+		if (targetPiece) player.piecesTaken.push(targetPiece);
 		this.board.move([col, row], [newCol, newRow]);
 		player.lastMovedFrom = currentLoc;
 		player.lastMove = targetLoc;
 
 		for (const side of Object.keys(this.sides) as Side[]) {
+			const oppName = this.sides[this.opposite(side)].name;
 			if (this.checkCheckmate(side)) {
-				return this.end(Utils.html`Checkmate! ${this.sides[this.opposite(side)].name} won the game!`);
+				return this.end(Utils.html`Checkmate! ${oppName} won the game!`);
 			}
-			this.checkCheck(side); // check to see if they've moved into check
+			this.check[side] = this.checkCheck(side); // check to see if they've moved into check
 			const sidePieces = this.find(side).map(([c, r]) => this.board.get(c, r));
 			// if this is true, they only have pawns and kings, they can't really win now except with promotion
 			// so this can change
@@ -571,10 +577,13 @@ export class ChessGame extends Rooms.RoomGame {
 			return this.end(`Stalemate. No players could win...`);
 		}
 
+		// if they've successfully moved, check has been invalidated (if it existed) - clear just to be safe
+		this.check = {};
+
 		const targetInfo = PIECES[targetPiece.charAt(1)];
 		this.add(
-			Utils.html`${player.name} moved their ${pieceInfo.name} to ${targetLoc}` +
-			Utils.html`${targetInfo ? ` and took ${this.sides[targetPiece.charAt(0)].name}'s ${targetInfo.name} there` : ''}.`
+			Utils.html`${player.name} moved their ${pieceInfo.name} to ${targetLoc} from ${currentLoc}` +
+			Utils.html`${targetInfo ? `, and took ${this.sides[targetPiece.charAt(0)].name}'s ${targetInfo.name} there` : ''}.`
 		);
 
 		this.log.push(
@@ -587,6 +596,10 @@ export class ChessGame extends Rooms.RoomGame {
 		this.add(Utils.html`<h2>${this.playerTable[this.turn].name}'s turn:</h2>`);
 		this.playerTable[this.turn].send(`|tempnotify|Make your move!`);
 		this.sendBoard();
+
+		for (const p of this.players) {
+			p.updateControls();
+		}
 
 		return piece;
 	}
@@ -690,6 +703,9 @@ export class ChessGame extends Rooms.RoomGame {
 		this.addControls("");
 		this.state = 'ended';
 		this.room.pokeExpireTimer();
+		for (const p of this.players) {
+			p.destroy();
+		}
 	}
 	find(piece: string, board: ChessBoard | null = null) {
 		if (!board) board = this.board.copy();
@@ -715,9 +731,9 @@ export class ChessGame extends Rooms.RoomGame {
 		}
 		const [col, row] = this.formatLoc(loc);
 		const piece = this.board.get(col, row);
-		const validRow = piece.startsWith('B') ? 7 : 0;
+		const validCol = piece.startsWith('B') ? 0 : 7;
 		if (!piece.startsWith(user.side)) user.error("Not your piece to promote");
-		if (row !== validRow) user.error("You're not in a place you can promote");
+		if (col !== validCol) user.error("You're not in a place you can promote");
 		const pieceType = Object.keys(PIECES).find(
 			p => toID(PIECES[p].name) === toID(to) || toID(p) === toID(to)
 		);
@@ -740,18 +756,21 @@ function findExistingRoom(user1: string, user2: string) {
 export const commands: ChatCommands = {
 	chess: {
 		challenge(target, room, user) {
-			this.checkChat();
 			if (this.pmTarget && !toID(target)) target = this.pmTarget.id;
 			if (!target) return this.errorReply(`Specify a user to challenge to chess.`);
 			const targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply(`User not found.`);
 			if (targetUser.id === user.id) return this.errorReply(`You can't challenge yourself.`);
+			this.checkChat(this.message, null, targetUser);
 			chessChallenges.set(targetUser.id, user.id);
-			Chat.sendPM(`/raw ${user.name} has challenged you to chess!`, user, targetUser);
+			targetUser.send(
+				`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/raw ${user.name} has challenged you to chess!`
+			);
 			targetUser.send(
 				`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
 				`/uhtml chess,<button class="button" name="send" value="/chess accept">Accept</button>`
 			);
+			user.send(`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/raw You challenged ${targetUser.name} to chess`);
 		},
 		accept(target, room, user) {
 			const request = chessChallenges.get(user.id);
