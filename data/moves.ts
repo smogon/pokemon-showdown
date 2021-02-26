@@ -15170,7 +15170,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('shelltrap');
 		},
-		onTryMove(pokemon) {
+		onTry(pokemon) {
 			if (!pokemon.volatiles['shelltrap']?.gotHit) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon, 'Shell Trap', 'Shell Trap');
