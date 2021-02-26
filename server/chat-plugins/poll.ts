@@ -532,7 +532,7 @@ export const commands: ChatCommands = {
 			} else {
 				if (!this.runBroadcast()) return;
 				if (poll.timeout) {
-					return this.sendReply(this.tr`The poll timer is on and will end in ${Chat.toDurationString(poll.timeoutMins)}.`);
+					return this.sendReply(this.tr`The poll timer is on and will end in ${Chat.toDurationString(poll.timeoutMins * MINUTES)}.`);
 				} else {
 					return this.sendReply(this.tr`The poll timer is off.`);
 				}
