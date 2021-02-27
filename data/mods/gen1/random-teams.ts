@@ -390,12 +390,14 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			} while (moves.length < 4);
 
 			// Random EVs
-			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-			const s: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-			for (const x of s) {
-				if (x === 'spd') continue;
-				evs[x] = this.random(256);
-			}
+			const evs = {
+				hp: this.random(256),
+				atk: this.random(256),
+				def: this.random(256),
+				spa: this.random(256),
+				spd: 0,
+				spe: this.random(256)
+			};
 			evs['spd'] = evs['spa'];
 
 			const validIVValues = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30];

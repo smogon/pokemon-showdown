@@ -1639,7 +1639,7 @@ export const Formats: FormatList = [
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Team Preview'],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				this.add(`c|\u2606${pokemon.side.name}|${pokemon.name}'s types: ${(pokemon.set as any).hc.types.join('/')}`);
+				this.add(`${pokemon.side.name}'s ${pokemon.name}'s types: ${(pokemon.set as any).hc.types.join('/')}`);
 			}
 		},
 		onModifySpecies(species, target, source, effect) {
