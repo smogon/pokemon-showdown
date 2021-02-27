@@ -396,7 +396,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				def: this.random(256),
 				spa: this.random(256),
 				spd: 0,
-				spe: this.random(256)
+				spe: this.random(256),
 			};
 			evs['spd'] = evs['spa'];
 
