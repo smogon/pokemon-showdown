@@ -826,7 +826,7 @@ export const commands: ChatCommands = {
 		}
 		const dex = Dex.forFormat(format);
 		if (!dex.getLearnsetData(species.id).learnset) {
-			return this.errorReply(`Learnsets for ${species.name} in ${format.name} not found.`);
+			throw new Chat.ErrorMessage(`Learnsets for ${species.name} in ${format.name} not found.`);
 		}
 
 		const set = Dex.getTeamGenerator(format.id).randomSet(species.id);
