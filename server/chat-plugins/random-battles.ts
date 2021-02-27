@@ -824,6 +824,10 @@ export const commands: ChatCommands = {
 		if (!species.exists) {
 			throw new Chat.ErrorMessage(`${pokemonString} is not a valid Pokémon for that format.`);
 		}
+		const dex = Dex.forFormat(format);
+		if (!dex.getLearnsetData(species.id).learnset) {
+			return this.errorReply(`Learnsets for ${species.name} in ${format.name} not found.`);
+		}
 
 		const set = Dex.getTeamGenerator(format.id).randomSet(species.id);
 		const prettyifiedSet = Dex.stringifyTeam([set]).replace(/<br \/>$/, '');
