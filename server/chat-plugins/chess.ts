@@ -4,13 +4,22 @@
  * @author mia-pi-git
  */
 
-import {Utils} from '../../lib';
+import {Utils, FS} from '../../lib';
 
 /** map<to, from> */
 export const chessChallenges: Map<ID, ID> = Chat.oldPlugins.chess?.chessChallenges || new Map();
 
 const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const MATCH_INTERVAL = 60 * 1000;
+
 type Side = 'B' | 'W';
+interface LadderEntry {
+	username: string;
+	userid: string;
+	rating: number;
+	wins: number;
+	losses: number;
+}
 
 interface Piece {
 	symbols: {B: string, W: string};
@@ -112,6 +121,138 @@ export const PIECES: {[letter: string]: Piece} = {
 	},
 };
 
+export class ChessLadder {
+	entries: Map<ID, LadderEntry> = new Map();
+	static settings: AnyObject & {disabled: boolean} = {disabled: true};
+	static searches: Map<ID, number> = Chat.oldPlugins.chess?.ChessLadder.searches || new Map();
+	static matchInterval = setInterval(() => ChessLadder.runMatch(), MATCH_INTERVAL);
+	constructor() {
+		this.load();
+	}
+	static search(user: User) {
+		if (this.searches.has(user.id)) return false;
+		this.searches.set(user.id, Date.now());
+		this.sortSearches();
+		return true;
+	}
+	static sortSearches() {
+		this.searches = new Map(
+			Utils.sortBy([...this.searches], a => -ChessGame.ladder.getRating(a[0]))
+		);
+	}
+	static runMatch() {
+		const startingSize = this.searches.size;
+		let iterations = 0;
+		this.sortSearches();
+		while (this.searches.size) {
+			const [search1, search2] = Utils.sortBy([...this.searches], a => -ChessGame.ladder.getRating(a[0]));
+			if (!search1 || !search2) break;
+			const [id1] = search1;
+			const [id2] = search2;
+			if (iterations > (startingSize * 10)) {
+				// we've looped over every user originally in it 10 times and can't match any of them, just cut it off here
+				// (to prevent an infinite loop)
+				// Mission failed, we'll get em next time
+				break;
+			}
+			iterations++;
+			const ids = [id1, id2];
+			// they've waited two intervals just match them
+			const force = ids.some(id => Date.now() - this.searches.get(id)! > 2 * MATCH_INTERVAL);
+			const p1rating = ChessGame.ladder.getRating(id1);
+			const p2rating = ChessGame.ladder.getRating(id2);
+			const [highest, lowest] = [p1rating, p2rating].sort();
+			// only match if they're within 50 points of each other
+			// else, skip over them for this round
+			// (unless we've skipped them for 2m+ in which case we do match them)
+			if ((lowest < (highest - 50) || highest > (lowest + 50)) && !force) {
+				continue;
+			}
+			this.searches.delete(id1);
+			this.searches.delete(id2);
+			this.matchUsers(id1, id2);
+		}
+	}
+	static matchUsers(p1: ID, p2: ID) {
+		const p1user = Users.get(p1);
+		const p2user = Users.get(p2);
+		if (!p1user) {
+			if (!p2user) return;
+			this.searches.set(p2, Date.now());
+			return;
+		}
+		if (!p2user) {
+			this.searches.set(p1, Date.now());
+			return;
+		}
+		ChessGame.start(p1user, p2user, true);
+	}
+	calculateRating(previousUserElo: number, score: number, foeElo: number): number {
+		// The K factor determines how much your Elo changes when you win or
+		// lose games. Larger K means more change.
+		// In the "original" Elo, K is constant, but it's common for K to
+		// get smaller as your rating goes up
+		let K = 50;
+
+		// dynamic K-scaling (optional)
+		if (previousUserElo < 1200) {
+			if (score < 0.5) {
+				K = 10 + (previousUserElo - 1000) * 40 / 200;
+			} else if (score > 0.5) {
+				K = 90 - (previousUserElo - 1000) * 40 / 200;
+			}
+		} else if (previousUserElo > 1350 && previousUserElo <= 1600) {
+			K = 40;
+		} else {
+			K = 32;
+		}
+
+		// main Elo formula
+		const E = 1 / (1 + Math.pow(10, (foeElo - previousUserElo) / 400));
+
+		const newElo = previousUserElo + K * (score - E);
+
+		return Math.max(newElo, 1000);
+	}
+	get(name: string) {
+		const id = toID(name);
+		let entry = this.entries.get(id);
+		if (!entry) {
+			entry = {
+				username: name,
+				userid: id,
+				rating: 1000,
+				wins: 0,
+				losses: 0,
+			};
+			this.entries.set(id, entry);
+		}
+		return entry;
+	}
+	load() {
+		const data = JSON.parse(FS('config/chat-plugins/chess.json').readIfExistsSync() || "{}");
+		if (data.settings) ChessLadder.settings = data.settings;
+		if (!data.ratings) data.ratings = [];
+		for (const entry of data.ratings) {
+			if (!entry.userid) continue;
+			this.entries.set(entry.userid, entry);
+		}
+	}
+	save() {
+		return FS(`config/chat-plugins/chess.json`).writeUpdate(() => (
+			JSON.stringify({settings: ChessLadder.settings, ratings: [...this.entries.values()]})
+		));
+	}
+	sorted() {
+		const chessLadder = [...this.entries.values()];
+		Utils.sortBy(chessLadder, a => -a.rating);
+		return chessLadder;
+	}
+	getRating(name: string) {
+		return this.get(name).rating;
+	}
+}
+
 export class ChessBoard {
 	strings: string[][];
 	constructor(strings?: string[][]) {
@@ -164,11 +305,13 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 	lastMovedFrom = '';
 	lastMove = '';
 	piecesTaken: string[] = [];
+	elo = 0;
 	constructor(user: User, game: ChessGame) {
 		super(user, game);
 		this.game = game;
 		this.user = user;
 		this.side = this.startingSide();
+		if (game.rated) this.elo = ChessGame.ladder.getRating(user.name);
 	}
 	startingSide(): Side {
 		if (this.game.players[0]) {
@@ -183,7 +326,7 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 	sendControls(html: string) {
 		this.send(`|controlshtml|${html}`);
 	}
-	error(message: string): never {
+	sendError(message: string): never {
 		this.updateControls(message);
 		throw new Chat.Interruption();
 	}
@@ -227,7 +370,8 @@ export class ChessGame extends Rooms.RoomGame {
 	turn!: string;
 	state: string;
 	check: {[side: string]: [number, number][]};
-	constructor(room: Room) {
+	rated: boolean;
+	constructor(room: Room, rated = false) {
 		super(room);
 		this.room = room;
 		this.sides = {};
@@ -235,14 +379,7 @@ export class ChessGame extends Rooms.RoomGame {
 		this.state = '';
 		this.check = {};
 		this.playerTable = {};
-
-		if (this.room.expireTimer) clearTimeout(this.room.expireTimer);
-	}
-	onChatMessage() {
-		this.room.pokeExpireTimer();
-	}
-	send(player: ChessPlayer, message: string) {
-		return player.user.sendTo(this.room, message);
+		this.rated = rated;
 	}
 	onJoin(user: User) {
 		this.sendBoardTo(user);
@@ -293,7 +430,7 @@ export class ChessGame extends Rooms.RoomGame {
 		};
 		let curStyle = styles.white;
 		let count = 1;
-		const opp = player ? this.sides[this.opposite(player.side)] : null;
+		const opp = player ? this.oppositePlayer(player) : null;
 
 		for (const [col, str] of this.board.entries()) {
 			buf += `<tr><th style="text-align:center;height:30px;">${col + 1}</th>`;
@@ -380,6 +517,8 @@ export class ChessGame extends Rooms.RoomGame {
 	sendField(buffer: string) {
 		this.room?.add(`|fieldhtml|${buffer}`).update();
 	}
+
+	static ladder = new ChessLadder();
 
 	static startingBoard(): string[][] {
 		const ROW1 = 'RNBQKBNR';
@@ -515,13 +654,13 @@ export class ChessGame extends Rooms.RoomGame {
 	move(player: ChessPlayer, currentLoc: string, targetLoc: string) {
 		player.updateControls();
 		if (!this.state) {
-			player.error(`The game has not started yet.`);
+			player.sendError(`The game has not started yet.`);
 		}
 		if (this.turn !== player.id) {
-			player.error(`It is not your turn to play!`);
+			player.sendError(`It is not your turn to play!`);
 		}
 		if (this.state === 'ended') {
-			player.error(`The game is over.`);
+			player.sendError(`The game is over.`);
 		}
 		const [col, row] = this.formatLoc(currentLoc);
 		const [newCol, newRow] = this.formatLoc(targetLoc);
@@ -530,7 +669,7 @@ export class ChessGame extends Rooms.RoomGame {
 		const pieceId = toPieceID(piece);
 		const pieceInfo = PIECES[pieceId.slice(1)];
 		if (!toID(piece).startsWith(toID(player.side))) {
-			player.error(`That isn't your piece to move.`);
+			player.sendError(`That isn't your piece to move.`);
 		}
 		const isBlack = player.side === 'B';
 
@@ -539,21 +678,21 @@ export class ChessGame extends Rooms.RoomGame {
 		curBoard.move(currentLoc, targetLoc);
 		if (this.checkCheck(player.side, curBoard, true)) {
 			if (startingCheck) {
-				player.error(`You must move your king out of check.`);
+				player.sendError(`You must move your king out of check.`);
 			} else {
-				player.error('You cannot move into check.');
+				player.sendError('You cannot move into check.');
 			}
 		}
 
 		if (toPieceID(targetPiece).endsWith('K')) {
-			player.error(`You cannot take kings.`);
+			player.sendError(`You cannot take kings.`);
 		}
 
 		try {
 			this.checkCanMove(piece, col, row, newCol, newRow, true);
 		} catch (e) {
 			if (!e.name.endsWith('ErrorMessage')) throw e;
-			player.error(e.message);
+			player.sendError(e.message);
 		}
 
 		if (targetPiece) player.piecesTaken.push(targetPiece);
@@ -564,7 +703,7 @@ export class ChessGame extends Rooms.RoomGame {
 		for (const side of Object.keys(this.sides) as Side[]) {
 			const oppName = this.sides[this.opposite(side)].name;
 			if (this.checkCheckmate(side)) {
-				return this.end(Utils.html`Checkmate! ${oppName} won the game!`);
+				return this.end(Utils.html`Checkmate! ${oppName} won the game!`, this.playerTable[oppName]);
 			}
 			this.check[side] = this.checkCheck(side); // check to see if they've moved into check
 			const sidePieces = this.find(side).map(([c, r]) => this.board.get(c, r));
@@ -697,10 +836,13 @@ export class ChessGame extends Rooms.RoomGame {
 	stringLoc(coords: [number, number]) {
 		return `${LETTERS[coords[1]]}${coords[0] + 1}`;
 	}
-	end(endMessage: string) {
+	end(endMessage: string, winner?: ChessPlayer) {
 		this.sendBoard();
 		this.add(`<h2>${endMessage}</h2>`);
 		this.addControls("");
+		if (winner) {
+			this.updateRating(winner);
+		}
 		this.state = 'ended';
 		this.room.pokeExpireTimer();
 		for (const p of this.players) {
@@ -720,37 +862,83 @@ export class ChessGame extends Rooms.RoomGame {
 		}
 		return result;
 	}
+	oppositePlayer(player: ChessPlayer) {
+		return this.sides[this.opposite(player.side)];
+	}
 	forfeit(user: User) {
 		const player = this.getPlayer(user);
 		this.add(Utils.html`${user.name} forfeited.`);
-		return this.end(Utils.html`${this.sides[this.opposite(player.side)].name} won the game!`);
+		const winner = this.oppositePlayer(player);
+		return this.end(Utils.html`${winner.name} won the game!`, winner);
 	}
 	promote(loc: string, to: string, user: ChessPlayer) {
 		if (this.turn !== user.id) {
-			user.error(`It is not your turn.`);
+			user.sendError(`It is not your turn.`);
 		}
 		const [col, row] = this.formatLoc(loc);
 		const piece = this.board.get(col, row);
 		const validCol = piece.startsWith('B') ? 0 : 7;
-		if (!piece.startsWith(user.side)) user.error("Not your piece to promote");
-		if (col !== validCol) user.error("You're not in a place you can promote");
+		if (!piece.startsWith(user.side)) user.sendError("Not your piece to promote");
+		if (col !== validCol) user.sendError("You're not in a place you can promote");
 		const pieceType = Object.keys(PIECES).find(
 			p => toID(PIECES[p].name) === toID(to) || toID(p) === toID(to)
 		);
 		if (!pieceType) {
-			user.error('Piece type not found');
+			user.sendError('Piece type not found');
 		}
 		if (['K', 'P'].includes(pieceType)) {
-			user.error(`Cannot promote to that type.`);
+			user.sendError(`Cannot promote to that type.`);
 		}
 		this.board.set([col, row], `${user.side}${pieceType}`);
 		this.sendBoard();
 		this.add(Utils.html`${user.name} promoted their piece at ${loc} to ${PIECES[pieceType].name}`);
 	}
+	updateRating(winner: ChessPlayer) {
+		if (!this.rated) return;
+
+		for (const player of this.players) {
+			const isWinner = winner.id === player.id;
+			const score = isWinner ? 1 : 0;
+			const resultElo = ChessGame.ladder.calculateRating(player.elo, score, this.oppositePlayer(player).elo);
+			const entry = ChessGame.ladder.get(player.name);
+			entry.username = player.name;
+			entry.rating = resultElo;
+			if (isWinner) {
+				entry.wins++;
+			} else {
+				entry.losses++;
+			}
+			player.elo = Math.round(resultElo);
+			this.room.add(`${player.name} ${isWinner ? 'won the game' : 'lost the game'} with a total of ${player.elo} elo`);
+		}
+		ChessGame.ladder.save();
+		this.room.update();
+	}
+	static start(user: User, targetUser: User, rated = false) {
+		const existingRoom = findExistingRoom(user.id, targetUser.id);
+		const options = {
+			modchat: '+', isPrivate: 'hidden',
+		};
+		const roomid = `chess-${targetUser.id}-${user.id}`;
+		if (existingRoom) existingRoom.log.log = [];
+		const gameRoom = existingRoom ? existingRoom : Rooms.createGameRoom(
+			roomid as RoomID, `[Chess] ${user.name} vs ${targetUser.name}`, options
+		);
+		gameRoom.game = new ChessGame(gameRoom, rated);
+		user.joinRoom(gameRoom.roomid);
+		targetUser.joinRoom(gameRoom.roomid);
+		gameRoom.game.addPlayer(targetUser);
+		gameRoom.game.addPlayer(user);
+		return gameRoom;
+	}
 }
 
 function findExistingRoom(user1: string, user2: string) {
 	return Rooms.get(`chess-${user1}-${user2}`) || Rooms.get(`chess-${user2}-${user1}`);
+}
+
+export function destroy() {
+	clearInterval(ChessLadder.matchInterval);
 }
 
 export const commands: ChatCommands = {
@@ -777,20 +965,7 @@ export const commands: ChatCommands = {
 			if (!request) return this.errorReply(`You do not have any chess challenges.`);
 			const targetUser = Users.get(request);
 			if (!targetUser) return this.errorReply(`User not found.`);
-			const existingRoom = findExistingRoom(user.id, targetUser.id);
-			const options = {
-				modchat: '+', isPrivate: 'hidden',
-			};
-			const roomid = `chess-${targetUser.id}-${user.id}`;
-			if (existingRoom) existingRoom.log.log = [];
-			const gameRoom = existingRoom ? existingRoom : Rooms.createGameRoom(
-				roomid as RoomID, `[Chess] ${user.name} vs ${targetUser.name}`, options
-			);
-			gameRoom.game = new ChessGame(gameRoom);
-			user.joinRoom(gameRoom.roomid);
-			targetUser.joinRoom(gameRoom.roomid);
-			gameRoom.game.addPlayer(targetUser);
-			gameRoom.game.addPlayer(user);
+			ChessGame.start(user, targetUser);
 			user.send(`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtmlchange chess,`);
 		},
 		move(target, room, user) {
@@ -876,6 +1051,35 @@ export const commands: ChatCommands = {
 				`${pieceInfo.desc.join('<br />')}`
 			);
 		},
+		random(target, room, user) {
+			this.checkChat();
+			if (ChessLadder.settings.disabled) {
+				return this.errorReply(`The Chess ladder is presently disabled.`);
+			}
+			if (!ChessLadder.search(user)) {
+				return this.errorReply(`You're already searching for a chess ladder match.`);
+			}
+			this.popupReply(`You're now searching for a match on the chess ladder.`);
+		},
+		toggleladder(target, room, user) {
+			this.checkCan('bypassall');
+			target = toID(target);
+			if (target === 'on') {
+				if (!ChessLadder.settings.disabled) return this.errorReply(`The chess ladder is already enabled.`);
+				ChessLadder.settings.disabled = false;
+			} else if (target === 'off') {
+				if (ChessLadder.settings.disabled) return this.errorReply(`The chess ladder is already disabled.`);
+				ChessLadder.settings.disabled = true;
+			} else {
+				return this.errorReply(`Invalid setting.`);
+			}
+			this.globalModlog(`CHESSLADDER`, null, target);
+			this.privateModAction(`${user.name} enabled the chess ladder.`);
+			ChessGame.ladder.save();
+		},
+		ladder() {
+			return this.parse(`/join view-chessladder`);
+		}
 	},
 	chesshelp: [
 		`/chess challenge [user] - Challenges the [user] to a chess game.`,
@@ -885,5 +1089,27 @@ export const commands: ChatCommands = {
 		`/chess promote [location], [type] - If the pawn at the [location] is at the end of the board, promotes it to the [type].`,
 		`/chess move [current space], [new space] - Moves the piece at the [current space] to the [new space]`,
 		`/chess piece [piece] - gives info on the specified chess piece.`,
+		`/chess random - Searches for a match on the Chess ladder.`,
+		`/chess ladder - Views the chess ladder rankings.`,
 	],
+};
+
+export const pages: PageTable = {
+	chessladder() {
+		if (ChessLadder.settings.disabled) {
+			return this.errorReply(`The chess ladder is currently disabled.`);
+		}
+		this.title = `[Chess] Ladder`;
+		let buf = `<div class="pad"><h2>Chess ladder</h2>`;
+		buf += `<div class="ladder pad"><table><tr>`;
+		buf += `<th></th><th>Username</th><th>Elo</th><th>Wins</th><th>Losses</th></tr>`;
+		for (const [i, entry] of ChessGame.ladder.sorted().entries()) {
+			buf += `<tr><td>${i + 1}</td><td>${entry.username}</td>`;
+			buf += `<td>${Math.round(entry.rating)}</td>`;
+			buf += `<td>${entry.wins}</td><td>${entry.losses}</td>`;
+			buf += `</tr>`;
+		}
+		buf += `</table></div>`;
+		return buf;
+	},
 };
