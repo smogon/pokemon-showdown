@@ -13209,7 +13209,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 					return;
 				}
-				this.add('-activate', target, 'move: Psychic Terrain');
+				this.add('-immune', target, 'move: Psychic Terrain');
 				return null;
 			},
 			onBasePowerPriority: 6,
