@@ -1728,19 +1728,19 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (Object.values(alts.gens).includes(false) && alts.gens[String(move.gen)] !== false) continue;
 			}
 			if (!zrecoveryUndefined || !recoveryUndefined) {
-			  for (const recoveryType in alts.other) {
-				 let hasRecovery = false;
-				 if (recoveryType === "recovery") {
-					 hasRecovery = !!move.drain || !!move.flags.heal;
-				 } else if (recoveryType === "zrecovery") {
-					 hasRecovery = (move.zMove?.effect === 'heal');
-				 }
-				 if (hasRecovery === alts.other[recoveryType]) {
-					 matched = true;
-					 break;
-				 }
-			    }
-		    }
+				for (const recoveryType in alts.other) {
+					let hasRecovery = false;
+					if (recoveryType === "recovery") {
+						hasRecovery = !!move.drain || !!move.flags.heal;
+					} else if (recoveryType === "zrecovery") {
+						hasRecovery = (move.zMove?.effect === 'heal');
+					}
+					if (hasRecovery === alts.other[recoveryType]) {
+						matched = true;
+						break;
+					}
+				}
+			}
 			if (matched) continue;
 			if (alts.other.recoil !== undefined) {
 				const recoil = move.recoil || move.hasCrashDamage;
