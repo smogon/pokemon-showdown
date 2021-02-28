@@ -226,7 +226,7 @@ export class YoutubeInterface {
 		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
-	async generateVideoDisplay(link: string, fullInfo = true) {
+	async generateVideoDisplay(link: string, fullInfo = false) {
 		if (!Config.youtubeKey) {
 			throw new Chat.ErrorMessage(`This server does not support YouTube commands. If you're the owner, you can enable them by setting up Config.youtubekey.`);
 		}
@@ -565,7 +565,7 @@ export const commands: ChatCommands = {
 		async video(target, room, user) {
 			room = this.requireRoom('youtube' as RoomID);
 			this.checkCan('mute', null, room);
-			const buffer = await YouTube.generateVideoDisplay(target);
+			const buffer = await YouTube.generateVideoDisplay(target, true);
 			this.runBroadcast();
 			this.sendReplyBox(buffer);
 		},
