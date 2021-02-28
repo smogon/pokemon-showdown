@@ -2,7 +2,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Alpha
 	caioniumz: {
 		name: "Caionium Z",
-		isNonstandard: "Custom",
 		onTakeItem: false,
 		zMove: "Blistering Ice Age",
 		zMoveFrom: "Blizzard",
@@ -14,7 +13,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// A Quag To The Past
 	quagniumz: {
 		name: "Quagnium Z",
-		isNonstandard: "Custom",
 		onTakeItem: false,
 		zMove: "Bounty Place",
 		zMoveFrom: "Scorching Sands",
@@ -26,7 +24,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// instruct
 	sodapop: {
 		name: "Soda Pop",
-		isNonstandard: "Custom",
 		onTakeItem: false,
 		zMove: "Satanic Panic",
 		zMoveFrom: "Fake Out",
@@ -38,7 +35,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Kalalokki
 	kalalokkiumz: {
 		name: "Kalalokkium Z",
-		isNonstandard: "Custom",
 		onTakeItem: false,
 		zMove: "Gaelstrom",
 		zMoveFrom: "Blackbird",
@@ -50,7 +46,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Robb576
 	modium6z: {
 		name: "Modium-6 Z",
-		isNonstandard: "Custom",
 		onTakeItem: false,
 		zMove: "Integer Overflow",
 		zMoveFrom: "Photon Geyser",
