@@ -78,15 +78,15 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				spd: 0,
 				spe: this.random(16),
 			};
-			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
-			ivs["atk"] = ivs["atk"] * 2;
-			ivs["def"] = ivs["def"] * 2;
-			ivs["spa"] = ivs["spa"] * 2;
+			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spa"] % 2) * 4 + (ivs["spe"] % 2) * 2;
+			ivs["atk"] *= 2;
+			ivs["def"] *= 2;
+			ivs["spa"] *= 2;
 			ivs["spd"] = ivs["spa"];
-			ivs["spe"] = ivs["spe"] * 2;
+			ivs["spe"] *= 2;
 
 			// Maxed EVs.
-			const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255,	spe: 255};
+			const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
@@ -402,15 +402,20 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			const validIVValues = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30];
 
-			// Random IVs
+			// Random DVs
 			const ivs: StatsTable = {
-				hp: this.sample(validIVValues),
-				atk: this.sample(validIVValues),
-				def: this.sample(validIVValues),
-				spa: this.sample(validIVValues),
+				hp: 0,
+				atk: this.random(16),
+				def: this.random(16),
+				spa: this.random(16),
 				spd: 0,
-				spe: this.sample(validIVValues),
+				spe: this.random(16),
 			};
+			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spa"] % 2) * 4 + (ivs["spe"] % 2) * 2;
+			for (const iv in ivs) {
+				if (iv === 'hp' || iv === 'spd') continue;
+				ivs[iv as keyof StatsTable] *= 2;
+			}
 			ivs['spd'] = ivs['spa'];
 
 			// Level balance
