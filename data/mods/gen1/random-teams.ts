@@ -78,7 +78,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				spd: 0,
 				spe: this.random(16),
 			};
-			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spa"] % 2) * 4 + (ivs["spe"] % 2) * 2;
+			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
 			ivs["atk"] *= 2;
 			ivs["def"] *= 2;
 			ivs["spa"] *= 2;
@@ -409,7 +409,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				spd: 0,
 				spe: this.random(16),
 			};
-			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spa"] % 2) * 4 + (ivs["spe"] % 2) * 2;
+			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
 			for (const iv in ivs) {
 				if (iv === 'hp' || iv === 'spd') continue;
 				ivs[iv as keyof StatsTable] *= 2;
