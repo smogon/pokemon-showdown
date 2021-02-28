@@ -490,7 +490,7 @@ export const commands: ChatCommands = {
 		if (!targetId || !message) {
 			return this.parse(`/help msgroom`);
 		}
-		const targetRoom = Rooms.search(toID(targetId));
+		const targetRoom = targetId.startsWith('groupchat-') ? Rooms.get(targetId) : Rooms.search(toID(targetId));
 		if (!targetRoom) return this.errorReply(`Room not found.`);
 		if (message.trim().startsWith('/msgroom ')) {
 			return this.errorReply(`Please do not nest /msgroom inside itself.`);
