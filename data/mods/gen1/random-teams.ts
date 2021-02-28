@@ -1,4 +1,10 @@
 import RandomGen2Teams from '../gen2/random-teams';
+import {Utils} from '../../../lib';
+
+interface HackmonsCupEntry {
+	types: string[];
+	baseStats: StatsTable;
+}
 
 export class RandomGen1Teams extends RandomGen2Teams {
 	// Challenge Cup or CC teams are basically fully random teams.
@@ -341,6 +347,114 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			shiny: false,
 			gender: false,
 		};
+	}
+
+	randomHCTeam(): PokemonSet[] {
+		const team = [];
+
+		const movePool = Object.keys(this.dex.data.Moves);
+		const typesPool = ['Bird', ...Object.keys(this.dex.data.TypeChart)];
+
+		const random6 = this.random6Pokemon();
+		const hackmonsCup: {[k: string]: HackmonsCupEntry} = {};
+
+		for (let i = 0; i < 6; i++) {
+			// Choose forme
+			const species = this.dex.getSpecies(random6[i]);
+			if (!hackmonsCup[species.id]) {
+				hackmonsCup[species.id] = {
+					types: [this.sample(typesPool), this.sample(typesPool)],
+					baseStats: {
+						hp: Utils.clampIntRange(this.random(256), 1),
+						atk: Utils.clampIntRange(this.random(256), 1),
+						def: Utils.clampIntRange(this.random(256), 1),
+						spa: Utils.clampIntRange(this.random(256), 1),
+						spd: 0,
+						spe: Utils.clampIntRange(this.random(256), 1),
+					},
+				};
+				hackmonsCup[species.id].baseStats.spd = hackmonsCup[species.id].baseStats.spa;
+			}
+			if (hackmonsCup[species.id].types[0] === hackmonsCup[species.id].types[1]) {
+				hackmonsCup[species.id].types.splice(1, 1);
+			}
+
+			// Random unique moves
+			const moves = [];
+			do {
+				const moveid = this.sampleNoReplace(movePool);
+				const move = this.dex.getMove(moveid);
+				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
+					moves.push(moveid);
+				}
+			} while (moves.length < 4);
+
+			// Random EVs
+			const evs = {
+				hp: this.random(256),
+				atk: this.random(256),
+				def: this.random(256),
+				spa: this.random(256),
+				spd: 0,
+				spe: this.random(256),
+			};
+			evs['spd'] = evs['spa'];
+
+			const validIVValues = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30];
+
+			// Random IVs
+			const ivs: StatsTable = {
+				hp: this.sample(validIVValues),
+				atk: this.sample(validIVValues),
+				def: this.sample(validIVValues),
+				spa: this.sample(validIVValues),
+				spd: 0,
+				spe: this.sample(validIVValues),
+			};
+			ivs['spd'] = ivs['spa'];
+
+			// Level balance
+			const mbstmin = 1307;
+			const baseStats = hackmonsCup[species.id].baseStats;
+			const calcStat = (statName: StatName, lvl?: number) => {
+				if (lvl) {
+					return Math.floor(Math.floor(2 * baseStats[statName] + ivs[statName] + Math.floor(evs[statName] / 4)) * lvl / 100 + 5);
+				}
+				return Math.floor(2 * baseStats[statName] + ivs[statName] + Math.floor(evs[statName] / 4)) + 5;
+			};
+			let mbst = 0;
+			for (const statName of Object.keys(baseStats)) {
+				mbst += calcStat(statName as StatName);
+				if (statName === 'hp') mbst += 5;
+			}
+			let level = Math.floor(100 * mbstmin / mbst);
+			while (level < 100) {
+				for (const statName of Object.keys(baseStats)) {
+					mbst += calcStat(statName as StatName, level);
+					if (statName === 'hp') mbst += 5;
+				}
+				if (mbst >= mbstmin) break;
+				level++;
+			}
+
+			team.push({
+				name: species.baseSpecies,
+				species: species.name,
+				gender: species.gender,
+				item: '',
+				ability: 'None',
+				moves,
+				evs,
+				ivs,
+				nature: '',
+				level,
+				shiny: false,
+				// Hacky but the only way to communicate stats/level generation properly
+				hc: hackmonsCup[species.id],
+			});
+		}
+
+		return team;
 	}
 }
 
