@@ -393,6 +393,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | undefined;
 	getActiveZMove?: (this: Battle, move: Move, pokemon: Pokemon) => ActiveMove;
 	canZMove?: (this: Battle, pokemon: Pokemon) => ZMoveOptions | void;
+	win?: (this: Battle, side?: SideID | '' | Side | null) => boolean;
 }
 
 interface TypeData {
