@@ -1,4 +1,4 @@
-const items: {[k: string]: ModdedItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	chilanberry: {
 		inherit: true,
 		desc: "Blocks damage taken from a Normal-type attack. Single use.",
@@ -96,72 +96,14 @@ const items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
-};
-
-const berries = {
-	heal: ['oran', 'sitrus'],
-	supereffective: [
-		['occa', 'Fire'],
-		['passho', 'Water'],
-		['wacan', 'Electric'],
-		['rindo', 'Grass'],
-		['yache', 'Ice'],
-		['chople', 'Fighting'],
-		['kebia', 'Poison'],
-		['shuca', 'Ground'],
-		['coba', 'Flying'],
-		['payapa', 'Psychic'],
-		['tanga', 'Bug'],
-		['charti', 'Rock'],
-		['kasib', 'Ghost'],
-		['haban', 'Dragon'],
-		['colbur', 'Dark'],
-		['babiri', 'Steel'],
-		['roseli', 'Fairy'],
-	],
-	pinchheal: [
-		['figy', 'Atk'],
-		['iapapa', 'Def'],
-		['wiki', 'SpA'],
-		['aguav', 'SpD'],
-		['Mago', 'Spe'],
-	],
-	pinchstat: [
-		['liechi', 'atk', 'Attack'],
-		['ganlon', 'def', 'Defense'],
-		['petaya', 'spa', 'Sp. Atk'],
-		['apicot', 'spd', 'Sp. Def'],
-		['salac', 'spe', 'Speed'],
-	],
-	keemaranga: [
-		['kee', 'def', 'Defense'],
-		['maranga', 'spd', 'Sp. Def'],
-	],
-	jabocarowap: [
-		['jaboca', 'physical'],
-		['rowap', 'special'],
-	],
-};
-
-for (const berry of berries.heal) {
-	items[`${berry}berry`] = {
+	occaberry: {
 		inherit: true,
-		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp);
-		},
-		desc: `Restores 100% max HP when at 1/2 max HP or less. Single use.`,
-	};
-}
-
-for (const [berry, type] of berries.supereffective) {
-	items[`${berry}berry`] = {
-		inherit: true,
-		desc: `Blocks damage taken from a supereffective ${type}-type attack. Single use.`,
+		desc: `Blocks damage taken from a supereffective Fire-type attack. Single use.`,
 		onSourceModifyDamage(damage, source, target, move) {},
 		onDamage(damage, target, source, effect) {
 			const move = effect;
 			if (!move || move.effectType !== 'Move') return;
-			if (move.type === type && target.getMoveHitData(move).typeMod > 0) {
+			if (move.type === 'Fire' && target.getMoveHitData(move).typeMod > 0) {
 				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
@@ -172,54 +114,444 @@ for (const [berry, type] of berries.supereffective) {
 				}
 			}
 		},
-	};
-}
-
-for (const [berry, stat] of berries.pinchheal) {
-	items[`${berry}berry`] = {
+	},
+	passhoberry: {
 		inherit: true,
-		desc: `Restores 100% max HP at 1/4 max HP or less; confuses if -${stat} Nature. Single use.`,
+		desc: `Blocks damage taken from a supereffective Water-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Water' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	wacanberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Electric-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Electric' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	rindoberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Grass-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Grass' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	yacheberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Ice-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Ice' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	chopleberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Fighting-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	kebiaberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Poison-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Poison' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	shucaberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Ground-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Ground' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	cobaberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Flying-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Flying' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	payapaberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Psychic-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Psychic' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	tangaberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Bug-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Bug' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	chartiberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Rock-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Rock' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	kasibberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Ghost-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Ghost' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	habanberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Dragon-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Dragon' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	colburberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Dark-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Dark' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	babiriberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Steel-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Steel' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	roseliberry: {
+		inherit: true,
+		desc: `Blocks damage taken from a supereffective Fairy-type attack. Single use.`,
+		onSourceModifyDamage(damage, source, target, move) {},
+		onDamage(damage, target, source, effect) {
+			const move = effect;
+			if (!move || move.effectType !== 'Move') return;
+			if (move.type === 'Fire' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-100% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return 0;
+				}
+			}
+		},
+	},
+	oranberry: {
+		inherit: true,
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp);
-			if (pokemon.getNature().minus === this.toID(stat)) {
+		},
+		desc: `Restores 100% max HP when at 1/2 max HP or less. Single use.`,
+	},
+	sitrusberry: {
+		inherit: true,
+		onEat(pokemon) {
+			this.heal(pokemon.baseMaxhp);
+		},
+		desc: `Restores 100% max HP when at 1/2 max HP or less. Single use.`,
+	},
+	figyberry: {
+		inherit: true,
+		desc: `Restores 100% max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.`,
+		onEat(pokemon) {
+			this.heal(pokemon.baseMaxhp);
+			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
 		},
-	};
-}
-
-for (const [berry, stat, statName] of berries.pinchstat) {
-	items[`${berry}berry`] = {
+	},
+	iapapaberry: {
 		inherit: true,
-		desc: `Raises holder's ${statName} by 12 stages when at 1/4 max HP or less. Single use.`,
+		desc: `Restores 100% max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.`,
 		onEat(pokemon) {
-			this.boost({[stat]: 12});
+			this.heal(pokemon.baseMaxhp);
+			if (pokemon.getNature().minus === 'def') {
+				pokemon.addVolatile('confusion');
+			}
 		},
-	};
-}
-
-for (const [berry, stat, statName] of berries.keemaranga) {
-	items[`${berry}berry`] = {
+	},
+	wikiberry: {
 		inherit: true,
-		desc: `Raises holder's ${statName} by 12 stages after it is hit by a ${statName.startsWith('S') ? 'Special' : 'Physical'} attack. Single use.`,
+		desc: `Restores 100% max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.`,
 		onEat(pokemon) {
-			this.boost({[stat]: 12});
+			this.heal(pokemon.baseMaxhp);
+			if (pokemon.getNature().minus === 'spa') {
+				pokemon.addVolatile('confusion');
+			}
 		},
-	};
-}
-
-for (const [berry, category] of berries.jabocarowap) {
-	items[`${berry}berry`] = {
+	},
+	aguavberry: {
 		inherit: true,
-		desc: `If holder is hit by a ${category} move, attacker loses 100% of its HP. Single use.`,
+		desc: `Restores 100% max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.`,
+		onEat(pokemon) {
+			this.heal(pokemon.baseMaxhp);
+			if (pokemon.getNature().minus === 'spd') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+	},
+	magoberry: {
+		inherit: true,
+		desc: `Restores 100% max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.`,
+		onEat(pokemon) {
+			this.heal(pokemon.baseMaxhp);
+			if (pokemon.getNature().minus === 'spe') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+	},
+	liechiberry: {
+		inherit: true,
+		desc: `Raises holder's Attack by 12 stages when at 1/4 max HP or less. Single use.`,
+		onEat(pokemon) {
+			this.boost({atk: 12});
+		},
+	},
+	ganlonberry: {
+		inherit: true,
+		desc: `Raises holder's Defense by 12 stages when at 1/4 max HP or less. Single use.`,
+		onEat(pokemon) {
+			this.boost({def: 12});
+		},
+	},
+	petayaberry: {
+		inherit: true,
+		desc: `Raises holder's Sp. Atk by 12 stages when at 1/4 max HP or less. Single use.`,
+		onEat(pokemon) {
+			this.boost({spa: 12});
+		},
+	},
+	apicotberry: {
+		inherit: true,
+		desc: `Raises holder's Sp. Def by 12 stages when at 1/4 max HP or less. Single use.`,
+		onEat(pokemon) {
+			this.boost({spd: 12});
+		},
+	},
+	salacberry: {
+		inherit: true,
+		desc: `Raises holder's Speed by 12 stages when at 1/4 max HP or less. Single use.`,
+		onEat(pokemon) {
+			this.boost({spe: 12});
+		},
+	},
+	keeberry: {
+		inherit: true,
+		desc: `Raises holder's Defense by 12 stages after it is hit by a Physical attack. Single use.`,
+		onEat(pokemon) {
+			this.boost({def: 12});
+		},
+	},
+	marangaberry: {
+		inherit: true,
+		desc: `Raises holder's Sp. Def by 12 stages after it is hit by a Special attack. Single use.`,
+		onEat(pokemon) {
+			this.boost({spd: 12});
+		},
+	},
+	jabocaberry: {
+		inherit: true,
+		desc: `If holder is hit by a physical move, attacker loses 100% of its HP. Single use.`,
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === category[0].toUpperCase() + category.slice(1)) {
+			if (move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp, source, target);
 				}
 			}
 		},
-	};
-}
-
-export const Items = items;
+	},
+	rowapberry: {
+		inherit: true,
+		desc: `If holder is hit by a special move, attacker loses 100% of its HP. Single use.`,
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Special') {
+				if (target.eatItem()) {
+					this.damage(source.baseMaxhp, source, target);
+				}
+			}
+		},
+	},
+};
