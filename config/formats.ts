@@ -659,7 +659,7 @@ export const Formats: FormatList = [
 				if (tiedSides.length <= 1) {
 					return this.win(tiedSides[1]);
 				}
-		
+
 				const hpPercentage = tiedSides.map(side => (
 					side.pokemon.map(pokemon => pokemon.hp / pokemon.maxhp).reduce((a, b) => a + b) * 100 / 6
 				));
@@ -671,7 +671,7 @@ export const Formats: FormatList = [
 				if (tiedSides.length <= 1) {
 					return this.win(tiedSides[1]);
 				}
-		
+
 				const hpTotal = tiedSides.map(side => (
 					side.pokemon.map(pokemon => pokemon.hp).reduce((a, b) => a + b)
 				));
@@ -710,7 +710,7 @@ export const Formats: FormatList = [
 						pokemon.side.faintedThisTurn = pokemon;
 					}
 				}
-		
+
 				if (this.gen <= 1) {
 					// in gen 1, fainting skips the rest of the turn
 					// residuals don't exist in gen 1
