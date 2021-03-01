@@ -611,6 +611,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] The Loser's Game",
+		desc: `The first player to lose all of their Pok&eacute;mon wins.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3657270/">The Loser's Game</a>`,
 		],
