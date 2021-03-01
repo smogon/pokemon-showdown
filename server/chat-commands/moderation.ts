@@ -1447,7 +1447,7 @@ export const commands: ChatCommands = {
 		}
 		this.globalModlog(`GLOBALDECLARE`, null, target);
 	},
-	globaldeclarehelp: [`/globaldeclare [message] - Anonymously announces a message to all rooms on the site. Requires: &`],
+	globaldeclarehelp: [`/globaldeclare [message] - Anonymously sends a private message to all the users on the site. Requires: &`],
 
 	cdeclare: 'chatdeclare',
 	chatdeclare(target, room, user) {
