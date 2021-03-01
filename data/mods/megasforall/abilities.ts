@@ -1648,7 +1648,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			const masquerade = pokemon.side.pokemon[i];
 			this.add('-ability', pokemon, 'Masquerade');
 			pokemon.setAbility(masquerade.ability);
-			this.hint(${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
+			this.hint(`${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
 			this.add('-ability', pokemon, this.dex.getAbility(pokemon.ability).name, '[silent]');
 		},
 		condition: {
