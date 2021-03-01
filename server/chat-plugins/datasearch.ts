@@ -456,7 +456,7 @@ function getMod(target: string) {
 		return sanitizedStr.startsWith('mod=');
 	}).length;
 	if (usedMod) arr.splice(arr.indexOf('mod=' + usedMod), 1);
-	return {splitTarget: arr, usedMod: usedMod ? usedMod.trim() : undefined, count};
+	return {splitTarget: arr, usedMod: usedMod?.trim(), count};
 }
 
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
