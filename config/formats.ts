@@ -621,12 +621,11 @@ export const Formats: FormatList = [
 		teamLength: {
 			validate: [6, 6],
 		},
-		ruleset: ['[Gen 8] Ubers', '!OHKO Clause'],
+		ruleset: ['Standard', '!OHKO Clause'],
 		banlist: [
 			'Shedinja', 'Infiltrator', 'Magic Guard', 'Choice Scarf',
 			'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Explosion', 'Self-Destruct',
 		],
-		unbanlist: ['AG', 'Baton Pass'],
 		onValidateTeam(team) {
 			const familyTable = new Set<ID>();
 			for (const set of team) {
