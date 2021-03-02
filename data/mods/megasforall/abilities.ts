@@ -2021,7 +2021,8 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		onBeforeMovePriority: 0.5,
 		onBeforeMove(attacker, defender, move) {
 			if (
-				(attacker.species.baseSpecies !== 'Aegislash' && !attacker.species.name.startsWith('Falinks-Mega')) || attacker.transformed
+				(attacker.species.baseSpecies !== 'Aegislash' && !attacker.species.name.startsWith('Falinks-Mega')) ||
+				attacker.transformed
 			) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
 			if (attacker.species.baseSpecies === 'Aegislash') {
