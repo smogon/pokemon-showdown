@@ -33,8 +33,8 @@ function getMonth(day?: string) {
 }
 
 function nextMonth(month: string) {
-	const nextMonth = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
-	return nextMonth.toISOString().slice(0, 7);
+	const next = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
+	return next.toISOString().slice(0, 7);
 }
 
 export abstract class BattleSearchHandler {
@@ -65,7 +65,7 @@ export abstract class BattleSearchHandler {
 			buf += `<tr><th>Won</th><th>Lost</th><th>Turns</th><th>Tied</th></tr>`;
 			for (const battle of outcomes) {
 				const {won, lost, turns, tied} = battle;
-				buf += `<tr><td>${won}</td><td>${lost}</td><td>${turns}</td><td>${!!tied ? 'Yes' : ''}</td></tr>`;
+				buf += `<tr><td>${won}</td><td>${lost}</td><td>${turns}</td><td>${tied ? 'Yes' : ''}</td></tr>`;
 			}
 		}
 		buf += `</tbody></table><br />`;
@@ -293,7 +293,7 @@ export class TextBattleSearcher extends BattleSearchHandler {
 
 				const outcomes = results[day].totalOutcomes;
 				if (outcomes) {
-					if (!winnerid) if (!winnerid) outcomes.push({won: '', lost: '', turns: data.turns, tied: true});
+					if (!winnerid) outcomes.push({won: '', lost: '', turns: data.turns, tied: true});
 					else outcomes.push({won: winnerid, lost: loser, turns: data.turns});
 				}
 				// we only want foe data for single-userid searches

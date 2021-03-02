@@ -34,7 +34,7 @@ export class PostgresDatabase {
 		} catch (e) {}
 		return config;
 	}
-	async transaction(callback: (conn: PG.PoolClient) => any) {
+	async transaction(callback: (conn: PG.PoolClient) => any, depth = 0) {
 		const conn = await this.pool.connect();
 		await conn.query(`BEGIN;`);
 		let result;
@@ -43,6 +43,19 @@ export class PostgresDatabase {
 			result = await callback(conn);
 		} catch (e) {
 			await conn.query(`ROLLBACK;`);
+			const code = parseInt(e?.code);
+			// two concurrent transactions conflicted, try again
+			if (code === 40001 && depth <= 10) {
+				this.transaction(callback, depth++);
+				return;
+			// There is a bug in Postgres that causes some
+         // serialization failures to be reported as failed
+         // unique constraint checks. Only retrying once since
+			// it could be our fault (thanks chaos for this info / the first half of this comment)
+			} else if (code === 23505 && !depth) {
+				this.transaction(callback, depth++);
+				return;
+			}
 			throw e;
 		}
 		await conn.query(`COMMIT;`);
