@@ -1936,6 +1936,127 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: -1052,
 	},
+	moleawhac: {
+		desc: "This Pokémon's Attack is raised by 1 stage at the end of each full turn if it uses an attacking move. Its Attack boosts are cleared and its Attack is not increased on the same turn when it is hit by a contact move.",
+		shortDesc: "Atk rises 1 stage on each attacking turn; Atk reset on contact.",
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
+				this.add('-ability', target, 'Mole-a-Whac');
+				this.hint(`${target.name}'s Attack boosts were reset!`);
+				target.setBoost({atk: 0});
+				this.add('-clearboost', target, 'atk', '[silent]');
+				target.addVolatile('moleawhac');
+			}
+		},
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status') {
+				source.addVolatile('moleawhac');
+			}
+		},
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns && !pokemon.volatiles['moleawhac']) {
+				this.boost({atk: 1});
+			}
+		},
+		condition: {
+			duration: 1,
+		},
+		name: "Mole-a-Whac",
+		rating: 4.5,
+		num: -1053,
+	},
+	sos: {
+		desc: "If this Pokémon is a Wishiwashi that has Mega Evolved, it calls for help and changes form at the end of each full turn it has been on the field, building up to Mega Wishiwashi (School Form) over five turns.",
+		shortDesc: "More Wishiwashi spawn at the end of each turn.",
+		onStart(pokemon) {
+			if (pokemon.species.id === 'wishiwashimega' && pokemon.hp > pokemon.maxhp / 4) {
+				this.add('-message', `Startled by the Mega Evolution, ${pokemon.name}'s school dispersed...`);
+			}
+		},
+		onResidualOrder: 27,
+		onResidual(pokemon) {
+			if (
+				pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.transformed || !pokemon.hp || !pokemon.activeTurns ||
+				pokemon.species.id === 'wishiwashi' || pokemon.species.id === 'wishiwashischool' ||
+				pokemon.species.id === 'wishiwashimegaschool'
+			) return;
+			this.add('-activate', pokemon, 'ability: SOS');
+			this.add('-message', `${pokemon.name} called for help!`);
+			if (pokemon.species.id === 'wishiwashimega') {
+				pokemon.formeChange('Wishiwashi-Mega-1', this.effect, true);
+			} else if (pokemon.species.id === 'wishiwashimega1') {
+				pokemon.formeChange('Wishiwashi-Mega-2', this.effect, true);
+			} else if (pokemon.species.id === 'wishiwashimega2') {
+				pokemon.formeChange('Wishiwashi-Mega-3', this.effect, true);
+			} else if (pokemon.species.id === 'wishiwashimega3') {
+				pokemon.formeChange('Wishiwashi-Mega-4', this.effect, true);
+			} else if (pokemon.species.id === 'wishiwashimega4') {
+				pokemon.formeChange('Wishiwashi-Mega-School', this.effect, true);
+			}
+			this.add('-message', `More of ${pokemon.name}'s friends came together!`);
+			const species = this.dex.getSpecies(pokemon.species.name);
+			const abilities = species.abilities;
+			const baseStats = species.baseStats;
+			const type = species.types[0];
+			this.add(`raw|<ul class="utilichart"><li class="result"><span class="col pokemonnamecol" style="white-space: nowrap">` + species.name + `</span> <span class="col typecol"><img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32"></span> <span style="float: left ; min-height: 26px"><span class="col abilitycol">` + abilities[0] + `</span><span class="col abilitycol"></span></span><span style="float: left ; min-height: 26px"><span class="col statcol"><em>HP</em><br>` + baseStats.hp + `</span> <span class="col statcol"><em>Atk</em><br>` + baseStats.atk + `</span> <span class="col statcol"><em>Def</em><br>` + baseStats.def + `</span> <span class="col statcol"><em>SpA</em><br>` + baseStats.spa + `</span> <span class="col statcol"><em>SpD</em><br>` + baseStats.spd + `</span> <span class="col statcol"><em>Spe</em><br>` + baseStats.spe + `</span> </span></li><li style="clear: both"></li></ul>`);
+			pokemon.baseMaxhp = Math.floor(Math.floor(
+				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
+			) * pokemon.level / 100 + 10);
+			const newMaxHP = pokemon.volatiles['dynamax'] ? (2 * pokemon.baseMaxhp) : pokemon.baseMaxhp;
+			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
+			pokemon.maxhp = newMaxHP;
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+		},
+		isPermanent: true,
+		name: "SOS",
+		rating: 5,
+		num: -1054,
+	},
+	stancechange: {
+		desc: "If this Pokémon is an Aegislash or a Falinks-Mega, it changes to Blade Forme or Mega Combat before attempting to use an attacking move, and changes to Shield Forme or Mega Legion before attempting to use King's Shield.",
+		shortDesc: "Changes Aegislash/Falinks-Mega to Blade Forme/Combat before attack, Shield Forme/Legion before King's Shield.",
+		onBeforeMovePriority: 0.5,
+		onBeforeMove(attacker, defender, move) {
+			if (
+				(attacker.species.baseSpecies !== 'Aegislash' && !attacker.species.name.startsWith('Falinks-Mega')) || attacker.transformed
+			) return;
+			if (move.category === 'Status' && move.id !== 'kingsshield') return;
+			if (attacker.species.baseSpecies === 'Aegislash') {
+				const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
+				if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+			} else if (attacker.species.name.startsWith('Falinks-Mega')) {
+				const targetForme = (move.id === 'kingsshield' ? 'Falinks-Mega-Legion' : 'Falinks-Mega-Combat');
+				if (attacker.species.name !== targetForme) {
+					attacker.formeChange(targetForme);
+					if (targetForme === 'Falinks-Mega-Legion') {
+						this.add('-message', `${attacker.name} changed to Legion formation!`);
+					} else {
+						this.add('-message', `${attacker.name} changed to Combat formation!`);
+						if (!this.effectData.busted) { // this is just to make a dt that only shows up once per Mega Falinks
+							const species = this.dex.getSpecies(attacker.species.name);
+							const abilities = species.abilities;
+							const baseStats = species.baseStats;
+							const type = species.types[0];
+							if (species.types[1]) {
+								const type2 = species.types[1];
+								this.add(`raw|<ul class="utilichart"><li class="result"><span class="col pokemonnamecol" style="white-space: nowrap">` + species.name + `</span> <span class="col typecol"><img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32"><img src="https://${Config.routes.client}/sprites/types/${type2}.png" alt="${type2}" height="14" width="32"></span> <span style="float: left ; min-height: 26px"><span class="col abilitycol">` + abilities[0] + `</span><span class="col abilitycol"></span></span><span style="float: left ; min-height: 26px"><span class="col statcol"><em>HP</em><br>` + baseStats.hp + `</span> <span class="col statcol"><em>Atk</em><br>` + baseStats.atk + `</span> <span class="col statcol"><em>Def</em><br>` + baseStats.def + `</span> <span class="col statcol"><em>SpA</em><br>` + baseStats.spa + `</span> <span class="col statcol"><em>SpD</em><br>` + baseStats.spd + `</span> <span class="col statcol"><em>Spe</em><br>` + baseStats.spe + `</span> </span></li><li style="clear: both"></li></ul>`);
+							} else {
+								this.add(`raw|<ul class="utilichart"><li class="result"><span class="col pokemonnamecol" style="white-space: nowrap">` + species.name + `</span> <span class="col typecol"><img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32"></span> <span style="float: left ; min-height: 26px"><span class="col abilitycol">` + abilities[0] + `</span><span class="col abilitycol"></span></span><span style="float: left ; min-height: 26px"><span class="col statcol"><em>HP</em><br>` + baseStats.hp + `</span> <span class="col statcol"><em>Atk</em><br>` + baseStats.atk + `</span> <span class="col statcol"><em>Def</em><br>` + baseStats.def + `</span> <span class="col statcol"><em>SpA</em><br>` + baseStats.spa + `</span> <span class="col statcol"><em>SpD</em><br>` + baseStats.spd + `</span> <span class="col statcol"><em>Spe</em><br>` + baseStats.spe + `</span> </span></li><li style="clear: both"></li></ul>`);
+							}
+							this.effectData.busted = true;
+						}
+					}
+				}
+			}
+		},
+		isPermanent: true,
+		name: "Stance Change",
+		rating: 4,
+		num: 176,
+	},
 	stickyresidues: {
 		desc: "On switch-in, this Pokémon summons sticky residues that prevent hazards from being cleared or moved by Court Change for five turns. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
 		shortDesc: "On switch-in, prevents hazards from being cleared or moved by Court Change for 5 turns.",
