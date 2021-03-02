@@ -407,7 +407,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onDamage(damage, target, source, effect) {
 			const move = effect;
 			if (!move || move.effectType !== 'Move') return;
-			if (move.type === 'Fire' && target.getMoveHitData(move).typeMod > 0) {
+			if (move.type === 'Fairy' && target.getMoveHitData(move).typeMod > 0) {
 				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
