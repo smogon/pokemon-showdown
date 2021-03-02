@@ -21,6 +21,7 @@ export class PostgresDatabase {
 		try {
 			result = await this.pool.query(statement, values);
 		} catch (e) {
+			// postgres won't give accurate stacks unless we do this
 			throw new Error(e.message);
 		}
 		return result?.rows || [];
@@ -29,19 +30,22 @@ export class PostgresDatabase {
 		let config: AnyObject = {};
 		try {
 			config = require('../config/config').usepostgres;
-			if (!config) throw new Error('');
+			if (!config) throw new Error('Missing config for pg database');
 		} catch (e) {}
 		return config;
 	}
 	async transaction(callback: (conn: PG.PoolClient) => any) {
 		const conn = await this.pool.connect();
 		await conn.query(`BEGIN;`);
+		let result;
 		try {
-			await callback(conn);
+			// eslint-disable-next-line callback-return
+			result = await callback(conn);
 		} catch (e) {
 			await conn.query(`ROLLBACK;`);
 			throw e;
 		}
 		await conn.query(`COMMIT;`);
+		return result;
 	}
 }

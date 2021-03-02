@@ -943,14 +943,13 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const format = Dex.getFormat(this.format).id;
 		const SQL = require('sql-template-strings');
 
-		let rowid;
-		await Rooms.RoomBattle.logDatabase.transaction(async worker => {
+		const rowid = await Rooms.RoomBattle.logDatabase.transaction(async worker => {
 			const possibleRows = (await worker.query(SQL`SELECT rowid FROM battle_identifiers WHERE format = ${format}`)).rows;
 			if (!possibleRows.length) {
 				const inserted = await worker.query(SQL`INSERT INTO battle_identifiers (format) VALUES (${format}) RETURNING rowid`);
-				rowid = inserted.rows[0].rowid;
+				return inserted.rows[0].rowid;
 			} else {
-				rowid = possibleRows[0].rowid;
+				return possibleRows[0].rowid;
 			}
 		});
 
