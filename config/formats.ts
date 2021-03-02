@@ -740,6 +740,9 @@ export const Formats: FormatList = [
 					this.win(this.p2);
 					return true;
 				}
+				if (faintData) {
+					this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
+				}
 				return false;
 			},
 		},
