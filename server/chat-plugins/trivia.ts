@@ -853,7 +853,8 @@ export class Trivia extends Rooms.RoomGame {
 		if (!triviaData.history) triviaData.history = [];
 		if (typeof this.game.length === 'number') this.game.length = `${this.game.length} questions`;
 
-		const scores = Object.fromEntries(this.getTopPlayers().map(player => [player.player.id, player.player.points]));
+		const scores = Object.fromEntries(this.getTopPlayers({max: null})
+			.map(player => [player.player.id, player.player.points]));
 		triviaData.history.push({
 			...this.game,
 			length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
