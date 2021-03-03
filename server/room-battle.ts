@@ -1196,7 +1196,7 @@ export class RoomBattleStream extends BattleStream {
 		if (this.battle) this.battle.sendUpdates();
 		const deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
-			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk}`);
+			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk.replace(/\n/ig, ' | ')}`);
 		}
 	}
 }
@@ -1205,7 +1205,11 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream());
+export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream(), message => {
+	if (message.startsWith(`SLOW\n`)) {
+		Monitor.slow(message.slice(5));
+	}
+});
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -1216,6 +1220,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	global.__version = {head: ''};
