@@ -720,8 +720,9 @@ export class RandomTeams {
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		moves: ID[],
 		isLead: boolean,
-		isDoubles: boolean
+		isDoubles: boolean,
 	): {cull: boolean, isSetup?: boolean} {
 		if (isDoubles && species.baseStats.def >= 140 && movePool.includes('bodypress')) {
 			// In Doubles, Pokémon with Defense stats >= 140 should always have body press
@@ -1402,8 +1403,10 @@ export class RandomTeams {
 		hasMove: {[k: string]: true},
 		counter: {[k: string]: any},
 		species: Species,
-		isDoubles: boolean
-	) {
+		moves: ID[],
+		isDoubles: boolean,
+		isLead: boolean,
+	): string | undefined {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
 
 		// Choice items
@@ -1479,7 +1482,7 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean
-	) {
+	): string | undefined {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
 
 		if (
@@ -1553,7 +1556,7 @@ export class RandomTeams {
 			(species.randomDoubleBattleMoves || species.randomBattleMoves);
 		const movePool = (randMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool = [];
-		const moves: string[] = [];
+		const moves: ID[] = [];
 		let ability = '';
 		let item = undefined;
 
@@ -1606,7 +1609,7 @@ export class RandomTeams {
 
 				let {cull: rejected, isSetup} = this.shouldCullMove(
 					move, hasType, hasMove, hasAbility, counter,
-					movePool, teamDetails, species, isLead, isDoubles
+					movePool, teamDetails, species, moves, isLead, isDoubles
 				);
 
 				// Pokemon should have moves that benefit their types, stats, or ability
@@ -1750,7 +1753,7 @@ export class RandomTeams {
 			if (item === undefined && isDoubles) {
 				item = this.getDoublesItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species);
 			}
-			if (item === undefined) item = this.getMediumPriorityItem(ability, hasMove, counter, species, isDoubles);
+			if (item === undefined) item = this.getMediumPriorityItem(ability, hasMove, counter, species, moves, false, isLead);
 			if (item === undefined) {
 				item = this.getLowPriorityItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species, isLead, isDoubles);
 			}
