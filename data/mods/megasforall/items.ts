@@ -1319,4 +1319,46 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Delphox, this item allows it to Mega Evolve in battle.",
 	},
+	dugtrionite: {
+		name: "Dugtrionite",
+		spritenum: 578,
+		megaStone: "Dugtrio-Mega",
+		megaEvolves: "Dugtrio",
+		itemUser: ["Dugtrio"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1081,
+		gen: 8,
+		desc: "If held by a Dugtrio, this item allows it to Mega Evolve in battle.",
+	},
+	wishiwashinite: {
+		name: "Wishiwashinite",
+		spritenum: 578,
+		megaStone: "Wishiwashi-Mega",
+		megaEvolves: "Wishiwashi",
+		itemUser: ["Wishiwashi"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1082,
+		gen: 8,
+		desc: "If held by a Wishiwashi, this item allows it to Mega Evolve in battle.",
+	},
+	falinksite: {
+		name: "Falinksite",
+		spritenum: 578,
+		megaStone: "Falinks-Mega-Legion",
+		megaEvolves: "Falinks",
+		itemUser: ["Falinks"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1083,
+		gen: 8,
+		desc: "If held by a Falinks, this item allows it to Mega Evolve in battle.",
+	},
 };
