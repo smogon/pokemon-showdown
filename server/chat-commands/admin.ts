@@ -108,17 +108,16 @@ export const commands: ChatCommands = {
 		this.canUseConsole();
 		target = toID(target);
 		const species = Dex.getSpecies(target);
+		if (species.id === Config.potd) {
+			return this.errorReply(`The PotD is already set to ${species.name}`);
+		}
 		if (!species.exists) return this.errorReply(`Pokemon ${target} not found.`);
 		if (!Dex.getLearnsetData(species.id).learnset) {
 			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
 		}
-		// this _could_ be an instanceof check but worst case we send it to another PM
-		// that's in that file and it does nothing
-		const simProcesses = ProcessManager.processManagers.filter(p => p.basename.includes('room-battle'));
-		for (const sim of simProcesses) {
-			for (const sub of sim.processes) {
-				sub.getProcess().send(`EVAL\n\nConfig.potd = '${species.id}'`);
-			}
+		Config.potd = species.id;
+		for (const sim of Rooms.PM.processes) {
+			sim.getProcess().send(`EVAL\n\nConfig.potd = '${species.id}'`);
 		}
 		this.addGlobalModAction(`${user.name} set the PotD to ${species.name}.`);
 		this.globalModlog(`POTD`, null, species.name);
