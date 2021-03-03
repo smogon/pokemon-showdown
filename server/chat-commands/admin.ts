@@ -106,7 +106,6 @@ async function rebuild(context: CommandContext) {
 export const commands: ChatCommands = {
 	potd(target, room, user) {
 		this.canUseConsole();
-		target = toID(target);
 		const species = Dex.getSpecies(target);
 		if (species.id === Config.potd) {
 			return this.errorReply(`The PotD is already set to ${species.name}`);
