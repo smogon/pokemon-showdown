@@ -2046,7 +2046,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 							const baseStats = species.baseStats;
 							const type = species.types[0];
 							const type2 = species.types[1];
-							let buf = `<ul class="utilichart"><li class="result"><span class="col pokemonnamecol" style="white-space: nowrap">${species.name}</span> <span class="col typecol"><psicon type="${type1}" />${type2 ? `<psicon type="${type2}" />` : ''}</span> <span style="float: left ; min-height: 26px"><span class="col abilitycol">${abilities[0]}</span><span class="col abilitycol"></span></span><span style="float: left ; min-height: 26px">`;
+							let buf = `<ul class="utilichart"><li class="result"><span class="col pokemonnamecol" style="white-space: nowrap">${species.name}</span> <span class="col typecol"><psicon type="${type}" />${type2 ? `<psicon type="${type2}" />` : ''}</span> <span style="float: left ; min-height: 26px"><span class="col abilitycol">${abilities[0]}</span><span class="col abilitycol"></span></span><span style="float: left ; min-height: 26px">`;
 							for (const statName of ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe']) {
 								buf += `<span class="col statcol"><em>${statName}</em><br>${baseStats[this.toID(statName) as keyof StatsTable]}</span> `;
 							}
