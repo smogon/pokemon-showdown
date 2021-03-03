@@ -117,7 +117,8 @@ interface TriviaData {
 	leaderboard?: TriviaLeaderboard;
 	altLeaderboard?: TriviaLeaderboard;
 	ladder?: TriviaLadder;
-	history?: (TriviaGame & {scores?: Map<ID, number>})[];
+	/* `scores` key is a user ID */
+	history?: (TriviaGame & {scores?: {[k: string]: number}})[];
 	moveEventQuestions?: boolean;
 }
 
@@ -852,7 +853,7 @@ export class Trivia extends Rooms.RoomGame {
 		if (!triviaData.history) triviaData.history = [];
 		if (typeof this.game.length === 'number') this.game.length = `${this.game.length} questions`;
 
-		const scores = new Map(this.getTopPlayers().map(player => [player.player.id, player.player.points]));
+		const scores = Object.fromEntries(this.getTopPlayers().map(player => [player.player.id, player.player.points]));
 		triviaData.history.push({
 			...this.game,
 			length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
@@ -2341,7 +2342,7 @@ const triviaCommands: ChatCommands = {
 		const lastGame = triviaData.history?.[triviaData.history.length - 1];
 		if (!lastGame?.scores) throw new Chat.ErrorMessage(`There are no scores recorded for the last Trivia game.`);
 
-		const scores = [...lastGame.scores].map(([userid, score]) => `${userid} (${score})`).join(', ');
+		const scores = Object.entries(lastGame.scores).map(([userid, score]) => `${userid} (${score})`).join(', ');
 		this.sendReplyBox(`The scores for the last Trivia game are: ${scores}`);
 	},
 	lastofficialscorehelp: [`/trivia lastofficialscore - View the scores from the last Trivia game. Intended for bots.`],
