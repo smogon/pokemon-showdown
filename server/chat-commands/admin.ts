@@ -115,8 +115,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
 		}
 		Config.potd = species.id;
-		for (const sim of Rooms.PM.processes) {
-			sim.getProcess().send(`EVAL\n\nConfig.potd = '${species.id}'`);
+		for (const process of Rooms.PM.processes) {
+			process.getProcess().send(`EVAL\n\nConfig.potd = '${species.id}'`);
 		}
 		this.addGlobalModAction(`${user.name} set the PotD to ${species.name}.`);
 		this.globalModlog(`POTD`, null, species.name);
