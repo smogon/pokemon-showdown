@@ -820,11 +820,11 @@ export const commands: ChatCommands = {
 		const format = Dex.getFormat(formatString || 'gen8randombattle');
 		if (!format.exists) throw new Chat.ErrorMessage(`${formatString} is not a valid format.`);
 
-		const species = Dex.getSpecies(pokemonString);
+		const dex = Dex.forFormat(format);
+		const species = dex.getSpecies(pokemonString);
 		if (!species.exists) {
 			throw new Chat.ErrorMessage(`${pokemonString} is not a valid Pokémon for that format.`);
 		}
-		const dex = Dex.forFormat(format);
 		if (!dex.getLearnsetData(species.id).learnset) {
 			throw new Chat.ErrorMessage(`Learnsets for ${species.name} in ${format.name} not found.`);
 		}
