@@ -34,6 +34,12 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 	});
 }
 
+const BLACKLISTED_PROPS = ['valueOf', 'constructor'];
+
+function isWhitelistedProp(prop: string) {
+	return !(prop.includes('__') || prop.toLowerCase().includes('prop') || BLACKLISTED_PROPS.includes(prop));
+}
+
 /**
  * @returns {boolean} Whether or not the rebase failed
  */
@@ -389,14 +395,17 @@ export const commands: ChatCommands = {
 		await rebuild(this);
 
 		const lock = Monitor.hotpatchLock;
-		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
+		const hotpatches = [
+			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
+			'processmanager', 'roomsp', 'usersp',
+		];
+		if (lock[target]) {
+			return this.errorReply(`That hotpatch has been disabled by ${lock[target].by} (${lock[target].reason})`);
+		}
 
 		try {
 			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
 			if (target === 'all') {
-				if (lock['all']) {
-					return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
-				}
 				if (Config.disablehotpatchall) {
 					return this.errorReply("This server does not allow for the use of /hotpatch all");
 				}
@@ -405,9 +414,6 @@ export const commands: ChatCommands = {
 					await this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
-				if (lock['chat']) {
-					return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
-				}
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
@@ -439,20 +445,86 @@ export const commands: ChatCommands = {
 				this.sendReply("Reloading chat plugins...");
 				Chat.loadPlugins(oldPlugins);
 				this.sendReply("DONE");
-			} else if (target === 'tournaments') {
-				if (lock['tournaments']) {
-					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
+			} else if (target === 'processmanager') {
+				this.sendReply('Hotpatching processmanager prototypes...');
+
+				// keep references
+				const cache = {...require.cache};
+				Utils.clearRequireCache();
+				const newPM = require('../../lib/process-manager');
+				require.cache = cache;
+
+				const protos = [
+					[ProcessManager.QueryProcessManager, newPM.QueryProcessManager],
+					[ProcessManager.StreamProcessManager, newPM.StreamProcessManager],
+					[ProcessManager.ProcessManager, newPM.ProcessManager],
+					[ProcessManager.RawProcessManager, newPM.RawProcessManager],
+				].map(part => part.map(pm => pm.prototype));
+
+				for (const [oldProto, newProto] of protos) {
+					const newKeys = Utils.listMethods(newProto, isWhitelistedProp);
+					const oldKeys = Utils.listMethods(oldProto, isWhitelistedProp);
+					for (const key of oldKeys) {
+						if (!newProto[key]) {
+							delete oldProto[key];
+						}
+					}
+					for (const key of newKeys) {
+						oldProto[key] = newProto[key];
+					}
+				}
+				this.sendReply('DONE');
+			} else if (target === 'usersp' || target === 'roomsp') {
+				let newProto: any, existingProto: any, message: string;
+				switch (target) {
+				case 'usersp':
+					newProto = require('../users').User.prototype;
+					existingProto = Users.User.prototype;
+					message = 'user prototypes';
+					break;
+				case 'roomsp':
+					newProto = require('../rooms').BasicRoom.prototype;
+					existingProto = Rooms.BasicRoom.prototype;
+					message = 'rooms prototypes';
+					break;
 				}
 
+				this.sendReply(`Hotpatching ${message}...`);
+				const keys = Utils.listMethods(newProto, isWhitelistedProp);
+				const existingKeys = Utils.listMethods(existingProto, isWhitelistedProp);
+
+				const counts = {
+					added: 0,
+					updated: 0,
+					deleted: 0,
+				};
+
+				for (const key of existingKeys) {
+					if (!newProto[key]) {
+						counts.deleted++;
+						delete existingProto[key];
+					}
+				}
+				for (const key of keys) {
+					if (!existingProto[key]) counts.added++;
+					// functions should always have this
+					else if (existingProto[key].toString() !== newProto[key].toString()) counts.updated++;
+
+					existingProto[key] = newProto[key];
+				}
+				this.sendReply(`DONE`);
+				this.sendReply(
+					`Updated ${Chat.count(counts.updated, 'methods')}` +
+					(counts.added ? `, added ${Chat.count(counts.added, 'new methods')} to ${message}` : '') +
+					(counts.deleted ? `, and removed ${Chat.count(counts.deleted, 'methods')}.` : '.')
+				);
+			} else if (target === 'tournaments') {
 				this.sendReply("Hotpatching tournaments...");
 
 				global.Tournaments = require('../tournaments').Tournaments;
 				Chat.loadPluginData(Tournaments, 'tournaments');
 				this.sendReply("DONE");
 			} else if (target === 'formats' || target === 'battles') {
-				if (lock['formats']) {
-					return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
-				}
 				if (lock['battles']) {
 					return this.errorReply(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
 				}
@@ -489,10 +561,6 @@ export const commands: ChatCommands = {
 				void TeamValidatorAsync.PM.respawn();
 				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
-				if (lock['punishments']) {
-					return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
-				}
-
 				this.sendReply("Hotpatching punishments...");
 				global.Punishments = require('../punishments').Punishments;
 				this.sendReply("DONE");
@@ -503,9 +571,6 @@ export const commands: ChatCommands = {
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("DONE");
 			} else if (target === 'modlog') {
-				if (lock['modlog']) {
-					return this.errorReply(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
-				}
 				this.sendReply("Hotpatching modlog...");
 
 				const streams = Rooms.Modlog.streams;
@@ -570,7 +635,10 @@ export const commands: ChatCommands = {
 		if (!reason || !target.includes(separator)) return this.parse('/help nohotpatch');
 
 		const lock = Monitor.hotpatchLock;
-		const validDisable = ['chat', 'battles', 'formats', 'validator', 'tournaments', 'punishments', 'modlog', 'all'];
+		const validDisable = [
+			'roomsp', 'usersp', 'chat', 'battles', 'formats', 'validator',
+			'tournaments', 'punishments', 'modlog', 'all', 'processmanager',
+		];
 
 		if (!validDisable.includes(hotpatch)) {
 			return this.errorReply(`Disabling hotpatching "${hotpatch}" is not supported.`);

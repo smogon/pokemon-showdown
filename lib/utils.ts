@@ -40,6 +40,20 @@ export function escapeRegex(str: string) {
 	return str.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
 }
 
+export function listMethods(obj: any, checker?: (prop: string, val: any) => boolean) {
+	const methods = new Set<string>();
+	let current = obj;
+	do {
+		const curProps = Object.getOwnPropertyNames(current);
+		for (const prop of curProps) {
+			if (typeof obj[prop] !== 'function') continue;
+			if (checker && !checker(prop, obj[prop])) continue;
+			methods.add(prop);
+		}
+	} while ((current = Object.getPrototypeOf(current)));
+	return [...methods.keys()];
+}
+
 /**
  * Escapes HTML in a string.
 */
@@ -368,5 +382,5 @@ export const Utils = {
 	shuffle, deepClone, clearRequireCache,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
-	escapeRegex,
+	escapeRegex, listMethods,
 };
