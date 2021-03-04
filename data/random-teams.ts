@@ -1753,7 +1753,7 @@ export class RandomTeams {
 			if (item === undefined && isDoubles) {
 				item = this.getDoublesItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species);
 			}
-			if (item === undefined) item = this.getMediumPriorityItem(ability, hasMove, counter, species, moves, false, isLead);
+			if (item === undefined) item = this.getMediumPriorityItem(ability, hasMove, counter, species, moves, isDoubles, isLead);
 			if (item === undefined) {
 				item = this.getLowPriorityItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species, isLead, isDoubles);
 			}
