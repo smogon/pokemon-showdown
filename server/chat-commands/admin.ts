@@ -104,6 +104,23 @@ async function rebuild(context: CommandContext) {
 
 
 export const commands: ChatCommands = {
+	potd(target, room, user) {
+		this.canUseConsole();
+		const species = Dex.getSpecies(target);
+		if (species.id === Config.potd) {
+			return this.errorReply(`The PotD is already set to ${species.name}`);
+		}
+		if (!species.exists) return this.errorReply(`Pokemon "${target}" not found.`);
+		if (!Dex.getLearnsetData(species.id).learnset) {
+			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
+		}
+		Config.potd = species.id;
+		for (const process of Rooms.PM.processes) {
+			process.getProcess().send(`EVAL\n\nConfig.potd = '${species.id}'`);
+		}
+		this.addGlobalModAction(`${user.name} set the PotD to ${species.name}.`);
+		this.globalModlog(`POTD`, null, species.name);
+	},
 
 	/*********************************************************
 	 * Bot commands (chat-log manipulation)
