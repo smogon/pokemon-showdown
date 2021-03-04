@@ -1225,7 +1225,7 @@ export const Formats: {[k: string]: FormatData} = {
 					if (!buf.endsWith('|')) buf += '/</span>&#8203;';
 					buf += `<span style="white-space: nowrap;"><psicon pokemon="${pokemon.species.id}"/>`;
 					for (const type of (pokemon.set as any).hc.types) {
-						buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32"> `;
+						buf += `<psicon type="${type}" /> `;
 					}
 				}
 				this.add(`${buf}</span>`);
