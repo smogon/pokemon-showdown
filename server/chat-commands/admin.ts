@@ -110,7 +110,7 @@ export const commands: ChatCommands = {
 		if (species.id === Config.potd) {
 			return this.errorReply(`The PotD is already set to ${species.name}`);
 		}
-		if (!species.exists) return this.errorReply(`Pokemon ${target} not found.`);
+		if (!species.exists) return this.errorReply(`Pokemon "${target}" not found.`);
 		if (!Dex.getLearnsetData(species.id).learnset) {
 			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
 		}
