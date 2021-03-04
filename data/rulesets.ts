@@ -1223,7 +1223,7 @@ export const Formats: {[k: string]: FormatData} = {
 				let buf = 'raw|';
 				for (const pokemon of side.pokemon) {
 					if (!buf.endsWith('|')) buf += '/</span>&#8203;';
-					buf += `<span style="white-space: nowrap;"><psicon pokemon="${pokemon.species.id}"/>`;
+					buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
 					for (const type of (pokemon.set as any).hc.types) {
 						buf += `<psicon type="${type}" /> `;
 					}
