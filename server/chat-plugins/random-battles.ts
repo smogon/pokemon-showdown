@@ -829,6 +829,10 @@ export const commands: ChatCommands = {
 			throw new Chat.ErrorMessage(`Learnsets for ${species.name} in ${format.name} not found.`);
 		}
 
+		if (!FS(dex.dataDir + '/random-teams.js').existsSync()) {
+			throw new Chat.ErrorMessage(`That format does not support random teams.`);
+		}
+
 		const set = Dex.getTeamGenerator(format.id).randomSet(species.id);
 		const prettyifiedSet = Dex.stringifyTeam([set]).replace(/<br \/>$/, '');
 		this.sendReplyBox(`<details><summary><strong>Random set for ${species.name} in ${format.name}</strong></summary>${prettyifiedSet}</details>`);
