@@ -1209,4 +1209,30 @@ export const Formats: {[k: string]: FormatData} = {
 			return newSpecies;
 		},
 	},
+	teamtypepreview: {
+		effectType: 'Rule',
+		name: 'Team Type Preview',
+		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team and those Pok&eacute;mon's types before they choose their lead Pok&eacute;mon",
+		onBegin() {
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					const details = pokemon.details.replace(', shiny', '')
+						.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
+					this.add('poke', pokemon.side.id, details, '');
+				}
+				let buf = 'raw|';
+				for (const pokemon of side.pokemon) {
+					if (!buf.endsWith('|')) buf += '/</span>&#8203;';
+					buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
+					for (const type of pokemon.species.types) {
+						buf += `<psicon type="${type}" /> `;
+					}
+				}
+				this.add(`${buf}</span>`);
+			}
+		},
+		onTeamPreview() {
+			this.makeRequest('teampreview');
+		},
+	},
 };
