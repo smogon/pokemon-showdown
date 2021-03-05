@@ -4,7 +4,7 @@ import RandomTeams from '../../random-teams';
 export class RandomLetsGoTeams extends RandomTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.moveRejectionCheckers = {
+		this.moveEnforcementCheckers = {
 			Dark: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Dark,
 			Dragon: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Dragon,
 			Electric: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Electric,
@@ -163,7 +163,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 					cull = true;
 				}
 
-				const moveNeedsExtraChecks = !move.damage && (move.category !== 'Status' || !move.flags.heal) && (
+				const moveIsRejectable = !move.damage && (move.category !== 'Status' || !move.flags.heal) && (
 					move.category === 'Status' ||
 					!hasType[move.type] ||
 					move.selfSwitch ||
@@ -171,7 +171,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 				);
 
 				// Pokemon should have moves that benefit their Type, as well as moves required by its forme
-				if (moveNeedsExtraChecks && !cull && !isSetup && counter.physicalsetup + counter.specialsetup < 2 && (
+				if (moveIsRejectable && !cull && !isSetup && counter.physicalsetup + counter.specialsetup < 2 && (
 					!counter.setupType || counter.setupType === 'Mixed' ||
 					(move.category !== counter.setupType && move.category !== 'Status') ||
 					counter[counter.setupType] + counter.Status > 3
@@ -183,7 +183,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 						cull = true;
 					} else {
 						for (const type of Object.keys(hasType)) {
-							if (this.moveRejectionCheckers[type]?.(movePool, hasMove, {}, hasType, counter, species, teamDetails)) cull = true;
+							if (this.moveEnforcementCheckers[type]?.(movePool, hasMove, {}, hasType, counter, species, teamDetails)) cull = true;
 						}
 					}
 				}
