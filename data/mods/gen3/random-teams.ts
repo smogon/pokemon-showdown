@@ -391,7 +391,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 						// With Calm Mind, Lugia and pure Normal-types are fine without STAB
 						counter.setupType === 'Special' &&
 						species.id === 'lugia' ||
-						(hasType['Normal'] && !species.types[1])
+						(hasType['Normal'] && species.types.length < 2)
 					) &&
 					!(
 						// With Swords Dance, Dark-types and pure Water-types are fine without STAB
