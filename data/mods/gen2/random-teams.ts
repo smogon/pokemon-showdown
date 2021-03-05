@@ -4,7 +4,7 @@ import {PRNG, PRNGSeed} from '../../../sim/prng';
 export class RandomGen2Teams extends RandomGen3Teams {
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.moveRejectionCheckers = {
+		this.moveEnforcementCheckers = {
 			Electric: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Electric,
 			Fire: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Fire,
 			Ground: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Ground,
@@ -207,15 +207,17 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 
 				// Reject Status, non-STAB, or low basepower moves
-				const moveNeedsExtraChecks = (
+				const moveIsRejectable = (
 					(move.category !== 'Status' || !move.flags.heal) &&
+					// These moves cannot be rejected in favor of a forced move
 					!['batonpass', 'sleeptalk', 'spikes', 'sunnyday'].includes(move.id) &&
 					(move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40))
 				);
 
-				// Pokemon should have moves that benefit their attributes
-				if (!cull && !isSetup && moveNeedsExtraChecks && (counter.setupType || !move.stallingMove)) {
+				if (!cull && !isSetup && moveIsRejectable && (counter.setupType || !move.stallingMove)) {
+					// There may be more important moves that this Pokemon needs
 					if (
+						// Pokemon should usually have at least one STAB move
 						(!counter.stab && !counter.damage && !hasType['Ghost'] && counter.physicalpool + counter.specialpool > 0) ||
 						(movePool.includes('megahorn') || (movePool.includes('softboiled') && hasMove['present'])) ||
 						// Rest + Sleep Talk should be selected together
@@ -226,8 +228,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					) {
 						cull = true;
 					} else {
+						// Pokemon should have moves that benefit their typing
 						for (const type of Object.keys(hasType)) {
-							if (this.moveRejectionCheckers[type]?.(movePool, hasMove, {}, hasType, counter, species, teamDetails)) cull = true;
+							if (this.moveEnforcementCheckers[type]?.(movePool, hasMove, {}, hasType, counter, species, teamDetails)) cull = true;
 						}
 					}
 				}

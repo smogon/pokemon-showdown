@@ -15,7 +15,7 @@ const defensiveStatusMoves = ['aromatherapy', 'haze', 'healbell', 'roar', 'whirl
 export class RandomGen4Teams extends RandomGen5Teams {
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.moveRejectionCheckers = {
+		this.moveEnforcementCheckers = {
 			Bug: (movePool, hasMove, hasAbility, hasType, counter) => (
 				!counter.Bug && (movePool.includes('bugbuzz') || movePool.includes('megahorn'))
 			),
@@ -618,33 +618,38 @@ export class RandomGen4Teams extends RandomGen5Teams {
 					cull = true;
 				}
 
-				const runRejectionChecker = (checkerName: string) => (
-					this.moveRejectionCheckers[checkerName]?.(
+				const runEnforcementChecker = (checkerName: string) => (
+					this.moveEnforcementCheckers[checkerName]?.(
 						movePool, hasMove, hasAbility, hasType, counter, species as Species, teamDetails
 					)
 				);
 
-				const moveNeedsExtraChecks = (
+				const moveIsRejectable = (
 					!move.weather &&
 					!move.damage &&
 					(move.category !== 'Status' || !move.flags.heal) &&
 					(move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) &&
+					// These moves cannot be rejected in favor of a forced move
 					!['judgment', 'sleeptalk'].includes(moveid) &&
+					// Setup-supported moves should only be rejected under specific circumstances
 					(counter.physicalsetup + counter.specialsetup < 2 && (
 						!counter.setupType || counter.setupType === 'Mixed' ||
 						(move.category !== counter.setupType && move.category !== 'Status') ||
 						counter[counter.setupType] + counter.Status > 3
 					))
 				);
-				// Pokemon should have moves that benefit their Ability/Type/Weather, as well as moves required by its forme
-				if (!cull && !isSetup && moveNeedsExtraChecks) {
-					const movepoolCull = (
+
+				if (!cull && !isSetup && moveIsRejectable) {
+					// There may be more important moves that this Pokemon needs
+					const canRollForcedMoves = (
+						// These moves should always be rolled
 						movePool.includes('spore') || (!moves.some(id => recoveryMoves.includes(id)) && (
 							movePool.includes('softboiled') ||
 							(species.baseSpecies === 'Arceus' && movePool.includes('recover'))
 						))
 					);
-					const counterCull = (
+					// Pokemon should usually have at least one STAB move
+					const requiresStab = (
 						!counter.stab && !counter.damage && (
 							species.types.length > 1 ||
 							(species.types[0] !== 'Normal' && species.types[0] !== 'Psychic') ||
@@ -653,18 +658,19 @@ export class RandomGen4Teams extends RandomGen5Teams {
 						)
 					);
 					if (
-						movepoolCull ||
-						counterCull ||
+						canRollForcedMoves ||
+						requiresStab ||
 						(species.requiredMove && movePool.includes(toID(species.requiredMove))) ||
 						(counter.defensesetup && !counter.recovery && !hasMove['rest'])
 					) {
 						cull = true;
 					} else {
+						// Pokemon should have moves that benefit their typing or ability
 						for (const type of Object.keys(hasType)) {
-							if (runRejectionChecker(type)) cull = true;
+							if (runEnforcementChecker(type)) cull = true;
 						}
 						for (const abil of Object.keys(hasAbility)) {
-							if (runRejectionChecker(abil)) cull = true;
+							if (runEnforcementChecker(abil)) cull = true;
 						}
 					}
 				}
