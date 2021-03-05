@@ -104,6 +104,10 @@ export class RandomTeams {
 				!counter.speedsetup &&
 				!hasMove['substitute']
 			),
+			leechseed: (movePool, hasMove) => (
+				!hasMove['calmmind'] &&
+				['protect', 'substitute', 'spikyshield'].some(m => movePool.includes(m))
+			),
 			Bug: (movePool) => movePool.includes('megahorn'),
 			Dark: (movePool, hasMove, hasAbility, hasType, counter) => {
 				if (!counter.Dark) return true;
@@ -732,9 +736,11 @@ export class RandomTeams {
 		}
 		if (
 			(species.id === 'entei' && movePool.includes('extremespeed')) ||
-			(species.id === 'genesectdouse' && movePool.includes('technoblast'))
+			(species.id === 'genesectdouse' && movePool.includes('technoblast')) ||
+			(species.id === 'golisopod' && movePool.includes('leechlife') && movePool.includes('firstimpression'))
 		) {
 			// Entei should always have Extreme Speed, and Genesect-Douse should always have Techno Blast
+			// Golisopod should always have one of its bug moves (Leech Life or First Impression)
 			return {cull: true};
 		}
 
@@ -794,6 +800,7 @@ export class RandomTeams {
 		case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
 			if (counter.setupType !== 'Physical') return {cull: true}; // if we're not setting up physically this is pointless
 			if (counter.Physical + counter.physicalpool < 2 && !hasRestTalk) return {cull: true};
+			if (isDoubles && hasMove['firstimpression']) return {cull: true}; // First Impression + setup is undesirable in Doubles
 			if (move.id === 'swordsdance' && hasMove['dragondance']) return {cull: true}; // Dragon Dance is judged as better
 
 			return {cull: false, isSetup: true};
@@ -873,7 +880,7 @@ export class RandomTeams {
 				counter.setupType ||
 				counter.speedsetup ||
 				teamDetails.stealthRock ||
-				['rest', 'substitute', 'trickroom'].some(m => hasMove[m]),
+				['rest', 'substitute', 'trickroom', 'teleport'].some(m => hasMove[m]),
 			};
 		case 'stickyweb':
 			return {cull: counter.setupType === 'Special' || !!teamDetails.stickyWeb};
@@ -1145,7 +1152,7 @@ export class RandomTeams {
 		case 'Analytic':
 			return (hasMove['rapidspin'] || species.nfe || isDoubles);
 		case 'Blaze':
-			return (isDoubles && hasAbility['Solar Power']);
+			return (isDoubles && hasAbility['Solar Power']) || (!isDoubles && species.id === 'charizard');
 		case 'Bulletproof': case 'Overcoat':
 			return (counter.setupType && hasAbility['Soundproof']);
 		case 'Chlorophyll':
@@ -1274,6 +1281,9 @@ export class RandomTeams {
 				hasMove['raindance'] ||
 				['Drizzle', 'Strong Jaw', 'Unaware', 'Volt Absorb'].some(abil => hasAbility[abil])
 			);
+		case 'Magnet Pull':
+			// In Singles, Mirror Coat Magnezone should be Analytic
+			return !isDoubles && hasMove['mirrorcoat'] && species.id === 'magnezone';
 		}
 
 		return false;
@@ -1376,8 +1386,8 @@ export class RandomTeams {
 		)) {
 			return (
 				!counter.priority && !hasAbility['Speed Boost'] &&
-				!hasMove['aerialace'] && species.baseStats.spe >= 60 &&
-				species.baseStats.spe <= 100 && this.randomChance(1, 2)
+				species.baseStats.spe >= 60 && species.baseStats.spe <= 100 &&
+				this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (
@@ -1647,7 +1657,8 @@ export class RandomTeams {
 						(!isDoubles && runEnforcementChecker('recovery')) ||
 						runEnforcementChecker('screens') ||
 						runEnforcementChecker('misc') ||
-						(isLead && runEnforcementChecker('lead'))
+						(isLead && runEnforcementChecker('lead')) ||
+						(hasMove['leechseed'] && runEnforcementChecker('leechseed'))
 					) {
 						rejected = true;
 					// Pokemon should have moves that benefit their typing
