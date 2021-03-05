@@ -396,7 +396,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					!(
 						// With Swords Dance, Dark-types and pure Water-types are fine without STAB
 						counter.setupType === 'Physical' &&
-						((hasType['Water'] && !species.types[1]) || hasType['Dark'])
+						((hasType['Water'] && species.types.length < 2) || hasType['Dark'])
 					) &&
 					counter.physicalpool + counter.specialpool > 0
 				);
