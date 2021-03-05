@@ -120,10 +120,12 @@ function prettifyResults(
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
-			`|pagehtml|<div class="pad"><p>The last ${scope}${Chat.count(lines, "logged actions")} ${Utils.escapeHTML(searchString)} on ${roomName}.`;
+			`|pagehtml|<div class="pad"><button style="float:right;" class="button" name="send" value="/msgroom ${roomid}, /modlog ${searchCmd}"><i class="fa fa-refresh"></i> Refresh</button>` +
+			`<div class="pad"><p>The last ${scope}${Chat.count(lines, "logged actions")} ${Utils.escapeHTML(searchString)} on ${roomName}.`;
 	} else {
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
-			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, `${scope}lines`)} of the Moderator Log of ${roomName}.`;
+			`|pagehtml|<div class="pad"><button style="float:right;" class="button" name="send" value="/msgroom ${roomid}, /modlog"><i class="fa fa-refresh"></i> Refresh</button>` +
+			`<div class="pad"><p>The last ${Chat.count(lines, `${scope}lines`)} of the Moderator Log of ${roomName}.`;
 	}
 	preamble += `</p><p>[${dateString}]<br /><small>[${timestamp}] \u2190 current server time</small>`;
 	const moreButton = getMoreButton(roomid, searchCmd, lines, maxLines, onlyPunishments);
