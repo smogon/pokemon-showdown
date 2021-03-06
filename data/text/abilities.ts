@@ -1161,9 +1161,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Rough Skin",
 		desc: "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down.",
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/8 of their max HP.",
-		gen4: {
-			desc: "Pokemon making contact with this Pokemon lose 1/16 of their maximum HP, rounded down. This effect does not happen if this Pokemon did not lose HP from the attack.",
-		},
 		gen3: {
 			desc: "Pokemon making contact with this Pokemon lose 1/16 of their maximum HP, rounded down. This effect does not happen if this Pokemon did not lose HP from the attack.",
 			shortDesc: "Pokemon making contact with this Pokemon lose 1/16 of their max HP.",
