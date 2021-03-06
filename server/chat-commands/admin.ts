@@ -34,10 +34,21 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 	});
 }
 
-const BLACKLISTED_PROPS = ['valueOf', 'constructor'];
-
-function isWhitelistedProp(prop: string) {
-	return !(prop.includes('__') || prop.toLowerCase().includes('prop') || BLACKLISTED_PROPS.includes(prop));
+function listMethods(obj: any) {
+	const methods = new Set<string>();
+	let current = obj;
+	do {
+		const curProps = Object.getOwnPropertyNames(current);
+		for (const prop of curProps) {
+			if (typeof obj[prop] !== 'function' || prop.includes('__') ||
+				prop.toLowerCase().includes('prop') || ['valueOf', 'constructor'].includes(prop)
+			) {
+				continue;
+			}
+			methods.add(prop);
+		}
+	} while ((current = Object.getPrototypeOf(current)));
+	return [...methods.keys()];
 }
 
 /**
@@ -472,8 +483,8 @@ export const commands: ChatCommands = {
 				].map(part => part.map(pm => pm.prototype));
 
 				for (const [oldProto, newProto] of protos) {
-					const newKeys = Utils.listMethods(newProto, isWhitelistedProp);
-					const oldKeys = Utils.listMethods(oldProto, isWhitelistedProp);
+					const newKeys = listMethods(newProto);
+					const oldKeys = listMethods(oldProto);
 					for (const key of oldKeys) {
 						if (!newProto[key]) {
 							delete oldProto[key];
@@ -503,8 +514,8 @@ export const commands: ChatCommands = {
 				}
 
 				this.sendReply(`Hotpatching ${message}...`);
-				const keys = Utils.listMethods(newProto, isWhitelistedProp);
-				const existingKeys = Utils.listMethods(existingProto, isWhitelistedProp);
+				const keys = listMethods(newProto);
+				const existingKeys = listMethods(existingProto);
 
 				const counts = {
 					added: 0,
@@ -532,6 +543,9 @@ export const commands: ChatCommands = {
 					(counts.deleted ? `, and removed ${Chat.count(counts.deleted, 'methods')}.` : '.')
 				);
 			} else if (target === 'tournaments') {
+				if (lock['tournaments']) {
+					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
+				}
 				this.sendReply("Hotpatching tournaments...");
 
 				global.Tournaments = require('../tournaments').Tournaments;
