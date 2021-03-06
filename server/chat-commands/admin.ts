@@ -40,9 +40,7 @@ function listMethods(obj: any) {
 	do {
 		const curProps = Object.getOwnPropertyNames(current);
 		for (const prop of curProps) {
-			if (typeof obj[prop] !== 'function' || prop.includes('__') ||
-				prop.toLowerCase().includes('prop') || ['valueOf', 'constructor'].includes(prop)
-			) {
+			if (prop.includes('__') || prop.toLowerCase().includes('prop') || ['valueOf', 'constructor'].includes(prop)) {
 				continue;
 			}
 			methods.add(prop);
