@@ -39,6 +39,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		counter: {[k: string]: any},
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
 	) {
 		const restTalk = hasMove['rest'] && hasMove['sleeptalk'];
 
@@ -77,7 +78,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return {cull: !hasMove['calmmind'] && !hasMove['batonpass'] && !hasMove['mirrorcoat']};
 		case 'batonpass':
 			return {cull: (
-				(!counter.setupType && !counter.speedsetup) ||
+				(!counter.setupType && !counter.speedsetup) &&
 				['meanlook', 'spiderweb', 'substitute', 'wish'].every(m => !hasMove[m])
 			)};
 		case 'endeavor': case 'flail': case 'reversal':
@@ -89,7 +90,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		case 'focuspunch':
 			return {cull: (
 				(counter.damagingMoves.length < 2 || hasMove['rest'] || counter.setupType && !hasMove['spore']) ||
-				(!hasMove['substitute'] && (counter.Physical < 4 || hasMove['fakeout']))
+				(!hasMove['substitute'] && (counter.Physical < 4 || hasMove['fakeout'])) ||
+				// Breloom likes to have coverage
+				(species.id === 'breloom' && (hasMove['machpunch'] || hasMove['skyuppercut']))
 			)};
 		case 'moonlight':
 			return {cull: hasMove['wish'] || hasMove['protect']};
@@ -125,7 +128,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		case 'encore': case 'painsplit': case 'recover': case 'yawn':
 			return {cull: restTalk};
 		case 'explosion': case 'machpunch': case 'selfdestruct':
-			return {cull: hasMove['rest'] || hasMove['substitute'] || !!counter.recovery};
+			// Snorlax doesn't want to roll selfdestruct as its only STAB move
+			const snorlaxCase = species.id === 'snorlax' && !hasMove['return'] && !hasMove['bodyslam'];
+			return {cull: snorlaxCase || hasMove['rest'] || hasMove['substitute'] || !!counter.recovery};
 		case 'haze':
 			return {cull: counter.setupType || hasMove['raindance'] || restTalk};
 		case 'icywind': case 'pursuit': case 'superpower': case 'transform':
@@ -152,7 +157,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return {cull: counter.setupType || hasMove['substitute'] || restTalk || teamDetails.spikes};
 		case 'substitute':
 			const restOrDD = hasMove['rest'] || (hasMove['dragondance'] && !hasMove['bellydrum']);
-			return {cull: restOrDD || (!hasMove['batonpass'] && movePool.includes('calmmind'))};
+			// This cull condition otherwise causes mono-solarbeam Entei
+			return {cull: restOrDD || (species.id !== 'entei' && !hasMove['batonpass'] && movePool.includes('calmmind'))};
 		case 'thunderwave':
 			return {cull: counter.setupType || hasMove['bodyslam'] || hasMove['substitute'] || restTalk};
 		case 'toxic':
@@ -170,7 +176,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		case 'bodyslam':
 			return {cull: hasMove['return'] && !!counter.Status};
 		case 'headbutt':
-			return {cull: hasMove['bodyslam'] && !hasMove['thunderwave']};
+			return {cull: !hasMove['bodyslam'] && !hasMove['thunderwave']};
 		case 'return':
 			return {cull: (
 				hasMove['endure'] ||
@@ -192,13 +198,13 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		case 'hiddenpower':
 			const stabCondition = hasType[move.type] && (
 				(hasMove['substitute'] && !counter.setupType && !hasMove['toxic']) ||
-				(hasMove['toxic'] && !hasMove['substitute']) ||
+				// This otherwise causes STABless meganium
+				(species.id !== 'meganium' && hasMove['toxic'] && !hasMove['substitute']) ||
 				restTalk
 			);
 			return {cull: stabCondition || (move.type === 'Grass' && hasMove['sunnyday'] && hasMove['solarbeam'])};
-		case 'brickbreak': case 'crosschop': case 'highjumpkick': case 'skyuppercut':
-			const subPunch = hasMove['substitute'] && (hasMove['focuspunch'] || movePool.includes('focuspunch'));
-			return {cull: subPunch || ((hasMove['endure'] || hasMove['substitute']) && hasMove['reversal'])};
+		case 'brickbreak': case 'crosschop': case 'skyuppercut':
+			return {cull: hasMove['substitute'] && (hasMove['focuspunch'] || movePool.includes('focuspunch'))};
 		case 'earthquake':
 			return {cull: hasMove['bonemerang']};
 		}
@@ -229,13 +235,18 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		// Medium priority items
-		if (
-			(hasMove['bellydrum'] && counter.Physical - counter.priority > 1) ||
-			(hasMove['swordsdance'] && counter.Status < 2)
-		) {
+		if (hasMove['dragondance'] && ability !== 'Natural Cure') return 'Lum Berry';
+		if ((hasMove['bellydrum'] && counter.Physical - counter.priority > 1) || (
+			((hasMove['swordsdance'] && counter.Status < 2) || (hasMove['bulkup'] && hasMove['substitute'])) &&
+			!counter.priority &&
+			species.baseStats.spe >= 60 && species.baseStats.spe <= 95
+		)) {
 			return 'Salac Berry';
 		}
-		if (hasMove['endure'] || (hasMove['substitute'] && ['endeavor', 'flail', 'reversal'].some(m => hasMove[m]))) {
+		if (hasMove['endure'] || (
+			hasMove['substitute'] &&
+			['bellydrum', 'endeavor', 'flail', 'reversal'].some(m => hasMove[m])
+		)) {
 			return (
 				species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter.speedsetup && !hasMove['focuspunch']
 			) ? 'Salac Berry' : 'Liechi Berry';
@@ -361,7 +372,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				const move = this.dex.getMove(moveId);
 				const moveid = move.id;
 
-				let {cull, isSetup} = this.shouldCullMove(move, hasType, hasMove, hasAbility, counter, movePool, teamDetails);
+				let {cull, isSetup} = this.shouldCullMove(move, hasType, hasMove, hasAbility, counter, movePool, teamDetails, species);
 
 				// This move doesn't satisfy our setup requirements:
 				if (
