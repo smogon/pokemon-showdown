@@ -4193,7 +4193,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	genesectdouse: {
 		randomBattleMoves: ["bugbuzz", "extremespeed", "flamethrower", "icebeam", "ironhead", "technoblast", "thunderbolt", "uturn"],
-		randomBattleLevel: 74,
+		randomBattleLevel: 76,
 		tier: "Uber",
 		doublesTier: "(DOU)",
 	},
