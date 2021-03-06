@@ -92,7 +92,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				(counter.damagingMoves.length < 2 || hasMove['rest'] || counter.setupType && !hasMove['spore']) ||
 				(!hasMove['substitute'] && (counter.Physical < 4 || hasMove['fakeout'])) ||
 				// Breloom likes to have coverage
-				(species.id === 'breloom' && hasMove['machpunch'] || hasMove['skyuppercut'])
+				(species.id === 'breloom' && (hasMove['machpunch'] || hasMove['skyuppercut']))
 			)};
 		case 'moonlight':
 			return {cull: hasMove['wish'] || hasMove['protect']};
