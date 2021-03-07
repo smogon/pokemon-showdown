@@ -478,6 +478,9 @@ export const commands: ChatCommands = {
 					[ProcessManager.StreamProcessManager, newPM.StreamProcessManager],
 					[ProcessManager.ProcessManager, newPM.ProcessManager],
 					[ProcessManager.RawProcessManager, newPM.RawProcessManager],
+					[ProcessManager.QueryProcessWrapper, newPM.QueryProcessWrapper],
+					[ProcessManager.StreamProcessWrapper, newPM.StreamProcessWrapper],
+					[ProcessManager.RawProcessManager, newPM.RawProcessWrapper],
 				].map(part => part.map(pm => pm.prototype));
 
 				for (const [oldProto, newProto] of protos) {
@@ -734,7 +737,7 @@ export const commands: ChatCommands = {
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
 				const pid = process.getProcess().pid;
-				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.load}`;
+				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
 				if (info.cpu) buf += `, CPU: ${info.cpu}`;
 				if (info.time) buf += `, time: ${info.time}`;
@@ -743,7 +746,7 @@ export const commands: ChatCommands = {
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
 				const pid = process.getProcess().pid;
-				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load}`;
+				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
 				if (info.cpu) buf += `, CPU: ${info.cpu}`;
 				if (info.time) buf += `, time: ${info.time}`;
