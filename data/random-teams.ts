@@ -1431,7 +1431,7 @@ export class RandomTeams {
 				(species.baseStats.atk >= 100 || ability === 'Huge Power') &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
 				ability !== 'Speed Boost' && !counter.priority &&
-				['aerialace', 'bounce', 'dualwingbeat'].every(m => !hasMove[m])
+				['bounce', 'dualwingbeat'].every(m => !hasMove[m])
 			);
 			return (scarfReqs && this.randomChance(2, 3)) ? 'Choice Scarf' : 'Choice Band';
 		}
