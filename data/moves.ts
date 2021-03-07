@@ -7914,16 +7914,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePowerCallback(pokemon, target) {
 			const targetWeight = target.getWeight();
 			const pokemonWeight = pokemon.getWeight();
-			if (pokemonWeight > targetWeight * 5) {
+			if (pokemonWeight >= targetWeight * 5) {
 				return 120;
 			}
-			if (pokemonWeight > targetWeight * 4) {
+			if (pokemonWeight >= targetWeight * 4) {
 				return 100;
 			}
-			if (pokemonWeight > targetWeight * 3) {
+			if (pokemonWeight >= targetWeight * 3) {
 				return 80;
 			}
-			if (pokemonWeight > targetWeight * 2) {
+			if (pokemonWeight >= targetWeight * 2) {
 				return 60;
 			}
 			return 40;
@@ -7971,16 +7971,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePowerCallback(pokemon, target) {
 			const targetWeight = target.getWeight();
 			const pokemonWeight = pokemon.getWeight();
-			if (pokemonWeight > targetWeight * 5) {
+			if (pokemonWeight >= targetWeight * 5) {
 				return 120;
 			}
-			if (pokemonWeight > targetWeight * 4) {
+			if (pokemonWeight >= targetWeight * 4) {
 				return 100;
 			}
-			if (pokemonWeight > targetWeight * 3) {
+			if (pokemonWeight >= targetWeight * 3) {
 				return 80;
 			}
-			if (pokemonWeight > targetWeight * 2) {
+			if (pokemonWeight >= targetWeight * 2) {
 				return 60;
 			}
 			return 40;
