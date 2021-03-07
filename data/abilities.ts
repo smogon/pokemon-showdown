@@ -1918,6 +1918,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move || !target) return;
 			if (target !== source && move.category !== 'Status') {
 				if (source.item || source.volatiles['gem'] || move.id === 'fling') return;
+				if (target.hasItem('weaknesspolicy') && source.getMoveHitData(move).typeMod > 0 && target.hp > 0) return;
 				const yourItem = target.takeItem(source);
 				if (!yourItem) return;
 				if (!source.setItem(yourItem)) {
