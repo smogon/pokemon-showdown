@@ -34,7 +34,7 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 	});
 }
 
-function listMethods(obj: any) {
+function listNonEnumerableKeys(obj: any) {
 	const methods = new Set<string>();
 	let current = obj;
 	do {
@@ -46,7 +46,7 @@ function listMethods(obj: any) {
 			methods.add(prop);
 		}
 	} while ((current = Object.getPrototypeOf(current)));
-	return [...methods.keys()];
+	return [...methods];
 }
 
 /**
@@ -481,8 +481,8 @@ export const commands: ChatCommands = {
 				].map(part => part.map(pm => pm.prototype));
 
 				for (const [oldProto, newProto] of protos) {
-					const newKeys = listMethods(newProto);
-					const oldKeys = listMethods(oldProto);
+					const newKeys = listNonEnumerableKeys(newProto);
+					const oldKeys = listNonEnumerableKeys(oldProto);
 					for (const key of oldKeys) {
 						if (!newProto[key]) {
 							delete oldProto[key];
@@ -512,8 +512,8 @@ export const commands: ChatCommands = {
 				}
 
 				this.sendReply(`Hotpatching ${message}...`);
-				const keys = listMethods(newProto);
-				const existingKeys = listMethods(existingProto);
+				const keys = listNonEnumerableKeys(newProto);
+				const existingKeys = listNonEnumerableKeys(existingProto);
 
 				const counts = {
 					added: 0,
