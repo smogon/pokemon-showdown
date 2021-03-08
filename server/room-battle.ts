@@ -525,7 +525,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.p2 = null!;
 		this.p3 = null!;
 		this.p4 = null!;
-		this.inviteOnlySetter = null!;
+		this.inviteOnlySetter = null;
 
 		// data to be logged
 		this.allowExtraction = {};
