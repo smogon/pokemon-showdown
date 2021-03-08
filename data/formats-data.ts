@@ -3253,7 +3253,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 78,
 		randomDoubleBattleMoves: ["boltstrike", "glaciate", "protect", "uturn", "vcreate", "zenheadbutt"],
 		randomDoubleBattleLevel: 82,
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	snivy: {

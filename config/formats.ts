@@ -86,6 +86,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL'],
+		unbanlist: ['Aegislash'],
 	},
 	{
 		name: "[Gen 8] RU",
