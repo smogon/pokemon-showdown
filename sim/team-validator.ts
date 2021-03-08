@@ -799,7 +799,7 @@ export class TeamValidator {
 		].includes(species.baseSpecies)) || [
 			'Manaphy', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala',
 		].includes(species.baseSpecies);
-		const diancieException = species.name === 'Diancie' && set.shiny;
+		const diancieException = species.name === 'Diancie' && !set.shiny;
 		const has3PerfectIVs = setSources.minSourceGen() >= 6 && isLegendary && !diancieException;
 
 		if (set.hpType === 'Fighting' && ruleTable.has('obtainablemisc')) {
