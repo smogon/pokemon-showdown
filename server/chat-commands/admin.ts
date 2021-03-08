@@ -49,7 +49,8 @@ function keysIncludingNonEnumerable(obj: object) {
 function keysToCopy(obj: object) {
 	return keysIncludingNonEnumerable(obj).filter(
 		// `__` matches sucrase init methods
-		// FIXME: document what 'prop' is for
+		// prop is excluded because it can hit things like hasOwnProperty that are potentially annoying (?) with
+		// the kind of prototype patching we want to do here - same for constructor and valueOf
 		prop => !(prop.includes('__') || prop.toLowerCase().includes('prop') || ['valueOf', 'constructor'].includes(prop))
 	);
 }
