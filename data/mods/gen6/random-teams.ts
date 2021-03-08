@@ -619,7 +619,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		isLead: boolean
 	): string | undefined {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
-		const scarfReqs = species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter.priority
+		const scarfReqs = species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter.priority;
 
 		if ((ability === 'Speed Boost' || ability === 'Stance Change') && counter.Physical + counter.Special > 2) {
 			return 'Life Orb';
