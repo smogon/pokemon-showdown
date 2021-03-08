@@ -34,19 +34,24 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 	});
 }
 
-function listNonEnumerableKeys(obj: any) {
+function keysIncludingNonEnumerable(obj: object) {
 	const methods = new Set<string>();
 	let current = obj;
 	do {
 		const curProps = Object.getOwnPropertyNames(current);
 		for (const prop of curProps) {
-			if (prop.includes('__') || prop.toLowerCase().includes('prop') || ['valueOf', 'constructor'].includes(prop)) {
-				continue;
-			}
 			methods.add(prop);
 		}
 	} while ((current = Object.getPrototypeOf(current)));
 	return [...methods];
+}
+
+function keysToCopy(obj: object) {
+	return keysIncludingNonEnumerable(obj).filter(
+		// `__` matches sucrase init methods
+		// FIXME: document what 'prop' is for
+		prop => !(prop.includes('__') || prop.toLowerCase().includes('prop') || ['valueOf', 'constructor'].includes(prop))
+	);
 }
 
 /**
@@ -481,11 +486,11 @@ export const commands: ChatCommands = {
 					[ProcessManager.QueryProcessWrapper, newPM.QueryProcessWrapper],
 					[ProcessManager.StreamProcessWrapper, newPM.StreamProcessWrapper],
 					[ProcessManager.RawProcessManager, newPM.RawProcessWrapper],
-				].map(part => part.map(pm => pm.prototype));
+				].map(part => part.map(constructor => constructor.prototype));
 
 				for (const [oldProto, newProto] of protos) {
-					const newKeys = listNonEnumerableKeys(newProto);
-					const oldKeys = listNonEnumerableKeys(oldProto);
+					const newKeys = keysToCopy(newProto);
+					const oldKeys = keysToCopy(oldProto);
 					for (const key of oldKeys) {
 						if (!newProto[key]) {
 							delete oldProto[key];
@@ -498,25 +503,25 @@ export const commands: ChatCommands = {
 				this.sendReply('DONE');
 			} else if (target === 'usersp' || target === 'roomsp') {
 				if (lock[target]) {
-					return this.errorReply(`Hot-patching formats has been disabled by ${lock[target].by} (${lock[target].reason})`);
+					return this.errorReply(`Hot-patching ${target} has been disabled by ${lock[target].by} (${lock[target].reason})`);
 				}
-				let newProto: any, existingProto: any, message: string;
+				let newProto: any, oldProto: any, message: string;
 				switch (target) {
 				case 'usersp':
 					newProto = require('../users').User.prototype;
-					existingProto = Users.User.prototype;
+					oldProto = Users.User.prototype;
 					message = 'user prototypes';
 					break;
 				case 'roomsp':
 					newProto = require('../rooms').BasicRoom.prototype;
-					existingProto = Rooms.BasicRoom.prototype;
+					oldProto = Rooms.BasicRoom.prototype;
 					message = 'rooms prototypes';
 					break;
 				}
 
 				this.sendReply(`Hotpatching ${message}...`);
-				const keys = listNonEnumerableKeys(newProto);
-				const existingKeys = listNonEnumerableKeys(existingProto);
+				const newKeys = keysToCopy(newProto);
+				const oldKeys = keysToCopy(oldProto);
 
 				const counts = {
 					added: 0,
@@ -524,18 +529,23 @@ export const commands: ChatCommands = {
 					deleted: 0,
 				};
 
-				for (const key of existingKeys) {
+				for (const key of oldKeys) {
 					if (!newProto[key]) {
 						counts.deleted++;
-						delete existingProto[key];
+						delete oldProto[key];
 					}
 				}
-				for (const key of keys) {
-					if (!existingProto[key]) counts.added++;
-					// functions should always have this
-					else if (existingProto[key].toString() !== newProto[key].toString()) counts.updated++;
+				for (const key of newKeys) {
+					if (!oldProto[key]) {
+						counts.added++;
+					} else if (
+						// compare source code
+						typeof oldProto[key] !== 'function' || oldProto[key].toString() !== newProto[key].toString()
+					) {
+						counts.updated++;
+					}
 
-					existingProto[key] = newProto[key];
+					oldProto[key] = newProto[key];
 				}
 				this.sendReply(`DONE`);
 				this.sendReply(
