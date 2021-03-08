@@ -95,7 +95,7 @@ class RawSubprocessStream extends Streams.ObjectReadWriteStream<string> {
 }
 
 interface ProcessWrapper {
-	load: number;
+	getLoad: () => number;
 	process: ChildProcess | Worker;
 	release: () => Promise<void>;
 	getProcess: () => ChildProcess;
@@ -144,7 +144,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 			this.pendingTasks.delete(taskId);
 			resolve(JSON.parse(message.slice(nlLoc + 1)));
 
-			if (this.resolveRelease && !this.load) this.destroy();
+			if (this.resolveRelease && !this.getLoad()) this.destroy();
 		});
 	}
 
@@ -152,7 +152,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 		return this.process;
 	}
 
-	get load() {
+	getLoad() {
 		return this.pendingTasks.size;
 	}
 
@@ -167,7 +167,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 
 	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
-		if (!this.load) {
+		if (!this.getLoad()) {
 			this.destroy();
 		} else {
 			this.pendingRelease = new Promise(resolve => {
@@ -260,6 +260,10 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		});
 	}
 
+	getLoad() {
+		return this.activeStreams.size;
+	}
+
 	getProcess() {
 		return this.process;
 	}
@@ -267,11 +271,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	deleteStream(taskId: number) {
 		this.activeStreams.delete(taskId);
 		// try to release
-		if (this.resolveRelease && !this.load) void this.destroy();
-	}
-
-	get load() {
-		return this.activeStreams.size;
+		if (this.resolveRelease && !this.getLoad()) void this.destroy();
 	}
 
 	createStream(): SubprocessStream {
@@ -284,7 +284,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 
 	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
-		if (!this.load) {
+		if (!this.getLoad()) {
 			void this.destroy();
 		} else {
 			this.pendingRelease = new Promise(resolve => {
@@ -361,13 +361,16 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 		this.stream = new RawSubprocessStream(this);
 	}
 
+	getLoad() {
+		return this.load;
+	}
 	getProcess() {
 		return this.process.process ? this.process.process : this.process;
 	}
 
 	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
-		if (!this.load) {
+		if (!this.getLoad()) {
 			void this.destroy();
 		} else {
 			this.pendingRelease = new Promise(resolve => {
@@ -417,7 +420,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		}
 		let lowestLoad = this.processes[0];
 		for (const process of this.processes) {
-			if (process.load < lowestLoad.load) {
+			if (process.getLoad() < lowestLoad.getLoad()) {
 				lowestLoad = process;
 			}
 		}
