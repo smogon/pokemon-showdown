@@ -619,6 +619,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		isLead: boolean
 	): string | undefined {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
+		const scarfReqs = species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter.priority
 
 		if ((ability === 'Speed Boost' || ability === 'Stance Change') && counter.Physical + counter.Special > 2) {
 			return 'Life Orb';
@@ -629,8 +630,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		) {
 			return (
 				(species.baseStats.atk >= 100 || ability === 'Huge Power') &&
-				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				!counter.priority &&
+				scarfReqs &&
 				this.randomChance(2, 3)
 			) ? 'Choice Scarf' : 'Choice Band';
 		}
@@ -640,15 +640,14 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		) {
 			return (
 				species.baseStats.spa >= 100 &&
-				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				!counter.priority && this.randomChance(2, 3)
+				scarfReqs &&
+				this.randomChance(2, 3)
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (
 			counter.Physical >= 3 &&
 			hasMove['defog'] &&
-			species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-			!counter.priority &&
+			scarfReqs &&
 			!hasMove['foulplay']
 		) {
 			return 'Choice Scarf';
