@@ -2,8 +2,8 @@
  * Main file
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is the main Pokemon Showdown app, and the file you should be
- * running to start Pokemon Showdown if you're using it normally.
+ * This is the main Pokemon Showdown app, and the file that the
+ * `pokemon-showdown` script runs if you start Pokemon Showdown normally.
  *
  * This file sets up our SockJS server, which handles communication
  * between users and your server, and also sets up globals. You can
