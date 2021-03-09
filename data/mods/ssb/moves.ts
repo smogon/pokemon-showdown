@@ -4671,7 +4671,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1},
+		flags: {protect: 1, snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onHit(target, source) {
 			const supportMoves = [
 				'Wish', 'Heal Bell', 'Defog', 'Spikes', 'Taunt', 'Torment',
