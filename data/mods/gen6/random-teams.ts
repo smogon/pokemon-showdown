@@ -541,6 +541,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		counter: {[k: string]: any},
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		moves: ID[],
 		isLead: boolean
 	): string | undefined {
 		if (species.requiredItem) return species.requiredItem;
@@ -1007,7 +1008,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			ability = abilityNames[0];
 		}
 
-		let item = this.getHighPriorityItem(ability, hasType, hasMove, counter, teamDetails, species, isLead);
+		let item = this.getHighPriorityItem(ability, hasType, hasMove, counter, teamDetails, species, moves, isLead);
 		if (item === undefined) item = this.getMediumPriorityItem(ability, hasMove, counter, species, moves, false, isLead);
 		if (item === undefined) {
 			item = this.getLowPriorityItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species, isLead);

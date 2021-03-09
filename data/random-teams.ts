@@ -197,6 +197,13 @@ export class RandomTeams {
 		return this.prng.sample(items);
 	}
 
+	sampleIfArray<T>(item: T | T[]): T {
+		if (Array.isArray(item)) {
+			return this.sample(item);
+		}
+		return item;
+	}
+
 	random(m?: number, n?: number) {
 		return this.prng.next(m, n);
 	}
@@ -1296,6 +1303,7 @@ export class RandomTeams {
 		counter: {[k: string]: any},
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		moves: ID[],
 		isLead: boolean,
 		isDoubles: boolean
 	) {
@@ -1767,7 +1775,7 @@ export class RandomTeams {
 			item = this.sample(species.requiredItems);
 		// First, the extra high-priority items
 		} else {
-			item = this.getHighPriorityItem(ability, hasType, hasMove, counter, teamDetails, species, isLead, isDoubles);
+			item = this.getHighPriorityItem(ability, hasType, hasMove, counter, teamDetails, species, moves, isLead, isDoubles);
 			if (item === undefined && isDoubles) {
 				item = this.getDoublesItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species);
 			}
@@ -2036,13 +2044,13 @@ export class RandomTeams {
 				name: species.baseSpecies,
 				species: species.name,
 				gender: species.gender,
-				item: (Array.isArray(setData.item) ? this.sample(setData.item) : setData.item) || '',
-				ability: (Array.isArray(setData.ability) ? this.sample(setData.ability) : setData.ability),
+				item: (this.sampleIfArray(setData.item)) || '',
+				ability: (this.sampleIfArray(setData.ability)),
 				shiny: this.randomChance(1, 1024),
 				evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.evs},
 				nature: setData.nature,
 				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.ivs || {}},
-				moves: setData.moves.map((move: any) => Array.isArray(move) ? this.sample(move) : move),
+				moves: setData.moves.map((move: any) => this.sampleIfArray(move)),
 			};
 			pokemon.push(set);
 		}
@@ -2107,13 +2115,13 @@ export class RandomTeams {
 			moves.push(setData.moveVariants ? moveSlot[setData.moveVariants[i]] : this.sample(moveSlot));
 		}
 
-		const setDataAbility = Array.isArray(setData.set.ability) ? this.sample(setData.set.ability) : setData.set.ability;
+		const setDataAbility = this.sampleIfArray(setData.set.ability);
 		return {
 			name: setData.set.nickname || setData.set.name || species.baseSpecies,
 			species: setData.set.species,
 			gigantamax: setData.set.gigantamax,
 			gender: setData.set.gender || species.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
-			item: (Array.isArray(setData.set.item) ? this.sample(setData.set.item) : setData.set.item) || '',
+			item: (this.sampleIfArray(setData.set.item)) || '',
 			ability: setDataAbility || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: setData.set.level || 50,
