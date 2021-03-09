@@ -523,6 +523,7 @@ export const Aliases: {[alias: string]: string} = {
 	propk1: "Pokestar Black Belt",
 
 	// abilities
+	ngas: "Neutralizing Gas",
 	pheal: "Poison Heal",
 	regen: "Regenerator",
 	stag: "Shadow Tag",
