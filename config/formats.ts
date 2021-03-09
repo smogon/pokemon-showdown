@@ -1594,6 +1594,9 @@ export const Formats: FormatList = [
 				pokemon.addVolatile(name, pokemon);
 			}
 			if (pokemon.m.hasBounty) this.add('-start', pokemon, 'bounty', '[silent]');
+			const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+			if (pokemon.m.nowShiny) context.add('replace', pokemon, details);
 		},
 		onFaint(target, source, effect) {
 			if (effect?.effectType !== 'Move') return;

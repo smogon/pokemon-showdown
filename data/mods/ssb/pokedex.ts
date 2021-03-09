@@ -203,6 +203,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Winding Song"},
 	},
+	// tiki
+	snom: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 65, def: 60, spa: 125, spd: 90, spe: 65},
+	},
 	// vivalospride's interaction with Coconut's move
 	darumaka: {
 		inherit: true,
