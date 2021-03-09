@@ -115,7 +115,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pichu: {
 		inherit: true,
 		types: ["Electric", "Water"],
-		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+		baseStats: {hp: 67, atk: 58, def: 57, spa: 81, spd: 67, spe: 101},
 	},
 	// Inactive
 	gyaradosmega: {
