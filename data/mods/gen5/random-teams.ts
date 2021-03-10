@@ -773,7 +773,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		while (pokemonPool.length && pokemon.length < 6) {
 			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
-			Monitor.slow(species.id);
 			if (!species.exists || !species.randomBattleMoves) continue;
 
 			// Limit to one of each species (Species Clause)
