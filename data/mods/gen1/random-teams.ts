@@ -323,6 +323,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			LC: 88,
 			NFE: 80,
 			NU: 77,
+			NUBL: 76,
 			UU: 74,
 			OU: 68,
 			Uber: 65,
