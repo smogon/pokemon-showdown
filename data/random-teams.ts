@@ -1321,7 +1321,7 @@ export class RandomTeams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
-		isDoubles: boolean,
+		isDoubles: boolean
 	) {
 		// not undefined — we want "no item" not "go find a different item"
 		if (hasMove['acrobatics'] && ability !== 'Ripen') return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
