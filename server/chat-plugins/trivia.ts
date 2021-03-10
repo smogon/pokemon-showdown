@@ -2078,8 +2078,11 @@ const triviaCommands: ChatCommands = {
 		}
 		user.lastCommand = '';
 
-		triviaData.questions![destinationCategory] = triviaData.questions![destinationCategory]
-			.concat(triviaData.questions![sourceCategory]);
+		for (const q of triviaData.questions![sourceCategory]) {
+			q.category = destinationCategory;
+			triviaData.questions![destinationCategory].push(q);
+		}
+
 		triviaData.questions![sourceCategory] = [];
 
 		this.modlog(`TRIVIAQUESTION MIGRATE`, null, `${sourceCategoryName} to ${destinationCategoryName}`);
