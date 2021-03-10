@@ -1284,9 +1284,11 @@ export class RandomTeams {
 				movePool.includes('snarl')
 			);
 		case 'Tinted Lens':
-			return (hasMove['defog'] || (!isNoDyna && hasMove['hurricane']) ||
-			(counter.Status > 2 && !counter.setupType) ||
-			(isNoDyna && species.id === 'butterfree')
+			return (
+				hasMove['defog'] ||
+				(!isNoDyna && hasMove['hurricane']) ||
+				(counter.Status > 2 && !counter.setupType) ||
+				(isNoDyna && species.id === 'butterfree')
 			);
 		case 'Torrent':
 			return (hasMove['focusenergy'] || hasMove['hypervoice']);
