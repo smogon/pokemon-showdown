@@ -1826,6 +1826,7 @@ export class RandomTeams {
 		if (isDoubles && species.randomDoubleBattleLevel) {
 			level = species.randomDoubleBattleLevel;
 		} else if (isNoDyna) {
+			const tier = species.name.endsWith('-Gmax') ? this.dex.getSpecies(species.changesFrom).tier : species.tier;
 			const tierScale: {[k: string]: number} = {
 				Uber: 76,
 				OU: 80,
