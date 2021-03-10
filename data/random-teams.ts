@@ -892,7 +892,7 @@ export class RandomTeams {
 		case 'stickyweb':
 			return {cull: counter.setupType === 'Special' || !!teamDetails.stickyWeb};
 		case 'taunt':
-			return {cull: hasMove['nastyplot'] || hasMove['swordsdance']};
+			return {cull: hasMove['encore'] || hasMove['nastyplot'] || hasMove['swordsdance']};
 		case 'thunderwave': case 'voltswitch':
 			const cullInDoubles = hasMove['electroweb'] || hasMove['nuzzle'];
 			return {cull: counter.setupType || counter.speedsetup || hasMove['raindance'] || (isDoubles && cullInDoubles)};
