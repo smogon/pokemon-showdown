@@ -32,7 +32,7 @@ export interface SpeciesFormatsData {
 	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomDoubleBattleLevel?: number;
-	randomBattleNoDynamaxMoves?: readonly string [];
+	randomBattleNoDynamaxMoves?: readonly string[];
 	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
