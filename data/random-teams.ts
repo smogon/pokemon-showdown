@@ -1012,7 +1012,7 @@ export class RandomTeams {
 			return {cull: hasMove['dragondance']};
 		case 'hurricane':
 			// Special case for Noctowl, which wants Air Slash if Nasty Plot instead
-			const noctowlCase = (!isNoDyna && hasAbility['Tinted Lens'] && counter.setupType && !isDoubles);
+			const noctowlCase = (!isNoDyna && !isDoubles && species.id === 'noctowl' && counter.setupType);
 			return {cull: counter.setupType === 'Physical' || noctowlCase};
 		case 'futuresight':
 			return {cull: hasMove['psyshock'] || hasMove['trick'] || movePool.includes('teleport')};
