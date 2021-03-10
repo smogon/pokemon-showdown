@@ -1846,12 +1846,8 @@ export class RandomTeams {
 				zaciancrowned: 66, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, glalie: 78, octillery: 84, wobbuffet: 86,
 				// These Pokemon are too weak and need a higher level
 				delibird: 100, vespiquen: 96, pikachu: 92,
-				// G-max formes are AG so i have to tier these on their own, fix this in review if you can
-				blastoisegmax: 86, butterfreegmax: 90, gengargmax: 81, laprasgmax: 90, snorlaxgmax: 84, garbodorgmax: 90,
-				rillaboomgmax: 80, inteleongmax: 86, coalossalgmax: 90, hatterenegmax: 82, grimmsnarlgmax: 82, alcremiegmax: 90,
-				copperajahgmax: 86, urshifugmax: 76, urshifurapidstrikegmax: 80,
 			};
-			level = customScale[species.id] || tierScale[species.tier];
+			level = customScale[species.id] || tierScale[tier];
 		} else if (species.randomBattleLevel) {
 			level = species.randomBattleLevel;
 		} else {
