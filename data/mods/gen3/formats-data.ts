@@ -1148,7 +1148,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	torkoal: {
-		randomBattleMoves: ["amnesia", "explosion", "fireblast", "flamethrower", "hiddenpowergrass", "rest", "toxic", "yawn"],
+		randomBattleMoves: ["explosion", "fireblast", "flamethrower", "hiddenpowergrass", "rest", "toxic", "yawn"],
 		tier: "NU",
 	},
 	spoink: {
@@ -1276,7 +1276,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	tropius: {
-		randomBattleMoves: ["earthquake", "hiddenpowerfire", "solarbeam", "sunnyday", "synthesis"],
+		randomBattleMoves: ["hiddenpowerfire", "solarbeam", "sunnyday", "synthesis"],
 		tier: "NU",
 	},
 	chimecho: {

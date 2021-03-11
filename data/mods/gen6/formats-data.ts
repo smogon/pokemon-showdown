@@ -3484,7 +3484,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	kyuremwhite: {
-		randomBattleMoves: ["dracometeor", "dragonpulse", "earthpower", "focusblast", "fusionflare", "icebeam", "roost", "substitute", "toxic"],
+		randomBattleMoves: ["dracometeor", "earthpower", "focusblast", "fusionflare", "icebeam", "roost", "substitute", "toxic"],
 		randomDoubleBattleMoves: ["dracometeor", "dragonpulse", "earthpower", "focusblast", "fusionflare", "icebeam", "protect", "roost"],
 		tier: "Uber",
 		doublesTier: "DUber",
