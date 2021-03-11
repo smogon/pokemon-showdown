@@ -1232,8 +1232,10 @@ export class RandomTeams {
 			return !counter.Normal;
 		case 'Regenerator':
 			return hasAbility['Magic Guard'];
-		case 'Reckless': case 'Rock Head':
+		case 'Reckless':
 			return !counter.recoil || hasMove['curse'];
+		case 'Rock Head':
+			return !counter.recoil;
 		case 'Sand Force': case 'Sand Veil':
 			return !teamDetails.sand;
 		case 'Sand Rush':
