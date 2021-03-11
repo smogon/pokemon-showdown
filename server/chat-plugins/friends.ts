@@ -46,15 +46,6 @@ export const Friends = new class {
 			}
 		}
 	}
-	writeLogin(user: User) {
-		return Chat.Friends.writeLogin(user.id);
-	}
-	hideLoginData(user: User) {
-		return Chat.Friends.hideLoginData(user.id);
-	}
-	allowLoginData(user: User) {
-		return Chat.Friends.allowLoginData(user.id);
-	}
 	async visualizeList(userid: ID) {
 		const friends = await Chat.Friends.getFriends(userid);
 		const categorized: {[k: string]: string[]} = {
@@ -72,7 +63,7 @@ export const Friends = new class {
 				categorized.offline.push(friendID);
 				// hidelogin - 1 to disable it being visible
 				if (!hideLogin) {
-					loginTimes[friendID] = last_login;
+					loginTimes[toID(friendID)] = last_login;
 				}
 			}
 		}
@@ -361,12 +352,12 @@ export const commands: ChatCommands = {
 			if (cmd.includes('hide')) {
 				if (setting) return this.errorReply(this.tr`You are already hiding your logins from friends.`);
 				user.settings.hideLogins = true;
-				await Friends.hideLoginData(user);
+				await Chat.Friends.hideLoginData(user.id);
 				this.sendReply(`You are now hiding your login times from your friends.`);
 			} else if (cmd.includes('show')) {
 				if (!setting) return this.errorReply(this.tr`You are already allowing friends to see your login times.`);
 				user.settings.hideLogins = false;
-				await Friends.allowLoginData(user);
+				await Chat.Friends.allowLoginData(user.id);
 				this.sendReply(`You are now allowing your friends to see your login times.`);
 			} else {
 				return this.errorReply(`Invalid setting.`);
@@ -541,7 +532,7 @@ export const loginfilter: LoginFilter = async user => {
 	// (quietly) notify their friends (that have opted in) that they are online
 	await Friends.notifyConnection(user);
 	// write login time
-	await Friends.writeLogin(user);
+	await Chat.Friends.writeLogin(user.id);
 
 	await Chat.Friends.cache.update(user.id);
 };

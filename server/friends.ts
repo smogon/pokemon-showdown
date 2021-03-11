@@ -237,6 +237,7 @@ export class FriendsProcess implements ProcessManager.ProcessWrapper {
 	process: ProcessManager.ChildProcess;
 	requests: Map<number, (...args: any) => any>;
 	messageCallback?: (message: string) => any;
+	taskId = 0;
 	constructor(filename: string, opts: {messageCallback?: (message: string) => any} = {}) {
 		this.filename = filename;
 		this.messageCallback = opts.messageCallback;
@@ -262,8 +263,11 @@ export class FriendsProcess implements ProcessManager.ProcessWrapper {
 			if (resolve) {
 				this.requests.delete(taskId);
 				return resolve(result);
+			} else if (taskId > this.taskId || isNaN(taskId)) {
+				// we explicitly do it this way bc some weird node bug ends up sending messages from the subprocesses twoce
+				// so we can't just throw if there's no resolve, since it may be a duped message.
+				throw new Error(`invalid taskId ${taskId} - missing result resolver`);
 			}
-			throw new Error(`Missing result resolver for task ${task}`);
 		});
 	}
 	getLoad() {
@@ -280,7 +284,7 @@ export class FriendsProcess implements ProcessManager.ProcessWrapper {
 		return Promise.resolve();
 	}
 	query(input: DatabaseRequest) {
-		const task = this.getLoad() + 1;
+		const task = this.taskId++;
 		return new Promise<DatabaseResult>(resolve => {
 			this.process.send(`${task}\n${JSON.stringify(input)}`);
 			this.requests.set(task, resolve);
@@ -358,14 +362,12 @@ export class FriendsProcessManager extends ProcessManager.ProcessManager {
 
 const ACTIONS = {
 	add: (
-		`REPLACE INTO friends (user1, user2) VALUES($user1, $user2) ON CONFLICT (user1, user2) ` +
+		`REPLACE INTO friends (user1, user2) VALUES ($user1, $user2) ON CONFLICT (user1, user2) ` +
 		`DO UPDATE SET user1 = $user1, user2 = $user2`
 	),
 	get: (
-		`SELECT * ` +
-		`FROM friends_simplified LEFT JOIN friend_settings USING (userid) WHERE userid = ? LIMIT ?`
+		`SELECT * FROM friends_simplified LEFT JOIN friend_settings USING (userid) WHERE userid = ? LIMIT ?`
 	),
-	// may look duplicated, but you pass in [userid1, userid2, userid2, userid1]
 	delete: `DELETE FROM friends WHERE (user1 = $user1 AND user2 = $user2) OR (user1 = $user2 AND user2 = $user1)`,
 	getSent: `SELECT receiver, sender FROM friend_requests WHERE sender = ?`,
 	getReceived: `SELECT receiver, sender FROM friend_requests WHERE receiver = ?`,
@@ -481,7 +483,7 @@ if (!PM.isParentProcess) {
 		},
 		slow(message: string) {
 			process.send!(`CALLBACK\nSLOW\n${message}`);
-		}
+		},
 	};
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
@@ -489,7 +491,7 @@ if (!PM.isParentProcess) {
 		}
 	});
 	// eslint-disable-next-line no-eval
-	Repl.start('friends', cmd => eval(cmd));
+	Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
 } else {
-	PM.spawn(Config.friendsprocesses || 2);
+	PM.spawn(Config.friendsprocesses || 1);
 }
