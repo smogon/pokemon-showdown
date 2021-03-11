@@ -73,6 +73,47 @@ export class FriendsDatabase {
 			this.process = PM.createProcess(file);
 		}
 	}
+	static setupDatabase(fileName?: string) {
+		const file = fileName || process.env.filename || DEFAULT_FILE;
+		const exists = FS(file).existsSync() || file === ':memory:';
+		const database = new Database(file);
+		if (!exists) {
+			database.exec(FS('databases/schemas/friends.sql').readSync());
+		} else {
+			let val;
+			try {
+				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
+			} catch (e) {}
+			const actualVersion = FS(`databases/migrations/`).readdirSync().length;
+			if (val === undefined) {
+				// hasn't been set up before, write new version.
+				database.exec(FS('databases/schemas/friends.sql').readSync());
+			}
+			if (typeof val === 'number' && val !== actualVersion) {
+				throw new Error(`Friends DB is out of date, please migrate to latest version.`);
+			}
+		}
+		database.exec(FS(`databases/schemas/friends-startup.sql`).readSync());
+
+		for (const k in FUNCTIONS) {
+			database.function(k, FUNCTIONS[k]);
+		}
+
+		for (const k in ACTIONS) {
+			try {
+				statements[k] = database.prepare(ACTIONS[k as keyof typeof ACTIONS]);
+			} catch (e) {
+				throw new Error(`Friends DB statement crashed: ${ACTIONS[k as keyof typeof ACTIONS]} (${e.message})`);
+			}
+		}
+
+		for (const k in TRANSACTIONS) {
+			transactions[k] = database.transaction(TRANSACTIONS[k]);
+		}
+
+		statements.expire.run();
+		return database;
+	}
 	getFriends(userid: ID): Promise<AnyObject[]> {
 		return this.all('get', [userid, MAX_FRIENDS]);
 	}
@@ -195,8 +236,10 @@ export class FriendsProcess implements ProcessManager.ProcessWrapper {
 	filename: string;
 	process: ProcessManager.ChildProcess;
 	requests: Map<number, (...args: any) => any>;
-	constructor(filename: string) {
+	messageCallback?: (message: string) => any;
+	constructor(filename: string, opts: {messageCallback?: (message: string) => any} = {}) {
 		this.filename = filename;
+		this.messageCallback = opts.messageCallback;
 		this.process = child_process.fork(__filename, {env: {filename}});
 		this.requests = new Map();
 		this.listen();
@@ -208,6 +251,9 @@ export class FriendsProcess implements ProcessManager.ProcessWrapper {
 				const error = new Error();
 				error.stack = message.slice(6);
 				throw error;
+			}
+			if (this.messageCallback && message.startsWith('CALLBACK\n')) {
+				return this.messageCallback(message.slice(9));
 			}
 			const [task, raw] = message.split('\n');
 			const result = JSON.parse(raw);
@@ -244,19 +290,62 @@ export class FriendsProcess implements ProcessManager.ProcessWrapper {
 
 export class FriendsProcessManager extends ProcessManager.ProcessManager {
 	processes: FriendsProcess[];
-	constructor() {
+	opts: {messageCallback?: (message: string) => any};
+	constructor(opts: {messageCallback?: (message: string) => any}) {
 		super(module);
 		this.processes = [];
-		this.listen();
+		this.opts = opts;
+
 		ProcessManager.processManagers.push(this);
+		this.listen();
 	}
 	createProcess(file: string = DEFAULT_FILE) {
-		const process = new FriendsProcess(file);
+		const process = new FriendsProcess(file, this.opts);
 		this.processes.push(process);
 		return process;
 	}
 	listen() {
 		if (this.isParentProcess) return;
+		const send = (task: string, res: any) => process.send!(`${task}\n${JSON.stringify(res)}`);
+		process.on('message', (message: string) => {
+			const [task, raw] = message.split('\n');
+			if (!raw.startsWith('{')) return;
+			const query = JSON.parse(raw);
+			const {type, statement, data} = query;
+			let result: any = '';
+			const cached = statements[statement];
+			const start = Date.now();
+			try {
+				switch (type) {
+				case 'all':
+					result = cached.all(data);
+					break;
+				case 'get':
+					result = cached.get(data);
+					break;
+				case 'run':
+					result = cached.run(data);
+					break;
+				case 'transaction':
+					const transaction = transactions[statement];
+					result = transaction([data]);
+					break;
+				}
+			} catch (e) {
+				if (!e.name.endsWith('FailureMessage')) {
+					Monitor.crashlog(e, 'A friends database process', query);
+					return send(task, {error: `Sorry! The database crashed. We've been notified and will fix this.`});
+				}
+				return send(task, {error: e.message});
+			}
+			const delta = Date.now() - start;
+			if (delta > 3000) {
+				Monitor.slow(`[Slow friends list query] ${JSON.stringify(query)}`);
+			}
+			if (!result) result = {};
+			if (result.result) result = result.result;
+			return send(task, {result} || {error: 'Unknown error in database query.'});
+		});
 		// ignore the error here and let it be handled by Monitor
 		process.on('error', () => {
 			process.exit();
@@ -371,58 +460,28 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	},
 };
 
-export const PM = new FriendsProcessManager();
+export const PM = new FriendsProcessManager({
+	messageCallback(message) {
+		if (message.startsWith('SLOW\n')) {
+			return Monitor.slow(message.slice(5));
+		}
+	},
+});
 
-let database: Database.Database;
 // if friends.database exists, Config.usesqlite is on.
 if (!PM.isParentProcess) {
 	global.Config = (require as any)('./config-loader').Config;
 	if (Config.usesqlite) {
-		const file = process.env.filename as string || DEFAULT_FILE;
-		const exists = FS(file).existsSync() || file === ':memory:';
-		database = new Database(file);
-		if (!exists) {
-			database.exec(FS('databases/schemas/friends.sql').readSync());
-		} else {
-			let val;
-			try {
-				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
-			} catch (e) {}
-			const actualVersion = FS(`databases/migrations/`).readdirSync().length;
-			if (val === undefined) {
-				// hasn't been set up before, write new version.
-				database.exec(FS('databases/schemas/friends.sql').readSync());
-			}
-			if (typeof val === 'number' && val !== actualVersion) {
-				throw new Error(`Friends DB is out of date, please migrate to latest version.`);
-			}
-		}
-		database.exec(FS(`databases/schemas/friends-startup.sql`).readSync());
-
-		for (const k in FUNCTIONS) {
-			database.function(k, FUNCTIONS[k]);
-		}
-
-		for (const k in ACTIONS) {
-			try {
-				statements[k] = database.prepare(ACTIONS[k as keyof typeof ACTIONS]);
-			} catch (e) {
-				throw new Error(`Friends DB statement crashed: ${ACTIONS[k as keyof typeof ACTIONS]} (${e.message})`);
-			}
-		}
-
-		for (const k in TRANSACTIONS) {
-			transactions[k] = database.transaction(TRANSACTIONS[k]);
-		}
-
-		statements.expire.run();
+		FriendsDatabase.setupDatabase();
 	}
 	global.Monitor = {
 		crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore please be silent
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
+		slow(message: string) {
+			process.send!(`CALLBACK\nSLOW\n${message}`);
+		}
 	};
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
@@ -431,43 +490,6 @@ if (!PM.isParentProcess) {
 	});
 	// eslint-disable-next-line no-eval
 	Repl.start('friends', cmd => eval(cmd));
-
-	const send = (task: string, res: any) => process.send!(`${task}\n${JSON.stringify(res)}`);
-
-	process.on('message', (message: string) => {
-		const [task, raw] = message.split('\n');
-		if (!raw.startsWith('{')) return;
-		const query = JSON.parse(raw);
-		const {type, statement, data} = query;
-		let result: any = '';
-		const cached = statements[statement];
-		try {
-			switch (type) {
-			case 'all':
-				result = cached.all(data);
-				break;
-			case 'get':
-				result = cached.get(data);
-				break;
-			case 'run':
-				result = cached.run(data);
-				break;
-			case 'transaction':
-				const transaction = transactions[statement];
-				result = transaction([data]);
-				break;
-			}
-		} catch (e) {
-			if (!e.name.endsWith('FailureMessage')) {
-				Monitor.crashlog(e, 'A friends database process', query);
-				return send(task, {error: `Sorry! The database crashed. We've been notified and will fix this.`});
-			}
-			return send(task, {error: e.message});
-		}
-		if (!result) result = {};
-		if (result.result) result = result.result;
-		return send(task, {result} || {error: 'Unknown error in database query.'});
-	});
 } else {
 	PM.spawn(Config.friendsprocesses || 2);
 }

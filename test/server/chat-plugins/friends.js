@@ -12,6 +12,6 @@ const test = (Config.usesqlite ? it : it.skip);
 
 describe("Friends lists", () => {
 	test("Should properly setup database", () => {
-		assert.doesNotThrow(() => new FriendsDatabase(':memory:'));
+		assert.doesNotThrow(() => FriendsDatabase.setupDatabase(':memory:'));
 	});
 });
