@@ -142,9 +142,8 @@ export class RandomTeams {
 				return movePool.includes('spectralthief') && !counter.Dark;
 			},
 			Grass: (movePool, hasMove, hasAbility, hasType, counter, species) => {
-				if (counter.Grass) return false;
-				if (species.baseStats.atk >= 100 || movePool.includes('leafstorm')) return true;
-				return movePool.includes('grassyglide');
+				if (species.baseStats.atk >= 100 || movePool.includes('leafstorm') || movePool.includes('grassyglide')) return true;
+				return !counter.Grass;
 			},
 			Ground: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Ground,
 			Ice: (movePool, hasMove, hasAbility, hasType, counter) => {
@@ -764,7 +763,7 @@ export class RandomTeams {
 		case 'dualwingbeat': case 'fly':
 			return {cull: !hasType[move.type] && !counter.setupType && counter.Status};
 		case 'storedpower':
-			return {cull: !counter.setupType || (!hasType[move.type] && counter.Status)};
+			return {cull: !counter.setupType};
 		case 'fireblast':
 			// Special case for Togekiss, which always wants Aura Sphere
 			return {cull: hasAbility['Serene Grace'] && (!hasMove['trick'] || counter.Status > 1)};
@@ -1008,8 +1007,11 @@ export class RandomTeams {
 			return {cull: hasMove['willowisp'] || hasMove['earthpower'] || (hasMove['toxic'] && movePool.includes('earthpower'))};
 		case 'airslash':
 			return {cull:
-				movePool.includes('flamethrower') ||
-				(hasMove['hurricane'] && !counter.setupType) ||
+				(species.id === 'naganadel' && hasMove['nastyplot']) ||
+				// I'm told that Nasty Plot Noctowl wants Air Slash (presumably for consistent damage),
+				// and Defog Noctowl wants Hurricane—presumably for a high-risk, high-reward damaging move
+				// after its main job of removing hazards is done.
+				(species.id === 'noctowl' && !counter.setupType) ||
 				hasRestTalk ||
 				(hasAbility['Simple'] && !!counter.recovery) ||
 				counter.setupType === 'Physical',
@@ -1029,8 +1031,9 @@ export class RandomTeams {
 		case 'psychic':
 			return {cull: hasMove['psyshock'] && (counter.setupType || isDoubles)};
 		case 'psyshock':
-			const cullNoSetup = (hasAbility['Multiscale'] && !counter.setupType) || (hasAbility['Pixilate'] && counter.Special < 4);
-			return {cull: hasMove['psychic'] || (!counter.setupType && cullNoSetup) || (isDoubles && hasMove['psychic'])};
+			// Special case for Sylveon which only wants Psyshock if it gets a Choice item
+			const sylveonCase = hasAbility['Pixilate'] && counter.Special < 4;
+			return {cull: hasMove['psychic'] || (!counter.setupType && sylveonCase) || (isDoubles && hasMove['psychic'])};
 		case 'bugbuzz':
 			return {cull: hasMove['uturn'] && !counter.setupType};
 		case 'leechlife':
@@ -1124,6 +1127,8 @@ export class RandomTeams {
 		case 'leechseed':
 			// Special case for Calyrex to prevent Leech Seed + Calm Mind
 			return {cull: !!counter.setupType};
+		case 'blueflare':
+			return {cull: hasMove['vcreate']};
 		}
 
 		if (move.id !== 'photongeyser' && (
@@ -1314,10 +1319,12 @@ export class RandomTeams {
 				['Drizzle', 'Strong Jaw', 'Unaware', 'Volt Absorb'].some(abil => hasAbility[abil])
 			);
 		case 'Weak Armor':
-			return (!isNoDynamax || hasMove['shellsmash'] || hasMove['rapidspin']);
-		case 'Magnet Pull':
-			// In Singles, Mirror Coat Magnezone should be Analytic
-			return !isDoubles && hasMove['mirrorcoat'] && species.id === 'magnezone';
+			// The Speed less than 50 case is intended for Cursola, but could apply to any slow Pokémon.
+			return (
+				(!isNoDynamax && species.baseStats.spe > 50) ||
+				counter.Status > 1 ||
+				hasMove['shellsmash'] || hasMove['rapidspin']
+			);
 		}
 
 		return false;
@@ -1694,7 +1701,7 @@ export class RandomTeams {
 						// Swords Dance Mew should have Brave Bird
 						(hasMove['swordsdance'] && species.id === 'mew' && runEnforcementChecker('Flying')) ||
 						// Dhelmise should have Anchor Shot
-						(hasAbility['steelworker'] && runEnforcementChecker('Steel')) ||
+						(hasAbility['Steelworker'] && runEnforcementChecker('Steel')) ||
 						// Check for miscellaneous important moves
 						(!isDoubles && runEnforcementChecker('recovery')) ||
 						runEnforcementChecker('screens') ||
@@ -1849,9 +1856,7 @@ export class RandomTeams {
 				NUBL: 85,
 				NU: 86,
 				PUBL: 87,
-				PU: 88,
-				"(PU)": 90,
-				NFE: 90,
+				PU: 88, "(PU)": 88, NFE: 88,
 			};
 			const customScale: {[k: string]: number} = {
 				// These Pokemon are too strong and need a lower level
