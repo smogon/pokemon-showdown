@@ -1543,6 +1543,13 @@ export const Formats: FormatList = [
 		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
+		name: "[Gen 8] Random Battle (No Dynamax)",
+
+		mod: 'gen8',
+		team: 'random',
+		ruleset: ['[Gen 8] Random Battle', 'Dynamax Clause'],
+	},
+	{
 		name: "[Gen 8] BSS Factory",
 		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
 		threads: [
