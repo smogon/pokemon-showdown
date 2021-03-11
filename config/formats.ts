@@ -1543,7 +1543,7 @@ export const Formats: FormatList = [
 		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
-		name: "[Gen 8] Random Battle (No Dynamax)",
+		name: "[Gen 8] Random Battle (No Dmax)",
 
 		mod: 'gen8',
 		team: 'random',
