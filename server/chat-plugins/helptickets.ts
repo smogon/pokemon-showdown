@@ -532,7 +532,7 @@ export function notifyStaff() {
 		if (user.can('lock') && !user.settings.ignoreTickets) user.sendTo(room, buf);
 		for (const connection of user.connections) {
 			if (connection.openPages?.has('help-tickets')) {
-				Chat.parse('/ht list', null, user, connection);
+				void Chat.resolvePage('view-help-tickets', user, connection);
 			}
 		}
 	}
