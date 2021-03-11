@@ -719,6 +719,35 @@ export const commands: ChatCommands = {
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,
 	],
 
+	randsnodmax: 'randombattlenodmax',
+	randombattlenodmax(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.parse(`/help randombattlenodynamax`);
+
+		const dex = Dex.forFormat('gen8randombattlenodmax');
+		let species = dex.getSpecies(target);
+
+		if (!species.exists) {
+			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${target.trim()}' does not exist.`);
+		}
+
+		let randomMoves = species.randomBattleNoDynamaxMoves || species.randomBattleMoves;
+		if (!randomMoves) {
+			const gmaxSpecies = dex.getSpecies(`${target}gmax`);
+			if (!gmaxSpecies.exists || !gmaxSpecies.randomBattleMoves) {
+				return this.errorReply(`Error: No move data found for ${species.name} in [Gen 8] Random Battle (No Dmax).`);
+			}
+			species = gmaxSpecies;
+			randomMoves = gmaxSpecies.randomBattleNoDynamaxMoves || gmaxSpecies.randomBattleMoves;
+		}
+
+		const m = [...randomMoves].sort().map(formatMove);
+		this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in [Gen 8] Random Battle (No Dmax):</span><br />${m.join(`, `)}`);
+	},
+	randombattlenodmaxhelp: [
+		`/randombattlenodmax OR /randsnodmax [pokemon] - Displays a Pok\u00e9mon's Random Battle (No Dmax) moves.`,
+	],
+
 	bssfactory: 'battlefactory',
 	battlefactory(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
