@@ -51,7 +51,7 @@ const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
 };
 
 function savePrenoms() {
-	return FS(PRENOMS_FILE).write(JSON.stringify(prenoms));
+	return FS(PRENOMS_FILE).writeUpdate(() => JSON.stringify(prenoms));
 }
 
 function toNominationId(nomination: string) {
@@ -348,7 +348,7 @@ class OtdHandler {
 			buf += `${strings.join('\t')}\n`;
 		}
 
-		return this.file.write(buf);
+		return this.file.writeUpdate(() => buf);
 	}
 
 	async generateWinnerDisplay() {
