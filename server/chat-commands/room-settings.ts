@@ -65,7 +65,7 @@ export const commands: ChatCommands = {
 
 		if (
 			room.settings.modchat && room.settings.modchat.length <= 1 &&
-			!Users.Auth.hasPermission(user, 'modchat', room.settings.modchat as GroupSymbol, room)
+			!room.auth.atLeast(user, room.settings.modchat)
 		) {
 			return this.errorReply(`/modchat - Access denied for changing a setting currently at ${room.settings.modchat}.`);
 		}
