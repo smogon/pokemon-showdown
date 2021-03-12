@@ -1148,7 +1148,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 		return result;
 	}
 	onChatMessage(message: string, user: User) {
-		void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room.roomid)}|${message}`);
+		const parts = message.split('\n');
+		for (const line of parts) {
+			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room.roomid)}|${line}`);
+		}
 	}
 	async getLog(): Promise<string[] | void> {
 		if (!this.logData) this.logData = {};
