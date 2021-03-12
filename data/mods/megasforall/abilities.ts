@@ -2093,13 +2093,6 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			onStart(pokemon, source, effect) {
 				this.add('-start', pokemon, 'Sticky Gel', '[from] ability: Red Licorice', '[of] ' + source);
 			},
-			onAnyModifyMove(target, source, move) {
-				if (move.type === 'Fire' && move.category !== 'Status') {
-					 if (target === this.effectData.target) {
-						move.basePower *= 1.5;
-					 }
-				}
-			},
 			onAnyDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && effect.type === 'Fire' && source === this.effectData.target) {
 					if (this.effectData.damage) {
@@ -2111,6 +2104,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					}
 				} else if (effect && effect.effectType === 'Move' && effect.type === 'Fire' && target === this.effectData.target) {
 					this.effectData.lit = true;
+					return damage * 1.5;
 				}
 			},
 			onUpdate(pokemon) {
@@ -2177,7 +2171,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						id: move.id,
 						name: move.name,
 						accuracy: move.accuracy,
-						basePower: move.basepower,
+						basePower: move.basePower,
 						category: move.category,
 						priority: move.priority,
 						flags: move.flags,
