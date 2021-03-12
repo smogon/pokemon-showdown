@@ -1131,17 +1131,17 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		num: 122,
 	},
 	savage: {
-		desc: "This Pokémon's biting moves become multi-hit moves that hit two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. Each hit's damage is cut to one third.",
-		shortDesc: "This Pokémon's biting moves hit two to five times. Each hit's damage is cut to one third.",
+		desc: "This Pokémon's biting moves become multi-hit moves that hit three times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. Each hit's damage is cut to one third.",
+		shortDesc: "This Pokémon's biting moves hit three times. Each hit's damage is cut to one third.",
 		onPrepareHit(source, target, move) {
 			if (move.multihit) return;
 			if (move.flags['bite'] && !move.isZ && !move.isMax) {
-				move.multihit = [2, 5];
+				move.multihit = 3;
 			}
 		},
 		onBasePowerPriority: 7,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.flags['bite']) return this.chainModify([1365, 4096]);
+			if (move.flags['bite']) return this.chainModify([0x0555, 0x1000]);
 		},
 		name: "Savage",
 		rating: 3.5,
@@ -1197,7 +1197,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 	},
 	settle: {
 		desc: "When using a given special move for the first time in at least three turns, this Pokémon uses its Attack stat, and the power is increased by 100%. Has no effect if the same special move has been used in the last three turns.",
-		shortDesc: "When using a special move, this Pokémon uses its Attack stat, and the power is increased by 100%.",
+		shortDesc: "On using special move for the first time in at least 3 turns: move uses Atk, 2x power.",
 		name: "Settle",
 		onModifyMove(move, pokemon) {
 			let num = 0;
@@ -1208,36 +1208,32 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					if (num === 1 && !pokemon.volatiles['settle1']) {
 						if (move.category !== 'Special') return;
 						pokemon.addVolatile('settle1');
-						move.category = 'Physical';
 						move.defensiveCategory = 'Special';
-						move.hasSheerForce = true;
+						move.settleBoosted = true;
 					} else if (num === 2 && !pokemon.volatiles['settle2']) {
 						if (move.category !== 'Special') return;
 						pokemon.addVolatile('settle2');
-						move.category = 'Physical';
 						move.defensiveCategory = 'Special';
-						move.hasSheerForce = true;
+						move.settleBoosted = true;
 					} else if (num === 3 && !pokemon.volatiles['settle3']) {
 						if (move.category !== 'Special') return;
 						pokemon.addVolatile('settle3');
-						move.category = 'Physical';
 						move.defensiveCategory = 'Special';
-						move.hasSheerForce = true;
+						move.settleBoosted = true;
 					} else if (num === 4 && !pokemon.volatiles['settle4']) {
 						if (move.category !== 'Special') return;
 						pokemon.addVolatile('settle4');
-						move.category = 'Physical';
 						move.defensiveCategory = 'Special';
-						move.hasSheerForce = true;
+						move.settleBoosted = true;
 					}
 				}
 			}
 		},
-		onBasePowerPriority: 21,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.hasSheerForce) {
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.settleBoosted) {
 				this.hint(`${move.name} was boosted by Settle!`);
-				return this.chainModify(2);
+				return attacker.getStat('atk') * 2;
 			}
 		},
 		rating: 3,
@@ -1254,7 +1250,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		},
 		onSourceHit(target, source, move) {
 			const bladeMoves = [
-				'aerialace', 'airslash', 'behemothblade', 'cut', 'furycutter', 'leafblade', 'nightslash', 'psychocut', 'razorshell', 'razorwind', 'sacredsword', 'secretsword', 'slash', 'smartstrike', 'solarblade',
+				'aerialace', 'airslash', 'behemothblade', 'cut', 'furycutter', 'leafblade', 'nightslash', 'psychocut', 'razorshell', 'razorwind', 'sacredsword', 'secretsword', 'slash', 'solarblade', 'xscissor',
 			];
 			if (!move || !target) return;
 			if (source.hp === source.maxhp || source.hp <= source.maxhp / 3) return;
@@ -1264,7 +1260,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		},
 		onModifyCritRatio(critRatio, source, target, move) {
 			const bladeMoves = [
-				'aerialace', 'airslash', 'behemothblade', 'cut', 'furycutter', 'leafblade', 'nightslash', 'psychocut', 'razorshell', 'razorwind', 'sacredsword', 'secretsword', 'slash', 'smartstrike', 'solarblade',
+				'aerialace', 'airslash', 'behemothblade', 'cut', 'furycutter', 'leafblade', 'nightslash', 'psychocut', 'razorshell', 'razorwind', 'sacredsword', 'secretsword', 'slash', 'solarblade', 'xscissor',
 			];
 			if (bladeMoves.includes(move.id) && source.hp <= source.maxhp / 3) return 5;
 		},
@@ -1557,14 +1553,14 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 	seismicscream: {
 		desc: "This Pokémon uses Earthquake at 60 base power after using a sound-based move. If the sound-based move is a special attack, the Earthquake that is used is also a special attack.",
 		shortDesc: "Follows up sound moves with an Earthquake of 60 BP.",
-		onSourceHit(target, source, move) {
-			if (!move || !target?.hp) return;
+		onAfterMove(target, source, move) {
+			if (!move || !target || !target.hp) return;
 			if (target !== source && target.hp && move.flags['sound']) {
-				source.addVolatile('seismicscream');
+				this.effectData.target.addVolatile('seismicscream');
 				if (move.category === 'Special') {
 					source.addVolatile('specialsound');
 				}
-				this.useMove('earthquake', source);
+				this.useMove('earthquake', this.effectData.target);
 			}
 		},
 		name: "Seismic Scream",
@@ -1672,37 +1668,17 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		num: -1047,
 	},
 	bodyofwater: {
-		desc: "When this Pokémon uses a Water-type attack, damage is calculated using the user's Defense stat as its Attack or its Special Defense as its Special Attack, including stat stage changes. Other effects that modify the Attack and Special Attack stats are used as normal.",
+		desc: "When this Pokémon uses a Water-type attack, damage is calculated using the user's Defense stat as its Attack or its Special Defense as its Special Attack. Other effects that modify the Attack and Special Attack stats are used as normal, including stat stage changes.",
 		shortDesc: "Water-type attacks use Def as Atk and Sp. Def as Sp. Atk in damage calculation.",
 		name: "Body of Water",
 		onModifyMove(move, attacker) {
 			if (move.type === 'Water') {
 				move.useSourceDefensiveAsOffensive = true;
+				move.bodyofwaterBoosted = true;
 			}
 		},
 		rating: 3.5,
 		num: -1048,
-	},
-	unaware: {
-		name: "Unaware",
-		onAnyModifyBoost(boosts, pokemon) {
-			const unawareUser = this.effectData.target;
-			if (unawareUser === pokemon) return;
-			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
-				boosts['def'] = 0;
-				boosts['spd'] = 0;
-				boosts['evasion'] = 0;
-			}
-			if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
-				boosts['atk'] = 0;
-				boosts['def'] = 0;
-				boosts['spa'] = 0;
-				boosts['spd'] = 0;
-				boosts['accuracy'] = 0;
-			}
-		},
-		rating: 4,
-		num: 109,
 	},
 	everlastingwinter: {
 		desc: "On switch-in, the weather becomes Hail. This weather remains in effect until this Ability is no longer active for any Pokémon, or the weather is changed by Delta Stream, Desolate Land or Primordial Sea.",
@@ -1814,7 +1790,10 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			pokemon.addVolatile('forgery');
 			let i;
 			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
-				if (!pokemon.side.pokemon[i] || pokemon.side.pokemon[i].fainted) continue;
+				if (
+					!pokemon.side.pokemon[i] || pokemon.side.pokemon[i].fainted ||
+					!pokemon.side.pokemon[i].item || this.dex.getItem(pokemon.side.pokemon[i].item).zMove
+				) continue;
 				break;
 			}
 			if (!pokemon.side.pokemon[i]) return;
@@ -1847,7 +1826,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				this.effectData.busted = true;
 			},
 			onUpdate(pokemon) {
-				if (this.effectData.busted && pokemon.item !== 'zoroarkite') {
+				if (this.effectData.busted === true && pokemon.item !== 'zoroarkite') {
 					this.add('-ability', pokemon, 'Forgery');
 					if (pokemon.item) {
 						this.add('-message', `${pokemon.name}'s ${this.dex.getItem(pokemon.item).name} was destroyed!`);
@@ -2062,6 +2041,158 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		name: "Stance Change",
 		rating: 4,
 		num: 176,
+	},
+	poolfloaties: {
+		desc: "This Pokémon and its adjacent allies are immune to Water-type moves. For 3 turns after the user or its adjacent allies use a Water-type move or are hit by a Water-type move, they are also immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability as long as they remain active. If they use Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, Thousand Arrows, and Iron Ball override this immunity if the user is under any of their effects.",
+		shortDesc: "Pokémon and allies: gain Ground immunity from Water moves; Water immunity.",
+		onAnyTryHit(target, source, move) {
+			if (target !== source && target.side === this.effectData.target.side && move.type === 'Water') {
+				target.addVolatile('poolfloaties');
+				this.add('-immune', target, '[from] ability: Pool Floaties', '[of] ' + this.effectData.target);
+				return null;
+			}
+			if (target !== source && source.side === this.effectData.target.side && move.type === 'Water') {
+				source.addVolatile('poolfloaties');
+			}
+		},
+		condition: {
+			duration: 3,
+			onStart(target) {
+				if (
+					target.volatiles['smackdown'] || target.volatiles['ingrain'] || this.field.getPseudoWeather('Gravity')
+				) return false;
+				this.add('-start', target, 'Pool Floaties', '[silent]');
+				if (target === this.effectData.source) {
+					this.add('-message', `${target.name} was lifted up by its pool floaties!`);
+				} else {
+					this.add('-message', `${target.name} was lifted up by ${this.effectData.source.name}'s pool floaties!`);
+				}
+			},
+			onImmunity(type) {
+				if (type === 'Ground') return false;
+			},
+			onResidualOrder: 15,
+			onEnd(target) {
+				this.add('-end', target, 'Pool Floaties', '[silent]');
+				this.add('-message', `${target.name} floated back down!`);
+			},
+		},
+		name: "Pool Floaties",
+		rating: 3,
+		num: -1055,
+	},
+	redlicorice: {
+		desc: "This Pokémon's Fairy-type attacks cause the target to become sticky and flammable. When a Fire-type attack is used against a target that is sticky and flammable, its power is multiplied by 1.5, and the target is burned but is no longer sticky and flammable. When a Fire-type attack is used by an attacker that is sticky and flammable, the user takes recoil damage equal to 50% the HP lost by the target (rounded half up, but not less than 1 HP), and the user is burned but is no longer sticky and flammable.",
+		shortDesc: "Fairy attacks make target sticky; Fire attacks: burn, 50% more damage to sticky Pokémon.",
+		onSourceHit(target, source, move) {
+			if (move.category !== 'Status' && move.type === 'Fairy') {
+				target.addVolatile('redlicorice');
+			}
+		},
+		condition: {
+			onStart(pokemon, source, effect) {
+				this.add('-start', pokemon, 'Sticky Gel', '[from] ability: Red Licorice', '[of] ' + source);
+			},
+			onAnyModifyMove(target, source, move) {
+				if (move.type === 'Fire' && move.category !== 'Status') {
+					 if (target === this.effectData.target) {
+						move.basePower *= 1.5;
+					 }
+				}
+			},
+			onAnyDamage(damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && effect.type === 'Fire' && source === this.effectData.target) {
+					if (this.effectData.damage) {
+						this.effectData.damage += damage;
+						this.effectData.lit = true;
+					} else {
+						this.effectData.damage = damage;
+						this.effectData.lit = true;
+					}
+				} else if (effect && effect.effectType === 'Move' && effect.type === 'Fire' && target === this.effectData.target) {
+					this.effectData.lit = true;
+				}
+			},
+			onUpdate(pokemon) {
+				if (this.effectData.lit) {
+					this.hint("The sticky gel ignited!");
+					if (this.effectData.damage) {
+						this.damage(this.effectData.damage / 2, this.effectData.target);
+					}
+					pokemon.trySetStatus('brn', this.effectData.source);
+					pokemon.removeVolatile('redlicorice');
+					this.add('-end', pokemon, 'Sticky Gel', '[silent]');
+				}
+			},
+		},
+		name: "Red Licorice",
+		rating: 3,
+		num: -1056,
+	},
+	stygianshades: {
+		desc: "This Pokémon's Dark-type status moves set one layer of Spikes on the opposing side of the field.",
+		shortDesc: "Dark-type status moves set spikes on the opposing side.",
+		onAfterMove(target, source, move) {
+			if (!move || !source) return;
+			if (move.type === 'Dark' && move.category === 'Status') {
+				this.effectData.target.side.foe.addSideCondition('spikes');
+			}
+		},
+		name: "Stygian Shades",
+		rating: 3,
+		num: -1057,
+	},
+	longwhip: {
+		desc: "This Pokémon's multi-hit attacks do damage at the end of each turn, for the maximum number of times the attack could hit, instead of being used immediately. More than one move can stack in this way.",
+		shortDesc: "Multi-hit attacks: damage over time, for as many turns as they could hit.",
+		onBeforeMove(source, target, move) {
+			if (move.multihit) {
+				let whipMove = null;
+				if (target.side.addSlotCondition(target, 'longwhip1')) {
+					whipMove = 'longwhip1';
+				} else if (target.side.addSlotCondition(target, 'longwhip2')) {
+					whipMove = 'longwhip2';
+				} else if (target.side.addSlotCondition(target, 'longwhip3')) {
+					whipMove = 'longwhip3';
+				} else if (target.side.addSlotCondition(target, 'longwhip4')) {
+					whipMove = 'longwhip4';
+				} else if (target.side.addSlotCondition(target, 'longwhip5')) {
+					whipMove = 'longwhip5';
+				}
+				if (whipMove === null) return false;
+				let numberHits;
+				if (Array.isArray(move.multihit) && move.multihit.length) {
+					numberHits = move.multihit[1];
+				} else {
+					numberHits = move.multihit;
+				}
+				Object.assign(target.side.slotConditions[target.position][whipMove], {
+					duration: numberHits,
+					source: source,
+					target: null,
+					move: move,
+					position: target.position,
+					side: target.side,
+					moveData: {
+						id: move.id,
+						name: move.name,
+						accuracy: move.accuracy,
+						basePower: move.basepower,
+						category: move.category,
+						priority: move.priority,
+						flags: move.flags,
+						effectType: 'Move',
+						isFutureMove: true,
+						type: move.type,
+					},
+				});
+				this.add('-message', `${source.name} prepared to whip ${target.name}'s team with ${move.name}!`);
+				return null;
+			}
+		},
+		name: "Long Whip",
+		rating: 3,
+		num: -1058,
 	},
 	stickyresidues: {
 		desc: "On switch-in, this Pokémon summons sticky residues that prevent hazards from being cleared or moved by Court Change for five turns. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
