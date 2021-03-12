@@ -1208,32 +1208,28 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					if (num === 1 && !pokemon.volatiles['settle1']) {
 						if (move.category !== 'Special') return;
 						pokemon.addVolatile('settle1');
-						move.defensiveCategory = 'Special';
-						move.settleBoosted = true;
+						(move as any).settleBoosted = true;
 					} else if (num === 2 && !pokemon.volatiles['settle2']) {
 						if (move.category !== 'Special') return;
 						pokemon.addVolatile('settle2');
-						move.defensiveCategory = 'Special';
-						move.settleBoosted = true;
+						(move as any).settleBoosted = true;
 					} else if (num === 3 && !pokemon.volatiles['settle3']) {
 						if (move.category !== 'Special') return;
 						pokemon.addVolatile('settle3');
-						move.defensiveCategory = 'Special';
-						move.settleBoosted = true;
+						(move as any).settleBoosted = true;
 					} else if (num === 4 && !pokemon.volatiles['settle4']) {
 						if (move.category !== 'Special') return;
 						pokemon.addVolatile('settle4');
-						move.defensiveCategory = 'Special';
-						move.settleBoosted = true;
+						(move as any).settleBoosted = true;
 					}
 				}
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.settleBoosted) {
+			if ((move as any).settleBoosted) {
 				this.hint(`${move.name} was boosted by Settle!`);
-				return attacker.getStat('atk') * 2;
+				return this.chainModify(2);
 			}
 		},
 		rating: 3,
@@ -1674,7 +1670,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		onModifyMove(move, attacker) {
 			if (move.type === 'Water') {
 				move.useSourceDefensiveAsOffensive = true;
-				move.bodyofwaterBoosted = true;
+				(move as any).bodyofwaterBoosted = true;
 			}
 		},
 		rating: 3.5,
