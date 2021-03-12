@@ -1883,7 +1883,7 @@ export const pages: PageTable = {
 			} else if (game.phase === 'day') {
 				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia night">Go to Night ${game.dayNum}</button>`;
 			} else if (game.phase === 'night') {
-				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia day">Go to Day ${game.dayNum + 1}</button> <button class="button" name="send" value="/mafia extend ${room.roomid}">Return to Day ${game.dayNum}</button>`;
+				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia day">Go to Day ${game.dayNum + 1}</button> <button class="button" name="send" value="/msgroom ${room.roomid},/mafia extend">Return to Day ${game.dayNum}</button>`;
 			}
 			buf += ` <button class="button" name="send" value="/msgroom ${room.roomid},/mafia selflynch ${game.selfEnabled === true ? 'off' : 'on'}">${game.selfEnabled === true ? 'Disable' : 'Enable'} self lynching</button> `;
 			buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia ${game.enableNL ? 'disable' : 'enable'}nl">${game.enableNL ? 'Disable' : 'Enable'} No Vote</button> `;
