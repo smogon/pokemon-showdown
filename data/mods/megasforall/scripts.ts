@@ -377,6 +377,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ('telekinesis' in this.volatiles) return false;
 			if ('poolfloaties' in this.volatiles) return false;
 			return item !== 'airballoon';
-		}
+		},
 	},
 };
