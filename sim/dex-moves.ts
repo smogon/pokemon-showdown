@@ -247,6 +247,8 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
 	inherit: true,
 	igniteBoosted?: boolean,
+	settleBoosted?: boolean,
+	bodyofwaterBoosted?: boolean,
 	gen?: number,
 };
 
