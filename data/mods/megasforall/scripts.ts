@@ -277,7 +277,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 		}
-		if (move.settleBoosted) {
+		if ((move as any).settleBoosted) {
 			attackStat = 'atk';
 		}
 
@@ -286,7 +286,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		let defense;
 
 		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
-		if (move.bodyofwaterBoosted) {
+		if ((move as any).bodyofwaterBoosted) {
 			if (attackStat === 'def') {
 				atkBoosts = attacker.boosts['atk'];
 			} else if (attackStat === 'spd') {
