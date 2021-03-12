@@ -217,7 +217,7 @@ export const Formats: FormatList = [
 			'Koffing', 'Magnemite', 'Mareanie', 'Mienfoo', 'Mudbray', 'Onix', 'Pawniard', 'Ponyta', 'Ponyta-Galar',
 			'Porygon', 'Scorbunny', 'Scraggy', 'Spritzee', 'Staryu', 'Timburr', 'Trapinch', 'Tyrunt', 'Vullaby', 'Vulpix',
 			// LC BL
-			'Farfetch\u2019d-Galar', 'Shellder', 'Wingull',
+			'Farfetch\u2019d-Galar', 'Shellder', 'Wingull', 'Carvanha',
 		],
 	},
 	{
