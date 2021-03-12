@@ -366,12 +366,12 @@ const ACTIONS = {
 		`DO UPDATE SET user1 = $user1, user2 = $user2`
 	),
 	get: (
-		`SELECT * FROM friends_simplified LEFT JOIN friend_settings USING (userid) WHERE userid = ? LIMIT ?`
+		`SELECT * FROM friends_simplified f LEFT JOIN friend_settings fs ON f.friend = fs.userid WHERE f.userid = ? LIMIT ?`
 	),
 	delete: `DELETE FROM friends WHERE (user1 = $user1 AND user2 = $user2) OR (user1 = $user2 AND user2 = $user1)`,
 	getSent: `SELECT receiver, sender FROM friend_requests WHERE sender = ?`,
 	getReceived: `SELECT receiver, sender FROM friend_requests WHERE receiver = ?`,
-	insertRequest: `INSERT INTO friend_requests(sender, receiver, sent_at) VALUES(?, ?, ?)`,
+	insertRequest: `INSERT INTO friend_requests(sender, receiver, sent_at) VALUES (?, ?, ?)`,
 	deleteRequest: `DELETE FROM friend_requests WHERE sender = ? AND receiver = ?`,
 	findFriendship: `SELECT * FROM friends WHERE (user1 = $user1 AND user2 = $user2) OR (user2 = $user1 AND user1 = $user2)`,
 	findRequest: (
