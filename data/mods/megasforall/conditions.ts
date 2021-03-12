@@ -196,4 +196,319 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 	},
+	longwhip1: {
+		// this is a slot condition
+		name: 'longwhip1',
+		onResidualOrder: 3,
+		onResidual(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+		onEnd(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+	},
+	longwhip2: {
+		// this is a slot condition
+		name: 'longwhip2',
+		onResidualOrder: 3,
+		onResidual(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+		onEnd(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+	},
+	longwhip3: {
+		// this is a slot condition
+		name: 'longwhip3',
+		onResidualOrder: 3,
+		onResidual(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+		onEnd(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+	},
+	longwhip4: {
+		// this is a slot condition
+		name: 'longwhip4',
+		onResidualOrder: 3,
+		onResidual(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+		onEnd(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+	},
+	longwhip5: {
+		// this is a slot condition
+		name: 'longwhip5',
+		onResidualOrder: 3,
+		onResidual(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+		onEnd(target) {
+			// unlike a future move, Long Whip activates each turn
+			this.effectData.target = this.effectData.side.active[this.effectData.position];
+			const data = this.effectData;
+			const move = this.dex.getMove(data.move);
+			this.add('-ability', this.effectData.source, 'Long Whip');
+			if (!data.target) {
+				this.hint(`${move.name} did not hit because there was no target.`);
+				return;
+			}
+
+			this.add(`${data.target.name} took the ${move.name} attack!`);
+			data.target.removeVolatile('Protect');
+			data.target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			data.moveData.isFutureMove = true;
+			data.move.multihit = null;
+
+			this.useMove(move, data.source, data.target);
+		},
+	},
 };
