@@ -249,6 +249,21 @@ export const Formats: FormatList = [
 		minSourceGen: 8,
 	},
 	{
+		name: "[Gen 8] Spikemuth Cup",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3679445/">Spikemuth Cup Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		forcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Spikemuth Cup GBU'],
+		minSourceGen: 8,
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
