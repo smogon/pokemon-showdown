@@ -957,7 +957,9 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	},
 	cinccinomega: {
 		num: 573,
-		name: "Cinccino",
+		name: "Cinccino-Mega",
+		baseSpecies: "Cinccino",
+		forme: "Mega",
 		types: ["Normal"],
 		genderRatio: {M: 0.25, F: 0.75},
 		baseStats: {hp: 75, atk: 140, def: 75, spa: 65, spd: 75, spe: 140},
@@ -2030,7 +2032,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Fairy", "Mineral"],
 		requiredItem: "Falinksite",
-		battleOnly: "Falinks-Mega-Legion",
+		battleOnly: "Falinks",
 	},
 	dragapult: {
 		inherit: true,
