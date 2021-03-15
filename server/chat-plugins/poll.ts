@@ -359,6 +359,7 @@ export const commands: ChatCommands = {
 		htmlcreatemulti: 'new',
 		queue: 'new',
 		queuehtml: 'new',
+		htmlqueue: 'new',
 		queuemulti: 'new',
 		htmlqueuemulti: 'new',
 		new(target, room, user, connection, cmd, message) {
@@ -425,7 +426,7 @@ export const commands: ChatCommands = {
 		newhelp: [
 			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
 			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
-			`To queue a poll, use [queue], [queuemulti], or [htmlqueuemulti].`,
+			`To queue a poll, use [queue], [queuemulti], [queuehtml], or [htmlqueuemulti].`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		],
 
