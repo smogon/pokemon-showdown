@@ -536,7 +536,7 @@ export abstract class Searcher {
 	abstract searchLinecounts(roomid: RoomID, month: string, user?: ID): Promise<string>;
 	abstract getSharedBattles(userids: string[]): Promise<string[]>;
 	renderLinecountResults(
-		results: {[date: string]: {[userid: string]: number}},
+		results: {[date: string]: {[userid: string]: number}} | null,
 		roomid: RoomID, month: string, user?: ID
 	) {
 		let buf = Utils.html`<div class="pad"><h2>Linecounts on `;
@@ -550,8 +550,18 @@ export abstract class Searcher {
 		if (FS(`logs/chat/${roomid}/${nextMonth}`).existsSync()) {
 			buf += ` <small><a roomid="view-roomstats-${roomid}--${nextMonth}${user ? `--${user}` : ''}">Next month</a></small>`;
 		}
-		buf += `<hr /><ol>`;
-		if (user) {
+		if (!results) {
+			buf += '<hr />';
+			buf += LogViewer.error(`Logs for month '${month}' do not exist on room ${roomid}.`);
+			return buf;
+		} else if (user) {
+			let total = 0;
+			for (const day in results) {
+				if (isNaN(results[day][user])) continue;
+				total += results[day][user];
+			}
+			buf += `<br />Total linecount: ${total}<hr />`;
+			buf += '<ol>';
 			const sortedDays = Object.keys(results).sort((a, b) => (
 				new Date(b).getTime() - new Date(a).getTime()
 			));
@@ -562,6 +572,7 @@ export abstract class Searcher {
 				buf += `${Chat.count(dayResults, 'lines')}</li>`;
 			}
 		} else {
+			buf += '<hr /><ol>';
 			// squish the results together
 			const totalResults: {[k: string]: number} = {};
 			for (const date in results) {
@@ -628,7 +639,7 @@ export class FSLogSearcher extends Searcher {
 	async searchLinecounts(roomid: RoomID, month: string, user?: ID) {
 		const directory = FS(`logs/chat/${roomid}/${month}`);
 		if (!directory.existsSync()) {
-			throw new Chat.ErrorMessage(`Logs for month '${month}' do not exist on room ${roomid}.`);
+			return this.renderLinecountResults(null, roomid, month, user);
 		}
 		const files = await directory.readdir();
 		const results: {[date: string]: {[userid: string]: number}} = {};
@@ -980,7 +991,6 @@ export class RipgrepLogSearcher extends Searcher {
 		const {results: rawResults} = await this.ripgrepSearchMonth({
 			search: regexString, raw: true, date: month, room, args,
 		});
-		if (!rawResults.length) return LogViewer.error(`No results found.`);
 		const results: {[k: string]: {[userid: string]: number}} = {};
 		for (const fullLine of rawResults) {
 			const [data, line] = fullLine.split('.txt:');
