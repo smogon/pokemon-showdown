@@ -9,10 +9,11 @@ import {Utils, FS} from '../../lib';
 /** map<to, from> */
 export const chessChallenges: Map<ID, ID> = Chat.oldPlugins.chess?.chessChallenges || new Map();
 
-const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const LETTERS = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'];
 const MATCH_INTERVAL = 60 * 1000;
 
 type Side = 'B' | 'W';
+
 interface LadderEntry {
 	username: string;
 	userid: string;
@@ -521,7 +522,7 @@ export class ChessGame extends Rooms.RoomGame {
 	static ladder = new ChessLadder();
 
 	static startingBoard(): string[][] {
-		const ROW1 = 'RNBQKBNR';
+		const ROW1 = 'RNBKQBNR';
 		const ROW2 = 'PPPPPPPP';
 		const EMPTY = ' '.repeat(8);
 		return [
