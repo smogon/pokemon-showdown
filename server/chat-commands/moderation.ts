@@ -253,6 +253,9 @@ export const commands: ChatCommands = {
 						targetUser.updateIdentity(subRoom.roomid);
 					}
 				}
+				if (targetUser.trusted && !Users.isTrusted(targetUser.id)) {
+					targetUser.trusted = '';
+				}
 			}
 		}
 		room.saveSettings();
@@ -1291,6 +1294,9 @@ export const commands: ChatCommands = {
 		if (targetUser) {
 			targetUser.updateIdentity();
 			Rooms.global.checkAutojoin(targetUser);
+			if (targetUser.trusted && !Users.isTrusted(targetUser.id)) {
+				targetUser.trusted = '';
+			}
 		}
 	},
 	promotehelp: [`/promote [username], [group] - Promotes the user to the specified group. Requires: &`],
