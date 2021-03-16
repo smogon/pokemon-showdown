@@ -1326,16 +1326,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		noCopy: true,
 		onStart(source) {
 			this.add(`c|${getName('PiraTe Princess')}|Ahoy! o/`);
-
-			// Easter Egg
-			const activeMon = this.toID(
-				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
-			);
-			if (activeMon === 'kaijubunny') {
-				this.add(`c|${getName('PiraTe Princess')}|~shame`);
-				this.add(`raw|<img src="https://i.imgur.com/pxsDOuK.gif" height="165" width="220">`);
-				this.add(`c|${getName('Kaiju Bunny')}|WHY MUST YOU DO THIS TO ME`);
-			}
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('PiraTe Princess')}|brb making tea`);
