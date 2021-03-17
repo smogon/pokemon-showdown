@@ -1,7 +1,6 @@
 import {getName} from './conditions';
 import {changeSet, changeMoves} from "./abilities";
 import {ssbSets} from "./random-teams";
-import {Pokemon} from '../../../sim/pokemon';
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
