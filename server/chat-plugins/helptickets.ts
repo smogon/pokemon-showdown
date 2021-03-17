@@ -355,10 +355,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	onChatMessage(message: string, user: User) {
 		// in case they namechange
 		if (this.room.auth.has(user.id) && user.connections.length) {
-			const roomids = /battle-([a-zA-Z0-9]+)-([0-9]+)(-([a-zA-Z0-9]+)pw)?/ig.exec(message)?.filter(
-				// ensure it's not one of the [a-z etc] parts
-				url => /battle-([a-zA-Z0-9]+)-([0-9]+)(-([a-zA-Z0-9]+)pw)?/ig.test(url)
-			) || [];
+			const roomids = message.match(/battle-(?:[a-zA-Z0-9]+)-(?:[0-9]+)(?:-(?:[a-zA-Z0-9]+)pw)?/ig);
 			for (const roomid of roomids) {
 				const curRoom = Rooms.get(roomid);
 				if (!curRoom || !('uploadReplay' in curRoom) || curRoom?.battle?.replaySaved) continue;
