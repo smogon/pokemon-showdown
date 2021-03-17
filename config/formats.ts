@@ -638,7 +638,7 @@ export const Formats: FormatList = [
 		},
 		ruleset: ['Standard', '!OHKO Clause'],
 		banlist: [
-			'Shedinja', 'Infiltrator', 'Magic Guard', 'Choice Scarf',
+			'Sandshrew-Alola', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Choice Scarf',
 			'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Explosion', 'Self-Destruct',
 		],
 		onValidateTeam(team) {
