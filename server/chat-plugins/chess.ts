@@ -1080,7 +1080,7 @@ export const commands: ChatCommands = {
 		},
 		ladder() {
 			return this.parse(`/join view-chessladder`);
-		}
+		},
 	},
 	chesshelp: [
 		`/chess challenge [user] - Challenges the [user] to a chess game.`,
