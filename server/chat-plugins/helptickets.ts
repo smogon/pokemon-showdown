@@ -355,7 +355,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	onChatMessage(message: string, user: User) {
 		// in case they namechange
 		if (this.room.auth.has(user.id) && user.connections.length) {
-			const roomids = message.match(/battle-(?:[a-zA-Z0-9]+)-(?:[0-9]+)(?:-(?:[a-zA-Z0-9]+)pw)?/ig);
+			const roomids = message.match(/battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/ig);
 			if (roomids) {
 				for (const roomid of roomids) {
 					const curRoom = Rooms.get(roomid);
