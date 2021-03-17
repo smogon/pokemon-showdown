@@ -353,9 +353,6 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.playerTable = null;
 	}
 	onChatMessage(message: string, user: User) {
-		// in case they namechange - 
-		// The creator's posted replays should always be uploaded, regardless of the name
-		// hence, we check room.auth rather than a direct userid check.
 		const roomids = message.match(/battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g);
 		if (roomids) {
 			for (const roomid of roomids) {
