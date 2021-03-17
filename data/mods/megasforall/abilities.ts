@@ -1,3 +1,7 @@
+const bladeMoves = [
+	'aerialace', 'airslash', 'behemothblade', 'cut', 'furycutter', 'leafblade', 'nightslash', 'psychocut', 'razorshell', 'razorwind', 'sacredsword',
+	'secretsword', 'slash', 'xscissor', 'solarblade',
+];
 export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 	gravitation: {
 		shortDesc: "On switch-in, this Pokémon summons Gravity.",
@@ -1239,15 +1243,9 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		desc: "If this Pokémon is at full HP, its blade-based and slashing moves have their priority increased by 1. When its HP is in between full and 1/3, this Pokémon's Defense is raised by 1 stage after it uses a blade-based or slashing move. When it has 1/3 or less of its maximum HP, rounded down, this Pokémon's blade-based and slashing moves are critical hits.",
 		shortDesc: "Slashing moves: +1 priority at full HP, always crit at 1/3 HP or less, +1 Defense otherwise.",
 		onModifyPriority(priority, pokemon, target, move) {
-			const bladeMoves = [
-				'aerialace', 'airslash', 'behemothblade', 'cut', 'furycutter', 'leafblade', 'nightslash', 'psychocut', 'razorshell', 'razorwind', 'sacredsword', 'secretsword', 'slash', 'smartstrike', 'solarblade',
-			];
 			if (bladeMoves.includes(move.id) && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 		onSourceHit(target, source, move) {
-			const bladeMoves = [
-				'aerialace', 'airslash', 'behemothblade', 'cut', 'furycutter', 'leafblade', 'nightslash', 'psychocut', 'razorshell', 'razorwind', 'sacredsword', 'secretsword', 'slash', 'solarblade', 'xscissor',
-			];
 			if (!move || !target) return;
 			if (source.hp === source.maxhp || source.hp <= source.maxhp / 3) return;
 			if (bladeMoves.includes(move.id)) {
@@ -1255,9 +1253,6 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			}
 		},
 		onModifyCritRatio(critRatio, source, target, move) {
-			const bladeMoves = [
-				'aerialace', 'airslash', 'behemothblade', 'cut', 'furycutter', 'leafblade', 'nightslash', 'psychocut', 'razorshell', 'razorwind', 'sacredsword', 'secretsword', 'slash', 'solarblade', 'xscissor',
-			];
 			if (bladeMoves.includes(move.id) && source.hp <= source.maxhp / 3) return 5;
 		},
 		name: "Heavenly Techniques",
