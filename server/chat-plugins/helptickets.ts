@@ -356,10 +356,12 @@ export class HelpTicket extends Rooms.RoomGame {
 		// in case they namechange
 		if (this.room.auth.has(user.id) && user.connections.length) {
 			const roomids = message.match(/battle-(?:[a-zA-Z0-9]+)-(?:[0-9]+)(?:-(?:[a-zA-Z0-9]+)pw)?/ig);
-			for (const roomid of roomids) {
-				const curRoom = Rooms.get(roomid);
-				if (!curRoom || !('uploadReplay' in curRoom) || curRoom?.battle?.replaySaved) continue;
-				void curRoom.uploadReplay(user, user.connections[0], 'forpunishment');
+			if (roomids) {
+				for (const roomid of roomids) {
+					const curRoom = Rooms.get(roomid);
+					if (!curRoom || !('uploadReplay' in curRoom) || curRoom?.battle?.replaySaved) continue;
+					void curRoom.uploadReplay(user, user.connections[0], 'forpunishment');
+				}
 			}
 		}
 	}
