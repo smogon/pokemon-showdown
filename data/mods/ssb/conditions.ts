@@ -2177,6 +2177,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			for (const side of this.sides) {
 				const keys = Object.keys(side.sideConditions);
 				for (const key of keys) {
+					if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
 					side.removeSideCondition(key);
 					if (!silentRemove.includes(key)) {
 						this.add('-sideend', side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
