@@ -358,10 +358,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: hasMove['stoneedge']};
 		case 'rockblast': case 'rockslide':
 			return {cull: hasMove['headsmash'] || hasMove['stoneedge']};
-			break;
 		case 'bulletpunch':
 			return {cull: hasMove['substitute']};
-			break;
 		case 'hydropump':
 			return {cull: (
 				hasMove['razorshell'] ||
