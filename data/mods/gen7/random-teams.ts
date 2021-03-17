@@ -356,22 +356,16 @@ export class RandomGen7Teams extends RandomTeams {
 			return {cull: hasMove['trickroom'] || (isDoubles && hasMove['energyball']) || (counter.Grass > 1 && counter.setupType)};
 		case 'seedbomb':
 			return {cull: hasMove['leafstorm'] || isDoubles && hasMove['gigadrain']};
-			break;
 		case 'solarbeam':
 			return {cull: (!hasAbility['Drought'] && !hasMove['sunnyday']) || hasMove['gigadrain'] || hasMove['leafstorm']};
-			break;
 		case 'bonemerang': case 'precipiceblades':
 			return {cull: hasMove['earthquake']};
-			break;
 		case 'earthpower':
 			return {cull: hasMove['earthquake'] && counter.setupType !== 'Special'};
-			break;
 		case 'earthquake':
 			return {cull: isDoubles && hasMove['highhorsepower']};
-			break;
 		case 'freezedry':
 			return {cull: hasMove['icebeam'] || hasMove['icywind'] || counter.stab < 2};
-			break;
 		case 'bodyslam': case 'return':
 			return {cull: (
 				hasMove['doubleedge'] ||
