@@ -2088,11 +2088,10 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				if (effect && effect.effectType === 'Move' && effect.type === 'Fire' && source === this.effectData.target) {
 					if (this.effectData.damage) {
 						this.effectData.damage += damage;
-						this.effectData.lit = true;
 					} else {
 						this.effectData.damage = damage;
-						this.effectData.lit = true;
 					}
+					this.effectData.lit = true;
 				} else if (effect && effect.effectType === 'Move' && effect.type === 'Fire' && target === this.effectData.target) {
 					this.effectData.lit = true;
 					return damage * 1.5;
