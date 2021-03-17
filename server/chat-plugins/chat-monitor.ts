@@ -655,7 +655,7 @@ export const commands: ChatCommands = {
 		if (!room || !toNotify.includes(room.roomid)) {
 			this.sendReply(msg);
 		}
-		this.globalModlog(`ALLOWNAME`, null, target);
+		this.globalModlog(`ALLOWNAME`, target);
 	},
 };
 
