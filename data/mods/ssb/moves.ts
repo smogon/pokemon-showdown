@@ -4205,8 +4205,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(source) {
-				let totalatk;
-				let totalspa;
+				let totalatk = 0;
+				let totalspa = 0;
 				for (const target of source.side.foe.active) {
 					if (!target || target.fainted) continue;
 					totalatk += target.getStat('atk', false, true);
