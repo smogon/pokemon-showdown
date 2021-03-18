@@ -736,7 +736,7 @@ export const commands: ChatCommands = {
 		`/allowhotpatch [chat|formats|battles|validator|tournaments|punishments|modlog|all] [reason] - Enables hotpatching the specified part of the simulator. Requires: &`,
 	],
 
-	processes(target, room, user) {
+	async processes(target, room, user) {
 		const devRoom = Rooms.get('development');
 		if (!(devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%'))) {
 			this.checkCan('lockdown');
@@ -744,16 +744,22 @@ export const commands: ChatCommands = {
 
 		const processes = new Map<string, ProcessData>();
 
-		const psOutput = child_process.execSync('ps -o pid,%cpu,time,command', {cwd: `${__dirname}/../..`}).toString();
-		const rows = psOutput.split('\n').slice(1); // first line is the table header
-		for (const row of rows) {
-			if (!row.trim()) continue;
-			const [pid, cpu, time, ...rest] = row.split(' ').filter(Boolean);
-			const entry: ProcessData = {cmd: rest.join(' ')};
-			if (time && time !== '00:00:00') entry.time = time;
-			if (cpu && cpu !== '0.0') entry.cpu = `${cpu}%`;
-			processes.set(pid, entry);
-		}
+		await new Promise<void>(resolve => {
+			const child = child_process.exec('ps -o pid,%cpu,time,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+				if (err) throw err;
+				const rows = stdout.split('\n').slice(1); // first line is the table header
+				for (const row of rows) {
+					if (!row.trim()) continue;
+					const [pid, cpu, time, ...rest] = row.split(' ').filter(Boolean);
+					if (pid === `${child.pid}`) continue; // ignore this process
+					const entry: ProcessData = {cmd: rest.join(' ')};
+					if (time && time !== '00:00:00') entry.time = time;
+					if (cpu && cpu !== '0.0') entry.cpu = `${cpu}%`;
+					processes.set(pid, entry);
+				}
+				resolve();
+			});
+		});
 
 		let buf = `<strong>${process.pid}</strong> - Main `;
 		const mainProcess = processes.get(`${process.pid}`)!;
