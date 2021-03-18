@@ -82,6 +82,7 @@ const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
 };
 
 interface OtdSettings {
+	id?: string;
 	updateOnNom?: boolean;
 	keys: string[];
 	title: string;
@@ -141,7 +142,7 @@ class OtdHandler {
 
 	static create(room: Room, settings: OtdSettings) {
 		const {title, timeLabel} = settings;
-		const id = toID(title).charAt(0) + 'ot' + timeLabel.charAt(0);
+		const id = settings.id || toID(title).charAt(0) + 'ot' + timeLabel.charAt(0);
 		const handler = new OtdHandler(id, room, settings);
 		otds.set(id, handler);
 		return handler;
@@ -533,7 +534,7 @@ if (!Object.keys(otdData).length) {
 			const winners = OtdHandler.parseOldWinners(content, keyLabels, keys);
 			otdData[otd] = {
 				settings: {
-					keyLabels, keys, title, timeLabel, roomid: roomid as RoomID,
+					keyLabels, keys, title, timeLabel, roomid: roomid as RoomID, id: otd,
 				},
 				winners,
 			};
