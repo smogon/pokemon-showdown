@@ -287,7 +287,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Aethernum
 	lilypadoverflow: {
 		accuracy: 100,
-		basePower: 60,
+		basePower: 61,
 		basePowerCallback(source, target, move) {
 			if (!source.volatiles['raindrop']?.layers) return move.basePower;
 			return move.basePower + (source.volatiles['raindrop'].layers * 20);
