@@ -1503,7 +1503,6 @@ export const Punishments = new class {
 
 		return banned;
 	}
-
 	checkNameInRoom(user: User, roomid: RoomID): boolean {
 		let punishment = Punishments.roomUserids.nestedGet(roomid, user.id);
 		if (!punishment && user.autoconfirmed) {
