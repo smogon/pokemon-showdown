@@ -144,10 +144,6 @@ class OtdHandler {
 		const id = toID(title).charAt(0) + 'ot' + timeLabel.charAt(0);
 		const handler = new OtdHandler(id, room, settings);
 		otds.set(id, handler);
-		Chat.commands[id] = Chat.annotateCommands(otdCommands);
-		Chat.pages[id] = function () {
-			return handler.generateWinnerList(this);
-		};
 		return handler;
 	}
 
@@ -975,4 +971,11 @@ for (const otd in otdData) {
 		continue;
 	}
 	OtdHandler.create(room, settings);
+}
+
+for (const [k, v] of otds) {
+	pages[k] = function () {
+		return v.generateWinnerList(this);
+	};
+	commands[k] = otdCommands;
 }
