@@ -239,10 +239,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		const moveHit = target.getMoveHitData(move);
 		moveHit.crit = move.willCrit || false;
-		if (move.willCrit === undefined) {
-			if (critRatio) {
-				moveHit.crit = this.randomChance(1, critMult[critRatio]);
-			}
+		if (move.willCrit === undefined && critRatio) {
+			moveHit.crit = this.randomChance(1, critMult[critRatio]);
 		}
 
 		if (moveHit.crit) {
