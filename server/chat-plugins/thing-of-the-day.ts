@@ -772,19 +772,6 @@ export const otdCommands: ChatCommands = {
 		if (!text) return this.errorReply("There is no winner yet.");
 		this.sendReplyBox(text);
 	},
-	help: [
-		`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
-		`- /-otd - View the current Thing of the Day.`,
-		`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`,
-		`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
-		`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
-		`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
-		`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
-		`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
-		`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
-		`- /-otd winners - Displays a list of previous things of the day.`,
-		`- /-otd toggleupdate [on|off] - Changes the Thing of the Day to display on nomination ([on] to update, [off] to turn off updates). Requires: % @ # &`,
-	],
 };
 
 export const pages: PageTable = {};
@@ -880,13 +867,27 @@ export const commands: ChatCommands = {
 			this.globalModlog(`OTD DELETE`, null, target);
 			this.privateGlobalModAction(`${user.name} deleted the OTD ${otd.name} of the ${otd.timeLabel}`);
 		},
-		help: [
-			`/otd create [title], [time], [...labels] - Creates a Thing of the Day with the given [name], [time], and [labels]. Requires: &`,
-			`/otd updateroom [otd], [room] - Updates the room for the given [otd] to the new [room]. Requires: &`,
-			`/otd delete [otd] - Removes the given Thing of the Day. Requires: &`,
-		],
 	},
+	otdhelp: [
+		`/otd create [title], [time], [...labels] - Creates a Thing of the Day with the given [name], [time], and [labels]. Requires: &`,
+		`/otd updateroom [otd], [room] - Updates the room for the given [otd] to the new [room]. Requires: &`,
+		`/otd delete [otd] - Removes the given Thing of the Day. Requires: &`,
+	],
 };
+
+const otdHelp = [
+	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
+	`- /-otd - View the current Thing of the Day.`,
+	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`,
+	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
+	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
+	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
+	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
+	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
+	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
+	`- /-otd winners - Displays a list of previous things of the day.`,
+	`- /-otd toggleupdate [on|off] - Changes the Thing of the Day to display on nomination ([on] to update, [off] to turn off updates). Requires: % @ # &`,
+];
 
 for (const otd in otdData) {
 	const data = otdData[otd];
@@ -904,4 +905,5 @@ for (const [k, v] of otds) {
 		return v.generateWinnerList(this);
 	};
 	commands[k] = otdCommands;
+	commands[`${k}help`] = otdHelp;
 }
