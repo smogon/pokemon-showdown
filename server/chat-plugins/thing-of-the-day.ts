@@ -851,6 +851,18 @@ export const otdCommands: ChatCommands = {
 		if (!text) return this.errorReply("There is no winner yet.");
 		this.sendReplyBox(text);
 	},
+	help: [
+		`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
+		`- /-otd - View the current Thing of the Day.`,
+		`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`,
+		`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
+		`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
+		`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
+		`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
+		`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
+		`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
+		`- /-otd winners - Displays a list of previous things of the day.`,
+	],
 };
 
 export const pages: PageTable = {};
@@ -952,18 +964,6 @@ export const commands: ChatCommands = {
 			`/otd delete [otd] - Removes the given Thing of the Day. Requires: &`,
 		],
 	},
-	help: [
-		`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
-		`- /-otd - View the current Thing of the Day.`,
-		`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`,
-		`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
-		`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
-		`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
-		`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
-		`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
-		`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
-		`- /-otd winners - Displays a list of previous things of the day.`,
-	],
 };
 
 for (const otd in otdData) {
