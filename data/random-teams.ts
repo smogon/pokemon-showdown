@@ -142,8 +142,8 @@ export class RandomTeams {
 				return movePool.includes('spectralthief') && !counter.Dark;
 			},
 			Grass: (movePool, hasMove, hasAbility, hasType, counter, species) => {
-				if (species.baseStats.atk >= 100 || movePool.includes('leafstorm') || movePool.includes('grassyglide')) return true;
-				return !counter.Grass;
+				if (movePool.includes('leafstorm') || movePool.includes('grassyglide')) return true;
+				return !counter.Grass && species.baseStats.atk >= 100;
 			},
 			Ground: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Ground,
 			Ice: (movePool, hasMove, hasAbility, hasType, counter) => {
@@ -166,7 +166,8 @@ export class RandomTeams {
 			Rock: (movePool, hasMove, hasAbility, hasType, counter, species) => !counter.Rock && species.baseStats.atk >= 80,
 			Steel: (movePool, hasMove, hasAbility, hasType, counter, species) => {
 				if (species.baseStats.atk < 95) return false;
-				return !counter.Steel || (hasMove['bulletpunch'] && counter.stab < 2);
+				if (movePool.includes('meteormash')) return true;
+				return !counter.Steel;
 			},
 			Water: (movePool, hasMove, hasAbility, hasType, counter, species) => {
 				if (!counter.Water && !hasMove['hypervoice']) return true;
@@ -1097,7 +1098,8 @@ export class RandomTeams {
 				hasMove['throatchop'] ||
 				// Hawlucha doesn't want Roost + 3 attacks
 				(hasMove['stoneedge'] && species.id === 'hawlucha') ||
-				(hasMove['outrage'] && hasMove['dualwingbeat'] && !hasMove['defog']),
+				// Special cases for Salamence, Dynaless Dragonite, and Scizor to help prevent sets with poor coverage or no setup.
+				(hasMove['dualwingbeat'] && ((hasMove['outrage'] && !hasMove['defog']) || species.id === 'scizor')),
 			};
 		case 'reflect': case 'lightscreen':
 			return {cull: !!teamDetails.screens};
@@ -1156,7 +1158,7 @@ export class RandomTeams {
 		isNoDynamax: boolean
 	): boolean {
 		if ([
-			'Cloud Nine', 'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge',
+			'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge',
 			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -1175,6 +1177,8 @@ export class RandomTeams {
 			return (counter.setupType && hasAbility['Soundproof']);
 		case 'Chlorophyll':
 			return (species.baseStats.spe > 100 || !counter.Fire && !hasMove['sunnyday'] && !teamDetails.sun);
+		case 'Cloud Nine':
+			return (!isNoDynamax || species.id !== 'golduck');
 		case 'Competitive':
 			return (counter.Special < 2 || (hasMove['rest'] && hasMove['sleeptalk']));
 		case 'Compound Eyes': case 'No Guard':
@@ -1278,7 +1282,7 @@ export class RandomTeams {
 			return hasType['Grass'];
 		case 'Swift Swim':
 			if (isNoDynamax) {
-				const neverWantsSwim = ['Intimidate', 'Rock Head', 'Water Absorb'].some(m => hasAbility[m]);
+				const neverWantsSwim = !hasMove['raindance'] && ['Intimidate', 'Rock Head', 'Water Absorb'].some(m => hasAbility[m]);
 				const noSwimIfNoRain = !hasMove['raindance'] && [
 					'Cloud Nine', 'Lightning Rod', 'Intimidate', 'Rock Head', 'Sturdy', 'Water Absorb', 'Weak Armor',
 				].some(m => hasAbility[m]);
@@ -1322,7 +1326,7 @@ export class RandomTeams {
 			// The Speed less than 50 case is intended for Cursola, but could apply to any slow Pokémon.
 			return (
 				(!isNoDynamax && species.baseStats.spe > 50) ||
-				counter.Status > 1 ||
+				species.id === 'skarmory' ||
 				hasMove['shellsmash'] || hasMove['rapidspin']
 			);
 		}
@@ -1754,10 +1758,10 @@ export class RandomTeams {
 			if (abilityNames[2] && abilities[1].rating <= abilities[2].rating && this.randomChance(1, 2)) {
 				[abilities[1], abilities[2]] = [abilities[2], abilities[1]];
 			}
-			if (abilities[0].rating <= abilities[1].rating && this.randomChance(1, 2)) {
-				[abilities[0], abilities[1]] = [abilities[1], abilities[0]];
-			} else if (abilities[0].rating - 0.6 <= abilities[1].rating && this.randomChance(2, 3)) {
-				[abilities[0], abilities[1]] = [abilities[1], abilities[0]];
+			if (abilities[0].rating <= abilities[1].rating) {
+				if (this.randomChance(1, 2)) [abilities[0], abilities[1]] = [abilities[1], abilities[0]];
+			} else if (abilities[0].rating - 0.6 <= abilities[1].rating) {
+				if (this.randomChance(2, 3)) [abilities[0], abilities[1]] = [abilities[1], abilities[0]];
 			}
 
 			// Start with the first abiility and work our way through, culling as we go
@@ -1793,12 +1797,14 @@ export class RandomTeams {
 				ability = 'Moxie';
 			} else if (isDoubles) {
 				if (hasAbility['Competitive'] && ability !== 'Shadow Tag' && ability !== 'Strong Jaw') ability = 'Competitive';
-				if (hasAbility['Curious Medicine'] && this.randomChance(1, 2)) ability = 'Curious Medicine';
 				if (hasAbility['Friend Guard']) ability = 'Friend Guard';
 				if (hasAbility['Gluttony'] && hasMove['recycle']) ability = 'Gluttony';
 				if (hasAbility['Guts']) ability = 'Guts';
 				if (hasAbility['Harvest']) ability = 'Harvest';
-				if (hasAbility['Healer'] && hasAbility['Natural Cure']) ability = 'Healer';
+				if (hasAbility['Healer'] && (
+					hasAbility['Natural Cure'] ||
+					(hasAbility['Aroma Veil'] && this.randomChance(1, 2))
+				)) ability = 'Healer';
 				if (hasAbility['Intimidate']) ability = 'Intimidate';
 				if (hasAbility['Klutz'] && ability === 'Limber') ability = 'Klutz';
 				if (hasAbility['Magic Guard'] && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
