@@ -146,6 +146,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		while (pokemonPool.length && pokemon.length < 6) {
 			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
+			// Only one Ditto is allowed per battle in Generation 1,
+			// as it can cause an endless battle if two Dittos are forced
+			// to face each other.
+			if (species.id === 'ditto' && this.battleHasDitto) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
@@ -222,6 +226,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Is it Magikarp or one of the useless bugs?
 			if (handicapMons.includes(species.id)) hasShitmon = true;
+
+			// Ditto check
+			if (species.id === 'ditto') this.battleHasDitto = true;
 		}
 
 		return pokemon;
