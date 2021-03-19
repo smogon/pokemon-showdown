@@ -4620,7 +4620,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Nasty Plot', source);
 		},
 		secondary: {
-			chance: 100,
+			chance: 75,
 			self: {
 				boosts: {
 					spe: 1,
