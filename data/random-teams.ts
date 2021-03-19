@@ -1041,7 +1041,7 @@ export class RandomTeams {
 			return {cull:
 				(isDoubles && hasMove['lunge']) ||
 				(hasMove['uturn'] && !counter.setupType) ||
-				movePool.includes('firstimpression') || movePool.includes('spikes'),
+				movePool.includes('spikes'),
 			};
 		case 'stoneedge':
 			const gutsCullCondition = hasAbility['Guts'] && (!hasMove['dynamicpunch'] || hasMove['spikes']);
