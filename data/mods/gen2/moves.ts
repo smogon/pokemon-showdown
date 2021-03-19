@@ -404,6 +404,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: true,
 		ignoreAccuracy: false,
+		flags: {reflectable: 1, mirror: 1},
 	},
 	metronome: {
 		inherit: true,
@@ -663,6 +664,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: true,
 		ignoreAccuracy: false,
+		flags: {reflectable: 1, mirror: 1},
 	},
 	spikes: {
 		inherit: true,
