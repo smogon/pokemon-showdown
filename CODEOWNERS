@@ -17,3 +17,4 @@ server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
 server/chat-plugins/the-studio.ts @KrisXV
 server/chat-plugins/trivia.ts @AnnikaCodes
 server/modlog.ts @monsanto
+test/random-battles/* @AnnikaCodes
