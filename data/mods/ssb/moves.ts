@@ -4190,7 +4190,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the Defense and Special Defense by 1 stage. Lowers the foe's higher offensive stat by 1 stage.",
-		shortDesc: "Gives +1 Def & SpD. -1 to foe's highest offensive stat.",
+		shortDesc: "+1 Def & SpD. -1 to foe's highest offensive stat.",
 		name: "Homunculus's Vanity",
 		gen: 8,
 		pp: 10,
