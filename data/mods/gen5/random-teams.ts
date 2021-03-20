@@ -198,7 +198,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'glare': case 'headbutt':
 			return {cull: hasMove['bodyslam']};
 		case 'healbell':
-			return {cull: hasMove['magiccoat']};
+			return {cull: counter.speedsetup || hasMove['magiccoat']};
 		case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
 			return {cull: ['leechseed', 'rest', 'wish'].some(m => hasMove[m])};
 		case 'substitute':
@@ -227,7 +227,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	) {
 		switch (ability) {
 		case 'Anger Point': case 'Gluttony': case 'Keen Eye': case 'Moody':
-		case 'Sand Veil': case 'Snow Cloak': case 'Steadfast':
+		case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
 			return true;
 		case 'Analytic': case 'Download': case 'Hyper Cutter':
 			return species.nfe;
@@ -250,7 +250,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Immunity':
 			return hasAbility['Toxic Boost'];
 		case 'Intimidate':
-			return hasMove['rest'];
+			return (hasMove['rest'] || species.id === 'staraptor');
 		case 'Lightning Rod':
 			return species.types.includes('Ground');
 		case 'Limber':
@@ -286,7 +286,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Unaware':
 			return (counter.setupType || hasAbility['Magic Guard']);
 		case 'Unburden':
-			return species.baseStats.spe > 100;
+			return species.baseStats.spe > 100 && !hasMove['acrobatics'];
 		case 'Water Absorb':
 			return (hasAbility['Drizzle'] || hasAbility['Unaware'] || hasAbility['Volt Absorb']);
 		}
@@ -651,10 +651,10 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			if (abilityNames[2] && abilities[1].rating <= abilities[2].rating && this.randomChance(1, 2)) {
 				[abilities[1], abilities[2]] = [abilities[2], abilities[1]];
 			}
-			if (abilities[0].rating <= abilities[1].rating && this.randomChance(1, 2)) {
-				[abilities[0], abilities[1]] = [abilities[1], abilities[0]];
-			} else if (abilities[0].rating - 0.6 <= abilities[1].rating && this.randomChance(2, 3)) {
-				[abilities[0], abilities[1]] = [abilities[1], abilities[0]];
+			if (abilities[0].rating <= abilities[1].rating) {
+				if (this.randomChance(1, 2)) [abilities[0], abilities[1]] = [abilities[1], abilities[0]];
+			} else if (abilities[0].rating - 0.6 <= abilities[1].rating) {
+				if (this.randomChance(2, 3)) [abilities[0], abilities[1]] = [abilities[1], abilities[0]];
 			}
 
 			// Start with the first abiility and work our way through, culling as we go
@@ -676,6 +676,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				ability = 'Guts';
 			} else if (abilityNames.includes('Prankster') && counter.Status > 1) {
 				ability = 'Prankster';
+			} else if (abilityNames.includes('Quick Feet') && hasMove['facade']) {
+				ability = 'Quick Feet';
 			} else if (abilityNames.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
