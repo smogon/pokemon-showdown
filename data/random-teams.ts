@@ -47,7 +47,7 @@ const SpeedSetup = [
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
-	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'clearsmog', 'eruption', 'explosion',
+	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion',
 	'fakeout', 'firstimpression', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch',
 	'meteorbeam', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct', 'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken',
 	'vacuumwave', 'voltswitch', 'waterspout',
@@ -908,7 +908,7 @@ export class RandomTeams {
 		// Ineffective to have two particular moves together
 		case 'explosion':
 			// Rock Blast: Special case for Gigalith to prevent Stone Edge-less Choice Band sets
-			const otherMoves = ['curse', 'drainpunch', 'rockblast', 'painsplit', 'wish'].some(m => hasMove[m]);
+			const otherMoves = ['curse', 'stompingtantrum', 'rockblast', 'painsplit', 'wish'].some(m => hasMove[m]);
 			return {cull: counter.speedsetup || counter.recovery || otherMoves};
 		case 'facade':
 			// Special cases for Braviary and regular Snorlax, respectively
@@ -1133,15 +1133,6 @@ export class RandomTeams {
 			return {cull: hasMove['vcreate']};
 		}
 
-		if (move.id !== 'photongeyser' && (
-			(move.category === 'Physical' && counter.setupType === 'Special') ||
-			(move.category === 'Special' && counter.setupType === 'Physical')
-		)) {
-			// Reject STABs last in case the setup type changes later on
-			const stabs = counter[species.types[0]] + (counter[species.types[1]] || 0);
-			if (!hasType[move.type] || stabs > 1 || counter[move.category] < 2) return {cull: true};
-		}
-
 		return {cull: false};
 	}
 
@@ -1348,7 +1339,14 @@ export class RandomTeams {
 		// not undefined — we want "no item" not "go find a different item"
 		if (hasMove['acrobatics'] && ability !== 'Ripen') return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
 		if (hasMove['geomancy'] || hasMove['meteorbeam']) return 'Power Herb';
-		if (hasMove['shellsmash']) return (ability === 'Sturdy' && !isLead && !isDoubles) ? 'Heavy-Duty Boots' : 'White Herb';
+		if (hasMove['shellsmash']) {
+			if (ability === 'Sturdy' && !isLead && !isDoubles) return 'Heavy-Duty Boots';
+			// Shell Smash + Solid Rock is intended for Carracosta, but I think
+			// any Pokémon which can take a SE hit via Solid Rock deserves to have
+			// its Shell Smash considered a good enough speed setup move for WP.
+			if (ability === 'Solid Rock') return 'Weakness Policy';
+			return 'White Herb';
+		}
 		// Techno Blast should always be Water-type
 		if (hasMove['technoblast']) return 'Douse Drive';
 		// Species-specific logic
@@ -1521,7 +1519,7 @@ export class RandomTeams {
 		) return 'Heavy-Duty Boots';
 		if (species.name === 'Necrozma-Dusk-Mane' || (
 			this.dex.getEffectiveness('Ground', species) < 2 &&
-			counter.speedsetup &&
+			counter.speedsetup || (hasMove['shellsmash'] && ability === 'Solid Rock') &&
 			counter.damagingMoves.length >= 3 &&
 			defensiveStatTotal >= 300
 		)) return 'Weakness Policy';
@@ -1549,7 +1547,7 @@ export class RandomTeams {
 		if (
 			isLead && !isDoubles &&
 			!['Disguise', 'Sturdy'].includes(ability) && !hasMove['substitute'] &&
-			!counter.recoil && !counter.recovery && defensiveStatTotal < 255
+			!counter.drain && !counter.recoil && !counter.recovery && defensiveStatTotal < 255
 		) return 'Focus Sash';
 		if (!isDoubles && ability === 'Water Bubble') return 'Mystic Water';
 		if (hasMove['clangoroussoul'] || (hasMove['boomburst'] && counter.speedsetup)) return 'Throat Spray';
@@ -1672,10 +1670,19 @@ export class RandomTeams {
 			for (const [k, moveId] of moves.entries()) {
 				const move = this.dex.getMove(moveId);
 
-				let {cull: rejected, isSetup} = this.shouldCullMove(
+				let {cull, isSetup} = this.shouldCullMove(
 					move, hasType, hasMove, hasAbility, counter,
 					movePool, teamDetails, species, moves, isLead, isDoubles, isNoDynamax
 				);
+
+				if (move.id !== 'photongeyser' && (
+					(move.category === 'Physical' && counter.setupType === 'Special') ||
+					(move.category === 'Special' && counter.setupType === 'Physical')
+				)) {
+					// Reject STABs last in case the setup type changes later on
+					const stabs = counter[species.types[0]] + (counter[species.types[1]] || 0);
+					if (!hasType[move.type] || stabs > 1 || counter[move.category] < 2) cull = true;
+				}
 
 				// Pokemon should have moves that benefit their types, stats, or ability
 				const isLowBP = move.basePower && move.basePower < 50;
@@ -1695,7 +1702,7 @@ export class RandomTeams {
 				);
 
 				if (moveIsRejectable && (
-					!rejected && !isSetup && !move.weather && !move.stallingMove && notImportantSetup && !move.damage &&
+					!cull && !isSetup && !move.weather && !move.stallingMove && notImportantSetup && !move.damage &&
 					(isDoubles ? this.unrejectableMovesInDoubles(move) : this.unrejectableMovesInSingles(move))
 				)) {
 					// There may be more important moves that this Pokemon needs
@@ -1713,23 +1720,23 @@ export class RandomTeams {
 						(isLead && runEnforcementChecker('lead')) ||
 						(hasMove['leechseed'] && runEnforcementChecker('leechseed'))
 					) {
-						rejected = true;
+						cull = true;
 					// Pokemon should have moves that benefit their typing
 					} else {
 						for (const type of Object.keys(hasType)) {
 							if (runEnforcementChecker(type)) {
-								rejected = true;
+								cull = true;
 							}
 						}
 					}
 				}
 
 				// Sleep Talk shouldn't be selected without Rest
-				if (move.id === 'rest' && rejected) {
+				if (move.id === 'rest' && cull) {
 					const sleeptalk = movePool.indexOf('sleeptalk');
 					if (sleeptalk >= 0) {
 						if (movePool.length < 2) {
-							rejected = false;
+							cull = false;
 						} else {
 							this.fastPop(movePool, sleeptalk);
 						}
@@ -1737,12 +1744,12 @@ export class RandomTeams {
 				}
 
 				// Remove rejected moves from the move list
-				if (rejected && movePool.length) {
+				if (cull && movePool.length) {
 					if (move.category !== 'Status' && !move.damage) rejectedPool.push(moves[k]);
 					moves.splice(k, 1);
 					break;
 				}
-				if (rejected && rejectedPool.length) {
+				if (cull && rejectedPool.length) {
 					moves.splice(k, 1);
 					break;
 				}

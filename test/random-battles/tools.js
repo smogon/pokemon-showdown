@@ -5,6 +5,8 @@
  */
 'use strict';
 
+const assert = require("../assert");
+
 /**
  * Unit test helper for Pokemon sets
  *
@@ -25,6 +27,23 @@ function testSet(pokemon, options, test) {
 }
 
 /**
+ * Tests that a Pokémon does not get two moves together.
+ *
+ * @param {ID} pokemon the ID of the Pokemon whose set is to be tested
+ * @param {{format?: string, rounds?: number, isDoubles?: boolean, isLead?: boolean, isDynamax?: boolean}} options
+ * @param {ID} move1
+ * @param {ID} move2
+ */
+function testNotBothMoves(pokemon, options, move1, move2) {
+	testSet(pokemon, options, set => {
+		assert(
+			!(set.moves.includes(move1) && set.moves.includes(move2)),
+			`${pokemon} should not generate both "${move1}" and "${move2}" (generate moveset: ${set.moves})`
+		);
+	});
+}
+
+/**
  * Unit test helper for Pokemon teams
  *
  * @param {{format?: string, rounds?: number}} options
@@ -41,4 +60,5 @@ function testTeam(options, test) {
 }
 
 exports.testSet = testSet;
+exports.testNotBothMoves = testNotBothMoves;
 exports.testTeam = testTeam;
