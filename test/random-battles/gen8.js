@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const {testSet} = require('./tools');
+const {testSet, testNotBothMoves} = require('./tools');
 const assert = require('../assert');
 
 describe('[Gen 8] Random Battle', () => {
@@ -15,6 +15,18 @@ describe('[Gen 8] Random Battle', () => {
 				const move = Dex.getMove(m);
 				return move.type === 'Bug' && move.category !== 'Status';
 			}), `Golisopod should get Bug STAB (got ${set.moves})`);
+		});
+	});
+
+	it('should not generate Swords Dance + Fire Blast Garchomp', () => {
+		testNotBothMoves('garchomp', options, 'swordsdance', 'fireblast');
+	});
+
+	it('should give Solid Rock + Shell Smash Carracosta a Weakness Policy', () => {
+		testSet('carracosta', options, set => {
+			if (set.moves.includes('shellsmash') && set.ability === 'Solid Rock') {
+				assert.equal(set.item, "Weakness Policy");
+			}
 		});
 	});
 });
