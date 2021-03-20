@@ -147,7 +147,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				hasMove['lightscreen'] || hasMove['reflect']
 			)};
 		case 'uturn':
-			// Infernape doesn't want Expert Belt
+			// Infernape doesn't want mixed sets with U-turn
 			const infernapeCase = species.id === 'infernape' && counter.Special;
 			return {cull: counter.setupType || !!counter.speedsetup || hasMove['batonpass'] || infernapeCase};
 		case 'voltswitch':

@@ -29,7 +29,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	blastoise: {
-		randomBattleMoves: ["dragontail", "icebeam", "protect", "rapidspin", "scald", "toxic"],
+		randomBattleMoves: ["icebeam", "protect", "rapidspin", "scald", "toxic"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -234,7 +234,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	primeape: {
-		randomBattleMoves: ["closecombat", "encore", "icepunch", "punishment", "stoneedge", "uturn"],
+		randomBattleMoves: ["closecombat", "honeclaws", "icepunch", "stoneedge", "uturn"],
 		tier: "NU",
 		doublesTier: "DUU",
 	},
@@ -327,12 +327,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	slowbro: {
-		randomBattleMoves: ["calmmind", "fireblast", "psyshock", "scald", "slackoff", "thunderwave", "toxic", "trick"],
+		randomBattleMoves: ["calmmind", "icebeam", "psyshock", "scald", "slackoff", "thunderwave", "toxic"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
 	slowking: {
-		randomBattleMoves: ["fireblast", "grassknot", "icebeam", "psychic", "surf", "trick", "trickroom"],
+		randomBattleMoves: ["fireblast", "grassknot", "icebeam", "nastyplot", "psychic", "surf", "trickroom"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
@@ -510,7 +510,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	tangrowth: {
-		randomBattleMoves: ["gigadrain", "hiddenpowerfire", "leechseed", "powerwhip", "rockslide", "sleeppowder", "synthesis"],
+		randomBattleMoves: ["earthquake", "hiddenpowerfire", "leechseed", "powerwhip", "rockslide", "sleeppowder", "synthesis"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
