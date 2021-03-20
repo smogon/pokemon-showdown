@@ -392,7 +392,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return 'Lustrous Orb';
 		}
 		if (counter.damagingMoves.length >= 4 && ability !== 'Sturdy') {
-			return (hasMove['uturn']) ? 'Expert Belt' : 'Life Orb';
+			return hasMove['uturn'] ? 'Expert Belt' : 'Life Orb';
 		}
 		if (
 			isLead &&
