@@ -1519,7 +1519,7 @@ export class RandomTeams {
 		) return 'Heavy-Duty Boots';
 		if (species.name === 'Necrozma-Dusk-Mane' || (
 			this.dex.getEffectiveness('Ground', species) < 2 &&
-			counter.speedsetup || (hasMove['shellsmash'] && ability === 'Solid Rock') &&
+			counter.speedsetup &&
 			counter.damagingMoves.length >= 3 &&
 			defensiveStatTotal >= 300
 		)) return 'Weakness Policy';
