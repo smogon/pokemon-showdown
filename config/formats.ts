@@ -1985,7 +1985,7 @@ export const Formats: FormatList = [
 		name: "[Gen 7] Mix and Mega",
 		desc: `Mega Stones and Primal Orbs can be used on almost any Pok&eacute;mon with no Mega Evolution limit.`,
 		threads: [
-			`&bullet; <a href="">USM Mix and Mega</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8778656/">USM Mix and Mega</a>`,
 		],
 
 		mod: 'mixandmega7',
