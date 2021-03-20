@@ -403,6 +403,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		) {
 			return ability === 'Sturdy' ? 'Custap Berry' : 'Focus Sash';
 		}
+		if (hasMove['voltswitch'] && species.baseStats.spe <= 90) {
+			return 'Leftovers';
+		}
 		if (
 			counter.damagingMoves.length >= 3 &&
 			species.baseStats.spe >= 40 &&

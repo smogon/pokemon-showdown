@@ -1994,7 +1994,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	rotom: {
-		randomBattleMoves: ["hiddenpowerfighting", "hiddenpowerice", "shadowball", "substitute", "painsplit", "thunderbolt", "trick", "voltswitch", "willowisp"],
+		randomBattleMoves: ["hiddenpowerice", "shadowball", "substitute", "painsplit", "thunderbolt", "trick", "voltswitch", "willowisp"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
