@@ -6,7 +6,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	venusaur: {
-		randomBattleMoves: ["gigadrain", "hiddenpowerfire", "hiddenpowerice", "leechseed", "naturepower", "powerwhip", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"],
+		randomBattleMoves: ["hiddenpowerfire", "hiddenpowerice", "leechseed", "naturepower", "powerwhip", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"],
 		tier: "(OU)",
 		doublesTier: "DOU",
 	},
@@ -467,7 +467,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	lickilicky: {
-		randomBattleMoves: ["bodyslam", "dragontail", "earthquake", "explosion", "healbell", "powerwhip", "protect", "swordsdance", "toxic", "wish"],
+		randomBattleMoves: ["bodyslam", "earthquake", "healbell", "powerwhip", "protect", "swordsdance", "toxic", "wish"],
 		tier: "NU",
 		doublesTier: "DUU",
 	},

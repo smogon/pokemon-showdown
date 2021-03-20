@@ -147,7 +147,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				hasMove['lightscreen'] || hasMove['reflect']
 			)};
 		case 'uturn':
-			return {cull: counter.setupType || !!counter.speedsetup || hasMove['batonpass']};
+			// Infernape doesn't want Expert Belt
+			const infernapeCase = species.id === 'infernape' && counter.Special;
+			return {cull: counter.setupType || !!counter.speedsetup || hasMove['batonpass'] || infernapeCase};
 		case 'voltswitch':
 			return {cull: counter.setupType || counter.speedsetup || ['batonpass', 'magnetrise', 'uturn'].some(m => hasMove[m])};
 
@@ -390,7 +392,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return 'Lustrous Orb';
 		}
 		if (counter.damagingMoves.length >= 4 && ability !== 'Sturdy') {
-			return (species.name === 'Deoxys-Attack' || counter.Normal || !!counter.priority) ? 'Life Orb' : 'Expert Belt';
+			return (hasMove['uturn']) ? 'Expert Belt' : 'Life Orb';
 		}
 		if (
 			isLead &&
