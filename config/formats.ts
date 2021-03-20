@@ -1989,7 +1989,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'mixandmega7',
-		ruleset: ['Standard', 'Mega Rayquaza Clause'],
+		ruleset: ['Standard', 'Mega Rayquaza Clause', 'Overflow Stat Mod'],
 		banlist: ['Shadow Tag', 'Gengarite', 'Baton Pass', 'Electrify'],
 		restricted: [
 			'Arceus', 'Deoxys', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem', 'Landorus-Therian', 'Lugia',
