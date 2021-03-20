@@ -1982,6 +1982,99 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 7] Mix and Mega",
+		desc: `Mega Stones and Primal Orbs can be used on almost any Pok&eacute;mon with no Mega Evolution limit.`,
+		threads: [
+			`&bullet; <a href="">USM Mix and Mega</a>`,
+		],
+
+		mod: 'mixandmega7',
+		ruleset: ['Standard', 'Mega Rayquaza Clause'],
+		banlist: ['Shadow Tag', 'Gengarite', 'Baton Pass', 'Electrify'],
+		restricted: [
+			'Arceus', 'Deoxys', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem', 'Landorus-Therian', 'Lugia',
+			'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shuckle',
+			'Slaking', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Beedrillite', 'Blazikenite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Ultranecrozium Z',
+		],
+		unbanlist: ['Deoxys-Defense', 'Kyurem-Base', 'Necrozma-Base'],
+		onValidateTeam(team) {
+			const itemTable = new Set<ID>();
+			for (const set of team) {
+				const item = this.dex.getItem(set.item);
+				if (!item.exists) continue;
+				if (itemTable.has(item.id) && (item.megaStone || item.onPrimal)) {
+					return [
+						`You are limited to one of each Mega Stone and Primal Orb.`,
+						`(You have more than one ${item.name}.)`,
+					];
+				}
+				itemTable.add(item.id);
+			}
+		},
+		onValidateSet(set) {
+			const species = this.dex.getSpecies(set.species);
+			const item = this.dex.getItem(set.item);
+			if (!item.megaEvolves && !item.onPrimal && item.id !== 'ultranecroziumz') return;
+			if (species.baseSpecies === item.megaEvolves || (item.onPrimal && item.itemUser?.includes(species.baseSpecies)) ||
+				(species.name.startsWith('Necrozma-') && item.id === 'ultranecroziumz')) {
+				return;
+			}
+			if (this.ruleTable.isRestricted(`item:${item.id}`) || this.ruleTable.isRestrictedSpecies(species) ||
+				set.ability === 'Power Construct') {
+				return [`${set.species} is not allowed to hold ${item.name}.`];
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
+			}
+		},
+		onSwitchIn(pokemon) {
+			// @ts-ignore
+			const oMegaSpecies = this.dex.getSpecies(pokemon.species.originalMega);
+			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
+				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
+				const oSpecies = this.dex.getSpecies(pokemon.m.originalSpecies);
+				if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
+					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			// @ts-ignore
+			const oMegaSpecies = this.dex.getSpecies(pokemon.species.originalMega);
+			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
+				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
+			}
+		},
+	},
+	{
+		name: "[Gen 7] STABmons",
+		desc: `Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8697545/">USM STABmons</a>`,
+		],
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
+		banlist: ['Aerodactyl', 'Aerodactyl-Mega', 'Araquanid', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Thundurus', 'Thundurus-Therian', 'King\'s Rock', 'Razor Fang'],
+		restricted: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
+	},
+	{
+		name: "[Gen 6] Almost Any Ability",
+		desc: `Pok&eacute;mon have access to almost any ability.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8772336/">ORAS Almost Any Ability</a>`,
+		],
+
+		mod: 'gen6',
+		ruleset: ['[Gen 6] OU', '2 Ability Clause', 'AAA Restricted Abilities', '!Obtainable Abilities'],
+		banlist: ['Archeops', 'Bisharp', 'Chatot', 'Dragonite', 'Keldeo', 'Kyurem-Black', 'Mamoswine', 'Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Snorlax', 'Suicune', 'Terrakion', 'Weavile', 'Dynamic Punch', 'Zap Cannon'],
+		unbanlist: ['Aegislash', 'Blaziken', 'Deoxys-Defense', 'Deoxys-Speed', 'Genesect', 'Greninja', 'Landorus'],
+		restricted: ['Arena Trap', 'Contrary', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter', 'Parental Bond', 'Protean', 'Pure Power', 'Simple', 'Speed Boost', 'Wonder Guard'],
+	},
+	{
 		name: "[Gen 6] Pure Hackmons",
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		threads: [

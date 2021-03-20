@@ -1260,4 +1260,21 @@ export const Formats: {[k: string]: FormatData} = {
 			this.makeRequest('teampreview');
 		},
 	},
+	aaarestrictedabilities: {
+		effectType: 'ValidatorRule',
+		name: 'AAA Restricted Abilities',
+		desc: "Allows validation for AAA formats to use restricted abilities instead of banned ones.",
+		onValidateSet(set) {
+			const ability = this.dex.getAbility(set.ability);
+			if (this.ruleTable.isRestricted(`ability:${ability.id}`)) {
+				const species = this.dex.getSpecies(set.species);
+				if (!Object.values(species.abilities).includes(ability.name)) {
+					return [
+						`The Ability "${ability.name}" is restricted.`,
+						`(Only Pok\u00e9mon that get ${ability.name} naturally can use it.)`,
+					];
+				}
+			}
+		},
+	},
 };
