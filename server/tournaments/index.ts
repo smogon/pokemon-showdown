@@ -1554,7 +1554,8 @@ const commands: ChatCommands = {
 			if (!target) {
 				this.sendReply("Usage: /tour rules <list of rules>");
 				this.sendReply("Rules can be: -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule");
-				return this.parse('/tour viewrules');
+				this.parse('/tour viewrules');
+				return this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
 			}
 			if (tournament.isTournamentStarted) {
 				return this.errorReply("The custom rules cannot be changed once the tournament has started.");
@@ -1565,6 +1566,7 @@ const commands: ChatCommands = {
 				);
 				this.privateModAction(`${user.name} updated the tournament's custom rules.`);
 				this.modlog('TOUR RULES', null, tournament.customRules.join(', '));
+				this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
 			}
 		},
 		clearruleset: 'clearcustomrules',
