@@ -252,7 +252,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Immunity':
 			return hasAbility['Toxic Boost'];
 		case 'Intimidate':
-			return (hasMove['rest'] || species.id === 'staraptor');
+			return hasMove['rest'] || species.id === 'staraptor';
 		case 'Lightning Rod':
 			return species.types.includes('Ground');
 		case 'Limber':
