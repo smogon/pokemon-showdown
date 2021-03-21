@@ -873,9 +873,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterHit(target, source) {
 			if (source.hp) {
-				const item = target.takeItem();
+				const item = target.takeItem(source);
 				if (item) {
-					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+					this.add('-enditem', target, item.name, '[from] move: Fishing for Hacks', '[of] ' + source);
 				}
 			}
 			const hazard = this.sample(['Stealth Rock', 'Spikes', 'Toxic Spikes']);
