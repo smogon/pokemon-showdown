@@ -18,10 +18,10 @@ export interface SSBSet {
 interface SSBSets {[k: string]: SSBSet}
 
 const afdSSBSets: SSBSets = {
-	Delphox: {
-		species: 'Delphox', ability: 'Magician', item: '', gender: '',
-		moves: ['Flare Blitz', 'Psybeam', 'Extreme Speed'],
-		signatureMove: 'Mirror Coat',
+	'Fox': {
+		species: 'Delphox', ability: 'No Ability', item: '', gender: '',
+		moves: [],
+		signatureMove: 'Super Metronome',
 	},
 };
 
@@ -880,6 +880,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		// @ts-ignore
+		if (this.format.isAFD) {
+			for (let x = 0; x < 6; x++) {
+				debug.push('Fox');
+			}
+		}
+		// @ts-ignore
 		const pool = debug.length ? debug : this.format.isAFD ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
@@ -946,6 +952,21 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Any set specific tweaks occur here.
 			if (set.name === 'Marshmallon' && !set.moves.includes('Head Charge')) set.moves[this.random(3)] = 'Head Charge';
+
+			// @ts-ignore
+			if (this.format.isAFD) {
+				const egg = this.random(100);
+				if (egg === 69) {
+					set.name = 'Falco';
+					set.species = 'Swellow';
+				} else if (egg === 96) {
+					set.name = 'Captain Falcon';
+					set.species = 'Talonflame';
+				}
+				if (this.randomChance(1, 100)) {
+					set.item = 'Mail';
+				}
+			}
 
 			team.push(set);
 

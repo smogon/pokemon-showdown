@@ -5576,4 +5576,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+
+	// :^)
+	supermetronome: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Uses 2-5 random moves. Does not include Z-Moves that have 1 Base Power, Super Metronome, Metronome, or Max moves that have 10 Base Power.",
+		shortDesc: "Uses 2-5 random moves.",
+		name: "Super Metronome",
+		isNonstandard: "Custom",
+		pp: 100,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {},
+		onTryMove(pokemon) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Metronome", source);
+		},
+		onHit(target, source, effect) {
+			const moves: ModdedMoveData[] = [];
+			for (const id in Moves) {
+				const move = Moves[id];
+				// @ts-ignore
+				if (move.realMove || this.toID(move.name) === 'supermetronome' || this.toID(move.name) === 'metronome') continue;
+				// Calling 1 BP move is somewhat lame and disappointing. However,
+				// signature Z moves are fine, as they actually have a base power.
+				if (move.isZ && move.basePower === 1) continue;
+				if (this.dex.getMove(id).gen > this.gen) continue;
+				if (move.isMax && (typeof move.isMax !== "string" && move.basePower === 10)) continue;
+				moves.push(move);
+			}
+			let randomMove: string;
+			if (moves.length) {
+				// @ts-ignore
+				randomMove = this.sample(moves).name;
+			} else {
+				return false;
+			}
+			this.useMove(randomMove, target);
+		},
+		multihit: [2, 5],
+		secondary: null,
+		target: "self",
+		type: "???",
+	},
 };
