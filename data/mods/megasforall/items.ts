@@ -1417,4 +1417,46 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Cinccino, this item allows it to Mega Evolve in battle.",
 	},
+	torterranite: {
+		name: "Torterranite",
+		spritenum: 578,
+		megaStone: "Torterra-Mega",
+		megaEvolves: "Torterra",
+		itemUser: ["Torterra"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1088,
+		gen: 8,
+		desc: "If held by a Torterra, this item allows it to Mega Evolve in battle.",
+	},
+	infernite: {
+		name: "Infernite",
+		spritenum: 578,
+		megaStone: "Infernape-Mega",
+		megaEvolves: "Infernape",
+		itemUser: ["Infernape"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1089,
+		gen: 8,
+		desc: "If held by an Infernape, this item allows it to Mega Evolve in battle.",
+	},
+	empoleonite: {
+		name: "Empoleonite",
+		spritenum: 578,
+		megaStone: "Empoleon-Mega",
+		megaEvolves: "Empoleon",
+		itemUser: ["Empoleon"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1090,
+		gen: 8,
+		desc: "If held by an Empoleon, this item allows it to Mega Evolve in battle.",
+	},
 };
