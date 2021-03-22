@@ -70,18 +70,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("drapion", ["shoreup"]);
 		newMoves("lurantis", ["moonblast", "moonlight", "playrough", "silverwind"]);
 		newMoves("exploud", ["clangingscales", "dragonpulse", "snarl"]);
-		newMoves("noivern", ["encore"]);
+		newMoves("noivern", ["encore", "psyshock"]);
 		newMoves("toxtricity", ["frustration", "gearup", "hiddenpower"]);
 		newMoves("toxtricitylowkey", ["hiddenpower", "return", "slackoff"]);
 		newMoves("cacturne", ["assurance", "knockoff", "strengthsap"]);
 		newMoves("hawlucha", ["partingshot", "stormthrow"]);
 		newMoves("araquanid", ["hypnosis", "lifedew", "painsplit", "purify"]);
+		newMoves("zoroark", ["focuspunch", "gunkshot", "superpower"]);
 		newMoves("delphox", ["recover", "speedswap", "teleport"]);
 		newMoves("wishiwashi", ["lifedew", "wish"]);
 		newMoves("falinks", ["aurasphere", "flameburst", "flashcannon", "kingsshield", "thunder"]);
 		newMoves("floatzel", ["coaching", "flipturn"]);
 		newMoves("simisear", ["calmmind", "dazzlinggleam", "drainingkiss", "mysticalfire", "playrough", "slackoff"]);
-		newMoves("krookodile", ["partingshot", "shoreup", "topsyturvy"]);
+		newMoves("krookodile", ["partingshot", "topsyturvy"]);
+		newMoves("torterra", ["bodypress", "gravapple", "meteorbeam"]);
+		newMoves("empoleon", ["flipturn", "haze", "originpulse", "roost"]);
 	},
 	canMegaEvo(pokemon) {
 		const altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
