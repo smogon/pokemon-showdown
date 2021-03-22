@@ -65,7 +65,9 @@ export const commands: ChatCommands = {
 
 		if (
 			room.settings.modchat && room.settings.modchat.length <= 1 &&
-			!room.auth.atLeast(user, room.settings.modchat)
+			!room.auth.atLeast(user, room.settings.modchat) &&
+			// Upper Staff should probably be able to set /modchat & in secret rooms
+			!user.can('bypassall')
 		) {
 			return this.errorReply(`/modchat - Access denied for changing a setting currently at ${room.settings.modchat}.`);
 		}
@@ -98,7 +100,9 @@ export const commands: ChatCommands = {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
-			if (!Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
+			// Users shouldn't be able to set modchat above their own rank (except for ROs who are also Upper Staff)
+			const modchatLevelHigherThanUserRank = !room.auth.atLeast(user, target) && !user.can('bypassall');
+			if (modchatLevelHigherThanUserRank || !Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
 				return this.errorReply(`/modchat - Access denied for setting to ${target}.`);
 			}
 			room.settings.modchat = target;
