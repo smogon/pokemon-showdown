@@ -138,12 +138,12 @@ export const commands: ChatCommands = {
 		}
 	},
 	dexsearchhelp() {
-		this.sendReplyBox(
-			`<code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
+		this.sendReply(
+			`|html| <details class="readmore"><summary><code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
 			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
 			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
-			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.<br/>` +
+			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.</summary>` +
 			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
 			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
 			`<code>weak</code> followed by a type or move will show Pok\u00e9mon that are weak to that typing or move (e.g. <code>weak fire</code>).<br/>` +
@@ -297,12 +297,12 @@ export const commands: ChatCommands = {
 		}
 	},
 	movesearchhelp() {
-		this.sendReplyBox(
-			`<code>/movesearch [parameter], [parameter], [parameter], ...</code>: searches for moves that fulfill the selected criteria.<br/>` +
+		this.sendReply(
+			`|html| <details class="readmore"><summary><code>/movesearch [parameter], [parameter], [parameter], ...</code>: searches for moves that fulfill the selected criteria.<br/>` +
 			`Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, Pok\u00e9mon targeted, and numeric range for base power, pp, priority, and accuracy.<br/>` +
 			`Types can be followed by <code> type</code> for clarity; e.g., <code>dragon type</code>.<br/>` +
 			`Stat boosts must be preceded with <code>boosts </code>, and stat-lowering moves with <code>lowers </code>; e.g., <code>boosts attack</code> searches for moves that boost the Attack stat of either Pok\u00e9mon.<br/>` +
-			`Z-stat boosts must be preceded with <code>zboosts </code>; e.g., <code>zboosts accuracy</code> searches for all Status moves with Z-Effects that boost the user's accuracy.<br/>` +
+			`Z-stat boosts must be preceded with <code>zboosts </code>; e.g., <code>zboosts accuracy</code> searches for all Status moves with Z-Effects that boost the user's accuracy.</summary>` +
 			`Moves that have a Z-Effect of fully restoring the user's health can be searched for with <code>zrecovery</code>.<br/>` +
 			`Move targets must be preceded with <code>targets </code>; e.g., <code>targets user</code> searches for moves that target the user.<br/>` +
 			`Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, and user.<br/>` +
