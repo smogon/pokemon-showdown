@@ -2127,7 +2127,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				this.add('-message', `${source.name} prepared to whip ${(target.illusion ? target.illusion.name : target.name)}'s team with ${move.name}!`);
 				source.deductPP(move.id, 1);
 				if (move.accuracy) {
-					if (this.randomChance((100 - move.accuracy), 100)) {
+					if (typeof move.accuracy === 'number' && this.randomChance((100 - move.accuracy), 100)) {
 						this.add('-message', `But it failed!`);
 						return null;
 					}
