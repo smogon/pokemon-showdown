@@ -1310,8 +1310,8 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 		accuracy: 90,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
-			if (move.longWhipBoost) {
-				return 20 * move.longWhipBoost;
+			if ((move as any).longWhipBoost) {
+				return 20 * (move as any).longWhipBoost;
 			} else {
 				return 20 * move.hit;
 			}
@@ -1334,8 +1334,8 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 		accuracy: 90,
 		basePower: 10,
 		basePowerCallback(pokemon, target, move) {
-			if (move.longWhipBoost) {
-				return 10 * move.longWhipBoost;
+			if ((move as any).longWhipBoost) {
+				return 10 * (move as any).longWhipBoost;
 			} else {
 				return 10 * move.hit;
 			}
