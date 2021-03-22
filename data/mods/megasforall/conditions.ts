@@ -1,4 +1,4 @@
-const longwhip = {
+const longwhip: ConditionData = {
 	// this is a slot condition
 	onResidualOrder: 3,
 	onResidual(target) {
