@@ -1524,49 +1524,53 @@ export const commands: ChatCommands = {
 	],
 
 	fr: 'forcerename',
+	ofr: 'forcerename',
+	offlineforcerename: 'forcerename',
 	forcerename(target, room, user) {
 		if (!target) return this.parse('/help forcerename');
 
 		const reason = this.splitTarget(target, true);
+		const offline = this.cmd.startsWith('o');
 		const targetUser = this.targetUser;
-		const targetID = toID(this.targetUsername);
-		if (!targetUser) {
+		const targetID = this.targetUser?.id || toID(this.targetUsername);
+		// && !offline because maybe we're trying to disallow the name after they namechanged
+		if (!targetUser && !offline) {
 			this.splitTarget(target);
 			if (this.targetUser) {
 				return this.errorReply(`User has already changed their name to '${this.targetUser.name}'.`);
 			}
-			return this.errorReply(`User '${target}' not found.`);
+			return this.errorReply(`User '${target}' not found. (use /offlineforcerename to rename anyway.)`);
 		}
 		this.checkCan('forcerename', targetID);
 		const {publicReason, privateReason} = this.parseSpoiler(reason);
 
-		Monitor.forceRenames.set(targetUser.id, (Monitor.forceRenames.get(targetUser.id) || 0) + 1);
+		Monitor.forceRenames.set(targetID, (Monitor.forceRenames.get(targetID) || 0) + 1);
 
 		let forceRenameMessage;
-		if (targetUser.connected) {
+		if (targetUser?.connected) {
 			forceRenameMessage = `was forced to choose a new name by ${user.name}${(publicReason ? `: ${publicReason}` : ``)}`;
 			this.globalModlog('FORCERENAME', targetUser, reason);
 			Ladders.cancelSearches(targetUser);
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(publicReason ? `: ${publicReason}` : ``)}`);
 		} else {
-			forceRenameMessage = `would be forced to choose a new name by ${user.name} but is offline${(publicReason ? `: ${publicReason}` : ``)}`;
+			forceRenameMessage = `was forced to choose a new name by ${user.name} while offline${(publicReason ? `: ${publicReason}` : ``)}`;
 			this.globalModlog('FORCERENAME OFFLINE', targetUser, `${publicReason} ${privateReason}`);
 		}
 		Monitor.forceRenames.set(targetID, (Monitor.forceRenames.get(targetID) || 0) + 1);
 
-		if (room?.roomid !== 'staff') this.privateModAction(`${targetUser.name} ${forceRenameMessage}`);
+		if (room?.roomid !== 'staff') this.privateModAction(`${targetUser?.name || targetID} ${forceRenameMessage}`);
 		const roomMessage = this.pmTarget ? `<PM:${this.pmTarget.id}>` :
 			room && room.roomid !== 'staff' ? `«<a href="/${room.roomid}" target="_blank">${room.roomid}</a>» ` :
 			'';
-		const rankMessage = targetUser.getAccountStatusString();
+		const rankMessage = targetUser?.getAccountStatusString() || "";
 		Rooms.global.notifyRooms(
 			['staff'],
-			`|html|${roomMessage}` + Utils.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`
+			`|html|${roomMessage}` + Utils.html`<span class="username">${targetUser?.name || targetID}</span> ${rankMessage} ${forceRenameMessage}`
 		);
 
-		targetUser.resetName(true);
-		if (Punishments.namefilterwhitelist.has(targetUser.id)) {
-			Punishments.unwhitelistName(targetUser.id);
+		targetUser?.resetName(true);
+		if (Punishments.namefilterwhitelist.has(targetID)) {
+			Punishments.unwhitelistName(targetID);
 		}
 		return true;
 	},
