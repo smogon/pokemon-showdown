@@ -442,7 +442,7 @@ export const commands: ChatCommands = {
 			this.checkCan('mute', null, room);
 			let [term, ...tags] = target.split(',');
 			term = toID(term);
-			tags = tags.map(i => i.trim()).filter(Boolean);
+			tags = tags.map(i => toID(i)).filter(Boolean);
 			if (!term || !tags || !tags.length) {
 				return this.parse('/help hangman');
 			}
@@ -453,9 +453,8 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Term ${term} not found.`);
 			}
 			if (!hangmanData[room.roomid][term].tags) hangmanData[room.roomid][term].tags = [];
-			const shortenedTags = hangmanData[room.roomid][term].tags?.map(toID) as string[];
 			for (const [i, tag] of tags.entries()) {
-				if (shortenedTags.includes(toID(tag))) {
+				if (hangmanData[room.roomid][term].tags!.includes(tag)) {
 					this.errorReply(`The tag ${tag} is already on the term ${term} and has been skipped.`);
 					tags.splice(i, 1);
 				}
@@ -478,7 +477,7 @@ export const commands: ChatCommands = {
 			}
 			let [term, ...tags] = target.split(',');
 			term = toID(term);
-			tags = tags.map(i => i.trim()).filter(Boolean);
+			tags = tags.map(i => toID(i)).filter(Boolean);
 			if (!term || !tags) {
 				return this.parse('/help hangman');
 			}
