@@ -1873,7 +1873,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				} else {
 					const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 					this.add('-anim', data.source, hitMove, data.target);
-					this.trySpreadMoveHit([data.target], data.source, hitMove)
+					this.trySpreadMoveHit([data.target], data.source, hitMove);
 				}
 			},
 		},
@@ -2198,7 +2198,6 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						return;
 					}
 				}
-				let announced = undefined;
 				const hazards = [
 					'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 				];
@@ -2212,7 +2211,6 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		},
 		condition: {
 			onStart(pokemon) {
-				let announced = undefined;
 				const hazards = [
 					'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 				];
