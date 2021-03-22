@@ -1782,10 +1782,10 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			pokemon.addVolatile('forgery');
 			let i;
 			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
+				const item = pokemon.side.pokemon[i].getItem();
 				if (
 					!pokemon.side.pokemon[i] || pokemon.side.pokemon[i].fainted ||
-					!pokemon.side.pokemon[i].item || this.dex.getItem(pokemon.side.pokemon[i].item).zMove ||
-					 this.dex.getItem(pokemon.side.pokemon[i].item).megaStone
+					!pokemon.side.pokemon[i].item || item.zMove || item.megaStone
 				) continue;
 				break;
 			}
@@ -1794,7 +1794,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			const forgery = pokemon.side.pokemon[i];
 			this.add('-ability', pokemon, 'Forgery');
 			pokemon.item = forgery.item;
-			this.add('-message', `${pokemon.name}'s Zoroarkite became a replica of the ${this.dex.getItem(forgery.item).name} belonging to ${forgery.name}!`);
+			this.add('-message', `${pokemon.name}'s Zoroarkite became a replica of the ${forgery.getItem().name} belonging to ${forgery.name}!`);
 		},
 		onUpdate(pokemon) {
 			if (pokemon.species.name !== 'Zoroark-Mega') return;
