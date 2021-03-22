@@ -249,6 +249,7 @@ export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
 	igniteBoosted?: boolean,
 	settleBoosted?: boolean,
 	bodyofwaterBoosted?: boolean,
+	longWhipBoost?: boolean,
 	gen?: number,
 };
 
