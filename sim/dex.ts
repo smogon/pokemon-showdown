@@ -410,6 +410,7 @@ export class ModdedDex {
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.gen === 1) species.bst -= species.baseStats.spd;
+			if (this.gen < 5) delete species.abilities['H'];
 		} else {
 			species = new Species({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',

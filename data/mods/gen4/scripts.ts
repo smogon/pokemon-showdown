@@ -1,12 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen5',
 	gen: 4,
-	init() {
-		for (const i in this.data.Pokedex) {
-			delete this.data.Pokedex[i].abilities['H'];
-		}
-	},
-
 	modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 		// DPP divides modifiers into several mathematically important stages
 		// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
