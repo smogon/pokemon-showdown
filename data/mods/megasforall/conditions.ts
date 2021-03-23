@@ -1,3 +1,75 @@
+const longwhip: ConditionData = {
+	// this is a slot condition
+	onResidualOrder: 3,
+	onResidual(target) {
+		// unlike a future move, Long Whip activates each turn
+		this.effectData.target = this.effectData.side.active[this.effectData.position];
+		const data = this.effectData;
+		const move = this.dex.getMove(data.move);
+		if (data.target.fainted || data.target === data.source) {
+			this.hint(`${move.name} did not hit because the target is ${(data.fainted ? 'fainted' : 'the user')}.`);
+			return;
+		}
+
+		this.add('-message', `${(data.target.illusion ? data.target.illusion.name : data.target.name)} took the ${move.name} attack!`);
+		data.target.removeVolatile('Protect');
+		data.target.removeVolatile('Endure');
+
+		if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+			data.moveData.infiltrates = true;
+		}
+		if (data.source.hasAbility('normalize') && this.gen >= 6) {
+			data.moveData.type = 'Normal';
+		}
+		if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+			data.moveData.stab = 2;
+		}
+		if (data.move.name === 'Triple Axel' || data.move.name === 'Triple Kick') {
+			data.moveData.longWhipBoost = 3 - data.duration;
+		}
+		data.moveData.accuracy = true;
+		data.moveData.isFutureMove = true;
+		data.move.multihit = null;
+
+		const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
+		this.add('-anim', data.source, hitMove, data.target);
+		this.trySpreadMoveHit([data.target], data.source, hitMove);
+	},
+	onEnd(target) {
+		// unlike a future move, Long Whip activates each turn
+		this.effectData.target = this.effectData.side.active[this.effectData.position];
+		const data = this.effectData;
+		const move = this.dex.getMove(data.move);
+		if (data.target.fainted || data.target === data.source) {
+			this.hint(`${move.name} did not hit because the target is ${(data.fainted ? 'fainted' : 'the user')}.`);
+			return;
+		}
+
+		this.add('-message', `${(data.target.illusion ? data.target.illusion.name : data.target.name)} took the ${move.name} attack!`);
+		data.target.removeVolatile('Protect');
+		data.target.removeVolatile('Endure');
+
+		if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+			data.moveData.infiltrates = true;
+		}
+		if (data.source.hasAbility('normalize') && this.gen >= 6) {
+			data.moveData.type = 'Normal';
+		}
+		if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+			data.moveData.stab = 2;
+		}
+		if (data.move.name === 'Triple Axel' || data.move.name === 'Triple Kick') {
+			data.moveData.longWhipBoost = 3 - data.duration;
+		}
+		data.moveData.accuracy = true;
+		data.moveData.isFutureMove = true;
+		data.move.multihit = null;
+
+		const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
+		this.add('-anim', data.source, hitMove, data.target);
+		this.trySpreadMoveHit([data.target], data.source, hitMove);
+	},
+};
 export const Conditions: {[k: string]: ConditionData} = {
 	desertgales: {
 		name: 'Desert Gales',
@@ -196,4 +268,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 	},
+	longwhip1: longwhip,
+	longwhip2: longwhip,
+	longwhip3: longwhip,
+	longwhip4: longwhip,
+	longwhip5: longwhip,
 };

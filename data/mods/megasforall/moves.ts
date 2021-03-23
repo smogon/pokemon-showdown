@@ -267,6 +267,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 		condition: {
 			onStart(side) {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
+				for (const active of this.getAllActive()) {
+					if (active.volatiles['gravitationalpull']) {
+						this.add('-ability', active, 'Gravitational Pull');
+						this.add('-message', `The sharp spikes are surrounding ${active.name}!`);
+					}
+				}
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('trashcompactor') && !this.field.getPseudoWeather('stickyresidues')) {
@@ -277,7 +283,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					pokemon.side.removeSideCondition('gmaxsteelsurge');
 					return;
 				}
-				if (pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) return;
+				if (
+					pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('gravitationalpull')
+				) return;
+				for (const active of this.getAllActive()) {
+					if (active.hasAbility('gravitationalpull')) return;
+				}
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
 				// They don't get typed damage from Steelsurge because Steelsurge doesn't,
@@ -296,6 +307,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			onStart(side) {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectData.layers = 1;
+				for (const active of this.getAllActive()) {
+					if (active.volatiles['gravitationalpull']) {
+						this.add('-ability', active, 'Gravitational Pull');
+						this.add('-message', `The spikes are surrounding ${active.name}!`);
+					}
+				}
 			},
 			onRestart(side) {
 				if (this.effectData.layers >= 3) return false;
@@ -312,7 +329,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					pokemon.side.removeSideCondition('spikes');
 					return;
 				}
-				if (pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) return;
+				if (
+					pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('gravitationalpull')
+				) return;
+				for (const active of this.getAllActive()) {
+					if (active.hasAbility('gravitationalpull')) return;
+				}
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			},
@@ -324,6 +346,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			// this is a side condition
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
+				for (const active of this.getAllActive()) {
+					if (active.volatiles['gravitationalpull']) {
+						this.add('-ability', active, 'Gravitational Pull');
+						this.add('-message', `The pointed stones are surrounding ${active.name}!`);
+					}
+				}
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('trashcompactor') && !this.field.getPseudoWeather('stickyresidues')) {
@@ -334,7 +362,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					pokemon.side.removeSideCondition('stealthrock');
 					return;
 				}
-				if (pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) return;
+				if (
+					pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('gravitationalpull')
+				) return;
+				for (const active of this.getAllActive()) {
+					if (active.hasAbility('gravitationalpull')) return;
+				}
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},
@@ -345,6 +378,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 		condition: {
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
+				for (const active of this.getAllActive()) {
+					if (active.volatiles['gravitationalpull']) {
+						this.add('-ability', active, 'Gravitational Pull');
+						this.add('-message', `The sticky web is surrounding ${active.name}!`);
+					}
+				}
 			},
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
@@ -356,7 +395,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					pokemon.side.removeSideCondition('stickyweb');
 					return;
 				}
-				if (pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) return;
+				if (
+					pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('gravitationalpull')
+				) return;
+				for (const active of this.getAllActive()) {
+					if (active.hasAbility('gravitationalpull')) return;
+				}
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, this.effectData.source, this.dex.getActiveMove('stickyweb'));
 			},
@@ -369,6 +413,12 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectData.layers = 1;
+				for (const active of this.getAllActive()) {
+					if (active.volatiles['gravitationalpull']) {
+						this.add('-ability', active, 'Gravitational Pull');
+						this.add('-message', `The toxic spikes are surrounding ${active.name}!`);
+					}
+				}
 			},
 			onRestart(side) {
 				if (this.effectData.layers >= 2) return false;
@@ -389,12 +439,17 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (pokemon.hasType('Steel') || pokemon.hasType('Poison') ||
-					pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots')) {
+					pokemon.hasAbility('trashcompactor') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('gravitationalpull')) {
 					return;
-				} else if (this.effectData.layers >= 2) {
-					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 				} else {
-					pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+					for (const active of this.getAllActive()) {
+						if (active.hasAbility('gravitationalpull')) return;
+					}
+					if (this.effectData.layers >= 2) {
+						pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
+					} else {
+						pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+					}
 				}
 			},
 		},
@@ -823,7 +878,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			const sourceSide = source.side;
 			const targetSide = source.side.foe;
 			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
+				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire', 'volcanicsinge',
 			];
 			let success = false;
 			for (const id of sideConditions) {
@@ -1249,6 +1304,55 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 				delete source.volatiles['quakingboom'];
 			}
 		},
+	},
+	tripleaxel: {
+		num: 813,
+		accuracy: 90,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			if ((move as any).longWhipBoost) {
+				return 20 * (move as any).longWhipBoost;
+			} else {
+				return 20 * move.hit;
+			}
+		},
+		category: "Physical",
+		name: "Triple Axel",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		multihit: 3,
+		multiaccuracy: true,
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+		zMove: {basePower: 120},
+		maxMove: {basePower: 140},
+	},
+	triplekick: {
+		num: 167,
+		accuracy: 90,
+		basePower: 10,
+		basePowerCallback(pokemon, target, move) {
+			if ((move as any).longWhipBoost) {
+				return 10 * (move as any).longWhipBoost;
+			} else {
+				return 10 * move.hit;
+			}
+		},
+		category: "Physical",
+		name: "Triple Kick",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		multihit: 3,
+		multiaccuracy: true,
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+		zMove: {basePower: 120},
+		maxMove: {basePower: 80},
+		contestType: "Cool",
 	},
 	acidicterrain: {
 		num: 100000,
