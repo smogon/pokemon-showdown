@@ -18733,6 +18733,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-start', target, 'Uproar');
 			},
 			onResidual(target) {
+				if (target.volatiles['throatchop']) {
+					target.removeVolatile('uproar');
+					return;
+				}
 				if (target.lastMove && target.lastMove.id === 'struggle') {
 					// don't lock
 					delete target.volatiles['uproar'];
