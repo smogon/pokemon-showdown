@@ -90,7 +90,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`There is already a poll or announcement in progress in this room.`);
 			}
 
-			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target);
+			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target, true);
 
 			room.setMinorActivity(new Announcement(room, {source}));
 
