@@ -1633,7 +1633,8 @@ export const Formats: FormatList = [
 		name: "[Gen 8] Super Staff Bros 4 (Wii U)",
 		desc: "A more competitive version of the existing Super Staff Bros 4 format!",
 		threads: [
-			`&bullet; <a href="http://spo.ink/happybirthdayaeonic">Discussion Thread</a>`,
+			`&bullet; <a href="http://spo.ink/instruct">Introduction &amp; Roster</a>`,
+			`&bullet; <a href="http://spo.ink/HappyBirthdayAeonic">Discussion Thread</a>`,
 		],
 
 		mod: 'ssb',
