@@ -11,7 +11,7 @@ const mons = [
 	"lurantismega", "mimikyumega", "mimikyubustedmega", "dhelmisemega", "kommoomega", "rillaboommega", "cinderacemega", "inteleonmega", "corviknightmega",
 	"orbeetlemega", "thievulmega", "boltundmega", "toxtricitymega", "toxtricitylowkeymega", "dragapultmega", "ninetalesalolamega", "zoroarkmega", "delphoxmega",
 	"dugtriomega", "falinksmegacombat", "falinksmegalegion", "wishiwashimega", "wishiwashimega1", "wishiwashimega2", "wishiwashimega3", "wishiwashimega4",
-	"wishiwashimegaschool",
+	"wishiwashimegaschool", "floatzelmega", "simisearmega", "krookodilemega", "cinccinomega", "torterramega", "infernapemega", "empoleonmega",
 ];
 
 const data: {[k: string]: ModdedSpeciesFormatsData} = {};

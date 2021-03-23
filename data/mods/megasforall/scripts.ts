@@ -35,7 +35,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("staraptor", ["roleplay", "superfang"]);
 		newMoves("bibarel", ["fly"]);
 		newMoves("kricketune", ["closecombat", "drainpunch", "dualwingbeat", "firstimpression", "powertrip", "tripleaxel", "uturn"]);
-		newMoves("mismagius", ["sludgebomb", "sludgewave", "toxicspikes", "poisonfang", "partingshot", "fling"]);
+		newMoves("mismagius", ["sludgebomb", "sludgewave", "toxicspikes", "poisonfang", "partingshot"]);
 		newMoves("murkrow", ["partingshot"]);
 		newMoves("honchkrow", ["partingshot", "dualwingbeat"]);
 		newMoves("spiritomb", ["partingshot"]);
@@ -60,7 +60,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("samurott", ["flipturn", "psychocut", "slackoff"]);
 		newMoves("meowstic", ["brickbreak", "foulplay", "knockoff", "partingshot", "pursuit"]);
 		newMoves("meowsticf", ["dazzlinggleam", "drainingkiss", "moonblast", "mysticalfire"]);
-		newMoves("starmie", ["calmmind", "futuresight", "followme", "moonblast", "photongeyser", "storedpower"]);
+		newMoves("starmie", ["calmmind", "futuresight", "followme", "moonblast", "storedpower"]);
 		newMoves("delibird", ["celebrate", "healingwish", "roost", "swordsdance", "uturn", "wish"]);
 		newMoves("sawsbuck", ["moonblast", "petalblizzard", "playrough"]);
 		newMoves("sawsbucksummer", ["flameburst", "flamethrower", "growth", "leafstorm", "overheat"]);
@@ -70,15 +70,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("drapion", ["shoreup"]);
 		newMoves("lurantis", ["moonblast", "moonlight", "playrough", "silverwind"]);
 		newMoves("exploud", ["clangingscales", "dragonpulse", "snarl"]);
-		newMoves("noivern", ["encore"]);
+		newMoves("noivern", ["encore", "psyshock"]);
 		newMoves("toxtricity", ["frustration", "gearup", "hiddenpower"]);
 		newMoves("toxtricitylowkey", ["hiddenpower", "return", "slackoff"]);
 		newMoves("cacturne", ["assurance", "knockoff", "strengthsap"]);
 		newMoves("hawlucha", ["partingshot", "stormthrow"]);
 		newMoves("araquanid", ["hypnosis", "lifedew", "painsplit", "purify"]);
+		newMoves("zoroark", ["focuspunch", "gunkshot", "superpower"]);
 		newMoves("delphox", ["recover", "speedswap", "teleport"]);
 		newMoves("wishiwashi", ["lifedew", "wish"]);
 		newMoves("falinks", ["aurasphere", "flameburst", "flashcannon", "kingsshield", "thunder"]);
+		newMoves("floatzel", ["coaching", "flipturn"]);
+		newMoves("simisear", ["calmmind", "dazzlinggleam", "drainingkiss", "mysticalfire", "playrough", "slackoff"]);
+		newMoves("krookodile", ["partingshot", "topsyturvy"]);
+		newMoves("torterra", ["bodypress", "gravapple", "meteorbeam"]);
+		newMoves("empoleon", ["flipturn", "haze", "originpulse", "roost"]);
 	},
 	canMegaEvo(pokemon) {
 		const altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
@@ -178,124 +184,163 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.runEvent('AfterMega', pokemon);
 		return true;
 	},
-	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove, originalTarget) {
-		pokemon.activeMoveActions++;
-		let target = this.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
-		let baseMove = this.dex.getActiveMove(moveOrMoveName);
-		const pranksterBoosted = baseMove.pranksterBoosted;
-		if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
-			const changedMove = this.runEvent('OverrideAction', pokemon, target, baseMove);
-			if (changedMove && changedMove !== true) {
-				baseMove = this.dex.getActiveMove(changedMove);
-				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
-				target = this.getRandomTarget(pokemon, baseMove);
+
+	getDamage(
+		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
+		suppressMessages = false
+	): number | undefined | null | false {
+		if (typeof move === 'string') move = this.dex.getActiveMove(move);
+
+		if (typeof move === 'number') {
+			const basePower = move;
+			move = new Dex.Move({
+				basePower,
+				type: '???',
+				category: 'Physical',
+				willCrit: false,
+			}) as ActiveMove;
+			move.hit = 0;
+		}
+
+		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
+			if (!target.runImmunity(move.type, !suppressMessages)) {
+				return false;
 			}
 		}
-		let move = baseMove;
-		if (zMove) {
-			if (pokemon.item === 'zoroarkite') { // only part that's changed
-				zMove = undefined;
+
+		if (move.ohko) return target.maxhp;
+		if (move.damageCallback) return move.damageCallback.call(this, pokemon, target);
+		if (move.damage === 'level') {
+			return pokemon.level;
+		} else if (move.damage) {
+			return move.damage;
+		}
+
+		const category = this.getCategory(move);
+		const defensiveCategory = move.defensiveCategory || category;
+
+		let basePower: number | false | null = move.basePower;
+		if (move.basePowerCallback) {
+			basePower = move.basePowerCallback.call(this, pokemon, target, move);
+		}
+		if (!basePower) return basePower === 0 ? undefined : basePower;
+		basePower = this.clampIntRange(basePower, 1);
+
+		let critMult;
+		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
+		if (this.gen <= 5) {
+			critRatio = this.clampIntRange(critRatio, 0, 5);
+			critMult = [0, 16, 8, 4, 3, 2];
+		} else {
+			critRatio = this.clampIntRange(critRatio, 0, 4);
+			if (this.gen === 6) {
+				critMult = [0, 16, 8, 2, 1];
 			} else {
-				move = this.getActiveZMove(baseMove, pokemon);
-			}
-		} else if (maxMove) {
-			move = this.getActiveMaxMove(baseMove, pokemon);
-		}
-
-		move.isExternal = externalMove;
-
-		this.setActiveMove(move, pokemon, target);
-
-		/* if (pokemon.moveThisTurn) {
-			// THIS IS PURELY A SANITY CHECK
-			// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
-			// USE this.queue.cancelMove INSTEAD
-			this.debug('' + pokemon.id + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
-			this.clearActiveMove(true);
-			return;
-		} */
-		const willTryMove = this.runEvent('BeforeMove', pokemon, target, move);
-		if (!willTryMove) {
-			this.runEvent('MoveAborted', pokemon, target, move);
-			this.clearActiveMove(true);
-			// The event 'BeforeMove' could have returned false or null
-			// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
-			// null indicates the opposite, as the Pokemon didn't have an option to choose anything
-			pokemon.moveThisTurnResult = willTryMove;
-			return;
-		}
-		if (move.beforeMoveCallback) {
-			if (move.beforeMoveCallback.call(this, pokemon, target, move)) {
-				this.clearActiveMove(true);
-				pokemon.moveThisTurnResult = false;
-				return;
+				critMult = [0, 24, 8, 2, 1];
 			}
 		}
-		pokemon.lastDamage = 0;
-		let lockedMove;
-		if (!externalMove) {
-			lockedMove = this.runEvent('LockMove', pokemon);
-			if (lockedMove === true) lockedMove = false;
-			if (!lockedMove) {
-				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
-					this.add('cant', pokemon, 'nopp', move);
-					const gameConsole = [
-						null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS',
-					][this.gen] || 'Switch';
-					this.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
-					this.clearActiveMove(true);
-					pokemon.moveThisTurnResult = false;
-					return;
+
+		const moveHit = target.getMoveHitData(move);
+		moveHit.crit = move.willCrit || false;
+		if (move.willCrit === undefined && critRatio) {
+			moveHit.crit = this.randomChance(1, critMult[critRatio]);
+		}
+
+		if (moveHit.crit) {
+			moveHit.crit = this.runEvent('CriticalHit', target, null, move);
+		}
+
+		// happens after crit calculation
+		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
+
+		if (!basePower) return 0;
+		basePower = this.clampIntRange(basePower, 1);
+
+		const level = pokemon.level;
+
+		const attacker = pokemon;
+		const defender = target;
+		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
+		const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		if (move.useSourceDefensiveAsOffensive) {
+			attackStat = defenseStat;
+			// Body press really wants to use the def stat,
+			// so it switches stats to compensate for Wonder Room.
+			// Of course, the game thus miscalculates the boosts...
+			if ('wonderroom' in this.field.pseudoWeather) {
+				if (attackStat === 'def') {
+					attackStat = 'spd';
+				} else if (attackStat === 'spd') {
+					attackStat = 'def';
 				}
-			} else {
-				sourceEffect = this.dex.getEffect('lockedmove');
-			}
-			pokemon.moveUsed(move, targetLoc);
-		}
-
-		// Dancer Petal Dance hack
-		// TODO: implement properly
-		const noLock = externalMove && !pokemon.volatiles['lockedmove'];
-
-		if (zMove) {
-			if (pokemon.illusion) {
-				this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
-			}
-			this.add('-zpower', pokemon);
-			pokemon.side.zMoveUsed = true;
-		}
-		const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
-		this.lastSuccessfulMoveThisTurn = moveDidSomething ? this.activeMove && this.activeMove.id : null;
-		if (this.activeMove) move = this.activeMove;
-		this.singleEvent('AfterMove', move, null, pokemon, target, move);
-		this.runEvent('AfterMove', pokemon, target, move);
-
-		// Dancer's activation order is completely different from any other event, so it's handled separately
-		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
-			const dancers = [];
-			for (const currentPoke of this.getAllActive()) {
-				if (pokemon === currentPoke) continue;
-				if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
-					dancers.push(currentPoke);
+				if (attacker.boosts['def'] || attacker.boosts['spd']) {
+					this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
 				}
 			}
-			// Dancer activates in order of lowest speed stat to highest
-			// Note that the speed stat used is after any volatile replacements like Speed Swap,
-			// but before any multipliers like Agility or Choice Scarf
-			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			dancers.sort(
-				(a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder
-			);
-			for (const dancer of dancers) {
-				if (this.faintMessages()) break;
-				if (dancer.fainted) continue;
-				this.add('-activate', dancer, 'ability: Dancer');
-				const dancersTarget = target!.side !== dancer.side && pokemon.side === dancer.side ? target! : pokemon;
-				this.runMove(move.id, dancer, this.getTargetLoc(dancersTarget, dancer), this.dex.getAbility('dancer'), undefined, true);
+		}
+		if ((move as any).settleBoosted) {
+			attackStat = 'atk';
+		}
+
+		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+		let attack;
+		let defense;
+
+		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+		if ((move as any).bodyofwaterBoosted) {
+			if (attackStat === 'def') {
+				atkBoosts = attacker.boosts['atk'];
+			} else if (attackStat === 'spd') {
+				atkBoosts = attacker.boosts['spa'];
 			}
 		}
-		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
+		let defBoosts = defender.boosts[defenseStat];
+
+		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
+		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
+
+		if (moveHit.crit) {
+			ignoreNegativeOffensive = true;
+			ignorePositiveDefensive = true;
+		}
+		const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
+		const ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
+
+		if (ignoreOffensive) {
+			this.debug('Negating (sp)atk boost/penalty.');
+			atkBoosts = 0;
+		}
+		if (ignoreDefensive) {
+			this.debug('Negating (sp)def boost/penalty.');
+			defBoosts = 0;
+		}
+
+		if (move.useTargetOffensive) {
+			attack = defender.calculateStat(attackStat, atkBoosts);
+		} else {
+			attack = attacker.calculateStat(attackStat, atkBoosts);
+		}
+
+		attackStat = (category === 'Physical' ? 'atk' : 'spa');
+		defense = defender.calculateStat(defenseStat, defBoosts);
+
+		// Apply Stat Modifiers
+		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
+		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
+
+		if (this.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
+		}
+
+		const tr = this.trunc;
+
+		// int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
+		const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
+
+		// Calculate damage modifiers separately (order differs between generations)
+		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
 	},
+
 	pokemon: {
 		lostItemForDelibird: null,
 		setItem(item: string | Item, source?: Pokemon, effect?: Effect) {
@@ -319,6 +364,20 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.singleEvent('Start', item, this.itemData, this, source, effect);
 			}
 			return true;
+		},
+		isGrounded(negateImmunity = false) {
+			if ('gravity' in this.battle.field.pseudoWeather) return true;
+			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
+			if ('smackdown' in this.volatiles) return true;
+			const item = (this.ignoringItem() ? '' : this.item);
+			if (item === 'ironball') return true;
+			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
+			if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
+			if ('magnetrise' in this.volatiles) return false;
+			if ('telekinesis' in this.volatiles) return false;
+			if ('poolfloaties' in this.volatiles) return false;
+			return item !== 'airballoon';
 		},
 	},
 };
