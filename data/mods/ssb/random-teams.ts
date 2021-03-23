@@ -157,7 +157,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
 	},
 	Blaz: {
-		species: 'Carbink', ability: 'Why Worry', item: 'Leftovers', gender: 'N',
+		species: 'Carbink', ability: 'Solid Rock', item: 'Leftovers', gender: 'N',
 		moves: ['Cosmic Power', 'Body Press', 'Recover'],
 		signatureMove: 'Bleak December',
 		evs: {hp: 4, def: 252, spd: 252}, ivs: {atk: 0}, nature: 'Careful', shiny: true,
@@ -182,7 +182,7 @@ export const ssbSets: SSBSets = {
 	},
 	Cake: {
 		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Shell Bell', gender: 'M',
-		moves: ['Haze', 'Life Dew', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Refresh', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
+		moves: ['Haze', 'Jungle Healing', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Refresh', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
 		signatureMove: 'Kevin',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
@@ -360,9 +360,9 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 	instruct: {
-		species: 'Riolu', ability: 'Truant', item: 'Soda Pop', gender: '',
+		species: 'Riolu', ability: 'Truant', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Explosion', 'Lunar Dance', 'Memento'],
-		signatureMove: 'Fake Out',
+		signatureMove: 'Soda Break',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
 	Iyarito: {
@@ -470,7 +470,7 @@ export const ssbSets: SSBSets = {
 		species: 'Zekrom', ability: 'Petrichor', item: 'Damp Rock', gender: 'N',
 		moves: ['Bolt Strike', 'Dragon Claw', 'Liquidation'],
 		signatureMove: 'Ca-LLAMA-ty',
-		evs: {atk: 252, def: 4, spe: 252}, ivs: {def: 0}, nature: 'Jolly', shiny: true,
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
 	},
 	MajorBowman: {
 		species: 'Weezing-Galar', ability: 'Neutralizing Gas', item: 'Black Sludge', gender: 'M',
