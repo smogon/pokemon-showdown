@@ -1939,7 +1939,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen3',
 		ruleset: ['Standard', '3 Baton Pass Clause'],
-		banlist: ['Uber', 'Smeargle + Baton Pass', 'Sand Veil'],
+		banlist: ['Uber', 'Mr. Mime', 'Smeargle + Baton Pass', 'Sand Veil'],
 	},
 	{
 		name: "[Gen 2] OU",
