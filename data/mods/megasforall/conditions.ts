@@ -32,7 +32,9 @@ const longwhip: ConditionData = {
 		data.move.multihit = null;
 
 		const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
-		this.add('-anim', data.source, hitMove, data.target);
+		if (data.source.isActive) {
+			this.add('-anim', data.source, hitMove, data.target);
+		}
 		this.trySpreadMoveHit([data.target], data.source, hitMove);
 	},
 	onEnd(target) {
@@ -66,7 +68,9 @@ const longwhip: ConditionData = {
 		data.move.multihit = null;
 
 		const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
-		this.add('-anim', data.source, hitMove, data.target);
+		if (data.source.isActive) {
+			this.add('-anim', data.source, hitMove, data.target);
+		}
 		this.trySpreadMoveHit([data.target], data.source, hitMove);
 	},
 };
