@@ -265,7 +265,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		},
 		onAnyTerrainStart(target, source, terrain) {
 			if (!source.hasAbility('arenarock')) {
-				this.field.setTerrain('grassyterrain');
+				this.field.setTerrain('grassyterrain', this.effectData.target);
 			}
 		},
 		onEnd(pokemon) {
@@ -1872,7 +1872,9 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					this.useMove(move, target, data.target);
 				} else {
 					const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
-					this.add('-anim', data.source, hitMove, data.target);
+					if (data.source.hp) { // the move should still activate, but animating can cause issues depending on the move
+						this.add('-anim', data.source, hitMove, data.target);
+					}
 					this.trySpreadMoveHit([data.target], data.source, hitMove);
 				}
 			},
@@ -2211,16 +2213,19 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		},
 		condition: {
 			onStart(pokemon) {
+				this.add('-start', pokemon, 'ability: Gravitational Pull');
 				const hazards = [
 					'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 				];
 				for (const sideCondition of hazards) {
 					if (pokemon.side.getSideCondition(sideCondition) || pokemon.side.foe.getSideCondition(sideCondition)) {
-						this.add('-ability', pokemon, 'Gravitational Pull');
 						this.add('-message', `The hazards on the field are surrounding ${pokemon.name}!`);
 						return;
 					}
 				}
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'ability: Gravitational Pull', '[silent]');
 			},
 			onDamagingHitOrder: 1,
 			onDamagingHit(damage, target, source, move) {
@@ -2266,7 +2271,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 							this.add('-ability', source, 'Gravitational Pull');
 						}
 						const typeMod = this.clampIntRange(source.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-						this.damage(source.maxhp * Math.pow(2, typeMod) / 8);
+						this.damage(source.maxhp * Math.pow(2, typeMod) / 8, source, target);
 						// this.add('-message', `Pointed stones dug into ${source.name}!`);
 					}
 					if (target.side.getSideCondition('stickyweb') || target.side.foe.getSideCondition('stickyweb')) {
@@ -2285,7 +2290,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						const steelHazard = this.dex.getActiveMove('Stealth Rock');
 						steelHazard.type = 'Steel';
 						const typeMod = this.clampIntRange(source.runEffectiveness(steelHazard), -6, 6);
-						this.damage(source.maxhp * Math.pow(2, typeMod) / 8);
+						this.damage(source.maxhp * Math.pow(2, typeMod) / 8, source, target);
 						// this.add('-message', `${source.name} was hurt by the sharp spikes!`);
 					}
 				}
