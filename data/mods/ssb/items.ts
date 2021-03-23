@@ -21,17 +21,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "If held by a Quagsire with Scorching Sands, it can use Bounty Place.",
 	},
 
-	// instruct
-	sodapop: {
-		name: "Soda Pop",
-		onTakeItem: false,
-		zMove: "Satanic Panic",
-		zMoveFrom: "Fake Out",
-		itemUser: ["Riolu"],
-		gen: 1,
-		desc: "If held by a Riolu with Fake Out, it can use Satanic Panic.",
-	},
-
 	// Kalalokki
 	kalalokkiumz: {
 		name: "Kalalokkium Z",

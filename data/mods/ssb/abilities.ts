@@ -455,25 +455,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Blaz
-	whyworry: {
-		desc: "This Pokemon receives 3/4 damage from supereffective attacks and does not take damage from poison.",
-		shortDesc: "This Pokemon takes 3/4 damage from supereffective moves. Not hurt by poison.",
-		onSourceModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod > 0) {
-				this.debug('Why Worry neutralize');
-				return this.chainModify(0.75);
-			}
-		},
-		onDamage(damage, target, source, effect) {
-			if (effect.name === 'tox' || effect.name === 'psn') {
-				return false;
-			}
-		},
-		name: "Why Worry",
-		gen: 8,
-	},
-
 	// Brandon
 	banesurge: {
 		desc: "On switch-in, this Pokemon summons Bane Terrain for 5 turns. For the duration of the effect, all Pokemon use their weaker offensive stat for all attacks. The move category used does not change.",
@@ -813,11 +794,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// gallant's pear
 	armortime: {
 		name: "Armor Time",
-		desc: "If this Pokemon uses a status move or a custom move, it changes its typing and boosts one of its stats by 1 stage randomly between four options: Bug/Fire type with a Special Attack boost, Bug/Steel type with a Defense boost, Bug/Rock type with a Special Defense boost, and Bug/Electric type with a Speed boost.",
-		shortDesc: "On use of status or custom, this Pokemon changes type and gets a boost.",
+		desc: "If this Pokemon uses a status move or King Giri Giri Slash, it changes its typing and boosts one of its stats by 1 stage randomly between four options: Bug/Fire type with a Special Attack boost, Bug/Steel type with a Defense boost, Bug/Rock type with a Special Defense boost, and Bug/Electric type with a Speed boost.",
+		shortDesc: "On use of status or King Giri Giri Slash, the user changes type and gets a boost.",
 		isPermanent: true,
 		onBeforeMove(source, target, move) {
-			if (move.category !== "Status" && move.isNonstandard !== "Custom") return;
+			if (move.category !== "Status" && move.id !== "kinggirigirislash") return;
 			const types = ['Fire', 'Steel', 'Rock', 'Electric'];
 			const type = ['Bug', this.sample(types)];
 			if (!source.setType(type)) return;
@@ -1198,17 +1179,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// KingSwordYT
 	bambookingdom: {
-		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 1 stage. Pokemon using direct attacks against this Pokemon lose 1/16 of their maximum HP. Attacking moves used by this Pokemon have their priority set to -7.",
-		shortDesc: "+1 Def/SpD. -7 priority on attacks. 1/16 hit by moves.",
+		desc: "On switch-in, this Pokemon's Defense and Special Defense are raised by 1 stage. Attacking moves used by this Pokemon have their priority set to -7.",
+		shortDesc: "+1 Def/SpD. -7 priority on attacks.",
 		name: "Bamboo Kingdom",
 		onStart(pokemon) {
 			this.boost({def: 1, spd: 1}, pokemon);
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category !== 'Status') return -7;
-		},
-		onDamagingHit(damage, target, source, move) {
-			this.damage(source.baseMaxhp / 16, source, target);
 		},
 		gen: 8,
 	},
@@ -1351,8 +1329,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Mitsuki
 	photosynthesis: {
-		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled. If Sunny Day is active, this Pokemon's Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its Attack remains the same and it does not lose any HP.",
-		shortDesc: "Drought + Chlorophyll + physical Solar Power",
+		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
+		shortDesc: "Drought + Chlorophyll",
 		name: "Photosynthesis",
 		onStart(source) {
 			for (const action of this.queue) {
@@ -1364,17 +1342,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifySpe(spe, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(2);
-			}
-		},
-		onModifyAtk(atk, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				return this.chainModify(1.5);
-			}
-		},
-		onWeather(target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
-			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
-				this.damage(target.baseMaxhp / 8, target, target);
 			}
 		},
 		gen: 8,
@@ -1503,6 +1470,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.boost({spe: length}, source);
 				if (source.species.baseSpecies !== 'Chandelure') return;
 				if (source.set.shiny) return;
+				source.m.nowShiny = true;
 				this.add(`c|${getName('PartMan')}|THE LIGHT! IT BURNS!`);
 				changeSet(this, source, ssbSets['PartMan-Shiny']);
 			}
@@ -1668,11 +1636,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Rach
 	burnitdown: {
-		desc: "On switch-in, this Pokemon lowers the foe's higher offensive stat. This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
-		shortDesc: "Lower the foe's higher offensive stat. Regenerator.",
-		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.baseMaxhp / 3);
-		},
+		desc: "On switch-in, this Pokemon lowers the foe's higher offensive stat.",
+		shortDesc: "Lower the foe's higher offensive stat.",
 		onStart(pokemon) {
 			let totalatk = 0;
 			let totalspa = 0;

@@ -768,9 +768,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('instruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
-		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
-		shortDesc: "Upon foe KOing user, deal 50% of their max HP to all foes that this Pokemon contacted.",
-		// Extinction Level Event Innate
+		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon. Moves deal 10x more if already made contact through this ability.",
+		shortDesc: "50% of their max HP to all who contacted the user upon KO. Do 10x more if contacted.",
+		// Innate
+		onBasePower(basePower, pokemon, target) {
+			if (target?.m.marked) {
+				return this.chainModify(10);
+			}
+		},
 		onSourceHit(target, source, move) {
 			if (source.illusion) return;
 			if (!move || !target) return;
@@ -1982,7 +1987,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-message', 'The Storm Surge receded.');
 		},
 		onModifySpe() {
-			return this.chainModify(0.5);
+			return this.chainModify(0.75);
 		},
 	},
 	// Kipkluif, needs to end in mod to not trigger aelita/andrew's effect
@@ -2162,6 +2167,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			for (const side of this.sides) {
 				const keys = Object.keys(side.sideConditions);
 				for (const key of keys) {
+					if (key.endsWith('mod') || key.endsWith('clause')) continue;
 					side.removeSideCondition(key);
 					if (!silentRemove.includes(key)) {
 						this.add('-sideend', side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
