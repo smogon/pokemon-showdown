@@ -34,6 +34,27 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 	});
 }
 
+function keysIncludingNonEnumerable(obj: object) {
+	const methods = new Set<string>();
+	let current = obj;
+	do {
+		const curProps = Object.getOwnPropertyNames(current);
+		for (const prop of curProps) {
+			methods.add(prop);
+		}
+	} while ((current = Object.getPrototypeOf(current)));
+	return [...methods];
+}
+
+function keysToCopy(obj: object) {
+	return keysIncludingNonEnumerable(obj).filter(
+		// `__` matches sucrase init methods
+		// prop is excluded because it can hit things like hasOwnProperty that are potentially annoying (?) with
+		// the kind of prototype patching we want to do here - same for constructor and valueOf
+		prop => !(prop.includes('__') || prop.toLowerCase().includes('prop') || ['valueOf', 'constructor'].includes(prop))
+	);
+}
+
 /**
  * @returns {boolean} Whether or not the rebase failed
  */
@@ -104,6 +125,23 @@ async function rebuild(context: CommandContext) {
 
 
 export const commands: ChatCommands = {
+	potd(target, room, user) {
+		this.canUseConsole();
+		const species = Dex.getSpecies(target);
+		if (species.id === Config.potd) {
+			return this.errorReply(`The PotD is already set to ${species.name}`);
+		}
+		if (!species.exists) return this.errorReply(`Pokemon "${target}" not found.`);
+		if (!Dex.getLearnsetData(species.id).learnset) {
+			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
+		}
+		Config.potd = species.id;
+		for (const process of Rooms.PM.processes) {
+			process.getProcess().send(`EVAL\n\nConfig.potd = '${species.id}'`);
+		}
+		this.addGlobalModAction(`${user.name} set the PotD to ${species.name}.`);
+		this.globalModlog(`POTD`, null, species.name);
+	},
 
 	/*********************************************************
 	 * Bot commands (chat-log manipulation)
@@ -389,7 +427,10 @@ export const commands: ChatCommands = {
 		await rebuild(this);
 
 		const lock = Monitor.hotpatchLock;
-		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
+		const hotpatches = [
+			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
+			'processmanager', 'roomsp', 'usersp',
+		];
 
 		try {
 			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
@@ -405,12 +446,13 @@ export const commands: ChatCommands = {
 					await this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
-				if (lock['chat']) {
-					return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
-				}
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
+				if (lock['chat']) {
+					return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
+				}
+
 				this.sendReply("Hotpatching chat commands...");
 
 				const disabledCommands = Chat.allCommands().filter(c => c.disabled).map(c => `/${c.fullCmd}`);
@@ -439,11 +481,100 @@ export const commands: ChatCommands = {
 				this.sendReply("Reloading chat plugins...");
 				Chat.loadPlugins(oldPlugins);
 				this.sendReply("DONE");
+			} else if (target === 'processmanager') {
+				if (lock['processmanager']) {
+					return this.errorReply(
+						`Hot-patching formats has been disabled by ${lock['processmanager'].by} ` +
+						`(${lock['processmanager'].reason})`
+					);
+				}
+				this.sendReply('Hotpatching processmanager prototypes...');
+
+				// keep references
+				const cache = {...require.cache};
+				Utils.clearRequireCache();
+				const newPM = require('../../lib/process-manager');
+				require.cache = cache;
+
+				const protos = [
+					[ProcessManager.QueryProcessManager, newPM.QueryProcessManager],
+					[ProcessManager.StreamProcessManager, newPM.StreamProcessManager],
+					[ProcessManager.ProcessManager, newPM.ProcessManager],
+					[ProcessManager.RawProcessManager, newPM.RawProcessManager],
+					[ProcessManager.QueryProcessWrapper, newPM.QueryProcessWrapper],
+					[ProcessManager.StreamProcessWrapper, newPM.StreamProcessWrapper],
+					[ProcessManager.RawProcessManager, newPM.RawProcessWrapper],
+				].map(part => part.map(constructor => constructor.prototype));
+
+				for (const [oldProto, newProto] of protos) {
+					const newKeys = keysToCopy(newProto);
+					const oldKeys = keysToCopy(oldProto);
+					for (const key of oldKeys) {
+						if (!newProto[key]) {
+							delete oldProto[key];
+						}
+					}
+					for (const key of newKeys) {
+						oldProto[key] = newProto[key];
+					}
+				}
+				this.sendReply('DONE');
+			} else if (target === 'usersp' || target === 'roomsp') {
+				if (lock[target]) {
+					return this.errorReply(`Hot-patching ${target} has been disabled by ${lock[target].by} (${lock[target].reason})`);
+				}
+				let newProto: any, oldProto: any, message: string;
+				switch (target) {
+				case 'usersp':
+					newProto = require('../users').User.prototype;
+					oldProto = Users.User.prototype;
+					message = 'user prototypes';
+					break;
+				case 'roomsp':
+					newProto = require('../rooms').BasicRoom.prototype;
+					oldProto = Rooms.BasicRoom.prototype;
+					message = 'rooms prototypes';
+					break;
+				}
+
+				this.sendReply(`Hotpatching ${message}...`);
+				const newKeys = keysToCopy(newProto);
+				const oldKeys = keysToCopy(oldProto);
+
+				const counts = {
+					added: 0,
+					updated: 0,
+					deleted: 0,
+				};
+
+				for (const key of oldKeys) {
+					if (!newProto[key]) {
+						counts.deleted++;
+						delete oldProto[key];
+					}
+				}
+				for (const key of newKeys) {
+					if (!oldProto[key]) {
+						counts.added++;
+					} else if (
+						// compare source code
+						typeof oldProto[key] !== 'function' || oldProto[key].toString() !== newProto[key].toString()
+					) {
+						counts.updated++;
+					}
+
+					oldProto[key] = newProto[key];
+				}
+				this.sendReply(`DONE`);
+				this.sendReply(
+					`Updated ${Chat.count(counts.updated, 'methods')}` +
+					(counts.added ? `, added ${Chat.count(counts.added, 'new methods')} to ${message}` : '') +
+					(counts.deleted ? `, and removed ${Chat.count(counts.deleted, 'methods')}.` : '.')
+				);
 			} else if (target === 'tournaments') {
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
-
 				this.sendReply("Hotpatching tournaments...");
 
 				global.Tournaments = require('../tournaments').Tournaments;
@@ -570,7 +701,10 @@ export const commands: ChatCommands = {
 		if (!reason || !target.includes(separator)) return this.parse('/help nohotpatch');
 
 		const lock = Monitor.hotpatchLock;
-		const validDisable = ['chat', 'battles', 'formats', 'validator', 'tournaments', 'punishments', 'modlog', 'all'];
+		const validDisable = [
+			'roomsp', 'usersp', 'chat', 'battles', 'formats', 'validator',
+			'tournaments', 'punishments', 'modlog', 'all', 'processmanager',
+		];
 
 		if (!validDisable.includes(hotpatch)) {
 			return this.errorReply(`Disabling hotpatching "${hotpatch}" is not supported.`);
@@ -602,7 +736,7 @@ export const commands: ChatCommands = {
 		`/allowhotpatch [chat|formats|battles|validator|tournaments|punishments|modlog|all] [reason] - Enables hotpatching the specified part of the simulator. Requires: &`,
 	],
 
-	processes(target, room, user) {
+	async processes(target, room, user) {
 		const devRoom = Rooms.get('development');
 		if (!(devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%'))) {
 			this.checkCan('lockdown');
@@ -610,16 +744,22 @@ export const commands: ChatCommands = {
 
 		const processes = new Map<string, ProcessData>();
 
-		const psOutput = child_process.execSync('ps -o pid,%cpu,time,command', {cwd: `${__dirname}/../..`}).toString();
-		const rows = psOutput.split('\n').slice(1); // first line is the table header
-		for (const row of rows) {
-			if (!row.trim()) continue;
-			const [pid, cpu, time, ...rest] = row.split(' ').filter(Boolean);
-			const entry: ProcessData = {cmd: rest.join(' ')};
-			if (time && time !== '00:00:00') entry.time = time;
-			if (cpu && cpu !== '0.0') entry.cpu = `${cpu}%`;
-			processes.set(pid, entry);
-		}
+		await new Promise<void>(resolve => {
+			const child = child_process.exec('ps -o pid,%cpu,time,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+				if (err) throw err;
+				const rows = stdout.split('\n').slice(1); // first line is the table header
+				for (const row of rows) {
+					if (!row.trim()) continue;
+					const [pid, cpu, time, ...rest] = row.split(' ').filter(Boolean);
+					if (pid === `${child.pid}`) continue; // ignore this process
+					const entry: ProcessData = {cmd: rest.join(' ')};
+					if (time && time !== '00:00:00') entry.time = time;
+					if (cpu && cpu !== '0.0') entry.cpu = `${cpu}%`;
+					processes.set(pid, entry);
+				}
+				resolve();
+			});
+		});
 
 		let buf = `<strong>${process.pid}</strong> - Main `;
 		const mainProcess = processes.get(`${process.pid}`)!;
@@ -631,7 +771,7 @@ export const commands: ChatCommands = {
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
 				const pid = process.getProcess().pid;
-				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.load}`;
+				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
 				if (info.cpu) buf += `, CPU: ${info.cpu}`;
 				if (info.time) buf += `, time: ${info.time}`;
@@ -640,7 +780,7 @@ export const commands: ChatCommands = {
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
 				const pid = process.getProcess().pid;
-				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load}`;
+				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
 				if (info.cpu) buf += `, CPU: ${info.cpu}`;
 				if (info.time) buf += `, time: ${info.time}`;

@@ -40,10 +40,10 @@ describe('Simulator abstraction layer features', function () {
 			const PM = require('../../.server-dist/room-battle').PM;
 			assert.equal(PM.processes.length, 0);
 			PM.spawn(1, true);
-			assert.equal(PM.processes[0].load, 0);
+			assert.equal(PM.processes[0].getLoad(), 0);
 
 			const stream = PM.createStream();
-			assert.equal(PM.processes[0].load, 1);
+			assert.equal(PM.processes[0].getLoad(), 1);
 			stream.write(
 				'>version a2393dfd2a2da5594148bf99eea514e72b136c2c\n' +
 				'>start {"formatid":"gen8randombattle","seed":[9619,36790,28450,62465],"rated":"Rated battle"}\n' +
@@ -61,10 +61,10 @@ describe('Simulator abstraction layer features', function () {
 			assert((await stream.read()).startsWith('sideupdate\np2\n|request|'));
 			assert((await stream.read()).includes('|move|'));
 			stream.destroy();
-			assert.equal(PM.processes[0].load, 0);
+			assert.equal(PM.processes[0].getLoad(), 0);
 
 			const stream2 = PM.createStream();
-			assert.equal(PM.processes[0].load, 1);
+			assert.equal(PM.processes[0].getLoad(), 1);
 			stream2.write(
 				'>version a2393dfd2a2da5594148bf99eea514e72b136c2c\n' +
 				'>start {"formatid":"gen8randombattle","seed":[9619,36790,28450,62465],"rated":"Rated battle"}\n' +
@@ -76,7 +76,7 @@ describe('Simulator abstraction layer features', function () {
 			assert(await stream2.read());
 			stream2.writeEnd();
 			await stream2.readAll();
-			assert.equal(PM.processes[0].load, 0);
+			assert.equal(PM.processes[0].getLoad(), 0);
 			PM.unspawn();
 		});
 	});

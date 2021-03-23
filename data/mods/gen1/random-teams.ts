@@ -1,4 +1,10 @@
 import RandomGen2Teams from '../gen2/random-teams';
+import {Utils} from '../../../lib';
+
+interface HackmonsCupEntry {
+	types: string[];
+	baseStats: StatsTable;
+}
 
 export class RandomGen1Teams extends RandomGen2Teams {
 	// Challenge Cup or CC teams are basically fully random teams.
@@ -73,14 +79,14 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				spe: this.random(16),
 			};
 			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
-			ivs["atk"] = ivs["atk"] * 2;
-			ivs["def"] = ivs["def"] * 2;
-			ivs["spa"] = ivs["spa"] * 2;
+			ivs["atk"] *= 2;
+			ivs["def"] *= 2;
+			ivs["spa"] *= 2;
 			ivs["spd"] = ivs["spa"];
-			ivs["spe"] = ivs["spe"] * 2;
+			ivs["spe"] *= 2;
 
 			// Maxed EVs.
-			const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255,	spe: 255};
+			const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
@@ -140,6 +146,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		while (pokemonPool.length && pokemon.length < 6) {
 			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
+			// Only one Ditto is allowed per battle in Generation 1,
+			// as it can cause an endless battle if two Dittos are forced
+			// to face each other.
+			if (species.id === 'ditto' && this.battleHasDitto) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
@@ -216,6 +226,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Is it Magikarp or one of the useless bugs?
 			if (handicapMons.includes(species.id)) hasShitmon = true;
+
+			// Ditto check
+			if (species.id === 'ditto') this.battleHasDitto = true;
 		}
 
 		return pokemon;
@@ -316,6 +329,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const levelScale: {[k: string]: number} = {
 			LC: 88,
 			NFE: 80,
+			NU: 77,
+			NUBL: 76,
 			UU: 74,
 			OU: 68,
 			Uber: 65,
@@ -341,6 +356,118 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			shiny: false,
 			gender: false,
 		};
+	}
+
+	randomHCTeam(): PokemonSet[] {
+		const team = [];
+
+		const movePool = Object.keys(this.dex.data.Moves);
+		const typesPool = ['Bird', ...Object.keys(this.dex.data.TypeChart)];
+
+		const random6 = this.random6Pokemon();
+		const hackmonsCup: {[k: string]: HackmonsCupEntry} = {};
+
+		for (let i = 0; i < 6; i++) {
+			// Choose forme
+			const species = this.dex.getSpecies(random6[i]);
+			if (!hackmonsCup[species.id]) {
+				hackmonsCup[species.id] = {
+					types: [this.sample(typesPool), this.sample(typesPool)],
+					baseStats: {
+						hp: Utils.clampIntRange(this.random(256), 1),
+						atk: Utils.clampIntRange(this.random(256), 1),
+						def: Utils.clampIntRange(this.random(256), 1),
+						spa: Utils.clampIntRange(this.random(256), 1),
+						spd: 0,
+						spe: Utils.clampIntRange(this.random(256), 1),
+					},
+				};
+				hackmonsCup[species.id].baseStats.spd = hackmonsCup[species.id].baseStats.spa;
+			}
+			if (hackmonsCup[species.id].types[0] === hackmonsCup[species.id].types[1]) {
+				hackmonsCup[species.id].types.splice(1, 1);
+			}
+
+			// Random unique moves
+			const moves = [];
+			do {
+				const moveid = this.sampleNoReplace(movePool);
+				const move = this.dex.getMove(moveid);
+				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
+					moves.push(moveid);
+				}
+			} while (moves.length < 4);
+
+			// Random EVs
+			const evs = {
+				hp: this.random(256),
+				atk: this.random(256),
+				def: this.random(256),
+				spa: this.random(256),
+				spd: 0,
+				spe: this.random(256),
+			};
+			evs['spd'] = evs['spa'];
+
+			// Random DVs
+			const ivs: StatsTable = {
+				hp: 0,
+				atk: this.random(16),
+				def: this.random(16),
+				spa: this.random(16),
+				spd: 0,
+				spe: this.random(16),
+			};
+			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
+			for (const iv in ivs) {
+				if (iv === 'hp' || iv === 'spd') continue;
+				ivs[iv as keyof StatsTable] *= 2;
+			}
+			ivs['spd'] = ivs['spa'];
+
+			// Level balance
+			const mbstmin = 425;
+			const baseStats = hackmonsCup[species.id].baseStats;
+			const calcStat = (statName: StatName, lvl?: number) => {
+				if (lvl) {
+					return Math.floor(Math.floor(2 * baseStats[statName] + ivs[statName] + Math.floor(evs[statName] / 4)) * lvl / 100 + 5);
+				}
+				return Math.floor(2 * baseStats[statName] + ivs[statName] + Math.floor(evs[statName] / 4)) + 5;
+			};
+			let mbst = 0;
+			for (const statName of Object.keys(baseStats)) {
+				mbst += calcStat(statName as StatName);
+				if (statName === 'hp') mbst += 5;
+			}
+			let level = Math.floor(100 * mbstmin / mbst);
+			while (level < 100) {
+				for (const statName of Object.keys(baseStats)) {
+					mbst += calcStat(statName as StatName, level);
+					if (statName === 'hp') mbst += 5;
+				}
+				if (mbst >= mbstmin) break;
+				level++;
+			}
+			if (level > 100) level = 100;
+
+			team.push({
+				name: species.baseSpecies,
+				species: species.name,
+				gender: species.gender,
+				item: '',
+				ability: 'None',
+				moves,
+				evs,
+				ivs,
+				nature: '',
+				level,
+				shiny: false,
+				// Hacky but the only way to communicate stats/level generation properly
+				hc: hackmonsCup[species.id],
+			});
+		}
+
+		return team;
 	}
 }
 

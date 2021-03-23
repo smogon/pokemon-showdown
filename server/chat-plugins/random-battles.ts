@@ -630,42 +630,42 @@ export const commands: ChatCommands = {
 			dex = Dex.mod(format.mod);
 			if (format.mod === 'letsgo') isLetsGo = true;
 		}
-		let species = dex.getSpecies(args[0]);
+		const species = dex.getSpecies(args[0]);
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
 		let formatName = dex.getFormat(`gen${dex.gen}randombattle`).name;
+
+		const movesets = [];
 		if (dex.gen === 1) {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${rbyMoves}`);
-		}
-		if (isLetsGo) {
+			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${rbyMoves}`);
+		} else if (isLetsGo) {
 			formatName = `[Gen 7 Let's Go] Random Battle`;
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
+			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
 		}
-		let randomMoves = species.randomBattleMoves;
-		if (!randomMoves) {
-			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
-			if (!gmaxSpecies.exists || !gmaxSpecies.randomBattleMoves) {
-				return this.errorReply(`Error: No moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
-			}
-			species = gmaxSpecies;
-			randomMoves = gmaxSpecies.randomBattleMoves;
+
+		const setsToCheck = [species];
+		if (dex.gen > 7) setsToCheck.push(dex.getSpecies(`${args[0]}gmax`));
+
+		for (const pokemon of setsToCheck) {
+			if (!pokemon.randomBattleMoves) continue;
+			const randomMoves = pokemon.randomBattleMoves.slice();
+			const m = randomMoves.sort().map(formatMove);
+			movesets.push(`<span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:</span><br />${m.join(`, `)}`);
 		}
-		const moves: string[] = [];
-		// Done because species.randomBattleMoves is readonly
-		for (const move of randomMoves) {
-			moves.push(move);
+
+		if (!movesets.length) {
+			return this.errorReply(`Error: ${species.name} has no Random Battle data in ${formatName}`);
 		}
-		const m = moves.sort().map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${m.join(`, `)}`);
+		this.sendReplyBox(movesets.join('<hr />'));
 	},
 	randombattleshelp: [
 		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
@@ -717,6 +717,35 @@ export const commands: ChatCommands = {
 	},
 	randomdoublesbattlehelp: [
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,
+	],
+
+	randsnodmax: 'randombattlenodmax',
+	randombattlenodmax(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.parse(`/help randombattlenodynamax`);
+
+		const dex = Dex.forFormat('gen8randombattlenodmax');
+		let species = dex.getSpecies(target);
+
+		if (!species.exists) {
+			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${target.trim()}' does not exist.`);
+		}
+
+		let randomMoves = species.randomBattleNoDynamaxMoves || species.randomBattleMoves;
+		if (!randomMoves) {
+			const gmaxSpecies = dex.getSpecies(`${target}gmax`);
+			if (!gmaxSpecies.exists || !gmaxSpecies.randomBattleMoves) {
+				return this.errorReply(`Error: No move data found for ${species.name} in [Gen 8] Random Battle (No Dmax).`);
+			}
+			species = gmaxSpecies;
+			randomMoves = gmaxSpecies.randomBattleNoDynamaxMoves || gmaxSpecies.randomBattleMoves;
+		}
+
+		const m = [...randomMoves].sort().map(formatMove);
+		this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in [Gen 8] Random Battle (No Dmax):</span><br />${m.join(`, `)}`);
+	},
+	randombattlenodmaxhelp: [
+		`/randombattlenodmax OR /randsnodmax [pokemon] - Displays a Pok\u00e9mon's Random Battle (No Dmax) moves.`,
 	],
 
 	bssfactory: 'battlefactory',

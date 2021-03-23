@@ -461,6 +461,7 @@ export const Punishments = new class {
 	 *********************************************************/
 
 	async punish(user: User | ID, punishment: Punishment, ignoreAlts: boolean, bypassPunishmentfilter = false) {
+		user = Users.get(user) || user;
 		if (typeof user === 'string') {
 			return Punishments.punishName(user, punishment);
 		}
@@ -1502,7 +1503,6 @@ export const Punishments = new class {
 
 		return banned;
 	}
-
 	checkNameInRoom(user: User, roomid: RoomID): boolean {
 		let punishment = Punishments.roomUserids.nestedGet(roomid, user.id);
 		if (!punishment && user.autoconfirmed) {

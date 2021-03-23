@@ -352,6 +352,16 @@ export class HelpTicket extends Rooms.RoomGame {
 		// @ts-ignore
 		this.playerTable = null;
 	}
+	onChatMessage(message: string, user: User) {
+		const roomids = message.match(/battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g);
+		if (roomids) {
+			for (const roomid of roomids) {
+				const curRoom = Rooms.get(roomid);
+				if (!curRoom || !('uploadReplay' in curRoom) || curRoom?.battle?.replaySaved) continue;
+				void curRoom.uploadReplay(user, user.connections[0], 'forpunishment');
+			}
+		}
+	}
 	static ban(user: User | ID, reason = '') {
 		const userid = toID(user);
 		const userObj = Users.get(user);
@@ -513,7 +523,7 @@ export function notifyStaff() {
 		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
 		buf = buf.slice(0, fourthTicketIndex) +
-			`<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
+			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button>`;
 	}
 	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox" style="padding: 6px 4px">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
@@ -530,6 +540,11 @@ export function notifyStaff() {
 	}
 	for (const user of Object.values(room.users)) {
 		if (user.can('lock') && !user.settings.ignoreTickets) user.sendTo(room, buf);
+		for (const connection of user.connections) {
+			if (connection.openPages?.has('help-tickets')) {
+				void Chat.resolvePage('view-help-tickets', user, connection);
+			}
+		}
 	}
 	pokeUnclaimedTicketTimer(hasUnclaimed, hasAssistRequest);
 }
@@ -930,7 +945,7 @@ export const pages: PageTable = {
 			if (FS(`logs/tickets/${prevString}.tsv`).readIfExistsSync()) {
 				buttonBar += `<a class="button" href="/view-help-stats-${table}-${prevString}" target="replace" style="float: left">&lt; ${this.tr`Previous Month`}</a>`;
 			} else {
-				buttonBar += `<a class="button disabled" style="float: left">&lt; ${this.tr`Previous Month`}Month</a>`;
+				buttonBar += `<a class="button disabled" style="float: left">&lt; ${this.tr`Previous Month`}</a>`;
 			}
 			buttonBar += `<a class="button${table === 'tickets' ? ' disabled"' : `" href="/view-help-stats-tickets-${dateUrl}" target="replace"`}>${this.tr`Ticket Stats`}</a> <a class="button ${table === 'staff' ? ' disabled"' : `" href="/view-help-stats-staff-${dateUrl}" target="replace"`}>${this.tr`Staff Stats`}</a>`;
 			if (FS(`logs/tickets/${nextString}.tsv`).readIfExistsSync()) {
@@ -1452,9 +1467,16 @@ export const commands: ChatCommands = {
 export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 	if (punishment[0] !== 'BAN') return;
 
-	const helpRoom = Rooms.get(`help-${toID(user)}`);
-	if (helpRoom?.game?.gameid !== 'helpticket') return;
-
-	const ticket = helpRoom.game as HelpTicket;
-	ticket.close('ticketban');
+	const userId = toID(user);
+	if (typeof user === 'object') {
+		const ids = [userId, ...(user as User).previousIDs];
+		for (const userid of ids) {
+			punishmentfilter(userid, punishment);
+		}
+	} else {
+		const helpRoom = Rooms.get(`help-${userId}`);
+		if (helpRoom?.game?.gameid !== 'helpticket') return;
+		const ticket = helpRoom.game as HelpTicket;
+		ticket.close('ticketban');
+	}
 };

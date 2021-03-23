@@ -27,6 +27,9 @@ export const Aliases: {[alias: string]: string} = {
 	ts: "[Gen 8] Tier Shift",
 	ph: "[Gen 8] Pure Hackmons",
 	gen7bh: "[Gen 7] Balanced Hackmons",
+	gen7mnm: "[Gen 7] Mix and Mega",
+	gen7stab: "[Gen 7] STABmons",
+	gen6aaa: "[Gen 6] Almost Any Ability",
 	gen6ph: "[Gen 6] Pure Hackmons",
 	gen6hackmons: "[Gen 6] Pure Hackmons",
 	cc1v1: "[Gen 8] Challenge Cup 1v1",
@@ -51,8 +54,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6mono: "[Gen 6] Monotype",
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 8] Cross Evolution",
-	omotm: "[Gen 8] Inheritance",
-	lcotm: "[Gen 8] Nature Swap",
+	omotm: "[Gen 8] Max Berries",
+	lcotm: "[Gen 8] The Loser's Game",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
@@ -523,6 +526,7 @@ export const Aliases: {[alias: string]: string} = {
 	propk1: "Pokestar Black Belt",
 
 	// abilities
+	ngas: "Neutralizing Gas",
 	pheal: "Poison Heal",
 	regen: "Regenerator",
 	stag: "Shadow Tag",

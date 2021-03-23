@@ -2266,8 +2266,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	gmaxdrumsolo: {
 		name: "G-Max Drum Solo",
-		desc: "This move will always have 160 Base Power, and it ignores the abilities of opposing Pokemon.",
-		shortDesc: "Stronger than other Max Moves. Ignores abilities.",
+		desc: "Power is 160 regardless of the base move's Max Move power. This move and its effects ignore the Abilities of other Pokemon.",
+		shortDesc: "Always 160 power. Ignores Abilities.",
 	},
 	gmaxfinale: {
 		name: "G-Max Finale",
@@ -2276,8 +2276,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	gmaxfireball: {
 		name: "G-Max Fire Ball",
-		desc: "This move will always have 160 Base Power, and it ignores the abilities of opposing Pokemon.",
-		shortDesc: "Stronger than other Max Moves. Ignores abilities.",
+		desc: "Power is 160 regardless of the base move's Max Move power. This move and its effects ignore the Abilities of other Pokemon.",
+		shortDesc: "Always 160 power. Ignores Abilities.",
 	},
 	gmaxfoamburst: {
 		name: "G-Max Foam Burst",
@@ -2296,8 +2296,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	gmaxhydrosnipe: {
 		name: "G-Max Hydrosnipe",
-		desc: "This move will always have 160 Base Power, and it ignores the abilities of opposing Pokemon.",
-		shortDesc: "Stronger than other Max Moves. Ignores abilities.",
+		desc: "Power is 160 regardless of the base move's Max Move power. This move and its effects ignore the Abilities of other Pokemon.",
+		shortDesc: "Always 160 power. Ignores Abilities.",
 	},
 	gmaxmalodor: {
 		name: "G-Max Malodor",
@@ -2311,13 +2311,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	gmaxoneblow: {
 		name: "G-Max One Blow",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
-		shortDesc: "Base move affects power. Breaks all protection.",
+		desc: "Power is equal to the base move's Max Move power. This move bypasses all protection effects, including Max Guard.",
+		shortDesc: "Base move affects power. Bypasses Max Guard.",
 	},
 	gmaxrapidflow: {
 		name: "G-Max Rapid Flow",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
-		shortDesc: "Base move affects power. Breaks all protection.",
+		desc: "Power is equal to the base move's Max Move power. This move bypasses all protection effects, including Max Guard.",
+		shortDesc: "Base move affects power. Bypasses Max Guard.",
 	},
 	gmaxreplenish: {
 		name: "G-Max Replenish",
@@ -4678,8 +4678,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	recycle: {
 		name: "Recycle",
-		desc: "The user regains the item it last used. Fails if the user is holding an item, if the user has not held an item, if the item was a popped Air Balloon, if the item was picked up by a Pokemon with the Pickup Ability, or if the item was lost to Bug Bite, Covet, Incinerate, Knock Off, Pluck, or Thief. Items thrown with Fling can be regained.",
+		desc: "The user regains the item it last used. Fails if the user is holding an item, if the user has not held an item, if the item was a popped Air Balloon, if the item was picked up by a Pokemon with the Pickup Ability, or if the item was lost to Bug Bite, Corrosive Gas, Covet, Incinerate, Knock Off, Pluck, or Thief. Items thrown with Fling can be regained.",
 		shortDesc: "Restores the item the user last used.",
+		gen7: {
+			desc: "The user regains the item it last used. Fails if the user is holding an item, if the user has not held an item, if the item was a popped Air Balloon, if the item was picked up by a Pokemon with the Pickup Ability, or if the item was lost to Bug Bite, Covet, Incinerate, Knock Off, Pluck, or Thief. Items thrown with Fling can be regained.",
+		},
 		gen4: {
 			desc: "The user regains the item last used by a Pokemon in its current position on the field, even if that Pokemon was not the user. Fails if the user is holding an item, if no items have been used at the user's position, or if the item was lost to Covet, Knock Off, or Thief. Items thrown with Fling can be regained.",
 		},

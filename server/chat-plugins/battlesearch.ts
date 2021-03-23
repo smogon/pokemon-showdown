@@ -368,8 +368,14 @@ export const commands: ChatCommands = {
 
 export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
 	const {userids, turnLimit, month, tierid} = data;
+	const start = Date.now();
 	try {
-		return await runBattleSearch(userids, month, tierid, turnLimit);
+		const result = await runBattleSearch(userids, month, tierid, turnLimit);
+		const elapsedTime = Date.now() - start;
+		if (elapsedTime > 10 * 60 * 1000) {
+			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+		}
+		return result;
 	} catch (err) {
 		Monitor.crashlog(err, 'A battle search query', {
 			userids,
@@ -379,7 +385,11 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		});
 	}
 	return null;
-}, BATTLESEARCH_PROCESS_TIMEOUT);
+}, BATTLESEARCH_PROCESS_TIMEOUT, message => {
+	if (message.startsWith('SLOW\n')) {
+		Monitor.slow(message.slice(5));
+	}
+});
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -388,6 +398,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	process.on('uncaughtException', err => {

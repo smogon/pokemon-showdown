@@ -510,7 +510,7 @@ export abstract class BasicRoom {
 	}
 	clearMinorActivityQueue(slot?: number, depth = 1) {
 		if (!this.minorActivityQueue) return;
-		if (!slot) {
+		if (slot === undefined) {
 			this.minorActivityQueue = null;
 			delete this.settings.minorActivityQueue;
 			this.saveSettings();

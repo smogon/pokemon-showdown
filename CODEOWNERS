@@ -1,4 +1,4 @@
-config/formats.ts @KrisXV
+config/formats.ts @KrisXV @Marty-D
 data/mods/*/random-teams.ts @AnnikaCodes
 data/mods/ssb/ @HoeenCoder @xInstruct
 data/random-teams.ts @AnnikaCodes
@@ -17,3 +17,4 @@ server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
 server/chat-plugins/the-studio.ts @KrisXV
 server/chat-plugins/trivia.ts @AnnikaCodes
 server/modlog.ts @monsanto
+test/random-battles/* @AnnikaCodes
