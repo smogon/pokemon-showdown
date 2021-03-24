@@ -1186,6 +1186,7 @@ export const Formats: {[k: string]: FormatData} = {
 		onBegin() {
 			this.add('rule', '350 Cup Mod: If a Pokemon\'s BST is 350 or lower, all of its stats get doubled.');
 		},
+		onModifySpeciesPriority: 2,
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			if (newSpecies.bst <= 350) {
@@ -1205,6 +1206,7 @@ export const Formats: {[k: string]: FormatData} = {
 		onBegin() {
 			this.add('rule', 'Flipped Mod: Pokemon have their stats flipped (HP becomes Spe, vice versa).');
 		},
+		onModifySpeciesPriority: 2,
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			const reversedNums = Object.values(newSpecies.baseStats).reverse();
@@ -1221,6 +1223,7 @@ export const Formats: {[k: string]: FormatData} = {
 		onBegin() {
 			this.add('rule', 'Scalemons Mod: Every Pokemon\'s stats, barring HP, are scaled to come as close to a BST of 600 as possible');
 		},
+		onModifySpeciesPriority: 1,
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			const bstWithoutHp: number = newSpecies.bst - newSpecies.baseStats['hp'];
