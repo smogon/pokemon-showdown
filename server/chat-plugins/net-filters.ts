@@ -15,7 +15,7 @@ const NUM_PROCESSES = {
 	training: 1,
 	main: 1,
 };
-const PM_TIMEOUT = 2 * 60 * 60 * 1000; // training can be _really_ slow
+const PM_TIMEOUT = 10 * 60 * 60 * 1000; // training can be _really_ slow
 const WHITELIST = ["mia"];
 
 interface NetQuery {
@@ -63,22 +63,7 @@ export class NeuralNetChecker {
 			await FS(PATH).copyFile(PATH + '.backup');
 		} catch (e) {}
 		if (!this.model) throw new Error(`Attempting to train with no model installed`);
-		let buf = [];
-		while (data.length) {
-			const line = data.shift()!;
-			buf.push(line);
-			if (buf.length > 10) {
-				try {
-					this.model.train(buf, {iterations: options.iterations});
-				} catch (e) {
-					Monitor.crashlog(e, "a netfilter training process", {
-						line: JSON.stringify(buf),
-					});
-					process.exit();
-				}
-				buf = [];
-			}
-		}
+		this.model.train(data, options);
 		this.save();
 		return Date.now() - now; // time data is helpful for training
 	}
@@ -111,8 +96,7 @@ export class NeuralNetChecker {
 	}
 	save(path = PATH) {
 		if (!this.model) return {};
-		const state = this.model.toJSON();
-		FS(path).writeUpdate(() => JSON.stringify(state));
+		FS(path).writeUpdate(() => JSON.stringify(this.model));
 		return state;
 	}
 	load(path: string) {
