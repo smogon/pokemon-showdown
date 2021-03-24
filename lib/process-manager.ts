@@ -553,7 +553,9 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 				response => process.send!(`${taskId}\n${JSON.stringify(response)}`)
 			);
 		});
-		process.on('disconnect', () => process.exit());
+		process.on('disconnect', () => {
+			process.exit();
+		});
 	}
 	destroyProcess(process: QueryProcessWrapper<T, U>) {
 		process.destroy();
