@@ -17,9 +17,8 @@ export let hangmanData: {[roomid: string]: {[phrase: string]: HangmanEntry}} = {
 
 try {
 	hangmanData = JSON.parse(FS(HANGMAN_FILE).readSync());
-	const roomids = Object.keys(hangmanData);
 	let save = false;
-	for (const roomid of roomids) {
+	for (const roomid in hangmanData) {
 		const roomData = hangmanData[roomid] || {};
 		const roomKeys = Object.keys(roomData);
 		if (roomKeys.length && !roomData[roomKeys[0]].hints) {
