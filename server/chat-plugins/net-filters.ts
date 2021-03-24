@@ -97,7 +97,7 @@ export class NeuralNetChecker {
 	save(path = PATH) {
 		if (!this.model) return {};
 		FS(path).writeUpdate(() => JSON.stringify(this.model));
-		return state;
+		return this.model.toJSON();
 	}
 	load(path: string) {
 		if (!FS(path).existsSync()) return;
