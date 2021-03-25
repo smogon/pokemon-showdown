@@ -1396,7 +1396,7 @@ export class Mastermind extends Rooms.RoomGame {
 			let smallBuf;
 			if (second && third) {
 				const secondPlace = Utils.escapeHTML(second.name);
-				const thirdPlace = Utils.escapeHTML(second.name);
+				const thirdPlace = Utils.escapeHTML(third.name);
 				smallBuf = `<br />${this.room.tr`${secondPlace} and ${thirdPlace} were runners-up with ${second.player.points} and ${third.player.points} points, respectively.`}`;
 			} else if (second) {
 				const secondPlace = Utils.escapeHTML(second.name);
@@ -2633,8 +2633,8 @@ const mastermindCommands: ChatCommands = {
 			`<code>/mastermind finals [length in seconds]</code>: starts the Mastermind finals. Requires: + % @ # &`,
 			`<code>/mastermind kick [user]</code>: kicks a user from the current game of Mastermind. Requires: % @ # &`,
 			`<code>/mastermind join</code>: joins the current game of Mastermind.`,
-			`<code>/mastermind answer [answer]</code>: answers a question in a round of Mastermind.`,
-			`<code>/mastermind pass</code>: passes on the current question. Must be the player of the current round of Mastermind.`,
+			`<code>/mastermind answer OR /mma [answer]</code>: answers a question in a round of Mastermind.`,
+			`<code>/mastermind pass OR /mmp</code>: passes on the current question. Must be the player of the current round of Mastermind.`,
 		];
 		return this.sendReplyBox(
 			`<strong>Mastermind</strong> is a game in which each player tries to score as many points as possible in a timed round where only they can answer, ` +
@@ -2648,6 +2648,8 @@ export const commands: ChatCommands = {
 	mm: mastermindCommands,
 	mastermind: mastermindCommands,
 	mastermindhelp: mastermindCommands.mastermindhelp,
+	mma: mastermindCommands.answer,
+	mmp: mastermindCommands.pass,
 	trivia: triviaCommands,
 	ta: triviaCommands.answer,
 	triviahelp: triviaCommands.triviahelp,
