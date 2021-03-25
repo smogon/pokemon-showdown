@@ -246,6 +246,7 @@ export const pages: PageTable = {
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
+		if (Config.nobattlesearch) return this.errorReply(`Battlesearch has been temporarily disabled due to load issues.`);
 		const [ids, rawLimit, month, formatid, confirmation] = Utils.splitFirst(this.pageid.slice(18), '--', 5);
 		let turnLimit: number | undefined = parseInt(rawLimit);
 		if (isNaN(turnLimit)) turnLimit = undefined;
