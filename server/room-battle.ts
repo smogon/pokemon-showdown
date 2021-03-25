@@ -209,7 +209,7 @@ export class RoomBattleTimer {
 			maxPerTurn: isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME,
 			maxFirstTurn: isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME,
 			timeoutAutoChoose: false,
-			accelerate: !timerSettings,
+			accelerate: !timerSettings && !isChallenge,
 			...timerSettings,
 		};
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
