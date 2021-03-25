@@ -45,7 +45,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!randomMove) {
 				return false;
 			}
-			this.useMove(randomMove, target);
+			this.move.useMove(randomMove, target);
 		},
 	},
 	assurance: {
@@ -160,7 +160,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!this.lastMove || noCopycat.includes(this.lastMove.id)) {
 				return false;
 			}
-			this.useMove(this.lastMove.id, pokemon);
+			this.move.useMove(this.lastMove.id, pokemon);
 		},
 	},
 	cottonspore: {
@@ -597,7 +597,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryHit() {},
 		onHit(pokemon) {
-			this.useMove('earthquake', pokemon);
+			this.move.useMove('earthquake', pokemon);
 		},
 		target: "self",
 	},
@@ -873,7 +873,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target === source || move.flags['authentic']) {
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				let damage = this.move.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
@@ -895,7 +895,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
 				if (move.recoil && damage) {
-					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
+					this.damage(this.move.calcRecoilDamage(damage, move), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');

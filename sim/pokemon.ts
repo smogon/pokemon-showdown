@@ -424,8 +424,8 @@ export class Pokemon {
 		this.speed = 0;
 		this.abilityOrder = 0;
 
-		this.canMegaEvo = this.battle.canMegaEvo(this);
-		this.canUltraBurst = this.battle.canUltraBurst(this);
+		this.canMegaEvo = this.battle.move.canMegaEvo(this);
+		this.canUltraBurst = this.battle.move.canUltraBurst(this);
 		// Normally would want to use battle.canDynamax to set this, but it references this property.
 		this.canDynamax = (this.battle.gen >= 8);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
@@ -549,7 +549,7 @@ export class Pokemon {
 
 		// stat modifier effects
 		if (!unmodified) {
-			const statTable: {[s in StatNameExceptHP]?: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			const statTable: {[s in StatNameExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 		}
 
@@ -609,7 +609,6 @@ export class Pokemon {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
-			// @ts-ignore
 			allies = this.battle.sides.flatMap(
 				(side: Side) => side.n % 2 === team ? side.active : []
 			);
@@ -618,14 +617,13 @@ export class Pokemon {
 	}
 
 	nearbyAllies(): Pokemon[] {
-		return this.allies().filter(ally => this.battle.isAdjacent(this, ally));
+		return this.allies().filter(ally => this.battle.move.isAdjacent(this, ally));
 	}
 
 	foes(): Pokemon[] {
 		let foes = this.side.foe.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.foe.n % 2;
-			// @ts-ignore
 			foes = this.battle.sides.flatMap(
 				(side: Side) => side.n % 2 === team ? side.active : []
 			);
@@ -634,7 +632,7 @@ export class Pokemon {
 	}
 
 	nearbyFoes(): Pokemon[] {
-		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
+		return this.foes().filter(foe => this.battle.move.isAdjacent(this, foe));
 	}
 
 	getUndynamaxedHP(amount?: number) {
@@ -871,7 +869,7 @@ export class Pokemon {
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
 			} else if (
 				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)
+				this.side.active.length >= 2 && this.battle.move.targetTypeChoices(target!)
 			) {
 				disabled = true;
 			}
@@ -918,7 +916,7 @@ export class Pokemon {
 		let atLeastOne = false;
 		for (const moveSlot of this.moveSlots) {
 			const move = this.battle.dex.getMove(moveSlot.id);
-			const maxMove = this.battle.getMaxMove(move, this);
+			const maxMove = this.battle.move.getMaxMove(move, this);
 			if (maxMove) {
 				if (this.maxMoveDisabled(move)) {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
@@ -979,7 +977,7 @@ export class Pokemon {
 		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
-			const canZMove = this.battle.canZMove(this);
+			const canZMove = this.battle.move.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 
 			if (this.getDynamaxRequest()) data.canDynamax = true;

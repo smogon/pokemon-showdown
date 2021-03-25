@@ -11,6 +11,7 @@ import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
+import {BattleMove} from './battle-move';
 import {Utils} from '../lib';
 
 /** A Pokemon that has fainted. */
@@ -88,6 +89,7 @@ export class Battle {
 	reportPercentages: boolean;
 	supportCancel: boolean;
 
+	move: BattleMove;
 	queue: BattleQueue;
 	readonly faintQueue: FaintedPokemon[];
 
@@ -118,6 +120,7 @@ export class Battle {
 	lastMove: ActiveMove | null;
 	lastSuccessfulMoveThisTurn: ID | null;
 	lastMoveLine: number;
+	/** The last damage dealt by a move in the battle - only used by Gen 1 Counter. */
 	lastDamage: number;
 	abilityOrder: number;
 
@@ -152,7 +155,11 @@ export class Battle {
 		this.maxMoveTable = {};
 		this.trunc = this.dex.trunc;
 		this.clampIntRange = Utils.clampIntRange;
-		Object.assign(this, this.dex.data.Scripts);
+		// Object.assign(this, this.dex.data.Scripts);
+		for (const i in this.dex.data.Scripts) {
+			const entry = this.dex.data.Scripts[i];
+			if (typeof entry === 'function') (this as any)[i] = entry;
+		}
 		if (format.battle) Object.assign(this, format.battle);
 
 		this.id = '';
@@ -163,8 +170,7 @@ export class Battle {
 		this.gameType = (format.gameType || 'singles');
 		this.field = new Field(this);
 		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
-		// @ts-ignore
-		this.sides = Array(isFourPlayer ? 4 : 2).fill(null!);
+		this.sides = Array(isFourPlayer ? 4 : 2).fill(null) as any;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
 		this.rated = options.rated || !!options.rated;
@@ -173,6 +179,7 @@ export class Battle {
 		this.supportCancel = false;
 
 		this.queue = new BattleQueue(this);
+		this.move = new BattleMove(this);
 		this.faintQueue = [];
 
 		this.inputLog = [];
@@ -1525,7 +1532,7 @@ export class Battle {
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			const actives = this.getAllActive();
-			if (actives.length > 1 && !this.isAdjacent(actives[0], actives[1])) {
+			if (actives.length > 1 && !this.move.isAdjacent(actives[0], actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
 				this.add('-center');
@@ -2037,241 +2044,6 @@ export class Battle {
 		return this.dex.getMove(move).category || 'Physical';
 	}
 
-	/**
-	 * 0 is a success dealing 0 damage, such as from False Swipe at 1 HP.
-	 *
-	 * Normal PS return value rules apply:
-	 * undefined = success, null = silent failure, false = loud failure
-	 */
-	getDamage(
-		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
-		suppressMessages = false
-	): number | undefined | null | false {
-		if (typeof move === 'string') move = this.dex.getActiveMove(move);
-
-		if (typeof move === 'number') {
-			const basePower = move;
-			move = new Dex.Move({
-				basePower,
-				type: '???',
-				category: 'Physical',
-				willCrit: false,
-			}) as ActiveMove;
-			move.hit = 0;
-		}
-
-		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-			if (!target.runImmunity(move.type, !suppressMessages)) {
-				return false;
-			}
-		}
-
-		if (move.ohko) return target.maxhp;
-		if (move.damageCallback) return move.damageCallback.call(this, pokemon, target);
-		if (move.damage === 'level') {
-			return pokemon.level;
-		} else if (move.damage) {
-			return move.damage;
-		}
-
-		const category = this.getCategory(move);
-		const defensiveCategory = move.defensiveCategory || category;
-
-		let basePower: number | false | null = move.basePower;
-		if (move.basePowerCallback) {
-			basePower = move.basePowerCallback.call(this, pokemon, target, move);
-		}
-		if (!basePower) return basePower === 0 ? undefined : basePower;
-		basePower = this.clampIntRange(basePower, 1);
-
-		let critMult;
-		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
-		if (this.gen <= 5) {
-			critRatio = this.clampIntRange(critRatio, 0, 5);
-			critMult = [0, 16, 8, 4, 3, 2];
-		} else {
-			critRatio = this.clampIntRange(critRatio, 0, 4);
-			if (this.gen === 6) {
-				critMult = [0, 16, 8, 2, 1];
-			} else {
-				critMult = [0, 24, 8, 2, 1];
-			}
-		}
-
-		const moveHit = target.getMoveHitData(move);
-		moveHit.crit = move.willCrit || false;
-		if (move.willCrit === undefined) {
-			if (critRatio) {
-				moveHit.crit = this.randomChance(1, critMult[critRatio]);
-			}
-		}
-
-		if (moveHit.crit) {
-			moveHit.crit = this.runEvent('CriticalHit', target, null, move);
-		}
-
-		// happens after crit calculation
-		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
-
-		if (!basePower) return 0;
-		basePower = this.clampIntRange(basePower, 1);
-
-		const level = pokemon.level;
-
-		const attacker = pokemon;
-		const defender = target;
-		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
-		const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
-		if (move.useSourceDefensiveAsOffensive) {
-			attackStat = defenseStat;
-			// Body press really wants to use the def stat,
-			// so it switches stats to compensate for Wonder Room.
-			// Of course, the game thus miscalculates the boosts...
-			if ('wonderroom' in this.field.pseudoWeather) {
-				if (attackStat === 'def') {
-					attackStat = 'spd';
-				} else if (attackStat === 'spd') {
-					attackStat = 'def';
-				}
-				if (attacker.boosts['def'] || attacker.boosts['spd']) {
-					this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
-				}
-			}
-		}
-
-		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
-		let attack;
-		let defense;
-
-		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
-		let defBoosts = defender.boosts[defenseStat];
-
-		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
-		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
-
-		if (moveHit.crit) {
-			ignoreNegativeOffensive = true;
-			ignorePositiveDefensive = true;
-		}
-		const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
-		const ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
-
-		if (ignoreOffensive) {
-			this.debug('Negating (sp)atk boost/penalty.');
-			atkBoosts = 0;
-		}
-		if (ignoreDefensive) {
-			this.debug('Negating (sp)def boost/penalty.');
-			defBoosts = 0;
-		}
-
-		if (move.useTargetOffensive) {
-			attack = defender.calculateStat(attackStat, atkBoosts);
-		} else {
-			attack = attacker.calculateStat(attackStat, atkBoosts);
-		}
-
-		attackStat = (category === 'Physical' ? 'atk' : 'spa');
-		defense = defender.calculateStat(defenseStat, defBoosts);
-
-		// Apply Stat Modifiers
-		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
-		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
-
-		if (this.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
-			defense = this.clampIntRange(Math.floor(defense / 2), 1);
-		}
-
-		const tr = this.trunc;
-
-		// int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
-		const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
-
-		// Calculate damage modifiers separately (order differs between generations)
-		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
-	}
-
-	modifyDamage(
-		baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
-	) {
-		const tr = this.trunc;
-		if (!move.type) move.type = '???';
-		const type = move.type;
-
-		baseDamage += 2;
-
-		// multi-target modifier (doubles only)
-		if (move.spreadHit) {
-			const spreadModifier = move.spreadModifier || (this.gameType === 'free-for-all' ? 0.5 : 0.75);
-			this.debug('Spread modifier: ' + spreadModifier);
-			baseDamage = this.modify(baseDamage, spreadModifier);
-		}
-
-		// weather modifier
-		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
-
-		// crit - not a modifier
-		const isCrit = target.getMoveHitData(move).crit;
-		if (isCrit) {
-			baseDamage = tr(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
-		}
-
-		// random factor - also not a modifier
-		baseDamage = this.randomizer(baseDamage);
-
-		// STAB
-		if (move.forceSTAB || (type !== '???' && pokemon.hasType(type))) {
-			// The "???" type never gets STAB
-			// Not even if you Roost in Gen 4 and somehow manage to use
-			// Struggle in the same turn.
-			// (On second thought, it might be easier to get a MissingNo.)
-			baseDamage = this.modify(baseDamage, move.stab || 1.5);
-		}
-		// types
-		let typeMod = target.runEffectiveness(move);
-		typeMod = this.clampIntRange(typeMod, -6, 6);
-		target.getMoveHitData(move).typeMod = typeMod;
-		if (typeMod > 0) {
-			if (!suppressMessages) this.add('-supereffective', target);
-
-			for (let i = 0; i < typeMod; i++) {
-				baseDamage *= 2;
-			}
-		}
-		if (typeMod < 0) {
-			if (!suppressMessages) this.add('-resisted', target);
-
-			for (let i = 0; i > typeMod; i--) {
-				baseDamage = tr(baseDamage / 2);
-			}
-		}
-
-		if (isCrit && !suppressMessages) this.add('-crit', target);
-
-		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
-			if (this.gen < 6 || move.id !== 'facade') {
-				baseDamage = this.modify(baseDamage, 0.5);
-			}
-		}
-
-		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
-		if (this.gen === 5 && !baseDamage) baseDamage = 1;
-
-		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
-		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
-
-		if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
-			baseDamage = this.modify(baseDamage, 0.25);
-			this.add('-zbroken', target);
-		}
-
-		// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
-		if (this.gen !== 5 && !baseDamage) return 1;
-
-		// ...but 16-bit truncation happens even later, and can truncate to 0
-		return tr(baseDamage, 16);
-	}
-
 	randomizer(baseDamage: number) {
 		const tr = this.trunc;
 		return tr(tr(baseDamage * (100 - this.random(16))) / 100);
@@ -2497,7 +2269,7 @@ export class Battle {
 		if (action.choice === 'move') {
 			let move = action.move;
 			if (action.zmove) {
-				const zMoveName = this.getZMove(action.move, action.pokemon, true);
+				const zMoveName = this.move.getZMove(action.move, action.pokemon, true);
 				if (zMoveName) {
 					const zMove = this.dex.getActiveMove(zMoveName);
 					if (zMove.exists && zMove.isZ) {
@@ -2506,9 +2278,9 @@ export class Battle {
 				}
 			}
 			if (action.maxMove) {
-				const maxMoveName = this.getMaxMove(action.maxMove, action.pokemon);
+				const maxMoveName = this.move.getMaxMove(action.maxMove, action.pokemon);
 				if (maxMoveName) {
-					const maxMove = this.getActiveMaxMove(action.move, action.pokemon);
+					const maxMove = this.move.getActiveMaxMove(action.move, action.pokemon);
 					if (maxMove.exists && maxMove.isMax) {
 						move = maxMove;
 					}
@@ -2570,11 +2342,11 @@ export class Battle {
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			this.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
+			this.move.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
 				action.zmove, undefined, action.maxMove, action.originalTarget);
 			break;
 		case 'megaEvo':
-			this.runMegaEvo(action.pokemon);
+			this.move.runMegaEvo(action.pokemon);
 			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
@@ -3077,206 +2849,8 @@ export class Battle {
 		}
 	}
 
-	combineResults<T extends number | boolean | null | '' | undefined,
-		U extends number | boolean | null | '' | undefined>(
-		left: T, right: U
-	): T | U {
-		const NOT_FAILURE = 'string';
-		const NULL = 'object';
-		const resultsPriorities = ['undefined', NOT_FAILURE, NULL, 'boolean', 'number'];
-		if (resultsPriorities.indexOf(typeof left) > resultsPriorities.indexOf(typeof right)) {
-			return left;
-		} else if (left && !right && right !== 0) {
-			return left;
-		} else if (typeof left === 'number' && typeof right === 'number') {
-			return (left + right) as T;
-		} else {
-			return right;
-		}
-	}
-
 	getSide(sideid: SideID): Side {
 		return this.sides[parseInt(sideid[1]) - 1];
-	}
-
-	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw new UnimplementedError('afterMoveSecondary');
-	}
-
-	calcRecoilDamage(damageDealt: number, move: Move): number {
-		throw new UnimplementedError('calcRecoilDamage');
-	}
-
-	canMegaEvo(pokemon: Pokemon): string | null | undefined {
-		throw new UnimplementedError('canMegaEvo');
-	}
-
-	canUltraBurst(pokemon: Pokemon): string | null {
-		throw new UnimplementedError('canUltraBurst');
-	}
-
-	canZMove(pokemon: Pokemon): (AnyObject | null)[] | void {
-		throw new UnimplementedError('canZMove');
-	}
-
-	forceSwitch(
-		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
-	): SpreadMoveDamage {
-		throw new UnimplementedError('forceSwitch');
-	}
-
-	getActiveMaxMove(move: Move, pokemon: Pokemon): ActiveMove {
-		throw new UnimplementedError('getActiveMaxMove');
-	}
-
-	getActiveZMove(move: Move, pokemon: Pokemon): ActiveMove {
-		throw new UnimplementedError('getActiveZMove');
-	}
-
-	getMaxMove(move: Move, pokemon: Pokemon): Move | undefined {
-		throw new UnimplementedError('getMaxMove');
-	}
-
-	getSpreadDamage(
-		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
-	): SpreadMoveDamage {
-		throw new UnimplementedError('getSpreadDamage');
-	}
-
-	getZMove(move: Move, pokemon: Pokemon, skipChecks?: boolean): string | undefined {
-		throw new UnimplementedError('getZMove');
-	}
-
-	hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new UnimplementedError('hitStepAccuracy');
-	}
-
-	hitStepBreakProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw new UnimplementedError('hitStepBreakProtect');
-	}
-
-	hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): SpreadMoveDamage {
-		throw new UnimplementedError('hitStepMoveHitLoop');
-	}
-
-	hitStepTryImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new UnimplementedError('hitStepTryImmunityEvent');
-	}
-
-	hitStepStealBoosts(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw new UnimplementedError('hitStepStealBoosts');
-	}
-
-	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (boolean | '')[] {
-		throw new UnimplementedError('hitStepTryHitEvent');
-	}
-
-	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new UnimplementedError('hitStepInvulnerabilityEvent ');
-	}
-
-	hitStepTypeImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new UnimplementedError('hitStepTypeImmunity');
-	}
-
-	isAdjacent(pokemon1: Pokemon, pokemon2: Pokemon): boolean {
-		throw new UnimplementedError('isAdjacent');
-	}
-
-	moveHit(
-		target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
-		moveData?: Dex.HitEffect,
-		isSecondary?: boolean, isSelf?: boolean
-	): number | undefined | false {
-		throw new UnimplementedError('moveHit');
-	}
-
-	/**
-	 * This function is also used for Ultra Bursting.
-	 * Takes the Pokemon that will Mega Evolve or Ultra Burst as a parameter.
-	 * Returns false if the Pokemon cannot Mega Evolve or Ultra Burst, otherwise returns true.
-	 */
-	runMegaEvo(pokemon: Pokemon): boolean {
-		throw new UnimplementedError('runMegaEvo');
-	}
-
-	runMove(
-		moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
-		sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean,
-		maxMove?: string, originalTarget?: Pokemon
-	) {
-		throw new UnimplementedError('runMove');
-	}
-
-	runMoveEffects(
-		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
-	): SpreadMoveDamage {
-		throw new UnimplementedError('runMoveEffects');
-	}
-
-	runZPower(move: ActiveMove, pokemon: Pokemon) {
-		throw new UnimplementedError('runZPower');
-	}
-
-	secondaries(
-		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSelf?: boolean
-	): SpreadMoveDamage {
-		throw new UnimplementedError('secondaries');
-	}
-
-	selfDrops(
-		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary?: boolean
-	): SpreadMoveDamage {
-		throw new UnimplementedError('selfDrops');
-	}
-
-	spreadMoveHit(
-		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
-		isSecondary?: boolean, isSelf?: boolean
-	): [SpreadMoveDamage, SpreadMoveTargets] {
-		throw new UnimplementedError('spreadMoveHit');
-	}
-
-	targetTypeChoices(targetType: string): boolean {
-		throw new UnimplementedError('targetTypeChoices');
-	}
-
-	tryMoveHit(target: Pokemon, pokemon: Pokemon, move: ActiveMove): number | undefined | false | '' {
-		throw new UnimplementedError('tryMoveHit');
-	}
-
-	tryPrimaryHitEvent(
-		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean
-	): SpreadMoveDamage {
-		throw new UnimplementedError('tryPrimaryHitEvent');
-	}
-
-	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove, notActive?: boolean): boolean {
-		throw new UnimplementedError('trySpreadMoveHit');
-	}
-
-	useMove(
-		move: string | Move, pokemon: Pokemon, target?: Pokemon | null,
-		sourceEffect?: Effect | null, zMove?: string, maxMove?: string
-	): boolean {
-		throw new UnimplementedError('useMove');
-	}
-
-	/**
-	 * target = undefined: automatically resolve target
-	 * target = null: no target (move will fail)
-	 */
-	useMoveInner(
-		move: string | Move, pokemon: Pokemon, target?: Pokemon | null,
-		sourceEffect?: Effect | null, zMove?: string, maxMove?: string
-	): boolean {
-		throw new UnimplementedError('useMoveInner');
 	}
 
 	destroy() {
@@ -3300,12 +2874,5 @@ export class Battle {
 		this.queue = null!;
 		// in case the garbage collector really sucks, at least deallocate the log
 		(this as any).log = [];
-	}
-}
-
-class UnimplementedError extends Error {
-	constructor(name: string) {
-		super(`The ${name} function needs to be implemented in scripts.js or the battle format.`);
-		this.name = 'UnimplementedError';
 	}
 }

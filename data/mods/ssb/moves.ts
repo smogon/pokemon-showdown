@@ -2215,7 +2215,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.add('-activate', pokemon, 'move: The Hunt is On!');
 						alreadyAdded = true;
 					}
-					this.runMove('thehuntison', source, this.getTargetLoc(pokemon, source));
+					this.move.runMove('thehuntison', source, this.getTargetLoc(pokemon, source));
 				}
 			},
 		},
@@ -2967,12 +2967,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		// fruit this move.
 		onHit(target, source) {
 			for (const move of ['Haze', 'Worry Seed', 'Poison Powder', 'Stun Spore', 'Leech Seed']) {
-				this.useMove(move, source);
+				this.move.useMove(move, source);
 				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
 			}
 			const strgl = this.dex.getActiveMove('Struggle');
 			strgl.basePower = 150;
-			this.useMove(strgl, source);
+			this.move.useMove(strgl, source);
 			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
 		},
 		secondary: null,
@@ -3170,13 +3170,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const hax = this.sample(['slp', 'brn', 'par', 'tox']);
 			target.trySetStatus(hax, source);
 			if (hax === 'slp') {
-				this.useMove('Dream Eater', source);
+				this.move.useMove('Dream Eater', source);
 			} else if (hax === 'par') {
-				this.useMove('Iron Head', source);
+				this.move.useMove('Iron Head', source);
 			} else if (hax === 'brn') {
-				this.useMove('Fire Blast', source);
+				this.move.useMove('Fire Blast', source);
 			} else if (hax === 'tox') {
-				this.useMove('Venoshock', source);
+				this.move.useMove('Venoshock', source);
 			}
 		},
 		secondary: null,
@@ -3393,7 +3393,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Celebrate", target);
 		},
 		onTryHit(target, source) {
-			this.useMove('Substitute', source);
+			this.move.useMove('Substitute', source);
 		},
 		onHit(target, source) {
 			target.trySetStatus('brn', source);
@@ -3958,7 +3958,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source) {
 			if (source.species.id === 'charizard') {
-				this.runMegaEvo(source);
+				this.move.runMegaEvo(source);
 			}
 		},
 		secondary: null,
@@ -4687,7 +4687,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (let x = 1; x <= randomTurns; x++) {
 				const randomMove = this.sample(supportMoves);
 				supportMoves.splice(supportMoves.indexOf(randomMove), 1);
-				this.useMove(randomMove, target);
+				this.move.useMove(randomMove, target);
 				successes++;
 			}
 			if (successes === 1) {
@@ -4940,19 +4940,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.m.yukiCosplayForme = this.sample(formes);
 			switch (source.m.yukiCosplayForme) {
 			case 'Cleric':
-				this.useMove("Strength Sap", source);
+				this.move.useMove("Strength Sap", source);
 				break;
 			case 'Ninja':
-				this.useMove("Confuse Ray", source);
+				this.move.useMove("Confuse Ray", source);
 				break;
 			case 'Dancer':
-				this.useMove("Feather Dance", source);
+				this.move.useMove("Feather Dance", source);
 				break;
 			case 'Songstress':
-				this.useMove("Sing", source);
+				this.move.useMove("Sing", source);
 				break;
 			case 'Jester':
-				this.useMove("Charm", source);
+				this.move.useMove("Charm", source);
 				break;
 			}
 		},
@@ -5073,10 +5073,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onTry(pokemon, target) {
 			pokemon.addVolatile('bigstormcomingmod');
-			this.useMove("Hurricane", pokemon);
-			this.useMove("Thunder", pokemon);
-			this.useMove("Blizzard", pokemon);
-			this.useMove("Weather Ball", pokemon);
+			this.move.useMove("Hurricane", pokemon);
+			this.move.useMove("Thunder", pokemon);
+			this.move.useMove("Blizzard", pokemon);
+			this.move.useMove("Weather Ball", pokemon);
 		},
 		secondary: null,
 		target: "normal",
