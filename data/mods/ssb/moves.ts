@@ -287,13 +287,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Aethernum
 	lilypadoverflow: {
 		accuracy: 100,
-		basePower: 61,
+		basePower: 62,
 		basePowerCallback(source, target, move) {
 			if (!source.volatiles['raindrop']?.layers) return move.basePower;
 			return move.basePower + (source.volatiles['raindrop'].layers * 20);
 		},
 		category: "Special",
-		desc: "Power is equal to 61 + (Number of Raindrops collected * 20). Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Raindrop had increased them, and the user's Raindrop count resets to 0.",
+		desc: "Power is equal to 62 + (Number of Raindrops collected * 20). Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Raindrop had increased them, and the user's Raindrop count resets to 0.",
 		shortDesc: "More power per Raindrop. Lose Raindrops.",
 		name: "Lilypad Overflow",
 		gen: 8,
