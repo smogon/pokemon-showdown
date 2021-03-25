@@ -4,7 +4,7 @@
  * Original /adddatacenters command written by Zarel
  */
 
-import {Utils} from "../../lib/utils";
+import {Utils} from "../../lib";
 import {AddressRange} from "../ip-tools";
 import {GlobalPermission} from "../user-groups";
 
@@ -450,7 +450,17 @@ export const commands: ChatCommands = {
 			if (Punishments.isBlacklistedSharedIp(ip)) {
 				return this.errorReply(`This IP is already blacklisted from being marked as shared.`);
 			}
-			if (ip.endsWith('*')) { // range
+			// this works because we test ipRangeRegex above, which works for both ranges AND single ips.
+			// so we know here this is one of the two.
+			// If it doesn't work as a single IP, it's a range.
+			if (!IPTools.ipRegex.test(ip)) {
+				// if it doesn't end with *, it doesn't function as a range in IPTools#stringToRange, only as a single IP.
+				// that's valid behavior, but it's detrimental here.
+				if (!ip.endsWith('*')) {
+					this.errorReply(`That looks like a range, but it is invalid.`);
+					this.errorReply(`Append * to the end of the range and try again.`);
+					return;
+				}
 				if (!user.can('bypassall')) {
 					return this.errorReply(`Only Administrators can add ranges.`);
 				}

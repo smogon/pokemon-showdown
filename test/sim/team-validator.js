@@ -89,6 +89,20 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it('should validate the Diancie released with zero perfect IVs', function () {
+		let team = [
+			{species: 'diancie', ability: 'clearbody', shiny: true, moves: ['hiddenpowerfighting'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'diancie', ability: 'clearbody', moves: ['hiddenpowerfighting'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should reject non-existent natures', function () {
 		const team = [
 			{species: 'pikachu', ability: 'static', moves: ['thunderbolt'], nature: 'nonexistentNature', evs: {hp: 1}},
@@ -229,6 +243,26 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen8lc').validateTeam(team);
 		assert(illegal);
+	});
+
+	it('should handle Deoxys formes in Gen 3', function () {
+		let team = [
+			{species: 'deoxys', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+			{species: 'deoxys', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen3ubers').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'deoxysattack', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+			{species: 'deoxysdefense', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause,+nonexistent').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should validate Sketch', function () {

@@ -39,7 +39,7 @@ import {Ability} from './dex-abilities';
 import {Species} from './dex-species';
 import {Format, RuleTable, mergeFormatLists, ComplexBan, ComplexTeamBan} from './dex-formats';
 import {PRNG, PRNGSeed} from './prng';
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
@@ -410,6 +410,7 @@ export class ModdedDex {
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.gen === 1) species.bst -= species.baseStats.spd;
+			if (this.gen < 5) delete species.abilities['H'];
 		} else {
 			species = new Species({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',

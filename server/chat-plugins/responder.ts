@@ -7,8 +7,7 @@
  * @author mia-pi-git
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 
@@ -348,30 +347,20 @@ export const commands: ChatCommands = {
 			this.modlog(`AUTOFILTER ADD`, null, target);
 		},
 		remove(target, room, user) {
-			const [faq, index, id] = target.split(',');
-			if (id) {
-				const targetRoom = Rooms.search(id);
-				if (!targetRoom) {
-					return this.errorReply(`Room not found.`);
-				}
-				room = targetRoom;
-			} else {
-				room = this.requireRoom();
-			}
+			const [faq, index] = target.split(',');
+			room = this.requireRoom();
 			if (!room.responder) {
 				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
 			}
 			this.checkCan('ban', null, room);
-			// intended for use mainly within the page, so supports being used in all rooms
-			this.room = room;
 			const num = parseInt(index);
 			if (isNaN(num)) return this.errorReply("Invalid index.");
 			room.responder.tryRemoveRegex(faq, num - 1);
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
 			this.modlog('AUTOFILTER REMOVE', null, index);
 			const pages = [`keys`, `pairs`];
-			if (pages.some(p => this.connection.openPages?.has(`autoresponder-${room?.roomid}-${p}`))) {
-				return this.parse(`/ar view keys`);
+			for (const p of pages) {
+				this.refreshPage(`autofilter-${room.roomid}-${p}`);
 			}
 		},
 		ignore(target, room, user) {
@@ -391,14 +380,6 @@ export const commands: ChatCommands = {
 			this.modlog(`AUTOFILTER IGNORE`, null, target);
 		},
 		unignore(target, room, user) {
-			let targetId;
-			[target, targetId] = Utils.splitFirst(target, '|');
-			if (targetId) {
-				const targetRoom = Rooms.search(targetId);
-				if (!targetRoom) return this.errorReply(`Invalid room.`);
-				room = targetRoom;
-				this.room = room;
-			}
 			room = this.requireRoom();
 			if (!room.responder) {
 				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
@@ -496,7 +477,7 @@ export const pages: PageTable = {
 				buffer += `</tr>`;
 				for (const regex of regexes) {
 					const index = regexes.indexOf(regex) + 1;
-					const button = `<button class="button" name="send"value="/ar remove ${item}, ${index}, ${room.roomid}">Remove</button>`;
+					const button = `<button class="button" name="send"value="/msgroom ${room.roomid},/ar remove ${item}, ${index}">Remove</button>`;
 					buffer += `<tr><td>${index}</td><td><code>${regex}</code></td>`;
 					if (canChange) buffer += `<td>${button}</td></tr>`;
 				}
@@ -511,7 +492,7 @@ export const pages: PageTable = {
 				return this.errorReply(`No terms on ignore list.`);
 			}
 			for (const term of roomData.ignore) {
-				buf += `- ${term} <button class="button" name="send"value="/ar unignore ${term}|${room.roomid}">Remove</button><br />`;
+				buf += `- ${term} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
 			}
 			buf += `</div>`;
 			break;

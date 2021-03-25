@@ -7,7 +7,7 @@
 
 import * as defaults from '../config/config-example';
 import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
-import {exec} from '../lib/process-manager';
+import {ProcessManager} from '../lib';
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
@@ -146,8 +146,8 @@ export function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
 		Config.ripgrepmodlog = (async () => {
 			try {
-				await exec(['rg', '--version'], {cwd: `${__dirname}/../`});
-				await exec(['tac', '--version'], {cwd: `${__dirname}/../`});
+				await ProcessManager.exec(['rg', '--version'], {cwd: `${__dirname}/../`});
+				await ProcessManager.exec(['tac', '--version'], {cwd: `${__dirname}/../`});
 				return true;
 			} catch (error) {
 				return false;

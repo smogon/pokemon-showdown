@@ -11,7 +11,7 @@ import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -282,8 +282,10 @@ export class Battle {
 		return this.prng.sample(items);
 	}
 
-	resetRNG() {
-		this.prng = new PRNG(this.prng.startingSeed);
+	/** Note that passing `undefined` resets to the starting seed, but `null` will roll a new seed */
+	resetRNG(seed: PRNGSeed | null = this.prng.startingSeed) {
+		this.prng = new PRNG(seed);
+		this.add('message', "The battle's RNG was reset.");
 	}
 
 	suppressingAttackEvents(target?: Pokemon) {
@@ -1315,6 +1317,7 @@ export class Battle {
 		}
 		this.runEvent('BeforeSwitchIn', pokemon);
 		this.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
+		pokemon.abilityOrder = this.abilityOrder++;
 		if (isDrag && this.gen === 2) pokemon.draggedIn = this.turn;
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
 		pokemon.previouslySwitchedIn++;
@@ -1340,7 +1343,6 @@ export class Battle {
 		pokemon.isStarted = true;
 		if (!pokemon.fainted) {
 			this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
-			pokemon.abilityOrder = this.abilityOrder++;
 			this.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
 		}
 		if (this.gen === 4) {
@@ -1680,7 +1682,7 @@ export class Battle {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (!target || !target.hp) return 0;
+		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
 		if (this.gen > 5 && !target.side.foe.pokemonLeft) return false;
 		boost = this.runEvent('Boost', target, source, effect, {...boost});
@@ -1777,7 +1779,7 @@ export class Battle {
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (this.gen <= 1) {
-				if (this.dex.currentMod === 'stadium' ||
+				if (this.dex.currentMod === 'gen1stadium' ||
 					!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
 					this.lastDamage = targetDamage;
 				}
@@ -1811,7 +1813,7 @@ export class Battle {
 
 			if (targetDamage && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
-					if (this.dex.currentMod !== 'stadium' || target.hp > 0) {
+					if (this.dex.currentMod !== 'gen1stadium' || target.hp > 0) {
 						const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
 						this.damage(amount, source, target, 'recoil');
 					}
@@ -1863,14 +1865,14 @@ export class Battle {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (!target || !target.hp) return 0;
+		if (!target?.hp) return 0;
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 
 		if (typeof effect === 'string' || !effect) effect = this.dex.getEffectByID((effect || '') as ID);
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
-		if (this.gen <= 1 && this.dex.currentMod !== 'stadium' &&
+		if (this.gen <= 1 && this.dex.currentMod !== 'gen1stadium' &&
 			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
 			const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
 			if (source?.volatiles['substitute']) {
@@ -1917,7 +1919,7 @@ export class Battle {
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
 		damage = this.runEvent('TryHeal', target, source, effect, damage);
 		if (!damage) return damage;
-		if (!target || !target.hp) return false;
+		if (!target?.hp) return false;
 		if (!target.isActive) return false;
 		if (target.hp >= target.maxhp) return false;
 		const finalDamage = target.heal(damage, source, effect);

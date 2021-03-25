@@ -2428,7 +2428,7 @@
 				"species": "Slowbro",
 				"item": ["Slowbronite", "Leftovers"],
 				"ability": ["Regenerator"],
-				"evs": {"hp": 248, "def": 96, "spe": 164},
+				"evs": {"hp": 248, "def": 96, "spd": 164},
 				"nature": "Bold",
 				"moves": [["Scald"], ["Ice Beam"], ["Flamethrower", "Toxic", "Thunder Wave"], ["Slack Off"]]
 			}]

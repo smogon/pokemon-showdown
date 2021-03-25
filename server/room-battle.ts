@@ -11,11 +11,8 @@
  * @license MIT
  */
 
+import {FS, Repl, ProcessManager} from '../lib';
 import {execSync} from "child_process";
-import {FS} from "../lib/fs";
-import {Utils} from '../lib/utils';
-import {StreamProcessManager} from "../lib/process-manager";
-import {Repl} from "../lib/repl";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
 
@@ -212,7 +209,7 @@ export class RoomBattleTimer {
 			maxPerTurn: isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME,
 			maxFirstTurn: isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME,
 			timeoutAutoChoose: false,
-			accelerate: !timerSettings,
+			accelerate: !timerSettings && !isChallenge,
 			...timerSettings,
 		};
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
@@ -528,7 +525,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.p2 = null!;
 		this.p3 = null!;
 		this.p4 = null!;
-		this.inviteOnlySetter = null!;
+		this.inviteOnlySetter = null;
 
 		// data to be logged
 		this.allowExtraction = {};
@@ -585,14 +582,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 		let active = true;
 		if (this.ended || !this.started) {
 			active = false;
-		} else if (!this.p1 || !this.p1.active) {
+		} else if (!this.p1?.active) {
 			active = false;
-		} else if (!this.p2 || !this.p2.active) {
+		} else if (!this.p2?.active) {
 			active = false;
 		} else if (this.playerCap > 2) {
-			if (!this.p3 || !this.p3.active) {
+			if (!this.p3?.active) {
 				active = false;
-			} else if (!this.p4 || !this.p4.active) {
+			} else if (!this.p4?.active) {
 				active = false;
 			}
 		}
@@ -1151,7 +1148,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 		return result;
 	}
 	onChatMessage(message: string, user: User) {
-		void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room.roomid)}|${message}`);
+		const parts = message.split('\n');
+		for (const line of parts) {
+			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room.roomid)}|${line}`);
+		}
 	}
 	async getLog(): Promise<string[] | void> {
 		if (!this.logData) this.logData = {};
@@ -1199,69 +1199,7 @@ export class RoomBattleStream extends BattleStream {
 		if (this.battle) this.battle.sendUpdates();
 		const deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
-			console.log(`[slow battle] ${deltaTime}ms - ${chunk}`);
-		}
-	}
-
-	_writeLine(type: string, message: string) {
-		switch (type) {
-		case 'chat-inputlogonly':
-			this.battle.inputLog.push(`>chat ${message}`);
-			break;
-		case 'chat':
-			this.battle.inputLog.push(`>chat ${message}`);
-			this.battle.add('chat', `${message}`);
-			break;
-		case 'requestlog':
-			this.push(`requesteddata\n${this.battle.inputLog.join('\n')}`);
-			break;
-		case 'eval':
-			const battle = this.battle;
-			battle.inputLog.push(`>${type} ${message}`);
-			message = message.replace(/\f/g, '\n');
-			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
-			try {
-				/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
-				const p1 = battle?.sides[0];
-				const p2 = battle?.sides[1];
-				const p3 = battle?.sides[2];
-				const p4 = battle?.sides[3];
-				const p1active = p1?.active[0];
-				const p2active = p2?.active[0];
-				const p3active = p3?.active[0];
-				const p4active = p4?.active[0];
-				let result = eval(message);
-				/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
-
-				if (result?.then) {
-					result.then((unwrappedResult: any) => {
-						unwrappedResult = Utils.visualize(unwrappedResult);
-						battle.add('', 'Promise -> ' + unwrappedResult);
-						battle.sendUpdates();
-					}, (error: Error) => {
-						battle.add('', '<<< error: ' + error.message);
-						battle.sendUpdates();
-					});
-				} else {
-					result = Utils.visualize(result);
-					result = result.replace(/\n/g, '\n||');
-					battle.add('', '<<< ' + result);
-				}
-			} catch (e) {
-				battle.add('', '<<< error: ' + e.message);
-			}
-			break;
-		case 'requestteam':
-			message = message.trim();
-			const slotNum = parseInt(message.slice(1)) - 1;
-			if (isNaN(slotNum) || slotNum < 0) {
-				throw new Error(`Team requested for slot ${message}, but that slot does not exist.`);
-			}
-			const side = this.battle.sides[slotNum];
-			const team = Dex.packTeam(side.team);
-			this.push(`requesteddata\n${team}`);
-			break;
-		default: super._writeLine(type, message);
+			Monitor.slow(`[slow battle] ${deltaTime}ms - ${chunk.replace(/\n/ig, ' | ')}`);
 		}
 	}
 }
@@ -1270,7 +1208,11 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new StreamProcessManager(module, () => new RoomBattleStream());
+export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream(), message => {
+	if (message.startsWith(`SLOW\n`)) {
+		Monitor.slow(message.slice(5));
+	}
+});
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -1281,6 +1223,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	global.__version = {head: ''};

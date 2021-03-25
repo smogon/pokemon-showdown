@@ -506,8 +506,8 @@ export const Scripts: BattleScriptsData = {
 					}
 				}
 				if (broke) {
-					if (['feint', 'gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
-						this.add('-activate', target, 'move: ' + move.name);
+					if (move.id === 'feint') {
+						this.add('-activate', target, 'move: Feint');
 					} else {
 						this.add('-activate', target, 'move: ' + move.name, '[broken]');
 					}
@@ -614,7 +614,7 @@ export const Scripts: BattleScriptsData = {
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
 			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
-			if (targets.every(target => !target || !target.hp)) break;
+			if (targets.every(target => !target?.hp)) break;
 			move.hit = hit;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
@@ -703,7 +703,7 @@ export const Scripts: BattleScriptsData = {
 			if (this.dex.gen >= 5) {
 				recoilDamage = this.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
 			} else {
-				recoilDamage = this.trunc(pokemon.maxhp / 4);
+				recoilDamage = this.clampIntRange(this.trunc(pokemon.maxhp / 4), 1);
 			}
 			this.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as Condition);
 		}
@@ -1095,7 +1095,7 @@ export const Scripts: BattleScriptsData = {
 			if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
 			const moveData = pokemon.getMoveData(move);
 			// Draining the PP of the base move prevents the corresponding Z-move from being used.
-			if (!moveData || !moveData.pp) return;
+			if (!moveData?.pp) return;
 		}
 
 		if (item.zMoveFrom) {

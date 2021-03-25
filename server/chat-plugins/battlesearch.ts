@@ -1,10 +1,8 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
-import {QueryProcessManager, exec} from '../../lib/process-manager';
-import {Repl} from '../../lib/repl';
+import {FS, Utils, ProcessManager, Repl} from '../../lib';
+
 import {checkRipgrepAvailability} from '../config-loader';
 
 const BATTLESEARCH_PROCESS_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
@@ -48,7 +46,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		let output;
 		try {
-			output = await exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
+			output = await ProcessManager.exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
 		} catch (error) {
 			return results;
 		}
@@ -368,10 +366,16 @@ export const commands: ChatCommands = {
  * Process manager
  *********************************************************/
 
-export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async data => {
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
 	const {userids, turnLimit, month, tierid} = data;
+	const start = Date.now();
 	try {
-		return await runBattleSearch(userids, month, tierid, turnLimit);
+		const result = await runBattleSearch(userids, month, tierid, turnLimit);
+		const elapsedTime = Date.now() - start;
+		if (elapsedTime > 10 * 60 * 1000) {
+			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+		}
+		return result;
 	} catch (err) {
 		Monitor.crashlog(err, 'A battle search query', {
 			userids,
@@ -381,7 +385,11 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async da
 		});
 	}
 	return null;
-}, BATTLESEARCH_PROCESS_TIMEOUT);
+}, BATTLESEARCH_PROCESS_TIMEOUT, message => {
+	if (message.startsWith('SLOW\n')) {
+		Monitor.slow(message.slice(5));
+	}
+});
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -390,6 +398,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	process.on('uncaughtException', err => {

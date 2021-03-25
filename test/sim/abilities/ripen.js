@@ -33,7 +33,7 @@ describe("Ripen", function () {
 		assert.statStage(ripenWynaut, 'atk', 2);
 	});
 
-	it.skip('should double damage done from Jaboca / Rowap Berries', function () {
+	it(`should double damage done from Jaboca / Rowap Berries`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'jabocaberry', moves: ['sleeptalk']},
 		], [
@@ -41,9 +41,7 @@ describe("Ripen", function () {
 		]]);
 		battle.makeChoices();
 		const falinks = battle.p2.active[0];
-
-		// Should be 204; if it was just 1/8, would be 238
-		assert.equal(falinks.hp, falinks.maxhp - (Math.floor(falinks.maxhp / 4)));
+		assert.equal(falinks.hp, falinks.maxhp - Math.floor(falinks.maxhp / 4), `Falinks should have lost 1/4 of its HP`);
 	});
 
 	it('should allow resist Berries to quarter the damage done', function () {

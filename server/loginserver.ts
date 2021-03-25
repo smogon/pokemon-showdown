@@ -10,9 +10,7 @@
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-import {Net} from '../lib/net';
-
-import {FS} from '../lib/fs';
+import {Net, FS} from '../lib';
 
 /**
  * A custom error type used when requests to the login server take too long.

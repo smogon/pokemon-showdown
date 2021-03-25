@@ -2,7 +2,7 @@
 	"Arghonaut": [{
 		"item": "Choice Band",
 		"ability": "Technician",
-		"evs": {"hp": 252, "atk": 204, "spd": 52},
+		"evs": {"hp": 252, "atk": 204, "spe": 52},
 		"nature": "Adamant",
 		"moves": ["Mach Punch", "Waterfall", "Earthquake", "Knock Off"]
 	}, {
@@ -13,12 +13,6 @@
 		"moves": ["Mach Punch", "Aqua Jet", "Earthquake", "Knock Off"]
 	}],
 	"Astrolotl": [{
-		"item": "Air Balloon",
-		"ability": "Vital Spirit",
-		"evs": {"hp": 252, "spd": 32, "spe": 224},
-		"nature": "Jolly",
-		"moves": ["Fire Lash", "Yawn", "Wish", "Protect"]
-	}, {
 		"item": "Life Orb",
 		"ability": "Vital Spirit",
 		"evs": {"hp": 32, "atk": 252, "spe": 224},
@@ -26,7 +20,7 @@
 		"moves": ["Flare Blitz", "Outrage", "Stomping Tantrum", "Taunt"]
 	}, {
 		"item": "Power Herb",
-		"ability": "Vital Spirit",
+		"ability": "Magician",
 		"evs": {"hp": 32, "spa": 252, "spe": 224},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
@@ -84,7 +78,7 @@
 		"item": "Shuca Berry",
 		"ability": "Liquid Ooze",
 		"evs": {"hp": 252, "def": 252, "spd": 4},
-		"nature": "Impish",
+		"nature": "Bold",
 		"ivs": {"atk": 0},
 		"moves": ["Torment", "Protect", "Substitute", "Draining Kiss"]
 	}],
@@ -111,10 +105,10 @@
 		"ivs": {"atk": 0},
 		"moves": ["Earth Power", "Flash Cannon", "Aura Sphere", "Doom Desire"]
 	}, {
-		"item": "Life Orb",
+		"item": "Weakness Policy",
 		"ability": "Levitate",
-		"evs": {"hp": 252, "spa": 168, "spd": 88},
-		"nature": "Quiet",
+		"evs": {"hp": 252, "spa": 68, "spd": 188},
+		"nature": "Sassy",
 		"ivs": {"atk": 0, "spe": 0},
 		"moves": ["Trick Room", "Earth Power", "Flash Cannon", "Aura Sphere"]
 	}],
@@ -202,7 +196,7 @@
 		"ability": "Neutralizing Gas",
 		"evs": {"hp": 4, "atk": 252, "spe": 252},
 		"nature": "Adamant",
-		"moves": ["Outrage", "Earthquake", "Iron Head", "Megahorn"]
+		"moves": ["Outrage", "Earthquake", ["Iron Head", "Poison Jab"], "Megahorn"]
 	}, {
 		"item": "Expert Belt",
 		"ability": "Neutralizing Gas",
@@ -220,7 +214,7 @@
 	}, {
 		"item": "Choice Scarf",
 		"ability": "Dry Skin",
-		"evs": {"hp": 92, "def": 164, "spe": 252},
+		"evs": {"hp": 92, "spa": 164, "spe": 252},
 		"nature": "Modest",
 		"ivs": {"atk": 0},
 		"moves": ["Eruption", "Sludge Bomb", "Thunderbolt", "Trick"]
@@ -297,7 +291,7 @@
 	}, {
 		"item": "Sitrus Berry",
 		"ability": "Triage",
-		"evs": {"hp": 252, "def": 148, "spe": 108},
+		"evs": {"hp": 252, "def": 148, "spd": 108},
 		"nature": "Impish",
 		"moves": ["Curse", "Moonlight", "Drain Punch", "Protect"]
 	}],
@@ -325,6 +319,7 @@
 		"ability": "Poison Heal",
 		"evs": {"hp": 248, "def": 40, "spd": 220},
 		"nature": "Bold",
+    "ivs": {"atk": 0},
 		"moves": ["Spiky Shield", "Substitute", "Rapid Spin", ["Water Pulse", "Confide"]]
 	}],
 	"Stratagem": [{

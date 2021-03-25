@@ -402,8 +402,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 
-		if ((move.forceSwitch || move.selfSwitch) && this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
-			this.hint(`Self-switching and force switch moves don't trigger when a Pokemon with Skill Drain is active.`);
+		if (move.selfSwitch && this.getAllActive().some(x => x.hasAbility('skilldrain'))) {
+			this.hint(`Self-switching doesn't trigger when a Pokemon with Skill Drain is active.`);
 		}
 
 		return true;
@@ -451,7 +451,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
 			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
-			if (targets.every(target => !target || !target.hp)) break;
+			if (targets.every(target => !target?.hp)) break;
 			move.hit = hit;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
@@ -874,7 +874,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (item === 'ironball') return true;
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
-			if (this.hasAbility(['levitate', 'candlewax']) && !this.battle.suppressingAttackEvents()) return null;
+			if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
 			if ('magnetrise' in this.volatiles) return false;
 			if ('telekinesis' in this.volatiles) return false;
 			return item !== 'airballoon';

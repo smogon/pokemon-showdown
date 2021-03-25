@@ -1,7 +1,7 @@
 
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
@@ -251,7 +251,7 @@ export class Tournament extends Rooms.RoomGame {
 		const html = [];
 		if (bans.length) html.push(Utils.html`<b>Added bans</b> - ${bans.join(', ')}`);
 		if (unbans.length) html.push(Utils.html`<b>Removed bans</b> - ${unbans.join(', ')}`);
-		if (restrictions.length) html.push(Utils.html`<b>Added Restrictions</b> - ${restrictions.join(', ')}`);
+		if (restrictions.length) html.push(Utils.html`<b>Added restrictions</b> - ${restrictions.join(', ')}`);
 		if (addedRules.length) html.push(Utils.html`<b>Added rules</b> - ${addedRules.join(', ')}`);
 		if (removedRules.length) html.push(Utils.html`<b>Removed rules</b> - ${removedRules.join(', ')}`);
 		return html.join(`<br />`);
@@ -908,7 +908,7 @@ export class Tournament extends Rooms.RoomGame {
 		const from = this.playerTable[user.id];
 		const to = this.playerTable[targetUserid];
 		const availableMatches = from.availableMatches;
-		if (!availableMatches || !availableMatches.has(to)) {
+		if (!availableMatches?.has(to)) {
 			output.sendReply('|tournament|error|InvalidMatch');
 			return;
 		}
@@ -956,7 +956,7 @@ export class Tournament extends Rooms.RoomGame {
 
 		const player = this.playerTable[user.id];
 		const challenge = player.pendingChallenge;
-		if (!challenge || !challenge.to) return;
+		if (!challenge?.to) return;
 
 		player.isBusy = false;
 		challenge.to.isBusy = false;
@@ -982,14 +982,14 @@ export class Tournament extends Rooms.RoomGame {
 
 		const player = this.playerTable[user.id];
 		const challenge = player.pendingChallenge;
-		if (!challenge || !challenge.from) return;
+		if (!challenge?.from) return;
 
 		const ready = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour');
 		if (!ready) return;
 
 		// Prevent battles between offline users from starting
 		const from = Users.get(challenge.from.id);
-		if (!from || !from.connected || !user.connected) return;
+		if (!from?.connected || !user.connected) return;
 
 		// Prevent double accepts and users that have been disqualified while between these two functions
 		if (!challenge.from.pendingChallenge) return;
@@ -1010,7 +1010,7 @@ export class Tournament extends Rooms.RoomGame {
 			tour: this,
 			parentid: this.roomid,
 		});
-		if (!room || !room.battle) throw new Error(`Failed to create battle in ${room}`);
+		if (!room?.battle) throw new Error(`Failed to create battle in ${room}`);
 
 		challenge.from.pendingChallenge = null;
 		player.pendingChallenge = null;
@@ -1437,7 +1437,7 @@ const commands: ChatCommands = {
 				return;
 			}
 			const result = await TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.battleSettings.team);
-			if (result.charAt(0) === '1') {
+			if (result.startsWith('1')) {
 				connection.popup("Your team is valid for this tournament.");
 			} else {
 				const formatName = Dex.getFormat(tournament.baseFormat).name;
@@ -1554,7 +1554,8 @@ const commands: ChatCommands = {
 			if (!target) {
 				this.sendReply("Usage: /tour rules <list of rules>");
 				this.sendReply("Rules can be: -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule");
-				return this.parse('/tour viewrules');
+				this.parse('/tour viewrules');
+				return this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
 			}
 			if (tournament.isTournamentStarted) {
 				return this.errorReply("The custom rules cannot be changed once the tournament has started.");
@@ -1565,6 +1566,7 @@ const commands: ChatCommands = {
 				);
 				this.privateModAction(`${user.name} updated the tournament's custom rules.`);
 				this.modlog('TOUR RULES', null, tournament.customRules.join(', '));
+				this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
 			}
 		},
 		clearruleset: 'clearcustomrules',

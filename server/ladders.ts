@@ -171,7 +171,7 @@ class Ladder extends LadderStore {
 			valResult = await validator.validateTeam(team, {removeNicknames});
 		}
 
-		if (valResult.charAt(0) !== '1') {
+		if (!valResult.startsWith('1')) {
 			connection.popup(
 				`Your team was rejected for the following reasons:\n\n` +
 				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
@@ -179,7 +179,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		const settings = {...user.battleSettings, team: valResult.slice(1) as string};
+		const settings = {...user.battleSettings, team: valResult.slice(1)};
 		user.battleSettings.inviteOnly = false;
 		user.battleSettings.hidden = false;
 		return new BattleReady(userid, this.formatid, settings, rating, challengeType);
@@ -382,7 +382,7 @@ class Ladder extends LadderStore {
 	getSearcher(search: BattleReady) {
 		const formatid = toID(this.formatid);
 		const user = Users.get(search.userid);
-		if (!user || !user.connected || user.id !== search.userid) {
+		if (!user?.connected || user.id !== search.userid) {
 			const formatTable = Ladders.searches.get(formatid);
 			if (formatTable) formatTable.delete(search.userid);
 			if (user?.connected) {

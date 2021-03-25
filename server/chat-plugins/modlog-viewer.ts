@@ -7,9 +7,7 @@
  * @license MIT
  */
 
-import * as Dashycode from '../../lib/dashycode';
-
-import {Utils} from '../../lib/utils';
+import {Dashycode, Utils} from '../../lib';
 import {ModlogID, ModlogSearch, ModlogEntry} from '../modlog';
 
 const MAX_QUERY_LENGTH = 2500;
@@ -85,7 +83,6 @@ function prettifyResults(
 	const lines = resultArray.length;
 	let curDate = '';
 	const resultString = resultArray.map(result => {
-		if (!result) return '';
 		const date = new Date(result.time || Date.now());
 		const entryRoom = result.visualRoomID || result.roomID || 'global';
 		let [dateString, timestamp] = Chat.toTimestamp(date, {human: true}).split(' ');

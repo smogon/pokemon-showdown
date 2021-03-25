@@ -14,7 +14,7 @@
  */
 
 /* eslint no-else-return: "error" */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 import type {UserSettings} from '../users';
 
 const avatarTable = new Set([
@@ -354,7 +354,7 @@ export const commands: ChatCommands = {
 
 		for (const id in room.users) {
 			const curUser = Users.get(room.users[id]);
-			if (!curUser || !curUser.named) continue;
+			if (!curUser?.named) continue;
 			userList.push(Utils.escapeHTML(curUser.getIdentity(room.roomid)));
 		}
 
@@ -485,6 +485,21 @@ export const commands: ChatCommands = {
 	},
 	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
 
+	async msgroom(target, room, user, connection) {
+		const [targetId, message] = Utils.splitFirst(target, ',').map(i => i.trim());
+		if (!targetId || !message) {
+			return this.parse(`/help msgroom`);
+		}
+		const targetRoom = Rooms.search(targetId.trim());
+		if (!targetRoom) return this.errorReply(`Room not found.`);
+		if (message.trim().startsWith('/msgroom ')) {
+			return this.errorReply(`Please do not nest /msgroom inside itself.`);
+		}
+		const subcontext = new Chat.CommandContext({room: targetRoom, message, user, connection});
+		await subcontext.parse();
+	},
+	msgroomhelp: [`/msgroom [room], [command] - Runs the [command] in the given [room].`],
+
 	r: 'reply',
 	reply(target, room, user) {
 		if (!target) return this.parse('/help reply');
@@ -524,7 +539,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
-		this.parse(target);
+		return this.parse(target);
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
 
@@ -1063,7 +1078,7 @@ export const commands: ChatCommands = {
 			}
 		}
 	},
-	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Requires: \u2606 @ # &`],
+	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Can only be used after 100+ turns have passed. Requires: \u2606 @ # &`],
 
 	rejectdraw: 'rejecttie',
 	rejecttie(target, room, user) {
@@ -1140,7 +1155,7 @@ export const commands: ChatCommands = {
 
 	uploadreplay: 'savereplay',
 	async savereplay(target, room, user, connection) {
-		if (!room || !room.battle) {
+		if (!room?.battle) {
 			return this.errorReply(this.tr`You can only save replays for battles.`);
 		}
 
@@ -1149,7 +1164,7 @@ export const commands: ChatCommands = {
 	},
 
 	hidereplay(target, room, user, connection) {
-		if (!room || !room.battle) return this.errorReply(`Must be used in a battle.`);
+		if (!room?.battle) return this.errorReply(`Must be used in a battle.`);
 		this.checkCan('joinbattle', null, room);
 		if (room.tour?.forcePublic) {
 			return this.errorReply(this.tr`This battle can't have hidden replays, because the tournament is set to be forced public.`);
@@ -1254,7 +1269,7 @@ export const commands: ChatCommands = {
 		}
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
-		if (!targetUser || !targetUser.connected) {
+		if (!targetUser?.connected) {
 			const targetUsername = this.targetUsername;
 			return this.errorReply(this.tr`User ${targetUsername} not found.`);
 		}
@@ -1276,7 +1291,7 @@ export const commands: ChatCommands = {
 	timer(target, room, user) {
 		target = toID(target);
 		room = this.requireRoom();
-		if (!room.game || !room.game.timer) {
+		if (!room.game?.timer) {
 			return this.errorReply(this.tr`You can only set the timer from inside a battle room.`);
 		}
 		const timer = room.game.timer as any;
@@ -1387,7 +1402,7 @@ export const commands: ChatCommands = {
 	challenge(target, room, user, connection) {
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
-		if (!targetUser || !targetUser.connected) {
+		if (!targetUser?.connected) {
 			const targetUsername = this.targetUsername;
 			return this.popupReply(this.tr`The user '${targetUsername}' was not found.`);
 		}
@@ -1474,7 +1489,7 @@ export const commands: ChatCommands = {
 
 		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team).then(result => {
 			const matchMessage = (originalFormat === format ? "" : this.tr`The format '${originalFormat.name}' was not found.`);
-			if (result.charAt(0) === '1') {
+			if (result.startsWith('1')) {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team is valid for ${format.name}.`}`);
 			} else {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team was rejected for the following reasons:`}\n\n- ${result.slice(1).replace(/\n/g, '\n- ')}`);
@@ -1671,7 +1686,7 @@ export const commands: ChatCommands = {
 			if (user.tempGroup !== Users.Auth.defaultSymbol()) {
 				this.sendReply(`${this.tr`DRIVER COMMANDS`}: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /modchat, /lock, /weeklock, /unlock, /announce`);
 				this.sendReply(`${this.tr`MODERATOR COMMANDS`}: /globalban, /unglobalban, /ip, /markshared, /unlockip`);
-				this.sendReply(`${this.tr`ADMIN COMMANDS`}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall, /ipsearch`);
+				this.sendReply(`${this.tr`ADMIN COMMANDS`}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /ipsearch`);
 			}
 			this.sendReply(this.tr`For an overview of room commands, use /roomhelp`);
 			this.sendReply(this.tr`For details of a specific command, use something like: /help data`);
