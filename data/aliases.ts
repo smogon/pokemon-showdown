@@ -58,7 +58,7 @@ export const Aliases: {[alias: string]: string} = {
 	lcotm: "[Gen 8] The Loser's Game",
 	m4a: "[Gen 8] Megas For All",
 
-  // mega evos
+	// mega evos
 	fabio: "Ampharos-Mega",
 	maero: "Aerodactyl-Mega",
 	megabunny: "Lopunny-Mega",
