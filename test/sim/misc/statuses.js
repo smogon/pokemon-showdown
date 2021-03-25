@@ -30,6 +30,18 @@ describe('Burn', function () {
 		assert.hurtsBy(target, 64, () => battle.makeChoices('move boneclub', 'move willowisp'));
 	});
 
+	it('should reduce atk to 50% of its original value in Stadium', function () {
+		// I know WoW doesn't exist in Stadium, but the engine supports future gen moves
+		// and this is easier than digging for a seed that makes Flamethrower burn
+		battle = common.createBattle({formatid: 'gen1stadiumou@@@!teampreview'}, [
+			[{species: 'Vaporeon', moves: ['growl']}],
+			[{species: 'Jolteon', moves: ['willowisp']}],
+		]);
+		const attack = battle.p1.active[0].getStat('atk');
+		battle.makeChoices('move growl', 'move willowisp');
+		assert.equal(battle.p1.active[0].getStat('atk'), Math.floor(attack * 0.5));
+	});
+
 	it('should not halve damage from moves with set damage', function () {
 		battle = common.createBattle([
 			[{species: 'Machamp', ability: 'noguard', moves: ['seismictoss']}],
@@ -78,7 +90,7 @@ describe('Paralysis', function () {
 		]);
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move growl', 'move thunderwave');
-		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+		assert.equal(battle.p1.active[0].getStat('spe'), Math.floor(speed * 0.25));
 	});
 
 	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', function () {
