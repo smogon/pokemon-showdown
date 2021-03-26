@@ -825,11 +825,11 @@ export abstract class BasicRoom {
 	}
 
 	/**
-	 * Displays a warning popup to all users in the room.
+	 * Displays a warning popup to all non-staff users users in the room.
 	 * Returns a list of all the user IDs that were warned.
 	 */
 	warnParticipants(message: string) {
-		const warned = Object.values(this.users);
+		const warned = Object.values(this.users).filter(u => !u.can('lock'));
 		for (const user of warned) {
 			user.popup(`|modal|${message}`);
 		}
