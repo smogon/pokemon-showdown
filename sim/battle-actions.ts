@@ -52,6 +52,7 @@ export class BattleActions {
 		this.battle = battle;
 		this.dex = battle.dex;
 		if (this.dex.data.Scripts.actions) Object.assign(this, this.dex.data.Scripts.actions);
+		if (battle.format.actions) Object.assign(this, battle.format.actions);
 	}
 	/**
 	 * runMove is the "outside" move caller. It handles deducting PP,
