@@ -7,8 +7,7 @@
  * @author mia-pi-git
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 
@@ -21,19 +20,6 @@ export let answererData: {[roomid: string]: PluginData} = {};
 try {
 	answererData = JSON.parse(FS(PATH).readSync());
 } catch (e) {}
-
-function loadOldData() {
-	const oldDataPath = 'config/chat-plugins/help.json';
-	const oldPath = FS(oldDataPath);
-	if (oldPath.existsSync() && Config.helpFilterRoom) {
-		const newData = answererData[toID(Config.helpFilterRoom)];
-		const oldData = JSON.parse(oldPath.readSync());
-		if (newData && newData !== oldData) return;
-		answererData[toID(Config.helpFilterRoom)] = oldData;
-		// oldPath.unlinkIfExistsSync();
-	}
-}
-loadOldData();
 
 /**
  * A message caught by the filter.
@@ -269,10 +255,9 @@ const BYPASS_TERMS = ['a:', 'A:', '!', '/'];
 
 export const chatfilter: ChatFilter = function (message, user, room) {
 	if (BYPASS_TERMS.some(t => message.startsWith(t))) {
-		if (message.startsWith('a:') || message.startsWith('A:')) {
-			message = message.slice(2);
-		}
-		return message;
+		// do not return `message` or it will bypass all filters
+		// including super important filters like against `/html`
+		return;
 	}
 	if (room?.responder && room.auth.get(user.id) === ' ') {
 		const responder = room.responder;
@@ -327,7 +312,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			if (!target) {
 				return this.sendReply(
-					`The Help auto-response filter is currently set to: ${room.responder ? 'OFF' : "ON"}`
+					`The Help auto-response filter is currently set to: ${room.responder ? 'ON' : "OFF"}`
 				);
 			}
 			this.checkCan('ban', null, room);
@@ -362,30 +347,20 @@ export const commands: ChatCommands = {
 			this.modlog(`AUTOFILTER ADD`, null, target);
 		},
 		remove(target, room, user) {
-			const [faq, index, id] = target.split(',');
-			if (id) {
-				const targetRoom = Rooms.search(id);
-				if (!targetRoom) {
-					return this.errorReply(`Room not found.`);
-				}
-				room = targetRoom;
-			} else {
-				room = this.requireRoom();
-			}
+			const [faq, index] = target.split(',');
+			room = this.requireRoom();
 			if (!room.responder) {
 				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
 			}
 			this.checkCan('ban', null, room);
-			// intended for use mainly within the page, so supports being used in all rooms
-			this.room = room;
 			const num = parseInt(index);
 			if (isNaN(num)) return this.errorReply("Invalid index.");
 			room.responder.tryRemoveRegex(faq, num - 1);
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
 			this.modlog('AUTOFILTER REMOVE', null, index);
 			const pages = [`keys`, `pairs`];
-			if (pages.some(p => this.connection.openPages?.has(`autoresponder-${room?.roomid}-${p}`))) {
-				this.parse(`/ar view keys`);
+			for (const p of pages) {
+				this.refreshPage(`autofilter-${room.roomid}-${p}`);
 			}
 		},
 		ignore(target, room, user) {
@@ -407,7 +382,7 @@ export const commands: ChatCommands = {
 		unignore(target, room, user) {
 			room = this.requireRoom();
 			if (!room.responder) {
-				return this.errorReply(`This room has not configured an auto-response filter.`);
+				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
 			}
 			this.checkCan('ban', null, room);
 			if (!toID(target)) {
@@ -417,6 +392,9 @@ export const commands: ChatCommands = {
 			room.responder.unignore(targets);
 			this.privateModAction(`${user.name} removed ${Chat.count(targets.length, "terms")} from the autoresponder ignore list.`);
 			this.modlog(`AUTOFILTER UNIGNORE`, null, target);
+			if (this.connection.openPages?.has(`autoresponder-${room.roomid}-ignore`)) {
+				return this.parse(`/join view-autoresponder-${room.roomid}-ignore`);
+			}
 		},
 	},
 	autoresponderhelp() {
@@ -443,12 +421,13 @@ export const pages: PageTable = {
 		const canChange = user.can('ban', null, room);
 		let buf = '';
 		const refresh = (type: string, extra?: string[]) => {
+			if (extra) extra = extra.filter(Boolean);
 			let button = `<button class="button" name="send" value="/join view-autoresponder-${room.roomid}-${type}`;
-			button += `${extra ? `-${extra.join('-')}` : ''}" style="float: right">`;
+			button += `${extra?.length ? `-${extra.join('-')}` : ''}" style="float: right">`;
 			button += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 			return button;
 		};
-		const back = `<br /><a roomid="view-autoresponder-${room.roomid}-">Back to all</a>`;
+		const back = `<br /><a roomid="view-autoresponder-${room.roomid}">Back to all</a>`;
 		switch (args[0]) {
 		case 'stats':
 			args.shift();
@@ -498,7 +477,7 @@ export const pages: PageTable = {
 				buffer += `</tr>`;
 				for (const regex of regexes) {
 					const index = regexes.indexOf(regex) + 1;
-					const button = `<button class="button" name="send"value="/ar remove ${item}, ${index}, ${room.roomid}">Remove</button>`;
+					const button = `<button class="button" name="send"value="/msgroom ${room.roomid},/ar remove ${item}, ${index}">Remove</button>`;
 					buffer += `<tr><td>${index}</td><td><code>${regex}</code></td>`;
 					if (canChange) buffer += `<td>${button}</td></tr>`;
 				}
@@ -506,12 +485,24 @@ export const pages: PageTable = {
 				return buffer;
 			}).filter(Boolean).join('<hr />');
 			break;
+		case 'ignore':
+			this.title = `[${room.title} Autoresponder ignore list]`;
+			buf = `<div class="pad"><h2>${room.title} responder terms to ignore:</h2>${back}${refresh('ignore')}<hr />`;
+			if (!roomData.ignore) {
+				return this.errorReply(`No terms on ignore list.`);
+			}
+			for (const term of roomData.ignore) {
+				buf += `- ${term} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
+			}
+			buf += `</div>`;
+			break;
 		default:
 			this.title = `[${room.title} Autoresponder]`;
 			buf = `<div class="pad"><h2>Specify a filter page to view.</h2>`;
 			buf += `<hr /><strong>Options:</strong><hr />`;
 			buf += `<a roomid="view-autoresponder-${room.roomid}-stats">Stats</a><hr />`;
 			buf += `<a roomid="view-autoresponder-${room.roomid}-keys">Regex keys</a><hr/>`;
+			buf += `<a roomid="view-autoresponder-${room.roomid}-ignore">Ignore list</a><hr/>`;
 			buf += `</div>`;
 		}
 		return LogViewer.linkify(buf);

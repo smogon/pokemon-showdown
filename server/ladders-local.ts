@@ -13,8 +13,7 @@
  * @license MIT
  */
 
-import {FS} from '../lib/fs';
-import {Utils} from '../lib/utils';
+import {FS, Utils} from '../lib';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
@@ -172,30 +171,7 @@ export class LadderStore {
 	updateRow(row: LadderRow, score: number, foeElo: number) {
 		let elo = row[1];
 
-		// The K factor determines how much your Elo changes when you win or
-		// lose games. Larger K means more change.
-		// In the "original" Elo, K is constant, but it's common for K to
-		// get smaller as your rating goes up
-		let K = 50;
-
-		// dynamic K-scaling (optional)
-		if (elo < 1200) {
-			if (score < 0.5) {
-				K = 10 + (elo - 1000) * 40 / 200;
-			} else if (score > 0.5) {
-				K = 90 - (elo - 1000) * 40 / 200;
-			}
-		} else if (elo > 1350 && elo <= 1600) {
-			K = 40;
-		} else {
-			K = 32;
-		}
-
-		// main Elo formula
-		const E = 1 / (1 + Math.pow(10, (foeElo - elo) / 400));
-		elo += K * (score - E);
-
-		if (elo < 1000) elo = 1000;
+		elo = this.calculateElo(elo, score, foeElo);
 
 		row[1] = elo;
 		if (score > 0.6) {
@@ -320,6 +296,37 @@ export class LadderStore {
 
 		const output = `<tr><td>${this.formatid}</td><td><strong>${Math.round(ratings[1])}</strong></td>`;
 		return `${output}<td>${ratings[3]}</td><td>${ratings[4]}</td><td>${ratings[3] + ratings[4]}</td></tr>`;
+	}
+
+	/**
+	 * Calculates Elo based on a match result
+	 */
+	 calculateElo(oldElo: number, score: number, foeElo: number): number {
+		// The K factor determines how much your Elo changes when you win or
+		// lose games. Larger K means more change.
+		// In the "original" Elo, K is constant, but it's common for K to
+		// get smaller as your rating goes up
+		let K = 50;
+
+		// dynamic K-scaling (optional)
+		if (oldElo < 1200) {
+			if (score < 0.5) {
+				K = 10 + (oldElo - 1000) * 40 / 200;
+			} else if (score > 0.5) {
+				K = 90 - (oldElo - 1000) * 40 / 200;
+			}
+		} else if (oldElo > 1350 && oldElo <= 1600) {
+			K = 40;
+		} else {
+			K = 32;
+		}
+
+		// main Elo formula
+		const E = 1 / (1 + Math.pow(10, (foeElo - oldElo) / 400));
+
+		const newElo = oldElo + K * (score - E);
+
+		return Math.max(newElo, 1000);
 	}
 
 	/**

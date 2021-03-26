@@ -89,6 +89,20 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it('should validate the Diancie released with zero perfect IVs', function () {
+		let team = [
+			{species: 'diancie', ability: 'clearbody', shiny: true, moves: ['hiddenpowerfighting'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'diancie', ability: 'clearbody', moves: ['hiddenpowerfighting'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should reject non-existent natures', function () {
 		const team = [
 			{species: 'pikachu', ability: 'static', moves: ['thunderbolt'], nature: 'nonexistentNature', evs: {hp: 1}},
@@ -229,6 +243,36 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen8lc').validateTeam(team);
 		assert(illegal);
+	});
+
+	it('should handle Deoxys formes in Gen 3', function () {
+		let team = [
+			{species: 'deoxys', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+			{species: 'deoxys', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen3ubers').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'deoxysattack', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+			{species: 'deoxysdefense', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen3ubers@@@!speciesclause,+nonexistent').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
+	it('should validate Sketch', function () {
+		// Spore is a Gen 5 event move
+		// Sketch itself should still be valid
+		const team = [
+			{species: 'smeargle', ability: 'owntempo', moves: ['bellydrum', 'spore', 'sketch'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen4ou').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should reject illegal egg move combinations', function () {
@@ -408,6 +452,12 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
 		assert(illegal);
+
+		team = [
+			{species: 'koffing', ability: 'levitate', moves: ['zapcannon'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8ou').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should correctly validate USUM Rockruff', function () {
@@ -478,6 +528,20 @@ describe('Team Validator', function () {
 		];
 		const illegal = TeamValidator.get('gen5ou').validateTeam(team);
 		assert.equal(illegal, null);
+	});
+
+	it('should consider Dream World Abilities as Hidden based on Gen 5 data', function () {
+		let team = [
+			{species: 'kecleon', ability: 'colorchange', moves: ['reflecttype'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'kecleon', ability: 'protean', moves: ['reflecttype'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen6ou').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should reject newer Pokemon in older gens', function () {
@@ -565,14 +629,6 @@ describe('Team Validator', function () {
 		const team = [
 			{species: 'urshifu', ability: 'unseenfist', shiny: true, moves: ['snore'], evs: {hp: 1}},
 			{species: 'cosmoem', ability: 'sturdy', shiny: true, moves: ['teleport'], evs: {hp: 1}},
-		];
-		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
-		assert(illegal);
-	});
-
-	it('should not allow unreleased Gmax formes', function () {
-		const team = [
-			{species: 'melmetal-gmax', ability: 'ironfist', moves: ['doubleironbash'], evs: {hp: 1}},
 		];
 		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert(illegal);

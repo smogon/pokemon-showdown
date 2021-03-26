@@ -139,6 +139,19 @@ describe('Choice parser', function () {
 				assert.throws(() => battle.choose('p1', `${switchChoice}, ${passChoice} a`));
 				assert.throws(() => battle.choose('p1', `${passChoice} a, ${switchChoice}`));
 			});
+
+			it.skip(`should only allow switching to left slots on double KOs with only one Pokemon remaining`, function () {
+				battle = common.createBattle({gameType: 'doubles'}, [[
+					{species: 'tornadus', moves: ['sleeptalk']},
+					{species: 'landorus', moves: ['earthquake']},
+				], [
+					{species: 'roggenrola', level: 1, moves: ['sleeptalk']},
+					{species: 'aron', level: 1, moves: ['sleeptalk']},
+					{species: 'wynaut', moves: ['sleeptalk']},
+				]]);
+				battle.makeChoices();
+				assert.throws(() => battle.choose('p2', 'pass, switch 3'), 'Wynaut should only be able to switch on the left.');
+			});
 		});
 	});
 

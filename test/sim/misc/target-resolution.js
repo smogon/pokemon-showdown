@@ -199,7 +199,7 @@ describe('Target Resolution', function () {
 		});
 	});
 
-	it.skip('should not force charge moves called by another move to target an ally after Ally Switch', function () {
+	it('should not force charge moves called by another move to target an ally after Ally Switch', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'purrloin', ability: 'prankster', moves: ['copycat', 'sleeptalk']},
 			{species: 'wynaut', moves: ['allyswitch', 'solarbeam']},
@@ -226,5 +226,35 @@ describe('Target Resolution', function () {
 		battle.makeChoices('move ironhead -2, move allyswitch', 'auto');
 		battle.makeChoices('move allyswitch, move thunder -1', 'auto');
 		assert.fullHP(battle.p1.active[0]);
+	});
+
+	it.skip(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'houndour', level: 1, moves: ['sleeptalk']},
+			{species: 'altaria', moves: ['sleeptalk']},
+			{species: 'aggron', moves: ['sleeptalk']},
+		], [
+			{species: 'dragapult', moves: ['phantomforce']},
+			{species: 'regieleki', moves: ['sleeptalk', 'sheercold']},
+		]]);
+
+		// Phantom Force should still target slot 1, despite Houndour fainting
+		battle.makeChoices('auto', 'move phantomforce 1, move sheercold 1');
+		battle.makeChoices('switch 3');
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[1], 'Altaria should be at full HP, because it was not targeted.');
+
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'houndour', level: 1, moves: ['sleeptalk']},
+			{species: 'altaria', moves: ['sleeptalk']},
+			{species: 'aggron', moves: ['sleeptalk']},
+		], [
+			{species: 'dragapult', moves: ['phantomforce']},
+			{species: 'regieleki', moves: ['sleeptalk', 'sheercold']},
+		]]);
+
+		battle.makeChoices('auto', 'move phantomforce 1, move sleeptalk');
+		battle.makeChoices('auto', 'move phantomforce 1, move sheercold 1');
+		assert.false.fullHP(battle.p1.active[1], 'Altaria should not be at full HP, because Phantom Force was redirected and targeted it.');
 	});
 });

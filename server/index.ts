@@ -2,8 +2,8 @@
  * Main file
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is the main Pokemon Showdown app, and the file you should be
- * running to start Pokemon Showdown if you're using it normally.
+ * This is the main Pokemon Showdown app, and the file that the
+ * `pokemon-showdown` script runs if you start Pokemon Showdown normally.
  *
  * This file sets up our SockJS server, which handles communication
  * between users and your server, and also sets up globals. You can
@@ -70,7 +70,7 @@ try {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
 
-import {FS} from '../lib/fs';
+import {FS, Repl} from '../lib';
 
 /*********************************************************
  * Load configuration
@@ -163,7 +163,12 @@ if (require.main === module) {
 	// in the case of app.js being imported as a module (e.g. unit tests),
 	// postpone launching until app.listen() is called.
 	let port;
-	if (process.argv[2]) port = parseInt(process.argv[2]);
+	for (const arg of process.argv) {
+		if (/^[0-9]+$/.test(arg)) {
+			port = parseInt(arg);
+			break;
+		}
+	}
 	Sockets.listen(port);
 }
 
@@ -179,7 +184,6 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-import {Repl} from '../lib/repl';
 // eslint-disable-next-line no-eval
 Repl.start('app', cmd => eval(cmd));
 

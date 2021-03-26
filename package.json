@@ -1,15 +1,16 @@
 {
   "name": "pokemon-showdown",
   "description": "The server for the Pokémon Showdown battle simulator",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "main": ".sim-dist/index.js",
   "dependencies": {
     "@types/better-sqlite3": "^5.4.0",
     "probe-image-size": "^5.0.0",
-    "sockjs": "0.3.20",
+    "sockjs": "^0.3.21",
     "sucrase": "^3.15.0"
   },
   "optionalDependencies": {
+    "brain.js": "^2.0.0-beta.2",
     "better-sqlite3": "^7.1.0",
     "cloud-env": "^0.2.3",
     "node-static": "^0.7.11",
@@ -78,7 +79,7 @@
     "eslint-plugin-import": "^2.22.1",
     "husky": "^4.3.0",
     "mocha": "^8.2.0",
-    "smogon": "^1.1.3",
-    "typescript": "^4.0.5"
+    "smogon": "^1.4.2",
+    "typescript": "^4.1.0"
   }
 }

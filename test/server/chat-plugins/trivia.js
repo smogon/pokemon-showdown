@@ -2,20 +2,17 @@
 
 const assert = require('assert').strict;
 
-const userUtils = require('../../users-utils');
-const User = userUtils.User;
-const Connection = userUtils.Connection;
+const {makeUser} = require('../../users-utils');
 const trivia = require('../../../.server-dist/chat-plugins/trivia');
 const Trivia = trivia.Trivia;
 const FirstModeTrivia = trivia.FirstModeTrivia;
 const TimerModeTrivia = trivia.TimerModeTrivia;
 const NumberModeTrivia = trivia.NumberModeTrivia;
 
-function makeUser(name, connection) {
-	const user = new User(connection);
-	user.forceRename(name, true);
-	Users.users.set(user.id, user);
-	user.joinRoom('trivia', connection);
+function makeTriviaUser(name, ip) {
+	const user = makeUser(name, ip);
+	assert.equal(Users.users.get(user.id), user);
+	user.joinRoom('trivia');
 	return user;
 }
 
@@ -34,9 +31,9 @@ describe('Trivia', function () {
 
 	beforeEach(function () {
 		const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-		this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-		this.tarUser = makeUser('ReallyNotMorfent', new Connection('127.0.0.2'));
-		this.game = this.room.game = new Trivia(this.room, 'first', 'ae', 'short', questions);
+		this.user = makeTriviaUser('Morfent', '127.0.0.1');
+		this.tarUser = makeTriviaUser('ReallyNotMorfent', '127.0.0.2');
+		this.game = this.room.game = new Trivia(this.room, 'first', 'ae', true, 'short', questions);
 	});
 
 	afterEach(function () {
@@ -70,7 +67,7 @@ describe('Trivia', function () {
 	it('should not add a player if another one on the same IP has joined', function () {
 		this.game.addTriviaPlayer(this.user);
 
-		const user2 = makeUser('Not Morfent', new Connection('127.0.0.1'));
+		const user2 = makeTriviaUser('Not Morfent', '127.0.0.1');
 		assert.throws(() => this.game.addTriviaPlayer(user2));
 
 		assert.equal(this.game.playerCount, 1);
@@ -84,7 +81,7 @@ describe('Trivia', function () {
 		this.user.forceRename('Not Morfent', true);
 		this.user.previousIDs.push(userid);
 
-		const user2 = makeUser(name, new Connection('127.0.0.3'));
+		const user2 = makeTriviaUser(name, '127.0.0.3');
 		assert.throws(() => this.game.addTriviaPlayer(user2));
 
 		assert.equal(this.game.playerCount, 1);
@@ -127,7 +124,7 @@ describe('Trivia', function () {
 		const name = this.tarUser.name;
 		this.tarUser.resetName();
 
-		const user2 = makeUser(name, new Connection('127.0.0.2'));
+		const user2 = makeTriviaUser(name, '127.0.0.2');
 		assert.throws(() => this.game.addTriviaPlayer(user2));
 		assert.equal(this.game.playerCount, 0);
 		destroyUser(user2);
@@ -160,11 +157,11 @@ describe('Trivia', function () {
 	context('marking player absence', function () {
 		beforeEach(function () {
 			const questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
-			const game = new FirstModeTrivia(this.room, 'first', 'ae', 'short', questions);
+			const game = new FirstModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
 
-			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
-			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+			this.user = makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = makeTriviaUser('user3', '127.0.0.3');
 
 			this.user.joinRoom(this.room);
 			game.addTriviaPlayer(this.user);
@@ -211,11 +208,11 @@ describe('Trivia', function () {
 	context('first mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new FirstModeTrivia(this.room, 'first', 'ae', 'short', questions);
+			const game = new FirstModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
 
-			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
-			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+			this.user = makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);
@@ -275,11 +272,11 @@ describe('Trivia', function () {
 	context('timer mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new TimerModeTrivia(this.room, 'first', 'ae', 'short', questions);
+			const game = new TimerModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
 
-			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
-			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+			this.user = makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);
@@ -350,11 +347,11 @@ describe('Trivia', function () {
 	context('number mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new NumberModeTrivia(this.room, 'first', 'ae', 'short', questions);
+			const game = new NumberModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
 
-			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
-			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+			this.user = makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);

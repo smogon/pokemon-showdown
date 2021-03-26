@@ -420,13 +420,15 @@ export class WriteStream {
 					});
 				}
 				return new Promise(resolve => {
-					this.drainListeners.push(resolve);
+					// `as () => void` is necessary because TypeScript thinks that it should be a function
+					// that takes an undefined value as its only parameter: `(value: PromiseLike<undefined> | undefined) => void`
+					this.drainListeners.push(resolve as () => void);
 				});
 			};
 			// Prior to Node v10.12.0, attempting to close STDOUT or STDERR will throw
 			if (nodeStream !== process.stdout && nodeStream !== process.stderr) {
 				options.writeEnd = function () {
-					return new Promise(resolve => {
+					return new Promise<void>(resolve => {
 						this.nodeWritableStream!.end(() => resolve());
 					});
 				};
@@ -494,7 +496,7 @@ export class ReadWriteStream extends ReadStream implements WriteStream {
 			// Prior to Node v10.12.0, attempting to close STDOUT or STDERR will throw
 			if (nodeStream !== process.stdout && nodeStream !== process.stderr) {
 				options.writeEnd = function () {
-					return new Promise(resolve => {
+					return new Promise<void>(resolve => {
 						this.nodeWritableStream!.end(() => resolve());
 					});
 				};
@@ -765,7 +767,7 @@ export class ObjectWriteStream<T> {
 			options.write = function (data: T) {
 				const result = this.nodeWritableStream!.write(data as unknown as string);
 				if (result === false) {
-					return new Promise(resolve => {
+					return new Promise<void>(resolve => {
 						this.nodeWritableStream!.once('drain', () => {
 							resolve();
 						});
@@ -776,7 +778,7 @@ export class ObjectWriteStream<T> {
 			// Prior to Node v10.12.0, attempting to close STDOUT or STDERR will throw
 			if (nodeStream !== process.stdout && nodeStream !== process.stderr) {
 				options.writeEnd = function () {
-					return new Promise(resolve => {
+					return new Promise<void>(resolve => {
 						this.nodeWritableStream!.end(() => resolve());
 					});
 				};

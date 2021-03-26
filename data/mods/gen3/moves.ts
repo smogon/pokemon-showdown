@@ -321,6 +321,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 70,
 	},
+	furycutter: {
+		inherit: true,
+		onHit(target, source) {
+			source.addVolatile('furycutter');
+		},
+	},
 	gigadrain: {
 		inherit: true,
 		pp: 5,
@@ -421,7 +427,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform',
 			];
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.source.lastMove || !lastAttackedBy.move) {
+			if (!lastAttackedBy?.source.lastMove || !lastAttackedBy.move) {
 				return false;
 			}
 			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
@@ -628,6 +634,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.category = 'Special';
 				break;
 			}
+			if (this.field.effectiveWeather()) move.basePower *= 2;
 		},
 	},
 	yawn: {

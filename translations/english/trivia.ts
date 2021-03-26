@@ -17,6 +17,7 @@ export const translations: Translations = {
 		"Not enough players are participating to continue the game!": "",
 		"Until there are ${MINIMUM_PLAYERS} players participating and present, the game will be paused.": "",
 		"Signups for a new trivia game have begun!": "",
+		"Signups for a new unranked trivia game have begun!": "",
 		"Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${this.getCap() || \"Infinite\"}<br />": "",
 		"Enter /trivia join to sign up for the trivia game.": "",
 		"Mode: ${this.game.mode} | Category: ${this.game.category} | Score cap: ${this.getCap() || \"Infinite\"}": "",
@@ -37,6 +38,7 @@ export const translations: Translations = {
 		"Category: ${ALL_CATEGORIES[question.category]}": "",
 		"The answering period has ended!": "",
 		"You gained ${player.points} and answered ": "",
+		"You answered": "",
 		"${player.correctAnswers} questions correctly.": "",
 		"${p1.name} won the game with a final score of <strong>${p1.player.points}</strong>, and ": "",
 		"${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points!": "",
@@ -173,5 +175,6 @@ export const translations: Translations = {
 		"You are not a player in the current round of Mastermind.": "",
 		"There is a Mastermind game in progress, and it is in its ${game.phase} phase.": "",
 		"Players": "",
+		"Kicking ${user.name} would leave this game of Mastermind without enough players to reach ${this.numFinalists} finalists.": "",
 	},
 };

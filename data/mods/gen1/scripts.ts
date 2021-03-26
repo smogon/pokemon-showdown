@@ -459,9 +459,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			// handlers.
 
 			if ((damage || damage === 0) && !target.fainted) {
-				if (move.noFaint && damage >= target.hp) {
-					damage = target.hp - 1;
-				}
 				damage = this.damage(damage, target, pokemon, move);
 				if (!(damage || damage === 0)) return false;
 				didSomething = true;
@@ -603,7 +600,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!effect) effect = this.effect;
 		}
 		if (typeof effect === 'string') effect = this.dex.getEffect(effect);
-		if (!target || !target.hp) return 0;
+		if (!target?.hp) return 0;
 		let success = null;
 		boost = this.runEvent('Boost', target, source, effect, {...boost});
 		let i: BoostName;
