@@ -1022,7 +1022,7 @@ export const Punishments = new class {
 					Punishments.bannedGroupchatParticipants[targetRoom.roomid] = new Set(
 						// Room#users is a UserTable where the keys are IDs,
 						// but typed as strings so that they can be used as object keys.
-						Object.keys(targetRoom.users) as ID[]
+						Object.keys(targetRoom.users).filter(u => !targetRoom.users[u].can('lock')) as ID[]
 					);
 				}
 			}
