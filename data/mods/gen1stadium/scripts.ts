@@ -26,8 +26,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.baseStoredStats[statName] = this.storedStats[statName] = Math.floor(stat);
 				this.modifiedStats![statName] = Math.floor(stat);
 				// Re-apply drops, if necessary.
-				if (this.status === 'par') this.modifyStat!('spe', 0.25);
-				if (this.status === 'brn') this.modifyStat!('atk', 0.5);
+				if (this.status === 'par' && statName === 'spe') this.modifyStat!('spe', 0.25);
+				if (this.status === 'brn' && statName === 'atk') this.modifyStat!('atk', 0.5);
 				if (this.boosts[statName] !== 0) {
 					if (this.boosts[statName] >= 0) {
 						this.modifyStat!(statName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[statName]]);
