@@ -650,16 +650,16 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
-		}
+		} else {
+			const setsToCheck = [species];
+			if (dex.gen > 7) setsToCheck.push(dex.getSpecies(`${args[0]}gmax`));
 
-		const setsToCheck = [species];
-		if (dex.gen > 7) setsToCheck.push(dex.getSpecies(`${args[0]}gmax`));
-
-		for (const pokemon of setsToCheck) {
-			if (!pokemon.randomBattleMoves) continue;
-			const randomMoves = pokemon.randomBattleMoves.slice();
-			const m = randomMoves.sort().map(formatMove);
-			movesets.push(`<span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:</span><br />${m.join(`, `)}`);
+			for (const pokemon of setsToCheck) {
+				if (!pokemon.randomBattleMoves) continue;
+				const randomMoves = pokemon.randomBattleMoves.slice();
+				const m = randomMoves.sort().map(formatMove);
+				movesets.push(`<span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:</span><br />${m.join(`, `)}`);
+			}
 		}
 
 		if (!movesets.length) {
