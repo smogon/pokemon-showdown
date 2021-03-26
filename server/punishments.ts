@@ -413,7 +413,8 @@ export const Punishments = new class {
 		for (const row of data.replace('\r', '').split("\n")) {
 			if (!row) continue;
 			const [ip, reason] = row.trim().split("\t");
-			if (!IPTools.ipRegex.test(ip)) continue;
+			// it can be an ip or a range
+			if (!IPTools.ipRegex.test(ip) || !IPTools.ipRangeRegex.test(ip)) continue;
 			if (!reason) continue;
 
 			Punishments.sharedIpBlacklist.set(ip, reason);
