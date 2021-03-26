@@ -2241,7 +2241,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	latiasmega: {
-		randomBattleMoves: ["defog", "dracometeor", "psyshock", "roost", "surf"],
+		randomBattleMoves: ["calmmind", "defog", "dracometeor", "psyshock", "roost", "surf"],
 		randomDoubleBattleMoves: ["dragonpulse", "healpulse", "helpinghand", "protect", "psychic", "tailwind"],
 		tier: "OU",
 		doublesTier: "(DUU)",
@@ -2253,7 +2253,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	latiosmega: {
-		randomBattleMoves: ["calmmind", "defog", "dracometeor", "hiddenpowerfire", "psyshock", "roost"],
+		randomBattleMoves: ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost"],
 		randomDoubleBattleMoves: ["dracometeor", "dragonpulse", "hiddenpowerfire", "protect", "psyshock", "tailwind"],
 		tier: "UUBL",
 		doublesTier: "(DUU)",
@@ -2277,7 +2277,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	groudonprimal: {
-		randomBattleMoves: ["firepunch", "lavaplume", "precipiceblades", "rockpolish", "stealthrock", "stoneedge", "swordsdance", "toxic"],
+		randomBattleMoves: ["firepunch", "lavaplume", "precipiceblades", "rockpolish", "stealthrock", "stoneedge", "swordsdance"],
 		randomDoubleBattleMoves: ["firepunch", "precipiceblades", "protect", "rockpolish", "rockslide", "stoneedge", "swordsdance"],
 		tier: "Uber",
 		doublesTier: "DUber",
