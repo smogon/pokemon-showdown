@@ -174,7 +174,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.side.foe.active) {
-				if (target && this.move.isAdjacent(target, pokemon) &&
+				if (target && this.actions.isAdjacent(target, pokemon) &&
 					!(target.volatiles['substitute'] ||
 						target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn')) {
 					activated = true;
@@ -189,7 +189,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
 			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.move.isAdjacent(target, pokemon)) continue;
+				if (!target || !this.actions.isAdjacent(target, pokemon)) continue;
 
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);

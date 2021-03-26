@@ -414,7 +414,7 @@ export class Side {
 
 		// Z-move
 
-		const zMove = megaDynaOrZ === 'zmove' ? this.battle.move.getZMove(move, pokemon) : undefined;
+		const zMove = megaDynaOrZ === 'zmove' ? this.battle.actions.getZMove(move, pokemon) : undefined;
 		if (megaDynaOrZ === 'zmove' && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
@@ -427,7 +427,7 @@ export class Side {
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
 		const maxMove = (megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax']) ?
-			this.battle.move.getMaxMove(move, pokemon) : undefined;
+			this.battle.actions.getMaxMove(move, pokemon) : undefined;
 		if (megaDynaOrZ === 'dynamax' && !maxMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
@@ -438,7 +438,7 @@ export class Side {
 
 		if (autoChoose) {
 			targetLoc = 0;
-		} else if (this.battle.move.targetTypeChoices(targetType)) {
+		} else if (this.battle.actions.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
 				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
 			}

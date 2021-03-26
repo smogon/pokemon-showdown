@@ -424,8 +424,8 @@ export class Pokemon {
 		this.speed = 0;
 		this.abilityOrder = 0;
 
-		this.canMegaEvo = this.battle.move.canMegaEvo(this);
-		this.canUltraBurst = this.battle.move.canUltraBurst(this);
+		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
+		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		// Normally would want to use battle.canDynamax to set this, but it references this property.
 		this.canDynamax = (this.battle.gen >= 8);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
@@ -617,7 +617,7 @@ export class Pokemon {
 	}
 
 	nearbyAllies(): Pokemon[] {
-		return this.allies().filter(ally => this.battle.move.isAdjacent(this, ally));
+		return this.allies().filter(ally => this.battle.actions.isAdjacent(this, ally));
 	}
 
 	foes(): Pokemon[] {
@@ -632,7 +632,7 @@ export class Pokemon {
 	}
 
 	nearbyFoes(): Pokemon[] {
-		return this.foes().filter(foe => this.battle.move.isAdjacent(this, foe));
+		return this.foes().filter(foe => this.battle.actions.isAdjacent(this, foe));
 	}
 
 	getUndynamaxedHP(amount?: number) {
@@ -869,7 +869,7 @@ export class Pokemon {
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
 			} else if (
 				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				this.side.active.length >= 2 && this.battle.move.targetTypeChoices(target!)
+				this.side.active.length >= 2 && this.battle.actions.targetTypeChoices(target!)
 			) {
 				disabled = true;
 			}
@@ -916,7 +916,7 @@ export class Pokemon {
 		let atLeastOne = false;
 		for (const moveSlot of this.moveSlots) {
 			const move = this.battle.dex.getMove(moveSlot.id);
-			const maxMove = this.battle.move.getMaxMove(move, this);
+			const maxMove = this.battle.actions.getMaxMove(move, this);
 			if (maxMove) {
 				if (this.maxMoveDisabled(move)) {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
@@ -977,7 +977,7 @@ export class Pokemon {
 		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
-			const canZMove = this.battle.move.canZMove(this);
+			const canZMove = this.battle.actions.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 
 			if (this.getDynamaxRequest()) data.canDynamax = true;

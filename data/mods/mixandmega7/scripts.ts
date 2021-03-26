@@ -6,7 +6,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.modData('Items', id).onTakeItem = false;
 		}
 	},
-	move: {
+	actions: {
 		canMegaEvo(pokemon) {
 			if (pokemon.species.isMega || pokemon.species.isPrimal) return null;
 

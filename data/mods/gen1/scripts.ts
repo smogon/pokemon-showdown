@@ -58,7 +58,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return changed;
 		},
 	},
-	move: {
+	actions: {
 		// This function is the main one when running a move.
 		// It deals with the beforeMove and AfterMoveSelf events.
 		// This leads with partial trapping moves shennanigans after the move has been used.

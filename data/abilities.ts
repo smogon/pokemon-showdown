@@ -148,14 +148,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	arenatrap: {
 		onFoeTrapPokemon(pokemon) {
-			if (!this.move.isAdjacent(pokemon, this.effectData.target)) return;
+			if (!this.actions.isAdjacent(pokemon, this.effectData.target)) return;
 			if (pokemon.isGrounded()) {
 				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.move.isAdjacent(pokemon, source)) return;
+			if (!source || !this.actions.isAdjacent(pokemon, source)) return;
 			if (pokemon.isGrounded(!pokemon.knownType)) { // Negate immunity if the type is unknown
 				pokemon.maybeTrapped = true;
 			}
@@ -1365,7 +1365,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			for (const allyActive of pokemon.side.active) {
 				if (
 					allyActive &&
-					(allyActive.hp && this.move.isAdjacent(pokemon, allyActive) && allyActive.status) && this.randomChance(3, 10)
+					(allyActive.hp && this.actions.isAdjacent(pokemon, allyActive) && allyActive.status) && this.randomChance(3, 10)
 				) {
 					this.add('-activate', pokemon, 'ability: Healer');
 					allyActive.cureStatus();
@@ -1673,7 +1673,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.move.isAdjacent(target, pokemon)) continue;
+				if (!target || !this.actions.isAdjacent(target, pokemon)) continue;
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate', 'boost');
 					activated = true;
@@ -1883,7 +1883,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.move.useMove(newMove, target, source);
+			this.actions.useMove(newMove, target, source);
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -1893,7 +1893,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.move.useMove(newMove, this.effectData.target, source);
+			this.actions.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
 		condition: {
@@ -1947,13 +1947,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	magnetpull: {
 		onFoeTrapPokemon(pokemon) {
-			if (pokemon.hasType('Steel') && this.move.isAdjacent(pokemon, this.effectData.target)) {
+			if (pokemon.hasType('Steel') && this.actions.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.move.isAdjacent(pokemon, source)) return;
+			if (!source || !this.actions.isAdjacent(pokemon, source)) return;
 			if (!pokemon.knownType || pokemon.hasType('Steel')) {
 				pokemon.maybeTrapped = true;
 			}
@@ -2563,7 +2563,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.item) return;
 			const pickupTargets = [];
 			for (const target of this.getAllActive()) {
-				if (target.lastItem && target.usedItemThisTurn && this.move.isAdjacent(pokemon, target)) {
+				if (target.lastItem && target.usedItemThisTurn && this.actions.isAdjacent(pokemon, target)) {
 					pickupTargets.push(target);
 				}
 			}
@@ -3218,13 +3218,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	shadowtag: {
 		onFoeTrapPokemon(pokemon) {
-			if (!pokemon.hasAbility('shadowtag') && this.move.isAdjacent(pokemon, this.effectData.target)) {
+			if (!pokemon.hasAbility('shadowtag') && this.actions.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.move.isAdjacent(pokemon, source)) return;
+			if (!source || !this.actions.isAdjacent(pokemon, source)) return;
 			if (!pokemon.hasAbility('shadowtag')) {
 				pokemon.maybeTrapped = true;
 			}
@@ -4379,7 +4379,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
-			this.move.useMove(newMove, target, source);
+			this.actions.useMove(newMove, target, source);
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -4390,7 +4390,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
-			this.move.useMove(newMove, this.effectData.target, source);
+			this.actions.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
 		condition: {

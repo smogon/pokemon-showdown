@@ -13,7 +13,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 	},
-	move: {
+	actions: {
 		inherit: true,
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 			// RSE divides modifiers into several mathematically important stages

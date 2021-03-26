@@ -2,7 +2,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen5',
 	gen: 4,
 
-	move: {
+	actions: {
 		inherit: true,
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 			// DPP divides modifiers into several mathematically important stages

@@ -11,7 +11,7 @@ import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
-import {BattleMove} from './battle-move';
+import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
 
 /** A Pokemon that has fainted. */
@@ -89,7 +89,7 @@ export class Battle {
 	reportPercentages: boolean;
 	supportCancel: boolean;
 
-	move: BattleMove;
+	actions: BattleActions;
 	queue: BattleQueue;
 	readonly faintQueue: FaintedPokemon[];
 
@@ -179,7 +179,7 @@ export class Battle {
 		this.supportCancel = false;
 
 		this.queue = new BattleQueue(this);
-		this.move = new BattleMove(this);
+		this.actions = new BattleActions(this);
 		this.faintQueue = [];
 
 		this.inputLog = [];
@@ -1532,7 +1532,7 @@ export class Battle {
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			const actives = this.getAllActive();
-			if (actives.length > 1 && !this.move.isAdjacent(actives[0], actives[1])) {
+			if (actives.length > 1 && !this.actions.isAdjacent(actives[0], actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
 				this.add('-center');
@@ -2269,7 +2269,7 @@ export class Battle {
 		if (action.choice === 'move') {
 			let move = action.move;
 			if (action.zmove) {
-				const zMoveName = this.move.getZMove(action.move, action.pokemon, true);
+				const zMoveName = this.actions.getZMove(action.move, action.pokemon, true);
 				if (zMoveName) {
 					const zMove = this.dex.getActiveMove(zMoveName);
 					if (zMove.exists && zMove.isZ) {
@@ -2278,9 +2278,9 @@ export class Battle {
 				}
 			}
 			if (action.maxMove) {
-				const maxMoveName = this.move.getMaxMove(action.maxMove, action.pokemon);
+				const maxMoveName = this.actions.getMaxMove(action.maxMove, action.pokemon);
 				if (maxMoveName) {
-					const maxMove = this.move.getActiveMaxMove(action.move, action.pokemon);
+					const maxMove = this.actions.getActiveMaxMove(action.move, action.pokemon);
 					if (maxMove.exists && maxMove.isMax) {
 						move = maxMove;
 					}
@@ -2342,11 +2342,11 @@ export class Battle {
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			this.move.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
+			this.actions.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
 				action.zmove, undefined, action.maxMove, action.originalTarget);
 			break;
 		case 'megaEvo':
-			this.move.runMegaEvo(action.pokemon);
+			this.actions.runMegaEvo(action.pokemon);
 			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');

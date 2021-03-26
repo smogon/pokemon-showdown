@@ -87,7 +87,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		newMoves("empoleon", ["flipturn", "haze", "originpulse", "roost"]);
 	},
 
-	move: {
+	actions: {
 		canMegaEvo(pokemon) {
 			const altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
 			const item = pokemon.getItem();

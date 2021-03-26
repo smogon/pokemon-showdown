@@ -350,7 +350,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					if (!activated) {
 						this.add('-activate', pokemon, 'ability: Trash Compactor');
 						activated = true;
-						this.move.useMove('stockpile', pokemon);
+						this.actions.useMove('stockpile', pokemon);
 					}
 					pokemon.side.removeSideCondition(sideCondition);
 					this.add('-sideend', pokemon.side, this.dex.getEffect(sideCondition).name, '[from] Ability: Trash Compactor', '[of] ' + pokemon);
@@ -564,13 +564,13 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		desc: "Prevents adjacent opposing Flying-type Pokémon from choosing to switch out unless they are immune to trapping.",
 		shortDesc: "Prevents adjacent Flying-type foes from choosing to switch.",
 		onFoeTrapPokemon(pokemon) {
-			if (pokemon.hasType('Flying') && this.move.isAdjacent(pokemon, this.effectData.target)) {
+			if (pokemon.hasType('Flying') && this.actions.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.move.isAdjacent(pokemon, source)) return;
+			if (!source || !this.actions.isAdjacent(pokemon, source)) return;
 			if (!pokemon.knownType || pokemon.hasType('Flying')) {
 				pokemon.maybeTrapped = true;
 			}
@@ -767,7 +767,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						}
 					} else {
 						this.add('-message', `${(target.illusion ? target.illusion.name : target.name)} suddenly exploded!`);
-						this.move.useMove('explosion', target, source, this.dex.getAbility('alchemist'));
+						this.actions.useMove('explosion', target, source, this.dex.getAbility('alchemist'));
 					}
 				} else {
 					this.add('-ability', source, 'Alchemist');
@@ -1288,7 +1288,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			if (pokemon.item) return;
 			const pickupTargets = [];
 			for (const target of this.getAllActive()) {
-				if (target.lastItem && target.usedItemThisTurn && this.move.isAdjacent(pokemon, target)) {
+				if (target.lastItem && target.usedItemThisTurn && this.actions.isAdjacent(pokemon, target)) {
 					pickupTargets.push(target);
 				}
 			}
@@ -1552,7 +1552,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				if (move.category === 'Special') {
 					source.addVolatile('specialsound');
 				}
-				this.move.useMove('earthquake', this.effectData.target);
+				this.actions.useMove('earthquake', this.effectData.target);
 			}
 		},
 		name: "Seismic Scream",
@@ -1563,7 +1563,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		shortDesc: "On switch-in, this Pokémon poisons every Pokémon on the field.",
 		onStart(pokemon) {
 			for (const target of this.getAllActive()) {
-				if (!target || !this.move.isAdjacent(target, pokemon) || target.status) continue;
+				if (!target || !this.actions.isAdjacent(target, pokemon) || target.status) continue;
 				if (target.hasAbility('soundproof')) {
 					this.add('-ability', pokemon, 'Acid Rock');
 					this.add('-immune', target, "[from] ability: Soundproof", "[of] " + target);
@@ -1869,13 +1869,13 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				data.moveData.isFutureMove = true;
 
 				if (move.category === 'Status') {
-					this.move.useMove(move, target, data.target);
+					this.actions.useMove(move, target, data.target);
 				} else {
 					const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 					if (data.source.hp) { // the move should still activate, but animating can cause issues depending on the move
 						this.add('-anim', data.source, hitMove, data.target);
 					}
-					this.move.trySpreadMoveHit([data.target], data.source, hitMove);
+					this.actions.trySpreadMoveHit([data.target], data.source, hitMove);
 				}
 			},
 		},

@@ -59,7 +59,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return changed;
 		},
 	},
-	move: {
+	actions: {
 		inherit: true,
 		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 			const move = this.dex.getActiveMove(moveOrMoveName);
@@ -94,7 +94,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else {
 				sourceEffect = move;
 			}
-			this.battle.move.useMove(move, pokemon, target, sourceEffect);
+			this.battle.actions.useMove(move, pokemon, target, sourceEffect);
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 			// If target fainted

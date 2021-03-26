@@ -7,7 +7,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.modData('FormatsData', id).isNonstandard = null;
 		}
 	},
-	move: {
+	actions: {
 		canMegaEvo(pokemon) {
 			if (pokemon.species.isMega) return null;
 

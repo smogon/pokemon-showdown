@@ -45,13 +45,13 @@ const Z_MOVES: {readonly [k: string]: string} = {
 	Fairy: "Twinkle Tackle",
 };
 
-export class BattleMove {
+export class BattleActions {
 	battle: Battle;
 	dex: ModdedDex;
 	constructor(battle: Battle) {
 		this.battle = battle;
 		this.dex = battle.dex;
-		if (this.dex.data.Scripts.move) Object.assign(this, this.dex.data.Scripts.move);
+		if (this.dex.data.Scripts.actions) Object.assign(this, this.dex.data.Scripts.actions);
 	}
 	/**
 	 * runMove is the "outside" move caller. It handles deducting PP,

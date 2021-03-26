@@ -1,6 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen8',
-	move: {
+	actions: {
 		// 1 mega per pokemon
 		runMegaEvo(pokemon) {
 			if (pokemon.name === 'Struchni' && pokemon.species.name === 'Aggron') pokemon.canMegaEvo = 'Aggron-Mega';
@@ -190,7 +190,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// In SSB Z-Moves are limited to 1 per pokemon.
 				pokemon.m.zMoveUsed = true;
 			}
-			const moveDidSomething = this.battle.move.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
+			const moveDidSomething = this.battle.actions.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMove', pokemon, target, move);
@@ -1058,7 +1058,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			const actives = this.getAllActive();
-			if (actives.length > 1 && !this.move.isAdjacent(actives[0], actives[1])) {
+			if (actives.length > 1 && !this.actions.isAdjacent(actives[0], actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
 				this.add('-center');
