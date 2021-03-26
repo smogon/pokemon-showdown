@@ -262,7 +262,6 @@ interface ModdedBattleActions {
 		this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove
 	) => boolean[];
 	hitStepTypeImmunity?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[];
-	isAdjacent?: (this: BattleActions, pokemon1: Pokemon, pokemon2: Pokemon) => boolean;
 	moveHit?: (
 		this: BattleActions, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
 		moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean

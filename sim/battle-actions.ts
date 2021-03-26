@@ -1356,12 +1356,6 @@ export class BattleActions {
 		}
 	}
 
-	isAdjacent(pokemon1: Pokemon, pokemon2: Pokemon) {
-		if (pokemon1.fainted || pokemon2.fainted) return false;
-		if (pokemon1.side === pokemon2.side) return Math.abs(pokemon1.position - pokemon2.position) === 1;
-		return Math.abs(pokemon1.position + pokemon2.position + 1 - pokemon1.side.active.length) <= 1;
-	}
-
 	targetTypeChoices(targetType: string) {
 		return CHOOSABLE_TARGETS.has(targetType);
 	}

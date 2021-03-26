@@ -212,7 +212,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				let lacksTarget = !target || target.fainted;
 				if (!lacksTarget) {
 					if (['adjacentFoe', 'adjacentAlly', 'normal', 'randomNormal'].includes(move.target)) {
-						lacksTarget = !this.isAdjacent(target, pokemon);
+						lacksTarget = !target.isNear(pokemon);
 					}
 				}
 				if (lacksTarget && !move.isFutureMove) {

@@ -617,7 +617,7 @@ export class Pokemon {
 	}
 
 	nearbyAllies(): Pokemon[] {
-		return this.allies().filter(ally => this.battle.actions.isAdjacent(this, ally));
+		return this.allies().filter(ally => this.isNear(ally));
 	}
 
 	foes(): Pokemon[] {
@@ -632,7 +632,13 @@ export class Pokemon {
 	}
 
 	nearbyFoes(): Pokemon[] {
-		return this.foes().filter(foe => this.battle.actions.isAdjacent(this, foe));
+		return this.foes().filter(foe => this.isNear(foe));
+	}
+
+	isNear(pokemon2: Pokemon) {
+		if (this.fainted || pokemon2.fainted) return false;
+		if (this.side === pokemon2.side) return Math.abs(this.position - pokemon2.position) === 1;
+		return Math.abs(this.position + pokemon2.position + 1 - this.side.active.length) <= 1;
 	}
 
 	getUndynamaxedHP(amount?: number) {

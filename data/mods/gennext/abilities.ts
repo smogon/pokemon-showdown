@@ -675,7 +675,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.actions.isAdjacent(pokemon, source)) return;
+			if (!source || !pokemon.isNear(source)) return;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles['shadowtag']) {
 				pokemon.maybeTrapped = true;
 			}

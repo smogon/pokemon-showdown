@@ -564,13 +564,13 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		desc: "Prevents adjacent opposing Flying-type Pokémon from choosing to switch out unless they are immune to trapping.",
 		shortDesc: "Prevents adjacent Flying-type foes from choosing to switch.",
 		onFoeTrapPokemon(pokemon) {
-			if (pokemon.hasType('Flying') && this.actions.isAdjacent(pokemon, this.effectData.target)) {
+			if (pokemon.hasType('Flying') && pokemon.isNear(this.effectData.target)) {
 				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.actions.isAdjacent(pokemon, source)) return;
+			if (!source || !pokemon.isNear(source)) return;
 			if (!pokemon.knownType || pokemon.hasType('Flying')) {
 				pokemon.maybeTrapped = true;
 			}
@@ -1286,12 +1286,9 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (pokemon.item) return;
-			const pickupTargets = [];
-			for (const target of this.getAllActive()) {
-				if (target.lastItem && target.usedItemThisTurn && this.actions.isAdjacent(pokemon, target)) {
-					pickupTargets.push(target);
-				}
-			}
+			const pickupTargets = this.getAllActive().filter(target => (
+				target.lastItem && target.usedItemThisTurn && pokemon.isNear(target)
+			));
 			if (!pickupTargets.length) return;
 			const randomTarget = this.sample(pickupTargets);
 			const item = randomTarget.lastItem;
@@ -1563,7 +1560,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		shortDesc: "On switch-in, this Pokémon poisons every Pokémon on the field.",
 		onStart(pokemon) {
 			for (const target of this.getAllActive()) {
-				if (!target || !this.actions.isAdjacent(target, pokemon) || target.status) continue;
+				if (!target.isNear(pokemon) || target.status) continue;
 				if (target.hasAbility('soundproof')) {
 					this.add('-ability', pokemon, 'Acid Rock');
 					this.add('-immune', target, "[from] ability: Soundproof", "[of] " + target);
