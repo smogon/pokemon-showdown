@@ -1358,7 +1358,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	moltresgalar: {
-		randomBattleMoves: ["fierywrath", "hurricane", "nastyplot", "rest", "substitute"],
+		randomBattleMoves: ["fierywrath", "hurricane", "nastyplot", "rest"],
 		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["fierywrath", "hurricane", "nastyplot", "protect"],
 		randomDoubleBattleLevel: 78,
@@ -3780,7 +3780,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	emolga: {
-		randomBattleMoves: ["airslash", "encore", "energyball", "roost", "thunderbolt", "toxic", "voltswitch"],
+		randomBattleMoves: ["airslash", "encore", "energyball", "roost", "thunderbolt", "toxic", "uturn"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["acrobatics", "helpinghand", "nuzzle", "tailwind", "taunt"],
 		randomDoubleBattleLevel: 88,
@@ -4177,7 +4177,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	kyuremwhite: {
-		randomBattleMoves: ["dracometeor", "earthpower", "freezedry", "fusionflare", "icebeam"],
+		randomBattleMoves: ["dracometeor", "earthpower", "freezedry", "fusionflare", "icebeam", "roost"],
 		randomBattleLevel: 72,
 		randomDoubleBattleMoves: ["dracometeor", "dragonpulse", "earthpower", "freezedry", "fusionflare", "icebeam", "protect", "roost"],
 		randomDoubleBattleLevel: 72,
