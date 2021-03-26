@@ -1223,9 +1223,9 @@ export const commands: ChatCommands = {
 
 		if (!this.runBroadcast()) return;
 
-		const includeSecret = !this.broadcasting && user.can('mute', null, room);
+		const showSecret = !this.broadcasting && user.can('mute', null, room);
 
-		const subRooms = room.getSubRooms({includeSecret, includeBattles: !this.broadcasting});
+		const subRooms = room.getSubRooms(showSecret);
 
 		if (!subRooms.length) return this.sendReply(`This room doesn't have any subrooms.`);
 
