@@ -734,7 +734,7 @@ export abstract class BasicRoom {
 		}
 		return message ? `|raw|${message}` : ``;
 	}
-	getSubRooms(opts: {includeBattles?: boolean, includeSecret?: boolean} = {}) {
+	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
 		return [...this.subRooms.values()].filter(
 			room => includeSecret ? true : !room.settings.isPrivate && !room.settings.isPersonal
