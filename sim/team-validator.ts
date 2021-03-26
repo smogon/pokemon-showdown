@@ -1215,7 +1215,7 @@ export class TeamValidator {
 					const baseSpecies = this.dex.getSpecies(species.changesFrom);
 					problems.push(
 						`${name} needs to hold ${species.requiredItems.join(' or ')} to be in its ${species.forme} forme.`,
-						`(It will revert to its ${baseSpecies.baseForme} forme if you remove the item or give it a different item.)`
+						`(It will revert to its ${baseSpecies.baseForme || 'base'} forme if you remove the item or give it a different item.)`
 					);
 				}
 			}
