@@ -41,10 +41,8 @@ const SpecialSetup = [
 const MixedSetup = [
 	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
 ];
-// Moves which boost Speed:
-const SpeedSetup = [
-	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'shiftgear', 'dragondance',
-];
+// Moves which boost Speed by two stages:
+const SpeedTwoStageSetup = ['agility', 'autotomize', 'rockpolish', 'shiftgear'];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion',
@@ -676,7 +674,7 @@ export class RandomTeams {
 			}
 
 			if (MixedSetup.includes(moveid)) counter.mixedsetup++;
-			if (SpeedSetup.includes(moveid)) counter.speedsetup++;
+			if (SpeedTwoStageSetup.includes(moveid)) counter.speedsetup++;
 			if (Hazards.includes(moveid)) counter.hazards++;
 		}
 
