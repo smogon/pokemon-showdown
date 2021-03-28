@@ -54,7 +54,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
-			this.useMove(randomMove, target);
+			this.actions.useMove(randomMove, target);
 		},
 	},
 	sappyseed: {

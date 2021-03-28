@@ -350,7 +350,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					if (!activated) {
 						this.add('-activate', pokemon, 'ability: Trash Compactor');
 						activated = true;
-						this.useMove('stockpile', pokemon);
+						this.actions.useMove('stockpile', pokemon);
 					}
 					pokemon.side.removeSideCondition(sideCondition);
 					this.add('-sideend', pokemon.side, this.dex.getEffect(sideCondition).name, '[from] Ability: Trash Compactor', '[of] ' + pokemon);
@@ -564,13 +564,13 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		desc: "Prevents adjacent opposing Flying-type Pokémon from choosing to switch out unless they are immune to trapping.",
 		shortDesc: "Prevents adjacent Flying-type foes from choosing to switch.",
 		onFoeTrapPokemon(pokemon) {
-			if (pokemon.hasType('Flying') && this.isAdjacent(pokemon, this.effectData.target)) {
+			if (pokemon.hasType('Flying') && pokemon.isAdjacent(this.effectData.target)) {
 				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!source || !pokemon.isAdjacent(source)) return;
 			if (!pokemon.knownType || pokemon.hasType('Flying')) {
 				pokemon.maybeTrapped = true;
 			}
@@ -767,7 +767,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						}
 					} else {
 						this.add('-message', `${(target.illusion ? target.illusion.name : target.name)} suddenly exploded!`);
-						this.useMove('explosion', target, source, this.dex.getAbility('alchemist'));
+						this.actions.useMove('explosion', target, source, this.dex.getAbility('alchemist'));
 					}
 				} else {
 					this.add('-ability', source, 'Alchemist');
@@ -1059,7 +1059,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		desc: "On entry, this Pokémon's type changes to match its first move that's super effective against an adjacent opponent.",
 		shortDesc: "On entry: type changes to match its first move that's super effective against an adjacent opponent.",
 		onStart(pokemon) {
-			const possibleTargets = pokemon.side.foe.active.filter(foeActive => foeActive && this.isAdjacent(pokemon, foeActive));
+			const possibleTargets = pokemon.adjacentFoes();
 			while (possibleTargets.length) {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
@@ -1286,12 +1286,9 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (pokemon.item) return;
-			const pickupTargets = [];
-			for (const target of this.getAllActive()) {
-				if (target.lastItem && target.usedItemThisTurn && this.isAdjacent(pokemon, target)) {
-					pickupTargets.push(target);
-				}
-			}
+			const pickupTargets = this.getAllActive().filter(target => (
+				target.lastItem && target.usedItemThisTurn && pokemon.isAdjacent(target)
+			));
 			if (!pickupTargets.length) return;
 			const randomTarget = this.sample(pickupTargets);
 			const item = randomTarget.lastItem;
@@ -1552,7 +1549,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				if (move.category === 'Special') {
 					source.addVolatile('specialsound');
 				}
-				this.useMove('earthquake', this.effectData.target);
+				this.actions.useMove('earthquake', this.effectData.target);
 			}
 		},
 		name: "Seismic Scream",
@@ -1563,7 +1560,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		shortDesc: "On switch-in, this Pokémon poisons every Pokémon on the field.",
 		onStart(pokemon) {
 			for (const target of this.getAllActive()) {
-				if (!target || !this.isAdjacent(target, pokemon) || target.status) continue;
+				if (!target.isAdjacent(pokemon) || target.status) continue;
 				if (target.hasAbility('soundproof')) {
 					this.add('-ability', pokemon, 'Acid Rock');
 					this.add('-immune', target, "[from] ability: Soundproof", "[of] " + target);
@@ -1869,13 +1866,13 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				data.moveData.isFutureMove = true;
 
 				if (move.category === 'Status') {
-					this.useMove(move, target, data.target);
+					this.actions.useMove(move, target, data.target);
 				} else {
 					const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 					if (data.source.hp) { // the move should still activate, but animating can cause issues depending on the move
 						this.add('-anim', data.source, hitMove, data.target);
 					}
-					this.trySpreadMoveHit([data.target], data.source, hitMove);
+					this.actions.trySpreadMoveHit([data.target], data.source, hitMove);
 				}
 			},
 		},

@@ -1539,7 +1539,7 @@ export const Formats: FormatList = [
 					name: move.name,
 					onStart(this: Battle, pokemon: Pokemon) {
 						this.add('-activate', pokemon, 'ability: ' + move.name);
-						this.useMove(move, pokemon);
+						this.actions.useMove(move, pokemon);
 					},
 					toString() {
 						return "";

@@ -67,6 +67,10 @@ export class Side {
 	activeRequest: AnyObject | null;
 	choice: Choice;
 
+	/**
+	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon
+	 * (this is for Counter and Mirror Move)
+	 */
 	lastMove: Move | null;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
@@ -410,7 +414,7 @@ export class Side {
 
 		// Z-move
 
-		const zMove = megaDynaOrZ === 'zmove' ? this.battle.getZMove(move, pokemon) : undefined;
+		const zMove = megaDynaOrZ === 'zmove' ? this.battle.actions.getZMove(move, pokemon) : undefined;
 		if (megaDynaOrZ === 'zmove' && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
@@ -423,7 +427,7 @@ export class Side {
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
 		const maxMove = (megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax']) ?
-			this.battle.getMaxMove(move, pokemon) : undefined;
+			this.battle.actions.getMaxMove(move, pokemon) : undefined;
 		if (megaDynaOrZ === 'dynamax' && !maxMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
@@ -434,7 +438,7 @@ export class Side {
 
 		if (autoChoose) {
 			targetLoc = 0;
-		} else if (this.battle.targetTypeChoices(targetType)) {
+		} else if (this.battle.actions.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
 				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
 			}

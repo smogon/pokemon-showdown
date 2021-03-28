@@ -197,7 +197,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return;
 				}
 				if (move.volatileStatus && target === source) return;
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage) return null;
 				damage = this.runEvent('SubDamage', target, source, move, damage);
 				if (!damage) return damage;

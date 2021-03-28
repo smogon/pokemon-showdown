@@ -340,7 +340,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.add('-ability', target, 'Carefree');
-			this.useMove(newMove, target, source);
+			this.actions.useMove(newMove, target, source);
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -351,7 +351,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.add('-ability', target, 'Carefree');
-			this.useMove(newMove, this.effectData.target, source);
+			this.actions.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
 		condition: {
@@ -407,7 +407,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.add('-ability', target, 'Magic Hat');
-			this.useMove(newMove, target, source);
+			this.actions.useMove(newMove, target, source);
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -418,7 +418,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.add('-ability', target, 'Magic Hat');
-			this.useMove(newMove, this.effectData.target, source);
+			this.actions.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
 		condition: {
@@ -1869,7 +1869,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.species.id.includes('aggron') && !target.illusion && !target.transformed) {
 					this.boost({atk: 1}, target);
 					if (target.species.name !== 'Aggron') return;
-					this.runMegaEvo(target);
+					this.actions.runMegaEvo(target);
 				}
 			}
 		},

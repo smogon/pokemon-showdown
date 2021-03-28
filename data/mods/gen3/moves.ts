@@ -75,7 +75,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						effectType: 'Move',
 						type: 'Normal',
 					} as unknown as ActiveMove;
-					this.tryMoveHit(target, pokemon, moveData);
+					this.actions.tryMoveHit(target, pokemon, moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
@@ -224,7 +224,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				willCrit: false,
 				type: '???',
 			} as unknown as ActiveMove;
-			const damage = this.getDamage(source, target, moveData, true);
+			const damage = this.actions.getDamage(source, target, moveData, true);
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'doomdesire',
@@ -353,7 +353,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 85,
 		onMoveFail(target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				const damage = this.getDamage(source, target, move, true);
+				const damage = this.actions.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("HJK recoil failed");
 				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 			}
@@ -368,7 +368,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 70,
 		onMoveFail(target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				const damage = this.getDamage(source, target, move, true);
+				const damage = this.actions.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Jump Kick didn't recoil");
 				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 			}
@@ -433,7 +433,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
 				return false;
 			}
-			this.useMove(lastAttackedBy.move, pokemon);
+			this.actions.useMove(lastAttackedBy.move, pokemon);
 		},
 		target: "self",
 	},
@@ -441,7 +441,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 95,
 		onHit(target) {
-			this.useMove('swift', target);
+			this.actions.useMove('swift', target);
 		},
 	},
 	needlearm: {
@@ -513,7 +513,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('cant', pokemon, 'nopp', randomMove.move);
 				return;
 			}
-			this.useMove(randomMove.move, pokemon);
+			this.actions.useMove(randomMove.move, pokemon);
 		},
 	},
 	spiderweb: {
