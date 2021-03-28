@@ -67,7 +67,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			const damage = this.getDamage(pokemon, pokemon, 40);
+			const damage = this.actions.getDamage(pokemon, pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
 			this.directDamage(damage);
 		},

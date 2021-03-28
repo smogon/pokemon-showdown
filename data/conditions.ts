@@ -172,7 +172,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return;
 			}
 			this.activeTarget = pokemon;
-			const damage = this.getDamage(pokemon, pokemon, 40);
+			const damage = this.actions.getDamage(pokemon, pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
 			const activeMove = {id: this.toID('confused'), effectType: 'Move', type: '???'};
 			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
@@ -376,7 +376,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
-			this.trySpreadMoveHit([target], data.source, hitMove, true);
+			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
 		},
 	},
 	healreplacement: {

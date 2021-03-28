@@ -95,7 +95,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					const target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					this.moveHit(target, pokemon, move, {damage: this.effectData.totalDamage * 2} as ActiveMove);
+					this.actions.moveHit(target, pokemon, move, {damage: this.effectData.totalDamage * 2} as ActiveMove);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
@@ -584,7 +584,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!foe?.lastMove || foe.lastMove.id === 'mirrormove') {
 				return false;
 			}
-			this.useMove(foe.lastMove.id, pokemon);
+			this.actions.useMove(foe.lastMove.id, pokemon);
 		},
 	},
 	mist: {
@@ -861,7 +861,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
-				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.getDamage(source, target, move);
+				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.actions.getDamage(source, target, move);
 				if (!uncappedDamage) return null;
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
 				if (!uncappedDamage) return uncappedDamage;

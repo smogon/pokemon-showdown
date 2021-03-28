@@ -143,7 +143,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				flags: {},
 				selfdestruct: move.selfdestruct,
 			} as unknown as ActiveMove;
-			const damage = this.getDamage(pokemon, pokemon, move);
+			const damage = this.actions.getDamage(pokemon, pokemon, move);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
 			this.directDamage(damage);
 			return false;

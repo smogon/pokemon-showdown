@@ -205,6 +205,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly pokemon?: ModdedBattlePokemon;
 	readonly queue?: ModdedBattleQueue;
 	readonly field?: ModdedField;
+	readonly actions?: ModdedBattleActions;
 	readonly cannotMega?: string[];
 	readonly challengeShow?: boolean;
 	readonly searchShow?: boolean;

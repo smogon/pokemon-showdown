@@ -277,7 +277,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('trashcompactor') && !this.field.getPseudoWeather('stickyresidues')) {
 					if (!pokemon.volatiles['stockpile']) {
-						this.useMove('stockpile', pokemon);
+						this.actions.useMove('stockpile', pokemon);
 					}
 					this.add('-sideend', pokemon.side, 'move: G-Max Steelsurge', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('gmaxsteelsurge');
@@ -323,7 +323,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasAbility('trashcompactor') && !this.field.getPseudoWeather('stickyresidues')) {
 					if (!pokemon.volatiles['stockpile']) {
-						this.useMove('stockpile', pokemon);
+						this.actions.useMove('stockpile', pokemon);
 					}
 					this.add('-sideend', pokemon.side, 'move: Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('spikes');
@@ -356,7 +356,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('trashcompactor') && !this.field.getPseudoWeather('stickyresidues')) {
 					if (!pokemon.volatiles['stockpile']) {
-						this.useMove('stockpile', pokemon);
+						this.actions.useMove('stockpile', pokemon);
 					}
 					this.add('-sideend', pokemon.side, 'move: Stealth Rock', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('stealthrock');
@@ -389,7 +389,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasAbility('trashcompactor') && !this.field.getPseudoWeather('stickyresidues')) {
 					if (!pokemon.volatiles['stockpile']) {
-						this.useMove('stockpile', pokemon);
+						this.actions.useMove('stockpile', pokemon);
 					}
 					this.add('-sideend', pokemon.side, 'move: Sticky Web', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('stickyweb');
@@ -429,7 +429,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasAbility('trashcompactor') && !this.field.getPseudoWeather('stickyresidues')) {
 					if (!pokemon.volatiles['stockpile']) {
-						this.useMove('stockpile', pokemon);
+						this.actions.useMove('stockpile', pokemon);
 					}
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
@@ -652,7 +652,7 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 					move = 'triattack';
 				}
 			}
-			this.useMove(move, pokemon, target);
+			this.actions.useMove(move, pokemon, target);
 			return null;
 		},
 	},

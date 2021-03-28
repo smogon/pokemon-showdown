@@ -19,7 +19,7 @@ describe('Z Moves', function () {
 		assert.statStage(chansey, 'atk', -1);
 		battle.makeChoices('auto', 'move taunt');
 
-		assert(battle.canZMove(chansey), `Chansey should be able to use its Z Move`);
+		assert(battle.actions.canZMove(chansey), `Chansey should be able to use its Z Move`);
 		battle.makeChoices('move doubleteam zmove', 'auto'); // Z-Effect: Restores negative stat stages to 0
 		assert.statStage(chansey, 'atk', 0);
 	});
@@ -33,7 +33,7 @@ describe('Z Moves', function () {
 		assert.statStage(chansey, 'atk', -1);
 		battle.makeChoices('auto', 'move taunt');
 
-		assert.false(battle.canZMove(chansey), `Chansey should not be able to use its Z Move`);
+		assert.false(battle.actions.canZMove(chansey), `Chansey should not be able to use its Z Move`);
 		battle.makeChoices('auto', 'auto');
 		assert.statStage(chansey, 'atk', -1);
 		assert.cantMove(() => battle.makeChoices('move doubleteam zmove', ''));
