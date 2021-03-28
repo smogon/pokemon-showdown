@@ -2,58 +2,193 @@ import {Dex, toID} from './dex';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
-const MAX_MOVES: {readonly [k: string]: string} = {
-	Flying: 'Max Airstream',
-	Dark: 'Max Darkness',
-	Fire: 'Max Flare',
-	Bug: 'Max Flutterby',
-	Water: 'Max Geyser',
-	Status: 'Max Guard',
-	Ice: 'Max Hailstorm',
-	Fighting: 'Max Knuckle',
-	Electric: 'Max Lightning',
-	Psychic: 'Max Mindstorm',
-	Poison: 'Max Ooze',
-	Grass: 'Max Overgrowth',
-	Ghost: 'Max Phantasm',
-	Ground: 'Max Quake',
-	Rock: 'Max Rockfall',
-	Fairy: 'Max Starfall',
-	Steel: 'Max Steelspike',
-	Normal: 'Max Strike',
-	Dragon: 'Max Wyrmwind',
-};
-
-const Z_MOVES: {readonly [k: string]: string} = {
-	Poison: "Acid Downpour",
-	Fighting: "All-Out Pummeling",
-	Dark: "Black Hole Eclipse",
-	Grass: "Bloom Doom",
-	Normal: "Breakneck Blitz",
-	Rock: "Continental Crush",
-	Steel: "Corkscrew Crash",
-	Dragon: "Devastating Drake",
-	Electric: "Gigavolt Havoc",
-	Water: "Hydro Vortex",
-	Fire: "Inferno Overdrive",
-	Ghost: "Never-Ending Nightmare",
-	Bug: "Savage Spin-Out",
-	Psychic: "Shattered Psyche",
-	Ice: "Subzero Slammer",
-	Flying: "Supersonic Skystrike",
-	Ground: "Tectonic Rage",
-	Fairy: "Twinkle Tackle",
-};
-
 export class BattleActions {
 	battle: Battle;
 	dex: ModdedDex;
+
+	readonly MAX_MOVES: {readonly [k: string]: string} = {
+		Flying: 'Max Airstream',
+		Dark: 'Max Darkness',
+		Fire: 'Max Flare',
+		Bug: 'Max Flutterby',
+		Water: 'Max Geyser',
+		Status: 'Max Guard',
+		Ice: 'Max Hailstorm',
+		Fighting: 'Max Knuckle',
+		Electric: 'Max Lightning',
+		Psychic: 'Max Mindstorm',
+		Poison: 'Max Ooze',
+		Grass: 'Max Overgrowth',
+		Ghost: 'Max Phantasm',
+		Ground: 'Max Quake',
+		Rock: 'Max Rockfall',
+		Fairy: 'Max Starfall',
+		Steel: 'Max Steelspike',
+		Normal: 'Max Strike',
+		Dragon: 'Max Wyrmwind',
+	};
+
+	readonly Z_MOVES: {readonly [k: string]: string} = {
+		Poison: "Acid Downpour",
+		Fighting: "All-Out Pummeling",
+		Dark: "Black Hole Eclipse",
+		Grass: "Bloom Doom",
+		Normal: "Breakneck Blitz",
+		Rock: "Continental Crush",
+		Steel: "Corkscrew Crash",
+		Dragon: "Devastating Drake",
+		Electric: "Gigavolt Havoc",
+		Water: "Hydro Vortex",
+		Fire: "Inferno Overdrive",
+		Ghost: "Never-Ending Nightmare",
+		Bug: "Savage Spin-Out",
+		Psychic: "Shattered Psyche",
+		Ice: "Subzero Slammer",
+		Flying: "Supersonic Skystrike",
+		Ground: "Tectonic Rage",
+		Fairy: "Twinkle Tackle",
+	};
+
 	constructor(battle: Battle) {
 		this.battle = battle;
 		this.dex = battle.dex;
 		if (this.dex.data.Scripts.actions) Object.assign(this, this.dex.data.Scripts.actions);
 		if (battle.format.actions) Object.assign(this, battle.format.actions);
 	}
+
+	// #region SWITCH
+	// ==================================================================
+
+	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {
+		if (!pokemon || pokemon.isActive) {
+			this.battle.hint("A switch failed because the Pokémon trying to switch in is already in.");
+			return false;
+		}
+
+		const side = pokemon.side;
+		if (pos >= side.active.length) {
+			throw new Error(`Invalid switch position ${pos} / ${side.active.length}`);
+		}
+		const oldActive = side.active[pos];
+		const unfaintedActive = oldActive?.hp ? oldActive : null;
+		if (unfaintedActive) {
+			oldActive.beingCalledBack = true;
+			let switchCopyFlag = false;
+			if (sourceEffect && (sourceEffect as Move).selfSwitch === 'copyvolatile') {
+				switchCopyFlag = true;
+			}
+			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
+				this.battle.runEvent('BeforeSwitchOut', oldActive);
+				if (this.battle.gen >= 5) {
+					this.battle.eachEvent('Update');
+				}
+			}
+			oldActive.skipBeforeSwitchOutEventFlag = false;
+			if (!this.battle.runEvent('SwitchOut', oldActive)) {
+				// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
+				// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
+				// use the 'trapped' flag instead.
+
+				// Note: Nothing in the real games can interrupt a switch-out (except Pursuit KOing,
+				// which is handled elsewhere); this is just for custom formats.
+				return false;
+			}
+			if (!oldActive.hp) {
+				// a pokemon fainted from Pursuit before it could switch
+				return 'pursuitfaint';
+			}
+
+			// will definitely switch out at this point
+
+			oldActive.illusion = null;
+			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
+
+			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
+			this.battle.queue.cancelAction(oldActive);
+
+			let newMove = null;
+			if (this.battle.gen === 4 && sourceEffect) {
+				newMove = oldActive.lastMove;
+			}
+			if (switchCopyFlag) {
+				pokemon.copyVolatileFrom(oldActive);
+			}
+			if (newMove) pokemon.lastMove = newMove;
+			oldActive.clearVolatile();
+		}
+		if (oldActive) {
+			oldActive.isActive = false;
+			oldActive.isStarted = false;
+			oldActive.usedItemThisTurn = false;
+			oldActive.position = pokemon.position;
+			pokemon.position = pos;
+			side.pokemon[pokemon.position] = pokemon;
+			side.pokemon[oldActive.position] = oldActive;
+		}
+		pokemon.isActive = true;
+		side.active[pos] = pokemon;
+		pokemon.activeTurns = 0;
+		pokemon.activeMoveActions = 0;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
+		}
+		this.battle.runEvent('BeforeSwitchIn', pokemon);
+		this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
+		pokemon.abilityOrder = this.battle.abilityOrder++;
+		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
+		if (sourceEffect) this.battle.log[this.battle.log.length - 1] += `|[from]${sourceEffect.fullname}`;
+		pokemon.previouslySwitchedIn++;
+
+		if (isDrag && this.battle.gen >= 5) {
+			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
+			this.battle.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
+			this.runSwitch(pokemon);
+		} else {
+			this.battle.queue.insertChoice({choice: 'runUnnerve', pokemon});
+			this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
+		}
+
+		return true;
+	}
+	dragIn(side: Side, pos: number) {
+		const pokemon = this.battle.getRandomSwitchable(side);
+		if (!pokemon || pokemon.isActive) return false;
+		const oldActive = side.active[pos];
+		if (!oldActive) throw new Error(`nothing to drag out`);
+		if (!oldActive.hp) return false;
+
+		if (!this.battle.runEvent('DragOut', oldActive)) {
+			return false;
+		}
+		if (!this.switchIn(pokemon, pos, null, true)) return false;
+		return true;
+	}
+	runSwitch(pokemon: Pokemon) {
+		this.battle.runEvent('Swap', pokemon);
+		this.battle.runEvent('SwitchIn', pokemon);
+		if (this.battle.gen <= 2 && !pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
+			this.battle.runEvent('AfterSwitchInSelf', pokemon);
+		}
+		if (!pokemon.hp) return false;
+		pokemon.isStarted = true;
+		if (!pokemon.fainted) {
+			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
+			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
+		}
+		if (this.battle.gen === 4) {
+			for (const foeActive of pokemon.side.foe.active) {
+				foeActive.removeVolatile('substitutebroken');
+			}
+		}
+		pokemon.draggedIn = null;
+		return true;
+	}
+
+	// #endregion
+
+	// #region MOVES
+	// ==================================================================
+
 	/**
 	 * runMove is the "outside" move caller. It handles deducting PP,
 	 * flinching, full paralysis, etc. All the stuff up to and including
@@ -1165,7 +1300,7 @@ export class BattleActions {
 				if (move.category === "Status") {
 					return move.name;
 				} else if (move.zMove?.basePower) {
-					return Z_MOVES[move.type];
+					return this.Z_MOVES[move.type];
 				}
 			}
 		}
@@ -1187,7 +1322,7 @@ export class BattleActions {
 			zMove.isZOrMaxPowered = true;
 			return zMove;
 		}
-		const zMove = this.dex.getActiveMove(Z_MOVES[move.type]);
+		const zMove = this.dex.getActiveMove(this.Z_MOVES[move.type]);
 		zMove.basePower = move.zMove!.basePower!;
 		zMove.category = move.category;
 		// copy the priority for Quick Guard
@@ -1229,31 +1364,6 @@ export class BattleActions {
 		if (atLeastOne && !mustStruggle) return zMoves;
 	}
 
-	canMegaEvo(pokemon: Pokemon) {
-		const species = pokemon.baseSpecies;
-		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
-		const item = pokemon.getItem();
-		// Mega Rayquaza
-		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('standardnatdex')) &&
-			altForme?.isMega && altForme?.requiredMove &&
-			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
-			return altForme.name;
-		}
-		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
-		if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
-			return item.megaStone;
-		}
-		return null;
-	}
-
-	canUltraBurst(pokemon: Pokemon) {
-		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseSpecies.name) &&
-			pokemon.getItem().id === 'ultranecroziumz') {
-			return "Necrozma-Ultra";
-		}
-		return null;
-	}
-
 	getMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.getMove(move);
 		if (move.name === 'Struggle') return move;
@@ -1261,14 +1371,14 @@ export class BattleActions {
 			const gMaxMove = this.dex.getMove(pokemon.canGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
 		}
-		const maxMove = this.dex.getMove(MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
+		const maxMove = this.dex.getMove(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
 		if (maxMove.exists) return maxMove;
 	}
 
 	getActiveMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 		if (move.name === 'Struggle') return this.dex.getActiveMove(move);
-		let maxMove = this.dex.getActiveMove(MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
+		let maxMove = this.dex.getActiveMove(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
 		if (move.category !== 'Status') {
 			if (pokemon.gigantamax && pokemon.canGigantamax) {
 				const gMaxMove = this.dex.getActiveMove(pokemon.canGigantamax);
@@ -1285,34 +1395,6 @@ export class BattleActions {
 		maxMove.priority = move.priority;
 		maxMove.isZOrMaxPowered = true;
 		return maxMove;
-	}
-
-	runMegaEvo(pokemon: Pokemon) {
-		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
-		if (!speciesid) return false;
-		const side = pokemon.side;
-
-		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of side.foe.active) {
-			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
-				return false;
-			}
-		}
-
-		pokemon.formeChange(speciesid, pokemon.getItem(), true);
-
-		// Limit one mega evolution
-		const wasMega = pokemon.canMegaEvo;
-		for (const ally of side.pokemon) {
-			if (wasMega) {
-				ally.canMegaEvo = null;
-			} else {
-				ally.canUltraBurst = null;
-			}
-		}
-
-		this.battle.runEvent('AfterMega', pokemon);
-		return true;
 	}
 
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
@@ -1612,4 +1694,64 @@ export class BattleActions {
 		// ...but 16-bit truncation happens even later, and can truncate to 0
 		return tr(baseDamage, 16);
 	}
+
+	// #endregion
+
+	// #region MEGA EVOLUTION
+	// ==================================================================
+
+	canMegaEvo(pokemon: Pokemon) {
+		const species = pokemon.baseSpecies;
+		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
+		const item = pokemon.getItem();
+		// Mega Rayquaza
+		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('standardnatdex')) &&
+			altForme?.isMega && altForme?.requiredMove &&
+			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+			return altForme.name;
+		}
+		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
+		if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
+			return item.megaStone;
+		}
+		return null;
+	}
+
+	canUltraBurst(pokemon: Pokemon) {
+		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseSpecies.name) &&
+			pokemon.getItem().id === 'ultranecroziumz') {
+			return "Necrozma-Ultra";
+		}
+		return null;
+	}
+
+	runMegaEvo(pokemon: Pokemon) {
+		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+		if (!speciesid) return false;
+		const side = pokemon.side;
+
+		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
+		for (const foeActive of side.foe.active) {
+			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
+				return false;
+			}
+		}
+
+		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+
+		// Limit one mega evolution
+		const wasMega = pokemon.canMegaEvo;
+		for (const ally of side.pokemon) {
+			if (wasMega) {
+				ally.canMegaEvo = null;
+			} else {
+				ally.canUltraBurst = null;
+			}
+		}
+
+		this.battle.runEvent('AfterMega', pokemon);
+		return true;
+	}
+
+	// #endregion
 }

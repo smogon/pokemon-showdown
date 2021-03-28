@@ -102,7 +102,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.category === "Status") {
 					return move.name;
 				} else if (move.zMove?.basePower) {
-					return this.battle.zMoveTable[move.type];
+					return this.Z_MOVES[move.type];
 				}
 			}
 		},

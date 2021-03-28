@@ -128,9 +128,6 @@ export class Battle {
 
 	readonly hints: Set<string>;
 
-	readonly zMoveTable: {[k: string]: string};
-	readonly maxMoveTable: {[k: string]: string};
-
 	readonly NOT_FAIL: '';
 	readonly HIT_SUBSTITUTE: 0;
 	readonly FAIL: false;
@@ -151,8 +148,6 @@ export class Battle {
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.getRuleTable(format);
 
-		this.zMoveTable = {};
-		this.maxMoveTable = {};
 		this.trunc = this.dex.trunc;
 		this.clampIntRange = Utils.clampIntRange;
 		// Object.assign(this, this.dex.data.Scripts);
@@ -1248,119 +1243,6 @@ export class Battle {
 		return true;
 	}
 
-	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {
-		if (!pokemon || pokemon.isActive) {
-			this.hint("A switch failed because the Pokémon trying to switch in is already in.");
-			return false;
-		}
-
-		const side = pokemon.side;
-		if (pos >= side.active.length) {
-			console.log(this.getDebugLog());
-			throw new Error(`Invalid switch position ${pos} / ${side.active.length}`);
-		}
-		const oldActive = side.active[pos];
-		const unfaintedActive = oldActive?.hp ? oldActive : null;
-		if (unfaintedActive) {
-			oldActive.beingCalledBack = true;
-			let switchCopyFlag = false;
-			if (sourceEffect && (sourceEffect as Move).selfSwitch === 'copyvolatile') {
-				switchCopyFlag = true;
-			}
-			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
-				this.runEvent('BeforeSwitchOut', oldActive);
-				if (this.gen >= 5) {
-					this.eachEvent('Update');
-				}
-			}
-			oldActive.skipBeforeSwitchOutEventFlag = false;
-			if (!this.runEvent('SwitchOut', oldActive)) {
-				// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
-				// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
-				// use the 'trapped' flag instead.
-
-				// Note: Nothing in the real games can interrupt a switch-out (except Pursuit KOing,
-				// which is handled elsewhere); this is just for custom formats.
-				return false;
-			}
-			if (!oldActive.hp) {
-				// a pokemon fainted from Pursuit before it could switch
-				return 'pursuitfaint';
-			}
-
-			// will definitely switch out at this point
-
-			oldActive.illusion = null;
-			this.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
-
-			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
-			this.queue.cancelAction(oldActive);
-
-			let newMove = null;
-			if (this.gen === 4 && sourceEffect) {
-				newMove = oldActive.lastMove;
-			}
-			if (switchCopyFlag) {
-				pokemon.copyVolatileFrom(oldActive);
-			}
-			if (newMove) pokemon.lastMove = newMove;
-			oldActive.clearVolatile();
-		}
-		if (oldActive) {
-			oldActive.isActive = false;
-			oldActive.isStarted = false;
-			oldActive.usedItemThisTurn = false;
-			oldActive.position = pokemon.position;
-			pokemon.position = pos;
-			side.pokemon[pokemon.position] = pokemon;
-			side.pokemon[oldActive.position] = oldActive;
-		}
-		pokemon.isActive = true;
-		side.active[pos] = pokemon;
-		pokemon.activeTurns = 0;
-		pokemon.activeMoveActions = 0;
-		for (const moveSlot of pokemon.moveSlots) {
-			moveSlot.used = false;
-		}
-		this.runEvent('BeforeSwitchIn', pokemon);
-		this.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
-		pokemon.abilityOrder = this.abilityOrder++;
-		if (isDrag && this.gen === 2) pokemon.draggedIn = this.turn;
-		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
-		pokemon.previouslySwitchedIn++;
-
-		if (isDrag && this.gen >= 5) {
-			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
-			this.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
-			this.runSwitch(pokemon);
-		} else {
-			this.queue.insertChoice({choice: 'runUnnerve', pokemon});
-			this.queue.insertChoice({choice: 'runSwitch', pokemon});
-		}
-
-		return true;
-	}
-	runSwitch(pokemon: Pokemon) {
-		this.runEvent('Swap', pokemon);
-		this.runEvent('SwitchIn', pokemon);
-		if (this.gen <= 2 && !pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.turn) {
-			this.runEvent('AfterSwitchInSelf', pokemon);
-		}
-		if (!pokemon.hp) return false;
-		pokemon.isStarted = true;
-		if (!pokemon.fainted) {
-			this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
-			this.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
-		}
-		if (this.gen === 4) {
-			for (const foeActive of pokemon.side.foe.active) {
-				foeActive.removeVolatile('substitutebroken');
-			}
-		}
-		pokemon.draggedIn = null;
-		return true;
-	}
-
 	canSwitch(side: Side) {
 		return this.possibleSwitches(side).length;
 	}
@@ -1379,20 +1261,6 @@ export class Battle {
 			}
 		}
 		return canSwitchIn;
-	}
-
-	dragIn(side: Side, pos: number) {
-		const pokemon = this.getRandomSwitchable(side);
-		if (!pokemon || pokemon.isActive) return false;
-		const oldActive = side.active[pos];
-		if (!oldActive) throw new Error(`nothing to drag out`);
-		if (!oldActive.hp) return false;
-
-		if (!this.runEvent('DragOut', oldActive)) {
-			return false;
-		}
-		if (!this.switchIn(pokemon, pos, null, true)) return false;
-		return true;
 	}
 
 	swapPosition(pokemon: Pokemon, slot: number, attributes?: string) {
@@ -2329,7 +2197,7 @@ export class Battle {
 			this.add('start');
 			for (const side of this.sides) {
 				for (let pos = 0; pos < side.active.length; pos++) {
-					this.switchIn(side.pokemon[pos], pos);
+					this.actions.switchIn(side.pokemon[pos], pos);
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
@@ -2382,7 +2250,7 @@ export class Battle {
 			if (action.choice === 'switch' && action.pokemon.status && this.dex.data.Abilities.naturalcure) {
 				this.singleEvent('CheckShow', this.dex.getAbility('naturalcure'), null, action.pokemon);
 			}
-			if (this.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
+			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
 				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
 					// in gen 2-4, the switch still happens
@@ -2401,7 +2269,7 @@ export class Battle {
 			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityData, action.pokemon);
 			break;
 		case 'runSwitch':
-			this.runSwitch(action.pokemon);
+			this.actions.runSwitch(action.pokemon);
 			break;
 		case 'runPrimal':
 			if (!action.pokemon.transformed) {
@@ -2432,7 +2300,7 @@ export class Battle {
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
 				if (pokemon.forceSwitchFlag) {
-					if (pokemon.hp) this.dragIn(pokemon.side, pokemon.position);
+					if (pokemon.hp) this.actions.dragIn(pokemon.side, pokemon.position);
 					pokemon.forceSwitchFlag = false;
 				}
 			}

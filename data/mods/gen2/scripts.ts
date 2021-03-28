@@ -455,7 +455,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (target && target.hp > 0 && pokemon.hp > 0 && moveData.forceSwitch && this.battle.canSwitch(target.side)) {
 				hitResult = this.battle.runEvent('DragOut', target, pokemon, move);
 				if (hitResult) {
-					this.battle.dragIn(target.side, target.position);
+					this.dragIn(target.side, target.position);
 				} else if (hitResult === false) {
 					this.battle.add('-fail', target);
 				}
