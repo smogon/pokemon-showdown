@@ -152,6 +152,10 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly heightm: number;
 	/** Color. */
 	readonly color: string;
+	/** Tags, miscellaneous data.
+	* This just checks if a Pokemon has some sort of Legendary or Mythical status right now though.
+	*/
+	readonly tags?: string[];
 	/** Does this Pokemon have an unreleased hidden ability? */
 	readonly unreleasedHidden: boolean | 'Past';
 	/**
