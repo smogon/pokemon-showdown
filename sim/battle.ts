@@ -14,13 +14,6 @@ import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
 
-/** A Pokemon that has fainted. */
-interface FaintedPokemon {
-	target: Pokemon;
-	source: Pokemon | null;
-	effect: Effect | null;
-}
-
 interface BattleOptions {
 	format?: Format;
 	formatid: ID;
@@ -91,7 +84,11 @@ export class Battle {
 
 	actions: BattleActions;
 	queue: BattleQueue;
-	readonly faintQueue: FaintedPokemon[];
+	readonly faintQueue: {
+		target: Pokemon,
+		source: Pokemon | null,
+		effect: Effect | null,
+	}[];
 
 	readonly log: string[];
 	readonly inputLog: string[];
@@ -1400,7 +1397,7 @@ export class Battle {
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			const actives = this.getAllActive();
-			if (actives.length > 1 && !actives[0].isNear(actives[1])) {
+			if (actives.length > 1 && !actives[0].isAdjacent(actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
 				this.add('-center');
@@ -1959,14 +1956,6 @@ export class Battle {
 		return this.validTargetLoc(this.getTargetLoc(target, source), source, targetType);
 	}
 
-	getAtLoc(pokemon: Pokemon, targetLoc: number) {
-		if (targetLoc > 0) {
-			return pokemon.side.foe.active[targetLoc - 1];
-		} else {
-			return pokemon.side.active[-targetLoc - 1];
-		}
-	}
-
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon) {
 		move = this.dex.getMove(move);
 
@@ -1981,7 +1970,7 @@ export class Battle {
 
 		// banning Dragon Darts from directly targeting itself is done in side.ts, but
 		// Dragon Darts can target itself if Ally Switch is used afterwards
-		if (move.smartTarget) return this.getAtLoc(pokemon, targetLoc);
+		if (move.smartTarget) return pokemon.getAtLoc(targetLoc);
 
 		// Fails if the target is the user and the move can't target its own position
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1) &&
@@ -1989,7 +1978,7 @@ export class Battle {
 			return move.isFutureMove ? pokemon : null;
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
-			const target = this.getAtLoc(pokemon, targetLoc);
+			const target = pokemon.getAtLoc(targetLoc);
 			if (target?.fainted && target.side === pokemon.side) {
 				// Target is a fainted ally: attack shouldn't retarget
 				return target;

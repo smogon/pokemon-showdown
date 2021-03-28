@@ -172,7 +172,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	intimidate: {
 		inherit: true,
 		onStart(pokemon) {
-			const activated = pokemon.nearbyFoes().some(target => (
+			const activated = pokemon.adjacentFoes().some(target => (
 				!(target.volatiles['substitute'] || target.volatiles['substitutebroken']?.move === 'uturn')
 			));
 
@@ -182,7 +182,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.nearbyFoes()) {
+			for (const target of pokemon.adjacentFoes()) {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else if (target.volatiles['substitutebroken']?.move === 'uturn') {

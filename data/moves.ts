@@ -5038,7 +5038,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.side.active.length === 1) {
 				return;
 			}
-			for (const ally of target.nearbyAllies()) {
+			for (const ally of target.adjacentAllies()) {
 				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
 			}
 		},
@@ -5046,7 +5046,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.side.active.length === 1) {
 				return;
 			}
-			for (const ally of target.nearbyAllies()) {
+			for (const ally of target.adjacentAllies()) {
 				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
 			}
 		},

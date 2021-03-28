@@ -616,8 +616,8 @@ export class Pokemon {
 		return allies.filter(ally => ally && !ally.fainted);
 	}
 
-	nearbyAllies(): Pokemon[] {
-		return this.allies().filter(ally => this.isNear(ally));
+	adjacentAllies(): Pokemon[] {
+		return this.allies().filter(ally => this.isAdjacent(ally));
 	}
 
 	foes(): Pokemon[] {
@@ -631,11 +631,11 @@ export class Pokemon {
 		return foes.filter(foe => foe && !foe.fainted);
 	}
 
-	nearbyFoes(): Pokemon[] {
-		return this.foes().filter(foe => this.isNear(foe));
+	adjacentFoes(): Pokemon[] {
+		return this.foes().filter(foe => this.isAdjacent(foe));
 	}
 
-	isNear(pokemon2: Pokemon) {
+	isAdjacent(pokemon2: Pokemon) {
 		if (this.fainted || pokemon2.fainted) return false;
 		if (this.side === pokemon2.side) return Math.abs(this.position - pokemon2.position) === 1;
 		return Math.abs(this.position + pokemon2.position + 1 - this.side.active.length) <= 1;
@@ -651,7 +651,7 @@ export class Pokemon {
 
 	/** Get targets for Dragon Darts */
 	getSmartTargets(target: Pokemon, move: ActiveMove) {
-		const target2 = target.nearbyAllies()[0];
+		const target2 = target.adjacentAllies()[0];
 		if (!target2 || target2 === this || !target2.hp) {
 			move.smartTarget = false;
 			return [target];
@@ -661,6 +661,14 @@ export class Pokemon {
 			return [target2];
 		}
 		return [target, target2];
+	}
+
+	getAtLoc(targetLoc: number) {
+		if (targetLoc > 0) {
+			return this.side.foe.active[targetLoc - 1];
+		} else {
+			return this.side.active[-targetLoc - 1];
+		}
 	}
 
 	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
@@ -682,10 +690,10 @@ export class Pokemon {
 			}
 			break;
 		case 'allAdjacent':
-			targets.push(...this.nearbyAllies());
+			targets.push(...this.adjacentAllies());
 			// falls through
 		case 'allAdjacentFoes':
-			targets.push(...this.nearbyFoes());
+			targets.push(...this.adjacentFoes());
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}
