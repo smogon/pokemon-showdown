@@ -47532,7 +47532,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		eventData: [
 			{generation: 4, level: 70, shiny: 1, moves: ["scaryface", "lavaplume", "firespin", "ironhead"]},
 			{generation: 4, level: 50, shiny: 1, moves: ["metalsound", "crunch", "scaryface", "lavaplume"]},
-			{generation: 4, level: 50, nature: "Quiet", moves: ["eruption", "magmastorm", "earthpower", "ancientpower"], pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Quiet", moves: ["eruption", "magmastorm", "earthpower", "ancientpower"], pokeball: "pokeball"},
 			{generation: 5, level: 68, shiny: 1, moves: ["scaryface", "lavaplume", "firespin", "ironhead"]},
 			{generation: 6, level: 50, shiny: 1, moves: ["metalsound", "crunch", "scaryface", "lavaplume"]},
 			{generation: 7, level: 60, shiny: 1, moves: ["crunch", "scaryface", "lavaplume", "firespin"]},
