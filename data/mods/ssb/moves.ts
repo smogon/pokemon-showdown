@@ -3407,7 +3407,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Perish Song
 	trickery: {
-		accuracy: 85,
+		accuracy: 90,
 		basePower: 100,
 		category: "Physical",
 		desc: "Changes the target's item to something random.",
