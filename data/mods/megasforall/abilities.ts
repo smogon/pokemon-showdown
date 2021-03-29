@@ -301,8 +301,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		shortDesc: "Summons hail on switch-in. If foe has a supereffective or OHKO move, summons rain.",
 		onStart(source) {
 			this.field.setWeather('hail');
-			for (const target of source.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of source.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
 					if (move.category === 'Status') continue;
@@ -320,8 +319,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		onAnySwitchIn(pokemon) {
 			const source = this.effectData.target;
 			if (pokemon === source) return;
-			for (const target of source.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of source.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
 					if (move.category === 'Status') continue;
@@ -1266,8 +1264,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			let totalatk = 0;
 			let totalspa = 0;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				totalatk += target.getStat('atk', false, true);
 				totalspa += target.getStat('spa', false, true);
 			}

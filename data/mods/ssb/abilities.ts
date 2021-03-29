@@ -1641,13 +1641,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			let totalatk = 0;
 			let totalspa = 0;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				totalatk += target.getStat('atk', false, true);
 				totalspa += target.getStat('spa', false, true);
 			}
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				this.add('-ability', pokemon, 'BURN IT DOWN!');
 				if (totalatk && totalatk >= totalspa) {
 					this.boost({atk: -1}, target, pokemon, null, true);

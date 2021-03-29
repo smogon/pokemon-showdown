@@ -7,11 +7,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.name === 'Raj.Shoot' && pokemon.species.name === 'Charizard') pokemon.canMegaEvo = 'Charizard-Mega-X';
 			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 			if (!speciesid) return false;
-			const side = pokemon.side;
 
 			// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-			for (const foeActive of side.foe.active) {
-				if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
+			for (const foeActive of pokemon.foes()) {
+				if (foeActive.volatiles['skydrop']?.source === pokemon) {
 					return false;
 				}
 			}
@@ -1013,8 +1012,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// canceling switches would leak information
 				// if a foe might have a trapping ability
 				if (this.gen > 2) {
-					for (const source of pokemon.side.foe.active) {
-						if (!source || source.fainted) continue;
+					for (const source of pokemon.foes()) {
 						const species = (source.illusion || source).species;
 						if (!species.abilities) continue;
 						for (const abilitySlot in species.abilities) {

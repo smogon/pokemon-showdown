@@ -605,7 +605,7 @@ export class Pokemon {
 		});
 	}
 
-	allies(): Pokemon[] {
+	alliesAndSelf(): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
@@ -616,8 +616,12 @@ export class Pokemon {
 		return allies.filter(ally => ally && !ally.fainted);
 	}
 
+	allies(): Pokemon[] {
+		return this.alliesAndSelf().filter(ally => ally !== this);
+	}
+
 	adjacentAllies(): Pokemon[] {
-		return this.allies().filter(ally => this.isAdjacent(ally));
+		return this.alliesAndSelf().filter(ally => this.isAdjacent(ally));
 	}
 
 	foes(): Pokemon[] {
@@ -680,7 +684,7 @@ export class Pokemon {
 		case 'allySide':
 		case 'allyTeam':
 			if (!move.target.startsWith('foe')) {
-				targets.push(...this.allies());
+				targets.push(...this.alliesAndSelf());
 			}
 			if (!move.target.startsWith('ally')) {
 				targets.push(...this.foes());
@@ -699,7 +703,7 @@ export class Pokemon {
 			}
 			break;
 		case 'allies':
-			targets = this.allies();
+			targets = this.alliesAndSelf();
 			break;
 		default:
 			const selectedTarget = target;

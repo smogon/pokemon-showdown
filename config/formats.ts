@@ -1402,11 +1402,9 @@ export const Formats: FormatList = [
 		},
 		field: {
 			suppressingWeather() {
-				for (const side of this.battle.sides) {
-					for (const pokemon of side.active) {
-						if (pokemon && !pokemon.ignoringAbility() && pokemon.hasAbility('Cloud Nine')) {
-							return true;
-						}
+				for (const pokemon of this.battle.getAllActive()) {
+					if (pokemon && !pokemon.ignoringAbility() && pokemon.hasAbility('Cloud Nine')) {
+						return true;
 					}
 				}
 				return false;
