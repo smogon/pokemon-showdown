@@ -5035,17 +5035,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target, source, move) {
-			if (target.side.active.length === 1) {
-				return;
-			}
 			for (const ally of target.adjacentAllies()) {
 				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
-			if (target.side.active.length === 1) {
-				return;
-			}
 			for (const ally of target.adjacentAllies()) {
 				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
 			}
@@ -5954,11 +5948,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			for (const pokemon of side.active) {
 				if (
 					pokemon.hasAbility(['plus', 'minus']) &&
-					(!pokemon.volatiles['maxguard'] ||
-					  this.runEvent('TryHit', pokemon, source, move))
-				  ) {
+					(!pokemon.volatiles['maxguard'] || this.runEvent('TryHit', pokemon, source, move))
+				) {
 					targets.push(pokemon);
-				  }
+				}
 			}
 			if (!targets.length) return false;
 			let didSomething = false;
@@ -6154,7 +6147,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Butterfree",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					const result = this.random(3);
 					if (result === 0) {
 						pokemon.trySetStatus('slp', source);
@@ -6223,7 +6216,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Centiskorch",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Centiferno'));
 				}
 			},
@@ -6246,7 +6239,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Machamp",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					pokemon.addVolatile('gmaxchistrike');
 				}
 			},
@@ -6288,7 +6281,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Eevee",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('attract');
 				}
 			},
@@ -6311,7 +6304,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Duraludon",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					let move: Move | ActiveMove | null = pokemon.lastMove;
 					if (!move || move.isZ) continue;
 					if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
@@ -6360,7 +6353,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Alcremie",
 		self: {
 			onHit(target, source, move) {
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.heal(pokemon.maxhp / 6, pokemon, source, move);
 				}
 			},
@@ -6400,7 +6393,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Kingler",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({spe: -2}, pokemon);
 				}
 			},
@@ -6423,7 +6416,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Meowth",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('confusion');
 				}
 			},
@@ -6481,7 +6474,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Garbodor",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.trySetStatus('psn', source);
 				}
 			},
@@ -6503,7 +6496,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Melmetal",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					if (!pokemon.volatiles['dynamax']) pokemon.addVolatile('torment');
 				}
 			},
@@ -6559,8 +6552,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (this.random(2) === 0) return;
-				for (const pokemon of source.side.active) {
-					if (!pokemon.hp || pokemon.item) continue;
+				for (const pokemon of source.alliesAndSelf()) {
+					if (pokemon.item) continue;
 
 					if (pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
 						const item = pokemon.lastItem;
@@ -6608,7 +6601,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Sandaconda",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Sandblast'));
 				}
 			},
@@ -6631,7 +6624,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Hatterene",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('confusion', source);
 				}
 			},
@@ -6738,7 +6731,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Toxtricity",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					const result = this.random(2);
 					if (result === 0) {
 						pokemon.trySetStatus('par', source);
@@ -6789,7 +6782,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Flapple",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({evasion: -1}, pokemon);
 				}
 			},
@@ -6812,7 +6805,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Gengar",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('trapped', source, null, 'trapper');
 				}
 			},

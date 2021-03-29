@@ -159,11 +159,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		runMegaEvo(pokemon) {
 			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 			if (!speciesid) return false;
-			const side = pokemon.side;
 
 			// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-			for (const foeActive of side.foe.active) {
-				if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
+			for (const foeActive of pokemon.foes()) {
+				if (foeActive.volatiles['skydrop']?.source === pokemon) {
 					return false;
 				}
 			}
@@ -175,7 +174,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Limit one mega evolution
 			const wasMega = pokemon.canMegaEvo;
-			for (const ally of side.pokemon) {
+			for (const ally of pokemon.alliesAndSelf()) {
 				if (wasMega) {
 					ally.canMegaEvo = null;
 				} else {

@@ -61,8 +61,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			if (this.randomChance(1, 10)) {
-				for (const foe of source.side.foe.active) {
-					if (!foe || foe.fainted) continue;
+				for (const foe of source.foes()) {
 					foe.trySetStatus('brn', source);
 				}
 			}
@@ -4207,8 +4206,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(source) {
 				let totalatk = 0;
 				let totalspa = 0;
-				for (const target of source.side.foe.active) {
-					if (!target || target.fainted) continue;
+				for (const target of source.foes()) {
 					totalatk += target.getStat('atk', false, true);
 					totalspa += target.getStat('spa', false, true);
 					if (totalatk && totalatk >= totalspa) {

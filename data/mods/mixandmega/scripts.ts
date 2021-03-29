@@ -24,11 +24,10 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// @ts-ignore
 			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo);
-			const side = pokemon.side;
 
 			// Pokémon affected by Sky Drop cannot Mega Evolve. Enforce it here for now.
-			for (const foeActive of side.foe.active) {
-				if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
+			for (const foeActive of pokemon.foes()) {
+				if (foeActive.volatiles['skydrop']?.source === pokemon) {
 					return false;
 				}
 			}

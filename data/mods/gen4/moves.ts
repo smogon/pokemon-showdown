@@ -673,8 +673,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {authentic: 1},
 		onTryHit(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const move of pokemon.moves) {
 					if (target.moves.includes(move)) return;
 				}
@@ -720,7 +719,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.allies().length > 1) return this.chainModify(2, 3);
+						if (target.alliesAndSelf().length > 1) return this.chainModify(2, 3);
 						return this.chainModify(0.5);
 					}
 				}
@@ -1031,7 +1030,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.allies().length > 1) return this.chainModify(2, 3);
+						if (target.alliesAndSelf().length > 1) return this.chainModify(2, 3);
 						return this.chainModify(0.5);
 					}
 				}

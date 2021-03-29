@@ -330,8 +330,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			let totaldef = 0;
 			let totalspd = 0;
-			for (const foe of pokemon.side.foe.active) {
-				if (!foe || foe.fainted) continue;
+			for (const foe of pokemon.foes()) {
 				totaldef += foe.storedStats.def;
 				totalspd += foe.storedStats.spd;
 			}
