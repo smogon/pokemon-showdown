@@ -10,7 +10,7 @@ describe(`Unnerve`, function () {
 		battle.destroy();
 	});
 
-	it.skip(`should allow Berry activation between switches of Unnerve`, function () {
+	it(`should allow Berry activation between switches of Unnerve`, function () {
 		battle = common.createBattle([[
 			{species: 'toxapex', ability: 'unnerve', moves: ['toxic']},
 			{species: 'corviknight', ability: 'unnerve', moves: ['sleeptalk']},
