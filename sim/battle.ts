@@ -1947,13 +1947,8 @@ export class Battle {
 		return false;
 	}
 
-	getTargetLoc(target: Pokemon, source: Pokemon) {
-		const position = target.position + 1;
-		return (target.side === source.side) ? -position : position;
-	}
-
 	validTarget(target: Pokemon, source: Pokemon, targetType: string) {
-		return this.validTargetLoc(this.getTargetLoc(target, source), source, targetType);
+		return this.validTargetLoc(source.getLocOf(target), source, targetType);
 	}
 
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon) {

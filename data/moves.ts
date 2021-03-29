@@ -13450,7 +13450,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 							}
 						}
 					}
-					this.actions.runMove('pursuit', source, this.getTargetLoc(pokemon, source));
+					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
 				}
 			},
 		},

@@ -675,6 +675,15 @@ export class Pokemon {
 		}
 	}
 
+	/**
+	 * Returns a relative location: 1-3, positive for foe, and negative for ally.
+	 * Use `getAtLoc` to reverse.
+	 */
+	getLocOf(target: Pokemon) {
+		const position = target.position + 1;
+		return (target.side === this.side) ? -position : position;
+	}
+
 	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
 		let targets: Pokemon[] = [];
 

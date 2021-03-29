@@ -2214,7 +2214,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.add('-activate', pokemon, 'move: The Hunt is On!');
 						alreadyAdded = true;
 					}
-					this.actions.runMove('thehuntison', source, this.getTargetLoc(pokemon, source));
+					this.actions.runMove('thehuntison', source, source.getLocOf(pokemon));
 				}
 			},
 		},

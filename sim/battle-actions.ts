@@ -308,7 +308,7 @@ export class BattleActions {
 				if (dancer.fainted) continue;
 				this.battle.add('-activate', dancer, 'ability: Dancer');
 				const dancersTarget = target!.side !== dancer.side && pokemon.side === dancer.side ? target! : pokemon;
-				const dancersTargetLoc = this.battle.getTargetLoc(dancersTarget, dancer);
+				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
 				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.getAbility('dancer'), undefined, true);
 			}
 		}
