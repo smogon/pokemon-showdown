@@ -19,7 +19,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	frisk: {
 		inherit: true,
 		onStart(pokemon) {
-			const target = pokemon.side.foe.randomActive();
+			const target = pokemon.side.foe.randomAlly();
 			if (target?.item) {
 				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
 			}

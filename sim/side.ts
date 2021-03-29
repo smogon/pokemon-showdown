@@ -2,8 +2,23 @@
  * Simulator Side
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * @license MIT license
+ * There's a lot of ambiguity between the terms "player", "side", "team",
+ * and "half-field", which I'll try to explain here:
+ *
+ * These terms usually all mean the same thing. The exceptions are:
+ *
+ * - Multi-battle: there are 2 half-fields, 2 teams, 4 sides
+ *
+ * - Free-for-all: there are 2 half-fields, 4 teams, 4 sides
+ *
+ * "Half-field" is usually abbreviated to "half".
+ *
+ * Function naming will be very careful about which term to use. Pay attention
+ * if it's relevant to your code.
+ *
+ * @license MIT
  */
+
 import {Utils} from '../lib';
 import type {RequestState} from './battle';
 import {Pokemon, EffectState} from './pokemon';
@@ -43,6 +58,7 @@ export interface Choice {
 export class Side {
 	readonly battle: Battle;
 	readonly id: SideID;
+	/** Index in `battle.sides`: `battle.sides[side.n] === side` */
 	readonly n: number;
 
 	name: string;
@@ -186,10 +202,29 @@ export class Side {
 		return data;
 	}
 
-	randomActive() {
-		const actives = this.active.filter(active => active && !active.fainted);
+	randomAlly() {
+		const actives = this.allies();
 		if (!actives.length) return null;
 		return this.battle.sample(actives);
+	}
+
+	getAllySide() {
+		if (this.battle.gameType !== 'multi') return null;
+		return this.battle.sides[[2, 3, 0, 1][this.n]]!;
+	}
+	allies() {
+		return this.activeTeam().filter(ally => ally && !ally.fainted);
+	}
+	foes() {
+		return this.foe.allies();
+	}
+	activeTeam() {
+		if (this.battle.gameType !== 'multi') return this.active;
+
+		const team = this.n % 2;
+		return this.battle.sides.flatMap(
+			side => side.n % 2 === team ? side.active : []
+		);
 	}
 
 	addSideCondition(

@@ -70,6 +70,11 @@ export class Battle {
 	readonly format: Format;
 	readonly formatData: EffectState;
 	readonly gameType: GameType;
+	/**
+	 * The number of active pokemon per half-field.
+	 * See header comment in side.ts for details.
+	 */
+	readonly activePerHalf: 1 | 2 | 3;
 	readonly field: Field;
 	readonly sides: [Side, Side] | [Side, Side, Side, Side];
 	readonly prngSeed: PRNGSeed;
@@ -163,6 +168,9 @@ export class Battle {
 		this.field = new Field(this);
 		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
 		this.sides = Array(isFourPlayer ? 4 : 2).fill(null) as any;
+		this.activePerHalf = this.gameType === 'triples' ? 3 :
+			(isFourPlayer || this.gameType === 'doubles') ? 2 :
+			1;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
 		this.rated = options.rated || !!options.rated;
@@ -1260,25 +1268,32 @@ export class Battle {
 		return canSwitchIn;
 	}
 
-	swapPosition(pokemon: Pokemon, slot: number, attributes?: string) {
-		if (slot >= pokemon.side.active.length) {
+	swapPosition(pokemon: Pokemon, newPosition: number, attributes?: string) {
+		if (newPosition >= pokemon.side.active.length) {
 			throw new Error("Invalid swap position");
 		}
-		const target = pokemon.side.active[slot];
-		if (slot !== 1 && (!target || target.fainted)) return false;
+		const target = pokemon.side.active[newPosition];
+		if (newPosition !== 1 && (!target || target.fainted)) return false;
 
-		this.add('swap', pokemon, slot, attributes || '');
+		this.add('swap', pokemon, newPosition, attributes || '');
 
 		const side = pokemon.side;
 		side.pokemon[pokemon.position] = target;
-		side.pokemon[slot] = pokemon;
+		side.pokemon[newPosition] = pokemon;
 		side.active[pokemon.position] = side.pokemon[pokemon.position];
-		side.active[slot] = side.pokemon[slot];
+		side.active[newPosition] = side.pokemon[newPosition];
 		if (target) target.position = pokemon.position;
-		pokemon.position = slot;
+		pokemon.position = newPosition;
 		this.runEvent('Swap', target, pokemon);
 		this.runEvent('Swap', pokemon, target);
 		return true;
+	}
+
+	getAtSlot(slot: PokemonSlot) {
+		const side = this.sides[slot.charCodeAt(1) - 49]; // 49 is '1'
+		const position = slot.charCodeAt(2) - 97; // 97 is 'a'
+		const positionOffset = Math.floor(side.n / 2) * side.active.length;
+		return side.active[position - positionOffset];
 	}
 
 	faint(pokemon: Pokemon, source?: Pokemon, effect?: Effect) {
@@ -2024,7 +2039,7 @@ export class Battle {
 				return foeActives[frontPosition];
 			}
 		}
-		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
+		return pokemon.side.foe.randomAlly() || pokemon.side.foe.active[0];
 	}
 
 	checkFainted() {

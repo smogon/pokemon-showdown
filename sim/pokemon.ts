@@ -453,10 +453,10 @@ export class Pokemon {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
-	getSlot() {
+	getSlot(): PokemonSlot {
 		const positionOffset = Math.floor(this.side.n / 2) * this.side.active.length;
 		const positionLetter = 'abcdef'.charAt(this.position + positionOffset);
-		return this.side.id + positionLetter;
+		return (this.side.id + positionLetter) as PokemonSlot;
 	}
 
 	toString() {
@@ -606,37 +606,23 @@ export class Pokemon {
 	}
 
 	alliesAndSelf(): Pokemon[] {
-		let allies = this.side.active;
-		if (this.battle.gameType === 'multi') {
-			const team = this.side.n % 2;
-			allies = this.battle.sides.flatMap(
-				(side: Side) => side.n % 2 === team ? side.active : []
-			);
-		}
-		return allies.filter(ally => ally && !ally.fainted);
+		return this.side.allies();
 	}
 
 	allies(): Pokemon[] {
-		return this.alliesAndSelf().filter(ally => ally !== this);
+		return this.side.allies().filter(ally => ally !== this);
 	}
 
 	adjacentAllies(): Pokemon[] {
-		return this.alliesAndSelf().filter(ally => this.isAdjacent(ally));
+		return this.side.allies().filter(ally => this.isAdjacent(ally));
 	}
 
 	foes(): Pokemon[] {
-		let foes = this.side.foe.active;
-		if (this.battle.gameType === 'multi') {
-			const team = this.side.foe.n % 2;
-			foes = this.battle.sides.flatMap(
-				(side: Side) => side.n % 2 === team ? side.active : []
-			);
-		}
-		return foes.filter(foe => foe && !foe.fainted);
+		return this.side.foe.allies();
 	}
 
 	adjacentFoes(): Pokemon[] {
-		return this.foes().filter(foe => this.isAdjacent(foe));
+		return this.side.foe.allies().filter(foe => this.isAdjacent(foe));
 	}
 
 	isAdjacent(pokemon2: Pokemon) {
@@ -827,11 +813,10 @@ export class Pokemon {
 	}
 
 	getLastDamagedBy(filterOutSameSide: boolean) {
-		const damagedBy: Attacker[] = this.attackedBy.filter(
-			(attacker) =>
-			  typeof attacker.damageValue === 'number' &&
-			  (filterOutSameSide === undefined || this.side !== attacker.source.side)
-		  );
+		const damagedBy: Attacker[] = this.attackedBy.filter(attacker => (
+			typeof attacker.damageValue === 'number' &&
+			(filterOutSameSide === undefined || this.side !== attacker.source.side)
+		));
 		if (damagedBy.length === 0) return undefined;
 		return damagedBy[damagedBy.length - 1];
 	}
