@@ -300,14 +300,24 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 224,
 	},
 	berserk: {
+		onDamage(damage, target) {
+			target.abilityData.checkedBerserk = false;
+		},
 		onAfterMoveSecondary(target, source, move) {
-			if (!source || source === target || !target.hp || !move.totalDamage) return;
+			if (!source || source === target || !target.hp || !move.totalDamage) {
+				target.abilityData.checkedBerserk = true;
+				return;
+			}
 			const lastAttackedBy = target.getLastAttackedBy();
-			if (!lastAttackedBy) return;
+			if (!lastAttackedBy) {
+				target.abilityData.checkedBerserk = true;
+				return;
+			}
 			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({spa: 1});
 			}
+			target.abilityData.checkedBerserk = true;
 		},
 		name: "Berserk",
 		rating: 2,

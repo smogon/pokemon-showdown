@@ -10,7 +10,7 @@ describe('Berserk', function () {
 		battle.destroy();
 	});
 
-	it.skip(`should activate prior to healing from Sitrus Berry`, function () {
+	it(`should activate prior to healing from Sitrus Berry`, function () {
 		battle = common.createBattle([[
 			{species: "Drampa", item: 'sitrusberry', ability: 'berserk', evs: {hp: 4}, moves: ['sleeptalk']},
 		], [
