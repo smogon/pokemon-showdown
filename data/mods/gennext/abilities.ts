@@ -606,7 +606,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
 			if (!target) return;
 			// singles, or single-target move
-			if (target.side.active.length < 2 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
+			if (this.activePerHalf === 1 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
 				move.multihit = 2;
 				move.accuracy = true;
 				pokemon.addVolatile('parentalbond');

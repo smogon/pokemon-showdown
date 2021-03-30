@@ -793,7 +793,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Aurora Veil weaken');
-						if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
+						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -5495,7 +5495,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		volatileStatus: 'followme',
 		onTry(source) {
-			return source.side.active.length > 1;
+			return this.activePerHalf > 1;
 		},
 		condition: {
 			duration: 1,
@@ -9662,7 +9662,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
+						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -13485,7 +13485,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			if (target.side.active.length < 2) return false; // fails in singles
+			if (this.activePerHalf === 1) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 
@@ -13624,7 +13624,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
 		onTry(source) {
-			return source.side.active.length > 1;
+			return this.activePerHalf > 1;
 		},
 		condition: {
 			duration: 1,
@@ -13835,7 +13835,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
+						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -16579,7 +16579,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mystery: 1},
 		volatileStatus: 'spotlight',
 		onTryHit(target) {
-			if (target.side.active.length < 2) return false;
+			if (this.activePerHalf === 1) return false;
 		},
 		condition: {
 			duration: 1,

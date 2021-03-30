@@ -716,7 +716,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	quash: {
 		inherit: true,
 		onHit(target) {
-			if (target.side.active.length < 2) return false; // fails in singles
+			if (this.activePerHalf === 1) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 
