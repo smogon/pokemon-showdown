@@ -301,27 +301,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	berserk: {
 		onDamage(damage, target, source, effect) {
-			if (effect.effectType === "Move" && (!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce'))))
+			if (effect.effectType === "Move" && (!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))) {
 				target.abilityData.checkedBerserk = false;
-			else {
+			} else {
 				target.abilityData.checkedBerserk = true;
 			}
 		},
 		onAfterMoveSecondary(target, source, move) {
-			if (!source || source === target || !target.hp || !move.totalDamage) {
-				target.abilityData.checkedBerserk = true;
-				return;
-			}
+			target.abilityData.checkedBerserk = true;
+			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
-			if (!lastAttackedBy) {
-				target.abilityData.checkedBerserk = true;
-				return;
-			}
+			if (!lastAttackedBy) return;
 			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({spa: 1});
 			}
-			target.abilityData.checkedBerserk = true;
 		},
 		name: "Berserk",
 		rating: 2,
