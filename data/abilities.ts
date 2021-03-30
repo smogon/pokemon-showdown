@@ -300,8 +300,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 224,
 	},
 	berserk: {
-		onDamage(damage, target) {
-			target.abilityData.checkedBerserk = false;
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType === "Move" && (!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce'))))
+				target.abilityData.checkedBerserk = false;
+			else {
+				target.abilityData.checkedBerserk = true;
+			}
 		},
 		onAfterMoveSecondary(target, source, move) {
 			if (!source || source === target || !target.hp || !move.totalDamage) {
