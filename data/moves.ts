@@ -4877,7 +4877,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-sidestart', targetSide, 'Fire Pledge');
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (pokemon && !pokemon.hasType('Fire')) {
 						this.damage(pokemon.baseMaxhp / 8, pokemon);
 					}
@@ -4887,7 +4887,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(side) {
-				for (const pokemon of side.active) {
+				for (const pokemon of side.activeTeam()) {
 					if (pokemon && !pokemon.hasType('Fire')) {
 						this.damage(pokemon.baseMaxhp / 8, pokemon);
 					}
@@ -5945,7 +5945,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, authentic: 1},
 		onHitSide(side, source, move) {
 			const targets = [];
-			for (const pokemon of side.active) {
+			for (const pokemon of side.activeTeam()) {
 				if (
 					pokemon.hasAbility(['plus', 'minus']) &&
 					(!pokemon.volatiles['maxguard'] || this.runEvent('TryHit', pokemon, source, move))
@@ -6187,12 +6187,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (!pokemon.hasType('Water')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (!pokemon.hasType('Water')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 				this.add('-sideend', targetSide, 'G-Max Cannonade');
@@ -6839,12 +6839,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (!pokemon.hasType('Grass')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (!pokemon.hasType('Grass')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 				this.add('-sideend', targetSide, 'G-Max Vine Lash');
@@ -6879,12 +6879,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 				this.add('-sideend', targetSide, 'G-Max Volcalith');
@@ -6908,7 +6908,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Pikachu",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.trySetStatus('par', source);
 				}
 			},
@@ -6942,12 +6942,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
+				for (const pokemon of targetSide.activeTeam()) {
 					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 				this.add('-sideend', targetSide, 'G-Max Wildfire');
@@ -10107,14 +10107,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, distance: 1, authentic: 1},
 		onHitSide(side, source, move) {
 			const targets = [];
-			for (const pokemon of side.active) {
+			for (const pokemon of side.activeTeam()) {
 				if (
 					pokemon.hasAbility(['plus', 'minus']) &&
-					(!pokemon.volatiles['maxguard'] ||
-					  this.runEvent('TryHit', pokemon, source, move))
-				  ) {
+					(!pokemon.volatiles['maxguard'] || this.runEvent('TryHit', pokemon, source, move))
+				) {
 					targets.push(pokemon);
-				  }
+				}
 			}
 			if (!targets.length) return false;
 			let didSomething = false;
@@ -10289,7 +10288,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({spe: 1}, pokemon);
 				}
 			},
@@ -10311,7 +10310,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({spd: -1}, pokemon);
 				}
 			},
@@ -10353,7 +10352,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({spa: -1}, pokemon);
 				}
 			},
@@ -10470,7 +10469,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({atk: 1}, pokemon);
 				}
 			},
@@ -10532,7 +10531,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({spa: 1}, pokemon);
 				}
 			},
@@ -10574,7 +10573,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({def: -1}, pokemon);
 				}
 			},
@@ -10596,7 +10595,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({spd: 1}, pokemon);
 				}
 			},
@@ -10658,7 +10657,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({def: 1}, pokemon);
 				}
 			},
@@ -10680,7 +10679,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({spe: -1}, pokemon);
 				}
 			},
@@ -10702,7 +10701,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({atk: -1}, pokemon);
 				}
 			},
@@ -18710,9 +18709,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			volatileStatus: 'uproar',
 		},
 		onTryHit(target) {
-			for (const [i, allyActive] of target.side.active.entries()) {
+			const activeTeam = target.side.activeTeam();
+			const foeActiveTeam = target.side.foe.activeTeam();
+			for (const [i, allyActive] of activeTeam.entries()) {
 				if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
-				const foeActive = target.side.foe.active[i];
+				const foeActive = foeActiveTeam[i];
 				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
 			}
 		},
