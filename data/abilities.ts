@@ -181,15 +181,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.effectData.unnerved = true;
 		},
 		onEnd() {
 			this.effectData.unnerved = false;
 		},
 		onFoeTryEatItem() {
-			if (!this.effectData.unnerved) {
-				return true;
-			}
-			return false;
+			return !this.effectData.unnerved
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
@@ -205,15 +203,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.effectData.unnerved = true;
 		},
 		onEnd() {
 			this.effectData.unnerved = false;
 		},
 		onFoeTryEatItem() {
-			if (!this.effectData.unnerved) {
-				return true;
-			}
-			return false;
+			return !this.effectData.unnerved
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
@@ -4065,10 +4061,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.effectData.unnerved = false;
 		},
 		onFoeTryEatItem() {
-			if (!this.effectData.unnerved) {
-				return true;
-			}
-			return false;
+			return !this.effectData.unnerved
 		},
 		name: "Unnerve",
 		rating: 1.5,
