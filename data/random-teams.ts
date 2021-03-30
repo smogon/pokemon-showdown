@@ -785,7 +785,8 @@ export class RandomTeams {
 			return {cull: !counter.Status || hasRestTalk};
 		case 'rest':
 			const bulkySetup = !hasMove['sleeptalk'] && ['bulkup', 'calmmind', 'coil', 'curse'].some(m => movePool.includes(m));
-			return {cull: movePool.includes('sleeptalk') || bulkySetup};
+			// Registeel would otherwise get Curse sets without Rest, which are very bad generally
+			return {cull: species.id !== 'registeel' && (movePool.includes('sleeptalk') || bulkySetup)};
 		case 'sleeptalk':
 			if (!hasMove['rest']) return {cull: true};
 			if (movePool.length > 1 && !hasAbility['Contrary']) {
@@ -864,7 +865,7 @@ export class RandomTeams {
 		case 'partingshot':
 			return {cull: counter.speedsetup || hasMove['bulkup'] || hasMove['uturn']};
 		case 'protect':
-			if ((counter.setupType && !hasMove['wish'] && !isDoubles) || hasRestTalk) return {cull: true};
+			if (!isDoubles && ((counter.setupType && !hasMove['wish']) || hasMove['rest'])) return {cull: true};
 			if (
 				!isDoubles &&
 				counter.Status < 2 &&
