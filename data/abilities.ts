@@ -187,7 +187,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.effectData.unnerved = false;
 		},
 		onFoeTryEatItem() {
-			return !this.effectData.unnerved
+			return !this.effectData.unnerved;
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
@@ -209,7 +209,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.effectData.unnerved = false;
 		},
 		onFoeTryEatItem() {
-			return !this.effectData.unnerved
+			return !this.effectData.unnerved;
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
@@ -4061,7 +4061,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.effectData.unnerved = false;
 		},
 		onFoeTryEatItem() {
-			return !this.effectData.unnerved
+			return !this.effectData.unnerved;
 		},
 		name: "Unnerve",
 		rating: 1.5,
