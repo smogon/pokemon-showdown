@@ -64,7 +64,9 @@ export class Side {
 	name: string;
 	avatar: string;
 	maxTeamSize: number;
-	foe: Side;
+	foe: Side = null!; // set in battle.start()
+	/** Only exists in multi battle, for the allied side */
+	allySide: Side | null = null; // set in battle.start()
 	team: PokemonSet[];
 	pokemon: Pokemon[];
 	active: Pokemon[];
@@ -100,7 +102,6 @@ export class Side {
 		this.name = name;
 		this.avatar = '';
 		this.maxTeamSize = 6;
-		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
 
 		this.team = team;
 		this.pokemon = [];
@@ -221,10 +222,7 @@ export class Side {
 	activeTeam() {
 		if (this.battle.gameType !== 'multi') return this.active;
 
-		const team = this.n % 2;
-		return this.battle.sides.flatMap(
-			side => side.n % 2 === team ? side.active : []
-		);
+		return this.battle.sides[this.n % 2].active.concat(this.battle.sides[this.n % 2 + 2].active);
 	}
 
 	addSideCondition(

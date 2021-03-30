@@ -1235,7 +1235,9 @@ export class Battle {
 		this.winner = side ? side.name : '';
 
 		this.add('');
-		if (side) {
+		if (side?.allySide) {
+			this.add('win', side.name + ' & ' + side.allySide.name);
+		} else if (side) {
 			this.add('win', side.name);
 		} else {
 			this.add('tie');
@@ -1498,8 +1500,23 @@ export class Battle {
 		if (this.started) throw new Error(`Battle already started`);
 
 		this.started = true;
-		this.sides[1].foe = this.sides[0];
-		this.sides[0].foe = this.sides[1];
+		if (this.gameType === 'multi') {
+			this.sides[1].foe = this.sides[2]!;
+			this.sides[0].foe = this.sides[3]!;
+			this.sides[2]!.foe = this.sides[1];
+			this.sides[3]!.foe = this.sides[0];
+			this.sides[1].allySide = this.sides[3]!;
+			this.sides[0].allySide = this.sides[2]!;
+			this.sides[2]!.allySide = this.sides[0];
+			this.sides[3]!.allySide = this.sides[1];
+		} else {
+			this.sides[1].foe = this.sides[0];
+			this.sides[0].foe = this.sides[1];
+			if (this.sides.length > 2) { // ffa
+				this.sides[2]!.foe = this.sides[3]!;
+				this.sides[3]!.foe = this.sides[2]!;
+			}
+		}
 
 		for (const side of this.sides) {
 			this.add('teamsize', side.id, side.pokemon.length);
