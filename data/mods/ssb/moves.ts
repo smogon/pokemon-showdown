@@ -5405,7 +5405,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Uses 2-5 random moves. Does not include Z-Moves that have 1 Base Power, Super Metronome, Metronome, or Max moves that have 10 Base Power.",
+		desc: "Uses 2-5 random moves. Does not include 1-Base Power Z-Moves, Super Metronome, Metronome, or 10-Base Power Max moves.",
 		shortDesc: "Uses 2-5 random moves.",
 		name: "Super Metronome",
 		isNonstandard: "Custom",
