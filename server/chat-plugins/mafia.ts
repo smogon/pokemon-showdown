@@ -814,7 +814,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 	lynchBoxFor(userid: ID) {
 		let buf = '';
-		buf += `<h3>Lynches (Hammer: ${this.hammerCount || 'Disabled'}) <button class="button" name="send" value="/msgroom ${this.roomid},/mafia refreshlynches"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
+		buf += `<h3>Votes (Hammer: ${this.hammerCount || 'Disabled'}) <button class="button" name="send" value="/msgroom ${this.roomid},/mafia refreshlynches"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
 		const plur = this.getPlurality();
 		for (const key of Object.keys(this.playerTable).concat((this.enableNL ? ['nolynch'] : [])) as ID[]) {
 			if (this.lynches[key]) {
