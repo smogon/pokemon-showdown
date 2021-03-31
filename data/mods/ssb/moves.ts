@@ -5421,7 +5421,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves: ModdedMoveData[] = [];
-			for (const id in Moves) {
+			for (const id in this.dex.data.Moves) {
 				const move = this.dex.getMove(id);
 				if (move.realMove || move.id.includes('metronome')) continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
