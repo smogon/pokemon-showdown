@@ -5439,7 +5439,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else {
 				return false;
 			}
-			this.useMove(randomMove, target);
+			this.actions.useMove(randomMove, target);
 		},
 		multihit: [2, 5],
 		secondary: null,
