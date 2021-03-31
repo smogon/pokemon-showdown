@@ -30,7 +30,7 @@ Ratings and how they work:
 	  The sort of ability that defines metagames.
 	ex. Imposter, Shadow Tag
 
-*/	
+*/
 
 export const Abilities: {[abilityid: string]: AbilityData} = {
 	noability: {
@@ -313,7 +313,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onTryEatItem(item, pokemon) {
 			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice'
+				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
 			];
 			if (healingItems.includes(item.id)) {
 				return pokemon.abilityData.checkedBerserk;
