@@ -424,8 +424,8 @@ export class Pokemon {
 		this.speed = 0;
 		this.abilityOrder = 0;
 
-		this.canMegaEvo = this.battle.canMegaEvo(this);
-		this.canUltraBurst = this.battle.canUltraBurst(this);
+		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
+		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		// Normally would want to use battle.canDynamax to set this, but it references this property.
 		this.canDynamax = (this.battle.gen >= 8);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
@@ -549,7 +549,7 @@ export class Pokemon {
 
 		// stat modifier effects
 		if (!unmodified) {
-			const statTable: {[s in StatNameExceptHP]?: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			const statTable: {[s in StatNameExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 		}
 
@@ -605,11 +605,10 @@ export class Pokemon {
 		});
 	}
 
-	allies(): Pokemon[] {
+	alliesAndSelf(): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
-			// @ts-ignore
 			allies = this.battle.sides.flatMap(
 				(side: Side) => side.n % 2 === team ? side.active : []
 			);
@@ -617,15 +616,18 @@ export class Pokemon {
 		return allies.filter(ally => ally && !ally.fainted);
 	}
 
-	nearbyAllies(): Pokemon[] {
-		return this.allies().filter(ally => this.battle.isAdjacent(this, ally));
+	allies(): Pokemon[] {
+		return this.alliesAndSelf().filter(ally => ally !== this);
+	}
+
+	adjacentAllies(): Pokemon[] {
+		return this.alliesAndSelf().filter(ally => this.isAdjacent(ally));
 	}
 
 	foes(): Pokemon[] {
 		let foes = this.side.foe.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.foe.n % 2;
-			// @ts-ignore
 			foes = this.battle.sides.flatMap(
 				(side: Side) => side.n % 2 === team ? side.active : []
 			);
@@ -633,8 +635,14 @@ export class Pokemon {
 		return foes.filter(foe => foe && !foe.fainted);
 	}
 
-	nearbyFoes(): Pokemon[] {
-		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
+	adjacentFoes(): Pokemon[] {
+		return this.foes().filter(foe => this.isAdjacent(foe));
+	}
+
+	isAdjacent(pokemon2: Pokemon) {
+		if (this.fainted || pokemon2.fainted) return false;
+		if (this.side === pokemon2.side) return Math.abs(this.position - pokemon2.position) === 1;
+		return Math.abs(this.position + pokemon2.position + 1 - this.side.active.length) <= 1;
 	}
 
 	getUndynamaxedHP(amount?: number) {
@@ -647,7 +655,7 @@ export class Pokemon {
 
 	/** Get targets for Dragon Darts */
 	getSmartTargets(target: Pokemon, move: ActiveMove) {
-		const target2 = target.nearbyAllies()[0];
+		const target2 = target.adjacentAllies()[0];
 		if (!target2 || target2 === this || !target2.hp) {
 			move.smartTarget = false;
 			return [target];
@@ -659,6 +667,14 @@ export class Pokemon {
 		return [target, target2];
 	}
 
+	getAtLoc(targetLoc: number) {
+		if (targetLoc > 0) {
+			return this.side.foe.active[targetLoc - 1];
+		} else {
+			return this.side.active[-targetLoc - 1];
+		}
+	}
+
 	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
 		let targets: Pokemon[] = [];
 
@@ -668,7 +684,7 @@ export class Pokemon {
 		case 'allySide':
 		case 'allyTeam':
 			if (!move.target.startsWith('foe')) {
-				targets.push(...this.allies());
+				targets.push(...this.alliesAndSelf());
 			}
 			if (!move.target.startsWith('ally')) {
 				targets.push(...this.foes());
@@ -678,16 +694,16 @@ export class Pokemon {
 			}
 			break;
 		case 'allAdjacent':
-			targets.push(...this.nearbyAllies());
+			targets.push(...this.adjacentAllies());
 			// falls through
 		case 'allAdjacentFoes':
-			targets.push(...this.nearbyFoes());
+			targets.push(...this.adjacentFoes());
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}
 			break;
 		case 'allies':
-			targets = this.allies();
+			targets = this.alliesAndSelf();
 			break;
 		default:
 			const selectedTarget = target;
@@ -871,7 +887,7 @@ export class Pokemon {
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
 			} else if (
 				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)
+				this.side.active.length >= 2 && this.battle.actions.targetTypeChoices(target!)
 			) {
 				disabled = true;
 			}
@@ -918,7 +934,7 @@ export class Pokemon {
 		let atLeastOne = false;
 		for (const moveSlot of this.moveSlots) {
 			const move = this.battle.dex.getMove(moveSlot.id);
-			const maxMove = this.battle.getMaxMove(move, this);
+			const maxMove = this.battle.actions.getMaxMove(move, this);
 			if (maxMove) {
 				if (this.maxMoveDisabled(move)) {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
@@ -979,7 +995,7 @@ export class Pokemon {
 		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
-			const canZMove = this.battle.canZMove(this);
+			const canZMove = this.battle.actions.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 
 			if (this.getDynamaxRequest()) data.canDynamax = true;

@@ -1329,6 +1329,7 @@ export const commands: ChatCommands = {
 	slb: 'sharedloggedbattles',
 	async sharedloggedbattles(target, room, user) {
 		this.checkCan('lock');
+		if (Config.nobattlesearch) return this.errorReply(`/${this.cmd} has been temporarily disabled due to load issues.`);
 		const targets = target.split(',').map(toID).filter(Boolean);
 		if (targets.length < 2 || targets.length > 2) {
 			return this.errorReply(`Specify two users.`);

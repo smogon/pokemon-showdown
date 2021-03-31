@@ -340,7 +340,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.add('-ability', target, 'Carefree');
-			this.useMove(newMove, target, source);
+			this.actions.useMove(newMove, target, source);
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -351,7 +351,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.add('-ability', target, 'Carefree');
-			this.useMove(newMove, this.effectData.target, source);
+			this.actions.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
 		condition: {
@@ -407,7 +407,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.add('-ability', target, 'Magic Hat');
-			this.useMove(newMove, target, source);
+			this.actions.useMove(newMove, target, source);
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -418,7 +418,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.add('-ability', target, 'Magic Hat');
-			this.useMove(newMove, this.effectData.target, source);
+			this.actions.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
 		condition: {
@@ -1641,13 +1641,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			let totalatk = 0;
 			let totalspa = 0;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				totalatk += target.getStat('atk', false, true);
 				totalspa += target.getStat('spa', false, true);
 			}
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				this.add('-ability', pokemon, 'BURN IT DOWN!');
 				if (totalatk && totalatk >= totalspa) {
 					this.boost({atk: -1}, target, pokemon, null, true);
@@ -1869,7 +1867,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.species.id.includes('aggron') && !target.illusion && !target.transformed) {
 					this.boost({atk: 1}, target);
 					if (target.species.name !== 'Aggron') return;
-					this.runMegaEvo(target);
+					this.actions.runMegaEvo(target);
 				}
 			}
 		},

@@ -153,7 +153,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target === source || move.flags['authentic'] || move.infiltrates) {
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage) {
 					return null;
 				}
@@ -663,7 +663,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const moveData = {
 						damage: this.effectData.totalDamage * 2,
 					} as unknown as ActiveMove;
-					this.moveHit(target, pokemon, this.dex.getActiveMove('bide'), moveData);
+					this.actions.moveHit(target, pokemon, this.dex.getActiveMove('bide'), moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');

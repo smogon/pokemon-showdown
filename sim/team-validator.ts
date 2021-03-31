@@ -230,10 +230,22 @@ export class TeamValidator {
 		let problems: string[] = [];
 		const ruleTable = this.ruleTable;
 		if (format.team) {
+			if (team) {
+				return [
+					`This format doesn't let you use your own team.`,
+					`If you're not using a custom client, please report this as a bug. If you are, remember to use \`/utm null\` before starting a game in this format.`,
+				];
+			}
 			return null;
 		}
-		if (!team || !Array.isArray(team)) {
-			return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
+		if (!team) {
+			return [
+				`This format requires you to use your own team.`,
+				`If you're not using a custom client, please report this as a bug.`,
+			];
+		}
+		if (!Array.isArray(team)) {
+			throw new Error(`Invalid team data`);
 		}
 
 		let [minSize, maxSize] = format.teamLength && format.teamLength.validate || [1, 6];
@@ -1215,7 +1227,7 @@ export class TeamValidator {
 					const baseSpecies = this.dex.getSpecies(species.changesFrom);
 					problems.push(
 						`${name} needs to hold ${species.requiredItems.join(' or ')} to be in its ${species.forme} forme.`,
-						`(It will revert to its ${baseSpecies.baseForme} forme if you remove the item or give it a different item.)`
+						`(It will revert to its ${baseSpecies.baseForme || 'base'} forme if you remove the item or give it a different item.)`
 					);
 				}
 			}

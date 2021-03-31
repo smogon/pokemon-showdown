@@ -205,6 +205,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly pokemon?: ModdedBattlePokemon;
 	readonly queue?: ModdedBattleQueue;
 	readonly field?: ModdedField;
+	readonly actions?: ModdedBattleActions;
 	readonly cannotMega?: string[];
 	readonly challengeShow?: boolean;
 	readonly searchShow?: boolean;
@@ -219,6 +220,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly onChangeSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
 	) => string[] | void;
+	readonly onModifySpeciesPriority?: number;
 	readonly onModifySpecies?: (
 		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
 	) => Species | void;

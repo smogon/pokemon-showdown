@@ -135,8 +135,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			let warnMoves: Move[] = [];
 			let warnBp = 1;
-			for (const target of pokemon.side.foe.active) {
-				if (target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
 					let bp = move.basePower;
@@ -172,15 +171,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	intimidate: {
 		inherit: true,
 		onStart(pokemon) {
-			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (target && this.isAdjacent(target, pokemon) &&
-					!(target.volatiles['substitute'] ||
-						target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn')) {
-					activated = true;
-					break;
-				}
-			}
+			const activated = pokemon.adjacentFoes().some(target => (
+				!(target.volatiles['substitute'] || target.volatiles['substitutebroken']?.move === 'uturn')
+			));
 
 			if (!activated) {
 				this.hint("In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).", false, pokemon.side);
@@ -188,12 +181,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-
+			for (const target of pokemon.adjacentFoes()) {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
-				} else if (target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn') {
+				} else if (target.volatiles['substitutebroken']?.move === 'uturn') {
 					this.hint("In Gen 4, if U-turn breaks Substitute the incoming Intimidate does nothing.");
 				} else {
 					this.boost({atk: -1}, target, pokemon, null, true);

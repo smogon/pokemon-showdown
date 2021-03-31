@@ -31,8 +31,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				(counter.setupType || !counter.Status || movePool.includes('closecombat') || movePool.includes('highjumpkick'))
 			),
 			Fire: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Fire,
-			Flying: (movePool, hasMove, hasAbility, hasType, counter) => (
-				!counter['Flying'] && (counter.setupType !== 'Special' && movePool.includes('bravebird'))
+			Flying: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Flying && (
+				(counter.setupType !== 'Special' && movePool.includes('bravebird')) ||
+				(hasAbility['Serene Grace'] && movePool.includes('airslash'))
 			),
 			Grass: (movePool, hasMove, hasAbility, hasType, counter) => (
 				!counter.Grass &&

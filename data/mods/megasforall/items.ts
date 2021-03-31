@@ -1361,4 +1361,102 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by a Falinks, this item allows it to Mega Evolve in battle.",
 	},
+	floatzelite: {
+		name: "Floatzelite",
+		spritenum: 578,
+		megaStone: "Floatzel-Mega",
+		megaEvolves: "Floatzel",
+		itemUser: ["Floatzel"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1084,
+		gen: 8,
+		desc: "If held by a Floatzel, this item allows it to Mega Evolve in battle.",
+	},
+	simisearite: {
+		name: "Simisearite",
+		spritenum: 578,
+		megaStone: "Simisear-Mega",
+		megaEvolves: "Simisear",
+		itemUser: ["Simisear"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1085,
+		gen: 8,
+		desc: "If held by a Simisear, this item allows it to Mega Evolve in battle.",
+	},
+	krookodilite: {
+		name: "Krookodilite",
+		spritenum: 578,
+		megaStone: "Krookodile-Mega",
+		megaEvolves: "Krookodile",
+		itemUser: ["Krookodile"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1086,
+		gen: 8,
+		desc: "If held by a Krookodile, this item allows it to Mega Evolve in battle.",
+	},
+	cinccinite: {
+		name: "Cinccinite",
+		spritenum: 578,
+		megaStone: "Cinccino-Mega",
+		megaEvolves: "Cinccino",
+		itemUser: ["Cinccino"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1087,
+		gen: 8,
+		desc: "If held by a Cinccino, this item allows it to Mega Evolve in battle.",
+	},
+	torterranite: {
+		name: "Torterranite",
+		spritenum: 578,
+		megaStone: "Torterra-Mega",
+		megaEvolves: "Torterra",
+		itemUser: ["Torterra"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1088,
+		gen: 8,
+		desc: "If held by a Torterra, this item allows it to Mega Evolve in battle.",
+	},
+	infernite: {
+		name: "Infernite",
+		spritenum: 578,
+		megaStone: "Infernape-Mega",
+		megaEvolves: "Infernape",
+		itemUser: ["Infernape"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1089,
+		gen: 8,
+		desc: "If held by an Infernape, this item allows it to Mega Evolve in battle.",
+	},
+	empoleonite: {
+		name: "Empoleonite",
+		spritenum: 578,
+		megaStone: "Empoleon-Mega",
+		megaEvolves: "Empoleon",
+		itemUser: ["Empoleon"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1090,
+		gen: 8,
+		desc: "If held by an Empoleon, this item allows it to Mega Evolve in battle.",
+	},
 };

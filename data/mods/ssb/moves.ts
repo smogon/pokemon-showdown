@@ -61,8 +61,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			if (this.randomChance(1, 10)) {
-				for (const foe of source.side.foe.active) {
-					if (!foe || foe.fainted) continue;
+				for (const foe of source.foes()) {
 					foe.trySetStatus('brn', source);
 				}
 			}
@@ -287,13 +286,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Aethernum
 	lilypadoverflow: {
 		accuracy: 100,
-		basePower: 61,
+		basePower: 62,
 		basePowerCallback(source, target, move) {
 			if (!source.volatiles['raindrop']?.layers) return move.basePower;
 			return move.basePower + (source.volatiles['raindrop'].layers * 20);
 		},
 		category: "Special",
-		desc: "Power is equal to 60 + (Number of Raindrops collected * 20). Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Raindrop had increased them, and the user's Raindrop count resets to 0.",
+		desc: "Power is equal to 62 + (Number of Raindrops collected * 20). Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Raindrop had increased them, and the user's Raindrop count resets to 0.",
 		shortDesc: "More power per Raindrop. Lose Raindrops.",
 		name: "Lilypad Overflow",
 		gen: 8,
@@ -2215,7 +2214,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.add('-activate', pokemon, 'move: The Hunt is On!');
 						alreadyAdded = true;
 					}
-					this.runMove('thehuntison', source, this.getTargetLoc(pokemon, source));
+					this.actions.runMove('thehuntison', source, this.getTargetLoc(pokemon, source));
 				}
 			},
 		},
@@ -2967,12 +2966,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		// fruit this move.
 		onHit(target, source) {
 			for (const move of ['Haze', 'Worry Seed', 'Poison Powder', 'Stun Spore', 'Leech Seed']) {
-				this.useMove(move, source);
+				this.actions.useMove(move, source);
 				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
 			}
 			const strgl = this.dex.getActiveMove('Struggle');
 			strgl.basePower = 150;
-			this.useMove(strgl, source);
+			this.actions.useMove(strgl, source);
 			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
 		},
 		secondary: null,
@@ -3170,13 +3169,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const hax = this.sample(['slp', 'brn', 'par', 'tox']);
 			target.trySetStatus(hax, source);
 			if (hax === 'slp') {
-				this.useMove('Dream Eater', source);
+				this.actions.useMove('Dream Eater', source);
 			} else if (hax === 'par') {
-				this.useMove('Iron Head', source);
+				this.actions.useMove('Iron Head', source);
 			} else if (hax === 'brn') {
-				this.useMove('Fire Blast', source);
+				this.actions.useMove('Fire Blast', source);
 			} else if (hax === 'tox') {
-				this.useMove('Venoshock', source);
+				this.actions.useMove('Venoshock', source);
 			}
 		},
 		secondary: null,
@@ -3393,7 +3392,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Celebrate", target);
 		},
 		onTryHit(target, source) {
-			this.useMove('Substitute', source);
+			this.actions.useMove('Substitute', source);
 		},
 		onHit(target, source) {
 			target.trySetStatus('brn', source);
@@ -3407,7 +3406,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Perish Song
 	trickery: {
-		accuracy: 85,
+		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
 		desc: "Changes the target's item to something random.",
@@ -3424,6 +3423,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Trick", target);
 		},
 		onHit(target, source, effect) {
+			this.add(`c|${getName('Perish Song')}|/html <img src="https://i.imgflip.com/3rt1d8.png" />`);
 			const item = target.takeItem(source);
 			if (!target.item) {
 				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
@@ -3455,7 +3455,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1},
+		flags: {protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3958,7 +3958,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source) {
 			if (source.species.id === 'charizard') {
-				this.runMegaEvo(source);
+				this.actions.runMegaEvo(source);
 			}
 		},
 		secondary: null,
@@ -4207,8 +4207,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(source) {
 				let totalatk = 0;
 				let totalspa = 0;
-				for (const target of source.side.foe.active) {
-					if (!target || target.fainted) continue;
+				for (const target of source.foes()) {
 					totalatk += target.getStat('atk', false, true);
 					totalspa += target.getStat('spa', false, true);
 					if (totalatk && totalatk >= totalspa) {
@@ -4687,7 +4686,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (let x = 1; x <= randomTurns; x++) {
 				const randomMove = this.sample(supportMoves);
 				supportMoves.splice(supportMoves.indexOf(randomMove), 1);
-				this.useMove(randomMove, target);
+				this.actions.useMove(randomMove, target);
 				successes++;
 			}
 			if (successes === 1) {
@@ -4940,19 +4939,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.m.yukiCosplayForme = this.sample(formes);
 			switch (source.m.yukiCosplayForme) {
 			case 'Cleric':
-				this.useMove("Strength Sap", source);
+				this.actions.useMove("Strength Sap", source);
 				break;
 			case 'Ninja':
-				this.useMove("Confuse Ray", source);
+				this.actions.useMove("Confuse Ray", source);
 				break;
 			case 'Dancer':
-				this.useMove("Feather Dance", source);
+				this.actions.useMove("Feather Dance", source);
 				break;
 			case 'Songstress':
-				this.useMove("Sing", source);
+				this.actions.useMove("Sing", source);
 				break;
 			case 'Jester':
-				this.useMove("Charm", source);
+				this.actions.useMove("Charm", source);
 				break;
 			}
 		},
@@ -5073,10 +5072,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onTry(pokemon, target) {
 			pokemon.addVolatile('bigstormcomingmod');
-			this.useMove("Hurricane", pokemon);
-			this.useMove("Thunder", pokemon);
-			this.useMove("Blizzard", pokemon);
-			this.useMove("Weather Ball", pokemon);
+			this.actions.useMove("Hurricane", pokemon);
+			this.actions.useMove("Thunder", pokemon);
+			this.actions.useMove("Blizzard", pokemon);
+			this.actions.useMove("Weather Ball", pokemon);
 		},
 		secondary: null,
 		target: "normal",
