@@ -26,7 +26,7 @@ interface Attacker {
 	damage: number;
 	thisTurn: boolean;
 	move?: ID;
-	position?: number;
+	slot: PokemonSlot;
 	damageValue?: (number | boolean | undefined);
 }
 
@@ -65,6 +65,11 @@ export class Pokemon {
 	hpType: string;
 	hpPower: number;
 
+	/**
+	 * Index of `pokemon.side.pokemon` and `pokemon.side.active`, which are
+	 * guaranteed to be the same for active pokemon. Note that this isn't
+	 * its field position in multi battles - use `getSlot()` for that.
+	 */
 	position: number;
 	details: string;
 
@@ -811,7 +816,7 @@ export class Pokemon {
 			damage: damageNumber,
 			move: move.id,
 			thisTurn: true,
-			position: source.position,
+			slot: source.getSlot(),
 			damageValue: damage,
 		});
 	}
@@ -1757,7 +1762,7 @@ export class Pokemon {
 		this.volatiles[status.id].target = this;
 		if (source) {
 			this.volatiles[status.id].source = source;
-			this.volatiles[status.id].sourcePosition = source.position;
+			this.volatiles[status.id].sourceSlot = source.getSlot();
 		}
 		if (sourceEffect) this.volatiles[status.id].sourceEffect = sourceEffect;
 		if (status.duration) this.volatiles[status.id].duration = status.duration;

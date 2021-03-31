@@ -1292,7 +1292,10 @@ export class Battle {
 		return true;
 	}
 
-	getAtSlot(slot: PokemonSlot) {
+	getAtSlot(slot: PokemonSlot): Pokemon;
+	getAtSlot(slot: PokemonSlot | null): Pokemon | null;
+	getAtSlot(slot: PokemonSlot | null) {
+		if (!slot) return null;
 		const side = this.sides[slot.charCodeAt(1) - 49]; // 49 is '1'
 		const position = slot.charCodeAt(2) - 97; // 97 is 'a'
 		const positionOffset = Math.floor(side.n / 2) * side.active.length;

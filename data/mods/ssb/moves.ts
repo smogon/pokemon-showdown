@@ -2491,7 +2491,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				const positions: boolean[] = this.effectData.positions;
-				if (target.position !== this.effectData.sourcePosition) {
+				if (target.getSlot() !== this.effectData.sourceSlot) {
 					return;
 				}
 				if (!target.fainted) {

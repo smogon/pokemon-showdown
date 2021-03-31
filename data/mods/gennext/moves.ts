@@ -641,8 +641,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					damage = target.hp - 1;
 				}
 				this.effectData.totalDamage += damage;
-				this.effectData.sourcePosition = source.position;
-				this.effectData.sourceSide = source.side;
+				this.effectData.sourceSlot = source.getSlot();
 				return damage;
 			},
 			onAfterSetStatus(status, pokemon) {
@@ -659,7 +658,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return false;
 					}
 					this.add('-end', pokemon, 'Bide');
-					const target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					const target = this.getAtSlot(this.effectData.sourceSlot);
 					const moveData = {
 						damage: this.effectData.totalDamage * 2,
 					} as unknown as ActiveMove;

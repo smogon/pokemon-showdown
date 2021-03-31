@@ -113,7 +113,9 @@ export interface MoveEventMethods {
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onMoveFail?: CommonHandlers['VoidMove'];
 	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
-	onModifyTarget?: (this: Battle, relayVar: any, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void;
+	onModifyTarget?: (
+		this: Battle, relayVar: {target: Pokemon}, pokemon: Pokemon, target: Pokemon, move: ActiveMove
+	) => void;
 	onPrepareHit?: CommonHandlers['ResultMove'];
 	onTry?: CommonHandlers['ResultSourceMove'];
 	onTryHit?: CommonHandlers['ExtResultSourceMove'];

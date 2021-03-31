@@ -2631,23 +2631,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onTryHit(target, source, move) {
 			if (!source.volatiles['counter']) return false;
-			if (source.volatiles['counter'].position === null) return false;
+			if (source.volatiles['counter'].slot === null) return false;
 		},
 		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
-				this.effectData.position = null;
+				this.effectData.slot = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				if (source !== this.effectData.target || !this.effectData.slot) return;
+				return this.getAtSlot(this.effectData.slot);
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (!source.isAlly(target) && this.getCategory(move) === 'Physical') {
-					this.effectData.position = source.position;
+					this.effectData.slot = source.getSlot();
 					this.effectData.damage = 2 * damage;
 				}
 			},
@@ -9539,7 +9539,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 8,
 			onResidual(pokemon) {
-				const target = this.effectData.source.side.active[pokemon.volatiles['leechseed'].sourcePosition];
+				const target = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
@@ -10902,8 +10902,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
 			const lastDamagedBy = source.getLastDamagedBy(true);
-			if (lastDamagedBy?.position !== undefined) {
-				targetRelayVar.target = source.side.foe.active[lastDamagedBy.position];
+			if (lastDamagedBy) {
+				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 			}
 		},
 		secondary: null,
@@ -11235,23 +11235,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onTryHit(target, source, move) {
 			if (!source.volatiles['mirrorcoat']) return false;
-			if (source.volatiles['mirrorcoat'].position === null) return false;
+			if (source.volatiles['mirrorcoat'].slot === null) return false;
 		},
 		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
-				this.effectData.position = null;
+				this.effectData.slot = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				if (source !== this.effectData.target || !this.effectData.slot) return;
+				return this.getAtSlot(this.effectData.slot);
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (!source.isAlly(target) && this.getCategory(move) === 'Special') {
-					this.effectData.position = source.position;
+					this.effectData.slot = source.getSlot();
 					this.effectData.damage = 2 * damage;
 				}
 			},

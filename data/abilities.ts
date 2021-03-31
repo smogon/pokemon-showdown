@@ -1607,6 +1607,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			// Imposter does not activate when Skill Swapped or when Neutralizing Gas leaves the field
 			if (!this.effectData.switchingIn) return;
+			// copies across in multibattle and diagonally in free-for-all
+			// fortunately, side.foe already takes care of all that
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
 				pokemon.transformInto(target, this.dex.getAbility('imposter'));

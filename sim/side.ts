@@ -247,7 +247,7 @@ export class Side {
 			id: status.id,
 			target: this,
 			source,
-			sourcePosition: source.position,
+			sourceSlot: source.getSlot(),
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
@@ -294,18 +294,18 @@ export class Side {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
 		}
-		const slotConditionData = this.slotConditions[target][status.id] = {
+		const conditionState = this.slotConditions[target][status.id] = {
 			id: status.id,
 			target: this,
 			source,
-			sourcePosition: source.position,
+			sourceSlot: source.getSlot(),
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
-			slotConditionData.duration =
+			conditionState.duration =
 				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, slotConditionData, this.active[target], source, sourceEffect)) {
+		if (!this.battle.singleEvent('Start', status, conditionState, this.active[target], source, sourceEffect)) {
 			delete this.slotConditions[target][status.id];
 			return false;
 		}

@@ -1824,8 +1824,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					source: source,
 					target: null,
 					move: move,
-					position: target.position,
-					side: target.side,
+					slot: target.getSlot(),
 					moveData: this.dex.getMove(move),
 				});
 				this.add('-ability', source, 'Clairvoyance');
@@ -1838,7 +1837,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			duration: 3,
 			onResidualOrder: 3,
 			onEnd(target) {
-				this.effectData.target = this.effectData.side.active[this.effectData.position];
+				this.effectData.target = this.getAtSlot(this.effectData.slot);
 				const data = this.effectData;
 				const move = this.dex.getMove(data.move);
 				this.add('-ability', this.effectData.source, 'Clairvoyance');
@@ -2153,8 +2152,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					duration: numberHits,
 					source: source,
 					move: move,
-					position: target.position,
-					side: target.side,
+					slot: target.getSlot(),
 					moveData: this.dex.getMove(move),
 				});
 				return null;

@@ -56,8 +56,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const damage = this.effectData.totalDamage;
 					this.effectData.totalDamage += damage;
 					this.effectData.lastDamage = damage;
-					this.effectData.sourcePosition = source.position;
-					this.effectData.sourceSide = source.side;
+					this.effectData.sourceSlot = source.getSlot();
 				}
 			},
 			onDamage(damage, target, source, move) {
@@ -68,8 +67,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectData.totalDamage += damage;
 				this.effectData.lastDamage = damage;
-				this.effectData.sourcePosition = source.position;
-				this.effectData.sourceSide = source.side;
+				this.effectData.sourceSlot = source.getSlot();
 			},
 			onAfterSetStatus(status, pokemon) {
 				// Sleep, freeze, and partial trap will just pause duration.
@@ -94,7 +92,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return false;
 					}
 					this.add('-end', pokemon, 'Bide');
-					const target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					const target = this.getAtSlot(this.effectData.sourceSlot);
 					this.actions.moveHit(target, pokemon, move, {damage: this.effectData.totalDamage * 2} as ActiveMove);
 					return false;
 				}
@@ -500,7 +498,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onAfterMoveSelfPriority: 1,
 			onAfterMoveSelf(pokemon) {
-				const leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				const leecher = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
@@ -887,7 +885,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, thisTurn: true});
+					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true});
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = uncappedDamage;
