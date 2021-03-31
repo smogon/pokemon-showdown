@@ -1638,8 +1638,6 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'ssb',
-		// @ts-ignore hack
-		isAFD: true,
 		team: 'randomStaffBros',
 		ruleset: ['Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 		onBegin() {
