@@ -953,8 +953,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			// Any set specific tweaks occur here.
 			if (set.name === 'Marshmallon' && !set.moves.includes('Head Charge')) set.moves[this.random(3)] = 'Head Charge';
 
-			// @ts-ignore
-			if (this.format.isAFD) {
+			if (this.format.id.includes('wiiu')) {
 				const egg = this.random(100);
 				if (egg === 69) {
 					set.name = 'Falco';
