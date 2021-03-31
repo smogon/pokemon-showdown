@@ -891,7 +891,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
 			const name = this.sampleNoReplace(pool);
-			const ssbSet: SSBSet = this.format.id.includes('wiiu') ? this.dex.deepClone(afdSSBSets[name]) : this.dex.deepClone(ssbSets[name]);
+			const ssbSet: SSBSet = this.format.id.includes('wiiu') ? this.dex.deepClone(afdSSBSets[name]) :
+				this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
