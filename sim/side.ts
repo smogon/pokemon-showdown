@@ -79,6 +79,7 @@ export class Side {
 	/** only used by Gen 1 Counter */
 	lastSelectedMove: ID = '';
 
+	/** these point to the same object as the ally's, in multi battles */
 	sideConditions: {[id: string]: EffectState};
 	slotConditions: {[id: string]: EffectState}[];
 
@@ -233,9 +234,6 @@ export class Side {
 	addSideCondition(
 		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
 	): boolean {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].addSideCondition(status, source, sourceEffect);
-		}
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
@@ -264,26 +262,17 @@ export class Side {
 	}
 
 	getSideCondition(status: string | Effect): Effect | null {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].getSideCondition(status);
-		}
 		status = this.battle.dex.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
 
 	getSideConditionData(status: string | Effect): AnyObject {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].getSideConditionData(status);
-		}
 		status = this.battle.dex.getEffect(status) as Effect;
 		return this.sideConditions[status.id] || null;
 	}
 
 	removeSideCondition(status: string | Effect): boolean {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].removeSideCondition(status);
-		}
 		status = this.battle.dex.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);

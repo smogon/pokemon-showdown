@@ -399,6 +399,7 @@ export class Battle {
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
 		handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, 'duration'));
 		for (const side of this.sides) {
+			if (side.n >= 2 && side.allySide) break;
 			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
 				if (!active) continue;
@@ -834,6 +835,7 @@ export class Battle {
 		}
 		if (target instanceof Side) {
 			for (const side of this.sides) {
+				if (side.n >= 2 && side.allySide) break;
 				if (side === target || side === target.allySide) {
 					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
 				} else {
@@ -1508,6 +1510,9 @@ export class Battle {
 			this.sides[0].allySide = this.sides[2]!;
 			this.sides[2]!.allySide = this.sides[0];
 			this.sides[3]!.allySide = this.sides[1];
+			// sync side conditions
+			this.sides[2]!.sideConditions = this.sides[0].sideConditions;
+			this.sides[3]!.sideConditions = this.sides[1].sideConditions;
 		} else {
 			this.sides[1].foe = this.sides[0];
 			this.sides[0].foe = this.sides[1];
