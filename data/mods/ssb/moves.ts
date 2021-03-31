@@ -5420,7 +5420,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Metronome", source);
 		},
 		onHit(target, source, effect) {
-			const moves: ModdedMoveData[] = [];
+			const moves = [];
 			for (const id in this.dex.data.Moves) {
 				const move = this.dex.getMove(id);
 				if (move.realMove || move.id.includes('metronome')) continue;
