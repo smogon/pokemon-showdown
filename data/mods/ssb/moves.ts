@@ -5428,7 +5428,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
 				if (move.gen > this.gen) continue;
-				if (move.isMax && (typeof move.isMax !== "string" && move.basePower === 10)) continue;
+				if (move.isMax === true && move.basePower === 10) continue;
 				moves.push(move.name);
 			}
 			let randomMove: string;
