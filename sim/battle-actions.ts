@@ -969,7 +969,7 @@ export class BattleActions {
 
 		// 0. check for substitute
 		if (!isSecondary && !isSelf) {
-			if (move.target !== 'all' && move.target !== 'allySide' && move.target !== 'foeSide') {
+			if (move.target !== 'all' && move.target !== 'allyTeam' && move.target !== 'allySide' && move.target !== 'foeSide') {
 				damage = this.tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary);
 			}
 		}
