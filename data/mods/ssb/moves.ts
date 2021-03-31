@@ -5423,8 +5423,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const moves: ModdedMoveData[] = [];
 			for (const id in Moves) {
 				const move = Moves[id];
-				// @ts-ignore
-				if (move.realMove || this.toID(move.name) === 'supermetronome' || this.toID(move.name) === 'metronome') continue;
+				if (move.realMove || move.id.includes('metronome')) continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
