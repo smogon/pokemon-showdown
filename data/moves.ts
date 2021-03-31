@@ -508,7 +508,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					ally.boostBy({atk: 1});
 					continue;
 				}
-				if (ally !== source && ((ally.volatiles['substitute'] && !move.infiltrates))) {
+				if (ally !== source && ally.volatiles['substitute'] && !move.infiltrates) {
 					continue;
 				}
 				if (ally.cureStatus()) success = true;
