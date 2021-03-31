@@ -879,8 +879,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
-		// @ts-ignore
-		if (this.format.isAFD) {
+		if (this.format.id.includes('wiiu')) {
 			for (let x = 0; x < 6; x++) {
 				debug.push('Fox');
 			}
