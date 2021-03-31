@@ -833,9 +833,8 @@ export class Battle {
 			handlers.push(...this.findPokemonEventHandlers(source, `onSource${eventName}`));
 		}
 		if (target instanceof Side) {
-			const team = this.gameType === 'multi' ? target.n % 2 : null;
 			for (const side of this.sides) {
-				if (team === null ? side === target : side.n % 2 === team) {
+				if (side === target || side === target.allySide) {
 					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
 				} else {
 					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
@@ -2119,8 +2118,8 @@ export class Battle {
 		const team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2]!.pokemonLeft;
 		const team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3]!.pokemonLeft;
 		if (this.gameType === 'multi') {
-			team1PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 0 ? side.pokemonLeft : 0), 0);
-			team2PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 1 ? side.pokemonLeft : 0), 0);
+			team1PokemonLeft += this.sides[2]!.pokemonLeft;
+			team2PokemonLeft += this.sides[3]!.pokemonLeft;
 		}
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);

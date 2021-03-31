@@ -209,14 +209,16 @@ export class Side {
 		return this.battle.sample(actives);
 	}
 
-	getAllySide() {
-		if (this.battle.gameType !== 'multi') return null;
-		return this.battle.sides[[2, 3, 0, 1][this.n]]!;
-	}
 	allies() {
+		// called during the first switch-in, so `active` can still contain nulls at this point
 		return this.activeTeam().filter(ally => ally && !ally.fainted);
 	}
 	foes() {
+		if (this.battle.gameType === 'free-for-all') {
+			return this.battle.sides
+				.flatMap(side => side === this ? [] : side.active)
+				.filter(pokemon => pokemon && !pokemon.fainted);
+		}
 		return this.foe.allies();
 	}
 	activeTeam() {

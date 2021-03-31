@@ -627,6 +627,7 @@ export class Pokemon {
 
 	isAdjacent(pokemon2: Pokemon) {
 		if (this.fainted || pokemon2.fainted) return false;
+		if (this.battle.activePerHalf <= 2) return this !== pokemon2;
 		if (this.side === pokemon2.side) return Math.abs(this.position - pokemon2.position) === 1;
 		return Math.abs(this.position + pokemon2.position + 1 - this.side.active.length) <= 1;
 	}
@@ -654,11 +655,13 @@ export class Pokemon {
 	}
 
 	getAtLoc(targetLoc: number) {
-		if (targetLoc > 0) {
-			return this.side.foe.active[targetLoc - 1];
-		} else {
-			return this.side.active[-targetLoc - 1];
+		let side = this.battle.sides[targetLoc < 0 ? this.side.n % 2 : (this.side.n + 1) % 2];
+		targetLoc = Math.abs(targetLoc);
+		if (targetLoc > side.active.length) {
+			targetLoc -= side.active.length;
+			side = this.battle.sides[side.n + 2];
 		}
+		return side.active[targetLoc - 1];
 	}
 
 	/**
@@ -666,8 +669,10 @@ export class Pokemon {
 	 * Use `getAtLoc` to reverse.
 	 */
 	getLocOf(target: Pokemon) {
-		const position = target.position + 1;
-		return (target.side === this.side) ? -position : position;
+		const positionOffset = Math.floor(target.side.n / 2) * target.side.active.length;
+		const position = target.position + positionOffset + 1;
+		const sameHalf = (this.side.n % 2) === (target.side.n % 2);
+		return sameHalf ? -position : position;
 	}
 
 	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
