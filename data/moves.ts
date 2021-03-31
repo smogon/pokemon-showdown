@@ -504,7 +504,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.add('-activate', source, 'move: Aromatherapy');
 			let success = false;
 			for (const ally of pokemon.side.pokemon) {
-				if (ally !== source && (ally.hasAbility('sapsipper'))) {
+				if (ally !== source && ally.hasAbility('sapsipper')) {
 					ally.boostBy({atk: 1});
 					continue;
 				}
