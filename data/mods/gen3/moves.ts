@@ -136,7 +136,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
-				if (effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Physical') {
+				if (effect.effectType === 'Move' && !source.isAlly(target) && this.getCategory(effect.id) === 'Physical') {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}
@@ -412,7 +412,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
-				if (effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special') {
+				if (effect.effectType === 'Move' && !source.isAlly(target) && this.getCategory(effect.id) === 'Special') {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}

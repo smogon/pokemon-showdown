@@ -863,13 +863,13 @@ export const Formats: {[k: string]: FormatData} = {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
 		onSetStatus(status, target, source) {
-			if (source && source.side === target.side) {
+			if (source && source.isAlly(target)) {
 				return;
 			}
 			if (status.id === 'slp') {
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (!pokemon.statusData.source || pokemon.statusData.source.side !== pokemon.side) {
+						if (!pokemon.statusData.source || !pokemon.statusData.source.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
 							return false;
 						}
@@ -886,7 +886,7 @@ export const Formats: {[k: string]: FormatData} = {
 			this.add('rule', 'Stadium Sleep Clause: Limit one foe put to sleep');
 		},
 		onSetStatus(status, target, source) {
-			if (source && source.side === target.side) {
+			if (source && source.isAlly(target)) {
 				return;
 			}
 			if (status.id === 'slp') {
@@ -934,7 +934,7 @@ export const Formats: {[k: string]: FormatData} = {
 			this.add('rule', 'Freeze Clause Mod: Limit one foe frozen');
 		},
 		onSetStatus(status, target, source) {
-			if (source && source.side === target.side) {
+			if (source && source.isAlly(target)) {
 				return;
 			}
 			if (status.id === 'frz') {

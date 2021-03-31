@@ -226,6 +226,9 @@ export class Side {
 
 		return this.battle.sides[this.n % 2].active.concat(this.battle.sides[this.n % 2 + 2].active);
 	}
+	hasAlly(pokemon: Pokemon) {
+		return pokemon.side === this || pokemon.side === this.allySide;
+	}
 
 	addSideCondition(
 		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null

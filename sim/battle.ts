@@ -2005,7 +2005,7 @@ export class Battle {
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = pokemon.getAtLoc(targetLoc);
-			if (target?.fainted && target.side === pokemon.side) {
+			if (target?.fainted && target.isAlly(pokemon)) {
 				// Target is a fainted ally: attack shouldn't retarget
 				return target;
 			}

@@ -2579,7 +2579,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(pokemon, source, move) {
 				if (!pokemon.hp) return;
 				if (this.effectData.gotHit) return;
-				if (pokemon.side !== source.side && move.category !== 'Status') {
+				if (!pokemon.isAlly(source) && move.category !== 'Status') {
 					this.effectData.gotHit = true;
 					this.add('-message', 'Gossifleur was prepared for the impact!');
 					const boosts: {[k: string]: number} = {def: 2, spd: 2};

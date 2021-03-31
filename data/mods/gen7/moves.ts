@@ -666,7 +666,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable() || target.side === source.side) return;
+				if (!target.isGrounded() || target.isSemiInvulnerable() || target.isAlly(source)) return;
 				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}

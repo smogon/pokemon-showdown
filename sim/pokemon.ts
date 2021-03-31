@@ -625,6 +625,10 @@ export class Pokemon {
 		return this.side.foe.allies().filter(foe => this.isAdjacent(foe));
 	}
 
+	isAlly(pokemon: Pokemon | null) {
+		return !!pokemon && (this.side === pokemon.side || this.side.allySide === pokemon.side);
+	}
+
 	isAdjacent(pokemon2: Pokemon) {
 		if (this.fainted || pokemon2.fainted) return false;
 		if (this.battle.activePerHalf <= 2) return this !== pokemon2;
@@ -707,7 +711,7 @@ export class Pokemon {
 			break;
 		default:
 			const selectedTarget = target;
-			if (!target || (target.fainted && target.side !== this.side)) {
+			if (!target || (target.fainted && !target.isAlly(this))) {
 				// If a targeted foe faints, the move is retargeted
 				const possibleTarget = this.battle.getRandomTarget(this, move);
 				if (!possibleTarget) return {targets: [], pressureTargets: []};
@@ -820,7 +824,7 @@ export class Pokemon {
 	getLastDamagedBy(filterOutSameSide: boolean) {
 		const damagedBy: Attacker[] = this.attackedBy.filter(attacker => (
 			typeof attacker.damageValue === 'number' &&
-			(filterOutSameSide === undefined || this.side !== attacker.source.side)
+			(filterOutSameSide === undefined || !this.isAlly(attacker.source))
 		));
 		if (damagedBy.length === 0) return undefined;
 		return damagedBy[damagedBy.length - 1];
@@ -1124,7 +1128,7 @@ export class Pokemon {
 		const types = pokemon.getTypes(true);
 		this.setType(pokemon.volatiles['roost'] ? pokemon.volatiles['roost'].typeWas : types, true);
 		this.addedType = pokemon.addedType;
-		this.knownType = this.side === pokemon.side && pokemon.knownType;
+		this.knownType = this.isAlly(pokemon) && pokemon.knownType;
 		this.apparentType = pokemon.apparentType;
 
 		let statName: StatNameExceptHP;
@@ -1650,7 +1654,7 @@ export class Pokemon {
 		const effectid = this.battle.effect ? this.battle.effect.id : '';
 		if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 			const inflicted = ['trick', 'switcheroo'].includes(effectid);
-			const external = inflicted && source && source.side.id !== this.side.id;
+			const external = inflicted && source && !source.isAlly(this);
 			this.pendingStaleness = external ? 'external' : 'internal';
 		} else {
 			this.pendingStaleness = undefined;

@@ -214,7 +214,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (this.battle.faintMessages()) break;
 					if (dancer.fainted) continue;
 					this.battle.add('-activate', dancer, 'ability: Dancer');
-					const dancersTarget = target!.side !== dancer.side && pokemon.side === dancer.side ? target! : pokemon;
+					const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
 					const dancersTargetLoc = dancer.getLocOf(dancersTarget);
 					this.runMove(move.id, dancer, dancersTargetLoc, this.dex.getAbility('dancer'), undefined, true);
 				}
@@ -236,7 +236,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else if (
 					this.battle.gen >= 7 && move.pranksterBoosted &&
 					(pokemon.hasAbility('prankster') || pokemon.hasAbility('plausibledeniability') || pokemon.volatiles['nol']) &&
-					targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)
+					!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)
 				) {
 					this.battle.debug('natural prankster immunity');
 					if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");

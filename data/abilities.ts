@@ -474,7 +474,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	competitive: {
 		onAfterEachBoost(boost, target, source, effect) {
-			if (!source || target.side === source.side) {
+			if (!source || target.isAlly(source)) {
 				if (effect.id === 'stickyweb') {
 					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Competitive only affects stats lowered by foes.", true, source.side);
 				}
@@ -632,7 +632,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 
 			const dazzlingHolder = this.effectData.target;
-			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
 				this.add('cant', dazzlingHolder, 'ability: Dazzling', move, '[of] ' + target);
 				return false;
@@ -661,7 +661,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	defiant: {
 		onAfterEachBoost(boost, target, source, effect) {
-			if (!source || target.side === source.side) {
+			if (!source || target.isAlly(source)) {
 				if (effect.id === 'stickyweb') {
 					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Defiant only affects stats lowered by foes.", true, source.side);
 				}
@@ -1143,7 +1143,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	friendguard: {
 		name: "Friend Guard",
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== this.effectData.target && target.side === this.effectData.target.side) {
+			if (target !== this.effectData.target && target.isAlly(this.effectData.target)) {
 				this.debug('Friend Guard weaken');
 				return this.chainModify(0.75);
 			}
@@ -1885,7 +1885,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
-			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
@@ -2703,7 +2703,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Pressure');
 		},
 		onDeductPP(target, source) {
-			if (target.side === source.side) return;
+			if (target.isAlly(source)) return;
 			return 1;
 		},
 		name: "Pressure",
@@ -2811,7 +2811,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 
 			const dazzlingHolder = this.effectData.target;
-			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
 				this.add('cant', dazzlingHolder, 'ability: Queenly Majesty', move, '[of] ' + target);
 				return false;
@@ -3086,7 +3086,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAllyTryHitSide(target, source, move) {
-			if (target === this.effectData.target || target.side !== source.side) return;
+			if (target === this.effectData.target || !target.isAlly(source)) return;
 			if (move.type === 'Grass') {
 				this.boost({atk: 1}, this.effectData.target);
 			}
@@ -3825,7 +3825,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	telepathy: {
 		onTryHit(target, source, move) {
-			if (target !== source && target.side === source.side && move.category !== 'Status') {
+			if (target !== source && target.isAlly(source) && move.category !== 'Status') {
 				this.add('-activate', target, 'ability: Telepathy');
 				return null;
 			}
@@ -4076,7 +4076,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	victorystar: {
 		onAnyModifyAccuracyPriority: -1,
 		onAnyModifyAccuracy(accuracy, target, source) {
-			if (source.side === this.effectData.target.side && typeof accuracy === 'number') {
+			if (source.isAlly(this.effectData.target) && typeof accuracy === 'number') {
 				return this.chainModify([4506, 4096]);
 			}
 		},
@@ -4127,7 +4127,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.flags['contact']) {
 				const sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
-				if (target.side === source.side) {
+				if (target.isAlly(source)) {
 					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
 				} else {
 					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.getAbility(sourceAbility).name, 'Wandering Spirit', '[of] ' + source);
@@ -4371,7 +4371,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllyTryHitSide(target, source, move) {
 			if (this.effectData.target.activeTurns) return;
 
-			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);

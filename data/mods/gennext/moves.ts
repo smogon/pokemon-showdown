@@ -636,7 +636,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onDamagePriority: -11,
 			onDamage(damage, target, source, effect) {
 				if (!effect || effect.effectType !== 'Move') return;
-				if (!source || source.side === target.side) return;
+				if (!source || source.isAlly(target)) return;
 				if (effect.effectType === 'Move' && damage >= target.hp) {
 					damage = target.hp - 1;
 				}

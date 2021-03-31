@@ -307,7 +307,7 @@ export class BattleActions {
 				if (this.battle.faintMessages()) break;
 				if (dancer.fainted) continue;
 				this.battle.add('-activate', dancer, 'ability: Dancer');
-				const dancersTarget = target!.side !== dancer.side && pokemon.side === dancer.side ? target! : pokemon;
+				const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
 				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.getAbility('dancer'), undefined, true);
 			}
@@ -614,7 +614,7 @@ export class BattleActions {
 				this.battle.add('-immune', target);
 				hitResults[i] = false;
 			} else if (this.battle.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') &&
-				targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
+				!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 				this.battle.debug('natural prankster immunity');
 				if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
 				this.battle.add('-immune', target);
@@ -695,7 +695,7 @@ export class BattleActions {
 				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'spikyshield']) {
 					if (target.removeVolatile(effectid)) broke = true;
 				}
-				if (this.battle.gen >= 6 || target.side !== pokemon.side) {
+				if (this.battle.gen >= 6 || !target.isAlly(pokemon)) {
 					for (const effectid of ['craftyshield', 'matblock', 'quickguard', 'wideguard']) {
 						if (target.side.removeSideCondition(effectid)) broke = true;
 					}

@@ -61,7 +61,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onDamage(damage, target, source, move) {
-				if (!source || source.side === target.side) return;
+				if (!source || source.isAlly(target)) return;
 				if (!move || move.effectType !== 'Move') return;
 				if (!damage && this.effectData.lastDamage > 0) {
 					damage = this.effectData.totalDamage;
@@ -396,7 +396,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
-				if (!source || source.side === target.side) return;
+				if (!source || source.isAlly(target)) return;
 				if (move.id === 'gust' || move.id === 'thunder') {
 					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
 					return null;
