@@ -5433,8 +5433,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			let randomMove: string;
 			if (moves.length) {
-				// @ts-ignore
-				randomMove = this.sample(moves).name;
+				randomMove = this.sample(moves);
 			} else {
 				return false;
 			}
