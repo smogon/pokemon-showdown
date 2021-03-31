@@ -312,7 +312,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			var healingItems = ['aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice'];
+			const healingItems = [
+				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice'
+			];
 			if (healingItems.includes(item.id)) {
 				return pokemon.abilityData.checkedBerserk;
 			}
