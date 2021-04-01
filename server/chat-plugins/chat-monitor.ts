@@ -288,42 +288,46 @@ Chat.registerMonitor('shorteners', {
  */
 
 export function loadFilters() {
+	let data;
 	try {
-		const data = FS(MONITOR_FILE).readSync();
-		const lines = data.split('\n');
-		loop: for (const line of lines) {
-			if (!line || line === '\r') continue;
-			const [location, word, punishment, reason, times, ...rest] = line.split('\t').map(param => param.trim());
-			if (location === 'Location') continue;
-			for (const key in Chat.monitors) {
-				if (Chat.monitors[key].location === location && Chat.monitors[key].punishment === punishment) {
-					const replacement = rest[0];
-					const publicReason = rest[1];
-					let regex: RegExp;
-					if (punishment === 'EVASION') {
-						regex = constructEvasionRegex(word);
-					} else {
-						regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'igu' : 'iu');
-					}
-
-					const filterWord: FilterWord = {regex, word, hits: parseInt(times) || 0};
-
-					// "undefined" is the result of an issue with filter storage.
-					// As far as I'm aware, nothing is actually filtered with "undefined" as the reason.
-					if (reason && reason !== "undefined") filterWord.reason = reason;
-					if (publicReason) filterWord.publicReason = publicReason;
-					if (replacement) filterWord.replacement = replacement;
-					filterWords[key].push(filterWord);
-					continue loop;
-				}
-			}
-			// this is not thrown because we DO NOT WANT SECRET FILTERS TO BE LEAKED, but we want this to be known
-			Monitor.crashlog(new Error("Couldn't find [location, punishment] pair for a filter word"), "The main process", {
-				location, word, punishment, reason, times, rest,
-			});
-		}
+		data = FS(MONITOR_FILE).readSync();
 	} catch (e) {
 		if (e.code !== 'ENOENT') throw e;
+	}
+	if (!data) return;
+	const lines = data.split('\n');
+	loop: for (const line of lines) {
+		if (!line || line === '\r') continue;
+		const [location, word, punishment, reason, times, ...rest] = line.split('\t').map(param => param.trim());
+		if (location === 'Location') continue;
+		if (!(location && word && punishment)) continue;
+		for (const key in Chat.monitors) {
+			if (Chat.monitors[key].location === location && Chat.monitors[key].punishment === punishment) {
+				const replacement = rest[0];
+				const publicReason = rest[1];
+				let regex: RegExp;
+				if (punishment === 'EVASION') {
+					regex = constructEvasionRegex(word);
+				} else {
+					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, replacement ? 'igu' : 'iu');
+				}
+
+				const filterWord: FilterWord = {regex, word, hits: parseInt(times) || 0};
+
+				// "undefined" is the result of an issue with filter storage.
+				// As far as I'm aware, nothing is actually filtered with "undefined" as the reason.
+				if (reason && reason !== "undefined") filterWord.reason = reason;
+				if (publicReason) filterWord.publicReason = publicReason;
+				if (replacement) filterWord.replacement = replacement;
+				filterWords[key].push(filterWord);
+				continue loop;
+			}
+		}
+		// this is not thrown because we DO NOT WANT SECRET FILTERS TO BE LEAKED, but we want this to be known
+		// (this sends the filter line info only in the email, but still reports the crash to Dev)
+		Monitor.crashlog(new Error("Couldn't find [location, punishment] pair for a filter word"), "The main process", {
+			location, word, punishment, reason, times, rest,
+		});
 	}
 }
 
