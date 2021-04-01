@@ -269,6 +269,7 @@ export class Side {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
+		if (!source.getSlot) source = (source as any as Side).active[0];
 
 		status = this.battle.dex.getEffect(status);
 		if (this.sideConditions[status.id]) {
