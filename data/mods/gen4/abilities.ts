@@ -224,12 +224,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	minus: {
 		onModifySpA(spa, pokemon) {
-			const allyActive = pokemon.side.active;
-			if (allyActive.length === 1) {
-				return;
-			}
-			for (const ally of allyActive) {
-				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'plus') {
+			for (const ally of pokemon.allies()) {
+				if (ally.ability === 'plus') {
 					return spa * 1.5;
 				}
 			}
@@ -278,12 +274,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	plus: {
 		onModifySpA(spa, pokemon) {
-			const allyActive = pokemon.side.active;
-			if (allyActive.length === 1) {
-				return;
-			}
-			for (const ally of allyActive) {
-				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'minus') {
+			for (const ally of pokemon.allies()) {
+				if (ally.ability === 'minus') {
 					return spa * 1.5;
 				}
 			}
@@ -462,7 +454,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
-			const target = pokemon.side.foe.randomActive();
+			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
 			const bannedAbilities = ['forecast', 'multitype', 'trace'];

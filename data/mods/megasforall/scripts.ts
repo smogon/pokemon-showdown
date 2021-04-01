@@ -355,7 +355,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			] as ID[]);
 			if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 				const inflicted = ['trick', 'switcheroo'].includes(effectid);
-				const external = inflicted && source && source.side.id !== this.side.id;
+				const external = inflicted && source && !source.isAlly(this);
 				this.pendingStaleness = external ? 'external' : 'internal';
 			} else {
 				this.pendingStaleness = undefined;

@@ -26,7 +26,7 @@ interface Attacker {
 	damage: number;
 	thisTurn: boolean;
 	move?: ID;
-	position?: number;
+	slot: PokemonSlot;
 	damageValue?: (number | boolean | undefined);
 }
 
@@ -65,6 +65,11 @@ export class Pokemon {
 	hpType: string;
 	hpPower: number;
 
+	/**
+	 * Index of `pokemon.side.pokemon` and `pokemon.side.active`, which are
+	 * guaranteed to be the same for active pokemon. Note that this isn't
+	 * its field position in multi battles - use `getSlot()` for that.
+	 */
 	position: number;
 	details: string;
 
@@ -453,10 +458,10 @@ export class Pokemon {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
-	getSlot() {
+	getSlot(): PokemonSlot {
 		const positionOffset = Math.floor(this.side.n / 2) * this.side.active.length;
 		const positionLetter = 'abcdef'.charAt(this.position + positionOffset);
-		return this.side.id + positionLetter;
+		return (this.side.id + positionLetter) as PokemonSlot;
 	}
 
 	toString() {
@@ -606,41 +611,33 @@ export class Pokemon {
 	}
 
 	alliesAndSelf(): Pokemon[] {
-		let allies = this.side.active;
-		if (this.battle.gameType === 'multi') {
-			const team = this.side.n % 2;
-			allies = this.battle.sides.flatMap(
-				(side: Side) => side.n % 2 === team ? side.active : []
-			);
-		}
-		return allies.filter(ally => ally && !ally.fainted);
+		return this.side.allies();
 	}
 
 	allies(): Pokemon[] {
-		return this.alliesAndSelf().filter(ally => ally !== this);
+		return this.side.allies().filter(ally => ally !== this);
 	}
 
 	adjacentAllies(): Pokemon[] {
-		return this.alliesAndSelf().filter(ally => this.isAdjacent(ally));
+		return this.side.allies().filter(ally => this.isAdjacent(ally));
 	}
 
 	foes(): Pokemon[] {
-		let foes = this.side.foe.active;
-		if (this.battle.gameType === 'multi') {
-			const team = this.side.foe.n % 2;
-			foes = this.battle.sides.flatMap(
-				(side: Side) => side.n % 2 === team ? side.active : []
-			);
-		}
-		return foes.filter(foe => foe && !foe.fainted);
+		return this.side.foes();
 	}
 
 	adjacentFoes(): Pokemon[] {
-		return this.foes().filter(foe => this.isAdjacent(foe));
+		if (this.battle.activePerHalf <= 2) return this.side.foes();
+		return this.side.foes().filter(foe => this.isAdjacent(foe));
+	}
+
+	isAlly(pokemon: Pokemon | null) {
+		return !!pokemon && (this.side === pokemon.side || this.side.allySide === pokemon.side);
 	}
 
 	isAdjacent(pokemon2: Pokemon) {
 		if (this.fainted || pokemon2.fainted) return false;
+		if (this.battle.activePerHalf <= 2) return this !== pokemon2;
 		if (this.side === pokemon2.side) return Math.abs(this.position - pokemon2.position) === 1;
 		return Math.abs(this.position + pokemon2.position + 1 - this.side.active.length) <= 1;
 	}
@@ -668,11 +665,24 @@ export class Pokemon {
 	}
 
 	getAtLoc(targetLoc: number) {
-		if (targetLoc > 0) {
-			return this.side.foe.active[targetLoc - 1];
-		} else {
-			return this.side.active[-targetLoc - 1];
+		let side = this.battle.sides[targetLoc < 0 ? this.side.n % 2 : (this.side.n + 1) % 2];
+		targetLoc = Math.abs(targetLoc);
+		if (targetLoc > side.active.length) {
+			targetLoc -= side.active.length;
+			side = this.battle.sides[side.n + 2];
 		}
+		return side.active[targetLoc - 1];
+	}
+
+	/**
+	 * Returns a relative location: 1-3, positive for foe, and negative for ally.
+	 * Use `getAtLoc` to reverse.
+	 */
+	getLocOf(target: Pokemon) {
+		const positionOffset = Math.floor(target.side.n / 2) * target.side.active.length;
+		const position = target.position + positionOffset + 1;
+		const sameHalf = (this.side.n % 2) === (target.side.n % 2);
+		return sameHalf ? -position : position;
 	}
 
 	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
@@ -707,7 +717,7 @@ export class Pokemon {
 			break;
 		default:
 			const selectedTarget = target;
-			if (!target || (target.fainted && target.side !== this.side)) {
+			if (!target || (target.fainted && !target.isAlly(this))) {
 				// If a targeted foe faints, the move is retargeted
 				const possibleTarget = this.battle.getRandomTarget(this, move);
 				if (!possibleTarget) return {targets: [], pressureTargets: []};
@@ -807,7 +817,7 @@ export class Pokemon {
 			damage: damageNumber,
 			move: move.id,
 			thisTurn: true,
-			position: source.position,
+			slot: source.getSlot(),
 			damageValue: damage,
 		});
 	}
@@ -818,11 +828,10 @@ export class Pokemon {
 	}
 
 	getLastDamagedBy(filterOutSameSide: boolean) {
-		const damagedBy: Attacker[] = this.attackedBy.filter(
-			(attacker) =>
-			  typeof attacker.damageValue === 'number' &&
-			  (filterOutSameSide === undefined || this.side !== attacker.source.side)
-		  );
+		const damagedBy: Attacker[] = this.attackedBy.filter(attacker => (
+			typeof attacker.damageValue === 'number' &&
+			(filterOutSameSide === undefined || !this.isAlly(attacker.source))
+		));
 		if (damagedBy.length === 0) return undefined;
 		return damagedBy[damagedBy.length - 1];
 	}
@@ -1125,7 +1134,7 @@ export class Pokemon {
 		const types = pokemon.getTypes(true);
 		this.setType(pokemon.volatiles['roost'] ? pokemon.volatiles['roost'].typeWas : types, true);
 		this.addedType = pokemon.addedType;
-		this.knownType = this.side === pokemon.side && pokemon.knownType;
+		this.knownType = this.isAlly(pokemon) && pokemon.knownType;
 		this.apparentType = pokemon.apparentType;
 
 		let statName: StatNameExceptHP;
@@ -1651,7 +1660,7 @@ export class Pokemon {
 		const effectid = this.battle.effect ? this.battle.effect.id : '';
 		if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 			const inflicted = ['trick', 'switcheroo'].includes(effectid);
-			const external = inflicted && source && source.side.id !== this.side.id;
+			const external = inflicted && source && !source.isAlly(this);
 			this.pendingStaleness = external ? 'external' : 'internal';
 		} else {
 			this.pendingStaleness = undefined;
@@ -1754,7 +1763,7 @@ export class Pokemon {
 		this.volatiles[status.id].target = this;
 		if (source) {
 			this.volatiles[status.id].source = source;
-			this.volatiles[status.id].sourcePosition = source.position;
+			this.volatiles[status.id].sourceSlot = source.getSlot();
 		}
 		if (sourceEffect) this.volatiles[status.id].sourceEffect = sourceEffect;
 		if (status.duration) this.volatiles[status.id].duration = status.duration;
