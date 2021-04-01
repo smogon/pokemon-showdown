@@ -1867,7 +1867,7 @@ export class RandomTeams {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.getSpecies(species.changesFrom).tier : species.tier;
 			const tierScale: {[k: string]: number} = {
 				Uber: 76,
-				OU: 80,
+				OU: 80, CAP: 80,
 				UUBL: 81,
 				UU: 82,
 				RUBL: 83,
