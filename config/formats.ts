@@ -1740,7 +1740,6 @@ export const Formats: FormatList = [
 		threads: [
 			`&bullet; <a href="http://spo.ink/HappyBirthdayAeonic">Introduction &amp; Roster</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3681253/">Discussion Thread</a>`,
-			
 		],
 
 		mod: 'ssb',
