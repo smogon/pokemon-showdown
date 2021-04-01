@@ -1025,6 +1025,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (!message) message = ' forfeited.';
 		this.room.add(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
+		// multi battles, they need to be removed, else they can do things like spam forfeit
+		if (this.playerCap > 2) this.removePlayer(player);
 		void this.stream.write(`>forcelose ${player.slot}`);
 		return true;
 	}
