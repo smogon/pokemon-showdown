@@ -1899,8 +1899,9 @@ export class RandomTeams {
 			const customScale: {[k: string]: number} = {
 				// These Pokemon are too strong and need a lower level
 				zaciancrowned: 66, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, glalie: 78, octillery: 84, wobbuffet: 86,
+				jolteon: 84, swoobat: 84, haxorus: 80, kyogre: 73, inteleon: 80, slurpuff: 84, polteageist: 84,
 				// These Pokemon are too weak and need a higher level
-				delibird: 100, vespiquen: 96, pikachu: 92,
+				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, reuniclus: 87, arctozolt: 88,
 			};
 			level = customScale[species.id] || tierScale[tier];
 		} else if (species.randomBattleLevel) {
