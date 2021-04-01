@@ -508,3 +508,11 @@ export const pages: PageTable = {
 		return LogViewer.linkify(buf);
 	},
 };
+
+export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
+	if (answererData[oldID]) {
+		if (!answererData[newID]) answererData[newID] = {pairs: {}};
+		Object.assign(answererData[newID], answererData[oldID]);
+		FS(PATH).writeUpdate(() => JSON.stringify(answererData));
+	}
+};

@@ -170,6 +170,15 @@ export const pages: PageTable = {
 	},
 };
 
+export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
+	if (roomFaqs[oldID]) {
+		if (!roomFaqs[newID]) roomFaqs[newID] = {};
+		Object.assign(roomFaqs[newID], roomFaqs[oldID]);
+		delete roomFaqs[oldID];
+		saveRoomFaqs();
+	}
+};
+
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/addfaq ');
 });

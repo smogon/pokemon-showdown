@@ -1378,6 +1378,7 @@ export const Chat = new class {
 	basePages!: PageTable;
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
+	readonly renameHandlers: Rooms.RenameHandler[] = [];
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
 	/** Will be empty except during hotpatch */
@@ -1756,6 +1757,7 @@ export const Chat = new class {
 		if (plugin.punishmentfilter) Chat.punishmentfilters.push(plugin.punishmentfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
+		if (plugin.onRenameRoom) Chat.renameHandlers.push(plugin.onRenameRoom);
 		Chat.plugins[name] = plugin;
 	}
 	loadPlugins(oldPlugins?: {[k: string]: ChatPlugin}) {
@@ -1818,6 +1820,12 @@ export const Chat = new class {
 	destroy() {
 		for (const handler of Chat.destroyHandlers) {
 			handler();
+		}
+	}
+
+	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
+		for (const handler of Chat.renameHandlers) {
+			handler(oldID, newID, room);
 		}
 	}
 

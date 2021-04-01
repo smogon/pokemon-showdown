@@ -979,7 +979,12 @@ export const commands: ChatCommands = {
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
+		const oldID = room.roomid;
+
 		room.rename(target, id);
+
+		Chat.handleRoomRename(oldID, id || toID(target) as RoomID, room);
+
 		this.modlog(`RENAME${isGroupchat ? 'GROUPCHAT' : 'ROOM'}`, null, `from ${oldTitle}`);
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :

@@ -256,6 +256,14 @@ export const commands: ChatCommands = {
 	},
 };
 
+export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
+	if (spotlights[oldID]) {
+		if (!spotlights[newID]) spotlights[newID] = {};
+		Object.assign(spotlights[newID], spotlights[oldID]);
+		saveSpotlights();
+	}
+};
+
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/(queue|set|replace)daily(at | )');
 });

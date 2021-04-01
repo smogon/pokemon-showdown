@@ -63,6 +63,7 @@ namespace Rooms {
 	export type RoomBattle = import('./room-battle').RoomBattle;
 	export type Roomlog = import('./roomlogs').Roomlog;
 	export type Room = import('./rooms').Room;
+	export type RenameHandler = import('./rooms').RenameHandler;
 }
 
 // Streams
