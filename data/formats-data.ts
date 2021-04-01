@@ -6146,10 +6146,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	syclant: {
+		randomBattleMoves: ["iceshard", "stoneedge", "superpower", "swordsdance", "tripleaxel", "uturn"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	revenankh: {
+		randomBattleMoves: ["bulkup", "drainpunch", "earthquake", "moonlight", "poltergeist", "shadowsneak"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6162,6 +6166,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP NFE",
 	},
 	pyroak: {
+		randomBattleMoves: ["earthpower", "fireblast", "leafstorm", "stealthrock", "synthesis"],
+		randomBattleLevel: 84,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6170,6 +6176,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	fidgit: {
+		randomBattleMoves: ["earthpower", "sludgebomb", "rapidspin", "spikes", "stealthrock", "tailwind", "toxicspikes"],
+		randomBattleLevel: 84,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6182,6 +6190,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP NFE",
 	},
 	stratagem: {
+		randomBattleMoves: ["earthpower", "fireblast", "meteorbeam", "paleowave"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6190,22 +6200,32 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	arghonaut: {
+		randomBattleMoves: ["aquajet", "closecombat", "knockoff", "machpunch", "recover", "spikes", "waterfall"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	kitsunoh: {
+		randomBattleMoves: ["closecombat", "meteormash", "poltergeist", "shadowsneak", "trick", "uturn"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	cyclohm: {
+		randomBattleMoves: ["dracometeor", "fireblast", "icebeam", "thunderbolt", "voltswitch"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	colossoil: {
+		randomBattleMoves: ["earthquake", "facade", "knockoff", "rapidspin", "suckerpunch"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	krilowatt: {
+		randomBattleMoves: ["icebeam", "surf", "thunderbolt", "voltswitch"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6214,6 +6234,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	voodoom: {
+		randomBattleMoves: ["darkpulse", "flashcannon", "focusblast", "nastyplot", "thunderbolt"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6222,6 +6244,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	tomohawk: {
+		randomBattleMoves: ["aurasphere", "haze", "hurricane", "roost", "stealthrock"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6230,10 +6254,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	necturna: {
+		randomBattleMoves: ["powerwhip", "shadowclaw", "shellsmash", "stoneedge"],
+		randomBattleLevel: 78,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	mollux: {
+		randomBattleMoves: ["calmmind", "eruption", "lavaplume", "recover", "sludgebomb", "thunderbolt"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6246,6 +6274,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP NFE",
 	},
 	aurumoth: {
+		randomBattleMoves: ["closecombat", "dragondance", "dualwingbeat", "megahorn", "zenheadbutt"],
+		randomBattleLevel: 78,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6254,6 +6284,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	malaconda: {
+		randomBattleMoves: ["glare", "knockoff", "solarblade", "synthesis", "wildcharge", "uturn"],
+		randomBattleLevel: 84,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6262,6 +6294,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	cawmodore: {
+		randomBattleMoves: ["acrobatics", "bellydrum", "bulletpunch", "drainpunch"],
+		randomBattleLevel: 78,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6270,6 +6304,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	volkraken: {
+		randomBattleMoves: ["fireblast", "hydropump", "powergem", "scorchingsands", "u-turn"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6278,6 +6314,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	plasmanta: {
+		randomBattleMoves: ["bodypress", "magnetrise", "psychic", "sludgewave", "thunderbolt"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6290,10 +6328,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP NFE",
 	},
 	naviathan: {
+		randomBattleMoves: ["dragondance", "facade", "heavyslam", "iciclecrash", "slackoff", "waterfall"],
+		randomBattleLevel: 78,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	crucibelle: {
+		randomBattleMoves: ["coil", "gunkshot", "stealthrock", "stoneedge", "uturn", "woodhammer"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6306,10 +6348,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	kerfluffle: {
+		randomBattleMoves: ["focusblast", "moonblast", "partingshot", "sludgewave", "taunt"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	pajantom: {
+		randomBattleMoves: ["bravebird", "earthquake", "outrage", "spiritshackle", "toxicspikes"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6318,6 +6364,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	jumbao: {
+		randomBattleMoves: ["focusblast", "healingwish", "solarbeam", "moonblast", "synthesis"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6330,6 +6378,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP NFE",
 	},
 	caribolt: {
+		randomBattleMoves: ["brickbreak", "doubleedge", "knockoff", "powerwhip", "quickattack", "swordsdance"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6342,6 +6392,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP NFE",
 	},
 	smokomodo: {
+		randomBattleMoves: ["earthquake", "flareblitz", "gunkshot", "morningsun", "stealthrock", "stormthrow"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6354,6 +6406,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP NFE",
 	},
 	snaelstrom: {
+		randomBattleMoves: ["scald", "spikyshield", "stealthrock", "stickyweb", "uturn"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6362,6 +6416,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	equilibra: {
+		randomBattleMoves: ["aurasphere", "earthpower", "flashcannon", "painsplit", "rapidspin", "trickroom"],
+		randomBattleLevel: 82,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6370,6 +6426,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	astrolotl: {
+		randomBattleMoves: ["defog", "dracometeor", "firelash", "spikes", "stompingtantrum", "willowisp"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -6378,6 +6436,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP LC",
 	},
 	miasmaw: {
+		randomBattleMoves: ["closecombat", "dragonhammer", "firstimpression", "megahorn", "poisonjab", "recover"],
+		randomBattleLevel: 80,
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
