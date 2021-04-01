@@ -100,7 +100,7 @@ export const Formats: FormatList = [
 		banlist: ['OU', 'UUBL'],
 	},
 	{
-		name: "[Gen 8] UU",
+		name: "[Gen 8] UU (suspect test)",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3681243/">UU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3659681/">UU Sample Teams</a>`,
