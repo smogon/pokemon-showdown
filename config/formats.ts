@@ -744,159 +744,88 @@ export const Formats: FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 8] Max Berries",
-		desc: `All berries have their effects maximized.`,
+		name: "[Gen 8] Pokebilities",
+		desc: `Pok&eacute;mon have all of their released abilities simultaneously.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3677136/">Max Berries</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3679692/">Pok&eacute;bilities</a>`,
 		],
 
-		mod: 'maxberries',
+		mod: 'pokebilities',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Eternatus', 'Genesect', 'Giratina',
-			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia', 'Lunala', 'Magearna',
-			'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza',
-			'Reshiram', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base',
-			'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Jaboca Berry', 'Rowap Berry', 'Starf Berry', 'Baton Pass',
-			'Block', 'Bug Bite', 'Knock Off', 'Mean Look', 'Pluck', 'Substitute',
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Eternatus', 'Excadrill', 'Genesect',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base',
+			'Lugia', 'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
+			'Porygon-Z', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
+			'Zekrom', 'Zygarde-Base', 'Power Construct', 'Baton Pass',
+			// Moody users
+			'Glalie', 'Octillery', 'Remoraid', 'Snorunt',
+			// Shadow Tag/Arena Trap
+			'Diglett-Base', 'Dugtrio-Base', 'Gothita', 'Gothitelle', 'Gothorita', 'Trapinch', 'Wobbuffet', 'Wynaut',
 		],
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
+					continue;
+				}
+				pokemon.m.innates = Object.keys(pokemon.species.abilities)
+					.filter(key => key !== 'S' && (key !== 'H' || !pokemon.species.unreleasedHidden))
+					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
+					.filter(ability => ability !== pokemon.ability);
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
+		},
+		onAfterMega(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+			pokemon.m.innates = undefined;
+		},
 	},
 	{
-		name: "[Gen 8] The Loser's Game",
-		desc: `The first player to lose all of their Pok&eacute;mon wins.`,
+		name: "[Gen 8] Godly Gift",
+		desc: `Each Pok&eacute;mon receives one base stat from a God (Uber Pok&eacute;mon) depending on its position in the team. If there is no Uber Pok&eacute;mon, it uses the Pok&eacute;mon in the first slot.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3657270/">The Loser's Game</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660461/">Godly Gift</a>`,
 		],
 
 		mod: 'gen8',
-		forcedLevel: 100,
-		teamLength: {
-			validate: [6, 6],
-		},
-		ruleset: ['Standard', '!OHKO Clause'],
-		banlist: [
-			'Sandshrew-Alola', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Choice Scarf',
-			'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Explosion', 'Self-Destruct',
-		],
-		onValidateTeam(team) {
-			const familyTable = new Set<ID>();
-			for (const set of team) {
-				let species = this.dex.getSpecies(set.species);
-				while (species.prevo) {
-					species = this.dex.getSpecies(species.prevo);
+		// searchShow: false,
+		ruleset: ['Standard', 'Dynamax Clause'],
+		banlist: ['Blissey', 'Chansey', 'Toxapex', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
+		onModifySpeciesPriority: 3,
+		onModifySpecies(species, target, source) {
+			if (source || !target?.side) return;
+			const god = target.side.team.find(set => {
+				let godSpecies = this.dex.getSpecies(set.species);
+				const validator = this.dex.getRuleTable(this.dex.getFormat(`gen${this.gen}ou`));
+				if (this.toID(set.ability) === 'powerconstruct') {
+					return true;
 				}
-				if (familyTable.has(species.id)) {
-					return [
-						`You are limited to one Pok&eacute;mon from each family by the Family Clause.`,
-						`(You have more than one evolution of ${species.name}.)`,
-					];
+				if (set.item) {
+					const item = this.dex.getItem(set.item);
+					if (item.megaEvolves === set.species) godSpecies = this.dex.getSpecies(item.megaStone);
 				}
-				familyTable.add(species.id);
+				const isBanned = validator.isBannedSpecies(godSpecies);
+				return isBanned;
+			}) || target.side.team[0];
+			const stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
+			const newSpecies = this.dex.deepClone(species);
+			let godSpecies = this.dex.getSpecies(god.species);
+			if (godSpecies.forme === 'Crowned') {
+				godSpecies = this.dex.getSpecies(godSpecies.changesFrom || godSpecies.baseSpecies);
 			}
-		},
-		battle: {
-			tiebreak() {
-				if (this.ended) return false;
-
-				this.inputLog.push(`>tiebreak`);
-				this.add('message', "Time's up! Going to tiebreaker...");
-				const notFainted = this.sides.map(side => (
-					side.pokemon.filter(pokemon => !pokemon.fainted).length
-				));
-				this.add('-message', this.sides.map((side, i) => (
-					`${side.name}: ${notFainted[i]} Pokemon left`
-				)).join('; '));
-				const maxNotFainted = Math.max(...notFainted);
-				let tiedSides = this.sides.filter((side, i) => notFainted[i] === maxNotFainted);
-				if (tiedSides.length <= 1) {
-					return this.win(tiedSides[1]);
-				}
-
-				const hpPercentage = tiedSides.map(side => (
-					side.pokemon.map(pokemon => pokemon.hp / pokemon.maxhp).reduce((a, b) => a + b) * 100 / 6
-				));
-				this.add('-message', tiedSides.map((side, i) => (
-					`${side.name}: ${Math.round(hpPercentage[i])}% total HP left`
-				)).join('; '));
-				const maxPercentage = Math.max(...hpPercentage);
-				tiedSides = tiedSides.filter((side, i) => hpPercentage[i] === maxPercentage);
-				if (tiedSides.length <= 1) {
-					return this.win(tiedSides[1]);
-				}
-
-				const hpTotal = tiedSides.map(side => (
-					side.pokemon.map(pokemon => pokemon.hp).reduce((a, b) => a + b)
-				));
-				this.add('-message', tiedSides.map((side, i) => (
-					`${side.name}: ${Math.round(hpTotal[i])} total HP left`
-				)).join('; '));
-				const maxTotal = Math.max(...hpTotal);
-				tiedSides = tiedSides.filter((side, i) => hpTotal[i] === maxTotal);
-				if (tiedSides.length <= 1) {
-					return this.win(tiedSides[1]);
-				}
-				return this.tie();
-			},
-			faintMessages(lastFirst) {
-				if (this.ended) return;
-				const length = this.faintQueue.length;
-				if (!length) return false;
-				if (lastFirst) {
-					this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
-					this.faintQueue.pop();
-				}
-				let faintData;
-				while (this.faintQueue.length) {
-					faintData = this.faintQueue.shift()!;
-					const pokemon: Pokemon = faintData.target;
-					if (!pokemon.fainted &&
-						this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
-						this.add('faint', pokemon);
-						pokemon.side.pokemonLeft--;
-						this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
-						this.singleEvent('End', pokemon.getAbility(), pokemon.abilityData, pokemon);
-						pokemon.clearVolatile(false);
-						pokemon.fainted = true;
-						pokemon.isActive = false;
-						pokemon.isStarted = false;
-						pokemon.side.faintedThisTurn = pokemon;
-					}
-				}
-
-				if (this.gen <= 1) {
-					// in gen 1, fainting skips the rest of the turn
-					// residuals don't exist in gen 1
-					this.queue.clear();
-				} else if (this.gen <= 3 && this.gameType === 'singles') {
-					// in gen 3 or earlier, fainting in singles skips to residuals
-					for (const pokemon of this.getAllActive()) {
-						if (this.gen <= 2) {
-							// in gen 2, fainting skips moves only
-							this.queue.cancelMove(pokemon);
-						} else {
-							// in gen 3, fainting skips all moves and switches
-							this.queue.cancelAction(pokemon);
-						}
-					}
-				}
-
-				if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
-					this.win(faintData ? faintData.target.side.foe : null);
-					return true;
-				}
-				if (!this.p1.pokemonLeft) {
-					this.win(this.p1);
-					return true;
-				}
-				if (!this.p2.pokemonLeft) {
-					this.win(this.p2);
-					return true;
-				}
-				if (faintData) {
-					this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
-				}
-				return false;
-			},
+			newSpecies.bst -= newSpecies.baseStats[stat];
+			newSpecies.baseStats[stat] = godSpecies.baseStats[stat as StatName];
+			newSpecies.bst += newSpecies.baseStats[stat];
+			return newSpecies;
 		},
 	},
 
@@ -1231,45 +1160,6 @@ export const Formats: FormatList = [
 		},
 	},
 	{
-		name: "[Gen 8] Godly Gift",
-		desc: `Each Pok&eacute;mon receives one base stat from a God (Uber Pok&eacute;mon) depending on its position in the team. If there is no Uber Pok&eacute;mon, it uses the Pok&eacute;mon in the first slot.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3660461/">Godly Gift</a>`,
-		],
-
-		mod: 'gen8',
-		searchShow: false,
-		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: ['Blissey', 'Chansey', 'Toxapex', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
-		onModifySpeciesPriority: 3,
-		onModifySpecies(species, target, source) {
-			if (source || !target?.side) return;
-			const god = target.side.team.find(set => {
-				let godSpecies = this.dex.getSpecies(set.species);
-				const validator = this.dex.getRuleTable(this.dex.getFormat(`gen${this.gen}ou`));
-				if (this.toID(set.ability) === 'powerconstruct') {
-					return true;
-				}
-				if (set.item) {
-					const item = this.dex.getItem(set.item);
-					if (item.megaEvolves === set.species) godSpecies = this.dex.getSpecies(item.megaStone);
-				}
-				const isBanned = validator.isBannedSpecies(godSpecies);
-				return isBanned;
-			}) || target.side.team[0];
-			const stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
-			const newSpecies = this.dex.deepClone(species);
-			let godSpecies = this.dex.getSpecies(god.species);
-			if (godSpecies.forme === 'Crowned') {
-				godSpecies = this.dex.getSpecies(godSpecies.changesFrom || godSpecies.baseSpecies);
-			}
-			newSpecies.bst -= newSpecies.baseStats[stat];
-			newSpecies.baseStats[stat] = godSpecies.baseStats[stat as StatName];
-			newSpecies.bst += newSpecies.baseStats[stat];
-			return newSpecies;
-		},
-	},
-	{
 		name: "[Gen 8] Inheritance",
 		desc: `Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.`,
 		threads: [
@@ -1552,6 +1442,145 @@ export const Formats: FormatList = [
 				if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
 				const abilityid = this.battle.toID(ability);
 				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
+			},
+		},
+	},
+	{
+		name: "[Gen 8] The Loser's Game",
+		desc: `The first player to lose all of their Pok&eacute;mon wins.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3657270/">The Loser's Game</a>`,
+		],
+
+		mod: 'gen8',
+		forcedLevel: 100,
+		teamLength: {
+			validate: [6, 6],
+		},
+		searchShow: false,
+		ruleset: ['Standard', '!OHKO Clause'],
+		banlist: [
+			'Sandshrew-Alola', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Choice Scarf',
+			'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Explosion', 'Self-Destruct',
+		],
+		onValidateTeam(team) {
+			const familyTable = new Set<ID>();
+			for (const set of team) {
+				let species = this.dex.getSpecies(set.species);
+				while (species.prevo) {
+					species = this.dex.getSpecies(species.prevo);
+				}
+				if (familyTable.has(species.id)) {
+					return [
+						`You are limited to one Pok&eacute;mon from each family by the Family Clause.`,
+						`(You have more than one evolution of ${species.name}.)`,
+					];
+				}
+				familyTable.add(species.id);
+			}
+		},
+		battle: {
+			tiebreak() {
+				if (this.ended) return false;
+
+				this.inputLog.push(`>tiebreak`);
+				this.add('message', "Time's up! Going to tiebreaker...");
+				const notFainted = this.sides.map(side => (
+					side.pokemon.filter(pokemon => !pokemon.fainted).length
+				));
+				this.add('-message', this.sides.map((side, i) => (
+					`${side.name}: ${notFainted[i]} Pokemon left`
+				)).join('; '));
+				const maxNotFainted = Math.max(...notFainted);
+				let tiedSides = this.sides.filter((side, i) => notFainted[i] === maxNotFainted);
+				if (tiedSides.length <= 1) {
+					return this.win(tiedSides[1]);
+				}
+
+				const hpPercentage = tiedSides.map(side => (
+					side.pokemon.map(pokemon => pokemon.hp / pokemon.maxhp).reduce((a, b) => a + b) * 100 / 6
+				));
+				this.add('-message', tiedSides.map((side, i) => (
+					`${side.name}: ${Math.round(hpPercentage[i])}% total HP left`
+				)).join('; '));
+				const maxPercentage = Math.max(...hpPercentage);
+				tiedSides = tiedSides.filter((side, i) => hpPercentage[i] === maxPercentage);
+				if (tiedSides.length <= 1) {
+					return this.win(tiedSides[1]);
+				}
+
+				const hpTotal = tiedSides.map(side => (
+					side.pokemon.map(pokemon => pokemon.hp).reduce((a, b) => a + b)
+				));
+				this.add('-message', tiedSides.map((side, i) => (
+					`${side.name}: ${Math.round(hpTotal[i])} total HP left`
+				)).join('; '));
+				const maxTotal = Math.max(...hpTotal);
+				tiedSides = tiedSides.filter((side, i) => hpTotal[i] === maxTotal);
+				if (tiedSides.length <= 1) {
+					return this.win(tiedSides[1]);
+				}
+				return this.tie();
+			},
+			faintMessages(lastFirst) {
+				if (this.ended) return;
+				const length = this.faintQueue.length;
+				if (!length) return false;
+				if (lastFirst) {
+					this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
+					this.faintQueue.pop();
+				}
+				let faintData;
+				while (this.faintQueue.length) {
+					faintData = this.faintQueue.shift()!;
+					const pokemon: Pokemon = faintData.target;
+					if (!pokemon.fainted &&
+						this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
+						this.add('faint', pokemon);
+						pokemon.side.pokemonLeft--;
+						this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+						this.singleEvent('End', pokemon.getAbility(), pokemon.abilityData, pokemon);
+						pokemon.clearVolatile(false);
+						pokemon.fainted = true;
+						pokemon.isActive = false;
+						pokemon.isStarted = false;
+						pokemon.side.faintedThisTurn = pokemon;
+					}
+				}
+
+				if (this.gen <= 1) {
+					// in gen 1, fainting skips the rest of the turn
+					// residuals don't exist in gen 1
+					this.queue.clear();
+				} else if (this.gen <= 3 && this.gameType === 'singles') {
+					// in gen 3 or earlier, fainting in singles skips to residuals
+					for (const pokemon of this.getAllActive()) {
+						if (this.gen <= 2) {
+							// in gen 2, fainting skips moves only
+							this.queue.cancelMove(pokemon);
+						} else {
+							// in gen 3, fainting skips all moves and switches
+							this.queue.cancelAction(pokemon);
+						}
+					}
+				}
+
+				if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
+					this.win(faintData ? faintData.target.side.foe : null);
+					return true;
+				}
+				if (!this.p1.pokemonLeft) {
+					this.win(this.p1);
+					return true;
+				}
+				if (!this.p2.pokemonLeft) {
+					this.win(this.p2);
+					return true;
+				}
+				if (faintData) {
+					this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
+				}
+				return false;
 			},
 		},
 	},
@@ -1997,40 +2026,40 @@ export const Formats: FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 4] UU",
+		name: "[Gen 5] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3532624/">DPP UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3503638/">DPP UU Viability Rankings</a>`,
-		],
-
-		mod: 'gen4',
-		// searchShow: false,
-		ruleset: ['[Gen 4] OU', 'Baton Pass Clause'],
-		banlist: ['OU', 'UUBL'],
-		unbanlist: ['Arena Trap', 'Sand Veil', 'Baton Pass'],
-	},
-	{
-		name: "[Gen 5] PU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7326932/">BW2 PU</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3474024/">BW2 UU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
 		],
 
 		mod: 'gen5',
 		// searchShow: false,
-		ruleset: ['[Gen 5] NU', 'Sleep Moves Clause'],
-		banlist: ['NU', 'Combusken', 'Gothorita', 'Linoone', 'Riolu', 'Rotom-Frost', 'Throh', 'Vigoroth'],
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Sleep Clause Mod'],
+		banlist: ['Uber', 'OU', 'UUBL', 'Arena Trap', 'Drought', 'Sand Stream', 'Snow Warning'],
 	},
 	{
-		name: "[Gen 7] PU",
+		name: "[Gen 6] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3611496/">USM PU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3614892/">USM PU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/dex/xy/formats/uu/">ORAS UU Banlist</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3598164/">ORAS UU Viability Rankings</a>`,
 		],
 
-		mod: 'gen7',
+		mod: 'gen6',
 		// searchShow: false,
-		ruleset: ['[Gen 7] NU'],
-		banlist: ['NU', 'PUBL'],
+		ruleset: ['[Gen 6] OU'],
+		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought'],
+	},
+	{
+		name: "[Gen 6] CAP",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3537407/">ORAS CAP Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8752281/">ORAS CAP Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8752280/">ORAS CAP Viability Rankings</a>`,
+		],
+
+		mod: 'gen6',
+		// searchShow: false,
+		ruleset: ['[Gen 6] OU', '+CAP'],
 	},
 
 	// Past Gens OU
@@ -2298,6 +2327,18 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 7] RU'],
 		banlist: ['RU', 'NUBL', 'Drought'],
+	},
+	{
+		name: "[Gen 7] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3611496/">USM PU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3614892/">USM PU Viability Rankings</a>`,
+		],
+
+		mod: 'gen7',
+		searchShow: false,
+		ruleset: ['[Gen 7] NU'],
+		banlist: ['NU', 'PUBL'],
 	},
 	{
 		name: "[Gen 7] LC",
@@ -2612,18 +2653,6 @@ export const Formats: FormatList = [
 		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause'],
 	},
 	{
-		name: "[Gen 6] UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/dex/xy/tags/uu/">ORAS UU Banlist</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3598164/">ORAS UU Viability Rankings</a>`,
-		],
-
-		mod: 'gen6',
-		searchShow: false,
-		ruleset: ['[Gen 6] OU'],
-		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought'],
-	},
-	{
 		name: "[Gen 6] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/dex/xy/tags/ru/">ORAS RU Banlist</a>`,
@@ -2724,18 +2753,6 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-	{
-		name: "[Gen 6] CAP",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3537407/">ORAS CAP Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8752281/">ORAS CAP Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8752280/">ORAS CAP Viability Rankings</a>`,
-		],
-
-		mod: 'gen6',
-		searchShow: false,
-		ruleset: ['[Gen 6] OU', '+CAP'],
 	},
 	{
 		name: "[Gen 6] Battle Spot Singles",
@@ -2913,18 +2930,6 @@ export const Formats: FormatList = [
 		ruleset: ['Standard', 'Sleep Clause Mod'],
 	},
 	{
-		name: "[Gen 5] UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3474024/">BW2 UU Viability Rankings</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
-		],
-
-		mod: 'gen5',
-		searchShow: false,
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Sleep Clause Mod'],
-		banlist: ['Uber', 'OU', 'UUBL', 'Arena Trap', 'Drought', 'Sand Stream', 'Snow Warning'],
-	},
-	{
 		name: "[Gen 5] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
@@ -2947,6 +2952,17 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 5] RU'],
 		banlist: ['RU', 'NUBL', 'Prankster + Assist'],
+	},
+	{
+		name: "[Gen 5] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7326932/">BW2 PU</a>`,
+		],
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['[Gen 5] NU', 'Sleep Moves Clause'],
+		banlist: ['NU', 'Combusken', 'Gothorita', 'Linoone', 'Riolu', 'Rotom-Frost', 'Throh', 'Vigoroth'],
 	},
 	{
 		name: "[Gen 5] LC",
@@ -3105,6 +3121,19 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard'],
 		banlist: ['AG'],
+	},
+	{
+		name: "[Gen 4] UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3532624/">DPP UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503638/">DPP UU Viability Rankings</a>`,
+		],
+
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['[Gen 4] OU', 'Baton Pass Clause'],
+		banlist: ['OU', 'UUBL'],
+		unbanlist: ['Arena Trap', 'Sand Veil', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 4] NU",
