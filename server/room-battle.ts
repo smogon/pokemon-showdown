@@ -18,7 +18,7 @@ import * as RoomGames from "./room-game";
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
-export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour' | 'multi';
+export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
 
 interface BattleRequestTracker {
 	rqid: number;
@@ -103,11 +103,13 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.wantsTie = false;
 		this.active = true;
 		this.eliminated = false;
+
 		this.secondsLeft = 1;
 		this.turnSecondsLeft = 1;
 		this.dcSecondsLeft = 1;
 
 		this.connected = true;
+
 		if (user) {
 			user.games.add(this.game.roomid);
 			user.updateSearch();

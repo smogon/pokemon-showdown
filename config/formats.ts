@@ -1656,17 +1656,6 @@ export const Formats: FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 8] Random Multi Battle",
-
-		mod: 'gen8',
-		gameType: 'multi',
-		team: 'random',
-		teamLength: {
-			battle: 3,
-		},
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-	},
-	{
 		name: "[Gen 8] Monotype Random Battle",
 
 		mod: 'gen8',
