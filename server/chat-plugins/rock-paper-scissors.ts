@@ -297,7 +297,7 @@ export const commands: ChatCommands = {
 			if (!targetUser) return this.errorReply(`The user who challenged you to Rock Paper Scissors is offline.`);
 			const existingRoom = findExisting(user.id, targetUser.id);
 			const options = {
-				modchat: '+',
+				modchat: '+' as AuthLevel,
 				isPrivate: true,
 			};
 			const roomid = `rps-${targetUser.id}-${user.id}`;
