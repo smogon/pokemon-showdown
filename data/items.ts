@@ -66,6 +66,17 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
+		onBoost(boost, target, source, effect) {
+			// check other edge case of -5 and intim
+			if (target.boosts["atk"] === -5 && boost.atk && (boost.atk < 0) && effect && effect.id === 'intimidate') {
+				target.useItem();
+			}
+			// contrary, probably can be optimized
+			// eslint-disable-next-line max-len
+			if (target.hasAbility('Contrary') && target.boosts["atk"] === 5 && boost.atk && (boost.atk > 0) && effect.id === 'intimidate') {
+				target.useItem();
+			}
+		},
 		onAfterBoost(boost, target, source, effect) {
 			if ((target.boosts['atk'] === -6) || (target.boosts['spe'] === 6)) return;
 			// check contrary users
