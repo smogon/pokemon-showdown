@@ -1990,7 +1990,7 @@ export class RandomTeams {
 			if (!species.exists) continue;
 
 			// AFD enforcement of at least 1 CAP pokemon per team
-			if (pokemon.length === 5 && !hasCAP && species.isNonstandard !== 'CAP') continue;
+			if (!isMonotype && pokemon.length === 5 && !hasCAP && species.isNonstandard !== 'CAP') continue;
 
 			// Check if the forme has moves for random battle
 			if (this.format.gameType === 'singles') {
