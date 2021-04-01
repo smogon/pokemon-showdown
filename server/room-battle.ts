@@ -1025,8 +1025,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (!message) message = ' forfeited.';
 		this.room.add(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
-		const otherids = ['p2', 'p1'];
-		void this.stream.write(`>forcewin ${otherids[(player.num - 1) % 2]}`);
+		void this.stream.write(`>forcelose ${player.slot}`);
 		return true;
 	}
 

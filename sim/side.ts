@@ -235,7 +235,7 @@ export class Side {
 		return [this.foe];
 	}
 	foePokemonLeft() {
-		if (this.battle.gameType === 'multi') {
+		if (this.battle.gameType === 'freeforall') {
 			return this.battle.sides.filter(side => side !== this).map(side => side.pokemonLeft).reduce((a, b) => a + b);
 		}
 
