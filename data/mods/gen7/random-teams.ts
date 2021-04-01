@@ -952,6 +952,18 @@ export class RandomGen7Teams extends RandomTeams {
 			(species.randomDoubleBattleMoves || species.randomBattleMoves) :
 			species.randomBattleMoves;
 		const movePool = (randMoves || Object.keys(Dex.getLearnsetData(species.id).learnset!)).slice();
+		if (this.format.gameType === 'multi') {
+			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
+			const allySwitch = movePool.indexOf('allyswitch');
+			if (allySwitch !== undefined) {
+				if (movePool.length > 4) {
+					this.fastPop(movePool, allySwitch);
+				} else {
+					// Ideally, we'll never get here, but better to have a move that usually does nothing than one that always does
+					movePool[allySwitch] = 'sleeptalk';
+				}
+			}
+		}
 		const rejectedPool = [];
 		const moves: ID[] = [];
 		let ability = '';

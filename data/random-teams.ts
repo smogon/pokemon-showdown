@@ -62,6 +62,7 @@ export class RandomTeams {
 	factoryTier: string;
 	format: Format;
 	prng: PRNG;
+	maxLength?: number;
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
@@ -74,7 +75,13 @@ export class RandomTeams {
 		format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
-
+		if (format.teamLength) {
+			if (format.teamLength.validate && format.teamLength.validate[1]) {
+				this.maxLength = format.teamLength.validate[1];
+			} else {
+				this.maxLength = format.teamLength.battle;
+			}
+		}
 		this.factoryTier = '';
 		this.format = format;
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
@@ -1624,6 +1631,18 @@ export class RandomTeams {
 			(isNoDynamax && species.randomBattleNoDynamaxMoves) ||
 			species.randomBattleMoves;
 		const movePool = (randMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		if (this.format.gameType === 'multi') {
+			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
+			const allySwitch = movePool.indexOf('allyswitch');
+			if (allySwitch !== undefined) {
+				if (movePool.length > 4) {
+					this.fastPop(movePool, allySwitch);
+				} else {
+					// Ideally, we'll never get here, but better to have a move that usually does nothing than one that always does
+					movePool[allySwitch] = 'sleeptalk';
+				}
+			}
+		}
 		const rejectedPool = [];
 		const moves: ID[] = [];
 		let ability = '';

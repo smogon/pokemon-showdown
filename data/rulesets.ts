@@ -1003,8 +1003,8 @@ export const Formats: {[k: string]: FormatData} = {
 			}
 		},
 		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canDynamax = false;
+			for (const side of this.sides) {
+				side.dynamaxUsed = true;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},

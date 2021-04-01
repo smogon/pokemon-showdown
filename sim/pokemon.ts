@@ -244,7 +244,6 @@ export class Pokemon {
 
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
-	canDynamax: boolean;
 	readonly canGigantamax: string | null;
 
 	/** A Pokemon's currently 'staleness' with respect to the Endless Battle Clause. */
@@ -431,8 +430,6 @@ export class Pokemon {
 
 		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
-		// Normally would want to use battle.canDynamax to set this, but it references this property.
-		this.canDynamax = (this.battle.gen >= 8);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 
 		// This is used in gen 1 only, here to avoid code repetition.
@@ -454,7 +451,7 @@ export class Pokemon {
 		return this.moveSlots.map(moveSlot => moveSlot.id);
 	}
 
-	get baseMoves() {
+	get baseMoves(): readonly string[] {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
@@ -929,7 +926,7 @@ export class Pokemon {
 	getDynamaxRequest(skipChecks?: boolean) {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
-			if (!this.canDynamax) return;
+			if (!this.side.canDynamaxNow()) return;
 			if (
 				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
 				this.getItem().zMove || this.canMegaEvo
@@ -1014,7 +1011,7 @@ export class Pokemon {
 		return data;
 	}
 
-	getSwitchRequestData() {
+	getSwitchRequestData(forAlly?: boolean) {
 		const entry: AnyObject = {
 			ident: this.fullname,
 			details: this.details,
@@ -1027,7 +1024,7 @@ export class Pokemon {
 				spd: this.baseStoredStats['spd'],
 				spe: this.baseStoredStats['spe'],
 			},
-			moves: this.moves.map(move => {
+			moves: this[forAlly ? 'baseMoves' : 'moves'].map(move => {
 				if (move === 'hiddenpower') {
 					return move + toID(this.hpType) + (this.battle.gen < 6 ? '' : this.hpPower);
 				}
