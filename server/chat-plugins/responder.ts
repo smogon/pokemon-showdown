@@ -513,6 +513,7 @@ export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
 	if (answererData[oldID]) {
 		if (!answererData[newID]) answererData[newID] = {pairs: {}};
 		Object.assign(answererData[newID], answererData[oldID]);
+		delete answererData[oldID];
 		FS(PATH).writeUpdate(() => JSON.stringify(answererData));
 	}
 };

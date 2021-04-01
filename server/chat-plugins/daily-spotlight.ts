@@ -260,6 +260,7 @@ export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
 	if (spotlights[oldID]) {
 		if (!spotlights[newID]) spotlights[newID] = {};
 		Object.assign(spotlights[newID], spotlights[oldID]);
+		delete spotlights[oldID];
 		saveSpotlights();
 	}
 };
