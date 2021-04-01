@@ -124,6 +124,17 @@ export const Formats: FormatList = [
 		banlist: ['UU', 'RUBL'],
 	},
 	{
+		name: "[Gen 8] RU (Dynamax)",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3676870/">RU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3661013/">RU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3676023/">RU Viability Rankings</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] RU', '!Dynamax Clause'],
+	},
+	{
 		name: "[Gen 8] NU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3677068/">NU Metagame Discussion</a>`,
@@ -190,6 +201,18 @@ export const Formats: FormatList = [
 			'Pheromosa', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base',
 			'Moody', 'Power Construct', 'Shadow Tag', 'Damp Rock', 'Smooth Rock', 'Terrain Extender', 'Baton Pass',
 		],
+	},
+	{
+		name: "[Gen 8] Monotype (Dynamax)",
+		desc: `All the Pok&eacute;mon on a team must share a type.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672167/">Monotype Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3673391/">Monotype Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3673165">Monotype Viability Rankings</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] Monotype', '!Dynamax Clause'],
 	},
 	{
 		name: "[Gen 8] 1v1",
@@ -612,6 +635,18 @@ export const Formats: FormatList = [
 			'Spectrier', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base',
 			'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Damp Rock', 'Smooth Rock', 'Terrain Extender', 'Baton Pass',
 		],
+	},
+	{
+		name: "[Gen 8] ND Monotype (No Toxapex)",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677638/">National Dex Monotype Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677637/">National Dex Monotype Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677636/">National Dex Monotype Viability Rankings</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] National Dex Monotype'],
+		banlist: ['Toxapex'],
 	},
 	{
 		name: "[Gen 8] National Dex AG",
