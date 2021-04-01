@@ -216,9 +216,8 @@ export class Side {
 	}
 	foes() {
 		if (this.battle.gameType === 'free-for-all') {
-			return this.battle.sides
-				.flatMap(side => side === this ? [] : side.active)
-				.filter(pokemon => pokemon && !pokemon.fainted);
+			return this.battle.sides.map(side => side.active[0])
+				.filter(pokemon => pokemon.side !== this && pokemon && !pokemon.fainted);
 		}
 		return this.foe.allies();
 	}

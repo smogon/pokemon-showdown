@@ -176,7 +176,7 @@ export class BattleActions {
 			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
 		}
 		if (this.battle.gen === 4) {
-			for (const foeActive of pokemon.side.foe.active) {
+			for (const foeActive of pokemon.foes()) {
 				foeActive.removeVolatile('substitutebroken');
 			}
 		}
@@ -1728,11 +1728,10 @@ export class BattleActions {
 	runMegaEvo(pokemon: Pokemon) {
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!speciesid) return false;
-		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of side.foe.active) {
-			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
+		for (const foeActive of pokemon.foes()) {
+			if (foeActive.volatiles['skydrop']?.source === pokemon) {
 				return false;
 			}
 		}
@@ -1741,7 +1740,7 @@ export class BattleActions {
 
 		// Limit one mega evolution
 		const wasMega = pokemon.canMegaEvo;
-		for (const ally of side.pokemon) {
+		for (const ally of pokemon.allies()) {
 			if (wasMega) {
 				ally.canMegaEvo = null;
 			} else {

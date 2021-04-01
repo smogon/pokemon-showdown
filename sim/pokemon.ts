@@ -623,11 +623,12 @@ export class Pokemon {
 	}
 
 	foes(): Pokemon[] {
-		return this.side.foe.allies();
+		return this.side.foes();
 	}
 
 	adjacentFoes(): Pokemon[] {
-		return this.side.foe.allies().filter(foe => this.isAdjacent(foe));
+		if (this.battle.activePerHalf <= 2) return this.side.foes();
+		return this.side.foes().filter(foe => this.isAdjacent(foe));
 	}
 
 	isAlly(pokemon: Pokemon | null) {
