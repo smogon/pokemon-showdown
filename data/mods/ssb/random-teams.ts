@@ -17,6 +17,14 @@ export interface SSBSet {
 }
 interface SSBSets {[k: string]: SSBSet}
 
+const afdSSBSets: SSBSets = {
+	'Fox': {
+		species: 'Delphox', ability: 'No Ability', item: '', gender: '',
+		moves: [],
+		signatureMove: 'Super Metronome',
+	},
+};
+
 export const ssbSets: SSBSets = {
 	/*
 	// Example:
@@ -870,15 +878,19 @@ export const ssbSets: SSBSets = {
 export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		const team: PokemonSet[] = [];
-		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
-		const pool = debug.length ? debug : Object.keys(ssbSets);
+		let debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
+		if (this.format.id.includes('wiiu')) {
+			debug = Array(6).fill('Fox');
+		}
+		const pool = debug.length ? debug : this.format.id.includes('wiiu') ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
 		while (pool.length && team.length < 6) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
 			const name = this.sampleNoReplace(pool);
-			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
+			const ssbSet: SSBSet = this.format.id.includes('wiiu') ? this.dex.deepClone(afdSSBSets[name]) :
+				this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
@@ -936,6 +948,20 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Any set specific tweaks occur here.
 			if (set.name === 'Marshmallon' && !set.moves.includes('Head Charge')) set.moves[this.random(3)] = 'Head Charge';
+
+			if (this.format.id.includes('wiiu')) {
+				const egg = this.random(100);
+				if (egg === 69) {
+					set.name = 'Falco';
+					set.species = 'Swellow';
+				} else if (egg === 96) {
+					set.name = 'Captain Falcon';
+					set.species = 'Talonflame';
+				}
+				if (this.randomChance(1, 100)) {
+					set.item = 'Mail';
+				}
+			}
 
 			team.push(set);
 
