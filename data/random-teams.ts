@@ -1158,7 +1158,7 @@ export class RandomTeams {
 		isNoDynamax: boolean
 	): boolean {
 		if ([
-			'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge', 'Mountaineer',
+			'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge',
 			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -1226,13 +1226,11 @@ export class RandomTeams {
 		case 'Moxie':
 			return (counter.Physical < 2 || hasMove['stealthrock'] || hasMove['defog']);
 		case 'Neutralizing Gas':
-			return !hasMove['toxicspikes'] && species.id !== 'miasmaw';
+			return !hasMove['toxicspikes'];
 		case 'Overgrow':
 			return !counter.Grass;
 		case 'Own Tempo':
 			return !hasMove['petaldance'];
-		case 'Persistent':
-			return !hasMove['tailwind'];
 		case 'Power Construct':
 			return (species.forme === '10%' && !isDoubles);
 		case 'Prankster':
@@ -1260,7 +1258,7 @@ export class RandomTeams {
 		case 'Shadow Tag':
 			return (species.name === 'Gothitelle' && !isDoubles);
 		case 'Shed Skin':
-			return hasMove['dragondance'] || species.id === 'revenankh';
+			return hasMove['dragondance'];
 		case 'Sheer Force':
 			return (!counter.sheerforce || hasAbility['Guts']);
 		case 'Shell Armor':
@@ -1348,9 +1346,7 @@ export class RandomTeams {
 		isDoubles: boolean
 	) {
 		// not undefined — we want "no item" not "go find a different item"
-		if (hasMove['acrobatics'] && ability !== 'Ripen' && species.id !== 'cawmodore') {
-			return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
-		}
+		if (hasMove['acrobatics'] && ability !== 'Ripen') return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
 		if (hasMove['geomancy'] || hasMove['meteorbeam']) return 'Power Herb';
 		if (hasMove['shellsmash']) {
 			if (ability === 'Sturdy' && !isLead && !isDoubles) return 'Heavy-Duty Boots';
@@ -1886,7 +1882,7 @@ export class RandomTeams {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.getSpecies(species.changesFrom).tier : species.tier;
 			const tierScale: {[k: string]: number} = {
 				Uber: 76,
-				OU: 80, CAP: 80,
+				OU: 80,
 				UUBL: 81,
 				UU: 82,
 				RUBL: 83,
@@ -2006,15 +2002,11 @@ export class RandomTeams {
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		let hasCAP = false;
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < 6) {
 			let species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
-
-			// AFD enforcement of at least 1 CAP pokemon per team
-			if (!isMonotype && pokemon.length === 5 && !hasCAP && species.isNonstandard !== 'CAP') continue;
 
 			// Check if the forme has moves for random battle
 			if (this.format.gameType === 'singles') {
@@ -2093,8 +2085,6 @@ export class RandomTeams {
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
-			// AFD enforcement helper
-			if (species.isNonstandard === 'CAP') hasCAP = true;
 
 			if (pokemon.length === 6) {
 				// Set Zoroark's level to be the same as the last Pokemon
