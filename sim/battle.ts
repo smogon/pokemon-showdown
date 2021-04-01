@@ -1546,6 +1546,7 @@ export class Battle {
 			}
 		}
 
+		this.add('gametype', this.gameType);
 		for (const side of this.sides) {
 			let teamsize = side.pokemon.length;
 			if (format.teamLength && format.teamLength.battle) {
@@ -2046,7 +2047,6 @@ export class Battle {
 			if (target?.fainted) {
 				if (this.gameType === 'free-for-all') {
 					// Target is a fainted opponent in a free-for-all battle; attack shouldn't retarget
-					// TODO: find out if this is actually right
 					return target;
 				}
 				if (target.isAlly(pokemon)) {
