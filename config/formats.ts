@@ -782,7 +782,7 @@ export const Formats: FormatList = [
 				pokemon.m.innates = Object.keys(pokemon.species.abilities)
 					.filter(key => key !== 'S' && (key !== 'H' || !pokemon.species.unreleasedHidden))
 					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
-					.filter(ability => ability !== 'mirrorarmor' && ability !== pokemon.ability);
+					.filter(ability => ability !== pokemon.ability);
 			}
 		},
 		onSwitchInPriority: 2,
@@ -810,7 +810,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		// searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: ['Blissey', 'Chansey', 'Toxapex', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Blissey', 'Calyrex-Shadow', 'Chansey', 'Melmetal', 'Toxapex', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
 		onModifySpeciesPriority: 3,
 		onModifySpecies(species, target, source) {
 			if (source || !target?.side) return;

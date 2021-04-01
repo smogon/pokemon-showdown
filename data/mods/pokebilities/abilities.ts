@@ -1,4 +1,22 @@
 export const Abilities: {[k: string]: ModdedAbilityData} = {
+	mirrorarmor: {
+		inherit: true,
+		onBoost(boost, target, source, effect) {
+			// Don't bounce self stat changes, or boosts that have already bounced
+			if (target === source || !boost || effect.id === 'mirrorarmor' || effect.id === 'ability:mirrorarmor') return;
+			let b: BoostName;
+			for (b in boost) {
+				if (boost[b]! < 0) {
+					if (target.boosts[b] === -6) continue;
+					const negativeBoost: SparseBoostsTable = {};
+					negativeBoost[b] = boost[b];
+					delete boost[b];
+					this.add('-ability', target, 'Mirror Armor');
+					this.boost(negativeBoost, source, target, null, true);
+				}
+			}
+		},
+	},
 	neutralizinggas: {
 		inherit: true,
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
@@ -40,6 +58,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
 					if (pokemon.m.innates) {
 						for (const innate of pokemon.m.innates) {
+							// permanent abilities
+							if (pokemon.volatiles['ability:' + innate]) continue;
 							pokemon.addVolatile('ability:' + innate, pokemon);
 						}
 					}
