@@ -1261,6 +1261,24 @@ export class Battle {
 		return true;
 	}
 
+	lose(side: SideID | Side) {
+		if (typeof side === 'string') {
+			side = this.getSide(side);
+		}
+		if (this.gameType !== 'freeforall') {
+			return this.win(side.foe);
+		}
+		if (!side.pokemonLeft) return;
+
+		side.pokemonLeft = 0;
+		side.active[0].faint();
+		this.faintMessages();
+		if (!this.ended && this.requestState === 'move') {
+			this.makeRequest();
+		}
+		return true;
+	}
+
 	canSwitch(side: Side) {
 		return this.possibleSwitches(side).length;
 	}
@@ -1271,6 +1289,8 @@ export class Battle {
 	}
 
 	private possibleSwitches(side: Side) {
+		if (!side.pokemonLeft) return [];
+
 		const canSwitchIn = [];
 		for (let i = side.active.length; i < side.pokemon.length; i++) {
 			const pokemon = side.pokemon[i];
@@ -2124,7 +2144,7 @@ export class Battle {
 			if (!pokemon.fainted &&
 					this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
 				this.add('faint', pokemon);
-				pokemon.side.pokemonLeft--;
+				if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityData, pokemon);
 				pokemon.clearVolatile(false);
@@ -2165,21 +2185,11 @@ export class Battle {
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
 		}
-		if (!team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
-			this.win(this.sides[0]);
-			return true;
-		}
-		if (!team1PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
-			this.win(this.sides[1]);
-			return true;
-		}
-		if (!team1PokemonLeft && !team2PokemonLeft && !team4PokemonLeft) {
-			this.win(this.sides[2]);
-			return true;
-		}
-		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft) {
-			this.win(this.sides[3]);
-			return true;
+		for (const side of this.sides) {
+			if (!side.foePokemonLeft()) {
+				this.win(side);
+				return true;
+			}
 		}
 
 		if (faintData) {

@@ -122,6 +122,15 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		case 'forcewin':
 		case 'forcetie':
 			this.battle!.win(type === 'forcewin' ? message as SideID : null);
+			if (message) {
+				this.battle!.inputLog.push(`>forcewin ${message}`);
+			} else {
+				this.battle!.inputLog.push(`>forcetie`);
+			}
+			break;
+		case 'forcelose':
+			this.battle!.lose(message as SideID);
+			this.battle!.inputLog.push(`>forcelose ${message}`);
 			break;
 		case 'reseed':
 			const seed = message ? message.split(',').map(Number) as PRNGSeed : null;
