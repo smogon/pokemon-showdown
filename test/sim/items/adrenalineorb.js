@@ -46,7 +46,7 @@ describe('Adrenaline Orb', function () {
 		assert.statStage(battle.p1.active[0], 'spe', 0);
 	});
 
-	it.skip(`should not activate if the holder is at -6 Attack`, function () {
+	it(`should not activate if the holder is at -6 Attack`, function () {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', moves: ['bellydrum']},
 		], [
@@ -60,7 +60,7 @@ describe('Adrenaline Orb', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it.skip(`should not activate if the holder is at +6 Speed`, function () {
+	it(`should not activate if the holder is at +6 Speed`, function () {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', ability: 'steamengine', moves: ['sleeptalk']},
 		], [
@@ -73,7 +73,7 @@ describe('Adrenaline Orb', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it.skip(`should not activate if the Contrary holder is at +6 Attack`, function () {
+	it(`should not activate if the Contrary holder is at +6 Attack`, function () {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', ability: 'contrary', moves: ['bellydrum']},
 		], [

@@ -67,6 +67,9 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		onAfterBoost(boost, target, source, effect) {
+			if ((target.boosts['atk'] === -6) || (target.boosts['spe'] === 6)) return;
+			// check contrary users
+			if (target.hasAbility('Contrary') && (target.boosts['atk'] === 6)) return;
 			if (effect.id === 'intimidate') {
 				target.useItem();
 			}
