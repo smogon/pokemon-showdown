@@ -206,7 +206,7 @@ type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inheri
 
 type Nature = import('./dex-data').Nature;
 
-type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'free-for-all';
+type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'freeforall';
 type SideID = 'p1' | 'p2' | 'p3' | 'p4';
 
 interface GameTimerSettings {

@@ -59,7 +59,7 @@ The beginning of a battle will look something like this:
 
 `|gametype|GAMETYPE`
 
-> - `GAMETYPE` is `singles`, `doubles`, `triples`, `multi`, or `free-for-all`.
+> - `GAMETYPE` is `singles`, `doubles`, `triples`, `multi`, or `freeforall`.
 
 `|gen|GENNUM`
 

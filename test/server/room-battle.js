@@ -25,7 +25,9 @@ describe('Simulator abstraction layer features', function () {
 				const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 				p1 = makeUser("MissingNo.");
 				p2 = makeUser();
-				room = Rooms.createBattle('', {p1, p2, p1team: packedTeam, p2team: packedTeam, allowRenames: false});
+				room = Rooms.createBattle({
+					format: '', p1: {user: p1, team: packedTeam}, p2: {user: p2, team: packedTeam}, allowRenames: false,
+				});
 				p1.resetName();
 				for (const player of room.battle.players) {
 					assert.equal(player, room.battle.playerTable[toID(player.name)]);

@@ -345,7 +345,7 @@ export class User extends Chat.MessageContext {
 
 	lastChallenge: number;
 	lastPM: string;
-	lastMatch: string;
+	lastMatch: ID;
 
 	settings: UserSettings;
 
@@ -353,6 +353,7 @@ export class User extends Chat.MessageContext {
 		team: string,
 		hidden: boolean,
 		inviteOnly: boolean,
+		special?: string,
 	};
 
 	isSysop: boolean;

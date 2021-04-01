@@ -49,14 +49,19 @@ describe('Rooms features', function () {
 		it('should allow two users to join the battle', function () {
 			const p1 = makeUser();
 			const p2 = makeUser();
-			const options = [{rated: false, tour: false}, {rated: false, tour: {onBattleWin() {}}}, {rated: true, tour: false}, {rated: true, tour: {onBattleWin() {}}}];
+			const options = [
+				{rated: false, tour: false},
+				{rated: false, tour: {onBattleWin() {}}},
+				{rated: true, tour: false},
+				{rated: true, tour: {onBattleWin() {}}},
+			];
 			for (const option of options) {
-				room = Rooms.createBattle('customgame', Object.assign({
-					p1,
-					p2,
-					p1team: packedTeam,
-					p2team: packedTeam,
-				}, option));
+				room = Rooms.createBattle({
+					format: 'customgame',
+					p1: {user: p1, team: packedTeam},
+					p2: {user: p2, team: packedTeam},
+					...option,
+				});
 				assert(room.battle.p1 && room.battle.p2); // Automatically joined
 			}
 		});
@@ -66,19 +71,17 @@ describe('Rooms features', function () {
 			parent.auth.get = () => '%';
 			const p1 = makeUser();
 			const p2 = makeUser();
-			const options = {
-				p1,
-				p2,
-				p1team: packedTeam,
-				p2team: packedTeam,
+			room = Rooms.createBattle({
+				format: 'customgame',
+				p1: {user: p1, team: packedTeam},
+				p2: {user: p2, team: packedTeam},
 				rated: false,
 				auth: {},
 				tour: {
 					onBattleWin() {},
 					room: parent,
 				},
-			};
-			room = Rooms.createBattle('customgame', options);
+			});
 			assert.equal(room.auth.get(makeUser().id), '%');
 		});
 
@@ -90,19 +93,23 @@ describe('Rooms features', function () {
 			const roomStaff = makeUser("Room auth");
 			const administrator = makeUser("Admin");
 			administrator.tempGroup = '~';
-			const options = {
-				p1,
-				p2,
-				p1team: packedTeam,
-				p2team: packedTeam,
+			room = Rooms.createBattle({
+				format: 'customgame',
+				p1: {
+					user: p1,
+					team: packedTeam,
+				},
+				p2: {
+					user: p2,
+					team: packedTeam,
+				},
 				rated: false,
 				auth: {},
 				tour: {
 					onBattleWin() {},
 					room: parent,
 				},
-			};
-			room = Rooms.createBattle('customgame', options);
+			});
 			roomStaff.joinRoom(room);
 			administrator.joinRoom(room);
 			assert.equal(room.auth.get(roomStaff), '%', 'before promotion attempt');

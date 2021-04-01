@@ -21,7 +21,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Double battle multi-hit
 			if (move.spreadHit) {
-				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'free-for-all' ? 0.5 : 0.75);
+				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
 				this.battle.debug('Spread modifier: ' + spreadModifier);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			}
