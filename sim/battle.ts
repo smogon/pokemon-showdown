@@ -1414,7 +1414,7 @@ export class Battle {
 
 		if (this.maybeTriggerEndlessBattleClause(trappedBySide, stalenessBySide)) return;
 
-		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
+		if (this.gameType === 'triples' && this.sides.every(side => side.pokemonLeft === 1)) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			const actives = this.getAllActive();
 			if (actives.length > 1 && !actives[0].isAdjacent(actives[1])) {
@@ -1594,7 +1594,7 @@ export class Battle {
 		}
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
-		if (this.gen > 5 && !target.side.foe.pokemonLeft) return false;
+		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
 		boost = this.runEvent('Boost', target, source, effect, {...boost});
 		let success = null;
 		let boosted = isSecondary;
@@ -2062,7 +2062,7 @@ export class Battle {
 				return foeActives[frontPosition];
 			}
 		}
-		return pokemon.side.foe.randomAlly() || pokemon.side.foe.active[0];
+		return pokemon.side.randomFoe() || pokemon.side.foe.active[0];
 	}
 
 	checkFainted() {

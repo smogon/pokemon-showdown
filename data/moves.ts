@@ -4877,20 +4877,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-sidestart', targetSide, 'Fire Pledge');
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.baseMaxhp / 8, pokemon);
-					}
+				for (const pokemon of targetSide.allies()) {
+					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 8, pokemon);
 				}
 				this.add('-sideend', targetSide, 'Fire Pledge');
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(side) {
-				for (const pokemon of side.activeTeam()) {
-					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.baseMaxhp / 8, pokemon);
-					}
+				for (const pokemon of side.allies()) {
+					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 8, pokemon);
 				}
 			},
 		},
@@ -5944,15 +5940,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, authentic: 1},
 		onHitSide(side, source, move) {
-			const targets = [];
-			for (const pokemon of side.activeTeam()) {
-				if (
-					pokemon.hasAbility(['plus', 'minus']) &&
-					(!pokemon.volatiles['maxguard'] || this.runEvent('TryHit', pokemon, source, move))
-				) {
-					targets.push(pokemon);
-				}
-			}
+			const targets = side.allies().filter(target => (
+				target.hasAbility(['plus', 'minus']) &&
+				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
+			));
 			if (!targets.length) return false;
 			let didSomething = false;
 			for (const target of targets) {
@@ -6187,13 +6178,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (!pokemon.hasType('Water')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (!pokemon.hasType('Water')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
 				}
 				this.add('-sideend', targetSide, 'G-Max Cannonade');
 			},
@@ -6839,13 +6830,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (!pokemon.hasType('Grass')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (!pokemon.hasType('Grass')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
 				}
 				this.add('-sideend', targetSide, 'G-Max Vine Lash');
 			},
@@ -6879,13 +6870,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
 				}
 				this.add('-sideend', targetSide, 'G-Max Volcalith');
 			},
@@ -6942,13 +6933,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.activeTeam()) {
-					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
 				}
 				this.add('-sideend', targetSide, 'G-Max Wildfire');
 			},
@@ -10106,16 +10097,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, distance: 1, authentic: 1},
 		onHitSide(side, source, move) {
-			const targets = [];
-			for (const pokemon of side.activeTeam()) {
-				if (
-					pokemon.hasAbility(['plus', 'minus']) &&
-					(!pokemon.volatiles['maxguard'] || this.runEvent('TryHit', pokemon, source, move))
-				) {
-					targets.push(pokemon);
-				}
-			}
+			const targets = side.allies().filter(ally => (
+				ally.hasAbility(['plus', 'minus']) &&
+				(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
+			));
 			if (!targets.length) return false;
+
 			let didSomething = false;
 			for (const target of targets) {
 				didSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;

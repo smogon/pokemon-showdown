@@ -454,7 +454,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
-			const target = pokemon.side.foe.randomAlly();
+			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
 			const bannedAbilities = ['forecast', 'multitype', 'trace'];

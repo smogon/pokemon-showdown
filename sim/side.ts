@@ -204,12 +204,27 @@ export class Side {
 		return data;
 	}
 
-	randomAlly() {
-		const actives = this.allies();
+	randomFoe() {
+		const actives = this.foes();
 		if (!actives.length) return null;
 		return this.battle.sample(actives);
 	}
 
+	/** Intended as a way to iterate through all foe side conditions - do not use for anything else. */
+	foeSidesWithConditions() {
+		if (this.battle.gameType === 'multi') return this.battle.sides.filter(side => side !== this);
+
+		return [this.foe];
+	}
+	foePokemonLeft() {
+		if (this.battle.gameType === 'multi') {
+			return this.battle.sides.filter(side => side !== this).map(side => side.pokemonLeft).reduce((a, b) => a + b);
+		}
+
+		if (this.foe.allySide) return this.foe.pokemonLeft + this.foe.allySide.pokemonLeft;
+
+		return this.foe.pokemonLeft;
+	}
 	allies() {
 		// called during the first switch-in, so `active` can still contain nulls at this point
 		return this.activeTeam().filter(ally => ally && !ally.fainted);
@@ -217,7 +232,7 @@ export class Side {
 	foes() {
 		if (this.battle.gameType === 'free-for-all') {
 			return this.battle.sides.map(side => side.active[0])
-				.filter(pokemon => pokemon.side !== this && pokemon && !pokemon.fainted);
+				.filter(pokemon => pokemon && pokemon.side !== this && !pokemon.fainted);
 		}
 		return this.foe.allies();
 	}
