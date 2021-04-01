@@ -1735,6 +1735,24 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 8] Super Staff Bros 4 (Wii U)",
+		desc: "A more competitive version of the existing Super Staff Bros 4 format!",
+		threads: [
+			`&bullet; <a href="http://spo.ink/instruct">Introduction &amp; Roster</a>`,
+			`&bullet; <a href="http://spo.ink/HappyBirthdayAeonic">Discussion Thread</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3681253/">Info thread</a>`,
+		],
+
+		mod: 'ssb',
+		team: 'randomStaffBros',
+		ruleset: ['Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+		onBegin() {
+			this.add('message', 'Delphox only');
+			this.add('message', 'No items');
+			this.add('message', 'Final Destination');
+		},
+	},
+	{
 		name: "[Gen 8] Challenge Cup",
 
 		mod: 'gen8',
