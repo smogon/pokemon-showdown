@@ -1341,7 +1341,9 @@ export class RandomTeams {
 		isDoubles: boolean
 	) {
 		// not undefined — we want "no item" not "go find a different item"
-		if (hasMove['acrobatics'] && ability !== 'Ripen' && species.id !== 'cawmodore') return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
+		if (hasMove['acrobatics'] && ability !== 'Ripen' && species.id !== 'cawmodore') {
+			return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
+		}
 		if (hasMove['geomancy'] || hasMove['meteorbeam']) return 'Power Herb';
 		if (hasMove['shellsmash']) {
 			if (ability === 'Sturdy' && !isLead && !isDoubles) return 'Heavy-Duty Boots';
