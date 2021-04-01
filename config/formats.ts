@@ -67,7 +67,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		unbanlist: ['Zacian-Crowned', 'Arena Trap'],
+		unbanlist: ['Zamazenta-Crowned', 'Arena Trap'],
 	},
 	{
 		name: "[Gen 8] OU (Blitz)",
