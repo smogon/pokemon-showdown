@@ -782,7 +782,7 @@ export const Formats: FormatList = [
 				pokemon.m.innates = Object.keys(pokemon.species.abilities)
 					.filter(key => key !== 'S' && (key !== 'H' || !pokemon.species.unreleasedHidden))
 					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
-					.filter(ability => ability !== pokemon.ability);
+					.filter(ability => ability !== 'mirrorarmor' && ability !== pokemon.ability);
 			}
 		},
 		onSwitchInPriority: 2,
