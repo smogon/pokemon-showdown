@@ -1219,7 +1219,7 @@ export class RandomTeams {
 		case 'Moxie':
 			return (counter.Physical < 2 || hasMove['stealthrock'] || hasMove['defog']);
 		case 'Neutralizing Gas':
-			return (!hasMove['toxicspikes'] && species.id !== 'miasmaw');
+			return !hasMove['toxicspikes'] && species.id !== 'miasmaw';
 		case 'Overgrow':
 			return !counter.Grass;
 		case 'Own Tempo':
