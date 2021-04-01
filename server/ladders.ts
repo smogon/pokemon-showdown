@@ -551,7 +551,7 @@ class Ladder extends LadderStore {
 			Ladders.searches.set(formatid, formatTable);
 		}
 		if (formatTable.has(user.id)) {
-			// user.popup(`Couldn't search: You are already searching for a ${formatid} battle.`);
+			user.popup(`Couldn't search: You are already searching for a ${formatid} battle.`);
 			return;
 		}
 		const players = [];
@@ -567,8 +567,7 @@ class Ladder extends LadderStore {
 					const matched = this.matchmakingOK(newSearch, user, players[0], searchers[0], players[1],
 						searchers[1], players[2], searchers[2]);
 					if (matched) {
-						// @ts-ignore formatTable can't be undefined here. no idea why ts thinks it can.
-						players.forEach(player => formatTable.delete(player.userid));
+						for (const player of players) formatTable.delete(player.userid);
 						Ladder.matchMulti(newSearch, players[0], players[1], players[2]);
 						return;
 					}
