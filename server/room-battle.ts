@@ -997,17 +997,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (!message) message = ' forfeited.';
 		this.room.add(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
-		if (Dex.getFormat(this.format).gameType === 'multi') {
-			const sides = ['p2', 'p1'];
-			if (player.num === 1 || player.num === 3) {
-				void this.stream.write(`>forcewin ${sides[0]}`);
-			} else {
-				void this.stream.write(`>forcewin ${sides[1]}`);
-			}
-		} else {
-			const otherids = ['p2', 'p1'];
-			void this.stream.write(`>forcewin ${otherids[player.num - 1]}`);
-		}
+		const otherids = ['p2', 'p1'];
+		void this.stream.write(`>forcewin ${otherids[(player.num - 1) % 2]}`);
 		return true;
 	}
 

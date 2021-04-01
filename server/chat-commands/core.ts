@@ -1417,9 +1417,7 @@ export const commands: ChatCommands = {
 		}
 		const sep: string[] = target?.includes(',') ? target.split(',') : [];
 		const teammate = Users.get(sep.splice(-1)[0]);
-		// let isMulti: boolean; // commented out incase it's needed later during development
 		if (Dex.getFormat(target.substring(0, target.lastIndexOf(","))).gameType === 'multi' && teammate) {
-			// isMulti = true; // commented out incase it's needed later during development
 			if (!teammate || !teammate.connected) {
 				return this.popupReply(`The user '${teammate?.name || target.substring(target.indexOf(",") + 1)}' was not found.`);
 			}

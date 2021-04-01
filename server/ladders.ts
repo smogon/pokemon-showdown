@@ -309,18 +309,6 @@ class Ladder extends LadderStore {
 		const ladder = Ladders(chall.formatid);
 		// how do p3 and p4 accept and choose a team?
 		if (Dex.getFormat(chall.formatid).gameType === 'multi') {
-			/* const ready = await ladder.prepBattle(connection, 'multi', null, false, teammate);
-			chall.p4 = teammate;
-			if (!ready) return false;
-			if (!chall.p3 || !chall.p4) {
-				Monitor.crashlog(Error(
-					`User tried to accept a multi battle challenge, but ${!chall.p3 ? 'player 3' : 'player 4'} didn't exist.`
-				));
-			}
-			if (Ladder.removeChallenge(chall)) {
-				Ladder.matchMulti(chall.ready, ready, chall.p3, chall.p4, true);
-			}
-			return true; */
 			return false;
 		}
 		const ready = await ladder.prepBattle(connection, 'challenge');
@@ -635,46 +623,6 @@ class Ladder extends LadderStore {
 	}
 
 	static match(ready1: BattleReady, ready2: BattleReady) {
-		/* if (ready1.challengeType === "multi" && ready2.challengeType === "multi") {
-			const team1 = [ready1.user, ready1.teammate];
-			const team2 = [ready2.user, ready2.teammate];
-			console.log(`${team1[0].id} ${team1[1].id} ${team2[0].id} ${team2[1].id} `)
-			for (let player of team1) {
-				if (!player) {
-					team1[team1.indexOf(player) ^ 1].popup(`Sorry, your teammate ${player.id} went offline before the battle could start.`);
-					team2[0].popup(`Sorry, your opponent ${player.id} went offline before the battle started.`);
-					team2[1].popup(`Sorry, your opponent ${player.id} went offline before the battle started.`);
-					return false;
-				}
-			}
-			for (let player of team2) {
-				if (!player) {
-					team2[team2.indexOf(player) ^ 1].popup(`Sorry, your teammate ${player.id} went offline before the battle could start.`);
-					team1[0].popup(`Sorry, your opponent ${player.id} went offline before the battle could start.`);
-					team1[1].popup(`Sorry, your opponent ${player.id} went offline before the battle could start.`);
-					return false;
-				}
-			}
-			Rooms.createBattle(ready1.formatid, {
-				p1: team1[0],
-				p3: team1[1],
-				p1team: ready1.team,
-				p3team: ready1.team,
-				p1rating: ready1.rating,
-				p1hidden: ready1.hidden,
-				p1inviteOnly: ready1.inviteOnly,
-				p2: team2[0],
-				p4: team2[1],
-				p2team: ready2.team,
-				p4team: ready2.team,
-				p2rating: ready2.rating,
-				p2hidden: ready2.hidden,
-				p2inviteOnly: ready2.inviteOnly,
-				rated: Math.min(ready1.rating, ready2.rating),
-				challengeType: ready1.challengeType,
-			});
-			return;
-		}*/
 		if (ready1.formatid !== ready2.formatid) throw new Error(`Format IDs don't match`);
 		const user1 = Users.get(ready1.userid);
 		const user2 = Users.get(ready2.userid);
