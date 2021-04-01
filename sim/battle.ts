@@ -273,6 +273,14 @@ export class Battle {
 		return this.sides[1];
 	}
 
+	get p3() {
+		return this.sides[2];
+	}
+
+	get p4() {
+		return this.sides[3];
+	}
+
 	toString() {
 		return `Battle: ${this.format}`;
 	}
@@ -1425,6 +1433,17 @@ export class Battle {
 		}
 
 		this.add('turn', this.turn);
+		if (this.gameType === 'multi') {
+			for (const side of this.sides) {
+				if (side.canDynamaxNow()) {
+					if (this.turn === 1) {
+						this.addSplit(side.id, ['-candynamax', side.id]);
+					} else {
+						this.add('-candynamax', side.id);
+					}
+				}
+			}
+		}
 
 		this.makeRequest('move');
 	}
@@ -1433,6 +1452,8 @@ export class Battle {
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
 		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
+		// for now, FFA doesn't support the endless battle clause
+		if (this.format.gameType === 'free-for-all') return;
 
 		if ((this.turn >= 500 && this.turn % 100 === 0) ||
 			(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -1502,6 +1523,7 @@ export class Battle {
 
 		if (this.started) throw new Error(`Battle already started`);
 
+		const format = this.format;
 		this.started = true;
 		if (this.gameType === 'multi') {
 			this.sides[1].foe = this.sides[2]!;
@@ -1524,14 +1546,16 @@ export class Battle {
 			}
 		}
 
+		this.add('gametype', this.gameType);
 		for (const side of this.sides) {
-			this.add('teamsize', side.id, side.pokemon.length);
+			let teamsize = side.pokemon.length;
+			if (format.teamLength && format.teamLength.battle) {
+				teamsize = format.teamLength.battle <= teamsize ? format.teamLength.battle : teamsize;
+			}
+			this.add('teamsize', side.id, teamsize);
 		}
 
-		this.add('gametype', this.gameType);
 		this.add('gen', this.gen);
-
-		const format = this.format;
 
 		this.add('tier', format.name);
 		if (this.rated) {
@@ -1957,16 +1981,20 @@ export class Battle {
 	 */
 	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
-		const numSlots = source.side.active.length;
+		const numSlots = this.activePerHalf;
+		const sourceLoc = source.getLocOf(source);
 		if (Math.abs(targetLoc) > numSlots) return false;
-
-		const sourceLoc = -(source.position + 1);
-		const isFoe = (targetLoc > 0);
+		const isSelf = (sourceLoc === targetLoc);
+		const isFoe = (this.gameType === 'free-for-all' ? !isSelf : targetLoc > 0);
 		const acrossFromTargetLoc = -(numSlots + 1 - targetLoc);
 		const isAdjacent = (isFoe ?
 			Math.abs(acrossFromTargetLoc - sourceLoc) <= 1 :
 			Math.abs(targetLoc - sourceLoc) === 1);
-		const isSelf = (sourceLoc === targetLoc);
+
+		if (this.gameType === 'free-for-all' && targetType === 'adjacentAlly') {
+			// moves targeting one ally can instead target foes in Battle Royal
+			return isAdjacent;
+		}
 
 		switch (targetType) {
 		case 'randomNormal':
@@ -2003,18 +2031,28 @@ export class Battle {
 
 		// banning Dragon Darts from directly targeting itself is done in side.ts, but
 		// Dragon Darts can target itself if Ally Switch is used afterwards
-		if (move.smartTarget) return pokemon.getAtLoc(targetLoc);
+		if (move.smartTarget) {
+			const curTarget = pokemon.getAtLoc(targetLoc);
+			return curTarget && !curTarget.fainted ? curTarget : this.getRandomTarget(pokemon, move);
+		}
 
 		// Fails if the target is the user and the move can't target its own position
-		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1) &&
+		const selfLoc = pokemon.getLocOf(pokemon);
+		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
 				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
 			return move.isFutureMove ? pokemon : null;
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = pokemon.getAtLoc(targetLoc);
-			if (target?.fainted && target.isAlly(pokemon)) {
-				// Target is a fainted ally: attack shouldn't retarget
-				return target;
+			if (target?.fainted) {
+				if (this.gameType === 'free-for-all') {
+					// Target is a fainted opponent in a free-for-all battle; attack shouldn't retarget
+					return target;
+				}
+				if (target.isAlly(pokemon)) {
+					// Target is a fainted ally: attack shouldn't retarget
+					return target;
+				}
 			}
 			if (target && !target.fainted) {
 				// Target is unfainted: use selected target location
@@ -2040,26 +2078,20 @@ export class Battle {
 
 		move = this.dex.getMove(move);
 		if (move.target === 'adjacentAlly') {
-			const allyActives = pokemon.side.active;
-			let adjacentAllies = [allyActives[pokemon.position - 1], allyActives[pokemon.position + 1]];
-			adjacentAllies = adjacentAllies.filter(active => active && !active.fainted);
+			const adjacentAllies = pokemon.adjacentAllies();
 			return adjacentAllies.length ? this.sample(adjacentAllies) : null;
 		}
-		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' ||
-				move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
+		if (['self', 'all', 'allySide', 'allyTeam', 'adjacentAllyOrSelf'].includes(move.target)) {
 			return pokemon;
 		}
-		if (pokemon.side.active.length > 2) {
+		if (this.activePerHalf > 2) {
 			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
 				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your all
-				const foeActives = pokemon.side.foe.active;
-				const frontPosition = foeActives.length - 1 - pokemon.position;
-				let adjacentFoes = foeActives.slice(frontPosition < 1 ? 0 : frontPosition - 1, frontPosition + 2);
-				adjacentFoes = adjacentFoes.filter(active => active && !active.fainted);
+				const adjacentFoes = pokemon.adjacentFoes();
 				if (adjacentFoes.length) return this.sample(adjacentFoes);
-				// no valid target at all, return a foe for any possible redirection
-				return foeActives[frontPosition];
+				// no valid target at all, return a possibly-fainted foe for any possible redirection
+				return pokemon.side.foe.active[0];
 			}
 		}
 		return pokemon.side.randomFoe() || pokemon.side.foe.active[0];
@@ -2240,9 +2272,8 @@ export class Battle {
 			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
-			for (const pokemon of action.pokemon.side.pokemon) {
-				pokemon.canDynamax = false;
-			}
+			action.pokemon.side.dynamaxUsed = true;
+			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
 			break;
 		case 'beforeTurnMove': {
 			if (!action.pokemon.isActive) return false;
