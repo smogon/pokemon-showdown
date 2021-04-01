@@ -8,7 +8,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onPrimal(pokemon) {
 			// @ts-ignore
-			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal');
+			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal');
 			if (pokemon.m.originalSpecies === 'Kyogre') {
 				pokemon.formeChange(species, this.effect, true);
 			} else {
@@ -28,7 +28,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onPrimal(pokemon) {
 			// @ts-ignore
-			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal');
+			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal');
 			if (pokemon.m.originalSpecies === 'Groudon') {
 				pokemon.formeChange(species, this.effect, true);
 			} else {
