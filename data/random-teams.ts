@@ -1151,7 +1151,7 @@ export class RandomTeams {
 		isNoDynamax: boolean
 	): boolean {
 		if ([
-			'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge',
+			'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge', 'Mountaineer',
 			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -1219,11 +1219,13 @@ export class RandomTeams {
 		case 'Moxie':
 			return (counter.Physical < 2 || hasMove['stealthrock'] || hasMove['defog']);
 		case 'Neutralizing Gas':
-			return !hasMove['toxicspikes'];
+			return !hasMove['toxicspikes'] && species.id !== 'miasmaw';
 		case 'Overgrow':
 			return !counter.Grass;
 		case 'Own Tempo':
 			return !hasMove['petaldance'];
+		case 'Persistent':
+			return !hasMove['tailwind'];
 		case 'Power Construct':
 			return (species.forme === '10%' && !isDoubles);
 		case 'Prankster':
@@ -1251,7 +1253,7 @@ export class RandomTeams {
 		case 'Shadow Tag':
 			return (species.name === 'Gothitelle' && !isDoubles);
 		case 'Shed Skin':
-			return hasMove['dragondance'];
+			return hasMove['dragondance'] || species.id === 'revenankh';
 		case 'Sheer Force':
 			return (!counter.sheerforce || hasAbility['Guts']);
 		case 'Shell Armor':
@@ -1339,7 +1341,9 @@ export class RandomTeams {
 		isDoubles: boolean
 	) {
 		// not undefined — we want "no item" not "go find a different item"
-		if (hasMove['acrobatics'] && ability !== 'Ripen') return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
+		if (hasMove['acrobatics'] && ability !== 'Ripen' && species.id !== 'cawmodore') {
+			return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
+		}
 		if (hasMove['geomancy'] || hasMove['meteorbeam']) return 'Power Herb';
 		if (hasMove['shellsmash']) {
 			if (ability === 'Sturdy' && !isLead && !isDoubles) return 'Heavy-Duty Boots';
