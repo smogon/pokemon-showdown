@@ -1136,22 +1136,19 @@ export class Battle {
 
 	getRequests(type: RequestState, maxTeamSize: number) {
 		// default to no request
-		const requests: any[] = Array(this.sides.length).fill(null);
+		const requests: AnyObject[] = Array(this.sides.length).fill(null);
 
 		switch (type) {
-		case 'switch': {
+		case 'switch':
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
-				const switchTable = [];
-				for (const pokemon of side.active) {
-					switchTable.push(!!pokemon?.switchFlag);
-				}
-				if (switchTable.some(flag => flag === true)) {
+				if (!side.pokemonLeft) continue;
+				const switchTable = side.active.map(pokemon => !!pokemon?.switchFlag);
+				if (switchTable.some(Boolean)) {
 					requests[i] = {forceSwitch: switchTable, side: side.getRequestData()};
 				}
 			}
 			break;
-		}
 
 		case 'teampreview':
 			for (let i = 0; i < this.sides.length; i++) {
@@ -1161,17 +1158,17 @@ export class Battle {
 			}
 			break;
 
-		default: {
+		default:
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
+				if (!side.pokemonLeft) continue;
 				const activeData = side.active.map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 			}
 			break;
 		}
-		}
 
-		const allRequestsMade = requests.every(request => request);
+		const allRequestsMade = requests.every(Boolean);
 		for (let i = 0; i < this.sides.length; i++) {
 			if (requests[i]) {
 				if (!this.supportCancel || !allRequestsMade) requests[i].noCancel = true;
@@ -1273,8 +1270,9 @@ export class Battle {
 		side.pokemonLeft = 0;
 		side.active[0].faint();
 		this.faintMessages();
-		if (!this.ended && this.requestState === 'move') {
-			this.makeRequest();
+		if (!this.ended && side.requestState) {
+			side.emitRequest({wait: true, side: side.getRequestData()});
+			if (this.allChoicesDone()) this.commitDecisions();
 		}
 		return true;
 	}

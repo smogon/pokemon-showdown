@@ -59,7 +59,8 @@ class TestTools {
 
 		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
 		if (this.currentMod === 'gen1stadium') basicFormat = 'OU';
-		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType) + ' ';
+		if (gameType === 'freeforall') basicFormat = 'completelynormalrandombattle';
+		const gameTypePrefix = gameType === 'singles' || gameType === 'freeforall' ? '' : capitalize(gameType) + ' ';
 		const formatName = `${this.modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
 
 		let format = formatsCache.get(formatName);
