@@ -1740,7 +1740,7 @@ export class BattleActions {
 
 		// Limit one mega evolution
 		const wasMega = pokemon.canMegaEvo;
-		for (const ally of pokemon.allies()) {
+		for (const ally of pokemon.side.pokemon) {
 			if (wasMega) {
 				ally.canMegaEvo = null;
 			} else {

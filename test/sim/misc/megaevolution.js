@@ -37,6 +37,18 @@ describe('Mega Evolution', function () {
 		assert.equal(battle.p1.active[0].species.name, 'Charizard-Mega-X');
 	});
 
+	it('should happen once', function () {
+		battle = common.gen(7).createBattle([[
+			{species: "Rayquaza", moves: ['dragondance', 'dragonascent']},
+		], [
+			{species: "Steelix", moves: ['splash']},
+		]]);
+		battle.makeChoices('move dragondance mega', 'move splash');
+		assert.throws(() => {
+			battle.makeChoices('move dragondance mega', 'move splash');
+		});
+	});
+
 	it('should modify speed/priority in gen 7+', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
