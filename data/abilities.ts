@@ -180,7 +180,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	asoneglastrier: {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'As One');
-			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.add('-ability', pokemon, 'Unnerve');
 			this.effectData.unnerved = true;
 		},
 		onEnd() {
@@ -202,7 +202,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	asonespectrier: {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'As One');
-			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.add('-ability', pokemon, 'Unnerve');
 			this.effectData.unnerved = true;
 		},
 		onEnd() {
@@ -4049,12 +4049,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	unnerve: {
 		onPreStart(pokemon) {
-			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.add('-ability', pokemon, 'Unnerve');
 			this.effectData.unnerved = true;
 		},
 		onStart(pokemon) {
 			if (this.effectData.unnerved) return;
-			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
+			this.add('-ability', pokemon, 'Unnerve');
 			this.effectData.unnerved = true;
 		},
 		onEnd() {
