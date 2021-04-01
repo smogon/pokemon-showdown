@@ -70,7 +70,7 @@ export class Field {
 		this.weatherData = {id: status.id};
 		if (source) {
 			this.weatherData.source = source;
-			this.weatherData.sourcePosition = source.position;
+			this.weatherData.sourceSlot = source.getSlot();
 		}
 		if (status.duration) {
 			this.weatherData.duration = status.duration;
@@ -139,7 +139,7 @@ export class Field {
 		this.terrainData = {
 			id: status.id,
 			source,
-			sourcePosition: source.position,
+			sourceSlot: source.getSlot(),
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
@@ -197,7 +197,7 @@ export class Field {
 		effectData = this.pseudoWeather[status.id] = {
 			id: status.id,
 			source,
-			sourcePosition: source?.position,
+			sourceSlot: source?.getSlot(),
 			duration: status.duration,
 		};
 		if (status.durationCallback) {

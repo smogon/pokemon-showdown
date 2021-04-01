@@ -15,6 +15,7 @@ type TeamValidator = import('./team-validator').TeamValidator;
 type PokemonSources = import('./team-validator').PokemonSources;
 
 type ID = '' | string & {__isID: true};
+type PokemonSlot = '' | string & {__isSlot: true};
 interface AnyObject {[k: string]: any}
 interface DexTable<T> {
 	[key: string]: T;

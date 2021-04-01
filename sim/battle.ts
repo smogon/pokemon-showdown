@@ -70,6 +70,11 @@ export class Battle {
 	readonly format: Format;
 	readonly formatData: EffectState;
 	readonly gameType: GameType;
+	/**
+	 * The number of active pokemon per half-field.
+	 * See header comment in side.ts for details.
+	 */
+	readonly activePerHalf: 1 | 2 | 3;
 	readonly field: Field;
 	readonly sides: [Side, Side] | [Side, Side, Side, Side];
 	readonly prngSeed: PRNGSeed;
@@ -163,6 +168,9 @@ export class Battle {
 		this.field = new Field(this);
 		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
 		this.sides = Array(isFourPlayer ? 4 : 2).fill(null) as any;
+		this.activePerHalf = this.gameType === 'triples' ? 3 :
+			(isFourPlayer || this.gameType === 'doubles') ? 2 :
+			1;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
 		this.rated = options.rated || !!options.rated;
@@ -391,6 +399,7 @@ export class Battle {
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
 		handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, 'duration'));
 		for (const side of this.sides) {
+			if (side.n >= 2 && side.allySide) break;
 			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
 				if (!active) continue;
@@ -825,9 +834,9 @@ export class Battle {
 			handlers.push(...this.findPokemonEventHandlers(source, `onSource${eventName}`));
 		}
 		if (target instanceof Side) {
-			const team = this.gameType === 'multi' ? target.n % 2 : null;
 			for (const side of this.sides) {
-				if (team === null ? side === target : side.n % 2 === team) {
+				if (side.n >= 2 && side.allySide) break;
+				if (side === target || side === target.allySide) {
 					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
 				} else {
 					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
@@ -1227,7 +1236,9 @@ export class Battle {
 		this.winner = side ? side.name : '';
 
 		this.add('');
-		if (side) {
+		if (side?.allySide) {
+			this.add('win', side.name + ' & ' + side.allySide.name);
+		} else if (side) {
 			this.add('win', side.name);
 		} else {
 			this.add('tie');
@@ -1260,25 +1271,35 @@ export class Battle {
 		return canSwitchIn;
 	}
 
-	swapPosition(pokemon: Pokemon, slot: number, attributes?: string) {
-		if (slot >= pokemon.side.active.length) {
+	swapPosition(pokemon: Pokemon, newPosition: number, attributes?: string) {
+		if (newPosition >= pokemon.side.active.length) {
 			throw new Error("Invalid swap position");
 		}
-		const target = pokemon.side.active[slot];
-		if (slot !== 1 && (!target || target.fainted)) return false;
+		const target = pokemon.side.active[newPosition];
+		if (newPosition !== 1 && (!target || target.fainted)) return false;
 
-		this.add('swap', pokemon, slot, attributes || '');
+		this.add('swap', pokemon, newPosition, attributes || '');
 
 		const side = pokemon.side;
 		side.pokemon[pokemon.position] = target;
-		side.pokemon[slot] = pokemon;
+		side.pokemon[newPosition] = pokemon;
 		side.active[pokemon.position] = side.pokemon[pokemon.position];
-		side.active[slot] = side.pokemon[slot];
+		side.active[newPosition] = side.pokemon[newPosition];
 		if (target) target.position = pokemon.position;
-		pokemon.position = slot;
+		pokemon.position = newPosition;
 		this.runEvent('Swap', target, pokemon);
 		this.runEvent('Swap', pokemon, target);
 		return true;
+	}
+
+	getAtSlot(slot: PokemonSlot): Pokemon;
+	getAtSlot(slot: PokemonSlot | null): Pokemon | null;
+	getAtSlot(slot: PokemonSlot | null) {
+		if (!slot) return null;
+		const side = this.sides[slot.charCodeAt(1) - 49]; // 49 is '1'
+		const position = slot.charCodeAt(2) - 97; // 97 is 'a'
+		const positionOffset = Math.floor(side.n / 2) * side.active.length;
+		return side.active[position - positionOffset];
 	}
 
 	faint(pokemon: Pokemon, source?: Pokemon, effect?: Effect) {
@@ -1352,8 +1373,7 @@ export class Battle {
 				// canceling switches would leak information
 				// if a foe might have a trapping ability
 				if (this.gen > 2) {
-					for (const source of pokemon.side.foe.active) {
-						if (!source || source.fainted) continue;
+					for (const source of pokemon.foes()) {
 						const species = (source.illusion || source).species;
 						if (!species.abilities) continue;
 						for (const abilitySlot in species.abilities) {
@@ -1394,7 +1414,7 @@ export class Battle {
 
 		if (this.maybeTriggerEndlessBattleClause(trappedBySide, stalenessBySide)) return;
 
-		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
+		if (this.gameType === 'triples' && this.sides.every(side => side.pokemonLeft === 1)) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			const actives = this.getAllActive();
 			if (actives.length > 1 && !actives[0].isAdjacent(actives[1])) {
@@ -1483,8 +1503,26 @@ export class Battle {
 		if (this.started) throw new Error(`Battle already started`);
 
 		this.started = true;
-		this.sides[1].foe = this.sides[0];
-		this.sides[0].foe = this.sides[1];
+		if (this.gameType === 'multi') {
+			this.sides[1].foe = this.sides[2]!;
+			this.sides[0].foe = this.sides[3]!;
+			this.sides[2]!.foe = this.sides[1];
+			this.sides[3]!.foe = this.sides[0];
+			this.sides[1].allySide = this.sides[3]!;
+			this.sides[0].allySide = this.sides[2]!;
+			this.sides[2]!.allySide = this.sides[0];
+			this.sides[3]!.allySide = this.sides[1];
+			// sync side conditions
+			this.sides[2]!.sideConditions = this.sides[0].sideConditions;
+			this.sides[3]!.sideConditions = this.sides[1].sideConditions;
+		} else {
+			this.sides[1].foe = this.sides[0];
+			this.sides[0].foe = this.sides[1];
+			if (this.sides.length > 2) { // ffa
+				this.sides[2]!.foe = this.sides[3]!;
+				this.sides[3]!.foe = this.sides[2]!;
+			}
+		}
 
 		for (const side of this.sides) {
 			this.add('teamsize', side.id, side.pokemon.length);
@@ -1556,7 +1594,7 @@ export class Battle {
 		}
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
-		if (this.gen > 5 && !target.side.foe.pokemonLeft) return false;
+		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
 		boost = this.runEvent('Boost', target, source, effect, {...boost});
 		let success = null;
 		let boosted = isSecondary;
@@ -1947,13 +1985,8 @@ export class Battle {
 		return false;
 	}
 
-	getTargetLoc(target: Pokemon, source: Pokemon) {
-		const position = target.position + 1;
-		return (target.side === source.side) ? -position : position;
-	}
-
 	validTarget(target: Pokemon, source: Pokemon, targetType: string) {
-		return this.validTargetLoc(this.getTargetLoc(target, source), source, targetType);
+		return this.validTargetLoc(source.getLocOf(target), source, targetType);
 	}
 
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon) {
@@ -1979,7 +2012,7 @@ export class Battle {
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = pokemon.getAtLoc(targetLoc);
-			if (target?.fainted && target.side === pokemon.side) {
+			if (target?.fainted && target.isAlly(pokemon)) {
 				// Target is a fainted ally: attack shouldn't retarget
 				return target;
 			}
@@ -2029,7 +2062,7 @@ export class Battle {
 				return foeActives[frontPosition];
 			}
 		}
-		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
+		return pokemon.side.randomFoe() || pokemon.side.foe.active[0];
 	}
 
 	checkFainted() {
@@ -2092,8 +2125,8 @@ export class Battle {
 		const team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2]!.pokemonLeft;
 		const team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3]!.pokemonLeft;
 		if (this.gameType === 'multi') {
-			team1PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 0 ? side.pokemonLeft : 0), 0);
-			team2PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 1 ? side.pokemonLeft : 0), 0);
+			team1PokemonLeft += this.sides[2]!.pokemonLeft;
+			team2PokemonLeft += this.sides[3]!.pokemonLeft;
 		}
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);

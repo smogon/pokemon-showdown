@@ -2214,7 +2214,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.add('-activate', pokemon, 'move: The Hunt is On!');
 						alreadyAdded = true;
 					}
-					this.actions.runMove('thehuntison', source, this.getTargetLoc(pokemon, source));
+					this.actions.runMove('thehuntison', source, source.getLocOf(pokemon));
 				}
 			},
 		},
@@ -2491,7 +2491,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				const positions: boolean[] = this.effectData.positions;
-				if (target.position !== this.effectData.sourcePosition) {
+				if (target.getSlot() !== this.effectData.sourceSlot) {
 					return;
 				}
 				if (!target.fainted) {
@@ -2579,7 +2579,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(pokemon, source, move) {
 				if (!pokemon.hp) return;
 				if (this.effectData.gotHit) return;
-				if (pokemon.side !== source.side && move.category !== 'Status') {
+				if (!pokemon.isAlly(source) && move.category !== 'Status') {
 					this.effectData.gotHit = true;
 					this.add('-message', 'Gossifleur was prepared for the impact!');
 					const boosts: {[k: string]: number} = {def: 2, spd: 2};
