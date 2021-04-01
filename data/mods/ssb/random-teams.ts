@@ -882,7 +882,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		if (this.format.id.includes('wiiu')) {
 			debug = Array(6).fill('Fox');
 		}
-		const pool = debug.length ? debug : this.format.id.includes('wiiu') ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
+		const pool = debug.length ? debug : Object.keys(ssbSets);
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
 		while (pool.length && team.length < 6) {
