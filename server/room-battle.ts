@@ -15,6 +15,7 @@ import {FS, Repl, ProcessManager} from '../lib';
 import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
+import type {Tournament} from './tournaments/index';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
@@ -449,6 +450,31 @@ export class RoomBattleTimer {
 	}
 }
 
+interface RoomBattlePlayerOptions {
+	user: User;
+	/** should be '' for random teams */
+	team?: string;
+	rating?: number;
+	inviteOnly?: boolean;
+	hidden?: boolean;
+}
+
+export interface RoomBattleOptions {
+	format: string;
+	p1?: RoomBattlePlayerOptions;
+	p2?: RoomBattlePlayerOptions;
+	p3?: RoomBattlePlayerOptions;
+	p4?: RoomBattlePlayerOptions;
+
+	challengeType?: ChallengeType;
+	allowRenames?: boolean;
+	rated?: number | boolean | null;
+	tour?: Tournament | null;
+	inputLog?: string;
+	ratedMessage?: string;
+	seed?: PRNGSeed;
+}
+
 export class RoomBattle extends RoomGames.RoomGame {
 	readonly gameid: ID;
 	readonly room: GameRoom;
@@ -494,20 +520,20 @@ export class RoomBattle extends RoomGames.RoomGame {
 	rqid: number;
 	requestCount: number;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
-	constructor(room: GameRoom, formatid: string, options: AnyObject) {
+	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
-		const format = Dex.getFormat(formatid, true);
+		const format = Dex.getFormat(options.format, true);
 		this.gameid = 'battle' as ID;
 		this.room = room;
 		this.title = format.name;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
 		this.allowRenames = options.allowRenames !== undefined ? !!options.allowRenames : (!options.rated && !options.tour);
 
-		this.format = formatid;
+		this.format = options.format;
 		this.gameType = format.gameType;
-		this.challengeType = options.challengeType;
-		this.rated = options.rated || 0;
-		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : formatid;
+		this.challengeType = options.challengeType || 'challenge';
+		this.rated = options.rated === true ? 1 : options.rated || 0;
+		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
 		// true when onCreateBattleRoom has been called
 		this.missingBattleStartMessage = !!options.inputLog;
 		this.started = false;
@@ -520,7 +546,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		this.players = [];
 
-		this.playerCap = this.gameType === 'multi' || this.gameType === 'free-for-all' ? 4 : 2;
+		this.playerCap = this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2;
 		this.p1 = null!;
 		this.p2 = null!;
 		this.p3 = null!;
@@ -567,11 +593,11 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		void this.listen();
 
-		this.addPlayer(options.p1, options.p1team || '', options.p1rating);
-		this.addPlayer(options.p2, options.p2team || '', options.p2rating);
+		this.addPlayer(options.p1?.user || null, options.p1);
+		this.addPlayer(options.p2?.user || null, options.p2);
 		if (this.playerCap > 2) {
-			this.addPlayer(options.p3, options.p3team || '', options.p3rating);
-			this.addPlayer(options.p4, options.p4team || '', options.p4rating);
+			this.addPlayer(options.p3?.user || null, options.p3);
+			this.addPlayer(options.p4?.user || null, options.p4);
 		}
 		this.timer = new RoomBattleTimer(this);
 		if (Config.forcetimer || this.format.includes('blitz')) this.timer.start();
@@ -1005,22 +1031,22 @@ export class RoomBattle extends RoomGames.RoomGame {
 	}
 
 	/**
-	 * Team should be '' for random teams. `null` should be used only if importing
-	 * an inputlog (so the player isn't recreated)
+	 * playerOpts should be emtpy only if importing an inputlog
+	 * (so the player isn't recreated)
 	 */
-	addPlayer(user: User | null, team: string | null, rating = 0) {
+	addPlayer(user: User | null, playerOpts?: RoomBattlePlayerOptions) {
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		const player = super.addPlayer(user) as RoomBattlePlayer;
 		if (!player) return null;
 		const slot = player.slot;
 		this[slot] = player;
 
-		if (team !== null) {
+		if (playerOpts) {
 			const options = {
 				name: player.name,
 				avatar: user ? '' + user.avatar : '',
-				team,
-				rating: Math.round(rating),
+				team: playerOpts.team || undefined,
+				rating: Math.round(playerOpts.rating || 0),
 			};
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
@@ -1079,7 +1105,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		if (this.gameType === 'multi') {
 			this.room.title = `Team ${this.p1.name} vs. Team ${this.p2.name}`;
-		} else if (this.gameType === 'free-for-all') {
+		} else if (this.gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			this.room.title = `${this.p1.name} and friends`;
 		} else {

@@ -33,7 +33,7 @@ import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wif
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
-import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
+import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity} from './room-minor-activity';
 import {Roomlogs} from './roomlogs';
@@ -1674,10 +1674,10 @@ export class ChatRoom extends BasicRoom {
 export class GameRoom extends BasicRoom {
 	readonly type: 'battle';
 	readonly format: string;
-	p1: AnyObject | null;
-	p2: AnyObject | null;
-	p3: AnyObject | null;
-	p4: AnyObject | null;
+	p1: User | null;
+	p2: User | null;
+	p3: User | null;
+	p4: User | null;
 	/**
 	 * The lower player's rating, for searching purposes.
 	 * 0 for unrated battles. 1 for unknown ratings.
@@ -1687,11 +1687,10 @@ export class GameRoom extends BasicRoom {
 	game: RoomGame;
 	modchatUser: string;
 	active: boolean;
-	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> & AnyObject = {}) {
+	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
 		options.isMultichannel = true;
-		options.batchJoins = 0;
 		super(roomid, title, options);
 		this.reportJoins = !!Config.reportbattlejoins;
 		this.settings.modchat = (Config.battlemodchat || null);
@@ -1702,14 +1701,14 @@ export class GameRoom extends BasicRoom {
 		// console.log("NEW BATTLE");
 
 		this.tour = options.tour || null;
-		this.setParent(options.parent || (this.tour && this.tour.room) || null);
+		this.setParent((options as any).parent || (this.tour && this.tour.room) || null);
 
-		this.p1 = options.p1 || null;
-		this.p2 = options.p2 || null;
-		this.p3 = options.p3 || null;
-		this.p4 = options.p4 || null;
+		this.p1 = options.p1?.user || null;
+		this.p2 = options.p2?.user || null;
+		this.p3 = options.p3?.user || null;
+		this.p4 = options.p4?.user || null;
 
-		this.rated = options.rated || 0;
+		this.rated = options.rated === true ? 1 : options.rated || 0;
 
 		this.battle = null;
 		this.game = null!;
@@ -1847,7 +1846,7 @@ export const Rooms = {
 		return getRoom(name) || getRoom(toID(name)) || getRoom(Rooms.aliases.get(toID(name)));
 	},
 
-	createGameRoom(roomid: RoomID, title: string, options: AnyObject) {
+	createGameRoom(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		Monitor.debug("NEW BATTLE ROOM: " + roomid);
 		const room = new GameRoom(roomid, title, options);
@@ -1860,11 +1859,11 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
-	createBattle(formatid: string, options: AnyObject) {
-		const players: (User & {specialNextBattle?: string })[] =
-			[options.p1, options.p2, options.p3, options.p4].filter(user => user);
-		const gameType = Dex.getFormat(formatid).gameType;
-		if (gameType !== 'multi' && gameType !== 'free-for-all') {
+	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
+		const players: User[] = [options.p1, options.p2, options.p3, options.p4]
+			.filter(Boolean).map(player => player!.user);
+		const gameType = Dex.getFormat(options.format).gameType;
+		if (gameType !== 'multi' && gameType !== 'freeforall') {
 			if (players.length > 2) {
 				throw new Error(`Four players were provided, but the format is a two-player format.`);
 			}
@@ -1884,13 +1883,13 @@ export const Rooms = {
 			return;
 		}
 
-		const p1Special = players.length ? players[0].specialNextBattle : undefined;
+		const p1Special = players.length ? players[0].battleSettings.special : undefined;
 		let mismatch = `"${p1Special}"`;
 		for (const user of players) {
-			if (user.specialNextBattle !== p1Special) {
-				mismatch += ` vs. "${user.specialNextBattle}"`;
+			if (user.battleSettings.special !== p1Special) {
+				mismatch += ` vs. "${user.battleSettings.special}"`;
 			}
-			user.specialNextBattle = undefined;
+			user.battleSettings.special = undefined;
 		}
 
 		if (mismatch !== `"${p1Special}"`) {
@@ -1902,12 +1901,11 @@ export const Rooms = {
 			options.ratedMessage = p1Special;
 		}
 
-		const roomid = Rooms.global.prepBattleRoom(formatid);
-		options.format = formatid;
+		const roomid = Rooms.global.prepBattleRoom(options.format);
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
-		options.rated = Math.max(+options.rated || 0, 0);
+		options.rated = Math.max(+options.rated! || 0, 0);
 		const p1 = players[0];
 		const p2 = players[1];
 		const p1name = p1 ? p1.name : "Player 1";
@@ -1915,7 +1913,7 @@ export const Rooms = {
 		let roomTitle;
 		if (gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
-		} else if (gameType === 'free-for-all') {
+		} else if (gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
 		} else {
@@ -1923,19 +1921,20 @@ export const Rooms = {
 		}
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
-		const battle = new Rooms.RoomBattle(room, formatid, options);
+		const battle = new Rooms.RoomBattle(room, options);
 		room.game = battle;
 		// Special battles have modchat set to Player from the beginning
 		if (p1Special) room.settings.modchat = '\u2606';
 
 		let inviteOnly = false;
-		const privacySetter = new Set<ID>(options.inviteOnly || []);
-		for (const p of ['p1', 'p2', 'p3', 'p4']) {
-			if (options[`${p}inviteOnly`]) {
+		const privacySetter = new Set<ID>([]);
+		for (const p of ['p1', 'p2', 'p3', 'p4'] as const) {
+			const playerOptions = options[p];
+			if (playerOptions && playerOptions.inviteOnly) {
 				inviteOnly = true;
-				privacySetter.add(options[p].id);
-			} else if (options[`${p}hidden`]) {
-				privacySetter.add(options[p].id);
+				privacySetter.add(playerOptions.user.id);
+			} else if (playerOptions && playerOptions.hidden) {
+				privacySetter.add(playerOptions.user.id);
 			}
 		}
 

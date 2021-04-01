@@ -166,7 +166,7 @@ export class Battle {
 		this.formatData = {id: format.id};
 		this.gameType = (format.gameType || 'singles');
 		this.field = new Field(this);
-		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
+		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'freeforall';
 		this.sides = Array(isFourPlayer ? 4 : 2).fill(null) as any;
 		this.activePerHalf = this.gameType === 'triples' ? 3 :
 			(isFourPlayer || this.gameType === 'doubles') ? 2 :
@@ -249,6 +249,8 @@ export class Battle {
 				if (hasEventHandler) this.field.addPseudoWeather(rule);
 			}
 		}
+
+		this.add('gametype', this.gameType);
 		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
 		for (const side of sides) {
 			if (options[side]) {
@@ -1453,7 +1455,7 @@ export class Battle {
 	) {
 		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
 		// for now, FFA doesn't support the endless battle clause
-		if (this.format.gameType === 'free-for-all') return;
+		if (this.format.gameType === 'freeforall') return;
 
 		if ((this.turn >= 500 && this.turn % 100 === 0) ||
 			(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -1546,7 +1548,6 @@ export class Battle {
 			}
 		}
 
-		this.add('gametype', this.gameType);
 		for (const side of this.sides) {
 			let teamsize = side.pokemon.length;
 			if (format.teamLength && format.teamLength.battle) {
@@ -1985,13 +1986,13 @@ export class Battle {
 		const sourceLoc = source.getLocOf(source);
 		if (Math.abs(targetLoc) > numSlots) return false;
 		const isSelf = (sourceLoc === targetLoc);
-		const isFoe = (this.gameType === 'free-for-all' ? !isSelf : targetLoc > 0);
+		const isFoe = (this.gameType === 'freeforall' ? !isSelf : targetLoc > 0);
 		const acrossFromTargetLoc = -(numSlots + 1 - targetLoc);
-		const isAdjacent = (isFoe ?
+		const isAdjacent = (targetLoc > 0 ?
 			Math.abs(acrossFromTargetLoc - sourceLoc) <= 1 :
 			Math.abs(targetLoc - sourceLoc) === 1);
 
-		if (this.gameType === 'free-for-all' && targetType === 'adjacentAlly') {
+		if (this.gameType === 'freeforall' && targetType === 'adjacentAlly') {
 			// moves targeting one ally can instead target foes in Battle Royal
 			return isAdjacent;
 		}
@@ -2045,7 +2046,7 @@ export class Battle {
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = pokemon.getAtLoc(targetLoc);
 			if (target?.fainted) {
-				if (this.gameType === 'free-for-all') {
+				if (this.gameType === 'freeforall') {
 					// Target is a fainted opponent in a free-for-all battle; attack shouldn't retarget
 					return target;
 				}
@@ -2154,8 +2155,8 @@ export class Battle {
 
 		let team1PokemonLeft = this.sides[0].pokemonLeft;
 		let team2PokemonLeft = this.sides[1].pokemonLeft;
-		const team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2]!.pokemonLeft;
-		const team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3]!.pokemonLeft;
+		const team3PokemonLeft = this.gameType === 'freeforall' && this.sides[2]!.pokemonLeft;
+		const team4PokemonLeft = this.gameType === 'freeforall' && this.sides[3]!.pokemonLeft;
 		if (this.gameType === 'multi') {
 			team1PokemonLeft += this.sides[2]!.pokemonLeft;
 			team2PokemonLeft += this.sides[3]!.pokemonLeft;
