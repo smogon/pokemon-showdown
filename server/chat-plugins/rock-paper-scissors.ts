@@ -296,13 +296,12 @@ export const commands: ChatCommands = {
 			const targetUser = Users.get(id);
 			if (!targetUser) return this.errorReply(`The user who challenged you to Rock Paper Scissors is offline.`);
 			const existingRoom = findExisting(user.id, targetUser.id);
-			const options = {
-				modchat: '+' as AuthLevel,
-				isPrivate: true,
-			};
 			const roomid = `rps-${targetUser.id}-${user.id}`;
-			const gameRoom = existingRoom ? existingRoom : Rooms.createGameRoom(
-				roomid as RoomID, `[RPS] ${user.name} vs ${targetUser.name}`, options
+			const gameRoom = existingRoom || Rooms.createGameRoom(
+				roomid as RoomID, `[RPS] ${user.name} vs ${targetUser.name}`, {
+					modchat: '+',
+					isPrivate: true,
+				}
 			);
 			gameRoom.game = new RPSGame(gameRoom);
 			gameRoom.add(
