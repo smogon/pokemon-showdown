@@ -2384,8 +2384,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				pokemon.side.removeSideCondition('gaelstrom');
 			},
-			onStart(side) {
-				side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)]);
+			onStart(side, source) {
+				side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)], source);
 			},
 		},
 		forceSwitch: true,
