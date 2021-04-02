@@ -432,6 +432,7 @@ export const commands: ChatCommands = {
 			'processmanager', 'roomsp', 'usersp',
 		];
 
+		target = toID(target);
 		try {
 			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
 			if (target === 'all') {
