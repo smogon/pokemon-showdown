@@ -344,7 +344,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
-			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
@@ -411,7 +411,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
-			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
@@ -1258,7 +1258,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 
 			const dazzlingHolder = this.effectData.target;
-			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
 				this.add('-ability', dazzlingHolder, 'Dark Royalty');
 				this.add('cant', target, move, '[of] ' + dazzlingHolder);
@@ -1731,7 +1731,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', pokemon, 'Royal Aura');
 		},
 		onDeductPP(target, source) {
-			if (target.side === source.side) return;
+			if (target.isAlly(source)) return;
 			return 1;
 		},
 		onTryMove(pokemon, target, move) {

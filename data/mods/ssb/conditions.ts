@@ -1857,7 +1857,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
-			if (target.side === this.effectData.source.side) return;
+			if (target.isAlly(this.effectData.source)) return;
 			// Hail is stronger from Heavy Hailstorm
 			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 8);
 		},
@@ -2100,7 +2100,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return;
 			}
 
-			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
 				this.add('message', 'Minior dazzles!');
 				this.add('cant', target, move, '[of] ' + dazzlingHolder);
@@ -2239,14 +2239,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && target.side === this.effectData.target) {
+			if (target !== source && this.effectData.target.hasAlly(target)) {
 				if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
 						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 					return;
 				}
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Aurora Veil weaken');
-					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
+					if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}
@@ -2274,10 +2274,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
+			if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Light Screen weaken');
-					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
+					if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}
@@ -2299,7 +2299,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: "Mist",
 		duration: 5,
 		onBoost(boost, target, source, effect) {
-			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 			if (source && target !== source) {
 				let showMsg = false;
 				let i: BoostName;
@@ -2337,10 +2337,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
+			if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Reflect weaken');
-					if (target.side.active.length > 1) return this.chainModify([2732, 4096]);
+					if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 					return this.chainModify(0.5);
 				}
 			}
@@ -2369,7 +2369,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onSetStatus(status, target, source, effect) {
 			if (!effect || !source) return;
-			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 			if (target !== source) {
 				this.debug('interrupting setStatus');
 				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
@@ -2380,7 +2380,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onTryAddVolatile(status, target, source, effect) {
 			if (!effect || !source) return;
-			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 			if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
 				if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
 				return null;

@@ -666,7 +666,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable() || target.side === source.side) return;
+				if (!target.isGrounded() || target.isSemiInvulnerable() || target.isAlly(source)) return;
 				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}
@@ -716,7 +716,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	quash: {
 		inherit: true,
 		onHit(target) {
-			if (target.side.active.length < 2) return false; // fails in singles
+			if (this.activePerHalf === 1) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 

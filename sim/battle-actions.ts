@@ -176,7 +176,7 @@ export class BattleActions {
 			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
 		}
 		if (this.battle.gen === 4) {
-			for (const foeActive of pokemon.side.foe.active) {
+			for (const foeActive of pokemon.foes()) {
 				foeActive.removeVolatile('substitutebroken');
 			}
 		}
@@ -307,8 +307,8 @@ export class BattleActions {
 				if (this.battle.faintMessages()) break;
 				if (dancer.fainted) continue;
 				this.battle.add('-activate', dancer, 'ability: Dancer');
-				const dancersTarget = target!.side !== dancer.side && pokemon.side === dancer.side ? target! : pokemon;
-				const dancersTargetLoc = this.battle.getTargetLoc(dancersTarget, dancer);
+				const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
+				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
 				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.getAbility('dancer'), undefined, true);
 			}
 		}
@@ -614,7 +614,7 @@ export class BattleActions {
 				this.battle.add('-immune', target);
 				hitResults[i] = false;
 			} else if (this.battle.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') &&
-				targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
+				!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 				this.battle.debug('natural prankster immunity');
 				if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
 				this.battle.add('-immune', target);
@@ -695,7 +695,7 @@ export class BattleActions {
 				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'spikyshield']) {
 					if (target.removeVolatile(effectid)) broke = true;
 				}
-				if (this.battle.gen >= 6 || target.side !== pokemon.side) {
+				if (this.battle.gen >= 6 || !target.isAlly(pokemon)) {
 					for (const effectid of ['craftyshield', 'matblock', 'quickguard', 'wideguard']) {
 						if (target.side.removeSideCondition(effectid)) broke = true;
 					}
@@ -954,8 +954,8 @@ export class BattleActions {
 		if (!moveData.flags) moveData.flags = {};
 		if (move.target === 'all' && !isSelf) {
 			hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
-		} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
-			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, (target ? target.side : null), pokemon, move);
+		} else if ((move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') && !isSelf) {
+			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target || null, pokemon, move);
 		} else if (target) {
 			hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 		}
@@ -969,7 +969,7 @@ export class BattleActions {
 
 		// 0. check for substitute
 		if (!isSecondary && !isSelf) {
-			if (move.target !== 'all' && move.target !== 'allySide' && move.target !== 'foeSide') {
+			if (move.target !== 'all' && move.target !== 'allyTeam' && move.target !== 'allySide' && move.target !== 'foeSide') {
 				damage = this.tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary);
 			}
 		}
@@ -1625,7 +1625,7 @@ export class BattleActions {
 
 		// multi-target modifier (doubles only)
 		if (move.spreadHit) {
-			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'free-for-all' ? 0.5 : 0.75);
+			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
 			this.battle.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		}
@@ -1728,11 +1728,10 @@ export class BattleActions {
 	runMegaEvo(pokemon: Pokemon) {
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!speciesid) return false;
-		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of side.foe.active) {
-			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
+		for (const foeActive of pokemon.foes()) {
+			if (foeActive.volatiles['skydrop']?.source === pokemon) {
 				return false;
 			}
 		}
@@ -1741,7 +1740,7 @@ export class BattleActions {
 
 		// Limit one mega evolution
 		const wasMega = pokemon.canMegaEvo;
-		for (const ally of side.pokemon) {
+		for (const ally of pokemon.side.pokemon) {
 			if (wasMega) {
 				ally.canMegaEvo = null;
 			} else {

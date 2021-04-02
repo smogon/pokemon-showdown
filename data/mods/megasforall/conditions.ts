@@ -3,7 +3,7 @@ const longwhip: ConditionData = {
 	onResidualOrder: 3,
 	onResidual(target) {
 		// unlike a future move, Long Whip activates each turn
-		this.effectData.target = this.effectData.side.active[this.effectData.position];
+		this.effectData.target = this.getAtSlot(this.effectData.slot);
 		const data = this.effectData;
 		const move = this.dex.getMove(data.move);
 		if (data.target.fainted || data.target === data.source) {
@@ -39,7 +39,7 @@ const longwhip: ConditionData = {
 	},
 	onEnd(target) {
 		// unlike a future move, Long Whip activates each turn
-		this.effectData.target = this.effectData.side.active[this.effectData.position];
+		this.effectData.target = this.getAtSlot(this.effectData.slot);
 		const data = this.effectData;
 		const move = this.dex.getMove(data.move);
 		if (data.target.fainted || data.target === data.source) {
