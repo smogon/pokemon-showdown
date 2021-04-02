@@ -322,7 +322,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		essentialMove: "surf",
 		exclusiveMoves: ["psychic", "hypnosis", "hypnosis"],
 		comboMoves: ["amnesia", "blizzard"],
-		tier: "NU",
+		tier: "NUBL",
 	},
 	abra: {
 		randomBattleMoves: ["psychic", "thunderwave", "seismictoss"],
