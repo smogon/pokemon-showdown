@@ -46,7 +46,7 @@ export const Formats: FormatList = [
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
-		name: "[Gen 8] Free-For-All Random Battle",
+		name: "[Gen 8] 4 Player Random Battle",
 
 		mod: 'gen8',
 		team: 'random',
