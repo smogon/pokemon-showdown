@@ -432,6 +432,7 @@ export const commands: ChatCommands = {
 			'processmanager', 'roomsp', 'usersp',
 		];
 
+		target = toID(target);
 		try {
 			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
 			if (target === 'all') {
@@ -781,9 +782,11 @@ export const commands: ChatCommands = {
 			for (const [i, process] of manager.releasingProcesses.entries()) {
 				const pid = process.getProcess().pid;
 				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.getLoad()}`;
-				const info = processes.get(`${pid}`)!;
-				if (info.cpu) buf += `, CPU: ${info.cpu}`;
-				if (info.time) buf += `, time: ${info.time}`;
+				const info = processes.get(`${pid}`);
+				if (info) {
+					if (info.cpu) buf += `, CPU: ${info.cpu}`;
+					if (info.time) buf += `, time: ${info.time}`;
+				}
 				buf += `)<br />`;
 				processes.delete(`${pid}`);
 			}

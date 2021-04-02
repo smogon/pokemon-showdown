@@ -286,14 +286,21 @@ Chat.registerMonitor('shorteners', {
  * Location: EVERYWHERE, PUBLIC, NAMES, BATTLES
  * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER, MUTE, EVASION
  */
-void FS(MONITOR_FILE).readIfExists().then(data => {
+
+export function loadFilters() {
+	let data;
+	try {
+		data = FS(MONITOR_FILE).readSync();
+	} catch (e) {
+		if (e.code !== 'ENOENT') throw e;
+	}
+	if (!data) return;
 	const lines = data.split('\n');
 	loop: for (const line of lines) {
 		if (!line || line === '\r') continue;
 		const [location, word, punishment, reason, times, ...rest] = line.split('\t').map(param => param.trim());
 		if (location === 'Location') continue;
 		if (!(location && word && punishment)) continue;
-
 		for (const key in Chat.monitors) {
 			if (Chat.monitors[key].location === location && Chat.monitors[key].punishment === punishment) {
 				const replacement = rest[0];
@@ -313,13 +320,16 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 				if (publicReason) filterWord.publicReason = publicReason;
 				if (replacement) filterWord.replacement = replacement;
 				filterWords[key].push(filterWord);
-
 				continue loop;
 			}
 		}
-		throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment, reason, times]}`);
+		// this is not thrown because we DO NOT WANT SECRET FILTERS TO BE LEAKED, but we want this to be known
+		// (this sends the filter line info only in the email, but still reports the crash to Dev)
+		Monitor.crashlog(new Error("Couldn't find [location, punishment] pair for a filter word"), "The main process", {
+			location, word, punishment, reason, times, rest,
+		});
 	}
-});
+}
 
 /* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -661,4 +671,5 @@ export const commands: ChatCommands = {
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/filter (add|remove) ');
+	loadFilters();
 });

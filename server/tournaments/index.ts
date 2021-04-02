@@ -935,8 +935,12 @@ export class Tournament extends Rooms.RoomGame {
 		}
 
 		to.lastActionTime = Date.now();
-		from.pendingChallenge = {to, team: ready.team, hidden: ready.hidden, inviteOnly: ready.inviteOnly};
-		to.pendingChallenge = {from, team: ready.team, hidden: ready.hidden, inviteOnly: ready.inviteOnly};
+		from.pendingChallenge = {
+			to, team: ready.settings.team, hidden: ready.settings.hidden, inviteOnly: ready.settings.inviteOnly,
+		};
+		to.pendingChallenge = {
+			from, team: ready.settings.team, hidden: ready.settings.hidden, inviteOnly: ready.settings.inviteOnly,
+		};
 		from.sendRoom(`|tournament|update|${JSON.stringify({challenging: to.name})}`);
 		to.sendRoom(`|tournament|update|${JSON.stringify({challenged: from.name})}`);
 
@@ -995,16 +999,21 @@ export class Tournament extends Rooms.RoomGame {
 		if (!challenge.from.pendingChallenge) return;
 		if (!player.pendingChallenge) return;
 
-		const room = Rooms.createBattle(this.fullFormat, {
+		const room = Rooms.createBattle({
+			format: this.fullFormat,
 			isPrivate: this.room.settings.isPrivate,
-			p1: from,
-			p1team: challenge.team,
-			p1hidden: challenge.hidden,
-			p1inviteOnly: challenge.inviteOnly,
-			p2: user,
-			p2team: ready.team,
-			p2hidden: ready.hidden,
-			p2inviteOnly: ready.inviteOnly,
+			p1: {
+				user: from,
+				team: challenge.team,
+				hidden: challenge.hidden,
+				inviteOnly: challenge.inviteOnly,
+			},
+			p2: {
+				user,
+				team: ready.settings.team,
+				hidden: ready.settings.hidden,
+				inviteOnly: ready.settings.inviteOnly,
+			},
 			rated: !Ladders.disabled && this.isRated,
 			challengeType: ready.challengeType,
 			tour: this,

@@ -43,18 +43,18 @@ describe('Matchmaker', function () {
 		const s1 = addSearch(this.p1);
 		assert(Ladders.searches.has(FORMATID));
 
-		const formatSearches = Ladders.searches.get(FORMATID);
+		const formatSearches = Ladders.searches.get(FORMATID).searches;
 		assert(formatSearches instanceof Map);
 		assert.equal(formatSearches.size, 1);
 		assert.equal(s1.userid, this.p1.id);
-		assert.equal(s1.team, this.p1.battleSettings.team);
+		assert.equal(s1.settings.team, this.p1.battleSettings.team);
 		assert.equal(s1.rating, 1000);
 	});
 
 	it('should matchmake users when appropriate', function () {
 		addSearch(this.p1);
 		addSearch(this.p2);
-		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 0);
 
 		const [roomid] = [...this.p1.games];
 		Rooms.get(roomid).destroy();
@@ -63,24 +63,24 @@ describe('Matchmaker', function () {
 	it('should matchmake users within a reasonable rating range', function () {
 		addSearch(this.p1);
 		addSearch(this.p2, 2000);
-		assert.equal(Ladders.searches.get(FORMATID).size, 2);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 2);
 	});
 
 	it('should cancel searches', function () {
 		addSearch(this.p1);
 		Ladders(FORMATID).cancelSearch(this.p1);
 		Ladders.cancelSearches(this.p2);
-		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 0);
 	});
 
 	it('should periodically matchmake users when appropriate', function () {
 		addSearch(this.p1);
 		const s2 = addSearch(this.p2, 2000);
-		assert.equal(Ladders.searches.get(FORMATID).size, 2);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 2);
 
 		s2.rating = 1000;
 		Ladders.Ladder.periodicMatch();
-		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 0);
 
 		const [roomid] = [...this.p1.games];
 		Rooms.get(roomid).destroy();
@@ -99,13 +99,13 @@ describe('Matchmaker', function () {
 	it('should cancel search on disconnect', function () {
 		addSearch(this.p1);
 		this.p1.onDisconnect(this.p1.connections[0]);
-		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 0);
 	});
 
 	it('should cancel search on merge', function () {
 		addSearch(this.p1);
 		this.p2.merge(this.p1);
-		assert.equal(Ladders.searches.get(FORMATID).size, 0);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 0);
 	});
 
 	describe('#startBattle', function () {
@@ -123,7 +123,12 @@ describe('Matchmaker', function () {
 			Object.assign(this.s2, this.s1);
 			let room;
 			try {
-				room = Rooms.createBattle(FORMATID, {p1: this.p1, p2: this.p1, p1team: this.s1.team, p2team: this.s2.team, rated: 1000});
+				room = Rooms.createBattle({
+					format: FORMATID,
+					p1: {user: this.p1, team: this.s1.team},
+					p2: {user: this.p1, team: this.s2.team},
+					rated: 1000,
+				});
 			} catch (e) {}
 			assert.equal(room, undefined);
 		});
