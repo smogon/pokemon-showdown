@@ -155,7 +155,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] RU'],
-		banlist: ['RU', 'NUBL', 'Drizzle', 'Drought', 'Aurora Veil'],
+		banlist: ['RU', 'NUBL', 'Drizzle', 'Drought', 'Snow Warning'],
 	},
 	{
 		name: "[Gen 8] PU",
