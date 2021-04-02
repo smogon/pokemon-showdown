@@ -1,6 +1,6 @@
 export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	bulbasaur: {
-		tier: "LC",
+		tier: "LC OU",
 	},
 	ivysaur: {
 		tier: "NFE",
@@ -23,7 +23,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUber)",
 	},
 	charmander: {
-		tier: "LC",
+		tier: "LC UU",
 	},
 	charmeleon: {
 		tier: "NFE",
@@ -52,7 +52,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUber)",
 	},
 	squirtle: {
-		tier: "LC",
+		tier: "TESTU",
 	},
 	wartortle: {
 		tier: "NFE",
@@ -1083,7 +1083,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["closecombat", "feint", "protect", "rockslide", "swordsdance", "xscissor"],
 		randomDoubleBattleLevel: 88,
-		tier: "NU",
+		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
 	pinsirmega: {
@@ -6320,5 +6320,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	scarkraken: {
 		tier: "OU",
+	},
+	woopa: {
+		tier: "OU",
+	},
+	woopaunbound: {
+		tier: "Uber",
 	},
 };

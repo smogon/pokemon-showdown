@@ -5999,4 +5999,14 @@ export const MovesText = {
 		desc: "This move's type is the pokemon's first type. Applies Perish Song.",
 		shortDesc: "Uses users First Type, Applies Perish Song.",
 	},
+	hyperwoophole: {
+		name: "Hyperwoop Hole",
+		desc: "This move breaks the targets protection for this turn.",
+		shortDesc: "Breaks the targets protection for this turn.",
+	},
+	hyperwoopfury: {
+		name: "Hyperwoop Fury",
+		desc: "This move lowers user's SpDef by 1; breaks protect",
+		shortDesc: "Lowers user's SpDef by 1; breaks protect",
+	},
 };

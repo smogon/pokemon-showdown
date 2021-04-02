@@ -22006,4 +22006,53 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "???",
 		contestType: "Tough",
 	},
+	hyperwoopfury: {
+        num: 947,
+        accuracy: true,
+        basePower: 100,
+        category: "Physical",
+        name: "Hyperwoop Fury",
+        pp: 5,
+        priority: 0,
+        flags: {mirror: 1, authentic: 1},
+        breaksProtect: true,
+        onTry(source) {
+            if (source.species.name === 'Woopa-Unbound') {
+                return;
+            }
+            this.hint("Only a Pokemon whose form is Woopa Unbound can use this move.");
+            if (source.species.name === 'Woopa') {
+                this.attrLastMove('[still]');
+                this.add('-fail', source, 'move: Hyperwoop Fury', '[forme]');
+                return null;
+            }
+            this.attrLastMove('[still]');
+            this.add('-fail', source, 'move: Hyperwoop Fury');
+            return null;
+        },
+        self: {
+            boosts: {
+                spd: -1,
+            },
+        },
+        secondary: null,
+        target: "normal",
+        type: "Water",
+        contestType: "Tough",
+    },
+    hyperwoophole: {
+        num: 948,
+        accuracy: true,
+        basePower: 80,
+        category: "Special",
+        name: "Hyperwoop Hole",
+        pp: 5,
+        priority: 0,
+        flags: {mirror: 1, authentic: 1},
+        breaksProtect: true,
+        secondary: null,
+        target: "normal",
+        type: "Ground",
+        contestType: "Cute",
+    },
 };
