@@ -1,10 +1,11 @@
 export const Scripts: ModdedBattleScriptsData = {
+	gen: 8,
 	field: {
 		suppressingWeather() {
 			for (const pokemon of this.battle.getAllActive()) {
 				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() &&
 					(pokemon.getAbility().suppressWeather ||
-						pokemon.m.innates?.some((k: string) => pokemon.volatiles['ability:' + k]?.suppressWeather))) {
+						pokemon.m.innates?.some((k: string) => this.battle.dex.getAbility(k).suppressWeather))) {
 					return true;
 				}
 			}
