@@ -7,6 +7,8 @@ interface SpeciesAbility {
 	S?: string;
 }
 
+type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary";
+
 export interface SpeciesData extends Partial<Species> {
 	name: string;
 	/** National Dex number */
@@ -155,7 +157,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** Tags, miscellaneous data.
 	* This just checks if a Pokemon has some sort of Legendary or Mythical status right now though.
 	*/
-	readonly tags?: string[];
+	readonly tags: SpeciesTag[];
 	/** Does this Pokemon have an unreleased hidden ability? */
 	readonly unreleasedHidden: boolean | 'Past';
 	/**
@@ -259,6 +261,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm || 0;
 		this.color = data.color || '';
+		this.tags = data.tags || [];
 		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
