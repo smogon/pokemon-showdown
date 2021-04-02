@@ -1555,7 +1555,6 @@ const commands: ChatCommands = {
 		rules: 'customrules',
 		customrules(target, room, user, connection, cmd) {
 			room = this.requireRoom();
-			this.checkCan('tournaments', null, room);
 			const tournament = this.requireGame(Tournament);
 			if (cmd === 'banlist') {
 				return this.errorReply('The new syntax is: /tour rules -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule');
@@ -1566,6 +1565,7 @@ const commands: ChatCommands = {
 				this.parse('/tour viewrules');
 				return this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
 			}
+			this.checkCan('tournaments', null, room);
 			if (tournament.isTournamentStarted) {
 				return this.errorReply("The custom rules cannot be changed once the tournament has started.");
 			}
