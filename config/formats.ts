@@ -69,18 +69,6 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
 	},
 	{
-		name: "[Gen 8] OU (suspect test)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672210/">OU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672556/">OU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3674058/">OU Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] OU'],
-		unbanlist: ['Zamazenta-Crowned', 'Arena Trap'],
-	},
-	{
 		name: "[Gen 8] OU (Blitz)",
 
 		mod: 'gen8',
@@ -111,18 +99,6 @@ export const Formats: FormatList = [
 		banlist: ['OU', 'UUBL'],
 	},
 	{
-		name: "[Gen 8] UU (suspect test)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3681243/">UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3659681/">UU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3674793/">UU Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] UU'],
-		unbanlist: ['Excadrill', 'Tyranitar'],
-	},
-	{
 		name: "[Gen 8] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3676870/">RU Metagame Discussion</a>`,
@@ -133,17 +109,6 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] UU'],
 		banlist: ['UU', 'RUBL'],
-	},
-	{
-		name: "[Gen 8] RU (Dynamax)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3676870/">RU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661013/">RU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3676023/">RU Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] RU', '!Dynamax Clause'],
 	},
 	{
 		name: "[Gen 8] NU",
@@ -167,17 +132,6 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] NU'],
 		banlist: ['NU', 'PUBL'],
-	},
-	{
-		name: "[Gen 8] PU (Indeedee-F + No Team Preview)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3676543/">PU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3676106/">PU Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] PU', '!Team Preview'],
-		unbanlist: ['Indeedee-F'],
 	},
 	{
 		name: "[Gen 8] LC",
@@ -214,18 +168,6 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 8] Monotype (Dynamax)",
-		desc: `All the Pok&eacute;mon on a team must share a type.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672167/">Monotype Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3673391/">Monotype Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3673165">Monotype Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] Monotype', '!Dynamax Clause'],
-	},
-	{
 		name: "[Gen 8] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
@@ -257,18 +199,6 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
-	},
-	{
-		name: "[Gen 8] Anything Goes (with Eternamax)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672172/">AG Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3675040/">AG Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672899/">AG Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] Anything Goes'],
-		unbanlist: ['Eternatus-Eternamax'],
 	},
 	{
 		name: "[Gen 8] ZU",
@@ -553,18 +483,6 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 8] National Dex (No stall)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">National Dex Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">National Dex Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">National Dex Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] National Dex'],
-		banlist: ['Chansey', 'Sableye-Mega', 'Toxapex'],
-	},
-	{
 		name: "[Gen 8] National Dex UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3660920/">National Dex UU Metagame Discussion</a>`,
@@ -580,38 +498,6 @@ export const Formats: FormatList = [
 			'Garchomp', 'Gliscor', 'Greninja', 'Gyarados-Mega', 'Heatran', 'Kartana', 'Kommo-o', 'Kyurem', 'Landorus-Therian', 'Lopunny-Mega',
 			'Magearna', 'Magnezone', 'Mawile-Mega', 'Medicham-Mega', 'Pelipper', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base',
 			'Swampert-Mega', 'Tangrowth', 'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Toxapex', 'Tyranitar', 'Victini', 'Volcarona', 'Zapdos-Base',
-			'nduubl', // National Dex UUBL
-			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Hawlucha',
-			'Heracross-Mega', 'Hydreigon', 'Latias', 'Latias-Mega', 'Latios', 'Manaphy', 'Pinsir-Mega', 'Slowbro-Mega', 'Thundurus',
-			'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar', 'Drizzle', 'Drought',
-			// Slowbronite is banned so it doesn't validate on Galarian Slowbro
-			'Slowbronite',
-		],
-		// Used to distinguish UU from below UU in the client
-		restricted: [
-			'Absol-Mega', 'Aegislash', 'Aggron-Mega', 'Altaria-Mega', 'Amoonguss', 'Beedrill-Mega', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela',
-			'Chesnaught', 'Crobat', 'Donphan', 'Dragonite', 'Hippowdon', 'Honchkrow', 'Hoopa-Unbound', 'Infernape', 'Jirachi', 'Keldeo', 'Krookodile',
-			'Mamoswine', 'Mandibuzz', 'Manectric-Mega', 'Melmetal', 'Mew', 'Mienshao', 'Moltres-Base', 'Nihilego', 'Porygon2', 'Regieleki', 'Ribombee',
-			'Rotom-Heat', 'Rotom-Wash', 'Sableye-Mega', 'Scizor', 'Shuckle', 'Skarmory', 'Slowking', 'Slowking-Galar', 'Staraptor', 'Swampert', 'Umbreon',
-			'Urshifu-Rapid-Strike', 'Weavile',
-		],
-	},
-	{
-		name: "[Gen 8] National Dex UU (No stall)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3660920/">National Dex UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672486/">National Dex UU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672482/">National Dex UU Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] National Dex (No stall)'],
-		banlist: [
-			// National Dex OU
-			'Blissey', 'Charizard-Mega-X', 'Charizard-Mega-Y', 'Clefable', 'Corviknight', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gliscor',
-			'Greninja', 'Gyarados-Mega', 'Heatran', 'Kartana', 'Kommo-o', 'Kyurem', 'Landorus-Therian', 'Lopunny-Mega', 'Magearna', 'Magnezone',
-			'Mawile-Mega', 'Medicham-Mega', 'Pelipper', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base', 'Swampert-Mega', 'Tangrowth',
-			'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Tyranitar', 'Victini', 'Volcarona', 'Zapdos-Base',
 			'nduubl', // National Dex UUBL
 			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Hawlucha',
 			'Heracross-Mega', 'Hydreigon', 'Latias', 'Latias-Mega', 'Latios', 'Manaphy', 'Pinsir-Mega', 'Slowbro-Mega', 'Thundurus',
@@ -648,18 +534,6 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 8] ND Monotype (No Toxapex)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3677638/">National Dex Monotype Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3677637/">National Dex Monotype Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3677636/">National Dex Monotype Viability Rankings</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] National Dex Monotype'],
-		banlist: ['Toxapex'],
-	},
-	{
 		name: "[Gen 8] National Dex AG",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
@@ -667,16 +541,6 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['Standard NatDex'],
-	},
-	{
-		name: "[Gen 8] NatDex AG (with Eternamax)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['Standard NatDex'],
-		unbanlist: ['Eternatus-Eternamax'],
 	},
 
 	// Pet Mods
@@ -1614,7 +1478,7 @@ export const Formats: FormatList = [
 			if (target && boosts[tier] > 20) {
 				if (target.set.ability === 'drizzle') tier = 'nubl';
 				if (target.set.ability === 'drought') tier = 'nubl';
-				if (target.set.moves.includes('auroraveil')) tier = 'nubl';
+				if (target.set.ability === 'snowwarning') tier = 'nubl';
 			}
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = pokemon.baseStats['hp'];
@@ -1795,23 +1659,6 @@ export const Formats: FormatList = [
 				this.add('-message', `${source.name} received the bounty!`);
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
 			}
-		},
-	},
-	{
-		name: "[Gen 8] Super Staff Bros 4 (Wii U)",
-		desc: "A more competitive version of the existing Super Staff Bros 4 format!",
-		threads: [
-			`&bullet; <a href="http://spo.ink/HappyBirthdayAeonic">Introduction &amp; Roster</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3681253/">Discussion Thread</a>`,
-		],
-
-		mod: 'ssb',
-		team: 'randomStaffBros',
-		ruleset: ['Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-		onBegin() {
-			this.add('message', 'Delphox only');
-			this.add('message', 'No items');
-			this.add('message', 'Final Destination');
 		},
 	},
 	{
@@ -2059,6 +1906,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		// searchShow: false,
 		ruleset: ['[Gen 6] OU', '+CAP'],
+		banlist: ['Aurumoth', 'Cawmodore'],
 	},
 
 	// Past Gens OU
