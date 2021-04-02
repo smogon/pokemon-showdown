@@ -5400,6 +5400,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// :^)
+	// Remnant of an AFD past. Thank u for the memes.
+	/*
 	supermetronome: {
 		accuracy: true,
 		basePower: 0,
@@ -5443,4 +5445,5 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "???",
 	},
+	*/
 };
