@@ -55,7 +55,6 @@ export const commands: ChatCommands = {
 		if (!roomQuotes[index - 1]) {
 			return this.errorReply(`Out of bounds.`);
 		}
-		this.runBroadcast(true);
 		const {quote, date, userid} = roomQuotes[index - 1];
 		const time = Chat.toTimestamp(new Date(date), {human: true});
 		return this.sendReplyBox(`${Chat.getReadmoreBlock(quote)}`);
