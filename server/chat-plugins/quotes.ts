@@ -49,15 +49,12 @@ export const commands: ChatCommands = {
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes) return this.errorReply(`No quotes found for ${room.roomid}.`);
 		const index = parseInt(target.trim());
-		if (isNaN(index)) {
+		if (isNaN(index) || !roomQuotes[index - 1]) {
 			return this.errorReply(`Invalid index.`);
 		}
-		if (!roomQuotes[index - 1]) {
-			return this.errorReply(`Out of bounds.`);
-		}
-		const {quote, date, userid} = roomQuotes[index - 1];
+		const {quote, date} = roomQuotes[index - 1];
 		const time = Chat.toTimestamp(new Date(date), {human: true});
-		return this.sendReplyBox(`${Chat.getReadmoreBlock(quote)}`);
+		return this.sendReplyBox(Chat.getReadmoreBlock(quote));
 	},
 	nquotehelp: [`/nquote [index] [showauthor] - Show a specifix quote from the room. Add 'showauthor' to see who added it and when.`],
 
