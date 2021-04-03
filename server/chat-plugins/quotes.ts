@@ -57,7 +57,7 @@ export const commands: ChatCommands = {
 		const {quote} = roomQuotes[index - 1];
 		return this.sendReplyBox(Chat.getReadmoreBlock(quote));
 	},
-	getquotehelp: [`/nquote [index] - Show a specifix quote from the room.`],
+	getquotehelp: [`/getquote [index] - Show a specifix quote from the room.`],
 
 	addquote: 'quote',
 	quote(target, room, user) {
