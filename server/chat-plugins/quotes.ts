@@ -45,7 +45,7 @@ export const commands: ChatCommands = {
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
 	
-	nquote(target, room) {
+	getquote(target, room) {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes) return this.errorReply(`No quotes found for ${room.roomid}.`);
@@ -58,7 +58,7 @@ export const commands: ChatCommands = {
 		const time = Chat.toTimestamp(new Date(date), {human: true});
 		return this.sendReplyBox(Chat.getReadmoreBlock(quote));
 	},
-	nquotehelp: [`/nquote [index] - Show a specifix quote from the room.`],
+	getquotehelp: [`/nquote [index] - Show a specifix quote from the room.`],
 
 	addquote: 'quote',
 	quote(target, room, user) {
