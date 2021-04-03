@@ -599,6 +599,9 @@ class Ladder extends LadderStore {
 			}
 			return false;
 		}
+		const format = Dex.getFormat(formatid);
+		const delayedStart = (['multi', 'freeforall'].includes(format.gameType) && players.length === 2) ?
+			'multi' : false;
 		Rooms.createBattle({
 			format: formatid,
 			p1: players[0],
@@ -607,6 +610,7 @@ class Ladder extends LadderStore {
 			p4: players[3],
 			rated: minRating,
 			challengeType: readies[0].challengeType,
+			delayedStart,
 		});
 	}
 }

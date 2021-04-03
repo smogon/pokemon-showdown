@@ -51,7 +51,6 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		team: 'random',
 		gameType: 'freeforall',
-		challengeShow: false,
 		tournamentShow: false,
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],

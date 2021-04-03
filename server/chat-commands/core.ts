@@ -1183,7 +1183,7 @@ export const commands: ChatCommands = {
 		if (room.rated) return this.errorReply(this.tr`You can only add a Player to unrated battles.`);
 
 		target = this.splitTarget(target, true).trim();
-		if (target !== 'p1' && target !== 'p2') {
+		if (target !== 'p1' && target !== 'p2' && target !== 'p3' && target !== 'p4') {
 			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${target}".`);
 			return this.parse('/help addplayer');
 		}
