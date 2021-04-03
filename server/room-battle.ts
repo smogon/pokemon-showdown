@@ -466,6 +466,7 @@ export interface RoomBattleOptions {
 	p3?: RoomBattlePlayerOptions;
 	p4?: RoomBattlePlayerOptions;
 
+	delayedStart?: boolean | 'multi';
 	challengeType?: ChallengeType;
 	allowRenames?: boolean;
 	rated?: number | boolean | null;
@@ -496,7 +497,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	readonly allowExtraction: {[k: string]: Set<ID>};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
 	readonly timer: RoomBattleTimer;
-	missingBattleStartMessage: boolean;
+	missingBattleStartMessage: boolean | 'multi';
 	started: boolean;
 	ended: boolean;
 	active: boolean;
@@ -535,7 +536,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
 		// true when onCreateBattleRoom has been called
-		this.missingBattleStartMessage = !!options.inputLog;
+		this.missingBattleStartMessage = !!options.inputLog || options.delayedStart || false;
 		this.started = false;
 		this.ended = false;
 		this.active = false;
@@ -1123,6 +1124,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 				`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
 				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
 			).update();
+		}
+		if (this.missingBattleStartMessage === 'multi') {
+			this.room.add(`|html|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />Players will need to be manually added with <code>/addplayer [username], p3</code> and <code>/addplayer [username], p4</code></div>`);
 		}
 	}
 
