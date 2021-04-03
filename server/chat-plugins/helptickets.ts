@@ -1275,8 +1275,16 @@ export const commands: ChatCommands = {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
 				ticketGame.addPlayer(user);
 			}
-			if (contexts[ticket.type]) {
-				helpRoom.add(`|c|&Staff|${this.tr(contexts[ticket.type])}`);
+			let context = contexts[ticket.type];
+			switch (ticket.type) {
+			case 'IP-Appeal':
+				if (user.locked === '#hostfilter') {
+					context += ` (Have you looked at https://${Config.routes.root}/pages/proxyhelp?)`;
+				}
+				break;
+			}
+			if (context) {
+				helpRoom.add(`|c|&Staff|${this.tr(context)}`);
 				helpRoom.update();
 			}
 			if (pmRequestButton) {
