@@ -52,7 +52,7 @@ export const commands: ChatCommands = {
 		if (isNaN(index)) {
 			return this.errorReply(`Invalid index.`);
 		}
-		if(!roomQuotes[index - 1]) {
+		if (!roomQuotes[index - 1]) {
 			return this.errorReply(`Out of bounds.`);
 		}
 		this.runBroadcast(true);
