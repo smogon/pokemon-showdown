@@ -454,7 +454,7 @@ export class BattleActions {
 
 		let damage: number | false | undefined | '' = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-			damage = this.tryMoveHit(target, pokemon, move);
+			damage = this.tryMoveHit(targets, pokemon, move);
 			if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		} else {
@@ -749,8 +749,11 @@ export class BattleActions {
 		return undefined;
 	}
 	/** NOTE: used only for moves that target sides/fields rather than pokemon */
-	tryMoveHit(target: Pokemon, pokemon: Pokemon, move: ActiveMove): number | undefined | false | '' {
-		this.battle.setActiveMove(move, pokemon, target);
+	tryMoveHit(targetOrTargets: Pokemon | Pokemon[], pokemon: Pokemon, move: ActiveMove): number | undefined | false | '' {
+		const target = Array.isArray(targetOrTargets) ? targetOrTargets[0] : targetOrTargets;
+		const targets = Array.isArray(targetOrTargets) ? targetOrTargets : [target];
+
+		this.battle.setActiveMove(move, pokemon, targets[0]);
 
 		let hitResult = this.battle.singleEvent('Try', move, null, pokemon, target, move) &&
 			this.battle.singleEvent('PrepareHit', move, {}, target, pokemon, move) &&
@@ -763,8 +766,14 @@ export class BattleActions {
 			return false;
 		}
 
+		const isFFAHazard = move.target === 'foeSide' && this.battle.gameType === 'freeforall';
 		if (move.target === 'all') {
 			hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
+		} else if (isFFAHazard) {
+			const hitResults: any[] = this.battle.runEvent('TryHitSide', targets, pokemon, move);
+			// if some side blocked the move, prevent the move from executing against any other sides
+			if (hitResults.some(result => !result)) return false;
+			hitResult = true;
 		} else {
 			hitResult = this.battle.runEvent('TryHitSide', target, pokemon, move);
 		}
@@ -775,7 +784,7 @@ export class BattleActions {
 			}
 			return false;
 		}
-		return this.moveHit(target, pokemon, move);
+		return this.moveHit(isFFAHazard ? targets : target, pokemon, move);
 	}
 	hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) { // Temporary name
 		const damage: (number | boolean | undefined)[] = [];
@@ -1271,10 +1280,11 @@ export class BattleActions {
 		return damage;
 	}
 	moveHit(
-		target: Pokemon | null, pokemon: Pokemon, moveOrMoveName: ActiveMove,
+		targets: Pokemon | null | (Pokemon | null)[], pokemon: Pokemon, moveOrMoveName: ActiveMove,
 		moveData?: Dex.HitEffect, isSecondary?: boolean, isSelf?: boolean
 	): number | undefined | false {
-		const retVal = this.spreadMoveHit([target], pokemon, moveOrMoveName, moveData, isSecondary, isSelf)[0][0];
+		if (!Array.isArray(targets)) targets = [targets];
+		const retVal = this.spreadMoveHit(targets, pokemon, moveOrMoveName, moveData, isSecondary, isSelf)[0][0];
 		return retVal === true ? undefined : retVal;
 	}
 
