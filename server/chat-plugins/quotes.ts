@@ -44,6 +44,23 @@ export const commands: ChatCommands = {
 		return this.sendReplyBox(`${Chat.getReadmoreBlock(quote)}${attribution}`);
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
+	
+	nquote(target, room, user) {
+		room = this.requireRoom();
+		const roomQuotes = quotes[room.roomid];
+		const index = parseInt(target.trim());
+		if (isNaN(index)) {
+			return this.errorReply(`Invalid index.`);
+		}
+		if(!roomQuotes[index - 1]) {
+			return this.errorReply(`Out of bounds.`);
+		}
+		this.runBroadcast(true);
+		const {quote, date, userid} = roomQuotes[index - 1];
+		const time = Chat.toTimestamp(new Date(date), {human: true});
+		return this.sendReplyBox(`${Chat.getReadmoreBlock(quote)}`);
+	},
+	nquotehelp: [`/nquote [index] [showauthor] - Show a specifix quote from the room. Add 'showauthor' to see who added it and when.`],
 
 	addquote: 'quote',
 	quote(target, room, user) {
