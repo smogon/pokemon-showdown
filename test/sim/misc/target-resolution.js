@@ -88,6 +88,22 @@ describe('Target Resolution', function () {
 			battle.makeChoices('move watergun -2, auto', 'auto');
 			assert.statStage(redirector, 'spa', 1);
 		});
+
+		it(`should not redirect to another random target if the intended one is fainted in FFA`, function () {
+			battle = common.createBattle({gameType: 'freeforall'}, [[
+				{species: 'Calyrex', moves: ['sleeptalk']},
+			], [
+				{species: 'Victini', ability: 'Victory Star', moves: ['vcreate']},
+			], [
+				{species: 'Chansey', moves: ['sleeptalk']},
+			], [
+				{species: 'Tyrunt', moves: ['crunch']},
+			]]);
+			battle.makeChoices('auto', 'move vcreate 1', 'auto', 'move crunch 1');
+			assert.fainted(battle.sides[0].active[0]);
+			assert.fullHP(battle.sides[1].active[0]);
+			assert.fullHP(battle.sides[2].active[0]);
+		});
 	});
 
 	describe(`Targetted slot is empty`, function () {

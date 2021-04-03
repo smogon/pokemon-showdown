@@ -720,7 +720,7 @@ export class Pokemon {
 				if (!possibleTarget) return {targets: [], pressureTargets: []};
 				target = possibleTarget;
 			}
-			if (target.side.active.length > 1 && !move.tracksTarget) {
+			if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
 				const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
 					!(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) &&
 					!(this.hasItem('powerherb') && move.id !== 'skydrop');
