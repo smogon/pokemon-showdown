@@ -26,6 +26,10 @@ const searches = new Map<string, {
 	/** userid:BattleReady */
 	searches: Map<ID, BattleReady>,
 }>();
+/**
+ * Map<to, Map<from, formatid>>
+ */
+const requests = new Map<string, Map<string, ID>>();
 
 /**
  * This keeps track of searches for battles, creating a new battle for a newly
@@ -37,7 +41,13 @@ class Ladder extends LadderStore {
 		super(formatid);
 	}
 
-	async prepBattle(connection: Connection, challengeType: ChallengeType, team: string | null = null, isRated = false) {
+	async prepBattle(
+		connection: Connection,
+		challengeType: ChallengeType,
+		team: string | null = null,
+		isRated = false,
+		noPartner = false
+	) {
 		// all validation for a battle goes through here
 		const user = connection.user;
 		const userid = user.id;
@@ -135,6 +145,13 @@ class Ladder extends LadderStore {
 				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
 			);
 			return null;
+		}
+
+		if (Dex.getFormat(this.formatid).gameType === 'multi' && !noPartner) {
+			if (!user.battleSettings.teammate) {
+				connection.popup(`You must have a teammate consent to play with you before playing this tier.`);
+				return null;
+			}
 		}
 
 		const settings = {...user.battleSettings, team: valResult.slice(1)};
@@ -329,6 +346,9 @@ class Ladder extends LadderStore {
 		if (oldUserid !== user.id) return;
 		if (!search) return;
 
+		if (user.battleSettings.teammate) {
+			BattleReady.averageRatings([search, user.battleSettings.teammate]);
+		}
 		this.addSearch(search, user);
 	}
 
@@ -422,7 +442,6 @@ class Ladder extends LadderStore {
 	static periodicMatch() {
 		// In order from longest waiting to shortest waiting
 		for (const [formatid, formatTable] of Ladders.searches) {
-			if (formatTable.playerCount > 2) continue; // TODO: implement
 			const matchmaker = Ladders(formatid);
 			let longest: [BattleReady, User] | null = null;
 			for (const search of formatTable.searches.values()) {
@@ -458,6 +477,9 @@ class Ladder extends LadderStore {
 			if (!user) {
 				missingUser = ready.userid;
 				break;
+			}
+			if (user.battleSettings.teammate) {
+				readies.push(user.battleSettings.teammate);
 			}
 			players.push({
 				user,
@@ -513,6 +535,7 @@ export const Ladders = Object.assign(getLadder, {
 
 	searches,
 	challenges,
+	requests,
 	periodicMatchInterval,
 
 	// tells the client to ask the server for format information

@@ -30,6 +30,14 @@ export class BattleReady {
 		this.challengeType = challengeType;
 		this.time = Date.now();
 	}
+	static averageRatings(readies: BattleReady[]) {
+		const combined = readies.map(r => r.rating).reduce((cur, prev) => cur + prev);
+		const newRating = combined / readies.length;
+		for (const ready of readies) {
+			(ready as any).rating = newRating;
+		}
+		return newRating;
+	}
 }
 
 export abstract class AbstractChallenge {
