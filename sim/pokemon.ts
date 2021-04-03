@@ -619,8 +619,8 @@ export class Pokemon {
 		return this.side.allies().filter(ally => this.isAdjacent(ally));
 	}
 
-	foes(): Pokemon[] {
-		return this.side.foes();
+	foes(all?: boolean): Pokemon[] {
+		return this.side.foes(all);
 	}
 
 	adjacentFoes(): Pokemon[] {
@@ -694,7 +694,7 @@ export class Pokemon {
 				targets.push(...this.alliesAndSelf());
 			}
 			if (!move.target.startsWith('ally')) {
-				targets.push(...this.foes());
+				targets.push(...this.foes(true));
 			}
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);

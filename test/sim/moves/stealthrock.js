@@ -55,22 +55,4 @@ describe('Stealth Rock', function () {
 		const expectedDamage = Math.floor(pokemon.maxhp * expectedPercent);
 		assert.equal(pokemon.maxhp - pokemon.hp, expectedDamage, `${pokemon.name} should take ${expectedPercent * 100}%`);
 	});
-
-	it(`should be applied to every opponents' side in a Free-for-all battle`, function () {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'Bronzong', moves: ['sleeptalk', 'stealthrock']},
-		], [
-			{species: 'Cufant', moves: ['sleeptalk']},
-		], [
-			{species: 'Qwilfish', moves: ['sleeptalk']},
-		], [
-			{species: 'Marowak', moves: ['stealthrock']},
-		]]);
-
-		battle.makeChoices();
-		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, true, true, false]);
-		battle.makeChoices('move stealthrock', 'auto', 'auto', 'auto');
-		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, true, true, true]);
-		common.saveReplay(battle);
-	});
 });

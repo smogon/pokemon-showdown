@@ -243,16 +243,19 @@ export class Side {
 
 		return this.foe.pokemonLeft;
 	}
-	allies() {
+	allies(all?: boolean) {
 		// called during the first switch-in, so `active` can still contain nulls at this point
-		return this.activeTeam().filter(ally => ally && !ally.fainted);
+		let allies = this.activeTeam().filter(ally => ally);
+		if (!all) allies = allies.filter(ally => !ally.fainted);
+
+		return allies;
 	}
-	foes() {
+	foes(all?: boolean) {
 		if (this.battle.gameType === 'freeforall') {
 			return this.battle.sides.map(side => side.active[0])
-				.filter(pokemon => pokemon && pokemon.side !== this && !pokemon.fainted);
+				.filter(pokemon => pokemon && pokemon.side !== this && (all || !pokemon.fainted));
 		}
-		return this.foe.allies();
+		return this.foe.allies(all);
 	}
 	activeTeam() {
 		if (this.battle.gameType !== 'multi') return this.active;
