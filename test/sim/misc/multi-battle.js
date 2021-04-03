@@ -29,20 +29,4 @@ describe('Free-for-all', function () {
 		battle.makeChoices();
 		assert.equal(battle.turn, 4);
 	});
-
-	it(`moves should not redirect to another random target if the intended one is fainted`, function () {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'Calyrex', moves: ['sleeptalk']},
-		], [
-			{species: 'Victini', ability: 'Victory Star', moves: ['vcreate']},
-		], [
-			{species: 'Chansey', moves: ['sleeptalk']},
-		], [
-			{species: 'Tyrunt', moves: ['crunch']},
-		]]);
-		battle.makeChoices('auto', 'move vcreate 1', 'auto', 'move crunch 1');
-		assert.fainted(battle.sides[0].active[0]);
-		assert.fullHP(battle.sides[1].active[0]);
-		assert.fullHP(battle.sides[2].active[0]);
-	});
 });
