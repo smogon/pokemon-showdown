@@ -409,8 +409,9 @@ export class Battle {
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
 		handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, 'duration'));
 		for (const side of this.sides) {
-			if (side.n >= 2 && side.allySide) break;
-			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
+			if (side.n < 2 || !side.allySide) {
+				handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
+			}
 			for (const active of side.active) {
 				if (!active) continue;
 				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, 'duration'));
