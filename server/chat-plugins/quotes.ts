@@ -37,6 +37,7 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes?.length) return this.errorReply(`This room has no quotes.`);
+		this.runBroadcast(true);
 		const {quote, date, userid} = roomQuotes[Math.floor(Math.random() * roomQuotes.length)];
 		const time = Chat.toTimestamp(new Date(date), {human: true});
 		const attribution = toID(target) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
@@ -44,7 +45,7 @@ export const commands: ChatCommands = {
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
 	
-	nquote(target, room, user) {
+	nquote(target, room) {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes) return this.errorReply(`No quotes found for ${room.roomid}.`);
@@ -52,11 +53,12 @@ export const commands: ChatCommands = {
 		if (isNaN(index) || !roomQuotes[index - 1]) {
 			return this.errorReply(`Invalid index.`);
 		}
+		this.runBroadcast(true);
 		const {quote, date} = roomQuotes[index - 1];
 		const time = Chat.toTimestamp(new Date(date), {human: true});
 		return this.sendReplyBox(Chat.getReadmoreBlock(quote));
 	},
-	nquotehelp: [`/nquote [index] [showauthor] - Show a specifix quote from the room. Add 'showauthor' to see who added it and when.`],
+	nquotehelp: [`/nquote [index] - Show a specifix quote from the room.`],
 
 	addquote: 'quote',
 	quote(target, room, user) {
