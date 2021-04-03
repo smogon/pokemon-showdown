@@ -44,7 +44,6 @@ export const commands: ChatCommands = {
 		return this.sendReplyBox(`${Chat.getReadmoreBlock(quote)}${attribution}`);
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
-	
 	getquote(target, room) {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
