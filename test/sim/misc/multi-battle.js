@@ -30,7 +30,7 @@ describe('Free-for-all', function () {
 		assert.equal(battle.turn, 4);
 	});
 
-	it(`: moves should not redirect to another random target if the intended one is fainted`, function () {
+	it(`moves should not redirect to another random target if the intended one is fainted`, function () {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: 'Calyrex', moves: ['sleeptalk']},
 		], [
