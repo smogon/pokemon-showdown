@@ -1153,6 +1153,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 				`<form data-submitsend="/msgroom ${this.roomid},/invitebattle {username}, p${player.num}"><label>Player ${player.num}: <input name="username" class="textbox" placeholder="Username" /></label> <button class="button">Add Player</button></form>`
 			)
 		));
+		if (this.gameType === 'multi') {
+			[playerForms[1], playerForms[2]] = [playerForms[2], playerForms[1]];
+			playerForms.splice(2, 0, '&mdash; vs &mdash;');
+		}
 		connection.sendTo(
 			this.room,
 			`|uhtmlchange|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br /><br />${playerForms.join(``)}</div>`
