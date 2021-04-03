@@ -45,6 +45,7 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS, Utils, ProcessManager} from '../lib';
 import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission} from './user-groups';
+import {BattleReady} from './ladders';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -354,6 +355,7 @@ export class User extends Chat.MessageContext {
 		hidden: boolean,
 		inviteOnly: boolean,
 		special?: string,
+		teammate?: BattleReady,
 	};
 
 	isSysop: boolean;
