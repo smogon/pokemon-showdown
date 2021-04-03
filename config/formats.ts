@@ -64,6 +64,9 @@ export const Formats: FormatList = [
 		searchShow: false,
 		tournamentShow: false,
 		rated: false,
+		teamLength: {
+			battle: 3,
+		},
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
