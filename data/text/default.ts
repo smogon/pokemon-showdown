@@ -23,7 +23,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 
 		// Multi Battles only
 		canDynamax: "  [TRAINER] can dynamax now!",
-		canDynamaxOwn: "Dynamax Energy gathered around [TRAINER]!",
+		canDynamaxOwn: "  Dynamax Energy gathered around [TRAINER]!",
 
 		zEffect: "  [POKEMON] unleashes its full-force Z-Move!",
 		move: "[POKEMON] used **[MOVE]**!",
