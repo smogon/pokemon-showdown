@@ -93,6 +93,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 	 * the proper message when it changes.
 	 */
 	connected: boolean;
+	invite: ID;
 	constructor(user: User | string | null, game: RoomBattle, num: PlayerIndex) {
 		super(user, game, num);
 		if (typeof user === 'string') user = null;
@@ -110,6 +111,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.dcSecondsLeft = 1;
 
 		this.connected = true;
+		this.invite = '';
 
 		if (user) {
 			user.games.add(this.game.roomid);
@@ -665,11 +667,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 		void this.stream.write(`>${player.slot} undo`);
 	}
 	joinGame(user: User, slot?: SideID) {
-		if (!user.can('joinbattle', null, this.room)) {
-			user.popup(`You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.`);
-			return false;
-		}
-
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
@@ -697,6 +694,13 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		if (!slot) slot = validSlots[0];
 
+		if (this[slot].invite === user.id) {
+			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
+		} else if (!user.can('joinbattle', null, this.room)) {
+			user.popup(`You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.`);
+			return false;
+		}
+
 		this.updatePlayer(this[slot], user);
 		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
 			const users = this.players.map(player => {
@@ -706,6 +710,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 			});
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
 			this.missingBattleStartMessage = false;
+			this.started = true;
+			this.room.add(`|uhtmlchange|invites|`);
+		} else if (!this.started) {
+			for (const player of this.players) this.sendInviteForm(player.getUser());
 		}
 		if (user.inRooms.has(this.roomid)) this.onConnect(user);
 		this.room.update();
@@ -933,6 +941,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 			if (request.choice) data += `\n|sentchoice|${request.choice}`;
 			(connection || user).sendTo(this.roomid, data);
 		}
+		if (!this.started) {
+			this.sendInviteForm(connection || user);
+		}
 		if (!player.active) this.onJoin(user);
 	}
 	onUpdateConnection(user: User, connection: Connection | null = null) {
@@ -1074,6 +1085,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	updatePlayer(player: RoomBattlePlayer, user: User | null) {
 		super.updatePlayer(player, user);
 
+		player.invite = '';
 		const slot = player.slot;
 		if (user) {
 			const options = {
@@ -1095,7 +1107,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 	start() {
 		// on start
-		this.started = true;
 		const users = this.players.map(player => {
 			const user = player.getUser();
 			if (!user && !this.missingBattleStartMessage) {
@@ -1106,6 +1117,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (!this.missingBattleStartMessage) {
 			// @ts-ignore The above error should throw if null is found, or this should be skipped
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
+			this.started = true;
 		}
 
 		if (this.gameType === 'multi') {
@@ -1126,8 +1138,25 @@ export class RoomBattle extends RoomGames.RoomGame {
 			).update();
 		}
 		if (this.missingBattleStartMessage === 'multi') {
-			this.room.add(`|html|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />Players will need to be manually added with <code>/addplayer [username], p3</code> and <code>/addplayer [username], p4</code></div>`);
+			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);
 		}
+	}
+
+	sendInviteForm(connection: Connection | User | null) {
+		if (!connection) return;
+		const playerForms = this.players.map(player => (
+			player.id ? (
+				`<form><label>Player ${player.num}: <strong>${player.name}</strong></label></form>`
+			) : player.invite ? (
+				`<form data-submitsend="/msgroom ${this.roomid},/uninvitebattle ${player.invite}"><label>Player ${player.num}: <strong>${player.invite}</strong> (invited) <button>Uninvite</button></label></form>`
+			) : (
+				`<form data-submitsend="/msgroom ${this.roomid},/invitebattle {username}, p${player.num}"><label>Player ${player.num}: <input name="username" class="textbox" placeholder="Username" /></label> <button class="button">Add Player</button></form>`
+			)
+		));
+		connection.sendTo(
+			this.room,
+			`|uhtmlchange|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br /><br />${playerForms.join(``)}</div>`
+		);
 	}
 
 	clearPlayers() {
@@ -1142,14 +1171,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 		this.playerTable = {};
 		this.players = [];
-		// @ts-ignore
-		this.p1 = null;
-		// @ts-ignore
-		this.p2 = null;
-		// @ts-ignore
-		this.p3 = null;
-		// @ts-ignore
-		this.p4 = null;
+		this.p1 = null!;
+		this.p2 = null!;
+		this.p3 = null!;
+		this.p4 = null!;
 
 		this.ended = true;
 		void this.stream.destroy();
@@ -1158,8 +1183,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.active = false;
 		}
 
-		// @ts-ignore
-		this.room = null;
+		(this as any).room = null;
 		if (this.dataResolvers) {
 			for (const [, reject] of this.dataResolvers) {
 				// reject the promise, make whatever function called it return undefined

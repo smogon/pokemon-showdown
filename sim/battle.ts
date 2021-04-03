@@ -1253,7 +1253,7 @@ export class Battle {
 		this.ended = true;
 		this.requestState = '';
 		for (const s of this.sides) {
-			s.activeRequest = null;
+			if (s) s.activeRequest = null;
 		}
 		return true;
 	}
