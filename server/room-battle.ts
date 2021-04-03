@@ -1159,7 +1159,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 		connection.sendTo(
 			this.room,
-			`|uhtmlchange|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br /><br />${playerForms.join(``)}</div>`
+			`|uhtmlchange|invites|<div class="broadcast broadcast-blue"><strong>This battle needs more players to start</strong><br /><br />${playerForms.join(``)}</div>`
 		);
 	}
 
