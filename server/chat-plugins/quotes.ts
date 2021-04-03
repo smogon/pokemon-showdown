@@ -54,8 +54,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Invalid index.`);
 		}
 		this.runBroadcast(true);
-		const {quote, date} = roomQuotes[index - 1];
-		const time = Chat.toTimestamp(new Date(date), {human: true});
+		const {quote} = roomQuotes[index - 1];
 		return this.sendReplyBox(Chat.getReadmoreBlock(quote));
 	},
 	getquotehelp: [`/nquote [index] - Show a specifix quote from the room.`],
