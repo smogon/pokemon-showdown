@@ -193,7 +193,7 @@ export class RoomBattleTimer {
 		this.lastDisabledByUser = null;
 
 		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
-		const isChallenge = (!battle.rated && !battle.room.tour);
+		const isChallenge = (battle.challengeType === 'challenge');
 		const timerEntry = Dex.getRuleTable(Dex.getFormat(battle.format, true)).timer;
 		const timerSettings = timerEntry?.[0];
 
