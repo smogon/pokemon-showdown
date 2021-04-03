@@ -1,4 +1,34 @@
 export const Abilities: {[k: string]: ModdedAbilityData} = {
+	damp: {
+		inherit: true,
+		onAnyDamage(damage, target, source, effect) {
+			if (effect && (effect.id === 'aftermath' || effect.id === 'ability:aftermath')) {
+				return false;
+			}
+		},
+	},
+	flowerveil: {
+		inherit: true,
+		onAllySetStatus(status, target, source, effect) {
+			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
+				this.debug('interrupting setStatus with Flower Veil');
+				if (effect.id.endsWith('synchronize') || (effect.effectType === 'Move' && !effect.secondaries)) {
+					const effectHolder = this.effectData.target;
+					this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
+				}
+				return null;
+			}
+		},
+	},
+	innerfocus: {
+		inherit: true,
+		onBoost(boost, target, source, effect) {
+			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', '[of] ' + target);
+			}
+		},
+	},
 	mirrorarmor: {
 		inherit: true,
 		onBoost(boost, target, source, effect) {
@@ -17,12 +47,52 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	mummy: {
+		inherit: true,
+		onDamagingHit(damage, target, source, move) {
+			if (target.ability === 'mummy') {
+				const sourceAbility = source.getAbility();
+				if (sourceAbility.isPermanent || sourceAbility.id === 'mummy') {
+					return;
+				}
+				if (move.flags['contact']) {
+					const oldAbility = source.setAbility('mummy', target);
+					if (oldAbility) {
+						this.add('-activate', target, 'ability: Mummy', this.dex.getAbility(oldAbility).name, '[of] ' + source);
+					}
+				}
+			} else {
+				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
+					.filter(val => !this.dex.getAbility(val).isPermanent && val !== 'mummy');
+				if (!possibleAbilities.length) return;
+				if (move.flags['contact']) {
+					const abil = this.sample(possibleAbilities);
+					if (abil === source.ability) {
+						const oldAbility = source.setAbility('mummy', target);
+						if (oldAbility) {
+							this.add('-activate', target, 'ability: Mummy', this.dex.getAbility(oldAbility).name, '[of] ' + source);
+						}
+					} else {
+						source.removeVolatile('ability:' + abil);
+						source.addVolatile('ability:mummy', source);
+					}
+				}
+			}
+		},
+	},
 	neutralizinggas: {
 		inherit: true,
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityData.ending = false;
+			// Remove setter's innates before the ability starts
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (this.dex.getAbility(innate).isPermanent || innate === 'neutralizinggas') continue;
+					pokemon.removeVolatile('ability:' + innate);
+				}
+			}
 			for (const target of this.getAllActive()) {
 				if (target.illusion) {
 					this.singleEvent('End', this.dex.getAbility('Illusion'), target.abilityData, target, pokemon, 'neutralizinggas');
@@ -67,6 +137,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	oblivious: {
+		inherit: true,
+		onBoost(boost, target, source, effect) {
+			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
+			}
+		},
+	},
+	owntempo: {
+		inherit: true,
+		onBoost(boost, target, source, effect) {
+			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Tempo', '[of] ' + target);
+			}
+		},
+	},
 	powerofalchemy: {
 		inherit: true,
 		onAllyFaint(ally) {
@@ -91,6 +179,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	rattled: {
+		inherit: true,
+		onAfterBoost(boost, target, source, effect) {
+			if (effect && (effect.id === 'intimidate' || effect.id === 'ability:intimidate')) {
+				this.boost({spe: 1});
+			}
+		},
+	},
 	receiver: {
 		inherit: true,
 		onAllyFaint(ally) {
@@ -112,6 +208,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else {
 				pokemon.removeVolatile("ability:receiver");
 				pokemon.addVolatile("ability:" + ability, pokemon);
+			}
+		},
+	},
+	scrappy: {
+		inherit: true,
+		onBoost(boost, target, source, effect) {
+			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
 			}
 		},
 	},
@@ -150,6 +255,56 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.addVolatile("ability:" + ability, pokemon);
 				}
 				return;
+			}
+		},
+	},
+	wanderingspirit: {
+		inherit: true,
+		onDamagingHit(damage, target, source, move) {
+			const isAbility = target.ability === 'wanderingspirit';
+			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
+			if (isAbility) {
+				if (source.getAbility().isPermanent || additionalBannedAbilities.includes(source.ability) ||
+					target.volatiles['dynamax']
+				) {
+					return;
+				}
+
+				if (move.flags['contact']) {
+					const sourceAbility = source.setAbility('wanderingspirit', target);
+					if (!sourceAbility) return;
+					if (target.isAlly(source)) {
+						this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
+					} else {
+						this.add('-activate', target, 'ability: Wandering Spirit', this.dex.getAbility(sourceAbility).name, 'Wandering Spirit', '[of] ' + source);
+					}
+					target.setAbility(sourceAbility);
+				}
+			} else {
+				// Make Wandering Spirit replace a random ability
+				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
+					.filter(val => !this.dex.getAbility(val).isPermanent && !additionalBannedAbilities.includes(val));
+				if (!possibleAbilities.length || target.volatiles['dynamax']) return;
+				if (move.flags['contact']) {
+					const sourceAbility = this.sample(possibleAbilities);
+					if (sourceAbility === source.ability) {
+						if (!source.setAbility('wanderingspirit', target)) return;
+					} else {
+						source.removeVolatile('ability:' + sourceAbility);
+						source.addVolatile('ability:wanderingspirit', source);
+					}
+					if (target.isAlly(source)) {
+						this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
+					} else {
+						this.add('-activate', target, 'ability: Wandering Spirit', this.dex.getAbility(sourceAbility).name, 'Wandering Spirit', '[of] ' + source);
+					}
+					if (sourceAbility === source.ability) {
+						target.setAbility(sourceAbility);
+					} else {
+						target.removeVolatile('ability:wanderingspirit');
+						target.addVolatile('ability:' + sourceAbility, target);
+					}
+				}
 			}
 		},
 	},
