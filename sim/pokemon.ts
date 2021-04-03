@@ -714,7 +714,7 @@ export class Pokemon {
 			break;
 		default:
 			const selectedTarget = target;
-			if (!target || (target.fainted && !target.isAlly(this))) {
+			if (!target || (target.fainted && !target.isAlly(this)) && this.battle.gameType !== 'freeforall') {
 				// If a targeted foe faints, the move is retargeted
 				const possibleTarget = this.battle.getRandomTarget(this, move);
 				if (!possibleTarget) return {targets: [], pressureTargets: []};
