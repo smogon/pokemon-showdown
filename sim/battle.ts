@@ -1269,7 +1269,7 @@ export class Battle {
 
 		side.pokemonLeft = 0;
 		side.active[0].faint();
-		this.faintMessages();
+		this.faintMessages(false, true);
 		if (!this.ended && side.requestState) {
 			side.emitRequest({wait: true, side: side.getRequestData()});
 			if (this.allChoicesDone()) this.commitDecisions();
@@ -2127,10 +2127,13 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst = false) {
+	faintMessages(lastFirst = false, forceCheck = false) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
-		if (!length) return false;
+		if (!length) {
+			if (forceCheck && this.checkWin()) return true;
+			return false;
+		}
 		if (lastFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
@@ -2171,6 +2174,15 @@ export class Battle {
 			}
 		}
 
+		if (this.checkWin(faintData)) return true;
+
+		if (faintData && length) {
+			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
+		}
+		return false;
+	}
+
+	checkWin(faintData?: Battle['faintQueue'][0]) {
 		let team1PokemonLeft = this.sides[0].pokemonLeft;
 		let team2PokemonLeft = this.sides[1].pokemonLeft;
 		const team3PokemonLeft = this.gameType === 'freeforall' && this.sides[2]!.pokemonLeft;
@@ -2189,11 +2201,6 @@ export class Battle {
 				return true;
 			}
 		}
-
-		if (faintData) {
-			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
-		}
-		return false;
 	}
 
 	getActionSpeed(action: AnyObject) {
