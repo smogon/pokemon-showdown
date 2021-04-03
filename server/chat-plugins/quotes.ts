@@ -48,6 +48,7 @@ export const commands: ChatCommands = {
 	nquote(target, room, user) {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
+		if (!roomQuotes) return this.errorReply(`No quotes found for ${room.roomid}.`);
 		const index = parseInt(target.trim());
 		if (isNaN(index)) {
 			return this.errorReply(`Invalid index.`);
