@@ -1165,6 +1165,9 @@ export class Battle {
 				if (!side.pokemonLeft) continue;
 				const activeData = side.active.map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
+				if (side.allySide) {
+					requests[i].ally = side.allySide.getRequestData(true);
+				}
 			}
 			break;
 		}
