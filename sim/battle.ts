@@ -1169,10 +1169,10 @@ export class Battle {
 			break;
 		}
 
-		const allRequestsMade = requests.every(Boolean);
+		const multipleRequestsExist = requests.filter(Boolean).length >= 2;
 		for (let i = 0; i < this.sides.length; i++) {
 			if (requests[i]) {
-				if (!this.supportCancel || !allRequestsMade) requests[i].noCancel = true;
+				if (!this.supportCancel || !multipleRequestsExist) requests[i].noCancel = true;
 			} else {
 				requests[i] = {wait: true, side: this.sides[i].getRequestData()};
 			}
