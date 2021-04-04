@@ -10,7 +10,7 @@ describe('G-Max Steelsurge', function () {
 		battle.destroy();
 	});
 
-	it.skip(`should deal 2x damage to Eiscue and Mimikyu`, function () {
+	it(`should deal 2x damage to Eiscue and Mimikyu`, function () {
 		battle = common.createBattle([[
 			{species: 'Pyukumuku', moves: ['uturn']},
 			{species: 'Eiscue', ability: 'iceface', moves: ['splash']},
