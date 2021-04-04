@@ -1254,6 +1254,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser)) {
+			battle.sendInviteForm(connection);
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return this.errorReply(this.tr`The user '${targetUser.name}' is not accepting challenges right now.`);
 		}
