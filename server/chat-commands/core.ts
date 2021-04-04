@@ -1253,6 +1253,11 @@ export const commands: ChatCommands = {
 			return this.errorReply(this.tr`${targetUser.name} is already a player in this battle.`);
 		}
 
+		if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser)) {
+			Chat.maybeNotifyBlocked('challenge', targetUser, user);
+			return this.errorReply(this.tr`The user '${targetUser.name}' is not accepting challenges right now.`);
+		}
+
 		// INVITE
 		if (!targetUser.inRooms.has(room.roomid)) {
 			if (player.invite) {
