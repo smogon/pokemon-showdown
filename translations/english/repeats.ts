@@ -13,6 +13,7 @@ export const translations: Translations = {
 		"Raw text": "",
 		"Remove": "",
 		"Remove all repeats": "",
+		"Repeat names must include at least one alphanumeric character.": "",
 		"You must specify an interval as a number of minutes or chat messages between 1 and 1440.": "",
 		'The phrase labeled with "${id}" is already being repeated in this room.': "",
 		'${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} minute(s).': "",
