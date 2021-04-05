@@ -476,7 +476,6 @@ export const commands: ChatCommands = {
 				return this.parse(`/help hangman`);
 			}
 			let [term, ...tags] = target.split(',');
-			term = toID(term);
 			tags = tags.map(i => toID(i)).filter(Boolean);
 			if (!term || !tags) {
 				return this.parse('/help hangman');
