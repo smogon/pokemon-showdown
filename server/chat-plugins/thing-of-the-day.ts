@@ -429,9 +429,8 @@ class OtdHandler {
 		let buf = `<div class="pad ladder"><h2>${this.name} of the ${this.timeLabel} Winners</h2>`;
 
 		// Only use specific fields for displaying in winners list.
-		// (we want timestamp to be forced to be first)
-		const columns: string[] = ['time'];
-		const labels = ['Timestamp'];
+		const columns: string[] = [];
+		const labels = [];
 
 		for (let i = 0; i < this.keys.length; i++) {
 			if (i === 0 || ['song', 'event', 'link', 'tagline', 'sport', 'country']
