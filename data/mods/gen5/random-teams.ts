@@ -422,7 +422,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 		let forme = species.name;
 
 		if (typeof species.battleOnly === 'string') {
@@ -495,7 +495,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				const move = this.dex.getMove(setMoveid);
+				const move = this.dex.moves.get(setMoveid);
 				const moveid = move.id;
 				let {cull, isSetup} = this.shouldCullMove(
 					move, hasType, hasMove, hasAbility, counter, movePool,
@@ -631,7 +631,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 				// Handle Hidden Power IVs
 				if (moveid === 'hiddenpower') {
-					const HPivs = this.dex.getType(move.type).HPivs;
+					const HPivs = this.dex.types.get(move.type).HPivs;
 					let iv: StatName;
 					for (iv in HPivs) {
 						ivs[iv] = HPivs[iv];
@@ -646,11 +646,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		const abilityNames: string[] = Object.values(species.abilities);
-		abilityNames.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
+		abilityNames.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
 
 
 		if (abilityNames.length > 1) {
-			const abilities = abilityNames.map(name => this.dex.getAbility(name));
+			const abilities = abilityNames.map(name => this.dex.abilities.get(name));
 
 			// Sort abilities by rating with an element of randomness
 			if (abilityNames[2] && abilities[1].rating <= abilities[2].rating && this.randomChance(1, 2)) {
@@ -762,7 +762,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 	randomTeam() {
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.getRuleTable(this.format);
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
@@ -779,7 +779,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists || !species.randomBattleMoves) continue;
 
 			// Limit to one of each species (Species Clause)

@@ -76,7 +76,7 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 	let slot = 0;
 	for (const newMove of newMoves) {
 		const moveName = Array.isArray(newMove) ? newMove[context.random(newMove.length)] : newMove;
-		const move = context.dex.getMove(context.toID(moveName));
+		const move = context.dex.moves.get(context.toID(moveName));
 		if (!move.id) continue;
 		const moveSlot = {
 			move: move.name,
@@ -132,13 +132,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+						this.add('-sideend', target.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
 					}
 					successes++;
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
+						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Scyphozoa', '[of] ' + source);
 					}
 					successes++;
 				}
@@ -694,7 +694,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newTypes = [types[0], types[1]];
 			this.add('-start', pokemon, 'typechange', newTypes.join('/'));
 			pokemon.setType(newTypes);
-			let move = this.dex.getMove(typeMap[newTypes[0]]);
+			let move = this.dex.moves.get(typeMap[newTypes[0]]);
 			pokemon.moveSlots[3] = pokemon.moveSlots[1];
 			pokemon.moveSlots[1] = {
 				move: move.name,
@@ -706,7 +706,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				used: false,
 				virtual: true,
 			};
-			move = this.dex.getMove(typeMap[newTypes[1]]);
+			move = this.dex.moves.get(typeMap[newTypes[1]]);
 			pokemon.moveSlots[2] = {
 				move: move.name,
 				id: move.id,
@@ -743,10 +743,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			let move;
 			if (pokemon.moves.includes(this.toID(coolMoves[0]))) {
 				oldMove = this.toID(coolMoves[0]);
-				move = this.dex.getMove(coolMoves[1]);
+				move = this.dex.moves.get(coolMoves[1]);
 			} else if (pokemon.moves.includes(this.toID(coolMoves[1]))) {
 				oldMove = this.toID(coolMoves[1]);
-				move = this.dex.getMove(coolMoves[0]);
+				move = this.dex.moves.get(coolMoves[0]);
 			} else {
 				return;
 			}
@@ -764,7 +764,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			};
 			pokemon.moveSlots[sketchIndex] = sketchedMove;
 			pokemon.baseMoveSlots[sketchIndex] = sketchedMove;
-			this.add('-message', `Finland changed its move ${this.dex.getMove(oldMove).name} to ${move.name}!`);
+			this.add('-message', `Finland changed its move ${this.dex.moves.get(oldMove).name} to ${move.name}!`);
 		},
 		gen: 8,
 	},
@@ -1569,7 +1569,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
-			const types = pokemon.moveSlots.map(slot => this.dex.getMove(slot.id).type);
+			const types = pokemon.moveSlots.map(slot => this.dex.moves.get(slot.id).type);
 			const type = types.length ? this.sample(types) : '???';
 			if (pokemon.setType(type)) {
 				this.add('-ability', pokemon, 'Wild Magic Surge');
@@ -2096,12 +2096,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
 				// Handle users whose names match a species
-				if (this.dex.getSpecies(disguisedAs).exists) disguisedAs += 'user';
+				if (this.dex.species.get(disguisedAs).exists) disguisedAs += 'user';
 				if (pokemon.volatiles[disguisedAs]) {
 					pokemon.removeVolatile(disguisedAs);
 				}
 				if (!pokemon.volatiles[this.toID(pokemon.name)]) {
-					const status = this.dex.getEffect(this.toID(pokemon.name));
+					const status = this.dex.conditions.get(this.toID(pokemon.name));
 					if (status?.exists) {
 						pokemon.addVolatile(this.toID(pokemon.name), pokemon);
 					}

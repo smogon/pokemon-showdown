@@ -1,5 +1,5 @@
 import {Utils} from '../lib';
-import {BasicEffect} from './dex-data';
+import {BasicEffect, toID} from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -432,8 +432,8 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 
 	readonly volatileStatus?: ID;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `move: ${this.name}`;
@@ -560,5 +560,55 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 				this.gen = 1;
 			}
 		}
+	}
+}
+
+export class DexMoves {
+	readonly dex: ModdedDex;
+	readonly moveCache = new Map<ID, Move>();
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name?: string | Move): Move {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		const id = toID(name);
+		return this.getByID(id);
+	}
+
+	getByID(id: ID): Move {
+		let move = this.moveCache.get(id);
+		if (move) return move;
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			move = this.get(this.dex.data.Aliases[id]);
+			if (move.exists) {
+				this.moveCache.set(id, move);
+			}
+			return move;
+		}
+		if (id.startsWith('hiddenpower')) {
+			id = /([a-z]*)([0-9]*)/.exec(id)![1] as ID;
+		}
+		if (id && this.dex.data.Moves.hasOwnProperty(id)) {
+			const moveData = this.dex.data.Moves[id] as any;
+			const moveTextData = this.dex.getDescs('Moves', id, moveData);
+			move = new DataMove({
+				name: id,
+				...moveData,
+				...moveTextData,
+			});
+			if (move.gen > this.dex.gen) {
+				(move as any).isNonstandard = 'Future';
+			}
+		} else {
+			move = new DataMove({
+				name: id, exists: false,
+			});
+		}
+		if (move.exists) this.moveCache.set(id, move);
+		return move;
 	}
 }

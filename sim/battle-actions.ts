@@ -265,7 +265,7 @@ export class BattleActions {
 					return;
 				}
 			} else {
-				sourceEffect = this.dex.getEffect('lockedmove');
+				sourceEffect = this.dex.conditions.get('lockedmove');
 			}
 			pokemon.moveUsed(move, targetLoc);
 		}
@@ -276,7 +276,7 @@ export class BattleActions {
 
 		if (zMove) {
 			if (pokemon.illusion) {
-				this.battle.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityData, pokemon);
 			}
 			this.battle.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
@@ -309,7 +309,7 @@ export class BattleActions {
 				this.battle.add('-activate', dancer, 'ability: Dancer');
 				const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.getAbility('dancer'), undefined, true);
+				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.abilities.get('dancer'), undefined, true);
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -811,7 +811,7 @@ export class BattleActions {
 		let nullDamage = true;
 		let moveDamage: (number | boolean | undefined)[] = [];
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
-		const isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
+		const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 
 		let targetsCopy: (Pokemon | false | null)[] = targets.slice(0);
 		let hit: number;
@@ -882,7 +882,7 @@ export class BattleActions {
 				move.totalDamage += damage[i] as number;
 			}
 			if (move.mindBlownRecoil) {
-				this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Mind Blown'), true);
+				this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
 				move.mindBlownRecoil = false;
 			}
 			this.battle.eachEvent('Update');
@@ -1360,10 +1360,10 @@ export class BattleActions {
 			if (!moveSlot.disabled) {
 				mustStruggle = false;
 			}
-			const move = this.dex.getMove(moveSlot.move);
+			const move = this.dex.moves.get(moveSlot.move);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
 			if (zMoveName) {
-				const zMove = this.dex.getMove(zMoveName);
+				const zMove = this.dex.moves.get(zMoveName);
 				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
 				zMoves.push({move: zMoveName, target: zMove.target});
 			} else {
@@ -1375,13 +1375,13 @@ export class BattleActions {
 	}
 
 	getMaxMove(move: Move, pokemon: Pokemon) {
-		if (typeof move === 'string') move = this.dex.getMove(move);
+		if (typeof move === 'string') move = this.dex.moves.get(move);
 		if (move.name === 'Struggle') return move;
 		if (pokemon.gigantamax && pokemon.canGigantamax && move.category !== 'Status') {
-			const gMaxMove = this.dex.getMove(pokemon.canGigantamax);
+			const gMaxMove = this.dex.moves.get(pokemon.canGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
 		}
-		const maxMove = this.dex.getMove(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
+		const maxMove = this.dex.moves.get(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
 		if (maxMove.exists) return maxMove;
 	}
 
@@ -1408,7 +1408,7 @@ export class BattleActions {
 	}
 
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
-		const zPower = this.dex.getEffect('zpower');
+		const zPower = this.dex.conditions.get('zpower');
 		if (move.category !== 'Status') {
 			this.battle.attrLastMove('[zeffect]');
 		} else if (move.zMove?.boost) {
@@ -1712,7 +1712,7 @@ export class BattleActions {
 
 	canMegaEvo(pokemon: Pokemon) {
 		const species = pokemon.baseSpecies;
-		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
+		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
 		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('standardnatdex')) &&

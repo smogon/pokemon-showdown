@@ -36,12 +36,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Do we have a proper sprite for it?
 			// @ts-ignore assert non-null pokemon.canMegaEvo
-			if (isUltraBurst || this.dex.getSpecies(pokemon.canMegaEvo).baseSpecies === pokemon.m.originalSpecies) {
+			if (isUltraBurst || this.dex.species.get(pokemon.canMegaEvo).baseSpecies === pokemon.m.originalSpecies) {
 				pokemon.formeChange(species, pokemon.getItem(), true);
 			} else {
-				const oSpecies = this.dex.getSpecies(pokemon.m.originalSpecies);
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
 				// @ts-ignore
-				const oMegaSpecies = this.dex.getSpecies(species.originalMega);
+				const oMegaSpecies = this.dex.species.get(species.originalMega);
 				pokemon.formeChange(species, pokemon.getItem(), true);
 				this.battle.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
 				if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
@@ -54,8 +54,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			return true;
 		},
 		getMixedSpecies(originalSpecies, megaSpecies) {
-			const oSpecies = this.dex.getSpecies(originalSpecies);
-			const mSpecies = this.dex.getSpecies(megaSpecies);
+			const oSpecies = this.dex.species.get(originalSpecies);
+			const mSpecies = this.dex.species.get(megaSpecies);
 			if (oSpecies.baseSpecies === mSpecies.baseSpecies) return mSpecies;
 			// @ts-ignore
 			const deltas = this.getMegaDeltas(mSpecies);
@@ -64,7 +64,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return species;
 		},
 		getMegaDeltas(megaSpecies) {
-			const baseSpecies = this.dex.getSpecies(megaSpecies.baseSpecies);
+			const baseSpecies = this.dex.species.get(megaSpecies.baseSpecies);
 			const deltas: {
 				ability: string,
 				baseStats: SparseStatsTable,
@@ -98,7 +98,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		doGetMixedSpecies(speciesOrSpeciesName, deltas) {
 			if (!deltas) throw new TypeError("Must specify deltas!");
-			const species = this.dex.deepClone(this.dex.getSpecies(speciesOrSpeciesName));
+			const species = this.dex.deepClone(this.dex.species.get(speciesOrSpeciesName));
 			species.abilities = {'0': deltas.ability};
 			if (species.types[0] === deltas.type) {
 				species.types = [deltas.type];

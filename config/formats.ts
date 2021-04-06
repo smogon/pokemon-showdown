@@ -415,23 +415,23 @@ export const Formats: FormatList = [
 			'Steel Memory', 'Oran Berry', 'Rocky Helmet', 'Shell Bell', 'Sitrus Berry', 'Wiki Berry', 'Harvest + Jaboca Berry', 'Harvest + Rowap Berry',
 		],
 		onValidateSet(set) {
-			const species = this.dex.getSpecies(set.species);
+			const species = this.dex.species.get(set.species);
 			if (species.types.includes('Steel')) {
 				return [`${species.name} is a Steel-type, which is banned from Metronome Battle.`];
 			}
 			if (species.bst > 625) {
 				return [`${species.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
 			}
-			const item = this.dex.getItem(set.item);
+			const item = this.dex.items.get(set.item);
 			if (set.item && item.megaStone) {
-				const megaSpecies = this.dex.getSpecies(item.megaStone);
+				const megaSpecies = this.dex.species.get(item.megaStone);
 				if (species.baseSpecies === item.megaEvolves && megaSpecies.bst > 625) {
 					return [
 						`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`,
 					];
 				}
 			}
-			if (set.moves.length !== 1 || this.dex.getMove(set.moves[0]).id !== 'metronome') {
+			if (set.moves.length !== 1 || this.dex.moves.get(set.moves[0]).id !== 'metronome') {
 				return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
 			}
 		},
@@ -579,8 +579,8 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] Doubles OU'],
 		// Dumb hack because Mawile has 5 abilities for some reason
 		validateSet(set, teamHas) {
-			const species = this.dex.getSpecies(set.species);
-			const ability = this.dex.getAbility(set.ability);
+			const species = this.dex.species.get(set.species);
+			const ability = this.dex.abilities.get(set.ability);
 			if (species.name === "Mawile" && set.moves.includes("Follow Me") && ability.name !== "Steelworker") {
 				return [`Mawile can only use Follow Me with Steelworker.`];
 			}
@@ -677,23 +677,23 @@ export const Formats: FormatList = [
 		onModifySpecies(species, target, source) {
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
-				let godSpecies = this.dex.getSpecies(set.species);
-				const validator = this.dex.getRuleTable(this.dex.getFormat(`gen${this.gen}ou`));
+				let godSpecies = this.dex.species.get(set.species);
+				const validator = this.dex.formats.getRuleTable(this.dex.formats.get(`gen${this.gen}ou`));
 				if (this.toID(set.ability) === 'powerconstruct') {
 					return true;
 				}
 				if (set.item) {
-					const item = this.dex.getItem(set.item);
-					if (item.megaEvolves === set.species) godSpecies = this.dex.getSpecies(item.megaStone);
+					const item = this.dex.items.get(set.item);
+					if (item.megaEvolves === set.species) godSpecies = this.dex.species.get(item.megaStone);
 				}
 				const isBanned = validator.isBannedSpecies(godSpecies);
 				return isBanned;
 			}) || target.side.team[0];
 			const stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
-			let godSpecies = this.dex.getSpecies(god.species);
+			let godSpecies = this.dex.species.get(god.species);
 			if (godSpecies.forme === 'Crowned') {
-				godSpecies = this.dex.getSpecies(godSpecies.changesFrom || godSpecies.baseSpecies);
+				godSpecies = this.dex.species.get(godSpecies.changesFrom || godSpecies.baseSpecies);
 			}
 			newSpecies.bst -= newSpecies.baseStats[stat];
 			newSpecies.baseStats[stat] = godSpecies.baseStats[stat as StatName];
@@ -727,7 +727,7 @@ export const Formats: FormatList = [
 		],
 		restricted: ['Zacian-Crowned'],
 		onValidateSet(set) {
-			const ability = this.dex.getAbility(set.ability);
+			const ability = this.dex.abilities.get(set.ability);
 			if (set.species === 'Zacian-Crowned') {
 				if (this.dex.toID(set.item) !== 'rustedsword' || ability.id !== 'intrepidsword') {
 					return [`${set.species} is banned.`];
@@ -779,9 +779,9 @@ export const Formats: FormatList = [
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
 			for (const set of team) {
-				const item = this.dex.getItem(set.item);
+				const item = this.dex.items.get(set.item);
 				if (!item?.megaStone) continue;
-				const species = this.dex.getSpecies(set.species);
+				const species = this.dex.species.get(set.species);
 				if (species.isNonstandard) return [`${species.baseSpecies} does not exist in gen 8.`];
 				if (this.ruleTable.isRestrictedSpecies(species) || this.toID(set.ability) === 'powerconstruct') {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
@@ -799,11 +799,11 @@ export const Formats: FormatList = [
 		},
 		onSwitchIn(pokemon) {
 			// @ts-ignore
-			const oMegaSpecies = this.dex.getSpecies(pokemon.species.originalMega);
+			const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
 			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
 				// Place volatiles on the Pokémon to show its mega-evolved condition and details
 				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
-				const oSpecies = this.dex.getSpecies(pokemon.m.originalSpecies);
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
 				if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
 					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 				}
@@ -811,7 +811,7 @@ export const Formats: FormatList = [
 		},
 		onSwitchOut(pokemon) {
 			// @ts-ignore
-			const oMegaSpecies = this.dex.getSpecies(pokemon.species.originalMega);
+			const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
 			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
 				this.add('-end', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
 			}
@@ -875,7 +875,7 @@ export const Formats: FormatList = [
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
-			const types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.getMove(move.id).type))];
+			const types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.moves.get(move.id).type))];
 			return {...species, types: types};
 		},
 		onSwitchIn(pokemon) {
@@ -948,14 +948,14 @@ export const Formats: FormatList = [
 			return null;
 		},
 		validateSet(set, teamHas) {
-			const crossSpecies = this.dex.getSpecies(set.name);
-			const onChangeSet = this.dex.getFormat('Pokemon').onChangeSet;
+			const crossSpecies = this.dex.species.get(set.name);
+			const onChangeSet = this.dex.formats.get('Pokemon').onChangeSet;
 			let problems = onChangeSet?.call(this, set, this.format) || null;
 			if (Array.isArray(problems) && problems.length) return problems;
 			const crossNonstandard = !this.ruleTable.has('standardnatdex') && crossSpecies.isNonstandard === 'Past';
 			const crossIsCap = !this.ruleTable.has('+pokemontag:cap') && crossSpecies.isNonstandard === 'CAP';
 			if (!crossSpecies.exists || crossNonstandard || crossIsCap) return this.validateSet(set, teamHas);
-			const species = this.dex.getSpecies(set.species);
+			const species = this.dex.species.get(set.species);
 			const check = this.checkSpecies(set, species, species, {});
 			if (check) return [check];
 			const nonstandard = !this.ruleTable.has('standardnatdex') && species.isNonstandard === 'Past';
@@ -969,13 +969,13 @@ export const Formats: FormatList = [
 			if (this.ruleTable.isRestrictedSpecies(crossSpecies)) {
 				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it is banned.`];
 			}
-			const crossPrevoSpecies = this.dex.getSpecies(crossSpecies.prevo);
+			const crossPrevoSpecies = this.dex.species.get(crossSpecies.prevo);
 			if (!crossPrevoSpecies.prevo !== !species.prevo) {
 				return [
 					`${species.name} cannot cross evolve into ${crossSpecies.name} because they are not consecutive evolution stages.`,
 				];
 			}
-			const ability = this.dex.getAbility(set.ability);
+			const ability = this.dex.abilities.get(set.ability);
 			if (!this.ruleTable.isRestricted(`ability:${ability.id}`) || Object.values(species.abilities).includes(ability.name)) {
 				set.species = crossSpecies.name;
 			}
@@ -995,12 +995,12 @@ export const Formats: FormatList = [
 			if (!target) return; // chat
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			if (target.set.name === target.set.species) return;
-			const crossSpecies = this.dex.getSpecies(target.set.name);
+			const crossSpecies = this.dex.species.get(target.set.name);
 			if (!crossSpecies.exists) return;
 			if (species.battleOnly || !species.nfe) return;
 			const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable");
 			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) return;
-			const crossPrevoSpecies = this.dex.getSpecies(crossSpecies.prevo);
+			const crossPrevoSpecies = this.dex.species.get(crossSpecies.prevo);
 			if (!crossPrevoSpecies.prevo !== !species.prevo) return;
 
 			const mixedSpecies = this.dex.deepClone(species);
@@ -1052,9 +1052,9 @@ export const Formats: FormatList = [
 			'Shell Smash',
 		],
 		getEvoFamily(speciesid) {
-			let species = Dex.getSpecies(speciesid);
+			let species = Dex.species.get(speciesid);
 			while (species.prevo) {
-				species = Dex.getSpecies(species.prevo);
+				species = Dex.species.get(species.prevo);
 			}
 			return species.id;
 		},
@@ -1063,7 +1063,7 @@ export const Formats: FormatList = [
 			if (!teamHas.abilityMap) {
 				teamHas.abilityMap = Object.create(null);
 				for (const speciesid in Dex.data.Pokedex) {
-					const pokemon = this.dex.getSpecies(speciesid);
+					const pokemon = this.dex.species.get(speciesid);
 					if (pokemon.isNonstandard || unreleased(pokemon)) continue;
 					if (pokemon.requiredAbility || pokemon.requiredItem || pokemon.requiredMove) continue;
 					if (this.ruleTable.isBannedSpecies(pokemon)) continue;
@@ -1082,7 +1082,7 @@ export const Formats: FormatList = [
 			const problem = this.validateForme(set);
 			if (problem.length) return problem;
 
-			const species = this.dex.getSpecies(set.species);
+			const species = this.dex.species.get(set.species);
 			if (!species.exists || species.num < 1) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
 			if (species.isNonstandard || unreleased(species)) {
 				return [`${species.name} is not obtainable in Generation ${this.dex.gen}.`];
@@ -1093,10 +1093,10 @@ export const Formats: FormatList = [
 				return this.validateSet(set, teamHas);
 			}
 
-			const ability = this.dex.getAbility(set.ability);
+			const ability = this.dex.abilities.get(set.ability);
 			if (!ability.exists || ability.isNonstandard) return [`${name} needs to have a valid ability.`];
 			const pokemonWithAbility = teamHas.abilityMap[ability.id];
-			if (!pokemonWithAbility) return [`${this.dex.getAbility(set.ability).name} is not available on a legal Pok\u00e9mon.`];
+			if (!pokemonWithAbility) return [`${ability.name} is not available on a legal Pok\u00e9mon.`];
 
 			(this.format as any).debug = true;
 
@@ -1106,9 +1106,9 @@ export const Formats: FormatList = [
 			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
 
 			for (const donor of pokemonWithAbility) {
-				const donorSpecies = this.dex.getSpecies(donor);
+				const donorSpecies = this.dex.species.get(donor);
 				let format = this.format;
-				if (!format.getEvoFamily) format = this.dex.getFormat('gen8inheritance');
+				if (!format.getEvoFamily) format = this.dex.formats.get('gen8inheritance');
 				const evoFamily = format.getEvoFamily!(donorSpecies.id);
 				if (validSources.includes(evoFamily)) continue;
 
@@ -1128,7 +1128,7 @@ export const Formats: FormatList = [
 			set.species = species.name;
 			if (!validSources.length) {
 				if (pokemonWithAbility.length > 1) return [`${name}'s set is illegal.`];
-				return [`${name} has an illegal set with an ability from ${this.dex.getSpecies(pokemonWithAbility[0]).name}.`];
+				return [`${name} has an illegal set with an ability from ${this.dex.species.get(pokemonWithAbility[0]).name}.`];
 			}
 
 			// Protocol: Include the data of the donor species in the `ability` data slot.
@@ -1143,7 +1143,7 @@ export const Formats: FormatList = [
 				const abilitySources = teamHas.abilitySources?.[this.dex.toID(set.species)];
 				if (!abilitySources) continue;
 				let format = this.format;
-				if (!format.getEvoFamily) format = this.dex.getFormat('gen8inheritance');
+				if (!format.getEvoFamily) format = this.dex.formats.get('gen8inheritance');
 				evoFamilyLists.push(abilitySources.map(format.getEvoFamily!));
 			}
 
@@ -1158,7 +1158,7 @@ export const Formats: FormatList = [
 				if (requiredFamilies[familyId] > 2) {
 					return [
 						`You are limited to up to two inheritances from each evolution family by the Donor Clause.`,
-						`(You inherit more than twice from ${this.dex.getSpecies(familyId).name}).`,
+						`(You inherit more than twice from ${this.dex.species.get(familyId).name}).`,
 					];
 				}
 			}
@@ -1175,7 +1175,7 @@ export const Formats: FormatList = [
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.m.donor) return;
-			const donorTemplate = this.dex.getSpecies(pokemon.m.donor);
+			const donorTemplate = this.dex.species.get(pokemon.m.donor);
 			if (!donorTemplate.exists) return;
 			// Place volatiles on the Pokémon to show the donor details.
 			this.add('-start', pokemon, donorTemplate.name, '[silent]');
@@ -1202,7 +1202,7 @@ export const Formats: FormatList = [
 			spreadModify(baseStats, set) {
 				const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
 				const tr = this.trunc;
-				const nature = this.dex.getNature(set.nature);
+				const nature = this.dex.natures.get(set.nature);
 				let statName: keyof StatsTable;
 				for (statName in modStats) {
 					const stat = baseStats[statName];
@@ -1224,7 +1224,7 @@ export const Formats: FormatList = [
 			},
 			natureModify(stats, set) {
 				const tr = this.trunc;
-				const nature = this.dex.getNature(set.nature);
+				const nature = this.dex.natures.get(set.nature);
 				let s: StatNameExceptHP;
 				if (nature.plus) {
 					s = nature.minus!;
@@ -1286,7 +1286,7 @@ export const Formats: FormatList = [
 		},
 		onBeforeSwitchIn(pokemon) {
 			let format = this.format;
-			if (!format.getSharedPower) format = this.dex.getFormat('gen8sharedpower');
+			if (!format.getSharedPower) format = this.dex.formats.get('gen8sharedpower');
 			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
 				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
@@ -1295,7 +1295,7 @@ export const Formats: FormatList = [
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
 			let format = this.format;
-			if (!format.getSharedPower) format = this.dex.getFormat('gen8sharedpower');
+			if (!format.getSharedPower) format = this.dex.formats.get('gen8sharedpower');
 			for (const ability of format.getSharedPower!(pokemon)) {
 				if (ability === 'noability') {
 					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
@@ -1327,9 +1327,9 @@ export const Formats: FormatList = [
 		onValidateTeam(team) {
 			const familyTable = new Set<ID>();
 			for (const set of team) {
-				let species = this.dex.getSpecies(set.species);
+				let species = this.dex.species.get(set.species);
 				while (species.prevo) {
-					species = this.dex.getSpecies(species.prevo);
+					species = this.dex.species.get(species.prevo);
 				}
 				if (familyTable.has(species.id)) {
 					return [
@@ -1523,7 +1523,7 @@ export const Formats: FormatList = [
 		},
 		validateSet(set, teamHas) {
 			const dex = this.dex;
-			const ability = dex.getMove(set.ability);
+			const ability = dex.moves.get(set.ability);
 			if (ability.category !== 'Status' || ability.status === 'slp' ||
 				this.ruleTable.isRestricted(`move:${ability.id}`) || set.moves.map(this.dex.toID).includes(ability.id)) {
 				return this.validateSet(set, teamHas);
@@ -1540,14 +1540,14 @@ export const Formats: FormatList = [
 			const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
 				require('../sim/team-validator').TeamValidator;
 
-			const validator = new TeamValidator(dex.getFormat(`${this.format.id}@@@${customRules.join(',')}`));
+			const validator = new TeamValidator(dex.formats.get(`${this.format.id}@@@${customRules.join(',')}`));
 			const moves = set.moves;
 			set.moves = [ability.id];
-			set.ability = dex.getSpecies(set.species).abilities['0'];
+			set.ability = dex.species.get(set.species).abilities['0'];
 			let problems = validator.validateSet(set, {}) || [];
 			if (problems.length) return problems;
 			set.moves = moves;
-			set.ability = dex.getSpecies(set.species).abilities['0'];
+			set.ability = dex.species.get(set.species).abilities['0'];
 			problems = problems.concat(validator.validateSet(set, teamHas) || []);
 			set.ability = ability.id;
 			if (!teamHas.trademarks) teamHas.trademarks = {};
@@ -1556,7 +1556,7 @@ export const Formats: FormatList = [
 		},
 		pokemon: {
 			getAbility() {
-				const move = this.battle.dex.getMove(this.battle.toID(this.ability));
+				const move = this.battle.dex.moves.get(this.battle.toID(this.ability));
 				if (!move.exists) return Object.getPrototypeOf(this).getAbility.call(this);
 				return {
 					id: move.id,
@@ -1632,7 +1632,7 @@ export const Formats: FormatList = [
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let name: string = this.toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
-			if (this.dex.getSpecies(name).exists || this.dex.getMove(name).exists || this.dex.getAbility(name).exists) {
+			if (this.dex.species.get(name).exists || this.dex.moves.get(name).exists || this.dex.abilities.get(name).exists) {
 				// Certain pokemon have volatiles named after their id
 				// To prevent overwriting those, and to prevent accidentaly leaking
 				// that a pokemon is on a team through the onStart even triggering
@@ -1641,7 +1641,7 @@ export const Formats: FormatList = [
 				name = name + 'user';
 			}
 			// Add the mon's status effect to it as a volatile.
-			const status = this.dex.getEffect(name);
+			const status = this.dex.conditions.get(name);
 			if (status?.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
@@ -2036,7 +2036,7 @@ export const Formats: FormatList = [
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
 			for (const set of team) {
-				const item = this.dex.getItem(set.item);
+				const item = this.dex.items.get(set.item);
 				if (!item.exists) continue;
 				if (itemTable.has(item.id) && (item.megaStone || item.onPrimal)) {
 					return [
@@ -2048,8 +2048,8 @@ export const Formats: FormatList = [
 			}
 		},
 		onValidateSet(set) {
-			const species = this.dex.getSpecies(set.species);
-			const item = this.dex.getItem(set.item);
+			const species = this.dex.species.get(set.species);
+			const item = this.dex.items.get(set.item);
 			if (!item.megaEvolves && !item.onPrimal && item.id !== 'ultranecroziumz') return;
 			if (species.baseSpecies === item.megaEvolves || (item.onPrimal && item.itemUser?.includes(species.baseSpecies)) ||
 				(species.name.startsWith('Necrozma-') && item.id === 'ultranecroziumz')) {
@@ -2067,10 +2067,10 @@ export const Formats: FormatList = [
 		},
 		onSwitchIn(pokemon) {
 			// @ts-ignore
-			const oMegaSpecies = this.dex.getSpecies(pokemon.species.originalMega);
+			const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
 			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
 				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
-				const oSpecies = this.dex.getSpecies(pokemon.m.originalSpecies);
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
 				if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
 					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 				}
@@ -2078,7 +2078,7 @@ export const Formats: FormatList = [
 		},
 		onSwitchOut(pokemon) {
 			// @ts-ignore
-			const oMegaSpecies = this.dex.getSpecies(pokemon.species.originalMega);
+			const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
 			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
 				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
 			}
@@ -2682,7 +2682,7 @@ export const Formats: FormatList = [
 			];
 			let n = 0;
 			for (const set of team) {
-				const baseSpecies = this.dex.getSpecies(set.species).baseSpecies;
+				const baseSpecies = this.dex.species.get(set.species).baseSpecies;
 				if (legends.includes(baseSpecies)) n++;
 				if (n > 2) return ["You can only use up to two legendary Pok\u00E9mon."];
 			}

@@ -146,7 +146,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			this.add('-enditem', target, 'Air Balloon');
 			target.item = '';
 			target.itemData = {id: '', target};
-			this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
+			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 		},
 		onAfterSubDamage(damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
@@ -154,7 +154,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
+				this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 			}
 		},
 		num: 541,
@@ -275,7 +275,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onDisableMove(pokemon) {
 			for (const moveSlot of pokemon.moveSlots) {
-				if (this.dex.getMove(moveSlot.move).category === 'Status') {
+				if (this.dex.moves.get(moveSlot.move).category === 'Status') {
 					pokemon.disableMove(moveSlot.id);
 				}
 			}
@@ -2910,7 +2910,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (source && source !== target && move && move.category !== 'Status') {
-				this.damage(source.baseMaxhp / 10, source, source, this.dex.getItem('lifeorb'));
+				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 			}
 		},
 		num: 270,

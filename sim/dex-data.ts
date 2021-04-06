@@ -1,8 +1,8 @@
 /**
- * Simulator Battle
+ * Dex Data
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * @license MIT license
+ * @license MIT
  */
 import {Utils} from '../lib';
 
@@ -128,36 +128,12 @@ export class BasicEffect implements EffectData {
 	}
 }
 
-export class Learnset {
-	readonly effectType: 'Learnset';
-	/**
-	 * Keeps track of exactly how a pokemon might learn a move, in the
-	 * form moveid:sources[].
-	 */
-	readonly learnset?: {[moveid: string]: MoveSource[]};
-	/** True if the only way to get this Pokemon is from events. */
-	readonly eventOnly: boolean;
-	/** List of event data for each event. */
-	readonly eventData?: EventInfo[];
-	readonly encounters?: EventInfo[];
-	readonly exists: boolean;
-
-	constructor(data: AnyObject) {
-		this.exists = true;
-		this.effectType = 'Learnset';
-		this.learnset = data.learnset || undefined;
-		this.eventOnly = !!data.eventOnly;
-		this.eventData = data.eventData || undefined;
-		this.encounters = data.encounters || undefined;
-	}
-}
-
 export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
 	readonly effectType: 'Nature';
 	readonly plus?: StatNameExceptHP;
 	readonly minus?: StatNameExceptHP;
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `nature: ${this.name}`;
@@ -165,6 +141,43 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 		this.gen = 3;
 		this.plus = data.plus || undefined;
 		this.minus = data.minus || undefined;
+	}
+}
+
+export class DexNatures {
+	readonly dex: ModdedDex;
+	readonly natureCache = new Map<ID, Nature>();
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name: string | Nature): Nature {
+		if (name && typeof name !== 'string') return name;
+
+		return this.getByID(toID(name));
+	}
+	getByID(id: ID): Nature {
+		let nature = this.natureCache.get(id);
+		if (nature) return nature;
+
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			nature = this.get(this.dex.data.Aliases[id]);
+			if (nature.exists) {
+				this.natureCache.set(id, nature);
+			}
+			return nature;
+		}
+		if (id && this.dex.data.Natures.hasOwnProperty(id)) {
+			const natureData = this.dex.data.Natures[id];
+			nature = new Nature(natureData);
+			if (nature.gen > this.dex.gen) nature.isNonstandard = 'Future';
+		} else {
+			nature = new Nature({name: id, exists: false});
+		}
+
+		if (nature.exists) this.natureCache.set(id, nature);
+		return nature;
 	}
 }
 
@@ -202,12 +215,12 @@ export class TypeInfo implements Readonly<TypeData> {
 	/** The DVs to get this Type Hidden Power (in gen 2). */
 	readonly HPdvs: SparseStatsTable;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
+	constructor(data: AnyObject) {
 		this.exists = true;
-		data = combine(this, data, ...moreData);
+		Object.assign(this, data);
 
-		this.id = data.id || '';
-		this.name = Utils.getString(data.name).trim();
+		this.name = data.name;
+		this.id = data.id;
 		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
 		this.exists = !!(this.exists && this.id);
 		this.gen = data.gen || 0;
@@ -218,6 +231,35 @@ export class TypeInfo implements Readonly<TypeData> {
 
 	toString() {
 		return this.name;
+	}
+}
+
+export class DexTypes {
+	readonly dex: ModdedDex;
+	readonly typeCache = new Map<ID, TypeInfo>();
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name: string | TypeInfo): TypeInfo {
+		if (name && typeof name !== 'string') return name;
+		return this.getByID(toID(name));
+	}
+
+	getByID(id: ID): TypeInfo {
+		let type = this.typeCache.get(id);
+		if (type) return type;
+
+		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
+		if (typeName && this.dex.data.TypeChart.hasOwnProperty(typeName)) {
+			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[typeName]});
+		} else {
+			type = new TypeInfo({name: typeName, id, exists: false, effectType: 'EffectType'});
+		}
+
+		if (type.exists) this.typeCache.set(id, type);
+		return type;
 	}
 }
 

@@ -1011,7 +1011,7 @@ export const commands: ChatCommands = {
 			}
 		}
 		const nicknames = teamStrings.map(set => {
-			const species = Dex.getSpecies(set.species).baseSpecies;
+			const species = Dex.species.get(set.species).baseSpecies;
 			return species !== set.name ? set.name : species;
 		});
 		let resultString = Dex.stringifyTeam(teamStrings, nicknames, hideStats);
@@ -1614,9 +1614,9 @@ export const commands: ChatCommands = {
 			return;
 		}
 		if (!target) return this.errorReply(this.tr`Provide a valid format.`);
-		const originalFormat = Dex.getFormat(target);
+		const originalFormat = Dex.formats.get(target);
 		// Note: The default here of [Gen 8] Anything Goes isn't normally hit; since the web client will send a default format
-		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat(
+		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get(
 			'[Gen 8] Anything Goes'
 		);
 		if (format.effectType !== this.tr`Format`) return this.popupReply(this.tr`Please provide a valid format.`);

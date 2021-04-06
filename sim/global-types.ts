@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+type Mutable<T> = {
+	-readonly [P in keyof T]: T[P];
+};
+
 type Battle = import('./battle').Battle;
 type BattleQueue = import('./battle-queue').BattleQueue;
 type BattleActions = import('./battle-actions').BattleActions;
@@ -179,22 +183,14 @@ type SpeciesData = import('./dex-species').SpeciesData;
 type ModdedSpeciesData = import('./dex-species').ModdedSpeciesData;
 type SpeciesFormatsData = import('./dex-species').SpeciesFormatsData;
 type ModdedSpeciesFormatsData = import('./dex-species').ModdedSpeciesFormatsData;
+type LearnsetData = import('./dex-species').LearnsetData;
+type ModdedLearnsetData = import('./dex-species').ModdedLearnsetData;
 type Species = import('./dex-species').Species;
 
 type FormatData = import('./dex-formats').FormatData;
 type FormatList = import('./dex-formats').FormatList;
 type ModdedFormatData = import('./dex-formats').ModdedFormatData;
 type Format = import('./dex-formats').Format;
-
-interface LearnsetData {
-	learnset?: {[moveid: string]: MoveSource[]};
-	eventData?: EventInfo[];
-	eventOnly?: boolean;
-	encounters?: EventInfo[];
-	exists?: boolean;
-}
-
-type ModdedLearnsetData = LearnsetData & {inherit?: true};
 
 interface NatureData {
 	name: string;

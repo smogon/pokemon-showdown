@@ -38,6 +38,16 @@ export interface SpeciesFormatsData {
 
 export type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
 
+export interface LearnsetData {
+	learnset?: {[moveid: string]: MoveSource[]};
+	eventData?: EventInfo[];
+	eventOnly?: boolean;
+	encounters?: EventInfo[];
+	exists?: boolean;
+}
+
+export type ModdedLearnsetData = LearnsetData & {inherit?: true};
+
 export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
 	readonly effectType: 'Pokemon';
 	/**
@@ -45,13 +55,13 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * 'basculinbluestriped'. To get the base species ID, you need to
 	 * manually read toID(species.baseSpecies).
 	 */
-	readonly id: ID;
+	readonly id!: ID;
 	/**
 	 * Name. Note that this is the full name with forme,
 	 * e.g. 'Basculin-Blue-Striped'. To get the name without forme, see
 	 * `species.baseSpecies`.
 	 */
-	readonly name: string;
+	readonly name!: string;
 	/**
 	 * Base species. Species, but without the forme name.
 	 *
@@ -212,14 +222,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly comboMoves?: readonly ID[];
 	readonly essentialMove?: ID;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `pokemon: ${data.name}`;
 		this.effectType = 'Pokemon';
-		this.id = data.id as ID;
-		this.name = data.name;
 		this.baseSpecies = data.baseSpecies || this.name;
 		this.forme = data.forme || '';
 		this.baseForme = data.baseForme || '';
@@ -290,5 +298,196 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 				this.gen = 1;
 			}
 		}
+	}
+}
+
+export class Learnset {
+	readonly effectType: 'Learnset';
+	/**
+	 * Keeps track of exactly how a pokemon might learn a move, in the
+	 * form moveid:sources[].
+	 */
+	readonly learnset?: {[moveid: string]: MoveSource[]};
+	/** True if the only way to get this Pokemon is from events. */
+	readonly eventOnly: boolean;
+	/** List of event data for each event. */
+	readonly eventData?: EventInfo[];
+	readonly encounters?: EventInfo[];
+	readonly exists: boolean;
+
+	constructor(data: AnyObject) {
+		this.exists = true;
+		this.effectType = 'Learnset';
+		this.learnset = data.learnset || undefined;
+		this.eventOnly = !!data.eventOnly;
+		this.eventData = data.eventData || undefined;
+		this.encounters = data.encounters || undefined;
+	}
+}
+
+export class DexSpecies {
+	readonly dex: ModdedDex;
+	readonly speciesCache = new Map<ID, Species>();
+	readonly learnsetCache = new Map<ID, Learnset>();
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name?: string | Species): Species {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		let id = toID(name);
+		if (id === 'nidoran' && name.endsWith('♀')) {
+			id = 'nidoranf' as ID;
+		} else if (id === 'nidoran' && name.endsWith('♂')) {
+			id = 'nidoranm' as ID;
+		}
+
+		return this.getByID(id);
+	}
+	getByID(id: ID): Species {
+		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
+		if (species) return species;
+
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			if (this.dex.data.FormatsData.hasOwnProperty(id)) {
+				// special event ID, like Rockruff-Dusk
+				const baseId = toID(this.dex.data.Aliases[id]);
+				species = new Species({
+					...this.dex.data.Pokedex[baseId],
+					...this.dex.data.FormatsData[id],
+					name: id,
+				});
+				species.abilities = {0: species.abilities['S']!};
+			} else {
+				species = this.get(this.dex.data.Aliases[id]);
+				if (species.cosmeticFormes) {
+					for (const forme of species.cosmeticFormes) {
+						if (toID(forme) === id) {
+							species = new Species({
+								...species,
+								name: forme,
+								forme: forme.slice(species.name.length + 1),
+								baseForme: "",
+								baseSpecies: species.name,
+								otherFormes: null,
+								cosmeticFormes: null,
+							});
+							break;
+						}
+					}
+				}
+			}
+			this.speciesCache.set(id, species);
+			return species;
+		}
+
+		if (!this.dex.data.Pokedex.hasOwnProperty(id)) {
+			let aliasTo = '';
+			const formeNames: {[k: string]: string[]} = {
+				alola: ['a', 'alola', 'alolan'],
+				galar: ['g', 'galar', 'galarian'],
+				mega: ['m', 'mega'],
+				primal: ['p', 'primal'],
+			};
+			for (const forme in formeNames) {
+				let pokeName = '';
+				for (const i of formeNames[forme]) {
+					if (id.startsWith(i)) {
+						pokeName = id.slice(i.length);
+					} else if (id.endsWith(i)) {
+						pokeName = id.slice(0, -i.length);
+					}
+				}
+				if (this.dex.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.dex.data.Aliases[pokeName]);
+				if (this.dex.data.Pokedex[pokeName + forme]) {
+					aliasTo = pokeName + forme;
+					break;
+				}
+			}
+			if (aliasTo) {
+				species = this.get(aliasTo);
+				if (species.exists) {
+					this.speciesCache.set(id, species);
+					return species;
+				}
+			}
+		}
+		if (id && this.dex.data.Pokedex.hasOwnProperty(id)) {
+			species = new Species({
+				...this.dex.data.Pokedex[id],
+				...this.dex.data.FormatsData[id],
+			});
+			// Inherit any statuses from the base species (Arceus, Silvally).
+			const baseSpeciesStatuses = this.dex.data.Conditions[toID(species.baseSpecies)];
+			if (baseSpeciesStatuses !== undefined) {
+				let key: keyof EffectData;
+				for (key in baseSpeciesStatuses) {
+					if (!(key in species)) (species as any)[key] = baseSpeciesStatuses[key];
+				}
+			}
+			if (!species.tier && !species.doublesTier && species.baseSpecies !== species.name) {
+				if (species.baseSpecies === 'Mimikyu') {
+					species.tier = this.dex.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
+				} else if (species.id.endsWith('totem')) {
+					species.tier = this.dex.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || 'Illegal';
+				} else if (species.battleOnly) {
+					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)].doublesTier || 'Illegal';
+				} else {
+					const baseFormatsData = this.dex.data.FormatsData[toID(species.baseSpecies)];
+					if (!baseFormatsData) {
+						throw new Error(`${species.baseSpecies} has no formats-data entry`);
+					}
+					species.tier = baseFormatsData.tier || 'Illegal';
+					species.doublesTier = baseFormatsData.doublesTier || 'Illegal';
+				}
+			}
+			if (!species.tier) species.tier = 'Illegal';
+			if (!species.doublesTier) species.doublesTier = species.tier as any;
+			if (species.gen > this.dex.gen) {
+				species.tier = 'Illegal';
+				species.doublesTier = 'Illegal';
+				species.isNonstandard = 'Future';
+			}
+			if (this.dex.currentMod === 'letsgo' && !species.isNonstandard) {
+				const isLetsGo = (
+					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
+					(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
+				);
+				if (!isLetsGo) species.isNonstandard = 'Past';
+			}
+			species.nfe = !!(species.evos.length && this.get(species.evos[0]).gen <= this.dex.gen);
+			species.canHatch = species.canHatch ||
+				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
+			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
+			if (this.dex.gen < 5) delete species.abilities['H'];
+		} else {
+			species = new Species({
+				id, name: id,
+				exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
+			});
+		}
+		if (species.exists) this.speciesCache.set(id, species);
+		return species;
+	}
+
+	getLearnset(id: ID): Learnset['learnset'] {
+		return this.getLearnsetData(id).learnset;
+	}
+
+	getLearnsetData(id: ID): Learnset {
+		let learnsetData = this.learnsetCache.get(id);
+		if (learnsetData) return learnsetData;
+		if (!this.dex.data.Learnsets.hasOwnProperty(id)) {
+			return new Learnset({exists: false});
+		}
+		learnsetData = new Learnset(this.dex.data.Learnsets[id]);
+		this.learnsetCache.set(id, learnsetData);
+		return learnsetData;
 	}
 }

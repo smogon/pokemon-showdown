@@ -1308,7 +1308,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock'];
 			for (const condition of sideConditions) {
 				if (user.side.removeSideCondition(condition)) {
-					this.add('-sideend', user.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + user);
+					this.add('-sideend', user.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + user);
 					doubled = true;
 				}
 			}
@@ -2012,10 +2012,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		onModifyMove(move, user) {
 			if (user.illusion) {
-				const illusionMoves = user.illusion.moves.filter(m => this.dex.getMove(m).category !== 'Status');
+				const illusionMoves = user.illusion.moves.filter(m => this.dex.moves.get(m).category !== 'Status');
 				if (!illusionMoves.length) return;
 				// I'll figure out a better fix for this later
-				(move as any).name = this.dex.getMove(this.sample(illusionMoves)).name;
+				(move as any).name = this.dex.moves.get(this.sample(illusionMoves)).name;
 			}
 		},
 		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",

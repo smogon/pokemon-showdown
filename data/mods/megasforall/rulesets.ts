@@ -1,4 +1,4 @@
-export const Formats: {[k: string]: FormatData} = {
+export const Rulesets: {[k: string]: FormatData} = {
 	megadatamod: {
 		effectType: 'Rule',
 		name: 'Mega Data Mod',
@@ -36,7 +36,7 @@ export const Formats: {[k: string]: FormatData} = {
 		},
 		onAfterMega(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
-			const species = this.dex.getSpecies(pokemon.species.name);
+			const species = this.dex.species.get(pokemon.species.name);
 			const abilities = species.abilities;
 			const baseStats = species.baseStats;
 			const type = species.types[0];
@@ -56,7 +56,7 @@ export const Formats: {[k: string]: FormatData} = {
 			this.add('-message', 'Your Mega Evolution this match is:');
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.canMegaEvo) {
-					const mega = this.dex.getSpecies(pokemon.canMegaEvo);
+					const mega = this.dex.species.get(pokemon.canMegaEvo);
 					const baseStats = mega.baseStats;
 					let types = mega.types[0];
 					if (mega.types[1]) {
@@ -66,7 +66,7 @@ export const Formats: {[k: string]: FormatData} = {
 					if (mega.name === "Mimikyu-Mega") {
 						msg += `; Mega Mimikyu has two forms! If its Disguise is busted, it will Mega Evolve into Mimikyu-Busted-Mega. Use /dt for more info.`;
 					}
-					const ability = this.dex.getAbility(mega.abilities[0]);
+					const ability = this.dex.abilities.get(mega.abilities[0]);
 					let txt = `${mega.name} (${types}); `;
 					txt += `Ability: ${ability.name} (${ability.shortDesc}); `;
 					txt += `Stats: ${baseStats.hp} HP / ${baseStats.atk} Atk / ${baseStats.def} Def / ${baseStats.spa} SpA / ${baseStats.spd} SpD / ${baseStats.spe} Spe;${msg}`;
@@ -87,25 +87,25 @@ export const Formats: {[k: string]: FormatData} = {
 		onValidateTeam(team) {
 			let typeTable: string[] = [];
 			for (const [i, set] of team.entries()) {
-				let species = this.dex.getSpecies(set.species);
+				let species = this.dex.species.get(set.species);
 				if (!species.types) return [`Invalid pokemon ${set.name || set.species}`];
 				if (i === 0) {
 					typeTable = species.types;
 				} else {
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
-				const item = this.dex.getItem(set.item);
+				const item = this.dex.items.get(set.item);
 				if (item.megaStone && species.baseSpecies === item.megaEvolves) {
-					species = this.dex.getSpecies(item.megaStone);
+					species = this.dex.species.get(item.megaStone);
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
-					species = this.dex.getSpecies("Necrozma-Ultra");
+					species = this.dex.species.get("Necrozma-Ultra");
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				if (item.id === "mimikyunite" && species.baseSpecies === "Mimikyu") {
 					// Mega Mimikyu is banned from Fairy Mono and this enforces that
-					species = this.dex.getSpecies("Mimikyu-Busted-Mega");
+					species = this.dex.species.get("Mimikyu-Busted-Mega");
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				if (!typeTable.length) return [`Your team must share a type.`];

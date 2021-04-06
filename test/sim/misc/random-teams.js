@@ -9,16 +9,16 @@ const ALL_GENS = [1, 2, 3, 4, 5, 6, 7];
 
 function isValidSet(gen, set) {
 	const dex = Dex.mod(`gen${gen}`);
-	const species = dex.getSpecies(set.species || set.name);
+	const species = dex.species.get(set.species || set.name);
 	if (!species.exists || species.gen > gen) return false;
 	if (set.item) {
-		const item = dex.getItem(set.item);
+		const item = dex.items.get(set.item);
 		if (!item.exists || item.gen > gen) {
 			return false;
 		}
 	}
 	if (set.ability && set.ability !== 'None') {
-		const ability = dex.getAbility(set.ability);
+		const ability = dex.abilities.get(set.ability);
 		if (!ability.exists || ability.gen > gen) {
 			return false;
 		}
@@ -30,7 +30,7 @@ function isValidSet(gen, set) {
 
 function validLearnset(move, set, tier) {
 	const validator = TeamValidator.get(`gen7${tier}`);
-	const species = validator.dex.getSpecies(set.species || set.name);
+	const species = validator.dex.species.get(set.species || set.name);
 	return !validator.checkCanLearn(move, species);
 }
 
@@ -70,7 +70,7 @@ describe(`Random Team generator (slow)`, function () {
 				let types;
 				for (const set of team) {
 					if (!isValidSet(8, set)) throw new Error(`Invalid set: ${JSON.stringify(set)}`);
-					const species = Dex.getSpecies(set.species || set.name);
+					const species = Dex.species.get(set.species || set.name);
 					if (types) {
 						if (!types.filter(t => species.types.includes(t)).length) {
 							throw new Error(`Team is not monotype: ${JSON.stringify(team)}`);
@@ -145,7 +145,7 @@ describe(`Factory sets`, function () {
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
-						const species = Dex.getSpecies(set.species);
+						const species = Dex.species.get(set.species);
 						assert(species.exists, `invalid species "${set.species}" of ${species}`);
 						assert(species.name === set.species, `miscapitalized species "${set.species}" of ${species}`);
 
@@ -156,26 +156,26 @@ describe(`Factory sets`, function () {
 
 						for (const itemName of [].concat(set.item)) {
 							if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;
-							const item = Dex.getItem(itemName);
+							const item = Dex.items.get(itemName);
 							assert(item.exists, `invalid item "${itemName}" of ${species}`);
 							assert(item.name === itemName, `miscapitalized item "${itemName}" of ${species}`);
 						}
 
 						for (const abilityName of [].concat(set.ability)) {
-							const ability = Dex.getAbility(abilityName);
+							const ability = Dex.abilities.get(abilityName);
 							assert(ability.exists, `invalid ability "${abilityName}" of ${species}`);
 							assert(ability.name === abilityName, `miscapitalized ability "${abilityName}" of ${species}`);
 						}
 
 						for (const natureName of [].concat(set.nature)) {
-							const nature = Dex.getNature(natureName);
+							const nature = Dex.natures.get(natureName);
 							assert(nature.exists, `invalid nature "${natureName}" of ${species}`);
 							assert(nature.name === natureName, `miscapitalized nature "${natureName}" of ${species}`);
 						}
 
 						for (const moveSpec of set.moves) {
 							for (const moveName of [].concat(moveSpec)) {
-								const move = Dex.getMove(moveName);
+								const move = Dex.moves.get(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
 								assert(move.name === moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${species}`);
 								assert(validLearnset(move, set, vType), `illegal move "${moveName}" of ${species}`);

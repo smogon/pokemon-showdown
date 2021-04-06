@@ -42,7 +42,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, effect) {
 			const moves = [];
 			for (const id in this.dex.data.Moves) {
-				const move = this.dex.getMove(id);
+				const move = this.dex.moves.get(id);
 				if (move.realMove) continue;
 				if (move.gen !== 1) continue;
 				if (effect.noMetronome!.includes(move.name)) continue;

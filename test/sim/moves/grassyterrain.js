@@ -31,10 +31,10 @@ describe('Grassy Terrain', function () {
 		battle.setPlayer('p1', {team: [{species: "Shaymin", ability: 'naturalcure', moves: ['grassyterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]});
 		battle.makeChoices('move grassyterrain', 'move leechseed');
-		assert.equal(battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], Dex.getMove('earthquake'), 100, true), 50);
-		assert.equal(battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], Dex.getMove('earthquake'), 100, true), 50);
-		assert.equal(battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], Dex.getMove('bulldoze'), 60, true), 30);
-		assert.equal(battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], Dex.getMove('bulldoze'), 60, true), 30);
+		assert.equal(battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], Dex.moves.get('earthquake'), 100, true), 50);
+		assert.equal(battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], Dex.moves.get('earthquake'), 100, true), 50);
+		assert.equal(battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], Dex.moves.get('bulldoze'), 60, true), 30);
+		assert.equal(battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], Dex.moves.get('bulldoze'), 60, true), 30);
 	});
 
 	it('should increase the base power of Grass-type attacks used by grounded Pokemon', function () {
@@ -43,7 +43,7 @@ describe('Grassy Terrain', function () {
 		battle.setPlayer('p2', {team: [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]});
 		battle.makeChoices('move grassyterrain', 'move leechseed');
 		let basePower;
-		const move = Dex.getMove('gigadrain');
+		const move = Dex.moves.get('gigadrain');
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);
 		assert.equal(basePower, battle.modify(move.basePower, 1.5));
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);

@@ -136,7 +136,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target) {
 			const possibleTypes = target.moveSlots.map(moveSlot => {
-				const move = this.dex.getMove(moveSlot.id);
+				const move = this.dex.moves.get(moveSlot.id);
 				if (move.id !== 'conversion' && !target.hasType(move.type)) {
 					return move.type;
 				}
@@ -183,7 +183,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const sideConditions = ['reflect', 'lightscreen', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock'];
 			for (const condition of sideConditions) {
 				if (pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Defog', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Defog', '[of] ' + pokemon);
 				}
 			}
 		},
@@ -669,7 +669,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryHit(target, source, effect) {
 				// Quick Guard only blocks moves with a natural positive priority
 				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
-				if (effect && (effect.id === 'feint' || this.dex.getMove(effect.id).priority <= 0)) {
+				if (effect && (effect.id === 'feint' || this.dex.moves.get(effect.id).priority <= 0)) {
 					return;
 				}
 				this.add('-activate', target, 'Quick Guard');
@@ -772,7 +772,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (targetAbility === sourceAbility) {
 				return false;
 			}
-			this.add('-activate', source, 'move: Skill Swap', this.dex.getAbility(targetAbility), this.dex.getAbility(sourceAbility), '[of] ' + target);
+			this.add('-activate', source, 'move: Skill Swap', this.dex.abilities.get(targetAbility), this.dex.abilities.get(sourceAbility), '[of] ' + target);
 			source.setAbility(targetAbility);
 			target.setAbility(sourceAbility);
 		},

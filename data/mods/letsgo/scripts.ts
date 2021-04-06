@@ -29,7 +29,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	 * @return {StatsTable}
 	 */
 	natureModify(stats, set) {
-		const nature = this.dex.getNature(set.nature);
+		const nature = this.dex.natures.get(set.nature);
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
 		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
 		set.happiness = 70;

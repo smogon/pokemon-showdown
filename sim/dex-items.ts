@@ -1,5 +1,5 @@
 import {EventMethods} from './dex-conditions';
-import {BasicEffect} from './dex-data';
+import {BasicEffect, toID} from './dex-data';
 
 interface FlingData {
 	basePower: number;
@@ -100,8 +100,8 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
 	readonly onStart?: (this: Battle, target: Pokemon) => void;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `item: ${this.name}`;
@@ -142,5 +142,60 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		if (this.onDrive) this.fling = {basePower: 70};
 		if (this.megaStone) this.fling = {basePower: 80};
 		if (this.onMemory) this.fling = {basePower: 50};
+	}
+}
+
+export class DexItems {
+	readonly dex: ModdedDex;
+	readonly itemCache = new Map<ID, Item>();
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name?: string | Item): Item {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		const id = toID(name);
+		return this.getByID(id);
+	}
+
+	getByID(id: ID): Item {
+		let item = this.itemCache.get(id);
+		if (item) return item;
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			item = this.get(this.dex.data.Aliases[id]);
+			if (item.exists) {
+				this.itemCache.set(id, item);
+			}
+			return item;
+		}
+		if (id && !this.dex.data.Items[id] && this.dex.data.Items[id + 'berry']) {
+			item = this.getByID(id + 'berry' as ID);
+			this.itemCache.set(id, item);
+			return item;
+		}
+		if (id && this.dex.data.Items.hasOwnProperty(id)) {
+			const itemData = this.dex.data.Items[id] as any;
+			const itemTextData = this.dex.getDescs('Items', id, itemData);
+			item = new Item({
+				name: id,
+				...itemData,
+				...itemTextData,
+			});
+			if (item.gen > this.dex.gen) {
+				(item as any).isNonstandard = 'Future';
+			}
+			// hack for allowing mega evolution in LGPE
+			if (this.dex.currentMod === 'letsgo' && !item.isNonstandard && !item.megaStone) {
+				(item as any).isNonstandard = 'Past';
+			}
+		} else {
+			item = new Item({name: id, exists: false});
+		}
+
+		if (item.exists) this.itemCache.set(id, item);
+		return item;
 	}
 }

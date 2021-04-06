@@ -2170,7 +2170,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					if (key.endsWith('mod') || key.endsWith('clause')) continue;
 					side.removeSideCondition(key);
 					if (!silentRemove.includes(key)) {
-						this.add('-sideend', side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
+						this.add('-sideend', side, this.dex.conditions.get(key).name, '[from] ability: Turbulence');
 					}
 				}
 			}

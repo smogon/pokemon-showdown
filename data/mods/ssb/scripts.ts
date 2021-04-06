@@ -36,7 +36,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Modded for Mega Rayquaza
 		canMegaEvo(pokemon) {
 			const species = pokemon.baseSpecies;
-			const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
+			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 			const item = pokemon.getItem();
 			// Mega Rayquaza
 			if (altForme?.isMega && altForme?.requiredMove &&
@@ -70,10 +70,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!moveSlot.disabled) {
 					mustStruggle = false;
 				}
-				const move = this.dex.getMove(moveSlot.move);
+				const move = this.dex.moves.get(moveSlot.move);
 				let zMoveName = this.getZMove(move, pokemon, true) || '';
 				if (zMoveName) {
-					const zMove = this.dex.getMove(zMoveName);
+					const zMove = this.dex.moves.get(zMoveName);
 					if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
 					zMoves.push({move: zMoveName, target: zMove.target});
 				} else {
@@ -172,7 +172,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						return;
 					}
 				} else {
-					sourceEffect = this.dex.getEffect('lockedmove');
+					sourceEffect = this.dex.conditions.get('lockedmove');
 				}
 				pokemon.moveUsed(move, targetLoc);
 			}
@@ -183,7 +183,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (zMove) {
 				if (pokemon.illusion) {
-					this.battle.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
+					this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityData, pokemon);
 				}
 				this.battle.add('-zpower', pokemon);
 				// In SSB Z-Moves are limited to 1 per pokemon.
@@ -216,7 +216,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.add('-activate', dancer, 'ability: Dancer');
 					const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
 					const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-					this.runMove(move.id, dancer, dancersTargetLoc, this.dex.getAbility('dancer'), undefined, true);
+					this.runMove(move.id, dancer, dancersTargetLoc, this.dex.abilities.get('dancer'), undefined, true);
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -312,7 +312,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
-			if (sourceEffect) attrs += '|[from]' + this.dex.getEffect(sourceEffect);
+			if (sourceEffect) attrs += '|[from]' + this.dex.conditions.get(sourceEffect);
 			if (zMove && move.isZ === true) {
 				attrs = '|[anim]' + movename + attrs;
 				movename = 'Z-' + movename;
@@ -444,7 +444,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let nullDamage = true;
 			let moveDamage: (number | boolean | undefined)[];
 			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
-			const isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
+			const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 
 			let targetsCopy: (Pokemon | false | null)[] = targets.slice(0);
 			let hit: number;
@@ -516,7 +516,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					move.totalDamage += damage[i];
 				}
 				if (move.mindBlownRecoil) {
-					this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Mind Blown'), true);
+					this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
 					move.mindBlownRecoil = false;
 				}
 				this.battle.eachEvent('Update');
@@ -882,7 +882,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		setStatus(status, source, sourceEffect, ignoreImmunities) {
 			if (!this.hp) return false;
-			status = this.battle.dex.getEffect(status);
+			status = this.battle.dex.conditions.get(status);
 			if (this.battle.event) {
 				if (!source) source = this.battle.event.source;
 				if (!sourceEffect) sourceEffect = this.battle.effect;
@@ -1031,7 +1031,7 @@ export const Scripts: ModdedBattleScriptsData = {
 								// unreleased hidden ability
 								continue;
 							}
-							const ability = this.dex.getAbility(abilityName);
+							const ability = this.dex.abilities.get(abilityName);
 							if (ruleTable.has('-ability:' + ability.id)) continue;
 							if (pokemon.knownType && !this.dex.getImmunity('trapped', pokemon)) continue;
 							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, source);

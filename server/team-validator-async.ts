@@ -13,7 +13,7 @@ export class TeamValidatorAsync {
 	format: Format;
 
 	constructor(format: string) {
-		this.format = Dex.getFormat(format);
+		this.format = Dex.formats.get(format);
 	}
 
 	validateTeam(team: string, options?: {removeNicknames?: boolean}) {

@@ -72,7 +72,7 @@ export class RandomTeams {
 	moveEnforcementCheckers: {[k: string]: MoveEnforcementChecker};
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
-		format = Dex.getFormat(format);
+		format = Dex.formats.get(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		if (format.teamLength) {
@@ -278,46 +278,46 @@ export class RandomTeams {
 
 		for (let i = 0; i < 6; i++) {
 			let forme = random6[i];
-			let species = dex.getSpecies(forme);
-			if (species.isNonstandard) species = dex.getSpecies(species.baseSpecies);
+			let species = dex.species.get(forme);
+			if (species.isNonstandard) species = dex.species.get(species.baseSpecies);
 
 			// Random legal item
 			let item = '';
 			if (this.gen >= 2) {
 				do {
 					item = this.sample(items);
-				} while (this.dex.getItem(item).gen > this.gen || this.dex.data.Items[item].isNonstandard);
+				} while (this.dex.items.get(item).gen > this.gen || this.dex.data.Items[item].isNonstandard);
 			}
 
 			// Make sure forme is legal
 			if (species.battleOnly) {
 				if (typeof species.battleOnly === 'string') {
-					species = dex.getSpecies(species.battleOnly);
+					species = dex.species.get(species.battleOnly);
 				} else {
-					species = dex.getSpecies(this.sample(species.battleOnly));
+					species = dex.species.get(this.sample(species.battleOnly));
 				}
 				forme = species.name;
 			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
-				species = dex.getSpecies(species.changesFrom);
+				species = dex.species.get(species.changesFrom);
 				forme = species.name;
 			}
 
 			// Make sure that a base forme does not hold any forme-modifier items.
-			let itemData = this.dex.getItem(item);
-			if (itemData.forcedForme && forme === this.dex.getSpecies(itemData.forcedForme).baseSpecies) {
+			let itemData = this.dex.items.get(item);
+			if (itemData.forcedForme && forme === this.dex.species.get(itemData.forcedForme).baseSpecies) {
 				do {
 					item = this.sample(items);
-					itemData = this.dex.getItem(item);
+					itemData = this.dex.items.get(item);
 				} while (
 					itemData.gen > this.gen ||
 					itemData.isNonstandard ||
-					(itemData.forcedForme && forme === this.dex.getSpecies(itemData.forcedForme).baseSpecies)
+					(itemData.forcedForme && forme === this.dex.species.get(itemData.forcedForme).baseSpecies)
 				);
 			}
 
 			// Random legal ability
-			const abilities = Object.values(species.abilities).filter(a => this.dex.getAbility(a).gen <= this.gen);
+			const abilities = Object.values(species.abilities).filter(a => this.dex.abilities.get(a).gen <= this.gen);
 			const ability: string = this.gen <= 2 ? 'None' : this.sample(abilities);
 
 			// Four random unique moves from the movepool
@@ -331,7 +331,7 @@ export class RandomTeams {
 				const formes = ['gastrodoneast', 'pumpkaboosuper', 'zygarde10'];
 				let learnset = this.dex.data.Learnsets[species.id]?.learnset && !formes.includes(species.id) ?
 					this.dex.data.Learnsets[species.id].learnset :
-					this.dex.data.Learnsets[this.dex.getSpecies(species.baseSpecies).id].learnset;
+					this.dex.data.Learnsets[this.dex.species.get(species.baseSpecies).id].learnset;
 				if (learnset) {
 					pool = Object.keys(learnset).filter(
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
@@ -377,7 +377,7 @@ export class RandomTeams {
 
 			let stats = species.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
-			if (species.baseSpecies === 'Wishiwashi') stats = Dex.getSpecies('wishiwashischool').baseStats;
+			if (species.baseSpecies === 'Wishiwashi') stats = Dex.species.get('wishiwashischool').baseStats;
 
 			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
 			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
@@ -454,7 +454,7 @@ export class RandomTeams {
 		const formes: string[][] = [[], [], [], [], [], []];
 		for (const id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
-			const species = this.dex.getSpecies(id);
+			const species = this.dex.species.get(id);
 			if (species.gen <= this.gen && (!species.isNonstandard || species.isNonstandard === 'Unobtainable')) {
 				formes[hasDexNumber[species.num]].push(species.name);
 			}
@@ -482,14 +482,14 @@ export class RandomTeams {
 
 		for (let i = 0; i < 6; i++) {
 			// Choose forme
-			const species = this.dex.getSpecies(random6[i]);
+			const species = this.dex.species.get(random6[i]);
 
 			// Random unique item
 			let item = '';
 			if (this.gen >= 2) {
 				do {
 					item = this.sampleNoReplace(itemPool);
-				} while (this.dex.getItem(item).gen > this.gen || this.dex.data.Items[item].isNonstandard);
+				} while (this.dex.items.get(item).gen > this.gen || this.dex.data.Items[item].isNonstandard);
 			}
 
 			// Random unique ability
@@ -497,14 +497,14 @@ export class RandomTeams {
 			if (this.gen >= 3) {
 				do {
 					ability = this.sampleNoReplace(abilityPool);
-				} while (this.dex.getAbility(ability).gen > this.gen || this.dex.data.Abilities[ability].isNonstandard);
+				} while (this.dex.abilities.get(ability).gen > this.gen || this.dex.data.Abilities[ability].isNonstandard);
 			}
 
 			// Random unique moves
 			const m = [];
 			do {
 				const moveid = this.sampleNoReplace(movePool);
-				const move = this.dex.getMove(moveid);
+				const move = this.dex.moves.get(moveid);
 				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
 					m.push(moveid);
 				}
@@ -612,9 +612,9 @@ export class RandomTeams {
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
 		for (const moveId of moves) {
-			let move = this.dex.getMove(moveId);
+			let move = this.dex.moves.get(moveId);
 			if (move.id === 'naturepower') {
-				if (this.gen === 5) move = this.dex.getMove('earthquake');
+				if (this.gen === 5) move = this.dex.moves.get('earthquake');
 			}
 			const moveid = move.id;
 			let moveType = move.type;
@@ -689,7 +689,7 @@ export class RandomTeams {
 
 		// Keep track of the available moves
 		for (const moveid of movePool) {
-			const move = this.dex.getMove(moveid);
+			const move = this.dex.moves.get(moveid);
 			if (move.damageCallback) continue;
 			if (move.category === 'Physical') counter.physicalpool++;
 			if (move.category === 'Special') counter.specialpool++;
@@ -1606,7 +1606,7 @@ export class RandomTeams {
 		isDoubles = false,
 		isNoDynamax = false
 	): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 		let forme = species.name;
 		let gmax = false;
 
@@ -1690,7 +1690,7 @@ export class RandomTeams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [k, moveId] of moves.entries()) {
-				const move = this.dex.getMove(moveId);
+				const move = this.dex.moves.get(moveId);
 
 				let {cull, isSetup} = this.shouldCullMove(
 					move, hasType, hasMove, hasAbility, counter,
@@ -1779,9 +1779,9 @@ export class RandomTeams {
 		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
 
 		const abilityNames: string[] = Object.values(species.abilities);
-		abilityNames.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
+		abilityNames.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
 
-		const abilities = abilityNames.map(name => this.dex.getAbility(name));
+		const abilities = abilityNames.map(name => this.dex.abilities.get(name));
 		if (abilityNames[1]) {
 			// Sort abilities by rating with an element of randomness
 			if (abilityNames[2] && abilities[1].rating <= abilities[2].rating && this.randomChance(1, 2)) {
@@ -1880,7 +1880,7 @@ export class RandomTeams {
 		if (isDoubles && species.randomDoubleBattleLevel) {
 			level = species.randomDoubleBattleLevel;
 		} else if (isNoDynamax) {
-			const tier = species.name.endsWith('-Gmax') ? this.dex.getSpecies(species.changesFrom).tier : species.tier;
+			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
 			const tierScale: {[k: string]: number} = {
 				Uber: 76,
 				OU: 80,
@@ -1969,12 +1969,12 @@ export class RandomTeams {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		for (const id in this.dex.data.FormatsData) {
-			let species = this.dex.getSpecies(id);
+			let species = this.dex.species.get(id);
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
 				if (typeof species.battleOnly === 'string') {
-					species = this.dex.getSpecies(species.battleOnly);
+					species = this.dex.species.get(species.battleOnly);
 					if (!species.types.includes(type)) continue;
 				}
 			}
@@ -1985,7 +1985,7 @@ export class RandomTeams {
 
 	randomTeam() {
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.getRuleTable(this.format);
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
@@ -1995,7 +1995,7 @@ export class RandomTeams {
 
 		// PotD stuff
 		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
-		const potd = usePotD ? this.dex.getSpecies(Config.potd) : null;
+		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
 
 		const baseFormes: {[k: string]: number} = {};
 
@@ -2006,7 +2006,7 @@ export class RandomTeams {
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < 6) {
-			let species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			let species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
 			// Check if the forme has moves for random battle
@@ -2082,7 +2082,7 @@ export class RandomTeams {
 			if (potd?.exists && pokemon.length === 1) species = potd;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0,
-				this.format.gameType !== 'singles', this.dex.getRuleTable(this.format).has('dynamaxclause'));
+				this.format.gameType !== 'singles', this.dex.formats.getRuleTable(this.format).has('dynamaxclause'));
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2150,7 +2150,7 @@ export class RandomTeams {
 		const pokemonPool = Object.keys(this.randomCAP1v1Sets);
 
 		while (pokemonPool.length && pokemon.length < 3) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) throw new Error(`Invalid Pokemon "${species}" in ${this.format}`);
 
 			const setData: AnyObject = this.sample(this.randomCAP1v1Sets[species.name]);
@@ -2279,7 +2279,7 @@ export class RandomTeams {
 			let maxUsage = 0;
 			const sets: {[k: string]: number} = {};
 			for (const specie of pokemonPool) {
-				if (teamData.baseFormes[this.dex.getSpecies(specie).baseSpecies]) continue; // Species Clause
+				if (teamData.baseFormes[this.dex.species.get(specie).baseSpecies]) continue; // Species Clause
 				const usage: number = this.randomBSSFactorySets[specie].usage;
 				sets[specie] = usage + maxUsage;
 				maxUsage += usage;
@@ -2296,7 +2296,7 @@ export class RandomTeams {
 				 last = sets[key];
 			}
 
-			const species = this.dex.getSpecies(specie);
+			const species = this.dex.species.get(specie);
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -2324,7 +2324,7 @@ export class RandomTeams {
 			}
 			if (typeCombo in teamData.typeComboCount) continue;
 
-			const itemData = this.dex.getItem(set.item);
+			const itemData = this.dex.items.get(set.item);
 			if (teamData.has[itemData.id]) continue; // Item Clause
 
 			// Okay, the set passes, add it to our team
@@ -2344,7 +2344,7 @@ export class RandomTeams {
 
 			teamData.has[itemData.id] = 1;
 
-			const abilityData = this.dex.getAbility(set.ability);
+			const abilityData = this.dex.abilities.get(set.ability);
 			if (abilityData.id in weatherAbilitiesSet) {
 				teamData.weather = weatherAbilitiesSet[abilityData.id];
 			}

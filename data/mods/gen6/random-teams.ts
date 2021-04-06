@@ -728,7 +728,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 		let forme = species.name;
 
 		if (typeof species.battleOnly === 'string') {
@@ -804,7 +804,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				const move = this.dex.getMove(setMoveid);
+				const move = this.dex.moves.get(setMoveid);
 				const moveid = move.id;
 
 				let {cull, isSetup} = this.shouldCullMove(
@@ -932,7 +932,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 				// Handle Hidden Power IVs
 				if (moveid === 'hiddenpower') {
-					const HPivs = this.dex.getType(move.type).HPivs;
+					const HPivs = this.dex.types.get(move.type).HPivs;
 					let iv: StatName;
 					for (iv in HPivs) {
 						ivs[iv] = HPivs[iv]!;
@@ -955,12 +955,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		const battleOnly = species.battleOnly && !species.requiredAbility;
-		const baseSpecies: Species = battleOnly ? this.dex.getSpecies(species.battleOnly as string) : species;
+		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
 		const abilityNames: string[] = Object.values(baseSpecies.abilities);
-		abilityNames.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
+		abilityNames.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
 
 		if (abilityNames.length > 1) {
-			const abilities = abilityNames.map(name => this.dex.getAbility(name));
+			const abilities = abilityNames.map(name => this.dex.abilities.get(name));
 
 			// Sort abilities by rating with an element of randomness
 			if (abilityNames[2] && abilities[1].rating <= abilities[2].rating && this.randomChance(1, 2)) {
@@ -1106,11 +1106,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		let effectivePool: {set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[] = [];
 		const priorityPool = [];
 		for (const curSet of setList) {
-			const itemData = this.dex.getItem(curSet.item);
+			const itemData = this.dex.items.get(curSet.item);
 			if (teamData.megaCount && teamData.megaCount > 0 && itemData.megaStone) continue; // reject 2+ mega stones
 			if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
 
-			const abilityData = this.dex.getAbility(curSet.ability);
+			const abilityData = this.dex.abilities.get(curSet.ability);
 			if (weatherAbilitiesRequire[abilityData.id] && teamData.weather !== weatherAbilitiesRequire[abilityData.id]) continue;
 			if (teamData.weather && weatherAbilities.includes(abilityData.id)) continue; // reject 2+ weather setters
 
@@ -1195,7 +1195,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
 			const speciesFlags = this.randomFactorySets[chosenTier][species.id].flags;
@@ -1244,7 +1244,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 			teamData.baseFormes[species.baseSpecies] = 1;
 
-			const itemData = this.dex.getItem(set.item);
+			const itemData = this.dex.items.get(set.item);
 			if (itemData.megaStone) teamData.megaCount++;
 			if (itemData.id in teamData.has) {
 				teamData.has[itemData.id]++;
@@ -1252,7 +1252,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				teamData.has[itemData.id] = 1;
 			}
 
-			const abilityData = this.dex.getAbility(set.ability);
+			const abilityData = this.dex.abilities.get(set.ability);
 			if (abilityData.id in weatherAbilitiesSet) {
 				teamData.weather = weatherAbilitiesSet[abilityData.id];
 			}

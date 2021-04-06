@@ -26,9 +26,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let formeCounter = 0;
 		for (const id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
-			const species = this.dex.getSpecies(id);
-			const lsetData = this.dex.getLearnsetData(id as ID);
-			if (!lsetData.learnset || species.forme) continue;
+			const species = this.dex.species.get(id);
+			const learnset = this.dex.species.getLearnset(id as ID);
+			if (!learnset || species.forme) continue;
 			formes[hasDexNumber[species.num]].push(species.name);
 			if (++formeCounter >= 6) {
 				// Gen 1 had no alternate formes, so we can break out of the loop already.
@@ -39,8 +39,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		for (let i = 0; i < 6; i++) {
 			// Choose forme.
 			const poke = this.sample(formes[i]);
-			const species = this.dex.getSpecies(poke);
-			const lsetData = this.dex.getLearnsetData(species.id);
+			const species = this.dex.species.get(poke);
+			const learnset = this.dex.species.getLearnset(species.id);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
 			const mbstmin = 1307;
@@ -91,10 +91,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
 			const pool: string[] = [];
-			if (lsetData.learnset) {
-				for (const move in lsetData.learnset) {
-					if (this.dex.getMove(move).gen !== 1) continue;
-					if (lsetData.learnset[move].some(learned => learned.startsWith('1'))) {
+			if (learnset) {
+				for (const move in learnset) {
+					if (this.dex.moves.get(move).gen !== 1) continue;
+					if (learnset[move].some(learned => learned.startsWith('1'))) {
 						pool.push(move);
 					}
 				}
@@ -130,7 +130,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		const pokemonPool = [];
 		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
+			const species = this.dex.species.get(id);
 			if (!species.isNonstandard && species.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
@@ -144,7 +144,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let hasShitmon = false;
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
@@ -261,8 +261,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	 * Random set generation for Gen 1 Random Battles.
 	 */
 	randomSet(species: string | Species): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
-		if (!species.exists) species = this.dex.getSpecies('pikachu'); // Because Gen 1.
+		species = this.dex.species.get(species);
+		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
 		const movePool = species.randomBattleMoves ? species.randomBattleMoves.slice() : [];
 		const moves: string[] = [];
@@ -306,7 +306,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				hasMove = {};
 				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
 				for (const setMoveid of moves) {
-					const move = this.dex.getMove(setMoveid);
+					const move = this.dex.moves.get(setMoveid);
 					const moveid = move.id;
 					hasMove[moveid] = true;
 					if (!move.damage && !move.damageCallback) counter[move.category]++;
@@ -316,7 +316,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 				for (const [i, moveid] of moves.entries()) {
 					if (moveid === species.essentialMove) continue;
-					const move = this.dex.getMove(moveid);
+					const move = this.dex.moves.get(moveid);
 					if ((!species.essentialMove || moveid !== species.essentialMove) && this.shouldCullMove(move, hasMove, counter).cull) {
 						moves.splice(i, 1);
 						break;
@@ -369,7 +369,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		for (let i = 0; i < 6; i++) {
 			// Choose forme
-			const species = this.dex.getSpecies(random6[i]);
+			const species = this.dex.species.get(random6[i]);
 			if (!hackmonsCup[species.id]) {
 				hackmonsCup[species.id] = {
 					types: [this.sample(typesPool), this.sample(typesPool)],
@@ -392,7 +392,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			const moves = [];
 			do {
 				const moveid = this.sampleNoReplace(movePool);
-				const move = this.dex.getMove(moveid);
+				const move = this.dex.moves.get(moveid);
 				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
 					moves.push(moveid);
 				}

@@ -1,4 +1,4 @@
-import {BasicEffect} from './dex-data';
+import {BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
 
 export interface EventMethods {
@@ -602,5 +602,72 @@ export class Condition extends BasicEffect implements Readonly<BasicEffect & Con
 		super(data, ...moreData);
 		data = this;
 		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
+	}
+}
+
+const EMPTY_CONDITION: Condition = new Condition({name: '', exists: false});
+
+export class DexConditions {
+	readonly dex: ModdedDex;
+	readonly conditionCache = new Map<ID, Effect | Move>();
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	/**
+	 * While this function can technically return any kind of effect at
+	 * all, not just a Condition, that's not a feature TypeScript needs to know about.
+	 */
+	 get(name?: string | Effect | null): Condition {
+		if (!name) return EMPTY_CONDITION;
+		if (typeof name !== 'string') return name as Condition;
+
+		const id = toID(name);
+		let condition = this.conditionCache.get(id);
+		if (condition) return condition as Condition;
+
+		if (name.startsWith('move:')) {
+			condition = this.dex.moves.get(name.slice(5));
+		} else if (name.startsWith('item:')) {
+			condition = this.dex.items.get(name.slice(5));
+		} else if (name.startsWith('ability:')) {
+			const ability = this.dex.abilities.get(name.slice(8));
+			condition = {...ability, id: 'ability:' + ability.id as ID} as any as Condition;
+		}
+		if (condition) {
+			this.conditionCache.set(id, condition);
+			return condition as Condition;
+		}
+		return this.getByID(id);
+	}
+
+	getByID(id: ID): Condition {
+		if (!id) return EMPTY_CONDITION;
+
+		let condition = this.conditionCache.get(id);
+		if (condition) return condition as Condition;
+
+		let found;
+		if (this.dex.data.Rulesets.hasOwnProperty(id)) {
+			condition = this.dex.formats.get(id);
+		} else if (this.dex.data.Conditions.hasOwnProperty(id)) {
+			condition = new Condition({name: id}, this.dex.data.Conditions[id]);
+		} else if (
+			(this.dex.data.Moves.hasOwnProperty(id) && (found = this.dex.data.Moves[id]).condition) ||
+			(this.dex.data.Abilities.hasOwnProperty(id) && (found = this.dex.data.Abilities[id]).condition) ||
+			(this.dex.data.Items.hasOwnProperty(id) && (found = this.dex.data.Items[id]).condition)
+		) {
+			condition = new Condition({name: found.name || id}, found.condition);
+		} else if (id === 'recoil') {
+			condition = new Condition({id, name: 'Recoil', effectType: 'Recoil'});
+		} else if (id === 'drain') {
+			condition = new Condition({id, name: 'Drain', effectType: 'Drain'});
+		} else {
+			condition = new Condition({id, name: id, exists: false});
+		}
+
+		this.conditionCache.set(id, condition);
+		return condition as Condition;
 	}
 }

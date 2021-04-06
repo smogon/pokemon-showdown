@@ -42,7 +42,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('forecast'));
+					this.field.setWeather(weather, source, this.dex.abilities.get('forecast'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
@@ -171,7 +171,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('flowergift'));
+					this.field.setWeather(weather, source, this.dex.abilities.get('flowergift'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
@@ -194,7 +194,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
-					this.boost({spd: 1}, target, target, this.dex.getAbility('flowergift'));
+					this.boost({spd: 1}, target, target, this.dex.abilities.get('flowergift'));
 				}
 				target.side.removeSideCondition('flowergift');
 			},
@@ -499,7 +499,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.dex.getItem(pokemon.lastItem).isBerry) {
+			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.dex.items.get(pokemon.lastItem).isBerry) {
 				pokemon.m.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
 				pokemon.lastItem = '';

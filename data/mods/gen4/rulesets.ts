@@ -1,4 +1,4 @@
-export const Formats: {[k: string]: ModdedFormatData} = {
+export const Rulesets: {[k: string]: ModdedFormatData} = {
 	standard: {
 		inherit: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
@@ -6,8 +6,8 @@ export const Formats: {[k: string]: ModdedFormatData} = {
 	validatestats: {
 		inherit: true,
 		onValidateSet(set) {
-			const species = this.dex.getSpecies(set.species);
-			const item = this.dex.getItem(set.item);
+			const species = this.dex.species.get(set.species);
+			const item = this.dex.items.get(set.item);
 			if (item && item.id === 'griseousorb' && species.num !== 487) {
 				return ['Griseous Orb can only be held by Giratina in Generation 4.'];
 			}

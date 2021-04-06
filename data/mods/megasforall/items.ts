@@ -1120,9 +1120,9 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			this.add('-enditem', target, 'Air Balloon');
 			target.item = '';
-			(target as any).lostItemForDelibird = this.dex.getItem('airballoon');
+			(target as any).lostItemForDelibird = this.dex.items.get('airballoon');
 			target.itemData = {id: '', target};
-			this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
+			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 		},
 		onAfterSubDamage(damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
@@ -1130,7 +1130,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
+				this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 			}
 		},
 		num: 541,

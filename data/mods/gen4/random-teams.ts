@@ -486,7 +486,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 		let forme = species.name;
 
 		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
@@ -557,7 +557,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				const move = this.dex.getMove(setMoveid);
+				const move = this.dex.moves.get(setMoveid);
 				const moveid = move.id;
 				let {cull, isSetup} = this.shouldCullMove(
 					move, hasType, hasMove, hasAbility, counter,
@@ -704,7 +704,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 				// Handle Hidden Power IVs
 				if (moveid === 'hiddenpower') {
-					const HPivs = this.dex.getType(move.type).HPivs;
+					const HPivs = this.dex.types.get(move.type).HPivs;
 					let iv: StatName;
 					for (iv in HPivs) {
 						ivs[iv] = HPivs[iv];
@@ -719,9 +719,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		const abilities = Object.values(species.abilities);
-		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
-		let ability0 = this.dex.getAbility(abilities[0]);
-		let ability1 = this.dex.getAbility(abilities[1]);
+		abilities.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
+		let ability0 = this.dex.abilities.get(abilities[0]);
+		let ability1 = this.dex.abilities.get(abilities[1]);
 		if (abilities[1]) {
 			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];

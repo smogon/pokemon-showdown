@@ -303,7 +303,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			this.field.setWeather('hail');
 			for (const target of source.foes()) {
 				for (const moveSlot of target.moveSlots) {
-					const move = this.dex.getMove(moveSlot.move);
+					const move = this.dex.moves.get(moveSlot.move);
 					if (move.category === 'Status') continue;
 					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
 					if (
@@ -321,7 +321,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			if (pokemon === source) return;
 			for (const target of source.foes()) {
 				for (const moveSlot of target.moveSlots) {
-					const move = this.dex.getMove(moveSlot.move);
+					const move = this.dex.moves.get(moveSlot.move);
 					if (move.category === 'Status') continue;
 					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
 					if (
@@ -351,7 +351,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						this.actions.useMove('stockpile', pokemon);
 					}
 					pokemon.side.removeSideCondition(sideCondition);
-					this.add('-sideend', pokemon.side, this.dex.getEffect(sideCondition).name, '[from] Ability: Trash Compactor', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name, '[from] Ability: Trash Compactor', '[of] ' + pokemon);
 				}
 			}
 		},
@@ -765,7 +765,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						}
 					} else {
 						this.add('-message', `${(target.illusion ? target.illusion.name : target.name)} suddenly exploded!`);
-						this.actions.useMove('explosion', target, source, this.dex.getAbility('alchemist'));
+						this.actions.useMove('explosion', target, source, this.dex.abilities.get('alchemist'));
 					}
 				} else {
 					this.add('-ability', source, 'Alchemist');
@@ -876,7 +876,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectData.busted) {
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
-				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.getSpecies(speciesid));
+				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
 			}
 			if (pokemon.canMegaEvo && this.effectData.busted) {
 				pokemon.canMegaEvo = 'mimikyubustedmega';
@@ -1063,7 +1063,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
 				for (const moveSlot of pokemon.moveSlots) {
-					const move = this.dex.getMove(moveSlot.move);
+					const move = this.dex.moves.get(moveSlot.move);
 					if (move.category === 'Status') continue;
 					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
 					if (
@@ -1206,7 +1206,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			let num = 0;
 			for (const moveSlot of pokemon.moveSlots) {
 				num++;
-				const checkSlot = this.dex.getMove(moveSlot.move);
+				const checkSlot = this.dex.moves.get(moveSlot.move);
 				if (move.id === checkSlot.id) {
 					if (num === 1 && !pokemon.volatiles['settle1']) {
 						if (move.category !== 'Special') return;
@@ -1291,7 +1291,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			const item = randomTarget.lastItem;
 			randomTarget.lastItem = '';
 			(randomTarget as any).lostItemForDelibird = item;
-			this.add('-item', pokemon, this.dex.getItem(item), '[from] ability: Pickup');
+			this.add('-item', pokemon, this.dex.items.get(item), '[from] ability: Pickup');
 			pokemon.setItem(item);
 		},
 		name: "Pickup",
@@ -1316,7 +1316,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 							this.add('-ability', pokemon, 'Spirit of Giving');
 						}
 						activated = true;
-						this.add('-item', ally, this.dex.getItem(item), '[from] Ability: Spirit of Giving');
+						this.add('-item', ally, this.dex.items.get(item), '[from] Ability: Spirit of Giving');
 						ally.lastItem = '';
 					}
 				} else if ((ally as any).lostItemForDelibird) {
@@ -1326,7 +1326,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 							this.add('-ability', pokemon, 'Spirit of Giving');
 						}
 						activated = true;
-						this.add('-item', ally, this.dex.getItem(item), '[from] Ability: Spirit of Giving');
+						this.add('-item', ally, this.dex.items.get(item), '[from] Ability: Spirit of Giving');
 						(ally as any).lostItemForDelibird = '';
 					}
 				}
@@ -1630,8 +1630,8 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			const masquerade = pokemon.side.pokemon[i];
 			this.add('-ability', pokemon, 'Masquerade');
 			pokemon.setAbility(masquerade.ability);
-			this.hint(`${pokemon.name} inherited ${this.dex.getAbility(pokemon.ability).name} from ${masquerade.name}!`);
-			this.add('-ability', pokemon, this.dex.getAbility(pokemon.ability).name, '[silent]');
+			this.hint(`${pokemon.name} inherited ${this.dex.abilities.get(pokemon.ability).name} from ${masquerade.name}!`);
+			this.add('-ability', pokemon, this.dex.abilities.get(pokemon.ability).name, '[silent]');
 		},
 		condition: {
 			onDamagingHit(damage, target, source, move) {
@@ -1825,7 +1825,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					target: null,
 					move: move,
 					slot: target.getSlot(),
-					moveData: this.dex.getMove(move),
+					moveData: this.dex.moves.get(move),
 				});
 				this.add('-ability', source, 'Clairvoyance');
 				this.add('-message', `${source.name} cast ${move.name} into the future!`);
@@ -1839,7 +1839,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			onEnd(target) {
 				this.effectData.target = this.getAtSlot(this.effectData.slot);
 				const data = this.effectData;
-				const move = this.dex.getMove(data.move);
+				const move = this.dex.moves.get(data.move);
 				this.add('-ability', this.effectData.source, 'Clairvoyance');
 				if (!data.target) {
 					this.hint(`${move.name} did not hit because there was no target.`);
@@ -1950,7 +1950,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 			}
 			this.add('-message', `More of ${pokemon.name}'s friends came together!`);
 			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
-			const species = this.dex.getSpecies(pokemon.species.name);
+			const species = this.dex.species.get(pokemon.species.name);
 			const abilities = species.abilities;
 			const baseStats = species.baseStats;
 			const type = species.types[0];
@@ -1997,7 +1997,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 						this.add('-message', `${attacker.name} changed to Combat formation!`);
 						this.add('-start', attacker, 'typechange', attacker.getTypes(true).join('/'), '[silent]');
 						if (!this.effectData.busted) { // this is just to make a dt that only shows up once per Mega Falinks
-							const species = this.dex.getSpecies(attacker.species.name);
+							const species = this.dex.species.get(attacker.species.name);
 							const abilities = species.abilities;
 							const baseStats = species.baseStats;
 							const type = species.types[0];
@@ -2153,7 +2153,7 @@ export const Abilities: {[abilityid: string]: ModdedAbilityData} = {
 					source: source,
 					move: move,
 					slot: target.getSlot(),
-					moveData: this.dex.getMove(move),
+					moveData: this.dex.moves.get(move),
 				});
 				return null;
 			}

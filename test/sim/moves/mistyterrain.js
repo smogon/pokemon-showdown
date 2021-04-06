@@ -32,7 +32,7 @@ describe('Misty Terrain', function () {
 		battle.setPlayer('p2', {team: [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]});
 		battle.makeChoices('move mistyterrain', 'move leechseed');
 		let basePower;
-		const move = Dex.getMove('dragonpulse');
+		const move = Dex.moves.get('dragonpulse');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.equal(basePower, battle.modify(move.basePower, 0.5));
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);

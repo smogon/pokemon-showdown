@@ -8,7 +8,7 @@ describe('Team Validator', function () {
 		Dex.includeFormats();
 		for (const format in Dex.formatsCache) {
 			try {
-				Dex.getRuleTable(Dex.getFormat(format));
+				Dex.formats.getRuleTable(Dex.formats.get(format));
 			} catch (e) {
 				e.message = `${format}: ${e.message}`;
 				throw e;
