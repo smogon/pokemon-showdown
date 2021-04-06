@@ -4058,7 +4058,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		condition: {
 			onModifySpe(spe, pokemon) {
-				if (!pokemon.item) {
+				if (!pokemon.item && !pokemon.ignoringAbility()) {
 					return this.chainModify(2);
 				}
 			},

@@ -115,7 +115,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(wynaut.getStat('spe'), originalSpeed);
 	});
 
-	it.skip(`should negate Unburden when Neutralizing Gas enters the field`, function () {
+	it(`should negate Unburden when Neutralizing Gas enters the field`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
