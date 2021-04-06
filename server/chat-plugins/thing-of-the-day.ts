@@ -97,9 +97,11 @@ class OtdHandler {
 		const id = settings.id || toID(title).charAt(0) + 'ot' + timeLabel.charAt(0);
 		const handler = new OtdHandler(id, room, settings);
 		otds.set(id, handler);
-		if (!handler.keys.includes('time')) {
-			handler.keys.unshift('time');
-			handler.keyLabels.unshift('Timestamp');
+		if (handler.keys[0] === 'time') {
+			handler.keys.shift();
+			handler.keyLabels.shift();
+			handler.keys.push('time');
+			handler.keyLabels.push('Timestamp');
 			handler.save();
 		}
 		return handler;
