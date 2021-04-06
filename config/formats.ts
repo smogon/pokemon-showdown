@@ -2023,7 +2023,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/posts/8778656/">USM Mix and Mega</a>`,
 		],
 
-		mod: 'mixandmega7',
+		mod: 'gen7mixandmega',
 		ruleset: ['Standard', 'Mega Rayquaza Clause', 'Overflow Stat Mod'],
 		banlist: ['Shadow Tag', 'Gengarite', 'Baton Pass', 'Electrify'],
 		restricted: [
