@@ -260,4 +260,12 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			this.effectData.duration = 2;
 		},
 	},
+	twoturnmove: {
+		inherit: true,
+		onMoveAborted(pokemon) {
+			if pokemon.volatileStatuses.twoturnmove.isInterrupted = true {
+				pokemon.addVolatile('twoturnmove');
+			},
+		},
+	},
 };
