@@ -796,7 +796,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 				const request = this[slot].request;
 				request.isWait = failed ? 'cantUndo' : false;
 				request.choice = '';
-				if (!failed) this.timer.nextRequest();
 			} else if (lines[2].startsWith(`|request|`)) {
 				this.rqid++;
 				const request = JSON.parse(lines[2].slice(9));
