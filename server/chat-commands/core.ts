@@ -975,7 +975,9 @@ export const commands: ChatCommands = {
 		this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
-			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
+			battleRoom.add(`|uhtmlchange|invites|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/invitebattle</code> or <code>/restoreplayers</code></div>`);
+			battleRoom.add(`|uhtml|invites|`).update();
+			battleRoom.battle!.sendInviteForm(user);
 		}, 500);
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ &`],
@@ -1183,7 +1185,7 @@ export const commands: ChatCommands = {
 		if (room.rated) return this.errorReply(this.tr`You can only add a Player to unrated battles.`);
 
 		target = this.splitTarget(target, true).trim();
-		if (target !== 'p1' && target !== 'p2') {
+		if (target !== 'p1' && target !== 'p2' && target !== 'p3' && target !== 'p4') {
 			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${target}".`);
 			return this.parse('/help addplayer');
 		}
@@ -1217,6 +1219,138 @@ export const commands: ChatCommands = {
 		`/addplayer [username], p1 - Allow the specified user to join the battle as Player 1.`,
 		`/addplayer [username], p2 - Allow the specified user to join the battle as Player 2.`,
 	],
+
+	invitebattle(target, room, user, connection) {
+		room = this.requireRoom();
+		if (!room.battle) return this.errorReply(this.tr`You can only do this in battle rooms.`);
+		if (room.rated) return this.errorReply(this.tr`You can only add a Player to unrated battles.`);
+
+		target = this.splitTarget(target, true).trim();
+		if (target !== 'p1' && target !== 'p2' && target !== 'p3' && target !== 'p4') {
+			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${target}".`);
+			return this.parse('/help addplayer');
+		}
+
+		const targetUser = this.targetUser;
+		const name = this.targetUsername;
+		const battle = room.battle;
+		const player = battle[target];
+
+		if (!player) {
+			return this.errorReply(`This battle does not support having players in ${target}`);
+		}
+		if (!targetUser) {
+			battle.sendInviteForm(connection);
+			return this.errorReply(this.tr`User ${name} not found.`);
+		}
+		this.checkCan('joinbattle', null, room);
+		if (player.id) {
+			battle.sendInviteForm(connection);
+			return this.errorReply(this.tr`This room already has a player in slot ${target}.`);
+		}
+		if (targetUser.id in battle.playerTable) {
+			battle.sendInviteForm(connection);
+			return this.errorReply(this.tr`${targetUser.name} is already a player in this battle.`);
+		}
+
+		if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser)) {
+			battle.sendInviteForm(connection);
+			Chat.maybeNotifyBlocked('challenge', targetUser, user);
+			return this.errorReply(this.tr`The user '${targetUser.name}' is not accepting challenges right now.`);
+		}
+
+		// INVITE
+		if (!targetUser.inRooms.has(room.roomid)) {
+			if (player.invite) {
+				battle.sendInviteForm(connection);
+				return this.errorReply(`Someone else (${player.invite}) has already been invited to be ${target}!`);
+			}
+			player.invite = targetUser.id;
+			const playerNames = battle.players.map(p => p.id && p.name).filter(Boolean).join(', ');
+			targetUser.send(`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml battleinvite,You've been invited to join a ${battle.format} battle (with ${playerNames})<br /><button name="send" value="/acceptbattle ${room.roomid}, ${user.id}" class="button"><strong>Accept</strong></button> <button name="send" value="/rejectbattle ${room.roomid}, ${user.id}" class="button">Reject</button>`);
+			user.send(`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/text Invite sent for <<${room.roomid}>>`);
+			battle.sendInviteForm(connection);
+			return this.add(`||Invite sent to ${targetUser.name}!`);
+		}
+
+		room.auth.set(targetUser.id, Users.PLAYER_SYMBOL);
+		const success = battle.joinGame(targetUser, target);
+		if (!success) {
+			room.auth.delete(targetUser.id);
+			return;
+		}
+		if (!battle.started) {
+			battle.sendInviteForm(connection);
+		}
+	},
+
+	acceptbattle(target, room, user) {
+		const [roomid, senderID] = target.split(',').map(part => part.trim());
+		const targetRoom = Rooms.get(roomid);
+		if (!targetRoom) return this.errorReply(`Room ${roomid} not found`);
+		if (!targetRoom.battle) return this.errorReply(`Room ${roomid} is not a battle`);
+		const battle = targetRoom.battle;
+		const player = battle.players.find(maybe => maybe.invite === user.id);
+		if (!player) {
+			return this.errorReply(`You haven't been invited to that battle.`);
+		}
+		const slot = player.slot;
+		if (!battle[slot]) {
+			return this.errorReply(this.tr`This battle can't have players in slot ${slot}.`);
+		}
+		if (battle[slot].id) {
+			return this.errorReply(this.tr`This room already has a player in slot ${roomid}.`);
+		}
+
+		user.send(`|pm| ${senderID}|${user.getIdentity()}|/uhtmlchange battleinvite, You accepted the battle invite`);
+		this.parse(`/join ${targetRoom.roomid}`);
+		battle.joinGame(user, slot);
+	},
+
+	rejectbattle(target, room, user) {
+		const [roomid, senderID] = target.split(',').map(part => part.trim());
+		const targetRoom = Rooms.get(roomid);
+		if (!targetRoom) return this.errorReply(`Room ${roomid} not found`);
+		if (!targetRoom.battle) return this.errorReply(`Room ${roomid} is not a battle`);
+		const battle = targetRoom.battle;
+		const player = battle.players.find(maybe => maybe.invite === user.id);
+		if (!player) {
+			return this.errorReply(`You haven't been invited to that battle.`);
+		}
+
+		player.invite = '';
+		user.send(`|pm| ${senderID}|${user.getIdentity()}|/uhtmlchange battleinvite, You rejected the battle invite`);
+	},
+
+	uninvitebattle(target, room, user, connection) {
+		room = this.requireRoom();
+		if (!room.battle) return this.errorReply(this.tr`You can only do this in battle rooms.`);
+		if (room.rated) return this.errorReply(this.tr`You can only add a Player to unrated battles.`);
+
+		target = this.splitTarget(target, true);
+
+		const targetUser = this.targetUser;
+		const name = this.targetUsername;
+		const battle = room.battle;
+
+		if (!targetUser) {
+			battle.sendInviteForm(connection);
+			return this.errorReply(this.tr`User ${name} not found.`);
+		}
+
+		for (const player of battle.players) {
+			if (player.invite === targetUser.id) {
+				targetUser.send(`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml battleinvite,The battle invite was changed to someone else, sorry!`);
+				user.send(`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/text Invite cancelled for <<${room.roomid}>>`);
+				player.invite = '';
+				battle.sendInviteForm(connection);
+				return;
+			}
+		}
+
+		battle.sendInviteForm(connection);
+		this.errorReply(`User ${targetUser.name} is not currently invited to the battle`);
+	},
 
 	restoreplayers(target, room, user) {
 		room = this.requireRoom();
