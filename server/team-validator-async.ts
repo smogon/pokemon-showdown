@@ -39,7 +39,7 @@ export const PM = new QueryProcessManager<{
 	formatid: string, options?: {removeNicknames?: boolean}, team: string,
 }>(module, message => {
 	const {formatid, options, team} = message;
-	const parsedTeam = Teams.fastUnpack(team);
+	const parsedTeam = Teams.unpack(team);
 
 	if (Config.debugvalidatorprocesses && process.send) {
 		process.send('DEBUG\n' + JSON.stringify(message));

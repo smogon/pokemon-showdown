@@ -110,7 +110,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 
 			stdin.readLine().then(function (textTeam) {
 				try {
-					var team = Teams.fastUnpack(textTeam);
+					var team = Teams.unpack(textTeam);
 					var result = validator.validateTeam(team);
 					if (result) {
 						console.error(result.join('\n'));
@@ -182,7 +182,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 
 			stdin.readLine().then(function (packedTeam) {
 				try {
-					var unpackedTeam = Teams.fastUnpack(packedTeam);
+					var unpackedTeam = Teams.unpack(packedTeam);
 					console.log(JSON.stringify(unpackedTeam));
 					process.exit(0);
 				} catch (e) {

@@ -49,29 +49,29 @@ describe('Team Validator', function () {
 	});
 
 	it('should validate Gen 2 IVs', function () {
-		let team = Teams.fastUnpack('|raikou|||hiddenpowerwater||||14,28,26,,,|||');
+		let team = Teams.unpack('|raikou|||hiddenpowerwater||||14,28,26,,,|||');
 		let illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert.equal(illegal, null);
 
-		team = Teams.fastUnpack('|raikou|||hiddenpowerfire||||14,28,26,,,|||');
+		team = Teams.unpack('|raikou|||hiddenpowerfire||||14,28,26,,,|||');
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
 
-		team = Teams.fastUnpack('|raikou|||hiddenpowerwater||||16,28,26,,,|||');
+		team = Teams.unpack('|raikou|||hiddenpowerwater||||16,28,26,,,|||');
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
 
-		team = Teams.fastUnpack('|raikou|||thunderbolt||||,,,28,30,|||');
+		team = Teams.unpack('|raikou|||thunderbolt||||,,,28,30,|||');
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
 	});
 
 	it('should validate Gen 2 EVs', function () {
-		let team = Teams.fastUnpack('|gengar|||thunderbolt||,,,200,200,|||||');
+		let team = Teams.unpack('|gengar|||thunderbolt||,,,200,200,|||||');
 		let illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert.equal(illegal, null);
 
-		team = Teams.fastUnpack('|gengar|||thunderbolt||,,,248,252,|||||');
+		team = Teams.unpack('|gengar|||thunderbolt||,,,248,252,|||||');
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
 	});

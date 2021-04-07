@@ -1207,7 +1207,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		});
 		const resultStrings = await teamDataPromise;
 		if (!resultStrings) return;
-		const result = Teams.fastUnpack(resultStrings[0]);
+		const result = Teams.unpack(resultStrings[0]);
 		return result;
 	}
 	onChatMessage(message: string, user: User) {
