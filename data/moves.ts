@@ -6167,12 +6167,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Blastoise",
 		self: {
 			onHit(source) {
-				if (this.gameType === 'freeforall') {
-					for (const side of this.sides) {
-						if (side !== source.side) side.addSideCondition('gmaxcannonade');
-					}
-				} else {
-					source.side.foe.addSideCondition('gmaxcannonade');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxcannonade');
 				}
 			},
 		},
@@ -6670,12 +6666,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Copperajah",
 		self: {
 			onHit(source) {
-				if (this.gameType === 'freeforall') {
-					for (const side of this.sides) {
-						if (side !== source.side) side.addSideCondition('gmaxsteelsurge');
-					}
-				} else {
-					source.side.foe.addSideCondition('gmaxsteelsurge');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxsteelsurge');
 				}
 			},
 		},
@@ -6713,12 +6705,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Drednaw",
 		self: {
 			onHit(source) {
-				if (this.gameType === 'freeforall') {
-					for (const side of this.sides) {
-						if (side !== source.side) side.addSideCondition('stealthrock');
-					}
-				} else {
-					source.side.foe.addSideCondition('stealthrock');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock');
 				}
 			},
 		},
@@ -6837,12 +6825,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Venusaur",
 		self: {
 			onHit(source) {
-				if (this.gameType === 'freeforall') {
-					for (const side of this.sides) {
-						if (side !== source.side) side.addSideCondition('gmaxvinelash');
-					}
-				} else {
-					source.side.foe.addSideCondition('gmaxvinelash');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxvinelash');
 				}
 			},
 		},
@@ -6883,12 +6867,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Coalossal",
 		self: {
 			onHit(source) {
-				if (this.gameType === 'freeforall') {
-					for (const side of this.sides) {
-						if (side !== source.side) side.addSideCondition('gmaxvolcalith');
-					}
-				} else {
-					source.side.foe.addSideCondition('gmaxvolcalith');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxvolcalith');
 				}
 			},
 		},
@@ -6952,12 +6932,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Charizard",
 		self: {
 			onHit(source) {
-				if (this.gameType === 'freeforall') {
-					for (const side of this.sides) {
-						if (side !== source.side) side.addSideCondition('gmaxwildfire');
-					}
-				} else {
-					source.side.foe.addSideCondition('gmaxwildfire');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxwildfire');
 				}
 			},
 		},
