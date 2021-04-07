@@ -794,7 +794,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
 				const failed = lines[2].includes(`Can't undo`);
 				const request = this[slot].request;
-				request.isWait =  failed ? 'cantUndo' : false;
+				request.isWait = failed ? 'cantUndo' : false;
 				request.choice = '';
 				if (!failed) this.timer.nextRequest();
 			} else if (lines[2].startsWith(`|request|`)) {
