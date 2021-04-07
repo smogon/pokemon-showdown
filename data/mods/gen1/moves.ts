@@ -387,7 +387,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onLockMove: 'fly',
-			onStart(pokemon) { //This should trigger the semi-invulnerability glitch.
+			onTryMove(pokemon) { //This should trigger the semi-invulnerability glitch.
 				if (pokemon.volatileStatuses.twoturnmove.isInterrupted = true) {
 					pokemon.volatiles['fly'].duration = 2;
 				}
