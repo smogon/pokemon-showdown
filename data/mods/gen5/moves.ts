@@ -45,7 +45,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!randomMove) {
 				return false;
 			}
-			this.useMove(randomMove, target);
+			this.actions.useMove(randomMove, target);
 		},
 	},
 	assurance: {
@@ -160,7 +160,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!this.lastMove || noCopycat.includes(this.lastMove.id)) {
 				return false;
 			}
-			this.useMove(this.lastMove.id, pokemon);
+			this.actions.useMove(this.lastMove.id, pokemon);
 		},
 	},
 	cottonspore: {
@@ -499,10 +499,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
+				if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xA8F, 0x1000]);
+						if (this.activePerHalf > 1) return this.chainModify([2703, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -582,8 +582,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onAnyBasePowerPriority: 1,
 			onAnyBasePower(basePower, user, target, move) {
-				// The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
-				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]);
+				if (move.type === 'Electric') return this.chainModify([1352, 4096]);
 			},
 		},
 		secondary: null,
@@ -598,7 +597,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryHit() {},
 		onHit(pokemon) {
-			this.useMove('earthquake', pokemon);
+			this.actions.useMove('earthquake', pokemon);
 		},
 		target: "self",
 	},
@@ -701,10 +700,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
+				if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xA8F, 0x1000]);
+						if (this.activePerHalf > 1) return this.chainModify([2703, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -796,7 +795,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return null;
 				}
 			} else {
-				if (target.volatiles['substitute'] || target.side === source.side) {
+				if (target.volatiles['substitute'] || target.isAlly(source)) {
 					return false;
 				}
 
@@ -874,7 +873,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target === source || move.flags['authentic']) {
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
@@ -890,12 +889,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
+					if (move.ohko) this.add('-ohko');
 					target.removeVolatile('substitute');
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
 				if (move.recoil && damage) {
-					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
+					this.damage(this.actions.calcRecoilDamage(damage, move), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
@@ -961,6 +961,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 95,
 	},
+	toxic: {
+		inherit: true,
+		onPrepareHit() {},
+	},
 	uproar: {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, sound: 1},
@@ -1005,8 +1009,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onAnyBasePowerPriority: 1,
 			onAnyBasePower(basePower, user, target, move) {
-				// The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
-				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]);
+				if (move.type === 'Fire') return this.chainModify([1352, 4096]);
 			},
 		},
 		secondary: null,

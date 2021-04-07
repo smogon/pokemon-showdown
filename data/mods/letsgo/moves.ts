@@ -54,7 +54,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
-			this.useMove(randomMove, target);
+			this.actions.useMove(randomMove, target);
 		},
 	},
 	sappyseed: {
@@ -87,7 +87,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "User switches out.",
 		priority: -6,
 		selfSwitch: true,
-		onTryHit: true,
+		onTry: true,
 	},
 	zippyzap: {
 		inherit: true,

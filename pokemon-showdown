@@ -7,7 +7,7 @@
 // unless we shell out and use `execSync`. However, the heuristic of simply
 // checking for the presence of  './.sim-dist/dex' to determine whether a build
 // is required is somewhat risky as it only is valid from a clean repository -
-// if you make edits or have previous build artifacts lying arround, this
+// if you make edits or have previous build artifacts lying around, this
 // script could potentially be missing additional sources or the compiled output
 // may be out of date.
 //
@@ -86,8 +86,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'start':
 		{
 			process.argv.splice(2, 1);
-			if (process.argv[2] === '--skip-build') {
-				process.argv.splice(2, 1);
+			if (process.argv.includes('--skip-build')) {
 				built = true;
 			}
 			if (!built) build();

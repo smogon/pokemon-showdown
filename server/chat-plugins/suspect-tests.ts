@@ -1,6 +1,7 @@
 import {FS} from '../../lib/fs';
 
 const SUSPECTS_FILE = 'config/suspects.json';
+const WHITELIST = ["kris"];
 
 interface SuspectTest {
 	tier: string;
@@ -9,10 +10,16 @@ interface SuspectTest {
 	url: string;
 }
 
-const suspectTests: {[format: string]: SuspectTest} = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
+export const suspectTests: {[format: string]: SuspectTest} = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
 
 function saveSuspectTests() {
 	FS(SUSPECTS_FILE).writeUpdate(() => JSON.stringify(suspectTests));
+}
+
+function checkPermissions(context: CommandContext) {
+	const user = context.user;
+	if (WHITELIST.includes(user.id)) return true;
+	context.checkCan('gdeclare');
 }
 
 export const commands: ChatCommands = {
@@ -26,15 +33,16 @@ export const commands: ChatCommands = {
 
 			let buffer = '<strong>Suspect tests currently running:</strong>';
 			for (const i of Object.keys(suspectTests)) {
+				const test = suspectTests[i];
 				buffer += '<br />';
-				buffer += `${suspectTests[i].tier}: <a href="${suspectTests[i].url}">${suspectTests[i].suspect}</a> (${suspectTests[i].date})`;
+				buffer += `${test.tier}: <a href="${test.url}">${test.suspect}</a> (${test.date})`;
 			}
 			return this.sendReplyBox(buffer);
 		},
 
 		edit: 'add',
 		add(target, room, user) {
-			this.checkCan('gdeclare');
+			checkPermissions(this);
 
 			const [tier, suspect, date, url] = target.split(',');
 			if (!(tier && suspect && date && url)) {
@@ -70,13 +78,14 @@ export const commands: ChatCommands = {
 
 		delete: 'remove',
 		remove(target, room, user) {
-			this.checkCan('gdeclare');
+			checkPermissions(this);
 
 			const format = toID(target);
-			if (!suspectTests[format]) return this.errorReply(`There is no suspect test for '${target}'. Check spelling?`);
+			const test = suspectTests[format];
+			if (!test) return this.errorReply(`There is no suspect test for '${target}'. Check spelling?`);
 
-			this.privateGlobalModAction(`${user.name} removed the ${suspectTests[format].tier} suspect test.`);
-			this.globalModlog('SUSPECTTEST', null, `removed ${suspectTests[format].tier}`);
+			this.privateGlobalModAction(`${user.name} removed the ${test.tier} suspect test.`);
+			this.globalModlog('SUSPECTTEST', null, `removed ${test.tier}`);
 
 			delete suspectTests[format];
 			saveSuspectTests();

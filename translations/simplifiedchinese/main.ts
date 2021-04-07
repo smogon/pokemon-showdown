@@ -22,6 +22,7 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp <strong>全服总管</strong> - 可以在服务器做任何事，例如修改你现在看到的这条信息",
 
 		"<strong>Room ranks</strong>": "<strong>房权限</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>信任用户</strong> - 可以使用!广播指令，比如!groups，并可以在限制发言期间发言",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>见习管理</strong> - 同上，并可以禁止用户发言或警告用",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>管理员</strong> - 同上，并可以将用户从房间封禁",
@@ -144,7 +145,7 @@ export const translations: Translations = {
 
 		"Staff FAQ": "管理FAQ",
 		"You cannot broadcast all FAQs at once.": "无法同时广播所有FAQ",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat. However, staff are not obligated to disable modchat": "自动确认用户就是在天梯上赢了一次的还有注册满一周的用户。为了避免机器与熊孩子等垃圾之类的用户，PS大多数的聊天室都需要自动确认用户以上的用户才能聊天。如果你没有得到要求，你可以私言一个在房里的管理员（用户名前加%，@，#号的）。总之还是要看情况，要是管理员很忙的话或者哪里不符合要求，就只能等待",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "自动确认用户就是在天梯上赢了一次的还有注册满一周的用户。为了避免机器与熊孩子等垃圾之类的用户，PS大多数的聊天室都需要自动确认用户以上的用户才能聊天。如果你没有得到要求，你可以私言一个在房里的管理员（用户名前加%，@，#号的）。总之还是要看情况，要是管理员很忙的话或者哪里不符合要求，就只能等待",
 		"How the ladder works": "什么叫做天梯",
 		"Tiering FAQ": "分级评论FAQ",
 		"Badge FAQ": "论坛徽章FAQ",

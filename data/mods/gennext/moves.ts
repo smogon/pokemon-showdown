@@ -153,7 +153,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target === source || move.flags['authentic'] || move.infiltrates) {
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage) {
 					return null;
 				}
@@ -636,13 +636,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onDamagePriority: -11,
 			onDamage(damage, target, source, effect) {
 				if (!effect || effect.effectType !== 'Move') return;
-				if (!source || source.side === target.side) return;
+				if (!source || source.isAlly(target)) return;
 				if (effect.effectType === 'Move' && damage >= target.hp) {
 					damage = target.hp - 1;
 				}
 				this.effectData.totalDamage += damage;
-				this.effectData.sourcePosition = source.position;
-				this.effectData.sourceSide = source.side;
+				this.effectData.sourceSlot = source.getSlot();
 				return damage;
 			},
 			onAfterSetStatus(status, pokemon) {
@@ -659,11 +658,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return false;
 					}
 					this.add('-end', pokemon, 'Bide');
-					const target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					const target = this.getAtSlot(this.effectData.sourceSlot);
 					const moveData = {
 						damage: this.effectData.totalDamage * 2,
 					} as unknown as ActiveMove;
-					this.moveHit(target, pokemon, this.dex.getActiveMove('bide'), moveData);
+					this.actions.moveHit(target, pokemon, this.dex.getActiveMove('bide'), moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');

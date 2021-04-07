@@ -11,7 +11,7 @@
  *
  * @license MIT
  */
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 export class LadderStore {
 	formatid: string;
@@ -61,7 +61,9 @@ export class LadderStore {
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
 	 */
-	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject) {
+	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject): Promise<[
+		number, AnyObject | undefined | null, AnyObject | undefined | null,
+	]> {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
 			return [p1score, null, null];
@@ -70,25 +72,47 @@ export class LadderStore {
 		const formatid = this.formatid;
 		const p1 = Users.getExact(p1name);
 		const p2 = Users.getExact(p2name);
-		room.update();
-		room.send(`||Ladder updating...`);
-		const [data, error] = await LoginServer.request('ladderupdate', {
+		const p1id = toID(p1name);
+		const p2id = toID(p2name);
+
+		const ladderUpdatePromise = LoginServer.request('ladderupdate', {
 			p1: p1name,
 			p2: p2name,
 			score: p1score,
 			format: formatid,
 		});
-		let problem = false;
 
+		// calculate new Elo scores and display to room while loginserver updates the ladder
+		const [p1OldElo, p2OldElo] = (await Promise.all([this.getRating(p1id), this.getRating(p2id)])).map(Math.round);
+		const p1NewElo = Math.round(this.calculateElo(p1OldElo, p1score, p2OldElo));
+		const p2NewElo = Math.round(this.calculateElo(p2OldElo, 1 - p1score, p1OldElo));
+
+		const p1Act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
+		let p1Reasons = `${p1NewElo - p1OldElo} for ${p1Act}`;
+		if (!p1Reasons.startsWith('-')) p1Reasons = '+' + p1Reasons;
+		room.addRaw(Utils.html`${p1name}'s rating: ${p1OldElo} &rarr; <strong>${p1NewElo}</strong><br />(${p1Reasons})`);
+
+		const p2Act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
+		let p2Reasons = `${p2NewElo - p2OldElo} for ${p2Act}`;
+		if (!p2Reasons.startsWith('-'))	p2Reasons = '+' + p2Reasons;
+		room.addRaw(Utils.html`${p2name}'s rating: ${p2OldElo} &rarr; <strong>${p2NewElo}</strong><br />(${p2Reasons})`);
+
+		room.rated = Math.min(p1NewElo, p2NewElo);
+
+		if (p1) p1.mmrCache[formatid] = +p1NewElo;
+		if (p2) p2.mmrCache[formatid] = +p2NewElo;
+
+		room.update();
+
+		const [data, error] = await ladderUpdatePromise;
+
+		let problem = false;
 		if (error) {
-			if (error.message === 'stream interrupt') {
-				room.add(`||Ladder updated, but score could not be retrieved.`);
-			} else {
-				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
+			if (error.message !== 'stream interrupt') {
+				room.add(`||Ladder isn't responding, score probably updated but might not have (${error.message}).`);
+				problem = true;
 			}
-			problem = true;
 		} else if (!room.battle) {
-			Monitor.warn(`room expired before ladder update was received`);
 			problem = true;
 		} else if (!data) {
 			room.add(`|error|Unexpected response ${data} from ladder server.`);
@@ -108,37 +132,7 @@ export class LadderStore {
 			return [p1score, null, null];
 		}
 
-		let p1rating;
-		let p2rating;
-		try {
-			p1rating = data!.p1rating;
-			p2rating = data!.p2rating;
-
-			let oldelo = Math.round(p1rating.oldelo);
-			let elo = Math.round(p1rating.elo);
-			let act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
-			let reasons = `${elo - oldelo} for ${act}`;
-			if (!reasons.startsWith('-')) reasons = '+' + reasons;
-			room.addRaw(Utils.html`${p1name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
-			let minElo = elo;
-
-			oldelo = Math.round(p2rating.oldelo);
-			elo = Math.round(p2rating.elo);
-			act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
-			reasons = `${elo - oldelo} for ${act}`;
-			if (!reasons.startsWith('-')) reasons = '+' + reasons;
-			room.addRaw(Utils.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
-			if (elo < minElo) minElo = elo;
-			room.rated = minElo;
-
-			if (p1) p1.mmrCache[formatid] = +p1rating.elo;
-			if (p2) p2.mmrCache[formatid] = +p2rating.elo;
-			room.update();
-		} catch (e) {
-			room.addRaw(`There was an error calculating rating changes.`);
-			room.update();
-		}
-		return [p1score, p1rating, p2rating];
+		return [p1score, data?.p1rating, data?.p2rating];
 	}
 
 	/**
@@ -148,5 +142,37 @@ export class LadderStore {
 	// eslint-disable-next-line @typescript-eslint/require-await
 	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
+	}
+	/**
+	 * Calculates Elo based on a match result
+	 *
+	 */
+	calculateElo(oldElo: number, score: number, foeElo: number): number {
+		// see lib/ntbb-ladder.lib.php in the pokemon-showdown-client repo for the login server implementation
+		// *intentionally* different from calculation in ladders-local, due to the high activity on the main server
+
+		// The K factor determines how much your Elo changes when you win or
+		// lose games. Larger K means more change.
+		// In the "original" Elo, K is constant, but it's common for K to
+		// get smaller as your rating goes up
+		let K = 50;
+
+		// dynamic K-scaling (optional)
+		if (oldElo < 1100) {
+			if (score < 0.5) {
+				K = 20 + (oldElo - 1000) * 30 / 100;
+			} else if (score > 0.5) {
+				K = 80 - (oldElo - 1000) * 30 / 100;
+			}
+		} else if (oldElo > 1300) {
+			K = 40;
+		}
+
+		// main Elo formula
+		const E = 1 / (1 + Math.pow(10, (foeElo - oldElo) / 400));
+
+		const newElo = oldElo + K * (score - E);
+
+		return Math.max(newElo, 1000);
 	}
 }

@@ -232,9 +232,9 @@ export class BattleQueue {
 			if (!action.targetLoc) {
 				target = this.battle.getRandomTarget(action.pokemon, action.move);
 				// TODO: what actually happens here?
-				if (target) action.targetLoc = this.battle.getTargetLoc(target, action.pokemon);
+				if (target) action.targetLoc = action.pokemon.getLocOf(target);
 			}
-			action.originalTarget = this.battle.getAtLoc(action.pokemon, action.targetLoc);
+			action.originalTarget = action.pokemon.getAtLoc(action.targetLoc);
 		}
 		if (!deferPriority) this.battle.getActionSpeed(action);
 		return actions as any;

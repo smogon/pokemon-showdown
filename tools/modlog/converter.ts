@@ -20,7 +20,7 @@ if (!global.Config) {
 }
 
 import type * as DatabaseType from 'better-sqlite3';
-import {FS} from '../../lib/fs';
+import {FS} from '../../lib';
 import {Modlog, ModlogEntry} from '../../server/modlog';
 import {IPTools} from '../../server/ip-tools';
 
@@ -435,11 +435,11 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		}
 	}
 
-	let regex = /by .*:/;
+	let regex = /\bby .*:/;
 	let actionTakerIndex = regex.exec(line)?.index;
 	if (actionTakerIndex === undefined) {
 		actionTakerIndex = line.indexOf('by ');
-		regex = /by .*/;
+		regex = /\bby .*/;
 	}
 	if (actionTakerIndex !== -1) {
 		const colonIndex = line.indexOf(': ');
@@ -447,7 +447,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		if (toID(actionTaker).length < 19) {
 			log.loggedBy = toID(actionTaker) || null;
 			if (colonIndex > actionTakerIndex) line = line.slice(colonIndex);
-			line = line.replace(regex, '');
+			line = line.replace(regex, ' ');
 		}
 	}
 	if (line) log.note = line.replace(/^\s?:\s?/, '').trim();

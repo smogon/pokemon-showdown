@@ -8,8 +8,7 @@
  */
 
 import {exec, ExecException, ExecOptions} from 'child_process';
-import {crashlogger} from "../lib/crashlogger";
-import {FS} from "../lib/fs";
+import {crashlogger, FS} from "../lib";
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
 
@@ -63,7 +62,6 @@ export const Monitor = new class {
 	networkUse: {[k: string]: number} = {};
 	networkCount: {[k: string]: number} = {};
 	hotpatchLock: {[k: string]: {by: string, reason: string}} = {};
-	hotpatchVersions: {[k: string]: string | undefined} = {};
 
 	TimedCounter = TimedCounter;
 
@@ -134,6 +132,15 @@ export const Monitor = new class {
 
 	notice(text: string) {
 		if (Config.loglevel <= 2) console.log(text);
+	}
+
+	slow(text: string) {
+		const logRoom = Rooms.get('slowlog');
+		if (logRoom) {
+			logRoom.add(`|c|&|/log ${text}`).update();
+		} else {
+			this.warn(text);
+		}
 	}
 
 	/*********************************************************

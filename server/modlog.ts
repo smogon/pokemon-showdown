@@ -8,9 +8,7 @@
  * @license MIT
  */
 
-import {FS} from '../lib/fs';
-import {QueryProcessManager, exec} from '../lib/process-manager';
-import {Repl} from '../lib/repl';
+import {ProcessManager, FS, Repl} from '../lib';
 import type * as Database from 'better-sqlite3';
 import {checkRipgrepAvailability} from './config-loader';
 
@@ -19,8 +17,11 @@ import {parseModlog} from '../tools/modlog/converter';
 const MAX_PROCESSES = 1;
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
+const MODLOG_PM_TIMEOUT = 30 * 60 * 60 * 1000; // 30 minutes
 
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
+export const MODLOG_PATH = 'logs/modlog';
+export const MODLOG_DB_PATH = `${__dirname}/../databases/modlog.db`;
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -42,7 +43,7 @@ export type ModlogID = RoomID | 'global';
 
 interface ModlogResults {
 	results: ModlogEntry[];
-	duration?: number;
+	duration: number;
 }
 
 interface ModlogTextQuery {
@@ -366,7 +367,7 @@ export class Modlog {
 				...paths,
 				'-g', '!modlog_global.txt', '-g', '!README.md',
 			];
-			output = await exec(['rg', ...options], {cwd: `${__dirname}/../`});
+			output = await ProcessManager.exec(['rg', ...options], {cwd: `${__dirname}/../`});
 		} catch (error) {
 			return results;
 		}
@@ -396,6 +397,7 @@ export class Modlog {
 		maxLines = 20,
 		onlyPunishments = false,
 	): Promise<ModlogResults> {
+		const startTime = Date.now();
 		const rooms = (roomid === 'public' ?
 			[...Rooms.rooms.values()]
 				.filter(room => !room.settings.isPrivate && !room.settings.isPersonal)
@@ -403,12 +405,13 @@ export class Modlog {
 			[roomid]);
 
 		const query = this.prepareSearch(rooms, maxLines, onlyPunishments, search);
-		const response = await PM.query(query);
+		const results = await PM.query(query);
 
-		if (response.duration > LONG_QUERY_DURATION) {
-			Monitor.log(`Long modlog query took ${response.duration} ms to complete: ${JSON.stringify(query)}`);
+		const duration = Date.now() - startTime;
+		if (duration > LONG_QUERY_DURATION) {
+			Monitor.slow(`[slow modlog] ${duration}ms - ${JSON.stringify(query)}`);
 		}
-		return {results: response, duration: response.duration};
+		return {results, duration};
 	}
 
 	prepareSearch(rooms: ModlogID[], maxLines: number, onlyPunishments: boolean, search: ModlogSearch) {
@@ -462,33 +465,32 @@ export class Modlog {
 	}
 }
 
-// if I don't do this TypeScript thinks that (ModlogResult | undefined)[] is a function
-// and complains about an "nexpected newline between function name and paren"
-// even though it's a type not a function...
-type ModlogResult = ModlogEntry | undefined;
-
+export const mainModlog = new Modlog(MODLOG_PATH, MODLOG_DB_PATH);
 
 // the ProcessManager only accepts text queries at this time
 // SQL support is to be determined
-export const PM = new QueryProcessManager<ModlogTextQuery, ModlogResult[]>(module, async data => {
+export const PM = new ProcessManager.QueryProcessManager<ModlogTextQuery, ModlogEntry[]>(module, async data => {
 	const {rooms, regexString, maxLines, onlyPunishments} = data;
 	try {
 		if (Config.debugmodlogprocesses && process.send) {
 			process.send('DEBUG\n' + JSON.stringify(data));
 		}
-		const results = await Rooms.Modlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
-		return results.map((line: string, index: number) => parseModlog(line, results[index + 1]));
+		const lines = await mainModlog.runTextSearch(rooms, regexString, maxLines, onlyPunishments);
+		const results = [];
+		for (const [i, line] of lines.entries()) {
+			const result = parseModlog(line, lines[i + 1]);
+			if (result) results.push(result);
+		}
+		return results;
 	} catch (err) {
 		Monitor.crashlog(err, 'A modlog query', data);
 		return [];
 	}
-});
+}, MODLOG_PM_TIMEOUT);
 
 if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config;
 	global.toID = require('../sim/dex').Dex.toID;
-
-	global.Rooms = require('./rooms').Rooms;
 
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {

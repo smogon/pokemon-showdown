@@ -330,8 +330,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			let totaldef = 0;
 			let totalspd = 0;
-			for (const foe of pokemon.side.foe.active) {
-				if (!foe || foe.fainted) continue;
+			for (const foe of pokemon.foes()) {
 				totaldef += foe.storedStats.def;
 				totalspd += foe.storedStats.spd;
 			}
@@ -607,7 +606,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
 			if (!target) return;
 			// singles, or single-target move
-			if (target.side.active.length < 2 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
+			if (this.activePerHalf === 1 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
 				move.multihit = 2;
 				move.accuracy = true;
 				pokemon.addVolatile('parentalbond');
@@ -675,7 +674,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!source || !pokemon.isAdjacent(source)) return;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles['shadowtag']) {
 				pokemon.maybeTrapped = true;
 			}
