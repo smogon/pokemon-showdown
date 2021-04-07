@@ -226,8 +226,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			onHit(pokemon) {
 				if (pokemon.positiveBoosts() < 5) {
-					const stats: BoostName[] = [];
-					let stat: BoostName;
+					const stats: BoostID[] = [];
+					let stat: BoostID;
 					for (stat in pokemon.boosts) {
 						if (!['accuracy', 'evasion'].includes(stat) && pokemon.boosts[stat] < 6) {
 							stats.push(stat);
@@ -1680,7 +1680,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			let success = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in target.boosts) {
 				if (target.boosts[i] === 0) continue;
 				target.boosts[i] = -target.boosts[i];
@@ -1717,7 +1717,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Psywave', target);
 		},
 		onHit(target, source, move) {
-			const boosts: BoostName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+			const boosts: BoostID[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 			const selfBoost: SparseBoostsTable = {};
 			selfBoost[boosts[this.random(5)]] = 1;
 			const oppBoost: SparseBoostsTable = {};
@@ -2018,7 +2018,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target) {
 			let success = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in target.boosts) {
 				if (target.boosts[i] === 0) continue;
 				target.boosts[i] = -target.boosts[i];
@@ -2721,7 +2721,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Topsy-Turvy', target);
 		},
 		onHit(target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			const boosts: SparseBoostsTable = {};
 			for (i in target.boosts) {
 				const stage = target.boosts[i];
@@ -2840,7 +2840,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-activate', target, 'move: /nexthunt');
 				let statName = 'atk';
 				let bestStat = 0;
-				let s: StatNameExceptHP;
+				let s: StatIDExceptHP;
 				for (s in target.storedStats) {
 					if (target.storedStats[s] > bestStat) {
 						statName = s;
@@ -3539,7 +3539,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.addVolatile('laserfocus');
 			} else if (result >= 2 && result <= 16) {
 				const boost: SparseBoostsTable = {};
-				const stats: BoostName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+				const stats: BoostID[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 				boost[stats[this.random(5)]] = 1;
 				this.boost(boost, source);
 			} else if (result >= 17 && result <= 19) {
@@ -3603,8 +3603,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Splash', source);
 			if (source.positiveBoosts() < 8) {
-				const stats: BoostName[] = [];
-				let stat: BoostName;
+				const stats: BoostID[] = [];
+				let stat: BoostID;
 				const exclude: string[] = ['accuracy', 'evasion'];
 				for (stat in source.boosts) {
 					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {

@@ -658,8 +658,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const attacker = pokemon;
 			const defender = target;
-			let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
-			const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
+			let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
+			const defenseStat: StatIDExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
 			if (this.battle.field.isTerrain('baneterrain')) {
 				if (attacker.getStat('atk') > attacker.getStat('spa')) {
 					attackStat = 'spa';

@@ -933,7 +933,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				// Handle Hidden Power IVs
 				if (moveid === 'hiddenpower') {
 					const HPivs = this.dex.types.get(move.type).HPivs;
-					let iv: StatName;
+					let iv: StatID;
 					for (iv in HPivs) {
 						ivs[iv] = HPivs[iv]!;
 					}

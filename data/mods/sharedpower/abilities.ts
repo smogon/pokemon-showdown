@@ -4,7 +4,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBoost(boost, target, source, effect) {
 			// Don't bounce self stat changes, or boosts that have already bounced
 			if (target === source || !boost || effect.id === 'mirrorarmor' || effect.id === 'ability:mirrorarmor') return;
-			let b: BoostName;
+			let b: BoostID;
 			for (b in boost) {
 				if (boost[b]! < 0) {
 					if (target.boosts[b] === -6) continue;

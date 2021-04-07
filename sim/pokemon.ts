@@ -255,7 +255,7 @@ export class Pokemon {
 
 	// Gen 1 only
 	modifiedStats?: StatsExceptHPTable;
-	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
+	modifyStat?: (this: Pokemon, statName: StatIDExceptHP, modifier: number) => void;
 	// Stadium only
 	recalculateStats?: (this: Pokemon) => void;
 
@@ -344,7 +344,7 @@ export class Pokemon {
 			this.set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 		const stats: StatsTable = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
-		let stat: StatName;
+		let stat: StatID;
 		for (stat in stats) {
 			if (!this.set.evs[stat]) this.set.evs[stat] = 0;
 			if (!this.set.ivs[stat] && this.set.ivs[stat] !== 0) this.set.ivs[stat] = 31;
@@ -481,8 +481,8 @@ export class Pokemon {
 		this.speed = this.getActionSpeed();
 	}
 
-	calculateStat(statName: StatNameExceptHP, boost: number, modifier?: number) {
-		statName = toID(statName) as StatNameExceptHP;
+	calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number) {
+		statName = toID(statName) as StatIDExceptHP;
 		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
@@ -500,7 +500,7 @@ export class Pokemon {
 
 		// stat boosts
 		let boosts: SparseBoostsTable = {};
-		const boostName = statName as BoostName;
+		const boostName = statName as BoostID;
 		boosts[boostName] = boost;
 		boosts = this.battle.runEvent('ModifyBoost', this, null, null, boosts);
 		boost = boosts[boostName]!;
@@ -517,8 +517,8 @@ export class Pokemon {
 		return this.battle.modify(stat, (modifier || 1));
 	}
 
-	getStat(statName: StatNameExceptHP, unboosted?: boolean, unmodified?: boolean) {
-		statName = toID(statName) as StatNameExceptHP;
+	getStat(statName: StatIDExceptHP, unboosted?: boolean, unmodified?: boolean) {
+		statName = toID(statName) as StatIDExceptHP;
 		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
@@ -551,7 +551,7 @@ export class Pokemon {
 
 		// stat modifier effects
 		if (!unmodified) {
-			const statTable: {[s in StatNameExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			const statTable: {[s in StatIDExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 		}
 
@@ -1053,7 +1053,7 @@ export class Pokemon {
 
 	positiveBoosts() {
 		let boosts = 0;
-		let boost: BoostName;
+		let boost: BoostID;
 		for (boost in this.boosts) {
 			if (this.boosts[boost] > 0) boosts += this.boosts[boost];
 		}
@@ -1062,7 +1062,7 @@ export class Pokemon {
 
 	boostBy(boosts: SparseBoostsTable) {
 		let delta = 0;
-		let boostName: BoostName;
+		let boostName: BoostID;
 		for (boostName in boosts) {
 			delta = boosts[boostName]!;
 			this.boosts[boostName] += delta;
@@ -1079,14 +1079,14 @@ export class Pokemon {
 	}
 
 	clearBoosts() {
-		let boostName: BoostName;
+		let boostName: BoostID;
 		for (boostName in this.boosts) {
 			this.boosts[boostName] = 0;
 		}
 	}
 
 	setBoost(boosts: SparseBoostsTable) {
-		let boostName: BoostName;
+		let boostName: BoostID;
 		for (boostName in boosts) {
 			this.boosts[boostName] = boosts[boostName]!;
 		}
@@ -1134,7 +1134,7 @@ export class Pokemon {
 		this.knownType = this.isAlly(pokemon) && pokemon.knownType;
 		this.apparentType = pokemon.apparentType;
 
-		let statName: StatNameExceptHP;
+		let statName: StatIDExceptHP;
 		for (statName in this.storedStats) {
 			this.storedStats[statName] = pokemon.storedStats[statName];
 		}
@@ -1158,7 +1158,7 @@ export class Pokemon {
 				virtual: true,
 			});
 		}
-		let boostName: BoostName;
+		let boostName: BoostID;
 		for (boostName in pokemon.boosts) {
 			this.boosts[boostName] = pokemon.boosts[boostName]!;
 		}
@@ -1230,7 +1230,7 @@ export class Pokemon {
 		}
 
 		if (!isTransform) this.baseStoredStats = stats;
-		let statName: StatNameExceptHP;
+		let statName: StatIDExceptHP;
 		for (statName in this.storedStats) {
 			this.storedStats[statName] = stats[statName];
 			if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.

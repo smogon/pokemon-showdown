@@ -8,7 +8,7 @@
 import {Utils} from '../../lib';
 
 interface StoneDeltas {
-	baseStats: {[stat in StatName]: number};
+	baseStats: {[stat in StatID]: number};
 	bst: number;
 	weighthg: number;
 	type?: string;
@@ -119,7 +119,7 @@ export const commands: ChatCommands = {
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
 			bst: megaSpecies.bst - baseSpecies.bst,
 		};
-		let statId: StatName;
+		let statId: StatID;
 		for (statId in megaSpecies.baseStats) {
 			deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 		}
@@ -139,7 +139,7 @@ export const commands: ChatCommands = {
 		} else if (deltas.type) {
 			mixedSpecies.types = [mixedSpecies.types[0], deltas.type];
 		}
-		let statName: StatName;
+		let statName: StatID;
 		mixedSpecies.bst = 0;
 		for (statName in species.baseStats) { // Add the changed stats and weight
 			mixedSpecies.baseStats[statName] = Utils.clampIntRange(
@@ -237,7 +237,7 @@ export const commands: ChatCommands = {
 				weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
 				bst: megaSpecies.bst - baseSpecies.bst,
 			};
-			let statId: StatName;
+			let statId: StatID;
 			for (statId in megaSpecies.baseStats) {
 				deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 			}
@@ -567,7 +567,7 @@ export const commands: ChatCommands = {
 		mixedSpecies.abilities = Utils.deepClone(crossSpecies.abilities);
 		mixedSpecies.baseStats = Utils.deepClone(mixedSpecies.baseStats);
 		mixedSpecies.bst = 0;
-		let statName: StatName;
+		let statName: StatID;
 		for (statName in species.baseStats) {
 			const statChange = crossSpecies.baseStats[statName] - prevo.baseStats[statName];
 			mixedSpecies.baseStats[statName] = Utils.clampIntRange(mixedSpecies.baseStats[statName] + statChange, 1, 255);
@@ -632,7 +632,7 @@ export const commands: ChatCommands = {
 		deltas.tier = 'CE';
 		deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
 		deltas.bst = 0;
-		let i: StatName;
+		let i: StatID;
 		for (i in evo.baseStats) {
 			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
 			deltas.baseStats[i] = statChange;

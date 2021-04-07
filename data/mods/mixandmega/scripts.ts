@@ -76,7 +76,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				originalMega: megaSpecies.name,
 				requiredItem: megaSpecies.requiredItem,
 			};
-			let statId: StatName;
+			let statId: StatID;
 			for (statId in megaSpecies.baseStats) {
 				deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 			}

@@ -30,7 +30,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
 		boostBy(boost) {
 			let changed = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				const delta = boost[i];
 				if (delta === undefined) continue;
@@ -696,8 +696,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			let attacker = pokemon;
 			const defender = target;
 			if (move.useTargetOffensive) attacker = target;
-			const atkType: StatNameExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
-			const defType: StatNameExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
+			const atkType: StatIDExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
+			const defType: StatIDExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 			let attack = attacker.getStat(move.useSourceDefensiveAsOffensive ? defType : atkType);
 			let defense = defender.getStat(defType);
 			// In gen 1, screen effect is applied here.
@@ -804,7 +804,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (!target?.hp) return 0;
 		let success = null;
 		boost = this.runEvent('Boost', target, source, effect, {...boost});
-		let i: BoostName;
+		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[i] = boost[i];

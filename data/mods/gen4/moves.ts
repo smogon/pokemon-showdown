@@ -6,8 +6,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (target.volatiles['substitute']) {
 				return false;
 			}
-			const stats: BoostName[] = [];
-			let stat: BoostName;
+			const stats: BoostID[] = [];
+			let stat: BoostID;
 			for (stat in target.boosts) {
 				if (target.boosts[stat] < 6) {
 					stats.push(stat);

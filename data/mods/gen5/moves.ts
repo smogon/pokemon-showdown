@@ -636,7 +636,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	psychup: {
 		inherit: true,
 		onHit(target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			for (i in target.boosts) {
 				source.boosts[i] = target.boosts[i];
 			}

@@ -1645,7 +1645,7 @@ export class Battle {
 		boost = this.runEvent('Boost', target, source, effect, {...boost});
 		let success = null;
 		let boosted = isSecondary;
-		let boostName: BoostName;
+		let boostName: BoostID;
 		for (boostName in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[boostName] = boost[boostName];
@@ -1976,7 +1976,7 @@ export class Battle {
 		// This only affects Eternatus-Eternamax in Pure Hackmons.
 		const tr = this.trunc;
 		const nature = this.dex.natures.get(set.nature);
-		let s: StatNameExceptHP;
+		let s: StatIDExceptHP;
 		if (nature.plus) {
 			s = nature.plus;
 			const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 595) : stats[s];

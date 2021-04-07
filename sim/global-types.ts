@@ -26,13 +26,13 @@ interface DexTable<T> {
 }
 
 type GenderName = 'M' | 'F' | 'N' | '';
-type StatNameExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
-type StatName = 'hp' | StatNameExceptHP;
-type StatsExceptHPTable = {[stat in StatNameExceptHP]: number};
-type StatsTable = {[stat in StatName]: number };
+type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+type StatID = 'hp' | StatIDExceptHP;
+type StatsExceptHPTable = {[stat in StatIDExceptHP]: number};
+type StatsTable = {[stat in StatID]: number};
 type SparseStatsTable = Partial<StatsTable>;
-type BoostName = StatNameExceptHP | 'accuracy' | 'evasion';
-type BoostsTable = {[boost in BoostName]: number };
+type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
+type BoostsTable = {[boost in BoostID]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
 type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax';
 
@@ -194,8 +194,8 @@ type Format = import('./dex-formats').Format;
 
 interface NatureData {
 	name: string;
-	plus?: StatNameExceptHP;
-	minus?: StatNameExceptHP;
+	plus?: StatIDExceptHP;
+	minus?: StatIDExceptHP;
 }
 
 type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
@@ -324,7 +324,7 @@ interface ModdedBattlePokemon {
 	inherit?: true;
 	lostItemForDelibird?: Item | null;
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number;
-	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number;
+	calculateStat?: (this: Pokemon, statName: StatIDExceptHP, boost: number, modifier?: number) => number;
 	getAbility?: (this: Pokemon) => Ability;
 	getActionSpeed?: (this: Pokemon) => number;
 	getMoveRequestData?: (this: Pokemon) => {
@@ -333,12 +333,12 @@ interface ModdedBattlePokemon {
 		canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: ZMoveOptions,
 	};
 	getStat?: (
-		this: Pokemon, statName: StatNameExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean
+		this: Pokemon, statName: StatIDExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean
 	) => number;
 	getWeight?: (this: Pokemon) => number;
 	hasAbility?: (this: Pokemon, ability: string | string[]) => boolean;
 	isGrounded?: (this: Pokemon, negateImmunity: boolean | undefined) => boolean | null;
-	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
+	modifyStat?: (this: Pokemon, statName: StatIDExceptHP, modifier: number) => void;
 	moveUsed?: (this: Pokemon, move: ActiveMove, targetLoc?: number) => void;
 	recalculateStats?: (this: Pokemon) => void;
 	setAbility?: (

@@ -150,10 +150,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			if (this.field.clearWeather()) successes++;
 			if (this.field.clearTerrain()) successes++;
-			const stats: BoostName[] = [];
+			const stats: BoostID[] = [];
 			const exclude: string[] = ['accuracy', 'evasion'];
 			for (let x = 0; x < successes; x++) {
-				let stat: BoostName;
+				let stat: BoostID;
 				for (stat in source.boosts) {
 					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
 						stats.push(stat);
@@ -577,10 +577,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const side = pokemon.side;
 			const sideConditions = Object.keys(side.sideConditions);
 			const activeCount = sideConditions.length;
-			const stats: BoostName[] = [];
+			const stats: BoostID[] = [];
 			const exclude: string[] = ['accuracy', 'evasion'];
 			for (let x = 0; x < activeCount; x++) {
-				let stat: BoostName;
+				let stat: BoostID;
 				for (stat in pokemon.boosts) {
 					if (pokemon.boosts[stat] < 6 && !exclude.includes(stat)) {
 						stats.push(stat);
@@ -919,7 +919,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -1307,7 +1307,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onFoeAfterBoost(boost, target, source, effect) {
 			const pokemon = target.side.foe.active[0];
 			let success = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! > 0) {
 					success = true;
@@ -1614,8 +1614,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	extremeways: {
 		desc: "On switch-in, this Pokemon boosts a random stat by 2 stages.",
 		onStart(source) {
-			const stats: BoostName[] = [];
-			let stat: BoostName;
+			const stats: BoostID[] = [];
+			let stat: BoostID;
 			for (stat in source.boosts) {
 				if (stat !== 'accuracy' && stat !== 'evasion' && source.boosts[stat] < 6) {
 					stats.push(stat);
@@ -1783,8 +1783,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "On switch-in, this Pokemon boosts a random stat other than Special Attack by 1 stage and gains 2 random type immunities that are displayed to the opponent.",
 		shortDesc: "On switch-in, gains random +1 to non-SpA, 2 random immunities.",
 		onStart(pokemon) {
-			const stats: BoostName[] = [];
-			let stat: BoostName;
+			const stats: BoostID[] = [];
+			let stat: BoostID;
 			for (stat in pokemon.boosts) {
 				const noBoost: string[] = ['accuracy', 'evasion', 'spa'];
 				if (!noBoost.includes(stat) && pokemon.boosts[stat] < 6) {
@@ -1894,7 +1894,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onUpdate(pokemon) {
 			let activate = false;
 			const boosts: SparseBoostsTable = {};
-			let i: BoostName;
+			let i: BoostID;
 			for (i in pokemon.boosts) {
 				if (pokemon.boosts[i] <= -2) {
 					activate = true;

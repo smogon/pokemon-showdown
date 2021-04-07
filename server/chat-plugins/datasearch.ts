@@ -1095,7 +1095,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				} else if (stat === 'gen') {
 					monStat = dex[mon].gen;
 				} else {
-					monStat = dex[mon].baseStats[stat as StatName];
+					monStat = dex[mon].baseStats[stat as StatID];
 				}
 				if (typeof alts.stats[stat].less === 'number') {
 					if (monStat < alts.stats[stat].less) {
@@ -1172,8 +1172,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				let monStat2 = 0;
 				if (stat === 'bst') {
 					for (const monStats in mon1.baseStats) {
-						monStat1 += mon1.baseStats[monStats as StatName];
-						monStat2 += mon2.baseStats[monStats as StatName];
+						monStat1 += mon1.baseStats[monStats as StatID];
+						monStat2 += mon2.baseStats[monStats as StatID];
 					}
 				} else if (stat === 'weight') {
 					monStat1 = mon1.weighthg;
@@ -1185,8 +1185,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					monStat1 = mon1.gen;
 					monStat2 = mon2.gen;
 				} else {
-					monStat1 = mon1.baseStats[stat as StatName];
-					monStat2 = mon2.baseStats[stat as StatName];
+					monStat1 = mon1.baseStats[stat as StatID];
+					monStat2 = mon2.baseStats[stat as StatID];
 				}
 				return (monStat1 - monStat2) * (direction === '+' ? 1 : -1);
 			});
@@ -1806,12 +1806,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (matched) continue;
 			for (const boost in alts.boost) {
 				if (move.boosts) {
-					if ((move.boosts[boost as BoostName]! > 0) === alts.boost[boost]) {
+					if ((move.boosts[boost as BoostID]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
 				} else if (move.secondary && move.secondary.self && move.secondary.self.boosts) {
-					if ((move.secondary.self.boosts[boost as BoostName]! > 0) === alts.boost[boost]) {
+					if ((move.secondary.self.boosts[boost as BoostID]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
@@ -1820,18 +1820,18 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (matched) continue;
 			for (const lower in alts.lower) {
 				if (move.boosts && move.boosts !== false) {
-					if ((move.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
+					if ((move.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
 						matched = true;
 						break;
 					}
 				} else if (move.secondary) {
 					if (move.secondary.boosts) {
-						if ((move.secondary.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
+						if ((move.secondary.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
 							matched = true;
 							break;
 						}
 					} else if (move.secondary.self && move.secondary.self.boosts) {
-						if ((move.secondary.self.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
+						if ((move.secondary.self.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
 							matched = true;
 							break;
 						}
@@ -1842,7 +1842,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			for (const boost in alts.zboost) {
 				const zMove = move.zMove;
 				if (zMove?.boost) {
-					if ((zMove.boost[boost as BoostName]! > 0) === alts.zboost[boost]) {
+					if ((zMove.boost[boost as BoostID]! > 0) === alts.zboost[boost]) {
 						matched = true;
 						break;
 					}

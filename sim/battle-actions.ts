@@ -717,7 +717,7 @@ export class BattleActions {
 		if (move.stealsBoosts) {
 			const boosts: SparseBoostsTable = {};
 			let stolen = false;
-			let statName: BoostName;
+			let statName: BoostID;
 			for (statName in target.boosts) {
 				const stage = target.boosts[statName];
 				if (stage > 0) {
@@ -730,7 +730,7 @@ export class BattleActions {
 				this.battle.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
 				this.battle.boost(boosts, pokemon, pokemon);
 
-				let statName2: BoostName;
+				let statName2: BoostID;
 				for (statName2 in boosts) {
 					boosts[statName2] = 0;
 				}
@@ -1423,7 +1423,7 @@ export class BattleActions {
 				break;
 			case 'clearnegativeboost':
 				const boosts: SparseBoostsTable = {};
-				let i: BoostName;
+				let i: BoostID;
 				for (i in pokemon.boosts) {
 					if (pokemon.boosts[i] < 0) {
 						boosts[i] = 0;
@@ -1553,8 +1553,8 @@ export class BattleActions {
 
 		const attacker = pokemon;
 		const defender = target;
-		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
-		const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
+		const defenseStat: StatIDExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
 		if (move.useSourceDefensiveAsOffensive) {
 			attackStat = defenseStat;
 			// Body press really wants to use the def stat,

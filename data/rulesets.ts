@@ -1007,7 +1007,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			if (species.num === 493 && set.evs) {
-				let stat: StatName;
+				let stat: StatID;
 				for (stat in set.evs) {
 					const ev = set.evs[stat];
 					if (ev > 100) {

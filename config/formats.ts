@@ -689,14 +689,14 @@ export const Formats: FormatList = [
 				const isBanned = validator.isBannedSpecies(godSpecies);
 				return isBanned;
 			}) || target.side.team[0];
-			const stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
+			const stat = Dex.stats.ids()[target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
 			let godSpecies = this.dex.species.get(god.species);
 			if (godSpecies.forme === 'Crowned') {
 				godSpecies = this.dex.species.get(godSpecies.changesFrom || godSpecies.baseSpecies);
 			}
 			newSpecies.bst -= newSpecies.baseStats[stat];
-			newSpecies.baseStats[stat] = godSpecies.baseStats[stat as StatName];
+			newSpecies.baseStats[stat] = godSpecies.baseStats[stat];
 			newSpecies.bst += newSpecies.baseStats[stat];
 			return newSpecies;
 		},
@@ -1012,7 +1012,7 @@ export const Formats: FormatList = [
 			mixedSpecies.eggGroups = crossSpecies.eggGroups;
 			mixedSpecies.abilities = crossSpecies.abilities;
 			mixedSpecies.bst = 0;
-			let i: StatName;
+			let i: StatID;
 			for (i in species.baseStats) {
 				const statChange = crossSpecies.baseStats[i] - crossPrevoSpecies.baseStats[i];
 				mixedSpecies.baseStats[i] = this.clampIntRange(species.baseStats[i] + statChange, 1, 255);
@@ -1225,7 +1225,7 @@ export const Formats: FormatList = [
 			natureModify(stats, set) {
 				const tr = this.trunc;
 				const nature = this.dex.natures.get(set.nature);
-				let s: StatNameExceptHP;
+				let s: StatIDExceptHP;
 				if (nature.plus) {
 					s = nature.minus!;
 					const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 595) : stats[s];
@@ -1481,7 +1481,7 @@ export const Formats: FormatList = [
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = pokemon.baseStats['hp'];
 			const boost = boosts[tier];
-			let statName: StatName;
+			let statName: StatID;
 			for (statName in pokemon.baseStats as StatsTable) {
 				if (statName === 'hp') continue;
 				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);

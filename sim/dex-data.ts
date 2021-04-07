@@ -130,8 +130,8 @@ export class BasicEffect implements EffectData {
 
 export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
 	readonly effectType: 'Nature';
-	readonly plus?: StatNameExceptHP;
-	readonly minus?: StatNameExceptHP;
+	readonly plus?: StatIDExceptHP;
+	readonly minus?: StatIDExceptHP;
 	constructor(data: AnyObject) {
 		super(data);
 		data = this;
@@ -260,6 +260,39 @@ export class DexTypes {
 
 		if (type.exists) this.typeCache.set(id, type);
 		return type;
+	}
+}
+
+const idsCache: readonly StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+export class DexStats {
+	readonly shortNames: {readonly [k in StatID]: string};
+	readonly mediumNames: {readonly [k in StatID]: string};
+	readonly names: {readonly [k in StatID]: string};
+	constructor(dex: ModdedDex) {
+		if (dex.gen !== 1) {
+			this.shortNames = {
+				__proto__: null, hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
+			} as any;
+			this.mediumNames = {
+				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Sp. Atk", spd: "Sp. Def", spe: "Speed",
+			} as any;
+			this.names = {
+				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special Attack", spd: "Special Defense", spe: "Speed",
+			} as any;
+		} else {
+			this.shortNames = {
+				__proto__: null, hp: "HP", atk: "Atk", def: "Def", spa: "Spc", spd: "[SpD]", spe: "Spe",
+			} as any;
+			this.mediumNames = {
+				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special", spd: "[Sp. Def]", spe: "Speed",
+			} as any;
+			this.names = {
+				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special", spd: "[Special Defense]", spe: "Speed",
+			} as any;
+		}
+	}
+	ids(): typeof idsCache {
+		return idsCache;
 	}
 }
 

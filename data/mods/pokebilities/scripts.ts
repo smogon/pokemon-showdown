@@ -61,7 +61,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.knownType = this.isAlly(pokemon) && pokemon.knownType;
 			this.apparentType = pokemon.apparentType;
 
-			let statName: StatNameExceptHP;
+			let statName: StatIDExceptHP;
 			for (statName in this.storedStats) {
 				this.storedStats[statName] = pokemon.storedStats[statName];
 			}
@@ -85,7 +85,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					virtual: true,
 				});
 			}
-			let boostName: BoostName;
+			let boostName: BoostID;
 			for (boostName in pokemon.boosts) {
 				this.boosts[boostName] = pokemon.boosts[boostName]!;
 			}

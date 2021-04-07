@@ -338,7 +338,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	simple: {
 		onModifyBoost(boosts) {
-			let key: BoostName;
+			let key: BoostID;
 			for (key in boosts) {
 				boosts[key]! *= 2;
 			}

@@ -428,7 +428,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Level balance
 			const mbstmin = 425;
 			const baseStats = hackmonsCup[species.id].baseStats;
-			const calcStat = (statName: StatName, lvl?: number) => {
+			const calcStat = (statName: StatID, lvl?: number) => {
 				if (lvl) {
 					return Math.floor(Math.floor(2 * baseStats[statName] + ivs[statName] + Math.floor(evs[statName] / 4)) * lvl / 100 + 5);
 				}
@@ -436,13 +436,13 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			};
 			let mbst = 0;
 			for (const statName of Object.keys(baseStats)) {
-				mbst += calcStat(statName as StatName);
+				mbst += calcStat(statName as StatID);
 				if (statName === 'hp') mbst += 5;
 			}
 			let level = Math.floor(100 * mbstmin / mbst);
 			while (level < 100) {
 				for (const statName of Object.keys(baseStats)) {
-					mbst += calcStat(statName as StatName, level);
+					mbst += calcStat(statName as StatID, level);
 					if (statName === 'hp') mbst += 5;
 				}
 				if (mbst >= mbstmin) break;

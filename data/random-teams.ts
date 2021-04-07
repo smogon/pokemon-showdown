@@ -350,7 +350,7 @@ export class RandomTeams {
 
 			// Random EVs
 			const evs: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-			const s: StatName[] = ["hp", "atk", "def", "spa", "spd", "spe"];
+			const s: StatID[] = ["hp", "atk", "def", "spa", "spd", "spe"];
 			let evpool = 510;
 			do {
 				const x = this.sample(s);
@@ -512,17 +512,16 @@ export class RandomTeams {
 
 			// Random EVs
 			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-			const s: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
 			if (this.gen === 6) {
 				let evpool = 510;
 				do {
-					const x = this.sample(s);
+					const x = this.sample(Dex.stats.ids());
 					const y = this.random(Math.min(256 - evs[x], evpool + 1));
 					evs[x] += y;
 					evpool -= y;
 				} while (evpool > 0);
 			} else {
-				for (const x of s) {
+				for (const x of Dex.stats.ids()) {
 					evs[x] = this.random(256);
 				}
 			}

@@ -291,7 +291,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	clearbody: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -304,7 +304,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	whitesmoke: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];

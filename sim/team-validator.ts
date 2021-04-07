@@ -776,9 +776,6 @@ export class TeamValidator {
 
 		const problems = [];
 		const name = set.name || set.species;
-		const statTable = {
-			hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
-		};
 
 		const maxedIVs = Object.values(set.ivs).every(stat => stat === 31);
 		for (const moveName of set.moves) {
@@ -795,7 +792,7 @@ export class TeamValidator {
 			if (dex.gen <= 2) {
 				const HPdvs = dex.types.get(set.hpType).HPdvs;
 				set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-				let statName: StatName;
+				let statName: StatID;
 				for (statName in HPdvs) {
 					set.ivs[statName] = HPdvs[statName]! * 2;
 				}
@@ -898,7 +895,7 @@ export class TeamValidator {
 
 		for (const stat in set.evs) {
 			if (set.evs[stat as 'hp'] < 0) {
-				problems.push(`${name} has less than 0 ${allowAVs ? 'Awakening Values' : 'EVs'} in ${statTable[stat as 'hp']}.`);
+				problems.push(`${name} has less than 0 ${allowAVs ? 'Awakening Values' : 'EVs'} in ${Dex.stats.names[stat as 'hp']}.`);
 			}
 		}
 
@@ -908,13 +905,13 @@ export class TeamValidator {
 					problems.push(`${name} has Awakening Values but this format doesn't allow them.`);
 					break;
 				} else if (set.evs[stat as 'hp'] > 200) {
-					problems.push(`${name} has more than 200 Awakening Values in ${statTable[stat as 'hp']}.`);
+					problems.push(`${name} has more than 200 Awakening Values in ${Dex.stats.names[stat as 'hp']}.`);
 				}
 			}
 		} else { // EVs
 			for (const stat in set.evs) {
-				if (set.evs[stat as StatName] > 255) {
-					problems.push(`${name} has more than 255 EVs in ${statTable[stat as 'hp']}.`);
+				if (set.evs[stat as StatID] > 255) {
+					problems.push(`${name} has more than 255 EVs in ${Dex.stats.names[stat as 'hp']}.`);
 				}
 			}
 			if (dex.gen <= 2) {
@@ -1619,15 +1616,12 @@ export class TeamValidator {
 			const canBottleCap = (dex.gen >= 7 && set.level === 100);
 
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-			const statTable = {
-				hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
-			};
-			let statName: StatName;
+			let statName: StatID;
 			for (statName in eventData.ivs) {
 				if (canBottleCap && set.ivs[statName] === 31) continue;
 				if (set.ivs[statName] !== eventData.ivs[statName]) {
 					if (fastReturn) return true;
-					problems.push(`${name} must have ${eventData.ivs[statName]} ${statTable[statName]} IVs${etc}.`);
+					problems.push(`${name} must have ${eventData.ivs[statName]} ${Dex.stats.names[statName]} IVs${etc}.`);
 				}
 			}
 
@@ -1649,7 +1643,7 @@ export class TeamValidator {
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
 			// Events can also have a certain amount of guaranteed perfect IVs
 			let perfectIVs = 0;
-			let statName: StatName;
+			let statName: StatID;
 			for (statName in set.ivs) {
 				if (set.ivs[statName] >= 31) perfectIVs++;
 			}
@@ -2119,7 +2113,7 @@ export class TeamValidator {
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {
 		const filledStats: StatsTable = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
 		if (stats) {
-			let statName: StatName;
+			let statName: StatID;
 			for (statName in filledStats) {
 				const stat = stats[statName];
 				if (typeof stat === 'number') filledStats[statName] = stat;

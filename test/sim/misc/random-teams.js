@@ -184,10 +184,9 @@ describe(`Factory sets`, function () {
 
 						assert(!!set.evs, `Set of ${species} has no EVs specified`);
 						const keys = Object.keys(set.evs);
-						const evKeys = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
 						let totalEVs = 0;
 						for (const ev of keys) {
-							assert(evKeys.includes(ev), `Invalid EV key (${ev}) on set of ${species}`);
+							assert(Dex.stats.ids().includes(ev), `Invalid EV key (${ev}) on set of ${species}`);
 							totalEVs += set.evs[ev];
 							assert.equal(set.evs[ev] % 4, 0, `EVs of ${ev} not divisible by 4 on ${species}`);
 						}

@@ -261,8 +261,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const attacker = pokemon;
 			const defender = target;
-			let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
-			const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
+			let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
+			const defenseStat: StatIDExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
 			if (move.useSourceDefensiveAsOffensive) {
 				attackStat = defenseStat;
 				// Body press really wants to use the def stat,

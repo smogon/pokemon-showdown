@@ -258,7 +258,7 @@ function generateSSBSet(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	if (set.shiny) buf += `<li>Shiny: ${typeof set.shiny === 'number' ? `Sometimes` : `Yes`}</li>`;
 	if (set.evs) {
 		const evs: string[] = [];
-		let ev: StatName;
+		let ev: StatID;
 		for (ev in set.evs) {
 			if (set.evs[ev] === 0) continue;
 			evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
@@ -270,7 +270,7 @@ function generateSSBSet(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	}
 	if (set.ivs) {
 		const ivs: string[] = [];
-		let iv: StatName;
+		let iv: StatID;
 		for (iv in set.ivs) {
 			if (set.ivs[iv] === 31) continue;
 			ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
@@ -330,12 +330,8 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 		} else if (sigMove.zMove?.boost) {
 			details["Z-Effect"] = "";
 			const boost = sigMove.zMove.boost;
-			const stats: {[k in BoostName]: string} = {
-				atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness',
-			};
-			let h: BoostName;
-			for (h in boost) {
-				details["Z-Effect"] += ` ${stats[h]} +${boost[h]}`;
+			for (const h in boost) {
+				details["Z-Effect"] += ` ${Dex.stats.mediumNames[h as 'atk']} +${boost[h as 'atk']}`;
 			}
 		} else if (sigMove.isZ && typeof sigMove.isZ === 'string') {
 			details["&#10003; Z-Move"] = "";

@@ -583,10 +583,7 @@ export const commands: ChatCommands = {
 				const nature = Dex.natures.get(newTarget.name);
 				buffer += `${nature.name} nature: `;
 				if (nature.plus) {
-					const statNames = {
-						atk: "Attack", def: "Defense", spa: "Special Attack", spd: "Special Defense", spe: "Speed",
-					};
-					buffer += `+10% ${statNames[nature.plus]}, -10% ${statNames[nature.minus!]}.`;
+					buffer += `+10% ${Dex.stats.names[nature.plus]}, -10% ${Dex.stats.names[nature.minus!]}.`;
 				} else {
 					buffer += `No effect.`;
 				}
@@ -748,10 +745,10 @@ export const commands: ChatCommands = {
 						} else if (move.zMove?.boost) {
 							details["Z-Effect"] = "";
 							const boost = move.zMove.boost;
-							const stats: {[k in BoostName]: string} = {
+							const stats: {[k in BoostID]: string} = {
 								atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness',
 							};
-							let h: BoostName;
+							let h: BoostID;
 							for (h in boost) {
 								details["Z-Effect"] += ` ${stats[h]} +${boost[h]}`;
 							}
@@ -1269,7 +1266,7 @@ export const commands: ChatCommands = {
 		let realSet = false;
 
 		let pokemon: StatsTable | undefined;
-		let useStat: StatName | '' = '';
+		let useStat: StatID | '' = '';
 
 		let level = 100;
 		let calcHP = false;

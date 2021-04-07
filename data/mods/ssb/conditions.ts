@@ -2070,7 +2070,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (source && target === source) return;
 			if (target.species.id !== 'miniorblue') return;
 			let showMsg = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -2302,7 +2302,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 			if (source && target !== source) {
 				let showMsg = false;
-				let i: BoostName;
+				let i: BoostID;
 				for (i in boost) {
 					if (boost[i]! < 0) {
 						delete boost[i];

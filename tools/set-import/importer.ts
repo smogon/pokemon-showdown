@@ -336,7 +336,7 @@ function toPokemonSet(
 				fill = 31;
 			} else if (dex.gen === 2) {
 				const dvs = {...dex.types.get(type).HPdvs};
-				let stat: StatName;
+				let stat: StatID;
 				for (stat in dvs) {
 					dvs[stat]! *= 2;
 				}
@@ -498,7 +498,7 @@ function getUsageThreshold(format: Format, count: number) {
 	return /uber|anythinggoes|doublesou/.test(format.id) ? 0.03 : 0.01;
 }
 
-const STATS: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+const STATS = Dex.stats.ids();
 
 function fromSpread(spread: string) {
 	const [nature, revs] = spread.split(':');

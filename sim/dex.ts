@@ -105,6 +105,7 @@ export class ModdedDex {
 	readonly name = "[ModdedDex]";
 	readonly isBase: boolean;
 	readonly currentMod: string;
+	readonly dataDir: string;
 
 	readonly toID = Data.toID;
 
@@ -125,10 +126,12 @@ export class ModdedDex {
 	readonly conditions: DexConditions;
 	readonly natures: Data.DexNatures;
 	readonly types: Data.DexTypes;
+	readonly stats: Data.DexStats;
 
 	constructor(mod = 'base') {
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
+		this.dataDir = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
 
 		this.dataCache = null;
 		this.textCache = null;
@@ -141,10 +144,7 @@ export class ModdedDex {
 		this.conditions = new DexConditions(this);
 		this.natures = new Data.DexNatures(this);
 		this.types = new Data.DexTypes(this);
-	}
-
-	get dataDir(): string {
-		return (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
+		this.stats = new Data.DexStats(this);
 	}
 
 	get data(): DexTableData {
@@ -657,13 +657,13 @@ export class ModdedDex {
 			if (!hideStats) {
 				const evs = [];
 				for (const stat in mon.evs) {
-					if (mon.evs[stat as StatName]) evs.push(`${mon.evs[stat as StatName]} ${stat}`);
+					if (mon.evs[stat as StatID]) evs.push(`${mon.evs[stat as StatID]} ${stat}`);
 				}
 				if (evs.length) output += `EVs: ${evs.join(' / ')}<br />`;
 				if (mon.nature) output += `${this.natures.get(mon.nature).name} Nature<br />`;
 				const ivs = [];
 				for (const stat in mon.ivs) {
-					if (mon.ivs[stat as StatName] !== 31) ivs.push(`${mon.ivs[stat as StatName]} ${stat}`);
+					if (mon.ivs[stat as StatID] !== 31) ivs.push(`${mon.ivs[stat as StatID]} ${stat}`);
 				}
 				if (ivs.length) output += `IVs: ${ivs.join(' / ')}<br />`;
 			}

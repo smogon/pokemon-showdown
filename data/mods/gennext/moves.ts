@@ -862,8 +862,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			self: {
 				onHit(target, source) {
-					const stats: BoostName[] = [];
-					let stat: BoostName;
+					const stats: BoostID[] = [];
+					let stat: BoostID;
 					for (stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
@@ -895,8 +895,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			self: {
 				onHit(target, source) {
-					const stats: BoostName[] = [];
-					let stat: BoostName;
+					const stats: BoostID[] = [];
+					let stat: BoostID;
 					for (stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
@@ -922,8 +922,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			self: {
 				onHit(target, source) {
-					const stats: BoostName[] = [];
-					let stat: BoostName;
+					const stats: BoostID[] = [];
+					let stat: BoostID;
 					for (stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
