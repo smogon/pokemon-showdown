@@ -323,7 +323,7 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert.equal(illegal, null);
-		illegal = TeamValidator.get('gen1outradeback').validateTeam(team);
+		illegal = TeamValidator.get('gen1tradebacksou').validateTeam(team);
 		assert.equal(illegal, null);
 		illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert(illegal);
@@ -332,7 +332,7 @@ describe('Team Validator', function () {
 		team = [
 			{species: 'charizard', moves: ['crunch']},
 		];
-		illegal = TeamValidator.get('gen1outradeback').validateTeam(team);
+		illegal = TeamValidator.get('gen1tradebacksou').validateTeam(team);
 		assert(illegal);
 
 		// tradeback: gen 2 event move from prevo with gen 1 tutor or TM moves
