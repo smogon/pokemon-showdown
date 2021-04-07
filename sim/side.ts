@@ -230,7 +230,7 @@ export class Side {
 
 	/** Intended as a way to iterate through all foe side conditions - do not use for anything else. */
 	foeSidesWithConditions() {
-		if (this.battle.gameType === 'multi') return this.battle.sides.filter(side => side !== this);
+		if (this.battle.gameType === 'freeforall') return this.battle.sides.filter(side => side !== this);
 
 		return [this.foe];
 	}
