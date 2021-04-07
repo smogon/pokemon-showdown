@@ -148,6 +148,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 export class DexItems {
 	readonly dex: ModdedDex;
 	readonly itemCache = new Map<ID, Item>();
+	allCache: readonly Item[] | null = null;
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
@@ -197,5 +198,15 @@ export class DexItems {
 
 		if (item.exists) this.itemCache.set(id, item);
 		return item;
+	}
+
+	all(): readonly Item[] {
+		if (this.allCache) return this.allCache;
+		const items = [];
+		for (const id in this.dex.data.Items) {
+			items.push(this.getByID(id as ID));
+		}
+		this.allCache = items;
+		return this.allCache;
 	}
 }

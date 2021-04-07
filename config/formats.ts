@@ -1062,8 +1062,7 @@ export const Formats: FormatList = [
 			const unreleased = (pokemon: Species) => pokemon.tier === "Unreleased" && pokemon.isNonstandard === "Unobtainable";
 			if (!teamHas.abilityMap) {
 				teamHas.abilityMap = Object.create(null);
-				for (const speciesid in Dex.data.Pokedex) {
-					const pokemon = this.dex.species.get(speciesid);
+				for (const pokemon of Dex.species.all()) {
 					if (pokemon.isNonstandard || unreleased(pokemon)) continue;
 					if (pokemon.requiredAbility || pokemon.requiredItem || pokemon.requiredMove) continue;
 					if (this.ruleTable.isBannedSpecies(pokemon)) continue;
@@ -1071,9 +1070,9 @@ export const Formats: FormatList = [
 					for (const key of Object.values(pokemon.abilities)) {
 						const abilityId = this.dex.toID(key);
 						if (abilityId in teamHas.abilityMap) {
-							teamHas.abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
+							teamHas.abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](pokemon.id);
 						} else {
-							teamHas.abilityMap[abilityId] = [speciesid];
+							teamHas.abilityMap[abilityId] = [pokemon.id];
 						}
 					}
 				}

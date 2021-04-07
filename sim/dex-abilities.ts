@@ -53,6 +53,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 export class DexAbilities {
 	readonly dex: ModdedDex;
 	readonly abilityCache = new Map<ID, Ability>();
+	allCache: readonly Ability[] | null = null;
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
@@ -96,5 +97,15 @@ export class DexAbilities {
 
 		if (ability.exists) this.abilityCache.set(id, ability);
 		return ability;
+	}
+
+	all(): readonly Ability[] {
+		if (this.allCache) return this.allCache;
+		const abilities = [];
+		for (const id in this.dex.data.Abilities) {
+			abilities.push(this.getByID(id as ID));
+		}
+		this.allCache = abilities;
+		return this.allCache;
 	}
 }

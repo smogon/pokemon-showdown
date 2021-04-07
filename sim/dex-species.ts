@@ -329,6 +329,7 @@ export class DexSpecies {
 	readonly dex: ModdedDex;
 	readonly speciesCache = new Map<ID, Species>();
 	readonly learnsetCache = new Map<ID, Learnset>();
+	allCache: readonly Species[] | null = null;
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
@@ -489,5 +490,15 @@ export class DexSpecies {
 		learnsetData = new Learnset(this.dex.data.Learnsets[id]);
 		this.learnsetCache.set(id, learnsetData);
 		return learnsetData;
+	}
+
+	all(): readonly Species[] {
+		if (this.allCache) return this.allCache;
+		const species = [];
+		for (const id in this.dex.data.Pokedex) {
+			species.push(this.getByID(id as ID));
+		}
+		this.allCache = species;
+		return this.allCache;
 	}
 }

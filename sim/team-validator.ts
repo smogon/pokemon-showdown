@@ -1077,8 +1077,7 @@ export class TeamValidator {
 		if (!getAll && eggGroups.includes('Field')) return true;
 
 		// try to find a father to inherit the egg move combination from
-		for (const fatherid in dex.data.Pokedex) {
-			const father = dex.species.get(fatherid);
+		for (const father of dex.species.all()) {
 			// can't inherit from CAP pokemon
 			if (father.isNonstandard) continue;
 			// can't breed mons from future gens
@@ -1086,10 +1085,10 @@ export class TeamValidator {
 			// father must be male
 			if (father.gender === 'N' || father.gender === 'F') continue;
 			// can't inherit from dex entries with no learnsets
-			if (!dex.species.getLearnset(fatherid as ID)) continue;
+			if (!dex.species.getLearnset(father.id)) continue;
 			// something is clearly wrong if its only possible father is itself
 			// (exceptions: ExtremeSpeed Dragonite, Self-destruct Snorlax)
-			if (species.id === fatherid && !['dragonite', 'snorlax'].includes(fatherid)) continue;
+			if (species.id === father.id && !['dragonite', 'snorlax'].includes(father.id)) continue;
 			// don't check NFE Pokémon - their evolutions will know all their moves and more
 			// exception: Combee/Salandit, because their evos can't be fathers
 			if (father.evos.length) {
@@ -1105,7 +1104,7 @@ export class TeamValidator {
 
 			// father found!
 			if (!getAll) return true;
-			fathers.push(fatherid as ID);
+			fathers.push(father.id);
 		}
 		if (!getAll) return false;
 		return (!fathers.length && eggGen < 6) ? null : fathers;

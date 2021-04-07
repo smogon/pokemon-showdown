@@ -486,8 +486,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		doublesnu: '(DUU)', dnu: '(DUU)',
 	});
 	const allTypes = Object.create(null);
-	for (const i in mod.data.TypeChart) {
-		allTypes[toID(i)] = i;
+	for (const type of mod.types.all()) {
+		allTypes[type.id] = type.name;
 	}
 	const allColors = ['green', 'red', 'blue', 'white', 'brown', 'yellow', 'purple', 'pink', 'gray', 'black'];
 	const allEggGroups: {[k: string]: string} = Object.assign(Object.create(null), {
@@ -768,18 +768,18 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
-				for (const move in mod.data.Moves) {
-					const moveData = mod.moves.get(move);
-					if (moveData.category === "Status" || moveData.id === "bide") continue;
-					if (moveData.priority > 0) {
-						const invalid = validParameter("moves", move, isNotSearch, target);
+				for (const moveid in mod.data.Moves) {
+					const move = mod.moves.get(moveid);
+					if (move.category === "Status" || move.id === "bide") continue;
+					if (move.priority > 0) {
+						const invalid = validParameter("moves", moveid, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
 							const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
-							bufferObj.moves[move] = false;
+							bufferObj.moves[moveid] = false;
 							searches.push(bufferObj as DexOrGroup);
 						} else {
-							orGroup.moves[move] = true;
+							orGroup.moves[moveid] = true;
 						}
 					}
 				}
@@ -916,8 +916,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	const dex: {[k: string]: Species} = {};
-	for (const pokemon in mod.data.Pokedex) {
-		const species = mod.species.get(pokemon);
+	for (const species of mod.species.all()) {
 		const megaSearchResult = (
 			megaSearch === null || (megaSearch === true && species.isMega) ||
 			(megaSearch === false && !species.isMega)
@@ -946,7 +945,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			gmaxSearchResult &&
 			fullyEvolvedSearchResult
 		) {
-			dex[pokemon] = species;
+			dex[species.id] = species;
 		}
 	}
 
@@ -2081,8 +2080,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 
-		for (const n in dex.data.Items) {
-			const item = dex.items.get(n);
+		for (const item of dex.items.all()) {
 			if (!item.fling || (gen && item.gen !== gen) || (maxGen && item.gen <= maxGen)) continue;
 
 			if (basePower && effect) {
@@ -2113,8 +2111,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 
-		for (const n in dex.data.Items) {
-			const item = dex.items.get(n);
+		for (const item of dex.items.all()) {
 			if (!item.isBerry || !item.naturalGift || (gen && item.gen !== gen) || (maxGen && item.gen <= maxGen)) continue;
 
 			if (basePower && type) {
@@ -2130,8 +2127,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		}
 	} else {
 		let bestMatched = 0;
-		for (const n in dex.data.Items) {
-			const item = dex.items.get(n);
+		for (const item of dex.items.all()) {
 			let matched = 0;
 			// splits words in the description into a toID()-esk format except retaining / and . in numbers
 			let descWords = item.desc || '';
@@ -2280,8 +2276,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 
 	let bestMatched = 0;
 	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
-	for (const n in dex.data.Abilities) {
-		const ability = dex.abilities.get(n);
+	for (const ability of dex.abilities.all()) {
 		let matched = 0;
 		// splits words in the description into a toID()-esque format except retaining / and . in numbers
 		let descWords = ability.desc || ability.shortDesc || '';

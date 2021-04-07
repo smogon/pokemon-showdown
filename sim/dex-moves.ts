@@ -566,6 +566,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 export class DexMoves {
 	readonly dex: ModdedDex;
 	readonly moveCache = new Map<ID, Move>();
+	allCache: readonly Move[] | null = null;
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
@@ -610,5 +611,15 @@ export class DexMoves {
 		}
 		if (move.exists) this.moveCache.set(id, move);
 		return move;
+	}
+
+	all(): readonly Move[] {
+		if (this.allCache) return this.allCache;
+		const moves = [];
+		for (const id in this.dex.data.Moves) {
+			moves.push(this.getByID(id as ID));
+		}
+		this.allCache = moves;
+		return this.allCache;
 	}
 }

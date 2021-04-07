@@ -2321,8 +2321,8 @@ export class Battle {
 			return;
 		case 'instaswitch':
 		case 'switch':
-			if (action.choice === 'switch' && action.pokemon.status && this.dex.data.Abilities.naturalcure) {
-				this.singleEvent('CheckShow', this.dex.abilities.get('naturalcure'), null, action.pokemon);
+			if (action.choice === 'switch' && action.pokemon.status) {
+				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
 			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
 				// a pokemon fainted from Pursuit before it could switch

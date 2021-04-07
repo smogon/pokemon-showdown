@@ -147,6 +147,7 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 export class DexNatures {
 	readonly dex: ModdedDex;
 	readonly natureCache = new Map<ID, Nature>();
+	allCache: readonly Nature[] | null = null;
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
@@ -178,6 +179,16 @@ export class DexNatures {
 
 		if (nature.exists) this.natureCache.set(id, nature);
 		return nature;
+	}
+
+	all(): readonly Nature[] {
+		if (this.allCache) return this.allCache;
+		const natures = [];
+		for (const id in this.dex.data.Natures) {
+			natures.push(this.getByID(id as ID));
+		}
+		this.allCache = natures;
+		return this.allCache;
 	}
 }
 
@@ -237,6 +248,7 @@ export class TypeInfo implements Readonly<TypeData> {
 export class DexTypes {
 	readonly dex: ModdedDex;
 	readonly typeCache = new Map<ID, TypeInfo>();
+	allCache: readonly TypeInfo[] | null = null;
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
@@ -260,6 +272,16 @@ export class DexTypes {
 
 		if (type.exists) this.typeCache.set(id, type);
 		return type;
+	}
+
+	all(): readonly TypeInfo[] {
+		if (this.allCache) return this.allCache;
+		const types = [];
+		for (const id in this.dex.data.TypeChart) {
+			types.push(this.getByID(id as ID));
+		}
+		this.allCache = types;
+		return this.allCache;
 	}
 }
 
