@@ -3267,7 +3267,7 @@ export const Formats: FormatList = [
 		banlist: ['UU', 'NUBL'],
 	},
 	{
-		name: "[Gen 1] OU (Tradeback)",
+		name: "[Gen 1] Tradebacks OU",
 		desc: `RBY OU with movepool additions from the Time Capsule.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/articles/rby-tradebacks-ou">RBY Tradebacks OU</a>`,
