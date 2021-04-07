@@ -21,10 +21,26 @@ function needsSucrase(source, dest, path = "") {
 	if (!path.includes(".")) {
 		// probably dir
 		try {
-			const files = fs.readdirSync(source + path);
-			for (const file of files) {
+			const sourceFiles = fs.readdirSync(source + path);
+			for (const file of sourceFiles) {
 				if (needsSucrase(source, dest, path + "/" + file)) {
 					return true;
+				}
+			}
+			if (path.endsWith('/chat-plugins') || path.includes('/mods/')) {
+				const destFiles = fs.readdirSync(dest + path);
+				for (const file of destFiles) {
+					if (file.endsWith('.js') && !sourceFiles.includes(file.slice(0, -2) + 'ts') && !sourceFiles.includes(file)) {
+						fs.unlinkSync(dest + path + "/" + file);
+					}
+				}
+			}
+			if (path.endsWith('/mods')) {
+				const destFolders = fs.readdirSync(dest + path);
+				for (const destFolder of destFolders) {
+					if (!destFolder.includes('.') && !sourceFiles.includes(destFolder)) {
+						fs.rmSync(dest + path + "/" + destFolder, {recursive: true});
+					}
 				}
 			}
 		} catch (e) {
