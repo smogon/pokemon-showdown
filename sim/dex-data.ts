@@ -101,9 +101,9 @@ export class BasicEffect implements EffectData {
 	/** ??? */
 	sourceEffect: string;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
+	constructor(data: AnyObject) {
 		this.exists = true;
-		data = combine(this, data, ...moreData);
+		Object.assign(this, data);
 
 		this.name = Utils.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
@@ -294,11 +294,4 @@ export class DexStats {
 	ids(): typeof idsCache {
 		return idsCache;
 	}
-}
-
-export function combine(obj: AnyObject, ...data: (AnyObject | null)[]): AnyObject {
-	for (const d of data) {
-		if (d) Object.assign(obj, d);
-	}
-	return obj;
 }

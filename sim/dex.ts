@@ -67,6 +67,10 @@ const DATA_FILES = {
 	TypeChart: 'typechart',
 };
 
+interface DexTable<T> {
+	[key: string]: T;
+}
+
 interface DexTableData {
 	Abilities: DexTable<AbilityData>;
 	Aliases: {[id: string]: string};

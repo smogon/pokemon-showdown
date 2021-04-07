@@ -598,8 +598,8 @@ export class Condition extends BasicEffect implements Readonly<BasicEffect & Con
 	readonly onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 	readonly onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
 	}
@@ -652,19 +652,19 @@ export class DexConditions {
 		if (this.dex.data.Rulesets.hasOwnProperty(id)) {
 			condition = this.dex.formats.get(id);
 		} else if (this.dex.data.Conditions.hasOwnProperty(id)) {
-			condition = new Condition({name: id}, this.dex.data.Conditions[id]);
+			condition = new Condition({name: id, ...this.dex.data.Conditions[id]});
 		} else if (
 			(this.dex.data.Moves.hasOwnProperty(id) && (found = this.dex.data.Moves[id]).condition) ||
 			(this.dex.data.Abilities.hasOwnProperty(id) && (found = this.dex.data.Abilities[id]).condition) ||
 			(this.dex.data.Items.hasOwnProperty(id) && (found = this.dex.data.Items[id]).condition)
 		) {
-			condition = new Condition({name: found.name || id}, found.condition);
+			condition = new Condition({name: found.name || id, ...found.condition});
 		} else if (id === 'recoil') {
-			condition = new Condition({id, name: 'Recoil', effectType: 'Recoil'});
+			condition = new Condition({name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
-			condition = new Condition({id, name: 'Drain', effectType: 'Drain'});
+			condition = new Condition({name: 'Drain', effectType: 'Drain'});
 		} else {
-			condition = new Condition({id, name: id, exists: false});
+			condition = new Condition({name: id, exists: false});
 		}
 
 		this.conditionCache.set(id, condition);

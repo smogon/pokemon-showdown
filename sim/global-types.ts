@@ -18,12 +18,10 @@ type Side = import('./side').Side;
 type TeamValidator = import('./team-validator').TeamValidator;
 type PokemonSources = import('./team-validator').PokemonSources;
 
+/** An ID must be lowercase alphanumeric. */
 type ID = '' | string & {__isID: true};
 type PokemonSlot = '' | string & {__isSlot: true};
 interface AnyObject {[k: string]: any}
-interface DexTable<T> {
-	[key: string]: T;
-}
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';

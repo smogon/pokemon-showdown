@@ -47,7 +47,7 @@ export interface PokemonSet {
 	/**
 	 * Effort Values, used in stat calculation.
 	 * These must be between 0 and 255, inclusive.
-	 * 
+	 *
 	 * Also used to store AVs for Let's Go
 	 */
 	evs: StatsTable;
