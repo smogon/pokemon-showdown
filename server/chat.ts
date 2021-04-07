@@ -1187,7 +1187,7 @@ export class CommandContext extends MessageContext {
 				// autoclose tags
 				'p', 'li', 'dt', 'dd', 'option', 'tr', 'th', 'td', 'thead', 'tbody', 'tfoot', 'colgroup',
 				// PS custom element
-				'psicon',
+				'psicon', 'youtube',
 			];
 			const stack = [];
 			for (const tag of tags) {
