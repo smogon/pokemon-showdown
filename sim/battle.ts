@@ -5,6 +5,7 @@
  * @license MIT
  */
 import {Dex, toID} from './dex';
+import {Teams} from './teams';
 import {Field} from './field';
 import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
@@ -126,7 +127,7 @@ export class Battle {
 	lastDamage: number;
 	abilityOrder: number;
 
-	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
+	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
 
 	readonly hints: Set<string>;
 
@@ -2694,7 +2695,7 @@ export class Battle {
 
 	getTeam(options: PlayerOptions): PokemonSet[] {
 		let team = options.team;
-		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
+		if (typeof team === 'string') team = Teams.fastUnpack(team);
 		if (team) return team;
 
 		if (!options.seed) {
@@ -2702,7 +2703,7 @@ export class Battle {
 		}
 
 		if (!this.teamGenerator) {
-			this.teamGenerator = this.dex.getTeamGenerator(this.format, options.seed);
+			this.teamGenerator = Teams.getGenerator(this.format, options.seed);
 		} else {
 			this.teamGenerator.setSeed(options.seed);
 		}
@@ -2736,7 +2737,7 @@ export class Battle {
 			if (options.team) throw new Error(`Player ${slot} already has a team!`);
 		}
 		if (options.team && typeof options.team !== 'string') {
-			options.team = this.dex.packTeam(options.team);
+			options.team = Teams.pack(options.team);
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));

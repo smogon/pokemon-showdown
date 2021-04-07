@@ -1014,7 +1014,7 @@ export const commands: ChatCommands = {
 			const species = Dex.species.get(set.species).baseSpecies;
 			return species !== set.name ? set.name : species;
 		});
-		let resultString = Dex.stringifyTeam(teamStrings, nicknames, hideStats);
+		let resultString = Teams.export(teamStrings, nicknames, hideStats);
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}

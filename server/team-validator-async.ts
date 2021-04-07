@@ -39,7 +39,7 @@ export const PM = new QueryProcessManager<{
 	formatid: string, options?: {removeNicknames?: boolean}, team: string,
 }>(module, message => {
 	const {formatid, options, team} = message;
-	const parsedTeam = Dex.fastUnpackTeam(team);
+	const parsedTeam = Teams.fastUnpack(team);
 
 	if (Config.debugvalidatorprocesses && process.send) {
 		process.send('DEBUG\n' + JSON.stringify(message));
@@ -62,7 +62,7 @@ export const PM = new QueryProcessManager<{
 	if (problems?.length) {
 		return '0' + problems.join('\n');
 	}
-	const packedTeam = Dex.packTeam(parsedTeam);
+	const packedTeam = Teams.pack(parsedTeam);
 	// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
 	// console.log('TO: ' + packedTeam);
 	return '1' + packedTeam;
@@ -89,6 +89,7 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = require('../sim/dex').Dex.includeData();
+	global.Teams = require('../sim/teams').Teams;
 
 	// eslint-disable-next-line no-eval
 	require('../lib/repl').Repl.start(`team-validator-${process.pid}`, (cmd: string) => eval(cmd));

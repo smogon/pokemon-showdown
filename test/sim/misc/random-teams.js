@@ -2,6 +2,7 @@
 
 const assert = require('./../../assert');
 const TeamValidator = require('./../../../.sim-dist/team-validator').TeamValidator;
+const Teams = require('./../../../.sim-dist/teams').Teams;
 const Utils = require('./../../../.lib-dist/utils').Utils;
 
 const TOTAL_TEAMS = 10;
@@ -38,7 +39,7 @@ describe(`Random Team generator (slow)`, function () {
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
-			const generator = Dex.getTeamGenerator(`gen${gen}randombattle`);
+			const generator = Teams.getGenerator(`gen${gen}randombattle`);
 			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
 			let teamCount = TOTAL_TEAMS;
@@ -58,7 +59,7 @@ describe(`Random Team generator (slow)`, function () {
 
 	it(`should successfully create valid gen8monotyperandombattle teams`, function () {
 		this.timeout(0);
-		const generator = Dex.getTeamGenerator('gen8monotyperandombattle', [46, 41716, 23878, 52950]);
+		const generator = Teams.getGenerator('gen8monotyperandombattle', [46, 41716, 23878, 52950]);
 
 		let teamCount = 1000;
 		while (teamCount--) {
@@ -91,7 +92,7 @@ describe(`Challenge Cup Team generator`, function () {
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
-			const generator = Dex.getTeamGenerator(`gen${gen}challengecup`);
+			const generator = Teams.getGenerator(`gen${gen}challengecup`);
 			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
 			let teamCount = TOTAL_TEAMS;
@@ -114,7 +115,7 @@ describe(`Hackmons Cup Team generator`, function () {
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
-			const generator = Dex.getTeamGenerator(`gen${gen}hackmonscup`);
+			const generator = Teams.getGenerator(`gen${gen}hackmonscup`);
 			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
 			let teamCount = TOTAL_TEAMS;
@@ -190,7 +191,7 @@ describe(`Factory sets`, function () {
 							totalEVs += set.evs[ev];
 							assert.equal(set.evs[ev] % 4, 0, `EVs of ${ev} not divisible by 4 on ${species}`);
 						}
-						const sortedKeys = Utils.sortBy([...keys], ev => evKeys.indexOf(ev));
+						const sortedKeys = Utils.sortBy([...keys], ev => Dex.stats.ids().indexOf(ev));
 						assert.deepEqual(keys, sortedKeys, `EVs out of order on set of ${species}, possibly because one of them is for the wrong stat`);
 						assert(totalEVs <= 510, `more than 510 EVs on set of ${species}`);
 					}

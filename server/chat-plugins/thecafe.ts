@@ -85,8 +85,8 @@ export const commands: ChatCommands = {
 		let importable;
 		const [newDish, newIngredients] = generateDish();
 		if (!target) {
-			const bfTeam = Dex.generateTeam('gen7bssfactory');
-			importable = Dex.stringifyTeam(bfTeam, newIngredients);
+			const bfTeam = Teams.generate('gen7bssfactory');
+			importable = Teams.export(bfTeam, newIngredients);
 			team = bfTeam.map(val => val.species);
 		} else {
 			team = generateTeam(target);
