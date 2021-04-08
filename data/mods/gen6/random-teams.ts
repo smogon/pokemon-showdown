@@ -1269,7 +1269,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				}
 			}
 
-			for (const typeName in this.dex.data.TypeChart) {
+			for (const typeName of this.dex.types.names()) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
 				if (resistanceAbilities[abilityData.id]?.includes(typeName) || !this.dex.getImmunity(typeName, types)) {

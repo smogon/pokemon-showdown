@@ -1375,7 +1375,7 @@ export class RandomGen7Teams extends RandomTeams {
 
 		// For Monotype
 		const isMonotype = ruleTable.has('sametypeclause');
-		const typePool = Object.keys(this.dex.data.TypeChart);
+		const typePool = this.dex.types.names();
 		const type = this.sample(typePool);
 
 		const baseFormes: {[k: string]: number} = {};
@@ -1646,7 +1646,7 @@ export class RandomGen7Teams extends RandomTeams {
 		const pokemon = [];
 		const pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
-		const typePool = Object.keys(this.dex.data.TypeChart);
+		const typePool = this.dex.types.names();
 		const type = this.sample(typePool);
 
 		const teamData: TeamData = {
@@ -1781,7 +1781,7 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 			}
 
-			for (const typeName in this.dex.data.TypeChart) {
+			for (const typeName of this.dex.types.names()) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
 				if (resistanceAbilities[abilityData.id]?.includes(typeName) || !this.dex.getImmunity(typeName, types)) {
@@ -2014,7 +2014,7 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 			}
 
-			for (const typeName in this.dex.data.TypeChart) {
+			for (const typeName of this.dex.types.names()) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
 				if (resistanceAbilities[abilityData.id]?.includes(typeName) || !this.dex.getImmunity(typeName, types)) {

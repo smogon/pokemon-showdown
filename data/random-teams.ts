@@ -603,7 +603,7 @@ export class RandomTeams {
 			Ice: 0, Normal: 0, Poison: 0, Psychic: 0, Rock: 0, Steel: 0, Water: 0,
 		};
 
-		for (const typeDef in this.dex.data.TypeChart) {
+		for (const typeDef of this.dex.types.names()) {
 			counter[typeDef] = 0;
 		}
 
@@ -1989,7 +1989,7 @@ export class RandomTeams {
 
 		// For Monotype
 		const isMonotype = ruleTable.has('sametypeclause');
-		const typePool = Object.keys(this.dex.data.TypeChart);
+		const typePool = this.dex.types.names();
 		const type = this.sample(typePool);
 
 		// PotD stuff
@@ -2360,7 +2360,7 @@ export class RandomTeams {
 				}
 			}
 
-			for (const typeName in this.dex.data.TypeChart) {
+			for (const typeName of this.dex.types.names()) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
 				if (resistanceAbilities[abilityData.id]?.includes(typeName) || !this.dex.getImmunity(typeName, types)) {

@@ -362,7 +362,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const team = [];
 
 		const movePool = Object.keys(this.dex.data.Moves);
-		const typesPool = ['Bird', ...Object.keys(this.dex.data.TypeChart)];
+		const typesPool = ['Bird', ...this.dex.types.names()];
 
 		const random6 = this.random6Pokemon();
 		const hackmonsCup: {[k: string]: HackmonsCupEntry} = {};

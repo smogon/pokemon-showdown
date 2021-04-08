@@ -347,7 +347,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
 			// h innate
 			if (pokemon.illusion) return;
-			const typeList = Object.keys(this.dex.data.TypeChart);
+			const typeList = [...this.dex.types.names()];
 			this.prng.shuffle(typeList);
 			const firstType = typeList[0];
 			this.prng.shuffle(typeList);
@@ -369,7 +369,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onResidual(pokemon) {
 			if (pokemon.illusion) return;
 			if (pokemon.activeTurns) {
-				const typeList = Object.keys(this.dex.data.TypeChart);
+				const typeList = [...this.dex.types.names()];
 				this.prng.shuffle(typeList);
 				const firstType = typeList[0];
 				this.prng.shuffle(typeList);

@@ -2449,9 +2449,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 			const possibleTypes = [];
 			const attackType = target.lastMoveUsed.type;
-			for (const type in this.dex.data.TypeChart) {
+			for (const type of this.dex.types.names()) {
 				if (source.hasType(type)) continue;
-				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
+				const typeCheck = this.dex.types.get(type).damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
 					possibleTypes.push(type);
 				}

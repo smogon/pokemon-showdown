@@ -217,6 +217,11 @@ export class TypeInfo implements Readonly<TypeData> {
 	 */
 	readonly gen: number;
 	/**
+	 * Set to 'Future' for types before they're released (like Fairy
+	 * in Gen 5 or Dark in Gen 1).
+	 */
+	readonly isNonstandard: Nonstandard | null;
+	/**
 	 * Type chart, attackingTypeName:result, effectid:result
 	 * result is: 0 = normal, 1 = weakness, 2 = resistance, 3 = immunity
 	 */
@@ -235,6 +240,7 @@ export class TypeInfo implements Readonly<TypeData> {
 		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
 		this.exists = !!(this.exists && this.id);
 		this.gen = data.gen || 0;
+		this.isNonstandard = data.isNonstandard || null;
 		this.damageTaken = data.damageTaken || {};
 		this.HPivs = data.HPivs || {};
 		this.HPdvs = data.HPdvs || {};
@@ -249,6 +255,7 @@ export class DexTypes {
 	readonly dex: ModdedDex;
 	readonly typeCache = new Map<ID, TypeInfo>();
 	allCache: readonly TypeInfo[] | null = null;
+	namesCache: readonly string[] | null = null;
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
@@ -264,14 +271,28 @@ export class DexTypes {
 		if (type) return type;
 
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-		if (typeName && this.dex.data.TypeChart.hasOwnProperty(typeName)) {
-			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[typeName]});
+		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
+			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
 		} else {
 			type = new TypeInfo({name: typeName, id, exists: false, effectType: 'EffectType'});
 		}
 
 		if (type.exists) this.typeCache.set(id, type);
 		return type;
+	}
+
+	names(): readonly string[] {
+		if (this.namesCache) return this.namesCache;
+
+		this.namesCache = this.all().filter(type => !type.isNonstandard).map(type => type.name);
+
+		return this.namesCache;
+	}
+
+	isName(name: string): boolean {
+		const id = name.toLowerCase();
+		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
+		return name === typeName && this.dex.data.TypeChart.hasOwnProperty(id);
 	}
 
 	all(): readonly TypeInfo[] {
