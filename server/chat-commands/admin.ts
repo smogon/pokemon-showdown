@@ -18,6 +18,12 @@ interface ProcessData {
 	cmd: string;
 	cpu?: string;
 	time?: string;
+	ram?: string;
+}
+
+function hasDevAuth(user: User) {
+	const devRoom = Rooms.get('development');
+	return devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%');
 }
 
 function bash(command: string, context: CommandContext, cwd?: string): Promise<[number, string, string]> {
@@ -407,8 +413,8 @@ export const commands: ChatCommands = {
 	 *********************************************************/
 
 	memusage: 'memoryusage',
-	memoryusage(target) {
-		this.checkCan('lockdown');
+	memoryusage(target, room, user) {
+		if (!hasDevAuth(user)) this.checkCan('lockdown');
 		const memUsage = process.memoryUsage();
 		const resultNums = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
 		const units = ["B", "KiB", "MiB", "GiB", "TiB"];
@@ -742,24 +748,31 @@ export const commands: ChatCommands = {
 	],
 
 	async processes(target, room, user) {
-		const devRoom = Rooms.get('development');
-		if (!(devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%'))) {
-			this.checkCan('lockdown');
-		}
+		if (!hasDevAuth(user)) this.checkCan('lockdown');
 
 		const processes = new Map<string, ProcessData>();
+		const ramUnits = ["B", "KiB", "MiB", "GiB", "TiB"];
 
 		await new Promise<void>(resolve => {
-			const child = child_process.exec('ps -o pid,%cpu,time,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
 				if (err) throw err;
 				const rows = stdout.split('\n').slice(1); // first line is the table header
 				for (const row of rows) {
 					if (!row.trim()) continue;
-					const [pid, cpu, time, ...rest] = row.split(' ').filter(Boolean);
+					const [pid, cpu, time, ram, ...rest] = row.split(' ').filter(Boolean);
 					if (pid === `${child.pid}`) continue; // ignore this process
 					const entry: ProcessData = {cmd: rest.join(' ')};
-					if (time && time !== '00:00:00') entry.time = time;
+					// at the point of 0:00.[num], it's in so few seconds we don't care, so
+					// we don't need to clutter the display
+					if (time && !time.startsWith('0:00')) {
+						entry.time = time;
+					}
 					if (cpu && cpu !== '0.0') entry.cpu = `${cpu}%`;
+					const ramNum = parseInt(ram);
+					if (!isNaN(ramNum)) {
+						const unitIndex = Math.floor(Math.log2(ramNum) / 10); // 2^10 base log
+						entry.ram = `${(ramNum / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${ramUnits[unitIndex]}`;
+					}
 					processes.set(pid, entry);
 				}
 				resolve();
@@ -767,9 +780,14 @@ export const commands: ChatCommands = {
 		});
 
 		let buf = `<strong>${process.pid}</strong> - Main `;
+		const mainDisplay = [];
 		const mainProcess = processes.get(`${process.pid}`)!;
-		if (mainProcess.cpu) buf += `(CPU ${mainProcess.cpu}`;
-		if (mainProcess.time) buf += mainProcess.cpu ? `, time: ${mainProcess.time})` : `(time: ${mainProcess.time})`;
+		if (mainProcess.cpu) mainDisplay.push(`CPU ${mainProcess.cpu}`);
+		if (mainProcess.time) mainDisplay.push(`time: ${mainProcess.time})`);
+		if (mainProcess.ram) {
+			mainDisplay.push(`RAM: ${mainProcess.ram}`);
+		}
+		if (mainDisplay.length) buf += ` (${mainDisplay.join(', ')})`;
 		buf += `<br /><br /><strong>Process managers:</strong><br />`;
 		processes.delete(`${process.pid}`);
 
@@ -778,9 +796,12 @@ export const commands: ChatCommands = {
 				const pid = process.getProcess().pid;
 				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
-				if (info.cpu) buf += `, CPU: ${info.cpu}`;
-				if (info.time) buf += `, time: ${info.time}`;
-				buf += `)<br />`;
+				const display = [];
+				if (info.cpu) display.push(`CPU: ${info.cpu}`);
+				if (info.time) display.push(`time: ${info.time}`);
+				if (info.ram) display.push(`RAM: ${info.ram}`);
+				if (display.length) buf += `, ${display.join(', ')})`;
+				buf += `<br />`;
 				processes.delete(`${pid}`);
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
@@ -788,22 +809,26 @@ export const commands: ChatCommands = {
 				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`);
 				if (info) {
-					if (info.cpu) buf += `, CPU: ${info.cpu}`;
-					if (info.time) buf += `, time: ${info.time}`;
+					const display = [];
+					if (info.cpu) display.push(`CPU: ${info.cpu}`);
+					if (info.time) display.push(`time: ${info.time}`);
+					if (info.ram) display.push(`RAM: ${info.ram}`);
+					if (display.length) buf += `, ${display.join(', ')})`;
 				}
-				buf += `)<br />`;
+				buf += `br />`;
 				processes.delete(`${pid}`);
 			}
 		}
 		buf += `<br />`;
 		buf += `<details class="readmore"><summary><strong>Other processes:</strong></summary>`;
 
-		for (const [pid, process] of processes) {
-			buf += `<strong>${pid}</strong> - <code>${process.cmd}</code>`;
-			if (process.cpu) buf += ` (CPU: ${process.cpu}`;
-			if (process.time) {
-				buf += `${process.cpu ? `, ` : ' ('}time: ${process.time})`;
-			}
+		for (const [pid, info] of processes) {
+			buf += `<strong>${pid}</strong> - <code>${info.cmd}</code>`;
+			const display = [];
+			if (info.cpu) display.push(`CPU: ${info.cpu}`);
+			if (info.time) display.push(`time: ${info.time}`);
+			if (info.ram) display.push(`RAM: ${info.ram}`);
+			if (display.length) buf += `(${display.join(', ')})`;
 			buf += `<br />`;
 		}
 		buf += `</details>`;
