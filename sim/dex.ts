@@ -239,7 +239,7 @@ export class ModdedDex {
 			}
 			return true;
 		}
-		const typeData = this.data.TypeChart[targetTyping];
+		const typeData = this.types.get(targetTyping);
 		if (typeData && typeData.damageTaken[sourceType] === 3) return false;
 		return true;
 	}
@@ -258,7 +258,7 @@ export class ModdedDex {
 			}
 			return totalTypeMod;
 		}
-		const typeData = this.data.TypeChart[targetTyping];
+		const typeData = this.types.get(targetTyping);
 		if (!typeData) return 0;
 		switch (typeData.damageTaken[sourceType]) {
 		case 1: return 1; // super-effective

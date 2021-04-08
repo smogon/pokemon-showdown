@@ -376,20 +376,12 @@ interface TypeData {
 	damageTaken: {[attackingTypeNameOrEffectid: string]: number};
 	HPdvs?: SparseStatsTable;
 	HPivs?: SparseStatsTable;
+	isNonstandard?: Nonstandard | null;
 }
 
 type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & {inherit: true};
 
-interface TypeInfo extends Readonly<TypeData> {
-	readonly effectType: 'Type' | 'EffectType';
-	readonly exists: boolean;
-	readonly gen: number;
-	readonly HPdvs: SparseStatsTable;
-	readonly HPivs: SparseStatsTable;
-	readonly id: ID;
-	readonly name: string;
-	readonly toString: () => string;
-}
+type TypeInfo = import('./dex-data').TypeInfo;
 
 interface PlayerOptions {
 	name?: string;

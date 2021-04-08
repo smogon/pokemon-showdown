@@ -558,7 +558,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// For Monotype
 		const isMonotype = ruleTable.has('sametypeclause');
-		const typePool = Object.keys(this.dex.data.TypeChart);
+		const typePool = this.dex.types.names();
 		const type = this.sample(typePool);
 
 		const baseFormes: {[k: string]: number} = {};

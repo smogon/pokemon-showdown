@@ -1,5 +1,5 @@
 export const TypeChart: {[k: string]: ModdedTypeData} = {
-	Dark: {
+	dark: {
 		inherit: true,
 		damageTaken: {
 			Bug: 1,

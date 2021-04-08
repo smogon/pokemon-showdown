@@ -1798,7 +1798,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.boost(boost);
 			}
 			if (this.effectData.immunities) return;
-			const typeList = Object.keys(this.dex.data.TypeChart);
+			const typeList = this.dex.types.names();
 			const firstTypeIndex = this.random(typeList.length);
 			const secondType = this.sample(typeList.slice(0, firstTypeIndex).concat(typeList.slice(firstTypeIndex + 1)));
 			this.effectData.immunities = [typeList[firstTypeIndex], secondType];

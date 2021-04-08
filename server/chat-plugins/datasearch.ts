@@ -789,7 +789,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 8) === 'resists ') {
 				const targetResist = target.substr(8, 1).toUpperCase() + target.substr(9);
-				if (targetResist in mod.data.TypeChart) {
+				if (mod.types.isName(targetResist)) {
 					const invalid = validParameter("resists", targetResist, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.resists[targetResist] = !isNotSearch;
@@ -813,7 +813,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 5) === 'weak ') {
 				const targetWeak = target.substr(5, 1).toUpperCase() + target.substr(6);
-				if (targetWeak in mod.data.TypeChart) {
+				if (mod.types.isName(targetWeak)) {
 					const invalid = validParameter("weak", targetWeak, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.weak[targetWeak] = !isNotSearch;
@@ -1247,8 +1247,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		user: 'self',
 	};
 	const allTypes: {[k: string]: string} = Object.create(null);
-	for (const i in mod.data.TypeChart) {
-		allTypes[toID(i)] = i;
+	for (const type of mod.types.all()) {
+		allTypes[type.id] = type.name;
 	}
 	let showAll = false;
 	let sort: string | null = null;
@@ -2098,12 +2098,11 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		let type = "";
 
 		for (let word of searchedWords) {
-			word = word.charAt(0).toUpperCase() + word.slice(1);
 			if (word in dex.data.TypeChart) {
 				if (type) return {error: "Only specify natural gift type once."};
-				type = word;
+				type = word.charAt(0).toUpperCase() + word.slice(1);
 			} else {
-				if (word.substr(word.length - 2) === 'bp' && word.length > 2) word = word.substr(0, word.length - 2);
+				if (word.endsWith('bp') && word.length > 2) word = word.slice(0, -2);
 				if (Number.isInteger(Number(word))) {
 					if (basePower) return {error: "Only specify a number for base power once."};
 					basePower = parseInt(word);
