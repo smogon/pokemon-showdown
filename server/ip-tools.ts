@@ -221,7 +221,7 @@ export const IPTools = new class {
 	 * Proxy and host management functions
 	 */
 	ranges: (AddressRange & {host: string})[] = [];
-	singleIPOpenProxies: Set<string> = new Set();
+	singleIPOpenProxies = new Set<string>();
 	torProxyIps = new Set<string>();
 	proxyHosts: Set<string> = new Set();
 	residentialHosts: Set<string> = new Set();
