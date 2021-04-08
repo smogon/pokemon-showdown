@@ -45,7 +45,8 @@ export function findFormats(targetId: string, isOMSearch = false) {
 		// Skip generation prefix if it wasn't provided
 		const formatId = /^gen\d+/.test(targetId) ? format.id : format.id.slice(4);
 		if (
-			!targetId || format[targetId + 'Show' as 'searchShow'] || sectionId === targetId || formatId.startsWith(targetId)
+			!targetId || format[targetId + 'Show' as 'searchShow'] || sectionId === targetId ||
+			formatId.startsWith(targetId) || exactFormat
 		) {
 			if (isOMSearch) {
 				const officialFormats = [
