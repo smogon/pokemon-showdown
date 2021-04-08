@@ -1,4 +1,4 @@
-import {BasicEffect} from './dex-data';
+import {BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
 
 export interface EventMethods {
@@ -598,9 +598,62 @@ export class Condition extends BasicEffect implements Readonly<BasicEffect & Con
 	readonly onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 	readonly onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
+	}
+}
+
+const EMPTY_CONDITION: Condition = new Condition({name: '', exists: false});
+
+export class DexConditions {
+	readonly dex: ModdedDex;
+	readonly conditionCache = new Map<ID, Condition>();
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name?: string | Effect | null): Condition {
+		if (!name) return EMPTY_CONDITION;
+		if (typeof name !== 'string') return name as Condition;
+
+		return this.getByID(name.startsWith('item:') || name.startsWith('ability:') ? name as ID : toID(name));
+	}
+
+	getByID(id: ID): Condition {
+		if (!id) return EMPTY_CONDITION;
+
+		let condition = this.conditionCache.get(id);
+		if (condition) return condition;
+
+		let found;
+		if (id.startsWith('item:')) {
+			const item = this.dex.items.getByID(id.slice(5) as ID);
+			condition = {...item, id: 'item:' + item.id as ID} as any as Condition;
+		} else if (id.startsWith('ability:')) {
+			const ability = this.dex.abilities.getByID(id.slice(8) as ID);
+			condition = {...ability, id: 'ability:' + ability.id as ID} as any as Condition;
+		} else if (this.dex.data.Rulesets.hasOwnProperty(id)) {
+			condition = this.dex.formats.get(id) as any as Condition;
+		} else if (this.dex.data.Conditions.hasOwnProperty(id)) {
+			condition = new Condition({name: id, ...this.dex.data.Conditions[id]});
+		} else if (
+			(this.dex.data.Moves.hasOwnProperty(id) && (found = this.dex.data.Moves[id]).condition) ||
+			(this.dex.data.Abilities.hasOwnProperty(id) && (found = this.dex.data.Abilities[id]).condition) ||
+			(this.dex.data.Items.hasOwnProperty(id) && (found = this.dex.data.Items[id]).condition)
+		) {
+			condition = new Condition({name: found.name || id, ...found.condition});
+		} else if (id === 'recoil') {
+			condition = new Condition({name: 'Recoil', effectType: 'Recoil'});
+		} else if (id === 'drain') {
+			condition = new Condition({name: 'Drain', effectType: 'Drain'});
+		} else {
+			condition = new Condition({name: id, exists: false});
+		}
+
+		this.conditionCache.set(id, condition);
+		return condition;
 	}
 }

@@ -127,12 +127,12 @@ async function rebuild(context: CommandContext) {
 export const commands: ChatCommands = {
 	potd(target, room, user) {
 		this.canUseConsole();
-		const species = Dex.getSpecies(target);
+		const species = Dex.species.get(target);
 		if (species.id === Config.potd) {
 			return this.errorReply(`The PotD is already set to ${species.name}`);
 		}
 		if (!species.exists) return this.errorReply(`Pokemon "${target}" not found.`);
-		if (!Dex.getLearnsetData(species.id).learnset) {
+		if (!Dex.species.getLearnset(species.id)) {
 			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
 		}
 		Config.potd = species.id;
@@ -352,9 +352,11 @@ export const commands: ChatCommands = {
 			context.title = `[${user.name}] ${pageid}`;
 			context.send(content);
 		}
+
+		this.sendReply(`Sent ${targetUser.name} the bot page ${pageid}.`);
 	},
 	sendhtmlpagehelp: [
-		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: * # &`,
+		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # &`,
 	],
 
 	highlighthtmlpage(target, room, user) {
@@ -386,9 +388,11 @@ export const commands: ChatCommands = {
 		for (const conn of targetConnections) {
 			conn.send(`>view-bot-${pageid}\n${buf}`);
 		}
+
+		this.sendReply(`Sent a highlight to ${targetUser.name} on the bot page ${pageid}.`);
 	},
 	highlighthtmlpagehelp: [
-		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Send a highlight to [userid] if they're viewing the bot page [pageid].`,
+		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Sends a highlight to [userid] if they're viewing the bot page [pageid].`,
 		`If a [highlight] is specified, only highlights them if they have that term on their highlight list.`,
 	],
 
@@ -812,7 +816,7 @@ export const commands: ChatCommands = {
 		await FS('data/learnsets.js').write(`'use strict';\n\nexports.Learnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
 				`\t${id}: {learnset: {\n` +
-				Object.entries(Dex.getLearnsetData(id as ID)).sort(
+				Object.entries(Dex.species.getLearnsetData(id as ID)).sort(
 					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
 				).map(([moveid, sources]) => (
 					`\t\t${moveid}: ["` + sources.join(`", "`) + `"],\n`

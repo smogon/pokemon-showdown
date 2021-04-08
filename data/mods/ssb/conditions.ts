@@ -347,7 +347,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
 			// h innate
 			if (pokemon.illusion) return;
-			const typeList = Object.keys(this.dex.data.TypeChart);
+			const typeList = [...this.dex.types.names()];
 			this.prng.shuffle(typeList);
 			const firstType = typeList[0];
 			this.prng.shuffle(typeList);
@@ -369,7 +369,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onResidual(pokemon) {
 			if (pokemon.illusion) return;
 			if (pokemon.activeTurns) {
-				const typeList = Object.keys(this.dex.data.TypeChart);
+				const typeList = [...this.dex.types.names()];
 				this.prng.shuffle(typeList);
 				const firstType = typeList[0];
 				this.prng.shuffle(typeList);
@@ -2070,7 +2070,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (source && target === source) return;
 			if (target.species.id !== 'miniorblue') return;
 			let showMsg = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -2170,7 +2170,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					if (key.endsWith('mod') || key.endsWith('clause')) continue;
 					side.removeSideCondition(key);
 					if (!silentRemove.includes(key)) {
-						this.add('-sideend', side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
+						this.add('-sideend', side, this.dex.conditions.get(key).name, '[from] ability: Turbulence');
 					}
 				}
 			}
@@ -2302,7 +2302,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 			if (source && target !== source) {
 				let showMsg = false;
-				let i: BoostName;
+				let i: BoostID;
 				for (i in boost) {
 					if (boost[i]! < 0) {
 						delete boost[i];

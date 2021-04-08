@@ -182,7 +182,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			delete pokemon.volatiles['lockedmove'];
 		},
 		onBeforeTurn(pokemon) {
-			const move = this.dex.getMove(this.effectData.move);
+			const move = this.dex.moves.get(this.effectData.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
 				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});

@@ -5,7 +5,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			for (const pokemon of this.battle.getAllActive()) {
 				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() &&
 					(pokemon.getAbility().suppressWeather ||
-						pokemon.m.innates?.some((k: string) => this.battle.dex.getAbility(k).suppressWeather))) {
+						pokemon.m.innates?.some((k: string) => this.battle.dex.abilities.get(k).suppressWeather))) {
 					return true;
 				}
 			}
@@ -61,7 +61,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.knownType = this.isAlly(pokemon) && pokemon.knownType;
 			this.apparentType = pokemon.apparentType;
 
-			let statName: StatNameExceptHP;
+			let statName: StatIDExceptHP;
 			for (statName in this.storedStats) {
 				this.storedStats[statName] = pokemon.storedStats[statName];
 			}
@@ -85,7 +85,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					virtual: true,
 				});
 			}
-			let boostName: BoostName;
+			let boostName: BoostID;
 			for (boostName in pokemon.boosts) {
 				this.boosts[boostName] = pokemon.boosts[boostName]!;
 			}

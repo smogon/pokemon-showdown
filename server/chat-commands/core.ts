@@ -991,30 +991,29 @@ export const commands: ChatCommands = {
 		const battle = room.battle;
 		if (!showAll && !target) return this.parse(`/help showset`);
 		if (!battle) return this.errorReply(this.tr`This command can only be used in a battle.`);
-		let teamStrings = await battle.getTeam(user);
-		if (!teamStrings) return this.errorReply(this.tr`Only players can extract their team.`);
+		let team = await battle.getTeam(user);
+		if (!team) return this.errorReply(this.tr`You are not a player and don't have a team.`);
+
 		if (!showAll) {
 			const parsed = parseInt(target);
-			if (parsed > 6) return this.errorReply(this.tr`Use a number between 1-6 to view a specific set.`);
 			if (isNaN(parsed)) {
-				const matchedSet = teamStrings.filter(set => {
+				const matchedSet = team.filter(set => {
 					const id = toID(target);
 					return toID(set.name) === id || toID(set.species) === id;
 				})[0];
-				if (!matchedSet) return this.errorReply(this.tr`The Pokemon "${target}" is not in your team.`);
-				teamStrings = [matchedSet];
+				if (!matchedSet) return this.errorReply(this.tr`You don't have a Pokémon matching "${target}" in your team.`);
+				team = [matchedSet];
 			} else {
 				const setIndex = parsed - 1;
-				const indexedSet = teamStrings[setIndex];
-				if (!indexedSet) return this.errorReply(this.tr`That Pokemon is not in your team.`);
-				teamStrings = [indexedSet];
+				const indexedSet = team[setIndex];
+				if (!indexedSet) {
+					return this.errorReply(this.tr`You don't have a Pokémon #${parsed} on your team - your team only has ${team.length} Pokémon.`);
+				}
+				team = [indexedSet];
 			}
 		}
-		const nicknames = teamStrings.map(set => {
-			const species = Dex.getSpecies(set.species).baseSpecies;
-			return species !== set.name ? set.name : species;
-		});
-		let resultString = Dex.stringifyTeam(teamStrings, nicknames, hideStats);
+
+		let resultString = Utils.escapeHTML(Teams.export(team, {hideStats}));
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
@@ -1614,9 +1613,9 @@ export const commands: ChatCommands = {
 			return;
 		}
 		if (!target) return this.errorReply(this.tr`Provide a valid format.`);
-		const originalFormat = Dex.getFormat(target);
+		const originalFormat = Dex.formats.get(target);
 		// Note: The default here of [Gen 8] Anything Goes isn't normally hit; since the web client will send a default format
-		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat(
+		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get(
 			'[Gen 8] Anything Goes'
 		);
 		if (format.effectType !== this.tr`Format`) return this.popupReply(this.tr`Please provide a valid format.`);

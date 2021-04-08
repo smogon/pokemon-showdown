@@ -1,5 +1,5 @@
 export const TypeChart: {[k: string]: ModdedTypeData | null} = {
-	Electric: {
+	electric: {
 		inherit: true,
 		damageTaken: {
 			Bug: 0,
@@ -21,7 +21,7 @@ export const TypeChart: {[k: string]: ModdedTypeData | null} = {
 			Water: 0,
 		},
 	},
-	Ghost: {
+	ghost: {
 		inherit: true,
 		damageTaken: {
 			Bug: 2,
@@ -43,7 +43,7 @@ export const TypeChart: {[k: string]: ModdedTypeData | null} = {
 			Water: 0,
 		},
 	},
-	Grass: {
+	grass: {
 		inherit: true,
 		damageTaken: {
 			Bug: 1,
@@ -65,7 +65,7 @@ export const TypeChart: {[k: string]: ModdedTypeData | null} = {
 			Water: 2,
 		},
 	},
-	Steel: {
+	steel: {
 		inherit: true,
 		damageTaken: {
 			psn: 3,
@@ -90,5 +90,8 @@ export const TypeChart: {[k: string]: ModdedTypeData | null} = {
 			Water: 0,
 		},
 	},
-	Fairy: null,
+	fairy: {
+		inherit: true,
+		isNonstandard: 'Future',
+	},
 };

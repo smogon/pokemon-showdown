@@ -6,6 +6,7 @@
 'use strict';
 
 const assert = require("../assert");
+const Teams = require('./../../.sim-dist/teams').Teams;
 
 /**
  * Unit test helper for Pokemon sets
@@ -15,7 +16,7 @@ const assert = require("../assert");
  * @param {(set: RandomTeamsTypes.RandomSet) => void} test a function called on each set
  */
 function testSet(pokemon, options, test) {
-	const generator = Dex.getTeamGenerator(options.format);
+	const generator = Teams.getGenerator(options.format);
 	const rounds = options.rounds || 1000;
 
 	const isDoubles = options.isDoubles || (options.format && options.format.includes('doubles'));
@@ -50,7 +51,7 @@ function testNotBothMoves(pokemon, options, move1, move2) {
  * @param {(team: RandomTeamsTypes.RandomSet[]) => void} test a function called on each team
  */
 function testTeam(options, test) {
-	const generator = Dex.getTeamGenerator(options.format);
+	const generator = Teams.getGenerator(options.format);
 	const rounds = options.rounds || 1000;
 
 	for (let i = 0; i < rounds; i++) {

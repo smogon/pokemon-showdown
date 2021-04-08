@@ -1,4 +1,5 @@
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 
 const DISHES_FILE = 'config/chat-plugins/thecafe-foodfight.json';
 const FOODFIGHT_COOLDOWN = 5 * 60 * 1000;
@@ -11,24 +12,24 @@ function saveDishes() {
 
 function generateTeam(generator = '') {
 	let potentialPokemon = Object.keys(Dex.data.Pokedex).filter(mon => {
-		const species = Dex.getSpecies(mon);
+		const species = Dex.species.get(mon);
 		return species.baseSpecies === species.name;
 	});
 	let speciesClause = true;
 	switch (generator) {
 	case 'ou':
 		potentialPokemon = potentialPokemon.filter(mon => {
-			const species = Dex.getSpecies(mon);
+			const species = Dex.species.get(mon);
 			return species.tier === 'OU';
 		}).concat(potentialPokemon.filter(mon => {
 			// There is probably a better way to get the ratios right, oh well.
-			const species = Dex.getSpecies(mon);
+			const species = Dex.species.get(mon);
 			return species.tier === 'OU' || species.tier === 'UU';
 		}));
 		break;
 	case 'ag':
 		potentialPokemon = potentialPokemon.filter(mon => {
-			const species = Dex.getSpecies(mon);
+			const species = Dex.species.get(mon);
 			const unviable = species.tier === 'NFE' || species.tier === 'PU' ||
 				species.tier === '(PU)' || species.tier.startsWith("LC");
 			const illegal = species.tier === 'Unreleased' || species.tier === 'Illegal' || species.tier.startsWith("CAP");
@@ -38,7 +39,7 @@ function generateTeam(generator = '') {
 		break;
 	default:
 		potentialPokemon = potentialPokemon.filter(mon => {
-			const species = Dex.getSpecies(mon);
+			const species = Dex.species.get(mon);
 			const op = species.tier === 'AG' || species.tier === 'Uber' || species.tier.slice(1, -1) === 'Uber';
 			const unviable = species.tier === 'Illegal' || species.tier.includes("LC");
 			return !(op || unviable);
@@ -56,7 +57,7 @@ function generateTeam(generator = '') {
 		if (speciesClause) potentialPokemon.splice(randIndex, 1);
 	}
 
-	return team.map(mon => Dex.getSpecies(mon).name);
+	return team.map(mon => Dex.species.get(mon).name);
 }
 
 function generateDish(): [string, string[]] {
@@ -85,15 +86,16 @@ export const commands: ChatCommands = {
 		let importable;
 		const [newDish, newIngredients] = generateDish();
 		if (!target) {
-			const bfTeam = Dex.generateTeam('gen7bssfactory');
-			importable = Dex.stringifyTeam(bfTeam, newIngredients);
+			const bfTeam = Teams.generate('gen7bssfactory');
+			for (const [i, name] of newIngredients.entries()) bfTeam[i].name = name;
+			importable = Teams.export(bfTeam);
 			team = bfTeam.map(val => val.species);
 		} else {
 			team = generateTeam(target);
 		}
 		user.foodfight = {generatedTeam: team, dish: newDish, ingredients: newIngredients, timestamp: Date.now()};
 		const importStr = importable ?
-			`<tr><td colspan=7><details><summary style="font-size:13pt;">Importable team:</summary><div style="width:100%;height:400px;overflow:auto;color:black;font-family:monospace;background:white;text-align:left;">${importable}</textarea></details></td></tr>` :
+			Utils.html`<tr><td colspan=7><details><summary style="font-size:13pt;">Importable team:</summary><div style="width:100%;height:400px;overflow:auto;color:black;font-family:monospace;background:white;text-align:left;">${importable}</textarea></details></td></tr>` :
 			'';
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${newDish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${newIngredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>${importStr}</table></div>`);
 	},
