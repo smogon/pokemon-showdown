@@ -1273,7 +1273,7 @@ export class Battle {
 		if (!side.pokemonLeft) return;
 
 		side.pokemonLeft = 0;
-		side.active[0].faint();
+		side.active[0]?.faint();
 		this.faintMessages(false, true);
 		if (!this.ended && side.requestState) {
 			side.emitRequest({wait: true, side: side.getRequestData()});
