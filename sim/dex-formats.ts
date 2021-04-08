@@ -469,7 +469,7 @@ export class DexFormats {
 		if (depth === 1) {
 			const dex = this.dex.mod(format.mod);
 			if (dex !== this.dex) {
-				return dex.formats.getRuleTable(format, depth + 1);
+				return dex.formats.getRuleTable(format, 2, repeals);
 			}
 		}
 		const ruleTable = new RuleTable();
@@ -597,7 +597,7 @@ export class DexFormats {
 			}
 		}
 
-		format.ruleTable = ruleTable;
+		if (!repeals) format.ruleTable = ruleTable;
 		return ruleTable;
 	}
 
