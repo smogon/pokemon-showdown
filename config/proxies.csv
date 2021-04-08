@@ -5454,4 +5454,3 @@ RANGE,223.25.240.0,223.25.243.255,thegigabit.com?/proxy
 RANGE,223.25.245.0,223.25.247.255,thegigabit.com?/proxy
 RANGE,223.27.168.0,223.27.175.255,voxel.net?/proxy
 RANGE,223.252.0.0,223.252.63.255,serversaustralia.com.au?/proxy
-RANGE,240.0.0.0,255.255.255.255,should-not-be-allocated.com?/proxy
