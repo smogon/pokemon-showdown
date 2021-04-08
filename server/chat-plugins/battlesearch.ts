@@ -296,7 +296,7 @@ export const pages: PageTable = {
 			return 0;
 		}).map(tier => {
 			// Use the official tier name
-			const format = Dex.getFormat(tier);
+			const format = Dex.formats.get(tier);
 			if (format?.exists) tier = format.name;
 			// Otherwise format as best as possible
 			if (tier.startsWith('gen')) {

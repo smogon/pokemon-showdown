@@ -146,7 +146,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			this.add('-enditem', target, 'Air Balloon');
 			target.item = '';
 			target.itemData = {id: '', target};
-			this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
+			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 		},
 		onAfterSubDamage(damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
@@ -154,7 +154,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
+				this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 			}
 		},
 		num: 541,
@@ -275,7 +275,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onDisableMove(pokemon) {
 			for (const moveSlot of pokemon.moveSlots) {
-				if (this.dex.getMove(moveSlot.move).category === 'Status') {
+				if (this.dex.moves.get(moveSlot.move).category === 'Status') {
 					pokemon.disableMove(moveSlot.id);
 				}
 			}
@@ -1420,7 +1420,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onAfterBoost(boost, target, source, effect) {
 			if (this.activeMove?.id === 'partingshot') return;
 			let eject = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					eject = true;
@@ -2910,7 +2910,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (source && source !== target && move && move.category !== 'Status') {
-				this.damage(source.baseMaxhp / 10, source, source, this.dex.getItem('lifeorb'));
+				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 			}
 		},
 		num: 270,
@@ -5243,8 +5243,8 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onEat(pokemon) {
-			const stats: BoostName[] = [];
-			let stat: BoostName;
+			const stats: BoostID[] = [];
+			let stat: BoostID;
 			for (stat in pokemon.boosts) {
 				if (stat !== 'accuracy' && stat !== 'evasion' && pokemon.boosts[stat] < 6) {
 					stats.push(stat);
@@ -6704,7 +6704,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			effect(pokemon) {
 				let activate = false;
 				const boosts: SparseBoostsTable = {};
-				let i: BoostName;
+				let i: BoostID;
 				for (i in pokemon.boosts) {
 					if (pokemon.boosts[i] < 0) {
 						activate = true;
@@ -6720,7 +6720,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onUpdate(pokemon) {
 			let activate = false;
 			const boosts: SparseBoostsTable = {};
-			let i: BoostName;
+			let i: BoostID;
 			for (i in pokemon.boosts) {
 				if (pokemon.boosts[i] < 0) {
 					activate = true;

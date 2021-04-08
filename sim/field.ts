@@ -37,7 +37,7 @@ export class Field {
 	}
 
 	setWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
@@ -122,11 +122,11 @@ export class Field {
 	}
 
 	getWeather() {
-		return this.battle.dex.getEffectByID(this.weather);
+		return this.battle.dex.conditions.getByID(this.weather);
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
@@ -177,7 +177,7 @@ export class Field {
 	}
 
 	getTerrain() {
-		return this.battle.dex.getEffectByID(this.terrain);
+		return this.battle.dex.conditions.getByID(this.terrain);
 	}
 
 	addPseudoWeather(
@@ -187,7 +187,7 @@ export class Field {
 	): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 
 		let effectData = this.pseudoWeather[status.id];
 		if (effectData) {
@@ -212,12 +212,12 @@ export class Field {
 	}
 
 	getPseudoWeather(status: string | Effect) {
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		return this.pseudoWeather[status.id] ? status : null;
 	}
 
 	removePseudoWeather(status: string | Effect) {
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		const effectData = this.pseudoWeather[status.id];
 		if (!effectData) return false;
 		this.battle.singleEvent('End', status, effectData, this);

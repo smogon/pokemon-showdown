@@ -14,7 +14,7 @@ const importer = require('./importer');
 const formats = new Map();
 for (let gen = 1; gen <= 8; gen++) {
 	for (const tier of importer.TIERS) {
-		const format = Dex.getFormat(`gen${gen}${tier}`);
+		const format = Dex.formats.get(`gen${gen}${tier}`);
 		if (format.exists) {
 			formats.set(format.id, {});
 		}

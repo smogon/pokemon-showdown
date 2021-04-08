@@ -23,7 +23,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			if (target.hp <= target.maxhp / 2) {
-				this.boost({atk: 2}, null, null, this.dex.getEffect('bellydrum2'));
+				this.boost({atk: 2}, null, null, this.dex.conditions.get('bellydrum2'));
 				return false;
 			}
 			this.directDamage(target.maxhp / 2);
@@ -79,7 +79,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return false;
 					}
 					if (!target.isActive) {
-						const possibleTarget = this.getRandomTarget(pokemon, this.dex.getMove('pound'));
+						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
 						if (!possibleTarget) {
 							this.add('-miss', pokemon);
 							return false;
@@ -641,7 +641,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
 				const move = moveSlot.id;
-				if (move && !NoSleepTalk.includes(move) && !this.dex.getMove(move).flags['charge']) {
+				if (move && !NoSleepTalk.includes(move) && !this.dex.moves.get(move).flags['charge']) {
 					moves.push(move);
 				}
 			}

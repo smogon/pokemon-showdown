@@ -144,7 +144,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	}
 
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool: string[] = [];
@@ -197,7 +197,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [k, moveId] of moves.entries()) {
-				const move = this.dex.getMove(moveId);
+				const move = this.dex.moves.get(moveId);
 				let {cull, isSetup} = this.shouldCullMove(move, hasType, hasMove, {}, counter, movePool, teamDetails);
 
 				// This move doesn't satisfy our setup requirements:

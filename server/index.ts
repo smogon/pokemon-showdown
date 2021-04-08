@@ -105,6 +105,9 @@ import {Dex} from '../sim/dex';
 global.Dex = Dex;
 global.toID = Dex.toID;
 
+import {Teams} from '../sim/teams';
+global.Teams = Teams;
+
 import {LoginServer} from './loginserver';
 global.LoginServer = LoginServer;
 

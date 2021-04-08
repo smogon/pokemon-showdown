@@ -488,8 +488,7 @@ To cancel searching, send:
 ### Team format
 
 Pokémon Showdown's main way of representing teams is in packed format. This
-format is implemented in `Dex.packTeam` and `Dex.fastUnpackTeam` in
-`sim/dex.js`.
+format is implemented in `Teams.pack` and `Teams.unpack` in `sim/teams.ts`.
 
 If you're not using JavaScript and don't want to reimplement these conversions,
 [Pokémon Showdown's command-line client][command-line] can convert between packed teams and

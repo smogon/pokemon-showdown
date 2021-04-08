@@ -12,7 +12,7 @@ describe('[Gen 8] Random Battle', () => {
 	it('should not generate Golisopod without Bug STAB', () => {
 		testSet('golisopod', options, set => {
 			assert(set.moves.some(m => {
-				const move = Dex.getMove(m);
+				const move = Dex.moves.get(m);
 				return move.type === 'Bug' && move.category !== 'Status';
 			}), `Golisopod should get Bug STAB (got ${set.moves})`);
 		});

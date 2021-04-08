@@ -57,7 +57,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return false;
 					}
 					if (!target.isActive) {
-						const possibleTarget = this.getRandomTarget(pokemon, this.dex.getMove('pound'));
+						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
 						if (!possibleTarget) {
 							this.add('-miss', pokemon);
 							return false;
@@ -105,7 +105,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target) {
 			const possibleTypes = target.moveSlots.map(moveSlot => {
-				const move = this.dex.getMove(moveSlot.id);
+				const move = this.dex.moves.get(moveSlot.id);
 				if (move.id !== 'curse' && !target.hasType(move.type)) {
 					return move.type;
 				}
@@ -501,7 +501,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const move = moveSlot.id;
 				const pp = moveSlot.pp;
 				const NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
-				if (move && !(NoSleepTalk.includes(move) || this.dex.getMove(move).flags['charge'])) {
+				if (move && !(NoSleepTalk.includes(move) || this.dex.moves.get(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
 				}
 			}
@@ -576,7 +576,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
-					if (this.dex.getMove(moveSlot.move).category === 'Status') {
+					if (this.dex.moves.get(moveSlot.move).category === 'Status') {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}

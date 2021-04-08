@@ -1,4 +1,4 @@
-export const Formats: {[k: string]: ModdedFormatData} = {
+export const Rulesets: {[k: string]: ModdedFormatData} = {
 	obtainablemoves: {
 		inherit: true,
 		banlist: [

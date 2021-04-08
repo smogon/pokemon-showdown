@@ -137,7 +137,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			let warnBp = 1;
 			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
-					const move = this.dex.getMove(moveSlot.move);
+					const move = this.dex.moves.get(moveSlot.move);
 					let bp = move.basePower;
 					if (move.ohko) bp = 160;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
@@ -338,7 +338,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	simple: {
 		onModifyBoost(boosts) {
-			let key: BoostName;
+			let key: BoostID;
 			for (key in boosts) {
 				boosts[key]! *= 2;
 			}

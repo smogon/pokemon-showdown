@@ -2,6 +2,10 @@ import {Utils} from '../lib';
 import {toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
 
+const DEFAULT_MOD = 'gen8';
+const MAIN_FORMATS = `${__dirname}/../.config-dist/formats`;
+const CUSTOM_FORMATS = `${__dirname}/../.config-dist/custom-formats`;
+
 export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
 }
@@ -240,8 +244,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly section?: string;
 	readonly column?: number;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.mod = Utils.getString(data.mod) || 'gen8';
@@ -268,7 +272,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 }
 
 /** merges format lists from config/formats and config/custom-formats */
-export function mergeFormatLists(main: FormatList, custom: FormatList | undefined): FormatList {
+function mergeFormatLists(main: FormatList, custom: FormatList | undefined): FormatList {
 	// interface for the builder.
 	interface FormatSection {
 		section: string;
@@ -321,4 +325,386 @@ export function mergeFormatLists(main: FormatList, custom: FormatList | undefine
 	}
 
 	return result;
+}
+
+export class DexFormats {
+	readonly dex: ModdedDex;
+	rulesetCache = new Map<ID, Format>();
+	formatsListCache: readonly Format[] | null;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+		this.formatsListCache = null;
+	}
+
+	load(): this {
+		if (!this.dex.isBase) throw new Error(`This should only be run on the base mod`);
+		this.dex.includeMods();
+		if (this.formatsListCache) return this;
+
+		const formatsList = [];
+
+		// Load formats
+		let customFormats;
+		try {
+			customFormats = require(CUSTOM_FORMATS).Formats;
+			if (!Array.isArray(customFormats)) {
+				throw new TypeError(`Exported property 'Formats' from "./config/custom-formats.ts" must be an array`);
+			}
+		} catch (e) {
+			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
+				throw e;
+			}
+		}
+		let Formats: AnyObject[] = require(MAIN_FORMATS).Formats;
+		if (!Array.isArray(Formats)) {
+			throw new TypeError(`Exported property 'Formats' from "./config/formats.ts" must be an array`);
+		}
+		if (customFormats) Formats = mergeFormatLists(Formats as any, customFormats);
+
+		let section = '';
+		let column = 1;
+		for (const [i, format] of Formats.entries()) {
+			const id = toID(format.name);
+			if (format.section) section = format.section;
+			if (format.column) column = format.column;
+			if (!format.name && format.section) continue;
+			if (!id) {
+				throw new RangeError(`Format #${i + 1} must have a name with alphanumeric characters, not '${format.name}'`);
+			}
+			if (!format.section) format.section = section;
+			if (!format.column) format.column = column;
+			if (this.rulesetCache.has(id)) throw new Error(`Format #${i + 1} has a duplicate ID: '${id}'`);
+			format.effectType = 'Format';
+			format.baseRuleset = format.ruleset ? format.ruleset.slice() : [];
+			if (format.challengeShow === undefined) format.challengeShow = true;
+			if (format.searchShow === undefined) format.searchShow = true;
+			if (format.tournamentShow === undefined) format.tournamentShow = true;
+			if (format.mod === undefined) format.mod = 'gen8';
+			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
+
+			const ruleset = new Format(format);
+			this.rulesetCache.set(id, ruleset);
+			formatsList.push(ruleset);
+		}
+
+		this.formatsListCache = formatsList;
+		return this;
+	}
+
+	/**
+	 * Returns a sanitized format ID if valid, or throws if invalid.
+	 */
+	validate(name: string) {
+		const [formatName, customRulesString] = name.split('@@@', 2);
+		const format = this.get(formatName);
+		if (!format.exists) throw new Error(`Unrecognized format "${formatName}"`);
+		if (!customRulesString) return format.id;
+		const ruleTable = this.getRuleTable(format);
+		const customRules = customRulesString.split(',').map(rule => {
+			rule = rule.replace(/[\r\n|]*/g, '').trim();
+			const ruleSpec = this.validateRule(rule);
+			if (typeof ruleSpec === 'string' && ruleTable.has(ruleSpec)) return null;
+			return rule;
+		}).filter(Boolean);
+		if (!customRules.length) throw new Error(`The format already has your custom rules`);
+		const validatedFormatid = format.id + '@@@' + customRules.join(',');
+		const moddedFormat = this.get(validatedFormatid, true);
+		this.getRuleTable(moddedFormat);
+		return validatedFormatid;
+	}
+
+	get(name?: string | Format, isTrusted = false): Format {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		let id = toID(name);
+
+		if (!name.includes('@@@')) {
+			const ruleset = this.rulesetCache.get(id);
+			if (ruleset) return ruleset;
+		}
+
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			name = this.dex.data.Aliases[id];
+			id = toID(name);
+		}
+		if (this.dex.data.Rulesets.hasOwnProperty(DEFAULT_MOD + id)) {
+			id = (DEFAULT_MOD + id) as ID;
+		}
+		let supplementaryAttributes: AnyObject | null = null;
+		if (name.includes('@@@')) {
+			if (!isTrusted) {
+				try {
+					name = this.validate(name);
+					isTrusted = true;
+				} catch (e) {}
+			}
+			const [newName, customRulesString] = name.split('@@@', 2);
+			name = newName.trim();
+			id = toID(name);
+			if (isTrusted && customRulesString) {
+				supplementaryAttributes = {
+					customRules: customRulesString.split(','),
+					searchShow: false,
+				};
+			}
+		}
+		let effect;
+		if (this.dex.data.Rulesets.hasOwnProperty(id)) {
+			effect = new Format({name, ...this.dex.data.Rulesets[id] as any, ...supplementaryAttributes});
+		} else {
+			effect = new Format({id, name, exists: false});
+		}
+		return effect;
+	}
+
+	all() {
+		this.load();
+		return this.formatsListCache!;
+	}
+
+	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
+		if (format.ruleTable && !repeals) return format.ruleTable;
+		if (depth === 1) {
+			const dex = this.dex.mod(format.mod);
+			if (dex !== this.dex) {
+				return dex.formats.getRuleTable(format, depth + 1);
+			}
+		}
+		const ruleTable = new RuleTable();
+
+		const ruleset = format.ruleset.slice();
+		for (const ban of format.banlist) {
+			ruleset.push('-' + ban);
+		}
+		for (const ban of format.restricted) {
+			ruleset.push('*' + ban);
+		}
+		for (const ban of format.unbanlist) {
+			ruleset.push('+' + ban);
+		}
+		if (format.customRules) {
+			ruleset.push(...format.customRules);
+		}
+		if (format.checkCanLearn) {
+			ruleTable.checkCanLearn = [format.checkCanLearn, format.name];
+		}
+		if (format.timer) {
+			ruleTable.timer = [format.timer, format.name];
+		}
+		if (format.minSourceGen) {
+			ruleTable.minSourceGen = [format.minSourceGen, format.name];
+		}
+
+		// apply rule repeals before other rules
+		// repeals is a ruleid:depth map
+		for (const rule of ruleset) {
+			if (rule.startsWith('!')) {
+				const ruleSpec = this.validateRule(rule, format) as string;
+				if (!repeals) repeals = new Map();
+				repeals.set(ruleSpec.slice(1), depth);
+			}
+		}
+
+		for (const rule of ruleset) {
+			const ruleSpec = this.validateRule(rule, format);
+
+			if (typeof ruleSpec !== 'string') {
+				if (ruleSpec[0] === 'complexTeamBan') {
+					const complexTeamBan: ComplexTeamBan = ruleSpec.slice(1) as ComplexTeamBan;
+					ruleTable.addComplexTeamBan(complexTeamBan[0], complexTeamBan[1], complexTeamBan[2], complexTeamBan[3]);
+				} else if (ruleSpec[0] === 'complexBan') {
+					const complexBan: ComplexBan = ruleSpec.slice(1) as ComplexBan;
+					ruleTable.addComplexBan(complexBan[0], complexBan[1], complexBan[2], complexBan[3]);
+				} else {
+					throw new Error(`Unrecognized rule spec ${ruleSpec}`);
+				}
+				continue;
+			}
+
+			if (rule.startsWith('!')) {
+				const repealDepth = repeals!.get(ruleSpec.slice(1));
+				if (repealDepth === undefined) throw new Error(`Multiple "${rule}" rules in ${format.name}`);
+				if (repealDepth === depth) {
+					throw new Error(`Rule "${rule}" did nothing because "${rule.slice(1)}" is not in effect`);
+				}
+				if (repealDepth === -depth) repeals!.delete(ruleSpec.slice(1));
+				continue;
+			}
+
+			if ("+*-".includes(ruleSpec.charAt(0))) {
+				if (ruleTable.has(ruleSpec)) {
+					throw new Error(`Rule "${rule}" was added by "${format.name}" but already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
+				}
+				for (const prefix of "-*+") ruleTable.delete(prefix + ruleSpec.slice(1));
+				ruleTable.set(ruleSpec, '');
+				continue;
+			}
+			const subformat = this.get(ruleSpec);
+			if (repeals?.has(subformat.id)) {
+				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
+				continue;
+			}
+			if (ruleTable.has(subformat.id)) {
+				throw new Error(`Rule "${rule}" was added by "${format.name}" but already exists in "${ruleTable.get(subformat.id) || format.name}"`);
+			}
+			ruleTable.set(subformat.id, '');
+			if (!subformat.exists) continue;
+			if (depth > 16) {
+				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
+			}
+			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
+			for (const [k, v] of subRuleTable) {
+				// don't check for "already exists" here; multiple inheritance is allowed
+				if (!repeals?.has(k)) {
+					ruleTable.set(k, v || subformat.name);
+				}
+			}
+			for (const [subRule, source, limit, bans] of subRuleTable.complexBans) {
+				ruleTable.addComplexBan(subRule, source || subformat.name, limit, bans);
+			}
+			for (const [subRule, source, limit, bans] of subRuleTable.complexTeamBans) {
+				ruleTable.addComplexTeamBan(subRule, source || subformat.name, limit, bans);
+			}
+			if (subRuleTable.checkCanLearn) {
+				if (ruleTable.checkCanLearn) {
+					throw new Error(
+						`"${format.name}" has conflicting move validation rules from ` +
+						`"${ruleTable.checkCanLearn[1]}" and "${subRuleTable.checkCanLearn[1]}"`
+					);
+				}
+				ruleTable.checkCanLearn = subRuleTable.checkCanLearn;
+			}
+			if (subRuleTable.timer) {
+				if (ruleTable.timer) {
+					throw new Error(
+						`"${format.name}" has conflicting timer validation rules from "${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`
+					);
+				}
+				ruleTable.timer = subRuleTable.timer;
+			}
+			// minSourceGen is automatically ignored if higher than current gen
+			// this helps the common situation where Standard has a minSourceGen in the
+			// latest gen but not in any past gens
+			if (subRuleTable.minSourceGen && subRuleTable.minSourceGen[0] <= this.dex.gen) {
+				if (ruleTable.minSourceGen) {
+					throw new Error(
+						`"${format.name}" has conflicting minSourceGen from "${ruleTable.minSourceGen[1]}" and "${subRuleTable.minSourceGen[1]}"`
+					);
+				}
+				ruleTable.minSourceGen = subRuleTable.minSourceGen;
+			}
+		}
+
+		format.ruleTable = ruleTable;
+		return ruleTable;
+	}
+
+	validateRule(rule: string, format: Format | null = null) {
+		if (rule !== rule.trim()) throw new Error(`Rule "${rule}" should be trimmed`);
+		switch (rule.charAt(0)) {
+		case '-':
+		case '*':
+		case '+':
+			if (format?.team) throw new Error(`We don't currently support bans in generated teams`);
+			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
+				let buf = rule.slice(1);
+				const gtIndex = buf.lastIndexOf('>');
+				let limit = rule.startsWith('+') ? Infinity : 0;
+				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
+					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1));
+					buf = buf.slice(0, gtIndex);
+				}
+				let checkTeam = buf.includes('++');
+				const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
+				if (banNames.length === 1 && limit > 0) checkTeam = true;
+				const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
+				const bans = banNames.map(v => this.validateBanRule(v));
+
+				if (checkTeam) {
+					return ['complexTeamBan', innerRule, '', limit, bans];
+				}
+				if (bans.length > 1 || limit > 0) {
+					return ['complexBan', innerRule, '', limit, bans];
+				}
+				throw new Error(`Confusing rule ${rule}`);
+			}
+			return rule.charAt(0) + this.validateBanRule(rule.slice(1));
+		default:
+			const id = toID(rule);
+			if (!this.dex.data.Rulesets.hasOwnProperty(id)) {
+				throw new Error(`Unrecognized rule "${rule}"`);
+			}
+			if (rule.startsWith('!')) return `!${id}`;
+			return id;
+		}
+	}
+
+	validateBanRule(rule: string) {
+		let id = toID(rule);
+		if (id === 'unreleased') return 'unreleased';
+		if (id === 'nonexistent') return 'nonexistent';
+		const matches = [];
+		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'nature', 'pokemontag'];
+		for (const matchType of matchTypes) {
+			if (rule.startsWith(`${matchType}:`)) {
+				matchTypes = [matchType];
+				id = id.slice(matchType.length) as ID;
+				break;
+			}
+		}
+		const ruleid = id;
+		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
+		for (const matchType of matchTypes) {
+			let table;
+			switch (matchType) {
+			case 'pokemon': table = this.dex.data.Pokedex; break;
+			case 'move': table = this.dex.data.Moves; break;
+			case 'item': table = this.dex.data.Items; break;
+			case 'ability': table = this.dex.data.Abilities; break;
+			case 'nature': table = this.dex.data.Natures; break;
+			case 'pokemontag':
+				// valid pokemontags
+				const validTags = [
+					// singles tiers
+					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lc', 'cap', 'caplc', 'capnfe', 'ag',
+					// doubles tiers
+					'duber', 'dou', 'dbl', 'duu', 'dnu',
+					// custom tags -- nduubl is used for national dex teambuilder formatting
+					'mega', 'nduubl',
+					// illegal/nonstandard reasons
+					'past', 'future', 'unobtainable', 'lgpe', 'custom',
+					// all
+					'allpokemon', 'allitems', 'allmoves', 'allabilities', 'allnatures',
+				];
+				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
+				continue;
+			default:
+				throw new Error(`Unrecognized match type.`);
+			}
+			if (table.hasOwnProperty(id)) {
+				if (matchType === 'pokemon') {
+					const species: Species = table[id] as Species;
+					if (species.otherFormes && ruleid !== species.id + toID(species.baseForme)) {
+						matches.push('basepokemon:' + id);
+						continue;
+					}
+				}
+				matches.push(matchType + ':' + id);
+			} else if (matchType === 'pokemon' && id.endsWith('base')) {
+				id = id.slice(0, -4) as ID;
+				if (table.hasOwnProperty(id)) {
+					matches.push('pokemon:' + id);
+				}
+			}
+		}
+		if (matches.length > 1) {
+			throw new Error(`More than one thing matches "${rule}"; please specify one of: ` + matches.join(', '));
+		}
+		if (matches.length < 1) {
+			throw new Error(`Nothing matches "${rule}"`);
+		}
+		return matches[0];
+	}
 }

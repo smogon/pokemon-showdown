@@ -81,8 +81,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		desc: "Raises a random stat by 12 when at 1/4 max HP or less (not acc/eva). Single use.",
 		onEat(pokemon) {
-			const stats: BoostName[] = [];
-			let stat: BoostName;
+			const stats: BoostID[] = [];
+			let stat: BoostID;
 			for (stat in pokemon.boosts) {
 				if (stat !== 'accuracy' && stat !== 'evasion' && pokemon.boosts[stat] < 6) {
 					stats.push(stat);

@@ -68,7 +68,7 @@ describe('Focus Punch', function () {
 		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]});
 
-		const move = battle.p1.active[0].getMoveData(Dex.getMove('focuspunch'));
+		const move = battle.p1.active[0].getMoveData(Dex.moves.get('focuspunch'));
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
 		assert.equal(move.pp, move.maxpp);
 		battle.makeChoices('move focuspunch', 'move toxic');
@@ -80,7 +80,7 @@ describe('Focus Punch', function () {
 		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]});
 
-		const move = battle.p1.active[0].getMoveData(Dex.getMove('focuspunch'));
+		const move = battle.p1.active[0].getMoveData(Dex.moves.get('focuspunch'));
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
 		assert.equal(move.pp, move.maxpp - 1);
 		battle.makeChoices('move focuspunch', 'move toxic');

@@ -228,11 +228,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// - (Counter will thus desync if the target's last used move is not as counterable as the target's last selected move)
 			// - if Counter succeeds it will deal twice the last move damage dealt in battle (even if it's from a different pokemon because of a switch)
 
-			const lastMove = target.side.lastMove && this.dex.getMove(target.side.lastMove.id);
+			const lastMove = target.side.lastMove && this.dex.moves.get(target.side.lastMove.id);
 			const lastMoveIsCounterable = lastMove && lastMove.basePower > 0 &&
 				['Normal', 'Fighting'].includes(lastMove.type) && lastMove.id !== 'counter';
 
-			const lastSelectedMove = target.side.lastSelectedMove && this.dex.getMove(target.side.lastSelectedMove);
+			const lastSelectedMove = target.side.lastSelectedMove && this.dex.moves.get(target.side.lastSelectedMove);
 			const lastSelectedMoveIsCounterable = lastSelectedMove && lastSelectedMove.basePower > 0 &&
 				['Normal', 'Fighting'].includes(lastSelectedMove.type) && lastSelectedMove.id !== 'counter';
 
@@ -296,7 +296,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.effectData.duration++;
 				}
 				const moves = pokemon.moves;
-				const move = this.dex.getMove(this.sample(moves));
+				const move = this.dex.moves.get(this.sample(moves));
 				this.add('-start', pokemon, 'Disable', move.name);
 				this.effectData.move = move.id;
 				return;
@@ -558,7 +558,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const moves = target.moves;
 			const moveid = this.sample(moves);
 			if (!moveid) return false;
-			const move = this.dex.getMove(moveid);
+			const move = this.dex.moves.get(moveid);
 			source.moveSlots[moveslot] = {
 				move: move.name,
 				id: move.id,

@@ -108,7 +108,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		return {cull: false};
 	}
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 		let forme = species.name;
 
 		if (typeof species.battleOnly === 'string') {
@@ -145,7 +145,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				const move = this.dex.getMove(setMoveid);
+				const move = this.dex.moves.get(setMoveid);
 
 				let {cull, isSetup} = this.shouldCullMove(move, hasMove, hasType, counter, teamDetails);
 
@@ -220,7 +220,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 		const pokemonPool: string[] = [];
 		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
+			const species = this.dex.species.get(id);
 			if (
 				species.num < 1 ||
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
@@ -239,7 +239,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
