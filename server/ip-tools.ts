@@ -223,9 +223,9 @@ export const IPTools = new class {
 	ranges: (AddressRange & {host: string})[] = [];
 	singleIPOpenProxies = new Set<string>();
 	torProxyIps = new Set<string>();
-	proxyHosts: Set<string> = new Set();
-	residentialHosts: Set<string> = new Set();
-	mobileHosts: Set<string> = new Set();
+	proxyHosts = new Set<string>();
+	residentialHosts = new Set<string>();
+	mobileHosts = new Set<string>();
 	async loadHostsAndRanges() {
 		const data = await FS(HOSTS_FILE).readIfExists() + await FS(PROXIES_FILE).readIfExists();
 		// Strip carriage returns for Windows compatibility
