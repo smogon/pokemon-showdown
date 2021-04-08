@@ -222,6 +222,7 @@ export const IPTools = new class {
 	 */
 	ranges: (AddressRange & {host: string})[] = [];
 	singleIPOpenProxies: Set<string> = new Set();
+	torProxyIps = new Set<string>();
 	proxyHosts: Set<string> = new Set();
 	residentialHosts: Set<string> = new Set();
 	mobileHosts: Set<string> = new Set();
@@ -560,7 +561,7 @@ export const IPTools = new class {
 		if (Punishments.sharedIps.has(ip)) {
 			return 'shared';
 		}
-		if (this.singleIPOpenProxies.has(ip)) {
+		if (this.singleIPOpenProxies.has(ip) || this.torProxyIps.has(ip)) {
 			// single-IP open proxies
 			return 'proxy';
 		}
@@ -608,14 +609,11 @@ export const IPTools = new class {
 		try {
 			const raw = await Net('https://check.torproject.org/torbulkexitlist').get();
 			const torIps = raw.split('\n');
-			let save = false;
 			for (const ip of torIps) {
-				if (!this.singleIPOpenProxies.has(ip) && this.ipRegex.test(ip)) {
-					this.singleIPOpenProxies.add(ip);
-					save = true;
+				if (this.ipRegex.test(ip)) {
+					this.torProxyIps.add(ip);
 				}
 			}
-			if (save) this.saveHostsAndRanges();
 		} catch (e) {}
 	}
 };
