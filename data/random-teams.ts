@@ -1871,7 +1871,7 @@ export class RandomTeams {
 		if (item === 'Leftovers' && hasType['Poison']) {
 			item = 'Black Sludge';
 		}
-		if (species.baseSpecies === 'Pikachu') {
+		if (species.baseSpecies === 'Pikachu' && !gmax) {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
