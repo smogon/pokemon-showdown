@@ -60,6 +60,22 @@ describe('Adrenaline Orb', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
+	it(`should activate if the holder is at -5 Attack`, function () {
+		battle = common.createBattle([[
+			{species: "Dugtrio", item: 'adrenalineorb', moves: ['bellydrum', 'curse', 'splash']},
+		], [
+			{species: "Shedinja", moves: ['splash', 'topsyturvy']},
+			{species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices('move curse', 'move topsyturvy');
+		assert.statStage(battle.p1.active[0], 'spe', 1);
+		battle.makeChoices('move splash', 'switch 2');
+		assert.statStage(battle.p1.active[0], 'spe', 2);
+		assert.false.holdsItem(battle.p1.active[0]);
+	});
+
 	it(`should not activate if the holder is at +6 Speed`, function () {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', ability: 'steamengine', moves: ['sleeptalk']},
