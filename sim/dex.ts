@@ -507,7 +507,7 @@ export class ModdedDex {
 			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
 			if (dataType === 'Rulesets' && !parentDex) {
 				for (const format of this.formats.all()) {
-					BattleData[format.id] = format;
+					BattleData[format.id] = {...format, ruleTable: null};
 				}
 			}
 		}
