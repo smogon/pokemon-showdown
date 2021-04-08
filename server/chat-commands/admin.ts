@@ -352,9 +352,11 @@ export const commands: ChatCommands = {
 			context.title = `[${user.name}] ${pageid}`;
 			context.send(content);
 		}
+
+		this.sendReply(`Sent ${targetUser.name} the bot page ${pageid}.`);
 	},
 	sendhtmlpagehelp: [
-		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: * # &`,
+		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # &`,
 	],
 
 	highlighthtmlpage(target, room, user) {
@@ -386,9 +388,11 @@ export const commands: ChatCommands = {
 		for (const conn of targetConnections) {
 			conn.send(`>view-bot-${pageid}\n${buf}`);
 		}
+
+		this.sendReply(`Sent a highlight to ${targetUser.name} on the bot page ${pageid}.`);
 	},
 	highlighthtmlpagehelp: [
-		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Send a highlight to [userid] if they're viewing the bot page [pageid].`,
+		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Sends a highlight to [userid] if they're viewing the bot page [pageid].`,
 		`If a [highlight] is specified, only highlights them if they have that term on their highlight list.`,
 	],
 
