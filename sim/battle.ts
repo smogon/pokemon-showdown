@@ -1648,8 +1648,9 @@ export class Battle {
 		let boosted = isSecondary;
 		let boostName: BoostID;
 		for (boostName in boost) {
-			const currentBoost: SparseBoostsTable = {};
-			currentBoost[boostName] = boost[boostName];
+			const currentBoost: SparseBoostsTable = {
+				[boostName]: boost[boostName],
+			};
 			let boostBy = target.boostBy(currentBoost);
 			let msg = '-boost';
 			if (boost[boostName]! < 0) {
@@ -1691,9 +1692,11 @@ export class Battle {
 				this.add(msg, target, boostName, boostBy);
 			}
 		}
-		this.runEvent('AfterBoost', target, source, effect, boost);
-		if (success && Object.values(boost).some(x => x! > 0)) target.statsRaisedThisTurn = true;
-		if (success && Object.values(boost).some(x => x! < 0)) target.statsLoweredThisTurn = true;
+		if (success) {
+			this.runEvent('AfterBoost', target, source, effect, boost);
+			if (Object.values(boost).some(x => x! > 0)) target.statsRaisedThisTurn = true;
+			if (Object.values(boost).some(x => x! < 0)) target.statsLoweredThisTurn = true;
+		}
 		return success;
 	}
 
