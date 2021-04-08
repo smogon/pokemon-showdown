@@ -1226,7 +1226,7 @@ export class TeamValidator {
 					);
 				}
 			}
-			if (species.requiredMove && !set.moves.includes(toID(species.requiredMove))) {
+			if (species.requiredMove && !set.moves.map(toID).includes(toID(species.requiredMove))) {
 				const baseSpecies = this.dex.species.get(species.changesFrom);
 				problems.push(
 					`${name} needs to know the move ${species.requiredMove} to be in its ${species.forme} forme.`,
