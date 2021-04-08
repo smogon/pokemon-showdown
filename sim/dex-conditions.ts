@@ -609,48 +609,34 @@ const EMPTY_CONDITION: Condition = new Condition({name: '', exists: false});
 
 export class DexConditions {
 	readonly dex: ModdedDex;
-	readonly conditionCache = new Map<ID, Effect | Move>();
+	readonly conditionCache = new Map<ID, Condition>();
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
 	}
 
-	/**
-	 * While this function can technically return any kind of effect at
-	 * all, not just a Condition, that's not a feature TypeScript needs to know about.
-	 */
-	 get(name?: string | Effect | null): Condition {
+	get(name?: string | Effect | null): Condition {
 		if (!name) return EMPTY_CONDITION;
 		if (typeof name !== 'string') return name as Condition;
 
-		const id = toID(name);
-		let condition = this.conditionCache.get(id);
-		if (condition) return condition as Condition;
-
-		if (name.startsWith('move:')) {
-			condition = this.dex.moves.get(name.slice(5));
-		} else if (name.startsWith('item:')) {
-			condition = this.dex.items.get(name.slice(5));
-		} else if (name.startsWith('ability:')) {
-			const ability = this.dex.abilities.get(name.slice(8));
-			condition = {...ability, id: 'ability:' + ability.id as ID} as any as Condition;
-		}
-		if (condition) {
-			this.conditionCache.set(id, condition);
-			return condition as Condition;
-		}
-		return this.getByID(id);
+		return this.getByID(name.startsWith('item:') || name.startsWith('ability:') ? name as ID : toID(name));
 	}
 
 	getByID(id: ID): Condition {
 		if (!id) return EMPTY_CONDITION;
 
 		let condition = this.conditionCache.get(id);
-		if (condition) return condition as Condition;
+		if (condition) return condition;
 
 		let found;
-		if (this.dex.data.Rulesets.hasOwnProperty(id)) {
-			condition = this.dex.formats.get(id);
+		if (id.startsWith('item:')) {
+			const item = this.dex.items.getByID(id.slice(5) as ID);
+			condition = {...item, id: 'item:' + item.id as ID} as any as Condition;
+		} else if (id.startsWith('ability:')) {
+			const ability = this.dex.abilities.getByID(id.slice(8) as ID);
+			condition = {...ability, id: 'ability:' + ability.id as ID} as any as Condition;
+		} else if (this.dex.data.Rulesets.hasOwnProperty(id)) {
+			condition = this.dex.formats.get(id) as any as Condition;
 		} else if (this.dex.data.Conditions.hasOwnProperty(id)) {
 			condition = new Condition({name: id, ...this.dex.data.Conditions[id]});
 		} else if (
@@ -668,6 +654,6 @@ export class DexConditions {
 		}
 
 		this.conditionCache.set(id, condition);
-		return condition as Condition;
+		return condition;
 	}
 }
