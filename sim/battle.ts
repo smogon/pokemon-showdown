@@ -1692,8 +1692,8 @@ export class Battle {
 				this.add(msg, target, boostName, boostBy);
 			}
 		}
+		this.runEvent('AfterBoost', target, source, effect, boost);
 		if (success) {
-			this.runEvent('AfterBoost', target, source, effect, boost);
 			if (Object.values(boost).some(x => x! > 0)) target.statsRaisedThisTurn = true;
 			if (Object.values(boost).some(x => x! < 0)) target.statsLoweredThisTurn = true;
 		}
