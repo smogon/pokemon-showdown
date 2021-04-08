@@ -5,6 +5,7 @@
  * @license MIT
  */
 import {Dex, toID} from './dex';
+import {Teams} from './teams';
 import {Field} from './field';
 import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
@@ -126,7 +127,7 @@ export class Battle {
 	lastDamage: number;
 	abilityOrder: number;
 
-	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
+	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
 
 	readonly hints: Set<string>;
 
@@ -144,11 +145,11 @@ export class Battle {
 		this.log = [];
 		this.add('t:', Math.floor(Date.now() / 1000));
 
-		const format = options.format || Dex.getFormat(options.formatid, true);
+		const format = options.format || Dex.formats.get(options.formatid, true);
 		this.format = format;
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
-		this.ruleTable = this.dex.getRuleTable(format);
+		this.ruleTable = this.dex.formats.getRuleTable(format);
 
 		this.trunc = this.dex.trunc;
 		this.clampIntRange = Utils.clampIntRange;
@@ -241,7 +242,7 @@ export class Battle {
 
 		for (const rule of this.ruleTable.keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
-			const subFormat = this.dex.getFormat(rule);
+			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
 				const hasEventHandler = Object.keys(subFormat).some(
 					val => val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
@@ -873,7 +874,7 @@ export class Battle {
 		}
 		for (const id in pokemon.volatiles) {
 			const volatileState = pokemon.volatiles[id];
-			const volatile = pokemon.getVolatile(id)!;
+			const volatile = this.dex.conditions.getByID(id as ID);
 			// @ts-ignore - dynamic lookup
 			callback = volatile[callbackName];
 			if (callback !== undefined || (getKey && volatileState[getKey])) {
@@ -909,7 +910,7 @@ export class Battle {
 		const side = pokemon.side;
 		for (const conditionid in side.slotConditions[pokemon.position]) {
 			const slotConditionData = side.slotConditions[pokemon.position][conditionid];
-			const slotCondition = side.getSlotCondition(pokemon, conditionid)!;
+			const slotCondition = this.dex.conditions.getByID(conditionid as ID);
 			// @ts-ignore - dynamic lookup
 			callback = slotCondition[callbackName];
 			if (callback !== undefined || (getKey && slotConditionData[getKey])) {
@@ -955,9 +956,9 @@ export class Battle {
 		const handlers: EventListener[] = [];
 
 		let callback;
-		for (const i in field.pseudoWeather) {
-			const pseudoWeatherData = field.pseudoWeather[i];
-			const pseudoWeather = field.getPseudoWeather(i)!;
+		for (const id in field.pseudoWeather) {
+			const pseudoWeatherData = field.pseudoWeather[id];
+			const pseudoWeather = this.dex.conditions.getByID(id as ID);
 			// @ts-ignore - dynamic lookup
 			callback = pseudoWeather[callbackName];
 			if (callback !== undefined || (getKey && pseudoWeatherData[getKey])) {
@@ -989,9 +990,9 @@ export class Battle {
 	findSideEventHandlers(side: Side, callbackName: string, getKey?: 'duration') {
 		const handlers: EventListener[] = [];
 
-		for (const i in side.sideConditions) {
-			const sideConditionData = side.sideConditions[i];
-			const sideCondition = side.getSideCondition(i)!;
+		for (const id in side.sideConditions) {
+			const sideConditionData = side.sideConditions[id];
+			const sideCondition = this.dex.conditions.getByID(id as ID);
 			// @ts-ignore - dynamic lookup
 			const callback = sideCondition[callbackName];
 			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
@@ -1423,7 +1424,7 @@ export class Battle {
 								// unreleased hidden ability
 								continue;
 							}
-							const ability = this.dex.getAbility(abilityName);
+							const ability = this.dex.abilities.get(abilityName);
 							if (ruleTable.has('-ability:' + ability.id)) continue;
 							if (pokemon.knownType && !this.dex.getImmunity('trapped', pokemon)) continue;
 							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, source);
@@ -1589,7 +1590,7 @@ export class Battle {
 		if (format.onBegin) format.onBegin.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
-			const subFormat = this.dex.getFormat(rule);
+			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
 				if (subFormat.onBegin) subFormat.onBegin.call(this);
 			}
@@ -1645,7 +1646,7 @@ export class Battle {
 		boost = this.runEvent('Boost', target, source, effect, {...boost});
 		let success = null;
 		let boosted = isSecondary;
-		let boostName: BoostName;
+		let boostName: BoostID;
 		for (boostName in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[boostName] = boost[boostName];
@@ -1702,7 +1703,7 @@ export class Battle {
 	) {
 		if (!targetArray) return [0];
 		const retVals: (number | false | undefined)[] = [];
-		if (typeof effect === 'string' || !effect) effect = this.dex.getEffectByID((effect || '') as ID);
+		if (typeof effect === 'string' || !effect) effect = this.dex.conditions.getByID((effect || '') as ID);
 		for (const [i, curDamage] of damage.entries()) {
 			const target = targetArray[i];
 			let targetDamage = curDamage;
@@ -1826,7 +1827,7 @@ export class Battle {
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 
-		if (typeof effect === 'string' || !effect) effect = this.dex.getEffectByID((effect || '') as ID);
+		if (typeof effect === 'string' || !effect) effect = this.dex.conditions.getByID((effect || '') as ID);
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.dex.currentMod !== 'gen1stadium' &&
@@ -1870,7 +1871,7 @@ export class Battle {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (effect === 'drain') effect = this.dex.getEffectByID(effect as ID);
+		if (effect === 'drain') effect = this.dex.conditions.getByID(effect as ID);
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
@@ -1975,8 +1976,8 @@ export class Battle {
 		// Natures are calculated with 16-bit truncation.
 		// This only affects Eternatus-Eternamax in Pure Hackmons.
 		const tr = this.trunc;
-		const nature = this.dex.getNature(set.nature);
-		let s: StatNameExceptHP;
+		const nature = this.dex.natures.get(set.nature);
+		let s: StatIDExceptHP;
 		if (nature.plus) {
 			s = nature.plus;
 			const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 595) : stats[s];
@@ -1991,7 +1992,7 @@ export class Battle {
 	}
 
 	getCategory(move: string | Move) {
-		return this.dex.getMove(move).category || 'Physical';
+		return this.dex.moves.get(move).category || 'Physical';
 	}
 
 	randomizer(baseDamage: number) {
@@ -2041,7 +2042,7 @@ export class Battle {
 	}
 
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon) {
-		move = this.dex.getMove(move);
+		move = this.dex.moves.get(move);
 
 		let tracksTarget = move.tracksTarget;
 		// Stalwart sets trackTarget in ModifyMove, but ModifyMove happens after getTarget, so
@@ -2099,7 +2100,7 @@ export class Battle {
 		// moves that can target either allies or foes will only target foes
 		// when used without an explicit target.
 
-		move = this.dex.getMove(move);
+		move = this.dex.moves.get(move);
 		if (move.target === 'adjacentAlly') {
 			const adjacentAllies = pokemon.adjacentAllies();
 			return adjacentAllies.length ? this.sample(adjacentAllies) : null;
@@ -2230,7 +2231,7 @@ export class Battle {
 			}
 			// take priority from the base move, so abilities like Prankster only apply once
 			// (instead of compounding every time `getActionSpeed` is called)
-			let priority = this.dex.getMove(move.id).priority;
+			let priority = this.dex.moves.get(move.id).priority;
 			// Grassy Glide priority
 			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
 			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
@@ -2275,7 +2276,7 @@ export class Battle {
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.getEffectByID(pokemon.species.id), pokemon.speciesData, pokemon);
+				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -2320,8 +2321,8 @@ export class Battle {
 			return;
 		case 'instaswitch':
 		case 'switch':
-			if (action.choice === 'switch' && action.pokemon.status && this.dex.data.Abilities.naturalcure) {
-				this.singleEvent('CheckShow', this.dex.getAbility('naturalcure'), null, action.pokemon);
+			if (action.choice === 'switch' && action.pokemon.status) {
+				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
 			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
 				// a pokemon fainted from Pursuit before it could switch
@@ -2694,7 +2695,7 @@ export class Battle {
 
 	getTeam(options: PlayerOptions): PokemonSet[] {
 		let team = options.team;
-		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
+		if (typeof team === 'string') team = Teams.unpack(team);
 		if (team) return team;
 
 		if (!options.seed) {
@@ -2702,7 +2703,7 @@ export class Battle {
 		}
 
 		if (!this.teamGenerator) {
-			this.teamGenerator = this.dex.getTeamGenerator(this.format, options.seed);
+			this.teamGenerator = Teams.getGenerator(this.format, options.seed);
 		} else {
 			this.teamGenerator.setSeed(options.seed);
 		}
@@ -2736,7 +2737,7 @@ export class Battle {
 			if (options.team) throw new Error(`Player ${slot} already has a team!`);
 		}
 		if (options.team && typeof options.team !== 'string') {
-			options.team = this.dex.packTeam(options.team);
+			options.team = Teams.pack(options.team);
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));

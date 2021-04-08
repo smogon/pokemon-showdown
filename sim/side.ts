@@ -274,7 +274,7 @@ export class Side {
 		if (!source) throw new Error(`setting sidecond without a source`);
 		if (!source.getSlot) source = (source as any as Side).active[0];
 
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
@@ -298,18 +298,18 @@ export class Side {
 	}
 
 	getSideCondition(status: string | Effect): Effect | null {
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
 
 	getSideConditionData(status: string | Effect): AnyObject {
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		return this.sideConditions[status.id] || null;
 	}
 
 	removeSideCondition(status: string | Effect): boolean {
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
@@ -325,7 +325,7 @@ export class Side {
 		if (target instanceof Pokemon) target = target.position;
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		if (this.slotConditions[target][status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
@@ -350,14 +350,14 @@ export class Side {
 
 	getSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return null;
 		return status;
 	}
 
 	removeSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return false;
 		this.battle.singleEvent('End', status, this.slotConditions[target][status.id], this.active[target]);
 		delete this.slotConditions[target][status.id];
@@ -473,7 +473,7 @@ export class Side {
 				break;
 			}
 		}
-		const move = this.battle.dex.getMove(moveid);
+		const move = this.battle.dex.moves.get(moveid);
 
 		// Z-move
 
@@ -485,7 +485,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
 		}
 
-		if (zMove) targetType = this.battle.dex.getMove(zMove).target;
+		if (zMove) targetType = this.battle.dex.moves.get(zMove).target;
 
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
@@ -495,7 +495,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
 
-		if (maxMove) targetType = this.battle.dex.getMove(maxMove).target;
+		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).target;
 
 		// Validate targetting
 

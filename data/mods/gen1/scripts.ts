@@ -30,7 +30,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
 		boostBy(boost) {
 			let changed = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				const delta = boost[i];
 				if (delta === undefined) continue;
@@ -149,7 +149,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		// It uses the move and then deals with the effects after the move.
 		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
-			const baseMove = this.battle.dex.getMove(moveOrMoveName);
+			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
 			let move = this.battle.dex.getActiveMove(baseMove);
 			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
 			if (move.target === 'self') {
@@ -180,7 +180,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (sourceEffect) attrs += '|[from]' + this.battle.dex.getEffect(sourceEffect);
+			if (sourceEffect) attrs += '|[from]' + this.battle.dex.conditions.get(sourceEffect);
 			this.battle.addMove('move', pokemon, move.name, target + attrs);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
@@ -696,8 +696,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			let attacker = pokemon;
 			const defender = target;
 			if (move.useTargetOffensive) attacker = target;
-			const atkType: StatNameExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
-			const defType: StatNameExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
+			const atkType: StatIDExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
+			const defType: StatIDExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 			let attack = attacker.getStat(move.useSourceDefensiveAsOffensive ? defType : atkType);
 			let defense = defender.getStat(defType);
 			// In gen 1, screen effect is applied here.
@@ -800,11 +800,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (typeof effect === 'string') effect = this.dex.getEffect(effect);
+		if (typeof effect === 'string') effect = this.dex.conditions.get(effect);
 		if (!target?.hp) return 0;
 		let success = null;
 		boost = this.runEvent('Boost', target, source, effect, {...boost});
-		let i: BoostName;
+		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[i] = boost[i];

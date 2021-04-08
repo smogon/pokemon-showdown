@@ -99,7 +99,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -115,7 +115,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Skystriker', '[of] ' + pokemon);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -226,8 +226,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			onHit(pokemon) {
 				if (pokemon.positiveBoosts() < 5) {
-					const stats: BoostName[] = [];
-					let stat: BoostName;
+					const stats: BoostID[] = [];
+					let stat: BoostID;
 					for (stat in pokemon.boosts) {
 						if (!['accuracy', 'evasion'].includes(stat) && pokemon.boosts[stat] < 6) {
 							stats.push(stat);
@@ -401,12 +401,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+						this.add('-sideend', target.side, this.dex.conditions.get(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
 					}
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
+						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Whammer Jammer', '[of] ' + source);
 					}
 				}
 			}
@@ -608,12 +608,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
 						if (!silentRemove.includes(sideCondition)) {
-							this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+							this.add('-sideend', source.side.foe, this.dex.conditions.get(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
 						}
 					}
 					if (source.side.removeSideCondition(sideCondition)) {
 						if (!silentRemove.includes(sideCondition)) {
-							this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+							this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
 						}
 					}
 				}
@@ -1065,7 +1065,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					} else {
 						target.m.backupMoves.push(this.dex.deepClone(moveSlot));
 					}
-					const moveData = this.dex.getMove(this.toID(moves.pop()));
+					const moveData = this.dex.moves.get(this.toID(moves.pop()));
 					if (!moveData.id) continue;
 					target.moveSlots[target.moveSlots.indexOf(moveSlot)] = {
 						move: moveData.name,
@@ -1306,13 +1306,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			let species = target.species;
-			if (species.isMega) species = this.dex.getSpecies(species.baseSpecies);
+			if (species.isMega) species = this.dex.species.get(species.baseSpecies);
 			const ability = target.ability;
 			const isSingleStage = (species.nfe && !species.prevo) || (!species.nfe && !species.prevo);
 			if (!isSingleStage) {
 				let prevo = species.prevo;
-				if (this.dex.getSpecies(prevo).prevo) {
-					prevo = this.dex.getSpecies(prevo).prevo;
+				if (this.dex.species.get(prevo).prevo) {
+					prevo = this.dex.species.get(prevo).prevo;
 				}
 				target.formeChange(prevo, this.effect);
 				target.canMegaEvo = null;
@@ -1680,7 +1680,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			let success = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in target.boosts) {
 				if (target.boosts[i] === 0) continue;
 				target.boosts[i] = -target.boosts[i];
@@ -1717,7 +1717,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Psywave', target);
 		},
 		onHit(target, source, move) {
-			const boosts: BoostName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+			const boosts: BoostID[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 			const selfBoost: SparseBoostsTable = {};
 			selfBoost[boosts[this.random(5)]] = 1;
 			const oppBoost: SparseBoostsTable = {};
@@ -2018,7 +2018,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target) {
 			let success = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in target.boosts) {
 				if (target.boosts[i] === 0) continue;
 				target.boosts[i] = -target.boosts[i];
@@ -2633,7 +2633,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!source) return;
 			if (source.species.id.includes('unown')) {
 				const monList = Object.keys(this.dex.data.Pokedex).filter(speciesid => {
-					const species = this.dex.getSpecies(speciesid);
+					const species = this.dex.species.get(speciesid);
 					if (species.id.startsWith('unown')) return false;
 					if (species.isNonstandard && ['Gigantamax', 'Unobtainable'].includes(species.isNonstandard)) return false;
 					if (['Arceus', 'Silvally'].includes(species.baseSpecies) && species.types[0] !== 'Normal') return false;
@@ -2654,7 +2654,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						seedflare: 'appleacid',
 					};
 					if (slot.id in newMoves) {
-						const newMove = this.dex.getMove(newMoves[slot.id]);
+						const newMove = this.dex.moves.get(newMoves[slot.id]);
 						const newSlot = {
 							id: newMove.id,
 							move: newMove.name,
@@ -2680,7 +2680,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						appleacid: 'seedflare',
 					};
 					if (slot.id in newMoves) {
-						const newMove = this.dex.getMove(newMoves[slot.id]);
+						const newMove = this.dex.moves.get(newMoves[slot.id]);
 						const newSlot = {
 							id: newMove.id,
 							move: newMove.name,
@@ -2721,7 +2721,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Topsy-Turvy', target);
 		},
 		onHit(target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			const boosts: SparseBoostsTable = {};
 			for (i in target.boosts) {
 				const stage = target.boosts[i];
@@ -2771,13 +2771,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
-						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						this.add('-sideend', target.side, this.dex.conditions.get(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
 					}
 					success = true;
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
 					if (!silentRemove.includes(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
+						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Big Bang', '[of] ' + source);
 					}
 					success = true;
 				}
@@ -2840,7 +2840,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-activate', target, 'move: /nexthunt');
 				let statName = 'atk';
 				let bestStat = 0;
-				let s: StatNameExceptHP;
+				let s: StatIDExceptHP;
 				for (s in target.storedStats) {
 					if (target.storedStats[s] > bestStat) {
 						statName = s;
@@ -3308,7 +3308,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Turn', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Turn', '[of] ' + pokemon);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -3321,7 +3321,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Turn', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Turn', '[of] ' + pokemon);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -3427,7 +3427,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const item = target.takeItem(source);
 			if (!target.item) {
 				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
-				const items = Object.keys(this.dex.data.Items).map(obj => this.dex.getItem(obj).name);
+				const items = Object.keys(this.dex.data.Items).map(obj => this.dex.items.get(obj).name);
 				let randomItem = '';
 				if (items.length) randomItem = this.sample(items);
 				if (!randomItem) {
@@ -3539,7 +3539,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.addVolatile('laserfocus');
 			} else if (result >= 2 && result <= 16) {
 				const boost: SparseBoostsTable = {};
-				const stats: BoostName[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+				const stats: BoostID[] = ['atk', 'def', 'spa', 'spd', 'spe'];
 				boost[stats[this.random(5)]] = 1;
 				this.boost(boost, source);
 			} else if (result >= 17 && result <= 19) {
@@ -3603,8 +3603,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Splash', source);
 			if (source.positiveBoosts() < 8) {
-				const stats: BoostName[] = [];
-				let stat: BoostName;
+				const stats: BoostID[] = [];
+				let stat: BoostID;
 				const exclude: string[] = ['accuracy', 'evasion'];
 				for (stat in source.boosts) {
 					if (source.boosts[stat] < 6 && !exclude.includes(stat)) {
@@ -5423,7 +5423,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, effect) {
 			const moves = [];
 			for (const id in this.dex.data.Moves) {
-				const move = this.dex.getMove(id);
+				const move = this.dex.moves.get(id);
 				if (move.realMove || move.id.includes('metronome')) continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.

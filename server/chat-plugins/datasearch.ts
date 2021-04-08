@@ -486,8 +486,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		doublesnu: '(DUU)', dnu: '(DUU)',
 	});
 	const allTypes = Object.create(null);
-	for (const i in mod.data.TypeChart) {
-		allTypes[toID(i)] = i;
+	for (const type of mod.types.all()) {
+		allTypes[type.id] = type.name;
 	}
 	const allColors = ['green', 'red', 'blue', 'white', 'brown', 'yellow', 'purple', 'pink', 'gray', 'black'];
 	const allEggGroups: {[k: string]: string} = Object.assign(Object.create(null), {
@@ -560,7 +560,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				target = target.substr(1);
 			}
 
-			const targetAbility = mod.getAbility(target);
+			const targetAbility = mod.abilities.get(target);
 			if (targetAbility.exists) {
 				const invalid = validParameter("abilities", targetAbility.id, isNotSearch, targetAbility.name);
 				if (invalid) return {error: invalid};
@@ -598,7 +598,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				continue;
 			}
 
-			const targetMove = mod.getMove(target);
+			const targetMove = mod.moves.get(target);
 			if (targetMove.exists) {
 				const invalid = validParameter("moves", targetMove.id, isNotSearch, target);
 				if (invalid) return {error: invalid};
@@ -768,18 +768,18 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
-				for (const move in mod.data.Moves) {
-					const moveData = mod.getMove(move);
-					if (moveData.category === "Status" || moveData.id === "bide") continue;
-					if (moveData.priority > 0) {
-						const invalid = validParameter("moves", move, isNotSearch, target);
+				for (const moveid in mod.data.Moves) {
+					const move = mod.moves.get(moveid);
+					if (move.category === "Status" || move.id === "bide") continue;
+					if (move.priority > 0) {
+						const invalid = validParameter("moves", moveid, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
 							const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
-							bufferObj.moves[move] = false;
+							bufferObj.moves[moveid] = false;
 							searches.push(bufferObj as DexOrGroup);
 						} else {
-							orGroup.moves[move] = true;
+							orGroup.moves[moveid] = true;
 						}
 					}
 				}
@@ -796,7 +796,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					continue;
 				} else {
 					if (toID(targetResist) in mod.data.Moves) {
-						const move = mod.getMove(targetResist);
+						const move = mod.moves.get(targetResist);
 						if (move.category === 'Status') {
 							return {error: `'${targetResist}' is a status move and can't be used with 'resists'.`};
 						} else {
@@ -820,7 +820,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					continue;
 				} else {
 					if (toID(targetWeak) in mod.data.Moves) {
-						const move = mod.getMove(targetWeak);
+						const move = mod.moves.get(targetWeak);
 						if (move.category === 'Status') {
 							return {error: `'${targetWeak}' is a status move and can't be used with 'weak'.`};
 						} else {
@@ -845,7 +845,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					}
 				}
 				for (const move in mod.data.Moves) {
-					const moveData = mod.getMove(move);
+					const moveData = mod.moves.get(move);
 					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
@@ -916,8 +916,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	const dex: {[k: string]: Species} = {};
-	for (const pokemon in mod.data.Pokedex) {
-		const species = mod.getSpecies(pokemon);
+	for (const species of mod.species.all()) {
 		const megaSearchResult = (
 			megaSearch === null || (megaSearch === true && species.isMega) ||
 			(megaSearch === false && !species.isMega)
@@ -946,7 +945,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			gmaxSearchResult &&
 			fullyEvolvedSearchResult
 		) {
-			dex[pokemon] = species;
+			dex[species.id] = species;
 		}
 	}
 
@@ -986,15 +985,15 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
 				// as well as event-only Pokemon that are not eligible for LC despite being the first stage
-				let format = Dex.getFormat('gen' + mod.gen + 'lc');
-				if (!format.exists) format = Dex.getFormat('gen8lc');
+				let format = Dex.formats.get('gen' + mod.gen + 'lc');
+				if (!format.exists) format = Dex.formats.get('gen8lc');
 				if (
 					alts.tiers.LC &&
 					!dex[mon].prevo &&
-					dex[mon].evos.some(evo => mod.getSpecies(evo).gen <= mod.gen) &&
-					!Dex.getRuleTable(format).isBannedSpecies(dex[mon])
+					dex[mon].evos.some(evo => mod.species.get(evo).gen <= mod.gen) &&
+					!Dex.formats.getRuleTable(format).isBannedSpecies(dex[mon])
 				) {
-					const lsetData = mod.getLearnsetData(dex[mon].id);
+					const lsetData = mod.species.getLearnsetData(dex[mon].id);
 					if (lsetData.exists && lsetData.eventData && lsetData.eventOnly) {
 						let validEvents = 0;
 						for (const event of lsetData.eventData) {
@@ -1024,7 +1023,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			for (const targetResist in alts.resists) {
 				let effectiveness = 0;
-				const move = mod.getMove(targetResist);
+				const move = mod.moves.get(targetResist);
 				const attackingType = move.type || targetResist;
 				const notImmune = (move.id === 'thousandarrows' || mod.getImmunity(attackingType, dex[mon])) &&
 					!(move.id === 'sheercold' && mod.gen >= 7 && dex[mon].types.includes('Ice'));
@@ -1047,7 +1046,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			for (const targetWeak in alts.weak) {
 				let effectiveness = 0;
-				const move = mod.getMove(targetWeak);
+				const move = mod.moves.get(targetWeak);
 				const attackingType = move.type || targetWeak;
 				const notImmune = (move.id === 'thousandarrows' || mod.getImmunity(attackingType, dex[mon])) &&
 					!(move.id === 'sheercold' && mod.gen >= 7 && dex[mon].types.includes('Ice'));
@@ -1095,7 +1094,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				} else if (stat === 'gen') {
 					monStat = dex[mon].gen;
 				} else {
-					monStat = dex[mon].baseStats[stat as StatName];
+					monStat = dex[mon].baseStats[stat as StatID];
 				}
 				if (typeof alts.stats[stat].less === 'number') {
 					if (monStat < alts.stats[stat].less) {
@@ -1118,13 +1117,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			const format = Object.entries(Dex.data.Formats).find(([a, f]) => f.mod === usedMod);
+			const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
 			const formatStr = format ? format[1].name : 'gen8ou';
 			const validator = TeamValidator.get(
-				`${formatStr}${nationalSearch && !Dex.getRuleTable(Dex.getFormat(formatStr)).has('standardnatdex') ? '@@@standardnatdex' : ''}`
+				`${formatStr}${nationalSearch && !Dex.formats.getRuleTable(Dex.formats.get(formatStr)).has('standardnatdex') ? '@@@standardnatdex' : ''}`
 			);
 			const pokemonSource = validator.allSources();
-			for (const move of Object.keys(alts.moves).map(x => mod.getMove(x))) {
+			for (const move of Object.keys(alts.moves).map(x => mod.moves.get(x))) {
 				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
@@ -1148,7 +1147,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 	if (usedMod === 'letsgo') {
 		results = results.filter(name => {
-			const species = mod.getSpecies(name);
+			const species = mod.species.get(name);
 			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
 			(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
 				species.name !== 'Pikachu-Alola'));
@@ -1166,14 +1165,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const stat = sort.slice(0, -1);
 			const direction = sort.slice(-1);
 			results.sort((a, b) => {
-				const mon1 = mod.getSpecies(a);
-				const mon2 = mod.getSpecies(b);
+				const mon1 = mod.species.get(a);
+				const mon2 = mod.species.get(b);
 				let monStat1 = 0;
 				let monStat2 = 0;
 				if (stat === 'bst') {
 					for (const monStats in mon1.baseStats) {
-						monStat1 += mon1.baseStats[monStats as StatName];
-						monStat2 += mon2.baseStats[monStats as StatName];
+						monStat1 += mon1.baseStats[monStats as StatID];
+						monStat2 += mon2.baseStats[monStats as StatID];
 					}
 				} else if (stat === 'weight') {
 					monStat1 = mon1.weighthg;
@@ -1185,8 +1184,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					monStat1 = mon1.gen;
 					monStat2 = mon2.gen;
 				} else {
-					monStat1 = mon1.baseStats[stat as StatName];
-					monStat2 = mon2.baseStats[stat as StatName];
+					monStat1 = mon1.baseStats[stat as StatID];
+					monStat2 = mon2.baseStats[stat as StatID];
 				}
 				return (monStat1 - monStat2) * (direction === '+' ? 1 : -1);
 			});
@@ -1438,7 +1437,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				continue;
 			}
 
-			const species = mod.getSpecies(target);
+			const species = mod.species.get(target);
 			if (species.exists) {
 				if (parameters.length > 1) return {error: "A Pok\u00e9mon learnset cannot have alternative parameters."};
 				if (targetMons.some(mon => mon.name === species.name && isNotSearch !== mon.shouldBeExcluded)) {
@@ -1620,17 +1619,17 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	const getFullLearnsetOfPokemon = (species: Species) => {
 		let usedSpecies: Species = Utils.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.getLearnsetData(usedSpecies.id));
-		if (!usedSpeciesLearnset.learnset) {
-			usedSpecies = Utils.deepClone(mod.getSpecies(usedSpecies.baseSpecies));
-			usedSpeciesLearnset.learnset = Utils.deepClone(mod.getLearnsetData(usedSpecies.id).learnset || {});
+		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
+		if (!usedSpeciesLearnset) {
+			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.baseSpecies));
+			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id) || {});
 		}
-		const lsetData = new Set(Object.keys(usedSpeciesLearnset.learnset!));
+		const lsetData = new Set(Object.keys(usedSpeciesLearnset));
 
 		while (usedSpecies.prevo) {
-			usedSpecies = Utils.deepClone(mod.getSpecies(usedSpecies.prevo));
-			usedSpeciesLearnset = Utils.deepClone(mod.getLearnsetData(usedSpecies.id));
-			for (const move in usedSpeciesLearnset.learnset) {
+			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.prevo));
+			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
+			for (const move in usedSpeciesLearnset) {
 				lsetData.add(move);
 			}
 		}
@@ -1642,7 +1641,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	// then the valid moveset we can search is the set of all moves.
 	const validMoves = new Set(Object.keys(mod.data.Moves));
 	for (const mon of targetMons) {
-		const species = mod.getSpecies(mon.name);
+		const species = mod.species.get(mon.name);
 		const lsetData = getFullLearnsetOfPokemon(species);
 		// This pokemon's learnset needs to be excluded, so we perform a difference operation
 		// on the valid moveset and this pokemon's moveset.
@@ -1665,7 +1664,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	// the moves that are appropriate considering the requested pokemon.
 	const dex: {[moveid: string]: Move} = {};
 	for (const moveid of validMoves) {
-		const move = mod.getMove(moveid);
+		const move = mod.moves.get(moveid);
 		if (move.gen <= mod.gen) {
 			if (
 				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
@@ -1806,12 +1805,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (matched) continue;
 			for (const boost in alts.boost) {
 				if (move.boosts) {
-					if ((move.boosts[boost as BoostName]! > 0) === alts.boost[boost]) {
+					if ((move.boosts[boost as BoostID]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
 				} else if (move.secondary && move.secondary.self && move.secondary.self.boosts) {
-					if ((move.secondary.self.boosts[boost as BoostName]! > 0) === alts.boost[boost]) {
+					if ((move.secondary.self.boosts[boost as BoostID]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
@@ -1820,18 +1819,18 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (matched) continue;
 			for (const lower in alts.lower) {
 				if (move.boosts && move.boosts !== false) {
-					if ((move.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
+					if ((move.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
 						matched = true;
 						break;
 					}
 				} else if (move.secondary) {
 					if (move.secondary.boosts) {
-						if ((move.secondary.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
+						if ((move.secondary.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
 							matched = true;
 							break;
 						}
 					} else if (move.secondary.self && move.secondary.self.boosts) {
-						if ((move.secondary.self.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
+						if ((move.secondary.self.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
 							matched = true;
 							break;
 						}
@@ -1842,7 +1841,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			for (const boost in alts.zboost) {
 				const zMove = move.zMove;
 				if (zMove?.boost) {
-					if ((zMove.boost[boost as BoostName]! > 0) === alts.zboost[boost]) {
+					if ((zMove.boost[boost as BoostID]! > 0) === alts.zboost[boost]) {
 						matched = true;
 						break;
 					}
@@ -2081,8 +2080,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 
-		for (const n in dex.data.Items) {
-			const item = dex.getItem(n);
+		for (const item of dex.items.all()) {
 			if (!item.fling || (gen && item.gen !== gen) || (maxGen && item.gen <= maxGen)) continue;
 
 			if (basePower && effect) {
@@ -2113,8 +2111,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 
-		for (const n in dex.data.Items) {
-			const item = dex.getItem(n);
+		for (const item of dex.items.all()) {
 			if (!item.isBerry || !item.naturalGift || (gen && item.gen !== gen) || (maxGen && item.gen <= maxGen)) continue;
 
 			if (basePower && type) {
@@ -2130,8 +2127,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		}
 	} else {
 		let bestMatched = 0;
-		for (const n in dex.data.Items) {
-			const item = dex.getItem(n);
+		for (const item of dex.items.all()) {
 			let matched = 0;
 			// splits words in the description into a toID()-esk format except retaining / and . in numbers
 			let descWords = item.desc || '';
@@ -2280,8 +2276,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 
 	let bestMatched = 0;
 	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
-	for (const n in dex.data.Abilities) {
-		const ability = dex.getAbility(n);
+	for (const ability of dex.abilities.all()) {
 		let matched = 0;
 		// splits words in the description into a toID()-esque format except retaining / and . in numbers
 		let descWords = ability.desc || ability.shortDesc || '';
@@ -2348,11 +2343,11 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 
 	while (targets.length) {
 		const targetid = toID(targets[0]);
-		if (Dex.getFormat(targetid).exists) {
+		if (Dex.formats.get(targetid).exists) {
 			if (format.minSourceGen && format.minSourceGen === 6) {
 				return {error: "'pentagon' can't be used with formats."};
 			}
-			format = Utils.deepClone(Dex.getFormat(targetid));
+			format = Utils.deepClone(Dex.formats.get(targetid));
 			formatid = targetid;
 			formatName = format.name;
 			targets.shift();
@@ -2375,13 +2370,13 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	}
 	if (!formatName) {
 		if (!Dex.mod(`gen${gen}`)) return {error: `Gen ${gen} does not exist.`};
-		format = new Dex.Format(format, {mod: `gen${gen}`});
+		format = new Dex.Format({...format, mod: `gen${gen}`});
 		formatName = `Gen ${gen}`;
 		if (minSourceGen === 6) formatName += ' Pentagon';
 	}
 	const validator = TeamValidator.get(format);
 
-	const species = validator.dex.getSpecies(targets.shift());
+	const species = validator.dex.species.get(targets.shift());
 	const setSources = validator.allSources(species);
 	const set: Partial<PokemonSet> = {
 		name: species.baseSpecies,
@@ -2408,7 +2403,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			setSources.isHidden = true;
 			continue;
 		}
-		const move = validator.dex.getMove(arg);
+		const move = validator.dex.moves.get(arg);
 		moveNames.push(move.name);
 		if (!move.exists) {
 			return {error: `Move '${move.id}' not found.`};
@@ -2496,7 +2491,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			}
 		}
 		if (setSources.babyOnly && sourcesBefore) {
-			buffer += `<li>must be obtained as ` + Dex.getSpecies(setSources.babyOnly).name;
+			buffer += `<li>must be obtained as ` + Dex.species.get(setSources.babyOnly).name;
 		}
 		buffer += "</ul>";
 	} else if (problems.length >= 1) {

@@ -218,7 +218,7 @@ export class BattleQueue {
 				action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 			} else if (['switch', 'instaswitch'].includes(action.choice)) {
 				if (typeof action.pokemon.switchFlag === 'string') {
-					action.sourceEffect = this.battle.dex.getMove(action.pokemon.switchFlag as ID) as any;
+					action.sourceEffect = this.battle.dex.moves.get(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
 			}

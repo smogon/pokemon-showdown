@@ -2155,7 +2155,7 @@ export const Chat = new class {
 		buf += '</span> ';
 		if (gen >= 3) {
 			buf += '<span style="float:left;min-height:26px">';
-			if (species.abilities['1'] && (gen >= 4 || Dex.getAbility(species.abilities['1']).gen === 3)) {
+			if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
 				buf += '<span class="col twoabilitycol">' + species.abilities['0'] + '<br />' + species.abilities['1'] + '</span>';
 			} else {
 				buf += '<span class="col abilitycol">' + species.abilities['0'] + '</span>';

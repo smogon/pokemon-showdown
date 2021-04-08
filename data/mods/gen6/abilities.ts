@@ -50,7 +50,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
-			if (move.id !== 'struggle' && this.dex.getMove(move.id).type !== 'Normal') {
+			if (move.id !== 'struggle' && this.dex.moves.get(move.id).type !== 'Normal') {
 				move.type = 'Normal';
 			}
 		},

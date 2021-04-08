@@ -40,7 +40,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		inherit: true,
 		onHit(target, source, move) {
 			// don't count Hidden Power or Weather Ball as Fire-type
-			if (move.thawsTarget || this.dex.getMove(move.id).type === 'Fire' && move.category !== 'Status') {
+			if (move.thawsTarget || this.dex.moves.get(move.id).type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
 		},
