@@ -811,7 +811,7 @@ export const commands: ChatCommands = {
 			name = targetUser.getLastName();
 			userid = targetUser.getLastId();
 
-			if (targetUser.locked && !week && !month) {
+			if (targetUser.locked && !targetUser.locked.startsWith('#') && !week && !month) {
 				return this.privateModAction(`${name} would be locked by ${user.name} but was already locked.`);
 			}
 		} else {
