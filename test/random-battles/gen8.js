@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const {testSet, testNotBothMoves} = require('./tools');
+const {testSet, testNotBothMoves, testHasSTAB} = require('./tools');
 const assert = require('../assert');
 
 describe('[Gen 8] Random Battle', () => {
@@ -39,6 +39,12 @@ describe('[Gen 8] Random Doubles Battle', () => {
 			assert(set.moves.includes('bodypress'), `Melmetal should get Body Press (got ${set.moves})`);
 		});
 	});
+
+	it('should enforce STAB on Pinsir, Pikachu, and Zygarde', () => {
+		for (const pkmn of ['pinsir', 'pikachu', 'zygarde']) {
+			testHasSTAB(pkmn, options);
+		}
+	});
 });
 
 describe('[Gen 8] Random Battle (No Dmax)', () => {
@@ -46,4 +52,14 @@ describe('[Gen 8] Random Battle (No Dmax)', () => {
 	// This format is extremely new; this will be filled in later when I have to fix No Dmax bugs.
 
 	// const options = {format: 'gen8randombattlenodmax', isDynamax: true};
+});
+
+describe('[Gen 8] Free-for-All Random Battle', () => {
+	const options = {format: 'gen8freeforallrandombattle', isDoubles: true};
+
+	it('should enforce STAB on Pinsir, Pikachu, and Zygarde', () => {
+		for (const pkmn of ['pinsir', 'pikachu', 'zygarde']) {
+			testHasSTAB(pkmn, options);
+		}
+	});
 });
