@@ -630,7 +630,7 @@ const cheatingScenarios = [
 		`Sometimes, <a href="//${Config.routes.root}/pages/rng">that's just how RNG works</a>!`,
 	],
 	[
-		`My opponent used six of the same Pokemon / too many Legendaries`,
+		`My opponent used six of the same Pokemon or too many Legendaries`,
 		`Certain tiers, like Anything Goes, do not have Species Clause, which normally restricts a player to only one of each Pokemon. In addition, many tiers allow lots of legendaries, and you are allowed to use them!`,
 	],
 	[
@@ -646,7 +646,7 @@ const cheatingScenarios = [
 		`Perhaps Weezing's <a href="//${Config.routes.dex}/abilities/neutralizinggas">Neutralizing Gas</a> was active (<psicon pokemon="weezinggalar" />), or another effect, like <a href="https://dex.pokemonshowdown.com/abilities/moldbreaker">Mold Breaker</a>, was suppressing the Ability.`,
 	],
 	[
-		`My Pokemon's move failed when I attacked the opponent (Double Battle)`,
+		`My Pokemon's move failed when I attacked the opponent in a Double Battle)`,
 		`You attacked your own partner Pokemon, which failed because no Pokemon was there.`,
 	],
 ];
@@ -748,7 +748,7 @@ export const pages: PageTable = {
 					buf += `<p>Your opponent cannot control how lucky or unlucky you are, what moves you choose, or the mechanics of the battle. You may just be misunderstanding what happened in your battle!</p>`;
 					buf += `<h4>Some common situations</h4><ul>`;
 					for (const [scenario, explanation] of cheatingScenarios) {
-						buf += `<li><details class = "readmore"><summary>${scenario}</summary><br />${explanation}<br /><br /></details></li>`;
+						buf += `<li><details class="readmore"><summary>${scenario}</summary><br />${explanation}<br /><br /></details></li>`;
 					}
 					buf += `</ul><p>There are many more situations like this where the opponent was not cheating or hacking. If you're confused about what happened, upload your battle replay and share it with the Help room. They can help you understand what happened!</p>`;
 					buf += `<p style="text-align: center"><button class="button" name="send" value="/j help"><strong>Join the Help Room</strong></button></p>`;
