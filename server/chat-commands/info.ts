@@ -46,7 +46,7 @@ export function findFormats(targetId: string, isOMSearch = false) {
 		const formatId = /^gen\d+/.test(targetId) ? format.id : format.id.slice(4);
 		if (
 			!targetId || format[targetId + 'Show' as 'searchShow'] || sectionId === targetId ||
-			formatId.startsWith(targetId) || exactFormat
+			formatId.startsWith(targetId) || exactFormat.exists
 		) {
 			if (isOMSearch) {
 				const officialFormats = [
