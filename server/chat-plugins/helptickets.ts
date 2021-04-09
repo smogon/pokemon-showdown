@@ -627,7 +627,7 @@ const cheatingScenarios = [
 	],
 	[
 		`My opponent got very lucky (critical hits, freezes, flinches, etc.)`,
-		`Sometimes, <a href = "https://pokemonshowdown.com/pages/rng">that's just how RNG works</a>!`,
+		`Sometimes, <a href="https://pokemonshowdown.com/pages/rng">that's just how RNG works</a>!`,
 	],
 	[
 		`My opponent used six of the same Pokemon / too many Legendaries`,
@@ -643,10 +643,10 @@ const cheatingScenarios = [
 	],
 	[
 		`My Pokemon's Ability didn't work`,
-		`Perhaps Weezing's <a href = "https://dex.pokemonshowdown.com/abilities/neutralizinggas">Neutralizing Gas</a> was active (<psicon pokemon="weezinggalar">), or another effect, like <a href="https://dex.pokemonshowdown.com/abilities/moldbreaker">Mold Breaker</a>, was suppressing the Ability.`,
+		`Perhaps Weezing's <a href="https://dex.pokemonshowdown.com/abilities/neutralizinggas">Neutralizing Gas</a> was active (<psicon pokemon="weezinggalar" />), or another effect, like <a href="https://dex.pokemonshowdown.com/abilities/moldbreaker">Mold Breaker</a>, was suppressing the Ability.`,
 	],
 	[
-		`My Pokemon's move failed when I attacked the opponent (double battle)`,
+		`My Pokemon's move failed when I attacked the opponent (Double Battle)`,
 		`You attacked your own partner Pokemon, which failed because no Pokemon was there.`,
 	],
 ];
