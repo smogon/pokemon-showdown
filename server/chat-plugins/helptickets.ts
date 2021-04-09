@@ -623,11 +623,11 @@ const ticketPages: {[k: string]: string} = {
 const cheatingScenarios = [
 	[
 		`My opponent's Pokemon used moves it couldn't learn`,
-		`It was probably a disguised Zoroark (<psicon pokemon="zoroark" />), which has the ability <a href="https://dex.pokemonshowdown.com/abilities/illusion">Illusion</a>. This happens often in Random Battles!`,
+		`It was probably a disguised Zoroark (<psicon pokemon="zoroark" />), which has the ability <a href="//${Config.routes.dex}/abilities/illusion">Illusion</a>. This happens often in Random Battles!`,
 	],
 	[
 		`My opponent got very lucky (critical hits, freezes, flinches, etc.)`,
-		`Sometimes, <a href="https://pokemonshowdown.com/pages/rng">that's just how RNG works</a>!`,
+		`Sometimes, <a href="//${Config.routes.root}/pages/rng">that's just how RNG works</a>!`,
 	],
 	[
 		`My opponent used six of the same Pokemon / too many Legendaries`,
@@ -643,7 +643,7 @@ const cheatingScenarios = [
 	],
 	[
 		`My Pokemon's Ability didn't work`,
-		`Perhaps Weezing's <a href="https://dex.pokemonshowdown.com/abilities/neutralizinggas">Neutralizing Gas</a> was active (<psicon pokemon="weezinggalar" />), or another effect, like <a href="https://dex.pokemonshowdown.com/abilities/moldbreaker">Mold Breaker</a>, was suppressing the Ability.`,
+		`Perhaps Weezing's <a href="//${Config.routes.dex}/abilities/neutralizinggas">Neutralizing Gas</a> was active (<psicon pokemon="weezinggalar" />), or another effect, like <a href="https://dex.pokemonshowdown.com/abilities/moldbreaker">Mold Breaker</a>, was suppressing the Ability.`,
 	],
 	[
 		`My Pokemon's move failed when I attacked the opponent (Double Battle)`,
@@ -795,7 +795,7 @@ export const pages: PageTable = {
 					break;
 				case 'hostfilter':
 					buf += `<p>${this.tr`We automatically lock proxies and VPNs to prevent evasion of punishments and other attacks on our server. To get unlocked, you need to disable your proxy or VPN.`}</p>`;
-					buf += `<p>For more detailed information, view the  <a href="https://pokemonshowdown.com/pages/proxyhelp">proxy help guide</a>.</p>`;
+					buf += `<p>For more detailed information, view the  <a href="//${Config.routes.root}/pages/proxyhelp">proxy help guide</a>.</p>`;
 					break;
 				case 'semilock':
 					buf += `<p>${this.tr`Do you have an autoconfirmed account? An account is autoconfirmed when it has won at least one rated battle and has been registered for one week or longer.`}</p>`;
