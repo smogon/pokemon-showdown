@@ -28,6 +28,23 @@ function testSet(pokemon, options, test) {
 }
 
 /**
+ * Tests that a Pokémon always gets STAB moves.
+ *
+ * @param {ID} pokemon
+ * @param {{format?: string, rounds?: number, isDoubles?: boolean, isLead?: boolean, isDynamax?: boolean}} options
+ */
+function testHasSTAB(pokemon, options) {
+	const dex = Dex.forFormat(options.format || 'gen8randombattle');
+	const types = dex.species.get(pokemon).types;
+	testSet(pokemon, options, set => {
+		assert(
+			set.moves.some(move => types.includes(dex.moves.get(move).type)),
+			`${pokemon} should have at least one STAB move (generated moveset: ${set.moves})`
+		);
+	});
+}
+
+/**
  * Tests that a Pokémon does not get two moves together.
  *
  * @param {ID} pokemon the ID of the Pokemon whose set is to be tested
@@ -63,3 +80,4 @@ function testTeam(options, test) {
 exports.testSet = testSet;
 exports.testNotBothMoves = testNotBothMoves;
 exports.testTeam = testTeam;
+exports.testHasSTAB = testHasSTAB;

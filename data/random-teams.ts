@@ -224,6 +224,11 @@ export class RandomTeams {
 		// element at the given index with the removed element
 		// is much, much faster than using list.splice(index, 1).
 		const length = list.length;
+		if (index < 0 || index >= list.length) {
+			// sanity check
+			throw new Error(`Index ${index} out of bounds for given array`);
+		}
+
 		const element = list[index];
 		list[index] = list[length - 1];
 		list.pop();
@@ -1630,7 +1635,7 @@ export class RandomTeams {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
 			// Random Free-For-All also uses doubles move pools, for now
 			const allySwitch = movePool.indexOf('allyswitch');
-			if (allySwitch !== undefined) {
+			if (allySwitch > -1) {
 				if (movePool.length > 4) {
 					this.fastPop(movePool, allySwitch);
 				} else {
