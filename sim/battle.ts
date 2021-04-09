@@ -1277,6 +1277,7 @@ export class Battle {
 		this.faintMessages(false, true);
 		if (!this.ended && side.requestState) {
 			side.emitRequest({wait: true, side: side.getRequestData()});
+			side.clearChoice();
 			if (this.allChoicesDone()) this.commitDecisions();
 		}
 		return true;
@@ -2259,23 +2260,25 @@ export class Battle {
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
 			const format = this.format;
 
-			// Remove Pokémon duplicates remaining after `team` decisions.
 			for (const side of this.sides) {
-				side.pokemon = side.pokemon.slice(0, side.pokemonLeft);
-			}
-
-			if (format.teamLength && format.teamLength.battle) {
-				// Trim the team: not all of the Pokémon brought to Preview will battle.
-				for (const side of this.sides) {
+				if (format.teamLength && format.teamLength.battle) {
+					// Trim the team: not all of the Pokémon brought to Preview will battle.
 					side.pokemon = side.pokemon.slice(0, format.teamLength.battle);
-					side.pokemonLeft = side.pokemon.length;
 				}
+				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
 			}
 
 			this.add('start');
 			for (const side of this.sides) {
-				for (let pos = 0; pos < side.active.length; pos++) {
-					this.actions.switchIn(side.pokemon[pos], pos);
+				for (let i = 0; i < side.active.length; i++) {
+					if (!side.pokemonLeft) {
+						// forfeited before starting
+						side.active[i] = side.pokemon[i];
+						side.active[i].fainted = true;
+						side.active[i].hp = 0;
+					} else {
+						this.actions.switchIn(side.pokemon[i], i);
+					}
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
@@ -2313,12 +2316,14 @@ export class Battle {
 		case 'event':
 			this.runEvent(action.event!, action.pokemon);
 			break;
-		case 'team': {
-			action.pokemon.side.pokemon.splice(action.index, 0, action.pokemon);
+		case 'team':
+			if (action.index === 0) {
+				action.pokemon.side.pokemon = [];
+			}
+			action.pokemon.side.pokemon.push(action.pokemon);
 			action.pokemon.position = action.index;
 			// we return here because the update event would crash since there are no active pokemon yet
 			return;
-		}
 
 		case 'pass':
 			return;
@@ -2353,12 +2358,11 @@ export class Battle {
 				this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
 			}
 			break;
-		case 'shift': {
+		case 'shift':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.swapPosition(action.pokemon, 1);
 			break;
-		}
 
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
