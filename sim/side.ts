@@ -116,9 +116,7 @@ export class Side {
 		for (let i = 0; i < this.team.length && i < 24; i++) {
 			// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new Pokemon(this.team[i], this));
-		}
-		for (const [i, pokemon] of this.pokemon.entries()) {
-			pokemon.position = i;
+			this.pokemon[i].position = i;
 		}
 
 		switch (this.battle.gameType) {
