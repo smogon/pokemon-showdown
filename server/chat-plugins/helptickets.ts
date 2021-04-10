@@ -593,6 +593,7 @@ const ticketPages: {[k: string]: string} = {
 	battleharassment: `Someone is harassing me in a battle`,
 	inapname: `Someone is using an offensive username`,
 	inappokemon: `Someone is using offensive Pokemon nicknames`,
+	cheating: `Someone is hacking or cheating in my battle`,
 
 	appeal: `I want to appeal a punishment`,
 	permalock: `I want to appeal my permalock`,
@@ -619,6 +620,36 @@ const ticketPages: {[k: string]: string} = {
 	confirmroomhelp: `Call a Global Staff member to help`,
 	confirmother: `Call a Global Staff member`,
 };
+const cheatingScenarios = [
+	[
+		`My opponent's Pokemon used moves it couldn't learn`,
+		`It was probably a disguised Zoroark (<psicon pokemon="zoroark" />), which has the ability <a href="//${Config.routes.dex}/abilities/illusion">Illusion</a>. This happens often in Random Battles!`,
+	],
+	[
+		`My opponent got very lucky (critical hits, freezes, flinches, etc.)`,
+		`Sometimes, <a href="//${Config.routes.root}/pages/rng">that's just how RNG works</a>!`,
+	],
+	[
+		`My opponent used six of the same Pokemon or too many Legendaries`,
+		`Certain tiers, like Anything Goes, do not have Species Clause, which normally restricts a player to only one of each Pokemon. In addition, many tiers allow lots of legendaries, and you are allowed to use them!`,
+	],
+	[
+		`My Pokemon used a move I didn't choose`,
+		`You accidentally selected the wrong move and didn't notice. It happens more often than you might think!`,
+	],
+	[
+		`My Pokemon moved last when it shouldn't have`,
+		`You probably accidentally chose a move with negative priority, like Trick Room, Dragon Tail, or Roar.`,
+	],
+	[
+		`My Pokemon's Ability didn't work`,
+		`Perhaps Weezing's <a href="//${Config.routes.dex}/abilities/neutralizinggas">Neutralizing Gas</a> was active (<psicon pokemon="weezinggalar" />), or another effect, like <a href="https://dex.pokemonshowdown.com/abilities/moldbreaker">Mold Breaker</a>, was suppressing the Ability.`,
+	],
+	[
+		`My Pokemon's move failed when I attacked the opponent in a Double Battle)`,
+		`You attacked your own partner Pokemon, which failed because no Pokemon was there.`,
+	],
+];
 
 export const pages: PageTable = {
 	help: {
@@ -689,6 +720,7 @@ export const pages: PageTable = {
 					buf += `<p><Button>battleharassment</Button></p>`;
 					buf += `<p><Button>inapname</Button></p>`;
 					buf += `<p><Button>inappokemon</Button></p>`;
+					buf += `<p><Button>cheating</Button></p>`;
 					break;
 				case 'pmharassment':
 					buf += `<p>${this.tr`If someone is harassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.`}</p>`;
@@ -711,6 +743,15 @@ export const pages: PageTable = {
 					buf += `<p>${this.tr`Please save a replay of the battle if it has ended, or provide a link to the battle if it is still ongoing.`}</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirminappokemon</Button></p>`;
+					break;
+				case 'cheating':
+					buf += `<p>Your opponent cannot control how lucky or unlucky you are, what moves you choose, or the mechanics of the battle. You may just be misunderstanding what happened in your battle!</p>`;
+					buf += `<h4>Some common situations</h4><ul>`;
+					for (const [scenario, explanation] of cheatingScenarios) {
+						buf += `<li><details class="readmore"><summary>${scenario}</summary><br />${explanation}<br /><br /></details></li>`;
+					}
+					buf += `</ul><p>There are many more situations like this where the opponent was not cheating or hacking. If you're confused about what happened, upload your battle replay and share it with the Help room. They can help you understand what happened!</p>`;
+					buf += `<p style="text-align: center"><button class="button" name="send" value="/j help"><strong>Join the Help Room</strong></button></p>`;
 					break;
 				case 'appeal':
 					buf += `<p><b>${this.tr`What would you like to appeal?`}</b></p>`;
@@ -754,7 +795,7 @@ export const pages: PageTable = {
 					break;
 				case 'hostfilter':
 					buf += `<p>${this.tr`We automatically lock proxies and VPNs to prevent evasion of punishments and other attacks on our server. To get unlocked, you need to disable your proxy or VPN.`}</p>`;
-					buf += `<p>For more detailed information, view the  <a href="https://pokemonshowdown.com/pages/proxyhelp">proxy help guide</a>.</p>`;
+					buf += `<p>For more detailed information, view the  <a href="//${Config.routes.root}/pages/proxyhelp">proxy help guide</a>.</p>`;
 					break;
 				case 'semilock':
 					buf += `<p>${this.tr`Do you have an autoconfirmed account? An account is autoconfirmed when it has won at least one rated battle and has been registered for one week or longer.`}</p>`;
