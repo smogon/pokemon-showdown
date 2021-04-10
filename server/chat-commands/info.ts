@@ -10,8 +10,7 @@
  */
 import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
-import {Utils} from '../../lib/utils';
-import {Net} from '../../lib/net';
+import {Net, Utils} from '../../lib';
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
@@ -34,43 +33,35 @@ export function getCommonBattles(
 }
 
 export function findFormats(targetId: string, isOMSearch = false) {
-	let formatList: string[] = [];
-	const format = Dex.getFormat(targetId);
-	if (['Format', 'ValidatorRule', 'Rule'].includes(format.effectType)) formatList = [targetId];
-	if (!formatList.length) {
-		formatList = Object.keys(Dex.formats);
-	}
+	const exactFormat = Dex.formats.get(targetId);
+
+	const formatList = exactFormat.exists ? [exactFormat] : Dex.formats.all();
 
 	// Filter formats and group by section
-	let exactMatch = '';
-	const sections: {[k: string]: {name: string, formats: string[]}} = {};
+	const sections: {[k: string]: {name: string, formats: ID[]}} = {};
 	let totalMatches = 0;
-	for (const mode of formatList) {
-		const subformat = Dex.getFormat(mode);
-		const sectionId = toID(subformat.section);
-		let formatId = subformat.id;
-		if (!/^gen\d+/.test(targetId)) {
-			// Skip generation prefix if it wasn't provided
-			formatId = formatId.replace(/^gen\d+/, '') as ID;
-		}
-		if (targetId && !(subformat as any)[targetId + 'Show'] && sectionId !== targetId &&
-		subformat.id === mode && !formatId.startsWith(targetId)) continue;
-		if (isOMSearch) {
-			const officialFormats = [
-				'ou', 'uu', 'ru', 'nu', 'pu', 'ubers', 'lc', 'monotype', 'customgame', 'doublescustomgame', 'gbusingles', 'gbudoubles',
-			];
-			if (subformat.id.startsWith('gen') && officialFormats.includes(subformat.id.slice(4))) {
-				continue;
+	for (const format of formatList) {
+		const sectionId = toID(format.section);
+		// Skip generation prefix if it wasn't provided
+		const formatId = /^gen\d+/.test(targetId) ? format.id : format.id.slice(4);
+		if (
+			!targetId || format[targetId + 'Show' as 'searchShow'] || sectionId === targetId ||
+			formatId.startsWith(targetId) || exactFormat.exists
+		) {
+			if (isOMSearch) {
+				const officialFormats = [
+					'ou', 'uu', 'ru', 'nu', 'pu', 'ubers', 'lc', 'monotype', 'customgame', 'doublescustomgame', 'gbusingles', 'gbudoubles',
+				];
+				if (format.id.startsWith('gen') && officialFormats.includes(format.id.slice(4))) {
+					continue;
+				}
 			}
+			totalMatches++;
+			if (!sections[sectionId]) sections[sectionId] = {name: format.section!, formats: []};
+			sections[sectionId].formats.push(format.id);
 		}
-		totalMatches++;
-		if (!sections[sectionId]) sections[sectionId] = {name: subformat.section!, formats: []};
-		sections[sectionId].formats.push(subformat.id);
-		if (subformat.id !== targetId) continue;
-		exactMatch = sectionId;
-		break;
 	}
-	return {totalMatches, sections, exactMatch};
+	return {totalMatches, sections};
 }
 
 export const commands: ChatCommands = {
@@ -314,7 +305,7 @@ export const commands: ChatCommands = {
 		if (!userid) return this.errorReply("Please enter a valid username.");
 		const targetUser = Users.get(userid);
 		let buf = Utils.html`<strong class="username">${target}</strong>`;
-		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
+		if (!targetUser?.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
 		const roomauth = room?.auth.getDirect(userid);
 		if (roomauth && Config.groups[roomauth]?.name) {
@@ -413,7 +404,7 @@ export const commands: ChatCommands = {
 
 	async host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
-		this.checkCan('ip');
+		this.checkCan('alts');
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		const {dnsbl, host, hostType} = await IPTools.lookup(target);
@@ -437,19 +428,22 @@ export const commands: ChatCommands = {
 		const results: string[] = [];
 		const isAll = (cmd === 'ipsearchall');
 
+		// If the IP is a range ending with *, we remove the *, so we have to keep track of that now
+		// so that we can properly determine if a lack of users is caused by invalid input or if it's just an empty range.
+		const isValidRange = ip.endsWith('*') && IPTools.ipRangeRegex.test(ip);
 		if (/[a-z]/.test(ip)) {
 			// host
 			this.sendReply(`Users with host ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
-				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
+				if (!curUser.latestHost?.endsWith(ip)) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
-		} else if (ip.endsWith('*')) {
+		} else if (isValidRange) {
 			// IP range
 			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			ip = ip.slice(0, -1);
@@ -471,36 +465,12 @@ export const commands: ChatCommands = {
 			}
 		}
 		if (!results.length) {
-			if (!IPTools.ipRangeRegex.test(ip)) return this.errorReply(`${ip} is not a valid IP or host.`);
-			return this.sendReply(`No results found.`);
+			if (!isValidRange && !IPTools.ipRegex.test(ip)) return this.errorReply(`${ip} is not a valid IP or host.`);
+			return this.sendReply(`No users found.`);
 		}
 		return this.sendReply(results.join('; '));
 	},
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
-
-	usersearch(target) {
-		this.checkCan('lock');
-		const results = [];
-		target = toID(target);
-		if (!target) {
-			return this.parse(`/help usersearch`);
-		}
-		if (target.length < 3) {
-			return this.errorReply(`That's too short of a term to search for.`);
-		}
-		for (const curUser of Users.users.values()) {
-			if (!curUser.id.includes(target)) continue;
-			results.push(
-				Utils.html`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`
-			);
-		}
-		Utils.sortBy(results, name => name.startsWith(ONLINE_SYMBOL));
-		if (!results.length) results.push(`No users found.`);
-		return this.sendReplyBox(
-			`Users with a name matching '${target}':<br />${results.join('; ')}`
-		);
-	},
-	usersearchhelp: [`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`],
 
 	checkchallenges(target, room, user) {
 		room = this.requireRoom();
@@ -522,7 +492,7 @@ export const commands: ChatCommands = {
 		if (user1Challs) {
 			for (const chall of user1Challs) {
 				if (chall.from === user1.id && Users.get(chall.to) === user2) {
-					challenges.push(Utils.html`${user1.name} is challenging ${user2.name} in ${Dex.getFormat(chall.formatid).name}.`);
+					challenges.push(Utils.html`${user1.name} is challenging ${user2.name} in ${Dex.formats.get(chall.formatid).name}.`);
 					break;
 				}
 			}
@@ -531,7 +501,7 @@ export const commands: ChatCommands = {
 		if (user2Challs) {
 			for (const chall of user2Challs) {
 				if (chall.from === user2.id && Users.get(chall.to) === user1) {
-					challenges.push(Utils.html`${user2.name} is challenging ${user1.name} in ${Dex.getFormat(chall.formatid).name}.`);
+					challenges.push(Utils.html`${user2.name} is challenging ${user1.name} in ${Dex.formats.get(chall.formatid).name}.`);
 					break;
 				}
 			}
@@ -576,8 +546,7 @@ export const commands: ChatCommands = {
 		if (!targetId) return this.parse('/help data');
 		const targetNum = parseInt(target);
 		if (!isNaN(targetNum) && `${targetNum}` === target) {
-			for (const p in Dex.data.Pokedex) {
-				const pokemon = Dex.getSpecies(p);
+			for (const pokemon of Dex.species.all()) {
 				if (pokemon.num === targetNum) {
 					target = pokemon.baseSpecies;
 					break;
@@ -589,13 +558,13 @@ export const commands: ChatCommands = {
 		if (sep[1] && toID(sep[1]) in Dex.dexes) {
 			dex = Dex.mod(toID(sep[1]));
 		} else if (sep[1]) {
-			format = Dex.getFormat(sep[1]);
+			format = Dex.formats.get(sep[1]);
 			if (!format.exists) {
 				return this.errorReply(`Unrecognized format or mod "${format.name}"`);
 			}
 			dex = Dex.mod(format.mod);
 		} else if (room?.battle) {
-			format = Dex.getFormat(room.battle.format);
+			format = Dex.formats.get(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
 		const newTargets = dex.dataSearch(target);
@@ -611,19 +580,16 @@ export const commands: ChatCommands = {
 			let details: {[k: string]: string} = {};
 			switch (newTarget.searchType) {
 			case 'nature':
-				const nature = Dex.getNature(newTarget.name);
+				const nature = Dex.natures.get(newTarget.name);
 				buffer += `${nature.name} nature: `;
 				if (nature.plus) {
-					const statNames = {
-						atk: "Attack", def: "Defense", spa: "Special Attack", spd: "Special Defense", spe: "Speed",
-					};
-					buffer += `+10% ${statNames[nature.plus]}, -10% ${statNames[nature.minus!]}.`;
+					buffer += `+10% ${Dex.stats.names[nature.plus]}, -10% ${Dex.stats.names[nature.minus!]}.`;
 				} else {
 					buffer += `No effect.`;
 				}
 				return this.sendReply(buffer);
 			case 'pokemon':
-				let pokemon = dex.getSpecies(newTarget.name);
+				let pokemon = dex.species.get(newTarget.name);
 				if (format?.onModifySpecies) {
 					pokemon = format.onModifySpecies.call({dex, clampIntRange: Utils.clampIntRange, toID} as Battle, pokemon) || pokemon;
 				}
@@ -659,13 +625,13 @@ export const commands: ChatCommands = {
 						Height: `${pokemon.heightm} m`,
 					};
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
-					const gmaxMove = pokemon.canGigantamax || dex.getSpecies(pokemon.changesFrom).canGigantamax;
+					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove) details["G-Max Move"] = gmaxMove;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
 					for (const evoName of pokemon.evos) {
-						const evo = dex.getSpecies(evoName);
+						const evo = dex.species.get(evoName);
 						if (evo.gen <= dex.gen) {
 							const condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
@@ -703,7 +669,7 @@ export const commands: ChatCommands = {
 				}
 				break;
 			case 'item':
-				const item = dex.getItem(newTarget.name);
+				const item = dex.items.get(newTarget.name);
 				buffer += `|raw|${Chat.getDataItemHTML(item)}\n`;
 				if (showDetails) {
 					details = {
@@ -735,7 +701,7 @@ export const commands: ChatCommands = {
 				}
 				break;
 			case 'move':
-				const move = dex.getMove(newTarget.name);
+				const move = dex.moves.get(newTarget.name);
 				buffer += `|raw|${Chat.getDataMoveHTML(move)}\n`;
 				if (showDetails) {
 					details = {
@@ -779,20 +745,20 @@ export const commands: ChatCommands = {
 						} else if (move.zMove?.boost) {
 							details["Z-Effect"] = "";
 							const boost = move.zMove.boost;
-							const stats: {[k in BoostName]: string} = {
+							const stats: {[k in BoostID]: string} = {
 								atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness',
 							};
-							let h: BoostName;
+							let h: BoostID;
 							for (h in boost) {
 								details["Z-Effect"] += ` ${stats[h]} +${boost[h]}`;
 							}
 						} else if (move.isZ && typeof move.isZ === 'string') {
 							details["&#10003; Z-Move"] = "";
-							const zCrystal = dex.getItem(move.isZ);
+							const zCrystal = dex.items.get(move.isZ);
 							details["Z-Crystal"] = zCrystal.name;
 							if (zCrystal.itemUser) {
 								details["User"] = zCrystal.itemUser.join(", ");
-								details["Required Move"] = dex.getItem(move.isZ).zMoveFrom!;
+								details["Required Move"] = dex.items.get(move.isZ).zMoveFrom!;
 							}
 						} else {
 							details["Z-Effect"] = "None";
@@ -839,7 +805,7 @@ export const commands: ChatCommands = {
 				}
 				break;
 			case 'ability':
-				const ability = dex.getAbility(newTarget.name);
+				const ability = dex.abilities.get(newTarget.name);
 				buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
 				if (showDetails) {
 					details = {
@@ -907,17 +873,17 @@ export const commands: ChatCommands = {
 			mod = Dex.mod(maybeMod);
 			targets.pop();
 		} else if (room?.battle) {
-			format = Dex.getFormat(room.battle.format);
+			format = Dex.formats.get(room.battle.format);
 			mod = Dex.mod(format.mod);
 		}
 		if (maybeMod === 'inverse') {
 			isInverse = true;
 			targets.pop();
 		}
-		let species: {types: string[], [k: string]: any} = mod.getSpecies(targets[0]);
-		const type1 = mod.getType(targets[0]);
-		const type2 = mod.getType(targets[1]);
-		const type3 = mod.getType(targets[2]);
+		let species: {types: string[], [k: string]: any} = mod.species.get(targets[0]);
+		const type1 = mod.types.get(targets[0]);
+		const type2 = mod.types.get(targets[1]);
+		const type3 = mod.types.get(targets[2]);
 
 		if (species.exists) {
 			target = species.name;
@@ -943,7 +909,7 @@ export const commands: ChatCommands = {
 		const weaknesses = [];
 		const resistances = [];
 		const immunities = [];
-		for (const type in mod.data.TypeChart) {
+		for (const type of mod.types.names()) {
 			const notImmune = mod.getImmunity(type, species);
 			if (notImmune || isInverse) {
 				let typeMod = !notImmune && isInverse ? 1 : 0;
@@ -1011,9 +977,9 @@ export const commands: ChatCommands = {
 		const targets = target.split(/[,/]/).slice(0, 2);
 		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
 
-		let searchMethods = ['getType', 'getMove', 'getSpecies'];
-		const sourceMethods = ['getType', 'getMove'];
-		const targetMethods = ['getType', 'getSpecies'];
+		let searchMethods = ['types', 'moves', 'species'];
+		const sourceMethods = ['types', 'moves'];
+		const targetMethods = ['types', 'species'];
 		let source;
 		let defender;
 		let foundData;
@@ -1024,7 +990,7 @@ export const commands: ChatCommands = {
 		for (let i = 0; i < 2; ++i) {
 			let method!: string;
 			for (const m of searchMethods) {
-				foundData = dex[m](targets[i]);
+				foundData = dex[m].get(targets[i]);
 				if (foundData.exists) {
 					method = m;
 					break;
@@ -1087,7 +1053,7 @@ export const commands: ChatCommands = {
 		const sources: (string | Move)[] = [];
 		let dex = Dex;
 		if (room?.battle) {
-			const format = Dex.getFormat(room.battle.format);
+			const format = Dex.formats.get(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
 		if (targets[targets.length - 1] && toID(targets[targets.length - 1]) in Dex.dexes) {
@@ -1097,7 +1063,7 @@ export const commands: ChatCommands = {
 		const bestCoverage: {[k: string]: number} = {};
 		let hasThousandArrows = false;
 
-		for (const type in dex.data.TypeChart) {
+		for (const type of dex.types.names()) {
 			// This command uses -5 to designate immunity
 			bestCoverage[type] = -5;
 		}
@@ -1118,7 +1084,7 @@ export const commands: ChatCommands = {
 			// arg is a type?
 			const argType = arg.charAt(0).toUpperCase() + arg.slice(1);
 			let eff;
-			if (argType in dex.data.TypeChart) {
+			if (dex.types.isName(argType)) {
 				sources.push(argType);
 				for (const type in bestCoverage) {
 					if (!dex.getImmunity(argType, type)) continue;
@@ -1129,7 +1095,7 @@ export const commands: ChatCommands = {
 			}
 
 			// arg is a move?
-			const move = dex.getMove(arg);
+			const move = dex.moves.get(arg);
 			if (!move.exists) {
 				return this.errorReply(`Type or move '${arg}' not found.`);
 			} else if (move.gen > dex.gen) {
@@ -1199,16 +1165,16 @@ export const commands: ChatCommands = {
 		} else {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			const icon: {[k: string]: string} = {};
-			for (const type in dex.data.TypeChart) {
+			for (const type of dex.types.names()) {
 				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
 				// row of icons at top
 				buffer += `<th>${icon[type]}</th>`;
 			}
 			buffer += '</tr>';
-			for (const type1 in dex.data.TypeChart) {
+			for (const type1 of dex.types.names()) {
 				// assembles the rest of the rows
 				buffer += `<tr><th>${icon[type1]}</th>`;
-				for (const type2 in dex.data.TypeChart) {
+				for (const type2 of dex.types.names()) {
 					let typing: string;
 					let cell = '<th ';
 					let bestEff = -5;
@@ -1300,7 +1266,7 @@ export const commands: ChatCommands = {
 		let realSet = false;
 
 		let pokemon: StatsTable | undefined;
-		let useStat: StatName | '' = '';
+		let useStat: StatID | '' = '';
 
 		let level = 100;
 		let calcHP = false;
@@ -1448,7 +1414,7 @@ export const commands: ChatCommands = {
 			}
 
 			if (!pokemon) {
-				const testPoke = Dex.getSpecies(arg);
+				const testPoke = Dex.species.get(arg);
 				if (testPoke.exists) {
 					pokemon = testPoke.baseStats;
 					baseSet = true;
@@ -1635,7 +1601,6 @@ export const commands: ChatCommands = {
 			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
 			`<strong>weeklock</strong> - Locks a user for a week.`,
 			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
-			`<strong>groupchatban</strong> — Bans a user from creating or joining groupchats for a week or a month.`,
 			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
@@ -1737,11 +1702,12 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`New to competitive Pok&eacute;mon?<br />` +
-			`- <a href="https://www.smogon.com/forums/threads/3496279/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
+			`- <a href="https://www.smogon.com/forums/threads/3676132/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
 			`- <a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />` +
 			`- <a href="https://www.smogon.com/sm/articles/sm_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
 			`- <a href="https://www.smogon.com/dex/ss/formats/">What are the rules for each format?</a><br />` +
-			`- <a href="https://www.smogon.com/ss/articles/clauses">What is 'Sleep Clause' and other clauses?</a>`
+			`- <a href="https://www.smogon.com/ss/articles/clauses">What is 'Sleep Clause' and other clauses?</a><br />` +
+			`- <a href="https://www.smogon.com/articles/getting-started">Next Steps for Competitive Battling</a>`
 		);
 	},
 	introhelp: [
@@ -1816,6 +1782,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(
 			`An introduction to the Create-A-Pok&eacute;mon project:<br />` +
 			`- <a href="https://www.smogon.com/cap/">CAP project website and description</a><br />` +
+			`- <a href="https://www.smogon.com/forums/forums/66/">CAP project discussion forum</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/48782/">What Pok&eacute;mon have been made?</a><br />` +
 			`- <a href="https://www.smogon.com/forums/forums/477">Talk about the metagame here</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/3671157/">Sample SS CAP teams</a>`
@@ -1866,14 +1833,14 @@ export const commands: ChatCommands = {
 		let targetId = toID(target);
 		if (targetId === 'ladder') targetId = 'search' as ID;
 		if (targetId === 'all') targetId = '';
-		const {totalMatches, sections, exactMatch} = findFormats(targetId, isOMSearch);
+		const {totalMatches, sections} = findFormats(targetId, isOMSearch);
 
 		if (!totalMatches) return this.errorReply("No matched formats found.");
 		if (!this.runBroadcast()) return;
 		if (totalMatches === 1) {
 			const rules: string[] = [];
 			let rulesetHtml = '';
-			const subformat = Dex.getFormat(Object.values(sections)[0].formats[0]);
+			const subformat = Dex.formats.get(Object.values(sections)[0].formats[0]);
 			if (['Format', 'Rule', 'ValidatorRule'].includes(subformat.effectType)) {
 				if (subformat.ruleset?.length) {
 					rules.push(`<b>Ruleset</b> - ${Utils.escapeHTML(subformat.ruleset.join(", "))}`);
@@ -1915,10 +1882,9 @@ export const commands: ChatCommands = {
 		// Build tables
 		const buf = [`<table style="${tableStyle}" cellspacing="0" cellpadding="5">`];
 		for (const sectionId in sections) {
-			if (exactMatch && sectionId !== exactMatch) continue;
 			buf.push(Utils.html`<th style="border:1px solid gray" colspan="2">${sections[sectionId].name}</th>`);
 			for (const section of sections[sectionId].formats) {
-				const subformat = Dex.getFormat(section);
+				const subformat = Dex.formats.get(section);
 				const nameHTML = Utils.escapeHTML(subformat.name);
 				const desc = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
 				const descHTML = desc.length ? desc.join("<br />") : "&mdash;";
@@ -2095,6 +2061,9 @@ export const commands: ChatCommands = {
 		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
 			buffer.push(this.tr`To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
 		}
+		if (showAll || ['vpn', 'proxy'].includes(target)) {
+			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/proxyhelp`}">${this.tr`Proxy lock help`}</a>`);
+		}
 		if (!buffer.length && target) {
 			this.errorReply(`'${target}' is an invalid FAQ.`);
 			return this.parse(`/help faq`);
@@ -2105,8 +2074,8 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
 	faqhelp: [
-		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
+		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, proxy, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
+		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, proxy, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
 	],
 
 	analysis: 'smogdex',
@@ -2116,15 +2085,15 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 
 		const targets = target.split(',');
-		let pokemon = Dex.getSpecies(targets[0]);
-		const item = Dex.getItem(targets[0]);
-		const move = Dex.getMove(targets[0]);
-		const ability = Dex.getAbility(targets[0]);
-		const format = Dex.getFormat(targets[0]);
+		let pokemon = Dex.species.get(targets[0]);
+		const item = Dex.items.get(targets[0]);
+		const move = Dex.moves.get(targets[0]);
+		const ability = Dex.abilities.get(targets[0]);
+		const format = Dex.formats.get(targets[0]);
 		let atLeastOne = false;
 		let generation = (targets[1] || 'ss').trim().toLowerCase();
 		let genNumber = 8;
-		const extraFormat = Dex.getFormat(targets[2]);
+		const extraFormat = Dex.formats.get(targets[2]);
 
 		if (['8', 'gen8', 'eight', 'ss', 'swsh'].includes(generation)) {
 			generation = 'ss';
@@ -2162,7 +2131,7 @@ export const commands: ChatCommands = {
 
 			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') ||
 				['Keldeo', 'Genesect'].includes(pokemon.baseSpecies)) {
-				pokemon = Dex.getSpecies(pokemon.changesFrom || pokemon.baseSpecies);
+				pokemon = Dex.species.get(pokemon.changesFrom || pokemon.baseSpecies);
 			}
 
 			let formatName = extraFormat.name;
@@ -2284,11 +2253,11 @@ export const commands: ChatCommands = {
 
 		const baseLink = 'http://veekun.com/dex/';
 
-		const pokemon = Dex.getSpecies(target);
-		const item = Dex.getItem(target);
-		const move = Dex.getMove(target);
-		const ability = Dex.getAbility(target);
-		const nature = Dex.getNature(target);
+		const pokemon = Dex.species.get(target);
+		const item = Dex.items.get(target);
+		const move = Dex.moves.get(target);
+		const ability = Dex.abilities.get(target);
+		const nature = Dex.natures.get(target);
 		let atLeastOne = false;
 
 		// Pokemon
@@ -2304,8 +2273,8 @@ export const commands: ChatCommands = {
 			// Showdown and Veekun have different names for various formes
 			if (baseSpecies === 'Meowstic' && forme === 'F') forme = 'Female';
 			if (baseSpecies === 'Zygarde' && forme === '10%') forme = '10';
-			if (baseSpecies === 'Necrozma' && !Dex.getSpecies(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
-			if (baseSpecies === 'Pikachu' && Dex.getSpecies(baseSpecies + forme).gen === 7) forme += '-Cap';
+			if (baseSpecies === 'Necrozma' && !Dex.species.get(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
+			if (baseSpecies === 'Pikachu' && Dex.species.get(baseSpecies + forme).gen === 7) forme += '-Cap';
 			if (forme.endsWith('Totem')) {
 				if (baseSpecies === 'Raticate') forme = 'Totem-Alola';
 				if (baseSpecies === 'Marowak') forme = 'Totem';
@@ -2495,7 +2464,7 @@ export const commands: ChatCommands = {
 	pickrandomhelp: [`/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.`],
 
 	shuffle(target, room, user) {
-		if (!target || !target.includes(',')) return this.parse('/help shuffle');
+		if (!target?.includes(',')) return this.parse('/help shuffle');
 		const args = target.split(',');
 		if (!this.runBroadcast(true)) return false;
 		const results = Utils.shuffle(args.map(arg => arg.trim()));
@@ -2726,7 +2695,7 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	battlerules(query, user) {
-		const rules = Object.values(Dex.data.Formats).filter(rule => rule.effectType !== "Format");
+		const rules = Object.values(Dex.data.Rulesets).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
 		this.title = "Custom Rules";
 		let rulesHTML = `<div class="pad"><h1>Custom Rules in challenges and tournaments</h1>`;

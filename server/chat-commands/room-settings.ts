@@ -6,7 +6,7 @@
  *
  * @license MIT
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 import type {EffectiveGroupSymbol, RoomPermission} from '../user-groups';
 
 const RANKS = Config.groupsranking;
@@ -65,7 +65,9 @@ export const commands: ChatCommands = {
 
 		if (
 			room.settings.modchat && room.settings.modchat.length <= 1 &&
-			!Users.Auth.hasPermission(user, 'modchat', room.settings.modchat as GroupSymbol, room)
+			!room.auth.atLeast(user, room.settings.modchat) &&
+			// Upper Staff should probably be able to set /modchat & in secret rooms
+			!user.can('bypassall')
 		) {
 			return this.errorReply(`/modchat - Access denied for changing a setting currently at ${room.settings.modchat}.`);
 		}
@@ -98,7 +100,9 @@ export const commands: ChatCommands = {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
-			if (!Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
+			// Users shouldn't be able to set modchat above their own rank (except for ROs who are also Upper Staff)
+			const modchatLevelHigherThanUserRank = !room.auth.atLeast(user, target) && !user.can('bypassall');
+			if (modchatLevelHigherThanUserRank || !Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
 				return this.errorReply(`/modchat - Access denied for setting to ${target}.`);
 			}
 			room.settings.modchat = target;
@@ -123,8 +127,63 @@ export const commands: ChatCommands = {
 		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & for all the options`,
 	],
 
-	inviteonlynext: 'ionext',
-	ionext(target, room, user) {
+	automodchat(target, room, user) {
+		room = this.requireRoom();
+		if (!target) {
+			if (!room.settings.autoModchat) return this.sendReply(`This room has automodchat OFF.`);
+			const {rank: curRank, time: curTime} = room.settings.autoModchat;
+			return this.sendReply(`Automodchat is currently set to set modchat to ${curRank} after ${curTime} minutes.`);
+		}
+		this.checkCan('declare', null, room);
+		if (this.meansNo(toID(target))) {
+			if (!room.settings.autoModchat) return this.errorReply(`Auto modchat is not set.`);
+			delete room.settings.autoModchat;
+			room.saveSettings();
+			if (room.modchatTimer) clearTimeout(room.modchatTimer); // fallback just in case (should never happen)
+			this.privateModAction(`${user.name} turned off automatic modchat.`);
+			return this.modlog(`AUTOMODCHAT`, null, 'OFF');
+		}
+		let [rawTime, rank] = Utils.splitFirst(target, ',').map(i => i.trim()) as [string, GroupSymbol];
+		if (!rawTime) {
+			return this.parse(`/help automodchat`);
+		}
+		if (!rank) {
+			if (room.settings.autoModchat) {
+				rank = room.settings.autoModchat.rank;
+			} else {
+				return this.parse(`/help automodchat`);
+			}
+		}
+		const validGroups = [...Config.groupsranking as string[], 'trusted'];
+		if (!validGroups.includes(rank)) {
+			return this.errorReply(`Invalid rank.`);
+		}
+		const time = parseInt(rawTime);
+		if (isNaN(time) || time > 480 || time < 5) {
+			return this.errorReply("Invalid duration. Choose a number under 480 (in minutes) and over 5 minutes.");
+		}
+		room.settings.autoModchat = {
+			rank, time, active: false,
+		};
+		this.privateModAction(`${user.name} set automodchat to rank ${rank} and timeout ${time} minutes.`);
+		this.modlog(`AUTOMODCHAT`, null, `${rank}: ${time} minutes`);
+		room.saveSettings();
+	},
+	automodchathelp: [
+		`/automodchat [number], [rank] - Sets modchat [rank] to automatically turn on after [number] minutes. [number] must be between 5 and 480. Requires: # &`,
+		`/automodchat off - Turns off automodchat.`,
+	],
+
+	ionext() {
+		this.errorReply(`"ionext" is an outdated feature. Hidden battles now have password-protected URLs, making them fully secure against eavesdroppers.`);
+		this.errorReply(`You probably want to switch from /ionext to /hidenext, and from /ioo to /hideroom`);
+	},
+	ioo() {
+		this.errorReply(`"ioo" is an outdated feature. Hidden battles now have password-protected URLs, making them fully secure against eavesdroppers.`);
+		this.errorReply(`You probably want to switch from /ioo to /hideroom`);
+	},
+
+	inviteonlynext(target, room, user) {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
 		if (!groupConfig?.editprivacy) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
@@ -137,15 +196,13 @@ export const commands: ChatCommands = {
 			this.sendReply(`Your next battle will be invite-only${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
 		}
 	},
-	ionexthelp: [
-		`/ionext - Sets your next battle to be invite-only.`,
-		`/ionext off - Sets your next battle to be publicly visible.`,
+	inviteonlynexthelp: [
+		`/inviteonlynext - Sets your next battle to be invite-only.`,
+		`/inviteonlynext off - Sets your next battle to be publicly visible.`,
 	],
 
-	ioo: 'inviteonly',
 	inviteonly(target, room, user, connection, cmd) {
 		room = this.requireRoom();
-		if (cmd === 'ioo') target = 'on';
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
 			return this.parse("/modjoin %");
@@ -180,7 +237,7 @@ export const commands: ChatCommands = {
 		} else {
 			this.checkCan('makeroom');
 		}
-		if (room.tour && !room.tour.modjoin) {
+		if (room.tour && !room.tour.allowModjoin) {
 			return this.errorReply(`You can't do this in tournaments where modjoin is prohibited.`);
 		}
 		if (target === 'player') target = Users.PLAYER_SYMBOL;
@@ -293,15 +350,16 @@ export const commands: ChatCommands = {
 	permissions: {
 		clear: 'set',
 		set(target, room, user) {
+			let [perm, rank] = this.splitOne(target);
 			room = this.requireRoom();
-			let [perm, rank] = target.split(',').map(item => item.trim().toLowerCase());
 			if (rank === 'default') rank = '';
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!target || !perm) return this.parse(`/permissions help`);
 			if (rank && rank !== 'whitelist' && !Config.groupsranking.includes(rank as EffectiveGroupSymbol)) {
 				return this.errorReply(`${rank} is not a valid rank.`);
 			}
-			if (!Users.Auth.supportedRoomPermissions(room).includes(perm)) {
+			const validPerms = Users.Auth.supportedRoomPermissions(room);
+			if (!validPerms.some(p => p === perm || p.startsWith(`${perm} `))) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
 			}
 			if (!room.auth.atLeast(user, '#')) {
@@ -330,22 +388,13 @@ export const commands: ChatCommands = {
 
 			if (!rank) rank = `default`;
 			this.modlog(`SETPERMISSION`, null, `${perm}: ${rank}`);
+			this.refreshPage(`permissions-${room.roomid}`);
 			return this.privateModAction(`${user.name} set the required rank for ${perm} to ${rank}.`);
 		},
 		sethelp: [
 			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
 			`/permissions clear [command] - resets the required permission to use the command [command] to the default. Requires: # &`,
 		],
-
-		clickset(target, room, user) {
-			const [roomid, newTarget] = Utils.splitFirst(target, ',');
-			this.room = Rooms.get(roomid) || null;
-			if (!this.room) return this.errorReply(`must specify roomid`);
-			this.pmTarget = null;
-			void this.parse(`/permissions set ${newTarget}`);
-			return this.parse(`/join view-permissions-${this.room.roomid}`);
-		},
-
 		view(target, room, user) {
 			room = this.requireRoom();
 			return this.parse(`/join view-permissions-${room.roomid}`);
@@ -577,7 +626,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 
-			if (!room.settings.banwords || !room.settings.banwords.length) {
+			if (!room.settings.banwords?.length) {
 				return this.sendReply("This room has no banned phrases.");
 			}
 			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.settings.banwords.join(', ')}`);
@@ -698,8 +747,8 @@ export const commands: ChatCommands = {
 	makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkChat();
-		if (!user.autoconfirmed) {
-			return this.errorReply("You must be autoconfirmed to make a groupchat.");
+		if (!user.trusted) {
+			return this.errorReply("You must be trusted (public room driver or global voice) to make a groupchat.");
 		}
 
 		const groupchatbanned = Punishments.isGroupchatBanned(user);
@@ -783,6 +832,7 @@ export const commands: ChatCommands = {
 	makegroupchathelp: [
 		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
+		`Only users who are staff in a public room or global auth can make groupchats.`,
 	],
 	groupchatuptime: 'roomuptime',
 	roomuptime(target, room, user, connection, cmd) {
@@ -929,7 +979,12 @@ export const commands: ChatCommands = {
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
+		const oldID = room.roomid;
+
 		room.rename(target, id);
+
+		Chat.handleRoomRename(oldID, id || toID(target) as RoomID, room);
+
 		this.modlog(`RENAME${isGroupchat ? 'GROUPCHAT' : 'ROOM'}`, null, `from ${oldTitle}`);
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :
@@ -1517,7 +1572,7 @@ export const pages: PageTable = {
 	permissions(args, user, connection) {
 		this.title = `[Permissions]`;
 		const room = this.requireRoom();
-		if (!room.auth.atLeast(user, '%')) return `<h2>Access denied.</h2>`;
+		this.checkCan('mute', null, room);
 
 		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
 		const permissions = room.settings.permissions || {};
@@ -1534,7 +1589,7 @@ export const pages: PageTable = {
 				buf += roomGroups.map(group => (
 					requiredRank === group ?
 						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :
-						Utils.html`<button class="button" name="send" value="/permissions clickset ${room.roomid}, ${permission}, ${group}">${group}</button>`
+						Utils.html`<button class="button" name="send" value="/msgroom ${room.roomid},/permissions set ${permission}, ${group}">${group}</button>`
 				)).join(' ');
 			} else {
 				buf += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${requiredRank}</button>`;

@@ -23,7 +23,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			if (target.hp <= target.maxhp / 2) {
-				this.boost({atk: 2}, null, null, this.dex.getEffect('bellydrum2'));
+				this.boost({atk: 2}, null, null, this.dex.conditions.get('bellydrum2'));
 				return false;
 			}
 			this.directDamage(target.maxhp / 2);
@@ -79,7 +79,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return false;
 					}
 					if (!target.isActive) {
-						const possibleTarget = this.getRandomTarget(pokemon, this.dex.getMove('pound'));
+						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
 						if (!possibleTarget) {
 							this.add('-miss', pokemon);
 							return false;
@@ -97,7 +97,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						effectType: 'Move',
 						type: 'Normal',
 					} as unknown as ActiveMove;
-					this.tryMoveHit(target, pokemon, moveData);
+					this.actions.tryMoveHit(target, pokemon, moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
@@ -119,7 +119,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		damageCallback(pokemon, target) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 
 			// Hidden Power counts as physical
 			if (this.getCategory(lastAttackedBy.move) === 'Physical' && target.lastMove?.id !== 'sleeptalk') {
@@ -319,7 +319,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onMoveFail(target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				const damage = this.getDamage(source, target, move, true);
+				const damage = this.actions.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get High Jump Kick recoil");
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
@@ -329,7 +329,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onMoveFail(target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				const damage = this.getDamage(source, target, move, true);
+				const damage = this.actions.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get Jump Kick recoil");
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
@@ -349,7 +349,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onAfterMoveSelfPriority: 2,
 			onAfterMoveSelf(pokemon) {
 				if (!pokemon.hp) return;
-				const leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				const leecher = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					return;
 				}
@@ -404,6 +404,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: true,
 		ignoreAccuracy: false,
+		flags: {reflectable: 1, mirror: 1},
 	},
 	metronome: {
 		inherit: true,
@@ -429,7 +430,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		damageCallback(pokemon, target) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 
 			// Hidden Power counts as physical
 			if (this.getCategory(lastAttackedBy.move) === 'Special' && target.lastMove?.id !== 'sleeptalk') {
@@ -454,7 +455,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (noMirror.includes(lastMove) || pokemon.moves.includes(lastMove)) {
 				return false;
 			}
-			this.useMove(lastMove, pokemon);
+			this.actions.useMove(lastMove, pokemon);
 		},
 		noSketch: true,
 	},
@@ -640,14 +641,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
 				const move = moveSlot.id;
-				if (move && !NoSleepTalk.includes(move) && !this.dex.getMove(move).flags['charge']) {
+				if (move && !NoSleepTalk.includes(move) && !this.dex.moves.get(move).flags['charge']) {
 					moves.push(move);
 				}
 			}
 			let randomMove = '';
 			if (moves.length) randomMove = this.sample(moves);
 			if (!randomMove) return false;
-			this.useMove(randomMove, pokemon);
+			this.actions.useMove(randomMove, pokemon);
 		},
 		noSketch: true,
 	},
@@ -663,6 +664,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: true,
 		ignoreAccuracy: false,
+		flags: {reflectable: 1, mirror: 1},
 	},
 	spikes: {
 		inherit: true,
@@ -724,7 +726,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage) {
 					return null;
 				}

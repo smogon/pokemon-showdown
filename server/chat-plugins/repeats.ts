@@ -93,8 +93,8 @@ export const Repeats = new class {
 				this.clearRepeats(targetRoom);
 				return;
 			}
-			const formattedText = repeat.faq ? Chat.formatText(roomFaqs[targetRoom.roomid][repeat.id], true) :
-				repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, false, true);
+			const repeatedPhrase = repeat.faq ? roomFaqs[targetRoom.roomid][repeat.id] : phrase;
+			const formattedText = repeat.isHTML ? phrase : Chat.formatText(repeatedPhrase, true);
 			targetRoom.add(`|html|<div class="infobox">${formattedText}</div>`);
 			targetRoom.update();
 		};
@@ -136,19 +136,14 @@ export const pages: PageTable = {
 		html += `<table><tr><th>${this.tr`Identifier`}</th><th>${this.tr`Phrase`}</th><th>${this.tr`Raw text`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (repeat.isByMessages ? 1 : 60 * 1000);
-			if (!repeat.faq) {
-				const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeat.phrase, false, true);
-				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeat.phrase)}</td><td>${repeat.isHTML ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
-				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
-			} else {
-				const phrase = Chat.formatText(roomFaqs[room.roomid][repeat.id], true);
-				html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(roomFaqs[room.roomid][repeat.id])}</td><td>${repeat.isHTML ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
-				html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
-			}
+			const repeatText = repeat.faq ? roomFaqs[room.roomid][repeat.id] : repeat.phrase;
+			const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeatText, true);
+			html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeatText)}</td><td>${repeat.isByMessages ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
+			html += `<td><button class="button" name="send" value="/msgroom ${room.roomid},/removerepeat ${repeat.id}">${this.tr`Remove`}</button></td>`;
 		}
 		html += `</table>`;
 		if (user.can("editroom", null, room)) {
-			html += `<br /><button class="button" name="send" value="/removeallrepeats ${room.roomid}">${this.tr`Remove all repeats`}</button>`;
+			html += `<br /><button class="button" name="send" value="/msgroom ${room.roomid},/removeallrepeats">${this.tr`Remove all repeats`}</button>`;
 		}
 		html += `</div>`;
 		return html;
@@ -166,6 +161,8 @@ export const commands: ChatCommands = {
 		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
+		if (!id) throw new Chat.ErrorMessage(this.tr`Repeat names must include at least one alphanumeric character.`);
+
 		const phrase = messageArray.join(',').trim();
 		const interval = parseInt(intervalString);
 		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
@@ -241,58 +238,47 @@ export const commands: ChatCommands = {
 		this.modlog('REPEATPHRASE', null, `every ${interval} ${isByMessages ? 'chat message' : 'minute'}${Chat.plural(interval)}: the Room FAQ for "${topic}"`);
 		this.privateModAction(
 			isByMessages ?
-				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} minute(s).` :
-				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} chat message(s).`
+				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} chat message(s).` :
+				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} minute(s).`
 		);
 	},
 
 	deleterepeat: 'removerepeat',
 	removerepeat(target, room, user) {
-		target = target.trim();
-		const [name, roomid] = target.split(',');
-		const id = toID(name);
+		room = this.requireRoom();
+		const id = toID(target);
 		if (!id) {
 			return this.parse(`/help repeat`);
 		}
-		const targetRoom = roomid ? Rooms.search(roomid) : room;
-		if (!targetRoom) {
-			return this.errorReply(`Invalid room.`);
-		}
-		this.room = targetRoom;
-		this.checkCan('mute', null, targetRoom);
-		if (!targetRoom.settings.repeats?.length) {
+		this.checkCan('mute', null, room);
+		if (!room.settings.repeats?.length) {
 			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
 		}
 
-		if (!Repeats.hasRepeat(targetRoom, id)) {
+		if (!Repeats.hasRepeat(room, id)) {
 			return this.errorReply(this.tr`The phrase labeled with "${id}" is not being repeated in this room.`);
 		}
 
-		Repeats.removeRepeat(targetRoom, id);
+		Repeats.removeRepeat(room, id);
 
 		this.modlog('REMOVE REPEATPHRASE', null, `"${id}"`);
-		this.privateModAction(targetRoom.tr`${user.name} removed the repeated phrase labeled with "${id}".`);
-		if (roomid) this.parse(`/join view-repeats-${targetRoom.roomid}`);
+		this.privateModAction(room.tr`${user.name} removed the repeated phrase labeled with "${id}".`);
+		this.refreshPage(`repeats-${room.roomid}`);
 	},
 
 	removeallrepeats(target, room, user) {
-		target = target.trim();
-		const targetRoom = target ? Rooms.search(target) : room;
-		if (!targetRoom) {
-			return this.errorReply(this.tr`Invalid room.`);
-		}
-		this.room = targetRoom;
-		this.checkCan('declare', null, targetRoom);
-		if (!targetRoom.settings.repeats?.length) {
+		room = this.requireRoom();
+		this.checkCan('declare', null, room);
+		if (!room.settings.repeats?.length) {
 			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
 		}
 
-		for (const {id} of targetRoom.settings.repeats) {
-			Repeats.removeRepeat(targetRoom, id);
+		for (const {id} of room.settings.repeats) {
+			Repeats.removeRepeat(room, id);
 		}
 
 		this.modlog('REMOVE REPEATPHRASE', null, 'all repeated phrases');
-		this.privateModAction(targetRoom.tr`${user.name} removed all repeated phrases.`);
+		this.privateModAction(room.tr`${user.name} removed all repeated phrases.`);
 	},
 
 	repeats: 'viewrepeats',

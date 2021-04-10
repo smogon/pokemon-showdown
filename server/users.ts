@@ -43,15 +43,14 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
-import {Utils} from '../lib/utils';
-import {FS} from '../lib/fs';
+import {FS, Utils, ProcessManager} from '../lib';
 import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
+const CONNECTION_EXPIRY_TIME = 24 * 60 * MINUTES;
 
-import type {StreamWorker} from '../lib/process-manager';
 
 /*********************************************************
  * Utility functions
@@ -211,7 +210,7 @@ export class Connection {
 	 */
 	readonly id: string;
 	readonly socketid: string;
-	readonly worker: StreamWorker;
+	readonly worker: ProcessManager.StreamWorker;
 	readonly inRooms: Set<RoomID>;
 	readonly ip: string;
 	readonly protocol: string;
@@ -231,7 +230,7 @@ export class Connection {
 	openPages: null | Set<string>;
 	constructor(
 		id: string,
-		worker: StreamWorker,
+		worker: ProcessManager.StreamWorker,
 		socketid: string,
 		user: User | null,
 		ip: string | null,
@@ -346,7 +345,7 @@ export class User extends Chat.MessageContext {
 
 	lastChallenge: number;
 	lastPM: string;
-	lastMatch: string;
+	lastMatch: ID;
 
 	settings: UserSettings;
 
@@ -354,6 +353,7 @@ export class User extends Chat.MessageContext {
 		team: string,
 		hidden: boolean,
 		inviteOnly: boolean,
+		special?: string,
 	};
 
 	isSysop: boolean;
@@ -677,7 +677,7 @@ export class User extends Chat.MessageContext {
 		if (userid !== this.id) {
 			for (const roomid of this.games) {
 				const room = Rooms.get(roomid);
-				if (!room || !room.game || room.game.ended) {
+				if (!room?.game || room.game.ended) {
 					this.games.delete(roomid);
 					console.log(`desynced roomgame ${roomid} renaming ${this.id} -> ${userid}`);
 					continue;
@@ -1240,7 +1240,7 @@ export class User extends Chat.MessageContext {
 		if (!room && roomid.startsWith('view-')) {
 			return Chat.resolvePage(roomid, this, connection);
 		}
-		if (!room || !room.checkModjoin(this)) {
+		if (!room?.checkModjoin(this)) {
 			if (!this.named) {
 				return Rooms.RETRY_AFTER_LOGIN;
 			} else {
@@ -1541,6 +1541,13 @@ function pruneInactive(threshold: number) {
 		if (!user.connected && (now - user.lastDisconnected) > threshold) {
 			user.destroy();
 		}
+		if (!user.can('addhtml')) {
+			for (const connection of user.connections) {
+				if (now - connection.lastActiveTime > CONNECTION_EXPIRY_TIME) {
+					connection.destroy();
+				}
+			}
+		}
 	}
 }
 
@@ -1567,7 +1574,7 @@ function logGhostConnections(threshold: number): Promise<unknown> {
  *********************************************************/
 
 function socketConnect(
-	worker: StreamWorker,
+	worker: ProcessManager.StreamWorker,
 	workerid: number,
 	socketid: string,
 	ip: string,
@@ -1608,21 +1615,21 @@ function socketConnect(
 
 	Rooms.global.handleConnect(user, connection);
 }
-function socketDisconnect(worker: StreamWorker, workerid: number, socketid: string) {
+function socketDisconnect(worker: ProcessManager.StreamWorker, workerid: number, socketid: string) {
 	const id = '' + workerid + '-' + socketid;
 
 	const connection = connections.get(id);
 	if (!connection) return;
 	connection.onDisconnect();
 }
-function socketDisconnectAll(worker: StreamWorker, workerid: number) {
+function socketDisconnectAll(worker: ProcessManager.StreamWorker, workerid: number) {
 	for (const connection of connections.values()) {
 		if (connection.worker === worker) {
 			connection.onDisconnect();
 		}
 	}
 }
-function socketReceive(worker: StreamWorker, workerid: number, socketid: string, message: string) {
+function socketReceive(worker: ProcessManager.StreamWorker, workerid: number, socketid: string, message: string) {
 	const id = `${workerid}-${socketid}`;
 
 	const connection = connections.get(id);
@@ -1672,13 +1679,8 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 		void FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
 	}
 
-	const startTime = Date.now();
 	for (const line of lines) {
 		if (user.chat(line, room, connection) === false) break;
-	}
-	const deltaTime = Date.now() - startTime;
-	if (deltaTime > 1000) {
-		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${roomId}|${message}`);
 	}
 }
 

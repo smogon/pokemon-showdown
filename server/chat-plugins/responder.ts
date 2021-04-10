@@ -7,8 +7,7 @@
  * @author mia-pi-git
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 
@@ -87,7 +86,7 @@ export class AutoResponder {
 		if (response) {
 			let buf = '';
 			buf += Utils.html`<strong>You said:</strong> ${question}<br />`;
-			buf += `<strong>Our automated reply:</strong> ${Chat.formatText(response)}`;
+			buf += `<strong>Our automated reply:</strong> ${Chat.collapseLineBreaksHTML(Chat.formatText(response, true))}`;
 			if (!hideButton) {
 				buf += Utils.html`<hr /><button class="button" name="send" value="A: ${question}">`;
 				buf += `Send to ${this.room.title} if you weren't answered correctly. </button>`;
@@ -266,13 +265,10 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		if (!reply) {
 			return message;
 		} else {
-			user.sendTo(room.roomid, `|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
+			this.sendReply(`|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
 			const trimmedMessage = `<div class="infobox">${responder.visualize(message, true)}</div>`;
 			setTimeout(() => {
-				user.sendTo(
-					room.roomid,
-					`|c| ${user.name}|/uhtmlchange askhelp-${user}-${toID(message)}, ${trimmedMessage}`
-				);
+				this.sendReply(`|uhtmlchange|askhelp-${user}-${toID(message)}|${trimmedMessage}`);
 			}, 10 * 1000);
 			return false;
 		}
@@ -348,30 +344,20 @@ export const commands: ChatCommands = {
 			this.modlog(`AUTOFILTER ADD`, null, target);
 		},
 		remove(target, room, user) {
-			const [faq, index, id] = target.split(',');
-			if (id) {
-				const targetRoom = Rooms.search(id);
-				if (!targetRoom) {
-					return this.errorReply(`Room not found.`);
-				}
-				room = targetRoom;
-			} else {
-				room = this.requireRoom();
-			}
+			const [faq, index] = target.split(',');
+			room = this.requireRoom();
 			if (!room.responder) {
 				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
 			}
 			this.checkCan('ban', null, room);
-			// intended for use mainly within the page, so supports being used in all rooms
-			this.room = room;
 			const num = parseInt(index);
 			if (isNaN(num)) return this.errorReply("Invalid index.");
 			room.responder.tryRemoveRegex(faq, num - 1);
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
 			this.modlog('AUTOFILTER REMOVE', null, index);
 			const pages = [`keys`, `pairs`];
-			if (pages.some(p => this.connection.openPages?.has(`autoresponder-${room?.roomid}-${p}`))) {
-				return this.parse(`/ar view keys`);
+			for (const p of pages) {
+				this.refreshPage(`autofilter-${room.roomid}-${p}`);
 			}
 		},
 		ignore(target, room, user) {
@@ -391,14 +377,6 @@ export const commands: ChatCommands = {
 			this.modlog(`AUTOFILTER IGNORE`, null, target);
 		},
 		unignore(target, room, user) {
-			let targetId;
-			[target, targetId] = Utils.splitFirst(target, '|');
-			if (targetId) {
-				const targetRoom = Rooms.search(targetId);
-				if (!targetRoom) return this.errorReply(`Invalid room.`);
-				room = targetRoom;
-				this.room = room;
-			}
 			room = this.requireRoom();
 			if (!room.responder) {
 				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
@@ -496,7 +474,7 @@ export const pages: PageTable = {
 				buffer += `</tr>`;
 				for (const regex of regexes) {
 					const index = regexes.indexOf(regex) + 1;
-					const button = `<button class="button" name="send"value="/ar remove ${item}, ${index}, ${room.roomid}">Remove</button>`;
+					const button = `<button class="button" name="send"value="/msgroom ${room.roomid},/ar remove ${item}, ${index}">Remove</button>`;
 					buffer += `<tr><td>${index}</td><td><code>${regex}</code></td>`;
 					if (canChange) buffer += `<td>${button}</td></tr>`;
 				}
@@ -511,7 +489,7 @@ export const pages: PageTable = {
 				return this.errorReply(`No terms on ignore list.`);
 			}
 			for (const term of roomData.ignore) {
-				buf += `- ${term} <button class="button" name="send"value="/ar unignore ${term}|${room.roomid}">Remove</button><br />`;
+				buf += `- ${term} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
 			}
 			buf += `</div>`;
 			break;
@@ -526,4 +504,13 @@ export const pages: PageTable = {
 		}
 		return LogViewer.linkify(buf);
 	},
+};
+
+export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
+	if (answererData[oldID]) {
+		if (!answererData[newID]) answererData[newID] = {pairs: {}};
+		Object.assign(answererData[newID], answererData[oldID]);
+		delete answererData[oldID];
+		FS(PATH).writeUpdate(() => JSON.stringify(answererData));
+	}
 };

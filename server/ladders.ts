@@ -23,9 +23,7 @@ import type {ChallengeType} from './room-battle';
 class BattleReady {
 	readonly userid: ID;
 	readonly formatid: string;
-	readonly team: string;
-	readonly hidden: boolean;
-	readonly inviteOnly: boolean;
+	readonly settings: User['battleSettings'];
 	readonly rating: number;
 	readonly challengeType: ChallengeType;
 	readonly time: number;
@@ -38,9 +36,7 @@ class BattleReady {
 	) {
 		this.userid = userid;
 		this.formatid = formatid;
-		this.team = settings.team;
-		this.hidden = settings.hidden;
-		this.inviteOnly = settings.inviteOnly;
+		this.settings = settings;
 		this.rating = rating;
 		this.challengeType = challengeType;
 		this.time = Date.now();
@@ -48,9 +44,13 @@ class BattleReady {
 }
 
 /**
- * formatid:userid:BattleReady
+ * Keys are formatids
  */
-const searches = new Map<string, Map<string, BattleReady>>();
+const searches = new Map<string, {
+	numPlayers: number,
+	/** userid:BattleReady */
+	searches: Map<ID, BattleReady>,
+}>();
 
 class Challenge {
 	readonly from: ID;
@@ -106,7 +106,7 @@ class Ladder extends LadderStore {
 		}
 
 		try {
-			this.formatid = Dex.validateFormat(this.formatid);
+			this.formatid = Dex.formats.validate(this.formatid);
 		} catch (e) {
 			connection.popup(`Your selected format is invalid:\n\n- ${e.message}`);
 			return null;
@@ -171,7 +171,7 @@ class Ladder extends LadderStore {
 			valResult = await validator.validateTeam(team, {removeNicknames});
 		}
 
-		if (valResult.charAt(0) !== '1') {
+		if (!valResult.startsWith('1')) {
 			connection.popup(
 				`Your team was rejected for the following reasons:\n\n` +
 				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
@@ -179,7 +179,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		const settings = {...user.battleSettings, team: valResult.slice(1) as string};
+		const settings = {...user.battleSettings, team: valResult.slice(1)};
 		user.battleSettings.inviteOnly = false;
 		user.battleSettings.hidden = false;
 		return new BattleReady(userid, this.formatid, settings, rating, challengeType);
@@ -272,7 +272,7 @@ class Ladder extends LadderStore {
 					chall.to === user.id &&
 					chall.formatid === this.formatid) {
 					if (Ladder.removeChallenge(chall)) {
-						Ladders.match(chall.ready, ready);
+						Ladders.match([chall.ready, ready]);
 						return true;
 					}
 				}
@@ -292,7 +292,7 @@ class Ladder extends LadderStore {
 		const ready = await ladder.prepBattle(connection, 'challenge');
 		if (!ready) return false;
 		if (Ladder.removeChallenge(chall)) {
-			Ladders.match(chall.ready, ready);
+			Ladders.match([chall.ready, ready]);
 		}
 		return true;
 	}
@@ -358,8 +358,8 @@ class Ladder extends LadderStore {
 
 		const formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) return false;
-		if (!formatTable.has(user.id)) return false;
-		formatTable.delete(user.id);
+		if (!formatTable.searches.has(user.id)) return false;
+		formatTable.searches.delete(user.id);
 
 		Ladder.updateSearch(user);
 		return true;
@@ -369,9 +369,9 @@ class Ladder extends LadderStore {
 		let cancelCount = 0;
 
 		for (const formatTable of Ladders.searches.values()) {
-			const search = formatTable.get(user.id);
+			const search = formatTable.searches.get(user.id);
 			if (!search) continue;
-			formatTable.delete(user.id);
+			formatTable.searches.delete(user.id);
 			cancelCount++;
 		}
 
@@ -382,9 +382,9 @@ class Ladder extends LadderStore {
 	getSearcher(search: BattleReady) {
 		const formatid = toID(this.formatid);
 		const user = Users.get(search.userid);
-		if (!user || !user.connected || user.id !== search.userid) {
+		if (!user?.connected || user.id !== search.userid) {
 			const formatTable = Ladders.searches.get(formatid);
-			if (formatTable) formatTable.delete(search.userid);
+			if (formatTable) formatTable.searches.delete(search.userid);
 			if (user?.connected) {
 				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
 				Ladder.updateSearch(user);
@@ -397,7 +397,7 @@ class Ladder extends LadderStore {
 	static getSearches(user: User) {
 		const userSearches = [];
 		for (const [formatid, formatTable] of Ladders.searches) {
-			if (formatTable.has(user.id)) userSearches.push(formatid);
+			if (formatTable.searches.has(user.id)) userSearches.push(formatid);
 		}
 		return userSearches;
 	}
@@ -431,7 +431,7 @@ class Ladder extends LadderStore {
 		const formatid = toID(this.formatid);
 		const formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) return false;
-		return formatTable.has(user.id);
+		return formatTable.searches.has(user.id);
 	}
 
 	/**
@@ -441,7 +441,7 @@ class Ladder extends LadderStore {
 	async searchBattle(user: User, connection: Connection) {
 		if (!user.connected) return;
 
-		const format = Dex.getFormat(this.formatid);
+		const format = Dex.formats.get(this.formatid);
 		if (!format.searchShow) {
 			connection.popup(`Error: Your format ${format.id} is not ladderable.`);
 			return;
@@ -459,32 +459,32 @@ class Ladder extends LadderStore {
 	/**
 	 * Verifies whether or not a match made between two users is valid. Returns
 	 */
-	matchmakingOK(search1: BattleReady, search2: BattleReady, user1: User, user2: User) {
+	matchmakingOK(matches: [BattleReady, User][]) {
 		const formatid = toID(this.formatid);
-		if (!user1 || !user2) {
-			// This should never happen.
-			Monitor.crashlog(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The matchmaker");
-			return false;
-		}
+		const users = matches.map(([ready, user]) => user);
+		const userids = users.map(user => user.id);
 
 		// users must be different
-		if (user1 === user2) return false;
+		if (new Set(users).size !== users.length) return false;
 
 		if (Config.noipchecks) {
-			user1.lastMatch = user2.id;
-			user2.lastMatch = user1.id;
+			users[0].lastMatch = users[1].id;
+			users[1].lastMatch = users[0].id;
 			return true;
 		}
 
 		// users must have different IPs
-		if (user1.latestIp === user2.latestIp) return false;
+		if (new Set(users.map(user => user.latestIp)).size !== users.length) return false;
 
 		// users must not have been matched immediately previously
-		if (user1.lastMatch === user2.id || user2.lastMatch === user1.id) return false;
+		for (const user of users) {
+			if (userids.includes(user.lastMatch)) return false;
+		}
 
 		// search must be within range
 		let searchRange = 100;
-		const elapsed = Date.now() - Math.min(search1.time, search2.time);
+		const times = matches.map(([search]) => search.time);
+		const elapsed = Date.now() - Math.min(...times);
 		if (formatid === 'gen8ou' || formatid === 'gen8oucurrent' ||
 				formatid === 'gen8oususpecttest' || formatid === 'gen8randombattle') {
 			searchRange = 50;
@@ -493,10 +493,11 @@ class Ladder extends LadderStore {
 		searchRange += elapsed / 300; // +1 every .3 seconds
 		if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
 		if (searchRange > 600) searchRange = 600;
-		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
+		const ratings = matches.map(([search]) => search.rating);
+		if (Math.max(...ratings) - Math.min(...ratings) > searchRange) return false;
 
-		user1.lastMatch = user2.id;
-		user2.lastMatch = user1.id;
+		matches[0][1].lastMatch = matches[1][1].id;
+		matches[1][1].lastMatch = matches[0][1].id;
 		return true;
 	}
 
@@ -507,27 +508,34 @@ class Ladder extends LadderStore {
 		const formatid = newSearch.formatid;
 		let formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) {
-			formatTable = new Map();
+			formatTable = {
+				numPlayers: ['multi', 'freeforall'].includes(Dex.formats.get(formatid).gameType) ? 4 : 2,
+				searches: new Map(),
+			};
 			Ladders.searches.set(formatid, formatTable);
 		}
-		if (formatTable.has(user.id)) {
+		if (formatTable.searches.has(user.id)) {
 			user.popup(`Couldn't search: You are already searching for a ${formatid} battle.`);
 			return;
 		}
 
+		const matches = [newSearch];
 		// In order from longest waiting to shortest waiting
-		for (const search of formatTable.values()) {
+		for (const search of formatTable.searches.values()) {
 			const searcher = this.getSearcher(search);
 			if (!searcher) continue;
-			const matched = this.matchmakingOK(search, newSearch, searcher, user);
+			const matched = this.matchmakingOK([[search, searcher], [newSearch, user]]);
 			if (matched) {
-				formatTable.delete(search.userid);
-				Ladder.match(search, newSearch);
+				matches.push(search);
+			}
+			if (matches.length >= formatTable.numPlayers) {
+				for (const matchedSearch of matches) formatTable.searches.delete(matchedSearch.userid);
+				Ladder.match(matches);
 				return;
 			}
 		}
 
-		formatTable.set(newSearch.userid, newSearch);
+		formatTable.searches.set(newSearch.userid, newSearch);
 		Ladder.updateSearch(user);
 	}
 
@@ -539,9 +547,10 @@ class Ladder extends LadderStore {
 	static periodicMatch() {
 		// In order from longest waiting to shortest waiting
 		for (const [formatid, formatTable] of Ladders.searches) {
+			if (formatTable.numPlayers > 2) continue; // TODO: implement
 			const matchmaker = Ladders(formatid);
 			let longest: [BattleReady, User] | null = null;
-			for (const search of formatTable.values()) {
+			for (const search of formatTable.searches.values()) {
 				if (!longest) {
 					const longestSearcher = matchmaker.getSearcher(search);
 					if (!longestSearcher) continue;
@@ -552,43 +561,56 @@ class Ladder extends LadderStore {
 				if (!searcher) continue;
 
 				const [longestSearch, longestSearcher] = longest;
-				const matched = matchmaker.matchmakingOK(search, longestSearch, searcher, longestSearcher);
+				const matched = matchmaker.matchmakingOK([[search, searcher], [longestSearch, longestSearcher]]);
 				if (matched) {
-					formatTable.delete(search.userid);
-					formatTable.delete(longestSearch.userid);
-					Ladder.match(longestSearch, search);
+					formatTable.searches.delete(search.userid);
+					formatTable.searches.delete(longestSearch.userid);
+					Ladder.match([longestSearch, search]);
 					return;
 				}
 			}
 		}
 	}
 
-	static match(ready1: BattleReady, ready2: BattleReady) {
-		if (ready1.formatid !== ready2.formatid) throw new Error(`Format IDs don't match`);
-		const user1 = Users.get(ready1.userid);
-		const user2 = Users.get(ready2.userid);
-		if (!user1) {
-			if (!user2) return false;
-			user2.popup(`Sorry, your opponent ${ready1.userid} went offline before your battle could start.`);
+	static match(readies: BattleReady[]) {
+		const formatid = readies[0].formatid;
+		if (readies.some(ready => ready.formatid !== formatid)) throw new Error(`Format IDs don't match`);
+		const players = [];
+		let missingUser = null;
+		let minRating = Infinity;
+		for (const ready of readies) {
+			const user = Users.get(ready.userid);
+			if (!user) {
+				missingUser = ready.userid;
+				break;
+			}
+			players.push({
+				user,
+				team: ready.settings.team,
+				rating: ready.rating,
+				hidden: ready.settings.hidden,
+				inviteOnly: ready.settings.inviteOnly,
+			});
+			if (ready.rating < minRating) minRating = ready.rating;
+		}
+		if (missingUser) {
+			for (const ready of readies) {
+				Users.get(ready.userid)?.popup(`Sorry, your opponent ${missingUser} went offline before your battle could start.`);
+			}
 			return false;
 		}
-		if (!user2) {
-			user1.popup(`Sorry, your opponent ${ready2.userid} went offline before your battle could start.`);
-			return false;
-		}
-		Rooms.createBattle(ready1.formatid, {
-			p1: user1,
-			p1team: ready1.team,
-			p1rating: ready1.rating,
-			p1hidden: ready1.hidden,
-			p1inviteOnly: ready1.inviteOnly,
-			p2: user2,
-			p2team: ready2.team,
-			p2rating: ready2.rating,
-			p2hidden: ready2.hidden,
-			p2inviteOnly: ready2.inviteOnly,
-			rated: Math.min(ready1.rating, ready2.rating),
-			challengeType: ready1.challengeType,
+		const format = Dex.formats.get(formatid);
+		const delayedStart = (['multi', 'freeforall'].includes(format.gameType) && players.length === 2) ?
+			'multi' : false;
+		Rooms.createBattle({
+			format: formatid,
+			p1: players[0],
+			p2: players[1],
+			p3: players[2],
+			p4: players[3],
+			rated: minRating,
+			challengeType: readies[0].challengeType,
+			delayedStart,
 		});
 	}
 }

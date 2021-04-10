@@ -98,7 +98,9 @@ class WorkerStream extends ObjectReadWriteStream {
 	moveToChannel(roomid, channelid, socketid) {
 		socketid = +socketid;
 		if (!this.rooms.has(roomid)) {
-			throw new Error(`Attempted to move socket ${socketid} to channel ${channelid} of nonexistent room ${roomid}`);
+			// happens when destroying rooms
+			// throw new Error(`Attempted to move socket ${socketid} to channel ${channelid} of nonexistent room ${roomid}`);
+			return;
 		}
 
 		if (!this.roomChannels.has(roomid)) {
@@ -139,17 +141,11 @@ class Worker {
 
 const worker = new Worker(1);
 
-function createConnection(ip, workerid, socketid) {
-	if (workerid || socketid) {
-		throw new Error("deprecated");
-	}
-
-	workerid = 1;
-	if (!socketid) {
-		socketid = 1;
-		while (Users.connections.has(`${workerid}-${socketid}`)) {
-			socketid++;
-		}
+function makeConnection(ip) {
+	const workerid = 1;
+	let socketid = 1;
+	while (Users.connections.has(`${workerid}-${socketid}`)) {
+		socketid++;
 	}
 	worker.stream.addSocket(socketid);
 
@@ -160,14 +156,18 @@ function createConnection(ip, workerid, socketid) {
 	return connection;
 }
 
-function createUser(connection) {
-	if (!connection) connection = createConnection();
+function makeUser(name, connectionOrIp) {
+	if (!connectionOrIp) connectionOrIp = '127.0.0.1';
+	const connection = typeof connectionOrIp === 'string' ? makeConnection(connectionOrIp) : connectionOrIp;
 
 	const user = new Users.User(connection);
 	connection.user = user;
 
+	if (name) user.forceRename(name, true);
+	if (!user.connected) throw new Error("User should be connected");
+	if (Users.users.get(user.id) !== user) throw new Error("User should be in user table");
 	return user;
 }
 
-exports.Connection = createConnection;
-exports.User = createUser;
+exports.makeConnection = makeConnection;
+exports.makeUser = makeUser;

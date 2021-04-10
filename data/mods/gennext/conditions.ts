@@ -67,7 +67,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			const damage = this.getDamage(pokemon, pokemon, 40);
+			const damage = this.actions.getDamage(pokemon, pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
 			this.directDamage(damage);
 		},
@@ -340,7 +340,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('snowwarning'));
+					this.field.setWeather(weather, source, this.dex.abilities.get('snowwarning'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
@@ -363,7 +363,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('sandstream'));
+					this.field.setWeather(weather, source, this.dex.abilities.get('sandstream'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
@@ -377,7 +377,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('drizzle'));
+					this.field.setWeather(weather, source, this.dex.abilities.get('drizzle'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';

@@ -28,15 +28,14 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
-import {FS} from '../lib/fs';
-import {Utils} from '../lib/utils';
-import {WriteStream} from '../lib/streams';
+import {FS, Utils, Streams} from '../lib';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
-import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
+import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
+import {MinorActivity} from './room-minor-activity';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
@@ -100,7 +99,6 @@ export interface RoomSettings {
 	unoDisabled?: boolean;
 	blackjackDisabled?: boolean;
 	hangmanDisabled?: boolean;
-	tourAnnouncements?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
 	isOfficial?: boolean;
@@ -114,8 +112,10 @@ export interface RoomSettings {
 	requestShowEnabled?: boolean | null;
 	permissions?: {[k: string]: GroupSymbol};
 	minorActivity?: PollData | AnnouncementData;
-	minorActivityQueue?: (PollData | AnnouncementData)[];
+	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
+	autoModchat?: {rank: GroupSymbol, time: number, active: boolean};
+	tournaments?: TournamentRoomSettings;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -130,13 +130,14 @@ export interface RoomSettings {
 }
 
 export type MessageHandler = (room: BasicRoom, message: string) => void;
+export type RenameHandler = (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
 export type Room = GameRoom | ChatRoom;
 
-import type {Announcement, AnnouncementData} from './chat-plugins/announcements';
-import type {Poll, PollData} from './chat-plugins/poll';
+import type {AnnouncementData} from './chat-plugins/announcements';
+import type {PollData} from './chat-plugins/poll';
 import type {AutoResponder} from './chat-plugins/responder';
 import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
-import type {Tournament} from './tournaments/index';
+import type {Tournament, TournamentRoomSettings} from './tournaments/index';
 
 export abstract class BasicRoom {
 	/** to rename use room.rename */
@@ -181,6 +182,7 @@ export abstract class BasicRoom {
 	userCount: number;
 	active: boolean;
 	muteTimer: NodeJS.Timer | null;
+	modchatTimer: NodeJS.Timer | null;
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
@@ -200,8 +202,8 @@ export abstract class BasicRoom {
 	batchJoins: number;
 	reportJoinsInterval: NodeJS.Timer | null;
 
-	minorActivity: Poll | Announcement | null;
-	minorActivityQueue: PollData[] | null;
+	minorActivity: MinorActivity | null;
+	minorActivityQueue: MinorActivityData[] | null;
 	banwordRegex: RegExp | true | null;
 	logUserStatsInterval: NodeJS.Timer | null;
 	expireTimer: NodeJS.Timer | null;
@@ -284,6 +286,7 @@ export abstract class BasicRoom {
 
 		this.active = false;
 		this.muteTimer = null;
+		this.modchatTimer = null;
 
 		this.logUserStatsInterval = null;
 		this.expireTimer = null;
@@ -491,6 +494,44 @@ export abstract class BasicRoom {
 		// TODO: switch to `static readonly gameid` when all game files are TypeScripted
 		if (this.game && this.game.constructor.name === constructor.name) return this.game as T;
 		return null;
+	}
+	getMinorActivity<T extends MinorActivity>(constructor: new (...args: any[]) => T): T | null {
+		if (this.minorActivity?.constructor.name === constructor.name) return this.minorActivity as T;
+		return null;
+	}
+	getMinorActivityQueue(settings = false): MinorActivityData[] | null {
+		const usedQueue = settings ? this.settings.minorActivityQueue : this.minorActivityQueue;
+		if (!usedQueue?.length) return null;
+		return usedQueue;
+	}
+	queueMinorActivity(activity: MinorActivityData): void {
+		if (!this.minorActivityQueue) this.minorActivityQueue = [];
+		this.minorActivityQueue.push(activity);
+		this.settings.minorActivityQueue = this.minorActivityQueue;
+	}
+	clearMinorActivityQueue(slot?: number, depth = 1) {
+		if (!this.minorActivityQueue) return;
+		if (slot === undefined) {
+			this.minorActivityQueue = null;
+			delete this.settings.minorActivityQueue;
+			this.saveSettings();
+		} else {
+			this.minorActivityQueue.splice(slot, depth);
+			this.settings.minorActivityQueue = this.minorActivityQueue;
+			this.saveSettings();
+			if (!this.minorActivityQueue.length) this.clearMinorActivityQueue();
+		}
+	}
+	setMinorActivity(activity: MinorActivity | null, noDisplay = false): void {
+		this.minorActivity?.endTimer();
+		this.minorActivity = activity;
+		if (this.minorActivity) {
+			this.minorActivity.save();
+			if (!noDisplay) this.minorActivity.display();
+		} else {
+			delete this.settings.minorActivity;
+			this.saveSettings();
+		}
 	}
 	saveSettings() {
 		if (!this.persist) return;
@@ -785,11 +826,11 @@ export abstract class BasicRoom {
 	}
 
 	/**
-	 * Displays a warning popup to all users in the room.
+	 * Displays a warning popup to all non-staff users users in the room.
 	 * Returns a list of all the user IDs that were warned.
 	 */
 	warnParticipants(message: string) {
-		const warned = Object.values(this.users);
+		const warned = Object.values(this.users).filter(u => !u.can('lock'));
 		for (const user of warned) {
 			user.popup(`|modal|${message}`);
 		}
@@ -872,8 +913,8 @@ export abstract class BasicRoom {
 			connection,
 			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.log.getScrollback() + this.getIntroMessage(user)
 		);
-		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
-		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
+		this.minorActivity?.onConnect?.(user, connection);
+		this.game?.onConnect?.(user, connection);
 	}
 	onJoin(user: User, connection: Connection) {
 		if (!user) return false; // ???
@@ -888,9 +929,10 @@ export abstract class BasicRoom {
 
 		this.users[user.id] = user;
 		this.userCount++;
+		this.checkAutoModchat(user);
 
-		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
-		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
+		this.minorActivity?.onConnect?.(user, connection);
+		this.game?.onJoin?.(user, connection);
 		return true;
 	}
 	onRename(user: User, oldid: ID, joining: boolean) {
@@ -914,9 +956,8 @@ export abstract class BasicRoom {
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + oldid, user);
 		}
-		if (this.minorActivity && 'voters' in this.minorActivity) {
-			if (user.id in this.minorActivity.voters) this.minorActivity.updateFor(user);
-		}
+		this.minorActivity?.onRename?.(user, oldid, joining);
+		this.checkAutoModchat(user);
 		return true;
 	}
 	/**
@@ -945,7 +986,42 @@ export abstract class BasicRoom {
 			this.reportJoin('l', user.getIdentity(this.roomid), user);
 		}
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
+		this.runAutoModchat();
+
 		return true;
+	}
+
+	runAutoModchat() {
+		if (!this.settings.autoModchat || this.settings.autoModchat.active) return;
+		// they are staff and online
+		const staff = Object.values(this.users).filter(u => this.auth.isStaff(u.id));
+		if (!staff.length) {
+			const {rank, time} = this.settings.autoModchat;
+			this.modchatTimer = setTimeout(() => {
+				this.settings.modchat = rank;
+				this.add(
+					`|raw|<div class="broadcast-blue"><strong>This room has had no active staff for ${Chat.toDurationString(time)},` +
+					` and has had modchat set to ${rank}.</strong></div>`
+				).update();
+				this.modlog({
+					action: 'AUTOMODCHAT ACTIVATE',
+				});
+				// automodchat will always exist
+				this.settings.autoModchat!.active = true;
+			}, time * 60 * 1000);
+		}
+	}
+
+	checkAutoModchat(user: User) {
+		if (this.auth.isStaff(user.id)) {
+			if (this.modchatTimer) {
+				clearTimeout(this.modchatTimer);
+			}
+			if (this.settings.autoModchat?.active) {
+				delete this.settings.modchat;
+				this.settings.autoModchat.active = false;
+			}
+		}
 	}
 
 	destroy(): void {
@@ -1024,7 +1100,7 @@ export class GlobalRoomState {
 	 * Rooms that users autojoin upon logging in
 	 */
 	readonly modjoinedAutojoinList: RoomID[];
-	readonly ladderIpLog: WriteStream;
+	readonly ladderIpLog: Streams.WriteStream;
 	readonly reportUserStatsInterval: NodeJS.Timeout;
 	lockdown: boolean | 'pre' | 'ddos';
 	battleCount: number;
@@ -1064,7 +1140,7 @@ export class GlobalRoomState {
 		this.autojoinList = [];
 		this.modjoinedAutojoinList = [];
 		for (const [i, settings] of this.settingsList.entries()) {
-			if (!settings || !settings.title) {
+			if (!settings?.title) {
 				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
 			}
@@ -1106,7 +1182,7 @@ export class GlobalRoomState {
 		} else {
 			// Prevent there from being two possible hidden classes an instance
 			// of GlobalRoom can have.
-			this.ladderIpLog = new WriteStream({write() { return undefined; }});
+			this.ladderIpLog = new Streams.WriteStream({write() { return undefined; }});
 		}
 		// Create writestream for modlog
 		Rooms.Modlog.initialize('global');
@@ -1143,7 +1219,7 @@ export class GlobalRoomState {
 			JSON.stringify(this.settingsList)
 				.replace(/\{"title":/g, '\n{"title":')
 				.replace(/\]$/, '\n]')
-		));
+		), {throttle: 5000});
 	}
 
 	writeNumRooms() {
@@ -1184,8 +1260,7 @@ export class GlobalRoomState {
 		let section = '';
 		let prevSection = '';
 		let curColumn = 1;
-		for (const i in Dex.formats) {
-			const format = Dex.formats[i];
+		for (const format of Dex.formats.all()) {
 			if (format.section) section = format.section;
 			if (format.column) curColumn = format.column;
 			if (!format.name) continue;
@@ -1247,7 +1322,7 @@ export class GlobalRoomState {
 		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;
 		for (const room of Rooms.rooms.values()) {
-			if (!room || !room.active || room.settings.isPrivate) continue;
+			if (!room?.active || room.settings.isPrivate) continue;
 			if (room.type !== 'battle') continue;
 			if (formatFilter && formatFilter !== room.format) continue;
 			if (eloFilter && (!room.rated || room.rated < eloFilter)) continue;
@@ -1333,7 +1408,7 @@ export class GlobalRoomState {
 
 	prepBattleRoom(format: string) {
 		// console.log('BATTLE START BETWEEN: ' + p1.id + ' ' + p2.id);
-		const roomPrefix = `battle-${toID(Dex.getFormat(format).name)}-`;
+		const roomPrefix = `battle-${toID(Dex.formats.get(format).name)}-`;
 		let battleNum = this.lastBattle;
 		let roomid: RoomID;
 		do {
@@ -1346,11 +1421,11 @@ export class GlobalRoomState {
 	}
 
 	onCreateBattleRoom(players: User[], room: GameRoom, options: AnyObject) {
-		players.forEach(player => {
+		for (const player of players) {
 			if (player.statusType === 'idle') {
 				player.setStatusType('online');
 			}
-		});
+		}
 		if (Config.reportbattles) {
 			const reportRoom = Rooms.get(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
@@ -1598,10 +1673,10 @@ export class ChatRoom extends BasicRoom {
 export class GameRoom extends BasicRoom {
 	readonly type: 'battle';
 	readonly format: string;
-	p1: AnyObject | null;
-	p2: AnyObject | null;
-	p3: AnyObject | null;
-	p4: AnyObject | null;
+	p1: User | null;
+	p2: User | null;
+	p3: User | null;
+	p4: User | null;
 	/**
 	 * The lower player's rating, for searching purposes.
 	 * 0 for unrated battles. 1 for unknown ratings.
@@ -1611,11 +1686,10 @@ export class GameRoom extends BasicRoom {
 	game: RoomGame;
 	modchatUser: string;
 	active: boolean;
-	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> & AnyObject = {}) {
+	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
 		options.isMultichannel = true;
-		options.batchJoins = 0;
 		super(roomid, title, options);
 		this.reportJoins = !!Config.reportbattlejoins;
 		this.settings.modchat = (Config.battlemodchat || null);
@@ -1626,14 +1700,14 @@ export class GameRoom extends BasicRoom {
 		// console.log("NEW BATTLE");
 
 		this.tour = options.tour || null;
-		this.setParent(options.parent || (this.tour && this.tour.room) || null);
+		this.setParent((options as any).parent || (this.tour && this.tour.room) || null);
 
-		this.p1 = options.p1 || null;
-		this.p2 = options.p2 || null;
-		this.p3 = options.p3 || null;
-		this.p4 = options.p4 || null;
+		this.p1 = options.p1?.user || null;
+		this.p2 = options.p2?.user || null;
+		this.p3 = options.p3?.user || null;
+		this.p4 = options.p4?.user || null;
 
-		this.rated = options.rated || 0;
+		this.rated = options.rated === true ? 1 : options.rated || 0;
 
 		this.battle = null;
 		this.game = null!;
@@ -1704,7 +1778,7 @@ export class GameRoom extends BasicRoom {
 		if (!battle) return;
 
 		// retrieve spectator log (0) if there are privacy concerns
-		const format = Dex.getFormat(this.format, true);
+		const format = Dex.formats.get(this.format, true);
 
 		// custom games always show full details
 		// random-team battles show full details if the battle is ended
@@ -1771,7 +1845,7 @@ export const Rooms = {
 		return getRoom(name) || getRoom(toID(name)) || getRoom(Rooms.aliases.get(toID(name)));
 	},
 
-	createGameRoom(roomid: RoomID, title: string, options: AnyObject) {
+	createGameRoom(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		Monitor.debug("NEW BATTLE ROOM: " + roomid);
 		const room = new GameRoom(roomid, title, options);
@@ -1784,11 +1858,11 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
-	createBattle(formatid: string, options: AnyObject) {
-		const players: (User & {specialNextBattle?: string })[] =
-			[options.p1, options.p2, options.p3, options.p4].filter(user => user);
-		const gameType = Dex.getFormat(formatid).gameType;
-		if (gameType !== 'multi' && gameType !== 'free-for-all') {
+	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
+		const players: User[] = [options.p1, options.p2, options.p3, options.p4]
+			.filter(Boolean).map(player => player!.user);
+		const gameType = Dex.formats.get(options.format).gameType;
+		if (gameType !== 'multi' && gameType !== 'freeforall') {
 			if (players.length > 2) {
 				throw new Error(`Four players were provided, but the format is a two-player format.`);
 			}
@@ -1808,13 +1882,13 @@ export const Rooms = {
 			return;
 		}
 
-		const p1Special = players.length ? players[0].specialNextBattle : undefined;
+		const p1Special = players.length ? players[0].battleSettings.special : undefined;
 		let mismatch = `"${p1Special}"`;
 		for (const user of players) {
-			if (user.specialNextBattle !== p1Special) {
-				mismatch += ` vs. "${user.specialNextBattle}"`;
+			if (user.battleSettings.special !== p1Special) {
+				mismatch += ` vs. "${user.battleSettings.special}"`;
 			}
-			user.specialNextBattle = undefined;
+			user.battleSettings.special = undefined;
 		}
 
 		if (mismatch !== `"${p1Special}"`) {
@@ -1826,12 +1900,11 @@ export const Rooms = {
 			options.ratedMessage = p1Special;
 		}
 
-		const roomid = Rooms.global.prepBattleRoom(formatid);
-		options.format = formatid;
+		const roomid = Rooms.global.prepBattleRoom(options.format);
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
-		options.rated = Math.max(+options.rated || 0, 0);
+		options.rated = Math.max(+options.rated! || 0, 0);
 		const p1 = players[0];
 		const p2 = players[1];
 		const p1name = p1 ? p1.name : "Player 1";
@@ -1839,7 +1912,7 @@ export const Rooms = {
 		let roomTitle;
 		if (gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
-		} else if (gameType === 'free-for-all') {
+		} else if (gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
 		} else {
@@ -1847,19 +1920,20 @@ export const Rooms = {
 		}
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
-		const battle = new Rooms.RoomBattle(room, formatid, options);
+		const battle = new Rooms.RoomBattle(room, options);
 		room.game = battle;
 		// Special battles have modchat set to Player from the beginning
 		if (p1Special) room.settings.modchat = '\u2606';
 
 		let inviteOnly = false;
-		const privacySetter = new Set<ID>(options.inviteOnly || []);
-		for (const p of ['p1', 'p2', 'p3', 'p4']) {
-			if (options[`${p}inviteOnly`]) {
+		const privacySetter = new Set<ID>([]);
+		for (const p of ['p1', 'p2', 'p3', 'p4'] as const) {
+			const playerOptions = options[p];
+			if (playerOptions && playerOptions.inviteOnly) {
 				inviteOnly = true;
-				privacySetter.add(options[p].id);
-			} else if (options[`${p}hidden`]) {
-				privacySetter.add(options[p].id);
+				privacySetter.add(playerOptions.user.id);
+			} else if (playerOptions && playerOptions.hidden) {
+				privacySetter.add(playerOptions.user.id);
 			}
 		}
 
@@ -1868,7 +1942,7 @@ export const Rooms = {
 				room.setPrivate(false);
 				room.settings.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
-			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
+			} else if (!options.tour || (room.tour?.allowModjoin)) {
 				room.setPrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';
 				room.privacySetter = privacySetter;
@@ -1899,6 +1973,8 @@ export const Rooms = {
 
 	RoomGame,
 	RoomGamePlayer,
+
+	MinorActivity,
 
 	RETRY_AFTER_LOGIN,
 

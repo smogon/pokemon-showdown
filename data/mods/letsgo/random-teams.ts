@@ -1,10 +1,114 @@
-/* eslint max-len: ["error", 240] */
-
+import type {PRNG} from '../../../sim';
 import RandomTeams from '../../random-teams';
 
 export class RandomLetsGoTeams extends RandomTeams {
+	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
+		super(format, prng);
+		this.moveEnforcementCheckers = {
+			Dark: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Dark,
+			Dragon: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Dragon,
+			Electric: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Electric,
+			Fighting: (movePool, hasMove, hasAbility, hasType, counter) => (
+				!counter.Fighting && (counter.setupType || !counter.Status)
+			),
+			Fire: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Fire,
+			Ghost: (movePool, hasMove, hasAbility, hasType, counter) => !hasType['Dark'] && !counter.Ghost,
+			Ground: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Ground,
+			Ice: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Ice,
+			Water: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Water || !counter.stab,
+		};
+	}
+	shouldCullMove(
+		move: Move,
+		hasMove: {[k: string]: true},
+		hasType: {[k: string]: true},
+		counter: {[k: string]: any},
+		teamDetails: RandomTeamsTypes.TeamDetails,
+	): {cull: boolean, isSetup?: boolean} {
+		switch (move.id) {
+		// Set up once and only if we have the moves for it
+		case 'bulkup': case 'swordsdance':
+			return {
+				cull: (
+					counter.setupType !== 'Physical' ||
+					counter.physicalsetup > 1 ||
+					counter.Physical + counter.physicalpool < 2
+				),
+				isSetup: true,
+			};
+		case 'calmmind': case 'nastyplot': case 'quiverdance':
+			return {
+				cull: (
+					counter.setupType !== 'Special' ||
+					counter.specialstup > 1 ||
+					counter.Special + counter.specialpool < 2
+				),
+				isSetup: true,
+			};
+		case 'growth': case 'shellsmash':
+			return {
+				cull: counter.setupType !== 'Mixed' || (counter.damagingMoves.length + counter.physicalpool + counter.specialpool) < 2,
+				isSetup: true,
+			};
+		case 'agility':
+			return {
+				cull: counter.damagingMoves.length < 2 && !counter.setupType,
+				isSetup: !counter.setupType,
+			};
+
+		// Bad after setup
+		case 'dragontail':
+			return {cull: counter.setupType || !!counter.speedsetup || ['encore', 'roar', 'whirlwind'].some(m => hasMove[m])};
+		case 'fakeout': case 'uturn': case 'teleport':
+			return {cull: counter.setupType || !!counter.speedsetup || hasMove['substitute']};
+		case 'haze': case 'leechseed': case 'roar': case 'whirlwind':
+			return {cull: counter.setupType || !!counter.speedsetup || hasMove['dragontail']};
+		case 'protect':
+			return {cull: counter.setupType || ['rest', 'lightscreen', 'reflect'].some(m => hasMove[m])};
+		case 'seismictoss':
+			return {cull: counter.damagingMoves.length > 1 || counter.setupType};
+		case 'stealthrock':
+			return {cull: counter.setupType || !!counter.speedsetup || teamDetails.stealthRock};
+
+		// Bit redundant to have both
+		case 'leechlife': case 'substitute':
+			return {cull: hasMove['uturn']};
+		case 'dragonpulse':
+			return {cull: hasMove['dragontail'] || hasMove['outrage']};
+		case 'thunderbolt':
+			return {cull: hasMove['thunder']};
+		case 'flareblitz': case 'flamethrower':
+			return {cull: hasMove['fireblast'] || hasMove['firepunch']};
+		case 'megadrain':
+			return {cull: hasMove['petaldance'] || hasMove['powerwhip']};
+		case 'bonemerang':
+			return {cull: hasMove['earthquake']};
+		case 'icebeam':
+			return {cull: hasMove['blizzard']};
+		case 'rockslide':
+			return {cull: hasMove['stoneedge']};
+		case 'hydropump': case 'willowisp':
+			return {cull: hasMove['scald']};
+		case 'surf':
+			return {cull: hasMove['hydropump'] || hasMove['scald']};
+		}
+
+		// Increased/decreased priority moves are unneeded with moves that boost only speed
+		if (move.priority !== 0 && !!counter.speedsetup) return {cull: true};
+
+		// This move doesn't satisfy our setup requirements:
+		if (
+			(move.category === 'Physical' && counter.setupType === 'Special') ||
+			(move.category === 'Special' && counter.setupType === 'Physical')
+		) {
+			// Reject STABs last in case the setup type changes later on
+			if (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2) return {cull: true};
+		}
+
+		return {cull: false};
+	}
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 		let forme = species.name;
 
 		if (typeof species.battleOnly === 'string') {
@@ -20,7 +124,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 			hasType[species.types[1]] = true;
 		}
 
-		let hasMove: {[k: string]: boolean} = {};
+		let hasMove: {[k: string]: true} = {};
 		let counter;
 
 		do {
@@ -41,154 +145,60 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				const move = this.dex.getMove(setMoveid);
-				const moveid = move.id;
-				let rejected = false;
-				let isSetup = false;
+				const move = this.dex.moves.get(setMoveid);
 
-				switch (moveid) {
-				// Set up once and only if we have the moves for it
-				case 'bulkup': case 'swordsdance':
-					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
-					if (counter.Physical + counter['physicalpool'] < 2) rejected = true;
-					isSetup = true;
-					break;
-				case 'calmmind': case 'nastyplot': case 'quiverdance':
-					if (counter.setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
-					if (counter.Special + counter['specialpool'] < 2) rejected = true;
-					isSetup = true;
-					break;
-				case 'growth': case 'shellsmash':
-					if (counter.setupType !== 'Mixed') rejected = true;
-					if (counter.damagingMoves.length + counter['physicalpool'] + counter['specialpool'] < 2) rejected = true;
-					isSetup = true;
-					break;
-				case 'agility':
-					if (counter.damagingMoves.length < 2 && !counter.setupType) rejected = true;
-					if (!counter.setupType) isSetup = true;
-					break;
+				let {cull, isSetup} = this.shouldCullMove(move, hasMove, hasType, counter, teamDetails);
 
-				// Bad after setup
-				case 'dragontail':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['encore'] || hasMove['roar'] || hasMove['whirlwind']) rejected = true;
-					break;
-				case 'fakeout': case 'uturn':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['substitute']) rejected = true;
-					break;
-				case 'haze': case 'leechseed': case 'roar': case 'whirlwind':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['dragontail']) rejected = true;
-					break;
-				case 'protect':
-					if (counter.setupType || hasMove['rest'] || hasMove['lightscreen'] || hasMove['reflect']) rejected = true;
-					break;
-				case 'seismictoss':
-					if (counter.damagingMoves.length > 1 || counter.setupType) rejected = true;
-					break;
-				case 'stealthrock':
-					if (counter.setupType || !!counter['speedsetup'] || teamDetails.stealthRock) rejected = true;
-					break;
-
-				// Bit redundant to have both
-				case 'leechlife': case 'substitute':
-					if (hasMove['uturn']) rejected = true;
-					break;
-				case 'dragonclaw': case 'dragonpulse':
-					if (hasMove['dragontail'] || hasMove['outrage']) rejected = true;
-					break;
-				case 'thunderbolt':
-					if (hasMove['thunder']) rejected = true;
-					break;
-				case 'flareblitz': case 'flamethrower': case 'lavaplume':
-					if (hasMove['fireblast'] || hasMove['firepunch']) rejected = true;
-					break;
-				case 'megadrain':
-					if (hasMove['petaldance'] || hasMove['powerwhip']) rejected = true;
-					break;
-				case 'bonemerang':
-					if (hasMove['earthquake']) rejected = true;
-					break;
-				case 'icebeam':
-					if (hasMove['blizzard']) rejected = true;
-					break;
-				case 'return':
-					if (hasMove['bodyslam'] || hasMove['facade'] || hasMove['doubleedge']) rejected = true;
-					break;
-				case 'psychic':
-					if (hasMove['psyshock']) rejected = true;
-					break;
-				case 'rockslide':
-					if (hasMove['stoneedge']) rejected = true;
-					break;
-				case 'hydropump': case 'willowisp':
-					if (hasMove['scald']) rejected = true;
-					break;
-				case 'surf':
-					if (hasMove['hydropump'] || hasMove['scald']) rejected = true;
-					break;
+				if (
+					!isSetup &&
+					counter.setupType && counter.setupType !== 'Mixed' &&
+					move.category !== counter.setupType &&
+					counter[counter.setupType] < 2 && (
+						// Mono-attacking with setup and RestTalk is allowed
+						// Reject Status moves only if there is nothing else to reject
+						move.category !== 'Status' ||
+						counter[counter.setupType] + counter.Status > 3 && counter.physicalsetup + counter.specialsetup < 2
+					)
+				) {
+					cull = true;
 				}
 
-				// Increased/decreased priority moves are unneeded with moves that boost only speed
-				if (move.priority !== 0 && !!counter['speedsetup']) {
-					rejected = true;
-				}
-
-				// This move doesn't satisfy our setup requirements:
-				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
-					// Reject STABs last in case the setup type changes later on
-					if (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2) rejected = true;
-				}
-				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2) {
-					// Mono-attacking with setup and RestTalk is allowed
-					// Reject Status moves only if there is nothing else to reject
-					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) {
-						rejected = true;
-					}
-				}
+				const moveIsRejectable = !move.damage && (move.category !== 'Status' || !move.flags.heal) && (
+					move.category === 'Status' ||
+					!hasType[move.type] ||
+					move.selfSwitch ||
+					move.basePower && move.basePower < 40 && !move.multihit
+				);
 
 				// Pokemon should have moves that benefit their Type, as well as moves required by its forme
-				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (
+				if (moveIsRejectable && !cull && !isSetup && counter.physicalsetup + counter.specialsetup < 2 && (
 					!counter.setupType || counter.setupType === 'Mixed' ||
 					(move.category !== counter.setupType && move.category !== 'Status') ||
-					counter[counter.setupType] + counter.Status > 3)
-				) && (
-					((counter.damagingMoves.length === 0 || !counter.stab) && (counter['physicalpool'] || counter['specialpool'])) ||
-					(hasType['Dark'] && !counter['Dark']) ||
-					(hasType['Dragon'] && !counter['Dragon']) ||
-					(hasType['Electric'] && !counter['Electric']) ||
-					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
-					(hasType['Fire'] && !counter['Fire']) ||
-					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
-					(hasType['Ground'] && !counter['Ground']) ||
-					(hasType['Ice'] && !counter['Ice']) ||
-					(hasType['Water'] && (!counter['Water'] || !counter.stab))
+					counter[counter.setupType] + counter.Status > 3
 				)) {
-					// Reject Status or non-STAB
-					if (!isSetup && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
-						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
+					if (
+						(counter.damagingMoves.length === 0 || !counter.stab) &&
+						(counter.physicalpool || counter.specialpool)
+					) {
+						cull = true;
+					} else {
+						for (const type of Object.keys(hasType)) {
+							if (this.moveEnforcementCheckers[type]?.(movePool, hasMove, {}, hasType, counter, species, teamDetails)) cull = true;
+						}
 					}
 				}
 
 				// Remove rejected moves from the move list
-				if (rejected && movePool.length) {
+				if (cull && movePool.length) {
 					moves.splice(i, 1);
 					break;
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
 
-		const ivs = {
-			hp: 31,
-			atk: 31,
-			def: 31,
-			spa: 31,
-			spd: 31,
-			spe: 31,
-		};
-
+		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		// Minimize confusion damage
-		if (!counter['Physical'] && !hasMove['transform']) {
-			ivs.atk = 0;
-		}
+		if (!counter.Physical && !hasMove['transform']) ivs.atk = 0;
 
 		return {
 			name: species.baseSpecies,
@@ -199,9 +209,9 @@ export class RandomLetsGoTeams extends RandomTeams {
 			shiny: this.randomChance(1, 1024),
 			item: (species.requiredItem || ''),
 			ability: 'No Ability',
-			moves: moves,
 			evs: {hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20},
-			ivs: ivs,
+			moves,
+			ivs,
 		};
 	}
 
@@ -210,11 +220,16 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 		const pokemonPool: string[] = [];
 		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
+			const species = this.dex.species.get(id);
 			if (
-				species.num < 1 || (species.num > 151 && ![808, 809].includes(species.num)) || species.gen > 7 ||
-				species.nfe || !species.randomBattleMoves || !species.randomBattleMoves.length
-			) continue;
+				species.num < 1 ||
+				(species.num > 151 && ![808, 809].includes(species.num)) ||
+				species.gen > 7 ||
+				species.nfe ||
+				!species.randomBattleMoves?.length
+			) {
+				continue;
+			}
 			pokemonPool.push(id);
 		}
 
@@ -224,7 +239,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -232,7 +247,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 			const types = species.types;
 
-			// Limit 2 of any type
+			// Once we have 2 Pokémon of a given type we reject more Pokémon of that type 80% of the time
 			let skip = false;
 			for (const type of species.types) {
 				if (typeCount[type] > 1 && this.randomChance(4, 5)) {
@@ -242,13 +257,12 @@ export class RandomLetsGoTeams extends RandomTeams {
 			}
 			if (skip) continue;
 
-			const set = this.randomSet(species, teamDetails);
-
 			// Limit 1 of any type combination
 			const typeCombo = types.slice().sort().join();
 			if (typeComboCount[typeCombo] >= 1) continue;
 
 			// Okay, the set passes, add it to our team
+			const set = this.randomSet(species, teamDetails);
 			pokemon.push(set);
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
@@ -262,6 +276,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 					typeCount[type] = 1;
 				}
 			}
+
 			if (typeCombo in typeComboCount) {
 				typeComboCount[typeCombo]++;
 			} else {
@@ -269,8 +284,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 			}
 
 			// Team details
-			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
-			if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
+			if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
+			if (set.moves.includes('rapidspin')) teamDetails.rapidSpin = 1;
 		}
 		return pokemon;
 	}

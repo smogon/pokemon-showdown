@@ -11,7 +11,7 @@ try {
 
 var child_process = require('child_process');
 var fs = require('fs');
-var force = process.argv[2] === '--force';
+var force = ['--force', 'force', '--full', 'full'].includes(process.argv[2]);
 
 process.chdir(__dirname);
 

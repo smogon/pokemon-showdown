@@ -8,7 +8,7 @@
  */
 
 import {ScavengerHunt, ScavengerHuntPlayer} from './scavengers';
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
 interface Twist {
@@ -546,7 +546,7 @@ const MODES: {[k: string]: GameMode | string} = {
 
 			for (const userid of team.players) {
 				const user = Users.getExact(userid);
-				if (!user || !user.connected) continue; // user is offline
+				if (!user?.connected) continue; // user is offline
 
 				user.sendTo(this.room, `|raw|<div class="infobox">${message}</div>`);
 			}
@@ -732,7 +732,7 @@ export class ScavengerGameTemplate {
 	}
 
 	eliminate(userid: string) {
-		if (!this.playerlist || !this.playerlist.includes(userid)) return false;
+		if (!this.playerlist?.includes(userid)) return false;
 		this.playerlist = this.playerlist.filter(pid => pid !== userid);
 
 		if (this.leaderboard) delete this.leaderboard.data[userid];

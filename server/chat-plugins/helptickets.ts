@@ -1,5 +1,4 @@
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {getCommonBattles} from '../chat-commands/info';
 import type {Punishment} from '../punishments';
 
@@ -55,7 +54,7 @@ try {
 
 export function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(
-		() => JSON.stringify(tickets)
+		() => JSON.stringify(tickets), {throttle: 5000}
 	);
 }
 
@@ -353,6 +352,16 @@ export class HelpTicket extends Rooms.RoomGame {
 		// @ts-ignore
 		this.playerTable = null;
 	}
+	onChatMessage(message: string, user: User) {
+		const roomids = message.match(/battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g);
+		if (roomids) {
+			for (const roomid of roomids) {
+				const curRoom = Rooms.get(roomid);
+				if (!curRoom || !('uploadReplay' in curRoom) || curRoom?.battle?.replaySaved) continue;
+				void curRoom.uploadReplay(user, user.connections[0], 'forpunishment');
+			}
+		}
+	}
 	static ban(user: User | ID, reason = '') {
 		const userid = toID(user);
 		const userObj = Users.get(user);
@@ -364,27 +373,40 @@ export class HelpTicket extends Rooms.RoomGame {
 		user = toID(user);
 		return Punishments.roomUnpunish('staff', user, 'TICKETBAN');
 	}
-	static checkBanned(user: User) {
+	static checkBanned(user: User | ID) {
 		const staffRoom = Rooms.get('staff');
 		if (!staffRoom) return;
-		const punishment = Punishments.getRoomPunishType(staffRoom, user.id);
-		if (punishment === 'TICKETBAN') {
-			return `You are banned from creating tickets.`;
+		const ips = [];
+		if (typeof user === 'object') {
+			ips.push(...(user as User).ips);
+			ips.unshift((user as User).latestIp);
+			user = (user as User).id;
+		}
+		const punishment = Punishments.roomUserids.get('staff')?.get(user);
+		if (punishment?.[0] === 'TICKETBAN') {
+			return punishment;
 		}
 		// skip if the user is autoconfirmed and on a shared ip
-		if (Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) return false;
+		// [0] is forced to be the latestIp
+		if (Punishments.sharedIps.has(ips[0])) return false;
 
-		for (const ip of user.ips) {
+		for (const ip of ips) {
 			const curPunishment = Punishments.roomIps.get('staff')?.get(ip);
 			if (curPunishment && curPunishment[0] === 'TICKETBAN') {
-				const [, userid,, reason] = curPunishment;
-				return (
-					`You are banned from creating help tickets` +
-					`${userid !== user.id ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
-				);
+				return curPunishment;
 			}
 		}
 		return false;
+	}
+	static getBanMessage(userid: ID, punishment: Punishment) {
+		if (userid !== punishment[0]) {
+			const [, punished,, reason] = punishment;
+			return (
+				`You are banned from creating help tickets` +
+				`${punished !== userid ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
+			);
+		}
+		return `You are banned from creating help tickets.`;
 	}
 }
 
@@ -501,7 +523,7 @@ export function notifyStaff() {
 		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
 		buf = buf.slice(0, fourthTicketIndex) +
-			`<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
+			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button>`;
 	}
 	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox" style="padding: 6px 4px">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
@@ -518,6 +540,11 @@ export function notifyStaff() {
 	}
 	for (const user of Object.values(room.users)) {
 		if (user.can('lock') && !user.settings.ignoreTickets) user.sendTo(room, buf);
+		for (const connection of user.connections) {
+			if (connection.openPages?.has('help-tickets')) {
+				void Chat.resolvePage('view-help-tickets', user, connection);
+			}
+		}
 	}
 	pokeUnclaimedTicketTimer(hasUnclaimed, hasAssistRequest);
 }
@@ -535,7 +562,7 @@ function checkIp(ip: string) {
 for (const room of Rooms.rooms.values()) {
 	if (!room.settings.isHelp || !room.game) continue;
 	const game = room.getGame(HelpTicket)!;
-	if (game.ticket) game.ticket = tickets[game.ticket.userid];
+	if (game.ticket && tickets[game.ticket.userid]) game.ticket = tickets[game.ticket.userid];
 }
 
 const delayWarningPreamble = `Hi! All global staff members are busy right now and we apologize for the delay. `;
@@ -566,6 +593,7 @@ const ticketPages: {[k: string]: string} = {
 	battleharassment: `Someone is harassing me in a battle`,
 	inapname: `Someone is using an offensive username`,
 	inappokemon: `Someone is using offensive Pokemon nicknames`,
+	cheating: `Someone is hacking or cheating in my battle`,
 
 	appeal: `I want to appeal a punishment`,
 	permalock: `I want to appeal my permalock`,
@@ -592,6 +620,36 @@ const ticketPages: {[k: string]: string} = {
 	confirmroomhelp: `Call a Global Staff member to help`,
 	confirmother: `Call a Global Staff member`,
 };
+const cheatingScenarios = [
+	[
+		`My opponent's Pokemon used moves it couldn't learn`,
+		`It was probably a disguised Zoroark (<psicon pokemon="zoroark" />), which has the ability <a href="//${Config.routes.dex}/abilities/illusion">Illusion</a>. This happens often in Random Battles!`,
+	],
+	[
+		`My opponent got very lucky (critical hits, freezes, flinches, etc.)`,
+		`Sometimes, <a href="//${Config.routes.root}/pages/rng">that's just how RNG works</a>!`,
+	],
+	[
+		`My opponent used six of the same Pokemon or too many Legendaries`,
+		`Certain tiers, like Anything Goes, do not have Species Clause, which normally restricts a player to only one of each Pokemon. In addition, many tiers allow lots of legendaries, and you are allowed to use them!`,
+	],
+	[
+		`My Pokemon used a move I didn't choose`,
+		`You accidentally selected the wrong move and didn't notice. It happens more often than you might think!`,
+	],
+	[
+		`My Pokemon moved last when it shouldn't have`,
+		`You probably accidentally chose a move with negative priority, like Trick Room, Dragon Tail, or Roar.`,
+	],
+	[
+		`My Pokemon's Ability didn't work`,
+		`Perhaps Weezing's <a href="//${Config.routes.dex}/abilities/neutralizinggas">Neutralizing Gas</a> was active (<psicon pokemon="weezinggalar" />), or another effect, like <a href="https://dex.pokemonshowdown.com/abilities/moldbreaker">Mold Breaker</a>, was suppressing the Ability.`,
+	],
+	[
+		`My Pokemon's move failed when I attacked the opponent in a Double Battle)`,
+		`You attacked your own partner Pokemon, which failed because no Pokemon was there.`,
+	],
+];
 
 export const pages: PageTable = {
 	help: {
@@ -607,8 +665,10 @@ export const pages: PageTable = {
 			this.title = this.tr`Request Help`;
 			let buf = `<div class="pad"><h2>${this.tr`Request help from global staff`}</h2>`;
 
-			const banMsg = HelpTicket.checkBanned(user);
-			if (banMsg) return connection.popup(banMsg);
+			const ticketBan = HelpTicket.checkBanned(user);
+			if (ticketBan) {
+				return connection.popup(HelpTicket.getBanMessage(user.id, ticketBan));
+			}
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
@@ -660,6 +720,7 @@ export const pages: PageTable = {
 					buf += `<p><Button>battleharassment</Button></p>`;
 					buf += `<p><Button>inapname</Button></p>`;
 					buf += `<p><Button>inappokemon</Button></p>`;
+					buf += `<p><Button>cheating</Button></p>`;
 					break;
 				case 'pmharassment':
 					buf += `<p>${this.tr`If someone is harassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.`}</p>`;
@@ -682,6 +743,15 @@ export const pages: PageTable = {
 					buf += `<p>${this.tr`Please save a replay of the battle if it has ended, or provide a link to the battle if it is still ongoing.`}</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirminappokemon</Button></p>`;
+					break;
+				case 'cheating':
+					buf += `<p>Your opponent cannot control how lucky or unlucky you are, what moves you choose, or the mechanics of the battle. You may just be misunderstanding what happened in your battle!</p>`;
+					buf += `<h4>Some common situations</h4><ul>`;
+					for (const [scenario, explanation] of cheatingScenarios) {
+						buf += `<li><details class="readmore"><summary>${scenario}</summary><br />${explanation}<br /><br /></details></li>`;
+					}
+					buf += `</ul><p>There are many more situations like this where the opponent was not cheating or hacking. If you're confused about what happened, upload your battle replay and share it with the Help room. They can help you understand what happened!</p>`;
+					buf += `<p style="text-align: center"><button class="button" name="send" value="/j help"><strong>Join the Help Room</strong></button></p>`;
 					break;
 				case 'appeal':
 					buf += `<p><b>${this.tr`What would you like to appeal?`}</b></p>`;
@@ -725,6 +795,7 @@ export const pages: PageTable = {
 					break;
 				case 'hostfilter':
 					buf += `<p>${this.tr`We automatically lock proxies and VPNs to prevent evasion of punishments and other attacks on our server. To get unlocked, you need to disable your proxy or VPN.`}</p>`;
+					buf += `<p>For more detailed information, view the  <a href="//${Config.routes.root}/pages/proxyhelp">proxy help guide</a>.</p>`;
 					break;
 				case 'semilock':
 					buf += `<p>${this.tr`Do you have an autoconfirmed account? An account is autoconfirmed when it has won at least one rated battle and has been registered for one week or longer.`}</p>`;
@@ -915,7 +986,7 @@ export const pages: PageTable = {
 			if (FS(`logs/tickets/${prevString}.tsv`).readIfExistsSync()) {
 				buttonBar += `<a class="button" href="/view-help-stats-${table}-${prevString}" target="replace" style="float: left">&lt; ${this.tr`Previous Month`}</a>`;
 			} else {
-				buttonBar += `<a class="button disabled" style="float: left">&lt; ${this.tr`Previous Month`}Month</a>`;
+				buttonBar += `<a class="button disabled" style="float: left">&lt; ${this.tr`Previous Month`}</a>`;
 			}
 			buttonBar += `<a class="button${table === 'tickets' ? ' disabled"' : `" href="/view-help-stats-tickets-${dateUrl}" target="replace"`}>${this.tr`Ticket Stats`}</a> <a class="button ${table === 'staff' ? ' disabled"' : `" href="/view-help-stats-staff-${dateUrl}" target="replace"`}>${this.tr`Staff Stats`}</a>`;
 			if (FS(`logs/tickets/${nextString}.tsv`).readIfExistsSync()) {
@@ -1097,8 +1168,10 @@ export const commands: ChatCommands = {
 				return this.popupReply(this.tr`Global staff can't make tickets. They can only use the form for reference.`);
 			}
 			if (!user.named) return this.popupReply(this.tr`You need to choose a username before doing this.`);
-			const banMsg = HelpTicket.checkBanned(user);
-			if (banMsg) return this.popupReply(banMsg);
+			const ticketBan = HelpTicket.checkBanned(user);
+			if (ticketBan) {
+				return this.popupReply(HelpTicket.getBanMessage(user.id, ticketBan));
+			}
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
@@ -1182,7 +1255,7 @@ export const commands: ChatCommands = {
 			if (ticket.type === 'Appeal') {
 				staffIntroButtons += Utils.html`<button class="button" name="send" value="/modlog global, user='${user.name}'">Global Modlog for ${user.name}</button>`;
 			}
-			const introMsg = Utils.html`<h2 style="margin-top:0">${this.tr`Help Ticket`} - ${user.name}</h2>` +
+			const introMsg = Utils.html`<h2 style="margin:0">${this.tr`Help Ticket`} - ${user.name}</h2>` +
 				`<p><b>${this.tr`Issue`}</b>: ${ticket.type}<br />${this.tr`A Global Staff member will be with you shortly.`}</p>`;
 			const staffMessage = [
 				`<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}`,
@@ -1243,8 +1316,16 @@ export const commands: ChatCommands = {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
 				ticketGame.addPlayer(user);
 			}
-			if (contexts[ticket.type]) {
-				helpRoom.add(`|c|&Staff|${this.tr(contexts[ticket.type])}`);
+			let context = contexts[ticket.type];
+			switch (ticket.type) {
+			case 'IP-Appeal':
+				if (user.locked === '#hostfilter') {
+					context += ` (Have you looked at https://${Config.routes.root}/pages/proxyhelp?)`;
+				}
+				break;
+			}
+			if (context) {
+				helpRoom.add(`|c|&Staff|${this.tr(context)}`);
 				helpRoom.update();
 			}
 			if (pmRequestButton) {
@@ -1273,7 +1354,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
 			const ticket = tickets[toID(this.inputUsername)];
-			if (!ticket || !ticket.open || (ticket.userid !== user.id && !user.can('lock'))) {
+			if (!ticket?.open || (ticket.userid !== user.id && !user.can('lock'))) {
 				return this.errorReply(this.tr`${this.inputUsername} does not have an open ticket.`);
 			}
 			const helpRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
@@ -1365,17 +1446,17 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help helpticket unban');
 
 			this.checkCan('lock');
-			const targetUser = Users.get(target, true);
-			if (!targetUser) return this.errorReply(`User not found.`);
-			const banned = HelpTicket.checkBanned(targetUser);
+			target = toID(target);
+			const targetID: ID = Users.get(target)?.id || target as ID;
+			const banned = HelpTicket.checkBanned(targetID);
 			if (!banned) {
-				return this.errorReply(this.tr`${targetUser ? targetUser.name : target} is not ticket banned.`);
+				return this.errorReply(this.tr`${target} is not ticket banned.`);
 			}
 
-			const affected = HelpTicket.unban(targetUser);
+			const affected = HelpTicket.unban(targetID);
 			this.addModAction(`${affected} was ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", toID(target));
-			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
+			Users.get(target)?.popup(`${user.name} has ticket unbanned you.`);
 		},
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
 
@@ -1435,9 +1516,16 @@ export const commands: ChatCommands = {
 export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 	if (punishment[0] !== 'BAN') return;
 
-	const helpRoom = Rooms.get(`help-${toID(user)}`);
-	if (helpRoom?.game?.gameid !== 'helpticket') return;
-
-	const ticket = helpRoom.game as HelpTicket;
-	ticket.close('ticketban');
+	const userId = toID(user);
+	if (typeof user === 'object') {
+		const ids = [userId, ...(user as User).previousIDs];
+		for (const userid of ids) {
+			punishmentfilter(userid, punishment);
+		}
+	} else {
+		const helpRoom = Rooms.get(`help-${userId}`);
+		if (helpRoom?.game?.gameid !== 'helpticket') return;
+		const ticket = helpRoom.game as HelpTicket;
+		ticket.close('ticketban');
+	}
 };

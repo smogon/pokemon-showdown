@@ -7,8 +7,7 @@
  * @license MIT
  */
 
-import {FS} from '../lib/fs';
-import {Utils} from '../lib/utils';
+import {FS, Utils} from '../lib';
 import type {PartialModlogEntry} from './modlog';
 
 interface RoomlogOptions {
@@ -64,6 +63,8 @@ export class Roomlog {
 	 */
 	roomlogStream?: Streams.WriteStream | null;
 	roomlogFilename: string;
+
+	numTruncatedLines: number;
 	constructor(room: BasicRoom, options: RoomlogOptions = {}) {
 		this.roomid = room.roomid;
 
@@ -76,6 +77,8 @@ export class Roomlog {
 
 		this.roomlogStream = undefined;
 		this.roomlogFilename = '';
+
+		this.numTruncatedLines = 0;
 
 		Rooms.Modlog.initialize(this.roomid);
 		void this.setupRoomlogStream(true);
@@ -265,8 +268,16 @@ export class Roomlog {
 	truncate() {
 		if (this.noAutoTruncate) return;
 		if (this.log.length > 100) {
-			this.log.splice(0, this.log.length - 100);
+			const truncationLength = this.log.length - 100;
+			this.log.splice(0, truncationLength);
+			this.numTruncatedLines += truncationLength;
 		}
+	}
+	/**
+	 * Returns the total number of lines in the roomlog, including truncated lines.
+	 */
+	getLineCount() {
+		return this.log.length + this.numTruncatedLines;
 	}
 
 	destroy(destroyModlog?: boolean) {

@@ -55,8 +55,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (target && this.isAdjacent(target, pokemon) && !target.volatiles['substitute']) {
+			for (const target of pokemon.adjacentFoes()) {
+				if (!target.volatiles['substitute']) {
 					activated = true;
 					break;
 				}
@@ -68,9 +68,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-
+			for (const target of pokemon.adjacentFoes()) {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
@@ -154,7 +152,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
-			const target = pokemon.side.foe.randomActive();
+			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
 			const bannedAbilities = ['forecast', 'multitype', 'trace'];

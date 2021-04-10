@@ -1,4 +1,10 @@
 import RandomGen2Teams from '../gen2/random-teams';
+import {Utils} from '../../../lib';
+
+interface HackmonsCupEntry {
+	types: string[];
+	baseStats: StatsTable;
+}
 
 export class RandomGen1Teams extends RandomGen2Teams {
 	// Challenge Cup or CC teams are basically fully random teams.
@@ -20,9 +26,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let formeCounter = 0;
 		for (const id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
-			const species = this.dex.getSpecies(id);
-			const lsetData = this.dex.getLearnsetData(id as ID);
-			if (!lsetData.learnset || species.forme) continue;
+			const species = this.dex.species.get(id);
+			const learnset = this.dex.species.getLearnset(id as ID);
+			if (!learnset || species.forme) continue;
 			formes[hasDexNumber[species.num]].push(species.name);
 			if (++formeCounter >= 6) {
 				// Gen 1 had no alternate formes, so we can break out of the loop already.
@@ -33,8 +39,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		for (let i = 0; i < 6; i++) {
 			// Choose forme.
 			const poke = this.sample(formes[i]);
-			const species = this.dex.getSpecies(poke);
-			const lsetData = this.dex.getLearnsetData(species.id);
+			const species = this.dex.species.get(poke);
+			const learnset = this.dex.species.getLearnset(species.id);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
 			const mbstmin = 1307;
@@ -73,40 +79,31 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				spe: this.random(16),
 			};
 			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
-			ivs["atk"] = ivs["atk"] * 2;
-			ivs["def"] = ivs["def"] * 2;
-			ivs["spa"] = ivs["spa"] * 2;
+			ivs["atk"] *= 2;
+			ivs["def"] *= 2;
+			ivs["spa"] *= 2;
 			ivs["spd"] = ivs["spa"];
-			ivs["spe"] = ivs["spe"] * 2;
+			ivs["spe"] *= 2;
 
 			// Maxed EVs.
-			const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255,	spe: 255};
+			const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
-			let moves;
 			const pool: string[] = [];
-			if (lsetData.learnset) {
-				for (const move in lsetData.learnset) {
-					if (this.dex.getMove(move).gen !== 1) continue;
-					if (lsetData.learnset[move].some(learned => learned.startsWith('1'))) {
+			if (learnset) {
+				for (const move in learnset) {
+					if (this.dex.moves.get(move).gen !== 1) continue;
+					if (learnset[move].some(learned => learned.startsWith('1'))) {
 						pool.push(move);
 					}
 				}
-			}
-			if (pool.length <= 4) {
-				moves = pool;
-			} else {
-				moves = [
-					this.sampleNoReplace(pool), this.sampleNoReplace(pool),
-					this.sampleNoReplace(pool), this.sampleNoReplace(pool),
-				];
 			}
 
 			team.push({
 				name: poke,
 				species: species.name,
-				moves: moves,
+				moves: this.multipleSamplesNoReplace(pool, 4),
 				gender: false,
 				ability: 'None',
 				evs: evs,
@@ -125,7 +122,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	// Random team generation for Gen 1 Random Battles.
 	randomTeam() {
 		// Get what we need ready.
-		let pokemonLeft = 0;
 		const pokemon = [];
 
 		const handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
@@ -134,7 +130,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		const pokemonPool = [];
 		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
+			const species = this.dex.species.get(id);
 			if (!species.isNonstandard && species.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
@@ -147,9 +143,13 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let nuCount = 0;
 		let hasShitmon = false;
 
-		while (pokemonPool.length && pokemonLeft < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+		while (pokemonPool.length && pokemon.length < 6) {
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
+			// Only one Ditto is allowed per battle in Generation 1,
+			// as it can cause an endless battle if two Dittos are forced
+			// to face each other.
+			if (species.id === 'ditto' && this.battleHasDitto) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
@@ -200,12 +200,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			if (skip) continue;
 
 			// The set passes the limitations.
-			const set = this.randomSet(species);
-			pokemon.push(set);
+			pokemon.push(this.randomSet(species));
 
-			// Now let's increase the counters. First, the Pokémon left.
-			pokemonLeft++;
-
+			// Now let's increase the counters.
 			// Type counter.
 			for (const type of species.types) {
 				if (typeCount[type]) {
@@ -229,20 +226,46 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Is it Magikarp or one of the useless bugs?
 			if (handicapMons.includes(species.id)) hasShitmon = true;
+
+			// Ditto check
+			if (species.id === 'ditto') this.battleHasDitto = true;
 		}
 
 		return pokemon;
+	}
+
+	shouldCullMove(move: Move, hasMove: {[k: string]: true}, counter: {[k: string]: any}): {cull: boolean} {
+		switch (move.id) {
+		// bit redundant to have both, but neither particularly better than the other
+		case 'hydropump':
+			return {cull: hasMove['surf']};
+		case 'surf':
+			return {cull: hasMove['hydropump']};
+
+		// other redundancies that aren't handled within the movesets themselves
+		case 'selfdestruct':
+			return {cull: hasMove['rest']};
+		case 'rest':
+			return {cull: hasMove['selfdestruct']};
+		case 'sharpen': case 'swordsdance':
+			return {cull: counter.Special > counter.Physical || !counter.Physical || hasMove['growth']};
+		case 'growth':
+			return {cull: counter.Special < counter.Physical || !counter.Special || hasMove['swordsdance']};
+		case 'poisonpowder': case 'stunspore': case 'sleeppowder': case 'toxic':
+			return {cull: counter.Status > 1};
+		}
+		return {cull: false};
 	}
 
 	/**
 	 * Random set generation for Gen 1 Random Battles.
 	 */
 	randomSet(species: string | Species): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
-		if (!species.exists) species = this.dex.getSpecies('pikachu'); // Because Gen 1.
+		species = this.dex.species.get(species);
+		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
 		const movePool = species.randomBattleMoves ? species.randomBattleMoves.slice() : [];
-		let moves: string[] = [];
+		const moves: string[] = [];
 		const hasType: {[k: string]: true} = {};
 		hasType[species.types[0]] = true;
 		if (species.types[1]) hasType[species.types[1]] = true;
@@ -256,10 +279,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
-		if (species.comboMoves) {
-			if (this.randomChance(1, 2)) {
-				moves = moves.concat(species.comboMoves);
-			}
+		if (species.comboMoves && this.randomChance(1, 2)) {
+			moves.push(...species.comboMoves);
 		}
 
 		// Add one of the semi-mandatory moves
@@ -285,73 +306,31 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				hasMove = {};
 				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
 				for (const setMoveid of moves) {
-					const move = this.dex.getMove(setMoveid);
+					const move = this.dex.moves.get(setMoveid);
 					const moveid = move.id;
 					hasMove[moveid] = true;
-					if (!move.damage && !move.damageCallback) {
-						counter[move.category]++;
-					}
-					if (PhysicalSetup.includes(moveid)) {
-						counter['physicalsetup']++;
-					}
-					if (SpecialSetup.includes(moveid)) {
-						counter['specialsetup']++;
-					}
+					if (!move.damage && !move.damageCallback) counter[move.category]++;
+					if (PhysicalSetup.includes(moveid)) counter.physicalsetup++;
+					if (SpecialSetup.includes(moveid)) counter.specialsetup++;
 				}
-
-				// if (counter['specialsetup']) {
-				// 	setupType = 'Special';
-				// } else if (counter['physicalsetup']) {
-				// 	setupType = 'Physical';
-				// }
 
 				for (const [i, moveid] of moves.entries()) {
 					if (moveid === species.essentialMove) continue;
-					const move = this.dex.getMove(moveid);
-					let rejected = false;
-					if (!species.essentialMove || moveid !== species.essentialMove) {
-						switch (moveid) {
-						// bit redundant to have both, but neither particularly better than the other
-						case 'hydropump':
-							if (hasMove['surf']) rejected = true;
-							break;
-						case 'surf':
-							if (hasMove['hydropump']) rejected = true;
-							break;
-						// other redundancies that aren't handled within the movesets themselves
-						case 'selfdestruct':
-							if (hasMove['rest']) rejected = true;
-							break;
-						case 'rest':
-							if (hasMove['selfdestruct']) rejected = true;
-							break;
-						case 'sharpen':
-						case 'swordsdance':
-							if (counter['Special'] > counter['Physical'] || !counter['Physical'] || hasMove['growth']) rejected = true;
-							break;
-						case 'growth':
-							if (counter['Special'] < counter['Physical'] || !counter['Special'] || hasMove['swordsdance']) rejected = true;
-							break;
-						case 'poisonpowder':
-						case 'stunspore':
-						case 'sleeppowder':
-						case 'toxic':
-							if (counter['Status'] > 1) rejected = true;
-							break;
-						} // End of switch for moveid
-					}
-					if (rejected) {
+					const move = this.dex.moves.get(moveid);
+					if ((!species.essentialMove || moveid !== species.essentialMove) && this.shouldCullMove(move, hasMove, counter).cull) {
 						moves.splice(i, 1);
 						break;
 					}
 					counter[move.category]++;
-				} // End of for
+				}
 			} // End of the check for more than 4 moves on moveset.
 		}
 
 		const levelScale: {[k: string]: number} = {
 			LC: 88,
 			NFE: 80,
+			NU: 77,
+			NUBL: 76,
 			UU: 74,
 			OU: 68,
 			Uber: 65,
@@ -368,15 +347,127 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		return {
 			name: species.name,
 			species: species.name,
-			moves: moves,
+			moves,
 			ability: 'None',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
 			ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30},
 			item: '',
-			level: level,
+			level,
 			shiny: false,
 			gender: false,
 		};
+	}
+
+	randomHCTeam(): PokemonSet[] {
+		const team = [];
+
+		const movePool = Object.keys(this.dex.data.Moves);
+		const typesPool = ['Bird', ...this.dex.types.names()];
+
+		const random6 = this.random6Pokemon();
+		const hackmonsCup: {[k: string]: HackmonsCupEntry} = {};
+
+		for (let i = 0; i < 6; i++) {
+			// Choose forme
+			const species = this.dex.species.get(random6[i]);
+			if (!hackmonsCup[species.id]) {
+				hackmonsCup[species.id] = {
+					types: [this.sample(typesPool), this.sample(typesPool)],
+					baseStats: {
+						hp: Utils.clampIntRange(this.random(256), 1),
+						atk: Utils.clampIntRange(this.random(256), 1),
+						def: Utils.clampIntRange(this.random(256), 1),
+						spa: Utils.clampIntRange(this.random(256), 1),
+						spd: 0,
+						spe: Utils.clampIntRange(this.random(256), 1),
+					},
+				};
+				hackmonsCup[species.id].baseStats.spd = hackmonsCup[species.id].baseStats.spa;
+			}
+			if (hackmonsCup[species.id].types[0] === hackmonsCup[species.id].types[1]) {
+				hackmonsCup[species.id].types.splice(1, 1);
+			}
+
+			// Random unique moves
+			const moves = [];
+			do {
+				const moveid = this.sampleNoReplace(movePool);
+				const move = this.dex.moves.get(moveid);
+				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
+					moves.push(moveid);
+				}
+			} while (moves.length < 4);
+
+			// Random EVs
+			const evs = {
+				hp: this.random(256),
+				atk: this.random(256),
+				def: this.random(256),
+				spa: this.random(256),
+				spd: 0,
+				spe: this.random(256),
+			};
+			evs['spd'] = evs['spa'];
+
+			// Random DVs
+			const ivs: StatsTable = {
+				hp: 0,
+				atk: this.random(16),
+				def: this.random(16),
+				spa: this.random(16),
+				spd: 0,
+				spe: this.random(16),
+			};
+			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
+			for (const iv in ivs) {
+				if (iv === 'hp' || iv === 'spd') continue;
+				ivs[iv as keyof StatsTable] *= 2;
+			}
+			ivs['spd'] = ivs['spa'];
+
+			// Level balance
+			const mbstmin = 425;
+			const baseStats = hackmonsCup[species.id].baseStats;
+			const calcStat = (statName: StatID, lvl?: number) => {
+				if (lvl) {
+					return Math.floor(Math.floor(2 * baseStats[statName] + ivs[statName] + Math.floor(evs[statName] / 4)) * lvl / 100 + 5);
+				}
+				return Math.floor(2 * baseStats[statName] + ivs[statName] + Math.floor(evs[statName] / 4)) + 5;
+			};
+			let mbst = 0;
+			for (const statName of Object.keys(baseStats)) {
+				mbst += calcStat(statName as StatID);
+				if (statName === 'hp') mbst += 5;
+			}
+			let level = Math.floor(100 * mbstmin / mbst);
+			while (level < 100) {
+				for (const statName of Object.keys(baseStats)) {
+					mbst += calcStat(statName as StatID, level);
+					if (statName === 'hp') mbst += 5;
+				}
+				if (mbst >= mbstmin) break;
+				level++;
+			}
+			if (level > 100) level = 100;
+
+			team.push({
+				name: species.baseSpecies,
+				species: species.name,
+				gender: species.gender,
+				item: '',
+				ability: 'None',
+				moves,
+				evs,
+				ivs,
+				nature: '',
+				level,
+				shiny: false,
+				// Hacky but the only way to communicate stats/level generation properly
+				hc: hackmonsCup[species.id],
+			});
+		}
+
+		return team;
 	}
 }
 

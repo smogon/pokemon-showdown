@@ -8,7 +8,7 @@
  */
 
 import {Dex, toID} from './dex';
-import {Utils} from '../lib/utils';
+import {Utils} from '../lib';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -193,10 +193,10 @@ export class TeamValidator {
 
 	readonly toID: (str: any) => ID;
 	constructor(format: string | Format, dex = Dex) {
-		this.format = dex.getFormat(format);
+		this.format = dex.formats.get(format);
 		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
-		this.ruleTable = this.dex.getRuleTable(this.format);
+		this.ruleTable = this.dex.formats.getRuleTable(this.format);
 
 		this.minSourceGen = this.ruleTable.minSourceGen ?
 			this.ruleTable.minSourceGen[0] : 1;
@@ -230,10 +230,22 @@ export class TeamValidator {
 		let problems: string[] = [];
 		const ruleTable = this.ruleTable;
 		if (format.team) {
+			if (team) {
+				return [
+					`This format doesn't let you use your own team.`,
+					`If you're not using a custom client, please report this as a bug. If you are, remember to use \`/utm null\` before starting a game in this format.`,
+				];
+			}
 			return null;
 		}
-		if (!team || !Array.isArray(team)) {
-			return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
+		if (!team) {
+			return [
+				`This format requires you to use your own team.`,
+				`If you're not using a custom client, please report this as a bug.`,
+			];
+		}
+		if (!Array.isArray(team)) {
+			throw new Error(`Invalid team data`);
 		}
 
 		let [minSize, maxSize] = format.teamLength && format.teamLength.validate || [1, 6];
@@ -257,6 +269,7 @@ export class TeamValidator {
 
 		const teamHas: {[k: string]: number} = {};
 		let lgpeStarterCount = 0;
+		let deoxysType;
 		for (const set of team) {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 
@@ -275,13 +288,23 @@ export class TeamValidator {
 					problems.push(`You can only have one of Pikachu-Starter or Eevee-Starter on a team.`);
 				}
 			}
+			if (dex.gen === 3 && set.species.startsWith('Deoxys')) {
+				if (!deoxysType) {
+					deoxysType = set.species;
+				} else if (deoxysType !== set.species && ruleTable.isBanned('nonexistent')) {
+					return [
+						`You cannot have more than one type of Deoxys forme.`,
+						`(Each game in Gen 3 supports only one forme of Deoxys.)`,
+					];
+				}
+			}
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
 			if (options.removeNicknames) {
-				const species = dex.getSpecies(set.species);
+				const species = dex.species.get(set.species);
 				let crossSpecies: Species;
-				if (format.name === '[Gen 8] Cross Evolution' && (crossSpecies = dex.getSpecies(set.name)).exists) {
+				if (format.name === '[Gen 8] Cross Evolution' && (crossSpecies = dex.species.get(set.name)).exists) {
 					set.name = crossSpecies.name;
 				} else {
 					set.name = species.baseSpecies;
@@ -308,7 +331,7 @@ export class TeamValidator {
 
 		for (const rule of ruleTable.keys()) {
 			if ('!+-'.includes(rule.charAt(0))) continue;
-			const subformat = dex.getFormat(rule);
+			const subformat = dex.formats.get(rule);
 			if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateTeam.call(this, team, format, teamHas) || []);
 			}
@@ -331,12 +354,12 @@ export class TeamValidator {
 			return [`This is not a Pokemon.`];
 		}
 
-		let species = dex.getSpecies(set.species);
+		let species = dex.species.get(set.species);
 		set.species = species.name;
 		// Backwards compatability with old Gmax format
 		if (set.species.toLowerCase().endsWith('-gmax') && this.format.id !== 'gen8megamax') {
 			set.species = set.species.slice(0, -5);
-			species = dex.getSpecies(set.species);
+			species = dex.species.get(set.species);
 			if (set.name && set.name.endsWith('-Gmax')) set.name = species.baseSpecies;
 			set.gigantamax = true;
 		}
@@ -348,11 +371,11 @@ export class TeamValidator {
 			}
 		}
 		set.name = dex.getName(set.name);
-		let item = dex.getItem(Utils.getString(set.item));
+		let item = dex.items.get(Utils.getString(set.item));
 		set.item = item.name;
-		let ability = dex.getAbility(Utils.getString(set.ability));
+		let ability = dex.abilities.get(Utils.getString(set.ability));
 		set.ability = ability.name;
-		let nature = dex.getNature(Utils.getString(set.nature));
+		let nature = dex.natures.get(Utils.getString(set.nature));
 		set.nature = nature.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
@@ -393,13 +416,13 @@ export class TeamValidator {
 
 		if (ruleTable.has('obtainableformes')) {
 			problems.push(...this.validateForme(set));
-			species = dex.getSpecies(set.species);
+			species = dex.species.get(set.species);
 		}
 		const setSources = this.allSources(species);
 
 		for (const [rule] of ruleTable) {
 			if ('!+-'.includes(rule.charAt(0))) continue;
-			const subformat = dex.getFormat(rule);
+			const subformat = dex.formats.get(rule);
 			if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onChangeSet.call(this, set, format, setHas, teamHas) || []);
 			}
@@ -409,14 +432,14 @@ export class TeamValidator {
 		}
 
 		// onChangeSet can modify set.species, set.item, set.ability
-		species = dex.getSpecies(set.species);
-		item = dex.getItem(set.item);
-		ability = dex.getAbility(set.ability);
+		species = dex.species.get(set.species);
+		item = dex.items.get(set.item);
+		ability = dex.abilities.get(set.ability);
 
 		let outOfBattleSpecies = species;
 		let tierSpecies = species;
 		if (ability.id === 'battlebond' && species.id === 'greninja') {
-			outOfBattleSpecies = dex.getSpecies('greninjaash');
+			outOfBattleSpecies = dex.species.get('greninjaash');
 			if (ruleTable.has('obtainableformes')) {
 				tierSpecies = outOfBattleSpecies;
 			}
@@ -428,9 +451,9 @@ export class TeamValidator {
 			}
 		}
 		if (ability.id === 'owntempo' && species.id === 'rockruff') {
-			tierSpecies = outOfBattleSpecies = dex.getSpecies('rockruffdusk');
+			tierSpecies = outOfBattleSpecies = dex.species.get('rockruffdusk');
 		}
-		if (species.id === 'melmetal' && set.gigantamax) {
+		if (species.id === 'melmetal' && set.gigantamax && this.dex.species.getLearnsetData(species.id).eventData) {
 			setSources.sourcesBefore = 0;
 			setSources.sources = ['8S0 melmetal'];
 		}
@@ -444,7 +467,7 @@ export class TeamValidator {
 		if (ability.id && !ability.exists) {
 			if (dex.gen < 3) {
 				// gen 1-2 don't have abilities, just silently remove
-				ability = dex.getAbility('');
+				ability = dex.abilities.get('');
 				set.ability = '';
 			} else {
 				return [`"${set.ability}" is an invalid ability.`];
@@ -453,7 +476,7 @@ export class TeamValidator {
 		if (nature.id && !nature.exists) {
 			if (dex.gen < 3) {
 				// gen 1-2 don't have natures, just remove them
-				nature = dex.getNature('');
+				nature = dex.natures.get('');
 				set.nature = '';
 			} else {
 				problems.push(`"${set.nature}" is an invalid nature.`);
@@ -463,7 +486,7 @@ export class TeamValidator {
 			problems.push(`${name} has an invalid happiness value.`);
 		}
 		if (set.hpType) {
-			const type = dex.getType(set.hpType);
+			const type = dex.types.get(set.hpType);
 			if (!type.exists || ['normal', 'fairy'].includes(type.id)) {
 				problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
 			} else {
@@ -471,16 +494,17 @@ export class TeamValidator {
 			}
 		}
 
-		if (ruleTable.has('obtainableformes') && (dex.gen <= 7 || this.format.id.includes('nationaldex'))) {
+		if (ruleTable.has('obtainableformes')) {
+			const canMegaEvo = dex.gen <= 7 || ruleTable.has('standardnatdex');
 			if (item.megaEvolves === species.name) {
 				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
-				tierSpecies = dex.getSpecies(item.megaStone);
+				tierSpecies = dex.species.get(item.megaStone);
 			} else if (item.id === 'redorb' && species.id === 'groudon') {
-				tierSpecies = dex.getSpecies('Groudon-Primal');
+				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
-				tierSpecies = dex.getSpecies('Kyogre-Primal');
-			} else if (species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
-				tierSpecies = dex.getSpecies('Rayquaza-Mega');
+				tierSpecies = dex.species.get('Kyogre-Primal');
+			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
+				tierSpecies = dex.species.get('Rayquaza-Mega');
 			}
 		}
 
@@ -541,21 +565,21 @@ export class TeamValidator {
 			}
 		}
 
-		ability = dex.getAbility(set.ability);
+		ability = dex.abilities.get(set.ability);
 		problem = this.checkAbility(set, ability, setHas);
 		if (problem) problems.push(problem);
 
 		if (!set.nature || dex.gen <= 2) {
 			set.nature = '';
 		}
-		nature = dex.getNature(set.nature);
+		nature = dex.natures.get(set.nature);
 		problem = this.checkNature(set, nature, setHas);
 		if (problem) problems.push(problem);
 
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(val => val);
 		}
-		if (!set.moves || !set.moves.length) {
+		if (!set.moves?.length) {
 			problems.push(`${name} has no moves.`);
 			set.moves = [];
 		}
@@ -575,28 +599,20 @@ export class TeamValidator {
 			problems.push(...this.validateStats(set, species, setSources));
 		}
 
-		let lsetProblem = null;
 		for (const moveName of set.moves) {
 			if (!moveName) continue;
-			const move = dex.getMove(Utils.getString(moveName));
+			const move = dex.moves.get(Utils.getString(moveName));
 			if (!move.exists) return [`"${move.name}" is an invalid move.`];
 
 			problem = this.checkMove(set, move, setHas);
 			if (problem) problems.push(problem);
-
-			if (ruleTable.has('obtainablemoves')) {
-				const checkLearnset = (ruleTable.checkLearnset && ruleTable.checkLearnset[0] || this.checkLearnset);
-				lsetProblem = checkLearnset.call(this, move, outOfBattleSpecies, setSources, set);
-				if (lsetProblem) {
-					lsetProblem.moveName = move.name;
-					break;
-				}
-			}
 		}
 
-		const lsetProblems = this.reconcileLearnset(outOfBattleSpecies, setSources, lsetProblem, name);
-		if (lsetProblems) problems.push(...lsetProblems);
-		const learnsetSpecies = dex.getLearnsetData(outOfBattleSpecies.id);
+		if (ruleTable.has('obtainablemoves')) {
+			problems.push(...this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name));
+		}
+
+		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 
 		if (!setSources.sourcesBefore && setSources.sources.length) {
 			let legal = false;
@@ -631,9 +647,9 @@ export class TeamValidator {
 		} else if (ruleTable.has('obtainablemisc') && learnsetSpecies.eventOnly) {
 			const eventSpecies = !learnsetSpecies.eventData &&
 			outOfBattleSpecies.baseSpecies !== outOfBattleSpecies.name ?
-				dex.getSpecies(outOfBattleSpecies.baseSpecies) : outOfBattleSpecies;
+				dex.species.get(outOfBattleSpecies.baseSpecies) : outOfBattleSpecies;
 			const eventData = learnsetSpecies.eventData ||
-				dex.getLearnsetData(eventSpecies.id).eventData;
+				dex.species.getLearnsetData(eventSpecies.id).eventData;
 			if (!eventData) throw new Error(`Event-only species ${species.name} has no eventData table`);
 			let legal = false;
 			for (const event of eventData) {
@@ -673,11 +689,12 @@ export class TeamValidator {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
 		const requiresGen3Source = setSources.maxSourceGen() <= 3;
-		if (requiresGen3Source && dex.getAbility(set.ability).gen === 4 && !species.prevo && dex.gen <= 5) {
+		if (requiresGen3Source && dex.abilities.get(set.ability).gen === 4 && !species.prevo && dex.gen <= 5) {
 			// Ability Capsule allows this in Gen 6+
 			problems.push(`${name} has a Gen 4 ability and isn't evolved - it can't use moves from Gen 3.`);
 		}
-		if (setSources.maxSourceGen() < 5 && setSources.isHidden && (dex.gen <= 7 || format.mod === 'gen8dlc1')) {
+		const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
+		if (setSources.isHidden && !canUseAbilityPatch && setSources.maxSourceGen() < 5) {
 			problems.push(`${name} has a Hidden Ability - it can't use moves from before Gen 5.`);
 		}
 		if (
@@ -716,7 +733,7 @@ export class TeamValidator {
 
 		for (const [rule] of ruleTable) {
 			if ('!+-'.includes(rule.charAt(0))) continue;
-			const subformat = dex.getFormat(rule);
+			const subformat = dex.formats.get(rule);
 			if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateSet.call(this, set, format, setHas, teamHas) || []);
 			}
@@ -725,7 +742,7 @@ export class TeamValidator {
 			problems = problems.concat(format.onValidateSet.call(this, set, format, setHas, teamHas) || []);
 		}
 
-		const nameSpecies = dex.getSpecies(set.name);
+		const nameSpecies = dex.species.get(set.name);
 		if (nameSpecies.exists && nameSpecies.name.toLowerCase() === set.name.toLowerCase()) {
 			// nickname is the name of a species
 			if (nameSpecies.baseSpecies === species.baseSpecies) {
@@ -759,13 +776,10 @@ export class TeamValidator {
 
 		const problems = [];
 		const name = set.name || set.species;
-		const statTable = {
-			hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
-		};
 
 		const maxedIVs = Object.values(set.ivs).every(stat => stat === 31);
 		for (const moveName of set.moves) {
-			const move = dex.getMove(moveName);
+			const move = dex.moves.get(moveName);
 			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
 				if (!set.hpType) {
 					set.hpType = move.type;
@@ -776,15 +790,15 @@ export class TeamValidator {
 		}
 		if (set.hpType && maxedIVs && ruleTable.has('obtainablemisc')) {
 			if (dex.gen <= 2) {
-				const HPdvs = dex.getType(set.hpType).HPdvs;
+				const HPdvs = dex.types.get(set.hpType).HPdvs;
 				set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-				let statName: StatName;
+				let statName: StatID;
 				for (statName in HPdvs) {
 					set.ivs[statName] = HPdvs[statName]! * 2;
 				}
 				set.ivs.hp = -1;
 			} else if (!canBottleCap) {
-				set.ivs = TeamValidator.fillStats(dex.getType(set.hpType).HPivs, 31);
+				set.ivs = TeamValidator.fillStats(dex.types.get(set.hpType).HPivs, 31);
 			}
 		}
 
@@ -794,23 +808,23 @@ export class TeamValidator {
 		].includes(species.baseSpecies)) || [
 			'Manaphy', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala',
 		].includes(species.baseSpecies);
-		const diancieException = species.name === 'Diancie' && set.shiny;
+		const diancieException = species.name === 'Diancie' && !set.shiny;
 		const has3PerfectIVs = setSources.minSourceGen() >= 6 && isLegendary && !diancieException;
 
 		if (set.hpType === 'Fighting' && ruleTable.has('obtainablemisc')) {
 			if (has3PerfectIVs) {
 				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
-				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
+				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a Gen 6+ legendary.`);
 			}
 		}
 
-		if (has3PerfectIVs) {
+		if (has3PerfectIVs && ruleTable.has('obtainablemisc')) {
 			let perfectIVs = 0;
 			for (const stat in set.ivs) {
 				if (set.ivs[stat as 'hp'] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < 3) {
-				const reason = (this.minSourceGen === 6 ? ` and this format requires gen ${dex.gen} Pokémon` : ` in gen 6 or later`);
+				const reason = (this.minSourceGen === 6 ? ` and this format requires Gen ${dex.gen} Pokémon` : ` in Gen 6 or later`);
 				problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
 			}
 		}
@@ -881,7 +895,7 @@ export class TeamValidator {
 
 		for (const stat in set.evs) {
 			if (set.evs[stat as 'hp'] < 0) {
-				problems.push(`${name} has less than 0 ${allowAVs ? 'Awakening Values' : 'EVs'} in ${statTable[stat as 'hp']}.`);
+				problems.push(`${name} has less than 0 ${allowAVs ? 'Awakening Values' : 'EVs'} in ${Dex.stats.names[stat as 'hp']}.`);
 			}
 		}
 
@@ -891,13 +905,13 @@ export class TeamValidator {
 					problems.push(`${name} has Awakening Values but this format doesn't allow them.`);
 					break;
 				} else if (set.evs[stat as 'hp'] > 200) {
-					problems.push(`${name} has more than 200 Awakening Values in ${statTable[stat as 'hp']}.`);
+					problems.push(`${name} has more than 200 Awakening Values in ${Dex.stats.names[stat as 'hp']}.`);
 				}
 			}
 		} else { // EVs
 			for (const stat in set.evs) {
-				if (set.evs[stat as StatName] > 255) {
-					problems.push(`${name} has more than 255 EVs in ${statTable[stat as 'hp']}.`);
+				if (set.evs[stat as StatID] > 255) {
+					problems.push(`${name} has more than 255 EVs in ${Dex.stats.names[stat as 'hp']}.`);
 				}
 			}
 			if (dex.gen <= 2) {
@@ -978,8 +992,8 @@ export class TeamValidator {
 		if (source.charAt(1) === 'S') {
 			const splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
 			const dex = (this.dex.gen === 1 ? this.dex.mod('gen2') : this.dex);
-			eventSpecies = dex.getSpecies(splitSource[1]);
-			const eventLsetData = this.dex.getLearnsetData(eventSpecies.id);
+			eventSpecies = dex.species.get(splitSource[1]);
+			const eventLsetData = this.dex.species.getLearnsetData(eventSpecies.id);
 			eventData = eventLsetData.eventData?.[parseInt(splitSource[0])];
 			if (!eventData) {
 				throw new Error(`${eventSpecies.name} from ${species.name} doesn't have data for event ${source}`);
@@ -991,7 +1005,7 @@ export class TeamValidator {
 				generation: 2,
 				level: isMew ? 5 : isCelebi ? 30 : undefined,
 				perfectIVs: isMew || isCelebi ? 5 : 3,
-				isHidden: !!this.dex.mod('gen7').getSpecies(species.id).abilities['H'],
+				isHidden: !!this.dex.mod('gen7').species.get(species.id).abilities['H'],
 				shiny: isMew ? undefined : 1,
 				pokeball: 'pokeball',
 				from: 'Gen 1-2 Virtual Console transfer',
@@ -1009,7 +1023,7 @@ export class TeamValidator {
 				generation: 5,
 				level: 10,
 				from: 'Gen 5 Dream World',
-				isHidden: !!this.dex.mod('gen5').getSpecies(species.id).abilities['H'],
+				isHidden: !!this.dex.mod('gen5').species.get(species.id).abilities['H'],
 			};
 		} else if (source.charAt(1) === 'E') {
 			if (this.findEggMoveFathers(source, species, setSources)) {
@@ -1050,12 +1064,12 @@ export class TeamValidator {
 		// we'll test each possible father separately
 		let eggGroups = species.eggGroups;
 		if (species.id === 'nidoqueen' || species.id === 'nidorina') {
-			eggGroups = dex.getSpecies('nidoranf').eggGroups;
+			eggGroups = dex.species.get('nidoranf').eggGroups;
 		} else if (dex !== this.dex) {
 			// Gen 1 tradeback; grab the egg groups from Gen 2
-			eggGroups = dex.getSpecies(species.id).eggGroups;
+			eggGroups = dex.species.get(species.id).eggGroups;
 		}
-		if (eggGroups[0] === 'Undiscovered') eggGroups = dex.getSpecies(species.evos[0]).eggGroups;
+		if (eggGroups[0] === 'Undiscovered') eggGroups = dex.species.get(species.evos[0]).eggGroups;
 		if (eggGroups[0] === 'Undiscovered' || !eggGroups.length) {
 			throw new Error(`${species.name} has no egg groups for source ${source}`);
 		}
@@ -1063,9 +1077,7 @@ export class TeamValidator {
 		if (!getAll && eggGroups.includes('Field')) return true;
 
 		// try to find a father to inherit the egg move combination from
-		for (const fatherid in dex.data.Pokedex) {
-			const father = dex.getSpecies(fatherid);
-			const fatherLsetData = dex.getLearnsetData(fatherid as ID);
+		for (const father of dex.species.all()) {
 			// can't inherit from CAP pokemon
 			if (father.isNonstandard) continue;
 			// can't breed mons from future gens
@@ -1073,14 +1085,14 @@ export class TeamValidator {
 			// father must be male
 			if (father.gender === 'N' || father.gender === 'F') continue;
 			// can't inherit from dex entries with no learnsets
-			if (!fatherLsetData.exists || !fatherLsetData.learnset) continue;
+			if (!dex.species.getLearnset(father.id)) continue;
 			// something is clearly wrong if its only possible father is itself
 			// (exceptions: ExtremeSpeed Dragonite, Self-destruct Snorlax)
-			if (species.id === fatherid && !['dragonite', 'snorlax'].includes(fatherid)) continue;
+			if (species.id === father.id && !['dragonite', 'snorlax'].includes(father.id)) continue;
 			// don't check NFE Pokémon - their evolutions will know all their moves and more
 			// exception: Combee/Salandit, because their evos can't be fathers
 			if (father.evos.length) {
-				const evolvedFather = dex.getSpecies(father.evos[0]);
+				const evolvedFather = dex.species.get(father.evos[0]);
 				if (evolvedFather.gen <= eggGen && evolvedFather.gender !== 'F') continue;
 			}
 
@@ -1092,7 +1104,7 @@ export class TeamValidator {
 
 			// father found!
 			if (!getAll) return true;
-			fathers.push(fatherid as ID);
+			fathers.push(father.id);
 		}
 		if (!getAll) return false;
 		return (!fathers.length && eggGen < 6) ? null : fathers;
@@ -1108,24 +1120,25 @@ export class TeamValidator {
 	 * function (the answer is always yes).
 	 */
 	fatherCanLearn(species: Species, moves: ID[], eggGen: number) {
-		let lsetData = this.dex.getLearnsetData(species.id);
-		if (!lsetData.learnset) return false;
+		let learnset = this.dex.species.getLearnset(species.id);
+		if (!learnset) return false;
+
 		if (species.id === 'smeargle') return true;
+		const canBreedWithSmeargle = species.eggGroups.includes('Field');
+
 		let eggMoveCount = 0;
-		const noEggIncompatibility = species.eggGroups.includes('Field');
 		for (const move of moves) {
 			let curSpecies: Species | null = species;
 			/** 1 = can learn from egg, 2 = can learn unrestricted */
 			let canLearn: 0 | 1 | 2 = 0;
 
 			while (curSpecies) {
-				lsetData = this.dex.getLearnsetData(curSpecies.id);
-				if (lsetData.learnset && lsetData.learnset[move]) {
-					for (const moveSource of lsetData.learnset[move]) {
+				learnset = this.dex.species.getLearnset(curSpecies.id);
+				if (learnset && learnset[move]) {
+					for (const moveSource of learnset[move]) {
 						if (parseInt(moveSource.charAt(0)) > eggGen) continue;
-						if (!'ESDV'.includes(moveSource.charAt(1)) || (
-							moveSource.charAt(1) === 'E' && noEggIncompatibility
-						)) {
+						const canLearnFromSmeargle = moveSource.charAt(1) === 'E' && canBreedWithSmeargle;
+						if (!'ESDV'.includes(moveSource.charAt(1)) || canLearnFromSmeargle) {
 							canLearn = 2;
 							break;
 						} else {
@@ -1151,8 +1164,8 @@ export class TeamValidator {
 		const name = set.name || set.species;
 
 		const problems = [];
-		const item = dex.getItem(set.item);
-		const species = dex.getSpecies(set.species);
+		const item = dex.items.get(set.item);
+		const species = dex.species.get(set.species);
 
 		if (species.name === 'Necrozma-Ultra') {
 			const whichMoves = (set.moves.includes('sunsteelstrike') ? 1 : 0) +
@@ -1180,7 +1193,7 @@ export class TeamValidator {
 					problems.push(`${species.name} transforms in-battle with ${species.requiredItem}, please fix its item.`);
 				}
 			}
-			if (species.requiredMove && !set.moves.includes(toID(species.requiredMove))) {
+			if (species.requiredMove && !set.moves.map(toID).includes(toID(species.requiredMove))) {
 				// Meloetta-Pirouette, Rayquaza-Mega
 				problems.push(`${species.name} transforms in-battle with ${species.requiredMove}, please fix its moves.`);
 			}
@@ -1206,15 +1219,15 @@ export class TeamValidator {
 					}
 				} else {
 					// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
-					const baseSpecies = this.dex.getSpecies(species.changesFrom);
+					const baseSpecies = this.dex.species.get(species.changesFrom);
 					problems.push(
 						`${name} needs to hold ${species.requiredItems.join(' or ')} to be in its ${species.forme} forme.`,
-						`(It will revert to its ${baseSpecies.baseForme} forme if you remove the item or give it a different item.)`
+						`(It will revert to its ${baseSpecies.baseForme || 'base'} forme if you remove the item or give it a different item.)`
 					);
 				}
 			}
-			if (species.requiredMove && !set.moves.includes(toID(species.requiredMove))) {
-				const baseSpecies = this.dex.getSpecies(species.changesFrom);
+			if (species.requiredMove && !set.moves.map(toID).includes(toID(species.requiredMove))) {
+				const baseSpecies = this.dex.species.get(species.changesFrom);
 				problems.push(
 					`${name} needs to know the move ${species.requiredMove} to be in its ${species.forme} forme.`,
 					`(It will revert to its ${baseSpecies.baseForme} forme if it forgets the move.)`
@@ -1223,7 +1236,7 @@ export class TeamValidator {
 
 			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
 			// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
-			if (item.forcedForme && species.name === dex.getSpecies(item.forcedForme).baseSpecies) {
+			if (item.forcedForme && species.name === dex.species.get(item.forcedForme).baseSpecies) {
 				set.species = item.forcedForme;
 			}
 		}
@@ -1241,7 +1254,7 @@ export class TeamValidator {
 			}
 		}
 
-		if (species.name === 'Keldeo' && set.moves.includes('secretsword') && dex.gen >= 8) {
+		if (species.name === 'Keldeo' && set.moves.map(toID).includes('secretsword' as ID) && dex.gen >= 8) {
 			set.species = 'Keldeo-Resolute';
 		}
 
@@ -1249,7 +1262,7 @@ export class TeamValidator {
 			'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 		};
 		if (set.species in crowned) {
-			const ironHead = set.moves.indexOf('ironhead');
+			const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
 			if (ironHead >= 0) {
 				set.moves[ironHead] = crowned[set.species];
 			}
@@ -1314,7 +1327,7 @@ export class TeamValidator {
 		if (banReason === '') {
 			// don't allow nonstandard speciess when whitelisting standard base species
 			// i.e. unbanning Pichu doesn't mean allowing Pichu-Spiky-Eared outside of Gen 4
-			const baseSpecies = dex.getSpecies(species.baseSpecies);
+			const baseSpecies = dex.species.get(species.baseSpecies);
 			if (baseSpecies.isNonstandard === species.isNonstandard) {
 				return null;
 			}
@@ -1551,8 +1564,8 @@ export class TeamValidator {
 	validateEvent(set: PokemonSet, eventData: EventInfo, eventSpecies: Species, because = ``, from = `from an event`) {
 		const dex = this.dex;
 		let name = set.species;
-		const species = dex.getSpecies(set.species);
-		const maxSourceGen = this.ruleTable.has('allowtradeback') ? 2 : dex.gen;
+		const species = dex.species.get(set.species);
+		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(dex.gen + 1, 1, 8) : dex.gen;
 		if (!eventSpecies) eventSpecies = species;
 		if (set.name && set.species !== set.name && species.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
@@ -1602,15 +1615,12 @@ export class TeamValidator {
 			const canBottleCap = (dex.gen >= 7 && set.level === 100);
 
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-			const statTable = {
-				hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
-			};
-			let statName: StatName;
+			let statName: StatID;
 			for (statName in eventData.ivs) {
 				if (canBottleCap && set.ivs[statName] === 31) continue;
 				if (set.ivs[statName] !== eventData.ivs[statName]) {
 					if (fastReturn) return true;
-					problems.push(`${name} must have ${eventData.ivs[statName]} ${statTable[statName]} IVs${etc}.`);
+					problems.push(`${name} must have ${eventData.ivs[statName]} ${Dex.stats.names[statName]} IVs${etc}.`);
 				}
 			}
 
@@ -1632,7 +1642,7 @@ export class TeamValidator {
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
 			// Events can also have a certain amount of guaranteed perfect IVs
 			let perfectIVs = 0;
-			let statName: StatName;
+			let statName: StatID;
 			for (statName in set.ivs) {
 				if (set.ivs[statName] >= 31) perfectIVs++;
 			}
@@ -1658,21 +1668,21 @@ export class TeamValidator {
 			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
 				if (species.name === eventSpecies.name) {
 					// has not evolved, abilities must match
-					const requiredAbility = dex.getAbility(eventData.abilities[0]).name;
+					const requiredAbility = dex.abilities.get(eventData.abilities[0]).name;
 					if (set.ability !== requiredAbility) {
 						if (fastReturn) return true;
 						problems.push(`${name} must have ${requiredAbility}${etc}.`);
 					}
 				} else {
 					// has evolved
-					const ability1 = dex.getAbility(eventSpecies.abilities['1']);
+					const ability1 = dex.abilities.get(eventSpecies.abilities['1']);
 					if (ability1.gen && eventData.generation >= ability1.gen) {
 						// pokemon had 2 available abilities in the gen the event happened
 						// ability is restricted to a single ability slot
 						const requiredAbilitySlot = (toID(eventData.abilities[0]) === ability1.id ? 1 : 0);
-						const requiredAbility = dex.getAbility(species.abilities[requiredAbilitySlot] || species.abilities['0']).name;
+						const requiredAbility = dex.abilities.get(species.abilities[requiredAbilitySlot] || species.abilities['0']).name;
 						if (set.ability !== requiredAbility) {
-							const originalAbility = dex.getAbility(eventData.abilities[0]).name;
+							const originalAbility = dex.abilities.get(eventData.abilities[0]).name;
 							if (fastReturn) return true;
 							problems.push(`${name} must have ${requiredAbility}${because} from a ${originalAbility} ${eventSpecies.name} event.`);
 						}
@@ -1681,11 +1691,15 @@ export class TeamValidator {
 			}
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
-
-				if ((!isHidden && eventData.isHidden) ||
-					(isHidden && !eventData.isHidden && (dex.gen <= 7 || this.format.mod === 'gen8dlc1'))) {
+				if (!isHidden && eventData.isHidden) {
 					if (fastReturn) return true;
-					problems.push(`${name} must ${eventData.isHidden ? 'have' : 'not have'} its Hidden Ability${etc}.`);
+					problems.push(`${name} must have its Hidden Ability${etc}.`);
+				}
+
+				const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
+				if (isHidden && !eventData.isHidden && !canUseAbilityPatch) {
+					if (fastReturn) return true;
+					problems.push(`${name} must not have its Hidden Ability${etc}.`);
 				}
 			}
 		}
@@ -1697,34 +1711,27 @@ export class TeamValidator {
 		let minSourceGen = this.minSourceGen;
 		if (this.dex.gen >= 3 && minSourceGen < 3) minSourceGen = 3;
 		if (species) minSourceGen = Math.max(minSourceGen, species.gen);
-		const maxSourceGen = this.ruleTable.has('allowtradeback') ? 2 : this.dex.gen;
+		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(this.dex.gen + 1, 1, 8) : this.dex.gen;
 		return new PokemonSources(maxSourceGen, minSourceGen);
 	}
 
-	reconcileLearnset(
-		species: Species, setSources: PokemonSources, problem: {type: string, moveName: string, [key: string]: any} | null,
+	validateMoves(
+		species: Species, moves: string[], setSources: PokemonSources, set?: Partial<PokemonSet>,
 		name: string = species.name
 	) {
 		const dex = this.dex;
+		const ruleTable = this.ruleTable;
+
 		const problems = [];
 
-		if (problem) {
-			let problemString = `${name}'s move ${problem.moveName}`;
-			if (problem.type === 'incompatibleAbility') {
-				problemString += ` can only be learned in past gens without Hidden Abilities.`;
-			} else if (problem.type === 'incompatible') {
-				problemString = `${name}'s moves ${(setSources.restrictiveMoves || []).join(', ')} are incompatible.`;
-			} else if (problem.type === 'oversketched') {
-				const plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
-				problemString += ` can't be Sketched because it can only Sketch ${problem.maxSketches} move${plural}.`;
-			} else if (problem.type === 'pastgen') {
-				problemString += ` is not available in generation ${problem.gen}.`;
-			} else if (problem.type === 'invalid') {
-				problemString = `${name} can't learn ${problem.moveName}.`;
-			} else {
-				throw new Error(`Unrecognized problem ${JSON.stringify(problem)}`);
+		const checkCanLearn = (ruleTable.checkCanLearn && ruleTable.checkCanLearn[0] || this.checkCanLearn);
+		for (const moveName of moves) {
+			const move = dex.moves.get(moveName);
+			const problem = checkCanLearn.call(this, move, species, setSources, set);
+			if (problem) {
+				problems.push(`${name}${problem}`);
+				break;
 			}
-			problems.push(problemString);
 		}
 
 		if (setSources.size() && setSources.moveEvoCarryCount > 3) {
@@ -1744,14 +1751,15 @@ export class TeamValidator {
 				source => parseInt(source.charAt(0)) >= 5
 			);
 			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
-			if (!setSources.sourcesBefore && !setSources.sources.length && (dex.gen <= 7 || this.format.mod === 'gen8dlc1')) {
+			const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
+			if (!setSources.size() && !canUseAbilityPatch) {
 				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
 				return problems;
 			}
 		}
 
 		if (setSources.babyOnly && setSources.sources.length) {
-			const baby = dex.getSpecies(setSources.babyOnly);
+			const baby = dex.species.get(setSources.babyOnly);
 			const babyEvo = toID(baby.evos[0]);
 			setSources.sources = setSources.sources.filter(source => {
 				if (source.charAt(1) === 'S') {
@@ -1766,7 +1774,7 @@ export class TeamValidator {
 				}
 				return true;
 			});
-			if (!setSources.sources.length && !setSources.sourcesBefore) {
+			if (!setSources.size()) {
 				problems.push(`${name}'s event/egg moves are from an evolution, and are incompatible with its moves from ${baby.name}.`);
 			}
 		}
@@ -1774,48 +1782,47 @@ export class TeamValidator {
 			// there do theoretically exist evo/tradeback incompatibilities in
 			// gen 2, but those are very complicated to validate and should be
 			// handled separately anyway, so for now we just treat them all as
-			// wlegal (competitively relevant ones can be manually banned)
-			const baby = dex.getSpecies(setSources.babyOnly);
+			// legal (competitively relevant ones can be manually banned)
+			const baby = dex.species.get(setSources.babyOnly);
 			setSources.sources = setSources.sources.filter(source => {
 				if (baby.gen > parseInt(source.charAt(0)) && !source.startsWith('1ST')) return false;
 				if (baby.gen > 2 && source === '7V') return false;
 				return true;
 			});
 			if (setSources.sourcesBefore < baby.gen) setSources.sourcesBefore = 0;
-			if (!setSources.sources.length && !setSources.sourcesBefore) {
+			if (!setSources.size()) {
 				problems.push(`${name} has moves from before Gen ${baby.gen}, which are incompatible with its moves from ${baby.name}.`);
 			}
 		}
 
-		return problems.length ? problems : null;
+		return problems;
 	}
 
-	checkLearnset(
+	/** Returns null if you can learn the move, or a string explaining why you can't learn it */
+	checkCanLearn(
 		move: Move,
 		s: Species,
 		setSources = this.allSources(s),
-		set: AnyObject = {}
-	): {type: string, [key: string]: any} | null {
+		set: Partial<PokemonSet> = {}
+	): string | null {
 		const dex = this.dex;
-		if (!setSources.size()) throw new Error(`Bad sources passed to checkLearnset`);
+		if (!setSources.size()) throw new Error(`Bad sources passed to checkCanLearn`);
 
-		move = dex.getMove(move);
+		move = dex.moves.get(move);
 		const moveid = move.id;
-		const baseSpecies = dex.getSpecies(s);
+		const baseSpecies = dex.species.get(s);
 		let species: Species | null = baseSpecies;
 
 		const format = this.format;
-		const ruleTable = dex.getRuleTable(format);
+		const ruleTable = dex.formats.getRuleTable(format);
 		const alreadyChecked: {[k: string]: boolean} = {};
 		const level = set.level || 100;
 
-		let incompatibleAbility = false;
+		let cantLearnReason = null;
 
 		let limit1 = true;
 		let sketch = false;
 		let blockedHM = false;
-
-		let sometimesPossible = false; // is this move in the learnset at all?
 
 		let babyOnly = '';
 
@@ -1839,11 +1846,11 @@ export class TeamValidator {
 		while (species?.name && !alreadyChecked[species.id]) {
 			alreadyChecked[species.id] = true;
 			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
-			const lsetData = dex.getLearnsetData(species.id);
-			if (!lsetData.learnset) {
+			const learnset = dex.species.getLearnset(species.id);
+			if (!learnset) {
 				if ((species.changesFrom || species.baseSpecies) !== species.name) {
 					// forme without its own learnset
-					species = dex.getSpecies(species.changesFrom || species.baseSpecies);
+					species = dex.species.get(species.changesFrom || species.baseSpecies);
 					// warning: formes with their own learnset, like Wormadam, should NOT
 					// inherit from their base forme unless they're freely switchable
 					continue;
@@ -1853,7 +1860,7 @@ export class TeamValidator {
 
 					// Formats should replace the `Obtainable Moves` rule if they want to
 					// allow pokemon without learnsets.
-					return {type: 'invalid'};
+					return ` can't learn any moves at all.`;
 				}
 				// should never happen
 				throw new Error(`Species with no learnset data: ${species.id}`);
@@ -1865,26 +1872,28 @@ export class TeamValidator {
 				}
 			}
 
-			if (lsetData.learnset[moveid] || lsetData.learnset['sketch']) {
-				sometimesPossible = true;
-				let lset = lsetData.learnset[moveid];
-				if (moveid === 'sketch' || !lset || species.id === 'smeargle') {
-					// The logic behind this comes from the idea that a Pokemon that learns Sketch
-					// should be able to Sketch any move before transferring into Generation 8.
-					if (move.noSketch || move.isZ || move.isMax || (move.gen > 7 && !this.format.id.includes('nationaldex'))) {
-						return {type: 'invalid'};
-					}
-					lset = lsetData.learnset['sketch'];
-					sketch = true;
+			let sources = learnset[moveid];
+			if (moveid === 'sketch') {
+				sketch = true;
+			} else if (learnset['sketch']) {
+				if (move.noSketch || move.isZ || move.isMax) {
+					cantLearnReason = `can't be Sketched.`;
+				} else if (move.gen > 7 && !ruleTable.has('standardnatdex')) {
+					cantLearnReason = `can't be Sketched because it's a Gen 8 move and Sketch isn't available in Gen 8.`;
+				} else {
+					if (!sources) sketch = true;
+					sources = learnset['sketch'].concat(sources || []);
 				}
-				if (typeof lset === 'string') lset = [lset];
+			}
 
-				for (let learned of lset) {
+			if (typeof sources === 'string') sources = [sources];
+			if (sources) {
+				for (let learned of sources) {
 					// Every `learned` represents a single way a pokemon might
 					// learn a move. This can be handled one of several ways:
 					// `continue`
 					//   means we can't learn it
-					// `return false`
+					// `return null`
 					//   means we can learn it with no restrictions
 					//   (there's a way to just teach any pokemon of this species
 					//   the move in the current gen, like a TM.)
@@ -1897,26 +1906,44 @@ export class TeamValidator {
 					//   teach it, and transfer it to the current gen.)
 
 					const learnedGen = parseInt(learned.charAt(0));
-					if (learnedGen < this.minSourceGen) continue;
-					if (noFutureGen && learnedGen > dex.gen) continue;
+					if (learnedGen < this.minSourceGen) {
+						if (!cantLearnReason) {
+							cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
+						}
+						continue;
+					}
+					if (noFutureGen && learnedGen > dex.gen) {
+						if (!cantLearnReason) {
+							cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${dex.gen}.`;
+						}
+						continue;
+					}
 
 					// redundant
 					if (learnedGen <= moveSources.sourcesBefore) continue;
 
+					const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
 					if (
-						learnedGen < 7 && setSources.isHidden && (dex.gen <= 7 || format.mod === 'gen8dlc1') &&
-						!dex.mod('gen' + learnedGen).getSpecies(baseSpecies.name).abilities['H']
+						learnedGen < 7 && setSources.isHidden && !canUseAbilityPatch &&
+						!dex.mod('gen' + learnedGen).species.get(baseSpecies.name).abilities['H']
 					) {
-						// check if the Pokemon's hidden ability was available
-						incompatibleAbility = true;
+						cantLearnReason = `can only be learned in gens without Hidden Abilities.`;
 						continue;
 					}
 					if (!species.isNonstandard) {
 						// HMs can't be transferred
-						if (dex.gen >= 4 && learnedGen <= 3 &&
-							['cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive'].includes(moveid)) continue;
-						if (dex.gen >= 5 && learnedGen <= 4 &&
-							['cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb'].includes(moveid)) continue;
+						if (dex.gen >= 4 && learnedGen <= 3 && [
+							'cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive',
+						].includes(moveid)) {
+							cantLearnReason = `can't be transferred from Gen 3 to 4 because it's an HM move.`;
+							continue;
+						}
+						if (dex.gen >= 5 && learnedGen <= 4 && [
+							'cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb',
+						].includes(moveid)) {
+							cantLearnReason = `can't be transferred from Gen 3 to 4 because it's an HM move.`;
+							continue;
+						}
 						// Defog and Whirlpool can't be transferred together
 						if (dex.gen >= 5 && ['defog', 'whirlpool'].includes(moveid) && learnedGen <= 4) blockedHM = true;
 					}
@@ -1935,6 +1962,7 @@ export class TeamValidator {
 							// falls through to E check below
 						} else {
 							// this move is unavailable, skip it
+							cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
 							continue;
 						}
 					}
@@ -1995,8 +2023,8 @@ export class TeamValidator {
 				const glitchMoves = ['metronome', 'copycat', 'transform', 'mimic', 'assist'];
 				let getGlitch = false;
 				for (const i of glitchMoves) {
-					if (lsetData.learnset[i]) {
-						if (!(i === 'mimic' && dex.getAbility(set.ability).gen === 4 && !species.prevo)) {
+					if (learnset[i]) {
+						if (!(i === 'mimic' && dex.abilities.get(set.ability).gen === 4 && !species.prevo)) {
 							getGlitch = true;
 							break;
 						}
@@ -2026,14 +2054,14 @@ export class TeamValidator {
 		if (limit1 && sketch) {
 			// limit 1 sketch move
 			if (setSources.sketchMove) {
-				return {type: 'oversketched', maxSketches: 1};
+				return ` can't Sketch ${move.name} and ${setSources.sketchMove} because it can only Sketch 1 move.`;
 			}
-			setSources.sketchMove = moveid;
+			setSources.sketchMove = move.name;
 		}
 
 		if (blockedHM) {
 			// Limit one of Defog/Whirlpool to be transferred
-			if (setSources.hm) return {type: 'incompatible'};
+			if (setSources.hm) return ` can't simultaneously transfer Defog and Whirlpool from Gen 4 to 5.`;
 			setSources.hm = moveid;
 		}
 
@@ -2044,13 +2072,12 @@ export class TeamValidator {
 
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!moveSources.size()) {
-			if (this.minSourceGen > 1 && sometimesPossible) return {type: 'pastgen', gen: this.minSourceGen};
-			if (incompatibleAbility) return {type: 'incompatibleAbility'};
-			return {type: 'invalid'};
+			if (cantLearnReason) return `'s move ${move.name} ${cantLearnReason}`;
+			return ` can't learn ${move.name}.`;
 		}
 		setSources.intersectWith(moveSources);
 		if (!setSources.size()) {
-			return {type: 'incompatible'};
+			return `'s moves ${(setSources.restrictiveMoves || []).join(', ')} are incompatible.`;
 		}
 
 		if (babyOnly) setSources.babyOnly = babyOnly;
@@ -2064,20 +2091,20 @@ export class TeamValidator {
 		// base forme, but hardcode their learnsets into Rockruff-Dusk and
 		// Greninja-Ash
 		if ((species.baseSpecies === 'Gastrodon' || species.baseSpecies === 'Pumpkaboo') && species.forme) {
-			return this.dex.getSpecies(species.baseSpecies);
+			return this.dex.species.get(species.baseSpecies);
 		} else if (species.name === 'Lycanroc-Dusk') {
-			return this.dex.getSpecies('Rockruff-Dusk');
+			return this.dex.species.get('Rockruff-Dusk');
 		} else if (species.name === 'Greninja-Ash') {
 			return null;
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
 			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
-			species = this.dex.getSpecies(species.prevo);
+			species = this.dex.species.get(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
 		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
-			return this.dex.getSpecies(species.changesFrom);
+			return this.dex.species.get(species.changesFrom);
 		}
 		return null;
 	}
@@ -2085,7 +2112,7 @@ export class TeamValidator {
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {
 		const filledStats: StatsTable = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
 		if (stats) {
-			let statName: StatName;
+			let statName: StatID;
 			for (statName in filledStats) {
 				const stat = stats[statName];
 				if (typeof stat === 'number') filledStats[statName] = stat;

@@ -105,7 +105,7 @@ export class PRNG {
 	}
 
 	/**
-	 * This is how the game resolves speed ties.
+	 * A Fisher-Yates shuffle. This is how the game resolves speed ties.
 	 *
 	 * At least according to V4 in
 	 * https://github.com/smogon/pokemon-showdown/issues/1157#issuecomment-214454873

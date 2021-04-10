@@ -121,8 +121,7 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
-import {FS} from '../lib/fs';
-import {Utils} from '../lib/utils';
+import {FS, Utils} from '../lib';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
@@ -233,14 +232,14 @@ export abstract class MessageContext {
 	}
 	meansYes(text: string) {
 		switch (text.toLowerCase().trim()) {
-		case 'on': case 'enable': case 'yes': case 'true':
+		case 'on': case 'enable': case 'yes': case 'true': case 'allow':
 			return true;
 		}
 		return false;
 	}
 	meansNo(text: string) {
 		switch (text.toLowerCase().trim()) {
-		case 'off': case 'disable': case 'no': case 'false':
+		case 'off': case 'disable': case 'no': case 'false': case 'disallow': case '0':
 			return true;
 		}
 		return false;
@@ -276,6 +275,19 @@ export class PageContext extends MessageContext {
 			throw new Chat.ErrorMessage(`<h2>Permission denied.</h2>`);
 		}
 		return true;
+	}
+
+	privatelyCheckCan(permission: RoomPermission, target: User | null, room: Room): boolean;
+	privatelyCheckCan(permission: GlobalPermission, target?: User | null): boolean;
+	privatelyCheckCan(permission: string, target: User | null = null, room: Room | null = null) {
+		if (!this.user.can(permission as any, target, room as any)) {
+			this.pageDoesNotExist();
+		}
+		return true;
+	}
+
+	pageDoesNotExist(): never {
+		throw new Chat.ErrorMessage(`Page "${this.pageid}" not found`);
 	}
 
 	requireRoom(pageid?: string) {
@@ -334,15 +346,12 @@ export class PageContext extends MessageContext {
 			}
 			handler = handler[parts.shift() || 'default'];
 		}
-		if (typeof handler !== 'function') {
-			this.errorReply(`Page "${this.pageid}" not found`);
-			return;
-		}
 
 		this.args = parts;
 
 		let res;
 		try {
+			if (typeof handler !== 'function') this.pageDoesNotExist();
 			res = await handler.call(this, parts, this.user, this.connection);
 		} catch (err) {
 			if (err.name?.endsWith('ErrorMessage')) {
@@ -548,11 +557,12 @@ export class CommandContext extends MessageContext {
 			});
 		} else if (message && message !== true) {
 			this.sendChatMessage(message as string);
+			message = true;
 		}
 
 		this.update();
 
-		return message as boolean;
+		return message;
 	}
 
 	sendChatMessage(message: string) {
@@ -621,7 +631,7 @@ export class CommandContext extends MessageContext {
 	}
 
 	checkSlowchat(room: Room | null | undefined, user: User) {
-		if (!room || !room.settings.slowchat) return true;
+		if (!room?.settings.slowchat) return true;
 		if (user.can('show', null, room)) return true;
 		const lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
 		if (lastActiveSeconds < room.settings.slowchat) {
@@ -646,7 +656,7 @@ export class CommandContext extends MessageContext {
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
 	checkGameFilter() {
-		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return;
+		if (!this.room?.game || !this.room.game.onChatMessage) return;
 		return this.room.game.onChatMessage(this.message, this.user);
 	}
 	pmTransform(originalMessage: string) {
@@ -803,6 +813,20 @@ export class CommandContext extends MessageContext {
 		}
 		(this.room || Rooms.global).modlog(entry);
 	}
+	parseSpoiler(str: string) {
+		let privateReason = "";
+		if (!str) return {publicReason: "", privateReason};
+
+		let publicReason = str;
+		const targetLowercase = str.toLowerCase();
+		if (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:')) {
+			const proofIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
+			const bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			privateReason = `(PROOF: ${str.substr(proofIndex + bump, str.length).trim()}) `;
+			publicReason = str.substr(0, proofIndex).trim();
+		}
+		return {publicReason, privateReason};
+	}
 	roomlog(data: string) {
 		if (this.room) this.room.roomlog(data);
 	}
@@ -825,16 +849,16 @@ export class CommandContext extends MessageContext {
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
 	}
-	checkCan(permission: RoomPermission, target: User | null, room: Room): undefined;
-	checkCan(permission: GlobalPermission, target?: User | null): undefined;
-	checkCan(permission: string, target: User | null = null, room: Room | null = null) {
+	checkCan(permission: RoomPermission, target: User | ID | null, room: Room): undefined;
+	checkCan(permission: GlobalPermission, target?: User | ID | null): undefined;
+	checkCan(permission: string, target: User | ID | null = null, room: Room | null = null) {
 		if (!Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
 			throw new Chat.ErrorMessage(`${this.cmdToken}${this.fullCmd} - Access denied.`);
 		}
 	}
-	privatelyCheckCan(permission: RoomPermission, target: User | null, room: Room): boolean;
-	privatelyCheckCan(permission: GlobalPermission, target?: User | null): boolean;
-	privatelyCheckCan(permission: string, target: User | null = null, room: Room | null = null) {
+	privatelyCheckCan(permission: RoomPermission, target: User | ID | null, room: Room): boolean;
+	privatelyCheckCan(permission: GlobalPermission, target?: User | ID | null): boolean;
+	privatelyCheckCan(permission: string, target: User | ID | null = null, room: Room | null = null) {
 		this.handler!.isPrivate = true;
 		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
 			return true;
@@ -1079,7 +1103,7 @@ export class CommandContext extends MessageContext {
 		return message;
 	}
 	checkPMHTML(targetUser: User | null) {
-		if (!targetUser || !targetUser.connected) {
+		if (!targetUser?.connected) {
 			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
 		}
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
@@ -1163,7 +1187,7 @@ export class CommandContext extends MessageContext {
 				// autoclose tags
 				'p', 'li', 'dt', 'dd', 'option', 'tr', 'th', 'td', 'thead', 'tbody', 'tfoot', 'colgroup',
 				// PS custom element
-				'psicon',
+				'psicon', 'youtube',
 			];
 			const stack = [];
 			for (const tag of tags) {
@@ -1303,6 +1327,18 @@ export class CommandContext extends MessageContext {
 		}
 		return game;
 	}
+	requireMinorActivity<T extends MinorActivity>(constructor: new (...args: any[]) => T) {
+		const room = this.requireRoom();
+		if (!room.minorActivity) {
+			throw new Chat.ErrorMessage(`This command requires a ${constructor.name} (this room has no minor activity).`);
+		}
+		const game = room.getMinorActivity(constructor);
+		// must be a different game
+		if (!game) {
+			throw new Chat.ErrorMessage(`This command requires a ${constructor.name} (this minor activity is a(n) ${room.minorActivity.name}).`);
+		}
+		return game;
+	}
 	commandDoesNotExist(): never {
 		if (this.cmdToken === '!') {
 			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
@@ -1310,6 +1346,11 @@ export class CommandContext extends MessageContext {
 		throw new Chat.ErrorMessage(
 			`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
 		);
+	}
+	refreshPage(pageid: string) {
+		if (this.connection.openPages?.has(pageid)) {
+			this.parse(`/join view-${pageid}`);
+		}
 	}
 }
 
@@ -1337,6 +1378,7 @@ export const Chat = new class {
 	basePages!: PageTable;
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
+	readonly renameHandlers: Rooms.RenameHandler[] = [];
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
 	/** Will be empty except during hotpatch */
@@ -1600,11 +1642,18 @@ export const Chat = new class {
 	parse(message: string, room: Room | null | undefined, user: User, connection: Connection) {
 		Chat.loadPlugins();
 
-		const initialRoomlogLength = room?.log.log.length;
+		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({message, room, user, connection});
+		const start = Date.now();
 		const result = context.parse();
-
-		if (room && room.log.log.length !== initialRoomlogLength) {
+		if (typeof result?.then === 'function') {
+			void result.then(() => {
+				this.logSlowMessage(start, context);
+			});
+		} else {
+			this.logSlowMessage(start, context);
+		}
+		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
 			for (const [handler, numMessages] of room.nthMessageHandlers) {
 				if (room.messagesSent % numMessages === 0) handler(room, message);
@@ -1612,6 +1661,19 @@ export const Chat = new class {
 		}
 
 		return result;
+	}
+	logSlowMessage(start: number, context: CommandContext) {
+		const timeUsed = Date.now() - start;
+		if (timeUsed < 1000) return;
+		if (context.cmd === 'search' || context.cmd === 'savereplay') return;
+
+		const logMessage = (
+			`[slow command] ${timeUsed}ms - ${context.user.name} (${context.connection.ip}): ` +
+			`<${context.room ? context.room.roomid : context.pmTarget ? `PM:${context.pmTarget?.name}` : 'CMD'}> ` +
+			`${context.message.replace(/\n/ig, ' ')}`
+		);
+
+		Monitor.slow(logMessage);
 	}
 	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
@@ -1670,7 +1732,6 @@ export const Chat = new class {
 					if (baseEntry.isPrivate) entry.isPrivate = baseEntry.isPrivate;
 				}
 			}
-
 			// This is usually the same as `entry.name`, but some weirdness like
 			// `commands.a = b` could screw it up. This should make it consistent.
 			entry.cmd = cmd;
@@ -1696,6 +1757,7 @@ export const Chat = new class {
 		if (plugin.punishmentfilter) Chat.punishmentfilters.push(plugin.punishmentfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
+		if (plugin.onRenameRoom) Chat.renameHandlers.push(plugin.onRenameRoom);
 		Chat.plugins[name] = plugin;
 	}
 	loadPlugins(oldPlugins?: {[k: string]: ChatPlugin}) {
@@ -1752,11 +1814,18 @@ export const Chat = new class {
 			this.loadPlugin(`chat-plugins/${file}`);
 		}
 		Chat.oldPlugins = {};
-		Utils.sortBy(Chat.filters, filter => filter.priority || 0);
+		// lower priority should run later
+		Utils.sortBy(Chat.filters, filter => -(filter.priority || 0));
 	}
 	destroy() {
 		for (const handler of Chat.destroyHandlers) {
 			handler();
+		}
+	}
+
+	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
+		for (const handler of Chat.renameHandlers) {
+			handler(oldID, newID, room);
 		}
 	}
 
@@ -2048,14 +2117,14 @@ export const Chat = new class {
 	 */
 	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
 		const params = str.slice(+str.startsWith('\n')).split('\n');
-		const output = [];
+		const output: string[] = [];
 		for (const param of params) {
 			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
-			output.push(Utils.escapeHTML(param));
+			output.push(Utils[isCode ? 'escapeHTMLForceWrap' : 'escapeHTML'](param));
 		}
 
 		if (output.length > cutoff) {
-			return `<details class="readmore${isCode ? ` code` : ``}" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${
+			return `<details class="readmore${isCode ? ` code" style="white-space: pre-wrap; display: table; tab-size: 3` : ``}"><summary>${
 				output.slice(0, cutoff).join('<br />')
 			}</summary>${
 				output.slice(cutoff).join('<br />')
@@ -2086,7 +2155,7 @@ export const Chat = new class {
 		buf += '</span> ';
 		if (gen >= 3) {
 			buf += '<span style="float:left;min-height:26px">';
-			if (species.abilities['1'] && (gen >= 4 || Dex.getAbility(species.abilities['1']).gen === 3)) {
+			if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
 				buf += '<span class="col twoabilitycol">' + species.abilities['0'] + '<br />' + species.abilities['1'] + '</span>';
 			} else {
 				buf += '<span class="col abilitycol">' + species.abilities['0'] + '</span>';

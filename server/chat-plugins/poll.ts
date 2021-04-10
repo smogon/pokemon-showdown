@@ -2,7 +2,7 @@
  * Poll chat plugin
  * By bumbadadabum and Zarel.
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 const MINUTES = 60000;
 
@@ -11,7 +11,7 @@ interface PollAnswer {
 }
 
 export interface PollOptions {
-	pollNumber?: number;
+	activityNumber?: number;
 	question: string;
 	supportHTML: boolean;
 	multiPoll: boolean;
@@ -26,76 +26,14 @@ export interface PollOptions {
 }
 
 export interface PollData extends PollOptions {
-	readonly activityId: 'poll';
+	readonly activityid: 'poll';
 }
 
-export abstract class MinorActivity {
-	abstract readonly activityId: string;
-	room: Room;
-
-	timeout!: NodeJS.Timer | null;
-	timeoutMins!: number;
-	timerEnd!: number;
-
-	constructor(room: Room) {
-		this.room = room;
-	}
-	abstract save(): void;
-	setTimer(options: {timeoutMins?: number, timerEnd?: number}) {
-		if (this.timeout) clearTimeout(this.timeout);
-
-		this.timeoutMins = options.timeoutMins || 0;
-		if (!this.timeoutMins) {
-			this.timerEnd = 0;
-			this.timeout = null;
-			return;
-		}
-
-		const now = Date.now();
-		this.timerEnd = options.timerEnd || now + this.timeoutMins * MINUTES;
-		this.timeout = setTimeout(() => {
-			const room = this.room;
-			if (!room) return; // someone forgot to `.destroy()`
-
-			MinorActivity.end(room);
-		}, this.timerEnd - now);
-		this.save();
-	}
-	static end(room: Room) {
-		if (room.minorActivity) room.minorActivity.end();
-		if (room.minorActivityQueue?.length) {
-			const pollData = room.minorActivityQueue.shift()!;
-			room.settings.minorActivityQueue!.shift();
-			if (!room.minorActivityQueue?.length) room.minorActivityQueue = null;
-			if (!room.settings.minorActivityQueue?.length) delete room.settings.minorActivityQueue;
-
-			if (pollData.activityId !== 'poll') throw new Error("unexpected value in queue");
-
-			room.add(`|c|&|/log ${room.tr`The queued poll was started.`}`).update();
-			room.modlog({
-				action: 'POLL',
-				note: '(queued)',
-			});
-
-			room.minorActivity = new Poll(room, pollData);
-			room.minorActivity.save();
-			room.minorActivity.display();
-		}
-	}
-	endTimer() {
-		if (!this.timeout) return false;
-		clearTimeout(this.timeout);
-		this.timeoutMins = 0;
-		this.timerEnd = 0;
-		return true;
-	}
-}
-
-export class Poll extends MinorActivity {
-	readonly activityId: 'poll';
-	pollNumber: number;
+export class Poll extends Rooms.MinorActivity {
+	readonly activityid = 'poll' as ID;
+	name = "Poll";
+	activityNumber: number;
 	question: string;
-	supportHTML: boolean;
 	multiPoll: boolean;
 	pendingVotes: {[userid: string]: number[]};
 	voters: {[k: string]: number[]};
@@ -105,8 +43,7 @@ export class Poll extends MinorActivity {
 	answers: Map<number, PollAnswer>;
 	constructor(room: Room, options: PollOptions) {
 		super(room);
-		this.activityId = 'poll';
-		this.pollNumber = options.pollNumber || room.nextGameNumber();
+		this.activityNumber = options.activityNumber || room.nextGameNumber();
 		this.question = options.question;
 		this.supportHTML = options.supportHTML;
 		this.multiPoll = options.multiPoll;
@@ -135,15 +72,19 @@ export class Poll extends MinorActivity {
 		if (!this.pendingVotes[userid]) {
 			this.pendingVotes[userid] = [];
 		}
+		if (this.pendingVotes[userid].includes(option)) {
+			throw new Chat.ErrorMessage(this.room.tr`That option is already selected.`);
+		}
 		this.pendingVotes[userid].push(option);
 		this.updateFor(user);
 		this.save();
 	}
+
 	deselect(user: User, option: number) {
 		const userid = user.id;
 		const pendingVote = this.pendingVotes[userid];
-		if (!pendingVote || !pendingVote.includes(option)) {
-			return user.sendTo(this.room, this.room.tr`That option is not selected.`);
+		if (!pendingVote?.includes(option)) {
+			throw new Chat.ErrorMessage(this.room.tr`That option is not selected.`);
 		}
 		pendingVote.splice(pendingVote.indexOf(option), 1);
 		this.updateFor(user);
@@ -156,10 +97,10 @@ export class Poll extends MinorActivity {
 
 		if (userid in this.voters || ip in this.voterIps) {
 			delete this.pendingVotes[userid];
-			return user.sendTo(this.room, this.room.tr`You have already voted for this poll.`);
+			throw new Chat.ErrorMessage(this.room.tr`You have already voted for this poll.`);
 		}
 		const selected = this.pendingVotes[userid];
-		if (!selected) return user.sendTo(this.room, this.room.tr`No options selected.`);
+		if (!selected) throw new Chat.ErrorMessage(this.room.tr`No options selected.`);
 
 		this.voters[userid] = selected;
 		this.voterIps[ip] = selected;
@@ -222,12 +163,15 @@ export class Poll extends MinorActivity {
 		return output;
 	}
 
-	static generateResults(options: PollData, room: Room, ended = false, choice: number[] | null = null) {
+	static generateResults(
+		options: MinorActivityData, room: Room,
+		ended = false, choice: number[] | null = null
+	) {
 		const iconText = options.isQuiz ?
 			`<i class="fa fa-question"></i> ${room.tr`Quiz`}` :
 			`<i class="fa fa-bar-chart"></i> ${room.tr`Poll`}`;
-		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> <small>${options.totalVotes} ${room.tr`votes`}</small>`;
-		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup(options.question)}</strong></p>`;
+		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? ' ' + room.tr`ended` : ""}</span> <small>${options.totalVotes || 0} ${room.tr`votes`}</small>`;
+		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup(options.question, options.supportHTML)}</strong></p>`;
 		const answers = Poll.getAnswers(options.answers);
 
 		// indigo, blue, green
@@ -237,8 +181,8 @@ export class Poll extends MinorActivity {
 			const chosen = choice?.includes(num);
 			const percentage = Math.round((answer.votes * 100) / (options.totalVotes || 1));
 			const answerMarkup = options.isQuiz ?
-				`<span style="color:${answer.correct ? 'green' : 'red'};">${answer.correct ? '' : '<s>'}${this.getAnswerMarkup(answer)}${answer.correct ? '' : '</s>'}</span>` :
-				this.getAnswerMarkup(answer);
+				`<span style="color:${answer.correct ? 'green' : 'red'};">${answer.correct ? '' : '<s>'}${this.getAnswerMarkup(answer, options.supportHTML)}${answer.correct ? '' : '</s>'}</span>` :
+				this.getAnswerMarkup(answer, options.supportHTML);
 			output += `<div style="margin-top: 3px">${num}. <strong>${chosen ? '<em>' : ''}${answerMarkup}${chosen ? '</em>' : ''}</strong> <small>(${answer.votes} vote${answer.votes === 1 ? '' : 's'})</small><br /><span style="font-size:7pt;background:${colors[num % 3]};padding-right:${percentage * 3}px"></span><small>&nbsp;${percentage}%</small></div>`;
 		}
 		if (!choice && !ended) {
@@ -271,10 +215,10 @@ export class Poll extends MinorActivity {
 				if (selection.length) {
 					user.sendTo(
 						this.room,
-						`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`
+						`|uhtmlchange|poll${this.activityNumber}|${Poll.generateResults(state, this.room, false, selection)}`
 					);
 				} else {
-					user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${blankvote}`);
+					user.sendTo(this.room, `|uhtmlchange|poll${this.activityNumber}|${blankvote}`);
 				}
 			}
 		}
@@ -287,10 +231,10 @@ export class Poll extends MinorActivity {
 		if (selection) {
 			recipient.sendTo(
 				this.room,
-				`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`
+				`|uhtmlchange|poll${this.activityNumber}|${Poll.generateResults(state, this.room, false, selection)}`
 			);
 		} else {
-			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateVotes(user)}`);
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.activityNumber}|${this.generateVotes(user)}`);
 		}
 	}
 
@@ -299,10 +243,10 @@ export class Poll extends MinorActivity {
 		if (user.id in this.voters) {
 			user.sendTo(
 				this.room,
-				`|uhtmlchange|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, this.voters[user.id])}`
+				`|uhtmlchange|poll${this.activityNumber}|${Poll.generateResults(state, this.room, false, this.voters[user.id])}`
 			);
 		} else {
-			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateVotes(user)}`);
+			user.sendTo(this.room, `|uhtmlchange|poll${this.activityNumber}|${this.generateVotes(user)}`);
 		}
 	}
 
@@ -316,15 +260,16 @@ export class Poll extends MinorActivity {
 			const selection = this.voters[thisUser.id] || this.voterIps[thisUser.latestIp];
 			if (selection) {
 				if (selection.length) {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, selection)}`);
+					thisUser.sendTo(this.room,
+						`|uhtml|poll${this.activityNumber}|${Poll.generateResults(state, this.room, false, selection)}`);
 				} else {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${blankvote}`);
+					thisUser.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${blankvote}`);
 				}
 			} else {
 				if (this.multiPoll && thisUser.id in this.pendingVotes) {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateVotes(thisUser)}`);
+					thisUser.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${this.generateVotes(thisUser)}`);
 				} else {
-					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${blankquestions}`);
+					thisUser.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${blankquestions}`);
 				}
 			}
 		}
@@ -336,14 +281,14 @@ export class Poll extends MinorActivity {
 		if (user.id in this.voters) {
 			recipient.sendTo(
 				this.room,
-				`|uhtml|poll${this.pollNumber}|${Poll.generateResults(state, this.room, false, this.voters[user.id])}`
+				`|uhtml|poll${this.activityNumber}|${Poll.generateResults(state, this.room, false, this.voters[user.id])}`
 			);
 		} else if (user.latestIp in this.voterIps && !Config.noipchecks) {
-			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${Poll.generateResults(
+			recipient.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${Poll.generateResults(
 				state, this.room, false, this.voterIps[user.latestIp]
 			)}`);
 		} else {
-			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateVotes(user)}`);
+			recipient.sendTo(this.room, `|uhtml|poll${this.activityNumber}|${this.generateVotes(user)}`);
 		}
 	}
 
@@ -351,19 +296,23 @@ export class Poll extends MinorActivity {
 		this.displayTo(user, connection);
 	}
 
-	end() {
-		const results = Poll.generateResults(this.toJSON(), this.room, true);
-		this.room.send(`|uhtmlchange|poll${this.pollNumber}|<div class="infobox">(${this.room.tr`The poll has ended &ndash; scroll down to see the results`})</div>`);
-		this.room.add(`|html|${results}`).update();
-		this.endTimer();
-		this.room.minorActivity = null;
-		delete this.room.settings.minorActivity;
-		this.room.saveSettings();
+	onRename(user: User, oldid: ID, joining: boolean) {
+		if (user.id in this.voters) {
+			this.updateFor(user);
+		}
 	}
+
+	destroy() {
+		const results = Poll.generateResults(this.toJSON(), this.room, true);
+		this.room.send(`|uhtmlchange|poll${this.activityNumber}|<div class="infobox">(${this.room.tr`The poll has ended &ndash; scroll down to see the results`})</div>`);
+		this.room.add(`|html|${results}`).update();
+		this.room.setMinorActivity(null);
+	}
+
 	toJSON(): PollData {
 		return {
-			activityId: 'poll',
-			pollNumber: this.pollNumber,
+			activityid: 'poll',
+			activityNumber: this.activityNumber,
 			question: this.question,
 			supportHTML: this.supportHTML,
 			multiPoll: this.multiPoll,
@@ -377,10 +326,12 @@ export class Poll extends MinorActivity {
 			answers: [...this.answers.values()],
 		};
 	}
+
 	save() {
 		this.room.settings.minorActivity = this.toJSON();
 		this.room.saveSettings();
 	}
+
 	static getAnswers(answers: string[] | PollAnswer[]) {
 		const out = new Map<number, PollAnswer>();
 		if (answers.length && typeof answers[0] === 'string') {
@@ -398,9 +349,6 @@ export class Poll extends MinorActivity {
 		}
 		return out;
 	}
-	destroy() {
-		this.endTimer();
-	}
 }
 
 export const commands: ChatCommands = {
@@ -411,6 +359,7 @@ export const commands: ChatCommands = {
 		htmlcreatemulti: 'new',
 		queue: 'new',
 		queuehtml: 'new',
+		htmlqueue: 'new',
 		queuemulti: 'new',
 		htmlqueuemulti: 'new',
 		new(target, room, user, connection, cmd, message) {
@@ -460,28 +409,24 @@ export const commands: ChatCommands = {
 			}
 
 			if (room.minorActivity) {
-				if (!room.minorActivityQueue) room.minorActivityQueue = [];
-				room.minorActivityQueue.push({
-					question: params[0], supportHTML, answers: questions, multiPoll, activityId: 'poll',
+				room.queueMinorActivity({
+					question: params[0], answers: questions, multiPoll, supportHTML, activityid: 'poll',
 				});
-				room.settings.minorActivityQueue = room.minorActivityQueue;
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(room.tr`${user.name} queued a poll.`);
 			}
-			room.minorActivity = new Poll(room, {
+			room.setMinorActivity(new Poll(room, {
 				question: params[0], supportHTML, answers: questions, multiPoll,
-			});
-			room.minorActivity.display();
-			room.minorActivity.save();
+			}));
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('POLL');
-			return this.addModAction(room.tr`A poll was started by ${user.name}.`);
+			this.addModAction(room.tr`A poll was started by ${user.name}.`);
 		},
 		newhelp: [
 			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
 			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
-			`To queue a poll, use [queue], [queuemulti], or [htmlqueuemulti].`,
+			`To queue a poll, use [queue], [queuemulti], [queuehtml], or [htmlqueuemulti].`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		],
 
@@ -492,45 +437,47 @@ export const commands: ChatCommands = {
 		},
 		viewqueuehelp: [`/viewqueue - view the queue of polls in the room. Requires: % @ # &`],
 
-		clearqueue: 'deletequeue',
-		deletequeue(target, room, user, connection, cmd) {
+		deletequeue(target, room, user) {
 			room = this.requireRoom();
+			if (!target) return this.parse('/help deletequeue');
+
 			this.checkCan('mute', null, room);
-			if (!room.minorActivityQueue) {
+			const queue = room.getMinorActivityQueue();
+			if (!queue) {
 				return this.errorReply(this.tr`The queue is already empty.`);
 			}
-			if (cmd === 'deletequeue' && room.minorActivityQueue.length !== 1 && !target) {
-				return this.parse('/help deletequeue');
+			const slot = parseInt(target);
+			if (isNaN(slot)) {
+				return this.errorReply(this.tr`Can't delete poll at slot ${target} - "${target}" is not a number.`);
 			}
-			if (!target) {
-				room.minorActivityQueue = null;
-				this.modlog('CLEARQUEUE');
-				this.sendReply(this.tr`Cleared poll queue.`);
-			} else {
-				const [slotString, roomid, update] = target.split(',');
-				const slot = parseInt(slotString);
-				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
-				if (!curRoom) return this.errorReply(this.tr`Room "${roomid}" not found.`);
-				if (isNaN(slot)) {
-					return this.errorReply(this.tr`Can't delete poll at slot ${slotString} - "${slotString}" is not a number.`);
-				}
-				if (!room.minorActivityQueue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
+			if (!queue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
 
-				curRoom.minorActivityQueue!.splice(slot - 1, 1);
-				if (!curRoom.minorActivityQueue?.length) curRoom.minorActivityQueue = null;
+			room.clearMinorActivityQueue(slot - 1);
 
-				curRoom.modlog({
-					action: 'DELETEQUEUE',
-					loggedBy: user.id,
-					note: slot.toString(),
-				});
-				curRoom.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
-				curRoom.update();
-				if (update) this.parse(`/j view-pollqueue-${curRoom}`);
-			}
+			room.modlog({
+				action: 'DELETEQUEUE',
+				loggedBy: user.id,
+				note: slot.toString(),
+			});
+			room.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
+			room.update();
+			this.refreshPage(`pollqueue-${room.roomid}`);
 		},
 		deletequeuehelp: [
 			`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # &`,
+		],
+		clearqueue(target, room, user, connection, cmd) {
+			room = this.requireRoom();
+			this.checkCan('mute', null, room);
+			const queue = room.getMinorActivityQueue();
+			if (!queue) {
+				return this.errorReply(this.tr`The queue is already empty.`);
+			}
+			room.clearMinorActivityQueue();
+			this.modlog('CLEARQUEUE');
+			this.sendReply(this.tr`Cleared poll queue.`);
+		},
+		clearqueuehelp: [
 			`/poll clearqueue - deletes the queue of polls. Requires: % @ # &`,
 		],
 
@@ -538,11 +485,8 @@ export const commands: ChatCommands = {
 		vote: 'select',
 		select(target, room, user, connection, cmd) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
+			const poll = this.requireMinorActivity(Poll);
 			if (!target) return this.parse('/help poll vote');
-			const poll = room.minorActivity;
 
 			const parsed = parseInt(target);
 			if (isNaN(parsed)) return this.errorReply(this.tr`To vote, specify the number of the option.`);
@@ -562,10 +506,7 @@ export const commands: ChatCommands = {
 
 		submit(target, room, user) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
-			const poll = room.minorActivity;
+			const poll = this.requireMinorActivity(Poll);
 
 			poll.submit(user);
 		},
@@ -573,10 +514,7 @@ export const commands: ChatCommands = {
 
 		timer(target, room, user) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
-			const poll = room.minorActivity;
+			const poll = this.requireMinorActivity(Poll);
 
 			if (target) {
 				this.checkCan('minigame', null, room);
@@ -595,7 +533,7 @@ export const commands: ChatCommands = {
 			} else {
 				if (!this.runBroadcast()) return;
 				if (poll.timeout) {
-					return this.sendReply(this.tr`The poll timer is on and will end in ${Chat.toDurationString(poll.timeoutMins)}.`);
+					return this.sendReply(this.tr`The poll timer is on and will end in ${Chat.toDurationString(poll.timeoutMins * MINUTES)}.`);
 				} else {
 					return this.sendReply(this.tr`The poll timer is off.`);
 				}
@@ -608,12 +546,9 @@ export const commands: ChatCommands = {
 
 		results(target, room, user) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
-			const poll = room.minorActivity;
+			const poll = this.requireMinorActivity(Poll);
 
-			return poll.blankvote(user);
+			poll.blankvote(user);
 		},
 		resultshelp: [
 			`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
@@ -625,13 +560,10 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
-
+			const poll = this.requireMinorActivity(Poll);
 			this.modlog('POLL END');
 			this.privateModAction(room.tr`The poll was ended by ${user.name}.`);
-			MinorActivity.end(room);
+			poll.end(room, Poll);
 		},
 		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # &`],
 
@@ -639,10 +571,7 @@ export const commands: ChatCommands = {
 		display: '',
 		''(target, room, user, connection) {
 			room = this.requireRoom();
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
-				return this.errorReply(this.tr`There is no poll running in this room.`);
-			}
-			const poll = room.minorActivity;
+			const poll = this.requireMinorActivity(Poll);
 			if (!this.runBroadcast()) return;
 			room.update();
 
@@ -682,19 +611,20 @@ export const pages: PageTable = {
 		let buf = `<div class="pad"><strong>${this.tr`Queued polls:`}</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button><br />`;
-		if (!room.minorActivityQueue?.length) {
+		const queue = room.getMinorActivityQueue()?.filter(activity => activity.activityid === 'poll');
+		if (!queue) {
 			buf += `<hr /><strong>${this.tr`No polls queued.`}</strong></div>`;
 			return buf;
 		}
-		for (const [i, poll] of room.minorActivityQueue.entries()) {
+		for (const [i, poll] of queue.entries()) {
 			const number = i + 1; // for translation convienence
 			const button = (
 				`<strong>${this.tr`#${number} in queue`} </strong>` +
-				`<button class="button" name="send" value="/poll deletequeue ${i + 1},${room.roomid},updatelist">` +
+				`<button class="button" name="send" value="/msgroom ${room.roomid},/poll deletequeue ${i + 1}">` +
 				`(${this.tr`delete`})</button>`
 			);
 			buf += `<hr />`;
-			buf += `${button}<br />${Poll.generateResults(poll, room, true)}`;
+			buf += `${button}<br />${Poll.generateResults(poll, room, false)}`;
 		}
 		buf += `<hr />`;
 		return buf;
@@ -707,8 +637,39 @@ process.nextTick(() => {
 
 // should handle restarts and also hotpatches
 for (const room of Rooms.rooms.values()) {
-	if (room.settings.minorActivity?.activityId === 'poll') {
-		room.minorActivity?.destroy();
-		room.minorActivity = new Poll(room, room.settings.minorActivity);
+	if (room.getMinorActivityQueue(true)) {
+		for (const poll of room.getMinorActivityQueue(true)!) {
+			if (!poll.activityid) {
+				// @ts-ignore
+				poll.activityid = poll.activityId;
+				// @ts-ignore
+				delete poll.activityId;
+			}
+			if (!poll.activityNumber) {
+				// @ts-ignore
+				poll.activityNumber = poll.pollNumber;
+				// @ts-ignore
+				delete poll.pollNumber;
+			}
+			room.saveSettings();
+		}
+	}
+	if (room.settings.minorActivity) {
+		if (!room.settings.minorActivity.activityid) {
+			// @ts-ignore
+			room.settings.minorActivity.activityid = room.settings.minorActivity.activityId;
+			// @ts-ignore
+			delete room.settings.minorActivity.activityId;
+		}
+		if (typeof room.settings.minorActivity.activityNumber !== 'number') {
+			// @ts-ignore
+			room.settings.minorActivity.activityNumber = room.settings.minorActivity.pollNumber ||
+				// @ts-ignore
+				room.settings.minorActivity.announcementNumber;
+		}
+		room.saveSettings();
+	}
+	if (room.settings.minorActivity?.activityid === 'poll') {
+		room.setMinorActivity(new Poll(room, room.settings.minorActivity), true);
 	}
 }

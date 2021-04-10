@@ -176,8 +176,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		onHit(target) {
-			const stats: BoostName[] = [];
-			let stat: BoostName;
+			const stats: BoostID[] = [];
+			let stat: BoostID;
 			for (stat in target.boosts) {
 				if (target.boosts[stat] < 6) {
 					stats.push(stat);
@@ -556,7 +556,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				for (const moveSlot of pokemon.moveSlots) {
 					const moveid = moveSlot.id;
 					if (noAssist.includes(moveid)) continue;
-					const move = this.dex.getMove(moveid);
+					const move = this.dex.moves.get(moveid);
 					if (move.isZ || move.isMax) {
 						continue;
 					}
@@ -568,7 +568,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!randomMove) {
 				return false;
 			}
-			this.useMove(randomMove, target);
+			this.actions.useMove(randomMove, target);
 		},
 		secondary: null,
 		target: "self",
@@ -786,14 +786,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && target.side === this.effectData.target) {
+				if (target !== source && this.effectData.target.hasAlly(target)) {
 					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
 							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
 					}
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Aurora Veil weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -928,7 +928,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -1004,6 +1005,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
 		selfSwitch: 'copyvolatile',
 		secondary: null,
 		target: "self",
@@ -1194,7 +1200,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 						return false;
 					}
 					if (!target.isActive) {
-						const possibleTarget = this.getRandomTarget(pokemon, this.dex.getMove('pound'));
+						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
 						if (!possibleTarget) {
 							this.add('-miss', pokemon);
 							return false;
@@ -1212,7 +1218,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 						effectType: 'Move',
 						type: 'Normal',
 					};
-					this.tryMoveHit(target, pokemon, moveData as ActiveMove);
+					this.actions.tryMoveHit(target, pokemon, moveData as ActiveMove);
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
@@ -1648,11 +1654,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryHit(pokemon) {
 			// will shatter screens through sub, before you hit
-			if (pokemon.runImmunity('Fighting')) {
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
-				pokemon.side.removeSideCondition('auroraveil');
-			}
+			pokemon.side.removeSideCondition('reflect');
+			pokemon.side.removeSideCondition('lightscreen');
+			pokemon.side.removeSideCondition('auroraveil');
 		},
 		secondary: null,
 		target: "normal",
@@ -2176,7 +2180,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	clangoroussoul: {
 		num: 775,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		name: "Clangorous Soul",
@@ -2420,7 +2424,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		onHit(target) {
-			const type = this.dex.getMove(target.moveSlots[0].id).type;
+			const type = this.dex.moves.get(target.moveSlots[0].id).type;
 			if (target.hasType(type) || !target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
 		},
@@ -2440,14 +2444,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {authentic: 1},
 		onHit(target, source) {
-			if (!target.lastMove) {
+			if (!target.lastMoveUsed) {
 				return false;
 			}
 			const possibleTypes = [];
-			const attackType = target.lastMove.type;
-			for (const type in this.dex.data.TypeChart) {
+			const attackType = target.lastMoveUsed.type;
+			for (const type of this.dex.types.names()) {
 				if (source.hasType(type)) continue;
-				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
+				const typeCheck = this.dex.types.get(type).damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
 					possibleTypes.push(type);
 				}
@@ -2482,11 +2486,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			let move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
 
-			if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
+			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 			if (noCopycat.includes(move.id) || move.isZ || move.isMax) {
 				return false;
 			}
-			this.useMove(move.id, pokemon);
+			this.actions.useMove(move.id, pokemon);
 		},
 		secondary: null,
 		target: "self",
@@ -2627,23 +2631,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onTryHit(target, source, move) {
 			if (!source.volatiles['counter']) return false;
-			if (source.volatiles['counter'].position === null) return false;
+			if (source.volatiles['counter'].slot === null) return false;
 		},
 		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
-				this.effectData.position = null;
+				this.effectData.slot = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				if (source !== this.effectData.target || !this.effectData.slot) return;
+				return this.getAtSlot(this.effectData.slot);
 			},
 			onDamagingHit(damage, target, source, move) {
-				if (source.side !== target.side && this.getCategory(move) === 'Physical') {
-					this.effectData.position = source.position;
+				if (!source.isAlly(target) && this.getCategory(move) === 'Physical') {
+					this.effectData.slot = source.getSlot();
 					this.effectData.damage = 2 * damage;
 				}
 			},
@@ -2671,7 +2675,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			];
 			let success = false;
 			for (const id of sideConditions) {
-				const effectName = this.dex.getEffect(id).name;
+				const effectName = this.dex.conditions.get(id).name;
 				if (sourceSide.sideConditions[id] && targetSide.sideConditions[id]) {
 					[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
 						targetSide.sideConditions[id], sourceSide.sideConditions[id],
@@ -3081,13 +3085,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
 			}
@@ -3118,7 +3122,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint(target, source, effect) {
-				if (!source || !effect || target.side === source.side) return;
+				if (!source || !effect || target.isAlly(source)) return;
 				if (effect.effectType === 'Move' && !effect.isFutureMove) {
 					if (source.volatiles['dynamax']) {
 						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
@@ -3282,19 +3286,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 						if (!moveSlot.pp) {
 							this.debug('Move out of PP');
 							return false;
-						} else {
-							if (effect.id === 'cursedbody') {
-								this.add('-start', pokemon, 'Disable', moveSlot.move, '[from] ability: Cursed Body', '[of] ' + source);
-							} else {
-								this.add('-start', pokemon, 'Disable', moveSlot.move);
-							}
-							this.effectData.move = pokemon.lastMove.id;
-							return;
 						}
 					}
 				}
-				// this can happen if Disable works on a Z-move
-				return false;
+				if (effect.effectType === 'Ability') {
+					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
+				} else {
+					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
+				}
+				this.effectData.move = pokemon.lastMove.id;
 			},
 			onResidualOrder: 14,
 			onEnd(pokemon) {
@@ -3445,7 +3445,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				},
 			});
 			this.add('-start', source, 'Doom Desire');
-			return null;
+			return this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "normal",
@@ -4006,12 +4006,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			chance: 100,
 			onHit(target) {
 				if (!target.hp) return;
-				const move = target.lastMove;
-				if (!move || move.isZ || move.isMax) return;
+				let move: Move | ActiveMove | null = target.lastMove;
+				if (!move || move.isZ) return;
+				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
 				const ppDeducted = target.deductPP(move.id, 3);
 				if (!ppDeducted) return;
-
 				this.add('-activate', target, 'move: Eerie Spell', move.name, ppDeducted);
 			},
 		},
@@ -4070,7 +4070,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -4231,7 +4231,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
 
-				if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
+				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 				const moveIndex = target.moves.indexOf(move.id);
 				if (move.isZ || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
@@ -4379,7 +4379,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const oldAbility = target.setAbility(source.ability);
 			if (oldAbility) {
 				this.add('-ability', target, target.getAbility().name, '[from] move: Entrainment');
-				if (target.side !== source.side) target.volatileStaleness = 'external';
+				if (!target.isAlly(source)) target.volatileStaleness = 'external';
 				return;
 			}
 			return false;
@@ -4413,7 +4413,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 160,
 		category: "Special",
 		name: "Eternabeam",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: {recharge: 1, protect: 1, mirror: 1},
 		self: {
@@ -4637,7 +4637,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		noFaint: true,
+		onDamagePriority: -20,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp) return target.hp - 1;
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -4844,12 +4847,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onPrepareHit(target, source, move) {
 			for (const action of this.queue.list as MoveAction[]) {
 				if (
-					!action.move || !action.pokemon || !action.pokemon.isActive ||
+					!action.move || !action.pokemon?.isActive ||
 					action.pokemon.fainted || action.maxMove || action.zmove
 				) {
 					continue;
 				}
-				if (action.pokemon.side === source.side && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
+				if (action.pokemon.isAlly(source) && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
 					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
@@ -4874,20 +4877,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-sidestart', targetSide, 'Fire Pledge');
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.baseMaxhp / 8, pokemon);
-					}
+				for (const pokemon of targetSide.allies()) {
+					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 8, pokemon);
 				}
 				this.add('-sideend', targetSide, 'Fire Pledge');
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(side) {
-				for (const pokemon of side.active) {
-					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.baseMaxhp / 8, pokemon);
-					}
+				for (const pokemon of side.allies()) {
+					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 8, pokemon);
 				}
 			},
 		},
@@ -5032,23 +5031,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target, source, move) {
-			if (target.side.active.length === 1) {
-				return;
-			}
-			for (const ally of target.side.active) {
-				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
-				}
+			for (const ally of target.adjacentAllies()) {
+				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
-			if (target.side.active.length === 1) {
-				return;
-			}
-			for (const ally of target.side.active) {
-				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
-				}
+			for (const ally of target.adjacentAllies()) {
+				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
 			}
 		},
 		secondary: null,
@@ -5304,7 +5293,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
-			if (success && target.side !== source.side) {
+			if (success && !target.isAlly(source)) {
 				target.staleness = 'external';
 			}
 			return success;
@@ -5482,6 +5471,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 					pokemon.volatiles['focuspunch'].lostFocus = true;
 				}
 			},
+			onTryAddVolatile(status, pokemon) {
+				if (status.id === 'flinch') return null;
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -5499,7 +5491,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		volatileStatus: 'followme',
 		onTry(source) {
-			return source.side.active.length > 1;
+			return this.activePerHalf > 1;
 		},
 		condition: {
 			duration: 1,
@@ -5883,7 +5875,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				},
 			});
 			this.add('-start', source, 'move: Future Sight');
-			return null;
+			return this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "normal",
@@ -5948,16 +5940,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, authentic: 1},
 		onHitSide(side, source, move) {
-			const targets = [];
-			for (const pokemon of side.active) {
-				if (
-					pokemon.hasAbility(['plus', 'minus']) &&
-					(!pokemon.volatiles['maxguard'] ||
-					  this.runEvent('TryHit', pokemon, source, move))
-				  ) {
-					targets.push(pokemon);
-				  }
-			}
+			const targets = side.allies().filter(target => (
+				target.hasAbility(['plus', 'minus']) &&
+				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
+			));
 			if (!targets.length) return false;
 			let didSomething = false;
 			for (const target of targets) {
@@ -6152,7 +6138,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Butterfree",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					const result = this.random(3);
 					if (result === 0) {
 						pokemon.trySetStatus('slp', source);
@@ -6181,7 +6167,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Blastoise",
 		self: {
 			onHit(source) {
-				source.side.foe.addSideCondition('gmaxcannonade');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxcannonade');
+				}
 			},
 		},
 		condition: {
@@ -6192,13 +6180,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Water')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Water')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
 				}
 				this.add('-sideend', targetSide, 'G-Max Cannonade');
 			},
@@ -6221,7 +6209,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Centiskorch",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Centiferno'));
 				}
 			},
@@ -6244,7 +6232,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Machamp",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					pokemon.addVolatile('gmaxchistrike');
 				}
 			},
@@ -6286,7 +6274,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Eevee",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('attract');
 				}
 			},
@@ -6309,15 +6297,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Duraludon",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
-					const move = pokemon.lastMove;
-					if (move && !move.isZ && !move.isMax) {
-						const ppDeducted = pokemon.deductPP(move.id, 2);
-						if (ppDeducted) {
-							this.add("-activate", pokemon, 'move: G-Max Depletion', move.name, ppDeducted);
-							// Don't return here because returning early doesn't trigger
-							// activation text for the second Pokemon in doubles
-						}
+				for (const pokemon of source.foes()) {
+					let move: Move | ActiveMove | null = pokemon.lastMove;
+					if (!move || move.isZ) continue;
+					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+
+					const ppDeducted = pokemon.deductPP(move.id, 2);
+					if (ppDeducted) {
+						this.add("-activate", pokemon, 'move: G-Max Depletion', move.name, ppDeducted);
+						// Don't return here because returning early doesn't trigger
+						// activation text for the second Pokemon in doubles
 					}
 				}
 			},
@@ -6357,7 +6346,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Alcremie",
 		self: {
 			onHit(target, source, move) {
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.heal(pokemon.maxhp / 6, pokemon, source, move);
 				}
 			},
@@ -6397,7 +6386,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Kingler",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({spe: -2}, pokemon);
 				}
 			},
@@ -6420,7 +6409,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Meowth",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('confusion');
 				}
 			},
@@ -6478,7 +6467,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Garbodor",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.trySetStatus('psn', source);
 				}
 			},
@@ -6500,7 +6489,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Melmetal",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					if (!pokemon.volatiles['dynamax']) pokemon.addVolatile('torment');
 				}
 			},
@@ -6521,7 +6510,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		isMax: "Urshifu",
-		breaksProtect: true,
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Dark",
@@ -6538,7 +6526,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		isMax: "Urshifu-Rapid-Strike",
-		breaksProtect: true,
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Water",
@@ -6558,11 +6545,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (this.random(2) === 0) return;
-				for (const pokemon of source.side.active) {
-					if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
+				for (const pokemon of source.alliesAndSelf()) {
+					if (pokemon.item) continue;
+
+					if (pokemon.lastItem && this.dex.items.get(pokemon.lastItem).isBerry) {
 						const item = pokemon.lastItem;
 						pokemon.lastItem = '';
-						this.add('-item', pokemon, this.dex.getItem(item), '[from] move: G-Max Replenish');
+						this.add('-item', pokemon, this.dex.items.get(item), '[from] move: G-Max Replenish');
 						pokemon.setItem(item);
 					}
 				}
@@ -6605,7 +6594,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Sandaconda",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Sandblast'));
 				}
 			},
@@ -6628,7 +6617,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Hatterene",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('confusion', source);
 				}
 			},
@@ -6677,7 +6666,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Copperajah",
 		self: {
 			onHit(source) {
-				source.side.foe.addSideCondition('gmaxsteelsurge');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxsteelsurge');
+				}
 			},
 		},
 		condition: {
@@ -6714,7 +6705,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Drednaw",
 		self: {
 			onHit(source) {
-				source.side.foe.addSideCondition('stealthrock');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock');
+				}
 			},
 		},
 		secondary: null,
@@ -6735,7 +6728,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Toxtricity",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					const result = this.random(2);
 					if (result === 0) {
 						pokemon.trySetStatus('par', source);
@@ -6786,7 +6779,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Flapple",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({evasion: -1}, pokemon);
 				}
 			},
@@ -6809,7 +6802,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Gengar",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('trapped', source, null, 'trapper');
 				}
 			},
@@ -6832,7 +6825,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Venusaur",
 		self: {
 			onHit(source) {
-				source.side.foe.addSideCondition('gmaxvinelash');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxvinelash');
+				}
 			},
 		},
 		condition: {
@@ -6843,13 +6838,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Grass')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Grass')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
 				}
 				this.add('-sideend', targetSide, 'G-Max Vine Lash');
 			},
@@ -6872,7 +6867,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Coalossal",
 		self: {
 			onHit(source) {
-				source.side.foe.addSideCondition('gmaxvolcalith');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxvolcalith');
+				}
 			},
 		},
 		condition: {
@@ -6883,13 +6880,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
 				}
 				this.add('-sideend', targetSide, 'G-Max Volcalith');
 			},
@@ -6912,7 +6909,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Pikachu",
 		self: {
 			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					pokemon.trySetStatus('par', source);
 				}
 			},
@@ -6935,7 +6932,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isMax: "Charizard",
 		self: {
 			onHit(source) {
-				source.side.foe.addSideCondition('gmaxwildfire');
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxwildfire');
+				}
 			},
 		},
 		condition: {
@@ -6946,13 +6945,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
 				}
 			},
 			onEnd(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				for (const target of targetSide.allies()) {
+					if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
 				}
 				this.add('-sideend', targetSide, 'G-Max Wildfire');
 			},
@@ -6983,13 +6982,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
 						if (!removeAll.includes(targetCondition)) continue;
-						this.add('-sideend', source.side.foe, this.dex.getEffect(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
+						this.add('-sideend', source.side.foe, this.dex.conditions.get(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
 						success = true;
 					}
 				}
 				for (const sideCondition of removeAll) {
 					if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
+						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
 						success = true;
 					}
 				}
@@ -7069,12 +7068,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onPrepareHit(target, source, move) {
 			for (const action of this.queue.list as MoveAction[]) {
 				if (
-					!action.move || !action.pokemon || !action.pokemon.isActive ||
+					!action.move || !action.pokemon?.isActive ||
 					action.pokemon.fainted || action.maxMove || action.zmove
 				) {
 					continue;
 				}
-				if (action.pokemon.side === source.side && ['waterpledge', 'firepledge'].includes(action.move.id)) {
+				if (action.pokemon.isAlly(source) && ['waterpledge', 'firepledge'].includes(action.move.id)) {
 					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
@@ -7173,7 +7172,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				if (move.type === 'Grass' && attacker.isGrounded()) {
 					this.debug('grassy terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -7188,6 +7187,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual() {
 				this.eachEvent('Terrain');
 			},
+			onTerrainPriority: 1,
 			onTerrain(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
@@ -7279,11 +7279,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onModifyAccuracy(accuracy) {
 				if (typeof accuracy !== 'number') return;
-				return this.chainModify([0x1AB8, 0x1000]);
+				return this.chainModify([6840, 4096]);
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
-					if (this.dex.getMove(moveSlot.id).flags['gravity']) {
+					if (this.dex.moves.get(moveSlot.id).flags['gravity']) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -7371,7 +7371,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (!source || source.fainted || !effect) return;
 				if (effect.effectType === 'Move' && !effect.isFutureMove && source.lastMove) {
 					let move: Move = source.lastMove;
-					if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
+					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === move.id) {
@@ -7457,7 +7457,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const targetBoosts: SparseBoostsTable = {};
 			const sourceBoosts: SparseBoostsTable = {};
 
-			const defSpd: BoostName[] = ['def', 'spd'];
+			const defSpd: BoostID[] = ['def', 'spd'];
 			for (const stat of defSpd) {
 				targetBoosts[stat] = target.boosts[stat];
 				sourceBoosts[stat] = source.boosts[stat];
@@ -7734,7 +7734,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
-					if (this.dex.getMove(moveSlot.id).flags['heal']) {
+					if (this.dex.moves.get(moveSlot.id).flags['heal']) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -7838,7 +7838,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
-			if (success && target.side !== source.side) {
+			if (success && !target.isAlly(source)) {
 				target.staleness = 'external';
 			}
 			return success;
@@ -7881,7 +7881,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const targetBoosts: SparseBoostsTable = {};
 			const sourceBoosts: SparseBoostsTable = {};
 
-			let i: BoostName;
+			let i: BoostID;
 			for (i in target.boosts) {
 				targetBoosts[i] = target.boosts[i];
 				sourceBoosts[i] = source.boosts[i];
@@ -7905,16 +7905,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePowerCallback(pokemon, target) {
 			const targetWeight = target.getWeight();
 			const pokemonWeight = pokemon.getWeight();
-			if (pokemonWeight > targetWeight * 5) {
+			if (pokemonWeight >= targetWeight * 5) {
 				return 120;
 			}
-			if (pokemonWeight > targetWeight * 4) {
+			if (pokemonWeight >= targetWeight * 4) {
 				return 100;
 			}
-			if (pokemonWeight > targetWeight * 3) {
+			if (pokemonWeight >= targetWeight * 3) {
 				return 80;
 			}
-			if (pokemonWeight > targetWeight * 2) {
+			if (pokemonWeight >= targetWeight * 2) {
 				return 60;
 			}
 			return 40;
@@ -7962,16 +7962,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePowerCallback(pokemon, target) {
 			const targetWeight = target.getWeight();
 			const pokemonWeight = pokemon.getWeight();
-			if (pokemonWeight > targetWeight * 5) {
+			if (pokemonWeight >= targetWeight * 5) {
 				return 120;
 			}
-			if (pokemonWeight > targetWeight * 4) {
+			if (pokemonWeight >= targetWeight * 4) {
 				return 100;
 			}
-			if (pokemonWeight > targetWeight * 3) {
+			if (pokemonWeight >= targetWeight * 3) {
 				return 80;
 			}
-			if (pokemonWeight > targetWeight * 2) {
+			if (pokemonWeight >= targetWeight * 2) {
 				return 60;
 			}
 			return 40;
@@ -8348,7 +8348,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.baseMaxhp / 2, source, source, this.dex.getEffect('High Jump Kick'));
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
 		},
 		secondary: null,
 		target: "normal",
@@ -8364,7 +8364,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		noFaint: true,
+		onDamagePriority: -20,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp) return target.hp - 1;
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -9040,7 +9043,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
-			this.runMove(target.lastMove.id, target, target.lastMoveTargetLoc!);
+			this.actions.runMove(target.lastMove.id, target, target.lastMoveTargetLoc!);
 		},
 		secondary: null,
 		target: "normal",
@@ -9138,7 +9141,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 80,
 		category: "Physical",
 		name: "Jaw Lock",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		onHit(target, source, move) {
@@ -9183,7 +9186,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.baseMaxhp / 2, source, source, this.dex.getEffect('Jump Kick'));
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Jump Kick'));
 		},
 		secondary: null,
 		target: "normal",
@@ -9266,7 +9269,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -9538,7 +9542,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 8,
 			onResidual(pokemon) {
-				const target = this.effectData.source.side.active[pokemon.volatiles['leechseed'].sourcePosition];
+				const target = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
@@ -9658,10 +9662,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
+				if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -9991,17 +9995,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = this.effectData.pranksterBoosted;
-				this.useMove(newMove, target, source);
+				this.actions.useMove(newMove, target, source);
 				return null;
 			},
 			onAllyTryHitSide(target, source, move) {
-				if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
 					return;
 				}
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
-				this.useMove(newMove, this.effectData.target, source);
+				this.actions.useMove(newMove, this.effectData.target, source);
 				return null;
 			},
 		},
@@ -10105,17 +10109,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, distance: 1, authentic: 1},
 		onHitSide(side, source, move) {
-			const targets = [];
-			for (const pokemon of side.active) {
-				if (
-					pokemon.hasAbility(['plus', 'minus']) &&
-					(!pokemon.volatiles['maxguard'] ||
-					  this.runEvent('TryHit', pokemon, source, move))
-				  ) {
-					targets.push(pokemon);
-				  }
-			}
+			const targets = side.allies().filter(ally => (
+				ally.hasAbility(['plus', 'minus']) &&
+				(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
+			));
 			if (!targets.length) return false;
+
 			let didSomething = false;
 			for (const target of targets) {
 				didSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;
@@ -10253,7 +10252,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
@@ -10280,14 +10280,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Airstream",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({spe: 1}, pokemon);
 				}
 			},
@@ -10302,14 +10302,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Darkness",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({spd: -1}, pokemon);
 				}
 			},
@@ -10324,7 +10324,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 100,
 		category: "Physical",
 		name: "Max Flare",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
@@ -10344,14 +10344,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Flutterby",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({spa: -1}, pokemon);
 				}
 			},
@@ -10366,7 +10366,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Geyser",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
@@ -10386,7 +10386,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Max Guard",
-		pp: 5,
+		pp: 10,
 		priority: 4,
 		flags: {},
 		isMax: true,
@@ -10405,12 +10405,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (move.isMax && move.breaksProtect) return;
+				if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
 				/** moves blocked by Max Guard but not Protect */
 				const overrideBypassProtect = [
-					'block', 'flowershield', 'gearup', 'magneticflux', 'phantomforce', 'psychup', 'teatime', 'transform',
+					'block', 'flowershield', 'gearup', 'magneticflux', 'phantomforce', 'psychup', 'shadowforce', 'teatime', 'transform',
 				];
-				const blockedByMaxGuard = (this.dex.getMove(move.id).flags['protect'] ||
+				const blockedByMaxGuard = (this.dex.moves.get(move.id).flags['protect'] ||
 						move.isZ || move.isMax || overrideBypassProtect.includes(move.id));
 				if (!blockedByMaxGuard) {
 					return;
@@ -10441,7 +10441,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Hailstorm",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
@@ -10461,14 +10461,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Knuckle",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({atk: 1}, pokemon);
 				}
 			},
@@ -10483,7 +10483,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Lightning",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
@@ -10503,7 +10503,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Mindstorm",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
@@ -10523,14 +10523,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Ooze",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({spa: 1}, pokemon);
 				}
 			},
@@ -10545,7 +10545,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Overgrowth",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
@@ -10565,14 +10565,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Phantasm",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({def: -1}, pokemon);
 				}
 			},
@@ -10587,14 +10587,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Quake",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({spd: 1}, pokemon);
 				}
 			},
@@ -10609,7 +10609,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Rockfall",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
@@ -10629,7 +10629,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Starfall",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
@@ -10649,14 +10649,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Steelspike",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.active) {
+				for (const pokemon of source.alliesAndSelf()) {
 					this.boost({def: 1}, pokemon);
 				}
 			},
@@ -10671,14 +10671,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Strike",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({spe: -1}, pokemon);
 				}
 			},
@@ -10693,14 +10693,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 10,
 		category: "Physical",
 		name: "Max Wyrmwind",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {},
 		isMax: true,
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				for (const pokemon of source.side.foe.active) {
+				for (const pokemon of source.foes()) {
 					this.boost({atk: -1}, pokemon);
 				}
 			},
@@ -10768,7 +10768,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (move.category === 'Status' || noMeFirst.includes(move.id)) return false;
 
 			pokemon.addVolatile('mefirst');
-			this.useMove(move, pokemon, target);
+			this.actions.useMove(move, pokemon, target);
 			return null;
 		},
 		condition: {
@@ -10884,39 +10884,26 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			if (!pokemon.volatiles['metalburst']) return 0;
-			return pokemon.volatiles['metalburst'].damage || 1;
+			const lastDamagedBy = pokemon.getLastDamagedBy(true);
+			if (lastDamagedBy !== undefined) {
+				return (lastDamagedBy.damage * 1.5) || 1;
+			}
+			return 0;
 		},
 		category: "Physical",
 		name: "Metal Burst",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('metalburst');
-		},
 		onTryHit(target, source, move) {
-			if (!source.volatiles['metalburst']) return false;
-			if (source.volatiles['metalburst'].position === null) return false;
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
 		},
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectData.position = null;
-				this.effectData.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
-			},
-			onDamagingHit(damage, target, source, effect) {
-				if (source.side !== target.side) {
-					this.effectData.position = source.position;
-					this.effectData.damage = 1.5 * damage;
-				}
-			},
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy) {
+				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
+			}
 		},
 		secondary: null,
 		target: "scripted",
@@ -11043,7 +11030,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (move.realMove) continue;
 				if (move.isZ || move.isMax || move.isNonstandard) continue;
 				if (effect.noMetronome!.includes(move.name)) continue;
-				if (this.dex.getMove(id).gen > this.gen) continue;
+				if (this.dex.moves.get(id).gen > this.gen) continue;
 				moves.push(move);
 			}
 			let randomMove = '';
@@ -11054,7 +11041,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!randomMove) {
 				return false;
 			}
-			this.useMove(randomMove, target);
+			this.actions.useMove(randomMove, target);
 		},
 		secondary: null,
 		target: "self",
@@ -11126,7 +11113,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		mindBlownRecoil: true,
 		onAfterMove(pokemon, target, move) {
 			if (move.mindBlownRecoil && !move.multihit) {
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Mind Blown'), true);
+				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
 			}
 		},
 		secondary: null,
@@ -11247,23 +11234,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onTryHit(target, source, move) {
 			if (!source.volatiles['mirrorcoat']) return false;
-			if (source.volatiles['mirrorcoat'].position === null) return false;
+			if (source.volatiles['mirrorcoat'].slot === null) return false;
 		},
 		condition: {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, move) {
-				this.effectData.position = null;
+				this.effectData.slot = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				if (source !== this.effectData.target || !this.effectData.slot) return;
+				return this.getAtSlot(this.effectData.slot);
 			},
 			onDamagingHit(damage, target, source, move) {
-				if (source.side !== target.side && this.getCategory(move) === 'Special') {
-					this.effectData.position = source.position;
+				if (!source.isAlly(target) && this.getCategory(move) === 'Special') {
+					this.effectData.slot = source.getSlot();
 					this.effectData.damage = 2 * damage;
 				}
 			},
@@ -11285,10 +11272,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		onTryHit(target, pokemon) {
 			const move = target.lastMove;
-			if (!move || !move.flags['mirror'] || move.isZ || move.isMax) {
+			if (!move?.flags['mirror'] || move.isZ || move.isMax) {
 				return false;
 			}
-			this.useMove(move.id, pokemon, target);
+			this.actions.useMove(move.id, pokemon, target);
 			return null;
 		},
 		secondary: null,
@@ -11330,10 +11317,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 5,
 			onBoost(boost, target, source, effect) {
-				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 				if (source && target !== source) {
 					let showMsg = false;
-					let i: BoostName;
+					let i: BoostID;
 					for (i in boost) {
 						if (boost[i]! < 0) {
 							delete boost[i];
@@ -11631,7 +11618,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Electric') {
 					this.debug('mud sport weaken');
-					return this.chainModify([0x548, 0x1000]);
+					return this.chainModify([1352, 4096]);
 				}
 			},
 			onResidualOrder: 21,
@@ -11774,7 +11761,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			} else if (this.field.isTerrain('psychicterrain')) {
 				move = 'psychic';
 			}
-			this.useMove(move, pokemon, target);
+			this.actions.useMove(move, pokemon, target);
 			return null;
 		},
 		secondary: null,
@@ -12000,7 +11987,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	obstruct: {
 		num: 792,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		name: "Obstruct",
@@ -12023,7 +12010,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -12723,13 +12711,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
 		onTryHit(target, source, move) {
-			if (source.side === target.side) {
+			if (source.isAlly(target)) {
 				move.basePower = 0;
 				move.infiltrates = true;
 			}
 		},
 		onHit(target, source) {
-			if (source.side === target.side) {
+			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
 					this.add('-immune', target);
 				}
@@ -12753,7 +12741,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return !!target.item;
 		},
 		onTryHit(target, source, move) {
-			this.add('-activate', target, 'move: Poltergeist', this.dex.getItem(target.item).name);
+			this.add('-activate', target, 'move: Poltergeist', this.dex.items.get(target.item).name);
 		},
 		secondary: null,
 		target: "normal",
@@ -12872,7 +12860,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const targetBoosts: SparseBoostsTable = {};
 			const sourceBoosts: SparseBoostsTable = {};
 
-			const atkSpa: BoostName[] = ['atk', 'spa'];
+			const atkSpa: BoostID[] = ['atk', 'spa'];
 			for (const stat of atkSpa) {
 				targetBoosts[stat] = target.boosts[stat];
 				sourceBoosts[stat] = source.boosts[stat];
@@ -13066,7 +13054,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -13117,7 +13106,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {authentic: 1, mystery: 1},
 		onHit(target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			for (i in target.boosts) {
 				source.boosts[i] = target.boosts[i];
 			}
@@ -13168,11 +13157,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		onTryHit(pokemon) {
 			// will shatter screens through sub, before you hit
-			if (pokemon.runImmunity('Psychic')) {
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
-				pokemon.side.removeSideCondition('auroraveil');
-			}
+			pokemon.side.removeSideCondition('reflect');
+			pokemon.side.removeSideCondition('lightscreen');
+			pokemon.side.removeSideCondition('auroraveil');
 		},
 		secondary: null,
 		target: "normal",
@@ -13202,9 +13189,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}
-				if (target.isSemiInvulnerable() || target.side === source.side) return;
+				if (target.isSemiInvulnerable() || target.isAlly(source)) return;
 				if (!target.isGrounded()) {
-					const baseMove = this.dex.getMove(effect.id);
+					const baseMove = this.dex.moves.get(effect.id);
 					if (baseMove.priority > 0) {
 						this.hint("Psychic Terrain doesn't affect Pokémon immune to Ground.");
 					}
@@ -13217,7 +13204,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
-					return this.chainModify([0x14CD, 0x1000]);
+					return this.chainModify([5325, 4096]);
 				}
 			},
 			onStart(battle, source, effect) {
@@ -13409,7 +13396,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
 			// You can't get here unless the pursuit succeeds
-			if (target.beingCalledBack) {
+			if (target.beingCalledBack || target.switchFlag) {
 				this.debug('Pursuit damage boost');
 				return move.basePower * 2;
 			}
@@ -13423,7 +13410,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		beforeTurnCallback(pokemon) {
 			for (const side of this.sides) {
-				if (side === pokemon.side) continue;
+				if (side.hasAlly(pokemon)) continue;
 				side.addSideCondition('pursuit', pokemon);
 				const data = side.getSideConditionData('pursuit');
 				if (!data.sources) {
@@ -13433,7 +13420,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onModifyMove(move, source, target) {
-			if (target?.beingCalledBack) move.accuracy = true;
+			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
 		},
 		onTryHit(target, pokemon) {
 			target.side.removeSideCondition('pursuit');
@@ -13455,13 +13442,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 					if (source.canMegaEvo || source.canUltraBurst) {
 						for (const [actionIndex, action] of this.queue.entries()) {
 							if (action.pokemon === source && action.choice === 'megaEvo') {
-								this.runMegaEvo(source);
+								this.actions.runMegaEvo(source);
 								this.queue.list.splice(actionIndex, 1);
 								break;
 							}
 						}
 					}
-					this.runMove('pursuit', source, this.getTargetLoc(pokemon, source));
+					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
 				}
 			},
 		},
@@ -13496,7 +13483,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			if (target.side.active.length < 2) return false; // fails in singles
+			if (this.activePerHalf === 1) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 
@@ -13550,7 +13537,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
 				if (move.priority <= 0.1) return;
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
@@ -13634,7 +13622,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
 		onTry(source) {
-			return source.side.active.length > 1;
+			return this.activePerHalf > 1;
 		},
 		condition: {
 			duration: 1,
@@ -13691,7 +13679,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -13705,7 +13693,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -13814,7 +13802,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.item || !pokemon.lastItem) return false;
 			const item = pokemon.lastItem;
 			pokemon.lastItem = '';
-			this.add('-item', pokemon, this.dex.getItem(item), '[from] move: Recycle');
+			this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Recycle');
 			pokemon.setItem(item);
 		},
 		secondary: null,
@@ -13842,10 +13830,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
+				if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -13886,7 +13874,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
 			source.setType(newBaseTypes);
 			source.addedType = target.addedType;
-			source.knownType = target.side === source.side && target.knownType;
+			source.knownType = target.isAlly(source) && target.knownType;
 		},
 		secondary: null,
 		target: "normal",
@@ -14027,7 +14015,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
 		onModifyType(move, pokemon) {
-			let type = pokemon.types[0];
+			let type = pokemon.getTypes()[0];
 			if (type === "Bird") type = "???";
 			move.type = type;
 		},
@@ -14535,7 +14523,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSetStatus(status, target, source, effect) {
 				if (!effect || !source) return;
 				if (effect.id === 'yawn') return;
-				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 				if (target !== source) {
 					this.debug('interrupting setStatus');
 					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
@@ -14546,7 +14534,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onTryAddVolatile(status, target, source, effect) {
 				if (!effect || !source) return;
-				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 				if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
 					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
 					return null;
@@ -15172,7 +15160,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			pokemon.addVolatile('shelltrap');
 		},
 		onTryMove(pokemon) {
-			if (!pokemon.volatiles['shelltrap'] || !pokemon.volatiles['shelltrap'].gotHit) {
+			if (!pokemon.volatiles['shelltrap']?.gotHit) {
 				this.attrLastMove('[still]');
 				this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
 				return null;
@@ -15184,7 +15172,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-singleturn', pokemon, 'move: Shell Trap');
 			},
 			onHit(pokemon, source, move) {
-				if (pokemon.side !== source.side && move.category === 'Physical') {
+				if (!pokemon.isAlly(source) && move.category === 'Physical') {
 					pokemon.volatiles['shelltrap'].gotHit = true;
 					const action = this.queue.willMove(pokemon);
 					if (action) {
@@ -15406,6 +15394,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			source.baseMoveSlots[sketchIndex] = sketchedMove;
 			this.add('-activate', source, 'move: Sketch', move.name);
 		},
+		noSketch: true,
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -15434,20 +15423,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source, move) {
 			const targetAbility = target.getAbility();
 			const sourceAbility = source.getAbility();
-			if (target.side === source.side) {
+			if (target.isAlly(source)) {
 				this.add('-activate', source, 'move: Skill Swap', '', '', '[of] ' + target);
 			} else {
 				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
 			}
 			this.singleEvent('End', sourceAbility, source.abilityData, source);
 			this.singleEvent('End', targetAbility, target.abilityData, target);
-			if (targetAbility.id !== sourceAbility.id) {
-				source.ability = targetAbility.id;
-				target.ability = sourceAbility.id;
-				source.abilityData = {id: this.toID(source.ability), target: source};
-				target.abilityData = {id: this.toID(target.ability), target: target};
-				if (target.side !== source.side) target.volatileStaleness = 'external';
-			}
+			source.ability = targetAbility.id;
+			target.ability = sourceAbility.id;
+			source.abilityData = {id: this.toID(source.ability), target: source};
+			target.abilityData = {id: this.toID(target.ability), target: target};
+			if (!target.isAlly(source)) target.volatileStaleness = 'external';
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
 			this.singleEvent('Start', sourceAbility, target.abilityData, target);
 		},
@@ -15565,7 +15552,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return null;
 				}
 			} else {
-				if (target.volatiles['substitute'] || target.side === source.side) {
+				if (target.volatiles['substitute'] || target.isAlly(source)) {
 					return false;
 				}
 				if (target.getWeight() >= 2000) {
@@ -15736,7 +15723,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			for (const moveSlot of pokemon.moveSlots) {
 				const moveid = moveSlot.id;
 				if (!moveid) continue;
-				const move = this.dex.getMove(moveid);
+				const move = this.dex.moves.get(moveid);
 				if (noSleepTalk.includes(moveid) || move.flags['charge'] || (move.isZ && move.basePower !== 1)) {
 					continue;
 				}
@@ -15747,7 +15734,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!randomMove) {
 				return false;
 			}
-			this.useMove(randomMove, pokemon);
+			this.actions.useMove(randomMove, pokemon);
 		},
 		secondary: null,
 		target: "self",
@@ -15981,7 +15968,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
-				this.useMove(move.id, snatchUser);
+				this.actions.useMove(move.id, snatchUser);
 				return null;
 			},
 		},
@@ -16382,7 +16369,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ || (move.isMax && !move.breaksProtect)) target.getMoveHitData(move).zBrokeProtect = true;
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move.smartTarget) {
@@ -16420,7 +16408,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 75,
 		category: "Physical",
 		name: "Spirit Break",
-		pp: 10,
+		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: {
@@ -16456,7 +16444,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon) {
-			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
+			if (!pokemon.volatiles['stockpile']?.layers) return false;
 			return pokemon.volatiles['stockpile'].layers * 100;
 		},
 		category: "Special",
@@ -16485,12 +16473,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit(target) {
-			const move = target.lastMove;
-			if (!move || move.isZ || move.isMax) return false;
+			let move: Move | ActiveMove | null = target.lastMove;
+			if (!move || move.isZ) return false;
+			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
 			const ppDeducted = target.deductPP(move.id, 4);
 			if (!ppDeducted) return false;
-
 			this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
 		},
 		secondary: null,
@@ -16589,7 +16577,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mystery: 1},
 		volatileStatus: 'spotlight',
 		onTryHit(target) {
-			if (target.side.active.length < 2) return false;
+			if (this.activePerHalf === 1) return false;
 		},
 		condition: {
 			duration: 1,
@@ -16685,7 +16673,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		mindBlownRecoil: true,
 		onAfterMove(pokemon, target, move) {
 			if (move.mindBlownRecoil && !move.multihit) {
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Steel Beam'), true);
+				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Steel Beam'), true);
 			}
 		},
 		secondary: null,
@@ -16754,6 +16742,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
+		pressureTarget: "self",
 		target: "foeSide",
 		type: "Bug",
 		zMove: {boost: {spe: 1}},
@@ -17118,7 +17107,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target === source || move.flags['authentic'] || move.infiltrates) {
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
@@ -17134,12 +17123,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
+					if (move.ohko) this.add('-ohko');
 					target.removeVolatile('substitute');
 				} else {
 					this.add('-activate', target, 'move: Substitute', '[damage]');
 				}
 				if (move.recoil) {
-					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
+					this.damage(this.actions.calcRecoilDamage(damage, move), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
@@ -17432,7 +17422,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source, move) {
 			const yourItem = target.takeItem(source);
 			const myItem = source.takeItem();
-			if (target.item || source.item || (!yourItem && !myItem)) {
+			const orbUser = ([382, 383].includes(target.baseSpecies.num) || [382, 383].includes(source.baseSpecies.num));
+			if (target.item || source.item || (!yourItem && !myItem) || (!yourItem && orbUser) || (!myItem && orbUser)) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
 				return false;
@@ -17658,7 +17649,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Tar Shot",
-		pp: 20,
+		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		volatileStatus: 'tarshot',
@@ -17705,7 +17696,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
-					const move = this.dex.getMove(moveSlot.id);
+					const move = this.dex.moves.get(moveSlot.id);
 					if (move.category === 'Status' && move.id !== 'mefirst') {
 						pokemon.disableMove(moveSlot.id);
 					}
@@ -18042,7 +18033,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
-					if (this.dex.getMove(moveSlot.id).flags['sound']) {
+					if (this.dex.moves.get(moveSlot.id).flags['sound']) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -18256,7 +18247,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onHit(target) {
 			let success = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in target.boosts) {
 				if (target.boosts[i] === 0) continue;
 				target.boosts[i] = -target.boosts[i];
@@ -18442,7 +18433,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source, move) {
 			const yourItem = target.takeItem(source);
 			const myItem = source.takeItem();
-			if (target.item || source.item || (!yourItem && !myItem)) {
+			const orbUser = ([382, 383].includes(target.baseSpecies.num) || [382, 383].includes(source.baseSpecies.num));
+			if (target.item || source.item || (!yourItem && !myItem) || (!yourItem && orbUser) || (!myItem && orbUser)) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
 				return false;
@@ -18716,9 +18708,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			volatileStatus: 'uproar',
 		},
 		onTryHit(target) {
-			for (const [i, allyActive] of target.side.active.entries()) {
+			const activeTeam = target.side.activeTeam();
+			const foeActiveTeam = target.side.foe.activeTeam();
+			for (const [i, allyActive] of activeTeam.entries()) {
 				if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
-				const foeActive = target.side.foe.active[i];
+				const foeActive = foeActiveTeam[i];
 				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
 			}
 		},
@@ -18728,6 +18722,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-start', target, 'Uproar');
 			},
 			onResidual(target) {
+				if (target.volatiles['throatchop']) {
+					target.removeVolatile('uproar');
+					return;
+				}
 				if (target.lastMove && target.lastMove.id === 'struggle') {
 					// don't lock
 					delete target.volatiles['uproar'];
@@ -19003,7 +19001,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				) {
 					continue;
 				}
-				if (otherMoveUser.side === source.side && ['firepledge', 'grasspledge'].includes(otherMove.id)) {
+				if (otherMoveUser.isAlly(source) && ['firepledge', 'grasspledge'].includes(otherMove.id)) {
 					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, otherMoveUser);
 					return null;
@@ -19030,10 +19028,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
 			},
-			onModifyMove(move) {
+			onModifyMove(move, pokemon) {
 				if (move.secondaries && move.id !== 'secretpower') {
 					this.debug('doubling secondary chance');
 					for (const secondary of move.secondaries) {
+						if (pokemon.hasAbility('serenegrace') && secondary.volatileStatus === 'flinch') continue;
 						if (secondary.chance) secondary.chance *= 2;
 					}
 					if (move.self?.chance) move.self.chance *= 2;
@@ -19103,7 +19102,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Fire') {
 					this.debug('water sport weaken');
-					return this.chainModify([0x548, 0x1000]);
+					return this.chainModify([1352, 4096]);
 				}
 			},
 			onResidualOrder: 21,

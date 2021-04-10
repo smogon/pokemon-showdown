@@ -134,13 +134,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
 			}
@@ -304,6 +304,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidual() {
 				this.eachEvent('Terrain');
 			},
+			onTerrainPriority: 1,
 			onTerrain(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
@@ -665,7 +666,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable() || target.side === source.side) return;
+				if (!target.isGrounded() || target.isSemiInvulnerable() || target.isAlly(source)) return;
 				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}
@@ -715,7 +716,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	quash: {
 		inherit: true,
 		onHit(target) {
-			if (target.side.active.length < 2) return false; // fails in singles
+			if (this.activePerHalf === 1) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 
@@ -884,6 +885,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	switcheroo: {
+		inherit: true,
+		onHit(target, source, move) {
+			const yourItem = target.takeItem(source);
+			const myItem = source.takeItem();
+			if (target.item || source.item || (!yourItem && !myItem)) {
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
+				return false;
+			}
+			if (
+				(myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) ||
+				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))
+			) {
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
+				return false;
+			}
+			this.add('-activate', source, 'move: Trick', '[of] ' + target);
+			if (myItem) {
+				target.setItem(myItem);
+				this.add('-item', target, myItem, '[from] move: Switcheroo');
+			} else {
+				this.add('-enditem', target, yourItem, '[silent]', '[from] move: Switcheroo');
+			}
+			if (yourItem) {
+				source.setItem(yourItem);
+				this.add('-item', source, yourItem, '[from] move: Switcheroo');
+			} else {
+				this.add('-enditem', source, myItem, '[silent]', '[from] move: Switcheroo');
+			}
+		},
+	},
 	synchronoise: {
 		inherit: true,
 		isNonstandard: null,
@@ -909,7 +943,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	toxic: {
 		inherit: true,
 		onPrepareHit(target, source, move) {
-			source.addVolatile('toxic');
+			if (source.hasType('Poison')) source.addVolatile('toxic');
 		},
 		condition: {
 			noCopy: true,
@@ -926,6 +960,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	toxicthread: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	trick: {
+		inherit: true,
+		onHit(target, source, move) {
+			const yourItem = target.takeItem(source);
+			const myItem = source.takeItem();
+			if (target.item || source.item || (!yourItem && !myItem)) {
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
+				return false;
+			}
+			if (
+				(myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) ||
+				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))
+			) {
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
+				return false;
+			}
+			this.add('-activate', source, 'move: Trick', '[of] ' + target);
+			if (myItem) {
+				target.setItem(myItem);
+				this.add('-item', target, myItem, '[from] move: Trick');
+			} else {
+				this.add('-enditem', target, yourItem, '[silent]', '[from] move: Trick');
+			}
+			if (yourItem) {
+				source.setItem(yourItem);
+				this.add('-item', source, yourItem, '[from] move: Trick');
+			} else {
+				this.add('-enditem', source, myItem, '[silent]', '[from] move: Trick');
+			}
+		},
 	},
 	trumpcard: {
 		inherit: true,

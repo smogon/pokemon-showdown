@@ -1,5 +1,5 @@
-import {Utils} from '../lib/utils';
-import {BasicEffect} from './dex-data';
+import {Utils} from '../lib';
+import {BasicEffect, toID} from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -95,6 +95,10 @@ export interface MoveEventMethods {
 	onAfterMoveSecondarySelf?: CommonHandlers['VoidSourceMove'];
 	onAfterMoveSecondary?: CommonHandlers['VoidMove'];
 	onAfterMove?: CommonHandlers['VoidSourceMove'];
+	onDamagePriority?: number;
+	onDamage?: (
+		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
+	) => number | boolean | null | void;
 
 	/* Invoked by the global BasePower event (onEffect = true) */
 	onBasePower?: CommonHandlers['ModifierSourceMove'];
@@ -109,11 +113,15 @@ export interface MoveEventMethods {
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onMoveFail?: CommonHandlers['VoidMove'];
 	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
+	onModifyTarget?: (
+		this: Battle, relayVar: {target: Pokemon}, pokemon: Pokemon, target: Pokemon, move: ActiveMove
+	) => void;
 	onPrepareHit?: CommonHandlers['ResultMove'];
 	onTry?: CommonHandlers['ResultSourceMove'];
 	onTryHit?: CommonHandlers['ExtResultSourceMove'];
 	onTryHitField?: CommonHandlers['ResultMove'];
-	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
+	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean |
+	 null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryMove?: CommonHandlers['ResultSourceMove'];
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove'];
@@ -210,8 +218,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihit?: number | number[];
 	multihitType?: string;
 	noDamageVariance?: boolean;
-	/** False Swipe */
-	noFaint?: boolean;
 	nonGhostTarget?: string;
 	pressureTarget?: string;
 	spreadModifier?: number;
@@ -240,7 +246,14 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	baseMove?: string;
 }
 
-export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {inherit: true, gen?: number};
+export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
+	inherit: true,
+	igniteBoosted?: boolean,
+	settleBoosted?: boolean,
+	bodyofwaterBoosted?: boolean,
+	longWhipBoost?: boolean,
+	gen?: number,
+};
 
 export interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move';
@@ -419,8 +432,8 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 
 	readonly volatileStatus?: ID;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `move: ${this.name}`;
@@ -547,5 +560,66 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 				this.gen = 1;
 			}
 		}
+	}
+}
+
+export class DexMoves {
+	readonly dex: ModdedDex;
+	readonly moveCache = new Map<ID, Move>();
+	allCache: readonly Move[] | null = null;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name?: string | Move): Move {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		const id = toID(name);
+		return this.getByID(id);
+	}
+
+	getByID(id: ID): Move {
+		let move = this.moveCache.get(id);
+		if (move) return move;
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			move = this.get(this.dex.data.Aliases[id]);
+			if (move.exists) {
+				this.moveCache.set(id, move);
+			}
+			return move;
+		}
+		if (id.startsWith('hiddenpower')) {
+			id = /([a-z]*)([0-9]*)/.exec(id)![1] as ID;
+		}
+		if (id && this.dex.data.Moves.hasOwnProperty(id)) {
+			const moveData = this.dex.data.Moves[id] as any;
+			const moveTextData = this.dex.getDescs('Moves', id, moveData);
+			move = new DataMove({
+				name: id,
+				...moveData,
+				...moveTextData,
+			});
+			if (move.gen > this.dex.gen) {
+				(move as any).isNonstandard = 'Future';
+			}
+		} else {
+			move = new DataMove({
+				name: id, exists: false,
+			});
+		}
+		if (move.exists) this.moveCache.set(id, move);
+		return move;
+	}
+
+	all(): readonly Move[] {
+		if (this.allCache) return this.allCache;
+		const moves = [];
+		for (const id in this.dex.data.Moves) {
+			moves.push(this.getByID(id as ID));
+		}
+		this.allCache = moves;
+		return this.allCache;
 	}
 }

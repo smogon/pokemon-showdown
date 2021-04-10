@@ -1,5 +1,4 @@
-import {Utils} from '../../lib/utils';
-import {FS} from '../../lib/fs';
+import {FS, Utils} from '../../lib';
 
 const STORAGE_PATH = 'config/chat-plugins/quotes.json';
 const MAX_QUOTES = 200;
@@ -81,21 +80,14 @@ export const commands: ChatCommands = {
 	quotehelp: [`/quote [quote] - Adds [quote] to the room's quotes. Requires: % @ # &`],
 
 	removequote(target, room, user) {
-		target = target.trim();
-		const [idx, roomid] = Utils.splitFirst(target, ',');
-		const targetRoom = roomid ? Rooms.search(roomid) : room;
-		if (!targetRoom) return this.errorReply(`Invalid room.`);
-		if (!targetRoom.persist) {
-			return this.errorReply("This command is unavailable in temporary rooms.");
-		}
-		this.room = targetRoom;
-		this.checkCan('mute', null, targetRoom);
-		if (!quotes[targetRoom.roomid]?.length) return this.errorReply(`This room has no quotes.`);
-		const index = parseInt(idx);
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
+		if (!quotes[room.roomid]?.length) return this.errorReply(`This room has no quotes.`);
+		const index = parseInt(target.trim());
 		if (isNaN(index)) {
 			return this.errorReply(`Invalid index.`);
 		}
-		const roomQuotes = quotes[targetRoom.roomid];
+		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes[index - 1]) {
 			return this.errorReply(`Quote not found.`);
 		}
@@ -104,7 +96,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`${user.name} removed quote indexed at ${index}: "${collapsedQuote}" (originally added by ${removed.userid}).`);
 		this.modlog(`REMOVEQUOTE`, null, collapsedQuote);
 		saveQuotes();
-		if (roomid) this.parse(`/join view-quotes-${targetRoom.roomid}`);
+		this.refreshPage(`quotes-${room.roomid}`);
 	},
 	removequotehelp: [`/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # &`],
 
@@ -112,7 +104,7 @@ export const commands: ChatCommands = {
 	quotes(target, room) {
 		const targetRoom = target ? Rooms.search(target) : room;
 		if (!targetRoom) return this.errorReply(`Invalid room.`);
-		return this.parse(`/join view-quotes-${targetRoom.roomid}`);
+		this.parse(`/join view-quotes-${targetRoom.roomid}`);
 	},
 	quoteshelp: [`/quotes [room] - Shows all quotes for [room]. Defaults the room the command is used in.`],
 };
@@ -140,11 +132,20 @@ export const pages: PageTable = {
 			buffer += `<div class="infobox">${Chat.formatText(quote, false, true)}`;
 			buffer += `<br /><hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>`;
 			if (user.can('mute', null, room)) {
-				buffer += ` <button class="button" name="send" value="/removequote ${index},${room.roomid}">Remove</button>`;
+				buffer += ` <button class="button" name="send" value="/msgroom ${room.roomid},/removequote ${index}">Remove</button>`;
 			}
 			buffer += `</div>`;
 		}
 		buffer += `</div>`;
 		return buffer;
 	},
+};
+
+export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
+	if (quotes[oldID]) {
+		if (!quotes[newID]) quotes[newID] = [];
+		quotes[newID].push(...quotes[oldID]);
+		delete quotes[oldID];
+		saveQuotes();
+	}
 };

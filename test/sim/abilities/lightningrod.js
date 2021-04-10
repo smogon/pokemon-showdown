@@ -82,8 +82,21 @@ describe('Lightning Rod', function () {
 			{species: 'Pichu', ability: 'static', moves: ['thunderbolt']},
 			{species: 'Pichu', ability: 'static', moves: ['thunderbolt']},
 		]});
-		const [rodCopied, rodStarts] = battle.p1.active;
+		let [rodCopied, rodStarts] = battle.p1.active;
 		battle.makeChoices('move roleplay -2, move sleeptalk', 'move thunderbolt 1, move thunderbolt 2');
+		assert.statStage(rodCopied, 'spa', 0);
+		assert.statStage(rodStarts, 'spa', 2);
+
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Togedemaru', moves: ['zingzap']},
+			{species: 'Ditto', ability: 'imposter', moves: ['transform']},
+		], [
+			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
+			{species: 'Dratini', moves: ['thunderbolt']},
+		]]);
+		rodCopied = battle.p1.active[1]; // Ditto
+		rodStarts = battle.p2.active[0]; // Manectric
+		battle.makeChoices('move zingzap 2, move sleeptalk', 'move sleeptalk, move thunderbolt 1');
 		assert.statStage(rodCopied, 'spa', 0);
 		assert.statStage(rodStarts, 'spa', 2);
 	});
