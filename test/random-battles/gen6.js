@@ -1,6 +1,6 @@
 
 /**
- * Tests for Gen 7 randomized formats
+ * Tests for Gen 6 randomized formats
  */
 'use strict';
 
