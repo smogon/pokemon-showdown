@@ -4380,7 +4380,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	doublade: {
-		randomBattleMoves: ["ironhead", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"],
+		randomBattleMoves: ["closecombat", "ironhead", "shadowclaw", "shadowsneak", "swordsdance"],
 		randomBattleLevel: 82,
 		tier: "RU",
 		doublesTier: "NFE",
@@ -5394,7 +5394,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	magearnaoriginal: {
 		randomBattleMoves: ["agility", "calmmind", "flashcannon", "fleurcannon"],
-		randomBattleLevel: 74,
+		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["agility", "aurasphere", "dazzlinggleam", "flashcannon", "fleurcannon", "protect", "trick"],
 		randomDoubleBattleLevel: 72,
 		tier: "Uber",

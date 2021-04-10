@@ -289,7 +289,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'lavaplume':
 			return {cull: hasMove['firepunch'] || hasMove['fireblast'] && (counter.setupType || !!counter.speedsetup)};
 		case 'airslash': case 'hurricane':
-			return {cull: hasMove['bravebird']};
+			return {cull: hasMove['bravebird'] || hasMove[move.id === 'hurricane' ? 'airslash' : 'hurricane']};
 		case 'shadowball':
 			return {cull: hasMove['darkpulse'] || (hasMove['hex'] && hasMove['willowisp'])};
 		case 'shadowclaw':

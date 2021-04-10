@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const {testSet, testNotBothMoves, testHasSTAB} = require('./tools');
+const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove} = require('./tools');
 const assert = require('../assert');
 
 describe('[Gen 8] Random Battle', () => {
@@ -28,6 +28,23 @@ describe('[Gen 8] Random Battle', () => {
 				assert.equal(set.item, "Weakness Policy");
 			}
 		});
+	});
+
+	it('should not generate 3-attack Alcremie-Gmax', () => {
+		testSet('alcremiegmax', options, set => assert(
+			!['psychic', 'dazzlinggleam', 'mysticalfire'].every(move => set.moves.includes(move)),
+			`Alcremie-Gmax should not get three attacks (got ${set.moves})`
+		));
+	});
+
+	it('should always give Doublade Swords Dance', () => {
+		testAlwaysHasMove('doublade', options, 'swordsdance');
+	});
+
+	it('Dragonite and Salamence should always get Outrage', () => {
+		for (const pkmn of ['dragonite', 'salamence']) {
+			testAlwaysHasMove(pkmn, options, 'outrage');
+		}
 	});
 });
 
