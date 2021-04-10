@@ -265,7 +265,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 					moves.push(moveId);
 				}
 			}
-			set.moves = moves;
 		},
 	},
 	hoennpokedex: {
