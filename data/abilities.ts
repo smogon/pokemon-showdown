@@ -5250,4 +5250,34 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3.5,
 		num: 1040,
 	},
+	radioactive: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Poison' || move.type === 'Cosmic') {
+				this.debug('Radioactive boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Poison' || move.type === 'Cosmic') {
+				this.debug('Radioactive boost');
+				return this.chainModify(1.2);
+			}
+		},
+		name: "Radioactive",
+		rating: 3.5,
+		num: 1041,
+	},
+	haunted: {
+		name: "Haunted",
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.useMove("lazycurse", source);
+			}
+		},
+		rating: 2.5,
+		num: 1042,
+	},
 };

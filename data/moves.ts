@@ -22055,4 +22055,187 @@ export const Moves: {[moveid: string]: MoveData} = {
         type: "Ground",
         contestType: "Cute",
     },
+	raid: {
+		num: 949,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		name: "Raid",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyMove(move, pokemon) {
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				move.secondaries.push({
+					chance: 10,
+					status: 'brn',
+				});
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				move.secondaries.push({
+					chance: 10,
+					status: 'slp',
+				});
+				break;
+			case 'sandstorm':
+				move.secondaries.push({
+					chance: 10,
+					volatileStatus: 'flinch',
+				});
+				break;
+			case 'hail':
+				move.secondaries.push({
+					chance: 10,
+					status: 'frz',
+				});
+				break;
+			case 'toxiccloud':
+				move.secondaries.push({
+					chance: 10,
+					status: 'psn',
+				});
+				break;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Bug",
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
+		contestType: "Beautiful",
+	},
+	deathray: {
+		num: 950,
+		accuracy: 30,
+		basePower: 0,
+		category: "Special",
+		name: "Death Ray",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		ohko: true,
+		secondary: null,
+		target: "normal",
+		type: "Cosmic",
+		zMove: {basePower: 180},
+		maxMove: {basePower: 130},
+		contestType: "Cool",
+	},
+	brightclaw: {
+		num: 421,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Shadow Claw",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		critRatio: 2,
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Cool",
+	},
+	dazingpressure: {
+		num: 500,
+		accuracy: 100,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 20 * pokemon.positiveBoosts();
+		},
+		category: "Physical",
+		name: "Dazing Pressure",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, expert: 1},
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
+		contestType: "Clever",
+	},
+	dazingraze: {
+		num: 501,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		name: "Dazing Raze",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 10,
+			boosts: {
+				accuracy: -1,
+			},
+		},
+		target: "normal",
+		type: "Light",
+		contestType: "Beautiful",
+	},
+	freezingcomet: {
+		num: 502,
+		accuracy: 90,
+		basePower: 90,
+		category: "Special",
+		name: "Freezing Comet",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		target: "normal",
+		type: "Cosmic",
+		contestType: "Beautiful",
+	},
+	lazycurse: {
+		num: 503,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Lazy Curse",
+		pp: 10,
+		priority: 0,
+		flags: {authentic: 1},
+		volatileStatus: 'curse',
+		// onModifyMove(move, source, target) {
+			// if (!source.hasType('Ghost')) {
+				// move.target = move.nonGhostTarget as MoveTarget;
+			// }
+		// },
+		onTryHit(target, source, move) {
+			// if (!source.hasType('Ghost')) {
+				// delete move.volatileStatus;
+				// delete move.onHit;
+				// move.self = {boosts: {spe: -1, atk: 1, def: 1}};
+			// } 
+			if (move.volatileStatus && target.volatiles['curse']) {
+				return false;
+			}
+		},
+		onHit(target, source) {
+			this.directDamage(source.maxhp / 2, source, source);
+		},
+		condition: {
+			onStart(pokemon, source) {
+				this.add('-start', pokemon, 'Curse', '[of] ' + source);
+			},
+			onResidualOrder: 10,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / 4);
+			},
+		},
+		secondary: null,
+		target: "randomNormal",
+		nonGhostTarget: "self",
+		type: "Ghost",
+		zMove: {effect: 'curse'},
+		contestType: "Tough",
+	},
 };
