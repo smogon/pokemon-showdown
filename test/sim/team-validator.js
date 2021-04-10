@@ -668,6 +668,17 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it(`should not allow duplicate moves on the same set, except in hackmons`, function () {
+		const team = [
+			{species: 'corsola', ability: 'hustle', moves: ['snore', 'snore'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		illegal = TeamValidator.get('gen8purehackmons').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 
 	/*********************************************************
  	* Custom rules
