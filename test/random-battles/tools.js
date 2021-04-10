@@ -56,7 +56,23 @@ function testNotBothMoves(pokemon, options, move1, move2) {
 	testSet(pokemon, options, set => {
 		assert(
 			!(set.moves.includes(move1) && set.moves.includes(move2)),
-			`${pokemon} should not generate both "${move1}" and "${move2}" (generate moveset: ${set.moves})`
+			`${pokemon} should not generate both "${move1}" and "${move2}" (generated moveset: ${set.moves})`
+		);
+	});
+}
+
+/**
+ * Tests that a Pokémon always gets a move.
+ *
+ * @param {ID} pokemon the ID of the Pokemon whose set is to be tested
+ * @param {{format?: string, rounds?: number, isDoubles?: boolean, isLead?: boolean, isDynamax?: boolean}} options
+ * @param {ID} move
+ */
+function testAlwaysHasMove(pokemon, options, move) {
+	testSet(pokemon, options, set => {
+		assert(
+			set.moves.includes(move),
+			`${pokemon} should always generate "${move}" (generated moveset: ${set.moves})`
 		);
 	});
 }
@@ -78,6 +94,7 @@ function testTeam(options, test) {
 }
 
 exports.testSet = testSet;
+exports.testAlwaysHasMove = testAlwaysHasMove;
 exports.testNotBothMoves = testNotBothMoves;
 exports.testTeam = testTeam;
 exports.testHasSTAB = testHasSTAB;

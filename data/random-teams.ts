@@ -120,13 +120,16 @@ export class RandomTeams {
 				if (!counter.Dark) return true;
 				return hasMove['suckerpunch'] && (movePool.includes('knockoff') || movePool.includes('wickedblow'));
 			},
-			Dragon: (movePool, hasMove, hasAbility, hasType, counter) => (
-				!(counter.setupType === 'Physical' && hasType['Flying']) &&
-				!counter.Dragon &&
-				!hasMove['dragonascent'] &&
-				!hasMove['substitute'] &&
-				!(hasMove['rest'] && hasMove['sleeptalk'])
-			),
+			Dragon: (movePool, hasMove, hasAbility, hasType, counter, species) => {
+				if (movePool.includes('outrage') && species.baseStats.atk >= 115) return true;
+				return (
+					!(counter.setupType === 'Physical' && hasType['Flying']) &&
+					!counter.Dragon &&
+					!hasMove['dragonascent'] &&
+					!hasMove['substitute'] &&
+					!(hasMove['rest'] && hasMove['sleeptalk'])
+				);
+			},
 			Electric: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Electric || movePool.includes('thunder'),
 			Fairy: (movePool, hasMove, hasAbility, hasType, counter) => (
 				!counter.Fairy &&
@@ -755,6 +758,7 @@ export class RandomTeams {
 			return {cull: true};
 		}
 		if (
+			(species.id === 'doublade' && movePool.includes('swordsdance')) ||
 			(species.id === 'entei' && movePool.includes('extremespeed')) ||
 			(species.id === 'genesectdouse' && movePool.includes('technoblast')) ||
 			(species.id === 'golisopod' && movePool.includes('leechlife') && movePool.includes('firstimpression'))
@@ -1043,7 +1047,8 @@ export class RandomTeams {
 			// Special case for Necrozma-DM, which always wants Dragon Dance
 			return {cull: hasMove['morningsun']};
 		case 'psychic':
-			return {cull: hasMove['psyshock'] && (counter.setupType || isDoubles)};
+			const alcremieCase = species.id === 'alcremiegmax' && counter.Status < 2;
+			return {cull: alcremieCase || (hasMove['psyshock'] && (counter.setupType || isDoubles))};
 		case 'psyshock':
 			// Special case for Sylveon which only wants Psyshock if it gets a Choice item
 			const sylveonCase = hasAbility['Pixilate'] && counter.Special < 4;
@@ -1217,7 +1222,7 @@ export class RandomTeams {
 		case 'Lightning Rod':
 			return (species.types.includes('Ground') || (!isNoDynamax && counter.setupType === 'Physical'));
 		case 'Limber':
-			return species.types.includes('Electric');
+			return species.types.includes('Electric') || hasMove['facade'];
 		case 'Liquid Voice':
 			return !hasMove['hypervoice'];
 		case 'Magic Guard':
@@ -1393,10 +1398,7 @@ export class RandomTeams {
 		// Ability based logic and miscellaneous logic
 		if (species.name === 'Wobbuffet' || ['Cheek Pouch', 'Harvest', 'Ripen'].includes(ability)) return 'Sitrus Berry';
 		if (ability === 'Gluttony') return this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
-		if (
-			ability === 'Gorilla Tactics' || ability === 'Imposter' ||
-			(ability === 'Magnet Pull' && hasMove['bodypress'] && !isDoubles)
-		) return 'Choice Scarf';
+		if (ability === 'Imposter' || (ability === 'Magnet Pull' && hasMove['bodypress'] && !isDoubles)) return 'Choice Scarf';
 		if (ability === 'Guts' && (counter.Physical > 2 || isDoubles)) return hasType['Fire'] ? 'Toxic Orb' : 'Flame Orb';
 		if (ability === 'Magic Guard' && counter.damagingMoves.length > 1) {
 			return hasMove['counter'] ? 'Focus Sash' : 'Life Orb';
@@ -1806,9 +1808,13 @@ export class RandomTeams {
 				);
 
 				if (rejectAbility) {
-					if (ability === abilities[0].name && abilities[1].rating >= 1) {
+					// Lopunny, and other Facade users, don't want Limber, even if other abilities are poorly rated,
+					// since paralysis would arguably be good for them.
+					const limberFacade = hasMove['facade'] && ability === 'Limber';
+
+					if (ability === abilities[0].name && (abilities[1].rating >= 1 || limberFacade)) {
 						ability = abilities[1].name;
-					} else if (ability === abilities[1].name && abilityNames[2] && abilities[2].rating >= 1) {
+					} else if (ability === abilities[1].name && abilityNames[2] && (abilities[2].rating >= 1 || limberFacade)) {
 						ability = abilities[2].name;
 					} else {
 						// Default to the highest rated ability if all are rejected
@@ -2043,7 +2049,7 @@ export class RandomTeams {
 				break;
 			case 'Magearna': case 'Toxtricity': case 'Zacian': case 'Zamazenta': case 'Zarude':
 			case 'Appletun': case 'Blastoise': case 'Butterfree': case 'Copperajah': case 'Grimmsnarl':
-			case 'Inteleon': case 'Rillaboom': case 'Snorlax': case 'Urshifu': case 'Giratina':
+			case 'Inteleon': case 'Rillaboom': case 'Snorlax': case 'Urshifu': case 'Giratina': case 'Genesect':
 				if (this.gen >= 8 && this.randomChance(1, 2)) continue;
 				break;
 			}
