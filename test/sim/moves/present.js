@@ -11,8 +11,8 @@ describe('Present', function () {
 	});
 
 	it(`should heal the Pokemon through Substitute`, function () {
-		// Seed guarantees 2 healing Presents turn 1
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 1, 1, 1]}, [[
+		// Seed guarantees the Present that hits Wynaut heals
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 1, 1, 2]}, [[
 			{species: "Delibird", level: 1, ability: 'compoundeyes', moves: ['present']},
 			{species: "Delibird", level: 1, ability: 'compoundeyes', moves: ['present']},
 		], [

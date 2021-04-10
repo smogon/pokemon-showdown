@@ -222,10 +222,6 @@ export class Battle {
 
 		this.send = options.send || (() => {});
 
-		// bound function for faster speedSort
-		// (so speedSort doesn't need to bind before use)
-		this.comparePriority = this.comparePriority.bind(this);
-
 		const inputOptions: {formatid: ID, seed: PRNGSeed, rated?: string | true} = {
 			formatid: options.formatid, seed: this.prng.seed,
 		};
@@ -334,12 +330,21 @@ export class Battle {
 		}
 	}
 
+	/**
+	 * The default sort order for actions, but also event listeners.
+	 *
+	 * 1. Order, low to high (default last)
+	 * 2. Priority, high to low (default 0)
+	 * 3. Speed, high to low (default 0)
+	 * 4. SubOrder, low to high (default 0)
+	 *
+	 * Doesn't reference `this` so doesn't need to be bound.
+	 */
 	comparePriority(a: AnyObject, b: AnyObject) {
 		return -((b.order || 4294967296) - (a.order || 4294967296)) ||
 			((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
 			-((b.subOrder || 0) - (a.subOrder || 0)) ||
-			((a.effectHolder && b.effectHolder) ? -(b.effectHolder.abilityOrder - a.effectHolder.abilityOrder) : 0) ||
 			0;
 	}
 
@@ -361,6 +366,11 @@ export class Battle {
 	speedSort<T>(list: T[], comparator: (a: T, b: T) => number = this.comparePriority) {
 		if (list.length < 2) return;
 		let sorted = 0;
+		// This is a Selection Sort - not the fastest sort in general, but
+		// actually faster than QuickSort for small arrays like the ones
+		// `speedSort` is used for.
+		// More importantly, it makes it easiest to resolve speed ties
+		// properly.
 		while (sorted + 1 < list.length) {
 			let nextIndexes = [sorted];
 			// grab list of next indexes
@@ -371,16 +381,18 @@ export class Battle {
 				if (delta === 0) nextIndexes.push(i);
 			}
 			// put list of next indexes where they belong
-			const nextCount = nextIndexes.length;
-			for (let i = 0; i < nextCount; i++) {
-				let index = nextIndexes[i];
-				while (index > sorted + i) {
-					[list[index], list[index - 1]] = [list[index - 1], list[index]];
-					index--;
+			for (let i = 0; i < nextIndexes.length; i++) {
+				const index = nextIndexes[i];
+				if (index !== sorted + i) {
+					// nextIndexes is guaranteed to be in order, so it will never have
+					// been disturbed by an earlier swap
+					[list[sorted + i], list[index]] = [list[index], list[sorted + i]];
 				}
 			}
-			if (nextCount > 1) this.prng.shuffle(list, sorted, sorted + nextCount);
-			sorted += nextCount;
+			if (nextIndexes.length > 1) {
+				this.prng.shuffle(list, sorted, sorted + nextIndexes.length);
+			}
+			sorted += nextIndexes.length;
 		}
 	}
 
