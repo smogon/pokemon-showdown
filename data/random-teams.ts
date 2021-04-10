@@ -37,11 +37,11 @@ const PhysicalSetup = [
 const SpecialSetup = [
 	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow',
 ];
-// Moves which boost Attack AND Special Attack:
+// Moves that boost Attack AND Special Attack:
 const MixedSetup = [
 	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
 ];
-// Moves which only boost Speed:
+// Some moves that only boost Speed:
 const SpeedSetup = [
 	'agility', 'autotomize', 'flamecharge', 'rockpolish',
 ];
