@@ -254,7 +254,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 
 			// limit one of each move
-			const moves = [];
 			if (set.moves) {
 				const hasMove: {[k: string]: true} = {};
 				for (const moveId of set.moves) {
@@ -262,7 +261,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 					const moveid = move.id;
 					if (hasMove[moveid]) return [`${species.baseSpecies} has multiple copies of ${move.name}.`];
 					hasMove[moveid] = true;
-					moves.push(moveId);
 				}
 			}
 		},
