@@ -1262,7 +1262,7 @@ export class TeamValidator {
 			'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 		};
 		if (set.species in crowned) {
-			const ironHead = set.moves.indexOf('ironhead');
+			const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
 			if (ironHead >= 0) {
 				set.moves[ironHead] = crowned[set.species];
 			}
