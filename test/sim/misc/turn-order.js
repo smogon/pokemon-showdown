@@ -172,3 +172,26 @@ describe('Switching', function () {
 		assert.equal(battle.p2.pokemon[0].boosts.atk, 0);
 	});
 });
+
+describe('Speed ties', function () {
+	it('(slow) Perish Song faint order should be random', function () {
+		const wins = {p1: 0, p2: 0};
+		for (let i = 0; i < 20; i++) {
+			battle = common.createBattle({
+				seed: [i, 2, 3, 4],
+			}, [[
+				{species: "Politoed", moves: ['perishsong']},
+			], [
+				{species: "Politoed", moves: ['perishsong']},
+			]]);
+			battle.makeChoices('auto', 'auto');
+			battle.makeChoices('auto', 'auto');
+			battle.makeChoices('auto', 'auto');
+			battle.makeChoices('auto', 'auto');
+			wins[battle.winner === 'Player 1' ? 'p1' : 'p2']++;
+			if (wins.p1 && wins.p2) break;
+		}
+		assert(wins.p1);
+		assert(wins.p2);
+	});
+});

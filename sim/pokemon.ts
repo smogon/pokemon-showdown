@@ -426,6 +426,11 @@ export class Pokemon {
 
 		this.weighthg = 1;
 		this.speed = 0;
+		/**
+		 * Determines the order in which redirect abilities like Lightning Rod
+		 * activate if speed tied. Surprisingly not random like every other speed
+		 * tie, but based on who first switched in or acquired the ability!
+		 */
 		this.abilityOrder = 0;
 
 		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
