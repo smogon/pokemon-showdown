@@ -90,6 +90,17 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it(`should enforce the 3 perfect IV minimum on legendaries with Gen 6+ origin`, function () {
+		const team = [
+			{species: 'xerneas', ability: 'fairyaura', moves: ['snore'], ivs: {hp: 0, atk: 0, def: 0, spa: 0}, evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		illegal = TeamValidator.get('gen8purehackmons').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should validate the Diancie released with zero perfect IVs', function () {
 		let team = [
 			{species: 'diancie', ability: 'clearbody', shiny: true, moves: ['hiddenpowerfighting'], evs: {hp: 1}},
@@ -666,6 +677,17 @@ describe('Team Validator', function () {
 		];
 		const illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert(illegal);
+	});
+
+	it(`should not allow duplicate moves on the same set, except in hackmons`, function () {
+		const team = [
+			{species: 'corsola', ability: 'hustle', moves: ['snore', 'snore'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		illegal = TeamValidator.get('gen8purehackmons').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it(`should not allow duplicate moves on the same set, except in hackmons`, function () {

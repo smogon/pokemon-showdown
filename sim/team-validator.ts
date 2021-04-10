@@ -814,17 +814,17 @@ export class TeamValidator {
 		if (set.hpType === 'Fighting' && ruleTable.has('obtainablemisc')) {
 			if (has3PerfectIVs) {
 				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
-				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
+				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a Gen 6+ legendary.`);
 			}
 		}
 
-		if (has3PerfectIVs) {
+		if (has3PerfectIVs && ruleTable.has('obtainablemisc')) {
 			let perfectIVs = 0;
 			for (const stat in set.ivs) {
 				if (set.ivs[stat as 'hp'] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < 3) {
-				const reason = (this.minSourceGen === 6 ? ` and this format requires gen ${dex.gen} Pokémon` : ` in gen 6 or later`);
+				const reason = (this.minSourceGen === 6 ? ` and this format requires Gen ${dex.gen} Pokémon` : ` in Gen 6 or later`);
 				problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
 			}
 		}
