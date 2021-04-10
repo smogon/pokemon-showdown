@@ -921,7 +921,7 @@ export class RandomTeams {
 		 * These are sorted in order of:
 		 * Normal>Fire>Water>Electric>Grass>Ice>Fighting>Poison>Ground>Flying>Psychic>Bug>Rock>Ghost>Dragon>Dark>Fairy
 		 * and then subsorted alphabetically.
-		 * This type order is arbitrary and referenced from some sort of webpage. I do not know which webpage.
+		 * This type order is arbitrary and referenced from https://pokemondb.net/type.
 		 */
 		case 'explosion':
 			// Rock Blast: Special case for Gigalith to prevent Stone Edge-less Choice Band sets
