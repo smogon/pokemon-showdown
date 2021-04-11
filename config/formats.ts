@@ -3236,9 +3236,7 @@ export const Formats: FormatList = [
 		},
 		searchShow: false,
 		ruleset: ['Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause', 'Endless battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'Cup Level Limit'],
-		banlist: [
-   			'Uber',
-		],
+		banlist: ['Uber'],
 	},
 	{
 		name: "[Gen 2] Stadium OU",
