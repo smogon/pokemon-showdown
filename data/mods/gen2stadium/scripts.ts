@@ -484,8 +484,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		return success;
 	},
 	/**
-	 * Implementing Self-KO Clause by having it check what the last move used by the players were in the case both Pokemon faint.
-	 * Since the only way this can happen in Stadium 2 is if a player uses self-destruct or explosion, I can use this to determine who should win.
+	 * Implementing Self-KO Clause by having it check what the last move used by the players were
+	 * in the case both Pokemon faint. Since the only way this can happen in Stadium 2 is if a player
+	 * uses self-destruct or explosion, I can use this to determine who should win.
 	 */
 	faintMessages(lastFirst) {
 		if (this.ended) return;
