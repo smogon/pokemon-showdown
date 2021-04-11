@@ -3235,7 +3235,7 @@ export const Formats: FormatList = [
 			battle: 3,
 		},
 		searchShow: false,
-		ruleset: ['Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause','Item Clause', 'Endless battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'Cup Level Limit'],
+		ruleset: ['Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause', 'Endless battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'Cup Level Limit'],
 		banlist: [
    			'Uber',
 		],
