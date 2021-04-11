@@ -552,4 +552,4 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		return false;
 	},
-}
+};
