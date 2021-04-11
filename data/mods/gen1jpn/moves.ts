@@ -69,7 +69,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					// In gen 1 it only blocks:
 					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
 					let SubBlocked = ['lockon', 'meanlook', 'mindreader', 'nightmare'];
-					if (move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) || move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)) {
+					if ((move.status && ['psn', 'tox'].includes(move.status)) || (move.boosts && target !== source) ||
+						move.volatileStatus === 'confusion' || subBlocked.includes(move.id)) {
 						return false;
 					}
 					return;
