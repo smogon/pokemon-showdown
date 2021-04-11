@@ -3223,6 +3223,32 @@ export const Formats: FormatList = [
 		banlist: ['UU', 'NUBL'],
 	},
 	{
+		name: "[Gen 2] Nintendo Cup 2000",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Placeholder</a>`,
+		],
+
+		mod: 'gen2',
+		cupLevelLimit: [50, 55, 155],
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		searchShow: false,
+		ruleset: ['Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause','Item Clause', 'Endless battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'Cup Level Limit'],
+		banlist: [
+   			'Uber',
+		],
+	},
+	{
+		name: "[Gen 2] Stadium OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Placeholder</a>`,
+		],
+		mod: 'gen2stadium',
+		ruleset: ['Standard']
+	},
+	{
 		name: "[Gen 2] Custom Game",
 
 		mod: 'gen2',
@@ -3285,6 +3311,23 @@ export const Formats: FormatList = [
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
 		],
 	},
+	{
+        	name: "[Gen 1] Nintendo Cup 1997",
+        	threads: [
+            	`&bullet; <a href="https://www.smogon.com/forums/threads/3572352/">RBY OU Viability Ranking</a>`,
+            	`&bullet; <a href="https://www.smogon.com/forums/threads/3650478/#post-8133786">RBY Sample Teams</a>`,
+        	],
+
+        	mod: 'gen1jpn',
+        	cupLevelLimit: [50, 55, 155],
+        	teamLength: {
+            		validate: [3, 6],
+            		battle: 3,
+        	},
+        	searchShow: false,
+        	ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod'],
+        	banlist: ['Uber'],
+    	},
 	{
 		name: "[Gen 1] Stadium OU",
 
