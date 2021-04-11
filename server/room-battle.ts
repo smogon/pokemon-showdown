@@ -940,7 +940,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const p1id = toID(p1);
 		const p2id = toID(p2);
 		const loser = winner ? (p1id === winner ? p2id : p1id) : "";
-		const format = Dex.getFormat(this.format).id;
+		const format = Dex.formats.get(this.format).id;
 		const SQL = require('sql-template-strings');
 
 		const rowid = await Rooms.RoomBattle.logDatabase.transaction(async worker => {
