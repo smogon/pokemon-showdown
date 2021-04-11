@@ -831,7 +831,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'pivot') {
 				for (const move in mod.data.Moves) {
-					const moveData = mod.getMove(move);
+					const moveData = mod.moves.get(move);
 					if (moveData.selfSwitch && moveData.id !== 'batonpass') {
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
