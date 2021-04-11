@@ -256,7 +256,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
-		banlist: ['Crucibellite'],
+		banlist: ['Zamazenta-Crowned', 'Crucibellite'],
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
@@ -689,7 +689,7 @@ export const Formats: FormatList = [
 					if (item.megaEvolves === set.species) godSpecies = this.dex.species.get(item.megaStone);
 				}
 				const isBanned = validator.isBannedSpecies(godSpecies);
-				return isBanned;
+				return isBanned || godSpecies.id === 'zamazentacrowned';
 			}) || target.side.team[0];
 			const stat = Dex.stats.ids()[target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
