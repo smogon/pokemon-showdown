@@ -443,9 +443,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			return damage;
 		},
 	},
-	//Stadium 2 ignores stat drops due to status ailments upon boosting the dropped stat.
-	//For example: if a burned Snorlax uses Curse then it will ignore the attack drop from burn when it is recalculating its attack stat.
-	//This is why volatiles are added to status conditions, so that we can keep track of whether or not to apply the stat drop from statuses.
+	/**
+	 * Stadium 2 ignores stat drops due to status ailments upon boosting the dropped stat.
+	 * For example: if a burned Snorlax uses Curse then it will ignore the attack drop from burn when it is recalculating its attack stat.
+	 * This is why volatiles are added to status conditions, so that we can keep track of whether or not to apply the stat drop from statuses.
+	 */
 	boost(boost, target, source = null, effect = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
