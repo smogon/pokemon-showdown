@@ -24,7 +24,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!move || move.effectType !== 'Move') return;
 				if (!source) return;
 				if (move.id === 'earthquake') {
-					this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
+					this.add('-message', `The foe ${target.name} can't be hit underground!`);
 					return null;
 				}
 			},
