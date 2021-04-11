@@ -1847,7 +1847,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["extremespeed", "protect", "sacredfire", "snarl", "stompingtantrum", "stoneedge"],
 		randomDoubleBattleLevel: 80,
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DOU",
 	},
 	suicune: {
@@ -6102,7 +6102,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["closecombat", "highhorsepower", "iciclecrash", "protect"],
 		randomDoubleBattleLevel: 84,
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DOU",
 	},
 	spectrier: {
