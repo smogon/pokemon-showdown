@@ -3312,22 +3312,22 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-        	name: "[Gen 1] Nintendo Cup 1997",
-        	threads: [
-            	`&bullet; <a href="https://www.smogon.com/forums/threads/3572352/">RBY OU Viability Ranking</a>`,
-            	`&bullet; <a href="https://www.smogon.com/forums/threads/3650478/#post-8133786">RBY Sample Teams</a>`,
-        	],
+		name: "[Gen 1] Nintendo Cup 1997",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3572352/">RBY OU Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3650478/#post-8133786">RBY Sample Teams</a>`,
+		],
 
-        	mod: 'gen1jpn',
-        	cupLevelLimit: [50, 55, 155],
-        	teamLength: {
-            		validate: [3, 6],
-            		battle: 3,
-        	},
-        	searchShow: false,
-        	ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod'],
-        	banlist: ['Uber'],
-    	},
+		mod: 'gen1jpn',
+		cupLevelLimit: [50, 55, 155],
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		searchShow: false,
+		ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Uber'],
+	},
 	{
 		name: "[Gen 1] Stadium OU",
 
