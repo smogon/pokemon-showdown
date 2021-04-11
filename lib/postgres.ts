@@ -5,7 +5,7 @@
  */
 
 // @ts-ignore in case module doesn't exist
-import type * as PG from 'pg'
+import type * as PG from 'pg';
 import type {SQLStatement} from 'sql-template-strings';
 
 export class PostgresDatabase {
@@ -34,7 +34,7 @@ export class PostgresDatabase {
 		} catch (e) {}
 		return config;
 	}
-	async transaction(callback: (conn: PG.PoolClient) => any, depth = 0) {
+	async transaction(callback: (conn: PG.PoolClient) => any, depth = 0): Promise<any> {
 		const conn = await this.pool.connect();
 		await conn.query(`BEGIN;`);
 		let result;
@@ -46,17 +46,16 @@ export class PostgresDatabase {
 			const code = parseInt(e?.code);
 			// two concurrent transactions conflicted, try again
 			if (code === 40001 && depth <= 10) {
-				this.transaction(callback, depth++);
-				return;
+				result = await this.transaction(callback, depth++);
 			// There is a bug in Postgres that causes some
-         // serialization failures to be reported as failed
-         // unique constraint checks. Only retrying once since
+			// serialization failures to be reported as failed
+			// unique constraint checks. Only retrying once since
 			// it could be our fault (thanks chaos for this info / the first half of this comment)
 			} else if (code === 23505 && !depth) {
-				this.transaction(callback, depth++);
-				return;
+				result = await this.transaction(callback, depth++);
+			} else {
+				throw e;
 			}
-			throw e;
 		}
 		await conn.query(`COMMIT;`);
 		return result;

@@ -508,20 +508,17 @@ export const commands: ChatCommands = {
  * Process manager
  *********************************************************/
 
+
 export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
 	const {userids, turnLimit, month, tierid} = data;
 	const start = Date.now();
 	try {
-<<<<<<< HEAD
-		const result = await runBattleSearch(userids, month, tierid, turnLimit);
+		const result = await BattleSearcher.runSearch(userids, month, tierid, turnLimit);
 		const elapsedTime = Date.now() - start;
 		if (elapsedTime > 10 * 60 * 1000) {
 			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
 		}
 		return result;
-=======
-		return await BattleSearcher.runSearch(userids, month, tierid, turnLimit);
->>>>>>> Support logging battle logs to a Postgres database
 	} catch (err) {
 		Monitor.crashlog(err, 'A battle search query', {
 			userids,

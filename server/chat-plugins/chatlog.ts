@@ -620,7 +620,8 @@ export abstract class Searcher {
 	async sharedBattles(userids: string[]) {
 		let buf = `Logged shared battles between the users ${userids.join(', ')}`;
 		const results: string[] = await (this.usePM ?
-				PM.query({queryType: 'sharedsearch', search: userids}) : this.getSharedBattles(userids));
+			PM.query({queryType: 'sharedsearch', search: userids}) :
+			this.getSharedBattles(userids));
 		if (!results.length) {
 			buf += `:<br />None found.`;
 			return buf;
