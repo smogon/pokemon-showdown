@@ -464,7 +464,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			currentBoost[i] = boost[i];
 			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
 				success = true;
-				let msg = '-boost';
+				const msg = '-boost';
 				// Check for boost increases deleting attack or speed drops
 				if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
 					target.removeVolatile('brnattackdrop');
