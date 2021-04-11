@@ -17,7 +17,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onLockMove: 'dig',
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift' && target.volatiles['substitute']) return true;
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
+				this.add('-message', `The foe ${target.name} can't be hit underground!`);
 				return false;
 			},
 			onDamage(damage, target, source, move) {
