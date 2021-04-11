@@ -3244,7 +3244,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Placeholder</a>`,
 		],
 		mod: 'gen2stadium',
-		ruleset: ['Standard']
+		ruleset: ['Standard'],
 	},
 	{
 		name: "[Gen 2] Custom Game",
