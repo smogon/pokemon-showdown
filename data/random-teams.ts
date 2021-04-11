@@ -37,13 +37,13 @@ const PhysicalSetup = [
 const SpecialSetup = [
 	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow',
 ];
-// Moves which boost Attack AND Special Attack:
+// Moves that boost Attack AND Special Attack:
 const MixedSetup = [
 	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
 ];
-// Moves which boost Speed:
+// Some moves that only boost Speed:
 const SpeedSetup = [
-	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'shiftgear',
+	'agility', 'autotomize', 'flamecharge', 'rockpolish',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
@@ -120,16 +120,12 @@ export class RandomTeams {
 				if (!counter.Dark) return true;
 				return hasMove['suckerpunch'] && (movePool.includes('knockoff') || movePool.includes('wickedblow'));
 			},
-			Dragon: (movePool, hasMove, hasAbility, hasType, counter, species) => {
-				if (movePool.includes('outrage') && species.baseStats.atk >= 115) return true;
-				return (
-					!(counter.setupType === 'Physical' && hasType['Flying']) &&
-					!counter.Dragon &&
-					!hasMove['dragonascent'] &&
-					!hasMove['substitute'] &&
-					!(hasMove['rest'] && hasMove['sleeptalk'])
-				);
-			},
+			Dragon: (movePool, hasMove, hasAbility, hasType, counter) => (
+				!counter.Dragon &&
+				!hasMove['dragonascent'] &&
+				!hasMove['substitute'] &&
+				!(hasMove['rest'] && hasMove['sleeptalk'])
+			),
 			Electric: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Electric || movePool.includes('thunder'),
 			Fairy: (movePool, hasMove, hasAbility, hasType, counter) => (
 				!counter.Fairy &&
@@ -142,7 +138,7 @@ export class RandomTeams {
 				return !hasMove['bellydrum'] && (!counter.Fire || (!enteiException && movePool.includes('flareblitz')));
 			},
 			Flying: (movePool, hasMove, hasAbility, hasType, counter) => (
-				!counter.Flying && [
+				!counter.Flying && !hasType['Dragon'] && [
 					'airslash', 'bravebird', 'dualwingbeat', 'oblivionwing',
 				].some(moveid => movePool.includes(moveid))
 			),
@@ -775,23 +771,18 @@ export class RandomTeams {
 		case 'acrobatics': case 'junglehealing':
 			// Special case to prevent lead Acrobatics Rillaboom
 			return {cull: (species.id.startsWith('rillaboom') && isLead) || (!isDoubles && !counter.setupType)};
-		case 'healbell':
-			return {cull: movePool.includes('protect') || movePool.includes('wish')};
 		case 'dualwingbeat': case 'fly':
 			return {cull: !hasType[move.type] && !counter.setupType && counter.Status};
-		case 'storedpower':
-			return {cull: !counter.setupType};
+		case 'healbell':
+			return {cull: movePool.includes('protect') || movePool.includes('wish')};
 		case 'fireblast':
 			// Special case for Togekiss, which always wants Aura Sphere
 			return {cull: hasAbility['Serene Grace'] && (!hasMove['trick'] || counter.Status > 1)};
 		case 'firepunch':
 			// Special case for Darmanitan-Zen-Galar, which doesn't always want Fire Punch
 			return {cull: movePool.includes('bellydrum') || (hasMove['earthquake'] && movePool.includes('substitute'))};
-		case 'flamecharge': case 'sacredsword':
-			// Special cases for regular Silvally and Doublade, which don't want these without Swords Dance
-			const fewDamagingMoves = counter.damagingMoves.length < 3 && !counter.setupType;
-			const swordsDance = !hasType['Grass'] && movePool.includes('swordsdance');
-			return {cull: fewDamagingMoves || swordsDance};
+		case 'flamecharge':
+			return {cull: movePool.includes('swordsdance')};
 		case 'hypervoice':
 			// Special case for Heliolisk, which always wants Thunderbolt
 			return {cull: hasType['Electric'] && movePool.includes('thunderbolt')};
@@ -809,6 +800,8 @@ export class RandomTeams {
 				if (rest >= 0) this.fastPop(movePool, rest);
 			}
 			break;
+		case 'storedpower':
+			return {cull: !counter.setupType};
 		case 'switcheroo': case 'trick':
 			return {cull: counter.Physical + counter.Special < 3 || hasMove['rapidspin']};
 		case 'trickroom':
@@ -853,8 +846,6 @@ export class RandomTeams {
 		case 'coaching': case 'counter': case 'reversal':
 			// Counter: special case for Alakazam, which doesn't want Counter + Nasty Plot
 			return {cull: !!counter.setupType};
-		case 'firstimpression': case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
-			return {cull: (counter.setupType) || counter.speedsetup || hasMove['rest']};
 		case 'bulletpunch': case 'extremespeed': case 'rockblast':
 			return {cull: counter.speedsetup || counter.damagingMoves.length < 2};
 		case 'closecombat': case 'flashcannon': case 'pollenpuff':
@@ -872,6 +863,8 @@ export class RandomTeams {
 			return {cull: counter.setupType || hasMove['healbell'] || hasMove['toxicspikes'] || teamDetails.defog};
 		case 'fakeout':
 			return {cull: counter.setupType || ['protect', 'rapidspin', 'substitute', 'uturn'].some(m => hasMove[m])};
+		case 'firstimpression': case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
+			return {cull: (counter.setupType) || counter.speedsetup || hasMove['rest']};
 		case 'healingwish': case 'memento':
 			return {cull: counter.setupType || counter.recovery || hasMove['substitute'] || hasMove['uturn']};
 		case 'highjumpkick':
@@ -922,7 +915,14 @@ export class RandomTeams {
 			const bugSwordsDanceCase = hasType['Bug'] && counter.recovery && hasMove['swordsdance'];
 			return {cull: counter.speedsetup || (counter.setupType && !bugSwordsDanceCase) || (isDoubles && hasMove['leechlife'])};
 
-		// Ineffective to have two particular moves together
+		/**
+		 * Ineffective to have both moves together
+		 *
+		 * These are sorted in order of:
+		 * Normal>Fire>Water>Electric>Grass>Ice>Fighting>Poison>Ground>Flying>Psychic>Bug>Rock>Ghost>Dragon>Dark>Fairy
+		 * and then subsorted alphabetically.
+		 * This type order is arbitrary and referenced from https://pokemondb.net/type.
+		 */
 		case 'explosion':
 			// Rock Blast: Special case for Gigalith to prevent Stone Edge-less Choice Band sets
 			const otherMoves = ['curse', 'stompingtantrum', 'rockblast', 'painsplit', 'wish'].some(m => hasMove[m]);
@@ -936,15 +936,14 @@ export class RandomTeams {
 			return {cull: counter.speedsetup || (hasType['Rock'] && counter.Status) || diggersbyCull};
 		case 'blazekick':
 			return {cull: species.id === 'genesect' && counter.Special >= 1};
+		case 'blueflare':
+			return {cull: hasMove['vcreate']};
 		case 'firefang': case 'flamethrower':
 			// Fire Fang: Special case for Garchomp, which doesn't want Fire Fang w/o Swords Dance
 			const otherFireMoves = ['heatwave', 'overheat'].some(m => hasMove[m]);
 			return {cull: (hasMove['fireblast'] && counter.setupType !== 'Physical') || otherFireMoves};
 		case 'overheat':
 			return {cull: hasMove['flareblitz'] || (isDoubles && hasMove['calmmind'])};
-		case 'psychicfangs':
-			// Special case for Morpeko, which doesn't want 4 attacks Leftovers
-			return {cull: hasMove['rapidspin']};
 		case 'aquatail': case 'flipturn': case 'retaliate':
 			// Retaliate: Special case for Braviary to prevent Retaliate on non-Choice
 			return {cull: hasMove['aquajet'] || counter.Status};
@@ -1049,6 +1048,9 @@ export class RandomTeams {
 		case 'psychic':
 			const alcremieCase = species.id === 'alcremiegmax' && counter.Status < 2;
 			return {cull: alcremieCase || (hasMove['psyshock'] && (counter.setupType || isDoubles))};
+		case 'psychicfangs':
+			// Special case for Morpeko, which doesn't want 4 attacks Leftovers
+			return {cull: hasMove['rapidspin']};
 		case 'psyshock':
 			// Special case for Sylveon which only wants Psyshock if it gets a Choice item
 			const sylveonCase = hasAbility['Pixilate'] && counter.Special < 4;
@@ -1147,8 +1149,6 @@ export class RandomTeams {
 		case 'leechseed':
 			// Special case for Calyrex to prevent Leech Seed + Calm Mind
 			return {cull: !!counter.setupType};
-		case 'blueflare':
-			return {cull: hasMove['vcreate']};
 		}
 
 		return {cull: false};
@@ -1175,9 +1175,6 @@ export class RandomTeams {
 		// Abilities which are primarily useful for certain moves
 		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
 			return !counter[toID(ability)];
-		case 'Adaptability':
-			// Special case for Porygon-Z
-			return !isNoDynamax && !!counter.speedsetup;
 		case 'Analytic':
 			return (hasMove['rapidspin'] || species.nfe || isDoubles);
 		case 'Blaze':
@@ -1226,6 +1223,7 @@ export class RandomTeams {
 		case 'Liquid Voice':
 			return !hasMove['hypervoice'];
 		case 'Magic Guard':
+			// For Sigilyph
 			return (hasAbility['Tinted Lens'] && !counter.Status && !isDoubles);
 		case 'Mold Breaker':
 			return (
@@ -1234,8 +1232,6 @@ export class RandomTeams {
 			);
 		case 'Moxie':
 			return (counter.Physical < 2 || hasMove['stealthrock'] || hasMove['defog']);
-		case 'Neutralizing Gas':
-			return !hasMove['toxicspikes'];
 		case 'Overgrow':
 			return !counter.Grass;
 		case 'Own Tempo':
@@ -1249,6 +1245,7 @@ export class RandomTeams {
 		case 'Refrigerate':
 			return !counter.Normal;
 		case 'Regenerator':
+			// For Reuniclus
 			return hasAbility['Magic Guard'];
 		case 'Reckless':
 			return !counter.recoil || hasMove['curse'];
@@ -1259,6 +1256,7 @@ export class RandomTeams {
 		case 'Sand Rush':
 			return (!teamDetails.sand && (isNoDynamax || !counter.setupType || !counter.Rock || hasMove['rapidspin']));
 		case 'Sap Sipper':
+			// For Drampa, which wants Berserk with Roost
 			return hasMove['roost'];
 		case 'Scrappy':
 			return (hasMove['earthquake'] && species.id === 'miltank');
@@ -1267,6 +1265,7 @@ export class RandomTeams {
 		case 'Shadow Tag':
 			return (species.name === 'Gothitelle' && !isDoubles);
 		case 'Shed Skin':
+			// For Scrafty
 			return hasMove['dragondance'];
 		case 'Sheer Force':
 			return (!counter.sheerforce || hasAbility['Guts']);
@@ -1308,19 +1307,25 @@ export class RandomTeams {
 				!counter.technician ||
 				hasMove['tailslap'] ||
 				hasAbility['Punk Rock'] ||
+				// For Doubles Alolan Persian
 				movePool.includes('snarl')
 			);
 		case 'Tinted Lens':
 			return (
+				// For Sigilyph
 				hasMove['defog'] ||
-				(species.id === 'butterfree') ||
+				// For Butterfree
+				(hasMove['hurricane'] && hasAbility['Compound Eyes']) ||
 				(counter.Status > 2 && !counter.setupType)
 			);
 		case 'Torrent':
+			// For Inteleon-Gmax and Primarina
 			return (hasMove['focusenergy'] || hasMove['hypervoice']);
 		case 'Tough Claws':
+			// For Perrserker
 			return (hasType['Steel'] && !hasMove['fakeout']);
 		case 'Unaware':
+			// For Swoobat and Clefable
 			return (counter.setupType || hasMove['fireblast']);
 		case 'Unburden':
 			return (hasAbility['Prankster'] || !counter.setupType && !isDoubles);
@@ -1905,10 +1910,11 @@ export class RandomTeams {
 			};
 			const customScale: {[k: string]: number} = {
 				// These Pokemon are too strong and need a lower level
-				zaciancrowned: 66, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, glalie: 78, octillery: 84, wobbuffet: 86,
-				jolteon: 84, swoobat: 84, haxorus: 80, kyogre: 73, inteleon: 80, slurpuff: 84, polteageist: 84,
+				zaciancrowned: 66, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, zacian: 72, kyogre: 73, glalie: 78,
+				haxorus: 80, inteleon: 80, octillery: 84, jolteon: 84, swoobat: 84, dugtrio: 84, slurpuff: 84, polteageist: 84,
+				wobbuffet: 86,
 				// These Pokemon are too weak and need a higher level
-				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, reuniclus: 87, arctozolt: 88,
+				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, arctozolt: 88, reuniclus: 87,
 			};
 			level = customScale[species.id] || tierScale[tier];
 		} else if (species.randomBattleLevel) {

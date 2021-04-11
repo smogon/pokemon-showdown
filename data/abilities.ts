@@ -2344,7 +2344,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Neutralizing Gas",
-		rating: 5,
+		rating: 4,
 		num: 256,
 	},
 	noguard: {

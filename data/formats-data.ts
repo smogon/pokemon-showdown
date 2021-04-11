@@ -88,7 +88,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	butterfree: {
 		randomBattleMoves: ["energyball", "hurricane", "quiverdance", "sleeppowder"],
 		randomBattleLevel: 86,
-		randomDoubleBattleMoves: ["hurricane", "pollenpuff", "protect", "quiverdance", "ragepowder", "sleeppowder", "tailwind"],
+		randomDoubleBattleMoves: ["hurricane", "pollenpuff", "protect", "ragepowder", "sleeppowder", "tailwind"],
 		randomDoubleBattleLevel: 88,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -96,7 +96,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	butterfreegmax: {
 		randomBattleMoves: ["airslash", "bugbuzz", "quiverdance", "sleeppowder"],
 		randomBattleLevel: 86,
-		randomDoubleBattleMoves: ["hurricane", "pollenpuff", "protect", "quiverdance", "ragepowder", "sleeppowder", "tailwind"],
+		randomDoubleBattleMoves: ["hurricane", "pollenpuff", "protect", "quiverdance", "sleeppowder"],
 		randomDoubleBattleLevel: 88,
 		isNonstandard: "Gigantamax",
 		tier: "AG",
@@ -1255,7 +1255,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	porygonz: {
-		randomBattleMoves: ["agility", "darkpulse", "icebeam", "thunderbolt", "triattack", "trick"],
+		randomBattleMoves: ["darkpulse", "icebeam", "nastyplot", "thunderbolt", "triattack", "trick"],
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["darkpulse", "icebeam", "protect", "thunderbolt", "triattack", "trick"],
 		randomDoubleBattleLevel: 84,
