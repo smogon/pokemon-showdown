@@ -1531,7 +1531,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "If a player's last Pokemon uses Self-Destruct or Explosion, they automatically lose the battle.",
 		// implemented in data/mods/gen2stadium/scripts.ts
 		onBegin() {
-			this.add('rule', 'Self KO Clause: If a player's last Pokemon uses Self Destruct or Explosion, they automatically lose.');
+			this.add('rule', 'Self KO Clause: If a players last Pokemon uses Self Destruct or Explosion, they automatically lose.');
 		},
 	},
 };
