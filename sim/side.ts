@@ -731,7 +731,6 @@ export class Side {
 
 	chooseTeam(data?: string) {
 		const autoFill = !data;
-        
 		// default to sending team in order
 		if (!data) data = `123456`;
 		const positions = (('' + data)
@@ -742,9 +741,6 @@ export class Side {
 		if (this.requestState !== 'teampreview') {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
-        
-        
-
 		// hack for >6 pokemon Custom Game
 		while (positions.length >= 6 && positions.length < this.maxTeamSize && positions.length < this.pokemon.length) {
 			positions.push(positions.length);
