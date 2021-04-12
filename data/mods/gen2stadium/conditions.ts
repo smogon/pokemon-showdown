@@ -1,8 +1,11 @@
-//Since Stadium 2 ignores stat drops while recalculating stats due to boosting moves, haze, or stat-lowering moves.
-//The status conditions which affect a targets stats (brn and par) have a volatile along with them to keep track of if their respective stat changes
-//should be factored in during stat calculations or not.
+/**
+ * Since Stadium 2 ignores stat drops while recalculating stats due to boosting moves, haze,
+ * or stat-lowering moves. The status conditions which affect a targets stats (brn and par) have
+ * a volatile along with them to keep track of if their respective stat changes should be factored
+ * in during stat calculations or not.
+ */
 export const Conditions: {[k: string]: ModdedConditionData} = {
-	brn: {	
+	brn: {
 		name: 'brn',
 		effectType: 'Status',
 		onStart(target) {
@@ -20,7 +23,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			residualdmg(this, pokemon);
 		},
 	},
-	par: {	
+	par: {
 		name: 'par',
 		effectType: 'Status',
 		onStart(target) {
@@ -74,7 +77,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-start', target, 'confusion');
 			}
 			this.effectData.time = this.random(2, 6);
-			
 		},
 		onBeforeMove(pokemon, target, move) {
 			pokemon.volatiles['confusion'].time--;

@@ -96,7 +96,7 @@ export class Side {
 	/**
 	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon
 	 * (this is for Counter and Mirror Move)
-	 * This is also used for checking Self-KO clause in Pokemon Stadium 2.F
+	 * This is also used for checking Self-KO clause in Pokemon Stadium 2.
 	 */
 	lastMove: Move | null;
 
@@ -746,14 +746,14 @@ export class Side {
 			positions.push(positions.length);
 		}
 		if (format.teamLength?.battle && format.cupLevelLimit) {
-            		let totalLevel = 0;
-            		for (const pos of positions.slice(0, format.teamLength.battle)) {
-                		totalLevel += this.pokemon[pos].level;
-            	}
-            		if (totalLevel > format.cupLevelLimit[2]) {
-                		return this.emitChoiceError(`Your selected team's combined level of ${total_level} exceeds the format's maximum of ${format.cupLevelLimit[2]}, please select a valid team of ${format.teamLength.battle} Pokémon`);
-            		}
-        	}
+		let totalLevel = 0;
+		for (const pos of positions.slice(0, format.teamLength.battle)) {
+ 			totalLevel += this.pokemon[pos].level;
+ 		}
+ 		if (totalLevel > format.cupLevelLimit[2]) {
+ 			return this.emitChoiceError(`Your selected team's combined level of ${total_level} exceeds the format's maximum of ${format.cupLevelLimit[2]}, please select a valid team of ${format.teamLength.battle} Pokémon`);
+ 		}
+ 	}
 		for (const pos of positions) {
 			const index = this.choice.actions.length;
 			if (index >= this.maxTeamSize || index >= this.pokemon.length) {

@@ -32,7 +32,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		condition: {
 			onStart(pokemon) {
-				if ((pokemon.alliesAndSelf().filter(mon => !mon.status).length === 1) {
+				if (pokemon.alliesAndSelf().filter(mon => !mon.status).length === 1) {
 					this.add('-fail', pokemon);
 					this.hint("In Pokemon Stadium 2, Destiny Bond fails if it is being used by your last Pokemon.");
 				} else {

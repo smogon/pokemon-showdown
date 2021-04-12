@@ -1,5 +1,5 @@
 /**
- * Stadium 2 mechanics inherit from gen 2 mechanics, but fixes some bugs. 
+ * Stadium 2 mechanics inherit from gen 2 mechanics, but fixes some bugs.
  */
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
@@ -222,8 +222,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Implementing Recoil mechanics from Stadium 2.
 			// If a pokemon caused the other to faint with a recoil move and only one pokemon remains on both sides,
 			// recoil damage will not be taken.
-			if (move.recoil && move.totalDamage &&
-				(target.alliesAndSelf().filter(foe => !foe.status).length > 1 || target.hp > 0 || pokemon.alliesAndSelf().filter(ally => !ally.status).length > 1)) {
+			if (
+				move.recoil && move.totalDamage &&
+				(
+					target.alliesAndSelf().filter(foe => !foe.status).length > 1 ||
+					target.hp > 0 || pokemon.alliesAndSelf().filter(ally => !ally.status).length > 1
+				)
+			) {
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
 			}
 			return damage;
@@ -448,8 +453,10 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	/**
 	 * Stadium 2 ignores stat drops due to status ailments upon boosting the dropped stat.
-	 * For example: if a burned Snorlax uses Curse then it will ignore the attack drop from burn when it is recalculating its attack stat.
-	 * This is why volatiles are added to status conditions, so that we can keep track of whether or not to apply the stat drop from statuses.
+	 * For example: if a burned Snorlax uses Curse then it will ignore the attack drop from
+	 * burn when it is recalculating its attack stat. This is why volatiles are added to status
+	 * conditions, so that we can keep track of whether or not to apply the stat drop from
+	 * statuses.
 	 */
 	boost(boost, target, source = null, effect = null) {
 		if (this.event) {
