@@ -4,9 +4,6 @@
  */
 
 export const Moves: {[k: string]: ModdedMoveData} = {
-	absorb: {
-		inherit: true,
-	},
 	acid: {
 		inherit: true,
 		secondary: {
@@ -32,9 +29,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				atk: -1,
 			},
 		},
-	},
-	barrage: {
-		inherit: true,
 	},
 	bide: {
 		inherit: true,
@@ -149,9 +143,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 90,
 		target: "normal",
 	},
-	bonemerang: {
-		inherit: true,
-	},
 	bubble: {
 		inherit: true,
 		secondary: {
@@ -193,9 +184,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			}
 		},
-	},
-	cometpunch: {
-		inherit: true,
 	},
 	constrict: {
 		inherit: true,
@@ -259,9 +247,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	crabhammer: {
 		inherit: true,
 		critRatio: 2,
-	},
-	defensecurl: {
-		inherit: true,
 	},
 	dig: {
 		inherit: true,
@@ -329,21 +314,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 100,
 	},
-	doublekick: {
-		inherit: true,
-	},
-	doubleslap: {
-		inherit: true,
-	},
 	dragonrage: {
 		inherit: true,
 		basePower: 1,
-	},
-	dreameater: {
-		inherit: true,
-	},
-	earthquake: {
-		inherit: true,
 	},
 	explosion: {
 		inherit: true,
@@ -380,9 +353,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
-	fissure: {
-		inherit: true,
-	},
 	fly: {
 		inherit: true,
 		condition: {
@@ -413,12 +383,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onModifyMove() {},
 		},
 	},
-	furyattack: {
-		inherit: true,
-	},
-	furyswipes: {
-		inherit: true,
-	},
 	glare: {
 		inherit: true,
 		ignoreImmunity: true,
@@ -429,9 +393,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			spa: 1,
 			spd: 1,
 		},
-	},
-	guillotine: {
-		inherit: true,
 	},
 	gust: {
 		inherit: true,
@@ -470,12 +431,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.directDamage(1, source, target);
 			}
 		},
-	},
-	horndrill: {
-		inherit: true,
-	},
-	hyperbeam: {
-		inherit: true,
 	},
 	jumpkick: {
 		inherit: true,
@@ -573,9 +528,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-start', source, 'Mimic', move.name);
 		},
 	},
-	minimize: {
-		inherit: true,
-	},
 	mirrormove: {
 		inherit: true,
 		onHit(pokemon) {
@@ -586,19 +538,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(foe.lastMove.id, pokemon);
 		},
 	},
-	mist: {
-		inherit: true,
-	},
 	nightshade: {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
-	},
-	petaldance: {
-		inherit: true,
-	},
-	pinmissile: {
-		inherit: true,
 	},
 	poisonsting: {
 		inherit: true,
@@ -784,29 +727,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.heal(Math.floor(target.maxhp / 2), target, target);
 		},
 	},
-	solarbeam: {
-		inherit: true,
-	},
-	sonicboom: {
-		inherit: true,
-	},
-	spikecannon: {
-		inherit: true,
-	},
-	stomp: {
-		inherit: true,
-	},
 	struggle: {
 		inherit: true,
 		pp: 10,
 		recoil: [1, 2],
 		onModifyMove() {},
-	},
-	stunspore: {
-		inherit: true,
-	},
-	submission: {
-		inherit: true,
 	},
 	substitute: {
 		num: 164,
@@ -907,15 +832,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		ignoreImmunity: true,
 		basePower: 1,
 	},
-	swift: {
-		inherit: true,
-	},
-	takedown: {
-		inherit: true,
-	},
-	thrash: {
-		inherit: true,
-	},
 	thunder: {
 		inherit: true,
 		secondary: {
@@ -933,16 +849,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
-	transform: {
-		inherit: true,
-	},
 	triattack: {
 		inherit: true,
 		onHit() {},
 		secondary: null,
-	},
-	twineedle: {
-		inherit: true,
 	},
 	whirlwind: {
 		inherit: true,
