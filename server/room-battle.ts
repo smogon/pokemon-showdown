@@ -922,7 +922,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		const logsubfolder = Chat.toTimestamp(date).split(' ')[0];
 		const logfolder = logsubfolder.split('-', 2).join('-');
-		const tier = this.room.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
+		// log battles to the directory of the rated format (relevant for suspect tests)
+		const tier = toID(this.ladder);
 		const logpath = `logs/${logfolder}/${tier}/${logsubfolder}/`;
 
 		await FS(logpath).mkdirp();
@@ -1130,9 +1131,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 		}
 		this.room.send(`|title|${this.room.title}`);
-		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format];
+		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.ladder];
 		if (suspectTest) {
-			const format = Dex.formats.get(this.format);
+			const format = Dex.formats.get(this.ladder);
 			this.room.add(
 				`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
 				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
