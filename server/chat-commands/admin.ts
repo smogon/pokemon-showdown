@@ -815,7 +815,7 @@ export const commands: ChatCommands = {
 					if (info.ram) display.push(`RAM: ${info.ram}`);
 					if (display.length) buf += `, ${display.join(', ')})`;
 				}
-				buf += `br />`;
+				buf += `<br />`;
 				processes.delete(`${pid}`);
 			}
 		}
