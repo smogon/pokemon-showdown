@@ -4,13 +4,19 @@
  */
 import {Utils} from '../../lib';
 
-const MAX_ROUNDS = 500;
+const MAX_ROUNDS = 200;
 const TIMEOUT = 10 * 1000;
 const ICONS: {[k: string]: string} = {
 	Rock: `<i class="fa fa-hand-rock-o"></i>`,
 	Paper: '<i class="fa fa-hand-paper-o"></i>',
 	Scissors: '<i class="fa fa-hand-scissors-o"></i>',
 };
+
+const MATCHUPS = new Map<string, string>([
+	['scissors', 'paper'],
+	['rock', 'scissors'],
+	['paper', 'rock'],
+]);
 
 export const challenges: Map<string, string> = Chat.oldPlugins['rock-paper-scissors']?.challenges || new Map();
 
@@ -47,19 +53,14 @@ export class RPSGame extends Rooms.RoomGame {
 			this.addPlayer(user);
 		}
 	}
-	checkMatchup(attacker: RPSPlayer, defender: RPSPlayer) {
-		const attackerChoice = attacker.currentChoice;
-		const defenderChoice = defender.currentChoice;
-		if (attackerChoice === defenderChoice) return null;
-		const matchups: {[k: string]: boolean} = {
-			paperrock: true,
-			scissorspaper: true,
-			rockscissors: true,
-		};
-		if (matchups[attackerChoice + defenderChoice]) return attacker;
-		if (matchups[defenderChoice + attackerChoice]) return defender;
-		if (!attackerChoice && defenderChoice) return defender;
-		return attacker;
+	static checkMatchup(p1: RPSPlayer, p2: RPSPlayer) {
+		const p1Choice = p1.currentChoice;
+		const p2Choice = p2.currentChoice;
+		if (!p1Choice && p2Choice) return p2;
+		if (!p2Choice && p1Choice) return p1;
+		if (MATCHUPS.get(p1Choice) === p2Choice) return p1;
+		if (MATCHUPS.get(p2Choice) === p1Choice) return p2;
+		return null;
 	}
 	sendOptions() {
 		const button = (cmd: string, title: string) => `<button class="button" name="send" value="/${cmd}">${title}</button>`;
@@ -148,7 +149,7 @@ export class RPSGame extends Rooms.RoomGame {
 	}
 	runMatch() {
 		const [p1, p2] = this.players;
-		const winner = this.checkMatchup(p1, p2);
+		const winner = RPSGame.checkMatchup(p1, p2);
 		if (winner === null) { // tie
 			this.add(`The players have tied! Nobody wins this round....`);
 			this.wins.push(null);
@@ -160,7 +161,7 @@ export class RPSGame extends Rooms.RoomGame {
 				choice: winner.currentChoice,
 			});
 		}
-		if (this.currentRound === MAX_ROUNDS) {
+		if (this.currentRound >= MAX_ROUNDS) {
 			this.add(`The game has hit the max number of rounds, and so will be ending.`);
 			return this.end();
 		}
@@ -230,7 +231,11 @@ export class RPSGame extends Rooms.RoomGame {
 		this.playerTable = {};
 	}
 	choose(user: User, option: string) {
+		option = toID(option);
 		const player = this.getPlayer(user);
+		if (!MATCHUPS.get(option)) {
+			throw new Chat.ErrorMessage(`Invalid choice: ${option}.`);
+		}
 		if (player.currentChoice) throw new Chat.ErrorMessage("You have already made your choice!");
 		player.currentChoice = option;
 		this.add(Utils.html`${user.name} has made their choice.`);
