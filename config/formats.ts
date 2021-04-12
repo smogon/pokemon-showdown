@@ -3229,7 +3229,10 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen2',
-		cupLevelLimit: [50, 55, 155],
+		cupLevelLimit: {
+			range: [50, 55],
+			total: 155,
+		},
 		teamLength: {
 			validate: [3, 6],
 			battle: 3,
@@ -3313,11 +3316,14 @@ export const Formats: FormatList = [
 		name: "[Gen 1] Nintendo Cup 1997",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3572352/">RBY OU Viability Ranking</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3650478/#post-8133786">RBY Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8133786">RBY Sample Teams</a>`,
 		],
 
 		mod: 'gen1jpn',
-		cupLevelLimit: [50, 55, 155],
+		cupLevelLimit: {
+			range: [50, 55],
+			total: 155,
+		},
 		teamLength: {
 			validate: [3, 6],
 			battle: 3,
@@ -3325,6 +3331,71 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Uber'],
+		onValidateSet(set) {
+			const rgb97Legality: {[speciesid: string]: {[moveid: string]: string | number}} = {
+				charizard: {fly: 'illegal'},
+				butterfree: {
+					confusion: 12, poisonpowder: 15, stunspore: 16, sleeppowder: 17, supersonic: 21,
+					psybeam: 34, flash: 'illegal', gust: 'illegal',
+				},
+				fearow: {payday: 'illegal'},
+				pikachu: {quickattack: 16, tailwhip: 'illegal', slam: 'illegal', lightscreen: 'illegal'},
+				raichu: {quickattack: 16, tailwhip: 'illegal', slam: 'illegal', lightscreen: 'illegal'},
+				nidoranf: {doublekick: 43},
+				nidorina: {doublekick: 43},
+				nidoqueen: {doublekick: 43},
+				nidoranm: {doublekick: 43},
+				nidorino: {doublekick: 43},
+				nidoking: {doublekick: 43},
+				venonat: {poisonpowder: 24, supersonic: 'illegal', confusion: 'illegal'},
+				venomoth: {poisonpowder: 24, supersonic: 'illegal'},
+				diglett: {cut: 'illegal'},
+				dugtrio: {cut: 'illegal'},
+				psyduck: {amnesia: 'illegal'},
+				golduck: {amnesia: 'illegal'},
+				mankey: {lowkick: 'illegal', screech: 'illegal'},
+				primeape: {lowkick: 'illegal', screech: 'illegal'},
+				kadabra: {kinesis: 'illegal'},
+				alakazam: {kinesis: 'illegal'},
+				rapidash: {payday: 'illegal'},
+				cubone: {tailwhip: 'illegal', headbutt: 'illegal'},
+				marowak: {tailwhip: 'illegal', headbutt: 'illegal'},
+				chansey: {tailwhip: 'illegal'},
+				tangela: {absorb: 29, growth: 49, vinewhip: 'illegal'},
+				scyther: {wingattack: 'illegal'},
+				pinsir: {bind: 'illegal'},
+				magikarp: {dragonrage: 'illegal'},
+				eevee: {quickattack: 27, tailwhip: 31, bite: 37, growl: 'illegal', focusenergy: 'illegal'},
+				vaporeon: {
+					quickattack: 27, tailwhip: 31, watergun: 31, bite: 37, acidarmor: 42, haze: 44, mist: 48, hydropump: 54,
+					growl: 'illegal', focusenergy: 'illegal', aurorabeam: 'illegal',
+				},
+				jolteon: {
+					quickattack: 27, tailwhip: 31, thundershock: 31, bite: 37, doublekick: 42, agility: 44,
+					pinmissile: 48, growl: 'illegal', focusenergy: 'illegal',
+				},
+				flareon: {
+					quickattack: 27, tailwhip: 31, ember: 31, bite: 37, leer: 42, firespin: 44, flamethrower: 54,
+					growl: 'illegal', focusenergy: 'illegal', smog: 'illegal',
+				},
+			};
+			const species = this.dex.species.get(set.species || set.name);
+			const legalityList = rgb97Legality[species.id];
+			if (!legalityList) return;
+			const problems = [];
+			if (set.moves) {
+				for (const moveId of set.moves) {
+					if (legalityList[moveId]) {
+						if (legalityList[moveId] === 'illegal') {
+							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveId).name} in 1997.`);
+						} else if (set.level < legalityList[moveId]) {
+							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveId).name} before level ${legalityList[moveId]} in 1997.`);
+						}
+					}
+				}
+			}
+			return problems;
+		},
 	},
 	{
 		name: "[Gen 1] Stadium OU",

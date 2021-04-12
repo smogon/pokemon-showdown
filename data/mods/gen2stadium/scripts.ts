@@ -80,7 +80,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				 * such as a player from blowing up both they and their opponents second last Pokemon
 				 * and their opponent blowing up their last Pokemon. If we did not clear here, there would be a problem.
 				 */
-				target.side.lastmove = null;
+				target.side.lastMove = null;
 				pokemon.side.lastMove = move;
 			}
 
@@ -542,10 +542,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 
 		if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
-			if (this.p1.lastmove !== null && this.p2.lastmove === null) {
+			if (this.p1.lastMove !== null && this.p2.lastMove === null) {
 				this.win(this.p2);
 				return true;
-			} else if (this.p2.lastmove !== null && this.p1.lastmove === null) {
+			} else if (this.p2.lastMove !== null && this.p1.lastMove === null) {
 				this.win(this.p1);
 				return true;
 			}
