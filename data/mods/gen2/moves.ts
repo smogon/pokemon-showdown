@@ -98,6 +98,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						type: 'Normal',
 					} as unknown as ActiveMove;
 					this.actions.tryMoveHit(target, pokemon, moveData);
+					pokemon.removeVolatile('bide');
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');

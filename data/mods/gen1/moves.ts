@@ -86,14 +86,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onBeforeMove(pokemon, t, move) {
 				if (this.effectData.duration === 1) {
+					this.add('-end', pokemon, 'Bide');
 					if (!this.effectData.totalDamage) {
 						this.debug("Bide failed due to 0 damage taken");
 						this.add('-fail', pokemon);
 						return false;
 					}
-					this.add('-end', pokemon, 'Bide');
 					const target = this.getAtSlot(this.effectData.sourceSlot);
 					this.actions.moveHit(target, pokemon, move, {damage: this.effectData.totalDamage * 2} as ActiveMove);
+					pokemon.removeVolatile('bide');
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');

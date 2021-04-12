@@ -1219,6 +1219,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 						type: 'Normal',
 					};
 					this.actions.tryMoveHit(target, pokemon, moveData as ActiveMove);
+					pokemon.removeVolatile('bide');
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
