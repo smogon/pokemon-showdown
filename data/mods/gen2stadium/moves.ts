@@ -84,7 +84,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (source.alliesAndSelf().filter(ally => !ally.status).length === 1) {
 				this.add('-fail', source);
 				this.hint("In Pokemon Stadium 2, Perish Song fails if it is being used by your last Pokemon.");
-				return false;
 			} else {
 				for (const pokemon of this.getAllActive()) {
 					if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
