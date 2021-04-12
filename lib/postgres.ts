@@ -43,16 +43,15 @@ export class PostgresDatabase {
 			result = await callback(conn);
 		} catch (e) {
 			await conn.query(`ROLLBACK;`);
-			const code = parseInt(e?.code);
 			// two concurrent transactions conflicted, try again
-			if (code === 40001 && depth <= 10) {
-				result = await this.transaction(callback, depth++);
-			// There is a bug in Postgres that causes some
-			// serialization failures to be reported as failed
-			// unique constraint checks. Only retrying once since
-			// it could be our fault (thanks chaos for this info / the first half of this comment)
-			} else if (code === 23505 && !depth) {
-				result = await this.transaction(callback, depth++);
+			if (e?.code === '40001' && depth <= 10) {
+				return await this.transaction(callback, depth + 1);
+				// There is a bug in Postgres that causes some
+				// serialization failures to be reported as failed
+				// unique constraint checks. Only retrying once since
+				// it could be our fault (thanks chaos for this info / the first half of this comment)
+			} else if (e?.code === '23505' && !depth) {
+				return await this.transaction(callback, depth + 1);
 			} else {
 				throw e;
 			}
