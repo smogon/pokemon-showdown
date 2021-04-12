@@ -33,7 +33,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(pokemon) {
 				if ((pokemon.alliesAndSelf().filter(mon => !mon.status).length === 1) {
-					this.add('-miss', pokemon);
+					this.add('-fail', pokemon);
 					this.hint("In Pokemon Stadium 2, Destiny Bond fails if it is being used by your last Pokemon.");
 				} else {
 					this.add('-singlemove', pokemon, 'Destiny Bond');
@@ -79,13 +79,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	perishsong: {
 		inherit: true,
 		onHitField(target, source, move) {
-			
 			let result = false;
 			let message = false;
 			if (source.alliesAndSelf().filter(ally => !ally.status).length === 1) {
 				this.add('-fail', source);
 				this.hint("In Pokemon Stadium 2, Perish Song fails if it is being used by your last Pokemon.");
-				//return false;
+				return false;
 			} else {
 				for (const pokemon of this.getAllActive()) {
 					if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
