@@ -68,7 +68,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move.category === 'Status') {
 					// In gen 1 it only blocks:
 					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
-					let SubBlocked = ['lockon', 'meanlook', 'mindreader', 'nightmare'];
+					const subBlocked = ['lockon', 'meanlook', 'mindreader', 'nightmare'];
 					if ((move.status && ['psn', 'tox'].includes(move.status)) || (move.boosts && target !== source) ||
 						move.volatileStatus === 'confusion' || subBlocked.includes(move.id)) {
 						return false;
@@ -85,7 +85,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!uncappedDamage) return uncappedDamage;
 				source.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
-					/** @type {number} */(target.volatiles['substitute'].hp) : uncappedDamage;
+					target.volatiles['substitute'].hp : uncappedDamage;
 				if (target.volatiles['substitute'].hp <= 0) {
 					target.removeVolatile('substitute');
 					target.subFainted = true;
@@ -103,7 +103,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.runEvent('AfterSubDamage', target, source, move, uncappedDamage);
 				// Add here counter damage
-				let lastAttackedBy = target.getLastAttackedBy();
+				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
 					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, thisTurn: true});
 				} else {
@@ -123,7 +123,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	"swift": {
+	swift: {
 		inherit: true,
 		accuracy: 100,
 	},

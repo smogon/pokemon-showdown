@@ -66,7 +66,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	confusion: {
 		inherit: true,
-		//Stadium 2 fixed Berzerk Gene afflicting Confusion for 255 turns.
+		// Stadium 2 fixed Berserk Gene afflicting Confusion for 255 turns.
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[silent]');

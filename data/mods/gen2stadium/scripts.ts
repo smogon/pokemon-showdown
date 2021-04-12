@@ -74,8 +74,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.selfdestruct && doSelfDestruct) {
 				this.battle.faint(pokemon, pokemon, move);
 				/**
-				 * Keeping track of the last move used for self-ko clause, Making sure to clear the opponents last move so that self-destruct and explosion
-				 * does not persist between Pokemon, preventing problems caused by situations such as a player from blowing up both they and their opponents second last Pokemon
+				 * Keeping track of the last move used for self-ko clause,
+				 * making sure to clear the opponents last move so that self-destruct and explosion
+				 * does not persist between Pokemon, preventing problems caused by situations,
+				 * such as a player from blowing up both they and their opponents second last Pokemon
 				 * and their opponent blowing up their last Pokemon. If we did not clear here, there would be a problem.
 				 */
 				target.side.lastmove = null;
@@ -220,7 +222,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Implementing Recoil mechanics from Stadium 2.
 			// If a pokemon caused the other to faint with a recoil move and only one pokemon remains on both sides,
 			// recoil damage will not be taken.
-			if (move.recoil && move.totalDamage && ((target.side.pokemon.filter(foe => !foe.fainted && !foe.status).length) > 1 || target.hp > 0 || (pokemon.side.pokemon.filter(ally => !ally.fainted && !ally.status).length) > 1)) {
+			if (move.recoil && move.totalDamage &&
+				(target.alliesAndSelf().filter(foe => !foe.status).length > 1 || target.hp > 0 || pokemon.alliesAndSelf().filter(ally => !ally.status).length > 1)) {
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
 			}
 			return damage;

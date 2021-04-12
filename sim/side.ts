@@ -749,12 +749,12 @@ export class Side {
 		while (positions.length >= 6 && positions.length < this.maxTeamSize && positions.length < this.pokemon.length) {
 			positions.push(positions.length);
 		}
-		if (format.teamLength && format.cupLevelLimit) {
-            		let total_level = 0;
+		if (format.teamLength?.battle && format.cupLevelLimit) {
+            		let totalLevel = 0;
             		for (const pos of positions.slice(0, format.teamLength.battle)) {
-                		total_level += this.pokemon[pos].level;
+                		totalLevel += this.pokemon[pos].level;
             	}
-            		if (total_level > format.cupLevelLimit[2]) {
+            		if (totalLevel > format.cupLevelLimit[2]) {
                 		return this.emitChoiceError(`Your selected team's combined level of ${total_level} exceeds the format's maximum of ${format.cupLevelLimit[2]}, please select a valid team of ${format.teamLength.battle} Pokémon`);
             		}
         	}
