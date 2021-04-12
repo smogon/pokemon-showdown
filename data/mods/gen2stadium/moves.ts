@@ -1,5 +1,5 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
-	//Belly Drum no longer boosts attack by 2 stages if under 50% health.
+	// Belly Drum no longer boosts attack by 2 stages if under 50% health.
 	bellydrum: {
 		inherit: true,
 		onHit(target) {
@@ -55,7 +55,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onMoveAborted(pokemon, target, move) {
 				pokemon.removeVolatile('destinybond');
 			},
-		}
+		},
 	},
 	/**
 	 * In Stadium 2, moves which affect the stat stages of a Pokemon, such as moves which boost ones own stats,
@@ -100,7 +100,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				if (!result) return false;
-				if (message) this.add('-fieldactivate', 'move: Perish Song');	
+				if (message) this.add('-fieldactivate', 'move: Perish Song');
 			}
 		},
 	},
