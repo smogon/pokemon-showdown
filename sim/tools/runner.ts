@@ -8,6 +8,7 @@
 import {strict as assert} from 'assert';
 import * as fs from 'fs';
 
+import {Dex} from '..';
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
 import * as BattleStreams from '../battle-stream';
