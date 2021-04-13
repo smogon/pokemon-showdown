@@ -692,9 +692,10 @@ export const commands: ChatCommands = {
 			this.privatelyCheckCan('lock');
 			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
 			const monitorNames = [...Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)];
-			monitorNames.push(...Object.keys(Chat.monitors)
-				.filter(x => Chat.monitors[x].monitor && x.includes('filter'))
-				.map(x => x.replace('filter', ''))
+			monitorNames.push(
+				...Object.keys(Chat.monitors)
+					.filter(x => Chat.monitors[x].monitor && x.includes('filter'))
+					.map(x => x.replace('filter', ''))
 			);
 			this.sendReplyBox(
 				`<code>/filter test[monitorname] [test string]</code> OR <code>/filter test [test string] | [monitorname]</code>:<br />` +
