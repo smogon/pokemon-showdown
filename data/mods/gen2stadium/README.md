@@ -1,4 +1,4 @@
-Stadium
+Stadium 2
 ====================
 
 This mod inherits from gen 2, which inherits from gen 3, and then applies the Stadium changes upon the gen 2 engine.

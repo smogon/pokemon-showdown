@@ -1343,7 +1343,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	stadiumitemsclause: {
 		effectType: 'ValidatorRule',
 		name: 'Stadium Items Clause',
-		desc: "Bans moves only obtainable through events.",
+		desc: "Bans items which are not usable in Pokemon Stadium 2.",
 		banlist: ['Fast Ball', 'Friend Ball', 'Great Ball', 'Heavy Ball', 'Level Ball', 'Love Ball', 'Lure Ball', 'Master Ball', 'Moon Ball', 'Park Ball', 'Poke Ball', 'Safari Ball', 'Ultra Ball', 'Fire Stone', 'Leaf Stone', 'Moon Stone', 'Sun Stone', 'Thunder Stone', 'Upgrade', 'Water Stone', 'Mail',
 		],
 		onBegin() {

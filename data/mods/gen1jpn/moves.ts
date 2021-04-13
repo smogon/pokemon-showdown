@@ -62,7 +62,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryHit(target, source, move) {
 				if (move.drain) {
 					this.add('-miss', source);
-					this.hint("In Stadium, draining moves always miss against Substitute.");
+					this.hint("In the Japanese versions of Gen 1, draining moves always miss against substitutes.");
 					return null;
 				}
 				if (move.category === 'Status') {
