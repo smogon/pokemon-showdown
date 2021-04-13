@@ -905,7 +905,7 @@ export class RandomTeams {
 		case 'taunt':
 			return {cull: hasMove['encore'] || hasMove['nastyplot'] || hasMove['swordsdance']};
 		case 'thunderwave': case 'voltswitch':
-			const cullInDoubles = hasMove['electroweb'] || hasMove['nuzzle'];
+			const cullInDoubles = isDoubles && (hasMove['electroweb'] || hasMove['nuzzle']);
 			return {cull: counter.setupType || counter.speedsetup || hasMove['shiftgear'] || hasMove['raindance'] || cullInDoubles};
 		case 'toxic':
 			return {cull: counter.setupType || ['sludgewave', 'thunderwave', 'willowisp'].some(m => hasMove[m])};
