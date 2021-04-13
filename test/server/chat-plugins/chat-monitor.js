@@ -57,7 +57,6 @@ describe('Chat monitor', () => {
 			this.user.joinRoom(this.room.roomid, this.connection);
 
 			this.parse = async function (message) {
-				Chat.loadPlugins();
 				const context = new Chat.CommandContext({
 					message,
 					room: this.room,

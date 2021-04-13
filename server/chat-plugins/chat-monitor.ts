@@ -730,13 +730,11 @@ export const commands: ChatCommands = {
 	},
 };
 
-// Outside of `process.nextTick()` because it causes test to fail otherwise
-for (const list of Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)) {
-	(commands['filter'] as ChatCommands)[`test${list.replace('filter', '')}`] = 'test';
-	if (list.includes('filter')) (commands['filter'] as ChatCommands)[`test${list}`] = 'test';
-}
-
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/filter (add|remove) ');
 	loadFilters();
+	for (const list of Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)) {
+		(Chat.commands['filter'] as ChatCommands)[`test${list.replace('filter', '')}`] = 'test';
+		if (list.includes('filter')) (Chat.commands['filter'] as ChatCommands)[`test${list}`] = 'test';
+	}
 });
