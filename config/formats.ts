@@ -3247,6 +3247,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Placeholder</a>`,
 		],
 		mod: 'gen2stadium',
+		searchShow: false,
 		ruleset: ['Standard'],
 	},
 	{
