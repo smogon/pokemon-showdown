@@ -644,15 +644,12 @@ export const commands: ChatCommands = {
 		help(target, room, user) {
 			this.run(`filterhelp`);
 		},
-		test(target, room, user, connection, cmd) {
+		test(target, room, user) {
 			this.privatelyCheckCan('lock');
 			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
-			let [message, monitorName] = target.split('|').map(x => x.trim());
-			if (!monitorName && cmd !== 'test') {
-				monitorName = cmd.slice(4);
-				if (!Chat.monitors[monitorName] && Chat.monitors[monitorName + 'filter']) {
-					monitorName = monitorName + 'filter';
-				}
+			let [monitorName, message] = Utils.splitFirst(target, " ");
+			if (!Chat.monitors[monitorName] && Chat.monitors[monitorName + 'filter']) {
+				monitorName = monitorName + 'filter';
 			}
 			// namefilter doesn't have a monitor function
 			if (!(monitorName && message) || !Chat.monitors[monitorName]?.monitor) {
@@ -698,9 +695,9 @@ export const commands: ChatCommands = {
 					.map(x => x.replace('filter', ''))
 			);
 			this.sendReplyBox(
-				`<code>/filter test[monitorname] [test string]</code> OR <code>/filter test [test string] | [monitorname]</code>:<br />` +
+				`<code>/filter test [monitor name] [test string]</code>:<br />` +
 				`Tests whether or not the provided test string would trigger the respective monitor.<br />` +
-				`All usable commands: <code>${monitorNames.sort().map(x => `/filter test${x}`).join('</code>, <code>')}</code><br />` +
+				`All usable commands: <code>${monitorNames.sort().map(x => `/filter test ${x}`).join('</code>, <code>')}</code><br />` +
 				`Can only be broadcast in Staff and Upper Staff. Requires: % @ &`
 			);
 		},
@@ -733,8 +730,4 @@ export const commands: ChatCommands = {
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/filter (add|remove) ');
 	loadFilters();
-	for (const list of Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)) {
-		(Chat.commands['filter'] as ChatCommands)[`test${list.replace('filter', '')}`] = 'test';
-		if (list.includes('filter')) (Chat.commands['filter'] as ChatCommands)[`test${list}`] = 'test';
-	}
 });
