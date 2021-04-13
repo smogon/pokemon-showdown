@@ -642,13 +642,73 @@ export const commands: ChatCommands = {
 			this.parse(`/join view-filters`);
 		},
 		help(target, room, user) {
-			this.parse(`/help filter`);
+			this.run(`filterhelp`);
+		},
+		test(target, room, user, connection, cmd) {
+			this.privatelyCheckCan('lock');
+			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
+			let [message, monitorName] = target.split('|').map(x => x.trim());
+			if (!monitorName && cmd !== 'test') {
+				monitorName = cmd.slice(4);
+				if (!Chat.monitors[monitorName] && Chat.monitors[monitorName + 'filter']) {
+					monitorName = monitorName + 'filter';
+				}
+			}
+			// namefilter doesn't have a monitor function
+			if (!(monitorName && message) || !Chat.monitors[monitorName]?.monitor) {
+				return this.run((Chat.commands.filter as any).testhelp);
+			}
+			const monitor = Chat.monitors[monitorName].monitor!;
+			const lcMessage = Chat.stripFormatting(message
+				.replace(/\u039d/g, 'N')
+				.toLowerCase()
+				// eslint-disable-next-line no-misleading-character-class
+				.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
+				.replace(/\u03bf/g, 'o')
+				.replace(/\u043e/g, 'o')
+				.replace(/\u0430/g, 'a')
+				.replace(/\u0435/g, 'e')
+				.replace(/\u039d/g, 'e'));
+			let htmlBoxMessage = ``;
+			for (const line of Chat.filterWords[monitorName]) {
+				const ret = monitor.call(this, line, room, user, message, lcMessage, true);
+				if (typeof ret === 'string') {
+					htmlBoxMessage = ret;
+					break;
+				} else if (ret === false) {
+					htmlBoxMessage = `"${message}" would be blocked from being sent.`;
+					break;
+				 }
+			}
+			if (htmlBoxMessage) {
+				return this.sendReplyBox(Chat.formatText(htmlBoxMessage, false, true));
+			} else {
+				throw new Chat.ErrorMessage(
+					`"${message}" doesn't trigger any filters on the ${monitorName}${monitorName.endsWith('filter') ? '' : ' filter'}. Check spelling?`
+				);
+			}
+		},
+		testhelp(target, room, user) {
+			this.privatelyCheckCan('lock');
+			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
+			const monitorNames = [...Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)];
+			monitorNames.push(...Object.keys(Chat.monitors)
+				.filter(x => Chat.monitors[x].monitor && x.includes('filter'))
+				.map(x => x.replace('filter', ''))
+			);
+			this.sendReplyBox(
+				`<code>/filter test[monitorname] [test string]</code> OR <code>/filter test [test string] | [monitorname]</code>:<br />` +
+				`Tests whether or not the provided test string would trigger the respective monitor.<br />` +
+				`All usable commands: <code>${monitorNames.sort().map(x => `/filter test${x}`).join('</code>, <code>')}</code><br />` +
+				`Can only be broadcast in Staff and Upper Staff. Requires: % @ &`
+			);
 		},
 	},
 	filterhelp: [
-		`- /filter add list, word, reason[, optional public reason] - Adds a word to the given filter list. Requires: &`,
-		`- /filter remove list, words - Removes words from the given filter list. Requires: &`,
-		`- /filter view - Opens the list of filtered words. Requires: % @ &`,
+		`/filter add list, word, reason[, optional public reason] - Adds a word to the given filter list. Requires: &`,
+		`/filter remove list, words - Removes words from the given filter list. Requires: &`,
+		`/filter view - Opens the list of filtered words. Requires: % @ &`,
+		`/filter test - Do "/help filter test" for more information. Requires: % @ &`,
 		`You may use / instead of , in /filter add if you want to specify a reason that includes commas.`,
 	],
 	allowname(target, room, user) {
@@ -667,63 +727,12 @@ export const commands: ChatCommands = {
 		}
 		this.globalModlog(`ALLOWNAME`, target);
 	},
-	testfilter(target, room, user, connection, cmd) {
-		this.privatelyCheckCan('lock');
-		this.checkBroadcast(true);
-		if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast();
-		let [message, monitorName] = target.split('|').map(x => x.trim());
-		if (!monitorName && cmd !== 'testfilter') {
-			monitorName = cmd.slice(4);
-			if (!Chat.monitors[monitorName] && Chat.monitors[monitorName.replace('filter', '')]) {
-				monitorName = monitorName.replace('filter', '');
-			}
-		}
-		// namefilter doesn't have a monitor function
-		if (!(monitorName && message) || !Chat.monitors[monitorName]?.monitor) {
-			return this.parse(`${this.cmdToken}help testfilter`);
-		}
-		const monitor = Chat.monitors[monitorName].monitor!;
-		const lcMessage = Chat.stripFormatting(message
-			.replace(/\u039d/g, 'N').toLowerCase()
-			// eslint-disable-next-line no-misleading-character-class
-			.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
-			.replace(/\u03bf/g, 'o')
-			.replace(/\u043e/g, 'o')
-			.replace(/\u0430/g, 'a')
-			.replace(/\u0435/g, 'e')
-			.replace(/\u039d/g, 'e'));
-		let htmlBoxMessage = ``;
-		for (const line of Chat.filterWords[monitorName]) {
-			const ret = monitor.call(this, line, room, user, message, lcMessage, true);
-			if (typeof ret === 'string') {
-				htmlBoxMessage = ret;
-				break;
-			}
-		}
-		if (htmlBoxMessage) {
-			return this.sendReplyBox(`${Chat.formatText(htmlBoxMessage, false, true)}`);
-		} else {
-			throw new Chat.ErrorMessage(
-				`"${message}" doesn't trigger any filters on the ${monitorName}${monitorName.endsWith('filter') ? '' : ' filter'}. Check spelling?`
-			);
-		}
-	},
-	testfilterhelp(target, room, user) {
-		this.privatelyCheckCan('lock');
-		this.checkBroadcast(true);
-		if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast();
-		const monitorNames = Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor);
-		this.sendReplyBox(
-			`<code>/test[monitorname]filter [test string]</code> OR <code>/testfilter [test string] | [monitorname]</code>:<br />Tests whether or not the provided test string would trigger the respective monitor.<br />` +
-			`All usable commands: <code>${monitorNames.map(x => `/test${x.replace('filter', '')}filter`).join('</code>, <code>')}</code><br />` +
-			`Can only be broadcast in Staff and Upper Staff. Requires: % @ &`
-		);
-	},
 };
 
 // Outside of `process.nextTick()` because it causes test to fail otherwise
 for (const list of Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)) {
-	commands[`test${list.replace('filter', '')}filter`] = 'testfilter';
+	(commands['filter'] as ChatCommands)[`test${list.replace('filter', '')}`] = 'test';
+	if (list.includes('filter')) (commands['filter'] as ChatCommands)[`test${list}`] = 'test';
 }
 
 process.nextTick(() => {
