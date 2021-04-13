@@ -5816,7 +5816,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 70,
 		randomDoubleBattleMoves: ["behemothblade", "closecombat", "playrough", "protect", "psychicfangs", "swordsdance"],
 		randomDoubleBattleLevel: 69,
-		tier: "Uber",
+		tier: "AG",
 		doublesTier: "DUber",
 	},
 	zamazenta: {
@@ -5945,7 +5945,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 72,
 		randomDoubleBattleMoves: ["astralbarrage", "nastyplot", "pollenpuff", "protect", "psyshock"],
 		randomDoubleBattleLevel: 72,
-		tier: "Uber",
+		tier: "AG",
 		doublesTier: "DUber",
 	},
 	missingno: {

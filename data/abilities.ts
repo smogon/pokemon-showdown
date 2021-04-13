@@ -5280,4 +5280,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 1042,
 	},
+	speedadaptation: {
+		name: "Speed Adaptation",
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				const targetSpe = target.storedStats.spe;
+				target.storedStats.spe = source.storedStats.spe;
+				source.storedStats.spe = targetSpe;
+				this.add('-activate', source, 'ability: Speed Adaptation', '[of] ' + target);
+			}
+		},
+		rating: 2.5,
+		num: 1043,
+	},
 };

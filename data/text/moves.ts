@@ -5518,8 +5518,8 @@ export const MovesText = {
 	},
 	anticyclone: {
 		name: "Anticyclone",
-		desc: "This move's type changes to match current weather before removing it. Fails if there is no weather.",
-		shortDesc: "Type varies in each weather. Removes weather. Fails if no weather.",
+		desc: "In weather: type varies, ends weather.",
+		shortDesc: "In weather: type varies, ends weather.",
 	},
 	revengeblast: {
 		name: "Revenge Blast",
@@ -5591,8 +5591,8 @@ export const MovesText = {
 	},
 	dualstrike: {
 		name: "Dual Strike",
-		desc: "",
-		shortDesc: "",
+		desc: "2 hits. Each hit uses one of the user's types.",
+		shortDesc: "2 hits. Each hit uses one of the user's types.",
 	},
 	nitricstrike: {
 		name: "Nitric Strike",
@@ -5611,8 +5611,8 @@ export const MovesText = {
 	},
 	shieldbeam: {
 		name: "Shield Beam",
-		desc: "Damage is calculated using the user's Special Defense stat as its Special Attack, including stat stage changes. Other effects that modify the Special Attack stat are used as normal.",
-		shortDesc: "Uses user's Sp. Def stat as Atk in damage calculation.",
+		desc: "Uses user's Sp. Def stat as SpA in damage calculation.",
+		shortDesc: "Uses user's Sp. Def stat as SpA in damage calculation.",
 	},
 	darkwhispers: {
 		name: "Dark Whispers",
@@ -5817,8 +5817,8 @@ export const MovesText = {
 	},
 	moonritual: {
 		name: "Moon Ritual",
-		desc: "Raises the user's Attack, Defense and Special Defense by 1 stage in exchange for the user losing 1/2 of its maximum HP, rounded down.",
-		shortDesc: "User loses 25% max HP. Raises the user's Attack, Defense and Sp. Def by 1.",
+		desc: "+1 Atk, Def, Sp. Def. User: -25% HP.",
+		shortDesc: "+1 Atk, Def, Sp. Def. User: -25% HP.",
 	},
 	abduction: {
 		name: "Abduction",
@@ -5996,8 +5996,8 @@ export const MovesText = {
 	},
 	ragnarok: {
 		name: "Ragnarok",
-		desc: "This move's type is the pokemon's first type. Applies Perish Song.",
-		shortDesc: "Uses users First Type, Applies Perish Song.",
+		desc: "Uses user's first type. Applies Perish Song.",
+		shortDesc: "Uses user's first type. Applies Perish Song.",
 	},
 	hyperwoophole: {
 		name: "Hyperwoop Hole",
@@ -6008,5 +6008,38 @@ export const MovesText = {
 		name: "Hyperwoop Fury",
 		desc: "This move lowers user's SpDef by 1; breaks protect",
 		shortDesc: "Lowers user's SpDef by 1; breaks protect",
+	},
+	raid: {
+		name: "Raid",
+		desc: "This move has 10% chance of a weather-dependent effect (sun=burn, toxic cloud=poison, hail=freeze, rain=sleep, sandstorm=flinch).",
+		shortDesc: "10% chance of a weather-dependent effect.",
+	},
+	deathray: {
+		name: "Death Ray",
+		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
+		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		descGen2: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
+		descGen1: "Deals 65535 damage to the target. Fails if the target's Speed is greater than the user's.",
+		shortDescGen1: "Deals 65535 damage. Fails if target is faster.",
+	},
+	brightclaw: {
+		name: "Bright Claw",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
+	},
+	dazingpressure: {
+		name: "Dazing Pressure",
+		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0.",
+		shortDesc: " + 20 power for each of the user's stat boosts.",
+	},
+	dazingraze: {
+		name: "Dazing Raze",
+		desc: "Has a 10% chance to lower the target's accuracy by 1 stage.",
+		shortDesc: "10% chance to lower the target's accuracy by 1.",
+	},
+	freezingcomet: {
+		name: "Freezing Comet",
+		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze the target.",
 	},
 };
