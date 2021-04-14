@@ -106,8 +106,8 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3679677/">UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3659681/">UU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3681331/">UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3679621/">UU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3674793/">UU Viability Rankings</a>`,
 		],
 
@@ -118,7 +118,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] RU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3676870/">RU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3681857/">RU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3661013/">RU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3676023/">RU Viability Rankings</a>`,
 		],
@@ -144,7 +144,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] PU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3676543/">PU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3681306/">PU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3676106/">PU Viability Rankings</a>`,
 		],
 
@@ -346,9 +346,6 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] VGC 2021",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672129/">VGC 2021 Metagame Discussion & Resources</a>`,
-		],
 
 		mod: 'gen8',
 		gameType: 'doubles',
@@ -362,10 +359,6 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] VGC 2020",
-		threads: [
-			`&bullet; <a href="https://www.pokemon.com/us/pokemon-news/2020-pokemon-video-game-championships-vgc-format-rules/">VGC 2020 Rules</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3657818/">VGC 2020 Sample Teams</a>`,
-		],
 
 		mod: 'gen8dlc1',
 		gameType: 'doubles',
