@@ -145,6 +145,124 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 	isTrustedProxyIp: (ip: string) => boolean;
 
+	receivers: {[k: string]: (this: ServerStream, data: string) => void} = {
+		'$'(data) {
+			// $code
+			// eslint-disable-next-line no-eval
+			eval(data.substr(1));
+		},
+		'!'(data) {
+			// !socketid
+			// destroy
+			const socketid = data.substr(1);
+			const socket = this.sockets.get(socketid);
+			if (!socket) return;
+			socket.destroy();
+			this.sockets.delete(socketid);
+			for (const [curRoomid, curRoom] of this.rooms) {
+				curRoom.delete(socketid);
+				const roomChannel = this.roomChannels.get(curRoomid);
+				if (roomChannel) roomChannel.delete(socketid);
+				if (!curRoom.size) {
+					this.rooms.delete(curRoomid);
+					if (roomChannel) this.roomChannels.delete(curRoomid);
+				}
+			}
+		},
+		'>'(data) {
+			// >socketid, message
+			// message to single connection
+			const nlLoc = data.indexOf('\n');
+			const socketid = data.substr(1, nlLoc - 1);
+			const socket = this.sockets.get(socketid);
+			if (!socket) return;
+			const message = data.substr(nlLoc + 1);
+			socket.write(message);
+		},
+		'#'(data) {
+			// #roomid, message
+			// message to all connections in room
+			// #, message
+			// message to all connections
+			const nlLoc = data.indexOf('\n');
+			const roomid = data.substr(1, nlLoc - 1) as RoomID;
+			const room = roomid ? this.rooms.get(roomid) : this.sockets;
+			if (!room) return;
+			const message = data.substr(nlLoc + 1);
+			for (const curSocket of room.values()) curSocket.write(message);
+		},
+		'+'(data) {
+			// +roomid, socketid
+			// join room with connection
+			const nlLoc = data.indexOf('\n');
+			const socketid = data.substr(nlLoc + 1);
+			const socket = this.sockets.get(socketid);
+			if (!socket) return;
+			const roomid = data.substr(1, nlLoc - 1) as RoomID;
+			let room = this.rooms.get(roomid);
+			if (!room) {
+				room = new Map();
+				this.rooms.set(roomid, room);
+			}
+			room.set(socketid, socket);
+		},
+		'-'(data) {
+			// -roomid, socketid
+			// leave room with connection
+			const nlLoc = data.indexOf('\n');
+			const roomid = data.slice(1, nlLoc) as RoomID;
+			const room = this.rooms.get(roomid);
+			if (!room) return;
+			const socketid = data.slice(nlLoc + 1);
+			room.delete(socketid);
+			const roomChannel = this.roomChannels.get(roomid);
+			if (roomChannel) roomChannel.delete(socketid);
+			if (!room.size) {
+				this.rooms.delete(roomid);
+				if (roomChannel) this.roomChannels.delete(roomid);
+			}
+		},
+		'.'(data) {
+			// .roomid, channelid, socketid
+			// move connection to different channel in room
+			const nlLoc = data.indexOf('\n');
+			const roomid = data.slice(1, nlLoc) as RoomID;
+			const nlLoc2 = data.indexOf('\n', nlLoc + 1);
+			const channelid = Number(data.slice(nlLoc + 1, nlLoc2)) as ChannelID;
+			const socketid = data.slice(nlLoc2 + 1);
+
+			let roomChannel = this.roomChannels.get(roomid);
+			if (!roomChannel) {
+				roomChannel = new Map();
+				this.roomChannels.set(roomid, roomChannel);
+			}
+			if (channelid === 0) {
+				roomChannel.delete(socketid);
+			} else {
+				roomChannel.set(socketid, channelid);
+			}
+		},
+		':'(data) {
+			// :roomid, message
+			// message to a room, splitting `|split` by channel
+			const nlLoc = data.indexOf('\n');
+			const roomid = data.slice(1, nlLoc) as RoomID;
+			const room = this.rooms.get(roomid);
+			if (!room) return;
+
+			const messages: [string | null, string | null, string | null, string | null, string | null] = [
+				null, null, null, null, null,
+			];
+			const message = data.substr(nlLoc + 1);
+			const roomChannel = this.roomChannels.get(roomid);
+			for (const [curSocketid, curSocket] of room) {
+				const channelid = roomChannel?.get(curSocketid) || 0;
+				if (!messages[channelid]) messages[channelid] = this.extractChannel(message, channelid);
+				curSocket.write(messages[channelid]!);
+			}
+		},
+	};
+
 	constructor(config: {
 		port: number,
 		bindaddress?: string,
@@ -408,137 +526,9 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 	_write(data: string) {
 		// console.log('worker received: ' + data);
-		let socket: import('sockjs').Connection | undefined = undefined;
-		let socketid = '';
-		let room: Map<string, import('sockjs').Connection> | undefined = undefined;
-		let roomid = '' as RoomID;
-		let roomChannel: Map<string, ChannelID> | undefined = undefined;
-		let channelid: ChannelID = 0;
-		let nlLoc = -1;
-		let message = '';
 
-		switch (data.charAt(0)) {
-		case '$': // $code
-			// eslint-disable-next-line no-eval
-			eval(data.substr(1));
-			break;
-
-		case '!': // !socketid
-			// destroy
-			socketid = data.substr(1);
-			socket = this.sockets.get(socketid);
-			if (!socket) return;
-			socket.destroy();
-			this.sockets.delete(socketid);
-			for (const [curRoomid, curRoom] of this.rooms) {
-				curRoom.delete(socketid);
-				roomChannel = this.roomChannels.get(curRoomid);
-				if (roomChannel) roomChannel.delete(socketid);
-				if (!curRoom.size) {
-					this.rooms.delete(curRoomid);
-					if (roomChannel) this.roomChannels.delete(curRoomid);
-				}
-			}
-			break;
-
-		case '>':
-			// >socketid, message
-			// message to single connection
-			nlLoc = data.indexOf('\n');
-			socketid = data.substr(1, nlLoc - 1);
-			socket = this.sockets.get(socketid);
-			if (!socket) return;
-			message = data.substr(nlLoc + 1);
-			socket.write(message);
-			break;
-
-		case '#':
-			// #roomid, message
-			// message to all connections in room
-			// #, message
-			// message to all connections
-			nlLoc = data.indexOf('\n');
-			roomid = data.substr(1, nlLoc - 1) as RoomID;
-			room = roomid ? this.rooms.get(roomid) : this.sockets;
-			if (!room) return;
-			message = data.substr(nlLoc + 1);
-			for (const curSocket of room.values()) curSocket.write(message);
-			break;
-
-		case '+':
-			// +roomid, socketid
-			// join room with connection
-			nlLoc = data.indexOf('\n');
-			socketid = data.substr(nlLoc + 1);
-			socket = this.sockets.get(socketid);
-			if (!socket) return;
-			roomid = data.substr(1, nlLoc - 1) as RoomID;
-			room = this.rooms.get(roomid);
-			if (!room) {
-				room = new Map();
-				this.rooms.set(roomid, room);
-			}
-			room.set(socketid, socket);
-			break;
-
-		case '-':
-			// -roomid, socketid
-			// leave room with connection
-			nlLoc = data.indexOf('\n');
-			roomid = data.slice(1, nlLoc) as RoomID;
-			room = this.rooms.get(roomid);
-			if (!room) return;
-			socketid = data.slice(nlLoc + 1);
-			room.delete(socketid);
-			roomChannel = this.roomChannels.get(roomid);
-			if (roomChannel) roomChannel.delete(socketid);
-			if (!room.size) {
-				this.rooms.delete(roomid);
-				if (roomChannel) this.roomChannels.delete(roomid);
-			}
-			break;
-
-		case '.':
-			// .roomid, channelid, socketid
-			// move connection to different channel in room
-			nlLoc = data.indexOf('\n');
-			roomid = data.slice(1, nlLoc) as RoomID;
-			const nlLoc2 = data.indexOf('\n', nlLoc + 1);
-			channelid = Number(data.slice(nlLoc + 1, nlLoc2)) as ChannelID;
-			socketid = data.slice(nlLoc2 + 1);
-
-			roomChannel = this.roomChannels.get(roomid);
-			if (!roomChannel) {
-				roomChannel = new Map();
-				this.roomChannels.set(roomid, roomChannel);
-			}
-			if (channelid === 0) {
-				roomChannel.delete(socketid);
-			} else {
-				roomChannel.set(socketid, channelid);
-			}
-			break;
-
-		case ':':
-			// :roomid, message
-			// message to a room, splitting `|split` by channel
-			nlLoc = data.indexOf('\n');
-			roomid = data.slice(1, nlLoc) as RoomID;
-			room = this.rooms.get(roomid);
-			if (!room) return;
-
-			const messages: [string | null, string | null, string | null, string | null, string | null] = [
-				null, null, null, null, null,
-			];
-			message = data.substr(nlLoc + 1);
-			roomChannel = this.roomChannels.get(roomid);
-			for (const [curSocketid, curSocket] of room) {
-				channelid = roomChannel?.get(curSocketid) || 0;
-				if (!messages[channelid]) messages[channelid] = this.extractChannel(message, channelid);
-				curSocket.write(messages[channelid]!);
-			}
-			break;
-		}
+		const receiver = this.receivers[data.charAt(0)];
+		if (receiver) receiver.call(this, data);
 	}
 }
 
