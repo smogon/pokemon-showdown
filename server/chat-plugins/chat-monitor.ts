@@ -645,7 +645,7 @@ export const commands: ChatCommands = {
 			this.run(`filterhelp`);
 		},
 		test(target, room, user) {
-			this.privatelyCheckCan('lock');
+			this.checkCan('lock');
 			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
 			let [monitorName, message] = Utils.splitFirst(target, " ");
 			if (!Chat.monitors[monitorName] && Chat.monitors[monitorName + 'filter']) {
@@ -686,7 +686,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		testhelp(target, room, user) {
-			this.privatelyCheckCan('lock');
+			this.checkCan('lock');
 			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
 			const monitorNames = [...Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)];
 			monitorNames.push(
