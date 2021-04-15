@@ -1949,7 +1949,7 @@ export const Chat = new class {
 	 */
 	validateRegex(word: string) {
 		word = word.trim();
-		if (word.endsWith('|') || word.startsWith('|')) {
+		if ((word.endsWith('|') && !word.endsWith('\|'))|| word.startsWith('|')) {
 			throw new Chat.ErrorMessage(`Your regex was rejected because it included an unterminated |.`);
 		}
 		try {
