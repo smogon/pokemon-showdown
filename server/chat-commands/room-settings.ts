@@ -546,10 +546,10 @@ export const commands: ChatCommands = {
 			// Escape any character with a special meaning in regex
 			if (!regex) {
 				words = words.map(word => {
-					if (/[\\^$*+?()|{}[\]]/.test(word)) {
+					if (/[\\^$*+?()|{}[\]]/.test(word) && user.can('rangeban')) {
 						this.errorReply(`"${word}" might be a regular expression, did you mean "/banword addregex"?`);
 					}
-					return word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+					return Utils.escapeRegex(word);
 				});
 			}
 			// PS adds a preamble to the banword regex that's 32 chars long
