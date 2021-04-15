@@ -175,7 +175,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.setAbility(ability);
 			} else {
 				pokemon.removeVolatile("ability:powerofalchemy");
-				pokemon.addVolatile("ability:" + ability, pokemon);
+				pokemon.addVolatile("ability:" + ability.id, pokemon);
 			}
 		},
 	},
@@ -207,7 +207,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.setAbility(ability);
 			} else {
 				pokemon.removeVolatile("ability:receiver");
-				pokemon.addVolatile("ability:" + ability, pokemon);
+				pokemon.addVolatile("ability:" + ability.id, pokemon);
 			}
 		},
 	},
@@ -223,14 +223,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted) return;
+			if (!pokemon.isStarted || this.effectData.gaveUp) return;
 			const isAbility = pokemon.ability === 'trace';
-			const possibleTargets: Pokemon[] = [];
-			for (const target of pokemon.side.foe.active) {
-				if (target && !target.fainted) {
-					possibleTargets.push(target);
-				}
-			}
+			const possibleTargets: Pokemon[] = pokemon.adjacentFoes();
 			while (possibleTargets.length) {
 				const rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
@@ -252,7 +247,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.setAbility(ability);
 				} else {
 					pokemon.removeVolatile("ability:trace");
-					pokemon.addVolatile("ability:" + ability, pokemon);
+					pokemon.addVolatile("ability:" + ability.id, pokemon);
 				}
 				return;
 			}

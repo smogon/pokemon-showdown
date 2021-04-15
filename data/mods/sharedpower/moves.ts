@@ -47,9 +47,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
-				if (pokemon.m.innates) {
-					for (const innate of pokemon.m.innates) {
-						pokemon.removeVolatile("ability:" + innate);
+				const keys = Object.keys(pokemon.volatiles).filter(x => x.startsWith("ability:"));
+				if (keys.length) {
+					for (const abil of keys) {
+						pokemon.removeVolatile(abil);
 					}
 				}
 			},
