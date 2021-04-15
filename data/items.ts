@@ -6663,7 +6663,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 80,
 		},
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === "Move" && 
+			if (effect && effect.effectType === "Move" &&
 				!effect.damage && !effect.damageCallback && target.getMoveHitData(effect).typeMod > 0) {
 				target.useItem();
 			}
