@@ -446,7 +446,7 @@ export const commands: ChatCommands = {
 };
 
 function getMod(target: string) {
-	const arr = target.split(',');
+	const arr = target.split(',').map(x => x.trim());
 	const usedMod = arr.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
