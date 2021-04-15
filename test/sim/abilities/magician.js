@@ -10,7 +10,7 @@ describe('Magician', function () {
 		battle.destroy();
 	});
 
-	it.skip(`should not steal Weakness Policy on super-effective hits`, function () {
+	it(`should not steal Weakness Policy on super-effective hits`, function () {
 		battle = common.createBattle([[
 			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
 		], [

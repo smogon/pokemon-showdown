@@ -33,8 +33,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Water') {
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.effectType === "Move" && effect.type === 'Water') {
 				target.useItem();
 			}
 		},
@@ -647,8 +647,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Electric') {
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.effectType === "Move" && effect.type === 'Electric') {
 				target.useItem();
 			}
 		},
@@ -3039,8 +3039,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Water') {
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.effectType === "Move" && effect.type === 'Water') {
 				target.useItem();
 			}
 		},
@@ -5096,8 +5096,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Ice') {
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.effectType === "Move" && effect.type === 'Ice') {
 				target.useItem();
 			}
 		},
@@ -6662,8 +6662,9 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 80,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (!move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0) {
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.effectType === "Move" && 
+				!effect.damage && !effect.damageCallback && target.getMoveHitData(effect).typeMod > 0) {
 				target.useItem();
 			}
 		},
