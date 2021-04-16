@@ -6,7 +6,7 @@ export const Aliases: {[alias: string]: string} = {
 	ag: "[Gen 8] Anything Goes",
 	bss: "[Gen 8] Battle Stadium Singles",
 	vgc: "[Gen 8] VGC 2021 Series 9",
-	bsd: "[Gen 8] VGC 2021 Series 8",
+	bsd: "[Gen 8] VGC 2021",
 	randdubs: "[Gen 8] Random Doubles Battle",
 	doubles: "[Gen 8] Doubles OU",
 	dou: "[Gen 8] Doubles OU",

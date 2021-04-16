@@ -358,7 +358,7 @@ export const Formats: FormatList = [
 		minSourceGen: 8,
 	},
 	{
-		name: "[Gen 8] VGC 2021 Series 8",
+		name: "[Gen 8] VGC 2021",
 
 		mod: 'gen8',
 		gameType: 'doubles',
