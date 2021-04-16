@@ -3317,8 +3317,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 1] Nintendo Cup 1997",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3572352/">RBY OU Viability Ranking</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8133786">RBY Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3682412/">Nintendo Cup 1997 Discussion &amp; Resources</a>`,
 		],
 
 		mod: 'gen1jpn',
