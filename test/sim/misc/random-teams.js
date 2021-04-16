@@ -135,13 +135,14 @@ describe(`Hackmons Cup Team generator`, function () {
 });
 
 describe(`Factory sets`, function () {
-	for (const filename of ['bss-factory-sets', 'factory-sets']) {
+	const filenames = ['bss-factory-sets', 'mods/gen7/bss-factory-sets', 'mods/gen7/factory-sets', 'mods/gen6/factory-sets'];
+	for (const filename of filenames) {
 		it(`should have valid sets in ${filename}.json (slow)`, function () {
 			this.timeout(0);
-			const setsJSON = require(`../../../.data-dist/mods/gen7/${filename}.json`);
+			const setsJSON = require(`../../../.data-dist/${filename}.json`);
 
 			for (const type in setsJSON) {
-				const typeTable = filename === 'bss-factory-sets' ? setsJSON : setsJSON[type];
+				const typeTable = filename.includes('bss-factory-sets') ? setsJSON : setsJSON[type];
 				const vType = filename === 'bss-factory-sets' ? 'battlespotsingles' : type === 'Mono' ? 'monotype' : type.toLowerCase();
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
