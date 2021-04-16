@@ -87,6 +87,8 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				prevo = prevoSpecies.prevo;
 			}
 			for (const moveid of set.moves.map(this.toID)) {
+				// Diglett Magnemite Shellder
+				if (!learnsetData[moveid]) continue;
 				const list = learnsetData[moveid].filter(x => !x.includes(legalityList[moveid]));
 				if (!list.length) {
 					switch (legalityList[moveid]) {
@@ -120,7 +122,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			}
 			if (problems.some(x => notUsableAsTM.map(y => this.dex.moves.get(y).name).some(z => x.includes(z)))) {
 				problems.push(
-					`${notUsableAsTM.map(y => this.dex.moves.get(y).name).join(' / ')} aren't learnable outside of Pok\u00e9mon Crystal.`
+					`(${notUsableAsTM.map(y => this.dex.moves.get(y).name).join(' / ')} aren't learnable outside of Pok\u00e9mon Crystal.)`
 				);
 			}
 			return problems;
