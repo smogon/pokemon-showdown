@@ -37,14 +37,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onLockMove: 'fly',
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift' && target.volatiles['substitute']) return true;
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+				this.add('-message', `The foe ${target.name} can't be hit while flying!`);
 				return false;
 			},
 			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
 				if (!source || source.side === target.side) return;
 				if (move.id === 'gust' || move.id === 'thunder') {
-					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+					this.add('-message', `The foe ${target.name} can't be hit while flying!`);
 					return null;
 				}
 			},
