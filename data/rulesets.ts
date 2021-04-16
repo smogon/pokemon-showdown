@@ -1343,21 +1343,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	stadiumitemsclause: {
 		effectType: 'ValidatorRule',
 		name: 'Stadium Items Clause',
-		desc: "Bans items which are not usable in Pokemon Stadium 2.",
-		banlist: ['Fast Ball', 'Friend Ball', 'Great Ball', 'Heavy Ball', 'Level Ball', 'Love Ball', 'Lure Ball', 'Master Ball', 'Moon Ball', 'Park Ball', 'Poke Ball', 'Safari Ball', 'Ultra Ball', 'Fire Stone', 'Leaf Stone', 'Moon Stone', 'Sun Stone', 'Thunder Stone', 'Upgrade', 'Water Stone', 'Mail',
-		],
-		onBegin() {
-			this.add('rule', 'Stadium Items Clause: Items which are not usable in Pokemon Stadium 2 are banned.');
-		},
-	},
-	// Only implemented for Stadium 2
-	selfkoclause: {
-		effectType: 'Rule',
-		name: 'Self-KO Clause',
-		desc: "If a player's last Pokemon uses Self-Destruct or Explosion, they automatically lose the battle.",
-		// implemented in data/mods/gen2stadium/scripts.ts
-		onBegin() {
-			this.add('rule', 'Self-KO Clause: If a player\'s last Pokemon uses Self-Destruct or Explosion, they automatically lose');
-		},
+		desc: "Bans items that are not usable in Pokemon Stadium 2.",
+		banlist: ['Fast Ball', 'Friend Ball', 'Great Ball', 'Heavy Ball', 'Level Ball', 'Love Ball', 'Lure Ball', 'Master Ball', 'Moon Ball', 'Park Ball', 'Poke Ball', 'Safari Ball', 'Ultra Ball', 'Fire Stone', 'Leaf Stone', 'Moon Stone', 'Sun Stone', 'Thunder Stone', 'Upgrade', 'Water Stone', 'Mail'],
 	},
 };
