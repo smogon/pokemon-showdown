@@ -3385,12 +3385,12 @@ export const Formats: FormatList = [
 			if (!legalityList) return;
 			const problems = [];
 			if (set.moves) {
-				for (const moveId of set.moves) {
-					if (legalityList[moveId]) {
-						if (legalityList[moveId] === 'illegal') {
-							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveId).name} in 1997.`);
-						} else if (set.level < legalityList[moveId]) {
-							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveId).name} before level ${legalityList[moveId]} in 1997.`);
+				for (const moveid of set.moves.map(this.toID)) {
+					if (legalityList[moveid]) {
+						if (legalityList[moveid] === 'illegal') {
+							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} in Japanese versions of the Gen 1 games.`);
+						} else if (set.level < legalityList[moveid]) {
+							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} before level ${legalityList[moveid]} in 1997.`);
 						}
 					}
 				}
