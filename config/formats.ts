@@ -345,6 +345,18 @@ export const Formats: FormatList = [
 		banlist: ['DOU', 'DBL'],
 	},
 	{
+		name: "[Gen 8] Doubles LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658672/">Doubles LC</a>`,
+		],
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles', 'Little Cup', 'Dynamax Clause', 'Swagger Clause'],
+		banlist: ['Cutiefly', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola', 'Corsola-Galar', 'Drought'],
+	},
+	{
 		name: "[Gen 8] VGC 2021 Series 9",
 
 		mod: 'gen8',
