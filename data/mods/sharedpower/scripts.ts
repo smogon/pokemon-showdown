@@ -37,7 +37,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				(this.battle.gen >= 5 && !this.isActive) ||
 				((this.volatiles['gastroacid'] ||
 					(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
-						this.m.abils?.some((k: string) => k === 'ability:neutralizinggas'))
+						this.m.abils?.includes('ability:neutralizinggas'))
 					)) && !this.getAbility().isPermanent
 				)
 			);

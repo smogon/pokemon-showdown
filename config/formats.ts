@@ -1253,7 +1253,7 @@ export const Formats: FormatList = [
 		],
 		getSharedPower(pokemon) {
 			const sharedPower = new Set<string>();
-			for (const ally of pokemon.allies()) {
+			for (const ally of pokemon.side.pokemon) {
 				if (ally.previouslySwitchedIn > 0) {
 					if (pokemon.battle.dex.currentMod !== 'sharedpower' && ['trace', 'mirrorarmor'].includes(ally.baseAbility)) {
 						sharedPower.add('noability');
@@ -1262,6 +1262,7 @@ export const Formats: FormatList = [
 					sharedPower.add(ally.baseAbility);
 				}
 			}
+			sharedPower.delete(pokemon.baseAbility);
 			return sharedPower;
 		},
 		onBeforeSwitchIn(pokemon) {
