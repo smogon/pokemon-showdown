@@ -274,10 +274,7 @@ export const Tags: {[id: string]: TagData} = {
 	bst: {
 		name: "BST",
 		desc: "Base Stat Total",
-		speciesNumCol: species => (
-			species.baseStats.hp + species.baseStats.atk + species.baseStats.def +
-			species.baseStats.spa + species.baseStats.spd + species.baseStats.spe
-		),
+		speciesNumCol: species => species.bst,
 	},
 
 	basepower: {
