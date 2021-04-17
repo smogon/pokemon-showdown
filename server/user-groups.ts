@@ -307,9 +307,16 @@ export class RoomAuth extends Auth {
 
 export class GlobalAuth extends Auth {
 	usernames = new Map<ID, string>();
+	sectionLeaders = new SectionLeaders();
 	constructor() {
 		super();
 		this.load();
+	}
+	isSectionLeader(user: User | ID) {
+		return this.sectionLeaders.has(typeof user === 'string' ? user : (user as User).id) || false;
+	}
+	leadsSection(user: User | ID) {
+		return this.sectionLeaders.get(typeof user === 'string' ? user : (user as User).id) || null;
 	}
 	save() {
 		FS('config/usergroups.csv').writeUpdate(() => {
@@ -357,7 +364,8 @@ export class GlobalAuth extends Auth {
 	}
 }
 
-export class SectionLeaders extends Set<ID> {
+// string = section ids, but they aren't defined yet
+class SectionLeaders extends Map<ID, string> {
 	usernames = new Map<ID, string>();
 	constructor() {
 		super();
@@ -366,8 +374,8 @@ export class SectionLeaders extends Set<ID> {
 	save() {
 		FS('config/sectionleaders.csv').writeUpdate(() => {
 			let buffer = '';
-			for (const userid of this) {
-				buffer += `${this.usernames.get(userid) || userid}\n`;
+			for (const [userid, sectionid] of this) {
+				buffer += `${this.usernames.get(userid) || userid},${sectionid}\n`;
 			}
 			return buffer;
 		});
@@ -376,33 +384,28 @@ export class SectionLeaders extends Set<ID> {
 		const data = FS('config/sectionleaders.csv').readIfExistsSync();
 		for (const row of data.split("\n")) {
 			if (!row) continue;
-			const name = row;
+			const [name, sectionid] = row.split(',');
 			const id = toID(name);
 			this.usernames.set(id, name);
-			super.add(id);
+			super.set(id, sectionid);
 		}
 	}
-	add(id: ID, username?: string) {
+	add(id: ID, sectionid: string, username?: string) {
 		if (!username) username = id;
 		const user = Users.get(id);
 		if (user) {
-			user.sectionLeader = true;
 			user.updateIdentity();
 			username = user.name;
 			Rooms.global.checkAutojoin(user);
 		}
 		this.usernames.set(id, username);
-		super.add(id);
+		super.set(id, sectionid);
 		void this.save();
 		return this;
 	}
 	delete(id: ID) {
 		if (!super.has(id)) return false;
 		super.delete(id);
-		const user = Users.get(id);
-		if (user) {
-			user.sectionLeader = false;
-		}
 		this.usernames.delete(id);
 		this.save();
 		return true;

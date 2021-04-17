@@ -44,22 +44,27 @@ export const commands: ChatCommands = {
 	desectionleader: 'sectionleader',
 	sectionleader(target, room, user, connection, cmd) {
 		this.checkCan('gdeclare');
+		room = this.requireRoom();
 		if (!target) return this.parse(`/help sectionleader`);
 
-		target = this.splitTarget(target, true);
+		let [targetStr, sectionid] = this.splitOne(target).map(toID) as string[];
+		targetStr = this.splitTarget(targetStr, true);
+		const section = room.sanitizeSection(sectionid);
 		const targetUser = this.targetUser;
 		const userid = toID(this.targetUsername);
 		const name = targetUser ? targetUser.name : this.targetUsername;
 		const demoting = cmd === 'desectionleader';
-		if (targetUser?.sectionLeader && !demoting) {
-			throw new Chat.ErrorMessage(`${name} is already a Section Leader.`);
-		} else if (targetUser && !targetUser.sectionLeader && demoting) {
+		const leadsSection = Users.globalAuth.leadsSection(targetUser || toID(name));
+		if (targetUser && Users.globalAuth.isSectionLeader(targetUser) && !demoting &&
+		section === leadsSection) {
+			throw new Chat.ErrorMessage(`${name} is already a Section Leader of ${sectionNames[section]}.`);
+		} else if (targetUser && !Users.globalAuth.isSectionLeader(targetUser) && demoting) {
 			throw new Chat.ErrorMessage(`${name} is not a Section Leader.`);
 		}
 		const staff = Rooms.get('staff');
 		if (!demoting) {
-			Users.sectionLeaders.add(userid, name);
-			this.addGlobalModAction(`${name} was appointed Section Leader by ${user.name}.`);
+			Users.globalAuth.sectionLeaders.add(userid, section, name);
+			this.addGlobalModAction(`${name} was appointed Section Leader of ${sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`SECTION LEADER`, userid);
 			if (staff && !staff.auth.has(userid)) this.parse(`/msgroom staff,/roomvoice ${userid}`);
 			if (targetUser) {
@@ -70,7 +75,7 @@ export const commands: ChatCommands = {
 				}
 			}
 		} else {
-			Users.sectionLeaders.delete(userid);
+			Users.globalAuth.sectionLeaders.delete(userid);
 			this.parse();
 			this.privateGlobalModAction(`${name} was demoted from Section Leader by ${user.name}.`);
 			this.globalModlog(`DESECTION LEADER`, userid);
@@ -87,8 +92,10 @@ export const commands: ChatCommands = {
 		}
 	},
 	sectionleaderhelp: [
-		`/sectionleader [target user] - Appoints [target user] Section Leader.`,
-		`/desectionleader [target user] - Demotes [target user] from Section Leader.`,
+		`/sectionleader [target user], [sectionid] - Appoints [target user] Section Leader.`,
+		`/desectionleader [target user], [sectionid] - Demotes [target user] from Section Leader.`,
+		`Valid sections: ${sections.join(', ')}`,
+		`If you wish to change someone's section to another one, just /desectionleader then /sectionleader.`,
 		`Requires: &`,
 	],
 };
