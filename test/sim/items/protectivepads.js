@@ -114,4 +114,17 @@ describe('Protective Pads', function () {
 		assert.fullHP(wynaut, `Wynaut should not have lost HP from Spiky Shield`);
 		assert(battle.log.every(line => !line.includes('Protective Pads')));
 	});
+
+	it(`should not protect against Gulp Missile when using a contact move`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
+		], [
+			{species: 'cramorantgorging', ability: 'gulpmissile', item: 'rockyhelmet', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		const wynaut = battle.p1.active[0];
+		assert.equal(wynaut.hp, wynaut.maxhp - Math.floor(wynaut.maxhp / 4), `Wynaut should be damaged by Gulp Missile, but not Rocky Helmet`);
+		assert.equal(wynaut.status, 'par');
+		assert(battle.log.every(line => !line.includes('Protective Pads')));
+	});
 });
