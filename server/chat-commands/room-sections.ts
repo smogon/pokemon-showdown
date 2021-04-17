@@ -46,7 +46,8 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		if (!target || target.split(',').length < 2) return this.parse(`/help sectionleader`);
 
-		const [, sectionid] = this.splitTarget(target);
+		const [targetStr, sectionid] = this.splitOne(target);
+		this.splitTarget(targetStr);
 		const section = room.sanitizeSection(sectionid);
 		const targetUser = this.targetUser;
 		const userid = toID(this.targetUsername);
