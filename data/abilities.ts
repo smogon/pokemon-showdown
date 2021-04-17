@@ -1939,7 +1939,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 98,
 	},
 	magician: {
-		onSourceHit(target, source, move) {
+		onAfterMoveSecondarySelf(source, target, move) {
 			if (!move || !target) return;
 			if (target !== source && move.category !== 'Status') {
 				if (source.item || source.volatiles['gem'] || move.id === 'fling') return;
