@@ -371,8 +371,8 @@ class SectionLeaders extends Map<ID, RoomSection> {
 	save() {
 		FS('config/sectionleaders.csv').writeUpdate(() => {
 			let buffer = '';
-			for (const [userid, [sectionid, desc]] of this) {
-				buffer += `${this.usernames.get(userid) || userid}|${sectionid}|${desc}\n`;
+			for (const [userid, sectionid] of this) {
+				buffer += `${this.usernames.get(userid) || userid}|${sectionid}\n`;
 			}
 			return buffer;
 		});
