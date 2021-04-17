@@ -1,11 +1,10 @@
 import {Utils} from '../../lib';
 
-export type RoomSection = 'none' | 'nonpublic' | 'officialrooms' | 'officialtiers' | 'communityprojects' |
-'gaming' | 'languages' | 'entertainment' | 'lifehobbies' | 'onsitegames';
-
-export const sections: RoomSection[] = [
+export const sections = [
 	'none', 'nonpublic', 'officialrooms', 'officialtiers', 'communityprojects', 'gaming', 'languages', 'entertainment', 'lifehobbies', 'onsitegames',
-];
+] as const;
+
+export type RoomSection = typeof sections[number];
 
 export const sectionNames: {[k in RoomSection]: string} = {
 	none: 'none',
@@ -45,20 +44,18 @@ export const commands: ChatCommands = {
 	sectionleader(target, room, user, connection, cmd) {
 		this.checkCan('gdeclare');
 		room = this.requireRoom();
-		if (!target) return this.parse(`/help sectionleader`);
+		if (!target || target.split(',').length < 2) return this.parse(`/help sectionleader`);
 
-		let [targetStr, sectionid] = this.splitOne(target).map(toID) as string[];
-		targetStr = this.splitTarget(targetStr, true);
+		const [, sectionid] = this.splitTarget(target);
 		const section = room.sanitizeSection(sectionid);
 		const targetUser = this.targetUser;
 		const userid = toID(this.targetUsername);
 		const name = targetUser ? targetUser.name : this.targetUsername;
 		const demoting = cmd === 'desectionleader';
-		const leadsSection = Users.globalAuth.leadsSection(targetUser || toID(name));
-		if (targetUser && Users.globalAuth.isSectionLeader(targetUser) && !demoting &&
-		section === leadsSection) {
+		const leadsSection = Users.globalAuth.sectionLeaders.getSection(targetUser || userid);
+		if (Users.globalAuth.sectionLeaders.has(targetUser || userid) && !demoting && section === leadsSection) {
 			throw new Chat.ErrorMessage(`${name} is already a Section Leader of ${sectionNames[section]}.`);
-		} else if (targetUser && !Users.globalAuth.isSectionLeader(targetUser) && demoting) {
+		} else if (!Users.globalAuth.sectionLeaders.has(targetUser || userid) && demoting) {
 			throw new Chat.ErrorMessage(`${name} is not a Section Leader.`);
 		}
 		const staff = Rooms.get('staff');
@@ -93,7 +90,7 @@ export const commands: ChatCommands = {
 	},
 	sectionleaderhelp: [
 		`/sectionleader [target user], [sectionid] - Appoints [target user] Section Leader.`,
-		`/desectionleader [target user], [sectionid] - Demotes [target user] from Section Leader.`,
+		`/desectionleader [target user] - Demotes [target user] from Section Leader.`,
 		`Valid sections: ${sections.join(', ')}`,
 		`If you wish to change someone's section to another one, just /desectionleader then /sectionleader.`,
 		`Requires: &`,

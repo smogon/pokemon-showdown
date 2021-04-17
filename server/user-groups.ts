@@ -1,4 +1,5 @@
 import {FS} from '../lib/fs';
+import type {RoomSection} from './chat-commands/room-sections';
 
 export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
@@ -312,12 +313,6 @@ export class GlobalAuth extends Auth {
 		super();
 		this.load();
 	}
-	isSectionLeader(user: User | ID) {
-		return this.sectionLeaders.has(typeof user === 'string' ? user : (user as User).id) || false;
-	}
-	leadsSection(user: User | ID) {
-		return this.sectionLeaders.get(typeof user === 'string' ? user : (user as User).id) || null;
-	}
 	save() {
 		FS('config/usergroups.csv').writeUpdate(() => {
 			let buffer = '';
@@ -364,8 +359,10 @@ export class GlobalAuth extends Auth {
 	}
 }
 
-// string = section ids, but they aren't defined yet
-class SectionLeaders extends Map<ID, string> {
+/**
+ * userid:section
+ */
+class SectionLeaders extends Map<ID, RoomSection> {
 	usernames = new Map<ID, string>();
 	constructor() {
 		super();
@@ -374,8 +371,8 @@ class SectionLeaders extends Map<ID, string> {
 	save() {
 		FS('config/sectionleaders.csv').writeUpdate(() => {
 			let buffer = '';
-			for (const [userid, sectionid] of this) {
-				buffer += `${this.usernames.get(userid) || userid},${sectionid}\n`;
+			for (const [userid, [sectionid, desc]] of this) {
+				buffer += `${this.usernames.get(userid) || userid}|${sectionid}|${desc}\n`;
 			}
 			return buffer;
 		});
@@ -384,13 +381,13 @@ class SectionLeaders extends Map<ID, string> {
 		const data = FS('config/sectionleaders.csv').readIfExistsSync();
 		for (const row of data.split("\n")) {
 			if (!row) continue;
-			const [name, sectionid] = row.split(',');
+			const [name, sectionid] = row.split('|');
 			const id = toID(name);
 			this.usernames.set(id, name);
-			super.set(id, sectionid);
+			super.set(id, sectionid as RoomSection);
 		}
 	}
-	add(id: ID, sectionid: string, username?: string) {
+	add(id: ID, sectionid: RoomSection, username?: string) {
 		if (!username) username = id;
 		const user = Users.get(id);
 		if (user) {
@@ -409,5 +406,11 @@ class SectionLeaders extends Map<ID, string> {
 		this.usernames.delete(id);
 		this.save();
 		return true;
+	}
+	has(user: User | ID) {
+		return super.has(typeof user !== 'string' ? (user as any).id : user);
+	}
+	getSection(user: User | ID) {
+		return super.get(typeof user !== 'string' ? (user as any).id : user);
 	}
 }

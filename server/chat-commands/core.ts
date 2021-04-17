@@ -1704,7 +1704,7 @@ export const commands: ChatCommands = {
 			let group = targetUser.tempGroup;
 			if (targetUser.locked) group = Config.punishgroups?.locked?.symbol ?? '\u203d';
 			if (targetUser.namelocked) group = Config.punishgroups?.namelocked?.symbol ?? '✖';
-			const sectionleader = Users.globalAuth.isSectionLeader(targetUser);
+			const sectionleader = Users.globalAuth.sectionLeaders.has(targetUser);
 			const userdetails: AnyObject = {
 				id: target,
 				userid: targetUser.id,
