@@ -29,6 +29,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 const RETRY_AFTER_LOGIN = null;
 
 import {FS, Utils, Streams} from '../lib';
+import {RoomSection, categories, sectionNames} from './chat-commands/room-sections';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
@@ -80,6 +81,7 @@ export interface RoomSettings {
 	title: string;
 	auth: {[userid: string]: GroupSymbol};
 	creationTime: number;
+	section: RoomSection;
 
 	readonly autojoin?: boolean;
 	aliases?: string[];
@@ -101,7 +103,6 @@ export interface RoomSettings {
 	hangmanDisabled?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
-	isOfficial?: boolean;
 	pspl?: boolean;
 	parentid?: string | null;
 	desc?: string | null;
@@ -189,6 +190,7 @@ export abstract class BasicRoom {
 	settings: RoomSettings;
 	/** If true, this room's settings will be saved in config/chatrooms.json, allowing it to stay past restarts. */
 	persist: boolean;
+	section: RoomSection;
 
 	scavgame: ScavengerGameTemplate | null;
 	scavLeaderboard: AnyObject;
@@ -217,7 +219,7 @@ export abstract class BasicRoom {
 	 */
 	nthMessageHandlers: Map<MessageHandler, number>;
 
-	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
+	constructor(roomid: RoomID, title?: string, section: RoomSection = 'none', options: Partial<RoomSettings> = {}) {
 		this.users = Object.create(null);
 		this.type = 'chat';
 		this.muteQueue = [];
@@ -248,8 +250,10 @@ export abstract class BasicRoom {
 			title: this.title,
 			auth: Object.create(null),
 			creationTime: Date.now(),
+			section: 'none',
 		};
 		this.persist = false;
+		this.section = section;
 		this.hideReplay = false;
 		this.subRooms = null;
 		this.scavgame = null;
@@ -697,7 +701,7 @@ export abstract class BasicRoom {
 		}
 		message += `</div>`;
 		if (this.settings.introMessage) {
-			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(!this.settings.isOfficial ? 'class="infobox-limited"' : '')}>` +
+			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(this.settings.section !== 'officialrooms' ? 'class="infobox-limited"' : '')}>` +
 				this.settings.introMessage.replace(/\n/g, '') +
 				`</div></div>`;
 		}
@@ -823,6 +827,26 @@ export abstract class BasicRoom {
 				this.rename(this.title, this.roomid.slice(0, lastDashIndex) as RoomID);
 			}
 		}
+	}
+	sanitizeSection(section: string) {
+		const target = toID(section);
+		if (!categories.includes(target as any)) {
+			throw new Chat.ErrorMessage(`"${target}" is not a valid room section. Valid categories include: ${categories.join(', ')}`);
+		}
+		return target as RoomSection;
+	}
+	adjustSection(newSection: string) {
+		if (!this.persist) {
+			throw new Chat.ErrorMessage(`You cannot change the section of temporary rooms.`);
+		}
+		const section = this.sanitizeSection(newSection);
+		const oldSection = this.settings.section;
+		if (oldSection === section) {
+			throw new Chat.ErrorMessage(`${this.title}'s room section is already set to "${sectionNames[oldSection]}".`);
+		}
+		this.settings.section = this.section = section;
+		this.saveSettings();
+		return section;
 	}
 
 	/**
@@ -1123,8 +1147,8 @@ export class GlobalRoomState {
 				title: 'Lobby',
 				auth: {},
 				creationTime: Date.now(),
-				isOfficial: true,
 				autojoin: true,
+				section: 'officialrooms',
 			}, {
 				title: 'Staff',
 				auth: {},
@@ -1132,6 +1156,7 @@ export class GlobalRoomState {
 				isPrivate: 'hidden',
 				modjoin: '%',
 				autojoin: true,
+				section: 'nonpublic',
 			}];
 		}
 
@@ -1158,7 +1183,7 @@ export class GlobalRoomState {
 			// where they are used for shared modlogs and the like
 			const id = toID(settings.title) as RoomID;
 			Monitor.notice("RESTORE CHATROOM: " + id);
-			const room = Rooms.createChatRoom(id, settings.title, settings);
+			const room = Rooms.createChatRoom(id, settings.title, settings.section, settings);
 			if (room.settings.aliases) {
 				for (const alias of room.settings.aliases) {
 					Rooms.aliases.set(alias, id);
@@ -1352,11 +1377,10 @@ export class GlobalRoomState {
 	}
 	getRooms(user: User) {
 		const roomsData: {
-			official: ChatRoomTable[], pspl: ChatRoomTable[], chat: ChatRoomTable[], userCount: number, battleCount: number,
+			pspl: ChatRoomTable[], sections: {[k in RoomSection]: ChatRoomTable[]}, userCount: number, battleCount: number,
 		} = {
-			official: [],
 			pspl: [],
-			chat: [],
+			sections: Object.create(null),
 			userCount: Users.onlineCount,
 			battleCount: this.battleCount,
 		};
@@ -1372,13 +1396,13 @@ export class GlobalRoomState {
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
 
-			if (room.settings.isOfficial) {
-				roomsData.official.push(roomData);
-			// @ts-ignore
-			} else if (room.pspl) {
+			if (room.section !== 'nonpublic') {
+				if (!roomsData.sections[room.section]) roomsData.sections[room.section] = [];
+				roomsData.sections[room.section].push(roomData);
+			}
+
+			if (room.settings.pspl) {
 				roomsData.pspl.push(roomData);
-			} else {
-				roomsData.chat.push(roomData);
 			}
 		}
 		return roomsData;
@@ -1386,7 +1410,7 @@ export class GlobalRoomState {
 	sendAll(message: string) {
 		Sockets.roomBroadcast('', message);
 	}
-	addChatRoom(title: string) {
+	addChatRoom(title: string, section: RoomSection = 'nonpublic') {
 		const id = toID(title) as RoomID;
 		if (['battles', 'rooms', 'ladder', 'teambuilder', 'home', 'all', 'public'].includes(id)) {
 			return false;
@@ -1397,8 +1421,9 @@ export class GlobalRoomState {
 			title,
 			auth: {},
 			creationTime: Date.now(),
+			section,
 		};
-		const room = Rooms.createChatRoom(id, title, settings);
+		const room = Rooms.createChatRoom(id, title, section, settings);
 		if (id === 'lobby') Rooms.lobby = room;
 		this.settingsList.push(settings);
 		this.chatRooms.push(room);
@@ -1690,7 +1715,7 @@ export class GameRoom extends BasicRoom {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
 		options.isMultichannel = true;
-		super(roomid, title, options);
+		super(roomid, title, 'none', options);
 		this.reportJoins = !!Config.reportbattlejoins;
 		this.settings.modchat = (Config.battlemodchat || null);
 
@@ -1852,9 +1877,9 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
-	createChatRoom(roomid: RoomID, title: string, options: AnyObject) {
+	createChatRoom(roomid: RoomID, title: string, section: string, options: AnyObject) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
-		const room: ChatRoom = new (BasicRoom as any)(roomid, title, options);
+		const room: ChatRoom = new (BasicRoom as any)(roomid, title, section, options);
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},

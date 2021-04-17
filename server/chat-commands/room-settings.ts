@@ -807,7 +807,7 @@ export const commands: ChatCommands = {
 
 		const titleMsg = Utils.html`Welcome to ${parent ? room.title : user.name}'s` +
 			Utils.html`${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
-		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
+		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, 'hidden', {
 			isPersonal: true,
 			isPrivate: 'hidden',
 			creationTime: Date.now(),
@@ -1065,6 +1065,7 @@ export const commands: ChatCommands = {
 			room.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
+			room.adjustSection('none');
 			room.setPrivate(false);
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
@@ -1085,6 +1086,7 @@ export const commands: ChatCommands = {
 			}
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
+			room.adjustSection('nonpublic');
 			room.setPrivate(setting);
 			room.privacySetter = new Set([user.id]);
 		}
@@ -1114,47 +1116,26 @@ export const commands: ChatCommands = {
 	],
 
 	officialchatroom: 'officialroom',
-	officialroom(target, room, user) {
-		room = this.requireRoom();
-		this.checkCan('makeroom');
-		if (!room.persist) {
-			return this.errorReply(`/officialroom - This room can't be made official`);
-		}
-		if (this.meansNo(target)) {
-			if (!room.settings.isOfficial) return this.errorReply(`This chat room is already unofficial.`);
-			delete room.settings.isOfficial;
-			this.addModAction(`${user.name} made this chat room unofficial.`);
-			this.modlog('UNOFFICIALROOM');
-			delete room.settings.isOfficial;
-			room.saveSettings();
-		} else {
-			if (room.settings.isOfficial) return this.errorReply(`This chat room is already official.`);
-			room.settings.isOfficial = true;
-			this.addModAction(`${user.name} made this chat room official.`);
-			this.modlog('OFFICIALROOM');
-			room.settings.isOfficial = true;
-			room.saveSettings();
-		}
+	officialroom() {
+		this.parse(`/setroomsection officialrooms`);
 	},
 
 	psplwinnerroom(target, room, user) {
 		this.checkCan('makeroom');
 		room = this.requireRoom();
 		if (!room.persist) {
-			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
+			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room.`);
 		}
 		if (this.meansNo(target)) {
 			if (!room.settings.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
-			delete room.settings.pspl;
 			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
-			this.modlog('PSPLROOM');
+			this.modlog('UNPSPLROOM');
 			delete room.settings.pspl;
 			room.saveSettings();
 		} else {
 			if (room.settings.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
-			room.settings.pspl = true;
 			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
-			this.modlog('UNPSPLROOM');
+			this.modlog('PSPLROOM');
 			room.settings.pspl = true;
 			room.saveSettings();
 		}

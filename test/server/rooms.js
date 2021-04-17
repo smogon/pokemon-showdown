@@ -163,16 +163,16 @@ describe('Rooms features', function () {
 			});
 
 			it("should rename their parents subroom reference", async function () {
-				parent = Rooms.createChatRoom("parent", "Parent");
-				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
+				parent = Rooms.createChatRoom("parent", "Parent", 'none');
+				subroom = Rooms.createChatRoom("subroom", "Subroom", 'nonpublic', {parentid: "parent"});
 				await subroom.rename("TheSubroom");
 				assert.equal(parent.subRooms.has("subroom"), false);
 				assert.equal(parent.subRooms.has("thesubroom"), true);
 			});
 
 			it("should rename their subrooms parent reference", async function () {
-				parent = Rooms.createChatRoom("parent", "Parent");
-				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
+				parent = Rooms.createChatRoom("parent", "Parent", 'none');
+				subroom = Rooms.createChatRoom("subroom", "Subroom", 'none', {parentid: "parent"});
 				await parent.rename("TheParent");
 				assert.equal(subroom.parent, parent);
 			});

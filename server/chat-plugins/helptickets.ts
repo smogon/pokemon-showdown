@@ -1291,7 +1291,7 @@ export const commands: ChatCommands = {
 			}
 			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;
 			if (!helpRoom) {
-				helpRoom = Rooms.createChatRoom(`help-${user.id}` as RoomID, `[H] ${user.name}`, {
+				helpRoom = Rooms.createChatRoom(`help-${user.id}` as RoomID, `[H] ${user.name}`, 'nonpublic', {
 					isPersonal: true,
 					isHelp: true,
 					isPrivate: 'hidden',
