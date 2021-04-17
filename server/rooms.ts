@@ -1877,7 +1877,7 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
-	createChatRoom(roomid: RoomID, title: string, section: string, options: AnyObject) {
+	createChatRoom(roomid: RoomID, title: string, section: RoomSection, options: AnyObject) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		const room: ChatRoom = new (BasicRoom as any)(roomid, title, section, options);
 		Rooms.rooms.set(roomid, room);
