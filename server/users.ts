@@ -44,7 +44,9 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS, Utils, ProcessManager} from '../lib';
-import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission} from './user-groups';
+import {
+	Auth, GlobalAuth, SectionLeaders, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission,
+} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -174,6 +176,7 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
  * User groups
 *********************************************************/
 const globalAuth = new GlobalAuth();
+const sectionLeaders = new SectionLeaders();
 
 function isUsernameKnown(name: string) {
 	const userid = toID(name);
@@ -327,6 +330,7 @@ export class User extends Chat.MessageContext {
 	registered: boolean;
 	id: ID;
 	tempGroup: GroupSymbol;
+	sectionLeader: boolean;
 	avatar: string | number;
 	language: ID | null;
 
@@ -402,6 +406,7 @@ export class User extends Chat.MessageContext {
 		this.registered = false;
 		this.id = '';
 		this.tempGroup = Auth.defaultSymbol();
+		this.sectionLeader = false;
 		this.language = null;
 
 		this.avatar = DEFAULT_TRAINER_SPRITES[Math.floor(Math.random() * DEFAULT_TRAINER_SPRITES.length)];
@@ -1116,6 +1121,9 @@ export class User extends Chat.MessageContext {
 			}
 		}
 	}
+	appointSectionLeader() {
+		this.sectionLeader = true;
+	}
 	/**
 	 * Demotes a user from anything that grants trusted status.
 	 * Returns an array describing what the user was demoted from.
@@ -1701,6 +1709,7 @@ export const Users = {
 	findUsers,
 	Auth,
 	globalAuth,
+	sectionLeaders,
 	isUsernameKnown,
 	isTrusted,
 	PLAYER_SYMBOL,

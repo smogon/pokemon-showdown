@@ -708,9 +708,14 @@ export const commands: ChatCommands = {
 	makechatroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('makeroom');
-		const id = toID(target);
+		let [id, sectionTarget] = this.splitOne(target).map(toID);
+		if (!sectionTarget) sectionTarget = (cmd.includes('public') ? 'none' : 'nonpublic') as ID;
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
-		if (!Rooms.global.addChatRoom(target)) {
+		const section = room.sanitizeSection(sectionTarget);
+		if (!cmd.includes('public') && section !== 'nonpublic') {
+			throw new Chat.ErrorMessage(`Non-public rooms cannot be placed into room sections.`);
+		}
+		if (!Rooms.global.addChatRoom(target, section)) {
 			return this.errorReply(`An error occurred while trying to create the room '${target}'.`);
 		}
 
@@ -1065,7 +1070,7 @@ export const commands: ChatCommands = {
 			room.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
-			room.adjustSection('none');
+			if (!room.settings.isPersonal && !room.battle) room.adjustSection('none');
 			room.setPrivate(false);
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
@@ -1086,7 +1091,7 @@ export const commands: ChatCommands = {
 			}
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			room.adjustSection('nonpublic');
+			if (!room.settings.isPersonal && !room.battle) room.adjustSection('nonpublic');
 			room.setPrivate(setting);
 			room.privacySetter = new Set([user.id]);
 		}

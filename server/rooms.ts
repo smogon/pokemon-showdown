@@ -29,7 +29,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 const RETRY_AFTER_LOGIN = null;
 
 import {FS, Utils, Streams} from '../lib';
-import {RoomSection, categories, sectionNames} from './chat-commands/room-sections';
+import {RoomSection, sections, sectionNames} from './chat-commands/room-sections';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
@@ -830,8 +830,8 @@ export abstract class BasicRoom {
 	}
 	sanitizeSection(section: string) {
 		const target = toID(section);
-		if (!categories.includes(target as any)) {
-			throw new Chat.ErrorMessage(`"${target}" is not a valid room section. Valid categories include: ${categories.join(', ')}`);
+		if (!sections.includes(target as any)) {
+			throw new Chat.ErrorMessage(`"${target}" is not a valid room section. Valid categories include: ${sections.join(', ')}`);
 		}
 		return target as RoomSection;
 	}
@@ -1377,10 +1377,15 @@ export class GlobalRoomState {
 	}
 	getRooms(user: User) {
 		const roomsData: {
-			pspl: ChatRoomTable[], sections: {[k in RoomSection]: ChatRoomTable[]}, userCount: number, battleCount: number,
+			pspl: ChatRoomTable[],
+			sections: {[k in RoomSection]: ChatRoomTable[]},
+			sectionTitles: {[k: string]: string},
+			userCount: number,
+			battleCount: number,
 		} = {
 			pspl: [],
 			sections: Object.create(null),
+			sectionTitles: sectionNames,
 			userCount: Users.onlineCount,
 			battleCount: this.battleCount,
 		};

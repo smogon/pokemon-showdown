@@ -356,3 +356,55 @@ export class GlobalAuth extends Auth {
 		return true;
 	}
 }
+
+export class SectionLeaders extends Set<ID> {
+	usernames = new Map<ID, string>();
+	constructor() {
+		super();
+		this.load();
+	}
+	save() {
+		FS('config/sectionleaders.csv').writeUpdate(() => {
+			let buffer = '';
+			for (const userid of this) {
+				buffer += `${this.usernames.get(userid) || userid}\n`;
+			}
+			return buffer;
+		});
+	}
+	load() {
+		const data = FS('config/sectionleaders.csv').readIfExistsSync();
+		for (const row of data.split("\n")) {
+			if (!row) continue;
+			const name = row;
+			const id = toID(name);
+			this.usernames.set(id, name);
+			super.add(id);
+		}
+	}
+	add(id: ID, username?: string) {
+		if (!username) username = id;
+		const user = Users.get(id);
+		if (user) {
+			user.sectionLeader = true;
+			user.updateIdentity();
+			username = user.name;
+			Rooms.global.checkAutojoin(user);
+		}
+		this.usernames.set(id, username);
+		super.add(id);
+		void this.save();
+		return this;
+	}
+	delete(id: ID) {
+		if (!super.has(id)) return false;
+		super.delete(id);
+		const user = Users.get(id);
+		if (user) {
+			user.sectionLeader = false;
+		}
+		this.usernames.delete(id);
+		this.save();
+		return true;
+	}
+}
