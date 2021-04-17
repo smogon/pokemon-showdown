@@ -514,13 +514,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				if (move.flags['contact']) {
+				if (this.checkMoveMakesContact(move, source, target)) {
 					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
 					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 			},
