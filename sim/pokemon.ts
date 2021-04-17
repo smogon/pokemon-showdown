@@ -1699,7 +1699,7 @@ export class Pokemon {
 		}
 		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
 		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityData, this, source);
-		if (this.battle.effect && this.battle.effect.effectType === 'Move') {
+		if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
 			this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility), '[from] move: ' +
 				this.battle.dex.moves.get(this.battle.effect.id));
 		}
