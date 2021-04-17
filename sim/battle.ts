@@ -1072,10 +1072,12 @@ export class Battle {
 		}
 	}
 
-	checkMoveMakesContact(move: ActiveMove, attacker: Pokemon, defender: Pokemon) {
+	checkMoveMakesContact(move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads = false) {
 		if (move.flags['contact'] && attacker.hasItem('protectivepads')) {
-			this.add('-activate', defender, this.effect.fullname);
-			this.add('-activate', attacker, 'item: Protective Pads');
+			if (announcePads) {
+				this.add('-activate', defender, this.effect.fullname);
+				this.add('-activate', attacker, 'item: Protective Pads');
+			}
 			return false;
 		}
 		return move.flags['contact'];

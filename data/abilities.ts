@@ -70,7 +70,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Aftermath",
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target) && !target.hp) {
+			if (!target.hp && this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 4, source, target);
 			}
 		},
@@ -1248,7 +1248,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	gooey: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Gooey');
 				this.boost({spe: -1}, source, target, null, true);
 			}
@@ -1725,7 +1725,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	ironbarbs: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
@@ -2203,7 +2203,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (sourceAbility.isPermanent || sourceAbility.id === 'mummy') {
 				return;
 			}
-			if (this.checkMoveMakesContact(move, source, target)) {
+			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 				const oldAbility = source.setAbility('mummy', target);
 				if (oldAbility) {
 					this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
@@ -3025,7 +3025,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	roughskin: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
@@ -3822,7 +3822,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	tanglinghair: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Tangling Hair');
 				this.boost({spe: -1}, source, target, null, true);
 			}
