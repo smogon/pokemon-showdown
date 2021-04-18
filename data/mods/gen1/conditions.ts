@@ -87,7 +87,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'frz');
-			delete target.volatiles['mustrecharge']?.duration;
 		},
 		onBeforeMovePriority: 12,
 		onBeforeMove(pokemon, target, move) {
@@ -221,6 +220,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	},
 	mustrecharge: {
 		inherit: true,
+		duration: 0,
 		onStart() {},
 	},
 	lockedmove: {
