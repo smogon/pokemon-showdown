@@ -1368,15 +1368,15 @@ export const commands: ChatCommands = {
 	sectionleader(target, room, user, connection, cmd) {
 		this.checkCan('gdeclare');
 		room = this.requireRoom();
-		if (!target || target.split(',').length < 2) return this.parse(`/help sectionleader`);
+		const demoting = cmd === 'desectionleader';
+		if (!target || (target.split(',').length < 2 && !demoting)) return this.parse(`/help sectionleader`);
 
 		const [targetStr, sectionid] = this.splitOne(target);
 		this.splitTarget(targetStr);
-		const section = room.sanitizeSection(sectionid);
 		const targetUser = this.targetUser;
 		const userid = toID(this.targetUsername);
+		const section = !demoting ? room.sanitizeSection(sectionid) : Users.globalAuth.sectionLeaders.getSection(userid)!;
 		const name = targetUser ? targetUser.name : this.targetUsername;
-		const demoting = cmd === 'desectionleader';
 		if (Users.globalAuth.sectionLeaders.has(targetUser || userid) && !demoting) {
 			throw new Chat.ErrorMessage(`${name} is already a Section Leader of ${RoomSections.sectionNames[section]}.`);
 		} else if (!Users.globalAuth.sectionLeaders.has(targetUser || userid) && demoting) {
@@ -1396,12 +1396,11 @@ export const commands: ChatCommands = {
 				}
 			}
 		} else {
-			const oldSection = RoomSections.sectionNames[Users.globalAuth.sectionLeaders.getSection(targetUser || userid)!];
 			Users.globalAuth.sectionLeaders.delete(userid);
-			this.privateGlobalModAction(`${name} was demoted from Section Leader of ${oldSection} by ${user.name}.`);
+			this.privateGlobalModAction(`${name} was demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`DESECTION LEADER`, userid, section);
 			if (staffRoom?.auth.getDirect(userid) === '+') this.parse(`/msgroom staff,/roomdeauth ${userid}`);
-			if (targetUser) targetUser.popup(`You were demoted from Section Leader of ${oldSection} by ${user.name}.`);
+			if (targetUser) targetUser.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		}
 
 		if (targetUser) {

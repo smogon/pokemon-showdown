@@ -1508,8 +1508,8 @@ export const commands: ChatCommands = {
 		const section = room.adjustSection(target);
 		this.sendReply(`The room section is now: ${sectionNames[section]}`);
 
-		this.privateModAction(`(${user.name} changed the room section to: "${sectionNames[section]}".)`);
-		this.modlog('ROOMSECTION', null, `to "${sectionNames[section]}"`);
+		this.privateGlobalModAction(`${user.name} changed the room section of ${room.title} to ${sectionNames[section]}.`);
+		this.globalModlog('ROOMSECTION', null, section);
 	},
 	roomsectionhelp: [
 		`/roomsection [section] - Sets the room this is used in to the specified [section]. Requires: &`,
