@@ -16,7 +16,7 @@ const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
 
 export const sections = [
-	'none', 'nonpublic', 'officialrooms', 'officialtiers', 'communityprojects', 'gaming', 'languages', 'entertainment', 'lifehobbies', 'onsitegames',
+	'none', 'nonpublic', 'officialrooms', 'officialtiers', 'communityprojects', 'languages', 'gaming', 'leisure', 'lifehobbies', 'onsitegames',
 ] as const;
 
 export type RoomSection = typeof sections[number];
@@ -28,9 +28,9 @@ export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections
 		officialrooms: 'Official rooms',
 		officialtiers: 'Official tiers',
 		communityprojects: 'Community projects',
-		gaming: 'Gaming',
 		languages: 'Languages',
-		entertainment: 'Entertainment',
+		gaming: 'Gaming',
+		leisure: 'Leisure',
 		lifehobbies: 'Life & hobbies',
 		onsitegames: 'On-site games',
 	},

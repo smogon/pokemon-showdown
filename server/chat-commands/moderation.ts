@@ -9,7 +9,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib';
-import {RoomSections} from './room-settings';
+import {RoomSection, RoomSections} from './room-settings';
 
 /* eslint no-else-return: "error" */
 
@@ -122,7 +122,6 @@ export function runCrisisDemote(userid: ID) {
 }
 
 export const commands: ChatCommands = {
-
 	roomowner(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) {
@@ -375,6 +374,10 @@ export const commands: ChatCommands = {
 		if (group !== ' ' || Users.isTrusted(targetId)) {
 			buffer.push(`Global auth: ${group === ' ' ? 'trusted' : group}`);
 		}
+		const sectionLeader = Users.globalAuth.sectionLeaders.getSection(targetId);
+		if (sectionLeader) {
+			buffer.push(`Section leader: ${RoomSections.sectionNames[sectionLeader]}`);
+		}
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.settings.isPrivate) continue;
 			if (!curRoom.auth.has(targetId)) continue;
@@ -413,6 +416,28 @@ export const commands: ChatCommands = {
 
 		buffer.unshift(`${targetUsername} user auth:`);
 		connection.popup(buffer.join("\n\n"));
+	},
+
+	sectionleaders(target, room, user, connection) {
+		const usernames = Users.globalAuth.sectionLeaders.usernames;
+		const buffer = [];
+		const sections: {[k in RoomSection]: Set<string>} = Object.create(null);
+		for (const section of RoomSections.sections) {
+			if (['none', 'nonpublic'].includes(section)) continue;
+			sections[section] = new Set<string>();
+		}
+		for (const [id, username] of usernames) {
+			const sectionid = Users.globalAuth.sectionLeaders.getSection(id)!;
+			if (!sections[sectionid]) continue;
+			sections[sectionid].add(username);
+		}
+		let sectionid: RoomSection;
+		for (sectionid in sections) {
+			if (!sections[sectionid].size) continue;
+			buffer.push(`**${RoomSections.sectionNames[sectionid]}**:\n` + [...sections[sectionid]].join(', '));
+		}
+		if (!buffer.length) throw new Chat.ErrorMessage(`There are no Section Leaders currently.`);
+		connection.popup(buffer.join(`\n\n`));
 	},
 
 	async autojoin(target, room, user, connection) {
@@ -1387,13 +1412,9 @@ export const commands: ChatCommands = {
 			Users.globalAuth.sectionLeaders.add(userid, section, name);
 			this.addGlobalModAction(`${name} was appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`SECTION LEADER`, userid, section);
-			if (!staffRoom?.auth.has(userid)) this.parse(`/msgroom staff,/roomvoice ${userid}`);
+			if (!staffRoom?.auth.has(userid)) this.parse(`/msgroom staff,/forceroompromote ${userid},+`);
 			if (targetUser) {
 				targetUser.popup(`You were appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
-				if (!targetUser.inRooms.has('staff')) this.parse(`/msgroom staff,/invite ${name}`);
-				if (staffRoom && !targetUser.inRooms.has(staffRoom.roomid)) {
-					this.parse(`/msgroom staff,/invite ${name}`);
-				}
 			}
 		} else {
 			Users.globalAuth.sectionLeaders.delete(userid);
