@@ -9,6 +9,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib';
+import {RoomSections} from './room-settings';
 
 /* eslint no-else-return: "error" */
 
@@ -1361,6 +1362,62 @@ export const commands: ChatCommands = {
 	trustuserhelp: [
 		`/trustuser [username] - Trusts the user (makes them immune to locks). Requires: &`,
 		`/untrustuser [username] - Removes the trusted user status from the user. Requires: &`,
+	],
+
+	desectionleader: 'sectionleader',
+	sectionleader(target, room, user, connection, cmd) {
+		this.checkCan('gdeclare');
+		room = this.requireRoom();
+		if (!target || target.split(',').length < 2) return this.parse(`/help sectionleader`);
+
+		const [targetStr, sectionid] = this.splitOne(target);
+		this.splitTarget(targetStr);
+		const section = room.sanitizeSection(sectionid);
+		const targetUser = this.targetUser;
+		const userid = toID(this.targetUsername);
+		const name = targetUser ? targetUser.name : this.targetUsername;
+		const demoting = cmd === 'desectionleader';
+		if (Users.globalAuth.sectionLeaders.has(targetUser || userid) && !demoting) {
+			throw new Chat.ErrorMessage(`${name} is already a Section Leader of ${RoomSections.sectionNames[section]}.`);
+		} else if (!Users.globalAuth.sectionLeaders.has(targetUser || userid) && demoting) {
+			throw new Chat.ErrorMessage(`${name} is not a Section Leader.`);
+		}
+		const staffRoom = Rooms.get('staff');
+		if (!demoting) {
+			Users.globalAuth.sectionLeaders.add(userid, section, name);
+			this.addGlobalModAction(`${name} was appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
+			this.globalModlog(`SECTION LEADER`, userid, section);
+			if (!staffRoom?.auth.has(userid)) this.parse(`/msgroom staff,/roomvoice ${userid}`);
+			if (targetUser) {
+				targetUser.popup(`You were appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
+				if (!targetUser.inRooms.has('staff')) this.parse(`/msgroom staff,/invite ${name}`);
+				if (staffRoom && !targetUser.inRooms.has(staffRoom.roomid)) {
+					this.parse(`/msgroom staff,/invite ${name}`);
+				}
+			}
+		} else {
+			const oldSection = RoomSections.sectionNames[Users.globalAuth.sectionLeaders.getSection(targetUser || userid)!];
+			Users.globalAuth.sectionLeaders.delete(userid);
+			this.privateGlobalModAction(`${name} was demoted from Section Leader of ${oldSection} by ${user.name}.`);
+			this.globalModlog(`DESECTION LEADER`, userid, section);
+			if (staffRoom?.auth.getDirect(userid) === '+') this.parse(`/msgroom staff,/roomdeauth ${userid}`);
+			if (targetUser) targetUser.popup(`You were demoted from Section Leader of ${oldSection} by ${user.name}.`);
+		}
+
+		if (targetUser) {
+			targetUser.updateIdentity();
+			Rooms.global.checkAutojoin(targetUser);
+			if (targetUser.trusted && !Users.isTrusted(targetUser.id)) {
+				targetUser.trusted = '';
+			}
+		}
+	},
+	sectionleaderhelp: [
+		`/sectionleader [target user], [sectionid] - Appoints [target user] Section Leader.`,
+		`/desectionleader [target user] - Demotes [target user] from Section Leader.`,
+		`Valid sections: ${RoomSections.sections.join(', ')}`,
+		`If you want to change which section someone leads, demote them and then re-promote them in the desired section.`,
+		`Requires: &`,
 	],
 
 	globaldemote: 'demote',

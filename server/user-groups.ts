@@ -1,5 +1,5 @@
 import {FS} from '../lib/fs';
-import type {RoomSection} from './chat-commands/room-sections';
+import type {RoomSection} from './chat-commands/room-settings';
 
 export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';

@@ -29,7 +29,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 const RETRY_AFTER_LOGIN = null;
 
 import {FS, Utils, Streams} from '../lib';
-import {RoomSection, sections, sectionNames} from './chat-commands/room-sections';
+import {RoomSection, RoomSections} from './chat-commands/room-settings';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
@@ -830,8 +830,8 @@ export abstract class BasicRoom {
 	}
 	sanitizeSection(section: string) {
 		const target = toID(section);
-		if (!sections.includes(target as any)) {
-			throw new Chat.ErrorMessage(`"${target}" is not a valid room section. Valid categories include: ${sections.join(', ')}`);
+		if (!RoomSections.sections.includes(target as any)) {
+			throw new Chat.ErrorMessage(`"${target}" is not a valid room section. Valid categories include: ${RoomSections.sections.join(', ')}`);
 		}
 		return target as RoomSection;
 	}
@@ -842,7 +842,7 @@ export abstract class BasicRoom {
 		const section = this.sanitizeSection(newSection);
 		const oldSection = this.settings.section;
 		if (oldSection === section) {
-			throw new Chat.ErrorMessage(`${this.title}'s room section is already set to "${sectionNames[oldSection]}".`);
+			throw new Chat.ErrorMessage(`${this.title}'s room section is already set to "${RoomSections.sectionNames[oldSection]}".`);
 		}
 		this.settings.section = this.section = section;
 		this.saveSettings();
@@ -1385,7 +1385,7 @@ export class GlobalRoomState {
 		} = {
 			pspl: [],
 			sections: Object.create(null),
-			sectionTitles: sectionNames,
+			sectionTitles: RoomSections.sectionNames,
 			userCount: Users.onlineCount,
 			battleCount: this.battleCount,
 		};

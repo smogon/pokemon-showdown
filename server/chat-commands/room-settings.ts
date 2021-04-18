@@ -15,6 +15,28 @@ const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
 
+export const sections = [
+	'none', 'nonpublic', 'officialrooms', 'officialtiers', 'communityprojects', 'gaming', 'languages', 'entertainment', 'lifehobbies', 'onsitegames',
+] as const;
+
+export type RoomSection = typeof sections[number];
+
+export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections: readonly RoomSection[]} = {
+	sectionNames: {
+		none: 'none',
+		nonpublic: 'Non-public',
+		officialrooms: 'Official rooms',
+		officialtiers: 'Official tiers',
+		communityprojects: 'Community projects',
+		gaming: 'Gaming',
+		languages: 'Languages',
+		entertainment: 'Entertainment',
+		lifehobbies: 'Life & hobbies',
+		onsitegames: 'On-site games',
+	},
+	sections,
+};
+
 export const commands: ChatCommands = {
 	roomsetting: 'roomsettings',
 	roomsettings(target, room, user, connection) {
@@ -1471,6 +1493,27 @@ export const commands: ChatCommands = {
 		`/roomtierdisplay - displays the current room's display.`,
 		`/roomtierdisplay [option] - changes the current room's tier display. Valid options are: tiers, doubles tiers, numbers. Requires: # &`,
 		`/resettierdisplay - resets the current room's tier display. Requires: # &`,
+	],
+
+	setroomsection: 'roomsection',
+	roomsection(target, room, user) {
+		room = this.requireRoom();
+		const sectionNames = RoomSections.sectionNames;
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			this.sendReplyBox(Utils.html`This room is ${sectionNames[room.settings.section] !== 'none' ? `in the ${sectionNames[room.settings.section]} section` : `not in a section`}.`);
+			return;
+		}
+		this.checkCan('gdeclare');
+		const section = room.adjustSection(target);
+		this.sendReply(`The room section is now: ${sectionNames[section]}`);
+
+		this.privateModAction(`(${user.name} changed the room section to: "${sectionNames[section]}".)`);
+		this.modlog('ROOMSECTION', null, `to "${sectionNames[section]}"`);
+	},
+	roomsectionhelp: [
+		`/roomsection [section] - Sets the room this is used in to the specified [section]. Requires: &`,
+		`Valid sections: ${sections.join(', ')}`,
 	],
 };
 
