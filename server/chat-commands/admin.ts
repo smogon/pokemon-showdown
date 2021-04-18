@@ -751,7 +751,7 @@ export const commands: ChatCommands = {
 		if (!hasDevAuth(user)) this.checkCan('lockdown');
 
 		const processes = new Map<string, ProcessData>();
-		const ramUnits = ["B", "KiB", "MiB", "GiB", "TiB"];
+		const ramUnits = ["KiB", "MiB", "GiB", "TiB"];
 
 		await new Promise<void>(resolve => {
 			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
