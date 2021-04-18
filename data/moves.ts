@@ -2553,6 +2553,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const item = target.takeItem(source);
 			if (item) {
 				this.add('-enditem', target, item.name, '[from] move: Corrosive Gas', '[of] ' + source);
+			} else {
+				this.add('-fail', target, 'move: Corrosive Gas');
 			}
 		},
 		secondary: null,
