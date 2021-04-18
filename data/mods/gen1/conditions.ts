@@ -220,6 +220,17 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	},
 	mustrecharge: {
 		inherit: true,
+		onBeforeMove(pokemon) {
+			if (pokemon.status === 'frz') {
+				this.effectData.duration += 1;
+				this.add('cant', pokemon, 'frz');
+				pokemon.lastMove = null;
+				return false;
+			}
+			this.add('cant', pokemon, 'recharge');
+			pokemon.removeVolatile('mustrecharge');
+			return null;
+		},
 		onStart() {},
 	},
 	lockedmove: {
