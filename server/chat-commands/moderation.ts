@@ -1400,7 +1400,9 @@ export const commands: ChatCommands = {
 			this.privateGlobalModAction(`${name} was demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`DESECTION LEADER`, userid, section);
 			if (staffRoom?.auth.getDirect(userid) === '+') this.parse(`/msgroom staff,/roomdeauth ${userid}`);
-			if (targetUser) targetUser.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
+			if (targetUser) {
+				targetUser.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
+			}
 		}
 
 		if (targetUser) {
