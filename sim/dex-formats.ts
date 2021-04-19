@@ -674,7 +674,7 @@ export class DexFormats {
 					// custom tags -- nduubl is used for national dex teambuilder formatting
 					'mega', 'nduubl',
 					// illegal/nonstandard reasons
-					'past', 'future', 'unobtainable', 'lgpe', 'custom',
+					'past', 'future', 'unobtainable', 'lgpe', 'custom', 'mythical', 'restrictedlegendary', 'sublegendary',
 					// all
 					'allpokemon', 'allitems', 'allmoves', 'allabilities', 'allnatures',
 				];

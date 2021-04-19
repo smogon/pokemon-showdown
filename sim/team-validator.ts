@@ -1286,8 +1286,8 @@ export class TeamValidator {
 			}
 		}
 
-    if (dex.getSpecies(species.baseSpecies).tags) {
-      setHas['pokemontag:' + toID(dex.getSpecies(species.baseSpecies).tags)] = true;
+    if (dex.species.get(species.baseSpecies).tags) {
+      setHas['pokemontag:' + toID(dex.species.get(species.baseSpecies).tags)] = true;
     }
 
 		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
@@ -1378,7 +1378,7 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-    if (dex.getSpecies(species.baseSpecies).tags) {
+    if (dex.species.get(species.baseSpecies).tags) {
         banReason = ruleTable.check('pokemontag:mythical', setHas);
   			if (banReason) {
   				return `Mythical Pokemon are ${banReason}.`;
