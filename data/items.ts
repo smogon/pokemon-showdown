@@ -4177,48 +4177,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onAttractPriority: -1,
-		onAttract(target, source) {
-			if (
-				target !== source && target === this.activePokemon &&
-				this.activeMove && this.activeMove.flags['contact']
-			) return false;
-		},
-		onBoostPriority: -1,
-		onBoost(boost, target, source, effect) {
-			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
-				if (effect && effect.effectType === 'Ability') {
-					// Ability activation always happens for boosts
-					this.add('-activate', target, 'item: Protective Pads');
-				}
-				return false;
-			}
-		},
-		onDamagePriority: -1,
-		onDamage(damage, target, source, effect) {
-			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-activate', source, effect.fullname);
-					this.add('-activate', target, 'item: Protective Pads');
-				}
-				return false;
-			}
-		},
-		onSetAbility(ability, target, source, effect) {
-			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
-				if (effect && effect.effectType === 'Ability' && effect.id !== 'wanderingspirit') {
-					this.add('-activate', source, effect.fullname);
-					this.add('-activate', target, 'item: Protective Pads');
-				}
-				return false;
-			}
-		},
-		onSetStatus(status, target, source, effect) {
-			if (
-				target !== source && target === this.activePokemon &&
-				this.activeMove && this.activeMove.flags['contact']
-			) return false;
-		},
+		// protective effect handled in Battle#checkMoveMakesContact
 		num: 880,
 		gen: 7,
 	},
@@ -4602,7 +4561,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onDamagingHitOrder: 2,
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact']) {
+			if (this.checkMoveMakesContact(move, source, target)) {
 				this.damage(source.baseMaxhp / 6, source, target);
 			}
 		},
@@ -5352,7 +5311,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			this.damage(pokemon.baseMaxhp / 8);
 		},
 		onHit(target, source, move) {
-			if (source && source !== target && !source.item && move && move.flags['contact']) {
+			if (source && source !== target && !source.item && move && this.checkMoveMakesContact(move, source, target)) {
 				const barb = target.takeItem();
 				if (!barb) return; // Gen 4 Multitype
 				source.setItem(barb);

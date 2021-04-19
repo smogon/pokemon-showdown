@@ -264,7 +264,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Foe loses 1/8 HP if makes contact; Restores 1/16 of its max HP every turn.",
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact']) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
@@ -445,7 +445,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Pokemon making contact with this Pokemon have the effects of Yawn, Taunt, and Torment applied to them.",
 		shortDesc: "Upon contact, opposing Pokemon is made drowsy and applies Taunt + Torment.",
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact']) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
 				source.addVolatile('taunt', target);
 				source.addVolatile('yawn', target);
 				source.addVolatile('torment', target);
@@ -1771,7 +1771,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact']) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
