@@ -760,7 +760,7 @@ export class CommandContext extends MessageContext {
 		}
 		this.roomlog(`(${msg})`);
 	}
-	globalModlog(action: string, user: string | User | null, note?: string | null, ip?: string) {
+	globalModlog(action: string, user: string | User | null = null, note: string | null = null, ip?: string) {
 		const entry: PartialModlogEntry = {
 			action,
 			isGlobal: true,
