@@ -88,7 +88,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		onStart(target) {
 			this.add('-status', target, 'frz');
 		},
-		onBeforeMovePriority: 10,
+		onBeforeMovePriority: 12,
 		onBeforeMove(pokemon, target, move) {
 			this.add('cant', pokemon, 'frz');
 			pokemon.lastMove = null;
@@ -220,6 +220,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	},
 	mustrecharge: {
 		inherit: true,
+		duration: 0,
 		onStart() {},
 	},
 	lockedmove: {
