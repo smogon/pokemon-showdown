@@ -27,16 +27,8 @@ export const Formats: {[k: string]: FormatData} = {
 		name: 'Alt GBU',
 		desc: "The standard ruleset for all official in-game Pok&eacute;mon tournaments and Battle Spot, just programmed differently.",
 		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
-		onValidateTeam(team, format) {
-			const problems = [];
-			for (const set of team) {
-				const species = this.dex.getSpecies(set.species);
-				if (species.tags?.includes("Legendary") || species.tags?.includes("Mythical")) {
-					problems.push(`${set.name || set.species} is a Legendary Pokemon, which is banned in ${format.name}.`);
-				}
-			}
-			return problems;
-		},
+		banlist: ['Mythical', 'Restricted Legendary'],
+
 		onValidateSet(set, format) {
 			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];

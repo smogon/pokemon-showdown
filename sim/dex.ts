@@ -983,7 +983,7 @@ export class ModdedDex {
 					// doubles tiers
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags -- nduubl is used for national dex teambuilder formatting
-					'mega', 'nduubl',
+					'mega', 'nduubl', 'mythical', 'restrictedlegendary', 'sublegendary',
 					// illegal/nonstandard reasons
 					'past', 'future', 'unobtainable', 'lgpe', 'custom',
 					// all
