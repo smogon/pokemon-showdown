@@ -145,7 +145,7 @@ export const translations: Translations = {
 
 		"Staff FAQ": "FAQ relative allo Staff",
 		"You cannot broadcast all FAQs at once.": "Non puoi mostrare tutte le FAQ in una volta.",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat. However, staff are not obligated to disable modchat": "Un utente è \"autoconfirmed\" quando ha vinto almeno una lotta a punti ed è registrato da una o più settimane. In modo da prevenire episodi di spam e trolling, la maggior parte delle chatroom permette unicamente agli utenti autoconfirmed di parlare. Nel caso in cui tu non sia autoconfirmed, chiedi educatamente ad un membro dello staff (lo staff è contrassegnato dai simboli %, @ o # vicino al loro nome utente) della room nella quale vuoi parlare e chiedi loro di disattivare la modchat. Tuttavia, lo staff non è in alcun modo obbligato a disattivare la modchat.",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "Un utente è \"autoconfirmed\" quando ha vinto almeno una lotta a punti ed è registrato da una o più settimane. In modo da prevenire episodi di spam e trolling, la maggior parte delle chatroom permette unicamente agli utenti autoconfirmed di parlare. Nel caso in cui tu non sia autoconfirmed, chiedi educatamente ad un membro dello staff (lo staff è contrassegnato dai simboli %, @ o # vicino al loro nome utente) della room nella quale vuoi parlare e chiedi loro di disattivare la modchat. Tuttavia, lo staff non è in alcun modo obbligato a disattivare la modchat.",
 		"How the ladder works": "Come funziona la ladder",
 		"Tiering FAQ": "FAQ relative al Tiering",
 		"Badge FAQ": "FAQ relative alle Badge",
@@ -157,5 +157,10 @@ export const translations: Translations = {
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
 	},
 };

@@ -199,7 +199,7 @@ Chat.registerMonitor('evasion', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`,
-					`<<${room.roomid}>> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
+					`<<${room.roomid}>> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${word}'${publicReason ? ` ${publicReason}` : ``}.`);
@@ -286,14 +286,21 @@ Chat.registerMonitor('shorteners', {
  * Location: EVERYWHERE, PUBLIC, NAMES, BATTLES
  * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER, MUTE, EVASION
  */
-void FS(MONITOR_FILE).readIfExists().then(data => {
+
+export function loadFilters() {
+	let data;
+	try {
+		data = FS(MONITOR_FILE).readSync();
+	} catch (e) {
+		if (e.code !== 'ENOENT') throw e;
+	}
+	if (!data) return;
 	const lines = data.split('\n');
 	loop: for (const line of lines) {
 		if (!line || line === '\r') continue;
 		const [location, word, punishment, reason, times, ...rest] = line.split('\t').map(param => param.trim());
 		if (location === 'Location') continue;
 		if (!(location && word && punishment)) continue;
-
 		for (const key in Chat.monitors) {
 			if (Chat.monitors[key].location === location && Chat.monitors[key].punishment === punishment) {
 				const replacement = rest[0];
@@ -313,13 +320,16 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 				if (publicReason) filterWord.publicReason = publicReason;
 				if (replacement) filterWord.replacement = replacement;
 				filterWords[key].push(filterWord);
-
 				continue loop;
 			}
 		}
-		throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment, reason, times]}`);
+		// this is not thrown because we DO NOT WANT SECRET FILTERS TO BE LEAKED, but we want this to be known
+		// (this sends the filter line info only in the email, but still reports the crash to Dev)
+		Monitor.crashlog(new Error("Couldn't find [location, punishment] pair for a filter word"), "The main process", {
+			location, word, punishment, reason, times, rest,
+		});
 	}
-});
+}
 
 /* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -464,7 +474,7 @@ export const nicknamefilter: NicknameFilter = (name, user) => {
 					// Don't autolock unless it's an evasion regex and they're evading
 					void Punishments.autolock(
 						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname (${name} => ${word})`,
-						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``
+						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``, true
 					);
 				}
 				line.hits++;
@@ -632,13 +642,71 @@ export const commands: ChatCommands = {
 			this.parse(`/join view-filters`);
 		},
 		help(target, room, user) {
-			this.parse(`/help filter`);
+			this.run(`filterhelp`);
+		},
+		test(target, room, user) {
+			this.checkCan('lock');
+			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
+			let [monitorName, message] = Utils.splitFirst(target, " ");
+			if (!Chat.monitors[monitorName] && Chat.monitors[monitorName + 'filter']) {
+				monitorName = monitorName + 'filter';
+			}
+			// namefilter doesn't have a monitor function
+			if (!(monitorName && message) || !Chat.monitors[monitorName]?.monitor) {
+				return this.run((Chat.commands.filter as any).testhelp);
+			}
+			const monitor = Chat.monitors[monitorName].monitor!;
+			const lcMessage = Chat.stripFormatting(message
+				.replace(/\u039d/g, 'N')
+				.toLowerCase()
+				// eslint-disable-next-line no-misleading-character-class
+				.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
+				.replace(/\u03bf/g, 'o')
+				.replace(/\u043e/g, 'o')
+				.replace(/\u0430/g, 'a')
+				.replace(/\u0435/g, 'e')
+				.replace(/\u039d/g, 'e'));
+			let htmlBoxMessage = ``;
+			for (const line of Chat.filterWords[monitorName]) {
+				const ret = monitor.call(this, line, room, user, message, lcMessage, true);
+				if (typeof ret === 'string') {
+					htmlBoxMessage = ret;
+					break;
+				} else if (ret === false) {
+					htmlBoxMessage = `"${message}" would be blocked from being sent.`;
+					break;
+				 }
+			}
+			if (htmlBoxMessage) {
+				return this.sendReplyBox(Chat.formatText(htmlBoxMessage, false, true));
+			} else {
+				throw new Chat.ErrorMessage(
+					`"${message}" doesn't trigger any filters on the ${monitorName}${monitorName.endsWith('filter') ? '' : ' filter'}. Check spelling?`
+				);
+			}
+		},
+		testhelp(target, room, user) {
+			this.checkCan('lock');
+			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
+			const monitorNames = [...Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)];
+			monitorNames.push(
+				...Object.keys(Chat.monitors)
+					.filter(x => Chat.monitors[x].monitor && x.includes('filter'))
+					.map(x => x.replace('filter', ''))
+			);
+			this.sendReplyBox(
+				`<code>/filter test [monitor name] [test string]</code>:<br />` +
+				`Tests whether or not the provided test string would trigger the respective monitor.<br />` +
+				`All usable commands: <code>${monitorNames.sort().map(x => `/filter test ${x}`).join('</code>, <code>')}</code><br />` +
+				`Can only be broadcast in Staff and Upper Staff. Requires: % @ &`
+			);
 		},
 	},
 	filterhelp: [
-		`- /filter add list, word, reason, [, optional public reason] - Adds a word to the given filter list. Requires: &`,
-		`- /filter remove list, words - Removes words from the given filter list. Requires: &`,
-		`- /filter view - Opens the list of filtered words. Requires: % @ &`,
+		`/filter add list, word, reason[, optional public reason] - Adds a word to the given filter list. Requires: &`,
+		`/filter remove list, words - Removes words from the given filter list. Requires: &`,
+		`/filter view - Opens the list of filtered words. Requires: % @ &`,
+		`/filter test - Do "/help filter test" for more information. Requires: % @ &`,
 		`You may use / instead of , in /filter add if you want to specify a reason that includes commas.`,
 	],
 	allowname(target, room, user) {
@@ -661,4 +729,5 @@ export const commands: ChatCommands = {
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/filter (add|remove) ');
+	loadFilters();
 });

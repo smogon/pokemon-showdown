@@ -40,21 +40,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		onHit(target, source, effect) {
-			const moves = [];
-			for (const id in this.dex.data.Moves) {
-				const move = this.dex.getMove(id);
-				if (move.realMove) continue;
-				if (move.gen !== 1) continue;
-				if (effect.noMetronome!.includes(move.name)) continue;
-				moves.push(move);
-			}
+			const moves = this.dex.moves.all().filter(
+				move => !move.realMove && move.gen === 1 && !effect.noMetronome!.includes(move.name)
+			);
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
-			this.useMove(randomMove, target);
+			this.actions.useMove(randomMove, target);
 		},
 	},
 	sappyseed: {

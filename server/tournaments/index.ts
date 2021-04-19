@@ -210,12 +210,12 @@ export class Tournament extends Rooms.RoomGame {
 
 	setCustomRules(rules: string) {
 		try {
-			this.fullFormat = Dex.validateFormat(`${this.baseFormat}@@@${rules}`);
+			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
 		} catch (e) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
 
-		const customRules = Dex.getFormat(this.fullFormat, true).customRules;
+		const customRules = Dex.formats.get(this.fullFormat, true).customRules;
 		if (!customRules) {
 			throw new Chat.ErrorMessage(`Invalid rules.`);
 		}
@@ -935,8 +935,12 @@ export class Tournament extends Rooms.RoomGame {
 		}
 
 		to.lastActionTime = Date.now();
-		from.pendingChallenge = {to, team: ready.team, hidden: ready.hidden, inviteOnly: ready.inviteOnly};
-		to.pendingChallenge = {from, team: ready.team, hidden: ready.hidden, inviteOnly: ready.inviteOnly};
+		from.pendingChallenge = {
+			to, team: ready.settings.team, hidden: ready.settings.hidden, inviteOnly: ready.settings.inviteOnly,
+		};
+		to.pendingChallenge = {
+			from, team: ready.settings.team, hidden: ready.settings.hidden, inviteOnly: ready.settings.inviteOnly,
+		};
 		from.sendRoom(`|tournament|update|${JSON.stringify({challenging: to.name})}`);
 		to.sendRoom(`|tournament|update|${JSON.stringify({challenged: from.name})}`);
 
@@ -995,16 +999,21 @@ export class Tournament extends Rooms.RoomGame {
 		if (!challenge.from.pendingChallenge) return;
 		if (!player.pendingChallenge) return;
 
-		const room = Rooms.createBattle(this.fullFormat, {
+		const room = Rooms.createBattle({
+			format: this.fullFormat,
 			isPrivate: this.room.settings.isPrivate,
-			p1: from,
-			p1team: challenge.team,
-			p1hidden: challenge.hidden,
-			p1inviteOnly: challenge.inviteOnly,
-			p2: user,
-			p2team: ready.team,
-			p2hidden: ready.hidden,
-			p2inviteOnly: ready.inviteOnly,
+			p1: {
+				user: from,
+				team: challenge.team,
+				hidden: challenge.hidden,
+				inviteOnly: challenge.inviteOnly,
+			},
+			p2: {
+				user,
+				team: ready.settings.team,
+				hidden: ready.settings.hidden,
+				inviteOnly: ready.settings.inviteOnly,
+			},
 			rated: !Ladders.disabled && this.isRated,
 			challengeType: ready.challengeType,
 			tour: this,
@@ -1027,7 +1036,7 @@ export class Tournament extends Rooms.RoomGame {
 	}
 
 	getDefaultCustomName() {
-		return Dex.getFormat(this.fullFormat).name + " (with custom rules)";
+		return Dex.formats.get(this.fullFormat).name + " (with custom rules)";
 	}
 	forfeit(user: User) {
 		return this.disqualifyUser(user.id, null, "You left the tournament", true);
@@ -1182,7 +1191,7 @@ function createTournament(
 		output.errorReply("The server is restarting soon, so a tournament cannot be created.");
 		return;
 	}
-	const format = Dex.getFormat(formatId);
+	const format = Dex.formats.get(formatId);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(`${format.id} is not a valid tournament format.`);
 		void output.parse(`/tour formats`);
@@ -1299,7 +1308,7 @@ const commands: ChatCommands = {
 					if (tourRoom && tourRoom !== room) {
 						tourRoom.addRaw(
 							Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
-							`<strong>${Dex.getFormat(tour.name).name}</strong> tournament created in` +
+							`<strong>${Dex.formats.get(tour.name).name}</strong> tournament created in` +
 							` <strong>${room.title}</strong>.</a></div>`
 						).update();
 					}
@@ -1310,7 +1319,7 @@ const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			let buf = ``;
 			let section = undefined;
-			for (const format of Object.values(Dex.formats)) {
+			for (const format of Dex.formats.all()) {
 				if (!format.tournamentShow) continue;
 				const name = format.name.startsWith(`[Gen ${Dex.gen}] `) ? format.name.slice(8) : format.name;
 				if (format.section !== section) {
@@ -1440,7 +1449,7 @@ const commands: ChatCommands = {
 			if (result.startsWith('1')) {
 				connection.popup("Your team is valid for this tournament.");
 			} else {
-				const formatName = Dex.getFormat(tournament.baseFormat).name;
+				const formatName = Dex.formats.get(tournament.baseFormat).name;
 				// split/join is the easiest way to do a find/replace with an untrusted string, sadly
 				const reasons = result.slice(1).split(formatName).join('this tournament');
 				connection.popup(`Your team was rejected for the following reasons:\n\n- ${reasons.replace(/\n/g, '\n- ')}`);
@@ -1546,7 +1555,6 @@ const commands: ChatCommands = {
 		rules: 'customrules',
 		customrules(target, room, user, connection, cmd) {
 			room = this.requireRoom();
-			this.checkCan('tournaments', null, room);
 			const tournament = this.requireGame(Tournament);
 			if (cmd === 'banlist') {
 				return this.errorReply('The new syntax is: /tour rules -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule');
@@ -1557,6 +1565,7 @@ const commands: ChatCommands = {
 				this.parse('/tour viewrules');
 				return this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
 			}
+			this.checkCan('tournaments', null, room);
 			if (tournament.isTournamentStarted) {
 				return this.errorReply("The custom rules cannot be changed once the tournament has started.");
 			}

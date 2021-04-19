@@ -95,7 +95,9 @@ Sets player information:
 
 - `avatar` is a string for the player avatar (defaults to "")
 
-- `team` is a team (either in JSON or a string in packed format)
+- `team` is a team (either in JSON or a string in [packed format][https://github.com/smogon/pokemon-showdown/blob/master/sim/TEAMS.md])
+
+`team` will not be validated! [Use the team validator first][https://github.com/smogon/pokemon-showdown/blob/master/sim/TEAMS.md]. In random formats, `team` can be left out or set to `null` to have the team generator generate a random team for you.
 
 ```
 >p1 CHOICE

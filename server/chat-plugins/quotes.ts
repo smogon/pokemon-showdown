@@ -140,3 +140,12 @@ export const pages: PageTable = {
 		return buffer;
 	},
 };
+
+export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
+	if (quotes[oldID]) {
+		if (!quotes[newID]) quotes[newID] = [];
+		quotes[newID].push(...quotes[oldID]);
+		delete quotes[oldID];
+		saveQuotes();
+	}
+};

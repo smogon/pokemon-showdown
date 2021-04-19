@@ -5,7 +5,7 @@ export const Aliases: {[alias: string]: string} = {
 	mono: "[Gen 8] Monotype",
 	ag: "[Gen 8] Anything Goes",
 	bss: "[Gen 8] Battle Stadium Singles",
-	vgc: "[Gen 8] VGC 2020",
+	vgc: "[Gen 8] VGC 2021 Series 9",
 	bsd: "[Gen 8] VGC 2021",
 	randdubs: "[Gen 8] Random Doubles Battle",
 	doubles: "[Gen 8] Doubles OU",
@@ -47,6 +47,7 @@ export const Aliases: {[alias: string]: string} = {
 	gen7ag: "[Gen 7] Anything Goes",
 	gen7bss: "[Gen 7] Battle Spot Singles",
 	lgou: "[Gen 7] Let's Go OU",
+	vgc20: "[Gen 8] VGC 2020",
 	vgc19: "[Gen 7] VGC 2019",
 	vgc18: "[Gen 7] VGC 2018",
 	vgc17: "[Gen 7] VGC 2017",
@@ -54,8 +55,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6mono: "[Gen 6] Monotype",
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 8] Cross Evolution",
-	omotm: "[Gen 8] Max Berries",
-	lcotm: "[Gen 8] The Loser's Game",
+	omotm: "[Gen 8] Pokebilities",
+	lcotm: "[Gen 8] Godly Gift",
 	m4a: "[Gen 8] Megas For All",
 
 	// mega evos

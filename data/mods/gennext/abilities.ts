@@ -42,7 +42,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('forecast'));
+					this.field.setWeather(weather, source, this.dex.abilities.get('forecast'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
@@ -171,7 +171,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('flowergift'));
+					this.field.setWeather(weather, source, this.dex.abilities.get('flowergift'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
@@ -194,7 +194,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
-					this.boost({spd: 1}, target, target, this.dex.getAbility('flowergift'));
+					this.boost({spd: 1}, target, target, this.dex.abilities.get('flowergift'));
 				}
 				target.side.removeSideCondition('flowergift');
 			},
@@ -291,7 +291,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	clearbody: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -304,7 +304,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	whitesmoke: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -330,8 +330,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			let totaldef = 0;
 			let totalspd = 0;
-			for (const foe of pokemon.side.foe.active) {
-				if (!foe || foe.fainted) continue;
+			for (const foe of pokemon.foes()) {
 				totaldef += foe.storedStats.def;
 				totalspd += foe.storedStats.spd;
 			}
@@ -500,7 +499,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.dex.getItem(pokemon.lastItem).isBerry) {
+			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.dex.items.get(pokemon.lastItem).isBerry) {
 				pokemon.m.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
 				pokemon.lastItem = '';
@@ -607,7 +606,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
 			if (!target) return;
 			// singles, or single-target move
-			if (target.side.active.length < 2 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
+			if (this.activePerHalf === 1 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
 				move.multihit = 2;
 				move.accuracy = true;
 				pokemon.addVolatile('parentalbond');
@@ -675,7 +674,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!source || !pokemon.isAdjacent(source)) return;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles['shadowtag']) {
 				pokemon.maybeTrapped = true;
 			}

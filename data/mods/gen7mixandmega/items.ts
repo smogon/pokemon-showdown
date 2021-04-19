@@ -8,7 +8,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onPrimal(pokemon) {
 			// @ts-ignore
-			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal');
+			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal');
 			if (pokemon.m.originalSpecies === 'Kyogre') {
 				pokemon.formeChange(species, this.effect, true);
 			} else {
@@ -28,7 +28,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onPrimal(pokemon) {
 			// @ts-ignore
-			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal');
+			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal');
 			if (pokemon.m.originalSpecies === 'Groudon') {
 				pokemon.formeChange(species, this.effect, true);
 			} else {
@@ -36,7 +36,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.baseSpecies = species;
 				this.add('-start', pokemon, 'Red Orb', '[silent]');
 				const apparentSpecies = pokemon.illusion ? pokemon.illusion.species.name : pokemon.m.originalSpecies;
-				const oSpecies = this.dex.getSpecies(apparentSpecies);
+				const oSpecies = this.dex.species.get(apparentSpecies);
 				if (pokemon.illusion) {
 					const types = oSpecies.types;
 					if (types.length > 1 || types[types.length - 1] !== 'Fire') {
