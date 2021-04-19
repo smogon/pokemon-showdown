@@ -1045,10 +1045,45 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 122,
 	},
 	flowerveil: {
-		onAllyBoost(boost, target, source, effect) {
+		//self part
+		onBoost(boost, target, source, effect) {
 			if ((source && target === source)) return;
 			let showMsg = false;
-			let i: BoostName;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries) {
+				const effectHolder = this.effectData.target;
+				this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (source && target !== source && effect && effect.id !== 'yawn') {
+				this.debug('interrupting setStatus with Flower Veil');
+				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					const effectHolder = this.effectData.target;
+					this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
+				}
+				return null;
+			}
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.debug('Flower Veil blocking yawn');
+				const effectHolder = this.effectData.target;
+				this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
+				return null;
+			}
+		},
+		//allies part
+		onAllyBoost(boost, target, source, effect) {
+			if ((source && target === source) || !target.hasType('Grass')) return;
+			let showMsg = false;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -1061,7 +1096,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAllySetStatus(status, target, source, effect) {
-			if (source && target !== source && effect && effect.id !== 'yawn') {
+			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					const effectHolder = this.effectData.target;
@@ -1071,7 +1106,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAllyTryAddVolatile(status, target) {
-			if (status.id === 'yawn') {
+			if (target.hasType('Grass') && status.id === 'yawn') {
 				this.debug('Flower Veil blocking yawn');
 				const effectHolder = this.effectData.target;
 				this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
@@ -3827,7 +3862,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	surgesurfer: {
 		onModifySpe(spe) {
-			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('psychicterrain')) {
+			if (this.field.isTerrain('electricterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -5274,7 +5309,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
-				this.useMove("lazycurse", source);
+				this.useMove("lazycurse", target);
 			}
 		},
 		rating: 2.5,
@@ -5294,4 +5329,80 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 1043,
 	},
+	solidfooting: {
+		//coded directly in moves.ts
+		name: "Solid Footing",
+		rating: 2.5,
+		num: 1044,
+	},
+	fishmemory: {
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(target) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
+		},
+		name: "Fish Memory",
+		rating: 5,
+		num: 1045,
+	},
+	grassygloves: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['contact']) {
+				this.debug('Grassy Gloves neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+		name: "Grassy Gloves",
+		rating: 3,
+		num: 1046,
+	},
+	lovetouch: {
+		// upokecenter says this is implemented as an added secondary effect
+		onModifyMove(move) {
+			if (!move || !move.flags['contact'] || move.target === 'self') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				volatileStatus: 'lovetouch',
+				ability: this.dex.getAbility('lovetouch'),
+			});
+		},
+		name: "Love Touch",
+		rating: 2,
+		num: 1047,
+	},
+	perfectmelody: {
+		onSourceModifyAccuracyPriority: 9,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy !== 'number') return;
+			if (move.flags['sound']) {
+				this.debug('perfectmelody - enhancing accuracy');
+				return true;
+			}
+			return accuracy;
+		},
+		name: "Perfect Melody",
+		rating: 2,
+		num: 1048,
+	},
+	toxicintake: {
+        onWeather(target, source, effect) {
+            if (target.hasItem('utilityumbrella')) return;
+            if (effect.id === 'toxiccloud') {
+                this.heal(target.baseMaxhp / 16);
+            }
+        },
+        name: "Toxic Intake",
+        rating: 1.5,
+        num: 1049,
+    },
+	sleepyfellow: {
+		//coded in conditions.ts (slp)
+        name: "Sleepy Fellow",
+        rating: 1.5,
+        num: 1050,
+    },
 };

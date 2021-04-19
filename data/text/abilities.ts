@@ -123,6 +123,7 @@ export const AbilitiesText = {
 	},
 	bigpecks: {
 		name: "Big Pecks",
+		desc: "Prevents other Pokemon from lowering this Pokemon's Defense stat stage. Ignores other Pokemon Attack boosts.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Defense stat stage. Ignores other Pokemon Attack boosts.",
 	},
 	blaze: {
@@ -477,7 +478,8 @@ export const AbilitiesText = {
 	},
 	heavymetal: {
 		name: "Heavy Metal",
-		shortDesc: "This Pokemon's weight is doubled.",
+		desc: "Doubles user's weight, multiplies Def and Sp. Def by 1.25; halves speed.",
+		shortDesc: "Doubles user's weight, multiplies Def and Sp. Def by 1.25; halves speed.",
 	},
 	honeygather: {
 		name: "Honey Gather",
@@ -504,6 +506,7 @@ export const AbilitiesText = {
 	},
 	hypercutter: {
 		name: "Hyper Cutter",
+		desc: "Prevents other Pokemon from lowering this Pokemon's Attack stat stage. Ignores other Pokemon Defense boosts.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Attack stat stage. Ignores other Pokemon Defense boosts.",
 	},
 	icebody: {
@@ -554,8 +557,8 @@ export const AbilitiesText = {
 	},
 	innerfocus: {
 		name: "Inner Focus",
-		shortDesc: "This Pokemon cannot be made to flinch. Immune to Intimidate.",
-		shortDescGen7: "This Pokemon cannot be made to flinch.",
+		shortDesc: "This Pokemon cannot be made to flinch. Immune to Intimidate, Daunt, Petrify.",
+		shortDescGen7: "This Pokemon cannot be made to flinch. Immune to Intimidate, Daunt, Petrify.",
 	},
 	insomnia: {
 		name: "Insomnia",
@@ -601,8 +604,8 @@ export const AbilitiesText = {
 	},
 	leafguard: {
 		name: "Leaf Guard",
-		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon cannot gain a major status condition, reduces received damage from 30% and Rest will fail for it.",
-		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused, reduces received damage from 30% and Rest will fail for it.",
+		desc: "User cannot be statused and takes 30% less damage in the sun.",
+		shortDesc: "User cannot be statused and takes 30% less damage in the sun.",
 		descGen7: "If Sunny Day is active, this Pokemon cannot gain a major status condition and Rest will fail for it.",
 		descGen4: "If Sunny Day is active, this Pokemon cannot gain a major status condition, but can use Rest normally.",
 		shortDescGen4: "If Sunny Day is active, this Pokemon cannot be statused, but Rest works normally.",
@@ -624,7 +627,8 @@ export const AbilitiesText = {
 	},
 	lightmetal: {
 		name: "Light Metal",
-		shortDesc: "This Pokemon's weight is halved.",
+		desc: "Halves user's weight, multiplies Speed by 1.25; 0.75x Def and Sp. Def.",
+		shortDesc: "Halves user's weight, multiplies Speed by 1.25; 0.75x Def and Sp. Def.",
 	},
 	lightningrod: {
 		name: "Lightning Rod",
@@ -793,8 +797,8 @@ export const AbilitiesText = {
 	},
 	oblivious: {
 		name: "Oblivious",
-		desc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while affected cures it. Immune to Intimidate.",
-		shortDesc: "This Pokemon cannot be infatuated or taunted. Immune to Intimidate.",
+		desc: "This Pokemon cannot be infatuated or taunted. Immune to Intimidate, Daunt, Petrify.",
+		shortDesc: "This Pokemon cannot be infatuated or taunted. Immune to Intimidate, Daunt, Petrify.",
 		descGen7: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while affected cures it.",
 		shortDescGen7: "This Pokemon cannot be infatuated or taunted.",
 		descGen5: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
@@ -814,8 +818,8 @@ export const AbilitiesText = {
 	},
 	owntempo: {
 		name: "Own Tempo",
-		desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it. Immune to Intimidate.",
-		shortDesc: "This Pokemon cannot be confused. Immune to Intimidate.",
+		desc: "This Pokemon cannot be confused. Immune to Intimidate, Daunt, Petrify.",
+		shortDesc: "This Pokemon cannot be confused. Immune to Intimidate, Daunt, Petrify.",
 		descGen7: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
 		shortDescGen7: "This Pokemon cannot be confused.",
 
@@ -1634,34 +1638,42 @@ export const AbilitiesText = {
 	},
 	blazeroar: {
 		name: "Blaze Roar",
+		desc: "This Pokemon's sound-based moves become Fire type and are x1.1.",
 		shortDesc: "This Pokemon's sound-based moves become Fire type and are x1.1.",
 	},
 	strongwinds: {
 		name: "Strong Winds",
+		desc: "This Pokemon's wind-based attacks have 1.2x power.",
 		shortDesc: "This Pokemon's wind-based attacks have 1.2x power.",
 	},
 	supernova: {
 		name: "Supernova",
+		desc: "At 1/3 or less of its max HP, this Pokemon's attacking stat is 1.5x with Cosmic attacks.",
 		shortDesc: "At 1/3 or less of its max HP, this Pokemon's attacking stat is 1.5x with Cosmic attacks.",
 	},
 	sacredlight: {
 		name: "Sacred Light",
+		desc: "Summons Safeguard on switch in. Removed on switch-out.",
 		shortDesc: "Summons Safeguard on switch in. Removed on switch-out.",
 	},
 	fortitude: {
 		name: "Fortitude",
+		desc: "This Pokemon's Def, Sp. Def are raised by 1 when it reaches 1/2 or less of its max HP.",
 		shortDesc: "This Pokemon's Def, Sp. Def are raised by 1 when it reaches 1/2 or less of its max HP.",
 	},
 	sunray: {
 		name: "Sunray",
-		shortDesc: "If Sunny Day is active, this Pokemon's Light moves are 1.5x.",
+		desc: "If Sunny Day is active, this Pokemon's Light moves have 1.5x power.",
+		shortDesc: "If Sunny Day is active, this Pokemon's Light moves have 1.5x power.",
 	},
 	illuminate: {
 		name: "Illuminate",
+		desc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
 		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
 	},
 	perseverance: {
 		name: "Perseverance",
+		desc: "This Pokemon's Atk, SpAtk, Def, SpDef are x1.25 if its the last one standing.",
 		shortDesc: "This Pokemon's Atk, SpAtk, Def, SpDef are x1.25 if its the last one standing.",
 	},
 	predatoryinstinct: {
@@ -1676,11 +1688,78 @@ export const AbilitiesText = {
 	},
 	divineguard: {
 		name: "Divine Guard",
+		desc: "This Pokemon can only be damaged by notveryeffective moves and indirect damage.",
 		shortDesc: "This Pokemon can only be damaged by notveryeffective moves and indirect damage.",
 	},
 	orchestral: {
 		name: "Orchestral",
 		desc: "This Pokemon's sound-based moves have their power multiplied by 1.3. This Pokemon takes halved damage from sound-based moves.",
 		shortDesc: "This Pokemon receives 1/2 damage from sound moves. Its own have 1.3x power.",
+	},
+	visionary: {
+		name: "Visionary",
+		desc: "Delayed turn moves have their power multiplied by 1.3.",
+		shortDesc: "Delayed turn moves have their power multiplied by 1.3.",
+	},
+	hideandseek: {
+		name: "Hide and Seek",
+		desc: "On switch-in, this Pokemon summons a Substitute.",
+		shortDesc: "On switch-in, this Pokemon summons a Substitute.",
+	},
+	scavenger: {
+		name: "Scavenger",
+		desc: "50% chance of retrieving a used item at the end of a turn.",
+		shortDesc: "50% chance of retrieving a used item at the end of a turn.",
+	},
+	corruptedintention: {
+		name: "Corrupted Intention",
+		desc: "This Pokemon sets 2 layers of Toxic Spikes instead of 1.",
+		shortDesc: "This Pokemon sets 2 layers of Toxic Spikes instead of 1.",
+	},
+	radioactive: {
+		name: "Radioactive",
+		desc: "Poison and Cosmic moves are x1.2 BP.",
+		shortDesc: "Poison and Cosmic moves are x1.2 BP.",
+	},
+	haunted: {
+		name: "Haunted",
+		desc: "When this Pokemon is fainted, the Pokemon that used the attack that fainted this Pokemon is afflicted with the Curse status.",
+		shortDesc: "Applies Curse on faint.",
+	},
+	solidfooting: {
+		name: "Solid Footing",
+		desc: "When switching in, the holder is unaffected by hazards on its side of the field.",
+		shortDesc: "When switching in, the holder is unaffected by hazards on its side of the field.",
+	},
+	fishmemory: {
+		name: "Fish Memory",
+		desc: "At the end of the turn, this Pokemon's stat changes dissapear.",
+		shortDesc: "At the end of the turn, this Pokemon's stat changes dissapear.",
+	},
+	grassygloves: {
+		name: "Grassy Gloves",
+		desc: "This Pokemon receives 3/4 damage from contact moves.",
+		shortDesc: "This Pokemon receives 3/4 damage from contact moves.",
+	},
+	lovetouch: {
+		name: "Poison Touch",
+		desc: "This Pokemon's contact moves have a 30% chance of infatuating.",
+		shortDesc: "This Pokemon's contact moves have a 30% chance of infatuating.",
+	},
+	perfectmelody: {
+		name: "Perfect Melody",
+		desc: "Sound moves do not check accuracy. ",
+		shortDesc: "Sound moves do not check accuracy. ",
+	},
+	toxicintake: {
+		name: "Toxic Intake",
+		desc: "If Toxic Cloud is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its HP does not get restored.",
+		shortDesc: "If Toxic Cloud is active, this Pokemon heals 1/16 of its max HP each turn.",
+		descGen7: "If Toxic Cloud is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
+	},
+	sleepyfellow: {
+		name: "Sleepy Fellow",
+		desc: "While sleeping the mon has a 10% chance to still use the move selected even though it’s sleeping. ",
+		shortDesc: "While sleeping the mon has a 10% chance to still use the move selected even though it’s sleeping. ",
 	},
 };

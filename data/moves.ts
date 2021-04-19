@@ -6662,6 +6662,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
+				if (pokemon.hasAbility('solidfooting')) return;
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
 				// They don't get typed damage from Steelsurge because Steelsurge doesn't,
@@ -16255,6 +16256,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasItem('heavydutyboots')) return;
+				if (pokemon.hasAbility('solidfooting')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			},
@@ -16530,6 +16532,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
+				if (pokemon.hasAbility('solidfooting')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},
@@ -16652,6 +16655,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasItem('heavydutyboots')) return;
+				if (pokemon.hasAbility('solidfooting')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, this.effectData.source, this.dex.getActiveMove('stickyweb'));
 			},
@@ -18233,7 +18237,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
+				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('solidfooting')) {
 					return;
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -22100,7 +22104,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Cool",
 	},
 	brightclaw: {
-		num: 421,
+		num: 951,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
@@ -22115,7 +22119,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Cool",
 	},
 	dazingpressure: {
-		num: 500,
+		num: 952,
 		accuracy: 100,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
@@ -22134,7 +22138,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Clever",
 	},
 	dazingraze: {
-		num: 501,
+		num: 953,
 		accuracy: 100,
 		basePower: 85,
 		category: "Physical",
@@ -22153,7 +22157,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	freezingcomet: {
-		num: 502,
+		num: 954,
 		accuracy: 90,
 		basePower: 90,
 		category: "Special",
@@ -22170,26 +22174,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	lazycurse: {
-		num: 503,
+		num: 955,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		name: "Lazy Curse",
+		name: "Haunted Curse",
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1},
 		volatileStatus: 'curse',
-		// onModifyMove(move, source, target) {
-			// if (!source.hasType('Ghost')) {
-				// move.target = move.nonGhostTarget as MoveTarget;
-			// }
-		// },
 		onTryHit(target, source, move) {
-			// if (!source.hasType('Ghost')) {
-				// delete move.volatileStatus;
-				// delete move.onHit;
-				// move.self = {boosts: {spe: -1, atk: 1, def: 1}};
-			// } 
 			if (move.volatileStatus && target.volatiles['curse']) {
 				return false;
 			}
@@ -22212,5 +22206,65 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		zMove: {effect: 'curse'},
 		contestType: "Tough",
+	},
+	lazyattract: {
+		num: 956,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Love Touch",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
+		volatileStatus: 'lovetouch',
+		condition: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(pokemon, source, effect) {
+				// if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
+					// this.debug('incompatible gender');
+					// return false;
+				// }
+				// if (!this.runEvent('Attract', pokemon, source)) {
+					// this.debug('Attract event failed');
+					// return false;
+				// }
+
+				// if (effect.id === 'cutecharm') {
+					// this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
+				// } else if (effect.id === 'destinyknot') {
+					// this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
+				// } else {
+					this.add('-start', pokemon, 'Love Touch');
+					pokemon.addVolatile('lovetouch');
+					console.log('onStart()');
+				// }
+			},
+			onUpdate(pokemon) {
+				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['lovetouch']) {
+					this.debug('Removing Love Touch volatile on ' + pokemon);
+					pokemon.removeVolatile('lovetouch');
+				}
+			},
+			onBeforeMovePriority: 2,
+			onBeforeMove(pokemon, target, move) {
+				this.add('-activate', pokemon, 'move: Love Touch', '[of] ' + this.effectData.source);
+				if (this.randomChance(1, 2)) {
+					this.add('cant', pokemon, 'Love Touch');
+					return false;
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Love Touch', '[silent]');
+			},
+			onHit(target) {
+				target.addVolatile('lovetouch');
+				console.log('onHit(target)');
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		zMove: {effect: 'clearnegativeboost'},
+		contestType: "Cute",
 	},
 };
