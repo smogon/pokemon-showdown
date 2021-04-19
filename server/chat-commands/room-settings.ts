@@ -1156,13 +1156,13 @@ export const commands: ChatCommands = {
 		if (this.meansNo(target)) {
 			if (!room.settings.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
 			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
-			this.modlog('UNPSPLROOM');
+			this.globalModlog('UNPSPLROOM');
 			delete room.settings.pspl;
 			room.saveSettings();
 		} else {
 			if (room.settings.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
 			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
-			this.modlog('PSPLROOM');
+			this.globalModlog('PSPLROOM');
 			room.settings.pspl = true;
 			room.saveSettings();
 		}

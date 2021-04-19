@@ -1400,7 +1400,7 @@ export const commands: ChatCommands = {
 		this.splitTarget(targetStr);
 		const targetUser = this.targetUser;
 		const userid = toID(this.targetUsername);
-		const section = !demoting ? room.sanitizeSection(sectionid) : Users.globalAuth.sectionLeaders.getSection(userid)!;
+		const section = demoting ? Users.globalAuth.sectionLeaders.getSection(userid)! : room.sanitizeSection(sectionid);
 		const name = targetUser ? targetUser.name : this.targetUsername;
 		if (Users.globalAuth.sectionLeaders.has(targetUser || userid) && !demoting) {
 			throw new Chat.ErrorMessage(`${name} is already a Section Leader of ${RoomSections.sectionNames[section]}.`);
