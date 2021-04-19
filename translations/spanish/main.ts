@@ -154,9 +154,10 @@ export const translations: Translations = {
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "Para unirte a un torneo, haz click en el botón <strong>Join!</strong> o escribe el comando <code>/tour join</code> en el chat de la sala. Puedes revisar si tu equipo es legal para el torneo al hacer click en el botón <strong>Validate</strong> una vez te hayas unido y seleccionado un equipo. Para jugar contra tu oponente en el torneo, haz click en el botón <strong>Ready!</strong> cuando aparezca. Hay dos tipos diferentes de torneos de sala: elimination (si un usuario pierde más de cierto número de veces, es eliminado) y round robin (todos los usuarios juegan contra todos, y el usuario con más victorias es el ganador).",
 		"Frequently Asked Questions": "Preguntas Frecuentes",
 
-		"pages/faq": "pages/faq",
+		"pages/faq": "pages/faq-es",
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
+		"pages/staff": "pages/staff-es",
 
 		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
 		"- We log IPs to enforce bans and mutes.": "",
