@@ -1286,9 +1286,9 @@ export class TeamValidator {
 			}
 		}
 
-    if (dex.species.get(species.baseSpecies).tags) {
-      setHas['pokemontag:' + toID(dex.species.get(species.baseSpecies).tags)] = true;
-    }
+		if (dex.species.get(species.baseSpecies).tags) {
+			setHas['pokemontag:' + toID(dex.species.get(species.baseSpecies).tags)] = true;
+		}
 
 		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
 		const tierTag = 'pokemontag:' + toID(tier);
@@ -1378,22 +1378,21 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-    if (dex.species.get(species.baseSpecies).tags) {
-        banReason = ruleTable.check('pokemontag:mythical', setHas);
-  			if (banReason) {
-  				return `Mythical Pokemon are ${banReason}.`;
-  			}
-        banReason = ruleTable.check('pokemontag:restrictedlegendary', setHas);
-  			if (banReason) {
-  				return `Legendary Pokemon are ${banReason}.`;
-  			}
-        banReason = ruleTable.check('pokemontag:sublegendary', setHas);
-  			if (banReason) {
-  				return `Sub-Legendary Pokemon are ${banReason}.`;
-  			}
-
-      if (banReason === '') return null;
-    }
+		if (dex.species.get(species.baseSpecies).tags) {
+			banReason = ruleTable.check('pokemontag:mythical', setHas);
+			if (banReason) {
+				return `Mythical Pokemon are ${banReason}.`;
+			}
+			banReason = ruleTable.check('pokemontag:restrictedlegendary', setHas);
+			if (banReason) {
+				return `Legendary Pokemon are ${banReason}.`;
+			}
+			banReason = ruleTable.check('pokemontag:sublegendary', setHas);
+			if (banReason) {
+				return `Sub-Legendary Pokemon are ${banReason}.`;
+			}
+			if (banReason === '') return null;
+		}
 
 		if (tierSpecies.isNonstandard && tierSpecies.isNonstandard !== 'Unobtainable') {
 			banReason = ruleTable.check('nonexistent', setHas);
