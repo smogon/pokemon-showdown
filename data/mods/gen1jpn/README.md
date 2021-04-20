@@ -11,3 +11,4 @@ between players, these differences are as follows.
  - Swift does not ignore accuracy checks except against substitutes.
  - Draining moves, such as Absorb or Mega Drain, fail on substitutes. Funnily enough, Draining moves not failing against Substitutes was a glitch introduced when the games were
    internationally released which eventually became a feature of later generations.
+ - Some Pokemon for access to Japanese event-only moves such as Pikachu with Fly and Fearow with Pay Day.
