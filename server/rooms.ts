@@ -57,6 +57,7 @@ interface ChatRoomTable {
 	title: string;
 	desc: string;
 	userCount: number;
+	section: RoomSection;
 	subRooms?: string[];
 }
 
@@ -1378,13 +1379,13 @@ export class GlobalRoomState {
 	getRooms(user: User) {
 		const roomsData: {
 			pspl: ChatRoomTable[],
-			sections: {[k in RoomSection]: ChatRoomTable[]},
+			rooms: ChatRoomTable[],
 			sectionTitles: {[k: string]: string},
 			userCount: number,
 			battleCount: number,
 		} = {
 			pspl: [],
-			sections: Object.create(null),
+			rooms: [],
 			sectionTitles: RoomSections.sectionNames,
 			userCount: Users.onlineCount,
 			battleCount: this.battleCount,
@@ -1397,14 +1398,12 @@ export class GlobalRoomState {
 				title: room.title,
 				desc: room.settings.desc || '',
 				userCount: room.userCount,
+				section: room.section || room.settings.section || 'none',
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
 
-			if (room.section !== 'nonpublic') {
-				if (!roomsData.sections[room.section]) roomsData.sections[room.section] = [];
-				roomsData.sections[room.section].push(roomData);
-			}
+			roomsData.rooms.push(roomData);
 
 			if (room.settings.pspl) {
 				roomsData.pspl.push(roomData);
