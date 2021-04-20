@@ -1922,8 +1922,6 @@ export const Rooms = {
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		const battle = new Rooms.RoomBattle(room, options);
 		room.game = battle;
-		// Special battles have modchat set to Player from the beginning
-		if (p1Special) room.settings.modchat = '\u2606';
 
 		let inviteOnly = false;
 		const privacySetter = new Set<ID>([]);
@@ -1935,13 +1933,19 @@ export const Rooms = {
 			} else if (playerOptions && playerOptions.hidden) {
 				privacySetter.add(playerOptions.user.id);
 			}
+			if (playerOptions) battle.checkForcedSettings(playerOptions.user);
+		}
+
+		// Special battles have modchat set to Player from the beginning
+		if (p1Special || battle.forcedSettings.modchat) {
+			room.settings.modchat = '\u2606';
 		}
 
 		if (privacySetter.size) {
-			if (battle.forcePublic) {
+			if (battle.forcedSettings.privacy) {
 				room.setPrivate(false);
 				room.settings.modjoin = null;
-				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
+				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcedSettings.privacy}'.</div>`);
 			} else if (!options.tour || (room.tour?.allowModjoin)) {
 				room.setPrivate('hidden');
 				if (inviteOnly) room.settings.modjoin = '%';

@@ -1480,9 +1480,13 @@ export class User extends Chat.MessageContext {
 			this.registered ? `[registered]` :
 			``;
 	}
-	battlesForcedPublic() {
-		if (!Config.forcedpublicprefixes) return null;
-		for (const prefix of Config.forcedpublicprefixes) {
+	forcedPublic(key: 'modchat' | 'privacy') {
+		if (Config.forcepublicprefixes) {
+			Config.forcedprefixes = {public: Config.forcepublicprefixes};
+			delete Config.forcepublicprefixes;
+		}
+		if (!Config.forcedprefixes?.[key]) return null;
+		for (const prefix of Config.forcedprefixes[key]) {
 			if (this.id.startsWith(toID(prefix))) return prefix;
 		}
 		return null;
