@@ -1286,7 +1286,7 @@ export class TeamValidator {
 			}
 		}
 
-		if (dex.species.get(species.baseSpecies).tags?.length > 0) {
+		if (dex.species.get(species.baseSpecies).tags?.length) {
 			setHas['pokemontag:' + toID(dex.species.get(species.baseSpecies).tags[0])] = true;
 		}
 
