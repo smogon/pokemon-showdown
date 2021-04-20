@@ -1378,20 +1378,20 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		if (dex.species.get(species.baseSpecies).tags?.length > 0) {
+		if (dex.species.get(species.baseSpecies).tags?.length) {
 			if (dex.species.get(species.baseSpecies).tags.includes("Mythical")) {
 				banReason = ruleTable.check('pokemontag:mythical');
 				if (banReason) {
 					return `${species.name} is a Mythical Pokemon, which is ${banReason}.`;
 				}
 				if (banReason === '') return null;
-			} else if (dex.species.get(species.baseSpecies).tags[0] === "Restricted Legendary") {
+			} else if (dex.species.get(species.baseSpecies).tags.includes("Restricted Legendary")) {
 				banReason = ruleTable.check('pokemontag:restrictedlegendary');
 				if (banReason) {
 					return `${species.name} is a Restricted Legendary Pokemon, which is ${banReason}.`;
 				}
 				if (banReason === '') return null;
-			} else if (dex.species.get(species.baseSpecies).tags[0] === "Sub-Legendary") {
+			} else if (dex.species.get(species.baseSpecies).tags.includes("Sub-Legendary")) {
 				banReason = ruleTable.check('pokemontag:sublegendary');
 				if (banReason) {
 					return `${species.name} is a Sub-Legendary Pokemon, which is ${banReason}.`;
