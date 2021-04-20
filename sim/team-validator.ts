@@ -1379,7 +1379,7 @@ export class TeamValidator {
 		}
 
 		if (dex.species.get(species.baseSpecies).tags?.length > 0) {
-			if (dex.species.get(species.baseSpecies).tags[0] === "Mythical") {
+			if (dex.species.get(species.baseSpecies).tags.includes("Mythical")) {
 				banReason = ruleTable.check('pokemontag:mythical');
 				if (banReason) {
 					return `${species.name} is a Mythical Pokemon, which is ${banReason}.`;
