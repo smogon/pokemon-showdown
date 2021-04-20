@@ -8,6 +8,6 @@ However, up until Generation 5, Pokemon Games initially released in Japan before
 or changes to moves to balance the game. The first generation of Pokemon has examples of both, though only a handful of changes actually affect battles
 between players, these differences are as follows.
  - Blizzard Freezes its target 30.1% of the time.
- - Swift does not ignore accuracy checks.
+ - Swift does not ignore accuracy checks except against substitutes.
  - Draining moves, such as Absorb or Mega Drain, fail on substitutes. Funnily enough, Draining moves not failing against Substitutes was a glitch introduced when the games were
    internationally released which eventually became a feature of later generations.
