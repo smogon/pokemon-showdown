@@ -1286,8 +1286,8 @@ export class TeamValidator {
 			}
 		}
 
-		if (dex.species.get(species.baseSpecies).tags) {
-			setHas['pokemontag:' + toID(dex.species.get(species.baseSpecies).tags)] = true;
+		if (dex.species.get(species.baseSpecies).tags?.length > 0) {
+			setHas['pokemontag:' + toID(dex.species.get(species.baseSpecies).tags[0])] = true;
 		}
 
 		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
@@ -1378,20 +1378,26 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		if (dex.species.get(species.baseSpecies).tags) {
-			banReason = ruleTable.check('pokemontag:mythical', setHas);
-			if (banReason) {
-				return `Mythical Pokemon are ${banReason}.`;
+		if (dex.species.get(species.baseSpecies).tags?.length > 0) {
+			if (dex.species.get(species.baseSpecies).tags[0] === "Mythical") {
+				banReason = ruleTable.check('pokemontag:mythical');
+				if (banReason) {
+					return `${species.name} is a Mythical Pokemon, which is ${banReason}.`;
+				}
+				if (banReason === '') return null;
+			} else if (dex.species.get(species.baseSpecies).tags[0] === "Restricted Legendary") {
+				banReason = ruleTable.check('pokemontag:restrictedlegendary');
+				if (banReason) {
+					return `${species.name} is a Restricted Legendary Pokemon, which is ${banReason}.`;
+				}
+				if (banReason === '') return null;
+			} else if (dex.species.get(species.baseSpecies).tags[0] === "Sub-Legendary") {
+				banReason = ruleTable.check('pokemontag:sublegendary');
+				if (banReason) {
+					return `${species.name} is a Sub-Legendary Pokemon, which is ${banReason}.`;
+				}
+				if (banReason === '') return null;
 			}
-			banReason = ruleTable.check('pokemontag:restrictedlegendary', setHas);
-			if (banReason) {
-				return `Legendary Pokemon are ${banReason}.`;
-			}
-			banReason = ruleTable.check('pokemontag:sublegendary', setHas);
-			if (banReason) {
-				return `Sub-Legendary Pokemon are ${banReason}.`;
-			}
-			if (banReason === '') return null;
 		}
 
 		if (tierSpecies.isNonstandard && tierSpecies.isNonstandard !== 'Unobtainable') {
