@@ -642,7 +642,7 @@ export const commands: ChatCommands = {
 			this.parse(`/join view-filters`);
 		},
 		help(target, room, user) {
-			this.run(`filterhelp`);
+			this.parse(`/help filter`);
 		},
 		test(target, room, user) {
 			this.checkCan('lock');
