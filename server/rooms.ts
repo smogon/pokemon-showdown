@@ -1379,13 +1379,13 @@ export class GlobalRoomState {
 	getRooms(user: User) {
 		const roomsData: {
 			pspl: ChatRoomTable[],
-			rooms: ChatRoomTable[],
+			chat: ChatRoomTable[],
 			sectionTitles: {[k: string]: string},
 			userCount: number,
 			battleCount: number,
 		} = {
 			pspl: [],
-			rooms: [],
+			chat: [],
 			sectionTitles: RoomSections.sectionNames,
 			userCount: Users.onlineCount,
 			battleCount: this.battleCount,
@@ -1403,10 +1403,10 @@ export class GlobalRoomState {
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
 
-			roomsData.rooms.push(roomData);
-
-			if (room.settings.pspl) {
+			if (room.settings.pspl && roomData.section !== 'officialrooms') {
 				roomsData.pspl.push(roomData);
+			} else {
+				roomsData.chat.push(roomData);
 			}
 		}
 		return roomsData;
