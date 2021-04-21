@@ -355,7 +355,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Standard Doubles', 'Little Cup', 'Dynamax Clause', 'Swagger Clause'],
-		banlist: ['Cutiefly', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola', 'Corsola-Galar', 'Drought'],
+		banlist: ['Corsola-Galar', 'Cutiefly', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix', 'Vulpix-Alola'],
 	},
 	{
 		name: "[Gen 8] VGC 2021 Series 9",
