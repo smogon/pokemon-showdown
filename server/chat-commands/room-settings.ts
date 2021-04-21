@@ -765,7 +765,8 @@ export const commands: ChatCommands = {
 	},
 	makechatroomhelp: [
 		`/makeprivatechatroom [roomname] - Creates a new private room named [roomname]. Requires: &`,
-		`/makepublicchatroom [roomname] - Creates a new public room named [roomname]. Requires: &`,
+		`/makepublicchatroom [roomname], [section] - Creates a new public room named [roomname]. Requires: &`,
+		`Valid sections: ${RoomSections.sections.filter(x => x !== 'nonpublic').join(', ')}`,
 	],
 
 	subroomgroupchat: 'makegroupchat',

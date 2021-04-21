@@ -67,7 +67,7 @@ describe('Rooms features', function () {
 		});
 
 		it('should copy auth from tournament', function () {
-			parent = Rooms.createChatRoom('parentroom', '', {});
+			parent = Rooms.createChatRoom('parentroom');
 			parent.auth.get = () => '%';
 			const p1 = makeUser();
 			const p2 = makeUser();
@@ -86,7 +86,7 @@ describe('Rooms features', function () {
 		});
 
 		it('should prevent overriding tournament room auth by a tournament player', function () {
-			parent = Rooms.createChatRoom('parentroom2', '', {});
+			parent = Rooms.createChatRoom('parentroom2');
 			parent.auth.get = () => '%';
 			const p1 = makeUser();
 			const p2 = makeUser();
@@ -163,8 +163,8 @@ describe('Rooms features', function () {
 			});
 
 			it("should rename their parents subroom reference", async function () {
-				parent = Rooms.createChatRoom("parent", "Parent", 'none');
-				subroom = Rooms.createChatRoom("subroom", "Subroom", 'nonpublic', {parentid: "parent"});
+				parent = Rooms.createChatRoom("parent", "Parent");
+				subroom = Rooms.createChatRoom("subroom", "Subroom", 'none', {parentid: "parent"});
 				await subroom.rename("TheSubroom");
 				assert.equal(parent.subRooms.has("subroom"), false);
 				assert.equal(parent.subRooms.has("thesubroom"), true);

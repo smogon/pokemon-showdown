@@ -109,7 +109,7 @@ export const LogReader = new class {
 				}
 			} else if (!room) {
 				if (opts === 'all' || opts === 'deleted') deleted.push(roomid);
-			} else if (room.section === 'officialrooms') {
+			} else if (room.settings.section === 'officialrooms') {
 				official.push(roomid);
 			} else if (!room.settings.isPrivate) {
 				normal.push(roomid);

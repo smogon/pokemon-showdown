@@ -191,7 +191,6 @@ export abstract class BasicRoom {
 	settings: RoomSettings;
 	/** If true, this room's settings will be saved in config/chatrooms.json, allowing it to stay past restarts. */
 	persist: boolean;
-	section: RoomSection;
 
 	scavgame: ScavengerGameTemplate | null;
 	scavLeaderboard: AnyObject;
@@ -251,10 +250,9 @@ export abstract class BasicRoom {
 			title: this.title,
 			auth: Object.create(null),
 			creationTime: Date.now(),
-			section: 'none',
+			section,
 		};
 		this.persist = false;
-		this.section = section;
 		this.hideReplay = false;
 		this.subRooms = null;
 		this.scavgame = null;
@@ -840,12 +838,15 @@ export abstract class BasicRoom {
 		if (!this.persist) {
 			throw new Chat.ErrorMessage(`You cannot change the section of temporary rooms.`);
 		}
+		if (this.settings.isPrivate && [true, 'hidden'].includes(this.settings.isPrivate) && newSection !== 'nonpublic') {
+			throw new Chat.ErrorMessage(`Only public rooms can change their section.`);
+		}
 		const section = this.sanitizeSection(newSection);
 		const oldSection = this.settings.section;
 		if (oldSection === section) {
 			throw new Chat.ErrorMessage(`${this.title}'s room section is already set to "${RoomSections.sectionNames[oldSection]}".`);
 		}
-		this.settings.section = this.section = section;
+		this.settings.section = section;
 		this.saveSettings();
 		return section;
 	}
@@ -1398,7 +1399,7 @@ export class GlobalRoomState {
 				title: room.title,
 				desc: room.settings.desc || '',
 				userCount: room.userCount,
-				section: room.section || room.settings.section || 'none',
+				section: room.settings.section || 'none',
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
@@ -1881,7 +1882,7 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
-	createChatRoom(roomid: RoomID, title: string, section: RoomSection, options: AnyObject) {
+	createChatRoom(roomid: RoomID, title: string, section: RoomSection, options: Partial<RoomSettings>) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		const room: ChatRoom = new (BasicRoom as any)(roomid, title, section, options);
 		Rooms.rooms.set(roomid, room);
