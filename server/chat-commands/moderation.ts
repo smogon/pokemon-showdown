@@ -422,13 +422,10 @@ export const commands: ChatCommands = {
 		const usernames = Users.globalAuth.sectionLeaders.usernames;
 		const buffer = [];
 		const sections: {[k in RoomSection]: Set<string>} = Object.create(null);
-		for (const section of RoomSections.sections) {
-			if (['none', 'nonpublic'].includes(section)) continue;
-			sections[section] = new Set<string>();
-		}
 		for (const [id, username] of usernames) {
-			const sectionid = Users.globalAuth.sectionLeaders.getSection(id)!;
-			if (!sections[sectionid]) continue;
+			const sectionid = Users.globalAuth.sectionLeaders.getSection(id);
+			if (!sectionid) continue;
+			if (!sections[sectionid]) sections[sectionid] = new Set();
 			sections[sectionid].add(username);
 		}
 		let sectionid: RoomSection;
@@ -1413,17 +1410,13 @@ export const commands: ChatCommands = {
 			this.addGlobalModAction(`${name} was appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`SECTION LEADER`, userid, section);
 			if (!staffRoom?.auth.has(userid)) this.parse(`/msgroom staff,/forceroompromote ${userid},+`);
-			if (targetUser) {
-				targetUser.popup(`You were appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
-			}
+			targetUser?.popup(`You were appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		} else {
 			Users.globalAuth.sectionLeaders.delete(userid);
 			this.privateGlobalModAction(`${name} was demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`DESECTION LEADER`, userid, section);
 			if (staffRoom?.auth.getDirect(userid) === '+') this.parse(`/msgroom staff,/roomdeauth ${userid}`);
-			if (targetUser) {
-				targetUser.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
-			}
+			targetUser?.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		}
 
 		if (targetUser) {

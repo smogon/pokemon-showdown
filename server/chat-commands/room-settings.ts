@@ -735,7 +735,7 @@ export const commands: ChatCommands = {
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
 		const section = room.sanitizeSection(sectionTarget);
 		if (!cmd.includes('public') && section !== 'nonpublic') {
-			throw new Chat.ErrorMessage(`Non-public rooms cannot be placed into room sections.`);
+			throw new Chat.ErrorMessage(`Only public rooms can be placed into room sections.`);
 		}
 		if (!Rooms.global.addChatRoom(target, section)) {
 			return this.errorReply(`An error occurred while trying to create the room '${target}'.`);
