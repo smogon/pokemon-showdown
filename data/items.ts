@@ -583,7 +583,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 558,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	bugmemory: {
 		name: "Bug Memory",
@@ -1061,7 +1061,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 562,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	darkmemory: {
 		name: "Dark Memory",
@@ -1251,7 +1251,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 561,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	dragonmemory: {
 		name: "Dragon Memory",
@@ -1459,7 +1459,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 550,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	electricmemory: {
 		name: "Electric Memory",
@@ -1601,7 +1601,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 715,
 		gen: 6,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	fairymemory: {
 		name: "Fairy Memory",
@@ -1637,7 +1637,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 553,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	fightingmemory: {
 		name: "Fighting Memory",
@@ -1704,7 +1704,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 548,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	firememory: {
 		name: "Fire Memory",
@@ -1832,7 +1832,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 556,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	flyingmemory: {
 		name: "Flying Memory",
@@ -2050,7 +2050,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 560,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	ghostmemory: {
 		name: "Ghost Memory",
@@ -2115,7 +2115,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 551,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	grassmemory: {
 		name: "Grass Memory",
@@ -2231,7 +2231,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 555,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	groundmemory: {
 		name: "Ground Memory",
@@ -2433,7 +2433,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 552,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	icememory: {
 		name: "Ice Memory",
@@ -3993,7 +3993,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 554,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	poisonmemory: {
 		name: "Poison Memory",
@@ -4235,7 +4235,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 557,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	psychicmemory: {
 		name: "Psychic Memory",
@@ -4542,7 +4542,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 559,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	rockincense: {
 		name: "Rock Incense",
@@ -5131,13 +5131,16 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (
-				move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) &&
-				(move.type === 'Psychic' || move.type === 'Dragon')
-			) {
-				return this.chainModify([0x1333, 0x1000]);
+		onModifySpAPriority: 1,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 1,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
+				return this.chainModify(1.5);
 			}
 		},
 		itemUser: ["Latios", "Latias"],
@@ -5287,7 +5290,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 563,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	steelmemory: {
 		name: "Steel Memory",
@@ -6582,7 +6585,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 549,
 		gen: 5,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	watermemory: {
 		name: "Water Memory",
@@ -7467,7 +7470,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 10019,
 		gen: 6,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	cosmicgem: {
 		name: "Cosmic Gem",
@@ -7481,7 +7484,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 10019,
 		gen: 6,
-		isNonstandard: "Past",
+		//isNonstandard: "Past",
 	},
 	solarpanel: {
 		name: "Solar Panel",
@@ -7513,6 +7516,145 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Genesect-Flash",
 		itemUser: ["Genesect-Flash"],
 		num: 10021,
+		gen: 5,
+	},
+	sacredash: {
+		name: "Sacred Ash",
+		spritenum: 459,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && (user.baseSpecies.num === 243 || move.type === 'Electric')) {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+			if (move && (user.baseSpecies.num === 244 || move.type === 'Fire')) {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+			if (move && (user.baseSpecies.num === 245 || move.type === 'Water')) {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		itemUser: ["Entei", "Raikou", "Suicune"],
+		num: 10022,
+		gen: 3,
+	},
+	fogmachine: {
+		name: "Fog Machine",
+		spritenum: 459,
+		fling: {
+			basePower: 30,
+		},
+		onCriticalHit(target, source, move) {
+			if (target.useItem(source)) {
+				console.log('crit detected');
+				this.add('-item', target, 'Fog Machine');
+				return false;
+			}
+			return;
+		},
+		num: 10023,
+		gen: 3,
+	},
+	crawshell: {
+		name: "Craw Shell",
+		spritenum: 459,
+		fling: {
+			basePower: 80,
+		},
+		num: 10024,
+		gen: 3,
+	},
+	glitterbomb: {
+		name: "Glitter Bomb",
+		spritenum: 459,
+		fling: {
+			basePower: 80,
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.side === source.side) {
+				if (effect.id === 'stickyweb') {
+					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Glitter Bomb only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.add('-item', target, 'Glitter Bomb');
+				source.addVolatile('torment');
+				//this.boost({atk: 2}, target, target, null, true);
+			}
+		},
+		num: 10025,
+		gen: 3,
+	},
+	finalite: {
+		name: "Finalite",
+		spritenum: 130,
+		fling: {
+			basePower: 40,
+		},
+		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (!pokemon.baseSpecies.nfe && pokemon.baseSpecies.prevo) {
+				return this.chainModify(0.75);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (!pokemon.baseSpecies.nfe && pokemon.baseSpecies.prevo) {
+				return this.chainModify(0.75);
+			}
+		},
+		num: 10026,
+		gen: 5,
+	},
+	cursedflute: {
+        name: "Cursed Flute",
+        spritenum: 2,
+		onFaint(target, source, effect) {
+			console.log("add confusion");
+			source.addVolatile('confusion');
+		},
+        num: 10027,
+        gen: 8,
+    },
+	fairydust: {
+		name: "Fairy Dust",
+		spritenum: 305,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Fairy') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		num: 10027,
+		gen: 2,
+	},
+	shamecard: {
+		name: "Shame Card",
+		spritenum: 387,
+		fling: {
+			basePower: 10,
+		},
+		onAfterMoveSecondary(target, source, move) {
+			if (source && source !== target && source.hp && target.hp && move && move.category === 'Status') {
+				if (target.useItem(source)) {
+					source.addVolatile('taunt');
+				}
+			}
+		},
+		num: 10028,
 		gen: 5,
 	},
 };

@@ -147,7 +147,7 @@ export const ItemsText = {
 	},
 	blunderpolicy: {
 		name: "Blunder Policy",
-		desc: "If the holder misses due to accuracy, its Speed is raised by 2 stages and Accuracy raised by 1 stage. Single use.",
+		desc: "If holder misses due to accuracy, its Speed is raised 2 stages and Accuracy by 1 stage.",
 	},
 	bottlecap: {
 		name: "Bottle Cap",
@@ -1498,7 +1498,7 @@ export const ItemsText = {
 	},
 	souldew: {
 		name: "Soul Dew",
-		desc: "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
+		desc: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
 		descGen6: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
 	},
 	spelltag: {
@@ -2279,5 +2279,53 @@ export const ItemsText = {
 	flashdrive: {
 		name: "Flash Drive",
 		desc: "Holder's Techno Blast is Light type.",
+	},
+	gravityrock: {
+		name: "Gravity Rock",
+		desc: "Holder's use of Gravity lasts 8 turns instead of 5.",
+	},
+	lantern: {
+		name: "Lantern",
+		desc: "Holder's Light-type attacks have 1.2x power.",
+	},
+	satellitescope: {
+		name: "Satellite Scope",
+		desc: "Holder's Cosmic-type attacks have 1.2x power.",
+	},
+	sacredash: {
+		name: "Sacred Ash",
+		desc: "If holder is Suicune,Entei or Raikou, STAB attacks have 1.3x power.",
+	},
+	fogmachine: {
+		name: "Fog Machine",
+		desc: "Holder is protected from critical strikes. Single use.",
+		
+		end: "  [POKEMON] blocked a crit thanks to its Fog Machine!",
+	},
+	crawshell: {
+		name: "Craw Shell",
+		desc: "Applies Taunt when flung.",
+	},
+	glitterbomb: {
+		name: "Glitter Bomb",
+		desc: "Holder applies Torment when its stats are lowered by a foe.",
+	},
+	finalite: {
+		name: "Finalite",
+		desc: "When held by fully-evolved Pokemon, their Defense and Special Defense is lowered. [x0.75] Pokemon with only one stage are unaffected.",
+	},
+	cursedflute: {
+		name: "Cursed Flute",
+		desc: "Confuses opponent if holder faints.",
+	},
+	fairydust: {
+		name: "Fairy Dust",
+		desc: "Holder's Fairy-type attacks have 1.2x power.",
+	},
+	shamecard: {
+		name: "Shame Card",
+		desc: "If holder is statused, attacker is taunted. Single use.",
+
+		end: "  [POKEMON] held up its Shame Card against [TARGET]!",
 	},
 };

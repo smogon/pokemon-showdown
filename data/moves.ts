@@ -5237,6 +5237,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.add("-enditem", source, item.name, '[from] move: Fling');
 			this.runEvent('AfterUseItem', source, null, null, item);
 		},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.ignoringItem()) return false;
+			const item = pokemon.getItem();
+			if (item.id === 'crawshell') {
+				//add a taunt
+				target.addVolatile('taunt');
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -13851,11 +13859,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {
 				move.willChangeForme = true;
 			}
+			//meloettapirouettan part
+			if (pokemon.baseSpecies.baseSpecies === 'Meloetta-Pirouettan' && !pokemon.transformed) {
+				move.willChangeFormePirouettan = true;
+			}
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.willChangeForme) {
 				const meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';
 				pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '[msg]');
+			}
+			//meloettapirouettan part
+			if (move.willChangeFormePirouettan) {
+				const meloettaForme = pokemon.species.id === 'meloettapirouettanarian' ? '' : '-Arian';
+				console.log('meloettaforme: '+meloettaForme);
+				pokemon.formeChange('Meloetta-Pirouettan' + meloettaForme, this.effect, false, '[msg]');
 			}
 		},
 		target: "allAdjacentFoes",
