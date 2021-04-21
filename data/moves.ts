@@ -6185,7 +6185,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual() {
 				if (this.effectData.turn === this.turn) return;
 				const active = this.getAllActive();
-                this.speedSort(active);
+				this.speedSort(active);
 				for (const target of active) {
 					if (!target.side.getSideCondition('gmaxcannonade')) continue;
 					if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
@@ -6198,7 +6198,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return;
 				}
 				const active = this.getAllActive();
-                this.speedSort(active);
+				this.speedSort(active);
 				for (const target of active) {
 					if (!target.side.getSideCondition('gmaxcannonade')) continue;
 					if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
@@ -6856,7 +6856,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual() {
 				if (this.effectData.turn === this.turn) return;
 				const active = this.getAllActive();
-                this.speedSort(active);
+				this.speedSort(active);
 				for (const target of active) {
 					if (!target.side.getSideCondition('gmaxvinelash')) continue;
 					if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
@@ -6869,7 +6869,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return;
 				}
 				const active = this.getAllActive();
-                this.speedSort(active);
+				this.speedSort(active);
 				for (const target of active) {
 					if (!target.side.getSideCondition('gmaxvinelash')) continue;
 					if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
@@ -6911,7 +6911,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual() {
 				if (this.effectData.turn === this.turn) return;
 				const active = this.getAllActive();
-                this.speedSort(active);
+				this.speedSort(active);
 				for (const target of active) {
 					if (!target.side.getSideCondition('gmaxvolcalith')) continue;
 					if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
@@ -6924,7 +6924,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return;
 				}
 				const active = this.getAllActive();
-                this.speedSort(active);
+				this.speedSort(active);
 				for (const target of active) {
 					if (!target.side.getSideCondition('gmaxvolcalith')) continue;
 					if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
@@ -6989,7 +6989,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual() {
 				if (this.effectData.turn === this.turn) return;
 				const active = this.getAllActive();
-                this.speedSort(active);
+				this.speedSort(active);
 				for (const target of active) {
 					if (!target.side.getSideCondition('gmaxwildfire')) continue;
 					if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
@@ -7002,7 +7002,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return;
 				}
 				const active = this.getAllActive();
-                this.speedSort(active);
+				this.speedSort(active);
 				for (const target of active) {
 					if (!target.side.getSideCondition('gmaxwildfire')) continue;
 					if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
