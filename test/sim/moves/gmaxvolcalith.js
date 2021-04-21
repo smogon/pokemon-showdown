@@ -63,7 +63,7 @@ describe('G-Max Volcalith', function () {
 		assert.equal(battle.p2.active[0].hp, expectedHP);
 	});
 
-	it.skip(`should damage Pokemon in order of Speed`, function () {
+	it(`should damage Pokemon in order of Speed`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -85,7 +85,7 @@ describe('G-Max Volcalith', function () {
 		assert(mewtwoDamagedTRIndex < wynautDamagedTRIndex, 'Wynaut should be damaged before Mewtwo in Trick Room.');
 	});
 
-	it.skip(`should deal damage before Black Sludge recovery/damage`, function () {
+	it(`should deal damage before Black Sludge recovery/damage`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},

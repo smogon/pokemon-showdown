@@ -6182,14 +6182,27 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
-			onResidual(targetSide) {
-				for (const target of targetSide.allies()) {
+			onResidual() {
+				if (this.effectData.turn === this.turn) return;
+				const active = this.getAllActive();
+                this.speedSort(active);
+				for (const target of active) {
+					if (!target.side.getSideCondition('gmaxcannonade')) continue;
 					if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
+					target.side.getSideConditionData('gmaxcannonade').turn = this.turn;
 				}
 			},
 			onEnd(targetSide) {
-				for (const target of targetSide.allies()) {
+				if (this.effectData.turn === this.turn) {
+					this.add('-sideend', targetSide, 'G-Max Cannonade');
+					return;
+				}
+				const active = this.getAllActive();
+                this.speedSort(active);
+				for (const target of active) {
+					if (!target.side.getSideCondition('gmaxcannonade')) continue;
 					if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
+					target.side.getSideConditionData('gmaxcannonade').turn = this.turn;
 				}
 				this.add('-sideend', targetSide, 'G-Max Cannonade');
 			},
@@ -6840,14 +6853,27 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
-			onResidual(targetSide) {
-				for (const target of targetSide.allies()) {
+			onResidual() {
+				if (this.effectData.turn === this.turn) return;
+				const active = this.getAllActive();
+                this.speedSort(active);
+				for (const target of active) {
+					if (!target.side.getSideCondition('gmaxvinelash')) continue;
 					if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
+					target.side.getSideConditionData('gmaxvinelash').turn = this.turn;
 				}
 			},
 			onEnd(targetSide) {
-				for (const target of targetSide.allies()) {
+				if (this.effectData.turn === this.turn) {
+					this.add('-sideend', targetSide, 'G-Max Vine Lash');
+					return;
+				}
+				const active = this.getAllActive();
+                this.speedSort(active);
+				for (const target of active) {
+					if (!target.side.getSideCondition('gmaxvinelash')) continue;
 					if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
+					target.side.getSideConditionData('gmaxvinelash').turn = this.turn;
 				}
 				this.add('-sideend', targetSide, 'G-Max Vine Lash');
 			},
@@ -6882,14 +6908,27 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
-			onResidual(targetSide) {
-				for (const target of targetSide.allies()) {
+			onResidual() {
+				if (this.effectData.turn === this.turn) return;
+				const active = this.getAllActive();
+                this.speedSort(active);
+				for (const target of active) {
+					if (!target.side.getSideCondition('gmaxvolcalith')) continue;
 					if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
+					target.side.getSideConditionData('gmaxvolcalith').turn = this.turn;
 				}
 			},
 			onEnd(targetSide) {
-				for (const target of targetSide.allies()) {
+				if (this.effectData.turn === this.turn) {
+					this.add('-sideend', targetSide, 'G-Max Volcalith');
+					return;
+				}
+				const active = this.getAllActive();
+                this.speedSort(active);
+				for (const target of active) {
+					if (!target.side.getSideCondition('gmaxvolcalith')) continue;
 					if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
+					target.side.getSideConditionData('gmaxvolcalith').turn = this.turn;
 				}
 				this.add('-sideend', targetSide, 'G-Max Volcalith');
 			},
@@ -6947,14 +6986,27 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1.1,
-			onResidual(targetSide) {
-				for (const target of targetSide.allies()) {
+			onResidual() {
+				if (this.effectData.turn === this.turn) return;
+				const active = this.getAllActive();
+                this.speedSort(active);
+				for (const target of active) {
+					if (!target.side.getSideCondition('gmaxwildfire')) continue;
 					if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
+					target.side.getSideConditionData('gmaxwildfire').turn = this.turn;
 				}
 			},
 			onEnd(targetSide) {
-				for (const target of targetSide.allies()) {
+				if (this.effectData.turn === this.turn) {
+					this.add('-sideend', targetSide, 'G-Max Wildfire');
+					return;
+				}
+				const active = this.getAllActive();
+                this.speedSort(active);
+				for (const target of active) {
+					if (!target.side.getSideCondition('gmaxwildfire')) continue;
 					if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
+					target.side.getSideConditionData('gmaxwildfire').turn = this.turn;
 				}
 				this.add('-sideend', targetSide, 'G-Max Wildfire');
 			},
