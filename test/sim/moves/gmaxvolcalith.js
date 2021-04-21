@@ -85,7 +85,7 @@ describe('G-Max Volcalith', function () {
 		assert(mewtwoDamagedTRIndex < wynautDamagedTRIndex, 'Wynaut should be damaged before Mewtwo in Trick Room.');
 	});
 
-	it(`should deal damage before Black Sludge recovery/damage`, function () {
+	it.skip(`should deal damage before Black Sludge recovery/damage`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
