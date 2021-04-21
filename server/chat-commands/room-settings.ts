@@ -430,8 +430,8 @@ export const commands: ChatCommands = {
 			buffer += `<code>/permissions view</code></p>`;
 			buffer += `<p><strong>Group permissions:</strong> (will affect multiple commands or part of one command)<br />`;
 			buffer += `<code>` + permissionGroups.join(`</code> <code>`) + `</code></p>`;
-			buffer += `<p><strong>Single-command permissions:</strong> (will affect one command)<br />`;
-			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></p>`;
+			buffer += `<p><details class="readmore"><summary><strong>Single-command permissions:</strong> (will affect one command)</summary>`;
+			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></details></p>`;
 			buffer += `<p><details class="readmore"><summary><strong>Sub-commands:</strong> (will affect one sub-command, like /roomevents view)</summary>`;
 			for (const subPerms of Object.values(subPermissionsByNamespace)) {
 				buffer += `<br /><code>` + subPerms.join(`</code> <code>`) + `</code><br />`;
