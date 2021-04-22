@@ -83,7 +83,7 @@ export interface RoomSettings {
 	title: string;
 	auth: {[userid: string]: GroupSymbol};
 	creationTime: number;
-	section: RoomSection;
+	section?: RoomSection;
 
 	readonly autojoin?: boolean;
 	aliases?: string[];
@@ -251,7 +251,6 @@ export abstract class BasicRoom {
 			title: this.title,
 			auth: Object.create(null),
 			creationTime: Date.now(),
-			section: 'none',
 		};
 		this.persist = false;
 		this.hideReplay = false;
@@ -265,7 +264,6 @@ export abstract class BasicRoom {
 		this.reportJoinsInterval = null;
 
 		options.title = this.title;
-		if (options.section) this.settings.section = options.section;
 		if (options.isHelp) options.noAutoTruncate = true;
 		this.reportJoins = !!(Config.reportjoins || options.isPersonal);
 		this.batchJoins = options.isPersonal ? 0 : Config.reportjoinsperiod || 0;
@@ -836,21 +834,26 @@ export abstract class BasicRoom {
 		}
 		return target as RoomSection;
 	}
-	setSection(section: string) {
+	setSection(section?: string) {
 		if (!this.persist) {
 			throw new Chat.ErrorMessage(`You cannot change the section of temporary rooms.`);
 		}
-		const validatedSection = this.validateSection(section);
-		if (this.settings.isPrivate && [true, 'hidden'].includes(this.settings.isPrivate) && validatedSection !== 'nonpublic') {
-			throw new Chat.ErrorMessage(`Only public rooms can change their section.`);
+		if (section) {
+			const validatedSection = this.validateSection(section);
+			if (this.settings.isPrivate && [true, 'hidden'].includes(this.settings.isPrivate)) {
+				throw new Chat.ErrorMessage(`Only public rooms can change their section.`);
+			}
+			const oldSection = this.settings.section;
+			if (oldSection === section) {
+				throw new Chat.ErrorMessage(`${this.title}'s room section is already set to "${RoomSections.sectionNames[oldSection]}".`);
+			}
+			this.settings.section = validatedSection;
+			this.saveSettings();
+			return validatedSection;
 		}
-		const oldSection = this.settings.section;
-		if (oldSection === section) {
-			throw new Chat.ErrorMessage(`${this.title}'s room section is already set to "${RoomSections.sectionNames[oldSection]}".`);
-		}
-		this.settings.section = validatedSection;
+		delete this.settings.section;
 		this.saveSettings();
-		return validatedSection;
+		return undefined;
 	}
 
 	/**
@@ -1160,7 +1163,6 @@ export class GlobalRoomState {
 				isPrivate: 'hidden',
 				modjoin: '%',
 				autojoin: true,
-				section: 'nonpublic',
 			}];
 		}
 
@@ -1412,17 +1414,18 @@ export class GlobalRoomState {
 	sendAll(message: string) {
 		Sockets.roomBroadcast('', message);
 	}
-	addChatRoom(title: string, options: Partial<RoomSettings> = {section: 'nonpublic'}) {
+	addChatRoom(title: string) {
 		const id = toID(title) as RoomID;
 		if (['battles', 'rooms', 'ladder', 'teambuilder', 'home', 'all', 'public'].includes(id)) {
 			return false;
 		}
 		if (Rooms.rooms.has(id)) return false;
 
-		if (!options.title) options.title = title;
-		options.auth = {};
-		options.creationTime = Date.now();
-		const settings: RoomSettings = {...options} as RoomSettings;
+		const settings = {
+			title: title,
+			auth: {},
+			creationTime: Date.now(),
+		};
 		const room = Rooms.createChatRoom(id, title, settings);
 		if (id === 'lobby') Rooms.lobby = room;
 		this.settingsList.push(settings);
@@ -1715,7 +1718,6 @@ export class GameRoom extends BasicRoom {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
 		options.isMultichannel = true;
-		options.section = 'none';
 		super(roomid, title, options);
 		this.reportJoins = !!Config.reportbattlejoins;
 		this.settings.modchat = (Config.battlemodchat || null);

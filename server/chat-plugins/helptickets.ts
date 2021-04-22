@@ -1295,7 +1295,6 @@ export const commands: ChatCommands = {
 					isPersonal: true,
 					isHelp: true,
 					isPrivate: 'hidden',
-					section: 'nonpublic',
 					modjoin: '%',
 					auth: {[user.id]: '+'},
 					introMessage: introMsg,

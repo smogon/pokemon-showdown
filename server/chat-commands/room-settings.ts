@@ -16,15 +16,13 @@ const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
 
 export const sections = [
-	'none', 'nonpublic', 'officialrooms', 'officialtiers', 'communityprojects', 'languages', 'gaming', 'leisure', 'lifehobbies', 'onsitegames',
+	'officialrooms', 'officialtiers', 'communityprojects', 'languages', 'gaming', 'leisure', 'lifehobbies', 'onsitegames',
 ] as const;
 
 export type RoomSection = typeof sections[number];
 
 export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections: readonly RoomSection[]} = {
 	sectionNames: {
-		none: 'none',
-		nonpublic: 'Non-public',
 		officialrooms: 'Official rooms',
 		officialtiers: 'Official tiers',
 		communityprojects: 'Community projects',
@@ -730,44 +728,37 @@ export const commands: ChatCommands = {
 	makechatroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('makeroom');
-		let [title, sectionTarget] = this.splitOne(target);
-		const id = toID(title);
-		if (!sectionTarget) sectionTarget = (cmd.includes('public') ? 'none' : 'nonpublic') as ID;
+		const id = toID(target);
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
-		const section = room.validateSection(sectionTarget);
-		if (!cmd.includes('public') && section !== 'nonpublic') {
-			throw new Chat.ErrorMessage(`Only public rooms can be placed into room sections.`);
-		}
-		if (!Rooms.global.addChatRoom(title, {section})) {
-			return this.errorReply(`An error occurred while trying to create the room '${title}'.`);
+		if (!Rooms.global.addChatRoom(target)) {
+			return this.errorReply(`An error occurred while trying to create the room '${target}'.`);
 		}
 
-		const targetRoom = Rooms.search(title);
+		const targetRoom = Rooms.search(target);
 		if (!targetRoom) throw new Error(`Error in room creation.`);
 		if (cmd === 'makeprivatechatroom') {
 			if (!targetRoom.persist) throw new Error(`Private chat room created without settings.`);
 			targetRoom.setPrivate(true);
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
-				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(title)}</b></div>`).update();
+				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
 			}
-			this.sendReply(`The private chat room '${title}' was created.`);
+			this.sendReply(`The private chat room '${target}' was created.`);
 		} else {
 			const staffRoom = Rooms.get('staff');
 			if (staffRoom) {
-				staffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(title)}</b></div>`).update();
+				staffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
 			}
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
-				upperStaffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(title)}</b></div>`).update();
+				upperStaffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
 			}
-			this.sendReply(`The chat room '${title}' was created.`);
+			this.sendReply(`The chat room '${target}' was created.`);
 		}
 	},
 	makechatroomhelp: [
 		`/makeprivatechatroom [roomname] - Creates a new private room named [roomname]. Requires: &`,
-		`/makepublicchatroom [roomname], [section] - Creates a new public room named [roomname]. Requires: &`,
-		`Valid sections: ${RoomSections.sections.filter(x => x !== 'nonpublic').join(', ')}`,
+		`/makepublicchatroom [roomname] - Creates a new public room named [roomname]. Requires: &`,
 	],
 
 	subroomgroupchat: 'makegroupchat',
@@ -842,7 +833,6 @@ export const commands: ChatCommands = {
 			creationTime: Date.now(),
 			modjoin: parent ? null : '+',
 			parentid: parent,
-			section: 'nonpublic',
 			auth: {},
 			introMessage: `` +
 				`<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//${Config.routes.client}/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
@@ -1095,7 +1085,6 @@ export const commands: ChatCommands = {
 			room.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
-			if (!room.settings.isPersonal && !room.battle) room.setSection('none');
 			room.setPrivate(false);
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
@@ -1116,7 +1105,7 @@ export const commands: ChatCommands = {
 			}
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			if (!room.settings.isPersonal && !room.battle) room.setSection('nonpublic');
+			if (!room.settings.isPersonal && !room.battle) room.setSection();
 			room.setPrivate(setting);
 			room.privacySetter = new Set([user.id]);
 		}
@@ -1504,15 +1493,15 @@ export const commands: ChatCommands = {
 		const sectionNames = RoomSections.sectionNames;
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			this.sendReplyBox(Utils.html`This room is ${sectionNames[room.settings.section] !== 'none' ? `in the ${sectionNames[room.settings.section]} section` : `not in a section`}.`);
+			this.sendReplyBox(Utils.html`This room is ${room.settings.section ? `in the ${sectionNames[room.settings.section]} section` : `not in a section`}.`);
 			return;
 		}
 		this.checkCan('gdeclare');
 		const section = room.setSection(target);
-		this.sendReply(`The room section is now: ${sectionNames[section]}`);
+		this.sendReply(`The room section is now: ${section ? sectionNames[section] : 'none'}`);
 
-		this.privateGlobalModAction(`${user.name} changed the room section of ${room.title} to ${sectionNames[section]}.`);
-		this.globalModlog('ROOMSECTION', null, section);
+		this.privateGlobalModAction(`${user.name} changed the room section of ${room.title} to ${section ? sectionNames[section] : 'none'}.`);
+		this.globalModlog('ROOMSECTION', null, section || 'none');
 	},
 	roomsectionhelp: [
 		`/roomsection [section] - Sets the room this is used in to the specified [section]. Requires: &`,
