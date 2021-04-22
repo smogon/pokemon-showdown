@@ -339,7 +339,7 @@ export const Twitch = new class {
 			throw new Chat.ErrorMessage(`Error retrieving twitch channel: ${e.message}`);
 		}
 		const data = JSON.parse(res);
-		(data.channels as AnyObject[]).sort((a, b) => b.followers - a.followers);
+		Utils.sortBy(data.channels as AnyObject[], c => -c.followers);
 		return data?.channels?.[0] as TwitchChannel | undefined;
 	}
 	visualizeChannel(info: TwitchChannel) {

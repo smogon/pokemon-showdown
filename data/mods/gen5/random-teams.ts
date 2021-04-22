@@ -1,4 +1,5 @@
 import RandomGen6Teams from '../gen6/random-teams';
+import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
 
@@ -646,8 +647,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		const abilityNames: string[] = Object.values(species.abilities);
-		abilityNames.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
-
+		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
 
 		if (abilityNames.length > 1) {
 			const abilities = abilityNames.map(name => this.dex.abilities.get(name));

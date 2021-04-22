@@ -952,9 +952,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	// Prioritize searches with the least alternatives.
 	const accumulateKeyCount = (count: number, searchData: AnyObject) =>
 		count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
-	searches.sort(
-		(a, b) => Object.values(a).reduce(accumulateKeyCount, 0) - Object.values(b).reduce(accumulateKeyCount, 0)
-	);
+	Utils.sortBy(searches, search => (
+		Object.values(search).reduce(accumulateKeyCount, 0)
+	));
 
 	for (const alts of searches) {
 		if (alts.skip) continue;
@@ -1164,30 +1164,21 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (sort) {
 			const stat = sort.slice(0, -1);
 			const direction = sort.slice(-1);
-			results.sort((a, b) => {
-				const mon1 = mod.species.get(a);
-				const mon2 = mod.species.get(b);
-				let monStat1 = 0;
-				let monStat2 = 0;
+			Utils.sortBy(results, name => {
+				const mon = mod.species.get(name);
+				let monStat = 0;
 				if (stat === 'bst') {
-					for (const monStats in mon1.baseStats) {
-						monStat1 += mon1.baseStats[monStats as StatID];
-						monStat2 += mon2.baseStats[monStats as StatID];
-					}
+					monStat = mon.bst;
 				} else if (stat === 'weight') {
-					monStat1 = mon1.weighthg;
-					monStat2 = mon2.weighthg;
+					monStat = mon.weighthg;
 				} else if (stat === 'height') {
-					monStat1 = mon1.heightm;
-					monStat2 = mon2.heightm;
+					monStat = mon.heightm;
 				} else if (stat === 'gen') {
-					monStat1 = mon1.gen;
-					monStat2 = mon2.gen;
+					monStat = mon.gen;
 				} else {
-					monStat1 = mon1.baseStats[stat as StatID];
-					monStat2 = mon2.baseStats[stat as StatID];
+					monStat = mon.baseStats[stat as StatID];
 				}
-				return (monStat1 - monStat2) * (direction === '+' ? 1 : -1);
+				return monStat * (direction === '+' ? 1 : -1);
 			});
 		}
 		let notShown = 0;
@@ -1908,13 +1899,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		if (sort) {
 			const prop = sort.slice(0, -1);
 			const direction = sort.slice(-1);
-			results.sort((a, b) => {
-				let move1prop = dex[toID(a)][prop as keyof Move] as number;
-				let move2prop = dex[toID(b)][prop as keyof Move] as number;
+			Utils.sortBy(results, moveName => {
+				let moveProp = dex[toID(moveName)][prop as keyof Move] as number;
 				// convert booleans to 0 or 1
-				if (typeof move1prop === 'boolean') move1prop = move1prop ? 1 : 0;
-				if (typeof move2prop === 'boolean') move2prop = move2prop ? 1 : 0;
-				return (move1prop - move2prop) * (direction === '+' ? 1 : -1);
+				if (typeof moveProp === 'boolean') moveProp = moveProp ? 1 : 0;
+				return moveProp * (direction === '+' ? 1 : -1);
 			});
 		}
 		let notShown = 0;
