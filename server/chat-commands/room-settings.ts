@@ -730,7 +730,7 @@ export const commands: ChatCommands = {
 	makechatroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('makeroom');
-		let [title, sectionTarget] = this.splitOne(target).map(toID);
+		let [title, sectionTarget] = this.splitOne(target);
 		const id = toID(title);
 		if (!sectionTarget) sectionTarget = (cmd.includes('public') ? 'none' : 'nonpublic') as ID;
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
