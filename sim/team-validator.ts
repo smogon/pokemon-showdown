@@ -9,6 +9,7 @@
 
 import {Dex, toID} from './dex';
 import {Utils} from '../lib';
+import {Tags} from '../data/tags';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -1333,36 +1334,25 @@ export class TeamValidator {
 			}
 		}
 
-		banReason = ruleTable.check(tierTag) || (tier === 'AG' ? ruleTable.check('pokemontag:uber') : null);
-		if (banReason) {
-			return `${tierSpecies.name} is in ${tier}, which is ${banReason}.`;
-		}
-		if (banReason === '') return null;
-
-		banReason = ruleTable.check(doublesTierTag);
-		if (banReason) {
-			return `${tierSpecies.name} is in ${doublesTier}, which is ${banReason}.`;
-		}
-		if (banReason === '') return null;
-
-		banReason = ruleTable.check('pokemontag:allpokemon');
-		if (banReason) {
-			return `${species.name} is not in the list of allowed pokemon.`;
-		}
-
-		// obtainability
-		if (tierSpecies.isNonstandard) {
-			banReason = ruleTable.check('pokemontag:' + toID(tierSpecies.isNonstandard));
-			if (banReason) {
-				if (tierSpecies.isNonstandard === 'Unobtainable') {
-					return `${tierSpecies.name} is not obtainable without hacking or glitches.`;
+		for (const ruleid of ruleTable.tagRules) {
+			if (ruleid.startsWith('*')) continue;
+			const tag = Tags[ruleid.slice(12)];
+			if ((tag.speciesFilter || tag.genericFilter)!(tierSpecies)) {
+				if (ruleid.startsWith('+')) return null;
+				if (tag.name === 'Past' || tag.name === 'Future') {
+					return `${tierSpecies.name} does not exist in Gen ${dex.gen}.`;
 				}
-				if (tierSpecies.isNonstandard === 'Gigantamax') {
+				if (tag.name === 'CAP') {
+					return `${tierSpecies.name} is a CAP and does not exist in this game.`;
+				}
+				if (tag.name === 'Unobtainable') {
+					return `${tierSpecies.name} is not possible to obtain in this game.`;
+				}
+				if (tag.name === 'Gigantamax') {
 					return `${tierSpecies.name} is not obtainable without Gigantamaxing, even through hacking.`;
 				}
-				return `${tierSpecies.name} is tagged ${tierSpecies.isNonstandard}, which is ${banReason}.`;
+				return `${species.name} is tagged ${tag.name}, which is ${banReason}.`;
 			}
-			if (banReason === '') return null;
 		}
 
 		// Special casing for Pokemon that can Gmax, but their Gmax factor cannot be legally obtained
@@ -1374,15 +1364,9 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		if (tierSpecies.isNonstandard && tierSpecies.isNonstandard !== 'Unobtainable') {
-			banReason = ruleTable.check('nonexistent', setHas);
-			if (banReason) {
-				if (['Past', 'Future'].includes(tierSpecies.isNonstandard)) {
-					return `${tierSpecies.name} does not exist in Gen ${dex.gen}.`;
-				}
-				return `${tierSpecies.name} does not exist in this game.`;
-			}
-			if (banReason === '') return null;
+		banReason = ruleTable.check('pokemontag:allpokemon');
+		if (banReason) {
+			return `${species.name} is not in the list of allowed pokemon.`;
 		}
 
 		return null;
