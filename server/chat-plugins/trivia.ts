@@ -895,7 +895,14 @@ export class Trivia extends Rooms.RoomGame {
 	getWinningMessage(winners: TopPlayer[]) {
 		const prizes = this.getPrizes();
 		const [p1, p2, p3] = winners;
-		const initialPart = this.room.tr`${Utils.escapeHTML(p1.name)} won the game with a final score of <strong>${p1.player.points}</strong>, and `;
+
+		let initialPart = this.room.tr`${Utils.escapeHTML(p1.name)} won the game with a final score of <strong>${p1.player.points}</strong>`;
+		if (!this.game.givesPoints) {
+			return `${initialPart}.`;
+		} else {
+			initialPart += this.room.tr`, and `;
+		}
+
 		switch (winners.length) {
 		case 1:
 			return this.room.tr`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points!`;
@@ -911,8 +918,9 @@ export class Trivia extends Rooms.RoomGame {
 	getStaffEndMessage(winners: TopPlayer[], mapper: (k: TopPlayer) => string) {
 		let message = "";
 		const winnerParts: ((k: TopPlayer) => string)[] = [
-			winner => this.room.tr`User ${mapper(winner)} won the game of ${this.game.mode} ` +
-				this.room.tr`mode trivia under the ${this.game.category} category with ` +
+			winner => this.room.tr`User ${mapper(winner)} won the game of ` +
+				(this.game.givesPoints ? this.room.tr`ranked ` : this.room.tr`unranked `) +
+				this.room.tr`${this.game.mode} mode trivia under the ${this.game.category} category with ` +
 				this.room.tr`a cap of ${this.getDisplayableCap()} ` +
 				this.room.tr`with ${winner.player.points} points and ` +
 				this.room.tr`${winner.player.correctAnswers} correct answers`,
@@ -1636,6 +1644,7 @@ const triviaCommands: ChatCommands = {
 	},
 	newhelp: [
 		`/trivia new [mode], [category], [length] - Begin a new Trivia game.`,
+		`/trivia unrankednew [mode], [category], [length] - Begin a new Trivia game that does not award leaderboard points.`,
 		`/trivia sortednew [mode], [category], [length] — Begin a new Trivia game in which the question order is not randomized.`,
 		`Requires: + % @ # &`,
 	],
@@ -2472,6 +2481,7 @@ const triviaCommands: ChatCommands = {
 			`</ul></details>` +
 			`<details><summary><strong>Game commands</strong></summary><ul>` +
 				`<li><code>/trivia new [mode], [category], [length]</code> - Begin signups for a new Trivia game. Requires: + % @ # &</li>` +
+				`<li><code>/trivia unrankednew [mode], [category], [length]</code> - Begin a new Trivia game that does not award leaderboard points. Requires: + % @ # &</li>` +
 				`<li><code>/trivia sortednew [mode], [category], [length]</code> — Begin a new Trivia game in which the question order is not randomized. Requires: + % @ # &</li>` +
 				`<li><code>/trivia join</code> - Join a game of Trivia or Mastermind during signups.</li>` +
 				`<li><code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # &</li>` +
