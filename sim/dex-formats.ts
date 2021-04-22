@@ -620,7 +620,7 @@ export class DexFormats {
 	getTagRules(ruleTable: RuleTable) {
 		const tagRules = [];
 		for (const ruleid of ruleTable.keys()) {
-			if (ruleid.startsWith('+pokemontag:') || ruleid.startsWith('-pokemontag:') || ruleid.startsWith('*pokemontag:')) {
+			if (/^[+*-]pokemontag:/.test(ruleid)) {
 				if (ruleid.slice(12) === 'allpokemon') continue;
 				tagRules.push(ruleid);
 			}
