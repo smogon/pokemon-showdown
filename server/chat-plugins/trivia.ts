@@ -109,7 +109,7 @@ interface TriviaGame {
 	givesPoints?: boolean;
 }
 
-type TriviaLadder = TriviaRank[][];
+type TriviaLadder = ID[][];
 
 interface TriviaData {
 	/** category:questions */
@@ -334,7 +334,7 @@ class Ladder {
 				}
 				if (i === 0 && rank < 15) {
 					if (!ladder[rank]) ladder[rank] = [];
-					ladder[rank].push(leader as unknown as TriviaRank);
+					ladder[rank].push(leader as ID);
 				}
 				ranks[leader][i] = rank + 1;
 			}
