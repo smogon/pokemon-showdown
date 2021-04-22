@@ -3227,6 +3227,36 @@ export const Formats: FormatList = [
 		banlist: ['UU', 'NUBL'],
 	},
 	{
+		name: "[Gen 2] Nintendo Cup 2000",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3682691/">Nintendo Cup 2000 Resource Hub</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Differences between Nintendo Cup 2000 and GSC</a>`,
+		],
+
+		mod: 'gen2',
+		cupLevelLimit: {
+			range: [50, 55],
+			total: 155,
+		},
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		searchShow: false,
+		ruleset: ['Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause', 'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'Cup Level Limit', 'Nintendo Cup 2000 Move Legality'],
+		banlist: ['Uber'],
+	},
+	{
+		name: "[Gen 2] Stadium OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Placeholder</a>`,
+		],
+
+		mod: 'gen2stadium2',
+		searchShow: false,
+		ruleset: ['Standard'],
+	},
+	{
 		name: "[Gen 2] Custom Game",
 
 		mod: 'gen2',
@@ -3288,6 +3318,90 @@ export const Formats: FormatList = [
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
 		],
+	},
+	{
+		name: "[Gen 1] Nintendo Cup 1997",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3682412/">Nintendo Cup 1997 Discussion &amp; Resources</a>`,
+		],
+
+		mod: 'gen1jpn',
+		cupLevelLimit: {
+			range: [50, 55],
+			total: 155,
+		},
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		searchShow: false,
+		ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Uber'],
+		onValidateSet(set) {
+			const rgb97Legality: {[speciesid: string]: {[moveid: string]: string | number}} = {
+				charizard: {fly: 'illegal'},
+				butterfree: {
+					confusion: 12, poisonpowder: 15, stunspore: 16, sleeppowder: 17, supersonic: 21,
+					psybeam: 34, flash: 'illegal', gust: 'illegal',
+				},
+				fearow: {payday: 'illegal'},
+				pikachu: {quickattack: 16, tailwhip: 'illegal', slam: 'illegal', lightscreen: 'illegal'},
+				raichu: {quickattack: 16, tailwhip: 'illegal', slam: 'illegal', lightscreen: 'illegal'},
+				nidoranf: {doublekick: 43},
+				nidorina: {doublekick: 43},
+				nidoqueen: {doublekick: 43},
+				nidoranm: {doublekick: 43},
+				nidorino: {doublekick: 43},
+				nidoking: {doublekick: 43},
+				venonat: {poisonpowder: 24, supersonic: 'illegal', confusion: 'illegal'},
+				venomoth: {poisonpowder: 24, supersonic: 'illegal'},
+				diglett: {cut: 'illegal'},
+				dugtrio: {cut: 'illegal'},
+				psyduck: {amnesia: 'illegal'},
+				golduck: {amnesia: 'illegal'},
+				mankey: {lowkick: 'illegal', screech: 'illegal'},
+				primeape: {lowkick: 'illegal', screech: 'illegal'},
+				kadabra: {kinesis: 'illegal'},
+				alakazam: {kinesis: 'illegal'},
+				rapidash: {payday: 'illegal'},
+				cubone: {tailwhip: 'illegal', headbutt: 'illegal'},
+				marowak: {tailwhip: 'illegal', headbutt: 'illegal'},
+				chansey: {tailwhip: 'illegal'},
+				tangela: {absorb: 29, growth: 49, vinewhip: 'illegal'},
+				scyther: {wingattack: 'illegal'},
+				pinsir: {bind: 'illegal'},
+				magikarp: {dragonrage: 'illegal'},
+				eevee: {quickattack: 27, tailwhip: 31, bite: 37, growl: 'illegal', focusenergy: 'illegal'},
+				vaporeon: {
+					quickattack: 27, tailwhip: 31, watergun: 31, bite: 37, acidarmor: 42, haze: 44, mist: 48, hydropump: 54,
+					growl: 'illegal', focusenergy: 'illegal', aurorabeam: 'illegal',
+				},
+				jolteon: {
+					quickattack: 27, tailwhip: 31, thundershock: 31, bite: 37, doublekick: 42, agility: 44,
+					pinmissile: 48, growl: 'illegal', focusenergy: 'illegal',
+				},
+				flareon: {
+					quickattack: 27, tailwhip: 31, ember: 31, bite: 37, leer: 42, firespin: 44, flamethrower: 54,
+					growl: 'illegal', focusenergy: 'illegal', smog: 'illegal',
+				},
+			};
+			const species = this.dex.species.get(set.species || set.name);
+			const legalityList = rgb97Legality[species.id];
+			if (!legalityList) return;
+			const problems = [];
+			if (set.moves) {
+				for (const moveid of set.moves.map(this.toID)) {
+					if (legalityList[moveid]) {
+						if (legalityList[moveid] === 'illegal') {
+							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} in Japanese versions of the Gen 1 games.`);
+						} else if (set.level < legalityList[moveid]) {
+							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} before level ${legalityList[moveid]} in 1997.`);
+						}
+					}
+				}
+			}
+			return problems;
+		},
 	},
 	{
 		name: "[Gen 1] Stadium OU",

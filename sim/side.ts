@@ -96,6 +96,7 @@ export class Side {
 	/**
 	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon
 	 * (this is for Counter and Mirror Move)
+	 * This is also used for checking Self-KO clause in Pokemon Stadium 2.
 	 */
 	lastMove: Move | null;
 
@@ -735,17 +736,24 @@ export class Side {
 		const positions = (('' + data)
 			.split(data.includes(',') ? ',' : '')
 			.map(datum => parseInt(datum) - 1));
-
+		const format = this.battle.format;
 		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
 		if (this.requestState !== 'teampreview') {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
-
 		// hack for >6 pokemon Custom Game
 		while (positions.length >= 6 && positions.length < this.maxTeamSize && positions.length < this.pokemon.length) {
 			positions.push(positions.length);
 		}
-
+		if (format.teamLength?.battle && format.cupLevelLimit) {
+			let totalLevel = 0;
+			for (const pos of positions.slice(0, format.teamLength.battle)) {
+				totalLevel += this.pokemon[pos].level;
+			}
+			if (totalLevel > format.cupLevelLimit.total) {
+				return this.emitChoiceError(`Your selected team's combined level of ${totalLevel} exceeds the format's maximum of ${format.cupLevelLimit.total}, please select a valid team of ${format.teamLength.battle} Pokémon`);
+			}
+		}
 		for (const pos of positions) {
 			const index = this.choice.actions.length;
 			if (index >= this.maxTeamSize || index >= this.pokemon.length) {
