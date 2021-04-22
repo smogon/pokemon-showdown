@@ -275,7 +275,7 @@ export const Formats: FormatList = [
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Alt GBU'],
+		ruleset: ['Single Restricted GBU'],
 		minSourceGen: 8,
 	},
 	{

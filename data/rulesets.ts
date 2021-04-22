@@ -22,19 +22,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 		],
 		banlist: ['Soul Dew'],
 	},
-	altgbu: {
-		effectType: 'ValidatorRule',
-		name: 'Alt GBU',
-		desc: "The standard ruleset for all official in-game Pok&eacute;mon tournaments and Battle Spot, just programmed differently.",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
-		banlist: ['Mythical', 'Restricted Legendary'],
-
-		onValidateSet(set, format) {
-			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
-				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
-			}
-		},
-	},
 	standardgbu: {
 		effectType: 'ValidatorRule',
 		name: 'Standard GBU',
