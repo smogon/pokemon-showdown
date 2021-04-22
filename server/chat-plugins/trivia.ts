@@ -94,10 +94,10 @@ interface TriviaQuestion {
 	type?: string;
 }
 
-type TriviaRank = [number, number, number];
+type TriviaScores = [number, number, number];
 
 interface TriviaLeaderboard {
-	[k: string]: TriviaRank;
+	[k: string]: TriviaScores;
 }
 
 interface TriviaGame {
@@ -117,7 +117,6 @@ interface TriviaData {
 	submissions?: {[k: string]: TriviaQuestion[]};
 	leaderboard?: TriviaLeaderboard;
 	altLeaderboard?: TriviaLeaderboard;
-	ladder?: TriviaLadder;
 	/* `scores` key is a user ID */
 	history?: (TriviaGame & {scores?: {[k: string]: number}})[];
 	moveEventQuestions?: boolean;
