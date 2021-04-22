@@ -23,4 +23,18 @@ describe('Red Card', function () {
 		battle.makeChoices();
 		assert.holdsItem(battle.p1.active[0]);
 	});
+
+	it(`should trigger if the target is still in battle`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Aggron", item: 'redcard', moves: ['rockslide']},
+			{species: "Wynaut", ability: 'prankster', level: 1, moves: ['sleeptalk']},
+		], [
+			{species: "Conkeldurr", moves: ['sleeptalk']},
+			{species: "Gardevoir", moves: ['strugglebug']},
+			{species: "Corsola", moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		assert.false(battle.p1.active[0].item, "red card should be used");
+	});
 });
