@@ -4412,6 +4412,10 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onAfterMoveSecondary(target, source, move) {
+			// check faint queue to evaluate destiny bond first
+			if (source && source.battle.faintQueue.length > 0) {
+				source.battle.faintMessages();
+			}
 			if (source && source !== target && source.hp && target.hp && move && move.category !== 'Status') {
 				if (!source.isActive || !this.canSwitch(source.side) || source.forceSwitchFlag || target.forceSwitchFlag) {
 					return;

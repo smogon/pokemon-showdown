@@ -10,7 +10,7 @@ describe('Red Card', function () {
 		battle.destroy();
 	});
 
-	it.skip(`should not trigger if the target should be KOed from Destiny Bond and also not crash the client`, function () {
+	it(`should not trigger if the target should be KOed from Destiny Bond and also not crash the client`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Aggron", item: 'redcard', moves: ['rockslide']},
 			{species: "Wynaut", ability: 'prankster', level: 1, moves: ['destinybond']},
