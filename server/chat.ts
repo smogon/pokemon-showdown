@@ -1708,7 +1708,7 @@ export const Chat = new class {
 				const base = commandTable[entry];
 				if (!base) continue;
 				if (!base.aliases) base.aliases = [];
-				base.aliases.push(cmd);
+				if (!base.aliases.includes(cmd)) base.aliases.push(cmd);
 				continue;
 			}
 			if (typeof entry !== 'function') continue;
@@ -1927,14 +1927,17 @@ export const Chat = new class {
 		const results: AnnotatedChatHandler[] = [];
 		for (const cmd in table) {
 			const handler = table[cmd];
-			if (Array.isArray(handler) || !handler || typeof handler === 'string') continue;
+			if (Array.isArray(handler) || !handler || ['string', 'boolean'].includes(typeof handler)) {
+				continue;
+			}
 			if (typeof handler === 'object') {
 				results.push(...this.allCommands(handler));
 				continue;
 			}
 			results.push(handler as AnnotatedChatHandler);
 		}
-		return results;
+		if (table !== Chat.commands) return results;
+		return results.filter((handler, i) => results.indexOf(handler) === i);
 	}
 
 	/**
