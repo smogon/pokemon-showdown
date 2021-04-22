@@ -734,7 +734,7 @@ export const commands: ChatCommands = {
 		const id = toID(title);
 		if (!sectionTarget) sectionTarget = (cmd.includes('public') ? 'none' : 'nonpublic') as ID;
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
-		const section = room.sanitizeSection(sectionTarget);
+		const section = room.validateSection(sectionTarget);
 		if (!cmd.includes('public') && section !== 'nonpublic') {
 			throw new Chat.ErrorMessage(`Only public rooms can be placed into room sections.`);
 		}
@@ -1095,7 +1095,7 @@ export const commands: ChatCommands = {
 			room.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
-			if (!room.settings.isPersonal && !room.battle) room.adjustSection('none');
+			if (!room.settings.isPersonal && !room.battle) room.setSection('none');
 			room.setPrivate(false);
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
@@ -1116,7 +1116,7 @@ export const commands: ChatCommands = {
 			}
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			if (!room.settings.isPersonal && !room.battle) room.adjustSection('nonpublic');
+			if (!room.settings.isPersonal && !room.battle) room.setSection('nonpublic');
 			room.setPrivate(setting);
 			room.privacySetter = new Set([user.id]);
 		}
@@ -1508,7 +1508,7 @@ export const commands: ChatCommands = {
 			return;
 		}
 		this.checkCan('gdeclare');
-		const section = room.adjustSection(target);
+		const section = room.setSection(target);
 		this.sendReply(`The room section is now: ${sectionNames[section]}`);
 
 		this.privateGlobalModAction(`${user.name} changed the room section of ${room.title} to ${sectionNames[section]}.`);

@@ -829,28 +829,28 @@ export abstract class BasicRoom {
 			}
 		}
 	}
-	sanitizeSection(section: string) {
+	validateSection(section: string) {
 		const target = toID(section);
 		if (!RoomSections.sections.includes(target as any)) {
 			throw new Chat.ErrorMessage(`"${target}" is not a valid room section. Valid categories include: ${RoomSections.sections.join(', ')}`);
 		}
 		return target as RoomSection;
 	}
-	adjustSection(newSection: string) {
+	setSection(section: string) {
 		if (!this.persist) {
 			throw new Chat.ErrorMessage(`You cannot change the section of temporary rooms.`);
 		}
-		if (this.settings.isPrivate && [true, 'hidden'].includes(this.settings.isPrivate) && newSection !== 'nonpublic') {
+		const validatedSection = this.validateSection(section);
+		if (this.settings.isPrivate && [true, 'hidden'].includes(this.settings.isPrivate) && validatedSection !== 'nonpublic') {
 			throw new Chat.ErrorMessage(`Only public rooms can change their section.`);
 		}
-		const section = this.sanitizeSection(newSection);
 		const oldSection = this.settings.section;
 		if (oldSection === section) {
 			throw new Chat.ErrorMessage(`${this.title}'s room section is already set to "${RoomSections.sectionNames[oldSection]}".`);
 		}
-		this.settings.section = section;
+		this.settings.section = validatedSection;
 		this.saveSettings();
-		return section;
+		return validatedSection;
 	}
 
 	/**
