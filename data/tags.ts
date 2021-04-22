@@ -114,39 +114,39 @@ export const Tags: {[id: string]: TagData} = {
 	// -----
 	uber: {
 		name: "Uber",
-		speciesFilter: species => species.tier === 'Uber',
+		speciesFilter: species => toID(species.tier) === 'uber' || species.tier === 'AG',
 	},
 	ou: {
 		name: "OU",
-		speciesFilter: species => species.tier === 'OU',
+		speciesFilter: species => toID(species.tier) === 'ou',
 	},
 	uubl: {
 		name: "UUBL",
-		speciesFilter: species => species.tier === 'UUBL',
+		speciesFilter: species => toID(species.tier) === 'uubl',
 	},
 	uu: {
 		name: "UU",
-		speciesFilter: species => species.tier === 'UU',
+		speciesFilter: species => toID(species.tier) === 'uu',
 	},
 	rubl: {
 		name: "RUBL",
-		speciesFilter: species => species.tier === 'RUBL',
+		speciesFilter: species => toID(species.tier) === 'rubl',
 	},
 	ru: {
 		name: "RU",
-		speciesFilter: species => species.tier === 'RU',
+		speciesFilter: species => toID(species.tier) === 'ru',
 	},
 	nubl: {
 		name: "NUBL",
-		speciesFilter: species => species.tier === 'NUBL',
+		speciesFilter: species => toID(species.tier) === 'nubl',
 	},
 	nu: {
 		name: "NU",
-		speciesFilter: species => species.tier === 'NU',
+		speciesFilter: species => toID(species.tier) === 'nu',
 	},
 	publ: {
 		name: "PUBL",
-		speciesFilter: species => species.tier === 'PUBL',
+		speciesFilter: species => toID(species.tier) === 'publ',
 	},
 	pu: {
 		name: "PU",
