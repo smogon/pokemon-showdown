@@ -730,37 +730,38 @@ export const commands: ChatCommands = {
 	makechatroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('makeroom');
-		let [id, sectionTarget] = this.splitOne(target).map(toID);
+		let [title, sectionTarget] = this.splitOne(target).map(toID);
+		const id = toID(title);
 		if (!sectionTarget) sectionTarget = (cmd.includes('public') ? 'none' : 'nonpublic') as ID;
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
 		const section = room.sanitizeSection(sectionTarget);
 		if (!cmd.includes('public') && section !== 'nonpublic') {
 			throw new Chat.ErrorMessage(`Only public rooms can be placed into room sections.`);
 		}
-		if (!Rooms.global.addChatRoom(target, section)) {
-			return this.errorReply(`An error occurred while trying to create the room '${target}'.`);
+		if (!Rooms.global.addChatRoom(title, {section})) {
+			return this.errorReply(`An error occurred while trying to create the room '${title}'.`);
 		}
 
-		const targetRoom = Rooms.search(target);
+		const targetRoom = Rooms.search(title);
 		if (!targetRoom) throw new Error(`Error in room creation.`);
 		if (cmd === 'makeprivatechatroom') {
 			if (!targetRoom.persist) throw new Error(`Private chat room created without settings.`);
 			targetRoom.setPrivate(true);
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
-				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
+				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Utils.escapeHTML(title)}</b></div>`).update();
 			}
-			this.sendReply(`The private chat room '${target}' was created.`);
+			this.sendReply(`The private chat room '${title}' was created.`);
 		} else {
 			const staffRoom = Rooms.get('staff');
 			if (staffRoom) {
-				staffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
+				staffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(title)}</b></div>`).update();
 			}
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
-				upperStaffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(target)}</b></div>`).update();
+				upperStaffRoom.add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Utils.escapeHTML(title)}</b></div>`).update();
 			}
-			this.sendReply(`The chat room '${target}' was created.`);
+			this.sendReply(`The chat room '${title}' was created.`);
 		}
 	},
 	makechatroomhelp: [
@@ -835,12 +836,13 @@ export const commands: ChatCommands = {
 
 		const titleMsg = Utils.html`Welcome to ${parent ? room.title : user.name}'s` +
 			Utils.html`${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
-		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, 'nonpublic', {
+		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
 			creationTime: Date.now(),
 			modjoin: parent ? null : '+',
 			parentid: parent,
+			section: 'nonpublic',
 			auth: {},
 			introMessage: `` +
 				`<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//${Config.routes.client}/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,

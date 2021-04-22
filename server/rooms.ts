@@ -57,8 +57,9 @@ interface ChatRoomTable {
 	title: string;
 	desc: string;
 	userCount: number;
-	section: RoomSection;
+	section?: RoomSection;
 	subRooms?: string[];
+	prizewinner?: true;
 }
 
 interface ShowRequest {
@@ -219,7 +220,7 @@ export abstract class BasicRoom {
 	 */
 	nthMessageHandlers: Map<MessageHandler, number>;
 
-	constructor(roomid: RoomID, title?: string, section: RoomSection = 'none', options: Partial<RoomSettings> = {}) {
+	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
 		this.users = Object.create(null);
 		this.type = 'chat';
 		this.muteQueue = [];
@@ -250,7 +251,7 @@ export abstract class BasicRoom {
 			title: this.title,
 			auth: Object.create(null),
 			creationTime: Date.now(),
-			section,
+			section: 'none',
 		};
 		this.persist = false;
 		this.hideReplay = false;
@@ -264,6 +265,7 @@ export abstract class BasicRoom {
 		this.reportJoinsInterval = null;
 
 		options.title = this.title;
+		if (options.section) this.settings.section = options.section;
 		if (options.isHelp) options.noAutoTruncate = true;
 		this.reportJoins = !!(Config.reportjoins || options.isPersonal);
 		this.batchJoins = options.isPersonal ? 0 : Config.reportjoinsperiod || 0;
@@ -1185,7 +1187,7 @@ export class GlobalRoomState {
 			// where they are used for shared modlogs and the like
 			const id = toID(settings.title) as RoomID;
 			Monitor.notice("RESTORE CHATROOM: " + id);
-			const room = Rooms.createChatRoom(id, settings.title, settings.section, settings);
+			const room = Rooms.createChatRoom(id, settings.title, settings);
 			if (room.settings.aliases) {
 				for (const alias of room.settings.aliases) {
 					Rooms.aliases.set(alias, id);
@@ -1379,13 +1381,11 @@ export class GlobalRoomState {
 	}
 	getRooms(user: User) {
 		const roomsData: {
-			pspl: ChatRoomTable[],
 			chat: ChatRoomTable[],
 			sectionTitles: {[k: string]: string},
 			userCount: number,
 			battleCount: number,
 		} = {
-			pspl: [],
 			chat: [],
 			sectionTitles: RoomSections.sectionNames,
 			userCount: Users.onlineCount,
@@ -1399,36 +1399,31 @@ export class GlobalRoomState {
 				title: room.title,
 				desc: room.settings.desc || '',
 				userCount: room.userCount,
-				section: room.settings.section || 'none',
+				section: room.settings.section || undefined,
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
+			if (room.settings.pspl) roomData.prizewinner = true;
 
-			if (room.settings.pspl && roomData.section !== 'officialrooms') {
-				roomsData.pspl.push(roomData);
-			} else {
-				roomsData.chat.push(roomData);
-			}
+			roomsData.chat.push(roomData);
 		}
 		return roomsData;
 	}
 	sendAll(message: string) {
 		Sockets.roomBroadcast('', message);
 	}
-	addChatRoom(title: string, section: RoomSection = 'nonpublic') {
+	addChatRoom(title: string, options: Partial<RoomSettings> = {section: 'nonpublic'}) {
 		const id = toID(title) as RoomID;
 		if (['battles', 'rooms', 'ladder', 'teambuilder', 'home', 'all', 'public'].includes(id)) {
 			return false;
 		}
 		if (Rooms.rooms.has(id)) return false;
 
-		const settings = {
-			title,
-			auth: {},
-			creationTime: Date.now(),
-			section,
-		};
-		const room = Rooms.createChatRoom(id, title, section, settings);
+		if (!options.title) options.title = title;
+		options.auth = {};
+		options.creationTime = Date.now();
+		const settings: RoomSettings = {...options} as RoomSettings;
+		const room = Rooms.createChatRoom(id, title, settings);
 		if (id === 'lobby') Rooms.lobby = room;
 		this.settingsList.push(settings);
 		this.chatRooms.push(room);
@@ -1720,7 +1715,8 @@ export class GameRoom extends BasicRoom {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
 		options.isMultichannel = true;
-		super(roomid, title, 'none', options);
+		options.section = 'none';
+		super(roomid, title, options);
 		this.reportJoins = !!Config.reportbattlejoins;
 		this.settings.modchat = (Config.battlemodchat || null);
 
@@ -1882,9 +1878,9 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
-	createChatRoom(roomid: RoomID, title: string, section: RoomSection, options: Partial<RoomSettings>) {
+	createChatRoom(roomid: RoomID, title: string, options: Partial<RoomSettings>) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
-		const room: ChatRoom = new (BasicRoom as any)(roomid, title, section, options);
+		const room: ChatRoom = new (BasicRoom as any)(roomid, title, options);
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
