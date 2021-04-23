@@ -1087,7 +1087,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			} else if (playerOptions && playerOptions.hidden) {
 				privacySetter.add(playerOptions.user.id);
 			}
-			if (playerOptions) this.checkForcedUserSettings(playerOptions.user);
+			if (playerOptions?.user) this.checkForcedUserSettings(playerOptions.user);
 		}
 
 		if (privacySetter.size) {

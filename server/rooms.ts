@@ -1926,7 +1926,6 @@ export const Rooms = {
 
 		for (const p of players) {
 			if (p) {
-				battle.checkForcedUserSettings(p);
 				p.joinRoom(room);
 				Monitor.countBattle(p.latestIp, p.name);
 			}
