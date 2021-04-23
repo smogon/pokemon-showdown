@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {Pokemon} from "../sim";
 
 export const Items: {[itemid: string]: ItemData} = {
