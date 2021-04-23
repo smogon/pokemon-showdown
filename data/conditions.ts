@@ -382,7 +382,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 	healreplacement: {
 		// this is a slot condition
 		name: 'healreplacement',
-		onStart(side, source, sourceEffect) {
+		onStart(target, source, sourceEffect) {
 			this.effectData.sourceEffect = sourceEffect;
 			this.add('-activate', source, 'healreplacement');
 		},
@@ -453,7 +453,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
@@ -490,7 +490,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,
@@ -523,7 +523,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect, '[of] ' + source);
@@ -564,7 +564,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onImmunity(type, pokemon) {
@@ -598,7 +598,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return this.modify(spd, 1.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect, '[of] ' + source);
@@ -628,7 +628,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 			return 5;
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
@@ -659,7 +659,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return 0;
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,

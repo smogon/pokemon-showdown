@@ -725,7 +725,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Light Screen');
 			},
 			onSideResidualOrder: 21,
@@ -759,7 +759,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 1,
-			onStart(side) {
+			onSideStart(side) {
 				this.debug('Lunar Dance started on ' + side.name);
 			},
 			onSwitchInPriority: -1,
@@ -1036,7 +1036,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
 			onSideResidualOrder: 21,
@@ -1255,7 +1255,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return 3;
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Tailwind');
 			},
 			onModifySpe(spe) {
@@ -1317,11 +1317,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		condition: {
 			// this is a side condition
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectData.layers = 1;
 			},
-			onRestart(side) {
+			onSideRestart(side) {
 				if (this.effectData.layers >= 2) return false;
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectData.layers++;

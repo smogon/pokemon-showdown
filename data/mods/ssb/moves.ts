@@ -593,7 +593,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(1.2);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Wave Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -958,7 +958,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return 5;
 			},
 			// Stat modifying in scripts.ts
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Bane Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -2384,7 +2384,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				pokemon.side.removeSideCondition('gaelstrom');
 			},
-			onStart(side, source) {
+			onSideStart(side, source) {
 				side.addSideCondition(['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'][this.random(4)], source);
 			},
 		},
@@ -2477,7 +2477,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		sideCondition: 'leaveittotheteam',
 		condition: {
 			duration: 2,
-			onStart(side, source) {
+			onSideStart(side, source) {
 				this.debug('Leave it to the team! started on ' + side.name);
 				this.effectData.positions = [];
 				for (const i of side.active.keys()) {
@@ -2485,7 +2485,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectData.positions[source.position] = true;
 			},
-			onRestart(side, source) {
+			onSideRestart(side, source) {
 				this.effectData.positions[source.position] = true;
 			},
 			onSwitchInPriority: 1,
@@ -2824,7 +2824,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		sideCondition: 'nexthunt',
 		condition: {
 			duration: 1,
-			onStart(side, source) {
+			onSideStart(side, source) {
 				this.debug('/nexthunt started on ' + side.name);
 				this.effectData.positions = [];
 				for (const i of side.active.keys()) {
@@ -2832,7 +2832,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectData.positions[source.position] = true;
 			},
-			onRestart(side, source) {
+			onSideRestart(side, source) {
 				this.effectData.positions[source.position] = true;
 			},
 			onSwitchInPriority: 1,
@@ -3657,7 +3657,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(0.5);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Swampy Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -3882,7 +3882,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move && !this.dex.getImmunity(move, type)) return 1;
 				return -typeMod;
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Inversion Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -4060,7 +4060,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', `${target.name} got a boost by the terrain!`);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Pitch Black Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -4458,7 +4458,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Tempest Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -4723,7 +4723,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		sideCondition: 'herocreation',
 		condition: {
 			duration: 1,
-			onStart(side, source) {
+			onSideStart(side, source) {
 				this.debug('Hero Creation started on ' + side.name);
 				this.effectData.positions = [];
 				for (const i of side.active.keys()) {
@@ -4731,7 +4731,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectData.positions[source.position] = true;
 			},
-			onRestart(side, source) {
+			onSideRestart(side, source) {
 				this.effectData.positions[source.position] = true;
 			},
 			onSwitchInPriority: 1,

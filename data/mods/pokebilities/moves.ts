@@ -86,7 +86,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return null;
 				}
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Safeguard');
 			},
 			onSideResidualOrder: 21,

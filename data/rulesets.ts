@@ -419,7 +419,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`One vs One is for singles formats.`, `(Use Two vs Two in doubles)`];
 			}
 		},
-		onStart() {
+		onFieldStart() {
 			if (this.format.gameType === 'singles') (this.format as any).teamLength = {battle: 1};
 		},
 	},
@@ -432,7 +432,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`Two vs Two is for non-triples formats.`];
 			}
 		},
-		onStart() {
+		onFieldStart() {
 			if (this.format.gameType !== 'triples') (this.format as any).teamLength = {battle: 2};
 		},
 	},

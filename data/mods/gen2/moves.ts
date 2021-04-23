@@ -367,7 +367,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 5,
 			// Sp. Def boost applied directly in stat calculation
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
 			onSideResidualOrder: 21,
@@ -562,7 +562,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 5,
 			// Defense boost applied directly in stat calculation
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
 			onSideResidualOrder: 21,
@@ -671,7 +671,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		condition: {
 			// this is a side condition
-			onStart(side) {
+			onSideStart(side) {
 				if (!this.effectData.layers || this.effectData.layers === 0) {
 					this.add('-sidestart', side, 'Spikes');
 					this.effectData.layers = 1;

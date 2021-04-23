@@ -1833,7 +1833,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return this.chainModify(1.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'The hail became extremely chilling!');
 		},
@@ -1870,7 +1870,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Winter Hail',
 		effectType: 'Weather',
 		duration: 0,
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'It became winter!');
 		},
@@ -2147,7 +2147,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Turbulence',
 		effectType: 'Weather',
 		duration: 0,
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,
@@ -2211,7 +2211,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return this.chainModify(0.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
@@ -2251,7 +2251,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Aurora Veil from starting!`);
 				return null;
@@ -2282,7 +2282,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Light Screen from starting!`);
 				return null;
@@ -2314,7 +2314,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Mist from starting!`);
 				return null;
@@ -2345,7 +2345,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Reflect from starting!`);
 				return null;
@@ -2386,7 +2386,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return null;
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Safeguard from starting!`);
 				return null;
@@ -2400,7 +2400,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 	},
 	gmaxsteelsurge: {
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Steel Spikes from starting!`);
 				return null;
@@ -2421,7 +2421,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	spikes: {
 		name: "Spikes",
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Spikes from starting!`);
 				return null;
@@ -2429,7 +2429,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.effectData.layers = 1;
 			this.add('-sidestart', side, 'move: Spikes');
 		},
-		onRestart(side) {
+		onSideRestart(side) {
 			if (this.effectData.layers >= 3) return false;
 			this.add('-sidestart', side, 'Spikes');
 			this.effectData.layers++;
@@ -2443,7 +2443,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	stealthrock: {
 		name: "Stealth Rock",
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Stealth Rock from starting!`);
 				return null;
@@ -2458,7 +2458,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	stickyweb: {
 		name: "Sticky Web",
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Sticky Web from starting!`);
 				return null;
@@ -2474,7 +2474,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	toxicspikes: {
 		name: "Toxic Spikes",
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Toxic Spikes from starting!`);
 				return null;
@@ -2482,7 +2482,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-sidestart', side, 'move: Toxic Spikes');
 			this.effectData.layers = 1;
 		},
-		onRestart(side) {
+		onSideRestart(side) {
 			if (this.effectData.layers >= 2) return false;
 			this.add('-sidestart', side, 'move: Toxic Spikes');
 			this.effectData.layers++;

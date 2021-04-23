@@ -798,7 +798,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 				}
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Aurora Veil');
 			},
 			onSideResidualOrder: 21,
@@ -3961,10 +3961,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		condition: {
 			duration: 2,
-			onStart() {
+			onFieldStart() {
 				this.effectData.multiplier = 1;
 			},
-			onRestart() {
+			onFieldRestart() {
 				if (this.effectData.duration !== 2) {
 					this.effectData.duration = 2;
 					if (this.effectData.multiplier < 5) {
@@ -4076,7 +4076,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return this.chainModify([5325, 4096]);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -6669,7 +6669,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		condition: {
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
 			onSwitchIn(pokemon) {
@@ -7163,7 +7163,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return this.chainModify([5325, 4096]);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -7235,7 +7235,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
-			onStart() {
+			onFieldStart() {
 				this.add('-fieldstart', 'move: Gravity');
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;
@@ -9659,7 +9659,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 				}
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
 			onSideResidualOrder: 21,
@@ -9835,7 +9835,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		sideCondition: 'luckychant',
 		condition: {
 			duration: 5,
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Lucky Chant'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
 			},
 			onCriticalHit: false,
@@ -11321,7 +11321,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 				}
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Mist');
 			},
 			onSideResidualOrder: 21,
@@ -11414,7 +11414,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return this.chainModify(0.5);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -11600,7 +11600,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pseudoWeather: 'mudsport',
 		condition: {
 			duration: 5,
-			onStart(side, source) {
+			onSideStart(side, source) {
 				this.add('-fieldstart', 'move: Mud Sport', '[of] ' + source);
 			},
 			onBasePowerPriority: 1,
@@ -13196,7 +13196,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return this.chainModify([5325, 4096]);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -13827,7 +13827,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 				}
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
 			onSideResidualOrder: 21,
@@ -14529,7 +14529,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return null;
 				}
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Safeguard');
 			},
 			onSideResidualOrder: 21,
@@ -16311,11 +16311,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		sideCondition: 'spikes',
 		condition: {
 			// this is a side condition
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectData.layers = 1;
 			},
-			onRestart(side) {
+			onSideRestart(side) {
 				if (this.effectData.layers >= 3) return false;
 				this.add('-sidestart', side, 'Spikes');
 				this.effectData.layers++;
@@ -16599,7 +16599,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		sideCondition: 'stealthrock',
 		condition: {
 			// this is a side condition
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn(pokemon) {
@@ -16720,7 +16720,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {reflectable: 1},
 		sideCondition: 'stickyweb',
 		condition: {
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
 			onSwitchIn(pokemon) {
@@ -17599,7 +17599,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 4;
 			},
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Tailwind');
 			},
 			onModifySpe(spe, pokemon) {
@@ -18312,11 +18312,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		sideCondition: 'toxicspikes',
 		condition: {
 			// this is a side condition
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectData.layers = 1;
 			},
-			onRestart(side) {
+			onSideRestart(side) {
 				if (this.effectData.layers >= 2) return false;
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectData.layers++;
@@ -19084,7 +19084,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pseudoWeather: 'watersport',
 		condition: {
 			duration: 5,
-			onStart(side, source) {
+			onSideStart(side, source) {
 				this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
 			},
 			onBasePowerPriority: 1,
@@ -19379,7 +19379,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
-			onStart(side, source) {
+			onSideStart(side, source) {
 				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
 			},
 			onRestart(target, source) {
