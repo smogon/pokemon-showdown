@@ -498,7 +498,7 @@
         "species": "Regieleki",
         "item": ["Light Clay"],
         "ability": ["Transistor"],
-        "evs": {"spa": 252, "atk": 4, "spe": 252},
+        "evs": {"atk": 4, "spa": 252, "spe": 252},
         "nature": "Naive",
         "moves": [["Volt Switch"], ["Reflect"], ["Light Screen"], ["Explosion"]]
       },
@@ -1699,7 +1699,7 @@
         "gigantamax": true,
         "item": ["Life Orb", "Heavy-Duty Boots"],
         "ability": ["Blaze"],
-        "evs": {"spa": 252, "def": 4, "spe": 252},
+        "evs": {"def": 4, "spa": 252, "spe": 252},
         "ivs": {"atk": 0},
         "nature": "Timid",
         "moves": [["Blast Burn"], ["Air Slash", "Hurricane"], ["Solar Beam"], ["Scorching Sands", "Dragon Pulse"]]
@@ -1708,7 +1708,7 @@
         "species": "Charizard",
         "item": ["Life Orb", "Heavy-Duty Boots"],
         "ability": ["Solar Power"],
-        "evs": {"spa": 252, "def": 4, "spe": 252},
+        "evs": {"def": 4, "spa": 252, "spe": 252},
         "ivs": {"atk": 0},
         "nature": "Timid",
         "moves": [["Fire Blast", "Flamethrower"], ["Air Slash"], ["Solar Beam"], ["Scorching Sands", "Dragon Pulse"]]
@@ -1752,7 +1752,7 @@
         "gigantamax": true,
         "item": ["Focus Sash", "Wide Lens"],
         "ability": ["Cursed Body"],
-        "evs": {"spa": 252, "def": 4, "spe": 252},
+        "evs": {"def": 4, "spa": 252, "spe": 252},
         "ivs": {"atk": 0},
         "nature": "Timid",
         "moves": [["Shadow Ball", "Hex"], ["Sludge Wave"], ["Icy Wind", "Destiny Bond"], ["Hypnosis", "Will-O-Wisp"]]

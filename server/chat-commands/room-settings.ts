@@ -430,8 +430,8 @@ export const commands: ChatCommands = {
 			buffer += `<code>/permissions view</code></p>`;
 			buffer += `<p><strong>Group permissions:</strong> (will affect multiple commands or part of one command)<br />`;
 			buffer += `<code>` + permissionGroups.join(`</code> <code>`) + `</code></p>`;
-			buffer += `<p><strong>Single-command permissions:</strong> (will affect one command)<br />`;
-			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></p>`;
+			buffer += `<p><details class="readmore"><summary><strong>Single-command permissions:</strong> (will affect one command)</summary>`;
+			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></details></p>`;
 			buffer += `<p><details class="readmore"><summary><strong>Sub-commands:</strong> (will affect one sub-command, like /roomevents view)</summary>`;
 			for (const subPerms of Object.values(subPermissionsByNamespace)) {
 				buffer += `<br /><code>` + subPerms.join(`</code> <code>`) + `</code><br />`;
@@ -546,10 +546,10 @@ export const commands: ChatCommands = {
 			// Escape any character with a special meaning in regex
 			if (!regex) {
 				words = words.map(word => {
-					if (/[\\^$*+?()|{}[\]]/.test(word)) {
+					if (/[\\^$*+?()|{}[\]]/.test(word) && user.can('rangeban')) {
 						this.errorReply(`"${word}" might be a regular expression, did you mean "/banword addregex"?`);
 					}
-					return word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+					return Utils.escapeRegex(word);
 				});
 			}
 			// PS adds a preamble to the banword regex that's 32 chars long

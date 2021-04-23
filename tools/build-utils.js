@@ -20,6 +20,7 @@ function needsSucrase(source, dest, path = "") {
 	}
 	if (!path.includes(".")) {
 		// probably dir
+		if (source === './config' && path) return false;
 		try {
 			const sourceFiles = fs.readdirSync(source + path);
 			for (const file of sourceFiles) {
@@ -27,9 +28,10 @@ function needsSucrase(source, dest, path = "") {
 					return true;
 				}
 			}
-			if (path.endsWith('/chat-plugins') || path.includes('/mods/')) {
+			if (path.endsWith('/chat-plugins') || source === './config' || path.includes('/mods/')) {
 				const destFiles = fs.readdirSync(dest + path);
 				for (const file of destFiles) {
+					if (path.endsWith('/config')) console.log(file);
 					if (file.endsWith('.js') && !sourceFiles.includes(file.slice(0, -2) + 'ts') && !sourceFiles.includes(file)) {
 						fs.unlinkSync(dest + path + "/" + file);
 					}
@@ -60,10 +62,6 @@ function findFiles(options) {
 	const extensions = options.sucraseOptions.transforms.includes("typescript") ?
 		[".ts", ".tsx"] :
 		[".js", ".jsx"];
-
-	if (!fs.existsSync(outDirPath)) {
-		fs.mkdirSync(outDirPath);
-	}
 
 	const outArr = [];
 	for (const child of fs.readdirSync(srcDirPath)) {
@@ -96,6 +94,12 @@ function findFiles(options) {
 		}
 	}
 
+	if (!outArr.length) {
+		return outArr;
+	}
+	if (!fs.existsSync(outDirPath)) {
+		fs.mkdirSync(outDirPath, {recursive: true});
+	}
 	if (!fs.existsSync(path.join(outDirPath, "sourceMaps"))) {
 		fs.mkdirSync(path.join(outDirPath, "sourceMaps"));
 	}
@@ -105,7 +109,7 @@ function findFiles(options) {
 
 function sucrase(src, out, opts, excludeDirs = []) {
 	try {
-		if (!force && src !== "./config" && !needsSucrase(src, out)) {
+		if (!force && !needsSucrase(src, out) && src !== "./config") {
 			return false;
 		}
 	} catch (e) {}
@@ -202,7 +206,7 @@ exports.transpile = (doForce) => {
 
 	if (sucrase('./sim', './.sim-dist')) {
 		replace('.sim-dist', [
-			{regex: /(require\(.*?)(lib)/g, replace: `$1.lib-dist`},
+			{regex: /(require\(.*?)\/(lib|data)/g, replace: `$1/.$2-dist`},
 		]);
 	}
 

@@ -138,11 +138,17 @@ describe('Dex data', function () {
 		}
 	});
 
-	it('should have valid Formats entries', function () {
-		const Formats = Dex.data.Rulesets;
-		for (const formatid in Formats) {
-			const entry = Formats[formatid];
-			assert.equal(toID(entry.name), formatid, `Mismatched Format/Ruleset key "${formatid}" of "${entry.name}"`);
+	it('should have valid Rulesets entries', function () {
+		const Rulesets = Dex.data.Rulesets;
+		for (const formatid in Rulesets) {
+			const entry = Rulesets[formatid];
+			assert.equal(toID(entry.name), formatid, `Mismatched Ruleset key "${formatid}" of "${entry.name}"`);
+		}
+	});
+
+	it('should have valid Formats', function () {
+		for (const format of Dex.formats.all()) {
+			Dex.formats.getRuleTable(format);
 		}
 	});
 

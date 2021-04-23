@@ -222,10 +222,6 @@ export class Battle {
 
 		this.send = options.send || (() => {});
 
-		// bound function for faster speedSort
-		// (so speedSort doesn't need to bind before use)
-		this.comparePriority = this.comparePriority.bind(this);
-
 		const inputOptions: {formatid: ID, seed: PRNGSeed, rated?: string | true} = {
 			formatid: options.formatid, seed: this.prng.seed,
 		};
@@ -334,12 +330,21 @@ export class Battle {
 		}
 	}
 
+	/**
+	 * The default sort order for actions, but also event listeners.
+	 *
+	 * 1. Order, low to high (default last)
+	 * 2. Priority, high to low (default 0)
+	 * 3. Speed, high to low (default 0)
+	 * 4. SubOrder, low to high (default 0)
+	 *
+	 * Doesn't reference `this` so doesn't need to be bound.
+	 */
 	comparePriority(a: AnyObject, b: AnyObject) {
 		return -((b.order || 4294967296) - (a.order || 4294967296)) ||
 			((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
 			-((b.subOrder || 0) - (a.subOrder || 0)) ||
-			((a.effectHolder && b.effectHolder) ? -(b.effectHolder.abilityOrder - a.effectHolder.abilityOrder) : 0) ||
 			0;
 	}
 
@@ -361,6 +366,11 @@ export class Battle {
 	speedSort<T>(list: T[], comparator: (a: T, b: T) => number = this.comparePriority) {
 		if (list.length < 2) return;
 		let sorted = 0;
+		// This is a Selection Sort - not the fastest sort in general, but
+		// actually faster than QuickSort for small arrays like the ones
+		// `speedSort` is used for.
+		// More importantly, it makes it easiest to resolve speed ties
+		// properly.
 		while (sorted + 1 < list.length) {
 			let nextIndexes = [sorted];
 			// grab list of next indexes
@@ -371,16 +381,18 @@ export class Battle {
 				if (delta === 0) nextIndexes.push(i);
 			}
 			// put list of next indexes where they belong
-			const nextCount = nextIndexes.length;
-			for (let i = 0; i < nextCount; i++) {
-				let index = nextIndexes[i];
-				while (index > sorted + i) {
-					[list[index], list[index - 1]] = [list[index - 1], list[index]];
-					index--;
+			for (let i = 0; i < nextIndexes.length; i++) {
+				const index = nextIndexes[i];
+				if (index !== sorted + i) {
+					// nextIndexes is guaranteed to be in order, so it will never have
+					// been disturbed by an earlier swap
+					[list[sorted + i], list[index]] = [list[index], list[sorted + i]];
 				}
 			}
-			if (nextCount > 1) this.prng.shuffle(list, sorted, sorted + nextCount);
-			sorted += nextCount;
+			if (nextIndexes.length > 1) {
+				this.prng.shuffle(list, sorted, sorted + nextIndexes.length);
+			}
+			sorted += nextIndexes.length;
 		}
 	}
 
@@ -1060,6 +1072,17 @@ export class Battle {
 		}
 	}
 
+	checkMoveMakesContact(move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads = false) {
+		if (move.flags['contact'] && attacker.hasItem('protectivepads')) {
+			if (announcePads) {
+				this.add('-activate', defender, this.effect.fullname);
+				this.add('-activate', attacker, 'item: Protective Pads');
+			}
+			return false;
+		}
+		return move.flags['contact'];
+	}
+
 	getPokemon(fullname: string | Pokemon) {
 		if (typeof fullname !== 'string') fullname = fullname.fullname;
 		for (const side of this.sides) {
@@ -1277,6 +1300,7 @@ export class Battle {
 		this.faintMessages(false, true);
 		if (!this.ended && side.requestState) {
 			side.emitRequest({wait: true, side: side.getRequestData()});
+			side.clearChoice();
 			if (this.allChoicesDone()) this.commitDecisions();
 		}
 		return true;
@@ -2259,23 +2283,25 @@ export class Battle {
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
 			const format = this.format;
 
-			// Remove Pokémon duplicates remaining after `team` decisions.
 			for (const side of this.sides) {
-				side.pokemon = side.pokemon.slice(0, side.pokemonLeft);
-			}
-
-			if (format.teamLength && format.teamLength.battle) {
-				// Trim the team: not all of the Pokémon brought to Preview will battle.
-				for (const side of this.sides) {
+				if (format.teamLength && format.teamLength.battle) {
+					// Trim the team: not all of the Pokémon brought to Preview will battle.
 					side.pokemon = side.pokemon.slice(0, format.teamLength.battle);
-					side.pokemonLeft = side.pokemon.length;
 				}
+				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
 			}
 
 			this.add('start');
 			for (const side of this.sides) {
-				for (let pos = 0; pos < side.active.length; pos++) {
-					this.actions.switchIn(side.pokemon[pos], pos);
+				for (let i = 0; i < side.active.length; i++) {
+					if (!side.pokemonLeft) {
+						// forfeited before starting
+						side.active[i] = side.pokemon[i];
+						side.active[i].fainted = true;
+						side.active[i].hp = 0;
+					} else {
+						this.actions.switchIn(side.pokemon[i], i);
+					}
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
@@ -2313,12 +2339,14 @@ export class Battle {
 		case 'event':
 			this.runEvent(action.event!, action.pokemon);
 			break;
-		case 'team': {
-			action.pokemon.side.pokemon.splice(action.index, 0, action.pokemon);
+		case 'team':
+			if (action.index === 0) {
+				action.pokemon.side.pokemon = [];
+			}
+			action.pokemon.side.pokemon.push(action.pokemon);
 			action.pokemon.position = action.index;
 			// we return here because the update event would crash since there are no active pokemon yet
 			return;
-		}
 
 		case 'pass':
 			return;
@@ -2353,12 +2381,11 @@ export class Battle {
 				this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
 			}
 			break;
-		case 'shift': {
+		case 'shift':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.swapPosition(action.pokemon, 1);
 			break;
-		}
 
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');

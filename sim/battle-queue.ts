@@ -13,7 +13,7 @@
  * @license MIT
  */
 
-import {Battle} from './battle';
+import type {Battle} from './battle';
 
 /** A move action */
 export interface MoveAction {
@@ -348,7 +348,7 @@ export class BattleQueue {
 		}
 		const actions = this.resolveAction(choice, midTurn);
 		for (const [i, curAction] of this.list.entries()) {
-			if (BattleQueue.comparePriority(actions[0], curAction) < 0) {
+			if (this.battle.comparePriority(actions[0], curAction) < 0) {
 				this.list.splice(i, 0, ...actions);
 				return;
 			}
@@ -373,24 +373,6 @@ export class BattleQueue {
 		// this.log.push('SORT ' + this.debugQueue());
 		this.battle.speedSort(this.list);
 		return this;
-	}
-
-	/**
-	 * The default sort order for actions, but also event listeners.
-	 *
-	 * 1. Order, low to high (default last)
-	 * 2. Priority, high to low (default 0)
-	 * 3. Speed, high to low (default 0)
-	 * 4. SubOrder, low to high (default 0)
-	 * 5. AbilityOrder, switch-in order for abilities
-	 */
-	static comparePriority(a: AnyObject, b: AnyObject) {
-		return -((b.order || 4294967296) - (a.order || 4294967296)) ||
-			((b.priority || 0) - (a.priority || 0)) ||
-			((b.speed || 0) - (a.speed || 0)) ||
-			-((b.subOrder || 0) - (a.subOrder || 0)) ||
-			((a.thing && b.thing) ? -(b.thing.abilityOrder - a.thing.abilityOrder) : 0) ||
-			0;
 	}
 }
 

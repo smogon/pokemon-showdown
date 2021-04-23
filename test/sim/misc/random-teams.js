@@ -29,8 +29,8 @@ function isValidSet(gen, set) {
 	return true;
 }
 
-function validLearnset(move, set, tier) {
-	const validator = TeamValidator.get(`gen7${tier}`);
+function validLearnset(move, set, tier, mod = 'gen7') {
+	const validator = TeamValidator.get(`${mod}${tier}`);
 	const species = validator.dex.species.get(set.species || set.name);
 	return !validator.checkCanLearn(move, species);
 }
@@ -135,14 +135,18 @@ describe(`Hackmons Cup Team generator`, function () {
 });
 
 describe(`Factory sets`, function () {
-	for (const filename of ['bss-factory-sets', 'factory-sets']) {
+	const filenames = ['bss-factory-sets', 'mods/gen7/bss-factory-sets', 'mods/gen7/factory-sets', 'mods/gen6/factory-sets'];
+	for (const filename of filenames) {
 		it(`should have valid sets in ${filename}.json (slow)`, function () {
 			this.timeout(0);
-			const setsJSON = require(`../../../.data-dist/mods/gen7/${filename}.json`);
+			const setsJSON = require(`../../../.data-dist/${filename}.json`);
+			const mod = filename.split('/')[1] || 'gen' + Dex.gen;
+			const genNum = isNaN(mod[3]) ? Dex.gen : mod[3];
 
 			for (const type in setsJSON) {
-				const typeTable = filename === 'bss-factory-sets' ? setsJSON : setsJSON[type];
-				const vType = filename === 'bss-factory-sets' ? 'battlespotsingles' : type === 'Mono' ? 'monotype' : type.toLowerCase();
+				const typeTable = filename.includes('bss-factory-sets') ? setsJSON : setsJSON[type];
+				const vType = filename === 'bss-factory-sets' ? `battle${genNum === 8 ? 'stadium' : 'spot'}singles` :
+					type === 'Mono' ? 'monotype' : type.toLowerCase();
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
@@ -179,7 +183,7 @@ describe(`Factory sets`, function () {
 								const move = Dex.moves.get(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
 								assert(move.name === moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${species}`);
-								assert(validLearnset(move, set, vType), `illegal move "${moveName}" of ${species}`);
+								assert(validLearnset(move, set, vType, mod), `illegal move "${moveName}" of ${species}`);
 							}
 						}
 

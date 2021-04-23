@@ -55,7 +55,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (sourceAbility.isPermanent || sourceAbility.id === 'mummy') {
 					return;
 				}
-				if (move.flags['contact']) {
+				if (this.checkMoveMakesContact(move, source, target)) {
 					const oldAbility = source.setAbility('mummy', target);
 					if (oldAbility) {
 						this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
@@ -65,7 +65,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
 					.filter(val => !this.dex.abilities.get(val).isPermanent && val !== 'mummy');
 				if (!possibleAbilities.length) return;
-				if (move.flags['contact']) {
+				if (this.checkMoveMakesContact(move, source, target)) {
 					const abil = this.sample(possibleAbilities);
 					if (abil === source.ability) {
 						const oldAbility = source.setAbility('mummy', target);
@@ -175,7 +175,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.setAbility(ability);
 			} else {
 				pokemon.removeVolatile("ability:powerofalchemy");
-				pokemon.addVolatile("ability:" + ability, pokemon);
+				pokemon.addVolatile("ability:" + ability.id, pokemon);
 			}
 		},
 	},
@@ -207,7 +207,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.setAbility(ability);
 			} else {
 				pokemon.removeVolatile("ability:receiver");
-				pokemon.addVolatile("ability:" + ability, pokemon);
+				pokemon.addVolatile("ability:" + ability.id, pokemon);
 			}
 		},
 	},
@@ -223,14 +223,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted) return;
+			if (!pokemon.isStarted || this.effectData.gaveUp) return;
 			const isAbility = pokemon.ability === 'trace';
-			const possibleTargets: Pokemon[] = [];
-			for (const target of pokemon.side.foe.active) {
-				if (target && !target.fainted) {
-					possibleTargets.push(target);
-				}
-			}
+			const possibleTargets: Pokemon[] = pokemon.adjacentFoes();
 			while (possibleTargets.length) {
 				const rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
@@ -252,7 +247,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.setAbility(ability);
 				} else {
 					pokemon.removeVolatile("ability:trace");
-					pokemon.addVolatile("ability:" + ability, pokemon);
+					pokemon.addVolatile("ability:" + ability.id, pokemon);
 				}
 				return;
 			}
@@ -270,7 +265,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					return;
 				}
 
-				if (move.flags['contact']) {
+				if (this.checkMoveMakesContact(move, source, target)) {
 					const sourceAbility = source.setAbility('wanderingspirit', target);
 					if (!sourceAbility) return;
 					if (target.isAlly(source)) {
@@ -285,7 +280,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
 					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
 				if (!possibleAbilities.length || target.volatiles['dynamax']) return;
-				if (move.flags['contact']) {
+				if (this.checkMoveMakesContact(move, source, target)) {
 					const sourceAbility = this.sample(possibleAbilities);
 					if (sourceAbility === source.ability) {
 						if (!source.setAbility('wanderingspirit', target)) return;

@@ -814,17 +814,17 @@ export class TeamValidator {
 		if (set.hpType === 'Fighting' && ruleTable.has('obtainablemisc')) {
 			if (has3PerfectIVs) {
 				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
-				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
+				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a Gen 6+ legendary.`);
 			}
 		}
 
-		if (has3PerfectIVs) {
+		if (has3PerfectIVs && ruleTable.has('obtainablemisc')) {
 			let perfectIVs = 0;
 			for (const stat in set.ivs) {
 				if (set.ivs[stat as 'hp'] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < 3) {
-				const reason = (this.minSourceGen === 6 ? ` and this format requires gen ${dex.gen} Pokémon` : ` in gen 6 or later`);
+				const reason = (this.minSourceGen === 6 ? ` and this format requires Gen ${dex.gen} Pokémon` : ` in Gen 6 or later`);
 				problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
 			}
 		}
@@ -927,8 +927,8 @@ export class TeamValidator {
 
 		let totalEV = 0;
 		for (const stat in set.evs) totalEV += set.evs[stat as 'hp'];
-
-		if (!this.format.debug) {
+		// Not having this affect Nintendo Cup formats because it is annoying to deal with having to lower a base stat by 1 for every Pokemon.
+		if (!this.format.debug && !this.format.cupLevelLimit) {
 			if (set.level > 1 && (allowEVs || allowAVs) && totalEV === 0) {
 				problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			} else if (allowEVs && !capEVs && [508, 510].includes(totalEV)) {
@@ -1226,7 +1226,7 @@ export class TeamValidator {
 					);
 				}
 			}
-			if (species.requiredMove && !set.moves.includes(toID(species.requiredMove))) {
+			if (species.requiredMove && !set.moves.map(toID).includes(toID(species.requiredMove))) {
 				const baseSpecies = this.dex.species.get(species.changesFrom);
 				problems.push(
 					`${name} needs to know the move ${species.requiredMove} to be in its ${species.forme} forme.`,
@@ -1262,7 +1262,7 @@ export class TeamValidator {
 			'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 		};
 		if (set.species in crowned) {
-			const ironHead = set.moves.indexOf('ironhead');
+			const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
 			if (ironHead >= 0) {
 				set.moves[ironHead] = crowned[set.species];
 			}

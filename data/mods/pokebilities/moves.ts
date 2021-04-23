@@ -49,7 +49,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
 				if (pokemon.m.innates) {
 					for (const innate of pokemon.m.innates) {
-						pokemon.removeVolatile("ability" + innate);
+						pokemon.removeVolatile("ability:" + innate);
 					}
 				}
 			},

@@ -46,7 +46,7 @@ export function findFormats(targetId: string, isOMSearch = false) {
 		const formatId = /^gen\d+/.test(targetId) ? format.id : format.id.slice(4);
 		if (
 			!targetId || format[targetId + 'Show' as 'searchShow'] || sectionId === targetId ||
-			formatId.startsWith(targetId) || exactFormat
+			formatId.startsWith(targetId) || exactFormat.exists
 		) {
 			if (isOMSearch) {
 				const officialFormats = [
@@ -1646,12 +1646,12 @@ export const commands: ChatCommands = {
 
 	privacypolicy(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(
-			`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.<br />` +
-			`- We log IPs to enforce bans and mutes.<br />` +
-			`- We use cookies to save your login info and teams, and for Google Analytics and AdSense.<br />` +
-			`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`
-		);
+		this.sendReplyBox([
+			this.tr`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.`,
+			this.tr`- We log IPs to enforce bans and mutes.`,
+			this.tr`- We use cookies to save your login info and teams, and for Google Analytics and AdSense.`,
+			this.tr`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`,
+		].join(`<br />`));
 	},
 
 	suggest: 'suggestions',

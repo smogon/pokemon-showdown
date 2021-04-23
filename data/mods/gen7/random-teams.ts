@@ -955,7 +955,7 @@ export class RandomGen7Teams extends RandomTeams {
 		if (this.format.gameType === 'multi') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
 			const allySwitch = movePool.indexOf('allyswitch');
-			if (allySwitch !== undefined) {
+			if (allySwitch > -1) {
 				if (movePool.length > 4) {
 					this.fastPop(movePool, allySwitch);
 				} else {

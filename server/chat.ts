@@ -760,7 +760,7 @@ export class CommandContext extends MessageContext {
 		}
 		this.roomlog(`(${msg})`);
 	}
-	globalModlog(action: string, user: string | User | null, note?: string | null, ip?: string) {
+	globalModlog(action: string, user: string | User | null = null, note: string | null = null, ip?: string) {
 		const entry: PartialModlogEntry = {
 			action,
 			isGlobal: true,
@@ -1708,7 +1708,7 @@ export const Chat = new class {
 				const base = commandTable[entry];
 				if (!base) continue;
 				if (!base.aliases) base.aliases = [];
-				base.aliases.push(cmd);
+				if (!base.aliases.includes(cmd)) base.aliases.push(cmd);
 				continue;
 			}
 			if (typeof entry !== 'function') continue;
@@ -1927,14 +1927,17 @@ export const Chat = new class {
 		const results: AnnotatedChatHandler[] = [];
 		for (const cmd in table) {
 			const handler = table[cmd];
-			if (Array.isArray(handler) || !handler || typeof handler === 'string') continue;
+			if (Array.isArray(handler) || !handler || ['string', 'boolean'].includes(typeof handler)) {
+				continue;
+			}
 			if (typeof handler === 'object') {
 				results.push(...this.allCommands(handler));
 				continue;
 			}
 			results.push(handler as AnnotatedChatHandler);
 		}
-		return results;
+		if (table !== Chat.commands) return results;
+		return results.filter((handler, i) => results.indexOf(handler) === i);
 	}
 
 	/**
@@ -1949,7 +1952,7 @@ export const Chat = new class {
 	 */
 	validateRegex(word: string) {
 		word = word.trim();
-		if (word.endsWith('|') || word.startsWith('|')) {
+		if ((word.endsWith('|') && !word.endsWith('\\|')) || word.startsWith('|')) {
 			throw new Chat.ErrorMessage(`Your regex was rejected because it included an unterminated |.`);
 		}
 		try {

@@ -284,12 +284,12 @@ export const commands: ChatCommands = {
 			if (cmd === 'disable') {
 				if (disabled) return this.errorReply(`Net filters are already disabled.`);
 				disabled = true;
-				this.globalModlog(`NETFILTER DISABLE`, null);
+				this.globalModlog(`NETFILTER DISABLE`);
 				logMessage = `${user.name} disabled the net filters`;
 			} else {
 				if (!disabled) return this.errorReply(`The net filters are already enabled`);
 				disabled = false;
-				this.globalModlog(`NETFILTER ENABLE`, null);
+				this.globalModlog(`NETFILTER ENABLE`);
 				logMessage = `${user.name} enabled the net filters`;
 			}
 			this.privateGlobalModAction(logMessage);

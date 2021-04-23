@@ -154,7 +154,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		buf += `<span style="color:#999999;">Sets for ${species.name} in ${format.name}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
 			buf += `<details><summary>Set ${i + 1}</summary>`;
-			buf += `<ul style="list-style-type:none;">`;
+			buf += `<ul style="list-style-type:none;padding-left:0;">`;
 			buf += `<li>${set.species}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
 			buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
 			if (!set.level) buf += `<li>Level: 50</li>`;
@@ -747,8 +747,7 @@ export const commands: ChatCommands = {
 	bssfactory: 'battlefactory',
 	battlefactory(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		let isBSS = false;
-		if (cmd === 'bssfactory') isBSS = true;
+		const isBSS = cmd === 'bssfactory';
 		if (isBSS) {
 			const args = target.split(',');
 			if (!args[0]) return this.parse(`/help battlefactory`);
@@ -756,7 +755,7 @@ export const commands: ChatCommands = {
 			if (!species.exists) {
 				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
-			let mod = 'gen7';
+			let mod = 'gen8';
 			// There is only [Gen 7] BSS Factory right now
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen === 7) mod = toID(args[1]);
 			const bssSets = battleFactorySets(species, null, mod, true);
