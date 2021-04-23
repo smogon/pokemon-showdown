@@ -281,7 +281,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
 		// Unaware innate
 		onAnyModifyBoost(boosts, pokemon) {
-			const unawareUser = this.effectData.target;
+			const unawareUser = this.effectState.target;
 			if (unawareUser.illusion) return;
 			if (unawareUser === pokemon) return;
 			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
@@ -668,7 +668,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		// Unburden Innate
 		onAfterUseItem(item, pokemon) {
-			if (pokemon !== this.effectData.target) return;
+			if (pokemon !== this.effectState.target) return;
 			pokemon.addVolatile('unburden');
 		},
 		onTakeItem(item, pokemon) {
@@ -1857,7 +1857,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
-			if (target.isAlly(this.effectData.source)) return;
+			if (target.isAlly(this.effectState.source)) return;
 			// Hail is stronger from Heavy Hailstorm
 			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 8);
 		},
@@ -1894,35 +1894,35 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Raindrop',
 		noCopy: true,
 		onStart(target) {
-			this.effectData.layers = 1;
-			this.effectData.def = 0;
-			this.effectData.spd = 0;
+			this.effectState.layers = 1;
+			this.effectState.def = 0;
+			this.effectState.spd = 0;
 			this.add('-start', target, 'Raindrop');
-			this.add('-message', `${target.name} has ${this.effectData.layers} raindrop(s)!`);
+			this.add('-message', `${target.name} has ${this.effectState.layers} raindrop(s)!`);
 			const [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
 			this.boost({def: 1, spd: 1}, target, target);
-			if (curDef !== target.boosts.def) this.effectData.def--;
-			if (curSpD !== target.boosts.spd) this.effectData.spd--;
+			if (curDef !== target.boosts.def) this.effectState.def--;
+			if (curSpD !== target.boosts.spd) this.effectState.spd--;
 		},
 		onRestart(target) {
-			this.effectData.layers++;
+			this.effectState.layers++;
 			this.add('-start', target, 'Raindrop');
-			this.add('-message', `${target.name} has ${this.effectData.layers} raindrop(s)!`);
+			this.add('-message', `${target.name} has ${this.effectState.layers} raindrop(s)!`);
 			const curDef = target.boosts.def;
 			const curSpD = target.boosts.spd;
 			this.boost({def: 1, spd: 1}, target, target);
-			if (curDef !== target.boosts.def) this.effectData.def--;
-			if (curSpD !== target.boosts.spd) this.effectData.spd--;
+			if (curDef !== target.boosts.def) this.effectState.def--;
+			if (curSpD !== target.boosts.spd) this.effectState.spd--;
 		},
 		onEnd(target) {
-			if (this.effectData.def || this.effectData.spd) {
+			if (this.effectState.def || this.effectState.spd) {
 				const boosts: SparseBoostsTable = {};
-				if (this.effectData.def) boosts.def = this.effectData.def;
-				if (this.effectData.spd) boosts.spd = this.effectData.spd;
+				if (this.effectState.def) boosts.def = this.effectState.def;
+				if (this.effectState.spd) boosts.spd = this.effectState.spd;
 				this.boost(boosts, target, target);
 			}
 			this.add('-end', target, 'Raindrop');
-			if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
+			if (this.effectState.def !== this.effectState.layers * -1 || this.effectState.spd !== this.effectState.layers * -1) {
 				this.hint("Raindrop keeps track of how many times it successfully altered each stat individually.");
 			}
 		},
@@ -1994,7 +1994,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	degeneratormod: {
 		onBeforeSwitchOut(pokemon) {
 			let alreadyAdded = false;
-			for (const source of this.effectData.sources) {
+			for (const source of this.effectState.sources) {
 				if (!source.hp || source.volatiles['gastroacid']) continue;
 				if (!alreadyAdded) {
 					const foe = pokemon.side.foe.active[0];
@@ -2092,7 +2092,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}.bind(this);
 				return;
 			}
-			const dazzlingHolder = this.effectData.target;
+			const dazzlingHolder = this.effectState.target;
 			if (!dazzlingHolder.set.shiny) return;
 			if (dazzlingHolder.species.id !== 'minior') return;
 			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
@@ -2213,7 +2213,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectData.duration = 0;
+				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'RainDance');
@@ -2239,7 +2239,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && this.effectData.target.hasAlly(target)) {
+			if (target !== source && this.effectState.target.hasAlly(target)) {
 				if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
 						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 					return;
@@ -2274,7 +2274,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Special') {
+			if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Light Screen weaken');
 					if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -2337,7 +2337,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
+			if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Reflect weaken');
 					if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -2426,19 +2426,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.add('-message', `Wave Terrain prevented Spikes from starting!`);
 				return null;
 			}
-			this.effectData.layers = 1;
+			this.effectState.layers = 1;
 			this.add('-sidestart', side, 'move: Spikes');
 		},
 		onSideRestart(side) {
-			if (this.effectData.layers >= 3) return false;
+			if (this.effectState.layers >= 3) return false;
 			this.add('-sidestart', side, 'Spikes');
-			this.effectData.layers++;
+			this.effectState.layers++;
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.isGrounded()) return;
 			if (pokemon.hasItem('heavydutyboots')) return;
 			const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
-			this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
+			this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 		},
 	},
 	stealthrock: {
@@ -2480,12 +2480,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return null;
 			}
 			this.add('-sidestart', side, 'move: Toxic Spikes');
-			this.effectData.layers = 1;
+			this.effectState.layers = 1;
 		},
 		onSideRestart(side) {
-			if (this.effectData.layers >= 2) return false;
+			if (this.effectState.layers >= 2) return false;
 			this.add('-sidestart', side, 'move: Toxic Spikes');
-			this.effectData.layers++;
+			this.effectState.layers++;
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.isGrounded()) return;
@@ -2494,7 +2494,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				pokemon.side.removeSideCondition('toxicspikes');
 			} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
 				return;
-			} else if (this.effectData.layers >= 2) {
+			} else if (this.effectState.layers >= 2) {
 				pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 			} else {
 				pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
@@ -2546,13 +2546,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	echoedvoiceclone: {
 		duration: 2,
 		onStart() {
-			this.effectData.multiplier = 1;
+			this.effectState.multiplier = 1;
 		},
 		onRestart() {
-			if (this.effectData.duration !== 2) {
-				this.effectData.duration = 2;
-				if (this.effectData.multiplier < 5) {
-					this.effectData.multiplier++;
+			if (this.effectState.duration !== 2) {
+				this.effectState.duration = 2;
+				if (this.effectState.multiplier < 5) {
+					this.effectState.multiplier++;
 				}
 			}
 		},
