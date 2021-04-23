@@ -308,7 +308,7 @@ export class RoomAuth extends Auth {
 
 export class GlobalAuth extends Auth {
 	usernames = new Map<ID, string>();
-	sectionLeaders = new SectionLeaders();
+	sectionLeaders = new Map<ID, RoomSection>();
 	constructor() {
 		super();
 		this.load();
@@ -317,7 +317,7 @@ export class GlobalAuth extends Auth {
 		FS('config/usergroups.csv').writeUpdate(() => {
 			let buffer = '';
 			for (const [userid, groupSymbol] of this) {
-				buffer += `${this.usernames.get(userid) || userid},${groupSymbol}\n`;
+				buffer += `${this.usernames.get(userid) || userid},${groupSymbol},${this.sectionLeaders.get(userid) || ''}\n`;
 			}
 			return buffer;
 		});
@@ -326,9 +326,10 @@ export class GlobalAuth extends Auth {
 		const data = FS('config/usergroups.csv').readIfExistsSync();
 		for (const row of data.split("\n")) {
 			if (!row) continue;
-			const [name, symbol] = row.split(",");
+			const [name, symbol, sectionid] = row.split(",");
 			const id = toID(name);
 			this.usernames.set(id, name);
+			if (sectionid) this.sectionLeaders.set(id, sectionid as RoomSection);
 			super.set(id, symbol.charAt(0) as GroupSymbol);
 		}
 	}
@@ -356,61 +357,5 @@ export class GlobalAuth extends Auth {
 		this.usernames.delete(id);
 		this.save();
 		return true;
-	}
-}
-
-/**
- * userid:section
- */
-class SectionLeaders extends Map<ID, RoomSection> {
-	usernames = new Map<ID, string>();
-	constructor() {
-		super();
-		this.load();
-	}
-	save() {
-		FS('config/sectionleaders.csv').writeUpdate(() => {
-			let buffer = '';
-			for (const [userid, sectionid] of this) {
-				buffer += `${this.usernames.get(userid) || userid}|${sectionid}\n`;
-			}
-			return buffer;
-		});
-	}
-	load() {
-		const data = FS('config/sectionleaders.csv').readIfExistsSync();
-		for (const row of data.split("\n")) {
-			if (!row) continue;
-			const [name, sectionid] = row.split('|');
-			const id = toID(name);
-			this.usernames.set(id, name);
-			super.set(id, sectionid as RoomSection);
-		}
-	}
-	add(id: ID, sectionid: RoomSection, username?: string) {
-		if (!username) username = id;
-		const user = Users.get(id);
-		if (user) {
-			user.updateIdentity();
-			username = user.name;
-			Rooms.global.checkAutojoin(user);
-		}
-		this.usernames.set(id, username);
-		super.set(id, sectionid);
-		void this.save();
-		return this;
-	}
-	delete(id: ID) {
-		if (!super.has(id)) return false;
-		super.delete(id);
-		this.usernames.delete(id);
-		this.save();
-		return true;
-	}
-	has(user: User | ID) {
-		return super.has(typeof user !== 'string' ? (user as any).id : user);
-	}
-	getSection(user: User | ID) {
-		return super.get(typeof user !== 'string' ? (user as any).id : user);
 	}
 }

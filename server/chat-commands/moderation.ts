@@ -374,7 +374,7 @@ export const commands: ChatCommands = {
 		if (group !== ' ' || Users.isTrusted(targetId)) {
 			buffer.push(`Global auth: ${group === ' ' ? 'trusted' : group}`);
 		}
-		const sectionLeader = Users.globalAuth.sectionLeaders.getSection(targetId);
+		const sectionLeader = Users.globalAuth.sectionLeaders.get(targetId);
 		if (sectionLeader) {
 			buffer.push(`Section leader: ${RoomSections.sectionNames[sectionLeader]}`);
 		}
@@ -419,11 +419,11 @@ export const commands: ChatCommands = {
 	},
 
 	sectionleaders(target, room, user, connection) {
-		const usernames = Users.globalAuth.sectionLeaders.usernames;
+		const usernames = Users.globalAuth.usernames;
 		const buffer = [];
 		const sections: {[k in RoomSection]: Set<string>} = Object.create(null);
 		for (const [id, username] of usernames) {
-			const sectionid = Users.globalAuth.sectionLeaders.getSection(id);
+			const sectionid = Users.globalAuth.sectionLeaders.get(id);
 			if (!sectionid) continue;
 			if (!sections[sectionid]) sections[sectionid] = new Set();
 			sections[sectionid].add(username);
@@ -1397,16 +1397,16 @@ export const commands: ChatCommands = {
 		this.splitTarget(targetStr);
 		const targetUser = this.targetUser;
 		const userid = toID(this.targetUsername);
-		const section = demoting ? Users.globalAuth.sectionLeaders.getSection(userid)! : room.validateSection(sectionid);
+		const section = demoting ? Users.globalAuth.sectionLeaders.get(userid)! : room.validateSection(sectionid);
 		const name = targetUser ? targetUser.name : this.targetUsername;
-		if (Users.globalAuth.sectionLeaders.has(targetUser || userid) && !demoting) {
+		if (Users.globalAuth.sectionLeaders.has(targetUser?.id || userid) && !demoting) {
 			throw new Chat.ErrorMessage(`${name} is already a Section Leader of ${RoomSections.sectionNames[section]}.`);
-		} else if (!Users.globalAuth.sectionLeaders.has(targetUser || userid) && demoting) {
+		} else if (!Users.globalAuth.sectionLeaders.has(targetUser?.id || userid) && demoting) {
 			throw new Chat.ErrorMessage(`${name} is not a Section Leader.`);
 		}
 		const staffRoom = Rooms.get('staff');
 		if (!demoting) {
-			Users.globalAuth.sectionLeaders.add(userid, section, name);
+			Users.globalAuth.sectionLeaders.set(userid, section);
 			this.addGlobalModAction(`${name} was appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`SECTION LEADER`, userid, section);
 			if (!staffRoom?.auth.has(userid)) this.parse(`/msgroom staff,/forceroompromote ${userid},+`);
@@ -1418,6 +1418,7 @@ export const commands: ChatCommands = {
 			if (staffRoom?.auth.getDirect(userid) === '+') this.parse(`/msgroom staff,/roomdeauth ${userid}`);
 			targetUser?.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		}
+		Users.globalAuth.save();
 
 		if (targetUser) {
 			targetUser.updateIdentity();
