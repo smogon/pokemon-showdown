@@ -415,7 +415,7 @@ export class Battle {
 	/**
 	 * Runs an event with no source on each effect on the field, in Speed order.
 	 *
-	 * Unlike `eachEvent`
+	 * Unlike `eachEvent`, this contains a lot of other handling and is intended only for the residual step.
 	 */
 	residualEvent(eventid: string, relayVar?: any) {
 		const callbackName = `on${eventid}`;
@@ -450,7 +450,9 @@ export class Battle {
 			let handlerEventid = eventid;
 			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
-			this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, relayVar);
+			if (handler.callback) {
+				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, relayVar, handler.callback);
+			}
 
 			this.faintMessages();
 			if (this.ended) return;
@@ -461,7 +463,7 @@ export class Battle {
 	singleEvent(
 		eventid: string, effect: Effect, effectData: AnyObject | null,
 		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
-		sourceEffect?: Effect | string | null, relayVar?: any
+		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown
 	) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
@@ -506,8 +508,7 @@ export class Battle {
 			return relayVar;
 		}
 
-		// @ts-ignore - dynamic lookup
-		const callback = effect[`on${eventid}`];
+		const callback = customCallback || (effect as any)[`on${eventid}`];
 		if (callback === undefined) return relayVar;
 
 		const parentEffect = this.effect;
