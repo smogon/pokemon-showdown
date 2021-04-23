@@ -75,7 +75,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterBoost(boost, target, source, effect) {
 			if ((boost.atk && boost.atk < 0 && target.boosts['atk'] === -6 && target.itemData.oldatk !== -5) ||
-			 (target.boosts['spe'] === 6) || (boost.atk && boost.atk > 0 && target.boosts['atk'] === 6)) {
+			 (target.boosts['spe'] === 6) ||
+			  (boost.atk && boost.atk > 0 && target.boosts['atk'] === 6 && target.itemData.oldatk !== 5)) {
 				return;
 			}
 			if (effect.id === 'intimidate') {
