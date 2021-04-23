@@ -446,7 +446,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			onLoad() {
 				const game = this.room.scavgame!;
 				if (game.round === 0) return;
-				const maxTime = (game.jumpstart as number[]).sort((a, b) => b - a)[0];
+				const maxTime = Math.max(...game.jumpstart);
 
 				this.jumpstartTimers = [];
 				this.answerLock = true;
