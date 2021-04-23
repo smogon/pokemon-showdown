@@ -91,7 +91,7 @@ export class Field {
 	clearWeather() {
 		if (!this.weather) return false;
 		const prevWeather = this.getWeather();
-		this.battle.singleEvent('End', prevWeather, this.weatherData, this);
+		this.battle.singleEvent('FieldEnd', prevWeather, this.weatherData, this);
 		this.weather = '';
 		this.weatherData = {id: ''};
 		return true;
@@ -157,7 +157,7 @@ export class Field {
 	clearTerrain() {
 		if (!this.terrain) return false;
 		const prevTerrain = this.getTerrain();
-		this.battle.singleEvent('End', prevTerrain, this.terrainData, this);
+		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainData, this);
 		this.terrain = '';
 		this.terrainData = {id: ''};
 		return true;
@@ -220,7 +220,7 @@ export class Field {
 		status = this.battle.dex.conditions.get(status);
 		const effectData = this.pseudoWeather[status.id];
 		if (!effectData) return false;
-		this.battle.singleEvent('End', status, effectData, this);
+		this.battle.singleEvent('FieldEnd', status, effectData, this);
 		delete this.pseudoWeather[status.id];
 		return true;
 	}

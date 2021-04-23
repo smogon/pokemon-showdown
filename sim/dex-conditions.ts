@@ -69,7 +69,9 @@ export interface EventMethods {
 	onRedirectTarget?: (
 		this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove
 	) => Pokemon | void;
-	onResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void;
+	onResidual?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onSideResidual?: (this: Battle, target: Side, source: Pokemon, effect: Effect) => void;
+	onFieldResidual?: (this: Battle, target: Field, source: Pokemon, effect: Effect) => void;
 	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => boolean | void;
 	onSetStatus?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect
@@ -567,6 +569,12 @@ export interface EventMethods {
 	onResidualOrder?: number;
 	onResidualPriority?: number;
 	onResidualSubOrder?: number;
+	onSideResidualOrder?: number;
+	onSideResidualPriority?: number;
+	onSideResidualSubOrder?: number;
+	onFieldResidualOrder?: number;
+	onFieldResidualPriority?: number;
+	onFieldResidualSubOrder?: number;
 	onSourceBasePowerPriority?: number;
 	onSourceInvulnerabilityPriority?: number;
 	onSourceModifyAccuracyPriority?: number;
@@ -594,7 +602,9 @@ export class Condition extends BasicEffect implements Readonly<BasicEffect & Con
 
 	readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
 	readonly onCopy?: (this: Battle, pokemon: Pokemon) => void;
-	readonly onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
+	readonly onEnd?: (this: Battle, target: Pokemon) => void;
+	readonly onSideEnd?: (this: Battle, target: Side) => void;
+	readonly onFieldEnd?: (this: Battle, target: Field) => void;
 	readonly onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 	readonly onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 
