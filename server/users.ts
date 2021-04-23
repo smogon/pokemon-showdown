@@ -1480,17 +1480,6 @@ export class User extends Chat.MessageContext {
 			this.registered ? `[registered]` :
 			``;
 	}
-	forcedPublic(key: 'modchat' | 'privacy') {
-		if (Config.forcepublicprefixes) {
-			Config.forcedprefixes = {public: Config.forcepublicprefixes};
-			delete Config.forcepublicprefixes;
-		}
-		if (!Config.forcedprefixes?.[key]) return null;
-		for (const prefix of Config.forcedprefixes[key]) {
-			if (this.id.startsWith(toID(prefix))) return prefix;
-		}
-		return null;
-	}
 	destroy() {
 		// deallocate user
 		for (const roomid of this.games) {

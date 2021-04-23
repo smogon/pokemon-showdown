@@ -16,6 +16,7 @@ import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
 import type {Tournament} from './tournaments/index';
+import {RoomSettings} from './rooms';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
@@ -1070,19 +1071,66 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		if (user) {
 			this.room.auth.set(player.id, Users.PLAYER_SYMBOL);
-			if (this.rated) {
-				this.checkForcedSettings(user);
-			}
 		}
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
 	}
 
-	checkForcedSettings(user: User) {
+	checkPrivacySettings(options: RoomBattleOptions & Partial<RoomSettings>) {
+		let inviteOnly = false;
+		const privacySetter = new Set<ID>([]);
+		for (const p of ['p1', 'p2', 'p3', 'p4'] as const) {
+			const playerOptions = options[p];
+			if (playerOptions && playerOptions.inviteOnly) {
+				inviteOnly = true;
+				privacySetter.add(playerOptions.user.id);
+			} else if (playerOptions && playerOptions.hidden) {
+				privacySetter.add(playerOptions.user.id);
+			}
+			if (playerOptions) this.checkForcedUserSettings(playerOptions.user);
+		}
+
+		if (privacySetter.size) {
+			const room = this.room;
+			if (this.forcedSettings.privacy) {
+				room.setPrivate(false);
+				room.settings.modjoin = null;
+				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${this.forcedSettings.privacy}'.</div>`);
+			} else if (!options.tour || (room.tour?.allowModjoin)) {
+				room.setPrivate('hidden');
+				if (inviteOnly) room.settings.modjoin = '%';
+				room.privacySetter = privacySetter;
+				if (inviteOnly) {
+					room.settings.modjoin = '%';
+					room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+				}
+			}
+		}
+	}
+
+	checkForcedUserSettings(user: User) {
 		this.forcedSettings = {
-			modchat: this.forcedSettings.modchat || user.forcedPublic('modchat'),
-			privacy: this.forcedSettings.privacy || user.forcedPublic('privacy'),
+			modchat: this.forcedSettings.modchat || RoomBattle.battleForcedSetting(user, 'modchat'),
+			privacy: this.forcedSettings.privacy || RoomBattle.battleForcedSetting(user, 'privacy'),
 		};
+		if (
+			this.players.some(p => p.getUser()?.battleSettings.special) ||
+			(this.rated && this.forcedSettings.modchat)
+		) {
+			this.room.settings.modchat = '\u2606';
+		}
+	}
+
+	static battleForcedSetting(user: User, key: 'modchat' | 'privacy') {
+		if (Config.forcepublicprefixes) {
+			Config.forcedprefixes = {public: Config.forcepublicprefixes};
+			delete Config.forcepublicprefixes;
+		}
+		if (!Config.forcedprefixes?.[key]) return null;
+		for (const prefix of Config.forcedprefixes[key]) {
+			if (user.id.startsWith(toID(prefix))) return prefix;
+		}
+		return null;
 	}
 
 	makePlayer(user: User) {
