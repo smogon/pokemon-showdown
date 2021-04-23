@@ -499,9 +499,8 @@ export class Battle {
 			return relayVar;
 		}
 		if (
-			effect.effectType === 'Weather' && eventid !== 'Start' && eventid !== 'Residual' &&
-			eventid !== 'SideResidual' && eventid !== 'FieldResidual' && eventid !== 'End' &&
-			eventid !== 'SideEnd' && eventid !== 'FieldEnd' && this.field.suppressingWeather()
+			effect.effectType === 'Weather' && eventid !== 'Start' && eventid !== 'FieldResidual' &&
+			eventid !== 'FieldEnd' && this.field.suppressingWeather()
 		) {
 			this.debug(eventid + ' handler suppressed by Air Lock');
 			return relayVar;
