@@ -1081,13 +1081,15 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const privacySetter = new Set<ID>([]);
 		for (const p of ['p1', 'p2', 'p3', 'p4'] as const) {
 			const playerOptions = options[p];
-			if (playerOptions && playerOptions.inviteOnly) {
-				inviteOnly = true;
-				privacySetter.add(playerOptions.user.id);
-			} else if (playerOptions && playerOptions.hidden) {
-				privacySetter.add(playerOptions.user.id);
+			if (playerOptions) {
+				if (playerOptions.inviteOnly) {
+					inviteOnly = true;
+					privacySetter.add(playerOptions.user.id);
+				} else if (playerOptions.hidden) {
+					privacySetter.add(playerOptions.user.id);
+				}
+				if (playerOptions.user) this.checkForcedUserSettings(playerOptions.user);
 			}
-			if (playerOptions?.user) this.checkForcedUserSettings(playerOptions.user);
 		}
 
 		if (privacySetter.size) {
