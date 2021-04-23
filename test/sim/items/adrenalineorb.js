@@ -68,11 +68,12 @@ describe('Adrenaline Orb', function () {
 			{species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices();
-		battle.makeChoices('move curse', 'move topsyturvy');
-		assert.statStage(battle.p1.active[0], 'spe', 1);
+		battle.makeChoices(); //dugtrio +6 atk
+		battle.makeChoices('move splash', 'move topsyturvy'); //dugtrio -6 atk
+		battle.makeChoices('move curse', 'move splash');
+		assert.statStage(battle.p1.active[0], 'spe', -1);
 		battle.makeChoices('move splash', 'switch 2');
-		assert.statStage(battle.p1.active[0], 'spe', 2);
+		assert.statStage(battle.p1.active[0], 'spe', 0);
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 

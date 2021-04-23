@@ -1,3 +1,5 @@
+import {Pokemon} from "../sim";
+
 export const Items: {[itemid: string]: ItemData} = {
 	abomasite: {
 		name: "Abomasite",
@@ -66,9 +68,16 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
+		onModifyBoost(boost, target) {
+			target.itemData.oldatk = target.itemData.newatk;
+			target.itemData.newatk = target.boosts['atk'];
+			console.log('old ' + target.itemData.oldatk + ' / new ' + target.itemData.newatk);
+		},
 		onAfterBoost(boost, target, source, effect) {
-			if ((boost.atk && boost.atk < 0 && target.boosts['atk'] === -6) || (target.boosts['spe'] === 6) ||
-                    (boost.atk && boost.atk > 0 && target.boosts['atk'] === 6)) return;
+			if ((boost.atk && boost.atk < 0 && target.boosts['atk'] === -6 && target.itemData.oldatk !== -5) ||
+			 (target.boosts['spe'] === 6) || (boost.atk && boost.atk > 0 && target.boosts['atk'] === 6)) {
+				return;
+			}
 			if (effect.id === 'intimidate') {
 				target.useItem();
 			}
