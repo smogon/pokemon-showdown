@@ -16,19 +16,19 @@ const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
 
 export const sections = [
-	'officialrooms', 'officialtiers', 'communityprojects', 'languages', 'gaming', 'leisure', 'lifehobbies', 'onsitegames',
+	'official', 'smogontiers', 'communityprojectsformats', 'languages', 'entertainment', 'gaming', 'lifehobbies', 'onsitegames',
 ] as const;
 
 export type RoomSection = typeof sections[number];
 
 export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections: readonly RoomSection[]} = {
 	sectionNames: {
-		officialrooms: 'Official rooms',
-		officialtiers: 'Official tiers',
-		communityprojects: 'Community projects',
+		official: 'Official',
+		smogontiers: 'Smogon tiers',
+		communityprojectsformats: 'Community projects & formats',
 		languages: 'Languages',
+		entertainment: 'Entertainment',
 		gaming: 'Gaming',
-		leisure: 'Leisure',
 		lifehobbies: 'Life & hobbies',
 		onsitegames: 'On-site games',
 	},
@@ -1136,7 +1136,7 @@ export const commands: ChatCommands = {
 
 	officialchatroom: 'officialroom',
 	officialroom() {
-		this.parse(`/setroomsection officialrooms`);
+		this.parse(`/setroomsection official`);
 	},
 
 	psplwinnerroom(target, room, user) {
@@ -1155,7 +1155,7 @@ export const commands: ChatCommands = {
 			if (room.settings.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
 			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
 			this.globalModlog('PSPLROOM');
-			room.settings.pspl = true;
+			room.settings.pspl = "PSPL Winner";
 			room.saveSettings();
 		}
 	},

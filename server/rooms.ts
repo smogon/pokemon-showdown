@@ -57,9 +57,9 @@ interface ChatRoomTable {
 	title: string;
 	desc: string;
 	userCount: number;
-	section?: RoomSection;
+	section?: string;
 	subRooms?: string[];
-	prizewinner?: true;
+	spotlight?: string;
 }
 
 interface ShowRequest {
@@ -105,7 +105,7 @@ export interface RoomSettings {
 	hangmanDisabled?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
-	pspl?: boolean;
+	pspl?: string;
 	parentid?: string | null;
 	desc?: string | null;
 	introMessage?: string | null;
@@ -700,7 +700,7 @@ export abstract class BasicRoom {
 		}
 		message += `</div>`;
 		if (this.settings.introMessage) {
-			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(this.settings.section !== 'officialrooms' ? 'class="infobox-limited"' : '')}>` +
+			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(this.settings.section !== 'official' ? 'class="infobox-limited"' : '')}>` +
 				this.settings.introMessage.replace(/\n/g, '') +
 				`</div></div>`;
 		}
@@ -1155,7 +1155,7 @@ export class GlobalRoomState {
 				auth: {},
 				creationTime: Date.now(),
 				autojoin: true,
-				section: 'officialrooms',
+				section: 'official',
 			}, {
 				title: 'Staff',
 				auth: {},
@@ -1384,12 +1384,12 @@ export class GlobalRoomState {
 	getRooms(user: User) {
 		const roomsData: {
 			chat: ChatRoomTable[],
-			sectionTitles: {[k: string]: string},
+			sectionTitles: string[],
 			userCount: number,
 			battleCount: number,
 		} = {
 			chat: [],
-			sectionTitles: RoomSections.sectionNames,
+			sectionTitles: Object.values(RoomSections.sectionNames),
 			userCount: Users.onlineCount,
 			battleCount: this.battleCount,
 		};
@@ -1401,11 +1401,12 @@ export class GlobalRoomState {
 				title: room.title,
 				desc: room.settings.desc || '',
 				userCount: room.userCount,
-				section: room.settings.section || undefined,
+				section: room.settings.section ?
+					(RoomSections.sectionNames[room.settings.section] || room.settings.section) : undefined,
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
-			if (room.settings.pspl) roomData.prizewinner = true;
+			if (room.settings.pspl) roomData.spotlight = room.settings.pspl;
 
 			roomsData.chat.push(roomData);
 		}
@@ -1422,7 +1423,7 @@ export class GlobalRoomState {
 		if (Rooms.rooms.has(id)) return false;
 
 		const settings = {
-			title: title,
+			title,
 			auth: {},
 			creationTime: Date.now(),
 		};
