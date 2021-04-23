@@ -1406,19 +1406,18 @@ export const commands: ChatCommands = {
 		}
 		const staffRoom = Rooms.get('staff');
 		if (!demoting) {
-			Users.globalAuth.sectionLeaders.set(userid, section);
+			Users.globalAuth.set(userid, Users.globalAuth.get(userid), section);
 			this.addGlobalModAction(`${name} was appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`SECTION LEADER`, userid, section);
 			if (!staffRoom?.auth.has(userid)) this.parse(`/msgroom staff,/forceroompromote ${userid},+`);
 			targetUser?.popup(`You were appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		} else {
-			Users.globalAuth.sectionLeaders.delete(userid);
+			Users.globalAuth.delete(userid, true);
 			this.privateGlobalModAction(`${name} was demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`DESECTION LEADER`, userid, section);
 			if (staffRoom?.auth.getDirect(userid) === '+') this.parse(`/msgroom staff,/roomdeauth ${userid}`);
 			targetUser?.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		}
-		Users.globalAuth.save();
 
 		if (targetUser) {
 			targetUser.updateIdentity();
