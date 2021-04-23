@@ -743,7 +743,6 @@ export class BattleActions {
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		// console.log(`${targets}, ${pokemon}, ${move}`)
 		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
-			this.battle.faintMessages();
 			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
 			this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
 		}
@@ -898,6 +897,7 @@ export class BattleActions {
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
+		this.battle.faintMessages();
 
 		if (move.recoil && move.totalDamage) {
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
