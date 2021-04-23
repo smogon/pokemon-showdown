@@ -333,7 +333,7 @@ export class GlobalAuth extends Auth {
 			super.set(id, symbol.charAt(0) as GroupSymbol);
 		}
 	}
-	set(id: ID, group: GroupSymbol, sectionid?: RoomSection, username?: string) {
+	set(id: ID, group: GroupSymbol, username?: string) {
 		if (!username) username = id;
 		const user = Users.get(id);
 		if (user) {
@@ -343,25 +343,45 @@ export class GlobalAuth extends Auth {
 			Rooms.global.checkAutojoin(user);
 		}
 		this.usernames.set(id, username);
-		if (sectionid) this.sectionLeaders.set(id, sectionid);
 		super.set(id, group);
 		void this.save();
 		return this;
 	}
-	delete(id: ID, sectionOnly = false) {
+	delete(id: ID) {
 		if (!super.has(id)) return false;
-		if (sectionOnly) {
-			if (!this.sectionLeaders.has(id)) return false;
-			this.sectionLeaders.delete(id);
-			this.save();
-			return true;
-		}
 		super.delete(id);
 		const user = Users.get(id);
 		if (user) {
 			user.tempGroup = ' ';
 		}
 		this.usernames.delete(id);
+		this.save();
+		return true;
+	}
+	setSection(id: ID, sectionid: RoomSection, username?: string) {
+		if (!username) username = id;
+		const user = Users.get(id);
+		if (user) {
+			user.updateIdentity();
+			username = user.name;
+			Rooms.global.checkAutojoin(user);
+		}
+		if (!super.has(id)) this.set(id, ' ', username);
+		this.sectionLeaders.set(id, sectionid);
+		void this.save();
+		return this;
+	}
+	deleteSection(id: ID) {
+		if (!this.sectionLeaders.has(id)) return false;
+		this.sectionLeaders.delete(id);
+		if (super.get(id) === ' ') {
+			return this.delete(id);
+		}
+		const user = Users.get(id);
+		if (user) {
+			user.updateIdentity();
+			Rooms.global.checkAutojoin(user);
+		}
 		this.save();
 		return true;
 	}

@@ -9,7 +9,7 @@ for (const row of usergroupData) {
 	if (!toID(row)) continue;
 
 	const cells = row.split(',');
-	if (cells.length !== 2) throw new Error(`Invalid entry when parsing usergroups.csv`);
+	if (cells.length > 3) throw new Error(`Invalid entry when parsing usergroups.csv`);
 	usergroups[toID(cells[0])] = cells[1].trim() || ' ';
 }
 
