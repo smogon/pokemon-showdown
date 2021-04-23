@@ -71,7 +71,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onModifyBoost(boost, target) {
 			target.itemData.oldatk = target.itemData.newatk;
 			target.itemData.newatk = target.boosts['atk'];
-			console.log('old ' + target.itemData.oldatk + ' / new ' + target.itemData.newatk);
 		},
 		onAfterBoost(boost, target, source, effect) {
 			if ((boost.atk && boost.atk < 0 && target.boosts['atk'] === -6 && target.itemData.oldatk !== -5) ||

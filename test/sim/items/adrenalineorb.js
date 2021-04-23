@@ -70,9 +70,9 @@ describe('Adrenaline Orb', function () {
 
 		battle.makeChoices(); //dugtrio +6 atk
 		battle.makeChoices('move splash', 'move topsyturvy'); //dugtrio -6 atk
-		battle.makeChoices('move curse', 'move splash');
-		assert.statStage(battle.p1.active[0], 'spe', -1);
-		battle.makeChoices('move splash', 'switch 2');
+		battle.makeChoices('move curse', 'move splash'); // dugtrio -5 atk and -1 speed
+		assert.statStage(battle.p1.active[0], 'spe', -1); 
+		battle.makeChoices('move splash', 'switch 2'); // now dugtrio is at -6 and should use orb to be back at 0 speed
 		assert.statStage(battle.p1.active[0], 'spe', 0);
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
