@@ -21,7 +21,8 @@ describe('Red Card', function () {
 		]]);
 
 		battle.makeChoices();
-		assert.holdsItem(battle.p1.active[0]);
+		assert.holdsItem(battle.p1.active[0], "Red Card should not be consumed");
+		assert.fainted(battle.p1.pokemon[1], "Gardevoir should faint from Aggron's Destiny Bond");
 	});
 
 	it(`should trigger if the target is still in battle`, function () {
@@ -35,6 +36,7 @@ describe('Red Card', function () {
 		]]);
 
 		battle.makeChoices();
-		assert.false(battle.p1.active[0].item, "red card should be used");
+		assert.false.holdsItem(battle.p1.active[0], "Red Card should be consumed.");
+		assert.species(battle.p2.active[1], "Corsola", "Corsola should be dragged in by Red Card");
 	});
 });
