@@ -90,9 +90,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(side) {
 				this.add('-sidestart', side, 'Safeguard');
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd(side) {
+			onSideResidualOrder: 21,
+			onSideResidualSubOrder: 2,
+			onSideEnd(side) {
 				this.add('-sideend', side, 'Safeguard');
 			},
 		},

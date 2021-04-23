@@ -461,12 +461,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.add('-weather', 'RainDance');
 			}
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'RainDance', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -493,12 +493,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onStart(battle, source, effect) {
 			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect, '[of] ' + source);
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'PrimordialSea', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -535,12 +535,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (pokemon.hasItem('utilityumbrella')) return;
 			if (type === 'frz') return false;
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'SunnyDay', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -571,12 +571,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (pokemon.hasItem('utilityumbrella')) return;
 			if (type === 'frz') return false;
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'DesolateLand', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -606,15 +606,15 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.add('-weather', 'Sandstorm');
 			}
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'Sandstorm', '[upkeep]');
 			if (this.field.isWeather('sandstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
 			this.damage(target.baseMaxhp / 16);
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -636,15 +636,15 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.add('-weather', 'Hail');
 			}
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
 			this.damage(target.baseMaxhp / 16);
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -662,12 +662,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onStart(battle, source, effect) {
 			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'DeltaStream', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},

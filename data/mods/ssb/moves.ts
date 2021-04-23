@@ -619,12 +619,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', `Hazards were removed by the terrain!`);
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
+			onFieldResidualOrder: 5,
+			onFieldResidualSubOrder: 3,
+			onFieldResidual() {
 				this.eachEvent('Terrain');
 			},
-			onEnd() {
+			onFieldEnd() {
 				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Wave Terrain');
 			},
@@ -966,12 +966,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield suddenly became grim!');
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
+			onFieldResidualOrder: 5,
+			onFieldResidualSubOrder: 3,
+			onFieldResidual() {
 				this.eachEvent('Terrain');
 			},
-			onEnd() {
+			onFieldEnd() {
 				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Bane Terrain');
 			},
@@ -3665,9 +3665,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became swamped!');
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
+			onFieldResidualOrder: 5,
+			onFieldResidualSubOrder: 3,
+			onFieldResidual() {
 				this.eachEvent('Terrain');
 			},
 			onTerrain(pokemon) {
@@ -3678,7 +3678,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			},
-			onEnd() {
+			onFieldEnd() {
 				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Swampy Terrain');
 			},
@@ -3890,12 +3890,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became upside down!');
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
+			onFieldResidualOrder: 5,
+			onFieldResidualSubOrder: 3,
+			onFieldResidual() {
 				this.eachEvent('Terrain');
 			},
-			onEnd() {
+			onFieldEnd() {
 				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Inversion Terrain');
 			},
@@ -4072,9 +4072,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', `${source.name} got a boost by the terrain!`);
 				}
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
+			onFieldResidualOrder: 5,
+			onFieldResidualSubOrder: 3,
+			onFieldResidual() {
 				this.eachEvent('Terrain');
 			},
 			onTerrain(pokemon) {
@@ -4084,7 +4084,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', `${pokemon.name} was hurt by the terrain!`);
 				}
 			},
-			onEnd() {
+			onFieldEnd() {
 				this.add('-fieldend', 'move: Pitch Black Terrain');
 			},
 		},
@@ -4442,9 +4442,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return 5;
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
+			onFieldResidualOrder: 5,
+			onFieldResidualSubOrder: 3,
+			onFieldResidual() {
 				this.eachEvent('Terrain');
 			},
 			onTerrain(pokemon) {
@@ -4466,7 +4466,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became stormy!');
 			},
-			onEnd() {
+			onFieldEnd() {
 				this.add('-fieldend', 'move: Tempest Terrain');
 			},
 		},

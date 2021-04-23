@@ -406,7 +406,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add('poke', pokemon.side.id, details, '');
 			}
 		},
-		onTeamPreview() {
+		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
@@ -1247,7 +1247,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add(`${buf}</span>`);
 			}
 		},
-		onTeamPreview() {
+		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},

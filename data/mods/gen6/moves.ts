@@ -141,9 +141,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd(side) {
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
 				this.add('-fieldend', 'Misty Terrain');
 			},
 		},

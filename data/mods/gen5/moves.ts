@@ -510,9 +510,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 1,
-			onEnd(side) {
+			onSideResidualOrder: 21,
+			onSideResidualSubOrder: 1,
+			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Light Screen');
 			},
 		},
@@ -711,8 +711,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
-			onResidualOrder: 21,
-			onEnd(side) {
+			onSideResidualOrder: 21,
+			onSideEnd(side) {
 				this.add('-sideend', side, 'Reflect');
 			},
 		},

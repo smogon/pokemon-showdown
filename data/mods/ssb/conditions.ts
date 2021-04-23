@@ -1851,8 +1851,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				});
 			}
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
@@ -1861,7 +1861,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			// Hail is stronger from Heavy Hailstorm
 			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 8);
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -1877,8 +1877,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onModifySpe(spe, pokemon) {
 			if (!pokemon.hasType('Ice')) return this.chainModify(0.5);
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('winterhail')) this.eachEvent('Weather');
 		},
@@ -1886,7 +1886,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (target.hasType('Ice')) return;
 			this.damage(target.baseMaxhp / 8);
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -2150,8 +2150,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(battle, source, effect) {
 			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'DeltaStream', '[upkeep]');
 			this.eachEvent('Weather');
 		},
@@ -2176,7 +2176,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 			this.field.clearTerrain();
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -2219,12 +2219,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.add('-weather', 'RainDance');
 			}
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'RainDance', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -2258,9 +2258,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 			this.add('-sidestart', side, 'move: Aurora Veil');
 		},
-		onResidualOrder: 21,
-		onResidualSubOrder: 1,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideResidualSubOrder: 1,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'move: Aurora Veil');
 		},
 	},
@@ -2289,9 +2289,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 			this.add('-sidestart', side, 'move: Light Screen');
 		},
-		onResidualOrder: 21,
-		onResidualSubOrder: 1,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideResidualSubOrder: 1,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'move: Light Screen');
 		},
 	},
@@ -2321,9 +2321,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 			this.add('-sidestart', side, 'move: Mist');
 		},
-		onResidualOrder: 21,
-		onResidualSubOrder: 3,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideResidualSubOrder: 3,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'Mist');
 		},
 	},
@@ -2352,8 +2352,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 			this.add('-sidestart', side, 'Reflect');
 		},
-		onResidualOrder: 21,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'Reflect');
 		},
 	},
@@ -2393,9 +2393,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 			this.add('-sidestart', side, 'move: Safeguard');
 		},
-		onResidualOrder: 21,
-		onResidualSubOrder: 2,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideResidualSubOrder: 2,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'Safeguard');
 		},
 	},

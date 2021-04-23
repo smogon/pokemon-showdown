@@ -209,9 +209,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Electric Terrain');
 				}
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd() {
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
 				this.add('-fieldend', 'move: Electric Terrain');
 			},
 		},
@@ -299,9 +299,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Grassy Terrain');
 				}
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
+			onFieldResidualOrder: 5,
+			onFieldResidualSubOrder: 3,
+			onFieldResidual() {
 				this.eachEvent('Terrain');
 			},
 			onTerrainPriority: 1,
@@ -311,7 +311,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				}
 			},
-			onEnd() {
+			onFieldEnd() {
 				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
@@ -686,9 +686,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd() {
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
 				this.add('-fieldend', 'move: Psychic Terrain');
 			},
 		},
