@@ -214,8 +214,9 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		}
 
 		// Static server
-		try {
-			if (config.disablenodestatic) throw new Error("disablenodestatic");
+		if (config.disablenodestatic) {
+			console.log('node-static is disabled');
+		} else {
 			const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
 			const cssServer = new NetServer('./config');
 			const avatarServer = new NetServer('./config/avatars');
@@ -250,12 +251,6 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 			this.server.on('request', staticRequestHandler);
 			if (this.serverSsl) this.serverSsl.on('request', staticRequestHandler);
-		} catch (e) {
-			if (e.message === 'disablenodestatic') {
-				console.log('node-static is disabled');
-			} else {
-				console.log('Could not start node-static - try `npm install` if you want to use it');
-			}
 		}
 
 		// SockJS server
