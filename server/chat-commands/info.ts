@@ -267,7 +267,7 @@ export const commands: ChatCommands = {
 
 				buf += punishments.map(([curRoom, curPunishment]) => {
 					const [punishType, punishUserid, expireTime, reason] = curPunishment;
-					let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.display;
+					let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc;
 					if (!punishDesc) punishDesc = `punished`;
 					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
 					const expiresIn = new Date(expireTime).getTime() - Date.now();
@@ -346,7 +346,7 @@ export const commands: ChatCommands = {
 
 			buf += punishments.map(([curRoom, curPunishment]) => {
 				const [punishType, punishUserid, expireTime, reason] = curPunishment;
-				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.display;
+				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc;
 				if (!punishDesc) punishDesc = `punished`;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 				const expiresIn = new Date(expireTime).getTime() - Date.now();

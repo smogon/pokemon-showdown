@@ -58,13 +58,12 @@ export type Punishment = [string, ID | PunishType, number, string];
 
 /**
  * Info on punishment types. Can be used for either room punishment types or global punishments
- * extended by plugins. It can either be just a string (corresponding to the display in /alts),
- * or a [string, callback] - where the string is the /alts display, and the callback is what to do if the user
+ * extended by plugins. The `desc` is the /alts display, and the `callback` is what to do if the user
  * _does_ have the punishment (can be used to add extra effects in lieu of something like a loginfilter.)
  * Rooms will be specified for room punishments, otherwise it's null for global punishments
  */
 export interface PunishInfo {
-	display: string;
+	desc: string;
 	callback?: (user: User, punishment: Punishment, room: Room | null) => void;
 }
 
@@ -195,15 +194,11 @@ export const Punishments = new class {
 	 *
 	 * This map can be extended with custom punishments by chat plugins.
 	 *
-	 * Keys in the map correspond to punishTypes, values signify the way
-	 * they should be displayed in /alt. Optionally, it can be made an array with [display, callback function]
-	 * with the callback function being called in `checkName`
-	 * (can be used in lieu of a loginfilter to apply the effects of the punishment, or to handle notifying the user.)
-	 */
+	 * Keys in the map correspond to PunishInfo */
 	readonly punishmentTypes = new Map<string, PunishInfo>([
-		['LOCK', {display: 'locked'}],
-		['BAN', {display: 'globally banned'}],
-		['NAMELOCK', {display: 'namelocked'}],
+		['LOCK', {desc: 'locked'}],
+		['BAN', {desc: 'globally banned'}],
+		['NAMELOCK', {desc: 'namelocked'}],
 	]);
 	/**
 	 * For room punishments, they can be anything in the roomPunishmentTypes map.
@@ -220,11 +215,11 @@ export const Punishments = new class {
 	 *
 	 */
 	readonly roomPunishmentTypes = new Map<string, PunishInfo>([
-		['ROOMBAN', {display: 'banned'}],
-		['BLACKLIST', {display: 'blacklisted'}],
-		['BATTLEBAN', {display: 'battlebanned'}],
-		['MUTE', {display: 'muted'}],
-		['GROUPCHATBAN', {display: 'banned from using groupchats'}],
+		['ROOMBAN', {desc: 'banned'}],
+		['BLACKLIST', {desc: 'blacklisted'}],
+		['BATTLEBAN', {desc: 'battlebanned'}],
+		['MUTE', {desc: 'muted'}],
+		['GROUPCHATBAN', {desc: 'banned from using groupchats'}],
 	]);
 	constructor() {
 		setImmediate(() => {
@@ -752,11 +747,11 @@ export const Punishments = new class {
 		return success;
 	}
 
-	addRoomPunishmentType(type: string, display: string, callback?: PunishInfo['callback']) {
-		this.roomPunishmentTypes.set(type, {display, callback});
+	addRoomPunishmentType(type: string, desc: string, callback?: PunishInfo['callback']) {
+		this.roomPunishmentTypes.set(type, {desc, callback});
 	}
-	addPunishmentType(type: string, display: string, callback?: PunishInfo['callback']) {
-		this.punishmentTypes.set(type, {display, callback});
+	addPunishmentType(type: string, desc: string, callback?: PunishInfo['callback']) {
+		this.punishmentTypes.set(type, {desc, callback});
 	}
 
 	/*********************************************************
@@ -1793,7 +1788,7 @@ export const Punishments = new class {
 			const punishmentText = punishments.map(([room, punishment]) => {
 				const [punishType, punishUserid, , reason] = punishment;
 				if (punishType in PUNISHMENT_POINT_VALUES) points += PUNISHMENT_POINT_VALUES[punishType];
-				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.display;
+				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc;
 				if (!punishDesc) punishDesc = `punished`;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 
