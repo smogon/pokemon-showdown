@@ -16,7 +16,7 @@ const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
 
 export const sections = [
-	'official', 'smogonformats', 'communityprojectsformats', 'languages', 'entertainment', 'gaming', 'lifehobbies', 'onsitegames',
+	'official', 'battleformats', 'languages', 'entertainment', 'gaming', 'lifehobbies', 'onsitegames',
 ] as const;
 
 export type RoomSection = typeof sections[number];
@@ -24,8 +24,7 @@ export type RoomSection = typeof sections[number];
 export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections: readonly RoomSection[]} = {
 	sectionNames: {
 		official: 'Official',
-		smogonformats: 'Smogon formats',
-		communityprojectsformats: 'Community projects & formats',
+		battleformats: 'Battle formats',
 		languages: 'Languages',
 		entertainment: 'Entertainment',
 		gaming: 'Gaming',

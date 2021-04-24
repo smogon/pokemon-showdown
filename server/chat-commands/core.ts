@@ -1711,7 +1711,7 @@ export const commands: ChatCommands = {
 				name: targetUser.name,
 				avatar: targetUser.avatar,
 				group: group,
-				sectionleader,
+				customgroup: sectionleader ? "Section Leader" : undefined,
 				autoconfirmed: !!targetUser.autoconfirmed,
 				status: targetUser.getStatus(),
 				rooms: roomList,

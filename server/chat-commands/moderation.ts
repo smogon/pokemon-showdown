@@ -1412,8 +1412,10 @@ export const commands: ChatCommands = {
 			if (!staffRoom?.auth.has(userid)) this.parse(`/msgroom staff,/forceroompromote ${userid},▸`);
 			targetUser?.popup(`You were appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		} else {
+			const group = Users.globalAuth.get(userid);
 			Users.globalAuth.deleteSection(userid);
 			this.privateGlobalModAction(`${name} was demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
+			if (group === ' ') this.sendReply(`They are also no longer manually trusted. If they should be, use '/trustuser'.`);
 			this.globalModlog(`DESECTION LEADER`, userid, section);
 			if (staffRoom?.auth.getDirect(userid) as any === '▸') this.parse(`/msgroom staff,/roomdeauth ${userid}`);
 			targetUser?.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
