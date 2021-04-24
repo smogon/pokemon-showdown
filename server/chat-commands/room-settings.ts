@@ -95,6 +95,14 @@ export const commands: ChatCommands = {
 			if (error) return this.errorReply(error);
 		}
 
+		// only admins can force modchat on a forced public battle
+		if (room.battle?.forcedSettings.modchat && !user.can('rangeban')) {
+			return this.errorReply(
+				`This battle is required to have modchat on due to one of the players having a username that starts with ` +
+				`${room.battle.forcedSettings.modchat}.`
+			);
+		}
+
 		target = target.toLowerCase().trim();
 		const currentModchat = room.settings.modchat;
 		switch (target) {
@@ -212,7 +220,7 @@ export const commands: ChatCommands = {
 		} else {
 			user.battleSettings.inviteOnly = true;
 			user.update();
-			this.sendReply(`Your next battle will be invite-only${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
+			this.sendReply(`Your next battle will be invite-only${Rooms.RoomBattle.battleForcedSetting(user, 'privacy') ? `, unless it is rated` : ``}.`);
 		}
 	},
 	inviteonlynexthelp: [
@@ -244,8 +252,10 @@ export const commands: ChatCommands = {
 		}
 		if (room.battle) {
 			this.checkCan('editprivacy', null, room);
-			if (room.battle.forcePublic) {
-				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${room.battle.forcePublic}'.`);
+			if (room.battle.forcedSettings.privacy) {
+				return this.errorReply(
+					`This battle is required to be public due to a player having a name prefixed by '${room.battle.forcedSettings.privacy}'.`
+				);
 			}
 			if (room.battle.inviteOnlySetter && !user.can('mute', null, room) && room.battle.inviteOnlySetter !== user.id) {
 				return this.errorReply(`Only the person who set this battle to be invite-only can turn it off.`);
@@ -1026,8 +1036,8 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		if (room.battle) {
 			this.checkCan('editprivacy', null, room);
-			if (room.battle.forcePublic) {
-				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${room.battle.forcePublic}'.`);
+			if (room.battle.forcedSettings.privacy) {
+				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${room.battle.forcedSettings.privacy}'.`);
 			}
 			if (room.tour?.forcePublic) {
 				return this.errorReply(`This battle can't be hidden, because the tournament is set to be forced public.`);
@@ -1125,7 +1135,7 @@ export const commands: ChatCommands = {
 		} else {
 			user.battleSettings.hidden = true;
 			user.update();
-			this.sendReply(`Your next battle will be hidden${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
+			this.sendReply(`Your next battle will be hidden${Rooms.RoomBattle.battleForcedSetting(user, 'privacy') ? `, unless it is rated` : ``}.`);
 		}
 	},
 	hidenexthelp: [
