@@ -1346,4 +1346,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans items that are not usable in Pokemon Stadium 2.",
 		banlist: ['Fast Ball', 'Friend Ball', 'Great Ball', 'Heavy Ball', 'Level Ball', 'Love Ball', 'Lure Ball', 'Master Ball', 'Moon Ball', 'Park Ball', 'Poke Ball', 'Safari Ball', 'Ultra Ball', 'Fire Stone', 'Leaf Stone', 'Moon Stone', 'Sun Stone', 'Thunder Stone', 'Upgrade', 'Water Stone', 'Mail'],
 	},
+	nintendocup2000movelegality: {
+		effectType: 'ValidatorRule',
+		name: "Nintendo Cup 2000 Move Legality",
+		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
+		// Implemented in mods/gen2/rulesets.ts
+	},
 };
