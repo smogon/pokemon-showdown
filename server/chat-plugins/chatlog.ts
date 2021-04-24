@@ -562,9 +562,7 @@ export abstract class Searcher {
 			}
 			buf += `<br />Total linecount: ${total}<hr />`;
 			buf += '<ol>';
-			const sortedDays = Object.keys(results).sort((a, b) => (
-				new Date(b).getTime() - new Date(a).getTime()
-			));
+			const sortedDays = Utils.sortBy(Object.keys(results), day => ({reverse: day}));
 			for (const day of sortedDays) {
 				const dayResults = results[day][user];
 				if (isNaN(dayResults)) continue;
@@ -582,8 +580,8 @@ export abstract class Searcher {
 				}
 			}
 			const resultKeys = Object.keys(totalResults);
-			const sortedResults = resultKeys.sort((a, b) => (
-				totalResults[b] - totalResults[a]
+			const sortedResults = Utils.sortBy(resultKeys, userid => (
+				-totalResults[userid]
 			)).slice(0, MAX_TOPUSERS);
 			for (const userid of sortedResults) {
 				buf += `<li><span class="username"><username>${userid}</username></span>: `;
@@ -944,13 +942,9 @@ export class RipgrepLogSearcher extends Searcher {
 		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const useOriginal = originalSearch && originalSearch !== search;
 		const searchRegex = new RegExp(useOriginal ? search : this.constructSearchRegex(search), "i");
-		const sorted = results.sort((aLine, bLine) => {
-			const [aName] = aLine.split('.txt');
-			const [bName] = bLine.split('.txt');
-			const aDate = new Date(aName.split('/').pop()!);
-			const bDate = new Date(bName.split('/').pop()!);
-			return bDate.getTime() - aDate.getTime();
-		}).map(chunk => chunk.split('\n').map(rawLine => {
+		const sorted = Utils.sortBy(results, line => (
+			{reverse: line.split('.txt')[0].split('/').pop()!}
+		)).map(chunk => chunk.split('\n').map(rawLine => {
 			if (exactMatches > limit || !toID(rawLine)) return null; // return early so we don't keep sorting
 			const sep = rawLine.includes('.txt-') ? '.txt-' : '.txt:';
 			const [name, text] = rawLine.split(sep);

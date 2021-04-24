@@ -471,33 +471,18 @@ export function notifyStaff() {
 	const room = Rooms.get('staff');
 	if (!room) return;
 	let buf = ``;
-	const keys = Object.keys(tickets).sort((aKey, bKey) => {
-		const a = tickets[aKey];
-		const b = tickets[bKey];
-		if (a.offline) {
-			return (b.offline ? 1 : -1);
-		}
-		if (a.open !== b.open) {
-			return (a.open ? -1 : 1);
-		} else if (a.open && b.open) {
-			if (a.active !== b.active) {
-				return (a.active ? -1 : 1);
-			}
-			if (!!a.claimed !== !!b.claimed) {
-				return (a.claimed ? 1 : -1);
-			}
-			return a.created - b.created;
-		}
-		return 0;
-	});
+	const sortedTickets = Utils.sortBy(Object.values(tickets), ticket => [
+		!ticket.offline,
+		ticket.open,
+		ticket.open ? [ticket.active, !ticket.claimed, ticket.created] : 0,
+	]);
 	let count = 0;
 	let hiddenTicketUnclaimedCount = 0;
 	let hiddenTicketCount = 0;
 	let hasUnclaimed = false;
 	let fourthTicketIndex = 0;
 	let hasAssistRequest = false;
-	for (const key of keys) {
-		const ticket = tickets[key];
+	for (const ticket of sortedTickets) {
 		if (!ticket.open) continue;
 		if (!ticket.active) continue;
 		if (count >= 3) {
@@ -868,27 +853,16 @@ export const pages: PageTable = {
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Help tickets`}</h1></th></tr>`;
 			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
 
-			const keys = Object.keys(tickets).sort((aKey, bKey) => {
-				const a = tickets[aKey];
-				const b = tickets[bKey];
-				if (a.open !== b.open) {
-					return (a.open ? -1 : 1);
-				}
-				if (a.open) {
-					if (a.active !== b.active) {
-						return (a.active ? -1 : 1);
-					}
-					return a.created - b.created;
-				}
-				return b.created - a.created;
-			});
+			const sortedTickets = Utils.sortBy(Object.values(tickets), ticket => [
+				ticket.open,
+				ticket.open ? [ticket.active, ticket.created] : -ticket.created,
+			]);
 			let count = 0;
-			for (const key of keys) {
+			for (const ticket of sortedTickets) {
 				if (count >= 100 && query[0] !== 'all') {
-					buf += `<tr><td colspan="5">${this.tr`And ${keys.length - count} more tickets.`} <a class="button" href="/view-help-tickets-all" target="replace">${this.tr`View all tickets`}</a></td></tr>`;
+					buf += `<tr><td colspan="5">${this.tr`And ${sortedTickets.length - count} more tickets.`} <a class="button" href="/view-help-tickets-all" target="replace">${this.tr`View all tickets`}</a></td></tr>`;
 					break;
 				}
-				const ticket = tickets[key];
 				let icon = `<span style="color:gray"><i class="fa fa-check-circle-o"></i> ${this.tr`Closed`}</span>`;
 				if (ticket.open) {
 					if (!ticket.active) {
@@ -924,9 +898,10 @@ export const pages: PageTable = {
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody>`;
 			buf += `<tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Ticket Bans`}<i class="fa fa-ban"></i></h2></th></tr>`;
 			buf += `<tr><th>Userids</th><th>IPs</th><th>Expires</th><th>Reason</th></tr>`;
-			const ticketBans = Array.from(Punishments.getPunishments('staff'))
-				.sort((a, b) => a[1].expireTime - b[1].expireTime)
-				.filter(item => item[1].punishType === 'TICKETBAN');
+			const ticketBans = Utils.sortBy(
+				[...Punishments.getPunishments('staff')].filter(([id, entry]) => entry.punishType === 'TICKETBAN'),
+				([id, entry]) => entry.expireTime
+			);
 			for (const [userid, entry] of ticketBans) {
 				let ids = [userid];
 				if (entry.userids) ids = ids.concat(entry.userids);
@@ -1060,14 +1035,14 @@ export const pages: PageTable = {
 					}
 				}
 
-				const sortedStats = Object.keys(typeStats).sort((a, b) => {
+				const sortedStats = Utils.sortBy(Object.keys(typeStats), t => {
 					if (col === 'type') {
 						// Alphabetize strings
-						return a.localeCompare(b, 'en');
+						return t;
 					} else if (col === 'resolution') {
-						return (typeStats[b].resolved || 0) - (typeStats[a].resolved || 0);
+						return -(typeStats[t].resolved || 0);
 					}
-					return typeStats[b][col] - typeStats[a][col];
+					return -typeStats[t][col];
 				});
 
 				for (const type of sortedStats) {
@@ -1088,12 +1063,12 @@ export const pages: PageTable = {
 				for (const staff in staffStats) {
 					staffStats[staff].time = Math.round(staffStats[staff].time / staffStats[staff].num);
 				}
-				const sortedStaff = Object.keys(staffStats).sort((a, b) => {
+				const sortedStaff = Utils.sortBy(Object.keys(staffStats), staff => {
 					if (col === 'staff') {
 						// Alphabetize strings
-						return a.localeCompare(b, 'en');
+						return staff;
 					}
-					return staffStats[b][col] - staffStats[a][col];
+					return -staffStats[staff][col];
 				});
 				for (const staff of sortedStaff) {
 					buf += `<tr><td>${staff}</td><td>${staffStats[staff].num}</td><td>${Chat.toDurationString(staffStats[staff].time, {precision: 1})}</td></tr>`;

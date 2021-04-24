@@ -599,8 +599,8 @@ class UNOPlayer extends Rooms.RoomGamePlayer {
 	}
 
 	buildHand() {
-		return this.hand.sort((a, b) => a.color.localeCompare(b.color) || a.value.localeCompare(b.value))
-			.map((c, i) => cardHTML(c, i === this.hand.length - 1));
+		return Utils.sortBy(this.hand, card => [card.color, card.value])
+			.map((card, i) => cardHTML(card, i === this.hand.length - 1));
 	}
 
 	sendDisplay() {

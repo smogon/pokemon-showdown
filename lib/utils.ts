@@ -172,13 +172,16 @@ export function compare(a: Comparable, b: Comparable): number {
 /**
  * Sorts an array according to the callback's output on its elements.
  *
- * The callback's output is compared according to `PSUtils.compare` (in
- * particular, it supports arrays so you can sort by multiple things).
+ * The callback's output is compared according to `PSUtils.compare`
+ * (numbers low to high, strings A-Z, booleans true-first, arrays in order).
  */
 export function sortBy<T>(array: T[], callback: (a: T) => Comparable): T[];
 /**
-* Sorts an array according to `PSUtils.compare`. (Correctly sorts numbers,
- * unlike `array.sort`)
+ * Sorts an array according to `PSUtils.compare`
+ * (numbers low to high, strings A-Z, booleans true-first, arrays in order).
+ *
+ * Note that array.sort() only works on strings, not numbers, so you'll need
+ * this to sort numbers.
  */
 export function sortBy<T extends Comparable>(array: T[]): T[];
 export function sortBy<T>(array: T[], callback?: (a: T) => Comparable) {

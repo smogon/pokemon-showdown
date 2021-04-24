@@ -1,4 +1,5 @@
 import {Dex, toID} from '../sim/dex';
+import {Utils} from '../lib';
 import {PRNG, PRNGSeed} from '../sim/prng';
 
 export interface TeamData {
@@ -1790,7 +1791,7 @@ export class RandomTeams {
 		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
 
 		const abilityNames: string[] = Object.values(species.abilities);
-		abilityNames.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
+		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
 
 		const abilities = abilityNames.map(name => this.dex.abilities.get(name));
 		if (abilityNames[1]) {
