@@ -218,7 +218,7 @@ export const commands: ChatCommands = {
 				const punishment = Punishments.ips.get(ip);
 				if (user.can('alts') && punishment) {
 					const [punishType, userid] = punishment;
-					let punishMsg = Punishments.punishmentTypes.get(punishType) || 'punished';
+					let punishMsg = Punishments.punishmentTypes.get(punishType)?.desc || punishType;
 					if (userid !== targetUser.id) punishMsg += ` as ${userid}`;
 					status.push(punishMsg);
 				}
@@ -271,8 +271,7 @@ export const commands: ChatCommands = {
 
 				buf += punishments.map(([curRoom, curPunishment]) => {
 					const [punishType, punishUserid, expireTime, reason] = curPunishment;
-					let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc;
-					if (!punishDesc) punishDesc = `punished`;
+					let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc || punishType;
 					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
 					const expiresIn = new Date(expireTime).getTime() - Date.now();
 					const expireString = Chat.toDurationString(expiresIn, {precision: 1});
@@ -329,9 +328,8 @@ export const commands: ChatCommands = {
 		const punishment = Punishments.userids.get(userid);
 		if (punishment) {
 			const [punishType, punishUserid, , reason] = punishment;
-			const punishData = (Punishments.punishmentTypes.get(punishType) || punishType);
-			const punishName = (Array.isArray(punishData) ? punishData[0] : punishData).toUpperCase();
-			buf += `${punishName}: ${punishUserid}`;
+			const punishDesc = (Punishments.punishmentTypes.get(punishType)?.desc || punishType);
+			buf += `${punishDesc}: ${punishUserid}`;
 			const expiresIn = Punishments.checkLockExpiration(userid);
 			if (expiresIn) buf += expiresIn;
 			if (reason) buf += Utils.html` (reason: ${reason})`;
@@ -353,8 +351,7 @@ export const commands: ChatCommands = {
 
 			buf += punishments.map(([curRoom, curPunishment]) => {
 				const [punishType, punishUserid, expireTime, reason] = curPunishment;
-				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc;
-				if (!punishDesc) punishDesc = `punished`;
+				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc || punishType;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 				const expiresIn = new Date(expireTime).getTime() - Date.now();
 				const expireString = Chat.toDurationString(expiresIn, {precision: 1});
