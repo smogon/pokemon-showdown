@@ -436,7 +436,7 @@ export const commands: ChatCommands = {
 		let sectionid: RoomSection;
 		for (sectionid in sections) {
 			if (!sections[sectionid].size) continue;
-			buffer.push(`**${RoomSections.sectionNames[sectionid]}**:\n` + [...sections[sectionid]].join(', '));
+			buffer.push(`**${RoomSections.sectionNames[sectionid]}**:\n` + Utils.sortBy([...sections[sectionid]]).join(', '));
 		}
 		if (!buffer.length) throw new Chat.ErrorMessage(`There are no Section Leaders currently.`);
 		connection.popup(buffer.join(`\n\n`));
