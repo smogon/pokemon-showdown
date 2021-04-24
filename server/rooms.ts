@@ -105,7 +105,7 @@ export interface RoomSettings {
 	hangmanDisabled?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
-	pspl?: string;
+	spotlight?: string;
 	parentid?: string | null;
 	desc?: string | null;
 	introMessage?: string | null;
@@ -1407,7 +1407,7 @@ export class GlobalRoomState {
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
-			if (room.settings.pspl) roomData.spotlight = room.settings.pspl;
+			if (room.settings.spotlight) roomData.spotlight = room.settings.spotlight;
 
 			roomsData.chat.push(roomData);
 		}
