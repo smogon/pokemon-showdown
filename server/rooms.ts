@@ -1276,7 +1276,8 @@ export class GlobalRoomState {
 			if (format.searchShow) displayCode |= 2;
 			if (format.challengeShow) displayCode |= 4;
 			if (format.tournamentShow) displayCode |= 8;
-			const level = format.maxLevel || format.maxForcedLevel || format.forcedLevel;
+			const level = format.cupLevelLimit ? format.cupLevelLimit.range[0] :
+				format.maxLevel || format.maxForcedLevel || format.forcedLevel;
 			if (level === 50) displayCode |= 16;
 			this.formatList += ',' + displayCode.toString(16);
 		}
