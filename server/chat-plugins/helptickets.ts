@@ -6,7 +6,7 @@ const TICKET_FILE = 'config/tickets.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 
-Punishments.roomPunishmentTypes.set(`TICKETBAN`, 'banned from creating help tickets');
+Punishments.addRoomPunishmentType('TICKETBAN', 'banned from creating help tickets');
 
 interface TicketState {
 	creator: string;
