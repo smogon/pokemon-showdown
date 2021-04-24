@@ -1148,23 +1148,24 @@ export const commands: ChatCommands = {
 		this.parse(`/setroomsection official`);
 	},
 
-	psplwinnerroom(target, room, user) {
+	roomspotlight(target, room, user) {
 		this.checkCan('makeroom');
 		room = this.requireRoom();
+		if (!target) return this.parse(`/help roomspotlight`);
 		if (!room.persist) {
-			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room.`);
+			return this.errorReply(`/roomspotlight - You can't spotlight this room.`);
 		}
 		if (this.meansNo(target)) {
-			if (!room.settings.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
-			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
-			this.globalModlog('UNPSPLROOM');
-			delete room.settings.pspl;
+			if (!room.settings.spotlight) return this.errorReply(`This chatroom is not being spotlighted.`);
+			this.addModAction(`${user.name} removed this chatroom from the spotlight.`);
+			this.globalModlog('UNSPOTLIGHT');
+			delete room.settings.spotlight;
 			room.saveSettings();
 		} else {
-			if (room.settings.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
-			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
-			this.globalModlog('PSPLROOM');
-			room.settings.pspl = "PSPL Winner";
+			if (room.settings.spotlight === target) return this.errorReply("This chat room is already spotlighted.");
+			this.addModAction(`${user.name} spotlighted this room with the message "${target}".`);
+			this.globalModlog('SPOTLIGHT');
+			room.settings.spotlight = target;
 			room.saveSettings();
 		}
 	},
