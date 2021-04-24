@@ -146,7 +146,7 @@ export const pages: PageTable = {
 
 		buf += `<h2>FAQs for ${room.title}:</h2>`;
 		const keys = Object.keys(roomFaqs[room.roomid]);
-		const sortedKeys = keys.filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b));
+		const sortedKeys = Utils.sortBy(keys.filter(val => !getAlias(room.roomid, val)));
 		for (const key of sortedKeys) {
 			const topic = roomFaqs[room.roomid][key];
 			buf += `<div class="infobox">`;

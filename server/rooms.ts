@@ -1321,7 +1321,7 @@ export class GlobalRoomState {
 		if (Config.rankList) {
 			return Config.rankList;
 		}
-		let rankList = [];
+		const rankList = [];
 
 		for (const rank in Config.groups) {
 			if (!Config.groups[rank] || !rank) continue;
@@ -1338,7 +1338,7 @@ export class GlobalRoomState {
 
 		const typeOrder = ['punishment', 'normal', 'staff', 'leadership'];
 
-		rankList = rankList.sort((a, b) => typeOrder.indexOf(b.type) - typeOrder.indexOf(a.type));
+		Utils.sortBy(rankList, rank => -typeOrder.indexOf(rank.type));
 
 		// add the punishment types at the very end.
 		for (const rank in Config.punishgroups) {

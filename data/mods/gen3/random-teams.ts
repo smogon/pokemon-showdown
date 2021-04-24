@@ -1,4 +1,5 @@
 import RandomGen4Teams from '../gen4/random-teams';
+import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 
 export class RandomGen3Teams extends RandomGen4Teams {
@@ -477,7 +478,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (!hasMove['hiddenpower']) ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const abilities = Object.values(species.abilities).filter(a => this.dex.abilities.get(a).gen === 3);
-		abilities.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
+		Utils.sortBy(abilities, name => -this.dex.abilities.get(name).rating);
 		let ability0 = this.dex.abilities.get(abilities[0]);
 		let ability1 = this.dex.abilities.get(abilities[1]);
 		if (abilities[1]) {

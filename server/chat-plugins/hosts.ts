@@ -39,13 +39,6 @@ function formatRange(range: AddressRange, includeModlogBrackets?: boolean) {
 	return result;
 }
 
-// ipSort doesn't work on .* ranges, so we can just convert it to range
-// and make the min ip a string to check
-function makeRangeSortable(rangeString: string) {
-	if (!IPTools.ipRangeRegex.test(rangeString)) return rangeString;
-	return IPTools.numberToIP(IPTools.stringToRange(rangeString)!.minIP);
-}
-
 export const pages: PageTable = {
 	proxies(query, user) {
 		this.title = "[Proxies]";
@@ -53,7 +46,7 @@ export const pages: PageTable = {
 
 		const openProxies = [...IPTools.singleIPOpenProxies];
 		const proxyHosts = [...IPTools.proxyHosts];
-		openProxies.sort(IPTools.ipSort);
+		Utils.sortBy(openProxies, IPTools.ipToNumber);
 		proxyHosts.sort();
 		IPTools.sortRanges();
 
@@ -142,12 +135,11 @@ export const pages: PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
 			const sortedSharedIPBlacklist = [...Punishments.sharedIpBlacklist];
-			sortedSharedIPBlacklist.sort(([a], [b]) => {
-				if ([a, b].every(ip => IPTools.ipRegex.test(ip))) {
-					return IPTools.ipSort(a, b);
-				}
-				return IPTools.ipSort(makeRangeSortable(a), makeRangeSortable(b));
-			});
+			Utils.sortBy(sortedSharedIPBlacklist, ([ipOrRange]) => (
+				IPTools.ipRegex.test(ipOrRange) ?
+					IPTools.ipToNumber(ipOrRange) :
+					IPTools.stringToRange(ipOrRange)!.minIP
+			));
 			for (const [ip, reason] of sortedSharedIPBlacklist) {
 				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
 			}
@@ -167,7 +159,7 @@ export const pages: PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Location</th></tr>`;
 			const sortedSharedIPs = [...Punishments.sharedIps];
-			sortedSharedIPs.sort((a, b) => IPTools.ipSort(a[0], b[0]));
+			Utils.sortBy(sortedSharedIPs, ([ip]) => IPTools.ipToNumber(ip));
 
 			for (const [ip, location] of sortedSharedIPs) {
 				buf += `<tr><td>${ip}</td><td>${location}</td></tr>`;

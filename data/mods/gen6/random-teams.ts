@@ -1,6 +1,7 @@
 import {TeamData} from '../../random-teams';
 import RandomGen7Teams from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
 export class RandomGen6Teams extends RandomGen7Teams {
@@ -957,7 +958,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const battleOnly = species.battleOnly && !species.requiredAbility;
 		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
 		const abilityNames: string[] = Object.values(baseSpecies.abilities);
-		abilityNames.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
+		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
 
 		if (abilityNames.length > 1) {
 			const abilities = abilityNames.map(name => this.dex.abilities.get(name));

@@ -97,7 +97,7 @@ interface TriviaQuestion {
 type TriviaScores = [number, number, number];
 
 interface TriviaLeaderboard {
-	[k: string]: TriviaScores;
+	[userid: string]: TriviaScores;
 }
 
 interface TriviaGame {
@@ -314,19 +314,19 @@ class Ladder {
 	}
 
 	computeCachedLadder() {
-		const leaders = Object.keys(this.leaderboard);
+		const leaders = Object.entries(this.leaderboard);
 		const ladder: TriviaLadder = [];
 		const ranks: TriviaLeaderboard = {};
-		for (const leader of leaders) {
+		for (const [leader] of leaders) {
 			ranks[leader] = [0, 0, 0];
 		}
 		for (let i = 0; i < 3; i++) {
-			leaders.sort((a, b) => this.leaderboard[b][i] - this.leaderboard[a][i]);
+			Utils.sortBy(leaders, ([userid, scores]) => -scores[i]);
 
 			let max = Infinity;
 			let rank = -1;
-			for (const leader of leaders) {
-				const score = this.leaderboard[leader][i];
+			for (const [leader, scores] of leaders) {
+				const score = scores[i];
 				if (max !== score) {
 					rank++;
 					max = score;
@@ -885,9 +885,9 @@ export class Trivia extends Rooms.RoomGame {
 			if ((options.requirePoints && !player.points) || !user) continue;
 			ranks.push({id: userid, player, name: user.name});
 		}
-		ranks.sort((a, b) => b.player.points - a.player.points ||
-				a.player.lastQuestion - b.player.lastQuestion ||
-				hrtimeToNanoseconds(a.player.answeredAt) - hrtimeToNanoseconds(b.player.answeredAt));
+		Utils.sortBy(ranks, ({player}) => (
+			[-player.points, player.lastQuestion, hrtimeToNanoseconds(player.answeredAt)]
+		));
 		return options.max === null ? ranks : ranks.slice(0, options.max);
 	}
 
@@ -1062,8 +1062,8 @@ export class TimerModeTrivia extends Trivia {
 
 		let winner = cap.questions && this.questionNumber >= cap.questions;
 
-		for (const i in this.playerTable) {
-			const player = this.playerTable[i];
+		for (const userid in this.playerTable) {
+			const player = this.playerTable[userid];
 			if (!player.isCorrect) {
 				player.clearAnswer();
 				continue;
@@ -1075,7 +1075,7 @@ export class TimerModeTrivia extends Trivia {
 			player.incrementPoints(points, this.questionNumber);
 
 			const pointBuffer = innerBuffer.get(points) || [];
-			pointBuffer.push([Utils.escapeHTML(player.name), playerAnsweredAt]);
+			pointBuffer.push([player.name, playerAnsweredAt]);
 
 			if (cap.points && player.points >= cap.points) {
 				winner = true;
@@ -1089,13 +1089,12 @@ export class TimerModeTrivia extends Trivia {
 			if (!players.length) continue;
 
 			rowAdded = true;
-			const sanitizedPlayerArray = players
-				.sort((a, b) => a[1] - b[1])
-				.map(a => a[0]);
+			const playerNames = Utils.sortBy(players, ([name, answeredAt]) => answeredAt)
+				.map(([name]) => name);
 			buffer += (
 				'<tr style="background-color: #6688AA">' +
 				`<td style="text-align: center">${pointValue}</td>` +
-				`<td>${sanitizedPlayerArray.join(', ')}</td>` +
+				Utils.html`<td>${playerNames.join(', ')}</td>` +
 				'</tr>'
 			);
 		}
@@ -1148,21 +1147,20 @@ export class NumberModeTrivia extends Trivia {
 		this.phase = INTERMISSION_PHASE;
 
 		let buffer;
-		const innerBuffer = Object.keys(this.playerTable)
-			.filter(id => !!this.playerTable[id].isCorrect)
-			.map(id => {
-				const player = this.playerTable[id];
-				return [Utils.escapeHTML(player.name), hrtimeToNanoseconds(player.currentAnsweredAt)];
-			})
-			.sort((a, b) => (a[1] as number) - (b[1] as number));
+		const innerBuffer = Utils.sortBy(
+			Object.values(this.playerTable)
+				.filter(player => !!player.isCorrect)
+				.map(player => [player.name, hrtimeToNanoseconds(player.currentAnsweredAt)]),
+			([player, answeredAt]) => answeredAt
+		);
 
 		const points = this.calculatePoints(innerBuffer.length);
 		if (points) {
 			const cap = this.getCap();
 			// We add 1 questionNumber because it starts at 0
 			let winner = cap.questions && this.questionNumber >= cap.questions;
-			for (const i in this.playerTable) {
-				const player = this.playerTable[i];
+			for (const userid in this.playerTable) {
+				const player = this.playerTable[userid];
 				if (player.isCorrect) player.incrementPoints(points, this.questionNumber);
 
 				if (cap.points && player.points >= cap.points) {
@@ -1172,15 +1170,15 @@ export class NumberModeTrivia extends Trivia {
 				player.clearAnswer();
 			}
 
-			const players = innerBuffer.map(arr => arr[0]).join(', ');
+			const players = Utils.escapeHTML(innerBuffer.map(([playerName]) => playerName).join(', '));
 			buffer = this.room.tr`Correct: ${players}` + `<br />` +
 				this.room.tr`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 				`${Chat.plural(innerBuffer, this.room.tr`Each of them gained <strong>${points}</strong> point(s)!`, this.room.tr`They gained <strong>${points}</strong> point(s)!`)}`;
 
 			if (winner) return this.win(buffer);
 		} else {
-			for (const i in this.playerTable) {
-				const player = this.playerTable[i];
+			for (const userid in this.playerTable) {
+				const player = this.playerTable[userid];
 				player.clearAnswer();
 			}
 
@@ -1219,11 +1217,8 @@ export class TriumvirateModeTrivia extends Trivia {
 	tallyAnswers() {
 		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
-		const correctPlayers = Object.keys(this.playerTable)
-			.filter(id => this.playerTable[id].isCorrect)
-			.map(id => this.playerTable[id]);
-		correctPlayers.sort((a, b) =>
-			(hrtimeToNanoseconds(a.currentAnsweredAt) > hrtimeToNanoseconds(b.currentAnsweredAt) ? 1 : -1));
+		const correctPlayers = Object.values(this.playerTable).filter(p => p.isCorrect);
+		Utils.sortBy(correctPlayers, p => hrtimeToNanoseconds(p.currentAnsweredAt));
 
 		const cap = this.getCap();
 		let winner = cap.questions && this.questionNumber >= cap.questions;
@@ -1315,14 +1310,14 @@ export class Mastermind extends Rooms.RoomGame {
 	}
 
 	formatPlayerList() {
-		return Object.values(this.playerTable)
-			.sort((a, b) => (this.leaderboard.get(b.id) || 0) - (this.leaderboard.get(a.id) || 0))
-			.map(player => {
-				const isFinalist = this.currentRound instanceof MastermindFinals && player.id in this.currentRound.playerTable;
-				const name = isFinalist ? Utils.html`<strong>${player.name}</strong>` : Utils.escapeHTML(player.name);
-				return `${name} (${this.leaderboard.get(player.id) || "0"})`;
-			})
-			.join(', ');
+		return Utils.sortBy(
+			Object.values(this.playerTable),
+			player => -(this.leaderboard.get(player.id) || 0)
+		).map(player => {
+			const isFinalist = this.currentRound instanceof MastermindFinals && player.id in this.currentRound.playerTable;
+			const name = isFinalist ? Utils.html`<strong>${player.name}</strong>` : Utils.escapeHTML(player.name);
+			return `${name} (${this.leaderboard.get(player.id) || "0"})`;
+		}).join(', ');
 	}
 
 	/**
@@ -1423,12 +1418,17 @@ export class Mastermind extends Rooms.RoomGame {
 	getTopPlayers(n: number) {
 		if (n < 0) return [];
 
-		const sortedPlayerIDs = [...this.leaderboard]
-			.sort((a, b) => b[1] - a[1]) // sort by number of points
-			.map(entry => entry[0]); // convert to an array of IDs
+		const sortedPlayerIDs = Utils.sortBy([...this.leaderboard], ([userid, score]) => score)
+			.map(([userid]) => userid);
 
-		const cutoff = this.leaderboard.get(sortedPlayerIDs[n - 1])!; // The number of points required to be in the top n
-		return sortedPlayerIDs.filter(id => this.leaderboard.get(id)! >= cutoff);
+		if (sortedPlayerIDs.length <= n) return sortedPlayerIDs;
+
+		/** The number of points required to be in the top n */
+		const cutoff = this.leaderboard.get(sortedPlayerIDs[n - 1])!;
+		while (n < sortedPlayerIDs.length && this.leaderboard.get(sortedPlayerIDs[n])! === cutoff) {
+			n++;
+		}
+		return sortedPlayerIDs.slice(0, n);
 	}
 
 	end(user: User) {
@@ -1954,7 +1954,7 @@ const triviaCommands: ChatCommands = {
 				indices.splice(i, 1);
 			}
 
-			indices.sort((a, b) => Number(a) - Number(b));
+			Utils.sortBy(indices, Number);
 			indices = indices.filter((entry, index) => !index || indices[index - 1] !== entry);
 
 			const indicesLen = indices.length;
