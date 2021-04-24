@@ -102,15 +102,15 @@ export function runPromote(
 
 export function runCrisisDemote(userid: ID) {
 	const from = [];
-	const globalGroup = Users.globalAuth.get(userid);
-	if (globalGroup && globalGroup !== ' ') {
-		from.push(globalGroup);
-		Users.globalAuth.delete(userid);
-	}
 	const section = Users.globalAuth.sectionLeaders.get(userid);
 	if (section) {
 		from.push(`Section Leader (${RoomSections.sectionNames[section] || section})`);
 		Users.globalAuth.deleteSection(userid);
+	}
+	const globalGroup = Users.globalAuth.get(userid);
+	if (globalGroup && globalGroup !== ' ') {
+		from.push(globalGroup);
+		Users.globalAuth.delete(userid);
 	}
 	for (const room of Rooms.global.chatRooms) {
 		if (!room.settings.isPrivate && room.auth.isStaff(userid)) {
