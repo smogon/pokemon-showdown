@@ -1704,12 +1704,14 @@ export const commands: ChatCommands = {
 			let group = targetUser.tempGroup;
 			if (targetUser.locked) group = Config.punishgroups?.locked?.symbol ?? '\u203d';
 			if (targetUser.namelocked) group = Config.punishgroups?.namelocked?.symbol ?? '✖';
+			const sectionleader = Users.globalAuth.sectionLeaders.has(targetUser.id);
 			const userdetails: AnyObject = {
 				id: target,
 				userid: targetUser.id,
 				name: targetUser.name,
 				avatar: targetUser.avatar,
 				group: group,
+				customgroup: sectionleader ? "Section Leader" : undefined,
 				autoconfirmed: !!targetUser.autoconfirmed,
 				status: targetUser.getStatus(),
 				rooms: roomList,
