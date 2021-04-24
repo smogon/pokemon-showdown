@@ -6,7 +6,7 @@
 
 import {FS, Utils} from '../../lib';
 
-Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
+Punishments.addRoomPunishmentType('GIVEAWAYBAN', 'banned from giveaways');
 
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;

@@ -271,7 +271,7 @@ export const commands: ChatCommands = {
 
 				buf += punishments.map(([curRoom, curPunishment]) => {
 					const [punishType, punishUserid, expireTime, reason] = curPunishment;
-					let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+					let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc;
 					if (!punishDesc) punishDesc = `punished`;
 					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
 					const expiresIn = new Date(expireTime).getTime() - Date.now();
@@ -329,7 +329,8 @@ export const commands: ChatCommands = {
 		const punishment = Punishments.userids.get(userid);
 		if (punishment) {
 			const [punishType, punishUserid, , reason] = punishment;
-			const punishName = (Punishments.punishmentTypes.get(punishType) || punishType).toUpperCase();
+			const punishData = (Punishments.punishmentTypes.get(punishType) || punishType);
+			const punishName = (Array.isArray(punishData) ? punishData[0] : punishData).toUpperCase();
 			buf += `${punishName}: ${punishUserid}`;
 			const expiresIn = Punishments.checkLockExpiration(userid);
 			if (expiresIn) buf += expiresIn;
@@ -352,7 +353,7 @@ export const commands: ChatCommands = {
 
 			buf += punishments.map(([curRoom, curPunishment]) => {
 				const [punishType, punishUserid, expireTime, reason] = curPunishment;
-				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc;
 				if (!punishDesc) punishDesc = `punished`;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 				const expiresIn = new Date(expireTime).getTime() - Date.now();
