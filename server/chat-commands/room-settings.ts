@@ -1606,7 +1606,7 @@ export const pages: PageTable = {
 			atLeastOne = true;
 			buf += `<tr><td><strong>${permission}</strong></td><td>`;
 			if (room.auth.atLeast(user, '#')) {
-				buf += roomGroups.map(group => (
+				buf += roomGroups.filter(group => group !== Users.SECTIONLEADER_SYMBOL).map(group => (
 					requiredRank === group ?
 						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :
 						Utils.html`<button class="button" name="send" value="/msgroom ${room.roomid},/permissions set ${permission}, ${group}">${group}</button>`

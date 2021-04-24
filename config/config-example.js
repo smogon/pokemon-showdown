@@ -688,6 +688,14 @@ exports.grouplist = [
 		nooverride: true,
 	},
 	{
+		symbol: '\u25B8',
+		id: "sectionleader",
+		name: "Section Leader",
+		inherit: '+',
+
+		roomonly: true,
+	},
+	{
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
