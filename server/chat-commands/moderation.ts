@@ -107,6 +107,11 @@ export function runCrisisDemote(userid: ID) {
 		from.push(globalGroup);
 		Users.globalAuth.delete(userid);
 	}
+	const section = Users.globalAuth.sectionLeaders.get(userid);
+	if (section) {
+		from.push(`Section Leader (${RoomSections.sectionNames[section] || section})`);
+		Users.globalAuth.deleteSection(userid);
+	}
 	for (const room of Rooms.global.chatRooms) {
 		if (!room.settings.isPrivate && room.auth.isStaff(userid)) {
 			let oldGroup: string = room.auth.getDirect(userid);
