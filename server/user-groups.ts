@@ -1,14 +1,16 @@
 import {FS} from '../lib/fs';
+import type {RoomSection} from './chat-commands/room-settings';
 
-export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
+export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '▸' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
+export const SECTIONLEADER_SYMBOL: GroupSymbol = '\u25B8';
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 export const ROOM_PERMISSIONS = [
-	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
+	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomsectionleader', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
 ] as const;
 
 export const GLOBAL_PERMISSIONS = [
@@ -307,6 +309,7 @@ export class RoomAuth extends Auth {
 
 export class GlobalAuth extends Auth {
 	usernames = new Map<ID, string>();
+	sectionLeaders = new Map<ID, RoomSection>();
 	constructor() {
 		super();
 		this.load();
@@ -315,7 +318,7 @@ export class GlobalAuth extends Auth {
 		FS('config/usergroups.csv').writeUpdate(() => {
 			let buffer = '';
 			for (const [userid, groupSymbol] of this) {
-				buffer += `${this.usernames.get(userid) || userid},${groupSymbol}\n`;
+				buffer += `${this.usernames.get(userid) || userid},${groupSymbol},${this.sectionLeaders.get(userid) || ''}\n`;
 			}
 			return buffer;
 		});
@@ -324,9 +327,10 @@ export class GlobalAuth extends Auth {
 		const data = FS('config/usergroups.csv').readIfExistsSync();
 		for (const row of data.split("\n")) {
 			if (!row) continue;
-			const [name, symbol] = row.split(",");
+			const [name, symbol, sectionid] = row.split(",");
 			const id = toID(name);
 			this.usernames.set(id, name);
+			if (sectionid) this.sectionLeaders.set(id, sectionid as RoomSection);
 			super.set(id, symbol.charAt(0) as GroupSymbol);
 		}
 	}
@@ -352,6 +356,33 @@ export class GlobalAuth extends Auth {
 			user.tempGroup = ' ';
 		}
 		this.usernames.delete(id);
+		this.save();
+		return true;
+	}
+	setSection(id: ID, sectionid: RoomSection, username?: string) {
+		if (!username) username = id;
+		const user = Users.get(id);
+		if (user) {
+			user.updateIdentity();
+			username = user.name;
+			Rooms.global.checkAutojoin(user);
+		}
+		if (!super.has(id)) this.set(id, ' ', username);
+		this.sectionLeaders.set(id, sectionid);
+		void this.save();
+		return this;
+	}
+	deleteSection(id: ID) {
+		if (!this.sectionLeaders.has(id)) return false;
+		this.sectionLeaders.delete(id);
+		if (super.get(id) === ' ') {
+			return this.delete(id);
+		}
+		const user = Users.get(id);
+		if (user) {
+			user.updateIdentity();
+			Rooms.global.checkAutojoin(user);
+		}
 		this.save();
 		return true;
 	}
