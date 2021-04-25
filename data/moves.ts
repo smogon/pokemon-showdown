@@ -9159,7 +9159,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	jokersdumb: {
 		num: 827,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Special",
 		name: "Joker's Bad At Pokemon",
 		pp: 35,
