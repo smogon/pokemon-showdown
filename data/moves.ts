@@ -6184,7 +6184,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onSideResidualOrder: 5,
 			onSideResidualSubOrder: 1.15,
-			onEnd(targetSide) {
+			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Cannonade');
 			},
 		},
@@ -6839,7 +6839,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onSideResidualOrder: 5,
 			onSideResidualSubOrder: 1.15,
-			onEnd(targetSide) {
+			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Vine Lash');
 			},
 		},
@@ -6878,7 +6878,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onSideResidualOrder: 5,
 			onSideResidualSubOrder: 1.15,
-			onEnd(targetSide) {
+			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Volcalith');
 			},
 		},
@@ -6940,7 +6940,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onSideResidualOrder: 5,
 			onSideResidualSubOrder: 1.15,
-			onEnd(targetSide) {
+			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Wildfire');
 			},
 		},
@@ -7085,7 +7085,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Grass Pledge');
 			},
-			onEnd(targetSide) {
+			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Grass Pledge');
 			},
 			onModifySpe(spe, pokemon) {
@@ -19011,7 +19011,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Water Pledge');
 			},
-			onEnd(targetSide) {
+			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
 			},
 			onModifyMove(move, pokemon) {
@@ -19381,7 +19381,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onFieldStart(field, source) {
 				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
 			},
-			onRestart(target, source) {
+			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('wonderroom');
 			},
 			// Swapping defenses implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
