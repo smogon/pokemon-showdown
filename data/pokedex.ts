@@ -16728,6 +16728,19 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Bug", "Dragon"],
 		gen: 8,
 	},
+	chromera: {
+		num: -60,
+		name: "Chromera",
+		types: ["Dark", "Poison"],
+		gender: "N",
+		baseStats: {hp: 85, atk: 85, def: 115, spa: 115, spd: 100, spe: 100},
+		abilities: {0: "Color Change"},
+		heightm: 2.5,
+		weightkg: 215,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+		gen: 8,
+	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {
 		num: -5000,
