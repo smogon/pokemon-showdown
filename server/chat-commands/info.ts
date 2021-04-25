@@ -147,7 +147,7 @@ export const commands: ChatCommands = {
 		if (canViewAlts) {
 			let prevNames = targetUser.previousIDs.map(userid => {
 				const punishment = Punishments.userids.get(userid);
-				return `${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || `punished`}${punishment[1] !== targetUser.id ? ` as ${punishment[1]}` : ``})` : ``}`;
+				return `${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment[0])?.desc || `punished`}${punishment[1] !== targetUser.id ? ` as ${punishment[1]}` : ``})` : ``}`;
 			}).join(", ");
 			if (prevNames) buf += Utils.html`<br />Previous names: ${prevNames}`;
 
@@ -156,13 +156,13 @@ export const commands: ChatCommands = {
 				if (targetAlt.tempGroup === '~' && user.tempGroup !== '~') continue;
 
 				const punishment = Punishments.userids.get(targetAlt.id);
-				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}` +
+				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0])?.desc || 'punished'}` +
 					`${punishment[1] !== targetAlt.id ? ` as ${punishment[1]}` : ''})` : '';
 				buf += Utils.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = targetAlt.previousIDs.map(userid => {
 					const p = Punishments.userids.get(userid);
-					return `${userid}${p ? ` (${Punishments.punishmentTypes.get(p[0]) || 'punished'}${p[1] !== targetAlt.id ? ` as ${p[1]}` : ``})` : ``}`;
+					return `${userid}${p ? ` (${Punishments.punishmentTypes.get(p[0])?.desc || 'punished'}${p[1] !== targetAlt.id ? ` as ${p[1]}` : ``})` : ``}`;
 				}).join(", ");
 				if (prevNames) buf += `<br />Previous names: ${prevNames}`;
 			}
