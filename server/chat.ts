@@ -448,7 +448,7 @@ export class CommandContext extends MessageContext {
 		if (typeof msg === 'string') {
 			// spawn subcontext
 			const subcontext = new CommandContext(this);
-			if (options && options.isQuiet) subcontext.isQuiet = true;
+			if (options?.isQuiet) subcontext.isQuiet = true;
 			subcontext.recursionDepth++;
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
 				throw new Error("Too much command recursion");
