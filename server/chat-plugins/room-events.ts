@@ -98,7 +98,7 @@ function getEventID(nameOrAlias: string, room: Room): ID {
 	return id;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	events: 'roomevents',
 	roomevent: 'roomevents',
 	roomevents: {

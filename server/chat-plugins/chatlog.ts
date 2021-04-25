@@ -326,7 +326,7 @@ export const LogViewer = new class {
 		return this.linkify(buf);
 	}
 
-	async battle(tier: string, number: number, context: PageContext) {
+	async battle(tier: string, number: number, context: Chat.PageContext) {
 		if (number > Rooms.global.lastBattle) {
 			throw new Chat.ErrorMessage(`That battle cannot exist, as the number has not been used.`);
 		}
@@ -592,7 +592,7 @@ export abstract class Searcher {
 		return LogViewer.linkify(buf);
 	}
 	async runSearch(
-		context: PageContext, search: string, roomid: RoomID, date: string | null, limit: number | null
+		context: Chat.PageContext, search: string, roomid: RoomID, date: string | null, limit: number | null
 	) {
 		context.title = `[Search] [${roomid}] ${search}`;
 		if (!['ripgrep', 'fs'].includes(Config.chatlogreader)) {
@@ -606,7 +606,7 @@ export abstract class Searcher {
 		const response = await PM.query({search, roomid, date, limit, queryType: 'search'});
 		return context.setHTML(response);
 	}
-	async runLinecountSearch(context: PageContext, roomid: RoomID, month: string, user?: ID) {
+	async runLinecountSearch(context: Chat.PageContext, roomid: RoomID, month: string, user?: ID) {
 		context.setHTML(
 			`<div class="pad"><h2>Searching linecounts on room ${roomid}${user ? ` for the user ${user}` : ''}.</h2></div>`
 		);
@@ -1092,7 +1092,7 @@ if (!PM.isParentProcess) {
 
 const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
@@ -1236,7 +1236,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	chatlog(target, room, user) {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;

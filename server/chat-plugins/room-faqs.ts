@@ -21,7 +21,7 @@ export function getAlias(roomid: RoomID, key: string) {
 	return false;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	addfaq(target, room, user, connection) {
 		room = this.requireRoom();
 		this.checkCan('ban', null, room);
@@ -131,7 +131,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	roomfaqs(args, user) {
 		const room = this.requireRoom();
 		this.title = `[Room FAQs]`;

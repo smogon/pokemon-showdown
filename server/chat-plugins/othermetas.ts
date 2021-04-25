@@ -44,7 +44,7 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 	return item;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	om: 'othermetas',
 	othermetas(target, room, user) {
 		this.runBroadcast();

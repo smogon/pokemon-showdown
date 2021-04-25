@@ -26,7 +26,7 @@ function hasDevAuth(user: User) {
 	return devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%');
 }
 
-function bash(command: string, context: CommandContext, cwd?: string): Promise<[number, string, string]> {
+function bash(command: string, context: Chat.CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
 	return new Promise(resolve => {
 		child_process.exec(command, {
@@ -64,7 +64,7 @@ function keysToCopy(obj: object) {
 /**
  * @returns {boolean} Whether or not the rebase failed
  */
-async function updateserver(context: CommandContext, codePath: string) {
+async function updateserver(context: Chat.CommandContext, codePath: string) {
 	const exec = (command: string) => bash(command, context, codePath);
 
 	context.sendReply(`Fetching newest version of code in the repository ${codePath}...`);
@@ -122,15 +122,14 @@ async function updateserver(context: CommandContext, codePath: string) {
 	}
 }
 
-async function rebuild(context: CommandContext) {
+async function rebuild(context: Chat.CommandContext) {
 	const [, , stderr] = await bash('node ./build', context);
 	if (stderr) {
 		throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
 	}
 }
 
-
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	potd(target, room, user) {
 		this.canUseConsole();
 		const species = Dex.species.get(target);
@@ -1354,7 +1353,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	bot(args, user, connection) {
 		const [botid, pageid] = args;
 		const bot = Users.get(botid);

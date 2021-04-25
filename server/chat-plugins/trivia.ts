@@ -1564,7 +1564,7 @@ export class MastermindFinals extends MastermindRound {
 	}
 }
 
-const triviaCommands: ChatCommands = {
+const triviaCommands: Chat.ChatCommands = {
 	sortednew: 'new',
 	newsorted: 'new',
 	unrankednew: 'new',
@@ -2529,7 +2529,7 @@ const triviaCommands: ChatCommands = {
 };
 
 
-const mastermindCommands: ChatCommands = {
+const mastermindCommands: Chat.ChatCommands = {
 	answer: triviaCommands.answer,
 	end: triviaCommands.end,
 	kick: triviaCommands.kick,
@@ -2653,7 +2653,7 @@ const mastermindCommands: ChatCommands = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	mm: mastermindCommands,
 	mastermind: mastermindCommands,
 	mastermindhelp: mastermindCommands.mastermindhelp,
