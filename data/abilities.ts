@@ -2210,9 +2210,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 		},
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.25);
-		},
 		rating: 2,
 		num: 152,
 	},
@@ -2481,10 +2478,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				move.multihitType = 'parentalbond';
 			}
 		},
-		onBasePowerPriority: 7,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.25);
-		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
 		onSourceModifySecondaries(secondaries, target, source, move) {
 			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
 				// hack to prevent accidentally suppressing King's Rock/Razor Fang
