@@ -577,7 +577,7 @@ export class CommandContext extends MessageContext {
 					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
 				}
 			}
-			Chat.sendPM(message, this.user, this.pmTarget);
+			Chat.sendPM(message, this.user, this.pmTarget, null, this.isQuiet);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
 			if (this.room.game && this.room.game.onLogMessage) {
@@ -1675,10 +1675,10 @@ export const Chat = new class {
 
 		Monitor.slow(logMessage);
 	}
-	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
+	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null, isQuiet?: boolean) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
 		if (onlyRecipient) return onlyRecipient.send(buf);
-		user.send(buf);
+		if (!isQuiet) user.send(buf);
 		if (pmTarget !== user) pmTarget.send(buf);
 		pmTarget.lastPM = user.id;
 		user.lastPM = pmTarget.id;
