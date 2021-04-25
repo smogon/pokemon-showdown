@@ -406,7 +406,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add('poke', pokemon.side.id, details, '');
 			}
 		},
-		onTeamPreview() {
+		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
@@ -419,7 +419,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`One vs One is for singles formats.`, `(Use Two vs Two in doubles)`];
 			}
 		},
-		onStart() {
+		onFieldStart() {
 			if (this.format.gameType === 'singles') (this.format as any).teamLength = {battle: 1};
 		},
 	},
@@ -432,7 +432,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`Two vs Two is for non-triples formats.`];
 			}
 		},
-		onStart() {
+		onFieldStart() {
 			if (this.format.gameType !== 'triples') (this.format as any).teamLength = {battle: 2};
 		},
 	},
@@ -857,7 +857,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (status.id === 'slp') {
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (!pokemon.statusData.source || !pokemon.statusData.source.isAlly(pokemon)) {
+						if (!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
 							return false;
 						}
@@ -1247,7 +1247,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add(`${buf}</span>`);
 			}
 		},
-		onTeamPreview() {
+		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},

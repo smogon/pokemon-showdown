@@ -131,7 +131,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	name: string;
 	/** move index number, used for Metronome rolls */
 	num?: number;
-	condition?: Partial<ConditionData>;
+	condition?: ConditionData;
 	basePower: number;
 	accuracy: true | number;
 	pp: number;

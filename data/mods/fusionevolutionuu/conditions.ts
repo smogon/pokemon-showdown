@@ -89,7 +89,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect?.effectType === 'Ability') {
 				this.add('-status', target, 'psn', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
-				this.effectData.sourceEffect = sourceEffect.id;
+				this.effectState.sourceEffect = sourceEffect.id;
 			} else {
 				this.add('-status', target, 'psn');
 			}
@@ -105,7 +105,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		name: 'tox',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			this.effectData.stage = 0;
+			this.effectState.stage = 0;
 			if (sourceEffect && sourceEffect.id === 'toxicorb') {
 				this.add('-status', target, 'tox', '[from] item: Toxic Orb');
 				target.m.orbItemStatus = true;
@@ -116,15 +116,15 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onSwitchIn() {
-			this.effectData.stage = 0;
+			this.effectState.stage = 0;
 		},
 		onResidualOrder: 9,
 		onResidual(pokemon) {
-			if (this.effectData.stage < 15) {
-				this.effectData.stage++;
+			if (this.effectState.stage < 15) {
+				this.effectState.stage++;
 			}
 			if (!pokemon.hasAbility('therapeutic')) {
-				this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectData.stage);
+				this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
 			}
 		},
 	},

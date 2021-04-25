@@ -121,7 +121,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// Rage lock
 			duration: 255,
 			onStart(target, source, effect) {
-				this.effectData.move = 'rage';
+				this.effectState.move = 'rage';
 			},
 			onLockMove: 'rage',
 			onTryHit(target, source, move) {
@@ -153,8 +153,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// max HP and current HP is 0, 255, or 511
 			if (target.hp >= target.maxhp) return false;
 			if (!target.setStatus('slp', source, move)) return false;
-			target.statusData.time = 2;
-			target.statusData.startTime = 2;
+			target.statusState.time = 2;
+			target.statusState.startTime = 2;
 			target.recalculateStats!(); // Stadium Rest removes statdrops given by Major Status Conditions.
 			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
@@ -175,7 +175,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
-				this.effectData.hp = Math.floor(target.maxhp / 4);
+				this.effectState.hp = Math.floor(target.maxhp / 4);
 				delete target.volatiles['partiallytrapped'];
 			},
 			onTryHitPriority: -1,

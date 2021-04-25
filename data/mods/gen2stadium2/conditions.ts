@@ -51,12 +51,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-status', target, 'slp');
 			}
 			// 1-4 turns, guaranteed 1 turn of sleep.
-			this.effectData.time = this.random(2, 5);
+			this.effectState.time = this.random(2, 5);
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
-			pokemon.statusData.time--;
-			if (pokemon.statusData.time <= 0) {
+			pokemon.statusState.time--;
+			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
 				return;
 			}
@@ -76,7 +76,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			} else {
 				this.add('-start', target, 'confusion');
 			}
-			this.effectData.time = this.random(2, 6);
+			this.effectState.time = this.random(2, 6);
 		},
 		onBeforeMove(pokemon, target, move) {
 			pokemon.volatiles['confusion'].time--;
