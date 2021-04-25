@@ -444,15 +444,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 5,
 		onResidual(pokemon) {
-			if (this.field.isTerrain('grassyterrain')) return;
-			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.baseMaxhp / 16);
-			} else {
-				this.damage(pokemon.baseMaxhp / 8);
-			}
-		},
-		onTerrain(pokemon) {
-			if (!this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.baseMaxhp / 16);
 			} else {
@@ -2838,11 +2829,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 5,
 		onResidual(pokemon) {
-			if (this.field.isTerrain('grassyterrain')) return;
-			this.heal(pokemon.baseMaxhp / 16);
-		},
-		onTerrain(pokemon) {
-			if (!this.field.isTerrain('grassyterrain')) return;
 			this.heal(pokemon.baseMaxhp / 16);
 		},
 		num: 234,

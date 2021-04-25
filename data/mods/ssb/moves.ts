@@ -619,13 +619,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', `Hazards were removed by the terrain!`);
 			},
-			onFieldResidualOrder: 5,
+			onFieldResidualOrder: 21,
 			onFieldResidualSubOrder: 3,
-			onFieldResidual() {
-				this.eachEvent('Terrain');
-			},
 			onFieldEnd() {
-				if (!this.effectState.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Wave Terrain');
 			},
 		},
@@ -966,13 +962,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield suddenly became grim!');
 			},
-			onFieldResidualOrder: 5,
+			onFieldResidualOrder: 21,
 			onFieldResidualSubOrder: 3,
-			onFieldResidual() {
-				this.eachEvent('Terrain');
-			},
 			onFieldEnd() {
-				if (!this.effectState.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Bane Terrain');
 			},
 		},
@@ -3665,12 +3657,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became swamped!');
 			},
-			onFieldResidualOrder: 5,
-			onFieldResidualSubOrder: 3,
-			onFieldResidual() {
-				this.eachEvent('Terrain');
-			},
-			onTerrain(pokemon) {
+			onResidualOrder: 5,
+			onResidual(pokemon) {
 				if ((pokemon.hasType('Water') || pokemon.hasType('Ground')) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.debug('Pokemon is grounded and a Water or Ground type, healing through Swampy Terrain.');
 					if (this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon)) {
@@ -3678,8 +3666,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
-				if (!this.effectState.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Swampy Terrain');
 			},
 		},
@@ -3890,13 +3879,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became upside down!');
 			},
-			onFieldResidualOrder: 5,
+			onFieldResidualOrder: 21,
 			onFieldResidualSubOrder: 3,
-			onFieldResidual() {
-				this.eachEvent('Terrain');
-			},
 			onFieldEnd() {
-				if (!this.effectState.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Inversion Terrain');
 			},
 		},
@@ -4072,18 +4057,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', `${source.name} got a boost by the terrain!`);
 				}
 			},
-			onFieldResidualOrder: 5,
-			onFieldResidualSubOrder: 3,
-			onFieldResidual() {
-				this.eachEvent('Terrain');
-			},
-			onTerrain(pokemon) {
+			onResidualOrder: 5,
+			onResidual(pokemon) {
 				if (pokemon.isSemiInvulnerable()) return;
 				if (!pokemon || pokemon.hasType('Ghost')) return;
 				if (this.damage(pokemon.baseMaxhp / 16, pokemon)) {
 					this.add('-message', `${pokemon.name} was hurt by the terrain!`);
 				}
 			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Pitch Black Terrain');
 			},
@@ -4442,12 +4425,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return 5;
 			},
-			onFieldResidualOrder: 5,
-			onFieldResidualSubOrder: 3,
-			onFieldResidual() {
-				this.eachEvent('Terrain');
-			},
-			onTerrain(pokemon) {
+			onResidualOrder: 5,
+			onResidual(pokemon) {
 				if (pokemon.hasType('Electric')) {
 					if (this.heal(pokemon.baseMaxhp / 8, pokemon)) {
 						this.add('-message', `${pokemon.name} was healed by the terrain!`);
@@ -4466,6 +4445,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became stormy!');
 			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Tempest Terrain');
 			},

@@ -299,20 +299,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Grassy Terrain');
 				}
 			},
-			onFieldResidualOrder: 5,
-			onFieldResidualSubOrder: 3,
-			onFieldResidual() {
-				this.eachEvent('Terrain');
-			},
-			onTerrainPriority: 1,
-			onTerrain(pokemon) {
+			onResidualOrder: 5,
+			onResidual(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+				} else {
+					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
 				}
 			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
-				if (!this.effectState.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
 		},
