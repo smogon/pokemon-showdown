@@ -164,9 +164,9 @@ export const Tags: {[id: string]: TagData} = {
 		name: "LC",
 		speciesFilter: species => species.doublesTier === 'LC',
 	},
-	cap: {
-		name: "CAP",
-		speciesFilter: species => species.tier === 'CAP',
+	captier: {
+		name: "CAP Tier",
+		speciesFilter: species => species.isNonstandard === 'CAP',
 	},
 	caplc: {
 		name: "CAP LC",
@@ -221,17 +221,25 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Future",
 		genericFilter: thing => thing.isNonstandard === 'Future',
 	},
-	unobtainable: {
-		name: "Unobtainable",
-		genericFilter: thing => thing.isNonstandard === 'Unobtainable',
-	},
 	lgpe: {
 		name: "LGPE",
 		genericFilter: thing => thing.isNonstandard === 'LGPE',
 	},
+	unobtainable: {
+		name: "Unobtainable",
+		genericFilter: thing => thing.isNonstandard === 'Unobtainable',
+	},
+	cap: {
+		name: "CAP",
+		speciesFilter: thing => thing.isNonstandard === 'CAP',
+	},
 	custom: {
 		name: "Custom",
 		genericFilter: thing => thing.isNonstandard === 'Custom',
+	},
+	nonexistent: {
+		name: "Nonexistent",
+		genericFilter: thing => !!thing.isNonstandard && thing.isNonstandard !== 'Unobtainable',
 	},
 
 	// filter columns

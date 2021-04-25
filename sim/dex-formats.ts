@@ -619,13 +619,29 @@ export class DexFormats {
 
 	getTagRules(ruleTable: RuleTable) {
 		const tagRules = [];
+		const specificExistenceTagRules = [];
+		const existenceTagRules = [];
 		for (const ruleid of ruleTable.keys()) {
 			if (/^[+*-]pokemontag:/.test(ruleid)) {
-				if (ruleid.slice(12) === 'allpokemon') continue;
-				tagRules.push(ruleid);
+				const banid = ruleid.slice(12);
+				if (
+					banid === 'allpokemon' || banid === 'allitems' || banid === 'allmoves' ||
+					banid === 'allabilities' || banid === 'allnatures'
+				) {
+					// hardcoded and not a part of the ban rule system
+				} else if (!ruleid.startsWith('+') && (
+					banid === 'past' || banid === 'future' || banid === 'lgpe' ||
+					banid === 'unobtainable' || banid === 'cap' || banid === 'custom'
+				)) {
+					specificExistenceTagRules.push(ruleid);
+				} else if (!ruleid.startsWith('+') && banid === 'nonexistent') {
+					existenceTagRules.push(ruleid);
+				} else {
+					tagRules.push(ruleid);
+				}
 			}
 		}
-		ruleTable.tagRules = tagRules;
+		ruleTable.tagRules = [...tagRules, ...existenceTagRules, ...specificExistenceTagRules].reverse();
 	}
 
 	validateRule(rule: string, format: Format | null = null) {
