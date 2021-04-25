@@ -1978,7 +1978,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			const windSpeeds = [65, 85, 95, 115, 140];
 			return windSpeeds.indexOf((effect as ActiveMove).basePower) + 2;
 		},
-		onStart(targetSide) {
+		onSideStart(targetSide) {
 			this.add('-sidestart', targetSide, 'Storm Surge');
 			this.add('-message', `Storm Surge flooded the afflicted side of the battlefield!`);
 		},
