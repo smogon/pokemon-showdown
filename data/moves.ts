@@ -7170,8 +7170,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.add('-fieldstart', 'move: Grassy Terrain');
 				}
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 3,
 			onResidualOrder: 5,
 			onResidual(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
@@ -7179,6 +7177,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				}
 			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},

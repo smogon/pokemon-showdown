@@ -3657,8 +3657,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became swamped!');
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 3,
 			onResidualOrder: 5,
 			onResidual(pokemon) {
 				if ((pokemon.hasType('Water') || pokemon.hasType('Ground')) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
@@ -3668,6 +3666,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Swampy Terrain');
 			},
@@ -4057,8 +4057,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', `${source.name} got a boost by the terrain!`);
 				}
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 3,
 			onResidualOrder: 5,
 			onResidual(pokemon) {
 				if (pokemon.isSemiInvulnerable()) return;
@@ -4067,6 +4065,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', `${pokemon.name} was hurt by the terrain!`);
 				}
 			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Pitch Black Terrain');
 			},
@@ -4425,8 +4425,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return 5;
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 3,
 			onResidualOrder: 5,
 			onResidual(pokemon) {
 				if (pokemon.hasType('Electric')) {
@@ -4447,6 +4445,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-message', 'The battlefield became stormy!');
 			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Tempest Terrain');
 			},
