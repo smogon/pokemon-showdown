@@ -1239,13 +1239,22 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (tagName === 'button') {
+					const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
+					const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
+					const quietMsgCommandRegex = /^\/noreply \/(?:msg|pm|w|whisper) /i;
+					const auth = this.room ? this.room.auth : Users.globalAuth;
+					if (buttonName === 'send' && buttonValue && quietMsgCommandRegex.test(buttonValue)) {
+						const [pmTarget] = buttonValue.replace(quietMsgCommandRegex, '').split(',');
+						if (auth.get(toID(pmTarget)) !== '*') {
+							this.errorReply(`This button is not allowed: <${tagContent}>`);
+							throw new Chat.ErrorMessage(`Your scripted button can't send quiet PMs to ${pmTarget}, because that user is not a Room Bot.`);
+						}
+					}
+
 					if ((!this.room || this.room.settings.isPersonal || this.room.settings.isPrivate === true) && !this.user.can('lock')) {
-						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
-						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const msgCommandRegex = /^\/(?:msg|pm|w|whisper) /i;
 						if (buttonName === 'send' && buttonValue && msgCommandRegex.test(buttonValue)) {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
-							const auth = this.room ? this.room.auth : Users.globalAuth;
 							if (auth.get(toID(pmTarget)) !== '*' && toID(pmTarget) !== this.user.id) {
 								this.errorReply(`This button is not allowed: <${tagContent}>`);
 								throw new Chat.ErrorMessage(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
