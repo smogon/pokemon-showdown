@@ -12,7 +12,9 @@ const HOST_SUFFIXES = ['res', 'proxy', 'mobile'];
 
 const WHITELISTED_USERIDS: ID[] = [];
 
-function checkCanPerform(context: PageContext | CommandContext, user: User, permission: GlobalPermission = 'lockdown') {
+function checkCanPerform(
+	context: Chat.PageContext | Chat.CommandContext, user: User, permission: GlobalPermission = 'lockdown'
+) {
 	if (!WHITELISTED_USERIDS.includes(user.id)) context.checkCan(permission);
 }
 
@@ -39,7 +41,7 @@ function formatRange(range: AddressRange, includeModlogBrackets?: boolean) {
 	return result;
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	proxies(query, user) {
 		this.title = "[Proxies]";
 		checkCanPerform(this, user, 'globalban');
@@ -171,7 +173,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	dc: 'ipranges',
 	datacenter: 'ipranges',
 	datacenters: 'ipranges',

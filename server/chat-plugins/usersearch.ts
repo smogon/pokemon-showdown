@@ -59,7 +59,7 @@ function searchUsernames(target: string, page = false) {
 	return buf;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	us: 'usersearch',
 	uspage: 'usersearch',
 	usersearchpage: 'usersearch',
@@ -85,7 +85,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	usersearch(query, user) {
 		this.checkCan('lock');
 		if (!query.length) return this.close();

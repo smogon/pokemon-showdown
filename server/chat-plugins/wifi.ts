@@ -626,7 +626,7 @@ export class GTSGiveaway {
 	}
 }
 
-const cmds: ChatCommands = {
+const cmds: Chat.ChatCommands = {
 	// question giveaway.
 	quiz: 'question',
 	qg: 'question',

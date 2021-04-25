@@ -654,7 +654,7 @@ class BlackjackDeck {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	blj: 'blackjack',
 	blackjack: {
 		new: 'create',
@@ -767,7 +767,7 @@ export const commands: ChatCommands = {
 		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # &",
 	],
 };
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "Blackjack",
 	permission: 'editroom',
 	options: [

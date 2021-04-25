@@ -410,7 +410,7 @@ class RecommendationsInterface {
 export const LastFM = new LastFMInterface();
 export const Recs = new RecommendationsInterface();
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	registerlastfm(target, room, user) {
 		if (!target) return this.parse(`/help registerlastfm`);
 		this.checkChat(target);
@@ -618,7 +618,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async recommendations(query, user, connection) {
 		const room = this.requireRoom();
 		this.checkCan('mute', null, room);

@@ -94,7 +94,7 @@ function getWinnersInLottery(roomid: RoomID) {
 	return winners;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	lottery: {
 		''(target, room) {
 			room = this.requireRoom();
@@ -274,7 +274,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	lottery(query, user) {
 		this.title = 'Lottery';
 		const room = this.requireRoom();

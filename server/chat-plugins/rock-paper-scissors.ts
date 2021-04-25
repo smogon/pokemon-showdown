@@ -266,7 +266,7 @@ function findExisting(user1: string, user2: string) {
 	return Rooms.get(`rps-${user1}-${user2}`) || Rooms.get(`rps-${user2}-${user1}`);
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	rps: 'rockpaperscissors',
 	rockpaperscissors: {
 		challenge: 'create',

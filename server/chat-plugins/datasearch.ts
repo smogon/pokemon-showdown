@@ -70,7 +70,7 @@ function checkCanAll(room: Room | null) {
 	return !room.battle && !!isPersonal && !isHelp;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
 	ds2: 'dexsearch',

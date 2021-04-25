@@ -242,7 +242,7 @@ async function getBattleSearch(
 	connection.send(buildResults(response, userids as ID[], month, tierid, turnLimit));
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
@@ -331,7 +331,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	battlesearch(target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');

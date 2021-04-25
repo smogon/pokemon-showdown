@@ -1709,7 +1709,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	mafia(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!query.length) return this.close();
@@ -1975,7 +1975,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	mafia: {
 		''(target, room, user) {
 			room = this.requireRoom();
@@ -3868,7 +3868,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "Mafia",
 	permission: 'editroom',
 	options: [

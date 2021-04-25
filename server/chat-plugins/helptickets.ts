@@ -636,7 +636,7 @@ const cheatingScenarios = [
 	],
 ];
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	help: {
 		request(query, user, connection) {
 			if (!user.named) {
@@ -1096,7 +1096,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	report(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';

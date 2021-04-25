@@ -65,7 +65,7 @@ export function findFormats(targetId: string, isOMSearch = false) {
 	return {totalMatches, sections};
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	ip: 'whois',
 	rooms: 'whois',
 	alt: 'whois',
@@ -2698,7 +2698,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	battlerules(query, user) {
 		const rules = Object.values(Dex.data.Rulesets).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;

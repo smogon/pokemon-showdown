@@ -426,7 +426,7 @@ class OtdHandler {
 		return output;
 	}
 
-	generateWinnerList(context: PageContext) {
+	generateWinnerList(context: Chat.PageContext) {
 		context.title = `${this.id.toUpperCase()} Winners`;
 		let buf = `<div class="pad ladder"><h2>${this.name} of the ${this.timeLabel} Winners</h2>`;
 
@@ -490,7 +490,7 @@ function selectHandler(message: string) {
 	return handler;
 }
 
-export const otdCommands: ChatCommands = {
+export const otdCommands: Chat.ChatCommands = {
 	start(target, room, user, connection, cmd) {
 		this.checkChat();
 
@@ -781,8 +781,8 @@ export const otdCommands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {};
-export const commands: ChatCommands = {
+export const pages: Chat.PageTable = {};
+export const commands: Chat.ChatCommands = {
 	otd: {
 		create(target, room, user) {
 			room = this.requireRoom();

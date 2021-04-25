@@ -2307,22 +2307,14 @@ export const Chat = new class {
 (Chat as any).escapeHTML = Utils.escapeHTML;
 (Chat as any).html = Utils.html;
 (Chat as any).splitFirst = Utils.splitFirst;
-// @ts-ignore
-CommandContext.prototype.can = CommandContext.prototype.checkCan;
-// @ts-ignore
-CommandContext.prototype.canTalk = CommandContext.prototype.checkChat;
-// @ts-ignore
-CommandContext.prototype.canBroadcast = CommandContext.prototype.checkBroadcast;
-// @ts-ignore
-CommandContext.prototype.canHTML = CommandContext.prototype.checkHTML;
-// @ts-ignore
-CommandContext.prototype.canEmbedURI = CommandContext.prototype.checkEmbedURI;
-// @ts-ignore
-CommandContext.prototype.canPMHTML = CommandContext.prototype.checkPMHTML;
-// @ts-ignore
-CommandContext.prototype.privatelyCan = CommandContext.prototype.privatelyCheckCan;
-// @ts-ignore
-CommandContext.prototype.requiresRoom = CommandContext.prototype.requireRoom;
+(CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
+(CommandContext.prototype as any).canTalk = CommandContext.prototype.checkChat;
+(CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;
+(CommandContext.prototype as any).canHTML = CommandContext.prototype.checkHTML;
+(CommandContext.prototype as any).canEmbedURI = CommandContext.prototype.checkEmbedURI;
+(CommandContext.prototype as any).canPMHTML = CommandContext.prototype.checkPMHTML;
+(CommandContext.prototype as any).privatelyCan = CommandContext.prototype.privatelyCheckCan;
+(CommandContext.prototype as any).requiresRoom = CommandContext.prototype.requireRoom;
 
 /**
  * Used by ChatMonitor.

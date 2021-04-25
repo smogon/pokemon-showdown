@@ -626,7 +626,7 @@ class UNOPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	uno: {
 		// roomowner commands
 		off: 'disable',
@@ -930,7 +930,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "UNO",
 	permission: 'editroom',
 	options: [

@@ -340,7 +340,7 @@ const avatarTableGnomowladny = new Set([
 for (const avatar of avatarTableBeliot419) avatarTable.add(avatar);
 for (const avatar of avatarTableGnomowladny) avatarTable.add(avatar);
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 
 	version(target, room, user) {
 		if (!this.runBroadcast()) return;

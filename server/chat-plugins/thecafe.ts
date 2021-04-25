@@ -71,7 +71,7 @@ function generateDish(): [string, string[]] {
 	return [dish, ingredients];
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	foodfight(target, room, user) {
 		room = this.requireRoom('thecafe' as RoomID);
 		if (!Object.keys(dishes).length) return this.errorReply("No dishes found. Add some dishes first.");
@@ -173,7 +173,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	foodfight(query, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let buf = `|title|Foodfight\n|pagehtml|<div class="pad ladder"><h2>Foodfight Dish list</h2>`;

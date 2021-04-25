@@ -126,7 +126,7 @@ export function runCrisisDemote(userid: ID) {
 	return from;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	roomowner(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) {

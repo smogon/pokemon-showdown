@@ -34,7 +34,7 @@ export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections
 	sections,
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	roomsetting: 'roomsettings',
 	roomsettings(target, room, user, connection) {
 		room = this.requireRoom();
@@ -1519,7 +1519,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const roomSettings: SettingsHandler[] = [
+export const roomSettings: Chat.SettingsHandler[] = [
 	// modchat
 	(room, user) => ({
 		label: "Modchat",
@@ -1599,7 +1599,7 @@ export const roomSettings: SettingsHandler[] = [
 	}),
 ];
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	permissions(args, user, connection) {
 		this.title = `[Permissions]`;
 		const room = this.requireRoom();
