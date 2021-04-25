@@ -59,6 +59,19 @@ export interface AnnotatedChatCommands {
 	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
+interface CommandContextOptions {
+	message: string;
+	user: User;
+	connection: Connection;
+	room?: Room | null;
+	pmTarget?: User | null;
+	cmd?: string;
+	cmdToken?: string;
+	target?: string;
+	fullCmd?: string;
+	isQuiet?: boolean;
+}
+
 export interface ChatPlugin {
 	commands?: AnnotatedChatCommands;
 	pages?: PageTable;
@@ -407,11 +420,7 @@ export class CommandContext extends MessageContext {
 	targetUser: User | null;
 	targetUsername: string;
 	inputUsername: string;
-	constructor(
-		options:
-		{message: string, user: User, connection: Connection} &
-		Partial<{room: Room | null, pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string, isQuiet: boolean}>
-	) {
+	constructor(options: CommandContextOptions) {
 		super(
 			options.user, options.room && options.room.settings.language ?
 				options.room.settings.language : options.user.language
