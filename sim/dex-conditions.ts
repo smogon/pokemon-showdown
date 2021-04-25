@@ -82,8 +82,6 @@ export interface EventMethods {
 	onTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
 	) | boolean;
-	onTerrain?: (this: Battle, pokemon: Pokemon) => void;
-	onTerrainStart?: (this: Battle, target: Pokemon, source: Pokemon, terrain: Condition) => void;
 	onWeatherStart?: (this: Battle, target: Pokemon, source: Pokemon, weather: Condition) => void;
 	onTrapPokemon?: (this: Battle, pokemon: Pokemon) => void;
 	onTryAddVolatile?: (
@@ -471,7 +469,6 @@ export interface EventMethods {
 	onSourceModifyDamagePriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
-	onTerrainPriority?: number;
 	onTrapPokemonPriority?: number;
 	onTryEatItemPriority?: number;
 	onTryHealPriority?: number;
