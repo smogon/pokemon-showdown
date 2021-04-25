@@ -444,11 +444,11 @@ export class CommandContext extends MessageContext {
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
-	parse(msg?: string, options?: {quiet?: boolean}): any {
+	parse(msg?: string, options?: {isQuiet?: boolean}): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
 			const subcontext = new CommandContext(this);
-			if (options && options.quiet) subcontext.isQuiet = true;
+			if (options && options.isQuiet) subcontext.isQuiet = true;
 			subcontext.recursionDepth++;
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
 				throw new Error("Too much command recursion");
