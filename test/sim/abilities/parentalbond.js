@@ -26,18 +26,19 @@ describe('Parental Bond', function () {
 	it('should cause single-hit attacks to strike twice, with the second hit dealing 0.25x damage', function () {
 		battle.makeChoices('move thunderpunch', 'move rest');
 		const damageRatio = damages[0] / damages[1];
-		assert(damageRatio > (0.85 / 0.25 - 0.1) && damageRatio < (1 / (0.85 * 0.25) + 0.1), `Damage ratio ${damageRatio} not within expected range`);
+		assert.bounded(damageRatio, [(0.85 / 0.25 - 0.1), (1 / (0.85 * 0.25) + 0.1)]);
 	});
 
 	it('should not have any effect on moves with multiple hits', function () {
 		battle.makeChoices('move doublekick', 'move rest');
-		assert(damages[0] >= 54 && damages[0] <= 64 && damages[1] >= 54 && damages[1] <= 64, damages);
+		assert.bounded(damages[0], [54, 64]);
+		assert.bounded(damages[1], [54, 64]);
 	});
 
 	it('should not have any effect Z-Moves', function () {
 		battle.makeChoices('move thunderpunch zmove', 'move rest');
 		assert.equal(damages.length, 1);
-		assert(damages[0] >= 61 && damages[0] <= 72);
+		assert.bounded(damages[0], [61, 72]);
 	});
 });
 
@@ -61,11 +62,12 @@ describe('Parental Bond [Gen 6]', function () {
 	it('should cause single-hit attacks to strike twice, with the second hit dealing 0.5x damage', function () {
 		battle.makeChoices('move thunderpunch', 'move rest');
 		const damageRatio = damages[0] / damages[1];
-		assert(damageRatio > (0.85 / 0.5 - 0.1) && damageRatio < (1 / (0.85 * 0.5) + 0.1), `Damage ratio ${damageRatio} not within expected range`);
+		assert.bounded(damageRatio, [(0.85 / 0.5 - 0.1), (1 / (0.85 * 0.5) + 0.1)]);
 	});
 
 	it('should not have any effect on moves with multiple hits', function () {
 		battle.makeChoices('move doublekick', 'move rest');
-		assert(damages[0] >= 54 && damages[0] <= 64 && damages[1] >= 54 && damages[1] <= 64, damages);
+		assert.bounded(damages[0], [54, 64]);
+		assert.bounded(damages[1], [54, 64]);
 	});
 });
