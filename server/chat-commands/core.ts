@@ -481,7 +481,8 @@ export const commands: Chat.ChatCommands = {
 
 	noreply(target, room, user) {
 		if (!target.startsWith('/')) return this.parse('/help noreply');
-		return this.parse(target, {isQuiet: true});
+		this.isQuiet = true;
+		return this.parse(target);
 	},
 	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
 
@@ -539,7 +540,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
-		return this.parse(target, {isQuiet: this.isQuiet});
+		return this.parse(target);
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
 

@@ -410,7 +410,7 @@ export class CommandContext extends MessageContext {
 	constructor(
 		options:
 		{message: string, user: User, connection: Connection} &
-		Partial<{room: Room | null, pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string}>
+		Partial<{room: Room | null, pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string, isQuiet: boolean}>
 	) {
 		super(
 			options.user, options.room && options.room.settings.language ?
@@ -430,7 +430,7 @@ export class CommandContext extends MessageContext {
 		this.target = options.target || ``;
 		this.fullCmd = options.fullCmd || '';
 		this.handler = null;
-		this.isQuiet = false;
+		this.isQuiet = options.isQuiet || false;
 
 		// broadcast context
 		this.broadcasting = false;
@@ -444,15 +444,15 @@ export class CommandContext extends MessageContext {
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
-	parse(msg?: string, options?: {isQuiet?: boolean}): any {
+	parse(msg?: string): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
 			const subcontext = new CommandContext(this);
-			if (options?.isQuiet) subcontext.isQuiet = true;
 			subcontext.recursionDepth++;
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
 				throw new Error("Too much command recursion");
 			}
+			if (subcontext.isQuiet && msg.startsWith('/help ')) subcontext.isQuiet = false;
 			subcontext.message = msg;
 			subcontext.cmd = '';
 			subcontext.fullCmd = '';
@@ -523,7 +523,7 @@ export class CommandContext extends MessageContext {
 				pmTarget: this.pmTarget?.name,
 				message: this.message,
 			});
-			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
+			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`, true);
 			return;
 		}
 
@@ -552,7 +552,7 @@ export class CommandContext extends MessageContext {
 					pmTarget: this.pmTarget?.name,
 					message: this.message,
 				});
-				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
+				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`, true);
 				return false;
 			});
 		} else if (message && message !== true) {
@@ -684,8 +684,8 @@ export class CommandContext extends MessageContext {
 			return prefix + `/text ` + message;
 		}).join(`\n`);
 	}
-	sendReply(data: string) {
-		if (this.isQuiet) return;
+	sendReply(data: string, errorReply?: boolean) {
+		if (this.isQuiet && !errorReply) return;
 		if (this.broadcasting && this.broadcastToRoom) {
 			// broadcasting
 			this.add(data);
@@ -700,7 +700,7 @@ export class CommandContext extends MessageContext {
 		}
 	}
 	errorReply(message: string) {
-		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
+		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`), true);
 	}
 	addBox(htmlContent: string) {
 		this.add(`|html|<div class="infobox">${htmlContent}</div>`);
