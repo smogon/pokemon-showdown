@@ -7173,8 +7173,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidual(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+				} else {
+					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
 				}
 			},
 			onFieldResidualOrder: 21,
