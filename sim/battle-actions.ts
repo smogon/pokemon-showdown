@@ -101,7 +101,7 @@ export class BattleActions {
 			// will definitely switch out at this point
 
 			oldActive.illusion = null;
-			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
+			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
 
 			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
 			this.battle.queue.cancelAction(oldActive);
@@ -141,7 +141,7 @@ export class BattleActions {
 
 		if (isDrag && this.battle.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
-			this.battle.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
+			this.battle.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityState, pokemon);
 			this.runSwitch(pokemon);
 		} else {
 			this.battle.queue.insertChoice({choice: 'runUnnerve', pokemon});
@@ -172,8 +172,8 @@ export class BattleActions {
 		if (!pokemon.hp) return false;
 		pokemon.isStarted = true;
 		if (!pokemon.fainted) {
-			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
-			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
+			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
 		}
 		if (this.battle.gen === 4) {
 			for (const foeActive of pokemon.foes()) {
@@ -276,7 +276,7 @@ export class BattleActions {
 
 		if (zMove) {
 			if (pokemon.illusion) {
-				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityData, pokemon);
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
 			this.battle.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;

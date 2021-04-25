@@ -97,11 +97,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	symbiosis: {
 		inherit: true,
 		onAllyAfterUseItem(item, pokemon) {
-			const source = this.effectData.target;
+			const source = this.effectState.target;
 			const myItem = source.takeItem();
 			if (!myItem) return;
 			if (
-				!this.singleEvent('TakeItem', myItem, source.itemData, pokemon, source, this.effect, myItem) ||
+				!this.singleEvent('TakeItem', myItem, source.itemState, pokemon, source, this.effect, myItem) ||
 				!pokemon.setItem(myItem)
 			) {
 				source.item = myItem.id;
