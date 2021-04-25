@@ -23,6 +23,7 @@ namespace Chat {
 	export type LoginFilter = import('./chat').LoginFilter;
 	export type PunishmentFilter = import('./chat').PunishmentFilter;
 	export type FilterWord = import('./chat').FilterWord;
+	export type CRQHandler = import('./chat').CRQHandler;
 	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 	export type AnnotatedChatHandler = import('./chat').AnnotatedChatHandler;
 }

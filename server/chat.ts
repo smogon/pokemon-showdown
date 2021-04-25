@@ -78,6 +78,8 @@ export type SettingsHandler = (
 	options: [string, string | true][],
 };
 
+export type CRQHandler = (this: CommandContext, target: string, user: User, trustable?: boolean) => any;
+
 /**
  * Chat filters can choose to:
  * 1. return false OR null - to not send a user's message
@@ -1378,6 +1380,7 @@ export const Chat = new class {
 	basePages!: PageTable;
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
+	readonly crqHandlers: {[k: string]: CRQHandler} = {};
 	readonly renameHandlers: Rooms.RenameHandler[] = [];
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
@@ -1746,6 +1749,9 @@ export const Chat = new class {
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
 		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
+		if (plugin.crqHandlers) {
+			Object.assign(Chat.crqHandlers, plugin.crqHandlers);
+		}
 		if (plugin.roomSettings) {
 			if (!Array.isArray(plugin.roomSettings)) plugin.roomSettings = [plugin.roomSettings];
 			Chat.roomSettings = Chat.roomSettings.concat(plugin.roomSettings);
