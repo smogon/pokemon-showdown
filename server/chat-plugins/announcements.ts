@@ -68,7 +68,7 @@ export class Announcement extends Rooms.MinorActivity {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	announcement: {
 		htmlcreate: 'new',
 		create: 'new',

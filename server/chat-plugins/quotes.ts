@@ -32,7 +32,7 @@ function saveQuotes() {
 
 convertOldQuotes();
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	randquote(target, room, user) {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
@@ -109,7 +109,7 @@ export const commands: ChatCommands = {
 	quoteshelp: [`/quotes [room] - Shows all quotes for [room]. Defaults the room the command is used in.`],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	quotes(args, user) {
 		const room = this.requireRoom();
 		this.title = `[Quotes]`;

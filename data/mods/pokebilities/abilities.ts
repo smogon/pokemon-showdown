@@ -13,7 +13,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.id.endsWith('synchronize') || (effect.effectType === 'Move' && !effect.secondaries)) {
-					const effectHolder = this.effectData.target;
+					const effectHolder = this.effectState.target;
 					this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
 				}
 				return null;
@@ -85,7 +85,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
-			pokemon.abilityData.ending = false;
+			pokemon.abilityState.ending = false;
 			// Remove setter's innates before the ability starts
 			if (pokemon.m.innates) {
 				for (const innate of pokemon.m.innates) {
@@ -95,7 +95,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			for (const target of this.getAllActive()) {
 				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityData, target, pokemon, 'neutralizinggas');
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
 				if (target.volatiles['slowstart']) {
 					delete target.volatiles['slowstart'];
@@ -118,14 +118,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			// (If you're tackling this, do note extreme weathers have the same issue)
 
 			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
-			if (source.abilityData.ending) return;
-			source.abilityData.ending = true;
+			if (source.abilityState.ending) return;
+			source.abilityState.ending = true;
 			const sortedActive = this.getAllActive();
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
 				if (pokemon !== source) {
 					// Will be suppressed by Pokemon#ignoringAbility if needed
-					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
+					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
 					if (pokemon.m.innates) {
 						for (const innate of pokemon.m.innates) {
 							// permanent abilities
@@ -158,7 +158,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	powerofalchemy: {
 		inherit: true,
 		onAllyFaint(ally) {
-			const pokemon = this.effectData.target;
+			const pokemon = this.effectState.target;
 			if (!pokemon.hp) return;
 			const isAbility = pokemon.ability === 'powerofalchemy';
 			let possibleAbilities = [ally.ability];
@@ -190,7 +190,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	receiver: {
 		inherit: true,
 		onAllyFaint(ally) {
-			const pokemon = this.effectData.target;
+			const pokemon = this.effectState.target;
 			if (!pokemon.hp) return;
 			const isAbility = pokemon.ability === 'receiver';
 			let possibleAbilities = [ally.ability];
@@ -223,7 +223,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted || this.effectData.gaveUp) return;
+			if (!pokemon.isStarted || this.effectState.gaveUp) return;
 			const isAbility = pokemon.ability === 'trace';
 			const possibleTargets: Pokemon[] = pokemon.adjacentFoes();
 			while (possibleTargets.length) {

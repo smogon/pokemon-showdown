@@ -340,7 +340,7 @@ const avatarTableGnomowladny = new Set([
 for (const avatar of avatarTableBeliot419) avatarTable.add(avatar);
 for (const avatar of avatarTableGnomowladny) avatarTable.add(avatar);
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 
 	version(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -796,7 +796,7 @@ export const commands: ChatCommands = {
 		if (user.tempGroup === group) {
 			return this.errorReply(this.tr`You already have the temporary symbol '${group}'.`);
 		}
-		if (!Users.Auth.isValidSymbol(group) || !(group in Config.groups)) {
+		if (!Users.Auth.isValidSymbol(group) || !(group in Config.groups) || group === Users.SECTIONLEADER_SYMBOL) {
 			return this.errorReply(this.tr`You must specify a valid group symbol.`);
 		}
 		if (!isShow && Config.groups[group].rank > Config.groups[user.tempGroup].rank) {
