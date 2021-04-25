@@ -2545,10 +2545,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	echoedvoiceclone: {
 		duration: 2,
-		onStart() {
+		onFieldStart() {
 			this.effectState.multiplier = 1;
 		},
-		onRestart() {
+		onFieldRestart() {
 			if (this.effectState.duration !== 2) {
 				this.effectState.duration = 2;
 				if (this.effectState.multiplier < 5) {
