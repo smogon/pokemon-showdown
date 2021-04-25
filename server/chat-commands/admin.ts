@@ -356,7 +356,7 @@ export const commands: ChatCommands = {
 				pageid: `view-bot-${pageid}`,
 			});
 			context.title = `[${user.name}] ${pageid}`;
-			context.send(content);
+			context.setHTML(content);
 		}
 
 		this.sendReply(`Sent ${targetUser.name} the bot page ${pageid}.`);
