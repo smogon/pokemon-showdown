@@ -340,6 +340,120 @@ const avatarTableGnomowladny = new Set([
 for (const avatar of avatarTableBeliot419) avatarTable.add(avatar);
 for (const avatar of avatarTableGnomowladny) avatarTable.add(avatar);
 
+export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
+	userdetails(target, user, trustable) {
+		if (target.length > 18) {
+			return null;
+		}
+
+		const targetUser = Users.get(target);
+		if (!trustable || !targetUser) {
+			return {
+				id: target,
+				userid: toID(target),
+				name: target,
+				rooms: false,
+			};
+		}
+		interface RoomData {p1?: string; p2?: string; isPrivate?: boolean | 'hidden' | 'voice'}
+		let roomList: {[roomid: string]: RoomData} | false = {};
+		for (const roomid of targetUser.inRooms) {
+			const targetRoom = Rooms.get(roomid);
+			if (!targetRoom) continue; // shouldn't happen
+			const roomData: RoomData = {};
+			if (targetRoom.settings.isPrivate) {
+				if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
+				roomData.isPrivate = true;
+			}
+			if (targetRoom.battle) {
+				if (targetUser.settings.hideBattlesFromTrainerCard && user.id !== targetUser.id && !user.can('lock')) continue;
+				const battle = targetRoom.battle;
+				roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
+				roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
+			}
+			let roomidWithAuth: string = roomid;
+			if (targetRoom.auth.has(targetUser.id)) {
+				roomidWithAuth = targetRoom.auth.getDirect(targetUser.id) + roomid;
+			}
+			roomList[roomidWithAuth] = roomData;
+		}
+		if (!targetUser.connected) roomList = false;
+		let group = targetUser.tempGroup;
+		if (targetUser.locked) group = Config.punishgroups?.locked?.symbol ?? '\u203d';
+		if (targetUser.namelocked) group = Config.punishgroups?.namelocked?.symbol ?? '✖';
+		const sectionleader = Users.globalAuth.sectionLeaders.has(targetUser.id);
+		return {
+			id: target,
+			userid: targetUser.id,
+			name: targetUser.name,
+			avatar: targetUser.avatar,
+			group: group,
+			customgroup: sectionleader ? "Section Leader" : undefined,
+			autoconfirmed: !!targetUser.autoconfirmed,
+			status: targetUser.getStatus(),
+			rooms: roomList,
+		};
+	},
+	roomlist(target, user, trustable) {
+		if (!trustable) return false;
+		return {rooms: Rooms.global.getBattles(target)};
+	},
+	rooms(target, user, trustable) {
+		if (!trustable) return false;
+		return Rooms.global.getRooms(user);
+	},
+	laddertop(target, user, trustable) {
+		if (!trustable) return false;
+		const [format, prefix] = target.split(',').map(x => x.trim());
+		return Ladders(toID(format)).getTop(prefix);
+	},
+	roominfo(target, user, trustable) {
+		if (!trustable) return false;
+
+		if (target.length > 225) {
+			return null;
+		}
+		const targetRoom = Rooms.get(target);
+		if (!targetRoom || (
+			targetRoom.settings.isPrivate && !user.inRooms.has(targetRoom.roomid) && !user.games.has(targetRoom.roomid)
+		)) {
+			const roominfo = {id: target, error: 'not found or access denied'};
+			return roominfo;
+		}
+		let visibility;
+		if (targetRoom.settings.isPrivate) {
+			visibility = (targetRoom.settings.isPrivate === 'hidden') ? 'hidden' : 'secret';
+		} else {
+			visibility = 'public';
+		}
+
+		const roominfo: AnyObject = {
+			id: target,
+			roomid: targetRoom.roomid,
+			title: targetRoom.title,
+			type: targetRoom.type,
+			visibility: visibility,
+			modchat: targetRoom.settings.modchat,
+			modjoin: targetRoom.settings.modjoin,
+			auth: {},
+			users: [],
+		};
+
+		for (const [id, rank] of targetRoom.auth) {
+			if (!roominfo.auth[rank]) roominfo.auth[rank] = [];
+			roominfo.auth[rank].push(id);
+		}
+
+		for (const userid in targetRoom.users) {
+			const curUser = targetRoom.users[userid];
+			if (!curUser.named) continue;
+			const userinfo = curUser.getIdentity(targetRoom.roomid);
+			roominfo.users.push(userinfo);
+		}
+		return roominfo;
+	},
+};
+
 export const commands: Chat.ChatCommands = {
 
 	version(target, room, user) {
@@ -1656,136 +1770,17 @@ export const commands: Chat.ChatCommands = {
 
 	cmd: 'crq',
 	query: 'crq',
-	crq(target, room, user, connection) {
+	async crq(target, room, user, connection) {
 		// In emergency mode, clamp down on data returned from crq's
 		const trustable = (!Config.emergency || (user.named && user.registered));
 		let cmd;
 		[cmd, target] = Utils.splitFirst(target, ' ');
 
-		if (cmd === 'userdetails') {
-			if (target.length > 18) {
-				connection.send('|queryresponse|userdetails|null');
-				return false;
-			}
-
-			const targetUser = Users.get(target);
-			if (!trustable || !targetUser) {
-				connection.send('|queryresponse|userdetails|' + JSON.stringify({
-					id: target,
-					userid: toID(target),
-					name: target,
-					rooms: false,
-				}));
-				return false;
-			}
-			interface RoomData {p1?: string; p2?: string; isPrivate?: boolean | 'hidden' | 'voice'}
-			let roomList: {[roomid: string]: RoomData} | false = {};
-			for (const roomid of targetUser.inRooms) {
-				const targetRoom = Rooms.get(roomid);
-				if (!targetRoom) continue; // shouldn't happen
-				const roomData: RoomData = {};
-				if (targetRoom.settings.isPrivate) {
-					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
-					roomData.isPrivate = true;
-				}
-				if (targetRoom.battle) {
-					if (targetUser.settings.hideBattlesFromTrainerCard && user.id !== targetUser.id && !user.can('lock')) continue;
-					const battle = targetRoom.battle;
-					roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
-					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
-				}
-				let roomidWithAuth: string = roomid;
-				if (targetRoom.auth.has(targetUser.id)) {
-					roomidWithAuth = targetRoom.auth.getDirect(targetUser.id) + roomid;
-				}
-				roomList[roomidWithAuth] = roomData;
-			}
-			if (!targetUser.connected) roomList = false;
-			let group = targetUser.tempGroup;
-			if (targetUser.locked) group = Config.punishgroups?.locked?.symbol ?? '\u203d';
-			if (targetUser.namelocked) group = Config.punishgroups?.namelocked?.symbol ?? '✖';
-			const sectionleader = Users.globalAuth.sectionLeaders.has(targetUser.id);
-			const userdetails: AnyObject = {
-				id: target,
-				userid: targetUser.id,
-				name: targetUser.name,
-				avatar: targetUser.avatar,
-				group: group,
-				customgroup: sectionleader ? "Section Leader" : undefined,
-				autoconfirmed: !!targetUser.autoconfirmed,
-				status: targetUser.getStatus(),
-				rooms: roomList,
-			};
-			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
-		} else if (cmd === 'roomlist') {
-			if (!trustable) return false;
-			connection.send('|queryresponse|roomlist|' + JSON.stringify({
-				rooms: Rooms.global.getBattles(target),
-			}));
-		} else if (cmd === 'rooms') {
-			if (!trustable) return false;
-			connection.send('|queryresponse|rooms|' + JSON.stringify(
-				Rooms.global.getRooms(user)
-			));
-		} else if (cmd === 'laddertop') {
-			if (!trustable) return false;
-			const [format, prefix] = target.split(',').map(x => x.trim());
-			return Ladders(toID(format)).getTop(prefix).then(result => {
-				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
-			});
-		} else if (cmd === 'roominfo') {
-			if (!trustable) return false;
-
-			if (target.length > 225) {
-				connection.send('|queryresponse|roominfo|null');
-				return false;
-			}
-
-			const targetRoom = Rooms.get(target);
-			if (!targetRoom || (
-				targetRoom.settings.isPrivate && !user.inRooms.has(targetRoom.roomid) && !user.games.has(targetRoom.roomid)
-			)) {
-				const roominfo = {id: target, error: 'not found or access denied'};
-				connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);
-				return false;
-			}
-
-			let visibility;
-			if (targetRoom.settings.isPrivate) {
-				visibility = (targetRoom.settings.isPrivate === 'hidden') ? 'hidden' : 'secret';
-			} else {
-				visibility = 'public';
-			}
-
-			const roominfo: AnyObject = {
-				id: target,
-				roomid: targetRoom.roomid,
-				title: targetRoom.title,
-				type: targetRoom.type,
-				visibility: visibility,
-				modchat: targetRoom.settings.modchat,
-				modjoin: targetRoom.settings.modjoin,
-				auth: {},
-				users: [],
-			};
-
-			for (const [id, rank] of targetRoom.auth) {
-				if (!roominfo.auth[rank]) roominfo.auth[rank] = [];
-				roominfo.auth[rank].push(id);
-			}
-
-			for (const userid in targetRoom.users) {
-				const curUser = targetRoom.users[userid];
-				if (!curUser.named) continue;
-				const userinfo = curUser.getIdentity(targetRoom.roomid);
-				roominfo.users.push(userinfo);
-			}
-
-			connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);
-		} else {
-			// default to sending null
-			connection.send(`|queryresponse|${cmd}|null`);
-		}
+		const handler = Chat.crqHandlers[cmd];
+		if (!handler) return connection.send(`|queryresponse|${cmd}|null`);
+		let data = handler.call(this, target, user, trustable);
+		if (data && data.then) data = await data;
+		connection.send(`|queryresponse|${cmd}|${JSON.stringify(data)}`);
 	},
 
 	trn(target, room, user, connection) {
