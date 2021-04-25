@@ -198,7 +198,7 @@ async function getModlog(
 
 const shouldSearchGlobal = ['staff', 'adminlog'];
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	ml: 'modlog',
 	punishlog: 'modlog',
 	pl: 'modlog',

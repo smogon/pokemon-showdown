@@ -1036,7 +1036,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-const ScavengerCommands: ChatCommands = {
+const ScavengerCommands: Chat.ChatCommands = {
 	/**
 	 * Player commands
 	 */
@@ -2433,7 +2433,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	recycledHunts(query, user, connection) {
 		this.title = 'Recycled Hunts';
 		const room = this.requireRoom();
@@ -2475,7 +2475,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	// general
 	scav: 'scavengers',
 	scavengers: ScavengerCommands,

@@ -150,7 +150,7 @@ function solveRPN(rpn: string[]): [number, number] {
 	return [resultStack.pop()!, base];
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	math: "calculate",
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');

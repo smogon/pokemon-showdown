@@ -24,7 +24,7 @@ describe('Grassy Terrain', function () {
 		assert(battle.field.isTerrain(''));
 	});
 
-	it.skip(`should halve the base power of Earthquake, Bulldoze, and Magnitude against grounded targets`, function () {
+	it(`should halve the base power of Earthquake, Bulldoze, and Magnitude against grounded targets`, function () {
 		battle = common.createBattle([[
 			{species: 'Shaymin', moves: ['grassyterrain']},
 		], [
