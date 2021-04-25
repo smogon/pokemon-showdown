@@ -58,9 +58,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	parentalbond: {
 		inherit: true,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
-		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
 		rating: 5,
 	},
 	pixilate: {
