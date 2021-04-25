@@ -1778,7 +1778,8 @@ export const commands: ChatCommands = {
 
 		const handler = Chat.crqHandlers[cmd];
 		if (!handler) return connection.send(`|queryresponse|${cmd}|null`);
-		const data = await handler.call(this, target, user, trustable);
+		let data = handler.call(this, target, user, trustable);
+		if (data && data.then) data = await data;
 		connection.send(`|queryresponse|${cmd}|${JSON.stringify(data)}`);
 	},
 
