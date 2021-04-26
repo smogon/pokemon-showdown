@@ -320,15 +320,11 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
 
-		let targetID: string;
-		let pageid: string;
-		let content: string;
+		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
 		let selector: string | undefined;
 		if (cmd === 'changehtmlpageselector') {
-			[targetID, pageid, selector, content] = Utils.splitFirst(target, ',', 3);
+			[selector, content] = Utils.splitFirst(content, ',');
 			if (!selector) return this.parse(`/help ${cmd}`);
-		} else {
-			[targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
 		}
 		if (!targetID || !pageid || !content) return this.parse(`/help ${cmd}`);
 
@@ -373,7 +369,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 
-		this.sendReply(`Sent ${targetUser.name}${(selector ? ` the selector ${selector} on` : '')} the bot page ${pageid}.`);
+		this.sendReply(`Sent ${targetUser.name}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
 	},
 	sendhtmlpagehelp: [
 		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # &`,
