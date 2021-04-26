@@ -315,11 +315,18 @@ export const commands: Chat.ChatCommands = {
 		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * # &`,
 	],
 
-	sendhtmlpage(target, room, user) {
+	changehtmlpageselector: 'sendhtmlpage',
+	sendhtmlpage(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
+
 		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
-		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
+		let selector: string | undefined;
+		if (cmd === 'changehtmlpageselector') {
+			[selector, content] = Utils.splitFirst(content, ',');
+			if (!selector) return this.parse(`/help ${cmd}`);
+		}
+		if (!targetID || !pageid || !content) return this.parse(`/help ${cmd}`);
 
 		pageid = `${user.id}-${toID(pageid)}`;
 
@@ -354,14 +361,21 @@ export const commands: Chat.ChatCommands = {
 				connection: targetConnection,
 				pageid: `view-bot-${pageid}`,
 			});
-			context.title = `[${user.name}] ${pageid}`;
-			context.setHTML(content);
+			if (selector) {
+				context.send(`|selectorhtml|${selector}|${content}`);
+			} else {
+				context.title = `[${user.name}] ${pageid}`;
+				context.setHTML(content);
+			}
 		}
 
-		this.sendReply(`Sent ${targetUser.name} the bot page ${pageid}.`);
+		this.sendReply(`Sent ${targetUser.name}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
 	},
 	sendhtmlpagehelp: [
 		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # &`,
+	],
+	changehtmlpageselectorhelp: [
+		`/changehtmlpageselector [userid], [pageid], [selector], [html] - Sends [userid] the content [html] for the selector [selector] on the bot page [pageid]. Requires: * # &`,
 	],
 
 	highlighthtmlpage(target, room, user) {
