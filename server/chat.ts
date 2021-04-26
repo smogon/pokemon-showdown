@@ -70,6 +70,7 @@ interface CommandContextOptions {
 	target?: string;
 	fullCmd?: string;
 	isQuiet?: boolean;
+	isQuietPm?: boolean;
 }
 
 export interface ChatPlugin {
@@ -414,6 +415,7 @@ export class CommandContext extends MessageContext {
 	handler: AnnotatedChatHandler | null;
 
 	isQuiet: boolean;
+	isQuietPm: boolean;
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
 	broadcastMessage: string;
@@ -440,6 +442,7 @@ export class CommandContext extends MessageContext {
 		this.fullCmd = options.fullCmd || '';
 		this.handler = null;
 		this.isQuiet = options.isQuiet || false;
+		this.isQuietPm = options.isQuietPm || false;
 
 		// broadcast context
 		this.broadcasting = false;
@@ -532,7 +535,7 @@ export class CommandContext extends MessageContext {
 				pmTarget: this.pmTarget?.name,
 				message: this.message,
 			});
-			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`, true);
+			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
 			return;
 		}
 
@@ -561,7 +564,7 @@ export class CommandContext extends MessageContext {
 					pmTarget: this.pmTarget?.name,
 					message: this.message,
 				});
-				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`, true);
+				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
 				return false;
 			});
 		} else if (message && message !== true) {
@@ -586,7 +589,7 @@ export class CommandContext extends MessageContext {
 					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
 				}
 			}
-			Chat.sendPM(message, this.user, this.pmTarget, null, this.isQuiet);
+			Chat.sendPM(message, this.user, this.pmTarget, null, this.isQuietPm);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
 			if (this.room.game && this.room.game.onLogMessage) {
@@ -693,8 +696,8 @@ export class CommandContext extends MessageContext {
 			return prefix + `/text ` + message;
 		}).join(`\n`);
 	}
-	sendReply(data: string, errorReply?: boolean) {
-		if (this.isQuiet && !errorReply) return;
+	sendReply(data: string) {
+		if (this.isQuiet) return;
 		if (this.broadcasting && this.broadcastToRoom) {
 			// broadcasting
 			this.add(data);
@@ -709,7 +712,7 @@ export class CommandContext extends MessageContext {
 		}
 	}
 	errorReply(message: string) {
-		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`), true);
+		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
 	}
 	addBox(htmlContent: string) {
 		this.add(`|html|<div class="infobox">${htmlContent}</div>`);
@@ -1250,13 +1253,13 @@ export class CommandContext extends MessageContext {
 				if (tagName === 'button') {
 					const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 					const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
-					const quietMsgCommandRegex = /^\/noreply \/(?:msg|pm|w|whisper) /i;
+					const botMsgCommandRegex = /^\/botmsg /i;
 					const auth = this.room ? this.room.auth : Users.globalAuth;
-					if (buttonName === 'send' && buttonValue && quietMsgCommandRegex.test(buttonValue)) {
-						const [pmTarget] = buttonValue.replace(quietMsgCommandRegex, '').split(',');
+					if (buttonName === 'send' && buttonValue && botMsgCommandRegex.test(buttonValue)) {
+						const [pmTarget] = buttonValue.replace(botMsgCommandRegex, '').split(',');
 						if (auth.get(toID(pmTarget)) !== '*') {
 							this.errorReply(`This button is not allowed: <${tagContent}>`);
-							throw new Chat.ErrorMessage(`Your scripted button can't send quiet PMs to ${pmTarget}, because that user is not a Room Bot.`);
+							throw new Chat.ErrorMessage(`Your scripted button can't send bot PMs to ${pmTarget} because that user is not a bot.`);
 						}
 					}
 
@@ -1266,7 +1269,7 @@ export class CommandContext extends MessageContext {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
 							if (auth.get(toID(pmTarget)) !== '*' && toID(pmTarget) !== this.user.id) {
 								this.errorReply(`This button is not allowed: <${tagContent}>`);
-								throw new Chat.ErrorMessage(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
+								throw new Chat.ErrorMessage(`Your scripted button can't send PMs to ${pmTarget} because that user is not a bot.`);
 							}
 						} else if (buttonName) {
 							this.errorReply(`This button is not allowed: <${tagContent}>`);
@@ -1693,10 +1696,10 @@ export const Chat = new class {
 
 		Monitor.slow(logMessage);
 	}
-	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null, isQuiet?: boolean) {
+	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null, isQuietPm?: boolean) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
 		if (onlyRecipient) return onlyRecipient.send(buf);
-		if (!isQuiet) user.send(buf);
+		if (!isQuietPm) user.send(buf);
 		if (pmTarget !== user) pmTarget.send(buf);
 		pmTarget.lastPM = user.id;
 		user.lastPM = pmTarget.id;

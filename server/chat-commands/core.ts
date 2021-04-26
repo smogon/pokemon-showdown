@@ -511,10 +511,11 @@ export const commands: Chat.ChatCommands = {
 	},
 	replyhelp: [`/reply OR /r [message] - Send a message to the last user you got a message from, or sent a message to.`],
 
+	botmsg: 'msg',
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
-	msg(target, room, user, connection) {
+	msg(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help msg');
 		if (!target.includes(',')) {
 			this.errorReply(this.tr`You forgot the comma.`);
@@ -539,6 +540,8 @@ export const commands: Chat.ChatCommands = {
 		if (targetUser && !targetUser.connected) {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
+
+		if (cmd === 'botmsg') this.isQuietPm = true;
 
 		return this.parse(target);
 	},
