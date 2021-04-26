@@ -15099,10 +15099,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onHit(target, source, move) {
-			this.hint(move.category + " Shell Side Arm");
+			// Shell Side Arm normally reveals its category via animation on cart, but doesn't play either custom animation against allies
+			if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
 		},
 		onAfterSubDamage(damage, target, source, move) {
-			this.hint(move.category + " Shell Side Arm");
+			if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
 		},
 		secondary: {
 			chance: 20,
