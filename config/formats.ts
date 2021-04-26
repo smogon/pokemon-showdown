@@ -80,16 +80,12 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
-		// Suspect test
-		unbanlist: ['Zamazenta-Crowned'],
 	},
 	{
 		name: "[Gen 8] OU (Blitz)",
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', 'Blitz'],
-		// Suspect test
-		banlist: ['Zamazenta-Crowned'],
 	},
 	{
 		name: "[Gen 8] Ubers",
@@ -113,7 +109,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['OU', 'UUBL', 'Zamazenta-Crowned'],
+		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 8] RU",
@@ -261,7 +257,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
-		banlist: ['Zamazenta-Crowned', 'Crucibellite'],
+		banlist: ['Crucibellite'],
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
@@ -696,7 +692,7 @@ export const Formats: FormatList = [
 					if (item.megaEvolves === set.species) godSpecies = this.dex.species.get(item.megaStone);
 				}
 				const isBanned = validator.isBannedSpecies(godSpecies);
-				return isBanned || godSpecies.id === 'zamazentacrowned';
+				return isBanned;
 			}) || target.side.team[0];
 			const stat = Dex.stats.ids()[target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
@@ -1466,6 +1462,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 8] OU', 'Overflow Stat Mod'],
 		banlist: ['Damp Rock', 'Eviolite', 'Heat Rock'],
+		unbanlist: ['Zamazenta-Crowned'],
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
 			const boosts: {[tier: string]: number} = {
