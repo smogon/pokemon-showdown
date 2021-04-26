@@ -365,10 +365,10 @@ export const commands: Chat.ChatCommands = {
 				connection: targetConnection,
 				pageid: `view-bot-${pageid}`,
 			});
-			context.title = `[${user.name}] ${pageid}`;
 			if (selector) {
 				context.send(`|selectorhtml|${selector}|${content}`);
 			} else {
+				context.title = `[${user.name}] ${pageid}`;
 				context.setHTML(content);
 			}
 		}
