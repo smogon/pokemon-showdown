@@ -248,50 +248,42 @@ export abstract class MessageContext {
 	}
 	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
 		const targets = typeof target === 'string' ? target.split(',') : target;
-		if (atLeastOneTarget && targets.length < 2) {
-			const {dex, format} = this.extractFormat();
-			return {dex, format, targets};
-		}
-		let {dex, format, isMatch} = this.extractFormat(targets[0].trim());
-		if (isMatch) {
-			targets.shift();
-			return {dex, format, targets};
+		if (!targets[0].trim()) targets.pop();
+
+		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
+			const {dex, format, isMatch} = this.extractFormat(targets[0].trim());
+			if (isMatch) {
+				targets.shift();
+				return {dex, format, targets};
+			}
 		}
 		if (targets.length > 1) {
-			({dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim()));
+			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim());
 			if (isMatch) {
 				targets.pop();
 				return {dex, format, targets};
 			}
 		}
+
+		const room = (this as any as CommandContext).room;
+		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
 		return {dex, format, targets};
 	}
-	extractFormat(formatOrMod?: string, throwIfNoMatch?: boolean, skipRoom?: boolean): {
-		dex: ModdedDex, format: Format | null, isMatch: boolean,
-	} {
-		const room = skipRoom ? null : (this as any as CommandContext).room;
-
+	extractFormat(formatOrMod?: string): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
 		if (!formatOrMod) {
-			if (room) {
-				return {...this.extractFormat(room.settings.defaultFormat || room.battle?.format, false, true), isMatch: true};
-			}
-			return {dex: Dex.includeData(), format: null, isMatch: true};
+			return {dex: Dex.includeData(), format: null, isMatch: false};
 		}
 
 		const format = Dex.formats.get(formatOrMod);
 		if (format.exists) {
-			return {dex: Dex.forFormat(format).includeData(), format: format, isMatch: true};
+			return {dex: Dex.forFormat(format), format: format, isMatch: true};
 		}
 
 		if (toID(formatOrMod) in Dex.dexes) {
 			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
 		}
 
-		if (!throwIfNoMatch) {
-			return {...this.extractFormat(), isMatch: false};
-		}
-
-		throw new Chat.ErrorMessage(`Unrecognized format or mod "${formatOrMod}"`);
+		return this.extractFormat();
 	}
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
 		return Chat.tr(this.language, strings, ...keys);

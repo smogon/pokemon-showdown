@@ -1542,7 +1542,8 @@ export const commands: Chat.ChatCommands = {
 		if (format.exists) {
 			target = format.name;
 		}
-		this.extractFormat(target, true, true);
+		const {isMatch} = this.extractFormat(target);
+		if (!isMatch) throw new Chat.ErrorMessage(`Unrecognized format or mod "${target}"`);
 
 		room.settings.defaultFormat = target;
 		room.saveSettings();
