@@ -1633,9 +1633,11 @@ export class GlobalRoomState {
 		this.lastReportedCrash = time;
 
 		const stack = (err && (err.stack || err.message || err.name)) || '';
-		const stackLines = Utils.escapeHTML(stack).split(`\n`);
+		const [stackFirst, stackRest] = Utils.splitFirst(Utils.escapeHTML(stack), `<br />`);
+		let fullStack = `<b>${crasher} crashed:</b> ` + stackFirst;
+		if (stackRest) fullStack = `<details class="readmore"><summary>${fullStack}</summary>${stackRest}</details>`;
 
-		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stackLines.slice(1).join('<br />')}</details></div>`;
+		let crashMessage = `|html|<div class="broadcast-red">${fullStack}</div>`;
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
