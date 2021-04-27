@@ -504,7 +504,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				}
 			}
 		}
-		if (Config.validateSocket && !Config.validateSocket.call(this, socket, socketip)) {
+		if (Config.validateSocket && Config.validateSocket.call(this, socket, socketip) === false) {
 			socket.destroy();
 			this.sockets.delete(socketid);
 			return;
