@@ -1418,7 +1418,7 @@ export class Mastermind extends Rooms.RoomGame {
 	getTopPlayers(n: number) {
 		if (n < 0) return [];
 
-		const sortedPlayerIDs = Utils.sortBy([...this.leaderboard], ([userid, score]) => score)
+		const sortedPlayerIDs = Utils.sortBy([...this.leaderboard], ([userid, score]) => -score)
 			.map(([userid]) => userid);
 
 		if (sortedPlayerIDs.length <= n) return sortedPlayerIDs;
