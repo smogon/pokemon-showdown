@@ -246,6 +246,15 @@ export abstract class MessageContext {
 		}
 		return false;
 	}
+	/**
+	 * Given an array of strings (or a comma-delimited string), check the
+	 * first and last string for a format/mod/gen. If it exists, remove
+	 * it from the array.
+	 *
+	 * @returns `format` (null if no format was found), `dex` (the dex
+	 * for the format/mod, or the default dex if none was found), and
+	 * `targets` (the rest of the array).
+	 */
 	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
 		const targets = typeof target === 'string' ? target.split(',') : target;
 		if (!targets[0].trim()) targets.pop();
