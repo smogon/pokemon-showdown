@@ -234,7 +234,7 @@ export abstract class MessageContext {
 	}
 	meansYes(text: string) {
 		switch (text.toLowerCase().trim()) {
-		case 'on': case 'enable': case 'yes': case 'true': case 'allow':
+		case 'on': case 'enable': case 'yes': case 'true': case 'allow': case '1':
 			return true;
 		}
 		return false;
@@ -245,6 +245,53 @@ export abstract class MessageContext {
 			return true;
 		}
 		return false;
+	}
+	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
+		const targets = typeof target === 'string' ? target.split(',') : target;
+		if (atLeastOneTarget && targets.length < 2) {
+			const {dex, format} = this.extractFormat();
+			return {dex, format, targets};
+		}
+		let {dex, format, isMatch} = this.extractFormat(targets[0].trim());
+		if (isMatch) {
+			targets.shift();
+			return {dex, format, targets};
+		}
+		if (targets.length > 1) {
+			({dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim()));
+			if (isMatch) {
+				targets.pop();
+				return {dex, format, targets};
+			}
+		}
+		return {dex, format, targets};
+	}
+	extractFormat(formatOrMod?: string, throwIfNoMatch?: boolean, skipRoom?: boolean): {
+		dex: ModdedDex, format: Format | null, isMatch: boolean,
+	} {
+		const room = skipRoom ? null : (this as any as CommandContext).room;
+
+		if (!formatOrMod) {
+			if (room) {
+				return {...this.extractFormat(room.settings.defaultFormat || room.battle?.format, false, true), isMatch: true};
+			}
+			return {dex: Dex.includeData(), format: null, isMatch: true};
+		}
+
+		const format = Dex.formats.get(formatOrMod);
+		if (format.exists) {
+			return {dex: Dex.forFormat(format).includeData(), format: format, isMatch: true};
+		}
+
+		if (toID(formatOrMod) in Dex.dexes) {
+			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
+		}
+
+		if (!throwIfNoMatch) {
+			return {...this.extractFormat(), isMatch: false};
+		}
+
+		throw new Chat.ErrorMessage(`Unrecognized format or mod "${formatOrMod}"`);
 	}
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
 		return Chat.tr(this.language, strings, ...keys);
