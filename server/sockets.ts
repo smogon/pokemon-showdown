@@ -60,6 +60,7 @@ export const Sockets = new class {
 				const message = data.substr(idx + 1);
 				const room = Rooms.get(roomid);
 				if (room) room.add(message).update();
+				break;
 			}
 
 			default:
