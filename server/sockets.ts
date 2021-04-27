@@ -57,6 +57,7 @@ export const Sockets = new class {
 			case '&': {
 				// &roomid, pline
 				// forcibly add a pline directly to a room ID
+				// (intended for logging)
 				const [roomid, message] = Utils.splitFirst(message, '\n');
 				Rooms.get(roomid)?.add(message).update();
 				break;
