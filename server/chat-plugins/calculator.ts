@@ -1,6 +1,6 @@
 import {Utils} from '../../lib';
 
-type Operator = '^' | '%' | '/' | '*' | '+' | '-';
+type Operator = '^' | 'negative' | '%' | '/' | '*' | '+' | '-' | '(';
 interface Operators {
 	precedence: number;
 	associativity: "Left" | "Right";
@@ -8,6 +8,10 @@ interface Operators {
 
 const OPERATORS: {[k in Operator]: Operators} = {
 	"^": {
+		precedence: 5,
+		associativity: "Right",
+	},
+	"negative": {
 		precedence: 4,
 		associativity: "Right",
 	},
@@ -31,6 +35,10 @@ const OPERATORS: {[k in Operator]: Operators} = {
 		precedence: 2,
 		associativity: "Left",
 	},
+	"(": {
+		precedence: 1,
+		associativity: "Right",
+	},
 };
 
 const BASE_PREFIXES: {[base: number]: string} = {
@@ -43,7 +51,7 @@ const BASE_PREFIXES: {[base: number]: string} = {
 function parseMathematicalExpression(infix: string) {
 	// Shunting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 	const outputQueue: string[] = [];
-	const operatorStack: string[] = [];
+	const operatorStack: Operator[] = ['('];
 	infix = infix.replace(/\s+/g, "");
 	const infixArray = infix.split(/([+\-*/%^()])/).filter(token => token);
 	let isExprExpected = true;
@@ -54,19 +62,17 @@ function parseMathematicalExpression(infix: string) {
 			if (isExprExpected) throw new SyntaxError(`Got "${token}" where an expression should be`);
 			const op = OPERATORS[token as Operator];
 			let prevToken = operatorStack[operatorStack.length - 1];
-			let prevOp = OPERATORS[prevToken as Operator];
-			while ("^%*/+-".includes(prevToken) && (
-				op.associativity === "Left" ? op.precedence <= prevOp.precedence : op.precedence < prevOp.precedence
-			)) {
+			let prevOp = OPERATORS[prevToken];
+			while (op.associativity === "Left" ? op.precedence <= prevOp.precedence : op.precedence < prevOp.precedence) {
 				outputQueue.push(operatorStack.pop()!);
 				prevToken = operatorStack[operatorStack.length - 1];
-				prevOp = OPERATORS[prevToken as Operator];
+				prevOp = OPERATORS[prevToken];
 			}
-			operatorStack.push(token);
+			operatorStack.push(token as Operator);
 			isExprExpected = true;
 		} else if (token === "(") {
 			if (!isExprExpected) throw new SyntaxError(`Got "(" where an operator should be`);
-			operatorStack.push(token);
+			operatorStack.push(token as Operator);
 			isExprExpected = true;
 		} else if (token === ")") {
 			if (isExprExpected) throw new SyntaxError(`Got ")" where an expression should be`);
