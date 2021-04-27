@@ -55,7 +55,8 @@ export const Sockets = new class {
 			}
 
 			case '&': {
-				// roomid\nmessage - message to a roomid from the child process
+				// &roomid, pline
+				// forcibly add a pline directly to a room ID
 				const [roomid, message] = Utils.splitFirst(message, '\n');
 				const room = Rooms.get(roomid);
 				if (room) room.add(message).update();
