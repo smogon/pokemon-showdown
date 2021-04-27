@@ -55,6 +55,7 @@ export const Sockets = new class {
 			}
 
 			case '&': {
+				// roomid\nmessage - message to a roomid from the child process
 				const idx = data.indexOf('\n');
 				const roomid = data.substr(1, idx - 1);
 				const message = data.substr(idx + 1);
