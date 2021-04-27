@@ -54,6 +54,14 @@ export const Sockets = new class {
 				break;
 			}
 
+			case '&': {
+				const idx = data.indexOf('\n');
+				const roomid = data.substr(1, idx - 1);
+				const message = data.substr(idx + 1);
+				const room = Rooms.get(roomid);
+				if (room) room.add(message).update();
+			}
+
 			default:
 			// unhandled
 			}
@@ -495,6 +503,11 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				}
 			}
 		}
+		if (Config.validateSocket && !Config.validateSocket.call(this, socket, socketip)) {
+			socket.destroy();
+			this.sockets.delete(socketid);
+			return;
+		}
 
 		this.push(`*${socketid}\n${socketip}\n${socket.protocol}`);
 
@@ -529,6 +542,10 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 		const receiver = this.receivers[data.charAt(0)];
 		if (receiver) receiver.call(this, data);
+	}
+	log(message: string, roomid?: RoomID) {
+		if (!roomid) roomid = 'adminlog' as RoomID;
+		this.push(`&${roomid}\n${message}`);
 	}
 }
 
