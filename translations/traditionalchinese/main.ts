@@ -68,7 +68,7 @@ export const translations: Translations = {
 		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>信息</em>: 在房間管理檔案中留下信息，隻有見習管理以上能閱讀",
 
 		"<strong>Room moderators (@)</strong> can also use:": "<strong>管理員（@）</strong> 可以使用：",
-		"- /roomban OR /rb <em>username</em>: ban user from the room": "- /roomban 或 /rb <em>用戶名</em>: 將用戶封禁",
+		"- /roomban OR /rb <em>username</em>: ban user from the room": "- /roomban 或 /rb <em>用戶名</em>: 將用戶封鎖",
 		"- /roomunban <em>username</em>: unban user from the room": "- /roomunban <em>用戶名</em>: 解除封鎖",
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>用戶名</em>: 提升用戶為信任用戶",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>用戶名</em>: 移除信任用戶權限",
