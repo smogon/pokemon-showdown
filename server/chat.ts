@@ -234,7 +234,7 @@ export abstract class MessageContext {
 	}
 	meansYes(text: string) {
 		switch (text.toLowerCase().trim()) {
-		case 'on': case 'enable': case 'yes': case 'true': case 'allow':
+		case 'on': case 'enable': case 'yes': case 'true': case 'allow': case '1':
 			return true;
 		}
 		return false;
@@ -245,6 +245,54 @@ export abstract class MessageContext {
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * Given an array of strings (or a comma-delimited string), check the
+	 * first and last string for a format/mod/gen. If it exists, remove
+	 * it from the array.
+	 *
+	 * @returns `format` (null if no format was found), `dex` (the dex
+	 * for the format/mod, or the default dex if none was found), and
+	 * `targets` (the rest of the array).
+	 */
+	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
+		const targets = typeof target === 'string' ? target.split(',') : target;
+		if (!targets[0].trim()) targets.pop();
+
+		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
+			const {dex, format, isMatch} = this.extractFormat(targets[0].trim());
+			if (isMatch) {
+				targets.shift();
+				return {dex, format, targets};
+			}
+		}
+		if (targets.length > 1) {
+			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim());
+			if (isMatch) {
+				targets.pop();
+				return {dex, format, targets};
+			}
+		}
+
+		const room = (this as any as CommandContext).room;
+		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		return {dex, format, targets};
+	}
+	extractFormat(formatOrMod?: string): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
+		if (!formatOrMod) {
+			return {dex: Dex.includeData(), format: null, isMatch: false};
+		}
+
+		const format = Dex.formats.get(formatOrMod);
+		if (format.exists) {
+			return {dex: Dex.forFormat(format), format: format, isMatch: true};
+		}
+
+		if (toID(formatOrMod) in Dex.dexes) {
+			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
+		}
+
+		return this.extractFormat();
 	}
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
 		return Chat.tr(this.language, strings, ...keys);

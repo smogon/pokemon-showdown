@@ -1517,6 +1517,44 @@ export const commands: Chat.ChatCommands = {
 		`/roomsection [section] - Sets the room this is used in to the specified [section]. Requires: &`,
 		`Valid sections: ${sections.join(', ')}`,
 	],
+
+	roomdefaultformat(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('editroom', null, room);
+
+		if (!target) {
+			this.checkBroadcast();
+			if (room.settings.defaultFormat) {
+				this.sendReply(`This room's default format is ${room.settings.defaultFormat}.`);
+			} else {
+				this.sendReply(`This room has no default format.`);
+			}
+			return;
+		}
+		if (this.meansNo(target)) {
+			this.modlog(`DEFAULTFORMAT`, null, 'off');
+			this.privateModAction(`${user.name} removed this room's default format.`);
+			return;
+		}
+
+		target = toID(target);
+		const format = Dex.formats.get(target);
+		if (format.exists) {
+			target = format.name;
+		}
+		const {isMatch} = this.extractFormat(target);
+		if (!isMatch) throw new Chat.ErrorMessage(`Unrecognized format or mod "${target}"`);
+
+		room.settings.defaultFormat = target;
+		room.saveSettings();
+		this.modlog(`DEFAULTFORMAT`, null, target);
+		this.privateModAction(`${user.name} set this room's default format to ${target}.`);
+	},
+	roomdefaultformathelp: [
+		`/roomdefaultformat [format] or [mod] or gen[number] - Sets this room's default format/mod. Requires: # &`,
+		`/roomdefaultformat off - Clears this room's default format/mod. Requires: # &`,
+		`Affected commands: /details, /coverage, /effectiveness, /weakness, /learn`,
+	],
 };
 
 export const roomSettings: Chat.SettingsHandler[] = [
