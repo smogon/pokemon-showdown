@@ -15,7 +15,7 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
-import {crashlogger, ProcessManager, Streams, Repl} from '../lib';
+import {crashlogger, ProcessManager, Streams, Repl, Utils} from '../lib';
 import {IPTools} from './ip-tools';
 
 type StreamWorker = ProcessManager.StreamWorker;
@@ -56,9 +56,7 @@ export const Sockets = new class {
 
 			case '&': {
 				// roomid\nmessage - message to a roomid from the child process
-				const idx = data.indexOf('\n');
-				const roomid = data.substr(1, idx - 1);
-				const message = data.substr(idx + 1);
+				const [roomid, message] = Utils.splitFirst(message, '\n');
 				const room = Rooms.get(roomid);
 				if (room) room.add(message).update();
 				break;
