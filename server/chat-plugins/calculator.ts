@@ -51,7 +51,7 @@ const BASE_PREFIXES: {[base: number]: string} = {
 function parseMathematicalExpression(infix: string) {
 	// Shunting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 	const outputQueue: string[] = [];
-	const operatorStack: Operator[] = ['('];
+	const operatorStack: Operator[] = [];
 	infix = infix.replace(/\s+/g, "");
 	const infixArray = infix.split(/([+\-*/%^()])/).filter(token => token);
 	let isExprExpected = true;
@@ -61,11 +61,11 @@ function parseMathematicalExpression(infix: string) {
 		} else if ("^%*/+-".includes(token)) {
 			if (isExprExpected) throw new SyntaxError(`Got "${token}" where an expression should be`);
 			const op = OPERATORS[token as Operator];
-			let prevToken = operatorStack[operatorStack.length - 1];
+			let prevToken = operatorStack[operatorStack.length - 1] || '(';
 			let prevOp = OPERATORS[prevToken];
 			while (op.associativity === "Left" ? op.precedence <= prevOp.precedence : op.precedence < prevOp.precedence) {
 				outputQueue.push(operatorStack.pop()!);
-				prevToken = operatorStack[operatorStack.length - 1];
+				prevToken = operatorStack[operatorStack.length - 1] || '(';
 				prevOp = OPERATORS[prevToken];
 			}
 			operatorStack.push(token as Operator);
