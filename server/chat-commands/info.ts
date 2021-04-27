@@ -543,10 +543,10 @@ export const commands: Chat.ChatCommands = {
 		const gen = parseInt(cmd.substr(-1));
 		if (gen) target += `, gen${gen}`;
 
+		const {dex, format, targets} = this.splitFormat(target, true);
+
 		let buffer = '';
-		let sep = target.split(',');
-		if (sep.length !== 2) sep = [target];
-		target = sep[0].trim();
+		target = targets.join(',');
 		const targetId = toID(target);
 		if (!targetId) return this.parse('/help data');
 		const targetNum = parseInt(target);
@@ -557,20 +557,6 @@ export const commands: Chat.ChatCommands = {
 					break;
 				}
 			}
-		}
-		let dex = Dex;
-		let format: Format | null = null;
-		if (sep[1] && toID(sep[1]) in Dex.dexes) {
-			dex = Dex.mod(toID(sep[1]));
-		} else if (sep[1]) {
-			format = Dex.formats.get(sep[1]);
-			if (!format.exists) {
-				return this.errorReply(`Unrecognized format or mod "${format.name}"`);
-			}
-			dex = Dex.mod(format.mod);
-		} else if (room?.battle) {
-			format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
 		}
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
@@ -868,27 +854,18 @@ export const commands: Chat.ChatCommands = {
 	weakness(target, room, user) {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
-		target = target.trim();
-		const targets = target.split(/[,/]/).map(toID);
-		const maybeMod = targets[targets.length - 1];
-		let mod = Dex;
-		let format: Format | null = null;
+		const {dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
+
 		let isInverse = false;
-		if (maybeMod && maybeMod in Dex.dexes) {
-			mod = Dex.mod(maybeMod);
-			targets.pop();
-		} else if (room?.battle) {
-			format = Dex.formats.get(room.battle.format);
-			mod = Dex.mod(format.mod);
-		}
-		if (maybeMod === 'inverse') {
+		if (targets[targets.length - 1] === 'inverse') {
 			isInverse = true;
 			targets.pop();
 		}
-		let species: {types: string[], [k: string]: any} = mod.species.get(targets[0]);
-		const type1 = mod.types.get(targets[0]);
-		const type2 = mod.types.get(targets[1]);
-		const type3 = mod.types.get(targets[2]);
+
+		let species: {types: string[], [k: string]: any} = dex.species.get(targets[0]);
+		const type1 = dex.types.get(targets[0]);
+		const type2 = dex.types.get(targets[1]);
+		const type3 = dex.types.get(targets[2]);
 
 		if (species.exists) {
 			target = species.name;
@@ -905,7 +882,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
 			}
 			species = {types: types};
 			target = types.join("/");
@@ -914,11 +891,11 @@ export const commands: Chat.ChatCommands = {
 		const weaknesses = [];
 		const resistances = [];
 		const immunities = [];
-		for (const type of mod.types.names()) {
-			const notImmune = mod.getImmunity(type, species);
+		for (const type of dex.types.names()) {
+			const notImmune = dex.getImmunity(type, species);
 			if (notImmune || isInverse) {
 				let typeMod = !notImmune && isInverse ? 1 : 0;
-				typeMod += (isInverse ? -1 : 1) * mod.getEffectiveness(type, species);
+				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, species);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -956,7 +933,7 @@ export const commands: Chat.ChatCommands = {
 			trapped: "Trapping",
 		};
 		for (const status in statuses) {
-			if (!mod.getImmunity(status, species)) {
+			if (!dex.getImmunity(status, species)) {
 				immunities.push(statuses[status]);
 			}
 		}
@@ -979,7 +956,7 @@ export const commands: Chat.ChatCommands = {
 	type: 'effectiveness',
 	matchup: 'effectiveness',
 	effectiveness(target, room, user) {
-		const targets = target.split(/[,/]/).slice(0, 2);
+		const {dex, targets} = this.splitFormat(target.split(/[,/]/));
 		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
 
 		let searchMethods = ['types', 'moves', 'species'];
@@ -990,12 +967,11 @@ export const commands: Chat.ChatCommands = {
 		let foundData;
 		let atkName;
 		let defName;
-		const dex: any = Dex;
 
 		for (let i = 0; i < 2; ++i) {
 			let method!: string;
 			for (const m of searchMethods) {
-				foundData = dex[m].get(targets[i]);
+				foundData = (dex as any).get(targets[i]);
 				if (foundData.exists) {
 					method = m;
 					break;
@@ -1026,12 +1002,12 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 
 		let factor = 0;
-		if (Dex.getImmunity(source, defender) ||
+		if (dex.getImmunity(source, defender) ||
 			source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) {
 			let totalTypeMod = 0;
 			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
 				for (const type of defender.types) {
-					const baseMod = Dex.getEffectiveness(source, type);
+					const baseMod = dex.getEffectiveness(source, type);
 					const moveMod = source.onEffectiveness?.call({dex: Dex} as Battle, baseMod, null, type, source);
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
@@ -1054,16 +1030,8 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse("/help coverage");
 
-		const targets = target.split(/[,+/]/);
+		const {dex, targets} = this.splitFormat(target.split(/[,+/]/));
 		const sources: (string | Move)[] = [];
-		let dex = Dex;
-		if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-		}
-		if (targets[targets.length - 1] && toID(targets[targets.length - 1]) in Dex.dexes) {
-			dex = Dex.mod(toID(targets[targets.length - 1]));
-		}
 		let dispTable = false;
 		const bestCoverage: {[k: string]: number} = {};
 		let hasThousandArrows = false;

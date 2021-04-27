@@ -419,14 +419,23 @@ export const commands: Chat.ChatCommands = {
 	usumlearn: 'learn',
 	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
-		target = target.slice(0, 300);
+		if (target.length > 300) throw new Chat.ErrorMessage(`Query too long.`);
+
+		const GENS: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7};
+		const cmdGen = GENS[cmd.slice(0, -5)];
+		if (cmdGen) target = `gen${cmdGen}, ${target}`;
+
 		this.checkBroadcast();
+		const {format, dex, targets} = this.splitFormat(target);
+
+		const formatid = format ? format.id : dex.currentMod;
+		if (cmd === 'learn5') targets.unshift('level5');
 
 		const response = await runSearch({
-			target,
+			target: targets.join(','),
 			cmd: 'learn',
 			canAll: !this.broadcastMessage || checkCanAll(room),
-			message: cmd,
+			message: formatid,
 		});
 		if (!response.error && !this.runBroadcast()) return;
 		if (response.error) {
@@ -2320,47 +2329,41 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	return {reply: resultsStr};
 }
 
-function runLearn(target: string, cmd: string, canAll: boolean, message: string) {
-	let format: Format = Object.create(null);
+function runLearn(target: string, cmd: string, canAll: boolean, formatid: string) {
+	let format: Format = Dex.formats.get(formatid);
 	const targets = target.split(',');
-	const gens: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7};
-	let gen = (gens[cmd.slice(0, -5)] || 8);
-	let formatid;
-	let formatName;
-	let minSourceGen;
+	let formatName = format.name;
+	let minSourceGen = undefined;
+	let level = 100;
 
 	while (targets.length) {
 		const targetid = toID(targets[0]);
-		if (Dex.formats.get(targetid).exists) {
-			if (format.minSourceGen && format.minSourceGen === 6) {
-				return {error: "'pentagon' can't be used with formats."};
-			}
-			format = Utils.deepClone(Dex.formats.get(targetid));
-			formatid = targetid;
-			formatName = format.name;
-			targets.shift();
-			continue;
-		}
-		if (targetid.startsWith('gen') && parseInt(targetid.charAt(3))) {
-			gen = parseInt(targetid.slice(3));
-			targets.shift();
-			continue;
-		}
 		if (targetid === 'pentagon') {
-			if (formatid) {
+			if (format.exists) {
 				return {error: "'pentagon' can't be used with formats."};
 			}
 			minSourceGen = 6;
 			targets.shift();
 			continue;
 		}
+		if (targetid === 'level5') {
+			level = 5;
+			targets.shift();
+			continue;
+		}
 		break;
 	}
-	if (!formatName) {
-		if (!Dex.mod(`gen${gen}`)) return {error: `Gen ${gen} does not exist.`};
-		format = new Dex.Format({...format, mod: `gen${gen}`});
+	let gen;
+	if (!format.exists) {
+		// can happen if you hotpatch formats without hotpatching chat
+		const dex = Dex.mod(formatid).includeData();
+		if (!dex) return {error: `"${formatid}" is not a supported format.`};
+		gen = dex.gen;
+		format = new Dex.Format({minSourceGen, mod: formatid});
 		formatName = `Gen ${gen}`;
 		if (minSourceGen === 6) formatName += ' Pentagon';
+	} else {
+		gen = Dex.forFormat(format).gen;
 	}
 	const validator = TeamValidator.get(format);
 
@@ -2369,7 +2372,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	const set: Partial<PokemonSet> = {
 		name: species.baseSpecies,
 		species: species.name,
-		level: cmd === 'learn5' ? 5 : 100,
+		level,
 	};
 	const all = (cmd === 'learnall');
 
@@ -2518,7 +2521,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		case 'abilitysearch':
 			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
 		case 'learn':
-			return runLearn(query.target, query.message, query.canAll, query.message);
+			return runLearn(query.target, query.cmd, query.canAll, query.message);
 		default:
 			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}
