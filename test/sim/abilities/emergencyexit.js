@@ -321,4 +321,36 @@ describe(`Emergency Exit`, function () {
 		assert.equal(volcarona.hp, Math.floor(volcarona.maxhp / 2), 'Emergency Exit should trigger before Spikes damage.');
 		assert.equal(battle.requestState, 'switch');
 	});
+
+	it.skip(`should request switchout between residual damage`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Coalossal', level: 1, item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
+			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'grasspledge']},
+			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'firepledge']},
+		], [
+			{species: 'Blissey', moves: ['sleeptalk']},
+			{species: 'Amoonguss', ability: 'noguard', moves: ['sleeptalk', 'superfang']},
+			{species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk']},
+		]]);
+
+		// Set up Volcalith and Sea of Fire
+		battle.makeChoices('move rockthrow 1 dynamax, move grasspledge -1', 'auto');
+		battle.makeChoices('switch 3');
+		battle.makeChoices('move firepledge 1, move grasspledge 1', 'auto');
+
+		// Halve Golisopod's HP
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'switch 3, move superfang -1');
+
+		const golisopod = battle.p2.active[0];
+		let maxHP = golisopod.maxhp;
+		let expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 6);
+		assert.equal(golisopod.hp, expectedHP, `Golisopod should have only taken Volcalith damage`);
+
+		const amoonguss = battle.p2.active[1];
+		maxHP = amoonguss.maxhp;
+		expectedHP = maxHP - (3 * Math.floor(maxHP / 6)) - (2 * Math.floor(maxHP / 8)); // 3 turns of Volcalith, 2 turns of Sea of Fire
+		assert.equal(amoonguss.hp, expectedHP, `Amoonguss should have taken damage before Golisopod can be replaced.`);
+
+		assert.equal(battle.requestState, 'switch');
+	});
 });
