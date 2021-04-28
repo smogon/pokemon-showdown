@@ -1360,7 +1360,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	noswitch: {
 		effectType: 'Rule',
 		name: 'No Switch',
-		desc: 'It is not possible to switch Pok&eacute;mon. Except with an item, moove or Ability provided for this purpose.',
+		desc: 'Players cannot switch their Pok&eacute;mon, except with an item, move, or Ability.',
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
 			this.add('rule', '-activate', pokemon, 'trapped');
