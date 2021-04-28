@@ -1503,7 +1503,7 @@ export const Punishments = new class {
 	 */
 	checkIpBanned(connection: Connection) {
 		const ip = connection.ip;
-		if (Punishments.cfloods.has(ip) || (Monitor.countConnection(ip) && Punishments.cfloods.add(ip))) {
+		if (Punishments.cfloods.has(ip) || (Monitor.isCflooding(ip) && Punishments.cfloods.add(ip))) {
 			connection.send(`|popup||modal|PS is under heavy load and cannot accommodate your connection right now.`);
 			return '#cflood';
 		}

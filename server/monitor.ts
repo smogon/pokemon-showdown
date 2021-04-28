@@ -154,7 +154,26 @@ export const Monitor = new class {
 		this.connections.clear();
 		IPTools.dnsblCache.clear();
 	}
+	/**
+	 * Check to see how many connections share this IP.
+	 * Returns true if it should be terminated for having too many concurrent connections.
+	 */
+	countConcurrentConnections(ip: string) {
+		const cfloodMax = Punishments.sharedIps.has(ip) ? 50 : (Config.maxconns || 30);
+		let count = 0;
+		for (const conn of Users.connections.values()) {
+			if (conn.ip === ip) count++;
+			if (count >= cfloodMax) {
+				this.adminlog(`[ResourceMonitor] IP ${ip} banned for cflooding (${count} concurrent connections sharing the IP)`);
+				return true;
+			}
+		}
+		return false;
+	}
 
+	isCflooding(ip: string) {
+		return this.countConnection(ip) || this.countConcurrentConnections(ip);
+	}
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
