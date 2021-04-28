@@ -1357,4 +1357,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Japanese versions of Gen 1.",
 		// Implemented in mods/gen1jpn/rulesets.ts
 	},
+	noswitch: {
+		effectType: 'Rule',
+		name: 'No Switch',
+		desc: 'It is not possible to switch Pok&eacute;mon. Except with an item, moove or Ability provided for this purpose.',
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+			this.add('rule', '-activate', pokemon, 'trapped');
+		},
+	},
 };
