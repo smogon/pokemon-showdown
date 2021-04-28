@@ -111,7 +111,7 @@ export const translations: Translations = {
 		"Since you have reached ${Config.forceregisterelo} ELO in ${target}, you must register your account to continue playing that format on ladder.": "",
 		"Register": "",
 		"The user '${targetUsername}' was not found.": "",
-		"You are locked and cannot challenge unlocked users.": "",
+		"You are locked and cannot challenge unlocked users. If this user is your friend, ask them to challenge you instead.": "",
 		"You are banned from battling and cannot challenge users.": "",
 		"You must choose a username before you challenge someone.": "",
 		"This server requires you to be rank ${groupName} or higher to challenge users.": "",

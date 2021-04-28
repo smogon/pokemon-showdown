@@ -1654,7 +1654,7 @@ export const commands: Chat.ChatCommands = {
 			return this.popupReply(this.tr`The user '${targetUsername}' was not found.`);
 		}
 		if (user.locked && !targetUser.locked) {
-			return this.popupReply(this.tr`You are locked and cannot challenge unlocked users.`);
+			return this.popupReply(this.tr`You are locked and cannot challenge unlocked users. If this user is your friend, ask them to challenge you instead.`);
 		}
 		if (Punishments.isBattleBanned(user)) {
 			return this.popupReply(this.tr`You are banned from battling and cannot challenge users.`);

@@ -111,7 +111,7 @@ export const translations: Translations = {
 		"Since you have reached ${Config.forceregisterelo} ELO in ${target}, you must register your account to continue playing that format on ladder.": "Maintenant que tu as atteint un ELO de ${Config.forceregisterelo} en ${target}, tu dois enregistrer ton compte pour continuer de jouer ce format en classé.",
 		"Register": "Enregistrer son compte",
 		"The user '${targetUsername}' was not found.": "L'utilisateur '${targetUsername}' n'a pas été trouvé.",
-		"You are locked and cannot challenge unlocked users.": "Tu es locked et ne peux pas envoyer de challenge aux utilisateurs qui ne le sont pas.",
+		"You are locked and cannot challenge unlocked users. If this user is your friend, ask them to challenge you instead.": "Tu es locked et ne peux pas envoyer de challenge aux utilisateurs qui ne le sont pas.",
 		"You are banned from battling and cannot challenge users.": "Tu es banni des combats et ne peux pas envoyer de challenge aux autres utilisateurs",
 		"You must choose a username before you challenge someone.": "Tu dois choisir un pseudo avant d'envoyer des challenges aux autres utilisateurs",
 		"This server requires you to be rank ${groupName} or higher to challenge users.": "Ce serveur demande d'être au moins ${groupName} ou plus pour envoyer des challenges aux autres utilisateurs.",
