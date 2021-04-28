@@ -3251,6 +3251,7 @@ export const Formats: FormatList = [
 		mod: 'gen2stadium2',
 		searchShow: false,
 		ruleset: ['Standard'],
+		banlist: ['Uber'],
 	},
 	{
 		name: "[Gen 2] Custom Game",
