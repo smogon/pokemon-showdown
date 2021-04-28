@@ -971,7 +971,7 @@ export const commands: Chat.ChatCommands = {
 		for (let i = 0; i < 2; ++i) {
 			let method!: string;
 			for (const m of searchMethods) {
-				foundData = (dex as any).get(targets[i]);
+				foundData = (dex as any)[m].get(targets[i]);
 				if (foundData.exists) {
 					method = m;
 					break;
