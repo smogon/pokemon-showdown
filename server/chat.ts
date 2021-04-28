@@ -294,6 +294,22 @@ export abstract class MessageContext {
 
 		return this.extractFormat();
 	}
+	splitUser(target: string, exactName = false) {
+		const [inputUsername, rest] = this.splitOne(target).map(str => str.trim());
+		const targetUser = Users.get(inputUsername, exactName);
+
+		return {
+			targetUser,
+			inputUsername,
+			targetUsername: targetUser ? targetUser.name : inputUsername,
+			rest,
+		};
+	}
+	getUserOrSelf(target: string, exactName = false) {
+		if (!target.trim()) return this.user;
+
+		return Users.get(target, exactName);
+	}
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
 		return Chat.tr(this.language, strings, ...keys);
 	}
@@ -454,8 +470,11 @@ export class CommandContext extends MessageContext {
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
 	broadcastMessage: string;
+	/** @deprecated */
 	targetUser: User | null;
+	/** @deprecated */
 	targetUsername: string;
+	/** @deprecated */
 	inputUsername: string;
 	constructor(
 		options:
@@ -1316,32 +1335,8 @@ export class CommandContext extends MessageContext {
 
 		return htmlContent;
 	}
-	targetUserOrSelf(target: string, exactName: boolean) {
-		if (!target) {
-			this.targetUsername = this.user.name;
-			this.inputUsername = this.user.name;
-			return this.user;
-		}
-		this.splitTarget(target, exactName);
-		return this.targetUser;
-	}
 
-	/**
-	 * Given a message in the form "USERNAME" or "USERNAME, MORE", splits
-	 * it apart:
-	 *
-	 * - `this.targetUser` will be the User corresponding to USERNAME
-	 *   (or null, if not found)
-	 *
-	 * - `this.inputUsername` will be the text of USERNAME, unmodified
-	 *
-	 * - `this.targetUsername` will be the username, if found, or
-	 *   this.inputUsername otherwise
-	 *
-	 * - and the text of MORE will be returned (empty string, if the
-	 *   message has no comma)
-	 *
-	 */
+	/** @deprecated */
 	splitTarget(target: string, exactName = false) {
 		const [name, rest] = this.splitOne(target);
 
@@ -2369,6 +2364,20 @@ export const Chat = new class {
 (CommandContext.prototype as any).canPMHTML = CommandContext.prototype.checkPMHTML;
 (CommandContext.prototype as any).privatelyCan = CommandContext.prototype.privatelyCheckCan;
 (CommandContext.prototype as any).requiresRoom = CommandContext.prototype.requireRoom;
+(CommandContext.prototype as any).targetUserOrSelf = function (this: any, target: string, exactName: boolean) {
+	const user = this.getUserOrSelf(target, exactName);
+	this.targetUser = user;
+	this.inputUsername = target;
+	this.targetUsername = user?.name || target;
+	return user;
+};
+(CommandContext.prototype as any).splitTarget = function (this: any, target: string, exactName: boolean) {
+	const {targetUser, inputUsername, targetUsername, rest} = this.splitUser(target, exactName);
+	this.targetUser = targetUser;
+	this.inputUsername = inputUsername;
+	this.targetUsername = targetUsername;
+	return rest;
+};
 
 /**
  * Used by ChatMonitor.
