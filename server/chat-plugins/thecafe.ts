@@ -102,14 +102,14 @@ export const commands: Chat.ChatCommands = {
 	checkfoodfight(target, room, user) {
 		room = this.requireRoom('thecafe' as RoomID);
 
-		const targetUser = this.targetUserOrSelf(target, false);
-		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
+		const targetUser = this.getUserOrSelf(target);
+		if (!targetUser) return this.errorReply(`User ${target} not found.`);
 		const self = targetUser === user;
 		if (!self) this.checkCan('mute', targetUser, room);
 		if (!targetUser.foodfight) {
 			return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
 		}
-		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">${self ? `Your` : `${this.targetUsername}'s`} dish is: <u>${targetUser.foodfight.dish}</u></th></tr><tr><th>Team</th>${targetUser.foodfight.generatedTeam.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${targetUser.foodfight.ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr></table></div>`);
+		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">${self ? `Your` : `${targetUser.name}'s`} dish is: <u>${targetUser.foodfight.dish}</u></th></tr><tr><th>Team</th>${targetUser.foodfight.generatedTeam.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${targetUser.foodfight.ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr></table></div>`);
 	},
 	addingredients: 'adddish',
 	adddish(target, room, user, connection, cmd) {

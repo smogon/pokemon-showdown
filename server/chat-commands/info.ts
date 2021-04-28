@@ -75,12 +75,12 @@ export const commands: Chat.ChatCommands = {
 	profile: 'whois',
 	whois(target, room, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
-		const targetUser = this.targetUserOrSelf(target, user.tempGroup === ' ');
+		const targetUser = this.getUserOrSelf(target, user.tempGroup === ' ');
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
 		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
 		if (!targetUser) {
 			if (showAll) return this.parse('/offlinewhois ' + target);
-			return this.errorReply("User " + this.targetUsername + " not found.");
+			return this.errorReply(`User ${target} not found.`);
 		}
 		if (showAll && !user.trusted && targetUser !== user) {
 			return this.errorReply(`/${cmd} - Access denied.`);
