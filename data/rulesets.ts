@@ -1316,8 +1316,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			teamLevels.sort((a, b) => b - a);
 			let combinedLowestLevels = 0;
-			let i;
-			for (i = 0; i < format.teamLength.battle; i++) {
+			for (let i = 0; i < format.teamLength.battle; i++) {
 				combinedLowestLevels += teamLevels.pop()!;
 			}
 			if (combinedLowestLevels > format.cupLevelLimit.total) {
@@ -1351,5 +1350,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: "Nintendo Cup 2000 Move Legality",
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
 		// Implemented in mods/gen2/rulesets.ts
+	},
+	japanesegen1movelegality: {
+		effectType: 'ValidatorRule',
+		name: "Japanese Gen 1 Move Legality",
+		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Japanese versions of Gen 1.",
+		// Implemented in mods/gen1jpn/rulesets.ts
 	},
 };
