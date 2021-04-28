@@ -84,6 +84,19 @@ As an example:
 `/help whois` will send the information in `whoishelp`.
 
 
+Plines
+------------------------------------------------------------------------
+
+A lot of the functions refering "plines". A pline is a protocol line,
+documented in [PROTOCOL.md][https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md]
+
+Plines are the ones that usually start with `|MESSAGETYPE|`, but a pline
+that doesn't start with `|` will be shown as text directly to the user.
+
+Note that currently, most plines starting with `|` break horribly when
+sent in PMs, so please be careful about that.
+
+
 Functions
 ------------------------------------------------------------------------
 
