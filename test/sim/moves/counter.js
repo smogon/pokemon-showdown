@@ -193,7 +193,7 @@ describe('Mirror Coat', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it.skip(`should not have its target changed by Stalwart`, function () {
+	it(`should not have its target changed by Stalwart`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Duraludon", ability: 'stalwart', moves: ['mirrorcoat']},
 			{species: "Diglett", moves: ['sleeptalk']},

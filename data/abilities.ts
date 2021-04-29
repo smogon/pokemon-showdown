@@ -3514,11 +3514,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 100,
 	},
 	stalwart: {
-		onModifyMove(move) {
-			// this doesn't actually do anything because ModifyMove happens after the tracksTarget check
-			// the actual implementation is in Battle#getTarget
-			move.tracksTarget = true;
-		},
 		name: "Stalwart",
 		rating: 0,
 		num: 242,
