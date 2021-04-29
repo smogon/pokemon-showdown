@@ -2767,11 +2767,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 232,
 	},
 	propellertail: {
-		onModifyMove(move) {
-			// this doesn't actually do anything because ModifyMove happens after the tracksTarget check
-			// the actual implementation is in Battle#getTarget
-			move.tracksTarget = true;
-		},
 		name: "Propeller Tail",
 		rating: 0,
 		num: 239,
