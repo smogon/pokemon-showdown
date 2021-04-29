@@ -2767,6 +2767,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 232,
 	},
 	propellertail: {
+		// the actual implementation is in Battle#getTarget
 		name: "Propeller Tail",
 		rating: 0,
 		num: 239,
@@ -3509,6 +3510,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 100,
 	},
 	stalwart: {
+		// the actual implementation is in Battle#getTarget
 		name: "Stalwart",
 		rating: 0,
 		num: 242,
