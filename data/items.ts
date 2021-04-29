@@ -69,14 +69,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyBoost(boost, target) {
-			target.itemData.oldatk = target.itemData.newatk;
+		onBoostPriority: 1,
+		onBoost(boost, target) {
 			target.itemData.newatk = target.boosts['atk'];
 		},
 		onAfterBoost(boost, target, source, effect) {
-			if ((boost.atk && boost.atk < 0 && target.boosts['atk'] === -6 && target.itemData.oldatk !== -5) ||
-			 (target.boosts['spe'] === 6) ||
-			  (boost.atk && boost.atk > 0 && target.boosts['atk'] === 6 && target.itemData.oldatk !== 5)) {
+			if (target.itemData.newatk === -6 || (target.boosts['spe'] === 6) ||
+			  (target.itemData.newatk === 6 && target.hasAbility('contrary'))) {
 				return;
 			}
 			if (effect.id === 'intimidate') {
