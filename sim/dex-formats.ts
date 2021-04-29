@@ -639,6 +639,12 @@ export class DexFormats {
 				} else {
 					tagRules.push(ruleid);
 				}
+			} else if ('+*-'.includes(ruleid.charAt(0)) && ruleid.slice(1) === 'nonexistent') {
+				if (!ruleid.startsWith('+')) {
+					existenceTagRules.push(ruleid.charAt(0) + 'pokemontag:nonexistent');
+				} else {
+					tagRules.push('+pokemontag:nonexistent');
+				}
 			}
 		}
 		ruleTable.tagRules = [...tagRules, ...existenceTagRules, ...specificExistenceTagRules].reverse();

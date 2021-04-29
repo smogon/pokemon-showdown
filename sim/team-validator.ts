@@ -1335,6 +1335,7 @@ export class TeamValidator {
 		}
 
 		const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
+		console.log(ruleTable.tagRules);
 		for (const ruleid of ruleTable.tagRules) {
 			if (ruleid.startsWith('*')) continue;
 			const tagid = ruleid.slice(12);
