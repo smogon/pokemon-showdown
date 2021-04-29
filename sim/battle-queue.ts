@@ -352,10 +352,10 @@ export class BattleQueue {
 		let lastIndex = null;
 		for (const [i, curAction] of this.list.entries()) {
 			const compared = this.battle.comparePriority(actions[0], curAction);
-			if (compared === 0) {
+			if (compared <= 0 && firstIndex === null) {
 				firstIndex = i;
-			} if (compared < 0) {
-				if (firstIndex === null) firstIndex = i;
+			}
+			if (compared < 0) {
 				lastIndex = i;
 				break;
 			}
