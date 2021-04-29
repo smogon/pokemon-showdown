@@ -114,7 +114,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Dragon",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony && pokemon.abilityState.gluttony)) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
 		},
@@ -222,7 +222,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Ground",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony && pokemon.abilityState.gluttony)) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
 		},
