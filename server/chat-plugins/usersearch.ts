@@ -29,7 +29,7 @@ function searchUsernames(target: string, page = false) {
 		} else {
 			buf += results.online.join('; ');
 			if (results.offline.length) {
-				buf += `<br /><br />`;
+				if (results.online.length) buf += `<br /><br />`;
 				buf += results.offline.join('; ');
 			}
 		}
