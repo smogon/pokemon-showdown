@@ -415,6 +415,26 @@ export const commands: Chat.ChatCommands = {
 		`If a [highlight] is specified, only highlights them if they have that term on their highlight list.`,
 	],
 
+	botmsg(target, room, user, connection) {
+		if (!target || !target.includes(',')) return this.parse('/help botmsg');
+		target = this.splitTarget(target);
+		const targetUser = this.targetUser;
+		const targetUsername = this.targetUsername;
+
+		if (!targetUser || !targetUser.connected) {
+			return this.popupReply(`The bot "${targetUsername}" is offline.`);
+		}
+
+		const auth = this.room ? this.room.auth : Users.globalAuth;
+		if (auth.get(targetUser) !== '*') {
+			return this.popupReply(`The user "${targetUsername}" is not a bot in this room.`);
+		}
+
+		target = this.checkChat(target);
+		Chat.sendPM(`/botmsg ${target}`, user, targetUser, targetUser);
+	},
+	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
+
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
 		this.sendReply(`||https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md#global-messages`);
