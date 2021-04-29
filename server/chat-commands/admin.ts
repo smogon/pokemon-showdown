@@ -1190,7 +1190,6 @@ export const commands: Chat.ChatCommands = {
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
 	async eval(target, room, user, connection) {
-		room = this.requireRoom();
 		this.canUseConsole();
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
@@ -1209,17 +1208,17 @@ export const commands: Chat.ChatCommands = {
 		let uhtmlId = null;
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
-			const battle = room.battle;
+			const battle = room?.battle;
 			const me = user;
 			let result = eval(target);
 			/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
 
 			if (result?.then) {
-				uhtmlId = `eval-${room.nextGameNumber()}`;
-				this.sendReply(`|uhtml|${uhtmlId}|${generateHTML('<', 'Promise pending')}`);
+				uhtmlId = `eval-${room ? room.nextGameNumber() : Date.now()}`;
+				this.sendReply(`|c|~|/uhtml ${uhtmlId},${generateHTML('<', 'Promise pending')}`);
 				this.update();
 				result = `Promise -> ${Utils.visualize(await result)}`;
-				this.sendReply(`|uhtmlchange|${uhtmlId}|${generateHTML('<', result)}`);
+				this.sendReply(`|c|~|/uhtmlchange ${uhtmlId},${generateHTML('<', result)}`);
 			} else {
 				result = Utils.visualize(result);
 				this.sendReply(`|html|${generateHTML('<', result)}`);
@@ -1227,7 +1226,7 @@ export const commands: Chat.ChatCommands = {
 			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
 			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
-			const command = uhtmlId ? `|uhtmlchange|${uhtmlId}|` : '|html|';
+			const command = uhtmlId ? `|c|~|/uhtmlchange ${uhtmlId},` : '|html|';
 			this.sendReply(`${command}${generateHTML('<', message)}`);
 			logRoom?.roomlog(`<< ${message}`);
 		}
