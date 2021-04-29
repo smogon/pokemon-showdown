@@ -71,11 +71,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onBoostPriority: 1,
 		onBoost(boost, target) {
-			target.itemData.newatk = target.boosts['atk'];
+			target.itemData.lastAtk = target.boosts['atk'];
 		},
 		onAfterBoost(boost, target, source, effect) {
-			if (target.itemData.newatk === -6 || (target.boosts['spe'] === 6) ||
-			  (target.itemData.newatk === 6 && target.hasAbility('contrary'))) {
+			const noAtkChange = boost.atk && boost.atk < 0 && target.boosts['atk'] === -6 && target.itemData.lastAtk === -6;
+			const noContraryAtkChange = boost.atk && boost.atk > 0 && target.boosts['atk'] === 6 && target.itemData.lastAtk === 6;
+			if (target.boosts['spe'] === 6 || noAtkChange || (target.hasAbility('contrary') && noContraryAtkChange)) {
 				return;
 			}
 			if (effect.id === 'intimidate') {
