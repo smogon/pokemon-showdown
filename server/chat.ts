@@ -484,12 +484,6 @@ export class CommandContext extends MessageContext {
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
 	broadcastMessage: string;
-	/** @deprecated */
-	targetUser: User | null;
-	/** @deprecated */
-	targetUsername: string;
-	/** @deprecated */
-	inputUsername: string;
 	constructor(
 		options:
 		{message: string, user: User, connection: Connection} &
@@ -519,11 +513,6 @@ export class CommandContext extends MessageContext {
 		this.broadcasting = false;
 		this.broadcastToRoom = true;
 		this.broadcastMessage = '';
-
-		// target user
-		this.targetUser = null;
-		this.targetUsername = "";
-		this.inputUsername = "";
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
@@ -1185,9 +1174,9 @@ export class CommandContext extends MessageContext {
 
 		return message;
 	}
-	checkPMHTML(targetUser: User | null) {
+	checkPMHTML(targetUser: User | null, targetUsername: string) {
 		if (!targetUser?.connected) {
-			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
+			throw new Chat.ErrorMessage(`User ${targetUsername} is not currently online.`);
 		}
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
@@ -1351,16 +1340,6 @@ export class CommandContext extends MessageContext {
 		}
 
 		return htmlContent;
-	}
-
-	/** @deprecated */
-	splitTarget(target: string, exactName = false) {
-		const [name, rest] = this.splitOne(target);
-
-		this.targetUser = Users.get(name, exactName);
-		this.inputUsername = name.trim();
-		this.targetUsername = this.targetUser ? this.targetUser.name : this.inputUsername;
-		return rest;
 	}
 
 	requireRoom(id?: RoomID) {

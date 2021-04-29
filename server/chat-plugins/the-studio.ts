@@ -430,10 +430,10 @@ export const commands: Chat.ChatCommands = {
 		this.checkChat();
 		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
-		this.splitTarget(target, true);
+		const {targetUser, targetUsername} = this.splitUser(target);
 		const username = LastFM.getAccountName(target ? target : user.name);
 		this.sendReplyBox(
-			await LastFM.getScrobbleData(username, this.targetUsername ? this.targetUsername : user.named ? user.name : undefined)
+			await LastFM.getScrobbleData(username, targetUser ? targetUsername : user.named ? user.name : undefined)
 		);
 	},
 	lastfmhelp: [
