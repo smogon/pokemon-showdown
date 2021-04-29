@@ -433,7 +433,7 @@ export const commands: Chat.ChatCommands = {
 		target = this.checkChat(target);
 		Chat.sendPM(`/botmsg ${target}`, user, targetUser, targetUser);
 	},
-	msghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
+	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
 
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
