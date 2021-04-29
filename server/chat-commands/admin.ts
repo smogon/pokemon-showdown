@@ -1214,7 +1214,7 @@ export const commands: Chat.ChatCommands = {
 			/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
 
 			if (result?.then) {
-				uhtmlId = `eval-${Date.now() + Math.random()}`;
+				uhtmlId = `eval-${Date.now())}`;
 				this.sendReply(`|c|~|/uhtml ${uhtmlId},${generateHTML('<', 'Promise pending')}`);
 				this.update();
 				result = `Promise -> ${Utils.visualize(await result)}`;
