@@ -100,8 +100,8 @@ const VALID_IMAGES = [
 let MafiaData: MafiaData = Object.create(null);
 let logs: MafiaLog = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
 
-Punishments.roomPunishmentTypes.set('MAFIAGAMEBAN', 'banned from playing mafia games');
-Punishments.roomPunishmentTypes.set('MAFIAHOSTBAN', 'banned from hosting mafia games');
+Punishments.addRoomPunishmentType('MAFIAGAMEBAN', 'banned from playing mafia games');
+Punishments.addRoomPunishmentType('MAFIAHOSTBAN', 'banned from hosting mafia games');
 
 const hostQueue: ID[] = [];
 
@@ -153,17 +153,9 @@ for (const section of tables) {
 	if (!logs[section][month]) logs[section][month] = {};
 	if (Object.keys(logs[section]).length >= 3) {
 		// eliminate the oldest month(s)
-		const keys = Object.keys(logs[section]).sort((aKey, bKey) => {
-			const a = aKey.split('/');
-			const b = bKey.split('/');
-			if (a[1] !== b[1]) {
-				// year
-				if (parseInt(a[1]) < parseInt(b[1])) return -1;
-				return 1;
-			}
-			// month
-			if (parseInt(a[0]) < parseInt(b[0])) return -1;
-			return 1;
+		const keys = Utils.sortBy(Object.keys(logs[section]), key => {
+			const [monthStr, yearStr] = key.split('/');
+			return [parseInt(yearStr), parseInt(monthStr)];
 		});
 		while (keys.length > 2) {
 			const curKey = keys.shift();
@@ -439,7 +431,7 @@ class Mafia extends Rooms.RoomGame {
 				image: '',
 				memo: [`To learn more about your role, PM the host (${this.host}).`],
 			}));
-			this.originalRoles.sort((a, b) => a.name.localeCompare(b.name));
+			Utils.sortBy(this.originalRoles, role => role.name);
 			this.roles = this.originalRoles.slice();
 			this.originalRoleString = this.originalRoles.map(
 				r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
@@ -481,7 +473,7 @@ class Mafia extends Rooms.RoomGame {
 		this.IDEA.data = null;
 
 		this.originalRoles = newRoles;
-		this.originalRoles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
+		Utils.sortBy(this.originalRoles, role => [role.alignment, role.name]);
 		this.roles = this.originalRoles.slice();
 		this.originalRoleString = this.originalRoles.map(
 			r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
@@ -802,13 +794,12 @@ class Mafia extends Rooms.RoomGame {
 		if (!this.started) return `<strong>The game has not started yet.</strong>`;
 		let buf = `<strong>Votes (Hammer: ${this.hammerCount || "Disabled"})</strong><br />`;
 		const plur = this.getPlurality();
-		const list = Object.keys(this.lynches).sort((a, b) => {
-			if (a === plur) return -1;
-			if (b === plur) return 1;
-			return this.lynches[b].count - this.lynches[a].count;
-		});
-		for (const key of list) {
-			buf += `${this.lynches[key].count}${plur === key ? '*' : ''} ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Vote'} (${this.lynches[key].lynchers.map(a => this.playerTable[a] ? this.playerTable[a].safeName : a).join(', ')})<br />`;
+		const list = Utils.sortBy(Object.entries(this.lynches), ([key, lynch]) => [
+			key === plur,
+			-lynch.count,
+		]);
+		for (const [key, lynch] of list) {
+			buf += `${lynch.count}${plur === key ? '*' : ''} ${this.playerTable[key]?.safeName || 'No Vote'} (${lynch.lynchers.map(a => this.playerTable[a]?.safeName || a).join(', ')})<br />`;
 		}
 		return buf;
 	}
@@ -948,30 +939,24 @@ class Mafia extends Rooms.RoomGame {
 		if (this.hasPlurality) return this.hasPlurality;
 		if (!Object.keys(this.lynches).length) return null;
 		let max = 0;
-		let topLynches: ID[] = [];
-		for (const key in this.lynches) {
-			if (this.lynches[key].count > max) {
-				max = this.lynches[key].count;
-				topLynches = [key as ID];
-			} else if (this.lynches[key].count === max) {
-				topLynches.push(key as ID);
+		let topLynches: [ID, MafiaLynch][] = [];
+		for (const [key, lynch] of Object.entries(this.lynches)) {
+			if (lynch.count > max) {
+				max = lynch.count;
+				topLynches = [[key as ID, lynch]];
+			} else if (lynch.count === max) {
+				topLynches.push([key as ID, lynch]);
 			}
 		}
 		if (topLynches.length <= 1) {
-			this.hasPlurality = topLynches[0];
+			[this.hasPlurality] = topLynches[0];
 			return this.hasPlurality;
 		}
-		topLynches = topLynches.sort((key1, key2) => {
-			const l1 = this.lynches[key1];
-			const l2 = this.lynches[key2];
-			if (l1.dir !== l2.dir) {
-				return (l1.dir === 'down' ? -1 : 1);
-			} else {
-				if (l1.dir === 'up') return (l1.lastLynch < l2.lastLynch ? -1 : 1);
-				return (l1.lastLynch > l2.lastLynch ? -1 : 1);
-			}
-		});
-		this.hasPlurality = topLynches[0];
+		topLynches = Utils.sortBy(topLynches, ([key, lynch]) => [
+			lynch.dir === 'down',
+			lynch.dir === 'up' ? lynch.lastLynch : -lynch.lastLynch,
+		]);
+		[this.hasPlurality] = topLynches[0];
 		return this.hasPlurality;
 	}
 
@@ -1082,7 +1067,7 @@ class Mafia extends Rooms.RoomGame {
 				};
 				this.roles.push(deadPlayer.role);
 			}
-			this.roles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
+			Utils.sortBy(this.roles, r => [r.alignment, r.name]);
 			delete this.dead[deadPlayer.id];
 		} else {
 			const targetUser = Users.get(toRevive);
@@ -1724,7 +1709,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	mafia(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!query.length) return this.close();
@@ -1978,21 +1963,19 @@ export const pages: PageTable = {
 			buf += `${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</div>`;
 			return buf;
 		}
-		const keys = Object.keys(logs[section][month]).sort((keyA, keyB) => {
-			const a = logs[section][month][keyA];
-			const b = logs[section][month][keyB];
-			return b - a;
-		});
+		const entries = Utils.sortBy(Object.entries(logs[section][month]), ([key, value]) => (
+			-value
+		));
 		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
 		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
-		for (const key of keys) {
-			buf += `<tr><td>${key}</td><td>${logs[section][month][key]}</td></tr>`;
+		for (const [key, value] of entries) {
+			buf += `<tr><td>${key}</td><td>${value}</td></tr>`;
 		}
 		return buf + `</table></div>`;
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	mafia: {
 		''(target, room, user) {
 			room = this.requireRoom();
@@ -2907,11 +2890,9 @@ export const commands: ChatCommands = {
 				return this.sendReplyBox(buf);
 			}
 			const showOrl = (['orl', 'originalrolelist'].includes(cmd) || game.noReveal);
-			const roleString = (showOrl ? game.originalRoles : game.roles).sort((a, b) => {
-				if (a.alignment < b.alignment) return -1;
-				if (b.alignment < a.alignment) return 1;
-				return 0;
-			}).map(role => role.safeName).join(', ');
+			const roleString = Utils.sortBy((showOrl ? game.originalRoles : game.roles), role => (
+				role.alignment
+			)).map(role => role.safeName).join(', ');
 
 			this.sendReplyBox(`${showOrl ? `Original Rolelist: ` : `Rolelist: `}${roleString}`);
 		},
@@ -3887,7 +3868,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "Mafia",
 	permission: 'editroom',
 	options: [

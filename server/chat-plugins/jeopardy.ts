@@ -561,7 +561,7 @@ class JeopardyGamePlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	jp: 'jeopardy',
 	jeopardy: {
 		off: 'disable',
@@ -887,7 +887,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "Jeopardy",
 	permission: 'editroom',
 	options: [

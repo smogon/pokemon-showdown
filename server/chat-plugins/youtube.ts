@@ -339,7 +339,7 @@ export const Twitch = new class {
 			throw new Chat.ErrorMessage(`Error retrieving twitch channel: ${e.message}`);
 		}
 		const data = JSON.parse(res);
-		(data.channels as AnyObject[]).sort((a, b) => b.followers - a.followers);
+		Utils.sortBy(data.channels as AnyObject[], c => -c.followers);
 		return data?.channels?.[0] as TwitchChannel | undefined;
 	}
 	visualizeChannel(info: TwitchChannel) {
@@ -513,7 +513,7 @@ export function destroy() {
 	if (YouTube.interval) clearInterval(YouTube.interval);
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	async randchannel(target, room, user) {
 		room = this.requireRoom('youtube' as RoomID);
 		if (Object.keys(YouTube.data.channels).length < 1) return this.errorReply(`No channels in the database.`);
@@ -778,7 +778,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async channels(args, user) {
 		const [type] = args;
 		if (!Config.youtubeKey) return `<h2>Youtube is not configured.</h2>`;

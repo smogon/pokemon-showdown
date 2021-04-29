@@ -9,16 +9,6 @@ type AuthLevel = import('./user-groups').AuthLevel;
 type PunishType = '#hostfilter' | '#dnsbl' | '#ipban';
 
 // Chat
-type CommandContext = Chat.CommandContext;
-type PageContext = Chat.PageContext;
-type PageTable = Chat.PageTable;
-type ChatCommands = Chat.ChatCommands;
-type SettingsHandler = Chat.SettingsHandler;
-type ChatFilter = Chat.ChatFilter;
-type NameFilter = Chat.NameFilter;
-type NicknameFilter = Chat.NicknameFilter;
-type StatusFilter = Chat.StatusFilter;
-type LoginFilter = Chat.LoginFilter;
 namespace Chat {
 	export type CommandContext = import('./chat').CommandContext;
 	export type PageContext = import('./chat').PageContext;
@@ -33,18 +23,17 @@ namespace Chat {
 	export type LoginFilter = import('./chat').LoginFilter;
 	export type PunishmentFilter = import('./chat').PunishmentFilter;
 	export type FilterWord = import('./chat').FilterWord;
+	export type CRQHandler = import('./chat').CRQHandler;
 	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 	export type AnnotatedChatHandler = import('./chat').AnnotatedChatHandler;
 }
 
 // Rooms
-type GlobalRoomState = Rooms.GlobalRoomState;
 type ChatRoom = Rooms.ChatRoom;
 type GameRoom = Rooms.GameRoom;
 type BasicRoom = Rooms.BasicRoom;
 type RoomGame = Rooms.RoomGame;
 type MinorActivity = Rooms.MinorActivity;
-type MinorActivityData = Rooms.MinorActivityData;
 type RoomBattle = Rooms.RoomBattle;
 type Roomlog = Rooms.Roomlog;
 type Room = Rooms.Room;

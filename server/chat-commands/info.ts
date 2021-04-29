@@ -11,6 +11,7 @@
 import * as net from 'net';
 import {YoutubeInterface} from '../chat-plugins/youtube';
 import {Net, Utils} from '../../lib';
+import {RoomSections} from './room-settings';
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
@@ -64,7 +65,7 @@ export function findFormats(targetId: string, isOMSearch = false) {
 	return {totalMatches, sections};
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	ip: 'whois',
 	rooms: 'whois',
 	alt: 'whois',
@@ -74,12 +75,12 @@ export const commands: ChatCommands = {
 	profile: 'whois',
 	whois(target, room, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
-		const targetUser = this.targetUserOrSelf(target, user.tempGroup === ' ');
+		const targetUser = this.getUserOrSelf(target, user.tempGroup === ' ');
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
 		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
 		if (!targetUser) {
 			if (showAll) return this.parse('/offlinewhois ' + target);
-			return this.errorReply("User " + this.targetUsername + " not found.");
+			return this.errorReply(`User ${target} not found.`);
 		}
 		if (showAll && !user.trusted && targetUser !== user) {
 			return this.errorReply(`/${cmd} - Access denied.`);
@@ -101,6 +102,9 @@ export const commands: ChatCommands = {
 		}
 		if (Config.groups[targetUser.tempGroup]?.name) {
 			buf += Utils.html`<br />Global ${Config.groups[targetUser.tempGroup].name} (${targetUser.tempGroup})`;
+		}
+		if (Users.globalAuth.sectionLeaders.has(targetUser.id)) {
+			buf += Utils.html`<br />Section Leader (${RoomSections.sectionNames[Users.globalAuth.sectionLeaders.get(targetUser.id)!]})`;
 		}
 		if (targetUser.isSysop) {
 			buf += `<br />(Pok&eacute;mon Showdown System Operator)`;
@@ -143,7 +147,7 @@ export const commands: ChatCommands = {
 		if (canViewAlts) {
 			let prevNames = targetUser.previousIDs.map(userid => {
 				const punishment = Punishments.userids.get(userid);
-				return `${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || `punished`}${punishment[1] !== targetUser.id ? ` as ${punishment[1]}` : ``})` : ``}`;
+				return `${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment[0])?.desc || `punished`}${punishment[1] !== targetUser.id ? ` as ${punishment[1]}` : ``})` : ``}`;
 			}).join(", ");
 			if (prevNames) buf += Utils.html`<br />Previous names: ${prevNames}`;
 
@@ -152,13 +156,13 @@ export const commands: ChatCommands = {
 				if (targetAlt.tempGroup === '~' && user.tempGroup !== '~') continue;
 
 				const punishment = Punishments.userids.get(targetAlt.id);
-				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}` +
+				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0])?.desc || 'punished'}` +
 					`${punishment[1] !== targetAlt.id ? ` as ${punishment[1]}` : ''})` : '';
 				buf += Utils.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = targetAlt.previousIDs.map(userid => {
 					const p = Punishments.userids.get(userid);
-					return `${userid}${p ? ` (${Punishments.punishmentTypes.get(p[0]) || 'punished'}${p[1] !== targetAlt.id ? ` as ${p[1]}` : ``})` : ``}`;
+					return `${userid}${p ? ` (${Punishments.punishmentTypes.get(p[0])?.desc || 'punished'}${p[1] !== targetAlt.id ? ` as ${p[1]}` : ``})` : ``}`;
 				}).join(", ");
 				if (prevNames) buf += `<br />Previous names: ${prevNames}`;
 			}
@@ -214,7 +218,7 @@ export const commands: ChatCommands = {
 				const punishment = Punishments.ips.get(ip);
 				if (user.can('alts') && punishment) {
 					const [punishType, userid] = punishment;
-					let punishMsg = Punishments.punishmentTypes.get(punishType) || 'punished';
+					let punishMsg = Punishments.punishmentTypes.get(punishType)?.desc || punishType;
 					if (userid !== targetUser.id) punishMsg += ` as ${userid}`;
 					status.push(punishMsg);
 				}
@@ -267,8 +271,7 @@ export const commands: ChatCommands = {
 
 				buf += punishments.map(([curRoom, curPunishment]) => {
 					const [punishType, punishUserid, expireTime, reason] = curPunishment;
-					let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
-					if (!punishDesc) punishDesc = `punished`;
+					let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc || punishType;
 					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
 					const expiresIn = new Date(expireTime).getTime() - Date.now();
 					const expireString = Chat.toDurationString(expiresIn, {precision: 1});
@@ -315,6 +318,9 @@ export const commands: ChatCommands = {
 		if (Config.groups[group]?.name) {
 			buf += `<br />Global ${Config.groups[group].name} (${group})`;
 		}
+		if (Users.globalAuth.sectionLeaders.has(userid)) {
+			buf += `<br />Section Leader (${RoomSections.sectionNames[Users.globalAuth.sectionLeaders.get(userid)!]})`;
+		}
 
 		buf += `<br /><br />`;
 		let atLeastOne = false;
@@ -322,8 +328,8 @@ export const commands: ChatCommands = {
 		const punishment = Punishments.userids.get(userid);
 		if (punishment) {
 			const [punishType, punishUserid, , reason] = punishment;
-			const punishName = (Punishments.punishmentTypes.get(punishType) || punishType).toUpperCase();
-			buf += `${punishName}: ${punishUserid}`;
+			const punishDesc = (Punishments.punishmentTypes.get(punishType)?.desc || punishType);
+			buf += `${punishDesc}: ${punishUserid}`;
 			const expiresIn = Punishments.checkLockExpiration(userid);
 			if (expiresIn) buf += expiresIn;
 			if (reason) buf += Utils.html` (reason: ${reason})`;
@@ -345,8 +351,7 @@ export const commands: ChatCommands = {
 
 			buf += punishments.map(([curRoom, curPunishment]) => {
 				const [punishType, punishUserid, expireTime, reason] = curPunishment;
-				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
-				if (!punishDesc) punishDesc = `punished`;
+				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc || punishType;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 				const expiresIn = new Date(expireTime).getTime() - Date.now();
 				const expireString = Chat.toDurationString(expiresIn, {precision: 1});
@@ -538,10 +543,10 @@ export const commands: ChatCommands = {
 		const gen = parseInt(cmd.substr(-1));
 		if (gen) target += `, gen${gen}`;
 
+		const {dex, format, targets} = this.splitFormat(target, true);
+
 		let buffer = '';
-		let sep = target.split(',');
-		if (sep.length !== 2) sep = [target];
-		target = sep[0].trim();
+		target = targets.join(',');
 		const targetId = toID(target);
 		if (!targetId) return this.parse('/help data');
 		const targetNum = parseInt(target);
@@ -552,20 +557,6 @@ export const commands: ChatCommands = {
 					break;
 				}
 			}
-		}
-		let dex = Dex;
-		let format: Format | null = null;
-		if (sep[1] && toID(sep[1]) in Dex.dexes) {
-			dex = Dex.mod(toID(sep[1]));
-		} else if (sep[1]) {
-			format = Dex.formats.get(sep[1]);
-			if (!format.exists) {
-				return this.errorReply(`Unrecognized format or mod "${format.name}"`);
-			}
-			dex = Dex.mod(format.mod);
-		} else if (room?.battle) {
-			format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
 		}
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
@@ -863,27 +854,18 @@ export const commands: ChatCommands = {
 	weakness(target, room, user) {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
-		target = target.trim();
-		const targets = target.split(/[,/]/).map(toID);
-		const maybeMod = targets[targets.length - 1];
-		let mod = Dex;
-		let format: Format | null = null;
+		const {dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
+
 		let isInverse = false;
-		if (maybeMod && maybeMod in Dex.dexes) {
-			mod = Dex.mod(maybeMod);
-			targets.pop();
-		} else if (room?.battle) {
-			format = Dex.formats.get(room.battle.format);
-			mod = Dex.mod(format.mod);
-		}
-		if (maybeMod === 'inverse') {
+		if (targets[targets.length - 1] === 'inverse') {
 			isInverse = true;
 			targets.pop();
 		}
-		let species: {types: string[], [k: string]: any} = mod.species.get(targets[0]);
-		const type1 = mod.types.get(targets[0]);
-		const type2 = mod.types.get(targets[1]);
-		const type3 = mod.types.get(targets[2]);
+
+		let species: {types: string[], [k: string]: any} = dex.species.get(targets[0]);
+		const type1 = dex.types.get(targets[0]);
+		const type2 = dex.types.get(targets[1]);
+		const type3 = dex.types.get(targets[2]);
 
 		if (species.exists) {
 			target = species.name;
@@ -900,7 +882,7 @@ export const commands: ChatCommands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
 			}
 			species = {types: types};
 			target = types.join("/");
@@ -909,11 +891,11 @@ export const commands: ChatCommands = {
 		const weaknesses = [];
 		const resistances = [];
 		const immunities = [];
-		for (const type of mod.types.names()) {
-			const notImmune = mod.getImmunity(type, species);
+		for (const type of dex.types.names()) {
+			const notImmune = dex.getImmunity(type, species);
 			if (notImmune || isInverse) {
 				let typeMod = !notImmune && isInverse ? 1 : 0;
-				typeMod += (isInverse ? -1 : 1) * mod.getEffectiveness(type, species);
+				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, species);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -951,7 +933,7 @@ export const commands: ChatCommands = {
 			trapped: "Trapping",
 		};
 		for (const status in statuses) {
-			if (!mod.getImmunity(status, species)) {
+			if (!dex.getImmunity(status, species)) {
 				immunities.push(statuses[status]);
 			}
 		}
@@ -974,7 +956,7 @@ export const commands: ChatCommands = {
 	type: 'effectiveness',
 	matchup: 'effectiveness',
 	effectiveness(target, room, user) {
-		const targets = target.split(/[,/]/).slice(0, 2);
+		const {dex, targets} = this.splitFormat(target.split(/[,/]/));
 		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
 
 		let searchMethods = ['types', 'moves', 'species'];
@@ -985,12 +967,11 @@ export const commands: ChatCommands = {
 		let foundData;
 		let atkName;
 		let defName;
-		const dex: any = Dex;
 
 		for (let i = 0; i < 2; ++i) {
 			let method!: string;
 			for (const m of searchMethods) {
-				foundData = dex[m].get(targets[i]);
+				foundData = (dex as any)[m].get(targets[i]);
 				if (foundData.exists) {
 					method = m;
 					break;
@@ -1021,12 +1002,12 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 
 		let factor = 0;
-		if (Dex.getImmunity(source, defender) ||
+		if (dex.getImmunity(source, defender) ||
 			source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) {
 			let totalTypeMod = 0;
 			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
 				for (const type of defender.types) {
-					const baseMod = Dex.getEffectiveness(source, type);
+					const baseMod = dex.getEffectiveness(source, type);
 					const moveMod = source.onEffectiveness?.call({dex: Dex} as Battle, baseMod, null, type, source);
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
@@ -1049,16 +1030,8 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse("/help coverage");
 
-		const targets = target.split(/[,+/]/);
+		const {dex, targets} = this.splitFormat(target.split(/[,+/]/));
 		const sources: (string | Move)[] = [];
-		let dex = Dex;
-		if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-		}
-		if (targets[targets.length - 1] && toID(targets[targets.length - 1]) in Dex.dexes) {
-			dex = Dex.mod(toID(targets[targets.length - 1]));
-		}
 		let dispTable = false;
 		const bestCoverage: {[k: string]: number} = {};
 		let hasThousandArrows = false;
@@ -2693,7 +2666,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	battlerules(query, user) {
 		const rules = Object.values(Dex.data.Rulesets).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
@@ -2743,11 +2716,12 @@ export const pages: PageTable = {
 		if (!room.persist) return;
 		this.checkCan('mute', null, room);
 		// Ascending order
-		const sortedPunishments = Array.from(Punishments.getPunishments(room.roomid))
-			.sort((a, b) => a[1].expireTime - b[1].expireTime);
+		const sortedPunishments = Utils.sortBy([...Punishments.getPunishments(room.roomid)], ([id, entry]) => (
+			entry.expireTime
+		));
 		const sP = new Map();
-		for (const punishment of sortedPunishments) {
-			sP.set(punishment[0], punishment[1]);
+		for (const [id, entry] of sortedPunishments) {
+			sP.set(id, entry);
 		}
 		buf += Punishments.visualizePunishments(sP, user);
 		return buf;
@@ -2758,7 +2732,9 @@ export const pages: PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('lock');
 		// Ascending order
-		const sortedPunishments = Array.from(Punishments.getPunishments()).sort((a, b) => a[1].expireTime - b[1].expireTime);
+		const sortedPunishments = Utils.sortBy([...Punishments.getPunishments()], ([id, entry]) => (
+			entry.expireTime
+		));
 		const sP = new Map();
 		for (const punishment of sortedPunishments) {
 			sP.set(punishment[0], punishment[1]);

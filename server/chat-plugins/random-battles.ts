@@ -610,7 +610,7 @@ function SSBSets(target: string) {
 	return buf;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	randbats: 'randombattles',
 	randombattles(target, room, user) {
 		if (!this.runBroadcast()) return;

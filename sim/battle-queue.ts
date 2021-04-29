@@ -347,13 +347,27 @@ export class BattleQueue {
 			choice.pokemon.updateSpeed();
 		}
 		const actions = this.resolveAction(choice, midTurn);
+
+		let firstIndex = null;
+		let lastIndex = null;
 		for (const [i, curAction] of this.list.entries()) {
-			if (this.battle.comparePriority(actions[0], curAction) < 0) {
-				this.list.splice(i, 0, ...actions);
-				return;
+			const compared = this.battle.comparePriority(actions[0], curAction);
+			if (compared <= 0 && firstIndex === null) {
+				firstIndex = i;
+			}
+			if (compared < 0) {
+				lastIndex = i;
+				break;
 			}
 		}
-		this.list.push(...actions);
+
+		if (firstIndex === null) {
+			this.list.push(...actions);
+		} else {
+			if (lastIndex === null) lastIndex = this.list.length;
+			const index = firstIndex === lastIndex ? firstIndex : this.battle.random(firstIndex, lastIndex + 1);
+			this.list.splice(index, 0, ...actions);
+		}
 	}
 
 	clear() {

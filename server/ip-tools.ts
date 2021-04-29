@@ -19,7 +19,7 @@ const HOSTS_FILE = 'config/hosts.csv';
 const PROXIES_FILE = 'config/proxies.csv';
 
 import * as dns from 'dns';
-import {FS, Net} from '../lib';
+import {FS, Net, Utils} from '../lib';
 
 export interface AddressRange {
 	minIP: number;
@@ -171,25 +171,9 @@ export const IPTools = new class {
 		return {minIP, maxIP};
 	}
 
-	ipSort(a: string, b: string) {
-		let i = 0;
-		let diff = 0;
-		const aParts = a.split('.');
-		const bParts = b.split('.');
-		while (diff === 0) {
-			const aPart = parseInt(aParts[i]);
-			const bPart = parseInt(bParts[i]);
-			if (isNaN(aPart) || isNaN(bPart)) throw new Error("Invalid IP passed to IPTools.ipSort.");
-			diff = aPart - bPart;
-			i++;
-		}
-		return diff;
-	}
-
 	/******************************
 	 * Range management functions *
 	 ******************************/
-
 
 	checkPattern(patterns: AddressRange[], num: number) {
 		for (const pattern of patterns) {
@@ -424,9 +408,8 @@ export const IPTools = new class {
 	}
 
 	sortRanges() {
-		IPTools.ranges.sort((a, b) => a.minIP - b.minIP);
+		Utils.sortBy(IPTools.ranges, range => range.minIP);
 	}
-
 
 	getRange(minIP: number, maxIP: number) {
 		for (const range of IPTools.ranges) {

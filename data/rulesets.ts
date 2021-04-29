@@ -406,7 +406,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add('poke', pokemon.side.id, details, '');
 			}
 		},
-		onTeamPreview() {
+		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
@@ -419,7 +419,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`One vs One is for singles formats.`, `(Use Two vs Two in doubles)`];
 			}
 		},
-		onStart() {
+		onFieldStart() {
 			if (this.format.gameType === 'singles') (this.format as any).teamLength = {battle: 1};
 		},
 	},
@@ -432,7 +432,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`Two vs Two is for non-triples formats.`];
 			}
 		},
-		onStart() {
+		onFieldStart() {
 			if (this.format.gameType !== 'triples') (this.format as any).teamLength = {battle: 2};
 		},
 	},
@@ -857,7 +857,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (status.id === 'slp') {
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (!pokemon.statusData.source || !pokemon.statusData.source.isAlly(pokemon)) {
+						if (!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
 							return false;
 						}
@@ -1247,7 +1247,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add(`${buf}</span>`);
 			}
 		},
-		onTeamPreview() {
+		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
@@ -1316,8 +1316,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			teamLevels.sort((a, b) => b - a);
 			let combinedLowestLevels = 0;
-			let i;
-			for (i = 0; i < format.teamLength.battle; i++) {
+			for (let i = 0; i < format.teamLength.battle; i++) {
 				combinedLowestLevels += teamLevels.pop()!;
 			}
 			if (combinedLowestLevels > format.cupLevelLimit.total) {
@@ -1345,5 +1344,17 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Stadium Items Clause',
 		desc: "Bans items that are not usable in Pokemon Stadium 2.",
 		banlist: ['Fast Ball', 'Friend Ball', 'Great Ball', 'Heavy Ball', 'Level Ball', 'Love Ball', 'Lure Ball', 'Master Ball', 'Moon Ball', 'Park Ball', 'Poke Ball', 'Safari Ball', 'Ultra Ball', 'Fire Stone', 'Leaf Stone', 'Moon Stone', 'Sun Stone', 'Thunder Stone', 'Upgrade', 'Water Stone', 'Mail'],
+	},
+	nintendocup2000movelegality: {
+		effectType: 'ValidatorRule',
+		name: "Nintendo Cup 2000 Move Legality",
+		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
+		// Implemented in mods/gen2/rulesets.ts
+	},
+	japanesegen1movelegality: {
+		effectType: 'ValidatorRule',
+		name: "Japanese Gen 1 Move Legality",
+		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Japanese versions of Gen 1.",
+		// Implemented in mods/gen1jpn/rulesets.ts
 	},
 };

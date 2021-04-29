@@ -78,6 +78,8 @@ export type SettingsHandler = (
 	options: [string, string | true][],
 };
 
+export type CRQHandler = (this: CommandContext, target: string, user: User, trustable?: boolean) => any;
+
 /**
  * Chat filters can choose to:
  * 1. return false OR null - to not send a user's message
@@ -232,7 +234,7 @@ export abstract class MessageContext {
 	}
 	meansYes(text: string) {
 		switch (text.toLowerCase().trim()) {
-		case 'on': case 'enable': case 'yes': case 'true': case 'allow':
+		case 'on': case 'enable': case 'yes': case 'true': case 'allow': case '1':
 			return true;
 		}
 		return false;
@@ -243,6 +245,70 @@ export abstract class MessageContext {
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * Given an array of strings (or a comma-delimited string), check the
+	 * first and last string for a format/mod/gen. If it exists, remove
+	 * it from the array.
+	 *
+	 * @returns `format` (null if no format was found), `dex` (the dex
+	 * for the format/mod, or the default dex if none was found), and
+	 * `targets` (the rest of the array).
+	 */
+	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
+		const targets = typeof target === 'string' ? target.split(',') : target;
+		if (!targets[0].trim()) targets.pop();
+
+		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
+			const {dex, format, isMatch} = this.extractFormat(targets[0].trim());
+			if (isMatch) {
+				targets.shift();
+				return {dex, format, targets};
+			}
+		}
+		if (targets.length > 1) {
+			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim());
+			if (isMatch) {
+				targets.pop();
+				return {dex, format, targets};
+			}
+		}
+
+		const room = (this as any as CommandContext).room;
+		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		return {dex, format, targets};
+	}
+	extractFormat(formatOrMod?: string): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
+		if (!formatOrMod) {
+			return {dex: Dex.includeData(), format: null, isMatch: false};
+		}
+
+		const format = Dex.formats.get(formatOrMod);
+		if (format.exists) {
+			return {dex: Dex.forFormat(format), format: format, isMatch: true};
+		}
+
+		if (toID(formatOrMod) in Dex.dexes) {
+			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
+		}
+
+		return this.extractFormat();
+	}
+	splitUser(target: string, exactName = false) {
+		const [inputUsername, rest] = this.splitOne(target).map(str => str.trim());
+		const targetUser = Users.get(inputUsername, exactName);
+
+		return {
+			targetUser,
+			inputUsername,
+			targetUsername: targetUser ? targetUser.name : inputUsername,
+			rest,
+		};
+	}
+	getUserOrSelf(target: string, exactName = false) {
+		if (!target.trim()) return this.user;
+
+		return Users.get(target, exactName);
 	}
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
 		return Chat.tr(this.language, strings, ...keys);
@@ -310,22 +376,22 @@ export class PageContext extends MessageContext {
 		return room;
 	}
 
-	send(content: string) {
-		if (!content.startsWith('|deinit')) {
-			const roomid = this.room ? `[${this.room.roomid}] ` : '';
-			if (!this.initialized) {
-				content = `|init|html\n|title|${roomid}${this.title}\n|pagehtml|${content}`;
-				this.initialized = true;
-			} else {
-				content = `|title|${roomid}${this.title}\n|pagehtml|${content}`;
-			}
+	setHTML(html: string) {
+		const roomid = this.room ? `[${this.room.roomid}] ` : '';
+		let content = `|title|${roomid}${this.title}\n|pagehtml|${html}`;
+		if (!this.initialized) {
+			content = `|init|html\n${content}`;
+			this.initialized = true;
 		}
-		this.connection.send(`>${this.pageid}\n${content}`);
+		this.send(content);
 	}
 	errorReply(message: string) {
-		this.send(`<div class="pad"><p class="message-error">${message}</p></div>`);
+		this.setHTML(`<div class="pad"><p class="message-error">${message}</p></div>`);
 	}
 
+	send(content: string) {
+		this.connection.send(`>${this.pageid}\n${content}`);
+	}
 	close() {
 		this.send('|deinit');
 	}
@@ -366,14 +432,14 @@ export class PageContext extends MessageContext {
 				room: this.room && this.room.roomid,
 				pageid: this.pageid,
 			});
-			this.send(
+			this.setHTML(
 				`<div class="pad"><div class="broadcast-red">` +
 				`<strong>Pokemon Showdown crashed!</strong><br />Don't worry, we're working on fixing it.` +
 				`</div></div>`
 			);
 		}
 		if (typeof res === 'string') {
-			this.send(res);
+			this.setHTML(res);
 			res = undefined;
 		}
 		return res;
@@ -404,8 +470,11 @@ export class CommandContext extends MessageContext {
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
 	broadcastMessage: string;
+	/** @deprecated */
 	targetUser: User | null;
+	/** @deprecated */
 	targetUsername: string;
+	/** @deprecated */
 	inputUsername: string;
 	constructor(
 		options:
@@ -1242,7 +1311,8 @@ export class CommandContext extends MessageContext {
 					if ((!this.room || this.room.settings.isPersonal || this.room.settings.isPrivate === true) && !this.user.can('lock')) {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
-						const msgCommandRegex = /^\/(?:msg|pm|w|whisper) /i;
+						const msgCommandRegex = /^\/(?:msg|pm|w|whisper|botmsg) /;
+						const botmsgCommandRegex = /^\/msgroom (?:[a-z0-9-]+), ?\/botmsg /;
 						if (buttonName === 'send' && buttonValue && msgCommandRegex.test(buttonValue)) {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
 							const auth = this.room ? this.room.auth : Users.globalAuth;
@@ -1250,11 +1320,13 @@ export class CommandContext extends MessageContext {
 								this.errorReply(`This button is not allowed: <${tagContent}>`);
 								throw new Chat.ErrorMessage(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
 							}
+						} else if (buttonName === 'send' && buttonValue && botmsgCommandRegex.test(buttonValue)) {
+							// no need to validate the bot being an actual bot; `/botmsg` will do it for us and is not abusable
 						} else if (buttonName) {
 							this.errorReply(`This button is not allowed: <${tagContent}>`);
 							this.errorReply(`You do not have permission to use most buttons. Here are the two types you're allowed to use:`);
 							this.errorReply(`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`);
-							throw new Chat.ErrorMessage(`2. Sending a message to a Bot: <button name="send" value="/msg BOT_USERNAME, MESSAGE">send the thing</button>`);
+							throw new Chat.ErrorMessage(`2. Sending a message to a Bot: <button name="send" value="/msgroom BOT_ROOMID, /botmsg BOT_USERNAME, MESSAGE">send the thing</button>`);
 						}
 					}
 				}
@@ -1266,32 +1338,8 @@ export class CommandContext extends MessageContext {
 
 		return htmlContent;
 	}
-	targetUserOrSelf(target: string, exactName: boolean) {
-		if (!target) {
-			this.targetUsername = this.user.name;
-			this.inputUsername = this.user.name;
-			return this.user;
-		}
-		this.splitTarget(target, exactName);
-		return this.targetUser;
-	}
 
-	/**
-	 * Given a message in the form "USERNAME" or "USERNAME, MORE", splits
-	 * it apart:
-	 *
-	 * - `this.targetUser` will be the User corresponding to USERNAME
-	 *   (or null, if not found)
-	 *
-	 * - `this.inputUsername` will be the text of USERNAME, unmodified
-	 *
-	 * - `this.targetUsername` will be the username, if found, or
-	 *   this.inputUsername otherwise
-	 *
-	 * - and the text of MORE will be returned (empty string, if the
-	 *   message has no comma)
-	 *
-	 */
+	/** @deprecated */
 	splitTarget(target: string, exactName = false) {
 		const [name, rest] = this.splitOne(target);
 
@@ -1378,6 +1426,7 @@ export const Chat = new class {
 	basePages!: PageTable;
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
+	readonly crqHandlers: {[k: string]: CRQHandler} = {};
 	readonly renameHandlers: Rooms.RenameHandler[] = [];
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
@@ -1746,6 +1795,9 @@ export const Chat = new class {
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
 		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
+		if (plugin.crqHandlers) {
+			Object.assign(Chat.crqHandlers, plugin.crqHandlers);
+		}
 		if (plugin.roomSettings) {
 			if (!Array.isArray(plugin.roomSettings)) plugin.roomSettings = [plugin.roomSettings];
 			Chat.roomSettings = Chat.roomSettings.concat(plugin.roomSettings);
@@ -2307,22 +2359,28 @@ export const Chat = new class {
 (Chat as any).escapeHTML = Utils.escapeHTML;
 (Chat as any).html = Utils.html;
 (Chat as any).splitFirst = Utils.splitFirst;
-// @ts-ignore
-CommandContext.prototype.can = CommandContext.prototype.checkCan;
-// @ts-ignore
-CommandContext.prototype.canTalk = CommandContext.prototype.checkChat;
-// @ts-ignore
-CommandContext.prototype.canBroadcast = CommandContext.prototype.checkBroadcast;
-// @ts-ignore
-CommandContext.prototype.canHTML = CommandContext.prototype.checkHTML;
-// @ts-ignore
-CommandContext.prototype.canEmbedURI = CommandContext.prototype.checkEmbedURI;
-// @ts-ignore
-CommandContext.prototype.canPMHTML = CommandContext.prototype.checkPMHTML;
-// @ts-ignore
-CommandContext.prototype.privatelyCan = CommandContext.prototype.privatelyCheckCan;
-// @ts-ignore
-CommandContext.prototype.requiresRoom = CommandContext.prototype.requireRoom;
+(CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
+(CommandContext.prototype as any).canTalk = CommandContext.prototype.checkChat;
+(CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;
+(CommandContext.prototype as any).canHTML = CommandContext.prototype.checkHTML;
+(CommandContext.prototype as any).canEmbedURI = CommandContext.prototype.checkEmbedURI;
+(CommandContext.prototype as any).canPMHTML = CommandContext.prototype.checkPMHTML;
+(CommandContext.prototype as any).privatelyCan = CommandContext.prototype.privatelyCheckCan;
+(CommandContext.prototype as any).requiresRoom = CommandContext.prototype.requireRoom;
+(CommandContext.prototype as any).targetUserOrSelf = function (this: any, target: string, exactName: boolean) {
+	const user = this.getUserOrSelf(target, exactName);
+	this.targetUser = user;
+	this.inputUsername = target;
+	this.targetUsername = user?.name || target;
+	return user;
+};
+(CommandContext.prototype as any).splitTarget = function (this: any, target: string, exactName: boolean) {
+	const {targetUser, inputUsername, targetUsername, rest} = this.splitUser(target, exactName);
+	this.targetUser = targetUser;
+	this.inputUsername = inputUsername;
+	this.targetUsername = targetUsername;
+	return rest;
+};
 
 /**
  * Used by ChatMonitor.
