@@ -1351,10 +1351,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
 		// Implemented in mods/gen2/rulesets.ts
 	},
-	japanesegen1movelegality: {
+	nintendocup1997movelegality: {
 		effectType: 'ValidatorRule',
 		name: "Japanese Gen 1 Move Legality",
-		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Japanese versions of Gen 1.",
+		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Nintendo Cup 1997.",
 		// Implemented in mods/gen1jpn/rulesets.ts
 	},
 };
