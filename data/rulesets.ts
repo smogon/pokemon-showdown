@@ -1353,7 +1353,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	},
 	nintendocup1997movelegality: {
 		effectType: 'ValidatorRule',
-		name: "Japanese Gen 1 Move Legality",
+		name: "Nintendo Cup 1997 Move Legality",
 		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Nintendo Cup 1997.",
 		// Implemented in mods/gen1jpn/rulesets.ts
 	},
