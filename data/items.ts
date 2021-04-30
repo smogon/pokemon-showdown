@@ -71,11 +71,11 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onBoostPriority: 1,
 		onBoost(boost, target) {
-			target.itemData.lastAtk = target.boosts['atk'];
+			target.itemState.lastAtk = target.boosts['atk'];
 		},
 		onAfterBoost(boost, target, source, effect) {
-			const noAtkChange = boost.atk && boost.atk < 0 && target.boosts['atk'] === -6 && target.itemData.lastAtk === -6;
-			const noContraryAtkChange = boost.atk && boost.atk > 0 && target.boosts['atk'] === 6 && target.itemData.lastAtk === 6;
+			const noAtkChange = boost.atk && boost.atk < 0 && target.boosts['atk'] === -6 && target.itemState.lastAtk === -6;
+			const noContraryAtkChange = boost.atk && boost.atk > 0 && target.boosts['atk'] === 6 && target.itemState.lastAtk === 6;
 			if (target.boosts['spe'] === 6 || noAtkChange || (target.hasAbility('contrary') && noContraryAtkChange)) {
 				return;
 			}
