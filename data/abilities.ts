@@ -3510,7 +3510,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 100,
 	},
 	stalwart: {
+		onModifyMovePriority: 1,
+		onModifyMove(move, pokemon, target) {
+			// this works with every test....
+			if (!['counter', 'mirrorcoat'].includes(move.id)) {
+				move.tracksTarget = true;
+			}
+		},
 		// the actual implementation is in Battle#getTarget
+		// move.tracksTarget is not actually useless
 		name: "Stalwart",
 		rating: 0,
 		num: 242,
