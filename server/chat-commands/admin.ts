@@ -179,7 +179,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkHTML(target);
 		this.checkCan('addhtml', null, room);
 		target = Chat.collapseLineBreaksHTML(target);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			target += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -197,7 +197,7 @@ export const commands: Chat.ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -217,7 +217,7 @@ export const commands: Chat.ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -246,7 +246,7 @@ export const commands: Chat.ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
