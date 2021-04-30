@@ -904,6 +904,25 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 8] Free-For-All",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3681641/">Free-For-All</a>`,
+		],
+
+		mod: 'gen8',
+		gameType: 'freeforall',
+		rated: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['Standard Doubles', 'Sleep Clause Mod', 'Dynamax Clause', '!Gravity Sleep Clause'],
+		unbanlist: [
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
+			'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza',
+			'Reshiram', 'Solgaleo', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
+			'Zygarde-Complete', 'Moody', 'Power Construct', 'Baton Pass', 'Swagger',
+		],
+	},
+	{
 		name: "[Gen 8] Cross Evolution",
 		desc: `Give a Pok&eacute;mon a Pok&eacute;mon name of the next evolution stage as a nickname to inherit stat changes, typing, abilities, and up to 2 moves from the next stage Pok&eacute;mon.`,
 		threads: [
@@ -3311,10 +3330,7 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		searchShow: false,
 		ruleset: ['Obtainable', 'Allow Tradeback', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod'],
-		banlist: ['Uber',
-			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
-			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
-		],
+		banlist: ['Uber'],
 	},
 	{
 		name: "[Gen 1] Japanese OU",
@@ -3322,7 +3338,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen1jpn',
 		searchShow: false,
-		ruleset: ['Standard', 'Japanese Gen 1 Move Legality'],
+		ruleset: ['Standard'],
 		banlist: ['Uber'],
 	},
 	{
@@ -3341,7 +3357,7 @@ export const Formats: FormatList = [
 			battle: 3,
 		},
 		searchShow: false,
-		ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Japanese Gen 1 Move Legality'],
+		ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Nintendo Cup 1997 Move Legality'],
 		banlist: ['Uber'],
 	},
 	{
