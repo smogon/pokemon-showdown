@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {Pokemon} from "../sim";
-
 export const Items: {[itemid: string]: ItemData} = {
 	abomasite: {
 		name: "Abomasite",
@@ -76,7 +73,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onAfterBoost(boost, target, source, effect) {
 			const noAtkChange = boost.atk && boost.atk < 0 && target.boosts['atk'] === -6 && target.itemState.lastAtk === -6;
 			const noContraryAtkChange = boost.atk && boost.atk > 0 && target.boosts['atk'] === 6 && target.itemState.lastAtk === 6;
-			if (target.boosts['spe'] === 6 || noAtkChange || (target.hasAbility('contrary') && noContraryAtkChange)) {
+			if (target.boosts['spe'] === 6 || noAtkChange || noContraryAtkChange) {
 				return;
 			}
 			if (effect.id === 'intimidate') {
