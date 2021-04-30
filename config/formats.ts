@@ -770,14 +770,14 @@ export const Formats: FormatList = [
 		mod: 'mixandmega',
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod', 'Dynamax Clause', 'Sleep Clause Mod', 'Endless Battle Clause'],
 		banlist: [
-			'Calyrex-Shadow', 'Kyogre', 'Zacian-Crowned',
+			'Calyrex-Shadow', 'Kyogre', 'Zacian',
 			'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite',
 			'Moody', 'Shadow Tag', 'Baton Pass', 'Electrify',
 		],
 		restricted: [
 			'Calyrex-Ice', 'Dialga', 'Eternatus', 'Gengar', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyurem-Black', 'Kyurem-White',
-			'Lugia', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
-			'Rayquaza', 'Regigigas', 'Reshiram', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zekrom', 'Zygarde-Complete',
+			'Lugia', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
+			'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zekrom', 'Zygarde-Complete',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
