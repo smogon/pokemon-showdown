@@ -1187,7 +1187,7 @@ export class Pokemon {
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
-		if (this.battle.gen > 2)  {
+		if (this.battle.gen > 2) {
 			this.setAbility(pokemon.ability, this, true);
 			if (this.m.pseudoAbilities) {
 				for (const pseudoAbility of this.m.pseudoAbilities) {
@@ -1732,7 +1732,7 @@ export class Pokemon {
 		return this.battle.dex.abilities.getByID(this.ability);
 	}
 
-	hasAbility(ability: string | string[]) : boolean {
+	hasAbility(ability: string | string[]): boolean {
 		if (this.ignoringAbility()) return false;
 		if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
 		ability = this.battle.toID(ability);
