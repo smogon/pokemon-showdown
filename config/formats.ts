@@ -3330,10 +3330,7 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		searchShow: false,
 		ruleset: ['Obtainable', 'Allow Tradeback', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod'],
-		banlist: ['Uber',
-			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
-			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
-		],
+		banlist: ['Uber'],
 	},
 	{
 		name: "[Gen 1] Japanese OU",
@@ -3341,7 +3338,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen1jpn',
 		searchShow: false,
-		ruleset: ['Standard', 'Japanese Gen 1 Move Legality'],
+		ruleset: ['Standard'],
 		banlist: ['Uber'],
 	},
 	{
@@ -3360,7 +3357,7 @@ export const Formats: FormatList = [
 			battle: 3,
 		},
 		searchShow: false,
-		ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Japanese Gen 1 Move Legality'],
+		ruleset: ['Obtainable', 'Team Preview', 'Cup Level Limit', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Nintendo Cup 1997 Move Legality'],
 		banlist: ['Uber'],
 	},
 	{
