@@ -275,14 +275,12 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help pminfobox");
 
-		target = this.splitTarget(target);
-		this.checkHTML(target);
-		const targetUser = this.targetUser!;
+		const {targetUser, rest: html} = this.requireUser(target);
+		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
-		// Apply the infobox to the message
-		target = `/raw <div class="infobox">${target}</div>`;
-		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|${target}`;
+		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
+			`/raw <div class="infobox">${html}</div>`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -298,12 +296,12 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help " + cmd);
 
-		target = this.splitTarget(target);
-		this.checkHTML(target);
-		const targetUser = this.targetUser!;
+		const {targetUser, rest: html} = this.requireUser(target);
+		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
-		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${target}`;
+		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
+			`/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${html}`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -320,21 +318,17 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
 
-		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
+		const {targetUser, rest} = this.requireUser(target);
+		let [pageid, content] = this.splitOne(rest);
 		let selector: string | undefined;
 		if (cmd === 'changehtmlpageselector') {
-			[selector, content] = Utils.splitFirst(content, ',');
+			[selector, content] = this.splitOne(content);
 			if (!selector) return this.parse(`/help ${cmd}`);
 		}
-		if (!targetID || !pageid || !content) return this.parse(`/help ${cmd}`);
+		if (!pageid || !content) return this.parse(`/help ${cmd}`);
 
 		pageid = `${user.id}-${toID(pageid)}`;
 
-		const targetUser = Users.get(targetID)!;
-		if (!targetUser?.connected) {
-			this.errorReply(`User ${this.targetUsername} is not currently online.`);
-			return false;
-		}
 		if (targetUser.locked && !this.user.can('lock')) {
 			this.errorReply("This user is currently locked, so you cannot send them HTML.");
 			return false;
@@ -379,14 +373,11 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	highlighthtmlpage(target, room, user) {
-		target = target.trim();
-		let [userid, pageid, title, highlight] = Utils.splitFirst(target, ',', 3);
+		const {targetUser, rest} = this.requireUser(target);
+		let [pageid, title, highlight] = Utils.splitFirst(rest, ',', 2);
+
 		pageid = `${user.id}-${toID(pageid)}`;
-		if (!userid || !pageid || !target) return this.parse(`/help highlighthtmlpage`);
-		const targetUser = Users.get(userid);
-		if (!targetUser?.connected) {
-			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
-		}
+		if (!pageid || !target) return this.parse(`/help highlighthtmlpage`);
 		if (targetUser.locked && !this.user.can('lock')) {
 			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them highlights.");
 		}
@@ -417,21 +408,15 @@ export const commands: Chat.ChatCommands = {
 
 	botmsg(target, room, user, connection) {
 		if (!target || !target.includes(',')) return this.parse('/help botmsg');
-		target = this.splitTarget(target);
-		const targetUser = this.targetUser;
-		const targetUsername = this.targetUsername;
-
-		if (!targetUser || !targetUser.connected) {
-			return this.popupReply(`The bot "${targetUsername}" is offline.`);
-		}
+		let {targetUser, rest: message} = this.requireUser(target);
 
 		const auth = this.room ? this.room.auth : Users.globalAuth;
 		if (auth.get(targetUser) !== '*') {
-			return this.popupReply(`The user "${targetUsername}" is not a bot in this room.`);
+			return this.popupReply(`The user "${targetUser.name}" is not a bot in this room.`);
 		}
 
-		target = this.checkChat(target);
-		Chat.sendPM(`/botmsg ${target}`, user, targetUser, targetUser);
+		message = this.checkChat(message);
+		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
 	},
 	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
 

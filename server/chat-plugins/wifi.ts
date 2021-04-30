@@ -844,9 +844,7 @@ const cmds: Chat.ChatCommands = {
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		target = this.splitTarget(target, false);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		const {targetUser} = this.requireUser(target, {allowOffline: true});
 		if (target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
@@ -865,9 +863,7 @@ const cmds: Chat.ChatCommands = {
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		this.splitTarget(target, false);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		const {targetUser} = this.requireUser(target, {allowOffline: true});
 		if (!Giveaway.checkBanned(room, targetUser)) {
 			return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
 		}

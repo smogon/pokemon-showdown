@@ -1327,10 +1327,11 @@ export const commands: Chat.ChatCommands = {
 
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
-			let result = !(this.splitTarget(target) === 'false');
-			const ticket = tickets[toID(this.inputUsername)];
+			const [targetUsername, rest] = this.splitOne(target);
+			let result = rest !== 'false';
+			const ticket = tickets[toID(targetUsername)];
 			if (!ticket?.open || (ticket.userid !== user.id && !user.can('lock'))) {
-				return this.errorReply(this.tr`${this.inputUsername} does not have an open ticket.`);
+				return this.errorReply(this.tr`${targetUsername} does not have an open ticket.`);
 			}
 			const helpRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
 			if (helpRoom) {
