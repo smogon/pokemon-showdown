@@ -177,6 +177,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly teamLength?: {battle?: number, validate?: [number, number]};
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
+	readonly onStart?: (this: Battle) => void;
 	/** Pokemon must be obtained from this generation or later. */
 	readonly minSourceGen?: number;
 	/**

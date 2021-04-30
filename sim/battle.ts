@@ -2306,6 +2306,14 @@ export class Battle {
 			}
 
 			this.add('start');
+			if (format.onStart) format.onStart.call(this);
+			for (const rule of this.ruleTable.keys()) {
+				if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
+				const subFormat = this.dex.formats.get(rule);
+				if (subFormat.exists) {
+					if (subFormat.onStart) subFormat.onStart.call(this);
+				}
+			}
 			for (const side of this.sides) {
 				for (let i = 0; i < side.active.length; i++) {
 					if (!side.pokemonLeft) {

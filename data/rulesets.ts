@@ -402,10 +402,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
+					.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu|Zacian|Zamazenta)(-[a-zA-Z?-]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, '');
 			}
 		},
+		onStart() {},
 		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
