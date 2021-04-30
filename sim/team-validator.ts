@@ -1334,15 +1334,25 @@ export class TeamValidator {
 			}
 		}
 
+		// We can't return here because the `-nonexistent` rule is a bit
+		// complicated in terms of what trumps it. We don't want e.g.
+		// +Mythical to unban Shaymin in Gen 1, for instance.
+		const nonexistentCheck = Tags.nonexistent.genericFilter!(tierSpecies) && ruleTable.check('nonexistent');
+
 		const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
-		console.log(ruleTable.tagRules);
+
 		for (const ruleid of ruleTable.tagRules) {
 			if (ruleid.startsWith('*')) continue;
 			const tagid = ruleid.slice(12);
 			const tag = Tags[tagid];
 			if ((tag.speciesFilter || tag.genericFilter)!(tierSpecies)) {
-				if (ruleid.startsWith('+')) return null;
-				if (EXISTENCE_TAG.includes(tagid)) {
+				const existenceTag = EXISTENCE_TAG.includes(tagid);
+				if (ruleid.startsWith('+')) {
+					// we want rules like +CAP to trump -Nonexistent, but most tags shouldn't
+					if (!existenceTag && nonexistentCheck) continue;
+					return null;
+				}
+				if (existenceTag) {
 					if (tierSpecies.isNonstandard === 'Past' || tierSpecies.isNonstandard === 'Future') {
 						return `${tierSpecies.name} does not exist in Gen ${dex.gen}.`;
 					}
@@ -1362,6 +1372,11 @@ export class TeamValidator {
 				return `${species.name} is tagged ${tag.name}, which is ${banReason}.`;
 			}
 		}
+
+		if (nonexistentCheck) {
+			return `Despite being whitelisted by a tag, ${tierSpecies.name} does not exist in this game.`;
+		}
+		if (nonexistentCheck === '') return null;
 
 		// Special casing for Pokemon that can Gmax, but their Gmax factor cannot be legally obtained
 		if (tierSpecies.gmaxUnreleased && set.gigantamax) {

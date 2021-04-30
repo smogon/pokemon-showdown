@@ -97,6 +97,11 @@ export class RuleTable extends Map<string, string> {
 		return this.has(`*pokemontag:allpokemon`);
 	}
 
+	/**
+	 * - non-empty string: banned, string is the reason
+	 * - '': whitelisted
+	 * - null: neither whitelisted nor banned
+	 */
 	check(thing: string, setHas: {[id: string]: true} | null = null) {
 		if (this.has(`+${thing}`)) return '';
 		if (setHas) setHas[thing] = true;
@@ -619,8 +624,6 @@ export class DexFormats {
 
 	getTagRules(ruleTable: RuleTable) {
 		const tagRules = [];
-		const specificExistenceTagRules = [];
-		const existenceTagRules = [];
 		for (const ruleid of ruleTable.keys()) {
 			if (/^[+*-]pokemontag:/.test(ruleid)) {
 				const banid = ruleid.slice(12);
@@ -629,25 +632,14 @@ export class DexFormats {
 					banid === 'allabilities' || banid === 'allnatures'
 				) {
 					// hardcoded and not a part of the ban rule system
-				} else if (!ruleid.startsWith('+') && (
-					banid === 'past' || banid === 'future' || banid === 'lgpe' ||
-					banid === 'unobtainable' || banid === 'cap' || banid === 'custom'
-				)) {
-					specificExistenceTagRules.push(ruleid);
-				} else if (!ruleid.startsWith('+') && banid === 'nonexistent') {
-					existenceTagRules.push(ruleid);
 				} else {
 					tagRules.push(ruleid);
 				}
 			} else if ('+*-'.includes(ruleid.charAt(0)) && ruleid.slice(1) === 'nonexistent') {
-				if (!ruleid.startsWith('+')) {
-					existenceTagRules.push(ruleid.charAt(0) + 'pokemontag:nonexistent');
-				} else {
-					tagRules.push('+pokemontag:nonexistent');
-				}
+				tagRules.push(ruleid.charAt(0) + 'pokemontag:nonexistent');
 			}
 		}
-		ruleTable.tagRules = [...tagRules, ...existenceTagRules, ...specificExistenceTagRules].reverse();
+		ruleTable.tagRules = tagRules.reverse();
 	}
 
 	validateRule(rule: string, format: Format | null = null) {
