@@ -831,22 +831,7 @@ export const commands: Chat.ChatCommands = {
 
 	cs: 'clearstatus',
 	clearstatus(target, room, user) {
-		if (target) {
-			room = this.requireRoom();
-			// Clearing another user's status
-			const reason = this.splitTarget(target);
-			const targetUser = this.targetUser;
-			if (!targetUser) return this.errorReply(this.tr`User '${target}' not found.`);
-			if (!targetUser.userMessage) return this.errorReply(this.tr`${targetUser.name} does not have a status set.`);
-			this.checkCan('forcerename', targetUser);
-
-			const displayReason = reason ? `: ${reason}` : ``;
-			this.privateGlobalModAction(room.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
-			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
-			targetUser.clearStatus();
-			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);
-			return;
-		}
+		if (target) return this.parse(`/forceclearstatus ${target}`);
 
 		if (!user.userMessage) return this.sendReply(this.tr`You don't have a status message set.`);
 		user.setUserMessage('');
@@ -1297,35 +1282,31 @@ export const commands: Chat.ChatCommands = {
 		if (!room.battle) return this.errorReply(this.tr`You can only do this in battle rooms.`);
 		if (room.rated) return this.errorReply(this.tr`You can only add a Player to unrated battles.`);
 
-		target = this.splitTarget(target, true).trim();
-		if (target !== 'p1' && target !== 'p2' && target !== 'p3' && target !== 'p4') {
-			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${target}".`);
+		const {targetUser, rest: slot} = this.requireUser(target, {exactName: true});
+		if (slot !== 'p1' && slot !== 'p2' && slot !== 'p3' && slot !== 'p4') {
+			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${slot}".`);
 			return this.parse('/help addplayer');
 		}
 
-		const targetUser = this.targetUser;
-		const name = this.targetUsername;
-
-		if (!targetUser) return this.errorReply(this.tr`User ${name} not found.`);
 		if (!targetUser.inRooms.has(room.roomid)) {
-			return this.errorReply(this.tr`User ${name} must be in the battle room already.`);
+			return this.errorReply(this.tr`User ${targetUser.name} must be in the battle room already.`);
 		}
 		this.checkCan('joinbattle', null, room);
-		if (room.battle[target].id) {
-			return this.errorReply(this.tr`This room already has a player in slot ${target}.`);
+		if (room.battle[slot].id) {
+			return this.errorReply(this.tr`This room already has a player in slot ${slot}.`);
 		}
 		if (targetUser.id in room.battle.playerTable) {
 			return this.errorReply(this.tr`${targetUser.name} is already a player in this battle.`);
 		}
 
 		room.auth.set(targetUser.id, Users.PLAYER_SYMBOL);
-		const success = room.battle.joinGame(targetUser, target);
+		const success = room.battle.joinGame(targetUser, slot);
 		if (!success) {
 			room.auth.delete(targetUser.id);
 			return;
 		}
-		const playerNum = target.slice(1);
-		this.addModAction(room.tr`${name} was added to the battle as Player ${playerNum} by ${user.name}.`);
+		const playerNum = slot.slice(1);
+		this.addModAction(room.tr`${targetUser.name} was added to the battle as Player ${playerNum} by ${user.name}.`);
 		this.modlog('ROOMPLAYER', targetUser.getLastId());
 	},
 	addplayerhelp: [
@@ -1514,17 +1495,12 @@ export const commands: Chat.ChatCommands = {
 		if (room.battle.challengeType === 'tour' || room.battle.rated) {
 			return this.errorReply(this.tr`You can only do this in unrated non-tour battles.`);
 		}
-		target = this.splitTarget(target);
-		const targetUser = this.targetUser;
-		if (!targetUser?.connected) {
-			const targetUsername = this.targetUsername;
-			return this.errorReply(this.tr`User ${targetUsername} not found.`);
-		}
+		const {targetUser, rest: reason} = this.requireUser(target, {allowOffline: true});
 		this.checkCan('kick', targetUser, room);
 		if (room.battle.leaveGame(targetUser)) {
-			const displayTarget = target ? ` (${target})` : ``;
-			this.addModAction(room.tr`${targetUser.name} was kicked from a battle by ${user.name} ${displayTarget}`);
-			this.modlog('KICKBATTLE', targetUser, target, {noip: 1, noalts: 1});
+			const displayReason = reason ? ` (${reason})` : ``;
+			this.addModAction(room.tr`${targetUser.name} was kicked from a battle by ${user.name} ${displayReason}`);
+			this.modlog('KICKBATTLE', targetUser, reason, {noip: 1, noalts: 1});
 		} else {
 			this.errorReply("/kickbattle - User isn't in battle.");
 		}

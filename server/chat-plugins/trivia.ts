@@ -1660,9 +1660,7 @@ const triviaCommands: Chat.ChatCommands = {
 		this.checkChat();
 		this.checkCan('mute', null, room);
 
-		this.splitTarget(target);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(this.tr`The user "${target}" does not exist.`);
+		const {targetUser} = this.requireUser(target, {allowOffline: true});
 		getTriviaOrMastermindGame(room).kick(targetUser, user);
 	},
 	kickhelp: [`/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # &`],
@@ -1751,25 +1749,19 @@ const triviaCommands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return false;
 		const game = getTriviaGame(room);
 
-		let tarUser;
-		if (target) {
-			this.splitTarget(target);
-			if (!this.targetUser) return this.errorReply(this.tr`User ${target} does not exist.`);
-			tarUser = this.targetUser;
-		} else {
-			tarUser = user;
-		}
+		const targetUser = this.getUserOrSelf(target);
+		if (!targetUser) return this.errorReply(this.tr`User ${target} does not exist.`);
 		let buffer = `${game.isPaused ? this.tr`There is a paused trivia game` : this.tr`There is a trivia game in progress`}, ` +
 			this.tr`and it is in its ${game.phase} phase.` + `<br />` +
 			this.tr`Mode: ${game.game.mode} | Category: ${game.game.category} | Cap: ${game.getDisplayableCap()}`;
 
-		const player = game.playerTable[tarUser.id];
+		const player = game.playerTable[targetUser.id];
 		if (player) {
 			if (!this.broadcasting) {
 				buffer += `<br />${this.tr`Current score: ${player.points} | Correct Answers: ${player.correctAnswers}`}`;
 			}
-		} else if (tarUser.id !== user.id) {
-			return this.errorReply(this.tr`User ${tarUser.name} is not a player in the current trivia game.`);
+		} else if (targetUser.id !== user.id) {
+			return this.errorReply(this.tr`User ${targetUser.name} is not a player in the current trivia game.`);
 		}
 		buffer += `<br />${this.tr`Players: ${game.formatPlayerList({max: null, requirePoints: false})}`}`;
 
@@ -2265,9 +2257,8 @@ const triviaCommands: Chat.ChatCommands = {
 			name = Utils.escapeHTML(user.name);
 			userid = user.id;
 		} else {
-			this.splitTarget(target, true);
-			name = Utils.escapeHTML(this.targetUsername);
-			userid = toID(name);
+			name = Utils.escapeHTML(target);
+			userid = toID(target);
 		}
 
 		const allTimeScore = triviaData.leaderboard![userid];

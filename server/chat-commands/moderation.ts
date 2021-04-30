@@ -1658,6 +1658,19 @@ export const commands: Chat.ChatCommands = {
 		`/allowname [username] - Unmarks a forcerenamed username, stopping staff from being notified when it is used. Requires % @ &`,
 	],
 
+	forceclearstatus(target, room, user) {
+		const {targetUser, rest: reason} = this.requireUser(target, {allowOffline: true});
+		this.checkCan('forcerename', targetUser);
+
+		if (!targetUser.userMessage) return this.errorReply(this.tr`${targetUser.name} does not have a status set.`);
+
+		const displayReason = reason ? `: ${reason}` : ``;
+		this.privateGlobalModAction(this.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
+		this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
+		targetUser.clearStatus();
+		targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);
+	},
+
 	nl: 'namelock',
 	forcenamelock: 'namelock',
 	weeknamelock: 'namelock',

@@ -294,7 +294,7 @@ export abstract class MessageContext {
 
 		return this.extractFormat();
 	}
-	splitUser(target: string, exactName = false) {
+	splitUser(target: string, {exactName}: {exactName?: boolean} = {}) {
 		const [inputUsername, rest] = this.splitOne(target).map(str => str.trim());
 		const targetUser = Users.get(inputUsername, exactName);
 
@@ -305,7 +305,21 @@ export abstract class MessageContext {
 			rest,
 		};
 	}
-	getUserOrSelf(target: string, exactName = false) {
+	requireUser(target: string, options: {allowOffline?: boolean, exactName?: boolean} = {}) {
+		const {targetUser, targetUsername, rest} = this.splitUser(target, options);
+
+		if (!targetUser) {
+			throw new Chat.ErrorMessage(`The user "${targetUsername}" is offline or misspelled.`);
+		}
+		if (!options.allowOffline && !targetUser.connected) {
+			throw new Chat.ErrorMessage(`The user "${targetUsername}" is offline.`);
+		}
+
+		// `inputUsername` and `targetUsername` are never needed because we already handle the "user not found" error messages
+		// just use `targetUser.name` where previously necessary
+		return {targetUser, rest};
+	}
+	getUserOrSelf(target: string, {exactName}: {exactName?: boolean} = {}) {
 		if (!target.trim()) return this.user;
 
 		return Users.get(target, exactName);

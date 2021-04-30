@@ -75,7 +75,7 @@ export const commands: Chat.ChatCommands = {
 	profile: 'whois',
 	whois(target, room, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
-		const targetUser = this.getUserOrSelf(target, user.tempGroup === ' ');
+		const targetUser = this.getUserOrSelf(target, {exactName: user.tempGroup === ' '});
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
 		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
 		if (!targetUser) {
@@ -485,10 +485,10 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(`This command must be broadcast:`);
 			return this.parse(`/help checkchallenges`);
 		}
-		target = this.splitTarget(target);
-		const user1 = this.targetUser;
-		const user2 = Users.get(target);
-		if (!user1 || !user2 || user1 === user2) return this.parse(`/help checkchallenges`);
+		if (!target || !target.includes(',')) return this.parse(`/help checkchallenges`);
+		const {targetUser: user1, rest} = this.requireUser(target);
+		const {targetUser: user2, rest: rest2} = this.requireUser(rest);
+		if (user1 === user2 || rest2) return this.parse(`/help checkchallenges`);
 		if (!(user1.id in room.users) || !(user2.id in room.users)) {
 			return this.errorReply(`Both users must be in this room.`);
 		}
