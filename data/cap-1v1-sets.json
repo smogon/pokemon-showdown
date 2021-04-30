@@ -61,6 +61,14 @@
 		"nature": "Jolly",
 		"moves": ["Belly Drum", "Acrobatics", ["Bullet Punch", "Iron Head"], "Drain Punch"]
 	}],
+	"Chromera": [{
+		"item": "Air Balloon",
+		"ability": "Color Change",
+		"evs": {"hp": 252, "def": 152, "spd": 104},
+		"nature": "Bold",
+		"ivs": {"atk": 0},
+		"moves": ["Sludge Bomb", "Scald", "Calm Mind", "Recover"]
+	}],
 	"Colossoil": [{
 		"item": "Flame Orb",
 		"ability": "Guts",
