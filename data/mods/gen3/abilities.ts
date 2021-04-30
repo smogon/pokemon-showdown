@@ -154,13 +154,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!pokemon.isStarted) return;
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
-			const ability = target.getAbility();
+
+			const isAbility = pokemon.ability === 'trace';
+			let possibleAbilities = [target.ability];
+			if (target.m.pseudoAbilities) possibleAbilities.push(...target.m.pseudoAbilities);
 			const bannedAbilities = ['forecast', 'multitype', 'trace'];
-			if (bannedAbilities.includes(target.ability)) {
-				return;
-			}
-			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+			possibleAbilities = possibleAbilities
+				.filter(val => !this.dex.abilities.get(val).isPermanent && !bannedAbilities.includes(val));
+			if (!possibleAbilities.length) return;
+
+			const ability = this.dex.abilities.get(this.sample(possibleAbilities));
+			if (isAbility) {
+				if (pokemon.setAbility(ability)) {
+					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				}
+			} else {
+				pokemon.removeVolatile("ability:trace");
+				pokemon.addVolatile("ability:" + ability.id, pokemon);
 			}
 		},
 	},

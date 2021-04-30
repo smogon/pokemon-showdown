@@ -39,7 +39,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
 					this.add('-start', target, 'move: Lansat Berry', '[zeffect]');
-				} else if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+				} else if (effect && (['psychup', 'transform'].includes(effect.id) || effect.name === "Imposter")) {
 					this.add('-start', target, 'move: Lansat Berry', '[silent]');
 				} else {
 					this.add('-start', target, 'move: Lansat Berry');

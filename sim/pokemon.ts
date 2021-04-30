@@ -767,8 +767,10 @@ export class Pokemon {
 		let neutralizinggas = false;
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
-			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
-				!pokemon.abilityState.ending) {
+			if (
+				(pokemon.ability === ('neutralizinggas' as ID) || pokemon.m.pseudoAbilities?.some((k: string) => k === 'neutralizinggas')) &&
+				!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
+			) {
 				neutralizinggas = true;
 				break;
 			}
@@ -776,8 +778,10 @@ export class Pokemon {
 
 		return !!(
 			(this.battle.gen >= 5 && !this.isActive) ||
-			((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID))) &&
-			!this.getAbility().isPermanent
+			((this.volatiles['gastroacid'] ||
+				(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
+					this.m.pseudoAbilities?.some((k: string) => k === 'neutralizinggas'))
+				)) && !this.getAbility().isPermanent
 			)
 		);
 	}
@@ -1183,7 +1187,19 @@ export class Pokemon {
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
-		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true);
+		if (this.battle.gen > 2)  {
+			this.setAbility(pokemon.ability, this, true);
+			if (this.m.pseudoAbilities) {
+				for (const pseudoAbility of this.m.pseudoAbilities) {
+					this.removeVolatile('ability:' + pseudoAbility);
+				}
+			}
+			if (pokemon.m.pseudoAbilities) {
+				for (const pseudoAbility of pokemon.m.pseudoAbilities) {
+					this.addVolatile('ability:' + pseudoAbility, this);
+				}
+			}
+		}
 
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
@@ -1716,11 +1732,11 @@ export class Pokemon {
 		return this.battle.dex.abilities.getByID(this.ability);
 	}
 
-	hasAbility(ability: string | string[]) {
+	hasAbility(ability: string | string[]) : boolean {
 		if (this.ignoringAbility()) return false;
-		const ownAbility = this.ability;
-		if (!Array.isArray(ability)) return ownAbility === toID(ability);
-		return ability.map(toID).includes(ownAbility);
+		if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
+		ability = this.battle.toID(ability);
+		return this.ability === ability || !!this.volatiles['ability:' + ability];
 	}
 
 	clearAbility() {

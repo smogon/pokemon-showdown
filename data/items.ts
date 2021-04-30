@@ -67,7 +67,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		onAfterBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate') {
+			if (effect.name === "Intimidate") {
 				target.useItem();
 			}
 		},

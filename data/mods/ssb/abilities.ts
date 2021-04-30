@@ -1221,7 +1221,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		condition: {
 			onStart(pokemon, source, effect) {
-				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+				if (effect && (['psychup', 'transform'].includes(effect.id) || effect.name === "Imposter")) {
 					this.add('-start', pokemon, 'move: Tension', '[silent]');
 				} else {
 					this.add('-start', pokemon, 'move: Tension');
@@ -1314,7 +1314,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			// Infinite Loop preventer
-			if (effect && ['stubbornness'].includes(effect.id)) return;
+			if (effect && ["Stubbornness"].includes(effect.name)) return;
 			if (success) {
 				if (!this.effectState.happened) {
 					this.boost({atk: 1, def: 1, spd: 1}, pokemon);

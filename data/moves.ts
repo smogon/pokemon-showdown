@@ -663,7 +663,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 
-				if (effect.id === 'cutecharm') {
+				if (effect.name === "Cute Charm") {
 					this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
 				} else if (effect.id === 'destinyknot') {
 					this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
@@ -5427,7 +5427,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
 					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-				} else if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+				} else if (effect && (['psychup', 'transform'].includes(effect.id || effect.name === "Imposter"))) {
 					this.add('-start', target, 'move: Focus Energy', '[silent]');
 				} else {
 					this.add('-start', target, 'move: Focus Energy');
@@ -5902,6 +5902,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
+				if (pokemon.m.pseudoAbilities) {
+					for (const pseudoAbility of pokemon.m.pseudoAbilities) {
+						pokemon.removeVolatile("ability:" + pseudoAbility);
+					}
+				}
 			},
 			onCopy(pokemon) {
 				if (pokemon.getAbility().isPermanent) pokemon.removeVolatile('gastroacid');
@@ -9345,7 +9350,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source, effect) {
-				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+				if (effect && (['psychup', 'transform'].includes(effect.id) || effect.name === "Imposter")) {
 					this.add('-start', pokemon, 'move: Laser Focus', '[silent]');
 				} else {
 					this.add('-start', pokemon, 'move: Laser Focus');
@@ -14512,7 +14517,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 				if (target !== source) {
 					this.debug('interrupting setStatus');
-					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					if (effect.name === "Synchronize" || (effect.effectType === 'Move' && !effect.secondaries)) {
 						this.add('-activate', target, 'move: Safeguard');
 					}
 					return null;
