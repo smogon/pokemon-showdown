@@ -65,7 +65,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				for (const moveid of set.moves.map(this.toID)) {
 					if (legalityList[moveid]) {
 						if (legalityList[moveid] === 'illegal') {
-							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} in Japanese versions of the Gen 1 games.`);
+							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} in 1997.`);
 						} else if (set.level < legalityList[moveid]) {
 							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} before level ${legalityList[moveid]} in 1997.`);
 						}
