@@ -2,12 +2,13 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Species Clause', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Dig', 'Fly'],
 	},
-	japanesegen1movelegality: {
+	nintendocup1997movelegality: {
 		effectType: 'ValidatorRule',
-		name: 'Japanese Gen 1 Move Legality',
-		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Japanese versions of Gen 1.",
+		name: 'Nintendo Cup 1997 Move Legality',
+		desc: "Bans move combinations on Pok\u00e9mon that would only be obtainable in Pok\u00e9mon Yellow.",
 		onValidateSet(set) {
 			const rgb97Legality: {[speciesid: string]: {[moveid: string]: 'illegal' | number}} = {
 				charizard: {fly: 'illegal'},
@@ -64,7 +65,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				for (const moveid of set.moves.map(this.toID)) {
 					if (legalityList[moveid]) {
 						if (legalityList[moveid] === 'illegal') {
-							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} in Japanese versions of the Gen 1 games.`);
+							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} in 1997.`);
 						} else if (set.level < legalityList[moveid]) {
 							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} before level ${legalityList[moveid]} in 1997.`);
 						}
