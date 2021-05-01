@@ -60,13 +60,13 @@ export class RuleTable extends Map<string, string> {
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
 			if (this.has(`-pokemontag:${tagid}`)) {
-				if (tag.speciesFilter!(species)) return false;
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
 		}
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
 			if (this.has(`+pokemontag:${tagid}`)) {
-				if (tag.speciesFilter!(species)) return false;
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
 		}
 		return this.has(`-pokemontag:allpokemon`);
