@@ -353,7 +353,7 @@ export const Formats: FormatList = [
 		banlist: ['Corsola-Galar', 'Cutiefly', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix', 'Vulpix-Alola'],
 	},
 	{
-		name: "[Gen 8] VGC 2021",
+		name: "[Gen 8] VGC 2021 Series 9",
 
 		mod: 'gen8',
 		gameType: 'doubles',
