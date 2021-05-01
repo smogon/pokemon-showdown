@@ -844,19 +844,19 @@ const cmds: Chat.ChatCommands = {
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		const {targetUser} = this.requireUser(target, {allowOffline: true});
-		if (target.length > 300) {
+		const {targetUser, rest: reason} = this.requireUser(target, {allowOffline: true});
+		if (reason.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
 		if (Punishments.getRoomPunishType(room, this.targetUsername)) {
 			return this.errorReply(`User '${this.targetUsername}' is already punished in this room.`);
 		}
 
-		Giveaway.ban(room, targetUser, target);
+		Giveaway.ban(room, targetUser, reason);
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
-		this.modlog('GIVEAWAYBAN', targetUser, target);
-		if (target) target = ` (${target})`;
-		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${target}`);
+		this.modlog('GIVEAWAYBAN', targetUser, reason);
+		const reasonMessage = reason ? ` (${reason})` : ``;
+		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${reasonMessage}`);
 	},
 	unban(target, room, user) {
 		if (!target) return false;
