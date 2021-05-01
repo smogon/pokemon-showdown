@@ -783,6 +783,12 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen8customgame@@@-nonexistent,+crucibellemega').validateTeam(team);
 		assert.equal(illegal, null, "Nonexistent should override all tags that aren't existence-related");
+
+		team = [
+			{species: 'Moltres-Galar', ability: 'Berserk', moves: ['protect'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8customgame@@@-sublegendary').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should allow moves to be banned', function () {
