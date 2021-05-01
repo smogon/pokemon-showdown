@@ -66,7 +66,16 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
+		onBoostPriority: 1,
+		onBoost(boost, target) {
+			target.itemState.lastAtk = target.boosts['atk'];
+		},
 		onAfterBoost(boost, target, source, effect) {
+			const noAtkChange = boost.atk! < 0 && target.boosts['atk'] === -6 && target.itemState.lastAtk === -6;
+			const noContraryAtkChange = boost.atk! > 0 && target.boosts['atk'] === 6 && target.itemState.lastAtk === 6;
+			if (target.boosts['spe'] === 6 || noAtkChange || noContraryAtkChange) {
+				return;
+			}
 			if (effect.id === 'intimidate') {
 				target.useItem();
 			}
