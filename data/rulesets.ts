@@ -1391,7 +1391,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 				pokemon.removeVolatile('ability:' + pseudoAbility);
 			}
 			pokemon.m.pseudoAbilities = pokemon.m.pseudoAbilities.filter(
-				(ability: string) => !pokemon.m.pokebilitiesPseudoAbilities.includes(ability));
+				(ability: string) => !pokemon.m.pokebilitiesPseudoAbilities.includes(ability)
+			);
 			pokemon.m.pokebilitiesPseudoAbilities = undefined;
 		},
 	},
