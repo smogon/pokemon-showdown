@@ -1221,7 +1221,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		condition: {
 			onStart(pokemon, source, effect) {
-				if (effect && (['psychup', 'transform'].includes(effect.id) || effect.name === "Imposter")) {
+				if (effect && (["Imposter", "Psych Up", "Transform"].includes(effect.name)) {
 					this.add('-start', pokemon, 'move: Tension', '[silent]');
 				} else {
 					this.add('-start', pokemon, 'move: Tension');
