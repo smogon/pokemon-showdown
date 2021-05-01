@@ -2173,7 +2173,7 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst = false, forceCheck = false) {
+	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
 		if (!length) {
@@ -2220,7 +2220,7 @@ export class Battle {
 			}
 		}
 
-		if (this.checkWin(faintData)) return true;
+		if (checkWin && this.checkWin(faintData)) return true;
 
 		if (faintData && length) {
 			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);

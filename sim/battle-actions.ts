@@ -897,7 +897,7 @@ export class BattleActions {
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
-		this.battle.faintMessages();
+		if (pokemon.hp) this.battle.faintMessages(false, false, false);
 
 		if (move.recoil && move.totalDamage) {
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
