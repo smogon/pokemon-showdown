@@ -3079,14 +3079,14 @@ export const commands: Chat.ChatCommands = {
 			this.checkChat();
 			if (!target) return this.parse(`/help mafia ${cmd}`);
 			this.checkCan('mute', null, room);
-			const {targetUser, rest} = this.requireUser(target);
+			const {targetUser} = this.requireUser(target);
 			if (!room.users[targetUser.id]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
 			if (game.hostid === targetUser.id) return this.errorReply(`${targetUser.name} is already the host.`);
 			if (game.cohostids.includes(targetUser.id)) return this.errorReply(`${targetUser.name} is already a cohost.`);
 			if (targetUser.id in game.playerTable) return this.errorReply(`The host cannot be ingame.`);
 			if (targetUser.id in game.dead) {
 				if (!cmd.includes('force')) {
-					return this.errorReply(`${targetUser.name} could potentially be revived. To continue anyway, use /mafia force${cmd} ${rest}.`);
+					return this.errorReply(`${targetUser.name} could potentially be revived. To continue anyway, use /mafia force${cmd} ${target}.`);
 				}
 				if (game.dead[targetUser.id].lynching) game.unlynch(targetUser.id);
 				game.dead[targetUser.id].destroy();
