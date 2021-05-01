@@ -277,7 +277,7 @@ export const commands: Chat.ChatCommands = {
 
 		const {targetUser, rest: html} = this.requireUser(target);
 		this.checkHTML(html);
-		this.checkPMHTML(targetUser, targetUser.name);
+		this.checkPMHTML(targetUser);
 
 		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
 			`/raw <div class="infobox">${html}</div>`;
@@ -298,7 +298,7 @@ export const commands: Chat.ChatCommands = {
 
 		const {targetUser, rest: html} = this.requireUser(target);
 		this.checkHTML(html);
-		this.checkPMHTML(targetUser, targetUser.name);
+		this.checkPMHTML(targetUser);
 
 		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
 			`/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${html}`;
@@ -343,7 +343,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!targetConnections.length) {
 			// no connection has requested it - verify that we share a room
-			this.checkPMHTML(targetUser, targetUser.name);
+			this.checkPMHTML(targetUser);
 			targetConnections = targetUser.connections;
 		}
 
@@ -384,7 +384,7 @@ export const commands: Chat.ChatCommands = {
 
 		const buf = `|tempnotify|bot-${pageid}|${title} [from ${user.name}]|${highlight ? highlight : ''}`;
 		let targetConnections = [];
-		this.checkPMHTML(targetUser, targetUser.name);
+		this.checkPMHTML(targetUser);
 		// try to locate connections that have requested the page recently
 		for (const c of targetUser.connections) {
 			if (c.lastRequestedPage === pageid) {

@@ -1174,10 +1174,7 @@ export class CommandContext extends MessageContext {
 
 		return message;
 	}
-	checkPMHTML(targetUser: User | null, targetUsername: string) {
-		if (!targetUser?.connected) {
-			throw new Chat.ErrorMessage(`User ${targetUsername} is not currently online.`);
-		}
+	checkPMHTML(targetUser: User) {
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
@@ -2357,7 +2354,6 @@ export const Chat = new class {
 (CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;
 (CommandContext.prototype as any).canHTML = CommandContext.prototype.checkHTML;
 (CommandContext.prototype as any).canEmbedURI = CommandContext.prototype.checkEmbedURI;
-(CommandContext.prototype as any).canPMHTML = CommandContext.prototype.checkPMHTML;
 (CommandContext.prototype as any).privatelyCan = CommandContext.prototype.privatelyCheckCan;
 (CommandContext.prototype as any).requiresRoom = CommandContext.prototype.requireRoom;
 (CommandContext.prototype as any).targetUserOrSelf = function (this: any, target: string, exactName: boolean) {
