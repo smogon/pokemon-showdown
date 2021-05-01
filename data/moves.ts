@@ -5427,7 +5427,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
 					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-				} else if (effect && (['psychup', 'transform'].includes(effect.id) || effect.name === "Imposter")) {
+				} else if (effect && ["Imposter", "Psych Up", "Transform"].includes(effect.name)) {
 					this.add('-start', target, 'move: Focus Energy', '[silent]');
 				} else {
 					this.add('-start', target, 'move: Focus Energy');
@@ -9350,7 +9350,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source, effect) {
-				if (effect && (['psychup', 'transform'].includes(effect.id) || effect.name === "Imposter")) {
+				if (effect && ["Imposter", "Psych Up", "Transform"].includes(effect.name)) {
 					this.add('-start', pokemon, 'move: Laser Focus', '[silent]');
 				} else {
 					this.add('-start', pokemon, 'move: Laser Focus');
