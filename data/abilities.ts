@@ -876,7 +876,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
-			if (effect.id === 'raindance' || effect.id === 'primordialsea') { // id rather than name is correct reference: this is the condition, not the ability
+			// id rather than name is correct reference: this is the condition, not the ability
+			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 8);
 			} else if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
 				this.damage(target.baseMaxhp / 8, target, target);
@@ -2916,7 +2917,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	raindish: {
 		onWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
-			if (effect.id === 'raindance' || effect.id === 'primordialsea') { // id rather than name is correct reference: this is the condition, not the ability
+			// id rather than name is correct reference: this is the condition, not the ability
+			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 16);
 			}
 		},
@@ -3492,7 +3494,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
-			if (effect.id === 'sunnyday' || effect.id === 'desolateland') { // id rather than name is correct reference: this is the condition, not the ability
+			// id rather than name is correct reference: this is the condition, not the ability
+			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}
 		},

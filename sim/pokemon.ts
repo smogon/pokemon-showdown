@@ -768,7 +768,8 @@ export class Pokemon {
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
 			if (
-				(pokemon.ability === ('neutralizinggas' as ID) || pokemon.m.pseudoAbilities?.some((k: string) => k === 'neutralizinggas')) &&
+				(pokemon.ability === ('neutralizinggas' as ID) ||
+					pokemon.m.pseudoAbilities?.some((k: string) => k === 'neutralizinggas')) &&
 				!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
 			) {
 				neutralizinggas = true;

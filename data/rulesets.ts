@@ -1390,7 +1390,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const pseudoAbility of pokemon.m.pokebilitiesPseudoAbilities) {
 				pokemon.removeVolatile('ability:' + pseudoAbility);
 			}
-			pokemon.m.pseudoAbilities = pokemon.m.pseudoAbilities.filter((ability: string) => !pokemon.m.pokebilitiesPseudoAbilities.includes(ability));
+			pokemon.m.pseudoAbilities = pokemon.m.pseudoAbilities.filter(
+				(ability: string) => !pokemon.m.pokebilitiesPseudoAbilities.includes(ability));
 			pokemon.m.pokebilitiesPseudoAbilities = undefined;
 		},
 	},
@@ -1409,7 +1410,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return sharedPower;
 		},
 		onBeforeSwitchIn(pokemon) {
-			let rulesets = this.dex.data.Rulesets;
+			const rulesets = this.dex.data.Rulesets;
 			const rule = rulesets.hasOwnProperty('sharedpowerrule') ? rulesets['sharedpowerrule'] as Format : null;
 			if (!rule) return;
 
@@ -1422,7 +1423,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
-			let rulesets = this.dex.data.Rulesets;
+			const rulesets = this.dex.data.Rulesets;
 			const rule = rulesets.hasOwnProperty('sharedpowerrule') ? rulesets['sharedpowerrule'] as Format : null;
 			if (!rule) return;
 
