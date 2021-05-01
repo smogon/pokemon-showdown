@@ -10751,6 +10751,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			];
 			const move = this.dex.getActiveMove(action.move.id);
 			if (action.zmove || move.isZ || move.isMax) return false;
+			if (target.volatiles['mustrecharge']) return false;
 			if (move.category === 'Status' || noMeFirst.includes(move.id)) return false;
 
 			pokemon.addVolatile('mefirst');
