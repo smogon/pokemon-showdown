@@ -5427,7 +5427,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
 					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-				} else if (effect && (['psychup', 'transform'].includes(effect.id || effect.name === "Imposter"))) {
+				} else if (effect && (['psychup', 'transform'].includes(effect.id) || effect.name === "Imposter")) {
 					this.add('-start', target, 'move: Focus Energy', '[silent]');
 				} else {
 					this.add('-start', target, 'move: Focus Energy');
