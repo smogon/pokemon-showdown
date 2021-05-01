@@ -1286,10 +1286,6 @@ export class TeamValidator {
 			}
 		}
 
-		if (dex.species.get(species.baseSpecies).tags?.length) {
-			setHas['pokemontag:' + toID(dex.species.get(species.baseSpecies).tags[0])] = true;
-		}
-
 		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
 		const tierTag = 'pokemontag:' + toID(tier);
 		setHas[tierTag] = true;
@@ -1376,28 +1372,6 @@ export class TeamValidator {
 				return `${tierSpecies.name} is flagged as gigantamax, but it cannot gigantamax without hacking or glitches.`;
 			}
 			if (banReason === '') return null;
-		}
-
-		if (dex.species.get(species.baseSpecies).tags?.length) {
-			if (dex.species.get(species.baseSpecies).tags.includes("Mythical")) {
-				banReason = ruleTable.check('pokemontag:mythical');
-				if (banReason) {
-					return `${species.name} is a Mythical Pokemon, which is ${banReason}.`;
-				}
-				if (banReason === '') return null;
-			} else if (dex.species.get(species.baseSpecies).tags.includes("Restricted Legendary")) {
-				banReason = ruleTable.check('pokemontag:restrictedlegendary');
-				if (banReason) {
-					return `${species.name} is a Restricted Legendary Pokemon, which is ${banReason}.`;
-				}
-				if (banReason === '') return null;
-			} else if (dex.species.get(species.baseSpecies).tags.includes("Sub-Legendary")) {
-				banReason = ruleTable.check('pokemontag:sublegendary');
-				if (banReason) {
-					return `${species.name} is a Sub-Legendary Pokemon, which is ${banReason}.`;
-				}
-				if (banReason === '') return null;
-			}
 		}
 
 		if (tierSpecies.isNonstandard && tierSpecies.isNonstandard !== 'Unobtainable') {
