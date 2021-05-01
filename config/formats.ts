@@ -627,11 +627,11 @@ export const Formats: FormatList = [
 		checkCanLearn(move, species, lsetData, set) {
 			const problem = this.checkCanLearn(move, species, lsetData, set);
 			if (!problem) return null;
-			if (move.isZ || move.isMax || this.format.ruleTable?.isRestricted(`move:${move.id}`)) return problem;
+			if (move.isZ || move.isMax || this.ruleTable.isRestricted(`move:${move.id}`)) return problem;
 			if ((set as any).sketchMove) {
-				return ` already has ${this.dex.moves.get((set as any).sketchMove).name} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
+				return ` already has ${(set as any).sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
 			}
-			(set as any).sketchMove = move.id;
+			(set as any).sketchMove = move.name;
 			return null;
 		},
 		onValidateTeam(team) {
@@ -641,10 +641,10 @@ export const Formats: FormatList = [
 					sketches.set((set as any).sketchMove, (sketches.get((set as any).sketchMove) || 0) + 1);
 				}
 			}
-			const overSketched = [...sketches.keys()].filter(move => sketches.get(move)! > 1);
+			const overSketched = [...sketches.entries()].filter(([moveName, count]) => count > 1);
 			if (overSketched.length) {
-				return overSketched.map(move => (
-					`You are limited to 1 of ${this.dex.moves.get(move).name} by Sketch Clause.\n(You have sketched ${this.dex.moves.get(move).name} ${sketches.get(move)!} times.)`
+				return overSketched.map(([moveName, count]) => (
+					`You are limited to 1 of ${moveName} by Sketch Clause.\n(You have sketched ${moveName} ${count} times.)`
 				));
 			}
 		},
