@@ -3768,7 +3768,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["auroraveil", "blizzard", "freezedry", "iceshard", "protect"],
 		randomDoubleBattleLevel: 82,
-		tier: "ZU",
+		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	deerling: {
@@ -4495,7 +4495,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["auroraveil", "blizzard", "earthpower", "freezedry", "protect", "thunderwave"],
 		randomDoubleBattleLevel: 88,
-		tier: "ZU",
+		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	hawlucha: {
