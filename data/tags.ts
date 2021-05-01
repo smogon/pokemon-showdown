@@ -34,6 +34,18 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Mega",
 		speciesFilter: species => !!species.isMega,
 	},
+	mythical: {
+		name: "Mythical",
+		speciesFilter: species => species.tags.includes("Mythical"),
+	},
+	sublegendary: {
+		name: "Sub-Legendary",
+		speciesFilter: species => species.tags.includes("Sub-Legendary"),
+	},
+	restrictedlegendary: {
+		name: "Restricted Legendary",
+		speciesFilter: species => species.tags.includes("Restricted Legendary"),
+	},
 
 	// Move tags
 	// ---------
