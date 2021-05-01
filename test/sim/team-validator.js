@@ -765,6 +765,26 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should support banning/unbanning tag combinations', function () {
+		let team = [
+			{species: 'Crucibelle-Mega', ability: 'Regenerator', moves: ['protect'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8customgame@@@-nonexistent,+mega').validateTeam(team);
+		assert(illegal, "Nonexistent should override all tags that aren't existence-related");
+
+		team = [
+			{species: 'Crucibelle-Mega', ability: 'Regenerator', moves: ['protect'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8customgame@@@+mega,-nonexistent').validateTeam(team);
+		assert(illegal, "Nonexistent should override all tags that aren't existence-related");
+
+		team = [
+			{species: 'Crucibelle-Mega', ability: 'Regenerator', moves: ['protect'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8customgame@@@-nonexistent,+crucibellemega').validateTeam(team);
+		assert.equal(illegal, null, "Nonexistent should override all tags that aren't existence-related");
+	});
+
 	it('should allow moves to be banned', function () {
 		const team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
