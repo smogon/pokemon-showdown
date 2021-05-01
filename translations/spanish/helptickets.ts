@@ -139,7 +139,7 @@ export const translations: Translations = {
 		"Help Ticket": "Help Tickets",
 		"Issue": "Problema",
 		"A Global Staff member will be with you shortly.": "Un miembro del Staff Global estará contigo en breve.",
-		"${this.inputUsername} does not have an open ticket.": "${this.inputUsername} no tiene un ticket abierto.",
+		"${inputUsername} does not have an open ticket.": "${inputUsername} no tiene un ticket abierto.",
 		"You closed ${ticket.creator}'s ticket.": "Tú cerraste el ticket de ${ticket.creator}.",
 		"The reason is too long. It cannot exceed 300 characters.": "La razón es demasiado extensa. No puede exceder los 300 caracteres.",
 		"User '${targetUsername}' not found.": "Usuario '${targetUsername}' no encontrado.",

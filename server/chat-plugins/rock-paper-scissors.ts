@@ -272,14 +272,11 @@ export const commands: Chat.ChatCommands = {
 		challenge: 'create',
 		create(target, room, user) {
 			target = target.trim();
-			const userid = toID(target);
-			const targetUser = userid ? Users.get(userid) : this.pmTarget;
-			if (targetUser === user) return this.errorReply(`You cannot challenge yourself.`);
+			const {targetUser, targetUsername} = this.splitUser(target);
 			if (!targetUser) {
-				return this.errorReply(
-					`User ${this.targetUsername} not found. Either specify a username or use this command in PMs.`
-				);
+				return this.errorReply(`User ${targetUsername} not found. Either specify a username or use this command in PMs.`);
 			}
+			if (targetUser === user) return this.errorReply(`You cannot challenge yourself.`);
 			const existingRoom = findExisting(user.id, targetUser.id);
 			if (existingRoom?.game && !existingRoom.game.ended) {
 				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);

@@ -79,7 +79,7 @@ export const translations: Translations = {
 		"There are not enough questions in the trivia database to finish a trivia game.": "",
 		"There are not enough questions under the category \"${ALL_CATEGORIES[category]}\" to finish a trivia game.": "",
 		"You are now signed up for this game!": "",
-		"The user \"${target}\" does not exist.": "",
+		"The user \"${targetUsername}\" does not exist.": "",
 		"You have left the current game of Trivia.": "",
 		"No valid answer was entered.": "",
 		"You have selected \"${answer}\" as your answer.": "",

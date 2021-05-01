@@ -848,8 +848,8 @@ const cmds: Chat.ChatCommands = {
 		if (reason.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		if (Punishments.getRoomPunishType(room, this.targetUsername)) {
-			return this.errorReply(`User '${this.targetUsername}' is already punished in this room.`);
+		if (Punishments.getRoomPunishType(room, targetUser.name)) {
+			return this.errorReply(`User '${targetUser.name}' is already punished in this room.`);
 		}
 
 		Giveaway.ban(room, targetUser, reason);
@@ -865,7 +865,7 @@ const cmds: Chat.ChatCommands = {
 
 		const {targetUser} = this.requireUser(target, {allowOffline: true});
 		if (!Giveaway.checkBanned(room, targetUser)) {
-			return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
+			return this.errorReply(`User '${targetUser.name}' isn't banned from entering giveaways.`);
 		}
 
 		Giveaway.unban(room, targetUser);
