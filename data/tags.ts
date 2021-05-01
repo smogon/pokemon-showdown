@@ -205,7 +205,7 @@ export const Tags: {[id: string]: TagData} = {
 	// -------------
 	duber: {
 		name: "DUber",
-		speciesFilter: species => species.doublesTier === 'DUber',
+		speciesFilter: species => species.doublesTier === 'DUber' || species.doublesTier === '(DUber)',
 	},
 	dou: {
 		name: "DOU",
