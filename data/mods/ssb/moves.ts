@@ -3415,7 +3415,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Trick", target);
 		},
 		onHit(target, source, effect) {
-			this.add(`c|${getName('Perish Song')}|/html <img src="https://i.imgflip.com/3rt1d8.png" height=50% width=50%/>`);
+			this.add(`c|${getName('Perish Song')}|/html <img src="https://i.imgflip.com/3rt1d8.png" width="262" height="150" />`);
 			const item = target.takeItem(source);
 			if (!target.item) {
 				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
