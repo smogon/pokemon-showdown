@@ -1352,14 +1352,14 @@ export const commands: Chat.ChatCommands = {
 
 		ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
-			const {targetUser, targetUsername, rest} = this.splitUser(target, {exactName: true});
+			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
 			this.checkCan('lock', targetUser);
 
 			const punishment = Punishments.roomUserids.nestedGet('staff', toID(targetUsername));
 			if (!targetUser && !Punishments.search(toID(targetUsername)).length) {
 				return this.errorReply(this.tr`User '${targetUsername}' not found.`);
 			}
-			if (rest.length > 300) {
+			if (reason.length > 300) {
 				return this.errorReply(this.tr`The reason is too long. It cannot exceed 300 characters.`);
 			}
 
@@ -1384,11 +1384,11 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (targetUser) {
-				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(rest ? `\n\nReason: ${rest}` : ``)}\n\nYour ban will expire in a few days.`);
+				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(reason ? `\n\nReason: ${reason}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
-			const affected = HelpTicket.ban(targetUser || userid, rest);
-			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${rest ? ` (${rest})` : ``}`);
+			const affected = HelpTicket.ban(targetUser || userid, reason);
+			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${reason ? ` (${reason})` : ``}`);
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
@@ -1399,7 +1399,7 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(displayMessage);
 			}
 
-			this.globalModlog(`TICKETBAN`, targetUser || userid, rest);
+			this.globalModlog(`TICKETBAN`, targetUser || userid, reason);
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
 				const targetTicket = tickets[userObjID];

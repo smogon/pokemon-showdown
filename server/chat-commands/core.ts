@@ -633,7 +633,7 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(this.tr`You forgot the comma.`);
 			return this.parse('/help msg');
 		}
-		const {targetUser, targetUsername, rest} = this.splitUser(target);
+		const {targetUser, targetUsername, rest: message} = this.splitUser(target);
 		if (targetUsername === '~') {
 			this.pmTarget = null;
 			this.room = null;
@@ -651,35 +651,24 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
 		}
 
-		return this.parse(rest);
+		return this.parse(message);
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
 
 	inv: 'invite',
 	invite(target, room, user) {
 		if (!target) return this.parse('/help invite');
-		const {targetUser, targetUsername} = this.splitUser(target);
-		let targetRoom: Room | undefined;
-		if (room) {
-			target = room.roomid;
-			targetRoom = Rooms.search(target);
-			if (targetRoom && !targetRoom.checkModjoin(user)) targetRoom = undefined;
-		}
-
-		if (room) {
-			if (!targetUser) return this.errorReply(this.tr`The user "${targetUsername}" was not found.`);
-			if (!targetRoom) return this.errorReply(this.tr`The room "${target}" was not found.`);
-			return this.parse(`/pm ${targetUsername}, /invite ${targetRoom.roomid}`);
-		}
 
 		const pmTarget = this.pmTarget; // not room means it's a PM
-
-		if (!targetRoom) {
-			return this.errorReply(this.tr`The room "${target}" was not found.`);
-		}
 		if (!pmTarget) {
-			return this.parse('/help invite');
+			const {targetUser, rest: targetRoomid} = this.requireUser(target);
+			const targetRoom = targetRoomid ? Rooms.search(targetRoomid) : room;
+			if (!targetRoom) return this.errorReply(this.tr`The room "${targetRoomid}" was not found.`);
+			return this.parse(`/pm ${targetUser.name}, /invite ${targetRoom.roomid}`);
 		}
+
+		const targetRoom = Rooms.search(target);
+		if (!targetRoom) return this.errorReply(this.tr`The room "${target}" was not found.`);
 
 		const invitesBlocked = pmTarget.settings.blockInvites;
 		if (invitesBlocked) {
@@ -702,6 +691,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	invitehelp: [
 		`/invite [username] - Invites the player [username] to join the room you sent the command to.`,
+		`/invite [username], [roomname] - Invites the player [username] to join the room [roomname].`,
 		`(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname].`,
 	],
 
@@ -1317,18 +1307,17 @@ export const commands: Chat.ChatCommands = {
 		if (!room.battle) return this.errorReply(this.tr`You can only do this in battle rooms.`);
 		if (room.rated) return this.errorReply(this.tr`You can only add a Player to unrated battles.`);
 
-		const {targetUser, targetUsername: name, rest} = this.splitUser(target, {exactName: true});
-		target = rest.trim();
-		if (target !== 'p1' && target !== 'p2' && target !== 'p3' && target !== 'p4') {
-			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${target}".`);
+		const {targetUser, targetUsername: name, rest: slot} = this.splitUser(target, {exactName: true});
+		if (slot !== 'p1' && slot !== 'p2' && slot !== 'p3' && slot !== 'p4') {
+			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${slot}".`);
 			return this.parse('/help addplayer');
 		}
 
 		const battle = room.battle;
-		const player = battle[target];
+		const player = battle[slot];
 
 		if (!player) {
-			return this.errorReply(`This battle does not support having players in ${target}`);
+			return this.errorReply(`This battle does not support having players in ${slot}`);
 		}
 		if (!targetUser) {
 			battle.sendInviteForm(connection);
@@ -1337,7 +1326,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('joinbattle', null, room);
 		if (player.id) {
 			battle.sendInviteForm(connection);
-			return this.errorReply(this.tr`This room already has a player in slot ${target}.`);
+			return this.errorReply(this.tr`This room already has a player in slot ${slot}.`);
 		}
 		if (targetUser.id in battle.playerTable) {
 			battle.sendInviteForm(connection);
@@ -1354,7 +1343,7 @@ export const commands: Chat.ChatCommands = {
 		if (!targetUser.inRooms.has(room.roomid)) {
 			if (player.invite) {
 				battle.sendInviteForm(connection);
-				return this.errorReply(`Someone else (${player.invite}) has already been invited to be ${target}!`);
+				return this.errorReply(`Someone else (${player.invite}) has already been invited to be ${slot}!`);
 			}
 			player.invite = targetUser.id;
 			const playerNames = battle.players.map(p => p.id && p.name).filter(Boolean).join(', ');
@@ -1365,7 +1354,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		room.auth.set(targetUser.id, Users.PLAYER_SYMBOL);
-		const success = battle.joinGame(targetUser, target);
+		const success = battle.joinGame(targetUser, slot);
 		if (!success) {
 			room.auth.delete(targetUser.id);
 			return;
@@ -1617,7 +1606,7 @@ export const commands: Chat.ChatCommands = {
 
 	chall: 'challenge',
 	challenge(target, room, user, connection) {
-		const {targetUser, targetUsername, rest} = this.splitUser(target);
+		const {targetUser, targetUsername, rest: formatName} = this.splitUser(target);
 		if (!targetUser?.connected) {
 			return this.popupReply(this.tr`The user '${targetUsername}' was not found.`);
 		}
@@ -1635,7 +1624,7 @@ export const commands: Chat.ChatCommands = {
 			this.popupReply(this.tr`This server requires you to be rank ${groupName} or higher to challenge users.`);
 			return false;
 		}
-		return Ladders(rest).makeChallenge(connection, targetUser);
+		return Ladders(formatName).makeChallenge(connection, targetUser);
 	},
 
 	bch: 'blockchallenges',

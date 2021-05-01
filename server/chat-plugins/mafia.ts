@@ -2006,8 +2006,7 @@ export const commands: Chat.ChatCommands = {
 				const skipped = [];
 				let hostid;
 				while ((hostid = hostQueue.shift())) {
-					targetUser = this.splitUser(hostid, {exactName: true}).targetUser;
-					targetUsername = this.splitUser(hostid, {exactName: true}).targetUsername;
+					({targetUser, targetUsername} = this.splitUser(hostid, {exactName: true}));
 					if (!targetUser?.connected ||
 						!room.users[targetUser.id] || Mafia.isHostBanned(room, targetUser)) {
 						skipped.push(hostid);
@@ -2022,9 +2021,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				if (!targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
 			} else {
-				const {targetUser: one, targetUsername: two} = this.splitUser(target, {exactName: true});
-				targetUser = one;
-				targetUsername = two;
+				({targetUser, targetUsername} = this.splitUser(target, {exactName: true}));
 				if (room.roomid === 'mafia' && hostQueue.length && toID(targetUsername) !== hostQueue[0]) {
 					if (!cmd.includes('force')) {
 						return this.errorReply(`${targetUsername} isn't the next host on the queue. Use /mafia forcehost if you're sure.`);
