@@ -1369,7 +1369,7 @@ export class TeamValidator {
 						return `${tierSpecies.name} is a placeholder for a Gigantamax sprite, not a real Pokémon. (This message is likely to be a validator bug.)`;
 					}
 				}
-				return `${species.name} is tagged ${tag.name}, which is ${banReason}.`;
+				return `${species.name} is tagged ${tag.name}, which is ${ruleTable.check(ruleid.slice(1)) || "banned"}.`;
 			}
 		}
 
