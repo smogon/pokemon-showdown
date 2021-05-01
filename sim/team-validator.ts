@@ -2085,8 +2085,14 @@ export class TeamValidator {
 			if (cantLearnReason) return `'s move ${move.name} ${cantLearnReason}`;
 			return ` can't learn ${move.name}.`;
 		}
+		const backupSources = setSources.sources;
+		const backupSourcesBefore = setSources.sourcesBefore;
 		setSources.intersectWith(moveSources);
 		if (!setSources.size()) {
+			// pretend this pokemon didn't have this move:
+			// prevents a crash if OMs override `checkCanLearn` to keep validating after an error
+			setSources.sources = backupSources;
+			setSources.sourcesBefore = backupSourcesBefore;
 			return `'s moves ${(setSources.restrictiveMoves || []).join(', ')} are incompatible.`;
 		}
 
