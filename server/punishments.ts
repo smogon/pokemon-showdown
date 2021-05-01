@@ -1792,7 +1792,8 @@ export const Punishments = new class {
 				if (!punishDesc) punishDesc = `punished`;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 
-				if (reason) punishDesc += `: ${reason}`;
+				// Backwards compatability for current punishments
+				if (reason.trim() && !reason.trim().startsWith('(PROOF:')) punishDesc += `: ${reason}`;
 				return `<<${room}>> (${punishDesc})`;
 			}).join(', ');
 
