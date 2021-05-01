@@ -1352,15 +1352,14 @@ export const commands: Chat.ChatCommands = {
 
 		ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
-			target = this.splitTarget(target, true);
-			const targetUser = this.targetUser;
+			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
 			this.checkCan('lock', targetUser);
 
-			const punishment = Punishments.roomUserids.nestedGet('staff', toID(this.targetUsername));
-			if (!targetUser && !Punishments.search(toID(this.targetUsername)).length) {
-				return this.errorReply(this.tr`User '${this.targetUsername}' not found.`);
+			const punishment = Punishments.roomUserids.nestedGet('staff', toID(targetUsername));
+			if (!targetUser && !Punishments.search(toID(targetUsername)).length) {
+				return this.errorReply(this.tr`User '${targetUsername}' not found.`);
 			}
-			if (target.length > 300) {
+			if (reason.length > 300) {
 				return this.errorReply(this.tr`The reason is too long. It cannot exceed 300 characters.`);
 			}
 
@@ -1377,19 +1376,19 @@ export const commands: Chat.ChatCommands = {
 					Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
 				}
 			} else {
-				username = this.targetUsername;
-				userid = toID(this.targetUsername);
+				username = targetUsername;
+				userid = toID(targetUsername);
 				if (punishment) {
 					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 			}
 
 			if (targetUser) {
-				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(target ? `\n\nReason: ${target}` : ``)}\n\nYour ban will expire in a few days.`);
+				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(reason ? `\n\nReason: ${reason}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
-			const affected = HelpTicket.ban(targetUser || userid, target);
-			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
+			const affected = HelpTicket.ban(targetUser || userid, reason);
+			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${reason ? ` (${reason})` : ``}`);
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
@@ -1400,7 +1399,7 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(displayMessage);
 			}
 
-			this.globalModlog(`TICKETBAN`, targetUser || userid, target);
+			this.globalModlog(`TICKETBAN`, targetUser || userid, reason);
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
 				const targetTicket = tickets[userObjID];
