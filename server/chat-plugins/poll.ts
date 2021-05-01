@@ -165,7 +165,7 @@ export class Poll extends Rooms.MinorActivity {
 	}
 
 	static generateResults(
-		options: MinorActivityData, room: Room,
+		options: Rooms.MinorActivityData, room: Room,
 		ended = false, choice: number[] | null = null
 	) {
 		const iconText = options.isQuiz ?
@@ -352,7 +352,7 @@ export class Poll extends Rooms.MinorActivity {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	poll: {
 		htmlcreate: 'new',
 		create: 'new',
@@ -605,7 +605,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	pollqueue(args, user) {
 		const room = this.requireRoom();
 

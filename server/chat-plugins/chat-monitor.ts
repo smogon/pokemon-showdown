@@ -333,7 +333,7 @@ export function loadFilters() {
 
 /* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
-export const chatfilter: ChatFilter = function (message, user, room) {
+export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	let lcMessage = message
 		.replace(/\u039d/g, 'N').toLowerCase()
 		// eslint-disable-next-line no-misleading-character-class
@@ -385,7 +385,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 };
 /* eslint-enable @typescript-eslint/prefer-optional-chain */
 
-export const namefilter: NameFilter = (name, user) => {
+export const namefilter: Chat.NameFilter = (name, user) => {
 	const id = toID(name);
 	if (Punishments.namefilterwhitelist.has(id)) return name;
 	if (Monitor.forceRenames.has(id)) {
@@ -424,7 +424,7 @@ export const namefilter: NameFilter = (name, user) => {
 	}
 	return name;
 };
-export const loginfilter: LoginFilter = user => {
+export const loginfilter: Chat.LoginFilter = user => {
 	if (user.namelocked) return;
 	if (user.trackRename) {
 		const manualForceRename = Monitor.forceRenames.get(toID(user.trackRename));
@@ -440,7 +440,7 @@ export const loginfilter: LoginFilter = user => {
 		Punishments.offlineWarns.delete(user.id);
 	}
 };
-export const nicknamefilter: NicknameFilter = (name, user) => {
+export const nicknamefilter: Chat.NicknameFilter = (name, user) => {
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')
@@ -486,7 +486,7 @@ export const nicknamefilter: NicknameFilter = (name, user) => {
 
 	return name;
 };
-export const statusfilter: StatusFilter = (status, user) => {
+export const statusfilter: Chat.StatusFilter = (status, user) => {
 	let lcStatus = status
 		.replace(/\u039d/g, 'N').toLowerCase()
 		.replace(/[\u200b\u007F\u00AD]/g, '')
@@ -527,7 +527,7 @@ export const statusfilter: StatusFilter = (status, user) => {
 	return status;
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	filters(query, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.title = 'Filters';
@@ -562,7 +562,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	filters: 'filter',
 	filter: {
 		add(target, room, user) {

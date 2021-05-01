@@ -242,7 +242,7 @@ async function getBattleSearch(
 	connection.send(buildResults(response, userids as ID[], month, tierid, turnLimit));
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
@@ -261,12 +261,10 @@ export const pages: PageTable = {
 		}
 		buf += `</p>`;
 
-		const months = (await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
-			const a = aKey.split('-').map(n => parseInt(n));
-			const b = bKey.split('-').map(n => parseInt(n));
-			if (a[0] !== b[0]) return b[0] - a[0];
-			return b[1] - a[1];
-		});
+		const months = Utils.sortBy(
+			(await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')),
+			name => ({reverse: name})
+		);
 		if (!month) {
 			buf += `<p>Please select a month:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const i of months) {
@@ -281,20 +279,12 @@ export const pages: PageTable = {
 		}
 
 		const tierid = toID(formatid);
-		const tiers = (await FS(`logs/${month}/`).readdir()).sort((a, b) => {
+		const tiers = Utils.sortBy(await FS(`logs/${month}/`).readdir(), tier => [
 			// First sort by gen with the latest being first
-			let aGen = 6;
-			let bGen = 6;
-			if (a.startsWith('gen')) aGen = parseInt(a.substring(3, 4));
-			if (b.startsWith('gen')) bGen = parseInt(b.substring(3, 4));
-			if (aGen !== bGen) return bGen - aGen;
-			// Sort alphabetically
-			const aTier = a.substring(4);
-			const bTier = b.substring(4);
-			if (aTier < bTier) return -1;
-			if (aTier > bTier) return 1;
-			return 0;
-		}).map(tier => {
+			tier.startsWith('gen') ? -parseInt(tier.charAt(3)) : -6,
+			// Then sort alphabetically
+			tier,
+		]).map(tier => {
 			// Use the official tier name
 			const format = Dex.formats.get(tier);
 			if (format?.exists) tier = format.name;
@@ -341,7 +331,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	battlesearch(target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');

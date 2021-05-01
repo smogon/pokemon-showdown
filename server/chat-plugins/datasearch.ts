@@ -70,7 +70,7 @@ function checkCanAll(room: Room | null) {
 	return !room.battle && !!isPersonal && !isHelp;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
 	ds2: 'dexsearch',
@@ -419,14 +419,23 @@ export const commands: ChatCommands = {
 	usumlearn: 'learn',
 	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
-		target = target.slice(0, 300);
+		if (target.length > 300) throw new Chat.ErrorMessage(`Query too long.`);
+
+		const GENS: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7};
+		const cmdGen = GENS[cmd.slice(0, -5)];
+		if (cmdGen) target = `gen${cmdGen}, ${target}`;
+
 		this.checkBroadcast();
+		const {format, dex, targets} = this.splitFormat(target);
+
+		const formatid = format ? format.id : dex.currentMod;
+		if (cmd === 'learn5') targets.unshift('level5');
 
 		const response = await runSearch({
-			target,
+			target: targets.join(','),
 			cmd: 'learn',
 			canAll: !this.broadcastMessage || checkCanAll(room),
-			message: cmd,
+			message: formatid,
 		});
 		if (!response.error && !this.runBroadcast()) return;
 		if (response.error) {
@@ -952,9 +961,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	// Prioritize searches with the least alternatives.
 	const accumulateKeyCount = (count: number, searchData: AnyObject) =>
 		count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
-	searches.sort(
-		(a, b) => Object.values(a).reduce(accumulateKeyCount, 0) - Object.values(b).reduce(accumulateKeyCount, 0)
-	);
+	Utils.sortBy(searches, search => (
+		Object.values(search).reduce(accumulateKeyCount, 0)
+	));
 
 	for (const alts of searches) {
 		if (alts.skip) continue;
@@ -1164,30 +1173,21 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (sort) {
 			const stat = sort.slice(0, -1);
 			const direction = sort.slice(-1);
-			results.sort((a, b) => {
-				const mon1 = mod.species.get(a);
-				const mon2 = mod.species.get(b);
-				let monStat1 = 0;
-				let monStat2 = 0;
+			Utils.sortBy(results, name => {
+				const mon = mod.species.get(name);
+				let monStat = 0;
 				if (stat === 'bst') {
-					for (const monStats in mon1.baseStats) {
-						monStat1 += mon1.baseStats[monStats as StatID];
-						monStat2 += mon2.baseStats[monStats as StatID];
-					}
+					monStat = mon.bst;
 				} else if (stat === 'weight') {
-					monStat1 = mon1.weighthg;
-					monStat2 = mon2.weighthg;
+					monStat = mon.weighthg;
 				} else if (stat === 'height') {
-					monStat1 = mon1.heightm;
-					monStat2 = mon2.heightm;
+					monStat = mon.heightm;
 				} else if (stat === 'gen') {
-					monStat1 = mon1.gen;
-					monStat2 = mon2.gen;
+					monStat = mon.gen;
 				} else {
-					monStat1 = mon1.baseStats[stat as StatID];
-					monStat2 = mon2.baseStats[stat as StatID];
+					monStat = mon.baseStats[stat as StatID];
 				}
-				return (monStat1 - monStat2) * (direction === '+' ? 1 : -1);
+				return monStat * (direction === '+' ? 1 : -1);
 			});
 		}
 		let notShown = 0;
@@ -1908,13 +1908,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		if (sort) {
 			const prop = sort.slice(0, -1);
 			const direction = sort.slice(-1);
-			results.sort((a, b) => {
-				let move1prop = dex[toID(a)][prop as keyof Move] as number;
-				let move2prop = dex[toID(b)][prop as keyof Move] as number;
+			Utils.sortBy(results, moveName => {
+				let moveProp = dex[toID(moveName)][prop as keyof Move] as number;
 				// convert booleans to 0 or 1
-				if (typeof move1prop === 'boolean') move1prop = move1prop ? 1 : 0;
-				if (typeof move2prop === 'boolean') move2prop = move2prop ? 1 : 0;
-				return (move1prop - move2prop) * (direction === '+' ? 1 : -1);
+				if (typeof moveProp === 'boolean') moveProp = moveProp ? 1 : 0;
+				return moveProp * (direction === '+' ? 1 : -1);
 			});
 		}
 		let notShown = 0;
@@ -2331,47 +2329,41 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	return {reply: resultsStr};
 }
 
-function runLearn(target: string, cmd: string, canAll: boolean, message: string) {
-	let format: Format = Object.create(null);
+function runLearn(target: string, cmd: string, canAll: boolean, formatid: string) {
+	let format: Format = Dex.formats.get(formatid);
 	const targets = target.split(',');
-	const gens: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7};
-	let gen = (gens[cmd.slice(0, -5)] || 8);
-	let formatid;
-	let formatName;
-	let minSourceGen;
+	let formatName = format.name;
+	let minSourceGen = undefined;
+	let level = 100;
 
 	while (targets.length) {
 		const targetid = toID(targets[0]);
-		if (Dex.formats.get(targetid).exists) {
-			if (format.minSourceGen && format.minSourceGen === 6) {
-				return {error: "'pentagon' can't be used with formats."};
-			}
-			format = Utils.deepClone(Dex.formats.get(targetid));
-			formatid = targetid;
-			formatName = format.name;
-			targets.shift();
-			continue;
-		}
-		if (targetid.startsWith('gen') && parseInt(targetid.charAt(3))) {
-			gen = parseInt(targetid.slice(3));
-			targets.shift();
-			continue;
-		}
 		if (targetid === 'pentagon') {
-			if (formatid) {
+			if (format.exists) {
 				return {error: "'pentagon' can't be used with formats."};
 			}
 			minSourceGen = 6;
 			targets.shift();
 			continue;
 		}
+		if (targetid === 'level5') {
+			level = 5;
+			targets.shift();
+			continue;
+		}
 		break;
 	}
-	if (!formatName) {
-		if (!Dex.mod(`gen${gen}`)) return {error: `Gen ${gen} does not exist.`};
-		format = new Dex.Format({...format, mod: `gen${gen}`});
+	let gen;
+	if (!format.exists) {
+		// can happen if you hotpatch formats without hotpatching chat
+		const dex = Dex.mod(formatid).includeData();
+		if (!dex) return {error: `"${formatid}" is not a supported format.`};
+		gen = dex.gen;
+		format = new Dex.Format({minSourceGen, mod: formatid});
 		formatName = `Gen ${gen}`;
 		if (minSourceGen === 6) formatName += ' Pentagon';
+	} else {
+		gen = Dex.forFormat(format).gen;
 	}
 	const validator = TeamValidator.get(format);
 
@@ -2380,7 +2372,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	const set: Partial<PokemonSet> = {
 		name: species.baseSpecies,
 		species: species.name,
-		level: cmd === 'learn5' ? 5 : 100,
+		level,
 	};
 	const all = (cmd === 'learnall');
 
@@ -2529,7 +2521,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		case 'abilitysearch':
 			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
 		case 'learn':
-			return runLearn(query.target, query.message, query.canAll, query.message);
+			return runLearn(query.target, query.cmd, query.canAll, query.message);
 		default:
 			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}

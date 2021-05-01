@@ -1,6 +1,7 @@
 import {Utils} from '../lib';
 import {toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
+import {Tags} from '../data/tags';
 
 const DEFAULT_MOD = 'gen8';
 const MAIN_FORMATS = `${__dirname}/../.config-dist/formats`;
@@ -34,6 +35,7 @@ export class RuleTable extends Map<string, string> {
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	minSourceGen: [number, string] | null;
+	tagRules: string[];
 
 	constructor() {
 		super();
@@ -42,6 +44,7 @@ export class RuleTable extends Map<string, string> {
 		this.checkCanLearn = null;
 		this.timer = null;
 		this.minSourceGen = null;
+		this.tagRules = [];
 	}
 
 	isBanned(thing: string) {
@@ -54,12 +57,18 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`-pokemon:${species.id}`)) return true;
 		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`-basepokemon:${toID(species.baseSpecies)}`)) return true;
-		const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
-		if (this.has(`+pokemontag:${toID(tier)}`)) return false;
-		if (this.has(`-pokemontag:${toID(tier)}`)) return true;
-		const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
-		if (this.has(`+pokemontag:${toID(doublesTier)}`)) return false;
-		if (this.has(`-pokemontag:${toID(doublesTier)}`)) return true;
+		for (const tagid in Tags) {
+			const tag = Tags[tagid];
+			if (this.has(`-pokemontag:${tagid}`)) {
+				if (tag.speciesFilter!(species)) return false;
+			}
+		}
+		for (const tagid in Tags) {
+			const tag = Tags[tagid];
+			if (this.has(`+pokemontag:${tagid}`)) {
+				if (tag.speciesFilter!(species)) return false;
+			}
+		}
 		return this.has(`-pokemontag:allpokemon`);
 	}
 
@@ -73,15 +82,26 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`*pokemon:${species.id}`)) return true;
 		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
-		const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
-		if (this.has(`+pokemontag:${toID(tier)}`)) return false;
-		if (this.has(`*pokemontag:${toID(tier)}`)) return true;
-		const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
-		if (this.has(`+pokemontag:${toID(doublesTier)}`)) return false;
-		if (this.has(`*pokemontag:${toID(doublesTier)}`)) return true;
+		for (const tagid in Tags) {
+			const tag = Tags[tagid];
+			if (tag.speciesFilter && this.has(`*pokemontag:${tagid}`)) {
+				if (tag.speciesFilter(species)) return false;
+			}
+		}
+		for (const tagid in Tags) {
+			const tag = Tags[tagid];
+			if (tag.speciesFilter && this.has(`+pokemontag:${tagid}`)) {
+				if (tag.speciesFilter(species)) return false;
+			}
+		}
 		return this.has(`*pokemontag:allpokemon`);
 	}
 
+	/**
+	 * - non-empty string: banned, string is the reason
+	 * - '': whitelisted
+	 * - null: neither whitelisted nor banned
+	 */
 	check(thing: string, setHas: {[id: string]: true} | null = null) {
 		if (this.has(`+${thing}`)) return '';
 		if (setHas) setHas[thing] = true;
@@ -166,6 +186,11 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/** Table of rule names and banned effects. */
 	ruleTable: RuleTable | null;
 	/**
+	 * The range of levels on Pokemon that players can bring to battle and
+	 * the summative limit of those levels
+	 */
+	readonly cupLevelLimit?: {range: [number, number], total: number};
+	/**
 	 * The number of Pokemon players can bring to battle and
 	 * the number that can actually be used.
 	 */
@@ -228,8 +253,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly onModifySpecies?: (
 		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
 	) => Species | void;
-	readonly onStart?: (this: Battle) => void;
-	readonly onTeamPreview?: (this: Battle) => void;
+	readonly onFieldStart?: (this: Battle) => void;
+	readonly onFieldTeamPreview?: (this: Battle) => void;
 	readonly onValidateSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
 	) => string[] | void;
@@ -260,6 +285,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.unbanlist = data.unbanlist || [];
 		this.customRules = data.customRules || null;
 		this.ruleTable = null;
+		this.cupLevelLimit = data.cupLevelLimit || undefined;
 		this.teamLength = data.teamLength || undefined;
 		this.onBegin = data.onBegin || undefined;
 		this.minSourceGen = data.minSourceGen || undefined;
@@ -596,9 +622,30 @@ export class DexFormats {
 				ruleTable.minSourceGen = subRuleTable.minSourceGen;
 			}
 		}
+		this.getTagRules(ruleTable);
 
 		if (!repeals) format.ruleTable = ruleTable;
 		return ruleTable;
+	}
+
+	getTagRules(ruleTable: RuleTable) {
+		const tagRules = [];
+		for (const ruleid of ruleTable.keys()) {
+			if (/^[+*-]pokemontag:/.test(ruleid)) {
+				const banid = ruleid.slice(12);
+				if (
+					banid === 'allpokemon' || banid === 'allitems' || banid === 'allmoves' ||
+					banid === 'allabilities' || banid === 'allnatures'
+				) {
+					// hardcoded and not a part of the ban rule system
+				} else {
+					tagRules.push(ruleid);
+				}
+			} else if ('+*-'.includes(ruleid.charAt(0)) && ruleid.slice(1) === 'nonexistent') {
+				tagRules.push(ruleid.charAt(0) + 'pokemontag:nonexistent');
+			}
+		}
+		ruleTable.tagRules = tagRules.reverse();
 	}
 
 	validateRule(rule: string, format: Format | null = null) {
@@ -641,6 +688,12 @@ export class DexFormats {
 		}
 	}
 
+	validPokemonTag(tagid: ID) {
+		const tag = Tags.hasOwnProperty(tagid) && Tags[tagid];
+		if (!tag) return false;
+		return !!(tag.speciesFilter || tag.genericFilter);
+	}
+
 	validateBanRule(rule: string) {
 		let id = toID(rule);
 		if (id === 'unreleased') return 'unreleased';
@@ -667,18 +720,12 @@ export class DexFormats {
 			case 'pokemontag':
 				// valid pokemontags
 				const validTags = [
-					// singles tiers
-					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lc', 'cap', 'caplc', 'capnfe', 'ag',
-					// doubles tiers
-					'duber', 'dou', 'dbl', 'duu', 'dnu',
-					// custom tags -- nduubl is used for national dex teambuilder formatting
-					'mega', 'nduubl',
-					// illegal/nonstandard reasons
-					'past', 'future', 'unobtainable', 'lgpe', 'custom',
 					// all
 					'allpokemon', 'allitems', 'allmoves', 'allabilities', 'allnatures',
 				];
-				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
+				if (validTags.includes(ruleid) || this.validPokemonTag(ruleid)) {
+					matches.push('pokemontag:' + ruleid);
+				}
 				continue;
 			default:
 				throw new Error(`Unrecognized match type.`);

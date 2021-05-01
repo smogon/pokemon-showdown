@@ -406,7 +406,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add('poke', pokemon.side.id, details, '');
 			}
 		},
-		onTeamPreview() {
+		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
@@ -419,7 +419,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`One vs One is for singles formats.`, `(Use Two vs Two in doubles)`];
 			}
 		},
-		onStart() {
+		onFieldStart() {
 			if (this.format.gameType === 'singles') (this.format as any).teamLength = {battle: 1};
 		},
 	},
@@ -432,7 +432,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`Two vs Two is for non-triples formats.`];
 			}
 		},
-		onStart() {
+		onFieldStart() {
 			if (this.format.gameType !== 'triples') (this.format as any).teamLength = {battle: 2};
 		},
 	},
@@ -857,7 +857,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (status.id === 'slp') {
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (!pokemon.statusData.source || !pokemon.statusData.source.isAlly(pokemon)) {
+						if (!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
 							return false;
 						}
@@ -1247,7 +1247,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add(`${buf}</span>`);
 			}
 		},
-		onTeamPreview() {
+		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
@@ -1267,5 +1267,94 @@ export const Rulesets: {[k: string]: FormatData} = {
 				}
 			}
 		},
+	},
+	eventmovesclause: {
+		effectType: 'ValidatorRule',
+		name: 'Event Moves Clause',
+		desc: "Bans moves only obtainable through events.",
+		onBegin() {
+			this.add('rule', 'Event Moves Clause: Event-only moves are banned');
+		},
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const learnsetData = {...(this.dex.data.Learnsets[species.id]?.learnset || {})};
+			let prevo = species.prevo;
+			while (prevo) {
+				const prevoSpecies = this.dex.species.get(prevo);
+				const prevoLsetData = this.dex.data.Learnsets[prevoSpecies.id]?.learnset || {};
+				for (const moveid in prevoLsetData) {
+					if (!(moveid in learnsetData)) {
+						learnsetData[moveid] = prevoLsetData[moveid];
+					} else {
+						learnsetData[moveid].push(...prevoLsetData[moveid]);
+					}
+				}
+				prevo = prevoSpecies.prevo;
+			}
+			const problems = [];
+			if (set.moves?.length) {
+				for (const move of set.moves) {
+					if (learnsetData[this.toID(move)] && !learnsetData[this.toID(move)].filter(v => !v.includes('S')).length) {
+						problems.push(`${species.name}'s move ${move} is obtainable only through events.`);
+					}
+				}
+			}
+			if (problems.length) problems.push(`(Event-only moves are banned.)`);
+			return problems;
+		},
+	},
+	cuplevellimit: {
+		effectType: 'ValidatorRule',
+		name: 'Cup Level Limit',
+		desc: "Teams are restricted to a total maximum Level limit and Pokemon are restricted to a set range of Levels",
+		onValidateTeam(team, format) {
+			if (!format.teamLength?.battle) return;
+			if (!format.cupLevelLimit) return;
+			const teamLevels = [];
+			for (const set of team) {
+				teamLevels.push(set.level);
+			}
+			teamLevels.sort((a, b) => b - a);
+			let combinedLowestLevels = 0;
+			for (let i = 0; i < format.teamLength.battle; i++) {
+				combinedLowestLevels += teamLevels.pop()!;
+			}
+			if (combinedLowestLevels > format.cupLevelLimit.total) {
+				return [
+					`The combined levels of the ${format.teamLength.battle} lowest Leveled Pokemon of your team is ${combinedLowestLevels}, above the format's maximum combined level of ${format.cupLevelLimit.total}.`,
+				];
+			}
+		},
+		onValidateSet(set, format) {
+			if (!format.cupLevelLimit) return;
+			if (set.level < format.cupLevelLimit.range[0]) {
+				return [
+					`${set.name || set.species} is Level ${set.level}, below the format's minimum Level of ${format.cupLevelLimit.range[0]}.`,
+				];
+			}
+			if (set.level > format.cupLevelLimit.range[1]) {
+				return [
+					`${set.name || set.species} is Level ${set.level}, above the format's maximum Level of ${format.cupLevelLimit.range[1]}.`,
+				];
+			}
+		},
+	},
+	stadiumitemsclause: {
+		effectType: 'ValidatorRule',
+		name: 'Stadium Items Clause',
+		desc: "Bans items that are not usable in Pokemon Stadium 2.",
+		banlist: ['Fast Ball', 'Friend Ball', 'Great Ball', 'Heavy Ball', 'Level Ball', 'Love Ball', 'Lure Ball', 'Master Ball', 'Moon Ball', 'Park Ball', 'Poke Ball', 'Safari Ball', 'Ultra Ball', 'Fire Stone', 'Leaf Stone', 'Moon Stone', 'Sun Stone', 'Thunder Stone', 'Upgrade', 'Water Stone', 'Mail'],
+	},
+	nintendocup2000movelegality: {
+		effectType: 'ValidatorRule',
+		name: "Nintendo Cup 2000 Move Legality",
+		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
+		// Implemented in mods/gen2/rulesets.ts
+	},
+	nintendocup1997movelegality: {
+		effectType: 'ValidatorRule',
+		name: "Nintendo Cup 1997 Move Legality",
+		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Nintendo Cup 1997.",
+		// Implemented in mods/gen1jpn/rulesets.ts
 	},
 };

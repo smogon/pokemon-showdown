@@ -98,7 +98,7 @@ function getEventID(nameOrAlias: string, room: Room): ID {
 	return id;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	events: 'roomevents',
 	roomevent: 'roomevents',
 	roomevents: {
@@ -546,7 +546,7 @@ export const commands: ChatCommands = {
 				);
 				break;
 			default:
-				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
+				return this.errorReply(`Invalid column name "${columnName}". Please use one of: date, desc, name.`);
 			}
 
 			// rebuild the room.settings.events object
@@ -557,9 +557,9 @@ export const commands: ChatCommands = {
 			}
 
 			// build communication string
-			const resultString = `sorted by column:` + columnName +
-								 ` in ${multiplier === 1 ? "ascending" : "descending"} order` +
-								 `${delimited.length === 1 ? " (by default)" : ""}`;
+			const resultString = `sorted by column: ${columnName}` +
+				` in ${multiplier === 1 ? "ascending" : "descending"} order` +
+				`${delimited.length === 1 ? " (by default)" : ""}`;
 			this.modlog('ROOMEVENT', null, resultString);
 			return this.sendReply(resultString);
 		},

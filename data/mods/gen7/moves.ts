@@ -202,16 +202,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(1.5);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
 					this.add('-fieldstart', 'move: Electric Terrain');
 				}
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd() {
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
 				this.add('-fieldend', 'move: Electric Terrain');
 			},
 		},
@@ -283,7 +283,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onBasePower(basePower, attacker, defender, move) {
 				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-				if (weakenedMoves.includes(move.id)) {
+				if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
 					this.debug('move weakened by grassy terrain');
 					return this.chainModify(0.5);
 				}
@@ -292,7 +292,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(1.5);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -300,19 +300,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual() {
-				this.eachEvent('Terrain');
-			},
-			onTerrainPriority: 1,
-			onTerrain(pokemon) {
+			onResidual(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+				} else {
+					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
 				}
 			},
-			onEnd() {
-				if (!this.effectData.duration) this.eachEvent('Terrain');
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
+			onFieldEnd() {
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
 		},
@@ -679,16 +676,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(1.5);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd() {
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
 				this.add('-fieldend', 'move: Psychic Terrain');
 			},
 		},
@@ -896,8 +893,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			if (
-				(myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) ||
-				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))
+				(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
+				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
 			) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
@@ -950,10 +947,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onSourceInvulnerabilityPriority: 1,
 			onSourceInvulnerability(target, source, move) {
-				if (move && source === this.effectData.target) return 0;
+				if (move && source === this.effectState.target) return 0;
 			},
 			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectData.target) return true;
+				if (move && source === this.effectState.target) return true;
 			},
 		},
 	},
@@ -972,8 +969,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			if (
-				(myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) ||
-				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))
+				(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
+				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
 			) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;

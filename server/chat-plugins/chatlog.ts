@@ -109,7 +109,7 @@ export const LogReader = new class {
 				}
 			} else if (!room) {
 				if (opts === 'all' || opts === 'deleted') deleted.push(roomid);
-			} else if (room.settings.isOfficial) {
+			} else if (room.settings.section === 'official') {
 				official.push(roomid);
 			} else if (!room.settings.isPrivate) {
 				normal.push(roomid);
@@ -326,16 +326,16 @@ export const LogViewer = new class {
 		return this.linkify(buf);
 	}
 
-	async battle(tier: string, number: number, context: PageContext) {
+	async battle(tier: string, number: number, context: Chat.PageContext) {
 		if (number > Rooms.global.lastBattle) {
 			throw new Chat.ErrorMessage(`That battle cannot exist, as the number has not been used.`);
 		}
 		const roomid = `battle-${tier}-${number}` as RoomID;
-		context.send(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
+		context.setHTML(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
 		const log = await PM.query({
 			queryType: 'battlesearch', roomid: toID(tier), search: number,
 		});
-		if (!log) return context.send(this.error("Logs not found."));
+		if (!log) return context.setHTML(this.error("Logs not found."));
 		const {connection} = context;
 		context.close();
 		connection.sendTo(
@@ -562,9 +562,7 @@ export abstract class Searcher {
 			}
 			buf += `<br />Total linecount: ${total}<hr />`;
 			buf += '<ol>';
-			const sortedDays = Object.keys(results).sort((a, b) => (
-				new Date(b).getTime() - new Date(a).getTime()
-			));
+			const sortedDays = Utils.sortBy(Object.keys(results), day => ({reverse: day}));
 			for (const day of sortedDays) {
 				const dayResults = results[day][user];
 				if (isNaN(dayResults)) continue;
@@ -582,8 +580,8 @@ export abstract class Searcher {
 				}
 			}
 			const resultKeys = Object.keys(totalResults);
-			const sortedResults = resultKeys.sort((a, b) => (
-				totalResults[b] - totalResults[a]
+			const sortedResults = Utils.sortBy(resultKeys, userid => (
+				-totalResults[userid]
 			)).slice(0, MAX_TOPUSERS);
 			for (const userid of sortedResults) {
 				buf += `<li><span class="username"><username>${userid}</username></span>: `;
@@ -594,26 +592,26 @@ export abstract class Searcher {
 		return LogViewer.linkify(buf);
 	}
 	async runSearch(
-		context: PageContext, search: string, roomid: RoomID, date: string | null, limit: number | null
+		context: Chat.PageContext, search: string, roomid: RoomID, date: string | null, limit: number | null
 	) {
 		context.title = `[Search] [${roomid}] ${search}`;
 		if (!['ripgrep', 'fs'].includes(Config.chatlogreader)) {
 			throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
 		}
-		context.send(
+		context.setHTML(
 			`<div class="pad"><h2>Running a chatlog search for "${search}" on room ${roomid}` +
 			(date ? date !== 'all' ? `, on the date "${date}"` : ', on all dates' : '') +
 			`.</h2></div>`
 		);
 		const response = await PM.query({search, roomid, date, limit, queryType: 'search'});
-		return context.send(response);
+		return context.setHTML(response);
 	}
-	async runLinecountSearch(context: PageContext, roomid: RoomID, month: string, user?: ID) {
-		context.send(
+	async runLinecountSearch(context: Chat.PageContext, roomid: RoomID, month: string, user?: ID) {
+		context.setHTML(
 			`<div class="pad"><h2>Searching linecounts on room ${roomid}${user ? ` for the user ${user}` : ''}.</h2></div>`
 		);
 		const results = await PM.query({roomid, date: month, search: user, queryType: 'linecount'});
-		context.send(results);
+		context.setHTML(results);
 	}
 	async sharedBattles(userids: string[]) {
 		let buf = `Logged shared battles between the users ${userids.join(', ')}`;
@@ -944,13 +942,9 @@ export class RipgrepLogSearcher extends Searcher {
 		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const useOriginal = originalSearch && originalSearch !== search;
 		const searchRegex = new RegExp(useOriginal ? search : this.constructSearchRegex(search), "i");
-		const sorted = results.sort((aLine, bLine) => {
-			const [aName] = aLine.split('.txt');
-			const [bName] = bLine.split('.txt');
-			const aDate = new Date(aName.split('/').pop()!);
-			const bDate = new Date(bName.split('/').pop()!);
-			return bDate.getTime() - aDate.getTime();
-		}).map(chunk => chunk.split('\n').map(rawLine => {
+		const sorted = Utils.sortBy(results, line => (
+			{reverse: line.split('.txt')[0].split('/').pop()!}
+		)).map(chunk => chunk.split('\n').map(rawLine => {
 			if (exactMatches > limit || !toID(rawLine)) return null; // return early so we don't keep sorting
 			const sep = rawLine.includes('.txt-') ? '.txt-' : '.txt:';
 			const [name, text] = rawLine.split(sep);
@@ -1098,7 +1092,7 @@ if (!PM.isParentProcess) {
 
 const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
@@ -1242,7 +1236,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	chatlog(target, room, user) {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;

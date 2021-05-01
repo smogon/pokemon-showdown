@@ -1179,7 +1179,7 @@ export class RandomGen7Teams extends RandomTeams {
 		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
 
 		const abilityNames: string[] = Object.values(baseSpecies.abilities);
-		abilityNames.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
+		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
 
 		const abilities = abilityNames.map(name => this.dex.abilities.get(name));
 		if (abilityNames[1]) {
@@ -1764,9 +1764,9 @@ export class RandomGen7Teams extends RandomTeams {
 				teamData.has[itemData.id] = 1;
 			}
 
-			const abilityData = this.dex.abilities.get(set.ability);
-			if (abilityData.id in weatherAbilitiesSet) {
-				teamData.weather = weatherAbilitiesSet[abilityData.id];
+			const abilityState = this.dex.abilities.get(set.ability);
+			if (abilityState.id in weatherAbilitiesSet) {
+				teamData.weather = weatherAbilitiesSet[abilityState.id];
 			}
 
 			for (const move of set.moves) {
@@ -1784,7 +1784,7 @@ export class RandomGen7Teams extends RandomTeams {
 			for (const typeName of this.dex.types.names()) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
-				if (resistanceAbilities[abilityData.id]?.includes(typeName) || !this.dex.getImmunity(typeName, types)) {
+				if (resistanceAbilities[abilityState.id]?.includes(typeName) || !this.dex.getImmunity(typeName, types)) {
 					// Heuristic: assume that Pokémon with these abilities don't have (too) negative typing.
 					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
 					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
@@ -1997,9 +1997,9 @@ export class RandomGen7Teams extends RandomTeams {
 			}
 			teamData.has[itemData.id] = 1;
 
-			const abilityData = this.dex.abilities.get(set.ability);
-			if (abilityData.id in weatherAbilitiesSet) {
-				teamData.weather = weatherAbilitiesSet[abilityData.id];
+			const abilityState = this.dex.abilities.get(set.ability);
+			if (abilityState.id in weatherAbilitiesSet) {
+				teamData.weather = weatherAbilitiesSet[abilityState.id];
 			}
 
 			for (const move of set.moves) {
@@ -2017,7 +2017,7 @@ export class RandomGen7Teams extends RandomTeams {
 			for (const typeName of this.dex.types.names()) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
-				if (resistanceAbilities[abilityData.id]?.includes(typeName) || !this.dex.getImmunity(typeName, types)) {
+				if (resistanceAbilities[abilityState.id]?.includes(typeName) || !this.dex.getImmunity(typeName, types)) {
 					// Heuristic: assume that Pokémon with these abilities don't have (too) negative typing.
 					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
 					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;

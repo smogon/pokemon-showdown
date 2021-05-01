@@ -125,7 +125,7 @@ export class NeuralNetChecker {
 	}
 }
 
-function checkAllowed(context: CommandContext) {
+function checkAllowed(context: Chat.CommandContext) {
 	if (!modelExists()) throw new Chat.ErrorMessage(`Net filters are disabled - install brain.js to use them.`);
 	const user = context.user;
 	if (WHITELIST.includes(user.id)) return true;
@@ -145,7 +145,7 @@ export const hits: {[roomid: string]: {[userid: string]: number}} = (() => {
 	return cache;
 })();
 
-export const chatfilter: ChatFilter = function (message, user, room, connection) {
+export const chatfilter: Chat.ChatFilter = function (message, user, room, connection) {
 	if (disabled || !modelExists()) return;
 	// not awaited as so to not hold up the filters (additionally we can wait on this)
 	void (async () => {
@@ -223,7 +223,7 @@ if (!PM.isParentProcess) {
 	PM.spawn(NUM_PROCESSES);
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	netfilter: {
 		limit(target, room, user) {
 			checkAllowed(this);
