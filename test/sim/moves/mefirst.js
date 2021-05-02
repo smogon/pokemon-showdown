@@ -10,7 +10,7 @@ describe(`Me First`, function () {
 		battle.destroy();
 	});
 
-	it.skip(`Me First should fail to copy recharge turns from moves like Hyper Beam`, function () {
+	it(`Me First should fail to copy recharge turns from moves like Hyper Beam`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'aerodactyl', moves: ['sleeptalk', 'mefirst']},
 		], [
