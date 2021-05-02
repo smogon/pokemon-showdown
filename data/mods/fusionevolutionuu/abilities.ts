@@ -463,7 +463,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
 				let possibleAbilities = [target.ability];
-				if (target.m.pseudoAbilities) possibleAbilities.push(...target.m.pseudoAbilities);
+				if (this.ruleTable.has('multipleabilities')) {
+					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
+						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+						if (id) possibleAbilities.push(id);
+					}
+				}
 				const additionalBannedAbilities = [
 					// Zen Mode included here for compatability with Gen 5-6
 					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'pillage',

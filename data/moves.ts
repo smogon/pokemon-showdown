@@ -5902,9 +5902,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
-				if (pokemon.m.pseudoAbilities) {
-					for (const pseudoAbility of pokemon.m.pseudoAbilities) {
-						pokemon.removeVolatile("ability:" + pseudoAbility);
+				if (this.ruleTable.has('multipleabilities')) {
+					for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+						pokemon.removeVolatile(abilityVolatile);
 					}
 				}
 			},

@@ -157,7 +157,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 			const isAbility = pokemon.ability === 'trace';
 			let possibleAbilities = [target.ability];
-			if (target.m.pseudoAbilities) possibleAbilities.push(...target.m.pseudoAbilities);
+			if (this.ruleTable.has('multipleabilities')) {
+				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
+					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					if (id) possibleAbilities.push(id);
+				}
+			}
 			const bannedAbilities = ['forecast', 'multitype', 'trace'];
 			possibleAbilities = possibleAbilities
 				.filter(val => !this.dex.abilities.get(val).isPermanent && !bannedAbilities.includes(val));

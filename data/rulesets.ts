@@ -1357,10 +1357,17 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Japanese versions of Gen 1.",
 		// Implemented in mods/gen1jpn/rulesets.ts
 	},
+	multipleabilities: {
+		effectType: 'Rule',
+		name: 'Multiple Abilities',
+		desc: "Allows the simulator to recognize that Pok&eacute;mon may have multiple abilities active simulataneously.",
+		// Implemented in sim and data
+	},
 	pokebilitiesrule: {
 		effectType: 'Rule',
 		name: 'Pokebilities Rule',
-		desc: `Pok&eacute;mon have all of their released abilities simultaneously.`,
+		desc: "Pok&eacute;mon have all of their released abilities simultaneously.",
+		ruleset: ['Multiple Abilities'],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
@@ -1381,6 +1388,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 					const volatileName = "ability:" + pseudoAbility;
 					if (pokemon.getVolatile(volatileName)) continue;
 					pokemon.addVolatile(volatileName, pokemon);
+					const volatile = pokemon.getVolatile(volatileName);
+					if (volatile) 
 				}
 			}
 		},
@@ -1399,7 +1408,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 	sharedpowerrule: {
 		effectType: 'Rule',
 		name: 'Shared Power Rule',
-		desc: `Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.`,
+		desc: "Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.",
+		ruleset: ['Multiple Abilities'],
 		getSharedPower(pokemon) {
 			const sharedPower = new Set<string>();
 			for (const ally of pokemon.side.pokemon) {

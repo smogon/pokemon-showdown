@@ -763,15 +763,16 @@ export class Pokemon {
 	}
 
 	ignoringAbility() {
+		const isMultipleAbilities = this.battle.ruleTable.has('multipleabilities');
+
 		// Check if any active pokemon have the ability Neutralizing Gas
 		let neutralizinggas = false;
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
-			if (
-				(pokemon.ability === ('neutralizinggas' as ID) ||
-					pokemon.m.pseudoAbilities?.some((k: string) => k === 'neutralizinggas')) &&
-				!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
-			) {
+			if ((pokemon.ability === ('neutralizinggas' as ID) ||
+					(isMultipleAbilities && pokemon.volatiles['ability:neutralizinggas'])) &&
+				!pokemon.volatiles['gastroacid'] &&
+				!pokemon.abilityState.ending) {
 				neutralizinggas = true;
 				break;
 			}
@@ -781,7 +782,7 @@ export class Pokemon {
 			(this.battle.gen >= 5 && !this.isActive) ||
 			((this.volatiles['gastroacid'] ||
 				(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
-					this.m.pseudoAbilities?.some((k: string) => k === 'neutralizinggas'))
+					(isMultipleAbilities && this.volatiles['ability:neutralizinggas']))
 				)) && !this.getAbility().isPermanent
 			)
 		);
@@ -1190,14 +1191,12 @@ export class Pokemon {
 		}
 		if (this.battle.gen > 2) {
 			this.setAbility(pokemon.ability, this, true);
-			if (this.m.pseudoAbilities) {
-				for (const pseudoAbility of this.m.pseudoAbilities) {
-					this.removeVolatile('ability:' + pseudoAbility);
+			if (this.battle.ruleTable.has('multipleabilities')) {
+				for (const abilityVolatile of Object.keys(this.volatiles).filter(key => key.startsWith("ability:"))) {
+					this.removeVolatile(abilityVolatile);
 				}
-			}
-			if (pokemon.m.pseudoAbilities) {
-				for (const pseudoAbility of pokemon.m.pseudoAbilities) {
-					this.addVolatile('ability:' + pseudoAbility, this);
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+					this.addVolatile(abilityVolatile, this);
 				}
 			}
 		}

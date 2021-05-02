@@ -2212,8 +2212,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					}
 				}
 			} else { // Pseudo-ability case
-				const possibleAbilities = [source.ability, ...(source.m.pseudoAbilities || [])]
-					.filter(val => !this.dex.abilities.get(val).isPermanent && val !== 'mummy');
+				let possibleAbilities = [source.ability];
+				for (const abilityVolatile of Object.keys(source.volatiles).filter(key => key.startsWith("ability:"))) {
+					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					if (id && !this.dex.abilities.get(id).isPermanent && id !== 'mummy') possibleAbilities.push(id);
+				}
 				if (!possibleAbilities.length) return;
 				if (this.checkMoveMakesContact(move, source, target)) {
 					const abil = this.sample(possibleAbilities);
@@ -2225,6 +2228,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					} else {
 						source.removeVolatile('ability:' + abil);
 						source.addVolatile('ability:mummy', source);
+						if (abil) {
+							this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(abil).name, '[of] ' + source);
+						}
 					}
 				}
 			}
@@ -2329,11 +2335,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
-			// Remove any pseudo-abilities the setter may have before the ability starts
-			if (pokemon.m.pseudoAbilities) {
-				for (const pseudoAbility of pokemon.m.pseudoAbilities) {
-					if (this.dex.abilities.get(pseudoAbility).isPermanent || pseudoAbility === 'neutralizinggas') continue;
-					pokemon.removeVolatile('ability:' + pseudoAbility);
+			const isMultipleAbilities = this.ruleTable.has('multipleabilities');
+			if (isMultipleAbilities) {
+				// Remove any pseudo-abilities the setter may have before the ability starts
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					if (!id || this.dex.abilities.get(id).isPermanent || id === 'neutralizinggas') continue;
+					pokemon.removeVolatile(abilityVolatile);
 				}
 			}
 			for (const target of this.getAllActive()) {
@@ -2344,10 +2352,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					delete target.volatiles['slowstart'];
 					this.add('-end', target, 'Slow Start', '[silent]');
 				}
-				if (target.m.pseudoAbilities) {
-					for (const pseudoAbility of target.m.pseudoAbilities) {
-						if (this.dex.abilities.get(pseudoAbility).isPermanent) continue;
-						target.removeVolatile('ability:' + pseudoAbility);
+				if (isMultipleAbilities) {
+					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
+						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+						if (!id || this.dex.abilities.get(id).isPermanent) continue;
+						target.removeVolatile(abilityVolatile);
 					}
 				}
 			}
@@ -2726,9 +2735,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!pokemon.hp) return;
 			const isAbility = pokemon.ability === 'powerofalchemy';
 			let possibleAbilities = [target.ability];
-			if (target.m.pseudoAbilities) possibleAbilities.push(...target.m.pseudoAbilities);
+			let ownAbilities = [pokemon.ability];
+			if (this.ruleTable.has('multipleabilities')) {
+				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
+					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					if (id) possibleAbilities.push(id);
+				}
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					if (id) ownAbilities.push(id);
+				}
+			}
 			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', pokemon.ability, ...(pokemon.m.pseudoAbilities || []),
+				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', ...(ownAbilities || []),
 			];
 			possibleAbilities = possibleAbilities
 				.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
@@ -2947,9 +2966,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!pokemon.hp) return;
 			const isAbility = pokemon.ability === 'receiver';
 			let possibleAbilities = [target.ability];
-			if (target.m.pseudoAbilities) possibleAbilities.push(...target.m.pseudoAbilities);
+			let ownAbilities = [pokemon.ability];
+			if (this.ruleTable.has('multipleabilities')) {
+				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
+					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					if (id) possibleAbilities.push(id);
+				}
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					if (id) ownAbilities.push(id);
+				}
+			}
 			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', pokemon.ability, ...(pokemon.m.pseudoAbilities || []),
+				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', ...(ownAbilities || []),
 			];
 			possibleAbilities = possibleAbilities
 				.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
@@ -4011,10 +4040,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				const rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
 				let possibleAbilities = [target.ability];
-				if (target.m.pseudoAbilities) possibleAbilities.push(...target.m.pseudoAbilities);
+				let ownAbilities = [pokemon.ability];
+				if (this.ruleTable.has('multipleabilities')) {
+					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
+						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+						if (id) possibleAbilities.push(id);
+					}
+					for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+						if (id) ownAbilities.push(id);
+					}
+				}
 				const additionalBannedAbilities = [
 					// Zen Mode included here for compatability with Gen 5-6
-					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode', pokemon.ability, ...(pokemon.m.pseudoAbilities || []),
+					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode', ...(ownAbilities || []),
 				];
 				possibleAbilities = possibleAbilities
 					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
@@ -4230,8 +4269,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			} else {
 				// pseudo-ability case: make Wandering Spirit replace a random ability
-				const possibleAbilities = [source.ability, ...(source.m.pseudoAbilities || [])]
-					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+				let possibleAbilities = [source.ability];
+				for (const abilityVolatile of Object.keys(source.volatiles).filter(key => key.startsWith("ability:"))) {
+					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					if (id && !this.dex.abilities.get(id).isPermanent && !additionalBannedAbilities.includes(id)) possibleAbilities.push(id);
+				}
 				if (!possibleAbilities.length || target.volatiles['dynamax']) return;
 				if (this.checkMoveMakesContact(move, source, target)) {
 					const sourceAbility = this.sample(possibleAbilities);
