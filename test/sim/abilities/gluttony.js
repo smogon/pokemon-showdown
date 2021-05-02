@@ -12,7 +12,7 @@ describe('Gluttony', function () {
 
 	it(`should activate Aguav Berry at 50% health`, function () {
 		battle = common.createBattle([[
-			{species: "Wobbuffet",  ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['sleeptalk']},
+			{species: "Wobbuffet", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['sleeptalk']},
 		], [
 			{species: "wynaut", ability: 'compoundeyes', moves: ['superfang']},
 		]]);
