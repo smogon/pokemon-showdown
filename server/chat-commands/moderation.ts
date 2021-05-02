@@ -851,7 +851,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`Use /lock; ${name} is not a trusted user and is online.`);
 		}
 
-		const {privateReason, publicReason} = this.parseSpoiler(target);
+		const {privateReason, publicReason} = this.parseSpoiler(reason);
 
 
 		// Use default time for locks.
