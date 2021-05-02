@@ -42,5 +42,6 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 		},
+		onStart() {},
 	},
 };
