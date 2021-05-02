@@ -313,10 +313,13 @@ export const commands: Chat.ChatCommands = {
 		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * # &`,
 	],
 
+	closehtmlpage: 'sendhtmlpage',
 	changehtmlpageselector: 'sendhtmlpage',
 	sendhtmlpage(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
+
+		const closeHtmlPage = cmd === 'closehtmlpage';
 
 		const {targetUser, rest} = this.requireUser(target);
 		let [pageid, content] = this.splitOne(rest);
@@ -325,7 +328,9 @@ export const commands: Chat.ChatCommands = {
 			[selector, content] = this.splitOne(content);
 			if (!selector) return this.parse(`/help ${cmd}`);
 		}
-		if (!pageid || !content) return this.parse(`/help ${cmd}`);
+		if (!pageid || (closeHtmlPage ? content : !content)) {
+			return this.parse(`/help ${cmd}`);
+		}
 
 		pageid = `${user.id}-${toID(pageid)}`;
 
@@ -355,7 +360,9 @@ export const commands: Chat.ChatCommands = {
 				connection: targetConnection,
 				pageid: `view-bot-${pageid}`,
 			});
-			if (selector) {
+			if (closeHtmlPage) {
+				context.send(`|deinit|`);
+			} else if (selector) {
 				context.send(`|selectorhtml|${selector}|${content}`);
 			} else {
 				context.title = `[${user.name}] ${pageid}`;
@@ -363,13 +370,20 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 
-		this.sendReply(`Sent ${targetUser.name}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
+		if (closeHtmlPage) {
+			this.sendReply(`Closed the bot page ${pageid} for ${targetUser.name}.`);
+		} else {
+			this.sendReply(`Sent ${targetUser.name}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
+		}
 	},
 	sendhtmlpagehelp: [
 		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # &`,
 	],
 	changehtmlpageselectorhelp: [
 		`/changehtmlpageselector [userid], [pageid], [selector], [html] - Sends [userid] the content [html] for the selector [selector] on the bot page [pageid]. Requires: * # &`,
+	],
+	closehtmlpagehelp: [
+		`/closehtmlpage [userid], [pageid], - Closes the bot page [pageid] for [userid]. Requires: * # &`,
 	],
 
 	highlighthtmlpage(target, room, user) {
