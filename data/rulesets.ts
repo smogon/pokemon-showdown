@@ -1388,8 +1388,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 					const volatileName = "ability:" + pseudoAbility;
 					if (pokemon.getVolatile(volatileName)) continue;
 					pokemon.addVolatile(volatileName, pokemon);
-					const volatile = pokemon.getVolatile(volatileName);
-					if (volatile) 
 				}
 			}
 		},
