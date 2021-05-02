@@ -1571,7 +1571,13 @@ export class RandomTeams {
 			!counter.drain && !counter.recoil && !counter.recovery && defensiveStatTotal < 255
 		) return 'Focus Sash';
 		if (!isDoubles && ability === 'Water Bubble') return 'Mystic Water';
-		if (hasMove['clangoroussoul'] || (hasMove['boomburst'] && counter.speedsetup)) return 'Throat Spray';
+		if (
+			hasMove['clangoroussoul'] ||
+			// We manually check for speed-boosting moves, rather than using `counter.speedsetup`,
+			// because we want to check for ANY speed boosting move.
+			// In particular, Shift Gear + Boomburst Toxtricity should get Throat Spray.
+			(hasMove['boomburst'] && Object.keys(hasMove).some(m => Dex.moves.get(m).boosts?.spe))
+		) return 'Throat Spray';
 
 		const rockWeaknessCase = (
 			this.dex.getEffectiveness('Rock', species) >= 1 &&
@@ -1742,13 +1748,13 @@ export class RandomTeams {
 					// There may be more important moves that this Pokemon needs
 					if (
 						// Pokemon should have at least one STAB move
-						(!counter.stab && counter.physicalpool + counter.specialpool > 0) ||
+						(!counter.stab && counter.physicalpool + counter.specialpool > 0 && !Hazards.includes(move.id)) ||
 						// Swords Dance Mew should have Brave Bird
 						(hasMove['swordsdance'] && species.id === 'mew' && runEnforcementChecker('Flying')) ||
 						// Dhelmise should have Anchor Shot
 						(hasAbility['Steelworker'] && runEnforcementChecker('Steel')) ||
 						// Check for miscellaneous important moves
-						(!isDoubles && runEnforcementChecker('recovery')) ||
+						(!isDoubles && runEnforcementChecker('recovery') && !Hazards.includes(move.id)) ||
 						runEnforcementChecker('screens') ||
 						runEnforcementChecker('misc') ||
 						(isLead && runEnforcementChecker('lead')) ||
@@ -1756,7 +1762,7 @@ export class RandomTeams {
 					) {
 						cull = true;
 					// Pokemon should have moves that benefit their typing
-					} else {
+					} else if (!Hazards.includes(move.id)) { // Don't cull hazards in type-based enforcement
 						for (const type of Object.keys(hasType)) {
 							if (runEnforcementChecker(type)) {
 								cull = true;
@@ -1789,7 +1795,6 @@ export class RandomTeams {
 				}
 			}
 		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
-
 		const abilityNames: string[] = Object.values(species.abilities);
 		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
 
@@ -1911,11 +1916,11 @@ export class RandomTeams {
 			};
 			const customScale: {[k: string]: number} = {
 				// These Pokemon are too strong and need a lower level
-				zaciancrowned: 66, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, zacian: 72, kyogre: 73, glalie: 78,
-				haxorus: 80, inteleon: 80, octillery: 84, jolteon: 84, swoobat: 84, dugtrio: 84, slurpuff: 84, polteageist: 84,
-				wobbuffet: 86,
+				zaciancrowned: 66, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, zacian: 72, kyogre: 73, zekrom: 74,
+				marshadow: 75, eternatus: 75, glalie: 78, haxorus: 80, inteleon: 80, cresselia: 83, octillery: 84, jolteon: 84,
+				swoobat: 84, dugtrio: 84, slurpuff: 84, polteageist: 84, wobbuffet: 86,
 				// These Pokemon are too weak and need a higher level
-				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, arctozolt: 88, reuniclus: 87,
+				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, arctozolt: 88, reuniclus: 87, slowking: 81,
 			};
 			level = customScale[species.id] || tierScale[tier];
 		} else if (species.randomBattleLevel) {
