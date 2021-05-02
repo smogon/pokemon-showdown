@@ -349,7 +349,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxLevel: 5,
-		ruleset: ['Standard Doubles', 'Little Cup', 'Dynamax Clause', 'Swagger Clause'],
+		ruleset: ['Standard Doubles', 'Little Cup', 'Dynamax Clause', 'Swagger Clause', 'Sleep Clause Mod'],
 		banlist: ['Corsola-Galar', 'Cutiefly', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix', 'Vulpix-Alola'],
 	},
 	{
