@@ -2356,7 +2356,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
 						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
 						if (!id || this.dex.abilities.get(id).isPermanent) continue;
-						target.removeVolatile(abilityVolatile);
+						const status = this.dex.conditions.get(abilityVolatile) as Effect;
+						if (!status || !pokemon.volatiles[status.id]) continue;
+						this.singleEvent('End', status, target.volatiles[status.id], this);
 					}
 				}
 			}
@@ -2378,11 +2380,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (pokemon !== source) {
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-					if (pokemon.m.pseudoAbilities) {
-						for (const pseudoAbility of pokemon.m.pseudoAbilities) {
-							// permanent pseudo-abilities
-							if (pokemon.volatiles['ability:' + pseudoAbility]) continue;
-							pokemon.addVolatile('ability:' + pseudoAbility, pokemon);
+					if (this.ruleTable.has('multipleabilities')) {
+						for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+							const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+							if (!id || this.dex.abilities.get(id).isPermanent) continue;
+							const status = this.dex.conditions.get(abilityVolatile) as Effect;
+							if (!status || !pokemon.volatiles[status.id]) continue;
+							this.singleEvent('Start', status, pokemon.volatiles[status.id], pokemon, source);
 						}
 					}
 				}
