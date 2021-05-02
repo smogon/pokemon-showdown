@@ -3513,7 +3513,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyMovePriority: 1,
 		onModifyMove(move, pokemon, target) {
 			// this works with every test....
-			if (!['counter', 'mirrorcoat', 'metalburst'].includes(move.id)) {
+			if (!(move.target === 'scripted')) {
 				move.tracksTarget = true;
 			}
 		},
