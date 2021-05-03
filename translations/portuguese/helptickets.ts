@@ -82,6 +82,7 @@ export const translations: Translations = {
 		"Status": "Status",
 		"Creator": "Criador",
 		"Ticket Type": "Tipo de pedido",
+		"Language": "",
 		"Claimed by": "Atendido por",
 		"Action": "Ação",
 		"And ${keys.length - count} more tickets.": "E $${keys.length - count} outros pedidos",

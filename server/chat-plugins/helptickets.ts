@@ -851,7 +851,7 @@ export const pages: Chat.PageTable = {
 			this.checkCan('lock');
 			let buf = `<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button> <button class="button" name="send" value="/helpticket stats" style="float: right"><i class="fa fa-th-list"></i> ${this.tr`Help Ticket Stats`}</button><br /><br />`;
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Help tickets`}</h1></th></tr>`;
-			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
+			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Language`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
 
 			const sortedTickets = Utils.sortBy(Object.values(tickets), ticket => [
 				ticket.open,
@@ -873,9 +873,12 @@ export const pages: Chat.PageTable = {
 						icon = `<span style="color:orange"><i class="fa fa-circle-o"></i> <strong>${this.tr`Unclaimed`}</strong></span>`;
 					}
 				}
+
+				const ticketRoom = Rooms.get(`help-${ticket.userid}`);
 				buf += `<tr><td>${icon}</td>`;
 				buf += Utils.html`<td>${ticket.creator}</td>`;
 				buf += `<td>${ticket.type}</td>`;
+				buf += `<td>${Chat.languages.get(ticketRoom?.settings.language || '') || '-'}</td>`;
 				buf += Utils.html`<td>${ticket.claimed ? ticket.claimed : `-`}</td>`;
 				buf += `<td>`;
 				const roomid = 'help-' + ticket.userid;
