@@ -632,7 +632,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.auraBooster !== this.effectState.target) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
-		isUnbreakable: true,
 		name: "Dark Aura",
 		rating: 3,
 		num: 186,
@@ -943,7 +942,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.auraBooster !== this.effectState.target) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
-		isUnbreakable: true,
 		name: "Fairy Aura",
 		rating: 3,
 		num: 187,
