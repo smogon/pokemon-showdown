@@ -1748,13 +1748,13 @@ export class RandomTeams {
 					// There may be more important moves that this Pokemon needs
 					if (
 						// Pokemon should have at least one STAB move
-						(!counter.stab && counter.physicalpool + counter.specialpool > 0 && !Hazards.includes(move.id)) ||
+						(!counter.stab && counter.physicalpool + counter.specialpool > 0 && move.id !== 'stickyweb') ||
 						// Swords Dance Mew should have Brave Bird
 						(hasMove['swordsdance'] && species.id === 'mew' && runEnforcementChecker('Flying')) ||
 						// Dhelmise should have Anchor Shot
 						(hasAbility['Steelworker'] && runEnforcementChecker('Steel')) ||
 						// Check for miscellaneous important moves
-						(!isDoubles && runEnforcementChecker('recovery') && !Hazards.includes(move.id)) ||
+						(!isDoubles && runEnforcementChecker('recovery') && move.id !== 'stickyweb') ||
 						runEnforcementChecker('screens') ||
 						runEnforcementChecker('misc') ||
 						(isLead && runEnforcementChecker('lead')) ||
@@ -1762,7 +1762,7 @@ export class RandomTeams {
 					) {
 						cull = true;
 					// Pokemon should have moves that benefit their typing
-					} else if (!Hazards.includes(move.id)) { // Don't cull hazards in type-based enforcement
+					} else if (move.id !== 'stickyweb') { // Don't cull Sticky Web in type-based enforcement
 						for (const type of Object.keys(hasType)) {
 							if (runEnforcementChecker(type)) {
 								cull = true;

@@ -66,6 +66,8 @@ describe('[Gen 8] Random Battle', () => {
 			assert.equal(set.item, "Throat Spray", `got ${set.item} instead of Throat Spray`);
 		});
 	});
+
+	it('Toxapex should always have Scald', () => testAlwaysHasMove('toxapex', options, 'scald'));
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
