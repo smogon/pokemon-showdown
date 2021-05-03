@@ -2767,7 +2767,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 232,
 	},
 	propellertail: {
+		onModifyMovePriority: 1,
+		onModifyMove(move, pokemon, target) {
+			// this works with every test....
+			if (!(move.target === 'scripted')) {
+				move.tracksTarget = true;
+			}
+		},
 		// the actual implementation is in Battle#getTarget
+		// move.tracksTarget is not actually useless
 		name: "Propeller Tail",
 		rating: 0,
 		num: 239,
