@@ -68,7 +68,6 @@ Object.setPrototypeOf(LENGTHS, null);
 const SIGNUP_PHASE = 'signups';
 const QUESTION_PHASE = 'question';
 const INTERMISSION_PHASE = 'intermission';
-const LIMBO_PHASE = 'limbo';
 
 const MASTERMIND_ROUNDS_PHASE = 'rounds';
 const MASTERMIND_FINALS_PHASE = 'finals';
@@ -76,7 +75,6 @@ const MASTERMIND_FINALS_PHASE = 'finals';
 const MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY = 'event';
 const MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY = 'eventused';
 
-const MINIMUM_PLAYERS = 3;
 const START_TIMEOUT = 30 * 1000;
 const MASTERMIND_FINALS_START_TIMEOUT = 30 * 1000;
 const INTERMISSION_INTERVAL = 20 * 1000;
@@ -401,7 +399,6 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 export class Trivia extends Rooms.RoomGame {
 	playerTable: {[k: string]: TriviaPlayer};
 	gameid: ID;
-	minPlayers: number;
 	kickedUsers: Set<string>;
 	canLateJoin: boolean;
 	game: TriviaGame;
@@ -426,7 +423,6 @@ export class Trivia extends Rooms.RoomGame {
 		this.allowRenames = true;
 		this.playerCap = Number.MAX_SAFE_INTEGER;
 
-		this.minPlayers = MINIMUM_PLAYERS;
 		this.kickedUsers = new Set();
 		this.canLateJoin = true;
 
@@ -541,20 +537,6 @@ export class Trivia extends Rooms.RoomGame {
 		if (!player?.isAbsent) return false;
 
 		player.toggleAbsence();
-		if (++this.playerCount < MINIMUM_PLAYERS) return false;
-		if (this.phase !== LIMBO_PHASE) return false;
-
-		for (const i in this.playerTable) {
-			this.playerTable[i].clearAnswer();
-		}
-
-		broadcast(
-			this.room,
-			this.room.tr`Enough players have returned to continue the game!`,
-			this.room.tr`The game will continue with the next question.`
-		);
-		this.askQuestion();
-		return true;
 	}
 
 	onLeave(user: User, oldUserID: ID) {
@@ -564,20 +546,6 @@ export class Trivia extends Rooms.RoomGame {
 		if (!player || player.isAbsent) return false;
 
 		player.toggleAbsence();
-		if (--this.playerCount >= MINIMUM_PLAYERS) return false;
-
-		// At least let the game start first!!
-		if (this.phase === SIGNUP_PHASE) return false;
-
-		if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
-		this.phaseTimeout = null;
-		this.phase = LIMBO_PHASE;
-		broadcast(
-			this.room,
-			this.room.tr`Not enough players are participating to continue the game!`,
-			this.room.tr`Until there are ${MINIMUM_PLAYERS} players participating and present, the game will be paused.`
-		);
-		return true;
 	}
 
 	/**
@@ -660,9 +628,6 @@ export class Trivia extends Rooms.RoomGame {
 	 */
 	start() {
 		if (this.phase !== SIGNUP_PHASE) throw new Chat.ErrorMessage(this.room.tr`The game has already been started.`);
-		if (this.playerCount < this.minPlayers) {
-			throw new Chat.ErrorMessage(this.room.tr`Not enough players have signed up yet! At least ${this.minPlayers} players to begin.`);
-		}
 
 		broadcast(this.room, this.room.tr`The game will begin in ${START_TIMEOUT / 1000} seconds...`);
 		this.phase = INTERMISSION_PHASE;
@@ -1476,7 +1441,6 @@ export class MastermindRound extends FirstModeTrivia {
 		super(room, 'first', category, false, 'infinite', questions, 'Automatically Created', false, true);
 
 		this.playerCap = 1;
-		this.minPlayers = 0;
 		if (playerID) {
 			const player = Users.get(playerID);
 			const targetUsername = playerID;

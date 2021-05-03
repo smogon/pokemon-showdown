@@ -189,19 +189,12 @@ describe('Trivia', function () {
 			}
 		});
 
-		it('should mark a player absent on leave and pause the game', function () {
+		it('should mark a player absent on leave and unnmark them when they return', function () {
 			this.user.leaveRoom(this.room);
 			assert.equal(this.player.isAbsent, true);
-			assert.equal(this.game.phase, 'limbo');
-			assert.equal(this.game.phaseTimeout, null);
-		});
 
-		it('should unpause the game once enough players have returned', function () {
-			this.user.leaveRoom(this.room);
 			this.user.joinRoom(this.room);
 			assert.equal(this.player.isAbsent, false);
-			assert.equal(this.game.phase, 'question');
-			assert(this.game.phaseTimeout);
 		});
 	});
 
