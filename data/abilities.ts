@@ -2769,12 +2769,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	propellertail: {
 		onModifyMovePriority: 1,
 		onModifyMove(move, pokemon, target) {
+			// most of the implementation is in Battle#getTarget
 			if (!(move.target === 'scripted')) {
 				move.tracksTarget = true;
 			}
 		},
-		// the actual implementation is in Battle#getTarget
-		// move.tracksTarget is not actually useless
 		name: "Propeller Tail",
 		rating: 0,
 		num: 239,
@@ -3519,12 +3518,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	stalwart: {
 		onModifyMovePriority: 1,
 		onModifyMove(move, pokemon, target) {
+			// most of the implementation is in Battle#getTarget
 			if (!(move.target === 'scripted')) {
 				move.tracksTarget = true;
 			}
 		},
-		// the actual implementation is in Battle#getTarget
-		// move.tracksTarget is not actually useless
 		name: "Stalwart",
 		rating: 0,
 		num: 242,
