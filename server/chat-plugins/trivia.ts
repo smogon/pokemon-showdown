@@ -585,12 +585,13 @@ export class Trivia extends Rooms.RoomGame {
 	 */
 	init() {
 		const signupsMessage = this.game.givesPoints ?
-			`Signups for a new Trivia game have begun!` : `Signups for a new unranked trivia game have begun!`;
+			`Signups for a new Trivia game have begun!` : `Signups for a new unranked Trivia game have begun!`;
 		broadcast(
 			this.room,
 			this.room.tr(signupsMessage),
 			this.room.tr`Mode: ${this.game.mode} | Category: ${this.game.category} | Cap: ${this.getDisplayableCap()}<br />` +
-			this.room.tr`Enter /trivia join to sign up for the trivia game.`
+			`<button class="button" name="send" value="/trivia join">` + this.room.tr`Sign up for the Trivia game!` + `</button>` +
+			this.room.tr` (You can also type <code>/trivia join</code> to sign up manually.)`
 		);
 	}
 
