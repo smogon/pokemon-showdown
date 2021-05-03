@@ -402,8 +402,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu|Zacian|Zamazenta)(-[a-zA-Z?-]+)?/g, '$1-*')
-					.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-Neutral');
+					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Zacian|Zamazenta|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, '');
 			}
 		},
@@ -412,10 +411,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const pokemon of this.getAllPokemon()) {
 				if (!formesToLeak.includes(this.toID(pokemon.baseSpecies.name))) continue;
 				const oldDetails = pokemon.details.replace(', shiny', '')
-					.replace(/(Zacian|Zamazenta)(-[a-zA-Z?-]+)?/g, '$1-*')
-					.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-Neutral');
+					.replace(/(Xerneas|Zacian|Zamazenta)(-[a-zA-Z?-]+)?/g, '$1-*');
 				const newDetails = pokemon.details.replace(', shiny', '');
-				this.add('updatepokemon', pokemon, oldDetails, newDetails);
+				this.add('updatepokemon', pokemon, newDetails);
 			}
 		},
 		onFieldTeamPreview() {
