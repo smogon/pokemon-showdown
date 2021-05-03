@@ -1357,7 +1357,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Japanese versions of Gen 1.",
 		// Implemented in mods/gen1jpn/rulesets.ts
 	},
-	noswitch: {
+	noswitching: {
 		effectType: 'Rule',
 		name: 'No Switching',
 		desc: 'All Pok\u00e9mon are trapped (cannot switch naturally, but can as the effect of an item, move, or Ability).',
