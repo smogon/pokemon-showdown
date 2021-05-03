@@ -1350,6 +1350,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
 
+		tb: 'ban',
 		ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
 			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
