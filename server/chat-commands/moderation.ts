@@ -748,9 +748,7 @@ export const commands: Chat.ChatCommands = {
 		this.addModAction(`${name} was banned ${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
 
 		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
-		const affected = Punishments.roomBan(
-			room, targetUser, time, null, privateReason
-		);
+		const affected = Punishments.roomBan(room, targetUser, time, null, privateReason);
 
 		if (!room.settings.isPrivate && room.persist) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
