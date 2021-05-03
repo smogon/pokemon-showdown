@@ -3515,7 +3515,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	stalwart: {
 		onModifyMovePriority: 1,
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move) {
 			// most of the implementation is in Battle#getTarget
 			move.tracksTarget = move.target !== 'scripted';
 		},
