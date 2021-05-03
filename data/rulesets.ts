@@ -410,8 +410,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const formesToLeak = ["zaciancrowned", "zamazentacrowned", "xerneas"];
 			for (const pokemon of this.getAllPokemon()) {
 				if (!formesToLeak.includes(this.toID(pokemon.baseSpecies.name))) continue;
-				const oldDetails = pokemon.details.replace(', shiny', '')
-					.replace(/(Xerneas|Zacian|Zamazenta)(-[a-zA-Z?-]+)?/g, '$1-*');
 				const newDetails = pokemon.details.replace(', shiny', '');
 				this.add('updatepokemon', pokemon, newDetails);
 			}
