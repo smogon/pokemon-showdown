@@ -1359,10 +1359,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 	},
 	noswitch: {
 		effectType: 'Rule',
-		name: 'No Switch',
+		name: 'No Switching',
 		desc: 'All Pok\u00e9mon are trapped (cannot switch naturally, but can as the effect of an item, move, or Ability).',
 		onBegin() {
-			this.add('rule', 'No Switch: All Pok\u00e9mon are trapped');
+			this.add('rule', 'No Switching: All Pok\u00e9mon are trapped');
 		},
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
