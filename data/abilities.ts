@@ -2769,7 +2769,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	propellertail: {
 		onModifyMovePriority: 1,
 		onModifyMove(move, pokemon, target) {
-			// this works with every test....
 			if (!(move.target === 'scripted')) {
 				move.tracksTarget = true;
 			}
@@ -3520,7 +3519,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	stalwart: {
 		onModifyMovePriority: 1,
 		onModifyMove(move, pokemon, target) {
-			// this works with every test....
 			if (!(move.target === 'scripted')) {
 				move.tracksTarget = true;
 			}
