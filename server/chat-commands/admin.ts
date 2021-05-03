@@ -643,6 +643,8 @@ export const commands: Chat.ChatCommands = {
 				void TeamValidatorAsync.PM.respawn();
 				// respawn simulator processes
 				void Rooms.PM.respawn();
+				// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
+				void Chat.plugins.datasearch?.PM?.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.sendAll(Rooms.global.formatListText);
 				this.sendReply("DONE");
