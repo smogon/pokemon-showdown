@@ -517,7 +517,7 @@ export const commands: Chat.ChatCommands = {
 
 		const {targetUser, inputUsername, targetUsername, rest: reason} = this.splitUser(target);
 		const targetID = toID(targetUsername);
-		const {publicAndPrivateReason, publicReason} = this.parseSpoiler(reason);
+		const {privateReason, publicReason} = this.parseSpoiler(reason);
 
 		const saveReplay = globalWarn && room.battle;
 		if (!targetUser?.connected) {
@@ -525,7 +525,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('warn', null, room);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${publicReason ? ` (${publicReason})` : ``}`);
-			this.globalModlog('WARN OFFLINE', targetUser, reason ? publicAndPrivateReason || publicReason : '');
+			this.globalModlog('WARN OFFLINE', targetUser, privateReason);
 			Punishments.offlineWarns.set(targetID, reason);
 			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
@@ -548,9 +548,9 @@ export const commands: Chat.ChatCommands = {
 
 		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(publicReason ? ` (${publicReason})` : ``)}`);
 		if (globalWarn) {
-			this.globalModlog('WARN', targetUser, reason ? publicAndPrivateReason || publicReason : ``);
+			this.globalModlog('WARN', targetUser, privateReason);
 		} else {
-			this.modlog('WARN', targetUser, reason ? publicAndPrivateReason || publicReason : ``, {noalts: 1});
+			this.modlog('WARN', targetUser, privateReason, {noalts: 1});
 		}
 		targetUser.send(`|c|~|/warn ${publicReason}`);
 
@@ -625,7 +625,7 @@ export const commands: Chat.ChatCommands = {
 		if (reason.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
-		const {publicReason, publicAndPrivateReason} = this.parseSpoiler(reason);
+		const {publicReason, privateReason} = this.parseSpoiler(reason);
 
 		const muteDuration = ((cmd === 'hm' || cmd === 'hourmute') ? HOURMUTE_LENGTH : MUTE_LENGTH);
 		this.checkCan('mute', targetUser, room);
@@ -646,7 +646,7 @@ export const commands: Chat.ChatCommands = {
 			targetUser.popup(`|modal|${user.name} has muted you in ${room.roomid} for ${Chat.toDurationString(muteDuration)}. ${publicReason}`);
 		}
 		this.addModAction(`${targetUser.name} was muted by ${user.name} for ${Chat.toDurationString(muteDuration)}.${(publicReason ? ` (${publicReason})` : ``)}`);
-		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, publicAndPrivateReason || publicReason);
+		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, privateReason);
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.id) {
 			const displayMessage = `${targetUser.name}'s ac account: ${targetUser.autoconfirmed}`;
 			this.privateModAction(displayMessage);
@@ -704,7 +704,7 @@ export const commands: Chat.ChatCommands = {
 		const week = ['wrb', 'wb', 'forceweekban', 'weekban'].includes(cmd);
 
 		const {targetUser, inputUsername, targetUsername, rest: reason} = this.splitUser(target);
-		const {publicReason, publicAndPrivateReason} = this.parseSpoiler(reason);
+		const {publicReason, privateReason} = this.parseSpoiler(reason);
 		if (!targetUser) return this.errorReply(`User '${targetUsername}' not found.`);
 		if (reason.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
@@ -749,7 +749,7 @@ export const commands: Chat.ChatCommands = {
 
 		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
 		const affected = Punishments.roomBan(
-			room, targetUser, time, null, publicAndPrivateReason || publicReason
+			room, targetUser, time, null, privateReason
 		);
 
 		if (!room.settings.isPrivate && room.persist) {
@@ -766,9 +766,9 @@ export const commands: Chat.ChatCommands = {
 		room.hideText([userid, toID(inputUsername)]);
 
 		if (room.settings.isPrivate !== true && room.persist) {
-			this.globalModlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, publicAndPrivateReason || publicReason);
+			this.globalModlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, privateReason);
 		} else {
-			this.modlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, publicAndPrivateReason || publicReason);
+			this.modlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, privateReason);
 		}
 		return true;
 	},
@@ -853,7 +853,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`Use /lock; ${name} is not a trusted user and is online.`);
 		}
 
-		const {publicAndPrivateReason, publicReason} = this.parseSpoiler(target);
+		const {privateReason, publicReason} = this.parseSpoiler(target);
 
 
 		// Use default time for locks.
@@ -867,7 +867,7 @@ export const commands: Chat.ChatCommands = {
 			affected = await Punishments.lock(userid, duration, null, false, publicReason);
 		}
 
-		const globalReason = reason ? publicAndPrivateReason || publicReason : '';
+		const globalReason = reason ? privateReason : '';
 		this.globalModlog(
 			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, globalReason
 		);
@@ -1056,7 +1056,7 @@ export const commands: Chat.ChatCommands = {
 		if (roomauth.length) {
 			Monitor.log(`[CrisisMonitor] Globally banned user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
-		const {publicAndPrivateReason, publicReason} = this.parseSpoiler(reason);
+		const {privateReason, publicReason} = this.parseSpoiler(reason);
 		targetUser?.popup(
 			`|modal|${user.name} has globally banned you.${(publicReason ? `\n\nReason: ${publicReason}` : ``)} ` +
 			`${(Config.appealurl ? `\n\nIf you feel that your ban was unjustified, you can appeal:\n${Config.appealurl}` : ``)}` +
@@ -1086,7 +1086,7 @@ export const commands: Chat.ChatCommands = {
 
 		room?.hideText([userid, toID(inputUsername)]);
 
-		const globalReason = (reason ? publicAndPrivateReason || publicReason : '');
+		const globalReason = (reason ? privateReason : '');
 		this.globalModlog("BAN", targetUser, globalReason);
 		return true;
 	},
@@ -1608,7 +1608,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`User '${inputUsername}' not found. (use /offlineforcerename to rename anyway.)`);
 		}
 		this.checkCan('forcerename', targetID);
-		const {publicReason, publicAndPrivateReason} = this.parseSpoiler(reason);
+		const {publicReason, privateReason} = this.parseSpoiler(reason);
 
 		Monitor.forceRenames.set(targetID, (Monitor.forceRenames.get(targetID) || 0) + 1);
 
@@ -1620,7 +1620,7 @@ export const commands: Chat.ChatCommands = {
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(publicReason ? `: ${publicReason}` : ``)}`);
 		} else {
 			forceRenameMessage = `was forced to choose a new name by ${user.name} while offline${(publicReason ? `: ${publicReason}` : ``)}`;
-			this.globalModlog('FORCERENAME OFFLINE', targetUser, publicAndPrivateReason || publicReason);
+			this.globalModlog('FORCERENAME OFFLINE', targetUser, privateReason);
 		}
 		Monitor.forceRenames.set(targetID, (Monitor.forceRenames.get(targetID) || 0) + 1);
 
@@ -1681,10 +1681,10 @@ export const commands: Chat.ChatCommands = {
 		if (targetUser?.namelocked && !week) {
 			return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
 		}
-		const {publicAndPrivateReason, publicReason} = this.parseSpoiler(reason);
+		const {privateReason, publicReason} = this.parseSpoiler(reason);
 		const reasonText = publicReason ? ` (${publicReason})` : `.`;
 		this.privateGlobalModAction(`${targetUser?.name || userid} was ${week ? 'week' : ''}namelocked by ${user.name}${reasonText}`);
-		this.globalModlog(`${week ? 'WEEK' : ""}NAMELOCK`, targetUser || userid, reason ? publicAndPrivateReason || publicReason : ``);
+		this.globalModlog(`${week ? 'WEEK' : ""}NAMELOCK`, targetUser || userid, privateReason);
 
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);
 		if (roomauth.length) {

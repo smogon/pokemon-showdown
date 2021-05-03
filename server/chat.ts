@@ -886,19 +886,19 @@ export class CommandContext extends MessageContext {
 		(this.room || Rooms.global).modlog(entry);
 	}
 	parseSpoiler(str: string) {
-		let publicAndPrivateReason = "";
-		if (!str) return {publicReason: "", publicAndPrivateReason};
+		if (!str) return {publicReason: "", privateReason: ""};
 
 		let publicReason = str;
+		let privateReason = str;
 		const targetLowercase = str.toLowerCase();
 		if (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:')) {
 			const proofIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
-			const bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
-			const proof = str.substr(proofIndex + bump, str.length).trim();
-			publicReason = str.substr(0, proofIndex).trim();
-			publicAndPrivateReason = `${publicReason}${proof ? ` (PROOF: ${str.substr(proofIndex + bump, str.length).trim()})` : ''}`;
+			const proofOffset = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			const proof = str.slice(proofIndex + proofOffset).trim();
+			publicReason = str.slice(0, proofIndex).trim();
+			privateReason = `${publicReason}${proof ? ` (PROOF: ${proof})` : ''}`;
 		}
-		return {publicReason, publicAndPrivateReason};
+		return {publicReason, privateReason};
 	}
 	roomlog(data: string) {
 		if (this.room) this.room.roomlog(data);
