@@ -2963,6 +2963,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSourceModifyDamagePriority: -1,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.abilityState.berryWeaken) {
+				target.abilityState.berryWeaken = false;
 				return this.chainModify(0.5);
 			}
 		},
