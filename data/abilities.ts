@@ -2770,9 +2770,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyMovePriority: 1,
 		onModifyMove(move, pokemon, target) {
 			// most of the implementation is in Battle#getTarget
-			if (!(move.target === 'scripted')) {
-				move.tracksTarget = true;
-			}
+			move.tracksTarget = move.target !== 'scripted';
 		},
 		name: "Propeller Tail",
 		rating: 0,
