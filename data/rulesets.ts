@@ -1357,4 +1357,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Nintendo Cup 1997.",
 		// Implemented in mods/gen1jpn/rulesets.ts
 	},
+	noswitching: {
+		effectType: 'Rule',
+		name: 'No Switching',
+		desc: 'All Pok\u00e9mon are trapped (cannot switch naturally, but can as the effect of an item, move, or Ability).',
+		onBegin() {
+			this.add('rule', 'No Switching: All Pok\u00e9mon are trapped');
+		},
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+		},
+	},
 };
