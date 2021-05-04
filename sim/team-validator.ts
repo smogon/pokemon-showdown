@@ -775,6 +775,7 @@ export class TeamValidator {
 		const allowEVs = dex.currentMod !== 'letsgo';
 		const allowAVs = ruleTable.has('allowavs');
 		const capEVs = dex.gen > 2 && (ruleTable.has('obtainablemisc') || dex.gen === 6);
+		const customEVcap = ruleTable.has('maxevs');
 		const canBottleCap = dex.gen >= 7 && (set.level === 100 || !ruleTable.has('obtainablemisc'));
 
 		if (!set.evs) set.evs = TeamValidator.fillStats(null, allowEVs && !capEVs ? 252 : 0);
@@ -946,8 +947,19 @@ export class TeamValidator {
 				problems.push(`${name} is level 50, but this format allows level 100 Pokémon. (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}
 		}
+		// ill add stuff here for EV rules
+		if (ruleTable.has('minevs')) {
+			let evtotal = 0;
+			let stat: StatID;
+			for (stat in set.evs) {
+				evtotal += set.evs[stat];
+			}
+			if (ruleTable.totalEVmin > evtotal) {
+				problems.push(`${name} does not meet the minimum EV requirement`);
+			}
+		}
 
-		if (allowEVs && capEVs && totalEV > 510) {
+		if (allowEVs && capEVs && !customEVcap && totalEV > 510) {
 			problems.push(`${name} has more than 510 total EVs.`);
 		}
 

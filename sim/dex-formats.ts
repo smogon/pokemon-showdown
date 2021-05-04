@@ -45,6 +45,10 @@ export class RuleTable extends Map<string, string> {
 	minLevel!: number;
 	maxLevel!: number;
 	defaultLevel!: number;
+	totalEVmax!: number;
+	totalEVmin!: number;
+	// minStatEV?: SparseStatsTable;
+	// maxStatEV?: SparseStatsTable;
 
 	constructor() {
 		super();
@@ -218,10 +222,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 */
 	readonly maxForcedLevel?: number;
 	/** Setting EV maximum and minimum in total */
-	readonly totalEVLimit?: [number, number];
-	/** EV limit per stat */
-	readonly minStatEV?: SparseStatsTable;
-	readonly maxStatEV?: SparseStatsTable;
+
 	readonly noLog: boolean;
 
 	/**
@@ -285,9 +286,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.unbanlist = data.unbanlist || [];
 		this.customRules = data.customRules || null;
 		this.ruleTable = null;
-		this.totalEVLimit = data.totalEVLimit || [];
-		this.minStatEV = data.minStatEV || {};
-		this.maxStatEV = data.maxStatEV || {};
 		this.onBegin = data.onBegin || undefined;
 		this.forcedLevel = data.forcedLevel || undefined;
 		this.maxForcedLevel = data.maxForcedLevel || undefined;
@@ -656,6 +654,9 @@ export class DexFormats {
 		ruleTable.minLevel = Number(ruleTable.valueRules.get('minlevel')) || 1;
 		ruleTable.maxLevel = Number(ruleTable.valueRules.get('maxlevel')) || 100;
 		ruleTable.defaultLevel = Number(ruleTable.valueRules.get('defaultlevel')) || ruleTable.maxLevel;
+		ruleTable.totalEVmin = Number(ruleTable.valueRules.get('minevs')) || 0;
+		ruleTable.totalEVmax = Number(ruleTable.valueRules.get('maxevs')) || 510;
+
 		if (ruleTable.minTeamSize && ruleTable.minTeamSize < gameTypeMinTeamSize) {
 			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
 		}
@@ -677,6 +678,9 @@ export class DexFormats {
 		}
 		if (ruleTable.defaultLevel < ruleTable.minLevel) {
 			throw new Error(`Default level ${ruleTable.defaultLevel}${ruleTable.blame('defaultlevel')} should not be below min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}.`);
+		}
+		if (ruleTable.totalEVmin < 0) {
+			throw new Error('You cannot have less than 0 minimum EVs');
 		}
 
 		if (!repeals) format.ruleTable = ruleTable;

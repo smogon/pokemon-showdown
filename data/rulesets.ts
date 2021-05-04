@@ -1390,6 +1390,20 @@ export const Rulesets: {[k: string]: FormatData} = {
 		hasValue: 'positive-integer',
 		// hardcoded in sim/team-validator
 	},
+	minevs: {
+		effectType: 'ValidatorRule',
+		name: 'Min EVs',
+		desc: "Minimum total EVs allowed on each Pokémon",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
+	},
+	maxevs: {
+		effectType: 'ValidatorRule',
+		name: 'Max EVs',
+		desc: "Maximum total EVs allowed on each Pokémon",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
+	},
 	stadiumitemsclause: {
 		effectType: 'ValidatorRule',
 		name: 'Stadium Items Clause',
