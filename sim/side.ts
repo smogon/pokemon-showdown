@@ -771,17 +771,17 @@ export class Side {
 				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
 		}
-		if (ruleTable.maxChosenTotalLevel) {
+		if (ruleTable.maxTotalLevel) {
 			let totalLevel = 0;
 			for (const pos of positions) totalLevel += this.pokemon[pos].level;
 
-			if (totalLevel > ruleTable.maxChosenTotalLevel) {
+			if (totalLevel > ruleTable.maxTotalLevel) {
 				if (!data) {
 					// autoChoose
 					positions = [...this.pokemon.keys()].sort((a, b) => (this.pokemon[a].level - this.pokemon[b].level))
 						.slice(0, chosenTeamSize);
 				} else {
-					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${ruleTable.maxChosenTotalLevel}; please select a valid team of ${chosenTeamSize} Pokémon`);
+					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${ruleTable.maxTotalLevel}; please select a valid team of ${chosenTeamSize} Pokémon`);
 				}
 			}
 		}

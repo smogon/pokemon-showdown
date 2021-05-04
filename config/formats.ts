@@ -3092,7 +3092,7 @@ export const Formats: FormatList = [
 		mod: 'gen2',
 		searchShow: false,
 		ruleset: [
-			'Chosen Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Chosen Total Level = 155',
+			'Chosen Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
 			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause', 'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'Nintendo Cup 2000 Move Legality',
 		],
 		banlist: ['Uber'],
@@ -3180,7 +3180,7 @@ export const Formats: FormatList = [
 		mod: 'gen1jpn',
 		searchShow: false,
 		ruleset: [
-			'Chosen Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Chosen Total Level = 155',
+			'Chosen Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
 			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Nintendo Cup 1997 Move Legality',
 		],
 		banlist: ['Uber'],

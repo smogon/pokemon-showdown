@@ -40,7 +40,7 @@ export class RuleTable extends Map<string, string> {
 	minTeamSize!: number;
 	maxTeamSize!: number;
 	chosenTeamSize!: number | null;
-	maxChosenTotalLevel!: number | null;
+	maxTotalLevel!: number | null;
 	minSourceGen!: number;
 	minLevel!: number;
 	maxLevel!: number;
@@ -643,7 +643,7 @@ export class DexFormats {
 		ruleTable.minTeamSize = Number(ruleTable.valueRules.get('minteamsize')) || 0;
 		ruleTable.maxTeamSize = Number(ruleTable.valueRules.get('maxteamsize')) || 6;
 		ruleTable.chosenTeamSize = Number(ruleTable.valueRules.get('chosenteamsize')) || null;
-		ruleTable.maxChosenTotalLevel = Number(ruleTable.valueRules.get('maxchosentotallevel')) || null;
+		ruleTable.maxTotalLevel = Number(ruleTable.valueRules.get('maxtotallevel')) || null;
 		ruleTable.minSourceGen = Number(ruleTable.valueRules.get('minsourcegen')) || 1;
 		ruleTable.minLevel = Number(ruleTable.valueRules.get('minlevel')) || 1;
 		ruleTable.maxLevel = Number(ruleTable.valueRules.get('maxlevel')) || 100;

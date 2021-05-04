@@ -1317,15 +1317,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 		hasValue: 'positive-integer',
 		// hardcoded in sim/team-validator
 	},
-	maxchosentotallevel: {
+	maxtotallevel: {
 		effectType: 'Rule',
-		name: 'Max Chosen Total Level',
+		name: 'Max Total Level',
 		desc: "Teams are restricted to a total maximum Level limit and Pokemon are restricted to a set range of Levels",
 		hasValue: 'positive-integer',
 		onValidateTeam(team) {
 			const chosenTeamSize = this.ruleTable.chosenTeamSize || team.length;
-			const maxChosenTotalLevel = this.ruleTable.maxChosenTotalLevel;
-			if (maxChosenTotalLevel === null) throw new Error("No maxChosenTotalLevel specified.");
+			const maxTotalLevel = this.ruleTable.maxTotalLevel;
+			if (maxTotalLevel === null) throw new Error("No maxChosenTotalLevel specified.");
 
 			const teamLevels = [];
 			for (const set of team) {
@@ -1337,9 +1337,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (let i = 0; i < chosenTeamSize; i++) {
 				totalLowestLevels += teamLevels[i];
 			}
-			if (totalLowestLevels > maxChosenTotalLevel) {
+			if (totalLowestLevels > maxTotalLevel) {
+				const thePokemon = chosenTeamSize === team.length ?
+					`all ${team.length} Pokémon` : `the ${chosenTeamSize} lowest-leveled Pokémon`;
 				return [
-					`The combined levels of the ${chosenTeamSize} lowest-leveled Pokémon of your team is ${totalLowestLevels}, above the format's total level limit of ${maxChosenTotalLevel}.`,
+					`The combined levels of ${thePokemon} of your team is ${totalLowestLevels}, above the format's total level limit of ${maxTotalLevel}${this.ruleTable.blame('maxtotallevel')}.`,
 				];
 			}
 
@@ -1347,22 +1349,22 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (let i = 0; i < chosenTeamSize - 1; i++) {
 				minTotalWithHighestLevel += teamLevels[i];
 			}
-			if (minTotalWithHighestLevel > maxChosenTotalLevel) {
+			if (minTotalWithHighestLevel > maxTotalLevel) {
 				return [
-					`Your highest level Pokémon is unusable, because there's no way to create a team with it whose total level is less than the format's total level limit of ${maxChosenTotalLevel}.`,
+					`Your highest level Pokémon is unusable, because there's no way to create a team with it whose total level is less than the format's total level limit of ${maxTotalLevel}${this.ruleTable.blame('maxtotallevel')}.`,
 				];
 			}
 		},
 		onValidateRule(value) {
 			const ruleTable = this.ruleTable;
-			const maxChosenTotalLevel = ruleTable.maxChosenTotalLevel!;
+			const maxChosenTotalLevel = ruleTable.maxTotalLevel!;
 			const maxTeamSize = ruleTable.chosenTeamSize || ruleTable.maxTeamSize;
 			const maxTeamSizeBlame = ruleTable.chosenTeamSize ? ruleTable.blame('chosenteamsize') : ruleTable.blame('maxteamsize');
 			if (maxChosenTotalLevel >= ruleTable.maxLevel * maxTeamSize) {
-				throw new Error(`A Max Chosen Total Level of ${maxChosenTotalLevel}${ruleTable.blame('maxchosentotallevel')} is too high (and will have no effect) with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
+				throw new Error(`A Max Total Level of ${maxChosenTotalLevel}${ruleTable.blame('maxtotallevel')} is too high (and will have no effect) with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
 			}
 			if (maxChosenTotalLevel <= ruleTable.minLevel * maxTeamSize) {
-				throw new Error(`A Max Chosen Total Level of ${maxChosenTotalLevel}${ruleTable.blame('maxchosentotallevel')} is too low with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}`);
+				throw new Error(`A Max Total Level of ${maxChosenTotalLevel}${ruleTable.blame('maxtotallevel')} is too low with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}`);
 			}
 		},
 		// hardcoded in sim/side
