@@ -750,20 +750,18 @@ export class Side {
 		const chosenTeamSize = Math.min(this.pokemon.length, this.battle.format.teamLength?.battle || Infinity);
 
 		// make sure positions is exactly of length chosenTeamSize
-		// always autofill the choice to the required team size
+		// - If too big: the client automatically sends a full list, so we just trim it down to size
 		positions.splice(chosenTeamSize);
-		if (positions.length < chosenTeamSize) {
-			if (positions.length === 0) {
-				for (let i = 0; i < chosenTeamSize; i++) positions.push(i);
-			} else {
-				for (let i = 0; i < chosenTeamSize; i++) {
-					if (!positions.includes(i)) positions.push(i);
-					// duplicate in input, let the rest of the code handle the error message
-					if (positions.length >= chosenTeamSize) break;
-				}
+		// - If too small: we intentionally support only sending leads and having the sim fill in the rest
+		if (positions.length === 0) {
+			for (let i = 0; i < chosenTeamSize; i++) positions.push(i);
+		} else if (positions.length < chosenTeamSize) {
+			for (let i = 0; i < chosenTeamSize; i++) {
+				if (!positions.includes(i)) positions.push(i);
+				// duplicate in input, let the rest of the code handle the error message
+				if (positions.length >= chosenTeamSize) break;
 			}
 		}
-		// return this.emitChoiceError(`Can't choose for Team Preview: You are limited to ${chosenTeamSize} Pokémon`);
 
 		for (const [index, pos] of positions.entries()) {
 			if (isNaN(pos) || pos < 0 || pos >= this.pokemon.length) {
