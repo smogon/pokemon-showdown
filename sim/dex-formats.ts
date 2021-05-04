@@ -571,11 +571,11 @@ export class DexFormats {
 				continue;
 			}
 
-			if ("+*-".includes(ruleSpec.charAt(0))) {
+			if ('+*-'.includes(ruleSpec.charAt(0))) {
 				if (ruleTable.has(ruleSpec)) {
 					throw new Error(`Rule "${rule}" was added by "${format.name}" but already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
 				}
-				for (const prefix of "-*+") ruleTable.delete(prefix + ruleSpec.slice(1));
+				for (const prefix of '+*-') ruleTable.delete(prefix + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
