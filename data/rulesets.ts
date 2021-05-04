@@ -26,16 +26,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Standard GBU',
 		desc: "The standard ruleset for all official in-game Pok&eacute;mon tournaments and Battle Spot",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
-		banlist: ['Battle Bond',
-			'Mewtwo', 'Mew',
-			'Lugia', 'Ho-Oh', 'Celebi',
-			'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys',
-			'Dialga', 'Palkia', 'Giratina', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
-			'Victini', 'Reshiram', 'Zekrom', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect',
-			'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion',
-			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zeraora',
-			'Meltan', 'Melmetal', 'Zacian', 'Zamazenta', 'Eternatus', 'Zarude', 'Calyrex',
+		ruleset: [
+			'Min Source Gen = 8',
+			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod',
+		],
+		banlist: [
+			'Battle Bond',
+			'Restricted Legendary', 'Mythical',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
@@ -47,26 +44,16 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Minimal GBU',
 		desc: "The standard ruleset for official tournaments, but two Restricted Legendaries are allowed",
-		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: ['Battle Bond',
-			'Mew',
-			'Celebi',
-			'Jirachi', 'Deoxys',
-			'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
-			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
-			'Diancie', 'Hoopa', 'Volcanion',
-			'Magearna', 'Marshadow', 'Zeraora',
-			'Meltan', 'Melmetal', 'Zarude',
+		ruleset: [
+			'Min Source Gen = 8',
+			'Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
+		],
+		banlist: [
+			'Battle Bond',
+			'Mythical',
 		],
 		restricted: [
-			'Mewtwo',
-			'Lugia', 'Ho-Oh',
-			'Kyogre', 'Groudon', 'Rayquaza',
-			'Dialga', 'Palkia', 'Giratina',
-			'Reshiram', 'Zekrom', 'Kyurem',
-			'Xerneas', 'Yveltal', 'Zygarde',
-			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
-			'Zacian', 'Zamazenta', 'Eternatus', 'Calyrex',
+			'Restricted Legendary',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
@@ -86,26 +73,16 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Single Restricted GBU',
 		desc: "The standard ruleset for official tournaments, but one Restricted Legendary is allowed",
-		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: ['Battle Bond',
-			'Mew',
-			'Celebi',
-			'Jirachi', 'Deoxys',
-			'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
-			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
-			'Diancie', 'Hoopa', 'Volcanion',
-			'Magearna', 'Marshadow', 'Zeraora',
-			'Meltan', 'Melmetal', 'Zarude',
+		ruleset: [
+			'Min Source Gen = 8',
+			'Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
+		],
+		banlist: [
+			'Battle Bond',
+			'Mythical',
 		],
 		restricted: [
-			'Mewtwo',
-			'Lugia', 'Ho-Oh',
-			'Kyogre', 'Groudon', 'Rayquaza',
-			'Dialga', 'Palkia', 'Giratina',
-			'Reshiram', 'Zekrom', 'Kyurem',
-			'Xerneas', 'Yveltal', 'Zygarde',
-			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
-			'Zacian', 'Zamazenta', 'Eternatus', 'Calyrex',
+			'Restricted Legendary',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
@@ -394,6 +371,22 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	forcemonotype: {
+		effectType: 'ValidatorRule',
+		name: 'Force Monotype',
+		hasValue: true,
+		onValidateRule(value) {
+			if (!this.dex.types.get(value).exists) throw new Error(`Misspelled type "${value}"`);
+			if (!this.dex.types.isName(value)) throw new Error(`Incorrectly capitalized type "${value}"`);
+		},
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const type = this.ruleTable.valueRules.get('forcemonotype')!;
+			if (!species.types.includes(type)) {
+				return [`${set.species} must have type ${type}`];
+			}
+		},
+	},
 	teampreview: {
 		effectType: 'Rule',
 		name: 'Team Preview',
@@ -414,32 +407,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'One vs One',
 		desc: "Only allows one Pok&eacute;mon in battle",
-		onValidateTeam(team, format) {
-			if (format.gameType !== 'singles') {
-				return [`One vs One is for singles formats.`, `(Use Two vs Two in doubles)`];
-			}
-		},
-		onFieldStart() {
-			if (this.format.gameType === 'singles') (this.format as any).teamLength = {battle: 1};
-		},
+		ruleset: ['Chosen Team Size = 1'],
 	},
 	twovstwo: {
 		effectType: 'Rule',
 		name: 'Two vs Two',
 		desc: "Only allows two Pok&eacute;mon in battle",
-		onValidateTeam(team, format) {
-			if (format.gameType === 'triples') {
-				return [`Two vs Two is for non-triples formats.`];
-			}
-		},
-		onFieldStart() {
-			if (this.format.gameType !== 'triples') (this.format as any).teamLength = {battle: 2};
-		},
+		ruleset: ['Chosen Team Size = 2'],
 	},
 	littlecup: {
 		effectType: 'ValidatorRule',
 		name: 'Little Cup',
 		desc: "Only allows Pok&eacute;mon that can evolve and don't have any prior evolutions",
+		ruleset: ['Max Level = 5'],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species || set.name);
 			if (species.prevo && this.dex.species.get(species.prevo).gen <= this.gen) {
@@ -447,10 +427,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			if (!species.nfe) {
 				return [set.species + " doesn't have an evolution family."];
-			}
-			// Temporary hack for LC past-gen formats and other mashups
-			if (set.level > 5) {
-				return [`${set.species} can't be above level 5 in Little Cup formats.`];
 			}
 		},
 	},
@@ -1042,6 +1018,18 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return -typeMod;
 		},
 	},
+
+	minsourcegen: {
+		effectType: 'ValidatorRule',
+		name: "Min Source Gen",
+		desc: "Pokemon must be obtained from this generation or later.",
+		hasValue: true,
+		onValidateRule(value) {
+			const minSourceGen = parseInt(value);
+			return value === `${minSourceGen}` && minSourceGen >= 1 && minSourceGen < this.dex.gen;
+		},
+	},
+
 	stabmonsmovelegality: {
 		effectType: 'ValidatorRule',
 		name: 'STABmons Move Legality',
@@ -1303,41 +1291,102 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return problems;
 		},
 	},
-	cuplevellimit: {
+	chosenteamsize: {
+		effectType: 'Rule',
+		name: 'Chosen Team Size',
+		desc: "Team size that can be brought out of Team Preview",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/side
+		onValidateRule() {
+			if (!this.ruleTable.has('teampreview')) {
+				throw new Error(`The "Chosen Team Size" rule${this.ruleTable.blame('chosenteamsize')} requires Team Preview.`);
+			}
+		},
+	},
+	minteamsize: {
 		effectType: 'ValidatorRule',
-		name: 'Cup Level Limit',
+		name: "Min Team Size",
+		desc: "Minimum team size that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
+	},
+	maxteamsize: {
+		effectType: 'ValidatorRule',
+		name: "Max Team Size",
+		desc: "Maximum team size that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
+	},
+	maxchosentotallevel: {
+		effectType: 'Rule',
+		name: 'Max Chosen Total Level',
 		desc: "Teams are restricted to a total maximum Level limit and Pokemon are restricted to a set range of Levels",
-		onValidateTeam(team, format) {
-			if (!format.teamLength?.battle) return;
-			if (!format.cupLevelLimit) return;
+		hasValue: 'positive-integer',
+		onValidateTeam(team) {
+			const chosenTeamSize = this.ruleTable.chosenTeamSize || team.length;
+			const maxChosenTotalLevel = this.ruleTable.maxChosenTotalLevel;
+			if (maxChosenTotalLevel === null) throw new Error("No maxChosenTotalLevel specified.");
+
 			const teamLevels = [];
 			for (const set of team) {
 				teamLevels.push(set.level);
 			}
-			teamLevels.sort((a, b) => b - a);
-			let combinedLowestLevels = 0;
-			for (let i = 0; i < format.teamLength.battle; i++) {
-				combinedLowestLevels += teamLevels.pop()!;
+			teamLevels.sort((a, b) => a - b);
+
+			let totalLowestLevels = 0;
+			for (let i = 0; i < chosenTeamSize; i++) {
+				totalLowestLevels += teamLevels[i];
 			}
-			if (combinedLowestLevels > format.cupLevelLimit.total) {
+			if (totalLowestLevels > maxChosenTotalLevel) {
 				return [
-					`The combined levels of the ${format.teamLength.battle} lowest Leveled Pokemon of your team is ${combinedLowestLevels}, above the format's maximum combined level of ${format.cupLevelLimit.total}.`,
+					`The combined levels of the ${chosenTeamSize} lowest-leveled Pokémon of your team is ${totalLowestLevels}, above the format's total level limit of ${maxChosenTotalLevel}.`,
+				];
+			}
+
+			let minTotalWithHighestLevel = teamLevels[teamLevels.length - 1];
+			for (let i = 0; i < chosenTeamSize - 1; i++) {
+				minTotalWithHighestLevel += teamLevels[i];
+			}
+			if (minTotalWithHighestLevel > maxChosenTotalLevel) {
+				return [
+					`Your highest level Pokémon is unusable, because there's no way to create a team with it whose total level is less than the format's total level limit of ${maxChosenTotalLevel}.`,
 				];
 			}
 		},
-		onValidateSet(set, format) {
-			if (!format.cupLevelLimit) return;
-			if (set.level < format.cupLevelLimit.range[0]) {
-				return [
-					`${set.name || set.species} is Level ${set.level}, below the format's minimum Level of ${format.cupLevelLimit.range[0]}.`,
-				];
+		onValidateRule(value) {
+			const ruleTable = this.ruleTable;
+			const maxChosenTotalLevel = ruleTable.maxChosenTotalLevel!;
+			const maxTeamSize = ruleTable.chosenTeamSize || ruleTable.maxTeamSize;
+			const maxTeamSizeBlame = ruleTable.chosenTeamSize ? ruleTable.blame('chosenteamsize') : ruleTable.blame('maxteamsize');
+			if (maxChosenTotalLevel >= ruleTable.maxLevel * maxTeamSize) {
+				throw new Error(`A Max Chosen Total Level of ${maxChosenTotalLevel}${ruleTable.blame('maxchosentotallevel')} is too high (and will have no effect) with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
 			}
-			if (set.level > format.cupLevelLimit.range[1]) {
-				return [
-					`${set.name || set.species} is Level ${set.level}, above the format's maximum Level of ${format.cupLevelLimit.range[1]}.`,
-				];
+			if (maxChosenTotalLevel <= ruleTable.minLevel * maxTeamSize) {
+				throw new Error(`A Max Chosen Total Level of ${maxChosenTotalLevel}${ruleTable.blame('maxchosentotallevel')} is too low with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}`);
 			}
 		},
+		// hardcoded in sim/side
+	},
+	minlevel: {
+		effectType: 'ValidatorRule',
+		name: 'Min Level',
+		desc: "Minimum level of brought Pokémon",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
+	},
+	maxlevel: {
+		effectType: 'ValidatorRule',
+		name: 'Max Level',
+		desc: "Maximum level of brought Pokémon (note that this should be 100 in level-down rules like VGC)",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
+	},
+	defaultlevel: {
+		effectType: 'ValidatorRule',
+		name: 'Default Level',
+		desc: "Default level of brought Pokémon (normally should be equal to Max Level, except Custom Games have a very high max level but still default to 100)",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
 	},
 	stadiumitemsclause: {
 		effectType: 'ValidatorRule',

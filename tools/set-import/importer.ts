@@ -434,9 +434,10 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 
 function getLevel(format: Format, level = 0) {
 	if (format.forcedLevel) return format.forcedLevel;
-	const maxLevel = format.maxLevel || 100;
+	const ruleTable = Dex.formats.getRuleTable(format);
+	const maxLevel = ruleTable.maxLevel;
 	const maxForcedLevel = format.maxForcedLevel || maxLevel;
-	if (!level) level = format.defaultLevel || maxLevel;
+	if (!level) level = ruleTable.defaultLevel;
 	return level > maxForcedLevel ? maxForcedLevel : level;
 }
 
