@@ -189,12 +189,24 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 * The range of levels on Pokemon that players can bring to battle and
 	 * the summative limit of those levels
 	 */
-	readonly cupLevelLimit?: {range: [number, number], total: number};
-	/**
-	 * The number of Pokemon players can bring to battle and
-	 * the number that can actually be used.
-	 */
-	readonly teamLength?: {battle?: number, validate?: [number, number]};
+	readonly cupLevelLimit?: {
+		/** Minimum and maximum level (redundant with maxLevel) */
+		range: [number, number],
+		/** Maximum total level that can be chosen in Team Preview */
+		total: number,
+	};
+	readonly teamLength?: {
+		/**
+		 * Force this many pokemon to be chosen in Team Preview
+		 * (simultaneously a minimum and a maximum.)
+		 */
+		battle?: number,
+		/**
+		 * Require this many pokemon to be brought into Team Preview
+		 * (or into the battle, for battles without Team Preview)
+		 */
+		validate?: [number, number],
+	};
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
 	/** Pokemon must be obtained from this generation or later. */
