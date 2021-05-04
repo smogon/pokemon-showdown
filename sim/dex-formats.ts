@@ -223,7 +223,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 * Only applies to rules, not formats
 	 */
 	readonly hasValue?: boolean | 'number' | 'integer' | 'positive-integer';
-	readonly onValidateRule?: (this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string) => void;
+	readonly onValidateRule?: (this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string) => string | void;
 
 	readonly battle?: ModdedBattleScriptsData;
 	readonly pokemon?: ModdedBattlePokemon;
@@ -632,7 +632,8 @@ export class DexFormats {
 			if ("+*-!".includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
-				subFormat.onValidateRule?.call({format, ruleTable, dex: this.dex}, ruleTable.valueRules.get(rule as ID)!);
+				const value = subFormat.onValidateRule?.call({format, ruleTable, dex: this.dex}, ruleTable.valueRules.get(rule as ID)!);
+				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
 			}
 		}
 
