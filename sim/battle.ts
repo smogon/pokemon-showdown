@@ -237,7 +237,7 @@ export class Battle {
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
 		for (const rule of this.ruleTable.keys()) {
-			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
+			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
 				const hasEventHandler = Object.keys(subFormat).some(
@@ -1617,7 +1617,7 @@ export class Battle {
 
 		if (format.onBegin) format.onBegin.call(this);
 		for (const rule of this.ruleTable.keys()) {
-			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
+			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
 				if (subFormat.onBegin) subFormat.onBegin.call(this);
