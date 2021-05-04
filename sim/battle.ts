@@ -241,6 +241,7 @@ export class Battle {
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
 				const hasEventHandler = Object.keys(subFormat).some(
+					// skip event handlers that are handled elsewhere
 					val => val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
 				);
 				if (hasEventHandler) this.field.addPseudoWeather(rule);
@@ -1145,7 +1146,7 @@ export class Battle {
 			// `chosenTeamSize = 6` means the format wants the user to select
 			// the entire team order, unlike `chosenTeamSize = undefined` which
 			// will only ask the user to select their lead(s).
-			const chosenTeamSize = this.format.teamLength?.battle;
+			const chosenTeamSize = this.ruleTable.chosenTeamSize;
 			this.add('teampreview' + (chosenTeamSize ? '|' + chosenTeamSize : ''));
 		}
 
@@ -1186,7 +1187,7 @@ export class Battle {
 		case 'teampreview':
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
-				const maxChosenTeamSize = this.format.teamLength?.battle;
+				const maxChosenTeamSize = this.ruleTable.chosenTeamSize || undefined;
 				requests[i] = {teamPreview: true, maxChosenTeamSize, side: side.getRequestData()};
 			}
 			break;

@@ -736,7 +736,7 @@ export class Side {
 	 * supporting it.
 	 */
 	chosenTeamSize() {
-		return Math.min(this.pokemon.length, this.battle.format.teamLength?.battle || Infinity);
+		return Math.min(this.pokemon.length, this.battle.ruleTable.chosenTeamSize || Infinity);
 	}
 
 	chooseTeam(data = '') {
@@ -744,10 +744,10 @@ export class Side {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
 
+		const ruleTable = this.battle.ruleTable;
 		let positions = data.split(data.includes(',') ? ',' : '')
 			.map(datum => parseInt(datum) - 1);
-		const format = this.battle.format;
-		const chosenTeamSize = Math.min(this.pokemon.length, this.battle.format.teamLength?.battle || Infinity);
+		const chosenTeamSize = this.chosenTeamSize();
 
 		// make sure positions is exactly of length chosenTeamSize
 		// - If too big: the client automatically sends a full list, so we just trim it down to size
@@ -771,17 +771,17 @@ export class Side {
 				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
 		}
-		if (format.cupLevelLimit) {
+		if (ruleTable.maxTotalLevel) {
 			let totalLevel = 0;
 			for (const pos of positions) totalLevel += this.pokemon[pos].level;
 
-			if (totalLevel > format.cupLevelLimit.total) {
+			if (totalLevel > ruleTable.maxTotalLevel) {
 				if (!data) {
 					// autoChoose
 					positions = [...this.pokemon.keys()].sort((a, b) => (this.pokemon[a].level - this.pokemon[b].level))
 						.slice(0, chosenTeamSize);
 				} else {
-					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${format.cupLevelLimit.total}; please select a valid team of ${chosenTeamSize} Pokémon`);
+					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${ruleTable.maxTotalLevel}; please select a valid team of ${chosenTeamSize} Pokémon`);
 				}
 			}
 		}

@@ -34,8 +34,17 @@ export class RuleTable extends Map<string, string> {
 	complexTeamBans: ComplexTeamBan[];
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
-	minSourceGen: [number, string] | null;
 	tagRules: string[];
+	valueRules: Map<string, string>;
+
+	minTeamSize!: number;
+	maxTeamSize!: number;
+	chosenTeamSize!: number | null;
+	maxTotalLevel!: number | null;
+	minSourceGen!: number;
+	minLevel!: number;
+	maxLevel!: number;
+	defaultLevel!: number;
 
 	constructor() {
 		super();
@@ -43,8 +52,8 @@ export class RuleTable extends Map<string, string> {
 		this.complexTeamBans = [];
 		this.checkCanLearn = null;
 		this.timer = null;
-		this.minSourceGen = null;
 		this.tagRules = [];
+		this.valueRules = new Map();
 	}
 
 	isBanned(thing: string) {
@@ -117,6 +126,11 @@ export class RuleTable extends Map<string, string> {
 		return source ? `banned by ${source}` : `banned`;
 	}
 
+	blame(key: string): string {
+		const source = this.get(key);
+		return source ? ` from ${source}` : ``;
+	}
+
 	getComplexBanIndex(complexBans: ComplexBan[], rule: string): number {
 		const ruleId = toID(rule);
 		let complexBanIndex = -1;
@@ -185,50 +199,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly customRules: string[] | null;
 	/** Table of rule names and banned effects. */
 	ruleTable: RuleTable | null;
-	/**
-	 * The range of levels on Pokemon that players can bring to battle and
-	 * the summative limit of those levels
-	 */
-	readonly cupLevelLimit?: {
-		/** Minimum and maximum level (redundant with maxLevel) */
-		range: [number, number],
-		/** Maximum total level that can be chosen in Team Preview */
-		total: number,
-	};
-	readonly teamLength?: {
-		/**
-		 * Force this many pokemon to be chosen in Team Preview
-		 * (simultaneously a minimum and a maximum.)
-		 */
-		battle?: number,
-		/**
-		 * Require this many pokemon to be brought into Team Preview
-		 * (or into the battle, for battles without Team Preview)
-		 */
-		validate?: [number, number],
-	};
-	/** Setting EV maximum and minimum in total */
-	readonly totalEVLimit?: [number, number];
-	/** EV limit per stat */
-	readonly minStatEV?: SparseStatsTable;
-	readonly maxStatEV?: SparseStatsTable;
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
-	/** Pokemon must be obtained from this generation or later. */
-	readonly minSourceGen?: number;
-	/**
-	 * Maximum possible level pokemon you can bring. Note that this is
-	 * still 100 in VGC, because you can bring level 100 pokemon,
-	 * they'll just be set to level 50. Can be above 100 in special
-	 * formats.
-	 */
-	readonly maxLevel: number;
-	/**
-	 * Default level of a pokemon without level specified. Mainly
-	 * relevant to Custom Game where the default level is still 100
-	 * even though higher level pokemon can be brought.
-	 */
-	readonly defaultLevel: number;
 	/**
 	 * Forces all pokemon brought in to this level. Certain Game Freak
 	 * formats will change level 1 and level 100 pokemon to level 50,
@@ -245,7 +217,18 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 * 64.
 	 */
 	readonly maxForcedLevel?: number;
+	/** Setting EV maximum and minimum in total */
+	readonly totalEVLimit?: [number, number];
+	/** EV limit per stat */
+	readonly minStatEV?: SparseStatsTable;
+	readonly maxStatEV?: SparseStatsTable;
 	readonly noLog: boolean;
+
+	/**
+	 * Only applies to rules, not formats
+	 */
+	readonly hasValue?: boolean | 'number' | 'integer' | 'positive-integer';
+	readonly onValidateRule?: (this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string) => void;
 
 	readonly battle?: ModdedBattleScriptsData;
 	readonly pokemon?: ModdedBattlePokemon;
@@ -302,15 +285,10 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.unbanlist = data.unbanlist || [];
 		this.customRules = data.customRules || null;
 		this.ruleTable = null;
-		this.cupLevelLimit = data.cupLevelLimit || undefined;
-		this.teamLength = data.teamLength || undefined;
 		this.totalEVLimit = data.totalEVLimit || [];
 		this.minStatEV = data.minStatEV || {};
 		this.maxStatEV = data.maxStatEV || {};
 		this.onBegin = data.onBegin || undefined;
-		this.minSourceGen = data.minSourceGen || undefined;
-		this.maxLevel = data.maxLevel || 100;
-		this.defaultLevel = data.defaultLevel || this.maxLevel;
 		this.forcedLevel = data.forcedLevel || undefined;
 		this.maxForcedLevel = data.maxForcedLevel || undefined;
 		this.noLog = !!data.noLog;
@@ -539,9 +517,6 @@ export class DexFormats {
 		if (format.timer) {
 			ruleTable.timer = [format.timer, format.name];
 		}
-		if (format.minSourceGen) {
-			ruleTable.minSourceGen = [format.minSourceGen, format.name];
-		}
 
 		// apply rule repeals before other rules
 		// repeals is a ruleid:depth map
@@ -581,30 +556,58 @@ export class DexFormats {
 
 			if ('+*-'.includes(ruleSpec.charAt(0))) {
 				if (ruleTable.has(ruleSpec)) {
-					throw new Error(`Rule "${rule}" was added by "${format.name}" but already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
+					throw new Error(`Rule "${rule}" in "${format.name}" already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
 				}
 				for (const prefix of '+*-') ruleTable.delete(prefix + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
-			const subformat = this.get(ruleSpec);
+			let [formatid, value] = ruleSpec.split('=');
+			const subformat = this.get(formatid);
 			if (repeals?.has(subformat.id)) {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
 			}
 			if (ruleTable.has(subformat.id)) {
-				throw new Error(`Rule "${rule}" was added by "${format.name}" but already exists in "${ruleTable.get(subformat.id) || format.name}"`);
+				throw new Error(`Rule "${rule}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
+			}
+			if (subformat.hasValue) {
+				if (value === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
+				if (value === 'Current Gen') value = `${this.dex.gen}`;
+				if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
+					const intValue = parseInt(value);
+					if (isNaN(intValue) || value !== `${intValue}`) {
+						throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
+					}
+				}
+				if (subformat.hasValue === 'positive-integer') {
+					if (parseInt(value) <= 0) throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
+				}
+				if (ruleTable.valueRules.has(subformat.id) && ruleTable.valueRules.get(subformat.id) !== value) {
+					throw new Error(`Rule "${ruleSpec}" conflicts with "${subformat.id}=${ruleTable.valueRules.get(subformat.id)}"${ruleTable.blame(subformat.id)}`);
+				}
+				ruleTable.valueRules.set(subformat.id, value);
+			} else {
+				if (value !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
 			}
 			ruleTable.set(subformat.id, '');
-			if (!subformat.exists) continue;
 			if (depth > 16) {
 				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
 			}
 			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
-			for (const [k, v] of subRuleTable) {
+			for (const [ruleid, sourceFormat] of subRuleTable) {
 				// don't check for "already exists" here; multiple inheritance is allowed
-				if (!repeals?.has(k)) {
-					ruleTable.set(k, v || subformat.name);
+				if (!repeals?.has(ruleid)) {
+					const newValue = subRuleTable.valueRules.get(ruleid);
+					const oldValue = ruleTable.valueRules.get(ruleid);
+					if (newValue !== undefined && newValue !== oldValue) {
+						if (oldValue !== undefined) {
+							// conflict!
+							throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${ruleid}=${oldValue}"${ruleTable.blame(ruleid)}`);
+						}
+						ruleTable.valueRules.set(ruleid, newValue);
+					}
+					ruleTable.set(ruleid, sourceFormat || subformat.name);
 				}
 			}
 			for (const [subRule, source, limit, bans] of subRuleTable.complexBans) {
@@ -630,19 +633,51 @@ export class DexFormats {
 				}
 				ruleTable.timer = subRuleTable.timer;
 			}
-			// minSourceGen is automatically ignored if higher than current gen
-			// this helps the common situation where Standard has a minSourceGen in the
-			// latest gen but not in any past gens
-			if (subRuleTable.minSourceGen && subRuleTable.minSourceGen[0] <= this.dex.gen) {
-				if (ruleTable.minSourceGen) {
-					throw new Error(
-						`"${format.name}" has conflicting minSourceGen from "${ruleTable.minSourceGen[1]}" and "${subRuleTable.minSourceGen[1]}"`
-					);
-				}
-				ruleTable.minSourceGen = subRuleTable.minSourceGen;
-			}
 		}
 		this.getTagRules(ruleTable);
+
+		for (const rule of ruleTable.keys()) {
+			if ("+*-!".includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			if (subFormat.exists) {
+				subFormat.onValidateRule?.call({format, ruleTable, dex: this.dex}, ruleTable.valueRules.get(rule as ID)!);
+			}
+		}
+
+		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
+			format.gameType === 'doubles' ? 2 :
+			1;
+
+		ruleTable.minTeamSize = Number(ruleTable.valueRules.get('minteamsize')) || 0;
+		ruleTable.maxTeamSize = Number(ruleTable.valueRules.get('maxteamsize')) || 6;
+		ruleTable.chosenTeamSize = Number(ruleTable.valueRules.get('chosenteamsize')) || null;
+		ruleTable.maxTotalLevel = Number(ruleTable.valueRules.get('maxtotallevel')) || null;
+		ruleTable.minSourceGen = Number(ruleTable.valueRules.get('minsourcegen')) || 1;
+		ruleTable.minLevel = Number(ruleTable.valueRules.get('minlevel')) || 1;
+		ruleTable.maxLevel = Number(ruleTable.valueRules.get('maxlevel')) || 100;
+		ruleTable.defaultLevel = Number(ruleTable.valueRules.get('defaultlevel')) || ruleTable.maxLevel;
+		if (ruleTable.minTeamSize && ruleTable.minTeamSize < gameTypeMinTeamSize) {
+			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+		}
+		if (ruleTable.chosenTeamSize && ruleTable.chosenTeamSize < gameTypeMinTeamSize) {
+			throw new Error(`Chosen team size ${ruleTable.chosenTeamSize}${ruleTable.blame('chosenteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+		}
+		if (ruleTable.minTeamSize && ruleTable.chosenTeamSize && ruleTable.minTeamSize < ruleTable.chosenTeamSize) {
+			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} is lower than chosen team size ${ruleTable.chosenTeamSize}${ruleTable.blame('chosenteamsize')}.`);
+		}
+		if (!ruleTable.minTeamSize) ruleTable.minTeamSize = Math.max(gameTypeMinTeamSize, ruleTable.chosenTeamSize || 0);
+		if (ruleTable.maxTeamSize > 24) {
+			throw new Error(`Max team size ${ruleTable.maxTeamSize}${ruleTable.blame('maxteamsize')} can't be above 24.`);
+		}
+		if (ruleTable.minLevel > ruleTable.maxLevel) {
+			throw new Error(`Min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')} should not be above max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}.`);
+		}
+		if (ruleTable.defaultLevel > ruleTable.maxLevel) {
+			throw new Error(`Default level ${ruleTable.defaultLevel}${ruleTable.blame('defaultlevel')} should not be above max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}.`);
+		}
+		if (ruleTable.defaultLevel < ruleTable.minLevel) {
+			throw new Error(`Default level ${ruleTable.defaultLevel}${ruleTable.blame('defaultlevel')} should not be below min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}.`);
+		}
 
 		if (!repeals) format.ruleTable = ruleTable;
 		return ruleTable;
@@ -699,10 +734,12 @@ export class DexFormats {
 			}
 			return rule.charAt(0) + this.validateBanRule(rule.slice(1));
 		default:
-			const id = toID(rule);
+			const [ruleName, value] = rule.split('=');
+			let id: string = toID(ruleName);
 			if (!this.dex.data.Rulesets.hasOwnProperty(id)) {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
+			if (typeof value === 'string') id = `${id}=${value.trim()}`;
 			if (rule.startsWith('!')) return `!${id}`;
 			return id;
 		}
