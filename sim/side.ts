@@ -63,7 +63,6 @@ export class Side {
 
 	name: string;
 	avatar: string;
-	maxTeamSize: number;
 	foe: Side = null!; // set in battle.start()
 	/** Only exists in multi battle, for the allied side */
 	allySide: Side | null = null; // set in battle.start()
@@ -110,7 +109,6 @@ export class Side {
 
 		this.name = name;
 		this.avatar = '';
-		this.maxTeamSize = 6;
 
 		this.team = team;
 		this.pokemon = [];
@@ -390,7 +388,7 @@ export class Side {
 		if (this.choice.forcedSwitchesLeft) return false;
 
 		if (this.requestState === 'teampreview') {
-			return this.choice.actions.length >= Math.min(this.maxTeamSize, this.pokemon.length);
+			return this.choice.actions.length >= this.chosenTeamSize();
 		}
 
 		// current request is move/switch
@@ -729,47 +727,62 @@ export class Side {
 		return true;
 	}
 
-	chooseTeam(data?: string) {
-		const autoFill = !data;
-		// default to sending team in order
-		if (!data) data = `123456`;
-		const positions = (('' + data)
-			.split(data.includes(',') ? ',' : '')
-			.map(datum => parseInt(datum) - 1));
-		const format = this.battle.format;
-		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
+	/**
+	 * The number of pokemon you must choose in Team Preview.
+	 *
+	 * Note that PS doesn't support choosing fewer than this number of pokemon.
+	 * In the games, it is sometimes possible to bring fewer than this, but
+	 * since that's nearly always a mistake, we haven't gotten around to
+	 * supporting it.
+	 */
+	chosenTeamSize() {
+		return Math.min(this.pokemon.length, this.battle.format.teamLength?.battle || Infinity);
+	}
+
+	chooseTeam(data = '') {
 		if (this.requestState !== 'teampreview') {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
-		// hack for >6 pokemon Custom Game
-		while (positions.length >= 6 && positions.length < this.maxTeamSize && positions.length < this.pokemon.length) {
-			positions.push(positions.length);
-		}
-		if (format.teamLength?.battle && format.cupLevelLimit) {
-			let totalLevel = 0;
-			for (const pos of positions.slice(0, format.teamLength.battle)) {
-				totalLevel += this.pokemon[pos].level;
+
+		const positions = data.split(data.includes(',') ? ',' : '')
+			.map(datum => parseInt(datum) - 1);
+		const format = this.battle.format;
+		const chosenTeamSize = Math.min(this.pokemon.length, this.battle.format.teamLength?.battle || Infinity);
+
+		// make sure positions is exactly of length chosenTeamSize
+		// always autofill the choice to the required team size
+		positions.splice(chosenTeamSize);
+		if (positions.length < chosenTeamSize) {
+			if (positions.length === 0) {
+				for (let i = 0; i < chosenTeamSize; i++) positions.push(i);
+			} else {
+				for (let i = 0; i < chosenTeamSize; i++) {
+					if (!positions.includes(i)) positions.push(i);
+					// duplicate in input, let the rest of the code handle the error message
+					if (positions.length >= chosenTeamSize) break;
+				}
 			}
-			if (totalLevel > format.cupLevelLimit.total) {
-				return this.emitChoiceError(`Your selected team's combined level of ${totalLevel} exceeds the format's maximum of ${format.cupLevelLimit.total}, please select a valid team of ${format.teamLength.battle} Pokémon`);
-			}
 		}
+		// return this.emitChoiceError(`Can't choose for Team Preview: You are limited to ${chosenTeamSize} Pokémon`);
+
 		for (const pos of positions) {
-			const index = this.choice.actions.length;
-			if (index >= this.maxTeamSize || index >= this.pokemon.length) {
-				// client still sends entire team
-				break;
-				// if (autoFill) break;
-				// return this.emitChoiceError(`Can't choose for Team Preview: You are limited to ${this.maxTeamSize} Pokémon`);
-			}
 			if (isNaN(pos) || pos < 0 || pos >= this.pokemon.length) {
 				return this.emitChoiceError(`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`);
 			}
+		}
+		if (format.cupLevelLimit) {
+			let totalLevel = 0;
+			for (const pos of positions) totalLevel += this.pokemon[pos].level;
+
+			if (totalLevel > format.cupLevelLimit.total) {
+				return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${format.cupLevelLimit.total}; please select a valid team of ${chosenTeamSize} Pokémon`);
+			}
+		}
+		for (const pos of positions) {
 			if (this.choice.switchIns.has(pos)) {
-				if (autoFill) continue;
 				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
-
+			const index = this.choice.actions.length;
 			this.choice.switchIns.add(pos);
 			this.choice.actions.push({
 				choice: 'team',
@@ -905,8 +918,6 @@ export class Side {
 				break;
 			case 'team':
 				if (!this.chooseTeam(data)) return false;
-				// Auto-complete
-				this.chooseTeam();
 				break;
 			case 'pass':
 			case 'skip':

@@ -284,7 +284,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -455,7 +454,6 @@ export const Formats: FormatList = [
 		debug: true,
 		teamLength: {
 			validate: [2, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2343,7 +2341,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2491,7 +2488,6 @@ export const Formats: FormatList = [
 		debug: true,
 		teamLength: {
 			validate: [2, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2657,7 +2653,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2747,7 +2742,6 @@ export const Formats: FormatList = [
 		debug: true,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2781,7 +2775,6 @@ export const Formats: FormatList = [
 		debug: true,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2919,7 +2912,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2972,7 +2964,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -3086,7 +3077,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions
 		ruleset: ['Cancel Mod'],
@@ -3122,7 +3112,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		// no restrictions
 		ruleset: ['Cancel Mod'],
@@ -3198,7 +3187,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
@@ -3211,7 +3199,6 @@ export const Formats: FormatList = [
 		debug: true,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
@@ -3285,7 +3272,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
@@ -3384,7 +3370,6 @@ export const Formats: FormatList = [
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
-			battle: 24,
 		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod'],
 	},
