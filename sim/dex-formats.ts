@@ -39,7 +39,7 @@ export class RuleTable extends Map<string, string> {
 
 	minTeamSize!: number;
 	maxTeamSize!: number;
-	chosenTeamSize!: number | null;
+	pickedTeamSize!: number | null;
 	maxTotalLevel!: number | null;
 	minSourceGen!: number;
 	minLevel!: number;
@@ -642,7 +642,7 @@ export class DexFormats {
 
 		ruleTable.minTeamSize = Number(ruleTable.valueRules.get('minteamsize')) || 0;
 		ruleTable.maxTeamSize = Number(ruleTable.valueRules.get('maxteamsize')) || 6;
-		ruleTable.chosenTeamSize = Number(ruleTable.valueRules.get('chosenteamsize')) || null;
+		ruleTable.pickedTeamSize = Number(ruleTable.valueRules.get('pickedteamsize')) || null;
 		ruleTable.maxTotalLevel = Number(ruleTable.valueRules.get('maxtotallevel')) || null;
 		ruleTable.minSourceGen = Number(ruleTable.valueRules.get('minsourcegen')) || 1;
 		ruleTable.minLevel = Number(ruleTable.valueRules.get('minlevel')) || 1;
@@ -651,13 +651,13 @@ export class DexFormats {
 		if (ruleTable.minTeamSize && ruleTable.minTeamSize < gameTypeMinTeamSize) {
 			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
 		}
-		if (ruleTable.chosenTeamSize && ruleTable.chosenTeamSize < gameTypeMinTeamSize) {
-			throw new Error(`Chosen team size ${ruleTable.chosenTeamSize}${ruleTable.blame('chosenteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+		if (ruleTable.pickedTeamSize && ruleTable.pickedTeamSize < gameTypeMinTeamSize) {
+			throw new Error(`Chosen team size ${ruleTable.pickedTeamSize}${ruleTable.blame('pickedteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
 		}
-		if (ruleTable.minTeamSize && ruleTable.chosenTeamSize && ruleTable.minTeamSize < ruleTable.chosenTeamSize) {
-			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} is lower than chosen team size ${ruleTable.chosenTeamSize}${ruleTable.blame('chosenteamsize')}.`);
+		if (ruleTable.minTeamSize && ruleTable.pickedTeamSize && ruleTable.minTeamSize < ruleTable.pickedTeamSize) {
+			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} is lower than chosen team size ${ruleTable.pickedTeamSize}${ruleTable.blame('pickedteamsize')}.`);
 		}
-		if (!ruleTable.minTeamSize) ruleTable.minTeamSize = Math.max(gameTypeMinTeamSize, ruleTable.chosenTeamSize || 0);
+		if (!ruleTable.minTeamSize) ruleTable.minTeamSize = Math.max(gameTypeMinTeamSize, ruleTable.pickedTeamSize || 0);
 		if (ruleTable.maxTeamSize > 24) {
 			throw new Error(`Max team size ${ruleTable.maxTeamSize}${ruleTable.blame('maxteamsize')} can't be above 24.`);
 		}

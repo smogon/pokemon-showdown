@@ -407,13 +407,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'One vs One',
 		desc: "Only allows one Pok&eacute;mon in battle",
-		ruleset: ['Chosen Team Size = 1'],
+		ruleset: ['Picked Team Size = 1'],
 	},
 	twovstwo: {
 		effectType: 'Rule',
 		name: 'Two vs Two',
 		desc: "Only allows two Pok&eacute;mon in battle",
-		ruleset: ['Chosen Team Size = 2'],
+		ruleset: ['Picked Team Size = 2'],
 	},
 	littlecup: {
 		effectType: 'ValidatorRule',
@@ -1291,15 +1291,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return problems;
 		},
 	},
-	chosenteamsize: {
+	pickedteamsize: {
 		effectType: 'Rule',
-		name: 'Chosen Team Size',
+		name: 'Picked Team Size',
 		desc: "Team size that can be brought out of Team Preview",
 		hasValue: 'positive-integer',
 		// hardcoded in sim/side
 		onValidateRule() {
 			if (!this.ruleTable.has('teampreview')) {
-				throw new Error(`The "Chosen Team Size" rule${this.ruleTable.blame('chosenteamsize')} requires Team Preview.`);
+				throw new Error(`The "Picked Team Size" rule${this.ruleTable.blame('pickedteamsize')} requires Team Preview.`);
 			}
 		},
 	},
@@ -1323,7 +1323,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Teams are restricted to a total maximum Level limit and Pokemon are restricted to a set range of Levels",
 		hasValue: 'positive-integer',
 		onValidateTeam(team) {
-			const chosenTeamSize = this.ruleTable.chosenTeamSize || team.length;
+			const pickedTeamSize = this.ruleTable.pickedTeamSize || team.length;
 			const maxTotalLevel = this.ruleTable.maxTotalLevel;
 			if (maxTotalLevel === null) throw new Error("No maxChosenTotalLevel specified.");
 
@@ -1334,19 +1334,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 			teamLevels.sort((a, b) => a - b);
 
 			let totalLowestLevels = 0;
-			for (let i = 0; i < chosenTeamSize; i++) {
+			for (let i = 0; i < pickedTeamSize; i++) {
 				totalLowestLevels += teamLevels[i];
 			}
 			if (totalLowestLevels > maxTotalLevel) {
-				const thePokemon = chosenTeamSize === team.length ?
-					`all ${team.length} Pokémon` : `the ${chosenTeamSize} lowest-leveled Pokémon`;
+				const thePokemon = pickedTeamSize === team.length ?
+					`all ${team.length} Pokémon` : `the ${pickedTeamSize} lowest-leveled Pokémon`;
 				return [
 					`The combined levels of ${thePokemon} of your team is ${totalLowestLevels}, above the format's total level limit of ${maxTotalLevel}${this.ruleTable.blame('maxtotallevel')}.`,
 				];
 			}
 
 			let minTotalWithHighestLevel = teamLevels[teamLevels.length - 1];
-			for (let i = 0; i < chosenTeamSize - 1; i++) {
+			for (let i = 0; i < pickedTeamSize - 1; i++) {
 				minTotalWithHighestLevel += teamLevels[i];
 			}
 			if (minTotalWithHighestLevel > maxTotalLevel) {
@@ -1358,8 +1358,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onValidateRule(value) {
 			const ruleTable = this.ruleTable;
 			const maxChosenTotalLevel = ruleTable.maxTotalLevel!;
-			const maxTeamSize = ruleTable.chosenTeamSize || ruleTable.maxTeamSize;
-			const maxTeamSizeBlame = ruleTable.chosenTeamSize ? ruleTable.blame('chosenteamsize') : ruleTable.blame('maxteamsize');
+			const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
+			const maxTeamSizeBlame = ruleTable.pickedTeamSize ? ruleTable.blame('pickedteamsize') : ruleTable.blame('maxteamsize');
 			if (maxChosenTotalLevel >= ruleTable.maxLevel * maxTeamSize) {
 				throw new Error(`A Max Total Level of ${maxChosenTotalLevel}${ruleTable.blame('maxtotallevel')} is too high (and will have no effect) with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
 			}

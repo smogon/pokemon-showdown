@@ -192,7 +192,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: [
-			'Chosen Team Size = 1', 'Max Team Size = 3',
+			'Picked Team Size = 1', 'Max Team Size = 3',
 			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Endless Battle Clause',
 		],
 		banlist: [
@@ -265,7 +265,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		forcedLevel: 50,
-		ruleset: ['Standard GBU', 'Chosen Team Size = 3'],
+		ruleset: ['Standard GBU', 'Picked Team Size = 3'],
 	},
 	{
 		name: "[Gen 8] Custom Game",
@@ -346,7 +346,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		forcedLevel: 50,
 		ruleset: [
-			'Chosen Team Size = 4',
+			'Picked Team Size = 4',
 			'Standard GBU', 'VGC Timer',
 		],
 	},
@@ -358,7 +358,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		forcedLevel: 50,
 		ruleset: [
-			'Chosen Team Size = 4',
+			'Picked Team Size = 4',
 			'Standard GBU', 'VGC Timer',
 		],
 	},
@@ -372,7 +372,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		ruleset: [
-			'Chosen Team Size = 2', 'Max Team Size = 4',
+			'Picked Team Size = 2', 'Max Team Size = 4',
 			'Standard Doubles', 'Accuracy Moves Clause', 'Dynamax Clause', 'Sleep Clause Mod',
 		],
 		banlist: [
@@ -1318,7 +1318,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		forcedLevel: 100,
 		searchShow: false,
-		ruleset: ['Standard', '!OHKO Clause', 'Chosen Team Size = 6'],
+		ruleset: ['Standard', '!OHKO Clause', 'Picked Team Size = 6'],
 		banlist: [
 			'Sandshrew-Alola', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Choice Scarf',
 			'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Explosion', 'Self-Destruct',
@@ -1601,7 +1601,7 @@ export const Formats: FormatList = [
 		],
 
 		team: 'randomBSSFactory',
-		ruleset: ['Obtainable', 'Standard GBU', 'Chosen Team Size = 3'],
+		ruleset: ['Obtainable', 'Standard GBU', 'Picked Team Size = 3'],
 	},
 	{
 		name: "[Gen 8] Super Staff Bros 4",
@@ -1667,7 +1667,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		team: 'randomCC',
-		ruleset: ['[Gen 8] Challenge Cup', 'Team Preview', 'Dynamax Clause', 'Chosen Team Size = 1'],
+		ruleset: ['[Gen 8] Challenge Cup', 'Team Preview', 'Dynamax Clause', 'Picked Team Size = 1'],
 	},
 	{
 		name: "[Gen 8] Challenge Cup 2v2",
@@ -1676,7 +1676,7 @@ export const Formats: FormatList = [
 		team: 'randomCC',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 8] Challenge Cup 1v1', '!Chosen Team Size', 'Chosen Team Size = 2'],
+		ruleset: ['[Gen 8] Challenge Cup 1v1', '!Picked Team Size', 'Picked Team Size = 2'],
 	},
 	{
 		name: "[Gen 8] Hackmons Cup",
@@ -1705,7 +1705,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		team: 'randomCAP1v1',
 		ruleset: [
-			'Chosen Team Size = 1',
+			'Picked Team Size = 1',
 			'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Dynamax Clause',
 		],
 	},
@@ -1749,7 +1749,7 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		team: 'randomBSSFactory',
 		searchShow: false,
-		ruleset: ['Obtainable', 'Standard GBU', 'Chosen Team Size = 3'],
+		ruleset: ['Obtainable', 'Standard GBU', 'Picked Team Size = 3'],
 	},
 	{
 		name: "[Gen 7] Hackmons Cup",
@@ -2206,7 +2206,7 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		searchShow: false,
 		ruleset: [
-			'Chosen Team Size = 1', 'Max Team Size = 3',
+			'Picked Team Size = 1', 'Max Team Size = 3',
 			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Swagger Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
 		banlist: [
@@ -2269,7 +2269,7 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		searchShow: false,
 		maxForcedLevel: 50,
-		ruleset: ['Standard GBU', 'Chosen Team Size = 3', '!Min Source Gen', 'Min Source Gen = 6'],
+		ruleset: ['Standard GBU', 'Picked Team Size = 3', '!Min Source Gen', 'Min Source Gen = 6'],
 	},
 	{
 		name: "[Gen 7 Let's Go] OU",
@@ -2337,7 +2337,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		forcedLevel: 50,
-		ruleset: ['Minimal GBU', 'VGC Timer', 'Chosen Team Size = 4'],
+		ruleset: ['Minimal GBU', 'VGC Timer', 'Picked Team Size = 4'],
 		banlist: ['Unown'],
 	},
 	{
@@ -2362,7 +2362,7 @@ export const Formats: FormatList = [
 			dcTimerBank: false,
 		},
 		ruleset: [
-			'Chosen Team Size = 4',
+			'Picked Team Size = 4',
 			'Standard GBU',
 		],
 		banlist: ['Oranguru + Symbiosis', 'Passimian + Defiant', 'Unown', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
@@ -2389,7 +2389,7 @@ export const Formats: FormatList = [
 			dcTimerBank: false,
 		},
 		ruleset: [
-			'Chosen Team Size = 4', 'Min Source Gen = 7',
+			'Picked Team Size = 4', 'Min Source Gen = 7',
 			'Obtainable', 'Alola Pokedex', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
 		],
 		banlist: [
@@ -2409,7 +2409,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxForcedLevel: 50,
-		ruleset: ['Chosen Team Size = 4', 'Standard GBU', '!Min Source Gen', 'Min Source Gen = 6'],
+		ruleset: ['Picked Team Size = 4', 'Standard GBU', '!Min Source Gen', 'Min Source Gen = 6'],
 	},
 	{
 		name: "[Gen 7] Doubles Custom Game",
@@ -2519,7 +2519,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		ruleset: [
-			'Max Team Size = 3', 'Chosen Team Size = 1',
+			'Max Team Size = 3', 'Picked Team Size = 1',
 			'Obtainable', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview',
 		],
 		banlist: [
@@ -2563,7 +2563,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		maxForcedLevel: 50,
-		ruleset: ['Obtainable', 'Standard GBU', 'Chosen Team Size = 3'],
+		ruleset: ['Obtainable', 'Standard GBU', 'Picked Team Size = 3'],
 	},
 	{
 		name: "[Gen 6] Custom Game",
@@ -2609,7 +2609,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		maxForcedLevel: 50,
 		ruleset: [
-			'Chosen Team Size = 4', 'Min Source Gen = 6',
+			'Picked Team Size = 4', 'Min Source Gen = 6',
 			'Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
 		],
 		banlist: [
@@ -2638,7 +2638,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxForcedLevel: 50,
-		ruleset: ['Standard GBU', 'Chosen Team Size = 4'],
+		ruleset: ['Standard GBU', 'Picked Team Size = 4'],
 	},
 	{
 		name: "[Gen 6] Doubles Custom Game",
@@ -2776,7 +2776,7 @@ export const Formats: FormatList = [
 		mod: 'gen5',
 		searchShow: false,
 		ruleset: [
-			'Chosen Team Size = 1', 'Max Team Size = 3',
+			'Picked Team Size = 1', 'Max Team Size = 3',
 			'Standard', 'Baton Pass Clause', 'Swagger Clause',
 		],
 		banlist: ['Uber', 'Cottonee', 'Dragonite', 'Kyurem-Black', 'Whimsicott', 'Victini', 'Bright Powder', 'Focus Band', 'Focus Sash', 'Lax Incense', 'Quick Claw', 'Soul Dew', 'Perish Song'],
@@ -2788,7 +2788,7 @@ export const Formats: FormatList = [
 		mod: 'gen5',
 		searchShow: false,
 		maxForcedLevel: 50,
-		ruleset: ['Standard GBU', 'Chosen Team Size = 3'],
+		ruleset: ['Standard GBU', 'Picked Team Size = 3'],
 		banlist: ['Dark Void', 'Sky Drop'],
 	},
 	{
@@ -2830,7 +2830,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxForcedLevel: 50,
-		ruleset: ['Standard GBU', 'Chosen Team Size = 4'],
+		ruleset: ['Standard GBU', 'Picked Team Size = 4'],
 		banlist: ['Dark Void', 'Sky Drop'],
 	},
 	{
@@ -2926,7 +2926,7 @@ export const Formats: FormatList = [
 		mod: 'gen4',
 		searchShow: false,
 		ruleset: [
-			'Chosen Team Size = 1', 'Max Team Size = 3',
+			'Picked Team Size = 1', 'Max Team Size = 3',
 			'[Gen 4] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
 		banlist: ['Latias', 'Porygon-Z', 'Snorlax', 'Focus Sash', 'Destiny Bond', 'Explosion', 'Perish Song', 'Self-Destruct'],
@@ -3033,7 +3033,7 @@ export const Formats: FormatList = [
 		mod: 'gen3',
 		searchShow: false,
 		ruleset: [
-			'Chosen Team Size = 1', 'Max Team Size = 3',
+			'Picked Team Size = 1', 'Max Team Size = 3',
 			'[Gen 3] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
 		banlist: ['Slaking', 'Snorlax', 'Suicune', 'Destiny Bond', 'Explosion', 'Ingrain', 'Perish Song', 'Self-Destruct'],
@@ -3094,7 +3094,7 @@ export const Formats: FormatList = [
 		mod: 'gen2',
 		searchShow: false,
 		ruleset: [
-			'Chosen Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
+			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
 			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause', 'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'Nintendo Cup 2000 Move Legality',
 		],
 		banlist: ['Uber'],
@@ -3182,7 +3182,7 @@ export const Formats: FormatList = [
 		mod: 'gen1jpn',
 		searchShow: false,
 		ruleset: [
-			'Chosen Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
+			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
 			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Nintendo Cup 1997 Move Legality',
 		],
 		banlist: ['Uber'],

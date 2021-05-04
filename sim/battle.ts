@@ -1143,11 +1143,11 @@ export class Battle {
 		}
 
 		if (type === 'teampreview') {
-			// `chosenTeamSize = 6` means the format wants the user to select
-			// the entire team order, unlike `chosenTeamSize = undefined` which
+			// `pickedTeamSize = 6` means the format wants the user to select
+			// the entire team order, unlike `pickedTeamSize = undefined` which
 			// will only ask the user to select their lead(s).
-			const chosenTeamSize = this.ruleTable.chosenTeamSize;
-			this.add('teampreview' + (chosenTeamSize ? '|' + chosenTeamSize : ''));
+			const pickedTeamSize = this.ruleTable.pickedTeamSize;
+			this.add('teampreview' + (pickedTeamSize ? '|' + pickedTeamSize : ''));
 		}
 
 		const requests = this.getRequests(type);
@@ -1187,7 +1187,7 @@ export class Battle {
 		case 'teampreview':
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
-				const maxChosenTeamSize = this.ruleTable.chosenTeamSize || undefined;
+				const maxChosenTeamSize = this.ruleTable.pickedTeamSize || undefined;
 				requests[i] = {teamPreview: true, maxChosenTeamSize, side: side.getRequestData()};
 			}
 			break;
