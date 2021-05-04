@@ -765,9 +765,12 @@ export class Side {
 		}
 		// return this.emitChoiceError(`Can't choose for Team Preview: You are limited to ${chosenTeamSize} Pokémon`);
 
-		for (const pos of positions) {
+		for (const [index, pos] of positions.entries()) {
 			if (isNaN(pos) || pos < 0 || pos >= this.pokemon.length) {
 				return this.emitChoiceError(`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`);
+			}
+			if (positions.indexOf(pos) !== index) {
+				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
 		}
 		if (format.cupLevelLimit) {
@@ -778,11 +781,7 @@ export class Side {
 				return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${format.cupLevelLimit.total}; please select a valid team of ${chosenTeamSize} Pokémon`);
 			}
 		}
-		for (const pos of positions) {
-			if (this.choice.switchIns.has(pos)) {
-				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
-			}
-			const index = this.choice.actions.length;
+		for (const [index, pos] of positions.entries()) {
 			this.choice.switchIns.add(pos);
 			this.choice.actions.push({
 				choice: 'team',
