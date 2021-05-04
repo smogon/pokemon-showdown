@@ -138,7 +138,7 @@ export const State = new class {
 		// states we wouldnt be using, but also because battle.getRequests will mutate
 		// state on occasion (eg. `pokemon.getMoves` sets `pokemon.trapped = true` if locked).
 		if (activeRequests) {
-			const requests = battle.getRequests(battle.requestState, battle.getMaxTeamSize());
+			const requests = battle.getRequests(battle.requestState);
 			for (const [i, side] of state.sides.entries()) {
 				battle.sides[i].activeRequest = side.activeRequest === null ? null : requests[i];
 			}
