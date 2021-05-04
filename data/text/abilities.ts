@@ -1762,4 +1762,28 @@ export const AbilitiesText = {
 		desc: "While sleeping the mon has a 10% chance to still use the move selected even though it’s sleeping. ",
 		shortDesc: "While sleeping the mon has a 10% chance to still use the move selected even though it’s sleeping. ",
 	},
+	herbivore: {
+		name: "Herbivore",
+		desc: "This Pokemon is immune to Grass-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Grass-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Grass moves; Grass immunity.",
+	},
+	imitation: {
+		name: "Imitation",
+		desc: "This Pokemon's Speed changes to its opponent one if it attacks and knocks out another Pokemon.",
+		shortDesc: "This Pokemon's Speed changes to its opponent one if it attacks and knocks out another Pokemon.",
+	},
+	divinity: {
+		name: "Divinity",
+		shortDesc: "If this Pokemon is at half HP or more, its Light-type moves have their priority increased by 1.",
+		shortDescGen6: "If HP >= 50%, this Pokemon's Light-type moves have their priority increased by 1.",
+	},
+	blizzardgift: {
+		name: "Blizzard Gift",
+		desc: "If this Pokemon is a Yetitan and Hail is active, it changes to Blizzard Form and the Attack and Special Defense of it and its allies are multiplied by 1.5. If this Pokemon is a Yetitan and it is holding Utility Umbrella, it remains in its regular form and the Attack and Special Defense stats of it and its allies are not boosted. If this Pokemon is a Yetitan in its Blizzard form and is given Utility Umbrella, it will immediately switch back to its regular form. If this Pokemon is a Yetitan holding Utility Umbrella and its item is removed while Hail is active, it will transform into its Blizzard Form. If an ally is holding Utility Umbrella while Yetitan is in its Blizzard Form, they will not receive the Attack and Special Defense boosts.",
+		shortDesc: "If user is Yetitan and Hail is active, it and allies' Attack and Sp. Def are 1.5x.",
+	},
+	phytogenetic: {
+		name: "Phytogenetic",
+		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using a Grass-type attack.",
+	},
 };

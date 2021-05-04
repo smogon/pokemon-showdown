@@ -5315,15 +5315,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 1042,
 	},
-	speedadaptation: {
-		name: "Speed Adaptation",
-		onDamagingHitOrder: 1,
-		onDamagingHit(damage, target, source, move) {
-			if (!target.hp) {
+	imitation: {
+		name: "Imitation",
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
 				const targetSpe = target.storedStats.spe;
 				target.storedStats.spe = source.storedStats.spe;
 				source.storedStats.spe = targetSpe;
-				this.add('-activate', source, 'ability: Speed Adaptation', '[of] ' + target);
+				this.add('-activate', source, 'ability: Imitation', '[of] ' + target);
 			}
 		},
 		rating: 2.5,
@@ -5405,4 +5404,78 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         rating: 1.5,
         num: 1050,
     },
+	herbivore: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Grass') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Herbivore');
+				}
+				return null;
+			}
+		},
+		name: "Herbivore",
+		rating: 3.5,
+		num: 1050,
+	},
+	divinity: {
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Light' && pokemon.hp >= pokemon.maxhp / 2) return priority + 1;
+		},
+		name: "Divinity",
+		rating: 3,
+		num: 177,
+	},
+	blizzardgift: {
+		onStart(pokemon) {
+			delete this.effectData.forme;
+		},
+		onUpdate(pokemon) {
+			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Yetitan' || pokemon.transformed) return;
+			if (['hail'].includes(pokemon.effectiveWeather())) {
+				if (pokemon.species.id !== 'yetitanblizzard') {
+					pokemon.formeChange('Yetitan-Blizzard', this.effect, false, '[msg]');
+				}
+			} else {
+				if (pokemon.species.id === 'yetitanblizzard') {
+					pokemon.formeChange('Yetitan', this.effect, false, '[msg]');
+				}
+			}
+		},
+		onAllyModifyAtkPriority: 3,
+		onAllyModifyAtk(atk, pokemon) {
+			if (this.effectData.target.baseSpecies.baseSpecies !== 'Yetitan') return;
+			if (['hail'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAllyModifySpDPriority: 4,
+		onAllyModifySpD(spd, pokemon) {
+			if (this.effectData.target.baseSpecies.baseSpecies !== 'Yetitan') return;
+			if (['hail'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Blizzard Gift",
+		rating: 1,
+		num: 178,
+	},
+	phytogenetic: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Phytogenetic boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Phytogenetic boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Phytogenetic",
+		rating: 3.5,
+		num: 262,
+	},
 };

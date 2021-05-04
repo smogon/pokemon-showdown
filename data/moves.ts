@@ -20849,52 +20849,52 @@ export const Moves: {[moveid: string]: MoveData} = {
         zMove: {effect: 'clearnegativeboost'},
         contestType: "Clever",
     },
-	// toxicfortune: {
-		// num: 897,
-		// accuracy: 100,
-		// basePower: 120,
-		// category: "Special",
-		// name: "Toxic Fortune",
-		// pp: 10,
-		// priority: 0,
-		// flags: {future: 1},
-		// ignoreImmunity: true,
-		// isFutureMove: true,
-		// onTry(source, target) {
-			// if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-			// Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				// duration: 3,
-				// move: 'toxicfortune',
-				// source: source,
-				// moveData: {
-					// id: 'toxicfortune',
-					// name: "Toxic Fortune",
-					// accuracy: 100,
-					// basePower: 120,
-					// category: "Special",
-					// priority: 0,
-					// flags: {future: 1},
-					// ignoreImmunity: false,
-					// effectType: 'Move',
-					// isFutureMove: true,
-					// secondary: {
-						// chance: 10,
-						// status: 'psn',
-					// },
-					// type: 'Poison',
-				// },
-			// });
-			// this.add('-start', source, 'move: Future Sight');
-			// return null;
-		// },
-		// secondary: {
-			// chance: 10,
-			// status: 'psn',
-		// },
-		// target: "normal",
-		// type: "Poison",
-		// contestType: "Clever",
-	// },
+	toxicfortune: {
+		num: 897,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Toxic Fortune",
+		pp: 10,
+		priority: 0,
+		flags: {future: 1},
+		ignoreImmunity: true,
+		isFutureMove: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 3,
+				move: 'toxicfortune',
+				source: source,
+				moveData: {
+					id: 'toxicfortune',
+					name: "Toxic Fortune",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: {future: 1},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					secondary: {
+						chance: 10,
+						status: 'psn',
+					},
+					type: 'Poison',
+				},
+			});
+			this.add('-start', source, 'move: Future Sight');
+			return null;
+		},
+		secondary: {
+			chance: 10,
+			status: 'psn',
+		},
+		target: "normal",
+		type: "Poison",
+		contestType: "Clever",
+	},
 	frostychaw: {
 		num: 898,
 		accuracy: 85,
@@ -22284,5 +22284,104 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
+	},
+	tribaltoxins: {
+		num: 957,
+		accuracy: 90,
+		basePower: 0,
+		category: "Status",
+		name: "Tribal Toxins",
+		pp: 35,
+		priority: 0,
+		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
+		status: 'psn',
+		secondary: null,
+		onHit(target, source, move) {
+			if (source.getStat('atk', false, true) > source.getStat('spa', false, true)) {
+				this.boost({def: -2});
+			}
+			if (source.getStat('atk', false, true) < source.getStat('spa', false, true)) {
+				this.boost({spd: -2});
+			}
+		},
+		target: "normal",
+		type: "Grass",
+		zMove: {boost: {def: 1}},
+		contestType: "Clever",
+	},
+	calcitecrash: {
+		num: 958,
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		name: "Calcite Crash",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
+		recoil: [33, 100],
+		secondary: {
+			chance: 10,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Steel",
+		contestType: "Tough",
+	},
+	earthenshell: {
+		num: 959,
+		accuracy: 100,
+		basePower: 85,
+		category: "Special",
+		name: "Earthen Shell",
+		pp: 20,
+		priority: 0,
+		flags: {bullet: 1, protect: 1, pulse: 1, mirror: 1, distance: 1},
+		secondary: {
+			chance: 10,
+			boosts: {
+				spd: -1,
+			},
+		},
+		target: "any",
+		type: "Ground",
+		contestType: "Beautiful",
+	},
+	mysticalfang: {
+		num: 960,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Mystical Fang",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, contact: 1, bite: 1},
+		secondary: {
+			chance: 10,
+			volatileStatus: 'confusion',
+		},
+		target: "normal",
+		type: "Fairy",
+		contestType: "Cute",
+	},
+	regrowth: {
+		num: 961,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Regrowth",
+		pp: 8,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		heal: [1, 4],
+		secondary: {
+			chance: 100,
+			boosts: {
+				spa: 1,
+			},
+		},
+		target: "self",
+		type: "Grass",
+		zMove: {effect: 'clearnegativeboost'},
+		contestType: "Clever",
 	},
 };

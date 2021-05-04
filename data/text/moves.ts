@@ -6042,4 +6042,29 @@ export const MovesText = {
 		desc: "Has a 10% chance to freeze the target.",
 		shortDesc: "10% chance to freeze the target.",
 	},
+	tribaltoxins: {
+		name: "Tribal Toxins",
+		desc: "This move lowers the target's Def. if the user's Attack is greater than its Special Attack, or lowers the target's SpDef. if the user's Special Attack is greater than its Attack, including stat stage changes. Applies poison.",
+		shortDesc: "Applies Poison. Lowers target's Def if user's Atk > Sp. Atk. Lowers target's SpDef if user's Atk < Sp. Atk.",
+	},
+	calcitecrash: {
+		name: "Calcite Crash",
+		desc: "Has a 10% chance to burn the target. If the target lost HP, the user takes recoil damage equal to 33% the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 33% recoil. 10% chance to burn. Thaws user.",
+	},
+	earthenshell: {
+		name: "Earthen Shell",
+		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
+		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
+	},
+	mysticalfang: {
+		name: "Mystical Fang",
+		desc: "Has a 10% chance to confuse the target.",
+		shortDesc: "10% chance to confuse the target.",
+	},
+	regrowth: {
+		name: "Regrowth",
+		desc: "The user restores 1/4 of its maximum HP. Raises the user's Special Attack by 1 stage.",
+		shortDesc: "Heals the user by 25% of its max HP. Raises the user's Sp. Atk by 1.",
+	},
 };

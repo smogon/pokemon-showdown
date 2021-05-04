@@ -1086,6 +1086,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
+	pinsiroblivian: {
+		tier: "RU",
+	},
 	pinsirmega: {
 		isNonstandard: "PastMEGA",
 		tier: "Illegal",
@@ -1119,6 +1122,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	lapras: {
 		tier: "UU",
 		doublesTier: "DUU",
+	},
+	laprasalola: {
+		tier: "UU",
 	},
 	laprasgmax: {
 		randomBattleMoves: ["freezedry", "icebeam", "protect", "sparklingaria", "thunderbolt", "toxic"],
@@ -2327,6 +2333,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
+	whiscashoblivian: {
+		tier: "RU",
+	},
 	corphish: {
 		tier: "LC",
 	},
@@ -2847,6 +2856,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	chatot: {
 		tier: "RU",
+	},
+	chatotorren: {
+		tier: "NU",
 	},
 	spiritomb: {
 		randomBattleMoves: ["calmmind", "darkpulse", "psychic", "rest", "shadowsneak", "sleeptalk", "willowisp"],
@@ -3765,6 +3777,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
+	haxoruskanto: {
+		tier: "OU",
+	},
 	cubchoo: {
 		tier: "LC",
 	},
@@ -3822,6 +3837,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
+	mienshaogalar: {
+		tier: "UU",
+	},
 	druddigon: {
 		randomBattleMoves: ["earthquake", "glare", "outrage", "stealthrock", "suckerpunch", "superpower"],
 		randomBattleLevel: 86,
@@ -3855,6 +3873,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	bisharpalmian: {
 		tier: "UU",
 		doublesTier: "(DUU)",
+	},
+	bisharpkalos: {
+		tier: "OU",
 	},
 	bouffalant: {
 		randomBattleMoves: ["closecombat", "earthquake", "headcharge", "megahorn", "swordsdance"],
@@ -6135,6 +6156,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	miasmaw: {
 		tier: "UU",
 	},
+	chromera: {
+		tier: "UU",
+	},
 	pokestarsmeargle: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
@@ -6329,6 +6353,67 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 	},
 	woopaunbound: {
+		tier: "OU",
+	},
+	sparrende: {
+		tier: "OU",
+	},
+	sparrende: {
+		tier: "NU",
+	},
+	sabrenom: {
+		tier: "RU",
+	},
+	mossedge: {
+		tier: "UU",
+	},
+	beatboon: {
+		tier: "OU",
+	},
+	helmelime: {
+		tier: "LC",
+	},
+	sliarmor: {
+		tier: "RU",
+	},
+	cheslime: {
+		tier: "OU",
+	},
+	leamyst: {
+		tier: "UU",
+	},
+	shamblock: {
+		tier: "OU",
+	},
+	pyratrata: {
+		tier: "OU",
+	},
+	sapogro: {
+		tier: "RU",
+	},
+	platyber: {
+		tier: "OU",
+	},
+	shadrimoke: {
+		tier: "OU",
+	},
+	sphyrnutu: {
+		tier: "RU",
+	},
+	evergranura: {
+		tier: "RU",
+	},
+	yetitan: {
+		tier: "OU",
+		doublesTier: "(DOU)",
+	},
+	yetitanblizzard: {
+		
+	},
+	drapache: {
+		tier: "OU",
+	},
+	fortuxin: {
 		tier: "OU",
 	},
 };
