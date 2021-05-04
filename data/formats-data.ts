@@ -6408,7 +6408,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DOU)",
 	},
 	yetitanblizzard: {
-		
+		tier: "Illegal",
 	},
 	drapache: {
 		tier: "OU",

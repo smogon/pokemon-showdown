@@ -18201,7 +18201,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Sphyrnutu",
 		types: ["Steel", "Fairy"],
 		baseStats: {hp: 77, atk: 115, def: 83, spa: 45, spd: 75, spe: 95},
-		abilities: {0: "Sturdy", 1: "Strong Jaw", 2: "Misty Surge"},
+		abilities: {0: "Sturdy", 1: "Strong Jaw", H: "Misty Surge"},
 		heightm: 0.5,
 		weightkg: 40,
 		color: "Grey",
@@ -18221,7 +18221,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	yetitan: {
 		num: 10054,
 		name: "Yetitan",
-		baseForme: "Overcast",
+		baseForme: "Neutral",
 		types: ["Ice", "Dark"],
 		baseStats: {hp: 95, atk: 110, def: 85, spa: 85, spd: 100, spe: 85},
 		abilities: {0: "Blizzard Gift"},
