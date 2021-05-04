@@ -207,6 +207,11 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		 */
 		validate?: [number, number],
 	};
+	/** Setting EV maximum and minimum in total */
+	readonly totalEVLimit?: [number, number];
+	/** EV limit per stat */
+	readonly minStatEV?: SparseStatsTable;
+	readonly maxStatEV?: SparseStatsTable;
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
 	/** Pokemon must be obtained from this generation or later. */
@@ -299,6 +304,9 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.ruleTable = null;
 		this.cupLevelLimit = data.cupLevelLimit || undefined;
 		this.teamLength = data.teamLength || undefined;
+		this.totalEVLimit = data.totalEVLimit || [];
+		this.minStatEV = data.minStatEV || {};
+		this.maxStatEV = data.maxStatEV || {};
 		this.onBegin = data.onBegin || undefined;
 		this.minSourceGen = data.minSourceGen || undefined;
 		this.maxLevel = data.maxLevel || 100;
