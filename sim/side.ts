@@ -744,7 +744,7 @@ export class Side {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
 
-		const positions = data.split(data.includes(',') ? ',' : '')
+		let positions = data.split(data.includes(',') ? ',' : '')
 			.map(datum => parseInt(datum) - 1);
 		const format = this.battle.format;
 		const chosenTeamSize = Math.min(this.pokemon.length, this.battle.format.teamLength?.battle || Infinity);
@@ -778,7 +778,13 @@ export class Side {
 			for (const pos of positions) totalLevel += this.pokemon[pos].level;
 
 			if (totalLevel > format.cupLevelLimit.total) {
-				return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${format.cupLevelLimit.total}; please select a valid team of ${chosenTeamSize} Pokémon`);
+				if (!data) {
+					// autoChoose
+					positions = [...this.pokemon.keys()].sort((a, b) => (this.pokemon[a].level - this.pokemon[b].level))
+						.slice(0, chosenTeamSize);
+				} else {
+					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${format.cupLevelLimit.total}; please select a valid team of ${chosenTeamSize} Pokémon`);
+				}
 			}
 		}
 		for (const [index, pos] of positions.entries()) {
