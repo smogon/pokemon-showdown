@@ -95,14 +95,14 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
-			if (tag.speciesFilter && this.has(`*pokemontag:${tagid}`)) {
-				if (tag.speciesFilter(species)) return false;
+			if (this.has(`*pokemontag:${tagid}`)) {
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
 		}
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
-			if (tag.speciesFilter && this.has(`+pokemontag:${tagid}`)) {
-				if (tag.speciesFilter(species)) return false;
+			if (this.has(`+pokemontag:${tagid}`)) {
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
 		}
 		return this.has(`*pokemontag:allpokemon`);
@@ -162,6 +162,86 @@ export class RuleTable extends Map<string, string> {
 			this.complexTeamBans[complexBanTeamIndex] = [rule, source, limit, bans];
 		} else {
 			this.complexTeamBans.push([rule, source, limit, bans]);
+		}
+	}
+
+	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
+	resolveNumbers(format: Format) {
+		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
+			format.gameType === 'doubles' ? 2 :
+			1;
+
+		// NOTE: These numbers are pre-calculated here because they're hardcoded
+		// into the team validator and battle engine, and can affect validation
+		// in complicated ways.
+
+		// If you're making your own rule, it nearly definitely does not not
+		// belong here: `onValidateRule`, `onValidateSet`, and `onValidateTeam`
+		// should be enough for a validator rule, and the battle event system
+		// should be enough for a battle rule.
+
+		this.minTeamSize = Number(this.valueRules.get('minteamsize')) || 0;
+		this.maxTeamSize = Number(this.valueRules.get('maxteamsize')) || 6;
+		this.pickedTeamSize = Number(this.valueRules.get('pickedteamsize')) || null;
+		this.maxTotalLevel = Number(this.valueRules.get('maxtotallevel')) || null;
+		this.minSourceGen = Number(this.valueRules.get('minsourcegen')) || 1;
+		this.minLevel = Number(this.valueRules.get('minlevel')) || 1;
+		this.maxLevel = Number(this.valueRules.get('maxlevel')) || 100;
+		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || this.maxLevel;
+		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
+		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
+
+		// sanity checks; these _could_ be inside `onValidateRule` but this way
+		// involves less string conversion.
+		if (this.minTeamSize && this.minTeamSize < gameTypeMinTeamSize) {
+			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+		}
+		if (this.pickedTeamSize && this.pickedTeamSize < gameTypeMinTeamSize) {
+			throw new Error(`Chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+		}
+		if (this.minTeamSize && this.pickedTeamSize && this.minTeamSize < this.pickedTeamSize) {
+			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} is lower than chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')}.`);
+		}
+		if (!this.minTeamSize) this.minTeamSize = Math.max(gameTypeMinTeamSize, this.pickedTeamSize || 0);
+		if (this.maxTeamSize > 24) {
+			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} can't be above 24.`);
+		}
+		if (this.minLevel > this.maxLevel) {
+			throw new Error(`Min level ${this.minLevel}${this.blame('minlevel')} should not be above max level ${this.maxLevel}${this.blame('maxlevel')}.`);
+		}
+		if (this.defaultLevel > this.maxLevel) {
+			throw new Error(`Default level ${this.defaultLevel}${this.blame('defaultlevel')} should not be above max level ${this.maxLevel}${this.blame('maxlevel')}.`);
+		}
+		if (this.defaultLevel < this.minLevel) {
+			throw new Error(`Default level ${this.defaultLevel}${this.blame('defaultlevel')} should not be below min level ${this.minLevel}${this.blame('minlevel')}.`);
+		}
+		if (this.adjustLevelDown && this.adjustLevelDown >= this.maxLevel) {
+			throw new Error(`Adjust Level Down ${this.adjustLevelDown}${this.blame('adjustleveldown')} will have no effect because it's not below max level ${this.maxLevel}${this.blame('maxlevel')}.`);
+		}
+		if (this.adjustLevel && this.valueRules.has('minlevel')) {
+			throw new Error(`Min Level ${this.minLevel}${this.blame('minlevel')} will have no effect because you're using Adjust Level ${this.adjustLevel}${this.blame('adjustlevel')}.`);
+		}
+
+		if ((format as any).cupLevelLimit) {
+			throw new Error(`cupLevelLimit.range[0], cupLevelLimit.range[1], cupLevelLimit.total are now rules, respectively: "Min Level = NUMBER", "Max Level = NUMBER", and "Max Total Level = NUMBER"`);
+		}
+		if ((format as any).teamLength) {
+			throw new Error(`teamLength.validate[0], teamLength.validate[1], teamLength.battle are now rules, respectively: "Min Team Size = NUMBER", "Max Team Size = NUMBER", and "Picked Team Size = NUMBER"`);
+		}
+		if ((format as any).minSourceGen) {
+			throw new Error(`minSourceGen is now a rule: "Min Source Gen = NUMBER"`);
+		}
+		if ((format as any).maxLevel) {
+			throw new Error(`maxLevel is now a rule: "Max Level = NUMBER"`);
+		}
+		if ((format as any).defaultLevel) {
+			throw new Error(`defaultLevel is now a rule: "Default Level = NUMBER"`);
+		}
+		if ((format as any).forcedLevel) {
+			throw new Error(`forcedLevel is now a rule: "Adjust Level = NUMBER"`);
+		}
+		if ((format as any).maxForcedLevel) {
+			throw new Error(`maxForcedLevel is now a rule: "Adjust Level Down = NUMBER"`);
 		}
 	}
 }
@@ -654,6 +734,8 @@ export class DexFormats {
 		}
 		this.getTagRules(ruleTable);
 
+		ruleTable.resolveNumbers(format);
+
 		for (const rule of ruleTable.keys()) {
 			if ("+*-!".includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
@@ -661,71 +743,6 @@ export class DexFormats {
 				const value = subFormat.onValidateRule?.call({format, ruleTable, dex: this.dex}, ruleTable.valueRules.get(rule as ID)!);
 				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
 			}
-		}
-
-		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
-			format.gameType === 'doubles' ? 2 :
-			1;
-
-		ruleTable.minTeamSize = Number(ruleTable.valueRules.get('minteamsize')) || 0;
-		ruleTable.maxTeamSize = Number(ruleTable.valueRules.get('maxteamsize')) || 6;
-		ruleTable.pickedTeamSize = Number(ruleTable.valueRules.get('pickedteamsize')) || null;
-		ruleTable.maxTotalLevel = Number(ruleTable.valueRules.get('maxtotallevel')) || null;
-		ruleTable.minSourceGen = Number(ruleTable.valueRules.get('minsourcegen')) || 1;
-		ruleTable.minLevel = Number(ruleTable.valueRules.get('minlevel')) || 1;
-		ruleTable.maxLevel = Number(ruleTable.valueRules.get('maxlevel')) || 100;
-		ruleTable.defaultLevel = Number(ruleTable.valueRules.get('defaultlevel')) || ruleTable.maxLevel;
-		ruleTable.adjustLevel = Number(ruleTable.valueRules.get('adjustlevel')) || null;
-		ruleTable.adjustLevelDown = Number(ruleTable.valueRules.get('adjustleveldown')) || null;
-		if (ruleTable.minTeamSize && ruleTable.minTeamSize < gameTypeMinTeamSize) {
-			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
-		}
-		if (ruleTable.pickedTeamSize && ruleTable.pickedTeamSize < gameTypeMinTeamSize) {
-			throw new Error(`Chosen team size ${ruleTable.pickedTeamSize}${ruleTable.blame('pickedteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
-		}
-		if (ruleTable.minTeamSize && ruleTable.pickedTeamSize && ruleTable.minTeamSize < ruleTable.pickedTeamSize) {
-			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} is lower than chosen team size ${ruleTable.pickedTeamSize}${ruleTable.blame('pickedteamsize')}.`);
-		}
-		if (!ruleTable.minTeamSize) ruleTable.minTeamSize = Math.max(gameTypeMinTeamSize, ruleTable.pickedTeamSize || 0);
-		if (ruleTable.maxTeamSize > 24) {
-			throw new Error(`Max team size ${ruleTable.maxTeamSize}${ruleTable.blame('maxteamsize')} can't be above 24.`);
-		}
-		if (ruleTable.minLevel > ruleTable.maxLevel) {
-			throw new Error(`Min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')} should not be above max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}.`);
-		}
-		if (ruleTable.defaultLevel > ruleTable.maxLevel) {
-			throw new Error(`Default level ${ruleTable.defaultLevel}${ruleTable.blame('defaultlevel')} should not be above max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}.`);
-		}
-		if (ruleTable.defaultLevel < ruleTable.minLevel) {
-			throw new Error(`Default level ${ruleTable.defaultLevel}${ruleTable.blame('defaultlevel')} should not be below min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}.`);
-		}
-		if (ruleTable.adjustLevelDown && ruleTable.adjustLevelDown >= ruleTable.maxLevel) {
-			throw new Error(`Adjust Level Down ${ruleTable.adjustLevelDown}${ruleTable.blame('adjustleveldown')} will have no effect because it's not below max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}.`);
-		}
-		if (ruleTable.adjustLevel && ruleTable.valueRules.has('minlevel')) {
-			throw new Error(`Min Level ${ruleTable.minLevel}${ruleTable.blame('minlevel')} will have no effect because you're using Adjust Level ${ruleTable.adjustLevel}${ruleTable.blame('adjustlevel')}.`);
-		}
-
-		if ((format as any).cupLevelLimit) {
-			throw new Error(`cupLevelLimit.range[0], cupLevelLimit.range[1], cupLevelLimit.total are now rules, respectively: "Min Level = NUMBER", "Max Level = NUMBER", and "Max Total Level = NUMBER"`);
-		}
-		if ((format as any).teamLength) {
-			throw new Error(`teamLength.validate[0], teamLength.validate[1], teamLength.battle are now rules, respectively: "Min Team Size = NUMBER", "Max Team Size = NUMBER", and "Picked Team Size = NUMBER"`);
-		}
-		if ((format as any).minSourceGen) {
-			throw new Error(`minSourceGen is now a rule: "Min Source Gen = NUMBER"`);
-		}
-		if ((format as any).maxLevel) {
-			throw new Error(`maxLevel is now a rule: "Max Level = NUMBER"`);
-		}
-		if ((format as any).defaultLevel) {
-			throw new Error(`defaultLevel is now a rule: "Default Level = NUMBER"`);
-		}
-		if ((format as any).forcedLevel) {
-			throw new Error(`forcedLevel is now a rule: "Adjust Level = NUMBER"`);
-		}
-		if ((format as any).maxForcedLevel) {
-			throw new Error(`maxForcedLevel is now a rule: "Adjust Level Down = NUMBER"`);
 		}
 
 		if (!repeals) format.ruleTable = ruleTable;
