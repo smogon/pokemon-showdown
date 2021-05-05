@@ -1240,12 +1240,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 206,
 	},
 	gluttony: {
-		onStart(pokemon) {
-			pokemon.abilityState.gluttony = false;
-		},
-		onDamage(damage, pokemon) {
-			pokemon.abilityState.gluttony = true;
-		},
 		name: "Gluttony",
 		rating: 1.5,
 		num: 82,
