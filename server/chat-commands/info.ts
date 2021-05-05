@@ -416,7 +416,7 @@ export const commands: Chat.ChatCommands = {
 		const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
 		this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 	},
-	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ &`],
+	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: % @ &`],
 
 	searchip: 'ipsearch',
 	ipsearchall: 'ipsearch',
