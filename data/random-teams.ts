@@ -848,7 +848,7 @@ export class RandomTeams {
 			// Counter: special case for Alakazam, which doesn't want Counter + Nasty Plot
 			return {cull: !!counter.setupType};
 		case 'bulletpunch': case 'extremespeed': case 'rockblast':
-			return {cull: counter.speedsetup || counter.damagingMoves.length < 2};
+			return {cull: counter.speedsetup || (!isDoubles && hasMove['dragondance']) || counter.damagingMoves.length < 2};
 		case 'closecombat': case 'flashcannon': case 'pollenpuff':
 			const substituteCullCondition = (
 				(hasMove['substitute'] && !hasType['Fighting']) ||
@@ -959,6 +959,9 @@ export class RandomTeams {
 		case 'thunderbolt':
 			// Special case for Goodra, which only wants one move to hit Water-types
 			return {cull: hasMove['powerwhip']};
+		case 'energyball':
+			// Special case to prevent Shiinotic with four Grass moves and no Moonblast
+			return {cull: species.id === 'shiinotic' && !hasMove['moonblast']};
 		case 'gigadrain':
 			// Celebi always wants Leaf Storm on its more pivoting-focused non-Nasty Plot sets
 			const celebiPreferLeafStorm = species.id === 'celebi' && !counter.setupType && hasMove['uturn'];
