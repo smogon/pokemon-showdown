@@ -151,7 +151,7 @@ describe('Dex data', function () {
 			try {
 				Dex.formats.getRuleTable(format);
 			} catch (e) {
-				e.message += ` Format: ${format.name}`;
+				e.message = `${format.name}: ${e.message}`;
 				throw e;
 			}
 		}

@@ -45,6 +45,8 @@ export class RuleTable extends Map<string, string> {
 	minLevel!: number;
 	maxLevel!: number;
 	defaultLevel!: number;
+	adjustLevel!: number | null;
+	adjustLevelDown!: number | null;
 
 	constructor() {
 		super();
@@ -201,29 +203,17 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	ruleTable: RuleTable | null;
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
-	/**
-	 * Forces all pokemon brought in to this level. Certain Game Freak
-	 * formats will change level 1 and level 100 pokemon to level 50,
-	 * which is what this does.
-	 *
-	 * You usually want maxForcedLevel instead, which will bring level
-	 * 100 pokemon down, but not level 1 pokemon up.
-	 */
-	readonly forcedLevel?: number;
-	/**
-	 * Forces all pokemon above this level down to this level. This
-	 * will allow e.g. level 50 Hydreigon in Gen 5, which is not
-	 * normally legal because Hydreigon doesn't evolve until level
-	 * 64.
-	 */
-	readonly maxForcedLevel?: number;
 	readonly noLog: boolean;
 
 	/**
 	 * Only applies to rules, not formats
 	 */
 	readonly hasValue?: boolean | 'number' | 'integer' | 'positive-integer';
-	readonly onValidateRule?: (this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string) => string | void;
+	readonly onValidateRule?: (
+		this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string
+	) => string | void;
+	/** ID of rule that can't be combined with this rule */
+	readonly mutuallyExclusiveWith?: string;
 
 	readonly battle?: ModdedBattleScriptsData;
 	readonly pokemon?: ModdedBattlePokemon;
@@ -281,8 +271,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.customRules = data.customRules || null;
 		this.ruleTable = null;
 		this.onBegin = data.onBegin || undefined;
-		this.forcedLevel = data.forcedLevel || undefined;
-		this.maxForcedLevel = data.maxForcedLevel || undefined;
 		this.noLog = !!data.noLog;
 	}
 }
@@ -511,9 +499,9 @@ export class DexFormats {
 		}
 
 		// apply rule repeals before other rules
-		// repeals is a ruleid:depth map
+		// repeals is a ruleid:depth map (positive: unused, negative: used)
 		for (const rule of ruleset) {
-			if (rule.startsWith('!')) {
+			if (rule.startsWith('!') && !rule.startsWith('!!')) {
 				const ruleSpec = this.validateRule(rule, format) as string;
 				if (!repeals) repeals = new Map();
 				repeals.set(ruleSpec.slice(1), depth);
@@ -536,7 +524,7 @@ export class DexFormats {
 				continue;
 			}
 
-			if (rule.startsWith('!')) {
+			if (rule.startsWith('!') && !rule.startsWith('!!')) {
 				const repealDepth = repeals!.get(ruleSpec.slice(1));
 				if (repealDepth === undefined) throw new Error(`Multiple "${rule}" rules in ${format.name}`);
 				if (repealDepth === depth) {
@@ -556,6 +544,7 @@ export class DexFormats {
 			}
 			let [formatid, value] = ruleSpec.split('=');
 			const subformat = this.get(formatid);
+			const repealAndReplace = ruleSpec.startsWith('!!');
 			if (repeals?.has(subformat.id)) {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
@@ -575,12 +564,34 @@ export class DexFormats {
 				if (subformat.hasValue === 'positive-integer') {
 					if (parseInt(value) <= 0) throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
 				}
-				if (ruleTable.valueRules.has(subformat.id) && ruleTable.valueRules.get(subformat.id) !== value) {
-					throw new Error(`Rule "${ruleSpec}" conflicts with "${subformat.id}=${ruleTable.valueRules.get(subformat.id)}"${ruleTable.blame(subformat.id)}`);
+				const oldValue = ruleTable.valueRules.get(subformat.id);
+				if (oldValue === value) {
+					throw new Error(`Rule "${ruleSpec}" is redundant with existing rule "${subformat.id}=${value}"${ruleTable.blame(subformat.id)}.`);
+				} else if (repealAndReplace) {
+					if (oldValue === undefined) {
+						if (subformat.mutuallyExclusiveWith && ruleTable.valueRules.has(subformat.mutuallyExclusiveWith)) {
+							if (this.dex.formats.get(subformat.mutuallyExclusiveWith).ruleset.length) {
+								throw new Error(`This format does not support "!!"`);
+							}
+							ruleTable.valueRules.delete(subformat.mutuallyExclusiveWith);
+							ruleTable.delete(subformat.mutuallyExclusiveWith);
+						} else {
+							throw new Error(`Rule "${ruleSpec}" is not replacing anything (it should not have "!!")`);
+						}
+					}
+				} else {
+					if (oldValue !== undefined) {
+						throw new Error(`Rule "${ruleSpec}" conflicts with "${subformat.id}=${oldValue}"${ruleTable.blame(subformat.id)} (Use "!! ${ruleSpec}" to override "${subformat.id}=${oldValue}".)`);
+					}
+					if (subformat.mutuallyExclusiveWith && ruleTable.valueRules.has(subformat.mutuallyExclusiveWith)) {
+						const oldRule = `"${subformat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subformat.mutuallyExclusiveWith)}"`;
+						throw new Error(`Format can't simultaneously have "${ruleSpec}" and ${oldRule}${ruleTable.blame(subformat.mutuallyExclusiveWith)} (Use "!! ${ruleSpec}" to override ${oldRule}.)`);
+					}
 				}
 				ruleTable.valueRules.set(subformat.id, value);
 			} else {
 				if (value !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
+				if (repealAndReplace) throw new Error(`"!!" is not supported for this rule`);
 			}
 			ruleTable.set(subformat.id, '');
 			if (depth > 16) {
@@ -592,12 +603,20 @@ export class DexFormats {
 				if (!repeals?.has(ruleid)) {
 					const newValue = subRuleTable.valueRules.get(ruleid);
 					const oldValue = ruleTable.valueRules.get(ruleid);
-					if (newValue !== undefined && newValue !== oldValue) {
-						if (oldValue !== undefined) {
-							// conflict!
-							throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${ruleid}=${oldValue}"${ruleTable.blame(ruleid)}`);
+					if (newValue !== undefined) {
+						// set a value
+						const subSubFormat = this.get(ruleid);
+						if (subSubFormat.mutuallyExclusiveWith && ruleTable.valueRules.has(subSubFormat.mutuallyExclusiveWith)) {
+							// mutually exclusive conflict!
+							throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${subSubFormat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subSubFormat.mutuallyExclusiveWith)}"${ruleTable.blame(subSubFormat.mutuallyExclusiveWith)} (Repeal one with ! before adding another)`);
 						}
-						ruleTable.valueRules.set(ruleid, newValue);
+						if (newValue !== oldValue) {
+							if (oldValue !== undefined) {
+								// conflict!
+								throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${ruleid}=${oldValue}"${ruleTable.blame(ruleid)} (Repeal one with ! before adding another)`);
+							}
+							ruleTable.valueRules.set(ruleid, newValue);
+						}
 					}
 					ruleTable.set(ruleid, sourceFormat || subformat.name);
 				}
@@ -649,6 +668,8 @@ export class DexFormats {
 		ruleTable.minLevel = Number(ruleTable.valueRules.get('minlevel')) || 1;
 		ruleTable.maxLevel = Number(ruleTable.valueRules.get('maxlevel')) || 100;
 		ruleTable.defaultLevel = Number(ruleTable.valueRules.get('defaultlevel')) || ruleTable.maxLevel;
+		ruleTable.adjustLevel = Number(ruleTable.valueRules.get('adjustlevel')) || null;
+		ruleTable.adjustLevelDown = Number(ruleTable.valueRules.get('adjustleveldown')) || null;
 		if (ruleTable.minTeamSize && ruleTable.minTeamSize < gameTypeMinTeamSize) {
 			throw new Error(`Min team size ${ruleTable.minTeamSize}${ruleTable.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
 		}
@@ -729,10 +750,12 @@ export class DexFormats {
 		default:
 			const [ruleName, value] = rule.split('=');
 			let id: string = toID(ruleName);
-			if (!this.dex.data.Rulesets.hasOwnProperty(id)) {
+			const ruleset = this.dex.formats.get(id);
+			if (!ruleset.exists) {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
 			if (typeof value === 'string') id = `${id}=${value.trim()}`;
+			if (rule.startsWith('!!')) return `!!${id}`;
 			if (rule.startsWith('!')) return `!${id}`;
 			return id;
 		}

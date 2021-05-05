@@ -433,12 +433,12 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 }
 
 function getLevel(format: Format, level = 0) {
-	if (format.forcedLevel) return format.forcedLevel;
 	const ruleTable = Dex.formats.getRuleTable(format);
+	if (ruleTable.adjustLevel) return ruleTable.adjustLevel;
 	const maxLevel = ruleTable.maxLevel;
-	const maxForcedLevel = format.maxForcedLevel || maxLevel;
+	const adjustLevelDown = ruleTable.adjustLevelDown || maxLevel;
 	if (!level) level = ruleTable.defaultLevel;
-	return level > maxForcedLevel ? maxForcedLevel : level;
+	return level > adjustLevelDown ? adjustLevelDown : level;
 }
 
 export async function getStatisticsURL(

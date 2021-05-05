@@ -386,21 +386,19 @@ export class TeamValidator {
 		}
 
 		const maxLevel = ruleTable.maxLevel;
-		const maxForcedLevel = format.maxForcedLevel || maxLevel;
-		let forcedLevel: number | null = null;
+		const adjustLevelDown = ruleTable.adjustLevelDown || maxLevel;
+		let adjustLevel = ruleTable.adjustLevel;
 		if (!set.level) {
 			set.level = ruleTable.defaultLevel;
 		}
-		if (format.forcedLevel) {
-			forcedLevel = format.forcedLevel;
-		} else if (set.level >= maxForcedLevel) {
-			forcedLevel = maxForcedLevel;
+		if (adjustLevelDown && set.level >= adjustLevelDown) {
+			adjustLevel = adjustLevelDown;
 		}
-		if (set.level === forcedLevel || set.level === maxForcedLevel || (set.level === 100 && maxLevel < 100)) {
+		if (set.level === adjustLevel || set.level === adjustLevelDown || (set.level === 100 && maxLevel < 100)) {
 			// Note that we're temporarily setting level 50 pokemon in VGC to level 100
 			// This allows e.g. level 50 Hydreigon even though it doesn't evolve until level 64.
 			// Leveling up can't make an obtainable pokemon unobtainable, so this is safe.
-			// Just remember to set the level back to forcedLevel at the end of validation.
+			// Just remember to set the level back to adjustLevel at the end of validation.
 			set.level = maxLevel;
 		}
 		if (set.level < ruleTable.minLevel) {
@@ -761,7 +759,7 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (forcedLevel) set.level = forcedLevel;
+			if (adjustLevel) set.level = adjustLevel;
 			return null;
 		}
 

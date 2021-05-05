@@ -1309,7 +1309,7 @@ export class GlobalRoomState {
 			if (format.challengeShow) displayCode |= 4;
 			if (format.tournamentShow) displayCode |= 8;
 			const ruleTable = Dex.formats.getRuleTable(format);
-			const level = format.maxForcedLevel || format.forcedLevel || ruleTable.maxLevel;
+			const level = ruleTable.adjustLevel || ruleTable.adjustLevelDown || ruleTable.maxLevel;
 			if (level === 50) displayCode |= 16;
 			this.formatList += ',' + displayCode.toString(16);
 		}

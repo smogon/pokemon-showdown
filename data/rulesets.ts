@@ -27,7 +27,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard GBU',
 		desc: "The standard ruleset for all official in-game Pok&eacute;mon tournaments and Battle Spot",
 		ruleset: [
-			'Min Source Gen = 8',
+			'Min Source Gen = Current Gen', 'Adjust Level Down = 50',
 			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod',
 		],
 		banlist: [
@@ -45,7 +45,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Minimal GBU',
 		desc: "The standard ruleset for official tournaments, but two Restricted Legendaries are allowed",
 		ruleset: [
-			'Min Source Gen = 8',
+			'Min Source Gen = Current Gen', 'Adjust Level Down = 50',
 			'Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
 		],
 		banlist: [
@@ -1023,10 +1023,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: "Min Source Gen",
 		desc: "Pokemon must be obtained from this generation or later.",
-		hasValue: true,
+		hasValue: 'positive-integer',
 		onValidateRule(value) {
 			const minSourceGen = parseInt(value);
-			return value === `${minSourceGen}` && minSourceGen >= 1 && minSourceGen < this.dex.gen;
+			if (minSourceGen > this.dex.gen) {
+				// console.log(this.ruleTable);
+				throw new Error(`Invalid generation ${minSourceGen}${this.ruleTable.blame('minsourcegen')} for a Gen ${this.dex.gen} format`);
+			}
 		},
 	},
 
@@ -1388,6 +1391,22 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Default Level',
 		desc: "Default level of brought Pokémon (normally should be equal to Max Level, except Custom Games have a very high max level but still default to 100)",
 		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
+	},
+	adjustlevel: {
+		effectType: 'ValidatorRule',
+		name: 'Adjust Level',
+		desc: "All Pokémon will be set to exactly this level (but unlike Max Level and Min Level, it will still be able to learn moves from above this level)",
+		hasValue: 'positive-integer',
+		mutuallyExclusiveWith: 'adjustleveldown',
+		// hardcoded in sim/team-validator
+	},
+	adjustleveldown: {
+		effectType: 'ValidatorRule',
+		name: 'Adjust Level Down',
+		desc: "Any Pokémon above this level will be set to this level (but unlike Max Level, it will still be able to learn moves from above this level)",
+		hasValue: 'positive-integer',
+		mutuallyExclusiveWith: 'adjustlevel',
 		// hardcoded in sim/team-validator
 	},
 	stadiumitemsclause: {
