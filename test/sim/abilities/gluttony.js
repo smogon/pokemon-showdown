@@ -22,7 +22,7 @@ describe('Gluttony', function () {
 		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp / 2) + Math.floor(wobbuffet.maxhp * 0.33));
 	});
   
-  it(`should activate after Belly Drum`, function () {
+  	it(`should activate after Belly Drum`, function () {
 		battle = common.createBattle([[
 			{species: "snorlax", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -34,18 +34,18 @@ describe('Gluttony', function () {
 		assert.equal(snorlax.hp, Math.floor(snorlax.maxhp / 2) + Math.floor(snorlax.maxhp * 0.33));
 	});
   
-  it(`should activate after poison damage`, function () {
+  	it(`should activate after poison damage`, function () {
 		battle = common.createBattle([[
-			{species: "wobbuffet", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['sleeptalk']},
+			{species: "wobbuffet", ability: 'gluttony', item: 'aguavberry', evs: {hp: 28}, moves: ['sleeptalk']},
 		], [
 			{species: "wynaut", ability: 'compoundeyes', moves: ['poisonpowder']},
 		]]);
 
 		battle.makeChoices();
-    battle.makeChoices();
-    battle.makeChoices();
-    battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices();
 		const wobbuffet = battle.p1.active[0];
-		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp / 2) + Math.floor(wobbuffet.maxhp * 0.33));
+		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp * 1/2) + Math.floor(wobbuffet.maxhp * 0.33));
 	});
 });
