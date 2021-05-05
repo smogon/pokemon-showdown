@@ -1694,6 +1694,16 @@ export const commands: Chat.ChatCommands = {
 		await Punishments.namelock(userid, Date.now() + duration, null, false, publicReason);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room?.battle) this.parse('/savereplay forpunishment');
+		if (connection.openPages) {
+			// this hardcode is necessary because when /namelock and /uspage are send together in one button
+			// the uspage output is sent before the user's name is reset
+			// so it takes two clicks, which is bad behavior
+			for (const page of connection.openPages) {
+				if (page.includes('usersearch-')) {
+					this.refreshPage(page);
+				}
+			}
+		}
 
 		return true;
 	},
