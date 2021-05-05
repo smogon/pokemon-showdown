@@ -208,7 +208,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/**
 	 * Only applies to rules, not formats
 	 */
-	readonly hasValue?: boolean | 'number' | 'integer' | 'positive-integer';
+	readonly hasValue?: boolean | 'integer' | 'positive-integer';
 	readonly onValidateRule?: (
 		this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string
 	) => string | void;
