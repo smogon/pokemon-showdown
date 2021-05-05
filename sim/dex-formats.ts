@@ -693,6 +693,28 @@ export class DexFormats {
 			throw new Error(`Default level ${ruleTable.defaultLevel}${ruleTable.blame('defaultlevel')} should not be below min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}.`);
 		}
 
+		if ((format as any).cupLevelLimit) {
+			throw new Error(`cupLevelLimit.range[0], cupLevelLimit.range[1], cupLevelLimit.total are now rules, respectively: "Min Level = NUMBER", "Max Level = NUMBER", and "Max Total Level = NUMBER"`);
+		}
+		if ((format as any).teamLength) {
+			throw new Error(`teamLength.validate[0], teamLength.validate[1], teamLength.battle are now rules, respectively: "Min Team Size = NUMBER", "Max Team Size = NUMBER", and "Picked Team Size = NUMBER"`);
+		}
+		if ((format as any).minSourceGen) {
+			throw new Error(`minSourceGen is now a rule: "Min Source Gen = NUMBER"`);
+		}
+		if ((format as any).maxLevel) {
+			throw new Error(`maxLevel is now a rule: "Max Level = NUMBER"`);
+		}
+		if ((format as any).defaultLevel) {
+			throw new Error(`defaultLevel is now a rule: "Default Level = NUMBER"`);
+		}
+		if ((format as any).forcedLevel) {
+			throw new Error(`forcedLevel is now a rule: "Adjust Level = NUMBER"`);
+		}
+		if ((format as any).maxForcedLevel) {
+			throw new Error(`maxForcedLevel is now a rule: "Adjust Level Down = NUMBER"`);
+		}
+
 		if (!repeals) format.ruleTable = ruleTable;
 		return ruleTable;
 	}

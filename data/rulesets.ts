@@ -1328,7 +1328,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onValidateTeam(team) {
 			const pickedTeamSize = this.ruleTable.pickedTeamSize || team.length;
 			const maxTotalLevel = this.ruleTable.maxTotalLevel;
-			if (maxTotalLevel === null) throw new Error("No maxChosenTotalLevel specified.");
+			if (maxTotalLevel === null) throw new Error("No maxTotalLevel specified.");
 
 			const teamLevels = [];
 			for (const set of team) {
