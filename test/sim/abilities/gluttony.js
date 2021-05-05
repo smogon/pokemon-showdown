@@ -46,6 +46,6 @@ describe('Gluttony', function () {
 		battle.makeChoices();
 		battle.makeChoices();
 		const wobbuffet = battle.p1.active[0];
-		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp * 1/2) + Math.floor(wobbuffet.maxhp * 0.33));
+		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp / 2) + Math.floor(wobbuffet.maxhp * 0.33));
 	});
 });
