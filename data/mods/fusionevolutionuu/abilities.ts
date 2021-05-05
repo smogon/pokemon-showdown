@@ -477,7 +477,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const additionalBannedAbilities = [
 					// Zen Mode included here for compatability with Gen 5-6
 					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'pillage',
-					'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode', ...(ownAbilities || [])
+					'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode', ...(ownAbilities || []),
 				];
 				possibleAbilities = possibleAbilities
 					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
