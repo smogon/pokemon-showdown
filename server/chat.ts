@@ -885,17 +885,18 @@ export class CommandContext extends MessageContext {
 		}
 		(this.room || Rooms.global).modlog(entry);
 	}
-	parseSpoiler(str: string) {
-		let privateReason = "";
-		if (!str) return {publicReason: "", privateReason};
+	parseSpoiler(reason: string) {
+		if (!reason) return {publicReason: "", privateReason: ""};
 
-		let publicReason = str;
-		const targetLowercase = str.toLowerCase();
+		let publicReason = reason;
+		let privateReason = reason;
+		const targetLowercase = reason.toLowerCase();
 		if (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:')) {
 			const proofIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
-			const bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
-			privateReason = `(PROOF: ${str.substr(proofIndex + bump, str.length).trim()}) `;
-			publicReason = str.substr(0, proofIndex).trim();
+			const proofOffset = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			const proof = reason.slice(proofIndex + proofOffset).trim();
+			publicReason = reason.slice(0, proofIndex).trim();
+			privateReason = `${publicReason}${proof ? ` (PROOF: ${proof})` : ''}`;
 		}
 		return {publicReason, privateReason};
 	}
