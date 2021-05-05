@@ -294,7 +294,7 @@ export abstract class MessageContext {
 
 		return this.extractFormat();
 	}
-	splitUser(target: string, exactName = false) {
+	splitUser(target: string, {exactName}: {exactName?: boolean} = {}) {
 		const [inputUsername, rest] = this.splitOne(target).map(str => str.trim());
 		const targetUser = Users.get(inputUsername, exactName);
 
@@ -305,7 +305,21 @@ export abstract class MessageContext {
 			rest,
 		};
 	}
-	getUserOrSelf(target: string, exactName = false) {
+	requireUser(target: string, options: {allowOffline?: boolean, exactName?: boolean} = {}) {
+		const {targetUser, targetUsername, rest} = this.splitUser(target, options);
+
+		if (!targetUser) {
+			throw new Chat.ErrorMessage(`The user "${targetUsername}" is offline or misspelled.`);
+		}
+		if (!options.allowOffline && !targetUser.connected) {
+			throw new Chat.ErrorMessage(`The user "${targetUsername}" is offline.`);
+		}
+
+		// `inputUsername` and `targetUsername` are never needed because we already handle the "user not found" error messages
+		// just use `targetUser.name` where previously necessary
+		return {targetUser, rest};
+	}
+	getUserOrSelf(target: string, {exactName}: {exactName?: boolean} = {}) {
 		if (!target.trim()) return this.user;
 
 		return Users.get(target, exactName);
@@ -470,12 +484,6 @@ export class CommandContext extends MessageContext {
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
 	broadcastMessage: string;
-	/** @deprecated */
-	targetUser: User | null;
-	/** @deprecated */
-	targetUsername: string;
-	/** @deprecated */
-	inputUsername: string;
 	constructor(
 		options:
 		{message: string, user: User, connection: Connection} &
@@ -505,11 +513,6 @@ export class CommandContext extends MessageContext {
 		this.broadcasting = false;
 		this.broadcastToRoom = true;
 		this.broadcastMessage = '';
-
-		// target user
-		this.targetUser = null;
-		this.targetUsername = "";
-		this.inputUsername = "";
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
@@ -1171,10 +1174,7 @@ export class CommandContext extends MessageContext {
 
 		return message;
 	}
-	checkPMHTML(targetUser: User | null) {
-		if (!targetUser?.connected) {
-			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
-		}
+	checkPMHTML(targetUser: User) {
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
@@ -1311,7 +1311,8 @@ export class CommandContext extends MessageContext {
 					if ((!this.room || this.room.settings.isPersonal || this.room.settings.isPrivate === true) && !this.user.can('lock')) {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
-						const msgCommandRegex = /^\/(?:msg|pm|w|whisper) /i;
+						const msgCommandRegex = /^\/(?:msg|pm|w|whisper|botmsg) /;
+						const botmsgCommandRegex = /^\/msgroom (?:[a-z0-9-]+), ?\/botmsg /;
 						if (buttonName === 'send' && buttonValue && msgCommandRegex.test(buttonValue)) {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
 							const auth = this.room ? this.room.auth : Users.globalAuth;
@@ -1319,11 +1320,13 @@ export class CommandContext extends MessageContext {
 								this.errorReply(`This button is not allowed: <${tagContent}>`);
 								throw new Chat.ErrorMessage(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
 							}
+						} else if (buttonName === 'send' && buttonValue && botmsgCommandRegex.test(buttonValue)) {
+							// no need to validate the bot being an actual bot; `/botmsg` will do it for us and is not abusable
 						} else if (buttonName) {
 							this.errorReply(`This button is not allowed: <${tagContent}>`);
 							this.errorReply(`You do not have permission to use most buttons. Here are the two types you're allowed to use:`);
 							this.errorReply(`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`);
-							throw new Chat.ErrorMessage(`2. Sending a message to a Bot: <button name="send" value="/msg BOT_USERNAME, MESSAGE">send the thing</button>`);
+							throw new Chat.ErrorMessage(`2. Sending a message to a Bot: <button name="send" value="/msgroom BOT_ROOMID, /botmsg BOT_USERNAME, MESSAGE">send the thing</button>`);
 						}
 					}
 				}
@@ -1334,16 +1337,6 @@ export class CommandContext extends MessageContext {
 		}
 
 		return htmlContent;
-	}
-
-	/** @deprecated */
-	splitTarget(target: string, exactName = false) {
-		const [name, rest] = this.splitOne(target);
-
-		this.targetUser = Users.get(name, exactName);
-		this.inputUsername = name.trim();
-		this.targetUsername = this.targetUser ? this.targetUser.name : this.inputUsername;
-		return rest;
 	}
 
 	requireRoom(id?: RoomID) {
@@ -2361,7 +2354,6 @@ export const Chat = new class {
 (CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;
 (CommandContext.prototype as any).canHTML = CommandContext.prototype.checkHTML;
 (CommandContext.prototype as any).canEmbedURI = CommandContext.prototype.checkEmbedURI;
-(CommandContext.prototype as any).canPMHTML = CommandContext.prototype.checkPMHTML;
 (CommandContext.prototype as any).privatelyCan = CommandContext.prototype.privatelyCheckCan;
 (CommandContext.prototype as any).requiresRoom = CommandContext.prototype.requireRoom;
 (CommandContext.prototype as any).targetUserOrSelf = function (this: any, target: string, exactName: boolean) {

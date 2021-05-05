@@ -851,7 +851,7 @@ export const pages: Chat.PageTable = {
 			this.checkCan('lock');
 			let buf = `<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button> <button class="button" name="send" value="/helpticket stats" style="float: right"><i class="fa fa-th-list"></i> ${this.tr`Help Ticket Stats`}</button><br /><br />`;
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Help tickets`}</h1></th></tr>`;
-			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
+			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Language`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
 
 			const sortedTickets = Utils.sortBy(Object.values(tickets), ticket => [
 				ticket.open,
@@ -873,9 +873,12 @@ export const pages: Chat.PageTable = {
 						icon = `<span style="color:orange"><i class="fa fa-circle-o"></i> <strong>${this.tr`Unclaimed`}</strong></span>`;
 					}
 				}
+
+				const ticketRoom = Rooms.get(`help-${ticket.userid}`);
 				buf += `<tr><td>${icon}</td>`;
 				buf += Utils.html`<td>${ticket.creator}</td>`;
 				buf += `<td>${ticket.type}</td>`;
+				buf += `<td>${Chat.languages.get(ticketRoom?.settings.language || '') || '-'}</td>`;
 				buf += Utils.html`<td>${ticket.claimed ? ticket.claimed : `-`}</td>`;
 				buf += `<td>`;
 				const roomid = 'help-' + ticket.userid;
@@ -1327,10 +1330,11 @@ export const commands: Chat.ChatCommands = {
 
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
-			let result = !(this.splitTarget(target) === 'false');
-			const ticket = tickets[toID(this.inputUsername)];
+			const [targetUsername, rest] = this.splitOne(target);
+			let result = rest !== 'false';
+			const ticket = tickets[toID(targetUsername)];
 			if (!ticket?.open || (ticket.userid !== user.id && !user.can('lock'))) {
-				return this.errorReply(this.tr`${this.inputUsername} does not have an open ticket.`);
+				return this.errorReply(this.tr`${targetUsername} does not have an open ticket.`);
 			}
 			const helpRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
 			if (helpRoom) {
@@ -1349,17 +1353,17 @@ export const commands: Chat.ChatCommands = {
 		},
 		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
 
+		tb: 'ban',
 		ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
-			target = this.splitTarget(target, true);
-			const targetUser = this.targetUser;
+			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
 			this.checkCan('lock', targetUser);
 
-			const punishment = Punishments.roomUserids.nestedGet('staff', toID(this.targetUsername));
-			if (!targetUser && !Punishments.search(toID(this.targetUsername)).length) {
-				return this.errorReply(this.tr`User '${this.targetUsername}' not found.`);
+			const punishment = Punishments.roomUserids.nestedGet('staff', toID(targetUsername));
+			if (!targetUser && !Punishments.search(toID(targetUsername)).length) {
+				return this.errorReply(this.tr`User '${targetUsername}' not found.`);
 			}
-			if (target.length > 300) {
+			if (reason.length > 300) {
 				return this.errorReply(this.tr`The reason is too long. It cannot exceed 300 characters.`);
 			}
 
@@ -1376,19 +1380,19 @@ export const commands: Chat.ChatCommands = {
 					Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
 				}
 			} else {
-				username = this.targetUsername;
-				userid = toID(this.targetUsername);
+				username = targetUsername;
+				userid = toID(targetUsername);
 				if (punishment) {
 					return this.privateModAction(`${username} would be ticket banned by ${user.name} but was already ticket banned.`);
 				}
 			}
 
 			if (targetUser) {
-				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(target ? `\n\nReason: ${target}` : ``)}\n\nYour ban will expire in a few days.`);
+				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(reason ? `\n\nReason: ${reason}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
-			const affected = HelpTicket.ban(targetUser || userid, target);
-			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
+			const affected = HelpTicket.ban(targetUser || userid, reason);
+			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${reason ? ` (${reason})` : ``}`);
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
@@ -1399,7 +1403,7 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(displayMessage);
 			}
 
-			this.globalModlog(`TICKETBAN`, targetUser || userid, target);
+			this.globalModlog(`TICKETBAN`, targetUser || userid, reason);
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
 				const targetTicket = tickets[userObjID];

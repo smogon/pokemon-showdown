@@ -9,6 +9,7 @@
 
 import {Dex, toID} from './dex';
 import {Utils} from '../lib';
+import {Tags} from '../data/tags';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -1333,37 +1334,52 @@ export class TeamValidator {
 			}
 		}
 
-		banReason = ruleTable.check(tierTag) || (tier === 'AG' ? ruleTable.check('pokemontag:uber') : null);
-		if (banReason) {
-			return `${tierSpecies.name} is in ${tier}, which is ${banReason}.`;
-		}
-		if (banReason === '') return null;
+		// We can't return here because the `-nonexistent` rule is a bit
+		// complicated in terms of what trumps it. We don't want e.g.
+		// +Mythical to unban Shaymin in Gen 1, for instance.
+		let nonexistentCheck = Tags.nonexistent.genericFilter!(tierSpecies) && ruleTable.check('nonexistent');
 
-		banReason = ruleTable.check(doublesTierTag);
-		if (banReason) {
-			return `${tierSpecies.name} is in ${doublesTier}, which is ${banReason}.`;
-		}
-		if (banReason === '') return null;
+		const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 
-		banReason = ruleTable.check('pokemontag:allpokemon');
-		if (banReason) {
-			return `${species.name} is not in the list of allowed pokemon.`;
-		}
-
-		// obtainability
-		if (tierSpecies.isNonstandard) {
-			banReason = ruleTable.check('pokemontag:' + toID(tierSpecies.isNonstandard));
-			if (banReason) {
-				if (tierSpecies.isNonstandard === 'Unobtainable') {
-					return `${tierSpecies.name} is not obtainable without hacking or glitches.`;
+		for (const ruleid of ruleTable.tagRules) {
+			if (ruleid.startsWith('*')) continue;
+			const tagid = ruleid.slice(12);
+			const tag = Tags[tagid];
+			if ((tag.speciesFilter || tag.genericFilter)!(tierSpecies)) {
+				const existenceTag = EXISTENCE_TAG.includes(tagid);
+				if (ruleid.startsWith('+')) {
+					// we want rules like +CAP to trump -Nonexistent, but most tags shouldn't
+					if (!existenceTag && nonexistentCheck) continue;
+					return null;
 				}
-				if (tierSpecies.isNonstandard === 'Gigantamax') {
-					return `${tierSpecies.name} is not obtainable without Gigantamaxing, even through hacking.`;
+				if (existenceTag) {
+					// for a nicer error message
+					nonexistentCheck = 'banned';
+					break;
 				}
-				return `${tierSpecies.name} is tagged ${tierSpecies.isNonstandard}, which is ${banReason}.`;
+				return `${species.name} is tagged ${tag.name}, which is ${ruleTable.check(ruleid.slice(1)) || "banned"}.`;
 			}
-			if (banReason === '') return null;
 		}
+
+		if (nonexistentCheck) {
+			if (tierSpecies.isNonstandard === 'Past' || tierSpecies.isNonstandard === 'Future') {
+				return `${tierSpecies.name} does not exist in Gen ${dex.gen}.`;
+			}
+			if (tierSpecies.isNonstandard === 'LGPE') {
+				return `${tierSpecies.name} does not exist in Ultra Sun/Moon, only in Let's Go Pikachu/Eevee.`;
+			}
+			if (tierSpecies.isNonstandard === 'CAP') {
+				return `${tierSpecies.name} is a CAP and does not exist in this game.`;
+			}
+			if (tierSpecies.isNonstandard === 'Unobtainable') {
+				return `${tierSpecies.name} is not possible to obtain in this game.`;
+			}
+			if (tierSpecies.isNonstandard === 'Gigantamax') {
+				return `${tierSpecies.name} is a placeholder for a Gigantamax sprite, not a real Pokémon. (This message is likely to be a validator bug.)`;
+			}
+			return `${tierSpecies.name} does not exist in this game.`;
+		}
+		if (nonexistentCheck === '') return null;
 
 		// Special casing for Pokemon that can Gmax, but their Gmax factor cannot be legally obtained
 		if (tierSpecies.gmaxUnreleased && set.gigantamax) {
@@ -1374,15 +1390,9 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		if (tierSpecies.isNonstandard && tierSpecies.isNonstandard !== 'Unobtainable') {
-			banReason = ruleTable.check('nonexistent', setHas);
-			if (banReason) {
-				if (['Past', 'Future'].includes(tierSpecies.isNonstandard)) {
-					return `${tierSpecies.name} does not exist in Gen ${dex.gen}.`;
-				}
-				return `${tierSpecies.name} does not exist in this game.`;
-			}
-			if (banReason === '') return null;
+		banReason = ruleTable.check('pokemontag:allpokemon');
+		if (banReason) {
+			return `${species.name} is not in the list of allowed pokemon.`;
 		}
 
 		return null;
@@ -1584,7 +1594,7 @@ export class TeamValidator {
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
 
-		if (eventData.japan) {
+		if (eventData.japan && dex.currentMod !== 'gen1jpn') {
 			if (fastReturn) return true;
 			problems.push(`${name} has moves from Japan-only events, but this format simulates International Yellow/Crystal which can't trade with Japanese games.`);
 		}
@@ -2075,8 +2085,14 @@ export class TeamValidator {
 			if (cantLearnReason) return `'s move ${move.name} ${cantLearnReason}`;
 			return ` can't learn ${move.name}.`;
 		}
+		const backupSources = setSources.sources;
+		const backupSourcesBefore = setSources.sourcesBefore;
 		setSources.intersectWith(moveSources);
 		if (!setSources.size()) {
+			// pretend this pokemon didn't have this move:
+			// prevents a crash if OMs override `checkCanLearn` to keep validating after an error
+			setSources.sources = backupSources;
+			setSources.sourcesBefore = backupSourcesBefore;
 			return `'s moves ${(setSources.restrictiveMoves || []).join(', ')} are incompatible.`;
 		}
 

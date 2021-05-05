@@ -1999,16 +1999,18 @@ export const commands: Chat.ChatCommands = {
 			const nextHost = room.roomid === 'mafia' && cmd === 'nexthost';
 			if (nextHost || !room.auth.has(user.id)) this.checkCan('show', null, room);
 
+			let targetUser!: User | null;
+			let targetUsername!: string;
 			if (nextHost) {
 				if (!hostQueue.length) return this.errorReply(`Nobody is on the host queue.`);
 				const skipped = [];
 				let hostid;
 				while ((hostid = hostQueue.shift())) {
-					this.splitTarget(hostid, true);
-					if (!this.targetUser?.connected ||
-						!room.users[this.targetUser.id] || Mafia.isHostBanned(room, this.targetUser)) {
+					({targetUser, targetUsername} = this.splitUser(hostid, {exactName: true}));
+					if (!targetUser?.connected ||
+						!room.users[targetUser.id] || Mafia.isHostBanned(room, targetUser)) {
 						skipped.push(hostid);
-						this.targetUser = null;
+						targetUser = null;
 					} else {
 						// found a host
 						break;
@@ -2017,31 +2019,28 @@ export const commands: Chat.ChatCommands = {
 				if (skipped.length) {
 					this.sendReply(`${skipped.join(', ')} ${Chat.plural(skipped.length, 'were', 'was')} not online, not in the room, or are host banned and were removed from the host queue.`);
 				}
-				if (!this.targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
+				if (!targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
 			} else {
-				this.splitTarget(target, true);
-				if (room.roomid === 'mafia' && hostQueue.length && toID(this.targetUsername) !== hostQueue[0]) {
+				({targetUser, targetUsername} = this.splitUser(target, {exactName: true}));
+				if (room.roomid === 'mafia' && hostQueue.length && toID(targetUsername) !== hostQueue[0]) {
 					if (!cmd.includes('force')) {
-						return this.errorReply(`${this.targetUsername} isn't the next host on the queue. Use /mafia forcehost if you're sure.`);
+						return this.errorReply(`${targetUsername} isn't the next host on the queue. Use /mafia forcehost if you're sure.`);
 					}
 				}
 			}
 
-			if (!this.targetUser?.connected) {
-				const targetUsername = this.targetUsername;
+			if (!targetUser?.connected) {
 				return this.errorReply(`The user "${targetUsername}" was not found.`);
 			}
 
-			if (!nextHost && this.targetUser.id !== user.id) this.checkCan('mute', null, room);
+			if (!nextHost && targetUser.id !== user.id) this.checkCan('mute', null, room);
 
-			if (!room.users[this.targetUser.id]) {
-				return this.errorReply(`${this.targetUser.name} is not in this room, and cannot be hosted.`);
+			if (!room.users[targetUser.id]) {
+				return this.errorReply(`${targetUsername} is not in this room, and cannot be hosted.`);
 			}
-			if (Mafia.isHostBanned(room, this.targetUser)) {
-				return this.errorReply(`${this.targetUser.name} is banned from hosting mafia games.`);
+			if (Mafia.isHostBanned(room, targetUser)) {
+				return this.errorReply(`${targetUsername} is banned from hosting mafia games.`);
 			}
-
-			const targetUser = this.targetUser;
 
 			room.game = new Mafia(room, targetUser);
 
@@ -3080,12 +3079,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkChat();
 			if (!target) return this.parse(`/help mafia ${cmd}`);
 			this.checkCan('mute', null, room);
-			this.splitTarget(target, false);
-			const targetUser = this.targetUser;
-			if (!targetUser?.connected) {
-				const targetUsername = this.targetUsername;
-				return this.errorReply(`The user "${targetUsername}" was not found.`);
-			}
+			const {targetUser} = this.requireUser(target);
 			if (!room.users[targetUser.id]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
 			if (game.hostid === targetUser.id) return this.errorReply(`${targetUser.name} is already the host.`);
 			if (game.cohostids.includes(targetUser.id)) return this.errorReply(`${targetUser.name} is already a cohost.`);
@@ -3388,8 +3382,8 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
-			target = this.splitTarget(target, false);
-			const [string1, string2] = this.splitOne(target);
+			const {targetUser, rest} = this.requireUser(target);
+			const [string1, string2] = this.splitOne(rest);
 			let duration, reason;
 			if (parseInt(string1)) {
 				duration = parseInt(string1);
@@ -3405,18 +3399,15 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 			}
 
-			const targetUser = this.targetUser;
-			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
-
-			const punishment = Punishments.getRoomPunishType(room, this.targetUsername);
+			const punishment = Punishments.getRoomPunishType(room, targetUser.name);
 			if (punishment) {
 				if (punishment === `MAFIA${this.cmd.toUpperCase()}`) {
-					return this.errorReply(`User '${this.targetUsername}' is already ${this.cmd}ned in this room.`);
+					return this.errorReply(`User '${targetUser.name}' is already ${this.cmd}ned in this room.`);
 				} else if (punishment === 'MAFIAGAMEBAN') {
-					return this.errorReply(`User '${this.targetUsername}' is already gamebanned in this room, which also means they can't host.`);
+					return this.errorReply(`User '${targetUser.name}' is already gamebanned in this room, which also means they can't host.`);
 				} else if (punishment === 'MAFIAHOSTBAN') {
-					user.sendTo(room, `User '${this.targetUsername}' is already hostbanned in this room, but they will now be gamebanned.`);
-					this.parse(`/mafia unhostban ${this.targetUsername}`);
+					user.sendTo(room, `User '${targetUser.name}' is already hostbanned in this room, but they will now be gamebanned.`);
+					this.parse(`/mafia unhostban ${targetUser.name}`);
 				}
 			}
 
@@ -3446,13 +3437,11 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
-			this.splitTarget(target, false);
-			const targetUser = this.targetUser;
-			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+			const {targetUser} = this.requireUser(target, {allowOffline: true});
 			if (!Mafia.isGameBanned(room, targetUser) && cmd === 'ungameban') {
-				return this.errorReply(`User '${this.targetUsername}' isn't banned from playing mafia games.`);
+				return this.errorReply(`User '${targetUser.name}' isn't banned from playing mafia games.`);
 			} else if (!Mafia.isHostBanned(room, targetUser) && cmd === 'unhostban') {
-				return this.errorReply(`User '${this.targetUsername}' isn't banned from hosting mafia games.`);
+				return this.errorReply(`User '${targetUser.name}' isn't banned from hosting mafia games.`);
 			}
 
 			if (cmd === 'unhostban') Mafia.unhostBan(room, targetUser);

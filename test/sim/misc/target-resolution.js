@@ -187,31 +187,80 @@ describe('Target Resolution', function () {
 			battle.makeChoices('move watergun -2, pass', 'auto');
 			assert.statStage(redirector, 'spa', 2);
 		});
+	});
 
-		it(`should smart-track targets for Stalwart`, function () {
+	describe(`Smart-tracking targeting effects`, function () {
+		it(`should allow Stalwart to follow its target after an opposing Ally Switch`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
-				{species: 'Ninjask', ability: 'runaway', moves: ['splash']},
+				{species: 'Wynaut', moves: ['sleeptalk']},
 			], [
-				{species: 'Gastrodon', ability: 'runaway', moves: ['splash']},
-				{species: 'Ninjask', ability: 'runaway', moves: ['allyswitch']},
+				{species: 'Gastrodon', moves: ['sleeptalk']},
+				{species: 'Ninjask', moves: ['allyswitch']},
 			]]);
 
-			battle.makeChoices('move watergun 1, move splash', 'auto');
-			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+			const ninjask = battle.p2.active[1];
+			battle.makeChoices('move watergun 2, move sleeptalk', 'auto');
+			assert.false.fullHP(ninjask, `Duraludon should have followed Ninjask's Ally Switch.`);
 		});
 
-		it(`should smart-track targets for Snipe Shot`, function () {
+		it(`should allow Stalwart to bypass Storm Drain redirection`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Duraludon', ability: 'runaway', moves: ['snipeshot']},
-				{species: 'Ninjask', ability: 'runaway', moves: ['splash']},
+				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
+				{species: 'Wynaut', moves: ['sleeptalk']},
 			], [
-				{species: 'Gastrodon', ability: 'runaway', moves: ['splash']},
-				{species: 'Ninjask', ability: 'runaway', moves: ['allyswitch']},
+				{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
+				{species: 'Ninjask', moves: ['sleeptalk']},
 			]]);
 
-			battle.makeChoices('move snipeshot 1, move splash', 'auto');
-			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+			const ninjask = battle.p2.active[1];
+			battle.makeChoices('move watergun 2, move sleeptalk', 'auto');
+			assert.false.fullHP(ninjask, `Duraludon should have ignored Gastrodon's Storm Drain.`);
+		});
+
+		it(`should allow Stalwart to bypass Follow Me redirection`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
+				{species: 'Wynaut', moves: ['sleeptalk']},
+			], [
+				{species: 'Clefable', moves: ['followme']},
+				{species: 'Ninjask', moves: ['sleeptalk']},
+			]]);
+
+			const ninjask = battle.p2.active[1];
+			battle.makeChoices('move watergun 2, move sleeptalk', 'auto');
+			assert.false.fullHP(ninjask, `Duraludon should have ignored Clefable's Follow Me.`);
+		});
+
+		it(`should allow Stalwart to correctly target a Pokemon which switched out and back in another slot`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
+				{species: 'Wynaut', moves: ['sleeptalk']},
+			], [
+				{species: 'Ninjask', moves: ['uturn']},
+				{species: 'Regieleki', moves: ['uturn']},
+				{species: 'Octillery', moves: ['sleeptalk']},
+			]]);
+
+			const regieleki = battle.p2.active[1];
+			battle.makeChoices('move watergun 2, move sleeptalk', 'move uturn -2, move uturn -1');
+			battle.choose('p2', 'switch 3');
+			battle.choose('p2', 'switch 3');
+			assert.false.fullHP(regieleki, `Duraludon should have followed Regieleki through its switch-out.`);
+		});
+
+		it(`should allow Snipe Shot to follow its target after an opposing Ally Switch`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Inteleon', moves: ['snipeshot']},
+				{species: 'Ninjask', moves: ['sleeptalk']},
+			], [
+				{species: 'Gastrodon', moves: ['sleeptalk']},
+				{species: 'Ninjask', moves: ['allyswitch']},
+			]]);
+
+			const ninjask = battle.p2.active[1];
+			battle.makeChoices('move snipeshot 2, move sleeptalk', 'auto');
+			assert.false.fullHP(ninjask, `Inteleon should have followed Ninjask's Ally Switch.`);
 		});
 	});
 

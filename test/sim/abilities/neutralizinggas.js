@@ -169,7 +169,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(regigigas.getStat('spe'), slowStartSpeed);
 	});
 
-	it.skip(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
+	it(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [

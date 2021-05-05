@@ -34,6 +34,18 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Mega",
 		speciesFilter: species => !!species.isMega,
 	},
+	mythical: {
+		name: "Mythical",
+		speciesFilter: species => species.tags.includes("Mythical"),
+	},
+	sublegendary: {
+		name: "Sub-Legendary",
+		speciesFilter: species => species.tags.includes("Sub-Legendary"),
+	},
+	restrictedlegendary: {
+		name: "Restricted Legendary",
+		speciesFilter: species => species.tags.includes("Restricted Legendary"),
+	},
 
 	// Move tags
 	// ---------
@@ -114,43 +126,43 @@ export const Tags: {[id: string]: TagData} = {
 	// -----
 	uber: {
 		name: "Uber",
-		speciesFilter: species => toID(species.tier) === 'uber' || species.tier === 'AG',
+		speciesFilter: species => species.tier === 'Uber' || species.tier === '(Uber)' || species.tier === 'AG',
 	},
 	ou: {
 		name: "OU",
-		speciesFilter: species => toID(species.tier) === 'ou',
+		speciesFilter: species => species.tier === 'OU' || species.tier === '(OU)',
 	},
 	uubl: {
 		name: "UUBL",
-		speciesFilter: species => toID(species.tier) === 'uubl',
+		speciesFilter: species => species.tier === 'UUBL',
 	},
 	uu: {
 		name: "UU",
-		speciesFilter: species => toID(species.tier) === 'uu',
+		speciesFilter: species => species.tier === 'UU',
 	},
 	rubl: {
 		name: "RUBL",
-		speciesFilter: species => toID(species.tier) === 'rubl',
+		speciesFilter: species => species.tier === 'RUBL',
 	},
 	ru: {
 		name: "RU",
-		speciesFilter: species => toID(species.tier) === 'ru',
+		speciesFilter: species => species.tier === 'RU',
 	},
 	nubl: {
 		name: "NUBL",
-		speciesFilter: species => toID(species.tier) === 'nubl',
+		speciesFilter: species => species.tier === 'NUBL',
 	},
 	nu: {
 		name: "NU",
-		speciesFilter: species => toID(species.tier) === 'nu',
+		speciesFilter: species => species.tier === 'NU',
 	},
 	publ: {
 		name: "PUBL",
-		speciesFilter: species => toID(species.tier) === 'publ',
+		speciesFilter: species => species.tier === 'PUBL',
 	},
 	pu: {
 		name: "PU",
-		speciesFilter: species => species.tier === 'PU',
+		speciesFilter: species => species.tier === 'PU' || species.tier === '(NU)',
 	},
 	zu: {
 		name: "ZU",
@@ -164,9 +176,9 @@ export const Tags: {[id: string]: TagData} = {
 		name: "LC",
 		speciesFilter: species => species.doublesTier === 'LC',
 	},
-	cap: {
-		name: "CAP",
-		speciesFilter: species => species.tier === 'CAP',
+	captier: {
+		name: "CAP Tier",
+		speciesFilter: species => species.isNonstandard === 'CAP',
 	},
 	caplc: {
 		name: "CAP LC",
@@ -180,12 +192,20 @@ export const Tags: {[id: string]: TagData} = {
 		name: "AG",
 		speciesFilter: species => species.tier === 'AG',
 	},
+	nduubl: {
+		name: "ND UUBL",
+		speciesFilter: species => [
+			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Hawlucha',
+			'Heracross-Mega', 'Hydreigon', 'Latias', 'Latias-Mega', 'Latios', 'Manaphy', 'Pinsir-Mega', 'Slowbro-Mega', 'Thundurus',
+			'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
+		].includes(species.name),
+	},
 
 	// Doubles tiers
 	// -------------
 	duber: {
 		name: "DUber",
-		speciesFilter: species => species.doublesTier === 'DUber',
+		speciesFilter: species => species.doublesTier === 'DUber' || species.doublesTier === '(DUber)',
 	},
 	dou: {
 		name: "DOU",
@@ -213,17 +233,25 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Future",
 		genericFilter: thing => thing.isNonstandard === 'Future',
 	},
-	unobtainable: {
-		name: "Unobtainable",
-		genericFilter: thing => thing.isNonstandard === 'Unobtainable',
-	},
 	lgpe: {
 		name: "LGPE",
 		genericFilter: thing => thing.isNonstandard === 'LGPE',
 	},
+	unobtainable: {
+		name: "Unobtainable",
+		genericFilter: thing => thing.isNonstandard === 'Unobtainable',
+	},
+	cap: {
+		name: "CAP",
+		speciesFilter: thing => thing.isNonstandard === 'CAP',
+	},
 	custom: {
 		name: "Custom",
 		genericFilter: thing => thing.isNonstandard === 'Custom',
+	},
+	nonexistent: {
+		name: "Nonexistent",
+		genericFilter: thing => !!thing.isNonstandard && thing.isNonstandard !== 'Unobtainable',
 	},
 
 	// filter columns

@@ -2536,11 +2536,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 
 				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
-			this.add('-message', 'Dynamax is not allowed in SSB4, and custom challenges or tournaments won\'t save you from that fact.');
-			pokemon.removeVolatile('dynamax');
-			this.queue.cancelMove(pokemon);
-			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.
-			this.hint(`Your move was aborted due to dynamax. Cheater.`);
+			this.add('-message', 'Ok. sure. Dynamax. Just abuse it and win the game already.');
+			// This is just for fun, as dynamax cannot be in a rated battle.
+			this.win(pokemon.side);
 		},
 	},
 	echoedvoiceclone: {

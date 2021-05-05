@@ -1351,11 +1351,22 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
 		// Implemented in mods/gen2/rulesets.ts
 	},
-	japanesegen1movelegality: {
+	nintendocup1997movelegality: {
 		effectType: 'ValidatorRule',
-		name: "Japanese Gen 1 Move Legality",
-		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Japanese versions of Gen 1.",
+		name: "Nintendo Cup 1997 Move Legality",
+		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Nintendo Cup 1997.",
 		// Implemented in mods/gen1jpn/rulesets.ts
+	},
+	noswitching: {
+		effectType: 'Rule',
+		name: 'No Switching',
+		desc: 'All Pok\u00e9mon are trapped (cannot switch naturally, but can as the effect of an item, move, or Ability).',
+		onBegin() {
+			this.add('rule', 'No Switching: All Pok\u00e9mon are trapped');
+		},
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+		},
 	},
 	multipleabilities: {
 		effectType: 'Rule',

@@ -430,11 +430,9 @@ export const commands: Chat.ChatCommands = {
 		this.checkChat();
 		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
-		this.splitTarget(target, true);
-		const username = LastFM.getAccountName(target ? target : user.name);
-		this.sendReplyBox(
-			await LastFM.getScrobbleData(username, this.targetUsername ? this.targetUsername : user.named ? user.name : undefined)
-		);
+		const targetUsername = this.splitUser(target).targetUsername || (user.named ? user.name : '');
+		const username = LastFM.getAccountName(targetUsername);
+		this.sendReplyBox(await LastFM.getScrobbleData(username, targetUsername));
 	},
 	lastfmhelp: [
 		`/lastfm [username] - Displays the last scrobbled song for the person using the command or for [username] if provided.`,

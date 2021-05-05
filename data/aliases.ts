@@ -24,6 +24,7 @@ export const Aliases: {[alias: string]: string} = {
 	aaa: "[Gen 8] Almost Any Ability",
 	stab: "[Gen 8] STABmons",
 	camo: "[Gen 8] Camomons",
+	ffa: "[Gen 8] Free-For-All",
 	ts: "[Gen 8] Tier Shift",
 	ph: "[Gen 8] Pure Hackmons",
 	gen7bh: "[Gen 7] Balanced Hackmons",
@@ -55,8 +56,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6mono: "[Gen 6] Monotype",
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 8] Cross Evolution",
-	omotm: "[Gen 8] Pokebilities",
-	lcotm: "[Gen 8] Godly Gift",
+	omotm: "[Gen 8] Sketchmons",
+	lcotm: "[Gen 8] Inverse",
 	m4a: "[Gen 8] Megas For All",
 
 	// mega evos

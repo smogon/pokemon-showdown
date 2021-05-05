@@ -5,6 +5,7 @@
 
 const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove} = require('./tools');
 const assert = require('../assert');
+const {Dex} = require('../../.sim-dist/dex');
 
 describe('[Gen 8] Random Battle', () => {
 	const options = {format: 'gen8randombattle'};
@@ -46,6 +47,27 @@ describe('[Gen 8] Random Battle', () => {
 			testAlwaysHasMove(pkmn, options, 'outrage');
 		}
 	});
+
+	it('should give Sticky Web Pokémon Sticky Web unless they have setup', () => {
+		for (const pkmn of ['shuckle', 'orbeetle', 'araquanid']) {
+			testSet(pkmn, options, set => {
+				if (set.moves.some(move => Dex.moves.get(move).boosts)) return; // Setup
+				assert(
+					set.moves.includes('stickyweb'),
+					`${pkmn} should always generate Sticky Web (generated moveset: ${set.moves})`
+				);
+			});
+		}
+	});
+
+	it('should give Throat Spray to Shift Gear Toxtricity sets', () => {
+		testSet('toxtricity', options, set => {
+			if (!set.moves.includes('shiftgear')) return;
+			assert.equal(set.item, "Throat Spray", `got ${set.item} instead of Throat Spray`);
+		});
+	});
+
+	it('Toxapex should always have Scald', () => testAlwaysHasMove('toxapex', options, 'scald'));
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
