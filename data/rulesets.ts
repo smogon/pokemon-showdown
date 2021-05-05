@@ -1366,9 +1366,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 	pokebilitiesrule: {
 		effectType: 'Rule',
 		name: 'Pokebilities Rule',
-		desc: "Pok&eacute;mon have all of their released abilities simultaneously.",
+		desc: "Pokebilities battle effects: Pok&eacute;mon have all of their released abilities simultaneously.",
 		ruleset: ['Multiple Abilities'],
 		onBegin() {
+			this.add('rule', 'Pokebilities Rule: Pokémon have all of their released abilities simultaneously.');
+
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
 					continue;
@@ -1406,8 +1408,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 	sharedpowerrule: {
 		effectType: 'Rule',
 		name: 'Shared Power Rule',
-		desc: "Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.",
+		desc: "Shared Power battle effects: Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.",
 		ruleset: ['Multiple Abilities'],
+		onBegin() {
+			this.add('rule', 'Shared Power Rule: Once a Pokémon switches in, its ability is shared with the rest of the team');
+		},
 		getSharedPower(pokemon) {
 			const sharedPower = new Set<string>();
 			for (const ally of pokemon.side.pokemon) {
