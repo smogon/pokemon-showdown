@@ -17,6 +17,8 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
+import {Utils} from '../lib';
+
 export const Formats: FormatList = [
 
 	// Sw/Sh Singles
@@ -635,10 +637,10 @@ export const Formats: FormatList = [
 			return null;
 		},
 		onValidateTeam(team) {
-			const sketches = new Map<string, number>();
+			const sketches = new Utils.Multiset<string>();
 			for (const set of team) {
 				if ((set as any).sketchMove) {
-					sketches.set((set as any).sketchMove, (sketches.get((set as any).sketchMove) || 0) + 1);
+					sketches.add((set as any).sketchMove);
 				}
 			}
 			const overSketched = [...sketches.entries()].filter(([moveName, count]) => count > 1);
