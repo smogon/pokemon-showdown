@@ -663,7 +663,7 @@ export const Formats: FormatList = [
 		banlist: [
 			'Arena Trap', 'Baton Pass', 'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Diggersby', 'Dracovish', 'Dracozolt',
 			'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
-			'Landorus', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo', 'Moody', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
+			'Landorus-Base', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo', 'Moody', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
 			'Pheromosa', 'Porygon-Z', 'Power Construct', 'Rayquaza', 'Regieleki', 'Reshiram', 'Rillaboom', 'Shadow Tag', 'Solgaleo', 'Spectrier',
 			'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zekrom',
 		],
