@@ -44,7 +44,7 @@ For simplicity (mostly to make relicensing easier), client code should be also b
 Design standards
 ------------------------------------------------------------------------
 
-We strive to be maximally intuitive and accessible. "That's what they all say," but the currently-popular flat design trend straight-up sacrifices usability for aesthetics, and we try to take the other side of that trade-off.
+We strive to be maximally intuitive and accessible. Sure, "that's what they all say", but the currently-popular flat design trend straight-up sacrifices usability for aesthetics, and we try to take the other side of that trade-off.
 
 Some principles we try to design by:
 
@@ -60,7 +60,7 @@ In addition, blind users in particular navigate by link text, so a blind user wi
 
 ### D3. Remove unnecessary clicks
 
-Whenever you give a user a button to click, always think "In what situations would a user want to click this? In what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply more details by default.
+Whenever you give a user a button to click, always think, "In what situations would a user want to click this? In what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
 
 ### D4. Remove unnecessary scrolling and mouse movement
 
@@ -136,7 +136,7 @@ Sometimes, you have information about a variable/function (such as how and when 
 let numConnections: number | null = null;
 ```
 
-Doc comments start with `/**` and end with `*/`. In VS Code, doc comments will show up when you hover your mouse over the variable/function name anywhere it's used. If your information would be useful there, please put it in a doc comment.
+Doc comments start with `/**` and end with `*/`. In VS Code, doc comments will show up when you hover your mouse over the variable/function name, anywhere it's used. If your information would be useful there, please put it in a doc comment.
 
 ### C4. Other comments
 
@@ -214,7 +214,7 @@ If you want to have more than one commit in Git master's history after merge (i.
 
 Here is a guide for squashing, if you need help with that: https://redew.github.io/rebaseguide/
 
-If while rebasing you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed.
+If, while rebasing, you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed.
 
 
 Code standards
