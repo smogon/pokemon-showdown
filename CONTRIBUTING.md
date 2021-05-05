@@ -20,7 +20,7 @@ Contributing
 
 In general, we welcome pull requests that fix bugs.
 
-For feature additions and large projects, please discuss with us at https://psim.us/development an/dor https://psim.us/devdiscord first. We'd hate to have to reject a pull request that you spent a long time working on.
+For feature additions and large projects, please discuss with us at https://psim.us/development and/or https://psim.us/devdiscord first. We'd hate to have to reject a pull request that you spent a long time working on.
 
 If you're looking for inspiration for something to do, the Ideas issue has some ideas: https://github.com/smogon/pokemon-showdown/issues/2444
 
@@ -44,7 +44,7 @@ For simplicity (mostly to make relicensing easier), client code should be also b
 Design standards
 ------------------------------------------------------------------------
 
-We strive to be maximally intuitive and accessible. "That's what they all say", but the currently-popular flat design trend straight-up sacrifices usability for aesthetics, and we try to take the other side of that trade-off.
+We strive to be maximally intuitive and accessible. Sure, "that's what they all say", but the currently-popular flat design trend straight-up sacrifices usability for aesthetics, and we try to take the other side of that trade-off.
 
 Some principles we try to design by:
 
@@ -60,7 +60,7 @@ In addition, blind users in particular navigate by link text, so a blind user wi
 
 ### D3. Remove unnecessary clicks
 
-Whenever you give a user a button to click, always think "in what situations would a user want to click this? in what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
+Whenever you give a user a button to click, always think, "In what situations would a user want to click this? In what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
 
 ### D4. Remove unnecessary scrolling and mouse movement
 
@@ -173,7 +173,7 @@ In other words:
 
 The details of how you achieve the fix should be left for the second paragraph of the commit message.
 
-If this is not possible because your code does not make any functionality changes, your commit summary should ideally start with the word "Refactor" (or at least it contain it in some way).
+If this is not possible because your code does not make any functionality changes, your commit summary should ideally start with the word "Refactor" (or at least contain it in some way).
 
 ### CM2. Imperative
 
@@ -214,7 +214,7 @@ If you want to have more than one commit in Git master's history after merge (i.
 
 Here is a guide for squashing, if you need help with that: https://redew.github.io/rebaseguide/
 
-If while rebasing, you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed.
+If, while rebasing, you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed.
 
 
 Code standards
