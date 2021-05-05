@@ -8,7 +8,7 @@
  */
 
 import {exec, ExecException, ExecOptions} from 'child_process';
-import {crashlogger, FS} from "../lib";
+import {crashlogger, FS, Utils} from "../lib";
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
 
@@ -70,7 +70,7 @@ export const Monitor = new class {
 	/**
 	 * Inappropriate userid : number of times the name has been forcerenamed
 	 */
-	readonly forceRenames = new Map<ID, number>();
+	readonly forceRenames = new Utils.Multiset<ID>();
 
 	/*********************************************************
 	 * Logging
