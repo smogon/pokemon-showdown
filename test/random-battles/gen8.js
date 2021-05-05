@@ -68,6 +68,12 @@ describe('[Gen 8] Random Battle', () => {
 	});
 
 	it('Toxapex should always have Scald', () => testAlwaysHasMove('toxapex', options, 'scald'));
+
+	it('Shiinotic should always have Moonblast', () => testAlwaysHasMove('shiinotic', options, 'moonblast'));
+
+	it('should prevent Dragon Dance and Extreme Speed from appearing together', () => {
+		testNotBothMoves('dragonite', options, 'dragondance', 'extremespeed');
+	});
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
