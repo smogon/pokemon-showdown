@@ -1083,8 +1083,7 @@ export const commands: Chat.ChatCommands = {
 
 		room?.hideText([userid, toID(inputUsername)]);
 
-		const globalReason = (reason ? privateReason : '');
-		this.globalModlog("BAN", targetUser, globalReason);
+		this.globalModlog("BAN", targetUser, privateReason);
 		return true;
 	},
 	globalbanhelp: [
