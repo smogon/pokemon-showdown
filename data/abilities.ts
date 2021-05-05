@@ -2216,9 +2216,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					}
 				}
 			} else { // Pseudo-ability case
-				let possibleAbilities = [source.ability];
-				for (const abilityVolatile of Object.keys(source.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+				const possibleAbilities = [source.ability];
+				for (const abilityVolatile of Object.keys(source.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 					if (id && !this.dex.abilities.get(id).isPermanent && id !== 'mummy') possibleAbilities.push(id);
 				}
 				if (!possibleAbilities.length) return;
@@ -2342,8 +2342,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const isMultipleAbilities = this.ruleTable.has('multipleabilities');
 			if (isMultipleAbilities) {
 				// Remove any pseudo-abilities the setter may have before the ability starts
-				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 					if (!id || this.dex.abilities.get(id).isPermanent || id === 'neutralizinggas') continue;
 					pokemon.removeVolatile(abilityVolatile);
 				}
@@ -2357,8 +2357,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					this.add('-end', target, 'Slow Start', '[silent]');
 				}
 				if (isMultipleAbilities) {
-					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
-						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith('ability:'))) {
+						const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 						if (!id || this.dex.abilities.get(id).isPermanent) continue;
 						const status = this.dex.conditions.get(abilityVolatile) as Effect;
 						if (!status || !pokemon.volatiles[status.id]) continue;
@@ -2385,8 +2385,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
 					if (this.ruleTable.has('multipleabilities')) {
-						for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
-							const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+						for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
+							const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 							if (!id || this.dex.abilities.get(id).isPermanent) continue;
 							const status = this.dex.conditions.get(abilityVolatile) as Effect;
 							if (!status || !pokemon.volatiles[status.id]) continue;
@@ -2743,14 +2743,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!pokemon.hp) return;
 			const isAbility = pokemon.ability === 'powerofalchemy';
 			let possibleAbilities = [target.ability];
-			let ownAbilities = [pokemon.ability];
+			const ownAbilities = [pokemon.ability];
 			if (this.ruleTable.has('multipleabilities')) {
-				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 					if (id) possibleAbilities.push(id);
 				}
-				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 					if (id) ownAbilities.push(id);
 				}
 			}
@@ -2765,8 +2765,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (isAbility) {
 				pokemon.setAbility(ability);
 			} else {
-				pokemon.removeVolatile("ability:powerofalchemy");
-				pokemon.addVolatile("ability:" + ability.id, pokemon);
+				pokemon.removeVolatile('ability:powerofalchemy');
+				pokemon.addVolatile('ability:' + ability.id, pokemon);
 			}
 		},
 		name: "Power of Alchemy",
@@ -2974,14 +2974,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!pokemon.hp) return;
 			const isAbility = pokemon.ability === 'receiver';
 			let possibleAbilities = [target.ability];
-			let ownAbilities = [pokemon.ability];
+			const ownAbilities = [pokemon.ability];
 			if (this.ruleTable.has('multipleabilities')) {
-				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 					if (id) possibleAbilities.push(id);
 				}
-				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 					if (id) ownAbilities.push(id);
 				}
 			}
@@ -2996,8 +2996,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (isAbility) {
 				pokemon.setAbility(ability);
 			} else {
-				pokemon.removeVolatile("ability:receiver");
-				pokemon.addVolatile("ability:" + ability.id, pokemon);
+				pokemon.removeVolatile('ability:receiver');
+				pokemon.addVolatile('ability:' + ability.id, pokemon);
 			}
 		},
 		name: "Receiver",
@@ -4049,14 +4049,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				const rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
 				let possibleAbilities = [target.ability];
-				let ownAbilities = [pokemon.ability];
+				const ownAbilities = [pokemon.ability];
 				if (this.ruleTable.has('multipleabilities')) {
-					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
-						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith('ability:'))) {
+						const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 						if (id) possibleAbilities.push(id);
 					}
-					for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
-						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
+						const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 						if (id) ownAbilities.push(id);
 					}
 				}
@@ -4075,8 +4075,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (isAbility) {
 					pokemon.setAbility(ability);
 				} else {
-					pokemon.removeVolatile("ability:trace");
-					pokemon.addVolatile("ability:" + ability.id, pokemon);
+					pokemon.removeVolatile('ability:trace');
+					pokemon.addVolatile('ability:' + ability.id, pokemon);
 				}
 				return;
 			}
@@ -4278,10 +4278,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			} else {
 				// pseudo-ability case: make Wandering Spirit replace a random ability
-				let possibleAbilities = [source.ability];
-				for (const abilityVolatile of Object.keys(source.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
-					if (id && !this.dex.abilities.get(id).isPermanent && !additionalBannedAbilities.includes(id)) possibleAbilities.push(id);
+				const possibleAbilities = [source.ability];
+				for (const abilityVolatile of Object.keys(source.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
+					if (id && !this.dex.abilities.get(id).isPermanent && !additionalBannedAbilities.includes(id)) {
+						possibleAbilities.push(id);
+					}
 				}
 				if (!possibleAbilities.length || target.volatiles['dynamax']) return;
 				if (this.checkMoveMakesContact(move, source, target)) {

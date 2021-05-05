@@ -367,7 +367,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.ability === 'shellarmor') {
 					target.setAbility('');
 				} else {
-					target.removeVolatile("ability:shellarmor");
+					target.removeVolatile('ability:shellarmor');
 				}
 			}
 		},
@@ -410,7 +410,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.ability === 'weakarmor') {
 					target.setAbility('');
 				} else {
-					target.removeVolatile("ability:weakarmor");
+					target.removeVolatile('ability:weakarmor');
 				}
 				this.boost({spe: 1});
 				return damage;
@@ -435,8 +435,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					if (target.ability === 'magmaarmor') {
 						target.setAbility('battlearmor');
 					} else {
-						target.removeVolatile("ability:magmaarmor");
-						target.addVolatile("ability:battlearmor", target);
+						target.removeVolatile('ability:magmaarmor');
+						target.addVolatile('ability:battlearmor', target);
 					}
 					damage = 0;
 				} else {

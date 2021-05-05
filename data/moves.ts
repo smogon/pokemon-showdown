@@ -5938,7 +5938,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
 				if (this.ruleTable.has('multipleabilities')) {
-					for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+					for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
 						pokemon.removeVolatile(abilityVolatile);
 					}
 				}

@@ -1192,10 +1192,10 @@ export class Pokemon {
 		if (this.battle.gen > 2) {
 			this.setAbility(pokemon.ability, this, true);
 			if (this.battle.ruleTable.has('multipleabilities')) {
-				for (const abilityVolatile of Object.keys(this.volatiles).filter(key => key.startsWith("ability:"))) {
+				for (const abilityVolatile of Object.keys(this.volatiles).filter(key => key.startsWith('ability:'))) {
 					this.removeVolatile(abilityVolatile);
 				}
-				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
 					this.addVolatile(abilityVolatile, this);
 				}
 			}

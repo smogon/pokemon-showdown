@@ -463,16 +463,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
 				let possibleAbilities = [target.ability];
+				const ownAbilities = [pokemon.ability];
 				if (this.ruleTable.has('multipleabilities')) {
-					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
-						const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+					for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith('ability:'))) {
+						const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 						if (id) possibleAbilities.push(id);
+					}
+					for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
+						const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
+						if (id) ownAbilities.push(id);
 					}
 				}
 				const additionalBannedAbilities = [
 					// Zen Mode included here for compatability with Gen 5-6
 					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'pillage',
-					'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
+					'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode', ...(ownAbilities || [])
 				];
 				possibleAbilities = possibleAbilities
 					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
@@ -485,17 +490,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 				const isTargetAbilityReal = target.ability === ability.id;
 				if (isTargetAbilityReal) {
-					target.setAbility('pillage', pokemon);
+					if (target.species.id !== 'yaciancrowned') {
+						target.setAbility('pillage', pokemon);
+					}
 				} else {
-					target.removeVolatile("ability:" + ability);
-					target.addVolatile("ability:pillage", pokemon);
+					target.removeVolatile('ability:' + ability);
+					if (target.species.id !== 'yaciancrowned') {
+						target.addVolatile('ability:pillage', pokemon);
+					}
 				}
 
 				if (isPokemonAbility) {
 					pokemon.setAbility(ability);
 				} else {
-					pokemon.removeVolatile("ability:pillage");
-					pokemon.addVolatile("ability:" + ability.id, pokemon);
+					pokemon.removeVolatile('ability:pillage');
+					pokemon.addVolatile('ability:' + ability.id, pokemon);
 				}
 
 				this.add('-activate', pokemon, 'ability: Pillage');

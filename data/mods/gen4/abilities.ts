@@ -460,8 +460,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const isAbility = pokemon.ability === 'trace';
 			let possibleAbilities = [target.ability];
 			if (this.ruleTable.has('multipleabilities')) {
-				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+				for (const abilityVolatile of Object.keys(target.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 					if (id) possibleAbilities.push(id);
 				}
 			}
@@ -476,8 +476,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 				}
 			} else {
-				pokemon.removeVolatile("ability:trace");
-				pokemon.addVolatile("ability:" + ability.id, pokemon);
+				pokemon.removeVolatile('ability:trace');
+				pokemon.addVolatile('ability:' + ability.id, pokemon);
 			}
 		},
 	},

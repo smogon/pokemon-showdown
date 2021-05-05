@@ -1398,7 +1398,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onSwitchIn(pokemon) {
 			if (pokemon.m.pseudoAbilities) {
 				for (const pseudoAbility of pokemon.m.pseudoAbilities) {
-					const volatileName = "ability:" + pseudoAbility;
+					const volatileName = 'ability:' + pseudoAbility;
 					if (pokemon.getVolatile(volatileName)) continue;
 					pokemon.addVolatile(volatileName, pokemon);
 				}
@@ -1422,7 +1422,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Shared Power battle effects: Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.",
 		ruleset: ['Multiple Abilities'],
 		onBegin() {
-			this.add('rule', 'Shared Power Rule: Once a Pokémon switches in, its ability is shared with the rest of the team');
+			this.add('rule', 'Shared Power Rule: Once a Pokémon switches in, its ability is shared with the rest of the team.');
 		},
 		getSharedPower(pokemon) {
 			const sharedPower = new Set<string>();

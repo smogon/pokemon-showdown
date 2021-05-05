@@ -104,15 +104,15 @@ export class Field {
 
 	suppressingWeather() {
 		const isMultipleAbilities = this.battle.ruleTable.has('multipleabilities');
-		
+
 		for (const side of this.battle.sides) {
 			for (const pokemon of side.active) {
 				if (!pokemon || pokemon.fainted || pokemon.ignoringAbility()) continue;
 				if (pokemon.getAbility().suppressWeather) return true;
 
 				if (!isMultipleAbilities) continue; // Pseudo-ability case
-				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith("ability:"))) {
-					const id = abilityVolatile.replace(/^(ability\:)/, "") as ID;
+				for (const abilityVolatile of Object.keys(pokemon.volatiles).filter(key => key.startsWith('ability:'))) {
+					const id = abilityVolatile.replace(/^(ability:)/, '') as ID;
 					if (id && this.battle.dex.abilities.get(id).suppressWeather) return true;
 				}
 			}
