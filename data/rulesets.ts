@@ -22,79 +22,25 @@ export const Rulesets: {[k: string]: FormatData} = {
 		],
 		banlist: ['Soul Dew'],
 	},
-	standardgbu: {
+	flatrules: {
 		effectType: 'ValidatorRule',
-		name: 'Standard GBU',
-		desc: "The standard ruleset for all official in-game Pok&eacute;mon tournaments and Battle Spot",
-		ruleset: [
-			'Min Source Gen = Current Gen', 'Adjust Level Down = 50',
-			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod',
-		],
-		banlist: [
-			'Battle Bond',
-			'Restricted Legendary', 'Mythical',
-		],
-		onValidateSet(set, format) {
-			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
-				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
-			}
-		},
+		name: 'Flat Rules',
+		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level Down = 50', 'Picked Team Size = Flat Rules Team Size'],
+		banlist: ['Mythical', 'Restricted Legendary'],
 	},
-	minimalgbu: {
+	limittworestricted: {
 		effectType: 'ValidatorRule',
-		name: 'Minimal GBU',
-		desc: "The standard ruleset for official tournaments, but two Restricted Legendaries are allowed",
-		ruleset: [
-			'Min Source Gen = Current Gen', 'Adjust Level Down = 50',
-			'Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
-		],
-		banlist: [
-			'Battle Bond',
-			'Mythical',
-		],
-		restricted: [
-			'Restricted Legendary',
-		],
-		onValidateSet(set, format) {
-			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
-				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
-			}
-		},
+		name: 'Limit Two Restricted',
+		desc: "Limit two restricted Pokémon (flagged with * in the rules list)",
 		onValidateTeam(team) {
-			let n = 0;
+			const restrictedSpecies = [];
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
-				if (this.ruleTable.isRestrictedSpecies(species)) n++;
-				if (n > 2) return [`You can only use up to two restricted legendary Pok\u00E9mon.`];
+				if (this.ruleTable.isRestrictedSpecies(species)) restrictedSpecies.push(species.name);
 			}
-		},
-	},
-	singlerestrictedgbu: {
-		effectType: 'ValidatorRule',
-		name: 'Single Restricted GBU',
-		desc: "The standard ruleset for official tournaments, but one Restricted Legendary is allowed",
-		ruleset: [
-			'Min Source Gen = 8',
-			'Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
-		],
-		banlist: [
-			'Battle Bond',
-			'Mythical',
-		],
-		restricted: [
-			'Restricted Legendary',
-		],
-		onValidateSet(set, format) {
-			if (this.gen < 7 && this.toID(set.item) === 'souldew') {
-				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
-			}
-		},
-		onValidateTeam(team) {
-			let n = 0;
-			for (const set of team) {
-				const species = this.dex.species.get(set.species);
-				if (this.ruleTable.isRestrictedSpecies(species)) n++;
-				if (n > 1) return [`You can only use up to one restricted legendary Pok\u00E9mon.`];
+			if (restrictedSpecies.length > 2) {
+				return [`You can only use up to two restricted Pok\u00E9mon (you have: ${restrictedSpecies.join(', ')})`];
 			}
 		},
 	},

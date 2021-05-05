@@ -264,7 +264,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard GBU', '!! Adjust Level = 50', 'Picked Team Size = 3'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 	},
 	{
 		name: "[Gen 8] Custom Game",
@@ -343,10 +343,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		ruleset: [
-			'Picked Team Size = 4',
-			'Standard GBU', '!! Adjust Level = 50', 'VGC Timer',
-		],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
 	},
 	{
 		name: "[Gen 8] VGC 2020",
@@ -354,10 +351,7 @@ export const Formats: FormatList = [
 		mod: 'gen8dlc1',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: [
-			'Picked Team Size = 4',
-			'Standard GBU', '!! Adjust Level = 50', 'VGC Timer',
-		],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
 	},
 	{
 		name: "[Gen 8] 2v2 Doubles",
@@ -1597,7 +1591,7 @@ export const Formats: FormatList = [
 		],
 
 		team: 'randomBSSFactory',
-		ruleset: ['Obtainable', 'Standard GBU', 'Picked Team Size = 3'],
+		ruleset: ['Flat Rules'],
 	},
 	{
 		name: "[Gen 8] Super Staff Bros 4",
@@ -1672,7 +1666,7 @@ export const Formats: FormatList = [
 		team: 'randomCC',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 8] Challenge Cup 1v1', '!Picked Team Size', 'Picked Team Size = 2'],
+		ruleset: ['[Gen 8] Challenge Cup 1v1', '!! Picked Team Size = 2'],
 	},
 	{
 		name: "[Gen 8] Hackmons Cup",
@@ -1745,7 +1739,7 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		team: 'randomBSSFactory',
 		searchShow: false,
-		ruleset: ['Obtainable', 'Standard GBU', 'Picked Team Size = 3'],
+		ruleset: ['Flat Rules'],
 	},
 	{
 		name: "[Gen 7] Hackmons Cup",
@@ -2264,7 +2258,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['Standard GBU', 'Picked Team Size = 3', '!Min Source Gen', 'Min Source Gen = 6'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
 	},
 	{
 		name: "[Gen 7 Let's Go] OU",
@@ -2330,7 +2324,8 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Minimal GBU', '!! Adjust Level = 50', 'VGC Timer', 'Picked Team Size = 4'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7', 'VGC Timer', 'Limit Two Restricted'],
+		restricted: ['Restricted Legendary'],
 		banlist: ['Unown'],
 	},
 	{
@@ -2353,10 +2348,7 @@ export const Formats: FormatList = [
 			timeoutAutoChoose: true,
 			dcTimerBank: false,
 		},
-		ruleset: [
-			'Picked Team Size = 4',
-			'Standard GBU', '!! Adjust Level = 50',
-		],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7'],
 		banlist: ['Oranguru + Symbiosis', 'Passimian + Defiant', 'Unown', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
 	},
 	{
@@ -2399,7 +2391,7 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Picked Team Size = 4', 'Standard GBU', '!Min Source Gen', 'Min Source Gen = 6'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
 	},
 	{
 		name: "[Gen 7] Doubles Custom Game",
@@ -2552,7 +2544,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen6',
 		searchShow: false,
-		ruleset: ['Obtainable', 'Standard GBU', 'Picked Team Size = 3'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		banlist: ['Soul Dew'],
 	},
 	{
 		name: "[Gen 6] Custom Game",
@@ -2625,7 +2618,8 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard GBU', 'Picked Team Size = 4'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		banlist: ['Soul Dew'],
 	},
 	{
 		name: "[Gen 6] Doubles Custom Game",
@@ -2648,7 +2642,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		gameType: 'triples',
 		searchShow: false,
-		ruleset: ['Standard GBU', 'Min Team Size = 6'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
 	},
 	{
 		name: "[Gen 6] Triples Custom Game",
@@ -2773,8 +2767,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen5',
 		searchShow: false,
-		ruleset: ['Standard GBU', 'Picked Team Size = 3'],
-		banlist: ['Dark Void', 'Sky Drop'],
+		ruleset: ['Flat Rules'],
+		banlist: ['Dark Void', 'Sky Drop', 'Soul Dew'],
 	},
 	{
 		name: "[Gen 5] Custom Game",
@@ -2814,8 +2808,8 @@ export const Formats: FormatList = [
 		mod: 'gen5',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard GBU', 'Picked Team Size = 4'],
-		banlist: ['Dark Void', 'Sky Drop'],
+		ruleset: ['Flat Rules'],
+		banlist: ['Dark Void', 'Sky Drop', 'Soul Dew'],
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",

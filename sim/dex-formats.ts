@@ -549,12 +549,16 @@ export class DexFormats {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
 			}
-			if (ruleTable.has(subformat.id)) {
-				throw new Error(`Rule "${rule}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
-			}
 			if (subformat.hasValue) {
 				if (value === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
 				if (value === 'Current Gen') value = `${this.dex.gen}`;
+				if (value === 'Flat Rules Team Size') {
+					value = String(
+						['doubles', 'rotation'].includes(format.gameType) ? 4 :
+						format.gameType === 'triples' ? 6 :
+						3
+					);
+				}
 				if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
 					const intValue = parseInt(value);
 					if (isNaN(intValue) || value !== `${intValue}`) {
@@ -592,6 +596,9 @@ export class DexFormats {
 			} else {
 				if (value !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
 				if (repealAndReplace) throw new Error(`"!!" is not supported for this rule`);
+				if (ruleTable.has(subformat.id) && !repealAndReplace) {
+					throw new Error(`Rule "${rule}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
+				}
 			}
 			ruleTable.set(subformat.id, '');
 			if (depth > 16) {
