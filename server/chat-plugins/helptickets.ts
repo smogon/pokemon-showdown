@@ -877,7 +877,8 @@ export const pages: Chat.PageTable = {
 				const ticketRoom = Rooms.get(`help-${ticket.userid}`);
 				buf += `<tr><td>${icon}</td>`;
 				const language = Chat.languages.get(ticketRoom?.settings.language || '');
-				buf += `<td>${Utils.escapeHTML(ticket.creator)}${language ? ` <small>(${language})</small>` : ''}</td>`;
+				const languageString = language && toID(language) !== "english" ? ` <small>(${language})</small>` : '';
+				buf += `<td>${Utils.escapeHTML(ticket.creator)}${languageString}</td>`;
 				buf += `<td>${ticket.type}</td>`;
 				buf += Utils.html`<td>${ticket.claimed ? ticket.claimed : `-`}</td>`;
 				buf += `<td>`;
