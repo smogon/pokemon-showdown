@@ -38,7 +38,7 @@ describe('Gluttony', function () {
 		battle = common.createBattle([[
 			{species: "wobbuffet", ability: 'gluttony', item: 'aguavberry', evs: {hp: 28}, moves: ['sleeptalk']},
 		], [
-			{species: "wynaut", ability: 'compoundeyes', moves: ['poisonpowder']},
+			{species: "wynaut", ability: 'noguard', moves: ['poisonpowder']},
 		]]);
 
 		for (let i = 0; i < 4; i++) battle.makeChoices();
