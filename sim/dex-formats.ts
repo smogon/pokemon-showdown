@@ -692,6 +692,12 @@ export class DexFormats {
 		if (ruleTable.defaultLevel < ruleTable.minLevel) {
 			throw new Error(`Default level ${ruleTable.defaultLevel}${ruleTable.blame('defaultlevel')} should not be below min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}.`);
 		}
+		if (ruleTable.adjustLevelDown && ruleTable.adjustLevelDown >= ruleTable.maxLevel) {
+			throw new Error(`Adjust Level Down ${ruleTable.adjustLevelDown}${ruleTable.blame('adjustleveldown')} will have no effect because it's not below max level ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}.`);
+		}
+		if (ruleTable.adjustLevel && ruleTable.valueRules.has('minlevel')) {
+			throw new Error(`Min Level ${ruleTable.minLevel}${ruleTable.blame('minlevel')} will have no effect because you're using Adjust Level ${ruleTable.adjustLevel}${ruleTable.blame('adjustlevel')}.`);
+		}
 
 		if ((format as any).cupLevelLimit) {
 			throw new Error(`cupLevelLimit.range[0], cupLevelLimit.range[1], cupLevelLimit.total are now rules, respectively: "Min Level = NUMBER", "Max Level = NUMBER", and "Max Total Level = NUMBER"`);

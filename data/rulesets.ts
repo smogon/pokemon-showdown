@@ -1382,7 +1382,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	maxlevel: {
 		effectType: 'ValidatorRule',
 		name: 'Max Level',
-		desc: "Maximum level of brought Pokémon (note that this should be 100 in level-down rules like VGC)",
+		desc: "Maximum level of brought Pokémon (if you're using both this and Adjust Level, this will control what level moves you have access to)",
 		hasValue: 'positive-integer',
 		// hardcoded in sim/team-validator
 	},
