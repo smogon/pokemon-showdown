@@ -32,7 +32,7 @@ export const Friends = new class {
 	}
 	async notifyConnection(user: User) {
 		const connected = await Chat.Friends.getLastLogin(user.id);
-		if ((Date.now() - connected) < 2 * 60 * 1000) {
+		if (connected && (Date.now() - connected) < 2 * 60 * 1000) {
 			return;
 		}
 		const friends = await Chat.Friends.getFriends(user.id);
