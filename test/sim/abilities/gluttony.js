@@ -41,10 +41,7 @@ describe('Gluttony', function () {
 			{species: "wynaut", ability: 'compoundeyes', moves: ['poisonpowder']},
 		]]);
 
-		battle.makeChoices();
-		battle.makeChoices();
-		battle.makeChoices();
-		battle.makeChoices();
+		for (let i = 0; i < 4; i++) battle.makeChoices();
 		const wobbuffet = battle.p1.active[0];
 		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp / 2) + Math.floor(wobbuffet.maxhp * 0.33));
 	});
