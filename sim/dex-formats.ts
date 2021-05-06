@@ -212,6 +212,14 @@ export class RuleTable extends Map<string, string> {
 		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
 
+		if (this.valueRules.get('pickedteamsize') === 'Flat Rules Team Size') {
+			this.pickedTeamSize = (
+				['doubles', 'rotation'].includes(format.gameType) ? 4 :
+				format.gameType === 'triples' ? 6 :
+				3
+			);
+		}
+
 		// sanity checks; these _could_ be inside `onValidateRule` but this way
 		// involves less string conversion.
 		if (this.minTeamSize && this.minTeamSize < gameTypeMinTeamSize) {
@@ -653,14 +661,9 @@ export class DexFormats {
 			if (subformat.hasValue) {
 				if (value === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
 				if (value === 'Current Gen') value = `${this.dex.gen}`;
-				if (value === 'Flat Rules Team Size') {
-					value = String(
-						['doubles', 'rotation'].includes(format.gameType) ? 4 :
-						format.gameType === 'triples' ? 6 :
-						3
-					);
-				}
-				if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
+				if (subformat.id === 'pickedteamsize' && value === 'Flat Rules Team Size') {
+					// can't be resolved until later
+				} else if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
 					const intValue = parseInt(value);
 					if (isNaN(intValue) || value !== `${intValue}`) {
 						throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
