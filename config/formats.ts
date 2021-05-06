@@ -264,7 +264,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 8] Custom Game",
@@ -343,7 +343,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 8] VGC 2020",
@@ -351,7 +351,7 @@ export const Formats: FormatList = [
 		mod: 'gen8dlc1',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 8] 2v2 Doubles",
@@ -1591,7 +1591,7 @@ export const Formats: FormatList = [
 		],
 
 		team: 'randomBSSFactory',
-		ruleset: ['Flat Rules'],
+		ruleset: ['Flat Rules', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 8] Super Staff Bros 4",
@@ -2258,7 +2258,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6', 'Cancel Mod'],
 		banlist: ['Battle Bond'],
 	},
 	{
@@ -2325,7 +2325,9 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7', 'VGC Timer', 'Limit Two Restricted'],
+		ruleset: [
+			'Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7', 'VGC Timer', 'Limit Two Restricted', 'Cancel Mod',
+		],
 		restricted: ['Restricted Legendary'],
 		banlist: ['Unown', 'Battle Bond'],
 	},
@@ -2349,7 +2351,7 @@ export const Formats: FormatList = [
 			timeoutAutoChoose: true,
 			dcTimerBank: false,
 		},
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7', 'Cancel Mod'],
 		banlist: ['Oranguru + Symbiosis', 'Passimian + Defiant', 'Unown', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry', 'Battle Bond'],
 	},
 	{
@@ -2392,7 +2394,7 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6', 'Cancel Mod'],
 		banlist: ['Battle Bond'],
 	},
 	{
@@ -2546,7 +2548,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen6',
 		searchShow: false,
-		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6', 'Cancel Mod'],
 		banlist: ['Soul Dew'],
 	},
 	{
@@ -2620,7 +2622,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6', 'Cancel Mod'],
 		banlist: ['Soul Dew'],
 	},
 	{
@@ -2644,7 +2646,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		gameType: 'triples',
 		searchShow: false,
-		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 6', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 6] Triples Custom Game",
@@ -2770,7 +2772,7 @@ export const Formats: FormatList = [
 		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['Flat Rules'],
-		banlist: ['Dark Void', 'Sky Drop', 'Soul Dew'],
+		banlist: ['Dark Void', 'Sky Drop', 'Soul Dew', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 5] Custom Game",
@@ -2811,7 +2813,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules'],
-		banlist: ['Dark Void', 'Sky Drop', 'Soul Dew'],
+		banlist: ['Dark Void', 'Sky Drop', 'Soul Dew', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",
