@@ -280,7 +280,7 @@ Note: Most formats already come with one standard ruleset. Removing and adding m
 
 `Standard NEXT` - the standard ruleset for NEXT. Allows some unreleased Pokémon and includes the Evasion Moves Clause, Nickname Clause, Sleep Clause Mod, Species Clause, OHKO Clause, HP Percentage Mod, and Cancel Mod. Bans Soul Dew.
 
-`Flat Rules` - the standard ruleset for in-game formats, such as Battle Spot. Includes Species Clause, Item Clause, Nickname Clause, and Team Preview. Bans mythical Pokémon and restricted legendaries (e.g. Zekrom, Reshiram, Zygarde, Eternatus)
+`Flat Rules` - the standard ruleset for in-game formats, such as Battle Spot. Includes Species Clause, Item Clause, Cancel Mod, Nickname Clause, and Team Preview. Bans mythical Pokémon and restricted legendaries (e.g. Zekrom, Reshiram, Zygarde, Eternatus)
 
 `Standard NatDex` - the standard ruleset for National Dex formats. Allows the National Dex. Includes Nickname Clause, HP Percentage Mod, Cancel Mod, Endless Battle Clause.
 
