@@ -293,7 +293,7 @@ describe('Target Resolution', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it.skip(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
+	it(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'houndour', level: 1, moves: ['sleeptalk']},
 			{species: 'altaria', moves: ['sleeptalk']},
