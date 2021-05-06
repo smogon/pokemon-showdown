@@ -129,7 +129,7 @@ Chat.registerMonitor('autolock', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
-					`<<${room.roomid}>> ${user.name}: SPOILER: ${message}${reason ? ` __(${reason})__` : ''}`, true
+					`<<${room.roomid}>> ${user.name}: ||${message}${reason ? ` __(${reason})__` : ''}||`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'${publicReason ? ` ${publicReason}` : ``}.`);
@@ -199,7 +199,7 @@ Chat.registerMonitor('evasion', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`,
-					`<<${room.roomid}>> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`, true
+					`<<${room.roomid}>> ${user.name}: ||\`\`${message}\`\` __(${match[0]} => ${word})__||`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${word}'${publicReason ? ` ${publicReason}` : ``}.`);
@@ -413,7 +413,7 @@ export const namefilter: Chat.NameFilter = (name, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
-						`using an inappropriate name: SPOILER: ${name} (from ${user.name})`, false, name
+						`using an inappropriate name: ||${name} (from ${user.name})||`, false, name
 					);
 				}
 				line.hits++;
@@ -468,13 +468,13 @@ export const nicknamefilter: Chat.NicknameFilter = (name, user) => {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
-						`${user.name} - using an inappropriate Pokémon nickname: SPOILER: ${name}`, true
+						`${user.name} - using an inappropriate Pokémon nickname: ||${name}||`, true
 					);
 				} else if (Chat.monitors[list].punishment === 'EVASION' && match[0] !== lcName) {
 					// Don't autolock unless it's an evasion regex and they're evading
 					void Punishments.autolock(
 						user, 'staff', 'FilterEvasionMonitor', `Evading filter in Pokémon nickname (${name} => ${word})`,
-						`${user.name}: Pokémon nicknamed SPOILER: \`\`${name} => ${word}\`\``, true
+						`${user.name}: Pokémon nicknamed ||\`\`${name} => ${word}\`\`||`, true
 					);
 				}
 				line.hits++;
@@ -514,7 +514,7 @@ export const statusfilter: Chat.StatusFilter = (status, user) => {
 					// already registered and therefore try to make the name different from the original slur.
 					void Punishments.autolock(
 						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
-						`${user.name} - using an inappropriate status: SPOILER: ${status}`, true
+						`${user.name} - using an inappropriate status: ||${status}||`, true
 					);
 				}
 				line.hits++;
