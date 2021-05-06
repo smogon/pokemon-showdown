@@ -122,8 +122,8 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 	}
 }
 
-async function rebuild(context: Chat.CommandContext) {
-	const [, , stderr] = await bash('node ./build', context);
+async function rebuild(context: Chat.CommandContext, force?: boolean) {
+	const [, , stderr] = await bash(`node ./build${force ? ' force' : ''}`, context);
 	if (stderr) {
 		throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
 	}
@@ -1170,7 +1170,7 @@ export const commands: Chat.ChatCommands = {
 		this.canUseConsole();
 		Monitor.updateServerLock = true;
 		this.sendReply(`Rebuilding...`);
-		await rebuild(this);
+		await rebuild(this, true);
 		Monitor.updateServerLock = false;
 		this.sendReply(`DONE`);
 	},
