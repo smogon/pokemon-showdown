@@ -71,7 +71,7 @@ export class RuleTable extends Map<string, string> {
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
 			if (this.has(`-pokemontag:${tagid}`)) {
-				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
@@ -96,7 +96,7 @@ export class RuleTable extends Map<string, string> {
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
 			if (this.has(`*pokemontag:${tagid}`)) {
-				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {

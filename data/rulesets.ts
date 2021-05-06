@@ -44,6 +44,21 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	limitonerestricted: {
+		effectType: 'ValidatorRule',
+		name: 'Limit One Restricted',
+		desc: "Limit one restricted Pokémon (flagged with * in the rules list)",
+		onValidateTeam(team) {
+			const restrictedSpecies = [];
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				if (this.ruleTable.isRestrictedSpecies(species)) restrictedSpecies.push(species.name);
+			}
+			if (restrictedSpecies.length > 1) {
+				return [`You can only use one restricted Pok\u00E9mon (you have: ${restrictedSpecies.join(', ')})`];
+			}
+		},
+	},
 	standarddoubles: {
 		effectType: 'ValidatorRule',
 		name: 'Standard Doubles',
