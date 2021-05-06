@@ -1380,6 +1380,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Pokebilities battle effects: Pok&eacute;mon have all of their released abilities simultaneously.",
 		ruleset: ['Multiple Abilities'],
 		onBegin() {
+			if (!this.ruleTable.has('multipleabilities')) return;
+
 			this.add('rule', 'Pokebilities Rule: Pokémon have all of their released abilities simultaneously.');
 
 			for (const pokemon of this.getAllPokemon()) {
@@ -1396,6 +1398,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onSwitchInPriority: 3,
 		onSwitchIn(pokemon) {
+			if (!this.ruleTable.has('multipleabilities')) return;
+
 			if (pokemon.m.pseudoAbilities) {
 				for (const pseudoAbility of pokemon.m.pseudoAbilities) {
 					const volatileName = 'ability:' + pseudoAbility;
@@ -1405,6 +1409,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 		onAfterMega(pokemon) {
+			if (!this.ruleTable.has('multipleabilities')) return;
 			if (!pokemon.m.pokebilitiesPseudoAbilities) return; // Only clear our own pseudo-abilities
 
 			for (const pseudoAbility of pokemon.m.pokebilitiesPseudoAbilities) {
@@ -1422,6 +1427,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Shared Power battle effects: Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.",
 		ruleset: ['Multiple Abilities'],
 		onBegin() {
+			if (!this.ruleTable.has('multipleabilities')) return;
+
 			this.add('rule', 'Shared Power Rule: Once a Pokémon switches in, its ability is shared with the rest of the team.');
 		},
 		getSharedPower(pokemon) {
@@ -1435,6 +1442,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return sharedPower;
 		},
 		onBeforeSwitchIn(pokemon) {
+			if (!this.ruleTable.has('multipleabilities')) return;
+
 			const rulesets = this.dex.data.Rulesets;
 			const rule = rulesets.hasOwnProperty('sharedpowerrule') ? rulesets['sharedpowerrule'] as Format : null;
 			if (!rule) return;
@@ -1448,6 +1457,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
+			if (!this.ruleTable.has('multipleabilities')) return;
+
 			const rulesets = this.dex.data.Rulesets;
 			const rule = rulesets.hasOwnProperty('sharedpowerrule') ? rulesets['sharedpowerrule'] as Format : null;
 			if (!rule) return;
