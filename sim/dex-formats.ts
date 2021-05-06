@@ -97,6 +97,27 @@ export class RuleTable extends Map<string, string> {
 		return this.has(`*pokemontag:allpokemon`);
 	}
 
+	getTagRules() {
+		const tagRules = [];
+		for (const ruleid of this.keys()) {
+			if (/^[+*-]pokemontag:/.test(ruleid)) {
+				const banid = ruleid.slice(12);
+				if (
+					banid === 'allpokemon' || banid === 'allitems' || banid === 'allmoves' ||
+					banid === 'allabilities' || banid === 'allnatures'
+				) {
+					// hardcoded and not a part of the ban rule system
+				} else {
+					tagRules.push(ruleid);
+				}
+			} else if ('+*-'.includes(ruleid.charAt(0)) && ruleid.slice(1) === 'nonexistent') {
+				tagRules.push(ruleid.charAt(0) + 'pokemontag:nonexistent');
+			}
+		}
+		this.tagRules = tagRules.reverse();
+		return this.tagRules;
+	}
+
 	/**
 	 * - non-empty string: banned, string is the reason
 	 * - '': whitelisted
@@ -634,30 +655,10 @@ export class DexFormats {
 				ruleTable.minSourceGen = subRuleTable.minSourceGen;
 			}
 		}
-		this.getTagRules(ruleTable);
+		ruleTable.getTagRules();
 
 		if (!repeals) format.ruleTable = ruleTable;
 		return ruleTable;
-	}
-
-	getTagRules(ruleTable: RuleTable) {
-		const tagRules = [];
-		for (const ruleid of ruleTable.keys()) {
-			if (/^[+*-]pokemontag:/.test(ruleid)) {
-				const banid = ruleid.slice(12);
-				if (
-					banid === 'allpokemon' || banid === 'allitems' || banid === 'allmoves' ||
-					banid === 'allabilities' || banid === 'allnatures'
-				) {
-					// hardcoded and not a part of the ban rule system
-				} else {
-					tagRules.push(ruleid);
-				}
-			} else if ('+*-'.includes(ruleid.charAt(0)) && ruleid.slice(1) === 'nonexistent') {
-				tagRules.push(ruleid.charAt(0) + 'pokemontag:nonexistent');
-			}
-		}
-		ruleTable.tagRules = tagRules.reverse();
 	}
 
 	validateRule(rule: string, format: Format | null = null) {
