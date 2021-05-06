@@ -333,6 +333,45 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	evlimits: {
+		effectType: 'ValidatorRule',
+		name: 'EV Limits',
+		desc: "Require EVs to be in specific ranges, such as: \"EV Limits = Atk 0-124 / Def 100-252\"",
+		hasValue: true,
+		onValidateRule(value) {
+			if (!value) throw new Error(`To remove EV limits, use "! EV Limits"`);
+
+			const slashedParts = value.split('/');
+			const UINT_REGEX = /^[0-9]{1,4}$/;
+			return slashedParts.map(slashedPart => {
+				const parts = slashedPart.replace('-', ' - ').replace(/ +/g, ' ').trim().split(' ');
+				const [stat, low, hyphen, high] = parts;
+				if (parts.length !== 4 || !UINT_REGEX.test(low) || hyphen !== '-' || !UINT_REGEX.test(high)) {
+					throw new Error(`EV limits should be in the format "EV Limits = Atk 0-124 / Def 100-252"`);
+				}
+				const statid = toID(stat) as StatID;
+				if (!this.dex.stats.ids().includes(statid)) {
+					throw new Error(`Unrecognized stat name "${stat}" in "${value}"`);
+				}
+				return `${statid} ${low}-${high}`;
+			}).join(' / ');
+		},
+		onValidateSet(set) {
+			const limits = this.ruleTable.valueRules.get('evlimits')!;
+			const problems = [];
+
+			for (const limit of limits.split(' / ')) {
+				const [statid, range] = limit.split(' ') as [StatID, string];
+				const [low, high] = range.split('-').map(num => parseInt(num));
+				const ev = set.evs[statid];
+
+				if (ev < low || ev > high) {
+					problems.push(`${set.name || set.species}'s ${this.dex.stats.names[statid]} EV (${ev}) must be ${low}-${high}`);
+				}
+			}
+			return problems;
+		},
+	},
 	teampreview: {
 		effectType: 'Rule',
 		name: 'Team Preview',
