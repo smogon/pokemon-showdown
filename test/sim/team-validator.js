@@ -791,6 +791,21 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should support restrictions', function () {
+		let team = [
+			{species: 'Yveltal', ability: 'No Ability', moves: ['protect'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7customgame@@@limitonerestricted,*restrictedlegendary').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'Yveltal', ability: 'No Ability', moves: ['protect'], evs: {hp: 1}},
+			{species: 'Xerneas', ability: 'No Ability', moves: ['protect'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7customgame@@@limitonerestricted,*restrictedlegendary').validateTeam(team);
+		assert(illegal);
+	});
+
 	it('should allow moves to be banned', function () {
 		const team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
