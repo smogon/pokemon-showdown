@@ -63,7 +63,7 @@ export class RandomTeams {
 	factoryTier: string;
 	format: Format;
 	prng: PRNG;
-	maxLength?: number;
+	maxLength: number;
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
@@ -76,13 +76,8 @@ export class RandomTeams {
 		format = Dex.formats.get(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
-		if (format.teamLength) {
-			if (format.teamLength.validate && format.teamLength.validate[1]) {
-				this.maxLength = format.teamLength.validate[1];
-			} else {
-				this.maxLength = format.teamLength.battle;
-			}
-		}
+		const ruleTable = Dex.formats.getRuleTable(format);
+		this.maxLength = ruleTable.maxTeamSize;
 		this.factoryTier = '';
 		this.format = format;
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);

@@ -53,6 +53,10 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- Unreleased` - ban all things that will probably be released eventually (Venusaur in Gen 8)
 
+`- Mythical` - ban all Mythical Pokémon (such as Mew, Celebi)
+
+`- Restricted Legendary` - ban all Restricted Legendary Pokémon (such as Zekrom, Eternatus)
+
 `- all items` - ban all items
 
 `- all abilities, + No Ability` - ban all abilities (No Ability needs to be specifically allowed to allow Pokemon with no abilities)
@@ -202,6 +206,35 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Mimic Glitch` - allow Pokémon with access to Assist, Copycat, Metronome, Mimic, or Transform to gain access to almost any other move
 
+
+Value rules
+-----------
+
+Certain rules can specify a value.
+
+`Max Level = 50` - ban Pokémon above level 50
+
+`Min Level = 10` - ban Pokémon below level 10
+
+`Max Total Level = 200` - only allow Pokémon whose combined levels add up to 200 or below (if combined with `Picked Team Size`, only the picked team needs to be below that combined level)
+
+`Max Team Size = 4` - you must bring a team with at most 4 pokemon (before Team Preview, in games with Team Preview)
+
+`Min Team Size = 4` - you must bring a team with at least 4 pokemon (before Team Preview, in games with Team Preview)
+
+`Picked Team Size = 4` - in Team Preview, you must pick exactly 4 pokemon (if this exists, `Min Team Size` will default to this number)
+
+`Min Source Gen = 7` - only allow pokemon obtained in this generation or later
+
+`Adjust Level = 50` - change all levels to 50, like in some in-game formats (unlike `Max Level`, this still allows moves learned above level 50)
+
+`Adjust Level Down = 50` - change Pokémon with level above 50 to level 50 (but leave Pokémon below 50 alone), like in some in-game formats (unlike `Max Level`, this still allows moves learned above level 50)
+
+`Force Monotype = Water` - require all Pokémon to be Water-type
+
+`EV Limits = Atk 0-100 / Def 50-150` - require EVs to be in those ranges
+
+
 In-battle rules
 ---------------
 
@@ -247,9 +280,7 @@ Note: Most formats already come with one standard ruleset. Removing and adding m
 
 `Standard NEXT` - the standard ruleset for NEXT. Allows some unreleased Pokémon and includes the Evasion Moves Clause, Nickname Clause, Sleep Clause Mod, Species Clause, OHKO Clause, HP Percentage Mod, and Cancel Mod. Bans Soul Dew.
 
-`Standard GBU` - the standard ruleset for in-game formats, such as Battle Spot. Includes Species Clause, Item Clause, Nickname Clause, Team Preview, and Cancel Mod. Bans mythical Pokémon and restricted legendaries (e.g. Zekrom, Reshiram, Zygarde, Eternatus)
-
-`Minimal GBU` - the standard ruleset for in-game formats but without restricted legendary bans. Still bans mythical Pokémon.
+`Flat Rules` - the standard ruleset for in-game formats, such as Battle Spot. Includes Species Clause, Item Clause, Nickname Clause, and Team Preview. Bans mythical Pokémon and restricted legendaries (e.g. Zekrom, Reshiram, Zygarde, Eternatus)
 
 `Standard NatDex` - the standard ruleset for National Dex formats. Allows the National Dex. Includes Nickname Clause, HP Percentage Mod, Cancel Mod, Endless Battle Clause.
 
@@ -261,11 +292,19 @@ Removing rules
 
 Put `!` in front of a rule to remove it, like:
 
-`!Team Preview` - do not use Team Preview
+`! Team Preview` - do not use Team Preview
 
 You can use this to remove individual parts of rules, like:
 
-`Obtainable, !Obtainable Moves` - require pokemon to be obtained legitimately, except for moves, which they can use whatever
+`Obtainable, ! Obtainable Moves` - require pokemon to be obtained legitimately, except for moves, which they can use whatever
+
+For value rules, you just put `!` in front of the rule name, no `=`:
+
+`Flat Rules, ! Picked Team Size` - use Flat Rules, but players can pick 6
+
+To prevent mistakes, value rules can't be changed without being removed first. Use `!!` to remove and replace a value rule:
+
+`Flat Rules, !! Picked Team Size = 5` - use Flat Rules, but players can pick 5
 
 
 Multiple rules

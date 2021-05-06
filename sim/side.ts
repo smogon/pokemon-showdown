@@ -388,7 +388,7 @@ export class Side {
 		if (this.choice.forcedSwitchesLeft) return false;
 
 		if (this.requestState === 'teampreview') {
-			return this.choice.actions.length >= this.chosenTeamSize();
+			return this.choice.actions.length >= this.pickedTeamSize();
 		}
 
 		// current request is move/switch
@@ -735,8 +735,8 @@ export class Side {
 	 * since that's nearly always a mistake, we haven't gotten around to
 	 * supporting it.
 	 */
-	chosenTeamSize() {
-		return Math.min(this.pokemon.length, this.battle.format.teamLength?.battle || Infinity);
+	pickedTeamSize() {
+		return Math.min(this.pokemon.length, this.battle.ruleTable.pickedTeamSize || Infinity);
 	}
 
 	chooseTeam(data = '') {
@@ -744,22 +744,22 @@ export class Side {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
 
+		const ruleTable = this.battle.ruleTable;
 		let positions = data.split(data.includes(',') ? ',' : '')
 			.map(datum => parseInt(datum) - 1);
-		const format = this.battle.format;
-		const chosenTeamSize = Math.min(this.pokemon.length, this.battle.format.teamLength?.battle || Infinity);
+		const pickedTeamSize = this.pickedTeamSize();
 
-		// make sure positions is exactly of length chosenTeamSize
+		// make sure positions is exactly of length pickedTeamSize
 		// - If too big: the client automatically sends a full list, so we just trim it down to size
-		positions.splice(chosenTeamSize);
+		positions.splice(pickedTeamSize);
 		// - If too small: we intentionally support only sending leads and having the sim fill in the rest
 		if (positions.length === 0) {
-			for (let i = 0; i < chosenTeamSize; i++) positions.push(i);
-		} else if (positions.length < chosenTeamSize) {
-			for (let i = 0; i < chosenTeamSize; i++) {
+			for (let i = 0; i < pickedTeamSize; i++) positions.push(i);
+		} else if (positions.length < pickedTeamSize) {
+			for (let i = 0; i < pickedTeamSize; i++) {
 				if (!positions.includes(i)) positions.push(i);
 				// duplicate in input, let the rest of the code handle the error message
-				if (positions.length >= chosenTeamSize) break;
+				if (positions.length >= pickedTeamSize) break;
 			}
 		}
 
@@ -771,17 +771,17 @@ export class Side {
 				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
 		}
-		if (format.cupLevelLimit) {
+		if (ruleTable.maxTotalLevel) {
 			let totalLevel = 0;
 			for (const pos of positions) totalLevel += this.pokemon[pos].level;
 
-			if (totalLevel > format.cupLevelLimit.total) {
+			if (totalLevel > ruleTable.maxTotalLevel) {
 				if (!data) {
 					// autoChoose
 					positions = [...this.pokemon.keys()].sort((a, b) => (this.pokemon[a].level - this.pokemon[b].level))
-						.slice(0, chosenTeamSize);
+						.slice(0, pickedTeamSize);
 				} else {
-					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${format.cupLevelLimit.total}; please select a valid team of ${chosenTeamSize} Pokémon`);
+					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${ruleTable.maxTotalLevel}; please select a valid team of ${pickedTeamSize} Pokémon`);
 				}
 			}
 		}

@@ -148,7 +148,12 @@ describe('Dex data', function () {
 
 	it('should have valid Formats', function () {
 		for (const format of Dex.formats.all()) {
-			Dex.formats.getRuleTable(format);
+			try {
+				Dex.formats.getRuleTable(format);
+			} catch (e) {
+				e.message = `${format.name}: ${e.message}`;
+				throw e;
+			}
 		}
 	});
 

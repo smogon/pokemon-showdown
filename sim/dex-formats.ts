@@ -34,8 +34,19 @@ export class RuleTable extends Map<string, string> {
 	complexTeamBans: ComplexTeamBan[];
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
-	minSourceGen: [number, string] | null;
 	tagRules: string[];
+	valueRules: Map<string, string>;
+
+	minTeamSize!: number;
+	maxTeamSize!: number;
+	pickedTeamSize!: number | null;
+	maxTotalLevel!: number | null;
+	minSourceGen!: number;
+	minLevel!: number;
+	maxLevel!: number;
+	defaultLevel!: number;
+	adjustLevel!: number | null;
+	adjustLevelDown!: number | null;
 
 	constructor() {
 		super();
@@ -43,8 +54,8 @@ export class RuleTable extends Map<string, string> {
 		this.complexTeamBans = [];
 		this.checkCanLearn = null;
 		this.timer = null;
-		this.minSourceGen = null;
 		this.tagRules = [];
+		this.valueRules = new Map();
 	}
 
 	isBanned(thing: string) {
@@ -60,7 +71,7 @@ export class RuleTable extends Map<string, string> {
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
 			if (this.has(`-pokemontag:${tagid}`)) {
-				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
@@ -84,14 +95,14 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
-			if (tag.speciesFilter && this.has(`*pokemontag:${tagid}`)) {
-				if (tag.speciesFilter(species)) return false;
+			if (this.has(`*pokemontag:${tagid}`)) {
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
 			const tag = Tags[tagid];
-			if (tag.speciesFilter && this.has(`+pokemontag:${tagid}`)) {
-				if (tag.speciesFilter(species)) return false;
+			if (this.has(`+pokemontag:${tagid}`)) {
+				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
 		}
 		return this.has(`*pokemontag:allpokemon`);
@@ -138,6 +149,11 @@ export class RuleTable extends Map<string, string> {
 		return source ? `banned by ${source}` : `banned`;
 	}
 
+	blame(key: string): string {
+		const source = this.get(key);
+		return source ? ` from ${source}` : ``;
+	}
+
 	getComplexBanIndex(complexBans: ComplexBan[], rule: string): number {
 		const ruleId = toID(rule);
 		let complexBanIndex = -1;
@@ -167,6 +183,86 @@ export class RuleTable extends Map<string, string> {
 			this.complexTeamBans[complexBanTeamIndex] = [rule, source, limit, bans];
 		} else {
 			this.complexTeamBans.push([rule, source, limit, bans]);
+		}
+	}
+
+	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
+	resolveNumbers(format: Format) {
+		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
+			format.gameType === 'doubles' ? 2 :
+			1;
+
+		// NOTE: These numbers are pre-calculated here because they're hardcoded
+		// into the team validator and battle engine, and can affect validation
+		// in complicated ways.
+
+		// If you're making your own rule, it nearly definitely does not not
+		// belong here: `onValidateRule`, `onValidateSet`, and `onValidateTeam`
+		// should be enough for a validator rule, and the battle event system
+		// should be enough for a battle rule.
+
+		this.minTeamSize = Number(this.valueRules.get('minteamsize')) || 0;
+		this.maxTeamSize = Number(this.valueRules.get('maxteamsize')) || 6;
+		this.pickedTeamSize = Number(this.valueRules.get('pickedteamsize')) || null;
+		this.maxTotalLevel = Number(this.valueRules.get('maxtotallevel')) || null;
+		this.minSourceGen = Number(this.valueRules.get('minsourcegen')) || 1;
+		this.minLevel = Number(this.valueRules.get('minlevel')) || 1;
+		this.maxLevel = Number(this.valueRules.get('maxlevel')) || 100;
+		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || this.maxLevel;
+		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
+		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
+
+		// sanity checks; these _could_ be inside `onValidateRule` but this way
+		// involves less string conversion.
+		if (this.minTeamSize && this.minTeamSize < gameTypeMinTeamSize) {
+			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+		}
+		if (this.pickedTeamSize && this.pickedTeamSize < gameTypeMinTeamSize) {
+			throw new Error(`Chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+		}
+		if (this.minTeamSize && this.pickedTeamSize && this.minTeamSize < this.pickedTeamSize) {
+			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} is lower than chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')}.`);
+		}
+		if (!this.minTeamSize) this.minTeamSize = Math.max(gameTypeMinTeamSize, this.pickedTeamSize || 0);
+		if (this.maxTeamSize > 24) {
+			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} can't be above 24.`);
+		}
+		if (this.minLevel > this.maxLevel) {
+			throw new Error(`Min level ${this.minLevel}${this.blame('minlevel')} should not be above max level ${this.maxLevel}${this.blame('maxlevel')}.`);
+		}
+		if (this.defaultLevel > this.maxLevel) {
+			throw new Error(`Default level ${this.defaultLevel}${this.blame('defaultlevel')} should not be above max level ${this.maxLevel}${this.blame('maxlevel')}.`);
+		}
+		if (this.defaultLevel < this.minLevel) {
+			throw new Error(`Default level ${this.defaultLevel}${this.blame('defaultlevel')} should not be below min level ${this.minLevel}${this.blame('minlevel')}.`);
+		}
+		if (this.adjustLevelDown && this.adjustLevelDown >= this.maxLevel) {
+			throw new Error(`Adjust Level Down ${this.adjustLevelDown}${this.blame('adjustleveldown')} will have no effect because it's not below max level ${this.maxLevel}${this.blame('maxlevel')}.`);
+		}
+		if (this.adjustLevel && this.valueRules.has('minlevel')) {
+			throw new Error(`Min Level ${this.minLevel}${this.blame('minlevel')} will have no effect because you're using Adjust Level ${this.adjustLevel}${this.blame('adjustlevel')}.`);
+		}
+
+		if ((format as any).cupLevelLimit) {
+			throw new Error(`cupLevelLimit.range[0], cupLevelLimit.range[1], cupLevelLimit.total are now rules, respectively: "Min Level = NUMBER", "Max Level = NUMBER", and "Max Total Level = NUMBER"`);
+		}
+		if ((format as any).teamLength) {
+			throw new Error(`teamLength.validate[0], teamLength.validate[1], teamLength.battle are now rules, respectively: "Min Team Size = NUMBER", "Max Team Size = NUMBER", and "Picked Team Size = NUMBER"`);
+		}
+		if ((format as any).minSourceGen) {
+			throw new Error(`minSourceGen is now a rule: "Min Source Gen = NUMBER"`);
+		}
+		if ((format as any).maxLevel) {
+			throw new Error(`maxLevel is now a rule: "Max Level = NUMBER"`);
+		}
+		if ((format as any).defaultLevel) {
+			throw new Error(`defaultLevel is now a rule: "Default Level = NUMBER"`);
+		}
+		if ((format as any).forcedLevel) {
+			throw new Error(`forcedLevel is now a rule: "Adjust Level = NUMBER"`);
+		}
+		if ((format as any).maxForcedLevel) {
+			throw new Error(`maxForcedLevel is now a rule: "Adjust Level Down = NUMBER"`);
 		}
 	}
 }
@@ -206,62 +302,19 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly customRules: string[] | null;
 	/** Table of rule names and banned effects. */
 	ruleTable: RuleTable | null;
-	/**
-	 * The range of levels on Pokemon that players can bring to battle and
-	 * the summative limit of those levels
-	 */
-	readonly cupLevelLimit?: {
-		/** Minimum and maximum level (redundant with maxLevel) */
-		range: [number, number],
-		/** Maximum total level that can be chosen in Team Preview */
-		total: number,
-	};
-	readonly teamLength?: {
-		/**
-		 * Force this many pokemon to be chosen in Team Preview
-		 * (simultaneously a minimum and a maximum.)
-		 */
-		battle?: number,
-		/**
-		 * Require this many pokemon to be brought into Team Preview
-		 * (or into the battle, for battles without Team Preview)
-		 */
-		validate?: [number, number],
-	};
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
-	/** Pokemon must be obtained from this generation or later. */
-	readonly minSourceGen?: number;
-	/**
-	 * Maximum possible level pokemon you can bring. Note that this is
-	 * still 100 in VGC, because you can bring level 100 pokemon,
-	 * they'll just be set to level 50. Can be above 100 in special
-	 * formats.
-	 */
-	readonly maxLevel: number;
-	/**
-	 * Default level of a pokemon without level specified. Mainly
-	 * relevant to Custom Game where the default level is still 100
-	 * even though higher level pokemon can be brought.
-	 */
-	readonly defaultLevel: number;
-	/**
-	 * Forces all pokemon brought in to this level. Certain Game Freak
-	 * formats will change level 1 and level 100 pokemon to level 50,
-	 * which is what this does.
-	 *
-	 * You usually want maxForcedLevel instead, which will bring level
-	 * 100 pokemon down, but not level 1 pokemon up.
-	 */
-	readonly forcedLevel?: number;
-	/**
-	 * Forces all pokemon above this level down to this level. This
-	 * will allow e.g. level 50 Hydreigon in Gen 5, which is not
-	 * normally legal because Hydreigon doesn't evolve until level
-	 * 64.
-	 */
-	readonly maxForcedLevel?: number;
 	readonly noLog: boolean;
+
+	/**
+	 * Only applies to rules, not formats
+	 */
+	readonly hasValue?: boolean | 'integer' | 'positive-integer';
+	readonly onValidateRule?: (
+		this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string
+	) => string | void;
+	/** ID of rule that can't be combined with this rule */
+	readonly mutuallyExclusiveWith?: string;
 
 	readonly battle?: ModdedBattleScriptsData;
 	readonly pokemon?: ModdedBattlePokemon;
@@ -318,14 +371,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.unbanlist = data.unbanlist || [];
 		this.customRules = data.customRules || null;
 		this.ruleTable = null;
-		this.cupLevelLimit = data.cupLevelLimit || undefined;
-		this.teamLength = data.teamLength || undefined;
 		this.onBegin = data.onBegin || undefined;
-		this.minSourceGen = data.minSourceGen || undefined;
-		this.maxLevel = data.maxLevel || 100;
-		this.defaultLevel = data.defaultLevel || this.maxLevel;
-		this.forcedLevel = data.forcedLevel || undefined;
-		this.maxForcedLevel = data.maxForcedLevel || undefined;
 		this.noLog = !!data.noLog;
 	}
 }
@@ -552,14 +598,11 @@ export class DexFormats {
 		if (format.timer) {
 			ruleTable.timer = [format.timer, format.name];
 		}
-		if (format.minSourceGen) {
-			ruleTable.minSourceGen = [format.minSourceGen, format.name];
-		}
 
 		// apply rule repeals before other rules
-		// repeals is a ruleid:depth map
+		// repeals is a ruleid:depth map (positive: unused, negative: used)
 		for (const rule of ruleset) {
-			if (rule.startsWith('!')) {
+			if (rule.startsWith('!') && !rule.startsWith('!!')) {
 				const ruleSpec = this.validateRule(rule, format) as string;
 				if (!repeals) repeals = new Map();
 				repeals.set(ruleSpec.slice(1), depth);
@@ -582,7 +625,7 @@ export class DexFormats {
 				continue;
 			}
 
-			if (rule.startsWith('!')) {
+			if (rule.startsWith('!') && !rule.startsWith('!!')) {
 				const repealDepth = repeals!.get(ruleSpec.slice(1));
 				if (repealDepth === undefined) throw new Error(`Multiple "${rule}" rules in ${format.name}`);
 				if (repealDepth === depth) {
@@ -594,30 +637,96 @@ export class DexFormats {
 
 			if ('+*-'.includes(ruleSpec.charAt(0))) {
 				if (ruleTable.has(ruleSpec)) {
-					throw new Error(`Rule "${rule}" was added by "${format.name}" but already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
+					throw new Error(`Rule "${rule}" in "${format.name}" already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
 				}
 				for (const prefix of '+*-') ruleTable.delete(prefix + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
-			const subformat = this.get(ruleSpec);
+			let [formatid, value] = ruleSpec.split('=');
+			const subformat = this.get(formatid);
+			const repealAndReplace = ruleSpec.startsWith('!!');
 			if (repeals?.has(subformat.id)) {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
 			}
-			if (ruleTable.has(subformat.id)) {
-				throw new Error(`Rule "${rule}" was added by "${format.name}" but already exists in "${ruleTable.get(subformat.id) || format.name}"`);
+			if (subformat.hasValue) {
+				if (value === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
+				if (value === 'Current Gen') value = `${this.dex.gen}`;
+				if (value === 'Flat Rules Team Size') {
+					value = String(
+						['doubles', 'rotation'].includes(format.gameType) ? 4 :
+						format.gameType === 'triples' ? 6 :
+						3
+					);
+				}
+				if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
+					const intValue = parseInt(value);
+					if (isNaN(intValue) || value !== `${intValue}`) {
+						throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
+					}
+				}
+				if (subformat.hasValue === 'positive-integer') {
+					if (parseInt(value) <= 0) throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
+				}
+				const oldValue = ruleTable.valueRules.get(subformat.id);
+				if (oldValue === value) {
+					throw new Error(`Rule "${ruleSpec}" is redundant with existing rule "${subformat.id}=${value}"${ruleTable.blame(subformat.id)}.`);
+				} else if (repealAndReplace) {
+					if (oldValue === undefined) {
+						if (subformat.mutuallyExclusiveWith && ruleTable.valueRules.has(subformat.mutuallyExclusiveWith)) {
+							if (this.dex.formats.get(subformat.mutuallyExclusiveWith).ruleset.length) {
+								throw new Error(`This format does not support "!!"`);
+							}
+							ruleTable.valueRules.delete(subformat.mutuallyExclusiveWith);
+							ruleTable.delete(subformat.mutuallyExclusiveWith);
+						} else {
+							throw new Error(`Rule "${ruleSpec}" is not replacing anything (it should not have "!!")`);
+						}
+					}
+				} else {
+					if (oldValue !== undefined) {
+						throw new Error(`Rule "${ruleSpec}" conflicts with "${subformat.id}=${oldValue}"${ruleTable.blame(subformat.id)} (Use "!! ${ruleSpec}" to override "${subformat.id}=${oldValue}".)`);
+					}
+					if (subformat.mutuallyExclusiveWith && ruleTable.valueRules.has(subformat.mutuallyExclusiveWith)) {
+						const oldRule = `"${subformat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subformat.mutuallyExclusiveWith)}"`;
+						throw new Error(`Format can't simultaneously have "${ruleSpec}" and ${oldRule}${ruleTable.blame(subformat.mutuallyExclusiveWith)} (Use "!! ${ruleSpec}" to override ${oldRule}.)`);
+					}
+				}
+				ruleTable.valueRules.set(subformat.id, value);
+			} else {
+				if (value !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
+				if (repealAndReplace) throw new Error(`"!!" is not supported for this rule`);
+				if (ruleTable.has(subformat.id) && !repealAndReplace) {
+					throw new Error(`Rule "${rule}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
+				}
 			}
 			ruleTable.set(subformat.id, '');
-			if (!subformat.exists) continue;
 			if (depth > 16) {
 				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
 			}
 			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
-			for (const [k, v] of subRuleTable) {
+			for (const [ruleid, sourceFormat] of subRuleTable) {
 				// don't check for "already exists" here; multiple inheritance is allowed
-				if (!repeals?.has(k)) {
-					ruleTable.set(k, v || subformat.name);
+				if (!repeals?.has(ruleid)) {
+					const newValue = subRuleTable.valueRules.get(ruleid);
+					const oldValue = ruleTable.valueRules.get(ruleid);
+					if (newValue !== undefined) {
+						// set a value
+						const subSubFormat = this.get(ruleid);
+						if (subSubFormat.mutuallyExclusiveWith && ruleTable.valueRules.has(subSubFormat.mutuallyExclusiveWith)) {
+							// mutually exclusive conflict!
+							throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${subSubFormat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subSubFormat.mutuallyExclusiveWith)}"${ruleTable.blame(subSubFormat.mutuallyExclusiveWith)} (Repeal one with ! before adding another)`);
+						}
+						if (newValue !== oldValue) {
+							if (oldValue !== undefined) {
+								// conflict!
+								throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${ruleid}=${oldValue}"${ruleTable.blame(ruleid)} (Repeal one with ! before adding another)`);
+							}
+							ruleTable.valueRules.set(ruleid, newValue);
+						}
+					}
+					ruleTable.set(ruleid, sourceFormat || subformat.name);
 				}
 			}
 			for (const [subRule, source, limit, bans] of subRuleTable.complexBans) {
@@ -643,19 +752,19 @@ export class DexFormats {
 				}
 				ruleTable.timer = subRuleTable.timer;
 			}
-			// minSourceGen is automatically ignored if higher than current gen
-			// this helps the common situation where Standard has a minSourceGen in the
-			// latest gen but not in any past gens
-			if (subRuleTable.minSourceGen && subRuleTable.minSourceGen[0] <= this.dex.gen) {
-				if (ruleTable.minSourceGen) {
-					throw new Error(
-						`"${format.name}" has conflicting minSourceGen from "${ruleTable.minSourceGen[1]}" and "${subRuleTable.minSourceGen[1]}"`
-					);
-				}
-				ruleTable.minSourceGen = subRuleTable.minSourceGen;
-			}
 		}
 		ruleTable.getTagRules();
+
+		ruleTable.resolveNumbers(format);
+
+		for (const rule of ruleTable.keys()) {
+			if ("+*-!".includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			if (subFormat.exists) {
+				const value = subFormat.onValidateRule?.call({format, ruleTable, dex: this.dex}, ruleTable.valueRules.get(rule as ID)!);
+				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
+			}
+		}
 
 		if (!repeals) format.ruleTable = ruleTable;
 		return ruleTable;
@@ -692,10 +801,14 @@ export class DexFormats {
 			}
 			return rule.charAt(0) + this.validateBanRule(rule.slice(1));
 		default:
-			const id = toID(rule);
-			if (!this.dex.data.Rulesets.hasOwnProperty(id)) {
+			const [ruleName, value] = rule.split('=');
+			let id: string = toID(ruleName);
+			const ruleset = this.dex.formats.get(id);
+			if (!ruleset.exists) {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
+			if (typeof value === 'string') id = `${id}=${value.trim()}`;
+			if (rule.startsWith('!!')) return `!!${id}`;
 			if (rule.startsWith('!')) return `!${id}`;
 			return id;
 		}
