@@ -132,7 +132,10 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		} else {
 			// Cartridge glitch
 			assert.notEqual(cursePartner.hp, cursePartner.maxhp); // Partner afflicted by Curse
-			assert(foeHP[0] === p2active[0].maxhp && foeHP[1] === p2active[1].maxhp); // Foes unaffected by Curse
+
+			// Foes unaffected by Curse
+			assert.equal(foeHP[0], p2active[0].maxhp);
+			assert.equal(foeHP[1], p2active[1].maxhp);
 		}
 	}
 
