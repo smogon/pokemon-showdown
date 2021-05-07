@@ -95,7 +95,15 @@ For equally specific rules, the last rule wins:
 Restrictions
 ------------
 
-What restrictions achieve depends on the rule or metagame being played. Examples include:
+Some rules act on restricted things, without entirely banning or unbanning them. `*` is used to mark something that is restricted (it will simultaneously be unbanned).
+
+`* Uber, Limit One Restricted` - allow at most one Uber-tiered Pokémon on a team
+
+`* Restricted Legendary, Limit Two Restricted` - allow at most two restricted legendaries on a team
+
+Marking something as restricted with `*` does nothing by itself, you need to combine it with a rule that affects restricted things, such as `Limit One Restricted`.
+
+Other examples include:
 
 - Cross Evolution: Restricting a species prevents it from being the target of a cross evolution. (Ban a species to prevent it from being the base of a cross evolution.)
 - Mix and Mega: Restricting a species prevents that Pokémon from holding a mega stone. (Ban a stone to prevent all Pokémon from holding it.)
@@ -110,7 +118,7 @@ Restriction rules are used to adjust the behaviour of the above metagames. The s
 
 `* Baton Pass` - restrict a move
 
-An unban will remove a restriction.
+An unban (`+`) will remove a restriction.
 
 
 Whitelisting
