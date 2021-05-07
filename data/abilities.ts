@@ -632,7 +632,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.auraBooster !== this.effectState.target) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
-		isUnbreakable: true,
 		name: "Dark Aura",
 		rating: 3,
 		num: 186,
@@ -943,7 +942,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.auraBooster !== this.effectState.target) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
-		isUnbreakable: true,
 		name: "Fairy Aura",
 		rating: 3,
 		num: 187,
@@ -2767,10 +2765,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 232,
 	},
 	propellertail: {
+		onModifyMovePriority: 1,
 		onModifyMove(move) {
-			// this doesn't actually do anything because ModifyMove happens after the tracksTarget check
-			// the actual implementation is in Battle#getTarget
-			move.tracksTarget = true;
+			// most of the implementation is in Battle#getTarget
+			move.tracksTarget = move.target !== 'scripted';
 		},
 		name: "Propeller Tail",
 		rating: 0,
@@ -2963,6 +2961,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSourceModifyDamagePriority: -1,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.abilityState.berryWeaken) {
+				target.abilityState.berryWeaken = false;
 				return this.chainModify(0.5);
 			}
 		},
@@ -3514,10 +3513,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 100,
 	},
 	stalwart: {
+		onModifyMovePriority: 1,
 		onModifyMove(move) {
-			// this doesn't actually do anything because ModifyMove happens after the tracksTarget check
-			// the actual implementation is in Battle#getTarget
-			move.tracksTarget = true;
+			// most of the implementation is in Battle#getTarget
+			move.tracksTarget = move.target !== 'scripted';
 		},
 		name: "Stalwart",
 		rating: 0,

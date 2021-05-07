@@ -7,6 +7,8 @@ interface SpeciesAbility {
 	S?: string;
 }
 
+type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary";
+
 export interface SpeciesData extends Partial<Species> {
 	name: string;
 	/** National Dex number */
@@ -162,6 +164,10 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly heightm: number;
 	/** Color. */
 	readonly color: string;
+	/**
+	 * Tags, boolean data. Currently just legendary/mythical status.
+	 */
+	readonly tags: SpeciesTag[];
 	/** Does this Pokemon have an unreleased hidden ability? */
 	readonly unreleasedHidden: boolean | 'Past';
 	/**
@@ -263,6 +269,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm || 0;
 		this.color = data.color || '';
+		this.tags = data.tags || [];
 		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
@@ -417,8 +424,11 @@ export class DexSpecies {
 			}
 		}
 		if (id && this.dex.data.Pokedex.hasOwnProperty(id)) {
+			const pokedexData = this.dex.data.Pokedex[id];
+			const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
 			species = new Species({
-				...this.dex.data.Pokedex[id],
+				tags: baseSpeciesTags,
+				...pokedexData,
 				...this.dex.data.FormatsData[id],
 			});
 			// Inherit any statuses from the base species (Arceus, Silvally).
