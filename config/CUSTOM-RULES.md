@@ -230,6 +230,8 @@ Certain rules can specify a value.
 
 `Max Total Level = 200` - only allow Pokémon whose combined levels add up to 200 or below (if combined with `Picked Team Size`, only the picked team needs to be below that combined level)
 
+`Max Move Count = 5` - you can bring Pokémon with up to 5 moves
+
 `Max Team Size = 4` - you must bring a team with at most 4 pokemon (before Team Preview, in games with Team Preview)
 
 `Min Team Size = 4` - you must bring a team with at least 4 pokemon (before Team Preview, in games with Team Preview)

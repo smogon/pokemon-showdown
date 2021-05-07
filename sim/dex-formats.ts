@@ -41,6 +41,7 @@ export class RuleTable extends Map<string, string> {
 	maxTeamSize!: number;
 	pickedTeamSize!: number | null;
 	maxTotalLevel!: number | null;
+	maxMoveCount!: number;
 	minSourceGen!: number;
 	minLevel!: number;
 	maxLevel!: number;
@@ -205,6 +206,7 @@ export class RuleTable extends Map<string, string> {
 		this.maxTeamSize = Number(this.valueRules.get('maxteamsize')) || 6;
 		this.pickedTeamSize = Number(this.valueRules.get('pickedteamsize')) || null;
 		this.maxTotalLevel = Number(this.valueRules.get('maxtotallevel')) || null;
+		this.maxMoveCount = Number(this.valueRules.get('maxmovecount')) || 4;
 		this.minSourceGen = Number(this.valueRules.get('minsourcegen')) || 1;
 		this.minLevel = Number(this.valueRules.get('minlevel')) || 1;
 		this.maxLevel = Number(this.valueRules.get('maxlevel')) || 100;
@@ -222,6 +224,21 @@ export class RuleTable extends Map<string, string> {
 
 		// sanity checks; these _could_ be inside `onValidateRule` but this way
 		// involves less string conversion.
+
+		// engine hard limits
+		if (this.maxTeamSize > 24) {
+			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} is unsupported (we only support up to 24).`);
+		}
+		if (this.maxLevel > 99999) {
+			throw new Error(`Max level ${this.maxLevel}${this.blame('maxlevel')} is unsupported (we only support up to 99999)`);
+		}
+		if (this.maxMoveCount > 24) {
+			// A limit is imposed here to prevent too much engine strain or
+			// too much layout deformation - to be exact, this is the limit
+			// allowed in Custom Game.
+			throw new Error(`Max move count ${this.maxMoveCount}${this.blame('maxmovecount')} is unsupported (we only support up to 24)`);
+		}
+
 		if (this.minTeamSize && this.minTeamSize < gameTypeMinTeamSize) {
 			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
 		}
@@ -232,9 +249,6 @@ export class RuleTable extends Map<string, string> {
 			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} is lower than chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')}.`);
 		}
 		if (!this.minTeamSize) this.minTeamSize = Math.max(gameTypeMinTeamSize, this.pickedTeamSize || 0);
-		if (this.maxTeamSize > 24) {
-			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} can't be above 24.`);
-		}
 		if (this.minLevel > this.maxLevel) {
 			throw new Error(`Min level ${this.minLevel}${this.blame('minlevel')} should not be above max level ${this.maxLevel}${this.blame('maxlevel')}.`);
 		}

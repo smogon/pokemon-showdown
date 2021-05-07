@@ -1329,7 +1329,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	pickedteamsize: {
 		effectType: 'Rule',
 		name: 'Picked Team Size',
-		desc: "Team size that can be brought out of Team Preview",
+		desc: "Team size (number of pokemon) that can be brought out of Team Preview",
 		hasValue: 'positive-integer',
 		// hardcoded in sim/side
 		onValidateRule() {
@@ -1341,14 +1341,21 @@ export const Rulesets: {[k: string]: FormatData} = {
 	minteamsize: {
 		effectType: 'ValidatorRule',
 		name: "Min Team Size",
-		desc: "Minimum team size that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
+		desc: "Minimum team size (number of pokemon) that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
 		hasValue: 'positive-integer',
 		// hardcoded in sim/team-validator
 	},
 	maxteamsize: {
 		effectType: 'ValidatorRule',
 		name: "Max Team Size",
-		desc: "Maximum team size that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
+		desc: "Maximum team size (number of pokemon) that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
+		hasValue: 'positive-integer',
+		// hardcoded in sim/team-validator
+	},
+	maxmovecount: {
+		effectType: 'ValidatorRule',
+		name: "Max Move Count",
+		desc: "Max number of moves allowed on a single pokemon (defaults to 4 in a normal game)",
 		hasValue: 'positive-integer',
 		// hardcoded in sim/team-validator
 	},
