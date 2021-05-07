@@ -8,8 +8,7 @@ const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const BATTLES_REGEX = /battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g;
 const REPLAY_REGEX = new RegExp(
-	`${Config.routes.replays}` +
-	`/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
+	`${Config.routes.replays}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
 );
 
 Punishments.addRoomPunishmentType('TICKETBAN', 'banned from creating help tickets');
@@ -589,7 +588,7 @@ function checkIp(ip: string) {
 export function getBattleLinks(text: string) {
 	const rooms: string[] = [];
 	const battles = text.match(BATTLES_REGEX);
-	// yes this is necessary, exec has behavior here that makes it inferior
+	// typescript-eslint is having trouble detecting REPLAY_REGEX as a global regex
 	// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 	const replays = text.match(REPLAY_REGEX);
 	if (battles) rooms.push(...battles);
