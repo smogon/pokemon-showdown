@@ -761,7 +761,10 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(displayMessage);
 			}
 		}
-		room.hideText([userid, toID(inputUsername)]);
+		room.hideText([
+			...affected.map(u => u.id),
+			toID(inputUsername),
+		]);
 
 		if (room.settings.isPrivate !== true && room.persist) {
 			this.globalModlog(`${week ? 'WEEK' : ''}ROOMBAN`, targetUser, privateReason);
@@ -872,9 +875,6 @@ export const commands: Chat.ChatCommands = {
 		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
 		this.addGlobalModAction(`${name} was locked from talking${durationMsg} by ${user.name}.` + (publicReason ? ` (${publicReason})` : ""));
 
-		if (room && !room.settings.isHelp) {
-			room.hideText([userid, toID(inputUsername)]);
-		}
 		const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
 		if (affected.length > 1) {
@@ -883,6 +883,13 @@ export const commands: Chat.ChatCommands = {
 		} else if (acAccount) {
 			displayMessage = `${name}'s ac account: ${acAccount}`;
 			this.privateModAction(displayMessage);
+		}
+
+		if (room && !room.settings.isHelp) {
+			room.hideText([
+				...affected.map(u => u.id),
+				toID(inputUsername),
+			]);
 		}
 
 		if (targetUser) {
@@ -1081,7 +1088,10 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(displayMessage);
 		}
 
-		room?.hideText([userid, toID(inputUsername)]);
+		room?.hideText([
+			...affected.map(u => u.id),
+			toID(inputUsername),
+		]);
 
 		this.globalModlog("BAN", targetUser, privateReason);
 		return true;
