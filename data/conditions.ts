@@ -276,7 +276,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				// this move was called by another move such as metronome and needs a random target to be determined now
 				// won't randomly choose an empty slot if there's at least one valid target
 				moveTarget = this.getRandomTarget(target, effect.id);
-				if (moveTarget) slot = moveTarget?.getSlot();
+				if (moveTarget) slot = moveTarget.getSlot();
 			}
 			// if there are no valid targets, randomly choose one later
 			target.volatiles[effect.id].targetLoc = this.getAtSlot(slot);
