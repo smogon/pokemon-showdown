@@ -1287,6 +1287,7 @@ export class Battle {
 		if (typeof side === 'string') {
 			side = this.getSide(side);
 		}
+		if (!side) return; // can happen if a battle crashes
 		if (this.gameType !== 'freeforall') {
 			return this.win(side.foe);
 		}
