@@ -64,9 +64,7 @@ export class RandomTeams {
 	format: Format;
 	prng: PRNG;
 	readonly maxTeamSize: number;
-	readonly levelAdjustment: number;
 	readonly forceMonotype: string | undefined;
-	readonly minSourceGen: number | undefined;
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
@@ -82,9 +80,7 @@ export class RandomTeams {
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;
-		this.levelAdjustment = (ruleTable.adjustLevel || 0) - (ruleTable.adjustLevelDown || 0);
 		this.forceMonotype = ruleTable.valueRules.get('forcemonotype');
-		this.minSourceGen = ruleTable.minSourceGen;
 
 		this.factoryTier = '';
 		this.format = format;
@@ -282,7 +278,7 @@ export class RandomTeams {
 		const natures = Object.keys(this.dex.data.Natures);
 		const items = Object.keys(this.dex.data.Items);
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, this.minSourceGen);
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
 
 		for (let forme of randomN) {
 			let species = dex.species.get(forme);
@@ -425,7 +421,7 @@ export class RandomTeams {
 				evs: evs,
 				ivs: ivs,
 				nature: nature,
-				level: level + this.levelAdjustment,
+				level,
 				happiness: happiness,
 				shiny: shiny,
 			});
@@ -493,7 +489,7 @@ export class RandomTeams {
 		const movePool = Object.keys(this.dex.data.Moves);
 		const naturePool = Object.keys(this.dex.data.Natures);
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, this.minSourceGen);
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
 
 		for (const forme of randomN) {
 			// Choose forme
@@ -591,7 +587,7 @@ export class RandomTeams {
 				evs: evs,
 				ivs: ivs,
 				nature: nature,
-				level: level + this.levelAdjustment,
+				level,
 				happiness: happiness,
 				shiny: shiny,
 			});
@@ -1991,7 +1987,7 @@ export class RandomTeams {
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			gigantamax: gmax,
-			level: level + this.levelAdjustment,
+			level,
 			moves,
 			ability,
 			evs,
@@ -2004,13 +2000,12 @@ export class RandomTeams {
 		type: string,
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
-		minSourceGen = this.gen
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		for (const id in this.dex.data.FormatsData) {
 			let species = this.dex.species.get(id);
-			if (species.gen < minSourceGen || species.gen > this.gen || exclude.includes(species.id)) continue;
+			if (species.gen > this.gen || exclude.includes(species.id)) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
 				if (typeof species.battleOnly === 'string') {
@@ -2044,7 +2039,7 @@ export class RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, this.minSourceGen);
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			let species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
@@ -2198,7 +2193,6 @@ export class RandomTeams {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) throw new Error(`Invalid Pokemon "${species}" in ${this.format}`);
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			const setData: AnyObject = this.sample(this.randomCAP1v1Sets[species.name]);
 			const set = {
@@ -2285,7 +2279,7 @@ export class RandomTeams {
 			item: (this.sampleIfArray(setData.set.item)) || '',
 			ability: setDataAbility || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: (setData.set.level || 50) + this.levelAdjustment,
+			level: setData.set.level || 50,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
 			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
@@ -2346,7 +2340,6 @@ export class RandomTeams {
 			const species = this.dex.species.get(specie);
 			if (!species.exists) continue;
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[species.baseSpecies]) continue;

@@ -890,7 +890,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (!(debug.length || monotype)) { // Type limits are ignored when debugging or for monotype variations.
 				const species = this.dex.species.get(ssbSet.species);
 				if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-				if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 				const weaknesses = [];
 				for (const type of this.dex.types.names()) {
@@ -931,7 +930,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				evs: ssbSet.evs ? {...{hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ...ssbSet.evs} :
 				{hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 				ivs: {...{hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, ...ssbSet.ivs},
-				level: (ssbSet.level || 100) + this.levelAdjustment,
+				level: ssbSet.level || 100,
 				happiness: typeof ssbSet.happiness === 'number' ? ssbSet.happiness : 255,
 				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : !!ssbSet.shiny,
 			};

@@ -112,7 +112,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				evs: evs,
 				ivs: ivs,
 				item: '',
-				level: level + this.levelAdjustment,
+				level,
 				happiness: 0,
 				shiny: false,
 				nature: 'Serious',
@@ -357,7 +357,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
 			ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30},
 			item: '',
-			level: level + this.levelAdjustment,
+			level,
 			shiny: false,
 			gender: false,
 		};
@@ -468,7 +468,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				evs,
 				ivs,
 				nature: '',
-				level: level + this.levelAdjustment,
+				level,
 				shiny: false,
 				// Hacky but the only way to communicate stats/level generation properly
 				hc: hackmonsCup[species.id],

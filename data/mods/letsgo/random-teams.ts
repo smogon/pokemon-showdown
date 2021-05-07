@@ -203,7 +203,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			level: 100 + this.levelAdjustment,
+			level: 100,
 			gender: species.gender,
 			happiness: 70,
 			shiny: this.randomChance(1, 1024),
@@ -227,8 +227,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 				species.gen > 7 ||
 				species.nfe ||
 				!species.randomBattleMoves?.length ||
-				(this.forceMonotype && !species.types.includes(this.forceMonotype)) ||
-				(this.minSourceGen && species.gen < this.minSourceGen)
+				(this.forceMonotype && !species.types.includes(this.forceMonotype))
 			) {
 				continue;
 			}
