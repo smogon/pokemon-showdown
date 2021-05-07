@@ -1285,7 +1285,7 @@ export class TeamValidator {
 		if (!tierSpecies.canGigantamax && set.gigantamax) {
 			return `${tierSpecies.name} cannot Gigantamax but is flagged as being able to.`;
 		}
-		
+
 		let banReason = ruleTable.check('pokemon:' + species.id);
 		if (banReason) {
 			return `${species.name} is ${banReason}.`;
