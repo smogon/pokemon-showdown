@@ -2181,7 +2181,7 @@ export class RandomTeams {
 			// For setting Zoroark's level
 			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
-		if (pokemon.length < this.maxTeamSize) {
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 
