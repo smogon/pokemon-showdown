@@ -1696,6 +1696,7 @@ export const Formats: FormatList = [
 		team: 'randomCAP1v1',
 		ruleset: [
 			'Picked Team Size = 1',
+			'Max Team Size = 3',
 			'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Dynamax Clause',
 		],
 	},

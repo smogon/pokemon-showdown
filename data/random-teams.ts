@@ -63,7 +63,10 @@ export class RandomTeams {
 	factoryTier: string;
 	format: Format;
 	prng: PRNG;
-	maxLength: number;
+	readonly maxTeamSize: number;
+	readonly levelAdjustment: number;
+	readonly forceMonotype: string | undefined;
+	readonly minSourceGen: number | undefined;
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
@@ -76,8 +79,13 @@ export class RandomTeams {
 		format = Dex.formats.get(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
+
 		const ruleTable = Dex.formats.getRuleTable(format);
-		this.maxLength = ruleTable.maxTeamSize;
+		this.maxTeamSize = ruleTable.maxTeamSize;
+		this.levelAdjustment = (ruleTable.adjustLevel || 0) - (ruleTable.adjustLevelDown || 0);
+		this.forceMonotype = ruleTable.valueRules.get('forcemonotype');
+		this.minSourceGen = ruleTable.minSourceGen;
+
 		this.factoryTier = '';
 		this.format = format;
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
@@ -274,10 +282,9 @@ export class RandomTeams {
 		const natures = Object.keys(this.dex.data.Natures);
 		const items = Object.keys(this.dex.data.Items);
 
-		const random6 = this.random6Pokemon();
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, this.minSourceGen);
 
-		for (let i = 0; i < 6; i++) {
-			let forme = random6[i];
+		for (let forme of randomN) {
 			let species = dex.species.get(forme);
 			if (species.isNonstandard) species = dex.species.get(species.baseSpecies);
 
@@ -418,7 +425,7 @@ export class RandomTeams {
 				evs: evs,
 				ivs: ivs,
 				nature: nature,
-				level: level,
+				level: level + this.levelAdjustment,
 				happiness: happiness,
 				shiny: shiny,
 			});
@@ -427,11 +434,16 @@ export class RandomTeams {
 		return team;
 	}
 
-	random6Pokemon() {
-		// Pick six random pokemon--no repeats, even among formes
+	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number) {
+		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
-		const last = [0, 151, 251, 386, 493, 649, 721, 807, 890][this.gen];
+		const last = [0, 151, 251, 386, 493, 649, 721, 807, 890][minSourceGen || this.gen];
+
+		if (n <= 0 || n > last) throw new Error(`n must be a number between 1 and ${last} (got ${n})`);
+		if (requiredType && this.dex.types.get(requiredType).exists) {
+			throw new Error(`"${requiredType}" is not a valid type.`);
+		}
 
 		const pool: number[] = [];
 		for (const id in this.dex.data.FormatsData) {
@@ -439,6 +451,7 @@ export class RandomTeams {
 				!this.dex.data.Pokedex[id] ||
 				(this.dex.data.FormatsData[id].isNonstandard && this.dex.data.FormatsData[id].isNonstandard !== 'Unobtainable')
 			) continue;
+			if (requiredType && !this.dex.data.Pokedex[id].types.includes(requiredType)) continue;
 			const num = this.dex.data.Pokedex[id].num;
 			if (num <= 0 || pool.includes(num)) continue;
 			if (num > last) break;
@@ -446,28 +459,29 @@ export class RandomTeams {
 		}
 
 		const hasDexNumber: {[k: string]: number} = {};
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < n; i++) {
 			const num = this.sampleNoReplace(pool);
 			hasDexNumber[num] = i;
 		}
 
-		const formes: string[][] = [[], [], [], [], [], []];
+		const formes: string[][] = [];
 		for (const id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
 			const species = this.dex.species.get(id);
 			if (species.gen <= this.gen && (!species.isNonstandard || species.isNonstandard === 'Unobtainable')) {
+				if (!formes[hasDexNumber[species.num]]) formes[hasDexNumber[species.num]] = [];
 				formes[hasDexNumber[species.num]].push(species.name);
 			}
 		}
 
-		const sixPokemon = [];
-		for (let i = 0; i < 6; i++) {
+		const nPokemon = [];
+		for (let i = 0; i < n; i++) {
 			if (!formes[i].length) {
-				throw new Error("Invalid pokemon gen " + this.gen + ": " + JSON.stringify(formes) + " numbers " + JSON.stringify(hasDexNumber));
+				throw new Error(`Invalid pokemon gen ${this.gen}: ${JSON.stringify(formes)} numbers ${JSON.stringify(hasDexNumber)}`);
 			}
-			sixPokemon.push(this.sample(formes[i]));
+			nPokemon.push(this.sample(formes[i]));
 		}
-		return sixPokemon;
+		return nPokemon;
 	}
 
 	randomHCTeam(): PokemonSet[] {
@@ -478,11 +492,11 @@ export class RandomTeams {
 		const movePool = Object.keys(this.dex.data.Moves);
 		const naturePool = Object.keys(this.dex.data.Natures);
 
-		const random6 = this.random6Pokemon();
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, this.minSourceGen);
 
-		for (let i = 0; i < 6; i++) {
+		for (const forme of randomN) {
 			// Choose forme
-			const species = this.dex.species.get(random6[i]);
+			const species = this.dex.species.get(forme);
 
 			// Random unique item
 			let item = '';
@@ -576,7 +590,7 @@ export class RandomTeams {
 				evs: evs,
 				ivs: ivs,
 				nature: nature,
-				level: level,
+				level: level + this.levelAdjustment,
 				happiness: happiness,
 				shiny: shiny,
 			});
@@ -1976,21 +1990,26 @@ export class RandomTeams {
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			gigantamax: gmax,
+			level: level + this.levelAdjustment,
 			moves,
 			ability,
 			evs,
 			ivs,
 			item,
-			level,
 		};
 	}
 
-	getPokemonPool(type: string, pokemonToExclude: RandomTeamsTypes.RandomSet[] = [], isMonotype = false) {
+	getPokemonPool(
+		type: string,
+		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
+		isMonotype = false,
+		minSourceGen = this.gen
+	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		for (const id in this.dex.data.FormatsData) {
 			let species = this.dex.species.get(id);
-			if (species.gen > this.gen || exclude.includes(species.id)) continue;
+			if (species.gen < minSourceGen || species.gen > this.gen || exclude.includes(species.id)) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
 				if (typeof species.battleOnly === 'string') {
@@ -2009,9 +2028,9 @@ export class RandomTeams {
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
-		const isMonotype = ruleTable.has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
 		const typePool = this.dex.types.names();
-		const type = this.sample(typePool);
+		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff
 		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
@@ -2024,8 +2043,8 @@ export class RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
-		while (pokemonPool.length && pokemon.length < 6) {
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, this.minSourceGen);
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			let species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
@@ -2065,7 +2084,7 @@ export class RandomTeams {
 			}
 
 			// Illusion shouldn't be on the last slot
-			if (species.name === 'Zoroark' && pokemon.length > 4) continue;
+			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
 			if (
 				pokemon.some(pkmn => pkmn.species === 'Zoroark') &&
@@ -2079,11 +2098,14 @@ export class RandomTeams {
 			const typeCombo = types.slice().sort().join();
 
 			// Limit one Pokemon per tier, two for Monotype
-			if ((tierCount[tier] >= (isMonotype ? 2 : 1)) && !this.randomChance(1, Math.pow(5, tierCount[tier]))) {
+			if (
+				(tierCount[tier] >= (this.forceMonotype || isMonotype ? 2 : 1)) &&
+				!this.randomChance(1, Math.pow(5, tierCount[tier]))
+			) {
 				continue;
 			}
 
-			if (!isMonotype) {
+			if (!isMonotype && !this.forceMonotype) {
 				// Limit two of any type
 				let skip = false;
 				for (const typeName of types) {
@@ -2096,10 +2118,10 @@ export class RandomTeams {
 			}
 
 			// Limit one of any type combination, two in Monotype
-			if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
+			if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
 
 			// The Pokemon of the Day
-			if (potd?.exists && pokemon.length === 1) species = potd;
+			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0,
 				this.format.gameType !== 'singles', this.dex.formats.getRuleTable(this.format).has('dynamaxclause'));
@@ -2107,12 +2129,12 @@ export class RandomTeams {
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
-			if (pokemon.length === 6) {
+			if (pokemon.length === this.maxTeamSize) {
 				// Set Zoroark's level to be the same as the last Pokemon
 				const illusion = teamDetails.illusion;
-				if (illusion) pokemon[illusion - 1].level = pokemon[5].level;
+				if (illusion) pokemon[illusion - 1].level = pokemon[this.maxTeamSize - 1].level;
 
-				// Don't bother tracking details for the 6th Pokemon
+				// Don't bother tracking details for the last Pokemon
 				break;
 			}
 
@@ -2158,7 +2180,9 @@ export class RandomTeams {
 			// For setting Zoroark's level
 			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
-		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		if (pokemon.length < this.maxTeamSize) {
+			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		}
 
 		return pokemon;
 	}
@@ -2169,9 +2193,11 @@ export class RandomTeams {
 		const pokemon = [];
 		const pokemonPool = Object.keys(this.randomCAP1v1Sets);
 
-		while (pokemonPool.length && pokemon.length < 3) {
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) throw new Error(`Invalid Pokemon "${species}" in ${this.format}`);
+			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			const setData: AnyObject = this.sample(this.randomCAP1v1Sets[species.name]);
 			const set = {
@@ -2258,7 +2284,7 @@ export class RandomTeams {
 			item: (this.sampleIfArray(setData.set.item)) || '',
 			ability: setDataAbility || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: setData.set.level || 50,
+			level: (setData.set.level || 50) + this.levelAdjustment,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
 			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
@@ -2294,7 +2320,7 @@ export class RandomTeams {
 			levitate: ['Ground'],
 		};
 
-		while (pokemonPool.length && pokemon.length < 6) {
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			// Weighted random sampling
 			let maxUsage = 0;
 			const sets: {[k: string]: number} = {};
@@ -2318,6 +2344,8 @@ export class RandomTeams {
 
 			const species = this.dex.species.get(specie);
 			if (!species.exists) continue;
+			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[species.baseSpecies]) continue;
@@ -2399,7 +2427,7 @@ export class RandomTeams {
 				}
 			}
 		}
-		if (pokemon.length < 6) return this.randomBSSFactoryTeam(side, ++depth);
+		if (pokemon.length < this.maxTeamSize) return this.randomBSSFactoryTeam(side, ++depth);
 
 		// Quality control
 		if (!teamData.forceResult) {
