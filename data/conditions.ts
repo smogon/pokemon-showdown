@@ -269,7 +269,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		duration: 2,
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
-			let slot: PokemonSlot | null = target.getSlot();
+			let slot: PokemonSlot = source.getSlot();
 			target.addVolatile(effect.id);
 			let moveTarget: Pokemon | null = source;
 			if (effect.sourceEffect && this.dex.moves.get(effect.id).target === 'normal') {
