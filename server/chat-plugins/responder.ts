@@ -208,11 +208,7 @@ export class AutoResponder {
 	}
 	static canOverride(user: User, room: Room) {
 		const devAuth = Rooms.get('development')?.auth;
-		return (
-			devAuth?.atLeast(user, '%') && devAuth?.has(user.id) &&
-			room.auth.has(user.id) && room.auth.atLeast(user, '@') ||
-			user.can('rangeban')
-		);
+		return (devAuth?.atLeast(user, '%') && devAuth?.has(user.id) && room.auth.atLeast(user, '@')) || user.can('rangeban');
 	}
 	destroy() {
 		this.writeState();
