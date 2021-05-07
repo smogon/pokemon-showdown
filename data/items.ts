@@ -2901,9 +2901,11 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		onModifyDamage(damage, source, target, move) {
+			if (move.isFutureMove) return;
 			return this.chainModify([5324, 4096]);
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
+			if (move.isFutureMove) return;
 			if (source && source !== target && move && move.category !== 'Status') {
 				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 			}

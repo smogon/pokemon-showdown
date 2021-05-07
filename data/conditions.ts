@@ -374,6 +374,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
 				data.moveData.stab = 2;
 			}
+			if (data.source.hasItem('lifeorb') && this.gen >= 6) {
+				data.moveData.basePowerModifier = (5324 / 4096);
+			}
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
