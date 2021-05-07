@@ -137,7 +137,7 @@ export const Friends = new class {
 		buf = `<div class="infobox">${buf}</div>`;
 		return toLink(buf);
 	}
-	checkCanUse(context: CommandContext | PageContext) {
+	checkCanUse(context: Chat.CommandContext | Chat.PageContext) {
 		const user = context.user;
 		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
 			throw new Chat.ErrorMessage(`You are locked, and so cannot use the friends feature.`);
@@ -204,7 +204,7 @@ function headerButtons(type: string, user: User) {
 	return `<div style="line-height:25px">${buf.join(' / ')}${refresh}</div>`;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	unfriend(target) {
 		return this.parse(`/friend remove ${target}`);
 	},
@@ -409,7 +409,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async friends(args, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		Friends.checkCanUse(this);
@@ -522,7 +522,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const loginfilter: LoginFilter = async user => {
+export const loginfilter: Chat.LoginFilter = async user => {
 	if (!Config.usesqlitefriends || !Users.globalAuth.atLeast(user, Config.usesqlitefriends)) {
 		return;
 	}
