@@ -41,5 +41,6 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			}
 			this.makeRequest('teampreview');
 		},
+		onFieldStart() {},
 	},
 };
