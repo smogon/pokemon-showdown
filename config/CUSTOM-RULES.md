@@ -154,13 +154,17 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 ### Pokedex rules
 
-`Hoenn Pokedex` - allow only Pokémon in the Hoenn Pokédex
+`Hoenn Pokedex` - allow only Pokémon in the Hoenn Pokédex (OR/AS)
 
-`Sinnoh Pokedex` - allow only Pokémon in the Sinnoh Pokédex
+`Sinnoh Pokedex` - allow only Pokémon in the Sinnoh Pokédex (Platinum)
 
-`Kalos Pokedex` - allow only Pokémon in the Kalos Pokédex
+`Old Unova Pokedex` - allow only Pokémon in the Old Unova Pokédex (B/W)
 
-`Alola Pokedex` - allow only Pokémon in the Alola Pokédex
+`New Unova Pokedex` - allow only Pokémon in the New Unova Pokédex (B2/W2)
+
+`Kalos Pokedex` - allow only Pokémon in the Kalos Pokédex (X/Y)
+
+`Alola Pokedex` - allow only Pokémon in the Alola Pokédex (US/UM)
 
 (There is no `Galar Pokedex` rule, `-Nonexistent` covers it in Gen 8.)
 
