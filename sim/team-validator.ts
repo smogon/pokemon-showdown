@@ -1285,7 +1285,7 @@ export class TeamValidator {
 		if (!tierSpecies.canGigantamax && set.gigantamax) {
 			return `${tierSpecies.name} cannot Gigantamax but is flagged as being able to.`;
 		}
-
+		
 		let banReason = ruleTable.check('pokemon:' + species.id);
 		if (banReason) {
 			return `${species.name} is ${banReason}.`;
@@ -1318,6 +1318,11 @@ export class TeamValidator {
 			if (baseSpecies.isNonstandard === species.isNonstandard) {
 				return null;
 			}
+		}
+
+		banReason = ruleTable.check('pokemontag:allpokemon');
+		if (banReason) {
+			return `${species.name} is not in the list of allowed pokemon.`;
 		}
 
 		// We can't return here because the `-nonexistent` rule is a bit
@@ -1374,11 +1379,6 @@ export class TeamValidator {
 				return `${tierSpecies.name} is flagged as gigantamax, but it cannot gigantamax without hacking or glitches.`;
 			}
 			if (banReason === '') return null;
-		}
-
-		banReason = ruleTable.check('pokemontag:allpokemon');
-		if (banReason) {
-			return `${species.name} is not in the list of allowed pokemon.`;
 		}
 
 		return null;
