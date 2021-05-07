@@ -1169,6 +1169,10 @@ export const commands: Chat.ChatCommands = {
 			room.saveSettings();
 		}
 	},
+	roomspotlighthelp: [
+		`/roomspotlight [spotlight] - Makes the room this command is used in a spotlight room for the [spotlight] category on the roomlist. Requires: &`,
+		`/roomspotlight off - Removes the room this command is used in from the list of spotlight rooms. Requires: &`,
+	],
 
 	setsubroom: 'subroom',
 	subroom(target, room, user) {
