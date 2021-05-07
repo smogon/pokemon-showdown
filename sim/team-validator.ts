@@ -404,8 +404,8 @@ export class TeamValidator {
 		if (set.level > ruleTable.maxLevel) {
 			problems.push(`${name} (level ${set.level}) is above the maximum level of ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
 		}
-		if ((set.level > 100 || set.level < 1) && ruleTable.isBanned('nonexistent')) {
-			problems.push(`${name} (level ${set.level}) is higher than level 100.`);
+		if (set.level > 99999 || set.level < 1) {
+			problems.push(`${name} (level ${set.level}) is outside of the range of levels we support simulating (1-99999).`);
 		}
 
 		const setHas: {[k: string]: true} = {};
