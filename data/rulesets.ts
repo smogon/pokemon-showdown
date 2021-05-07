@@ -405,7 +405,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const pokemon of this.getAllPokemon()) {
 				if (!formesToLeak.includes(this.toID(pokemon.baseSpecies.name))) continue;
 				const newDetails = pokemon.details.replace(', shiny', '');
-				this.add('updatepokemon', pokemon, newDetails);
+				this.add('updatepoke', pokemon, newDetails);
 			}
 		},
 	},
