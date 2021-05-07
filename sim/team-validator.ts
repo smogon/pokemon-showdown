@@ -249,10 +249,10 @@ export class TeamValidator {
 		}
 
 		if (team.length < ruleTable.minTeamSize) {
-			problems.push(`You must bring at least ${ruleTable.minTeamSize} Pok\u00E9mon.`);
+			problems.push(`You must bring at least ${ruleTable.minTeamSize} Pok\u00E9mon (your team has ${team.length}).`);
 		}
 		if (team.length > ruleTable.maxTeamSize) {
-			return [`You may only bring up to ${ruleTable.maxTeamSize} Pok\u00E9mon.`];
+			return [`You may only bring up to ${ruleTable.maxTeamSize} Pok\u00E9mon (your team has ${team.length}).`];
 		}
 
 		// A limit is imposed here to prevent too much engine strain or
@@ -260,10 +260,6 @@ export class TeamValidator {
 		// allowed in Custom Game.
 		if (team.length > 24) {
 			problems.push(`Your team has more than than 24 Pok\u00E9mon, which the simulator can't handle.`);
-			return problems;
-		}
-		if (ruleTable.isBanned('nonexistent') && team.length > 6) {
-			problems.push(`Your team has more than than 6 Pok\u00E9mon.`);
 			return problems;
 		}
 
@@ -403,9 +399,6 @@ export class TeamValidator {
 		}
 		if (set.level > ruleTable.maxLevel) {
 			problems.push(`${name} (level ${set.level}) is above the maximum level of ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
-		}
-		if (set.level > 99999 || set.level < 1) {
-			problems.push(`${name} (level ${set.level}) is outside of the range of levels we support simulating (1-99999).`);
 		}
 
 		const setHas: {[k: string]: true} = {};
@@ -581,18 +574,11 @@ export class TeamValidator {
 			set.moves = set.moves.filter(val => val);
 		}
 		if (!set.moves?.length) {
-			problems.push(`${name} has no moves.`);
+			problems.push(`${name} has no moves (it must have at least one to be usable).`);
 			set.moves = [];
 		}
-		// A limit is imposed here to prevent too much engine strain or
-		// too much layout deformation - to be exact, this is the limit
-		// allowed in Custom Game.
-		if (set.moves.length > 24) {
-			problems.push(`${name} has more than 24 moves, which the simulator can't handle.`);
-			return problems;
-		}
-		if (ruleTable.isBanned('nonexistent') && set.moves.length > 4) {
-			problems.push(`${name} has more than 4 moves.`);
+		if (set.moves.length > ruleTable.maxMoveCount) {
+			problems.push(`${name} has ${set.moves.length} moves, which is more than the limit of ${ruleTable.maxMoveCount}.`);
 			return problems;
 		}
 
