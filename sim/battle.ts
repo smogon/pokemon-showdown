@@ -236,18 +236,6 @@ export class Battle {
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
-		for (const rule of this.ruleTable.keys()) {
-			if ('+*-!'.includes(rule.charAt(0))) continue;
-			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.exists) {
-				const hasEventHandler = Object.keys(subFormat).some(
-					// skip event handlers that are handled elsewhere
-					val => val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
-				);
-				if (hasEventHandler) this.field.addPseudoWeather(rule);
-			}
-		}
-
 		this.add('gametype', this.gameType);
 		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
 		for (const side of sides) {
@@ -1620,9 +1608,7 @@ export class Battle {
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.exists) {
-				if (subFormat.onBegin) subFormat.onBegin.call(this);
-			}
+			if (subFormat.onBegin) subFormat.onBegin.call(this);
 		}
 
 		if (this.sides.some(side => !side.pokemon[0])) {
@@ -1633,7 +1619,12 @@ export class Battle {
 			this.checkEVBalance();
 		}
 
-		this.residualEvent('TeamPreview');
+		if (format.onTeamPreview) format.onTeamPreview.call(this);
+		for (const rule of this.ruleTable.keys()) {
+			if ('+*-!'.includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
+		}
 
 		this.queue.addChoice({choice: 'start'});
 		this.midTurn = true;
@@ -2290,6 +2281,21 @@ export class Battle {
 			}
 
 			this.add('start');
+
+			for (const rule of this.ruleTable.keys()) {
+				if ('+*-!'.includes(rule.charAt(0))) continue;
+				const subFormat = this.dex.formats.get(rule);
+				if (subFormat.exists) {
+					const hasEventHandler = Object.keys(subFormat).some(
+						// skip event handlers that are handled elsewhere
+						val => val.startsWith('on') && ![
+							'onBegin', 'onTeamPreview', 'onValidateRule', 'onValidateTeam', 'onChangeSet', 'onValidateSet',
+						].includes(val)
+					);
+					if (hasEventHandler) this.field.addPseudoWeather(rule);
+				}
+			}
+
 			for (const side of this.sides) {
 				for (let i = 0; i < side.active.length; i++) {
 					if (!side.pokemonLeft) {
