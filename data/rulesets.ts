@@ -391,15 +391,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
-		onBegin() {
+		onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
 					.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, '');
 			}
-		},
-		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
@@ -1220,7 +1218,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Team Type Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team and those Pok&eacute;mon's types before they choose their lead Pok&eacute;mon",
-		onBegin() {
+		onTeamPreview() {
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
 					const details = pokemon.details.replace(', shiny', '')
@@ -1237,8 +1235,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 				}
 				this.add(`${buf}</span>`);
 			}
-		},
-		onFieldTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
@@ -1396,7 +1392,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	adjustlevel: {
 		effectType: 'ValidatorRule',
 		name: 'Adjust Level',
-		desc: "All Pokémon will be set to exactly this level (but unlike Max Level and Min Level, it will still be able to learn moves from above this level)",
+		desc: "All Pokémon will be set to exactly this level (but unlike Max Level and Min Level, it will still be able to learn moves from above this level) (when using this, Max Level is the level of the pokemon before it's level-adjusted down)",
 		hasValue: 'positive-integer',
 		mutuallyExclusiveWith: 'adjustleveldown',
 		// hardcoded in sim/team-validator
