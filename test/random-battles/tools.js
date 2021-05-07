@@ -2,11 +2,13 @@
  * Tools for testing Random Battles.
  *
  * @author Annika
+ * Some helper functions by Slayer95 have also been added.
  */
 'use strict';
 
 const assert = require("../assert");
 const Teams = require('./../../.sim-dist/teams').Teams;
+const TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;
 
 /**
  * Unit test helper for Pokemon sets
@@ -93,8 +95,53 @@ function testTeam(options, test) {
 	}
 }
 
+/**
+ * Checks if a set is valid.
+ *
+ * @param {number} genNumber
+ * @param {RandomTeamsTypes.RandomSet} set
+ */
+function isValidSet(genNumber, set) {
+	const dex = Dex.mod(`gen${genNumber}`);
+	const species = dex.species.get(set.species || set.name);
+	if (!species.exists || species.gen > genNumber) return false;
+	if (set.item) {
+		const item = dex.items.get(set.item);
+		if (!item.exists || item.gen > genNumber) {
+			return false;
+		}
+	}
+	if (set.ability && set.ability !== 'None') {
+		const ability = dex.abilities.get(set.ability);
+		if (!ability.exists || ability.gen > genNumber) {
+			return false;
+		}
+	} else if (genNumber >= 3) {
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Checks if a move is valid on a set.
+ *
+ * @param {ID} move
+ * @param {RandomTeamsTypes.RandomSet} set
+ * @param {ID} tier
+ * @param {ID} mod
+ * @returns {boolean}
+ */
+function validateLearnset(move, set, tier, mod = 'gen8') {
+	const validator = TeamValidator.get(`${mod}${tier}`);
+	const species = validator.dex.species.get(set.species || set.name);
+	return !validator.checkCanLearn(move, species);
+}
+
 exports.testSet = testSet;
 exports.testAlwaysHasMove = testAlwaysHasMove;
 exports.testNotBothMoves = testNotBothMoves;
 exports.testTeam = testTeam;
 exports.testHasSTAB = testHasSTAB;
+
+exports.isValidSet = isValidSet;
+exports.validateLearnset = validateLearnset;
