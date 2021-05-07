@@ -458,7 +458,7 @@ class OtdHandler {
 				if (!val) return '';
 				switch (col) {
 				case 'time':
-					const date = new Date(this.winners[i].time);
+					const date = new Date(parseInt(this.winners[i].time));
 
 					const pad = (num: number) => num < 10 ? '0' + num : num;
 
