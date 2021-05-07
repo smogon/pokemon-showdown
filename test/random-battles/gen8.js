@@ -3,9 +3,20 @@
  */
 'use strict';
 
-const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove} = require('./tools');
+const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove, testTeam} = require('./tools');
 const assert = require('../assert');
 const {Dex} = require('../../.sim-dist/dex');
+
+describe('value rule support', () => {
+	it('should generate teams of the proper length for the format (i.e. support Max Team Size)', () => {
+		testTeam({format: 'gen8randombattle', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({format: 'gen8challengecup1v1', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({format: 'gen8hackmonscup', rounds: 100}, team => assert.equal(team.length, 6));
+
+		testTeam({format: 'gen8multirandombattle', rounds: 100}, team => assert.equal(team.length, 3));
+		testTeam({format: 'gen8cap1v1', rounds: 100}, team => assert.equal(team.length, 3));
+	});
+});
 
 describe('[Gen 8] Random Battle', () => {
 	const options = {format: 'gen8randombattle'};

@@ -879,7 +879,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		}
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
-		while (pool.length && team.length < 6) {
+		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
 			const name = this.sampleNoReplace(pool);
@@ -888,10 +888,13 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Enforce typing limits
 			if (!(debug.length || monotype)) { // Type limits are ignored when debugging or for monotype variations.
-				const types = this.dex.species.get(ssbSet.species).types;
+				const species = this.dex.species.get(ssbSet.species);
+				if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+				if (this.minSourceGen && species.gen < this.minSourceGen) continue;
+
 				const weaknesses = [];
 				for (const type of this.dex.types.names()) {
-					const typeMod = this.dex.getEffectiveness(type, types);
+					const typeMod = this.dex.getEffectiveness(type, species.types);
 					if (typeMod > 0) weaknesses.push(type);
 				}
 				let rejected = false;
@@ -928,7 +931,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				evs: ssbSet.evs ? {...{hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ...ssbSet.evs} :
 				{hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 				ivs: {...{hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, ...ssbSet.ivs},
-				level: ssbSet.level || 100,
+				level: (ssbSet.level || 100) + this.levelAdjustment,
 				happiness: typeof ssbSet.happiness === 'number' ? ssbSet.happiness : 255,
 				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : !!ssbSet.shiny,
 			};
@@ -946,9 +949,9 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Team specific tweaks occur here
 			// Swap last and second to last sets if last set has Illusion
-			if (team.length === 6 && set.ability === 'Illusion') {
-				team[5] = team[4];
-				team[4] = set;
+			if (team.length === this.maxTeamSize && set.ability === 'Illusion') {
+				team[this.maxTeamSize - 1] = team[this.maxTeamSize - 2];
+				team[this.maxTeamSize - 2] = set;
 			}
 		}
 		return team;
