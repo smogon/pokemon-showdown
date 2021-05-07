@@ -1073,7 +1073,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			evs: evs,
 			ivs: ivs,
 			item: item,
-			level: level,
+			level: level + this.levelAdjustment,
 			shiny: this.randomChance(1, 1024),
 		};
 	}
@@ -1107,6 +1107,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		let effectivePool: {set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[] = [];
 		const priorityPool = [];
 		for (const curSet of setList) {
+			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
+
 			const itemData = this.dex.items.get(curSet.item);
 			if (teamData.megaCount && teamData.megaCount > 0 && itemData.megaStone) continue; // reject 2+ mega stones
 			if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
@@ -1156,7 +1159,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item: setData.set.item || '',
 			ability: setData.set.ability || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: 100,
+			level: 100 + this.levelAdjustment,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
@@ -1195,7 +1198,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			levitate: ['Ground'],
 		};
 
-		while (pokemonPool.length && pokemon.length < 6) {
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
@@ -1288,7 +1291,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				}
 			}
 		}
-		if (pokemon.length < 6) return this.randomFactoryTeam(side, ++depth);
+		if (pokemon.length < this.maxTeamSize) return this.randomFactoryTeam(side, ++depth);
 
 		// Quality control
 		if (!teamData.forceResult) {

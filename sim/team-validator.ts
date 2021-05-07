@@ -199,8 +199,7 @@ export class TeamValidator {
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(this.format);
 
-		this.minSourceGen = this.ruleTable.minSourceGen ?
-			this.ruleTable.minSourceGen[0] : 1;
+		this.minSourceGen = this.ruleTable.minSourceGen;
 
 		this.toID = toID;
 	}
@@ -249,22 +248,18 @@ export class TeamValidator {
 			throw new Error(`Invalid team data`);
 		}
 
-		let [minSize, maxSize] = format.teamLength && format.teamLength.validate || [1, 6];
-		if (format.gameType === 'doubles' && minSize < 2) minSize = 2;
-		if (['triples', 'rotation'].includes(format.gameType as 'triples') && minSize < 3) minSize = 3;
-
-		if (team.length < minSize) problems.push(`You must bring at least ${minSize} Pok\u00E9mon.`);
-		if (team.length > maxSize) return [`You may only bring up to ${maxSize} Pok\u00E9mon.`];
+		if (team.length < ruleTable.minTeamSize) {
+			problems.push(`You must bring at least ${ruleTable.minTeamSize} Pok\u00E9mon (your team has ${team.length}).`);
+		}
+		if (team.length > ruleTable.maxTeamSize) {
+			return [`You may only bring up to ${ruleTable.maxTeamSize} Pok\u00E9mon (your team has ${team.length}).`];
+		}
 
 		// A limit is imposed here to prevent too much engine strain or
 		// too much layout deformation - to be exact, this is the limit
 		// allowed in Custom Game.
 		if (team.length > 24) {
 			problems.push(`Your team has more than than 24 Pok\u00E9mon, which the simulator can't handle.`);
-			return problems;
-		}
-		if (ruleTable.isBanned('nonexistent') && team.length > 6) {
-			problems.push(`Your team has more than than 6 Pok\u00E9mon.`);
 			return problems;
 		}
 
@@ -380,32 +375,30 @@ export class TeamValidator {
 		set.nature = nature.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
-		const maxLevel = format.maxLevel || 100;
-		const maxForcedLevel = format.maxForcedLevel || maxLevel;
-		let forcedLevel: number | null = null;
-		if (!set.level) {
-			set.level = (format.defaultLevel || maxLevel);
-		}
-		if (format.forcedLevel) {
-			forcedLevel = format.forcedLevel;
-		} else if (set.level >= maxForcedLevel) {
-			forcedLevel = maxForcedLevel;
-		}
-		if (set.level > maxLevel || set.level === forcedLevel || set.level === maxForcedLevel) {
-			// Note that we're temporarily setting level 50 pokemon in VGC to level 100
-			// This allows e.g. level 50 Hydreigon even though it doesn't evolve until level 64.
-			// Leveling up can't make an obtainable pokemon unobtainable, so this is safe.
-			// Just remember to set the level back to forcedLevel at the end of the file.
-			set.level = maxLevel;
-		}
-		if ((set.level > 100 || set.level < 1) && ruleTable.isBanned('nonexistent')) {
-			problems.push((set.name || set.species) + ' is higher than level 100.');
-		}
-
 		set.name = set.name || species.baseSpecies;
 		let name = set.species;
 		if (set.species !== set.name && species.baseSpecies !== set.name) {
 			name = `${set.name} (${set.species})`;
+		}
+
+		if (!set.level) set.level = ruleTable.defaultLevel;
+
+		let adjustLevel = ruleTable.adjustLevel;
+		if (ruleTable.adjustLevelDown && set.level >= ruleTable.adjustLevelDown) {
+			adjustLevel = ruleTable.adjustLevelDown;
+		}
+		if (set.level === adjustLevel || (set.level === 100 && ruleTable.maxLevel < 100)) {
+			// Note that we're temporarily setting level 50 pokemon in VGC to level 100
+			// This allows e.g. level 50 Hydreigon even though it doesn't evolve until level 64.
+			// Leveling up can't make an obtainable pokemon unobtainable, so this is safe.
+			// Just remember to set the level back to adjustLevel at the end of validation.
+			set.level = ruleTable.maxLevel;
+		}
+		if (set.level < ruleTable.minLevel) {
+			problems.push(`${name} (level ${set.level}) is below the minimum level of ${ruleTable.minLevel}${ruleTable.blame('minlevel')}`);
+		}
+		if (set.level > ruleTable.maxLevel) {
+			problems.push(`${name} (level ${set.level}) is above the maximum level of ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
 		}
 
 		const setHas: {[k: string]: true} = {};
@@ -581,18 +574,11 @@ export class TeamValidator {
 			set.moves = set.moves.filter(val => val);
 		}
 		if (!set.moves?.length) {
-			problems.push(`${name} has no moves.`);
+			problems.push(`${name} has no moves (it must have at least one to be usable).`);
 			set.moves = [];
 		}
-		// A limit is imposed here to prevent too much engine strain or
-		// too much layout deformation - to be exact, this is the limit
-		// allowed in Custom Game.
-		if (set.moves.length > 24) {
-			problems.push(`${name} has more than 24 moves, which the simulator can't handle.`);
-			return problems;
-		}
-		if (ruleTable.isBanned('nonexistent') && set.moves.length > 4) {
-			problems.push(`${name} has more than 4 moves.`);
+		if (set.moves.length > ruleTable.maxMoveCount) {
+			problems.push(`${name} has ${set.moves.length} moves, which is more than the limit of ${ruleTable.maxMoveCount}.`);
 			return problems;
 		}
 
@@ -756,7 +742,7 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (forcedLevel) set.level = forcedLevel;
+			if (adjustLevel) set.level = adjustLevel;
 			return null;
 		}
 
@@ -929,7 +915,7 @@ export class TeamValidator {
 		let totalEV = 0;
 		for (const stat in set.evs) totalEV += set.evs[stat as 'hp'];
 		// Not having this affect Nintendo Cup formats because it is annoying to deal with having to lower a base stat by 1 for every Pokemon.
-		if (!this.format.debug && !this.format.cupLevelLimit) {
+		if (!this.format.debug && !ruleTable.has('maxtotallevel')) {
 			if (set.level > 1 && (allowEVs || allowAVs) && totalEV === 0) {
 				problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			} else if (allowEVs && !capEVs && [508, 510].includes(totalEV)) {
@@ -937,7 +923,7 @@ export class TeamValidator {
 			}
 			// Check for level import errors from user in VGC -> DOU, etc.
 			// Note that in VGC etc (maxForcedLevel: 50), `set.level` will be 100 here for validation purposes
-			if (set.level === 50 && this.format.maxLevel !== 50 && allowEVs && totalEV % 4 === 0) {
+			if (set.level === 50 && ruleTable.maxLevel !== 50 && allowEVs && totalEV % 4 === 0) {
 				problems.push(`${name} is level 50, but this format allows level 100 Pokémon. (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}
 		}

@@ -203,7 +203,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			level: 100,
+			level: 100 + this.levelAdjustment,
 			gender: species.gender,
 			happiness: 70,
 			shiny: this.randomChance(1, 1024),
@@ -226,7 +226,9 @@ export class RandomLetsGoTeams extends RandomTeams {
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!species.randomBattleMoves?.length
+				!species.randomBattleMoves?.length ||
+				(this.forceMonotype && !species.types.includes(this.forceMonotype)) ||
+				(this.minSourceGen && species.gen < this.minSourceGen)
 			) {
 				continue;
 			}
@@ -238,7 +240,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		const baseFormes: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		while (pokemonPool.length && pokemon.length < 6) {
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
@@ -259,7 +261,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 			// Limit 1 of any type combination
 			const typeCombo = types.slice().sort().join();
-			if (typeComboCount[typeCombo] >= 1) continue;
+			if (!this.forceMonotype && typeComboCount[typeCombo] >= 1) continue;
 
 			// Okay, the set passes, add it to our team
 			const set = this.randomSet(species, teamDetails);

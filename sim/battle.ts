@@ -236,17 +236,6 @@ export class Battle {
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
-		for (const rule of this.ruleTable.keys()) {
-			if ('+*-!'.includes(rule.charAt(0))) continue;
-			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.exists) {
-				const hasEventHandler = Object.keys(subFormat).some(
-					val => val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
-				);
-				if (hasEventHandler) this.field.addPseudoWeather(rule);
-			}
-		}
-
 		this.add('gametype', this.gameType);
 		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
 		for (const side of sides) {
@@ -1142,11 +1131,11 @@ export class Battle {
 		}
 
 		if (type === 'teampreview') {
-			// `chosenTeamSize = 6` means the format wants the user to select
-			// the entire team order, unlike `chosenTeamSize = undefined` which
+			// `pickedTeamSize = 6` means the format wants the user to select
+			// the entire team order, unlike `pickedTeamSize = undefined` which
 			// will only ask the user to select their lead(s).
-			const chosenTeamSize = this.format.teamLength?.battle;
-			this.add('teampreview' + (chosenTeamSize ? '|' + chosenTeamSize : ''));
+			const pickedTeamSize = this.ruleTable.pickedTeamSize;
+			this.add('teampreview' + (pickedTeamSize ? '|' + pickedTeamSize : ''));
 		}
 
 		const requests = this.getRequests(type);
@@ -1186,7 +1175,7 @@ export class Battle {
 		case 'teampreview':
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
-				const maxChosenTeamSize = this.format.teamLength?.battle;
+				const maxChosenTeamSize = this.ruleTable.pickedTeamSize || undefined;
 				requests[i] = {teamPreview: true, maxChosenTeamSize, side: side.getRequestData()};
 			}
 			break;
@@ -1298,6 +1287,7 @@ export class Battle {
 		if (typeof side === 'string') {
 			side = this.getSide(side);
 		}
+		if (!side) return; // can happen if a battle crashes
 		if (this.gameType !== 'freeforall') {
 			return this.win(side.foe);
 		}
@@ -1619,9 +1609,7 @@ export class Battle {
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.exists) {
-				if (subFormat.onBegin) subFormat.onBegin.call(this);
-			}
+			if (subFormat.onBegin) subFormat.onBegin.call(this);
 		}
 
 		if (this.sides.some(side => !side.pokemon[0])) {
@@ -1632,7 +1620,12 @@ export class Battle {
 			this.checkEVBalance();
 		}
 
-		this.residualEvent('TeamPreview');
+		if (format.onTeamPreview) format.onTeamPreview.call(this);
+		for (const rule of this.ruleTable.keys()) {
+			if ('+*-!'.includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
+		}
 
 		this.queue.addChoice({choice: 'start'});
 		this.midTurn = true;
@@ -2289,6 +2282,21 @@ export class Battle {
 			}
 
 			this.add('start');
+
+			for (const rule of this.ruleTable.keys()) {
+				if ('+*-!'.includes(rule.charAt(0))) continue;
+				const subFormat = this.dex.formats.get(rule);
+				if (subFormat.exists) {
+					const hasEventHandler = Object.keys(subFormat).some(
+						// skip event handlers that are handled elsewhere
+						val => val.startsWith('on') && ![
+							'onBegin', 'onTeamPreview', 'onValidateRule', 'onValidateTeam', 'onChangeSet', 'onValidateSet',
+						].includes(val)
+					);
+					if (hasEventHandler) this.field.addPseudoWeather(rule);
+				}
+			}
+
 			for (const side of this.sides) {
 				for (let i = 0; i < side.active.length; i++) {
 					if (!side.pokemonLeft) {

@@ -16,7 +16,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		// Pick six random Pokémon, no repeats.
 		let num: number;
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < this.maxTeamSize; i++) {
 			do {
 				num = this.random(151) + 1;
 			} while (num in hasDexNumber);
@@ -26,7 +26,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let formeCounter = 0;
 		for (const id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
+
 			const species = this.dex.species.get(id);
+			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+
 			const learnset = this.dex.species.getLearnset(id as ID);
 			if (!learnset || species.forme) continue;
 			formes[hasDexNumber[species.num]].push(species.name);
@@ -36,7 +39,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			}
 		}
 
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < this.maxTeamSize; i++) {
 			// Choose forme.
 			const poke = this.sample(formes[i]);
 			const species = this.dex.species.get(poke);
@@ -109,7 +112,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				evs: evs,
 				ivs: ivs,
 				item: '',
-				level: level,
+				level: level + this.levelAdjustment,
 				happiness: 0,
 				shiny: false,
 				nature: 'Serious',
@@ -143,7 +146,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let nuCount = 0;
 		let hasShitmon = false;
 
-		while (pokemonPool.length && pokemon.length < 6) {
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 			// Only one Ditto is allowed per battle in Generation 1,
@@ -154,6 +157,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
 			if (handicapMons.includes(species.id) && hasShitmon) continue;
+
+			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
 			const tier = species.tier;
 			switch (tier) {
@@ -352,7 +357,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
 			ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30},
 			item: '',
-			level,
+			level: level + this.levelAdjustment,
 			shiny: false,
 			gender: false,
 		};
@@ -364,12 +369,12 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const movePool = Object.keys(this.dex.data.Moves);
 		const typesPool = ['Bird', ...this.dex.types.names()];
 
-		const random6 = this.random6Pokemon();
+		const randomN = this.randomNPokemon(this.maxTeamSize);
 		const hackmonsCup: {[k: string]: HackmonsCupEntry} = {};
 
-		for (let i = 0; i < 6; i++) {
+		for (const forme of randomN) {
 			// Choose forme
-			const species = this.dex.species.get(random6[i]);
+			const species = this.dex.species.get(forme);
 			if (!hackmonsCup[species.id]) {
 				hackmonsCup[species.id] = {
 					types: [this.sample(typesPool), this.sample(typesPool)],
@@ -382,6 +387,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 						spe: Utils.clampIntRange(this.random(256), 1),
 					},
 				};
+				if (this.forceMonotype && !hackmonsCup[species.id].types.includes(this.forceMonotype)) {
+					hackmonsCup[species.id].types[1] = this.forceMonotype;
+				}
 				hackmonsCup[species.id].baseStats.spd = hackmonsCup[species.id].baseStats.spa;
 			}
 			if (hackmonsCup[species.id].types[0] === hackmonsCup[species.id].types[1]) {
@@ -460,7 +468,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				evs,
 				ivs,
 				nature: '',
-				level,
+				level: level + this.levelAdjustment,
 				shiny: false,
 				// Hacky but the only way to communicate stats/level generation properly
 				hc: hackmonsCup[species.id],
