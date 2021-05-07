@@ -269,15 +269,17 @@ export const Conditions: {[k: string]: ConditionData} = {
 		duration: 2,
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
+			let slot: PokemonSlot | null = target.getSlot();
 			target.addVolatile(effect.id);
 			let moveTarget: Pokemon | null = source;
 			if (effect.sourceEffect && this.dex.moves.get(effect.id).target === 'normal') {
 				// this move was called by another move such as metronome and needs a random target to be determined now
 				// won't randomly choose an empty slot if there's at least one valid target
 				moveTarget = this.getRandomTarget(target, effect.id);
+				if (moveTarget) slot = moveTarget?.getSlot();
 			}
 			// if there are no valid targets, randomly choose one later
-			target.volatiles[effect.id].targetLoc = target.getLocOf(moveTarget || target);
+			target.volatiles[effect.id].targetLoc = this.getAtSlot(slot);
 			this.attrLastMove('[still]');
 			// Run side-effects normally associated with hitting (e.g., Protean, Libero)
 			this.runEvent('PrepareHit', target, source, effect);
