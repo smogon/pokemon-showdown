@@ -756,7 +756,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			evs,
 			ivs,
 			item,
-			level: level + this.levelAdjustment,
+			level,
 		};
 	}
 
@@ -776,7 +776,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const typeComboCount: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, this.minSourceGen);
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));

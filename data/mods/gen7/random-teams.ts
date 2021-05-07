@@ -1364,7 +1364,7 @@ export class RandomGen7Teams extends RandomTeams {
 			evs,
 			ivs,
 			item,
-			level: level + this.levelAdjustment,
+			level,
 		};
 	}
 
@@ -1390,7 +1390,7 @@ export class RandomGen7Teams extends RandomTeams {
 		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
 		for (const restrict of [true, false]) {
 			if (pokemon.length >= this.maxTeamSize) break;
-			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, this.minSourceGen);
+			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 				const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 
@@ -1572,7 +1572,6 @@ export class RandomGen7Teams extends RandomTeams {
 		const priorityPool = [];
 		for (const curSet of setList) {
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			const item = this.dex.items.get(curSet.item);
 			if (teamData.megaCount && teamData.megaCount > 0 && item.megaStone) continue; // reject 2+ mega stones
@@ -1630,7 +1629,7 @@ export class RandomGen7Teams extends RandomTeams {
 			item: item || '',
 			ability: ability || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: level + this.levelAdjustment,
+			level,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
 			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
@@ -1858,7 +1857,6 @@ export class RandomGen7Teams extends RandomTeams {
 		const priorityPool = [];
 		for (const curSet of setList) {
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			const item = this.dex.items.get(curSet.item);
 			if (teamData.megaCount && teamData.megaCount > 1 && item.megaStone) continue; // reject 3+ mega stones
@@ -1912,7 +1910,7 @@ export class RandomGen7Teams extends RandomTeams {
 			item: setData.set.item || '',
 			ability: setData.set.ability || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: (setData.set.level || 50) + this.levelAdjustment,
+			level: setData.set.level || 50,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
 			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},

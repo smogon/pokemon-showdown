@@ -826,7 +826,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			evs,
 			ivs,
 			item,
-			level: level + this.levelAdjustment,
+			level,
 		};
 	}
 }

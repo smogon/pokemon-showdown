@@ -1073,7 +1073,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			evs: evs,
 			ivs: ivs,
 			item: item,
-			level: level + this.levelAdjustment,
+			level,
 			shiny: this.randomChance(1, 1024),
 		};
 	}
@@ -1108,7 +1108,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const priorityPool = [];
 		for (const curSet of setList) {
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			const itemData = this.dex.items.get(curSet.item);
 			if (teamData.megaCount && teamData.megaCount > 0 && itemData.megaStone) continue; // reject 2+ mega stones
@@ -1159,7 +1158,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item: setData.set.item || '',
 			ability: setData.set.ability || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: 100 + this.levelAdjustment,
+			level: 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
