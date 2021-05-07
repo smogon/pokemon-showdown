@@ -215,6 +215,14 @@ export class HelpTicket extends Rooms.RoomGame {
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
 			this.room.add(`|c|&Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
+			switch (this.ticket.type) {
+			case 'PM Harassment':
+				this.room.add(
+					`|c|&Staff|Global staff might take more than a few minutes to handle your report. ` +
+					`If you are being disturbed by another user, you can type \`\`/ignore [username]\`\` in any chat to ignore their messages immediately`
+				).update();
+				break;
+			}
 			this.ticket.needsDelayWarning = true;
 		}
 	}
