@@ -75,6 +75,6 @@ describe('Flash Fire [Gen 3-4]', function () {
 		const flashFireMon = battle.p1.active[0];
 		flashFireMon.setStatus('frz');
 		battle.makeChoices();
-		assert.notEqual(flashFireMon.hp, flashFireMon.maxhp);
+		assert.false.fullHP(flashFireMon);
 	});
 });
