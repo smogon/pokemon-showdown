@@ -63,7 +63,7 @@ describe('Flash Fire [Gen 3-4]', function () {
 		const flashFireMon = battle.p1.active[0];
 		flashFireMon.setStatus('frz');
 		battle.makeChoices();
-		assert(flashFireMon.hp !== flashFireMon.maxhp);
+		assert.notEqual(flashFireMon.hp, flashFireMon.maxhp);
 	});
 
 	it('should activate and grant Fire-type immunity even if the user is frozen in Gen 4', function () {
@@ -75,6 +75,6 @@ describe('Flash Fire [Gen 3-4]', function () {
 		const flashFireMon = battle.p1.active[0];
 		flashFireMon.setStatus('frz');
 		battle.makeChoices();
-		assert(flashFireMon.hp !== flashFireMon.maxhp);
+		assert.false.fullHP(flashFireMon);
 	});
 });

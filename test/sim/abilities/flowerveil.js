@@ -26,6 +26,6 @@ describe('Flower Veil', function () {
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move yawn 1, move sleeptalk');
 		battle.makeChoices('move sleeptalk, switch 3', 'move sleeptalk, move sleeptalk');
 		const breloom = battle.p1.active[0];
-		assert(breloom.status === 'slp');
+		assert.equal(breloom.status, 'slp');
 	});
 });

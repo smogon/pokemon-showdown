@@ -12,7 +12,7 @@ describe('Toxic', function () {
 			[{species: "Sigilyph", ability: 'wonderskin', moves: ['sleeptalk']}],
 		]);
 		battle.makeChoices('move toxic', 'move sleeptalk');
-		assert(battle.p2.active[0].status === 'tox');
+		assert.equal(battle.p2.active[0].status, 'tox');
 	});
 });
 
@@ -28,7 +28,7 @@ describe('Toxic [Gen 7]', function () {
 			{species: "Wynaut", moves: ['splash']},
 		]});
 		battle.makeChoices('move toxic 1, move trickroom', 'move dig 2, move splash');
-		assert(battle.p2.active[0].status === 'tox');
+		assert.equal(battle.p2.active[0].status, 'tox');
 		battle.makeChoices('move horndrill 2, move instruct -1', 'move dig 2, move splash');
 		assert.fainted(battle.p2.active[1]);
 	});
