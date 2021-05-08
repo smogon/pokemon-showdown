@@ -801,10 +801,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Illusion shouldn't be in the last slot
 			if (species.name === 'Zoroark' && pokemon.length > 4) continue;
 
+			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 			const tier = species.tier;
 
 			// Limit two Pokemon per tier
-			if (this.gen === 5 && !isMonotype && !this.forceMonotype && tierCount[tier] > 1) continue;
+			if (this.gen === 5 && !isMonotype && !this.forceMonotype && tierCount[tier] >= 2 * limitFactor) continue;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
 
@@ -814,7 +816,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				// Limit two of any type
 				let skip = false;
 				for (const typeName of types) {
-					if (typeCount[typeName] > 1) {
+					if (typeCount[typeName] >= 2 * limitFactor) {
 						skip = true;
 						break;
 					}
@@ -829,7 +831,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				typeCombo = set.ability;
 				if (typeCombo in typeComboCount) continue;
 			} else if (!this.forceMonotype) {
-				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
+				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
 			}
 
 			// Okay, the set passes, add it to our team
