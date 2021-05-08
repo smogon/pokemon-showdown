@@ -586,13 +586,16 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			const typeCombo = types.slice().sort().join();
 
 			if (!isMonotype && !this.forceMonotype) {
+				// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+				const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+
 				// Limit two Pokemon per tier
-				if (tierCount[tier] >= 2) continue;
+				if (tierCount[tier] >= 2 * limitFactor) continue;
 
 				// Limit two of any type
 				let skip = false;
 				for (const typeName of types) {
-					if (typeCount[typeName] > 1) {
+					if (typeCount[typeName] >= 2 * limitFactor) {
 						skip = true;
 						break;
 					}
@@ -600,7 +603,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				if (skip) continue;
 
 				// Limit one of any type combination
-				if (!this.forceMonotype && typeComboCount[typeCombo] >= 1) continue;
+				if (!this.forceMonotype && typeComboCount[typeCombo] >= 1 * limitFactor) continue;
 			}
 
 			// Okay, the set passes, add it to our team

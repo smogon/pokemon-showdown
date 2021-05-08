@@ -160,21 +160,26 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
+			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+
 			const tier = species.tier;
 			switch (tier) {
 			case 'LC':
 			case 'NFE':
 				// Don't add pre-evo mon if already 4 or more non-OUs, or if already 3 or more non-OUs with one being a shitmon
 				// Regardless, pre-evo mons are slightly less common.
-				if (nuCount > 3 || (hasShitmon && nuCount > 2) || this.randomChance(1, 3)) continue;
+				if (nuCount >= 4 * limitFactor || (hasShitmon && nuCount >= 4 * limitFactor - 1) || this.randomChance(1, 3)) continue;
 				break;
 			case 'Uber':
 				// If you have one of the worst mons we allow luck to give you all Ubers.
-				if (uberCount >= 1 && !hasShitmon) continue;
+				if (uberCount >= 1 * limitFactor && !hasShitmon) continue;
 				break;
 			default:
 				// OUs are fine. Otherwise 50% chance to skip mon if already 4 or more non-OUs.
-				if (uuTiers.includes(tier) && pokemonPool.length > 1 && (nuCount > 3 && this.randomChance(1, 2))) continue;
+				if (uuTiers.includes(tier) && pokemonPool.length > 1 && (nuCount >= 4 * limitFactor && this.randomChance(1, 2))) {
+					continue;
+				}
 			}
 
 			let skip = false;
@@ -182,7 +187,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Limit 2 of any type as well. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
 			for (const type of species.types) {
-				if (typeCount[type] > 1 || (typeCount[type] === 1 && this.randomChance(1, 2) && pokemonPool.length > 1)) {
+				if (typeCount[type] >= 2 * limitFactor ||
+					(typeCount[type] >= 1 * limitFactor && this.randomChance(1, 2) && pokemonPool.length > 1)) {
 					skip = true;
 					break;
 				}
@@ -195,7 +201,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			for (const type in weaknessCount) {
 				const increaseCount = this.dex.getImmunity(type, species) && this.dex.getEffectiveness(type, species) > 0;
 				if (!increaseCount) continue;
-				if (weaknessCount[type] >= 2) {
+				if (weaknessCount[type] >= 2 * limitFactor) {
 					skip = true;
 					break;
 				}
