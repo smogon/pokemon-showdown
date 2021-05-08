@@ -134,8 +134,8 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 			assert.notEqual(cursePartner.hp, cursePartner.maxhp); // Partner afflicted by Curse
 
 			// Foes unaffected by Curse
-			assert.equal(foeHP[0], p2active[0].maxhp);
-			assert.equal(foeHP[1], p2active[1].maxhp);
+			assert.fullHP(p2active[0]);
+			assert.fullHP(p2active[1]);
 		}
 	}
 
