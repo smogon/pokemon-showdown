@@ -440,8 +440,8 @@ export const commands: Chat.ChatCommands = {
 		let html: string;
 		let messageType: string;
 		let name: string | undefined;
-		const plainHTML = cmd === 'sendprivatehtml';
-		if (plainHTML) {
+		const plainHtml = cmd === 'sendprivatehtml';
+		if (plainHtml) {
 			html = rest;
 			messageType = 'html';
 		} else {
@@ -455,7 +455,7 @@ export const commands: Chat.ChatCommands = {
 		if (!html) return this.parse('/help ' + cmd);
 
 		html = `${Utils.html`<div style="color:#888;font-size:8pt">[Private from ${user.name}]</div>`}${Chat.collapseLineBreaksHTML(html)}`;
-		if (plainHTML) html = `<div class="infobox">${html}</div>`;
+		if (plainHtml) html = `<div class="infobox">${html}</div>`;
 
 		targetUser.sendTo(room, `|${messageType}|${html}`);
 
