@@ -378,8 +378,17 @@ export const Conditions: {[k: string]: ConditionData} = {
 				data.moveData.basePowerModifier = (5324 / 4096);
 			}
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
-
+			const tryMove = this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+
+			if (tryMove) {
+				// for some reason you take damage from life orb on future moves
+				// in gen 5 but it doesnt add a damage boost
+				const moveUser = data.source;
+				if (data.source.hasItem('lifeorb') && this.gen >= 5) {
+					this.damage(data.source.baseMaxhp / 10, moveUser, moveUser, this.dex.items.get('lifeorb'));
+				}
+			}
 		},
 	},
 	healreplacement: {
