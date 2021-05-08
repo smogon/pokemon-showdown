@@ -281,10 +281,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 				// it will already have one by now if there is any valid target
 				// but if there isn't one we need to choose a random slot now
 				if (defender.fainted) {
-					moveTargetLoc = attacker.getLocOf(this.sample(attacker.foes(true)));
-				} else {
-					moveTargetLoc = attacker.getLocOf(defender);
+					defender = this.sample(attacker.foes(true));
 				}
+				moveTargetLoc = attacker.getLocOf(defender);
 			}
 			attacker.volatiles[effect.id].targetLoc = moveTargetLoc;
 			this.attrLastMove('[still]');
