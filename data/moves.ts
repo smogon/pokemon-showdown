@@ -2717,26 +2717,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 						[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
 							targetSide.sideConditions[id], sourceSide.sideConditions[id],
 						];
-						this.add('-sideend', sourceSide, effectName, '[silent]');
-						this.add('-sideend', targetSide, effectName, '[silent]');
 					} else if (sourceSide.sideConditions[id] && !targetSide.sideConditions[id]) {
 						targetSide.sideConditions[id] = sourceSide.sideConditions[id];
 						delete sourceSide.sideConditions[id];
-						this.add('-sideend', sourceSide, effectName, '[silent]');
 					} else if (targetSide.sideConditions[id] && !sourceSide.sideConditions[id]) {
 						sourceSide.sideConditions[id] = targetSide.sideConditions[id];
 						delete targetSide.sideConditions[id];
-						this.add('-sideend', targetSide, effectName, '[silent]');
 					} else {
 						continue;
 					}
 					let sourceLayers = sourceSide.sideConditions[id] ? (sourceSide.sideConditions[id].layers || 1) : 0;
 					let targetLayers = targetSide.sideConditions[id] ? (targetSide.sideConditions[id].layers || 1) : 0;
 					for (; sourceLayers > 0; sourceLayers--) {
-						this.add('-sidestart', sourceSide, effectName, '[silent]');
+						this.add('-sideswitch', targetSide, sourceSide, effectName, '[silent]');
 					}
 					for (; targetLayers > 0; targetLayers--) {
-						this.add('-sidestart', targetSide, effectName, '[silent]');
+						this.add('-sideswitch', sourceSide, targetSide, effectName, '[silent]');
 					}
 					success = true;
 				}
