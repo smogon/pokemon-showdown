@@ -732,16 +732,6 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 			}
 
-			if (
-				!isDoubles &&
-				species.name === 'Porygon-Z' &&
-				hasMove['nastyplot'] &&
-				!hasMove['trick'] &&
-				!['nastyplot', 'icebeam', 'triattack'].includes(moves[0])
-			) {
-				return 'Normalium Z';
-			}
-
 			if (species.name === 'Mimikyu' && hasMove['playrough'] && counter.setupType) return 'Mimikium Z';
 			if (species.name === 'Raichu-Alola' && hasMove['thunderbolt'] && counter.setupType) return 'Aloraichium Z';
 			if (hasMove['bugbuzz'] && counter.setupType && species.baseStats.spa > 100) return 'Buginium Z';
@@ -1257,10 +1247,6 @@ export class RandomGen7Teams extends RandomTeams {
 		if (item === undefined) item = this.getMediumPriorityItem(ability, hasMove, counter, species, moves, isDoubles, isLead);
 		if (item === undefined) {
 			item = this.getLowPriorityItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species, isLead, isDoubles);
-		}
-		if (species.id === 'porygonz' && item === 'Normalium Z') {
-			moves[moves.indexOf('nastyplot' as ID)] = 'conversion' as ID;
-			moves[moves.indexOf('triattack' as ID)] = 'recover' as ID;
 		}
 
 		// fallback
