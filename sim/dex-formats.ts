@@ -246,7 +246,7 @@ export class RuleTable extends Map<string, string> {
 			throw new Error(`Chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
 		}
 		if (this.maxTeamSize && this.maxTeamSize < gameTypeMinTeamSize) {
-			throw new Error(`Max team size ${this.pickedTeamSize}${this.blame('maxTeamSize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxTeamSize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
 		}
 		if (this.minTeamSize && this.pickedTeamSize && this.minTeamSize < this.pickedTeamSize) {
 			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} is lower than chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')}.`);
