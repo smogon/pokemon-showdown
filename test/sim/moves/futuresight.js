@@ -106,4 +106,37 @@ describe('Future Sight', function () {
 		const wynaut = battle.p1.active[0];
 		assert.fullHP(wynaut);
 	});
+
+	it.skip(`should only cause the user to take Life Orb recoil on its damaging turn`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
+		], [
+			{species: 'mew', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		const wynaut = battle.p1.active[0];
+		const mew = battle.p2.active[0];
+		assert.fullHP(wynaut, `Wynaut should not take Life Orb recoil on Future Sight's starting turn`);
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.equal(wynaut.hp, wynaut.maxhp - Math.floor(wynaut.maxhp / 10), `Wynaut should take Life Orb recoil on Future Sight's damaging turn`);
+		const damage = mew.maxhp - mew.hp;
+		assert.bounded(damage, [30, 35]); // 22-27 if Life Orb was not applied
+	});
+
+	it.skip(`should not cause the user to change typing on either its starting or damaging turn`, function () {
+		battle = common.createBattle([[
+			{species: 'roggenrola', ability: 'protean', moves: ['futuresight', 'sleeptalk']},
+		], [
+			{species: 'mew', moves: ['sleeptalk']},
+		]]);
+
+		const roggenrola = battle.p1.active[0];
+		battle.makeChoices();
+		assert.false(roggenrola.hasType('Psychic'), `Protean Roggenrola should not change type on Future Sight's starting turn`);
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.false(roggenrola.hasType('Psychic'), `Protean Roggenrola should not change type on Future Sight's damaging turn`);
+	});
 });
