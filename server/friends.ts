@@ -2,7 +2,8 @@
  * Friends chat-plugin database handler.
  * @author mia-pi-git
  */
-import * as Database from 'better-sqlite3';
+// @ts-ignore in case it isn't installed
+import type * as Database from 'better-sqlite3';
 import {Utils, FS, ProcessManager, Repl, Cache} from '../lib';
 import {Config} from './config-loader';
 import * as path from 'path';
@@ -13,6 +14,7 @@ export const MAX_FRIENDS = 100;
 export const MAX_REQUESTS = 6;
 export const DEFAULT_FILE = `${__dirname}/../databases/friends.db`;
 const REQUEST_EXPIRY_TIME = 30 * 24 * 60 * 60 * 1000;
+const PM_TIMEOUT = 30 * 60 * 1000;
 
 export interface DatabaseRequest {
 	statement: string;
@@ -70,7 +72,7 @@ export class FriendsDatabase {
 	static setupDatabase(fileName?: string) {
 		const file = fileName || process.env.filename || DEFAULT_FILE;
 		const exists = FS(file).existsSync() || file === ':memory:';
-		const database = new Database(file);
+		const database: Database.Database = new (require('better-sqlite3'))(file);
 		if (!exists) {
 			database.exec(FS('databases/schemas/friends.sql').readSync());
 		} else {
@@ -357,6 +359,10 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 		Monitor.slow(`[Slow friends list query] ${JSON.stringify(query)}`);
 	}
 	return result;
+}, PM_TIMEOUT, message => {
+	if (message.startsWith('SLOW\n')) {
+		Monitor.slow(message.slice(5));
+	}
 });
 
 if (!PM.isParentProcess) {
