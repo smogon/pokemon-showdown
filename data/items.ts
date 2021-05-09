@@ -7657,4 +7657,50 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 10028,
 		gen: 5,
 	},
+	// glowingorb: {
+		// name: "Glowing Orb",
+		// spritenum: 180,
+		// fling: {
+			// basePower: 60,
+		// },
+		// onBasePowerPriority: 15,
+		// onBasePower(basePower, user, target, move) {
+			// if (user.baseSpecies.num === 10061 && move.type === 'Light') {
+				// return this.chainModify(1.2);
+			// }
+		// },
+		// onTakeItem(item, pokemon, source) {
+			// if ((source && source.baseSpecies.num === 10061) || pokemon.baseSpecies.num === 10061) {
+				// return false;
+			// }
+			// return true;
+		// },
+		// forcedForme: "Goranium-Lightmode",
+		// itemUser: ["Goranium-Lightmode"],
+		// num: 10029,
+		// gen: 4,
+	// },
+	// shadoworb: {
+		// name: "Shadow Orb",
+		// spritenum: 180,
+		// fling: {
+			// basePower: 60,
+		// },
+		// onBasePowerPriority: 15,
+		// onBasePower(basePower, user, target, move) {
+			// if (user.baseSpecies.num === 10061 && move.type === 'Dark') {
+				// return this.chainModify(1.2);
+			// }
+		// },
+		// onTakeItem(item, pokemon, source) {
+			// if ((source && source.baseSpecies.num === 10061) || pokemon.baseSpecies.num === 10061) {
+				// return false;
+			// }
+			// return true;
+		// },
+		// forcedForme: "Goranium-Darkmode",
+		// itemUser: ["Goranium-Darkmode"],
+		// num: 10030,
+		// gen: 4,
+	// },
 };

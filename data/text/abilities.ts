@@ -1290,7 +1290,7 @@ export const AbilitiesText = {
 	},
 	surgesurfer: {
 		name: "Surge Surfer",
-		shortDesc: "If Electric Terrain or Psychic Terrain is active, this Pokemon's Speed is doubled.",
+		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is doubled.",
 	},
 	swarm: {
 		name: "Swarm",
@@ -1785,5 +1785,10 @@ export const AbilitiesText = {
 	phytogenetic: {
 		name: "Phytogenetic",
 		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using a Grass-type attack.",
+	},
+	transmutation: {
+		name: "Transmutation",
+		desc: "This Pokemon's type changes when a status attempt is made on him. Grants status immunity. Psn/Tox->Poison,Par->Electric,Slp->Grass,Brn->Fire,Frz->Ice.",
+		shortDesc: "Type changes with status attempts. Psn/Tox->Poison,Par->Electric,Slp->Grass,Brn->Fire,Frz->Ice.",
 	},
 };

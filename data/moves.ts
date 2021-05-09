@@ -20849,52 +20849,52 @@ export const Moves: {[moveid: string]: MoveData} = {
         zMove: {effect: 'clearnegativeboost'},
         contestType: "Clever",
     },
-	toxicfortune: {
-		num: 897,
-		accuracy: 100,
-		basePower: 120,
-		category: "Special",
-		name: "Toxic Fortune",
-		pp: 10,
-		priority: 0,
-		flags: {future: 1},
-		ignoreImmunity: true,
-		isFutureMove: true,
-		onTry(source, target) {
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 3,
-				move: 'toxicfortune',
-				source: source,
-				moveData: {
-					id: 'toxicfortune',
-					name: "Toxic Fortune",
-					accuracy: 100,
-					basePower: 120,
-					category: "Special",
-					priority: 0,
-					flags: {future: 1},
-					ignoreImmunity: false,
-					effectType: 'Move',
-					isFutureMove: true,
-					secondary: {
-						chance: 10,
-						status: 'psn',
-					},
-					type: 'Poison',
-				},
-			});
-			this.add('-start', source, 'move: Future Sight');
-			return null;
-		},
-		secondary: {
-			chance: 10,
-			status: 'psn',
-		},
-		target: "normal",
-		type: "Poison",
-		contestType: "Clever",
-	},
+	// toxicfortune: {
+		// num: 897,
+		// accuracy: 100,
+		// basePower: 120,
+		// category: "Special",
+		// name: "Toxic Fortune",
+		// pp: 10,
+		// priority: 0,
+		// flags: {future: 1},
+		// ignoreImmunity: true,
+		// isFutureMove: true,
+		// onTry(source, target) {
+			// if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			// Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				// duration: 3,
+				// move: 'toxicfortune',
+				// source: source,
+				// moveData: {
+					// id: 'toxicfortune',
+					// name: "Toxic Fortune",
+					// accuracy: 100,
+					// basePower: 120,
+					// category: "Special",
+					// priority: 0,
+					// flags: {future: 1},
+					// ignoreImmunity: false,
+					// effectType: 'Move',
+					// isFutureMove: true,
+					// secondary: {
+						// chance: 10,
+						// status: 'psn',
+					// },
+					// type: 'Poison',
+				// },
+			// });
+			// this.add('-start', source, 'move: Future Sight');
+			// return null;
+		// },
+		// secondary: {
+			// chance: 10,
+			// status: 'psn',
+		// },
+		// target: "normal",
+		// type: "Poison",
+		// contestType: "Clever",
+	// },
 	frostychaw: {
 		num: 898,
 		accuracy: 85,

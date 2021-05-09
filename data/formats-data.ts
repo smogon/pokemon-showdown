@@ -2161,6 +2161,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	medicham: {
 		tier: "RU",
 	},
+	medititekalos: {
+		tier: "(LCUber)",
+	},
+	medichamkalos: {
+		tier: "OU",
+	},
 	medichammega: {
 		isNonstandard: "PastMEGA",
 		tier: "Illegal",
@@ -2356,7 +2362,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["allyswitch", "earthpower", "icebeam", "psychic", "rapidspin", "stealthrock"],
 		randomDoubleBattleLevel: 88,
 		tier: "PU",
-		doublesTier: "(UU)",
+		doublesTier: "UU",
 	},
 	lileep: {
 		tier: "LC",
@@ -6414,6 +6420,33 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 	},
 	fortuxin: {
+		tier: "OU",
+	},
+	chefuego: {
+		tier: "OU",
+	},
+	delpni: {
+		tier: "LC",
+	},
+	cuttaroo: {
+		tier: "OU",
+	},
+	wizzard: {
+		tier: "UU",
+	},
+	shoggoz: {
+		tier: "OU",
+	},
+	// goranium: {
+		// tier: "Uber",
+	// },
+	// goraniumlightmode: {
+		// tier: "Uber",
+	// },
+	// goraniumdarkmode: {
+		// tier: "Uber",
+	// },
+	pupavo: {
 		tier: "OU",
 	},
 };

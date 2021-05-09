@@ -5734,16 +5734,16 @@ export const MovesText = {
 		desc: "Lowers the user's Special Attack by 1 stage.",
 		shortDesc: "Lowers the user's Sp. Atk by 1.",
 	},
-	toxicfortune: {
-		name: "Toxic Fortune",
-		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
-		shortDesc: "Hits two turns after being used.",
-		descGen4: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
-		descGen2: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move is already in effect for the target's position.",
+	// toxicfortune: {
+		// name: "Toxic Fortune",
+		// desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
+		// shortDesc: "Hits two turns after being used.",
+		// descGen4: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
+		// descGen2: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move is already in effect for the target's position.",
 
-		start: "  [POKEMON] foresaw an attack!",
-		activate: "  [TARGET] took the Toxic Fortune attack!",
-	},
+		// start: "  [POKEMON] foresaw an attack!",
+		// activate: "  [TARGET] took the Toxic Fortune attack!",
+	// },
 	frostychaw: {
 		name: "Frosty Chaw",
 		desc: "Has a 10% chance to freeze the target.",

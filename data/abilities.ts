@@ -5415,7 +5415,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Herbivore",
 		rating: 3.5,
-		num: 1050,
+		num: 1051,
 	},
 	divinity: {
 		onModifyPriority(priority, pokemon, target, move) {
@@ -5423,7 +5423,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Divinity",
 		rating: 3,
-		num: 177,
+		num: 1052,
 	},
 	blizzardgift: {
 		onStart(pokemon) {
@@ -5457,7 +5457,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Blizzard Gift",
 		rating: 1,
-		num: 178,
+		num: 1053,
 	},
 	phytogenetic: {
 		onModifyAtkPriority: 5,
@@ -5476,6 +5476,47 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Phytogenetic",
 		rating: 3.5,
-		num: 262,
+		num: 1054,
+	},
+	sorcererscurse: {
+		onSourceModifyAccuracyPriority: 9,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('Sorcerers Curse - enhancing accuracy');
+			return true;
+		},
+		onModifyMove(move, pokemon) {
+			if (move.secondaries) {
+				delete move.secondaries;
+				// Technically not a secondary effect, but it is negated
+				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
+			}
+		},
+		name: "Sorcerers Curse",
+		rating: 2,
+		num: 1055,
+	},
+	transmutation: {
+		onSetStatus(status, target, source, effect) {
+			if (status.id === 'psn' || status.id === 'tox') {
+				this.add('-start', target, 'typechange', 'Poison', '[from] ability: Transmutation');
+			}
+			if (status.id === 'brn') {
+				this.add('-start', target, 'typechange', 'Fire', '[from] ability: Transmutation');
+			}
+			if (status.id === 'par') {
+				this.add('-start', target, 'typechange', 'Electric', '[from] ability: Transmutation');
+			}
+			if (status.id === 'slp') {
+				this.add('-start', target, 'typechange', 'Grass', '[from] ability: Transmutation');
+			}
+			if (status.id === 'frz') {
+				this.add('-start', target, 'typechange', 'Ice', '[from] ability: Transmutation');
+			}
+			return false;
+		},
+		name: "Transmutation",
+		rating: 3,
+		num: 1056,
 	},
 };
