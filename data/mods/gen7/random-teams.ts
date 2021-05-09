@@ -1897,7 +1897,7 @@ export class RandomGen7Teams extends RandomTeams {
 			name: setData.set.nickname || setData.set.name || species.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || species.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
-			item: setData.set.item || '',
+			item: this.sampleIfArray(setData.set.item) || '',
 			ability: setData.set.ability || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: setData.set.level || 50,
