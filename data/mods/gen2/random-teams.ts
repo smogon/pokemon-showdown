@@ -158,9 +158,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			if (setMoveid.startsWith('hiddenpower')) availableHP++;
 		}
 
-		const types = new Set<string>();
-		types.add(species.types[0]);
-		if (species.types[1]) types.add(species.types[1]);
+		const types = new Set(species.types);
 
 		let counter;
 		// We use a special variable to track Hidden Power

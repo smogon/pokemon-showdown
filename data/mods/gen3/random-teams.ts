@@ -335,9 +335,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			if (setMoveid.startsWith('hiddenpower')) availableHP++;
 		}
 
-		const types = new Set<string>();
-		types.add(species.types[0]);
-		if (species.types[1]) types.add(species.types[1]);
+		const types = new Set(species.types);
 
 		const abilities = new Set<string>();
 		abilities.add(species.abilities[0]);

@@ -278,9 +278,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		const movePool = species.randomBattleMoves ? species.randomBattleMoves.slice() : [];
 		const moves = new Set<string>();
-		const types = new Set<string>();
-		types.add(species.types[0]);
-		if (species.types[1]) types.add(species.types[1]);
+		const types = new Set(species.types);
 
 		const counter = new MoveCounter();
 

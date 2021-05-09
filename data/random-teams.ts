@@ -1723,9 +1723,7 @@ export class RandomTeams {
 		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
-		const types = new Set<string>();
-		types.add(species.types[0]);
-		if (species.types[1]) types.add(species.types[1]);
+		const types = new Set(species.types);
 
 		const abilities = new Set<string>();
 		abilities.add(species.abilities[0]);
