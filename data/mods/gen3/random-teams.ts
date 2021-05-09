@@ -337,10 +337,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		const types = new Set(species.types);
 
-		const abilities = new Set<string>();
-		abilities.add(species.abilities[0]);
-		if (species.abilities[1]) abilities.add(species.abilities[1]);
-		if (species.abilities.H) abilities.add(species.abilities.H);
+		const abilities = new Set(Object.values(species.abilities));
 
 		let counter: MoveCounter;
 		// We use a special variable to track Hidden Power
@@ -468,10 +465,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
 
-		const abilityData = Object.values(species.abilities).filter(a => this.dex.abilities.get(a).gen === 3);
-		Utils.sortBy(abilityData, name => -this.dex.abilities.get(name).rating);
-		let ability0 = this.dex.abilities.get(abilityData[0]);
-		let ability1 = this.dex.abilities.get(abilityData[1]);
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a)).filter(a => a.gen === 3);
+		Utils.sortBy(abilityData, abil => -abil.rating);
+		let ability0 = abilityData[0];
+		let ability1 = abilityData[1];
 		if (abilityData[1]) {
 			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];
@@ -485,12 +482,12 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					ability = ability1.name;
 				} else {
 					// Default to the highest rated ability if all are rejected
-					ability = abilityData[0];
+					ability = abilityData[0].name;
 					break;
 				}
 			}
 		} else {
-			ability = abilityData[0];
+			ability = abilityData[0].name;
 		}
 
 		const item = this.getItem(ability, types, moves, counter, species);

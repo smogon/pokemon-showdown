@@ -460,11 +460,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
 		const ivs: SparseStatsTable = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		const types = new Set(species.types);
-
-		const abilities = new Set<string>();
-		abilities.add(species.abilities[0]);
-		if (species.abilities[1]) abilities.add(species.abilities[1]);
-		if (species.abilities.H) abilities.add(species.abilities.H);
+		const abilities = new Set(Object.values(species.abilities));
 
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
@@ -651,14 +647,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 
-		const abilityNames: string[] = Object.values(species.abilities);
-		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
 
-		if (abilityNames.length > 1) {
-			const abilityData = abilityNames.map(name => this.dex.abilities.get(name));
-
+		if (abilityData.length > 1) {
 			// Sort abilities by rating with an element of randomness
-			if (abilityNames[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
+			if (abilityData[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
 				[abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
 			}
 			if (abilityData[0].rating <= abilityData[1].rating) {
@@ -677,22 +671,22 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				} else if (ability === abilityData[1].name && abilityData[2] && abilityData[2].rating >= 1) {
 					ability = abilityData[2].name;
 				} else {
-					ability = abilityNames[0];
+					ability = abilityData[0].name;
 					break;
 				}
 			}
 
-			if (abilityNames.includes('Guts') && moves.has('facade') && (ability !== 'Quick Feet' || !counter.setupType)) {
+			if (abilities.has('Guts') && moves.has('facade') && (ability !== 'Quick Feet' || !counter.setupType)) {
 				ability = 'Guts';
-			} else if (abilityNames.includes('Prankster') && counter.get('Status') > 1) {
+			} else if (abilities.has('Prankster') && counter.get('Status') > 1) {
 				ability = 'Prankster';
-			} else if (abilityNames.includes('Quick Feet') && moves.has('facade')) {
+			} else if (abilities.has('Quick Feet') && moves.has('facade')) {
 				ability = 'Quick Feet';
-			} else if (abilityNames.includes('Swift Swim') && moves.has('raindance')) {
+			} else if (abilities.has('Swift Swim') && moves.has('raindance')) {
 				ability = 'Swift Swim';
 			}
 		} else {
-			ability = abilityNames[0];
+			ability = abilityData[0].name;
 		}
 
 		let item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead);

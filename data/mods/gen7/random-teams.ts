@@ -1008,11 +1008,11 @@ export class RandomGen7Teams extends RandomTeams {
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = new Set(species.types);
-
 		const abilities = new Set<string>();
-		abilities.add(species.abilities[0]);
-		if (species.abilities[1]) abilities.add(species.abilities[1]);
-		if (species.abilities.H) abilities.add(species.abilities.H);
+		for (const abilityName of Object.values(species.abilities)) {
+			if (abilityName === species.abilities.S) continue;
+			abilities.add(abilityName);
+		}
 
 		let availableHP = 0;
 		for (const moveid of movePool) {
@@ -1207,13 +1207,12 @@ export class RandomGen7Teams extends RandomTeams {
 		const battleOnly = species.battleOnly && !species.requiredAbility;
 		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
 
-		const abilityNames: string[] = Object.values(baseSpecies.abilities);
-		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
 
-		const abilityData = abilityNames.map(name => this.dex.abilities.get(name));
-		if (abilityNames[1]) {
+		if (abilityData[1]) {
 			// Sort abilities by rating with an element of randomness
-			if (abilityNames[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
+			if (abilityData[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
 				[abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
 			}
 			if (abilityData[0].rating <= abilityData[1].rating && this.randomChance(1, 2)) {
@@ -1232,25 +1231,25 @@ export class RandomGen7Teams extends RandomTeams {
 					ability = abilityData[2].name;
 				} else {
 					// Default to the highest rated ability if all are rejected
-					ability = abilityNames[0];
+					ability = abilityData[0].name;
 					break;
 				}
 			}
 
 			if (
-				abilityNames.includes('Guts') &&
+				abilities.has('Guts') &&
 				ability !== 'Quick Feet' &&
 				(moves.has('facade') || (moves.has('protect') && !isDoubles) || (moves.has('sleeptalk') && moves.has('rest')))
 			) {
 				ability = 'Guts';
-			} else if (abilityNames.includes('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) {
+			} else if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) {
 				ability = 'Moxie';
 			} else if (isDoubles) {
-				if (abilityNames.includes('Intimidate')) ability = 'Intimidate';
-				if (abilityNames.includes('Guts') && ability !== 'Intimidate') ability = 'Guts';
-				if (abilityNames.includes('Storm Drain')) ability = 'Storm Drain';
-				if (abilityNames.includes('Harvest')) ability = 'Harvest';
-				if (abilityNames.includes('Unburden') && ability !== 'Prankster' && !species.isMega) ability = 'Unburden';
+				if (abilities.has('Intimidate')) ability = 'Intimidate';
+				if (abilities.has('Guts') && ability !== 'Intimidate') ability = 'Guts';
+				if (abilities.has('Storm Drain')) ability = 'Storm Drain';
+				if (abilities.has('Harvest')) ability = 'Harvest';
+				if (abilities.has('Unburden') && ability !== 'Prankster' && !species.isMega) ability = 'Unburden';
 			}
 			if (species.name === 'Ambipom' && !counter.get('technician')) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it

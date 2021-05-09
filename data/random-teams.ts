@@ -1724,12 +1724,7 @@ export class RandomTeams {
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = new Set(species.types);
-
-		const abilities = new Set<string>();
-		abilities.add(species.abilities[0]);
-		if (species.abilities[1]) abilities.add(species.abilities[1]);
-		if (species.abilities.H) abilities.add(species.abilities.H);
-
+		const abilities = new Set(Object.values(species.abilities));
 		const moves = new Set<string>();
 		let counter: MoveCounter;
 
@@ -1838,13 +1833,12 @@ export class RandomTeams {
 			}
 		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
 
-		const abilityNames: string[] = Object.values(species.abilities);
-		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
 
-		const abilityData = abilityNames.map(name => this.dex.abilities.get(name));
-		if (abilityNames[1]) {
+		if (abilityData[1]) {
 			// Sort abilities by rating with an element of randomness
-			if (abilityNames[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
+			if (abilityData[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
 				[abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
 			}
 			if (abilityData[0].rating <= abilityData[1].rating) {
@@ -1868,11 +1862,11 @@ export class RandomTeams {
 
 					if (ability === abilityData[0].name && (abilityData[1].rating >= 1 || limberFacade)) {
 						ability = abilityData[1].name;
-					} else if (ability === abilityData[1].name && abilityNames[2] && (abilityData[2].rating >= 1 || limberFacade)) {
+					} else if (ability === abilityData[1].name && abilityData[2] && (abilityData[2].rating >= 1 || limberFacade)) {
 						ability = abilityData[2].name;
 					} else {
 						// Default to the highest rated ability if all are rejected
-						ability = abilityNames[0];
+						ability = abilityData[0].name;
 						rejectAbility = false;
 					}
 				}

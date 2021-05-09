@@ -524,10 +524,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		const types = new Set(species.types);
 
-		const abilities = new Set<string>();
-		abilities.add(species.abilities[0]);
-		if (species.abilities[1]) abilities.add(species.abilities[1]);
-		if (species.abilities.H) abilities.add(species.abilities.H);
+		const abilities = new Set(Object.values(species.abilities));
 
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
@@ -718,7 +715,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (hasHiddenPower) {
 			let hpType;
 			for (const move of moves) {
-				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
+				if (move.startsWith('hiddenpower')) {
+					hpType = move.substr(11);
+					break;
+				}
 			}
 			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
 			const HPivs = this.dex.types.get(hpType).HPivs;
@@ -728,11 +728,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 
-		const abilityData = Object.values(species.abilities);
-		Utils.sortBy(abilityData, name => -this.dex.abilities.get(name).rating);
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
 
-		let ability0 = this.dex.abilities.get(abilityData[0]);
-		let ability1 = this.dex.abilities.get(abilityData[1]);
+		let ability0 = abilityData[0];
+		let ability1 = abilityData[1];
 		if (abilityData[1]) {
 			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];
@@ -746,7 +746,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 					ability = ability1.name;
 				} else {
 					// Default to the highest rated ability if all are rejected
-					ability = abilityData[0];
+					ability = abilityData[0].name;
 					break;
 				}
 			}

@@ -773,11 +773,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = new Set(species.types);
-
-		const abilities = new Set<string>();
-		abilities.add(species.abilities[0]);
-		if (species.abilities[1]) abilities.add(species.abilities[1]);
-		if (species.abilities.H) abilities.add(species.abilities.H);
+		const abilities = new Set(Object.values(species.abilities));
 
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
@@ -971,14 +967,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		const battleOnly = species.battleOnly && !species.requiredAbility;
 		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
-		const abilityNames: string[] = Object.values(baseSpecies.abilities);
-		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
 
-		if (abilityNames.length > 1) {
-			const abilityData = abilityNames.map(name => this.dex.abilities.get(name));
-
+		if (abilityData.length > 1) {
 			// Sort abilities by rating with an element of randomness
-			if (abilityNames[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
+			if (abilityData[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
 				[abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
 			}
 			if (abilityData[0].rating <= abilityData[1].rating && this.randomChance(1, 2)) {
@@ -997,18 +991,18 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					ability = abilityData[2].name;
 				} else {
 					// Default to the highest rated ability if all are rejected
-					ability = abilityNames[0];
+					ability = abilityData[0].name;
 					break;
 				}
 			}
 
 			if (
-				abilityNames.includes('Guts') &&
+				abilities.has('Guts') &&
 				ability !== 'Quick Feet' &&
 				(moves.has('facade') || moves.has('protect') || (moves.has('rest') && moves.has('sleeptalk')))
 			) {
 				ability = 'Guts';
-			} else if (abilityNames.includes('Moxie') && counter.get('Physical') > 3) {
+			} else if (abilities.has('Moxie') && counter.get('Physical') > 3) {
 				ability = 'Moxie';
 			}
 			if (species.name === 'Ambipom' && !counter.get('technician')) {
@@ -1018,7 +1012,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				ability = 'Klutz';
 			}
 		} else {
-			ability = abilityNames[0];
+			ability = abilityData[0].name;
 		}
 
 		let item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead);

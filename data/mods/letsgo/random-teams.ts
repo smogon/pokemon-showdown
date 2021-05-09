@@ -124,9 +124,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		}
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
-		const types = new Set<string>();
-		types.add(species.types[0]);
-		if (species.types[1]) types.add(species.types[1]);
+		const types = new Set(species.types);
 
 		const moves = new Set<string>();
 		let counter;
