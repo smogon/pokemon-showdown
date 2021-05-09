@@ -710,7 +710,7 @@ export class Battle {
 				// it's changed; call it off
 				continue;
 			}
-			if (effect.effectType === 'Ability' && !effect.isUnbreakable &&
+			if (effect.effectType === 'Ability' && effect.ignorable &&
 					this.suppressingAttackEvents(effectHolder as Pokemon)) {
 				// ignore attacking events
 				const AttackingEvents = {
