@@ -123,15 +123,15 @@ describe('Substitute', function () {
 	it('should track what the actual damage would have been without the substitute in Gen 1', function () {
 		battle = common.gen(1).createBattle([
 			[{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}}],
-			[{species: 'Cloyster', moves: ['clamp'], evs: {spa: 252}}],
+			[{species: 'Cloyster', moves: ['watergun'], evs: {spa: 252}}],
 		]);
 
 		const pokemon = battle.p1.active[0];
-		battle.makeChoices('move substitute', 'move clamp');
+		battle.makeChoices('move substitute', 'move watergun');
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 
 		const hp = pokemon.hp;
-		battle.makeChoices('move growl', 'move clamp');
-		assert.bounded(hp - pokemon.hp, [91, 108]);
+		battle.makeChoices('move growl', 'move watergun');
+		assert.bounded(hp - pokemon.hp, [103, 122]);
 	});
 });
