@@ -2726,7 +2726,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					} else {
 						continue;
 					}
-					
+
 					if (sourceSide.sideConditions[id]) {
 						this.add('-sideswitch', targetSide, sourceSide, effectName, '[silent]');
 					}
