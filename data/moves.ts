@@ -2726,12 +2726,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 					} else {
 						continue;
 					}
-					let sourceLayers = sourceSide.sideConditions[id] ? (sourceSide.sideConditions[id].layers || 1) : 0;
-					let targetLayers = targetSide.sideConditions[id] ? (targetSide.sideConditions[id].layers || 1) : 0;
-					for (; sourceLayers > 0; sourceLayers--) {
+					
+					if (sourceSide.sideConditions[id]) {
 						this.add('-sideswitch', targetSide, sourceSide, effectName, '[silent]');
 					}
-					for (; targetLayers > 0; targetLayers--) {
+					if (targetSide.sideConditions[id]) {
 						this.add('-sideswitch', sourceSide, targetSide, effectName, '[silent]');
 					}
 					success = true;
