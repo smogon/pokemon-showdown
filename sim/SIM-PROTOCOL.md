@@ -444,9 +444,9 @@ stat boosts are minor actions.
 
 > Indicates that the side condition `CONDITION` ended for the given `SIDE`.
 
-`|-sideswitch|SIDE1|SIDE2|CONDITION`
+`|-sideswitch|CONDITION`
 
-> Swaps a side condition `CONDITION` from `SIDE1` to `SIDE2`.
+> Swaps a side condition `CONDITION` between sides.
 > Used for Court Change.
 
 `|-start|POKEMON|EFFECT`

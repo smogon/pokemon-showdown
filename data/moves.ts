@@ -2726,13 +2726,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					} else {
 						continue;
 					}
-
-					if (sourceSide.sideConditions[id]) {
-						this.add('-sideswitch', targetSide, sourceSide, effectName, '[silent]');
-					}
-					if (targetSide.sideConditions[id]) {
-						this.add('-sideswitch', sourceSide, targetSide, effectName, '[silent]');
-					}
+					this.add('-sideswitch', effectName, '[silent]');
 					success = true;
 				}
 			}
