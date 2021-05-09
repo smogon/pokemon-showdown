@@ -428,6 +428,8 @@ export const commands: Chat.ChatCommands = {
 		if (auth.get(targetUser) !== '*') {
 			return this.popupReply(`The user "${targetUser.name}" is not a bot in this room.`);
 		}
+		this.room = null; // shouldn't be in a room
+		this.pmTarget = targetUser;
 
 		message = this.checkChat(message);
 		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
