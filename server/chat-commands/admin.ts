@@ -1143,6 +1143,7 @@ export const commands: Chat.ChatCommands = {
 		let success = true;
 		if (target === 'private') {
 			if (!validPrivateCodePath) {
+				Monitor.updateServerLock = false;
 				throw new Chat.ErrorMessage("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
 			}
 			success = await updateserver(this, Config.privatecodepath);
