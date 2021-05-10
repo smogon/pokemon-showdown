@@ -965,8 +965,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			moves.add('thunder');
 		}
 
-		const battleOnly = species.battleOnly && !species.requiredAbility;
-		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
