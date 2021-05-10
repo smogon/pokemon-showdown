@@ -291,8 +291,12 @@ export class Battle {
 		this.add('message', "The battle's RNG was reset.");
 	}
 
-	suppressingAttackEvents(target?: Pokemon) {
+	suppressingAbility(target?: Pokemon) {
 		return this.activePokemon && this.activePokemon.isActive && this.activePokemon !== target &&
+			this.activeMove && this.activeMove.ignoreAbility;
+	}
+	suppressingSelfAbility(source?: Pokemon) {
+		return this.activePokemon && this.activePokemon.isActive && this.activePokemon === source &&
 			this.activeMove && this.activeMove.ignoreAbility;
 	}
 
@@ -711,7 +715,7 @@ export class Battle {
 				continue;
 			}
 			if (effect.effectType === 'Ability' && effect.ignorable &&
-					this.suppressingAttackEvents(effectHolder as Pokemon)) {
+					this.suppressingAbility(effectHolder as Pokemon)) {
 				this.debug(eventid + ' handler suppressed by Mold Breaker');
 				continue;
 			}
