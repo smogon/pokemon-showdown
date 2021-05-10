@@ -494,7 +494,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
 		isPermanent: true,
-		isUnbreakable: true,
 		name: "Comatose",
 		rating: 4,
 		num: 213,
@@ -1217,7 +1216,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", "[of] " + target);
 			}
 		},
-		isUnbreakable: true,
 		name: "Full Metal Body",
 		rating: 2,
 		num: 230,
@@ -1626,7 +1624,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onFaint(pokemon) {
 			pokemon.illusion = null;
 		},
-		isUnbreakable: true,
 		name: "Illusion",
 		rating: 4.5,
 		num: 149,
@@ -2804,7 +2801,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(0.75);
 			}
 		},
-		isUnbreakable: true,
 		name: "Prism Armor",
 		rating: 3,
 		num: 232,
@@ -3258,7 +3254,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isUnbreakable: true,
 		name: "Shadow Shield",
 		rating: 3.5,
 		num: 231,
@@ -3370,7 +3365,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return null;
 		},
 		isPermanent: true,
-		isUnbreakable: true,
 		name: "Shields Down",
 		rating: 3,
 		num: 197,

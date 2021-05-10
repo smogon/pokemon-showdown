@@ -872,7 +872,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Minior-Meteor: Immune to crits and status",
 		name: "Capsule Armor",
 		isPermanent: true,
-		isUnbreakable: true,
 		onCriticalHit: false,
 		onSetStatus(status, target, source, effect) {
 			if (target.species.id !== 'miniormeteor' || target.transformed) return;
