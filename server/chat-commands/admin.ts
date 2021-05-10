@@ -428,6 +428,8 @@ export const commands: Chat.ChatCommands = {
 		if (auth.get(targetUser) !== '*') {
 			return this.popupReply(`The user "${targetUser.name}" is not a bot in this room.`);
 		}
+		this.room = null; // shouldn't be in a room
+		this.pmTarget = targetUser;
 
 		message = this.checkChat(message);
 		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
@@ -1143,6 +1145,7 @@ export const commands: Chat.ChatCommands = {
 		let success = true;
 		if (target === 'private') {
 			if (!validPrivateCodePath) {
+				Monitor.updateServerLock = false;
 				throw new Chat.ErrorMessage("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
 			}
 			success = await updateserver(this, Config.privatecodepath);

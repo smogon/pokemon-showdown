@@ -732,16 +732,6 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 			}
 
-			if (
-				!isDoubles &&
-				species.name === 'Porygon-Z' &&
-				hasMove['nastyplot'] &&
-				!hasMove['trick'] &&
-				!['nastyplot', 'icebeam', 'triattack'].includes(moves[0])
-			) {
-				return 'Normalium Z';
-			}
-
 			if (species.name === 'Mimikyu' && hasMove['playrough'] && counter.setupType) return 'Mimikium Z';
 			if (species.name === 'Raichu-Alola' && hasMove['thunderbolt'] && counter.setupType) return 'Aloraichium Z';
 			if (hasMove['bugbuzz'] && counter.setupType && species.baseStats.spa > 100) return 'Buginium Z';
@@ -1258,10 +1248,6 @@ export class RandomGen7Teams extends RandomTeams {
 		if (item === undefined) {
 			item = this.getLowPriorityItem(ability, hasType, hasMove, hasAbility, counter, teamDetails, species, isLead, isDoubles);
 		}
-		if (species.id === 'porygonz' && item === 'Normalium Z') {
-			moves[moves.indexOf('nastyplot' as ID)] = 'conversion' as ID;
-			moves[moves.indexOf('triattack' as ID)] = 'recover' as ID;
-		}
 
 		// fallback
 		if (item === undefined) item = isDoubles ? 'Sitrus Berry' : 'Leftovers';
@@ -1364,7 +1350,7 @@ export class RandomGen7Teams extends RandomTeams {
 			evs,
 			ivs,
 			item,
-			level: level + this.levelAdjustment,
+			level,
 		};
 	}
 
@@ -1390,7 +1376,7 @@ export class RandomGen7Teams extends RandomTeams {
 		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
 		for (const restrict of [true, false]) {
 			if (pokemon.length >= this.maxTeamSize) break;
-			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, this.minSourceGen);
+			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 				const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 
@@ -1436,11 +1422,13 @@ export class RandomGen7Teams extends RandomTeams {
 				const tier = species.tier;
 				const types = species.types;
 				const typeCombo = types.slice().sort().join();
+				// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+				const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
 				if (restrict && !species.isMega) {
 					// Limit one Pokemon per tier, two for Monotype
 					if (
-						(tierCount[tier] >= (isMonotype || this.forceMonotype ? 2 : 1)) &&
+						(tierCount[tier] >= (isMonotype || this.forceMonotype ? 2 : 1) * limitFactor) &&
 						!this.randomChance(1, Math.pow(5, tierCount[tier]))
 					) {
 						continue;
@@ -1450,7 +1438,7 @@ export class RandomGen7Teams extends RandomTeams {
 						// Limit two of any type
 						let skip = false;
 						for (const typeName of types) {
-							if (typeCount[typeName] > 1) {
+							if (typeCount[typeName] >= 2 * limitFactor) {
 								skip = true;
 								break;
 							}
@@ -1459,7 +1447,7 @@ export class RandomGen7Teams extends RandomTeams {
 					}
 
 					// Limit one of any type combination, two in Monotype
-					if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
+					if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
 				}
 
 				const set = this.randomSet(
@@ -1572,7 +1560,6 @@ export class RandomGen7Teams extends RandomTeams {
 		const priorityPool = [];
 		for (const curSet of setList) {
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			const item = this.dex.items.get(curSet.item);
 			if (teamData.megaCount && teamData.megaCount > 0 && item.megaStone) continue; // reject 2+ mega stones
@@ -1630,7 +1617,7 @@ export class RandomGen7Teams extends RandomTeams {
 			item: item || '',
 			ability: ability || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: level + this.levelAdjustment,
+			level,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
 			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
@@ -1719,6 +1706,8 @@ export class RandomGen7Teams extends RandomTeams {
 			if (teamData.zCount && teamData.zCount >= 1 && itemData.zMove) continue;
 
 			let types = species.types;
+			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
 			// Enforce Monotype
 			if (chosenTier === 'Mono') {
@@ -1736,7 +1725,7 @@ export class RandomGen7Teams extends RandomTeams {
 				// If not Monotype, limit to two of each type
 				let skip = false;
 				for (const typeName of types) {
-					if (teamData.typeCount[typeName] > 1 && this.randomChance(4, 5)) {
+					if (teamData.typeCount[typeName] >= 2 * limitFactor && this.randomChance(4, 5)) {
 						skip = true;
 						break;
 					}
@@ -1749,7 +1738,7 @@ export class RandomGen7Teams extends RandomTeams {
 				// Drought and Drizzle don't count towards the type combo limit
 					typeCombo = set.ability + '';
 				}
-				if (typeCombo in teamData.typeComboCount) continue;
+				if (teamData.typeComboCount[typeCombo] >= 1 * limitFactor) continue;
 			}
 
 			// Okay, the set passes, add it to our team
@@ -1763,7 +1752,7 @@ export class RandomGen7Teams extends RandomTeams {
 					teamData.typeCount[typeName] = 1;
 				}
 			}
-			teamData.typeComboCount[typeCombo] = 1;
+			teamData.typeComboCount[typeCombo] = (teamData.typeComboCount[typeCombo] + 1) || 1;
 
 			teamData.baseFormes[species.baseSpecies] = 1;
 
@@ -1858,7 +1847,6 @@ export class RandomGen7Teams extends RandomTeams {
 		const priorityPool = [];
 		for (const curSet of setList) {
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-			if (this.minSourceGen && species.gen < this.minSourceGen) continue;
 
 			const item = this.dex.items.get(curSet.item);
 			if (teamData.megaCount && teamData.megaCount > 1 && item.megaStone) continue; // reject 3+ mega stones
@@ -1909,10 +1897,10 @@ export class RandomGen7Teams extends RandomTeams {
 			name: setData.set.nickname || setData.set.name || species.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || species.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
-			item: setData.set.item || '',
+			item: this.sampleIfArray(setData.set.item) || '',
 			ability: setData.set.ability || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: (setData.set.level || 50) + this.levelAdjustment,
+			level: setData.set.level || 50,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
 			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
@@ -1961,11 +1949,14 @@ export class RandomGen7Teams extends RandomTeams {
 			// Limit the number of Megas + Z-moves to 3
 			if (teamData.megaCount + (teamData.zCount ? teamData.zCount : 0) >= 3 && speciesFlags.megaOnly) continue;
 
+			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+
 			// Limit 2 of any type
 			const types = species.types;
 			let skip = false;
 			for (const type of types) {
-				if (teamData.typeCount[type] > 1 && this.randomChance(4, 5)) {
+				if (teamData.typeCount[type] >= 2 * limitFactor && this.randomChance(4, 5)) {
 					skip = true;
 					break;
 				}
@@ -1988,7 +1979,7 @@ export class RandomGen7Teams extends RandomTeams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (typeCombo in teamData.typeComboCount) continue;
+			if (teamData.typeComboCount[typeCombo] >= 1 * limitFactor) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2001,7 +1992,7 @@ export class RandomGen7Teams extends RandomTeams {
 					teamData.typeCount[type] = 1;
 				}
 			}
-			teamData.typeComboCount[typeCombo] = 1;
+			teamData.typeComboCount[typeCombo] = (teamData.typeComboCount[typeCombo] + 1) || 1;
 
 			teamData.baseFormes[species.baseSpecies] = 1;
 
