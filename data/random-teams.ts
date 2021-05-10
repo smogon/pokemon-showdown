@@ -437,7 +437,7 @@ export class RandomTeams {
 		const last = [0, 151, 251, 386, 493, 649, 721, 807, 890][this.gen];
 
 		if (n <= 0 || n > last) throw new Error(`n must be a number between 1 and ${last} (got ${n})`);
-		if (requiredType && this.dex.types.get(requiredType).exists) {
+		if (requiredType && !this.dex.types.get(requiredType).exists) {
 			throw new Error(`"${requiredType}" is not a valid type.`);
 		}
 
