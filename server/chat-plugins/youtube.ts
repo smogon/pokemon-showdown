@@ -442,8 +442,10 @@ export class TwitchStream extends Rooms.RoomGame {
 		this.data = data;
 	}
 	static async createStreamWatch(room: Room, channel: string) {
-		if ([...Rooms.rooms.values()].some(r => r.roomid.startsWith(`twitch-`))) {
-			throw new Chat.ErrorMessage(`Twitch watch already in progress`);
+		if ([...Rooms.rooms.values()].some(
+			r => r.roomid.startsWith(`twitch-`) && r.parent?.roomid === room?.roomid
+		)) {
+			throw new Chat.ErrorMessage(`Twitch watch already in progress for this room.`);
 		}
 		const data = await Twitch.getChannel(channel);
 		if (!data) throw new Chat.ErrorMessage(`Channel not found`);
@@ -752,7 +754,10 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReplyBox(html);
 		},
 		async watch(target, room, user) {
-			room = this.requireRoom('youtube' as RoomID);
+			room = this.requireRoom();
+			if (!['youtube', 'pokemongo'].includes(room.roomid)) {
+				throw new Chat.ErrorMessage(`You cannot use this command in this room.`);
+			}
 			this.checkCan('mute', null, room);
 			if (!toID(target)) {
 				return this.errorReply(`Invalid channel`);
