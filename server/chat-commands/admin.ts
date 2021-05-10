@@ -429,8 +429,7 @@ export const commands: Chat.ChatCommands = {
 		const {targetUser, rest} = this.requireUser(target);
 
 		if (targetUser.locked && !this.user.can('lock')) {
-			this.errorReply("This user is currently locked, so you cannot send them private HTML.");
-			return false;
+			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them private HTML.");
 		}
 
 		if (!(targetUser.id in room.users)) {
@@ -463,11 +462,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	sendprivatehtmlhelp: [
 		`/sendprivatehtml [userid], [html] - Sends [userid] the private [html]. Requires: * # &`,
-	],
-	sendprivateuhtmlhelp: [
 		`/sendprivateuhtml [userid], [name], [html] - Sends [userid] the private [html] that can change. Requires: * # &`,
-	],
-	changeprivateuhtmlhelp: [
 		`/changeprivateuhtml [userid], [name], [html] - Changes the message previously sent with /sendprivateuhtml [userid], [name], [html]. Requires: * # &`,
 	],
 
