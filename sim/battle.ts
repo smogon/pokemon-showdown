@@ -295,10 +295,6 @@ export class Battle {
 		return this.activePokemon && this.activePokemon.isActive && this.activePokemon !== target &&
 			this.activeMove && this.activeMove.ignoreAbility;
 	}
-	suppressingSelfAbility(source?: Pokemon) {
-		return this.activePokemon && this.activePokemon.isActive && this.activePokemon === source &&
-			this.activeMove && this.activeMove.ignoreAbility;
-	}
 
 	setActiveMove(move?: ActiveMove | null, pokemon?: Pokemon | null, target?: Pokemon | null) {
 		this.activeMove = move || null;
