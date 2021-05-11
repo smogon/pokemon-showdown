@@ -392,7 +392,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (parts.length !== 4 || !UINT_REGEX.test(low) || hyphen !== '-' || !UINT_REGEX.test(high)) {
 					throw new Error(`EV limits should be in the format "EV Limits = Atk 0-124 / Def 100-252"`);
 				}
-				const statid = toID(stat) as StatID;
+				const statid = this.dex.toID(stat) as StatID;
 				if (!this.dex.stats.ids().includes(statid)) {
 					throw new Error(`Unrecognized stat name "${stat}" in "${value}"`);
 				}
