@@ -1080,12 +1080,16 @@ export class CommandContext extends MessageContext {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					throw new Chat.ErrorMessage(this.tr`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
-				const targetFriends = Chat.Friends.cache.get(targetUser.id) || new Set();
+				const targetFriends = Chat.Friends.cache.get(targetUser.id);
 				const targetBlock = targetUser.settings.blockPMs;
-				if (targetBlock && (
-					targetBlock === 'friends' && !targetFriends.has(user.id) || targetBlock === true ||
-					!Users.globalAuth.atLeast(user, targetBlock as AuthLevel)
-				) && !user.can('lock')) {
+				// we check if they can lock the other before this so we're fine here
+				const authAtLeast = targetBlock === true ?
+					user.can('lock', targetUser) :
+					Users.globalAuth.atLeast(user, targetBlock as any);
+
+				if (targetBlock && !user.can('lock', targetUser) && !(
+					targetBlock === 'friends' ? targetFriends?.has(user.id) : authAtLeast
+				)) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						throw new Chat.ErrorMessage(this.tr`This user is blocking private messages right now.`);
@@ -1094,9 +1098,9 @@ export class CommandContext extends MessageContext {
 						throw new Chat.ErrorMessage(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
 					}
 				}
-				const userFriends = Chat.Friends.cache.get(user.id) || new Set();
+				const userFriends = Chat.Friends.cache.get(user.id);
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
-					user.settings.blockPMs === 'friends' && !userFriends.has(targetUser.id) ||
+					(user.settings.blockPMs === 'friends' && !userFriends?.has(targetUser.id)) ||
 					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs as AuthLevel)) && !targetUser.can('lock')) {
 					throw new Chat.ErrorMessage(this.tr`You are blocking private messages right now.`);
 				}
@@ -1187,7 +1191,7 @@ export class CommandContext extends MessageContext {
 		const friends = Chat.Friends.cache.get(targetUser.id) || new Set();
 		if (targetUser.settings.blockPMs &&
 			(targetUser.settings.blockPMs === true ||
-			targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id) ||
+			(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
 			!Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs as AuthLevel)) &&
 			!this.user.can('lock')
 		) {
