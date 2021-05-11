@@ -742,6 +742,11 @@ export class Battle {
 					continue;
 				}
 			}
+			if (effect.effectType === 'Ability' && effect.isBreakable &&
+					this.suppressingAbility(effectHolder as Pokemon)) {
+				this.debug(eventid + ' handler suppressed by Mold Breaker');
+				continue;
+			}
 			if (eventid !== 'Start' && eventid !== 'SwitchIn' && eventid !== 'TakeItem' &&
 				effect.effectType === 'Item' && (effectHolder instanceof Pokemon) && effectHolder.ignoringItem()) {
 				if (eventid !== 'Update') {
