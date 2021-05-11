@@ -710,14 +710,14 @@ export class Battle {
 				// it's changed; call it off
 				continue;
 			}
-			if (effect.effectType === 'Ability' &&
+			if (effect.effectType === 'Ability' && effect.isBreakable !== false &&
 				this.suppressingAbility(effectHolder as Pokemon)) {
-				// ignore attacking events for custom abilities
-				if (effect.isBreakable && effect.num) {
-					this.debug(effect.name + 'suppressed by Mold Breaker');
+				if (effect.isBreakable) {
+					this.debug(eventid + ' handler suppressed by Mold Breaker');
 					continue;
 				}
-				if (effect.isBreakable !== false && !effect.num) {
+				if (!effect.num) {
+					// ignore attacking events for custom abilities
 					const AttackingEvents = {
 						BeforeMove: 1,
 						BasePower: 1,
