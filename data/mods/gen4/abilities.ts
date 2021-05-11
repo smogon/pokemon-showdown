@@ -377,7 +377,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	stickyhold: {
 		inherit: true,
 		onTakeItem(item, pokemon, source) {
-			if (this.suppressingAbility(pokemon)) return;
 			if ((source && source !== pokemon) || (this.activeMove && this.activeMove.id === 'knockoff')) {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
