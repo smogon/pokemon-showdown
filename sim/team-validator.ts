@@ -680,7 +680,9 @@ export class TeamValidator {
 			}
 
 			if (lowestEncounterLevel) {
-				if (set.level < lowestEncounterLevel) problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen 1.`);
+				if (set.level < lowestEncounterLevel) {
+					problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen 1.`);
+				}
 				isFromRBYEncounter = true;
 			}
 		}
