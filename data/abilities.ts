@@ -4429,6 +4429,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		isNonstandard: "CAP",
+		isBreakable: true,
 		name: "Mountaineer",
 		rating: 3,
 		num: -2,
