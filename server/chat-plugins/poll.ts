@@ -96,7 +96,7 @@ export class Poll extends Rooms.MinorActivity {
 		const ip = user.latestIp;
 		const userid = user.id;
 
-		if (userid in this.voters || !Config.noipchecks && ip in this.voterIps) {
+		if (userid in this.voters || (!Config.noipchecks && ip in this.voterIps)) {
 			delete this.pendingVotes[userid];
 			throw new Chat.ErrorMessage(this.room.tr`You have already voted for this poll.`);
 		}
