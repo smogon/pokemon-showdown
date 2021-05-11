@@ -154,6 +154,9 @@ export class FriendsDatabase {
 	}
 	async request(user: User, receiverID: ID) {
 		const receiver = Users.get(receiverID);
+		if (receiverID === user.id) {
+			throw new Chat.ErrorMessage(`You can't friend yourself.`);
+		}
 		if (receiver?.settings.blockFriendRequests) {
 			throw new Chat.ErrorMessage(`${receiver.name} is blocking friend requests.`);
 		}
@@ -165,10 +168,10 @@ export class FriendsDatabase {
 			`and you will be notified when they do, unless you opt out of receiving them.</small>`
 		);
 		if (receiver?.settings.blockFriendRequests) {
-			throw new FailureMessage(`This user is blocking friend requests.`);
+			throw new Chat.ErrorMessage(`This user is blocking friend requests.`);
 		}
 		if (receiver?.settings.blockPMs) {
-			throw new FailureMessage(`This user is blocking PMs, and cannot be friended right now.`);
+			throw new Chat.ErrorMessage(`This user is blocking PMs, and cannot be friended right now.`);
 		}
 
 		const result = await this.transaction('send', [user.id, receiverID]);
@@ -186,8 +189,8 @@ export class FriendsDatabase {
 		return result;
 	}
 	async removeRequest(receiverID: ID, senderID: ID) {
-		if (!senderID) throw new FailureMessage(`Invalid sender username.`);
-		if (!receiverID) throw new FailureMessage(`Invalid receiver username.`);
+		if (!senderID) throw new Chat.ErrorMessage(`Invalid sender username.`);
+		if (!receiverID) throw new Chat.ErrorMessage(`Invalid receiver username.`);
 
 		return this.run('deleteRequest', [senderID, receiverID]);
 	}
@@ -195,11 +198,11 @@ export class FriendsDatabase {
 		return this.transaction('accept', [senderID, receiverID]);
 	}
 	async removeFriend(userid: ID, friendID: ID) {
-		if (!friendID || !userid) throw new FailureMessage(`Invalid usernames supplied.`);
+		if (!friendID || !userid) throw new Chat.ErrorMessage(`Invalid usernames supplied.`);
 
 		const result = await this.run('delete', {user1: userid, user2: friendID});
 		if (result.changes < 1) {
-			throw new FailureMessage(`You do not have ${friendID} friended.`);
+			throw new Chat.ErrorMessage(`You do not have ${friendID} friended.`);
 		}
 	}
 	writeLogin(user: ID) {
@@ -215,13 +218,13 @@ export class FriendsDatabase {
 		const result = await this.get('checkLastLogin', [userid]);
 		return parseInt(result?.['last_login']) || null;
 	}
-	getSettings(userid: ID) {
-		return this.get('getSettings', [userid]);
+	async getSettings(userid: ID) {
+		return (await this.get('getSettings', [userid])) || {};
 	}
-	setHideList(userid: ID, setting: boolean) {
+	async setHideList(userid: ID, setting: boolean) {
 		const num = setting ? 1 : 0;
 		// name, send_login_data, last_login, public_list
-		return this.run('toggleList', [userid, num, num]);
+		return (await this.run('toggleList', [userid, num, num]));
 	}
 }
 
@@ -350,8 +353,12 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 			break;
 		}
 	} catch (e) {
-		result.error = 'Sorry! The database process crashed. We\'ve been notified and will fix this.';
-		Monitor.crashlog(e, "A friends database process", query);
+		if (!e.name.endsWith('FailureMessage')) {
+			result.error = 'Sorry! The database process crashed. We\'ve been notified and will fix this.';
+			Monitor.crashlog(e, "A friends database process", query);
+		} else {
+			result.error = e.message;
+		}
 		return result;
 	}
 	const delta = Date.now() - start;
