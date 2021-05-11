@@ -12,8 +12,6 @@ import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 
 const PATH = 'config/chat-plugins/responder.json';
-// 4: filters out conveniently short aliases
-const MINIMUM_LENGTH = 4;
 
 export let answererData: {[roomid: string]: PluginData} = {};
 
@@ -66,8 +64,7 @@ export class AutoResponder {
 				return null;
 			}
 		}
-		const faqs = Object.keys(helpFaqs)
-			.filter(item => item.length >= MINIMUM_LENGTH && !helpFaqs[item].startsWith('>'));
+		const faqs = Object.keys(helpFaqs).filter(item => !helpFaqs[item].startsWith('>'));
 		for (const faq of faqs) {
 			const match = this.test(normalized, faq);
 			if (match) {
@@ -150,11 +147,11 @@ export class AutoResponder {
 	test(question: string, faq: string) {
 		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
 		const regexes = this.data.pairs[faq].map(item => new RegExp(item, "i"));
-		if (!regexes) return;
+		if (!regexes.length) return;
 		for (const regex of regexes) {
 			if (regex.test(question)) return {faq, regex: regex.toString()};
 		}
-		return;
+		return null;
 	}
 	log(entry: string, faq: string, expression: string) {
 		if (!this.data.stats) this.data.stats = {};
