@@ -710,42 +710,43 @@ export class Battle {
 				// it's changed; call it off
 				continue;
 			}
-			if (effect.effectType === 'Ability' && effect.isBreakable !== false && !effect.num &&
+			if (effect.effectType === 'Ability' &&
 				this.suppressingAbility(effectHolder as Pokemon)) {
 				// ignore attacking events for custom abilities
-				const AttackingEvents = {
-					BeforeMove: 1,
-					BasePower: 1,
-					Immunity: 1,
-					RedirectTarget: 1,
-					Heal: 1,
-					SetStatus: 1,
-					CriticalHit: 1,
-					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1, ModifyAccuracy: 1,
-					ModifyBoost: 1,
-					ModifyDamage: 1,
-					ModifySecondaries: 1,
-					ModifyWeight: 1,
-					TryAddVolatile: 1,
-					TryHit: 1,
-					TryHitSide: 1,
-					TryMove: 1,
-					Boost: 1,
-					DragOut: 1,
-					Effectiveness: 1,
-				};
-				if (eventid in AttackingEvents) {
-					this.debug(eventid + ' handler suppressed by Mold Breaker');
-					continue;
-				} else if (eventid === 'Damage' && sourceEffect && sourceEffect.effectType === 'Move') {
-					this.debug(eventid + ' handler suppressed by Mold Breaker');
+				if (effect.isBreakable && effect.num) {
+					this.debug(effect.name + 'suppressed by Mold Breaker');
 					continue;
 				}
-			}
-			if (effect.effectType === 'Ability' && effect.isBreakable &&
-				this.suppressingAbility(effectHolder as Pokemon)) {
-				this.debug(eventid + ' handler suppressed by Mold Breaker');
-				continue;
+				if (effect.isBreakable !== false && !effect.num) {
+					const AttackingEvents = {
+						BeforeMove: 1,
+						BasePower: 1,
+						Immunity: 1,
+						RedirectTarget: 1,
+						Heal: 1,
+						SetStatus: 1,
+						CriticalHit: 1,
+						ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1, ModifyAccuracy: 1,
+						ModifyBoost: 1,
+						ModifyDamage: 1,
+						ModifySecondaries: 1,
+						ModifyWeight: 1,
+						TryAddVolatile: 1,
+						TryHit: 1,
+						TryHitSide: 1,
+						TryMove: 1,
+						Boost: 1,
+						DragOut: 1,
+						Effectiveness: 1,
+					};
+					if (eventid in AttackingEvents) {
+						this.debug(eventid + ' handler suppressed by Mold Breaker');
+						continue;
+					} else if (eventid === 'Damage' && sourceEffect && sourceEffect.effectType === 'Move') {
+						this.debug(eventid + ' handler suppressed by Mold Breaker');
+						continue;
+					}
+				}
 			}
 			if (eventid !== 'Start' && eventid !== 'SwitchIn' && eventid !== 'TakeItem' &&
 				effect.effectType === 'Item' && (effectHolder instanceof Pokemon) && effectHolder.ignoringItem()) {
