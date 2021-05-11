@@ -1872,7 +1872,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
-		this.privateModAction(`${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.`);
+		this.privateModAction(`${targetId} was given ${points} points on the current scavengers ladder by ${user.name}.`);
 		this.modlog('SCAV ADDPOINTS', targetId, '' + points);
 	},
 
@@ -1889,7 +1889,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
-		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.`);
+		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the current scavengers ladder.`);
 		this.modlog('SCAV REMOVEPOINTS', targetId, '' + points);
 	},
 
@@ -1899,7 +1899,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 		Leaderboard.reset().write();
 
-		this.privateModAction(`${user.name} has reset the monthly scavengers ladder.`);
+		this.privateModAction(`${user.name} has reset the current scavengers ladder.`);
 		this.modlog('SCAV RESETLADDER');
 	},
 	top: 'ladder',
@@ -2551,8 +2551,8 @@ export const commands: Chat.ChatCommands = {
 			"- /scavengerstatus  (or /scav status): Check your status in the current hunt.",
 			"- /scavengers queue (or /scav queue): Showcase the hunts currently in queue, with the answers hidden for any hunt that is not yours.",
 			"- /scavengerhint (or /scav hint): View your latest hint in the current game.",
-			"- /scavladder (or /scav top): View the current bimonthly scavengers leaderboard.",
-			"- /scavrank <em>[user]</em>: View the rank of the user on the monthly scavenger leaderboard. Defaults to the user if no name is provided.",
+			"- /scavladder (or /scav top): View the current scavengers leaderboard.",
+			"- /scavrank <em>[user]</em>: View the rank of the user on the current scavenger leaderboard. Defaults to the user if no name is provided.",
 			"For a more in-depth overview, use /scavhelp staff.",
 		].join('<br />');
 		const staffCommands = [
@@ -2589,7 +2589,7 @@ export const commands: Chat.ChatCommands = {
 			"- /scav queuerecycled <em>[number]</em>: Queue a recycled hunt from the database. If <em>[number]</em> is left blank, then a random hunt is queued.",
 			"- /recycledhuntshelp: give more info about the recycled hunts.",
 			"<br />As a <strong>room owner (#)</strong>, you can also use the following scavengers commands:",
-			"- /scav resetladder: Reset the monthly scavenger leaderboard.",
+			"- /scav resetladder: Reset the current scavenger leaderboard.",
 			"- /scav setpoints <em>[1st place]</em>, <em>[2nd place]</em>, <em>[3rd place]</em>, <em>[4th place]</em>, <em>[5th place]</em>, ...: Set the point values for wins of officials, minis and regular hunts.",
 			"- /scav defaulttimer <em>[value]</em>: Set the default timer applied to automatically started hunts from the queue.",
 			"- /scav setblitz <em>[value]</em> ...: Set the blitz award to the given value.",
