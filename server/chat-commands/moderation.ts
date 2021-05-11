@@ -1630,7 +1630,13 @@ export const commands: Chat.ChatCommands = {
 		}
 		Monitor.forceRenames.add(targetID);
 
-		if (room?.roomid !== 'staff') this.privateModAction(`${targetUser?.name || targetID} ${forceRenameMessage}`);
+		if (room?.roomid !== 'staff') {
+			if (room?.roomid.startsWith('help-')) {
+				this.addModAction(`${targetUser?.name || targetID} ${forceRenameMessage}`);
+			} else {
+				this.privateModAction(`${targetUser?.name || targetID} ${forceRenameMessage}`);
+			}
+		}
 		const roomMessage = this.pmTarget ? `<PM:${this.pmTarget.id}>` :
 			room && room.roomid !== 'staff' ? `«<a href="/${room.roomid}" target="_blank">${room.roomid}</a>» ` :
 			'';
