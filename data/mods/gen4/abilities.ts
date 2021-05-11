@@ -343,7 +343,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts[key]! *= 2;
 			}
 		},
-		ignorable: true,
+		isBreakable: true,
 		name: "Simple",
 		rating: 4,
 		num: 86,
