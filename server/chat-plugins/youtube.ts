@@ -323,6 +323,7 @@ export class YoutubeInterface {
 }
 
 export const Twitch = new class {
+	linkRegex = /(https?:\/\/)?twitch.tv\/([A-Za-z0-9]+)/i;
 	async getChannel(channel: string): Promise<TwitchChannel | undefined> {
 		channel = toID(channel);
 		let res;
