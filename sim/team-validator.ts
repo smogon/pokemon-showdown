@@ -1372,7 +1372,7 @@ export class TeamValidator {
 				return `${tierSpecies.name} does not exist in Gen ${dex.gen}.`;
 			}
 			if (tierSpecies.isNonstandard === 'LGPE') {
-				return `${tierSpecies.name} does not exist in Ultra Sun/Moon, only in Let's Go Pikachu/Eevee.`;
+				return `${tierSpecies.name} does not exist in this game, only in Let's Go Pikachu/Eevee.`;
 			}
 			if (tierSpecies.isNonstandard === 'CAP') {
 				return `${tierSpecies.name} is a CAP and does not exist in this game.`;
