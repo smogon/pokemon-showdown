@@ -267,20 +267,28 @@ export const Conditions: {[k: string]: ConditionData} = {
 		// Skull Bash, SolarBeam, Sky Drop...
 		name: 'twoturnmove',
 		duration: 2,
-		onStart(target, source, effect) {
+		onStart(attacker, defender, effect) {
+			// ("attacker" is the Pokemon using the two turn move and the Pokemon this condition is being applied to)
 			this.effectState.move = effect.id;
-			target.addVolatile(effect.id);
-			let moveTarget: Pokemon | null = source;
+			attacker.addVolatile(effect.id);
+			// lastMoveTargetLoc is the location of the originally targeted slot before any redirection
+			// note that this is not updated for moves called by other moves
+			// i.e. if Dig is called by Metronome, lastMoveTargetLoc will still be the user's location
+			let moveTargetLoc: number = attacker.lastMoveTargetLoc!;
 			if (effect.sourceEffect && this.dex.moves.get(effect.id).target === 'normal') {
-				// this move was called by another move such as metronome and needs a random target to be determined now
-				// won't randomly choose an empty slot if there's at least one valid target
-				moveTarget = this.getRandomTarget(target, effect.id);
+				// this move was called by another move such as Metronome
+				// and needs a random target to be determined this turn
+				// it will already have one by now if there is any valid target
+				// but if there isn't one we need to choose a random slot now
+				if (defender.fainted) {
+					defender = this.sample(attacker.foes(true));
+				}
+				moveTargetLoc = attacker.getLocOf(defender);
 			}
-			// if there are no valid targets, randomly choose one later
-			target.volatiles[effect.id].targetLoc = target.getLocOf(moveTarget || target);
+			attacker.volatiles[effect.id].targetLoc = moveTargetLoc;
 			this.attrLastMove('[still]');
 			// Run side-effects normally associated with hitting (e.g., Protean, Libero)
-			this.runEvent('PrepareHit', target, source, effect);
+			this.runEvent('PrepareHit', attacker, defender, effect);
 		},
 		onEnd(target) {
 			target.removeVolatile(this.effectState.move);
