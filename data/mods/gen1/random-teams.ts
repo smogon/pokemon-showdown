@@ -244,7 +244,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			if (species.id === 'ditto') this.battleHasDitto = true;
 		}
 
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !this.forceMonotype) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 
