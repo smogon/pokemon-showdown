@@ -293,7 +293,7 @@ describe('Target Resolution', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it.skip(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
+	it(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'houndour', level: 1, moves: ['sleeptalk']},
 			{species: 'altaria', moves: ['sleeptalk']},
@@ -308,6 +308,7 @@ describe('Target Resolution', function () {
 		battle.makeChoices('switch 3');
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[1], 'Altaria should be at full HP, because it was not targeted.');
+		assert.false.fullHP(battle.p1.active[0], 'Aggron should not be at full HP, because it was targeted.');
 
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'houndour', level: 1, moves: ['sleeptalk']},
