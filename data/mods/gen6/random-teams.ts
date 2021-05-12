@@ -823,7 +823,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					(move.category === 'Special' && counter.setupType === 'Physical')
 				) {
 					// Reject STABs last in case the setup type changes later on
-					const stabs = counter.get(species.types[0]) + (counter.get(species.types[1]) || 0);
+					const stabs = counter.get(species.types[0]) + counter.get(species.types[1]);
 					if (
 						!SetupException.includes(moveid) &&
 						(!types.has(move.type) || stabs > 1 || counter.get(move.category) < 2)
@@ -865,7 +865,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
-					!cull && !isSetup && !move.weather && !!move.damage &&
+					!cull && !isSetup && !move.weather && !move.damage &&
 					(move.category !== 'Status' || !move.flags.heal) &&
 					!['judgment', 'sleeptalk', 'toxic'].includes(moveid) &&
 					(counter.get('physicalsetup') + counter.get('specialsetup') < 2 && (
@@ -965,7 +965,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			moves.add('thunder');
 		}
 
-		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		const battleOnly = species.battleOnly && !species.requiredAbility;
+		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
+
+		const abilityData = Object.values(baseSpecies.abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
 		if (abilityData.length > 1) {
