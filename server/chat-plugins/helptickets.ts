@@ -8,7 +8,7 @@ const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const BATTLES_REGEX = /battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g;
 const REPLAY_REGEX = new RegExp(
-	`${Config.routes.replays}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
+	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
 );
 
 Punishments.addRoomPunishmentType('TICKETBAN', 'banned from creating help tickets');
@@ -56,7 +56,7 @@ try {
 					const ticketGame = ticketRoom.game as HelpTicket;
 					ticketGame.writeStats(false);
 					ticketRoom.expire();
-				} else if (ticket.text) {
+				} else if (ticket.text && ticket.open) {
 					ticket.open = false;
 					writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tdead\tvalid\t`);
 				}
@@ -742,7 +742,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 
 			let battlelogNoticeAdded = false;
-			for (const [i, url] of rooms.entries()) {
+			for (const [i, url] of [...rooms].entries()) {
 				if (rooms.indexOf(url) !== i) {
 					rooms.splice(i, 1);
 					continue;
