@@ -740,6 +740,12 @@ export class CommandContext extends MessageContext {
 				return prefix + `/text ` + message.slice(2);
 			} else if (message.startsWith(`|html|`)) {
 				return prefix + `/raw ` + message.slice(6);
+			} else if (message.startsWith(`|uhtml|`)) {
+				const [uhtmlid, html] = Utils.splitFirst(message.slice(7), '|');
+				return prefix + `/uhtml ${uhtmlid},${html}`;
+			} else if (message.startsWith(`|uhtmlchange|`)) {
+				const [uhtmlid, html] = Utils.splitFirst(message.slice(13), '|');
+				return prefix + `/uhtmlchange ${uhtmlid},${html}`;
 			} else if (message.startsWith(`|modaction|`)) {
 				return prefix + `/log ` + message.slice(11);
 			} else if (message.startsWith(`|raw|`)) {
