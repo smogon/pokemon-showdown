@@ -40,10 +40,10 @@ Pokémon Showdown simulates singles, doubles and triples battles in all the game
 Documentation quick links
 ------------------------------------------------------------------------
 
-* [PROTOCOL.md][4] - The protocol used by the server to communicate with clients.
-* [SIM-PROTOCOL.md][5] - The protocol used for battles and battle messages.
+* [PROTOCOL.md][4] - How the client and server communicate with each other.
+* [SIM-PROTOCOL.md][5] - The part of the protocol used for battles and battle messages.
 * [CONTRIBUTING.md][6] - Useful code standards to understand if you want to send pull requests to PS (not necessary if you're just using the code and not planning to contribute back).
-* [Bot FAQ][7] - An FAQ compiled by Kaiepi [Kaiepi] regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
+* [Bot FAQ][7] - An FAQ compiled by Kaiepi regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
 
   [4]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md
   [5]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
