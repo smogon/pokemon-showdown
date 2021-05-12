@@ -428,7 +428,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			this.makeRequest('teampreview');
 		},
-		onFieldStart() {
+		onBattleStart() {
 			const formesToLeak = ["zaciancrowned", "zamazentacrowned", "xerneas"];
 			for (const pokemon of this.getAllPokemon()) {
 				if (!formesToLeak.includes(this.toID(pokemon.baseSpecies.name))) continue;

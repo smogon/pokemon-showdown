@@ -237,6 +237,22 @@ export class Battle {
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
 		this.add('gametype', this.gameType);
+
+		// timing is early enough to hook into ModifySpecies event
+		for (const rule of this.ruleTable.keys()) {
+			if ('+*-!'.includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			if (subFormat.exists) {
+				const hasEventHandler = Object.keys(subFormat).some(
+					// skip event handlers that are handled elsewhere
+					val => val.startsWith('on') && ![
+						'onBegin', 'onTeamPreview', 'onBattleStart', 'onValidateRule', 'onValidateTeam', 'onChangeSet', 'onValidateSet',
+					].includes(val)
+				);
+				if (hasEventHandler) this.field.addPseudoWeather(rule);
+			}
+		}
+
 		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
 		for (const side of sides) {
 			if (options[side]) {
@@ -2283,18 +2299,11 @@ export class Battle {
 
 			this.add('start');
 
+			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
 			for (const rule of this.ruleTable.keys()) {
 				if ('+*-!'.includes(rule.charAt(0))) continue;
 				const subFormat = this.dex.formats.get(rule);
-				if (subFormat.exists) {
-					const hasEventHandler = Object.keys(subFormat).some(
-						// skip event handlers that are handled elsewhere
-						val => val.startsWith('on') && ![
-							'onBegin', 'onTeamPreview', 'onValidateRule', 'onValidateTeam', 'onChangeSet', 'onValidateSet',
-						].includes(val)
-					);
-					if (hasEventHandler) this.field.addPseudoWeather(rule);
-				}
+				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
 			}
 
 			for (const side of this.sides) {
