@@ -428,14 +428,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			this.makeRequest('teampreview');
 		},
-		onBattleStart() {
-			const formesToLeak = ["zaciancrowned", "zamazentacrowned", "xerneas"];
-			for (const pokemon of this.getAllPokemon()) {
-				if (!formesToLeak.includes(this.toID(pokemon.baseSpecies.name))) continue;
-				const newDetails = pokemon.details.replace(', shiny', '');
-				this.add('updatepoke', pokemon, newDetails);
-			}
-		},
 	},
 	onevsone: {
 		effectType: 'Rule',
