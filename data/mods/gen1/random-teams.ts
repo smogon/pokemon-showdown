@@ -127,6 +127,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	randomTeam() {
 		// Get what we need ready.
 		const pokemon = [];
+		const seed = this.prng.seed;
 
 		const handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
 		const nuTiers = ['UU', 'UUBL', 'NFE', 'LC', 'NU'];
@@ -241,6 +242,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Ditto check
 			if (species.id === 'ditto') this.battleHasDitto = true;
+		}
+
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
+			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 
 		return pokemon;
