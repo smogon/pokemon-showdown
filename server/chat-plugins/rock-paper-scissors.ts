@@ -277,6 +277,10 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`User ${targetUsername} not found. Either specify a username or use this command in PMs.`);
 			}
 			if (targetUser === user) return this.errorReply(`You cannot challenge yourself.`);
+			if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser)) {
+				Chat.maybeNotifyBlocked('challenge', targetUser, user);
+				return this.errorReply(`This user is currently blocking challenges.`);
+			}
 			const existingRoom = findExisting(user.id, targetUser.id);
 			if (existingRoom?.game && !existingRoom.game.ended) {
 				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);
