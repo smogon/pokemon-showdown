@@ -690,6 +690,42 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it('should require Pokémon transferred from Gens 1 and 2 to be above Level 2', () => {
+		const team = [
+			{species: 'pidgey', level: 1, ability: 'bigpecks', moves: ['curse'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert(illegal);
+
+		team[0].level = 2;
+		illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert(illegal);
+
+		team[0].level = 3;
+		illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
+	it('should enforce Gen 1 minimum levels', () => {
+		const team = [
+			{species: 'onix', level: 12, moves: ['explosion'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen1ou').validateTeam(team);
+		assert(illegal);
+
+		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
+	it('should correctly enforce levels on Pokémon with unusual encounters in RBY', () => {
+		const team = [
+			{species: 'dragonair', level: 15, moves: ['dragonrage'], evs: {hp: 1}},
+			{species: 'electrode', level: 15, moves: ['thunderbolt'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen1ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	/*********************************************************
  	* Custom rules
  	*********************************************************/

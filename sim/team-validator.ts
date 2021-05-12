@@ -667,10 +667,30 @@ export class TeamValidator {
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		}
-		if (ruleTable.has('obtainablemisc') && set.level < (species.evoLevel || 0)) {
+
+		let isFromRBYEncounter = false;
+		if (this.gen === 1 && !this.ruleTable.has('allowtradeback')) {
+			let lowestEncounterLevel;
+			for (const encounter of learnsetSpecies.encounters || []) {
+				if (encounter.generation !== 1) continue;
+				if (!encounter.level) continue;
+				if (lowestEncounterLevel && encounter.level < lowestEncounterLevel) continue;
+
+				lowestEncounterLevel = encounter.level;
+			}
+
+			if (lowestEncounterLevel) {
+				if (set.level < lowestEncounterLevel) {
+					problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen 1.`);
+				}
+				isFromRBYEncounter = true;
+			}
+		}
+		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc') && set.level < (species.evoLevel || 0)) {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			problems.push(`${name} must be at least level ${species.evoLevel} to be evolved.`);
 		}
+
 		if (ruleTable.has('obtainablemoves') && species.id === 'keldeo' && set.moves.includes('secretsword') &&
 			this.minSourceGen > 5 && dex.gen <= 7) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
@@ -990,7 +1010,7 @@ export class TeamValidator {
 			const isCelebi = species.id === 'celebi';
 			eventData = {
 				generation: 2,
-				level: isMew ? 5 : isCelebi ? 30 : undefined,
+				level: isMew ? 5 : isCelebi ? 30 : 3, // Level 1/2 Pokémon can't be obtained by transfer from RBY/GSC
 				perfectIVs: isMew || isCelebi ? 5 : 3,
 				isHidden: !!this.dex.mod('gen7').species.get(species.id).abilities['H'],
 				shiny: isMew ? undefined : 1,
