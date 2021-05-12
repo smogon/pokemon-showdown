@@ -748,9 +748,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					continue;
 				}
 				const room = Rooms.get(url);
-				if (room) {
-					staff.joinRoom(room, connection);
-				} else {
+				if (!room) {
 					if (battlelogNoticeAdded) continue;
 					buf += `<small>(use /battlelog to view logs if the battle is expired)</small><br />`;
 					battlelogNoticeAdded = true;
