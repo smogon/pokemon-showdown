@@ -272,6 +272,9 @@ export const commands: Chat.ChatCommands = {
 		challenge: 'create',
 		create(target, room, user) {
 			target = target.trim();
+			if (!target && this.pmTarget) {
+				target = this.pmTarget.id;
+			}
 			const {targetUser, targetUsername} = this.splitUser(target);
 			if (!targetUser) {
 				return this.errorReply(`User ${targetUsername} not found. Either specify a username or use this command in PMs.`);
