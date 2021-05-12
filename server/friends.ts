@@ -221,10 +221,10 @@ export class FriendsDatabase {
 	async getSettings(userid: ID) {
 		return (await this.get('getSettings', [userid])) || {};
 	}
-	async setHideList(userid: ID, setting: boolean) {
+	setHideList(userid: ID, setting: boolean) {
 		const num = setting ? 1 : 0;
 		// name, send_login_data, last_login, public_list
-		return (await this.run('toggleList', [userid, num, num]));
+		return this.run('toggleList', [userid, num, num]);
 	}
 }
 

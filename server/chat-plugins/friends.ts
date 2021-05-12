@@ -269,7 +269,7 @@ export const commands: Chat.ChatCommands = {
 				sendPM(`/uhtmlchange sent,`, targetUser.id);
 				sendPM(`/uhtmlchange undo,`, targetUser.id);
 			}
-			Chat.Friends.cache.update(user.id);
+			void Chat.Friends.cache.update(user.id);
 		},
 		deny: 'reject',
 		async reject(target, room, user, connection) {
