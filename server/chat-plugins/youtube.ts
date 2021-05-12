@@ -490,7 +490,7 @@ export class TwitchStream extends Rooms.RoomGame {
 	end() {
 		this.field('');
 		this.controls(`<center><h2>Stream watch ended</h2></center>`);
-		this.room.parent?.add(`|c|&|/uhtmlchange ts-${this.room.roomid},`);
+		this.room.parent?.add(`|uhtmlchange|ts-${this.room.roomid}|`);
 		this.add(`|expire|Stream ended`);
 		this.room.destroy();
 	}
@@ -693,7 +693,7 @@ export const commands: Chat.ChatCommands = {
 			const gameRoom = await YouTube.createGroupWatch(url, room, title);
 			this.modlog(`YOUTUBE GROUPWATCH`, null, `${url} (${title})`);
 			room.add(
-				`|c|~|/uhtml ${gameRoom.roomid},` +
+				`|uhtml|${gameRoom.roomid}|` +
 				`<button class="button" name="send" value="/j ${gameRoom.roomid}">Join the ongoing group watch!</button>`
 			);
 			room.send(`|tempnotify|youtube|New groupwatch - ${title}!`);
@@ -705,7 +705,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			this.requireGame(GroupWatch);
 			room.parent!.modlog({action: `GROUPWATCH END`, loggedBy: user.id});
-			room.parent!.add(`|c|~|/uhtmlchange ${room.roomid},`).update();
+			room.parent!.add(`|uhtmlchange|${room.roomid}|`).update();
 			room.destroy();
 		},
 		startwatch: 'beginwatch',
@@ -766,7 +766,7 @@ export const commands: Chat.ChatCommands = {
 			const gameRoom = await TwitchStream.createStreamWatch(room, target);
 			user.joinRoom(gameRoom);
 			room.add(
-				`|c|&|/uhtml ts-${gameRoom.roomid},` +
+				`|uhtml|ts-${gameRoom.roomid}|` +
 				`<button class="button" name="send" value="/j ${gameRoom.roomid}">Join the ongoing stream watch!</button>`
 			).update();
 		},
