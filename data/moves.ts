@@ -4275,6 +4275,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 					// it failed
 					return false;
 				}
+				this.effectState.slot = target.getSlot();
+				this.effectState.user = target;
 				this.effectState.move = move.id;
 				this.add('-start', target, 'Encore');
 				if (!this.queue.willMove(target)) {
@@ -4283,6 +4285,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onOverrideAction(pokemon, target, move) {
 				if (move.id !== this.effectState.move) return this.effectState.move;
+			},
+			onRedirectTargetPriority: 3,
+			onRedirectTarget(target, source, source2, move) {
+				if (move.target !== this.effectState.user && move.target === 'self') {
+					return this.getAtSlot(this.effectState.slot);
+				}
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
