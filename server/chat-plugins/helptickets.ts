@@ -551,7 +551,7 @@ export function notifyStaff() {
 		} else if (ticket.text) {
 			const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
 			const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
-			buf += `<a class="button notifying" ${title} href="/view-help-text-${ticket.userid}">`;
+			buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
 			buf += `<strong>${ticket.userid}:</strong>`;
 			buf += ` ${ticket.type} (text)</a>`;
 		}
@@ -757,20 +757,28 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					battlelogNoticeAdded = true;
 				}
 			}
-			buf += `Battle links: ${rooms.map(url => {
-				if (BATTLES_REGEX.test(url)) return `<a href="https://${Config.routes.client}/${url}">${url}</a>`;
-				return `<a href="https://${url}">${url}</a>`;
-			}).join(' | ')}<br />`;
 			if (ticket.meta) {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
 					buf += `<br />`;
-					buf += `<strong>Reported user:</strong> ${meta}<br />`;
-					buf += `<form data-submitsend="/msgroom staff,/lock ${meta},{reason} spoiler:${rooms.join('/')}">`;
-					buf += `Optional reason: <input name="reason" /><br />`;
-					buf += `<button class="button notifying" type="submit">Lock</button></form>`;
+					buf += `<strong>Reported user:</strong> ${meta} `;
+					buf += `<button class="button" name="send" value="/modlog global,${meta}">Global Modlog</button><br />`;
+					buf += `<details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
+					for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
+						buf += `<form data-submitsend="/msgroom staff,/${punishment} ${meta},{reason} spoiler:${rooms.join('/')}">`;
+						buf += `<button class="button notifying" type="submit">${name}</button><br />`;
+						buf += `Optional reason: <input name="reason" />`;
+						buf += `</form><br />`;
+					}
+					buf += `</div></details><br />`;
+				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
+					rooms.push(meta);
 				}
 			}
+			buf += `Battle links: ${rooms.map(url => {
+				if (BATTLES_REGEX.test(url)) return `<a href="https://${Config.routes.client}/${url}">${url}</a>`;
+				return `<a href="https://${url}">${url}</a>`;
+			}).join(' | ')}<br />`;
 			return buf;
 		},
 	},
@@ -1161,6 +1169,13 @@ export const pages: Chat.PageTable = {
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog global,${ticket.userid}">Global Modlog</button><br />`;
 			buf += `<br />`;
+			if (!ticket.claimed && ticket.open) {
+				ticket.claimed = user.id;
+				writeTickets();
+				notifyStaff();
+			} else if (ticket.claimed) {
+				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br />`;
+			}
 			buf += ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
@@ -1865,5 +1880,16 @@ export const loginfilter: Chat.LoginFilter = (user) => {
 	const ticket = tickets[user.id];
 	if (ticket?.resolved) {
 		HelpTicket.notifyResolved(user, ticket);
+	}
+};
+
+export const onCloseRoom: Chat.RoomCloseHandler = (room, user, conn, isPage) => {
+	if (!isPage || !room.includes('view-help-text')) return;
+	const userid = room.slice('view-help-text'.length + 1);
+	const ticket = tickets[userid];
+	if (ticket?.open && ticket.claimed === user.id) {
+		ticket.claimed = null;
+		writeTickets();
+		notifyStaff();
 	}
 };
