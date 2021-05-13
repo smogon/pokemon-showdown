@@ -13,173 +13,175 @@ const ICONS: {[k: string]: string} = {
 };
 
 const MATCHUPS = new Map<string, string>([
-	['scissors', 'paper'],
-	['rock', 'scissors'],
-	['paper', 'rock'],
+	['Scissors', 'Paper'],
+	['Rock', 'Scissors'],
+	['Paper', 'Rock'],
 ]);
+
+function toChoice(str: string) {
+	const id = toID(str);
+	return id.charAt(0).toUpperCase() + id.slice(1);
+}
 
 export const challenges: Map<string, string> = Chat.oldPlugins['rock-paper-scissors']?.challenges || new Map();
 
 export class RPSPlayer extends Rooms.RoomGamePlayer {
-	currentChoice = '';
-	points = 0;
+	choice = '';
+	prevChoice = '';
+	prevWinner = false;
+	score = 0;
 }
 
 export class RPSGame extends Rooms.RoomGame {
-	room: Room;
 	currentRound: number;
-	playerTable: {[k: string]: RPSPlayer};
+	declare playerTable: {[k: string]: RPSPlayer};
 	readonly checkChat = true;
-	roundTimer?: NodeJS.Timeout;
+	roundTimer: NodeJS.Timeout | null = null;
 	players: RPSPlayer[];
-	wins: ({name: string, choice: string} | null)[];
+	consecutiveTimeouts = 0;
 	constructor(room: Room) {
 		super(room);
-		this.room = room;
 		this.currentRound = 0;
-		this.playerTable = {};
 		this.title = 'Rock Paper Scissors';
 		this.gameid = 'rockpaperscissors' as ID;
 		this.players = [];
-		this.wins = [];
 
 		this.room.update();
-		this.room.add(`|controlshtml|<center>Waiting for another player to join....</center>`);
-		this.room.add(`|fieldhtml|<center><h2>Waiting to start the game...</h2></center>`);
+		this.room.send(`|controlshtml|<center>Waiting for another player to join....</center>`);
+		this.sendField();
 	}
-	onJoin(user: User) {
-		if (user.id in this.playerTable) return;
-		if (this.players.length < 2) {
-			this.addPlayer(user);
-		}
+	onConnect(user: User, connection: Connection) {
+		this.room.sendUser(connection, this.getField());
 	}
-	static checkMatchup(p1: RPSPlayer, p2: RPSPlayer) {
-		const p1Choice = p1.currentChoice;
-		const p2Choice = p2.currentChoice;
+	static getWinner(p1: RPSPlayer, p2: RPSPlayer) {
+		const p1Choice = p1.choice;
+		const p2Choice = p2.choice;
 		if (!p1Choice && p2Choice) return p2;
 		if (!p2Choice && p1Choice) return p1;
 		if (MATCHUPS.get(p1Choice) === p2Choice) return p1;
 		if (MATCHUPS.get(p2Choice) === p1Choice) return p2;
 		return null;
 	}
-	sendOptions() {
-		const button = (cmd: string, title: string) => `<button class="button" name="send" value="/${cmd}">${title}</button>`;
-		let buf = `<center><strong>Make your choice, quick!</strong><br />`;
-		for (const item of ['Rock', 'Paper', 'Scissors']) {
-			buf += `${button(`choose ${item}`, `${item} ${ICONS[item]}`)}`;
+	sendControls(player: RPSPlayer) {
+		if (!this.roundTimer) {
+			player.sendRoom(`|controlshtml|<center>The game is paused.</center>`);
+			return;
 		}
-		buf += `<br />${button('rps end', "End game")}</center>`;
-		this.addControls(buf);
+		if (player.choice) {
+			player.sendRoom(`|controlshtml|<center>You have selected <strong>${player.choice}</strong>. Now to wait for your foe.</center>`);
+			return;
+		}
+		let buf = `|controlshtml|<center><strong>Make your choice, quick! You have ${Chat.toDurationString(TIMEOUT)}!</strong><br />`;
+		for (const choice of ['Rock', 'Paper', 'Scissors']) {
+			buf += `<button class="button" name="send" value="/choose ${choice}" style="width:6em"><span style="font-size:24px">${ICONS[choice]}</span><br />${choice || '&nbsp;'}</button> `;
+		}
+		buf += `<br /><br /><button class="button" name="send" value="/rps end">End game</button></center>`;
+		player.sendRoom(buf);
 	}
-	sendFullLog() {
-		let buf = `|html|`;
-		for (const [i, entry] of this.wins.entries()) {
-			if (!entry) {
-				buf += `<div class="broadcast-red">Nobody won round ${i + 1}...</div>`;
-				continue;
-			}
-			const {name, choice} = entry;
-			buf += Utils.html`<div class="broadcast-green">${name} won round ${i + 1} with ${choice}!</div>`;
+	getField() {
+		if (this.players.length < 2) {
+			return `|fieldhtml|<center><h2>Waiting to start the game...</h2></center>`;
 		}
-		this.room.add(buf).update();
-	}
-	resetOptions(user: User) {
-		const player = this.getPlayer(user);
-		player.sendRoom(
-			`|controlshtml|<div class="pad"><h2>You have selected your choice. Wait for the next round.</h2></div>`
-		);
-	}
-	getScrollback() {
-		// some html borrowed from trivia plugin, credits Morfent? I think?
-		let buf = `|fieldhtml|<div class="broadcast-blue"><table style="width: 100%; background-color: #9CBEDF; margin: 2px 0">`;
-		buf += `<tr style="background-color: #6688AA"><th>Username</th><th>Points</th></tr>`;
-		for (const id in this.playerTable) {
-			const player = this.playerTable[id];
-			buf += Utils.html`<tr style="background-color: #6688AA"><td>${player.name}</td>`;
-			buf += Utils.html`<td style="text-align: center">${player.points}</td></tr>`;
+
+		const [p1, p2] = this.players;
+
+		function renderBigChoice(choice: string, isWinner?: boolean) {
+			return `<div style="width:180px;font-size:120px;background:${isWinner ? '#595' : '#888'};color:white;border-radius:20px;padding-bottom:5px;margin:0 auto">${ICONS[choice] || '&nbsp;'}<br /><small style="font-size:40px"> <small style="font-size:32px;display:block">${choice || '&nbsp;'}</small></div>`;
 		}
-		buf += `</table></div>`;
-		if (this.wins.length) {
-			buf += `<br />`;
-			for (const [i, entry] of this.wins.entries()) {
-				if (this.wins.length > 6) {
-					// we only wanna show the last 6 rounds
-					const diff = this.wins.length - 6;
-					if (i < diff) continue;
-				}
-				if (!entry) {
-					buf += `<div class="broadcast-red">Nobody won round ${i + 1}...</div>`;
-					continue;
-				}
-				const {name, choice} = entry;
-				buf += Utils.html`<div class="broadcast-green">${name} won round ${i + 1} with ${choice}!</div>`;
-			}
+
+		function renderCurrentChoice(exists?: boolean) {
+			return `<div style="width:100px;font-size:60px;background:#888;color:white;border-radius:15px;padding-bottom:5px;margin:20px auto 0">${exists ? '<i class="fa fa-check"></i>' : '&nbsp;'}</div>`;
 		}
+
+		const buf = `|fieldhtml|<table style="width:100%;text-align:center;font-size:18px"><tr>` +
+			Utils.html`<td><div style="padding:8px 0"><strong>${p1.name}</strong> (${p1.score})</div>` +
+			`${renderBigChoice(p1.prevChoice, p1.prevWinner)}` +
+			`${renderCurrentChoice(!!p1.choice)}</td>` +
+			`<td><em style="font-size:24px">vs</em></td>` +
+			Utils.html`<td><div style="padding:8px 0"><strong>${p2.name}</strong> (${p2.score})</div>` +
+			`${renderBigChoice(p2.prevChoice, p2.prevWinner)}` +
+			`${renderCurrentChoice(!!p2.choice)}</td>` +
+			`</tr></table>`;
+
 		return buf;
 	}
-	sendScrollback() {
-		this.room.add(this.getScrollback()).update();
+	sendField() {
+		this.room.send(this.getField());
 	}
 	end() {
-		const [p1, p2] = Object.keys(this.playerTable).map(item => this.playerTable[item]);
-		this.addControls(`<h2>The game is over!</h2>`);
-		const winner = p1.points > p2.points ? p1 : p2;
-		const points = winner.points;
-		const message = Utils.html`<strong>${winner.name} won the game with ${Chat.count(points, 'points')}!</strong>`;
-		this.addField(message);
-		this.add(message);
-		this.sendFullLog();
+		const [p1, p2] = this.players;
+		if (p1.score === p2.score) {
+			this.message(`**Tie** at score ${p1.score}!`);
+		} else {
+			const [winner, loser] = p1.score > p2.score ? [p1, p2] : [p2, p1];
+			this.message(`**${winner.name}** wins with score ${winner.score} to ${loser.score}!`);
+		}
 		this.destroy();
 	}
 	clearChoices() {
 		const [p1, p2] = this.players;
-		p1.currentChoice = "";
-		p2.currentChoice = "";
-	}
-	addControls(message: string) {
-		for (const id in this.playerTable) {
-			this.playerTable[id].sendRoom(`|controlshtml|<div class="pad">${message}</div>`);
-		}
+		p1.choice = "";
+		p2.choice = "";
 	}
 	getPlayers() {
 		return Object.keys(this.playerTable).map(item => this.playerTable[item]);
 	}
-	addField(message: string) {
-		return this.room.add(`${this.getScrollback()}<br /><div class="broadcast-green">${message}</div>`).update();
-	}
 	runMatch() {
 		const [p1, p2] = this.players;
-		const winner = RPSGame.checkMatchup(p1, p2);
-		if (winner === null) { // tie
-			this.add(`The players have tied! Nobody wins this round....`);
-			this.wins.push(null);
+		const winner = RPSGame.getWinner(p1, p2);
+		if (!winner) { // tie
+			if (!p1.choice) {
+				this.message(`${p1.name} and ${p2.name} both **timed out**.`);
+			} else {
+				this.message(`${p1.name} and ${p2.name} **tie** with ${p1.choice}.`);
+			}
 		} else {
-			this.add(Utils.html`${winner.name} wins the round! They gain a point.`);
-			winner.points++;
-			this.wins.push({
-				name: winner.name,
-				choice: winner.currentChoice,
-			});
+			const loser = p1 === winner ? p2 : p1;
+			if (!loser.choice) {
+				this.message(`**${winner.name}**'s ${winner.choice} wins; ${loser.name} timed out.`);
+			} else {
+				this.message(`**${winner.name}**'s ${winner.choice} beats ${loser.name}'s ${loser.choice}.`);
+			}
+			winner.score++;
 		}
+
+		if (!winner && !p1.choice) {
+			this.consecutiveTimeouts++;
+		} else {
+			this.consecutiveTimeouts = 0;
+		}
+
 		if (this.currentRound >= MAX_ROUNDS) {
-			this.add(`The game has hit the max number of rounds, and so will be ending.`);
+			this.message(`The game is ending automatically at ${this.currentRound} rounds.`);
 			return this.end();
 		}
-		this.clearChoices();
-		this.sendScrollback();
-		return this.startNextRound();
+
+		for (const player of this.players) {
+			player.prevChoice = player.choice;
+			player.prevWinner = false;
+			player.choice = '';
+		}
+		if (winner) winner.prevWinner = true;
+
+		this.sendField();
+		this.nextRound();
 	}
-	add(message: string) {
-		return this.room.add(`|html|${message}`).update();
+	smallMessage(message: string) {
+		this.room.add(`|-message|${message}`).update();
+	}
+	message(message: string) {
+		this.room.add(`|message|${message}`).update();
 	}
 	start() {
 		if (this.players.length < 2) {
-			this.add(`<h2>There are not enough players to start. Use /rps start to start when all players are ready.</h2>`);
-			return;
+			throw new Chat.ErrorMessage(`There are not enough players to start. Use /rps start to start when all players are ready.`);
 		}
-		this.addField(`The Rock Paper Scissors match has begun!`);
-		this.add(Utils.html`(Use /rps end to end the game)`);
-		this.startNextRound();
+		const [p1, p2] = this.players;
+		this.room.add(
+			`|raw|<h2><span style="font-weight: normal">Rock Paper Scissors:</span> ${p1.name} vs ${p2.name}!</h2>\n` +
+			`|message|Game started!`
+		).update();
+		this.nextRound();
 	}
 	getPlayer(user: User) {
 		const player = this.playerTable[user.id];
@@ -187,63 +189,64 @@ export class RPSGame extends Rooms.RoomGame {
 		return player;
 	}
 	pause(user: User) {
-		const player = this.getPlayer(user);
 		if (!this.roundTimer) throw new Chat.ErrorMessage(`The game is not running, and cannot be paused.`);
-		this.room.add(Utils.html`|html|<h2>The game has been paused by ${player.name}.</h2>`).update();
+
+		const player = this.getPlayer(user);
 		clearTimeout(this.roundTimer);
-		this.addControls(`The game is paused.`);
-		this.add(`The game is paused.`);
+		this.roundTimer = null;
+		for (const curPlayer of this.players) this.sendControls(curPlayer);
+		this.message(`The game was paused by ${player.name}.`);
 	}
 	unpause(user: User) {
-		const player = this.getPlayer(user);
 		if (this.roundTimer) throw new Chat.ErrorMessage(`The game is not paused.`);
-		this.room.add(Utils.html`|html|${player.name} unpaused the game.`).update();
-		this.startNextRound();
+
+		const player = this.getPlayer(user);
+		this.message(`The game was unpaused by ${player.name}.`);
+		this.nextRound();
 	}
-	startNextRound() {
+	nextRound() {
 		this.currentRound++;
-		if (this.currentRound > 0) {
-			this.addField(
-				`Round ${this.currentRound} has begun! ` +
-				`Players, you have ${Chat.toDurationString(TIMEOUT)} to make your moves!`
-			);
-		}
-		if (this.currentRound >= 100 && this.wins.filter(Boolean).length < (this.currentRound - 20)) {
+		this.sendField();
+		if (this.consecutiveTimeouts >= 20) {
 			// forcefully end if no one's progressed in 20 turns
 			return this.end();
 		}
 		this.room.add(`|html|<h2>Round ${this.currentRound}</h2>`).update();
-		this.sendOptions();
 		this.roundTimer = setTimeout(() => {
 			this.runMatch();
 		}, TIMEOUT);
+		for (const player of this.players) this.sendControls(player);
 	}
 	destroy() {
-		if (this.roundTimer) clearTimeout(this.roundTimer);
-		this.room.pokeExpireTimer();
-		this.addControls(`The game has ended.`);
-		this.ended = true;
-		this.room.add(`The game has been ended.`); // for the benefit of those in the room
-		this.room.log.log = [];
-		for (const id in this.playerTable) {
-			this.playerTable[id].unlinkUser();
+		if (this.roundTimer) {
+			clearTimeout(this.roundTimer);
+			this.roundTimer = null;
 		}
-		this.playerTable = {};
+		this.room.pokeExpireTimer();
+		this.ended = true;
+		this.room.add(`|-message|The game has ended.`); // for the benefit of those in the room
+		this.room.log.log = [];
+		for (const player of this.players) {
+			player.sendRoom(`|controlshtml|<div class="pad">The game has ended.</div>`);
+			player.destroy();
+		}
 	}
 	choose(user: User, option: string) {
-		option = toID(option);
+		option = toChoice(option);
 		const player = this.getPlayer(user);
 		if (!MATCHUPS.get(option)) {
 			throw new Chat.ErrorMessage(`Invalid choice: ${option}.`);
 		}
-		if (player.currentChoice) throw new Chat.ErrorMessage("You have already made your choice!");
-		player.currentChoice = option;
-		this.add(Utils.html`${user.name} has made their choice.`);
-		this.resetOptions(user);
-		if (this.players.filter(item => item.currentChoice).length > 1) {
+		if (player.choice) throw new Chat.ErrorMessage("You have already made your choice!");
+		player.choice = option;
+		this.smallMessage(`${user.name} made a choice.`);
+		this.sendControls(player);
+		if (this.players.filter(item => item.choice).length > 1) {
 			clearTimeout(this.roundTimer!);
+			this.roundTimer = null;
 			return this.runMatch();
 		}
+		this.sendField();
 		return true;
 	}
 	leaveGame(user: User) {
@@ -257,7 +260,6 @@ export class RPSGame extends Rooms.RoomGame {
 		this.playerTable[user.id] = new RPSPlayer(user, this);
 		this.players.push(this.playerTable[user.id]);
 		this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
-		user.sendTo(this.room, `You have successfully joined the Rock Paper Scissors game.`);
 		return this.playerTable[user.id];
 	}
 }
@@ -270,6 +272,8 @@ export const commands: Chat.ChatCommands = {
 	rps: 'rockpaperscissors',
 	rockpaperscissors: {
 		challenge: 'create',
+		chall: 'create',
+		chal: 'create',
 		create(target, room, user) {
 			target = target.trim();
 			if (!target && this.pmTarget) {
@@ -312,11 +316,12 @@ export const commands: Chat.ChatCommands = {
 					isPrivate: true,
 				}
 			);
-			gameRoom.game = new RPSGame(gameRoom);
-			gameRoom.add(
-				`|raw|<h2>Rock Paper Scissors: ${user.name} vs ${targetUser.name}!</h2>` +
-				`Use /rps start to start the game, once both players have joined!`
-			).update();
+
+			const game = new RPSGame(gameRoom);
+			gameRoom.game = game;
+
+			game.addPlayer(targetUser);
+			game.addPlayer(user);
 			user.joinRoom(gameRoom.roomid);
 			targetUser.joinRoom(gameRoom.roomid);
 			(gameRoom.game as RPSGame).start();
@@ -356,11 +361,14 @@ export const commands: Chat.ChatCommands = {
 			game.unpause(user);
 		},
 
+		'': 'help',
 		help() {
 			this.runBroadcast();
 			const strings = [
 				`/rockpaperscissors OR /rps<br />`,
-				`/rps create OR /rps challenge [user], [rounds] - Challenges a user to a game of Rock Paper Scissors with [rounds] (or 3) rounds`,				`/rps leave - Leave the game.`,
+				`/rps challenge [user] - Challenges a user to a game of Rock Paper Scissors`,
+				`(in PM) /rps challenge - Challenges a user to a game of Rock Paper Scissors`,
+				`/rps leave - Leave the game.`,
 				`/rps start - Start the Rock Paper Scissors game.`,
 				`/rps end - End the Rock Paper Scissors game`,
 				`/rps pause - Pauses the game, if it's in progress.`,
