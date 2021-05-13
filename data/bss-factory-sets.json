@@ -1443,7 +1443,7 @@
         "gigantamax": true,
         "item": ["Figy Berry", "Custap Berry"],
         "ability": ["Gluttony"],
-        "evs": {"atk": 252, "def": 252, "spd": 4},
+        "evs": {"hp": 4, "atk": 252, "def": 252},
         "nature": "Adamant",
         "moves": [["Facade", "Body Slam", "Self-Destruct"], ["Earthquake"], ["Darkest Lariat", "Heavy Slam", "Heat Crash"], ["Curse", "Belly Drum"]]
       },
@@ -1452,7 +1452,7 @@
         "gigantamax": true,
         "item": ["Figy Berry"],
         "ability": ["Gluttony"],
-        "evs": {"atk": 252, "def": 252, "spd": 4},
+        "evs": {"hp": 4, "atk": 252, "def": 252},
         "nature": "Adamant",
         "moves": [["Body Slam", "Self-Destruct"], ["Yawn"], ["Fire Punch"], ["Protect"]]
       },
