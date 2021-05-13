@@ -118,11 +118,6 @@ export class RPSGame extends Rooms.RoomGame {
 		}
 		this.destroy();
 	}
-	clearChoices() {
-		const [p1, p2] = this.players;
-		p1.choice = "";
-		p2.choice = "";
-	}
 	getPlayers() {
 		return Object.keys(this.playerTable).map(item => this.playerTable[item]);
 	}
