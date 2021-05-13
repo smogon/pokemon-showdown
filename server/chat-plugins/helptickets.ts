@@ -764,8 +764,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					buf += `<strong>Reported user:</strong> ${meta} `;
 					buf += `<button class="button" name="send" value="/modlog global,${meta}">Global Modlog</button><br />`;
 					buf += `<details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
+					const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 					for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
-						buf += `<form data-submitsend="/msgroom staff,/${punishment} ${meta},{reason} spoiler:${rooms.join('/')}">`;
+						buf += `<form data-submitsend="/msgroom staff,/${punishment} ${meta},{reason} spoiler:${proof}">`;
 						buf += `<button class="button notifying" type="submit">${name}</button><br />`;
 						buf += `Optional reason: <input name="reason" />`;
 						buf += `</form><br />`;
