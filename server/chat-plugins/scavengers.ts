@@ -2140,10 +2140,9 @@ const ScavengerCommands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return false;
 
 		let buffer = `<table><tr><th>Twist</th><th>Description</th></tr>`;
-		buffer += Object.keys(ScavMods.twists).map(twistid => {
-			const twist = ScavMods.twists[twistid];
-			return Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`;
-		}).join('');
+		buffer += Object.values(ScavMods.twists).map(twist => (
+			Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`
+		)).join('');
 		buffer += `</table>`;
 
 		this.sendReply(`|raw|<div class="ladder infobox-limited">${buffer}</div>`);

@@ -118,7 +118,7 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onComplete(player, time, blitz) {
 			const isPerfect = !this.leftGame?.includes(player.id) &&
-				Object.keys(player.answers).map(q => player.answers[q].length).every(attempts => attempts <= 1);
+				Object.values(player.answers).every((attempts: any) => attempts.length <= 1);
 			return {name: player.name, time, blitz, isPerfect};
 		},
 

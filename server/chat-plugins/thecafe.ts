@@ -182,10 +182,9 @@ export const pages: Chat.PageTable = {
 		if (!user.can('mute', null, room)) {
 			return buf + `<p>Access denied</p></div>`;
 		}
-		const content = Object.keys(dishes).map(entry => {
-			const [dish, ...ingredients] = dishes[entry];
-			return `<tr><td>${dish}</td><td>${ingredients.join(', ')}</td></tr>`;
-		}).join('');
+		const content = Object.values(dishes).map(
+			([dish, ...ingredients]) => `<tr><td>${dish}</td><td>${ingredients.join(', ')}</td></tr>`
+		).join('');
 
 		if (!content) {
 			buf += `<p>There are no dishes in the database.</p>`;

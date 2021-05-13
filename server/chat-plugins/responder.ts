@@ -458,8 +458,7 @@ export const pages: Chat.PageTable = {
 			this.title = '[Autoresponder Regexes]';
 			this.checkCan('show', null, room);
 			buf = `<div class="pad"><h2>${room.title} responder regexes and responses:</h2>${back}${refresh('keys')}<hr />`;
-			buf += Object.keys(roomData.pairs).map(item => {
-				const regexes = roomData.pairs[item];
+			buf += Object.entries(roomData.pairs).map(([item, regexes]) => {
 				if (regexes.length < 1) return null;
 				let buffer = `<details><summary>${item}</summary>`;
 				buffer += `<div class="ladder pad"><table><tr><th>Index</th><th>Regex</th>`;

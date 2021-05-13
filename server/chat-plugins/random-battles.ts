@@ -366,10 +366,9 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 		if (sigMove.isNonstandard === 'Unobtainable') {
 			details[`Unobtainable in Gen ${dex.gen}`] = "";
 		}
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 		if (sigMove.desc && sigMove.desc !== sigMove.shortDesc) {
 			buf += `<details><summary><strong>In-Depth Description</strong></summary>${sigMove.desc}</details>`;
 		}
@@ -411,10 +410,9 @@ function generateSSBItemInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 			if (sigItem.isNonstandard && sigItem.isNonstandard !== "Custom") {
 				details[`Unobtainable in Gen ${dex.gen}`] = "";
 			}
-			buf += `<font size="1">${Object.keys(details).map(detail => {
-				if (details[detail] === '') return detail;
-				return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-			}).join("&nbsp;|&ThickSpace;")}</font>`;
+			buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+				value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+			)).join("&nbsp;|&ThickSpace;")}</font>`;
 		}
 	}
 	return buf;
@@ -432,10 +430,9 @@ function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex)
 		const details: {[k: string]: string} = {
 			Gen: String(sigAbil.gen) || 'CAP',
 		};
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 		if (sigAbil.desc && sigAbil.shortDesc && sigAbil.desc !== sigAbil.shortDesc) {
 			buf += `<details><summary><strong>In-Depth Description</strong></summary>${sigAbil.desc}</details>`;
 		}
@@ -511,10 +508,9 @@ function generateSSBPokemonInfo(species: string, dex: ModdedDex, baseDex: Modded
 		} else {
 			details["Evolution"] = evos.join(", ");
 		}
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 	}
 	return buf;
 }
@@ -551,10 +547,9 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 	}
 	if (buf) {
 		const details: {[k: string]: string} = {Gen: '8'};
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 	}
 	if (longDesc) {
 		buf += `<details><summary><strong>In-Depth Description</strong></summary>${longDesc}</details>`;
