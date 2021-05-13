@@ -399,9 +399,9 @@ export class HelpTicket extends Rooms.RoomGame {
 		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
 		const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
 		const language = Users.get(ticket.userid)?.language || '';
-		const languageDisplay = language ? ` (${language})` : '';
+		const languageDisplay = language && language !== 'english' ? ` <small>(${language})</small>` : '';
 		buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
-		buf +=	ticket.claimed ? `${ticket.userid}${languageDisplay}:` : `<strong>${ticket.userid}${languageDisplay}:</strong>`;
+		buf +=	ticket.claimed ? `${ticket.userid}${languageDisplay}:` : `<strong>${ticket.userid}</strong>${languageDisplay}:`;
 		buf += ` ${ticket.type}</a>`;
 		return buf;
 	}
@@ -769,7 +769,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				if (type === 'user') {
 					buf += `<br />`;
 					buf += `<strong>Reported user:</strong> ${meta} `;
-					buf += `<button class="button" name="send" value="/modlog global,${meta}">Global Modlog</button><br />`;
+					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br />`;
 					buf += `<details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
 					const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 					for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
@@ -1170,7 +1170,7 @@ export const pages: Chat.PageTable = {
 			buf += `<h2>Issue: ${ticket.type}</h2>`;
 			buf += `<strong>From: ${ticket.userid}</strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
-			buf += `<button class="button" name="send" value="/modlog global,${ticket.userid}">Global Modlog</button><br />`;
+			buf += `<button class="button" name="send" value="/modlog global,[${ticket.userid}]">Global Modlog</button><br />`;
 			buf += `<br />`;
 			if (!ticket.claimed && ticket.open) {
 				ticket.claimed = user.id;
