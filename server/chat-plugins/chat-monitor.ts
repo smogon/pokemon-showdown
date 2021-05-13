@@ -435,8 +435,8 @@ export const loginfilter: Chat.LoginFilter = user => {
 		user.trackRename = '';
 	}
 	const offlineWarn = Punishments.offlineWarns.get(user.id);
-	if (offlineWarn) {
-		user.send(`|c|~|/warn You were warned while offline: ${offlineWarn}`);
+	if (typeof offlineWarn !== 'undefined') {
+		user.send(`|c|~|/warn You were warned while offline${offlineWarn.length ? `: ${offlineWarn}` : '.'}`);
 		Punishments.offlineWarns.delete(user.id);
 	}
 };
