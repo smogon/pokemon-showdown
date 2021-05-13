@@ -718,7 +718,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (ticket.meta?.startsWith('user-')) {
 				const tar = ticket.meta.slice(5);
 				buf += `<strong>Username: ${tar}</strong><br />`;
-				buf += `<form data-submitsend="/forcerename ${tar},{reason}">`;
+				buf += `<form data-submitsend="/msgroom staff,/forcerename ${tar},{reason}">`;
 			} else {
 				buf += `<strong>Provide a username to forcerename:</strong><br />`;
 				buf += `<form data-submitsend="/msgroom staff,/forcerename {text},{reason}">`;
