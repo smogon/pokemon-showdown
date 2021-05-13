@@ -43,8 +43,8 @@ export function escapeRegex(str: string) {
 /**
  * Escapes HTML in a string.
 */
-export function escapeHTML(str: string) {
-	if (!str) return '';
+export function escapeHTML(str: string | number) {
+	if (str === null || str === undefined) return '';
 	return ('' + str)
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
