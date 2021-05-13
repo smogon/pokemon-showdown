@@ -1042,9 +1042,9 @@ export const pages: Chat.PageTable = {
 					if (textTicket) {
 						buf += `<p><b>${this.tr(textTicket.title)}</b></p>`;
 						buf += `<form data-submitsend="/helpticket submit ${ticketTitles[page.slice(7)]} ${submitMeta} | {text} | {context}">`;
-						buf += `<textarea name="text"></textarea><br />`;
+						buf += `<textarea style="width: 100%" name="text"></textarea><br />`;
 						buf += `<strong>Do you have any other information you want to provide? (this is optional)</strong><br />`;
-						buf += `<textarea name="context"></textarea><br />`;
+						buf += `<textarea style="width: 100%" name="context"></textarea><br />`;
 						buf += `<br /><button class="button notifying" type="submit">Submit ticket</button></form>`;
 					} else {
 						buf += `<p><b>${this.tr`Are you sure you want to submit a ticket for ${type}?`}</b></p>`;
@@ -1190,7 +1190,7 @@ export const pages: Chat.PageTable = {
 			if (!ticket.resolved) {
 				buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text}">`;
 				buf += `<br /><strong>Resolve:</strong><br />`;
-				buf += `<textarea name="text"></textarea><br />`;
+				buf += `<textarea style="width: 100%" name="text"></textarea><br />`;
 				buf += `<br /><button class="button notifying" type="submit">Resolve ticket</button></form>`;
 			}
 			return buf;
