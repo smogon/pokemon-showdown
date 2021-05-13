@@ -79,6 +79,7 @@ export type SettingsHandler = (
 };
 
 export type CRQHandler = (this: CommandContext, target: string, user: User, trustable?: boolean) => any;
+export type RoomCloseHandler = (id: string, user: User, connection: Connection, page: boolean) => any;
 
 /**
  * Chat filters can choose to:
@@ -1425,6 +1426,7 @@ export const Chat = new class {
 	readonly destroyHandlers: (() => void)[] = [];
 	readonly crqHandlers: {[k: string]: CRQHandler} = {};
 	readonly renameHandlers: Rooms.RenameHandler[] = [];
+	readonly closeRoomHandlers: RoomCloseHandler[] = [];
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
 	/** Will be empty except during hotpatch */
@@ -1807,6 +1809,7 @@ export const Chat = new class {
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 		if (plugin.onRenameRoom) Chat.renameHandlers.push(plugin.onRenameRoom);
+		if (plugin.onCloseRoom) Chat.closeRoomHandlers.push(plugin.onCloseRoom);
 		Chat.plugins[name] = plugin;
 	}
 	loadPlugins(oldPlugins?: {[k: string]: ChatPlugin}) {
@@ -1875,6 +1878,12 @@ export const Chat = new class {
 	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
 		for (const handler of Chat.renameHandlers) {
 			handler(oldID, newID, room);
+		}
+	}
+
+	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
+		for (const handler of Chat.closeRoomHandlers) {
+			handler(roomid, user, connection, roomid.startsWith('view-'));
 		}
 	}
 
