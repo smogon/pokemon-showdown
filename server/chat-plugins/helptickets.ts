@@ -548,8 +548,11 @@ export function notifyStaff() {
 		}
 		if (ticketGame) {
 			buf += ticketGame.getButton();
-		} else {
-			buf += `<a class="button notifying" href="/view-help-text-${ticket.userid}"><strong>${ticket.userid}:</strong>`;
+		} else if (ticket.text) {
+			const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
+			const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
+			buf += `<a class="button notifying" ${title} href="/view-help-text-${ticket.userid}">`;
+			buf += `<strong>${ticket.userid}:</strong>`;
 			buf += ` ${ticket.type} (text)</a>`;
 		}
 		count++;
@@ -763,7 +766,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				if (type === 'user') {
 					buf += `<br />`;
 					buf += `<strong>Reported user:</strong> ${meta}<br />`;
-					buf += `<button class="button" name="send" value="/msgroom staff,/lock ${meta},${rooms.join(',')}">Lock reported user</button><br />`;
+					buf += `<form data-submitsend="/msgroom staff,/lock ${meta},{reason} spoiler:${rooms.join('/')}">`;
+					buf += `Optional reason: <input name="reason" /><br />`;
+					buf += `<button class="button notifying" type="submit">Lock</button></form>`;
 				}
 			}
 			return buf;
