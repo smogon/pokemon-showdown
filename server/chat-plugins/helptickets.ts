@@ -603,7 +603,7 @@ export function getBattleLinks(text: string) {
 	// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 	const replays = text.match(REPLAY_REGEX);
 	if (battles) rooms.push(...battles);
-	if (replays) rooms.push(...replays);
+	if (replays) rooms.push(...replays.map(r => `battle-${r.split('/').pop()!}`));
 	return rooms;
 }
 
@@ -775,10 +775,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					rooms.push(meta);
 				}
 			}
-			buf += `Battle links: ${rooms.map(url => {
-				if (BATTLES_REGEX.test(url)) return `<a href="https://${Config.routes.client}/${url}">${url}</a>`;
-				return `<a href="https://${url}">${url}</a>`;
-			}).join(' | ')}<br />`;
+			buf += `Battle links: ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			return buf;
 		},
 	},
@@ -823,7 +820,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += `<p><strong>Battle links given:</strong><p>`;
 			for (const [i, link] of links.entries()) {
 				if (links.indexOf(link) !== i) continue;
-				buf += `<a href="${link}">${link}</a>`;
+				buf += Chat.formatText(`<<${link}>>`);
 				const battles = link.match(BATTLES_REGEX);
 				if (battles) {
 					for (const battle of battles) {
