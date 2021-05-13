@@ -552,7 +552,7 @@ export function notifyStaff() {
 			const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
 			const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
 			buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
-			buf += `<strong>${ticket.userid}:</strong>`;
+			buf +=	ticket.claimed ? `${ticket.userid}:` : `<strong>${ticket.userid}:</strong>`;
 			buf += ` ${ticket.type} (text)</a>`;
 		}
 		count++;
