@@ -224,6 +224,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	aurabreak: {
 		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Aura Break');
 		},
 		onAnyTryPrimaryHit(target, source, move) {
@@ -630,6 +631,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	darkaura: {
 		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
 		onAnyBasePowerPriority: 20,
@@ -944,6 +946,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	fairyaura: {
 		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
 		onAnyBasePowerPriority: 20,
