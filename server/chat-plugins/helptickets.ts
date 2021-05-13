@@ -26,7 +26,7 @@ interface TicketState {
 	offline?: boolean;
 	/** [main text, context] */
 	text?: [string, string];
-	resolved?: {time: number, result: string, by: string, seen: boolean};
+	resolved?: {time: number, result: string, by: string, seen: boolean, staffReason: string};
 	meta?: string;
 }
 
@@ -1188,10 +1188,17 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `</div>`;
 			if (!ticket.resolved) {
-				buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text}">`;
+				buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
 				buf += `<br /><strong>Resolve:</strong><br />`;
-				buf += `<textarea style="width: 100%" name="text"></textarea><br />`;
+				buf += `User reason: <textarea style="width: 100%" name="text"></textarea><br />`;
+				buf += `Staff notes (optional): <textarea style="width: 100%" name="private"></textarea><br />`;
 				buf += `<br /><button class="button notifying" type="submit">Resolve ticket</button></form>`;
+			} else {
+				buf += Utils.html`<strong>Resolved: by ${ticket.resolved.by}</strong><br />`;
+				buf += Utils.html`<strong>Result:</strong> ${Chat.collapseLineBreaksHTML(ticket.resolved.result)}<br />`;
+				if (ticket.resolved.staffReason.includes('PROOF')) { // a note was added, show it
+					buf += Utils.html`<strong>Resolver notes:</strong> ${Chat.collapseLineBreaksHTML(ticket.resolved.staffReason)}<br />`;
+				}
 			}
 			return buf;
 		},
@@ -1659,8 +1666,13 @@ export const commands: Chat.ChatCommands = {
 			if (!ticket.text) {
 				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
 			}
+			const {publicReason, privateReason} = this.parseSpoiler(result);
 			ticket.resolved = {
-				result, time: Date.now(), by: user.name, seen: false,
+				result: publicReason,
+				time: Date.now(),
+				by: user.name,
+				seen: false,
+				staffReason: privateReason,
 			};
 			ticket.open = false;
 			writeTickets();
@@ -1674,7 +1686,7 @@ export const commands: Chat.ChatCommands = {
 			HelpTicket.modlog({
 				action: 'TEXTTICKET CLOSE',
 				loggedBy: user.id,
-				note: result,
+				note: privateReason,
 				userid: ticketId,
 			});
 			notifyStaff();
@@ -1893,3 +1905,9 @@ export const onCloseRoom: Chat.RoomCloseHandler = (room, user, conn, isPage) => 
 		notifyStaff();
 	}
 };
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register(
+		'/ht resolve ', '/helpticket resolve ', '/requesthelp resolve ', '/helprequest resolve ',
+	);
+});
