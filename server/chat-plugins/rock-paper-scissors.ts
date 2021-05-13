@@ -118,9 +118,6 @@ export class RPSGame extends Rooms.RoomGame {
 		}
 		this.destroy();
 	}
-	getPlayers() {
-		return Object.keys(this.playerTable).map(item => this.playerTable[item]);
-	}
 	runMatch() {
 		const [p1, p2] = this.players;
 		const winner = RPSGame.getWinner(p1, p2);
