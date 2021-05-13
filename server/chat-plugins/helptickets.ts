@@ -394,6 +394,17 @@ export class HelpTicket extends Rooms.RoomGame {
 	static modlog(entry: PartialModlogEntry) {
 		Rooms.Modlog.write('help-texttickets' as ModlogID, entry);
 	}
+	static getTextButton(ticket: TicketState & {text: [string, string]}) {
+		let buf = '';
+		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
+		const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
+		const language = Users.get(ticket.userid)?.language || '';
+		const languageDisplay = language ? ` (${language})` : '';
+		buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
+		buf +=	ticket.claimed ? `${ticket.userid}${languageDisplay}:` : `<strong>${ticket.userid}${languageDisplay}:</strong>`;
+		buf += ` ${ticket.type}</a>`;
+		return buf;
+	}
 	static ban(user: User | ID, reason = '') {
 		const userid = toID(user);
 		const userObj = Users.get(user);
@@ -549,11 +560,7 @@ export function notifyStaff() {
 		if (ticketGame) {
 			buf += ticketGame.getButton();
 		} else if (ticket.text) {
-			const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
-			const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
-			buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
-			buf +=	ticket.claimed ? `${ticket.userid}:` : `<strong>${ticket.userid}:</strong>`;
-			buf += ` ${ticket.type} (text)</a>`;
+			buf += HelpTicket.getTextButton(ticket as TicketState & {text: [string, string]});
 		}
 		count++;
 	}
@@ -1087,9 +1094,7 @@ export const pages: Chat.PageTable = {
 				}
 				let icon = `<span style="color:gray"><i class="fa fa-check-circle-o"></i> ${this.tr`Closed`}</span>`;
 				if (ticket.open) {
-					if (ticket.text) {
-						icon = `<span style="color:orange"><i class="fa fa-circle-o"></i> ${this.tr`Text ticket`}</span>`;
-					} else if (!ticket.active) {
+					if (!ticket.active && !ticket.text) {
 						icon = `<span style="color:gray"><i class="fa fa-circle-o"></i> ${this.tr`Inactive`}</span>`;
 					} else if (ticket.claimed) {
 						icon = `<span style="color:green"><i class="fa fa-circle-o"></i> ${this.tr`Claimed`}</span>`;
