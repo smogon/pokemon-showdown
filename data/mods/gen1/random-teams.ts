@@ -134,6 +134,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const uuTiers = ['NFE', 'UU', 'UUBL', 'NU'];
 
 		const pokemonPool = [];
+		/** Pokémon that are not wholly incompatible with the team, but still pretty bad */
+		const rejectedButNotInvalidPool = [];
 		for (const id in this.dex.data.FormatsData) {
 			const species = this.dex.species.get(id);
 			if (!species.isNonstandard && species.randomBattleMoves) {
@@ -158,7 +160,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
-			if (handicapMons.includes(species.id) && hasShitmon) continue;
+			if (handicapMons.includes(species.id) && hasShitmon) {
+				rejectedButNotInvalidPool.push(species.id);
+				continue;
+			}
 
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
@@ -195,7 +200,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 					break;
 				}
 			}
-			if (skip) continue;
+			if (skip) {
+				rejectedButNotInvalidPool.push(species.id);
+				continue;
+			}
 
 			// We need a weakness count of spammable attacks to avoid being swept by those.
 			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard, Earthquake.
@@ -210,7 +218,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				pokemonWeaknesses.push(type);
 			}
 
-			if (skip) continue;
+			if (skip) {
+				rejectedButNotInvalidPool.push(species.id);
+				continue;
+			}
 
 			// The set passes the limitations.
 			pokemon.push(this.randomSet(species));
@@ -242,6 +253,12 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Ditto check
 			if (species.id === 'ditto') this.battleHasDitto = true;
+		}
+
+		// if we don't have enough Pokémon, go back to rejects, which are already known to not be invalid.
+		while (pokemon.length < this.maxTeamSize && rejectedButNotInvalidPool.length) {
+			const species = this.sampleNoReplace(rejectedButNotInvalidPool);
+			pokemon.push(this.randomSet(species));
 		}
 
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !this.forceMonotype) {
