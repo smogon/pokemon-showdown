@@ -15126,7 +15126,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onPrepareHit(target, source, move) {
 			if (!source.isAlly(target)) {
-				if (move.category === "Physical") {
+				if (move.category === 'Physical') {
 					this.add('-anim', source, 'Poison Jab', target);
 				} else {
 					this.add('-anim', source, 'Sludge Bomb', target);
