@@ -34,6 +34,7 @@ interface TextTicketInfo {
 	checker?: (input: string, context: string, pageId: string, user: User, reportTarget?: string) => boolean | string[];
 	title: string;
 	getReviewDisplay: (ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection) => string | void;
+	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
 }
 
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
@@ -380,19 +381,20 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.playerTable = null;
 	}
 	onChatMessage(message: string, user: User) {
-		const roomids = message.match(BATTLES_REGEX);
-		if (roomids) {
-			for (const roomid of roomids) {
-				const curRoom = Rooms.get(roomid);
-				if (!curRoom || !('uploadReplay' in curRoom) || curRoom?.battle?.replaySaved) continue;
-				void curRoom.uploadReplay(user, user.connections[0], 'forpunishment');
-			}
-		}
+		HelpTicket.uploadReplaysFrom(message, user, user.connections[0]);
 	}
 	static modlogStream = Rooms.Modlog.initialize('help-texttickets' as ModlogID);
 	// workaround to modlog for no room
 	static modlog(entry: PartialModlogEntry) {
 		Rooms.Modlog.write('help-texttickets' as ModlogID, entry);
+	}
+	static uploadReplaysFrom(text: string, user: User, conn: Connection) {
+		const rooms = getBattleLinks(text);
+		for (const roomid of rooms) {
+			const room = Rooms.get(roomid);
+			if (!room || !('uploadReplay' in (room as GameRoom))) continue;
+			void (room as GameRoom).uploadReplay(user, conn, "forpunishment");
+		}
 	}
 	static getTextButton(ticket: TicketState & {text: [string, string]}) {
 		let buf = '';
@@ -742,6 +744,11 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
 			return ['Please provide at least one valid battle or replay URL.'];
 		},
+		onSubmit(ticket, text, submitter, conn) {
+			for (const part of text) {
+				HelpTicket.uploadReplaysFrom(part, submitter, conn);
+			}
+		},
 		getReviewDisplay(ticket, staff, connection) {
 			let buf = ``;
 			const [text, context] = ticket.text;
@@ -829,14 +836,13 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			for (const [i, link] of links.entries()) {
 				if (links.indexOf(link) !== i) continue;
 				buf += Chat.formatText(`<<${link}>>`);
-				const battles = link.match(BATTLES_REGEX);
-				if (battles) {
-					for (const battle of battles) {
-						void (Rooms.get(battle) as GameRoom | null)?.uploadReplay?.(staff, conn, "forpunishment");
-					}
-				}
 			}
 			return buf;
+		},
+		onSubmit(ticket, text, submitter, conn) {
+			for (const part of text) {
+				HelpTicket.uploadReplaysFrom(part, submitter, conn);
+			}
 		},
 	},
 };
@@ -1524,6 +1530,7 @@ export const commands: Chat.ChatCommands = {
 				});
 				writeTickets();
 				notifyStaff();
+				textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
 
 				connection.send(`>view-${pageId}\n|deinit`);
 				return this.popupReply(`Your report has been submitted.`);
