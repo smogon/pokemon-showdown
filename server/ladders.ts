@@ -16,7 +16,7 @@ const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
 import type {ChallengeType} from './room-battle';
-import {BattleReady, BattleChallenge, challenges} from './ladders-challenges';
+import {BattleReady, BattleChallenge, GameChallenge, challenges} from './ladders-challenges';
 
 /**
  * Keys are formatids
@@ -492,6 +492,9 @@ export const Ladders = Object.assign(getLadder, {
 	BattleReady,
 	LadderStore,
 	Ladder,
+
+	BattleChallenge,
+	GameChallenge,
 
 	cancelSearches: Ladder.cancelSearches,
 	updateSearch: Ladder.updateSearch,

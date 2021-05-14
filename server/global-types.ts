@@ -78,4 +78,5 @@ namespace Users {
 namespace Ladders {
 	export type Challenge = import('./ladders-challenges').Challenge;
 	export type BattleChallenge = import('./ladders-challenges').BattleChallenge;
+	export type GameChallenge = import('./ladders-challenges').GameChallenge;
 }
