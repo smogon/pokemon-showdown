@@ -15123,11 +15123,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit(target, source, move) {
 			if (!source.isAlly(target)) {
-				if (move.category === 'Physical') {
-					this.attrLastMove('[anim] Poison Jab');
-				} else {
-					this.attrLastMove('[anim] Sludge Bomb');
-				}
+				this.attrLastMove('[anim] Shell Side Arm ' + move.category);
 			}
 		},
 		onModifyMove(move, pokemon, target) {
