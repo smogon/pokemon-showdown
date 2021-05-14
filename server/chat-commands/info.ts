@@ -803,7 +803,7 @@ export const commands: Chat.ChatCommands = {
 						Gen: String(ability.gen) || 'CAP',
 					};
 					if (ability.isPermanent) details["&#10003; Not affected by Gastro Acid"] = "";
-					if (ability.isUnbreakable) details["&#10003; Not affected by Mold Breaker"] = "";
+					if (ability.isBreakable) details["&#10003; Ignored by Mold Breaker"] = "";
 				}
 				break;
 			default:
