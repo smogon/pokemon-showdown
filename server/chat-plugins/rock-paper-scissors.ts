@@ -23,9 +23,6 @@ function toChoice(str: string) {
 	return id.charAt(0).toUpperCase() + id.slice(1);
 }
 
-/** receiver:sender */
-export const challenges: Map<ID, ID> = Chat.oldPlugins['rock-paper-scissors']?.challenges || new Map();
-
 export class RPSPlayer extends Rooms.RoomGamePlayer {
 	choice = '';
 	prevChoice = '';
@@ -286,29 +283,19 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);
 			}
 
+			Ladders.challenges.add(
+				new Ladders.GameChallenge(user.id, targetUser.id, "Rock Paper Scissors", `/rps accept ${user.id}`)
+			);
+
 			if (!this.pmTarget) this.pmTarget = targetUser;
-			challenges.set(targetUser.id, user.id);
 			this.sendChatMessage(
 				`/raw ${user.name} wants to play Rock Paper Scissors!`
 			);
-			targetUser.send(this.pmTransform(
-				`|uhtml|rpschallenge|<button class="button" name="send" value="/rps accept"><strong>Accept</strong></button> <button class="button" name="send" value="/rps reject">Reject</button></div>`,
-				user, targetUser
-			));
 		},
 
 		accept(target, room, user) {
-			const id = challenges.get(user.id);
-			if (!id) return this.errorReply(`You have no Rock Paper Scissors request pending.`);
+			const targetUser = Ladders.challenges.accept(user, target, `/rps accept ${target}`);
 
-			challenges.delete(user.id);
-			user.send(this.pmTransform(
-				`|uhtml|rpschallenge|`,
-				user, id
-			));
-
-			const targetUser = Users.get(id);
-			if (!targetUser) return this.errorReply(`The user who challenged you to Rock Paper Scissors is offline.`);
 			const existingRoom = findExisting(user.id, targetUser.id);
 			const roomid = `game-rps-${targetUser.id}-${user.id}`;
 			const gameRoom = existingRoom || Rooms.createGameRoom(
@@ -323,23 +310,14 @@ export const commands: Chat.ChatCommands = {
 			user.joinRoom(gameRoom.roomid);
 			targetUser.joinRoom(gameRoom.roomid);
 			(gameRoom.game as RPSGame).start();
+
+			this.pmTarget = targetUser;
+			this.sendChatMessage(`/text ${user.name} accepted <<${gameRoom.roomid}>>`);
 		},
 
 		deny: 'reject',
 		reject(target, room, user) {
-			const sender = challenges.get(user.id);
-			if (!sender) return this.errorReply(`You have no Rock Paper Scissors challenge pending.`);
-
-			user.send(this.pmTransform(
-				`|uhtml|rpschallenge|`,
-				user, sender
-			));
-
-			this.pmTarget = Users.get(sender);
-			if (this.pmTarget) {
-				this.sendChatMessage(`/text ${user.name} rejected the challenge.`);
-			}
-			challenges.delete(user.id);
+			return this.parse(`/reject ${target}`);
 		},
 
 		end(target, room, user) {

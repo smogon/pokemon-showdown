@@ -122,6 +122,21 @@ export class Challenges extends Map<ID, Challenge[]> {
 		}
 		return null;
 	}
+	/**
+	 * Try to accept a custom challenge, throwing `Chat.ErrorMessage` on failure,
+	 * and returning the user the challenge was from on a success.
+	 */
+	accept(user: User, target: string, acceptCommand?: string) {
+		const targetid = toID(target);
+		const chall = this.search(user.id, targetid);
+		if (!chall || chall.to !== user.id || (acceptCommand && chall.acceptCommand !== acceptCommand)) {
+			throw new Chat.ErrorMessage(`Challenge not found. You are using the wrong command. Challenges should be accepted with /accept`);
+		}
+		this.remove(chall);
+		const targetUser = Users.get(targetid);
+		if (!targetUser) throw new Chat.ErrorMessage(`User "${targetid}" is not available right now.`);
+		return targetUser;
+	}
 	clearFor(userid: ID, reason?: string): number {
 		const user = Users.get(userid);
 		const userIdentity = user ? user.getIdentity() : ` ${userid}`;
