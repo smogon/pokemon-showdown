@@ -1371,7 +1371,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's attack.",
 		// Sticky Hold Innate
 		onTakeItem(item, pokemon, source) {
-			if (this.suppressingAttackEvents(pokemon) || !pokemon.hp || pokemon.item === 'stickybarb') return;
+			if (this.suppressingAbility(pokemon) || !pokemon.hp || pokemon.item === 'stickybarb') return;
 			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');

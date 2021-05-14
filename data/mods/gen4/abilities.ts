@@ -343,6 +343,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts[key]! *= 2;
 			}
 		},
+		isBreakable: true,
 		name: "Simple",
 		rating: 4,
 		num: 86,
@@ -376,7 +377,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	stickyhold: {
 		inherit: true,
 		onTakeItem(item, pokemon, source) {
-			if (this.suppressingAttackEvents(pokemon)) return;
 			if ((source && source !== pokemon) || (this.activeMove && this.activeMove.id === 'knockoff')) {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
@@ -434,6 +434,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
+		isBreakable: true,
 		name: "Thick Fat",
 		rating: 3.5,
 		num: 47,

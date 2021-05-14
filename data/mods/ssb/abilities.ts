@@ -781,7 +781,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if (this.suppressingAttackEvents(pokemon) || !pokemon.hp || pokemon.item === 'stickybarb') return;
+			if (this.suppressingAbility(pokemon) || !pokemon.hp || pokemon.item === 'stickybarb') return;
 			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
 				this.add('-activate', pokemon, 'ability: Ice Shield');
@@ -872,7 +872,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Minior-Meteor: Immune to crits and status",
 		name: "Capsule Armor",
 		isPermanent: true,
-		isUnbreakable: true,
+		isBreakable: false,
 		onCriticalHit: false,
 		onSetStatus(status, target, source, effect) {
 			if (target.species.id !== 'miniormeteor' || target.transformed) return;

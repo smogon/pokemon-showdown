@@ -118,7 +118,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	unown: {
 		// Unown: Shadow Tag
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -132,7 +132,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	bronzong: {
 		// Bronzong: Heatproof
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -144,7 +144,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	weezing: {
 		// Weezing: Aftermath
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -156,7 +156,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	flygon: {
 		// Flygon: Compoundeyes
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -168,7 +168,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	eelektross: {
 		// Eelektross: Poison Heal
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -180,7 +180,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	claydol: {
 		// Claydol: Filter
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -192,7 +192,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	gengar: {
 		// Gengar: Cursed Body
 		onImmunity(type, pokemon) {
-			if (pokemon.species.id !== 'gengarmega' && type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (pokemon.species.id !== 'gengarmega' && type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -204,7 +204,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	mismagius: {
 		// Mismagius: Cursed Body
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -216,7 +216,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	mesprit: {
 		// Mesprit: Serene Grace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -228,7 +228,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	uxie: {
 		// Uxie: Synchronize
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -240,7 +240,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	azelf: {
 		// Azelf: Steadfast
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -252,7 +252,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	hydreigon: {
 		// Hydreigon: Sheer Force
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -264,7 +264,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	rotom: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -276,7 +276,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	rotomheat: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -288,7 +288,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	rotomwash: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -300,7 +300,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	rotomfan: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -312,7 +312,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	rotomfrost: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -324,7 +324,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	rotommow: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -347,7 +347,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAbility(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
