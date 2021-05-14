@@ -1655,8 +1655,9 @@ function socketReceive(worker: ProcessManager.StreamWorker, workerid: number, so
 	const user = connection.user;
 	if (!user) return;
 
-	// The client obviates the room id when sending messages to Lobby by default
-	const roomId = message.slice(0, pipeIndex) || (Rooms.lobby && 'lobby') || '';
+	// LEGACY: The client obviates the room id when sending messages to Lobby by default
+	// now: we do not do that
+	const roomId = message.slice(0, pipeIndex) || '';
 	message = message.slice(pipeIndex + 1);
 
 	const room = Rooms.get(roomId) || null;
