@@ -420,6 +420,52 @@ export const commands: Chat.ChatCommands = {
 		`If a [highlight] is specified, only highlights them if they have that term on their highlight list.`,
 	],
 
+	changeprivateuhtml: 'sendprivatehtmlbox',
+	sendprivateuhtml: 'sendprivatehtmlbox',
+	sendprivatehtmlbox(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		this.checkCan('addhtml', null, room);
+
+		const {targetUser, rest} = this.requireUser(target);
+
+		if (targetUser.locked && !this.user.can('lock')) {
+			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them private HTML.");
+		}
+
+		if (!(targetUser.id in room.users)) {
+			throw new Chat.ErrorMessage("You cannot send private HTML to users who are not in this room.");
+		}
+
+		let html: string;
+		let messageType: string;
+		let name: string | undefined;
+		const plainHtml = cmd === 'sendprivatehtmlbox';
+		if (plainHtml) {
+			html = rest;
+			messageType = 'html';
+		} else {
+			[name, html] = this.splitOne(rest);
+			if (!name) return this.parse('/help sendprivatehtmlbox');
+
+			messageType = `uhtml${(cmd === 'changeprivateuhtml' ? 'change' : '')}|${name}`;
+		}
+
+		html = this.checkHTML(html);
+		if (!html) return this.parse('/help sendprivatehtmlbox');
+
+		html = `${Utils.html`<div style="color:#888;font-size:8pt">[Private from ${user.name}]</div>`}${Chat.collapseLineBreaksHTML(html)}`;
+		if (plainHtml) html = `<div class="infobox">${html}</div>`;
+
+		targetUser.sendTo(room, `|${messageType}|${html}`);
+
+		this.sendReply(`Sent private HTML to ${targetUser.name}.`);
+	},
+	sendprivatehtmlboxhelp: [
+		`/sendprivatehtmlbox [userid], [html] - Sends [userid] the private [html]. Requires: * # &`,
+		`/sendprivateuhtml [userid], [name], [html] - Sends [userid] the private [html] that can change. Requires: * # &`,
+		`/changeprivateuhtml [userid], [name], [html] - Changes the message previously sent with /sendprivateuhtml [userid], [name], [html]. Requires: * # &`,
+	],
+
 	botmsg(target, room, user, connection) {
 		if (!target || !target.includes(',')) return this.parse('/help botmsg');
 		let {targetUser, rest: message} = this.requireUser(target);
