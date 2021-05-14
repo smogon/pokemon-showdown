@@ -74,3 +74,8 @@ namespace Users {
 	export type User = import('./users').User;
 	export type Connection = import('./users').Connection;
 }
+
+namespace Ladders {
+	export type Challenge = import('./ladders-challenges').Challenge;
+	export type BattleChallenge = import('./ladders-challenges').BattleChallenge;
+}

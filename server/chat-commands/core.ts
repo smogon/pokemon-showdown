@@ -1624,6 +1624,9 @@ export const commands: Chat.ChatCommands = {
 			this.popupReply(this.tr`This server requires you to be rank ${groupName} or higher to challenge users.`);
 			return false;
 		}
+
+		this.pmTarget = targetUser;
+		this.sendChatMessage(`/text ${user.name} wants to battle!`);
 		return Ladders(formatName).makeChallenge(connection, targetUser);
 	},
 
@@ -1654,22 +1657,57 @@ export const commands: Chat.ChatCommands = {
 		`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`,
 	],
 	cchall: 'cancelChallenge',
-	cancelchallenge(target, room, user) {
-		Ladders.cancelChallenging(user);
-	},
-
-	accept(target, room, user, connection) {
-		let {targetUser, targetUsername, rest} = this.splitUser(target);
+	cancelchallenge(target, room, user, connection) {
+		const {targetUser, targetUsername, rest} = this.splitUser(target);
 		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
-		targetUser = targetUser || this.pmTarget;
-		if (!targetUser) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
-		return Ladders.acceptChallenge(connection, targetUser);
+		this.pmTarget = targetUser || this.pmTarget;
+		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
+
+		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
+		if (!chall || chall.from !== user.id) {
+			connection.popup(`You are not challenging ${this.pmTarget.name}. Maybe they accepted/rejected before you cancelled?`);
+			return false;
+		}
+
+		this.sendChatMessage(`/text ${user.name} cancelled the challenge.`);
+		return Ladders.challenges.remove(chall);
 	},
 
-	reject(target, room, user) {
-		target = toID(target);
-		if (!target && this.pmTarget) target = this.pmTarget.id;
-		Ladders.rejectChallenge(user, target);
+	async accept(target, room, user, connection) {
+		const {targetUser, targetUsername, rest} = this.splitUser(target);
+		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
+		this.pmTarget = targetUser || this.pmTarget;
+		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
+
+		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
+		if (!chall || chall.to !== user.id) {
+			connection.popup(`${this.pmTarget.id} is not challenging you. Maybe they cancelled before you accepted?`);
+			return false;
+		}
+
+		if (chall.acceptCommand) {
+			return this.parse(chall.acceptCommand);
+		}
+		const gameRoom = await Ladders.acceptChallenge(connection, chall as Ladders.BattleChallenge);
+		if (!gameRoom) return false;
+		this.sendChatMessage(`/text ${user.name} accepted the challenge, starting <<${gameRoom.roomid}>>`);
+		return true;
+	},
+
+	reject(target, room, user, connection) {
+		const {targetUser, targetUsername, rest} = this.splitUser(target);
+		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
+		this.pmTarget = targetUser || this.pmTarget;
+		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
+
+		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
+		if (!chall || chall.to !== user.id) {
+			connection.popup(`${this.pmTarget.id} is not challenging you. Maybe they cancelled before you rejected?`);
+			return false;
+		}
+
+		this.sendChatMessage(`/text ${user.name} rejected the challenge.`);
+		return Ladders.challenges.remove(chall);
 	},
 
 	saveteam: 'useteam',
