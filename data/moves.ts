@@ -15121,15 +15121,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
 		onPrepareHit(target, source, move) {
 			if (!source.isAlly(target)) {
 				if (move.category === 'Physical') {
-					this.add('-anim', source, 'Poison Jab', target);
+					this.attrLastMove('[anim] Poison Jab');
 				} else {
-					this.add('-anim', source, 'Sludge Bomb', target);
+					this.attrLastMove('[anim] Sludge Bomb');
 				}
 			}
 		},
