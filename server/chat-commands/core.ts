@@ -1656,7 +1656,7 @@ export const commands: Chat.ChatCommands = {
 	allowchallengeshelp: [
 		`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`,
 	],
-	cchall: 'cancelChallenge',
+	cchall: 'cancelchallenge',
 	cancelchallenge(target, room, user, connection) {
 		const {targetUser, targetUsername, rest} = this.splitUser(target);
 		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
