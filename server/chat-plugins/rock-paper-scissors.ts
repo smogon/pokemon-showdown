@@ -23,7 +23,8 @@ function toChoice(str: string) {
 	return id.charAt(0).toUpperCase() + id.slice(1);
 }
 
-export const challenges: Map<string, string> = Chat.oldPlugins['rock-paper-scissors']?.challenges || new Map();
+/** receiver:sender */
+export const challenges: Map<ID, ID> = Chat.oldPlugins['rock-paper-scissors']?.challenges || new Map();
 
 export class RPSPlayer extends Rooms.RoomGamePlayer {
 	choice = '';
@@ -38,7 +39,6 @@ export class RPSGame extends Rooms.RoomGame {
 	readonly checkChat = true;
 	roundTimer: NodeJS.Timeout | null = null;
 	players: RPSPlayer[];
-	consecutiveTimeouts = 0;
 	constructor(room: Room) {
 		super(room);
 		this.currentRound = 0;
@@ -64,7 +64,10 @@ export class RPSGame extends Rooms.RoomGame {
 	}
 	sendControls(player: RPSPlayer) {
 		if (!this.roundTimer) {
-			player.sendRoom(`|controlshtml|<center>The game is paused.</center>`);
+			player.sendRoom(
+				`|controlshtml|<center>The game is paused.<br /><br />` +
+				`<button class="button" name="send" value="/rps resume">Resume game</button></center>`
+			);
 			return;
 		}
 		if (player.choice) {
@@ -116,7 +119,19 @@ export class RPSGame extends Rooms.RoomGame {
 			const [winner, loser] = p1.score > p2.score ? [p1, p2] : [p2, p1];
 			this.message(`**${winner.name}** wins with score ${winner.score} to ${loser.score}!`);
 		}
-		this.destroy();
+
+		if (this.roundTimer) {
+			clearTimeout(this.roundTimer);
+			this.roundTimer = null;
+		}
+
+		this.room.pokeExpireTimer();
+		this.ended = true;
+		this.room.add(`|-message|The game has ended.`); // for the benefit of those in the room
+		for (const player of this.players) {
+			player.sendRoom(`|controlshtml|<div class="pad">The game has ended.</div>`);
+			player.unlinkUser();
+		}
 	}
 	runMatch() {
 		const [p1, p2] = this.players;
@@ -138,9 +153,8 @@ export class RPSGame extends Rooms.RoomGame {
 		}
 
 		if (!winner && !p1.choice) {
-			this.consecutiveTimeouts++;
-		} else {
-			this.consecutiveTimeouts = 0;
+			this.pause();
+			return;
 		}
 
 		if (this.currentRound >= MAX_ROUNDS) {
@@ -168,10 +182,15 @@ export class RPSGame extends Rooms.RoomGame {
 		if (this.players.length < 2) {
 			throw new Chat.ErrorMessage(`There are not enough players to start. Use /rps start to start when all players are ready.`);
 		}
+		if (this.room.log.log.length > 1000) {
+			// prevent logs from ballooning too much
+			this.room.log.log = [];
+		}
 		const [p1, p2] = this.players;
 		this.room.add(
 			`|raw|<h2><span style="font-weight: normal">Rock Paper Scissors:</span> ${p1.name} vs ${p2.name}!</h2>\n` +
-			`|message|Game started!`
+			`|message|Game started!\n` +
+			`|notify|Game started!`
 		).update();
 		this.nextRound();
 	}
@@ -180,48 +199,30 @@ export class RPSGame extends Rooms.RoomGame {
 		if (!player) throw new Chat.ErrorMessage(`You are not a player in this game.`);
 		return player;
 	}
-	pause(user: User) {
+	pause(user?: User) {
 		if (!this.roundTimer) throw new Chat.ErrorMessage(`The game is not running, and cannot be paused.`);
 
-		const player = this.getPlayer(user);
+		const player = user ? this.getPlayer(user) : null;
 		clearTimeout(this.roundTimer);
 		this.roundTimer = null;
 		for (const curPlayer of this.players) this.sendControls(curPlayer);
-		this.message(`The game was paused by ${player.name}.`);
+		if (player) this.message(`The game was paused by ${player.name}.`);
 	}
 	unpause(user: User) {
 		if (this.roundTimer) throw new Chat.ErrorMessage(`The game is not paused.`);
 
 		const player = this.getPlayer(user);
-		this.message(`The game was unpaused by ${player.name}.`);
+		this.message(`The game was resumed by ${player.name}.`);
 		this.nextRound();
 	}
 	nextRound() {
 		this.currentRound++;
 		this.sendField();
-		if (this.consecutiveTimeouts >= 20) {
-			// forcefully end if no one's progressed in 20 turns
-			return this.end();
-		}
 		this.room.add(`|html|<h2>Round ${this.currentRound}</h2>`).update();
 		this.roundTimer = setTimeout(() => {
 			this.runMatch();
 		}, TIMEOUT);
 		for (const player of this.players) this.sendControls(player);
-	}
-	destroy() {
-		if (this.roundTimer) {
-			clearTimeout(this.roundTimer);
-			this.roundTimer = null;
-		}
-		this.room.pokeExpireTimer();
-		this.ended = true;
-		this.room.add(`|-message|The game has ended.`); // for the benefit of those in the room
-		this.room.log.log = [];
-		for (const player of this.players) {
-			player.sendRoom(`|controlshtml|<div class="pad">The game has ended.</div>`);
-			player.destroy();
-		}
 	}
 	choose(user: User, option: string) {
 		option = toChoice(option);
@@ -257,7 +258,7 @@ export class RPSGame extends Rooms.RoomGame {
 }
 
 function findExisting(user1: string, user2: string) {
-	return Rooms.get(`rps-${user1}-${user2}`) || Rooms.get(`rps-${user2}-${user1}`);
+	return Rooms.get(`game-rps-${user1}-${user2}`) || Rooms.get(`game-rps-${user2}-${user1}`);
 }
 
 export const commands: Chat.ChatCommands = {
@@ -284,29 +285,34 @@ export const commands: Chat.ChatCommands = {
 			if (existingRoom?.game && !existingRoom.game.ended) {
 				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);
 			}
+
 			if (!this.pmTarget) this.pmTarget = targetUser;
 			challenges.set(targetUser.id, user.id);
 			this.sendChatMessage(
-				`/raw ${user.name} challenged you to Rock Paper Scissors!`
+				`/raw ${user.name} wants to play Rock Paper Scissors!`
 			);
-			targetUser.send(
-				`|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
-				`/raw <button class="button" name="send" value="/rps accept"><strong>Accept</strong></button></div>`
-			);
+			targetUser.send(this.pmTransform(
+				`|uhtml|rpschallenge|<button class="button" name="send" value="/rps accept"><strong>Accept</strong></button> <button class="button" name="send" value="/rps reject">Reject</button></div>`,
+				user, targetUser
+			));
 		},
 
 		accept(target, room, user) {
 			const id = challenges.get(user.id);
 			if (!id) return this.errorReply(`You have no Rock Paper Scissors request pending.`);
+
+			challenges.delete(user.id);
+			user.send(this.pmTransform(
+				`|uhtml|rpschallenge|`,
+				user, id
+			));
+
 			const targetUser = Users.get(id);
 			if (!targetUser) return this.errorReply(`The user who challenged you to Rock Paper Scissors is offline.`);
 			const existingRoom = findExisting(user.id, targetUser.id);
-			const roomid = `rps-${targetUser.id}-${user.id}`;
+			const roomid = `game-rps-${targetUser.id}-${user.id}`;
 			const gameRoom = existingRoom || Rooms.createGameRoom(
-				roomid as RoomID, `[RPS] ${user.name} vs ${targetUser.name}`, {
-					modchat: '+',
-					isPrivate: true,
-				}
+				roomid as RoomID, `[RPS] ${user.name} vs ${targetUser.name}`, {}
 			);
 
 			const game = new RPSGame(gameRoom);
@@ -319,11 +325,20 @@ export const commands: Chat.ChatCommands = {
 			(gameRoom.game as RPSGame).start();
 		},
 
-		deny(target, room, user) {
-			const request = challenges.get(user.id);
-			if (!request) return this.errorReply(`You have no Rock Paper Scissors challenge pending.`);
-			const [sender] = request;
-			Users.get(sender)?.popup(`${user.name} denied your Rock Paper Scissors challenge.`);
+		deny: 'reject',
+		reject(target, room, user) {
+			const sender = challenges.get(user.id);
+			if (!sender) return this.errorReply(`You have no Rock Paper Scissors challenge pending.`);
+
+			user.send(this.pmTransform(
+				`|uhtml|rpschallenge|`,
+				user, sender
+			));
+
+			this.pmTarget = Users.get(sender);
+			if (this.pmTarget) {
+				this.sendChatMessage(`/text ${user.name} rejected the challenge.`);
+			}
 			challenges.delete(user.id);
 		},
 
@@ -348,6 +363,7 @@ export const commands: Chat.ChatCommands = {
 			game.pause(user);
 		},
 
+		unpause: 'resume',
 		resume(target, room, user) {
 			const game = this.requireGame(RPSGame);
 			game.unpause(user);
