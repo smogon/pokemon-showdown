@@ -39,9 +39,12 @@ export abstract class AbstractChallenge {
 	format: string;
 	acceptCommand: string | null;
 	message: string;
+	acceptButton: string;
+	rejectButton: string;
 	roomid: RoomID;
 	constructor(from: ID, to: ID, ready: BattleReady | string, options: {
-		acceptCommand?: string, rejectCommand?: string, message?: string, roomid?: RoomID,
+		acceptCommand?: string, rejectCommand?: string, roomid?: RoomID,
+		message?: string, acceptButton?: string, rejectButton?: string,
 	} = {}) {
 		this.from = from;
 		this.to = to;
@@ -50,6 +53,8 @@ export abstract class AbstractChallenge {
 		this.acceptCommand = options.acceptCommand || null;
 		this.message = options.message || '';
 		this.roomid = options.roomid || '';
+		this.acceptButton = options.acceptButton || '';
+		this.rejectButton = options.rejectButton || '';
 	}
 	destroy(accepted?: boolean) {}
 }
@@ -203,7 +208,8 @@ export class Challenges extends Map<ID, Challenge[]> {
 	}
 	getUpdate(challenge: Challenge | null) {
 		if (!challenge) return `/challenge`;
-		return `/challenge ${challenge.format}|${challenge.ready ? challenge.ready.formatid : ''}|${challenge.message}`;
+		const teambuilderFormat = challenge.ready ? challenge.ready.formatid : '';
+		return `/challenge ${challenge.format}|${teambuilderFormat}|${challenge.message}|${challenge.acceptButton}|${challenge.rejectButton}`;
 	}
 	update(userid1: ID, userid2: ID) {
 		const challenge = this.search(userid1, userid2);
