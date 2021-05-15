@@ -2809,7 +2809,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Crafty Shield');
 			},
 			onTryHitPriority: 3,
@@ -10267,7 +10267,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Mat Block');
 			},
 			onTryHitPriority: 3,
@@ -13550,7 +13550,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Quick Guard');
 			},
 			onTryHitPriority: 4,
@@ -19274,7 +19274,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Wide Guard');
 			},
 			onTryHitPriority: 4,
