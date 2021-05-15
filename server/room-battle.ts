@@ -1213,8 +1213,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 	invitesFull() {
 		return this.players.every(player => player.id || player.invite);
 	}
-	/** true = send to everyone; false = send to no one */
-	sendInviteForm(connection: Connection | User | null | true) {
+	/** true = send to every player; falsy = send to no one */
+	sendInviteForm(connection: Connection | User | null | boolean) {
 		if (connection === true) {
 			for (const player of this.players) this.sendInviteForm(player.getUser());
 			return;
