@@ -154,4 +154,20 @@ describe('Fainting', function () {
 		assert.fainted(battle.p2.active[0]);
 		assert.equal(battle.winner, 'Player 1');
 	});
+
+	it('should check for a winner after future moves', function () {
+		battle = common.gen(7).createBattle([
+			[
+				{species: 'Shedinja', moves: ['futuresight']},
+			],
+			[
+				{species: 'Shedinja', moves: ['sleeptalk']},
+			],
+		]);
+		battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 1');
+	});
 });

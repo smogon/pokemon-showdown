@@ -385,6 +385,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			this.checkWin();
 		},
 	},
 	healreplacement: {
