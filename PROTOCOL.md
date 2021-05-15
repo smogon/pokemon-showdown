@@ -513,7 +513,7 @@ Qwilfish||blacksludge|H|thunderwave,destinybond,liquidation,painsplit||85,85,85,
 The format is a list of pokemon delimited by `]`, where every Pokémon is:
 
 ```
-NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE
+NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,DYNAMAXLEVEL,CANGIGANTAMAX
 ```
 
 - `SPECIES` is left blank if it's identical to `NICKNAME`
