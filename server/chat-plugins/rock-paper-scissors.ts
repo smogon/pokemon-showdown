@@ -276,11 +276,11 @@ export const commands: Chat.ChatCommands = {
 			if (targetUser === user) return this.errorReply(`You cannot challenge yourself.`);
 			if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser)) {
 				Chat.maybeNotifyBlocked('challenge', targetUser, user);
-				return this.errorReply(`This user is currently blocking challenges.`);
+				return this.errorReply(this.tr`The user '${targetUser.name}' is not accepting challenges right now.`);
 			}
 			const existingRoom = findExisting(user.id, targetUser.id);
 			if (existingRoom?.game && !existingRoom.game.ended) {
-				return this.errorReply(`You already have a Rock Paper Scissors game against ${targetUser.name}.`);
+				return this.errorReply(`You're already playing a Rock Paper Scissors game against ${targetUser.name}!`);
 			}
 
 			Ladders.challenges.add(

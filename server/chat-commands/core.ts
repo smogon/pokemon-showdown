@@ -1318,7 +1318,7 @@ export const commands: Chat.ChatCommands = {
 			Ladders.challenges.add(
 				new Ladders.BattleInvite(user.id, targetUser.id, ready, {
 					acceptCommand: `/acceptbattle ${user.id}`,
-					message: `You've been invited to join a battle (with ${playerNames})`,
+					message: `You're invited to join a battle (with ${playerNames})`,
 					roomid: room.roomid,
 				})
 			);
