@@ -720,7 +720,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.missingBattleStartMessage = false;
 			this.started = true;
 			this.room.add(`|uhtmlchange|invites|`);
-		} else if (!this.started) {
+		} else if (!this.started && this.invitesFull()) {
 			this.sendInviteForm(true);
 		}
 		if (user.inRooms.has(this.roomid)) this.onConnect(user);

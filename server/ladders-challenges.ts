@@ -112,11 +112,11 @@ export class Challenges extends Map<ID, Challenge[]> {
 		this.set(userid, challenges);
 		return challenges;
 	}
-	/** Returns false if a challenge between these users is already in the table */
-	add(challenge: Challenge): boolean {
+	/** Throws Chat.ErrorMessage if a challenge between these users is already in the table */
+	add(challenge: Challenge): true {
 		const oldChallenge = this.search(challenge.to, challenge.from);
 		if (oldChallenge) {
-			return false;
+			throw new Chat.ErrorMessage(`There is already a challenge (${challenge.format}) between ${challenge.to} and ${challenge.from}!`);
 		}
 		const to = this.getOrCreate(challenge.to);
 		const from = this.getOrCreate(challenge.from);

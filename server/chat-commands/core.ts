@@ -1295,6 +1295,10 @@ export const commands: Chat.ChatCommands = {
 			battle.sendInviteForm(connection);
 			return this.errorReply(this.tr`This room already has a player in slot ${slot}.`);
 		}
+		if (player.invite) {
+			battle.sendInviteForm(connection);
+			return this.errorReply(`Someone else (${player.invite}) has already been invited to be ${slot}!`);
+		}
 		if (targetUser.id in battle.playerTable) {
 			battle.sendInviteForm(connection);
 			return this.errorReply(this.tr`${targetUser.name} is already a player in this battle.`);
@@ -1307,11 +1311,8 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		// INVITE
-		if (!targetUser.inRooms.has(room.roomid)) {
-			if (player.invite) {
-				battle.sendInviteForm(connection);
-				return this.errorReply(`Someone else (${player.invite}) has already been invited to be ${slot}!`);
-			}
+
+		if (!targetUser.inRooms.has(room.roomid) || !player.hasTeam) {
 			player.invite = targetUser.id;
 			const playerNames = battle.players.map(p => p.id && p.name).filter(Boolean).join(', ');
 			const ready = player.hasTeam ? battle.format : new Ladders.BattleReady(user.id, battle.format, user.battleSettings);
@@ -1332,9 +1333,7 @@ export const commands: Chat.ChatCommands = {
 			room.auth.delete(targetUser.id);
 			return;
 		}
-		if (!battle.started) {
-			battle.sendInviteForm(battle.invitesFull() ? true : connection);
-		}
+		if (!battle.started) battle.sendInviteForm(connection);
 	},
 
 	async acceptbattle(target, room, user, connection) {
