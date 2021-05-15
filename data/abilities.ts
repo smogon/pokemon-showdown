@@ -2360,14 +2360,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onEnd(source) {
-			let nGasActiveElsewhere = false;
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon !== source && pokemon.hasAbility('Neutralizing Gas')) {
-					nGasActiveElsewhere = true;
-					break;
+					return;
 				}
 			}
-			if (nGasActiveElsewhere) return;
 			this.add('-end', source, 'ability: Neutralizing Gas');
 
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
