@@ -1579,8 +1579,6 @@ export const commands: Chat.ChatCommands = {
 			this.popupReply(this.tr`This server requires you to be rank ${groupName} or higher to challenge users.`);
 			return false;
 		}
-
-		this.pmTarget = targetUser;
 		return Ladders(formatName).makeChallenge(connection, targetUser);
 	},
 
