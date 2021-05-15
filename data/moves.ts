@@ -19378,7 +19378,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(pokemon, source) {
 				this.effectState.hp = source.maxhp / 2;
 			},
-			onResidualOrder: 3,
+			onResidualOrder: 4,
 			onEnd(target) {
 				if (target && !target.fainted) {
 					const damage = this.heal(this.effectState.hp, target, target);
