@@ -21,7 +21,7 @@ describe('Sunsteel Strike', function () {
 		assert.statStage(metagross, 'spe', 0);
 	});
 
-	it.skip(`should ignore the user's own Ability (Gen 7)`, function () {
+	it(`should ignore the user's own Ability (Gen 7)`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'metagross', ability: 'clearbody', moves: ['sunsteelstrike']},
 		], [
