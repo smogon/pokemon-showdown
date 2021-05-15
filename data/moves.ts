@@ -4276,8 +4276,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 					// it failed
 					return false;
 				}
-				this.effectState.slot = target.getSlot();
-				this.effectState.user = target;
 				this.effectState.move = move.id;
 				this.add('-start', target, 'Encore');
 				if (!this.queue.willMove(target)) {
