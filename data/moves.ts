@@ -9698,7 +9698,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
-		onSideResidualOrder: 26,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 2,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Light Screen');
@@ -19061,7 +19061,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Water Pledge');
 			},
-		onSideResidualOrder: 26,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 7,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
