@@ -1772,7 +1772,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 			status: 'brn',
 		},
-		onResidualOrder: 27,
+		onResidualOrder: 28,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			pokemon.trySetStatus('brn', pokemon);
@@ -5300,7 +5300,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 80,
 		},
-		onResidualOrder: 27,
+		onResidualOrder: 28,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			this.damage(pokemon.baseMaxhp / 8);
@@ -5499,7 +5499,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 			status: 'tox',
 		},
-		onResidualOrder: 27,
+		onResidualOrder: 28,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			pokemon.trySetStatus('tox', pokemon);

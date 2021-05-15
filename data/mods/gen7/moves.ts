@@ -209,7 +209,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Electric Terrain');
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Electric Terrain');
@@ -308,7 +308,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Grassy Terrain');
@@ -691,7 +691,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Psychic Terrain');

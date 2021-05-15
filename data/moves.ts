@@ -801,7 +801,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Aurora Veil');
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 10,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Aurora Veil');
@@ -4118,7 +4118,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.add('-fieldstart', 'move: Electric Terrain');
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Electric Terrain');
@@ -4919,7 +4919,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual(pokemon) {
 				if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 8, pokemon);
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 8,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Fire Pledge');
@@ -6217,7 +6217,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual(target) {
 				if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Cannonade');
@@ -6872,7 +6872,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual(target) {
 				if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Vine Lash');
@@ -6911,7 +6911,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual(target) {
 				if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Volcalith');
@@ -6973,7 +6973,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual(target) {
 				if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Wildfire');
@@ -7120,7 +7120,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Grass Pledge');
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 9,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Grass Pledge');
@@ -7216,7 +7216,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Grassy Terrain');
@@ -7325,7 +7325,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 2,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Gravity');
@@ -9698,7 +9698,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
-			onSideResidualOrder: 21,
+		onSideResidualOrder: 26,
 			onSideResidualSubOrder: 2,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Light Screen');
@@ -9875,7 +9875,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-sidestart', side, 'move: Lucky Chant'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
 			},
 			onCriticalHit: false,
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 6,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Lucky Chant'); // "[side.name]'s team's Lucky Chant wore off!"
@@ -10083,7 +10083,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.field.removePseudoWeather('magicroom');
 			},
 			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 6,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Magic Room', '[of] ' + this.effectState.source);
@@ -11362,7 +11362,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Mist');
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 4,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Mist');
@@ -11459,7 +11459,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'Misty Terrain');
@@ -11648,7 +11648,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return this.chainModify([1352, 4096]);
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 4,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Mud Sport');
@@ -13242,7 +13242,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Psychic Terrain');
@@ -13869,7 +13869,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 1,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Reflect');
@@ -14572,7 +14572,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Safeguard');
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 3,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Safeguard');
@@ -17650,7 +17650,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(2);
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 5,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Tailwind');
@@ -18554,7 +18554,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.field.removePseudoWeather('trickroom');
 			},
 			// Speed modification is changed in Pokemon.getActionSpeed() in sim/pokemon.js
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 1,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Trick Room');
@@ -18766,7 +18766,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				this.add('-start', target, 'Uproar', '[upkeep]');
 			},
-			onResidualOrder: 27,
+			onResidualOrder: 28,
 			onResidualSubOrder: 1,
 			onEnd(target) {
 				this.add('-end', target, 'Uproar');
@@ -19061,7 +19061,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Water Pledge');
 			},
-			onSideResidualOrder: 21,
+		onSideResidualOrder: 26,
 			onSideResidualSubOrder: 7,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
@@ -19143,7 +19143,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return this.chainModify([1352, 4096]);
 				}
 			},
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 3,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Water Sport');
@@ -19438,7 +19438,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.field.removePseudoWeather('wonderroom');
 			},
 			// Swapping defenses implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
-			onFieldResidualOrder: 26,
+			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 5,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Wonder Room');
