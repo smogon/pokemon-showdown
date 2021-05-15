@@ -2645,6 +2645,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
+				if (source.moveThisTurn !== 'counter') return;
 				if (source !== this.effectState.target || !this.effectState.slot) return;
 				return this.getAtSlot(this.effectState.slot);
 			},
@@ -4285,12 +4286,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onOverrideAction(pokemon, target, move) {
 				if (move.id !== this.effectState.move) return this.effectState.move;
-			},
-			onRedirectTargetPriority: 3,
-			onRedirectTarget(target, source, source2, move) {
-				if (move.target !== this.effectState.user && move.target === 'self') {
-					return this.getAtSlot(this.effectState.slot);
-				}
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
@@ -11275,6 +11270,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
+				if (source.moveThisTurn !== 'mirrorcoat') return;
 				if (source !== this.effectState.target || !this.effectState.slot) return;
 				return this.getAtSlot(this.effectState.slot);
 			},
