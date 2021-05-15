@@ -308,7 +308,7 @@ export class Battle {
 	}
 
 	suppressingAbility(target?: Pokemon) {
-		return this.activePokemon && this.activePokemon.isActive && this.activePokemon !== target &&
+		return this.activePokemon && this.activePokemon.isActive && (this.activePokemon !== target || this.gen === 7) &&
 			this.activeMove && this.activeMove.ignoreAbility;
 	}
 
@@ -726,7 +726,7 @@ export class Battle {
 				// it's changed; call it off
 				continue;
 			}
-			if (effect.effectType === 'Ability' && effect.isBreakable !== false &&
+			if (effect.effectType === 'Ability' && effect.isBreakable &&
 				this.suppressingAbility(effectHolder as Pokemon)) {
 				if (effect.isBreakable) {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');
