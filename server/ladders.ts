@@ -16,7 +16,7 @@ const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
 import type {ChallengeType} from './room-battle';
-import {BattleReady, BattleChallenge, GameChallenge, challenges} from './ladders-challenges';
+import {BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges} from './ladders-challenges';
 
 /**
  * Keys are formatids
@@ -204,6 +204,7 @@ class Ladder extends LadderStore {
 			}
 		}
 		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready));
+		Ladders.challenges.send(user.id, targetUser.id, `/text ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
 		return true;
 	}
@@ -495,6 +496,7 @@ export const Ladders = Object.assign(getLadder, {
 
 	BattleChallenge,
 	GameChallenge,
+	BattleInvite,
 
 	cancelSearches: Ladder.cancelSearches,
 	updateSearch: Ladder.updateSearch,

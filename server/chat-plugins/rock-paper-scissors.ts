@@ -284,7 +284,9 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			Ladders.challenges.add(
-				new Ladders.GameChallenge(user.id, targetUser.id, "Rock Paper Scissors", `/rps accept ${user.id}`)
+				new Ladders.GameChallenge(user.id, targetUser.id, "Rock Paper Scissors", {
+					acceptCommand: `/rps accept ${user.id}`,
+				})
 			);
 
 			if (!this.pmTarget) this.pmTarget = targetUser;
@@ -294,24 +296,24 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		accept(target, room, user) {
-			const targetUser = Ladders.challenges.accept(user, target, `/rps accept ${target}`);
+			const fromUser = Ladders.challenges.accept(this);
 
-			const existingRoom = findExisting(user.id, targetUser.id);
-			const roomid = `game-rps-${targetUser.id}-${user.id}`;
+			const existingRoom = findExisting(user.id, fromUser.id);
+			const roomid = `game-rps-${fromUser.id}-${user.id}`;
 			const gameRoom = existingRoom || Rooms.createGameRoom(
-				roomid as RoomID, `[RPS] ${user.name} vs ${targetUser.name}`, {}
+				roomid as RoomID, `[RPS] ${user.name} vs ${fromUser.name}`, {}
 			);
 
 			const game = new RPSGame(gameRoom);
 			gameRoom.game = game;
 
-			game.addPlayer(targetUser);
+			game.addPlayer(fromUser);
 			game.addPlayer(user);
 			user.joinRoom(gameRoom.roomid);
-			targetUser.joinRoom(gameRoom.roomid);
+			fromUser.joinRoom(gameRoom.roomid);
 			(gameRoom.game as RPSGame).start();
 
-			this.pmTarget = targetUser;
+			this.pmTarget = fromUser;
 			this.sendChatMessage(`/text ${user.name} accepted <<${gameRoom.roomid}>>`);
 		},
 

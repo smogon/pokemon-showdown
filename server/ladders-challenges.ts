@@ -20,8 +20,8 @@ export class BattleReady {
 		userid: ID,
 		formatid: string,
 		settings: User['battleSettings'],
-		rating: number,
-		challengeType: ChallengeType
+		rating = 0,
+		challengeType: ChallengeType = 'challenge'
 	) {
 		this.userid = userid;
 		this.formatid = formatid;
@@ -32,20 +32,32 @@ export class BattleReady {
 	}
 }
 
-export class AbstractChallenge {
+export abstract class AbstractChallenge {
 	from: ID;
 	to: ID;
 	ready: BattleReady | null;
 	format: string;
 	acceptCommand: string | null;
-	constructor(from: ID, to: ID, ready: BattleReady | string, acceptCommand: string | null = null) {
+	message: string;
+	roomid: RoomID;
+	constructor(from: ID, to: ID, ready: BattleReady | string, options: {
+		acceptCommand?: string, rejectCommand?: string, message?: string, roomid?: RoomID,
+	} = {}) {
 		this.from = from;
 		this.to = to;
 		this.ready = typeof ready === 'string' ? null : ready;
 		this.format = typeof ready === 'string' ? ready : ready.formatid;
-		this.acceptCommand = acceptCommand;
+		this.acceptCommand = options.acceptCommand || null;
+		this.message = options.message || '';
+		this.roomid = options.roomid || '';
 	}
+	destroy(accepted?: boolean) {}
 }
+/**
+ * As a regular battle challenge, acceptCommand will be null, but you
+ * can set acceptCommand to use this for custom requests wanting a
+ * team for something.
+ */
 export class BattleChallenge extends AbstractChallenge {
 	declare ready: BattleReady;
 	declare acceptCommand: string | null;
@@ -53,6 +65,26 @@ export class BattleChallenge extends AbstractChallenge {
 export class GameChallenge extends AbstractChallenge {
 	declare ready: null;
 	declare acceptCommand: string;
+}
+/**
+ * Invites for `/importinputlog` (`ready: null`) or 4-player battles
+ * (`ready: BattleReady`)
+ */
+export class BattleInvite extends AbstractChallenge {
+	declare acceptCommand: string;
+	destroy(accepted?: boolean) {
+		if (accepted) return;
+
+		const room = Rooms.get(this.roomid);
+		if (!room) return; // room expired?
+		const battle = room.battle!;
+		let invitesFull = true;
+		for (const player of battle.players) {
+			if (!player.invite && !player.id) invitesFull = false;
+			if (player.invite === this.to) player.invite = '';
+		}
+		if (invitesFull) battle.sendInviteForm(true);
+	}
 }
 
 /**
@@ -89,7 +121,7 @@ export class Challenges extends Map<ID, Challenge[]> {
 		return true;
 	}
 	/** Returns false if the challenge isn't in the table */
-	remove(challenge: Challenge): boolean {
+	remove(challenge: Challenge, accepted?: boolean): boolean {
 		const to = this.getOrCreate(challenge.to);
 		const from = this.getOrCreate(challenge.from);
 
@@ -106,7 +138,10 @@ export class Challenges extends Map<ID, Challenge[]> {
 			from.splice(fromIndex, 1);
 			if (!from.length) this.delete(challenge.from);
 		}
-		if (success) this.update(challenge.to, challenge.from);
+		if (success) {
+			this.update(challenge.to, challenge.from);
+			challenge.destroy(accepted);
+		}
 		return success;
 	}
 	search(userid1: ID, userid2: ID): Challenge | null {
@@ -126,16 +161,20 @@ export class Challenges extends Map<ID, Challenge[]> {
 	 * Try to accept a custom challenge, throwing `Chat.ErrorMessage` on failure,
 	 * and returning the user the challenge was from on a success.
 	 */
-	accept(user: User, target: string, acceptCommand?: string) {
-		const targetid = toID(target);
-		const chall = this.search(user.id, targetid);
-		if (!chall || chall.to !== user.id || (acceptCommand && chall.acceptCommand !== acceptCommand)) {
+	resolveAcceptCommand(context: Chat.CommandContext) {
+		const targetid = context.target as ID;
+		const chall = this.search(context.user.id, targetid);
+		if (!chall || chall.to !== context.user.id || chall.acceptCommand !== context.message) {
 			throw new Chat.ErrorMessage(`Challenge not found. You are using the wrong command. Challenges should be accepted with /accept`);
 		}
-		this.remove(chall);
-		const targetUser = Users.get(targetid);
-		if (!targetUser) throw new Chat.ErrorMessage(`User "${targetid}" is not available right now.`);
-		return targetUser;
+		return chall;
+	}
+	accept(context: Chat.CommandContext) {
+		const chall = this.resolveAcceptCommand(context);
+		this.remove(chall, true);
+		const fromUser = Users.get(chall.from);
+		if (!fromUser) throw new Chat.ErrorMessage(`User "${chall.from}" is not available right now.`);
+		return fromUser;
 	}
 	clearFor(userid: ID, reason?: string): number {
 		const user = Users.get(userid);
@@ -164,17 +203,22 @@ export class Challenges extends Map<ID, Challenge[]> {
 	}
 	getUpdate(challenge: Challenge | null) {
 		if (!challenge) return `/challenge`;
-		return `/challenge ${challenge.format}|${challenge.ready ? challenge.ready.formatid : ''}`;
+		return `/challenge ${challenge.format}|${challenge.ready ? challenge.ready.formatid : ''}|${challenge.message}`;
 	}
 	update(userid1: ID, userid2: ID) {
 		const challenge = this.search(userid1, userid2);
-		const user1 = Users.get(challenge ? challenge.from : userid1);
-		const user2 = Users.get(challenge ? challenge.to : userid2);
+		userid1 = challenge ? challenge.from : userid1;
+		userid2 = challenge ? challenge.to : userid2;
+		this.send(userid1, userid2, this.getUpdate(challenge));
+	}
+	send(userid1: ID, userid2: ID, message: string) {
+		const user1 = Users.get(userid1);
+		const user2 = Users.get(userid2);
 		const user1Identity = user1 ? user1.getIdentity() : ` ${userid1}`;
 		const user2Identity = user2 ? user2.getIdentity() : ` ${userid2}`;
-		const message = `|pm|${user1Identity}|${user2Identity}|${this.getUpdate(challenge)}`;
-		user1?.send(message);
-		user2?.send(message);
+		const fullMessage = `|pm|${user1Identity}|${user2Identity}|${message}`;
+		user1?.send(fullMessage);
+		user2?.send(fullMessage);
 	}
 	updateFor(connection: Connection | User) {
 		const user = connection.user;
