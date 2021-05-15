@@ -6218,7 +6218,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
 			},
 			onSideResidualOrder: 21,
-			onSideResidualSubOrder: 1.15,
+			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Cannonade');
 			},
@@ -6873,7 +6873,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
 			},
 			onSideResidualOrder: 21,
-			onSideResidualSubOrder: 1.15,
+			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Vine Lash');
 			},
@@ -6912,7 +6912,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
 			},
 			onSideResidualOrder: 21,
-			onSideResidualSubOrder: 1.15,
+			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Volcalith');
 			},
@@ -6974,7 +6974,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
 			},
 			onSideResidualOrder: 21,
-			onSideResidualSubOrder: 1.15,
+			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'G-Max Wildfire');
 			},
