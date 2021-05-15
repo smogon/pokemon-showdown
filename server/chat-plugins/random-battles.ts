@@ -644,6 +644,7 @@ export const commands: Chat.ChatCommands = {
 		} else {
 			const setsToCheck = [species];
 			if (dex.gen > 7) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
+			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
 
 			for (const pokemon of setsToCheck) {
 				if (!pokemon.randomBattleMoves) continue;
