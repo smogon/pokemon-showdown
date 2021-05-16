@@ -80,7 +80,11 @@ export const commands: Chat.ChatCommands = {
 			const modchatSetting = (room.settings.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
-		this.checkCan('modchat', null, room);
+		if (user.locked) { // would put this below but it behaves weird if there's no modchat set
+			return this.errorReply(`/modchat - Access denied.`);
+		} else {
+			this.checkCan('modchat', null, room);
+		}
 
 		if (
 			room.settings.modchat && room.settings.modchat.length <= 1 &&

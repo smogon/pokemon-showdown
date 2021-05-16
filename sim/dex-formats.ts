@@ -249,6 +249,12 @@ export class RuleTable extends Map<string, string> {
 			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} is lower than chosen team size ${this.pickedTeamSize}${this.blame('pickedteamsize')}.`);
 		}
 		if (!this.minTeamSize) this.minTeamSize = Math.max(gameTypeMinTeamSize, this.pickedTeamSize || 0);
+		if (this.maxTeamSize < gameTypeMinTeamSize) {
+			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
+		}
+		if (this.maxTeamSize < this.minTeamSize) {
+			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} must be at least min team size ${this.minTeamSize}${this.blame('minteamsize')}.`);
+		}
 		if (this.minLevel > this.maxLevel) {
 			throw new Error(`Min level ${this.minLevel}${this.blame('minlevel')} should not be above max level ${this.maxLevel}${this.blame('maxlevel')}.`);
 		}
@@ -361,7 +367,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly onModifySpecies?: (
 		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
 	) => Species | void;
-	readonly onFieldStart?: (this: Battle) => void;
+	readonly onBattleStart?: (this: Battle) => void;
 	readonly onTeamPreview?: (this: Battle) => void;
 	readonly onValidateSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject

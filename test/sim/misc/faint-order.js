@@ -55,4 +55,119 @@ describe('Fainting', function () {
 		battle.makeChoices('switch Pikachu', '');
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
+
+	it('should check for a winner after an attack', function () {
+		battle = common.gen(4).createBattle([
+			[
+				{species: 'Shedinja', moves: ['shadowsneak']},
+			],
+			[
+				{species: 'Shedinja', moves: ['sleeptalk']},
+			],
+		]);
+		battle.makeChoices();
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 1');
+		battle.destroy();
+
+		battle = common.gen(5).createBattle([
+			[
+				{species: 'Shedinja', moves: ['sleeptalk', 'shadowsneak']},
+			],
+			[
+				{species: 'Shedinja', ability: 'prankster', moves: ['spore']},
+			],
+		]);
+		battle.makeChoices();
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 1');
+	});
+
+	it('should check for a winner after recoil', function () {
+		battle = common.gen(4).createBattle([
+			[
+				{species: 'Shedinja', moves: ['flareblitz']},
+			],
+			[
+				{species: 'Shedinja', moves: ['flareblitz']},
+			],
+		]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, '');
+		battle.destroy();
+
+		battle = common.gen(5).createBattle([
+			[
+				{species: 'Shedinja', moves: ['flareblitz']},
+			],
+			[
+				{species: 'Shedinja', moves: ['sleeptalk']},
+			],
+		]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 1');
+	});
+
+	it('should check for a winner after Rough Skin', function () {
+		battle = common.gen(4).createBattle([
+			[
+				{species: 'Shedinja', moves: ['shadowsneak']},
+			],
+			[
+				{species: 'Shedinja', ability: 'roughskin', moves: ['sleeptalk']},
+			],
+		]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, '');
+		battle.destroy();
+
+		battle = common.gen(6).createBattle([
+			[
+				{species: 'Shedinja', moves: ['shadowsneak']},
+			],
+			[
+				{species: 'Shedinja', ability: 'roughskin', moves: ['sleeptalk']},
+			],
+		]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 2');
+		battle.destroy();
+
+		battle = common.gen(7).createBattle([
+			[
+				{species: 'Shedinja', moves: ['shadowsneak']},
+			],
+			[
+				{species: 'Shedinja', ability: 'roughskin', moves: ['sleeptalk']},
+			],
+		]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 1');
+	});
+
+	it('should check for a winner after future moves', function () {
+		battle = common.gen(7).createBattle([
+			[
+				{species: 'Shedinja', moves: ['futuresight']},
+			],
+			[
+				{species: 'Shedinja', moves: ['sleeptalk']},
+			],
+		]);
+		battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 1');
+	});
 });

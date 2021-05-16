@@ -171,10 +171,9 @@ export const commands: Chat.ChatCommands = {
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedSpecies)}`);
-		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
-		}).join("&nbsp;|&ThickSpace;") + '</font>');
+		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	mixandmegahelp: [
 		`/mnm <pokemon> @ <mega stone>[, generation] - Shows the Mix and Mega evolved Pok\u00e9mon's type and stats.`,
@@ -607,10 +606,9 @@ export const commands: Chat.ChatCommands = {
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedSpecies)}`);
-		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
-		}).join("&nbsp;|&ThickSpace;") + '</font>');
+		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	crossevolvehelp: [
 		"/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pok\u00e9mon.",

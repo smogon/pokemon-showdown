@@ -12,8 +12,6 @@ import {LogViewer} from './chatlog';
 import {roomFaqs} from './room-faqs';
 
 const PATH = 'config/chat-plugins/responder.json';
-// 4: filters out conveniently short aliases
-const MINIMUM_LENGTH = 4;
 
 export let answererData: {[roomid: string]: PluginData} = {};
 
@@ -66,8 +64,7 @@ export class AutoResponder {
 				return null;
 			}
 		}
-		const faqs = Object.keys(helpFaqs)
-			.filter(item => item.length >= MINIMUM_LENGTH && !helpFaqs[item].startsWith('>'));
+		const faqs = Object.keys(helpFaqs).filter(item => !helpFaqs[item].startsWith('>'));
 		for (const faq of faqs) {
 			const match = this.test(normalized, faq);
 			if (match) {
@@ -150,11 +147,11 @@ export class AutoResponder {
 	test(question: string, faq: string) {
 		if (!this.data.pairs[faq]) this.data.pairs[faq] = [];
 		const regexes = this.data.pairs[faq].map(item => new RegExp(item, "i"));
-		if (!regexes) return;
+		if (!regexes.length) return;
 		for (const regex of regexes) {
 			if (regex.test(question)) return {faq, regex: regex.toString()};
 		}
-		return;
+		return null;
 	}
 	log(entry: string, faq: string, expression: string) {
 		if (!this.data.stats) this.data.stats = {};
@@ -461,8 +458,7 @@ export const pages: Chat.PageTable = {
 			this.title = '[Autoresponder Regexes]';
 			this.checkCan('show', null, room);
 			buf = `<div class="pad"><h2>${room.title} responder regexes and responses:</h2>${back}${refresh('keys')}<hr />`;
-			buf += Object.keys(roomData.pairs).map(item => {
-				const regexes = roomData.pairs[item];
+			buf += Object.entries(roomData.pairs).map(([item, regexes]) => {
 				if (regexes.length < 1) return null;
 				let buffer = `<details><summary>${item}</summary>`;
 				buffer += `<div class="ladder pad"><table><tr><th>Index</th><th>Regex</th>`;

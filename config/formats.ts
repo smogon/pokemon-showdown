@@ -2,16 +2,13 @@
 // The rules that formats use are stored in data/rulesets.ts
 /*
 If you want to add custom formats, create a file in this folder named: "custom-formats.ts"
-
 Paste the following code into the file and add your desired formats and their sections between the brackets:
 --------------------------------------------------------------------------------
 // Note: This is the list of formats
 // The rules that formats use are stored in data/rulesets.ts
-
 export const Formats: FormatList = [
 ];
 --------------------------------------------------------------------------------
-
 If you specify a section that already exists, your format will be added to the bottom of that section.
 New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
@@ -419,7 +416,6 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.pokemonperfect.com/forums/index.php?threads/rules-discussion-thread.4222/">ADV 50 Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.pokemonperfect.com/forums/index.php?threads/viability-rankings.4975/">ADV 50 Viability Rankings</a>`,
 		],
-
 		mod: 'gen3',
 		ruleset: ['Standard'],
 		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'NFE', 'LC', "Mean Look"],
@@ -557,7 +553,6 @@ export const Formats: FormatList = [
 	/*{
 		name: "[Gen 1] Flipped",
 		desc: `Every Pok&eacute;mon's stats are reversed. HP becomes Spe, Atk becomes Spc, Def stays the same.`,
-
 		mod: 'gen1',
 		ruleset: ['Standard', 'Flipped Mod'],
 		banlist: ['Uber',],
@@ -646,7 +641,6 @@ export const Formats: FormatList = [
 	/*{
 		name: "[Gen 1] Battle Factory",
 		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
-
 		mod: 'gen1',
 		team: 'randomFactory',
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],

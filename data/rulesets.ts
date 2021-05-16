@@ -392,7 +392,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (parts.length !== 4 || !UINT_REGEX.test(low) || hyphen !== '-' || !UINT_REGEX.test(high)) {
 					throw new Error(`EV limits should be in the format "EV Limits = Atk 0-124 / Def 100-252"`);
 				}
-				const statid = toID(stat) as StatID;
+				const statid = this.dex.toID(stat) as StatID;
 				if (!this.dex.stats.ids().includes(statid)) {
 					throw new Error(`Unrecognized stat name "${stat}" in "${value}"`);
 				}
@@ -427,14 +427,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			this.makeRequest('teampreview');
-		},
-		onFieldStart() {
-			const formesToLeak = ["zaciancrowned", "zamazentacrowned", "xerneas"];
-			for (const pokemon of this.getAllPokemon()) {
-				if (!formesToLeak.includes(this.toID(pokemon.baseSpecies.name))) continue;
-				const newDetails = pokemon.details.replace(', shiny', '');
-				this.add('updatepoke', pokemon, newDetails);
-			}
 		},
 	},
 	onevsone: {

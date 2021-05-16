@@ -3419,7 +3419,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const item = target.takeItem(source);
 			if (!target.item) {
 				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
-				const items = Object.keys(this.dex.data.Items).map(obj => this.dex.items.get(obj).name);
+				const items = this.dex.items.all().map(i => i.name);
 				let randomItem = '';
 				if (items.length) randomItem = this.sample(items);
 				if (!randomItem) {
