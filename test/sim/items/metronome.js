@@ -67,7 +67,7 @@ describe('Metronome (item)', function () {
 		assert.bounded(damage, [59, 70]);
 	});
 
-	it('should keep the multiplier for two turn moves during the charge turn and increase it on each hit', function () {
+	it.skip('should keep the multiplier for two turn moves during the charge turn and increase it on each hit', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'metronome', moves: ['solarbeam']},
 		], [
