@@ -456,7 +456,9 @@ export class HelpTicket extends Rooms.RoomGame {
 	static notifyResolved(user: User, ticket: TicketState, userid = user.id) {
 		const {result, time, by, seen} = ticket.resolved as {result: string, time: number, by: string, seen: boolean};
 		if (seen) return;
-		user.send(`|pm|&Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}, ${Chat.toDurationString(Date.now() - time)} ago.`);
+		const timeString = (Date.now() - time) > 1000 ? `, ${Chat.toDurationString(Date.now() - time)} ago.` : '.';
+		console.log(timeString);
+		user.send(`|pm|&Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
 		if (result?.trim()) {
 			user.send(`|pm|&Staff|${user.getIdentity()}|The result was "${result}"`);
 		}
