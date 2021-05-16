@@ -229,6 +229,19 @@ describe('Neutralizing Gas', function () {
 		assert.equal(firstUnnerveIndex, secondUnnerveIndex, 'Unnerve should have only activated once.');
 	});
 
+	it(`should not announce Neutralizing Gas has worn off, if multiple are active simultenously`, function () {
+		battle = common.createBattle([[
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+		], [
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: "Wynaut", ability: 'intrepidsword', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sleeptalk', 'switch 2');
+		assert(battle.log.every(line => !line.startsWith('|-end')));
+		assert.statStage(battle.p2.active[0], 'atk', 0);
+	});
+
 	describe(`Ability reactivation order`, function () {
 		it(`should cause entrance Abilities to reactivate in order of Speed`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
