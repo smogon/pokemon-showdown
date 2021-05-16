@@ -319,8 +319,8 @@ export class Pokemon {
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,
-				pp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-				maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+				pp: ((move.noPPBoosts || move.isZ) ? move.pp : (this.battle.gen > 2 ? move.pp * 8 / 5 : Math.min(61, move.pp * 8 / 5))),
+				maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : (this.battle.gen > 2 ? move.pp * 8 / 5 : Math.min(61, move.pp * 8 / 5))),
 				target: move.target,
 				disabled: false,
 				disabledSource: '',
