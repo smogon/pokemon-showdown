@@ -204,7 +204,6 @@ type SpreadMoveDamage = (number | boolean | undefined)[];
 type ZMoveOptions = ({move: string, target: MoveTarget} | null)[];
 interface DynamaxOptions {
 	maxMoves: ({move: string, target: MoveTarget, disabled?: boolean})[];
-	dynamaxLevel?: number;
 	gigantamax?: string;
 }
 

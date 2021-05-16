@@ -99,8 +99,7 @@ export interface PokemonSet {
 	 */
 	hpType?: string;
 	/**
-	 * Dynamax Level. Affects the amount of HP gained when
-	 * dynamaxed.
+	 * Dynamax Level. Affects the amount of HP gained when Dynamaxed.
 	 * This value must be between 0 and 10, inclusive.
 	 */
 	dynamaxLevel?: number;
