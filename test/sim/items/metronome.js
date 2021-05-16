@@ -66,4 +66,22 @@ describe('Metronome (item)', function () {
 		const damage = cleffa.maxhp - cleffa.hp;
 		assert.bounded(damage, [59, 70]);
 	});
+
+	it('should keep the multiplier for two turn moves during the charge turn and increase it on each hit', function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', item: 'metronome', moves: ['solarbeam']},
+		], [
+			{species: 'cleffa', evs: {hp: 252}, ability: 'shellarmor', moves: ['sleeptalk', 'protect']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices();
+		const cleffa = battle.p2.active[0];
+		const damage = cleffa.maxhp - cleffa.hp;
+		assert.bounded(damage, [59, 70]);
+		battle.makeChoices();
+		const cleffahealth = cleffa.hp;
+		battle.makeChoices();
+		const damage2 = cleffahealth - cleffa.hp;
+		assert.bounded(damage2, [69, 81]);
+	});
 });
