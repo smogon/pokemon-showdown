@@ -18,15 +18,15 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-status', target, 'slp');
 			}
 			// 1-4 turns
-			this.effectData.time = this.random(2, 6);
+			this.effectState.time = this.random(2, 6);
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
 			if (pokemon.hasAbility('earlybird')) {
-				pokemon.statusData.time--;
+				pokemon.statusState.time--;
 			}
-			pokemon.statusData.time--;
-			if (pokemon.statusData.time <= 0) {
+			pokemon.statusState.time--;
+			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
 				return;
 			}
@@ -34,6 +34,28 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (move.sleepUsable) {
 				return;
 			}
+			return false;
+		},
+	},
+	confusion: {
+		inherit: true,
+		onBeforeMove(pokemon) {
+			pokemon.volatiles['confusion'].time--;
+			if (!pokemon.volatiles['confusion'].time) {
+				pokemon.removeVolatile('confusion');
+				return;
+			}
+			this.add('-activate', pokemon, 'confusion');
+			if (this.randomChance(1, 2)) {
+				return;
+			}
+			const damage = this.actions.getDamage(pokemon, pokemon, 40);
+			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
+			this.damage(damage, pokemon, pokemon, {
+				id: 'confused',
+				effectType: 'Move',
+				type: '???',
+			} as ActiveMove);
 			return false;
 		},
 	},

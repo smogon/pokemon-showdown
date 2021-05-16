@@ -1,4 +1,5 @@
 import RandomGen6Teams from '../gen6/random-teams';
+import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
 
@@ -422,7 +423,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 		let forme = species.name;
 
 		if (typeof species.battleOnly === 'string') {
@@ -495,7 +496,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				const move = this.dex.getMove(setMoveid);
+				const move = this.dex.moves.get(setMoveid);
 				const moveid = move.id;
 				let {cull, isSetup} = this.shouldCullMove(
 					move, hasType, hasMove, hasAbility, counter, movePool,
@@ -631,8 +632,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 				// Handle Hidden Power IVs
 				if (moveid === 'hiddenpower') {
-					const HPivs = this.dex.getType(move.type).HPivs;
-					let iv: StatName;
+					const HPivs = this.dex.types.get(move.type).HPivs;
+					let iv: StatID;
 					for (iv in HPivs) {
 						ivs[iv] = HPivs[iv];
 					}
@@ -646,11 +647,10 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		const abilityNames: string[] = Object.values(species.abilities);
-		abilityNames.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
-
+		Utils.sortBy(abilityNames, name => -this.dex.abilities.get(name).rating);
 
 		if (abilityNames.length > 1) {
-			const abilities = abilityNames.map(name => this.dex.getAbility(name));
+			const abilities = abilityNames.map(name => this.dex.abilities.get(name));
 
 			// Sort abilities by rating with an element of randomness
 			if (abilityNames[2] && abilities[1].rating <= abilities[2].rating && this.randomChance(1, 2)) {
@@ -762,13 +762,13 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 	randomTeam() {
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.getRuleTable(this.format);
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
-		const isMonotype = ruleTable.has('sametypeclause');
-		const typePool = Object.keys(this.dex.data.TypeChart);
-		const type = this.sample(typePool);
+		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const typePool = this.dex.types.names();
+		const type = this.forceMonotype || this.sample(typePool);
 
 		const baseFormes: {[k: string]: number} = {};
 		const tierCount: {[k: string]: number} = {};
@@ -778,8 +778,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 
-		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists || !species.randomBattleMoves) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -801,20 +801,22 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Illusion shouldn't be in the last slot
 			if (species.name === 'Zoroark' && pokemon.length > 4) continue;
 
+			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 			const tier = species.tier;
 
 			// Limit two Pokemon per tier
-			if (this.gen === 5 && !isMonotype && tierCount[tier] > 1) continue;
+			if (this.gen === 5 && !isMonotype && !this.forceMonotype && tierCount[tier] >= 2 * limitFactor) continue;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
 
 			const types = species.types;
 
-			if (!isMonotype) {
+			if (!isMonotype && !this.forceMonotype) {
 				// Limit two of any type
 				let skip = false;
 				for (const typeName of types) {
-					if (typeCount[typeName] > 1) {
+					if (typeCount[typeName] >= 2 * limitFactor) {
 						skip = true;
 						break;
 					}
@@ -828,17 +830,17 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
 				typeCombo = set.ability;
 				if (typeCombo in typeComboCount) continue;
-			} else {
-				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
+			} else if (!this.forceMonotype) {
+				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
 			}
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
-			if (pokemon.length === 6) {
+			if (pokemon.length === this.maxTeamSize) {
 				// Set Zoroark's level to be the same as the last Pokemon
 				const illusion = teamDetails.illusion;
-				if (illusion) pokemon[illusion - 1].level = pokemon[5].level;
+				if (illusion) pokemon[illusion - 1].level = pokemon[this.maxTeamSize - 1].level;
 				break;
 			}
 
@@ -877,7 +879,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// For setting Zoroark's level
 			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
-		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
+			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		}
 
 		return pokemon;
 	}

@@ -182,7 +182,7 @@ export const ssbSets: SSBSets = {
 	},
 	Cake: {
 		species: 'Dunsparce', ability: 'Wonder Guard', item: 'Shell Bell', gender: 'M',
-		moves: ['Haze', 'Jungle Healing', ['Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
+		moves: ['Haze', 'Jungle Healing', ['Baton Pass', 'Poison Gas', 'Corrosive Gas', 'Magic Powder', 'Speed Swap', 'Spite', 'Screech', 'Trick Room', 'Heal Block', 'Geomancy']],
 		signatureMove: 'Kevin',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
@@ -871,10 +871,15 @@ export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
-		const pool = debug.length ? debug : Object.keys(ssbSets);
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		const monotype = ruleTable.has('sametypeclause') ? this.sample([...this.dex.types.names()]) : false;
+		let pool = debug.length ? debug : Object.keys(ssbSets);
+		if (monotype && !debug.length) {
+			pool = pool.filter(x => this.dex.species.get(ssbSets[x].species).types.includes(monotype));
+		}
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
-		while (pool.length && team.length < 6) {
+		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
 			const name = this.sampleNoReplace(pool);
@@ -882,11 +887,13 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
-			if (!debug.length) { // Type limits are ignored when debugging
-				const types = this.dex.getSpecies(ssbSet.species).types;
+			if (!(debug.length || monotype)) { // Type limits are ignored when debugging or for monotype variations.
+				const species = this.dex.species.get(ssbSet.species);
+				if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+
 				const weaknesses = [];
-				for (const type in this.dex.data.TypeChart) {
-					const typeMod = this.dex.getEffectiveness(type, types);
+				for (const type of this.dex.types.names()) {
+					const typeMod = this.dex.getEffectiveness(type, species.types);
 					if (typeMod > 0) weaknesses.push(type);
 				}
 				let rejected = false;
@@ -941,9 +948,9 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Team specific tweaks occur here
 			// Swap last and second to last sets if last set has Illusion
-			if (team.length === 6 && set.ability === 'Illusion') {
-				team[5] = team[4];
-				team[4] = set;
+			if (team.length === this.maxTeamSize && set.ability === 'Illusion') {
+				team[this.maxTeamSize - 1] = team[this.maxTeamSize - 2];
+				team[this.maxTeamSize - 2] = set;
 			}
 		}
 		return team;

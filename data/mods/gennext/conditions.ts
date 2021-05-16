@@ -56,7 +56,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			} else {
 				this.add('-start', target, 'confusion');
 			}
-			this.effectData.time = this.random(3, 4);
+			this.effectState.time = this.random(3, 4);
 		},
 		onEnd(target) {
 			this.add('-end', target, 'confusion');
@@ -340,8 +340,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('snowwarning'));
-					this.field.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.dex.abilities.get('snowwarning'));
+					this.field.weatherState.duration = 0;
 				};
 				move.target = 'self';
 			}
@@ -363,8 +363,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('sandstream'));
-					this.field.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.dex.abilities.get('sandstream'));
+					this.field.weatherState.duration = 0;
 				};
 				move.target = 'self';
 			}
@@ -377,8 +377,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('drizzle'));
-					this.field.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.dex.abilities.get('drizzle'));
+					this.field.weatherState.duration = 0;
 				};
 				move.target = 'self';
 			}

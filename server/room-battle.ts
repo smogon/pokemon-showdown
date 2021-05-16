@@ -16,6 +16,7 @@ import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
 import type {Tournament} from './tournaments/index';
+import {RoomSettings} from './rooms';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
@@ -192,9 +193,9 @@ export class RoomBattleTimer {
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
-		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
+		const hasLongTurns = Dex.formats.get(battle.format, true).gameType !== 'singles';
 		const isChallenge = (battle.challengeType === 'challenge');
-		const timerEntry = Dex.getRuleTable(Dex.getFormat(battle.format, true)).timer;
+		const timerEntry = Dex.formats.getRuleTable(Dex.formats.get(battle.format, true)).timer;
 		const timerSettings = timerEntry?.[0];
 
 		// so that Object.assign doesn't overwrite anything with `undefined`
@@ -504,7 +505,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	ended: boolean;
 	active: boolean;
 	replaySaved: boolean;
-	forcePublic: string | null = null;
+	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	playerTable: {[userid: string]: RoomBattlePlayer};
 	players: RoomBattlePlayer[];
 	p1: RoomBattlePlayer;
@@ -525,7 +526,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
-		const format = Dex.getFormat(options.format, true);
+		const format = Dex.formats.get(options.format, true);
 		this.gameid = 'battle' as ID;
 		this.room = room;
 		this.title = format.name;
@@ -792,8 +793,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
 				// ... should not happen
 			} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
+				const undoFailed = lines[2].includes(`Can't undo`);
 				const request = this[slot].request;
-				request.isWait = false;
+				request.isWait = undoFailed ? 'cantUndo' : false;
 				request.choice = '';
 			} else if (lines[2].startsWith(`|request|`)) {
 				this.rqid++;
@@ -890,7 +892,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
 		p3rating: AnyObject | null = null, p4rating: AnyObject | null = null
 	) {
-		if (Dex.getFormat(this.format, true).noLog) return;
+		if (Dex.formats.get(this.format, true).noLog) return;
 		const logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space
@@ -1069,12 +1071,68 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		if (user) {
 			this.room.auth.set(player.id, Users.PLAYER_SYMBOL);
-			if (this.rated && !this.forcePublic) {
-				this.forcePublic = user.battlesForcedPublic();
-			}
 		}
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
+	}
+
+	checkPrivacySettings(options: RoomBattleOptions & Partial<RoomSettings>) {
+		let inviteOnly = false;
+		const privacySetter = new Set<ID>([]);
+		for (const p of ['p1', 'p2', 'p3', 'p4'] as const) {
+			const playerOptions = options[p];
+			if (playerOptions) {
+				if (playerOptions.inviteOnly) {
+					inviteOnly = true;
+					privacySetter.add(playerOptions.user.id);
+				} else if (playerOptions.hidden) {
+					privacySetter.add(playerOptions.user.id);
+				}
+				if (playerOptions.user) this.checkForcedUserSettings(playerOptions.user);
+			}
+		}
+
+		if (privacySetter.size) {
+			const room = this.room;
+			if (this.forcedSettings.privacy) {
+				room.setPrivate(false);
+				room.settings.modjoin = null;
+				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${this.forcedSettings.privacy}'.</div>`);
+			} else if (!options.tour || (room.tour?.allowModjoin)) {
+				room.setPrivate('hidden');
+				if (inviteOnly) room.settings.modjoin = '%';
+				room.privacySetter = privacySetter;
+				if (inviteOnly) {
+					room.settings.modjoin = '%';
+					room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+				}
+			}
+		}
+	}
+
+	checkForcedUserSettings(user: User) {
+		this.forcedSettings = {
+			modchat: this.forcedSettings.modchat || RoomBattle.battleForcedSetting(user, 'modchat'),
+			privacy: this.forcedSettings.privacy || RoomBattle.battleForcedSetting(user, 'privacy'),
+		};
+		if (
+			this.players.some(p => p.getUser()?.battleSettings.special) ||
+			(this.rated && this.forcedSettings.modchat)
+		) {
+			this.room.settings.modchat = '\u2606';
+		}
+	}
+
+	static battleForcedSetting(user: User, key: 'modchat' | 'privacy') {
+		if (Config.forcedpublicprefixes) {
+			Config.forcedprefixes = {privacy: Config.forcedpublicprefixes};
+			delete Config.forcedpublicprefixes;
+		}
+		if (!Config.forcedprefixes?.[key]) return null;
+		for (const prefix of Config.forcedprefixes[key]) {
+			if (user.id.startsWith(toID(prefix))) return prefix;
+		}
+		return null;
 	}
 
 	makePlayer(user: User) {
@@ -1131,7 +1189,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.room.send(`|title|${this.room.title}`);
 		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format];
 		if (suspectTest) {
-			const format = Dex.getFormat(this.format);
+			const format = Dex.formats.get(this.format);
 			this.room.add(
 				`|html|<div class="broadcast-blue"><strong>${format.name} is currently suspecting ${suspectTest.suspect}! ` +
 				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
@@ -1206,7 +1264,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		});
 		const resultStrings = await teamDataPromise;
 		if (!resultStrings) return;
-		const result = resultStrings.map(item => Dex.fastUnpackTeam(item))[0];
+		const result = Teams.unpack(resultStrings[0]);
 		return result;
 	}
 	onChatMessage(message: string, user: User) {

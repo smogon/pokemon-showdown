@@ -86,7 +86,7 @@ export class AutoResponder {
 		if (response) {
 			let buf = '';
 			buf += Utils.html`<strong>You said:</strong> ${question}<br />`;
-			buf += `<strong>Our automated reply:</strong> ${Chat.formatText(response)}`;
+			buf += `<strong>Our automated reply:</strong> ${Chat.collapseLineBreaksHTML(Chat.formatText(response, true))}`;
 			if (!hideButton) {
 				buf += Utils.html`<hr /><button class="button" name="send" value="A: ${question}">`;
 				buf += `Send to ${this.room.title} if you weren't answered correctly. </button>`;
@@ -208,11 +208,7 @@ export class AutoResponder {
 	}
 	static canOverride(user: User, room: Room) {
 		const devAuth = Rooms.get('development')?.auth;
-		return (
-			devAuth?.atLeast(user, '%') && devAuth?.has(user.id) &&
-			room.auth.has(user.id) && room.auth.atLeast(user, '@') ||
-			user.can('rangeban')
-		);
+		return (devAuth?.atLeast(user, '%') && devAuth?.has(user.id) && room.auth.atLeast(user, '@')) || user.can('rangeban');
 	}
 	destroy() {
 		this.writeState();
@@ -220,7 +216,7 @@ export class AutoResponder {
 		// @ts-ignore deallocating
 		this.room = null;
 	}
-	ignore(terms: string[], context: CommandContext) {
+	ignore(terms: string[], context: Chat.CommandContext) {
 		const filtered = terms.map(t => context.filter(t)).filter(Boolean);
 		if (filtered.length !== terms.length) {
 			throw new Chat.ErrorMessage(`Invalid terms.`);
@@ -253,7 +249,7 @@ for (const room of Rooms.rooms.values()) {
 
 const BYPASS_TERMS = ['a:', 'A:', '!', '/'];
 
-export const chatfilter: ChatFilter = function (message, user, room) {
+export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	if (BYPASS_TERMS.some(t => message.startsWith(t))) {
 		// do not return `message` or it will bypass all filters
 		// including super important filters like against `/html`
@@ -265,20 +261,17 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		if (!reply) {
 			return message;
 		} else {
-			user.sendTo(room.roomid, `|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
+			this.sendReply(`|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
 			const trimmedMessage = `<div class="infobox">${responder.visualize(message, true)}</div>`;
 			setTimeout(() => {
-				user.sendTo(
-					room.roomid,
-					`|c| ${user.name}|/uhtmlchange askhelp-${user}-${toID(message)}, ${trimmedMessage}`
-				);
+				this.sendReply(`|uhtmlchange|askhelp-${user}-${toID(message)}|${trimmedMessage}`);
 			}, 10 * 1000);
 			return false;
 		}
 	}
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	question(target, room, user) {
 		room = this.requireRoom();
 		const responder = room.responder;
@@ -410,7 +403,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	autoresponder(args, user) {
 		const room = this.requireRoom();
 		if (!room.responder) {

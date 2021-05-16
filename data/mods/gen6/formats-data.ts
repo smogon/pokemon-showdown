@@ -664,7 +664,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	kangaskhanmega: {
-		randomBattleMoves: ["crunch", "earthquake", "fakeout", "poweruppunch", "return", "suckerpunch"],
+		randomBattleMoves: ["crunch", "earthquake", "fakeout", "poweruppunch", "return", "suckerpunch", "seismictoss"],
 		randomDoubleBattleMoves: ["crunch", "doubleedge", "drainpunch", "earthquake", "fakeout", "poweruppunch", "protect", "return", "suckerpunch"],
 		tier: "Uber",
 		doublesTier: "DOU",
@@ -1223,7 +1223,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	shuckle: {
-		randomBattleMoves: ["encore", "infestation", "knockoff", "stealthrock", "stickyweb", "toxic"],
+		randomBattleMoves: ["encore", "knockoff", "stealthrock", "stickyweb", "toxic"],
 		randomDoubleBattleMoves: ["encore", "guardsplit", "helpinghand", "knockoff", "powersplit", "stealthrock", "stickyweb", "toxic"],
 		tier: "RUBL",
 		doublesTier: "(DUU)",

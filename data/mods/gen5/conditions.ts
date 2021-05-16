@@ -2,22 +2,22 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	slp: {
 		inherit: true,
 		onSwitchIn(target) {
-			this.effectData.time = this.effectData.startTime;
+			this.effectState.time = this.effectState.startTime;
 		},
 	},
 	partiallytrapped: {
 		inherit: true,
 		onStart(pokemon, source) {
-			this.add('-activate', pokemon, 'move: ' + this.effectData.sourceEffect, '[of] ' + source);
-			this.effectData.boundDivisor = source.hasItem('bindingband') ? 8 : 16;
+			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, '[of] ' + source);
+			this.effectState.boundDivisor = source.hasItem('bindingband') ? 8 : 16;
 		},
 		onResidual(pokemon) {
-			const trapper = this.effectData.source;
+			const trapper = this.effectState.source;
 			if (trapper && (!trapper.isActive || trapper.hp <= 0 || !trapper.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
 				return;
 			}
-			this.damage(pokemon.baseMaxhp / this.effectData.boundDivisor);
+			this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
 		},
 	},
 	stall: {
@@ -25,12 +25,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		duration: 2,
 		counterMax: 256,
 		onStart() {
-			this.effectData.counter = 2;
+			this.effectState.counter = 2;
 		},
 		onStallMove() {
-			// this.effectData.counter should never be undefined here.
+			// this.effectState.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
-			const counter = this.effectData.counter || 1;
+			const counter = this.effectState.counter || 1;
 			if (counter >= 256) {
 				// 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 				return (this.random() * 4294967296 < 1);
@@ -39,10 +39,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			return this.randomChance(1, counter);
 		},
 		onRestart() {
-			if (this.effectData.counter < (this.effect as Condition).counterMax!) {
-				this.effectData.counter *= 2;
+			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
+				this.effectState.counter *= 2;
 			}
-			this.effectData.duration = 2;
+			this.effectState.duration = 2;
 		},
 	},
 	gem: {

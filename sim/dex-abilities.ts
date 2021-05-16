@@ -1,5 +1,5 @@
-import {EventMethods} from './dex-conditions';
-import {BasicEffect} from './dex-data';
+import {PokemonEventMethods} from './dex-conditions';
+import {BasicEffect, toID} from './dex-data';
 
 interface AbilityEventMethods {
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
@@ -8,7 +8,7 @@ interface AbilityEventMethods {
 	onStart?: (this: Battle, target: Pokemon) => void;
 }
 
-export interface AbilityData extends Partial<Ability>, AbilityEventMethods, EventMethods {
+export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {
 	name: string;
 }
 
@@ -20,13 +20,12 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
 	readonly suppressWeather: boolean;
-	readonly condition?: Partial<ConditionData>;
+	readonly condition?: ConditionData;
 	readonly isPermanent?: boolean;
 	readonly isUnbreakable?: boolean;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
-		data = this;
+	constructor(data: AnyObject) {
+		super(data);
 
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
@@ -48,5 +47,65 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 				this.gen = 3;
 			}
 		}
+	}
+}
+
+export class DexAbilities {
+	readonly dex: ModdedDex;
+	readonly abilityCache = new Map<ID, Ability>();
+	allCache: readonly Ability[] | null = null;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name: string | Ability = ''): Ability {
+		if (name && typeof name !== 'string') return name;
+
+		const id = toID(name);
+		return this.getByID(id);
+	}
+
+	getByID(id: ID): Ability {
+		let ability = this.abilityCache.get(id);
+		if (ability) return ability;
+
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			ability = this.get(this.dex.data.Aliases[id]);
+		} else if (id && this.dex.data.Abilities.hasOwnProperty(id)) {
+			const abilityData = this.dex.data.Abilities[id] as any;
+			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);
+			ability = new Ability({
+				name: id,
+				...abilityData,
+				...abilityTextData,
+			});
+			if (ability.gen > this.dex.gen) {
+				(ability as any).isNonstandard = 'Future';
+			}
+			if (this.dex.currentMod === 'letsgo' && ability.id !== 'noability') {
+				(ability as any).isNonstandard = 'Past';
+			}
+			if ((this.dex.currentMod === 'letsgo' || this.dex.gen <= 2) && ability.id === 'noability') {
+				(ability as any).isNonstandard = null;
+			}
+		} else {
+			ability = new Ability({
+				id, name: id, exists: false,
+			});
+		}
+
+		if (ability.exists) this.abilityCache.set(id, ability);
+		return ability;
+	}
+
+	all(): readonly Ability[] {
+		if (this.allCache) return this.allCache;
+		const abilities = [];
+		for (const id in this.dex.data.Abilities) {
+			abilities.push(this.getByID(id as ID));
+		}
+		this.allCache = abilities;
+		return this.allCache;
 	}
 }

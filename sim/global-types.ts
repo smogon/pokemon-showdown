@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+type Mutable<T> = {
+	-readonly [P in keyof T]: T[P];
+};
+
 type Battle = import('./battle').Battle;
 type BattleQueue = import('./battle-queue').BattleQueue;
 type BattleActions = import('./battle-actions').BattleActions;
@@ -14,41 +18,23 @@ type Side = import('./side').Side;
 type TeamValidator = import('./team-validator').TeamValidator;
 type PokemonSources = import('./team-validator').PokemonSources;
 
+/** An ID must be lowercase alphanumeric. */
 type ID = '' | string & {__isID: true};
 type PokemonSlot = '' | string & {__isSlot: true};
 interface AnyObject {[k: string]: any}
-interface DexTable<T> {
-	[key: string]: T;
-}
 
 type GenderName = 'M' | 'F' | 'N' | '';
-type StatNameExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
-type StatName = 'hp' | StatNameExceptHP;
-type StatsExceptHPTable = {[stat in StatNameExceptHP]: number};
-type StatsTable = {[stat in StatName]: number };
+type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+type StatID = 'hp' | StatIDExceptHP;
+type StatsExceptHPTable = {[stat in StatIDExceptHP]: number};
+type StatsTable = {[stat in StatID]: number};
 type SparseStatsTable = Partial<StatsTable>;
-type BoostName = StatNameExceptHP | 'accuracy' | 'evasion';
-type BoostsTable = {[boost in BoostName]: number };
+type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
+type BoostsTable = {[boost in BoostID]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
 type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax';
 
-interface PokemonSet {
-	name: string;
-	species: string;
-	item: string;
-	ability: string;
-	moves: string[];
-	nature: string;
-	gender: string;
-	evs: StatsTable;
-	ivs: StatsTable;
-	level: number;
-	shiny?: boolean;
-	happiness?: number;
-	pokeball?: string;
-	hpType?: string;
-	gigantamax?: boolean;
-}
+type PokemonSet = import('./teams').PokemonSet;
 
 /**
  * Describes a possible way to get a move onto a pokemon.
@@ -179,6 +165,8 @@ type SpeciesData = import('./dex-species').SpeciesData;
 type ModdedSpeciesData = import('./dex-species').ModdedSpeciesData;
 type SpeciesFormatsData = import('./dex-species').SpeciesFormatsData;
 type ModdedSpeciesFormatsData = import('./dex-species').ModdedSpeciesFormatsData;
+type LearnsetData = import('./dex-species').LearnsetData;
+type ModdedLearnsetData = import('./dex-species').ModdedLearnsetData;
 type Species = import('./dex-species').Species;
 
 type FormatData = import('./dex-formats').FormatData;
@@ -186,20 +174,10 @@ type FormatList = import('./dex-formats').FormatList;
 type ModdedFormatData = import('./dex-formats').ModdedFormatData;
 type Format = import('./dex-formats').Format;
 
-interface LearnsetData {
-	learnset?: {[moveid: string]: MoveSource[]};
-	eventData?: EventInfo[];
-	eventOnly?: boolean;
-	encounters?: EventInfo[];
-	exists?: boolean;
-}
-
-type ModdedLearnsetData = LearnsetData & {inherit?: true};
-
 interface NatureData {
 	name: string;
-	plus?: StatNameExceptHP;
-	minus?: StatNameExceptHP;
+	plus?: StatIDExceptHP;
+	minus?: StatIDExceptHP;
 }
 
 type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
@@ -328,7 +306,8 @@ interface ModdedBattlePokemon {
 	inherit?: true;
 	lostItemForDelibird?: Item | null;
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number;
-	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number;
+	calculateStat?: (this: Pokemon, statName: StatIDExceptHP, boost: number, modifier?: number) => number;
+	cureStatus?: (this: Pokemon, silent?: boolean) => boolean;
 	getAbility?: (this: Pokemon) => Ability;
 	getActionSpeed?: (this: Pokemon) => number;
 	getMoveRequestData?: (this: Pokemon) => {
@@ -337,14 +316,15 @@ interface ModdedBattlePokemon {
 		canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: ZMoveOptions,
 	};
 	getStat?: (
-		this: Pokemon, statName: StatNameExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean
+		this: Pokemon, statName: StatIDExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean
 	) => number;
 	getWeight?: (this: Pokemon) => number;
 	hasAbility?: (this: Pokemon, ability: string | string[]) => boolean;
 	isGrounded?: (this: Pokemon, negateImmunity: boolean | undefined) => boolean | null;
-	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
+	modifyStat?: (this: Pokemon, statName: StatIDExceptHP, modifier: number) => void;
 	moveUsed?: (this: Pokemon, move: ActiveMove, targetLoc?: number) => void;
 	recalculateStats?: (this: Pokemon) => void;
+	runImmunity?: (this: Pokemon, type: string, message?: string | boolean) => boolean;
 	setAbility?: (
 		this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean
 	) => string | false;
@@ -398,20 +378,12 @@ interface TypeData {
 	damageTaken: {[attackingTypeNameOrEffectid: string]: number};
 	HPdvs?: SparseStatsTable;
 	HPivs?: SparseStatsTable;
+	isNonstandard?: Nonstandard | null;
 }
 
 type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & {inherit: true};
 
-interface TypeInfo extends Readonly<TypeData> {
-	readonly effectType: 'Type' | 'EffectType';
-	readonly exists: boolean;
-	readonly gen: number;
-	readonly HPdvs: SparseStatsTable;
-	readonly HPivs: SparseStatsTable;
-	readonly id: ID;
-	readonly name: string;
-	readonly toString: () => string;
-}
+type TypeInfo = import('./dex-data').TypeInfo;
 
 interface PlayerOptions {
 	name?: string;

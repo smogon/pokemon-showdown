@@ -21,7 +21,7 @@ export function getAlias(roomid: RoomID, key: string) {
 	return false;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	addfaq(target, room, user, connection) {
 		room = this.requireRoom();
 		this.checkCan('ban', null, room);
@@ -131,7 +131,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	roomfaqs(args, user) {
 		const room = this.requireRoom();
 		this.title = `[Room FAQs]`;
@@ -146,7 +146,7 @@ export const pages: PageTable = {
 
 		buf += `<h2>FAQs for ${room.title}:</h2>`;
 		const keys = Object.keys(roomFaqs[room.roomid]);
-		const sortedKeys = keys.filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b));
+		const sortedKeys = Utils.sortBy(keys.filter(val => !getAlias(room.roomid, val)));
 		for (const key of sortedKeys) {
 			const topic = roomFaqs[room.roomid][key];
 			buf += `<div class="infobox">`;

@@ -36,7 +36,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.baseSpecies = species;
 				this.add('-start', pokemon, 'Red Orb', '[silent]');
 				const apparentSpecies = pokemon.illusion ? pokemon.illusion.species.name : pokemon.m.originalSpecies;
-				const oSpecies = this.dex.getSpecies(apparentSpecies);
+				const oSpecies = this.dex.species.get(apparentSpecies);
 				if (pokemon.illusion) {
 					const types = oSpecies.types;
 					if (types.length > 1 || types[types.length - 1] !== 'Fire') {

@@ -19,7 +19,7 @@ const HOSTS_FILE = 'config/hosts.csv';
 const PROXIES_FILE = 'config/proxies.csv';
 
 import * as dns from 'dns';
-import {FS} from '../lib';
+import {FS, Net, Utils} from '../lib';
 
 export interface AddressRange {
 	minIP: number;
@@ -171,25 +171,9 @@ export const IPTools = new class {
 		return {minIP, maxIP};
 	}
 
-	ipSort(a: string, b: string) {
-		let i = 0;
-		let diff = 0;
-		const aParts = a.split('.');
-		const bParts = b.split('.');
-		while (diff === 0) {
-			const aPart = parseInt(aParts[i]);
-			const bPart = parseInt(bParts[i]);
-			if (isNaN(aPart) || isNaN(bPart)) throw new Error("Invalid IP passed to IPTools.ipSort.");
-			diff = aPart - bPart;
-			i++;
-		}
-		return diff;
-	}
-
 	/******************************
 	 * Range management functions *
 	 ******************************/
-
 
 	checkPattern(patterns: AddressRange[], num: number) {
 		for (const pattern of patterns) {
@@ -221,10 +205,11 @@ export const IPTools = new class {
 	 * Proxy and host management functions
 	 */
 	ranges: (AddressRange & {host: string})[] = [];
-	singleIPOpenProxies: Set<string> = new Set();
-	proxyHosts: Set<string> = new Set();
-	residentialHosts: Set<string> = new Set();
-	mobileHosts: Set<string> = new Set();
+	singleIPOpenProxies = new Set<string>();
+	torProxyIps = new Set<string>();
+	proxyHosts = new Set<string>();
+	residentialHosts = new Set<string>();
+	mobileHosts = new Set<string>();
 	async loadHostsAndRanges() {
 		const data = await FS(HOSTS_FILE).readIfExists() + await FS(PROXIES_FILE).readIfExists();
 		// Strip carriage returns for Windows compatibility
@@ -423,9 +408,8 @@ export const IPTools = new class {
 	}
 
 	sortRanges() {
-		IPTools.ranges.sort((a, b) => a.minIP - b.minIP);
+		Utils.sortBy(IPTools.ranges, range => range.minIP);
 	}
-
 
 	getRange(minIP: number, maxIP: number) {
 		for (const range of IPTools.ranges) {
@@ -560,7 +544,7 @@ export const IPTools = new class {
 		if (Punishments.sharedIps.has(ip)) {
 			return 'shared';
 		}
-		if (this.singleIPOpenProxies.has(ip)) {
+		if (this.singleIPOpenProxies.has(ip) || this.torProxyIps.has(ip)) {
 			// single-IP open proxies
 			return 'proxy';
 		}
@@ -604,6 +588,17 @@ export const IPTools = new class {
 		// rdns entry exists but is unrecognized
 		return 'res?';
 	}
+	async updateTorRanges() {
+		try {
+			const raw = await Net('https://check.torproject.org/torbulkexitlist').get();
+			const torIps = raw.split('\n');
+			for (const ip of torIps) {
+				if (this.ipRegex.test(ip)) {
+					this.torProxyIps.add(ip);
+				}
+			}
+		} catch (e) {}
+	}
 };
 
 const telstraRange: AddressRange & {host: string} = {
@@ -613,3 +608,5 @@ const telstraRange: AddressRange & {host: string} = {
 };
 
 export default IPTools;
+
+void IPTools.updateTorRanges();

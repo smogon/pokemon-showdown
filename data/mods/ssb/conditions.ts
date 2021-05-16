@@ -9,7 +9,7 @@ for (const row of usergroupData) {
 	if (!toID(row)) continue;
 
 	const cells = row.split(',');
-	if (cells.length !== 2) throw new Error(`Invalid entry when parsing usergroups.csv`);
+	if (cells.length > 3) throw new Error(`Invalid entry when parsing usergroups.csv`);
 	usergroups[toID(cells[0])] = cells[1].trim() || ' ';
 }
 
@@ -281,7 +281,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
 		// Unaware innate
 		onAnyModifyBoost(boosts, pokemon) {
-			const unawareUser = this.effectData.target;
+			const unawareUser = this.effectState.target;
 			if (unawareUser.illusion) return;
 			if (unawareUser === pokemon) return;
 			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
@@ -347,7 +347,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
 			// h innate
 			if (pokemon.illusion) return;
-			const typeList = Object.keys(this.dex.data.TypeChart);
+			const typeList = [...this.dex.types.names()];
 			this.prng.shuffle(typeList);
 			const firstType = typeList[0];
 			this.prng.shuffle(typeList);
@@ -369,7 +369,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onResidual(pokemon) {
 			if (pokemon.illusion) return;
 			if (pokemon.activeTurns) {
-				const typeList = Object.keys(this.dex.data.TypeChart);
+				const typeList = [...this.dex.types.names()];
 				this.prng.shuffle(typeList);
 				const firstType = typeList[0];
 				this.prng.shuffle(typeList);
@@ -668,7 +668,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		// Unburden Innate
 		onAfterUseItem(item, pokemon) {
-			if (pokemon !== this.effectData.target) return;
+			if (pokemon !== this.effectState.target) return;
 			pokemon.addVolatile('unburden');
 		},
 		onTakeItem(item, pokemon) {
@@ -788,7 +788,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (target.illusion) return;
-			if (move.flags['contact']) {
+			if (this.checkMoveMakesContact(move, source, target)) {
 				if (!source.m.marked) this.add('-message', `${source.name} was marked by an unknown being...`);
 				source.m.marked = true;
 			}
@@ -1833,7 +1833,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return this.chainModify(1.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'The hail became extremely chilling!');
 		},
@@ -1851,17 +1851,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				});
 			}
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
-			if (target.isAlly(this.effectData.source)) return;
+			if (target.isAlly(this.effectState.source)) return;
 			// Hail is stronger from Heavy Hailstorm
 			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 8);
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -1870,15 +1870,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Winter Hail',
 		effectType: 'Weather',
 		duration: 0,
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			this.add('-message', 'It became winter!');
 		},
 		onModifySpe(spe, pokemon) {
 			if (!pokemon.hasType('Ice')) return this.chainModify(0.5);
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('winterhail')) this.eachEvent('Weather');
 		},
@@ -1886,7 +1886,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (target.hasType('Ice')) return;
 			this.damage(target.baseMaxhp / 8);
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -1894,35 +1894,35 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Raindrop',
 		noCopy: true,
 		onStart(target) {
-			this.effectData.layers = 1;
-			this.effectData.def = 0;
-			this.effectData.spd = 0;
+			this.effectState.layers = 1;
+			this.effectState.def = 0;
+			this.effectState.spd = 0;
 			this.add('-start', target, 'Raindrop');
-			this.add('-message', `${target.name} has ${this.effectData.layers} raindrop(s)!`);
+			this.add('-message', `${target.name} has ${this.effectState.layers} raindrop(s)!`);
 			const [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
 			this.boost({def: 1, spd: 1}, target, target);
-			if (curDef !== target.boosts.def) this.effectData.def--;
-			if (curSpD !== target.boosts.spd) this.effectData.spd--;
+			if (curDef !== target.boosts.def) this.effectState.def--;
+			if (curSpD !== target.boosts.spd) this.effectState.spd--;
 		},
 		onRestart(target) {
-			this.effectData.layers++;
+			this.effectState.layers++;
 			this.add('-start', target, 'Raindrop');
-			this.add('-message', `${target.name} has ${this.effectData.layers} raindrop(s)!`);
+			this.add('-message', `${target.name} has ${this.effectState.layers} raindrop(s)!`);
 			const curDef = target.boosts.def;
 			const curSpD = target.boosts.spd;
 			this.boost({def: 1, spd: 1}, target, target);
-			if (curDef !== target.boosts.def) this.effectData.def--;
-			if (curSpD !== target.boosts.spd) this.effectData.spd--;
+			if (curDef !== target.boosts.def) this.effectState.def--;
+			if (curSpD !== target.boosts.spd) this.effectState.spd--;
 		},
 		onEnd(target) {
-			if (this.effectData.def || this.effectData.spd) {
+			if (this.effectState.def || this.effectState.spd) {
 				const boosts: SparseBoostsTable = {};
-				if (this.effectData.def) boosts.def = this.effectData.def;
-				if (this.effectData.spd) boosts.spd = this.effectData.spd;
+				if (this.effectState.def) boosts.def = this.effectState.def;
+				if (this.effectState.spd) boosts.spd = this.effectState.spd;
 				this.boost(boosts, target, target);
 			}
 			this.add('-end', target, 'Raindrop');
-			if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
+			if (this.effectState.def !== this.effectState.layers * -1 || this.effectState.spd !== this.effectState.layers * -1) {
 				this.hint("Raindrop keeps track of how many times it successfully altered each stat individually.");
 			}
 		},
@@ -1978,7 +1978,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			const windSpeeds = [65, 85, 95, 115, 140];
 			return windSpeeds.indexOf((effect as ActiveMove).basePower) + 2;
 		},
-		onStart(targetSide) {
+		onSideStart(targetSide) {
 			this.add('-sidestart', targetSide, 'Storm Surge');
 			this.add('-message', `Storm Surge flooded the afflicted side of the battlefield!`);
 		},
@@ -1994,7 +1994,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	degeneratormod: {
 		onBeforeSwitchOut(pokemon) {
 			let alreadyAdded = false;
-			for (const source of this.effectData.sources) {
+			for (const source of this.effectState.sources) {
 				if (!source.hp || source.volatiles['gastroacid']) continue;
 				if (!alreadyAdded) {
 					const foe = pokemon.side.foe.active[0];
@@ -2070,7 +2070,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (source && target === source) return;
 			if (target.species.id !== 'miniorblue') return;
 			let showMsg = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -2092,7 +2092,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}.bind(this);
 				return;
 			}
-			const dazzlingHolder = this.effectData.target;
+			const dazzlingHolder = this.effectState.target;
 			if (!dazzlingHolder.set.shiny) return;
 			if (dazzlingHolder.species.id !== 'minior') return;
 			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
@@ -2147,11 +2147,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'Turbulence',
 		effectType: 'Weather',
 		duration: 0,
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'DeltaStream', '[upkeep]');
 			this.eachEvent('Weather');
 		},
@@ -2170,13 +2170,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					if (key.endsWith('mod') || key.endsWith('clause')) continue;
 					side.removeSideCondition(key);
 					if (!silentRemove.includes(key)) {
-						this.add('-sideend', side, this.dex.getEffect(key).name, '[from] ability: Turbulence');
+						this.add('-sideend', side, this.dex.conditions.get(key).name, '[from] ability: Turbulence');
 					}
 				}
 			}
 			this.field.clearTerrain();
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -2211,20 +2211,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return this.chainModify(0.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectData.duration = 0;
+				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'RainDance');
 			}
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'RainDance', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onEnd() {
+		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
 	},
@@ -2239,7 +2239,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && this.effectData.target.hasAlly(target)) {
+			if (target !== source && this.effectState.target.hasAlly(target)) {
 				if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
 						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 					return;
@@ -2251,16 +2251,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Aurora Veil from starting!`);
 				return null;
 			}
 			this.add('-sidestart', side, 'move: Aurora Veil');
 		},
-		onResidualOrder: 21,
-		onResidualSubOrder: 1,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideResidualSubOrder: 1,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'move: Aurora Veil');
 		},
 	},
@@ -2274,7 +2274,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Special') {
+			if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Light Screen weaken');
 					if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -2282,16 +2282,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Light Screen from starting!`);
 				return null;
 			}
 			this.add('-sidestart', side, 'move: Light Screen');
 		},
-		onResidualOrder: 21,
-		onResidualSubOrder: 1,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideResidualSubOrder: 1,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'move: Light Screen');
 		},
 	},
@@ -2302,7 +2302,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 			if (source && target !== source) {
 				let showMsg = false;
-				let i: BoostName;
+				let i: BoostID;
 				for (i in boost) {
 					if (boost[i]! < 0) {
 						delete boost[i];
@@ -2314,16 +2314,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Mist from starting!`);
 				return null;
 			}
 			this.add('-sidestart', side, 'move: Mist');
 		},
-		onResidualOrder: 21,
-		onResidualSubOrder: 3,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideResidualSubOrder: 3,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'Mist');
 		},
 	},
@@ -2337,7 +2337,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return 5;
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== source && this.effectData.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
+			if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 					this.debug('Reflect weaken');
 					if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -2345,15 +2345,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				}
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Reflect from starting!`);
 				return null;
 			}
 			this.add('-sidestart', side, 'Reflect');
 		},
-		onResidualOrder: 21,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'Reflect');
 		},
 	},
@@ -2386,21 +2386,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				return null;
 			}
 		},
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Safeguard from starting!`);
 				return null;
 			}
 			this.add('-sidestart', side, 'move: Safeguard');
 		},
-		onResidualOrder: 21,
-		onResidualSubOrder: 2,
-		onEnd(side) {
+		onSideResidualOrder: 21,
+		onSideResidualSubOrder: 2,
+		onSideEnd(side) {
 			this.add('-sideend', side, 'Safeguard');
 		},
 	},
 	gmaxsteelsurge: {
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Steel Spikes from starting!`);
 				return null;
@@ -2421,29 +2421,29 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	spikes: {
 		name: "Spikes",
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Spikes from starting!`);
 				return null;
 			}
-			this.effectData.layers = 1;
+			this.effectState.layers = 1;
 			this.add('-sidestart', side, 'move: Spikes');
 		},
-		onRestart(side) {
-			if (this.effectData.layers >= 3) return false;
+		onSideRestart(side) {
+			if (this.effectState.layers >= 3) return false;
 			this.add('-sidestart', side, 'Spikes');
-			this.effectData.layers++;
+			this.effectState.layers++;
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.isGrounded()) return;
 			if (pokemon.hasItem('heavydutyboots')) return;
 			const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
-			this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
+			this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 		},
 	},
 	stealthrock: {
 		name: "Stealth Rock",
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Stealth Rock from starting!`);
 				return null;
@@ -2458,7 +2458,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	stickyweb: {
 		name: "Sticky Web",
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Sticky Web from starting!`);
 				return null;
@@ -2474,18 +2474,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	toxicspikes: {
 		name: "Toxic Spikes",
-		onStart(side) {
+		onSideStart(side) {
 			if (this.field.isTerrain('waveterrain')) {
 				this.add('-message', `Wave Terrain prevented Toxic Spikes from starting!`);
 				return null;
 			}
 			this.add('-sidestart', side, 'move: Toxic Spikes');
-			this.effectData.layers = 1;
+			this.effectState.layers = 1;
 		},
-		onRestart(side) {
-			if (this.effectData.layers >= 2) return false;
+		onSideRestart(side) {
+			if (this.effectState.layers >= 2) return false;
 			this.add('-sidestart', side, 'move: Toxic Spikes');
-			this.effectData.layers++;
+			this.effectState.layers++;
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.isGrounded()) return;
@@ -2494,7 +2494,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				pokemon.side.removeSideCondition('toxicspikes');
 			} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
 				return;
-			} else if (this.effectData.layers >= 2) {
+			} else if (this.effectState.layers >= 2) {
 				pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 			} else {
 				pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
@@ -2536,23 +2536,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 
 				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
-			this.add('-message', 'Dynamax is not allowed in SSB4, and custom challenges or tournaments won\'t save you from that fact.');
-			pokemon.removeVolatile('dynamax');
-			this.queue.cancelMove(pokemon);
-			// Actually its to prvent the user from using a Max Move in case of a crash. But this is funnier.
-			this.hint(`Your move was aborted due to dynamax. Cheater.`);
+			this.add('-message', 'Ok. sure. Dynamax. Just abuse it and win the game already.');
+			// This is just for fun, as dynamax cannot be in a rated battle.
+			this.win(pokemon.side);
 		},
 	},
 	echoedvoiceclone: {
 		duration: 2,
-		onStart() {
-			this.effectData.multiplier = 1;
+		onFieldStart() {
+			this.effectState.multiplier = 1;
 		},
-		onRestart() {
-			if (this.effectData.duration !== 2) {
-				this.effectData.duration = 2;
-				if (this.effectData.multiplier < 5) {
-					this.effectData.multiplier++;
+		onFieldRestart() {
+			if (this.effectState.duration !== 2) {
+				this.effectState.duration = 2;
+				if (this.effectState.multiplier < 5) {
+					this.effectState.multiplier++;
 				}
 			}
 		},

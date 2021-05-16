@@ -122,7 +122,7 @@ export function destroy() {
 	Repeats.destroy();
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	repeats(args, user) {
 		const room = this.requireRoom();
 		this.title = `[Repeats]`;
@@ -150,7 +150,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	repeatbymessages: 'repeat',
 	repeathtmlbymessages: 'repeat',
 	repeathtml: 'repeat',

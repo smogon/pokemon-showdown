@@ -101,7 +101,7 @@ export class BattleActions {
 			// will definitely switch out at this point
 
 			oldActive.illusion = null;
-			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
+			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
 
 			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
 			this.battle.queue.cancelAction(oldActive);
@@ -141,7 +141,7 @@ export class BattleActions {
 
 		if (isDrag && this.battle.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
-			this.battle.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
+			this.battle.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityState, pokemon);
 			this.runSwitch(pokemon);
 		} else {
 			this.battle.queue.insertChoice({choice: 'runUnnerve', pokemon});
@@ -172,8 +172,8 @@ export class BattleActions {
 		if (!pokemon.hp) return false;
 		pokemon.isStarted = true;
 		if (!pokemon.fainted) {
-			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
-			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
+			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
 		}
 		if (this.battle.gen === 4) {
 			for (const foeActive of pokemon.foes()) {
@@ -265,7 +265,7 @@ export class BattleActions {
 					return;
 				}
 			} else {
-				sourceEffect = this.dex.getEffect('lockedmove');
+				sourceEffect = this.dex.conditions.get('lockedmove');
 			}
 			pokemon.moveUsed(move, targetLoc);
 		}
@@ -276,7 +276,7 @@ export class BattleActions {
 
 		if (zMove) {
 			if (pokemon.illusion) {
-				this.battle.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
 			this.battle.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
@@ -309,7 +309,7 @@ export class BattleActions {
 				this.battle.add('-activate', dancer, 'ability: Dancer');
 				const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.getAbility('dancer'), undefined, true);
+				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.abilities.get('dancer'), undefined, true);
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -717,7 +717,7 @@ export class BattleActions {
 		if (move.stealsBoosts) {
 			const boosts: SparseBoostsTable = {};
 			let stolen = false;
-			let statName: BoostName;
+			let statName: BoostID;
 			for (statName in target.boosts) {
 				const stage = target.boosts[statName];
 				if (stage > 0) {
@@ -730,7 +730,7 @@ export class BattleActions {
 				this.battle.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
 				this.battle.boost(boosts, pokemon, pokemon);
 
-				let statName2: BoostName;
+				let statName2: BoostID;
 				for (statName2 in boosts) {
 					boosts[statName2] = 0;
 				}
@@ -811,7 +811,7 @@ export class BattleActions {
 		let nullDamage = true;
 		let moveDamage: (number | boolean | undefined)[] = [];
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
-		const isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
+		const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 
 		let targetsCopy: (Pokemon | false | null)[] = targets.slice(0);
 		let hit: number;
@@ -882,7 +882,7 @@ export class BattleActions {
 				move.totalDamage += damage[i] as number;
 			}
 			if (move.mindBlownRecoil) {
-				this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Mind Blown'), true);
+				this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
 				move.mindBlownRecoil = false;
 			}
 			this.battle.eachEvent('Update');
@@ -897,6 +897,7 @@ export class BattleActions {
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
+		this.battle.faintMessages();
 
 		if (move.recoil && move.totalDamage) {
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
@@ -1360,10 +1361,10 @@ export class BattleActions {
 			if (!moveSlot.disabled) {
 				mustStruggle = false;
 			}
-			const move = this.dex.getMove(moveSlot.move);
+			const move = this.dex.moves.get(moveSlot.move);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
 			if (zMoveName) {
-				const zMove = this.dex.getMove(zMoveName);
+				const zMove = this.dex.moves.get(zMoveName);
 				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
 				zMoves.push({move: zMoveName, target: zMove.target});
 			} else {
@@ -1375,13 +1376,13 @@ export class BattleActions {
 	}
 
 	getMaxMove(move: Move, pokemon: Pokemon) {
-		if (typeof move === 'string') move = this.dex.getMove(move);
+		if (typeof move === 'string') move = this.dex.moves.get(move);
 		if (move.name === 'Struggle') return move;
 		if (pokemon.gigantamax && pokemon.canGigantamax && move.category !== 'Status') {
-			const gMaxMove = this.dex.getMove(pokemon.canGigantamax);
+			const gMaxMove = this.dex.moves.get(pokemon.canGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
 		}
-		const maxMove = this.dex.getMove(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
+		const maxMove = this.dex.moves.get(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
 		if (maxMove.exists) return maxMove;
 	}
 
@@ -1408,7 +1409,7 @@ export class BattleActions {
 	}
 
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
-		const zPower = this.dex.getEffect('zpower');
+		const zPower = this.dex.conditions.get('zpower');
 		if (move.category !== 'Status') {
 			this.battle.attrLastMove('[zeffect]');
 		} else if (move.zMove?.boost) {
@@ -1423,7 +1424,7 @@ export class BattleActions {
 				break;
 			case 'clearnegativeboost':
 				const boosts: SparseBoostsTable = {};
-				let i: BoostName;
+				let i: BoostID;
 				for (i in pokemon.boosts) {
 					if (pokemon.boosts[i] < 0) {
 						boosts[i] = 0;
@@ -1553,8 +1554,8 @@ export class BattleActions {
 
 		const attacker = pokemon;
 		const defender = target;
-		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
-		const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
+		const defenseStat: StatIDExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
 		if (move.useSourceDefensiveAsOffensive) {
 			attackStat = defenseStat;
 			// Body press really wants to use the def stat,
@@ -1633,11 +1634,16 @@ export class BattleActions {
 
 		baseDamage += 2;
 
-		// multi-target modifier (doubles only)
 		if (move.spreadHit) {
+			// multi-target modifier (doubles only)
 			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
 			this.battle.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
+		} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
+			// Parental Bond modifier
+			const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
+			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
+			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		}
 
 		// weather modifier
@@ -1705,6 +1711,26 @@ export class BattleActions {
 		return tr(baseDamage, 16);
 	}
 
+	/**
+	 * Confusion damage is unique - most typical modifiers that get run when calculating
+	 * damage (e.g. Huge Power, Life Orb, critical hits) don't apply. It also uses a 16-bit
+	 * context for its damage, unlike the regular damage formula (though this only comes up
+	 * for base damage).
+	 */
+	getConfusionDamage(pokemon: Pokemon, basePower: number) {
+		const tr = this.battle.trunc;
+
+		const attack = pokemon.calculateStat('atk', pokemon.boosts['atk']);
+		const defense = pokemon.calculateStat('def', pokemon.boosts['def']);
+		const level = pokemon.level;
+		const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50) + 2;
+
+		// Damage is 16-bit context in self-hit confusion damage
+		let damage = tr(baseDamage, 16);
+		damage = this.battle.randomizer(damage);
+		return Math.max(1, damage);
+	}
+
 	// #endregion
 
 	// #region MEGA EVOLUTION
@@ -1712,7 +1738,7 @@ export class BattleActions {
 
 	canMegaEvo(pokemon: Pokemon) {
 		const species = pokemon.baseSpecies;
-		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
+		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
 		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('standardnatdex')) &&

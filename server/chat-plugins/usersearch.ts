@@ -11,7 +11,11 @@ function searchUsernames(target: string, page = false) {
 	for (const curUser of Users.users.values()) {
 		if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
 		const escapedName = Utils.escapeHTML(curUser.name);
-		const buttonHTML = `<button class="button" name="send" value="/msgroom staff,/fr ${escapedName}&#10;/j view-usersearch-${target}">Forcerename</button>`;
+		const buttonHTML = [
+			'Forcerename', 'Namelock', 'Weeknamelock',
+		].map((cmd) => (
+			`<button class="button" name="send" value="/msgroom staff,/${toID(cmd)} ${escapedName}&#10;/uspage ${target}">${cmd}</button>`
+		)).join(' | ');
 		if (curUser.connected) {
 			results.online.push(`${ONLINE_SYMBOL} ${page ? `<username>` : ``}${escapedName}${page ? `</username> ${buttonHTML}` : ``}`);
 		} else {
@@ -29,7 +33,7 @@ function searchUsernames(target: string, page = false) {
 		} else {
 			buf += results.online.join('; ');
 			if (results.offline.length) {
-				buf += `<br /><br />`;
+				if (results.online.length) buf += `<br /><br />`;
 				buf += results.offline.join('; ');
 			}
 		}
@@ -59,7 +63,7 @@ function searchUsernames(target: string, page = false) {
 	return buf;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	us: 'usersearch',
 	uspage: 'usersearch',
 	usersearchpage: 'usersearch',
@@ -85,7 +89,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	usersearch(query, user) {
 		this.checkCan('lock');
 		if (!query.length) return this.close();

@@ -18,9 +18,15 @@ interface ProcessData {
 	cmd: string;
 	cpu?: string;
 	time?: string;
+	ram?: string;
 }
 
-function bash(command: string, context: CommandContext, cwd?: string): Promise<[number, string, string]> {
+function hasDevAuth(user: User) {
+	const devRoom = Rooms.get('development');
+	return devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%');
+}
+
+function bash(command: string, context: Chat.CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
 	return new Promise(resolve => {
 		child_process.exec(command, {
@@ -58,7 +64,7 @@ function keysToCopy(obj: object) {
 /**
  * @returns {boolean} Whether or not the rebase failed
  */
-async function updateserver(context: CommandContext, codePath: string) {
+async function updateserver(context: Chat.CommandContext, codePath: string) {
 	const exec = (command: string) => bash(command, context, codePath);
 
 	context.sendReply(`Fetching newest version of code in the repository ${codePath}...`);
@@ -116,23 +122,22 @@ async function updateserver(context: CommandContext, codePath: string) {
 	}
 }
 
-async function rebuild(context: CommandContext) {
-	const [, , stderr] = await bash('node ./build', context);
+async function rebuild(context: Chat.CommandContext, force?: boolean) {
+	const [, , stderr] = await bash(`node ./build${force ? ' force' : ''}`, context);
 	if (stderr) {
 		throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
 	}
 }
 
-
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	potd(target, room, user) {
 		this.canUseConsole();
-		const species = Dex.getSpecies(target);
+		const species = Dex.species.get(target);
 		if (species.id === Config.potd) {
 			return this.errorReply(`The PotD is already set to ${species.name}`);
 		}
 		if (!species.exists) return this.errorReply(`Pokemon "${target}" not found.`);
-		if (!Dex.getLearnsetData(species.id).learnset) {
+		if (!Dex.species.getLearnset(species.id)) {
 			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
 		}
 		Config.potd = species.id;
@@ -174,7 +179,7 @@ export const commands: ChatCommands = {
 		this.checkHTML(target);
 		this.checkCan('addhtml', null, room);
 		target = Chat.collapseLineBreaksHTML(target);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			target += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -192,7 +197,7 @@ export const commands: ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -212,7 +217,7 @@ export const commands: ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -241,7 +246,7 @@ export const commands: ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -270,14 +275,12 @@ export const commands: ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help pminfobox");
 
-		target = this.splitTarget(target);
-		this.checkHTML(target);
-		const targetUser = this.targetUser!;
+		const {targetUser, rest: html} = this.requireUser(target);
+		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
-		// Apply the infobox to the message
-		target = `/raw <div class="infobox">${target}</div>`;
-		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|${target}`;
+		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
+			`/raw <div class="infobox">${html}</div>`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -293,12 +296,12 @@ export const commands: ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help " + cmd);
 
-		target = this.splitTarget(target);
-		this.checkHTML(target);
-		const targetUser = this.targetUser!;
+		const {targetUser, rest: html} = this.requireUser(target);
+		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
-		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${target}`;
+		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
+			`/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${html}`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -310,19 +313,27 @@ export const commands: ChatCommands = {
 		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * # &`,
 	],
 
-	sendhtmlpage(target, room, user) {
+	closehtmlpage: 'sendhtmlpage',
+	changehtmlpageselector: 'sendhtmlpage',
+	sendhtmlpage(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
-		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
-		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
+
+		const closeHtmlPage = cmd === 'closehtmlpage';
+
+		const {targetUser, rest} = this.requireUser(target);
+		let [pageid, content] = this.splitOne(rest);
+		let selector: string | undefined;
+		if (cmd === 'changehtmlpageselector') {
+			[selector, content] = this.splitOne(content);
+			if (!selector) return this.parse(`/help ${cmd}`);
+		}
+		if (!pageid || (closeHtmlPage ? content : !content)) {
+			return this.parse(`/help ${cmd}`);
+		}
 
 		pageid = `${user.id}-${toID(pageid)}`;
 
-		const targetUser = Users.get(targetID)!;
-		if (!targetUser?.connected) {
-			this.errorReply(`User ${this.targetUsername} is not currently online.`);
-			return false;
-		}
 		if (targetUser.locked && !this.user.can('lock')) {
 			this.errorReply("This user is currently locked, so you cannot send them HTML.");
 			return false;
@@ -349,23 +360,38 @@ export const commands: ChatCommands = {
 				connection: targetConnection,
 				pageid: `view-bot-${pageid}`,
 			});
-			context.title = `[${user.name}] ${pageid}`;
-			context.send(content);
+			if (closeHtmlPage) {
+				context.send(`|deinit|`);
+			} else if (selector) {
+				context.send(`|selectorhtml|${selector}|${content}`);
+			} else {
+				context.title = `[${user.name}] ${pageid}`;
+				context.setHTML(content);
+			}
+		}
+
+		if (closeHtmlPage) {
+			this.sendReply(`Closed the bot page ${pageid} for ${targetUser.name}.`);
+		} else {
+			this.sendReply(`Sent ${targetUser.name}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
 		}
 	},
 	sendhtmlpagehelp: [
-		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: * # &`,
+		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # &`,
+	],
+	changehtmlpageselectorhelp: [
+		`/changehtmlpageselector [userid], [pageid], [selector], [html] - Sends [userid] the content [html] for the selector [selector] on the bot page [pageid]. Requires: * # &`,
+	],
+	closehtmlpagehelp: [
+		`/closehtmlpage [userid], [pageid], - Closes the bot page [pageid] for [userid]. Requires: * # &`,
 	],
 
 	highlighthtmlpage(target, room, user) {
-		target = target.trim();
-		let [userid, pageid, title, highlight] = Utils.splitFirst(target, ',', 3);
+		const {targetUser, rest} = this.requireUser(target);
+		let [pageid, title, highlight] = Utils.splitFirst(rest, ',', 2);
+
 		pageid = `${user.id}-${toID(pageid)}`;
-		if (!userid || !pageid || !target) return this.parse(`/help highlighthtmlpage`);
-		const targetUser = Users.get(userid);
-		if (!targetUser?.connected) {
-			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
-		}
+		if (!pageid || !target) return this.parse(`/help highlighthtmlpage`);
 		if (targetUser.locked && !this.user.can('lock')) {
 			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them highlights.");
 		}
@@ -386,11 +412,27 @@ export const commands: ChatCommands = {
 		for (const conn of targetConnections) {
 			conn.send(`>view-bot-${pageid}\n${buf}`);
 		}
+
+		this.sendReply(`Sent a highlight to ${targetUser.name} on the bot page ${pageid}.`);
 	},
 	highlighthtmlpagehelp: [
-		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Send a highlight to [userid] if they're viewing the bot page [pageid].`,
+		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Sends a highlight to [userid] if they're viewing the bot page [pageid].`,
 		`If a [highlight] is specified, only highlights them if they have that term on their highlight list.`,
 	],
+
+	botmsg(target, room, user, connection) {
+		if (!target || !target.includes(',')) return this.parse('/help botmsg');
+		let {targetUser, rest: message} = this.requireUser(target);
+
+		const auth = this.room ? this.room.auth : Users.globalAuth;
+		if (auth.get(targetUser) !== '*') {
+			return this.popupReply(`The user "${targetUser.name}" is not a bot in this room.`);
+		}
+
+		message = this.checkChat(message);
+		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
+	},
+	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
 
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
@@ -403,8 +445,8 @@ export const commands: ChatCommands = {
 	 *********************************************************/
 
 	memusage: 'memoryusage',
-	memoryusage(target) {
-		this.checkCan('lockdown');
+	memoryusage(target, room, user) {
+		if (!hasDevAuth(user)) this.checkCan('lockdown');
 		const memUsage = process.memoryUsage();
 		const resultNums = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
 		const units = ["B", "KiB", "MiB", "GiB", "TiB"];
@@ -601,6 +643,8 @@ export const commands: ChatCommands = {
 				void TeamValidatorAsync.PM.respawn();
 				// respawn simulator processes
 				void Rooms.PM.respawn();
+				// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
+				void Chat.plugins.datasearch?.PM?.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.sendAll(Rooms.global.formatListText);
 				this.sendReply("DONE");
@@ -738,24 +782,31 @@ export const commands: ChatCommands = {
 	],
 
 	async processes(target, room, user) {
-		const devRoom = Rooms.get('development');
-		if (!(devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%'))) {
-			this.checkCan('lockdown');
-		}
+		if (!hasDevAuth(user)) this.checkCan('lockdown');
 
 		const processes = new Map<string, ProcessData>();
+		const ramUnits = ["KiB", "MiB", "GiB", "TiB"];
 
 		await new Promise<void>(resolve => {
-			const child = child_process.exec('ps -o pid,%cpu,time,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
 				if (err) throw err;
 				const rows = stdout.split('\n').slice(1); // first line is the table header
 				for (const row of rows) {
 					if (!row.trim()) continue;
-					const [pid, cpu, time, ...rest] = row.split(' ').filter(Boolean);
+					const [pid, cpu, time, ram, ...rest] = row.split(' ').filter(Boolean);
 					if (pid === `${child.pid}`) continue; // ignore this process
 					const entry: ProcessData = {cmd: rest.join(' ')};
-					if (time && time !== '00:00:00') entry.time = time;
+					// at the point of 0:00.[num], it's in so few seconds we don't care, so
+					// we don't need to clutter the display
+					if (time && !time.startsWith('0:00')) {
+						entry.time = time;
+					}
 					if (cpu && cpu !== '0.0') entry.cpu = `${cpu}%`;
+					const ramNum = parseInt(ram);
+					if (!isNaN(ramNum)) {
+						const unitIndex = Math.floor(Math.log2(ramNum) / 10); // 2^10 base log
+						entry.ram = `${(ramNum / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${ramUnits[unitIndex]}`;
+					}
 					processes.set(pid, entry);
 				}
 				resolve();
@@ -763,9 +814,14 @@ export const commands: ChatCommands = {
 		});
 
 		let buf = `<strong>${process.pid}</strong> - Main `;
+		const mainDisplay = [];
 		const mainProcess = processes.get(`${process.pid}`)!;
-		if (mainProcess.cpu) buf += `(CPU ${mainProcess.cpu}`;
-		if (mainProcess.time) buf += mainProcess.cpu ? `, time: ${mainProcess.time})` : `(time: ${mainProcess.time})`;
+		if (mainProcess.cpu) mainDisplay.push(`CPU ${mainProcess.cpu}`);
+		if (mainProcess.time) mainDisplay.push(`time: ${mainProcess.time})`);
+		if (mainProcess.ram) {
+			mainDisplay.push(`RAM: ${mainProcess.ram}`);
+		}
+		if (mainDisplay.length) buf += ` (${mainDisplay.join(', ')})`;
 		buf += `<br /><br /><strong>Process managers:</strong><br />`;
 		processes.delete(`${process.pid}`);
 
@@ -774,9 +830,12 @@ export const commands: ChatCommands = {
 				const pid = process.getProcess().pid;
 				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
-				if (info.cpu) buf += `, CPU: ${info.cpu}`;
-				if (info.time) buf += `, time: ${info.time}`;
-				buf += `)<br />`;
+				const display = [];
+				if (info.cpu) display.push(`CPU: ${info.cpu}`);
+				if (info.time) display.push(`time: ${info.time}`);
+				if (info.ram) display.push(`RAM: ${info.ram}`);
+				if (display.length) buf += `, ${display.join(', ')})`;
+				buf += `<br />`;
 				processes.delete(`${pid}`);
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
@@ -784,22 +843,26 @@ export const commands: ChatCommands = {
 				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`);
 				if (info) {
-					if (info.cpu) buf += `, CPU: ${info.cpu}`;
-					if (info.time) buf += `, time: ${info.time}`;
+					const display = [];
+					if (info.cpu) display.push(`CPU: ${info.cpu}`);
+					if (info.time) display.push(`time: ${info.time}`);
+					if (info.ram) display.push(`RAM: ${info.ram}`);
+					if (display.length) buf += `, ${display.join(', ')})`;
 				}
-				buf += `)<br />`;
+				buf += `<br />`;
 				processes.delete(`${pid}`);
 			}
 		}
 		buf += `<br />`;
 		buf += `<details class="readmore"><summary><strong>Other processes:</strong></summary>`;
 
-		for (const [pid, process] of processes) {
-			buf += `<strong>${pid}</strong> - <code>${process.cmd}</code>`;
-			if (process.cpu) buf += ` (CPU: ${process.cpu}`;
-			if (process.time) {
-				buf += `${process.cpu ? `, ` : ' ('}time: ${process.time})`;
-			}
+		for (const [pid, info] of processes) {
+			buf += `<strong>${pid}</strong> - <code>${info.cmd}</code>`;
+			const display = [];
+			if (info.cpu) display.push(`CPU: ${info.cpu}`);
+			if (info.time) display.push(`time: ${info.time}`);
+			if (info.ram) display.push(`RAM: ${info.ram}`);
+			if (display.length) buf += `(${display.join(', ')})`;
 			buf += `<br />`;
 		}
 		buf += `</details>`;
@@ -812,8 +875,9 @@ export const commands: ChatCommands = {
 		await FS('data/learnsets.js').write(`'use strict';\n\nexports.Learnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
 				`\t${id}: {learnset: {\n` +
-				Object.entries(Dex.getLearnsetData(id as ID)).sort(
-					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
+				Utils.sortBy(
+					Object.entries(Dex.species.getLearnsetData(id as ID)),
+					([moveid]) => moveid
 				).map(([moveid, sources]) => (
 					`\t\t${moveid}: ["` + sources.join(`", "`) + `"],\n`
 				)).join('') +
@@ -1106,7 +1170,7 @@ export const commands: ChatCommands = {
 		this.canUseConsole();
 		Monitor.updateServerLock = true;
 		this.sendReply(`Rebuilding...`);
-		await rebuild(this);
+		await rebuild(this, true);
 		Monitor.updateServerLock = false;
 		this.sendReply(`DONE`);
 	},
@@ -1324,7 +1388,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	bot(args, user, connection) {
 		const [botid, pageid] = args;
 		const bot = Users.get(botid);

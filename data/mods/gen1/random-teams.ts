@@ -16,7 +16,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		// Pick six random Pokémon, no repeats.
 		let num: number;
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < this.maxTeamSize; i++) {
 			do {
 				num = this.random(151) + 1;
 			} while (num in hasDexNumber);
@@ -26,9 +26,12 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let formeCounter = 0;
 		for (const id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
-			const species = this.dex.getSpecies(id);
-			const lsetData = this.dex.getLearnsetData(id as ID);
-			if (!lsetData.learnset || species.forme) continue;
+
+			const species = this.dex.species.get(id);
+			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+
+			const learnset = this.dex.species.getLearnset(id as ID);
+			if (!learnset || species.forme) continue;
 			formes[hasDexNumber[species.num]].push(species.name);
 			if (++formeCounter >= 6) {
 				// Gen 1 had no alternate formes, so we can break out of the loop already.
@@ -36,11 +39,11 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			}
 		}
 
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < this.maxTeamSize; i++) {
 			// Choose forme.
 			const poke = this.sample(formes[i]);
-			const species = this.dex.getSpecies(poke);
-			const lsetData = this.dex.getLearnsetData(species.id);
+			const species = this.dex.species.get(poke);
+			const learnset = this.dex.species.getLearnset(species.id);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
 			const mbstmin = 1307;
@@ -91,10 +94,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
 			const pool: string[] = [];
-			if (lsetData.learnset) {
-				for (const move in lsetData.learnset) {
-					if (this.dex.getMove(move).gen !== 1) continue;
-					if (lsetData.learnset[move].some(learned => learned.startsWith('1'))) {
+			if (learnset) {
+				for (const move in learnset) {
+					if (this.dex.moves.get(move).gen !== 1) continue;
+					if (learnset[move].some(learned => learned.startsWith('1'))) {
 						pool.push(move);
 					}
 				}
@@ -109,7 +112,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				evs: evs,
 				ivs: ivs,
 				item: '',
-				level: level,
+				level,
 				happiness: 0,
 				shiny: false,
 				nature: 'Serious',
@@ -130,7 +133,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		const pokemonPool = [];
 		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
+			const species = this.dex.species.get(id);
 			if (!species.isNonstandard && species.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
@@ -143,8 +146,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let nuCount = 0;
 		let hasShitmon = false;
 
-		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
@@ -155,21 +158,28 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// If you have a shitmon, don't get another
 			if (handicapMons.includes(species.id) && hasShitmon) continue;
 
+			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+
+			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+
 			const tier = species.tier;
 			switch (tier) {
 			case 'LC':
 			case 'NFE':
 				// Don't add pre-evo mon if already 4 or more non-OUs, or if already 3 or more non-OUs with one being a shitmon
 				// Regardless, pre-evo mons are slightly less common.
-				if (nuCount > 3 || (hasShitmon && nuCount > 2) || this.randomChance(1, 3)) continue;
+				if (nuCount >= 4 * limitFactor || (hasShitmon && nuCount >= 4 * limitFactor - 1) || this.randomChance(1, 3)) continue;
 				break;
 			case 'Uber':
 				// If you have one of the worst mons we allow luck to give you all Ubers.
-				if (uberCount >= 1 && !hasShitmon) continue;
+				if (uberCount >= 1 * limitFactor && !hasShitmon) continue;
 				break;
 			default:
 				// OUs are fine. Otherwise 50% chance to skip mon if already 4 or more non-OUs.
-				if (uuTiers.includes(tier) && pokemonPool.length > 1 && (nuCount > 3 && this.randomChance(1, 2))) continue;
+				if (uuTiers.includes(tier) && pokemonPool.length > 1 && (nuCount >= 4 * limitFactor && this.randomChance(1, 2))) {
+					continue;
+				}
 			}
 
 			let skip = false;
@@ -177,7 +187,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Limit 2 of any type as well. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
 			for (const type of species.types) {
-				if (typeCount[type] > 1 || (typeCount[type] === 1 && this.randomChance(1, 2) && pokemonPool.length > 1)) {
+				if (typeCount[type] >= 2 * limitFactor ||
+					(typeCount[type] >= 1 * limitFactor && this.randomChance(1, 2) && pokemonPool.length > 1)) {
 					skip = true;
 					break;
 				}
@@ -190,7 +201,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			for (const type in weaknessCount) {
 				const increaseCount = this.dex.getImmunity(type, species) && this.dex.getEffectiveness(type, species) > 0;
 				if (!increaseCount) continue;
-				if (weaknessCount[type] >= 2) {
+				if (weaknessCount[type] >= 2 * limitFactor) {
 					skip = true;
 					break;
 				}
@@ -261,8 +272,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	 * Random set generation for Gen 1 Random Battles.
 	 */
 	randomSet(species: string | Species): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
-		if (!species.exists) species = this.dex.getSpecies('pikachu'); // Because Gen 1.
+		species = this.dex.species.get(species);
+		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
 		const movePool = species.randomBattleMoves ? species.randomBattleMoves.slice() : [];
 		const moves: string[] = [];
@@ -306,7 +317,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				hasMove = {};
 				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
 				for (const setMoveid of moves) {
-					const move = this.dex.getMove(setMoveid);
+					const move = this.dex.moves.get(setMoveid);
 					const moveid = move.id;
 					hasMove[moveid] = true;
 					if (!move.damage && !move.damageCallback) counter[move.category]++;
@@ -316,7 +327,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 				for (const [i, moveid] of moves.entries()) {
 					if (moveid === species.essentialMove) continue;
-					const move = this.dex.getMove(moveid);
+					const move = this.dex.moves.get(moveid);
 					if ((!species.essentialMove || moveid !== species.essentialMove) && this.shouldCullMove(move, hasMove, counter).cull) {
 						moves.splice(i, 1);
 						break;
@@ -362,14 +373,14 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const team = [];
 
 		const movePool = Object.keys(this.dex.data.Moves);
-		const typesPool = ['Bird', ...Object.keys(this.dex.data.TypeChart)];
+		const typesPool = ['Bird', ...this.dex.types.names()];
 
-		const random6 = this.random6Pokemon();
+		const randomN = this.randomNPokemon(this.maxTeamSize);
 		const hackmonsCup: {[k: string]: HackmonsCupEntry} = {};
 
-		for (let i = 0; i < 6; i++) {
+		for (const forme of randomN) {
 			// Choose forme
-			const species = this.dex.getSpecies(random6[i]);
+			const species = this.dex.species.get(forme);
 			if (!hackmonsCup[species.id]) {
 				hackmonsCup[species.id] = {
 					types: [this.sample(typesPool), this.sample(typesPool)],
@@ -382,6 +393,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 						spe: Utils.clampIntRange(this.random(256), 1),
 					},
 				};
+				if (this.forceMonotype && !hackmonsCup[species.id].types.includes(this.forceMonotype)) {
+					hackmonsCup[species.id].types[1] = this.forceMonotype;
+				}
 				hackmonsCup[species.id].baseStats.spd = hackmonsCup[species.id].baseStats.spa;
 			}
 			if (hackmonsCup[species.id].types[0] === hackmonsCup[species.id].types[1]) {
@@ -392,7 +406,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			const moves = [];
 			do {
 				const moveid = this.sampleNoReplace(movePool);
-				const move = this.dex.getMove(moveid);
+				const move = this.dex.moves.get(moveid);
 				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
 					moves.push(moveid);
 				}
@@ -428,7 +442,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Level balance
 			const mbstmin = 425;
 			const baseStats = hackmonsCup[species.id].baseStats;
-			const calcStat = (statName: StatName, lvl?: number) => {
+			const calcStat = (statName: StatID, lvl?: number) => {
 				if (lvl) {
 					return Math.floor(Math.floor(2 * baseStats[statName] + ivs[statName] + Math.floor(evs[statName] / 4)) * lvl / 100 + 5);
 				}
@@ -436,13 +450,13 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			};
 			let mbst = 0;
 			for (const statName of Object.keys(baseStats)) {
-				mbst += calcStat(statName as StatName);
+				mbst += calcStat(statName as StatID);
 				if (statName === 'hp') mbst += 5;
 			}
 			let level = Math.floor(100 * mbstmin / mbst);
 			while (level < 100) {
 				for (const statName of Object.keys(baseStats)) {
-					mbst += calcStat(statName as StatName, level);
+					mbst += calcStat(statName as StatID, level);
 					if (statName === 'hp') mbst += 5;
 				}
 				if (mbst >= mbstmin) break;

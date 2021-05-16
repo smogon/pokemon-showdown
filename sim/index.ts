@@ -11,8 +11,9 @@
  */
 
 export {Battle} from './battle';
-export {BattleStream} from './battle-stream';
+export {BattleStream, getPlayerStreams} from './battle-stream';
 export {Dex} from './dex';
+export {Teams} from './teams';
 export {Pokemon} from './pokemon';
 export {PRNG} from './prng';
 export {Side} from './side';

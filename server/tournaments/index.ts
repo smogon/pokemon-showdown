@@ -24,7 +24,7 @@ const MAX_REASON_LENGTH = 300;
 const MAX_CUSTOM_NAME_LENGTH = 100;
 const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
 
-Punishments.roomPunishmentTypes.set('TOURBAN', 'banned from tournaments');
+Punishments.addRoomPunishmentType('TOURBAN', 'banned from tournaments');
 
 const TournamentGenerators = {
 	__proto__: null,
@@ -195,7 +195,7 @@ export class Tournament extends Rooms.RoomGame {
 		return this.players.filter(player => !player.isDisqualified && !player.isEliminated);
 	}
 
-	setGenerator(generator: Generator, output: CommandContext) {
+	setGenerator(generator: Generator, output: Chat.CommandContext) {
 		if (this.isTournamentStarted) {
 			output.sendReply('|tournament|error|BracketFrozen');
 			return;
@@ -210,12 +210,12 @@ export class Tournament extends Rooms.RoomGame {
 
 	setCustomRules(rules: string) {
 		try {
-			this.fullFormat = Dex.validateFormat(`${this.baseFormat}@@@${rules}`);
+			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
 		} catch (e) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
 
-		const customRules = Dex.getFormat(this.fullFormat, true).customRules;
+		const customRules = Dex.formats.get(this.fullFormat, true).customRules;
 		if (!customRules) {
 			throw new Chat.ErrorMessage(`Invalid rules.`);
 		}
@@ -369,7 +369,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.room.update();
 	}
 
-	addUser(user: User, output: CommandContext) {
+	addUser(user: User, output: Chat.CommandContext) {
 		if (!user.named) {
 			output.sendReply('|tournament|error|UserNotNamed');
 			return;
@@ -434,7 +434,7 @@ export class Tournament extends Rooms.RoomGame {
 		return new TournamentPlayer(user, this, num);
 	}
 
-	removeUser(userid: ID, output?: CommandContext) {
+	removeUser(userid: ID, output?: Chat.CommandContext) {
 		if (!(userid in this.playerTable)) {
 			if (output) output.sendReply('|tournament|error|UserNotAdded');
 			return;
@@ -455,7 +455,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.isBracketInvalidated = true;
 		this.update();
 	}
-	replaceUser(user: User, replacementUser: User, output: CommandContext) {
+	replaceUser(user: User, replacementUser: User, output: Chat.CommandContext) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -606,7 +606,7 @@ export class Tournament extends Rooms.RoomGame {
 		return data;
 	}
 
-	startTournament(output: CommandContext, isAutostart?: boolean) {
+	startTournament(output: Chat.CommandContext, isAutostart?: boolean) {
 		if (this.isTournamentStarted) {
 			output.sendReply('|tournament|error|AlreadyStarted');
 			return false;
@@ -684,7 +684,7 @@ export class Tournament extends Rooms.RoomGame {
 		};
 	}
 
-	disqualifyUser(userid: ID, output: CommandContext | null = null, reason: string | null = null, isSelfDQ = false) {
+	disqualifyUser(userid: ID, output: Chat.CommandContext | null = null, reason: string | null = null, isSelfDQ = false) {
 		const user = Users.get(userid);
 		let sendReply: (msg: string) => void;
 		if (output) {
@@ -778,7 +778,7 @@ export class Tournament extends Rooms.RoomGame {
 		return true;
 	}
 
-	setAutoStartTimeout(timeout: number, output: CommandContext) {
+	setAutoStartTimeout(timeout: number, output: Chat.CommandContext) {
 		if (this.isTournamentStarted) {
 			output.sendReply('|tournament|error|AlreadyStarted');
 			return false;
@@ -800,7 +800,7 @@ export class Tournament extends Rooms.RoomGame {
 		return true;
 	}
 
-	setAutoDisqualifyTimeout(timeout: number, output: CommandContext) {
+	setAutoDisqualifyTimeout(timeout: number, output: Chat.CommandContext) {
 		if (
 			isNaN(timeout) || timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT ||
 			(timeout > MAX_AUTO_DISQUALIFY_TIMEOUT && timeout !== Infinity)
@@ -821,7 +821,7 @@ export class Tournament extends Rooms.RoomGame {
 
 		return true;
 	}
-	runAutoDisqualify(output?: CommandContext) {
+	runAutoDisqualify(output?: Chat.CommandContext) {
 		if (!this.isTournamentStarted) {
 			if (output) output.sendReply('|tournament|error|NotStarted');
 			return false;
@@ -889,7 +889,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.room.add(`The tournament will start once ${this.playerCap} players have joined.`);
 	}
 
-	async challenge(user: User, targetUserid: ID, output: CommandContext) {
+	async challenge(user: User, targetUserid: ID, output: Chat.CommandContext) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -947,7 +947,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.isBracketInvalidated = true;
 		this.update();
 	}
-	cancelChallenge(user: User, output: CommandContext) {
+	cancelChallenge(user: User, output: Chat.CommandContext) {
 		if (!this.isTournamentStarted) {
 			if (output) output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -973,7 +973,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
 	}
-	async acceptChallenge(user: User, output: CommandContext) {
+	async acceptChallenge(user: User, output: Chat.CommandContext) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -1036,7 +1036,7 @@ export class Tournament extends Rooms.RoomGame {
 	}
 
 	getDefaultCustomName() {
-		return Dex.getFormat(this.fullFormat).name + " (with custom rules)";
+		return Dex.formats.get(this.fullFormat).name + " (with custom rules)";
 	}
 	forfeit(user: User) {
 		return this.disqualifyUser(user.id, null, "You left the tournament", true);
@@ -1164,7 +1164,7 @@ function getGenerator(generator: string | undefined) {
 }
 
 function createTournamentGenerator(
-	generatorName: string | undefined, modifier: string | undefined, output: CommandContext
+	generatorName: string | undefined, modifier: string | undefined, output: Chat.CommandContext
 ) {
 	const TourGenerator = getGenerator(generatorName);
 	if (!TourGenerator) {
@@ -1177,7 +1177,7 @@ function createTournamentGenerator(
 }
 function createTournament(
 	room: Room, formatId: string | undefined, generator: string | undefined, playerCap: string | undefined,
-	isRated: boolean, generatorMod: string | undefined, name: string | undefined, output: CommandContext
+	isRated: boolean, generatorMod: string | undefined, name: string | undefined, output: Chat.CommandContext
 ) {
 	if (room.type !== 'chat') {
 		output.errorReply("Tournaments can only be created in chat rooms.");
@@ -1191,7 +1191,7 @@ function createTournament(
 		output.errorReply("The server is restarting soon, so a tournament cannot be created.");
 		return;
 	}
-	const format = Dex.getFormat(formatId);
+	const format = Dex.formats.get(formatId);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(`${format.id} is not a valid tournament format.`);
 		void output.parse(`/tour formats`);
@@ -1226,7 +1226,7 @@ function createTournament(
 	return tour;
 }
 
-const commands: ChatCommands = {
+const commands: Chat.ChatCommands = {
 	tour: 'tournament',
 	tours: 'tournament',
 	tournaments: 'tournament',
@@ -1308,7 +1308,7 @@ const commands: ChatCommands = {
 					if (tourRoom && tourRoom !== room) {
 						tourRoom.addRaw(
 							Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
-							`<strong>${Dex.getFormat(tour.name).name}</strong> tournament created in` +
+							`<strong>${Dex.formats.get(tour.name).name}</strong> tournament created in` +
 							` <strong>${room.title}</strong>.</a></div>`
 						).update();
 					}
@@ -1319,7 +1319,7 @@ const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			let buf = ``;
 			let section = undefined;
-			for (const format of Object.values(Dex.formats)) {
+			for (const format of Dex.formats.all()) {
 				if (!format.tournamentShow) continue;
 				const name = format.name.startsWith(`[Gen ${Dex.gen}] `) ? format.name.slice(8) : format.name;
 				if (format.section !== section) {
@@ -1449,7 +1449,7 @@ const commands: ChatCommands = {
 			if (result.startsWith('1')) {
 				connection.popup("Your team is valid for this tournament.");
 			} else {
-				const formatName = Dex.getFormat(tournament.baseFormat).name;
+				const formatName = Dex.formats.get(tournament.baseFormat).name;
 				// split/join is the easiest way to do a find/replace with an untrusted string, sadly
 				const reasons = result.slice(1).split(formatName).join('this tournament');
 				connection.popup(`Your team was rejected for the following reasons:\n\n- ${reasons.replace(/\n/g, '\n- ')}`);
@@ -2150,7 +2150,7 @@ const commands: ChatCommands = {
 	},
 };
 
-const roomSettings: SettingsHandler[] = [
+const roomSettings: Chat.SettingsHandler[] = [
 	room => ({
 		label: "Tournament Forced Public Battles",
 		permission: "editroom",

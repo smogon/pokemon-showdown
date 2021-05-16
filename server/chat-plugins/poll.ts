@@ -5,6 +5,7 @@
 import {Utils} from '../../lib';
 
 const MINUTES = 60000;
+const MAX_QUESTIONS = 10;
 
 interface PollAnswer {
 	name: string; votes: number; correct?: boolean;
@@ -164,7 +165,7 @@ export class Poll extends Rooms.MinorActivity {
 	}
 
 	static generateResults(
-		options: MinorActivityData, room: Room,
+		options: Rooms.MinorActivityData, room: Room,
 		ended = false, choice: number[] | null = null
 	) {
 		const iconText = options.isQuiz ?
@@ -351,7 +352,7 @@ export class Poll extends Rooms.MinorActivity {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	poll: {
 		htmlcreate: 'new',
 		create: 'new',
@@ -400,8 +401,8 @@ export const commands: ChatCommands = {
 			if (supportHTML) params = params.map(parameter => this.checkHTML(parameter));
 
 			const questions = params.splice(1);
-			if (questions.length > 8) {
-				return this.errorReply(this.tr`Too many options for poll (maximum is 8).`);
+			if (questions.length > MAX_QUESTIONS) {
+				return this.errorReply(this.tr`Too many options for poll (maximum is ${MAX_QUESTIONS}).`);
 			}
 
 			if (new Set(questions).size !== questions.length) {
@@ -604,7 +605,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	pollqueue(args, user) {
 		const room = this.requireRoom();
 

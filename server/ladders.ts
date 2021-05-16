@@ -106,7 +106,7 @@ class Ladder extends LadderStore {
 		}
 
 		try {
-			this.formatid = Dex.validateFormat(this.formatid);
+			this.formatid = Dex.formats.validate(this.formatid);
 		} catch (e) {
 			connection.popup(`Your selected format is invalid:\n\n- ${e.message}`);
 			return null;
@@ -441,7 +441,7 @@ class Ladder extends LadderStore {
 	async searchBattle(user: User, connection: Connection) {
 		if (!user.connected) return;
 
-		const format = Dex.getFormat(this.formatid);
+		const format = Dex.formats.get(this.formatid);
 		if (!format.searchShow) {
 			connection.popup(`Error: Your format ${format.id} is not ladderable.`);
 			return;
@@ -509,7 +509,7 @@ class Ladder extends LadderStore {
 		let formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) {
 			formatTable = {
-				numPlayers: ['multi', 'freeforall'].includes(Dex.getFormat(formatid).gameType) ? 4 : 2,
+				numPlayers: ['multi', 'freeforall'].includes(Dex.formats.get(formatid).gameType) ? 4 : 2,
 				searches: new Map(),
 			};
 			Ladders.searches.set(formatid, formatTable);
@@ -599,7 +599,7 @@ class Ladder extends LadderStore {
 			}
 			return false;
 		}
-		const format = Dex.getFormat(formatid);
+		const format = Dex.formats.get(formatid);
 		const delayedStart = (['multi', 'freeforall'].includes(format.gameType) && players.length === 2) ?
 			'multi' : false;
 		Rooms.createBattle({

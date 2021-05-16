@@ -108,7 +108,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		return {cull: false};
 	}
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
-		species = this.dex.getSpecies(species);
+		species = this.dex.species.get(species);
 		let forme = species.name;
 
 		if (typeof species.battleOnly === 'string') {
@@ -145,7 +145,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				const move = this.dex.getMove(setMoveid);
+				const move = this.dex.moves.get(setMoveid);
 
 				let {cull, isSetup} = this.shouldCullMove(move, hasMove, hasType, counter, teamDetails);
 
@@ -220,13 +220,14 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 		const pokemonPool: string[] = [];
 		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.getSpecies(id);
+			const species = this.dex.species.get(id);
 			if (
 				species.num < 1 ||
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!species.randomBattleMoves?.length
+				!species.randomBattleMoves?.length ||
+				(this.forceMonotype && !species.types.includes(this.forceMonotype))
 			) {
 				continue;
 			}
@@ -238,8 +239,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 		const baseFormes: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		while (pokemonPool.length && pokemon.length < 6) {
-			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -259,7 +260,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 			// Limit 1 of any type combination
 			const typeCombo = types.slice().sort().join();
-			if (typeComboCount[typeCombo] >= 1) continue;
+			if (!this.forceMonotype && typeComboCount[typeCombo] >= 1) continue;
 
 			// Okay, the set passes, add it to our team
 			const set = this.randomSet(species, teamDetails);
