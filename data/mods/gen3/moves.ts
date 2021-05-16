@@ -413,7 +413,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
-				if (effect.effectType === 'Move' && !source.isAlly(target) && this.getCategory(effect.id) === 'Special') {
+				if (effect.effectType === 'Move' && !source.isAlly(target) &&
+				this.getCategory(effect.id) === 'Special' && effect.id !== 'weatherball') {
 					this.effectState.slot = source.getSlot();
 					this.effectState.damage = 2 * damage;
 				}

@@ -1345,6 +1345,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {authentic: 1},
 	},
+	trick: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (target.hasAbility('multitype')) return false;
+		},
+	},
 	uproar: {
 		inherit: true,
 		basePower: 50,
