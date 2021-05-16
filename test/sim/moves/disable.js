@@ -34,7 +34,7 @@ describe('Disable', function () {
 		assert.cantMove(() => battle.makeChoices('auto', 'move outrage'));
 	});
 
-	it.only(`should not work successfully against Struggle`, function () {
+	it(`should not work successfully against Struggle`, function () {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['disable']},
 		], [
