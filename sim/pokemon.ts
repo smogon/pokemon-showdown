@@ -958,7 +958,6 @@ export class Pokemon {
 			}
 		}
 		if (!atLeastOne) return;
-		if (this.dynamaxLevel) result.dynamaxLevel = this.dynamaxLevel;
 		if (this.canGigantamax) result.gigantamax = this.canGigantamax;
 		return result;
 	}
