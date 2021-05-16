@@ -2928,7 +2928,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	conkeldurr: {
 		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "knockoff", "machpunch"],
 		randomDoubleBattleMoves: ["drainpunch", "icepunch", "knockoff", "machpunch", "protect", "wideguard"],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	tympole: {
