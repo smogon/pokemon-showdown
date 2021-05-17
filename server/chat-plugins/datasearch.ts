@@ -1192,7 +1192,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+		if (!showAll && results.length > RESULTS_MAX_LENGTH + 20) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
@@ -1917,7 +1917,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+		if (!showAll && results.length > RESULTS_MAX_LENGTH + 20) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
