@@ -560,10 +560,10 @@ export function notifyStaff() {
 			hasUnclaimed = true;
 			if (ticket.type === 'Public Room Assistance Request') hasAssistRequest = true;
 		}
-		if (ticketGame) {
-			buf += ticketGame.getButton();
-		} else if (ticket.text) {
+		if (ticket.text) {
 			buf += HelpTicket.getTextButton(ticket as TicketState & {text: [string, string]});
+		} else if (ticketGame) {
+			buf += ticketGame.getButton();
 		}
 		count++;
 	}
