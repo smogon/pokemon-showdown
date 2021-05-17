@@ -1560,7 +1560,7 @@ export const commands: Chat.ChatCommands = {
 				const validation = await textTicket.checker?.(text, contextString || '', ticket.type, user, reportTarget);
 				if (Array.isArray(validation) && validation.length) {
 					this.parse(`/join view-${pageId}`);
-					return this.popupReply(validation.join('||'));
+					return this.popupReply(`|html|` + validation.join('||'));
 				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
