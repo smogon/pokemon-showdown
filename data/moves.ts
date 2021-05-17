@@ -3300,7 +3300,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax) {
+			if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax || target.lastMove.id === 'struggle') {
 				return false;
 			}
 		},
@@ -3316,7 +3316,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.effectState.duration--;
 				}
 				if (!pokemon.lastMove) {
-					this.debug('pokemon hasn\'t moved yet');
+					this.debug(`Pokemon hasn't moved yet`);
 					return false;
 				}
 				for (const moveSlot of pokemon.moveSlots) {
