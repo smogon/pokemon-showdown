@@ -843,7 +843,6 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'freeforall',
 		rated: false,
-		challengeShow: false,
 		tournamentShow: false,
 		ruleset: ['Standard Doubles', 'Sleep Clause Mod', 'Dynamax Clause', '!Gravity Sleep Clause'],
 		banlist: [

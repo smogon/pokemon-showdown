@@ -95,6 +95,12 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 	 */
 	connected: boolean;
 	invite: ID;
+	/**
+	 * Has the simulator received this player's team yet?
+	 * Basically always yes except when creating a 4-player battle,
+	 * in which case players will need to bring their own team.
+	 */
+	hasTeam: boolean;
 	constructor(user: User | string | null, game: RoomBattle, num: PlayerIndex) {
 		super(user, game, num);
 		if (typeof user === 'string') user = null;
@@ -113,6 +119,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 
 		this.connected = true;
 		this.invite = '';
+		this.hasTeam = false;
 
 		if (user) {
 			user.games.add(this.game.roomid);
@@ -667,7 +674,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		void this.stream.write(`>${player.slot} undo`);
 	}
-	joinGame(user: User, slot?: SideID) {
+	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
@@ -698,11 +705,11 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (this[slot].invite === user.id) {
 			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
 		} else if (!user.can('joinbattle', null, this.room)) {
-			user.popup(`You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.`);
+			user.popup(`You must be set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.`);
 			return false;
 		}
 
-		this.updatePlayer(this[slot], user);
+		this.updatePlayer(this[slot], user, playerOpts);
 		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
 			const users = this.players.map(player => {
 				const u = player.getUser();
@@ -713,8 +720,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.missingBattleStartMessage = false;
 			this.started = true;
 			this.room.add(`|uhtmlchange|invites|`);
-		} else if (!this.started) {
-			for (const player of this.players) this.sendInviteForm(player.getUser());
+		} else if (!this.started && this.invitesFull()) {
+			this.sendInviteForm(true);
 		}
 		if (user.inRooms.has(this.roomid)) this.onConnect(user);
 		this.room.update();
@@ -1049,7 +1056,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	}
 
 	/**
-	 * playerOpts should be emtpy only if importing an inputlog
+	 * playerOpts should be empty only if importing an inputlog
 	 * (so the player isn't recreated)
 	 */
 	addPlayer(user: User | null, playerOpts?: RoomBattlePlayerOptions) {
@@ -1067,6 +1074,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 				rating: Math.round(playerOpts.rating || 0),
 			};
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
+			player.hasTeam = true;
 		}
 
 		if (user) {
@@ -1140,7 +1148,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	updatePlayer(player: RoomBattlePlayer, user: User | null) {
+	updatePlayer(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
 		super.updatePlayer(player, user);
 
 		player.invite = '';
@@ -1149,8 +1157,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 			const options = {
 				name: player.name,
 				avatar: user.avatar,
+				team: playerOpts?.team,
 			};
 			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
+			if (playerOpts) player.hasTeam = true;
 
 			this.room.add(`|player|${slot}|${player.name}|${user.avatar}`);
 		} else {
@@ -1200,7 +1210,15 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 	}
 
-	sendInviteForm(connection: Connection | User | null) {
+	invitesFull() {
+		return this.players.every(player => player.id || player.invite);
+	}
+	/** true = send to every player; falsy = send to no one */
+	sendInviteForm(connection: Connection | User | null | boolean) {
+		if (connection === true) {
+			for (const player of this.players) this.sendInviteForm(player.getUser());
+			return;
+		}
 		if (!connection) return;
 		const playerForms = this.players.map(player => (
 			player.id ? (

@@ -316,6 +316,7 @@ export interface UserSettings {
 
 // User
 export class User extends Chat.MessageContext {
+	/** In addition to needing it to implement MessageContext, this is also nice for compatibility with Connection. */
 	readonly user: User;
 	readonly inRooms: Set<RoomID>;
 	/**
@@ -1341,7 +1342,7 @@ export class User extends Chat.MessageContext {
 	cancelReady() {
 		// setting variables because this can't be short-circuited
 		const searchesCancelled = Ladders.cancelSearches(this);
-		const challengesCancelled = Ladders.clearChallenges(this.id);
+		const challengesCancelled = Ladders.challenges.clearFor(this.id, 'they changed their username');
 		if (searchesCancelled || challengesCancelled) {
 			this.popup(`Your searches and challenges have been cancelled because you changed your username.`);
 		}
@@ -1355,7 +1356,7 @@ export class User extends Chat.MessageContext {
 	}
 	updateReady(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);
-		Ladders.updateChallenges(this, connection);
+		Ladders.challenges.updateFor(connection || this);
 	}
 	updateSearch(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);

@@ -492,29 +492,13 @@ export const commands: Chat.ChatCommands = {
 		if (!(user1.id in room.users) || !(user2.id in room.users)) {
 			return this.errorReply(`Both users must be in this room.`);
 		}
-		const challenges = [];
-		const user1Challs = Ladders.challenges.get(user1.id);
-		if (user1Challs) {
-			for (const chall of user1Challs) {
-				if (chall.from === user1.id && Users.get(chall.to) === user2) {
-					challenges.push(Utils.html`${user1.name} is challenging ${user2.name} in ${Dex.formats.get(chall.formatid).name}.`);
-					break;
-				}
-			}
-		}
-		const user2Challs = Ladders.challenges.get(user2.id);
-		if (user2Challs) {
-			for (const chall of user2Challs) {
-				if (chall.from === user2.id && Users.get(chall.to) === user1) {
-					challenges.push(Utils.html`${user2.name} is challenging ${user1.name} in ${Dex.formats.get(chall.formatid).name}.`);
-					break;
-				}
-			}
-		}
-		if (!challenges.length) {
+		const chall = Ladders.challenges.search(user1.id, user2.id);
+
+		if (!chall) {
 			return this.sendReplyBox(Utils.html`${user1.name} and ${user2.name} are not challenging each other.`);
 		}
-		this.sendReplyBox(challenges.join(`<br />`));
+		const [from, to] = user1.id === chall.from ? [user1, user2] : [user2, user1];
+		this.sendReplyBox(Utils.html`${from.name} is challenging ${to.name} in ${Dex.formats.get(chall.format).name}.`);
 	},
 	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: * @ # &`],
 
