@@ -125,6 +125,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.addSplit(pokemon.side.id, ['-ability', pokemon, 'Pressure', '[silent]']);
 		},
 	},
+	raindish: {
+		inherit: true,
+		onWeather() {},
+		onResidualOrder: 10,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				this.heal(pokemon.baseMaxhp / 16);
+			}
+		},
+	},
 	roughskin: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {

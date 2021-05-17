@@ -68,6 +68,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.flags['defrost']) pokemon.cureStatus();
 		},
+		onResidualOrder: 7,
 		onResidual(pokemon) {
 			if (this.randomChance(25, 256)) pokemon.cureStatus();
 		},
@@ -154,6 +155,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		durationCallback(target, source) {
 			return this.random(3, 6);
 		},
+		onResidualOrder: 3,
+		onResidualSubOrder: 1,
 	},
 	lockedmove: {
 		name: 'lockedmove',
@@ -189,8 +192,21 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 	},
+	futuremove: {
+		inherit: true,
+		onResidualOrder: 1,
+	},
+	raindance: {
+		inherit: true,
+		onFieldResidualOrder: 2,
+	},
+	sunnyday: {
+		inherit: true,
+		onFieldResidualOrder: 2,
+	},
 	sandstorm: {
 		inherit: true,
+		onFieldResidualOrder: 2,
 		onWeather(target) {
 			this.damage(target.baseMaxhp / 8);
 		},

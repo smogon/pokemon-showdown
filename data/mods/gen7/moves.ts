@@ -209,8 +209,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Electric Terrain');
 				}
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 2,
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Electric Terrain');
 			},
@@ -300,6 +300,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onResidualOrder: 5,
+			onResidualSubOrder: 2,
 			onResidual(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
@@ -307,8 +308,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
 				}
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 3,
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
@@ -690,8 +691,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 2,
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Psychic Terrain');
 			},

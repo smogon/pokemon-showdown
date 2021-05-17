@@ -16,6 +16,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	blacksludge: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
+	},
 	brightpowder: {
 		inherit: true,
 		onModifyAccuracyPriority: 5,
@@ -96,6 +101,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	flameorb: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 20,
+	},
 	focussash: {
 		inherit: true,
 		onDamage() { },
@@ -153,6 +163,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.debug('lax incense - decreasing accuracy');
 			return accuracy * 0.9;
 		},
+	},
+	leftovers: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 	},
 	lifeorb: {
 		inherit: true,
@@ -285,6 +300,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	stickybarb: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 20,
+	},
 	thickclub: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
@@ -292,6 +312,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return this.chainModify(2);
 			}
 		},
+	},
+	toxicorb: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 20,
 	},
 	widelens: {
 		inherit: true,

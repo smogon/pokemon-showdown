@@ -2,7 +2,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	aguavberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -12,7 +13,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	apicotberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
@@ -22,7 +24,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	berryjuice: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
@@ -75,7 +78,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	figyberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -85,7 +89,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	ganlonberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
@@ -103,7 +108,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	iapapaberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -128,7 +134,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	lansatberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
@@ -146,7 +153,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	liechiberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
@@ -168,7 +176,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	magoberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -210,7 +219,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	oranberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -220,7 +230,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	petayaberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
@@ -246,7 +257,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	salacberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
@@ -288,7 +300,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	sitrusberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -317,7 +330,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	starfberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
@@ -335,7 +349,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	wikiberry: {
 		inherit: true,
 		onUpdate() {},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();

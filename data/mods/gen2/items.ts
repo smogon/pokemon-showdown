@@ -86,6 +86,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	leftovers: {
+		inherit: true,
+		onResidualOrder: 5,
+		onResidualSubOrder: 1,
+	},
 	lightball: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.

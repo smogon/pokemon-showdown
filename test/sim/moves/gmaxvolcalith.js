@@ -95,4 +95,18 @@ describe('G-Max Volcalith', function () {
 		const toxicroak = battle.p2.active[0];
 		assert.equal(toxicroak.hp, toxicroak.maxhp - Math.floor(toxicroak.maxhp / 6) + Math.floor(toxicroak.maxhp / 16));
 	});
+
+	it(`should deal damage before Grassy Terrain recovery`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Rillaboom', ability: 'grassysurge', moves: ['sleeptalk']},
+			{species: 'Boldore', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move rockthrow 2 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
+		const rillaboom = battle.p2.active[0];
+		assert.equal(rillaboom.hp, rillaboom.maxhp - Math.floor(rillaboom.maxhp / 6) + Math.floor(rillaboom.maxhp / 16));
+	});
 });
