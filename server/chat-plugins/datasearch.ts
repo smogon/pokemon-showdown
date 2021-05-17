@@ -447,7 +447,8 @@ export const commands: Chat.ChatCommands = {
 	learnhelp: [
 		`/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.`,
 		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # &`,
-		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or 'pentagon'. A value of 'pentagon' indicates that trading from previous generations is not allowed.`,
+		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or "min source gen [number]".`,
+		`A value of 'min source gen [number]' indicates that trading (or Pokémon Bank) from generations before [number] is not allowed.`,
 		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
 		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum`,
@@ -2346,6 +2347,15 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 			targets.shift();
 			continue;
 		}
+		if (targetid.startsWith('minsourcegen')) {
+			if (format.exists) {
+				return {error: "'min source gen' can't be used with formats."};
+			}
+			minSourceGen = parseInt(targetid.slice(12));
+			if (isNaN(minSourceGen) || minSourceGen < 1) return {error: `Invalid min source gen "${targetid.slice(12)}"`};
+			targets.shift();
+			continue;
+		}
 		if (targetid === 'level5') {
 			level = 5;
 			targets.shift();
@@ -2355,13 +2365,18 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	}
 	let gen;
 	if (!format.exists) {
-		// can happen if you hotpatch formats without hotpatching chat
 		const dex = Dex.mod(formatid).includeData();
+		// can happen if you hotpatch formats without hotpatching chat
 		if (!dex) return {error: `"${formatid}" is not a supported format.`};
+
 		gen = dex.gen;
-		format = new Dex.Format({minSourceGen, mod: formatid});
+		format = new Dex.Format({mod: formatid});
 		formatName = `Gen ${gen}`;
-		if (minSourceGen === 6) formatName += ' Pentagon';
+		if (minSourceGen) {
+			formatName += ` (Min Source Gen = ${minSourceGen})`;
+			const ruleTable = dex.formats.getRuleTable(format);
+			ruleTable.minSourceGen = minSourceGen;
+		}
 	} else {
 		gen = Dex.forFormat(format).gen;
 	}
