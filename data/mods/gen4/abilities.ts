@@ -15,6 +15,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		rating: 1.5,
 	},
+	baddreams: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 10,
+	},
 	blaze: {
 		onBasePowerPriority: 2,
 		onBasePower(basePower, attacker, defender, move) {
@@ -163,6 +168,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return accuracy * 0.8;
 			}
 		},
+	},
+	hydration: {
+		onWeather(target, source, effect) {
+			if (effect.id === 'raindance' && target.status) {
+				this.add('-activate', target, 'ability: Hydration');
+				target.cureStatus();
+			}
+		},
+		name: "Hydration",
+		rating: 1.5,
+		num: 93,
 	},
 	insomnia: {
 		inherit: true,
@@ -336,6 +352,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	shedskin: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 3,
+	},
 	simple: {
 		onModifyBoost(boosts) {
 			let key: BoostID;
@@ -358,6 +379,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return accuracy * 0.8;
 			}
 		},
+	},
+	speedboost: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 3,
 	},
 	static: {
 		inherit: true,

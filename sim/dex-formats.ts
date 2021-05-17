@@ -859,6 +859,7 @@ export class DexFormats {
 		const ruleid = id;
 		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
 		for (const matchType of matchTypes) {
+			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
 			let table;
 			switch (matchType) {
 			case 'pokemon': table = this.dex.data.Pokedex; break;

@@ -316,6 +316,7 @@ export interface UserSettings {
 
 // User
 export class User extends Chat.MessageContext {
+	/** In addition to needing it to implement MessageContext, this is also nice for compatibility with Connection. */
 	readonly user: User;
 	readonly inRooms: Set<RoomID>;
 	/**
@@ -1341,7 +1342,7 @@ export class User extends Chat.MessageContext {
 	cancelReady() {
 		// setting variables because this can't be short-circuited
 		const searchesCancelled = Ladders.cancelSearches(this);
-		const challengesCancelled = Ladders.clearChallenges(this.id);
+		const challengesCancelled = Ladders.challenges.clearFor(this.id, 'they changed their username');
 		if (searchesCancelled || challengesCancelled) {
 			this.popup(`Your searches and challenges have been cancelled because you changed your username.`);
 		}
@@ -1355,7 +1356,7 @@ export class User extends Chat.MessageContext {
 	}
 	updateReady(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);
-		Ladders.updateChallenges(this, connection);
+		Ladders.challenges.updateFor(connection || this);
 	}
 	updateSearch(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);
@@ -1655,8 +1656,9 @@ function socketReceive(worker: ProcessManager.StreamWorker, workerid: number, so
 	const user = connection.user;
 	if (!user) return;
 
-	// The client obviates the room id when sending messages to Lobby by default
-	const roomId = message.slice(0, pipeIndex) || (Rooms.lobby && 'lobby') || '';
+	// LEGACY: In the past, an empty room ID would default to Lobby,
+	// but that is no longer supported
+	const roomId = message.slice(0, pipeIndex) || '';
 	message = message.slice(pipeIndex + 1);
 
 	const room = Rooms.get(roomId) || null;

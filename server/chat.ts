@@ -545,11 +545,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (this.room && !(this.user.id in this.room.users)) {
-			if (this.room.roomid === 'lobby') {
-				this.room = null;
-			} else {
-				return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
-			}
+			return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 		}
 
 		if (this.user.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
