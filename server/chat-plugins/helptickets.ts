@@ -35,6 +35,7 @@ interface TextTicketInfo {
 		input: string, context: string, pageId: string, user: User, reportTarget?: string
 	) => boolean | string[] | Promise<boolean | string[]>;
 	title: string;
+	disclaimer?: string;
 	getReviewDisplay: (
 		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection
 	) => Promise<string | void> | string | void;
@@ -1094,6 +1095,9 @@ export const pages: Chat.PageTable = {
 					const textTicket = textTickets[page.slice(7)];
 					if (textTicket) {
 						buf += `<p><b>${this.tr(textTicket.title)}</b></p>`;
+						if (textTicket.disclaimer) {
+							buf += `<p>${this.tr(textTicket.disclaimer)}</p>`;
+						}
 						buf += `<form data-submitsend="/helpticket submit ${ticketTitles[page.slice(7)]} ${submitMeta} | {text} | {context}">`;
 						buf += `<textarea style="width: 100%" name="text"></textarea><br />`;
 						buf += `<strong>Do you have any other information you want to provide? (this is optional)</strong><br />`;
