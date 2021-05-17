@@ -859,11 +859,29 @@ describe('Team Validator', function () {
 	});
 
 	it('should allow items to be banned', function () {
-		const team = [
+		let team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], item: 'lightball', evs: {hp: 1}},
 		];
-		const illegal = TeamValidator.get('gen7anythinggoes@@@-Light Ball').validateTeam(team);
+		let illegal = TeamValidator.get('gen7anythinggoes@@@-Light Ball').validateTeam(team);
 		assert(illegal);
+
+		team = [
+			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], item: 'lightball', evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes@@@-noitem').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes@@@-noitem').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes@@@-allitems').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should allow items to be unbanned', function () {
