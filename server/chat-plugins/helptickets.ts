@@ -31,7 +31,9 @@ interface TicketState {
 }
 
 interface TextTicketInfo {
-	checker?: (input: string, context: string, pageId: string, user: User, reportTarget?: string) => boolean | string[];
+	checker?: (
+		input: string, context: string, pageId: string, user: User, reportTarget?: string
+	) => boolean | string[] | Promise<boolean | string[]>;
 	title: string;
 	getReviewDisplay: (ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection) => string | void;
 	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
@@ -1438,7 +1440,7 @@ export const commands: Chat.ChatCommands = {
 		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
 
 		submittext: 'submit',
-		submit(target, room, user, connection, cmd) {
+		async submit(target, room, user, connection, cmd) {
 			if (user.can('lock') && !user.can('bypassall')) {
 				return this.popupReply(this.tr`Global staff can't make tickets. They can only use the form for reference.`);
 			}
@@ -1516,7 +1518,7 @@ export const commands: Chat.ChatCommands = {
 				if (text.length > 8192) {
 					return this.popupReply(`Your report is too long. Please use fewer words.`);
 				}
-				const validation = textTicket.checker?.(text, contextString || '', ticket.type, user, reportTarget);
+				const validation = await textTicket.checker?.(text, contextString || '', ticket.type, user, reportTarget);
 				if (Array.isArray(validation) && validation.length) {
 					this.parse(`/join view-${pageId}`);
 					return this.popupReply(validation.join('||'));
