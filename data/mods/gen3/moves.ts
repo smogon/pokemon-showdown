@@ -274,7 +274,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onOverrideAction(pokemon) {
 				return this.effectState.move;
 			},
-			onResidualOrder: 13,
+			onResidualOrder: 10,
+			onResidualSubOrder: 14,
 			onResidual(target) {
 				if (
 					target.moves.includes(this.effectState.move) &&
@@ -571,7 +572,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(target) {
 				this.add('-start', target, 'move: Taunt');
 			},
-			onResidualOrder: 12,
+			onResidualOrder: 10,
+			onResidualSubOrder: 15,
 			onEnd(target) {
 				this.add('-end', target, 'move: Taunt', '[silent]');
 			},
