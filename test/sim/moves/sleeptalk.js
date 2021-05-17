@@ -19,15 +19,4 @@ describe('Sleep Talk', function () {
 		assert.fullHP(battle.p2.active[0]);
 		assert.match(battle.log[battle.lastMoveLine + 1], /^\|cant.*move: Gravity|High Jump Kick$/, 'should log that High Jump Kick failed');
 	});
-
-	it.skip('should deduct PP even if it fails in gen 4', function () {
-		battle = common.gen(4).createBattle([[
-			{species: 'metagross', moves: ['sleeptalk']},
-		], [
-			{species: 'feebas', moves: ['splash']},
-		]]);
-		const pokemon = battle.p1.active[0];
-		battle.makeChoices();
-		assert.equal(pokemon.getMoveData('sleeptalk').pp, 15);
-	});
 });

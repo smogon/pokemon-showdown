@@ -1221,6 +1221,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
+	switcheroo: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
+		},
+	},
 	synthesis: {
 		inherit: true,
 		onHit(pokemon) {
@@ -1348,7 +1354,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	trick: {
 		inherit: true,
 		onTryHit(target, source, move) {
-			if (target.hasAbility('multitype')) return false;
+			if (target.hasAbility('multitype') || source.hasAbility('multitype')) return false;
 		},
 	},
 	uproar: {
