@@ -255,6 +255,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		duration: 5,
 		durationCallback(target, source) {
 			if (source?.hasItem('gripclaw')) return 8;
+			if (source?.hasAbility('tightgrip')) return 8;
 			return this.random(5, 7);
 		},
 		onStart(pokemon, source) {
@@ -555,7 +556,11 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
-			if (move.type === 'Water') {
+			if (move.type === 'Water' && attacker.hasAbility('steampower')) {
+				this.debug('Sunny Day Steam Power water boost');
+				return this.chainModify(1.1);
+			}
+			if (move.type === 'Water' && !attacker.hasAbility('steampower')) {
 				this.debug('Sunny Day water suppress');
 				return this.chainModify(0.5);
 			}
@@ -648,8 +653,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'Sandstorm', '[upkeep]');
 			if (this.field.isWeather('sandstorm')) this.eachEvent('Weather');
 		},
-		onWeather(target) {
-			this.damage(target.baseMaxhp / 16);
+		onWeather(target, source, effect) {
+			if (source?.hasAbility('catastrophic') || target?.hasAbility('catastrophic')) {
+				this.damage(target.baseMaxhp / 8);
+			}
+			else {
+				this.damage(target.baseMaxhp / 16);
+			}
 		},
 		onEnd() {
 			this.add('-weather', 'none');
@@ -684,8 +694,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
-		onWeather(target) {
-			this.damage(target.baseMaxhp / 16);
+		onWeather(target, source, effect) {
+			if (source?.hasAbility('catastrophic') || target?.hasAbility('catastrophic')) {
+				this.damage(target.baseMaxhp / 8);
+			}
+			else {
+				this.damage(target.baseMaxhp / 16);
+			}
 		},
 		onEnd() {
 			this.add('-weather', 'none');
@@ -744,8 +759,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'Toxic Cloud', '[upkeep]');
 			if (this.field.isWeather('toxiccloud')) this.eachEvent('Weather');
 		},
-		onWeather(target) {
-			this.damage(target.baseMaxhp / 16);
+		onWeather(target, source, effect) {
+			if (source?.hasAbility('catastrophic') || target?.hasAbility('catastrophic')) {
+				this.damage(target.baseMaxhp / 8);
+			}
+			else {
+				this.damage(target.baseMaxhp / 16);
+			}
 		},
 		onEnd() {
 			this.add('-weather', 'none');

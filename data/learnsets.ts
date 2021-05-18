@@ -89005,7 +89005,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			outrage: ["8M", "7M"],
 			dragonclaw: ["8M", "7M"],
 			dracometeor: ["8M", "7M"],
-			nastyplot: ["8M", "7M"],
 			fireblast: ["8M", "7M"],
 			flamethrower: ["8M", "7M"],
 			incinerate: ["8M", "7M"],

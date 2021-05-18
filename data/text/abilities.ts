@@ -1788,7 +1788,139 @@ export const AbilitiesText = {
 	},
 	transmutation: {
 		name: "Transmutation",
-		desc: "This Pokemon's type changes when a status attempt is made on him. Grants status immunity. Psn/Tox->Poison,Par->Electric,Slp->Grass,Brn->Fire,Frz->Ice.",
-		shortDesc: "Type changes with status attempts. Psn/Tox->Poison,Par->Electric,Slp->Grass,Brn->Fire,Frz->Ice.",
+		desc: "This Pokemon's type changes when a status attempt is made on him. Grants status immunity. Psn/Tox->Poison,Par->Electric,Slp->Psychic,Brn->Fire,Frz->Ice.",
+		shortDesc: "Type changes with status attempts. Psn/Tox->Poison,Par->Electric,Slp->Psychic,Brn->Fire,Frz->Ice.",
+	},
+	pantheon: {
+		name: "Pantheon",
+		desc: "If an active ally has this Ability, this Pokemon's highest stat is multiplied by 1.5.",
+		shortDesc: "If an active ally has this Ability, this Pokemon's highest stat is 1.5x.",
+	},
+	negationfield: {
+		name: "Negation Field",
+		desc: "Applies Magic Room while the bearer is in battle.",
+		shortDesc: "Applies Magic Room while the bearer is in battle.",
+	},
+	enchantment: {
+		name: "Enchantment",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its attacking stat is multiplied by 1.5 while using a Fairy-type attack.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's attacking stat is 1.5x with Fairy attacks.",
+	},
+	rushdown: {
+		name: "Rushdown",
+		desc: "This Pokemon attacking stat is multiplied by 1.5 if it is the user's first turn on the field.",
+		shortDesc: "This Pokemon's attacking stat is 1.5x if first turn out.",
+	},
+	vitalitydrain: {
+		name: "Vitality Drain",
+		desc: "This Pokemonis healed 1/4 max hp if it attacks and knocks out another Pokemon.",
+		shortDesc: "This Pokemonis healed 1/4 max hp if it attacks and KOes another Pokemon.",
+	},
+	paralyzingvenom: {
+		name: "Paralyzing Venom",
+		desc: "This Pokemon's poisoning moves become paralyzing ones. Don't affect Steel-typed foes.",
+		shortDesc: "Psn/Tox effects -> Par effects, don't affect Steel.",
+	},
+	famiybonds: {
+		name: "Family Bonds",
+		desc: "If an active ally has the same type, this Pokemon's STAB is 1.5 x 1.4.",
+		shortDesc: "If an active ally has the same type, this Pokemon's STAB is 1.5 x 1.4.",
+	},
+	wonderfield: {
+		name: "Wonder Field",
+		desc: "Applies Wonder Room while the bearer is in battle.",
+		shortDesc: "Applies Wonder Room while the bearer is in battle.",
+	},
+	stimulating: {
+		name: "Stimulating",
+		desc: "When this Pokemon's opponent stat stages are raised or lowered, the effect is doubled instead. This Ability does not affect stat stage increases received from Z-Power effects that happen before a Z-Move is used.",
+		shortDesc: "When this Pokemon's foe stat stages are raised or lowered, the effect is doubled instead.",
+	},
+	remorse: {
+		name: "Remorse",
+		desc: "If this Pokemon is knocked out, that move's user Attack and Special Attack are lowered 1 stage.",
+		shortDesc: "If this Pokemon is KOed, that move's user Atk and Sp.Atk are lowered 1 stage.",
+
+		damage: "  [POKEMON] was hurt!",
+	},
+	thunderdelight: {
+		name: "Thunder Delight",
+		desc: "This Pokemon's Electric moves heal him 1/10 max hp.",
+		shortDesc: "This Pokemon's Electric moves heal him 1/10 max hp.",
+	},
+	ignition: {
+		name: "Ignition",
+		desc: "This Pokemon is immune to Fire-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Fire-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Fire moves; Fire immunity.",
+	},
+	backstaber: {
+		name: "Backstaber",
+		desc: "This pokemon does 1.5x damage to allied Pokémon. This pokemon heals 50% when it attacks an ally directly.",
+		shortDesc: "This pokemon does 1.5x damage to allied Pokémon, heals 50% when it attacks an ally directly.",
+	},
+	desperation: {
+		name: "Desperation",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its attacking stat is multiplied by 1.5 while using a Dark-type attack.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's attacking stat is 1.5x with Dark attacks.",
+	},
+	chainstriker: {
+		name: "Chain Striker",
+		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
+		shortDesc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
+	},
+	twinned: {
+		name: "Twinned",
+		desc: "This Pokemons attacks have .75 power but hit both opponents.",
+		shortDesc: "This Pokemons attacks have .75 power but hit both opponents",
+	},
+	poisoncloak: {
+		name: "Poison Cloak",
+		desc: "If Toxic Cloud is active, this Pokemon's evasiveness is multiplied by 1.25. This Pokemon takes no damage from Toxic Cloud.",
+		shortDesc: "If Toxic Cloud is active, this Pokemon's evasiveness is 1.25x; immunity to Toxic Cloud.",
+	},
+	tightgrip: {
+		name: "Tight Grip",
+		desc: "Holder's partial-trapping moves always last 7 turns.",
+		shortDesc: "Holder's partial-trapping moves always last 7 turns.",
+	},
+	catastrophic: {
+		name: "Catastrophic",
+		desc: "While this pokemon is on the field, Weather damage are double.",
+		shortDesc: " While this pokemon is on the field, Weather damage are double.",
+	},
+	pyrotoxin: {
+		name: "Pyrotoxin",
+		desc: "Powers up Fire-type moves (x1'3)  if the target is poisoned, and powers up Poison-type moves(x1'3) if the target is burned.",
+		shortDesc: "Fire-type moves x1.3 if target poisoned, Poison-type moves x1.3 if the target burned.",
+	},
+	envious: {
+		name: "Envious",
+		desc: "On switch in, this Pokemons Attack is raised by one stage, but only if the opponent has at least one stat boosted.",
+		shortDesc: "On switch in, this Pokemons Attack is raised 1 stage if the opponent has at least one stat boosted.",
+	},
+	steampower: {
+		name: "Steam Power",
+		desc: "The power of the Pokémon's Water-type moves are boosted in sunshine instead of being weakened (x1.1 boost).",
+		shortDesc: "Water-type moves are boosted x1.1 in sunshine instead of being weakened.",
+	},
+	camper: {
+		name: "Camper",
+		desc: "This Pokémon recovers 15% of health and cures status when using two turns charge moves.",
+		shortDesc: "This Pokémon recovers 15% of health and cures status when using two turns charge moves.",
+	},
+	happyspiker: {
+		name: "Happy Spiker",
+		desc: "This Pokémon summons two layers instead of one when using Spikes.",
+		shortDesc: "This Pokémon summons two layers instead of one when using Spikes.",
+	},
+	seer: {
+		name: "Seer",
+		desc: "This Pokemon can hit Dark types with Psychic-type moves.",
+		shortDesc: "Psychic moves hit Dark.",
+	},
+	vicarious: {
+		name: "Vicarious",
+		desc: "This Pokémon copies the foe's boosts, when the foe is boosting.",
+		shortDesc: "This Pokémon copies the foe's boosts, when the foe is boosting.",
 	},
 };

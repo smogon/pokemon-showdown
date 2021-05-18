@@ -5508,7 +5508,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-start', target, 'typechange', 'Electric', '[from] ability: Transmutation');
 			}
 			if (status.id === 'slp') {
-				this.add('-start', target, 'typechange', 'Grass', '[from] ability: Transmutation');
+				this.add('-start', target, 'typechange', 'Psychic', '[from] ability: Transmutation');
 			}
 			if (status.id === 'frz') {
 				this.add('-start', target, 'typechange', 'Ice', '[from] ability: Transmutation');
@@ -5518,5 +5518,440 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Transmutation",
 		rating: 3,
 		num: 1056,
+	},
+	pantheon: {
+		onStart(source) {
+			if (source.side.active.length === 1) {
+				return;
+			}
+			for (const allyActive of source.side.active) {
+				if (
+					allyActive && allyActive.position !== source.position &&
+					!allyActive.fainted && allyActive.hasAbility(['pantheon'])
+				) {
+					let statName = 'atk';
+					let bestStat = 0;
+					let s: StatNameExceptHP;
+					for (s in source.storedStats) {
+						if (source.storedStats[s] > bestStat) {
+							statName = s;
+							bestStat = source.storedStats[s];
+						}
+					}
+					this.boost({[statName]: 1}, source);
+				}
+			}
+		},
+		name: "Pantheon",
+		rating: 0,
+		num: 1057,
+	},
+	negationfield: {
+        onStart(pokemon, move) {
+            this.field.addPseudoWeather('magicroom', pokemon);
+        },
+        onSwitchOut(pokemon) {
+            this.field.removePseudoWeather('magicroom');
+        },
+        onFaint(pokemon) {
+            this.field.removePseudoWeather('magicroom');
+        },
+        name: "Negation Field",
+        rating: 3,
+        num: 1058,
+    },
+	enchantment: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fairy' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Enchantment boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fairy' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Enchantment boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Enchantment",
+		rating: 2,
+		num: 1059,
+	},
+	rushdown: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (attacker.activeMoveActions <= 1) {
+				this.debug('Rushdown boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (attacker.activeMoveActions <= 1) {
+				this.debug('Rushdown boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Rushdown",
+		rating: 2,
+		num: 1060,
+	},
+	vitalitydrain: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				console.log('source: '+source);
+				this.heal(source.baseMaxhp / 4, source);
+			}
+		},
+		name: "Vitality Drain",
+		rating: 3,
+		num: 1061,
+	},
+	paralyzingvenom: {
+		onModifyMove(move, source, target) {
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			let paralyzingvenomMove = false;
+			let parChance = '';
+			for (const secondary of move.secondaries) {
+				if ((secondary.status == 'tox' || secondary.status == 'psn') && !target.hasType('Steel')) {
+					paralyzingvenomMove = true;
+					parChance = secondary.chance;
+					move.secondaries = [];
+					move.secondaries.push({
+						chance: parChance,
+						status: 'par',
+						ability: this.dex.getAbility('paralyzingvenom'),
+					});
+				}
+			}
+			if (!move.status) return;
+			if ((move.status == 'tox' || move.status == 'psn') && !target.hasType('Steel')) {
+				paralyzingvenomMove = true;
+				move.status = 'par';
+			}
+		},
+		name: "Paralyzing Venom",
+		rating: 2,
+		num: 1062,
+	},
+	wonderfield: {
+        onStart(pokemon, move) {
+            this.field.addPseudoWeather('wonderroom', pokemon);
+        },
+        onSwitchOut(pokemon) {
+            this.field.removePseudoWeather('wonderroom');
+        },
+        onFaint(pokemon) {
+            this.field.removePseudoWeather('wonderroom');
+        },
+        name: "Wonder Field",
+        rating: 3,
+        num: 1063,
+    },
+	familybonds: {
+		onModifyMove(move, source, target) {
+			const type1 = source.types[0];
+			const type2 = source.types[1];
+			if (source.side.active.length === 1) {
+				return;
+			}
+			for (const allyActive of source.side.active) {
+				if (source.getTypes().length === 2) {
+					if (
+						allyActive && allyActive.position !== source.position &&
+						!allyActive.fainted && (allyActive.hasType(type1) || allyActive.hasType(type2))
+					) {
+						move.stab = 1.5 * 1.4;
+					}
+				}
+				if (source.getTypes().length === 1) {
+					if (
+						allyActive && allyActive.position !== source.position &&
+						!allyActive.fainted && (allyActive.hasType(type1))
+					) {
+						move.stab = 1.5 * 1.4;
+					}
+				}
+			}
+		},
+		name: "Family Bonds",
+		rating: 0,
+		num: 1064,
+	},
+	remorse: {
+		name: "Remorse",
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.add('-ability', target, 'Remorse', 'boost');
+				this.boost({atk: -1}, source, target, null, true);
+				this.boost({spa: -1}, source, target, null, true);
+			}
+		},
+		rating: 2.5,
+		num: 1065,
+	},
+	thunderdelight: {
+		onAfterMove(pokemon, target, move) {
+			if (move.type === 'Electric') this.heal(pokemon.baseMaxhp / 10, pokemon);
+		},
+		name: "Thunder Delight",
+		rating: 3,
+		num: 1066,
+	},
+	ignition: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Ignition');
+				}
+				return null;
+			}
+		},
+		name: "Ignition",
+		rating: 3.5,
+		num: 1067,
+	},
+	desperation: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('ODesperation boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Desperation boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Desperation",
+		rating: 2,
+		num: 1068,
+	},
+	chainstriker: {
+		onStart(pokemon) {
+			pokemon.addVolatile('chainstriker');
+		},
+		condition: {
+			onStart(pokemon) {
+				this.effectData.numConsecutive = 0;
+				this.effectData.lastMove = '';
+			},
+			onTryMovePriority: -2,
+			onTryMove(pokemon, target, move) {
+				if (!pokemon.hasAbility('chainstriker')) {
+					pokemon.removeVolatile('chainstriker');
+					return;
+				}
+				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
+					this.effectData.numConsecutive++;
+				} else {
+					this.effectData.numConsecutive = 0;
+				}
+				this.effectData.lastMove = move.id;
+			},
+			onModifyDamage(damage, source, target, move) {
+				const dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
+				const numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
+				return this.chainModify([dmgMod[numConsecutive], 0x1000]);
+			},
+		},
+		name: "Chain Striker",
+		rating: 3.5,
+		num: 1069,
+	},
+	poisoncloak: {
+		onImmunity(type, pokemon) {
+			if (type === 'toxiccloud') return false;
+		},
+		onModifyAccuracyPriority: 8,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			if (this.field.isWeather('toxiccloud')) {
+				this.debug('Poison Cloak - decreasing accuracy');
+				return accuracy * 0.8;
+			}
+		},
+		name: "Poison Cloak",
+		rating: 1.5,
+		num: 1070,
+	},
+	tightgrip: {
+		//implemented in conditions.ts
+		name: "Tight Grip",
+		rating: 1.5,
+		num: 1071,
+	},
+	pyrotoxin: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fire' && (defender.status === 'tox' || defender.status === 'psn')) {
+				this.debug('Pyrotoxin boost');
+				return this.chainModify(1.3);
+			}
+			if (move.type === 'Poison' && defender.status === 'brn') {
+				this.debug('Pyrotoxin boost');
+				return this.chainModify(1.3);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fire' && (defender.status === 'tox' || defender.status === 'psn')) {
+				this.debug('Pyrotoxin boost');
+				return this.chainModify(1.3);
+			}
+			if (move.type === 'Poison' && defender.status === 'brn') {
+				this.debug('Pyrotoxin boost');
+				return this.chainModify(1.3);
+			}
+		},
+		name: "Pyrotoxin",
+		rating: 4,
+		num: 1072,
+	},
+	catastrophic: {
+		//implemented in conditions.ts
+		name: "Catastrophic",
+		rating: 1.5,
+		num: 1073,
+	},
+	twinned: {
+		onModifyMove(move, pokemon) {
+			move.target = "allAdjacentFoes";
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			return this.chainModify(0.75);
+		},
+		name: "Twinned",
+		rating: 3.5,
+		num: 1074,
+	},
+	envious: {
+		onStart(pokemon) {
+			for (const target of pokemon.side.foe.active) {
+				if (!target.boosts) return;
+				let isBoosted = false;
+				let i = '';
+				for (i in target.boosts) {
+					console.log("target.boosts[i]: "+target.boosts[i]);
+					if(target.boosts[i] > 0) isBoosted = true;
+				}
+				console.log("isBoosted: "+isBoosted);
+				if (isBoosted) this.boost({atk: 1}, pokemon);
+			}
+		},
+		name: "Envious",
+		rating: 4,
+		num: 1075,
+	},
+	stimulating: {
+		onFoeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostName;
+			for (i in boost) {
+				boost[i]! *= 2;
+			}
+		},
+		name: "Stimulating",
+		rating: 4,
+		num: 1076,
+	},
+	backstaber: {
+		onAllyHit(target, source, move) {
+			let hitByAlly = false;
+			if (!target.hp) return;
+			for (const allyActive of target.side.active) {
+				if (allyActive === source) hitByAlly = true;
+			}
+			if (hitByAlly && move.target != "allAdjacent") this.heal(source.baseMaxhp / 2, source);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			let hitByAlly = false;
+			if (!defender.hp) return;
+			for (const allyActive of defender.side.active) {
+				if (allyActive === attacker) hitByAlly = true;
+			}
+			console.log("move.target: "+move.target);
+			console.log("hitByAlly: "+hitByAlly)
+			if (hitByAlly && move.target != "allAdjacent") return this.chainModify(1.5);
+		},
+		name: "Backstaber",
+		rating: 1.5,
+		num: 1077,
+	},
+	seer: {
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Psychic'] = true;
+			}
+		},
+		name: "Seer",
+		rating: 3,
+		num: 1078,
+	},
+	steampower: {
+		//implemented in conditions.ts
+		name: "Steam Power",
+		rating: 1.5,
+		num: 1079,
+	},
+	camper: {
+        onModifyMove(move, attacker) {
+			console.log("move.flags: "+move.flags);
+            if (move.flags['charge'] && !attacker.volatiles['twoturnmove']) {
+				attacker.cureStatus();
+				this.heal(attacker.baseMaxhp / 7, attacker);
+            }
+        },
+        name: "Camper",
+        rating: 3,
+        num: 1080,
+    },
+	happyspiker: {
+		onModifyMove(move, source, target) {
+			if (move.id === 'spikes') {
+				source.side.foe.addSideCondition('spikes');
+			}
+		},
+		name: "Happy Spiker",
+		rating: 0,
+		num: 1081,
+	},
+	vicarious: {
+		onFoeBoost(boost, target, source, effect) {
+			if (effect.id === 'vicarious') return;
+			let b: BoostName;
+			for (b in boost) {
+				if (target.boosts[b] === -6) continue;
+				const negativeBoost: SparseBoostsTable = {};
+				negativeBoost[b] = boost[b];
+				delete boost[b];
+				for (const target2 of target.side.foe.active) {
+					if (target2.hasAbility('vicarious')) {
+						this.add('-ability', target2, 'Vicarious');
+						// console.log("negativeBoost[b]: "+negativeBoost[b]);
+						// console.log("b: "+b);
+						// console.log("target2: "+target2);
+						// console.log("source: "+source);
+						this.boost(negativeBoost, target2);
+						this.boost(negativeBoost, source);
+					}
+				}
+			}
+		},
+		name: "Vicarious",
+		rating: 4,
+		num: 1082,
 	},
 };
