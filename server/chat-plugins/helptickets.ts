@@ -740,8 +740,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			buf += `</div></details><br />`;
 			if (sharedBattles.length) {
-				buf += `<details class="readmore"><summary>Shared battles</summary>`;
-				buf += sharedBattles.map(url => `<<${url}>>`).join(', ');
+				buf += `<details class="readmore"><summary><strong>Shared battles</strong></summary>`;
+				buf += sharedBattles.map(url => Chat.formatText(`<<${url}>>`)).join(', ');
 				buf += `</details>`;
 			}
 			if (replays.length) {
