@@ -23,10 +23,9 @@ describe('Wandering Spirit', function () {
 		battle = common.createBattle([[
 			{species: 'Decidueye', ability: 'overgrow', moves: ['shadowsneak']},
 		], [
-			{species: 'Runerigus', ability: 'wanderingspirit', moves: ['sleeptalk']},
+			{species: 'Runerigus', ability: 'wanderingspirit', moves: ['bodypress']},
 		]]);
-		battle = common.createBattle();
-		battle.makeChoices('auto', 'move 1 dynamax');
+		battle.makeChoices('auto', 'move bodypress dynamax');
 		assert(battle.p1.active[0].hasAbility('overgrow'));
 		assert(battle.p2.active[0].hasAbility('wanderingspirit'));
 	});

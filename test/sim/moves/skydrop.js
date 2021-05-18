@@ -277,7 +277,7 @@ describe('Sky Drop [Gen 5]', function () {
 	});
 
 	it(`should not fail even if the target is heavier than 200kg`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(5).createBattle([[
 			{species: 'Aerodactyl', moves: ['skydrop']},
 		], [
 			{species: 'Aggron', moves: ['tackle']},
@@ -286,7 +286,7 @@ describe('Sky Drop [Gen 5]', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	describe(`Sky Drop Glitch`, function () {
+	describe.skip(`Sky Drop Glitch`, function () {
 		beforeEach(function () {
 			battle = common.gen(5).createBattle({gameType: 'doubles'}, [[
 				{species: 'Aerodactyl', moves: ['rockpolish', 'skydrop', 'dig']},
