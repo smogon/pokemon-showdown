@@ -699,7 +699,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('grimAuxiliatrix')}|${['THE JUICE IS LOOSE', 'TOOTHPASTE\'S OUT OF THE TUBE', 'PREPARE TO DISCORPORATE'][this.random(3)]}`);
 		},
 		onFaint() {
-			this.add(`c|${getName('grimAuxiliatrix')}|${['NOT LIKE THIS', 'HALT - MODULE CORE HEMORRHAGE', 'AAAAAAAAAAAAAAAAAAA'][this.random(3)]}`);
+			this.add(`c|${getName('grimAuxiliatrix')}|${['NOT LIKE THIS', 'HALT - MODULE CORE HEMORRHAGE', 'AAAAAAAAAAAAAAAAAAA', 'Change da world... my final message. Goodb ye.'][this.random(4)]}`);
 		},
 	},
 	hoeenhero: {
