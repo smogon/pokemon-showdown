@@ -731,8 +731,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
 			buf += `<strong>Reported user:</strong> ${reportUserid} `;
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
-			buf += `</br />`;
-			buf += `<br /><br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
+			buf += `<br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
 			const replayString = replays.concat(sharedBattles).map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
 			for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
