@@ -726,14 +726,17 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		},
 		getReviewDisplay(ticket, staff, conn) {
 			let buf = '';
-			const sharedBattles = getCommonBattles(ticket.userid, null, toID(ticket.text[0]), null, conn);
+			const reportUserid = toID(ticket.text[0]);
+			const sharedBattles = getCommonBattles(ticket.userid, null, reportUserid, null, conn);
 			const replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
-			buf += `<strong>Reported user:</strong> ${ticket.text[0]}</br />`;
+			buf += `<strong>Reported user:</strong> ${reportUserid} `;
+			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
+			buf += `</br />`;
 			buf += `<br /><br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
 			const replayString = replays.concat(sharedBattles).map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
 			for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
-				buf += `<form data-submitsend="/msgroom staff,/${punishment} ${ticket.text[0]},{reason} ${proofString}">`;
+				buf += `<form data-submitsend="/msgroom staff,/${punishment} ${reportUserid},{reason} ${proofString}">`;
 				buf += `<button class="button notifying" type="submit">${name}</button><br />`;
 				buf += `Optional reason: <input name="reason" />`;
 				buf += `</form><br />`;
