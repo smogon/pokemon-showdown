@@ -1215,10 +1215,10 @@ export const commands: Chat.ChatCommands = {
 
 			if (result?.then) {
 				uhtmlId = `eval-${Date.now().toString().slice(-6)}-${Math.random().toFixed(6).slice(-6)}`;
-				this.sendReply(`|c|~|/uhtml ${uhtmlId},${generateHTML('<', 'Promise pending')}`);
+				this.sendReply(`|uhtml|${uhtmlId}|${generateHTML('<', 'Promise pending')}`);
 				this.update();
 				result = `Promise -> ${Utils.visualize(await result)}`;
-				this.sendReply(`|c|~|/uhtmlchange ${uhtmlId},${generateHTML('<', result)}`);
+				this.sendReply(`|uhtmlchange|${uhtmlId}|${generateHTML('<', result)}`);
 			} else {
 				result = Utils.visualize(result);
 				this.sendReply(`|html|${generateHTML('<', result)}`);
@@ -1226,7 +1226,7 @@ export const commands: Chat.ChatCommands = {
 			logRoom?.roomlog(`<< ${result}`);
 		} catch (e) {
 			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
-			const command = uhtmlId ? `|c|~|/uhtmlchange ${uhtmlId},` : '|html|';
+			const command = uhtmlId ? `|uhtmlchange|${uhtmlId}|` : '|html|';
 			this.sendReply(`${command}${generateHTML('<', message)}`);
 			logRoom?.roomlog(`<< ${message}`);
 		}
