@@ -1026,7 +1026,7 @@ export abstract class BasicRoom {
 	runAutoModchat() {
 		if (!this.settings.autoModchat || this.settings.autoModchat.active) return;
 		// they are staff and online
-		const staff = Object.values(this.users).filter(u => this.auth.isStaff(u.id));
+		const staff = Object.values(this.users).filter(u => u.can('mute', null, this));
 		if (!staff.length) {
 			const {rank, time} = this.settings.autoModchat;
 			this.modchatTimer = setTimeout(() => {
@@ -1045,7 +1045,7 @@ export abstract class BasicRoom {
 	}
 
 	checkAutoModchat(user: User) {
-		if (this.auth.isStaff(user.id)) {
+		if (user.can('mute', null, this)) {
 			if (this.modchatTimer) {
 				clearTimeout(this.modchatTimer);
 			}
