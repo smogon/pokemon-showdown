@@ -105,4 +105,19 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move splash zmove', 'move gravity');
 		battle.makeChoices('move stomping tantrum', 'move gravity');
 	});
+
+	it.skip(`should not double its base power if the user dropped mid-Fly due to Smack Down`, function () {
+		battle = common.createBattle([[
+			{species: 'Magikarp', moves: ['fly', 'stompingtantrum']},
+		], [
+			{species: 'Wynaut', moves: ['smackdown']},
+		]]);
+
+		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
+		});
+
+		battle.makeChoices();
+		battle.makeChoices('move stompingtantrum', 'auto');
+	});
 });
