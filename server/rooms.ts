@@ -134,7 +134,6 @@ export interface RoomSettings {
 }
 
 export type MessageHandler = (room: BasicRoom, message: string) => void;
-export type RenameHandler = (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
 export type Room = GameRoom | ChatRoom;
 
 import type {AnnouncementData} from './chat-plugins/announcements';

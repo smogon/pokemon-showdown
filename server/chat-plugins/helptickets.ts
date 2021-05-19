@@ -1953,7 +1953,7 @@ export const loginfilter: Chat.LoginFilter = (user) => {
 	}
 };
 
-export const onCloseRoom: Chat.RoomCloseHandler = (room, user, conn, isPage) => {
+export const onCloseRoom: Chat.Handlers.RoomClose = (room, user, conn, isPage) => {
 	if (!isPage || !room.includes('view-help-text')) return;
 	const userid = room.slice('view-help-text'.length + 1);
 	const ticket = tickets[userid];

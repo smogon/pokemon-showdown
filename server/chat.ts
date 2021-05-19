@@ -1425,8 +1425,7 @@ export const Chat = new class {
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
 	readonly crqHandlers: {[k: string]: CRQHandler} = {};
-	readonly renameHandlers: Rooms.RenameHandler[] = [];
-	readonly closeRoomHandlers: RoomCloseHandler[] = [];
+	readonly handlers: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
 	/** Will be empty except during hotpatch */
@@ -1791,9 +1790,13 @@ export const Chat = new class {
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
-		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
+		if (plugin.pages) {
+			Object.assign(Chat.pages, plugin.pages);
+		}
 
-		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
+		if (plugin.destroy) {
+			Chat.destroyHandlers.push(plugin.destroy);
+		}
 		if (plugin.crqHandlers) {
 			Object.assign(Chat.crqHandlers, plugin.crqHandlers);
 		}
@@ -1808,8 +1811,12 @@ export const Chat = new class {
 		if (plugin.punishmentfilter) Chat.punishmentfilters.push(plugin.punishmentfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
-		if (plugin.onRenameRoom) Chat.renameHandlers.push(plugin.onRenameRoom);
-		if (plugin.onCloseRoom) Chat.closeRoomHandlers.push(plugin.onCloseRoom);
+		for (const k in plugin) {
+			if (!k.startsWith('on')) continue;
+			const name = k.slice(2);
+			if (!Chat.handlers[name]) Chat.handlers[name] = [];
+			Chat.handlers[name].push(plugin[k]);
+		}
 		Chat.plugins[name] = plugin;
 	}
 	loadPlugins(oldPlugins?: {[k: string]: ChatPlugin}) {
@@ -1875,16 +1882,20 @@ export const Chat = new class {
 		}
 	}
 
-	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
-		for (const handler of Chat.renameHandlers) {
-			handler(oldID, newID, room);
+	runHandlers(name: string, ...args: any) {
+		const handlers = this.handlers[name];
+		if (!handlers) return;
+		for (const h of handlers) {
+			void h.call(this, ...args);
 		}
 	}
 
+	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
+		Chat.runHandlers('RoomRename', oldID, newID, room);
+	}
+
 	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
-		for (const handler of Chat.closeRoomHandlers) {
-			handler(roomid, user, connection, roomid.startsWith('view-'));
-		}
+		Chat.runHandlers('CloseRoom', roomid, user, connection);
 	}
 
 	/**
