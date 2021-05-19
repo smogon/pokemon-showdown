@@ -1717,7 +1717,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.boost(selfBoost, source);
 			this.boost(oppBoost, target);
 			target.trySetStatus('tox', source);
-			if (source.species.baseSpecies === 'Alcremie') {
+			if (source.species.baseSpecies === 'Alcremie' && !source.transformed) {
 				const formes = ['Finland', 'Finland-Tsikhe', 'Finland-Nezavisa', 'Finland-Järvilaulu']
 					.filter(forme => ssbSets[forme].species !== source.species.name);
 				const newSet = this.sample(formes);
