@@ -2511,12 +2511,14 @@ const mastermindCommands: Chat.ChatCommands = {
 		this.checkChat();
 		const game = getMastermindGame(room);
 
-		const [category, timeoutString, player] = target.split(',').map(toID);
+		let [category, timeoutString, player] = target.split(',').map(toID);
 		if (!player) return this.parse(`/help mastermind start`);
+
+		category = CATEGORY_ALIASES[category] || category;
 		if (!(category in ALL_CATEGORIES)) {
 			return this.errorReply(this.tr`${category} is not a valid category.`);
 		}
-		const categoryName = ALL_CATEGORIES[CATEGORY_ALIASES[category] || category];
+		const categoryName = ALL_CATEGORIES[category];
 		const timeout = parseInt(timeoutString);
 		if (isNaN(timeout) || timeout < 1 || (timeout * 1000) > Chat.MAX_TIMEOUT_DURATION) {
 			return this.errorReply(this.tr`You must specify a round length of at least 1 second.`);
