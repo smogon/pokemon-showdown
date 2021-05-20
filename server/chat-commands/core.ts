@@ -699,7 +699,9 @@ export const commands: Chat.ChatCommands = {
 	ignorepms: 'blockpms',
 	ignorepm: 'blockpms',
 	blockpms(target, room, user) {
-		if (toID(target) === 'ac') target = 'autoconfirmed';
+		target = target.toLowerCase().trim();
+		if (target === 'ac') target = 'autoconfirmed';
+
 		if (user.settings.blockPMs === (target || true)) {
 			return this.errorReply(this.tr`You are already blocking private messages! To unblock, use /unblockpms`);
 		}
