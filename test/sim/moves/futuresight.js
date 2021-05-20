@@ -198,7 +198,7 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [96, 114]);
 	});
 
-	it.skip(`should not ignore the target's screens, even when the user is not active on the field`, function () {
+	it(`should not ignore the target's screens, even when the user is not active on the field`, function () {
 		battle = common.createBattle([[
 			{species: 'Blissey', ability: 'shellarmor', item: 'lightclay', moves: ['softboiled', 'lightscreen']},
 		], [
@@ -218,5 +218,25 @@ describe('Future Sight', function () {
 		battle.makeChoices('auto', 'switch 2');
 		damage = blissey.maxhp - blissey.hp;
 		assert.bounded(damage, [18, 21]);
+	});
+
+	it(`should not consider the user's item or Ability when the user is not active`, function () {
+		battle = common.createBattle([[
+			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
+		], [
+			{species: 'Wynaut', ability: 'adaptability', item: 'choicespecs', moves: ['futuresight']},
+			{species: 'Deino', ability: 'powerspot', moves: ['sleeptalk']},
+		]]);
+
+		for (let i = 0; i < 3; i++) battle.makeChoices();
+		const blissey = battle.p1.active[0];
+		let damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [70, 84]); // boosted by Adaptability and Choice Specs
+
+		battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices('auto', 'switch 2');
+		damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [46, 55]); // only boosted by Power Spot
 	});
 });
