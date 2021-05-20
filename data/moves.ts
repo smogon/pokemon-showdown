@@ -2712,7 +2712,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 				const sourceSide = source.side;
 				const targetSide = source.side.foe;
 				for (const id of sideConditions) {
-					const effectName = this.dex.conditions.get(id).name;
 					if (sourceSide.sideConditions[id] && targetSide.sideConditions[id]) {
 						[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
 							targetSide.sideConditions[id], sourceSide.sideConditions[id],
@@ -2726,9 +2725,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 					} else {
 						continue;
 					}
-					this.add('-sideswitch', effectName, '[silent]');
 					success = true;
 				}
+				this.add('-sideswitch', '[silent]');
 			}
 			if (!success) return false;
 			this.add('-activate', source, 'move: Court Change');
