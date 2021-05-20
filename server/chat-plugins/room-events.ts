@@ -316,7 +316,7 @@ export const commands: Chat.ChatCommands = {
 			buff += '</table>';
 
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
-			if (!this.broadcasting && user.can('ban', null, room, 'roomevents view') && events.length === 1) {
+			if (!this.broadcasting && user.can('ban', null, room, 'roomevents add') && events.length === 1) {
 				const event = events[0];
 				this.sendReplyBox(Utils.html`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomevents add ${event.eventName} | ${event.date} | ${event.desc}</code></details>`.replace(/\n/g, '<br />'));
 			}
