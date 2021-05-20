@@ -1813,9 +1813,9 @@ export const Chat = new class {
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 		for (const k in plugin) {
 			if (!k.startsWith('on')) continue;
-			const name = k.slice(2);
-			if (!Chat.handlers[name]) Chat.handlers[name] = [];
-			Chat.handlers[name].push(plugin[k]);
+			const handlerName = k.slice(2);
+			if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
+			Chat.handlers[handlerName].push(plugin[k]);
 		}
 		Chat.plugins[name] = plugin;
 	}
