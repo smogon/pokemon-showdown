@@ -1595,7 +1595,10 @@ export class Pokemon {
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+
 		const item = this.getItem();
+		const confusion = this.battle.dex.getActiveMove(move as ActiveMove);
+
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&
 			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
