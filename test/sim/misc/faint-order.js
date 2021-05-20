@@ -158,4 +158,39 @@ describe('Fainting', function () {
 		assert.fainted(battle.p2.active[0]);
 		assert.equal(battle.winner, 'Player 1');
 	});
+
+	it(`should check for a winner after Destiny Bond`, function () {
+		battle = common.gen(4).createBattle([[
+			{species: 'Shedinja', moves: ['destinybond']},
+		], [
+			{species: 'Shedinja', ability: 'scrappy', moves: ['vitalthrow']},
+		]]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, '');
+		battle.destroy();
+
+		battle = common.gen(5).createBattle([[
+			{species: 'Shedinja', moves: ['destinybond']},
+		], [
+			{species: 'Shedinja', ability: 'scrappy', moves: ['vitalthrow']},
+		]]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 2');
+	});
+
+	it(`should check for a winner after Final Gambit`, function () {
+		battle = common.gen(5).createBattle([[
+			{species: 'Shedinja', moves: ['sleeptalk']},
+		], [
+			{species: 'Shedinja', ability: 'scrappy', moves: ['finalgambit']},
+		]]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+		assert.fainted(battle.p2.active[0]);
+		assert.equal(battle.winner, 'Player 1');
+	});
 });
