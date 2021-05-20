@@ -2727,7 +2727,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 					success = true;
 				}
-				this.add('-sideswitch', '[silent]');
+				this.add('-sideswitch');
 			}
 			if (!success) return false;
 			this.add('-activate', source, 'move: Court Change');
