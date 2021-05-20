@@ -10,47 +10,60 @@ describe('Future Sight', function () {
 		battle.destroy();
 	});
 
-	it('should damage in two turns, ignoring Protect, affected by Dark immunities', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Sneasel", ability: 'innerfocus', moves: ['odorsleuth', 'futuresight', 'protect']}]});
-		battle.setPlayer('p2', {team: [{species: "Girafarig", ability: 'innerfocus', moves: ['odorsleuth', 'futuresight', 'protect']}]});
-		battle.makeChoices('move Future Sight', 'move Future Sight');
-		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.makeChoices('auto', 'auto');
-		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.makeChoices('auto', 'move Protect');
-		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
-		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+	it(`should damage in two turns, ignoring Protect, affected by Dark immunities`, function () {
+		battle = common.createBattle([[
+			{species: 'Sneasel', moves: ['sleeptalk', 'futuresight']},
+		], [
+			{species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect']},
+		]]);
+
+		const sneasel = battle.p1.active[0];
+		const girafarig = battle.p2.active[0];
+		battle.makeChoices('move futuresight', 'move futuresight');
+		assert.fullHP(girafarig);
+		battle.makeChoices();
+		assert.fullHP(girafarig);
+		battle.makeChoices('auto', 'move protect');
+		assert.fullHP(sneasel);
+		assert.false.fullHP(girafarig);
 	});
 
 	it(`should fail when already active for the target's position`, function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Sneasel", ability: 'innerfocus', moves: ['odorsleuth']}]});
-		battle.setPlayer('p2', {team: [{species: "Girafarig", ability: 'innerfocus', moves: ['futuresight']}]});
-		battle.makeChoices('auto', 'move futuresight');
-		battle.makeChoices('auto', 'move futuresight');
+		battle = common.createBattle([[
+			{species: 'Sneasel', moves: ['sleeptalk']},
+		], [
+			{species: 'Girafarig', moves: ['futuresight']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
-	it('[Gen 2] should damage in two turns, ignoring Protect', function () {
-		battle = common.gen(2).createBattle();
-		battle.setPlayer('p1', {team: [{species: "Sneasel", moves: ['odorsleuth', 'futuresight', 'protect', 'sweetscent']}]});
-		battle.setPlayer('p2', {team: [{species: "Girafarig", moves: ['odorsleuth', 'futuresight', 'protect', 'sweetscent']}]});
-		battle.makeChoices('move Sweet Scent', 'move Sweet Scent'); // counteract imperfect accuracy
-		battle.makeChoices('move Future Sight', 'move Future Sight');
-		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+	it(`[Gen 2] should damage in two turns, ignoring Protect`, function () {
+		battle = common.gen(2).createBattle([[
+			{species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent']},
+		], [
+			{species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect', 'sweetscent']},
+		]]);
+
+		const sneasel = battle.p1.active[0];
+		const girafarig = battle.p2.active[0];
+		battle.makeChoices('move sweetscent', 'move sweetscent'); // counteract imperfect accuracy
+		battle.makeChoices('move futuresight', 'move futuresight');
+		assert.fullHP(girafarig);
 		battle.makeChoices('auto', 'auto');
-		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.fullHP(girafarig);
 		battle.makeChoices('auto', 'move Protect');
-		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
-		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.false.fullHP(sneasel);
+		assert.false.fullHP(girafarig);
 	});
 
 	it(`should not double Stomping Tantrum for exiting normally`, function () {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['futuresight', 'stompingtantrum']},
+			{species: 'Wynaut', moves: ['futuresight', 'stompingtantrum']},
 		], [
-			{species: "Scizor", ability: 'shellarmor', moves: ['sleeptalk']},
+			{species: 'Scizor', ability: 'shellarmor', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
@@ -62,24 +75,22 @@ describe('Future Sight', function () {
 
 	it(`should not trigger Eject Button`, function () {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['futuresight']},
+			{species: 'Wynaut', moves: ['futuresight']},
 		], [
-			{species: "Scizor", item: 'ejectbutton', moves: ['sleeptalk']},
-			{species: "Roggenrola", moves: ['sleeptalk']},
+			{species: 'Scizor', item: 'ejectbutton', moves: ['sleeptalk']},
+			{species: 'Roggenrola', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices();
-		battle.makeChoices();
-		battle.makeChoices();
+		for (let i = 0; i < 3; i++) battle.makeChoices();
 		assert.equal(battle.requestState, 'move');
 	});
 
 	it(`should be able to set Future Sight against an empty target slot`, function () {
 		battle = common.createBattle([[
-			{species: "Shedinja", moves: ['finalgambit']},
-			{species: "Roggenrola", moves: ['sleeptalk']},
+			{species: 'Shedinja', moves: ['finalgambit']},
+			{species: 'Roggenrola', moves: ['sleeptalk']},
 		], [
-			{species: "Wynaut", moves: ['sleeptalk', 'futuresight']},
+			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
 		]]);
 
 		battle.makeChoices('auto', 'move future sight');
@@ -92,9 +103,9 @@ describe('Future Sight', function () {
 
 	it(`its damaging hit should not count as copyable for Copycat`, function () {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['sleeptalk', 'futuresight']},
+			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
 		], [
-			{species: "Liepard", moves: ['sleeptalk', 'copycat']},
+			{species: 'Liepard', moves: ['sleeptalk', 'copycat']},
 		]]);
 
 		battle.makeChoices('move futuresight', 'auto');
@@ -138,5 +149,74 @@ describe('Future Sight', function () {
 		battle.makeChoices();
 		battle.makeChoices();
 		assert.false(roggenrola.hasType('Psychic'), `Protean Roggenrola should not change type on Future Sight's damaging turn`);
+	});
+
+	it(`should be boosted by Terrain only if Terrain is active on the damaging turn`, function () {
+		battle = common.createBattle([[
+			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
+		], [
+			{species: 'Wynaut', ability: 'psychicsurge', moves: ['sleeptalk', 'futuresight']},
+		]]);
+
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices();
+		battle.makeChoices();
+		const blissey = battle.p1.active[0];
+		let damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [46, 55]);
+
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices();
+		battle.makeChoices();
+		damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [36, 43]);
+	});
+
+	it(`should be boosted by Terrain even if the user is not on the field, as long as the user is not Flying-type`, function () {
+		battle = common.createBattle([[
+			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
+		], [
+			{species: 'cresselia', ability: 'levitate', moves: ['sleeptalk', 'futuresight']},
+			{species: 'deino', ability: 'psychicsurge', moves: ['sleeptalk']},
+			{species: 'xatu', moves: ['sleeptalk', 'futuresight']},
+		]]);
+
+		// Cresselia will be Terrain-boosted because its Ability is not checked while not active
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices();
+		battle.makeChoices('auto', 'switch deino');
+		const blissey = battle.p1.active[0];
+		let damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [102, 121]);
+
+		// Xatu won't be Terrain-boosted because its Flying-type is checked while not active
+		battle.makeChoices('auto', 'switch xatu');
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices();
+		battle.makeChoices('auto', 'switch deino');
+		damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [96, 114]);
+	});
+
+	it.skip(`should not ignore the target's screens, even when the user is not active on the field`, function () {
+		battle = common.createBattle([[
+			{species: 'Blissey', ability: 'shellarmor', item: 'lightclay', moves: ['softboiled', 'lightscreen']},
+		], [
+			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+			{species: 'deino', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move lightscreen', 'move futuresight');
+		battle.makeChoices();
+		battle.makeChoices();
+		const blissey = battle.p1.active[0];
+		let damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [18, 21]);
+
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices();
+		battle.makeChoices('auto', 'switch 2');
+		damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [18, 21]);
 	});
 });
