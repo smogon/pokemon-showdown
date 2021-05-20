@@ -41,8 +41,10 @@ describe('Sitrus Berry', function () {
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
-	it.skip(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, function () {
-		battle = common.createBattle([[
+	it.only(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, function () {
+		battle = common.createBattle({
+			seed: [1, 2, 39, 5],
+		}, [[
 			{species: 'Deoxys-Attack', item: 'sitrusberry', moves: ['sleeptalk']},
 		], [
 			{species: 'Sableye', ability: 'prankster', moves: ['confuseray']},
