@@ -23,7 +23,7 @@ interface NetQuery {
 	options?: AnyObject;
 }
 // @ts-ignore in case the optional dependency is not installed
-type LSTM = import('brain.js').recurrent.LSTM;
+type NetModel = import('brain.js').recurrent.GRU;
 
 interface TrainingLine {
 	input: string;
@@ -45,10 +45,13 @@ function toRoomID(room: RoomID | Room) {
 }
 
 export class NeuralNetChecker {
-	model: LSTM | null;
+	model: NetModel | null;
 	constructor(path?: string) {
 		try {
-			this.model = new (require('brain.js').recurrent.LSTM)();
+			this.model = new (require('brain.js').recurrent.GRU)({
+				iterations: 200,
+				learningRate: 0.5,
+			});
 		} catch (e) {
 			this.model = null;
 		}

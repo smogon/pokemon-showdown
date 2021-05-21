@@ -828,11 +828,14 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			buf += `Battle links: ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			buf += `<br />`;
-			const existingRooms = rooms.map(r => Rooms.get(r)).filter(r => r?.type !== 'chat') as GameRoom[];
+			const existingRooms = rooms.map(r => Rooms.get(r)).filter(r => r?.type !== 'chat');
 			if (existingRooms.length) {
 				const chatBuffer = existingRooms.map(room => {
+					// there is no reason this should happen (room && room.type check above in .filter).
+					// but typescript is stupid. so appeasement.
+					if (!room) return '';
 					const log = room.log.log.filter(l => l.startsWith('|c'));
-					if (!log.length) return '';
+					if (!log?.length) return '';
 					let innerBuf = `<div class="infobox"><details class="readmore"><summary>${room.title}</summary><hr />`;
 					for (const line of log) {
 						const [,, username, message] = Utils.splitFirst(line, '|', 3);
