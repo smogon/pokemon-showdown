@@ -807,20 +807,6 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (context) {
 				rooms.push(...getBattleLinks(context));
 			}
-
-			let battlelogNoticeAdded = false;
-			for (const [i, url] of [...rooms].entries()) {
-				if (rooms.indexOf(url) !== i) {
-					rooms.splice(i, 1);
-					continue;
-				}
-				const room = Rooms.get(url);
-				if (!room) {
-					if (battlelogNoticeAdded) continue;
-					buf += `<small>(use /battlelog to view logs if the battle is expired)</small><br />`;
-					battlelogNoticeAdded = true;
-				}
-			}
 			if (ticket.meta) {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
@@ -841,6 +827,26 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				}
 			}
 			buf += `Battle links: ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
+			buf += `<br />`;
+			const existingRooms = rooms.map(r => Rooms.get(r)).filter(r => r?.type !== 'chat') as GameRoom[];
+			if (existingRooms.length) {
+				const chatBuffer = existingRooms.map(room => {
+					const log = room.log.log.filter(l => l.startsWith('|c'));
+					if (!log.length) return '';
+					let innerBuf = `<div class="infobox"><details class="readmore"><summary>${room.title}</summary><hr />`;
+					for (const line of log) {
+						const [,, username, message] = Utils.splitFirst(line, '|', 3);
+						innerBuf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}`;
+					}
+					innerBuf += `</div></details>`;
+					return innerBuf;
+				}).filter(Boolean).join('<br />');
+				if (chatBuffer) {
+					buf += `<div class="infobox"><details class="readmore"><summary><strong>Battle chat logs:</strong><br /></summary>`;
+					buf += chatBuffer;
+					buf += `</details></div>`;
+				}
+			}
 			return buf;
 		},
 	},
