@@ -137,10 +137,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
-				const weatherball = (effect.id === 'weatherball' && this.field.effectiveWeather() !== '');
 				if (
 					effect.effectType === 'Move' && !source.isAlly(target) &&
-					this.getCategory(effect.id) === 'Physical' && !weatherball
+					(effect.category === 'Physical' || effect.id === 'hiddenpower')
 				) {
 					this.effectState.slot = source.getSlot();
 					this.effectState.damage = 2 * damage;
@@ -418,10 +417,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
-				const weatherball = (effect.id === 'weatherball' && this.field.effectiveWeather() !== '');
 				if (
 					effect.effectType === 'Move' && !source.isAlly(target) &&
-					(this.getCategory(effect.id) === 'Special' || weatherball)
+					effect.category === 'Special' && effect.id !== 'hiddenpower'
 				) {
 					this.effectState.slot = source.getSlot();
 					this.effectState.damage = 2 * damage;

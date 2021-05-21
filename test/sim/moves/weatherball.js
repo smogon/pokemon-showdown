@@ -62,7 +62,7 @@ describe('Weather Ball', function () {
 
 	it('should trigger counter when it is physical during gen 3', function () {
 		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'plus', moves: ['weatherball']}]});
+		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'Sand Stream', moves: ['weatherball']}]});
 		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['counter']}]});
 		battle.makeChoices();
 		assert.notEqual(battle.p1.active[0].maxhp, battle.p1.active[0].hp);
