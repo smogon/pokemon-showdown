@@ -754,6 +754,11 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 
 			return buf;
 		},
+		onSubmit(ticket, text, submitter, conn) {
+			const targetId = toID(text[0]);
+			// this does the saving for us so we don't have to do anything else
+			getCommonBattles(targetId, Users.get(targetId), submitter.id, submitter, conn);
+		},
 	},
 	inapname: {
 		title: "What's the inappropriate username?",
