@@ -839,11 +839,11 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					let innerBuf = `<div class="infobox"><details class="readmore"><summary>${room.title}</summary><hr />`;
 					for (const line of log) {
 						const [,, username, message] = Utils.splitFirst(line, '|', 3);
-						innerBuf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}`;
+						innerBuf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
 					}
 					innerBuf += `</div></details>`;
 					return innerBuf;
-				}).filter(Boolean).join('<br />');
+				}).filter(Boolean).join('');
 				if (chatBuffer) {
 					buf += `<div class="infobox"><details class="readmore"><summary><strong>Battle chat logs:</strong><br /></summary>`;
 					buf += chatBuffer;
