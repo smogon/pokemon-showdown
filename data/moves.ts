@@ -16239,7 +16239,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			dustproof: true,
 			chance: 100,
-			onHit(target, source, move) {
+			onHit(target) {
 				if (target.status === 'brn') target.cureStatus();
 			},
 		},
