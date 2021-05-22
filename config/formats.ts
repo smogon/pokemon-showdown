@@ -123,7 +123,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] UU'],
-		banlist: ['UU', 'RUBL'],
+		banlist: ['UU', 'RUBL', 'Light Clay'],
 	},
 	{
 		name: "[Gen 8] NU",
