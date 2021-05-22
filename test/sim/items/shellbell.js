@@ -24,7 +24,7 @@ describe('Shell Bell', function () {
 	});
 
 	// Also applies to Parental Bond
-	it.skip(`should heal from the damage from all hits of multi-hit moves`, function () {
+	it(`should heal from the damage from all hits of multi-hit moves`, function () {
 		battle = common.createBattle([[
 			{species: 'shelmet', moves: ['finalgambit']},
 			{species: 'landorus', moves: ['sleeptalk']},
