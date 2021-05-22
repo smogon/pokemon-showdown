@@ -26,6 +26,8 @@ sound: Has no effect on Pokemon with the Soundproof Ability.
 
 */
 
+import { SECTIONLEADER_SYMBOL } from "../server/user-groups";
+
 export const Moves: {[moveid: string]: MoveData} = {
 	"10000000voltthunderbolt": {
 		num: 719,
@@ -15848,6 +15850,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					this.queue.cancelMove(pokemon);
+					pokemon.moveThisTurnResult = null;
 					pokemon.removeVolatile('twoturnmove');
 				}
 				if (pokemon.volatiles['magnetrise']) {
@@ -16238,7 +16241,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			dustproof: true,
 			chance: 100,
-			onHit(target) {
+			onHit(target, source, move) {
 				if (target.status === 'brn') target.cureStatus();
 			},
 		},

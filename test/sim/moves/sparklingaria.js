@@ -23,7 +23,7 @@ describe('Sparkling Aria', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it.skip(`should not cure the target's burn if the user fainted`, function () {
+	it(`should not cure the target's burn if the user fainted`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Shedinja', moves: ['sparklingaria']},
 			{species: 'Wynaut', level: 1, ability: 'innardsout', moves: ['sleeptalk']},
@@ -34,6 +34,7 @@ describe('Sparkling Aria', function () {
 		]]);
 
 		battle.makeChoices('auto', 'move sleeptalk, move willowisp -1');
+		common.saveReplay(battle, 'sparklingaria.js');
 		assert.equal(battle.p2.active[0].status, 'brn');
 	});
 });
