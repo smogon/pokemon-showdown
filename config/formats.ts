@@ -1459,13 +1459,12 @@ export const Formats: FormatList = [
 				nfe: 40,
 				lc: 40,
 			};
-			let tier = this.toID(species.tier) || 'ou';
+			let tier: string = this.toID(species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
-			if (target && boosts[tier] > 20) {
-				if (target.set.ability === 'drizzle') tier = 'nubl';
-				if (target.set.ability === 'drought') tier = 'nubl';
-				if (target.set.ability === 'snowwarning') tier = 'nubl';
+			if (target) {
+				if (target.set.item === 'lightclay' && boosts[tier] > 10) tier = 'rubl';
+				if (['drizzle', 'drought', 'snowwarning'].includes(target.set.ability) && boosts[tier] > 20) tier = 'nubl';
 			}
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = pokemon.baseStats['hp'];
