@@ -98,9 +98,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		ignoreAccuracy: true,
 	},
-	brickbreak: {
-		inherit: true,
-	},
 	charge: {
 		inherit: true,
 		boosts: null,

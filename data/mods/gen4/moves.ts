@@ -181,9 +181,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove(source, target, move) {
 			const ghost = this.dex.getImmunity(move.type, target);
 			this.debug('immune' + ghost);
-			if (!ghost && !target.isProtected) {
-				target.side.removeSideCondition('reflect');
-				target.side.removeSideCondition('lightscreen');
+			if (!ghost) {
+				move.ignoreImmunity = true;
+				move.basePower = 0;
 			}
 		},
 	},
