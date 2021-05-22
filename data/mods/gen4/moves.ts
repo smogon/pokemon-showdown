@@ -176,6 +176,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		recoil: [1, 3],
 	},
+	brickbreak: {
+		inherit: true,
+		onTryMove(source, target, move) {
+			const ghost = this.dex.getImmunity(move.type, target);
+			this.debug('immune' + ghost);
+			if (!ghost) {
+				target.side.removeSideCondition('reflect');
+				target.side.removeSideCondition('lightscreen');
+			}
+		},
+	},
 	bulletseed: {
 		inherit: true,
 		basePower: 10,
