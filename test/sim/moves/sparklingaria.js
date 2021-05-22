@@ -34,7 +34,6 @@ describe('Sparkling Aria', function () {
 		]]);
 
 		battle.makeChoices('auto', 'move sleeptalk, move willowisp -1');
-		common.saveReplay(battle, 'sparklingaria.js');
 		assert.equal(battle.p2.active[0].status, 'brn');
 	});
 });
