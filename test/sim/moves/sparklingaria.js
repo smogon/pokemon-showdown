@@ -23,7 +23,7 @@ describe('Sparkling Aria', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should not cure the target's burn if the user fainted`, function () {
+	it.skip(`should not cure the target's burn if the user fainted`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Shedinja', moves: ['sparklingaria']},
 			{species: 'Wynaut', level: 1, ability: 'innardsout', moves: ['sleeptalk']},
