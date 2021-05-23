@@ -95,6 +95,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	): {cull: boolean, isSetup?: boolean} {
 		const restTalk = moves.has('rest') && moves.has('sleeptalk');
 
+		if (move.priority > 0 && counter.get('speedsetup')) return {cull: true};
+
 		switch (move.id) {
 		// Not very useful without their supporting moves
 		case 'cottonguard': case 'defendorder':
