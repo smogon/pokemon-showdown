@@ -48,6 +48,7 @@ export class RuleTable extends Map<string, string> {
 	defaultLevel!: number;
 	adjustLevel!: number | null;
 	adjustLevelDown!: number | null;
+	evLimit!: number | null;
 
 	constructor() {
 		super();
@@ -213,13 +214,21 @@ export class RuleTable extends Map<string, string> {
 		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || this.maxLevel;
 		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
+		this.evLimit = Number(this.valueRules.get('evlimit')) || null;
 
-		if (this.valueRules.get('pickedteamsize') === 'Flat Rules Team Size') {
+		if (this.valueRules.get('pickedteamsize') === 'Auto') {
 			this.pickedTeamSize = (
 				['doubles', 'rotation'].includes(format.gameType) ? 4 :
 				format.gameType === 'triples' ? 6 :
 				3
 			);
+		} else if (this.valueRules.get('evlimit') === 'Auto') {
+			this.evLimit = format.gen > 2 ? 510 : null;
+			if (format.mod === 'letsgo') {
+				this.evLimit = this.has('allowavs') ? null : 0;
+			}
+			// Gen 6 hackmons also has a limit, which would need to be hardcoded
+			// TODO: supposedly? figure out if this is actually true
 		}
 
 		// sanity checks; these _could_ be inside `onValidateRule` but this way
@@ -269,6 +278,12 @@ export class RuleTable extends Map<string, string> {
 		}
 		if (this.adjustLevel && this.valueRules.has('minlevel')) {
 			throw new Error(`Min Level ${this.minLevel}${this.blame('minlevel')} will have no effect because you're using Adjust Level ${this.adjustLevel}${this.blame('adjustlevel')}.`);
+		}
+		if (this.evLimit && this.evLimit >= 1512) {
+			throw new Error(`EV Limit ${this.evLimit}${this.blame('evlimit')} will have no effect because it's not lower than 1512, the maximum possible combination of 252 EVs in every stat (if you currently have an EV limit, use "! EV Limit" to remove the limit).`);
+		}
+		if (this.evLimit && this.evLimit < 0) {
+			throw new Error(`EV Limit ${this.evLimit}${this.blame('evlimit')} can't be less than 0 (you might have meant: "! EV Limit" to remove the limit, or "EV Limit = 0" to ban EVs).`);
 		}
 
 		if ((format as any).cupLevelLimit) {
@@ -681,7 +696,7 @@ export class DexFormats {
 			if (subformat.hasValue) {
 				if (value === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
 				if (value === 'Current Gen') value = `${this.dex.gen}`;
-				if (subformat.id === 'pickedteamsize' && value === 'Flat Rules Team Size') {
+				if ((subformat.id === 'pickedteamsize' || subformat.id === 'evlimit') && value === 'Auto') {
 					// can't be resolved until later
 				} else if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
 					const intValue = parseInt(value);
@@ -690,7 +705,12 @@ export class DexFormats {
 					}
 				}
 				if (subformat.hasValue === 'positive-integer') {
-					if (parseInt(value) <= 0) throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
+					if (parseInt(value) === 0) {
+						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
+					}
+					if (parseInt(value) <= 0) {
+						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
+					}
 				}
 				const oldValue = ruleTable.valueRules.get(subformat.id);
 				if (oldValue === value) {
