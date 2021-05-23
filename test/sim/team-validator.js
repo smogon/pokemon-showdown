@@ -470,6 +470,12 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen8ou').validateTeam(team);
 		assert.equal(illegal, null);
+
+		team = [
+			{species: 'weezing-galar', ability: 'levitate', moves: ['zapcannon'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8ou').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should correctly validate USUM Rockruff', function () {
