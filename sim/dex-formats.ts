@@ -189,7 +189,7 @@ export class RuleTable extends Map<string, string> {
 	}
 
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
-	resolveNumbers(format: Format) {
+	resolveNumbers(format: Format, dex: ModdedDex) {
 		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
 			format.gameType === 'doubles' ? 2 :
 			1;
@@ -223,7 +223,7 @@ export class RuleTable extends Map<string, string> {
 				3
 			);
 		} else if (this.valueRules.get('evlimit') === 'Auto') {
-			this.evLimit = format.gen > 2 ? 510 : null;
+			this.evLimit = dex.gen > 2 ? 510 : null;
 			if (format.mod === 'letsgo') {
 				this.evLimit = this.has('allowavs') ? null : 0;
 			}
@@ -798,7 +798,7 @@ export class DexFormats {
 		}
 		ruleTable.getTagRules();
 
-		ruleTable.resolveNumbers(format);
+		ruleTable.resolveNumbers(format, this.dex);
 
 		for (const rule of ruleTable.keys()) {
 			if ("+*-!".includes(rule.charAt(0))) continue;

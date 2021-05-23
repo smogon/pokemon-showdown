@@ -131,6 +131,14 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should validate EVs', function () {
+		const team = [
+			{species: 'pikachu', ability: 'static', moves: ['thunderbolt'], evs: {hp: 252, atk: 252, def: 252}},
+		];
+		const illegal = TeamValidator.get('gen8ou').validateTeam(team);
+		assert(illegal);
+	});
+
 	it('should accept legal movesets', function () {
 		let team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
