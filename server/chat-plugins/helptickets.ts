@@ -834,9 +834,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					// there is no reason this should happen (room && room.type check above in .filter).
 					// but typescript is stupid. so appeasement.
 					if (!room) return '';
-					const log = room.log.log.filter(l => l.startsWith('|c'));
+					const log = room.log.log.filter(l => l.startsWith('|c|'));
 					if (!log?.length) return '';
-					let innerBuf = `<div class="infobox"><details class="readmore"><summary>${room.title}</summary><hr />`;
+					let innerBuf = `<div class="infobox"><strong>${room.title}</strong><hr />`;
 					for (const line of log) {
 						const [,, username, message] = Utils.splitFirst(line, '|', 3);
 						innerBuf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
