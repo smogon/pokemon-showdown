@@ -956,7 +956,7 @@ export class CommandContext extends MessageContext {
 	shouldBroadcast() {
 		return this.cmdToken === BROADCAST_TOKEN;
 	}
-	checkBroadcast(ignoreCooldown?: boolean, suppressMessage?: string | null) {
+	checkBroadcast(overrideCooldown?: boolean | string, suppressMessage?: string | null) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			return true;
 		}
@@ -973,10 +973,13 @@ export class CommandContext extends MessageContext {
 
 		// broadcast cooldown
 		const broadcastMessage = (suppressMessage || this.message).toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+		const cooldownMessage = overrideCooldown === true ? null : (overrideCooldown || broadcastMessage);
 
-		if (!ignoreCooldown && this.room && this.room.lastBroadcast === broadcastMessage &&
+		if (
+			cooldownMessage && this.room && this.room.lastBroadcast === cooldownMessage &&
 			this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
-			!this.user.can('bypassall')) {
+			!this.user.can('bypassall')
+		) {
 			throw new Chat.ErrorMessage("You can't broadcast this because it was just broadcasted.");
 		}
 
@@ -990,7 +993,7 @@ export class CommandContext extends MessageContext {
 		this.broadcastMessage = broadcastMessage;
 		return true;
 	}
-	runBroadcast(ignoreCooldown = false, suppressMessage: string | null = null) {
+	runBroadcast(overrideCooldown?: boolean | string, suppressMessage: string | null = null) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			// Already being broadcast, or the user doesn't intend to broadcast.
 			return true;
@@ -998,7 +1001,7 @@ export class CommandContext extends MessageContext {
 
 		if (!this.broadcastMessage) {
 			// Permission hasn't been checked yet. Do it now.
-			this.checkBroadcast(ignoreCooldown, suppressMessage);
+			this.checkBroadcast(overrideCooldown, suppressMessage);
 		}
 
 		this.broadcasting = true;
@@ -1012,8 +1015,8 @@ export class CommandContext extends MessageContext {
 			// We don't want broadcasted messages in a room to be translated
 			// according to a user's personal language setting.
 			this.language = this.room.settings.language || null;
-			if (!ignoreCooldown) {
-				this.room.lastBroadcast = this.broadcastMessage;
+			if (overrideCooldown !== true) {
+				this.room.lastBroadcast = overrideCooldown || this.broadcastMessage;
 				this.room.lastBroadcastTime = Date.now();
 			}
 		}
