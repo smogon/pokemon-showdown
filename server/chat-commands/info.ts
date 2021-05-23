@@ -1792,40 +1792,43 @@ export const commands: Chat.ChatCommands = {
 		const {totalMatches, sections} = findFormats(targetId, isOMSearch);
 
 		if (!totalMatches) return this.errorReply("No matched formats found.");
-		if (!this.runBroadcast()) return;
-		if (totalMatches === 1) {
+
+		const format = totalMatches === 1 ? Dex.formats.get(Object.values(sections)[0].formats[0]) : null;
+
+		if (!this.runBroadcast(`!formathelp ${format ? format.id : target}`)) return;
+
+		if (format) {
 			const rules: string[] = [];
 			let rulesetHtml = '';
-			const subformat = Dex.formats.get(Object.values(sections)[0].formats[0]);
-			if (['Format', 'Rule', 'ValidatorRule'].includes(subformat.effectType)) {
-				if (subformat.ruleset?.length) {
-					rules.push(`<b>Ruleset</b> - ${Utils.escapeHTML(subformat.ruleset.join(", "))}`);
+			if (['Format', 'Rule', 'ValidatorRule'].includes(format.effectType)) {
+				if (format.ruleset?.length) {
+					rules.push(`<b>Ruleset</b> - ${Utils.escapeHTML(format.ruleset.join(", "))}`);
 				}
-				if (subformat.banlist?.length) {
-					rules.push(`<b>Bans</b> - ${Utils.escapeHTML(subformat.banlist.join(", "))}`);
+				if (format.banlist?.length) {
+					rules.push(`<b>Bans</b> - ${Utils.escapeHTML(format.banlist.join(", "))}`);
 				}
-				if (subformat.unbanlist?.length) {
-					rules.push(`<b>Unbans</b> - ${Utils.escapeHTML(subformat.unbanlist.join(", "))}`);
+				if (format.unbanlist?.length) {
+					rules.push(`<b>Unbans</b> - ${Utils.escapeHTML(format.unbanlist.join(", "))}`);
 				}
-				if (subformat.restricted?.length) {
-					rules.push(`<b>Restricted</b> - ${Utils.escapeHTML(subformat.restricted.join(", "))}`);
+				if (format.restricted?.length) {
+					rules.push(`<b>Restricted</b> - ${Utils.escapeHTML(format.restricted.join(", "))}`);
 				}
 				if (rules.length > 0) {
 					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
 				} else {
-					rulesetHtml = `No ruleset found for ${subformat.name}`;
+					rulesetHtml = `No ruleset found for ${format.name}`;
 				}
 			}
-			let formatType: string = (subformat.gameType || "singles");
+			let formatType: string = (format.gameType || "singles");
 			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!subformat.desc && !subformat.threads) {
-				if (subformat.effectType === 'Format') {
-					return this.sendReplyBox(`No description found for this ${formatType} ${subformat.section} format.<br />${rulesetHtml}`);
+			if (!format.desc && !format.threads) {
+				if (format.effectType === 'Format') {
+					return this.sendReplyBox(`No description found for this ${formatType} ${format.section} format.<br />${rulesetHtml}`);
 				} else {
 					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
 				}
 			}
-			const descHtml = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
+			const descHtml = [...(format.desc ? [format.desc] : []), ...(format.threads || [])];
 			return this.sendReplyBox(`${descHtml.join("<br />")}<br />${rulesetHtml}`);
 		}
 
