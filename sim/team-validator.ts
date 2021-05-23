@@ -1013,7 +1013,7 @@ export class TeamValidator {
 				generation: 2,
 				level: isMew ? 5 : isCelebi ? 30 : 3, // Level 1/2 Pokémon can't be obtained by transfer from RBY/GSC
 				perfectIVs: isMew || isCelebi ? 5 : 3,
-				isHidden: !!(!isWeezingGalar && this.dex.mod('gen7').species.get(species.id).abilities['H']),
+				isHidden: !isWeezingGalar && !!this.dex.mod('gen7').species.get(species.id).abilities['H'],
 				shiny: isMew ? undefined : 1,
 				pokeball: 'pokeball',
 				from: 'Gen 1-2 Virtual Console transfer',
