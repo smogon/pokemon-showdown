@@ -1229,7 +1229,7 @@ export class TriumvirateModeTrivia extends Trivia {
  */
 export class Mastermind extends Rooms.RoomGame {
 	/** userid:score Map */
-	leaderboard: Map<ID, number>;
+	leaderboard: Map<ID, {score: number, hasLeft?: boolean}>;
 	phase: string;
 	currentRound: MastermindRound | MastermindFinals | null;
 	numFinalists: number;
@@ -1237,7 +1237,7 @@ export class Mastermind extends Rooms.RoomGame {
 	constructor(room: Room, numFinalists: number) {
 		super(room);
 
-		this.leaderboard = new Map<ID, number>();
+		this.leaderboard = new Map();
 		this.gameid = 'mastermind' as ID;
 		this.title = 'Mastermind';
 		this.allowRenames = true;
@@ -1282,7 +1282,7 @@ export class Mastermind extends Rooms.RoomGame {
 		).map(player => {
 			const isFinalist = this.currentRound instanceof MastermindFinals && player.id in this.currentRound.playerTable;
 			const name = isFinalist ? Utils.html`<strong>${player.name}</strong>` : Utils.escapeHTML(player.name);
-			return `${name} (${this.leaderboard.get(player.id) || "0"})`;
+			return `${name} (${this.leaderboard.get(player.id)?.score || "0"})`;
 		}).join(', ');
 	}
 
@@ -1320,7 +1320,7 @@ export class Mastermind extends Rooms.RoomGame {
 				points ? this.room.tr`${player} earned ${points} points!` : undefined
 			);
 
-			this.leaderboard.set(id, points || 0);
+			this.leaderboard.set(id, {score: points || 0});
 			this.currentRound.destroy();
 			this.currentRound = null;
 		}, timeout * 1000, playerID);
@@ -1384,8 +1384,10 @@ export class Mastermind extends Rooms.RoomGame {
 	getTopPlayers(n: number) {
 		if (n < 0) return [];
 
-		const sortedPlayerIDs = Utils.sortBy([...this.leaderboard], ([userid, score]) => -score)
-			.map(([userid]) => userid);
+		const sortedPlayerIDs = Utils.sortBy(
+			[...this.leaderboard].filter(([, info]) => !info.hasLeft),
+			([, info]) => -info.score
+		).map(([userid]) => userid);
 
 		if (sortedPlayerIDs.length <= n) return sortedPlayerIDs;
 
@@ -1407,7 +1409,10 @@ export class Mastermind extends Rooms.RoomGame {
 		if (!this.playerTable[user.id]) {
 			throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current game.`);
 		}
-		this.leaderboard.delete(user.id);
+		const lbEntry = this.leaderboard.get(user.id);
+		if (lbEntry) {
+			this.leaderboard.set(user.id, {...lbEntry, hasLeft: true});
+		}
 		super.removePlayer(user);
 	}
 
