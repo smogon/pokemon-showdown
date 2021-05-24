@@ -461,7 +461,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', shiny: true,
 	},
 	Lunala: {
-		species: 'Hattrem', ability: 'Magic Hat', item: 'Eviolite', gender: 'M',
+		species: 'Hattrem', ability: 'Magic Hat', item: 'Eviolite', gender: 'F',
 		moves: ['Nuzzle', 'Flamethrower', 'Healing Wish'],
 		signatureMove: 'Hat of Wisdom',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Sassy',
