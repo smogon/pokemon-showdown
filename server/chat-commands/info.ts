@@ -1536,6 +1536,7 @@ export const commands: Chat.ChatCommands = {
 
 	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
+		target = toID(target);
 		const showRoom = (target !== 'global');
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
