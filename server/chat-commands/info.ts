@@ -426,7 +426,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('rangeban');
 
 		let [ip, roomid] = this.splitOne(target);
-		const targetRoom = roomid && !IPTools.ipRegex.test(roomid) ? Rooms.get(roomid) : null;
+		const targetRoom = roomid ? Rooms.get(roomid) : null;
 		if (typeof targetRoom === 'undefined') {
 			return this.errorReply(`The room "${roomid}" does not exist.`);
 		}
