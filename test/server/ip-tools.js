@@ -39,10 +39,8 @@ describe("IP tools", () => {
 		assert.equal(IPTools.isValidRange('250.0.0.0/43'), false);
 		assert.equal(IPTools.isValidRange('250.0.0.0/16x'), false);
 		assert.equal(IPTools.isValidRange('250.0.0.0.1/24'), false);
-		assert.equal(IPTools.isValidRange('250.0/24'), false);
 		assert.equal(IPTools.isValidRange('250.0.0.0.1 - 250.0.0.2'), false);
 		assert.equal(IPTools.isValidRange('250.0.0.0.*'), false);
-		assert.equal(IPTools.isValidRange('250.0.0'), false);
 	});
 
 	it('should correctly parse shorthand IPs', () => {
