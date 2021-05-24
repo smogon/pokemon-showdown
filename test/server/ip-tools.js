@@ -36,6 +36,13 @@ describe("IP tools", () => {
 	it('should not parse invalid ranges', () => {
 		assert.equal(IPTools.stringToRange('42.42.10.0 - 42.42.5.0'), null);
 		assert.equal(IPTools.stringToRange('250.0.0.0 - 260.0.0.0'), null);
+		assert.equal(IPTools.stringToRange('250.0.0.0/43'), null);
+		assert.equal(IPTools.stringToRange('250.0.0.0/16x'), null);
+		assert.equal(IPTools.stringToRange('250.0.0.0.1/24'), null);
+		assert.equal(IPTools.stringToRange('250.0/24'), null);
+		assert.equal(IPTools.stringToRange('250.0.0.0.1 - 250.0.0.2'), null);
+		assert.equal(IPTools.stringToRange('250.0.0.0.*'), null);
+		assert.equal(IPTools.stringToRange('250.0.0'), null);
 	});
 
 	it('should reject invalid IPs', () => {
