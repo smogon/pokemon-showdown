@@ -228,8 +228,8 @@ export class RuleTable extends Map<string, string> {
 			if (format.mod === 'letsgo') {
 				this.evLimit = this.has('allowavs') ? null : 0;
 			}
-			// Gen 6 hackmons also has a limit, which would need to be hardcoded
-			// TODO: supposedly? figure out if this is actually true
+			// Gen 6 hackmons also has a limit, which is currently implemented
+			// at the appropriate format.
 		}
 
 		// sanity checks; these _could_ be inside `onValidateRule` but this way
