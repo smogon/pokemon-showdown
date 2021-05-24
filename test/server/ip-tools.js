@@ -45,6 +45,11 @@ describe("IP tools", () => {
 		assert.equal(IPTools.isValidRange('250.0.0'), false);
 	});
 
+	it('should correctly parse shorthand IPs', () => {
+		assert.equal(IPTools.ipToNumber('127.1'), IPTools.ipToNumber('127.0.0.1'));
+		assert.equal(IPTools.ipToNumber('192.168.257'), IPTools.ipToNumber('192.168.1.1'));
+	});
+
 	it('should reject invalid IPs', () => {
 		assert.equal(IPTools.ipToNumber('256.0.0.0'), -1);
 		assert.equal(IPTools.ipToNumber('42.0.0.1111'), -1);
