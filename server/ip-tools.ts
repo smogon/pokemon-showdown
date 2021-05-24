@@ -119,7 +119,7 @@ export const IPTools = new class {
 		for (const part of parts) {
 			num *= 256;
 
-			const partAsInt = parseInt(part);
+			const partAsInt = Utils.parseExactInt(part);
 			if (isNaN(partAsInt) || partAsInt < 0 || partAsInt > 255) return -1;
 			num += partAsInt;
 		}
@@ -146,7 +146,7 @@ export const IPTools = new class {
 			return {minIP: ip, maxIP: ip};
 		}
 		const low = IPTools.ipToNumber(cidr.slice(0, index));
-		const bits = parseInt(cidr.slice(index + 1));
+		const bits = Utils.parseExactInt(cidr.slice(index + 1));
 		// fun fact: IPTools fails if bits <= 1 because JavaScript
 		// does << with signed int32s.
 		const high = low + (1 << (32 - bits)) - 1;
@@ -173,9 +173,8 @@ export const IPTools = new class {
 		const [ip, bits] = cidrParts;
 		return this.ipRegex.test(ip.trim()) && /^[1-3]?[0-9]$/.test(bits.trim());
 	}
-	/** does not check for validity; use `validRange` for that; supports both range formats */
 	stringToRange(range: string): AddressRange | null {
-		if (!range) return null;
+		if (!IPTools.isValidRange(range)) return null;
 		if (range.endsWith('*')) {
 			const [a, b, c] = range.replace('*', '').split('.');
 			return {
