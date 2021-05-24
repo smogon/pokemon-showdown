@@ -448,7 +448,7 @@ export const commands: Chat.ChatCommands = {
 			checker = (curUser) => curUser.latestIp.startsWith(ip);
 			ip = ip.slice(0, -1);
 		} else if (target.split('-').every(i => IPTools.ipRegex.test(i))) {
-			const [low, high] = target.split(',').map(i => i.trim());
+			const [low, high] = target.split('-').map(i => i.trim());
 			const range = IPTools.stringToRange(`${low}-${high}`);
 			if (!range) {
 				return this.errorReply(`Invalid IPs - "${low}" & "${high}"`);
