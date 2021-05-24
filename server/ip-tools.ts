@@ -164,9 +164,7 @@ export const IPTools = new class {
 
 			const minIPNumber = IPTools.ipToNumber(minIP);
 			const maxIPNumber = IPTools.ipToNumber(maxIP);
-			if (minIPNumber < 0 || minIPNumber > maxIPNumber) return false;
-
-			return this.ipRegex.test(minIP.trim()) && this.ipRegex.test(maxIP.trim());
+			return minIPNumber >= 0 && minIPNumber < maxIPNumber;
 		}
 
 		// "127.0.0.0/24" format
