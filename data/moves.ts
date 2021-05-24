@@ -15848,7 +15848,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					this.queue.cancelMove(pokemon);
-					pokemon.moveThisTurnResult = null;
 					pokemon.removeVolatile('twoturnmove');
 				}
 				if (pokemon.volatiles['magnetrise']) {
@@ -15865,6 +15864,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onRestart(pokemon) {
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					this.queue.cancelMove(pokemon);
+					pokemon.moveThisTurnResult = null;
 					this.add('-start', pokemon, 'Smack Down');
 				}
 			},
