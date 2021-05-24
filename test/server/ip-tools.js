@@ -33,6 +33,20 @@ describe("IP tools", () => {
 		assert.deepEqual(cidrRange, stringRange);
 	});
 
+	it('should not parse invalid ranges', () => {
+		assert.equal(IPTools.stringToRange('42.42.10.0 - 42.42.5.0'), null);
+		assert.equal(IPTools.stringToRange('250.0.0.0 - 260.0.0.0'), null);
+	});
+
+	it('should reject invalid IPs', () => {
+		assert.equal(IPTools.ipToNumber('256.0.0.0'), -1);
+		assert.equal(IPTools.ipToNumber('42.0.0.1111'), -1);
+		assert.equal(IPTools.ipToNumber('42.0.hi.0'), -1);
+
+		assert.equal(IPTools.numberToIP(4294967296), null);
+		assert.equal(IPTools.numberToIP(-1), null);
+	});
+
 	it('should check if an IP is in a range', () => {
 		const range = IPTools.stringToRange('1.1.1.1 - 1.1.1.3');
 

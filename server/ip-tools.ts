@@ -108,7 +108,7 @@ export const IPTools = new class {
 	ipToNumber(ip: string) {
 		ip = ip.trim();
 		if (ip.includes(':') && !ip.includes('.')) {
-			// IPv6
+			// IPv6, which PS does not support
 			return -1;
 		}
 		if (ip.startsWith('::ffff:')) ip = ip.slice(7);
@@ -117,7 +117,10 @@ export const IPTools = new class {
 		const parts = ip.split('.');
 		for (const part of parts) {
 			num *= 256;
-			num += parseInt(part);
+
+			const partAsInt = parseInt(part);
+			if (isNaN(partAsInt) || partAsInt < 0 || partAsInt > 255) return -1;
+			num += partAsInt;
 		}
 		return num;
 	}
@@ -129,6 +132,7 @@ export const IPTools = new class {
 			num = (num - part) / 256;
 			ipParts.unshift(part.toString());
 		}
+		if (ipParts.length !== 4) return null;
 		return ipParts.join('.');
 	}
 
@@ -136,10 +140,9 @@ export const IPTools = new class {
 		if (!cidr) return null;
 		const index = cidr.indexOf('/');
 		if (index <= 0) {
-			return {
-				minIP: IPTools.ipToNumber(cidr),
-				maxIP: IPTools.ipToNumber(cidr),
-			};
+			const ip = IPTools.ipToNumber(cidr);
+			if (ip < 0) return null;
+			return {minIP: ip, maxIP: ip};
 		}
 		const low = IPTools.ipToNumber(cidr.slice(0, index));
 		const bits = parseInt(cidr.slice(index + 1));
@@ -178,13 +181,17 @@ export const IPTools = new class {
 		}
 		const index = range.indexOf('-');
 		if (index <= 0) {
-			return range.includes('/') ? IPTools.getCidrRange(range) : {
-				minIP: IPTools.ipToNumber(range),
-				maxIP: IPTools.ipToNumber(range),
-			};
+			if (range.includes('/')) return IPTools.getCidrRange(range);
+
+			const ip = IPTools.ipToNumber(range);
+			if (ip < 0) return null;
+			return {maxIP: ip, minIP: ip};
 		}
+
 		const minIP = IPTools.ipToNumber(range.slice(0, index));
 		const maxIP = IPTools.ipToNumber(range.slice(index + 1));
+		if (minIP < 0 || minIP > maxIP) return null;
+
 		return {minIP, maxIP};
 	}
 

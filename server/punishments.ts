@@ -1118,7 +1118,7 @@ export const Punishments = new class {
 		const {minIP, maxIP} = parsedRange;
 
 		for (let ipNumber = minIP; ipNumber <= maxIP; ipNumber++) {
-			ips.push(IPTools.numberToIP(ipNumber));
+			ips.push(IPTools.numberToIP(ipNumber)!); // range is already validated by stringToRange
 		}
 
 		void Punishments.appendPunishment({
