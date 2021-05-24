@@ -212,18 +212,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
-	averardo: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Averardo')}|o bella`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Averardo')}|Condivido schermo cosi' guardiamo i tre porcellini?`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Averardo')}|BE... Ok mejo chiudere gioco... vedo documentario su Bibbia`);
-		},
-	},
 	awauser: {
 		noCopy: true,
 		onStart() {
@@ -1071,6 +1059,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Litt♥Eleven')}|Perhaps, coin tossing isn't the optimal way to win a war...`);
 		},
 	},
+	lunalauser: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Lunala')}|o bella`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Lunala')}|Condivido schermo cosi' guardiamo i tre porcellini?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Lunala')}|BE... Ok mejo chiudere gioco... vedo documentario su Bibbia`);
+		},
+	},
 	madmonty: {
 		noCopy: true,
 		onStart() {
@@ -1498,16 +1498,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
-	sectoniaservant: {
+	sectonia: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('SectoniaServant')}|I love one (1) queen bee`);
+			this.add(`c|${getName('Sectonia')}|I love one (1) queen bee`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('SectoniaServant')}|My search for my lost queen continues....`);
+			this.add(`c|${getName('Sectonia')}|My search for my lost queen continues....`);
 		},
 		onFaint() {
-			this.add(`c|${getName('SectoniaServant')}|NOOOOOO NOT THE JELLY BABY`);
+			this.add(`c|${getName('Sectonia')}|NOOOOOO NOT THE JELLY BABY`);
 		},
 	},
 	segmr: {
