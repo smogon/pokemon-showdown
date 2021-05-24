@@ -425,7 +425,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target.trim()) return this.parse(`/help ipsearch`);
 		this.checkCan('rangeban');
 
-		let [ip, roomid] = this.splitOne(target);
+		const [ipOrHost, roomid] = this.splitOne(target);
 		const targetRoom = roomid ? Rooms.get(roomid) : null;
 		if (typeof targetRoom === 'undefined') {
 			return this.errorReply(`The room "${roomid}" does not exist.`);
@@ -433,47 +433,44 @@ export const commands: Chat.ChatCommands = {
 		const results: string[] = [];
 		const isAll = (cmd === 'ipsearchall');
 
-		// If the IP is a range ending with *, we remove the *, so we have to keep track of that now
-		// so that we can properly determine if a lack of users is caused by invalid input or if it's just an empty range.
-		const isValidRange = ip.endsWith('*') && IPTools.ipRangeRegex.test(ip);
-		if (/[a-z]/.test(ip)) {
+		if (/[a-z]/.test(ipOrHost)) {
 			// host
-			this.sendReply(`Users with host ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
+			this.sendReply(`Users with host ${ipOrHost}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
-				if (results.length > 100 && !isAll) continue;
-				if (!curUser.latestHost?.endsWith(ip)) continue;
+				if (results.length > 100 && !isAll) break;
+				if (!curUser.latestHost?.endsWith(ipOrHost)) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
-			if (results.length > 100 && !isAll) {
-				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
-			}
-		} else if (isValidRange) {
-			// IP range
-			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			ip = ip.slice(0, -1);
+		} else if (IPTools.ipRegex.test(ipOrHost)) {
+			// ip
+			this.sendReply(`Users with IP ${ipOrHost}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
-				if (results.length > 100 && !isAll) continue;
-				if (!curUser.latestIp.startsWith(ip)) continue;
+				if (curUser.latestIp !== ipOrHost) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
-			if (results.length > 100 && !isAll) {
-				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
+		} else if (IPTools.isValidRange(ipOrHost)) {
+			// range
+			this.sendReply(`Users in IP range ${ipOrHost}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
+			const checker = IPTools.checker(ipOrHost);
+			for (const curUser of Users.users.values()) {
+				if (results.length > 100 && !isAll) continue;
+				if (!checker(curUser.latestIp)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
+				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 		} else {
-			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			for (const curUser of Users.users.values()) {
-				if (curUser.latestIp !== ip) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
-				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
-			}
+			return this.errorReply(`${ipOrHost} is not a valid IP, IP range, or host.`);
 		}
+
 		if (!results.length) {
-			if (!isValidRange && !IPTools.ipRegex.test(ip)) return this.errorReply(`${ip} is not a valid IP or host.`);
 			return this.sendReply(`No users found.`);
 		}
-		return this.sendReply(results.join('; '));
+		this.sendReply(results.slice(0, 100).join('; '));
+		if (results.length > 100 && !isAll) {
+			this.sendReply(`More than 100 users found. Use /ipsearchall for the full list.`);
+		}
 	},
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
 
