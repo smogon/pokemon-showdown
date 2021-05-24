@@ -38,33 +38,33 @@ describe('Weather Ball', function () {
 
 	it('should not trigger counter when it is special during gen 3', function () {
 		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'drizzle', moves: ['weatherball']}]});
-		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['counter']}]});
+		battle.setPlayer('p1', {team: [{species: 'Shuckle', ability: 'drizzle', moves: ['weatherball']}]});
+		battle.setPlayer('p2', {team: [{species: 'Shuckle', moves: ['counter']}]});
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].maxhp, battle.p1.active[0].hp);
+		assert.fullHP(battle.p1.active[0]);
 	});
 
 	it('should trigger mirror coat when it is special during gen 3', function () {
 		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'drizzle', moves: ['weatherball']}]});
-		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['mirrorcoat']}]});
+		battle.setPlayer('p1', {team: [{species: 'Shuckle', ability: 'drought', moves: ['weatherball']}]});
+		battle.setPlayer('p2', {team: [{species: 'Shuckle', moves: ['mirrorcoat']}]});
 		battle.makeChoices();
-		assert.notEqual(battle.p1.active[0].maxhp, battle.p1.active[0].hp);
+		assert.false.fullHP(battle.p1.active[0]);
 	});
 
 	it('should not trigger mirror coat when it is physical during gen 3', function () {
 		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'plus', moves: ['weatherball']}]});
-		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['mirrorcoat']}]});
+		battle.setPlayer('p1', {team: [{species: 'Shuckle', moves: ['weatherball']}]});
+		battle.setPlayer('p2', {team: [{species: 'Shuckle', moves: ['mirrorcoat']}]});
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].maxhp, battle.p1.active[0].hp);
+		assert.fullHP(battle.p1.active[0]);
 	});
 
 	it('should trigger counter when it is physical during gen 3', function () {
 		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'Sand Stream', moves: ['weatherball']}]});
-		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['counter']}]});
+		battle.setPlayer('p1', {team: [{species: 'Shuckle', ability: 'sandstream', moves: ['weatherball']}]});
+		battle.setPlayer('p2', {team: [{species: 'Shuckle', moves: ['counter']}]});
 		battle.makeChoices();
-		assert.notEqual(battle.p1.active[0].maxhp, battle.p1.active[0].hp);
+		assert.false.fullHP(battle.p1.active[0]);
 	});
 });
