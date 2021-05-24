@@ -115,6 +115,7 @@ export const IPTools = new class {
 		else if (ip.startsWith('::')) ip = ip.slice(2);
 		let num = 0;
 		const parts = ip.split('.');
+		if (parts.length !== 4) return -1;
 		for (const part of parts) {
 			num *= 256;
 
