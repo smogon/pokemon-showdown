@@ -222,7 +222,8 @@ export class RuleTable extends Map<string, string> {
 				format.gameType === 'triples' ? 6 :
 				3
 			);
-		} else if (this.valueRules.get('evlimit') === 'Auto') {
+		}
+		if (this.valueRules.get('evlimit') === 'Auto') {
 			this.evLimit = dex.gen > 2 ? 510 : null;
 			if (format.mod === 'letsgo') {
 				this.evLimit = this.has('allowavs') ? null : 0;
