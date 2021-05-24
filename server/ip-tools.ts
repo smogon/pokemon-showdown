@@ -160,6 +160,11 @@ export const IPTools = new class {
 		const ips = range.split('-');
 		if (ips.length === 2) {
 			const [minIP, maxIP] = ips;
+
+			const minIPNumber = IPTools.ipToNumber(minIP);
+			const maxIPNumber = IPTools.ipToNumber(maxIP);
+			if (minIPNumber < 0 || minIPNumber > maxIPNumber) return false;
+
 			return this.ipRegex.test(minIP.trim()) && this.ipRegex.test(maxIP.trim());
 		}
 
@@ -181,17 +186,13 @@ export const IPTools = new class {
 		}
 		const index = range.indexOf('-');
 		if (index <= 0) {
-			if (range.includes('/')) return IPTools.getCidrRange(range);
-
-			const ip = IPTools.ipToNumber(range);
-			if (ip < 0) return null;
-			return {maxIP: ip, minIP: ip};
+			return range.includes('/') ? IPTools.getCidrRange(range) : {
+				minIP: IPTools.ipToNumber(range),
+				maxIP: IPTools.ipToNumber(range),
+			};
 		}
-
 		const minIP = IPTools.ipToNumber(range.slice(0, index));
 		const maxIP = IPTools.ipToNumber(range.slice(index + 1));
-		if (minIP < 0 || minIP > maxIP) return null;
-
 		return {minIP, maxIP};
 	}
 
