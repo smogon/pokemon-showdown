@@ -58,7 +58,7 @@ export const commands: Chat.ChatCommands = {
 		if (target === 'all') {
 			this.runBroadcast();
 			if (this.broadcasting) {
-				throw new Chat.ErrorMessage(`You cannot broadcast information about all Other Metagames at once.`);
+				throw new Chat.ErrorMessage(`"!om all" is too spammy to broadcast.`);
 			}
 			// Display OMotM formats, with forum thread links as caption
 			this.parse(`/formathelp omofthemonth`);

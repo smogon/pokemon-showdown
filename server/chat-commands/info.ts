@@ -2590,6 +2590,18 @@ export const commands: Chat.ChatCommands = {
 		`!show [url] - Shows an image or YouTube to everyone in a chatroom. Requires: whitelist % @ # &`,
 	],
 
+	rebroadcast(target, room, user, connection) {
+		if (!target || !target.startsWith('!') || !this.shouldBroadcast()) {
+			return this.parse('/help rebroadcast');
+		}
+		room = this.requireRoom();
+		room.lastBroadcast = '';
+		this.parse(target, {broadcastPrefix: "!rebroadcast "});
+	},
+	rebroadcasthelp: [
+		`!rebroadcast ![command] - Bypasses the broadcast cooldown to broadcast a command.`,
+	],
+
 	regdate: 'registertime',
 	regtime: 'registertime',
 	async registertime(target, room, user, connection) {
