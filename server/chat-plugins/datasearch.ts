@@ -50,6 +50,7 @@ type Direction = 'less' | 'greater' | 'equal';
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
+const RESULTS_MAX_GENERATE = 30;
 const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 
 function escapeHTML(str?: string) {
@@ -176,7 +177,7 @@ export const commands: Chat.ChatCommands = {
 			if (Number.isInteger(num)) {
 				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon Moves once.");
 				qty = num;
-				if (qty < 1 || 30 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon Moves must be between 1 and 30.");
+				if (qty < 1 || RESULTS_MAX_GENERATE < qty) throw new Chat.ErrorMessage(`Number of random Pok\u00e9mon Moves must be between 1 and ${RESULTS_MAX_GENERATE}.`);
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -221,7 +222,7 @@ export const commands: Chat.ChatCommands = {
 			if (Number.isInteger(num)) {
 				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
-				if (qty < 1 || 30 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon must be between 1 and 30.");
+				if (qty < 1 || RESULTS_MAX_GENERATE < qty) throw new Chat.ErrorMessage(`Number of random Pok\u00e9mon must be between 1 and ${RESULTS_MAX_GENERATE}.`);
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -1192,7 +1193,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 20) {
+		if (!showAll && results.length > RESULTS_MAX_GENERATE) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
@@ -1917,7 +1918,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 20) {
+		if (!showAll && results.length > RESULTS_MAX_GENERATE) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
