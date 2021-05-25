@@ -1995,7 +1995,7 @@ export const loginfilter: Chat.LoginFilter = (user) => {
 	}
 };
 
-export const hooks: Chat.Hooks = {
+export const handlers: Chat.Handlers = {
 	onRoomClose(room, user, conn, isPage) {
 		if (!isPage || !room.includes('view-help-text')) return;
 		const userid = room.slice('view-help-text'.length + 1);

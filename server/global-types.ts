@@ -26,7 +26,7 @@ namespace Chat {
 	export type CRQHandler = import('./chat').CRQHandler;
 	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 	export type AnnotatedChatHandler = import('./chat').AnnotatedChatHandler;
-	export type Hooks = import('./chat').Hooks;
+	export type Handlers = import('./chat').Handlers;
 }
 
 // Rooms

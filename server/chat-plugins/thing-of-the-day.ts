@@ -922,7 +922,7 @@ for (const [k, v] of otds) {
 	commands[`${k}help`] = otdHelp;
 }
 
-export const hooks: Chat.Hooks = {
+export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID, room) {
 		for (const otd in otdData) {
 			const data = otdData[otd];

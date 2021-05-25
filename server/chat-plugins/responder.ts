@@ -527,7 +527,7 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const hooks: Chat.Hooks = {
+export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID) {
 		if (answererData[oldID]) {
 			if (!answererData[newID]) answererData[newID] = {pairs: {}};

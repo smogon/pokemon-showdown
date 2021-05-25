@@ -170,7 +170,7 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const hooks: Chat.Hooks = {
+export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID) {
 		if (roomFaqs[oldID]) {
 			if (!roomFaqs[newID]) roomFaqs[newID] = {};

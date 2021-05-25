@@ -141,7 +141,7 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const hooks: Chat.Hooks = {
+export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID) {
 		if (quotes[oldID]) {
 			if (!quotes[newID]) quotes[newID] = [];

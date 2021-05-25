@@ -256,7 +256,7 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-export const hooks: Chat.Handlers = {
+export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID) {
 		if (spotlights[oldID]) {
 			if (!spotlights[newID]) spotlights[newID] = {};
