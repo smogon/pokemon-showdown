@@ -56,7 +56,7 @@ describe("IP tools", () => {
 
 	it('should be able to convert IPs in both directions', () => {
 		assert.equal(IPTools.ipToNumber(IPTools.numberToIP(0)), 0);
-		assert.equal(IPTools.numberToIP(IPTools.ipToNumber('0.0.0.1'))), '0.0.0.1');
+		assert.equal(IPTools.numberToIP(IPTools.ipToNumber('0.0.0.1')), '0.0.0.1');
 		assert.equal(IPTools.ipToNumber(IPTools.numberToIP(56468451)), 56468451);
 	});
 
