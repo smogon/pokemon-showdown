@@ -43,8 +43,8 @@ export class AutoResponder {
 	data: PluginData;
 	room: Room;
 	constructor(room: Room, data?: PluginData) {
-		this.data = AutoResponder.migrateStats(data || {pairs: {}, ignore: []}, this);
 		this.room = room;
+		this.data = AutoResponder.migrateStats(data || {pairs: {}, ignore: []}, this);
 	}
 	static migrateStats(data: any, responder: AutoResponder) {
 		if (!data.stats) return data;
