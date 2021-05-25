@@ -131,7 +131,7 @@ export class AutoResponder {
 
 	async listDays() {
 		const stream = FS(LOG_PATH).createReadStream();
-		const buf = new Set<string>();
+		const buf = new Utils.Multiset<string>();
 		for await (const raw of stream.byLine()) {
 			try {
 				const data = JSON.parse(raw);
@@ -472,13 +472,14 @@ export const pages: Chat.PageTable = {
 				return LogViewer.linkify(buf);
 			}
 			buf += `<strong> No date specified.<br />`;
-			let total = 0;
 			const days: string[] = [];
+			let totalCount = 0;
 			const dayKeys = await room.responder.listDays();
-			for (const key of dayKeys) {
-				days.push(`- <a roomid="view-autoresponder-${room.roomid}-stats-${key}">${key}</a>`);
+			for (const [dateKey, total] of dayKeys) {
+				totalCount += total;
+				days.push(`- <a roomid="view-autoresponder-${room.roomid}-stats-${dateKey}">${dateKey}</a> (${total})`);
 			}
-			buf += `Dates with stats:</strong> <br /><br />`;
+			buf += `Dates with stats:</strong><small>(total matches: ${totalCount})</small><br /><br />`;
 			buf += days.join('<br />');
 			break;
 		case 'pairs':
