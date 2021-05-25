@@ -44,7 +44,8 @@ export class AutoResponder {
 	room: Room;
 	constructor(room: Room, data?: PluginData) {
 		this.room = room;
-		this.data = AutoResponder.migrateStats(data || {pairs: {}, ignore: []}, this);
+		this.data = data || {pairs: {}, ignore: []};
+		AutoResponder.migrateStats(this.data, this);
 	}
 	static migrateStats(data: any, responder: AutoResponder) {
 		if (!data.stats) return data;
@@ -54,6 +55,7 @@ export class AutoResponder {
 			}
 		}
 		delete data.stats;
+		responder.data = data;
 		responder.writeState();
 		return data;
 	}
