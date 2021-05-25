@@ -98,6 +98,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		ignoreAccuracy: true,
 	},
+	brickbreak: {
+		inherit: true,
+		onTryHit(target, source) {
+			// will shatter screens through sub, before you hit
+			const foe = source.side.foe;
+			foe.removeSideCondition('reflect');
+			foe.removeSideCondition('lightscreen');
+		},
+	},
 	charge: {
 		inherit: true,
 		boosts: null,
