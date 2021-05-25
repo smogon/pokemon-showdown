@@ -129,11 +129,12 @@ export const IPTools = new class {
 	numberToIP(num: number) {
 		const ipParts: string[] = [];
 		while (num) {
+			if (num < 0) return null;
 			const part = num % 256;
 			num = (num - part) / 256;
 			ipParts.unshift(part.toString());
 		}
-		while (ipParts.length < 4) ipParts.unshift(0);
+		while (ipParts.length < 4) ipParts.unshift('0');
 		if (ipParts.length !== 4) return null;
 		return ipParts.join('.');
 	}
