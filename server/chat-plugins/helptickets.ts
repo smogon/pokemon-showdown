@@ -728,7 +728,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			let buf = '';
 			const reportUserid = toID(ticket.text[0]);
 			const sharedBattles = getCommonBattles(ticket.userid, null, reportUserid, null, conn);
-			const replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
+			let replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
+			replays = replays.filter((url, index) => replays.indexOf(url) === index);
 			buf += `<strong>Reported user:</strong> ${reportUserid} `;
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
 			buf += `<br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
@@ -802,11 +803,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		getReviewDisplay(ticket, staff, connection) {
 			let buf = ``;
 			const [text, context] = ticket.text;
-			const rooms = getBattleLinks(text);
+			let rooms = getBattleLinks(text);
 
 			if (context) {
 				rooms.push(...getBattleLinks(context));
 			}
+			rooms = rooms.filter((url, index) => rooms.indexOf(url) === index);
 			if (ticket.meta) {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
