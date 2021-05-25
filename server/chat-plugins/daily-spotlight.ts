@@ -256,13 +256,15 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-export const onRenameRoom: Chat.Handlers.RenameRoom = (oldID, newID) => {
-	if (spotlights[oldID]) {
-		if (!spotlights[newID]) spotlights[newID] = {};
-		Object.assign(spotlights[newID], spotlights[oldID]);
-		delete spotlights[oldID];
-		saveSpotlights();
-	}
+export const hooks: Chat.Handlers = {
+	onRenameRoom(oldID, newID) {
+		if (spotlights[oldID]) {
+			if (!spotlights[newID]) spotlights[newID] = {};
+			Object.assign(spotlights[newID], spotlights[oldID]);
+			delete spotlights[oldID];
+			saveSpotlights();
+		}
+	},
 };
 
 process.nextTick(() => {

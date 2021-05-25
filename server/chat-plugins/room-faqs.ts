@@ -170,13 +170,15 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const onRenameRoom: Chat.Handlers.RenameRoom = (oldID, newID) => {
-	if (roomFaqs[oldID]) {
-		if (!roomFaqs[newID]) roomFaqs[newID] = {};
-		Object.assign(roomFaqs[newID], roomFaqs[oldID]);
-		delete roomFaqs[oldID];
-		saveRoomFaqs();
-	}
+export const hooks: Chat.Hooks = {
+	onRenameRoom(oldID, newID) {
+		if (roomFaqs[oldID]) {
+			if (!roomFaqs[newID]) roomFaqs[newID] = {};
+			Object.assign(roomFaqs[newID], roomFaqs[oldID]);
+			delete roomFaqs[oldID];
+			saveRoomFaqs();
+		}
+	},
 };
 
 process.nextTick(() => {

@@ -141,11 +141,13 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const onRenameRoom: Chat.Handlers.RenameRoom = (oldID, newID) => {
-	if (quotes[oldID]) {
-		if (!quotes[newID]) quotes[newID] = [];
-		quotes[newID].push(...quotes[oldID]);
-		delete quotes[oldID];
-		saveQuotes();
-	}
+export const hooks: Chat.Hooks = {
+	onRenameRoom(oldID, newID) {
+		if (quotes[oldID]) {
+			if (!quotes[newID]) quotes[newID] = [];
+			quotes[newID].push(...quotes[oldID]);
+			delete quotes[oldID];
+			saveQuotes();
+		}
+	},
 };

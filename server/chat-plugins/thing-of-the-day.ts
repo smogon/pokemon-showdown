@@ -921,14 +921,16 @@ for (const [k, v] of otds) {
 	commands[`${k}help`] = otdHelp;
 }
 
-export const onRenameRoom: Chat.Handlers.RenameRoom = (oldID, newID, room) => {
-	for (const otd in otdData) {
-		const data = otdData[otd];
-		if (data.settings.roomid === oldID) {
-			data.settings.roomid = newID;
-			const handler = otds.get(otd);
-			handler!.room = room as Room;
-			handler!.save();
+export const hooks: Chat.Hooks = {
+	onRenameRoom(oldID, newID, room) {
+		for (const otd in otdData) {
+			const data = otdData[otd];
+			if (data.settings.roomid === oldID) {
+				data.settings.roomid = newID;
+				const handler = otds.get(otd);
+				handler!.room = room as Room;
+				handler!.save();
+			}
 		}
-	}
+	},
 };

@@ -1953,15 +1953,17 @@ export const loginfilter: Chat.LoginFilter = (user) => {
 	}
 };
 
-export const onCloseRoom: Chat.Handlers.RoomClose = (room, user, conn, isPage) => {
-	if (!isPage || !room.includes('view-help-text')) return;
-	const userid = room.slice('view-help-text'.length + 1);
-	const ticket = tickets[userid];
-	if (ticket?.open && ticket.claimed === user.id) {
-		ticket.claimed = null;
-		writeTickets();
-		notifyStaff();
-	}
+export const hooks: Chat.Hooks = {
+	onRoomClose(room, user, conn, isPage) {
+		if (!isPage || !room.includes('view-help-text')) return;
+		const userid = room.slice('view-help-text'.length + 1);
+		const ticket = tickets[userid];
+		if (ticket?.open && ticket.claimed === user.id) {
+			ticket.claimed = null;
+			writeTickets();
+			notifyStaff();
+		}
+	},
 };
 
 process.nextTick(() => {

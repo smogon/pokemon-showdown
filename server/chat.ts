@@ -59,6 +59,11 @@ export interface AnnotatedChatCommands {
 	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
+export interface Hooks {
+	onRoomClose?: (id: string, user: User, connection: Connection, page: boolean) => any;
+	onRenameRoom?: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
+}
+
 export interface ChatPlugin {
 	commands?: AnnotatedChatCommands;
 	pages?: PageTable;
@@ -1425,7 +1430,7 @@ export const Chat = new class {
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
 	readonly crqHandlers: {[k: string]: CRQHandler} = {};
-	readonly handlers: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
+	readonly hooks: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
 	/** Will be empty except during hotpatch */
@@ -1811,11 +1816,10 @@ export const Chat = new class {
 		if (plugin.punishmentfilter) Chat.punishmentfilters.push(plugin.punishmentfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
-		for (const k in plugin) {
-			if (!k.startsWith('on')) continue;
+		for (const k in plugin.hooks) {
 			const handlerName = k.slice(2);
-			if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
-			Chat.handlers[handlerName].push(plugin[k]);
+			if (!Chat.hooks[handlerName]) Chat.hooks[handlerName] = [];
+			Chat.hooks[handlerName].push(plugin[k]);
 		}
 		Chat.plugins[name] = plugin;
 	}
@@ -1882,8 +1886,8 @@ export const Chat = new class {
 		}
 	}
 
-	runHandlers(name: string, ...args: any) {
-		const handlers = this.handlers[name];
+	runHooks(name: string, ...args: any) {
+		const handlers = this.hooks[name];
 		if (!handlers) return;
 		for (const h of handlers) {
 			void h.call(this, ...args);
@@ -1891,11 +1895,11 @@ export const Chat = new class {
 	}
 
 	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
-		Chat.runHandlers('RoomRename', oldID, newID, room);
+		Chat.runHooks('RoomRename', oldID, newID, room);
 	}
 
 	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
-		Chat.runHandlers('CloseRoom', roomid, user, connection);
+		Chat.runHooks('CloseRoom', roomid, user, connection);
 	}
 
 	/**
