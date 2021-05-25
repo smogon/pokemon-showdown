@@ -170,7 +170,7 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
+export const onRenameRoom: Chat.Handlers.RenameRoom = (oldID, newID) => {
 	if (roomFaqs[oldID]) {
 		if (!roomFaqs[newID]) roomFaqs[newID] = {};
 		Object.assign(roomFaqs[newID], roomFaqs[oldID]);

@@ -921,7 +921,7 @@ for (const [k, v] of otds) {
 	commands[`${k}help`] = otdHelp;
 }
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID, room) => {
+export const onRenameRoom: Chat.Handlers.RenameRoom = (oldID, newID, room) => {
 	for (const otd in otdData) {
 		const data = otdData[otd];
 		if (data.settings.roomid === oldID) {
