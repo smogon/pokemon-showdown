@@ -50,7 +50,7 @@ type Direction = 'less' | 'greater' | 'equal';
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
-const RESULTS_MAX_GENERATE = 30;
+const MAX_RANDOM_RESULTS = 30;
 const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 
 function escapeHTML(str?: string) {
