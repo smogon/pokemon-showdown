@@ -9,13 +9,22 @@ import {AddressRange} from "../ip-tools";
 import {GlobalPermission} from "../user-groups";
 
 const HOST_SUFFIXES = ['res', 'proxy', 'mobile'];
-
+const SUFFIX_ALIASES: {[k: string]: string} = {
+	residential: 'res',
+};
 const WHITELISTED_USERIDS: ID[] = [];
 
 function checkCanPerform(
 	context: Chat.PageContext | Chat.CommandContext, user: User, permission: GlobalPermission = 'lockdown'
 ) {
 	if (!WHITELISTED_USERIDS.includes(user.id)) context.checkCan(permission);
+}
+
+function getHostType(type: string) {
+	type = toID(type);
+	if (HOST_SUFFIXES.includes(type)) return type;
+	if (SUFFIX_ALIASES[type]) return SUFFIX_ALIASES[type];
+	throw new Chat.ErrorMessage(`'${type}' is not a valid host type. Please specify one of ${HOST_SUFFIXES.join(', ')}.`);
 }
 
 export function visualizeRangeList(ranges: AddressRange[]) {
@@ -207,13 +216,11 @@ export const commands: Chat.ChatCommands = {
 			// should be in the format: IP, IP, name, URL
 			const widen = cmd.includes('widen');
 
-			const [type, stringRange, host] = target.split(',').map(part => part.trim());
+			const [typeString, stringRange, host] = target.split(',').map(part => part.trim());
 			if (!host || !IPTools.hostRegex.test(host)) {
 				return this.errorReply(`Invalid data: ${target}`);
 			}
-			if (!HOST_SUFFIXES.includes(type)) {
-				return this.errorReply(`'${type}' is not a valid host type. Please specify one of ${HOST_SUFFIXES.join(', ')}.`);
-			}
+			const type = getHostType(typeString);
 			const range = IPTools.stringToRange(stringRange);
 			if (!range) return this.errorReply(`Couldn't parse IP range '${stringRange}'.`);
 			range.host = `${IPTools.urlToHost(host)}?/${type}`;

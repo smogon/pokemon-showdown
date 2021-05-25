@@ -1,4 +1,8 @@
-import {Utils} from '../../lib';
+import {Utils, FS} from '../../lib';
+
+export const nameList: string[] = JSON.parse(
+	FS('config/chat-plugins/usersearch.json').readIfExistsSync() || "[]"
+);
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
@@ -63,6 +67,10 @@ function searchUsernames(target: string, page = false) {
 	return buf;
 }
 
+function saveNames() {
+	FS('config/chat-plugins/usersearch.json').writeUpdate(() => JSON.stringify(nameList));
+}
+
 export const commands: Chat.ChatCommands = {
 	us: 'usersearch',
 	uspage: 'usersearch',
@@ -70,7 +78,8 @@ export const commands: Chat.ChatCommands = {
 	usersearch(target, room, user, connection, cmd) {
 		this.checkCan('lock');
 		target = toID(target);
-		if (!target) {
+		if (!target) { // just join directly if it's the page cmd, they're likely looking for the full list
+			if (cmd.includes('page')) return this.parse(`/j view-usersearch`);
 			return this.parse(`/help usersearch`);
 		}
 		if (target.length < 3) {
@@ -87,14 +96,97 @@ export const commands: Chat.ChatCommands = {
 		`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`,
 		`Adding "page" to the end of the command, i.e. /usersearchpage OR /uspage will bring up a page.`,
 	],
+	usnames: 'usersearchnames',
+	usersearchnames: {
+		'': 'list',
+		list() {
+			this.parse(`/join view-usersearch`);
+		},
+		add(target, room, user) {
+			this.checkCan('lock');
+			const targets = target.split(',').map(toID).filter(Boolean);
+			if (!targets.length) {
+				return this.errorReply(`Specify at least one term.`);
+			}
+			for (const [i, arg] of targets.entries()) {
+				if (nameList.includes(arg)) {
+					targets.splice(i, 1);
+					this.errorReply(`Term ${arg} is already on the usersearch term list.`);
+					continue;
+				}
+				if (arg.length < 3) {
+					targets.splice(i, 1);
+					this.errorReply(`Term ${arg} is too short for the usersearch term list. Must be more than 3 characters.`);
+					continue;
+				}
+			}
+			nameList.push(...targets);
+			Rooms.get('staff')?.addByUser(user, `${user.name} added ${Chat.count(targets, 'terms')} to the usersearch name list.`);
+			this.globalModlog(`USERSEARCH ADD`, null, targets.join(', '));
+			if (!room || room.roomid !== 'staff') {
+				this.sendReply(`Added ${Chat.count(targets, 'terms')} to the usersearch name list.`);
+			}
+			saveNames();
+		},
+		remove(target, room, user) {
+			this.checkCan('lock');
+			const targets = target.split(',').map(toID).filter(Boolean);
+			if (!targets.length) {
+				return this.errorReply(`Specify at least one term.`);
+			}
+			for (const [i, arg] of targets.entries()) {
+				const idx = nameList.indexOf(arg);
+				if (idx < 0) {
+					targets.splice(i, 1);
+					this.errorReply(`${arg} is not in the usersearch name list, and has been skipped.`);
+					continue;
+				}
+				nameList.splice(idx, 1);
+			}
+			Rooms.get('staff')?.addByUser(user, `${user.name} removed ${Chat.count(targets, 'terms')} from the usersearch name list.`);
+			this.globalModlog(`USERSEARCH REMOVE`, null, targets.join(', '));
+			if (!room || room.roomid !== 'staff') {
+				this.sendReply(`You removed ${Chat.count(targets, 'terms')} from the usersearch name list.`);
+			}
+			saveNames();
+		},
+	},
 };
 
 export const pages: Chat.PageTable = {
 	usersearch(query, user) {
 		this.checkCan('lock');
-		if (!query.length) return this.close();
-		this.title = `[Usersearch] ${query[0]}`;
-		const target = toID(query[0]);
+		const target = toID(query.shift());
+		if (!target) {
+			this.title = `[Usersearch Terms]`;
+			let buf = `<div class="pad"><strong>Usersearch term list</strong>`;
+			buf += `<button style="float:right;" class="button" name="send" value="/uspage"><i class="fa fa-refresh"></i> Refresh</button>`;
+			buf += `<hr />`;
+			if (!nameList.length) {
+				buf += `None found.`;
+				return buf;
+			}
+			const sorted: {[k: string]: number} = {};
+			for (const curUser of Users.users.values()) {
+				for (const term of nameList) {
+					if (curUser.id.includes(term)) {
+						if (!sorted[term]) sorted[term] = 0;
+						sorted[term]++;
+					}
+				}
+			}
+			buf += `<div class="ladder pad"><table>`;
+			buf += `<tr><th>Term</th><th>Current matches</th><th></th></tr>`;
+			for (const k of Utils.sortBy(Object.keys(sorted), v => -sorted[v])) {
+				buf += `<tr>`;
+				buf += `<td>${k}</td>`;
+				buf += `<td>${sorted[k]}</td>`;
+				buf += `<td><button class="button" name="send" value="/uspage ${k}">Search</button></td>`;
+				buf += `</tr>`;
+			}
+			return buf;
+		}
+		this.title = `[Usersearch] ${target}`;
 		return searchUsernames(target, true);
 	},
 };

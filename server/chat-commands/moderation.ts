@@ -1772,7 +1772,7 @@ export const commands: Chat.ChatCommands = {
 		if (/^[0-9]+\s*(,|$)/.test(reason)) {
 			if (hasLineCount) {
 				let lineCountString;
-				[lineCountString, reason] = Utils.splitFirst(reason, ',');
+				[lineCountString, reason] = Utils.splitFirst(reason, ',').map(p => p.trim());
 				lineCount = parseInt(lineCountString);
 			} else if (!cmd.includes('force')) {
 				return this.errorReply(`Your reason was a number; use /hidelines if you wanted to clear a specific number of lines, or /forcehidetext if you really wanted your reason to be a number.`);

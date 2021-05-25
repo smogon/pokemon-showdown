@@ -401,6 +401,42 @@ export class HelpTicket extends Rooms.RoomGame {
 			void (room as GameRoom).uploadReplay(user, conn, "forpunishment");
 		}
 	}
+	static visualizeBattleLogs(rooms: string[]) {
+		const existingRooms = rooms.map(r => Rooms.get(r)).filter(r => r?.type !== 'chat');
+		if (existingRooms.length) {
+			const chatBuffer = existingRooms.map(room => {
+				// there is no reason this should happen (room && room.type check above in .filter).
+				// but typescript is stupid. so appeasement.
+				if (!room) return '';
+				const log = room.log.log.filter(l => l.startsWith('|c|'));
+				if (!log?.length) return '';
+				let innerBuf = `<div class="infobox"><strong>${room.title}</strong><hr />`;
+				for (const line of log) {
+					const [,, username, message] = Utils.splitFirst(line, '|', 3);
+					innerBuf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
+				}
+				innerBuf += `</div></details>`;
+				return innerBuf;
+			}).filter(Boolean).join('');
+			if (chatBuffer) {
+				return (
+					`<div class="infobox"><details class="readmore"><summary><strong>Battle chat logs:</strong><br /></summary>` +
+					`${chatBuffer}</details></div>`
+				);
+			}
+		}
+	}
+	static displayPunishmentList(reportUserid: ID, proofString?: string) {
+		let buf = `<br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
+		for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
+			buf += `<form data-submitsend="/msgroom staff,/${punishment} ${reportUserid},{reason} ${proofString}">`;
+			buf += `<button class="button notifying" type="submit">${name}</button><br />`;
+			buf += `Optional reason: <input name="reason" />`;
+			buf += `</form><br />`;
+		}
+		buf += `</div></details><br />`;
+		return buf;
+	}
 	static getTextButton(ticket: TicketState & {text: [string, string]}) {
 		let buf = '';
 		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
@@ -728,23 +764,21 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			let buf = '';
 			const reportUserid = toID(ticket.text[0]);
 			const sharedBattles = getCommonBattles(ticket.userid, null, reportUserid, null, conn);
-			const replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
+			let replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
+			replays = replays.filter((url, index) => replays.indexOf(url) === index);
 			buf += `<strong>Reported user:</strong> ${reportUserid} `;
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
-			buf += `<br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
 			const replayString = replays.concat(sharedBattles).map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
-			for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
-				buf += `<form data-submitsend="/msgroom staff,/${punishment} ${reportUserid},{reason} ${proofString}">`;
-				buf += `<button class="button notifying" type="submit">${name}</button><br />`;
-				buf += `Optional reason: <input name="reason" />`;
-				buf += `</form><br />`;
-			}
-			buf += `</div></details><br />`;
+			buf += HelpTicket.displayPunishmentList(reportUserid, proofString);
+
 			if (sharedBattles.length) {
-				buf += `<details class="readmore"><summary><strong>Shared battles</strong></summary>`;
-				buf += sharedBattles.map(url => Chat.formatText(`<<${url}>>`)).join(', ');
-				buf += `</details>`;
+				const battleLogHTML = HelpTicket.visualizeBattleLogs(sharedBattles);
+				if (battleLogHTML) {
+					buf += `<br />`;
+					buf += battleLogHTML;
+					buf += `<br />`;
+				}
 			}
 			if (replays.length) {
 				buf += `<details class="readmore"><summary>Battle links</summary>`;
@@ -753,6 +787,11 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 
 			return buf;
+		},
+		onSubmit(ticket, text, submitter, conn) {
+			const targetId = toID(text[0]);
+			// this does the saving for us so we don't have to do anything else
+			getCommonBattles(targetId, Users.get(targetId), submitter.id, submitter, conn);
 		},
 	},
 	inapname: {
@@ -797,45 +836,28 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		getReviewDisplay(ticket, staff, connection) {
 			let buf = ``;
 			const [text, context] = ticket.text;
-			const rooms = getBattleLinks(text);
+			let rooms = getBattleLinks(text);
 
 			if (context) {
 				rooms.push(...getBattleLinks(context));
 			}
-
-			let battlelogNoticeAdded = false;
-			for (const [i, url] of [...rooms].entries()) {
-				if (rooms.indexOf(url) !== i) {
-					rooms.splice(i, 1);
-					continue;
-				}
-				const room = Rooms.get(url);
-				if (!room) {
-					if (battlelogNoticeAdded) continue;
-					buf += `<small>(use /battlelog to view logs if the battle is expired)</small><br />`;
-					battlelogNoticeAdded = true;
-				}
-			}
+			rooms = rooms.filter((url, index) => rooms.indexOf(url) === index);
 			if (ticket.meta) {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
 					buf += `<br />`;
 					buf += `<strong>Reported user:</strong> ${meta} `;
 					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br />`;
-					buf += `<details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
 					const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
-					for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
-						buf += `<form data-submitsend="/msgroom staff,/${punishment} ${meta},{reason} spoiler:${proof}">`;
-						buf += `<button class="button notifying" type="submit">${name}</button><br />`;
-						buf += `Optional reason: <input name="reason" />`;
-						buf += `</form><br />`;
-					}
-					buf += `</div></details><br />`;
+					buf += HelpTicket.displayPunishmentList(toID(meta), proof);
 				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
 					rooms.push(meta);
 				}
 			}
 			buf += `Battle links: ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
+			buf += `<br />`;
+			const battleLogHTML = HelpTicket.visualizeBattleLogs(rooms);
+			if (battleLogHTML) buf += battleLogHTML;
 			return buf;
 		},
 	},
@@ -872,15 +894,35 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
 			return ['Please provide at least one valid battle or replay URL.'];
 		},
-		getReviewDisplay(ticket, staff, conn) {
+		async getReviewDisplay(ticket, staff, conn) {
 			let buf = ``;
 			const [text, context] = ticket.text;
-			const links = getBattleLinks(text);
+			let links = getBattleLinks(text);
 			if (context) links.push(...getBattleLinks(context));
 			buf += `<p><strong>Battle links given:</strong><p>`;
-			for (const [i, link] of links.entries()) {
-				if (links.indexOf(link) !== i) continue;
-				buf += Chat.formatText(`<<${link}>>`);
+			links = links.filter((url, i) => links.indexOf(url) === i);
+			buf += links.map(uri => Chat.formatText(`<<${uri}>>`)).join(', ');
+			const battleRooms = links.map(r => Rooms.get(r)).filter(room => room?.battle) as GameRoom[];
+			if (battleRooms.length) {
+				buf += `<div class="infobox"><strong>Names in given battles:</strong><hr />`;
+				for (const room of battleRooms) {
+					const names = [];
+					for (const id in room.battle!.playerTable) {
+						const user = Users.get(id);
+						if (!user) continue;
+						const team = await room.battle!.getTeam(user);
+						if (team) {
+							const teamNames = team.map(p => p.name ? `${p.name} (${p.species})` : p.species);
+							names.push(`<strong>${user.id}:</strong> ${teamNames.join(', ')}`);
+						}
+					}
+					if (names.length) {
+						buf += `<a href="/${room.roomid}">${room.title}</a><br />`;
+						buf += names.join('<br />');
+						buf += `<hr />`;
+					}
+				}
+				buf += `</div>`;
 			}
 			return buf;
 		},

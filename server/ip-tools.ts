@@ -44,9 +44,7 @@ export const IPTools = new class {
 
 	readonly connectionTestCache = new Map<string, boolean>();
 
-	// eslint-disable-next-line max-len
-	readonly ipRegex = /\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\b/;
-	// eslint-disable-next-line max-len
+	readonly ipRegex = /^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$/;
 	readonly ipRangeRegex = /^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]|\*)){0,2}\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]|\*)$/;
 	readonly hostRegex = /^.+\..{2,}$/;
 
@@ -150,6 +148,25 @@ export const IPTools = new class {
 		const high = low + (1 << (32 - bits)) - 1;
 		return {minIP: low, maxIP: high};
 	}
+	/** Is this an IP range supported by `stringToRange`? Note that exact IPs are also valid IP ranges. */
+	isValidRange(range: string): boolean {
+		// "127.0.0.*" format
+		if (this.ipRangeRegex.test(range.trim())) return true;
+
+		// "127.0.0.1 - 127.0.0.1" format
+		const ips = range.split('-');
+		if (ips.length === 2) {
+			const [minIP, maxIP] = ips;
+			return this.ipRegex.test(minIP.trim()) && this.ipRegex.test(maxIP.trim());
+		}
+
+		// "127.0.0.0/24" format
+		const cidrParts = range.split('/');
+		if (cidrParts.length !== 2) return false;
+		const [ip, bits] = cidrParts;
+		return this.ipRegex.test(ip.trim()) && /^[1-3]?[0-9]$/.test(bits.trim());
+	}
+	/** does not check for validity; use `validRange` for that; supports both range formats */
 	stringToRange(range: string): AddressRange | null {
 		if (!range) return null;
 		if (range.endsWith('*')) {
@@ -189,7 +206,7 @@ export const IPTools = new class {
 	 * ranges. The checker function returns true if its passed IP is
 	 * in the range.
 	 */
-	checker(rangeString: string | string[]) {
+	checker(rangeString: string | string[]): (ip: string) => boolean {
 		if (!rangeString?.length) return () => false;
 		let ranges: AddressRange[] = [];
 		if (typeof rangeString === 'string') {
