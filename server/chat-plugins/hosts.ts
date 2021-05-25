@@ -48,7 +48,14 @@ export const pages: Chat.PageTable = {
 
 		const openProxies = [...IPTools.singleIPOpenProxies];
 		const proxyHosts = [...IPTools.proxyHosts];
-		Utils.sortBy(openProxies, IPTools.ipToNumber);
+		Utils.sortBy(openProxies, ip => {
+			const number = IPTools.ipToNumber(ip);
+			if (number === null) {
+				Monitor.error(`Invalid IP address in IPTools.singleIPOpenProxies: '${ip}'`);
+				return -1;
+			}
+			return number;
+		});
 		proxyHosts.sort();
 		IPTools.sortRanges();
 
@@ -137,11 +144,17 @@ export const pages: Chat.PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
 			const sortedSharedIPBlacklist = [...Punishments.sharedIpBlacklist];
-			Utils.sortBy(sortedSharedIPBlacklist, ([ipOrRange]) => (
-				IPTools.ipRegex.test(ipOrRange) ?
-					IPTools.ipToNumber(ipOrRange) :
-					IPTools.stringToRange(ipOrRange)!.minIP
-			));
+			Utils.sortBy(sortedSharedIPBlacklist, ([ipOrRange]) => {
+				if (IPTools.ipRegex.test(ipOrRange)) {
+					const number = IPTools.ipToNumber(ipOrRange);
+					if (number === null) {
+						Monitor.error(`Invalid blacklisted-from-markshared IP: '${ipOrRange}`);
+						return -1;
+					}
+					return number;
+				}
+				return IPTools.stringToRange(ipOrRange)!.minIP;
+			});
 			for (const [ip, reason] of sortedSharedIPBlacklist) {
 				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
 			}
@@ -161,7 +174,14 @@ export const pages: Chat.PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Location</th></tr>`;
 			const sortedSharedIPs = [...Punishments.sharedIps];
-			Utils.sortBy(sortedSharedIPs, ([ip]) => IPTools.ipToNumber(ip));
+			Utils.sortBy(sortedSharedIPs, ([ip]) => {
+				const number = IPTools.ipToNumber(ip);
+				if (number === null) {
+					Monitor.error(`Invalid shared IP address: '${ip}'`);
+					return -1;
+				}
+				return number;
+			});
 
 			for (const [ip, location] of sortedSharedIPs) {
 				buf += `<tr><td>${ip}</td><td>${location}</td></tr>`;
@@ -473,6 +493,10 @@ export const commands: Chat.ChatCommands = {
 				if (!range) return this.errorReply(`Invalid IP range.`);
 				for (const sharedIp of Punishments.sharedIps.keys()) {
 					const ipNum = IPTools.ipToNumber(sharedIp);
+					if (ipNum === null) {
+						Monitor.error(`Invalid shared IP address: '${sharedIp}'`);
+						continue;
+					}
 					if (IPTools.checkPattern([range], ipNum)) {
 						this.parse(`/unmarkshared ${sharedIp}`);
 					}

@@ -44,11 +44,11 @@ describe("IP tools", () => {
 	});
 
 	it('should reject invalid IPs', () => {
-		assert.equal(IPTools.ipToNumber('256.0.0.0'), -1);
-		assert.equal(IPTools.ipToNumber('42.0.0.1111'), -1);
-		assert.equal(IPTools.ipToNumber('42.0.hi.0'), -1);
-		assert.equal(IPTools.ipToNumber('256.0.0.0.1'), -1);
-		assert.equal(IPTools.ipToNumber('256.0.0hi.1'), -1);
+		assert.equal(IPTools.ipToNumber('256.0.0.0'), null);
+		assert.equal(IPTools.ipToNumber('42.0.0.1111'), null);
+		assert.equal(IPTools.ipToNumber('42.0.hi.0'), null);
+		assert.equal(IPTools.ipToNumber('256.0.0.0.1'), null);
+		assert.equal(IPTools.ipToNumber('256.0.0hi.1'), null);
 
 		assert.equal(IPTools.numberToIP(4294967296), null);
 		assert.equal(IPTools.numberToIP(-1), null);
