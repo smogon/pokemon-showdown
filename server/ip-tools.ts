@@ -176,7 +176,9 @@ export const IPTools = new class {
 	stringToRange(range: string): AddressRange | null {
 		if (!IPTools.isValidRange(range)) return null;
 		if (range.endsWith('*')) {
-			const [a, b, c] = range.replace('*', '').split('.');
+			const parts = range.replace('*', '').split('.');
+			if (parts.length > 3) return null;
+			const [a, b, c] = parts;
 			return {
 				minIP: IPTools.ipToNumber(`${a || '0'}.${b || '0'}.${c || '0'}.0`),
 				maxIP: IPTools.ipToNumber(`${a || '255'}.${b || '255'}.${c || '255'}.255`),
