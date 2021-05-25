@@ -49,6 +49,7 @@ describe("IP tools", () => {
 		assert.equal(IPTools.ipToNumber('42.0.hi.0'), null);
 		assert.equal(IPTools.ipToNumber('256.0.0.0.1'), null);
 		assert.equal(IPTools.ipToNumber('256.0.0hi.1'), null);
+		assert.equal(IPTools.ipToNumber('256.0.1'), null);
 
 		assert.equal(IPTools.numberToIP(4294967296), null);
 		assert.equal(IPTools.numberToIP(-1), null);
