@@ -47,34 +47,29 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 export const commands: Chat.ChatCommands = {
 	om: 'othermetas',
 	othermetas(target, room, user) {
-		this.runBroadcast();
 		target = toID(target);
-		let buffer = ``;
+		const omLink = `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
 
-		if (target === 'all' && this.broadcasting) {
-			throw new Chat.ErrorMessage(`You cannot broadcast information about all Other Metagames at once.`);
+		if (!target) {
+			this.runBroadcast();
+			return this.sendReplyBox(omLink);
 		}
-
-		if (!target || target === 'all') {
-			buffer += `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
-			if (!target) return this.sendReplyBox(buffer);
-		}
-		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'month');
 
 		if (target === 'all') {
+			this.runBroadcast();
+			if (this.broadcasting) {
+				throw new Chat.ErrorMessage(`"!om all" is too spammy to broadcast.`);
+			}
 			// Display OMotM formats, with forum thread links as caption
 			this.parse(`/formathelp omofthemonth`);
 
 			// Display the rest of OM formats, with OM hub/index forum links as caption
 			this.parse(`/formathelp othermetagames`);
-			return this.sendReply(`|raw|<center>${buffer}</center>`);
+			return this.sendReply(`|raw|<center>${omLink}</center>`);
 		}
-		if (showMonthly) {
-			this.target = 'omofthemonth';
-			this.run('formathelp');
-		} else {
-			this.run('formathelp');
-		}
+
+		if (target === 'month') this.target = 'omofthemonth';
+		this.run('formathelp');
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,

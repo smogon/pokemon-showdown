@@ -489,18 +489,21 @@ export class CommandContext extends MessageContext {
 	isQuiet: boolean;
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
+	/** Used only by !rebroadcast */
+	broadcastPrefix: string;
 	broadcastMessage: string;
-	constructor(
-		options:
-		{message: string, user: User, connection: Connection} &
-		Partial<{room: Room | null, pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string}>
-	) {
+	constructor(options: {
+		message: string, user: User, connection: Connection,
+		room?: Room | null, pmTarget?: User | null, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string,
+		recursionDepth?: number, isQuiet?: boolean, broadcastPrefix?: string,
+	}) {
 		super(
 			options.user, options.room && options.room.settings.language ?
 				options.room.settings.language : options.user.language
 		);
 
 		this.message = options.message || ``;
+		this.recursionDepth = options.recursionDepth || 0;
 
 		// message context
 		this.pmTarget = options.pmTarget || null;
@@ -513,29 +516,31 @@ export class CommandContext extends MessageContext {
 		this.target = options.target || ``;
 		this.fullCmd = options.fullCmd || '';
 		this.handler = null;
-		this.isQuiet = false;
+		this.isQuiet = options.isQuiet || false;
 
 		// broadcast context
 		this.broadcasting = false;
 		this.broadcastToRoom = true;
+		this.broadcastPrefix = options.broadcastPrefix || '';
 		this.broadcastMessage = '';
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
-	parse(msg?: string, quiet?: boolean): any {
+	parse(msg?: string, options: {isQuiet?: boolean, broadcastPrefix?: string} = {}): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
-			const subcontext = new CommandContext(this);
-			if (quiet) subcontext.isQuiet = true;
-			subcontext.recursionDepth++;
+			const subcontext = new CommandContext({
+				message: msg,
+				user: this.user,
+				connection: this.connection,
+				room: this.room,
+				pmTarget: this.pmTarget,
+				recursionDepth: this.recursionDepth + 1,
+				...options,
+			});
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
 				throw new Error("Too much command recursion");
 			}
-			subcontext.message = msg;
-			subcontext.cmd = '';
-			subcontext.fullCmd = '';
-			subcontext.cmdToken = '';
-			subcontext.target = '';
 			return subcontext.parse();
 		}
 		let message: string | void | boolean | Promise<string | void | boolean> = this.message;
@@ -961,7 +966,7 @@ export class CommandContext extends MessageContext {
 	shouldBroadcast() {
 		return this.cmdToken === BROADCAST_TOKEN;
 	}
-	checkBroadcast(ignoreCooldown?: boolean, suppressMessage?: string | null) {
+	checkBroadcast(overrideCooldown?: boolean | string, suppressMessage?: string | null) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			return true;
 		}
@@ -978,11 +983,13 @@ export class CommandContext extends MessageContext {
 
 		// broadcast cooldown
 		const broadcastMessage = (suppressMessage || this.message).toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+		const cooldownMessage = overrideCooldown === true ? null : (overrideCooldown || broadcastMessage);
 
-		if (!ignoreCooldown && this.room && this.room.lastBroadcast === broadcastMessage &&
-			this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
-			!this.user.can('bypassall')) {
-			throw new Chat.ErrorMessage("You can't broadcast this because it was just broadcasted.");
+		if (
+			cooldownMessage && this.room && this.room.lastBroadcast === cooldownMessage &&
+			this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN
+		) {
+			throw new Chat.ErrorMessage(`You can't broadcast this because it was just broadcasted. If this was intentional, use !rebroadcast ${this.message}`);
 		}
 
 		const message = this.checkChat(suppressMessage || this.message);
@@ -995,7 +1002,7 @@ export class CommandContext extends MessageContext {
 		this.broadcastMessage = broadcastMessage;
 		return true;
 	}
-	runBroadcast(ignoreCooldown = false, suppressMessage: string | null = null) {
+	runBroadcast(overrideCooldown?: boolean | string, suppressMessage: string | null = null) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			// Already being broadcast, or the user doesn't intend to broadcast.
 			return true;
@@ -1003,22 +1010,23 @@ export class CommandContext extends MessageContext {
 
 		if (!this.broadcastMessage) {
 			// Permission hasn't been checked yet. Do it now.
-			this.checkBroadcast(ignoreCooldown, suppressMessage);
+			this.checkBroadcast(overrideCooldown, suppressMessage);
 		}
 
 		this.broadcasting = true;
 
+		const message = `${this.broadcastPrefix}${suppressMessage || this.message}`;
 		if (this.pmTarget) {
-			this.sendReply('|c~|' + (suppressMessage || this.message));
+			this.sendReply(`|c~|${message}`);
 		} else {
-			this.sendReply('|c|' + this.user.getIdentity(this.room ? this.room.roomid : '') + '|' + (suppressMessage || this.message));
+			this.sendReply(`|c|${this.user.getIdentity(this.room ? this.room.roomid : '')}|${message}`);
 		}
 		if (this.room) {
 			// We don't want broadcasted messages in a room to be translated
 			// according to a user's personal language setting.
 			this.language = this.room.settings.language || null;
-			if (!ignoreCooldown) {
-				this.room.lastBroadcast = this.broadcastMessage;
+			if (overrideCooldown !== true) {
+				this.room.lastBroadcast = overrideCooldown || this.broadcastMessage;
 				this.room.lastBroadcastTime = Date.now();
 			}
 		}
@@ -1122,8 +1130,10 @@ export class CommandContext extends MessageContext {
 		}
 
 		// remove zalgo
-		// eslint-disable-next-line max-len
-		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		message = message.replace(
+			/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,
+			''
+		);
 		if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
 			throw new Chat.ErrorMessage(this.tr`Your message contains banned characters.`);
 		}
@@ -1477,8 +1487,11 @@ export const Chat = new class {
 			// \u2E80-\u32FF              CJK symbols
 			// \u3400-\u9FFF              CJK
 			// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
-			// eslint-disable-next-line no-misleading-character-class, max-len
-			name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
+			name = name.replace(
+				// eslint-disable-next-line no-misleading-character-class
+				/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g,
+				''
+			);
 
 			// blacklist
 			// \u00a1 upside-down exclamation mark (i)
@@ -1496,11 +1509,21 @@ export const Chat = new class {
 
 			// Limit the amount of symbols allowed in usernames to 4 maximum, and
 			// disallow (R) and (C) from being used in the middle of names.
-			// eslint-disable-next-line max-len
-			const nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
+			const nameSymbols = name.replace(
+				/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g,
+				''
+			);
 			// \u00ae\u00a9 (R) (C)
-			// eslint-disable-next-line no-misleading-character-class, max-len
-			if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
+			if (
+				nameSymbols.length > 4 ||
+				/[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)
+			) {
+				name = name.replace(
+					// eslint-disable-next-line no-misleading-character-class
+					/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g,
+					''
+				).replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
+			}
 		}
 		name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
 		name = name.replace(/@/g, ""); // Remove @ as this is used to indicate status messages
@@ -1768,7 +1791,7 @@ export const Chat = new class {
 			const handlerCode = entry.toString();
 			entry.requiresRoom = /requireRoom\((?:'|"|`)(.*?)(?:'|"|`)/.exec(handlerCode)?.[1] as RoomID || /this\.requireRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
-			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
+			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run|should)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
 			if (!entry.aliases) entry.aliases = [];
 
