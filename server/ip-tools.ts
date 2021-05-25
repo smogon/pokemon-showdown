@@ -149,6 +149,7 @@ export const IPTools = new class {
 		const bits = Utils.parseExactInt(cidr.slice(index + 1));
 		// fun fact: IPTools fails if bits <= 1 because JavaScript
 		// does << with signed int32s.
+		if (!bits || bits < 2 || bits > 32) return null;
 		const high = low + (1 << (32 - bits)) - 1;
 		return {minIP: low, maxIP: high};
 	}
