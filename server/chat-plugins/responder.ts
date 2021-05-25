@@ -14,10 +14,6 @@ import {roomFaqs} from './room-faqs';
 const DATA_PATH = 'config/chat-plugins/responder.json';
 const LOG_PATH = 'logs/responder.jsonl';
 
-export const THROTTLE_TABLE: {
-	[room: string]: {[ip: string]: {count: number, throttled?: number}}
-} = Chat.oldPlugins.responder?.THROTTLE_TABLE || {};
-
 export let answererData: {[roomid: string]: PluginData} = {};
 
 try {
@@ -86,9 +82,6 @@ export class AutoResponder {
 			const match = this.test(normalized, faq);
 			if (match) {
 				if (user) {
-					if (!AutoResponder.askingAllowed(user, this.room)) {
-						return false;
-					}
 					const timestamp = Chat.toTimestamp(new Date()).split(' ')[1];
 					const log = `${timestamp} |c| ${user.name}|${question}`;
 					this.log(log, faq, match.regex);
@@ -100,9 +93,6 @@ export class AutoResponder {
 	}
 	visualize(question: string, hideButton?: boolean, user?: User) {
 		const response = this.find(question, user);
-		if (response === false) {
-			return `<div class="message-error">You are asking too many questions too quickly. Please wait a bit.</div>`;
-		}
 		if (response) {
 			let buf = '';
 			buf += Utils.html`<strong>You said:</strong> ${question}<br />`;
@@ -271,26 +261,6 @@ export class AutoResponder {
 		}
 		this.data.ignore = this.data.ignore.filter(item => !terms.includes(item));
 		this.writeState();
-		return true;
-	}
-	static askingAllowed(user: User, room: Room) {
-		for (const ip of user.ips) {
-			if (THROTTLE_TABLE[room.roomid]?.[ip]?.throttled) {
-				if (Date.now() - THROTTLE_TABLE[room.roomid][ip].throttled! > 60 * 1000) {
-					delete THROTTLE_TABLE[ip];
-				} else {
-					// THROTTLE_TABLE[room.roomid][ip].throttled = Date.now();
-					return false;
-				}
-			}
-			if (!THROTTLE_TABLE[room.roomid]) THROTTLE_TABLE[room.roomid] = {};
-			if (!THROTTLE_TABLE[room.roomid][ip]) THROTTLE_TABLE[room.roomid][ip] = {count: 0};
-			THROTTLE_TABLE[room.roomid][ip].count++;
-			if (THROTTLE_TABLE[room.roomid][ip].count > 10) { // you've asked too many times. stop it.
-				THROTTLE_TABLE[room.roomid][ip].throttled = Date.now();
-				return false;
-			}
-		}
 		return true;
 	}
 }
