@@ -426,6 +426,17 @@ export class HelpTicket extends Rooms.RoomGame {
 			}
 		}
 	}
+	static displayPunishmentList(reportUserid: ID, proofString?: string) {
+		let buf = `<br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
+		for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
+			buf += `<form data-submitsend="/msgroom staff,/${punishment} ${reportUserid},{reason} ${proofString}">`;
+			buf += `<button class="button notifying" type="submit">${name}</button><br />`;
+			buf += `Optional reason: <input name="reason" />`;
+			buf += `</form><br />`;
+		}
+		buf += `</div></details><br />`;
+		return buf;
+	}
 	static getTextButton(ticket: TicketState & {text: [string, string]}) {
 		let buf = '';
 		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
@@ -757,16 +768,10 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			replays = replays.filter((url, index) => replays.indexOf(url) === index);
 			buf += `<strong>Reported user:</strong> ${reportUserid} `;
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
-			buf += `<br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
 			const replayString = replays.concat(sharedBattles).map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
-			for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
-				buf += `<form data-submitsend="/msgroom staff,/${punishment} ${reportUserid},{reason} ${proofString}">`;
-				buf += `<button class="button notifying" type="submit">${name}</button><br />`;
-				buf += `Optional reason: <input name="reason" />`;
-				buf += `</form><br />`;
-			}
-			buf += `</div></details><br />`;
+			buf += HelpTicket.displayPunishmentList(reportUserid, proofString);
+
 			if (sharedBattles.length) {
 				const battleLogHTML = HelpTicket.visualizeBattleLogs(sharedBattles);
 				if (battleLogHTML) {
@@ -843,15 +848,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					buf += `<br />`;
 					buf += `<strong>Reported user:</strong> ${meta} `;
 					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br />`;
-					buf += `<details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
 					const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
-					for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
-						buf += `<form data-submitsend="/msgroom staff,/${punishment} ${meta},{reason} spoiler:${proof}">`;
-						buf += `<button class="button notifying" type="submit">${name}</button><br />`;
-						buf += `Optional reason: <input name="reason" />`;
-						buf += `</form><br />`;
-					}
-					buf += `</div></details><br />`;
+					buf += HelpTicket.displayPunishmentList(toID(meta), proof);
 				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
 					rooms.push(meta);
 				}
@@ -896,15 +894,35 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
 			return ['Please provide at least one valid battle or replay URL.'];
 		},
-		getReviewDisplay(ticket, staff, conn) {
+		async getReviewDisplay(ticket, staff, conn) {
 			let buf = ``;
 			const [text, context] = ticket.text;
-			const links = getBattleLinks(text);
+			let links = getBattleLinks(text);
 			if (context) links.push(...getBattleLinks(context));
 			buf += `<p><strong>Battle links given:</strong><p>`;
-			for (const [i, link] of links.entries()) {
-				if (links.indexOf(link) !== i) continue;
-				buf += Chat.formatText(`<<${link}>>`);
+			links = links.filter((url, i) => links.indexOf(url) === i);
+			buf += links.map(uri => Chat.formatText(`<<${uri}>>`)).join(', ');
+			const battleRooms = links.map(r => Rooms.get(r)).filter(room => room?.battle) as GameRoom[];
+			if (battleRooms.length) {
+				buf += `<div class="infobox"><strong>Names in given battles:</strong><hr />`;
+				for (const room of battleRooms) {
+					const names = [];
+					for (const id in room.battle!.playerTable) {
+						const user = Users.get(id);
+						if (!user) continue;
+						const team = await room.battle!.getTeam(user);
+						if (team) {
+							const teamNames = team.map(p => p.name ? `${p.name} (${p.species})` : p.species);
+							names.push(`<strong>${user.id}:</strong> ${teamNames.join(', ')}`);
+						}
+					}
+					if (names.length) {
+						buf += `<a href="/${room.roomid}">${room.title}</a><br />`;
+						buf += names.join('<br />');
+						buf += `<hr />`;
+					}
+				}
+				buf += `</div>`;
 			}
 			return buf;
 		},
