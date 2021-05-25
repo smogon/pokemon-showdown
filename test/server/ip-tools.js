@@ -52,7 +52,8 @@ describe("IP tools", () => {
 		assert.equal(IPTools.ipToNumber('256.0.1'), null);
 
 		assert.equal(IPTools.numberToIP(4294967296), null);
-		assert.equal(IPTools.numberToIP(-1), null);
+		assert.equal(IPTools.ipToNumber(IPTools.numberToIP(1)), 1);
+		assert.equal(IPTools.ipToNumber(IPTools.numberToIP(56468451)), 56468451);
 	});
 
 	it('should check if an IP is in a range', () => {
