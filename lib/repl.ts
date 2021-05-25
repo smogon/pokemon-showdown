@@ -43,7 +43,7 @@ export const Repl = new class {
 			process.once('SIGINT', () => process.exit(128 + 2));
 		}
 		(global as any).heapdump = (targetPath?: string) => {
-			if (!targetPath) targetPath = `${filename}-${Date.now()}`;
+			if (!targetPath) targetPath = `${filename}-${new Date().toISOString()}`;
 			let handler;
 			try {
 				handler = require('node-oom-heapdump')();
