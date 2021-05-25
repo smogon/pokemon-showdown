@@ -133,6 +133,7 @@ export const IPTools = new class {
 			num = (num - part) / 256;
 			ipParts.unshift(part.toString());
 		}
+		while (ipParts.length < 4) ipParts.unshift(0);
 		if (ipParts.length !== 4) return null;
 		return ipParts.join('.');
 	}
