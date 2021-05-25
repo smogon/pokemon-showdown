@@ -175,7 +175,6 @@ export const IPTools = new class {
 		return this.ipRegex.test(ip.trim()) && /^[1-3]?[0-9]$/.test(bits.trim());
 	}
 	stringToRange(range: string): AddressRange | null {
-		if (!IPTools.isValidRange(range)) return null;
 		if (range.endsWith('*')) {
 			const parts = range.replace('.*', '').split('.');
 			if (parts.length > 3) return null;
