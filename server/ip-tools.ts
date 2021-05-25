@@ -157,24 +157,7 @@ export const IPTools = new class {
 	}
 	/** Is this an IP range supported by `stringToRange`? Note that exact IPs are also valid IP ranges. */
 	isValidRange(range: string): boolean {
-		// "127.0.0.*" format
-		if (this.ipRangeRegex.test(range.trim())) return true;
-
-		// "127.0.0.1 - 127.0.0.1" format
-		const ips = range.split('-');
-		if (ips.length === 2) {
-			const [minIP, maxIP] = ips;
-
-			const minIPNumber = IPTools.ipToNumber(minIP);
-			const maxIPNumber = IPTools.ipToNumber(maxIP);
-			return minIPNumber !== null && maxIPNumber !== null && minIPNumber < maxIPNumber;
-		}
-
-		// "127.0.0.0/24" format
-		const cidrParts = range.split('/');
-		if (cidrParts.length !== 2) return false;
-		const [ip, bits] = cidrParts;
-		return this.ipRegex.test(ip.trim()) && /^[1-3]?[0-9]$/.test(bits.trim());
+		return IPTools.stringToRange(range) !== null;
 	}
 	stringToRange(range: string): AddressRange | null {
 		if (range.endsWith('*')) {
@@ -197,7 +180,7 @@ export const IPTools = new class {
 		const minIP = IPTools.ipToNumber(range.slice(0, index));
 		const maxIP = IPTools.ipToNumber(range.slice(index + 1));
 
-		if (minIP === null || maxIP === null) return null;
+		if (minIP === null || maxIP === null || maxIP < minIP) return null;
 		return {minIP, maxIP};
 	}
 
