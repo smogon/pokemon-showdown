@@ -429,7 +429,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	static displayPunishmentList(reportUserid: ID, proofString?: string) {
 		let buf = `<br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
 		for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
-			buf += `<form data-submitsend="/msgroom staff,/${punishment} ${reportUserid},{reason} ${proofString}">`;
+			buf += `<form data-submitsend="/msgroom staff,/${punishment} ${reportUserid},{reason} spoiler:${proofString}">`;
 			buf += `<button class="button notifying" type="submit">${name}</button><br />`;
 			buf += `Optional reason: <input name="reason" />`;
 			buf += `</form><br />`;
