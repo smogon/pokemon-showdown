@@ -401,6 +401,31 @@ export class HelpTicket extends Rooms.RoomGame {
 			void (room as GameRoom).uploadReplay(user, conn, "forpunishment");
 		}
 	}
+	static visualizeBattleLogs(rooms: string[]) {
+		const existingRooms = rooms.map(r => Rooms.get(r)).filter(r => r?.type !== 'chat');
+		if (existingRooms.length) {
+			const chatBuffer = existingRooms.map(room => {
+				// there is no reason this should happen (room && room.type check above in .filter).
+				// but typescript is stupid. so appeasement.
+				if (!room) return '';
+				const log = room.log.log.filter(l => l.startsWith('|c|'));
+				if (!log?.length) return '';
+				let innerBuf = `<div class="infobox"><strong>${room.title}</strong><hr />`;
+				for (const line of log) {
+					const [,, username, message] = Utils.splitFirst(line, '|', 3);
+					innerBuf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
+				}
+				innerBuf += `</div></details>`;
+				return innerBuf;
+			}).filter(Boolean).join('');
+			if (chatBuffer) {
+				return (
+					`<div class="infobox"><details class="readmore"><summary><strong>Battle chat logs:</strong><br /></summary>` +
+					`${chatBuffer}</details></div>`
+				);
+			}
+		}
+	}
 	static getTextButton(ticket: TicketState & {text: [string, string]}) {
 		let buf = '';
 		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
@@ -743,9 +768,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			buf += `</div></details><br />`;
 			if (sharedBattles.length) {
-				buf += `<details class="readmore"><summary><strong>Shared battles</strong></summary>`;
-				buf += sharedBattles.map(url => Chat.formatText(`<<${url}>>`)).join(', ');
-				buf += `</details>`;
+				const battleLogHTML = HelpTicket.visualizeBattleLogs(sharedBattles);
+				if (battleLogHTML) {
+					buf += `<br />`;
+					buf += battleLogHTML;
+					buf += `<br />`;
+				}
 			}
 			if (replays.length) {
 				buf += `<details class="readmore"><summary>Battle links</summary>`;
@@ -830,28 +858,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			buf += `Battle links: ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			buf += `<br />`;
-			const existingRooms = rooms.map(r => Rooms.get(r)).filter(r => r?.type !== 'chat');
-			if (existingRooms.length) {
-				const chatBuffer = existingRooms.map(room => {
-					// there is no reason this should happen (room && room.type check above in .filter).
-					// but typescript is stupid. so appeasement.
-					if (!room) return '';
-					const log = room.log.log.filter(l => l.startsWith('|c|'));
-					if (!log?.length) return '';
-					let innerBuf = `<div class="infobox"><strong>${room.title}</strong><hr />`;
-					for (const line of log) {
-						const [,, username, message] = Utils.splitFirst(line, '|', 3);
-						innerBuf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
-					}
-					innerBuf += `</div></details>`;
-					return innerBuf;
-				}).filter(Boolean).join('');
-				if (chatBuffer) {
-					buf += `<div class="infobox"><details class="readmore"><summary><strong>Battle chat logs:</strong><br /></summary>`;
-					buf += chatBuffer;
-					buf += `</details></div>`;
-				}
-			}
+			const battleLogHTML = HelpTicket.visualizeBattleLogs(rooms);
+			if (battleLogHTML) buf += battleLogHTML;
 			return buf;
 		},
 	},
