@@ -26,10 +26,7 @@ namespace Chat {
 	export type CRQHandler = import('./chat').CRQHandler;
 	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 	export type AnnotatedChatHandler = import('./chat').AnnotatedChatHandler;
-	export namespace Hooks {
-		export type onRoomClose = (id: string, user: User, connection: Connection, page: boolean) => any;
-		export type onRenameRoom = (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
-	}
+	export type Hooks = import('./chat').Hooks;
 }
 
 // Rooms
