@@ -159,7 +159,8 @@ export const IPTools = new class {
 	isValidRange(range: string): boolean {
 		return IPTools.stringToRange(range) !== null;
 	}
-	stringToRange(range: string): AddressRange | null {
+	stringToRange(range: string | null): AddressRange | null {
+		if (!range) return null;
 		if (range.endsWith('*')) {
 			const parts = range.replace('.*', '').split('.');
 			if (parts.length > 3) return null;
@@ -188,7 +189,8 @@ export const IPTools = new class {
 	 * Range management functions *
 	 ******************************/
 
-	checkPattern(patterns: AddressRange[], num: number) {
+	checkPattern(patterns: AddressRange[], num: number | null) {
+		if (num === null) return false;
 		for (const pattern of patterns) {
 			if (num >= pattern.minIP && num <= pattern.maxIP) {
 				return true;
@@ -213,7 +215,6 @@ export const IPTools = new class {
 		}
 		return (ip: string) => {
 			const ipNumber = IPTools.ipToNumber(ip);
-			if (ipNumber === null) return false; // default to assuming that an invalid IP is not in the range
 			return IPTools.checkPattern(ranges, ipNumber);
 		};
 	}

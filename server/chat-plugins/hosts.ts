@@ -493,10 +493,6 @@ export const commands: Chat.ChatCommands = {
 				if (!range) return this.errorReply(`Invalid IP range.`);
 				for (const sharedIp of Punishments.sharedIps.keys()) {
 					const ipNum = IPTools.ipToNumber(sharedIp);
-					if (ipNum === null) {
-						Monitor.error(`Invalid shared IP address: '${sharedIp}'`);
-						continue;
-					}
 					if (IPTools.checkPattern([range], ipNum)) {
 						this.parse(`/unmarkshared ${sharedIp}`);
 					}

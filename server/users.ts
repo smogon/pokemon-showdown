@@ -157,17 +157,11 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
 			continue;
 		}
 		for (const myIp of ips) {
+			const range = IPTools.stringToRange(myIp);
 			if (user.ips.includes(myIp) || (
+				range &&
 				(myIp.includes('*') || myIp.includes('-')) &&
-				user.ips.map(ip => {
-					const ipNumber = IPTools.ipToNumber(ip);
-					// this should never happen, but if a user object has an invalid IP address, that's pretty concerning
-					if (ipNumber === null) throw new Error(`Invalid IP address on ${user.id}: '${ip}'`);
-					return ipNumber;
-				}).some(ip => {
-					const range = IPTools.stringToRange(myIp);
-					return range && IPTools.checkPattern([range], ip);
-				})
+				user.ips.map(IPTools.ipToNumber).some(ip => IPTools.checkPattern([range], ip))
 			)) {
 				matches.push(user);
 				break;
