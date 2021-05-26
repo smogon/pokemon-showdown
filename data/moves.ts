@@ -15574,7 +15574,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (source.volatiles['twoturnmove'] && source.volatiles['twoturnmove'].duration === 1) {
 				source.removeVolatile('skydrop');
 				source.removeVolatile('twoturnmove');
-				this.add('-end', target, 'Sky Drop', '[interrupt]');
+				if (target === this.effectState.target) {
+					this.add('-end', target, 'Sky Drop', '[interrupt]');
+				}
 			}
 		},
 		onTry(source, target) {
