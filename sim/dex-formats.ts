@@ -327,7 +327,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 * Name of the team generator algorithm, if this format uses
 	 * random/fixed teams. null if players can bring teams.
 	 */
-	readonly team?: string;
+	declare readonly team?: string;
 	readonly effectType: FormatEffectType;
 	readonly debug: boolean;
 	/**
@@ -363,51 +363,51 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/**
 	 * Only applies to rules, not formats
 	 */
-	readonly hasValue?: boolean | 'integer' | 'positive-integer';
-	readonly onValidateRule?: (
+	declare readonly hasValue?: boolean | 'integer' | 'positive-integer';
+	declare readonly onValidateRule?: (
 		this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string
 	) => string | void;
 	/** ID of rule that can't be combined with this rule */
-	readonly mutuallyExclusiveWith?: string;
+	declare readonly mutuallyExclusiveWith?: string;
 
-	readonly battle?: ModdedBattleScriptsData;
-	readonly pokemon?: ModdedBattlePokemon;
-	readonly queue?: ModdedBattleQueue;
-	readonly field?: ModdedField;
-	readonly actions?: ModdedBattleActions;
-	readonly cannotMega?: string[];
-	readonly challengeShow?: boolean;
-	readonly searchShow?: boolean;
-	readonly threads?: string[];
-	readonly timer?: Partial<GameTimerSettings>;
-	readonly tournamentShow?: boolean;
-	readonly checkCanLearn?: (
+	declare readonly battle?: ModdedBattleScriptsData;
+	declare readonly pokemon?: ModdedBattlePokemon;
+	declare readonly queue?: ModdedBattleQueue;
+	declare readonly field?: ModdedField;
+	declare readonly actions?: ModdedBattleActions;
+	declare readonly cannotMega?: string[];
+	declare readonly challengeShow?: boolean;
+	declare readonly searchShow?: boolean;
+	declare readonly threads?: string[];
+	declare readonly timer?: Partial<GameTimerSettings>;
+	declare readonly tournamentShow?: boolean;
+	declare readonly checkCanLearn?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
 	) => string | null;
-	readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
-	readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
-	readonly onChangeSet?: (
+	declare readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
+	declare readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
+	declare readonly onChangeSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
 	) => string[] | void;
-	readonly onModifySpeciesPriority?: number;
-	readonly onModifySpecies?: (
+	declare readonly onModifySpeciesPriority?: number;
+	declare readonly onModifySpecies?: (
 		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
 	) => Species | void;
-	readonly onBattleStart?: (this: Battle) => void;
-	readonly onTeamPreview?: (this: Battle) => void;
-	readonly onValidateSet?: (
+	declare readonly onBattleStart?: (this: Battle) => void;
+	declare readonly onTeamPreview?: (this: Battle) => void;
+	declare readonly onValidateSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
 	) => string[] | void;
-	readonly onValidateTeam?: (
+	declare readonly onValidateTeam?: (
 		this: TeamValidator, team: PokemonSet[], format: Format, teamHas: AnyObject
 	) => string[] | void;
-	readonly validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
-	readonly validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
+	declare readonly validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
+	declare readonly validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
 		removeNicknames?: boolean,
 		skipSets?: {[name: string]: {[key: string]: boolean}},
 	}) => string[] | void;
-	readonly section?: string;
-	readonly column?: number;
+	declare readonly section?: string;
+	declare readonly column?: number;
 
 	constructor(data: AnyObject) {
 		super(data);

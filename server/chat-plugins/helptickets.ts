@@ -475,9 +475,9 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (!staffRoom) return;
 		const ips = [];
 		if (typeof user === 'object') {
-			ips.push(...(user as User).ips);
-			ips.unshift((user as User).latestIp);
-			user = (user as User).id;
+			ips.push(...user.ips);
+			ips.unshift(user.latestIp);
+			user = user.id;
 		}
 		const punishment = Punishments.roomUserids.get('staff')?.get(user);
 		if (punishment?.[0] === 'TICKETBAN') {
@@ -2011,7 +2011,7 @@ export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 
 	const userId = toID(user);
 	if (typeof user === 'object') {
-		const ids = [userId, ...(user as User).previousIDs];
+		const ids = [userId, ...user.previousIDs];
 		for (const userid of ids) {
 			punishmentfilter(userid, punishment);
 		}

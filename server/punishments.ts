@@ -476,12 +476,12 @@ export const Punishments = new class {
 			return Punishments.punishName(user, punishment);
 		}
 
-		if (!punishment[1]) punishment[1] = (user as User).getLastId();
+		if (!punishment[1]) punishment[1] = user.getLastId();
 
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
 		const mobileIps = new Set<string>();
-		const affected = ignoreAlts ? [user as User] : (user as User).getAltUsers(PUNISH_TRUSTED, true);
+		const affected = ignoreAlts ? [user] : user.getAltUsers(PUNISH_TRUSTED, true);
 		for (const alt of affected) {
 			await this.punishInner(alt, punishment, userids, ips, mobileIps);
 		}
@@ -619,12 +619,12 @@ export const Punishments = new class {
 			return Punishments.roomPunishName(room, user, punishment);
 		}
 
-		if (!punishment[1]) punishment[1] = (user as User).getLastId();
+		if (!punishment[1]) punishment[1] = user.getLastId();
 
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
-		const affected = (user as User).getAltUsers(PUNISH_TRUSTED, true);
+		const affected = user.getAltUsers(PUNISH_TRUSTED, true);
 		for (const curUser of affected) {
 			this.roomPunishInner(roomid, curUser, punishment, userids, ips);
 		}
@@ -820,7 +820,7 @@ export const Punishments = new class {
 
 		const userid = toID(user);
 		if (Users.get(user)?.locked) return false;
-		const name = typeof user === 'string' ? user : (user as User).name;
+		const name = typeof user === 'string' ? user : user.name;
 		if (namelock) {
 			punishment = `NAME${punishment}`;
 			await Punishments.namelock(user, expires, toID(namelock), false, `Autonamelock: ${name}: ${reason}`);
@@ -832,12 +832,12 @@ export const Punishments = new class {
 		const logEntry = {
 			action: `AUTO${punishment}`,
 			visualRoomID: typeof room !== 'string' ? (room as Room).roomid : room,
-			ip: typeof user !== 'string' ? (user as User).latestIp : null,
+			ip: typeof user !== 'string' ? user.latestIp : null,
 			userid: userid,
 			note: reason,
 			isGlobal: true,
 		};
-		if (typeof user !== 'string') logEntry.ip = (user as User).latestIp;
+		if (typeof user !== 'string') logEntry.ip = user.latestIp;
 
 		const roomObject = Rooms.get(room);
 		const userObject = Users.get(user);
@@ -1049,7 +1049,7 @@ export const Punishments = new class {
 	}
 
 	groupchatUnban(user: User | ID) {
-		let userid = (typeof user === 'object' ? (user as User).id : user);
+		let userid = (typeof user === 'object' ? user.id : user);
 
 		const punishment = Punishments.isGroupchatBanned(user);
 		if (punishment) userid = punishment[1] as ID;
@@ -1642,7 +1642,6 @@ export const Punishments = new class {
 	getRoomPunishments(user: User | string, options: Partial<{checkIps: any, publicOnly: any}> = {}) {
 		if (!user) return [];
 		const userid = toID(user);
-		const checkMutes = typeof user !== 'string';
 
 		const punishments: [Room, Punishment][] = [];
 
@@ -1670,12 +1669,12 @@ export const Punishments = new class {
 					}
 				}
 			}
-			if (checkMutes && curRoom.muteQueue) {
+			if (typeof user !== 'string' && curRoom.muteQueue) {
+				// check mutes
 				for (const entry of curRoom.muteQueue) {
-					// checkMutes guarantees user is a User
 					if (userid === entry.userid ||
-						(user as User).guestNum === entry.guestNum ||
-						((user as User).autoconfirmed && (user as User).autoconfirmed === entry.autoconfirmed)) {
+						user.guestNum === entry.guestNum ||
+						(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
 						punishments.push([curRoom, ['MUTE', entry.userid, entry.time, ''] as Punishment]);
 					}
 				}
@@ -1806,7 +1805,7 @@ export const Punishments = new class {
 
 				void Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message, isWeek);
 				if (typeof user !== 'string') {
-					(user as User).popup(
+					user.popup(
 						`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
 						`If you feel that your lock was unjustified, you can still PM staff members (%, @, &) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
 						`Your lock will expire in a few days.`
