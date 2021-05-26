@@ -704,52 +704,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
-	// Averardo
-	hatofwisdom: {
-		accuracy: 100,
-		basePower: 110,
-		category: "Special",
-		desc: "The user switches out, and this move deals damage one turn after it is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Future Sight, or Doom Desire is already in effect for the target's position.",
-		shortDesc: "Hits 1 turn after being used. User switches.",
-		name: "Hat of Wisdom",
-		gen: 8,
-		pp: 15,
-		priority: 0,
-		flags: {},
-		ignoreImmunity: true,
-		isFutureMove: true,
-		onTry(source, target) {
-			this.attrLastMove('[still]');
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-			this.add('-anim', source, 'Calm Mind', target);
-			this.add('-anim', source, 'Teleport', target);
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 2,
-				move: 'hatofwisdom',
-				source: source,
-				moveData: {
-					id: 'hatofwisdom',
-					name: "Hat of Wisdom",
-					accuracy: 100,
-					basePower: 110,
-					category: "Special",
-					priority: 0,
-					flags: {},
-					ignoreImmunity: false,
-					effectType: 'Move',
-					isFutureMove: true,
-					type: 'Psychic',
-				},
-			});
-			this.add('-start', source, 'move: Hat of Wisdom');
-			source.switchFlag = 'hatofwisdom' as ID;
-			return this.NOT_FAIL;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Psychic",
-	},
-
 	// awa
 	awa: {
 		accuracy: 100,
@@ -2848,6 +2802,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Lunala
+	hatofwisdom: {
+		accuracy: 100,
+		basePower: 110,
+		category: "Special",
+		desc: "The user switches out, and this move deals damage one turn after it is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Future Sight, or Doom Desire is already in effect for the target's position.",
+		shortDesc: "Hits 1 turn after being used. User switches.",
+		name: "Hat of Wisdom",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {},
+		ignoreImmunity: true,
+		isFutureMove: true,
+		onTry(source, target) {
+			this.attrLastMove('[still]');
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			this.add('-anim', source, 'Calm Mind', target);
+			this.add('-anim', source, 'Teleport', target);
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 2,
+				move: 'hatofwisdom',
+				source: source,
+				moveData: {
+					id: 'hatofwisdom',
+					name: "Hat of Wisdom",
+					accuracy: 100,
+					basePower: 110,
+					category: "Special",
+					priority: 0,
+					flags: {},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Psychic',
+				},
+			});
+			this.add('-start', source, 'move: Hat of Wisdom');
+			source.switchFlag = 'hatofwisdom' as ID;
+			return this.NOT_FAIL;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
+
 	// Mad Monty ¾°
 	callamaty: {
 		accuracy: 100,
@@ -4167,7 +4167,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
-	// SectoniaServant
+	// Sectonia
 	homunculussvanity: {
 		accuracy: true,
 		basePower: 0,
@@ -4200,7 +4200,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				this.boost({def: 1, spd: 1}, source);
-				this.add(`c|${getName('SectoniaServant')}|Jelly baby ;w;`);
+				this.add(`c|${getName('Sectonia')}|Jelly baby ;w;`);
 			},
 		},
 		secondary: null,

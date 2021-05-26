@@ -10,6 +10,7 @@ const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyh
  * @param newSet the SSBSet to assign
  */
 export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, changeAbility = false) {
+	if (pokemon.transformed) return;
 	const evs: StatsTable = {
 		hp: newSet.evs?.hp || 0,
 		atk: newSet.evs?.atk || 0,
@@ -384,47 +385,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Indomitable",
-		gen: 8,
-	},
-
-	// Averardo
-	magichat: {
-		desc: "This Pokemon can only be damaged by direct attacks. This Pokemon blocks certain status moves and instead uses the move against the original user.",
-		shortDesc: "Magic Guard + Magic Bounce.",
-		onDamage(damage, target, source, effect) {
-			if (effect.id === 'heavyhailstorm') return;
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
-			}
-		},
-		onTryHitPriority: 1,
-		onTryHit(target, source, move) {
-			if (target === source || move.hasBounced || !move.flags['reflectable']) {
-				return;
-			}
-			const newMove = this.dex.getActiveMove(move.id);
-			newMove.hasBounced = true;
-			newMove.pranksterBoosted = false;
-			this.add('-ability', target, 'Magic Hat');
-			this.actions.useMove(newMove, target, source);
-			return null;
-		},
-		onAllyTryHitSide(target, source, move) {
-			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
-				return;
-			}
-			const newMove = this.dex.getActiveMove(move.id);
-			newMove.hasBounced = true;
-			newMove.pranksterBoosted = false;
-			this.add('-ability', target, 'Magic Hat');
-			this.actions.useMove(newMove, this.effectState.target, source);
-			return null;
-		},
-		condition: {
-			duration: 1,
-		},
-		name: "Magic Hat",
 		gen: 8,
 	},
 
@@ -1274,6 +1234,47 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Dark Royalty",
 	},
 
+	// Lunala
+	magichat: {
+		desc: "This Pokemon can only be damaged by direct attacks. This Pokemon blocks certain status moves and instead uses the move against the original user.",
+		shortDesc: "Magic Guard + Magic Bounce.",
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'heavyhailstorm') return;
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Magic Hat');
+			this.actions.useMove(newMove, target, source);
+			return null;
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.add('-ability', target, 'Magic Hat');
+			this.actions.useMove(newMove, this.effectState.target, source);
+			return null;
+		},
+		condition: {
+			duration: 1,
+		},
+		name: "Magic Hat",
+		gen: 8,
+	},
+
 	// Mad Monty ¾°
 	petrichor: {
 		desc: "On switch-in, this Pokemon summons Rain Dance. If Rain Dance or Heavy Rain is active, this Pokemon's Electric-type moves have 1.2x power.",
@@ -1722,7 +1723,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// SectoniaServant
+	// Sectonia
 	royalaura: {
 		desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. Moves used by this Pokemon only use 0.5 PP.",
 		shortDesc: "Pressure, and this Pokemon uses 0.5 PP per move.",
