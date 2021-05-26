@@ -54,7 +54,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	 * users with temporary global auth.
 	 */
 	get(user: ID | User) {
-		if (typeof user !== 'string') return (user as User).tempGroup;
+		if (typeof user !== 'string') return user.tempGroup;
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
@@ -233,7 +233,7 @@ export class RoomAuth extends Auth {
 		this.room = room;
 	}
 	get(userOrID: ID | User): GroupSymbol {
-		const id = typeof userOrID === 'string' ? userOrID : (userOrID as User).id;
+		const id = typeof userOrID === 'string' ? userOrID : userOrID.id;
 
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? Users.globalAuth : null;

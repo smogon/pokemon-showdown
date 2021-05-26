@@ -1737,8 +1737,8 @@ export class Battle {
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
 		if (success) {
-			if (Object.values(boost).some(x => x! > 0)) target.statsRaisedThisTurn = true;
-			if (Object.values(boost).some(x => x! < 0)) target.statsLoweredThisTurn = true;
+			if (Object.values(boost).some(x => x > 0)) target.statsRaisedThisTurn = true;
+			if (Object.values(boost).some(x => x < 0)) target.statsLoweredThisTurn = true;
 		}
 		return success;
 	}
