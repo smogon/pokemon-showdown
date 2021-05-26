@@ -831,7 +831,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Not Fully Evolved', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Chansey', 'Doublade', 'Haunter', 'Magneton', 'Pawniard', 'Porygon2', 'Rhydon', 'Scyther', 'Sneasel', 'Type: Null',
+			'Chansey', 'Doublade', 'Haunter', 'Magneton', 'Pawniard', 'Pikachu', 'Porygon2', 'Rhydon', 'Scyther', 'Sneasel', 'Type: Null',
 			'Arena Trap', 'Shadow Tag', 'Baton Pass',
 		],
 	},
