@@ -1,4 +1,4 @@
-import {FS, Utils} from '../../lib';
+import {FS, Utils, Net} from '../../lib';
 import {getCommonBattles} from '../chat-commands/info';
 import type {Punishment} from '../punishments';
 import type {PartialModlogEntry, ModlogID} from '../modlog';
@@ -40,6 +40,12 @@ interface TextTicketInfo {
 		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection
 	) => Promise<string | void> | string | void;
 	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
+}
+
+interface BattleInfo {
+	log: string[];
+	url: string;
+	title: string;
 }
 
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
@@ -401,23 +407,28 @@ export class HelpTicket extends Rooms.RoomGame {
 			void (room as GameRoom).uploadReplay(user, conn, "forpunishment");
 		}
 	}
-	static visualizeBattleLogs(rooms: string[]) {
-		const existingRooms = rooms.map(r => Rooms.get(r)).filter(r => r?.type !== 'chat');
+	static formatBattleLog(logs: string[], title: string, url: string) {
+		const log = logs.filter(l => l.startsWith('|c|'));
+		let buf = ``;
+		for (const line of log) {
+			const [,, username, message] = Utils.splitFirst(line, '|', 3);
+			buf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
+		}
+		if (buf) buf = `<div class="infobox"><strong><a href="${url}">${title}</a></strong><hr />${buf}</div>`;
+		return buf;
+	}
+	static async visualizeBattleLogs(rooms: string[]) {
+		const logs = [];
+		for (const room of rooms) {
+			const log = await getBattleLog(room);
+			if (log) logs.push(log);
+		}
+		const existingRooms = logs.filter(Boolean);
 		if (existingRooms.length) {
-			const chatBuffer = existingRooms.map(room => {
-				// there is no reason this should happen (room && room.type check above in .filter).
-				// but typescript is stupid. so appeasement.
-				if (!room) return '';
-				const log = room.log.log.filter(l => l.startsWith('|c|'));
-				if (!log?.length) return '';
-				let innerBuf = `<div class="infobox"><strong>${room.title}</strong><hr />`;
-				for (const line of log) {
-					const [,, username, message] = Utils.splitFirst(line, '|', 3);
-					innerBuf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
-				}
-				innerBuf += `</div></details>`;
-				return innerBuf;
-			}).filter(Boolean).join('');
+			const chatBuffer = existingRooms
+				.map(room => this.formatBattleLog(room.log, room.title, room.url))
+				.filter(Boolean)
+				.join('');
 			if (chatBuffer) {
 				return (
 					`<div class="infobox"><details class="readmore"><summary><strong>Battle chat logs:</strong><br /></summary>` +
@@ -658,6 +669,30 @@ export function getBattleLinks(text: string) {
 	return rooms;
 }
 
+export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
+	const battleRoom = Rooms.get(battle);
+	if (battleRoom && battleRoom.type !== 'chat') {
+		return {
+			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
+			title: battleRoom.title,
+			url: `/${Config.routes.client}/${battle}`,
+		};
+	}
+	battle = battle.replace(`battle-`, '').replace(/-[a-z0-9]pw/, '');
+	try {
+		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
+		const data = JSON.parse(raw);
+		if (data.log?.length) {
+			return {
+				log: data.log.split('\n').filter((k: string) => k.startsWith('|c|')),
+				title: `${data.p1} vs ${data.p2}`,
+				url: `https://${Config.routes.replays}/${battle}.json`,
+			};
+		}
+	} catch (e) {}
+	return null;
+}
+
 // Prevent a desynchronization issue when hotpatching
 for (const room of Rooms.rooms.values()) {
 	if (!room.settings.isHelp || !room.game) continue;
@@ -760,7 +795,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			return true;
 		},
-		getReviewDisplay(ticket, staff, conn) {
+		async getReviewDisplay(ticket, staff, conn) {
 			let buf = '';
 			const reportUserid = toID(ticket.text[0]);
 			const sharedBattles = getCommonBattles(ticket.userid, null, reportUserid, null, conn);
@@ -773,7 +808,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += HelpTicket.displayPunishmentList(reportUserid, proofString);
 
 			if (sharedBattles.length) {
-				const battleLogHTML = HelpTicket.visualizeBattleLogs(sharedBattles);
+				const battleLogHTML = await HelpTicket.visualizeBattleLogs(sharedBattles);
 				if (battleLogHTML) {
 					buf += `<br />`;
 					buf += battleLogHTML;
@@ -833,7 +868,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				HelpTicket.uploadReplaysFrom(part, submitter, conn);
 			}
 		},
-		getReviewDisplay(ticket, staff, connection) {
+		async getReviewDisplay(ticket, staff, connection) {
 			let buf = ``;
 			const [text, context] = ticket.text;
 			let rooms = getBattleLinks(text);
@@ -856,7 +891,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			buf += `Battle links: ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			buf += `<br />`;
-			const battleLogHTML = HelpTicket.visualizeBattleLogs(rooms);
+			const battleLogHTML = await HelpTicket.visualizeBattleLogs(rooms);
 			if (battleLogHTML) buf += battleLogHTML;
 			return buf;
 		},
