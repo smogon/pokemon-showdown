@@ -211,7 +211,7 @@ export class RuleTable extends Map<string, string> {
 		this.minSourceGen = Number(this.valueRules.get('minsourcegen')) || 1;
 		this.minLevel = Number(this.valueRules.get('minlevel')) || 1;
 		this.maxLevel = Number(this.valueRules.get('maxlevel')) || 100;
-		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || this.maxLevel;
+		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || 0;
 		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
 		this.evLimit = Number(this.valueRules.get('evlimit')) || null;
@@ -249,6 +249,16 @@ export class RuleTable extends Map<string, string> {
 			throw new Error(`Max move count ${this.maxMoveCount}${this.blame('maxmovecount')} is unsupported (we only support up to 24)`);
 		}
 
+		if (!this.defaultLevel) {
+			// defaultLevel will set level 100 pokemon to the default level, which can break
+			// Max Total Level if Max Level is above 100.
+			const maxTeamSize = this.pickedTeamSize || this.maxTeamSize;
+			if (this.maxTotalLevel && this.maxLevel > 100 && this.maxLevel * maxTeamSize > this.maxTotalLevel) {
+				this.defaultLevel = 100;
+			} else {
+				this.defaultLevel = this.maxLevel;
+			}
+		}
 		if (this.minTeamSize && this.minTeamSize < gameTypeMinTeamSize) {
 			throw new Error(`Min team size ${this.minTeamSize}${this.blame('minteamsize')} must be at least ${gameTypeMinTeamSize} for a ${format.gameType} game.`);
 		}
