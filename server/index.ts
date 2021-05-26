@@ -90,6 +90,9 @@ if (Config.watchconfig) {
 	FS(require.resolve('../config/config')).onModify(() => {
 		try {
 			global.Config = ConfigLoader.load(true);
+			// ensure that battle prefixes configured via the chat plugin are not overwritten
+			// by battle prefixes manually specified in config.js
+			Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
 			Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
