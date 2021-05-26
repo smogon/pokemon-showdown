@@ -256,7 +256,7 @@ describe('Sky Drop', function () {
 		assert.statStage(battle.p2.active[0], 'spe', 1);
 	});
 
-	it.skip(`should not claim to have dropped a Pokemon if it is already fainted`, function () {
+	it(`should not claim to have dropped a Pokemon if it is already fainted`, function () {
 		battle = common.createBattle([[
 			{species: 'Shedinja', item: 'stickybarb', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
