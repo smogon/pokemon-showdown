@@ -82,7 +82,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('aegii')}|shoot! take a pano~rama~ https://youtu.be/G8GaQdW2wHc`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('aegii')}|${[`brb, buying albums`, `brb, downloading fancams`, `brb, streaming mvs`, `brb, learning choreos`][this.random(4)]}`);
+			this.add(`c|${getName('aegii')}|${this.sample([`brb, buying albums`, `brb, downloading fancams`, `brb, streaming mvs`, `brb, learning choreos`])}`);
 		},
 		onFaint() {
 			this.add(`c|${getName('aegii')}|i forgot to stan loona...`);
@@ -212,18 +212,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
-	averardo: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('Averardo')}|o bella`);
-		},
-		onSwitchOut() {
-			this.add(`c|${getName('Averardo')}|Condivido schermo cosi' guardiamo i tre porcellini?`);
-		},
-		onFaint() {
-			this.add(`c|${getName('Averardo')}|BE... Ok mejo chiudere gioco... vedo documentario su Bibbia`);
-		},
-	},
 	awauser: {
 		noCopy: true,
 		onStart() {
@@ -315,12 +303,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Brandon')}|I didn't come here to play. I came here to slay!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Brandon')}|${[`I need to catch my breath`, `brb getting a snack`][this.random(2)]}`);
+			this.add(`c|${getName('Brandon')}|${this.sample([`I need to catch my breath`, `brb getting a snack`])}`);
 		},
 		onFaint(pokemon) {
 			const foeName = pokemon.side.foe.active[0].illusion ?
 				pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name;
-			this.add(`c|${getName('Brandon')}|${[`This battle was rigga morris!`, `At least I'll snag Miss Congeniality...`, `This battle was rigged for ${foeName} anyway >:(`][this.random(3)]}`);
+			this.add(`c|${getName('Brandon')}|${this.sample([`This battle was rigga morris!`, `At least I'll snag Miss Congeniality...`, `This battle was rigged for ${foeName} anyway >:(`])}`);
 		},
 	},
 	brouha: {
@@ -391,7 +379,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('cant say')}|lol CTed`);
 		},
 		onFaint() {
-			this.add(`c|${getName('cant say')}|${['imagine taking pokemon seriously when you can just get haxed', '/me plays curb your enthusiasm theme', 'bad players always get lucky'][this.random(3)]}`);
+			this.add(`c|${getName('cant say')}|${this.sample(['imagine taking pokemon seriously when you can just get haxed', '/me plays curb your enthusiasm theme', 'bad players always get lucky'])}`);
 		},
 		innateName: "Magic Guard",
 		shortDesc: "This Pokemon can only be damaged by direct attacks.",
@@ -696,10 +684,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	grimauxiliatrix: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('grimAuxiliatrix')}|${['THE JUICE IS LOOSE', 'TOOTHPASTE\'S OUT OF THE TUBE', 'PREPARE TO DISCORPORATE'][this.random(3)]}`);
+			this.add(`c|${getName('grimAuxiliatrix')}|${this.sample(['THE JUICE IS LOOSE', 'TOOTHPASTE\'S OUT OF THE TUBE', 'PREPARE TO DISCORPORATE'])}`);
 		},
 		onFaint() {
-			this.add(`c|${getName('grimAuxiliatrix')}|${['NOT LIKE THIS', 'HALT - MODULE CORE HEMORRHAGE', 'AAAAAAAAAAAAAAAAAAA'][this.random(3)]}`);
+			this.add(`c|${getName('grimAuxiliatrix')}|${this.sample(['NOT LIKE THIS', 'HALT - MODULE CORE HEMORRHAGE', 'AAAAAAAAAAAAAAAAAAA', 'Change da world... my final message. Goodb ye.'])}`);
 		},
 	},
 	hoeenhero: {
@@ -768,14 +756,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('instruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
-		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon. Moves deal 10x more if already made contact through this ability.",
-		shortDesc: "50% of their max HP to all who contacted the user upon KO. Do 10x more if contacted.",
+		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
+		shortDesc: "Upon foe KOing user, deal 50% of their max HP to all foes that this Pokemon contacted.",
 		// Innate
-		onBasePower(basePower, pokemon, target) {
-			if (target?.m.marked) {
-				return this.chainModify(10);
-			}
-		},
 		onSourceHit(target, source, move) {
 			if (source.illusion) return;
 			if (!move || !target) return;
@@ -1071,6 +1054,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Litt♥Eleven')}|Perhaps, coin tossing isn't the optimal way to win a war...`);
 		},
 	},
+	lunalauser: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Lunala')}|o bella`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Lunala')}|Condivido schermo cosi' guardiamo i tre porcellini?`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Lunala')}|BE... Ok mejo chiudere gioco... vedo documentario su Bibbia`);
+		},
+	},
 	madmonty: {
 		noCopy: true,
 		onStart() {
@@ -1230,10 +1225,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('OM~!')}|What's Up Gamers`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('OM~!')}|Let me just ${['host murder for the 100th time', 'clean out scum zzz', 'ladder mnm rq'][this.random(3)]}`);
+			this.add(`c|${getName('OM~!')}|Let me just ${this.sample(['host murder for the 100th time', 'clean out scum zzz', 'ladder mnm rq'])}`);
 		},
 		onFaint() {
-			this.add(`c|${getName('OM~!')}|ugh, I ${['rolled a 1, damnit.', 'got killed night 1, seriously?', 'got v-create\'d by fucking dragapult lmaoo'][this.random(3)]}`);
+			this.add(`c|${getName('OM~!')}|ugh, I ${this.sample(['rolled a 1, damnit.', 'got killed night 1, seriously?', 'got v-create\'d by fucking dragapult lmaoo'])}`);
 		},
 	},
 	pants: {
@@ -1267,7 +1262,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	partman: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('PartMan')}|${[`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`, `Greetings, today we are all gathered here to pay respects to - wait, this is only ${source.side.foe.name}'s funeral. Never mind.`, `__I'm on fiiiiiiiiiiire__`, `/me hugs`, `A SACRIFICE FOR SNOM`, `${source.side.name} more like nerd`, `NER`][this.random(8)]}`);
+			this.add(`c|${getName('PartMan')}|${this.sample([`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`, `Greetings, today we are all gathered here to pay respects to - wait, this is only ${source.side.foe.name}'s funeral. Never mind.`, `__I'm on fiiiiiiiiiiire__`, `/me hugs`, `A SACRIFICE FOR SNOM`, `${source.side.name} more like nerd`, `NER`])}`);
 		},
 		onSwitchOut(source) {
 			this.add(`c|${getName('PartMan')}|Hi ${source.side.name}, I'm PartMan!`);
@@ -1276,7 +1271,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c|${getName('Hydro')}|/log PartMan was muted by Hydro for 7 minutes. (flood)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('PartMan')}|${['B-booli. >.<', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:', '/html <img src="https://allyourmeme.com/wp-content/uploads/2019/05/damn-it-hurts-right-in-my-meow-meow.jpeg" height=50% width=50% />'][this.random(6)]}`);
+			this.add(`c|${getName('PartMan')}|${this.sample(['B-booli. >.<', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:', '/html <img src="https://allyourmeme.com/wp-content/uploads/2019/05/damn-it-hurts-right-in-my-meow-meow.jpeg" height=50% width=50% />'])}`);
 		},
 	},
 	peapodc: {
@@ -1498,16 +1493,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
-	sectoniaservant: {
+	sectonia: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('SectoniaServant')}|I love one (1) queen bee`);
+			this.add(`c|${getName('Sectonia')}|I love one (1) queen bee`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('SectoniaServant')}|My search for my lost queen continues....`);
+			this.add(`c|${getName('Sectonia')}|My search for my lost queen continues....`);
 		},
 		onFaint() {
-			this.add(`c|${getName('SectoniaServant')}|NOOOOOO NOT THE JELLY BABY`);
+			this.add(`c|${getName('Sectonia')}|NOOOOOO NOT THE JELLY BABY`);
 		},
 	},
 	segmr: {
@@ -1724,7 +1719,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	vooper: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('vooper')}|${['Paws out, claws out!', 'Ready for the prowl!'][this.random(2)]}`);
+			this.add(`c|${getName('vooper')}|${this.sample(['Paws out, claws out!', 'Ready for the prowl!'])}`);
 		},
 		onSwitchOut() {
 			this.add(`c|${getName('vooper')}|Must... eat... bamboo...`);
