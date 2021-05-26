@@ -7,6 +7,14 @@ export const nameList: string[] = JSON.parse(
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
+function getPunishmentHTML(userid: ID, target: string) {
+	return [
+		'Forcerename', 'Namelock', 'Weeknamelock',
+	].map((cmd) => (
+		`<button class="button" name="send" value="/msgroom staff,/${toID(cmd)} ${userid}&#10;/uspage ${target}">${cmd}</button>`
+	)).join(' | ');
+}
+
 function searchUsernames(target: string, page = false) {
 	const results: {offline: string[], online: string[]} = {
 		offline: [],
@@ -14,16 +22,10 @@ function searchUsernames(target: string, page = false) {
 	};
 	for (const curUser of Users.users.values()) {
 		if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
-		const escapedName = Utils.escapeHTML(curUser.name);
-		const buttonHTML = [
-			'Forcerename', 'Namelock', 'Weeknamelock',
-		].map((cmd) => (
-			`<button class="button" name="send" value="/msgroom staff,/${toID(cmd)} ${escapedName}&#10;/uspage ${target}">${cmd}</button>`
-		)).join(' | ');
 		if (curUser.connected) {
-			results.online.push(`${ONLINE_SYMBOL} ${page ? `<username>` : ``}${escapedName}${page ? `</username> ${buttonHTML}` : ``}`);
+			results.online.push(`${!page ? ONLINE_SYMBOL : ''} ${curUser.name}`);
 		} else {
-			results.offline.push(`${OFFLINE_SYMBOL} ${page ? `<username>` : ``}${escapedName}${page ? `</username> ${buttonHTML}` : ``}`);
+			results.offline.push(`${!page ? OFFLINE_SYMBOL : ''} ${curUser.name}`);
 		}
 	}
 	for (const k in results) {
@@ -42,23 +44,28 @@ function searchUsernames(target: string, page = false) {
 			}
 		}
 	} else {
-		buf += `<div class="pad"><h1>Usernames containing "${target}"</h1>`;
+		buf += `<div class="pad"><h3>Usernames containing "${target}"</h3>`;
 		if (!results.offline.length && !results.online.length) {
 			buf += `<p>No results found.</p>`;
 		} else {
-			if (results.online.length) {
-				buf += `<h2>Online</h2>`;
-				for (const [i, result] of results.online.entries()) {
-					buf += `${i !== 0 ? '<br />' : ''}${result}`;
+			if (!results.offline.length && !results.online.length) {
+				buf += `<p>No users found.</p>`;
+			} else {
+				buf += `<div class="ladder pad"><h3>Online users</h3><table><tr><th>Username</th><th>Punish</th></tr>`;
+				for (const username of results.online) {
+					buf += `<tr><td><username>${Utils.escapeHTML(username)}</username></td>`;
+					buf += `<td>${getPunishmentHTML(toID(username), target)}</td></tr>`;
 				}
-			}
-			if (results.online.length && results.offline.length) {
-				buf += `<hr />`;
-			}
-			if (results.offline.length) {
-				buf += `<h2>Offline</h2>`;
-				for (const [i, result] of results.offline.entries()) {
-					buf += `${i !== 0 ? '<br />' : ''}${result}`;
+				buf += `</table></div>`;
+				if (results.offline.length && results.online.length) {
+					buf += `<hr />`;
+				}
+				if (results.offline.length) {
+					buf += `<div class="ladder pad"><h3>Offline users</h3><table><tr><th>Username</th><th>Punish</th></tr>`;
+					for (const username of results.offline) {
+						buf += `<tr><td><username>${Utils.escapeHTML(username)}</username></td>`;
+						buf += `<td>${getPunishmentHTML(toID(username), target)}</td></tr>`;
+					}
 				}
 			}
 		}
