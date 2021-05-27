@@ -437,10 +437,11 @@ export class HelpTicket extends Rooms.RoomGame {
 			}
 		}
 	}
-	static displayPunishmentList(reportUserid: ID, proofString?: string) {
-		let buf = `<br /><details class="readmore"><summary><strong>Punish:</strong></summary><div class="infobox">`;
-		for (const [name, punishment] of [['Lock', 'lock'], ['Weeklock', 'weeklock'], ['Warn', 'warn']]) {
-			buf += `<form data-submitsend="/msgroom staff,/${punishment} ${reportUserid},{reason} spoiler:${proofString}">`;
+	static displayPunishmentList(reportUserid: ID, proofString: string, title?: string) {
+		let buf = `<details class="readmore"><summary><strong>${title || 'Punish:'}</strong></summary><div class="infobox">`;
+		const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
+		for (const name of punishments) {
+			buf += `<form data-submitsend="/msgroom staff,/${toID(name)} ${reportUserid},{reason} spoiler: ${proofString}">`;
 			buf += `<button class="button notifying" type="submit">${name}</button><br />`;
 			buf += `Optional reason: <input name="reason" />`;
 			buf += `</form><br />`;
@@ -675,7 +676,7 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 		return {
 			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
 			title: battleRoom.title,
-			url: `/${Config.routes.client}/${battle}`,
+			url: `/${battle}`,
 		};
 	}
 	battle = battle.replace(`battle-`, '').replace(/-[a-z0-9]pw/, '');
@@ -686,7 +687,7 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 			return {
 				log: data.log.split('\n').filter((k: string) => k.startsWith('|c|')),
 				title: `${data.p1} vs ${data.p2}`,
-				url: `https://${Config.routes.replays}/${battle}.json`,
+				url: `https://${Config.routes.replays}/${battle}`,
 			};
 		}
 	} catch (e) {}
@@ -800,15 +801,16 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const reportUserid = toID(ticket.text[0]);
 			const sharedBattles = getCommonBattles(ticket.userid, null, reportUserid, null, conn);
 			let replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
-			replays = replays.filter((url, index) => replays.indexOf(url) === index);
+			replays = replays.filter((url, index) => replays.indexOf(url) === index).concat(sharedBattles);
 			buf += `<strong>Reported user:</strong> ${reportUserid} `;
-			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
-			const replayString = replays.concat(sharedBattles).map(u => `https://${Config.routes.client}/${u}`).join(', ');
+			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br /><br />`;
+			const replayString = replays.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
 			buf += HelpTicket.displayPunishmentList(reportUserid, proofString);
+			buf += HelpTicket.displayPunishmentList(ticket.userid, proofString, 'Punish reporter:');
 
-			if (sharedBattles.length) {
-				const battleLogHTML = await HelpTicket.visualizeBattleLogs(sharedBattles);
+			if (replays.length) {
+				const battleLogHTML = await HelpTicket.visualizeBattleLogs(replays);
 				if (battleLogHTML) {
 					buf += `<br />`;
 					buf += battleLogHTML;
@@ -877,18 +879,19 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				rooms.push(...getBattleLinks(context));
 			}
 			rooms = rooms.filter((url, index) => rooms.indexOf(url) === index);
+			const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			if (ticket.meta) {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
 					buf += `<br />`;
 					buf += `<strong>Reported user:</strong> ${meta} `;
 					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br />`;
-					const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 					buf += HelpTicket.displayPunishmentList(toID(meta), proof);
 				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
 					rooms.push(meta);
 				}
 			}
+			buf += HelpTicket.displayPunishmentList(ticket.userid, proof, 'Punish reporter:');
 			buf += `Battle links: ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			buf += `<br />`;
 			const battleLogHTML = await HelpTicket.visualizeBattleLogs(rooms);
