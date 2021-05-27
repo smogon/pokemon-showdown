@@ -444,7 +444,7 @@ stat boosts are minor actions.
 
 > Indicates that the side condition `CONDITION` ended for the given `SIDE`.
 
-`|-sideswitch`
+`|-swapsideconditions`
 
 > Swaps side conditions between sides. Used for Court Change.
 
