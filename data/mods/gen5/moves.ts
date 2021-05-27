@@ -662,7 +662,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Quick Guard');
 			},
 			onTryHitPriority: 4,

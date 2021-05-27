@@ -242,7 +242,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Wide Guard');
 			},
 			onTryHitPriority: 4,
