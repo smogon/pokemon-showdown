@@ -1396,7 +1396,7 @@ export const commands: Chat.ChatCommands = {
 		const demoting = cmd === 'desectionleader';
 		if (!target || (target.split(',').length < 2 && !demoting)) return this.parse(`/help sectionleader`);
 
-		const {targetUser, targetUsername, rest: sectionid} = this.splitUser(target);
+		const {targetUser, targetUsername, rest: sectionid} = this.splitUser(target, {exactName: true});
 		const userid = toID(targetUsername);
 		const section = demoting ? Users.globalAuth.sectionLeaders.get(userid)! : room.validateSection(sectionid);
 		const name = targetUser ? targetUser.name : targetUsername;
