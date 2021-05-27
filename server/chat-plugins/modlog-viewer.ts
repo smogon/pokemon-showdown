@@ -386,7 +386,7 @@ export const pages: Chat.PageTable = {
 		}
 
 		if (punishmentTable.size) {
-			buf += `<strong>Punishments:</strong><br />`
+			buf += `<strong>Punishments:</strong><br />`;
 			buf += `<div class="ladder pad"><table>`;
 			buf += `<tr><th>Punishment type</th><th>Count</th></tr>`;
 			for (const [punishment, number] of punishmentTable) {
@@ -397,4 +397,4 @@ export const pages: Chat.PageTable = {
 		buf += `<br /><br />`;
 		return buf;
 	},
-}
+};
