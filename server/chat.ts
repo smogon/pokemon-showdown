@@ -1839,6 +1839,14 @@ export const Chat = new class {
 		if (plugin.punishmentfilter) Chat.punishmentfilters.push(plugin.punishmentfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
+		if (plugin.onRenameRoom) {
+			if (!Chat.handlers['RenameRoom']) Chat.handlers['RenameRoom'] = [];
+			Chat.handlers['RenameRoom'].push(plugin.onRenameRoom);
+		}
+		if (plugin.onCloseRoom) {
+			if (!Chat.handlers['CloseRoom']) Chat.handlers['CloseRoom'] = [];
+			Chat.handlers['CloseRoom'].push(plugin.onCloseRoom);
+		}
 		for (const k in plugin.hooks) {
 			const handlerName = k.slice(2);
 			if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
