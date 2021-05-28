@@ -802,7 +802,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const sharedBattles = getCommonBattles(ticket.userid, null, reportUserid, null, conn);
 			let replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
 			replays = replays.filter((url, index) => replays.indexOf(url) === index).concat(sharedBattles);
-			buf += `<strong>Reported user:</strong> ${reportUserid} `;
+			buf += `<br /><strong>Reported user:</strong> ${reportUserid} `;
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br /><br />`;
 			const replayString = replays.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
@@ -869,6 +869,20 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			for (const part of text) {
 				HelpTicket.uploadReplaysFrom(part, submitter, conn);
 			}
+			// if there's no report meta, or there is and it isn't a user
+			if (!ticket.meta || ticket.meta.startsWith('room-')) {
+				const replays = getBattleLinks(text[0]);
+				const link = replays.shift()!;
+				const room = Rooms.get(link) as GameRoom | undefined;
+				// we can't determine this for FFA - valid guesses can be made for 2 player, but not 4p. not at all.
+				if (!room || !room.battle || room.battle.playerCap > 2) return;
+				for (const player of room.battle.players) {
+					const user = player.getUser();
+					if (!user || user.id === submitter.id) continue;
+					ticket.meta = `user-${user.id}`;
+					writeTickets();
+				}
+			}
 		},
 		async getReviewDisplay(ticket, staff, connection) {
 			let buf = ``;
@@ -883,16 +897,15 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (ticket.meta) {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
-					buf += `<br />`;
-					buf += `<strong>Reported user:</strong> ${meta} `;
-					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br />`;
+					buf += `<br /><strong>Reported user:</strong> ${meta} `;
+					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br /><br />`;
 					buf += HelpTicket.displayPunishmentList(toID(meta), proof);
 				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
 					rooms.push(meta);
 				}
 			}
 			buf += HelpTicket.displayPunishmentList(ticket.userid, proof, 'Punish reporter:');
-			buf += `Battle links: ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
+			buf += `<strong>Battle links:</strong> ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			buf += `<br />`;
 			const battleLogHTML = await HelpTicket.visualizeBattleLogs(rooms);
 			if (battleLogHTML) buf += battleLogHTML;
@@ -1305,13 +1318,12 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>From: ${ticket.userid}</strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog global,[${ticket.userid}]">Global Modlog</button><br />`;
-			buf += `<br />`;
 			if (!ticket.claimed && ticket.open) {
 				ticket.claimed = user.id;
 				writeTickets();
 				notifyStaff();
 			} else if (ticket.claimed) {
-				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br />`;
+				buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
 			}
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
