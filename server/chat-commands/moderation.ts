@@ -871,7 +871,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		this.globalModlog(
-			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, privateReason
+			(force ? `FORCE` : ``) + (week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, privateReason
 		);
 
 		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
@@ -1095,7 +1095,7 @@ export const commands: Chat.ChatCommands = {
 			toID(inputUsername),
 		]);
 
-		this.globalModlog("BAN", targetUser, privateReason);
+		this.globalModlog(`${force ? `FORCE` : ''}BAN`, targetUser, privateReason);
 		return true;
 	},
 	globalbanhelp: [
@@ -1698,7 +1698,7 @@ export const commands: Chat.ChatCommands = {
 		const {privateReason, publicReason} = this.parseSpoiler(reason);
 		const reasonText = publicReason ? ` (${publicReason})` : `.`;
 		this.privateGlobalModAction(`${targetUser?.name || userid} was ${week ? 'week' : ''}namelocked by ${user.name}${reasonText}`);
-		this.globalModlog(`${week ? 'WEEK' : ""}NAMELOCK`, targetUser || userid, privateReason);
+		this.globalModlog(`${force ? `FORCE` : ``}${week ? 'WEEK' : ""}NAMELOCK`, targetUser || userid, privateReason);
 
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);
 		if (roomauth.length) {
