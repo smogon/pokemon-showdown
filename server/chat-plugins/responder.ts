@@ -529,11 +529,13 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
-	if (answererData[oldID]) {
-		if (!answererData[newID]) answererData[newID] = {pairs: {}};
-		Object.assign(answererData[newID], answererData[oldID]);
-		delete answererData[oldID];
-		FS(DATA_PATH).writeUpdate(() => JSON.stringify(answererData));
-	}
+export const handlers: Chat.Handlers = {
+	onRenameRoom(oldID, newID) {
+		if (answererData[oldID]) {
+			if (!answererData[newID]) answererData[newID] = {pairs: {}};
+			Object.assign(answererData[newID], answererData[oldID]);
+			delete answererData[oldID];
+			FS(DATA_PATH).writeUpdate(() => JSON.stringify(answererData));
+		}
+	},
 };
