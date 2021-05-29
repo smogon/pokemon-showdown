@@ -331,7 +331,13 @@ export class GlobalAuth extends Auth {
 			const id = toID(name);
 			this.usernames.set(id, name);
 			if (sectionid) this.sectionLeaders.set(id, sectionid as RoomSection);
-			super.set(id, symbol.charAt(0) as GroupSymbol);
+
+			// handle glitched entries where a user has two entries in usergroups.csv due to bugs
+			const newSymbol = symbol.charAt(0) as GroupSymbol;
+			const preexistingSymbol = super.get(id);
+			// take a user's highest rank in usergroups.csv
+			if (preexistingSymbol && Auth.atLeast(preexistingSymbol, newSymbol)) continue;
+			super.set(id, newSymbol);
 		}
 	}
 	set(id: ID, group: GroupSymbol, username?: string) {
