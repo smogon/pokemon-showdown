@@ -817,11 +817,6 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					buf += `<br />`;
 				}
 			}
-			if (replays.length) {
-				buf += `<details class="readmore"><summary>Battle links</summary>`;
-				buf += replays.map(url => `<<${url}>>`).join(', ');
-				buf += `</details>`;
-			}
 
 			return buf;
 		},
