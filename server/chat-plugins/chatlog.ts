@@ -1155,8 +1155,10 @@ export const pages: Chat.PageTable = {
 
 		const parsedDate = new Date(date as string);
 		const validDateStrings = ['all', 'alltime', 'today'];
+		// this will make it throw if we call toISOString, so this is only allowed if a
+		const validSearchDate = date && validDateStrings.includes(date) && search;
 		// this is apparently the best way to tell if a date is invalid
-		if (date && isNaN(parsedDate.getTime()) && !validDateStrings.includes(toID(date))) {
+		if (date && isNaN(parsedDate.getTime()) && !validSearchDate) {
 			return this.errorReply(`Invalid date.`);
 		}
 
