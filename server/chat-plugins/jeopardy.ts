@@ -123,7 +123,7 @@ export class Jeopardy extends Rooms.RoomGame {
 			badstr += `${(badstr ? ", " : "")} final`;
 		}
 		if (badstr) {
-			throw new Chat.ErrorMessage(`The follow questions still need questions and answers: ${badstr}`);
+			throw new Chat.ErrorMessage(`The following questions still need questions and answers: ${badstr}.`);
 		}
 		this.roundStarted = true;
 		if (this.round === 1) {
@@ -212,11 +212,11 @@ export class Jeopardy extends Rooms.RoomGame {
 		if (params.length < 2) throw new Chat.ErrorMessage("You must specify a row and a column number.");
 		const categoryNumber = parseInt(params[0]);
 		if (!categoryNumber || categoryNumber < 1 || categoryNumber > this.categoryCount) {
-			throw new Chat.ErrorMessage(`The category must be a number between 1 and ${this.categoryCount}`);
+			throw new Chat.ErrorMessage(`The category must be a number between 1 and ${this.categoryCount}.`);
 		}
 		const questionNumber = parseInt(params[1]);
 		if (!questionNumber || questionNumber < 1 || questionNumber > this.questionCount) {
-			throw new Chat.ErrorMessage(`The question must be a number between 1 and ${this.questionCount}`);
+			throw new Chat.ErrorMessage(`The question must be a number between 1 and ${this.questionCount}.`);
 		}
 		const question = this.questions[questionNumber - 1][categoryNumber - 1];
 		if (question.answered) throw new Chat.ErrorMessage("That question has already been answered.");
@@ -399,7 +399,7 @@ export class Jeopardy extends Rooms.RoomGame {
 		if (this.finals) {
 			if (player.finalAnswer) throw new Chat.ErrorMessage("You have already answered the Final Jeopardy");
 			player.answer = Utils.escapeHTML(target);
-			player.send(`You have selected your answer as ${Utils.escapeHTML(target)}`);
+			player.send(`You have selected your answer as ${Utils.escapeHTML(target)}.`);
 		} else {
 			if (this.timeout) clearTimeout(this.timeout);
 			if (!this.curPlayer || this.curPlayer.id !== user.id) throw new Chat.ErrorMessage("It is not your turn to answer.");
