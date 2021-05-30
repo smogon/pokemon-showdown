@@ -288,7 +288,7 @@ export class Jeopardy extends Rooms.RoomGame {
 		this.curPlayer.buzzed = true;
 		this.room.add(`${user.name} has buzzed in!`);
 		this.state = "answering";
-		this.timeout = setTimeout(() => this.check(false), this.answeringTime * 1000);
+		this.timeout = setTimeout(() => this.check({correct: false, isBuzzTimeout: true}), this.answeringTime * 1000);
 	}
 
 	hasRemainingQuestion() {
@@ -408,11 +408,11 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	mark(correct: boolean) {
 		if (this.state !== 'checking') return "There is no answer to currently check.";
-		this.check(correct);
+		this.check({correct});
 	}
 
-	check(correct: boolean) {
-		if (correct) {
+	check(info: {correct: boolean, isBuzzTimeout?: boolean}) {
+		if (info.correct) {
 			const gainpoints = ((this.question.dd || this.finals) ? this.curPlayer.wager : this.question.points);
 			let points = this.curPlayer.points;
 			points += gainpoints;
@@ -439,7 +439,8 @@ export class Jeopardy extends Rooms.RoomGame {
 			}
 		} else {
 			const losspoints = ((this.question.dd || this.finals) ? this.curPlayer.wager : this.question.points);
-			this.room.add(`${this.curPlayer.name} answered incorrectly and loses ${losspoints} points!`);
+			const action = info.isBuzzTimeout ? 'failed to answer in time' : 'answered incorrectly';
+			this.room.add(`${this.curPlayer.name} ${action} and loses ${losspoints} points!`);
 			let points = this.curPlayer.points;
 			points -= losspoints;
 			this.curPlayer.points = points;
