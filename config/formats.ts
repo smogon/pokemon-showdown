@@ -303,7 +303,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Dynamax Clause', 'Swagger Clause'],
-		banlist: ['DUber', 'Power Construct'],
+		banlist: ['DUber', 'Power Construct', 'Shadow Tag'],
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
@@ -325,7 +325,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		ruleset: ['[Gen 8] Doubles OU'],
-		banlist: ['DOU', 'DBL', 'Shadow Tag'],
+		banlist: ['DOU', 'DBL'],
 	},
 	{
 		name: "[Gen 8] Doubles LC",
