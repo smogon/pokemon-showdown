@@ -44,6 +44,8 @@ const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 	z: ["z", "ᘔ", "Z", "ⓩ", "Ⓩ", "Ⱬ", "ẓ", "Ẓ", "ፚ", "Ꮓ", "ʐ", "ｚ", "Ｚ", "ᴢ", "🅩", "𝐳", "𝐙", "𝘻", "𝘡", "𝙯", "𝙕", "𝓏", "𝔃", "𝓩", "𝕫", "𝕋", "𝔷", "𝔙", "𝖟", "𝖅", "🅉", "🆉", "𝒵", "ȥ", "𝚣", "𝚉", "☡", "z"],
 };
 
+const filterWords: {[k: string]: Chat.FilterWord[]} = Chat.filterWords;
+
 export const Filters = new class {
 	readonly EVASION_DETECTION_SUB_STRINGS: {[k: string]: string} = {};
 	constructor() {
@@ -191,8 +193,6 @@ export const Filters = new class {
 		}
 	}
 };
-
-const filterWords: {[k: string]: Chat.FilterWord[]} = Chat.filterWords;
 
 // Register the chat monitors used
 Chat.registerMonitor('autolock', {
