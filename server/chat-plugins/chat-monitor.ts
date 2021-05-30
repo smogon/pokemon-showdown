@@ -136,11 +136,11 @@ export const Filters = new class {
 			// or b) the monitor doesn't exist anymore,
 			// in which case it can either be deleted manually or the data will be fine if the monitor is re-added later
 			for (const entry of data[k]) {
-				if (entry.punishment === 'EVASION') {
+				if (k === 'evasion') {
 					entry.regex = this.constructEvasionRegex(entry.word);
 				} else {
 					entry.regex = new RegExp(
-						entry.punishment === 'SHORTENER' ? `\\b${entry.word}` : entry.word,
+						k === 'shorteners' ? `\\b${entry.word}` : entry.word,
 						entry.replacement ? 'igu' : 'iu'
 					);
 				}
