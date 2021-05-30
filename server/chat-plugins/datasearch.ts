@@ -740,7 +740,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'recovery') {
-				if (parameters.length > 1) return {error: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"healorder", "junglehealing", "lifedew", "milkdrink", "moonlight", "morningsun", "recover",
 					"roost", "shoreup", "slackoff", "softboiled", "strengthsap", "synthesis", "wish",
@@ -756,12 +755,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[move] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'zrecovery') {
-				if (parameters.length > 1) return {error: "The parameter 'zrecovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"aromatherapy", "bellydrum", "conversion2", "haze", "healbell", "mist",
 					"psychup", "refresh", "spite", "stockpile", "teleport", "transform",
@@ -777,12 +774,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[moveid] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'priority') {
-				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
 				for (const moveid in mod.data.Moves) {
 					const move = mod.moves.get(moveid);
 					if (move.category === "Status" || move.id === "bide") continue;
@@ -798,8 +793,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target.substr(0, 8) === 'resists ') {
@@ -851,17 +845,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'pivot') {
-				let includeBatonPass = false;
-				if (parameters.length > 1) {
-					if (parameters[1].trim().toLowerCase() === 'batonpass') {
-						includeBatonPass = true;
-					} else {
-						return {error: "The parameter 'pivot' cannot have alternative parameters other than 'batonpass'."};
-					}
-				}
 				for (const move in mod.data.Moves) {
 					const moveData = mod.moves.get(move);
-					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
+					if (moveData.selfSwitch && moveData.id !== 'batonpass') {
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
@@ -873,8 +859,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			const inequality = target.search(/>|<|=/);
