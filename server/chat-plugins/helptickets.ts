@@ -805,7 +805,6 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += `<br /><strong>Reported user:</strong> ${reportUserid} `;
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br /><br />`;
 			const replayString = replays.map(u => `https://${Config.routes.client}/${u}`).join(', ');
-			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
 				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`
