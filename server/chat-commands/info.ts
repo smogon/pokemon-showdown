@@ -179,11 +179,11 @@ export const commands: Chat.ChatCommands = {
 		if (canViewPunishments) {
 			if (targetUser.namelocked) {
 				buf += `<br />NAMELOCKED: ${targetUser.namelocked}`;
-				const punishment = Punishments.userids.get(targetUser.locked!);
+				const punishment = Punishments.userids.getByType(targetUser.locked!, 'NAMELOCK');
 				if (punishment) {
 					const expiresIn = Punishments.checkLockExpiration(targetUser.locked);
 					if (expiresIn) buf += expiresIn;
-					if (punishment[3]) buf += Utils.html` (reason: ${punishment[3]})`;
+					if (punishment.reason) buf += Utils.html` (reason: ${punishment.reason})`;
 				}
 			} else if (targetUser.locked) {
 				buf += `<br />LOCKED: ${targetUser.locked}`;
@@ -195,11 +195,11 @@ export const commands: Chat.ChatCommands = {
 					buf += ` - host is permanently locked for being a proxy`;
 					break;
 				}
-				const punishment = Punishments.userids.get(targetUser.locked);
+				const punishment = Punishments.userids.getByType(targetUser.locked, 'LOCK');
 				if (punishment) {
 					const expiresIn = Punishments.checkLockExpiration(targetUser.locked);
 					if (expiresIn) buf += expiresIn;
-					if (punishment[3]) buf += Utils.html` (reason: ${punishment[3]})`;
+					if (punishment.reason) buf += Utils.html` (reason: ${punishment.reason})`;
 				}
 			}
 
