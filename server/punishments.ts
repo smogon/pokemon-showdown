@@ -544,7 +544,7 @@ export const Punishments = new class {
 			return Punishments.punishName(user, punishment);
 		}
 
-		Punishments.checkInteractions(user.getLastID(), punishment);
+		Punishments.checkInteractions(user.getLastId(), punishment);
 
 		if (!punishment.id) punishment.id = user.getLastId();
 
