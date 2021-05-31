@@ -337,7 +337,7 @@ export const commands: ChatCommands = {
 		stop(target, room, user) {
 			checkAllowed(this);
 			let count = 0;
-			const running = PMTraining.processes.filter(p => p.load > 0);
+			const running = PMTraining.processes.filter(p => p.getLoad() > 0);
 			if (!running.length) {
 				return this.errorReply(`No train tasks are pending`);
 			}
