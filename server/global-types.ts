@@ -24,9 +24,9 @@ namespace Chat {
 	export type PunishmentFilter = import('./chat').PunishmentFilter;
 	export type FilterWord = import('./chat').FilterWord;
 	export type CRQHandler = import('./chat').CRQHandler;
-	export type RoomCloseHandler = import('./chat').RoomCloseHandler;
 	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 	export type AnnotatedChatHandler = import('./chat').AnnotatedChatHandler;
+	export type Handlers = import('./chat').Handlers;
 }
 
 // Rooms
@@ -53,7 +53,6 @@ namespace Rooms {
 	export type RoomBattle = import('./room-battle').RoomBattle;
 	export type Roomlog = import('./roomlogs').Roomlog;
 	export type Room = import('./rooms').Room;
-	export type RenameHandler = import('./rooms').RenameHandler;
 }
 
 // Streams

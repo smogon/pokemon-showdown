@@ -15,14 +15,14 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Poke
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
-	readonly effectType: 'Ability';
+	declare readonly effectType: 'Ability';
 
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
 	readonly suppressWeather: boolean;
-	readonly condition?: ConditionData;
-	readonly isPermanent?: boolean;
-	readonly isBreakable?: boolean;
+	declare readonly condition?: ConditionData;
+	declare readonly isPermanent?: boolean;
+	declare readonly isBreakable?: boolean;
 
 	constructor(data: AnyObject) {
 		super(data);

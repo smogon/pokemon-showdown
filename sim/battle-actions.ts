@@ -545,7 +545,7 @@ export class BattleActions {
 			return hitResult === this.battle.NOT_FAIL;
 		}
 
-		let atLeastOneFailure!: boolean;
+		let atLeastOneFailure = false;
 		for (const step of moveSteps) {
 			const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, targets, pokemon, move);
 			if (!hitResults) continue;

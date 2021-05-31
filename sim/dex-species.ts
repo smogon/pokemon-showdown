@@ -51,19 +51,19 @@ export interface LearnsetData {
 export type ModdedLearnsetData = LearnsetData & {inherit?: true};
 
 export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
-	readonly effectType: 'Pokemon';
+	declare readonly effectType: 'Pokemon';
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
 	 * 'basculinbluestriped'. To get the base species ID, you need to
 	 * manually read toID(species.baseSpecies).
 	 */
-	readonly id!: ID;
+	declare readonly id: ID;
 	/**
 	 * Name. Note that this is the full name with forme,
 	 * e.g. 'Basculin-Blue-Striped'. To get the name without forme, see
 	 * `species.baseSpecies`.
 	 */
-	readonly name!: string;
+	declare readonly name: string;
 	/**
 	 * Base species. Species, but without the forme name.
 	 *
@@ -122,7 +122,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly abilities: SpeciesAbility;
 	/** Types. */
 	readonly types: string[];
-	/** Added type (used in OMs). */
+	/** Added type (added by Trick-Or-Treat or Forest's Curse, but only listed in species by OMs). */
 	readonly addedType?: string;
 	/** Pre-evolution. '' if nothing evolves into this Pokemon. */
 	readonly prevo: string;
@@ -130,9 +130,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly evos: string[];
 	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
 	/** Evolution condition. falsy if doesn't evolve. */
-	readonly evoCondition?: string;
+	declare readonly evoCondition?: string;
 	/** Evolution item. falsy if doesn't evolve. */
-	readonly evoItem?: string;
+	declare readonly evoItem?: string;
 	/** Evolution move. falsy if doesn't evolve. */
 	readonly evoMove?: string;
 	/** Evolution level. falsy if doesn't evolve. */
@@ -178,7 +178,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** True if a pokemon is mega. */
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */
-	readonly isPrimal?: boolean;
+	declare readonly isPrimal?: boolean;
 	/** Name of its Gigantamax move, if a pokemon is capable of gigantamaxing. */
 	readonly canGigantamax?: string;
 	/** If this Pokemon can gigantamax, is its gigantamax released? */
@@ -190,9 +190,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** Required item. Do not use this directly; see requiredItems. */
 	readonly requiredItem?: string;
 	/** Required move. Move required to use this forme in-battle. */
-	readonly requiredMove?: string;
+	declare readonly requiredMove?: string;
 	/** Required ability. Ability required to use this forme in-battle. */
-	readonly requiredAbility?: string;
+	declare readonly requiredAbility?: string;
 	/**
 	 * Required items. Items required to be in this forme, e.g. a mega
 	 * stone, or Griseous Orb. Array because Arceus formes can hold
@@ -219,14 +219,14 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
 	 */
 	readonly doublesTier: TierTypes.Doubles | TierTypes.Other;
-	readonly randomBattleMoves?: readonly ID[];
-	readonly randomBattleLevel?: number;
-	readonly randomDoubleBattleMoves?: readonly ID[];
-	readonly randomDoubleBattleLevel?: number;
-	readonly randomBattleNoDynamaxMoves?: readonly ID[];
-	readonly exclusiveMoves?: readonly ID[];
-	readonly comboMoves?: readonly ID[];
-	readonly essentialMove?: ID;
+	declare readonly randomBattleMoves?: readonly ID[];
+	declare readonly randomBattleLevel?: number;
+	declare readonly randomDoubleBattleMoves?: readonly ID[];
+	declare readonly randomDoubleBattleLevel?: number;
+	declare readonly randomBattleNoDynamaxMoves?: readonly ID[];
+	declare readonly exclusiveMoves?: readonly ID[];
+	declare readonly comboMoves?: readonly ID[];
+	declare readonly essentialMove?: ID;
 
 	constructor(data: AnyObject) {
 		super(data);

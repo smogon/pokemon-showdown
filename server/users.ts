@@ -259,7 +259,7 @@ export class Connection {
 		this.openPages = null;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
+		if (roomid && typeof roomid !== 'string') roomid = roomid.roomid;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
@@ -488,7 +488,7 @@ export class User extends Chat.MessageContext {
 	}
 
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
+		if (roomid && typeof roomid !== 'string') roomid = roomid.roomid;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
@@ -945,9 +945,7 @@ export class User extends Chat.MessageContext {
 			oldUser.locked !== oldUser.id &&
 			this.locked !== this.id &&
 			// Only unlock if no previous names are locked
-			!oldUser.previousIDs.some(id => !!Punishments.search(id)
-				.filter(punishment => punishment[2][0] === 'LOCK' && punishment[2][1] === id)
-				.length)
+			!oldUser.previousIDs.some(id => !!Punishments.hasPunishType(id, 'LOCK'))
 		) {
 			this.locked = null;
 			this.destroyPunishmentTimer();
