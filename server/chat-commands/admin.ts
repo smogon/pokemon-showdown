@@ -1249,7 +1249,7 @@ export const commands: Chat.ChatCommands = {
 			this.broadcastToRoom = true;
 		}
 		const generateHTML = (direction: string, contents: string) => (
-			`<table class="debug" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">` +
+			`<table class="debug" style="overflow:auto; max-height:20em;" border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">` +
 				Utils.escapeHTML(direction).repeat(2) +
 				`&nbsp;</td><td>${Chat.getReadmoreCodeBlock(contents)}</td></tr><table>`
 		);
