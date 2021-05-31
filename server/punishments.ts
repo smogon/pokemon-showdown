@@ -544,9 +544,9 @@ export const Punishments = new class {
 			return Punishments.punishName(user, punishment);
 		}
 
-		Punishments.checkInteractions((user as User).getLastID() || user as ID, punishment);
+		Punishments.checkInteractions(user.getLastID(), punishment);
 
-		if (!punishment.id) punishment.id = (user as User).getLastId();
+		if (!punishment.id) punishment.id = user.getLastId();
 
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
@@ -694,7 +694,7 @@ export const Punishments = new class {
 			return Punishments.roomPunishName(room, user, punishment);
 		}
 
-		if (!punishment.id) punishment.id = (user as User).getLastId();
+		if (!punishment.id) punishment.id = user.getLastId();
 
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		const userids = new Set<ID>();
