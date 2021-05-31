@@ -1149,7 +1149,8 @@ export class RandomTeams {
 			// Special case for Xurkitree to properly split Blunder Policy and Choice item sets
 			return {cull: moves.has('voltswitch')};
 		case 'willowisp': case 'yawn':
-			return {cull: moves.has('thunderwave') || moves.has('toxic')};
+			// Swords Dance is a special case for Rapidash
+			return {cull: moves.has('thunderwave') || moves.has('toxic') || moves.has('swordsdance')};
 		case 'painsplit': case 'recover': case 'synthesis':
 			return {cull: moves.has('rest') || moves.has('wish') || (move.id === 'synthesis' && moves.has('gigadrain'))};
 		case 'roost':

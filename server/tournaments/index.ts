@@ -352,7 +352,7 @@ export class Tournament extends Rooms.RoomGame {
 	}
 
 	static checkBanned(room: Room, user: User | string) {
-		return Punishments.getRoomPunishType(room, toID(user)) === 'TOURBAN';
+		return Punishments.hasRoomPunishType(room, toID(user), 'TOURBAN');
 	}
 
 	removeBannedUser(userid: User | ID) {
@@ -865,6 +865,8 @@ export class Tournament extends Rooms.RoomGame {
 			}
 		}
 		if (!this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
+
+		if (output) output.sendReply("All available matches were checked for automatic disqualification.");
 	}
 
 	setScouting(allowed: boolean) {
@@ -1349,8 +1351,12 @@ const commands: Chat.ChatCommands = {
 
 			if (Tournament.checkBanned(room, targetUser)) return this.errorReply("This user is already banned from tournaments.");
 
-			const punishment: [string, ID, number, string] =
-				['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
+			const punishment = {
+				type: 'TOURBAN',
+				id: targetUserid,
+				expireTime: Date.now() + TOURBAN_DURATION,
+				reason,
+			};
 			if (targetUser) {
 				Punishments.roomPunish(room, targetUser, punishment);
 			} else {

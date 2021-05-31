@@ -713,7 +713,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('ban', targetUser, room);
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to ban upper staff members.");
-		if (Punishments.getRoomPunishType(room, targetUsername) === 'BLACKLIST') {
+		if (Punishments.hasRoomPunishType(room, toID(targetUsername), 'BLACKLIST')) {
 			return this.errorReply(`This user is already blacklisted from ${room.roomid}.`);
 		}
 		const name = targetUser.getLastName();
@@ -871,7 +871,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		this.globalModlog(
-			(week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, privateReason
+			(force ? `FORCE` : ``) + (week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, privateReason
 		);
 
 		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
@@ -953,9 +953,9 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('lock');
 
 		const userid = toID(target);
-		const punishment = Punishments.userids.get(userid);
+		const punishment = Punishments.userids.getByType(userid, 'LOCK');
 		if (!punishment) return this.errorReply("This name isn't locked.");
-		if (punishment[1] === userid) {
+		if (punishment.id === userid) {
 			return this.errorReply(`"${userid}" was specifically locked by a staff member (check the global modlog). Use /unlock if you really want to unlock this name.`);
 		}
 		Punishments.userids.delete(userid);
@@ -1095,7 +1095,7 @@ export const commands: Chat.ChatCommands = {
 			toID(inputUsername),
 		]);
 
-		this.globalModlog("BAN", targetUser, privateReason);
+		this.globalModlog(`${force ? `FORCE` : ''}BAN`, targetUser, privateReason);
 		return true;
 	},
 	globalbanhelp: [
@@ -1159,8 +1159,8 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('rangeban');
 		const ipDesc = `IP ${(ip.endsWith('*') ? `range ` : ``)}${ip}`;
 
-		const curPunishment = Punishments.ipSearch(ip);
-		if (curPunishment && curPunishment[0] === 'BAN') {
+		const curPunishment = Punishments.ipSearch(ip, 'BAN');
+		if (curPunishment?.type === 'BAN') {
 			return this.errorReply(`The ${ipDesc} is already temporarily banned.`);
 		}
 		Punishments.banRange(ip, reason);
@@ -1201,9 +1201,9 @@ export const commands: Chat.ChatCommands = {
 		const ipDesc = ip.endsWith('*') ? `IP range ${ip}` : `IP ${ip}`;
 
 		const year = cmd === 'yearlockip';
-		const curPunishment = Punishments.ipSearch(ip);
-		if (!year && curPunishment && (curPunishment[0] === 'BAN' || curPunishment[0] === 'LOCK')) {
-			const punishDesc = curPunishment[0] === 'BAN' ? `temporarily banned` : `temporarily locked`;
+		const curPunishment = Punishments.byWeight(Punishments.ipSearch(ip) || [])[0];
+		if (!year && curPunishment && (curPunishment.type === 'BAN' || curPunishment.type === 'LOCK')) {
+			const punishDesc = curPunishment.type === 'BAN' ? `temporarily banned` : `temporarily locked`;
 			return this.errorReply(`The ${ipDesc} is already ${punishDesc}.`);
 		}
 
@@ -1396,7 +1396,7 @@ export const commands: Chat.ChatCommands = {
 		const demoting = cmd === 'desectionleader';
 		if (!target || (target.split(',').length < 2 && !demoting)) return this.parse(`/help sectionleader`);
 
-		const {targetUser, targetUsername, rest: sectionid} = this.splitUser(target);
+		const {targetUser, targetUsername, rest: sectionid} = this.splitUser(target, {exactName: true});
 		const userid = toID(targetUsername);
 		const section = demoting ? Users.globalAuth.sectionLeaders.get(userid)! : room.validateSection(sectionid);
 		const name = targetUser ? targetUser.name : targetUsername;
@@ -1698,7 +1698,7 @@ export const commands: Chat.ChatCommands = {
 		const {privateReason, publicReason} = this.parseSpoiler(reason);
 		const reasonText = publicReason ? ` (${publicReason})` : `.`;
 		this.privateGlobalModAction(`${targetUser?.name || userid} was ${week ? 'week' : ''}namelocked by ${user.name}${reasonText}`);
-		this.globalModlog(`${week ? 'WEEK' : ""}NAMELOCK`, targetUser || userid, privateReason);
+		this.globalModlog(`${force ? `FORCE` : ``}${week ? 'WEEK' : ""}NAMELOCK`, targetUser || userid, privateReason);
 
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);
 		if (roomauth.length) {
@@ -1772,7 +1772,7 @@ export const commands: Chat.ChatCommands = {
 		if (/^[0-9]+\s*(,|$)/.test(reason)) {
 			if (hasLineCount) {
 				let lineCountString;
-				[lineCountString, reason] = Utils.splitFirst(reason, ',');
+				[lineCountString, reason] = Utils.splitFirst(reason, ',').map(p => p.trim());
 				lineCount = parseInt(lineCountString);
 			} else if (!cmd.includes('force')) {
 				return this.errorReply(`Your reason was a number; use /hidelines if you wanted to clear a specific number of lines, or /forcehidetext if you really wanted your reason to be a number.`);
@@ -1851,7 +1851,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`This room is not going to last long enough for a blacklist to matter - just ban the user`);
 		}
 		const punishment = Punishments.isRoomBanned(targetUser, room.roomid);
-		if (punishment && punishment[0] === 'BLACKLIST') {
+		if (punishment && punishment.type === 'BLACKLIST') {
 			return this.errorReply(`This user is already blacklisted from this room.`);
 		}
 		const force = cmd === 'forceblacklist' || cmd === 'forcebl';
@@ -2085,7 +2085,7 @@ export const commands: Chat.ChatCommands = {
 
 		const duplicates = targets.filter(userid => (
 			// can be asserted, room should always exist
-			Punishments.roomUserids.nestedGet(room!.roomid, userid)?.[0] === 'BLACKLIST'
+			Punishments.roomUserids.nestedGetByType(room!.roomid, userid, 'BLACKLIST')
 		));
 		if (duplicates.length) {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
@@ -2177,11 +2177,13 @@ export const commands: Chat.ChatCommands = {
 		const blMap = new Map<ID | PunishType, any[]>();
 		let ips = '';
 
-		for (const [userid, punishment] of roomUserids) {
-			const [punishType, id, expireTime] = punishment;
-			if (punishType === 'BLACKLIST') {
-				if (!blMap.has(id)) blMap.set(id, [expireTime]);
-				if (id !== userid) blMap.get(id)!.push(userid);
+		for (const [userid, punishmentList] of roomUserids) {
+			for (const punishment of punishmentList) {
+				const {type, id, expireTime} = punishment;
+				if (type === 'BLACKLIST') {
+					if (!blMap.has(id)) blMap.set(id, [expireTime]);
+					if (id !== userid) blMap.get(id)!.push(userid);
+				}
 			}
 		}
 
@@ -2190,11 +2192,13 @@ export const commands: Chat.ChatCommands = {
 
 			if (roomIps) {
 				ips = '/ips';
-				for (const [ip, punishment] of roomIps) {
-					const [punishType, id] = punishment;
-					if (punishType === 'BLACKLIST') {
-						if (!blMap.has(id)) blMap.set(id, []);
-						blMap.get(id)!.push(ip);
+				for (const [ip, punishments] of roomIps) {
+					for (const punishment of punishments) {
+						const {type, id} = punishment;
+						if (type === 'BLACKLIST') {
+							if (!blMap.has(id)) blMap.set(id, []);
+							blMap.get(id)!.push(ip);
+						}
 					}
 				}
 			}

@@ -50,6 +50,7 @@ type Direction = 'less' | 'greater' | 'equal';
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
+const MAX_RANDOM_RESULTS = 30;
 const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 
 function escapeHTML(str?: string) {
@@ -176,7 +177,9 @@ export const commands: Chat.ChatCommands = {
 			if (Number.isInteger(num)) {
 				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon Moves once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
+				if (qty < 1 || MAX_RANDOM_RESULTS < qty) {
+					throw new Chat.ErrorMessage(`Number of random Pok\u00e9mon Moves must be between 1 and ${MAX_RANDOM_RESULTS}.`);
+				}
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -221,7 +224,9 @@ export const commands: Chat.ChatCommands = {
 			if (Number.isInteger(num)) {
 				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon must be between 1 and 15.");
+				if (qty < 1 || MAX_RANDOM_RESULTS < qty) {
+					throw new Chat.ErrorMessage(`Number of random Pok\u00e9mon must be between 1 and ${MAX_RANDOM_RESULTS}.`);
+				}
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -735,7 +740,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'recovery') {
-				if (parameters.length > 1) return {error: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"healorder", "junglehealing", "lifedew", "milkdrink", "moonlight", "morningsun", "recover",
 					"roost", "shoreup", "slackoff", "softboiled", "strengthsap", "synthesis", "wish",
@@ -751,12 +755,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[move] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'zrecovery') {
-				if (parameters.length > 1) return {error: "The parameter 'zrecovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"aromatherapy", "bellydrum", "conversion2", "haze", "healbell", "mist",
 					"psychup", "refresh", "spite", "stockpile", "teleport", "transform",
@@ -772,12 +774,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[moveid] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'priority') {
-				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
 				for (const moveid in mod.data.Moves) {
 					const move = mod.moves.get(moveid);
 					if (move.category === "Status" || move.id === "bide") continue;
@@ -793,8 +793,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target.substr(0, 8) === 'resists ') {
@@ -846,17 +845,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'pivot') {
-				let includeBatonPass = false;
-				if (parameters.length > 1) {
-					if (parameters[1].trim().toLowerCase() === 'batonpass') {
-						includeBatonPass = true;
-					} else {
-						return {error: "The parameter 'pivot' cannot have alternative parameters other than 'batonpass'."};
-					}
-				}
 				for (const move in mod.data.Moves) {
 					const moveData = mod.moves.get(move);
-					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
+					if (moveData.selfSwitch && moveData.id !== 'batonpass') {
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
@@ -868,8 +859,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			const inequality = target.search(/>|<|=/);
@@ -1192,7 +1182,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
@@ -1917,7 +1907,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}

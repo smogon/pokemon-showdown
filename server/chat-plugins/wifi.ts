@@ -108,11 +108,16 @@ class Giveaway {
 	}
 
 	static checkBanned(room: Room, user: User) {
-		return Punishments.getRoomPunishType(room, toID(user)) === 'GIVEAWAYBAN';
+		return Punishments.hasRoomPunishType(room, toID(user), 'GIVEAWAYBAN');
 	}
 
 	static ban(room: Room, user: User, reason: string) {
-		Punishments.roomPunish(room, user, ['GIVEAWAYBAN', toID(user), Date.now() + BAN_DURATION, reason]);
+		Punishments.roomPunish(room, user, {
+			type: 'GIVEAWAYBAN',
+			id: toID(user),
+			expireTime: Date.now() + BAN_DURATION,
+			reason,
+		});
 	}
 
 	static unban(room: Room, user: User) {
@@ -848,8 +853,8 @@ const cmds: Chat.ChatCommands = {
 		if (reason.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		if (Punishments.getRoomPunishType(room, targetUser.name)) {
-			return this.errorReply(`User '${targetUser.name}' is already punished in this room.`);
+		if (Punishments.hasRoomPunishType(room, targetUser.name, 'GIVEAWAYBAN')) {
+			return this.errorReply(`User '${targetUser.name}' is already giveawaybanned.`);
 		}
 
 		Giveaway.ban(room, targetUser, reason);

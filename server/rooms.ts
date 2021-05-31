@@ -134,7 +134,6 @@ export interface RoomSettings {
 }
 
 export type MessageHandler = (room: BasicRoom, message: string) => void;
-export type RenameHandler = (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
 export type Room = GameRoom | ChatRoom;
 
 import type {AnnouncementData} from './chat-plugins/announcements';
@@ -1704,7 +1703,7 @@ export class ChatRoom extends BasicRoom {
 }
 
 export class GameRoom extends BasicRoom {
-	readonly type: 'battle';
+	declare readonly type: 'battle';
 	readonly format: string;
 	p1: User | null;
 	p2: User | null;
@@ -1715,10 +1714,9 @@ export class GameRoom extends BasicRoom {
 	 * 0 for unrated battles. 1 for unknown ratings.
 	 */
 	rated: number;
-	battle: RoomBattle | null;
-	game: RoomGame;
+	declare battle: RoomBattle | null;
+	declare game: RoomGame;
 	modchatUser: string;
-	active: boolean;
 	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
