@@ -43,7 +43,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	finals: boolean;
 	gameNumber: number;
 
-	constructor(room: Room, user: User, categoryCount: number, questionCount: number) {
+	constructor(room: Room, user: User, categoryCount: number, questionCount: number, playerCap: number) {
 		super(room);
 		this.gameNumber = room.nextGameNumber();
 		this.playerTable = Object.create(null);
@@ -61,7 +61,7 @@ export class Jeopardy extends Rooms.RoomGame {
 		this.questionCount = questionCount;
 		this.round = 1;
 		this.points = new Map();
-		this.playerCap = 3;
+		this.playerCap = playerCap;
 		this.canBuzz = false;
 		this.numUpdates = 0;
 		this.finalCategory = "";
@@ -603,8 +603,13 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.checkCan('minigame', null, room);
 			const params = target.split(",");
-			const categoryCount = parseInt(params[0]) || MAX_CATEGORY_COUNT;
-			const questionCount = parseInt(params[1]) || MAX_QUESTION_COUNT;
+			const playerCap = parseInt(params[0]);
+			if (isNaN(playerCap) || playerCap <= 1) {
+				return this.errorReply(`The player cap must be a number above 1.`);
+			}
+
+			const categoryCount = parseInt(params[1]);
+			const questionCount = parseInt(params[2]);
 			if (categoryCount > MAX_CATEGORY_COUNT) {
 				return this.sendReply(`A match with more than ${MAX_CATEGORY_COUNT} categories cannot be created.`);
 			}
@@ -613,9 +618,9 @@ export const commands: Chat.ChatCommands = {
 					`A match with more than ${MAX_QUESTION_COUNT} questions per category cannot be created.`
 				);
 			}
-			room.game = new Jeopardy(room, user, categoryCount, questionCount);
-			this.privateModAction(`A new game of Jeopardy was started by ${user.name}`);
-			this.modlog('JEOPARDY');
+			room.game = new Jeopardy(room, user, categoryCount, questionCount, playerCap);
+			this.privateModAction(`${user.name} started a new game of Jeopardy.`);
+			this.modlog('JEOPARDY', null, `maximum of ${playerCap} players, ${categoryCount} categories, and ${questionCount} questions`);
 		},
 
 		categories(target, room, user) {
@@ -685,6 +690,11 @@ export const commands: Chat.ChatCommands = {
 				catStart = 'finals';
 				params.splice(0, 1);
 			} else {
+				// TODO: use Utils.parseExactInt once #8331 is merged
+				const numberRegex = /^(\s+)?\d+(\s+)?$/;
+				if (!numberRegex.test(params[0]) || !numberRegex.test(params[1])) {
+					return this.errorReply(`You must specify numeric values for Category Number Start and Question Number Start.`);
+				}
 				catStart = parseInt(params[0]);
 				if (catStart) {
 					if (catStart < 1 || catStart > game.categoryCount) {
@@ -706,10 +716,11 @@ export const commands: Chat.ChatCommands = {
 				}
 				params.splice(0, dataStart);
 			}
+			const numberOfQuestions = params.length;
 			game.importQuestions(
 				params, questionStart - 1, (typeof catStart === 'string' ? catStart : catStart - 1)
 			);
-			this.sendReply("Questions have been imported.");
+			this.sendReply(`Imported ${numberOfQuestions} questions.`);
 		},
 
 		dd: 'dailydouble',
@@ -751,18 +762,15 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(game.getQuestion(categoryNumber - 1, questionNumber - 1));
 		},
 
-		addplayer: 'adduser',
-		adduser(target, room, user) {
+		join(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
-			const targetUser = Users.get(target);
-			if (!targetUser) return this.errorReply("User '" + target + "' not found.");
-			if (game.host.id === targetUser.id) return this.errorReply("You can't add yourself to the game.");
-			if (game.addPlayer(targetUser)) {
+			if (game.host.id === user.id) return this.errorReply("You are the host and therefore cannot join the game.");
+			if (game.state !== 'signups') return this.errorReply("This Jeopardy game is not in its signups phase.");
+			if (game.addPlayer(user)) {
 				game.update();
 			} else {
-				this.errorReply("Unable to add '" + target + "' to the game.");
+				this.errorReply("Unable to join the game.");
 			}
 		},
 
@@ -780,12 +788,14 @@ export const commands: Chat.ChatCommands = {
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			game.start();
 		},
-		removeplayer: 'removeuser',
-		removeuser(target, room, user) {
+
+		kick: 'leave',
+		leave(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
-			const targetUser = Users.get(target);
+			const kicking = cmd.includes('kick');
+			if (kicking && user.id !== game.host.id) return this.errorReply("Only the host can kick players.");
+			const targetUser = kicking ? Users.get(target) : user;
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
 			if (game.removePlayer(targetUser)) {
 				game.update();
@@ -853,7 +863,7 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 	jeopardyhelp: [
-		`/jp new [number of categories], [number of questions] - Create a new game of jeopardy as the host. Requires: % @ # &`,
+		`/jp new [player cap], [number of categories], [number of questions] - Host a new game of Jeopardy. Requires: % @ # &`,
 		`/jp end - End the current game of Jeopardy. Requires: % @ # &`,
 		`/jp start - Start the game of Jeopardy. Must be the host.`,
 		`/jp categories [First Category], [Second Category], etc. - Set the categories of the jeopardy game. Must be the host.`,
@@ -864,8 +874,9 @@ export const commands: Chat.ChatCommands = {
 		`/jp correct/incorrect - Mark an answer as correct or incorrect. Must be the host.`,
 		`/jp dailydouble [Category Number], [Question Number] - Set a question to be a daily double. Must be the host.`,
 		`/jp wager [amount] - Wager some money for a daily double or finals. Must be a number or 'all'`,
-		`/jp adduser [User] - Add a user to the game of Jeopardy. Must be the host.`,
-		`/jp removeuser [User] - Remove a user from the game of Jeopardy. Must be the host.`,
+		`/jp join - Join the game of Jeopardy.`,
+		`/jp leave - Leave the game of Jeopardy.`,
+		`/jp kick [User] - Remove a user from the game of Jeopardy. Must be the host.`,
 		`/jp view [Category Number], [Question Number] - View a specific question and answer. Must be the host.`,
 		`/jp subhost [User] - Sub a new host into the game. Must be the host.`,
 		`/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc. - Import questions into the current game of Jeopardy. Must be the host.`,
