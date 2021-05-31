@@ -1843,9 +1843,9 @@ export const Chat = new class {
 			if (!Chat.handlers['RenameRoom']) Chat.handlers['RenameRoom'] = [];
 			Chat.handlers['RenameRoom'].push(plugin.onRenameRoom);
 		}
-		if (plugin.onCloseRoom) {
-			if (!Chat.handlers['CloseRoom']) Chat.handlers['CloseRoom'] = [];
-			Chat.handlers['CloseRoom'].push(plugin.onCloseRoom);
+		if (plugin.onRoomClose) {
+			if (!Chat.handlers['RoomClose']) Chat.handlers['RoomClose'] = [];
+			Chat.handlers['RoomClose'].push(plugin.onRoomClose);
 		}
 		for (const k in plugin.hooks) {
 			const handlerName = k.slice(2);
@@ -1930,7 +1930,7 @@ export const Chat = new class {
 	}
 
 	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
-		Chat.runHandlers('CloseRoom', roomid, user, connection);
+		Chat.runHandlers('RoomClose', roomid, user, connection);
 	}
 
 	/**
