@@ -806,8 +806,15 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br /><br />`;
 			const replayString = replays.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
-			buf += HelpTicket.displayPunishmentList(reportUserid, proofString);
-			buf += HelpTicket.displayPunishmentList(ticket.userid, proofString, 'Punish reporter:');
+			buf += HelpTicket.displayPunishmentList(
+				reportUserid,
+				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`
+			);
+			buf += HelpTicket.displayPunishmentList(
+				ticket.userid,
+				`spoiler:PMs with ${reportUserid}${replayString ? `, ${replayString}` : ''}`,
+				'Punish reporter:'
+			);
 
 			if (replays.length) {
 				const battleLogHTML = await HelpTicket.visualizeBattleLogs(replays);
