@@ -2227,8 +2227,9 @@ export const Chat = new class {
 	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
 		const params = str.slice(+str.startsWith('\n')).split('\n');
 		const output: string[] = [];
-		for (const param of params) {
+		for (const [i, param] of params.entries()) {
 			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
+			if (param.length > cutoff * 160 && i < cutoff) cutoff = i;
 			output.push(Utils[isCode ? 'escapeHTMLForceWrap' : 'escapeHTML'](param));
 		}
 
