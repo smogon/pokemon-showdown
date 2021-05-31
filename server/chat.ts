@@ -2517,7 +2517,7 @@ if (!PM.isParentProcess) {
 	global.Rooms = {
 		RoomGame: proto, MinorActivity: proto,
 		RoomGamePlayer: proto, rooms: new Map(),
-		get: noop, BasicRoom: proto
+		get: noop, BasicRoom: proto,
 	};
 	global.Users = {User: proto};
 	global.IPTools = {stringToRange: noop};
