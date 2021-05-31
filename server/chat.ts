@@ -1847,10 +1847,12 @@ export const Chat = new class {
 			if (!Chat.handlers['RoomClose']) Chat.handlers['RoomClose'] = [];
 			Chat.handlers['RoomClose'].push(plugin.onRoomClose);
 		}
-		for (const k in plugin.hooks) {
-			const handlerName = k.slice(2);
-			if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
-			Chat.handlers[handlerName].push(plugin[k]);
+		if (plugin.handlers) {
+			for (const k in plugin.handlers) {
+				const handlerName = k.slice(2);
+				if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
+				Chat.handlers[handlerName].push(plugin.handlers[k]);
+			}
 		}
 		Chat.plugins[name] = plugin;
 	}
