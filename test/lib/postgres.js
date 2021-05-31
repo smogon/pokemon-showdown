@@ -1,3 +1,4 @@
+"use strict";
 const assert = require('assert').strict;
 const {PostgresDatabase} = require('../../.lib-dist');
 
