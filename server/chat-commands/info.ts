@@ -146,7 +146,8 @@ export const commands: Chat.ChatCommands = {
 
 		if (canViewAlts) {
 			let prevNames = targetUser.previousIDs.map(userid => {
-				const punishments = Punishments.userids.get(userid) || [];
+				const punishments = Punishments.userids.get(userid);
+				if (!punishments) return userid;
 				return punishments.map(
 					punishment => (
 						`${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment.type)?.desc || `punished`}` +
