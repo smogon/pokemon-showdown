@@ -1932,7 +1932,7 @@ export const Chat = new class {
 	}
 
 	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
-		Chat.runHandlers('RoomClose', roomid, user, connection);
+		Chat.runHandlers('RoomClose', roomid, user, connection, roomid.startsWith('view-'));
 	}
 
 	/**
