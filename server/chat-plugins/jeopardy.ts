@@ -203,11 +203,9 @@ export class Jeopardy extends Rooms.RoomGame {
 		this.askQuestion();
 	}
 
-	select(target: string, user: User) {
+	select(target: string) {
 		if (this.state !== 'selecting') throw new Chat.ErrorMessage("The game of Jeopardy is not in the selection phase.");
-		const player = this.playerTable[user.id];
-		if (!player) throw new Chat.ErrorMessage("You are not in the game of Jeopardy.");
-		if (!this.curPlayer || this.curPlayer.id !== user.id) throw new Chat.ErrorMessage("It is not your turn to select.");
+
 		const params = target.split(",");
 		if (params.length < 2) throw new Chat.ErrorMessage("You must specify a row and a column number.");
 		const categoryNumber = parseInt(params[0]);
@@ -543,6 +541,29 @@ export class Jeopardy extends Rooms.RoomGame {
 			}
 		}
 	}
+
+	givePoints(user: User | ID, n: number) {
+		const id = toID(user);
+		if (!(id in this.playerTable)) throw new Chat.ErrorMessage(`'${id}' is not a player in the game of Jeopardy.`);
+		this.playerTable[id].points += n;
+	}
+
+	substitute(original: User, substitute: User) {
+		const originalPlayer = this.playerTable[original.id];
+		if (!originalPlayer) throw new Chat.ErrorMessage(`${original.name} is not a player in the game of Jeopardy.`);
+
+		delete this.playerTable[original.id];
+		this.addPlayer(substitute);
+
+		this.playerTable[substitute.id].answer = originalPlayer.answer;
+		this.playerTable[substitute.id].points = originalPlayer.points;
+		this.playerTable[substitute.id].wager = originalPlayer.wager;
+		this.playerTable[substitute.id].buzzedEarly = originalPlayer.buzzedEarly;
+		this.playerTable[substitute.id].finalAnswer = originalPlayer.finalAnswer;
+		this.playerTable[substitute.id].buzzed = originalPlayer.buzzed;
+
+		this.room.add(`${substitute.name} subbed in for ${original.name}!`);
+	}
 }
 
 class JeopardyGamePlayer extends Rooms.RoomGamePlayer {
@@ -567,6 +588,11 @@ class JeopardyGamePlayer extends Rooms.RoomGamePlayer {
 export const commands: Chat.ChatCommands = {
 	jp: 'jeopardy',
 	jeopardy: {
+		'': 'help',
+		help() {
+			return this.parse("/help jeopardy");
+		},
+
 		off: 'disable',
 		disable(target, room, user) {
 			room = this.requireRoom();
@@ -589,10 +615,6 @@ export const commands: Chat.ChatCommands = {
 			delete room.settings.jeopardyDisabled;
 			room.saveSettings();
 			return this.sendReply("Jeopardy has been enabled for this room.");
-		},
-
-		help(target, room, user) {
-			return this.parse("/help jeopardy");
 		},
 
 		create: 'new',
@@ -656,7 +678,8 @@ export const commands: Chat.ChatCommands = {
 		select(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			game.select(target, user);
+			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
+			game.select(target);
 		},
 
 		buzz(target, room, user) {
@@ -815,6 +838,20 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`${targetUser.name} has subbed in as the host.`);
 		},
 
+		subplayer(target, room, user) {
+			room = this.requireRoom();
+			const game = this.requireGame(Jeopardy);
+			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
+
+			const split = target.split(',');
+			if (split.length !== 2) return this.parse(`/help jeopardy`);
+			const [toSubOut, toSubIn] = split.map(u => Users.get(u));
+			if (!toSubOut) return this.errorReply(`User '${target[0]}' not found.`);
+			if (!toSubIn) return this.errorReply(`User '${target[1]}' not found.`);
+
+			game.substitute(toSubOut, toSubIn);
+		},
+
 		state(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
@@ -861,30 +898,52 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(`${user.name} has set the answering window for the final question to ${amount} seconds`);
 			this.modlog('JEOPARDY FINALTIMER', null, `${amount} seconds`);
 		},
+
+		removepoints: 'addpoints',
+		addpoints(target, room, user, connection, cmd) {
+			room = this.requireRoom();
+			if (!target) return this.parse(`/help jeopardy`);
+			const game = this.requireGame(Jeopardy);
+			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
+
+			const [recipient, pointsString] = target.split(',');
+			let points = parseInt(pointsString);
+			if (points <= 0 || isNaN(points)) {
+				return this.errorReply(`You must provide a positive number of points to add/remove.`);
+			}
+			if (cmd.includes('remove')) points *= -1;
+			game.givePoints(toID(recipient), points);
+		},
 	},
-	jeopardyhelp: [
-		`/jp new [player cap], [number of categories], [number of questions] - Host a new game of Jeopardy. Requires: % @ # &`,
-		`/jp end - End the current game of Jeopardy. Requires: % @ # &`,
-		`/jp start - Start the game of Jeopardy. Must be the host.`,
-		`/jp categories [First Category], [Second Category], etc. - Set the categories of the jeopardy game. Must be the host.`,
-		`/jp category [Category Number], [Category Name] - Set a specific category of the jeopardy game. Must be the host.`,
-		`/jp select [Category Number], [Question Number] - Select a question of the Jeopardy game.`,
-		`/jp buzz - Buzz into the current question.`,
-		`/jp answer [answer] - Attempt to answer the current question.`,
-		`/jp correct/incorrect - Mark an answer as correct or incorrect. Must be the host.`,
-		`/jp dailydouble [Category Number], [Question Number] - Set a question to be a daily double. Must be the host.`,
-		`/jp wager [amount] - Wager some money for a daily double or finals. Must be a number or 'all'`,
-		`/jp join - Join the game of Jeopardy.`,
-		`/jp leave - Leave the game of Jeopardy.`,
-		`/jp kick [User] - Remove a user from the game of Jeopardy. Must be the host.`,
-		`/jp view [Category Number], [Question Number] - View a specific question and answer. Must be the host.`,
-		`/jp subhost [User] - Sub a new host into the game. Must be the host.`,
-		`/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc. - Import questions into the current game of Jeopardy. Must be the host.`,
-		`/jp pass - Skip the current question of Jeopardy. Must be the host.`,
-		`/jp state - Check the state of the current Jeopardy game. Must be the host`,
-		`/jp timer [seconds] - Set the answering window after buzzing for questions`,
-		`/jp finaltimer [seconds] - Set the answering window for answering the final question`,
-	],
+	jeopardyhelp() {
+		this.runBroadcast();
+		return this.sendReply(
+			`|html|<details class="readmore"><summary><code>/jp new [player cap], [number of categories], [number of questions]</code>: Host a new game of Jeopardy. Requires: % @ # &<br />` +
+			`<code>/jp join</code>: Join the game of Jeopardy.<br />` +
+			`<code>/jp leave</code>: Leave the game of Jeopardy.<br />` +
+			`<code>/jp buzz</code>: Buzz into the current question.<br />` +
+			`<code>/jp answer [answer]</code>: Attempt to answer the current question.</summary>` +
+			`<code>/jp start</code>: Start the game of Jeopardy. Must be the host.<br />` +
+			`<code>/jp correct/incorrect</code>: Mark an answer as correct or incorrect. Must be the host.<br />` +
+			`<code>/jp categories [First Category], [Second Category], etc.</code>: Set the categories of the jeopardy game. Must be the host.<br />` +
+			`<code>/jp category [Category Number], [Category Name]</code>: Set a specific category of the jeopardy game. Must be the host.<br />` +
+			`<code>/jp select [Category Number], [Question Number]</code>: Select a question of the Jeopardy game.<br />` +
+			`<code>/jp end</code>: End the current game of Jeopardy. Requires: % @ # &<br />` +
+			`<code>/jp dailydouble [Category Number], [Question Number]</code>: Set a question to be a daily double. Must be the host.<br />` +
+			`<code>/jp wager [amount]</code>: Wager some money for a daily double or finals. Must be a number or 'all'<br />` +
+			`<code>/jp kick [User]</code>: Remove a user from the game of Jeopardy. Must be the host.<br />` +
+			`<code>/jp view [Category Number], [Question Number]</code>: View a specific question and answer. Must be the host.<br />` +
+			`<code>/jp subhost [User]</code>: Sub a new host into the game. Must be the host.<br />` +
+			`<code>/jp subplayer [original], [substitute]</code>: Sub a new player into the game. Must be the host.<br />` +
+			`<code>/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc.</code>: Import questions into the current game of Jeopardy. Must be the host.<br />` +
+			`<code>/jp pass</code>: Skip the current question of Jeopardy. Must be the host.<br />` +
+			`<code>/jp state</code>: Check the state of the current Jeopardy game. Must be the host.<br />` +
+			`<code>/jp timer [seconds]</code>: Set the answering window after buzzing for questions<br />` +
+			`<code>/jp finaltimer [seconds]</code>: Set the answering window for answering the final question<br />` +
+			`<code>/jp addpoints [user], [number of points]</code>: Give a player an arbitrary number of points. Must be the host.<br />` +
+			`<code>/jp remove [user], [number of points]</code>: Subtract an arbitrary number of points from a player. Must be the host.</details>`
+		);
+	},
 };
 
 export const roomSettings: Chat.SettingsHandler = room => ({
