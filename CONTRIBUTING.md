@@ -68,13 +68,21 @@ Similar to unnecessary clicks - if a user has a large screen and you show them a
 
 ### D5. Affordances are important
 
+An affordance is a hint for what you're supposed to do. A button looking like a physical button you can click is an example of an affordance. Or a button you can't use not looking clickable.
+
 This is why we depart from flat design: Years of UX research have taught us that it's important for buttons look like buttons. Making clickable things "look 3D and pressable" or underlining them is good practice. We can't always do this (dropdown menus would look pretty ugly if every item was beveled and embossed) but we do what we can.
 
 ### D6. Feedback is important
 
+Users should be shown enough information not to be confused about what's going on.
+
 If a button doesn't react instantly, it should be replaced with a "Loading" screen or some other indication that it's doing something. If something's failed, it should come with an error message so the user knows what's wrong.
 
 There's a famous story of a CEO of a company who clicked the "email everyone" button, but it didn't react, so he clicked it a few more times, accidentally spamming a bunch of users and getting their company marked as spam by a bunch of email services.
+
+This is why we notify for ignored messages once per session. If your friend sends you "here is the code for you to use" and you say "I never got it", there needs to be some way to understand what happened. Options can exist, but options that hide the fact that you turned them on should be avoided.
+
+Part of this overlaps with D5 (buttons that shouldn't be clicked multiple times should be disabled after the first click), but part of this is about not hiding information if it would confuse users. This does conflict with D1 (less is better) a bit, so a useful rule is that if the user has trouble understanding what's going on (e.g. because you replaced some text with a confusing symbol), you've taken D1 too far.
 
 
 Comment standards
