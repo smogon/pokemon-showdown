@@ -75,10 +75,10 @@ export class Pokemon {
 
 	baseSpecies: Species;
 	species: Species;
-	speciesData: EffectState;
+	speciesState: EffectState;
 
 	status: ID;
-	statusData: EffectState;
+	statusState: EffectState;
 	volatiles: {[id: string]: EffectState};
 	showCure?: boolean;
 
@@ -107,10 +107,10 @@ export class Pokemon {
 
 	baseAbility: ID;
 	ability: ID;
-	abilityData: EffectState;
+	abilityState: EffectState;
 
 	item: ID;
-	itemData: EffectState;
+	itemState: EffectState;
 	lastItem: ID;
 	usedItemThisTurn: boolean;
 	ateBerry: boolean;
@@ -290,12 +290,12 @@ export class Pokemon {
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseSpecies.baseSpecies;
 		}
-		this.speciesData = {id: this.species.id};
+		this.speciesState = {id: this.species.id};
 
 		this.name = set.name.substr(0, 20);
 		this.fullname = this.side.id + ': ' + this.name;
 
-		set.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
+		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
 		const genders: {[key: string]: GenderName} = {M: 'M', F: 'F', N: 'N'};
 		this.gender = genders[set.gender] || this.species.gender || (this.battle.random() * 2 < 1 ? 'M' : 'F');
@@ -316,11 +316,13 @@ export class Pokemon {
 				if (!set.hpType) set.hpType = move.type;
 				move = this.battle.dex.moves.get('hiddenpower');
 			}
+			let basepp = (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5;
+			if (this.battle.gen < 3) basepp = Math.min(61, basepp);
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,
-				pp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-				maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+				pp: basepp,
+				maxpp: basepp,
 				target: move.target,
 				disabled: false,
 				disabledSource: '',
@@ -333,7 +335,7 @@ export class Pokemon {
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.status = '';
-		this.statusData = {};
+		this.statusState = {};
 		this.volatiles = {};
 		this.showCure = false;
 
@@ -376,10 +378,10 @@ export class Pokemon {
 
 		this.baseAbility = toID(set.ability);
 		this.ability = this.baseAbility;
-		this.abilityData = {id: this.ability};
+		this.abilityState = {id: this.ability};
 
 		this.item = toID(set.item);
-		this.itemData = {id: this.item};
+		this.itemState = {id: this.item};
 		this.lastItem = '';
 		this.usedItemThisTurn = false;
 		this.ateBerry = false;
@@ -768,7 +770,7 @@ export class Pokemon {
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
-				!pokemon.abilityData.ending) {
+				!pokemon.abilityState.ending) {
 				neutralizinggas = true;
 				break;
 			}
@@ -1521,7 +1523,7 @@ export class Pokemon {
 			}
 		}
 		const prevStatus = this.status;
-		const prevStatusData = this.statusData;
+		const prevStatusState = this.statusState;
 		if (status.id) {
 			const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
 			if (!result) {
@@ -1531,18 +1533,18 @@ export class Pokemon {
 		}
 
 		this.status = status.id;
-		this.statusData = {id: status.id, target: this};
-		if (source) this.statusData.source = source;
-		if (status.duration) this.statusData.duration = status.duration;
+		this.statusState = {id: status.id, target: this};
+		if (source) this.statusState.source = source;
+		if (status.duration) this.statusState.duration = status.duration;
 		if (status.durationCallback) {
-			this.statusData.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
+			this.statusState.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
 
-		if (status.id && !this.battle.singleEvent('Start', status, this.statusData, this, source, sourceEffect)) {
+		if (status.id && !this.battle.singleEvent('Start', status, this.statusState, this, source, sourceEffect)) {
 			this.battle.debug('status start [' + status.id + '] interrupted');
 			// cancel the setstatus
 			this.status = prevStatus;
-			this.statusData = prevStatusData;
+			this.statusState = prevStatusState;
 			return false;
 		}
 		if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
@@ -1575,7 +1577,7 @@ export class Pokemon {
 		) {
 			this.battle.add('-enditem', this, item, '[eat]');
 
-			this.battle.singleEvent('Eat', item, this.itemData, this, source, sourceEffect);
+			this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
 			this.battle.runEvent('EatItem', this, null, null, item);
 
 			if (RESTORATIVE_BERRIES.has(item.id)) {
@@ -1592,7 +1594,7 @@ export class Pokemon {
 
 			this.lastItem = this.item;
 			this.item = '';
-			this.itemData = {id: '', target: this};
+			this.itemState = {id: '', target: this};
 			this.usedItemThisTurn = true;
 			this.ateBerry = true;
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
@@ -1625,11 +1627,11 @@ export class Pokemon {
 				this.battle.boost(item.boosts, this, source, item);
 			}
 
-			this.battle.singleEvent('Use', item, this.itemData, this, source, sourceEffect);
+			this.battle.singleEvent('Use', item, this.itemState, this, source, sourceEffect);
 
 			this.lastItem = this.item;
 			this.item = '';
-			this.itemData = {id: '', target: this};
+			this.itemState = {id: '', target: this};
 			this.usedItemThisTurn = true;
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
@@ -1648,7 +1650,7 @@ export class Pokemon {
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
-			this.itemData = {id: '', target: this};
+			this.itemState = {id: '', target: this};
 			this.pendingStaleness = undefined;
 			return item;
 		}
@@ -1668,9 +1670,9 @@ export class Pokemon {
 			this.pendingStaleness = undefined;
 		}
 		this.item = item.id;
-		this.itemData = {id: item.id, target: this};
+		this.itemState = {id: item.id, target: this};
 		if (item.id) {
-			this.battle.singleEvent('Start', item, this.itemData, this, source, effect);
+			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 		}
 		return true;
 	}
@@ -1698,15 +1700,15 @@ export class Pokemon {
 			if (ability.isPermanent || this.getAbility().isPermanent) return false;
 		}
 		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
-		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityData, this, source);
-		if (this.battle.effect && this.battle.effect.effectType === 'Move') {
+		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
+		if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
 			this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility), '[from] move: ' +
 				this.battle.dex.moves.get(this.battle.effect.id));
 		}
 		this.ability = ability.id;
-		this.abilityData = {id: ability.id, target: this};
+		this.abilityState = {id: ability.id, target: this};
 		if (ability.id && this.battle.gen > 3) {
-			this.battle.singleEvent('Start', ability, this.abilityData, this, source);
+			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
 		this.abilityOrder = this.battle.abilityOrder++;
 		return oldAbility;
@@ -1899,7 +1901,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
-		if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
+		if (this.hasAbility('levitate') && !this.battle.suppressingAbility()) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';

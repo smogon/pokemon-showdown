@@ -44,37 +44,32 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 	return item;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	om: 'othermetas',
 	othermetas(target, room, user) {
-		this.runBroadcast();
 		target = toID(target);
-		let buffer = ``;
+		const omLink = `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
 
-		if (target === 'all' && this.broadcasting) {
-			throw new Chat.ErrorMessage(`You cannot broadcast information about all Other Metagames at once.`);
+		if (!target) {
+			this.runBroadcast();
+			return this.sendReplyBox(omLink);
 		}
-
-		if (!target || target === 'all') {
-			buffer += `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
-			if (!target) return this.sendReplyBox(buffer);
-		}
-		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'month');
 
 		if (target === 'all') {
+			this.runBroadcast();
+			if (this.broadcasting) {
+				throw new Chat.ErrorMessage(`"!om all" is too spammy to broadcast.`);
+			}
 			// Display OMotM formats, with forum thread links as caption
 			this.parse(`/formathelp omofthemonth`);
 
 			// Display the rest of OM formats, with OM hub/index forum links as caption
 			this.parse(`/formathelp othermetagames`);
-			return this.sendReply(`|raw|<center>${buffer}</center>`);
+			return this.sendReply(`|raw|<center>${omLink}</center>`);
 		}
-		if (showMonthly) {
-			this.target = 'omofthemonth';
-			this.run('formathelp');
-		} else {
-			this.run('formathelp');
-		}
+
+		if (target === 'month') this.target = 'omofthemonth';
+		this.run('formathelp');
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
@@ -171,10 +166,9 @@ export const commands: ChatCommands = {
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedSpecies)}`);
-		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
-		}).join("&nbsp;|&ThickSpace;") + '</font>');
+		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	mixandmegahelp: [
 		`/mnm <pokemon> @ <mega stone>[, generation] - Shows the Mix and Mega evolved Pok\u00e9mon's type and stats.`,
@@ -607,10 +601,9 @@ export const commands: ChatCommands = {
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedSpecies)}`);
-		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
-		}).join("&nbsp;|&ThickSpace;") + '</font>');
+		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	crossevolvehelp: [
 		"/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pok\u00e9mon.",

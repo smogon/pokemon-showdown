@@ -65,7 +65,7 @@ function getScavsRoom(room?: Room) {
 
 class Ladder {
 	file: string;
-	data: AnyObject;
+	data: {[userid: string]: AnyObject};
 	constructor(file: string) {
 		this.file = file;
 		this.data = {};
@@ -101,26 +101,27 @@ class Ladder {
 		FS(this.file).writeUpdate(() => JSON.stringify(this.data));
 	}
 
+	visualize(sortBy: string): Promise<({rank: number} & AnyObject)[]>;
+	visualize(sortBy: string, userid: ID): Promise<({rank: number} & AnyObject) | undefined>;
 	visualize(sortBy: string, userid?: ID) {
 		// return a promise for async sorting - make this less exploitable
 		return new Promise((resolve, reject) => {
 			let lowestScore = Infinity;
 			let lastPlacement = 1;
 
-			const ladder: AnyObject[] = Object.keys(this.data)
-				.filter(k => this.data[k][sortBy])
-				.sort((a, b) => this.data[b][sortBy] - this.data[a][sortBy])
-				.map((u, i) => {
-					const chunk = this.data[u];
-					if (chunk[sortBy] !== lowestScore) {
-						lowestScore = chunk[sortBy];
-						lastPlacement = i + 1;
-					}
-					return {
-						rank: lastPlacement,
-						...chunk,
-					};
-				}); // identify ties
+			const ladder = Utils.sortBy(
+				Object.entries(this.data).filter(([u, bit]) => sortBy in bit),
+				([u, bit]) => -bit[sortBy]
+			).map(([u, chunk], i) => {
+				if (chunk[sortBy] !== lowestScore) {
+					lowestScore = chunk[sortBy];
+					lastPlacement = i + 1;
+				}
+				return {
+					rank: lastPlacement,
+					...chunk,
+				} as {rank: number} & AnyObject;
+			}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
@@ -525,18 +526,16 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	// returns whether or not the next action should be stopped
 	runEvent(event_id: string, ...args: any[]) {
-		let events = this.mods['on' + event_id];
+		const events = this.mods['on' + event_id];
 		if (!events) return;
 
-		events = events.sort((a, b) => b.priority - a.priority);
+		Utils.sortBy(events, event => -event.priority);
 		let result = undefined;
 
-		if (events) {
-			for (const event of events) {
-				const subResult = event.exec.call(this, ...args) as any;
-				if (subResult === true) return true;
-				result = subResult;
-			}
+		for (const event of events) {
+			const subResult = event.exec.call(this, ...args) as any;
+			if (subResult === true) return true;
+			result = subResult;
 		}
 
 		return result === false ? true : result;
@@ -736,7 +735,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		if (!reset) {
 			const sliceIndex = this.gameType === 'official' ? 5 : 3;
 
-			const hosts = Utils.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)));
+			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
 
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
@@ -1037,7 +1036,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-const ScavengerCommands: ChatCommands = {
+const ScavengerCommands: Chat.ChatCommands = {
 	/**
 	 * Player commands
 	 */
@@ -1431,7 +1430,7 @@ const ScavengerCommands: ChatCommands = {
 
 		const elapsedMsg = Chat.toDurationString(Date.now() - game.startTime, {hhmmss: true});
 		const gameTypeMsg = game.gameType ? `<em>${game.gameType}</em> ` : '';
-		const hostersMsg = Chat.toListString(game.hosts.map(h => h.name));
+		const hostersMsg = Utils.escapeHTML(Chat.toListString(game.hosts.map(h => h.name)));
 		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ?
 			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
@@ -1873,7 +1872,7 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
-		this.privateModAction(`${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.`);
+		this.privateModAction(`${targetId} was given ${points} points on the current scavengers ladder by ${user.name}.`);
 		this.modlog('SCAV ADDPOINTS', targetId, '' + points);
 	},
 
@@ -1890,7 +1889,7 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
-		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.`);
+		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the current scavengers ladder.`);
 		this.modlog('SCAV REMOVEPOINTS', targetId, '' + points);
 	},
 
@@ -1900,7 +1899,7 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.reset().write();
 
-		this.privateModAction(`${user.name} has reset the monthly scavengers ladder.`);
+		this.privateModAction(`${user.name} has reset the current scavengers ladder.`);
 		this.modlog('SCAV RESETLADDER');
 	},
 	top: 'ladder',
@@ -2141,10 +2140,9 @@ const ScavengerCommands: ChatCommands = {
 		if (!this.runBroadcast()) return false;
 
 		let buffer = `<table><tr><th>Twist</th><th>Description</th></tr>`;
-		buffer += Object.keys(ScavMods.twists).map(twistid => {
-			const twist = ScavMods.twists[twistid];
-			return Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`;
-		}).join('');
+		buffer += Object.values(ScavMods.twists).map(twist => (
+			Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`
+		)).join('');
 		buffer += `</table>`;
 
 		this.sendReply(`|raw|<div class="ladder infobox-limited">${buffer}</div>`);
@@ -2434,7 +2432,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	recycledHunts(query, user, connection) {
 		this.title = 'Recycled Hunts';
 		const room = this.requireRoom();
@@ -2476,7 +2474,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	// general
 	scav: 'scavengers',
 	scavengers: ScavengerCommands,
@@ -2552,8 +2550,8 @@ export const commands: ChatCommands = {
 			"- /scavengerstatus  (or /scav status): Check your status in the current hunt.",
 			"- /scavengers queue (or /scav queue): Showcase the hunts currently in queue, with the answers hidden for any hunt that is not yours.",
 			"- /scavengerhint (or /scav hint): View your latest hint in the current game.",
-			"- /scavladder (or /scav top): View the current bimonthly scavengers leaderboard.",
-			"- /scavrank <em>[user]</em>: View the rank of the user on the monthly scavenger leaderboard. Defaults to the user if no name is provided.",
+			"- /scavladder (or /scav top): View the current scavengers leaderboard.",
+			"- /scavrank <em>[user]</em>: View the rank of the user on the current scavenger leaderboard. Defaults to the user if no name is provided.",
 			"For a more in-depth overview, use /scavhelp staff.",
 		].join('<br />');
 		const staffCommands = [
@@ -2590,7 +2588,7 @@ export const commands: ChatCommands = {
 			"- /scav queuerecycled <em>[number]</em>: Queue a recycled hunt from the database. If <em>[number]</em> is left blank, then a random hunt is queued.",
 			"- /recycledhuntshelp: give more info about the recycled hunts.",
 			"<br />As a <strong>room owner (#)</strong>, you can also use the following scavengers commands:",
-			"- /scav resetladder: Reset the monthly scavenger leaderboard.",
+			"- /scav resetladder: Reset the current scavenger leaderboard.",
 			"- /scav setpoints <em>[1st place]</em>, <em>[2nd place]</em>, <em>[3rd place]</em>, <em>[4th place]</em>, <em>[5th place]</em>, ...: Set the point values for wins of officials, minis and regular hunts.",
 			"- /scav defaulttimer <em>[value]</em>: Set the default timer applied to automatically started hunts from the queue.",
 			"- /scav setblitz <em>[value]</em> ...: Set the blitz award to the given value.",

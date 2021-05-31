@@ -101,7 +101,7 @@ export class BattleActions {
 			// will definitely switch out at this point
 
 			oldActive.illusion = null;
-			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
+			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
 
 			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
 			this.battle.queue.cancelAction(oldActive);
@@ -141,7 +141,7 @@ export class BattleActions {
 
 		if (isDrag && this.battle.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
-			this.battle.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
+			this.battle.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityState, pokemon);
 			this.runSwitch(pokemon);
 		} else {
 			this.battle.queue.insertChoice({choice: 'runUnnerve', pokemon});
@@ -172,8 +172,8 @@ export class BattleActions {
 		if (!pokemon.hp) return false;
 		pokemon.isStarted = true;
 		if (!pokemon.fainted) {
-			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
-			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
+			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
 		}
 		if (this.battle.gen === 4) {
 			for (const foeActive of pokemon.foes()) {
@@ -276,7 +276,7 @@ export class BattleActions {
 
 		if (zMove) {
 			if (pokemon.illusion) {
-				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityData, pokemon);
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
 			this.battle.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
@@ -313,6 +313,8 @@ export class BattleActions {
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
+		this.battle.faintMessages();
+		this.battle.checkWin();
 	}
 	/**
 	 * useMove is the "inside" move caller. It handles effects of the
@@ -543,7 +545,7 @@ export class BattleActions {
 			return hitResult === this.battle.NOT_FAIL;
 		}
 
-		let atLeastOneFailure!: boolean;
+		let atLeastOneFailure = false;
 		for (const step of moveSteps) {
 			const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, targets, pokemon, move);
 			if (!hitResults) continue;
@@ -894,6 +896,7 @@ export class BattleActions {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
+		this.battle.faintMessages(false, false, !pokemon.hp);
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
@@ -1633,11 +1636,16 @@ export class BattleActions {
 
 		baseDamage += 2;
 
-		// multi-target modifier (doubles only)
 		if (move.spreadHit) {
+			// multi-target modifier (doubles only)
 			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
 			this.battle.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
+		} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
+			// Parental Bond modifier
+			const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
+			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
+			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		}
 
 		// weather modifier
@@ -1703,6 +1711,26 @@ export class BattleActions {
 
 		// ...but 16-bit truncation happens even later, and can truncate to 0
 		return tr(baseDamage, 16);
+	}
+
+	/**
+	 * Confusion damage is unique - most typical modifiers that get run when calculating
+	 * damage (e.g. Huge Power, Life Orb, critical hits) don't apply. It also uses a 16-bit
+	 * context for its damage, unlike the regular damage formula (though this only comes up
+	 * for base damage).
+	 */
+	getConfusionDamage(pokemon: Pokemon, basePower: number) {
+		const tr = this.battle.trunc;
+
+		const attack = pokemon.calculateStat('atk', pokemon.boosts['atk']);
+		const defense = pokemon.calculateStat('def', pokemon.boosts['def']);
+		const level = pokemon.level;
+		const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50) + 2;
+
+		// Damage is 16-bit context in self-hit confusion damage
+		let damage = tr(baseDamage, 16);
+		damage = this.battle.randomizer(damage);
+		return Math.max(1, damage);
 	}
 
 	// #endregion

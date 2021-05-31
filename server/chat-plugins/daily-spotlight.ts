@@ -59,7 +59,7 @@ export async function renderSpotlight(roomid: RoomID, key: string, index: number
 
 export const destroy = () => clearTimeout(timeout);
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async spotlights(query, user, connection) {
 		this.title = 'Daily Spotlights';
 		const room = this.requireRoom();
@@ -82,7 +82,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	removedaily(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
@@ -256,13 +256,15 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
-	if (spotlights[oldID]) {
-		if (!spotlights[newID]) spotlights[newID] = {};
-		Object.assign(spotlights[newID], spotlights[oldID]);
-		delete spotlights[oldID];
-		saveSpotlights();
-	}
+export const handlers: Chat.Handlers = {
+	onRenameRoom(oldID, newID) {
+		if (spotlights[oldID]) {
+			if (!spotlights[newID]) spotlights[newID] = {};
+			Object.assign(spotlights[newID], spotlights[oldID]);
+			delete spotlights[oldID];
+			saveSpotlights();
+		}
+	},
 };
 
 process.nextTick(() => {

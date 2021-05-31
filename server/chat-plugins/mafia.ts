@@ -100,8 +100,8 @@ const VALID_IMAGES = [
 let MafiaData: MafiaData = Object.create(null);
 let logs: MafiaLog = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
 
-Punishments.roomPunishmentTypes.set('MAFIAGAMEBAN', 'banned from playing mafia games');
-Punishments.roomPunishmentTypes.set('MAFIAHOSTBAN', 'banned from hosting mafia games');
+Punishments.addRoomPunishmentType('MAFIAGAMEBAN', 'banned from playing mafia games');
+Punishments.addRoomPunishmentType('MAFIAHOSTBAN', 'banned from hosting mafia games');
 
 const hostQueue: ID[] = [];
 
@@ -153,17 +153,9 @@ for (const section of tables) {
 	if (!logs[section][month]) logs[section][month] = {};
 	if (Object.keys(logs[section]).length >= 3) {
 		// eliminate the oldest month(s)
-		const keys = Object.keys(logs[section]).sort((aKey, bKey) => {
-			const a = aKey.split('/');
-			const b = bKey.split('/');
-			if (a[1] !== b[1]) {
-				// year
-				if (parseInt(a[1]) < parseInt(b[1])) return -1;
-				return 1;
-			}
-			// month
-			if (parseInt(a[0]) < parseInt(b[0])) return -1;
-			return 1;
+		const keys = Utils.sortBy(Object.keys(logs[section]), key => {
+			const [monthStr, yearStr] = key.split('/');
+			return [parseInt(yearStr), parseInt(monthStr)];
 		});
 		while (keys.length > 2) {
 			const curKey = keys.shift();
@@ -439,7 +431,7 @@ class Mafia extends Rooms.RoomGame {
 				image: '',
 				memo: [`To learn more about your role, PM the host (${this.host}).`],
 			}));
-			this.originalRoles.sort((a, b) => a.name.localeCompare(b.name));
+			Utils.sortBy(this.originalRoles, role => role.name);
 			this.roles = this.originalRoles.slice();
 			this.originalRoleString = this.originalRoles.map(
 				r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
@@ -481,7 +473,7 @@ class Mafia extends Rooms.RoomGame {
 		this.IDEA.data = null;
 
 		this.originalRoles = newRoles;
-		this.originalRoles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
+		Utils.sortBy(this.originalRoles, role => [role.alignment, role.name]);
 		this.roles = this.originalRoles.slice();
 		this.originalRoleString = this.originalRoles.map(
 			r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
@@ -802,13 +794,12 @@ class Mafia extends Rooms.RoomGame {
 		if (!this.started) return `<strong>The game has not started yet.</strong>`;
 		let buf = `<strong>Votes (Hammer: ${this.hammerCount || "Disabled"})</strong><br />`;
 		const plur = this.getPlurality();
-		const list = Object.keys(this.lynches).sort((a, b) => {
-			if (a === plur) return -1;
-			if (b === plur) return 1;
-			return this.lynches[b].count - this.lynches[a].count;
-		});
-		for (const key of list) {
-			buf += `${this.lynches[key].count}${plur === key ? '*' : ''} ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Vote'} (${this.lynches[key].lynchers.map(a => this.playerTable[a] ? this.playerTable[a].safeName : a).join(', ')})<br />`;
+		const list = Utils.sortBy(Object.entries(this.lynches), ([key, lynch]) => [
+			key === plur,
+			-lynch.count,
+		]);
+		for (const [key, lynch] of list) {
+			buf += `${lynch.count}${plur === key ? '*' : ''} ${this.playerTable[key]?.safeName || 'No Vote'} (${lynch.lynchers.map(a => this.playerTable[a]?.safeName || a).join(', ')})<br />`;
 		}
 		return buf;
 	}
@@ -948,30 +939,24 @@ class Mafia extends Rooms.RoomGame {
 		if (this.hasPlurality) return this.hasPlurality;
 		if (!Object.keys(this.lynches).length) return null;
 		let max = 0;
-		let topLynches: ID[] = [];
-		for (const key in this.lynches) {
-			if (this.lynches[key].count > max) {
-				max = this.lynches[key].count;
-				topLynches = [key as ID];
-			} else if (this.lynches[key].count === max) {
-				topLynches.push(key as ID);
+		let topLynches: [ID, MafiaLynch][] = [];
+		for (const [key, lynch] of Object.entries(this.lynches)) {
+			if (lynch.count > max) {
+				max = lynch.count;
+				topLynches = [[key as ID, lynch]];
+			} else if (lynch.count === max) {
+				topLynches.push([key as ID, lynch]);
 			}
 		}
 		if (topLynches.length <= 1) {
-			this.hasPlurality = topLynches[0];
+			[this.hasPlurality] = topLynches[0];
 			return this.hasPlurality;
 		}
-		topLynches = topLynches.sort((key1, key2) => {
-			const l1 = this.lynches[key1];
-			const l2 = this.lynches[key2];
-			if (l1.dir !== l2.dir) {
-				return (l1.dir === 'down' ? -1 : 1);
-			} else {
-				if (l1.dir === 'up') return (l1.lastLynch < l2.lastLynch ? -1 : 1);
-				return (l1.lastLynch > l2.lastLynch ? -1 : 1);
-			}
-		});
-		this.hasPlurality = topLynches[0];
+		topLynches = Utils.sortBy(topLynches, ([key, lynch]) => [
+			lynch.dir === 'down',
+			lynch.dir === 'up' ? lynch.lastLynch : -lynch.lastLynch,
+		]);
+		[this.hasPlurality] = topLynches[0];
 		return this.hasPlurality;
 	}
 
@@ -1082,7 +1067,7 @@ class Mafia extends Rooms.RoomGame {
 				};
 				this.roles.push(deadPlayer.role);
 			}
-			this.roles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
+			Utils.sortBy(this.roles, r => [r.alignment, r.name]);
 			delete this.dead[deadPlayer.id];
 		} else {
 			const targetUser = Users.get(toRevive);
@@ -1443,7 +1428,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	sendPlayerList() {
-		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.keys(this.playerTable).map(p => this.playerTable[p].name).sort().join(', ')}`).update();
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.values(this.playerTable).map(p => p.name).sort().join(', ')}`).update();
 	}
 
 	updatePlayers() {
@@ -1724,7 +1709,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	mafia(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!query.length) return this.close();
@@ -1741,7 +1726,7 @@ export const pages: PageTable = {
 		let buf = `<div class="pad broadcast-blue">`;
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.roomid}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${game.title}</h1><h3>Host: ${game.host}</h3>${game.cohostids[0] ? `<h3>Cohosts: ${game.cohosts.sort().join(', ')}</h3>` : ''}`;
-		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.playerTable).sort().map(p => game.playerTable[p].safeName).join(', ')}</p>`;
+		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.values(game.playerTable).map(p => p.safeName).sort().join(', ')}</p>`;
 		if (game.started && Object.keys(game.dead).length > 0) {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Dead Players</summary>`;
 			for (const d in game.dead) {
@@ -1925,7 +1910,7 @@ export const pages: PageTable = {
 			buf += `<p>To set the roles, use /mafia setroles [comma seperated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
 			buf += `<p>If you set the roles from a theme, the role parser will get all the correct roles for you. (Not all themes are supported).</p>`;
 			buf += `<p>The following key words determine a role's alignment (If none are found, the default alignment is town):</p>`;
-			buf += `<p style="font-weight:bold">${Object.keys(MafiaData.alignments).map(a => `<span style="color:${MafiaData.alignments[a].color || '#FFF'}">${MafiaData.alignments[a].name}</span>`).join(', ')}</p>`;
+			buf += `<p style="font-weight:bold">${Object.values(MafiaData.alignments).map(a => `<span style="color:${a.color || '#FFF'}">${a.name}</span>`).join(', ')}</p>`;
 			buf += `<p>Please note that anything inside (parentheses) is ignored by the role parser.</p>`;
 			buf += `<p>If you have roles that have conflicting alignments or base roles, you can use /mafia forcesetroles [comma seperated list of roles] to forcibly set the roles.</p>`;
 			buf += `<p>Please note that you will have to PM all the players their alignment, partners (if any), and other information about their role because the server will not provide it.</p>`;
@@ -1978,21 +1963,19 @@ export const pages: PageTable = {
 			buf += `${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</div>`;
 			return buf;
 		}
-		const keys = Object.keys(logs[section][month]).sort((keyA, keyB) => {
-			const a = logs[section][month][keyA];
-			const b = logs[section][month][keyB];
-			return b - a;
-		});
+		const entries = Utils.sortBy(Object.entries(logs[section][month]), ([key, value]) => (
+			-value
+		));
 		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
 		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
-		for (const key of keys) {
-			buf += `<tr><td>${key}</td><td>${logs[section][month][key]}</td></tr>`;
+		for (const [key, value] of entries) {
+			buf += `<tr><td>${key}</td><td>${value}</td></tr>`;
 		}
 		return buf + `</table></div>`;
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	mafia: {
 		''(target, room, user) {
 			room = this.requireRoom();
@@ -2016,16 +1999,18 @@ export const commands: ChatCommands = {
 			const nextHost = room.roomid === 'mafia' && cmd === 'nexthost';
 			if (nextHost || !room.auth.has(user.id)) this.checkCan('show', null, room);
 
+			let targetUser!: User | null;
+			let targetUsername!: string;
 			if (nextHost) {
 				if (!hostQueue.length) return this.errorReply(`Nobody is on the host queue.`);
 				const skipped = [];
 				let hostid;
 				while ((hostid = hostQueue.shift())) {
-					this.splitTarget(hostid, true);
-					if (!this.targetUser?.connected ||
-						!room.users[this.targetUser.id] || Mafia.isHostBanned(room, this.targetUser)) {
+					({targetUser, targetUsername} = this.splitUser(hostid, {exactName: true}));
+					if (!targetUser?.connected ||
+						!room.users[targetUser.id] || Mafia.isHostBanned(room, targetUser)) {
 						skipped.push(hostid);
-						this.targetUser = null;
+						targetUser = null;
 					} else {
 						// found a host
 						break;
@@ -2034,31 +2019,28 @@ export const commands: ChatCommands = {
 				if (skipped.length) {
 					this.sendReply(`${skipped.join(', ')} ${Chat.plural(skipped.length, 'were', 'was')} not online, not in the room, or are host banned and were removed from the host queue.`);
 				}
-				if (!this.targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
+				if (!targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
 			} else {
-				this.splitTarget(target, true);
-				if (room.roomid === 'mafia' && hostQueue.length && toID(this.targetUsername) !== hostQueue[0]) {
+				({targetUser, targetUsername} = this.splitUser(target, {exactName: true}));
+				if (room.roomid === 'mafia' && hostQueue.length && toID(targetUsername) !== hostQueue[0]) {
 					if (!cmd.includes('force')) {
-						return this.errorReply(`${this.targetUsername} isn't the next host on the queue. Use /mafia forcehost if you're sure.`);
+						return this.errorReply(`${targetUsername} isn't the next host on the queue. Use /mafia forcehost if you're sure.`);
 					}
 				}
 			}
 
-			if (!this.targetUser?.connected) {
-				const targetUsername = this.targetUsername;
+			if (!targetUser?.connected) {
 				return this.errorReply(`The user "${targetUsername}" was not found.`);
 			}
 
-			if (!nextHost && this.targetUser.id !== user.id) this.checkCan('mute', null, room);
+			if (!nextHost && targetUser.id !== user.id) this.checkCan('mute', null, room);
 
-			if (!room.users[this.targetUser.id]) {
-				return this.errorReply(`${this.targetUser.name} is not in this room, and cannot be hosted.`);
+			if (!room.users[targetUser.id]) {
+				return this.errorReply(`${targetUsername} is not in this room, and cannot be hosted.`);
 			}
-			if (Mafia.isHostBanned(room, this.targetUser)) {
-				return this.errorReply(`${this.targetUser.name} is banned from hosting mafia games.`);
+			if (Mafia.isHostBanned(room, targetUser)) {
+				return this.errorReply(`${targetUsername} is banned from hosting mafia games.`);
 			}
-
-			const targetUser = this.targetUser;
 
 			room.game = new Mafia(room, targetUser);
 
@@ -2890,7 +2872,7 @@ export const commands: ChatCommands = {
 			if (this.broadcasting) {
 				game.sendPlayerList();
 			} else {
-				this.sendReplyBox(`Players (${game.playerCount}): ${Object.keys(game.playerTable).map(p => game.playerTable[p].safeName).sort().join(', ')}`);
+				this.sendReplyBox(`Players (${game.playerCount}): ${Object.values(game.playerTable).map(p => p.safeName).sort().join(', ')}`);
 			}
 		},
 
@@ -2907,11 +2889,9 @@ export const commands: ChatCommands = {
 				return this.sendReplyBox(buf);
 			}
 			const showOrl = (['orl', 'originalrolelist'].includes(cmd) || game.noReveal);
-			const roleString = (showOrl ? game.originalRoles : game.roles).sort((a, b) => {
-				if (a.alignment < b.alignment) return -1;
-				if (b.alignment < a.alignment) return 1;
-				return 0;
-			}).map(role => role.safeName).join(', ');
+			const roleString = Utils.sortBy((showOrl ? game.originalRoles : game.roles), role => (
+				role.alignment
+			)).map(role => role.safeName).join(', ');
 
 			this.sendReplyBox(`${showOrl ? `Original Rolelist: ` : `Rolelist: `}${roleString}`);
 		},
@@ -3099,12 +3079,7 @@ export const commands: ChatCommands = {
 			this.checkChat();
 			if (!target) return this.parse(`/help mafia ${cmd}`);
 			this.checkCan('mute', null, room);
-			this.splitTarget(target, false);
-			const targetUser = this.targetUser;
-			if (!targetUser?.connected) {
-				const targetUsername = this.targetUsername;
-				return this.errorReply(`The user "${targetUsername}" was not found.`);
-			}
+			const {targetUser} = this.requireUser(target);
 			if (!room.users[targetUser.id]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
 			if (game.hostid === targetUser.id) return this.errorReply(`${targetUser.name} is already the host.`);
 			if (game.cohostids.includes(targetUser.id)) return this.errorReply(`${targetUser.name} is already a cohost.`);
@@ -3407,8 +3382,8 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
-			target = this.splitTarget(target, false);
-			const [string1, string2] = this.splitOne(target);
+			const {targetUser, rest} = this.requireUser(target);
+			const [string1, string2] = this.splitOne(rest);
 			let duration, reason;
 			if (parseInt(string1)) {
 				duration = parseInt(string1);
@@ -3424,18 +3399,15 @@ export const commands: ChatCommands = {
 				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 			}
 
-			const targetUser = this.targetUser;
-			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
-
-			const punishment = Punishments.getRoomPunishType(room, this.targetUsername);
+			const punishment = Punishments.getRoomPunishType(room, targetUser.name);
 			if (punishment) {
 				if (punishment === `MAFIA${this.cmd.toUpperCase()}`) {
-					return this.errorReply(`User '${this.targetUsername}' is already ${this.cmd}ned in this room.`);
+					return this.errorReply(`User '${targetUser.name}' is already ${this.cmd}ned in this room.`);
 				} else if (punishment === 'MAFIAGAMEBAN') {
-					return this.errorReply(`User '${this.targetUsername}' is already gamebanned in this room, which also means they can't host.`);
+					return this.errorReply(`User '${targetUser.name}' is already gamebanned in this room, which also means they can't host.`);
 				} else if (punishment === 'MAFIAHOSTBAN') {
-					user.sendTo(room, `User '${this.targetUsername}' is already hostbanned in this room, but they will now be gamebanned.`);
-					this.parse(`/mafia unhostban ${this.targetUsername}`);
+					user.sendTo(room, `User '${targetUser.name}' is already hostbanned in this room, but they will now be gamebanned.`);
+					this.parse(`/mafia unhostban ${targetUser.name}`);
 				}
 			}
 
@@ -3465,13 +3437,11 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
-			this.splitTarget(target, false);
-			const targetUser = this.targetUser;
-			if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+			const {targetUser} = this.requireUser(target, {allowOffline: true});
 			if (!Mafia.isGameBanned(room, targetUser) && cmd === 'ungameban') {
-				return this.errorReply(`User '${this.targetUsername}' isn't banned from playing mafia games.`);
+				return this.errorReply(`User '${targetUser.name}' isn't banned from playing mafia games.`);
 			} else if (!Mafia.isHostBanned(room, targetUser) && cmd === 'unhostban') {
-				return this.errorReply(`User '${this.targetUsername}' isn't banned from hosting mafia games.`);
+				return this.errorReply(`User '${targetUser.name}' isn't banned from hosting mafia games.`);
 			}
 
 			if (cmd === 'unhostban') Mafia.unhostBan(room, targetUser);
@@ -3887,7 +3857,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "Mafia",
 	permission: 'editroom',
 	options: [

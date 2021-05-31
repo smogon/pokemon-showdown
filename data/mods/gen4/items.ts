@@ -16,6 +16,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	blacksludge: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
+	},
 	brightpowder: {
 		inherit: true,
 		onModifyAccuracyPriority: 5,
@@ -96,6 +101,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	flameorb: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 20,
+	},
 	focussash: {
 		inherit: true,
 		onDamage() { },
@@ -108,12 +118,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 			duration: 1,
 			onDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
-					this.effectData.activated = true;
+					this.effectState.activated = true;
 					return target.hp - 1;
 				}
 			},
 			onAfterMoveSecondary(target) {
-				if (this.effectData.activated) target.useItem();
+				if (this.effectState.activated) target.useItem();
 				target.removeVolatile('focussash');
 			},
 		},
@@ -153,6 +163,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.debug('lax incense - decreasing accuracy');
 			return accuracy * 0.9;
 		},
+	},
+	leftovers: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 4,
 	},
 	lifeorb: {
 		inherit: true,
@@ -227,8 +242,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		condition: {
 			onStart(pokemon) {
-				this.effectData.numConsecutive = 0;
-				this.effectData.lastMove = '';
+				this.effectState.numConsecutive = 0;
+				this.effectState.lastMove = '';
 			},
 			onTryMovePriority: -2,
 			onTryMove(pokemon, target, move) {
@@ -236,15 +251,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
-				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
-					this.effectData.numConsecutive++;
+				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
+					this.effectState.numConsecutive++;
 				} else {
-					this.effectData.numConsecutive = 0;
+					this.effectState.numConsecutive = 0;
 				}
-				this.effectData.lastMove = move.id;
+				this.effectState.lastMove = move.id;
 			},
 			onModifyDamagePhase2(damage, source, target, move) {
-				return damage * (1 + (this.effectData.numConsecutive / 10));
+				return damage * (1 + (this.effectState.numConsecutive / 10));
 			},
 		},
 	},
@@ -285,6 +300,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	stickybarb: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 20,
+	},
 	thickclub: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
@@ -292,6 +312,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return this.chainModify(2);
 			}
 		},
+	},
+	toxicorb: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 20,
 	},
 	widelens: {
 		inherit: true,

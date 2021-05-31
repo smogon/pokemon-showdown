@@ -16,32 +16,7 @@ const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
 import type {ChallengeType} from './room-battle';
-
-/**
- * This represents a user's search for a battle under a format.
- */
-class BattleReady {
-	readonly userid: ID;
-	readonly formatid: string;
-	readonly settings: User['battleSettings'];
-	readonly rating: number;
-	readonly challengeType: ChallengeType;
-	readonly time: number;
-	constructor(
-		userid: ID,
-		formatid: string,
-		settings: User['battleSettings'],
-		rating: number,
-		challengeType: ChallengeType
-	) {
-		this.userid = userid;
-		this.formatid = formatid;
-		this.settings = settings;
-		this.rating = rating;
-		this.challengeType = challengeType;
-		this.time = Date.now();
-	}
-}
+import {BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges} from './ladders-challenges';
 
 /**
  * Keys are formatids
@@ -51,23 +26,6 @@ const searches = new Map<string, {
 	/** userid:BattleReady */
 	searches: Map<ID, BattleReady>,
 }>();
-
-class Challenge {
-	readonly from: ID;
-	readonly to: string;
-	readonly formatid: string;
-	readonly ready: BattleReady;
-	constructor(ready: BattleReady, to: string) {
-		this.from = ready.userid;
-		this.to = to;
-		this.formatid = ready.formatid;
-		this.ready = ready;
-	}
-}
-/**
- * formatid:userid:BattleReady
- */
-const challenges = new Map<string, Challenge[]>();
 
 /**
  * This keeps track of searches for battles, creating a new battle for a newly
@@ -195,44 +153,6 @@ class Ladder extends LadderStore {
 		return null;
 	}
 
-	static cancelChallenging(user: User) {
-		const chall = Ladder.getChallenging(user.id);
-		if (chall) {
-			Ladder.removeChallenge(chall);
-			return true;
-		}
-		return false;
-	}
-	static rejectChallenge(user: User, targetUsername: string) {
-		const targetUserid = toID(targetUsername);
-		const chall = Ladder.getChallenging(targetUserid);
-		if (chall && chall.to === user.id) {
-			Ladder.removeChallenge(chall);
-			return true;
-		}
-		return false;
-	}
-	static clearChallenges(username: string) {
-		const userid = toID(username);
-		const userChalls = Ladders.challenges.get(userid);
-		if (userChalls) {
-			for (const chall of userChalls.slice()) {
-				let otherUserid;
-				if (chall.from === userid) {
-					otherUserid = chall.to;
-				} else {
-					otherUserid = chall.from;
-				}
-				Ladder.removeChallenge(chall, true);
-				const otherUser = Users.get(otherUserid);
-				if (otherUser) Ladder.updateChallenges(otherUser);
-			}
-			const user = Users.get(userid);
-			if (user) Ladder.updateChallenges(user);
-			return true;
-		}
-		return false;
-	}
 	async makeChallenge(connection: Connection, targetUser: User) {
 		const user = connection.user;
 		if (targetUser === user) {
@@ -265,92 +185,37 @@ class Ladder extends LadderStore {
 		if (!ready) return false;
 		// If our target is already challenging us in the same format,
 		// simply accept the pending challenge instead of creating a new one.
-		const targetChalls = Ladders.challenges.get(targetUser.id);
-		if (targetChalls) {
-			for (const chall of targetChalls) {
-				if (chall.from === targetUser.id &&
-					chall.to === user.id &&
-					chall.formatid === this.formatid) {
-					if (Ladder.removeChallenge(chall)) {
-						Ladders.match([chall.ready, ready]);
-						return true;
-					}
+		const existingChall = Ladders.challenges.search(user.id, targetUser.id);
+		if (existingChall) {
+			if (
+				existingChall.from === targetUser.id &&
+				existingChall.to === user.id &&
+				existingChall.format === this.formatid &&
+				existingChall.ready
+			) {
+				if (Ladders.challenges.remove(existingChall)) {
+					Ladders.match([existingChall.ready, ready]);
+					return true;
 				}
+			} else {
+				connection.popup(`There's already a challenge (${existingChall.format}) between you and ${targetUser.name}!`);
+				Ladders.challenges.update(user.id, targetUser.id);
+				return false;
 			}
 		}
-		Ladder.addChallenge(new Challenge(ready, targetUser.id));
+		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready));
+		Ladders.challenges.send(user.id, targetUser.id, `/text ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
 		return true;
 	}
-	static async acceptChallenge(connection: Connection, targetUser: User) {
-		const chall = Ladder.getChallenging(targetUser.id);
-		if (!chall || chall.to !== connection.user.id) {
-			connection.popup(`${targetUser.id} is not challenging you. Maybe they cancelled before you accepted?`);
-			return false;
-		}
-		const ladder = Ladders(chall.formatid);
+	static async acceptChallenge(connection: Connection, chall: BattleChallenge) {
+		const ladder = Ladders(chall.format);
 		const ready = await ladder.prepBattle(connection, 'challenge');
-		if (!ready) return false;
-		if (Ladder.removeChallenge(chall)) {
-			Ladders.match([chall.ready, ready]);
+		if (!ready) return;
+		if (Ladders.challenges.remove(chall)) {
+			return Ladders.match([chall.ready, ready]);
 		}
-		return true;
-	}
-
-	static addChallenge(challenge: Challenge, skipUpdate = false) {
-		let challs1 = Ladders.challenges.get(challenge.from);
-		if (!challs1) Ladders.challenges.set(challenge.from, challs1 = []);
-		let challs2 = Ladders.challenges.get(challenge.to);
-		if (!challs2) Ladders.challenges.set(challenge.to, challs2 = []);
-		challs1.push(challenge);
-		challs2.push(challenge);
-		if (!skipUpdate) {
-			const fromUser = Users.get(challenge.from);
-			if (fromUser) Ladder.updateChallenges(fromUser);
-			const toUser = Users.get(challenge.to);
-			if (toUser) Ladder.updateChallenges(toUser);
-		}
-	}
-	static removeChallenge(challenge: Challenge, skipUpdate = false) {
-		const fromChalls = Ladders.challenges.get(challenge.from);
-		// the challenge may have been cancelled
-		if (!fromChalls) return false;
-		const fromIndex = fromChalls.indexOf(challenge);
-		if (fromIndex < 0) return false;
-		fromChalls.splice(fromIndex, 1);
-		if (!fromChalls.length) Ladders.challenges.delete(challenge.from);
-		const toChalls = Ladders.challenges.get(challenge.to)!;
-		toChalls.splice(toChalls.indexOf(challenge), 1);
-		if (!toChalls.length) Ladders.challenges.delete(challenge.to);
-		if (!skipUpdate) {
-			const fromUser = Users.get(challenge.from);
-			if (fromUser) Ladder.updateChallenges(fromUser);
-			const toUser = Users.get(challenge.to);
-			if (toUser) Ladder.updateChallenges(toUser);
-		}
-		return true;
-	}
-	static updateChallenges(user: User, connection: Connection | null = null) {
-		if (!user.connected) return;
-		let challengeTo = null;
-		const challengesFrom: {[k: string]: string} = {};
-		const userChalls = Ladders.challenges.get(user.id);
-		if (userChalls) {
-			for (const chall of userChalls) {
-				if (chall.from === user.id) {
-					challengeTo = {
-						to: chall.to,
-						format: chall.formatid,
-					};
-				} else {
-					challengesFrom[chall.from] = chall.formatid;
-				}
-			}
-		}
-		(connection || user).send(`|updatechallenges|` + JSON.stringify({
-			challengesFrom,
-			challengeTo,
-		}));
+		return;
 	}
 
 	cancelSearch(user: User) {
@@ -597,12 +462,12 @@ class Ladder extends LadderStore {
 			for (const ready of readies) {
 				Users.get(ready.userid)?.popup(`Sorry, your opponent ${missingUser} went offline before your battle could start.`);
 			}
-			return false;
+			return undefined;
 		}
 		const format = Dex.formats.get(formatid);
 		const delayedStart = (['multi', 'freeforall'].includes(format.gameType) && players.length === 2) ?
 			'multi' : false;
-		Rooms.createBattle({
+		return Rooms.createBattle({
 			format: formatid,
 			p1: players[0],
 			p2: players[1],
@@ -629,13 +494,13 @@ export const Ladders = Object.assign(getLadder, {
 	LadderStore,
 	Ladder,
 
+	BattleChallenge,
+	GameChallenge,
+	BattleInvite,
+
 	cancelSearches: Ladder.cancelSearches,
 	updateSearch: Ladder.updateSearch,
-	rejectChallenge: Ladder.rejectChallenge,
 	acceptChallenge: Ladder.acceptChallenge,
-	cancelChallenging: Ladder.cancelChallenging,
-	clearChallenges: Ladder.clearChallenges,
-	updateChallenges: Ladder.updateChallenges,
 	visualizeAll: Ladder.visualizeAll,
 	getSearches: Ladder.getSearches,
 	match: Ladder.match,

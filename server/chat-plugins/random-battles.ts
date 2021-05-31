@@ -154,7 +154,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		buf += `<span style="color:#999999;">Sets for ${species.name} in ${format.name}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
 			buf += `<details><summary>Set ${i + 1}</summary>`;
-			buf += `<ul style="list-style-type:none;">`;
+			buf += `<ul style="list-style-type:none;padding-left:0;">`;
 			buf += `<li>${set.species}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
 			buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
 			if (!set.level) buf += `<li>Level: 50</li>`;
@@ -366,10 +366,9 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 		if (sigMove.isNonstandard === 'Unobtainable') {
 			details[`Unobtainable in Gen ${dex.gen}`] = "";
 		}
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 		if (sigMove.desc && sigMove.desc !== sigMove.shortDesc) {
 			buf += `<details><summary><strong>In-Depth Description</strong></summary>${sigMove.desc}</details>`;
 		}
@@ -411,10 +410,9 @@ function generateSSBItemInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 			if (sigItem.isNonstandard && sigItem.isNonstandard !== "Custom") {
 				details[`Unobtainable in Gen ${dex.gen}`] = "";
 			}
-			buf += `<font size="1">${Object.keys(details).map(detail => {
-				if (details[detail] === '') return detail;
-				return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-			}).join("&nbsp;|&ThickSpace;")}</font>`;
+			buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+				value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+			)).join("&nbsp;|&ThickSpace;")}</font>`;
 		}
 	}
 	return buf;
@@ -432,10 +430,9 @@ function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex)
 		const details: {[k: string]: string} = {
 			Gen: String(sigAbil.gen) || 'CAP',
 		};
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 		if (sigAbil.desc && sigAbil.shortDesc && sigAbil.desc !== sigAbil.shortDesc) {
 			buf += `<details><summary><strong>In-Depth Description</strong></summary>${sigAbil.desc}</details>`;
 		}
@@ -511,10 +508,9 @@ function generateSSBPokemonInfo(species: string, dex: ModdedDex, baseDex: Modded
 		} else {
 			details["Evolution"] = evos.join(", ");
 		}
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 	}
 	return buf;
 }
@@ -551,10 +547,9 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 	}
 	if (buf) {
 		const details: {[k: string]: string} = {Gen: '8'};
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 	}
 	if (longDesc) {
 		buf += `<details><summary><strong>In-Depth Description</strong></summary>${longDesc}</details>`;
@@ -610,7 +605,7 @@ function SSBSets(target: string) {
 	return buf;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	randbats: 'randombattles',
 	randombattles(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -649,12 +644,17 @@ export const commands: ChatCommands = {
 		} else {
 			const setsToCheck = [species];
 			if (dex.gen > 7) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
+			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
 
 			for (const pokemon of setsToCheck) {
-				if (!pokemon.randomBattleMoves) continue;
+				if (!pokemon.randomBattleMoves || pokemon.isNonstandard === 'Future') continue;
 				const randomMoves = pokemon.randomBattleMoves.slice();
 				const m = randomMoves.sort().map(formatMove);
-				movesets.push(`<span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:</span><br />${m.join(`, `)}`);
+				movesets.push(
+					`<details${!movesets.length ? ' open' : ''}>` +
+					`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:<span style="color:#999999;"></summary>` +
+					`${m.join(`, `)}</details>`
+				);
 			}
 		}
 
@@ -747,8 +747,7 @@ export const commands: ChatCommands = {
 	bssfactory: 'battlefactory',
 	battlefactory(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		let isBSS = false;
-		if (cmd === 'bssfactory') isBSS = true;
+		const isBSS = cmd === 'bssfactory';
 		if (isBSS) {
 			const args = target.split(',');
 			if (!args[0]) return this.parse(`/help battlefactory`);
@@ -756,7 +755,7 @@ export const commands: ChatCommands = {
 			if (!species.exists) {
 				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
-			let mod = 'gen7';
+			let mod = 'gen8';
 			// There is only [Gen 7] BSS Factory right now
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen === 7) mod = toID(args[1]);
 			const bssSets = battleFactorySets(species, null, mod, true);

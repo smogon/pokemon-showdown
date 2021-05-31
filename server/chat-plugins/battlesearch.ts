@@ -383,7 +383,7 @@ function toDate(str: string) {
 	return Chat.toTimestamp(new Date(Number(str)));
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
@@ -401,7 +401,6 @@ export const pages: PageTable = {
 			buf += `Maximum Turns: ${turnLimit}`;
 		}
 		buf += `</p>`;
-
 		const months = await BattleSearcher.listMonths();
 		months.sort(monthSort);
 		if (!month) {
@@ -418,20 +417,12 @@ export const pages: PageTable = {
 		}
 
 		const tierid = toID(formatid);
-		const tiers = (await BattleSearcher.listTiers(month)).sort((a, b) => {
+		const tiers = Utils.sortBy(await BattleSearcher.listTiers(month), tier => [
 			// First sort by gen with the latest being first
-			let aGen = 6;
-			let bGen = 6;
-			if (a.startsWith('gen')) aGen = parseInt(a.substring(3, 4));
-			if (b.startsWith('gen')) bGen = parseInt(b.substring(3, 4));
-			if (aGen !== bGen) return bGen - aGen;
-			// Sort alphabetically
-			const aTier = a.substring(4);
-			const bTier = b.substring(4);
-			if (aTier < bTier) return -1;
-			if (aTier > bTier) return 1;
-			return 0;
-		}).map(tier => {
+			tier.startsWith('gen') ? -parseInt(tier.charAt(3)) : -6,
+			// Then sort alphabetically
+			tier,
+		]).map(tier => {
 			// Use the official tier name
 			const format = Dex.formats.get(tier);
 			if (format?.exists) tier = format.name;
@@ -482,7 +473,7 @@ export const BattleSearcher: BattleSearchHandler = (
 	Config.usepostgres ? new PostgresBattleSearcher() : new TextBattleSearcher()
 );
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	battlesearch(target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');

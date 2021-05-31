@@ -38,10 +38,9 @@ Messages from the user to the server are in the form:
 
     ROOMID|TEXT
 
-`ROOMID` can optionally be left blank if it's the lobby, or if the room
-is irrelevant (for instance, if `TEXT` is a command like
-`/join lobby` where it doesn't matter what room it's sent from, you can
-just send `|/join lobby`.)
+`ROOMID` can optionally be left blank if unneeded (commands like `/join lobby`
+can be sent anywhere). Responses will be sent to a PM box with no username
+(so `|/command` is equivalent to `|/pm &, /command`).
 
 `TEXT` can contain newlines, in which case it'll be treated the same
 way as if each line were sent to the room separately.
@@ -171,6 +170,16 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` said `MESSAGE`. Note that `MESSAGE` can contain `|` characters,
 > so you can't just split by `|` and take the fourth string.
+>
+> If `MESSAGE` starts with `/`, it is a special message. For instance,
+> `/me TEXT` or `/announce TEXT` or `/uhtml HTML`. A lot of these message
+> types are abused to embed protocol messages in PMs (for instance, `/uhtml`
+> is a stopgap before the client is rewritten to support `|uhtml|` etc in
+> PMs).
+>
+> If the server wants clients to actually render a message starting with
+> `/`, it will send a message starting with `//` (exactly like how users
+> need to send those messages).
 
 `|notify|TITLE|MESSAGE`
 

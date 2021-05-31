@@ -50,6 +50,7 @@ type Direction = 'less' | 'greater' | 'equal';
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
+const MAX_RANDOM_RESULTS = 30;
 const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 
 function escapeHTML(str?: string) {
@@ -70,7 +71,7 @@ function checkCanAll(room: Room | null) {
 	return !room.battle && !!isPersonal && !isHelp;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
 	ds2: 'dexsearch',
@@ -176,7 +177,9 @@ export const commands: ChatCommands = {
 			if (Number.isInteger(num)) {
 				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon Moves once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
+				if (qty < 1 || MAX_RANDOM_RESULTS < qty) {
+					throw new Chat.ErrorMessage(`Number of random Pok\u00e9mon Moves must be between 1 and ${MAX_RANDOM_RESULTS}.`);
+				}
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -221,7 +224,9 @@ export const commands: ChatCommands = {
 			if (Number.isInteger(num)) {
 				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon must be between 1 and 15.");
+				if (qty < 1 || MAX_RANDOM_RESULTS < qty) {
+					throw new Chat.ErrorMessage(`Number of random Pok\u00e9mon must be between 1 and ${MAX_RANDOM_RESULTS}.`);
+				}
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -419,14 +424,23 @@ export const commands: ChatCommands = {
 	usumlearn: 'learn',
 	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
-		target = target.slice(0, 300);
+		if (target.length > 300) throw new Chat.ErrorMessage(`Query too long.`);
+
+		const GENS: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7};
+		const cmdGen = GENS[cmd.slice(0, -5)];
+		if (cmdGen) target = `gen${cmdGen}, ${target}`;
+
 		this.checkBroadcast();
+		const {format, dex, targets} = this.splitFormat(target);
+
+		const formatid = format ? format.id : dex.currentMod;
+		if (cmd === 'learn5') targets.unshift('level5');
 
 		const response = await runSearch({
-			target,
+			target: targets.join(','),
 			cmd: 'learn',
 			canAll: !this.broadcastMessage || checkCanAll(room),
-			message: cmd,
+			message: formatid,
 		});
 		if (!response.error && !this.runBroadcast()) return;
 		if (response.error) {
@@ -438,7 +452,8 @@ export const commands: ChatCommands = {
 	learnhelp: [
 		`/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.`,
 		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # &`,
-		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or 'pentagon'. A value of 'pentagon' indicates that trading from previous generations is not allowed.`,
+		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or "min source gen [number]".`,
+		`A value of 'min source gen [number]' indicates that trading (or Pokémon Bank) from generations before [number] is not allowed.`,
 		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
 		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum`,
@@ -446,7 +461,7 @@ export const commands: ChatCommands = {
 };
 
 function getMod(target: string) {
-	const arr = target.split(',');
+	const arr = target.split(',').map(x => x.trim());
 	const usedMod = arr.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
@@ -725,7 +740,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'recovery') {
-				if (parameters.length > 1) return {error: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"healorder", "junglehealing", "lifedew", "milkdrink", "moonlight", "morningsun", "recover",
 					"roost", "shoreup", "slackoff", "softboiled", "strengthsap", "synthesis", "wish",
@@ -741,12 +755,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[move] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'zrecovery') {
-				if (parameters.length > 1) return {error: "The parameter 'zrecovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"aromatherapy", "bellydrum", "conversion2", "haze", "healbell", "mist",
 					"psychup", "refresh", "spite", "stockpile", "teleport", "transform",
@@ -762,12 +774,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[moveid] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'priority') {
-				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
 				for (const moveid in mod.data.Moves) {
 					const move = mod.moves.get(moveid);
 					if (move.category === "Status" || move.id === "bide") continue;
@@ -783,8 +793,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target.substr(0, 8) === 'resists ') {
@@ -836,17 +845,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'pivot') {
-				let includeBatonPass = false;
-				if (parameters.length > 1) {
-					if (parameters[1].trim().toLowerCase() === 'batonpass') {
-						includeBatonPass = true;
-					} else {
-						return {error: "The parameter 'pivot' cannot have alternative parameters other than 'batonpass'."};
-					}
-				}
 				for (const move in mod.data.Moves) {
 					const moveData = mod.moves.get(move);
-					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
+					if (moveData.selfSwitch && moveData.id !== 'batonpass') {
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
@@ -858,8 +859,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			const inequality = target.search(/>|<|=/);
@@ -952,9 +952,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	// Prioritize searches with the least alternatives.
 	const accumulateKeyCount = (count: number, searchData: AnyObject) =>
 		count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
-	searches.sort(
-		(a, b) => Object.values(a).reduce(accumulateKeyCount, 0) - Object.values(b).reduce(accumulateKeyCount, 0)
-	);
+	Utils.sortBy(searches, search => (
+		Object.values(search).reduce(accumulateKeyCount, 0)
+	));
 
 	for (const alts of searches) {
 		if (alts.skip) continue;
@@ -1164,34 +1164,25 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (sort) {
 			const stat = sort.slice(0, -1);
 			const direction = sort.slice(-1);
-			results.sort((a, b) => {
-				const mon1 = mod.species.get(a);
-				const mon2 = mod.species.get(b);
-				let monStat1 = 0;
-				let monStat2 = 0;
+			Utils.sortBy(results, name => {
+				const mon = mod.species.get(name);
+				let monStat = 0;
 				if (stat === 'bst') {
-					for (const monStats in mon1.baseStats) {
-						monStat1 += mon1.baseStats[monStats as StatID];
-						monStat2 += mon2.baseStats[monStats as StatID];
-					}
+					monStat = mon.bst;
 				} else if (stat === 'weight') {
-					monStat1 = mon1.weighthg;
-					monStat2 = mon2.weighthg;
+					monStat = mon.weighthg;
 				} else if (stat === 'height') {
-					monStat1 = mon1.heightm;
-					monStat2 = mon2.heightm;
+					monStat = mon.heightm;
 				} else if (stat === 'gen') {
-					monStat1 = mon1.gen;
-					monStat2 = mon2.gen;
+					monStat = mon.gen;
 				} else {
-					monStat1 = mon1.baseStats[stat as StatID];
-					monStat2 = mon2.baseStats[stat as StatID];
+					monStat = mon.baseStats[stat as StatID];
 				}
-				return (monStat1 - monStat2) * (direction === '+' ? 1 : -1);
+				return monStat * (direction === '+' ? 1 : -1);
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
@@ -1908,17 +1899,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		if (sort) {
 			const prop = sort.slice(0, -1);
 			const direction = sort.slice(-1);
-			results.sort((a, b) => {
-				let move1prop = dex[toID(a)][prop as keyof Move] as number;
-				let move2prop = dex[toID(b)][prop as keyof Move] as number;
+			Utils.sortBy(results, moveName => {
+				let moveProp = dex[toID(moveName)][prop as keyof Move] as number;
 				// convert booleans to 0 or 1
-				if (typeof move1prop === 'boolean') move1prop = move1prop ? 1 : 0;
-				if (typeof move2prop === 'boolean') move2prop = move2prop ? 1 : 0;
-				return (move1prop - move2prop) * (direction === '+' ? 1 : -1);
+				if (typeof moveProp === 'boolean') moveProp = moveProp ? 1 : 0;
+				return moveProp * (direction === '+' ? 1 : -1);
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
@@ -2331,47 +2320,55 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	return {reply: resultsStr};
 }
 
-function runLearn(target: string, cmd: string, canAll: boolean, message: string) {
-	let format: Format = Object.create(null);
+function runLearn(target: string, cmd: string, canAll: boolean, formatid: string) {
+	let format: Format = Dex.formats.get(formatid);
 	const targets = target.split(',');
-	const gens: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7};
-	let gen = (gens[cmd.slice(0, -5)] || 8);
-	let formatid;
-	let formatName;
-	let minSourceGen;
+	let formatName = format.name;
+	let minSourceGen = undefined;
+	let level = 100;
 
 	while (targets.length) {
 		const targetid = toID(targets[0]);
-		if (Dex.formats.get(targetid).exists) {
-			if (format.minSourceGen && format.minSourceGen === 6) {
-				return {error: "'pentagon' can't be used with formats."};
-			}
-			format = Utils.deepClone(Dex.formats.get(targetid));
-			formatid = targetid;
-			formatName = format.name;
-			targets.shift();
-			continue;
-		}
-		if (targetid.startsWith('gen') && parseInt(targetid.charAt(3))) {
-			gen = parseInt(targetid.slice(3));
-			targets.shift();
-			continue;
-		}
 		if (targetid === 'pentagon') {
-			if (formatid) {
+			if (format.exists) {
 				return {error: "'pentagon' can't be used with formats."};
 			}
 			minSourceGen = 6;
 			targets.shift();
 			continue;
 		}
+		if (targetid.startsWith('minsourcegen')) {
+			if (format.exists) {
+				return {error: "'min source gen' can't be used with formats."};
+			}
+			minSourceGen = parseInt(targetid.slice(12));
+			if (isNaN(minSourceGen) || minSourceGen < 1) return {error: `Invalid min source gen "${targetid.slice(12)}"`};
+			targets.shift();
+			continue;
+		}
+		if (targetid === 'level5') {
+			level = 5;
+			targets.shift();
+			continue;
+		}
 		break;
 	}
-	if (!formatName) {
-		if (!Dex.mod(`gen${gen}`)) return {error: `Gen ${gen} does not exist.`};
-		format = new Dex.Format({...format, mod: `gen${gen}`});
+	let gen;
+	if (!format.exists) {
+		const dex = Dex.mod(formatid).includeData();
+		// can happen if you hotpatch formats without hotpatching chat
+		if (!dex) return {error: `"${formatid}" is not a supported format.`};
+
+		gen = dex.gen;
+		format = new Dex.Format({mod: formatid});
 		formatName = `Gen ${gen}`;
-		if (minSourceGen === 6) formatName += ' Pentagon';
+		if (minSourceGen) {
+			formatName += ` (Min Source Gen = ${minSourceGen})`;
+			const ruleTable = dex.formats.getRuleTable(format);
+			ruleTable.minSourceGen = minSourceGen;
+		}
+	} else {
+		gen = Dex.forFormat(format).gen;
 	}
 	const validator = TeamValidator.get(format);
 
@@ -2380,7 +2377,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	const set: Partial<PokemonSet> = {
 		name: species.baseSpecies,
 		species: species.name,
-		level: cmd === 'learn5' ? 5 : 100,
+		level,
 	};
 	const all = (cmd === 'learnall');
 
@@ -2529,7 +2526,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		case 'abilitysearch':
 			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
 		case 'learn':
-			return runLearn(query.target, query.message, query.canAll, query.message);
+			return runLearn(query.target, query.cmd, query.canAll, query.message);
 		default:
 			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}

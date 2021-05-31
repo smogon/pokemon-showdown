@@ -1,28 +1,30 @@
 import type {PRNG} from '../../../sim';
-import RandomTeams from '../../random-teams';
+import RandomTeams, {MoveCounter} from '../../random-teams';
 
 export class RandomLetsGoTeams extends RandomTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
-			Dark: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Dark,
-			Dragon: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Dragon,
-			Electric: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Electric,
-			Fighting: (movePool, hasMove, hasAbility, hasType, counter) => (
-				!counter.Fighting && (counter.setupType || !counter.Status)
+			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
+			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
+			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
+			Fighting: (movePool, moves, abilities, types, counter) => (
+				!counter.get('Fighting') && (!!counter.setupType || !counter.get('Status'))
 			),
-			Fire: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Fire,
-			Ghost: (movePool, hasMove, hasAbility, hasType, counter) => !hasType['Dark'] && !counter.Ghost,
-			Ground: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Ground,
-			Ice: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Ice,
-			Water: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Water || !counter.stab,
+			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
+			Ghost: (movePool, moves, abilities, types, counter) => !types.has('Dark') && !counter.get('Ghost'),
+			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
+			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
+			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water') || !counter.get('stab'),
 		};
 	}
 	shouldCullMove(
 		move: Move,
-		hasMove: {[k: string]: true},
-		hasType: {[k: string]: true},
-		counter: {[k: string]: any},
+		types: Set<string>,
+		moves: Set<string>,
+		abilities: Set<string>,
+		counter: MoveCounter,
+		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 	): {cull: boolean, isSetup?: boolean} {
 		switch (move.id) {
@@ -31,8 +33,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 			return {
 				cull: (
 					counter.setupType !== 'Physical' ||
-					counter.physicalsetup > 1 ||
-					counter.Physical + counter.physicalpool < 2
+					counter.get('physicalsetup') > 1 ||
+					counter.get('Physical') + counter.get('physicalpool') < 2
 				),
 				isSetup: true,
 			};
@@ -40,61 +42,66 @@ export class RandomLetsGoTeams extends RandomTeams {
 			return {
 				cull: (
 					counter.setupType !== 'Special' ||
-					counter.specialstup > 1 ||
-					counter.Special + counter.specialpool < 2
+					counter.get('specialsetup') > 1 ||
+					counter.get('Special') + counter.get('specialpool') < 2
 				),
 				isSetup: true,
 			};
 		case 'growth': case 'shellsmash':
 			return {
-				cull: counter.setupType !== 'Mixed' || (counter.damagingMoves.length + counter.physicalpool + counter.specialpool) < 2,
+				cull: (
+					counter.setupType !== 'Mixed' ||
+					(counter.damagingMoves.size + counter.get('physicalpool') + counter.get('specialpool')) < 2
+				),
 				isSetup: true,
 			};
 		case 'agility':
 			return {
-				cull: counter.damagingMoves.length < 2 && !counter.setupType,
+				cull: counter.damagingMoves.size < 2 && !counter.setupType,
 				isSetup: !counter.setupType,
 			};
 
 		// Bad after setup
 		case 'dragontail':
-			return {cull: counter.setupType || !!counter.speedsetup || ['encore', 'roar', 'whirlwind'].some(m => hasMove[m])};
+			return {cull: (
+				!!counter.setupType || !!counter.get('speedsetup') || ['encore', 'roar', 'whirlwind'].some(m => moves.has(m))
+			)};
 		case 'fakeout': case 'uturn': case 'teleport':
-			return {cull: counter.setupType || !!counter.speedsetup || hasMove['substitute']};
+			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('substitute')};
 		case 'haze': case 'leechseed': case 'roar': case 'whirlwind':
-			return {cull: counter.setupType || !!counter.speedsetup || hasMove['dragontail']};
+			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('dragontail')};
 		case 'protect':
-			return {cull: counter.setupType || ['rest', 'lightscreen', 'reflect'].some(m => hasMove[m])};
+			return {cull: !!counter.setupType || ['rest', 'lightscreen', 'reflect'].some(m => moves.has(m))};
 		case 'seismictoss':
-			return {cull: counter.damagingMoves.length > 1 || counter.setupType};
+			return {cull: counter.damagingMoves.size > 1 || !!counter.setupType};
 		case 'stealthrock':
-			return {cull: counter.setupType || !!counter.speedsetup || teamDetails.stealthRock};
+			return {cull: !!counter.setupType || !!counter.get('speedsetup') || !!teamDetails.stealthRock};
 
 		// Bit redundant to have both
 		case 'leechlife': case 'substitute':
-			return {cull: hasMove['uturn']};
+			return {cull: moves.has('uturn')};
 		case 'dragonpulse':
-			return {cull: hasMove['dragontail'] || hasMove['outrage']};
+			return {cull: moves.has('dragontail') || moves.has('outrage')};
 		case 'thunderbolt':
-			return {cull: hasMove['thunder']};
+			return {cull: moves.has('thunder')};
 		case 'flareblitz': case 'flamethrower':
-			return {cull: hasMove['fireblast'] || hasMove['firepunch']};
+			return {cull: moves.has('fireblast') || moves.has('firepunch')};
 		case 'megadrain':
-			return {cull: hasMove['petaldance'] || hasMove['powerwhip']};
+			return {cull: moves.has('petaldance') || moves.has('powerwhip')};
 		case 'bonemerang':
-			return {cull: hasMove['earthquake']};
+			return {cull: moves.has('earthquake')};
 		case 'icebeam':
-			return {cull: hasMove['blizzard']};
+			return {cull: moves.has('blizzard')};
 		case 'rockslide':
-			return {cull: hasMove['stoneedge']};
+			return {cull: moves.has('stoneedge')};
 		case 'hydropump': case 'willowisp':
-			return {cull: hasMove['scald']};
+			return {cull: moves.has('scald')};
 		case 'surf':
-			return {cull: hasMove['hydropump'] || hasMove['scald']};
+			return {cull: moves.has('hydropump') || moves.has('scald')};
 		}
 
 		// Increased/decreased priority moves are unneeded with moves that boost only speed
-		if (move.priority !== 0 && !!counter.speedsetup) return {cull: true};
+		if (move.priority !== 0 && !!counter.get('speedsetup')) return {cull: true};
 
 		// This move doesn't satisfy our setup requirements:
 		if (
@@ -102,7 +109,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 			(move.category === 'Special' && counter.setupType === 'Physical')
 		) {
 			// Reject STABs last in case the setup type changes later on
-			if (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2) return {cull: true};
+			if (!types.has(move.type) || counter.get('stab') > 1 || counter.get(move.category) < 2) return {cull: true};
 		}
 
 		return {cull: false};
@@ -117,47 +124,37 @@ export class RandomLetsGoTeams extends RandomTeams {
 		}
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
-		const moves: string[] = [];
-		const hasType: {[k: string]: true} = {};
-		hasType[species.types[0]] = true;
-		if (species.types[1]) {
-			hasType[species.types[1]] = true;
-		}
+		const types = new Set(species.types);
 
-		let hasMove: {[k: string]: true} = {};
+		const moves = new Set<string>();
 		let counter;
 
 		do {
-			// Keep track of all moves we have:
-			hasMove = {};
-			for (const setMoveid of moves) {
-				hasMove[setMoveid] = true;
-			}
-
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.length < 4 && movePool.length) {
+			while (moves.size < 4 && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
-				hasMove[moveid] = true;
-				moves.push(moveid);
+				moves.add(moveid);
 			}
 
-			counter = this.queryMoves(moves, hasType, {}, movePool);
+			counter = this.queryMoves(moves, species.types, new Set(), movePool);
 
 			// Iterate through the moves again, this time to cull them:
-			for (const [i, setMoveid] of moves.entries()) {
-				const move = this.dex.moves.get(setMoveid);
+			for (const moveid of moves) {
+				const move = this.dex.moves.get(moveid);
 
-				let {cull, isSetup} = this.shouldCullMove(move, hasMove, hasType, counter, teamDetails);
+				let {cull, isSetup} = this.shouldCullMove(move, types, moves, new Set(), counter, movePool, teamDetails);
 
 				if (
 					!isSetup &&
 					counter.setupType && counter.setupType !== 'Mixed' &&
 					move.category !== counter.setupType &&
-					counter[counter.setupType] < 2 && (
+					counter.get(counter.setupType) < 2 && (
 						// Mono-attacking with setup and RestTalk is allowed
 						// Reject Status moves only if there is nothing else to reject
-						move.category !== 'Status' ||
-						counter[counter.setupType] + counter.Status > 3 && counter.physicalsetup + counter.specialsetup < 2
+						move.category !== 'Status' || (
+							counter.get(counter.setupType) + counter.get('Status') > 3 &&
+							counter.get('physicalsetup') + counter.get('specialsetup') < 2
+						)
 					)
 				) {
 					cull = true;
@@ -165,40 +162,40 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 				const moveIsRejectable = !move.damage && (move.category !== 'Status' || !move.flags.heal) && (
 					move.category === 'Status' ||
-					!hasType[move.type] ||
+					!types.has(move.type) ||
 					move.selfSwitch ||
 					move.basePower && move.basePower < 40 && !move.multihit
 				);
 
 				// Pokemon should have moves that benefit their Type, as well as moves required by its forme
-				if (moveIsRejectable && !cull && !isSetup && counter.physicalsetup + counter.specialsetup < 2 && (
+				if (moveIsRejectable && !cull && !isSetup && counter.get('physicalsetup') + counter.get('specialsetup') < 2 && (
 					!counter.setupType || counter.setupType === 'Mixed' ||
 					(move.category !== counter.setupType && move.category !== 'Status') ||
-					counter[counter.setupType] + counter.Status > 3
+					counter.get(counter.setupType) + counter.get('Status') > 3
 				)) {
 					if (
-						(counter.damagingMoves.length === 0 || !counter.stab) &&
-						(counter.physicalpool || counter.specialpool)
+						(counter.damagingMoves.size === 0 || !counter.get('stab')) &&
+						(counter.get('physicalpool') || counter.get('specialpool'))
 					) {
 						cull = true;
 					} else {
-						for (const type of Object.keys(hasType)) {
-							if (this.moveEnforcementCheckers[type]?.(movePool, hasMove, {}, hasType, counter, species, teamDetails)) cull = true;
+						for (const type of types) {
+							if (this.moveEnforcementCheckers[type]?.(movePool, moves, new Set(), types, counter, species, teamDetails)) cull = true;
 						}
 					}
 				}
 
 				// Remove rejected moves from the move list
 				if (cull && movePool.length) {
-					moves.splice(i, 1);
+					moves.delete(moveid);
 					break;
 				}
 			}
-		} while (moves.length < 4 && movePool.length);
+		} while (moves.size < 4 && movePool.length);
 
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		// Minimize confusion damage
-		if (!counter.Physical && !hasMove['transform']) ivs.atk = 0;
+		if (!counter.get('Physical') && !moves.has('transform')) ivs.atk = 0;
 
 		return {
 			name: species.baseSpecies,
@@ -210,7 +207,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 			item: (species.requiredItem || ''),
 			ability: 'No Ability',
 			evs: {hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20},
-			moves,
+			moves: Array.from(moves),
 			ivs,
 		};
 	}
@@ -226,7 +223,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!species.randomBattleMoves?.length
+				!species.randomBattleMoves?.length ||
+				(this.forceMonotype && !species.types.includes(this.forceMonotype))
 			) {
 				continue;
 			}
@@ -238,7 +236,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		const baseFormes: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		while (pokemonPool.length && pokemon.length < 6) {
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
@@ -259,7 +257,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 			// Limit 1 of any type combination
 			const typeCombo = types.slice().sort().join();
-			if (typeComboCount[typeCombo] >= 1) continue;
+			if (!this.forceMonotype && typeComboCount[typeCombo] >= 1) continue;
 
 			// Okay, the set passes, add it to our team
 			const set = this.randomSet(species, teamDetails);

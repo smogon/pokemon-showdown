@@ -2928,7 +2928,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	conkeldurr: {
 		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "knockoff", "machpunch"],
 		randomDoubleBattleMoves: ["drainpunch", "icepunch", "knockoff", "machpunch", "protect", "wideguard"],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	tympole: {
@@ -3699,7 +3699,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	slurpuff: {
-		randomBattleMoves: ["bellydrum", "calmmind", "dazzlinggleam", "drainpunch", "flamethrower", "playrough", "return", "surf"],
+		randomBattleMoves: ["bellydrum", "drainpunch", "playrough", "return"],
 		randomDoubleBattleMoves: ["bellydrum", "dazzlinggleam", "drainpunch", "flamethrower", "playrough", "protect", "psychic", "return", "surf"],
 		tier: "RUBL",
 		doublesTier: "(DUU)",

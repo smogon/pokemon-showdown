@@ -1,4 +1,4 @@
-import {EventMethods} from './dex-conditions';
+import {PokemonEventMethods} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
 interface AbilityEventMethods {
@@ -8,21 +8,21 @@ interface AbilityEventMethods {
 	onStart?: (this: Battle, target: Pokemon) => void;
 }
 
-export interface AbilityData extends Partial<Ability>, AbilityEventMethods, EventMethods {
+export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {
 	name: string;
 }
 
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
-	readonly effectType: 'Ability';
+	declare readonly effectType: 'Ability';
 
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
 	readonly suppressWeather: boolean;
-	readonly condition?: Partial<ConditionData>;
-	readonly isPermanent?: boolean;
-	readonly isUnbreakable?: boolean;
+	declare readonly condition?: ConditionData;
+	declare readonly isPermanent?: boolean;
+	declare readonly isBreakable?: boolean;
 
 	constructor(data: AnyObject) {
 		super(data);

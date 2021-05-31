@@ -13,6 +13,12 @@ interface HangmanEntry {
 	tags?: string[];
 }
 
+// futureproofing this into one single object so that new params can be added
+// more easily
+interface HangmanOptions {
+	allowCreator?: boolean;
+}
+
 export let hangmanData: {[roomid: string]: {[phrase: string]: HangmanEntry}} = {};
 
 try {
@@ -41,6 +47,7 @@ export class Hangman extends Rooms.RoomGame {
 	word: string;
 	hint: string;
 	incorrectGuesses: number;
+	options: HangmanOptions;
 
 	guesses: string[];
 	letterGuesses: string[];
@@ -48,7 +55,13 @@ export class Hangman extends Rooms.RoomGame {
 	wordSoFar: string[];
 	readonly checkChat = true;
 
-	constructor(room: Room, user: User, word: string, hint = '') {
+	constructor(
+		room: Room,
+		user: User,
+		word: string,
+		hint = '',
+		gameOptions: HangmanOptions = {}
+	) {
 		super(room);
 
 		this.gameNumber = room.nextGameNumber();
@@ -59,6 +72,7 @@ export class Hangman extends Rooms.RoomGame {
 		this.word = word;
 		this.hint = hint;
 		this.incorrectGuesses = 0;
+		this.options = gameOptions;
 
 		this.guesses = [];
 		this.letterGuesses = [];
@@ -75,7 +89,9 @@ export class Hangman extends Rooms.RoomGame {
 	}
 
 	choose(user: User, word: string) {
-		if (user.id === this.creator) throw new Chat.ErrorMessage("You can't guess in your own hangman game.");
+		if (user.id === this.creator && !this.options.allowCreator) {
+			throw new Chat.ErrorMessage("You can't guess in your own hangman game.");
+		}
 
 		const sanitized = word.replace(/[^A-Za-z ]/g, '');
 		const normalized = toID(sanitized);
@@ -280,7 +296,7 @@ export class Hangman extends Rooms.RoomGame {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	hangman: {
 		create: 'new',
 		new(target, room, user, connection) {
@@ -370,7 +386,7 @@ export const commands: ChatCommands = {
 			}
 			target = toID(target);
 			const {question, hint} = Hangman.getRandom(room.roomid, target);
-			const game = new Hangman(room, user, question, hint);
+			const game = new Hangman(room, user, question, hint, {allowCreator: true});
 			room.game = game;
 			this.addModAction(`${user.name} started a random game of hangman - use /guess to play!`);
 			game.display(user, true);
@@ -532,7 +548,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	hangman(args, user) {
 		const room = this.requireRoom();
 		this.title = `[Hangman]`;
@@ -567,7 +583,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "Hangman",
 	permission: 'editroom',
 	options: [

@@ -6,7 +6,7 @@
 
 import {FS, Utils} from '../../lib';
 
-Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
+Punishments.addRoomPunishmentType('GIVEAWAYBAN', 'banned from giveaways');
 
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
@@ -626,7 +626,7 @@ export class GTSGiveaway {
 	}
 }
 
-const cmds: ChatCommands = {
+const cmds: Chat.ChatCommands = {
 	// question giveaway.
 	quiz: 'question',
 	qg: 'question',
@@ -844,32 +844,28 @@ const cmds: ChatCommands = {
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		target = this.splitTarget(target, false);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
-		if (target.length > 300) {
+		const {targetUser, rest: reason} = this.requireUser(target, {allowOffline: true});
+		if (reason.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		if (Punishments.getRoomPunishType(room, this.targetUsername)) {
-			return this.errorReply(`User '${this.targetUsername}' is already punished in this room.`);
+		if (Punishments.getRoomPunishType(room, targetUser.name)) {
+			return this.errorReply(`User '${targetUser.name}' is already punished in this room.`);
 		}
 
-		Giveaway.ban(room, targetUser, target);
+		Giveaway.ban(room, targetUser, reason);
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
-		this.modlog('GIVEAWAYBAN', targetUser, target);
-		if (target) target = ` (${target})`;
-		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${target}`);
+		this.modlog('GIVEAWAYBAN', targetUser, reason);
+		const reasonMessage = reason ? ` (${reason})` : ``;
+		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${reasonMessage}`);
 	},
 	unban(target, room, user) {
 		if (!target) return false;
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		this.splitTarget(target, false);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		const {targetUser} = this.requireUser(target, {allowOffline: true});
 		if (!Giveaway.checkBanned(room, targetUser)) {
-			return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
+			return this.errorReply(`User '${targetUser.name}' isn't banned from entering giveaways.`);
 		}
 
 		Giveaway.unban(room, targetUser);

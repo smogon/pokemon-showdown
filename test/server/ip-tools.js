@@ -7,6 +7,7 @@
 
 const assert = require('assert').strict;
 const IPTools = require('../../.server-dist/ip-tools').IPTools;
+const Utils = require('../../.lib-dist/utils').Utils;
 
 describe("IP tools", () => {
 	it('should resolve 127.0.0.1 to localhost', async () => {
@@ -84,7 +85,7 @@ describe("IP tools helper functions", () => {
 		const unsortedIPs = ['2.3.4.5', '100.1.1.1', '2.3.5.4', '150.255.255.255', '240.0.0.0'];
 		const sortedIPs = ['2.3.4.5', '2.3.5.4', '100.1.1.1', '150.255.255.255', '240.0.0.0'];
 		const sortedIPNumbers = unsortedIPs.map(ip => IPTools.ipToNumber(ip));
-		sortedIPNumbers.sort((a, b) => a - b);
+		Utils.sortBy(sortedIPNumbers);
 		assert.deepEqual(sortedIPNumbers.map(ipnum => IPTools.numberToIP(ipnum)), sortedIPs);
 	});
 
@@ -96,7 +97,7 @@ describe("IP tools helper functions", () => {
 
 	it('should correctly sort a list of IP addresses', () => {
 		const ipList = ['2.3.4.5', '100.1.1.1', '2.3.5.4', '150.255.255.255', '240.0.0.0'];
-		ipList.sort(IPTools.ipSort);
+		Utils.sortBy(ipList, IPTools.ipToNumber);
 		assert.deepEqual(ipList, ['2.3.4.5', '2.3.5.4', '100.1.1.1', '150.255.255.255', '240.0.0.0']);
 	});
 });

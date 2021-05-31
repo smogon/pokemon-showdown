@@ -67,7 +67,7 @@ describe('Rooms features', function () {
 		});
 
 		it('should copy auth from tournament', function () {
-			parent = Rooms.createChatRoom('parentroom', '', {});
+			parent = Rooms.createChatRoom('parentroom');
 			parent.auth.get = () => '%';
 			const p1 = makeUser();
 			const p2 = makeUser();
@@ -86,7 +86,7 @@ describe('Rooms features', function () {
 		});
 
 		it('should prevent overriding tournament room auth by a tournament player', function () {
-			parent = Rooms.createChatRoom('parentroom2', '', {});
+			parent = Rooms.createChatRoom('parentroom2');
 			parent.auth.get = () => '%';
 			const p1 = makeUser();
 			const p2 = makeUser();

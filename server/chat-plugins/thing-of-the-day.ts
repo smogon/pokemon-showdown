@@ -97,13 +97,15 @@ class OtdHandler {
 		const id = settings.id || toID(title).charAt(0) + 'ot' + timeLabel.charAt(0);
 		const handler = new OtdHandler(id, room, settings);
 		otds.set(id, handler);
-		if (handler.keys[0] === 'time') {
-			handler.keys.shift();
-			handler.keyLabels.shift();
-			handler.keys.push('time');
-			handler.keyLabels.push('Timestamp');
-			handler.save();
+		let needsSave = false;
+		for (const winner of handler.winners) {
+			if (winner.timestamp) {
+				winner.time = winner.timestamp;
+				delete winner.timestamp;
+				needsSave = true;
+			}
 		}
+		if (needsSave) handler.save();
 		return handler;
 	}
 
@@ -426,7 +428,7 @@ class OtdHandler {
 		return output;
 	}
 
-	generateWinnerList(context: PageContext) {
+	generateWinnerList(context: Chat.PageContext) {
 		context.title = `${this.id.toUpperCase()} Winners`;
 		let buf = `<div class="pad ladder"><h2>${this.name} of the ${this.timeLabel} Winners</h2>`;
 
@@ -442,6 +444,10 @@ class OtdHandler {
 				labels.push(this.keyLabels[i]);
 			}
 		}
+		if (!columns.includes('time')) {
+			columns.push('time');
+			labels.push('Timestamp');
+		}
 
 		let content = ``;
 
@@ -452,11 +458,11 @@ class OtdHandler {
 				if (!val) return '';
 				switch (col) {
 				case 'time':
-					const date = new Date(this.winners[i].time);
+					const date = new Date(parseInt(this.winners[i].time));
 
 					const pad = (num: number) => num < 10 ? '0' + num : num;
 
-					return Utils.html `${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}`;
+					return Utils.html`${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}`;
 				case 'song':
 					if (!this.winners[i].link) return val;
 					// falls through
@@ -490,7 +496,7 @@ function selectHandler(message: string) {
 	return handler;
 }
 
-export const otdCommands: ChatCommands = {
+export const otdCommands: Chat.ChatCommands = {
 	start(target, room, user, connection, cmd) {
 		this.checkChat();
 
@@ -781,8 +787,8 @@ export const otdCommands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {};
-export const commands: ChatCommands = {
+export const pages: Chat.PageTable = {};
+export const commands: Chat.ChatCommands = {
 	otd: {
 		create(target, room, user) {
 			room = this.requireRoom();
@@ -889,6 +895,7 @@ const otdHelp = [
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
 	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
 	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
+	`- /-otd removewinner [nomination] - Remove a winner with the given [nomination] from the winners list. Requires: % @ # &`,
 	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
 	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
 	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
@@ -915,14 +922,16 @@ for (const [k, v] of otds) {
 	commands[`${k}help`] = otdHelp;
 }
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID, room) => {
-	for (const otd in otdData) {
-		const data = otdData[otd];
-		if (data.settings.roomid === oldID) {
-			data.settings.roomid = newID;
-			const handler = otds.get(otd);
-			handler!.room = room as Room;
-			handler!.save();
+export const handlers: Chat.Handlers = {
+	onRenameRoom(oldID, newID, room) {
+		for (const otd in otdData) {
+			const data = otdData[otd];
+			if (data.settings.roomid === oldID) {
+				data.settings.roomid = newID;
+				const handler = otds.get(otd);
+				handler!.room = room as Room;
+				handler!.save();
+			}
 		}
-	}
+	},
 };

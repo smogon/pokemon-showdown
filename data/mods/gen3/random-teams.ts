@@ -1,5 +1,7 @@
 import RandomGen4Teams from '../gen4/random-teams';
+import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
+import type {MoveCounter} from '../../random-teams';
 
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
@@ -10,22 +12,22 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		this.battleHasDitto = false;
 		this.battleHasWobbuffet = false;
 		this.moveEnforcementCheckers = {
-			Bug: (movePool, hasMove, hasAbility, hasType, counter, species) => (
+			Bug: (movePool, moves, abilities, types, counter, species) => (
 				movePool.includes('megahorn') || (!species.types[1] && movePool.includes('hiddenpowerbug'))
 			),
-			Electric: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Electric,
-			Fighting: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Fighting,
-			Fire: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Fire,
-			Ground: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Ground,
-			Normal: (movePool, hasMove, hasAbility, hasType, counter) => !counter.Normal && counter.setupType === 'Physical',
-			Psychic: (movePool, hasMove, hasAbility, hasType, counter, species) => (
-				hasType['Psychic'] &&
+			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
+			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
+			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
+			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
+			Normal: (movePool, moves, abilities, types, counter) => !counter.get('Normal') && counter.setupType === 'Physical',
+			Psychic: (movePool, moves, abilities, types, counter, species) => (
+				types.has('Psychic') &&
 				(movePool.includes('psychic') || movePool.includes('psychoboost')) &&
 				species.baseStats.spa >= 100
 			),
-			Rock: (movePool, hasMove, hasAbility, hasType, counter, species) => !counter.Rock && species.baseStats.atk >= 100,
-			Water: (movePool, hasMove, hasAbility, hasType, counter, species) => (
-				!counter.Water && counter.setupType !== 'Physical' && species.baseStats.spa >= 60
+			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 100,
+			Water: (movePool, moves, abilities, types, counter, species) => (
+				!counter.get('Water') && counter.setupType !== 'Physical' && species.baseStats.spa >= 60
 			),
 			// If the Pokémon has this move, the other move will be forced
 			protect: movePool => movePool.includes('wish'),
@@ -35,23 +37,23 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	shouldCullMove(
 		move: Move,
-		hasType: {[k: string]: true},
-		hasMove: {[k: string]: true},
-		hasAbility: {[k: string]: true},
-		counter: {[k: string]: any},
+		types: Set<string>,
+		moves: Set<string>,
+		abilities: Set<string>,
+		counter: MoveCounter,
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
-	) {
-		const restTalk = hasMove['rest'] && hasMove['sleeptalk'];
+	): {cull: boolean, isSetup?: boolean} {
+		const restTalk = moves.has('rest') && moves.has('sleeptalk');
 
 		switch (move.id) {
 		// Set up once and only if we have the moves for it
 		case 'bulkup': case 'curse': case 'dragondance': case 'swordsdance':
 			return {
 				cull: (
-					(counter.setupType !== 'Physical' || counter.physicalsetup > 1) ||
-					(counter.Physical + counter.physicalpool < 2 && !hasMove['batonpass'] && !restTalk)
+					(counter.setupType !== 'Physical' || counter.get('physicalsetup') > 1) ||
+					(counter.get('Physical') + counter.get('physicalpool') < 2 && !moves.has('batonpass') && !restTalk)
 				),
 				isSetup: true,
 			};
@@ -59,13 +61,13 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return {
 				cull: (
 					counter.setupType !== 'Special' ||
-					(counter.Special + counter.specialpool < 2 && !hasMove['batonpass'] && !restTalk)
+					(counter.get('Special') + counter.get('specialpool') < 2 && !moves.has('batonpass') && !restTalk)
 				),
 				isSetup: true,
 			};
 		case 'agility':
 			return {
-				cull: (counter.damagingMoves.length < 2 && !hasMove['batonpass']) || hasMove['substitute'] || restTalk,
+				cull: (counter.damagingMoves.size < 2 && !moves.has('batonpass')) || moves.has('substitute') || restTalk,
 				isSetup: !counter.setupType,
 			};
 
@@ -75,140 +77,147 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				const rest = movePool.indexOf('rest');
 				if (rest >= 0) this.fastPop(movePool, rest);
 			}
-			return {cull: !hasMove['rest']};
+			return {cull: !moves.has('rest')};
 		case 'barrier':
-			return {cull: !hasMove['calmmind'] && !hasMove['batonpass'] && !hasMove['mirrorcoat']};
+			return {cull: !moves.has('calmmind') && !moves.has('batonpass') && !moves.has('mirrorcoat')};
 		case 'batonpass':
 			return {cull: (
-				(!counter.setupType && !counter.speedsetup) &&
-				['meanlook', 'spiderweb', 'substitute', 'wish'].every(m => !hasMove[m])
+				(!counter.setupType && !counter.get('speedsetup')) &&
+				['meanlook', 'spiderweb', 'substitute', 'wish'].every(m => !moves.has(m))
 			)};
 		case 'endeavor': case 'flail': case 'reversal':
-			return {cull: restTalk || (!hasMove['endure'] && !hasMove['substitute'])};
+			return {cull: restTalk || (!moves.has('endure') && !moves.has('substitute'))};
 		case 'endure':
 			return {cull: movePool.includes('destinybond')};
 		case 'extremespeed': case 'raindance': case 'sunnyday':
-			return {cull: counter.damagingMoves.length < 2 || hasMove['rest']};
+			return {cull: counter.damagingMoves.size < 2 || moves.has('rest')};
 		case 'focuspunch':
 			return {cull: (
-				(counter.damagingMoves.length < 2 || hasMove['rest'] || counter.setupType && !hasMove['spore']) ||
-				(!hasMove['substitute'] && (counter.Physical < 4 || hasMove['fakeout'])) ||
+				(counter.damagingMoves.size < 2 || moves.has('rest') || counter.setupType && !moves.has('spore')) ||
+				(!moves.has('substitute') && (counter.get('Physical') < 4 || moves.has('fakeout'))) ||
 				// Breloom likes to have coverage
-				(species.id === 'breloom' && (hasMove['machpunch'] || hasMove['skyuppercut']))
+				(species.id === 'breloom' && (moves.has('machpunch') || moves.has('skyuppercut')))
 			)};
 		case 'moonlight':
-			return {cull: hasMove['wish'] || hasMove['protect']};
+			return {cull: moves.has('wish') || moves.has('protect')};
 		case 'perishsong':
-			return {cull: !hasMove['meanlook'] && !hasMove['spiderweb']};
+			return {cull: !moves.has('meanlook') && !moves.has('spiderweb')};
 		case 'protect':
-			return {cull: !hasAbility['Speed Boost'] && ['perishsong', 'toxic', 'wish'].every(m => !hasMove[m])};
+			return {cull: !abilities.has('Speed Boost') && ['perishsong', 'toxic', 'wish'].every(m => !moves.has(m))};
 		case 'refresh':
 			return {cull: !counter.setupType};
 		case 'rest':
 			return {cull: (
 				movePool.includes('sleeptalk') ||
-				(!hasMove['sleeptalk'] && (!!counter.recovery || movePool.includes('curse')))
+				(!moves.has('sleeptalk') && (!!counter.get('recovery') || movePool.includes('curse')))
 			)};
 		case 'solarbeam':
 			if (movePool.length > 1) {
 				const sunnyday = movePool.indexOf('sunnyday');
 				if (sunnyday >= 0) this.fastPop(movePool, sunnyday);
 			}
-			return {cull: !hasMove['sunnyday']};
+			return {cull: !moves.has('sunnyday')};
 
 		// Bad after setup
 		case 'aromatherapy': case 'healbell':
-			return {cull: hasMove['rest'] || teamDetails.statusCure};
+			return {cull: moves.has('rest') || !!teamDetails.statusCure};
 		case 'confuseray':
-			return {cull: counter.setupType || restTalk};
+			return {cull: !!counter.setupType || restTalk};
 		case 'counter': case 'mirrorcoat':
-			return {cull: counter.setupType || ['rest', 'substitute', 'toxic'].some(m => hasMove[m])};
+			return {cull: !!counter.setupType || ['rest', 'substitute', 'toxic'].some(m => moves.has(m))};
 		case 'destinybond':
-			return {cull: counter.setupType || hasMove['explosion'] || hasMove['selfdestruct']};
+			return {cull: !!counter.setupType || moves.has('explosion') || moves.has('selfdestruct')};
 		case 'doubleedge': case 'facade': case 'fakeout': case 'waterspout':
-			return {cull: counter.Status >= 1 || (move.id === 'doubleedge' && hasMove['return'])};
+			return {cull: (
+				(!types.has(move.type) && counter.get('Status') >= 1) ||
+				(move.id === 'doubleedge' && moves.has('return'))
+			)};
 		case 'encore': case 'painsplit': case 'recover': case 'yawn':
 			return {cull: restTalk};
 		case 'explosion': case 'machpunch': case 'selfdestruct':
 			// Snorlax doesn't want to roll selfdestruct as its only STAB move
-			const snorlaxCase = species.id === 'snorlax' && !hasMove['return'] && !hasMove['bodyslam'];
-			return {cull: snorlaxCase || hasMove['rest'] || hasMove['substitute'] || !!counter.recovery};
+			const snorlaxCase = species.id === 'snorlax' && !moves.has('return') && !moves.has('bodyslam');
+			return {cull: snorlaxCase || moves.has('rest') || moves.has('substitute') || !!counter.get('recovery')};
 		case 'haze':
-			return {cull: counter.setupType || hasMove['raindance'] || restTalk};
+			return {cull: !!counter.setupType || moves.has('raindance') || restTalk};
 		case 'icywind': case 'pursuit': case 'superpower': case 'transform':
-			return {cull: counter.setupType || hasMove['rest']};
+			return {cull: !!counter.setupType || moves.has('rest')};
 		case 'leechseed':
-			return {cull: counter.setupType || hasMove['explosion']};
+			return {cull: !!counter.setupType || moves.has('explosion')};
 		case 'stunspore':
-			return {cull: hasMove['sunnyday'] || hasMove['toxic']};
+			return {cull: moves.has('sunnyday') || moves.has('toxic')};
 		case 'lightscreen':
-			return {cull: counter.setupType || !!counter.speedsetup};
+			return {cull: !!counter.setupType || !!counter.get('speedsetup')};
 		case 'meanlook': case 'spiderweb':
-			return {cull: !!counter.speedsetup || (!hasMove['batonpass'] && !hasMove['perishsong'])};
+			return {cull: !!counter.get('speedsetup') || (!moves.has('batonpass') && !moves.has('perishsong'))};
 		case 'morningsun':
-			return {cull: counter.speedsetup >= 1};
+			return {cull: counter.get('speedsetup') >= 1};
 		case 'quickattack':
-			return {cull: !!counter.speedsetup || hasMove['substitute'] || (!hasType['Normal'] && !!counter.Status)};
+			return {cull: (
+				!!counter.get('speedsetup') ||
+				moves.has('substitute') ||
+				(!types.has('Normal') && !!counter.get('Status'))
+			)};
 		case 'rapidspin':
-			return {cull: counter.setupType || hasMove['rest'] || teamDetails.rapidSpin};
+			return {cull: !!counter.setupType || moves.has('rest') || !!teamDetails.rapidSpin};
 		case 'reflect':
-			return {cull: counter.setupType || !!counter.speedsetup};
+			return {cull: !!counter.setupType || !!counter.get('speedsetup')};
 		case 'seismictoss':
-			return {cull: counter.setupType || hasMove['thunderbolt']};
+			return {cull: !!counter.setupType || moves.has('thunderbolt')};
 		case 'spikes':
-			return {cull: counter.setupType || hasMove['substitute'] || restTalk || teamDetails.spikes};
+			return {cull: !!counter.setupType || moves.has('substitute') || restTalk || !!teamDetails.spikes};
 		case 'substitute':
-			const restOrDD = hasMove['rest'] || (hasMove['dragondance'] && !hasMove['bellydrum']);
+			const restOrDD = moves.has('rest') || (moves.has('dragondance') && !moves.has('bellydrum'));
 			// This cull condition otherwise causes mono-solarbeam Entei
-			return {cull: restOrDD || (species.id !== 'entei' && !hasMove['batonpass'] && movePool.includes('calmmind'))};
+			return {cull: restOrDD || (species.id !== 'entei' && !moves.has('batonpass') && movePool.includes('calmmind'))};
 		case 'thunderwave':
-			return {cull: counter.setupType || hasMove['bodyslam'] || hasMove['substitute'] || restTalk};
+			return {cull: !!counter.setupType || moves.has('bodyslam') || moves.has('substitute') || restTalk};
 		case 'toxic':
 			return {cull: (
-				counter.setupType ||
-				counter.speedsetup ||
-				['endure', 'focuspunch', 'raindance', 'yawn', 'hypnosis'].some(m => hasMove[m])
+				!!counter.setupType ||
+				!!counter.get('speedsetup') ||
+				['endure', 'focuspunch', 'raindance', 'yawn', 'hypnosis'].some(m => moves.has(m))
 			)};
 		case 'trick':
-			return {cull: counter.Status > 1};
+			return {cull: counter.get('Status') > 1};
 		case 'willowisp':
-			return {cull: counter.setupType || hasMove['hypnosis'] || hasMove['toxic']};
+			return {cull: !!counter.setupType || moves.has('hypnosis') || moves.has('toxic')};
 
 		// Bit redundant to have both
 		case 'bodyslam':
-			return {cull: hasMove['return'] && !!counter.Status};
+			return {cull: moves.has('return') && !!counter.get('Status')};
 		case 'headbutt':
-			return {cull: !hasMove['bodyslam'] && !hasMove['thunderwave']};
+			return {cull: !moves.has('bodyslam') && !moves.has('thunderwave')};
 		case 'return':
 			return {cull: (
-				hasMove['endure'] ||
-				(hasMove['substitute'] && hasMove['flail']) ||
-				(hasMove['bodyslam'] && !counter.Status)
+				moves.has('endure') ||
+				(moves.has('substitute') && moves.has('flail')) ||
+				(moves.has('bodyslam') && !counter.get('Status'))
 			)};
 		case 'fireblast':
-			return {cull: hasMove['flamethrower'] && !!counter.Status};
+			return {cull: moves.has('flamethrower') && !!counter.get('Status')};
 		case 'flamethrower':
-			return {cull: hasMove['fireblast'] && !counter.Status};
+			return {cull: moves.has('fireblast') && !counter.get('Status')};
 		case 'overheat':
-			return {cull: hasMove['flamethrower'] || hasMove['substitute']};
+			return {cull: moves.has('flamethrower') || moves.has('substitute')};
 		case 'hydropump':
-			return {cull: hasMove['surf'] && !!counter.Status};
+			return {cull: moves.has('surf') && !!counter.get('Status')};
 		case 'surf':
-			return {cull: hasMove['hydropump'] && !counter.Status};
+			return {cull: moves.has('hydropump') && !counter.get('Status')};
 		case 'gigadrain':
-			return {cull: hasMove['morningsun'] || hasMove['toxic']};
+			return {cull: moves.has('morningsun') || moves.has('toxic')};
 		case 'hiddenpower':
-			const stabCondition = hasType[move.type] && (
-				(hasMove['substitute'] && !counter.setupType && !hasMove['toxic']) ||
+			const stabCondition = types.has(move.type) && counter.get(move.type) > 1 && (
+				(moves.has('substitute') && !counter.setupType && !moves.has('toxic')) ||
 				// This otherwise causes STABless meganium
-				(species.id !== 'meganium' && hasMove['toxic'] && !hasMove['substitute']) ||
+				(species.id !== 'meganium' && moves.has('toxic') && !moves.has('substitute')) ||
 				restTalk
 			);
-			return {cull: stabCondition || (move.type === 'Grass' && hasMove['sunnyday'] && hasMove['solarbeam'])};
+			return {cull: stabCondition || (move.type === 'Grass' && moves.has('sunnyday') && moves.has('solarbeam'))};
 		case 'brickbreak': case 'crosschop': case 'skyuppercut':
-			return {cull: hasMove['substitute'] && (hasMove['focuspunch'] || movePool.includes('focuspunch'))};
+			return {cull: moves.has('substitute') && (moves.has('focuspunch') || movePool.includes('focuspunch'))};
 		case 'earthquake':
-			return {cull: hasMove['bonemerang']};
+			return {cull: moves.has('bonemerang')};
 		}
 
 		return {cull: false};
@@ -217,11 +226,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	getItem(
 		ability: string,
-		hasType: {[k: string]: true},
-		hasMove: {[k: string]: true},
-		counter: {[k: string]: any},
-		species: Species,
-		moves: ID[],
+		types: Set<string>,
+		moves: Set<string>,
+		counter: MoveCounter,
+		species: Species
 	) {
 		// First, the high-priority items
 		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
@@ -231,34 +239,37 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (species.name === 'Shedinja') return 'Lum Berry';
 		if (species.name === 'Unown') return 'Twisted Spoon';
 
-		if (hasMove['trick']) return 'Choice Band';
-		if (hasMove['rest'] && !hasMove['sleeptalk'] && !['Early Bird', 'Natural Cure', 'Shed Skin'].includes(ability)) {
+		if (moves.has('trick')) return 'Choice Band';
+		if (moves.has('rest') && !moves.has('sleeptalk') && !['Early Bird', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
 		}
 
 		// Medium priority items
-		if (hasMove['dragondance'] && ability !== 'Natural Cure') return 'Lum Berry';
-		if ((hasMove['bellydrum'] && counter.Physical - counter.priority > 1) || (
-			((hasMove['swordsdance'] && counter.Status < 2) || (hasMove['bulkup'] && hasMove['substitute'])) &&
-			!counter.priority &&
+		if (moves.has('dragondance') && ability !== 'Natural Cure') return 'Lum Berry';
+		if ((moves.has('bellydrum') && counter.get('Physical') - counter.get('priority') > 1) || (
+			((moves.has('swordsdance') && counter.get('Status') < 2) || (moves.has('bulkup') && moves.has('substitute'))) &&
+			!counter.get('priority') &&
 			species.baseStats.spe >= 60 && species.baseStats.spe <= 95
 		)) {
 			return 'Salac Berry';
 		}
-		if (hasMove['endure'] || (
-			hasMove['substitute'] &&
-			['bellydrum', 'endeavor', 'flail', 'reversal'].some(m => hasMove[m])
+		if (moves.has('endure') || (
+			moves.has('substitute') &&
+			['bellydrum', 'endeavor', 'flail', 'reversal'].some(m => moves.has(m))
 		)) {
 			return (
-				species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter.speedsetup && !hasMove['focuspunch']
+				species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter.get('speedsetup') && !moves.has('focuspunch')
 			) ? 'Salac Berry' : 'Liechi Berry';
 		}
-		if (hasMove['substitute'] && counter.Physical >= 3 && species.baseStats.spe >= 120) return 'Liechi Berry';
-		if ((hasMove['substitute'] || hasMove['raindance']) && counter.Special >= 3) return 'Petaya Berry';
-		if (counter.Physical >= 4 && !hasMove['fakeout']) return 'Choice Band';
-		if (counter.Physical >= 3 && !hasMove['rapidspin'] && (
-			['firepunch', 'icebeam', 'overheat'].some(m => hasMove[m]) ||
-			(moves.filter(m => this.dex.data.Moves[m].category === 'Special' && hasType[this.dex.data.Moves[m].type]).length)
+		if (moves.has('substitute') && counter.get('Physical') >= 3 && species.baseStats.spe >= 120) return 'Liechi Berry';
+		if ((moves.has('substitute') || moves.has('raindance')) && counter.get('Special') >= 3) return 'Petaya Berry';
+		if (counter.get('Physical') >= 4 && !moves.has('fakeout')) return 'Choice Band';
+		if (counter.get('Physical') >= 3 && !moves.has('rapidspin') && (
+			['firepunch', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
+			Array.from(moves).some(m => {
+				const moveData = this.dex.moves.get(m);
+				return moveData.category === 'Special' && types.has(moveData.type);
+			})
 		)) {
 			return 'Choice Band';
 		}
@@ -269,25 +280,27 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	shouldCullAbility(
 		ability: string,
-		hasMove: {[k: string]: true},
-		counter: {[k: string]: any},
+		types: Set<string>,
+		moves: Set<string>,
+		abilities: Set<string>,
+		counter: MoveCounter,
+		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
-		abilityNames: string[],
 	) {
 		switch (ability) {
 		case 'Chlorophyll':
-			return !hasMove['sunnyday'] && !teamDetails['sun'];
+			return !moves.has('sunnyday') && !teamDetails['sun'];
 		case 'Compound Eyes':
-			return !counter['inaccurate'];
+			return !counter.get('inaccurate');
 		case 'Hustle':
-			return counter.Physical < 2;
+			return counter.get('Physical') < 2;
 		case 'Lightning Rod':
 			return species.types.includes('Ground');
 		case 'Overgrow':
-			return !counter['Grass'];
+			return !counter.get('Grass');
 		case 'Rock Head':
-			return !counter['recoil'];
+			return !counter.get('recoil');
 		case 'Sand Veil':
 			return !teamDetails['sand'];
 		case 'Serene Grace':
@@ -296,13 +309,13 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// Sturdy is bad.
 			return true;
 		case 'Swift Swim':
-			return !hasMove['raindance'] && !teamDetails['rain'];
+			return !moves.has('raindance') && !teamDetails['rain'];
 		case 'Swarm':
-			return !counter['Bug'];
+			return !counter.get('Bug');
 		case 'Torrent':
-			return !counter['Water'];
+			return !counter.get('Water');
 		case 'Water Absorb':
-			return abilityNames.includes('Swift Swim');
+			return abilities.has('Swift Swim');
 		}
 
 		return false;
@@ -316,69 +329,52 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
 		const rejectedPool = [];
-		const moves: ID[] = [];
+		const moves = new Set<string>();
 		let ability = '';
 		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
-		let ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
 			if (setMoveid.startsWith('hiddenpower')) availableHP++;
 		}
 
-		const hasType: {[k: string]: true} = {};
-		hasType[species.types[0]] = true;
-		if (species.types[1]) {
-			hasType[species.types[1]] = true;
-		}
-		const hasAbility: {[k: string]: true} = {};
-		hasAbility[species.abilities[0]] = true;
-		if (species.abilities[1]) {
-			hasAbility[species.abilities[1]] = true;
-		}
-		let hasMove: {[k: string]: true} = {};
-		let counter: {[k: string]: any};
+		const types = new Set(species.types);
+
+		const abilities = new Set(Object.values(species.abilities));
+
+		let counter: MoveCounter;
+		// We use a special variable to track Hidden Power
+		// so that we can check for all Hidden Powers at once
+		let hasHiddenPower = false;
 
 		do {
-			// Keep track of all moves we have:
-			hasMove = {};
-			for (const moveid of moves) {
-				if (moveid.startsWith('hiddenpower')) {
-					hasMove['hiddenpower'] = true;
-				} else {
-					hasMove[moveid] = true;
-				}
-			}
-
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.length < 4 && movePool.length) {
+			while (moves.size < 4 && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
-					if (hasMove['hiddenpower']) continue;
-					hasMove['hiddenpower'] = true;
-				} else {
-					hasMove[moveid] = true;
+					if (hasHiddenPower) continue;
+					hasHiddenPower = true;
 				}
-				moves.push(moveid);
-			}
-			while (moves.length < 4 && rejectedPool.length) {
-				const moveid = this.sampleNoReplace(rejectedPool);
-				hasMove[moveid] = true;
-				moves.push(moveid);
+				moves.add(moveid);
 			}
 
-			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
+			while (moves.size < 4 && rejectedPool.length) {
+				const moveid = this.sampleNoReplace(rejectedPool);
+				moves.add(moveid);
+			}
+
+			counter = this.queryMoves(moves, species.types, abilities, movePool);
 
 			// Iterate through the moves again, this time to cull them:
-			for (const [k, moveId] of moves.entries()) {
-				const move = this.dex.moves.get(moveId);
-				const moveid = move.id;
+			for (const moveid of moves) {
+				const move = this.dex.moves.get(moveid);
 
-				let {cull, isSetup} = this.shouldCullMove(move, hasType, hasMove, hasAbility, counter, movePool, teamDetails, species);
+				let {cull, isSetup} = this.shouldCullMove(move, types, moves, abilities, counter, movePool, teamDetails, species);
 
 				// This move doesn't satisfy our setup requirements:
 				if (
-					(counter.setupType === 'Physical' && move.category === 'Special' && !hasType[move.type] && move.type !== 'Fire') ||
+					(counter.setupType === 'Physical' && move.category === 'Special' && !types.has(move.type) && move.type !== 'Fire') ||
 					(counter.setupType === 'Special' && move.category === 'Physical' && moveid !== 'superpower')
 				) {
 					cull = true;
@@ -390,33 +386,34 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					(counter.setupType || !move.stallingMove) &&
 					// These moves cannot be rejected in favor of a forced move
 					!['batonpass', 'sleeptalk', 'solarbeam', 'substitute', 'sunnyday'].includes(moveid) &&
-					(move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit))
+					(move.category === 'Status' || !types.has(move.type) || (move.basePower && move.basePower < 40 && !move.multihit))
 				);
 				// Pokemon should usually have at least one STAB move
 				const requiresStab = (
-					!counter.stab &&
-					!hasMove['seismictoss'] && !hasMove['nightshade'] &&
+					!counter.get('stab') &&
+					!moves.has('seismictoss') && !moves.has('nightshade') &&
 					species.id !== 'castform' &&
 					// If a Flying-type has Psychic, it doesn't need STAB
-					!(hasMove['psychic'] && hasType['Flying']) &&
-					!(hasType['Ghost'] && species.baseStats.spa > species.baseStats.atk) &&
+					!(moves.has('psychic') && types.has('Flying')) &&
+					!(types.has('Ghost') && species.baseStats.spa > species.baseStats.atk) &&
 					!(
 						// With Calm Mind, Lugia and pure Normal-types are fine without STAB
-						counter.setupType === 'Special' &&
-						species.id === 'lugia' ||
-						(hasType['Normal'] && species.types.length < 2)
+						counter.setupType === 'Special' && (
+							species.id === 'lugia' ||
+							(types.has('Normal') && species.types.length < 2)
+						)
 					) &&
 					!(
 						// With Swords Dance, Dark-types and pure Water-types are fine without STAB
 						counter.setupType === 'Physical' &&
-						((hasType['Water'] && species.types.length < 2) || hasType['Dark'])
+						((types.has('Water') && species.types.length < 2) || types.has('Dark'))
 					) &&
-					counter.physicalpool + counter.specialpool > 0
+					counter.get('physicalpool') + counter.get('specialpool') > 0
 				);
 
 				const runEnforcementChecker = (checkerName: string) => (
 					this.moveEnforcementCheckers[checkerName]?.(
-						movePool, hasMove, hasAbility, hasType, counter, species as Species, teamDetails
+						movePool, moves, abilities, types, counter, species as Species, teamDetails
 					)
 				);
 
@@ -424,19 +421,19 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					// There may be more important moves that this Pokemon needs
 					if (
 						requiresStab ||
-						(counter.setupType && counter[counter.setupType] < 2) ||
-						(hasMove['substitute'] && movePool.includes('morningsun')) ||
+						(counter.setupType && counter.get(counter.setupType) < 2) ||
+						(moves.has('substitute') && movePool.includes('morningsun')) ||
 						['meteormash', 'spore', 'recover'].some(m => movePool.includes(m))
 					) {
 						cull = true;
 					} else {
 						// Pokemon should have moves that benefit their typing and their other moves
-						for (const type of Object.keys(hasType)) {
+						for (const type of types) {
 							if (runEnforcementChecker(type)) {
 								cull = true;
 							}
 						}
-						for (const m of Object.keys(hasMove)) {
+						for (const m of moves) {
 							if (runEnforcementChecker(m)) cull = true;
 						}
 					}
@@ -457,30 +454,26 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				// Remove rejected moves from the move list
 				if (
 					cull &&
-					(movePool.length - availableHP || availableHP && (moveid === 'hiddenpower' || !hasMove['hiddenpower']))
+					(movePool.length - availableHP || availableHP && (moveid.startsWith('hiddenpower') || !hasHiddenPower))
 				) {
-					if (move.category !== 'Status' && !move.damage && (moveid !== 'hiddenpower' || !availableHP)) {
-						rejectedPool.push(moves[k]);
+					if (move.category !== 'Status' && !move.damage && (!moveid.startsWith('hiddenpower') || !availableHP)) {
+						rejectedPool.push(moveid);
 					}
-					moves.splice(k, 1);
-					// hp fire isnt getting rejected
+					moves.delete(moveid);
 					break;
 				}
 				if (cull && rejectedPool.length) {
-					moves.splice(k, 1);
+					moves.delete(moveid);
 					break;
 				}
 			}
-		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
+		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
 
-		// If Hidden Power has been removed, reset the IVs
-		if (!hasMove['hiddenpower']) ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-
-		const abilities = Object.values(species.abilities).filter(a => this.dex.abilities.get(a).gen === 3);
-		abilities.sort((a, b) => this.dex.abilities.get(b).rating - this.dex.abilities.get(a).rating);
-		let ability0 = this.dex.abilities.get(abilities[0]);
-		let ability1 = this.dex.abilities.get(abilities[1]);
-		if (abilities[1]) {
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a)).filter(a => a.gen === 3);
+		Utils.sortBy(abilityData, abil => -abil.rating);
+		let ability0 = abilityData[0];
+		let ability1 = abilityData[1];
+		if (abilityData[1]) {
 			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];
 			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
@@ -488,20 +481,20 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 			ability = ability0.name;
 
-			while (this.shouldCullAbility(ability, hasMove, counter, teamDetails, species, abilities)) {
+			while (this.shouldCullAbility(ability, types, moves, abilities, counter, movePool, teamDetails, species)) {
 				if (ability === ability0.name && ability1.rating > 1) {
 					ability = ability1.name;
 				} else {
 					// Default to the highest rated ability if all are rejected
-					ability = abilities[0];
+					ability = abilityData[0].name;
 					break;
 				}
 			}
 		} else {
-			ability = abilities[0];
+			ability = abilityData[0].name;
 		}
 
-		const item = this.getItem(ability, hasType, hasMove, counter, species, moves);
+		const item = this.getItem(ability, types, moves, counter, species);
 		const levelScale: {[k: string]: number} = {
 			Uber: 76,
 			OU: 80,
@@ -520,10 +513,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-		if (hasMove['substitute'] && ['endeavor', 'flail', 'reversal'].some(m => hasMove[m])) {
+		if (moves.has('substitute') && ['endeavor', 'flail', 'reversal'].some(m => moves.has(m))) {
 			// Endeavor/Flail/Reversal users should be able to use four Substitutes
 			if (hp % 4 === 0) evs.hp -= 4;
-		} else if (hasMove['substitute'] && (item === 'Salac Berry' || item === 'Petaya Berry' || item === 'Liechi Berry')) {
+		} else if (moves.has('substitute') && (item === 'Salac Berry' || item === 'Petaya Berry' || item === 'Liechi Berry')) {
 			// Other pinch berry holders should have berries activate after three Substitutes
 			while (hp % 4 > 0) {
 				evs.hp -= 4;
@@ -532,21 +525,21 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		// Minimize confusion damage
-		if (!counter.Physical && !hasMove['transform']) {
+		if (!counter.get('Physical') && !moves.has('transform')) {
 			evs.atk = 0;
-			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 28 : 0;
+			ivs.atk = hasHiddenPower ? ivs.atk - 28 : 0;
 		}
 
 		return {
 			name: species.baseSpecies,
 			species: forme,
 			gender: species.gender,
-			moves: moves,
+			moves: Array.from(moves),
 			ability: ability,
 			evs: evs,
 			ivs: ivs,
 			item: item,
-			level: level,
+			level,
 			shiny: this.randomChance(1, 1024),
 		};
 	}
@@ -557,9 +550,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
-		const isMonotype = ruleTable.has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
 		const typePool = this.dex.types.names();
-		const type = this.sample(typePool);
+		const type = this.forceMonotype || this.sample(typePool);
 
 		const baseFormes: {[k: string]: number} = {};
 		const tierCount: {[k: string]: number} = {};
@@ -569,7 +562,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 
-		while (pokemonPool.length && pokemon.length < 6) {
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists || !species.randomBattleMoves) continue;
 			// Limit to one of each species (Species Clause)
@@ -584,14 +577,17 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
 
-			if (!isMonotype) {
+			if (!isMonotype && !this.forceMonotype) {
+				// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+				const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+
 				// Limit two Pokemon per tier
-				if (tierCount[tier] >= 2) continue;
+				if (tierCount[tier] >= 2 * limitFactor) continue;
 
 				// Limit two of any type
 				let skip = false;
 				for (const typeName of types) {
-					if (typeCount[typeName] > 1) {
+					if (typeCount[typeName] >= 2 * limitFactor) {
 						skip = true;
 						break;
 					}
@@ -599,7 +595,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				if (skip) continue;
 
 				// Limit one of any type combination
-				if (typeComboCount[typeCombo] >= 1) continue;
+				if (!this.forceMonotype && typeComboCount[typeCombo] >= 1 * limitFactor) continue;
 			}
 
 			// Okay, the set passes, add it to our team
@@ -643,7 +639,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			if (species.id === 'ditto') this.battleHasDitto = true;
 		}
 
-		if (pokemon.length < 6 && !isMonotype) {
+		if (pokemon.length < this.maxTeamSize && !isMonotype && !this.forceMonotype && pokemon.length < 12) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 

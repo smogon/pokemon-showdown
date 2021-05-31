@@ -139,7 +139,7 @@ describe('Transform', function () {
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire", "Flying"]);
 	});
 
-	it.skip(`should not announce that its ability was suppressed after Transforming`, function () {
+	it(`should not announce that its ability was suppressed after Transforming`, function () {
 		battle = common.createBattle([[
 			{species: "Mew", ability: 'synchronize', moves: ['transform']},
 		], [

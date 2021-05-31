@@ -1,4 +1,4 @@
-import {EventMethods} from './dex-conditions';
+import {PokemonEventMethods} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
 interface FlingData {
@@ -8,7 +8,7 @@ interface FlingData {
 	effect?: CommonHandlers['ResultMove'];
 }
 
-export interface ItemData extends Partial<Item>, EventMethods {
+export interface ItemData extends Partial<Item>, PokemonEventMethods {
 	name: string;
 }
 
@@ -18,10 +18,10 @@ export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 };
 
 export class Item extends BasicEffect implements Readonly<BasicEffect> {
-	readonly effectType: 'Item';
+	declare readonly effectType: 'Item';
 
 	/** just controls location on the item spritesheet */
-	readonly num!: number;
+	declare readonly num: number;
 
 	/**
 	 * A Move-like object depicting what happens when Fling is used on
@@ -89,16 +89,16 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	/** Is this item a Pokeball? */
 	readonly isPokeball: boolean;
 
-	readonly condition?: Partial<ConditionData>;
-	readonly forcedForme?: string;
-	readonly isChoice?: boolean;
-	readonly naturalGift?: {basePower: number, type: string};
-	readonly spritenum?: number;
-	readonly boosts?: SparseBoostsTable | false;
+	declare readonly condition?: ConditionData;
+	declare readonly forcedForme?: string;
+	declare readonly isChoice?: boolean;
+	declare readonly naturalGift?: {basePower: number, type: string};
+	declare readonly spritenum?: number;
+	declare readonly boosts?: SparseBoostsTable | false;
 
-	readonly onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
-	readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
-	readonly onStart?: (this: Battle, target: Pokemon) => void;
+	declare readonly onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
+	declare readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
+	declare readonly onStart?: (this: Battle, target: Pokemon) => void;
 
 	constructor(data: AnyObject) {
 		super(data);
