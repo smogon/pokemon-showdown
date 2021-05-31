@@ -314,6 +314,7 @@ export class BattleQueue {
 		for (const [i, action] of this.list.entries()) {
 			if (action.choice === 'move' && action.pokemon === pokemon) {
 				this.list.splice(i, 1);
+				pokemon.moveThisTurnResult = null;
 				return true;
 			}
 		}
