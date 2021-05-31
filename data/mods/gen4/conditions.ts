@@ -1,4 +1,9 @@
 export const Conditions: {[k: string]: ModdedConditionData} = {
+	brn: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 6,
+	},
 	par: {
 		inherit: true,
 		onBeforeMove(pokemon) {
@@ -37,6 +42,38 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			return false;
 		},
 	},
+	psn: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 6,
+	},
+	tox: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 6,
+	},
+	confusion: {
+		inherit: true,
+		onBeforeMove(pokemon) {
+			pokemon.volatiles['confusion'].time--;
+			if (!pokemon.volatiles['confusion'].time) {
+				pokemon.removeVolatile('confusion');
+				return;
+			}
+			this.add('-activate', pokemon, 'confusion');
+			if (this.randomChance(1, 2)) {
+				return;
+			}
+			const damage = this.actions.getDamage(pokemon, pokemon, 40);
+			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
+			this.damage(damage, pokemon, pokemon, {
+				id: 'confused',
+				effectType: 'Move',
+				type: '???',
+			} as ActiveMove);
+			return false;
+		},
+	},
 	frz: {
 		inherit: true,
 		onBeforeMove(pokemon, target, move) {
@@ -66,12 +103,34 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (source.hasItem('gripclaw')) return 6;
 			return this.random(3, 7);
 		},
+		onResidualOrder: 10,
+		onResidualSubOrder: 9,
+	},
+	futuremove: {
+		inherit: true,
+		onResidualOrder: 11,
 	},
 	stall: {
 		// In gen 3-4, the chance of protect succeeding does not fall below 1/8.
 		// See http://upokecenter.dreamhosters.com/dex/?lang=en&move=182
 		inherit: true,
 		counterMax: 8,
+	},
+	raindance: {
+		inherit: true,
+		onFieldResidualOrder: 8,
+	},
+	sunnyday: {
+		inherit: true,
+		onFieldResidualOrder: 8,
+	},
+	sandstorm: {
+		inherit: true,
+		onFieldResidualOrder: 8,
+	},
+	hail: {
+		inherit: true,
+		onFieldResidualOrder: 8,
 	},
 	// Arceus's true typing for all its formes is Normal, and it's only Multitype
 	// that changes its type, but its formes are specified to be their corresponding

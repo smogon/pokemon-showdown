@@ -865,6 +865,8 @@ export class Tournament extends Rooms.RoomGame {
 			}
 		}
 		if (!this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
+
+		if (output) output.sendReply("All available matches were checked for automatic disqualification.");
 	}
 
 	setScouting(allowed: boolean) {

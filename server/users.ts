@@ -259,7 +259,7 @@ export class Connection {
 		this.openPages = null;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
+		if (roomid && typeof roomid !== 'string') roomid = roomid.roomid;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
@@ -316,6 +316,7 @@ export interface UserSettings {
 
 // User
 export class User extends Chat.MessageContext {
+	/** In addition to needing it to implement MessageContext, this is also nice for compatibility with Connection. */
 	readonly user: User;
 	readonly inRooms: Set<RoomID>;
 	/**
@@ -487,7 +488,7 @@ export class User extends Chat.MessageContext {
 	}
 
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
+		if (roomid && typeof roomid !== 'string') roomid = roomid.roomid;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
@@ -1161,6 +1162,12 @@ export class User extends Chat.MessageContext {
 		// NOTE: can't do a this.update(...) at this point because we're no longer connected.
 	}
 	onDisconnect(connection: Connection) {
+		// slightly safer to do this here so that we can do this before Conn#user is nulled.
+		if (connection.openPages) {
+			for (const page of connection.openPages) {
+				Chat.handleRoomClose(page as RoomID, this, connection);
+			}
+		}
 		for (const [i, connected] of this.connections.entries()) {
 			if (connected === connection) {
 				this.connections.splice(i, 1);
@@ -1333,7 +1340,7 @@ export class User extends Chat.MessageContext {
 	cancelReady() {
 		// setting variables because this can't be short-circuited
 		const searchesCancelled = Ladders.cancelSearches(this);
-		const challengesCancelled = Ladders.clearChallenges(this.id);
+		const challengesCancelled = Ladders.challenges.clearFor(this.id, 'they changed their username');
 		if (searchesCancelled || challengesCancelled) {
 			this.popup(`Your searches and challenges have been cancelled because you changed your username.`);
 		}
@@ -1347,7 +1354,7 @@ export class User extends Chat.MessageContext {
 	}
 	updateReady(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);
-		Ladders.updateChallenges(this, connection);
+		Ladders.challenges.updateFor(connection || this);
 	}
 	updateSearch(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);
@@ -1647,8 +1654,9 @@ function socketReceive(worker: ProcessManager.StreamWorker, workerid: number, so
 	const user = connection.user;
 	if (!user) return;
 
-	// The client obviates the room id when sending messages to Lobby by default
-	const roomId = message.slice(0, pipeIndex) || (Rooms.lobby && 'lobby') || '';
+	// LEGACY: In the past, an empty room ID would default to Lobby,
+	// but that is no longer supported
+	const roomId = message.slice(0, pipeIndex) || '';
 	message = message.slice(pipeIndex + 1);
 
 	const room = Rooms.get(roomId) || null;

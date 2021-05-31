@@ -54,7 +54,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	 * users with temporary global auth.
 	 */
 	get(user: ID | User) {
-		if (typeof user !== 'string') return (user as User).tempGroup;
+		if (typeof user !== 'string') return user.tempGroup;
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
@@ -233,7 +233,7 @@ export class RoomAuth extends Auth {
 		this.room = room;
 	}
 	get(userOrID: ID | User): GroupSymbol {
-		const id = typeof userOrID === 'string' ? userOrID : (userOrID as User).id;
+		const id = typeof userOrID === 'string' ? userOrID : userOrID.id;
 
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? Users.globalAuth : null;
@@ -331,7 +331,13 @@ export class GlobalAuth extends Auth {
 			const id = toID(name);
 			this.usernames.set(id, name);
 			if (sectionid) this.sectionLeaders.set(id, sectionid as RoomSection);
-			super.set(id, symbol.charAt(0) as GroupSymbol);
+
+			// handle glitched entries where a user has two entries in usergroups.csv due to bugs
+			const newSymbol = symbol.charAt(0) as GroupSymbol;
+			const preexistingSymbol = super.get(id);
+			// take a user's highest rank in usergroups.csv
+			if (preexistingSymbol && Auth.atLeast(preexistingSymbol, newSymbol)) continue;
+			super.set(id, newSymbol);
 		}
 	}
 	set(id: ID, group: GroupSymbol, username?: string) {

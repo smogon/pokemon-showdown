@@ -9,7 +9,7 @@
  * @license MIT
  */
 import * as net from 'net';
-import {YoutubeInterface} from '../chat-plugins/youtube';
+import {YouTube, Twitch} from '../chat-plugins/youtube';
 import {Net, Utils} from '../../lib';
 import {RoomSections} from './room-settings';
 
@@ -429,7 +429,7 @@ export const commands: Chat.ChatCommands = {
 		const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
 		this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 	},
-	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ &`],
+	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: % @ &`],
 
 	searchip: 'ipsearch',
 	ipsearchall: 'ipsearch',
@@ -438,7 +438,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target.trim()) return this.parse(`/help ipsearch`);
 		this.checkCan('rangeban');
 
-		let [ip, roomid] = this.splitOne(target);
+		const [ipOrHost, roomid] = this.splitOne(target);
 		const targetRoom = roomid ? Rooms.get(roomid) : null;
 		if (typeof targetRoom === 'undefined') {
 			return this.errorReply(`The room "${roomid}" does not exist.`);
@@ -446,47 +446,44 @@ export const commands: Chat.ChatCommands = {
 		const results: string[] = [];
 		const isAll = (cmd === 'ipsearchall');
 
-		// If the IP is a range ending with *, we remove the *, so we have to keep track of that now
-		// so that we can properly determine if a lack of users is caused by invalid input or if it's just an empty range.
-		const isValidRange = ip.endsWith('*') && IPTools.ipRangeRegex.test(ip);
-		if (/[a-z]/.test(ip)) {
+		if (/[a-z]/.test(ipOrHost)) {
 			// host
-			this.sendReply(`Users with host ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
+			this.sendReply(`Users with host ${ipOrHost}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
-				if (results.length > 100 && !isAll) continue;
-				if (!curUser.latestHost?.endsWith(ip)) continue;
+				if (results.length > 100 && !isAll) break;
+				if (!curUser.latestHost?.endsWith(ipOrHost)) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
-			if (results.length > 100 && !isAll) {
-				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
-			}
-		} else if (isValidRange) {
-			// IP range
-			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			ip = ip.slice(0, -1);
+		} else if (IPTools.ipRegex.test(ipOrHost)) {
+			// ip
+			this.sendReply(`Users with IP ${ipOrHost}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
-				if (results.length > 100 && !isAll) continue;
-				if (!curUser.latestIp.startsWith(ip)) continue;
+				if (curUser.latestIp !== ipOrHost) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
-			if (results.length > 100 && !isAll) {
-				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
+		} else if (IPTools.isValidRange(ipOrHost)) {
+			// range
+			this.sendReply(`Users in IP range ${ipOrHost}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
+			const checker = IPTools.checker(ipOrHost);
+			for (const curUser of Users.users.values()) {
+				if (results.length > 100 && !isAll) continue;
+				if (!checker(curUser.latestIp)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
+				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 		} else {
-			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			for (const curUser of Users.users.values()) {
-				if (curUser.latestIp !== ip) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
-				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
-			}
+			return this.errorReply(`${ipOrHost} is not a valid IP, IP range, or host.`);
 		}
+
 		if (!results.length) {
-			if (!isValidRange && !IPTools.ipRegex.test(ip)) return this.errorReply(`${ip} is not a valid IP or host.`);
 			return this.sendReply(`No users found.`);
 		}
-		return this.sendReply(results.join('; '));
+		this.sendReply(results.slice(0, 100).join('; '));
+		if (results.length > 100 && !isAll) {
+			this.sendReply(`More than 100 users found. Use /ipsearchall for the full list.`);
+		}
 	},
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
 
@@ -505,29 +502,13 @@ export const commands: Chat.ChatCommands = {
 		if (!(user1.id in room.users) || !(user2.id in room.users)) {
 			return this.errorReply(`Both users must be in this room.`);
 		}
-		const challenges = [];
-		const user1Challs = Ladders.challenges.get(user1.id);
-		if (user1Challs) {
-			for (const chall of user1Challs) {
-				if (chall.from === user1.id && Users.get(chall.to) === user2) {
-					challenges.push(Utils.html`${user1.name} is challenging ${user2.name} in ${Dex.formats.get(chall.formatid).name}.`);
-					break;
-				}
-			}
-		}
-		const user2Challs = Ladders.challenges.get(user2.id);
-		if (user2Challs) {
-			for (const chall of user2Challs) {
-				if (chall.from === user2.id && Users.get(chall.to) === user1) {
-					challenges.push(Utils.html`${user2.name} is challenging ${user1.name} in ${Dex.formats.get(chall.formatid).name}.`);
-					break;
-				}
-			}
-		}
-		if (!challenges.length) {
+		const chall = Ladders.challenges.search(user1.id, user2.id);
+
+		if (!chall) {
 			return this.sendReplyBox(Utils.html`${user1.name} and ${user2.name} are not challenging each other.`);
 		}
-		this.sendReplyBox(challenges.join(`<br />`));
+		const [from, to] = user1.id === chall.from ? [user1, user2] : [user2, user1];
+		this.sendReplyBox(Utils.html`${from.name} is challenging ${to.name} in ${Dex.formats.get(chall.format).name}.`);
 	},
 	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: * @ # &`],
 
@@ -816,7 +797,7 @@ export const commands: Chat.ChatCommands = {
 						Gen: String(ability.gen) || 'CAP',
 					};
 					if (ability.isPermanent) details["&#10003; Not affected by Gastro Acid"] = "";
-					if (ability.isUnbreakable) details["&#10003; Not affected by Mold Breaker"] = "";
+					if (ability.isBreakable) details["&#10003; Ignored by Mold Breaker"] = "";
 				}
 				break;
 			default:
@@ -824,10 +805,9 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (showDetails) {
-				buffer += `|raw|<font size="1">${Object.keys(details).map(detail => {
-					if (details[detail] === '') return detail;
-					return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-				}).join("&nbsp;|&ThickSpace;")}</font>\n`;
+				buffer += `|raw|<font size="1">${Object.entries(details).map(([detail, value]) => (
+					value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
 			}
 		}
 		this.sendReply(buffer);
@@ -1569,6 +1549,7 @@ export const commands: Chat.ChatCommands = {
 
 	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
+		target = toID(target);
 		const showRoom = (target !== 'global');
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
@@ -1822,40 +1803,43 @@ export const commands: Chat.ChatCommands = {
 		const {totalMatches, sections} = findFormats(targetId, isOMSearch);
 
 		if (!totalMatches) return this.errorReply("No matched formats found.");
-		if (!this.runBroadcast()) return;
-		if (totalMatches === 1) {
+
+		const format = totalMatches === 1 ? Dex.formats.get(Object.values(sections)[0].formats[0]) : null;
+
+		if (!this.runBroadcast(`!formathelp ${format ? format.id : target}`)) return;
+
+		if (format) {
 			const rules: string[] = [];
 			let rulesetHtml = '';
-			const subformat = Dex.formats.get(Object.values(sections)[0].formats[0]);
-			if (['Format', 'Rule', 'ValidatorRule'].includes(subformat.effectType)) {
-				if (subformat.ruleset?.length) {
-					rules.push(`<b>Ruleset</b> - ${Utils.escapeHTML(subformat.ruleset.join(", "))}`);
+			if (['Format', 'Rule', 'ValidatorRule'].includes(format.effectType)) {
+				if (format.ruleset?.length) {
+					rules.push(`<b>Ruleset</b> - ${Utils.escapeHTML(format.ruleset.join(", "))}`);
 				}
-				if (subformat.banlist?.length) {
-					rules.push(`<b>Bans</b> - ${Utils.escapeHTML(subformat.banlist.join(", "))}`);
+				if (format.banlist?.length) {
+					rules.push(`<b>Bans</b> - ${Utils.escapeHTML(format.banlist.join(", "))}`);
 				}
-				if (subformat.unbanlist?.length) {
-					rules.push(`<b>Unbans</b> - ${Utils.escapeHTML(subformat.unbanlist.join(", "))}`);
+				if (format.unbanlist?.length) {
+					rules.push(`<b>Unbans</b> - ${Utils.escapeHTML(format.unbanlist.join(", "))}`);
 				}
-				if (subformat.restricted?.length) {
-					rules.push(`<b>Restricted</b> - ${Utils.escapeHTML(subformat.restricted.join(", "))}`);
+				if (format.restricted?.length) {
+					rules.push(`<b>Restricted</b> - ${Utils.escapeHTML(format.restricted.join(", "))}`);
 				}
 				if (rules.length > 0) {
 					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
 				} else {
-					rulesetHtml = `No ruleset found for ${subformat.name}`;
+					rulesetHtml = `No ruleset found for ${format.name}`;
 				}
 			}
-			let formatType: string = (subformat.gameType || "singles");
+			let formatType: string = (format.gameType || "singles");
 			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!subformat.desc && !subformat.threads) {
-				if (subformat.effectType === 'Format') {
-					return this.sendReplyBox(`No description found for this ${formatType} ${subformat.section} format.<br />${rulesetHtml}`);
+			if (!format.desc && !format.threads) {
+				if (format.effectType === 'Format') {
+					return this.sendReplyBox(`No description found for this ${formatType} ${format.section} format.<br />${rulesetHtml}`);
 				} else {
 					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
 				}
 			}
-			const descHtml = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
+			const descHtml = [...(format.desc ? [format.desc] : []), ...(format.threads || [])];
 			return this.sendReplyBox(`${descHtml.join("<br />")}<br />${rulesetHtml}`);
 		}
 
@@ -2527,7 +2511,6 @@ export const commands: Chat.ChatCommands = {
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 		} else {
-			const YouTube = new YoutubeInterface();
 			buf = await YouTube.generateVideoDisplay(request.link);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		}
@@ -2581,10 +2564,16 @@ export const commands: Chat.ChatCommands = {
 		const [link, comment] = Utils.splitFirst(target, ',');
 
 		let buf;
-		const YouTube = new YoutubeInterface();
 		if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
+		} else if (Twitch.linkRegex.test(link)) {
+			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
+			if (!channelId) return this.errorReply(`Specify a Twitch channel.`);
+			const info = await Twitch.getChannel(channelId);
+			if (!info) return this.errorReply(`Channel ${channelId} not found.`);
+			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
+			buf += `<twitch src="${link}" />`;
 		} else {
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
@@ -2594,7 +2583,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid image');
 			}
 		}
-		if (comment) buf += Utils.html`<br>(${comment.trim()})</div>`;
+		if (comment) buf += Utils.html`<br />(${comment.trim()})</div>`;
 
 		this.checkBroadcast();
 		if (this.broadcastMessage) {
@@ -2610,6 +2599,18 @@ export const commands: Chat.ChatCommands = {
 	showhelp: [
 		`/show [url] - Shows you an image or YouTube video.`,
 		`!show [url] - Shows an image or YouTube to everyone in a chatroom. Requires: whitelist % @ # &`,
+	],
+
+	rebroadcast(target, room, user, connection) {
+		if (!target || !target.startsWith('!') || !this.shouldBroadcast()) {
+			return this.parse('/help rebroadcast');
+		}
+		room = this.requireRoom();
+		room.lastBroadcast = '';
+		this.parse(target, {broadcastPrefix: "!rebroadcast "});
+	},
+	rebroadcasthelp: [
+		`!rebroadcast ![command] - Bypasses the broadcast cooldown to broadcast a command.`,
 	],
 
 	regdate: 'registertime',
@@ -2632,9 +2633,8 @@ export const commands: Chat.ChatCommands = {
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
 		const result = JSON.parse(rawResult);
 		const date = new Date(result.registertime * 1000);
-		const regDate = Chat.toTimestamp(date, {human: true});
 		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
-		this.sendReplyBox(Utils.html`The user '${target}' registered ${regTimeAgo} ago, at ${regDate}.`);
+		this.sendReplyBox(Utils.html`The user '${target}' registered ${regTimeAgo} ago, on the date ${date.toDateString()}.`);
 	},
 	registertimehelp: [`/registertime OR /regtime [user] - Find out when [user] registered.`],
 

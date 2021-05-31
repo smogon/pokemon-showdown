@@ -49,7 +49,7 @@ describe('Dex data', function () {
 					assert.equal(entry.num, formeEntry.num, `Forme ${formeEntry.name} of ${entry.name} should have the same dex number`);
 					assert.equal(formeEntry.baseSpecies, entry.name, `Forme ${forme} of ${entry.name} should have it as a baseSpecies`);
 					if (!forme.startsWith('Pokestar')) {
-						assert(entry.formeOrder !== undefined, `${entry.name} has an otherForme "${forme}" but no formeOrder field`);
+						assert.notEqual(entry.formeOrder, undefined, `${entry.name} has an otherForme "${forme}" but no formeOrder field`);
 						assert(entry.formeOrder.includes(forme), `Forme "${forme}" of ${entry.name} is not included in its formeOrder`);
 					}
 				}
@@ -76,7 +76,7 @@ describe('Dex data', function () {
 					assert(!forme.endsWith("-"), `Cosmetic forme name "${forme}" of ${entry.name} should not end with a hyphen`);
 					assert.equal(forme, forme.trim(), `Cosmetic forme name "${forme}" of ${entry.name} should not start or end with whitespace`);
 					if (!forme.startsWith('Pokestar')) {
-						assert(entry.formeOrder !== undefined, `${entry.name} has a cosmetic forme "${forme}" but no formeOrder field`);
+						assert.notEqual(entry.formeOrder, undefined, `${entry.name} has a cosmetic forme "${forme}" but no formeOrder field`);
 						assert(entry.formeOrder.includes(forme), `Cosmetic forme name "${forme}" of ${entry.name} is not included in its formeOrder`);
 					}
 				}
@@ -148,7 +148,12 @@ describe('Dex data', function () {
 
 	it('should have valid Formats', function () {
 		for (const format of Dex.formats.all()) {
-			Dex.formats.getRuleTable(format);
+			try {
+				Dex.formats.getRuleTable(format);
+			} catch (e) {
+				e.message = `${format.name}: ${e.message}`;
+				throw e;
+			}
 		}
 	});
 

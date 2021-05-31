@@ -66,6 +66,27 @@ describe('[Gen 8] Random Battle', () => {
 			assert.equal(set.item, "Throat Spray", `got ${set.item} instead of Throat Spray`);
 		});
 	});
+
+	it('Toxapex should always have Scald', () => testAlwaysHasMove('toxapex', options, 'scald'));
+
+	it('Shiinotic should always have Moonblast', () => testAlwaysHasMove('shiinotic', options, 'moonblast'));
+
+	it('should prevent Dragon Dance and Extreme Speed from appearing together', () => {
+		testNotBothMoves('dragonite', options, 'dragondance', 'extremespeed');
+	});
+
+	it('Rapidash with Swords Dance should have at least two attacks', () => {
+		const dex = Dex.forFormat(options.format);
+		testSet('rapidash', options, set => {
+			if (!set.moves.includes('swordsdance')) return;
+			assert(set.moves.filter(m => dex.moves.get(m).category !== 'Status').length > 1, `got ${JSON.stringify(set.moves)}`);
+		});
+	});
+
+	it('Celesteela should not get Leech Seed or Protect on Autotomize sets', () => {
+		testNotBothMoves('celesteela', options, 'leechseed', 'autotomize');
+		testNotBothMoves('celesteela', options, 'protect', 'autotomize');
+	});
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {

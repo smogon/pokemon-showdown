@@ -313,6 +313,8 @@ export class BattleActions {
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
+		this.battle.faintMessages();
+		this.battle.checkWin();
 	}
 	/**
 	 * useMove is the "inside" move caller. It handles effects of the
@@ -543,7 +545,7 @@ export class BattleActions {
 			return hitResult === this.battle.NOT_FAIL;
 		}
 
-		let atLeastOneFailure!: boolean;
+		let atLeastOneFailure = false;
 		for (const step of moveSteps) {
 			const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, targets, pokemon, move);
 			if (!hitResults) continue;
@@ -894,10 +896,10 @@ export class BattleActions {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
+		this.battle.faintMessages(false, false, !pokemon.hp);
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
-		this.battle.faintMessages();
 
 		if (move.recoil && move.totalDamage) {
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
@@ -1709,6 +1711,26 @@ export class BattleActions {
 
 		// ...but 16-bit truncation happens even later, and can truncate to 0
 		return tr(baseDamage, 16);
+	}
+
+	/**
+	 * Confusion damage is unique - most typical modifiers that get run when calculating
+	 * damage (e.g. Huge Power, Life Orb, critical hits) don't apply. It also uses a 16-bit
+	 * context for its damage, unlike the regular damage formula (though this only comes up
+	 * for base damage).
+	 */
+	getConfusionDamage(pokemon: Pokemon, basePower: number) {
+		const tr = this.battle.trunc;
+
+		const attack = pokemon.calculateStat('atk', pokemon.boosts['atk']);
+		const defense = pokemon.calculateStat('def', pokemon.boosts['def']);
+		const level = pokemon.level;
+		const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50) + 2;
+
+		// Damage is 16-bit context in self-hit confusion damage
+		let damage = tr(baseDamage, 16);
+		damage = this.battle.randomizer(damage);
+		return Math.max(1, damage);
 	}
 
 	// #endregion

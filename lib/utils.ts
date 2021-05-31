@@ -43,8 +43,8 @@ export function escapeRegex(str: string) {
 /**
  * Escapes HTML in a string.
 */
-export function escapeHTML(str: string) {
-	if (!str) return '';
+export function escapeHTML(str: string | number) {
+	if (str === null || str === undefined) return '';
 	return ('' + str)
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
@@ -365,6 +365,19 @@ export function waitUntil(time: number): Promise<void> {
 	});
 }
 
+export class Multiset<T> extends Map<T, number> {
+	add(key: T) {
+		this.set(key, (this.get(key) ?? 0) + 1);
+		return this;
+	}
+	remove(key: T) {
+		const newValue = (this.get(key) ?? 0) - 1;
+		if (newValue <= 0) return this.delete(key);
+		this.set(key, newValue);
+		return true;
+	}
+}
+
 // backwards compatibility
 export const Utils = {
 	waitUntil, html, escapeHTML,
@@ -372,5 +385,5 @@ export const Utils = {
 	shuffle, deepClone, clearRequireCache,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
-	escapeRegex,
+	escapeRegex, Multiset,
 };

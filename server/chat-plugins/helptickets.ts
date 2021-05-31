@@ -1,10 +1,15 @@
-import {FS, Utils} from '../../lib';
+import {FS, Utils, Net} from '../../lib';
 import {getCommonBattles} from '../chat-commands/info';
 import type {Punishment} from '../punishments';
+import type {PartialModlogEntry, ModlogID} from '../modlog';
 
 const TICKET_FILE = 'config/tickets.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
+const BATTLES_REGEX = /battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g;
+const REPLAY_REGEX = new RegExp(
+	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
+);
 
 Punishments.addRoomPunishmentType('TICKETBAN', 'banned from creating help tickets');
 
@@ -19,7 +24,30 @@ interface TicketState {
 	ip: string;
 	needsDelayWarning?: boolean;
 	offline?: boolean;
+	/** [main text, context] */
+	text?: [string, string];
+	resolved?: {time: number, result: string, by: string, seen: boolean, staffReason: string};
+	meta?: string;
 }
+
+interface TextTicketInfo {
+	checker?: (
+		input: string, context: string, pageId: string, user: User, reportTarget?: string
+	) => boolean | string[] | Promise<boolean | string[]>;
+	title: string;
+	disclaimer?: string;
+	getReviewDisplay: (
+		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection
+	) => Promise<string | void> | string | void;
+	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
+}
+
+interface BattleInfo {
+	log: string[];
+	url: string;
+	title: string;
+}
+
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
 export const tickets: {[k: string]: TicketState} = {};
@@ -45,6 +73,9 @@ try {
 					const ticketGame = ticketRoom.game as HelpTicket;
 					ticketGame.writeStats(false);
 					ticketRoom.expire();
+				} else if (ticket.text && ticket.open) {
+					ticket.open = false;
+					writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tdead\tvalid\t`);
 				}
 				continue;
 			}
@@ -201,6 +232,14 @@ export class HelpTicket extends Rooms.RoomGame {
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
 			this.room.add(`|c|&Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
+			switch (this.ticket.type) {
+			case 'PM Harassment':
+				this.room.add(
+					`|c|&Staff|Global staff might take more than a few minutes to handle your report. ` +
+					`If you are being disturbed by another user, you can type \`\`/ignore [username]\`\` in any chat to ignore their messages immediately`
+				).update();
+				break;
+			}
 			this.ticket.needsDelayWarning = true;
 		}
 	}
@@ -358,14 +397,73 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.playerTable = null;
 	}
 	onChatMessage(message: string, user: User) {
-		const roomids = message.match(/battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g);
-		if (roomids) {
-			for (const roomid of roomids) {
-				const curRoom = Rooms.get(roomid);
-				if (!curRoom || !('uploadReplay' in curRoom) || curRoom?.battle?.replaySaved) continue;
-				void curRoom.uploadReplay(user, user.connections[0], 'forpunishment');
+		HelpTicket.uploadReplaysFrom(message, user, user.connections[0]);
+	}
+	static modlogStream = Rooms.Modlog.initialize('help-texttickets' as ModlogID);
+	// workaround to modlog for no room
+	static modlog(entry: PartialModlogEntry) {
+		Rooms.Modlog.write('help-texttickets' as ModlogID, entry);
+	}
+	static uploadReplaysFrom(text: string, user: User, conn: Connection) {
+		const rooms = getBattleLinks(text);
+		for (const roomid of rooms) {
+			const room = Rooms.get(roomid);
+			if (!room || !('uploadReplay' in (room as GameRoom))) continue;
+			void (room as GameRoom).uploadReplay(user, conn, "forpunishment");
+		}
+	}
+	static formatBattleLog(logs: string[], title: string, url: string) {
+		const log = logs.filter(l => l.startsWith('|c|'));
+		let buf = ``;
+		for (const line of log) {
+			const [,, username, message] = Utils.splitFirst(line, '|', 3);
+			buf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
+		}
+		if (buf) buf = `<div class="infobox"><strong><a href="${url}">${title}</a></strong><hr />${buf}</div>`;
+		return buf;
+	}
+	static async visualizeBattleLogs(rooms: string[]) {
+		const logs = [];
+		for (const room of rooms) {
+			const log = await getBattleLog(room);
+			if (log) logs.push(log);
+		}
+		const existingRooms = logs.filter(Boolean);
+		if (existingRooms.length) {
+			const chatBuffer = existingRooms
+				.map(room => this.formatBattleLog(room.log, room.title, room.url))
+				.filter(Boolean)
+				.join('');
+			if (chatBuffer) {
+				return (
+					`<div class="infobox"><details class="readmore"><summary><strong>Battle chat logs:</strong><br /></summary>` +
+					`${chatBuffer}</details></div>`
+				);
 			}
 		}
+	}
+	static displayPunishmentList(reportUserid: ID, proofString: string, title?: string) {
+		let buf = `<details class="readmore"><summary><strong>${title || 'Punish:'}</strong></summary><div class="infobox">`;
+		const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
+		for (const name of punishments) {
+			buf += `<form data-submitsend="/msgroom staff,/${toID(name)} ${reportUserid},{reason} spoiler: ${proofString}">`;
+			buf += `<button class="button notifying" type="submit">${name}</button><br />`;
+			buf += `Optional reason: <input name="reason" />`;
+			buf += `</form><br />`;
+		}
+		buf += `</div></details><br />`;
+		return buf;
+	}
+	static getTextButton(ticket: TicketState & {text: [string, string]}) {
+		let buf = '';
+		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
+		const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
+		const language = Users.get(ticket.userid)?.language || '';
+		const languageDisplay = language && language !== 'english' ? ` <small>(${language})</small>` : '';
+		buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
+		buf +=	ticket.claimed ? `${ticket.userid}${languageDisplay}:` : `<strong>${ticket.userid}</strong>${languageDisplay}:`;
+		buf += ` ${ticket.type}</a>`;
+		return buf;
 	}
 	static ban(user: User | ID, reason = '') {
 		const userid = toID(user);
@@ -387,9 +485,9 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (!staffRoom) return;
 		const ips = [];
 		if (typeof user === 'object') {
-			ips.push(...(user as User).ips);
-			ips.unshift((user as User).latestIp);
-			user = (user as User).id;
+			ips.push(...user.ips);
+			ips.unshift(user.latestIp);
+			user = user.id;
 		}
 		const punishment = Punishments.roomUserids.nestedGetByType('staff', user, 'TICKETBAN');
 		if (punishment) return punishment;
@@ -412,6 +510,20 @@ export class HelpTicket extends Rooms.RoomGame {
 			);
 		}
 		return `You are banned from creating help tickets.`;
+	}
+	static notifyResolved(user: User, ticket: TicketState, userid = user.id) {
+		const {result, time, by, seen} = ticket.resolved as {result: string, time: number, by: string, seen: boolean};
+		if (seen) return;
+		const timeString = (Date.now() - time) > 1000 ? `, ${Chat.toDurationString(Date.now() - time)} ago.` : '.';
+		user.send(`|pm|&Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
+		if (result?.trim()) {
+			user.send(`|pm|&Staff|${user.getIdentity()}|The result was "${result}"`);
+		}
+		tickets[userid].resolved!.seen = true;
+		writeTickets();
+	}
+	static getTypeId(name: string) {
+		return Object.entries(ticketTitles).find(entry => entry[1] === name)?.[0] || toID(name);
 	}
 }
 
@@ -499,14 +611,18 @@ export function notifyStaff() {
 				continue;
 			}
 		}
-		// should always exist
-		const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom;
-		const ticketGame = ticketRoom.getGame(HelpTicket)!;
+		// should always exist if it's a normal ticket
+		const ticketRoom = Rooms.get(`help-${ticket.userid}`);
+		const ticketGame = ticketRoom?.getGame(HelpTicket);
 		if (!ticket.claimed) {
 			hasUnclaimed = true;
 			if (ticket.type === 'Public Room Assistance Request') hasAssistRequest = true;
 		}
-		buf += ticketGame.getButton();
+		if (ticket.text) {
+			buf += HelpTicket.getTextButton(ticket as TicketState & {text: [string, string]});
+		} else if (ticketGame) {
+			buf += ticketGame.getButton();
+		}
 		count++;
 	}
 	if (hiddenTicketCount > 1) {
@@ -546,6 +662,41 @@ function checkIp(ip: string) {
 		}
 	}
 	return false;
+}
+
+export function getBattleLinks(text: string) {
+	const rooms: string[] = [];
+	const battles = text.match(BATTLES_REGEX);
+	// typescript-eslint is having trouble detecting REPLAY_REGEX as a global regex
+	// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+	const replays = text.match(REPLAY_REGEX);
+	if (battles) rooms.push(...battles);
+	if (replays) rooms.push(...replays.map(r => `battle-${r.split('/').pop()!}`));
+	return rooms;
+}
+
+export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
+	const battleRoom = Rooms.get(battle);
+	if (battleRoom && battleRoom.type !== 'chat') {
+		return {
+			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
+			title: battleRoom.title,
+			url: `/${battle}`,
+		};
+	}
+	battle = battle.replace(`battle-`, '').replace(/-[a-z0-9]pw/, '');
+	try {
+		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
+		const data = JSON.parse(raw);
+		if (data.log?.length) {
+			return {
+				log: data.log.split('\n').filter((k: string) => k.startsWith('|c|')),
+				title: `${data.p1} vs ${data.p2}`,
+				url: `https://${Config.routes.replays}/${battle}`,
+			};
+		}
+	} catch (e) {}
+	return null;
 }
 
 // Prevent a desynchronization issue when hotpatching
@@ -641,6 +792,199 @@ const cheatingScenarios = [
 	],
 ];
 
+export const textTickets: {[k: string]: TextTicketInfo} = {
+	pmharassment: {
+		title: "Who's harassing you in PMs?",
+		checker(input) {
+			if (!Users.get(input)) {
+				return ['That user was not found.'];
+			}
+			return true;
+		},
+		async getReviewDisplay(ticket, staff, conn) {
+			let buf = '';
+			const reportUserid = toID(ticket.text[0]);
+			const sharedBattles = getCommonBattles(ticket.userid, null, reportUserid, null, conn);
+			let replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
+			replays = replays.filter((url, index) => replays.indexOf(url) === index).concat(sharedBattles);
+			buf += `<br /><strong>Reported user:</strong> ${reportUserid} `;
+			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br /><br />`;
+			const replayString = replays.map(u => `https://${Config.routes.client}/${u}`).join(', ');
+			const proofString = `spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`;
+			buf += HelpTicket.displayPunishmentList(reportUserid, proofString);
+			buf += HelpTicket.displayPunishmentList(ticket.userid, proofString, 'Punish reporter:');
+
+			if (replays.length) {
+				const battleLogHTML = await HelpTicket.visualizeBattleLogs(replays);
+				if (battleLogHTML) {
+					buf += `<br />`;
+					buf += battleLogHTML;
+					buf += `<br />`;
+				}
+			}
+
+			return buf;
+		},
+		onSubmit(ticket, text, submitter, conn) {
+			const targetId = toID(text[0]);
+			// this does the saving for us so we don't have to do anything else
+			getCommonBattles(targetId, Users.get(targetId), submitter.id, submitter, conn);
+		},
+	},
+	inapname: {
+		title: "What's the inappropriate username?",
+		checker(input) {
+			if (!Users.get(input)) {
+				return [
+					"Please specify a valid username - that name was not found.",
+					"Maybe you spelled it wrong?",
+				];
+			}
+			return true;
+		},
+		getReviewDisplay(ticket) {
+			let buf = ``;
+			if (!ticket.open) return buf;
+			if (ticket.meta?.startsWith('user-')) {
+				const tar = ticket.meta.slice(5);
+				buf += `<strong>Username: ${tar}</strong><br />`;
+				buf += `<form data-submitsend="/msgroom staff,/forcerename ${tar},{reason}">`;
+			} else {
+				buf += `<strong>Provide a username to forcerename:</strong><br />`;
+				buf += `<form data-submitsend="/msgroom staff,/forcerename {text},{reason}">`;
+				buf += `Name: <input name="text" /><br />`;
+			}
+			buf += `Reason (optional:) <input name="reason" /><br />`;
+			buf += `<br /><button class="button notifying" type="submit">Forcerename</button></form>`;
+			return buf;
+		},
+	},
+	battleharassment: {
+		title: "Please provide a link to the battle (taken from the \"Upload and share\" button or copied from the browser URL)",
+		checker(input) {
+			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
+			return ['Please provide at least one valid battle or replay URL.'];
+		},
+		onSubmit(ticket, text, submitter, conn) {
+			for (const part of text) {
+				HelpTicket.uploadReplaysFrom(part, submitter, conn);
+			}
+			// if there's no report meta, or there is and it isn't a user
+			if (!ticket.meta || ticket.meta.startsWith('room-')) {
+				const replays = getBattleLinks(text[0]);
+				const link = replays.shift()!;
+				const room = Rooms.get(link) as GameRoom | undefined;
+				// we can't determine this for FFA - valid guesses can be made for 2 player, but not 4p. not at all.
+				if (!room || !room.battle || room.battle.playerCap > 2) return;
+				for (const player of room.battle.players) {
+					const user = player.getUser();
+					if (!user || user.id === submitter.id) continue;
+					ticket.meta = `user-${user.id}`;
+					writeTickets();
+				}
+			}
+		},
+		async getReviewDisplay(ticket, staff, connection) {
+			let buf = ``;
+			const [text, context] = ticket.text;
+			let rooms = getBattleLinks(text);
+
+			if (context) {
+				rooms.push(...getBattleLinks(context));
+			}
+			rooms = rooms.filter((url, index) => rooms.indexOf(url) === index);
+			const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
+			if (ticket.meta) {
+				const [type, meta] = ticket.meta.split('-');
+				if (type === 'user') {
+					buf += `<br /><strong>Reported user:</strong> ${meta} `;
+					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br /><br />`;
+					buf += HelpTicket.displayPunishmentList(toID(meta), proof);
+				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
+					rooms.push(meta);
+				}
+			}
+			buf += HelpTicket.displayPunishmentList(ticket.userid, proof, 'Punish reporter:');
+			buf += `<strong>Battle links:</strong> ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
+			buf += `<br />`;
+			const battleLogHTML = await HelpTicket.visualizeBattleLogs(rooms);
+			if (battleLogHTML) buf += battleLogHTML;
+			return buf;
+		},
+	},
+	roomhelp: {
+		title: "Enter the name of the room",
+		getReviewDisplay(ticket, staff) {
+			let buf = ``;
+			const room = Rooms.search(ticket.text[0]) as Room;
+			if (!staff.inRooms.has(room.roomid)) {
+				buf += `<button class="button" name="send" value="/msgroom staff,/join ${room.roomid}">Join room</button>`;
+				buf += `<br />`;
+			} else {
+				buf += `<p>You're already in that room.</p>`;
+			}
+			return buf;
+		},
+		checker(input) {
+			const room = Rooms.search(input);
+			if (!room) {
+				return [
+					`That room was not found.`,
+					`Enter either the room name or a room alias.`,
+				];
+			}
+			if (room.settings.isPrivate !== undefined) {
+				return ['You may only request help for public rooms.'];
+			}
+			return true;
+		},
+	},
+	inappokemon: {
+		title: "Please provide replays of the battle with inappropriate Pokemon nicknames",
+		checker(input) {
+			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
+			return ['Please provide at least one valid battle or replay URL.'];
+		},
+		async getReviewDisplay(ticket, staff, conn) {
+			let buf = ``;
+			const [text, context] = ticket.text;
+			let links = getBattleLinks(text);
+			if (context) links.push(...getBattleLinks(context));
+			buf += `<p><strong>Battle links given:</strong><p>`;
+			links = links.filter((url, i) => links.indexOf(url) === i);
+			buf += links.map(uri => Chat.formatText(`<<${uri}>>`)).join(', ');
+			const battleRooms = links.map(r => Rooms.get(r)).filter(room => room?.battle) as GameRoom[];
+			if (battleRooms.length) {
+				buf += `<div class="infobox"><strong>Names in given battles:</strong><hr />`;
+				for (const room of battleRooms) {
+					const names = [];
+					for (const id in room.battle!.playerTable) {
+						const user = Users.get(id);
+						if (!user) continue;
+						const team = await room.battle!.getTeam(user);
+						if (team) {
+							const teamNames = team.map(p => p.name ? `${p.name} (${p.species})` : p.species);
+							names.push(`<strong>${user.id}:</strong> ${teamNames.join(', ')}`);
+						}
+					}
+					if (names.length) {
+						buf += `<a href="/${room.roomid}">${room.title}</a><br />`;
+						buf += names.join('<br />');
+						buf += `<hr />`;
+					}
+				}
+				buf += `</div>`;
+			}
+			return buf;
+		},
+		onSubmit(ticket, text, submitter, conn) {
+			for (const part of text) {
+				HelpTicket.uploadReplaysFrom(part, submitter, conn);
+			}
+		},
+	},
+};
+
 export const pages: Chat.PageTable = {
 	help: {
 		request(query, user, connection) {
@@ -713,12 +1057,20 @@ export const pages: Chat.PageTable = {
 					buf += `<p><Button>cheating</Button></p>`;
 					break;
 				case 'pmharassment':
-					buf += `<p>${this.tr`If someone is harassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.`}</p>`;
+					buf += `<p>${this.tr`If someone is harassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it.`}`;
+					if (!this.pageid.includes('confirm')) {
+						buf += ` If it's a minor issue, consider using <code>/ignore [username]</code> instead.`;
+					}
+					buf += `</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmpmharassment</Button></p>`;
 					break;
 				case 'battleharassment':
-					buf += `<p>${this.tr`If someone is harassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.`}</p>`;
+					buf += `<p>${this.tr`If someone is harassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it.`}`;
+					if (!this.pageid.includes('confirm')) {
+						buf += ` If it's a minor issue, consider using <code>/ignore [username]</code> instead.`;
+					}
+					buf += `</p>`;
 					buf += `<p>${this.tr`Please save a replay of the battle if it has ended, or provide a link to the battle if it is still ongoing.`}</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmbattleharassment</Button></p>`;
@@ -834,9 +1186,28 @@ export const pages: Chat.PageTable = {
 						break;
 					}
 					const type = this.tr(ticketTitles[page.slice(7)]);
-					buf += `<p><b>${this.tr`Are you sure you want to submit a ticket for ${type}?`}</b></p>`;
 					const submitMeta = Utils.splitFirst(meta, '-', 2).join('|'); // change the delimiter as some ticket titles include -
-					buf += `<p><button class="button notifying" name="send" value="/helpticket submit ${ticketTitles[page.slice(7)]} ${submitMeta}">${this.tr`Yes, contact global staff`}</button> <a href="/view-help-request-${query.slice(0, i).join('-')}${meta}" target="replace"><button class="button">${this.tr`No, cancel`}</button></a></p>`;
+					const textTicket = textTickets[page.slice(7)];
+					if (textTicket) {
+						buf += `<p><b>${this.tr(textTicket.title)}</b></p>`;
+						if (textTicket.disclaimer) {
+							buf += `<p>${this.tr(textTicket.disclaimer)}</p>`;
+						}
+						buf += `<form data-submitsend="/helpticket submit ${ticketTitles[page.slice(7)]} ${submitMeta} | {text} | {context}">`;
+						buf += `<textarea style="width: 100%" name="text"></textarea><br />`;
+						buf += `<strong>Do you have any other information you want to provide? (this is optional)</strong><br />`;
+						buf += `<textarea style="width: 100%" name="context"></textarea><br />`;
+						buf += `<br /><button class="button notifying" type="submit">Submit ticket</button></form>`;
+					} else {
+						buf += `<p><b>${this.tr`Are you sure you want to submit a ticket for ${type}?`}</b></p>`;
+						buf += `<p><button class="button notifying" name="send" value="/helpticket submit ${ticketTitles[page.slice(7)]} ${submitMeta}">${this.tr`Yes, contact global staff`}</button> <a href="/view-help-request-${query.slice(0, i).join('-')}${meta}" target="replace">`;
+						buf += `<button class="button">${this.tr`No, cancel`}</button></a></p>`;
+					}
+					if (textTicket || page.includes('confirmpmharassment')) {
+						buf += `<p>`;
+						buf += `Global staff might take more than a few minutes to handle your report. `;
+						buf += `If you are being disturbed by another user, we advise you to type <code>/ignore [username]</code> in a chatroom to ignore their messages.`;
+					}
 					break;
 				}
 			}
@@ -870,7 +1241,7 @@ export const pages: Chat.PageTable = {
 				}
 				let icon = `<span style="color:gray"><i class="fa fa-check-circle-o"></i> ${this.tr`Closed`}</span>`;
 				if (ticket.open) {
-					if (!ticket.active) {
+					if (!ticket.active && !ticket.text) {
 						icon = `<span style="color:gray"><i class="fa fa-circle-o"></i> ${this.tr`Inactive`}</span>`;
 					} else if (ticket.claimed) {
 						icon = `<span style="color:green"><i class="fa fa-circle-o"></i> ${this.tr`Claimed`}</span>`;
@@ -878,8 +1249,12 @@ export const pages: Chat.PageTable = {
 						icon = `<span style="color:orange"><i class="fa fa-circle-o"></i> <strong>${this.tr`Unclaimed`}</strong></span>`;
 					}
 				}
+
+				const ticketRoom = Rooms.get(`help-${ticket.userid}`);
 				buf += `<tr><td>${icon}</td>`;
-				buf += Utils.html`<td>${ticket.creator}</td>`;
+				const language = Chat.languages.get(ticketRoom?.settings.language || '');
+				const languageString = language && toID(language) !== "english" ? ` <small>(${language})</small>` : '';
+				buf += `<td>${Utils.escapeHTML(ticket.creator)}${languageString}</td>`;
 				buf += `<td>${ticket.type}</td>`;
 				buf += Utils.html`<td>${ticket.claimed ? ticket.claimed : `-`}</td>`;
 				buf += `<td>`;
@@ -892,6 +1267,8 @@ export const pages: Chat.PageTable = {
 				if (room) {
 					const ticketGame = room.getGame(HelpTicket)!;
 					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
+				} else if (ticket.text) {
+					buf += `<a class="button" href="/view-help-text-${ticket.userid}">View</a>`;
 				}
 				if (logUrl) {
 					buf += `<a href="${logUrl}"><button class="button">${this.tr`Log`}</button></a>`;
@@ -916,6 +1293,62 @@ export const pages: Chat.PageTable = {
 				buf += `<td>${entry.reason || ''}</td></tr>`;
 			}
 			buf += `</tbody></table></div>`;
+			return buf;
+		},
+		async text(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+			this.title = this.tr`Queued Tickets`;
+			this.checkCan('lock');
+			const userid = query.shift();
+			if (!userid) {
+				return this.errorReply(`Specify a userid to view the ticket for.`);
+			}
+			const ticket = tickets[toID(userid)];
+			if (!ticket) {
+				return this.errorReply(`Ticket not found.`);
+			}
+			if (!ticket.text) {
+				return this.errorReply(`That is either not a text ticket, or it has not yet been submitted.`);
+			}
+			const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
+			this.title = `[Text Ticket] ${ticket.userid}`;
+			let buf = `<div class="pad">`;
+			buf += `<button class="button" name="send" value="/join ${this.pageid}" style="float:right"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
+			buf += `<h2>Issue: ${ticket.type}</h2>`;
+			buf += `<strong>From: ${ticket.userid}</strong>`;
+			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
+			buf += `<button class="button" name="send" value="/modlog global,[${ticket.userid}]">Global Modlog</button><br />`;
+			if (!ticket.claimed && ticket.open) {
+				ticket.claimed = user.id;
+				writeTickets();
+				notifyStaff();
+			} else if (ticket.claimed) {
+				buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
+			}
+			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
+			buf += `<br />`;
+			buf += `<div class="infobox">`;
+			const [text, context] = ticket.text;
+			buf += `<p><strong>Report text:</strong></p><hr />`;
+			buf += Chat.formatText(text);
+			if (ticket.text[1]) {
+				buf += `<br /><hr /><strong>Context given: </strong><br />`;
+				buf += Chat.formatText(context);
+			}
+			buf += `</div>`;
+			if (!ticket.resolved) {
+				buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
+				buf += `<br /><strong>Resolve:</strong><br />`;
+				buf += `Respond to reporter: <textarea style="width: 100%" name="text"></textarea><br />`;
+				buf += `Staff notes (optional): <textarea style="width: 100%" name="private"></textarea><br />`;
+				buf += `<br /><button class="button notifying" type="submit">Resolve ticket</button></form>`;
+			} else {
+				buf += Utils.html`<strong>Resolved: by ${ticket.resolved.by}</strong><br />`;
+				buf += Utils.html`<strong>Result:</strong> ${Chat.collapseLineBreaksHTML(ticket.resolved.result)}<br />`;
+				if (ticket.resolved.staffReason.includes('PROOF')) { // a note was added, show it
+					buf += Utils.html`<strong>Resolver notes:</strong> ${Chat.collapseLineBreaksHTML(ticket.resolved.staffReason)}<br />`;
+				}
+			}
 			return buf;
 		},
 		stats(query, user, connection) {
@@ -1143,7 +1576,8 @@ export const commands: Chat.ChatCommands = {
 		},
 		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
 
-		submit(target, room, user, connection) {
+		submittext: 'submit',
+		async submit(target, room, user, connection, cmd) {
 			if (user.can('lock') && !user.can('bypassall')) {
 				return this.popupReply(this.tr`Global staff can't make tickets. They can only use the form for reference.`);
 			}
@@ -1156,22 +1590,25 @@ export const commands: Chat.ChatCommands = {
 			const ipTicket = checkIp(user.latestIp);
 			if (ticket?.open || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
+				if (ticket.text) {
+					return this.popupReply(`You already have a pending ticket, please wait.`);
+				}
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
-					// Should never happen
-					tickets[ticket.userid].open = false;
-					writeTickets();
-				} else {
-					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
-					this.popupReply(this.tr`You already have an open ticket; please wait for global staff to respond.`);
-					return this.parse(`/join help-${ticket.userid}`);
+					ticket.open = false;
+					return;
 				}
+				helpRoom.auth.set(user.id, '+');
+				this.popupReply(`You already have a pending ticket, please wait.`);
+				return this.parse(`/join help-${ticket.userid}`);
 			}
 			if (Monitor.countTickets(user.latestIp)) {
 				const maxTickets = Punishments.sharedIps.has(user.latestIp) ? `50` : `5`;
 				return this.popupReply(this.tr`Due to high load, you are limited to creating ${maxTickets} tickets every hour.`);
 			}
-			let [ticketType, reportTargetType, reportTarget] = Utils.splitFirst(target, '|', 2).map(s => s.trim());
+			let [
+				ticketType, reportTargetType, reportTarget, text, contextString,
+			] = Utils.splitFirst(target, '|', 4).map(s => s.trim());
 			reportTarget = Utils.escapeHTML(reportTarget);
 			if (!Object.values(ticketTitles).includes(ticketType)) return this.parse('/helpticket');
 			const contexts: {[k: string]: string} = {
@@ -1198,6 +1635,47 @@ export const commands: Chat.ChatCommands = {
 				claimed: null,
 				ip: user.latestIp,
 			};
+
+			if (toID(reportTarget)) {
+				ticket.meta = `${reportTargetType}-${reportTarget}`;
+			}
+			const typeId = HelpTicket.getTypeId(ticketType);
+			const textTicket = textTickets[typeId];
+			if (textTicket) {
+				let pageId = '';
+				for (const page of connection.openPages || new Set()) {
+					if (page.includes('confirm' + typeId)) {
+						pageId = page;
+					}
+				}
+				if (!toID(text)) {
+					this.parse(`/join view-${pageId}`);
+					return this.popupReply(`Please tell us what is happening.`);
+				}
+				if (text.length > 8192) {
+					return this.popupReply(`Your report is too long. Please use fewer words.`);
+				}
+				const validation = await textTicket.checker?.(text, contextString || '', ticket.type, user, reportTarget);
+				if (Array.isArray(validation) && validation.length) {
+					this.parse(`/join view-${pageId}`);
+					return this.popupReply(`|html|` + validation.join('||'));
+				}
+				ticket.text = [text, contextString];
+				ticket.active = true;
+				tickets[user.id] = ticket;
+				HelpTicket.modlog({
+					action: 'TEXTTICKET OPEN',
+					loggedBy: user.id,
+					note: `(${ticket.type}) ${text}${contextString ? `, context: ${contextString}` : ''}`,
+				});
+				writeTickets();
+				notifyStaff();
+				textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
+
+				connection.send(`>view-${pageId}\n|deinit`);
+				return this.popupReply(`Your report has been submitted.`);
+			}
+
 			let closeButtons = ``;
 			switch (ticket.type) {
 			case 'Appeal':
@@ -1318,6 +1796,52 @@ export const commands: Chat.ChatCommands = {
 			connection.send(`>view-help-request\n|deinit`);
 		},
 
+		text(target, room, user) {
+			this.checkCan('lock');
+			return this.parse(`/join view-help-text-${toID(target)}`);
+		},
+
+		resolve(target, room, user) {
+			this.checkCan('lock');
+			const [ticketerName, result] = Utils.splitFirst(target, ',').map(i => i.trim());
+			const ticketId = toID(ticketerName);
+			if (!ticketId || !result) {
+				return this.parse(`/help helpticket`);
+			}
+			const ticket = tickets[ticketId];
+			if (!ticket) return this.popupReply(`That ticket was not found.`);
+			if (ticket.resolved) {
+				return this.popupReply(`That ticket has already been resolved.`);
+			}
+			if (!ticket.text) {
+				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
+			}
+			const {publicReason, privateReason} = this.parseSpoiler(result);
+			ticket.resolved = {
+				result: publicReason,
+				time: Date.now(),
+				by: user.name,
+				seen: false,
+				staffReason: privateReason,
+			};
+			ticket.open = false;
+			writeTickets();
+			const tarUser = Users.get(ticketId);
+			if (tarUser) {
+				HelpTicket.notifyResolved(tarUser, ticket, ticketId);
+			}
+			// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
+			writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tresolved\tvalid\t${user.id}`);
+			this.popupReply(`You resolved ${ticketId}'s ticket.`);
+			HelpTicket.modlog({
+				action: 'TEXTTICKET CLOSE',
+				loggedBy: user.id,
+				note: privateReason,
+				userid: ticketId,
+			});
+			notifyStaff();
+		},
+
 		list(target, room, user) {
 			this.checkCan('lock');
 			return this.parse('/join view-help-tickets');
@@ -1338,6 +1862,9 @@ export const commands: Chat.ChatCommands = {
 			if (!ticket?.open || (ticket.userid !== user.id && !user.can('lock'))) {
 				return this.errorReply(this.tr`${targetUsername} does not have an open ticket.`);
 			}
+			if (typeof ticket.text !== 'undefined') {
+				return this.parse(`/helpticket resolve ${target}`);
+			}
 			const helpRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
 			if (helpRoom) {
 				const ticketGame = helpRoom.getGame(HelpTicket)!;
@@ -1355,6 +1882,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
 
+		tb: 'ban',
 		ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
 			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
@@ -1405,6 +1933,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			this.globalModlog(`TICKETBAN`, targetUser || userid, reason);
+			const staffRoom = Rooms.get('staff');
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
 				const targetTicket = tickets[userObjID];
@@ -1414,6 +1943,30 @@ export const commands: Chat.ChatCommands = {
 					const ticketGame = helpRoom.getGame(HelpTicket)!;
 					ticketGame.writeStats('ticketban');
 					helpRoom.destroy();
+				} else if (targetTicket?.text) {
+					HelpTicket.modlog({
+						action: `TICKETBAN`,
+						loggedBy: user.id,
+						note: `(Ticket content: ${targetTicket.text.join(' ').replace(/\n/ig, ' ')})`,
+					});
+					targetTicket.resolved = {
+						by: user.id,
+						seen: true,
+						time: Date.now(),
+						result: 'Ticketban',
+						staffReason: 'Ticketban',
+					};
+					if (staffRoom) {
+						for (const curUser of Object.values(staffRoom.users)) {
+							for (const conn of curUser.connections) {
+								if (conn.openPages?.has(`help-text-${userObjID}`)) {
+									conn.send(`>view-help-text-${userObj}\n|deinit|`);
+									conn.openPages.delete(`help-text-${userObjID}`);
+									if (!conn.openPages.size) conn.openPages = null;
+								}
+							}
+						}
+					}
 				}
 			}
 			writeTickets();
@@ -1498,7 +2051,7 @@ export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 
 	const userId = toID(user);
 	if (typeof user === 'object') {
-		const ids = [userId, ...(user as User).previousIDs];
+		const ids = [userId, ...user.previousIDs];
 		for (const userid of ids) {
 			punishmentfilter(userid, punishment);
 		}
@@ -1509,3 +2062,29 @@ export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 		ticket.close('ticketban');
 	}
 };
+
+export const loginfilter: Chat.LoginFilter = (user) => {
+	const ticket = tickets[user.id];
+	if (ticket?.resolved) {
+		HelpTicket.notifyResolved(user, ticket);
+	}
+};
+
+export const handlers: Chat.Handlers = {
+	onRoomClose(room, user, conn, isPage) {
+		if (!isPage || !room.includes('view-help-text')) return;
+		const userid = room.slice('view-help-text'.length + 1);
+		const ticket = tickets[userid];
+		if (ticket?.open && ticket.claimed === user.id) {
+			ticket.claimed = null;
+			writeTickets();
+			notifyStaff();
+		}
+	},
+};
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register(
+		'/ht resolve ', '/helpticket resolve ', '/requesthelp resolve ', '/helprequest resolve ',
+	);
+});

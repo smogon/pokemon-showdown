@@ -49,7 +49,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onOverrideAction(pokemon, target, move) {
 				if (move.id !== this.effectState.move) return this.effectState.move;
 			},
-			onResidualOrder: 13,
+			onResidualOrder: 16,
 			onResidual(target) {
 				const lockedMoveIndex = target.moves.indexOf(this.effectState.move);
 				if (lockedMoveIndex >= 0 && target.moveSlots[lockedMoveIndex].pp <= 0) {
@@ -141,8 +141,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 2,
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'Misty Terrain');
 			},
@@ -242,7 +242,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Wide Guard');
 			},
 			onTryHitPriority: 4,

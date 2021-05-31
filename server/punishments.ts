@@ -116,7 +116,6 @@ class PunishmentMap extends Map<string, Punishment[]> {
 					// eslint-disable-next-line callback-return
 					callback(punishment, k, this);
 				}
-				continue;
 			} else {
 				this.delete(k);
 			}
@@ -281,8 +280,8 @@ export const Punishments = new class {
 	 *
 	 */
 	readonly roomPunishmentTypes = new Map<string, PunishInfo>([
-		// global  calls are here because if you hotpatch punishments without hotpatching chat,
-		// old punishments won't be loaded into here, which might cause issues. This guards against that
+		// references to global.Punishments? are here because if you hotpatch punishments without hotpatching chat,
+		// old punishment types won't be loaded into here, which might cause issues. This guards against that.
 		...(global.Punishments?.roomPunishmentTypes || []),
 		['ROOMBAN', {desc: 'banned'}],
 		['BLACKLIST', {desc: 'blacklisted'}],
@@ -310,12 +309,12 @@ export const Punishments = new class {
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
-			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
+			const [type, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
 			const expireTime = Number(expireTimeStr);
-			if (punishType === "Punishment") continue;
+			if (type === "Punishment") continue;
 			const keys = altKeys.split(',').concat(id);
 
-			const punishment = {type: punishType, id, expireTime, reason: reason.join('\t')} as Punishment;
+			const punishment = {type, id, expireTime, reason: reason.join('\t')} as Punishment;
 			if (Date.now() >= expireTime) {
 				continue;
 			}
@@ -492,7 +491,7 @@ export const Punishments = new class {
 			if (!row) continue;
 			const [ip, reason] = row.trim().split("\t");
 			// it can be an ip or a range
-			if (!(IPTools.ipRegex.test(ip) || IPTools.ipRangeRegex.test(ip))) continue;
+			if (!IPTools.ipRangeRegex.test(ip)) continue;
 			if (!reason) continue;
 
 			Punishments.sharedIpBlacklist.set(ip, reason);
@@ -545,14 +544,14 @@ export const Punishments = new class {
 			return Punishments.punishName(user, punishment);
 		}
 
-		Punishments.checkInteractions((user as User).id || user as ID, punishment);
+		Punishments.checkInteractions((user as User).getLastID() || user as ID, punishment);
 
 		if (!punishment.id) punishment.id = (user as User).getLastId();
 
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
 		const mobileIps = new Set<string>();
-		const affected = ignoreAlts ? [user as User] : (user as User).getAltUsers(PUNISH_TRUSTED, true);
+		const affected = ignoreAlts ? [user] : user.getAltUsers(PUNISH_TRUSTED, true);
 		for (const alt of affected) {
 			await this.punishInner(alt, punishment, userids, ips, mobileIps);
 		}
@@ -700,7 +699,7 @@ export const Punishments = new class {
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
-		const affected = (user as User).getAltUsers(PUNISH_TRUSTED, true);
+		const affected = user.getAltUsers(PUNISH_TRUSTED, true);
 		for (const curUser of affected) {
 			this.roomPunishInner(roomid, curUser, punishment, userids, ips);
 		}
@@ -928,7 +927,7 @@ export const Punishments = new class {
 
 		const userid = toID(user);
 		if (Users.get(user)?.locked) return false;
-		const name = typeof user === 'string' ? user : (user as User).name;
+		const name = typeof user === 'string' ? user : user.name;
 		if (namelock) {
 			punishment = `NAME${punishment}`;
 			await Punishments.namelock(user, expires, toID(namelock), false, `Autonamelock: ${name}: ${reason}`);
@@ -940,12 +939,12 @@ export const Punishments = new class {
 		const logEntry = {
 			action: `AUTO${punishment}`,
 			visualRoomID: typeof room !== 'string' ? (room as Room).roomid : room,
-			ip: typeof user !== 'string' ? (user as User).latestIp : null,
+			ip: typeof user !== 'string' ? user.latestIp : null,
 			userid: userid,
 			note: reason,
 			isGlobal: true,
 		};
-		if (typeof user !== 'string') logEntry.ip = (user as User).latestIp;
+		if (typeof user !== 'string') logEntry.ip = user.latestIp;
 
 		const roomObject = Rooms.get(room);
 		const userObject = Users.get(user);
@@ -1135,9 +1134,7 @@ export const Punishments = new class {
 			for (const roomid of targetUser.inRooms || []) {
 				const targetRoom = Rooms.get(roomid);
 				if (!targetRoom?.roomid.startsWith('groupchat-')) continue;
-				if (targetRoom.game && targetRoom.game.removeBannedUser) {
-					targetRoom.game.removeBannedUser(targetUser);
-				}
+				targetRoom.game?.removeBannedUser?.(targetUser);
 				targetUser.leaveRoom(targetRoom.roomid);
 
 				// Handle groupchats that the user created
@@ -1157,7 +1154,7 @@ export const Punishments = new class {
 	}
 
 	groupchatUnban(user: User | ID) {
-		let userid = (typeof user === 'object' ? (user as User).id : user);
+		let userid = (typeof user === 'object' ? user.id : user);
 
 		const punishment = Punishments.isGroupchatBanned(user);
 		if (punishment) userid = punishment.id as ID;
@@ -1250,9 +1247,7 @@ export const Punishments = new class {
 
 		const affected = Punishments.roomPunish(room, user, punishment);
 		for (const curUser of affected) {
-			if (room.game && room.game.removeBannedUser) {
-				room.game.removeBannedUser(curUser);
-			}
+			room.game?.removeBannedUser?.(curUser);
 			curUser.leaveRoom(room.roomid);
 		}
 
@@ -1288,9 +1283,7 @@ export const Punishments = new class {
 		if (room.subRooms) {
 			for (const subRoom of room.subRooms.values()) {
 				for (const curUser of affected) {
-					if (subRoom.game && subRoom.game.removeBannedUser) {
-						subRoom.game.removeBannedUser(curUser);
-					}
+					subRoom.game?.removeBannedUser?.(curUser);
 					curUser.leaveRoom(subRoom.roomid);
 				}
 			}
@@ -1808,7 +1801,6 @@ export const Punishments = new class {
 	getRoomPunishments(user: User | string, options: Partial<{checkIps: any, publicOnly: any}> = {}) {
 		if (!user) return [];
 		const userid = toID(user);
-		const checkMutes = typeof user !== 'string';
 
 		const punishments: [Room, Punishment][] = [];
 
@@ -1840,12 +1832,12 @@ export const Punishments = new class {
 					}
 				}
 			}
-			if (checkMutes && curRoom.muteQueue) {
+			if (typeof user !== 'string' && curRoom.muteQueue) {
+				// check mutes
 				for (const entry of curRoom.muteQueue) {
-					// checkMutes guarantees user is a User
 					if (userid === entry.userid ||
-						(user as User).guestNum === entry.guestNum ||
-						((user as User).autoconfirmed && (user as User).autoconfirmed === entry.autoconfirmed)) {
+						user.guestNum === entry.guestNum ||
+						(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
 						punishments.push([curRoom, {type: 'MUTE', id: entry.userid, expireTime: entry.time, reason: ''} as Punishment]);
 					}
 				}
@@ -1962,7 +1954,9 @@ export const Punishments = new class {
 				if (!punishDesc) punishDesc = `punished`;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 
-				if (reason) punishDesc += `: ${reason}`;
+				// Backwards compatibility for current punishments
+				const trimmedReason = reason?.trim();
+				if (trimmedReason && !trimmedReason.startsWith('(PROOF:')) punishDesc += `: ${trimmedReason}`;
 				return `<<${room}>> (${punishDesc})`;
 			}).join(', ');
 
@@ -1974,7 +1968,7 @@ export const Punishments = new class {
 
 				void Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message, isWeek);
 				if (typeof user !== 'string') {
-					(user as User).popup(
+					user.popup(
 						`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
 						`If you feel that your lock was unjustified, you can still PM staff members (%, @, &) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
 						`Your lock will expire in a few days.`

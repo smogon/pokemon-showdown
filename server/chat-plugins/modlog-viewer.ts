@@ -316,4 +316,85 @@ export const commands: Chat.ChatCommands = {
 			`</details>`
 		);
 	},
+	mls: 'modlogstats',
+	modlogstats(target, room, user) {
+		this.checkCan('globalban');
+		target = toID(target);
+		if (!target) return this.parse(`/help modlogstats`);
+		return this.parse(`/join view-modlogstats-${target}`);
+	},
+	modlogstatshelp: [`/modlogstats [userid] - Fetch all information on that [userid] from the modlog (IPs, alts, etc). Requires: @ &`],
+};
+
+export const pages: Chat.PageTable = {
+	async modlogstats(query, user) {
+		this.checkCan('globalban');
+		const target = toID(query.shift());
+		if (!target || target.length > 18) {
+			return this.errorReply(`Invalid userid - must be between 1 and 18 characters long.`);
+		}
+		this.title = `[Modlog Stats] ${target}`;
+		this.setHTML(`<div class="pad"><strong>Running modlog search...</strong></div>`);
+		const entries = await Rooms.Modlog.search('global', {
+			user: {
+				search: target,
+				isExact: true,
+			},
+		}, 1000);
+		if (!entries.results.length) {
+			return this.errorReply(`No data found.`);
+		}
+		const punishmentTable = new Utils.Multiset();
+		const alts = new Set<string>();
+		const autoconfirmed = new Set<string>();
+		const ips = new Set<string>();
+		for (const entry of entries.results) {
+			if (entry.action !== 'NOTE') punishmentTable.add(entry.action);
+			if (entry.alts) {
+				for (const alt of entry.alts) alts.add(alt);
+			}
+			if (entry.autoconfirmedID) autoconfirmed.add(entry.autoconfirmedID);
+			if (entry.ip) ips.add(entry.ip);
+		}
+		let buf = `<div class="pad"><h2>Modlog information for ${target}</h2><hr />`;
+		if (alts.size) {
+			buf += `<strong>Listed alts:</strong> `;
+			buf += `<small>(These are userids sharing the same IP at the time of the punishment, they may not be direct alts)</small><br />`;
+			buf += [...alts]
+				.map(id => `<a href="https://${Config.routes.root}/users/${toID(id)}">${toID(id)}</a>`)
+				.join(', ');
+			buf += `<br /><br />`;
+		}
+
+		if (autoconfirmed.size) {
+			buf += `<strong>Autoconfirmed alts:</strong>`;
+			buf += ` (these are autoconfirmed accounts linked to their name, and are very likely them)<br />`;
+			buf += [...autoconfirmed]
+				.map(id => `<a href="https://${Config.routes.root}/users/${toID(id)}">${toID(id)}</a>`)
+				.join(', ');
+			buf += `<br /><br />`;
+		}
+
+		if (ips.size) {
+			buf += `<strong>Known IPs:</strong><br />`;
+			const mapped = await Promise.all([...ips].map(async ip => {
+				const info = await IPTools.lookup(ip);
+				return `<a href="https://whatismyipaddress.com/ip/${ip}">${ip}</a> [${info.hostType}]`;
+			}));
+			buf += mapped.join(', ');
+			buf += `<br /><br />`;
+		}
+
+		if (punishmentTable.size) {
+			buf += `<strong>Punishments:</strong><br />`;
+			buf += `<div class="ladder pad"><table>`;
+			buf += `<tr><th>Punishment type</th><th>Count</th></tr>`;
+			for (const [punishment, number] of punishmentTable) {
+				buf += `<tr><td>${punishment}</td><td>${number}</td></tr>`;
+			}
+		}
+
+		buf += `<br /><br />`;
+		return buf;
+	},
 };
