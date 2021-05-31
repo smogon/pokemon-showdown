@@ -518,10 +518,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	larvesta: {
 		inherit: true,
-		abilities: {0: "Flame Body"},
+		unreleasedHidden: true,
 	},
 	volcarona: {
 		inherit: true,
-		abilities: {0: "Flame Body"},
+		unreleasedHidden: true,
 	},
 };
