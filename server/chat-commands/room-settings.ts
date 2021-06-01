@@ -15,7 +15,26 @@ const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
 
-export const commands: ChatCommands = {
+export const sections = [
+	'official', 'battleformats', 'languages', 'entertainment', 'gaming', 'lifehobbies', 'onsitegames',
+] as const;
+
+export type RoomSection = typeof sections[number];
+
+export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections: readonly RoomSection[]} = {
+	sectionNames: {
+		official: 'Official',
+		battleformats: 'Battle formats',
+		languages: 'Languages',
+		entertainment: 'Entertainment',
+		gaming: 'Gaming',
+		lifehobbies: 'Life & hobbies',
+		onsitegames: 'On-site games',
+	},
+	sections,
+};
+
+export const commands: Chat.ChatCommands = {
 	roomsetting: 'roomsettings',
 	roomsettings(target, room, user, connection) {
 		room = this.requireRoom();
@@ -61,17 +80,31 @@ export const commands: ChatCommands = {
 			const modchatSetting = (room.settings.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
-		this.checkCan('modchat', null, room);
+		if (user.locked) { // would put this below but it behaves weird if there's no modchat set
+			return this.errorReply(`/modchat - Access denied.`);
+		} else {
+			this.checkCan('modchat', null, room);
+		}
 
 		if (
 			room.settings.modchat && room.settings.modchat.length <= 1 &&
-			!Users.Auth.hasPermission(user, 'modchat', room.settings.modchat as GroupSymbol, room)
+			!room.auth.atLeast(user, room.settings.modchat) &&
+			// Upper Staff should probably be able to set /modchat & in secret rooms
+			!user.can('bypassall')
 		) {
 			return this.errorReply(`/modchat - Access denied for changing a setting currently at ${room.settings.modchat}.`);
 		}
 		if ((room as any).requestModchat) {
 			const error = (room as GameRoom).requestModchat(user);
 			if (error) return this.errorReply(error);
+		}
+
+		// only admins can force modchat on a forced public battle
+		if (room.battle?.forcedSettings.modchat && !user.can('rangeban')) {
+			return this.errorReply(
+				`This battle is required to have modchat on due to one of the players having a username that starts with ` +
+				`${room.battle.forcedSettings.modchat}.`
+			);
 		}
 
 		target = target.toLowerCase().trim();
@@ -98,7 +131,9 @@ export const commands: ChatCommands = {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
-			if (!Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
+			// Users shouldn't be able to set modchat above their own rank (except for ROs who are also Upper Staff)
+			const modchatLevelHigherThanUserRank = !room.auth.atLeast(user, target) && !user.can('bypassall');
+			if (modchatLevelHigherThanUserRank || !Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
 				return this.errorReply(`/modchat - Access denied for setting to ${target}.`);
 			}
 			room.settings.modchat = target;
@@ -174,6 +209,10 @@ export const commands: ChatCommands = {
 		this.errorReply(`"ionext" is an outdated feature. Hidden battles now have password-protected URLs, making them fully secure against eavesdroppers.`);
 		this.errorReply(`You probably want to switch from /ionext to /hidenext, and from /ioo to /hideroom`);
 	},
+	ioo() {
+		this.errorReply(`"ioo" is an outdated feature. Hidden battles now have password-protected URLs, making them fully secure against eavesdroppers.`);
+		this.errorReply(`You probably want to switch from /ioo to /hideroom`);
+	},
 
 	inviteonlynext(target, room, user) {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
@@ -185,7 +224,7 @@ export const commands: ChatCommands = {
 		} else {
 			user.battleSettings.inviteOnly = true;
 			user.update();
-			this.sendReply(`Your next battle will be invite-only${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
+			this.sendReply(`Your next battle will be invite-only${Rooms.RoomBattle.battleForcedSetting(user, 'privacy') ? `, unless it is rated` : ``}.`);
 		}
 	},
 	inviteonlynexthelp: [
@@ -193,10 +232,8 @@ export const commands: ChatCommands = {
 		`/inviteonlynext off - Sets your next battle to be publicly visible.`,
 	],
 
-	ioo: 'inviteonly',
 	inviteonly(target, room, user, connection, cmd) {
 		room = this.requireRoom();
-		if (cmd === 'ioo') target = 'on';
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
 			return this.parse("/modjoin %");
@@ -219,8 +256,10 @@ export const commands: ChatCommands = {
 		}
 		if (room.battle) {
 			this.checkCan('editprivacy', null, room);
-			if (room.battle.forcePublic) {
-				return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${room.battle.forcePublic}'.`);
+			if (room.battle.forcedSettings.privacy) {
+				return this.errorReply(
+					`This battle is required to be public due to a player having a name prefixed by '${room.battle.forcedSettings.privacy}'.`
+				);
 			}
 			if (room.battle.inviteOnlySetter && !user.can('mute', null, room) && room.battle.inviteOnlySetter !== user.id) {
 				return this.errorReply(`Only the person who set this battle to be invite-only can turn it off.`);
@@ -344,13 +383,7 @@ export const commands: ChatCommands = {
 	permissions: {
 		clear: 'set',
 		set(target, room, user) {
-			let [perm, rank, roomid] = target.split(',').map(item => item.trim().toLowerCase());
-			if (roomid) {
-				const tarRoom = Rooms.search(roomid);
-				if (!tarRoom) return this.errorReply(`Room not found.`);
-				room = tarRoom;
-				this.room = room;
-			}
+			let [perm, rank] = this.splitOne(target);
 			room = this.requireRoom();
 			if (rank === 'default') rank = '';
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
@@ -430,8 +463,8 @@ export const commands: ChatCommands = {
 			buffer += `<code>/permissions view</code></p>`;
 			buffer += `<p><strong>Group permissions:</strong> (will affect multiple commands or part of one command)<br />`;
 			buffer += `<code>` + permissionGroups.join(`</code> <code>`) + `</code></p>`;
-			buffer += `<p><strong>Single-command permissions:</strong> (will affect one command)<br />`;
-			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></p>`;
+			buffer += `<p><details class="readmore"><summary><strong>Single-command permissions:</strong> (will affect one command)</summary>`;
+			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></details></p>`;
 			buffer += `<p><details class="readmore"><summary><strong>Sub-commands:</strong> (will affect one sub-command, like /roomevents view)</summary>`;
 			for (const subPerms of Object.values(subPermissionsByNamespace)) {
 				buffer += `<br /><code>` + subPerms.join(`</code> <code>`) + `</code><br />`;
@@ -546,10 +579,10 @@ export const commands: ChatCommands = {
 			// Escape any character with a special meaning in regex
 			if (!regex) {
 				words = words.map(word => {
-					if (/[\\^$*+?()|{}[\]]/.test(word)) {
+					if (/[\\^$*+?()|{}[\]]/.test(word) && user.can('rangeban')) {
 						this.errorReply(`"${word}" might be a regular expression, did you mean "/banword addregex"?`);
 					}
-					return word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+					return Utils.escapeRegex(word);
 				});
 			}
 			// PS adds a preamble to the banword regex that's 32 chars long
@@ -626,7 +659,7 @@ export const commands: ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 
-			if (!room.settings.banwords || !room.settings.banwords.length) {
+			if (!room.settings.banwords?.length) {
 				return this.sendReply("This room has no banned phrases.");
 			}
 			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.settings.banwords.join(', ')}`);
@@ -979,7 +1012,12 @@ export const commands: ChatCommands = {
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
+		const oldID = room.roomid;
+
 		room.rename(target, id);
+
+		Chat.handleRoomRename(oldID, id || toID(target) as RoomID, room);
+
 		this.modlog(`RENAME${isGroupchat ? 'GROUPCHAT' : 'ROOM'}`, null, `from ${oldTitle}`);
 		const privacy = room.settings.isPrivate === true ? "Private" :
 			!room.settings.isPrivate ? "Public" :
@@ -1002,8 +1040,8 @@ export const commands: ChatCommands = {
 		room = this.requireRoom();
 		if (room.battle) {
 			this.checkCan('editprivacy', null, room);
-			if (room.battle.forcePublic) {
-				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${room.battle.forcePublic}'.`);
+			if (room.battle.forcedSettings.privacy) {
+				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${room.battle.forcedSettings.privacy}'.`);
 			}
 			if (room.tour?.forcePublic) {
 				return this.errorReply(`This battle can't be hidden, because the tournament is set to be forced public.`);
@@ -1080,6 +1118,7 @@ export const commands: ChatCommands = {
 			}
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
+			if (!room.settings.isPersonal && !room.battle) room.setSection();
 			room.setPrivate(setting);
 			room.privacySetter = new Set([user.id]);
 		}
@@ -1100,7 +1139,7 @@ export const commands: ChatCommands = {
 		} else {
 			user.battleSettings.hidden = true;
 			user.update();
-			this.sendReply(`Your next battle will be hidden${user.battlesForcedPublic() ? `, unless it is rated` : ``}.`);
+			this.sendReply(`Your next battle will be hidden${Rooms.RoomBattle.battleForcedSetting(user, 'privacy') ? `, unless it is rated` : ``}.`);
 		}
 	},
 	hidenexthelp: [
@@ -1109,51 +1148,35 @@ export const commands: ChatCommands = {
 	],
 
 	officialchatroom: 'officialroom',
-	officialroom(target, room, user) {
-		room = this.requireRoom();
-		this.checkCan('makeroom');
-		if (!room.persist) {
-			return this.errorReply(`/officialroom - This room can't be made official`);
-		}
-		if (this.meansNo(target)) {
-			if (!room.settings.isOfficial) return this.errorReply(`This chat room is already unofficial.`);
-			delete room.settings.isOfficial;
-			this.addModAction(`${user.name} made this chat room unofficial.`);
-			this.modlog('UNOFFICIALROOM');
-			delete room.settings.isOfficial;
-			room.saveSettings();
-		} else {
-			if (room.settings.isOfficial) return this.errorReply(`This chat room is already official.`);
-			room.settings.isOfficial = true;
-			this.addModAction(`${user.name} made this chat room official.`);
-			this.modlog('OFFICIALROOM');
-			room.settings.isOfficial = true;
-			room.saveSettings();
-		}
+	officialroom() {
+		this.parse(`/setroomsection official`);
 	},
 
-	psplwinnerroom(target, room, user) {
+	roomspotlight(target, room, user) {
 		this.checkCan('makeroom');
 		room = this.requireRoom();
+		if (!target) return this.parse(`/help roomspotlight`);
 		if (!room.persist) {
-			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
+			return this.errorReply(`/roomspotlight - You can't spotlight this room.`);
 		}
 		if (this.meansNo(target)) {
-			if (!room.settings.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
-			delete room.settings.pspl;
-			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
-			this.modlog('PSPLROOM');
-			delete room.settings.pspl;
+			if (!room.settings.spotlight) return this.errorReply(`This chatroom is not being spotlighted.`);
+			this.addModAction(`${user.name} removed this chatroom from the spotlight.`);
+			this.globalModlog('UNSPOTLIGHT');
+			delete room.settings.spotlight;
 			room.saveSettings();
 		} else {
-			if (room.settings.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
-			room.settings.pspl = true;
-			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
-			this.modlog('UNPSPLROOM');
-			room.settings.pspl = true;
+			if (room.settings.spotlight === target) return this.errorReply("This chat room is already spotlighted.");
+			this.addModAction(`${user.name} spotlighted this room with the message "${target}".`);
+			this.globalModlog('SPOTLIGHT');
+			room.settings.spotlight = target;
 			room.saveSettings();
 		}
 	},
+	roomspotlighthelp: [
+		`/roomspotlight [spotlight] - Makes the room this command is used in a spotlight room for the [spotlight] category on the roomlist. Requires: &`,
+		`/roomspotlight off - Removes the room this command is used in from the list of spotlight rooms. Requires: &`,
+	],
 
 	setsubroom: 'subroom',
 	subroom(target, room, user) {
@@ -1481,9 +1504,68 @@ export const commands: ChatCommands = {
 		`/roomtierdisplay [option] - changes the current room's tier display. Valid options are: tiers, doubles tiers, numbers. Requires: # &`,
 		`/resettierdisplay - resets the current room's tier display. Requires: # &`,
 	],
+
+	setroomsection: 'roomsection',
+	roomsection(target, room, user) {
+		room = this.requireRoom();
+		const sectionNames = RoomSections.sectionNames;
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			this.sendReplyBox(Utils.html`This room is ${room.settings.section ? `in the ${sectionNames[room.settings.section]} section` : `not in a section`}.`);
+			return;
+		}
+		this.checkCan('gdeclare');
+		const section = room.setSection(target);
+		this.sendReply(`The room section is now: ${section ? sectionNames[section] : 'none'}`);
+
+		this.privateGlobalModAction(`${user.name} changed the room section of ${room.title} to ${section ? sectionNames[section] : 'none'}.`);
+		this.globalModlog('ROOMSECTION', null, section || 'none');
+	},
+	roomsectionhelp: [
+		`/roomsection [section] - Sets the room this is used in to the specified [section]. Requires: &`,
+		`Valid sections: ${sections.join(', ')}`,
+	],
+
+	roomdefaultformat(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('editroom', null, room);
+
+		if (!target) {
+			this.checkBroadcast();
+			if (room.settings.defaultFormat) {
+				this.sendReply(`This room's default format is ${room.settings.defaultFormat}.`);
+			} else {
+				this.sendReply(`This room has no default format.`);
+			}
+			return;
+		}
+		if (this.meansNo(target)) {
+			this.modlog(`DEFAULTFORMAT`, null, 'off');
+			this.privateModAction(`${user.name} removed this room's default format.`);
+			return;
+		}
+
+		target = toID(target);
+		const format = Dex.formats.get(target);
+		if (format.exists) {
+			target = format.name;
+		}
+		const {isMatch} = this.extractFormat(target);
+		if (!isMatch) throw new Chat.ErrorMessage(`Unrecognized format or mod "${target}"`);
+
+		room.settings.defaultFormat = target;
+		room.saveSettings();
+		this.modlog(`DEFAULTFORMAT`, null, target);
+		this.privateModAction(`${user.name} set this room's default format to ${target}.`);
+	},
+	roomdefaultformathelp: [
+		`/roomdefaultformat [format] or [mod] or gen[number] - Sets this room's default format/mod. Requires: # &`,
+		`/roomdefaultformat off - Clears this room's default format/mod. Requires: # &`,
+		`Affected commands: /details, /coverage, /effectiveness, /weakness, /learn`,
+	],
 };
 
-export const roomSettings: SettingsHandler[] = [
+export const roomSettings: Chat.SettingsHandler[] = [
 	// modchat
 	(room, user) => ({
 		label: "Modchat",
@@ -1563,7 +1645,7 @@ export const roomSettings: SettingsHandler[] = [
 	}),
 ];
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	permissions(args, user, connection) {
 		this.title = `[Permissions]`;
 		const room = this.requireRoom();
@@ -1581,10 +1663,10 @@ export const pages: PageTable = {
 			atLeastOne = true;
 			buf += `<tr><td><strong>${permission}</strong></td><td>`;
 			if (room.auth.atLeast(user, '#')) {
-				buf += roomGroups.map(group => (
+				buf += roomGroups.filter(group => group !== Users.SECTIONLEADER_SYMBOL).map(group => (
 					requiredRank === group ?
 						Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${group}</button>` :
-						Utils.html`<button class="button" name="send" value="/permissions set ${permission}, ${group}, ${room.roomid}">${group}</button>`
+						Utils.html`<button class="button" name="send" value="/msgroom ${room.roomid},/permissions set ${permission}, ${group}">${group}</button>`
 				)).join(' ');
 			} else {
 				buf += Utils.html`<button class="button disabled" style="font-weight:bold;color:#575757;background:#d3d3d3">${requiredRank}</button>`;

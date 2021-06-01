@@ -14,7 +14,19 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import {FS, Utils, ProcessManager} from '../../lib';
 
-function bash(command: string, context: CommandContext, cwd?: string): Promise<[number, string, string]> {
+interface ProcessData {
+	cmd: string;
+	cpu?: string;
+	time?: string;
+	ram?: string;
+}
+
+function hasDevAuth(user: User) {
+	const devRoom = Rooms.get('development');
+	return devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%');
+}
+
+function bash(command: string, context: Chat.CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
 	return new Promise(resolve => {
 		child_process.exec(command, {
@@ -28,10 +40,31 @@ function bash(command: string, context: CommandContext, cwd?: string): Promise<[
 	});
 }
 
+function keysIncludingNonEnumerable(obj: object) {
+	const methods = new Set<string>();
+	let current = obj;
+	do {
+		const curProps = Object.getOwnPropertyNames(current);
+		for (const prop of curProps) {
+			methods.add(prop);
+		}
+	} while ((current = Object.getPrototypeOf(current)));
+	return [...methods];
+}
+
+function keysToCopy(obj: object) {
+	return keysIncludingNonEnumerable(obj).filter(
+		// `__` matches sucrase init methods
+		// prop is excluded because it can hit things like hasOwnProperty that are potentially annoying (?) with
+		// the kind of prototype patching we want to do here - same for constructor and valueOf
+		prop => !(prop.includes('__') || prop.toLowerCase().includes('prop') || ['valueOf', 'constructor'].includes(prop))
+	);
+}
+
 /**
  * @returns {boolean} Whether or not the rebase failed
  */
-async function updateserver(context: CommandContext, codePath: string) {
+async function updateserver(context: Chat.CommandContext, codePath: string) {
 	const exec = (command: string) => bash(command, context, codePath);
 
 	context.sendReply(`Fetching newest version of code in the repository ${codePath}...`);
@@ -89,15 +122,31 @@ async function updateserver(context: CommandContext, codePath: string) {
 	}
 }
 
-async function rebuild(context: CommandContext) {
-	const [, , stderr] = await bash('node ./build', context);
+async function rebuild(context: Chat.CommandContext, force?: boolean) {
+	const [, , stderr] = await bash(`node ./build${force ? ' force' : ''}`, context);
 	if (stderr) {
 		throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
 	}
 }
 
-
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
+	potd(target, room, user) {
+		this.canUseConsole();
+		const species = Dex.species.get(target);
+		if (species.id === Config.potd) {
+			return this.errorReply(`The PotD is already set to ${species.name}`);
+		}
+		if (!species.exists) return this.errorReply(`Pokemon "${target}" not found.`);
+		if (!Dex.species.getLearnset(species.id)) {
+			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
+		}
+		Config.potd = species.id;
+		for (const process of Rooms.PM.processes) {
+			process.getProcess().send(`EVAL\n\nConfig.potd = '${species.id}'`);
+		}
+		this.addGlobalModAction(`${user.name} set the PotD to ${species.name}.`);
+		this.globalModlog(`POTD`, null, species.name);
+	},
 
 	/*********************************************************
 	 * Bot commands (chat-log manipulation)
@@ -130,7 +179,7 @@ export const commands: ChatCommands = {
 		this.checkHTML(target);
 		this.checkCan('addhtml', null, room);
 		target = Chat.collapseLineBreaksHTML(target);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			target += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -148,7 +197,7 @@ export const commands: ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -168,7 +217,7 @@ export const commands: ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -197,7 +246,7 @@ export const commands: ChatCommands = {
 		html = this.checkHTML(html);
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
+		if (user.tempGroup !== '*') {
 			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
@@ -226,14 +275,12 @@ export const commands: ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help pminfobox");
 
-		target = this.splitTarget(target);
-		this.checkHTML(target);
-		const targetUser = this.targetUser!;
+		const {targetUser, rest: html} = this.requireUser(target);
+		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
-		// Apply the infobox to the message
-		target = `/raw <div class="infobox">${target}</div>`;
-		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|${target}`;
+		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
+			`/raw <div class="infobox">${html}</div>`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -249,12 +296,12 @@ export const commands: ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help " + cmd);
 
-		target = this.splitTarget(target);
-		this.checkHTML(target);
-		const targetUser = this.targetUser!;
+		const {targetUser, rest: html} = this.requireUser(target);
+		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
-		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${target}`;
+		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|` +
+			`/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${html}`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -266,19 +313,27 @@ export const commands: ChatCommands = {
 		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * # &`,
 	],
 
-	sendhtmlpage(target, room, user) {
+	closehtmlpage: 'sendhtmlpage',
+	changehtmlpageselector: 'sendhtmlpage',
+	sendhtmlpage(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
-		let [targetID, pageid, content] = Utils.splitFirst(target, ',', 2);
-		if (!target || !pageid || !content) return this.parse(`/help sendhtmlpage`);
+
+		const closeHtmlPage = cmd === 'closehtmlpage';
+
+		const {targetUser, rest} = this.requireUser(target);
+		let [pageid, content] = this.splitOne(rest);
+		let selector: string | undefined;
+		if (cmd === 'changehtmlpageselector') {
+			[selector, content] = this.splitOne(content);
+			if (!selector) return this.parse(`/help ${cmd}`);
+		}
+		if (!pageid || (closeHtmlPage ? content : !content)) {
+			return this.parse(`/help ${cmd}`);
+		}
 
 		pageid = `${user.id}-${toID(pageid)}`;
 
-		const targetUser = Users.get(targetID)!;
-		if (!targetUser || !targetUser.connected) {
-			this.errorReply(`User ${this.targetUsername} is not currently online.`);
-			return false;
-		}
 		if (targetUser.locked && !this.user.can('lock')) {
 			this.errorReply("This user is currently locked, so you cannot send them HTML.");
 			return false;
@@ -305,23 +360,38 @@ export const commands: ChatCommands = {
 				connection: targetConnection,
 				pageid: `view-bot-${pageid}`,
 			});
-			context.title = `[${user.name}] ${pageid}`;
-			context.send(content);
+			if (closeHtmlPage) {
+				context.send(`|deinit|`);
+			} else if (selector) {
+				context.send(`|selectorhtml|${selector}|${content}`);
+			} else {
+				context.title = `[${user.name}] ${pageid}`;
+				context.setHTML(content);
+			}
+		}
+
+		if (closeHtmlPage) {
+			this.sendReply(`Closed the bot page ${pageid} for ${targetUser.name}.`);
+		} else {
+			this.sendReply(`Sent ${targetUser.name}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
 		}
 	},
 	sendhtmlpagehelp: [
-		`/sendhtmlpage: [target], [page id], [html] - sends the [target] a HTML room with the HTML [content] and the [pageid]. Requires: * # &`,
+		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # &`,
+	],
+	changehtmlpageselectorhelp: [
+		`/changehtmlpageselector [userid], [pageid], [selector], [html] - Sends [userid] the content [html] for the selector [selector] on the bot page [pageid]. Requires: * # &`,
+	],
+	closehtmlpagehelp: [
+		`/closehtmlpage [userid], [pageid], - Closes the bot page [pageid] for [userid]. Requires: * # &`,
 	],
 
 	highlighthtmlpage(target, room, user) {
-		target = target.trim();
-		let [userid, pageid, title, highlight] = Utils.splitFirst(target, ',', 3);
+		const {targetUser, rest} = this.requireUser(target);
+		let [pageid, title, highlight] = Utils.splitFirst(rest, ',', 2);
+
 		pageid = `${user.id}-${toID(pageid)}`;
-		if (!userid || !pageid || !target) return this.parse(`/help highlighthtmlpage`);
-		const targetUser = Users.get(userid);
-		if (!targetUser || !targetUser.connected) {
-			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
-		}
+		if (!pageid || !target) return this.parse(`/help highlighthtmlpage`);
 		if (targetUser.locked && !this.user.can('lock')) {
 			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them highlights.");
 		}
@@ -342,11 +412,75 @@ export const commands: ChatCommands = {
 		for (const conn of targetConnections) {
 			conn.send(`>view-bot-${pageid}\n${buf}`);
 		}
+
+		this.sendReply(`Sent a highlight to ${targetUser.name} on the bot page ${pageid}.`);
 	},
 	highlighthtmlpagehelp: [
-		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Send a highlight to [userid] if they're viewing the bot page [pageid].`,
+		`/highlighthtmlpage [userid], [pageid], [title], [optional highlight] - Sends a highlight to [userid] if they're viewing the bot page [pageid].`,
 		`If a [highlight] is specified, only highlights them if they have that term on their highlight list.`,
 	],
+
+	changeprivateuhtml: 'sendprivatehtmlbox',
+	sendprivateuhtml: 'sendprivatehtmlbox',
+	sendprivatehtmlbox(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		this.checkCan('addhtml', null, room);
+
+		const {targetUser, rest} = this.requireUser(target);
+
+		if (targetUser.locked && !this.user.can('lock')) {
+			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them private HTML.");
+		}
+
+		if (!(targetUser.id in room.users)) {
+			throw new Chat.ErrorMessage("You cannot send private HTML to users who are not in this room.");
+		}
+
+		let html: string;
+		let messageType: string;
+		let name: string | undefined;
+		const plainHtml = cmd === 'sendprivatehtmlbox';
+		if (plainHtml) {
+			html = rest;
+			messageType = 'html';
+		} else {
+			[name, html] = this.splitOne(rest);
+			if (!name) return this.parse('/help sendprivatehtmlbox');
+
+			messageType = `uhtml${(cmd === 'changeprivateuhtml' ? 'change' : '')}|${name}`;
+		}
+
+		html = this.checkHTML(html);
+		if (!html) return this.parse('/help sendprivatehtmlbox');
+
+		html = `${Utils.html`<div style="color:#888;font-size:8pt">[Private from ${user.name}]</div>`}${Chat.collapseLineBreaksHTML(html)}`;
+		if (plainHtml) html = `<div class="infobox">${html}</div>`;
+
+		targetUser.sendTo(room, `|${messageType}|${html}`);
+
+		this.sendReply(`Sent private HTML to ${targetUser.name}.`);
+	},
+	sendprivatehtmlboxhelp: [
+		`/sendprivatehtmlbox [userid], [html] - Sends [userid] the private [html]. Requires: * # &`,
+		`/sendprivateuhtml [userid], [name], [html] - Sends [userid] the private [html] that can change. Requires: * # &`,
+		`/changeprivateuhtml [userid], [name], [html] - Changes the message previously sent with /sendprivateuhtml [userid], [name], [html]. Requires: * # &`,
+	],
+
+	botmsg(target, room, user, connection) {
+		if (!target || !target.includes(',')) return this.parse('/help botmsg');
+		let {targetUser, rest: message} = this.requireUser(target);
+
+		const auth = this.room ? this.room.auth : Users.globalAuth;
+		if (auth.get(targetUser) !== '*') {
+			return this.popupReply(`The user "${targetUser.name}" is not a bot in this room.`);
+		}
+		this.room = null; // shouldn't be in a room
+		this.pmTarget = targetUser;
+
+		message = this.checkChat(message);
+		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
+	},
+	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
 
 	nick() {
 		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
@@ -359,8 +493,8 @@ export const commands: ChatCommands = {
 	 *********************************************************/
 
 	memusage: 'memoryusage',
-	memoryusage(target) {
-		this.checkCan('lockdown');
+	memoryusage(target, room, user) {
+		if (!hasDevAuth(user)) this.checkCan('lockdown');
 		const memUsage = process.memoryUsage();
 		const resultNums = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
 		const units = ["B", "KiB", "MiB", "GiB", "TiB"];
@@ -383,8 +517,12 @@ export const commands: ChatCommands = {
 		await rebuild(this);
 
 		const lock = Monitor.hotpatchLock;
-		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog'];
+		const hotpatches = [
+			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
+			'processmanager', 'roomsp', 'usersp',
+		];
 
+		target = toID(target);
 		try {
 			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
 			if (target === 'all') {
@@ -399,12 +537,13 @@ export const commands: ChatCommands = {
 					await this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
-				if (lock['chat']) {
-					return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
-				}
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
+				if (lock['chat']) {
+					return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
+				}
+
 				this.sendReply("Hotpatching chat commands...");
 
 				const disabledCommands = Chat.allCommands().filter(c => c.disabled).map(c => `/${c.fullCmd}`);
@@ -433,11 +572,100 @@ export const commands: ChatCommands = {
 				this.sendReply("Reloading chat plugins...");
 				Chat.loadPlugins(oldPlugins);
 				this.sendReply("DONE");
+			} else if (target === 'processmanager') {
+				if (lock['processmanager']) {
+					return this.errorReply(
+						`Hot-patching formats has been disabled by ${lock['processmanager'].by} ` +
+						`(${lock['processmanager'].reason})`
+					);
+				}
+				this.sendReply('Hotpatching processmanager prototypes...');
+
+				// keep references
+				const cache = {...require.cache};
+				Utils.clearRequireCache();
+				const newPM = require('../../lib/process-manager');
+				require.cache = cache;
+
+				const protos = [
+					[ProcessManager.QueryProcessManager, newPM.QueryProcessManager],
+					[ProcessManager.StreamProcessManager, newPM.StreamProcessManager],
+					[ProcessManager.ProcessManager, newPM.ProcessManager],
+					[ProcessManager.RawProcessManager, newPM.RawProcessManager],
+					[ProcessManager.QueryProcessWrapper, newPM.QueryProcessWrapper],
+					[ProcessManager.StreamProcessWrapper, newPM.StreamProcessWrapper],
+					[ProcessManager.RawProcessManager, newPM.RawProcessWrapper],
+				].map(part => part.map(constructor => constructor.prototype));
+
+				for (const [oldProto, newProto] of protos) {
+					const newKeys = keysToCopy(newProto);
+					const oldKeys = keysToCopy(oldProto);
+					for (const key of oldKeys) {
+						if (!newProto[key]) {
+							delete oldProto[key];
+						}
+					}
+					for (const key of newKeys) {
+						oldProto[key] = newProto[key];
+					}
+				}
+				this.sendReply('DONE');
+			} else if (target === 'usersp' || target === 'roomsp') {
+				if (lock[target]) {
+					return this.errorReply(`Hot-patching ${target} has been disabled by ${lock[target].by} (${lock[target].reason})`);
+				}
+				let newProto: any, oldProto: any, message: string;
+				switch (target) {
+				case 'usersp':
+					newProto = require('../users').User.prototype;
+					oldProto = Users.User.prototype;
+					message = 'user prototypes';
+					break;
+				case 'roomsp':
+					newProto = require('../rooms').BasicRoom.prototype;
+					oldProto = Rooms.BasicRoom.prototype;
+					message = 'rooms prototypes';
+					break;
+				}
+
+				this.sendReply(`Hotpatching ${message}...`);
+				const newKeys = keysToCopy(newProto);
+				const oldKeys = keysToCopy(oldProto);
+
+				const counts = {
+					added: 0,
+					updated: 0,
+					deleted: 0,
+				};
+
+				for (const key of oldKeys) {
+					if (!newProto[key]) {
+						counts.deleted++;
+						delete oldProto[key];
+					}
+				}
+				for (const key of newKeys) {
+					if (!oldProto[key]) {
+						counts.added++;
+					} else if (
+						// compare source code
+						typeof oldProto[key] !== 'function' || oldProto[key].toString() !== newProto[key].toString()
+					) {
+						counts.updated++;
+					}
+
+					oldProto[key] = newProto[key];
+				}
+				this.sendReply(`DONE`);
+				this.sendReply(
+					`Updated ${Chat.count(counts.updated, 'methods')}` +
+					(counts.added ? `, added ${Chat.count(counts.added, 'new methods')} to ${message}` : '') +
+					(counts.deleted ? `, and removed ${Chat.count(counts.deleted, 'methods')}.` : '.')
+				);
 			} else if (target === 'tournaments') {
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 				}
-
 				this.sendReply("Hotpatching tournaments...");
 
 				global.Tournaments = require('../tournaments').Tournaments;
@@ -463,6 +691,8 @@ export const commands: ChatCommands = {
 				void TeamValidatorAsync.PM.respawn();
 				// respawn simulator processes
 				void Rooms.PM.respawn();
+				// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
+				void Chat.plugins.datasearch?.PM?.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.sendAll(Rooms.global.formatListText);
 				this.sendReply("DONE");
@@ -564,7 +794,10 @@ export const commands: ChatCommands = {
 		if (!reason || !target.includes(separator)) return this.parse('/help nohotpatch');
 
 		const lock = Monitor.hotpatchLock;
-		const validDisable = ['chat', 'battles', 'formats', 'validator', 'tournaments', 'punishments', 'modlog', 'all'];
+		const validDisable = [
+			'roomsp', 'usersp', 'chat', 'battles', 'formats', 'validator',
+			'tournaments', 'punishments', 'modlog', 'all', 'processmanager',
+		];
 
 		if (!validDisable.includes(hotpatch)) {
 			return this.errorReply(`Disabling hotpatching "${hotpatch}" is not supported.`);
@@ -596,22 +829,91 @@ export const commands: ChatCommands = {
 		`/allowhotpatch [chat|formats|battles|validator|tournaments|punishments|modlog|all] [reason] - Enables hotpatching the specified part of the simulator. Requires: &`,
 	],
 
-	processes(target, room, user) {
-		const devRoom = Rooms.get('development');
-		if (!(devRoom && Users.Auth.atLeast(devRoom.auth.getDirect(user.id), '%'))) {
-			this.checkCan('lockdown');
-		}
+	async processes(target, room, user) {
+		if (!hasDevAuth(user)) this.checkCan('lockdown');
 
-		let buf = `<strong>${process.pid}</strong> - Main<br />`;
+		const processes = new Map<string, ProcessData>();
+		const ramUnits = ["KiB", "MiB", "GiB", "TiB"];
+
+		await new Promise<void>(resolve => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+				if (err) throw err;
+				const rows = stdout.split('\n').slice(1); // first line is the table header
+				for (const row of rows) {
+					if (!row.trim()) continue;
+					const [pid, cpu, time, ram, ...rest] = row.split(' ').filter(Boolean);
+					if (pid === `${child.pid}`) continue; // ignore this process
+					const entry: ProcessData = {cmd: rest.join(' ')};
+					// at the point of 0:00.[num], it's in so few seconds we don't care, so
+					// we don't need to clutter the display
+					if (time && !time.startsWith('0:00')) {
+						entry.time = time;
+					}
+					if (cpu && cpu !== '0.0') entry.cpu = `${cpu}%`;
+					const ramNum = parseInt(ram);
+					if (!isNaN(ramNum)) {
+						const unitIndex = Math.floor(Math.log2(ramNum) / 10); // 2^10 base log
+						entry.ram = `${(ramNum / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${ramUnits[unitIndex]}`;
+					}
+					processes.set(pid, entry);
+				}
+				resolve();
+			});
+		});
+
+		let buf = `<strong>${process.pid}</strong> - Main `;
+		const mainDisplay = [];
+		const mainProcess = processes.get(`${process.pid}`)!;
+		if (mainProcess.cpu) mainDisplay.push(`CPU ${mainProcess.cpu}`);
+		if (mainProcess.time) mainDisplay.push(`time: ${mainProcess.time})`);
+		if (mainProcess.ram) {
+			mainDisplay.push(`RAM: ${mainProcess.ram}`);
+		}
+		if (mainDisplay.length) buf += ` (${mainDisplay.join(', ')})`;
+		buf += `<br /><br /><strong>Process managers:</strong><br />`;
+		processes.delete(`${process.pid}`);
+
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
-				buf += `<strong>${process.getProcess().pid}</strong> - ${manager.basename} ${i} (load ${process.load})<br />`;
+				const pid = process.getProcess().pid;
+				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()}`;
+				const info = processes.get(`${pid}`)!;
+				const display = [];
+				if (info.cpu) display.push(`CPU: ${info.cpu}`);
+				if (info.time) display.push(`time: ${info.time}`);
+				if (info.ram) display.push(`RAM: ${info.ram}`);
+				if (display.length) buf += `, ${display.join(', ')})`;
+				buf += `<br />`;
+				processes.delete(`${pid}`);
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
-				buf += `<strong>${process.getProcess().pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load})<br />`;
+				const pid = process.getProcess().pid;
+				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.getLoad()}`;
+				const info = processes.get(`${pid}`);
+				if (info) {
+					const display = [];
+					if (info.cpu) display.push(`CPU: ${info.cpu}`);
+					if (info.time) display.push(`time: ${info.time}`);
+					if (info.ram) display.push(`RAM: ${info.ram}`);
+					if (display.length) buf += `, ${display.join(', ')})`;
+				}
+				buf += `<br />`;
+				processes.delete(`${pid}`);
 			}
 		}
+		buf += `<br />`;
+		buf += `<details class="readmore"><summary><strong>Other processes:</strong></summary>`;
 
+		for (const [pid, info] of processes) {
+			buf += `<strong>${pid}</strong> - <code>${info.cmd}</code>`;
+			const display = [];
+			if (info.cpu) display.push(`CPU: ${info.cpu}`);
+			if (info.time) display.push(`time: ${info.time}`);
+			if (info.ram) display.push(`RAM: ${info.ram}`);
+			if (display.length) buf += `(${display.join(', ')})`;
+			buf += `<br />`;
+		}
+		buf += `</details>`;
 		this.sendReplyBox(buf);
 	},
 
@@ -621,8 +923,9 @@ export const commands: ChatCommands = {
 		await FS('data/learnsets.js').write(`'use strict';\n\nexports.Learnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
 				`\t${id}: {learnset: {\n` +
-				Object.entries(Dex.getLearnsetData(id as ID)).sort(
-					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
+				Utils.sortBy(
+					Object.entries(Dex.species.getLearnsetData(id as ID)),
+					([moveid]) => moveid
 				).map(([moveid, sources]) => (
 					`\t\t${moveid}: ["` + sources.join(`", "`) + `"],\n`
 				)).join('') +
@@ -642,7 +945,7 @@ export const commands: ChatCommands = {
 		if (!parsed) {
 			return this.errorReply(`Command "/${target}" is in an invalid format.`);
 		}
-		const {handler, cmd} = parsed;
+		const {handler, fullCmd} = parsed;
 		if (!handler) {
 			return this.errorReply(`Command "/${target}" not found.`);
 		}
@@ -650,7 +953,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Command "/${target}" is already disabled`);
 		}
 		handler.disabled = true;
-		this.addGlobalModAction(`${user.name} disabled the command /${cmd}.`);
+		this.addGlobalModAction(`${user.name} disabled the command /${fullCmd}.`);
 		this.globalModlog(`DISABLECOMMAND`, null, target);
 	},
 	disablecommandhelp: [`/disablecommand [command] - Disables the given [command]. Requires: &`],
@@ -888,6 +1191,7 @@ export const commands: ChatCommands = {
 		let success = true;
 		if (target === 'private') {
 			if (!validPrivateCodePath) {
+				Monitor.updateServerLock = false;
 				throw new Chat.ErrorMessage("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
 			}
 			success = await updateserver(this, Config.privatecodepath);
@@ -915,7 +1219,7 @@ export const commands: ChatCommands = {
 		this.canUseConsole();
 		Monitor.updateServerLock = true;
 		this.sendReply(`Rebuilding...`);
-		await rebuild(this);
+		await rebuild(this, true);
 		Monitor.updateServerLock = false;
 		this.sendReply(`DONE`);
 	},
@@ -936,7 +1240,6 @@ export const commands: ChatCommands = {
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
 	async eval(target, room, user, connection) {
-		room = this.requireRoom();
 		this.canUseConsole();
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
@@ -955,13 +1258,13 @@ export const commands: ChatCommands = {
 		let uhtmlId = null;
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
-			const battle = room.battle;
+			const battle = room?.battle;
 			const me = user;
 			let result = eval(target);
 			/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
 
 			if (result?.then) {
-				uhtmlId = `eval-${room.nextGameNumber()}`;
+				uhtmlId = `eval-${Date.now().toString().slice(-6)}-${Math.random().toFixed(6).slice(-6)}`;
 				this.sendReply(`|uhtml|${uhtmlId}|${generateHTML('<', 'Promise pending')}`);
 				this.update();
 				result = `Promise -> ${Utils.visualize(await result)}`;
@@ -1133,7 +1436,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	bot(args, user, connection) {
 		const [botid, pageid] = args;
 		const bot = Users.get(botid);

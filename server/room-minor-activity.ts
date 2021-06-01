@@ -79,7 +79,6 @@ export abstract class MinorActivity {
 		room.minorActivity?.destroy();
 		if (room.minorActivityQueue?.length) {
 			const pollData = room.minorActivityQueue.shift()!;
-			room.settings.minorActivityQueue!.shift();
 			if (!room.minorActivityQueue.length) room.clearMinorActivityQueue();
 			if (!room.settings.minorActivityQueue?.length) {
 				delete room.settings.minorActivityQueue;
@@ -95,7 +94,10 @@ export abstract class MinorActivity {
 			});
 
 			if (!MinorActivityClass) {
-				if (pollData.activityid === 'poll') throw new Error('No minorActivity class provided');
+				if (pollData.activityid === 'poll') {
+					const {Poll} = require('./chat-plugins/poll');
+					room.setMinorActivity(new Poll(room, pollData));
+				}
 			} else {
 				room.setMinorActivity(new MinorActivityClass(room, pollData));
 			}

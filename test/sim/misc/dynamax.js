@@ -69,22 +69,6 @@ describe("Dynamax", function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('G-Max Steelsurge hazard should deal 2x damage to Eiscue', function () {
-		battle = common.createBattle([[
-			{species: "Copperajah", moves: ['ironhead'], gigantamax: true},
-		], [
-			{species: "Pyukumuku", moves: ['uturn']},
-			{species: "Eiscue", ability: 'iceface', moves: ['splash']},
-		]]);
-		battle.makeChoices('move ironhead dynamax', 'move uturn');
-		battle.makeChoices('', 'switch eiscue');
-
-		const pokemon = battle.p2.active[0];
-		const expectedPercent = Math.pow(0.5, 2);
-		const expectedDamage = Math.floor(pokemon.maxhp * expectedPercent);
-		assert.equal(pokemon.maxhp - pokemon.hp, expectedDamage, `${pokemon.name} should take ${expectedPercent * 100}%`);
-	});
-
 	it.skip('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
@@ -108,6 +92,7 @@ describe("Dynamax", function () {
 		]]);
 		battle.makeChoices();
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
+		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
 
 		battle = common.createBattle([[
 			{species: "Feebas", moves: ['splash']},
@@ -117,6 +102,7 @@ describe("Dynamax", function () {
 		battle.makeChoices();
 		battle.makeChoices('move 1', 'auto');
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
+		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
 	});
 
 	it(`should not allow the user to select max moves with 0 base PP remaining`, function () {

@@ -7,7 +7,7 @@
 // unless we shell out and use `execSync`. However, the heuristic of simply
 // checking for the presence of  './.sim-dist/dex' to determine whether a build
 // is required is somewhat risky as it only is valid from a clean repository -
-// if you make edits or have previous build artifacts lying arround, this
+// if you make edits or have previous build artifacts lying around, this
 // script could potentially be missing additional sources or the compiled output
 // may be out of date.
 //
@@ -95,16 +95,14 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		}
 	case 'generate-team':
 		{
-			var Dex = require('./.sim-dist/dex').Dex;
-			global.toID = Dex.getId;
+			var Teams = require('./.sim-dist/teams').Teams;
 			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
-			console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], {seed})));
+			console.log(Teams.pack(Teams.generate(process.argv[3], {seed})));
 		}
 		break;
 	case 'validate-team':
 		{
-			var Dex = require('./.sim-dist/dex').Dex;
-			global.toID = Dex.getId;
+			var Teams = require('./.sim-dist/teams').Teams;
 			var TeamValidator = require('./.sim-dist/team-validator').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);
 			var Streams = require('./.lib-dist/streams');
@@ -112,7 +110,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 
 			stdin.readLine().then(function (textTeam) {
 				try {
-					var team = Dex.fastUnpackTeam(textTeam);
+					var team = Teams.unpack(textTeam);
 					var result = validator.validateTeam(team);
 					if (result) {
 						console.error(result.join('\n'));
@@ -178,13 +176,13 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'unpack-team':
 		{
-			var Dex = require('./.sim-dist/dex').Dex;
+			var Teams = require('./.sim-dist/teams').Teams;
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
 			stdin.readLine().then(function (packedTeam) {
 				try {
-					var unpackedTeam = Dex.fastUnpackTeam(packedTeam);
+					var unpackedTeam = Teams.unpack(packedTeam);
 					console.log(JSON.stringify(unpackedTeam));
 					process.exit(0);
 				} catch (e) {
@@ -196,13 +194,13 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'pack-team':
 		{
-			var Dex = require('./.sim-dist/dex').Dex;
+			var Teams = require('./.sim-dist/teams').Teams;
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
 			stdin.readLine().then(function (unpackedTeam) {
 				try {
-					var packedTeam = Dex.packTeam(JSON.parse(unpackedTeam));
+					var packedTeam = Teams.pack(JSON.parse(unpackedTeam));
 					console.log(packedTeam);
 					process.exit(0);
 				} catch (e) {

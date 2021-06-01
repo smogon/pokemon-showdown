@@ -122,7 +122,7 @@ export function destroy() {
 	Repeats.destroy();
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	repeats(args, user) {
 		const room = this.requireRoom();
 		this.title = `[Repeats]`;
@@ -139,18 +139,18 @@ export const pages: PageTable = {
 			const repeatText = repeat.faq ? roomFaqs[room.roomid][repeat.id] : repeat.phrase;
 			const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeatText, true);
 			html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeatText)}</td><td>${repeat.isByMessages ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
-			html += `<td><button class="button" name="send" value="/removerepeat ${repeat.id},${room.roomid}">${this.tr`Remove`}</button></td>`;
+			html += `<td><button class="button" name="send" value="/msgroom ${room.roomid},/removerepeat ${repeat.id}">${this.tr`Remove`}</button></td>`;
 		}
 		html += `</table>`;
 		if (user.can("editroom", null, room)) {
-			html += `<br /><button class="button" name="send" value="/removeallrepeats ${room.roomid}">${this.tr`Remove all repeats`}</button>`;
+			html += `<br /><button class="button" name="send" value="/msgroom ${room.roomid},/removeallrepeats">${this.tr`Remove all repeats`}</button>`;
 		}
 		html += `</div>`;
 		return html;
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	repeatbymessages: 'repeat',
 	repeathtmlbymessages: 'repeat',
 	repeathtml: 'repeat',
@@ -161,6 +161,8 @@ export const commands: ChatCommands = {
 		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
+		if (!id) throw new Chat.ErrorMessage(this.tr`Repeat names must include at least one alphanumeric character.`);
+
 		const phrase = messageArray.join(',').trim();
 		const interval = parseInt(intervalString);
 		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
@@ -243,51 +245,40 @@ export const commands: ChatCommands = {
 
 	deleterepeat: 'removerepeat',
 	removerepeat(target, room, user) {
-		target = target.trim();
-		const [name, roomid] = target.split(',');
-		const id = toID(name);
+		room = this.requireRoom();
+		const id = toID(target);
 		if (!id) {
 			return this.parse(`/help repeat`);
 		}
-		const targetRoom = roomid ? Rooms.search(roomid) : room;
-		if (!targetRoom) {
-			return this.errorReply(`Invalid room.`);
-		}
-		this.room = targetRoom;
-		this.checkCan('mute', null, targetRoom);
-		if (!targetRoom.settings.repeats?.length) {
+		this.checkCan('mute', null, room);
+		if (!room.settings.repeats?.length) {
 			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
 		}
 
-		if (!Repeats.hasRepeat(targetRoom, id)) {
+		if (!Repeats.hasRepeat(room, id)) {
 			return this.errorReply(this.tr`The phrase labeled with "${id}" is not being repeated in this room.`);
 		}
 
-		Repeats.removeRepeat(targetRoom, id);
+		Repeats.removeRepeat(room, id);
 
 		this.modlog('REMOVE REPEATPHRASE', null, `"${id}"`);
-	  this.privateModAction(targetRoom.tr`${user.name} removed the repeated phrase labeled with "${id}".`);
-		this.refreshPage(`repeats-${targetRoom.roomid}`);
+		this.privateModAction(room.tr`${user.name} removed the repeated phrase labeled with "${id}".`);
+		this.refreshPage(`repeats-${room.roomid}`);
 	},
 
 	removeallrepeats(target, room, user) {
-		target = target.trim();
-		const targetRoom = target ? Rooms.search(target) : room;
-		if (!targetRoom) {
-			return this.errorReply(this.tr`Invalid room.`);
-		}
-		this.room = targetRoom;
-		this.checkCan('declare', null, targetRoom);
-		if (!targetRoom.settings.repeats?.length) {
+		room = this.requireRoom();
+		this.checkCan('declare', null, room);
+		if (!room.settings.repeats?.length) {
 			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
 		}
 
-		for (const {id} of targetRoom.settings.repeats) {
-			Repeats.removeRepeat(targetRoom, id);
+		for (const {id} of room.settings.repeats) {
+			Repeats.removeRepeat(room, id);
 		}
 
 		this.modlog('REMOVE REPEATPHRASE', null, 'all repeated phrases');
-		this.privateModAction(targetRoom.tr`${user.name} removed all repeated phrases.`);
+		this.privateModAction(room.tr`${user.name} removed all repeated phrases.`);
 	},
 
 	repeats: 'viewrepeats',

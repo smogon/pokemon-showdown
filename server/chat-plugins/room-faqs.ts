@@ -21,7 +21,7 @@ export function getAlias(roomid: RoomID, key: string) {
 	return false;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	addfaq(target, room, user, connection) {
 		room = this.requireRoom();
 		this.checkCan('ban', null, room);
@@ -37,51 +37,49 @@ export const commands: ChatCommands = {
 		if (!(topic && rest.length)) return this.parse('/help roomfaq');
 		let text = rest.join(',').trim();
 		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
-		if (Chat.stripFormatting(text).length > MAX_ROOMFAQ_LENGTH) {
-			return this.errorReply(`FAQ entries should not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+
+		const lengthWithoutFormatting = Chat.stripFormatting(text).length;
+		if (lengthWithoutFormatting > MAX_ROOMFAQ_LENGTH) {
+			return this.errorReply(`FAQ entries must not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+		} else if (lengthWithoutFormatting < 1) {
+			return this.errorReply(`FAQ entries must include at least one character.`);
 		}
 
 		text = text.replace(/^>/, '&gt;');
 
 		if (!roomFaqs[room.roomid]) roomFaqs[room.roomid] = {};
+		const exists = topic in roomFaqs[room.roomid];
 		roomFaqs[room.roomid][topic] = text;
 		saveRoomFaqs();
 		this.sendReplyBox(Chat.formatText(text, true));
-		this.privateModAction(`${user.name} added a FAQ for '${topic}'`);
-		this.modlog('RFAQ', null, `added '${topic}'`);
+		this.privateModAction(`${user.name} ${exists ? 'edited' : 'added'} an FAQ for '${topic}'`);
+		this.modlog('RFAQ', null, `${exists ? 'edited' : 'added'} '${topic}'`);
 	},
 	removefaq(target, room, user) {
-		target = target.trim();
-		let [topic, roomid] = Utils.splitFirst(target, ',');
-		const targetRoom = roomid ? Rooms.search(roomid) : room;
-		if (!targetRoom) return this.errorReply(`Invalid room.`);
-		if (!targetRoom.persist) {
-			return this.errorReply("This command is unavailable in temporary rooms.");
-		}
-		this.room = targetRoom;
+		room = this.requireRoom();
 		this.checkChat();
-		this.checkCan('ban', null, targetRoom);
-		topic = toID(topic);
+		this.checkCan('ban', null, room);
+		const topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
 
-		if (!(roomFaqs[targetRoom.roomid] && roomFaqs[targetRoom.roomid][topic])) return this.errorReply("Invalid topic.");
+		if (!(roomFaqs[room.roomid] && roomFaqs[room.roomid][topic])) return this.errorReply("Invalid topic.");
 		if (
-			targetRoom.settings.repeats?.length &&
-			targetRoom.settings.repeats.filter(x => x.faq && x.id === (getAlias(targetRoom.roomid, topic) || topic)).length
+			room.settings.repeats?.length &&
+			room.settings.repeats.filter(x => x.faq && x.id === (getAlias(room!.roomid, topic) || topic)).length
 		) {
-			this.parse(`/removerepeat ${getAlias(targetRoom.roomid, topic) || topic},${targetRoom.roomid}`);
+			this.parse(`/msgroom ${room.roomid},/removerepeat ${getAlias(room.roomid, topic) || topic}`);
 		}
-		delete roomFaqs[targetRoom.roomid][topic];
-		Object.keys(roomFaqs[targetRoom.roomid]).filter(
-			val => getAlias(targetRoom.roomid, val) === topic
+		delete roomFaqs[room.roomid][topic];
+		Object.keys(roomFaqs[room.roomid]).filter(
+			val => getAlias(room!.roomid, val) === topic
 		).map(
-			val => delete roomFaqs[targetRoom.roomid][val]
+			val => delete roomFaqs[room!.roomid][val]
 		);
-		if (!Object.keys(roomFaqs[targetRoom.roomid]).length) delete roomFaqs[targetRoom.roomid];
+		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
 		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
-		if (roomid) this.refreshPage(`roomfaqs-${targetRoom.roomid}`);
+		this.refreshPage(`roomfaqs-${room.roomid}`);
 	},
 	addalias(target, room, user) {
 		room = this.requireRoom();
@@ -133,7 +131,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	roomfaqs(args, user) {
 		const room = this.requireRoom();
 		this.title = `[Room FAQs]`;
@@ -148,7 +146,7 @@ export const pages: PageTable = {
 
 		buf += `<h2>FAQs for ${room.title}:</h2>`;
 		const keys = Object.keys(roomFaqs[room.roomid]);
-		const sortedKeys = keys.filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b));
+		const sortedKeys = Utils.sortBy(keys.filter(val => !getAlias(room.roomid, val)));
 		for (const key of sortedKeys) {
 			const topic = roomFaqs[room.roomid][key];
 			buf += `<div class="infobox">`;
@@ -163,12 +161,23 @@ export const pages: PageTable = {
 				const src = Utils.escapeHTML(topic).replace(/\n/g, `<br />`);
 				buf += `<hr /><details><summary>Raw text</summary>`;
 				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/addfaq ${key}, ${src}</code></details>`;
-				buf += `<hr /><button class="button" name="send" value="/removefaq ${key},${room.roomid}">Delete FAQ</button>`;
+				buf += `<hr /><button class="button" name="send" value="/msgroom ${room.roomid},/removefaq ${key}">Delete FAQ</button>`;
 			}
 			buf += `</div>`;
 		}
 		buf += `</div>`;
 		return buf;
+	},
+};
+
+export const handlers: Chat.Handlers = {
+	onRenameRoom(oldID, newID) {
+		if (roomFaqs[oldID]) {
+			if (!roomFaqs[newID]) roomFaqs[newID] = {};
+			Object.assign(roomFaqs[newID], roomFaqs[oldID]);
+			delete roomFaqs[oldID];
+			saveRoomFaqs();
+		}
 	},
 };
 

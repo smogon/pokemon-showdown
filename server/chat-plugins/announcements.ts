@@ -68,7 +68,7 @@ export class Announcement extends Rooms.MinorActivity {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	announcement: {
 		htmlcreate: 'new',
 		create: 'new',
@@ -90,7 +90,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(this.tr`There is already a poll or announcement in progress in this room.`);
 			}
 
-			const source = supportHTML ? this.checkHTML(target) : Chat.formatText(target);
+			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
 
 			room.setMinorActivity(new Announcement(room, {source}));
 
@@ -179,6 +179,6 @@ process.nextTick(() => {
 // should handle restarts and also hotpatches
 for (const room of Rooms.rooms.values()) {
 	if (room.settings.minorActivity?.activityid === 'announcement') {
-		room.setMinorActivity(new Announcement(room, room.settings.minorActivity));
+		room.setMinorActivity(new Announcement(room, room.settings.minorActivity), true);
 	}
 }

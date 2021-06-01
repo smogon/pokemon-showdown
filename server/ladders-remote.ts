@@ -61,7 +61,9 @@ export class LadderStore {
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
 	 */
-	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject) {
+	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject): Promise<[
+		number, AnyObject | undefined | null, AnyObject | undefined | null,
+	]> {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
 			return [p1score, null, null];
@@ -70,6 +72,8 @@ export class LadderStore {
 		const formatid = this.formatid;
 		const p1 = Users.getExact(p1name);
 		const p2 = Users.getExact(p2name);
+		const p1id = toID(p1name);
+		const p2id = toID(p2name);
 
 		const ladderUpdatePromise = LoginServer.request('ladderupdate', {
 			p1: p1name,
@@ -79,7 +83,7 @@ export class LadderStore {
 		});
 
 		// calculate new Elo scores and display to room while loginserver updates the ladder
-		const [p1OldElo, p2OldElo] = (await Promise.all([this.getRating(p1!.id), this.getRating(p2!.id)])).map(Math.round);
+		const [p1OldElo, p2OldElo] = (await Promise.all([this.getRating(p1id), this.getRating(p2id)])).map(Math.round);
 		const p1NewElo = Math.round(this.calculateElo(p1OldElo, p1score, p2OldElo));
 		const p2NewElo = Math.round(this.calculateElo(p2OldElo, 1 - p1score, p1OldElo));
 
@@ -100,12 +104,14 @@ export class LadderStore {
 
 		room.update();
 
-
 		const [data, error] = await ladderUpdatePromise;
-		let problem = false;
 
+		let problem = false;
 		if (error) {
-			problem = true;
+			if (error.message !== 'stream interrupt') {
+				room.add(`||Ladder isn't responding, score probably updated but might not have (${error.message}).`);
+				problem = true;
+			}
 		} else if (!room.battle) {
 			problem = true;
 		} else if (!data) {
@@ -126,7 +132,7 @@ export class LadderStore {
 			return [p1score, null, null];
 		}
 
-		return [p1score, data!.p1rating, data!.p2rating];
+		return [p1score, data?.p1rating, data?.p2rating];
 	}
 
 	/**
@@ -137,13 +143,14 @@ export class LadderStore {
 	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
-
 	/**
-	 * Calculates Elo for quick display, matching the formula on loginserver
+	 * Calculates Elo based on a match result
+	 *
 	 */
-	// see lib/ntbb-ladder.lib.php in the pokemon-showdown-client repo for the login server implementation
-	// *intentionally* different from calculation in ladders-local, due to the high activity on the main server
-	private calculateElo(previousUserElo: number, score: number, foeElo: number): number {
+	calculateElo(oldElo: number, score: number, foeElo: number): number {
+		// see lib/ntbb-ladder.lib.php in the pokemon-showdown-client repo for the login server implementation
+		// *intentionally* different from calculation in ladders-local, due to the high activity on the main server
+
 		// The K factor determines how much your Elo changes when you win or
 		// lose games. Larger K means more change.
 		// In the "original" Elo, K is constant, but it's common for K to
@@ -151,22 +158,20 @@ export class LadderStore {
 		let K = 50;
 
 		// dynamic K-scaling (optional)
-		if (previousUserElo < 1100) {
+		if (oldElo < 1100) {
 			if (score < 0.5) {
-				K = 20 + (previousUserElo - 1000) * 30 / 100;
+				K = 20 + (oldElo - 1000) * 30 / 100;
 			} else if (score > 0.5) {
-				K = 80 - (previousUserElo - 1000) * 30 / 100;
+				K = 80 - (oldElo - 1000) * 30 / 100;
 			}
-		} else if (previousUserElo > 1300) {
+		} else if (oldElo > 1300) {
 			K = 40;
-		} else if (previousUserElo > 1600) {
-			K = 32;
 		}
 
 		// main Elo formula
-		const E = 1 / (1 + Math.pow(10, (foeElo - previousUserElo) / 400));
+		const E = 1 / (1 + Math.pow(10, (foeElo - oldElo) / 400));
 
-		const newElo = previousUserElo + K * (score - E);
+		const newElo = oldElo + K * (score - E);
 
 		return Math.max(newElo, 1000);
 	}

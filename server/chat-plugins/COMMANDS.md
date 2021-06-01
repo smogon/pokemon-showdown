@@ -18,18 +18,20 @@ But to actually define a command, it's a function:
 
 	avatars(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox('You can <button name="avatars">change ' +
+		this.sendReplyBox(
+			'You can <button name="avatars">change ' +
 			'your avatar</button> by clicking on it in the <button ' +
 			'name="openOptions"><i class="icon-cog"></i> Options' +
 			'</button> menu in the upper right. Custom avatars are ' +
-			'only obtainable by staff.');
+			'only obtainable by staff.'
+		);
 	}
 
 
 Parameters
 ------------------------------------------------------------------------
 
-Commands are actually passed five parameters:
+Commands are actually passed six parameters:
 
 	function (target, room, user, connection, cmd, message)
 
@@ -70,14 +72,29 @@ As an example:
 
 	ip: 'whois',
 	rooms: 'whois',
-	whois(target, room, user, connection, cmd) {
+	whois(target, room, user) {
 		<function body>
 	},
-	whoishelp:["/whois - Get details on yourself: alts, group, IP address,
+	whoishelp:[
+		"/whois - Get details on yourself: alts, group, IP address,
 		and rooms.",
-		"/whois [username] - Get details on a username: group and rooms."],
+		"/whois [username] - Get details on a username: group and rooms.",
+	],
 
 `/help whois` will send the information in `whoishelp`.
+
+
+Plines
+------------------------------------------------------------------------
+
+A lot of the functions refering "plines". A pline is a protocol line,
+documented in [PROTOCOL.md][https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md]
+
+Plines are the ones that usually start with `|MESSAGETYPE|`, but a pline
+that doesn't start with `|` will be shown as text directly to the user.
+
+Note that currently, most plines starting with `|` break horribly when
+sent in PMs, so please be careful about that.
 
 
 Functions
@@ -85,8 +102,8 @@ Functions
 
 Commands have access to the following functions:
 
-`this.sendReply(message)`
-*	Sends a message back to the room the user typed the command into.
+`this.sendReply(pline)`
+*	Sends a pline to the room/PM the user typed the command into.
 
 `this.sendReplyBox(html)`
 *	Same as sendReply, but shows it in a box, and you can put HTML in it.
@@ -94,37 +111,39 @@ Commands have access to the following functions:
 `this.popupReply(message)`
 *	Shows a popup in the window the user typed the command into.
 
-`this.add(message)`
-*	Adds a message to the room so that everyone can see it.
-	This is like `this.sendReply`, except everyone in the room gets it,
+`this.add(pline)`
+*	Adds a pline to the room so that everyone can see it.
+	This is like `this.sendReply`, except everyone in the room sees it,
 	instead of just the user that typed the command.
 
-`this.send(message)`
-*	Sends a message to the room so that everyone can see it.
+`this.send(pline)`
+*	Sends a pline to the room so that everyone can see it.
 	This is like `this.add`, except it's not logged, and users who join the
 	room later won't see it in the log, and if it's a battle, it won't show
 	up in saved replays.
 	You USUALLY want to use `this.add` instead.
 
-`this.roomlog(message)`
-*	Log a message to the room's log without sending it to anyone. This is
+`this.roomlog(pline)`
+*	Log a pline to the room's log without sending it to anyone. This is
 	like `this.add`, except no one will see it.
 
 `this.addModAction(message)`
-*	Like this.add, except it logs the message as being sent as the user who used the command.
-	This does not log anything into the modlog
+*	Like `this.add`, but the message is treated like a chat message from the
+	user who used the command (notifying and potentially highlighting other
+	users). This does not log anything into the modlog.
 
 `this.modlog(action, user, note, options)`
-*   Adds a log line into the room's modlog, similar to `this.globalModlog`.
-    The arguments `user` (the targeted user), `note` (details), and `options` (no ip, no alts) are optional.
+*	Adds a log line into the room's modlog, similar to `this.globalModlog`.
+	The arguments `user` (the targeted user), `note` (details), and `options`
+	(no ip, no alts) are optional.
 
 `this.checkCan(permission)`  
 `this.checkCan(permission, targetUser)`
 *	Checks if the user has the permission to do something, or if a
 	targetUser is passed, check if the user has permission to do it to that
-	user. Will automatically give the user an "Access denied" message, and stop the command there, if
-	the user doesn't have permission: use `user.can()` if you don't want that
-	message. 
+	user. Will automatically give the user an "Access denied" message, and
+	stop the command there, if the user doesn't have permission: use
+	`user.can()` if you don't want that message.
 
 	Should usually be near the top of the command, like:
 
@@ -183,35 +202,33 @@ Commands have access to the following functions:
 	corresponding namespace:
 
 		// command msg is in namespace test. (ie. /test msg)
-		this.parse('/help', true); // is parsed as if the user said
-								   // '/test help'
+		this.parse('/help', true);
+		// is parsed as if the user said '/test help'
 
 	After 10 levels of recursion (calling `this.parse` from a command called
 	by `this.parse` from a command called by `this.parse` etc) we will assume
 	it's a bug in your command and error out.
 
-`this.targetUserOrSelf(target, exactName)`
+`this.getUserOrSelf(target, exactName)`
 *	If `target` is blank, returns the user that sent the message.
 	Otherwise, returns the user with the username in target, or a falsy
 	value if no user with that username exists.
 	By default, this will track users across name changes. However, if
 	`exactName` is true, it will enforce exact matches.
 
-`this.splitTarget(target, exactName)`
-*	Splits a target in the form `<user>, <message>` into its constituent parts.
-	Returns `<message>`, and sets `this.targetUser` to the user, and
-	`this.targetUsername` to the username.
+`this.splitUser(target, exactName)`
+*	Splits a target in the form `<user>, <rest>` into its constituent parts;
+	returning
+	`{targetUser: User | null, targetUsername: string, inputUsername: string, rest: string}`.
+	`inputUsername` will be exactly `<user>` and `rest` will be `<rest>`.
 
 	If a user doesn't exist (because they are offline or otherwise),
-	`this.targetUser` will be falsy but `this.targetUsername` will still exist.
-	If `this.targetUser` exists, this.targetUsername will have the same
-	capitalization as the user's username, otherwise the capitalization
-	will be however it was passed into the function.
+	`targetUser` will be null but `targetUsername` will be `inputUsername`.
+	If `targetUser` exists, `targetUsername` will be `targetUser.name`
+	(fixing capitalization and following name changes if applicable).
 
 	By default, this will track users across name changes. However, if
 	`exactName` is true, it will enforce exact matches.
-
-	Remember to check if `this.targetUser` exists before going further.
 
 Unless otherwise specified, these functions will return undefined, so you
 can `return this.sendReply` or something to send a reply and stop the command
@@ -256,11 +273,13 @@ commands:
 			user.isPlaying = false;
 			this.sendReply("Stopped.");
 		},
-		stophelp: ["Tells you if the user has stopped playing."]
 	},
-	gamehelp: ["commands for /game are:",
+	gamehelp: [
+		"commands for /game are:",
 		"/game play - Tells you if the user is playing.",
-		"/game stop - Tells you if the user stopped playing."]
+		"/game stop - Tells you if the user stopped playing.",
+	],
 
 The help entries are accessed with `/help game play` and `/help game`
-respectively.
+respectively. If help for `/help game stop` doesn't exist, it will show
+help for `/help game` instead.

@@ -130,7 +130,7 @@ export class LadderStore {
 	 */
 	async getTop(prefix?: string) {
 		const formatid = this.formatid;
-		const name = Dex.getFormat(formatid).name;
+		const name = Dex.formats.get(formatid).name;
 		const ladder = await this.getLadder();
 		let buf = `<h3>${name} Top 100</h3>`;
 		buf += `<table>`;
@@ -299,22 +299,9 @@ export class LadderStore {
 	}
 
 	/**
-	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
-	 */
-	static visualizeAll(username: string) {
-		const ratings = [];
-		for (const i in Dex.formats) {
-			if (Dex.formats[i].searchShow) {
-				ratings.push(new LadderStore(i).visualize(username));
-			}
-		}
-		return Promise.all(ratings);
-	}
-
-	/**
 	 * Calculates Elo based on a match result
 	 */
-	private calculateElo(previousUserElo: number, score: number, foeElo: number): number {
+	 calculateElo(oldElo: number, score: number, foeElo: number): number {
 		// The K factor determines how much your Elo changes when you win or
 		// lose games. Larger K means more change.
 		// In the "original" Elo, K is constant, but it's common for K to
@@ -322,23 +309,36 @@ export class LadderStore {
 		let K = 50;
 
 		// dynamic K-scaling (optional)
-		if (previousUserElo < 1200) {
+		if (oldElo < 1200) {
 			if (score < 0.5) {
-				K = 10 + (previousUserElo - 1000) * 40 / 200;
+				K = 10 + (oldElo - 1000) * 40 / 200;
 			} else if (score > 0.5) {
-				K = 90 - (previousUserElo - 1000) * 40 / 200;
+				K = 90 - (oldElo - 1000) * 40 / 200;
 			}
-		} else if (previousUserElo > 1350 && previousUserElo <= 1600) {
+		} else if (oldElo > 1350 && oldElo <= 1600) {
 			K = 40;
 		} else {
 			K = 32;
 		}
 
 		// main Elo formula
-		const E = 1 / (1 + Math.pow(10, (foeElo - previousUserElo) / 400));
+		const E = 1 / (1 + Math.pow(10, (foeElo - oldElo) / 400));
 
-		const newElo = previousUserElo + K * (score - E);
+		const newElo = oldElo + K * (score - E);
 
 		return Math.max(newElo, 1000);
+	}
+
+	/**
+	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
+	 */
+	static visualizeAll(username: string) {
+		const ratings = [];
+		for (const format of Dex.formats.all()) {
+			if (format.searchShow) {
+				ratings.push(new LadderStore(format.id).visualize(username));
+			}
+		}
+		return Promise.all(ratings);
 	}
 }

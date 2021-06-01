@@ -1,5 +1,5 @@
-import {EventMethods} from './dex-conditions';
-import {BasicEffect} from './dex-data';
+import {PokemonEventMethods} from './dex-conditions';
+import {BasicEffect, toID} from './dex-data';
 
 interface FlingData {
 	basePower: number;
@@ -8,7 +8,7 @@ interface FlingData {
 	effect?: CommonHandlers['ResultMove'];
 }
 
-export interface ItemData extends Partial<Item>, EventMethods {
+export interface ItemData extends Partial<Item>, PokemonEventMethods {
 	name: string;
 }
 
@@ -18,10 +18,10 @@ export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 };
 
 export class Item extends BasicEffect implements Readonly<BasicEffect> {
-	readonly effectType: 'Item';
+	declare readonly effectType: 'Item';
 
 	/** just controls location on the item spritesheet */
-	readonly num!: number;
+	declare readonly num: number;
 
 	/**
 	 * A Move-like object depicting what happens when Fling is used on
@@ -89,19 +89,19 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	/** Is this item a Pokeball? */
 	readonly isPokeball: boolean;
 
-	readonly condition?: Partial<ConditionData>;
-	readonly forcedForme?: string;
-	readonly isChoice?: boolean;
-	readonly naturalGift?: {basePower: number, type: string};
-	readonly spritenum?: number;
-	readonly boosts?: SparseBoostsTable | false;
+	declare readonly condition?: ConditionData;
+	declare readonly forcedForme?: string;
+	declare readonly isChoice?: boolean;
+	declare readonly naturalGift?: {basePower: number, type: string};
+	declare readonly spritenum?: number;
+	declare readonly boosts?: SparseBoostsTable | false;
 
-	readonly onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
-	readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
-	readonly onStart?: (this: Battle, target: Pokemon) => void;
+	declare readonly onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
+	declare readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
+	declare readonly onStart?: (this: Battle, target: Pokemon) => void;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `item: ${this.name}`;
@@ -142,5 +142,71 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		if (this.onDrive) this.fling = {basePower: 70};
 		if (this.megaStone) this.fling = {basePower: 80};
 		if (this.onMemory) this.fling = {basePower: 50};
+	}
+}
+
+export class DexItems {
+	readonly dex: ModdedDex;
+	readonly itemCache = new Map<ID, Item>();
+	allCache: readonly Item[] | null = null;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name?: string | Item): Item {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		const id = toID(name);
+		return this.getByID(id);
+	}
+
+	getByID(id: ID): Item {
+		let item = this.itemCache.get(id);
+		if (item) return item;
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			item = this.get(this.dex.data.Aliases[id]);
+			if (item.exists) {
+				this.itemCache.set(id, item);
+			}
+			return item;
+		}
+		if (id && !this.dex.data.Items[id] && this.dex.data.Items[id + 'berry']) {
+			item = this.getByID(id + 'berry' as ID);
+			this.itemCache.set(id, item);
+			return item;
+		}
+		if (id && this.dex.data.Items.hasOwnProperty(id)) {
+			const itemData = this.dex.data.Items[id] as any;
+			const itemTextData = this.dex.getDescs('Items', id, itemData);
+			item = new Item({
+				name: id,
+				...itemData,
+				...itemTextData,
+			});
+			if (item.gen > this.dex.gen) {
+				(item as any).isNonstandard = 'Future';
+			}
+			// hack for allowing mega evolution in LGPE
+			if (this.dex.currentMod === 'letsgo' && !item.isNonstandard && !item.megaStone) {
+				(item as any).isNonstandard = 'Past';
+			}
+		} else {
+			item = new Item({name: id, exists: false});
+		}
+
+		if (item.exists) this.itemCache.set(id, item);
+		return item;
+	}
+
+	all(): readonly Item[] {
+		if (this.allCache) return this.allCache;
+		const items = [];
+		for (const id in this.dex.data.Items) {
+			items.push(this.getByID(id as ID));
+		}
+		this.allCache = items;
+		return this.allCache;
 	}
 }

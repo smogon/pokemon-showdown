@@ -34,12 +34,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-status', target, 'slp');
 			}
 			// 1-6 turns
-			this.effectData.time = this.random(2, 8);
+			this.effectState.time = this.random(2, 8);
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
-			pokemon.statusData.time--;
-			if (pokemon.statusData.time <= 0) {
+			pokemon.statusState.time--;
+			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
 				return;
 			}
@@ -68,6 +68,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.flags['defrost']) pokemon.cureStatus();
 		},
+		onResidualOrder: 7,
 		onResidual(pokemon) {
 			if (this.randomChance(25, 256)) pokemon.cureStatus();
 		},
@@ -117,9 +118,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-start', target, 'confusion');
 			}
 			if (sourceEffect && sourceEffect.id === 'berserkgene') {
-				this.effectData.time = 256;
+				this.effectState.time = 256;
 			} else {
-				this.effectData.time = this.random(2, 6);
+				this.effectState.time = this.random(2, 6);
 			}
 		},
 		onBeforeMove(pokemon, target, move) {
@@ -143,7 +144,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				flags: {},
 				selfdestruct: move.selfdestruct,
 			} as unknown as ActiveMove;
-			const damage = this.getDamage(pokemon, pokemon, move);
+			const damage = this.actions.getDamage(pokemon, pokemon, move);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
 			this.directDamage(damage);
 			return false;
@@ -154,6 +155,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		durationCallback(target, source) {
 			return this.random(3, 6);
 		},
+		onResidualOrder: 3,
+		onResidualSubOrder: 1,
 	},
 	lockedmove: {
 		name: 'lockedmove',
@@ -168,7 +171,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onStart(target, source, effect) {
-			this.effectData.move = effect.id;
+			this.effectState.move = effect.id;
 		},
 		onEnd(target) {
 			// Confusion begins even if already confused
@@ -176,21 +179,34 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (!target.side.getSideCondition('safeguard')) target.addVolatile('confusion');
 		},
 		onLockMove(pokemon) {
-			return this.effectData.move;
+			return this.effectState.move;
 		},
 		onMoveAborted(pokemon) {
 			delete pokemon.volatiles['lockedmove'];
 		},
 		onBeforeTurn(pokemon) {
-			const move = this.dex.getMove(this.effectData.move);
+			const move = this.dex.moves.get(this.effectState.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
 				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
 			}
 		},
 	},
+	futuremove: {
+		inherit: true,
+		onResidualOrder: 1,
+	},
+	raindance: {
+		inherit: true,
+		onFieldResidualOrder: 2,
+	},
+	sunnyday: {
+		inherit: true,
+		onFieldResidualOrder: 2,
+	},
 	sandstorm: {
 		inherit: true,
+		onFieldResidualOrder: 2,
 		onWeather(target) {
 			this.damage(target.baseMaxhp / 8);
 		},
@@ -199,16 +215,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		name: 'stall',
 		duration: 2,
 		onStart() {
-			this.effectData.counter = 127;
+			this.effectState.counter = 127;
 		},
 		onStallMove() {
-			const counter = Math.floor(this.effectData.counter) || 127;
+			const counter = Math.floor(this.effectState.counter) || 127;
 			this.debug("Success chance: " + Math.round(counter * 1000 / 255) / 10 + "% (" + counter + "/255)");
 			return this.randomChance(counter, 255);
 		},
 		onRestart() {
-			this.effectData.counter /= 2;
-			this.effectData.duration = 2;
+			this.effectState.counter /= 2;
+			this.effectState.duration = 2;
 		},
 	},
 	residualdmg: {

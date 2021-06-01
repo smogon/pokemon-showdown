@@ -6,7 +6,7 @@
 
 import {FS, Utils} from '../../lib';
 
-Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
+Punishments.addRoomPunishmentType('GIVEAWAYBAN', 'banned from giveaways');
 
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
@@ -108,11 +108,16 @@ class Giveaway {
 	}
 
 	static checkBanned(room: Room, user: User) {
-		return Punishments.getRoomPunishType(room, toID(user)) === 'GIVEAWAYBAN';
+		return Punishments.hasRoomPunishType(room, toID(user), 'GIVEAWAYBAN');
 	}
 
 	static ban(room: Room, user: User, reason: string) {
-		Punishments.roomPunish(room, user, ['GIVEAWAYBAN', toID(user), Date.now() + BAN_DURATION, reason]);
+		Punishments.roomPunish(room, user, {
+			type: 'GIVEAWAYBAN',
+			id: toID(user),
+			expireTime: Date.now() + BAN_DURATION,
+			reason,
+		});
 	}
 
 	static unban(room: Room, user: User) {
@@ -131,16 +136,16 @@ class Giveaway {
 			}
 			const regexp = new RegExp(`\\b${id}\\b`);
 			if (regexp.test(text)) {
-				const mon = Dex.getSpecies(i);
+				const mon = Dex.species.get(i);
 				mons.set(mon.baseSpecies, mon);
 			}
 		}
 		// the previous regex doesn't match "nidoran-m" or "nidoran male"
 		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-M', Dex.getSpecies('nidoranm'));
+			mons.set('Nidoran-M', Dex.species.get('nidoranm'));
 		}
 		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-F', Dex.getSpecies('nidoranf'));
+			mons.set('Nidoran-F', Dex.species.get('nidoranf'));
 		}
 		text = toID(text);
 		if (mons.size) {
@@ -626,7 +631,7 @@ export class GTSGiveaway {
 	}
 }
 
-const cmds: ChatCommands = {
+const cmds: Chat.ChatCommands = {
 	// question giveaway.
 	quiz: 'question',
 	qg: 'question',
@@ -644,7 +649,7 @@ const cmds: ChatCommands = {
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		const targetUser = Users.get(giver);
-		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
+		if (!targetUser?.connected) return this.errorReply(`User '${giver}' is not online.`);
 		if (!user.can('warn', null, room) && !(user.can('show', null, room) && user === targetUser)) {
 			return this.errorReply("/qg - Access denied.");
 		}
@@ -703,7 +708,7 @@ const cmds: ChatCommands = {
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		const targetUser = Users.get(giver);
-		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
+		if (!targetUser?.connected) return this.errorReply(`User '${giver}' is not online.`);
 		if (!user.can('warn', null, room) && !(user.can('show', null, room) && user === targetUser)) {
 			return this.errorReply("/lg - Access denied.");
 		}
@@ -770,7 +775,7 @@ const cmds: ChatCommands = {
 				return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 20 mons, and no more than 100.");
 			}
 			const targetUser = Users.get(giver);
-			if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
+			if (!targetUser?.connected) return this.errorReply(`User '${giver}' is not online.`);
 			this.checkCan('warn', null, room);
 			if (!targetUser.autoconfirmed) {
 				return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);
@@ -844,32 +849,28 @@ const cmds: ChatCommands = {
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		target = this.splitTarget(target, false);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
-		if (target.length > 300) {
+		const {targetUser, rest: reason} = this.requireUser(target, {allowOffline: true});
+		if (reason.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		if (Punishments.getRoomPunishType(room, this.targetUsername)) {
-			return this.errorReply(`User '${this.targetUsername}' is already punished in this room.`);
+		if (Punishments.hasRoomPunishType(room, targetUser.name, 'GIVEAWAYBAN')) {
+			return this.errorReply(`User '${targetUser.name}' is already giveawaybanned.`);
 		}
 
-		Giveaway.ban(room, targetUser, target);
+		Giveaway.ban(room, targetUser, reason);
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
-		this.modlog('GIVEAWAYBAN', targetUser, target);
-		if (target) target = ` (${target})`;
-		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${target}`);
+		this.modlog('GIVEAWAYBAN', targetUser, reason);
+		const reasonMessage = reason ? ` (${reason})` : ``;
+		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${reasonMessage}`);
 	},
 	unban(target, room, user) {
 		if (!target) return false;
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		this.splitTarget(target, false);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		const {targetUser} = this.requireUser(target, {allowOffline: true});
 		if (!Giveaway.checkBanned(room, targetUser)) {
-			return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
+			return this.errorReply(`User '${targetUser.name}' isn't banned from entering giveaways.`);
 		}
 
 		Giveaway.unban(room, targetUser);

@@ -4,9 +4,6 @@
  */
 
 export const Moves: {[k: string]: ModdedMoveData} = {
-	absorb: {
-		inherit: true,
-	},
 	acid: {
 		inherit: true,
 		secondary: {
@@ -33,9 +30,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	barrage: {
-		inherit: true,
-	},
 	bide: {
 		inherit: true,
 		priority: 0,
@@ -47,55 +41,54 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return this.random(3, 4);
 			},
 			onStart(pokemon) {
-				this.effectData.totalDamage = 0;
-				this.effectData.lastDamage = 0;
+				this.effectState.totalDamage = 0;
+				this.effectState.lastDamage = 0;
 				this.add('-start', pokemon, 'Bide');
 			},
 			onHit(target, source, move) {
 				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
-					const damage = this.effectData.totalDamage;
-					this.effectData.totalDamage += damage;
-					this.effectData.lastDamage = damage;
-					this.effectData.sourcePosition = source.position;
-					this.effectData.sourceSide = source.side;
+					const damage = this.effectState.totalDamage;
+					this.effectState.totalDamage += damage;
+					this.effectState.lastDamage = damage;
+					this.effectState.sourceSlot = source.getSlot();
 				}
 			},
 			onDamage(damage, target, source, move) {
-				if (!source || source.side === target.side) return;
+				if (!source || source.isAlly(target)) return;
 				if (!move || move.effectType !== 'Move') return;
-				if (!damage && this.effectData.lastDamage > 0) {
-					damage = this.effectData.totalDamage;
+				if (!damage && this.effectState.lastDamage > 0) {
+					damage = this.effectState.totalDamage;
 				}
-				this.effectData.totalDamage += damage;
-				this.effectData.lastDamage = damage;
-				this.effectData.sourcePosition = source.position;
-				this.effectData.sourceSide = source.side;
+				this.effectState.totalDamage += damage;
+				this.effectState.lastDamage = damage;
+				this.effectState.sourceSlot = source.getSlot();
 			},
 			onAfterSetStatus(status, pokemon) {
 				// Sleep, freeze, and partial trap will just pause duration.
 				if (pokemon.volatiles['flinch']) {
-					this.effectData.duration++;
+					this.effectState.duration++;
 				} else if (pokemon.volatiles['partiallytrapped']) {
-					this.effectData.duration++;
+					this.effectState.duration++;
 				} else {
 					switch (status.id) {
 					case 'slp':
 					case 'frz':
-						this.effectData.duration++;
+						this.effectState.duration++;
 						break;
 					}
 				}
 			},
 			onBeforeMove(pokemon, t, move) {
-				if (this.effectData.duration === 1) {
-					if (!this.effectData.totalDamage) {
+				if (this.effectState.duration === 1) {
+					this.add('-end', pokemon, 'Bide');
+					if (!this.effectState.totalDamage) {
 						this.debug("Bide failed due to 0 damage taken");
 						this.add('-fail', pokemon);
 						return false;
 					}
-					this.add('-end', pokemon, 'Bide');
-					const target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					this.moveHit(target, pokemon, move, {damage: this.effectData.totalDamage * 2} as ActiveMove);
+					const target = this.getAtSlot(this.effectState.sourceSlot);
+					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.totalDamage * 2} as ActiveMove);
+					pokemon.removeVolatile('bide');
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
@@ -150,9 +143,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 90,
 		target: "normal",
 	},
-	bonemerang: {
-		inherit: true,
-	},
 	bubble: {
 		inherit: true,
 		secondary: {
@@ -195,9 +185,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
-	cometpunch: {
-		inherit: true,
-	},
 	constrict: {
 		inherit: true,
 		secondary: {
@@ -230,11 +217,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// - (Counter will thus desync if the target's last used move is not as counterable as the target's last selected move)
 			// - if Counter succeeds it will deal twice the last move damage dealt in battle (even if it's from a different pokemon because of a switch)
 
-			const lastMove = target.side.lastMove && this.dex.getMove(target.side.lastMove.id);
+			const lastMove = target.side.lastMove && this.dex.moves.get(target.side.lastMove.id);
 			const lastMoveIsCounterable = lastMove && lastMove.basePower > 0 &&
 				['Normal', 'Fighting'].includes(lastMove.type) && lastMove.id !== 'counter';
 
-			const lastSelectedMove = target.side.lastSelectedMove && this.dex.getMove(target.side.lastSelectedMove);
+			const lastSelectedMove = target.side.lastSelectedMove && this.dex.moves.get(target.side.lastSelectedMove);
 			const lastSelectedMoveIsCounterable = lastSelectedMove && lastSelectedMove.basePower > 0 &&
 				['Normal', 'Fighting'].includes(lastSelectedMove.type) && lastSelectedMove.id !== 'counter';
 
@@ -260,9 +247,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	crabhammer: {
 		inherit: true,
 		critRatio: 2,
-	},
-	defensecurl: {
-		inherit: true,
 	},
 	dig: {
 		inherit: true,
@@ -295,12 +279,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onStart(pokemon) {
 				if (!this.queue.willMove(pokemon)) {
-					this.effectData.duration++;
+					this.effectState.duration++;
 				}
 				const moves = pokemon.moves;
-				const move = this.dex.getMove(this.sample(moves));
+				const move = this.dex.moves.get(this.sample(moves));
 				this.add('-start', pokemon, 'Disable', move.name);
-				this.effectData.move = move.id;
+				this.effectState.move = move.id;
 				return;
 			},
 			onResidualOrder: 14,
@@ -308,14 +292,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', pokemon, 'Disable');
 			},
 			onBeforeMove(attacker, defender, move) {
-				if (move.id === this.effectData.move) {
+				if (move.id === this.effectState.move) {
 					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === this.effectData.move) {
+					if (moveSlot.id === this.effectState.move) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -330,21 +314,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 100,
 	},
-	doublekick: {
-		inherit: true,
-	},
-	doubleslap: {
-		inherit: true,
-	},
 	dragonrage: {
 		inherit: true,
 		basePower: 1,
-	},
-	dreameater: {
-		inherit: true,
-	},
-	earthquake: {
-		inherit: true,
 	},
 	explosion: {
 		inherit: true,
@@ -381,9 +353,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
-	fissure: {
-		inherit: true,
-	},
 	fly: {
 		inherit: true,
 		condition: {
@@ -396,7 +365,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
-				if (!source || source.side === target.side) return;
+				if (!source || source.isAlly(target)) return;
 				if (move.id === 'gust' || move.id === 'thunder') {
 					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
 					return null;
@@ -414,12 +383,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onModifyMove() {},
 		},
 	},
-	furyattack: {
-		inherit: true,
-	},
-	furyswipes: {
-		inherit: true,
-	},
 	glare: {
 		inherit: true,
 		ignoreImmunity: true,
@@ -430,9 +393,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			spa: 1,
 			spd: 1,
 		},
-	},
-	guillotine: {
-		inherit: true,
 	},
 	gust: {
 		inherit: true,
@@ -472,12 +432,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
-	horndrill: {
-		inherit: true,
-	},
-	hyperbeam: {
-		inherit: true,
-	},
 	jumpkick: {
 		inherit: true,
 		onMoveFail(target, source, move) {
@@ -500,7 +454,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onAfterMoveSelfPriority: 1,
 			onAfterMoveSelf(pokemon) {
-				const leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				const leecher = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
@@ -560,7 +514,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const moves = target.moves;
 			const moveid = this.sample(moves);
 			if (!moveid) return false;
-			const move = this.dex.getMove(moveid);
+			const move = this.dex.moves.get(moveid);
 			source.moveSlots[moveslot] = {
 				move: move.name,
 				id: move.id,
@@ -574,32 +528,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-start', source, 'Mimic', move.name);
 		},
 	},
-	minimize: {
-		inherit: true,
-	},
 	mirrormove: {
 		inherit: true,
 		onHit(pokemon) {
 			const foe = pokemon.side.foe.active[0];
-			if (!foe || !foe.lastMove || foe.lastMove.id === 'mirrormove') {
+			if (!foe?.lastMove || foe.lastMove.id === 'mirrormove') {
 				return false;
 			}
-			this.useMove(foe.lastMove.id, pokemon);
+			this.actions.useMove(foe.lastMove.id, pokemon);
 		},
-	},
-	mist: {
-		inherit: true,
 	},
 	nightshade: {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
-	},
-	petaldance: {
-		inherit: true,
-	},
-	pinmissile: {
-		inherit: true,
 	},
 	poisonsting: {
 		inherit: true,
@@ -639,7 +581,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// Rage lock
 			duration: 255,
 			onStart(target, source, effect) {
-				this.effectData.move = 'rage';
+				this.effectState.move = 'rage';
 			},
 			onLockMove: 'rage',
 			onTryHit(target, source, move) {
@@ -712,8 +654,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			if (!target.setStatus('slp', source, move)) return false;
-			target.statusData.time = 2;
-			target.statusData.startTime = 2;
+			target.statusState.time = 2;
+			target.statusState.startTime = 2;
 			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
 	},
@@ -785,29 +727,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.heal(Math.floor(target.maxhp / 2), target, target);
 		},
 	},
-	solarbeam: {
-		inherit: true,
-	},
-	sonicboom: {
-		inherit: true,
-	},
-	spikecannon: {
-		inherit: true,
-	},
-	stomp: {
-		inherit: true,
-	},
 	struggle: {
 		inherit: true,
 		pp: 10,
 		recoil: [1, 2],
 		onModifyMove() {},
-	},
-	stunspore: {
-		inherit: true,
-	},
-	submission: {
-		inherit: true,
 	},
 	substitute: {
 		num: 164,
@@ -840,7 +764,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
-				this.effectData.hp = Math.floor(target.maxhp / 4) + 1;
+				this.effectState.hp = Math.floor(target.maxhp / 4) + 1;
 				delete target.volatiles['partiallytrapped'];
 			},
 			onTryHitPriority: -1,
@@ -861,7 +785,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
-				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.getDamage(source, target, move);
+				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.actions.getDamage(source, target, move);
 				if (!uncappedDamage) return null;
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
 				if (!uncappedDamage) return uncappedDamage;
@@ -887,7 +811,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, thisTurn: true});
+					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true});
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = uncappedDamage;
@@ -908,15 +832,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		ignoreImmunity: true,
 		basePower: 1,
 	},
-	swift: {
-		inherit: true,
-	},
-	takedown: {
-		inherit: true,
-	},
-	thrash: {
-		inherit: true,
-	},
 	thunder: {
 		inherit: true,
 		secondary: {
@@ -934,16 +849,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
-	transform: {
-		inherit: true,
-	},
 	triattack: {
 		inherit: true,
 		onHit() {},
 		secondary: null,
-	},
-	twineedle: {
-		inherit: true,
 	},
 	whirlwind: {
 		inherit: true,

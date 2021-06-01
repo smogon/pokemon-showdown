@@ -20,16 +20,16 @@ const TIERS: {[k: string]: string} = {
 };
 
 function formatAbility(ability: Ability | string) {
-	ability = Dex.getAbility(ability);
+	ability = Dex.abilities.get(ability);
 	return `<a href="https://${Config.routes.dex}/abilities/${ability.id}" target="_blank" class="subtle" style="white-space:nowrap">${ability.name}</a>`;
 }
 function formatNature(n: string) {
-	const nature = Dex.getNature(n);
+	const nature = Dex.natures.get(n);
 	return nature.name;
 }
 
 function formatMove(move: Move | string) {
-	move = Dex.getMove(move);
+	move = Dex.moves.get(move);
 	return `<a href="https://${Config.routes.dex}/moves/${move.id}" target="_blank" class="subtle" style="white-space:nowrap">${move.name}</a>`;
 }
 
@@ -37,13 +37,13 @@ function formatItem(item: Item | string) {
 	if (typeof item === 'string' && item === "No Item") {
 		return `No Item`;
 	} else {
-		item = Dex.getItem(item);
+		item = Dex.items.get(item);
 		return `<a href="https://${Config.routes.dex}/items/${item.id}" target="_blank" class="subtle" style="white-space:nowrap">${item.name}</a>`;
 	}
 }
 
 function getRBYMoves(species: string | Species) {
-	species = Dex.mod(`gen1`).getSpecies(species);
+	species = Dex.mod(`gen1`).species.get(species);
 	let buf = ``;
 	if (species.randomBattleMoves) {
 		buf += `<details><summary>Randomized moves</summary>`;
@@ -75,20 +75,20 @@ function getRBYMoves(species: string | Species) {
 }
 
 function getLetsGoMoves(species: string | Species) {
-	species = Dex.getSpecies(species);
+	species = Dex.species.get(species);
 	const isLetsGoLegal = (
 		(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
 		(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
 	);
 	if (!isLetsGoLegal) return false;
-	if (!species.randomBattleMoves || !species.randomBattleMoves.length) return false;
+	if (!species.randomBattleMoves?.length) return false;
 	return species.randomBattleMoves.map(formatMove).sort().join(`, `);
 }
 
 function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen7', isBSS = false) {
-	species = Dex.getSpecies(species);
+	species = Dex.species.get(species);
 	if (typeof species.battleOnly === 'string') {
-		species = Dex.getSpecies(species.battleOnly);
+		species = Dex.species.get(species.battleOnly);
 	}
 	gen = toID(gen);
 	const genNum = parseInt(gen[3]);
@@ -107,7 +107,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		}
 		const t = statsFile[TIERS[toID(tier)]];
 		if (!(species.id in t)) {
-			const formatName = Dex.getFormat(`${gen}battlefactory`).name;
+			const formatName = Dex.formats.get(`${gen}battlefactory`).name;
 			return {e: `${species.name} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`};
 		}
 		const setObj = t[species.id];
@@ -148,13 +148,13 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 			buf += `</ul></details>`;
 		}
 	} else {
-		const format = Dex.getFormat(`${gen}bssfactory`);
+		const format = Dex.formats.get(`${gen}bssfactory`);
 		if (!(species.id in statsFile)) return {e: `${species.name} doesn't have any sets in ${format.name}.`};
 		const setObj = statsFile[species.id];
 		buf += `<span style="color:#999999;">Sets for ${species.name} in ${format.name}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
 			buf += `<details><summary>Set ${i + 1}</summary>`;
-			buf += `<ul style="list-style-type:none;">`;
+			buf += `<ul style="list-style-type:none;padding-left:0;">`;
 			buf += `<li>${set.species}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
 			buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
 			if (!set.level) buf += `<li>Level: 50</li>`;
@@ -192,7 +192,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 }
 
 function CAP1v1Sets(species: string | Species) {
-	species = Dex.getSpecies(species);
+	species = Dex.species.get(species);
 	const statsFile = JSON.parse(
 		FS(`data/cap-1v1-sets.json`).readIfExistsSync() ||
 		"{}"
@@ -253,12 +253,12 @@ function generateSSBSet(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	}
 	let buf = ``;
 	buf += `<details><summary>Set</summary>`;
-	buf += `<ul style="list-style-type:none;"><li>${set.species}${set.gender !== '' ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(x => dex.getItem(x).name).join(' / ') : dex.getItem(set.item).name}</li>`;
-	buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(x => dex.getAbility(x).name).join(' / ') : dex.getAbility(set.ability).name}</li>`;
+	buf += `<ul style="list-style-type:none;"><li>${set.species}${set.gender !== '' ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(x => dex.items.get(x).name).join(' / ') : dex.items.get(set.item).name}</li>`;
+	buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(x => dex.abilities.get(x).name).join(' / ') : dex.abilities.get(set.ability).name}</li>`;
 	if (set.shiny) buf += `<li>Shiny: ${typeof set.shiny === 'number' ? `Sometimes` : `Yes`}</li>`;
 	if (set.evs) {
 		const evs: string[] = [];
-		let ev: StatName;
+		let ev: StatID;
 		for (ev in set.evs) {
 			if (set.evs[ev] === 0) continue;
 			evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
@@ -270,7 +270,7 @@ function generateSSBSet(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	}
 	if (set.ivs) {
 		const ivs: string[] = [];
-		let iv: StatName;
+		let iv: StatID;
 		for (iv in set.ivs) {
 			if (set.ivs[iv] === 31) continue;
 			ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
@@ -278,10 +278,10 @@ function generateSSBSet(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 		buf += `<li>IVs: ${ivs.join(" / ")}</li>`;
 	}
 	for (const moveid of set.moves) {
-		buf += `<li>- ${Array.isArray(moveid) ? moveid.map(x => dex.getMove(x).name).join(" / ") : dex.getMove(moveid).name}</li>`;
+		buf += `<li>- ${Array.isArray(moveid) ? moveid.map(x => dex.moves.get(x).name).join(" / ") : dex.moves.get(moveid).name}</li>`;
 	}
-	const italicize = !baseDex.getMove(set.signatureMove).exists;
-	buf += `<li>- ${italicize ? `<i>` : ``}${dex.getMove(set.signatureMove).name}${italicize ? `</i>` : ``}</li>`;
+	const italicize = !baseDex.moves.get(set.signatureMove).exists;
+	buf += `<li>- ${italicize ? `<i>` : ``}${dex.moves.get(set.signatureMove).name}${italicize ? `</i>` : ``}</li>`;
 	buf += `</ul>`;
 	buf += `</details>`;
 	return buf;
@@ -330,20 +330,16 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 		} else if (sigMove.zMove?.boost) {
 			details["Z-Effect"] = "";
 			const boost = sigMove.zMove.boost;
-			const stats: {[k in BoostName]: string} = {
-				atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness',
-			};
-			let h: BoostName;
-			for (h in boost) {
-				details["Z-Effect"] += ` ${stats[h]} +${boost[h]}`;
+			for (const h in boost) {
+				details["Z-Effect"] += ` ${Dex.stats.mediumNames[h as 'atk']} +${boost[h as 'atk']}`;
 			}
 		} else if (sigMove.isZ && typeof sigMove.isZ === 'string') {
 			details["&#10003; Z-Move"] = "";
-			const zCrystal = dex.getItem(sigMove.isZ);
+			const zCrystal = dex.items.get(sigMove.isZ);
 			details["Z-Crystal"] = zCrystal.name;
 			if (zCrystal.itemUser) {
 				details["User"] = zCrystal.itemUser.join(", ");
-				details["Required Move"] = dex.getItem(sigMove.isZ).zMoveFrom!;
+				details["Required Move"] = dex.items.get(sigMove.isZ).zMoveFrom!;
 			}
 		} else {
 			details["Z-Effect"] = "None";
@@ -370,10 +366,9 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 		if (sigMove.isNonstandard === 'Unobtainable') {
 			details[`Unobtainable in Gen ${dex.gen}`] = "";
 		}
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 		if (sigMove.desc && sigMove.desc !== sigMove.shortDesc) {
 			buf += `<details><summary><strong>In-Depth Description</strong></summary>${sigMove.desc}</details>`;
 		}
@@ -384,8 +379,8 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 function generateSSBItemInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	let buf = ``;
 	if (!Array.isArray(set.item)) {
-		const baseItem = baseDex.getItem(set.item);
-		const sigItem = dex.getItem(set.item);
+		const baseItem = baseDex.items.get(set.item);
+		const sigItem = dex.items.get(set.item);
 		if (!baseItem.exists || (baseItem.desc || baseItem.shortDesc) !== (sigItem.desc || sigItem.shortDesc)) {
 			buf += `<hr />`;
 			buf += Chat.getDataItemHTML(sigItem);
@@ -415,10 +410,9 @@ function generateSSBItemInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 			if (sigItem.isNonstandard && sigItem.isNonstandard !== "Custom") {
 				details[`Unobtainable in Gen ${dex.gen}`] = "";
 			}
-			buf += `<font size="1">${Object.keys(details).map(detail => {
-				if (details[detail] === '') return detail;
-				return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-			}).join("&nbsp;|&ThickSpace;")}</font>`;
+			buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+				value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+			)).join("&nbsp;|&ThickSpace;")}</font>`;
 		}
 	}
 	return buf;
@@ -426,8 +420,8 @@ function generateSSBItemInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 
 function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	let buf = ``;
-	if (!Array.isArray(set.ability) && !baseDex.getAbility(set.ability).exists) {
-		const sigAbil = Dex.deepClone(dex.getAbility(set.ability));
+	if (!Array.isArray(set.ability) && !baseDex.abilities.get(set.ability).exists) {
+		const sigAbil = Dex.deepClone(dex.abilities.get(set.ability));
 		if (!sigAbil.desc && !sigAbil.shortDesc) {
 			sigAbil.desc = `This ability doesn't have a description. Try contacting the SSB dev team.`;
 		}
@@ -436,10 +430,9 @@ function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex)
 		const details: {[k: string]: string} = {
 			Gen: String(sigAbil.gen) || 'CAP',
 		};
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 		if (sigAbil.desc && sigAbil.shortDesc && sigAbil.desc !== sigAbil.shortDesc) {
 			buf += `<details><summary><strong>In-Depth Description</strong></summary>${sigAbil.desc}</details>`;
 		}
@@ -449,8 +442,8 @@ function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex)
 
 function generateSSBPokemonInfo(species: string, dex: ModdedDex, baseDex: ModdedDex) {
 	let buf = ``;
-	const origSpecies = baseDex.getSpecies(species);
-	const newSpecies = dex.getSpecies(species);
+	const origSpecies = baseDex.species.get(species);
+	const newSpecies = dex.species.get(species);
 	if (
 		newSpecies.types.join('/') !== origSpecies.types.join('/') ||
 		Object.values(newSpecies.abilities).join('/') !== Object.values(origSpecies.abilities).join('/') ||
@@ -480,7 +473,7 @@ function generateSSBPokemonInfo(species: string, dex: ModdedDex, baseDex: Modded
 		if (newSpecies.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = newSpecies.eggGroups.join(", ");
 		const evos: string[] = [];
 		for (const evoName of newSpecies.evos) {
-			const evo = dex.getSpecies(evoName);
+			const evo = dex.species.get(evoName);
 			if (evo.gen <= dex.gen) {
 				const condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 				switch (evo.evoType) {
@@ -515,10 +508,9 @@ function generateSSBPokemonInfo(species: string, dex: ModdedDex, baseDex: Modded
 		} else {
 			details["Evolution"] = evos.join(", ");
 		}
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 	}
 	return buf;
 }
@@ -526,9 +518,9 @@ function generateSSBPokemonInfo(species: string, dex: ModdedDex, baseDex: Modded
 function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex) {
 	let buf = ``;
 	// Special casing for users whose usernames are already existing, i.e. Perish Song
-	let effect = dex.getEffect(name + 'user');
+	let effect = dex.conditions.get(name + 'user');
 	let longDesc = ``;
-	const baseAbility = Dex.deepClone(baseDex.getAbility('noability'));
+	const baseAbility = Dex.deepClone(baseDex.abilities.get('noability'));
 	// @ts-ignore hack to record the name of the innate abilities without using name
 	if (effect.exists && effect.innateName && (effect.desc || effect.shortDesc)) {
 		// @ts-ignore hack
@@ -540,7 +532,7 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 			longDesc = effect.desc;
 		}
 	} else {
-		effect = dex.getEffect(name);
+		effect = dex.conditions.get(name);
 		// @ts-ignore hack
 		if (effect.exists && effect.innateName && (effect.desc || effect.shortDesc)) {
 			// @ts-ignore hack
@@ -555,10 +547,9 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 	}
 	if (buf) {
 		const details: {[k: string]: string} = {Gen: '8'};
-		buf += `<font size="1">${Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return `<font color="#686868">${detail}:</font> ${details[detail]}`;
-		}).join("&nbsp;|&ThickSpace;")}</font>`;
+		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;")}</font>`;
 	}
 	if (longDesc) {
 		buf += `<details><summary><strong>In-Depth Description</strong></summary>${longDesc}</details>`;
@@ -582,20 +573,20 @@ function SSBSets(target: string) {
 	for (const name of names) {
 		if (buf) buf += `<hr>`;
 		const set = ssbSets[name];
-		const mutatedSpecies = dex.getSpecies(set.species);
+		const mutatedSpecies = dex.species.get(set.species);
 		if (!set.skip) {
 			buf += Utils.html`<h1><psicon pokemon="${mutatedSpecies.id}">${displayName === 'yuki' ? name : displayName}</h1>`;
 		} else {
 			buf += `<details><summary><psicon pokemon="${set.species}"><strong>${name.split('-').slice(1).join('-') + ' forme'}</strong></summary>`;
 		}
 		buf += generateSSBSet(set, dex, baseDex);
-		const item = dex.getItem(set.item as string);
+		const item = dex.items.get(set.item as string);
 		if (!set.skip || set.signatureMove !== ssbSets[set.skip].signatureMove) {
-			const sigMove = baseDex.getMove(set.signatureMove).exists && !Array.isArray(set.item) &&
+			const sigMove = baseDex.moves.get(set.signatureMove).exists && !Array.isArray(set.item) &&
 				typeof item.zMove === 'string' ?
-				dex.getMove(item.zMove) : dex.getMove(set.signatureMove);
+				dex.moves.get(item.zMove) : dex.moves.get(set.signatureMove);
 			buf += generateSSBMoveInfo(sigMove, dex);
-			if (sigMove.id === 'blackbird') buf += generateSSBMoveInfo(dex.getMove('gaelstrom'), dex);
+			if (sigMove.id === 'blackbird') buf += generateSSBMoveInfo(dex.moves.get('gaelstrom'), dex);
 		}
 		buf += generateSSBItemInfo(set, dex, baseDex);
 		buf += generateSSBAbilityInfo(set, dex, baseDex);
@@ -614,7 +605,7 @@ function SSBSets(target: string) {
 	return buf;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	randbats: 'randombattles',
 	randombattles(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -626,46 +617,51 @@ export const commands: ChatCommands = {
 			dex = Dex.dexes[toID(args[1])];
 			if (toID(args[1]) === 'letsgo') isLetsGo = true;
 		} else if (room?.battle) {
-			const format = Dex.getFormat(room.battle.format);
+			const format = Dex.formats.get(room.battle.format);
 			dex = Dex.mod(format.mod);
 			if (format.mod === 'letsgo') isLetsGo = true;
 		}
-		let species = dex.getSpecies(args[0]);
+		const species = dex.species.get(args[0]);
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		let formatName = dex.getFormat(`gen${dex.gen}randombattle`).name;
+		let formatName = dex.formats.get(`gen${dex.gen}randombattle`).name;
+
+		const movesets = [];
 		if (dex.gen === 1) {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${rbyMoves}`);
-		}
-		if (isLetsGo) {
+			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${rbyMoves}`);
+		} else if (isLetsGo) {
 			formatName = `[Gen 7 Let's Go] Random Battle`;
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
-		}
-		let randomMoves = species.randomBattleMoves;
-		if (!randomMoves) {
-			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
-			if (!gmaxSpecies.exists || !gmaxSpecies.randomBattleMoves) {
-				return this.errorReply(`Error: No moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
+		} else {
+			const setsToCheck = [species];
+			if (dex.gen > 7) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
+			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
+
+			for (const pokemon of setsToCheck) {
+				if (!pokemon.randomBattleMoves || pokemon.isNonstandard === 'Future') continue;
+				const randomMoves = pokemon.randomBattleMoves.slice();
+				const m = randomMoves.sort().map(formatMove);
+				movesets.push(
+					`<details${!movesets.length ? ' open' : ''}>` +
+					`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:<span style="color:#999999;"></summary>` +
+					`${m.join(`, `)}</details>`
+				);
 			}
-			species = gmaxSpecies;
-			randomMoves = gmaxSpecies.randomBattleMoves;
 		}
-		const moves: string[] = [];
-		// Done because species.randomBattleMoves is readonly
-		for (const move of randomMoves) {
-			moves.push(move);
+
+		if (!movesets.length) {
+			return this.errorReply(`Error: ${species.name} has no Random Battle data in ${formatName}`);
 		}
-		const m = moves.sort().map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${m.join(`, `)}`);
+		this.sendReplyBox(movesets.join('<hr />'));
 	},
 	randombattleshelp: [
 		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
@@ -680,19 +676,19 @@ export const commands: ChatCommands = {
 		if (args[1] && toID(args[1]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[1])];
 		} else if (room?.battle) {
-			const format = Dex.getFormat(room.battle.format);
+			const format = Dex.formats.get(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
 		if (parseInt(toID(args[1])[3]) < 4) {
 			if (room?.battle) {
-				const format = Dex.getFormat(room.battle.format);
+				const format = Dex.formats.get(room.battle.format);
 				dex = Dex.mod(format.mod);
 			} else {
 				return this.parse(`/help randomdoublesbattle`);
 			}
 		}
-		let species = dex.getSpecies(args[0]);
-		const formatName = dex.gen > 6 ? dex.getFormat(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
+		let species = dex.species.get(args[0]);
+		const formatName = dex.gen > 6 ? dex.formats.get(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
 			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
 				'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
 		if (!species.exists) {
@@ -700,7 +696,7 @@ export const commands: ChatCommands = {
 		}
 		let randomMoves = species.randomDoubleBattleMoves;
 		if (!randomMoves) {
-			const gmaxSpecies = dex.getSpecies(`${args[0]}gmax`);
+			const gmaxSpecies = dex.species.get(`${args[0]}gmax`);
 			if (!gmaxSpecies.exists || !gmaxSpecies.randomDoubleBattleMoves) {
 				return this.errorReply(`Error: No doubles moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 			}
@@ -719,19 +715,47 @@ export const commands: ChatCommands = {
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,
 	],
 
+	randsnodmax: 'randombattlenodmax',
+	randombattlenodmax(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.parse(`/help randombattlenodynamax`);
+
+		const dex = Dex.forFormat('gen8randombattlenodmax');
+		let species = dex.species.get(target);
+
+		if (!species.exists) {
+			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${target.trim()}' does not exist.`);
+		}
+
+		let randomMoves = species.randomBattleNoDynamaxMoves || species.randomBattleMoves;
+		if (!randomMoves) {
+			const gmaxSpecies = dex.species.get(`${target}gmax`);
+			if (!gmaxSpecies.exists || !gmaxSpecies.randomBattleMoves) {
+				return this.errorReply(`Error: No move data found for ${species.name} in [Gen 8] Random Battle (No Dmax).`);
+			}
+			species = gmaxSpecies;
+			randomMoves = gmaxSpecies.randomBattleNoDynamaxMoves || gmaxSpecies.randomBattleMoves;
+		}
+
+		const m = [...randomMoves].sort().map(formatMove);
+		this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in [Gen 8] Random Battle (No Dmax):</span><br />${m.join(`, `)}`);
+	},
+	randombattlenodmaxhelp: [
+		`/randombattlenodmax OR /randsnodmax [pokemon] - Displays a Pok\u00e9mon's Random Battle (No Dmax) moves.`,
+	],
+
 	bssfactory: 'battlefactory',
 	battlefactory(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		let isBSS = false;
-		if (cmd === 'bssfactory') isBSS = true;
+		const isBSS = cmd === 'bssfactory';
 		if (isBSS) {
 			const args = target.split(',');
 			if (!args[0]) return this.parse(`/help battlefactory`);
-			const species = Dex.getSpecies(args[0]);
+			const species = Dex.species.get(args[0]);
 			if (!species.exists) {
 				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
-			let mod = 'gen7';
+			let mod = 'gen8';
 			// There is only [Gen 7] BSS Factory right now
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen === 7) mod = toID(args[1]);
 			const bssSets = battleFactorySets(species, null, mod, true);
@@ -743,7 +767,7 @@ export const commands: ChatCommands = {
 		} else {
 			const args = target.split(',');
 			if (!args[0]) return this.parse(`/help battlefactory`);
-			const species = Dex.getSpecies(args[0]);
+			const species = Dex.species.get(args[0]);
 			if (!species.exists) {
 				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
@@ -756,14 +780,14 @@ export const commands: ChatCommands = {
 			const mod = args[2] || 'gen7';
 			let bfSets;
 			if (species.name === 'Necrozma-Ultra') {
-				bfSets = battleFactorySets(Dex.getSpecies('necrozma-dawnwings'), tier, mod);
+				bfSets = battleFactorySets(Dex.species.get('necrozma-dawnwings'), tier, mod);
 				if (typeof bfSets === 'string') {
-					bfSets += battleFactorySets(Dex.getSpecies('necrozma-duskmane'), tier, mod);
+					bfSets += battleFactorySets(Dex.species.get('necrozma-duskmane'), tier, mod);
 				}
 			} else if (species.name === 'Zygarde-Complete') {
-				bfSets = battleFactorySets(Dex.getSpecies('zygarde'), tier, mod);
+				bfSets = battleFactorySets(Dex.species.get('zygarde'), tier, mod);
 				if (typeof bfSets === 'string') {
-					bfSets += battleFactorySets(Dex.getSpecies('zygarde-10'), tier, mod);
+					bfSets += battleFactorySets(Dex.species.get('zygarde-10'), tier, mod);
 				}
 			} else {
 				bfSets = battleFactorySets(species, tier, mod);
@@ -784,7 +808,7 @@ export const commands: ChatCommands = {
 	cap1v1(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse(`/help cap1v1`);
-		const species = Dex.getSpecies(target);
+		const species = Dex.species.get(target);
 		if (!species.exists) return this.errorReply(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
 		const cap1v1Set = CAP1v1Sets(species);
 		if (!cap1v1Set) return this.parse(`/help cap1v1`);

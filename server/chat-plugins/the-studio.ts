@@ -216,12 +216,6 @@ class RecommendationsInterface {
 		return recs[Math.floor(Math.random() * recs.length)];
 	}
 
-	checkRoom(room: Room | null) {
-		if (room?.roomid !== 'thestudio') {
-			throw new Chat.ErrorMessage(`This command can only be used in The Studio.`);
-		}
-	}
-
 	async add(
 		artist: string, title: string, url: string, description: string,
 		username: string, tags: string[], avatar?: string
@@ -342,10 +336,10 @@ class RecommendationsInterface {
 		}
 		buf += `<hr />`;
 		if (suggested) {
-			buf += Utils.html`<button class="button" name="send" value="/approvesuggestion ${rec.userData.name}|${rec.artist}|${rec.title}">Approve</button> | `;
-			buf += Utils.html`<button class="button" name="send" value="/denysuggestion ${rec.userData.name}|${rec.artist}|${rec.title}">Deny</button>`;
+			buf += Utils.html`<button class="button" name="send" value="/msgroom thestudio,/approvesuggestion ${rec.userData.name}|${rec.artist}|${rec.title}">Approve</button> | `;
+			buf += Utils.html`<button class="button" name="send" value="/msgroom thestudio,/denysuggestion ${rec.userData.name}|${rec.artist}|${rec.title}">Deny</button>`;
 		} else {
-			buf += Utils.html`<button class="button" name="send" value="/likerec ${rec.artist}|${rec.title}" style="float:right;display:inline;padding:3px 5px;font-size:8pt;">`;
+			buf += Utils.html`<button class="button" name="send" value="/msgroom thestudio,/likerec ${rec.artist}|${rec.title}" style="float:right;display:inline;padding:3px 5px;font-size:8pt;">`;
 			buf += `<img src="https://${Config.routes.client}/sprites/bwicons/441.png" style="margin:-9px 0 -6px -7px;" width="32" height="32" />`;
 			buf += `<span style="position:relative;bottom:2.6px;">Upvote</span></button>`;
 		}
@@ -416,7 +410,7 @@ class RecommendationsInterface {
 export const LastFM = new LastFMInterface();
 export const Recs = new RecommendationsInterface();
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	registerlastfm(target, room, user) {
 		if (!target) return this.parse(`/help registerlastfm`);
 		this.checkChat(target);
@@ -436,11 +430,9 @@ export const commands: ChatCommands = {
 		this.checkChat();
 		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
-		this.splitTarget(target, true);
-		const username = LastFM.getAccountName(target ? target : user.name);
-		this.sendReplyBox(
-			await LastFM.getScrobbleData(username, this.targetUsername ? this.targetUsername : user.named ? user.name : undefined)
-		);
+		const targetUsername = this.splitUser(target).targetUsername || (user.named ? user.name : '');
+		const username = LastFM.getAccountName(targetUsername);
+		this.sendReplyBox(await LastFM.getScrobbleData(username, targetUsername));
 	},
 	lastfmhelp: [
 		`/lastfm [username] - Displays the last scrobbled song for the person using the command or for [username] if provided.`,
@@ -481,15 +473,12 @@ export const commands: ChatCommands = {
 
 	delrec: 'removerecommendation',
 	removerecommendation(target, room, user) {
-		const targetRoom = Rooms.search('thestudio') || room;
-		Recs.checkRoom(targetRoom);
-		this.room = targetRoom;
-		const [artist, title] = target.split(`|`).map(x => x.trim());
+		room = this.requireRoom('thestudio' as RoomID);		const [artist, title] = target.split(`|`).map(x => x.trim());
 		if (!(artist && title)) return this.parse(`/help removerecommendation`);
 		const rec = Recs.get(artist, title);
 		if (!rec) throw new Chat.ErrorMessage(`Recommendation not found.`);
 		if (toID(rec.userData.name) !== user.id) {
-			this.checkCan('mute', null, targetRoom!);
+			this.checkCan('mute', null, room);
 		}
 
 		Recs.delete(artist, title);
@@ -530,10 +519,8 @@ export const commands: ChatCommands = {
 	],
 
 	approvesuggestion(target, room, user) {
-		const targetRoom = Rooms.search('thestudio') || room;
-		Recs.checkRoom(targetRoom);
-		this.room = targetRoom;
-		this.checkCan('mute', null, targetRoom!);
+		room = this.requireRoom('thestudio' as RoomID);
+		this.checkCan('mute', null, room);
 		const [submitter, artist, title] = target.split('|').map(x => x.trim());
 		if (!(submitter && artist && title)) return this.parse(`/help approvesuggestion`);
 
@@ -547,10 +534,8 @@ export const commands: ChatCommands = {
 	],
 
 	denysuggestion(target, room, user) {
-		const targetRoom = Rooms.search('thestudio') || room;
-		Recs.checkRoom(targetRoom);
-		this.room = targetRoom;
-		this.checkCan('mute', null, targetRoom!);
+		room = this.requireRoom('thestudio' as RoomID);
+		this.checkCan('mute', null, room);
 		const [submitter, artist, title] = target.split('|').map(x => x.trim());
 		if (!(submitter && artist && title)) return this.parse(`/help approvesuggestion`);
 
@@ -574,9 +559,7 @@ export const commands: ChatCommands = {
 		if (!recommendations.saved.length) {
 			throw new Chat.ErrorMessage(`There are no recommendations saved.`);
 		}
-		const targetRoom = Rooms.search('thestudio') || room;
-		Recs.checkRoom(targetRoom);
-		this.room = targetRoom;
+		room = this.requireRoom('thestudio' as RoomID);
 		this.runBroadcast();
 		if (!target) {
 			return this.sendReply(`|html|${await Recs.render(Recs.getRandomRecommendation())}`);
@@ -603,9 +586,7 @@ export const commands: ChatCommands = {
 
 	likerec: 'likerecommendation',
 	likerecommendation(target, room, user, connection) {
-		const targetRoom = Rooms.search('thestudio') || room;
-		Recs.checkRoom(targetRoom);
-		this.room = targetRoom;
+		room = this.requireRoom('thestudio' as RoomID);
 		const [artist, title] = target.split('|').map(x => x.trim());
 		if (!(artist && title)) return this.parse(`/help likerecommendation`);
 		Recs.likeRecommendation(artist, title, user);
@@ -617,10 +598,8 @@ export const commands: ChatCommands = {
 
 	viewrecs: 'viewrecommendations',
 	viewrecommendations(target, room, user) {
-		const targetRoom = Rooms.search('thestudio') || room;
-		Recs.checkRoom(targetRoom);
-		this.room = targetRoom;
-		this.parse(`/j view-recommendations-${targetRoom!.roomid}`);
+		room = this.requireRoom('thestudio' as RoomID);
+		this.parse(`/j view-recommendations-${room.roomid}`);
 	},
 	viewrecommendationshelp: [
 		`/viewrecommendations OR /viewrecs - View all recommended songs.`,
@@ -629,17 +608,15 @@ export const commands: ChatCommands = {
 	viewsuggestions: 'viewsuggestedrecommendations',
 	viewsuggestedrecs: 'viewsuggestedrecommendations',
 	viewsuggestedrecommendations(target, room, user) {
-		const targetRoom = Rooms.search('thestudio') || room;
-		Recs.checkRoom(targetRoom);
-		this.room = targetRoom;
-		this.parse(`/j view-suggestedrecommendations-${targetRoom!.roomid}`);
+		room = this.requireRoom('thestudio' as RoomID);
+		this.parse(`/j view-suggestedrecommendations-${room.roomid}`);
 	},
 	viewsuggestedrecommendationshelp: [
 		`/viewsuggestedrecommendations OR /viewsuggestions - View all suggested recommended songs. Requires: % @ * # &`,
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async recommendations(query, user, connection) {
 		const room = this.requireRoom();
 		this.checkCan('mute', null, room);
@@ -656,7 +633,7 @@ export const pages: PageTable = {
 			buf += `<div class="infobox">`;
 			buf += await Recs.render(rec);
 			if (user.can('mute', null, room) || toID(rec.userData.name) === user.id) {
-				buf += `<hr /><button class="button" name="send" value="/removerecommendation ${rec.artist}|${rec.title}">Delete</button>`;
+				buf += `<hr /><button class="button" name="send" value="/msgroom thestudio,/removerecommendation ${rec.artist}|${rec.title}">Delete</button>`;
 			}
 			buf += `</div>`;
 		}

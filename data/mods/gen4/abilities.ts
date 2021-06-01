@@ -15,6 +15,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		rating: 1.5,
 	},
+	baddreams: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 10,
+	},
 	blaze: {
 		onBasePowerPriority: 2,
 		onBasePower(basePower, attacker, defender, move) {
@@ -58,7 +63,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
-					source.addVolatile('attract', this.effectData.target);
+					source.addVolatile('attract', this.effectState.target);
 				}
 			}
 		},
@@ -135,10 +140,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			let warnMoves: Move[] = [];
 			let warnBp = 1;
-			for (const target of pokemon.side.foe.active) {
-				if (target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
-					const move = this.dex.getMove(moveSlot.move);
+					const move = this.dex.moves.get(moveSlot.move);
 					let bp = move.basePower;
 					if (move.ohko) bp = 160;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
@@ -165,6 +169,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	hydration: {
+		onWeather(target, source, effect) {
+			if (effect.id === 'raindance' && target.status) {
+				this.add('-activate', target, 'ability: Hydration');
+				target.cureStatus();
+			}
+		},
+		name: "Hydration",
+		rating: 1.5,
+		num: 93,
+	},
 	insomnia: {
 		inherit: true,
 		rating: 2.5,
@@ -172,15 +187,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	intimidate: {
 		inherit: true,
 		onStart(pokemon) {
-			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (target && this.isAdjacent(target, pokemon) &&
-					!(target.volatiles['substitute'] ||
-						target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn')) {
-					activated = true;
-					break;
-				}
-			}
+			const activated = pokemon.adjacentFoes().some(target => (
+				!(target.volatiles['substitute'] || target.volatiles['substitutebroken']?.move === 'uturn')
+			));
 
 			if (!activated) {
 				this.hint("In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).", false, pokemon.side);
@@ -188,12 +197,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-
+			for (const target of pokemon.adjacentFoes()) {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
-				} else if (target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn') {
+				} else if (target.volatiles['substitutebroken']?.move === 'uturn') {
 					this.hint("In Gen 4, if U-turn breaks Substitute the incoming Intimidate does nothing.");
 				} else {
 					this.boost({atk: -1}, target, pokemon, null, true);
@@ -233,12 +240,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	minus: {
 		onModifySpA(spa, pokemon) {
-			const allyActive = pokemon.side.active;
-			if (allyActive.length === 1) {
-				return;
-			}
-			for (const ally of allyActive) {
-				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'plus') {
+			for (const ally of pokemon.allies()) {
+				if (ally.ability === 'plus') {
 					return spa * 1.5;
 				}
 			}
@@ -287,12 +290,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	plus: {
 		onModifySpA(spa, pokemon) {
-			const allyActive = pokemon.side.active;
-			if (allyActive.length === 1) {
-				return;
-			}
-			for (const ally of allyActive) {
-				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'minus') {
+			for (const ally of pokemon.allies()) {
+				if (ally.ability === 'minus') {
 					return spa * 1.5;
 				}
 			}
@@ -327,7 +326,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
 			if (damage && move.flags['contact']) {
-				this.damage(source.baseMaxhp / 16, source, target);
+				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
 	},
@@ -353,13 +352,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	shedskin: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 3,
+	},
 	simple: {
 		onModifyBoost(boosts) {
-			let key: BoostName;
+			let key: BoostID;
 			for (key in boosts) {
 				boosts[key]! *= 2;
 			}
 		},
+		isBreakable: true,
 		name: "Simple",
 		rating: 4,
 		num: 86,
@@ -374,6 +379,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return accuracy * 0.8;
 			}
 		},
+	},
+	speedboost: {
+		inherit: true,
+		onResidualOrder: 10,
+		onResidualSubOrder: 3,
 	},
 	static: {
 		inherit: true,
@@ -393,7 +403,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	stickyhold: {
 		inherit: true,
 		onTakeItem(item, pokemon, source) {
-			if (this.suppressingAttackEvents(pokemon)) return;
 			if ((source && source !== pokemon) || (this.activeMove && this.activeMove.id === 'knockoff')) {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
@@ -451,6 +460,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
+		isBreakable: true,
 		name: "Thick Fat",
 		rating: 3.5,
 		num: 47,
@@ -471,7 +481,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
-			const target = pokemon.side.foe.randomActive();
+			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
 			const bannedAbilities = ['forecast', 'multitype', 'trace'];

@@ -242,10 +242,11 @@ async function getBattleSearch(
 	connection.send(buildResults(response, userids as ID[], month, tierid, turnLimit));
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
+		if (Config.nobattlesearch) return this.errorReply(`Battlesearch has been temporarily disabled due to load issues.`);
 		const [ids, rawLimit, month, formatid, confirmation] = Utils.splitFirst(this.pageid.slice(18), '--', 5);
 		let turnLimit: number | undefined = parseInt(rawLimit);
 		if (isNaN(turnLimit)) turnLimit = undefined;
@@ -260,12 +261,10 @@ export const pages: PageTable = {
 		}
 		buf += `</p>`;
 
-		const months = (await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
-			const a = aKey.split('-').map(n => parseInt(n));
-			const b = bKey.split('-').map(n => parseInt(n));
-			if (a[0] !== b[0]) return b[0] - a[0];
-			return b[1] - a[1];
-		});
+		const months = Utils.sortBy(
+			(await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')),
+			name => ({reverse: name})
+		);
 		if (!month) {
 			buf += `<p>Please select a month:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const i of months) {
@@ -280,22 +279,14 @@ export const pages: PageTable = {
 		}
 
 		const tierid = toID(formatid);
-		const tiers = (await FS(`logs/${month}/`).readdir()).sort((a, b) => {
+		const tiers = Utils.sortBy(await FS(`logs/${month}/`).readdir(), tier => [
 			// First sort by gen with the latest being first
-			let aGen = 6;
-			let bGen = 6;
-			if (a.startsWith('gen')) aGen = parseInt(a.substring(3, 4));
-			if (b.startsWith('gen')) bGen = parseInt(b.substring(3, 4));
-			if (aGen !== bGen) return bGen - aGen;
-			// Sort alphabetically
-			const aTier = a.substring(4);
-			const bTier = b.substring(4);
-			if (aTier < bTier) return -1;
-			if (aTier > bTier) return 1;
-			return 0;
-		}).map(tier => {
+			tier.startsWith('gen') ? -parseInt(tier.charAt(3)) : -6,
+			// Then sort alphabetically
+			tier,
+		]).map(tier => {
 			// Use the official tier name
-			const format = Dex.getFormat(tier);
+			const format = Dex.formats.get(tier);
 			if (format?.exists) tier = format.name;
 			// Otherwise format as best as possible
 			if (tier.startsWith('gen')) {
@@ -340,7 +331,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	battlesearch(target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');
@@ -368,8 +359,14 @@ export const commands: ChatCommands = {
 
 export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
 	const {userids, turnLimit, month, tierid} = data;
+	const start = Date.now();
 	try {
-		return await runBattleSearch(userids, month, tierid, turnLimit);
+		const result = await runBattleSearch(userids, month, tierid, turnLimit);
+		const elapsedTime = Date.now() - start;
+		if (elapsedTime > 10 * 60 * 1000) {
+			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+		}
+		return result;
 	} catch (err) {
 		Monitor.crashlog(err, 'A battle search query', {
 			userids,
@@ -379,7 +376,11 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		});
 	}
 	return null;
-}, BATTLESEARCH_PROCESS_TIMEOUT);
+}, BATTLESEARCH_PROCESS_TIMEOUT, message => {
+	if (message.startsWith('SLOW\n')) {
+		Monitor.slow(message.slice(5));
+	}
+});
 
 if (!PM.isParentProcess) {
 	// This is a child process!
@@ -388,6 +389,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	process.on('uncaughtException', err => {

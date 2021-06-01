@@ -40,18 +40,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					// it failed
 					return false;
 				}
-				this.effectData.move = target.lastMove.id;
+				this.effectState.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
 				if (!this.queue.willMove(target)) {
-					this.effectData.duration++;
+					this.effectState.duration++;
 				}
 			},
 			onOverrideAction(pokemon, target, move) {
-				if (move.id !== this.effectData.move) return this.effectData.move;
+				if (move.id !== this.effectState.move) return this.effectState.move;
 			},
-			onResidualOrder: 13,
+			onResidualOrder: 16,
 			onResidual(target) {
-				const lockedMoveIndex = target.moves.indexOf(this.effectData.move);
+				const lockedMoveIndex = target.moves.indexOf(this.effectState.move);
 				if (lockedMoveIndex >= 0 && target.moveSlots[lockedMoveIndex].pp <= 0) {
 					// Encore ends early if you run out of PP
 					target.removeVolatile('encore');
@@ -61,11 +61,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', target, 'Encore');
 			},
 			onDisableMove(pokemon) {
-				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+				if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
 					return;
 				}
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id !== this.effectData.move) {
+					if (moveSlot.id !== this.effectState.move) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -134,16 +134,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(0.5);
 				}
 			},
-			onStart(battle, source, effect) {
+			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}
 			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd(side) {
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
 				this.add('-fieldend', 'Misty Terrain');
 			},
 		},
@@ -192,19 +192,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			noCopy: true,
 			onStart(target) {
-				this.effectData.layers = 1;
-				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				this.effectState.layers = 1;
+				this.add('-start', target, 'stockpile' + this.effectState.layers);
 				this.boost({def: 1, spd: 1}, target, target);
 			},
 			onRestart(target) {
-				if (this.effectData.layers >= 3) return false;
-				this.effectData.layers++;
-				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				if (this.effectState.layers >= 3) return false;
+				this.effectState.layers++;
+				this.add('-start', target, 'stockpile' + this.effectState.layers);
 				this.boost({def: 1, spd: 1}, target, target);
 			},
 			onEnd(target) {
-				const layers = this.effectData.layers * -1;
-				this.effectData.layers = 0;
+				const layers = this.effectState.layers * -1;
+				this.effectState.layers = 0;
 				this.boost({def: layers, spd: layers}, target, target);
 				this.add('-end', target, 'Stockpile');
 			},
@@ -242,7 +242,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Wide Guard');
 			},
 			onTryHitPriority: 4,

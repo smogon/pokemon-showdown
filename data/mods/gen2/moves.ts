@@ -23,7 +23,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			if (target.hp <= target.maxhp / 2) {
-				this.boost({atk: 2}, null, null, this.dex.getEffect('bellydrum2'));
+				this.boost({atk: 2}, null, null, this.dex.conditions.get('bellydrum2'));
 				return false;
 			}
 			this.directDamage(target.maxhp / 2);
@@ -57,29 +57,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onLockMove: 'bide',
 			onStart(pokemon) {
-				this.effectData.totalDamage = 0;
+				this.effectState.totalDamage = 0;
 				this.add('-start', pokemon, 'move: Bide');
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move' || !source) return;
-				this.effectData.totalDamage += damage;
-				this.effectData.lastDamageSource = source;
+				this.effectState.totalDamage += damage;
+				this.effectState.lastDamageSource = source;
 			},
 			onBeforeMove(pokemon, target, move) {
-				if (this.effectData.duration === 1) {
+				if (this.effectState.duration === 1) {
 					this.add('-end', pokemon, 'move: Bide');
-					if (!this.effectData.totalDamage) {
+					if (!this.effectState.totalDamage) {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					target = this.effectData.lastDamageSource;
+					target = this.effectState.lastDamageSource;
 					if (!target) {
 						this.add('-fail', pokemon);
 						return false;
 					}
 					if (!target.isActive) {
-						const possibleTarget = this.getRandomTarget(pokemon, this.dex.getMove('pound'));
+						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
 						if (!possibleTarget) {
 							this.add('-miss', pokemon);
 							return false;
@@ -90,14 +90,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						id: 'bide',
 						name: "Bide",
 						accuracy: 100,
-						damage: this.effectData.totalDamage * 2,
+						damage: this.effectState.totalDamage * 2,
 						category: "Physical",
 						priority: 0,
 						flags: {contact: 1, protect: 1},
 						effectType: 'Move',
 						type: 'Normal',
 					} as unknown as ActiveMove;
-					this.tryMoveHit(target, pokemon, moveData);
+					this.actions.tryMoveHit(target, pokemon, moveData);
+					pokemon.removeVolatile('bide');
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
@@ -119,7 +120,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		damageCallback(pokemon, target) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 
 			// Hidden Power counts as physical
 			if (this.getCategory(lastAttackedBy.move) === 'Physical' && target.lastMove?.id !== 'sleeptalk') {
@@ -201,18 +202,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					// it failed
 					return false;
 				}
-				this.effectData.move = lockedMove;
+				this.effectState.move = lockedMove;
 				this.add('-start', target, 'Encore');
 				if (!this.queue.willMove(target)) {
-					this.effectData.duration++;
+					this.effectState.duration++;
 				}
 			},
 			onOverrideAction(pokemon) {
-				return this.effectData.move;
+				return this.effectState.move;
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
-				const lockedMoveIndex = target.moves.indexOf(this.effectData.move);
+				const lockedMoveIndex = target.moves.indexOf(this.effectState.move);
 				if (lockedMoveIndex >= 0 && target.moveSlots[lockedMoveIndex].pp <= 0) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
@@ -222,11 +223,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', target, 'Encore');
 			},
 			onDisableMove(pokemon) {
-				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+				if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
 					return;
 				}
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id !== this.effectData.move) {
+					if (moveSlot.id !== this.effectState.move) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -319,7 +320,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onMoveFail(target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				const damage = this.getDamage(source, target, move, true);
+				const damage = this.actions.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get High Jump Kick recoil");
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
@@ -329,7 +330,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onMoveFail(target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				const damage = this.getDamage(source, target, move, true);
+				const damage = this.actions.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get Jump Kick recoil");
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
@@ -349,7 +350,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onAfterMoveSelfPriority: 2,
 			onAfterMoveSelf(pokemon) {
 				if (!pokemon.hp) return;
-				const leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				const leecher = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					return;
 				}
@@ -366,11 +367,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 5,
 			// Sp. Def boost applied directly in stat calculation
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
-			onResidualOrder: 21,
-			onEnd(side) {
+			onSideResidualOrder: 9,
+			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Light Screen');
 			},
 		},
@@ -384,7 +385,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectData.target && target === this.effectData.source) return true;
+				if (move && source === this.effectState.target && target === this.effectState.source) return true;
 			},
 		},
 	},
@@ -404,6 +405,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: true,
 		ignoreAccuracy: false,
+		flags: {reflectable: 1, mirror: 1},
 	},
 	metronome: {
 		inherit: true,
@@ -429,7 +431,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		damageCallback(pokemon, target) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 
 			// Hidden Power counts as physical
 			if (this.getCategory(lastAttackedBy.move) === 'Special' && target.lastMove?.id !== 'sleeptalk') {
@@ -454,7 +456,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (noMirror.includes(lastMove) || pokemon.moves.includes(lastMove)) {
 				return false;
 			}
-			this.useMove(lastMove, pokemon);
+			this.actions.useMove(lastMove, pokemon);
 		},
 		noSketch: true,
 	},
@@ -514,6 +516,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		ignoreAccuracy: false,
 	},
+	perishsong: {
+		inherit: true,
+		condition: {
+			duration: 4,
+			onEnd(target) {
+				this.add('-start', target, 'perish0');
+				target.faint();
+			},
+			onResidualOrder: 4,
+			onResidual(pokemon) {
+				const duration = pokemon.volatiles['perishsong'].duration;
+				this.add('-start', pokemon, 'perish' + duration);
+			},
+		},
+	},
 	petaldance: {
 		inherit: true,
 		onMoveFail(target, source, move) {
@@ -560,11 +577,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 5,
 			// Defense boost applied directly in stat calculation
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
-			onResidualOrder: 21,
-			onEnd(side) {
+			onSideResidualOrder: 9,
+			onSideEnd(side) {
 				this.add('-sideend', side, 'Reflect');
 			},
 		},
@@ -582,9 +599,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else {
 				this.add('-status', target, 'slp', '[from] move: Rest');
 			}
-			target.statusData.time = 3;
-			target.statusData.startTime = 3;
-			target.statusData.source = target;
+			target.statusState.time = 3;
+			target.statusState.startTime = 3;
+			target.statusState.source = target;
 			this.heal(target.maxhp);
 		},
 		secondary: null,
@@ -603,6 +620,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		priority: -1,
+	},
+	safeguard: {
+		inherit: true,
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', effect);
+					return 7;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (!effect || !source) return;
+				if (effect.id === 'yawn') return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if (target !== source) {
+					this.debug('interrupting setStatus');
+					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Safeguard');
+					}
+					return null;
+				}
+			},
+			onTryAddVolatile(status, target, source, effect) {
+				if (!effect || !source) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					return null;
+				}
+			},
+			onSideStart(side) {
+				this.add('-sidestart', side, 'Safeguard');
+			},
+			onSideResidualOrder: 8,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'Safeguard');
+			},
+		},
 	},
 	selfdestruct: {
 		inherit: true,
@@ -640,14 +697,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
 				const move = moveSlot.id;
-				if (move && !NoSleepTalk.includes(move) && !this.dex.getMove(move).flags['charge']) {
+				if (move && !NoSleepTalk.includes(move) && !this.dex.moves.get(move).flags['charge']) {
 					moves.push(move);
 				}
 			}
 			let randomMove = '';
 			if (moves.length) randomMove = this.sample(moves);
 			if (!randomMove) return false;
-			this.useMove(randomMove, pokemon);
+			this.actions.useMove(randomMove, pokemon);
 		},
 		noSketch: true,
 	},
@@ -663,15 +720,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: true,
 		ignoreAccuracy: false,
+		flags: {reflectable: 1, mirror: 1},
 	},
 	spikes: {
 		inherit: true,
 		condition: {
 			// this is a side condition
-			onStart(side) {
-				if (!this.effectData.layers || this.effectData.layers === 0) {
+			onSideStart(side) {
+				if (!this.effectState.layers || this.effectState.layers === 0) {
 					this.add('-sidestart', side, 'Spikes');
-					this.effectData.layers = 1;
+					this.effectState.layers = 1;
 				} else {
 					return false;
 				}
@@ -679,7 +737,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSwitchIn(pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
 				const damageAmounts = [0, 3];
-				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
+				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
 		},
 	},
@@ -688,7 +746,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
-				this.effectData.hp = Math.floor(target.maxhp / 4);
+				this.effectState.hp = Math.floor(target.maxhp / 4);
 				delete target.volatiles['partiallytrapped'];
 			},
 			onTryPrimaryHitPriority: -1,
@@ -724,7 +782,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage) {
 					return null;
 				}

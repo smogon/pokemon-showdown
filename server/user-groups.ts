@@ -1,14 +1,16 @@
 import {FS} from '../lib/fs';
+import type {RoomSection} from './chat-commands/room-settings';
 
-export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
+export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '▸' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
+export const SECTIONLEADER_SYMBOL: GroupSymbol = '\u25B8';
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 export const ROOM_PERMISSIONS = [
-	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
+	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomsectionleader', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
 ] as const;
 
 export const GLOBAL_PERMISSIONS = [
@@ -52,7 +54,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	 * users with temporary global auth.
 	 */
 	get(user: ID | User) {
-		if (typeof user !== 'string') return (user as User).tempGroup;
+		if (typeof user !== 'string') return user.tempGroup;
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
@@ -149,12 +151,12 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 					// this checks sub commands and command objects, but it checks to see if a sub-command
 					// overrides (should a perm for the command object exist) first
 					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
-					jurisdiction = 'su';
+					jurisdiction = 'u';
 					foundSpecificPermission = true;
 				} else if (roomPermissions[`/${namespace}`]) {
 					// if it's for one command object
 					if (!auth.atLeast(user, roomPermissions[`/${namespace}`])) return false;
-					jurisdiction = 'su';
+					jurisdiction = 'u';
 					foundSpecificPermission = true;
 				}
 			}
@@ -169,9 +171,21 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
+		const handlers = Chat.allCommands().filter(c => c.hasRoomPermissions);
+		const commands = [];
+		for (const handler of handlers) {
+			commands.push(`/${handler.fullCmd}`);
+			if (handler.aliases.length) {
+				for (const alias of handler.aliases) {
+					// kind of a hack but this is the only good way i could think of to
+					// overwrite the alias without making assumptions about the string
+					commands.push(`/${handler.fullCmd.replace(handler.cmd, alias)}`);
+				}
+			}
+		}
 		return [
 			...ROOM_PERMISSIONS,
-			...Chat.allCommands().filter(c => c.hasRoomPermissions).map(c => `/${c.fullCmd}`),
+			...commands,
 		];
 	}
 	static hasJurisdiction(
@@ -219,7 +233,7 @@ export class RoomAuth extends Auth {
 		this.room = room;
 	}
 	get(userOrID: ID | User): GroupSymbol {
-		const id = typeof userOrID === 'string' ? userOrID : (userOrID as User).id;
+		const id = typeof userOrID === 'string' ? userOrID : userOrID.id;
 
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? Users.globalAuth : null;
@@ -295,6 +309,7 @@ export class RoomAuth extends Auth {
 
 export class GlobalAuth extends Auth {
 	usernames = new Map<ID, string>();
+	sectionLeaders = new Map<ID, RoomSection>();
 	constructor() {
 		super();
 		this.load();
@@ -303,7 +318,7 @@ export class GlobalAuth extends Auth {
 		FS('config/usergroups.csv').writeUpdate(() => {
 			let buffer = '';
 			for (const [userid, groupSymbol] of this) {
-				buffer += `${this.usernames.get(userid) || userid},${groupSymbol}\n`;
+				buffer += `${this.usernames.get(userid) || userid},${groupSymbol},${this.sectionLeaders.get(userid) || ''}\n`;
 			}
 			return buffer;
 		});
@@ -312,10 +327,17 @@ export class GlobalAuth extends Auth {
 		const data = FS('config/usergroups.csv').readIfExistsSync();
 		for (const row of data.split("\n")) {
 			if (!row) continue;
-			const [name, symbol] = row.split(",");
+			const [name, symbol, sectionid] = row.split(",");
 			const id = toID(name);
 			this.usernames.set(id, name);
-			super.set(id, symbol.charAt(0) as GroupSymbol);
+			if (sectionid) this.sectionLeaders.set(id, sectionid as RoomSection);
+
+			// handle glitched entries where a user has two entries in usergroups.csv due to bugs
+			const newSymbol = symbol.charAt(0) as GroupSymbol;
+			const preexistingSymbol = super.get(id);
+			// take a user's highest rank in usergroups.csv
+			if (preexistingSymbol && Auth.atLeast(preexistingSymbol, newSymbol)) continue;
+			super.set(id, newSymbol);
 		}
 	}
 	set(id: ID, group: GroupSymbol, username?: string) {
@@ -340,6 +362,33 @@ export class GlobalAuth extends Auth {
 			user.tempGroup = ' ';
 		}
 		this.usernames.delete(id);
+		this.save();
+		return true;
+	}
+	setSection(id: ID, sectionid: RoomSection, username?: string) {
+		if (!username) username = id;
+		const user = Users.get(id);
+		if (user) {
+			user.updateIdentity();
+			username = user.name;
+			Rooms.global.checkAutojoin(user);
+		}
+		if (!super.has(id)) this.set(id, ' ', username);
+		this.sectionLeaders.set(id, sectionid);
+		void this.save();
+		return this;
+	}
+	deleteSection(id: ID) {
+		if (!this.sectionLeaders.has(id)) return false;
+		this.sectionLeaders.delete(id);
+		if (super.get(id) === ' ') {
+			return this.delete(id);
+		}
+		const user = Users.get(id);
+		if (user) {
+			user.updateIdentity();
+			Rooms.global.checkAutojoin(user);
+		}
 		this.save();
 		return true;
 	}

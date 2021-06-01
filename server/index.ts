@@ -2,8 +2,8 @@
  * Main file
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is the main Pokemon Showdown app, and the file you should be
- * running to start Pokemon Showdown if you're using it normally.
+ * This is the main Pokemon Showdown app, and the file that the
+ * `pokemon-showdown` script runs if you start Pokemon Showdown normally.
  *
  * This file sets up our SockJS server, which handles communication
  * between users and your server, and also sets up globals. You can
@@ -90,6 +90,9 @@ if (Config.watchconfig) {
 	FS(require.resolve('../config/config')).onModify(() => {
 		try {
 			global.Config = ConfigLoader.load(true);
+			// ensure that battle prefixes configured via the chat plugin are not overwritten
+			// by battle prefixes manually specified in config.js
+			Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
 			Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
@@ -104,6 +107,9 @@ if (Config.watchconfig) {
 import {Dex} from '../sim/dex';
 global.Dex = Dex;
 global.toID = Dex.toID;
+
+import {Teams} from '../sim/teams';
+global.Teams = Teams;
 
 import {LoginServer} from './loginserver';
 global.LoginServer = LoginServer;

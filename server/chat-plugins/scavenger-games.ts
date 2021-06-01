@@ -33,7 +33,7 @@ interface GameMode {
 }
 
 class Leaderboard {
-	data: AnyObject;
+	data: {[userid: string]: AnyObject};
 
 	constructor() {
 		this.data = {};
@@ -53,26 +53,28 @@ class Leaderboard {
 		return this; // allow chaining
 	}
 
+	visualize(sortBy: string): Promise<({rank: number} & AnyObject)[]>;
+	visualize(sortBy: string, userid: string): Promise<({rank: number} & AnyObject) | undefined>;
 	visualize(sortBy: string, userid?: string) {
+		// FIXME: this is not how promises work
 		// return a promise for async sorting - make this less exploitable
 		return new Promise((resolve, reject) => {
 			let lowestScore = Infinity;
 			let lastPlacement = 1;
 
-			const ladder = Object.keys(this.data)
-				.filter(k => sortBy in this.data[k])
-				.sort((a, b) => this.data[b][sortBy] - this.data[a][sortBy])
-				.map((u, i) => {
-					const bit = this.data[u];
-					if (bit[sortBy] !== lowestScore) {
-						lowestScore = bit[sortBy];
-						lastPlacement = i + 1;
-					}
-					return {
-						rank: lastPlacement,
-						...bit,
-					};
-				}); // identify ties
+			const ladder = Utils.sortBy(
+				Object.entries(this.data).filter(([u, bit]) => sortBy in bit),
+				([u, bit]) => -bit[sortBy]
+			).map(([u, bit], i) => {
+				if (bit[sortBy] !== lowestScore) {
+					lowestScore = bit[sortBy];
+					lastPlacement = i + 1;
+				}
+				return {
+					rank: lastPlacement,
+					...bit,
+				} as {rank: number} & AnyObject;
+			}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
@@ -83,7 +85,7 @@ class Leaderboard {
 	}
 
 	async htmlLadder(): Promise<string> {
-		const data = await this.visualize('points') as AnyObject[];
+		const data = await this.visualize('points');
 		const display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data.map(line =>
 			`<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('')
 		}</table></div>`;
@@ -116,7 +118,7 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onComplete(player, time, blitz) {
 			const isPerfect = !this.leftGame?.includes(player.id) &&
-				Object.keys(player.answers).map(q => player.answers[q].length).every(attempts => attempts <= 1);
+				Object.values(player.answers).every((attempts: any) => attempts.length <= 1);
 			return {name: player.name, time, blitz, isPerfect};
 		},
 
@@ -444,7 +446,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			onLoad() {
 				const game = this.room.scavgame!;
 				if (game.round === 0) return;
-				const maxTime = (game.jumpstart as number[]).sort((a, b) => b - a)[0];
+				const maxTime = Math.max(...game.jumpstart);
 
 				this.jumpstartTimers = [];
 				this.answerLock = true;
@@ -546,7 +548,7 @@ const MODES: {[k: string]: GameMode | string} = {
 
 			for (const userid of team.players) {
 				const user = Users.getExact(userid);
-				if (!user || !user.connected) continue; // user is offline
+				if (!user?.connected) continue; // user is offline
 
 				user.sendTo(this.room, `|raw|<div class="infobox">${message}</div>`);
 			}
@@ -732,7 +734,7 @@ export class ScavengerGameTemplate {
 	}
 
 	eliminate(userid: string) {
-		if (!this.playerlist || !this.playerlist.includes(userid)) return false;
+		if (!this.playerlist?.includes(userid)) return false;
 		this.playerlist = this.playerlist.filter(pid => pid !== userid);
 
 		if (this.leaderboard) delete this.leaderboard.data[userid];

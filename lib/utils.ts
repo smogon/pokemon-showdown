@@ -43,15 +43,16 @@ export function escapeRegex(str: string) {
 /**
  * Escapes HTML in a string.
 */
-export function escapeHTML(str: string) {
-	if (!str) return '';
+export function escapeHTML(str: string | number) {
+	if (str === null || str === undefined) return '';
 	return ('' + str)
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
 		.replace(/>/g, '&gt;')
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&apos;')
-		.replace(/\//g, '&#x2f;');
+		.replace(/\//g, '&#x2f;')
+		.replace(/\n/g, '<br />');
 }
 
 /**
@@ -162,7 +163,7 @@ export function compare(a: Comparable, b: Comparable): number {
 		}
 		return 0;
 	}
-	if (a.reverse) {
+	if ('reverse' in a) {
 		return compare((b as {reverse: string}).reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
@@ -171,13 +172,16 @@ export function compare(a: Comparable, b: Comparable): number {
 /**
  * Sorts an array according to the callback's output on its elements.
  *
- * The callback's output is compared according to `PSUtils.compare` (in
- * particular, it supports arrays so you can sort by multiple things).
+ * The callback's output is compared according to `PSUtils.compare`
+ * (numbers low to high, strings A-Z, booleans true-first, arrays in order).
  */
 export function sortBy<T>(array: T[], callback: (a: T) => Comparable): T[];
 /**
-* Sorts an array according to `PSUtils.compare`. (Correctly sorts numbers,
- * unlike `array.sort`)
+ * Sorts an array according to `PSUtils.compare`
+ * (numbers low to high, strings A-Z, booleans true-first, arrays in order).
+ *
+ * Note that array.sort() only works on strings, not numbers, so you'll need
+ * this to sort numbers.
  */
 export function sortBy<T extends Comparable>(array: T[]): T[];
 export function sortBy<T>(array: T[], callback?: (a: T) => Comparable) {
@@ -230,11 +234,20 @@ export function html(strings: TemplateStringsArray, ...args: any) {
 }
 
 /**
+ * This combines escapeHTML and forceWrap. The combination allows us to use
+ * <wbr /> instead of U+200B, which will make sure the word-wrapping hints
+ * can't be copy/pasted (which would mess up code).
+ */
+export function escapeHTMLForceWrap(text: string): string {
+	return escapeHTML(forceWrap(text)).replace(/\u200B/g, '<wbr />');
+}
+
+/**
  * HTML doesn't support `word-wrap: break-word` in tables, but sometimes it
  * would be really nice if it did. This emulates `word-wrap: break-word` by
- * manually inserting U+200B (zero-width space, the force-wrap character) in long words.
+ * manually inserting U+200B to tell long words to wrap.
  */
-export function forceWrap(text: string) {
+export function forceWrap(text: string): string {
 	return text.replace(/[^\s]{30,}/g, word => {
 		let lastBreak = 0;
 		let brokenWord = '';
@@ -352,6 +365,19 @@ export function waitUntil(time: number): Promise<void> {
 	});
 }
 
+export class Multiset<T> extends Map<T, number> {
+	add(key: T) {
+		this.set(key, (this.get(key) ?? 0) + 1);
+		return this;
+	}
+	remove(key: T) {
+		const newValue = (this.get(key) ?? 0) - 1;
+		if (newValue <= 0) return this.delete(key);
+		this.set(key, newValue);
+		return true;
+	}
+}
+
 // backwards compatibility
 export const Utils = {
 	waitUntil, html, escapeHTML,
@@ -359,5 +385,5 @@ export const Utils = {
 	shuffle, deepClone, clearRequireCache,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
-	escapeRegex,
+	escapeRegex, Multiset,
 };

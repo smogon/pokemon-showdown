@@ -42,7 +42,7 @@ class TestTools {
 	}
 
 	getFormat(options) {
-		if (options.formatid) return Dex.getFormat(options.formatid);
+		if (options.formatid) return Dex.formats.get(options.formatid);
 
 		const gameType = Dex.toID(options.gameType || 'singles');
 		const customRules = [
@@ -57,14 +57,16 @@ class TestTools {
 		].filter(Boolean);
 		const customRulesID = customRules.length ? `@@@${customRules.join(',')}` : ``;
 
-		const basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
+		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
+		if (this.currentMod === 'gen1stadium') basicFormat = 'OU';
+		if (gameType === 'freeforall') basicFormat = 'randombattle';
 		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType) + ' ';
 		const formatName = `${this.modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
 
 		let format = formatsCache.get(formatName);
 		if (format) return format;
 
-		format = Dex.getFormat(formatName);
+		format = Dex.formats.get(formatName);
 		if (!format.exists) throw new Error(`Unidentified format: ${formatName}`);
 
 		formatsCache.set(formatName, format);
