@@ -604,7 +604,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] Chimera 1v1",
 		desc: `Bring 6 Pok&eacute;mon and choose their order at Team Preview. The lead Pok&eacute;mon then receives the item, ability, stats, and moves of the other five Pok&eacute;mon, which play no further part in the battle.`,
 		threads: [
-			`&bullet <a href="https://www.smogon.com/forums/threads/3661215/">Chimera 1v1</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3661215/">Chimera 1v1</a>`,
 		],
 
 		mod: 'gen8',
