@@ -33,6 +33,7 @@ export class PrefixManager {
 			return;
 		}
 		for (const [type, prefixes] of Object.values(data)) {
+			if (!prefixes) continue;
 			if (!Config.forcedprefixes[type]) Config.forcedprefixes[type] = [];
 			for (const prefix of prefixes) {
 				if (Config.forcedprefixes[type].includes(prefix)) continue;
