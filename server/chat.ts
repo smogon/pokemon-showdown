@@ -1907,7 +1907,12 @@ export const Chat = new class {
 		}
 
 		for (const file of files) {
-			this.loadPlugin(`chat-plugins/${file}`);
+			try {
+				this.loadPlugin(`chat-plugins/${file}`);
+			} catch (e) {
+				Monitor.crashlog(e, "A loading chat plugin");
+				continue;
+			}
 		}
 		Chat.oldPlugins = {};
 		// lower priority should run later
