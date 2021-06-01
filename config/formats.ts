@@ -638,7 +638,6 @@ export const Formats: FormatList = [
 			newSpecies.bst = allies[2].baseSpecies.bst;
 			pokemon.item = allies[0].item;
 			pokemon.ability = pokemon.baseAbility = allies[1].ability;
-			pokemon.hp = pokemon.maxhp = newSpecies.maxHP = allies[2].maxhp;
 			pokemon.set.evs = allies[2].set.evs;
 			pokemon.set.nature = allies[2].set.nature;
 			pokemon.set.ivs = allies[2].set.ivs;
@@ -646,6 +645,8 @@ export const Formats: FormatList = [
 			pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
 				...allies[3].baseMoveSlots.slice(0, 2), ...allies[4].baseMoveSlots.slice(2),
 			].filter((move, index, moveSlots) => moveSlots.find(othermove => othermove.id === move.id) === move);
+			// so all HP-related properties get re-initialized in setSpecies
+			pokemon.maxhp = 0;
 			pokemon.setSpecies(newSpecies, null);
 		},
 	},
