@@ -822,7 +822,7 @@ export abstract class Searcher {
 			}
 			}
 		}
-		results.deadTime = waitIncrements.length ? waitIncrements.reduce((c, p) => c + p) / waitIncrements.length : 0;
+		results.deadTime = waitIncrements.length ? this.calculateDead(waitIncrements) : 0;
 		results.deadPercent = !results.totalLines ? 100 : (waitIncrements.length / results.totalLines) * 100;
 		results.linesPerUser = (results.totalLines / Object.keys(results.users).length) || 0;
 		results.averagePresent = results.averagePresent / userstatCount;
@@ -832,6 +832,13 @@ export abstract class Searcher {
 			this.roomstatsCache.set(day, results);
 		}
 		return results;
+	}
+	private calculateDead(waitIncrements: number[]) {
+		let num = 0;
+		for (const k of waitIncrements) {
+			num += k;
+		}
+		return num / waitIncrements.length;
 	}
 }
 
