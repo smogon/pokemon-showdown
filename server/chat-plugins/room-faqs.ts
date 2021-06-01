@@ -65,7 +65,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		const useHTML = this.cmd.includes('html');
 		this.checkCan('ban', null, room);
-		if (useHTML && !user.can('declare', null, room, this.fullCmd)) {
+		if (useHTML && !user.can('addhtml', null, room, this.fullCmd)) {
 			return this.errorReply(`You are not allowed to use raw HTML in roomfaqs.`);
 		}
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
