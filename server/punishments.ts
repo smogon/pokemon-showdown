@@ -367,10 +367,10 @@ export const Punishments = new class {
 
 	saveRoomPunishments() {
 		FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
-			const saveTable = new Map<string, PunishmentEntry>();
+			const saveTable: [string, PunishmentEntry][] = [];
 			for (const roomid of Punishments.roomIps.keys()) {
 				for (const [userid, punishment] of Punishments.getPunishments(roomid, true)) {
-					saveTable.set(`${roomid}:${userid}`, punishment);
+					saveTable.push([`${roomid}:${userid}`, punishment]);
 				}
 			}
 			let buf = 'Punishment\tRoom ID:User ID\tIPs and alts\tExpires\tReason\r\n';
@@ -1847,13 +1847,13 @@ export const Punishments = new class {
 		return punishments;
 	}
 	getPunishments(roomid?: RoomID, ignoreMutes?: boolean) {
-		const punishmentTable = new Map<string, PunishmentEntry>();
+		const punishmentTable: [string, PunishmentEntry][] = [];
 		if (roomid && (!Punishments.roomIps.has(roomid) || !Punishments.roomUserids.has(roomid))) return punishmentTable;
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomIps.get(roomid)! : Punishments.ips).each((punishment, ip) => {
 			const {type, id, expireTime, reason, rest} = punishment;
 			if (id !== '#rangelock' && id.startsWith('#')) return;
-			let entry = punishmentTable.get(id);
+			let entry = punishmentTable.find(e => e[0] === id && e[1].punishType === type)?.[1];
 
 			if (entry) {
 				entry.ips.push(ip);
@@ -1868,14 +1868,13 @@ export const Punishments = new class {
 				reason,
 				rest: rest || [],
 			};
-			punishmentTable.set(id, entry);
+			punishmentTable.push([id, entry]);
 		});
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomUserids.get(roomid)! : Punishments.userids).each((punishment, userid) => {
 			const {type, id, expireTime, reason, rest} = punishment;
 			if (id.startsWith('#')) return;
-			let entry = punishmentTable.get(id);
-
+			let entry = punishmentTable.find(([curId, cur]) => id === curId && cur.punishType === type)?.[1];
 			if (!entry) {
 				entry = {
 					userids: [],
@@ -1885,7 +1884,7 @@ export const Punishments = new class {
 					reason,
 					rest: rest || [],
 				};
-				punishmentTable.set(id, entry);
+				punishmentTable.push([id, entry]);
 			}
 
 			if (userid !== id) entry.userids.push(userid as ID); // guaranteed as per above check
@@ -1894,9 +1893,9 @@ export const Punishments = new class {
 			const room = Rooms.get(roomid);
 			if (room?.muteQueue) {
 				for (const mute of room.muteQueue) {
-					punishmentTable.set(mute.userid, {
+					punishmentTable.push([mute.userid, {
 						userids: [], ips: [], punishType: "MUTE", expireTime: mute.time, reason: "", rest: [],
-					});
+					}]);
 				}
 			}
 		}
