@@ -47,11 +47,6 @@ export function visualizeFaq(faq: RoomFaq) {
 	return Chat.formatText(faq.source, true);
 }
 
-/**
- * Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}
- * This is done to allow easy checking whether a key is associated with
- * a value or alias as well as preserve backwards compatibility.
- */
 export function getAlias(roomid: RoomID, key: string) {
 	if (!roomFaqs[roomid]) return false;
 	const value = roomFaqs[roomid][key];
