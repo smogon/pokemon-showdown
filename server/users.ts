@@ -195,7 +195,7 @@ function isTrusted(userid: ID) {
 		}
 	}
 	const staffRoom = Rooms.get('staff');
-	const staffAuth = staffRoom && !!(staffRoom.auth.get(userid) || staffRoom.users[userid]);
+	const staffAuth = staffRoom && !!(staffRoom.auth.has(userid) || staffRoom.users[userid]);
 	return staffAuth ? userid : false;
 }
 
