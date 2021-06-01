@@ -3,7 +3,7 @@ import {FS, Utils} from '../../lib';
 export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
 
-export const roomFaqs: {[k: string]: {[k: string]: RoomFaq}} = (() => {
+export const roomFaqs: {[k: string]: {[k: string]: RoomFAQ}} = (() => {
 	const data = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
 	let save = false;
 	for (const k in data) {
@@ -18,7 +18,7 @@ export const roomFaqs: {[k: string]: {[k: string]: RoomFaq}} = (() => {
 	return data;
 })();
 
-interface RoomFaq {
+interface RoomFAQ {
 	source: string;
 	alias?: boolean;
 	html?: boolean;
@@ -28,7 +28,7 @@ function saveRoomFaqs() {
 	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(roomFaqs));
 }
 
-function convertFaq(faq: string): RoomFaq {
+function convertFaq(faq: string): RoomFAQ {
 	if (faq.startsWith('>')) {
 		return {
 			alias: true,
@@ -40,7 +40,7 @@ function convertFaq(faq: string): RoomFaq {
 	};
 }
 
-export function visualizeFaq(faq: RoomFaq) {
+export function visualizeFaq(faq: RoomFAQ) {
 	if (faq.html) {
 		return faq.source;
 	}
