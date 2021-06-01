@@ -96,7 +96,7 @@ class PunishmentMap extends Map<string, Punishment[]> {
 		const punishments = super.get(k);
 		if (punishments) {
 			this.removeExpiring(punishments);
-			if (punishments.length) return Punishments.byWeight(punishments, !!this.roomid);
+			if (punishments.length) return punishments;
 			this.delete(k);
 		}
 		return undefined;
@@ -154,7 +154,6 @@ class PunishmentMap extends Map<string, Punishment[]> {
 			}
 		}
 		list.push(punishment);
-		Punishments.byWeight(list, !!this.roomid);
 		return this;
 	}
 }
