@@ -34,4 +34,8 @@ describe('[Gen 7] Random Battle', () => {
 			}
 		});
 	});
+
+	it('should not generate Swords Dance + Ice Beam', () => {
+		testNotBothMoves('arceusground', options, 'swordsdance', 'icebeam');
+	});
 });

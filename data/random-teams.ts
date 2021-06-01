@@ -1302,8 +1302,6 @@ export class RandomTeams {
 			return (moves.has('earthquake') && species.id === 'miltank');
 		case 'Screen Cleaner':
 			return !!teamDetails.screens;
-		case 'Shadow Tag':
-			return (species.name === 'Gothitelle' && !isDoubles);
 		case 'Shed Skin':
 			// For Scrafty
 			return moves.has('dragondance');
@@ -1460,8 +1458,7 @@ export class RandomTeams {
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (ability === 'Unburden') return (moves.has('closecombat') || moves.has('curse')) ? 'White Herb' : 'Sitrus Berry';
 
-		// Move based logic
-		if (moves.has('trick') || moves.has('switcheroo') && !isDoubles) {
+		if (moves.has('trick') || (moves.has('switcheroo') && !isDoubles) || ability === 'Gorilla Tactics') {
 			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter.get('priority') && ability !== 'Triage') {
 				return 'Choice Scarf';
 			} else {
@@ -1954,11 +1951,13 @@ export class RandomTeams {
 			};
 			const customScale: {[k: string]: number} = {
 				// These Pokemon are too strong and need a lower level
-				zaciancrowned: 66, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, zacian: 72, kyogre: 73, zekrom: 74,
-				marshadow: 75, eternatus: 75, glalie: 78, haxorus: 80, inteleon: 80, cresselia: 83, octillery: 84, jolteon: 84,
-				swoobat: 84, dugtrio: 84, slurpuff: 84, polteageist: 84, wobbuffet: 86,
+				zaciancrowned: 65, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, zacian: 72, kyogre: 73, eternatus: 73,
+				zekrom: 74, marshadow: 75, glalie: 78, urshifurapidstrike: 79, haxorus: 80, inteleon: 80,
+				cresselia: 83, octillery: 84, jolteon: 84, swoobat: 84, dugtrio: 84, slurpuff: 84, polteageist: 84,
+				wobbuffet: 86, scrafty: 86,
 				// These Pokemon are too weak and need a higher level
-				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, arctozolt: 88, reuniclus: 87, slowking: 81,
+				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, solrock: 90, arctozolt: 88, reuniclus: 87,
+				decidueye: 87, noivern: 85, magnezone: 82, slowking: 81,
 			};
 			level = customScale[species.id] || tierScale[tier];
 		} else if (species.randomBattleLevel) {

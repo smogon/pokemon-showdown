@@ -87,6 +87,10 @@ describe('[Gen 8] Random Battle', () => {
 		testNotBothMoves('celesteela', options, 'leechseed', 'autotomize');
 		testNotBothMoves('celesteela', options, 'protect', 'autotomize');
 	});
+
+	it('Landorus-Therian should not get Fly and Stealth Rock on the same set', () => {
+		testNotBothMoves('landorustherian', options, 'fly', 'stealthrock');
+	});
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
@@ -102,6 +106,10 @@ describe('[Gen 8] Random Doubles Battle', () => {
 		for (const pkmn of ['pinsir', 'pikachu', 'zygarde']) {
 			testHasSTAB(pkmn, options);
 		}
+	});
+
+	it('should give Galarian Darmanitan a Choice Item', () => {
+		testSet('darmanitangalar', options, set => assert(set.item.startsWith('Choice ')));
 	});
 });
 
