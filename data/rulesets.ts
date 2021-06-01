@@ -1,4 +1,7 @@
 // Note: These are the rules that formats use
+
+import {Utils} from "../lib";
+
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
 
@@ -1118,6 +1121,35 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (letters.includes(move.id[0])) return null;
 			}
 			return this.checkCanLearn(move, species, setSources, set);
+		},
+	},
+	sketchmonsmovelegality: {
+		effectType: 'ValidatorRule',
+		name: 'Sketchmons Move Legality',
+		desc: "Pok&eacute;mon can learn one of any move they don't normally learn.",
+		checkCanLearn(move, species, lsetData, set) {
+			const problem = this.checkCanLearn(move, species, lsetData, set);
+			if (!problem) return null;
+			if (move.isZ || move.isMax || this.ruleTable.isRestricted(`move:${move.id}`)) return problem;
+			if ((set as any).sketchMove) {
+				return ` already has ${(set as any).sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
+			}
+			(set as any).sketchMove = move.name;
+			return null;
+		},
+		onValidateTeam(team) {
+			const sketches = new Utils.Multiset<string>();
+			for (const set of team) {
+				if ((set as any).sketchMove) {
+					sketches.add((set as any).sketchMove);
+				}
+			}
+			const overSketched = [...sketches.entries()].filter(([moveName, count]) => count > 1);
+			if (overSketched.length) {
+				return overSketched.map(([moveName, count]) => (
+					`You are limited to 1 of ${moveName} by Sketch Clause.\n(You have sketched ${moveName} ${count} times.)`
+				));
+			}
 		},
 	},
 	allowtradeback: {
