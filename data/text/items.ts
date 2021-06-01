@@ -2038,7 +2038,7 @@ export const ItemsText = {
 	},
 	ultranecroziumz: {
 		name: "Ultranecrozium Z",
-		desc: "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
+		desc: "Dusk Mane/Dawn Wings Necrozma; Ultra Burst, then Z-Move  Photon Geyser.",
 
 		transform: "  Bright light is about to burst out of [POKEMON]!",
 		activate: "[POKEMON] regained its true power through Ultra Burst!",

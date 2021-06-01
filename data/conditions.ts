@@ -760,6 +760,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.isWeather('toxiccloud')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
+			if (target.side.getSideCondition('antidote')) return;
 			if (source?.hasAbility('catastrophic') || target?.hasAbility('catastrophic')) {
 				this.damage(target.baseMaxhp / 8);
 			}
@@ -767,7 +768,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.damage(target.baseMaxhp / 16);
 			}
 		},
-		onEnd() {
+		onEnd(pokemon) {
 			this.add('-weather', 'none');
 		},
 	},

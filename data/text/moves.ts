@@ -206,7 +206,7 @@ export const MovesText = {
 	aurawheel: {
 		name: "Aura Wheel",
 		desc: "Has a 100% chance to raise the user's Speed by 1 stage. If the user is a Morpeko in Full Belly Mode, this move is Electric type. If the user is a Morpeko in Hangry Mode, this move is Dark type. This move cannot be used successfully unless the user's current form, while considering Transform, is Full Belly or Hangry Mode Morpeko.",
-		shortDesc: "Morpeko: Electric; Hangry: Dark; 100% +1 Spe.",
+		shortDesc: "Morpeko; Electric; Hangry; Dark; 100% +1 Spe.",
 	},
 	aurorabeam: {
 		name: "Aurora Beam",
@@ -249,7 +249,7 @@ export const MovesText = {
 	banefulbunker: {
 		name: "Baneful Bunker",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user become poisoned. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from moves. Contact: poison.",
+		shortDesc: "Protects from moves. Contact -> poison.",
 		descGen7: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user become poisoned. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 	},
 	barrage: {
@@ -1071,7 +1071,7 @@ export const MovesText = {
 	dragondarts: {
 		name: "Dragon Darts",
 		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. In Double Battles, this move attempts to hit the targeted Pokemon and its ally once each. If hitting one of these Pokemon would be prevented by immunity, protection, semi-invulnerability, an Ability, or accuracy, it attempts to hit the other Pokemon twice instead. If this move is redirected, it hits that target twice.",
-		shortDesc: "Hits twice. Doubles: Tries to hit each foe once.",
+		shortDesc: "Hits twice. Doubles; Tries to hit each foe once.",
 	},
 	dragonenergy: {
 		name: "Dragon Energy",
@@ -1192,7 +1192,7 @@ export const MovesText = {
 	electricterrain: {
 		name: "Electric Terrain",
 		desc: "For 5 turns, the terrain becomes Electric Terrain. During the effect, the power of Electric-type attacks made by grounded Pokemon is multiplied by 1.3 and grounded Pokemon cannot fall asleep; Pokemon already asleep do not wake up. Camouflage transforms the user into an Electric type, Nature Power becomes Thunderbolt, and Secret Power has a 30% chance to cause paralysis. Fails if the current terrain is Electric Terrain.",
-		shortDesc: "5 turns. Grounded: +Electric power, can't sleep.",
+		shortDesc: "5 turns. Grounded; +Electric power, can't sleep.",
 		descGen7: "For 5 turns, the terrain becomes Electric Terrain. During the effect, the power of Electric-type attacks made by grounded Pokemon is multiplied by 1.5 and grounded Pokemon cannot fall asleep; Pokemon already asleep do not wake up. Camouflage transforms the user into an Electric type, Nature Power becomes Thunderbolt, and Secret Power has a 30% chance to cause paralysis. Fails if the current terrain is Electric Terrain.",
 	},
 	electrify: {
@@ -1286,7 +1286,7 @@ export const MovesText = {
 	expandingforce: {
 		name: "Expanding Force",
 		desc: "If the current terrain is Psychic Terrain and the user is grounded, this move hits all opposing Pokemon and has its power multiplied by 1.5.",
-		shortDesc: "User on Psychic Terrain: 1.5x power, hits foes.",
+		shortDesc: "User on Psychic Terrain; 1.5x power, hits foes.",
 	},
 	explosion: {
 		name: "Explosion",
@@ -1976,23 +1976,23 @@ export const MovesText = {
 	grassyglide: {
 		name: "Grassy Glide",
 		desc: "If the current terrain is Grassy Terrain and the user is grounded, this move has its priority increased by 1.",
-		shortDesc: "User on Grassy Terrain: +1 priority.",
+		shortDesc: "User on Grassy Terrain; +1 priority.",
 	},
 	grassyterrain: {
 		name: "Grassy Terrain",
 		desc: "For 5 turns, the terrain becomes Grassy Terrain. During the effect, the power of Grass-type attacks used by grounded Pokemon is multiplied by 1.3, the power of Bulldoze, Earthquake, and Magnitude used against grounded Pokemon is multiplied by 0.5, and grounded Pokemon have 1/16 of their maximum HP, rounded down, restored at the end of each turn, including the last turn. Camouflage transforms the user into a Grass type, Nature Power becomes Energy Ball, and Secret Power has a 30% chance to cause sleep. Fails if the current terrain is Grassy Terrain.",
-		shortDesc: "5 turns. Grounded: +Grass power, +1/16 max HP.",
+		shortDesc: "5 turns. Grounded; +Grass power, +1/16 max HP.",
 		descGen7: "For 5 turns, the terrain becomes Grassy Terrain. During the effect, the power of Grass-type attacks used by grounded Pokemon is multiplied by 1.5, the power of Bulldoze, Earthquake, and Magnitude used against grounded Pokemon is multiplied by 0.5, and grounded Pokemon have 1/16 of their maximum HP, rounded down, restored at the end of each turn, including the last turn. Camouflage transforms the user into a Grass type, Nature Power becomes Energy Ball, and Secret Power has a 30% chance to cause sleep. Fails if the current terrain is Grassy Terrain.",
 	},
 	gravapple: {
 		name: "Grav Apple",
 		desc: "Has a 100% chance to lower the target's Defense by 1 stage. Power is multiplied by 1.5 during Gravity's effect.",
-		shortDesc: "Target: 100% -1 Def. During Gravity: 1.5x power.",
+		shortDesc: "Target; 100% -1 Def. During Gravity; 1.5x power.",
 	},
 	gravity: {
 		name: "Gravity",
 		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
-		shortDesc: "5 turns: no Ground immunities, 1.67x accuracy.",
+		shortDesc: "5 turns; no Ground immunities, 1.67x accuracy.",
 		descGen7: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
 		descGen6: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
 		descGen5: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
@@ -2567,7 +2567,7 @@ export const MovesText = {
 	junglehealing: {
 		name: "Jungle Healing",
 		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up, and has its status condition cured.",
-		shortDesc: "User and allies: healed 1/4 max HP, status cured.",
+		shortDesc: "User and allies; healed 1/4 max HP, status cured.",
 	},
 	karatechop: {
 		name: "Karate Chop",
@@ -2582,7 +2582,7 @@ export const MovesText = {
 	kingsshield: {
 		name: "King's Shield",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from damaging attacks. Contact: -1 Atk.",
+		shortDesc: "Protects from damaging attacks. Contact; -1 Atk.",
 		descGen7: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDescGen7: "Protects from damaging attacks. Contact: -2 Atk.",
 		descGen6: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
@@ -3155,7 +3155,7 @@ export const MovesText = {
 	mistyexplosion: {
 		name: "Misty Explosion",
 		desc: "If the current terrain is Misty Terrain and the user is grounded, this move's power is multiplied by 1.5. The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		shortDesc: "User faints. User on Misty Terrain: 1.5x power.",
+		shortDesc: "User faints. User on Misty Terrain; 1.5x power.",
 	},
 	mistyterrain: {
 		name: "Misty Terrain",
@@ -3320,7 +3320,7 @@ export const MovesText = {
 	obstruct: {
 		name: "Obstruct",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Defense lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from damaging attacks. Contact: -2 Def.",
+		shortDesc: "Protects from damaging attacks. Contact; -2 Def.",
 	},
 	oceanicoperetta: {
 		name: "Oceanic Operetta",
@@ -3458,7 +3458,7 @@ export const MovesText = {
 	pikapapow: {
 		name: "Pika Papow",
 		desc: "Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1.",
-		shortDesc: "Max happiness: 102 power. Can't miss.",
+		shortDesc: "Max happiness; 102 power. Can't miss.",
 	},
 	pinmissile: {
 		name: "Pin Missile",
@@ -3650,7 +3650,7 @@ export const MovesText = {
 	psychicterrain: {
 		name: "Psychic Terrain",
 		desc: "For 5 turns, the terrain becomes Psychic Terrain. During the effect, the power of Psychic-type attacks made by grounded Pokemon is multiplied by 1.3 and grounded Pokemon cannot be hit by moves with priority greater than 0, unless the target is an ally. Camouflage transforms the user into a Psychic type, Nature Power becomes Psychic, and Secret Power has a 30% chance to lower the target's Speed by 1 stage. Fails if the current terrain is Psychic Terrain.",
-		shortDesc: "5 turns. Grounded: +Psychic power, priority-safe.",
+		shortDesc: "5 turns. Grounded; +Psychic power, priority-safe.",
 		descGen7: "For 5 turns, the terrain becomes Psychic Terrain. During the effect, the power of Psychic-type attacks made by grounded Pokemon is multiplied by 1.5 and grounded Pokemon cannot be hit by moves with priority greater than 0, unless the target is an ally. Camouflage transforms the user into a Psychic type, Nature Power becomes Psychic, and Secret Power has a 30% chance to lower the target's Speed by 1 stage. Fails if the current terrain is Psychic Terrain.",
 	},
 	psychoboost: {
@@ -4064,7 +4064,7 @@ export const MovesText = {
 	scaleshot: {
 		name: "Scale Shot",
 		desc: "Hits two to five times. Lowers the user's Defense by 1 stage and raises the user's Speed by 1 stage after the last hit. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
-		shortDesc: "Hits 2-5 times. User: -1 Def, +1 Spe after last hit.",
+		shortDesc: "Hits 2-5 times. User; -1 Def, +1 Spe after last hit.",
 	},
 	scaryface: {
 		name: "Scary Face",
@@ -4991,7 +4991,7 @@ export const MovesText = {
 	terrainpulse: {
 		name: "Terrain Pulse",
 		desc: "Power doubles if the user is grounded and a terrain is active, and this move's type changes to match. Electric type during Electric Terrain, Grass type during Grassy Terrain, Fairy type during Misty Terrain, and Psychic type during Psychic Terrain.",
-		shortDesc: "User on terrain: power doubles, type varies.",
+		shortDesc: "User on terrain; power doubles, type varies.",
 	},
 	thief: {
 		name: "Thief",
@@ -5242,7 +5242,7 @@ export const MovesText = {
 	veeveevolley: {
 		name: "Veevee Volley",
 		desc: "Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1.",
-		shortDesc: "Max happiness: 102 power. Can't miss.",
+		shortDesc: "Max happiness; 102 power. Can't miss.",
 	},
 	venomdrench: {
 		name: "Venom Drench",
@@ -5518,8 +5518,8 @@ export const MovesText = {
 	},
 	anticyclone: {
 		name: "Anticyclone",
-		desc: "In weather: type varies, ends weather.",
-		shortDesc: "In weather: type varies, ends weather.",
+		desc: "In weather; type varies, ends weather.",
+		shortDesc: "In weather; type varies, ends weather.",
 	},
 	revengeblast: {
 		name: "Revenge Blast",
@@ -5544,7 +5544,7 @@ export const MovesText = {
 	webshield: {
 		name: "Web Shield",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Speed lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Web Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from damaging attacks. Contact: -1 Spe.",
+		shortDesc: "Protects from damaging attacks. Contact; -1 Spe.",
 	},
 	crystalwave: {
 		name: "Crystal Wave",
@@ -5789,7 +5789,7 @@ export const MovesText = {
 	forcefield: {
 		name: "Force Field",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to deal Special damage with the user have their Special Defense lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from damaging attacks. Special: -2 Sp.Def.",
+		shortDesc: "Protects from damaging attacks. Special; -2 Sp.Def.",
 	},
 	radiantpunch: {
 		name: "Radiant Punch",
@@ -5817,8 +5817,8 @@ export const MovesText = {
 	},
 	moonritual: {
 		name: "Moon Ritual",
-		desc: "+1 Atk, Def, Sp. Def. User: -25% HP.",
-		shortDesc: "+1 Atk, Def, Sp. Def. User: -25% HP.",
+		desc: "+1 Atk, Def, Sp. Def. User; -25% HP.",
+		shortDesc: "+1 Atk, Def, Sp. Def. User; -25% HP.",
 	},
 	abduction: {
 		name: "Abduction",
@@ -6066,5 +6066,89 @@ export const MovesText = {
 		name: "Regrowth",
 		desc: "The user restores 1/4 of its maximum HP. Raises the user's Special Attack by 1 stage.",
 		shortDesc: "Heals the user by 25% of its max HP. Raises the user's Sp. Atk by 1.",
+	},
+	cloakedassault: {
+		name: "Cloaked Assault",
+		desc: "If the weather is Toxic Cloud, this move does not check accuracy.",
+		shortDesc: "Can't miss in toxic cloud.",
+	},
+	antidote: {
+		name: "Antidote",
+		desc: "Until Toxic Cloud ends, allies are immune to cloud damage. Toxic Cloud only.",
+		shortDesc: "Until Toxic Cloud ends, allies are immune to cloud damage. Toxic Cloud only.",
+	},
+	ironmaw: {
+		name: "Iron Maw",
+		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "20% chance to lower the target's Def by 1.",
+	},
+	veiloflight: {
+		name: "Veil of Light",
+		desc: "Sets up a Veil of Light on the opposing side of the field, damaging opposing Pokemon that switches out. Fails if 2 layers are already set on the foe. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Light type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively.",
+		shortDesc: "Hurts foes on switch-out. Max 2 layers.",
+		damage: "  [POKEMON] was hurt by the Veil of Light!",
+	},
+	neurotoxicdart: {
+		name: "Neurotoxic Dart",
+		desc: "Has a 30% chance to flinch the target.",
+		shortDesc: "30% chance to flinch the target.",
+	},
+	nosedive: {
+		name: "Nose Dive",
+		desc: "If the target lost HP, the user takes recoil damage equal to 25% the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 25% recoil.",
+	},
+	burningbarrage: {
+		name: "Burning Barrage",
+		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times in one turn.",
+	},
+	mindpulse: {
+		name: "Mind Pulse",
+		desc: "Has a 10% chance to raise the user's Special Attack by 1 stage.",
+		shortDesc: "10% chance to raise the user's Special Attack by 1.",
+	},
+	jadeblade: {
+		name: "Jade Blade",
+		shortDesc: "No additional effect.",
+	},
+	windscythe: {
+		name: "Wind Scythe",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
+	},
+	primordialfang: {
+		name: "Primordial Fang",
+		desc: "Has a higher chance for a critical hit. Has a 20% chance to flinch the target.",
+		shortDesc: "High critical hit ratio, 20% chance to flinch the target.",
+	},
+	dunewave: {
+		name: "Dune Wave",
+		desc: "Has a 10% chance to start a Sand Storm.",
+		shortDesc: "10% chance to start a Sand Storm.",
+	},
+	nostalgia: {
+		name: "Nostalgia",
+		shortDesc: "Resets all of the user's stat stages to 0.",
+	},
+	blazingtail: {
+		name: "Blazing Tail",
+		desc: "Has a 10% chance to burn the target.",
+		shortDesc: "10% chance to burn the target.",
+	},
+	electrotail: {
+		name: "Electro Tail",
+		desc: "Has a 10% chance to paralyze the target.",
+		shortDesc: "10% chance to paralyze the target.",
+	},
+	aquawing: {
+		name: "Aqua Wing",
+		desc: "Has a 50% chance to raise the user's Special Defense by 1 stage.",
+		shortDesc: "50% chance to raise the user's Special Defense by 1.",
+	},
+	dreamwrecker: {
+		name: "Dream Wrecker",
+		desc: "Power doubles if the target is asleep. If the user has not fainted, the target wakes up.",
+		shortDesc: "Power doubles if target is asleep, and wakes it.",
 	},
 };
