@@ -443,7 +443,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		}
 	}
 	static displayPunishmentList(reportUserid: ID, proofString: string, title?: string) {
-		let buf = `<details class="readmore"><summary><strong>${title || 'Punish:'}</strong></summary><div class="infobox">`;
+		let buf = `<details class="readmore"><summary><strong>${title || 'Punish reported user:'}</strong></summary><div class="infobox">`;
 		const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
 		for (const name of punishments) {
 			buf += `<form data-submitsend="/msgroom staff,/${toID(name)} ${reportUserid},{reason} spoiler: ${proofString}">`;
@@ -812,12 +812,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const replayString = replays.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
-				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`
+				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`,
 			);
 			buf += HelpTicket.displayPunishmentList(
 				ticket.userid,
 				`spoiler:PMs with ${reportUserid}${replayString ? `, ${replayString}` : ''}`,
-				'Punish reporter:'
+				'<strong><span class="message-error">Punish reporter:</span></strong>'
 			);
 
 			if (replays.length) {
