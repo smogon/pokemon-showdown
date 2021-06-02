@@ -862,7 +862,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const replayString = replays.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
-				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`
+				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`,
+				'Punish reported user',
 			);
 			buf += HelpTicket.displayPunishmentList(
 				ticket.userid,
