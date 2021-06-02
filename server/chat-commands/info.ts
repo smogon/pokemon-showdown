@@ -169,7 +169,8 @@ export const commands: Chat.ChatCommands = {
 				buf += Utils.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = targetAlt.previousIDs.map(userid => {
-					const p = Punishments.userids.get(userid) || [];
+					const p = Punishments.userids.get(userid);
+					if (!p) return userid;
 					return p.map(
 						cur => `${userid}(${Punishments.punishmentTypes.get(cur.type)?.desc || 'punished'}` + `${cur.id !== targetAlt.id ? ` as ${cur.id}` : ``})`
 					).join(' | ');
