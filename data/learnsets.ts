@@ -430,6 +430,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			solarorb: ["8M", "7M"],
 			brightclaw: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, gender: "M", moves: ["scratch", "growl", "ember"], pokeball: "pokeball"},
@@ -544,6 +545,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			solarorb: ["8M", "7M"],
 			brightclaw: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	charizard: {
@@ -682,6 +684,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			brightclaw: ["8M", "7M"],
 			nosedive: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 70, moves: ["wingattack", "slash", "dragonrage", "firespin"], pokeball: "pokeball"},
@@ -1507,6 +1510,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			windblast: ["8M", "7M"],
 			starpierce: ["8M", "7M"],
 			nosedive: ["8M", "7M"],
+			hypervoice: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 61, gender: "M", nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, abilities: ["keeneye"], moves: ["whirlwind", "wingattack", "skyattack", "mirrormove"], pokeball: "cherishball"},
@@ -5083,6 +5087,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			brightslap: ["8M", "7M"],
 			swift: ["8M", "7M"],
 			deathray: ["8M", "7M"],
+			gammaray: ["8M", "7M"],
 		},
 	},
 	vulpix: {
@@ -5172,6 +5177,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			solarorb: ["8M", "7M"],
 			blindingflash: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 18, gender: "F", nature: "Quirky", ivs: {hp: 15, atk: 6, def: 3, spa: 25, spd: 13, spe: 22}, moves: ["tailwhip", "roar", "quickattack", "willowisp"], pokeball: "pokeball"},
@@ -5358,6 +5364,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			solarflare: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 50, gender: "M", nature: "Bold", ivs: {def: 31}, isHidden: true, moves: ["heatwave", "solarbeam", "psyshock", "willowisp"], pokeball: "cherishball"},
@@ -5817,6 +5824,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			focusup: ["8M", "7M"],
 			magicdust: ["8M", "7M"],
 			moonritual: ["8M", "7M"],
+			recover: ["8M", "7M"],
+			calmmind: ["8M", "7M"],
+			moonblast: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 1, level: 22},
@@ -8189,6 +8199,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			firejet: ["8M", "7M"],
 			brightclaw: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 32, gender: "F", nature: "Quiet", ivs: {hp: 11, atk: 24, def: 28, spa: 1, spd: 20, spe: 2}, abilities: ["intimidate"], moves: ["leer", "odorsleuth", "takedown", "flamewheel"], pokeball: "pokeball"},
@@ -8292,6 +8303,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sunhammer: ["8M", "7M"],
 			brightclaw: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 4, level: 50, abilities: ["intimidate"], moves: ["flareblitz", "thunderfang", "crunch", "extremespeed"], pokeball: "cherishball"},
@@ -8783,6 +8795,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 			focusup: ["8M", "7M"],
 			mindpulse: ["8M", "7M"],
+			thinkfast:["8M","7M"],	
 		},
 		encounters: [
 			{generation: 1, level: 6},
@@ -8894,6 +8907,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 			focusup: ["8M", "7M"],
 			mindpulse: ["8M", "7M"],
+			thinkfast:["8M","7M"],	
 		},
 		encounters: [
 			{generation: 2, level: 15},
@@ -18283,6 +18297,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			solarflare: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, gender: "M", moves: ["leer", "smog", "firepunch", "ember"], pokeball: "pokeball"},
@@ -18394,6 +18409,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			solarflare: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 4, level: 50, gender: "F", nature: "Modest", moves: ["flamethrower", "psychic", "hyperbeam", "solarbeam"], pokeball: "pokeball"},
@@ -18699,6 +18715,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zapcannon: ["7V"],
 			zenheadbutt: ["8M", "8L30", "7T", "7L35", "6T", "6L35", "5T", "5L35", "4T", "4L29"],
 			flareblitz: ["8M", "7M"],
+			headcharge: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 25, nature: "Docile", ivs: {hp: 14, atk: 19, def: 12, spa: 17, spd: 5, spe: 26}, abilities: ["intimidate"], moves: ["rage", "hornattack", "scaryface", "pursuit"], pokeball: "safariball"},
@@ -19611,6 +19628,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			firejet: ["8M", "7M"],
 			purifyingflame: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
+			playrough: ["8M", "7M"],
+			blazekick: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
@@ -24760,6 +24780,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dazingraze: ["8M", "7M"],
 			veiloflight: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			morningsun: ["8M", "7M"],
+			wish: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 37, gender: "F", moves: ["thunder", "thundershock", "thunderwave", "cottonspore"], pokeball: "pokeball"},
@@ -24853,6 +24875,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dazingraze: ["8M", "7M"],
 			veiloflight: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			morningsun: ["8M", "7M"],
+			wish: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 7, level: 11, pokeball: "pokeball"},
@@ -24955,6 +24979,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dazingraze: ["8M", "7M"],
 			veiloflight: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			morningsun: ["8M", "7M"],
+			wish: ["8M", "7M"],
 		},
 	},
 	mareepfioren: {
@@ -27021,6 +27047,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			phazingphantasm: ["8M", "7M"],
 			spiritcalling: ["8M", "7M"],
 			cloakedassault: ["8M", "7M"],
+			spookytricks: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, gender: "M", moves: ["growl", "psywave", "spite"], pokeball: "pokeball"},
@@ -27110,6 +27137,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			spiritcalling: ["8M", "7M"],
 			cloakedassault: ["8M", "7M"],
+			spookytricks: ["8M", "7M"],
 		},
 	},
 	unown: {
@@ -27262,6 +27290,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zapcannon: ["7V"],
 			zenheadbutt: ["7T", "7L32", "6T", "6L32", "5T", "5L41", "4T", "4L41"],
 			spectralfang: ["8M", "7M"],
+			psychocrash: ["8M", "7M"],
 		},
 	},
 	pineco: {
@@ -27640,6 +27669,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dive: ["8M", "7M"],
 			skydrop: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	gligar: {
@@ -28165,6 +28195,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M", "5M"],
 			zapcannon: ["7V"],
 			magicdarts: ["8M", "7M"],
+			mysticalfang: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, gender: "M", moves: ["tackle", "scaryface", "tailwhip", "charm"], pokeball: "pokeball"},
@@ -28276,6 +28307,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zapcannon: ["7V"],
 			magicdarts: ["8M", "7M"],
 			magicdarts: ["8M", "7M"],
+			mysticalfang: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 2, level: 15},
@@ -30872,6 +30904,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7T", "7L38", "7E", "6T", "6L38", "6E", "5T", "5L38", "5E", "4T", "4L38", "4E"],
 			zapkick: ["8M", "7M"],
+			hornleech: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, gender: "M", abilities: ["intimidate"], moves: ["tackle", "leer"], pokeball: "pokeball"},
@@ -31194,6 +31227,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sunhammer: ["8M", "7M"],
 			brightclaw: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
+			windblast: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 50, shiny: 1, moves: ["ember", "roar", "firespin", "stomp"]},
@@ -35877,7 +35912,13 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			flashbeam: ["8M", "7M"],
 			clearlight: ["8M", "7M"],
 			webshield: ["8M", "7M"],
-			dazingraze: ["8M", "7M"],
+			nastyplot: ["8M", "7M"],
+			calmmind: ["8M", "7M"],
+			pollenpuff: ["8M", "7M"],
+			solarorb: ["8M", "7M"],
+			aircutter: ["8M", "7M"],
+			solarflare: ["8M", "7M"],
+			mirrorshot: ["8M", "7M"],
 		},
 	},
 	whismur: {
@@ -36243,6 +36284,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wideguard: ["7E", "6E", "5E"],
 			workup: ["7M", "5M"],
 			dazingpressure: ["8M", "7M"],
+			drainpunch: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 18, moves: ["refresh", "brickbreak", "armthrust", "rocktomb"]},
@@ -36336,6 +36378,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M", "5M"],
 			meditate: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
+			drainpunch: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 6, level: 22},
@@ -36501,6 +36544,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			rockseal: ["8M", "7M"],
 			recover: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
+			scorchingsands: ["8M", "7M"],
 		},
 	},
 	skitty: {
@@ -38115,6 +38159,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			suddenzap: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 5, shiny: 1, moves: ["growl", "thunderwave", "mudsport"], pokeball: "pokeball"},
@@ -38205,6 +38250,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			suddenzap: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 5, shiny: 1, moves: ["growl", "thunderwave", "watersport"], pokeball: "pokeball"},
@@ -39923,6 +39969,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			brightclaw: ["8M", "7M"],
 			nosedive: ["8M", "7M"],
 			windscythe: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 45, moves: ["sandtomb", "crunch", "dragonbreath", "screech"], pokeball: "pokeball"},
@@ -40618,6 +40665,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			starpierce: ["8M", "7M"],
 			vacuumray: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
+			gammaray: ["8M", "7M"],
+			implosion: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, moves: ["tackle", "harden", "confusion"], pokeball: "pokeball"},
@@ -40732,6 +40781,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			vacuumray: ["8M", "7M"],
 			sunhammer: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
+			gammaray: ["8M", "7M"],
+			implosion: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, moves: ["tackle", "harden", "confusion"], pokeball: "pokeball"},
@@ -42192,6 +42243,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			vengefulspirit: ["8M", "7M"],
 			spiritcalling: ["8M", "7M"],
 			cloakedassault: ["8M", "7M"],
+			poltergeist: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 37, abilities: ["insomnia"], moves: ["helpinghand", "feintattack", "shadowball", "curse"]},
@@ -42610,7 +42662,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			bodyslam: ["7L41", "6L37", "5L37", "4L37", "3T", "3L37"],
 			brutalswing: ["7M"],
 			bulldoze: ["7M", "6M", "5M"],
-			bulletseed: ["7E", "6E", "5E", "4M", "3M"],
 			captivate: ["4M"],
 			confide: ["7M", "6M"],
 			curse: ["7E", "6E", "5E", "4E"],
@@ -42663,7 +42714,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			swagger: ["7M", "6M", "5M", "4M", "3T"],
 			sweetscent: ["7L6", "6L6", "5L21", "4L21", "3L21"],
 			swordsdance: ["7M", "6M", "5M", "4M", "3T"],
-			synthesis: ["7T", "7L50", "7E", "6T", "6L41", "6E", "5T", "5L41", "5E", "4T", "4L41", "4E", "4S0", "3L47"],
 			tailwind: ["7T", "6T", "5T", "4T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			twister: ["4T"],
@@ -42687,6 +42737,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			cometstorm: ["8M", "7M"],
 			vacuumray: ["8M", "7M"],
 			dragonhammer: ["8M", "7M"],
+			gammaray: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 4, level: 53, gender: "F", nature: "Jolly", abilities: ["chlorophyll"], moves: ["airslash", "synthesis", "sunnyday", "solarbeam"], pokeball: "cherishball"},
@@ -43562,6 +43613,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			tailslap: ["8M", "7M"],
 			poisontail: ["8M", "7M"],
 			tailglow: ["8M", "7M"],
+			flipturn: ["8M", "7M"],
+			powertrip: ["8M", "7M"],
 		},
 	},
 	gorebyss: {
@@ -43625,6 +43678,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			psyshock: ["8M", "7M"],
 			gigadrain: ["8M", "7M"],
 			storedpower: ["8M", "7M"],
+			flipturn: ["8M", "7M"],
 		},
 	},
 	relicanth: {
@@ -44016,6 +44070,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dazingpressure: ["8M", "7M"],
 			nosedive: ["8M", "7M"],
 			windscythe: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 50, moves: ["protect", "dragonbreath", "scaryface", "fly"], pokeball: "pokeball"},
@@ -45011,6 +45066,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			landslide: ["8M", "7M"],
 			blindingflash: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 45, shiny: 1, moves: ["slash", "bulkup", "earthquake", "fireblast"]},
@@ -45139,6 +45195,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dazingpressure: ["8M", "7M"],
 			nosedive: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 70, shiny: 1, moves: ["fly", "rest", "extremespeed", "outrage"]},
@@ -45440,6 +45497,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wormhole: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			deathray: ["8M", "7M"],
+			psychocrash: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 3, level: 30, shiny: 1, moves: ["taunt", "pursuit", "psychic", "superpower"]},
@@ -45471,6 +45529,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wormhole: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			deathray: ["8M", "7M"],
+			psychocrash: ["8M", "7M"],
 		},
 	deoxysdefense: {
 		eventOnly: true,
@@ -45487,6 +45546,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wormhole: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			deathray: ["8M", "7M"],
+			psychocrash: ["8M", "7M"],
 		},
 	deoxysspeed: {
 		eventOnly: true,
@@ -45503,6 +45563,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wormhole: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			deathray: ["8M", "7M"],
+			psychocrash: ["8M", "7M"],
 		},
 	turtwig: {
 		learnset: {
@@ -45911,6 +45972,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			radiantpunch: ["8M", "7M"],
 			cometpunch: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	infernape: {
@@ -46017,6 +46079,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sunhammer: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 100, gender: "M", moves: ["fireblast", "closecombat", "uturn", "grassknot"], pokeball: "cherishball"},
@@ -46467,7 +46530,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			astonish: ["8M", "7M"],
 			attract: ["8M", "7M"],
 			bravebird: ["8M", "7M"],
-			closecombat: ["8M", "7M"],
 			cosmicpower: ["8M", "7M"],
 			cometstorm: ["8M", "7M"],
 			confide: ["8M", "7M"],
@@ -46684,6 +46746,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
 			yawn: ["7L23", "6L28", "5L28", "4L28"],
+			flipturn: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 4, level: 4},
@@ -47252,6 +47315,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			flareblitz: ["8M", "7M"],
 			heatcrash: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	shieldon: {
@@ -47861,6 +47925,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			voltswitch: ["7M", "6M", "5M"],
 			electrotail: ["8M", "7M"],
+			suddenzap: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 6, level: 50, nature: "Impish", ivs: {hp: 31, atk: 31, def: 31, spa: 14, spd: 31, spe: 31}, isHidden: true, moves: ["nuzzle", "superfang", "followme", "protect"], pokeball: "cherishball"},
@@ -49274,7 +49339,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			agility: ["7E", "6E", "5E", "4E"],
 			aircutter: ["7E", "6E", "5E", "4T"],
 			attract: ["7M", "6M", "5M", "4M"],
-			boomburst: ["7E", "6E"],
 			captivate: ["4M"],
 			chatter: ["7L1", "6L1", "5L21", "4L21", "4S0"],
 			confide: ["7M", "7L1", "6M", "6L1"],
@@ -49512,6 +49576,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			twister: ["8E", "7E", "6E", "5E", "4T", "4E"],
 			draconicfangs: ["8M", "7M"],
 			jadeblade: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	gabite: {
@@ -49587,6 +49652,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dualstrike: ["8M", "7M"],
 			draconicfangs: ["8M", "7M"],
 			jadeblade: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	garchomp: {
@@ -49679,6 +49745,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			draconicfangs: ["8M", "7M"],
 			jadeblade: ["8M", "7M"],
 			windscythe: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 100, gender: "M", moves: ["outrage", "earthquake", "swordsdance", "stoneedge"], pokeball: "cherishball"},
@@ -50227,7 +50294,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			belch: ["8M", "7M"],
 			acidarmor: ["8M", "7M"],
 			acid: ["8M", "7M"],
-			toxicthread: ["8M", "7M"],
 			nitricstrike: ["8M", "7M"],
 		},
 	},
@@ -50299,7 +50365,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			belch: ["8M", "7M"],
 			acidarmor: ["8M", "7M"],
 			acid: ["8M", "7M"],
-			toxicthread: ["8M", "7M"],
 			nitricstrike: ["8M", "7M"],
 		},
 	},
@@ -50850,6 +50915,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			glowingbeam: ["8M", "7M"],
 			dazingraze: ["8M", "7M"],
 			veiloflight: ["8M", "7M"],
+			flipturn: ["8M", "7M"],
 		},
 	},
 	lumineon: {
@@ -50915,6 +50981,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			dazingraze: ["8M", "7M"],
 			veiloflight: ["8M", "7M"],
+			flipturn: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 4, level: 20},
@@ -51628,6 +51695,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			deathray: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 4, level: 47, shiny: 1, moves: ["metalclaw", "ancientpower", "dragonclaw", "roaroftime"]},
@@ -52681,6 +52749,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			cloakedassault: ["8M", "7M"],
 			windscythe: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 4, level: 100, moves: ["judgment", "roaroftime", "spacialrend", "shadowforce"], pokeball: "cherishball"},
@@ -52940,6 +53009,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			worryseed: ["7T", "6T", "5T"],
 			wrap: ["7L10", "6L10", "5L10"],
 			wringout: ["7L37", "6L37", "5L37"],
+			solarorb: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 5, gender: "M", nature: "Hardy", moves: ["growth", "synthesis", "energyball", "aromatherapy"], pokeball: "cherishball"},
@@ -53004,6 +53074,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			worryseed: ["7T", "6T", "5T"],
 			wrap: ["7L1", "6L1", "5L1"],
 			wringout: ["7L44", "6L44", "5L44"],
+			solarorb: ["8M", "7M"],
 		},
 	},
 	serperior: {
@@ -53075,6 +53146,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			worryseed: ["7T", "6T", "5T"],
 			wrap: ["7L1", "6L1", "5L1"],
 			wringout: ["7L50", "6L50", "6S1", "5L50"],
+			solarorb: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 100, gender: "M", moves: ["leafstorm", "substitute", "gigadrain", "leechseed"], pokeball: "cherishball"},
@@ -54338,6 +54410,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			willowisp: ["7M", "6M", "5M"],
 			workup: ["7M", "6S0", "5M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 6, level: 5, perfectIVs: 2, moves: ["workup", "honeclaws", "poweruppunch", "gigaimpact"], pokeball: "cherishball"},
@@ -54940,6 +55013,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L47", "6M", "6L47", "5M", "5L47"],
 			firejet: ["8M", "7M"],
+			zapkick: ["8M", "7M"],
+			jumpkick: ["8M", "7M"],
+			swordsdance: ["8M", "7M"],
 		},
 	},
 	roggenrola: {
@@ -59309,6 +59385,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			thinkfast: ["8M", "7M"],
 			brightslap: ["8M", "7M"],
 			mindpulse: ["8M", "7M"],
+			focusup: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 5, level: 34},
@@ -60065,6 +60142,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			voltswitch: ["8M", "8L40", "7M", "7L42", "6M", "6L42", "5M", "5L42"],
 			wildcharge: ["8M", "7M", "6M", "5M"],
 			electrotail: ["8M", "7M"],
+			suddenzap: ["8M", "7M"],
 		},
 	},
 	karrablast: {
@@ -61126,6 +61204,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			implosion: ["8M", "7M"],
 			astroshift: ["8M", "7M"],
 			meteorshower: ["8M", "7M"],
+			gammaray: ["8M", "7M"],
 		},
 	},
 	klanglympeian: {
@@ -61175,6 +61254,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			implosion: ["8M", "7M"],
 			astroshift: ["8M", "7M"],
 			meteorshower: ["8M", "7M"],
+			gammaray: ["8M", "7M"],
 		},
 	},
 	klinklanglympeian: {
@@ -61231,6 +61311,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			confusion: ["8M", "7M"],
 			psybeam: ["8M", "7M"],
 			deathray: ["8M", "7M"],
+			gammaray: ["8M", "7M"],
 		},
 	},
 	tynamo: {
@@ -62129,6 +62210,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			substitute: ["8M", "7M"],			
 			ironmaw: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	cubchoo: {
@@ -62995,6 +63077,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			draconicfangs: ["8M", "7M"],
 			dragonhammer: ["8M", "7M"],
 			brightclaw: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
+			dragonrush: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 1, shiny: true, moves: ["leer", "scratch"], pokeball: "pokeball"},
@@ -63452,6 +63536,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
             xscissor: ["8M"],
         	veiloflight: ["8M", "7M"],
 			jadeblade: ["8M", "7M"],
+			dazingpressure: ["8M", "7M"],
+			dazingraze: ["8M", "7M"],
+			brightclaw: ["8M", "7M"],
 		},
 	},
 	bisharpalmian: {
@@ -63546,6 +63633,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			landslide: ["8M", "7M"],
 			jadeblade: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
+			uturn: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 7, level: 33},
@@ -64008,6 +64096,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wrap: ["7E", "6E", "5E"],
 			magmabath: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	durant: {
@@ -64924,6 +65013,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			anticyclone: ["8M", "7M"],
 			radiantpunch: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			airslash: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 40, shiny: 1, moves: ["revenge", "shockwave", "healblock", "agility"]},
@@ -65038,6 +65128,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			brightclaw: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 50, moves: ["dragonbreath", "slash", "extrasensory", "fusionflare"]},
@@ -65230,6 +65321,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			uturn: ["8M", "7M", "6M", "6S3", "5M"],
 			weatherball: ["8M"],
 			dunewave: ["8M", "7M"],
+			airslash: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 70, shiny: 1, moves: ["rockslide", "earthquake", "sandstorm", "fissure"]},
@@ -65717,6 +65809,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7T", "6T", "5T"],
 			dualstrike: ["8M", "7M"],
+			darkmelody: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 5, level: 15, moves: ["quickattack", "confusion", "round"], pokeball: "cherishball"},
@@ -66477,6 +66570,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M"],
 			revengeblast: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			purifyingflame: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 6, level: 15, gender: "F", nature: "Hardy", moves: ["scratch", "flamethrower", "hiddenpower"], pokeball: "cherishball"},
@@ -66551,6 +66645,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["7T", "6T"],
 			revengeblast: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			purifyingflame: ["8M", "7M"],
 		},
 	},
 	delphox: {
@@ -66636,6 +66731,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			solarorb: ["8M", "7M"],
 			solarflare: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			purifyingflame: ["8M", "7M"],
 		},
 	},
 	froakie: {
@@ -70440,6 +70536,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			voltswitch: ["8M", "8L30", "7M", "7L26", "6M", "6L26"],
 			wildcharge: ["8M", "7M", "6M"],
 			electrotail: ["8M", "7M"],
+			suddenzap: ["8M", "7M"],
 		},
 	},
 	carbink: {
@@ -70515,6 +70612,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			lightwave: ["8M", "7M"],
 			cometstorm: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
+			shieldbeam: ["8M", "7M"],
 		},
 	},
 	goomy: {
@@ -71821,6 +71919,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
+			shieldbeam: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 6, level: 50, moves: ["diamondstorm", "reflect", "return", "moonblast"], pokeball: "cherishball"},
@@ -76460,6 +76559,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "7T"],
 			zingzap: ["8L40", "7L33"],
 			electrotail: ["8M", "7M"],
+			suddenzap: ["8M", "7M"],
 		},
 	},
 	togedemarutotem: {
@@ -77190,6 +77290,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			cometpunch: ["8M", "7M"],
 			brightclaw: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 7, level: 41},
@@ -78425,6 +78526,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gammaray: ["8M", "7M"],
 			draconicfangs: ["8M", "7M"],
 			cloakedassault: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 7, level: 70, moves: ["thrash", "gastroacid", "heavyslam", "wringout"]},
@@ -78893,6 +78995,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wormhole: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			antidote: ["8M", "7M"],
+			uturn: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, moves: ["charm", "venomdrench", "nastyplot", "poisonjab"], pokeball: "pokeball"},
@@ -79293,7 +79396,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			mudslap: ["8M", "7M"],
 			mudbomb: ["8M", "7M"],
 			landslide: ["8M", "7M"],
-			rototiller: ["8M", "7M"],	
+			rototiller: ["8M", "7M"],
 		},
 	},
 	melmetal: {
@@ -81398,6 +81501,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sunnyday: ["8M"],
 			venoshock: ["8M"],
 			wrap: ["8L5"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	centiskorch: {
@@ -81450,6 +81554,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			xscissor: ["8M"],
 			purifyingflame: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	clobbopus: {
@@ -82552,6 +82657,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			voltswitch: ["8M"],
 			wildcharge: ["8M"],
 			cloakedassault: ["8M", "7M"],
+			suddenzap: ["8M", "7M"],
 		},
 	},
 	cufant: {
@@ -83997,6 +84103,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wonderroom: ["8M"],
 			zenheadbutt: ["8M"],
 			mindpulse: ["8M", "7M"],
+			crushingice: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 8, level: 80, moves: ["glaciallance", "psychic", "irondefense", "gigadrain"]},
@@ -85320,6 +85427,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			magmabath: ["8M", "7M"],
 			brightclaw: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 		eventData: [
 			{generation: 7, level: 50, moves: ["celebrate", "eruption", "magnitude", "camouflage"], pokeball: "cherishball"},
@@ -85555,6 +85663,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			cometpunch: ["8M", "7M"],
 			asteroidbelt: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	miasmaw: {
@@ -88363,6 +88472,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M"],
 			rockseal: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	smoguana: {
@@ -88425,6 +88535,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M"],
 			rockseal: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	swirlpool: {
@@ -89226,6 +89337,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dunewave: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
 			aquawing: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	ibroxiz: {
@@ -89685,6 +89797,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			toxic:["8M","7M"],
 			blindingflash: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	vampayar: {
@@ -89884,6 +89997,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			toxic: ["8M", "7M"], 
 			purifyingflame: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	ribbostuma: {
@@ -89956,6 +90070,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			purifyingflame: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	vektument: {
@@ -90057,6 +90172,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			brightclaw: ["8M", "7M"],
 			dazingraze: ["8M", "7M"],
 			veiloflight: ["8M", "7M"],
+			closecombat: ["8M", "7M"],
 		},
 	},
 	durantsinnoh: {
@@ -90286,6 +90402,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sleeptalk: ["8M", "7M"],
 			rest: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	colburnire: {
@@ -90961,6 +91078,11 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			confide: ["8M", "7M"],
 			substitute: ["8M", "7M"],		
 			dunewave: ["8M", "7M"],
+			superpower: ["8M", "7M"],
+			hammerarm: ["8M", "7M"],
+			thunderpunch: ["8M", "7M"],
+			flail: ["8M", "7M"],
+			roar: ["8M", "7M"],
 		},
 	},
 	cervumis: {
@@ -91077,6 +91199,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			trickroom: ["8M", "7M"],			
 			primordialfang: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
+			rockslide: ["8M", "7M"],
 		},
 	},
 	kyteroids: {
@@ -91258,6 +91381,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			confide: ["8M", "7M"],
 			substitute: ["8M", "7M"],			
 			dunewave: ["8M", "7M"],
+			dragondance: ["8M", "7M"],			
+			aquatail: ["8M", "7M"],
 		},
 	},
 	terraloosa: {
@@ -91629,6 +91754,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			ragnarok: ["8M", "7M"],			
 			antidote: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			blazingtail: ["8M", "7M"],
 		},
 	},
 	scarkraken: {
@@ -91771,7 +91897,21 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			cottonguard: ["8M", "7M"],
 			sunnyday: ["8M", "7M"],
 			raindance: ["8M", "7M"],
-			aerialace: ["8M", "7M"],		
+			aerialace: ["8M", "7M"],
+			protect: ["8M", "7M"],
+			toxic: ["8M", "7M"],
+			rest: ["8M", "7M"],
+			attract: ["8M", "7M"],
+			doubleedge: ["8M", "7M"],
+			doubleteam: ["8M", "7M"],
+			facade: ["8M", "7M"],
+			round: ["8M", "7M"],
+			swagger: ["8M", "7M"],
+			sleeptalk: ["8M", "7M"],
+			confide: ["8M", "7M"],
+			substitute: ["8M", "7M"],
+			hyperbeam: ["8M", "7M"],
+			gigaimpact: ["8M", "7M"],			
 		},
 	},
 	fortuxin: {
@@ -91800,7 +91940,21 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			confuseray: ["8M", "7M"],
 			hypnosis: ["8M", "7M"],
 			dreameater: ["8M", "7M"],
-			nightmare: ["8M", "7M"],			
+			nightmare: ["8M", "7M"],
+			protect: ["8M", "7M"],
+			toxic: ["8M", "7M"],
+			rest: ["8M", "7M"],
+			attract: ["8M", "7M"],
+			doubleedge: ["8M", "7M"],
+			doubleteam: ["8M", "7M"],
+			facade: ["8M", "7M"],
+			round: ["8M", "7M"],
+			swagger: ["8M", "7M"],
+			sleeptalk: ["8M", "7M"],
+			confide: ["8M", "7M"],
+			substitute: ["8M", "7M"],
+			hyperbeam: ["8M", "7M"],
+			gigaimpact: ["8M", "7M"],	
 		},
 	},
 	sabrenom: {
@@ -91840,6 +91994,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			confide:["8M","7M"],
 			toxic:["8M","7M"],			
 			primordialfang: ["8M", "7M"],
+			doubleedge:["8M","7M"],	
 		},
 	},
 	mossedge: {
@@ -91869,7 +92024,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			round:["8M","7M"],
 			swagger:["8M","7M"],
 			confide:["8M","7M"],
-			toxic:["8M","7M"],		
+			toxic:["8M","7M"],
+			doubleedge:["8M","7M"],	
 		},
 	},
 	beatboon: {
@@ -92126,7 +92282,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			spikes: ["8M", "7M"],
 			petalblizzard: ["8M", "7M"],
 			woodhammer: ["8M", "7M"],
-			strengthsap: ["8M", "7M"],
 			seedbomb: ["8M", "7M"],
 			leechseed: ["8M", "7M"],
 			uturn: ["8M", "7M"],
@@ -92142,7 +92297,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			round:["8M","7M"],
 			swagger:["8M","7M"],
 			confide:["8M","7M"],
-			toxic:["8M","7M"],			
+			toxic:["8M","7M"],
+			synthesis:["8M","7M"],					
 		},
 	},
 	pyratrata: {
@@ -92499,7 +92655,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			auroraveil: ["8M", "7M"],
 			hail: ["8M", "7M"],
 			grassyterrain: ["8M", "7M"],
-			earthpower: ["8M", "7M"],
 			crushingice: ["8M", "7M"],
 			mudshot: ["8M", "7M"],
 			mudslap: ["8M", "7M"],
@@ -93057,6 +93212,21 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			scratch: ["8M", "7M"],			
 			nosedive: ["8M", "7M"],
 			windscythe: ["8M", "7M"],
+			protect: ["8M", "7M"],
+			toxic: ["8M", "7M"],
+			rest: ["8M", "7M"],
+			attract: ["8M", "7M"],
+			doubleedge: ["8M", "7M"],
+			doubleteam: ["8M", "7M"],
+			facade: ["8M", "7M"],
+			round: ["8M", "7M"],
+			swagger: ["8M", "7M"],
+			sleeptalk: ["8M", "7M"],
+			confide: ["8M", "7M"],
+			substitute: ["8M", "7M"],
+			hyperbeam: ["8M", "7M"],
+			gigaimpact: ["8M", "7M"],
+			windblast: ["8M", "7M"],
 		},
 	},
 };

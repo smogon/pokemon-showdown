@@ -34,7 +34,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
-			if (this.randomChance(1, 4)) {
+			if (this.randomChance(1, 4) && !pokemon.hasAbility('quickfeet')) {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}
@@ -63,6 +63,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			pokemon.statusData.time--;
 			if (pokemon.statusData.time <= 0) {
 				pokemon.cureStatus();
+				if (pokemon.hasAbility('earlybird')) {
+					this.heal(pokemon.baseMaxhp / 4, pokemon);
+				}
 				return;
 			}
 			this.add('cant', pokemon, 'slp');
@@ -761,6 +764,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onWeather(target, source, effect) {
 			if (target.side.getSideCondition('antidote')) return;
+			if (target.hasAbility('poisonheal')) return;
+			if (target.hasAbility('immunity')) return;
 			if (source?.hasAbility('catastrophic') || target?.hasAbility('catastrophic')) {
 				this.damage(target.baseMaxhp / 8);
 			}

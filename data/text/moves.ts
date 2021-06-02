@@ -6054,8 +6054,8 @@ export const MovesText = {
 	},
 	earthenshell: {
 		name: "Earthen Shell",
-		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
+		desc: "Has a 20% chance to confuse the target.",
+		shortDesc: "20% chance to confuse the target.",
 	},
 	mysticalfang: {
 		name: "Mystical Fang",
@@ -6094,9 +6094,9 @@ export const MovesText = {
 		shortDesc: "30% chance to flinch the target.",
 	},
 	nosedive: {
-		name: "Nose Dive",
-		desc: "If the target lost HP, the user takes recoil damage equal to 25% the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 25% recoil.",
+		name: "Nosedive",
+		desc: "If this attack is not successful, the user loses quarter of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage.",
+		shortDesc: "User is hurt by 25% of its max HP if it misses.",
 	},
 	burningbarrage: {
 		name: "Burning Barrage",
@@ -6124,8 +6124,8 @@ export const MovesText = {
 	},
 	dunewave: {
 		name: "Dune Wave",
-		desc: "Has a 10% chance to start a Sand Storm.",
-		shortDesc: "10% chance to start a Sand Storm.",
+		desc: "Has a 10% chance to start a Sandstorm.",
+		shortDesc: "10% chance to start a Sandstorm.",
 	},
 	nostalgia: {
 		name: "Nostalgia",

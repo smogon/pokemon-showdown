@@ -309,7 +309,7 @@ export const AbilitiesText = {
 	},
 	earlybird: {
 		name: "Early Bird",
-		shortDesc: "This Pokemon's sleep counter drops by 2 instead of 1.",
+		shortDesc: "This Pokemon's sleep counter drops by 2 instead of 1. User heals 1/4 when waking up.",
 	},
 	effectspore: {
 		name: "Effect Spore",
@@ -416,8 +416,8 @@ export const AbilitiesText = {
 	},
 	galewings: {
 		name: "Gale Wings",
-		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
-		shortDescGen6: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		shortDesc: "If this Pokemon is at half HP or more, its Flying-type moves have their priority increased by 1.",
+		shortDescGen6: "If HP >= 50%, this Pokemon's Flying-type moves have their priority increased by 1.",
 	},
 	galvanize: {
 		name: "Galvanize",
@@ -532,7 +532,7 @@ export const AbilitiesText = {
 	},
 	immunity: {
 		name: "Immunity",
-		shortDesc: "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it.",
+		shortDesc: "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it. Toxic Cloud immunity",
 	},
 	imposter: {
 		name: "Imposter",
@@ -818,10 +818,8 @@ export const AbilitiesText = {
 	},
 	owntempo: {
 		name: "Own Tempo",
-		desc: "This Pokemon cannot be confused. Immune to Intimidate, Daunt, Petrify.",
-		shortDesc: "This Pokemon cannot be confused. Immune to Intimidate, Daunt, Petrify.",
-		descGen7: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
-		shortDescGen7: "This Pokemon cannot be confused.",
+		desc: "This Pokemon cannot be confused. Immune to Intimidate, Daunt, Petrify and Speed drop.",
+		shortDesc: "This Pokemon cannot be confused. Immune to Intimidate, Daunt, Petrify, speed drop.",
 
 		block: "  [POKEMON] cannot be confused!",
 	},
@@ -874,8 +872,8 @@ export const AbilitiesText = {
 	},
 	poisonheal: {
 		name: "Poison Heal",
-		desc: "If this Pokemon is poisoned, it restores 1/8 of its maximum HP, rounded down, at the end of each turn instead of losing HP.",
-		shortDesc: "This Pokemon is healed by 1/8 of its max HP each turn when poisoned; no HP loss.",
+		desc: "If this Pokemon is poisoned, it restores 1/8 of its maximum HP, rounded down, at the end of each turn instead of losing HP. Toxic Cloud immunity",
+		shortDesc: "This Pokemon is healed by 1/8 of its max HP each turn when poisoned; no HP loss. Toxic Cloud immunity",
 	},
 	poisonpoint: {
 		name: "Poison Point",
@@ -969,8 +967,8 @@ export const AbilitiesText = {
 	},
 	quickfeet: {
 		name: "Quick Feet",
-		desc: "If this Pokemon has a major status condition, its Speed is multiplied by 1.5; the Speed drop from paralysis is ignored.",
-		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop from paralysis.",
+		desc: "If this Pokemon has a major status condition, its Speed is multiplied by 1.5; paralysis effects are ignored.",
+		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores paralysis effects.",
 	},
 	raindish: {
 		name: "Rain Dish",
@@ -1229,7 +1227,7 @@ export const AbilitiesText = {
 	},
 	steadfast: {
 		name: "Steadfast",
-		shortDesc: "If this Pokemon flinches, its Speed is raised by 1 stage.",
+		shortDesc: "If this Pokemon flinches, is intimidated, daunted, petrified, its Speed is raised by 1 stage.",
 	},
 	steamengine: {
 		name: "Steam Engine",

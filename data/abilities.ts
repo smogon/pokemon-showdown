@@ -1258,7 +1258,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
+			if (move?.type === 'Flying' && pokemon.hp > pokemon.maxhp / 2) return priority + 1;
 		},
 		name: "Gale Wings",
 		rating: 3,
@@ -2590,6 +2590,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
                 delete boost.spa;
                 this.add('-immune', target, '[from] ability: Own Tempo');
             }
+			if (source && target === source) return;
+			if (boost.spe && boost.spe < 0) {
+				delete boost.spe;
+				if (!(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+					this.add("-fail", target, "unboost", "Speed", "[from] ability: Own Tempo", "[of] " + target);
+				}
+			}
 		},
 		name: "Own Tempo",
 		rating: 1.5,
@@ -3127,10 +3134,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (attacker.gender === defender.gender) {
 					this.debug('Rivalry boost');
 					return this.chainModify(1.25);
-				} else {
-					this.debug('Rivalry weaken');
-					return this.chainModify(0.75);
-				}
+				} 
+				// else {
+					// this.debug('Rivalry weaken');
+					// return this.chainModify(0.75);
+				// }
 			}
 		},
 		name: "Rivalry",
@@ -3711,6 +3719,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	steadfast: {
 		onFlinch(pokemon) {
 			this.boost({spe: 1});
+		},
+		onBoost(boost, target, source, effect) {
+			if (effect.id == 'intimidate' || effect.id == 'daunt' || effect.id == 'petrify') {
+				this.boost({spe: 1});
+			}
+			return;
 		},
 		name: "Steadfast",
 		rating: 1,
@@ -4869,7 +4883,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         onBasePower(basePower, attacker, defender, move) {
             if (move.flags['slap']) {
                 this.debug('Slapper boost');
-                return this.chainModify(1.2);
+                return this.chainModify(1.3);
             }
         },
         name: "Slapper",
@@ -5696,8 +5710,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 1065,
 	},
 	thunderdelight: {
-		onAfterMove(pokemon, target, move) {
-			if (move.type === 'Electric') this.heal(pokemon.baseMaxhp / 10, pokemon);
+		onFoeDamagingHit(damage, target, source, move) {
+			if (move.type === 'Electric') this.heal(source.baseMaxhp / 10, source);
 		},
 		name: "Thunder Delight",
 		rating: 3,
@@ -5720,7 +5734,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
-				this.debug('ODesperation boost');
+				this.debug('Desperation boost');
 				return this.chainModify(1.5);
 			}
 		},
