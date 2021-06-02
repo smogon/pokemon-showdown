@@ -4,6 +4,7 @@ const BACKGROUND_COLOR = "#0000FF";
 const HEIGHT = 40;
 const MAX_CATEGORY_COUNT = 5;
 const MAX_QUESTION_COUNT = 5;
+const BUZZ_COOLDOWN = 500; // 0.5 seconds
 
 interface Question {
 	question: string;
@@ -258,7 +259,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	allowBuzzes() {
 		this.canBuzz = true;
 		this.update(true);
-		this.timeout = setTimeout(() => this.allowAllBuzzes(), 1000 * 1 / 3);
+		this.timeout = setTimeout(() => this.allowAllBuzzes(), BUZZ_COOLDOWN);
 	}
 
 	allowAllBuzzes() {
@@ -347,7 +348,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	doFinals() {
-		if (!this.playerTable) this.room?.add(`Could not play finals because the player table does not exist.`);
+		if (!this.playerTable) return this.room?.add(`Could not play finals because the player table does not exist.`);
 		this.order = Object.keys(this.playerTable);
 		this.doFinalPlayer();
 	}
@@ -692,6 +693,10 @@ export const commands: Chat.ChatCommands = {
 		wager(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
+			if (user.lastCommand !== `/jeopardy wager ${target}`) {
+				user.lastCommand = `/jeopardy wager ${target}`;
+				return this.sendReply(`To confirm your wager of ${target}, type '${user.lastCommand}' again.`);
+			}
 			game.wager(target, user);
 		},
 
