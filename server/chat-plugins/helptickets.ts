@@ -1,5 +1,6 @@
 import {FS, Utils, Net, ProcessManager} from '../../lib';
 import {getCommonBattles} from '../chat-commands/info';
+import {checkRipgrepAvailability} from '../config-loader';
 import type {Punishment} from '../punishments';
 import type {PartialModlogEntry, ModlogID} from '../modlog';
 
@@ -427,7 +428,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 	static async getTextLogs(userid: ID, date?: string) {
 		const results = [];
-		if (Config.ripgrepmodlog) {
+		if (await checkRipgrepAvailability()) {
 			const args = [`-e`, `userid":"${userid}`, '--no-filename'];
 			const lines = await ProcessManager.exec([
 				`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
@@ -2147,7 +2148,7 @@ export const commands: Chat.ChatCommands = {
 		logs(target, room, user) {
 			this.checkCan('lock');
 			const [targetString, dateString] = Utils.splitFirst(target, ',').map(i => i.trim());
-			const id = toID(targetString)
+			const id = toID(targetString);
 			if (!id) return this.errorReply(`Specify a userid.`);
 			return this.parse(`/j view-help-logs-${id}${dateString ? `--${dateString}` : ''}`);
 		},
