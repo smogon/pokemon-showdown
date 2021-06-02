@@ -94,6 +94,14 @@ export function writeTickets() {
 	);
 }
 
+async function convertRoomPunishments() {
+	for (const [id, punishment] of Punishments.getPunishments('staff')) {
+		if (punishment.punishType !== 'TICKETBAN') continue;
+		Punishments.roomUnpunish('staff', id, 'TICKETBAN');
+		await HelpTicket.ban(id as ID, punishment.reason);
+	}
+}
+
 function writeStats(line: string) {
 	// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
 	const date = new Date();
@@ -684,6 +692,9 @@ for (const room of Rooms.rooms.values()) {
 	const game = room.getGame(HelpTicket)!;
 	if (game.ticket && tickets[game.ticket.userid]) game.ticket = tickets[game.ticket.userid];
 }
+
+// convert old-style Staff-room ticketbans to regular ones
+void convertRoomPunishments();
 
 const delayWarningPreamble = `Hi! All global staff members are busy right now and we apologize for the delay. `;
 const delayWarnings: {[k: string]: string} = {
