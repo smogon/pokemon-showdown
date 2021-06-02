@@ -347,6 +347,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	doFinals() {
+		if (!this.playerTable) this.room?.add(`Could not play finals because the player table does not exist.`);
 		this.order = Object.keys(this.playerTable);
 		this.doFinalPlayer();
 	}
