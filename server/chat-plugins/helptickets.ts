@@ -451,7 +451,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		}
 	}
 	static displayPunishmentList(reportUserid: ID, proofString: string, title?: string) {
-		let buf = `<details class="readmore"><summary><strong>${title || 'Punish reported user:'}</strong></summary><div class="infobox">`;
+		let buf = `<details class="readmore"><summary>${title || 'Punish reported user:'}</summary><div class="infobox">`;
 		const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
 		for (const name of punishments) {
 			buf += `<form data-submitsend="/msgroom staff,/${toID(name)} ${reportUserid},{reason} spoiler: ${proofString}">`;
@@ -797,17 +797,18 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const sharedBattles = getCommonBattles(ticket.userid, null, reportUserid, null, conn);
 			let replays = getBattleLinks(ticket.text[1]).concat(getBattleLinks(ticket.text[1]));
 			replays = replays.filter((url, index) => replays.indexOf(url) === index).concat(sharedBattles);
-			buf += `<br /><strong>Reported user:</strong> ${reportUserid} `;
-			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br /><br />`;
 			const replayString = replays.map(u => `https://${Config.routes.client}/${u}`).join(', ');
+			buf += HelpTicket.displayPunishmentList(
+				ticket.userid,
+				`spoiler:PMs with ${reportUserid} (as ${ticket.userid})${replayString ? `, ${replayString}` : ''}`,
+				`Punish <strong>${ticket.userid}</strong> (reporter)`
+			);
+			buf += `<strong>Reported user:</strong> ${reportUserid} </strong>`;
+			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
 				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`,
-			);
-			buf += HelpTicket.displayPunishmentList(
-				ticket.userid,
-				`spoiler:PMs with ${reportUserid}${replayString ? `, ${replayString}` : ''}`,
-				'<strong><span class="message-error">Punish reporter:</span></strong>'
+				`Punish <strong>${reportUserid}</strong> (reported user)`
 			);
 
 			if (replays.length) {
@@ -890,17 +891,21 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			rooms = rooms.filter((url, index) => rooms.indexOf(url) === index);
 			const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
+			buf += HelpTicket.displayPunishmentList(
+				ticket.userid,
+				proof,
+				`Punish <strong>${ticket.userid}</strong> (reporter)`
+			);
 			if (ticket.meta) {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
 					buf += `<br /><strong>Reported user:</strong> ${meta} `;
-					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br /><br />`;
-					buf += HelpTicket.displayPunishmentList(toID(meta), proof);
+					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br />`;
+					buf += HelpTicket.displayPunishmentList(toID(meta), proof, `Punish <strong>${toID(meta)}</strong> (reported user)`);
 				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
 					rooms.push(meta);
 				}
 			}
-			buf += HelpTicket.displayPunishmentList(ticket.userid, proof, 'Punish reporter:');
 			buf += `<strong>Battle links:</strong> ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			buf += `<br />`;
 			const battleLogHTML = await HelpTicket.visualizeBattleLogs(rooms);
@@ -1311,16 +1316,16 @@ export const pages: Chat.PageTable = {
 			let buf = `<div class="pad">`;
 			buf += `<button class="button" name="send" value="/join ${this.pageid}" style="float:right"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
 			buf += `<h2>Issue: ${ticket.type}</h2>`;
-			buf += `<strong>From: ${ticket.userid}</strong>`;
-			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
-			buf += `<button class="button" name="send" value="/modlog global,[${ticket.userid}]">Global Modlog</button><br />`;
 			if (!ticket.claimed && ticket.open) {
 				ticket.claimed = user.id;
 				writeTickets();
 				notifyStaff();
 			} else if (ticket.claimed) {
-				buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
+				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br /><br />`;
 			}
+			buf += `<strong>From: ${ticket.userid}</strong>`;
+			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
+			buf += `<button class="button" name="send" value="/modlog global,[${ticket.userid}]">Global Modlog</button><br />`;
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
