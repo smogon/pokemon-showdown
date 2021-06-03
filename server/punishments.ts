@@ -32,7 +32,7 @@ const BLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
 const USERID_REGEX = /^[a-z0-9]+$/;
 const PUNISH_TRUSTED = false;
 
-const PUNISHMENT_POINT_VALUES: {[k: string]: number} = {MUTE: 2, BLACKLIST: 3, BATTLEBAN: 4, ROOMBAN: 4};
+const PUNISHMENT_POINT_VALUES: {[k: string]: number} = {MUTE: 2, BLACKLIST: 3, ROOMBAN: 4};
 const AUTOLOCK_POINT_THRESHOLD = 8;
 
 const AUTOWEEKLOCK_THRESHOLD = 5; // number of global punishments to upgrade autolocks to weeklocks
@@ -263,6 +263,8 @@ export const Punishments = new class {
 		['LOCK', {desc: 'locked'}],
 		['BAN', {desc: 'globally banned'}],
 		['NAMELOCK', {desc: 'namelocked'}],
+		['GROUPCHATBAN', {desc: 'banned from using groupchats'}],
+		['BATTLEBAN', {desc: 'banned from battling'}],
 	]);
 	/**
 	 * For room punishments, they can be anything in the roomPunishmentTypes map.
@@ -274,7 +276,6 @@ export const Punishments = new class {
 	 * By default, this includes:
 	 * - 'ROOMBAN'
 	 * - 'BLACKLIST'
-	 * - 'BATTLEBAN'
 	 * - 'MUTE' (used by getRoomPunishments)
 	 *
 	 */
@@ -284,9 +285,7 @@ export const Punishments = new class {
 		...(global.Punishments?.roomPunishmentTypes || []),
 		['ROOMBAN', {desc: 'banned'}],
 		['BLACKLIST', {desc: 'blacklisted'}],
-		['BATTLEBAN', {desc: 'battlebanned'}],
 		['MUTE', {desc: 'muted'}],
-		['GROUPCHATBAN', {desc: 'banned from using groupchats'}],
 	]);
 	constructor() {
 		setImmediate(() => {
@@ -1088,7 +1087,7 @@ export const Punishments = new class {
 			}
 		}
 
-		return Punishments.roomPunish("battle", user, punishment);
+		return Punishments.punish(user, punishment, false);
 	}
 	unbattleban(userid: string) {
 		const user = Users.get(userid);
@@ -1096,21 +1095,21 @@ export const Punishments = new class {
 			const punishment = Punishments.isBattleBanned(user);
 			if (punishment) userid = punishment.id;
 		}
-		return Punishments.roomUnpunish("battle", userid, 'BATTLEBAN');
+		return Punishments.unpunish(userid, 'BATTLEBAN');
 	}
 	isBattleBanned(user: User) {
 		if (!user) throw new Error(`Trying to check if a non-existent user is battlebanned.`);
 
-		let punishment = Punishments.roomUserids.nestedGetByType("battle", user.id, 'BATTLEBAN');
-		if (punishment && punishment.type === 'BATTLEBAN') return punishment;
+		let punishment = Punishments.userids.getByType(user.id, 'BATTLEBAN');
+		if (punishment) return punishment;
 
 		if (user.autoconfirmed) {
-			punishment = Punishments.roomUserids.nestedGetByType("battle", user.autoconfirmed, 'BATTLEBAN');
-			if (punishment && punishment.type === 'BATTLEBAN') return punishment;
+			punishment = Punishments.userids.getByType(user.autoconfirmed, 'BATTLEBAN');
+			if (punishment) return punishment;
 		}
 
 		for (const ip of user.ips) {
-			punishment = Punishments.roomIps.nestedGetByType("battle", ip, 'BATTLEBAN');
+			punishment = Punishments.ips.getByType(ip, 'BATTLEBAN');
 			if (punishment) {
 				if (Punishments.sharedIps.has(ip) && user.autoconfirmed) return;
 				return punishment;
@@ -1123,7 +1122,7 @@ export const Punishments = new class {
 	 * We don't necessarily want to delete these, since we still need to warn the participants,
 	 * and make a modnote of the participant names, which doesn't seem appropriate for a Punishments method.
 	 */
-	groupchatBan(user: User | ID, expireTime: number | null, id: ID | null, reason: string | null) {
+	async groupchatBan(user: User | ID, expireTime: number | null, id: ID | null, reason: string | null) {
 		if (!expireTime) expireTime = Date.now() + GROUPCHATBAN_DURATION;
 		const punishment = {type: 'GROUPCHATBAN', id, expireTime, reason} as Punishment;
 
@@ -1148,7 +1147,7 @@ export const Punishments = new class {
 			}
 		}
 
-		Punishments.roomPunish("groupchat", user, punishment);
+		await Punishments.punish(user, punishment, false);
 		return groupchatsCreated;
 	}
 
@@ -1158,30 +1157,50 @@ export const Punishments = new class {
 		const punishment = Punishments.isGroupchatBanned(user);
 		if (punishment) userid = punishment.id as ID;
 
-		return Punishments.roomUnpunish("groupchat", userid, 'GROUPCHATBAN');
+		return Punishments.unpunish(userid, 'GROUPCHATBAN');
 	}
 
 	isGroupchatBanned(user: User | ID) {
 		const userid = toID(user);
 		const targetUser = Users.get(user);
 
-		let punishment = Punishments.roomUserids.nestedGetByType("groupchat", userid, 'GROUPCHATBAN');
+		let punishment = Punishments.userids.getByType(userid, 'GROUPCHATBAN');
 		if (punishment) return punishment;
 
 		if (targetUser?.autoconfirmed) {
-			punishment = Punishments.roomUserids.nestedGetByType("groupchat", targetUser.autoconfirmed, 'GROUPCHATBAN');
+			punishment = Punishments.userids.getByType(targetUser.autoconfirmed, 'GROUPCHATBAN');
 			if (punishment) return punishment;
 		}
 
 		if (targetUser && !targetUser.trusted) {
 			for (const ip of targetUser.ips) {
-				punishment = Punishments.roomIps.nestedGetByType("groupchat", ip, 'GROUPCHATBAN');
+				punishment = Punishments.ips.getByType(ip, 'GROUPCHATBAN');
 				if (punishment) {
 					if (Punishments.sharedIps.has(ip) && targetUser.autoconfirmed) return;
 					return punishment;
 				}
 			}
 		}
+	}
+
+	isTicketBanned(user: User | ID) {
+		const ips = [];
+		if (typeof user === 'object') {
+			ips.push(...user.ips);
+			ips.unshift(user.latestIp);
+			user = user.id;
+		}
+		const punishment = Punishments.userids.getByType(user, 'TICKETBAN');
+		if (punishment) return punishment;
+		// skip if the user is autoconfirmed and on a shared ip
+		// [0] is forced to be the latestIp
+		if (Punishments.sharedIps.has(ips[0])) return false;
+
+		for (const ip of ips) {
+			const curPunishment = Punishments.ips.getByType(ip, 'TICKETBAN');
+			if (curPunishment) return curPunishment;
+		}
+		return false;
 	}
 
 	/**
@@ -1533,9 +1552,9 @@ export const Punishments = new class {
 
 		if (battleban) {
 			if (battleban.id !== user.id && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
-				Punishments.roomUnpunish("battle", userid, 'BATTLEBAN');
+				Punishments.unpunish(userid, 'BATTLEBAN');
 			} else {
-				Punishments.roomPunish("battle", user, battleban);
+				void Punishments.punish(user, battleban, false);
 				user.cancelReady();
 				if (!punishment) {
 					const appealLink = ticket || (Config.appealurl ? `appeal at: ${Config.appealurl}` : ``);

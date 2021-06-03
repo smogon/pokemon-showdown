@@ -1916,7 +1916,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	forcebattleban: 'battleban',
-	battleban(target, room, user, connection, cmd) {
+	async battleban(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (!target) return this.parse(`/help battleban`);
 
@@ -1954,7 +1954,7 @@ export const commands: Chat.ChatCommands = {
 
 		this.globalModlog("BATTLEBAN", targetUser, reasonText);
 		Ladders.cancelSearches(targetUser);
-		Punishments.battleban(targetUser, null, null, reason);
+		await Punishments.battleban(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days${reasonText}`);
 
 		// Automatically upload replays as evidence/reference to the punishment
@@ -1986,7 +1986,7 @@ export const commands: Chat.ChatCommands = {
 	monthgroupchatban: 'groupchatban',
 	monthgcban: 'groupchatban',
 	gcban: 'groupchatban',
-	groupchatban(target, room, user, connection, cmd) {
+	async groupchatban(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (!target) return this.parse(`/help groupchatban`);
 		if (!user.can('rangeban')) {
@@ -2015,7 +2015,9 @@ export const commands: Chat.ChatCommands = {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from using groupchats by ${user.name}, and should probably be demoted.`);
 		}
 
-		const createdGroupchats = Punishments.groupchatBan(targetUser, (isMonth ? Date.now() + 30 * DAY : null), null, reason);
+		const createdGroupchats = await Punishments.groupchatBan(
+			targetUser, (isMonth ? Date.now() + 30 * DAY : null), null, reason
+		);
 		targetUser.popup(`|modal|${user.name} has banned you from using groupchats for a ${isMonth ? 'month' : 'week'}${reasonText}`);
 		this.globalModlog("GROUPCHATBAN", targetUser, ` by ${user.id}${reasonText}`);
 

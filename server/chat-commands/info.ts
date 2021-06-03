@@ -208,7 +208,7 @@ export const commands: Chat.ChatCommands = {
 			const battlebanned = Punishments.isBattleBanned(targetUser);
 			if (battlebanned) {
 				buf += `<br />BATTLEBANNED: ${battlebanned.id}`;
-				buf += ` (expires ${Punishments.checkPunishmentExpiration(battlebanned)})`;
+				buf += ` ${Punishments.checkPunishmentExpiration(battlebanned)}`;
 				if (battlebanned.reason) buf += Utils.html` (reason: ${battlebanned.reason})`;
 			}
 
@@ -217,6 +217,13 @@ export const commands: Chat.ChatCommands = {
 				buf += `<br />Banned from using groupchats${groupchatbanned.id !== targetUser.id ? `: ${groupchatbanned.id}` : ``}`;
 				buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
 				if (groupchatbanned.reason) buf += Utils.html` (reason: ${groupchatbanned.reason})`;
+			}
+
+			const ticketbanned = Punishments.isTicketBanned(targetUser.id);
+			if (ticketbanned) {
+				buf += `<br />Banned from creating help tickets${ticketbanned.id !== targetUser.id ? `: ${ticketbanned.id}` : ``}`;
+				buf += ` ${Punishments.checkPunishmentExpiration(ticketbanned)}`;
+				if (ticketbanned.reason) buf += Utils.html` (reason: ${ticketbanned.reason})`;
 			}
 
 			if (targetUser.semilocked) {
