@@ -13338,11 +13338,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
+			console.log("pokemon.hasItem('shedshell'): "+pokemon.hasItem('shedshell'));
 			// You can't get here unless the pursuit succeeds
 			if (target.beingCalledBack) {
 				this.debug('Pursuit damage boost');
 				return move.basePower * 2;
 			}
+			//shed shell item trick (only possible case of switch in with pursuit)
+			if (!target.activeTurns) return move.basePower * 2;
 			return move.basePower;
 		},
 		category: "Physical",
@@ -13370,27 +13373,29 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
-				this.debug('Pursuit start');
-				let alreadyAdded = false;
-				pokemon.removeVolatile('destinybond');
-				for (const source of this.effectData.sources) {
-					if (!this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (source.canMegaEvo || source.canUltraBurst) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
-								this.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
+				if (!pokemon.hasItem('shedshell')) {
+					this.debug('Pursuit start');
+					let alreadyAdded = false;
+					pokemon.removeVolatile('destinybond');
+					for (const source of this.effectData.sources) {
+						if (!this.queue.cancelMove(source) || !source.hp) continue;
+						if (!alreadyAdded) {
+							this.add('-activate', pokemon, 'move: Pursuit');
+							alreadyAdded = true;
+						}
+						// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+						// If it is, then Mega Evolve before moving.
+						if (source.canMegaEvo || source.canUltraBurst) {
+							for (const [actionIndex, action] of this.queue.entries()) {
+								if (action.pokemon === source && action.choice === 'megaEvo') {
+									this.runMegaEvo(source);
+									this.queue.list.splice(actionIndex, 1);
+									break;
+								}
 							}
 						}
+						this.runMove('pursuit', source, this.getTargetLoc(pokemon, source));
 					}
-					this.runMove('pursuit', source, this.getTargetLoc(pokemon, source));
 				}
 			},
 		},
@@ -22495,14 +22500,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target.hasItem('heavydutyboots')) return;
 				if (target.hasAbility('solidfooting')) return;
 				const typeMod = this.clampIntRange(target.runEffectiveness(this.dex.getActiveMove('veiloflight')), -6, 6);
-				// console.log("target: "+target);
-				// console.log("typeMod: "+typeMod);
-				// console.log("effectiveness: "+target.runEffectiveness(this.dex.getActiveMove('veiloflight')));
-				// console.log("veiloflight: "+this.dex.getActiveMove('veiloflight'));
-				// console.log("damage: "+target.maxhp * (Math.pow(2, typeMod) / 8) * this.effectData.layers);
-				// console.log("target.maxhp: "+target.maxhp);
-				// console.log("Math.pow(2, typeMod) / 8: "+Math.pow(2, typeMod) / 8);
-				// console.log("this.effectData.layers: "+this.effectData.layers);
 				this.damage(target.maxhp * (Math.pow(2, typeMod) / 8) * this.effectData.layers);
 			},
 		},

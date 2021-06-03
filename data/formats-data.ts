@@ -1376,7 +1376,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "DOU",
 	},
-	chikorita:{
+	chikorita: {
 		tier: "LC",
 	},
 	bayleef: {

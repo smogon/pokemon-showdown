@@ -603,8 +603,8 @@ export const MovesText = {
 	},
 	chargebeam: {
 		name: "Charge Beam",
-		desc: "Has a 70% chance to raise the user's Special Attack by 1 stage.",
-		shortDesc: "70% chance to raise the user's Sp. Atk by 1.",
+		desc: "Has a 100% chance to raise the user's Special Attack by 1 stage.",
+		shortDesc: "100% chance to raise the user's Sp. Atk by 1.",
 	},
 	charm: {
 		name: "Charm",
@@ -1092,9 +1092,8 @@ export const MovesText = {
 	},
 	dragonrush: {
 		name: "Dragon Rush",
-		desc: "Has a 20% chance to flinch the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "20% chance to flinch the target.",
-		descGen5: "Has a 20% chance to flinch the target.",
+		desc: "Has a 25% chance to flinch the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "25% chance to flinch the target.",
 	},
 	dragontail: {
 		name: "Dragon Tail",
