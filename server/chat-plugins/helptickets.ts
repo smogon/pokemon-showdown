@@ -11,7 +11,7 @@ const REPLAY_REGEX = new RegExp(
 	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
 );
 
-Punishments.addRoomPunishmentType('TICKETBAN', 'banned from creating help tickets');
+Punishments.addPunishmentType('TICKETBAN', 'banned from creating help tickets');
 
 interface TicketState {
 	creator: string;
@@ -58,12 +58,12 @@ try {
 		const ticket = ticketData[t];
 		if (ticket.banned) {
 			if (ticket.expires && ticket.expires <= Date.now()) continue;
-			Punishments.roomPunish(`staff`, ticket.userid, {
+			void Punishments.punish(ticket.userid, {
 				type: 'TICKETBAN',
 				id: ticket.userid,
 				expireTime: ticket.expires,
 				reason: ticket.reason,
-			});
+			}, false);
 			delete ticketData[t]; // delete the old format
 		} else {
 			if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
@@ -92,6 +92,14 @@ export function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(
 		() => JSON.stringify(tickets), {throttle: 5000}
 	);
+}
+
+async function convertRoomPunishments() {
+	for (const [id, punishment] of Punishments.getPunishments('staff')) {
+		if (punishment.punishType !== 'TICKETBAN') continue;
+		Punishments.roomUnpunish('staff', id, 'TICKETBAN');
+		await HelpTicket.ban(id as ID, punishment.reason);
+	}
 }
 
 function writeStats(line: string) {
@@ -465,41 +473,20 @@ export class HelpTicket extends Rooms.RoomGame {
 		buf += ` ${ticket.type}</a>`;
 		return buf;
 	}
-	static ban(user: User | ID, reason = '') {
+	static async ban(user: User | ID, reason = '') {
 		const userid = toID(user);
 		const userObj = Users.get(user);
 		if (userObj) user = userObj;
-		return Punishments.roomPunish('staff', user, {
+		return Punishments.punish(user, {
 			type: 'TICKETBAN',
 			id: userid,
 			expireTime: Date.now() + TICKET_BAN_DURATION,
 			reason,
-		});
+		}, false);
 	}
 	static unban(user: ID | User) {
 		user = toID(user);
-		return Punishments.roomUnpunish('staff', user, 'TICKETBAN');
-	}
-	static checkBanned(user: User | ID) {
-		const staffRoom = Rooms.get('staff');
-		if (!staffRoom) return;
-		const ips = [];
-		if (typeof user === 'object') {
-			ips.push(...user.ips);
-			ips.unshift(user.latestIp);
-			user = user.id;
-		}
-		const punishment = Punishments.roomUserids.nestedGetByType('staff', user, 'TICKETBAN');
-		if (punishment) return punishment;
-		// skip if the user is autoconfirmed and on a shared ip
-		// [0] is forced to be the latestIp
-		if (Punishments.sharedIps.has(ips[0])) return false;
-
-		for (const ip of ips) {
-			const curPunishment = Punishments.roomIps.nestedGetByType('staff', ip, 'TICKETBAN');
-			if (curPunishment) return curPunishment;
-		}
-		return false;
+		return Punishments.unpunish(user, 'TICKETBAN');
 	}
 	static getBanMessage(userid: ID, punishment: Punishment) {
 		if (userid !== punishment.id) {
@@ -705,6 +692,9 @@ for (const room of Rooms.rooms.values()) {
 	const game = room.getGame(HelpTicket)!;
 	if (game.ticket && tickets[game.ticket.userid]) game.ticket = tickets[game.ticket.userid];
 }
+
+// convert old-style Staff-room ticketbans to regular ones
+void convertRoomPunishments();
 
 const delayWarningPreamble = `Hi! All global staff members are busy right now and we apologize for the delay. `;
 const delayWarnings: {[k: string]: string} = {
@@ -1005,7 +995,7 @@ export const pages: Chat.PageTable = {
 			this.title = this.tr`Request Help`;
 			let buf = `<div class="pad"><h2>${this.tr`Request help from global staff`}</h2>`;
 
-			const ticketBan = HelpTicket.checkBanned(user);
+			const ticketBan = Punishments.isTicketBanned(user);
 			if (ticketBan) {
 				return connection.popup(HelpTicket.getBanMessage(user.id, ticketBan));
 			}
@@ -1287,7 +1277,7 @@ export const pages: Chat.PageTable = {
 			buf += `<tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Ticket Bans`}<i class="fa fa-ban"></i></h2></th></tr>`;
 			buf += `<tr><th>Userids</th><th>IPs</th><th>Expires</th><th>Reason</th></tr>`;
 			const ticketBans = Utils.sortBy(
-				[...Punishments.getPunishments('staff')].filter(([id, entry]) => entry.punishType === 'TICKETBAN'),
+				[...Punishments.getPunishments()].filter(([id, entry]) => entry.punishType === 'TICKETBAN'),
 				([id, entry]) => entry.expireTime
 			);
 			for (const [userid, entry] of ticketBans) {
@@ -1588,7 +1578,7 @@ export const commands: Chat.ChatCommands = {
 				return this.popupReply(this.tr`Global staff can't make tickets. They can only use the form for reference.`);
 			}
 			if (!user.named) return this.popupReply(this.tr`You need to choose a username before doing this.`);
-			const ticketBan = HelpTicket.checkBanned(user);
+			const ticketBan = Punishments.isTicketBanned(user);
 			if (ticketBan) {
 				return this.popupReply(HelpTicket.getBanMessage(user.id, ticketBan));
 			}
@@ -1889,7 +1879,7 @@ export const commands: Chat.ChatCommands = {
 		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
 
 		tb: 'ban',
-		ban(target, room, user) {
+		async ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
 			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
 			this.checkCan('lock', targetUser);
@@ -1926,7 +1916,7 @@ export const commands: Chat.ChatCommands = {
 				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(reason ? `\n\nReason: ${reason}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
-			const affected = HelpTicket.ban(targetUser || userid, reason);
+			const affected = await HelpTicket.ban(targetUser || userid, reason);
 			this.addGlobalModAction(`${username} was ticket banned by ${user.name}.${reason ? ` (${reason})` : ``}`);
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
@@ -1987,7 +1977,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			target = toID(target);
 			const targetID: ID = Users.get(target)?.id || target as ID;
-			const banned = HelpTicket.checkBanned(targetID);
+			const banned = Punishments.isTicketBanned(targetID);
 			if (!banned) {
 				return this.errorReply(this.tr`${target} is not ticket banned.`);
 			}
