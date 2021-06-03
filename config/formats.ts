@@ -266,6 +266,16 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 	},
 	{
+		name: "[Gen 8] Fair and Square",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3685517/">Fair and Square Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['Flat Rules', 'Galar Expansion Pokedex', '! Species Clause', '! Item Clause', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		banlist: ['Sub-Legendary'],
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
