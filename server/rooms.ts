@@ -1028,7 +1028,10 @@ export abstract class BasicRoom {
 		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%'));
 		if (!staff.length) {
 			const {time} = this.settings.autoModchat;
-			if (!time) throw new Error(`Invalid time setting for automodchat (${Utils.visualize(this.settings.autoModchat)})`);
+			if (!time || time < 5) {
+				throw new Error(`Invalid time setting for automodchat (${Utils.visualize(this.settings.autoModchat)})`);
+			}
+			if (this.modchatTimer) clearTimeout(this.modchatTimer);
 			this.modchatTimer = setTimeout(() => {
 				if (!this.settings.autoModchat) return;
 				const {rank} = this.settings.autoModchat;
