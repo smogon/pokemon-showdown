@@ -41,7 +41,7 @@ describe('Sitrus Berry', function () {
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
-	it.only(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, function () {
+	it(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, function () {
 		battle = common.createBattle({
 			seed: [1, 2, 39, 5],
 		}, [[
