@@ -218,7 +218,7 @@ export class Pokemon {
 	hurtThisTurn: number | null;
 	lastDamage: number;
 	attackedBy: Attacker[];
-
+	hitSelfConfusionThisTurn: boolean;
 	isActive: boolean;
 	activeTurns: number;
 	/**
@@ -419,6 +419,7 @@ export class Pokemon {
 		this.hurtThisTurn = null;
 		this.lastDamage = 0;
 		this.attackedBy = [];
+		this.hitSelfConfusionThisTurn = false;
 
 		this.isActive = false;
 		this.activeTurns = 0;
@@ -1597,7 +1598,7 @@ export class Pokemon {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 
 		const item = this.getItem();
-		const confusion = this.battle.dex.getActiveMove(move as ActiveMove);
+		if (source?.hitSelfConfusionThisTurn) return false;
 
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&

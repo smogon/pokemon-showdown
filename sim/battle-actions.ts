@@ -1740,6 +1740,7 @@ export class BattleActions {
 		// Damage is 16-bit context in self-hit confusion damage
 		let damage = tr(baseDamage, 16);
 		damage = this.battle.randomizer(damage);
+		pokemon.hitSelfConfusionThisTurn = true;
 		return Math.max(1, damage);
 	}
 
