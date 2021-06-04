@@ -1598,15 +1598,12 @@ export class Pokemon {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 
 		const item = this.getItem();
-		if (source?.hitSelf) {
-			source.hitSelf = false;
-			return false;
-		}
 
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&
 			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
 		) {
+			if (source?.hitSelf) return false;
 			this.battle.add('-enditem', this, item, '[eat]');
 
 			this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
@@ -1632,6 +1629,7 @@ export class Pokemon {
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
 		}
+		if (source) source.hitSelf = false;
 		return false;
 	}
 
