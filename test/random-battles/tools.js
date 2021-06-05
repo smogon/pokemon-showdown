@@ -64,6 +64,19 @@ function testNotBothMoves(pokemon, options, move1, move2) {
 }
 
 /**
+ * Tests that a Pokémon does not get two copies of Hidden Power.
+ *
+ * @param {ID} pokemon the ID of the Pokemon whose set is to be tested
+ * @param {{format?: string, rounds?: number, isDoubles?: boolean, isLead?: boolean, isDynamax?: boolean, seed?: PRNGSeed}} options
+ */
+function testHiddenPower(pokemon, options) {
+	testSet(pokemon, options, set => assert(
+		set.moves.filter(m => m.startsWith('hiddenpower')).length < 2,
+		`multiple Hidden Power moves (got ${JSON.stringify(set.moves)})`
+	));
+}
+
+/**
  * Tests that a Pokémon always gets a move.
  *
  * @param {ID} pokemon the ID of the Pokemon whose set is to be tested
@@ -119,6 +132,7 @@ function isValidSet(genNumber, set) {
 	} else if (genNumber >= 3) {
 		return false;
 	}
+	if (set.moves.filter(m => m.startsWith('hiddenpower')).length > 1) return false;
 	return true;
 }
 
@@ -140,6 +154,7 @@ function validateLearnset(move, set, tier, mod = 'gen8') {
 exports.testSet = testSet;
 exports.testAlwaysHasMove = testAlwaysHasMove;
 exports.testNotBothMoves = testNotBothMoves;
+exports.testHiddenPower = testHiddenPower;
 exports.testTeam = testTeam;
 exports.testHasSTAB = testHasSTAB;
 
