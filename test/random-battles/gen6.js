@@ -3,8 +3,7 @@
  */
 'use strict';
 
-const assert = require('../assert');
-const {testNotBothMoves, testAlwaysHasMove, testSet} = require('./tools');
+const {testNotBothMoves, testAlwaysHasMove, testHiddenPower} = require('./tools');
 
 describe('[Gen 6] Random Battle', () => {
 	const options = {format: 'gen6randombattle'};
@@ -18,10 +17,5 @@ describe('[Gen 6] Random Battle', () => {
 		testAlwaysHasMove('rapidash', options, 'flareblitz');
 	});
 
-	it('should not give Thundurus-Therian two Hidden Power Flyings', () => {
-		testSet('thundurustherian', options, set => {
-			if (!set.moves.includes('hiddenpowerflying')) return;
-			assert.equal(set.moves.filter(m => m.startsWith('hiddenpower')).length, 1);
-		});
-	});
+	it('should prevent double Hidden Power', () => testHiddenPower('thundurustherian', options));
 });

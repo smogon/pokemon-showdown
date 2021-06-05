@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testNotBothMoves, testSet} = require('./tools');
+const {testNotBothMoves, testSet, testHiddenPower} = require('./tools');
 
 describe('[Gen 7] Random Battle', () => {
 	const options = {format: 'gen7randombattle'};
@@ -38,4 +38,6 @@ describe('[Gen 7] Random Battle', () => {
 	it('should not generate Swords Dance + Ice Beam', () => {
 		testNotBothMoves('arceusground', options, 'swordsdance', 'icebeam');
 	});
+
+	it('should prevent double Hidden Power', () => testHiddenPower('lilligant', options));
 });
