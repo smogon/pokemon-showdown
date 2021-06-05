@@ -113,7 +113,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	zapdos: {
 		inherit: true,
-		abilities: {0: "Pressure",  H: "Lightning Rod"},
+		abilities: {0: "Pressure", H: "Lightning Rod"},
 		unreleasedHidden: true,
 	},
 	moltres: {
@@ -217,18 +217,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	hitmontop: {
 		inherit: true,
 		maleOnlyHidden: true,
-	},
-	raikou: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	entei: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	suicune: {
-		inherit: true,
-		unreleasedHidden: true,
 	},
 	treecko: {
 		inherit: true,
