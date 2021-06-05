@@ -65,7 +65,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	raikou: {
 		inherit: true,
-		abilities: {0: "Pressure",  H: "Volt Absorb"},
+		abilities: {0: "Pressure", H: "Volt Absorb"},
 		unreleasedHidden: true,
 	},
 	entei: {

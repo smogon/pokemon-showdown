@@ -382,10 +382,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Pressure"},
 	},
-	heatran: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
 	snivy: {
 		inherit: true,
 		unreleasedHidden: true,
