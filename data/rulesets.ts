@@ -1510,4 +1510,51 @@ export const Rulesets: {[k: string]: FormatData} = {
 			pokemon.trapped = true;
 		},
 	},
+	chimera1v1rule: {
+		effectType: 'Rule',
+		name: 'Chimera 1v1 Rule',
+		desc: "Validation and battle effects for Chimera 1v1.",
+		ruleset: ['Team Preview', 'Picked Team Size = 6'],
+		onValidateSet(set) {
+			if (!set.item) return;
+			const item = this.dex.items.get(set.item);
+			if (item.itemUser && !this.ruleTable.has(`+item:${item.id}`)) {
+				return [`${set.species}'s item ${item.name} is banned.`];
+			}
+		},
+		onValidateRule() {
+			const table = this.ruleTable;
+			if ((table.pickedTeamSize || table.minTeamSize) < 6) {
+				throw new Error(
+					`Custom rules that could allow the active team size to be reduced below 6 (Min Team Size < 6, Picked Team Size < 6) could prevent the Chimera from being fully defined, and are incompatible with Chimera 1v1.`
+				);
+			}
+			const gameType = this.format.gameType;
+			if (gameType === 'doubles' || gameType === 'triples') {
+				throw new Error(
+					`The game type '${gameType}' cannot be 1v1 because sides can have multiple active Pok\u00e9mon, so it is incompatible with Chimera 1v1.`
+				);
+			}
+		},
+		onBeforeSwitchIn(pokemon) {
+			const allies = pokemon.side.pokemon.splice(1);
+			pokemon.side.pokemonLeft = 1;
+			const newSpecies = this.dex.deepClone(pokemon.baseSpecies);
+			newSpecies.abilities = allies[1].baseSpecies.abilities;
+			newSpecies.baseStats = allies[2].baseSpecies.baseStats;
+			newSpecies.bst = allies[2].baseSpecies.bst;
+			pokemon.item = allies[0].item;
+			pokemon.ability = pokemon.baseAbility = allies[1].ability;
+			pokemon.set.evs = allies[2].set.evs;
+			pokemon.set.nature = allies[2].set.nature;
+			pokemon.set.ivs = allies[2].set.ivs;
+			pokemon.hpType = (pokemon as any).baseHpType = allies[2].baseHpType;
+			pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
+				...allies[3].baseMoveSlots.slice(0, 2), ...allies[4].baseMoveSlots.slice(2),
+			].filter((move, index, moveSlots) => moveSlots.find(othermove => othermove.id === move.id) === move);
+			// so all HP-related properties get re-initialized in setSpecies
+			pokemon.maxhp = 0;
+			pokemon.setSpecies(newSpecies, null);
+		},
+	},
 };
