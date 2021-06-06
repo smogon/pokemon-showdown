@@ -23,5 +23,8 @@ describe('[Gen 3] Random Battle', () => {
 		testAlwaysHasMove('delcatty', options, 'doubleedge');
 	});
 
-	it('should prevent double Hidden Power', () => testHiddenPower('kingler', options));
+	it('should prevent double Hidden Power', () => {
+		testHiddenPower('kingler', options);
+		testHiddenPower('moltres', options);
+	});
 });
