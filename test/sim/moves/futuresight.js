@@ -118,7 +118,7 @@ describe('Future Sight', function () {
 		assert.fullHP(wynaut);
 	});
 
-	it.skip(`should only cause the user to take Life Orb recoil on its damaging turn`, function () {
+	it(`should only cause the user to take Life Orb recoil on its damaging turn`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
 		], [
