@@ -39,5 +39,5 @@ describe('[Gen 7] Random Battle', () => {
 		testNotBothMoves('arceusground', options, 'swordsdance', 'icebeam');
 	});
 
-	it('should prevent double Hidden Power', () => testHiddenPower('lilligant', options));
+	it('should prevent double Hidden Power', () => testHiddenPower('thundurustherian', options));
 });

@@ -1166,23 +1166,26 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 
 				// Remove rejected moves from the move list
+				const moveIsHP = moveid.startsWith('hiddenpower');
 				if (cull && (
 					movePool.length - availableHP ||
-					(availableHP && (moveid.startsWith('hiddenpower') || !hasHiddenPower))
+					(availableHP && (moveIsHP || !hasHiddenPower))
 				)) {
 					if (
 						move.category !== 'Status' &&
 						!move.damage &&
 						!move.flags.charge &&
-						(!moveid.startsWith('hiddenpower') || !availableHP)
+						(!moveIsHP || !availableHP)
 					) {
 						rejectedPool.push(moveid);
 					}
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}
 
 				if (cull && rejectedPool.length) {
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}
