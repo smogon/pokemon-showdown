@@ -619,47 +619,8 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: [
-			'Standard', 'Dynamax Clause', 'Sleep Moves Clause',
-			'Max Team Size = 6', 'Min Team Size = 6', 'Picked Team Size = 6',
-		],
+		ruleset: ['Chimera 1v1 Rule', 'Standard', 'Dynamax Clause', 'Sleep Moves Clause'],
 		banlist: ['Shedinja', 'Huge Power', 'Moody', 'Neutralizing Gas', 'Truant', 'Eviolite', 'Focus Sash', 'Perish Song', 'Transform', 'Fishious Rend', 'Bolt Beak', 'Disable', 'Double Iron Bash'],
-		onValidateSet(set) {
-			if (!set.item) return;
-			const item = this.dex.items.get(set.item);
-			if (item.itemUser && !this.ruleTable.has(`+item:${item.id}`)) {
-				return [`${set.species}'s item ${item.name} is banned.`];
-			}
-		},
-		onValidateTeam() {
-			const table = this.ruleTable;
-			if (table.maxTeamSize !== 6 || table.minTeamSize !== 6 || table.pickedTeamSize !== 6) {
-				return [
-					`You are using custom rules that make the Max Team Size, Min Team Size, or Picked Team Size something other than 6.`,
-					'Doing this causes the server to crash.',
-				];
-			}
-		},
-		onBeforeSwitchIn(pokemon) {
-			const allies = pokemon.side.pokemon.splice(1);
-			pokemon.side.pokemonLeft = 1;
-			const newSpecies = this.dex.deepClone(pokemon.baseSpecies);
-			newSpecies.abilities = allies[1].baseSpecies.abilities;
-			newSpecies.baseStats = allies[2].baseSpecies.baseStats;
-			newSpecies.bst = allies[2].baseSpecies.bst;
-			pokemon.item = allies[0].item;
-			pokemon.ability = pokemon.baseAbility = allies[1].ability;
-			pokemon.set.evs = allies[2].set.evs;
-			pokemon.set.nature = allies[2].set.nature;
-			pokemon.set.ivs = allies[2].set.ivs;
-			pokemon.hpType = (pokemon as any).baseHpType = allies[2].baseHpType;
-			pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
-				...allies[3].baseMoveSlots.slice(0, 2), ...allies[4].baseMoveSlots.slice(2),
-			].filter((move, index, moveSlots) => moveSlots.find(othermove => othermove.id === move.id) === move);
-			// so all HP-related properties get re-initialized in setSpecies
-			pokemon.maxhp = 0;
-			pokemon.setSpecies(newSpecies, null);
-		},
 	},
 
 	// Other Metagames
