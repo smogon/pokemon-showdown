@@ -1524,7 +1524,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onValidateRule() {
 			const table = this.ruleTable;
-			if (table.maxTeamSize < 6 || table.minTeamSize !== 6 || table.pickedTeamSize !== 6) {
+			if ((table.pickedTeamSize || table.minTeamSize) < 6) {
 				throw new Error(
 					`Custom rules that could allow the active team size to be reduced below 6 (Max Team Size < 6, Min Team Size != 6, Picked Team Size != 6) could prevent the Chimera from being fully defined, and are incompatible with Chimera 1v1.`
 				);
