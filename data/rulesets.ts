@@ -1514,7 +1514,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Chimera 1v1 Rule',
 		desc: "Validation and battle effects for Chimera 1v1.",
-		ruleset: ['Team Preview', 'Max Team Size = 6', 'Min Team Size = 6', 'Picked Team Size = 6'],
+		ruleset: ['Team Preview', 'Picked Team Size = 6'],
 		onValidateSet(set) {
 			if (!set.item) return;
 			const item = this.dex.items.get(set.item);
