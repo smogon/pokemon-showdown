@@ -1168,8 +1168,8 @@ export const pages: Chat.PageTable = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'password':
-					buf += `<p>${this.tr`If you lost your password, click the button below to request a password reset. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.`}</p>`;
-					buf += `<p><a class="button" href="https://www.smogon.com/forums/password-reset-form/">${this.tr`Request a password reset`}</a></p>`;
+					buf += `<p>${this.tr`If you lost your password, click the button below to learn about requesting a password reset. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.`}</p>`;
+					buf += `<p><a class="button" href="https://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/post-6227626/">${this.tr`Request a password reset`}</a></p>`;
 					break;
 				case 'roomhelp':
 					buf += `<p>${this.tr`If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!`}</p>`;
