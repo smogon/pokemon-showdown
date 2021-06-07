@@ -248,11 +248,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	quickclaw: {
 		inherit: true,
-		onFractionalPriority(priority, pokemon) {
-			if (this.randomChance(1, 5)) {
-				return 0.1;
-			}
-		},
+		onFractionalPriority() {},
+		// implemented in Pokemon#getActionSpeed()
 	},
 	salacberry: {
 		inherit: true,

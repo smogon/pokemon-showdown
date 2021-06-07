@@ -126,6 +126,7 @@ export class Battle {
 	/** The last damage dealt by a move in the battle - only used by Gen 1 Counter. */
 	lastDamage: number;
 	abilityOrder: number;
+	quickClawRoll: boolean;
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
 
@@ -210,6 +211,7 @@ export class Battle {
 		this.lastSuccessfulMoveThisTurn = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
+		this.quickClawRoll = false;
 
 		this.teamGenerator = null;
 
@@ -1513,6 +1515,8 @@ export class Battle {
 				}
 			}
 		}
+		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
+		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
 		this.makeRequest('move');
 	}
