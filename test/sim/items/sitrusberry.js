@@ -51,9 +51,6 @@ describe('Sitrus Berry', function () {
 		]]);
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move confuseray');
-		battle.makeChoices('move sleeptalk', 'move sleeptalk');
-		battle.makeChoices('move sleeptalk', 'move falseswipe');
-		common.saveReplay(battle, 'sitrusberry.js');
 		assert.holdsItem(holder);
 		assert.false.fullHP(holder);
 	});
