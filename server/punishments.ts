@@ -694,6 +694,8 @@ export const Punishments = new class {
 
 		if (!punishment.id) punishment.id = user.getLastId();
 
+		Punishments.checkInteractions(punishment.id as ID, punishment, toID(room) as RoomID);
+
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
