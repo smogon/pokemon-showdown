@@ -165,14 +165,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
-	quickclaw: {
-		inherit: true,
-		onFractionalPriority(priority, pokemon) {
-			if (this.randomChance(60, 256)) {
-				return 0.1;
-			}
-		},
-	},
 	sharpbeak: {
 		inherit: true,
 		onBasePower() {},

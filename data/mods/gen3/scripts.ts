@@ -13,6 +13,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 	},
+	pokemon: {
+		inherit: true,
+		getActionSpeed() {
+			let speed = this.getStat('spe', false, false);
+			if (this.battle.field.getPseudoWeather('trickroom')) {
+				speed = -speed;
+			}
+			if (this.battle.quickClawRoll && this.hasItem('quickclaw')) {
+				speed = 65535;
+			}
+			return speed;
+		},
+	},
 	actions: {
 		inherit: true,
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
