@@ -1325,6 +1325,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'gmax') target = 'gmaxmove';
 			if (target === 'multi' || toID(target) === 'multihit') target = 'multihit';
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
+			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
+			if (target === 'bounceable' || toID(target) === 'magiccoat' || toID(target) === 'magicbounce') target = 'reflectable';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
 					return {error: `A search cannot both exclude and include '${target}'.`};
