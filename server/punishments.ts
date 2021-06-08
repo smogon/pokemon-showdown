@@ -1503,23 +1503,24 @@ export const Punishments = new class {
 	ipSearch(ip: string, type?: undefined): Punishment[] | undefined;
 	ipSearch(ip: string, type: string): Punishment | undefined;
 	ipSearch(ip: string, type?: string): Punishment | Punishment[] | undefined {
+		const allPunishments: Punishment[] = [];
+
 		let punishment = Punishments.ips.get(ip);
-		if (punishment) return punishment;
+		if (punishment) {
+			if (type) return punishment.find(p => p.type === type);
+			allPunishments.push(...punishment);
+		}
 		let dotIndex = ip.lastIndexOf('.');
 		for (let i = 0; i < 4 && dotIndex > 0; i++) {
 			ip = ip.substr(0, dotIndex);
 			punishment = Punishments.ips.get(ip + '.*');
 			if (punishment) {
-				if (type) {
-					for (const p of punishment) {
-						if (p.type === type) return p;
-					}
-				}
-				return punishment;
+				if (type) return punishment.find(p => p.type === type);
+				allPunishments.push(...punishment);
 			}
 			dotIndex = ip.lastIndexOf('.');
 		}
-		return undefined;
+		return allPunishments.length ? allPunishments : undefined;
 	}
 
 	/** Defined in Punishments.loadBanlist */
@@ -1684,7 +1685,7 @@ export const Punishments = new class {
 		let banned: false | string = false;
 		const punishment = Punishments.ipSearch(ip, 'BAN');
 		if (punishment) {
-			banned = punishment.id;
+			banned = (Array.isArray(punishment) ? punishment[0] : punishment).id;
 		}
 		if (!banned) return false;
 

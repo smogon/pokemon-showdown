@@ -38,4 +38,23 @@ describe("Punishments", () => {
 		Punishments.userids.deleteOne(id, {type: 'RICKROLL', expireTime, reason, id});
 		assert.equal(Punishments.userids.get(id).length, 1);
 	});
+
+	it('should properly search for IP punishments by type', () => {
+		const [expireTime, reason, id] = [Date.now() + 1000, '', 'banmeplease'];
+		Punishments.ips.add('127.0.0.1', {type: 'BAN', expireTime, reason, id});
+		Punishments.ips.add('127.0.0.1', {type: 'RICKROLL', expireTime, reason, id});
+		Punishments.ips.add('127.0.*', {type: 'RANGEBAN', expireTime, reason, id});
+
+		const allIPPunishments = Punishments.ipSearch('127.0.0.1');
+		assert(Array.isArray(allIPPunishments));
+		assert.equal(allIPPunishments.length, 3);
+
+		const ban = Punishments.ipSearch('127.0.0.1', 'BAN');
+		assert(!Array.isArray(ban));
+		assert.equal(ban.type, 'BAN');
+
+		const rickroll = Punishments.ipSearch('127.0.0.1', 'RICKROLL');
+		assert(!Array.isArray(rickroll));
+		assert.equal(rickroll.type, 'RICKROLL');
+	});
 });
