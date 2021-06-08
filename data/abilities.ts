@@ -341,7 +341,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
 			if (!lastAttackedBy) return;
-			const darts = move.id === 'dragondarts' && source.getSmartTargets(target, move).length > 1;
+			const darts = move.id === 'dragondarts' && target.lastDamage !== move.totalDamage;
 			const damage = (move.multihit && !darts) ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({spa: 1});
