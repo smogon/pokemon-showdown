@@ -480,7 +480,11 @@ export class BattleActions {
 			return false;
 		}
 
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (
+			!move.negateSecondary &&
+			!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
+			!move.isFutureMove
+		) {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);

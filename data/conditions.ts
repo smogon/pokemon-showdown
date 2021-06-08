@@ -385,6 +385,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
+				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
+			}
+
 			this.checkWin();
 		},
 	},

@@ -366,6 +366,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				flags: {},
 				willCrit: false,
 				type: '???',
+				isFutureMove: true,
 			} as unknown as ActiveMove;
 			const damage = this.actions.getDamage(source, target, moveData, true);
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
@@ -581,6 +582,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				flags: {},
 				willCrit: false,
 				type: '???',
+				isFutureMove: true,
 			} as unknown as ActiveMove;
 			const damage = this.actions.getDamage(source, target, moveData, true);
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
