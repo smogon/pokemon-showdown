@@ -1374,15 +1374,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
-	quadrophenic: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|${getName('quadrophenic')}|Did you ever like it then?`);
-		},
-		onFaint() {
-			this.add(`c|${getName('quadrophenic')}|It fell apart.`);
-		},
-	},
 	rabia: {
 		noCopy: true,
 		onStart() {

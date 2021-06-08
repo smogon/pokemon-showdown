@@ -611,12 +611,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Croak',
 		evs: {hp: 248, def: 8, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
-	quadrophenic: {
-		species: 'Dodrio', ability: 'Extreme Ways', item: 'Choice Band', gender: 'N',
-		moves: ['Dragon Ascent', 'Close Combat', 'U-turn'],
-		signatureMove: 'Triple Threat',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
-	},
 	Rabia: {
 		species: 'Mew', ability: 'Psychic Surge', item: 'Life Orb', gender: 'M',
 		moves: ['Nasty Plot', ['Flamethrower', 'Fire Blast'], 'Roost'],

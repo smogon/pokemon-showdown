@@ -3677,69 +3677,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ground",
 	},
 
-	// quadrophenic
-	triplethreat: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Physical",
-		desc: "Has a 40, 60, or 100 Base Power and a 10%, 25%, or 40% chance to apply any non-volatile status aside from freeze; the status chance and base power increase for each consecutive hit up to 3.",
-		shortDesc: "Chance to random status. Chance&BP+ per use.",
-		name: "Triple Threat",
-		gen: 8,
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('triplethreat');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Tri Attack', target);
-		},
-		secondary: {
-			chance: 10,
-			onHit(target, source) {
-				const hax = this.sample(['slp', 'brn', 'par', 'psn', 'tox']);
-				target.trySetStatus(hax, source);
-			},
-		},
-		condition: {
-			onStart(pokemon) {
-				this.effectState.numConsecutive = 0;
-				this.effectState.lastMove = 'triplethreat';
-			},
-			onTryMovePriority: -2,
-			onTryMove(pokemon, target, move) {
-				if (move.id !== 'triplethreat') {
-					pokemon.removeVolatile('triplethreat');
-					return;
-				}
-				if (this.effectState.lastMove === move.id) {
-					this.effectState.numConsecutive++;
-				} else {
-					this.effectState.numConsecutive = 0;
-				}
-				if (this.effectState.numConsecutive >= 3) this.effectState.numConsecutive = 0;
-				this.effectState.lastMove = move.id;
-			},
-			onModifyMove(move) {
-				if (move.secondaries && move.id === 'triplethreat') {
-					const bpModif = [40, 60, 100];
-					const secModif = [10, 25, 40];
-					const numConsecutive = this.effectState.numConsecutive > 2 ? 2 : this.effectState.numConsecutive;
-					move.basePower = bpModif[numConsecutive];
-					for (const secondary of move.secondaries) {
-						if (secondary.chance) secondary.chance = secModif[numConsecutive];
-					}
-				}
-			},
-		},
-		target: "normal",
-		type: "Normal",
-	},
-
 	// Rabia
 	psychodrive: {
 		accuracy: 100,

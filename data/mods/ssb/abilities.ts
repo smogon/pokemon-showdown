@@ -1611,30 +1611,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// quadrophenic
-	extremeways: {
-		desc: "On switch-in, this Pokemon boosts a random stat by 2 stages.",
-		onStart(source) {
-			const stats: BoostID[] = [];
-			let stat: BoostID;
-			for (stat in source.boosts) {
-				if (stat !== 'accuracy' && stat !== 'evasion' && source.boosts[stat] < 6) {
-					stats.push(stat);
-				}
-			}
-			if (stats.length) {
-				const randomStat = this.sample(stats);
-				const boost: SparseBoostsTable = {};
-				boost[randomStat] = 2;
-				this.boost(boost);
-			} else {
-				return;
-			}
-		},
-		name: "Extreme Ways",
-		gen: 8,
-	},
-
 	// Rach
 	burnitdown: {
 		desc: "On switch-in, this Pokemon lowers the foe's higher offensive stat.",
