@@ -1010,7 +1010,7 @@ export class RandomGen7Teams extends RandomTeams {
 		const types = new Set(species.types);
 		const abilities = new Set<string>();
 		for (const abilityName of Object.values(species.abilities)) {
-			if (abilityName === species.abilities.S) continue;
+			if (abilityName === species.abilities.S || (species.unreleasedHidden && abilityName === species.abilities.H)) continue;
 			abilities.add(abilityName);
 		}
 

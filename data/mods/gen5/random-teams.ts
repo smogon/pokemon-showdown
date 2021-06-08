@@ -461,6 +461,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const ivs: SparseStatsTable = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		const types = new Set(species.types);
 		const abilities = new Set(Object.values(species.abilities));
+		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
 		let availableHP = 0;
 		for (const setMoveid of movePool) {

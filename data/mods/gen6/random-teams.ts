@@ -776,6 +776,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		const types = new Set(species.types);
 		const abilities = new Set(Object.values(species.abilities));
+		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
