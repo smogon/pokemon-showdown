@@ -154,7 +154,7 @@ describe('Future Sight', function () {
 	});
 
 	it(`should not be affected by Life Orb if not the original user`, function () {
-		battle = common.gen(4).createBattle([[
+		battle = common.createBattle([[
 			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
 			{species: 'liepard', item: 'lifeorb', moves: ['sleeptalk']},
 		], [
