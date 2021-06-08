@@ -1685,7 +1685,7 @@ export const Punishments = new class {
 		let banned: false | string = false;
 		const punishment = Punishments.ipSearch(ip, 'BAN');
 		if (punishment) {
-			banned = (Array.isArray(punishment) ? punishment[0] : punishment).id;
+			banned = punishment.id;
 		}
 		if (!banned) return false;
 
