@@ -18,3 +18,4 @@ export {Pokemon} from './pokemon';
 export {PRNG} from './prng';
 export {Side} from './side';
 export {TeamValidator} from './team-validator';
+export * from '../lib';
