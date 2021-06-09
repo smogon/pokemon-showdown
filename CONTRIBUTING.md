@@ -14,6 +14,8 @@ PS has other useful command-line invocations, which you can investigate with `./
 
 Unit tests can be run with `npm test`. You can run specific unit tests with `npx mocha -g "text"`, which will run all unit tests whose name contains "text", or you can just edit the unit test from `it` to `it.only`.
 
+Packaging for npm is done by running `./build decl && npm publish`. Only Zarel has the NPM credentials to do this, but feel free to request a new NPM package if you need something.
+
 
 Contributing
 ------------------------------------------------------------------------
@@ -292,6 +294,8 @@ We care a lot about performance, but also readability. Fortunately, recent versi
 In general, we prefer modern ways of writing things as long as they're supported by the most recent LTS release of Node. For instance, we prefer `{...foo}` to `Object.assign({}, foo)`.
 
 - `.forEach`: Don't use; we always prefer `for`...`of` for readability as well as perf (others like `map`/`filter` are fine, though)
+
+- `.reduce`: we usually prefer `for`...`of` for readability, but you can use it in code that you code-own if you really want to
 
 - Multiline template strings: A frequent source of bugs, so we prefer to explicitly use `\n` and concatenate over multiple lines.
 
