@@ -14,6 +14,7 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
+declare const __version: any;
 
 interface BattleOptions {
 	format?: Format;
@@ -228,12 +229,12 @@ export class Battle {
 			formatid: options.formatid, seed: this.prng.seed,
 		};
 		if (this.rated) inputOptions.rated = this.rated;
-		if (global.__version) {
-			if (global.__version.head) {
-				this.inputLog.push(`>version ${global.__version.head}`);
+		if (typeof __version !== 'undefined') {
+			if (__version.head) {
+				this.inputLog.push(`>version ${__version.head}`);
 			}
-			if (global.__version.origin) {
-				this.inputLog.push(`>version-origin ${global.__version.origin}`);
+			if (__version.origin) {
+				this.inputLog.push(`>version-origin ${__version.origin}`);
 			}
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
