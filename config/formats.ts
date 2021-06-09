@@ -72,7 +72,7 @@ export const Formats: FormatList = [
 		banlist: [
 			'Cinderace', 'Darmanitan-Galar', 'Dracovish', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Magearna', 'Marshadow',
 			'Melmetal', 'Mewtwo', 'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
-			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass','Soul Dew',
 		],
 	},
 	{
@@ -133,22 +133,22 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] NU'],
 		banlist: ['NU', 'PUBL', 'Heat Rock'],
 	},
-	{
-		name: "[Gen 8] LC",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661419/">LC Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3657374/">LC Viability Rankings</a>`,
-		],
+	// {
+		// name: "[Gen 8] LC",
+		// threads: [
+			// `&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
+			// `&bullet; <a href="https://www.smogon.com/forums/threads/3661419/">LC Sample Teams</a>`,
+			// `&bullet; <a href="https://www.smogon.com/forums/threads/3657374/">LC Viability Rankings</a>`,
+		// ],
 
-		mod: 'gen8',
-		maxLevel: 5,
-		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
-		banlist: [
-			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Rufflet', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola',
-			'Chlorophyll', 'Moody', 'Baton Pass',
-		],
-	},
+		// mod: 'gen8',
+		// maxLevel: 5,
+		// ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
+		// banlist: [
+			// 'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Rufflet', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Alola',
+			// 'Chlorophyll', 'Moody', 'Baton Pass',
+		// ],
+	// },
 	{
 		name: "[Gen 8] Monotype",
 		desc: `All the Pok&eacute;mon on a team must share a type.`,
