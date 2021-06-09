@@ -10,6 +10,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+declare const Config: any;
 
 const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes

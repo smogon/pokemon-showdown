@@ -13,6 +13,7 @@ import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
 import {crashlogger} from './crashlogger';
+declare const Config: any;
 
 export const Repl = new class {
 	/**
@@ -61,7 +62,8 @@ export const Repl = new class {
 	 * non-global context.
 	 */
 	start(filename: string, evalFunction: (input: string) => any) {
-		if ('repl' in Config && !Config.repl) return;
+		const config = typeof Config !== 'undefined' ? Config : {};
+		if (config.repl !== undefined && !config.repl) return;
 
 		// TODO: Windows does support the REPL when using named pipes. For now,
 		// this only supports UNIX sockets.
@@ -70,7 +72,7 @@ export const Repl = new class {
 
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
-			const directory = path.dirname(path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', 'app'));
+			const directory = path.dirname(path.resolve(__dirname, '..', config.replsocketprefix || 'logs/repl', 'app'));
 			for (const file of fs.readdirSync(directory)) {
 				const pathname = path.resolve(directory, file);
 				const stat = fs.statSync(pathname);
