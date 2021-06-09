@@ -7761,7 +7761,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Normal"],
 		baseStats: {hp: 65, atk: 96, def: 74, spa: 44, spd: 96, spe: 105},
 		abilities: {0: "Fur Coat", 1: "Klutz", H: "Kicker"},
-		heightm: 1.2,
+		heightm: 1.3,
 		weightkg: 33.3,
 		color: "Brown",
 		prevo: "Buneary",
