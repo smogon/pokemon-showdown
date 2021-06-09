@@ -6073,7 +6073,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 	},
 	cawdet: {
-		tier: "LC OU",
+		tier: "LC UBER",
 	},
 	cawmodore: {
 		tier: "UU",
@@ -6341,7 +6341,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 	},
 	rauchick: {
-		tier: "LC",
+		tier: "LC OU",
 	},
 	symphonix: {
 		tier: "UU",
@@ -6426,7 +6426,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 	},
 	delpni: {
-		tier: "LC",
+		tier: "LC UU",
 	},
 	cuttaroo: {
 		tier: "OU",
