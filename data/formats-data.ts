@@ -1025,7 +1025,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["brickbreak", "bugbite", "dualwingbeat", "uturn"],
 		randomDoubleBattleLevel: 84,
 		tier: "NU",
-		doublesTier: "LC Uber",
+		doublesTier: "LC UBER",
 	},
 	scizor: {
 		randomBattleMoves: ["bulletpunch", "dualwingbeat", "knockoff", "roost", "superpower", "swordsdance", "uturn"],
@@ -1650,7 +1650,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	sneasel: {
 		tier: "NU",
-		doublesTier: "LC Uber",
+		doublesTier: "LC UBER",
 	},
 	weavile: {
 		randomBattleMoves: ["iceshard", "iciclecrash", "knockoff", "lowkick", "swordsdance"],
@@ -1662,7 +1662,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	sneaselalmian: {
 		tier: "NU",
-		doublesTier: "LC Uber",
+		doublesTier: "LC UBER",
 	},
 	weavilealmian: {
 		tier: "OU",
@@ -1707,7 +1707,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["haze", "nightshade", "stealthrock", "strengthsap", "willowisp"],
 		randomBattleLevel: 88,
 		tier: "LC UBER",
-		doublesTier: "LC Uber",
+		doublesTier: "LC UBER",
 	},
 	cursola: {
 		randomBattleMoves: ["earthpower", "hydropump", "icebeam", "shadowball", "stealthrock", "strengthsap"],
@@ -5251,7 +5251,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	poipole: {
-		tier: "NFE",
+		tier: "LC UBER",
 	},
 	naganadel: {
 		randomBattleMoves: ["airslash", "dracometeor", "flamethrower", "nastyplot", "sludgewave"],
