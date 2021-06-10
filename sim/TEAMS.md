@@ -173,6 +173,10 @@ API:
 
 - Converts a JSON team to a packed team
 
+`Teams.import(exportedTeam: string): PokemonSet[]`
+
+- Converts a team in any string format (JSON, exported, or packed) to a JSON team
+
 `Teams.export(team: PokemonSet[]): string`
 
 - Converts a JSON team to an export team
@@ -181,7 +185,7 @@ API:
 
 - Converts a JSON set to export format
 
-(Import is not available in this version; we'll add it to a future version.)
+To convert from export to packed (or vice versa), just round-trip through PokemonSet: `Teams.export(Teams.unpack(packedTeam))` will produce an exported team.
 
 Example use:
 

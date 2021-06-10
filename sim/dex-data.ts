@@ -307,6 +307,16 @@ export class DexTypes {
 }
 
 const idsCache: readonly StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+const reverseCache: {readonly [k: string]: StatID} = {
+	__proto: null as any,
+	"hitpoints": 'hp',
+	"attack": 'atk',
+	"defense": 'def',
+	"specialattack": 'spa', "spatk": 'spa', "spattack": 'spa', "specialatk": 'spa',
+	"special": 'spa', "spc": 'spa',
+	"specialdefense": 'spd', "spdef": 'spd', "spdefense": 'spd', "specialdef": 'spd',
+	"speed": 'spe',
+};
 export class DexStats {
 	readonly shortNames: {readonly [k in StatID]: string};
 	readonly mediumNames: {readonly [k in StatID]: string};
@@ -333,6 +343,13 @@ export class DexStats {
 				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special", spd: "[Special Defense]", spe: "Speed",
 			} as any;
 		}
+	}
+	getID(name: string) {
+		if (name === 'Spd') return 'spe' as StatID;
+		const id = toID(name);
+		if (reverseCache[id]) return reverseCache[id];
+		if (idsCache.includes(id as StatID)) return id as StatID;
+		return null;
 	}
 	ids(): typeof idsCache {
 		return idsCache;
