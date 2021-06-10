@@ -40,7 +40,7 @@ Note: Commands that ask for a team want the team in [packed team format][packed-
 
 `./pokemon-showdown validate-team [FORMAT-ID]`
 
-: Reads a team from stdin, and validates it
+: Reads a team in any format from stdin, and validates it
 : - If valid: exits with code 0
 : - If invalid: writes errors to stderr, exits with code 1
 
@@ -51,14 +51,90 @@ Note: Commands that ask for a team want the team in [packed team format][packed-
 : Using Pokémon Showdown as a command-line simulator is documented at:
 : https://github.com/smogon/pokemon-showdown/blob/master/sim/README.md
 
-`./pokemon-showdown unpack-team`
+`./pokemon-showdown json-team`
 
-: Reads a team from stdin, writes the unpacked JSON to stdout
+: Reads a team in any format from stdin, writes the unpacked JSON to stdout
 
 `./pokemon-showdown pack-team`
 
-: Reads a JSON team from stdin, writes the packed team to stdout
+: Reads a team in any format from stdin, writes the packed team to stdout
+
+`./pokemon-showdown export-team`
+
+: Reads a team in any format from stdin, writes the exported (human-readable) team to stdout
 
 `./pokemon-showdown help`
 
 : Displays this reference
+
+
+Piping
+------
+
+These commands are very unixy (using stdin and stdout), so you can of course pipe them together:
+
+```
+$ ./pokemon-showdown generate-team gen8randombattle | ./pokemon-showdown export-team
+Kartana @ Choice Band
+Ability: Beast Boost
+Level: 74
+EVs: 85 HP / 85 Atk / 85 Def / 85 SpA / 85 SpD / 85 Spe
+- Smart Strike
+- Sacred Sword
+- Knock Off
+- Leaf Blade
+
+Rotom (Rotom-Heat) @ Heavy-Duty Boots
+Ability: Levitate
+Level: 82
+EVs: 85 HP / 85 Def / 85 SpA / 85 SpD / 85 Spe
+IVs: 0 Atk
+- Defog
+- Will-O-Wisp
+- Thunderbolt
+- Overheat
+
+Kingler @ Life Orb
+Ability: Sheer Force
+Level: 84
+EVs: 85 HP / 85 Atk / 85 Def / 85 SpA / 85 SpD / 85 Spe
+- Liquidation
+- X-Scissor
+- Superpower
+- Rock Slide
+
+Abomasnow @ Light Clay
+Ability: Snow Warning
+Level: 82
+EVs: 85 HP / 85 Atk / 85 Def / 85 SpA / 85 SpD / 85 Spe
+- Ice Shard
+- Aurora Veil
+- Earthquake
+- Blizzard
+
+Goodra @ Assault Vest
+Ability: Sap Sipper
+Level: 82
+EVs: 85 HP / 85 Atk / 85 Def / 85 SpA / 85 SpD / 85 Spe
+- Earthquake
+- Power Whip
+- Draco Meteor
+- Fire Blast
+
+Raikou @ Choice Specs
+Ability: Pressure
+Level: 80
+EVs: 85 HP / 85 Def / 85 SpA / 85 SpD / 85 Spe
+IVs: 0 Atk
+- Scald
+- Aura Sphere
+- Thunderbolt
+- Volt Switch
+```
+
+```
+$ ./pokemon-showdown generate-team gen8randombattle | ./pokemon-showdown validate-team gen8ou
+Your set for Coalossal is flagged as Gigantamax, but Gigantamaxing is disallowed
+(If this was a mistake, disable Gigantamaxing on the set.)
+Octillery's ability Moody is banned.
+```

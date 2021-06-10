@@ -29,6 +29,13 @@ try {
 	build();
 }
 
+function readTeam(stream) {
+	return stream.readLine().then(line => {
+		if (line.startsWith('[') || line.includes('|')) return line;
+		return stream.readAll().then(all => (line + '\n' + all));
+	});
+}
+
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// Start the server.
 	//
@@ -68,16 +75,17 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
 		console.log('  Protocol is documented in ./.sim-dist/README.md');
 		console.log('');
-		console.log('pokemon-showdown unpack-team');
+		console.log('pokemon-showdown json-team');
 		console.log('');
-		console.log('  Reads a team from stdin, writes the unpacked JSON to stdout');
+		console.log('  Reads a team in any format from stdin, writes the unpacked JSON to stdout');
 		console.log('');
 		console.log('pokemon-showdown pack-team');
 		console.log('');
-		console.log('  Reads a JSON team from stdin, writes the packed team to stdout');
-		console.log('  NOTE for all team-processing functions: We can only handle JSON teams');
-		console.log('  and packed teams; the PS server is incapable of processing exported');
-		console.log('  teams.');
+		console.log('  Reads a team in any format from stdin, writes the packed team to stdout');
+		console.log('');
+		console.log('pokemon-showdown export-team');
+		console.log('');
+		console.log('  Reads a team in any format from stdin, writes the exported (human-readable) team to stdout');
 		console.log('');
 		console.log('pokemon-showdown help');
 		console.log('');
@@ -108,9 +116,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
-			stdin.readLine().then(function (textTeam) {
+			readTeam(stdin).then(function (textTeam) {
 				try {
-					var team = Teams.unpack(textTeam);
+					var team = Teams.import(textTeam);
 					var result = validator.validateTeam(team);
 					if (result) {
 						console.error(result.join('\n'));
@@ -175,14 +183,15 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		}
 		break;
 	case 'unpack-team':
+	case 'json-team':
 		{
 			var Teams = require('./.sim-dist/teams').Teams;
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
-			stdin.readLine().then(function (packedTeam) {
+			readTeam(stdin).then(function (team) {
 				try {
-					var unpackedTeam = Teams.unpack(packedTeam);
+					var unpackedTeam = Teams.unpack(Teams.import(team));
 					console.log(JSON.stringify(unpackedTeam));
 					process.exit(0);
 				} catch (e) {
@@ -198,10 +207,28 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
-			stdin.readLine().then(function (unpackedTeam) {
+			readTeam(stdin).then(function (team) {
 				try {
-					var packedTeam = Teams.pack(JSON.parse(unpackedTeam));
+					var packedTeam = Teams.pack(Teams.import(team));
 					console.log(packedTeam);
+					process.exit(0);
+				} catch (e) {
+					console.error(e);
+					process.exit(1);
+				}
+			});
+		}
+		break;
+	case 'export-team':
+		{
+			var Teams = require('./.sim-dist/teams').Teams;
+			var Streams = require('./.lib-dist/streams');
+			var stdin = Streams.stdin();
+
+			readTeam(stdin).then(function (team) {
+				try {
+					var exportedTeam = Teams.export(Teams.import(team));
+					console.log(exportedTeam);
 					process.exit(0);
 				} catch (e) {
 					console.error(e);
