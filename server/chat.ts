@@ -1115,6 +1115,22 @@ export class CommandContext extends MessageContext {
 					targetUser.id !== user.id) {
 					throw new Chat.ErrorMessage(this.tr`You are blocking private messages right now.`);
 				}
+				if (targetUser.settings.blockChallenges &&
+					(targetUser.settings.blockChallenges === true || !Users.globalAuth.atLeast(user, targetUser.settings.blockChallenges)) &&
+					!user.can('lock') && targetUser.id !== user.id) {
+					Chat.maybeNotifyBlocked('pm', targetUser, user);
+					if (!targetUser.can('lock')) {
+						throw new Chat.ErrorMessage(this.tr`This user is blocking challenge right now.`);
+					} else {
+						this.sendReply(`|html|${this.tr`If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`}`);
+						throw new Chat.ErrorMessage(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
+					}
+				}
+				if (user.settings.blockChallenges && (user.settings.blockChallenges === true ||
+					!Users.globalAuth.atLeast(targetUser, user.settings.blockChallenges)) && !targetUser.can('lock') &&
+					targetUser.id !== user.id) {
+					throw new Chat.ErrorMessage(this.tr`You are blocking challenge right now.`);
+				}
 			}
 		}
 
