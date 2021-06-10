@@ -17,55 +17,53 @@ Afterwards, you can use any of the following commands:
 Supported commands
 ------------------
 
-Note: Commands that ask for a team want the team in [packed team format][packed-teams] or JSON format. Teambuilder export format is not supported.
-
-  [packed-teams]: ./PROTOCOL.md#team-format
+Note: Commands that ask for a team want the team in [packed team format](./sim/TEAMS.md#packed-format) or JSON format. Teambuilder export format is not supported.
 
 `./pokemon-showdown start [--skip-build] [PORT]`
 
-: Starts a PS server on the specified port
-: (Defaults to the port setting in config/config.js)
-: (The port setting in config/config.js defaults to 8000)
+- Starts a PS server on the specified port
+  (Defaults to the port setting in config/config.js)
+  (The port setting in config/config.js defaults to 8000)
 
-: Using Pokémon Showdown as a server is documented at:
-: [server/README.md](./server/README.md)
+  Using Pokémon Showdown as a server is documented at:
+  [server/README.md](./server/README.md)
 
-: (You do not need to use `./build` when using PS as a server; it will
-: be run automatically for you unless you use `--skip-build`.)
+  (You do not need to use `./build` when using PS as a server; it will
+  be run automatically for you unless you use `--skip-build`.)
 
 `./pokemon-showdown generate-team [FORMAT-ID [RANDOM-SEED]]`
 
-: Generates a random team, and writes it to stdout in packed team format
-: (Format defaults to "gen7randombattle")
+- Generates a random team, and writes it to stdout in packed team format
+  (Format defaults to "gen7randombattle")
 
 `./pokemon-showdown validate-team [FORMAT-ID]`
 
-: Reads a team in any format from stdin, and validates it
-: - If valid: exits with code 0
-: - If invalid: writes errors to stderr, exits with code 1
+- Reads a team in any format from stdin, and validates it
+  - If valid: exits with code 0
+  - If invalid: writes errors to stderr, exits with code 1
 
 `./pokemon-showdown simulate-battle`
 
-: Simulates a battle, taking input to stdin and writing output to stdout
+- Simulates a battle, taking input to stdin and writing output to stdout
 
-: Using Pokémon Showdown as a command-line simulator is documented at:
-: [sim/README.md](./README.md)
+  Using Pokémon Showdown as a command-line simulator is documented at:
+  [sim/README.md](./README.md)
 
 `./pokemon-showdown json-team`
 
-: Reads a team in any format from stdin, writes the unpacked JSON to stdout
+- Reads a team in any format from stdin, writes the unpacked JSON to stdout
 
 `./pokemon-showdown pack-team`
 
-: Reads a team in any format from stdin, writes the packed team to stdout
+- Reads a team in any format from stdin, writes the packed team to stdout
 
 `./pokemon-showdown export-team`
 
-: Reads a team in any format from stdin, writes the exported (human-readable) team to stdout
+- Reads a team in any format from stdin, writes the exported (human-readable) team to stdout
 
 `./pokemon-showdown help`
 
-: Displays this reference
+- Displays this reference
 
 
 Piping

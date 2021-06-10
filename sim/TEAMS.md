@@ -157,13 +157,61 @@ Packed format
 Packed format looks like this:
 
 ```
-Articuno||leftovers|pressure|icebeam,hurricane,substitute,roost|Modest|252,,,252,4,||,,,30,30,|||]Ludicolo||lifeorb|swiftswim|surf,gigadrain,icebeam,raindance|Modest|4,,,252,,252|||||]Volbeat||damprock|prankster|tailglow,batonpass,encore,raindance|Bold|248,,252,,8,|M||||]Seismitoad||lifeorb|swiftswim|hydropump,earthpower,stealthrock,raindance|Modest|,,,252,4,252|||||]Alomomola||damprock|regenerator|wish,protect,toxic,raindance|Bold|252,,252,,4,|||||]Armaldo||leftovers|swiftswim|xscissor,stoneedge,aquatail,rapidspin|Adamant|128,252,4,,,124|||||
+Articuno||leftovers|pressure|icebeam,hurricane,substitute,roost|Modest|252,,,252,4,||,,,30,30,|||]
+Ludicolo||lifeorb|swiftswim|surf,gigadrain,icebeam,raindance|Modest|4,,,252,,252|||||]
+Volbeat||damprock|prankster|tailglow,batonpass,encore,raindance|Bold|248,,252,,8,|M||||]
+Seismitoad||lifeorb|swiftswim|hydropump,earthpower,stealthrock,raindance|Modest|,,,252,4,252|||||]
+Alomomola||damprock|regenerator|wish,protect,toxic,raindance|Bold|252,,252,,4,|||||]
+Armaldo||leftovers|swiftswim|xscissor,stoneedge,aquatail,rapidspin|Adamant|128,252,4,,,124|||||
 ```
+
+(Line breaks added for readability - this is all one line normally.)
+
+The format is a list of pokemon delimited by `]`, where every Pokémon is:
+
+```
+NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE
+```
+
+- `SPECIES` is left blank if it's identical to `NICKNAME`
+
+- `ABILITY` is `0`, `1`, or `H` if it's the ability from the corresponding slot
+  for the Pokémon. It can also be an ability string, for Hackmons etc.
+
+- `MOVES` is a comma-separated list of move IDs.
+
+- `NATURE` left blank means Serious, except in Gen 1-2, where it means no Nature.
+
+- `EVS` and `IVS` are comma-separated in standard order:
+  HP, Atk, Def, SpA, SpD, Spe. EVs left blank are 0, IVs left blank are 31.
+  If all EVs or IVs are blank, the commas can all be left off.
+
+- `EVS` represent AVs in Pokémon Let's Go.
+
+- `IVS` represent DVs in Gen 1-2. The IV will be divided by 2 and rounded down,
+  to become DVs (so the default of 31 IVs is converted to 15 DVs).
+
+- `IVS` is post-hyper-training: pre-hyper-training IVs are represented in
+  `HIDDENPOWERTYPE`
+
+- `SHINY` is `S` for shiny, and blank for non-shiny.
+
+- `LEVEL` is left blank for level 100.
+
+- `HAPPINESS` is left blank for 255.
+
+- `POKEBALL` is left blank if it's a regular Poké Ball.
+
+- `HIDDENPOWERTYPE` is left blank if the Pokémon is not Hyper Trained, if
+  Hyper Training doesn't affect IVs, or if it's represented by a move in
+  the moves list.
+
+- If `POKEBALL` and `HIDDENPOWERTYPE` are both blank, the commas will be left
+  off.
+
 
 Converting between formats
 --------------------------
-
-API:
 
 `Teams.unpack(packedTeam: string): PokemonSet[]`
 
@@ -230,4 +278,10 @@ const output = validator.validateTeam(
 
 `output` will be an array of problems, if it's not a legal team, or `null`, if it's a legal team.
 
-If you're not using JavaScript, use the commandline API: [COMMANDLINE.md](./../COMMANDLINE.md)
+
+Command-line API
+----------------
+
+If you're not using JavaScript, all of these APIs (conversion, generating random teams, validating teams) are available via the commandline API: [COMMANDLINE.md](./../COMMANDLINE.md).
+
+They use standard IO, so any programming language supporting fork/exec should be able to call into them.
