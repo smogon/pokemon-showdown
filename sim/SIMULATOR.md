@@ -95,9 +95,9 @@ Sets player information:
 
 - `avatar` is a string for the player avatar (defaults to "")
 
-- `team` is a team (either in JSON or a string in [packed format][https://github.com/smogon/pokemon-showdown/blob/master/sim/TEAMS.md])
+- `team` is a team (either in JSON or a string in [packed format][./TEAMS.md])
 
-`team` will not be validated! [Use the team validator first][https://github.com/smogon/pokemon-showdown/blob/master/sim/TEAMS.md]. In random formats, `team` can be left out or set to `null` to have the team generator generate a random team for you.
+`team` will not be validated! [Use the team validator first][./TEAMS.md]. In random formats, `team` can be left out or set to `null` to have the team generator generate a random team for you.
 
 ```
 >p1 CHOICE
@@ -108,7 +108,7 @@ Sets player information:
 
 Makes a choice for a player. [Possible choices are documented in `SIM-PROTOCOL.md`][possible-choices].
 
-  [possible-choices]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#possible-choices
+  [possible-choices]: ./SIM-PROTOCOL.md#possible-choices
 
 
 Reading from the simulator
@@ -127,7 +127,7 @@ An update which should be sent to all players and spectators.
 
 [The messages the simulator sends back are documented in `SIM-PROTOCOL.md`][sim-protocol]. You can also look at a replay log for examples.
 
-  [sim-protocol]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
+  [sim-protocol]: ./SIM-PROTOCOL.md
 
 One message type that only appears here is `|split|PLAYERID`:
 
@@ -151,7 +151,7 @@ Note that choice requests (updates telling the player what choices they have for
 
 [Choice requests are documented in "Choice requests" in `SIM-PROTOCOL.md`][choice-requests].
 
-  [choice-requests]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#choice-requests
+  [choice-requests]: ./SIM-PROTOCOL.md#choice-requests
 
     end
     LOGDATA

@@ -125,7 +125,7 @@ Gigantamax sprites are not considered actual Pokémon formes by the game data. F
 
 Filter them out with `species.forme === 'Gmax'`.
 
-For more information on formes whose status as "real" is controversial, see [FORMES.md][https://github.com/smogon/pokemon-showdown/blob/master/data/FORMES.md]
+For more information on formes whose status as "real" is controversial, see [data/FORMES.md](./../data/FORMES.md)
 
 
 "No Ability"

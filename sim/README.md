@@ -4,15 +4,15 @@ Node.js package
 Simulating battles
 ------------------
 
-See: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIMULATOR.md
+See: [sim/SIMULATOR.md](./SIMULATOR.md)
 
 Also available as a command-line API!
 
 
-Validating and converting teams
--------------------------------
+Validating, generating, and converting teams
+--------------------------------------------
 
-See: https://github.com/smogon/pokemon-showdown/blob/master/sim/TEAMS.md
+See: [sim/TEAMS.md](./TEAMS.md)
 
 Also available as a command-line API!
 
@@ -20,7 +20,7 @@ Also available as a command-line API!
 Getting Pokédex information
 ---------------------------
 
-See: https://github.com/smogon/pokemon-showdown/blob/master/sim/DEX.md
+See: [sim/DEX.md](./DEX.md)
 
 
 Undocumented APIs

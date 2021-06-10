@@ -19,7 +19,7 @@ Nonstandard information
 
 The Dex API gives access to a lot of nonstandard data (from other games, from CAP, unreleased things, etc). You often want to filter it out before using it.
 
-See NONSTANDARD.md for details: https://github.com/smogon/pokemon-showdown/blob/master/sim/NONSTANDARD.md
+For details, see [sim/NONSTANDARD.md](./NONSTANDARD.md).
 
 Nonstandard things will still have `exists: true`, but things we don't have information for at all (for instance, if you typo) will have `exists: false`.
 
@@ -81,7 +81,7 @@ Return values have not been stabilized yet. Use the TypeScript definitions if yo
 
 * Gets information about a Pokémon species or forme. `speciesName` can have any capitalization or whitespace. [This includes nonstandard information](#nonstandard-information).
 
-  Forme information is documented here: https://github.com/smogon/pokemon-showdown/blob/master/data/FORMES.md
+  Forme information is documented in [data/FORMES.md](./../data/FORMES.md)
 
 `dex.species.all(): Species[]`
 

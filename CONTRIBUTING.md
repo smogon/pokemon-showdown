@@ -4,9 +4,7 @@ Contributing to Pokémon Showdown
 Building and running
 ------------------------------------------------------------------------
 
-The README contains most of the relevant information here.
-
-https://github.com/smogon/pokemon-showdown/blob/master/README.md
+[README.md](./README.md) contains most of the relevant information here.
 
 Our build script does most of the work here: You can mostly just run `./pokemon-showdown` to start a server. (Windows users will have to replace `./whatever` with `node whatever`, every time it appears)
 

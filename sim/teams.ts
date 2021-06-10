@@ -2,7 +2,7 @@
  * Teams
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Will be documented in TEAMS.md
+ * Functions for converting and generating teams.
  *
  * @license MIT
  */

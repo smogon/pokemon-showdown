@@ -19,7 +19,7 @@ Supported commands
 
 Note: Commands that ask for a team want the team in [packed team format][packed-teams] or JSON format. Teambuilder export format is not supported.
 
-  [packed-teams]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md#team-format
+  [packed-teams]: ./PROTOCOL.md#team-format
 
 `./pokemon-showdown start [--skip-build] [PORT]`
 
@@ -28,7 +28,7 @@ Note: Commands that ask for a team want the team in [packed team format][packed-
 : (The port setting in config/config.js defaults to 8000)
 
 : Using Pokémon Showdown as a server is documented at:
-: https://github.com/smogon/pokemon-showdown/blob/master/server/README.md
+: [server/README.md](./server/README.md)
 
 : (You do not need to use `./build` when using PS as a server; it will
 : be run automatically for you unless you use `--skip-build`.)
@@ -49,7 +49,7 @@ Note: Commands that ask for a team want the team in [packed team format][packed-
 : Simulates a battle, taking input to stdin and writing output to stdout
 
 : Using Pokémon Showdown as a command-line simulator is documented at:
-: https://github.com/smogon/pokemon-showdown/blob/master/sim/README.md
+: [sim/README.md](./README.md)
 
 `./pokemon-showdown json-team`
 
