@@ -230,4 +230,4 @@ const output = validator.validateTeam(
 
 `output` will be an array of problems, if it's not a legal team, or `null`, if it's a legal team.
 
-If you're not using JavaScript, use the commandline API: https://github.com/smogon/pokemon-showdown/blob/master/COMMANDLINE.md
+If you're not using JavaScript, use the commandline API: [COMMANDLINE.md](./../COMMANDLINE.md)

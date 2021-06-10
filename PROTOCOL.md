@@ -416,12 +416,12 @@ Battles
 Battle rooms will have a mix of room messages and battle messages. [Battle
 messages are documented in `SIM-PROTOCOL.md`][sim-protocol].
 
-  [sim-protocol]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
+  [sim-protocol]: ./sim/SIM-PROTOCOL.md
 
 To make decisions in battle, players should use the `/choose` command,
 [also documented in `SIM-PROTOCOL.md`][sending-decisions].
 
-  [sending-decisions]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#sending-decisions
+  [sending-decisions]: ./sim/SIM-PROTOCOL.md#sending-decisions
 
 ### Starting battles through challenges
 
@@ -503,7 +503,7 @@ If you're not using JavaScript and don't want to reimplement these conversions,
 [Pokémon Showdown's command-line client][command-line] can convert between packed teams and
 JSON using standard IO.
 
-  [command-line]: https://github.com/smogon/pokemon-showdown/blob/master/COMMANDLINE.md
+  [command-line]: ./COMMANDLINE.md
 
 If you really want to write your own converter, the format looks something like
 this:

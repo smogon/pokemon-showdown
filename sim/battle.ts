@@ -2,8 +2,18 @@
  * Simulator Battle
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
+ * This file is where the battle simulation itself happens.
+ *
+ * The most important part of the simulation is the event system:
+ * see the `runEvent` function definition for details.
+ *
+ * General battle mechanics are in `battle-actions`; move-specific,
+ * item-specific, etc mechanics are in the corresponding file in
+ * `data`.
+ *
  * @license MIT
  */
+
 import {Dex, toID} from './dex';
 import {Teams} from './teams';
 import {Field} from './field';
