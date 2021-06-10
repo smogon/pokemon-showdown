@@ -56,7 +56,7 @@ console.log(pikachu.isNonstandard); // prints null
 
   const tackle = Dex.mod('gen1').moves.get('Tackle');
 
-  console.log(tackle.basePower); // returns 35
+  console.log(tackle.basePower); // prints 35
   ```
 
 
@@ -71,37 +71,35 @@ Return values have not been stabilized yet. Use the TypeScript definitions if yo
 
 `dex.moves.get(moveName: string): Move`
 
-* Gets information about a move. `moveName` can have any capitalization or whitespace.
-
-  [This includes nonstandard information.](#Nonstandard-information).
+* Gets information about a move. `moveName` can have any capitalization or whitespace. [This includes nonstandard information](#nonstandard-information).
 
 `dex.moves.all(): Move[]`
 
-* Lists all moves we have information for. [This includes nonstandard information.](#Nonstandard-information).
+* Lists all moves we have information for. [This includes nonstandard information](#nonstandard-information).
 
 `dex.species.get(speciesName: string): Species`
 
-* Gets information about a Pokémon species or forme. `speciesName` can have any capitalization or whitespace. [This includes nonstandard information.](#Nonstandard-information).
+* Gets information about a Pokémon species or forme. `speciesName` can have any capitalization or whitespace. [This includes nonstandard information](#nonstandard-information).
 
   Forme information is documented here: https://github.com/smogon/pokemon-showdown/blob/master/data/FORMES.md
 
 `dex.species.all(): Species[]`
 
-* Lists all Pokémon species we have information for. [This includes nonstandard information.](#Nonstandard-information).
+* Lists all Pokémon species we have information for. [This includes nonstandard information](#nonstandard-information).
 
 `dex.abilities.get(abilitysName: string): Ability`
 
-* Gets information about an ability. `abilitysName` can have any capitalization or whitespace. [This includes nonstandard information.](#Nonstandard-information).
+* Gets information about an ability. `abilitysName` can have any capitalization or whitespace. [This includes nonstandard information](#nonstandard-information).
 
 `dex.abilities.all(): Ability[]`
 
-* Lists all abilities we have information for. [This includes nonstandard information.](#Nonstandard-information).
+* Lists all abilities we have information for. [This includes nonstandard information](#nonstandard-information).
 
 `dex.items.get(itemName: string): Item`
 
-* Gets information about an item. `itemName` can have any capitalization or whitespace. [This includes nonstandard information.](#Nonstandard-information).
+* Gets information about an item. `itemName` can have any capitalization or whitespace. [This includes nonstandard information](#nonstandard-information).
 
 `dex.items.all(): Item[]`
 
-* Lists all items we have information for. [This includes nonstandard information.](#Nonstandard-information).
+* Lists all items we have information for. [This includes nonstandard information](#nonstandard-information).
 

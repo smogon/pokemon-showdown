@@ -165,25 +165,21 @@ Converting between formats
 
 API:
 
-`Sim.Teams.unpack(packedTeam: string): PokemonSet[]`
+`Teams.unpack(packedTeam: string): PokemonSet[]`
 
 - Converts a packed team to a JSON team
 
-`Sim.Teams.pack(team: PokemonSet[]): string`
+`Teams.pack(team: PokemonSet[]): string`
 
 - Converts a JSON team to a packed team
 
-`Sim.Teams.export(team: PokemonSet[]): string`
+`Teams.export(team: PokemonSet[]): string`
 
 - Converts a JSON team to an export team
 
-`Sim.Teams.exportSet(set: PokemonSet): string`
+`Teams.exportSet(set: PokemonSet): string`
 
 - Converts a JSON set to export format
-
-`Sim.Teams.generate(format: Format | string, options?: {seed: number[4]}): PokemonSet`
-
-- Generate a team for a random format
 
 (Import is not available in this version; we'll add it to a future version.)
 
@@ -199,6 +195,14 @@ console.log(JSON.stringify(Teams.unpack(
 // will log the team to console in JSON format
 
 ```
+
+
+Random team generator
+---------------------
+
+`Teams.generate(format: Format | string, options?: {seed: number[4]}): PokemonSet[]`
+
+- Generate a team for a random format
 
 
 Team validator
