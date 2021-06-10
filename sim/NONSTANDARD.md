@@ -39,7 +39,7 @@ These have `thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future' |
 Pokéstar Pokémon
 ----------------
 
-Gen 5 had a minigame called ["Pokéstar Studios"][https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9star_Studios], where you could fight robots and aliens and other non-Pokémon in Pokémon battles. These are treated as Pokémon in the Black 2 and White 2 game data.
+Gen 5 had a minigame called ["Pokéstar Studios"](https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9star_Studios), where you could fight robots and aliens and other non-Pokémon in Pokémon battles. These are treated as Pokémon in the Black 2 and White 2 game data.
 
 Examples include:
 
