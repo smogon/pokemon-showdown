@@ -67,7 +67,7 @@ export interface Punishment {
  */
 export interface PunishInfo {
 	desc: string;
-	callback?: (user: User, punishment: Punishment, room: Room | null) => void;
+	callback?: (user: User, punishment: Punishment, room: Room | null, isExactMatch: boolean) => void;
 }
 
 interface PunishmentEntry {
@@ -1475,7 +1475,7 @@ export const Punishments = new class {
 		return Punishments.roomUserids.nestedGet(room as RoomID, name)?.some(p => p.type === type);
 	}
 
-	sortedTypes = ['LOCK', 'NAMELOCK', 'BAN'];
+	sortedTypes = ['TICKETBAN', 'LOCK', 'NAMELOCK', 'BAN'];
 	sortedRoomTypes = [...(global.Punishments?.sortedRoomTypes || []), 'ROOMBAN', 'BLACKLIST'];
 	byWeight(punishments?: Punishment[], room = false) {
 		if (!punishments) return [];
@@ -1622,35 +1622,40 @@ export const Punishments = new class {
 			user.locked = punishUserid;
 			user.updateIdentity();
 		} else if (punishmentInfo?.callback) {
-			punishmentInfo.callback.call(this, user, punishment, null);
+			punishmentInfo.callback.call(this, user, punishment, null, punishment.id === user.id);
 		}
 		Punishments.checkPunishmentTime(user, punishment);
 	}
 
 	checkIp(user: User, connection: Connection) {
 		const ip = connection.ip;
-		let punishment: Punishment | undefined;
-		const punishments = Punishments.ipSearch(ip);
+		let punishments = Punishments.ipSearch(ip);
+
+		if (!punishments && Punishments.checkRangeBanned(ip)) {
+			punishments = [{type: 'LOCK', id: '#ipban', expireTime: Infinity, reason: ''}];
+		}
+
 		if (punishments) {
-			punishment = punishments[0];
-		}
-
-		if (!punishment && Punishments.checkRangeBanned(ip)) {
-			punishment = {type: 'LOCK', id: '#ipban', expireTime: Infinity, reason: ''};
-		}
-
-		if (punishment) {
-			if (Punishments.sharedIps.has(user.latestIp)) {
-				if (!user.locked && !user.autoconfirmed) {
-					user.semilocked = `#sharedip ${punishment.id}` as PunishType;
+			let shared = false;
+			for (const punishment of punishments) {
+				if (Punishments.sharedIps.has(user.latestIp)) {
+					if (!user.locked && !user.autoconfirmed) {
+						user.semilocked = `#sharedip ${punishment.id}` as PunishType;
+					}
+					shared = true;
+				} else {
+					if (['BAN', 'LOCK', 'NAMELOCK'].includes(punishment.type)) {
+						user.locked = punishment.id;
+						if (punishment.type === 'NAMELOCK') {
+							user.namelocked = punishment.id;
+						}
+					} else {
+						const info = Punishments.punishmentTypes.get(punishment.type);
+						info?.callback?.call(this, user, punishment, null, punishment.id === user.id);
+					}
 				}
-			} else {
-				user.locked = punishment.id;
-				if (punishment.type === 'NAMELOCK') {
-					user.namelocked = punishment.id;
-				}
-				Punishments.checkPunishmentTime(user, punishment);
 			}
+			if (!shared) Punishments.checkPunishmentTime(user, Punishments.byWeight(punishments)[0]);
 		}
 
 		return IPTools.lookup(ip).then(({dnsbl, host, hostType}) => {
@@ -1725,7 +1730,7 @@ export const Punishments = new class {
 			for (const punishment of punishments) {
 				const info = this.roomPunishmentTypes.get(punishment.type);
 				if (info?.callback) {
-					info.callback.call(this, user, punishment, Rooms.get(roomid)!);
+					info.callback.call(this, user, punishment, Rooms.get(roomid)!, punishment.id === user.id);
 					continue;
 				}
 				if (punishment.type !== 'ROOMBAN' && punishment.type !== 'BLACKLIST') return null;
