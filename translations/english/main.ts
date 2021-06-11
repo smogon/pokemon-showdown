@@ -147,7 +147,6 @@ export const translations: Translations = {
 		"You are now blocking challenges, except from staff and ${rank}.": "",
 		"You are now blocking challenges, except from staff and ${status} users.": "",
 
-
 		"Staff FAQ": "",
 		"You cannot broadcast all FAQs at once.": "",
 		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "",
