@@ -170,11 +170,7 @@ class Ladder extends LadderStore {
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;
 		}
-		if (Date.now() < user.lastChallenge + 10 * SECONDS && !Config.nothrottle) {
-			// 10 seconds ago, probable misclick
-			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
-			return false;
-		}
+
 		const currentChallenges = Ladders.challenges.get(targetUser.id);
 		if (currentChallenges && currentChallenges.length >= 3 && !user.autoconfirmed) {
 			connection.popup(
