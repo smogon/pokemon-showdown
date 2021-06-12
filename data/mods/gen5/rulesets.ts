@@ -13,4 +13,16 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			'Huntail + Shell Smash + Sucker Punch',
 		],
 	},
+	teampreview: {
+		inherit: true,
+		onTeamPreview() {
+			this.add('clearpoke');
+			for (const pokemon of this.getAllPokemon()) {
+				const details = pokemon.details.replace(', shiny', '')
+					.replace(/(Arceus)(-[a-zA-Z?-]+)?/g, '$1-*');
+				this.add('poke', pokemon.side.id, details, pokemon.item === 'mail' ? 'mail' : pokemon.item ? 'item' : '');
+			}
+			this.makeRequest('teampreview');
+		},
+	},
 };
