@@ -1656,6 +1656,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 				delete pokemon.volatiles[effect];
 				pokemon.addVolatile(effect);
 			}
-        }
-    },
+		},
+	},
 };
