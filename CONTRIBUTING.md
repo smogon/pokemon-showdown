@@ -4,9 +4,7 @@ Contributing to Pokémon Showdown
 Building and running
 ------------------------------------------------------------------------
 
-The README contains most of the relevant information here.
-
-https://github.com/smogon/pokemon-showdown/blob/master/README.md
+[README.md](./README.md) contains most of the relevant information here.
 
 Our build script does most of the work here: You can mostly just run `./pokemon-showdown` to start a server. (Windows users will have to replace `./whatever` with `node whatever`, every time it appears)
 
@@ -14,13 +12,15 @@ PS has other useful command-line invocations, which you can investigate with `./
 
 Unit tests can be run with `npm test`. You can run specific unit tests with `npx mocha -g "text"`, which will run all unit tests whose name contains "text", or you can just edit the unit test from `it` to `it.only`.
 
+Packaging for npm is done by running `./build decl && npm publish`. Only Zarel has the NPM credentials to do this, but feel free to request a new NPM package if you need something.
+
 
 Contributing
 ------------------------------------------------------------------------
 
 In general, we welcome pull requests that fix bugs.
 
-For feature additions and large projects, please discuss with us at https://psim.us/development an/dor https://psim.us/devdiscord first. We'd hate to have to reject a pull request that you spent a long time working on.
+For feature additions and large projects, please discuss with us at https://psim.us/development and/or https://psim.us/devdiscord first. We'd hate to have to reject a pull request that you spent a long time working on.
 
 If you're looking for inspiration for something to do, the Ideas issue has some ideas: https://github.com/smogon/pokemon-showdown/issues/2444
 
@@ -44,7 +44,7 @@ For simplicity (mostly to make relicensing easier), client code should be also b
 Design standards
 ------------------------------------------------------------------------
 
-We strive to be maximally intuitive and accessible. "That's what they all say", but the currently-popular flat design trend straight-up sacrifices usability for aesthetics, and we try to take the other side of that trade-off.
+We strive to be maximally intuitive and accessible. Sure, "that's what they all say", but the currently-popular flat design trend straight-up sacrifices usability for aesthetics, and we try to take the other side of that trade-off.
 
 Some principles we try to design by:
 
@@ -60,7 +60,7 @@ In addition, blind users in particular navigate by link text, so a blind user wi
 
 ### D3. Remove unnecessary clicks
 
-Whenever you give a user a button to click, always think "in what situations would a user want to click this? in what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
+Whenever you give a user a button to click, always think, "In what situations would a user want to click this? In what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
 
 ### D4. Remove unnecessary scrolling and mouse movement
 
@@ -68,13 +68,21 @@ Similar to unnecessary clicks - if a user has a large screen and you show them a
 
 ### D5. Affordances are important
 
+An affordance is a hint for what you're supposed to do. A button looking like a physical button you can click is an example of an affordance. Or a button you can't use not looking clickable.
+
 This is why we depart from flat design: Years of UX research have taught us that it's important for buttons look like buttons. Making clickable things "look 3D and pressable" or underlining them is good practice. We can't always do this (dropdown menus would look pretty ugly if every item was beveled and embossed) but we do what we can.
 
 ### D6. Feedback is important
 
+Users should be shown enough information not to be confused about what's going on.
+
 If a button doesn't react instantly, it should be replaced with a "Loading" screen or some other indication that it's doing something. If something's failed, it should come with an error message so the user knows what's wrong.
 
 There's a famous story of a CEO of a company who clicked the "email everyone" button, but it didn't react, so he clicked it a few more times, accidentally spamming a bunch of users and getting their company marked as spam by a bunch of email services.
+
+This is why we notify for ignored messages once per session. If your friend sends you "here is the code for you to use" and you say "I never got it", there needs to be some way to understand what happened. Options can exist, but options that hide the fact that you turned them on should be avoided.
+
+Part of this overlaps with D5 (buttons that shouldn't be clicked multiple times should be disabled after the first click), but part of this is about not hiding information if it would confuse users. This does conflict with D1 (less is better) a bit, so a useful rule is that if the user has trouble understanding what's going on (e.g. because you replaced some text with a confusing symbol), you've taken D1 too far.
 
 
 Comment standards
@@ -173,7 +181,7 @@ In other words:
 
 The details of how you achieve the fix should be left for the second paragraph of the commit message.
 
-If this is not possible because your code does not make any functionality changes, your commit summary should ideally start with the word "Refactor" (or at least it contain it in some way).
+If this is not possible because your code does not make any functionality changes, your commit summary should ideally start with the word "Refactor" (or at least contain it in some way).
 
 ### CM2. Imperative
 
@@ -214,7 +222,7 @@ If you want to have more than one commit in Git master's history after merge (i.
 
 Here is a guide for squashing, if you need help with that: https://redew.github.io/rebaseguide/
 
-If while rebasing, you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed.
+If, while rebasing, you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed.
 
 
 Code standards
@@ -284,6 +292,8 @@ We care a lot about performance, but also readability. Fortunately, recent versi
 In general, we prefer modern ways of writing things as long as they're supported by the most recent LTS release of Node. For instance, we prefer `{...foo}` to `Object.assign({}, foo)`.
 
 - `.forEach`: Don't use; we always prefer `for`...`of` for readability as well as perf (others like `map`/`filter` are fine, though)
+
+- `.reduce`: we usually prefer `for`...`of` for readability, but you can use it in code that you code-own if you really want to
 
 - Multiline template strings: A frequent source of bugs, so we prefer to explicitly use `\n` and concatenate over multiple lines.
 

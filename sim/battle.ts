@@ -2,8 +2,18 @@
  * Simulator Battle
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
+ * This file is where the battle simulation itself happens.
+ *
+ * The most important part of the simulation is the event system:
+ * see the `runEvent` function definition for details.
+ *
+ * General battle mechanics are in `battle-actions`; move-specific,
+ * item-specific, etc mechanics are in the corresponding file in
+ * `data`.
+ *
  * @license MIT
  */
+
 import {Dex, toID} from './dex';
 import {Teams} from './teams';
 import {Field} from './field';
@@ -14,6 +24,7 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
+declare const __version: any;
 
 interface BattleOptions {
 	format?: Format;
@@ -126,6 +137,7 @@ export class Battle {
 	/** The last damage dealt by a move in the battle - only used by Gen 1 Counter. */
 	lastDamage: number;
 	abilityOrder: number;
+	quickClawRoll: boolean;
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
 
@@ -210,6 +222,7 @@ export class Battle {
 		this.lastSuccessfulMoveThisTurn = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
+		this.quickClawRoll = false;
 
 		this.teamGenerator = null;
 
@@ -226,28 +239,33 @@ export class Battle {
 			formatid: options.formatid, seed: this.prng.seed,
 		};
 		if (this.rated) inputOptions.rated = this.rated;
-		if (global.__version) {
-			if (global.__version.head) {
-				this.inputLog.push(`>version ${global.__version.head}`);
+		if (typeof __version !== 'undefined') {
+			if (__version.head) {
+				this.inputLog.push(`>version ${__version.head}`);
 			}
-			if (global.__version.origin) {
-				this.inputLog.push(`>version-origin ${global.__version.origin}`);
+			if (__version.origin) {
+				this.inputLog.push(`>version-origin ${__version.origin}`);
 			}
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
+		this.add('gametype', this.gameType);
+
+		// timing is early enough to hook into ModifySpecies event
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
 				const hasEventHandler = Object.keys(subFormat).some(
-					val => val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
+					// skip event handlers that are handled elsewhere
+					val => val.startsWith('on') && ![
+						'onBegin', 'onTeamPreview', 'onBattleStart', 'onValidateRule', 'onValidateTeam', 'onChangeSet', 'onValidateSet',
+					].includes(val)
 				);
 				if (hasEventHandler) this.field.addPseudoWeather(rule);
 			}
 		}
 
-		this.add('gametype', this.gameType);
 		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
 		for (const side of sides) {
 			if (options[side]) {
@@ -302,8 +320,8 @@ export class Battle {
 		this.add('message', "The battle's RNG was reset.");
 	}
 
-	suppressingAttackEvents(target?: Pokemon) {
-		return this.activePokemon && this.activePokemon.isActive && this.activePokemon !== target &&
+	suppressingAbility(target?: Pokemon) {
+		return this.activePokemon && this.activePokemon.isActive && (this.activePokemon !== target || this.gen < 8) &&
 			this.activeMove && this.activeMove.ignoreAbility;
 	}
 
@@ -721,36 +739,42 @@ export class Battle {
 				// it's changed; call it off
 				continue;
 			}
-			if (effect.effectType === 'Ability' && !effect.isUnbreakable &&
-					this.suppressingAttackEvents(effectHolder as Pokemon)) {
-				// ignore attacking events
-				const AttackingEvents = {
-					BeforeMove: 1,
-					BasePower: 1,
-					Immunity: 1,
-					RedirectTarget: 1,
-					Heal: 1,
-					SetStatus: 1,
-					CriticalHit: 1,
-					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1, ModifyAccuracy: 1,
-					ModifyBoost: 1,
-					ModifyDamage: 1,
-					ModifySecondaries: 1,
-					ModifyWeight: 1,
-					TryAddVolatile: 1,
-					TryHit: 1,
-					TryHitSide: 1,
-					TryMove: 1,
-					Boost: 1,
-					DragOut: 1,
-					Effectiveness: 1,
-				};
-				if (eventid in AttackingEvents) {
+			if (effect.effectType === 'Ability' && effect.isBreakable !== false &&
+				this.suppressingAbility(effectHolder as Pokemon)) {
+				if (effect.isBreakable) {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');
 					continue;
-				} else if (eventid === 'Damage' && sourceEffect && sourceEffect.effectType === 'Move') {
-					this.debug(eventid + ' handler suppressed by Mold Breaker');
-					continue;
+				}
+				if (!effect.num) {
+					// ignore attacking events for custom abilities
+					const AttackingEvents = {
+						BeforeMove: 1,
+						BasePower: 1,
+						Immunity: 1,
+						RedirectTarget: 1,
+						Heal: 1,
+						SetStatus: 1,
+						CriticalHit: 1,
+						ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1, ModifyAccuracy: 1,
+						ModifyBoost: 1,
+						ModifyDamage: 1,
+						ModifySecondaries: 1,
+						ModifyWeight: 1,
+						TryAddVolatile: 1,
+						TryHit: 1,
+						TryHitSide: 1,
+						TryMove: 1,
+						Boost: 1,
+						DragOut: 1,
+						Effectiveness: 1,
+					};
+					if (eventid in AttackingEvents) {
+						this.debug(eventid + ' handler suppressed by Mold Breaker');
+						continue;
+					} else if (eventid === 'Damage' && sourceEffect && sourceEffect.effectType === 'Move') {
+						this.debug(eventid + ' handler suppressed by Mold Breaker');
+						continue;
+					}
 				}
 			}
 			if (eventid !== 'Start' && eventid !== 'SwitchIn' && eventid !== 'TakeItem' &&
@@ -852,7 +876,7 @@ export class Battle {
 			}
 			return handlers;
 		}
-		if (target instanceof Pokemon && target.isActive) {
+		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
 			handlers = this.findPokemonEventHandlers(target, `on${eventName}`);
 			for (const allyActive of target.alliesAndSelf()) {
 				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
@@ -1142,11 +1166,11 @@ export class Battle {
 		}
 
 		if (type === 'teampreview') {
-			// `chosenTeamSize = 6` means the format wants the user to select
-			// the entire team order, unlike `chosenTeamSize = undefined` which
+			// `pickedTeamSize = 6` means the format wants the user to select
+			// the entire team order, unlike `pickedTeamSize = undefined` which
 			// will only ask the user to select their lead(s).
-			const chosenTeamSize = this.format.teamLength?.battle;
-			this.add('teampreview' + (chosenTeamSize ? '|' + chosenTeamSize : ''));
+			const pickedTeamSize = this.ruleTable.pickedTeamSize;
+			this.add('teampreview' + (pickedTeamSize ? '|' + pickedTeamSize : ''));
 		}
 
 		const requests = this.getRequests(type);
@@ -1186,7 +1210,7 @@ export class Battle {
 		case 'teampreview':
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
-				const maxChosenTeamSize = this.format.teamLength?.battle;
+				const maxChosenTeamSize = this.ruleTable.pickedTeamSize || undefined;
 				requests[i] = {teamPreview: true, maxChosenTeamSize, side: side.getRequestData()};
 			}
 			break;
@@ -1298,6 +1322,7 @@ export class Battle {
 		if (typeof side === 'string') {
 			side = this.getSide(side);
 		}
+		if (!side) return; // can happen if a battle crashes
 		if (this.gameType !== 'freeforall') {
 			return this.win(side.foe);
 		}
@@ -1501,6 +1526,8 @@ export class Battle {
 				}
 			}
 		}
+		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
+		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
 		this.makeRequest('move');
 	}
@@ -1619,9 +1646,7 @@ export class Battle {
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.exists) {
-				if (subFormat.onBegin) subFormat.onBegin.call(this);
-			}
+			if (subFormat.onBegin) subFormat.onBegin.call(this);
 		}
 
 		if (this.sides.some(side => !side.pokemon[0])) {
@@ -1632,7 +1657,12 @@ export class Battle {
 			this.checkEVBalance();
 		}
 
-		this.residualEvent('TeamPreview');
+		if (format.onTeamPreview) format.onTeamPreview.call(this);
+		for (const rule of this.ruleTable.keys()) {
+			if ('+*-!'.includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
+		}
 
 		this.queue.addChoice({choice: 'start'});
 		this.midTurn = true;
@@ -1722,8 +1752,8 @@ export class Battle {
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
 		if (success) {
-			if (Object.values(boost).some(x => x! > 0)) target.statsRaisedThisTurn = true;
-			if (Object.values(boost).some(x => x! < 0)) target.statsLoweredThisTurn = true;
+			if (Object.values(boost).some(x => x > 0)) target.statsRaisedThisTurn = true;
+			if (Object.values(boost).some(x => x < 0)) target.statsLoweredThisTurn = true;
 		}
 		return success;
 	}
@@ -2163,7 +2193,7 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst = false, forceCheck = false) {
+	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
 		if (!length) {
@@ -2174,8 +2204,9 @@ export class Battle {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
 		}
-		let faintData;
+		let faintQueueLeft, faintData;
 		while (this.faintQueue.length) {
+			faintQueueLeft = this.faintQueue.length;
 			faintData = this.faintQueue.shift()!;
 			const pokemon: Pokemon = faintData.target;
 			if (!pokemon.fainted &&
@@ -2190,6 +2221,7 @@ export class Battle {
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
 				pokemon.side.faintedThisTurn = pokemon;
+				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
 			}
 		}
 
@@ -2210,7 +2242,7 @@ export class Battle {
 			}
 		}
 
-		if (this.checkWin(faintData)) return true;
+		if (checkWin && this.checkWin(faintData)) return true;
 
 		if (faintData && length) {
 			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
@@ -2289,6 +2321,14 @@ export class Battle {
 			}
 
 			this.add('start');
+
+			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
+			for (const rule of this.ruleTable.keys()) {
+				if ('+*-!'.includes(rule.charAt(0))) continue;
+				const subFormat = this.dex.formats.get(rule);
+				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
+			}
+
 			for (const side of this.sides) {
 				for (let i = 0; i < side.active.length; i++) {
 					if (!side.pokemonLeft) {

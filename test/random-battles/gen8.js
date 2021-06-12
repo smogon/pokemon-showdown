@@ -68,6 +68,29 @@ describe('[Gen 8] Random Battle', () => {
 	});
 
 	it('Toxapex should always have Scald', () => testAlwaysHasMove('toxapex', options, 'scald'));
+
+	it('Shiinotic should always have Moonblast', () => testAlwaysHasMove('shiinotic', options, 'moonblast'));
+
+	it('should prevent Dragon Dance and Extreme Speed from appearing together', () => {
+		testNotBothMoves('dragonite', options, 'dragondance', 'extremespeed');
+	});
+
+	it('Rapidash with Swords Dance should have at least two attacks', () => {
+		const dex = Dex.forFormat(options.format);
+		testSet('rapidash', options, set => {
+			if (!set.moves.includes('swordsdance')) return;
+			assert(set.moves.filter(m => dex.moves.get(m).category !== 'Status').length > 1, `got ${JSON.stringify(set.moves)}`);
+		});
+	});
+
+	it('Celesteela should not get Leech Seed or Protect on Autotomize sets', () => {
+		testNotBothMoves('celesteela', options, 'leechseed', 'autotomize');
+		testNotBothMoves('celesteela', options, 'protect', 'autotomize');
+	});
+
+	it('Landorus-Therian should not get Fly and Stealth Rock on the same set', () => {
+		testNotBothMoves('landorustherian', options, 'fly', 'stealthrock');
+	});
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
@@ -83,6 +106,10 @@ describe('[Gen 8] Random Doubles Battle', () => {
 		for (const pkmn of ['pinsir', 'pikachu', 'zygarde']) {
 			testHasSTAB(pkmn, options);
 		}
+	});
+
+	it('should give Galarian Darmanitan a Choice Item', () => {
+		testSet('darmanitangalar', options, set => assert(set.item.startsWith('Choice ')));
 	});
 });
 

@@ -4,6 +4,7 @@ const BACKGROUND_COLOR = "#0000FF";
 const HEIGHT = 40;
 const MAX_CATEGORY_COUNT = 5;
 const MAX_QUESTION_COUNT = 5;
+const BUZZ_COOLDOWN = 500; // 0.5 seconds
 
 interface Question {
 	question: string;
@@ -13,10 +14,12 @@ interface Question {
 	dd: boolean;
 }
 
+type JeopardyState = 'signups' | 'selecting' | 'answering' | 'wagering' | 'buzzing' | 'checking' | 'round2';
+
 export class Jeopardy extends Rooms.RoomGame {
 	playerTable: {[userid: string]: JeopardyGamePlayer};
 	host: User;
-	state: 'signups' | 'selecting' | 'answering' | 'wagering' | 'buzzing' | 'checking' | 'round2';
+	state: JeopardyState;
 	gameid: ID;
 	categories: string[];
 	question: Question;
@@ -41,7 +44,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	finals: boolean;
 	gameNumber: number;
 
-	constructor(room: Room, user: User, categoryCount: number, questionCount: number) {
+	constructor(room: Room, user: User, categoryCount: number, questionCount: number, playerCap: number) {
 		super(room);
 		this.gameNumber = room.nextGameNumber();
 		this.playerTable = Object.create(null);
@@ -59,7 +62,7 @@ export class Jeopardy extends Rooms.RoomGame {
 		this.questionCount = questionCount;
 		this.round = 1;
 		this.points = new Map();
-		this.playerCap = 3;
+		this.playerCap = playerCap;
 		this.canBuzz = false;
 		this.numUpdates = 0;
 		this.finalCategory = "";
@@ -106,8 +109,8 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	start() {
-		if (this.roundStarted) return "The game has already been started.";
-		if (this.playerCount < 2) return "The game needs at least two players to start.";
+		if (this.roundStarted) throw new Chat.ErrorMessage("The game has already been started.");
+		if (this.playerCount < 2) throw new Chat.ErrorMessage("The game needs at least two players to start.");
 		const noquestions = [];
 		for (let i = 0; i < this.categoryCount; i++) {
 			for (let j = 0; j < this.questionCount; j++) {
@@ -121,7 +124,7 @@ export class Jeopardy extends Rooms.RoomGame {
 			badstr += `${(badstr ? ", " : "")} final`;
 		}
 		if (badstr) {
-			return `The follow questions still need questions and answers: ${badstr}`;
+			throw new Chat.ErrorMessage(`The following questions still need questions and answers: ${badstr}.`);
 		}
 		this.roundStarted = true;
 		if (this.round === 1) {
@@ -152,7 +155,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	nextPlayer() {
-		this.room.addRaw(`${this.curPlayer.name} you're up!`);
+		this.room.addRaw(`${this.curPlayer.name}, you're up!`);
 	}
 
 	getGrid() {
@@ -169,12 +172,10 @@ export class Jeopardy extends Rooms.RoomGame {
 			buffer += `</tr>`;
 		}
 		buffer += `</table><br />`;
-		if (this.question && !this.finals) {
-			buffer += `<table align="left"><tr><td bgcolor="${this.canBuzz ? "00FF00" : "0000FF"}" height="30px" width="30px"></td></tr></table>`;
-		}
 		for (const userID in this.playerTable) {
 			const player = this.playerTable[userID];
-			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${Utils.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
+			const bold = this.curPlayer?.name === player.name;
+			buffer += `${bold ? "<b>" : ""}<font size=2>${Utils.escapeHTML(player.name)} (${(player.points || 0)})${bold ? "</b>" : ""}<br />`;
 		}
 		buffer += `</body></html></div>`;
 		return buffer;
@@ -201,23 +202,21 @@ export class Jeopardy extends Rooms.RoomGame {
 		this.askQuestion();
 	}
 
-	select(target: string, user: User) {
-		if (this.state !== 'selecting') return "The game of Jeopardy is not in the selection phase.";
-		const player = this.playerTable[user.id];
-		if (!player) return "You are not in the game of Jeopardy.";
-		if (!this.curPlayer || this.curPlayer.id !== user.id) return "It is not your turn to select.";
+	select(target: string) {
+		if (this.state !== 'selecting') throw new Chat.ErrorMessage("The game of Jeopardy is not in the selection phase.");
+
 		const params = target.split(",");
-		if (params.length < 2) return "You must specify a row and a column number.";
+		if (params.length < 2) throw new Chat.ErrorMessage("You must specify a row and a column number.");
 		const categoryNumber = parseInt(params[0]);
 		if (!categoryNumber || categoryNumber < 1 || categoryNumber > this.categoryCount) {
-			return `The category must be a number between 1 and ${this.categoryCount}`;
+			throw new Chat.ErrorMessage(`The category must be a number between 1 and ${this.categoryCount}.`);
 		}
 		const questionNumber = parseInt(params[1]);
 		if (!questionNumber || questionNumber < 1 || questionNumber > this.questionCount) {
-			return `The question must be a number between 1 and ${this.questionCount}`;
+			throw new Chat.ErrorMessage(`The question must be a number between 1 and ${this.questionCount}.`);
 		}
 		const question = this.questions[questionNumber - 1][categoryNumber - 1];
-		if (question.answered) return "That question has already been answered.";
+		if (question.answered) throw new Chat.ErrorMessage("That question has already been answered.");
 		this.question = question;
 		if (question.dd) {
 			this.room.add(`That was a daily double! ${this.curPlayer.name}, how much would you like to wager?`);
@@ -257,8 +256,9 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	allowBuzzes() {
 		this.canBuzz = true;
+		this.room.add(`You may now buzz in for the Jeopardy game!`);
 		this.update(true);
-		this.timeout = setTimeout(() => this.allowAllBuzzes(), 1000 * 1 / 3);
+		this.timeout = setTimeout(() => this.allowAllBuzzes(), BUZZ_COOLDOWN);
 	}
 
 	allowAllBuzzes() {
@@ -273,22 +273,22 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	buzz(user: User) {
-		if (this.state !== 'buzzing') return "You cannot buzz in at this time.";
+		if (this.state !== 'buzzing') throw new Chat.ErrorMessage("You cannot buzz in at this time.");
 		const player = this.playerTable[user.id];
-		if (!player) return "You are not in the game of Jeopardy.";
-		if (player.buzzed) return "You have already buzzed in to the current question.";
+		if (!player) throw new Chat.ErrorMessage("You are not in the game of Jeopardy.");
+		if (player.buzzed) throw new Chat.ErrorMessage("You have already buzzed in to the current question.");
 		if (!this.canBuzz) {
 			player.buzzedEarly = true;
 			player.send("You buzzed early! You now have a delay before you will be able to buzz.");
 			return;
 		} else if (player.buzzedEarly) {
-			return "Your buzzing cooldown has not yet ended.";
+			throw new Chat.ErrorMessage("Your buzzing cooldown has not yet ended.");
 		}
 		this.curPlayer = player;
 		this.curPlayer.buzzed = true;
 		this.room.add(`${user.name} has buzzed in!`);
 		this.state = "answering";
-		this.timeout = setTimeout(() => this.check(false), this.answeringTime * 1000);
+		this.timeout = setTimeout(() => this.check({correct: false, isBuzzTimeout: true}), this.answeringTime * 1000);
 	}
 
 	hasRemainingQuestion() {
@@ -310,19 +310,19 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	wager(amount: string | number, user: User) {
-		if (this.state !== "wagering" && (!this.finals || this.curPlayer.id !== user.id)) {
-			return "You cannot wager at this time.";
+		if (this.state !== "wagering" && (!this.finals || this.curPlayer?.id !== user.id)) {
+			throw new Chat.ErrorMessage("You cannot wager at this time.");
 		}
 		const player = this.playerTable[user.id];
-		if (!player) return "You are not in the game of Jeopardy.";
+		if (!player) throw new Chat.ErrorMessage("You are not in the game of Jeopardy.");
 		amount = toID(amount);
 		const wager = (amount === 'all' ? player.points : parseInt(amount));
-		if (!wager) return "Your wager must be a number, or 'all'";
-		if (wager < 0) return "You cannot wager a negative amount";
+		if (!wager || isNaN(wager)) throw new Chat.ErrorMessage("Your wager must be a number, or 'all'.");
+		if (wager < 0) throw new Chat.ErrorMessage("You cannot wager a negative amount.");
 		if (wager > player.points && (wager > (this.round * 1000) || this.finals)) {
-			return "You cannot wager more than your current number of points";
+			throw new Chat.ErrorMessage("You cannot wager more than your current number of points.");
 		}
-		if (player.wager) return "You have already wagered";
+		if (player.wager) throw new Chat.ErrorMessage("You have already wagered.");
 		player.wager = wager;
 		player.send(`You have wagered ${wager} points!`);
 		if (!this.finals) {
@@ -347,6 +347,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	doFinals() {
+		if (!this.playerTable) return this.room?.add(`Could not play finals because the player table does not exist.`);
 		this.order = Object.keys(this.playerTable);
 		this.doFinalPlayer();
 	}
@@ -391,28 +392,28 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	answer(target: string, user: User) {
-		if (this.state !== 'answering') return "You cannot answer the question at this time.";
+		if (this.state !== 'answering') throw new Chat.ErrorMessage("You cannot answer the question at this time.");
 		const player = this.playerTable[user.id];
-		if (!player) return "You are not in the game of Jeopardy.";
+		if (!player) throw new Chat.ErrorMessage("You are not in the game of Jeopardy.");
 		if (this.finals) {
-			if (player.finalAnswer) return "You have already answered the final jeopardy";
+			if (player.finalAnswer) throw new Chat.ErrorMessage("You have already answered the Final Jeopardy");
 			player.answer = Utils.escapeHTML(target);
-			player.send(`You have selected your answer as ${Utils.escapeHTML(target)}`);
+			player.send(`You have selected your answer as ${Utils.escapeHTML(target)}.`);
 		} else {
 			if (this.timeout) clearTimeout(this.timeout);
-			if (!this.curPlayer || this.curPlayer.id !== user.id) return "It is not your turn to answer.";
+			if (!this.curPlayer || this.curPlayer.id !== user.id) throw new Chat.ErrorMessage("It is not your turn to answer.");
 			this.state = "checking";
 			this.room.add(`${user.name} has answered ${Utils.escapeHTML(target)}!`);
 		}
 	}
 
 	mark(correct: boolean) {
-		if (this.state !== 'checking') return "There is no answer to currently check.";
-		this.check(correct);
+		if (this.state !== 'checking') throw new Chat.ErrorMessage("There is no answer to currently check.");
+		this.check({correct});
 	}
 
-	check(correct: boolean) {
-		if (correct) {
+	check(info: {correct: boolean, isBuzzTimeout?: boolean}) {
+		if (info.correct) {
 			const gainpoints = ((this.question.dd || this.finals) ? this.curPlayer.wager : this.question.points);
 			let points = this.curPlayer.points;
 			points += gainpoints;
@@ -439,7 +440,8 @@ export class Jeopardy extends Rooms.RoomGame {
 			}
 		} else {
 			const losspoints = ((this.question.dd || this.finals) ? this.curPlayer.wager : this.question.points);
-			this.room.add(`${this.curPlayer.name} answered incorrectly and loses ${losspoints} points!`);
+			const action = info.isBuzzTimeout ? 'failed to answer in time' : 'answered incorrectly';
+			this.room.add(`${this.curPlayer.name} ${action} and loses ${losspoints} points!`);
 			let points = this.curPlayer.points;
 			points -= losspoints;
 			this.curPlayer.points = points;
@@ -505,14 +507,14 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	setDailyDouble(categoryNumber: number, questionNumber: number) {
 		const question = this.questions[questionNumber][categoryNumber];
-		if (question.dd) return "That question is already a daily double.";
+		if (question.dd) throw new Chat.ErrorMessage("That question is already a daily double.");
 		question.dd = true;
 	}
 
 	importQuestions(questions: string[], questionStart: number, categoryStart: string | number) {
 		if (typeof categoryStart === 'string') {
 			const split = questions[0].split("|");
-			if (split.length !== 2) return "Final question was unable to be imported.";
+			if (split.length !== 2) throw new Chat.ErrorMessage("Final question was unable to be imported.");
 			this.finalQuestion.question = split[0].trim();
 			this.finalQuestion.answer = split[1].trim();
 		} else {
@@ -523,7 +525,7 @@ export class Jeopardy extends Rooms.RoomGame {
 					}
 					const split = questions[0].split("|");
 					if (split.length !== 2) {
-						return `Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`;
+						throw new Chat.ErrorMessage(`Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`);
 					}
 					this.questions[j][i].question = split[0].trim();
 					this.questions[j][i].answer = split[1].trim();
@@ -533,12 +535,35 @@ export class Jeopardy extends Rooms.RoomGame {
 			if (questions.length > 0) {
 				const split = questions[0].split("|");
 				if (split.length !== 2) {
-					return `Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`;
+					throw new Chat.ErrorMessage(`Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`);
 				}
 				this.finalQuestion.question = split[0].trim();
 				this.finalQuestion.answer = split[1].trim();
 			}
 		}
+	}
+
+	givePoints(user: User | ID, n: number) {
+		const id = toID(user);
+		if (!(id in this.playerTable)) throw new Chat.ErrorMessage(`'${id}' is not a player in the game of Jeopardy.`);
+		this.playerTable[id].points += n;
+	}
+
+	substitute(original: User, substitute: User) {
+		const originalPlayer = this.playerTable[original.id];
+		if (!originalPlayer) throw new Chat.ErrorMessage(`${original.name} is not a player in the game of Jeopardy.`);
+
+		delete this.playerTable[original.id];
+		this.addPlayer(substitute);
+
+		this.playerTable[substitute.id].answer = originalPlayer.answer;
+		this.playerTable[substitute.id].points = originalPlayer.points;
+		this.playerTable[substitute.id].wager = originalPlayer.wager;
+		this.playerTable[substitute.id].buzzedEarly = originalPlayer.buzzedEarly;
+		this.playerTable[substitute.id].finalAnswer = originalPlayer.finalAnswer;
+		this.playerTable[substitute.id].buzzed = originalPlayer.buzzed;
+
+		this.room.add(`${substitute.name} subbed in for ${original.name}!`);
 	}
 }
 
@@ -564,6 +589,11 @@ class JeopardyGamePlayer extends Rooms.RoomGamePlayer {
 export const commands: Chat.ChatCommands = {
 	jp: 'jeopardy',
 	jeopardy: {
+		'': 'help',
+		help() {
+			return this.parse("/help jeopardy");
+		},
+
 		off: 'disable',
 		disable(target, room, user) {
 			room = this.requireRoom();
@@ -588,10 +618,6 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReply("Jeopardy has been enabled for this room.");
 		},
 
-		help(target, room, user) {
-			return this.parse("/help jeopardy");
-		},
-
 		create: 'new',
 		new(target, room, user) {
 			room = this.requireRoom();
@@ -600,19 +626,32 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.checkCan('minigame', null, room);
 			const params = target.split(",");
-			const categoryCount = parseInt(params[0]) || MAX_CATEGORY_COUNT;
-			const questionCount = parseInt(params[1]) || MAX_QUESTION_COUNT;
+
+			const playerCap = parseInt(params[0]);
+			const categoryCount = parseInt(params[1]);
+			const questionCount = parseInt(params[2]);
+			if (isNaN(playerCap) || playerCap <= 1) {
+				return this.errorReply(`The player cap must be a number above 1.`);
+			}
+
+			if (isNaN(categoryCount) || categoryCount <= 0) {
+				return this.errorReply(`The category count must be a number above 0.`);
+			}
 			if (categoryCount > MAX_CATEGORY_COUNT) {
 				return this.sendReply(`A match with more than ${MAX_CATEGORY_COUNT} categories cannot be created.`);
+			}
+
+			if (isNaN(questionCount) || questionCount <= 0) {
+				return this.errorReply(`The question count must be a number above 0.`);
 			}
 			if (questionCount > MAX_QUESTION_COUNT) {
 				return this.sendReply(
 					`A match with more than ${MAX_QUESTION_COUNT} questions per category cannot be created.`
 				);
 			}
-			room.game = new Jeopardy(room, user, categoryCount, questionCount);
-			this.privateModAction(`A new game of Jeopardy was started by ${user.name}`);
-			this.modlog('JEOPARDY');
+			room.game = new Jeopardy(room, user, categoryCount, questionCount, playerCap);
+			this.privateModAction(`${user.name} started a new game of Jeopardy.`);
+			this.modlog('JEOPARDY', null, `maximum of ${playerCap} players, ${categoryCount} categories, and ${questionCount} questions`);
 		},
 
 		categories(target, room, user) {
@@ -648,29 +687,30 @@ export const commands: Chat.ChatCommands = {
 		select(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			const reply = game.select(target, user);
-			if (reply) this.errorReply(reply);
+			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
+			game.select(target);
 		},
 
 		buzz(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			const reply = game.buzz(user);
-			if (reply) this.errorReply(reply);
+			game.buzz(user);
 		},
 
 		wager(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			const reply = game.wager(target, user);
-			if (reply) this.errorReply(reply);
+			if (user.lastCommand !== `/jeopardy wager ${target}`) {
+				user.lastCommand = `/jeopardy wager ${target}`;
+				return this.sendReply(`To confirm your wager of ${target}, type '${user.lastCommand}' again.`);
+			}
+			game.wager(target, user);
 		},
 
 		answer(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			const reply = game.answer(target, user);
-			if (reply) this.errorReply(reply);
+			game.answer(target, user);
 		},
 
 		import(target, room, user) {
@@ -686,6 +726,11 @@ export const commands: Chat.ChatCommands = {
 				catStart = 'finals';
 				params.splice(0, 1);
 			} else {
+				// TODO: use Utils.parseExactInt once #8331 is merged
+				const numberRegex = /^(\s+)?\d+(\s+)?$/;
+				if (!numberRegex.test(params[0]) || !numberRegex.test(params[1])) {
+					return this.errorReply(`You must specify numeric values for Category Number Start and Question Number Start.`);
+				}
 				catStart = parseInt(params[0]);
 				if (catStart) {
 					if (catStart < 1 || catStart > game.categoryCount) {
@@ -707,14 +752,11 @@ export const commands: Chat.ChatCommands = {
 				}
 				params.splice(0, dataStart);
 			}
-			const reply = game.importQuestions(
+			const numberOfQuestions = params.length;
+			game.importQuestions(
 				params, questionStart - 1, (typeof catStart === 'string' ? catStart : catStart - 1)
 			);
-			if (reply) {
-				this.errorReply(reply);
-			} else {
-				this.sendReply("Questions have been imported.");
-			}
+			this.sendReply(`Imported ${numberOfQuestions} questions.`);
 		},
 
 		dd: 'dailydouble',
@@ -732,12 +774,8 @@ export const commands: Chat.ChatCommands = {
 			if (!questionNumber || questionNumber < 1 || questionNumber > game.questionCount) {
 				return this.errorReply(`The question must be a number between 1 and ${game.questionCount}.`);
 			}
-			const reply = game.setDailyDouble(categoryNumber - 1, questionNumber - 1);
-			if (reply) {
-				this.errorReply(reply);
-			} else {
-				this.sendReply("Daily double has been added.");
-			}
+			game.setDailyDouble(categoryNumber - 1, questionNumber - 1);
+			this.sendReply("Daily double has been added.");
 		},
 		dailydoublehelp: [
 			`/jeopardy dailydouble [category number], [question number] - Set a question to be a daily double.`,
@@ -760,18 +798,15 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(game.getQuestion(categoryNumber - 1, questionNumber - 1));
 		},
 
-		addplayer: 'adduser',
-		adduser(target, room, user) {
+		join(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
-			const targetUser = Users.get(target);
-			if (!targetUser) return this.errorReply("User '" + target + "' not found.");
-			if (game.host.id === targetUser.id) return this.errorReply("You can't add yourself to the game.");
-			if (game.addPlayer(targetUser)) {
+			if (game.host.id === user.id) return this.errorReply("You are the host and therefore cannot join the game.");
+			if (game.state !== 'signups') return this.errorReply("This Jeopardy game is not in its signups phase.");
+			if (game.addPlayer(user)) {
 				game.update();
 			} else {
-				this.errorReply("Unable to add '" + target + "' to the game.");
+				this.errorReply("Unable to join the game.");
 			}
 		},
 
@@ -780,23 +815,23 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
-			const reply = game.mark(cmd === 'correct');
-			if (reply) this.errorReply(reply);
+			game.mark(cmd === 'correct');
 		},
 
 		start(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
-			const reply = game.start();
-			if (reply) this.errorReply(reply);
+			game.start();
 		},
-		removeplayer: 'removeuser',
-		removeuser(target, room, user) {
+
+		kick: 'leave',
+		leave(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
-			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
-			const targetUser = Users.get(target);
+			const kicking = cmd.includes('kick');
+			if (kicking && user.id !== game.host.id) return this.errorReply("Only the host can kick players.");
+			const targetUser = kicking ? Users.get(target) : user;
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
 			if (game.removePlayer(targetUser)) {
 				game.update();
@@ -816,6 +851,20 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`${targetUser.name} has subbed in as the host.`);
 		},
 
+		subplayer(target, room, user) {
+			room = this.requireRoom();
+			const game = this.requireGame(Jeopardy);
+			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
+
+			const split = target.split(',');
+			if (split.length !== 2) return this.parse(`/help jeopardy`);
+			const [toSubOut, toSubIn] = split.map(u => Users.get(u));
+			if (!toSubOut) return this.errorReply(`User '${target[0]}' not found.`);
+			if (!toSubIn) return this.errorReply(`User '${target[1]}' not found.`);
+
+			game.substitute(toSubOut, toSubIn);
+		},
+
 		state(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
@@ -828,7 +877,7 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Jeopardy);
 			this.checkCan('minigame', null, room);
 			game.destroy();
-			this.privateModAction(`The game of Jeopardy was ended by ${user.name}`);
+			this.privateModAction(`${user.name} ended the game of Jeopardy.`);
 			this.modlog('JEOPARDY END');
 		},
 
@@ -862,29 +911,52 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(`${user.name} has set the answering window for the final question to ${amount} seconds`);
 			this.modlog('JEOPARDY FINALTIMER', null, `${amount} seconds`);
 		},
+
+		removepoints: 'addpoints',
+		addpoints(target, room, user, connection, cmd) {
+			room = this.requireRoom();
+			if (!target) return this.parse(`/help jeopardy`);
+			const game = this.requireGame(Jeopardy);
+			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
+
+			const [recipient, pointsString] = target.split(',');
+			let points = parseInt(pointsString);
+			if (points <= 0 || isNaN(points)) {
+				return this.errorReply(`You must provide a positive number of points to add/remove.`);
+			}
+			if (cmd.includes('remove')) points *= -1;
+			game.givePoints(toID(recipient), points);
+		},
 	},
-	jeopardyhelp: [
-		`/jp new [number of categories], [number of questions] - Create a new game of jeopardy as the host. Requires: % @ # &`,
-		`/jp end - End the current game of Jeopardy. Requires: % @ # &`,
-		`/jp start - Start the game of Jeopardy. Must be the host.`,
-		`/jp categories [First Category], [Second Category], etc. - Set the categories of the jeopardy game. Must be the host.`,
-		`/jp category [Category Number], [Category Name] - Set a specific category of the jeopardy game. Must be the host.`,
-		`/jp select [Category Number], [Question Number] - Select a question of the Jeopardy game.`,
-		`/jp buzz - Buzz into the current question.`,
-		`/jp answer [answer] - Attempt to answer the current question.`,
-		`/jp correct/incorrect - Mark an answer as correct or incorrect. Must be the host.`,
-		`/jp dailydouble [Category Number], [Question Number] - Set a question to be a daily double. Must be the host.`,
-		`/jp wager [amount] - Wager some money for a daily double or finals. Must be a number or 'all'`,
-		`/jp adduser [User] - Add a user to the game of Jeopardy. Must be the host.`,
-		`/jp removeuser [User] - Remove a user from the game of Jeopardy. Must be the host.`,
-		`/jp view [Category Number], [Question Number] - View a specific question and answer. Must be the host.`,
-		`/jp subhost [User] - Sub a new host into the game. Must be the host.`,
-		`/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc. - Import questions into the current game of Jeopardy. Must be the host.`,
-		`/jp pass - Skip the current question of Jeopardy. Must be the host.`,
-		`/jp state - Check the state of the current Jeopardy game. Must be the host`,
-		`/jp timer [seconds] - Set the answering window after buzzing for questions`,
-		`/jp finaltimer [seconds] - Set the answering window for answering the final question`,
-	],
+	jeopardyhelp() {
+		this.runBroadcast();
+		return this.sendReply(
+			`|html|<details class="readmore"><summary><code>/jp new [player cap], [number of categories], [number of questions]</code>: Host a new game of Jeopardy. Requires: % @ # &<br />` +
+			`<code>/jp join</code>: Join the game of Jeopardy.<br />` +
+			`<code>/jp leave</code>: Leave the game of Jeopardy.<br />` +
+			`<code>/jp buzz</code>: Buzz into the current question.<br />` +
+			`<code>/jp answer [answer]</code>: Attempt to answer the current question.</summary>` +
+			`<code>/jp start</code>: Start the game of Jeopardy. Must be the host.<br />` +
+			`<code>/jp correct/incorrect</code>: Mark an answer as correct or incorrect. Must be the host.<br />` +
+			`<code>/jp categories [First Category], [Second Category], etc.</code>: Set the categories of the jeopardy game. Must be the host.<br />` +
+			`<code>/jp category [Category Number], [Category Name]</code>: Set a specific category of the jeopardy game. Must be the host.<br />` +
+			`<code>/jp select [Category Number], [Question Number]</code>: Select a question of the Jeopardy game.<br />` +
+			`<code>/jp end</code>: End the current game of Jeopardy. Requires: % @ # &<br />` +
+			`<code>/jp dailydouble [Category Number], [Question Number]</code>: Set a question to be a daily double. Must be the host.<br />` +
+			`<code>/jp wager [amount]</code>: Wager some money for a daily double or finals. Must be a number or 'all'<br />` +
+			`<code>/jp kick [User]</code>: Remove a user from the game of Jeopardy. Must be the host.<br />` +
+			`<code>/jp view [Category Number], [Question Number]</code>: View a specific question and answer. Must be the host.<br />` +
+			`<code>/jp subhost [User]</code>: Sub a new host into the game. Must be the host.<br />` +
+			`<code>/jp subplayer [original], [substitute]</code>: Sub a new player into the game. Must be the host.<br />` +
+			`<code>/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc.</code>: Import questions into the current game of Jeopardy. Must be the host.<br />` +
+			`<code>/jp pass</code>: Skip the current question of Jeopardy. Must be the host.<br />` +
+			`<code>/jp state</code>: Check the state of the current Jeopardy game. Must be the host.<br />` +
+			`<code>/jp timer [seconds]</code>: Set the answering window after buzzing for questions<br />` +
+			`<code>/jp finaltimer [seconds]</code>: Set the answering window for answering the final question<br />` +
+			`<code>/jp addpoints [user], [number of points]</code>: Give a player an arbitrary number of points. Must be the host.<br />` +
+			`<code>/jp remove [user], [number of points]</code>: Subtract an arbitrary number of points from a player. Must be the host.</details>`
+		);
+	},
 };
 
 export const roomSettings: Chat.SettingsHandler = room => ({

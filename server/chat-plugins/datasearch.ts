@@ -50,6 +50,7 @@ type Direction = 'less' | 'greater' | 'equal';
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
+const MAX_RANDOM_RESULTS = 30;
 const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 
 function escapeHTML(str?: string) {
@@ -176,7 +177,9 @@ export const commands: Chat.ChatCommands = {
 			if (Number.isInteger(num)) {
 				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon Moves once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
+				if (qty < 1 || MAX_RANDOM_RESULTS < qty) {
+					throw new Chat.ErrorMessage(`Number of random Pok\u00e9mon Moves must be between 1 and ${MAX_RANDOM_RESULTS}.`);
+				}
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -221,7 +224,9 @@ export const commands: Chat.ChatCommands = {
 			if (Number.isInteger(num)) {
 				if (qty) throw new Chat.ErrorMessage("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) throw new Chat.ErrorMessage("Number of random Pok\u00e9mon must be between 1 and 15.");
+				if (qty < 1 || MAX_RANDOM_RESULTS < qty) {
+					throw new Chat.ErrorMessage(`Number of random Pok\u00e9mon must be between 1 and ${MAX_RANDOM_RESULTS}.`);
+				}
 				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(arg);
@@ -447,7 +452,8 @@ export const commands: Chat.ChatCommands = {
 	learnhelp: [
 		`/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.`,
 		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # &`,
-		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or 'pentagon'. A value of 'pentagon' indicates that trading from previous generations is not allowed.`,
+		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or "min source gen [number]".`,
+		`A value of 'min source gen [number]' indicates that trading (or Pokémon Bank) from generations before [number] is not allowed.`,
 		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
 		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum`,
@@ -734,7 +740,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'recovery') {
-				if (parameters.length > 1) return {error: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"healorder", "junglehealing", "lifedew", "milkdrink", "moonlight", "morningsun", "recover",
 					"roost", "shoreup", "slackoff", "softboiled", "strengthsap", "synthesis", "wish",
@@ -750,12 +755,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[move] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'zrecovery') {
-				if (parameters.length > 1) return {error: "The parameter 'zrecovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"aromatherapy", "bellydrum", "conversion2", "haze", "healbell", "mist",
 					"psychup", "refresh", "spite", "stockpile", "teleport", "transform",
@@ -771,12 +774,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.moves[moveid] = true;
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target === 'priority') {
-				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
 				for (const moveid in mod.data.Moves) {
 					const move = mod.moves.get(moveid);
 					if (move.category === "Status" || move.id === "bide") continue;
@@ -792,8 +793,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			if (target.substr(0, 8) === 'resists ') {
@@ -845,17 +845,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'pivot') {
-				let includeBatonPass = false;
-				if (parameters.length > 1) {
-					if (parameters[1].trim().toLowerCase() === 'batonpass') {
-						includeBatonPass = true;
-					} else {
-						return {error: "The parameter 'pivot' cannot have alternative parameters other than 'batonpass'."};
-					}
-				}
 				for (const move in mod.data.Moves) {
 					const moveData = mod.moves.get(move);
-					if (moveData.selfSwitch && (includeBatonPass || moveData.id !== 'batonpass')) {
+					if (moveData.selfSwitch && moveData.id !== 'batonpass') {
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
@@ -867,8 +859,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						}
 					}
 				}
-				if (isNotSearch) orGroup.skip = true;
-				break;
+				continue;
 			}
 
 			const inequality = target.search(/>|<|=/);
@@ -1191,7 +1182,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
@@ -1334,6 +1325,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'gmax') target = 'gmaxmove';
 			if (target === 'multi' || toID(target) === 'multihit') target = 'multihit';
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
+			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
+			if (target === 'bounceable' || toID(target) === 'magiccoat' || toID(target) === 'magicbounce') target = 'reflectable';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
 					return {error: `A search cannot both exclude and include '${target}'.`};
@@ -1916,7 +1909,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			});
 		}
 		let notShown = 0;
-		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
@@ -2346,6 +2339,15 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 			targets.shift();
 			continue;
 		}
+		if (targetid.startsWith('minsourcegen')) {
+			if (format.exists) {
+				return {error: "'min source gen' can't be used with formats."};
+			}
+			minSourceGen = parseInt(targetid.slice(12));
+			if (isNaN(minSourceGen) || minSourceGen < 1) return {error: `Invalid min source gen "${targetid.slice(12)}"`};
+			targets.shift();
+			continue;
+		}
 		if (targetid === 'level5') {
 			level = 5;
 			targets.shift();
@@ -2355,13 +2357,18 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	}
 	let gen;
 	if (!format.exists) {
-		// can happen if you hotpatch formats without hotpatching chat
 		const dex = Dex.mod(formatid).includeData();
+		// can happen if you hotpatch formats without hotpatching chat
 		if (!dex) return {error: `"${formatid}" is not a supported format.`};
+
 		gen = dex.gen;
-		format = new Dex.Format({minSourceGen, mod: formatid});
+		format = new Dex.Format({mod: formatid});
 		formatName = `Gen ${gen}`;
-		if (minSourceGen === 6) formatName += ' Pentagon';
+		if (minSourceGen) {
+			formatName += ` (Min Source Gen = ${minSourceGen})`;
+			const ruleTable = dex.formats.getRuleTable(format);
+			ruleTable.minSourceGen = minSourceGen;
+		}
 	} else {
 		gen = Dex.forFormat(format).gen;
 	}

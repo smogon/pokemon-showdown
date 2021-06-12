@@ -39,7 +39,7 @@ These have `thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future' |
 Pokéstar Pokémon
 ----------------
 
-Gen 5 had a minigame called ["Pokéstar Studios"][https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9star_Studios], where you could fight robots and aliens and other non-Pokémon in Pokémon battles. These are treated as Pokémon in the Black 2 and White 2 game data.
+Gen 5 had a minigame called ["Pokéstar Studios"](https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9star_Studios), where you could fight robots and aliens and other non-Pokémon in Pokémon battles. These are treated as Pokémon in the Black 2 and White 2 game data.
 
 Examples include:
 
@@ -67,13 +67,13 @@ Unobtainable Hidden Abilities
 
 In Gen 5, the game data contained a lot of Hidden Abilities, such as Volt Absorb Zapdos, which ended up never getting released, and were later retconned.
 
-Pokémon Showdown does not contain this data. Pokémon with never-released Gen 5 Hidden Abilities are recorded as simply not having Hidden Abilities in Gen 5.
+Pokémon with never-released Gen 5 Hidden Abilities have `species.unreleasedHidden` set to `true` in Gen 5.
 
 
 Typed Hidden Powers
 -------------------
 
-The data contains information for moves named "Hidden Power Fire", "Hidden Power Ice", etc. These are provided for convenience when building teams – selecting them simultaneously sets the move to "Hidden Power" and the Pokémon's IVs as appropriate – and when running damage calculations.
+The data contains information for moves named "Hidden Power Fire", "Hidden Power Ice", etc. These are provided for convenience: when building teams (to set the move to "Hidden Power" and change IVs), when running damage calculations, and when exporting or sending movesets.
 
 These are matched with `move.realMove === "Hidden Power"`. Since no other move has this feature, you can also check `move.realMove` for existence.
 
@@ -83,7 +83,7 @@ Max moves
 
 Max moves cannot be learned normally, and behave weirdly if hacked into a Pokémon's moveset.
 
-They are matched with `move.isMax`.
+They are matched with `move.isMax`. `move.isNonstandard === null` for Max moves.
 
 
 G-Max moves
@@ -99,7 +99,7 @@ Z-moves
 
 Z-moves cannot be learned normally, and behave weirdly if hacked onto a Pokémon's moveset.
 
-Damaging and Pokémon-specific Z moves are matched with `move.isZ`.
+Damaging and Pokémon-specific Z moves are matched with `move.isZ`. `move.isNonstandard === null` for Z moves.
 
 
 Z-status moves
@@ -125,7 +125,7 @@ Gigantamax sprites are not considered actual Pokémon formes by the game data. F
 
 Filter them out with `species.forme === 'Gmax'`.
 
-For more information on formes whose status as "real" is controversial, see [FORMES.md][https://github.com/smogon/pokemon-showdown/blob/master/data/FORMES.md]
+For more information on formes whose status as "real" is controversial, see [data/FORMES.md](./../data/FORMES.md)
 
 
 "No Ability"
@@ -135,7 +135,7 @@ There is an Ability named "-" in Gen 8, and "No Ability" in some older games, wh
 
 Pokémon Showdown always calls it "No Ability".
 
-No Ability has `ability.isNonstandard === 'Past'` in Gen 3+.
+No Ability has `ability.isNonstandard === 'Past'` in Gen 3+. In Gen 1-2, No Ability is considered the only legal ability, and will have `ability.isNonstandard === null`.
 
 
 Items with no competitive effect
@@ -143,4 +143,4 @@ Items with no competitive effect
 
 We do not carry information about all holdable items. Players wishing to hold an item with no competitive effect can simply hold a "Poke Ball".
 
-`Dex.items.all()` only contains information about items that are competitively relevant.
+`Dex.items.all()` only contains information about items that are competitively relevant. Do not rely on this not to have any given item; "competitively relevant" is not an objective metric and may change (especially since Fling does have an effect for most items we currently consider irrelevant).

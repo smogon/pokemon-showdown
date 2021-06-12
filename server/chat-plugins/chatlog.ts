@@ -1154,9 +1154,10 @@ export const pages: Chat.PageTable = {
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
 		const parsedDate = new Date(date as string);
-		const validDateStrings = ['all', 'alltime', 'today'];
+		const validDateStrings = ['all', 'alltime'];
+		const validNonDateTerm = search ? validDateStrings.includes(date!) : date === 'today';
 		// this is apparently the best way to tell if a date is invalid
-		if (date && isNaN(parsedDate.getTime()) && !validDateStrings.includes(toID(date))) {
+		if (date && isNaN(parsedDate.getTime()) && !validNonDateTerm) {
 			return this.errorReply(`Invalid date.`);
 		}
 
@@ -1186,6 +1187,9 @@ export const pages: Chat.PageTable = {
 		const [, date, target] = Utils.splitFirst(args.join('-'), '--', 3).map(item => item.trim());
 		if (isNaN(new Date(date).getTime())) {
 			return this.errorReply(`Invalid date.`);
+		}
+		if (!/[0-9]{4}-[0-9]{2}/.test(date)) {
+			return this.errorReply(`You must specify a full date - both a year and a month.`);
 		}
 		this.title = `[Log Stats] ${date}`;
 		return LogSearcher.runLinecountSearch(this, room ? room.roomid : args[2] as RoomID, date, toID(target));
@@ -1237,6 +1241,7 @@ export const pages: Chat.PageTable = {
 };
 
 export const commands: Chat.ChatCommands = {
+	chatlogs: 'chatlog',
 	chatlog(target, room, user) {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;

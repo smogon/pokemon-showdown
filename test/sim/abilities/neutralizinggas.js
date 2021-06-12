@@ -169,7 +169,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(regigigas.getStat('spe'), slowStartSpeed);
 	});
 
-	it(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
+	it.skip(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -227,6 +227,19 @@ describe('Neutralizing Gas', function () {
 		const firstUnnerveIndex = log.indexOf('|-ability|p2a: Rookidee|Unnerve');
 		const secondUnnerveIndex = log.lastIndexOf('|-ability|p2a: Rookidee|Unnerve');
 		assert.equal(firstUnnerveIndex, secondUnnerveIndex, 'Unnerve should have only activated once.');
+	});
+
+	it(`should not announce Neutralizing Gas has worn off, if multiple are active simultenously`, function () {
+		battle = common.createBattle([[
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+		], [
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: "Wynaut", ability: 'intrepidsword', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sleeptalk', 'switch 2');
+		assert(battle.log.every(line => !line.startsWith('|-end')));
+		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
 	describe(`Ability reactivation order`, function () {

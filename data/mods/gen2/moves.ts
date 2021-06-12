@@ -370,7 +370,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 9,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Light Screen');
 			},
@@ -516,6 +516,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		ignoreAccuracy: false,
 	},
+	perishsong: {
+		inherit: true,
+		condition: {
+			duration: 4,
+			onEnd(target) {
+				this.add('-start', target, 'perish0');
+				target.faint();
+			},
+			onResidualOrder: 4,
+			onResidual(pokemon) {
+				const duration = pokemon.volatiles['perishsong'].duration;
+				this.add('-start', pokemon, 'perish' + duration);
+			},
+		},
+	},
 	petaldance: {
 		inherit: true,
 		onMoveFail(target, source, move) {
@@ -565,7 +580,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 9,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Reflect');
 			},
@@ -605,6 +620,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		priority: -1,
+	},
+	safeguard: {
+		inherit: true,
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', effect);
+					return 7;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (!effect || !source) return;
+				if (effect.id === 'yawn') return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if (target !== source) {
+					this.debug('interrupting setStatus');
+					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Safeguard');
+					}
+					return null;
+				}
+			},
+			onTryAddVolatile(status, target, source, effect) {
+				if (!effect || !source) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					return null;
+				}
+			},
+			onSideStart(side) {
+				this.add('-sidestart', side, 'Safeguard');
+			},
+			onSideResidualOrder: 8,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'Safeguard');
+			},
+		},
 	},
 	selfdestruct: {
 		inherit: true,

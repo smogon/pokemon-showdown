@@ -123,10 +123,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Dragon",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -234,10 +231,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Ground",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -457,7 +451,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		onResidualOrder: 5,
-		onResidualSubOrder: 5,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.baseMaxhp / 16);
@@ -1034,8 +1028,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onFractionalPriority(priority, pokemon) {
 			if (
 				priority <= 0 &&
-				(pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony))
+				(pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony')))
 			) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
@@ -1684,10 +1677,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Bug",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -1782,8 +1772,8 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 			status: 'brn',
 		},
-		onResidualOrder: 26,
-		onResidualSubOrder: 2,
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			pokemon.trySetStatus('brn', pokemon);
 		},
@@ -2000,10 +1990,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Ice",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2422,10 +2409,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Dark",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2768,10 +2752,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Flying",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2855,7 +2836,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onResidualOrder: 5,
-		onResidualSubOrder: 5,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16);
 		},
@@ -2903,10 +2884,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Grass",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3165,10 +3143,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Ghost",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3423,6 +3398,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			onModifyDamage(damage, source, target, move) {
 				const dmgMod = [4096, 4915, 5734, 6553, 7372, 8192];
 				const numConsecutive = this.effectState.numConsecutive > 5 ? 5 : this.effectState.numConsecutive;
+				this.debug(`Current Metronome boost: ${dmgMod[numConsecutive]}/4096`);
 				return this.chainModify([dmgMod[numConsecutive], 4096]);
 			},
 		},
@@ -3477,10 +3453,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Rock",
 		},
 		onResidual(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3894,10 +3867,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Poison",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -4774,10 +4744,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Fighting",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -5226,10 +5193,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Psychic",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -5337,8 +5301,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 80,
 		},
-		onResidualOrder: 26,
-		onResidualSubOrder: 2,
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			this.damage(pokemon.baseMaxhp / 8);
 		},
@@ -5536,8 +5500,8 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 			status: 'tox',
 		},
-		onResidualOrder: 26,
-		onResidualSubOrder: 2,
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			pokemon.trySetStatus('tox', pokemon);
 		},
@@ -6750,10 +6714,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Rock",
 		},
 		onUpdate(pokemon) {
-			if (
-				pokemon.hp <= pokemon.maxhp / 4 ||
-				(pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)
-			) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},

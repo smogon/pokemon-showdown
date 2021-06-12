@@ -24,15 +24,15 @@ Pokémon Showdown is many things:
 
 - A **JavaScript library** for simulating Pokémon battles and getting Pokédex data
 
-  - https://github.com/smogon/pokemon-showdown/blob/master/sim/README.md
+  - [sim/README.md](./sim/README.md)
 
 - Some **command-line tools** for simulating Pokémon battles (which can be used in non-JavaScript programs)
 
-  - https://github.com/smogon/pokemon-showdown/blob/master/COMMANDLINE.md
+  - [COMMANDLINE.md](./COMMANDLINE.md)
 
 - A **game server** for hosting your own Pokémon Showdown community and game modes
 
-  - https://github.com/smogon/pokemon-showdown/blob/master/server/README.md
+  - [server/README.md](./server/README.md)
 
 Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 8).
 
@@ -40,14 +40,14 @@ Pokémon Showdown simulates singles, doubles and triples battles in all the game
 Documentation quick links
 ------------------------------------------------------------------------
 
-* [PROTOCOL.md][4] - The protocol used by the server to communicate with clients.
-* [SIM-PROTOCOL.md][5] - The protocol used for battles and battle messages.
+* [PROTOCOL.md][4] - How the client and server communicate with each other.
+* [sim/SIM-PROTOCOL.md][5] - The part of the protocol used for battles and battle messages.
 * [CONTRIBUTING.md][6] - Useful code standards to understand if you want to send pull requests to PS (not necessary if you're just using the code and not planning to contribute back).
-* [Bot FAQ][7] - An FAQ compiled by Kaiepi [Kaiepi] regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
+* [Bot FAQ][7] - An FAQ compiled by Kaiepi regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
 
-  [4]: https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md
-  [5]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
-  [6]: https://github.com/smogon/pokemon-showdown/blob/master/CONTRIBUTING.md
+  [4]: ./PROTOCOL.md
+  [5]: ./sim/SIM-PROTOCOL.md
+  [6]: ./CONTRIBUTING.md
   [7]: https://gist.github.com/Kaiepi/becc5d0ecd576f5e7733b57b4e3fa97e
 
 
@@ -70,7 +70,7 @@ License
 
 Pokémon Showdown's server is distributed under the terms of the [MIT License][10].
 
-  [10]: https://github.com/smogon/pokemon-showdown/blob/master/LICENSE
+  [10]: ./LICENSE
 
 
 Credits
