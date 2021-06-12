@@ -20,7 +20,8 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
 					.replace(/(Arceus)(-[a-zA-Z?-]+)?/g, '$1-*');
-				this.add('poke', pokemon.side.id, details, pokemon.item === 'mail' ? 'mail' : pokemon.item ? 'item' : '');
+				const item = pokemon.item.includes('mail') ? 'mail' : pokemon.item ? 'item' : '';
+				this.add('poke', pokemon.side.id, details, item);
 			}
 			this.makeRequest('teampreview');
 		},
