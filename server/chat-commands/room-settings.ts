@@ -1655,7 +1655,6 @@ export const pages: Chat.PageTable = {
 
 		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
 		const permissions = room.settings.permissions || {};
-		const botPermissions = room.settings.botpermissions || {};
 
 		let buf = `<div class="pad"><h2>Command permissions for ${room.title}</h2>`;
 		buf += `<div class="ladder"><table>`;
