@@ -1666,13 +1666,13 @@ export const pages: Chat.PageTable = {
 			buf += `<tr><td><strong>${permission}</strong></td><td>`;
 			if (room.auth.atLeast(user, '#')) {
 				buf += roomGroups.filter(group => group !== Users.SECTIONLEADER_SYMBOL).map(group => (
-					requiredRank[group]  ?
+					requiredRank[group] ?
 						Utils.html`<button class="button" name="send" value="/msgroom ${room.roomid},/permissions set ${permission}, ${group}" style="font-weight:bold;background:#e3c3a3;">${group}</button>` :
 						Utils.html`<button class="button" name="send" value="/msgroom ${room.roomid},/permissions set ${permission}, ${group}">${group}</button>`
 				)).join(' ');
 			} else {
 				buf += roomGroups.filter(group => group !== Users.SECTIONLEADER_SYMBOL).map(group => (
-					requiredRank[group]  ?
+					requiredRank[group] ?
 						Utils.html`<button class="button disabled">${group}</button>` : ''
 				)).join(' ');
 			}
