@@ -16233,7 +16233,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: -19,
 		name: "Voodoom",
 		types: ["Fighting", "Dark"],
-		baseStats: {hp: 90, atk: 85, def: 80, spa: 105, spd: 80, spe: 110},
+		baseStats: {hp: 90, atk: 85, def: 80, spa: 130, spd: 80, spe: 110},
 		abilities: {0: "Volt Absorb", 1: "Lightning Rod", H: "Cursed Body"},
 		heightm: 2,
 		weightkg: 75.5,
