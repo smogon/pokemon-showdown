@@ -450,8 +450,9 @@ export class HelpTicket extends Rooms.RoomGame {
 			}
 		}
 	}
-	static displayPunishmentList(reportUserid: ID, proofString: string, title?: string) {
+	static displayPunishmentList(reportUserid: ID, proofString: string, title?: string, inner?: string) {
 		let buf = `<details class="readmore"><summary>${title || 'Punish reported user:'}</summary><div class="infobox">`;
+		if (inner) buf += inner;
 		const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
 		for (const name of punishments) {
 			buf += `<form data-submitsend="/msgroom staff,/${toID(name)} ${reportUserid},{reason} spoiler: ${proofString}">`;
@@ -729,7 +730,14 @@ const ticketPages: {[k: string]: string} = {
 	appeal: `I want to appeal a punishment`,
 	permalock: `I want to appeal my permalock`,
 	lock: `I want to appeal my lock`,
-	ip: `I'm locked because I have the same IP as someone I don't recognize`,
+	ip: `I'm locked because I have the same IP as someone I don't recognize.`,
+	homeip: `I'm locked because someone in my home was punished.`,
+	device: `I'm locked because someone misused my device or account.`,
+	mobileip: `I am using mobile data.`,
+	public: `I am at a public place (school, library, workplace, etc) or was locked in one.`,
+	timeleft: `I want to know how long is left on my lock.`,
+	reason: `I want to know why I was locked.`,
+	startedit: `The other user started it.`,
 	semilock: `I can't talk in chat because of my ISP`,
 	hostfilter: `I'm locked because of a proxy or VPN`,
 	hasautoconfirmed: `Yes, I have an autoconfirmed account`,
@@ -801,7 +809,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += HelpTicket.displayPunishmentList(
 				ticket.userid,
 				`spoiler:PMs with ${reportUserid} (as ${ticket.userid})${replayString ? `, ${replayString}` : ''}`,
-				`Punish <strong>${ticket.userid}</strong> (reporter)`
+				`Punish <strong>${ticket.userid}</strong> (reporter)`,
+				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`
 			);
 			buf += `<strong>Reported user:</strong> ${reportUserid} </strong>`;
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
@@ -984,6 +993,58 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 		},
 	},
+	ipappeal: {
+		title: "Where are you currently connecting from?",
+		async getReviewDisplay(ticket, staff, conn) {
+			const tarUser = Users.get(ticket.userid);
+			const ips = tarUser ? tarUser.ips : ticket.meta!.split('-');
+			if (!tarUser) ips.shift(); // first one is always 'ips'
+			const info = await Promise.all(ips.map(i => IPTools.lookup(i)));
+			let buf = `<strong>IPs:</strong><br />`;
+			for (const [i, ip] of ips.entries()) {
+				const data = info[i];
+				buf += `<details class="readmore"><summary>`;
+				buf += `<strong><a href="https://whatismyipaddress.com/ip/${ip}">${ip}</a></strong></summary>`;
+				const ipPunishments = Punishments.ips.get(ip);
+				if (ipPunishments) {
+					const str = ipPunishments.map(p => (
+						`${Punishments.punishmentTypes.get(p.type)?.desc || p.type} as ${p.id}${p.reason ? ` (${p.reason})` : ''}`
+					));
+					if (str) buf += `Punishments: ${str.join(' | ')}<br />`;
+				}
+				buf += `Host: ${data.shortHost} [${data.hostType}]<br />`;
+				buf += `<button class="button" name="send" value="/modlog global,[${ip}]">Modlog</button><br />`;
+				if (ipPunishments) {
+					const unlockCmd = staff.can('globalban') ?
+						`/unlockip ${ip}` :
+						`Can someone \`\`/unlockip ${ip}\`\` (${data.hostType} host)`;
+					buf += `<button class="button" name="send" value="/msgroom staff,${unlockCmd}&#10;/join view-help-text-${ticket.userid}">Unlock IP</button>`;
+				}
+				buf += `</details>`;
+			}
+
+			return buf;
+		},
+		checker(text, context, pageId, user) {
+			if (!toID(text)) {
+				return ['Please tell us where you are connecting from.'];
+			}
+			if (!(user.locked || user.namelocked || user.semilocked)) {
+				return ['You are not punished.'];
+			}
+			if (user.ips.some(i => Punishments.sharedIpBlacklist.has(i))) {
+				return [
+					"Your network has too many users who consistently misbehave on it. As such, we cannot unlock you, lest they abuse the unlock.",
+					"Apologies for the inconvenience. It should expire in a few days.",
+				];
+			}
+			return true;
+		},
+		onSubmit(ticket, text, user) {
+			ticket.meta = `ip-${user.ips.join('-')}`;
+			writeTickets();
+		},
+	},
 };
 
 export const pages: Chat.PageTable = {
@@ -1097,9 +1158,10 @@ export const pages: Chat.PageTable = {
 					buf += `<p style="text-align: center"><button class="button" name="send" value="/j help"><strong>Join the Help Room</strong></button></p>`;
 					break;
 				case 'appeal':
-					buf += `<p><b>${this.tr`What would you like to appeal?`}</b></p>`;
+					// buf += `<p><b>${this.tr`What would you like to appeal?`}</b></p>`;
 					if (!isLast) break;
 					if (user.locked || isStaff) {
+						buf += `<p><strong>I want to appeal my lock.</strong></p>`;
 						const namelocked = user.named && user.id.startsWith('guest');
 						if (user.locked === user.id || namelocked || isStaff) {
 							if (user.permalocked || isStaff) {
@@ -1109,6 +1171,13 @@ export const pages: Chat.PageTable = {
 								buf += `<p><Button>lock</Button></p>`;
 							}
 						}
+						for (const type of ['timeleft', 'reason', 'startedit']) {
+							buf += `<p><Button>${type}</Button></p>`;
+						}
+						buf += `<p><strong>I'm locked under a name or IP I don't recognize.</strong></p>`;
+						for (const type of ['public', 'homeip', 'mobileip', 'device']) {
+							buf += `<p><Button>${type}</Button></p>`;
+						}
 						if (user.locked === '#hostfilter' || (user.latestHostType === 'proxy' && user.locked !== user.id) || isStaff) {
 							buf += `<p><Button>hostfilter</Button></p>`;
 						}
@@ -1116,6 +1185,7 @@ export const pages: Chat.PageTable = {
 							buf += `<p><Button>ip</Button></p>`;
 						}
 					}
+					buf += `<p><strong>I am punished but do not fall under any of the above.</strong></p>`;
 					if (user.semilocked || isStaff) {
 						buf += `<p><Button>semilock</Button></p>`;
 					}
@@ -1128,6 +1198,7 @@ export const pages: Chat.PageTable = {
 					break;
 				case 'lock':
 					buf += `<p>${this.tr`If you want to appeal your lock or namelock, click the button below and a global staff member will be with you shortly.`}</p>`;
+					buf += `<p>You will have to explain in detail why your punishment is unjustified and why we would want to unlock you. Insufficient explanations such as "lol this is bs unlock me" will not be considered.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmappeal</Button></p>`;
 					break;
@@ -1135,6 +1206,58 @@ export const pages: Chat.PageTable = {
 					buf += `<p>${this.tr`If you are locked or namelocked under a name you don't recognize, click the button below to call a global staff member so we can check.`}</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmipappeal</Button></p>`;
+					break;
+				case 'homeip':
+					buf += `<p>If you are using your home's wifi network, it means that the person you are being mistaken for did as well (maybe a family member?).</p>`;
+					buf += `<p>In any case, we have no mean to make the difference - for all we know, you are the same user. Please wait out the lock.</p>`;
+					break;
+				case 'device':
+					buf += `<p>Sorry, but you are considered responsible of whoever has access to your computer.</p>`;
+					buf += `<p>We have no way to make the difference between two people using the exact same computer. Please wait out the lock.</p>`;
+					break;
+				case 'mobileip':
+					buf += `<p>If you are not the user who was punished, the lock should go on its own within a few hours.</p>`;
+					buf += `<p>If you are in a hurry to communicate with another user, you can click on the following button to open a ticket.</p>`;
+					buf += `<p>A staff member will look at your case as soon as possible.</p>`;
+					if (!isLast) break;
+					buf += `<button name="send" value="/ht submit IP-Appeal|||I am on a mobile IP.|">Submit ticket</button>`;
+					break;
+				case 'public':
+					if (user.ips.some(ip => Punishments.sharedIpBlacklist.has(ip))) {
+						buf += "<p>The public place you are in has had frequent misbehavior. As such, we can not unlock it, to prevent the bad users on it from abusing this. We apologize for the inconvenience.</p>";
+						break;
+					} else {
+						buf += `<p>If you have been locked at school or in a library, please write down its name, city and country in the form below so we can verify your claim. If you have been locked using the wifi of another type of facility, please write down which kind it is in the form.</p>`;
+						buf += `<p><Button>confirmipappeal</Button></p>`;
+					}
+					break;
+				case 'timeleft':
+					const expiry = Punishments.checkLockExpiration(user.id);
+					if (typeof expiry !== 'string') {
+						buf += `<p>You aren't locked.</p>`;
+					} else {
+						buf += `Your lock ${expiry.trim().replace('(', '').replace(')', '')}.`;
+					}
+					break;
+				case 'reason':
+					const punishments = Punishments.search(user.id)
+						.map(p => p[2])
+						.filter(t => ['LOCK', 'NAMELOCK'].includes(t.type));
+					if (!punishments.some(p => p.reason)) {
+						buf += `<p>No reasons were given.</p>`;
+						break;
+					}
+					for (const [idx, punishment] of punishments.entries()) {
+						if (punishments.indexOf(punishment) !== idx) {
+							continue;
+						} else if (punishment.reason) {
+							buf += Utils.html`<p>Your ${punishment.type} was for: ${punishment.reason}.</p>`;
+						}
+					}
+					break;
+				case 'startedit':
+					buf += `<p>If you have been locked, it is because your behavior on its own has not been okay with PS rules - whether someone else "started" it does not excuse it.</p>`;
+					buf += `<p>If someone broke the rules during the interaction with led to your lock, they should have been punished as well when we treated the report concerning you.</p>`;
 					break;
 				case 'hostfilter':
 					buf += `<p>${this.tr`We automatically lock proxies and VPNs to prevent evasion of punishments and other attacks on our server. To get unlocked, you need to disable your proxy or VPN.`}</p>`;
