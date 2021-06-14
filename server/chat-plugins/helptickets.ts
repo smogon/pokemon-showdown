@@ -1209,14 +1209,14 @@ export const pages: Chat.PageTable = {
 					break;
 				case 'homeip':
 					buf += `<p>If you are using your home's wifi network, it means that the person you are being mistaken for did as well (maybe a family member?).</p>`;
-					buf += `<p>In any case, we have no mean to make the difference - for all we know, you are the same user. Please wait out the lock.</p>`;
+					buf += `<p>In any case, we have no ability to make the difference - for all we know, you are the same user. Please wait out the lock.</p>`;
 					break;
 				case 'device':
-					buf += `<p>Sorry, but you are considered responsible of whoever has access to your computer.</p>`;
+					buf += `<p>Sorry, but you are considered responsible for whoever has access to your computer.</p>`;
 					buf += `<p>We have no way to make the difference between two people using the exact same computer. Please wait out the lock.</p>`;
 					break;
 				case 'mobileip':
-					buf += `<p>If you are not the user who was punished, the lock should go on its own within a few hours.</p>`;
+					buf += `<p>If you are not the user who was punished, the lock should expire on its own within a few hours.</p>`;
 					buf += `<p>If you are in a hurry to communicate with another user, you can click on the following button to open a ticket.</p>`;
 					buf += `<p>A staff member will look at your case as soon as possible.</p>`;
 					if (!isLast) break;
@@ -1227,7 +1227,8 @@ export const pages: Chat.PageTable = {
 						buf += "<p>The public place you are in has had frequent misbehavior. As such, we can not unlock it, to prevent the bad users on it from abusing this. We apologize for the inconvenience.</p>";
 						break;
 					} else {
-						buf += `<p>If you have been locked at school or in a library, please write down its name, city and country in the form below so we can verify your claim. If you have been locked using the wifi of another type of facility, please write down which kind it is in the form.</p>`;
+						buf += `<p>If you have been locked at school or in a library, please write down its name, city and country in the form below so we can verify your claim. This information is strictly confidential, and global staff will only use it to deal with your appeal.</p>`;
+						buf += `<p>If you have been locked using the wifi of another type of facility, please write down which kind it is in the form.</p>`;
 						buf += `<p><Button>confirmipappeal</Button></p>`;
 					}
 					break;
@@ -1236,7 +1237,7 @@ export const pages: Chat.PageTable = {
 					if (typeof expiry !== 'string') {
 						buf += `<p>You aren't locked.</p>`;
 					} else {
-						buf += `Your lock ${expiry.trim().replace('(', '').replace(')', '')}.`;
+						buf += `Your lock ${expiry.trim().replace('(', '').replace(')', '') || "expires soon"}.`;
 					}
 					break;
 				case 'reason':
@@ -1244,7 +1245,7 @@ export const pages: Chat.PageTable = {
 						.map(p => p[2])
 						.filter(t => ['LOCK', 'NAMELOCK'].includes(t.type));
 					if (!punishments.some(p => p.reason)) {
-						buf += `<p>No reasons were given.</p>`;
+						buf += `<p>No reasons were found on your lock.</p>`;
 						break;
 					}
 					for (const [idx, punishment] of punishments.entries()) {
@@ -1256,8 +1257,8 @@ export const pages: Chat.PageTable = {
 					}
 					break;
 				case 'startedit':
-					buf += `<p>If you have been locked, it is because your behavior on its own has not been okay with PS rules - whether someone else "started" it does not excuse it.</p>`;
-					buf += `<p>If someone broke the rules during the interaction with led to your lock, they should have been punished as well when we treated the report concerning you.</p>`;
+					buf += `<p>If you have been locked, it is because your behavior on its own has broken PS rules - whether someone else "started" it does not excuse it.</p>`;
+					buf += `<p>If someone broke the rules during the interaction with led to your lock, they should have been punished as well when we addressed the report concerning you.</p>`;
 					break;
 				case 'hostfilter':
 					buf += `<p>${this.tr`We automatically lock proxies and VPNs to prevent evasion of punishments and other attacks on our server. To get unlocked, you need to disable your proxy or VPN.`}</p>`;
