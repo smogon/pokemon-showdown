@@ -1165,7 +1165,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		Punishments.banRange(ip, reason);
 
-		this.addGlobalModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
+		if (!this.room || this.room.roomid !== 'staff') {
+			this.sendReply(`You hour-banned the ${ipDesc}.`);
+		}
+		this.room = Rooms.get('staff') || null;
+		this.addModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
 		this.globalModlog(`RANGEBAN`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
 	},
 	baniphelp: [
