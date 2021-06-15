@@ -162,6 +162,14 @@ export class Challenges extends Map<ID, Challenge[]> {
 		}
 		return null;
 	}
+	searchByRoom(userid: ID, roomid: RoomID) {
+		const challenges = this.get(userid);
+		if (!challenges) return null;
+		for (const challenge of challenges) {
+			if (challenge.roomid === roomid) return challenge;
+		}
+		return null;
+	}
 	/**
 	 * Try to accept a custom challenge, throwing `Chat.ErrorMessage` on failure,
 	 * and returning the user the challenge was from on a success.

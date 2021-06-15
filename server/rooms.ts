@@ -883,6 +883,14 @@ export abstract class BasicRoom {
 		this.title = newTitle;
 		Rooms.rooms.delete(oldID);
 		Rooms.rooms.set(newID, this as Room);
+		if (this.battle && oldID) {
+			for (const player of this.battle.players) {
+				if (player.invite) {
+					const chall = Ladders.challenges.searchByRoom(player.invite, oldID);
+					if (chall) chall.roomid = this.roomid;
+				}
+			}
+		}
 
 		if (oldID === 'lobby') {
 			Rooms.lobby = null;
