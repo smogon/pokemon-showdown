@@ -1920,5 +1920,6 @@ export const AbilitiesText = {
 		name: "Vicarious",
 		desc: "This Pokémon copies the foe's boosts, when the foe is boosting.",
 		shortDesc: "This Pokémon copies the foe's boosts, when the foe is boosting.",
+		newmeta: "true",
 	},
 };

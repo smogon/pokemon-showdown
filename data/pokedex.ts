@@ -18396,5 +18396,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 380,
 		color: "Blue",
 		eggGroups: ["Field"],
+		newmeta: "true",
 	},
 };

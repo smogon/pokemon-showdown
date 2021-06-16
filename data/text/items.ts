@@ -2325,6 +2325,7 @@ export const ItemsText = {
 	shamecard: {
 		name: "Shame Card",
 		desc: "If holder is statused, attacker is taunted. Single use.",
+		newmeta: "true",
 
 		end: "  [POKEMON] held up its Shame Card against [TARGET]!",
 	},

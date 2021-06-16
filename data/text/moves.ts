@@ -6149,5 +6149,6 @@ export const MovesText = {
 		name: "Dream Wrecker",
 		desc: "Power doubles if the target is asleep. If the user has not fainted, the target wakes up.",
 		shortDesc: "Power doubles if target is asleep, and wakes it.",
+		newmeta: "true",
 	},
 };
