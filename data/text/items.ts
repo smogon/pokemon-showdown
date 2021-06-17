@@ -2197,130 +2197,162 @@ export const ItemsText = {
 	ngunishield: {
 		name: "Nguni Shield",
 		desc: "Holder's Def is 1.5x, but it can only select damaging moves.",
+		newmeta: "true",
 	},
 	bagofcaltrops: {
 		name: "Bag of Caltrops",
 		desc: "When the user holding this faints a layer of spikes is set-up on the opponent's side of the field.",
+		newmeta: "true",
 	},
 	shockorb: {
 		name: "Shock Orb",
 		desc: "At the end of every turn, this item attempts to paralyze the holder.",
+		newmeta: "true",
 	},
 	bikehelmet: {
 		name: "Bike Helmet",
 		desc: "Recoil-inducing moves have power x0.85 but recoil damage is negated (cancels out reckless).",
+		newmeta: "true",
 	},
 	rechargeherb: {
 		name: "Recharge Herb",
 		desc: "Allows the user to move immediately after using a move that would normally cause it to recharge. Single use.",
+		newmeta: "true",
 	},
 	brassknuckles: {
 		name: "Brass Knuckles",
 		desc: "Raises holder's Attack by 1 stage after it uses a punch move. Single use.",
+		newmeta: "true",
 	},
 	poisonrock: {
 		name: "Poison Rock",
 		desc: "Holder's use of Toxic Cloud lasts 8 turns instead of 5.",
+		newmeta: "true",
 	},
 	goodnightpillow: {
         name: "Good-Night Pillow",
         desc: "Each turn, if holder is asleep, restores 1/10 max HP.",
+		newmeta: "true",
     },
 	firewood: {
         name: "Fire Wood",
         desc: "Raises holder's Attack by 1 if hit by an Fire-type attack. Single use.",
+		newmeta: "true",
     },
 	radiantplate: {
 		name: "Radiant Plate",
 		desc: "Holder's Light-type attacks have 1.2x power. Judgment is Light type.",
+		newmeta: "true",
 	},
 	spatialplate: {
 		name: "Spatial Plate",
 		desc: "Holder's Cosmic-type attacks have 1.2x power. Judgment is Cosmic type.",
+		newmeta: "true",
 	},
 	lightmemory: {
 		name: "Light Memory",
 		desc: "Holder's Multi-Attack is Light type.",
+		newmeta: "true",
 	},
 	cosmicmemory: {
 		name: "Cosmic Memory",
 		desc: "Holder's Multi-Attack is Cosmic type.",
+		newmeta: "true",
 	},
 	eldurrberry: {
 		name: "Eldurr Berry",
 		desc: "Halves damage taken from a supereffective Cosmic-type attack. Single use.",
+		newmeta: "true",
 	},
 	keblacberry: {
 		name: "Keblac Berry",
 		desc: "Halves damage taken from a supereffective Light-type attack. Single use.",
+		newmeta: "true",
 	},
 	lightiumz: {
 		name: "Buginium Z",
 		desc: "If holder has a Light move, this item allows it to use a Light Z-Move.",
+		newmeta: "true",
 	},
 	cosmiumz: {
 		name: "Buginium Z",
 		desc: "If holder has a Cosmic move, this item allows it to use a Cosmic Z-Move.",
+		newmeta: "true",
 	},
 	lightgem: {
 		name: "Light Gem",
 		desc: "Holder's first successful Light-type attack will have 1.3x power. Single use.",
 		descGen5: "Holder's first successful Light-type attack will have 1.5x power. Single use.",
+		newmeta: "true",
 	},
 	cosmicgem: {
 		name: "Cosmic Gem",
 		desc: "Holder's first successful Cosmic-type attack will have 1.3x power. Single use.",
 		descGen5: "Holder's first successful Cosmic-type attack will have 1.5x power. Single use.",
+		newmeta: "true",
 	},
 	solarpanel: {
 		name: "Solar Panel",
 		desc: "Raises holder's Speed by 1 stage if hit by a Light-type attack. Single use.",
+		newmeta: "true",
 	},
 	flashdrive: {
 		name: "Flash Drive",
 		desc: "Holder's Techno Blast is Light type.",
+		newmeta: "true",
 	},
 	gravityrock: {
 		name: "Gravity Rock",
 		desc: "Holder's use of Gravity lasts 8 turns instead of 5.",
+		newmeta: "true",
 	},
 	lantern: {
 		name: "Lantern",
 		desc: "Holder's Light-type attacks have 1.2x power.",
+		newmeta: "true",
 	},
 	satellitescope: {
 		name: "Satellite Scope",
 		desc: "Holder's Cosmic-type attacks have 1.2x power.",
+		newmeta: "true",
 	},
 	sacredash: {
 		name: "Sacred Ash",
 		desc: "If holder is Suicune,Entei or Raikou, STAB attacks have 1.3x power.",
+		newmeta: "true",
 	},
 	fogmachine: {
 		name: "Fog Machine",
 		desc: "Holder is protected from critical strikes. Single use.",
+		newmeta: "true",
 		
 		end: "  [POKEMON] blocked a crit thanks to its Fog Machine!",
+		newmeta: "true",
 	},
 	crawshell: {
 		name: "Craw Shell",
 		desc: "Applies Taunt when flung.",
+		newmeta: "true",
 	},
 	glitterbomb: {
 		name: "Glitter Bomb",
 		desc: "Holder applies Torment when its stats are lowered by a foe.",
+		newmeta: "true",
 	},
 	finalite: {
 		name: "Finalite",
 		desc: "When held by fully-evolved Pokemon, their Defense and Special Defense is lowered. [x0.75] Pokemon with only one stage are unaffected.",
+		newmeta: "true",
 	},
 	cursedflute: {
 		name: "Cursed Flute",
 		desc: "Confuses opponent if holder faints.",
+		newmeta: "true",
 	},
 	fairydust: {
 		name: "Fairy Dust",
 		desc: "Holder's Fairy-type attacks have 1.2x power.",
+		newmeta: "true",
 	},
 	shamecard: {
 		name: "Shame Card",
