@@ -676,8 +676,8 @@ export const commands: Chat.ChatCommands = {
 		let species = dex.species.get(args[0]);
 		const formatName = format?.name ||
 			dex.gen > 6 ? dex.formats.get(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
-			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
-				'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
+				'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
+					'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
