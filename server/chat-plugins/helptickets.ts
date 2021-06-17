@@ -903,7 +903,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += HelpTicket.displayPunishmentList(
 				ticket.userid,
 				proof,
-				`Punish <strong>${ticket.userid}</strong> (reporter)`
+				`Punish <strong>${ticket.userid}</strong> (reporter)`,
+				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`
 			);
 			if (ticket.meta) {
 				const [type, meta] = ticket.meta.split('-');
@@ -1464,7 +1465,7 @@ export const pages: Chat.PageTable = {
 			if (!ticket.resolved) {
 				buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
 				buf += `<br /><strong>Resolve:</strong><br />`;
-				buf += `Respond to reporter: <textarea style="width: 100%" name="text"></textarea><br />`;
+				buf += `Respond to reporter: <textarea style="width: 100%" name="text" autocomplete="on"></textarea><br />`;
 				buf += `Staff notes (optional): <textarea style="width: 100%" name="private"></textarea><br />`;
 				buf += `<br /><button class="button notifying" type="submit">Resolve ticket</button></form>`;
 			} else {
