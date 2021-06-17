@@ -619,7 +619,7 @@ export const commands: Chat.ChatCommands = {
 		if (!FS(`${dex.dataDir}/random-teams.js`).readIfExistsSync()) {
 			dex = Dex.forGen(dex.gen);
 		}
-		const isLetsGo = !!(dex.currentMod === 'letsgo');
+		const isLetsGo = (dex.currentMod === 'letsgo');
 
 		const species = dex.species.get(args[0]);
 		if (!species.exists) {
