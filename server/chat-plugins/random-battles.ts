@@ -615,14 +615,17 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
 
-		const {dex, format} = this.splitFormat(target, true);
-		const isLetsGo = !!(format?.mod === 'letsgo');
+		let {dex} = this.splitFormat(target, true);
+		if (!FS(`${dex.dataDir}/random-teams.js`).readIfExistsSync()) {
+			dex = Dex.forGen(dex.gen);
+		}
+		const isLetsGo = !!(dex.currentMod === 'letsgo');
 
 		const species = dex.species.get(args[0]);
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		let formatName = format?.name || dex.formats.get(`gen${dex.gen}randombattle`).name;
+		let formatName = dex.formats.get(`gen${dex.gen}${isLetsGo ? 'letsgo' : ''}randombattle`).name;
 
 		const movesets = [];
 		if (dex.gen === 1) {
@@ -670,14 +673,16 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randomdoublesbattle`);
 
-		const {dex, format} = this.splitFormat(target, true);
+		let {dex} = this.splitFormat(target, true);
+		if (!FS(`${dex.dataDir}/random-teams.js`).readIfExistsSync()) {
+			dex = Dex.forGen(dex.gen);
+		}
 		if (dex.gen < 4) return this.parse(`/help randomdoublesbattle`);
 
 		let species = dex.species.get(args[0]);
-		const formatName = format?.name ||
-			dex.gen > 6 ? dex.formats.get(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
-				'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
-					'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
+		const formatName = dex.gen > 6 ? dex.formats.get(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
+			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
+				'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
