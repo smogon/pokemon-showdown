@@ -324,6 +324,8 @@ export const commands: Chat.ChatCommands = {
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # &"],
 
 		guess(target, room, user) {
+			const word = this.filter(target);
+			if (word !== target) return this.errorReply(`You may not use filtered words in guesses.`);
 			this.parse(`/choose ${target}`);
 		},
 		guesshelp: [

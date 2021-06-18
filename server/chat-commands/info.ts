@@ -146,8 +146,14 @@ export const commands: Chat.ChatCommands = {
 
 		if (canViewAlts) {
 			let prevNames = targetUser.previousIDs.map(userid => {
-				const punishment = Punishments.userids.get(userid);
-				return `${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment[0])?.desc || `punished`}${punishment[1] !== targetUser.id ? ` as ${punishment[1]}` : ``})` : ``}`;
+				const punishments = Punishments.userids.get(userid);
+				if (!punishments) return userid;
+				return punishments.map(
+					punishment => (
+						`${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment.type)?.desc || `punished`}` +
+						`${punishment.id !== targetUser.id ? ` as ${punishment.id}` : ``})` : ``}`
+					)
+				).join(' | ');
 			}).join(", ");
 			if (prevNames) buf += Utils.html`<br />Previous names: ${prevNames}`;
 
@@ -155,14 +161,19 @@ export const commands: Chat.ChatCommands = {
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.tempGroup === '~' && user.tempGroup !== '~') continue;
 
-				const punishment = Punishments.userids.get(targetAlt.id);
-				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0])?.desc || 'punished'}` +
-					`${punishment[1] !== targetAlt.id ? ` as ${punishment[1]}` : ''})` : '';
+				const punishments = Punishments.userids.get(targetAlt.id) || [];
+				const punishMsg = punishments.map(punishment => (
+					` (${Punishments.punishmentTypes.get(punishment.type)?.desc || 'punished'}` +
+					`${punishment.id !== targetAlt.id ? ` as ${punishment.id}` : ''})`
+				)).join(' | ');
 				buf += Utils.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = targetAlt.previousIDs.map(userid => {
 					const p = Punishments.userids.get(userid);
-					return `${userid}${p ? ` (${Punishments.punishmentTypes.get(p[0])?.desc || 'punished'}${p[1] !== targetAlt.id ? ` as ${p[1]}` : ``})` : ``}`;
+					if (!p) return userid;
+					return p.map(
+						cur => `${userid}(${Punishments.punishmentTypes.get(cur.type)?.desc || 'punished'}` + `${cur.id !== targetAlt.id ? ` as ${cur.id}` : ``})`
+					).join(' | ');
 				}).join(", ");
 				if (prevNames) buf += `<br />Previous names: ${prevNames}`;
 			}
@@ -170,11 +181,11 @@ export const commands: Chat.ChatCommands = {
 		if (canViewPunishments) {
 			if (targetUser.namelocked) {
 				buf += `<br />NAMELOCKED: ${targetUser.namelocked}`;
-				const punishment = Punishments.userids.get(targetUser.locked!);
+				const punishment = Punishments.userids.getByType(targetUser.locked!, 'NAMELOCK');
 				if (punishment) {
 					const expiresIn = Punishments.checkLockExpiration(targetUser.locked);
 					if (expiresIn) buf += expiresIn;
-					if (punishment[3]) buf += Utils.html` (reason: ${punishment[3]})`;
+					if (punishment.reason) buf += Utils.html` (reason: ${punishment.reason})`;
 				}
 			} else if (targetUser.locked) {
 				buf += `<br />LOCKED: ${targetUser.locked}`;
@@ -186,26 +197,33 @@ export const commands: Chat.ChatCommands = {
 					buf += ` - host is permanently locked for being a proxy`;
 					break;
 				}
-				const punishment = Punishments.userids.get(targetUser.locked);
+				const punishment = Punishments.userids.getByType(targetUser.locked, 'LOCK');
 				if (punishment) {
 					const expiresIn = Punishments.checkLockExpiration(targetUser.locked);
 					if (expiresIn) buf += expiresIn;
-					if (punishment[3]) buf += Utils.html` (reason: ${punishment[3]})`;
+					if (punishment.reason) buf += Utils.html` (reason: ${punishment.reason})`;
 				}
 			}
 
 			const battlebanned = Punishments.isBattleBanned(targetUser);
 			if (battlebanned) {
-				buf += `<br />BATTLEBANNED: ${battlebanned[1]}`;
-				buf += ` (expires ${Punishments.checkPunishmentExpiration(battlebanned)})`;
-				if (battlebanned[3]) buf += Utils.html` (reason: ${battlebanned[3]})`;
+				buf += `<br />BATTLEBANNED: ${battlebanned.id}`;
+				buf += ` ${Punishments.checkPunishmentExpiration(battlebanned)}`;
+				if (battlebanned.reason) buf += Utils.html` (reason: ${battlebanned.reason})`;
 			}
 
 			const groupchatbanned = Punishments.isGroupchatBanned(targetUser);
 			if (groupchatbanned) {
-				buf += `<br />Banned from using groupchats${groupchatbanned[1] !== targetUser.id ? `: ${groupchatbanned[1]}` : ``}`;
+				buf += `<br />Banned from using groupchats${groupchatbanned.id !== targetUser.id ? `: ${groupchatbanned.id}` : ``}`;
 				buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
-				if (groupchatbanned[3]) buf += Utils.html` (reason: ${groupchatbanned[3]})`;
+				if (groupchatbanned.reason) buf += Utils.html` (reason: ${groupchatbanned.reason})`;
+			}
+
+			const ticketbanned = Punishments.isTicketBanned(targetUser.id);
+			if (ticketbanned) {
+				buf += `<br />Banned from creating help tickets${ticketbanned.id !== targetUser.id ? `: ${ticketbanned.id}` : ``}`;
+				buf += ` ${Punishments.checkPunishmentExpiration(ticketbanned)}`;
+				if (ticketbanned.reason) buf += Utils.html` (reason: ${ticketbanned.reason})`;
 			}
 
 			if (targetUser.semilocked) {
@@ -215,12 +233,14 @@ export const commands: Chat.ChatCommands = {
 		if (user === targetUser ? user.can('ipself') : user.can('ip', targetUser)) {
 			const ips = targetUser.ips.map(ip => {
 				const status = [];
-				const punishment = Punishments.ips.get(ip);
-				if (user.can('alts') && punishment) {
-					const [punishType, userid] = punishment;
-					let punishMsg = Punishments.punishmentTypes.get(punishType)?.desc || punishType;
-					if (userid !== targetUser.id) punishMsg += ` as ${userid}`;
-					status.push(punishMsg);
+				const punishments = Punishments.ips.get(ip);
+				if (user.can('alts') && punishments) {
+					for (const punishment of punishments) {
+						const {type, id} = punishment;
+						let punishMsg = Punishments.punishmentTypes.get(type)?.desc || type;
+						if (id !== targetUser.id) punishMsg += ` as ${id}`;
+						status.push(punishMsg);
+					}
 				}
 				if (Punishments.sharedIps.has(ip)) {
 					let sharedStr = 'shared';
@@ -270,7 +290,7 @@ export const commands: Chat.ChatCommands = {
 				buf += `<br />Room punishments: `;
 
 				buf += punishments.map(([curRoom, curPunishment]) => {
-					const [punishType, punishUserid, expireTime, reason] = curPunishment;
+					const {type: punishType, id: punishUserid, expireTime, reason} = curPunishment;
 					let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc || punishType;
 					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
 					const expiresIn = new Date(expireTime).getTime() - Date.now();
@@ -325,16 +345,18 @@ export const commands: Chat.ChatCommands = {
 		buf += `<br /><br />`;
 		let atLeastOne = false;
 
-		const punishment = Punishments.userids.get(userid);
-		if (punishment) {
-			const [punishType, punishUserid, , reason] = punishment;
-			const punishDesc = (Punishments.punishmentTypes.get(punishType)?.desc || punishType);
-			buf += `${punishDesc}: ${punishUserid}`;
-			const expiresIn = Punishments.checkLockExpiration(userid);
-			if (expiresIn) buf += expiresIn;
-			if (reason) buf += Utils.html` (reason: ${reason})`;
-			buf += '<br />';
-			atLeastOne = true;
+		const idPunishments = Punishments.userids.get(userid);
+		if (idPunishments) {
+			for (const p of idPunishments) {
+				const {type: punishType, id: punishUserid, reason} = p;
+				const punishDesc = (Punishments.punishmentTypes.get(punishType)?.desc || punishType);
+				buf += `${punishDesc}: ${punishUserid}`;
+				const expiresIn = Punishments.checkLockExpiration(userid);
+				if (expiresIn) buf += expiresIn;
+				if (reason) buf += Utils.html` (reason: ${reason})`;
+				buf += '<br />';
+				atLeastOne = true;
+			}
 		}
 
 		if (!user.can('alts') && !atLeastOne) {
@@ -350,7 +372,7 @@ export const commands: Chat.ChatCommands = {
 			buf += `<br />Room punishments: `;
 
 			buf += punishments.map(([curRoom, curPunishment]) => {
-				const [punishType, punishUserid, expireTime, reason] = curPunishment;
+				const {type: punishType, id: punishUserid, expireTime, reason} = curPunishment;
 				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc || punishType;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 				const expiresIn = new Date(expireTime).getTime() - Date.now();
@@ -2441,7 +2463,7 @@ export const commands: Chat.ChatCommands = {
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
-		if (user.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
+		if (user.can('showmedia', null, room, '/show')) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
@@ -2620,7 +2642,12 @@ export const commands: Chat.ChatCommands = {
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
 		const result = JSON.parse(rawResult);
 		const date = new Date(result.registertime * 1000);
-		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
+		const duration = Date.now() - date.getTime();
+		// hardcode, since the loginserver doesn't store exact times, and
+		// so this can look quite inaccurate if it was within the last day
+		const regTimeAgo = duration > 24 * 60 * 60 * 1000 ?
+			Chat.toDurationString(duration, {precision: 1}) :
+			'less than a day';
 		this.sendReplyBox(Utils.html`The user '${target}' registered ${regTimeAgo} ago, on the date ${date.toDateString()}.`);
 	},
 	registertimehelp: [`/registertime OR /regtime [user] - Find out when [user] registered.`],

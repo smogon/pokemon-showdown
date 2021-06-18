@@ -361,6 +361,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 			while (moves.size < 4 && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
+				if (moveid.startsWith('hiddenpower')) {
+					if (hasHiddenPower) continue;
+					hasHiddenPower = true;
+				}
 				moves.add(moveid);
 			}
 
@@ -452,17 +456,20 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				}
 
 				// Remove rejected moves from the move list
+				const moveIsHP = moveid.startsWith('hiddenpower');
 				if (
 					cull &&
-					(movePool.length - availableHP || availableHP && (moveid.startsWith('hiddenpower') || !hasHiddenPower))
+					(movePool.length - availableHP || availableHP && (moveIsHP || !hasHiddenPower))
 				) {
-					if (move.category !== 'Status' && !move.damage && (!moveid.startsWith('hiddenpower') || !availableHP)) {
+					if (move.category !== 'Status' && !move.damage && (!moveIsHP || !availableHP)) {
 						rejectedPool.push(moveid);
 					}
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}
 				if (cull && rejectedPool.length) {
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}

@@ -1645,7 +1645,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		const gameRoom = await Ladders.acceptChallenge(connection, chall as Ladders.BattleChallenge);
 		if (!gameRoom) return false;
-		this.sendChatMessage(`/text ${user.name} accepted the challenge, starting <<${gameRoom.roomid}>>`);
+		this.sendChatMessage(Utils.html`/nonotify ${user.name} accepted the challenge, starting &laquo;<a href="/${gameRoom.roomid}">${gameRoom.roomid}</a>&raquo;`);
 		return true;
 	},
 

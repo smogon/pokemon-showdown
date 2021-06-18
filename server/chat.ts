@@ -1843,14 +1843,16 @@ export const Chat = new class {
 			if (!Chat.handlers['RenameRoom']) Chat.handlers['RenameRoom'] = [];
 			Chat.handlers['RenameRoom'].push(plugin.onRenameRoom);
 		}
-		if (plugin.onCloseRoom) {
-			if (!Chat.handlers['CloseRoom']) Chat.handlers['CloseRoom'] = [];
-			Chat.handlers['CloseRoom'].push(plugin.onCloseRoom);
+		if (plugin.onRoomClose) {
+			if (!Chat.handlers['RoomClose']) Chat.handlers['RoomClose'] = [];
+			Chat.handlers['RoomClose'].push(plugin.onRoomClose);
 		}
-		for (const k in plugin.hooks) {
-			const handlerName = k.slice(2);
-			if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
-			Chat.handlers[handlerName].push(plugin[k]);
+		if (plugin.handlers) {
+			for (const k in plugin.handlers) {
+				const handlerName = k.slice(2);
+				if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
+				Chat.handlers[handlerName].push(plugin.handlers[k]);
+			}
 		}
 		Chat.plugins[name] = plugin;
 	}
@@ -1905,7 +1907,12 @@ export const Chat = new class {
 		}
 
 		for (const file of files) {
-			this.loadPlugin(`chat-plugins/${file}`);
+			try {
+				this.loadPlugin(`chat-plugins/${file}`);
+			} catch (e) {
+				Monitor.crashlog(e, "A loading chat plugin");
+				continue;
+			}
 		}
 		Chat.oldPlugins = {};
 		// lower priority should run later
@@ -1930,7 +1937,7 @@ export const Chat = new class {
 	}
 
 	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
-		Chat.runHandlers('CloseRoom', roomid, user, connection);
+		Chat.runHandlers('RoomClose', roomid, user, connection, roomid.startsWith('view-'));
 	}
 
 	/**
@@ -2225,8 +2232,9 @@ export const Chat = new class {
 	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
 		const params = str.slice(+str.startsWith('\n')).split('\n');
 		const output: string[] = [];
-		for (const param of params) {
+		for (const [i, param] of params.entries()) {
 			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
+			if (param.length > cutoff * 160 && i < cutoff) cutoff = i;
 			output.push(Utils[isCode ? 'escapeHTMLForceWrap' : 'escapeHTML'](param));
 		}
 

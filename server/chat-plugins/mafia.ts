@@ -353,11 +353,16 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	static isGameBanned(room: Room, user: User) {
-		return Punishments.getRoomPunishType(room, toID(user)) === 'MAFIAGAMEBAN';
+		return Punishments.hasRoomPunishType(room, toID(user), 'MAFIAGAMEBAN');
 	}
 
 	static gameBan(room: Room, user: User, reason: string, duration: number) {
-		Punishments.roomPunish(room, user, ['MAFIAGAMEBAN', toID(user), Date.now() + (duration * 24 * 60 * 60 * 1000), reason]);
+		Punishments.roomPunish(room, user, {
+			type: 'MAFIAGAMEBAN',
+			id: toID(user),
+			expireTime: Date.now() + (duration * 24 * 60 * 60 * 1000),
+			reason,
+		});
 	}
 
 	static ungameBan(room: Room, user: User) {
@@ -370,7 +375,12 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	static hostBan(room: Room, user: User, reason: string, duration: number) {
-		Punishments.roomPunish(room, user, ['MAFIAHOSTBAN', toID(user), Date.now() + (duration * 24 * 60 * 60 * 1000), reason]);
+		Punishments.roomPunish(room, user, {
+			type: 'MAFIAHOSTBAN',
+			id: toID(user),
+			expireTime: Date.now() + (duration * 24 * 60 * 60 * 1000),
+			reason,
+		});
 	}
 
 	static unhostBan(room: Room, user: User) {
