@@ -21,8 +21,8 @@ describe('Rooms features', function () {
 	describe('BasicRoom', function () {
 		describe('getGame', function () {
 			it('should return the game only when the gameids match', function () {
-				const Hangman = require('../../.server-dist/chat-plugins/hangman').Hangman;
-				const UNO = require('../../.server-dist/chat-plugins/uno').UNO;
+				const Hangman = require('../../server/chat-plugins/hangman').Hangman;
+				const UNO = require('../../server/chat-plugins/uno').UNO;
 				const room = Rooms.createChatRoom('r/relationshipadvice');
 				const game = new Hangman(room, makeUser(), 'There\'s a lot of red flags here');
 				room.game = game;

@@ -529,7 +529,7 @@ export const commands: Chat.ChatCommands = {
 
 		target = toID(target);
 		try {
-			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
+			Utils.clearRequireCache({exclude: ['/lib/process-manager']});
 			if (target === 'all') {
 				if (lock['all']) {
 					return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
@@ -563,10 +563,7 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (
-						manager.filename.startsWith(FS('server/chat-plugins').path) ||
-						manager.filename.startsWith(FS('.server-dist/chat-plugins').path)
-					) {
+					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
 						void manager.destroy();
 					}
 				}
@@ -742,7 +739,7 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('.server-dist/modlog').path)) void manager.destroy();
+					if (manager.filename.startsWith(FS('server/modlog').path)) void manager.destroy();
 				}
 
 				const {mainModlog} = require('../modlog');
@@ -775,7 +772,7 @@ export const commands: Chat.ChatCommands = {
 		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
 		`/hotpatch chat - reloads the chat-commands and chat-plugins directories`,
 		`/hotpatch validator - spawn new team validator processes`,
-		`/hotpatch formats - reload the .sim-dist/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
+		`/hotpatch formats - reload the sim/dex.ts tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads IPTools datacenters`,
 		`/hotpatch punishments - reloads new punishments code`,
 		`/hotpatch loginserver - reloads new loginserver code`,

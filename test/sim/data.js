@@ -12,7 +12,7 @@ describe('Dex data', function () {
 			assert.equal(entry.name, entry.name.trim(), `Pokemon name "${entry.name}" should not start or end with whitespace`);
 
 			assert(entry.color, `Pokemon ${entry.name} must have a color.`);
-			assert(entry.heightm, `Pokemon ${entry.name} must have a heightm.`);
+			assert(entry.heightm, `Pokemon ${entry.name} must have a height.`);
 
 			if (entry.forme) {
 				// entry is a forme of a base species
@@ -146,7 +146,7 @@ describe('Dex data', function () {
 		}
 	});
 
-	it('should have valid Formats', function () {
+	it('should have valid Formats (slow)', function () {
 		for (const format of Dex.formats.all()) {
 			try {
 				Dex.formats.getRuleTable(format);

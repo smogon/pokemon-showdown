@@ -2,22 +2,23 @@
   "name": "pokemon-showdown",
   "description": "The server for the Pokémon Showdown battle simulator",
   "version": "0.11.7",
-  "main": ".sim-dist/index.js",
+  "main": "sim/index.ts",
   "dependencies": {
+    "@swc/core": "^1.2.61",
     "@types/better-sqlite3": "^5.4.0",
     "probe-image-size": "^5.0.0",
     "sockjs": "^0.3.21",
-    "sucrase": "^3.15.0"
+    "ts-node": "^10.0.0"
   },
   "optionalDependencies": {
-    "better-sqlite3": "^7.1.0",
     "brain.js": "^2.0.0-beta.2",
     "cloud-env": "^0.2.3",
     "node-static": "^0.7.11",
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^3.0.6"
+    "sqlite": "^3.0.6",
+    "sucrase": "^3.15.0"
   },
   "secretDependencies": {
     "node-oom-heapdump": "^1.2.0"
@@ -33,10 +34,10 @@
     "lint": "eslint . --cache --ext .js,.ts",
     "fix": "eslint . --cache --ext .js,.ts --fix",
     "full-lint": "eslint . --cache --ext .js,.ts --max-warnings 0",
-    "pretest": "npm run lint && npm run build",
+    "pretest": "npm run lint",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "full-test": "npm run full-lint && npm run build && npm run tsc && mocha --forbid-only -g \".*\""
+    "full-test": "npm run full-lint && npm run tsc && mocha --timeout 3000 --forbid-only -g \".*\""
   },
   "husky": {
     "hooks": {
