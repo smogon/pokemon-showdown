@@ -1605,7 +1605,6 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(this.tr`You are now blocking all incoming challenge requests.`);
 		}
 		user.update();
-		return true;
 	},
 	blockchallengeshelp: [
 		`/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.`,
