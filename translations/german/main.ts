@@ -127,7 +127,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "Dieser ${Config.groups[targetUser.group].name} ist gerade zu beschäftigt, um auf private Nachrichten zu antworten. Bitte wende dich an ein anderes Staff-Mitglied.",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "Falls du Hilfe benötigst, versuche ein <a href=\"view-help-request\" class=\"button\">Help-Ticket</a> zu beantragen.",
 		"You are blocking private messages right now.": "Du blockierst gerade private Nachrichten.",
-		"You are blocking challenge right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "Deine Nachricht enthielt Wörter, welche in diesem Raum verboten sind.",
 		"You can't send the same message again so soon.": "Du kannst die selbe Nachricht nicht so oft hintereinander abschicken.",
