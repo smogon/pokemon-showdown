@@ -195,10 +195,10 @@ export const Formats: FormatList = [
 			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Endless Battle Clause',
 		],
 		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Dialga', 'Dragonite', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black',
-			'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mew', 'Mewtwo', 'Mimikyu', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
-			'Rayquaza', 'Reshiram', 'Sableye', 'Snorlax', 'Solgaleo', 'Victini', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
-			'Moody', 'Bright Powder', 'Focus Band', 'Focus Sash', 'Lax Incense', 'Quick Claw', 'Perish Song',
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Dialga', 'Dragonite', 'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Jirachi',
+			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Melmetal', 'Mew', 'Mewtwo', 'Mimikyu', 'Necrozma-Dawn-Wings',
+			'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Sableye', 'Snorlax', 'Solgaleo', 'Victini', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned',
+			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Moody', 'Bright Powder', 'Focus Band', 'Focus Sash', 'Lax Incense', 'Quick Claw', 'Perish Song',
 		],
 	},
 	{
@@ -264,6 +264,16 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+	},
+	{
+		name: "[Gen 8] Fair and Square",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3685517/">Fair and Square Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['Flat Rules', 'Galar Expansion Pokedex', '! Species Clause', '! Item Clause', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		banlist: ['Sub-Legendary'],
 	},
 	{
 		name: "[Gen 8] Custom Game",
@@ -579,12 +589,14 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause', '!Nickname Clause'],
 		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragonite', 'Eternatus', 'Genesect',
-			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia',
-			'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa',
-			'Rayquaza', 'Reshiram', 'Shedinja', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
-			'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus',
+			'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base',
+			'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
+			'Pheromosa', 'Rayquaza', 'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian',
+			'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct',
+			'Shadow Tag', 'Baton Pass',
 		],
+		onModifySpeciesPriority: 1,
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
@@ -608,47 +620,8 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: [
-			'Standard', 'Dynamax Clause', 'Sleep Moves Clause',
-			'Max Team Size = 6', 'Min Team Size = 6', 'Picked Team Size = 6',
-		],
-		banlist: ['Shedinja', 'Huge Power', 'Moody', 'Neutralizing Gas', 'Truant', 'Eviolite', 'Focus Sash', 'Perish Song', 'Transform', 'Fishious Rend', 'Bolt Beak', 'Disable', 'Double Iron Bash'],
-		onValidateSet(set) {
-			if (!set.item) return;
-			const item = this.dex.items.get(set.item);
-			if (item.itemUser && !this.ruleTable.has(`+item:${item.id}`)) {
-				return [`${set.species}'s item ${item.name} is banned.`];
-			}
-		},
-		onValidateTeam() {
-			const table = this.ruleTable;
-			if (table.maxTeamSize !== 6 || table.minTeamSize !== 6 || table.pickedTeamSize !== 6) {
-				return [
-					`You are using custom rules that make the Max Team Size, Min Team Size, or Picked Team Size something other than 6.`,
-					'Doing this causes the server to crash.',
-				];
-			}
-		},
-		onBeforeSwitchIn(pokemon) {
-			const allies = pokemon.side.pokemon.splice(1);
-			pokemon.side.pokemonLeft = 1;
-			const newSpecies = this.dex.deepClone(pokemon.baseSpecies);
-			newSpecies.abilities = allies[1].baseSpecies.abilities;
-			newSpecies.baseStats = allies[2].baseSpecies.baseStats;
-			newSpecies.bst = allies[2].baseSpecies.bst;
-			pokemon.item = allies[0].item;
-			pokemon.ability = pokemon.baseAbility = allies[1].ability;
-			pokemon.set.evs = allies[2].set.evs;
-			pokemon.set.nature = allies[2].set.nature;
-			pokemon.set.ivs = allies[2].set.ivs;
-			pokemon.hpType = (pokemon as any).baseHpType = allies[2].baseHpType;
-			pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
-				...allies[3].baseMoveSlots.slice(0, 2), ...allies[4].baseMoveSlots.slice(2),
-			].filter((move, index, moveSlots) => moveSlots.find(othermove => othermove.id === move.id) === move);
-			// so all HP-related properties get re-initialized in setSpecies
-			pokemon.maxhp = 0;
-			pokemon.setSpecies(newSpecies, null);
-		},
+		ruleset: ['Chimera 1v1 Rule', 'Standard', 'Dynamax Clause', 'Sleep Moves Clause'],
+		banlist: ['Shedinja', 'Huge Power', 'Moody', 'Neutralizing Gas', 'Perish Body', 'Truant', 'Eviolite', 'Focus Sash', 'Perish Song', 'Transform', 'Trick', 'Fishious Rend', 'Bolt Beak', 'Disable', 'Double Iron Bash', 'Switcheroo'],
 	},
 
 	// Other Metagames
@@ -822,6 +795,7 @@ export const Formats: FormatList = [
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Shedinja', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zeraora', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
+		onModifySpeciesPriority: 2,
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
@@ -846,7 +820,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Not Fully Evolved', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Chansey', 'Doublade', 'Haunter', 'Magneton', 'Pawniard', 'Pikachu', 'Porygon2', 'Rhydon', 'Scyther', 'Sneasel', 'Type: Null',
+			'Chansey', 'Doublade', 'Haunter', 'Kadabra', 'Magneton', 'Pawniard', 'Pikachu', 'Porygon2', 'Rhydon', 'Scyther', 'Sneasel', 'Type: Null', 'Vulpix-Base',
 			'Arena Trap', 'Shadow Tag', 'Baton Pass',
 		],
 	},
@@ -2720,8 +2694,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen5',
 		searchShow: false,
-		ruleset: ['[Gen 5] UU'],
-		banlist: ['UU', 'RUBL', 'Shell Smash + Baton Pass'],
+		ruleset: ['[Gen 5] UU', '!Sleep Clause Mod', 'Sleep Moves Clause'],
+		banlist: ['UU', 'RUBL', 'Shadow Tag', 'Shell Smash + Baton Pass'],
 	},
 	{
 		name: "[Gen 5] NU",
@@ -2732,7 +2706,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen5',
 		searchShow: false,
-		ruleset: ['[Gen 5] RU'],
+		ruleset: ['[Gen 5] RU', '!Sleep Moves Clause', 'Sleep Clause Mod', '+Shadow Tag'],
 		banlist: ['RU', 'NUBL', 'Prankster + Assist'],
 	},
 	{
@@ -3095,10 +3069,10 @@ export const Formats: FormatList = [
 		name: "[Gen 2] Nintendo Cup 2000",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3682691/">Nintendo Cup 2000 Resource Hub</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Differences between Nintendo Cup 2000 and GSC</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Differences between Nintendo Cup 2000 and GSC OU</a>`,
 		],
 
-		mod: 'gen2',
+		mod: 'gen2stadium2',
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',

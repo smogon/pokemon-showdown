@@ -169,7 +169,8 @@ export const commands: Chat.ChatCommands = {
 				buf += Utils.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = targetAlt.previousIDs.map(userid => {
-					const p = Punishments.userids.get(userid) || [];
+					const p = Punishments.userids.get(userid);
+					if (!p) return userid;
 					return p.map(
 						cur => `${userid}(${Punishments.punishmentTypes.get(cur.type)?.desc || 'punished'}` + `${cur.id !== targetAlt.id ? ` as ${cur.id}` : ``})`
 					).join(' | ');
@@ -207,7 +208,7 @@ export const commands: Chat.ChatCommands = {
 			const battlebanned = Punishments.isBattleBanned(targetUser);
 			if (battlebanned) {
 				buf += `<br />BATTLEBANNED: ${battlebanned.id}`;
-				buf += ` (expires ${Punishments.checkPunishmentExpiration(battlebanned)})`;
+				buf += ` ${Punishments.checkPunishmentExpiration(battlebanned)}`;
 				if (battlebanned.reason) buf += Utils.html` (reason: ${battlebanned.reason})`;
 			}
 
@@ -216,6 +217,13 @@ export const commands: Chat.ChatCommands = {
 				buf += `<br />Banned from using groupchats${groupchatbanned.id !== targetUser.id ? `: ${groupchatbanned.id}` : ``}`;
 				buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
 				if (groupchatbanned.reason) buf += Utils.html` (reason: ${groupchatbanned.reason})`;
+			}
+
+			const ticketbanned = Punishments.isTicketBanned(targetUser.id);
+			if (ticketbanned) {
+				buf += `<br />Banned from creating help tickets${ticketbanned.id !== targetUser.id ? `: ${ticketbanned.id}` : ``}`;
+				buf += ` ${Punishments.checkPunishmentExpiration(ticketbanned)}`;
+				if (ticketbanned.reason) buf += Utils.html` (reason: ${ticketbanned.reason})`;
 			}
 
 			if (targetUser.semilocked) {
@@ -2455,7 +2463,7 @@ export const commands: Chat.ChatCommands = {
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
-		if (user.can('showmedia', null, room)) return this.errorReply(`Use !show instead.`);
+		if (user.can('showmedia', null, room, '/show')) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
@@ -2634,7 +2642,12 @@ export const commands: Chat.ChatCommands = {
 		// not in a try-catch block because if this doesn't work, this is a problem that should be known
 		const result = JSON.parse(rawResult);
 		const date = new Date(result.registertime * 1000);
-		const regTimeAgo = Chat.toDurationString(Date.now() - date.getTime(), {precision: 1});
+		const duration = Date.now() - date.getTime();
+		// hardcode, since the loginserver doesn't store exact times, and
+		// so this can look quite inaccurate if it was within the last day
+		const regTimeAgo = duration > 24 * 60 * 60 * 1000 ?
+			Chat.toDurationString(duration, {precision: 1}) :
+			'less than a day';
 		this.sendReplyBox(Utils.html`The user '${target}' registered ${regTimeAgo} ago, on the date ${date.toDateString()}.`);
 	},
 	registertimehelp: [`/registertime OR /regtime [user] - Find out when [user] registered.`],

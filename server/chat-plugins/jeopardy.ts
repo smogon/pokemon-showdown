@@ -4,6 +4,7 @@ const BACKGROUND_COLOR = "#0000FF";
 const HEIGHT = 40;
 const MAX_CATEGORY_COUNT = 5;
 const MAX_QUESTION_COUNT = 5;
+const BUZZ_COOLDOWN = 500; // 0.5 seconds
 
 interface Question {
 	question: string;
@@ -171,12 +172,10 @@ export class Jeopardy extends Rooms.RoomGame {
 			buffer += `</tr>`;
 		}
 		buffer += `</table><br />`;
-		if (this.question && !this.finals) {
-			buffer += `<table align="left"><tr><td bgcolor="${this.canBuzz ? "00FF00" : "0000FF"}" height="30px" width="30px"></td></tr></table>`;
-		}
 		for (const userID in this.playerTable) {
 			const player = this.playerTable[userID];
-			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${Utils.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
+			const bold = this.curPlayer?.name === player.name;
+			buffer += `${bold ? "<b>" : ""}<font size=2>${Utils.escapeHTML(player.name)} (${(player.points || 0)})${bold ? "</b>" : ""}<br />`;
 		}
 		buffer += `</body></html></div>`;
 		return buffer;
@@ -257,8 +256,9 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	allowBuzzes() {
 		this.canBuzz = true;
+		this.room.add(`You may now buzz in for the Jeopardy game!`);
 		this.update(true);
-		this.timeout = setTimeout(() => this.allowAllBuzzes(), 1000 * 1 / 3);
+		this.timeout = setTimeout(() => this.allowAllBuzzes(), BUZZ_COOLDOWN);
 	}
 
 	allowAllBuzzes() {
@@ -317,7 +317,7 @@ export class Jeopardy extends Rooms.RoomGame {
 		if (!player) throw new Chat.ErrorMessage("You are not in the game of Jeopardy.");
 		amount = toID(amount);
 		const wager = (amount === 'all' ? player.points : parseInt(amount));
-		if (!wager) throw new Chat.ErrorMessage("Your wager must be a number, or 'all'.");
+		if (!wager || isNaN(wager)) throw new Chat.ErrorMessage("Your wager must be a number, or 'all'.");
 		if (wager < 0) throw new Chat.ErrorMessage("You cannot wager a negative amount.");
 		if (wager > player.points && (wager > (this.round * 1000) || this.finals)) {
 			throw new Chat.ErrorMessage("You cannot wager more than your current number of points.");
@@ -347,6 +347,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	doFinals() {
+		if (!this.playerTable) return this.room?.add(`Could not play finals because the player table does not exist.`);
 		this.order = Object.keys(this.playerTable);
 		this.doFinalPlayer();
 	}
@@ -625,15 +626,23 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.checkCan('minigame', null, room);
 			const params = target.split(",");
+
 			const playerCap = parseInt(params[0]);
+			const categoryCount = parseInt(params[1]);
+			const questionCount = parseInt(params[2]);
 			if (isNaN(playerCap) || playerCap <= 1) {
 				return this.errorReply(`The player cap must be a number above 1.`);
 			}
 
-			const categoryCount = parseInt(params[1]);
-			const questionCount = parseInt(params[2]);
+			if (isNaN(categoryCount) || categoryCount <= 0) {
+				return this.errorReply(`The category count must be a number above 0.`);
+			}
 			if (categoryCount > MAX_CATEGORY_COUNT) {
 				return this.sendReply(`A match with more than ${MAX_CATEGORY_COUNT} categories cannot be created.`);
+			}
+
+			if (isNaN(questionCount) || questionCount <= 0) {
+				return this.errorReply(`The question count must be a number above 0.`);
 			}
 			if (questionCount > MAX_QUESTION_COUNT) {
 				return this.sendReply(
@@ -691,6 +700,10 @@ export const commands: Chat.ChatCommands = {
 		wager(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Jeopardy);
+			if (user.lastCommand !== `/jeopardy wager ${target}`) {
+				user.lastCommand = `/jeopardy wager ${target}`;
+				return this.sendReply(`To confirm your wager of ${target}, type '${user.lastCommand}' again.`);
+			}
 			game.wager(target, user);
 		},
 
@@ -864,7 +877,7 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Jeopardy);
 			this.checkCan('minigame', null, room);
 			game.destroy();
-			this.privateModAction(`The game of Jeopardy was ended by ${user.name}`);
+			this.privateModAction(`${user.name} ended the game of Jeopardy.`);
 			this.modlog('JEOPARDY END');
 		},
 

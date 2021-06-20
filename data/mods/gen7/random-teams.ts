@@ -1010,7 +1010,7 @@ export class RandomGen7Teams extends RandomTeams {
 		const types = new Set(species.types);
 		const abilities = new Set<string>();
 		for (const abilityName of Object.values(species.abilities)) {
-			if (abilityName === species.abilities.S) continue;
+			if (abilityName === species.abilities.S || (species.unreleasedHidden && abilityName === species.abilities.H)) continue;
 			abilities.add(abilityName);
 		}
 
@@ -1040,6 +1040,10 @@ export class RandomGen7Teams extends RandomTeams {
 			}
 			while (moves.size < 4 && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
+				if (moveid.startsWith('hiddenpower')) {
+					if (hasHiddenPower) continue;
+					hasHiddenPower = true;
+				}
 				moves.add(moveid);
 			}
 
@@ -1162,23 +1166,26 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 
 				// Remove rejected moves from the move list
+				const moveIsHP = moveid.startsWith('hiddenpower');
 				if (cull && (
 					movePool.length - availableHP ||
-					(availableHP && (moveid.startsWith('hiddenpower') || !hasHiddenPower))
+					(availableHP && (moveIsHP || !hasHiddenPower))
 				)) {
 					if (
 						move.category !== 'Status' &&
 						!move.damage &&
 						!move.flags.charge &&
-						(!moveid.startsWith('hiddenpower') || !availableHP)
+						(!moveIsHP || !availableHP)
 					) {
 						rejectedPool.push(moveid);
 					}
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}
 
 				if (cull && rejectedPool.length) {
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}

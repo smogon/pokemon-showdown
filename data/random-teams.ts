@@ -1723,6 +1723,8 @@ export class RandomTeams {
 
 		const types = new Set(species.types);
 		const abilities = new Set(Object.values(species.abilities));
+		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
+
 		const moves = new Set<string>();
 		let counter: MoveCounter;
 
