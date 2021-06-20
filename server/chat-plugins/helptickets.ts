@@ -445,7 +445,7 @@ export class HelpTicket extends Rooms.RoomGame {
 				if (line.trim()) results.push(JSON.parse(line));
 			}
 		} else {
-			if (!date) throw new Chat.ErrorMessage(`Specify a date.`);
+			if (!date) throw new Chat.ErrorMessage(`Specify a month.`);
 			const path = FS(`logs/tickets/${date}.jsonl`);
 			if (!path.existsSync()) {
 				throw new Chat.ErrorMessage(`There are no logs for that date.`);
