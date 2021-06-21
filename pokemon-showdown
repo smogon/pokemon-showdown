@@ -1,5 +1,27 @@
 #!/usr/bin/env node
 
+// Before running, ensure that the Typescript files have been compiled.
+//
+// Simply doing `require('../build')` here doesn't work because the `replace`
+// step of the build is asynchronous and we can't wait for it to finish easily
+// unless we shell out and use `execSync`. However, the heuristic of simply
+// checking for the presence of  './.sim-dist/dex' to determine whether a build
+// is required is somewhat risky as it only is valid from a clean repository -
+// if you make edits or have previous build artifacts lying around, this
+// script could potentially be missing additional sources or the compiled output
+// may be out of date.
+//
+// We're OK with risking being stale here unless we're starting the server
+// because we want to keep this script as fast as possible to be usable as a way
+// of interfacing with the simulator from non-JS languages. Otherwise we error
+// on the side of caution and run `node build` to ensure we're always running
+// with the latest code.
+var built = false;
+function build() {
+	require('child_process').execSync('node build', {stdio: 'inherit', cwd: __dirname});
+	built = true;
+}
+
 function readTeam(stream) {
 	return stream.readLine().then(line => {
 		if (line.startsWith('[') || line.includes('|')) return line;
@@ -12,13 +34,25 @@ function registerTSNode() {
 }
 
 // enable require()ing TypeScript files
-try {
-	registerTSNode();
-} catch (e) {
-	console.log(`Installing dependencies...`);
-	require('child_process').execSync('npm install --production'), {stdio: 'inherit'});
-	registerTSNode();
+function setupTSNode() {
+	try {
+		registerTSNode();
+	} catch (e) {
+		console.log(`Installing dependencies...`);
+		require('child_process').execSync('npm install --production', {stdio: 'inherit'});
+		registerTSNode();
+	}
 }
+
+function sucraseBuild() {
+	try {
+		require.resolve('./.sim-dist/dex');
+	} catch (err) {
+		if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+		build();
+	}
+}
+
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// Start the server.
 	//
@@ -26,7 +60,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// when launching with this file the same way app.js normally allows, e.g. to
 	// host on port 9000:
 	// $ ./pokemon-showdown 9000
-
+	setupTSNode();
 	require('module')._load('./server', module, true);
 } else switch (process.argv[2]) {
 	case 'help':
@@ -55,7 +89,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('pokemon-showdown simulate-battle');
 		console.log('');
 		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
-		console.log('  Protocol is documented in ./sim/README.md');
+		console.log('  Protocol is documented in ./.sim-dist/README.md');
 		console.log('');
 		console.log('pokemon-showdown json-team');
 		console.log('');
@@ -76,22 +110,25 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'start':
 		{
 			process.argv.splice(2, 1);
+			setupTSNode();
 			require('module')._load('./server', module, true);
 			break;
 		}
 	case 'generate-team':
 		{
-			var Teams = require('./sim/teams').Teams;
+			sucraseBuild();
+			var Teams = require('./.sim-dist/teams').Teams;
 			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
 			console.log(Teams.pack(Teams.generate(process.argv[3], {seed})));
 		}
 		break;
 	case 'validate-team':
 		{
-			var Teams = require('./sim/teams').Teams;
-			var TeamValidator = require('./sim/team-validator').TeamValidator;
+			sucraseBuild();
+			var Teams = require('./.sim-dist/teams').Teams;
+			var TeamValidator = require('./.sim-dist/team-validator').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);
-			var Streams = require('./lib/streams');
+			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
 			readTeam(stdin).then(function (textTeam) {
@@ -112,8 +149,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'simulate-battle':
 		{
-			var BattleTextStream = require('./sim/battle-stream').BattleTextStream;
-			var Streams = require('./lib/streams');
+			sucraseBuild();
+			var BattleTextStream = require('./.sim-dist/battle-stream').BattleTextStream;
+			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 			var stdout = Streams.stdout();
 
@@ -163,8 +201,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'unpack-team':
 	case 'json-team':
 		{
-			var Teams = require('./sim/teams').Teams;
-			var Streams = require('./lib/streams');
+			sucraseBuild();
+			var Teams = require('./.sim-dist/teams').Teams;
+			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
 			readTeam(stdin).then(function (team) {
@@ -181,8 +220,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'pack-team':
 		{
-			var Teams = require('./sim/teams').Teams;
-			var Streams = require('./lib/streams');
+			sucraseBuild();
+			var Teams = require('./.sim-dist/teams').Teams;
+			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
 			readTeam(stdin).then(function (team) {
@@ -199,8 +239,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'export-team':
 		{
-			var Teams = require('./sim/teams').Teams;
-			var Streams = require('./lib/streams');
+			sucraseBuild();
+			var Teams = require('./.sim-dist/teams').Teams;
+			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
 			readTeam(stdin).then(function (team) {
