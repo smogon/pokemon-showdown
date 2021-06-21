@@ -16,8 +16,7 @@ try {
 	registerTSNode();
 } catch (e) {
 	console.log(`Installing dependencies...`);
-	var decl = ['--decl', 'decl'].includes(process.argv[2]);
-	require('child_process').execSync('npm install' + (decl ? '' : ' --production'), {stdio: 'inherit'});
+	require('child_process').execSync('npm install --production'), {stdio: 'inherit'});
 	registerTSNode();
 }
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
