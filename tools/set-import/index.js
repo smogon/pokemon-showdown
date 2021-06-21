@@ -53,7 +53,7 @@ Chat.plural = function (num, plural = 's', singular = '') {
 	return (num !== 1 ? plural : singular);
 };
 // Sigh. Yay globals!
-global.toID = require('.././.sim/dex').Dex.getId;
+global.toID = require('../../sim/dex').Dex.getId;
 
 const importer = require('./importer.js');
 
