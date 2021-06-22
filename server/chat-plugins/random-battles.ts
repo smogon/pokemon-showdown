@@ -615,7 +615,7 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
 
-		let {dex} = this.splitFormat(target, true);
+		const {dex} = this.splitFormat(target, true);
 		const isLetsGo = (dex.currentMod === 'letsgo');
 
 		const species = dex.species.get(args[0]);
@@ -670,7 +670,7 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randomdoublesbattle`);
 
-		let {dex} = this.splitFormat(target, true);
+		const {dex} = this.splitFormat(target, true);
 		if (dex.gen < 4) return this.parse(`/help randomdoublesbattle`);
 
 		let species = dex.species.get(args[0]);
