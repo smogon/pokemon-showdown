@@ -471,7 +471,7 @@ export const commands: Chat.ChatCommands = {
 		let {targetUser, rest: message} = this.requireUser(target);
 
 		const auth = this.room ? this.room.auth : Users.globalAuth;
-		if (auth.get(targetUser) !== '*') {
+		if (!['*', '#'].includes(auth.get(targetUser))) {
 			return this.popupReply(`The user "${targetUser.name}" is not a bot in this room.`);
 		}
 		this.room = null; // shouldn't be in a room
@@ -1446,7 +1446,7 @@ export const pages: Chat.PageTable = {
 		let canSend = Users.globalAuth.get(bot) === '*';
 		let room;
 		for (const curRoom of Rooms.global.chatRooms) {
-			if (curRoom.auth.getDirect(bot.id) === '*') {
+			if (['*', '#'].includes(curRoom.auth.getDirect(bot.id))) {
 				canSend = true;
 				room = curRoom;
 			}
