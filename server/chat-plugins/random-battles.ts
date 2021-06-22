@@ -616,9 +616,6 @@ export const commands: Chat.ChatCommands = {
 		if (!args[0]) return this.parse(`/help randombattles`);
 
 		let {dex} = this.splitFormat(target, true);
-		if (!FS(`${dex.dataDir}/random-teams.js`).readIfExistsSync()) {
-			dex = Dex.forGen(dex.gen);
-		}
 		const isLetsGo = (dex.currentMod === 'letsgo');
 
 		const species = dex.species.get(args[0]);
@@ -674,9 +671,6 @@ export const commands: Chat.ChatCommands = {
 		if (!args[0]) return this.parse(`/help randomdoublesbattle`);
 
 		let {dex} = this.splitFormat(target, true);
-		if (!FS(`${dex.dataDir}/random-teams.js`).readIfExistsSync()) {
-			dex = Dex.forGen(dex.gen);
-		}
 		if (dex.gen < 4) return this.parse(`/help randomdoublesbattle`);
 
 		let species = dex.species.get(args[0]);
