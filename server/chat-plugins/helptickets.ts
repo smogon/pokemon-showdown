@@ -450,7 +450,14 @@ export class HelpTicket extends Rooms.RoomGame {
 			}
 		}
 	}
-	static displayPunishmentList(reportUserid: ID, proofString: string, title?: string, inner?: string) {
+	static displayPunishmentList(
+		reportUserid: ID,
+		proofString: string,
+		ticket: TicketState,
+		title?: string,
+		inner?: string,
+	) {
+		if (ticket.resolved) return '';
 		let buf = `<details class="readmore"><summary>${title || 'Punish reported user:'}</summary><div class="infobox">`;
 		if (inner) buf += inner;
 		const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
@@ -809,14 +816,16 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += HelpTicket.displayPunishmentList(
 				ticket.userid,
 				`spoiler:PMs with ${reportUserid} (as ${ticket.userid})${replayString ? `, ${replayString}` : ''}`,
+				ticket,
 				`Punish <strong>${ticket.userid}</strong> (reporter)`,
-				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`
+				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`,
 			);
 			buf += `<strong>Reported user:</strong> ${reportUserid} </strong>`;
 			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
 				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`,
+				ticket,
 				`Punish <strong>${reportUserid}</strong> (reported user)`
 			);
 
@@ -864,6 +873,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += `<br /><button class="button notifying" type="submit">Forcerename</button></form>`;
 			return buf;
 		},
+		onSubmit(ticket, text) {
+			if (!ticket.meta?.startsWith('user-')) {
+				// we validate that `text` is the id of existing user, so this is safe.
+				ticket.meta = `user-${toID(text)}`;
+			}
+		},
 	},
 	battleharassment: {
 		title: "Please provide a link to the battle (taken from the \"Upload and share\" button or copied from the browser URL)",
@@ -903,6 +918,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += HelpTicket.displayPunishmentList(
 				ticket.userid,
 				proof,
+				ticket,
 				`Punish <strong>${ticket.userid}</strong> (reporter)`,
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`
 			);
@@ -911,7 +927,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				if (type === 'user') {
 					buf += `<br /><strong>Reported user:</strong> ${meta} `;
 					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br />`;
-					buf += HelpTicket.displayPunishmentList(toID(meta), proof, `Punish <strong>${toID(meta)}</strong> (reported user)`);
+					buf += HelpTicket.displayPunishmentList(
+						toID(meta),
+						proof,
+						ticket,
+						`Punish <strong>${toID(meta)}</strong> (reported user)`
+					);
 				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
 					rooms.push(meta);
 				}
@@ -1966,6 +1987,19 @@ export const commands: Chat.ChatCommands = {
 				userid: ticketId,
 			});
 			notifyStaff();
+			const staffRoom = Rooms.get('staff');
+			if (staffRoom) {
+				// force a refresh for everyone in it, otherwise we potentially get two punishments at once
+				// from different people clicking at the same time and reading it separately.
+				// Yes. This was a real issue.
+				for (const curUser of Object.values(staffRoom.users)) {
+					for (const conn of curUser.connections) {
+						if (conn.openPages?.has(`help-text-${ticketId}`)) {
+							void Chat.parse(`/j view-help-text-${ticketId}`, staffRoom, user, conn);
+						}
+					}
+				}
+			}
 		},
 
 		list(target, room, user) {
