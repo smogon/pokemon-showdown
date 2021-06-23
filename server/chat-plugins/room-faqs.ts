@@ -24,8 +24,8 @@ interface RoomFAQ {
 	html?: boolean;
 }
 
-function saveRoomFaqs() {
-	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(roomFaqs));
+function saveRoomFaqs(table?: {[k: string]: {[k: string]: RoomFAQ}}) {
+	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(table || roomFaqs));
 }
 
 function convertFaq(faq: string): RoomFAQ {
