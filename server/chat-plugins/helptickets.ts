@@ -670,6 +670,30 @@ export function getBattleLinks(text: string) {
 	return rooms;
 }
 
+export async function getOpponent(link: string, submitter: ID): Promise<string | null> {
+	const room = Rooms.get(link) as GameRoom | undefined;
+	// we can't determine this for FFA - valid guesses can be made for 2 player, but not 4p. not at all.
+	if (room?.battle) {
+		if (room.battle.playerCap > 2) return null;
+		for (const player of room.battle.players) {
+			const p = player.getUser();
+			if (!p || p.id === submitter) continue;
+			return p.id;
+		}
+	}
+	if (!room) {
+		const replayUrl = Net(`https://${Config.routes.replays}/${link.slice(link.indexOf('-') + 1)}.json`);
+		try {
+			const body = await replayUrl.get();
+			const data = JSON.parse(body);
+			return data.p1id === submitter ? data.p1id : data.p2id;
+		} catch (e) {
+			return null;
+		}
+	}
+	return null;
+}
+
 export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	if (battleRoom && battleRoom.type !== 'chat') {
@@ -886,7 +910,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
 			return ['Please provide at least one valid battle or replay URL.'];
 		},
-		onSubmit(ticket, text, submitter, conn) {
+		async onSubmit(ticket, text, submitter, conn) {
 			for (const part of text) {
 				HelpTicket.uploadReplaysFrom(part, submitter, conn);
 			}
@@ -894,15 +918,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (!ticket.meta || ticket.meta.startsWith('room-')) {
 				const replays = getBattleLinks(text[0]);
 				const link = replays.shift()!;
-				const room = Rooms.get(link) as GameRoom | undefined;
-				// we can't determine this for FFA - valid guesses can be made for 2 player, but not 4p. not at all.
-				if (!room || !room.battle || room.battle.playerCap > 2) return;
-				for (const player of room.battle.players) {
-					const user = player.getUser();
-					if (!user || user.id === submitter.id) continue;
-					ticket.meta = `user-${user.id}`;
-					writeTickets();
-				}
+				const opp = await getOpponent(link, submitter.id);
+				if (opp) ticket.meta = `user-${opp}`;
 			}
 		},
 		async getReviewDisplay(ticket, staff, connection) {
