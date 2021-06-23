@@ -1118,8 +1118,7 @@ export class CommandContext extends MessageContext {
 				if (
 					user.settings.blockChallenges &&
 					(user.settings.blockChallenges === true || !Users.globalAuth.atLeast(targetUser, user.settings.blockChallenges)) &&
-					!targetUser.can('bypassblocks') &&
-					targetUser.id !== user.id
+					!targetUser.can('bypassblocks')
 				) {
 					throw new Chat.ErrorMessage(this.tr`You are blocking challenges right now.`);
 				}
