@@ -702,7 +702,7 @@ export abstract class Searcher {
 	visualizeStats(stats: RoomStats) {
 		const titles: {[k: string]: string} = {
 			deadTime: 'Average time between lines',
-			deadPercent: 'Average % of the day spent more than 5m inactive',
+			deadPercent: 'Average % of the day spent more than 5 minutes inactive',
 			linesPerUser: 'Average lines per user',
 			averagePresent: 'Average users present',
 			totalLines: 'Average lines per day',
