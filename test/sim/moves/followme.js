@@ -84,4 +84,23 @@ describe('Follow Me', function () {
 		assert.fullHP(battle.p1.active[0]);
 		assert.fullHP(battle.p2.active[0]);
 	});
+
+	it(`[Gen 3] should continue to redirect moves after the user is knocked out and replaced`, function () {
+		battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
+			{species: "Swellow", moves: ['aerialace']},
+			{species: "Chansey", level: 1, moves: ['followme']},
+			{species: "Blissey", moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", moves: ['pound']},
+			{species: "Wobbuffet", moves: ['pound']},
+		]]);
+
+		const blissey = battle.p1.pokemon[2];
+		battle.makeChoices('move aerialace -2, move followme', 'move pound 1, move pound 1');
+		battle.makeChoices('switch 3');
+
+		// Follow Me should have redirected both attacks, so the Swellow should be at full HP
+		assert.fullHP(battle.p1.active[0]);
+		assert.false.fullHP(blissey);
+	});
 });
