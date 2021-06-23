@@ -335,6 +335,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 70,
 	},
+	followme: {
+		inherit: true,
+		volatileStatus: undefined,
+		slotCondition: 'followme',
+		condition: {
+			duration: 1,
+			onStart(target, source, effect) {
+				this.add('-singleturn', target, 'move: Follow Me');
+				this.effectState.slot = target.getSlot();
+			},
+			onFoeRedirectTargetPriority: 1,
+			onFoeRedirectTarget(target, source, source2, move) {
+				const userSlot = this.getAtSlot(this.effectState.slot);
+				if (this.validTarget(userSlot, source, move.target)) {
+					return userSlot;
+				}
+			},
+		},
+	},
 	furycutter: {
 		inherit: true,
 		onHit(target, source) {
