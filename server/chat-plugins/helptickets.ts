@@ -2273,8 +2273,8 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/j view-help-logs-${id}${dateString ? `--${dateString}` : ''}`);
 		},
 		logshelp: [
-			`/helpticket logs [userid][, date] - View logs of the [userid]'s text tickets. `,
-			`If a [date] is given, searches only that month.`,
+			`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. `,
+			`If a [month] is given, searches only that month.`,
 			`Requires: % @ &`,
 		],
 
