@@ -37,7 +37,7 @@ config.fakeladder = false;
 // Don't log monitor messages to the console (necessary so that chat monitor tests don't clog up stdout)
 config.loglevel = 3;
 
-require('./../lib/process-manager').disabled = true;
+require('./../lib/process-manager').ProcessManager.disabled = true;
 
 // stop chatrooms from loading through modifying the require cache
 try {
