@@ -14,7 +14,7 @@ export const roomFaqs: {[k: string]: {[k: string]: RoomFAQ}} = (() => {
 			}
 		}
 	}
-	if (save) saveRoomFaqs();
+	if (save) saveRoomFaqs(data);
 	return data;
 })();
 
