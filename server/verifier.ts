@@ -32,9 +32,9 @@ export function verify(data: string, signature: string): Promise<boolean> {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = require('./config-loader').Config; // tslint:disable-line: no-var-requires
+	global.Config = require('./config-loader').Config;
 
-	const Repl = require('../lib/repl').Repl; // tslint:disable-line: no-var-requires
+	const Repl = require('../lib/repl').Repl;
 	// eslint-disable-next-line no-eval
 	Repl.start('verifier', (cmd: string) => eval(cmd));
 } else {

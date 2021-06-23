@@ -23,6 +23,6 @@ describe("Heavy Duty Boots", function () {
 		battle.makeChoices('auto', 'move toxicspikes');
 		battle.makeChoices('switch 2', 'auto');
 		assert.fullHP(battle.p1.active[0]);
-		assert.notStrictEqual(battle.p1.active[0].status, 'psn');
+		assert.notEqual(battle.p1.active[0].status, 'psn');
 	});
 });

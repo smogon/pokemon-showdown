@@ -2,20 +2,17 @@
 
 const assert = require('assert').strict;
 
-const userUtils = require('../../users-utils');
-const User = userUtils.User;
-const Connection = userUtils.Connection;
+const {makeUser} = require('../../users-utils');
 const trivia = require('../../../.server-dist/chat-plugins/trivia');
 const Trivia = trivia.Trivia;
 const FirstModeTrivia = trivia.FirstModeTrivia;
 const TimerModeTrivia = trivia.TimerModeTrivia;
 const NumberModeTrivia = trivia.NumberModeTrivia;
 
-function makeUser(name, connection) {
-	const user = new User(connection);
-	user.forceRename(name, true);
-	Users.users.set(user.id, user);
-	user.joinRoom('trivia', connection);
+function makeTriviaUser(name, ip) {
+	const user = makeUser(name, ip);
+	assert.equal(Users.users.get(user.id), user);
+	user.joinRoom('trivia');
 	return user;
 }
 
@@ -34,9 +31,9 @@ describe('Trivia', function () {
 
 	beforeEach(function () {
 		const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-		this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-		this.tarUser = makeUser('ReallyNotMorfent', new Connection('127.0.0.2'));
-		this.game = this.room.game = new Trivia(this.room, 'first', 'ae', 'short', questions);
+		this.user = makeTriviaUser('Morfent', '127.0.0.1');
+		this.tarUser = makeTriviaUser('ReallyNotMorfent', '127.0.0.2');
+		this.game = this.room.game = new Trivia(this.room, 'first', 'ae', true, 'short', questions);
 	});
 
 	afterEach(function () {
@@ -63,15 +60,15 @@ describe('Trivia', function () {
 
 	it('should not add a player if they have already joined', function () {
 		this.game.addTriviaPlayer(this.user);
-		this.game.addTriviaPlayer(this.user);
+		assert.throws(() => this.game.addTriviaPlayer(this.user));
 		assert.equal(this.game.playerCount, 1);
 	});
 
 	it('should not add a player if another one on the same IP has joined', function () {
 		this.game.addTriviaPlayer(this.user);
 
-		const user2 = makeUser('Not Morfent', new Connection('127.0.0.1'));
-		this.game.addTriviaPlayer(user2);
+		const user2 = makeTriviaUser('Not Morfent', '127.0.0.1');
+		assert.throws(() => this.game.addTriviaPlayer(user2));
 
 		assert.equal(this.game.playerCount, 1);
 		destroyUser(user2);
@@ -84,8 +81,8 @@ describe('Trivia', function () {
 		this.user.forceRename('Not Morfent', true);
 		this.user.previousIDs.push(userid);
 
-		const user2 = makeUser(name, new Connection('127.0.0.3'));
-		this.game.addTriviaPlayer(user2);
+		const user2 = makeTriviaUser(name, '127.0.0.3');
+		assert.throws(() => this.game.addTriviaPlayer(user2));
 
 		assert.equal(this.game.playerCount, 1);
 		destroyUser(user2);
@@ -93,7 +90,7 @@ describe('Trivia', function () {
 
 	it('should not add a player if they were kicked from the game', function () {
 		this.game.kickedUsers.add(this.tarUser.id);
-		this.game.addTriviaPlayer(this.tarUser);
+		assert.throws(() => this.game.addTriviaPlayer(this.tarUser));
 		assert.equal(this.game.playerCount, 0);
 	});
 
@@ -106,8 +103,7 @@ describe('Trivia', function () {
 	it('should not kick players already kicked from the game', function () {
 		this.game.addTriviaPlayer(this.tarUser);
 		this.game.kick(this.tarUser, this.user);
-		const res = this.game.kick(this.tarUser, this.user);
-		assert.equal(typeof res, 'string');
+		assert.throws(() => this.game.kick(this.tarUser, this.user));
 	});
 
 	it('should not kick users who were kicked under another name', function () {
@@ -117,7 +113,7 @@ describe('Trivia', function () {
 		const userid = this.tarUser.id;
 		this.tarUser.forceRename('Not Morfent', true);
 		this.tarUser.previousIDs.push(userid);
-		this.game.addTriviaPlayer(this.tarUser);
+		assert.throws(() => this.game.addTriviaPlayer(this.tarUser));
 		assert.equal(this.game.playerCount, 0);
 	});
 
@@ -128,26 +124,27 @@ describe('Trivia', function () {
 		const name = this.tarUser.name;
 		this.tarUser.resetName();
 
-		const user2 = makeUser(name, new Connection('127.0.0.2'));
-		this.game.addTriviaPlayer(user2);
+		const user2 = makeTriviaUser(name, '127.0.0.2');
+		assert.throws(() => this.game.addTriviaPlayer(user2));
 		assert.equal(this.game.playerCount, 0);
 		destroyUser(user2);
 	});
 
 	it('should not kick users that aren\'t players in the game', function () {
-		this.game.kick(this.tarUser, this.user);
+		assert.throws(() => this.game.kick(this.tarUser, this.user));
 		assert.equal(this.game.playerCount, 0);
 	});
 
 	it('should make players leave the game', function () {
+		this.game.addTriviaPlayer(this.user);
+		assert.equal(typeof this.game.playerTable[this.user.id], 'object');
 		this.game.leave(this.user);
-		assert.equal(this.game.playerTable[this.user.id], undefined);
+		assert.equal(typeof this.game.playerTable[this.user.id], 'undefined');
 	});
 
 	it('should not make users who are not players leave the game', function () {
-		this.game.leave(this.user);
-		const res = this.game.leave(this.user);
-		assert.equal(typeof res, 'string');
+		assert.equal(typeof this.game.playerTable[this.user.id], 'undefined');
+		assert.throws(() => this.game.leave(this.user));
 	});
 
 	it('should verify answers correctly', function () {
@@ -157,19 +154,14 @@ describe('Trivia', function () {
 		assert.equal(this.game.verifyAnswer('not the right answer'), false);
 	});
 
-	it('should not throw when attempting to broadcast after the game has ended', function () {
-		this.game.destroy();
-		assert.doesNotThrow(() => this.game.broadcast('ayy', 'lmao'));
-	});
-
 	context('marking player absence', function () {
 		beforeEach(function () {
 			const questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
-			const game = new FirstModeTrivia(this.room, 'first', 'ae', 'short', questions);
+			const game = new FirstModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
 
-			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
-			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+			this.user = makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = makeTriviaUser('user3', '127.0.0.3');
 
 			this.user.joinRoom(this.room);
 			game.addTriviaPlayer(this.user);
@@ -197,30 +189,23 @@ describe('Trivia', function () {
 			}
 		});
 
-		it('should mark a player absent on leave and pause the game', function () {
+		it('should mark a player absent on leave and unnmark them when they return', function () {
 			this.user.leaveRoom(this.room);
 			assert.equal(this.player.isAbsent, true);
-			assert.equal(this.game.phase, 'limbo');
-			assert.equal(this.game.phaseTimeout, null);
-		});
 
-		it('should unpause the game once enough players have returned', function () {
-			this.user.leaveRoom(this.room);
 			this.user.joinRoom(this.room);
 			assert.equal(this.player.isAbsent, false);
-			assert.equal(this.game.phase, 'question');
-			assert.ok(this.game.phaseTimeout);
 		});
 	});
 
 	context('first mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new FirstModeTrivia(this.room, 'first', 'ae', 'short', questions);
+			const game = new FirstModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
 
-			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
-			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+			this.user = makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);
@@ -260,7 +245,7 @@ describe('Trivia', function () {
 
 		it('should only reward a player points once per question', function () {
 			this.game.answerQuestion('answer', this.user);
-			this.game.answerQuestion('answer', this.user);
+			assert.throws(() => this.game.answerQuestion('answer', this.user));
 			assert.equal(this.player.correctAnswers, 1);
 		});
 
@@ -273,18 +258,18 @@ describe('Trivia', function () {
 		it('should not give NaN points to correct responders', function () {
 			this.game.answerQuestion('answer', this.user);
 			this.game.tallyAnswers();
-			assert.ok(!isNaN(this.player.points));
+			assert(!isNaN(this.player.points));
 		});
 	});
 
 	context('timer mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new TimerModeTrivia(this.room, 'first', 'ae', 'short', questions);
+			const game = new TimerModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
 
-			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
-			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+			this.user = makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);
@@ -339,7 +324,7 @@ describe('Trivia', function () {
 				const hrtimeToNanoseconds = hrtime => hrtime[0] * 1e9 + hrtime[1];
 				const playerNs = hrtimeToNanoseconds(this.player.answeredAt);
 				const player2Ns = hrtimeToNanoseconds(this.game.playerTable[this.user2.id].answeredAt);
-				assert.ok(playerNs <= player2Ns);
+				assert(playerNs <= player2Ns);
 
 				done();
 			});
@@ -348,18 +333,18 @@ describe('Trivia', function () {
 		it('should not give NaN points to correct responders', function () {
 			this.game.answerQuestion('answer', this.user);
 			this.game.tallyAnswers();
-			assert.ok(!isNaN(this.player.points));
+			assert(!isNaN(this.player.points));
 		});
 	});
 
 	context('number mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new NumberModeTrivia(this.room, 'first', 'ae', 'short', questions);
+			const game = new NumberModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
 
-			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
-			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
-			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+			this.user = makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);
@@ -407,7 +392,39 @@ describe('Trivia', function () {
 		it('should not give NaN points to correct responders', function () {
 			this.game.answerQuestion('answer', this.user);
 			this.game.tallyAnswers();
-			assert.ok(!isNaN(this.player.points));
+			assert(!isNaN(this.player.points));
+		});
+	});
+
+	context('alt merging', () => {
+		it('should only allow merging approved alts', () => {
+			trivia.triviaData.leaderboard = {
+				annika: [0, 0, 0],
+				heartofetheria: [0, 0, 0],
+				somerandomreg: [0, 0, 0],
+			};
+
+			assert.throws(() => trivia.mergeAlts('annika', 'heartofetheria'));
+
+			trivia.requestAltMerge('annika', 'somerandomreg');
+			trivia.requestAltMerge('heartofetheria', 'somerandomreg');
+			assert.throws(() => trivia.mergeAlts('annika', 'heartofetheria'));
+
+			trivia.requestAltMerge('annika', 'heartofetheria');
+			assert.doesNotThrow(() => trivia.mergeAlts('annika', 'heartofetheria'));
+		});
+
+		it('should correctly merge alts', () => {
+			trivia.triviaData.leaderboard = {
+				annika: [3, 2, 1],
+				heartofetheria: [1, 2, 3],
+			};
+
+			trivia.requestAltMerge('heartofetheria', 'annika');
+			trivia.mergeAlts('heartofetheria', 'annika');
+
+			assert.deepEqual(trivia.triviaData.leaderboard.annika, [4, 4, 4]);
+			assert.equal(trivia.triviaData.leaderboard.heartofetheria, undefined);
 		});
 	});
 });

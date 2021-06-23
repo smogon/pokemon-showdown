@@ -1,6 +1,7 @@
 /**
  * Tests for the Youtube room plugin.
- * Written by mia-pi.
+ * Written by Mia.
+ * @author mia-pi-git
  */
 'use strict';
 const YoutubeInterface = require('../../../.server-dist/chat-plugins/youtube').YoutubeInterface;
@@ -12,7 +13,7 @@ describe(`Youtube features`, function () {
 		const Youtube = new YoutubeInterface({});
 		const url = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
 		await Youtube.getChannelData(url, undefined);
-		assert.ok(Youtube.data['UCuAXFkgsw1L7xaCfnd5JJOw']);
+		assert(Youtube.data['UCuAXFkgsw1L7xaCfnd5JJOw']);
 	});
 
 	it.skip(`should correctly handle PS names and channel names`, async function () {
@@ -21,8 +22,8 @@ describe(`Youtube features`, function () {
 		const url = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
 		const channelId = 'UCuAXFkgsw1L7xaCfnd5JJOw';
 		await Youtube.getChannelData(url, 'Pickle Rick');
-		assert.strictEqual(channelId, Youtube.channelSearch('Pickle Rick'));
-		assert.strictEqual(channelId, Youtube.channelSearch('Official Rick Astley'));
+		assert.equal(channelId, Youtube.channelSearch('Pickle Rick'));
+		assert.equal(channelId, Youtube.channelSearch('Official Rick Astley'));
 	});
 
 	it.skip(`should correctly parse channel links`, function () {
@@ -31,8 +32,8 @@ describe(`Youtube features`, function () {
 		const channelUrl = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
 		const Youtube = new YoutubeInterface({});
 		const videoId = Youtube.getId(videoUrl);
-		assert.strictEqual(videoId, 'dQw4w9WgXcQ');
+		assert.equal(videoId, 'dQw4w9WgXcQ');
 		const channelId = Youtube.getId(channelUrl);
-		assert.strictEqual(channelId, 'UCuAXFkgsw1L7xaCfnd5JJOw');
+		assert.equal(channelId, 'UCuAXFkgsw1L7xaCfnd5JJOw');
 	});
 });

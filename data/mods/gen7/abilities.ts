@@ -2,7 +2,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	disguise: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectData.busted) {
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
 			}
@@ -20,9 +20,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	moody: {
 		inherit: true,
 		onResidual(pokemon) {
-			let stats: BoostName[] = [];
+			let stats: BoostID[] = [];
 			const boost: SparseBoostsTable = {};
-			let statPlus: BoostName;
+			let statPlus: BoostID;
 			for (statPlus in pokemon.boosts) {
 				if (pokemon.boosts[statPlus] < 6) {
 					stats.push(statPlus);
@@ -32,7 +32,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (randomStat) boost[randomStat] = 2;
 
 			stats = [];
-			let statMinus: BoostName;
+			let statMinus: BoostID;
 			for (statMinus in pokemon.boosts) {
 				if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
 					stats.push(statMinus);
@@ -65,6 +65,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	scrappy: {
 		inherit: true,
 		onBoost() {},
+	},
+	soundproof: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (move.flags['sound']) {
+				this.add('-immune', target, '[from] ability: Soundproof');
+				return null;
+			}
+		},
 	},
 	technician: {
 		inherit: true,

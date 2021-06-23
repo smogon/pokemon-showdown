@@ -16,6 +16,6 @@ describe('Smelling Salts', function () {
 		battle.setPlayer('p2', {team: [{species: "Dragonite", ability: 'multiscale', moves: ['roost']}]});
 		battle.makeChoices('move thunderwave', 'move roost');
 		battle.makeChoices('move smellingsalts', 'move roost');
-		assert.notStrictEqual(battle.p2.active[0].status, 'par');
+		assert.notEqual(battle.p2.active[0].status, 'par');
 	});
 });

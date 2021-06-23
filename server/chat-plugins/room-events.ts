@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export interface RoomEvent {
 	eventName: string;
@@ -98,7 +98,7 @@ function getEventID(nameOrAlias: string, room: Room): ID {
 	return id;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	events: 'roomevents',
 	roomevent: 'roomevents',
 	roomevents: {
@@ -316,12 +316,9 @@ export const commands: ChatCommands = {
 			buff += '</table>';
 
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
-			if (!this.broadcasting && user.can('ban', null, room) && events.length === 1) {
+			if (!this.broadcasting && user.can('ban', null, room, 'roomevents add') && events.length === 1) {
 				const event = events[0];
-				this.sendReplyBox(
-					Utils.html`<code>/roomevents add ${event.eventName} |` +
-					Utils.html`${event.date} | ${event.desc}</code>`
-				);
+				this.sendReplyBox(Utils.html`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomevents add ${event.eventName} | ${event.date} | ${event.desc}</code></details>`.replace(/\n/g, '<br />'));
 			}
 		},
 
@@ -476,6 +473,19 @@ export const commands: ChatCommands = {
 			room.saveSettings();
 		},
 
+		viewcategories: 'categories',
+		categories(target, room, user) {
+			room = this.requireRoom();
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
+			this.runBroadcast();
+
+			const categoryButtons = getAllCategories(room).map(
+				category => `<button class="button" name="send" value="/roomevents view ${category}">${category}</button>`
+			);
+			if (!categoryButtons.length) return this.errorReply(`There are no roomevent categories in ${room.title}.`);
+			this.sendReplyBox(`Roomevent categories in ${room.title}: ${categoryButtons.join(' ')}`);
+		},
+
 		help(target, room, user) {
 			return this.parse('/help roomevents');
 		},
@@ -536,7 +546,7 @@ export const commands: ChatCommands = {
 				);
 				break;
 			default:
-				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
+				return this.errorReply(`Invalid column name "${columnName}". Please use one of: date, desc, name.`);
 			}
 
 			// rebuild the room.settings.events object
@@ -547,20 +557,19 @@ export const commands: ChatCommands = {
 			}
 
 			// build communication string
-			const resultString = `sorted by column:` + columnName +
-								 ` in ${multiplier === 1 ? "ascending" : "descending"} order` +
-								 `${delimited.length === 1 ? " (by default)" : ""}`;
+			const resultString = `sorted by column: ${columnName}` +
+				` in ${multiplier === 1 ? "ascending" : "descending"} order` +
+				`${delimited.length === 1 ? " (by default)" : ""}`;
 			this.modlog('ROOMEVENT', null, resultString);
 			return this.sendReply(resultString);
 		},
 	},
 	roomeventshelp() {
 		this.sendReply(
-			`|html|<details class="readmore"><summary>Commands to manage room events.</summary>` +
-			`<code>/roomevents</code>: displays a list of upcoming room-specific events.<br />` +
+			`|html|<details class="readmore"><summary><code>/roomevents</code>: displays a list of upcoming room-specific events.<br />` +
 			`<code>/roomevents add [event name] | [event date/time] | [event description]</code>: adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # &<br />` +
 			`<code>/roomevents start [event name]</code>: declares to the room that the event has started. Requires: @ # &<br />` +
-			`<code>/roomevents remove [event name]</code>: deletes an event. Requires: @ # &<br />` +
+			`<code>/roomevents remove [event name]</code>: deletes an event. Requires: @ # &</summary>` +
 			`<code>/roomevents rename [old event name] | [new name]</code>: renames an event. Requires: @ # &<br />` +
 			`<code>/roomevents addalias [alias] | [event name]</code>: adds an alias for the event. Requires: @ # &<br />` +
 			`<code>/roomevents removealias [alias]</code>: removes an event alias. Requires: @ # &<br />` +
@@ -569,7 +578,8 @@ export const commands: ChatCommands = {
 			`<code>/roomevents addtocategory [event name] | [category]</code>: adds the event to a category. Requires: @ # &<br />` +
 			`<code>/roomevents removefromcategory [event name] | [category]</code>: removes the event from a category. Requires: @ # &<br />` +
 			`<code>/roomevents sortby [column name] | [asc/desc (optional)]</code> sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default. Requires: @ # &<br />` +
-			`<code>/roomevents view [event name or category]</code>: displays information about a specific event or category of events.` +
+			`<code>/roomevents view [event name or category]</code>: displays information about a specific event or category of events.<br />` +
+			`<code>/roomevents viewcategories</code>: displays a list of event categories for that room.` +
 			`</details>`
 		);
 	},

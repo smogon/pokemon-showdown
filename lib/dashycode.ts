@@ -148,7 +148,6 @@ export function encode(str: string, allowCaps = false) {
 			streamWrite(unsafeStream, 2, 0x0);
 		} else if (curCharCode === 32) { // space
 			streamWrite(unsafeStream, 3, 0x3);
-			// tslint:disable-next-line:no-conditional-assignment
 		} else if ((unsafeMapIndex = UNSAFE_MAP.indexOf(str.charAt(i))) >= 0) {
 			curCharCode = (unsafeMapIndex << 2) + 0x2;
 			streamWrite(unsafeStream, 7, curCharCode);
@@ -158,17 +157,17 @@ export function encode(str: string, allowCaps = false) {
 		}
 	}
 	let unsafePart = streamGetCode(unsafeStream);
-	if (safePart.charAt(0) === '-') {
+	if (safePart.startsWith('-')) {
 		safePart = safePart.slice(1);
 		unsafePart = unsafePart + '2';
 	}
-	if (safePart.slice(-1) === '-') {
+	if (safePart.endsWith('-')) {
 		safePart = safePart.slice(0, -1);
 	}
 	if (!safePart) {
 		safePart = '0';
 		unsafePart = '0' + unsafePart;
-		if (unsafePart.slice(-1) === '2') unsafePart = unsafePart.slice(0, -1);
+		if (unsafePart.endsWith('2')) unsafePart = unsafePart.slice(0, -1);
 	}
 	if (!unsafePart) return safePart;
 	return safePart + '--' + unsafePart;
@@ -183,13 +182,13 @@ export function decode(codedStr: string) {
 		return codedStr.replace(/-/g, ' ');
 	}
 	if (codedStr.charAt(lastDashIndex + 2) === '0') {
-		if (codedStr.charAt(0) !== '0' || lastDashIndex !== 1) {
+		if (!codedStr.startsWith('0') || lastDashIndex !== 1) {
 			throw new Error("Invalid Dashycode");
 		}
 		lastDashIndex -= 1;
 		codedStr = '--' + codedStr.slice(4);
 	}
-	if (codedStr.slice(-1) === '2') {
+	if (codedStr.endsWith('2')) {
 		codedStr = '-' + codedStr.slice(0, -1);
 		lastDashIndex += 1;
 	}
@@ -268,11 +267,11 @@ export function decode(codedStr: string) {
 
 export function vizStream(codeBuf: string, translate = true) {
 	let spacedStream = '';
-	if (codeBuf.charAt(0) === '0') {
+	if (codeBuf.startsWith('0')) {
 		codeBuf = codeBuf.slice(1);
 		spacedStream = ' [no safe chars]' + spacedStream;
 	}
-	if (codeBuf.slice(-1) === '2') {
+	if (codeBuf.endsWith('2')) {
 		codeBuf = codeBuf.slice(0, -1);
 		spacedStream = ' [start unsafe]' + spacedStream;
 	}

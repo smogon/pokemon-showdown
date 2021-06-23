@@ -1,0 +1,7 @@
+{
+  "spec": ["test/main.js", "test/lib/**/*.js", "test/server/**/*.js", "test/sim/**/*.js", "test/tools/**/*.js", "test/random-battles/**/*.js"],
+  "grep": "^((?!\\(slow\\)).)*$",
+  "reporter": "dot",
+  "ui": "bdd",
+  "exit": true
+}

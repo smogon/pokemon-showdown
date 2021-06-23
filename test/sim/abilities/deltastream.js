@@ -14,7 +14,7 @@ describe('Delta Stream', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Rayquaza", ability: 'deltastream', moves: ['roost']}]});
 		battle.setPlayer('p2', {team: [{species: "Abra", ability: 'magicguard', moves: ['teleport']}]});
-		assert.ok(battle.field.isWeather('deltastream'));
+		assert(battle.field.isWeather('deltastream'));
 	});
 
 	it('should negate the type weaknesses of the Flying-type', function () {
@@ -65,9 +65,9 @@ describe('Delta Stream', function () {
 		]});
 		for (let i = 2; i <= 5; i++) {
 			battle.makeChoices('move helpinghand', 'switch ' + i);
-			assert.ok(battle.field.isWeather('deltastream'));
+			assert(battle.field.isWeather('deltastream'));
 			battle.makeChoices('move helpinghand', 'move 1');
-			assert.ok(battle.field.isWeather('deltastream'));
+			assert(battle.field.isWeather('deltastream'));
 		}
 	});
 

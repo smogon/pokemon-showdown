@@ -10,6 +10,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+declare const Config: any;
 
 const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
@@ -27,7 +28,7 @@ export function crashlogger(
 ): string | null {
 	const datenow = Date.now();
 
-	let stack = typeof error === 'string' ? error : error.stack;
+	let stack = (typeof error === 'string' ? error : error?.stack) || '';
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (const k in data) {
@@ -63,7 +64,6 @@ export function crashlogger(
 			text += `again with this stack trace:\n${stack}`;
 		} else {
 			try {
-				// tslint:disable-next-line:no-implicit-dependencies
 				transport = require('nodemailer').createTransport(Config.crashguardemail.options);
 			} catch (e) {
 				throw new Error("Failed to start nodemailer; are you sure you've configured Config.crashguardemail correctly?");

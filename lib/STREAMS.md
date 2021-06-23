@@ -15,6 +15,10 @@ An overview:
 
 These streams are not API-compatible with Node streams, but can wrap them.
 
+
+Consuming streams
+-----------------
+
 ### "override encoding"
 
 Buffer stream methods often take an "override encoding" parameter. Normally, you should never use it: streams will automatically convert between strings and Buffers using their built-in encoding, which defaults to `utf8`, and can be changed by setting `stream.encoding`.
@@ -132,3 +136,61 @@ Can return synchronously. Use `await` or wrap the return value in `Promise.resol
 ### readStream.peekBuffer(byteCount)
 
 Like `readStream.read` and `readStream.peek`, but returns a Buffer instead of a string.
+
+
+Creating a ReadStream
+---------------------
+
+There are many ways of creating a ReadStream.
+
+You can convert a string or Buffer directly into a ReadStream. These all do the same thing:
+
+```js
+new ReadStream('abc')
+new ReadStream(new Buffer('abc'))
+new ReadStream({buffer: 'abc'})
+new ReadStream({buffer: new Buffer('abc')})
+```
+
+You can convert a Node.js ReadableStream into a ReadStream. These all do the same thing:
+
+```js
+new ReadStream(process.stdin)
+new ReadStream({nodeStream: process.stdin})
+Streams.stdin()
+```
+
+You can set up your own `read` functions. These all do the same thing:
+
+```js
+new ReadStream('abc');
+
+class MyReadStream extends ReadStream {
+	values = ['a', 'bc'];
+	_read() {
+		const next = values.shift();
+		if (next) {
+			this.push(next);
+		} else {
+			this.pushEnd();
+		}
+	}
+}
+new MyReadStream()
+
+const values = ['a', 'bc'];
+new ReadStream({
+	read() {
+		const next = values.shift();
+		if (next) {
+			this.push(next);
+		} else {
+			this.pushEnd();
+		}
+	}
+})
+```
+
+In general, your `read` function should call either `push` or `pushEnd` at least once. If it plans to call `push` more than once with a delay in between, it should return a `Promise` that resolves after all `push`es are called. Call `pushEnd` to end the stream, and remember that calling `push` after that will be treated as a bug and throw an error.
+
+Remember there's no `pushLine` function - you'll need to manually call `push(line + '\n')`.

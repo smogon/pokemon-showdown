@@ -1,4 +1,4 @@
-export const Formats: {[k: string]: ModdedFormatData} = {
+export const Rulesets: {[k: string]: ModdedFormatData} = {
 	standard: {
 		inherit: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
@@ -6,8 +6,8 @@ export const Formats: {[k: string]: ModdedFormatData} = {
 	validatestats: {
 		inherit: true,
 		onValidateSet(set) {
-			const species = this.dex.getSpecies(set.species);
-			const item = this.dex.getItem(set.item);
+			const species = this.dex.species.get(set.species);
+			const item = this.dex.items.get(set.item);
 			if (item && item.id === 'griseousorb' && species.num !== 487) {
 				return ['Griseous Orb can only be held by Giratina in Generation 4.'];
 			}
@@ -15,7 +15,7 @@ export const Formats: {[k: string]: ModdedFormatData} = {
 				const isEventArceus = set.moves.includes('roaroftime') || set.moves.includes('shadowforce') ||
 					set.moves.includes('spacialrend');
 				if (isEventArceus) {
-					let stat: StatName;
+					let stat: StatID;
 					for (stat in set.evs) {
 						if (set.evs[stat] > 100) {
 							return ["Event Arceus may not have more than 100 of any EVs in Generation 4."];

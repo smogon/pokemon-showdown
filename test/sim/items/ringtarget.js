@@ -10,43 +10,56 @@ describe('Ring Target', function () {
 		battle.destroy();
 	});
 
-	it('should negate natural immunities and deal normal type effectiveness with the other type(s)', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['earthquake', 'vitalthrow', 'shadowball', 'psychic']}]});
-		battle.setPlayer('p2', {team: [
+	it(`should negate natural immunities and deal normal type effectiveness with the other type(s)`, function () {
+		battle = common.createBattle([[
+			{species: "Smeargle", ability: 'owntempo', moves: ['earthquake', 'vitalthrow', 'shadowball', 'psychic']},
+		], [
 			{species: "Thundurus", ability: 'prankster', item: 'ringtarget', moves: ['rest']},
 			{species: "Drifblim", ability: 'unburden', item: 'ringtarget', moves: ['rest']},
 			{species: "Girafarig", ability: 'innerfocus', item: 'ringtarget', moves: ['rest']},
 			{species: "Absol", ability: 'superluck', item: 'ringtarget', moves: ['rest']},
-		]});
+		]]);
+
 		battle.makeChoices('move earthquake', 'move rest');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
 		battle.makeChoices('move vitalthrow', 'switch 2'); // Drifblim
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
 		battle.makeChoices('move shadowball', 'switch 3'); // Girafarig
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
 		battle.makeChoices('move psychic', 'switch 4'); // Absol
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should not affect ability-based immunities', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Hariyama", ability: 'guts', moves: ['earthquake']}]});
-		battle.setPlayer('p2', {team: [
-			{species: "Mismagius", ability: 'levitate', item: 'ringtarget', moves: ['shadowsneak']},
-			{species: "Rotom-Fan", ability: 'levitate', item: 'ringtarget', moves: ['snore']},
-		]});
-		battle.makeChoices('move earthquake', 'move shadowsneak');
+	it(`should not affect ability-based immunities`, function () {
+		battle = common.createBattle([[
+			{species: 'Hariyama', moves: ['earthquake']},
+		], [
+			{species: 'Mismagius', ability: 'levitate', item: 'ringtarget', moves: ['sleeptalk']},
+			{species: 'Rotom-Fan', ability: 'levitate', item: 'ringtarget', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
 		assert.fullHP(battle.p2.active[0]);
 
 		// even if Rotom-Fan
 		battle.makeChoices('move earthquake', 'switch 2');
+		assert.fullHP(battle.p2.active[0]);
+	});
+
+	it(`should not affect Magnet Rise`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['earthquake']},
+		], [
+			{species: 'Klefki', item: 'ringtarget', moves: ['magnetrise']},
+		]]);
+
+		battle.makeChoices();
 		assert.fullHP(battle.p2.active[0]);
 	});
 });

@@ -1,13 +1,15 @@
 {
     "compilerOptions": {
-        "lib": ["es2015", "es2016.array.include", "es2017.object"],
+        "lib": ["es2019"],
         "noEmit": true,
         "target": "esnext",
         "module": "commonjs",
         "moduleResolution": "node",
         "strict": true,
         "allowJs": true,
-        "checkJs": true
+        "checkJs": true,
+        "incremental": true,
+        "allowUnreachableCode": false
     },
     "types": ["node"],
     "exclude": [
@@ -19,9 +21,11 @@
         "./data/text/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
-        "./lib/*",
+        "./lib/*.ts",
         "./server/**/*.ts",
         "./sim/**/*",
-        "./tools/set-import/*.ts"
+        "./tools/set-import/*.ts",
+        "./tools/modlog/*.ts",
+        "./translations/**/*.ts",
     ]
 }

@@ -1,19 +1,21 @@
 import {FS} from '../lib/fs';
+import type {RoomSection} from './chat-commands/room-settings';
 
-export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
+export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '▸' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
+export const SECTIONLEADER_SYMBOL: GroupSymbol = '\u25B8';
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 export const ROOM_PERMISSIONS = [
-	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
+	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomsectionleader', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
 ] as const;
 
 export const GLOBAL_PERMISSIONS = [
 	// administrative
-	'bypassall', 'console', 'disableladder', 'lockdown', 'potd', 'rawpacket',
+	'bypassall', 'console', 'disableladder', 'lockdown', 'potd',
 	// other
 	'addhtml', 'alts', 'altsself', 'autotimer', 'globalban', 'bypassblocks', 'bypassafktimer', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'hiderank', 'ignorelimits', 'importinputlog', 'ip', 'ipself', 'lock', 'makeroom', 'modlog', 'rangeban', 'promote',
 ] as const;
@@ -52,11 +54,19 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	 * users with temporary global auth.
 	 */
 	get(user: ID | User) {
-		if (typeof user !== 'string') return (user as User).tempGroup;
+		if (typeof user !== 'string') return user.tempGroup;
 		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
-		return this.has(userid) && this.get(userid) !== '+';
+		if (this.has(userid)) {
+			const rank = this.get(userid);
+			// At one point bots used to be ranked above drivers, so this checks
+			// driver rank to make sure this function works on servers that
+			// did not reorder the ranks.
+			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, '%');
+		} else {
+			return false;
+		}
 	}
 	atLeast(user: User, group: AuthLevel) {
 		if (user.hasSysopAccess()) return true;
@@ -67,6 +77,9 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		}
 		if (user.locked || user.semilocked) return false;
 		if (group === 'unlocked') return true;
+		if (group === 'whitelist' && this.has(user.id)) {
+			return true;
+		}
 		if (!Config.groups[group]) return false;
 		if (this.get(user.id) === ' ' && group !== ' ') return false;
 		return Auth.atLeast(this.get(user.id), group);
@@ -83,11 +96,12 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (fallback !== undefined) return fallback;
 
 		// unidentified groups are treated as voice
-		return Object.assign({}, Config.groups['+'] || {}, {
+		return {
+			...(Config.groups['+'] || {}),
 			symbol,
 			id: 'voice',
 			name: symbol,
-		});
+		};
 	}
 	getEffectiveSymbol(user: User): EffectiveGroupSymbol {
 		const group = this.get(user);
@@ -99,7 +113,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	static hasPermission(
 		user: User,
 		permission: string,
-		target: User | EffectiveGroupSymbol | null,
+		target: User | EffectiveGroupSymbol | ID | null,
 		room?: BasicRoom | null,
 		cmd?: string
 	): boolean {
@@ -108,7 +122,15 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		const auth: Auth = room ? room.auth : Users.globalAuth;
 
 		const symbol = auth.getEffectiveSymbol(user);
-		let targetSymbol = (typeof target === 'string' || !target) ? target : auth.get(target);
+
+		let targetSymbol: EffectiveGroupSymbol | null;
+		if (!target) {
+			targetSymbol = null;
+		} else if (typeof target === 'string' && !toID(target)) { // empty ID -> target is a group symbol
+			targetSymbol = target as EffectiveGroupSymbol;
+		} else {
+			targetSymbol = auth.get(target as User | ID);
+		}
 		if (!targetSymbol || ['whitelist', 'trusted', 'autoconfirmed'].includes(targetSymbol)) {
 			targetSymbol = Auth.defaultSymbol();
 		}
@@ -129,12 +151,12 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 					// this checks sub commands and command objects, but it checks to see if a sub-command
 					// overrides (should a perm for the command object exist) first
 					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
-					jurisdiction = 'su';
+					jurisdiction = 'u';
 					foundSpecificPermission = true;
 				} else if (roomPermissions[`/${namespace}`]) {
 					// if it's for one command object
 					if (!auth.atLeast(user, roomPermissions[`/${namespace}`])) return false;
-					jurisdiction = 'su';
+					jurisdiction = 'u';
 					foundSpecificPermission = true;
 				}
 			}
@@ -149,24 +171,22 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
-		const permissions: string[] = ROOM_PERMISSIONS.slice();
-		for (const cmd in Chat.commands) {
-			const entry = Chat.commands[cmd];
-			if (typeof entry === 'string' || Array.isArray(entry)) continue;
-			if (typeof entry === 'function' && entry.hasRoomPermissions) {
-				permissions.push(`/${cmd}`);
-			}
-			if (typeof entry === 'object') {
-				permissions.push(`/${cmd}`);
-				for (const subCommand in entry) {
-					const subEntry = (entry as Chat.AnnotatedChatCommands)[subCommand];
-					if (typeof subEntry !== 'function') continue;
-					if (subEntry.hasRoomPermissions) permissions.push(`/${cmd} ${subCommand}`);
+		const handlers = Chat.allCommands().filter(c => c.hasRoomPermissions);
+		const commands = [];
+		for (const handler of handlers) {
+			commands.push(`/${handler.fullCmd}`);
+			if (handler.aliases.length) {
+				for (const alias of handler.aliases) {
+					// kind of a hack but this is the only good way i could think of to
+					// overwrite the alias without making assumptions about the string
+					commands.push(`/${handler.fullCmd.replace(handler.cmd, alias)}`);
 				}
-				continue;
 			}
 		}
-		return permissions;
+		return [
+			...ROOM_PERMISSIONS,
+			...commands,
+		];
 	}
 	static hasJurisdiction(
 		symbol: EffectiveGroupSymbol,
@@ -212,11 +232,12 @@ export class RoomAuth extends Auth {
 		super();
 		this.room = room;
 	}
-	get(user: ID | User): GroupSymbol {
+	get(userOrID: ID | User): GroupSymbol {
+		const id = typeof userOrID === 'string' ? userOrID : userOrID.id;
+
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? Users.globalAuth : null;
-		const parentGroup = parentAuth ? parentAuth.get(user) : Auth.defaultSymbol();
-		const id = typeof user === 'string' ? user : (user as User).id;
+		const parentGroup = parentAuth ? parentAuth.get(userOrID) : Auth.defaultSymbol();
 
 		if (this.has(id)) {
 			// authority is whichever is higher between roomauth and global auth
@@ -288,6 +309,7 @@ export class RoomAuth extends Auth {
 
 export class GlobalAuth extends Auth {
 	usernames = new Map<ID, string>();
+	sectionLeaders = new Map<ID, RoomSection>();
 	constructor() {
 		super();
 		this.load();
@@ -296,7 +318,7 @@ export class GlobalAuth extends Auth {
 		FS('config/usergroups.csv').writeUpdate(() => {
 			let buffer = '';
 			for (const [userid, groupSymbol] of this) {
-				buffer += `${this.usernames.get(userid) || userid},${groupSymbol}\n`;
+				buffer += `${this.usernames.get(userid) || userid},${groupSymbol},${this.sectionLeaders.get(userid) || ''}\n`;
 			}
 			return buffer;
 		});
@@ -305,10 +327,17 @@ export class GlobalAuth extends Auth {
 		const data = FS('config/usergroups.csv').readIfExistsSync();
 		for (const row of data.split("\n")) {
 			if (!row) continue;
-			const [name, symbol] = row.split(",");
+			const [name, symbol, sectionid] = row.split(",");
 			const id = toID(name);
 			this.usernames.set(id, name);
-			super.set(id, symbol.charAt(0) as GroupSymbol);
+			if (sectionid) this.sectionLeaders.set(id, sectionid as RoomSection);
+
+			// handle glitched entries where a user has two entries in usergroups.csv due to bugs
+			const newSymbol = symbol.charAt(0) as GroupSymbol;
+			const preexistingSymbol = super.get(id);
+			// take a user's highest rank in usergroups.csv
+			if (preexistingSymbol && Auth.atLeast(preexistingSymbol, newSymbol)) continue;
+			super.set(id, newSymbol);
 		}
 	}
 	set(id: ID, group: GroupSymbol, username?: string) {
@@ -318,6 +347,7 @@ export class GlobalAuth extends Auth {
 			user.tempGroup = group;
 			user.updateIdentity();
 			username = user.name;
+			Rooms.global.checkAutojoin(user);
 		}
 		this.usernames.set(id, username);
 		super.set(id, group);
@@ -332,6 +362,33 @@ export class GlobalAuth extends Auth {
 			user.tempGroup = ' ';
 		}
 		this.usernames.delete(id);
+		this.save();
+		return true;
+	}
+	setSection(id: ID, sectionid: RoomSection, username?: string) {
+		if (!username) username = id;
+		const user = Users.get(id);
+		if (user) {
+			user.updateIdentity();
+			username = user.name;
+			Rooms.global.checkAutojoin(user);
+		}
+		if (!super.has(id)) this.set(id, ' ', username);
+		this.sectionLeaders.set(id, sectionid);
+		void this.save();
+		return this;
+	}
+	deleteSection(id: ID) {
+		if (!this.sectionLeaders.has(id)) return false;
+		this.sectionLeaders.delete(id);
+		if (super.get(id) === ' ') {
+			return this.delete(id);
+		}
+		const user = Users.get(id);
+		if (user) {
+			user.updateIdentity();
+			Rooms.global.checkAutojoin(user);
+		}
 		this.save();
 		return true;
 	}

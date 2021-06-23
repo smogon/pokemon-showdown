@@ -49,4 +49,39 @@ describe('Follow Me', function () {
 		assert.equal(battle.p2.active[0].boosts['atk'], 1);
 		assert.equal(battle.p2.active[1].boosts['atk'], 1);
 	});
+
+	it(`should allow redirection even if the user is the last slot of a double battle`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Wynaut", moves: ['sleeptalk', 'tackle']},
+			{species: "Wynaut", moves: ['sleeptalk', 'tackle']},
+		], [
+			{species: "Accelgor", moves: ['finalgambit']},
+			{species: "Blissey", moves: ['sleeptalk', 'followme']},
+		]]);
+
+		battle.makeChoices('auto', 'move final gambit -2, move sleeptalk');
+		battle.makeChoices('move tackle -2, move tackle -1', 'move followme');
+
+		// Follow Me should have redirected both attacks, so the Wynaut should be at full HP
+		assert.fullHP(battle.p1.active[0]);
+		assert.fullHP(battle.p1.active[1]);
+	});
+
+	it(`should redirect single-target moves towards it if it is a valid target in FFA`, function () {
+		battle = common.createBattle({gameType: 'freeforall'}, [[
+			{species: "Wynaut", moves: ['tackle']},
+		], [
+			{species: "Wynaut", moves: ['tackle']},
+		], [
+			{species: "Accelgor", moves: ['finalgambit']},
+			{species: "Mimikyu", moves: ['substitute']},
+		], [
+			{species: "Blissey", moves: ['followme']},
+		]]);
+		battle.makeChoices('move tackle 1', 'move tackle 1', 'move final gambit 2', 'move followme');
+
+		// Follow Me should have redirected both attacks, so the Wynaut should be at full HP
+		assert.fullHP(battle.p1.active[0]);
+		assert.fullHP(battle.p2.active[0]);
+	});
 });

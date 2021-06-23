@@ -2,9 +2,25 @@
  * Simulator Side
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * @license MIT license
+ * There's a lot of ambiguity between the terms "player", "side", "team",
+ * and "half-field", which I'll try to explain here:
+ *
+ * These terms usually all mean the same thing. The exceptions are:
+ *
+ * - Multi-battle: there are 2 half-fields, 2 teams, 4 sides
+ *
+ * - Free-for-all: there are 2 half-fields, 4 teams, 4 sides
+ *
+ * "Half-field" is usually abbreviated to "half".
+ *
+ * Function naming will be very careful about which term to use. Pay attention
+ * if it's relevant to your code.
+ *
+ * @license MIT
  */
-import {RequestState} from './battle';
+
+import {Utils} from '../lib';
+import type {RequestState} from './battle';
 import {Pokemon, EffectState} from './pokemon';
 import {State} from './state';
 import {toID} from './dex';
@@ -42,27 +58,45 @@ export interface Choice {
 export class Side {
 	readonly battle: Battle;
 	readonly id: SideID;
+	/** Index in `battle.sides`: `battle.sides[side.n] === side` */
 	readonly n: number;
 
 	name: string;
 	avatar: string;
-	maxTeamSize: number;
-	foe: Side;
+	foe: Side = null!; // set in battle.start()
+	/** Only exists in multi battle, for the allied side */
+	allySide: Side | null = null; // set in battle.start()
 	team: PokemonSet[];
 	pokemon: Pokemon[];
 	active: Pokemon[];
 
 	pokemonLeft: number;
-	faintedLastTurn: boolean;
-	faintedThisTurn: boolean;
 	zMoveUsed: boolean;
+	/**
+	 * This will be true in any gen before 8 or if the player (or their battle partner) has dynamaxed once already
+	 *
+	 * Use Side.canDynamaxNow() to check if a side can dynamax instead of this property because only one
+	 * player per team can dynamax on any given turn of a gen 8 Multi Battle.
+	 */
+	dynamaxUsed: boolean;
 
+	faintedLastTurn: Pokemon | null;
+	faintedThisTurn: Pokemon | null;
+	/** only used by Gen 1 Counter */
+	lastSelectedMove: ID = '';
+
+	/** these point to the same object as the ally's, in multi battles */
 	sideConditions: {[id: string]: EffectState};
 	slotConditions: {[id: string]: EffectState}[];
 
 	activeRequest: AnyObject | null;
 	choice: Choice;
 
+	/**
+	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon
+	 * (this is for Counter and Mirror Move)
+	 * This is also used for checking Self-KO clause in Pokemon Stadium 2.
+	 */
 	lastMove: Move | null;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
@@ -75,17 +109,13 @@ export class Side {
 
 		this.name = name;
 		this.avatar = '';
-		this.maxTeamSize = 6;
-		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
 
 		this.team = team;
 		this.pokemon = [];
 		for (let i = 0; i < this.team.length && i < 24; i++) {
 			// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new Pokemon(this.team[i], this));
-		}
-		for (const [i, pokemon] of this.pokemon.entries()) {
-			pokemon.position = i;
+			this.pokemon[i].position = i;
 		}
 
 		switch (this.battle.gameType) {
@@ -100,9 +130,10 @@ export class Side {
 		}
 
 		this.pokemonLeft = this.pokemon.length;
-		this.faintedLastTurn = false;
-		this.faintedThisTurn = false;
+		this.faintedLastTurn = null;
+		this.faintedThisTurn = null;
 		this.zMoveUsed = false;
+		this.dynamaxUsed = this.battle.gen < 8;
 
 		this.sideConditions = {};
 		this.slotConditions = [];
@@ -138,6 +169,16 @@ export class Side {
 		return 'move';
 	}
 
+	canDynamaxNow(): boolean {
+		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
+		// On turn 1, the players on their team's respective left have the first chance (p1 and p2)
+		if (this.battle.gameType === 'multi' && this.battle.turn % 2 !== [1, 1, 0, 0][this.n]) return false;
+		// if (this.battle.gameType === 'multitriples' && this.battle.turn % 3 !== [1, 1, 2, 2, 0, 0][this.side.n]) {
+		//		return false;
+		// }
+		return !this.dynamaxUsed;
+	}
+
 	getChoice() {
 		if (this.choice.actions.length > 1 && this.choice.actions.every(action => action.choice === 'team')) {
 			return `team ` + this.choice.actions.map(action => action.pokemon!.position + 1).join(', ');
@@ -166,51 +207,87 @@ export class Side {
 		return `${this.id}: ${this.name}`;
 	}
 
-	getRequestData() {
+	getRequestData(forAlly?: boolean) {
 		const data = {
 			name: this.name,
 			id: this.id,
 			pokemon: [] as AnyObject[],
 		};
 		for (const pokemon of this.pokemon) {
-			data.pokemon.push(pokemon.getSwitchRequestData());
+			data.pokemon.push(pokemon.getSwitchRequestData(forAlly));
 		}
 		return data;
 	}
 
-	randomActive() {
-		const actives = this.active.filter(active => active && !active.fainted);
+	randomFoe() {
+		const actives = this.foes();
 		if (!actives.length) return null;
 		return this.battle.sample(actives);
+	}
+
+	/** Intended as a way to iterate through all foe side conditions - do not use for anything else. */
+	foeSidesWithConditions() {
+		if (this.battle.gameType === 'freeforall') return this.battle.sides.filter(side => side !== this);
+
+		return [this.foe];
+	}
+	foePokemonLeft() {
+		if (this.battle.gameType === 'freeforall') {
+			return this.battle.sides.filter(side => side !== this).map(side => side.pokemonLeft).reduce((a, b) => a + b);
+		}
+
+		if (this.foe.allySide) return this.foe.pokemonLeft + this.foe.allySide.pokemonLeft;
+
+		return this.foe.pokemonLeft;
+	}
+	allies(all?: boolean) {
+		// called during the first switch-in, so `active` can still contain nulls at this point
+		let allies = this.activeTeam().filter(ally => ally);
+		if (!all) allies = allies.filter(ally => !ally.fainted);
+
+		return allies;
+	}
+	foes(all?: boolean) {
+		if (this.battle.gameType === 'freeforall') {
+			return this.battle.sides.map(side => side.active[0])
+				.filter(pokemon => pokemon && pokemon.side !== this && (all || !pokemon.fainted));
+		}
+		return this.foe.allies(all);
+	}
+	activeTeam() {
+		if (this.battle.gameType !== 'multi') return this.active;
+
+		return this.battle.sides[this.n % 2].active.concat(this.battle.sides[this.n % 2 + 2].active);
+	}
+	hasAlly(pokemon: Pokemon) {
+		return pokemon.side === this || pokemon.side === this.allySide;
 	}
 
 	addSideCondition(
 		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
 	): boolean {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].addSideCondition(status, source, sourceEffect);
-		}
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
+		if (!source.getSlot) source = (source as any as Side).active[0];
 
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		if (this.sideConditions[status.id]) {
-			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
+			if (!(status as any).onSideRestart) return false;
+			return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, source, sourceEffect);
 		}
 		this.sideConditions[status.id] = {
 			id: status.id,
 			target: this,
 			source,
-			sourcePosition: source.position,
+			sourceSlot: source.getSlot(),
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
 			this.sideConditions[status.id].duration =
 				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, this.sideConditions[status.id], this, source, sourceEffect)) {
+		if (!this.battle.singleEvent('SideStart', status, this.sideConditions[status.id], this, source, sourceEffect)) {
 			delete this.sideConditions[status.id];
 			return false;
 		}
@@ -218,29 +295,20 @@ export class Side {
 	}
 
 	getSideCondition(status: string | Effect): Effect | null {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].getSideCondition(status);
-		}
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
 
 	getSideConditionData(status: string | Effect): AnyObject {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].getSideConditionData(status);
-		}
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		return this.sideConditions[status.id] || null;
 	}
 
 	removeSideCondition(status: string | Effect): boolean {
-		if (this.n >= 2 && this.battle.gameType === 'multi') {
-			return this.battle.sides[this.n % 2].removeSideCondition(status);
-		}
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
-		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
+		this.battle.singleEvent('SideEnd', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
 		return true;
 	}
@@ -254,23 +322,23 @@ export class Side {
 		if (target instanceof Pokemon) target = target.position;
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		if (this.slotConditions[target][status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
 		}
-		const slotConditionData = this.slotConditions[target][status.id] = {
+		const conditionState = this.slotConditions[target][status.id] = {
 			id: status.id,
 			target: this,
 			source,
-			sourcePosition: source.position,
+			sourceSlot: source.getSlot(),
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
-			slotConditionData.duration =
+			conditionState.duration =
 				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, slotConditionData, this.active[target], source, sourceEffect)) {
+		if (!this.battle.singleEvent('Start', status, conditionState, this.active[target], source, sourceEffect)) {
 			delete this.slotConditions[target][status.id];
 			return false;
 		}
@@ -279,21 +347,21 @@ export class Side {
 
 	getSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return null;
 		return status;
 	}
 
 	removeSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return false;
 		this.battle.singleEvent('End', status, this.slotConditions[target][status.id], this.active[target]);
 		delete this.slotConditions[target][status.id];
 		return true;
 	}
 
-	// tslint:disable-next-line:ban-types
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	send(...parts: (string | number | Function | AnyObject)[]) {
 		const sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
@@ -320,7 +388,7 @@ export class Side {
 		if (this.choice.forcedSwitchesLeft) return false;
 
 		if (this.requestState === 'teampreview') {
-			return this.choice.actions.length >= Math.min(this.maxTeamSize, this.pokemon.length);
+			return this.choice.actions.length >= this.pickedTeamSize();
 		}
 
 		// current request is move/switch
@@ -402,11 +470,11 @@ export class Side {
 				break;
 			}
 		}
-		const move = this.battle.dex.getMove(moveid);
+		const move = this.battle.dex.moves.get(moveid);
 
 		// Z-move
 
-		const zMove = megaDynaOrZ === 'zmove' ? this.battle.getZMove(move, pokemon) : undefined;
+		const zMove = megaDynaOrZ === 'zmove' ? this.battle.actions.getZMove(move, pokemon) : undefined;
 		if (megaDynaOrZ === 'zmove' && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
@@ -414,23 +482,23 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
 		}
 
-		if (zMove) targetType = this.battle.dex.getMove(zMove).target;
+		if (zMove) targetType = this.battle.dex.moves.get(zMove).target;
 
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
 		const maxMove = (megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax']) ?
-			this.battle.getMaxMove(move, pokemon) : undefined;
+			this.battle.actions.getMaxMove(move, pokemon) : undefined;
 		if (megaDynaOrZ === 'dynamax' && !maxMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
 
-		if (maxMove) targetType = this.battle.dex.getMove(maxMove).target;
+		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).target;
 
 		// Validate targetting
 
 		if (autoChoose) {
 			targetLoc = 0;
-		} else if (this.battle.targetTypeChoices(targetType)) {
+		} else if (this.battle.actions.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
 				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
 			}
@@ -445,12 +513,16 @@ export class Side {
 
 		const lockedMove = pokemon.getLockedMove();
 		if (lockedMove) {
-			const lockedMoveTarget = pokemon.lastMoveTargetLoc || 0;
+			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
+			const lockedMoveID = toID(lockedMove);
+			if (pokemon.volatiles[lockedMoveID] && pokemon.volatiles[lockedMoveID].targetLoc) {
+				lockedMoveTargetLoc = pokemon.volatiles[lockedMoveID].targetLoc;
+			}
 			this.choice.actions.push({
 				choice: 'move',
 				pokemon,
-				targetLoc: lockedMoveTarget,
-				moveid: toID(lockedMove),
+				targetLoc: lockedMoveTargetLoc,
+				moveid: lockedMoveID,
 			});
 			return true;
 		} else if (!moves.length && !zMove) {
@@ -459,8 +531,8 @@ export class Side {
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
 		} else if (maxMove) {
-			// Dynamaxed; only Taunt and Assault Vest disable Max Guard
-			if (pokemon.maxMoveDisabled(maxMove)) {
+			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
+			if (pokemon.maxMoveDisabled(move)) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${maxMove.name} is disabled`);
 			}
 		} else if (!zMove) {
@@ -520,10 +592,18 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
 		let dynamax = (megaDynaOrZ === 'dynamax');
-		if (dynamax && (this.choice.dynamax || !pokemon.getDynamaxRequest())) {
+		const canDynamax = this.activeRequest?.active[this.active.indexOf(pokemon)].canDynamax;
+		if (dynamax && (this.choice.dynamax || !canDynamax)) {
 			if (pokemon.volatiles['dynamax']) {
 				dynamax = false;
 			} else {
+				if (this.battle.gen < 8) {
+					return this.emitChoiceError(`Can't move: Dynamaxing doesn't exist before Gen 8.`);
+				} else if (pokemon.side.canDynamaxNow()) {
+					return this.emitChoiceError(`Can't move: ${pokemon.name} can't Dynamax now.`);
+				} else if (pokemon.side.allySide?.canDynamaxNow()) {
+					return this.emitChoiceError(`Can't move: It's your partner's turn to Dynamax.`);
+				}
 				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 			}
 		}
@@ -551,7 +631,7 @@ export class Side {
 	}
 
 	updateRequestForPokemon(pokemon: Pokemon, update: (req: AnyObject) => boolean) {
-		if (!this.activeRequest || !this.activeRequest.active) {
+		if (!this.activeRequest?.active) {
 			throw new Error(`Can't update a request without active Pokemon`);
 		}
 		const req = this.activeRequest.active[pokemon.position];
@@ -638,7 +718,6 @@ export class Side {
 
 		this.choice.switchIns.add(slot);
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: (this.requestState === 'switch' ? 'instaswitch' : 'switch'),
 			pokemon,
@@ -648,42 +727,66 @@ export class Side {
 		return true;
 	}
 
-	chooseTeam(data?: string) {
-		const autoFill = !data;
-		// default to sending team in order
-		if (!data) data = `123456`;
-		const positions = (('' + data)
-			.split(data.includes(',') ? ',' : '')
-			.map(datum => parseInt(datum) - 1));
+	/**
+	 * The number of pokemon you must choose in Team Preview.
+	 *
+	 * Note that PS doesn't support choosing fewer than this number of pokemon.
+	 * In the games, it is sometimes possible to bring fewer than this, but
+	 * since that's nearly always a mistake, we haven't gotten around to
+	 * supporting it.
+	 */
+	pickedTeamSize() {
+		return Math.min(this.pokemon.length, this.battle.ruleTable.pickedTeamSize || Infinity);
+	}
 
-		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
+	chooseTeam(data = '') {
 		if (this.requestState !== 'teampreview') {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
 
-		// hack for >6 pokemon Custom Game
-		while (positions.length >= 6 && positions.length < this.maxTeamSize && positions.length < this.pokemon.length) {
-			positions.push(positions.length);
+		const ruleTable = this.battle.ruleTable;
+		let positions = data.split(data.includes(',') ? ',' : '')
+			.map(datum => parseInt(datum) - 1);
+		const pickedTeamSize = this.pickedTeamSize();
+
+		// make sure positions is exactly of length pickedTeamSize
+		// - If too big: the client automatically sends a full list, so we just trim it down to size
+		positions.splice(pickedTeamSize);
+		// - If too small: we intentionally support only sending leads and having the sim fill in the rest
+		if (positions.length === 0) {
+			for (let i = 0; i < pickedTeamSize; i++) positions.push(i);
+		} else if (positions.length < pickedTeamSize) {
+			for (let i = 0; i < pickedTeamSize; i++) {
+				if (!positions.includes(i)) positions.push(i);
+				// duplicate in input, let the rest of the code handle the error message
+				if (positions.length >= pickedTeamSize) break;
+			}
 		}
 
-		for (const pos of positions) {
-			const index = this.choice.actions.length;
-			if (index >= this.maxTeamSize || index >= this.pokemon.length) {
-				// client still sends entire team
-				break;
-				// if (autoFill) break;
-				// return this.emitChoiceError(`Can't choose for Team Preview: You are limited to ${this.maxTeamSize} Pokémon`);
-			}
+		for (const [index, pos] of positions.entries()) {
 			if (isNaN(pos) || pos < 0 || pos >= this.pokemon.length) {
 				return this.emitChoiceError(`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`);
 			}
-			if (this.choice.switchIns.has(pos)) {
-				if (autoFill) continue;
+			if (positions.indexOf(pos) !== index) {
 				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
+		}
+		if (ruleTable.maxTotalLevel) {
+			let totalLevel = 0;
+			for (const pos of positions) totalLevel += this.pokemon[pos].level;
 
+			if (totalLevel > ruleTable.maxTotalLevel) {
+				if (!data) {
+					// autoChoose
+					positions = [...this.pokemon.keys()].sort((a, b) => (this.pokemon[a].level - this.pokemon[b].level))
+						.slice(0, pickedTeamSize);
+				} else {
+					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${ruleTable.maxTotalLevel}; please select a valid team of ${pickedTeamSize} Pokémon`);
+				}
+			}
+		}
+		for (const [index, pos] of positions.entries()) {
 			this.choice.switchIns.add(pos);
-			// tslint:disable-next-line:no-object-literal-type-assertion
 			this.choice.actions.push({
 				choice: 'team',
 				index,
@@ -708,7 +811,6 @@ export class Side {
 		}
 		const pokemon: Pokemon = this.active[index];
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'shift',
 			pokemon,
@@ -761,17 +863,9 @@ export class Side {
 			);
 		}
 
-		for (let choiceString of choiceStrings) {
-			let choiceType = '';
-			let data = '';
-			choiceString = choiceString.trim();
-			const firstSpaceIndex = choiceString.indexOf(' ');
-			if (firstSpaceIndex >= 0) {
-				data = choiceString.slice(firstSpaceIndex + 1).trim();
-				choiceType = choiceString.slice(0, firstSpaceIndex);
-			} else {
-				choiceType = choiceString;
-			}
+		for (const choiceString of choiceStrings) {
+			let [choiceType, data] = Utils.splitFirst(choiceString.trim(), ' ');
+			data = data.trim();
 
 			switch (choiceType) {
 			case 'move':
@@ -827,8 +921,6 @@ export class Side {
 				break;
 			case 'team':
 				if (!this.chooseTeam(data)) return false;
-				// Auto-complete
-				this.chooseTeam();
 				break;
 			case 'pass':
 			case 'skip':
@@ -895,7 +987,6 @@ export class Side {
 			return this.emitChoiceError(`Can't pass: Not a move or switch request`);
 		}
 
-		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'pass',
 		} as ChosenAction);
@@ -942,8 +1033,7 @@ export class Side {
 		// get rid of some possibly-circular references
 		this.pokemon = [];
 		this.active = [];
-		// @ts-ignore - readonly
-		this.battle = null!;
 		this.foe = null!;
+		(this as any).battle = null!;
 	}
 }

@@ -9,7 +9,8 @@
  * @license MIT
  */
 
-import * as Streams from './../lib/streams';
+import {Streams, Utils} from '../lib';
+import {Teams} from './teams';
 import {Battle} from './battle';
 
 /**
@@ -40,31 +41,39 @@ function splitFirst(str: string, delimiter: string, limit = 1) {
 
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	debug: boolean;
-	replay: boolean;
+	noCatch: boolean;
+	replay: boolean | 'spectator';
 	keepAlive: boolean;
 	battle: Battle | null;
 
-	constructor(options: {debug?: boolean, keepAlive?: boolean, replay?: boolean} = {}) {
+	constructor(options: {
+		debug?: boolean, noCatch?: boolean, keepAlive?: boolean, replay?: boolean | 'spectator',
+	} = {}) {
 		super();
 		this.debug = !!options.debug;
-		this.replay = !!options.replay;
+		this.noCatch = !!options.noCatch;
+		this.replay = options.replay || false;
 		this.keepAlive = !!options.keepAlive;
 		this.battle = null;
 	}
 
 	_write(chunk: string) {
-		try {
+		if (this.noCatch) {
 			this._writeLines(chunk);
-		} catch (err) {
-			this.pushError(err, true);
-			return;
+		} else {
+			try {
+				this._writeLines(chunk);
+			} catch (err) {
+				this.pushError(err, true);
+				return;
+			}
 		}
 		if (this.battle) this.battle.sendUpdates();
 	}
 
 	_writeLines(chunk: string) {
 		for (const line of chunk.split('\n')) {
-			if (line.charAt(0) === '>') {
+			if (line.startsWith('>')) {
 				const [type, message] = splitFirst(line.slice(1), ' ');
 				this._writeLine(type, message);
 			}
@@ -74,7 +83,11 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	pushMessage(type: string, data: string) {
 		if (this.replay) {
 			if (type === 'update') {
-				this.push(data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'));
+				if (this.replay === 'spectator') {
+					this.push(data.replace(/\n\|split\|p[1234]\n(?:[^\n]*)\n([^\n]*)/g, '\n$1'));
+				} else {
+					this.push(data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'));
+				}
 			}
 			return;
 		}
@@ -110,10 +123,107 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		case 'forcewin':
 		case 'forcetie':
 			this.battle!.win(type === 'forcewin' ? message as SideID : null);
+			if (message) {
+				this.battle!.inputLog.push(`>forcewin ${message}`);
+			} else {
+				this.battle!.inputLog.push(`>forcetie`);
+			}
+			break;
+		case 'forcelose':
+			this.battle!.lose(message as SideID);
+			this.battle!.inputLog.push(`>forcelose ${message}`);
+			break;
+		case 'reseed':
+			const seed = message ? message.split(',').map(Number) as PRNGSeed : null;
+			this.battle!.resetRNG(seed);
+			// could go inside resetRNG, but this makes using it in `eval` slightly less buggy
+			this.battle!.inputLog.push(`>reseed ${this.battle!.prng.seed.join(',')}`);
 			break;
 		case 'tiebreak':
 			this.battle!.tiebreak();
 			break;
+		case 'chat-inputlogonly':
+			this.battle!.inputLog.push(`>chat ${message}`);
+			break;
+		case 'chat':
+			this.battle!.inputLog.push(`>chat ${message}`);
+			this.battle!.add('chat', `${message}`);
+			break;
+		case 'eval':
+			const battle = this.battle!;
+
+			// n.b. this will usually but not always work - if you eval code that also affects the inputLog,
+			// replaying the inputlog would double-play the change.
+			battle.inputLog.push(`>${type} ${message}`);
+
+			message = message.replace(/\f/g, '\n');
+			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
+			try {
+				/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
+				const p1 = battle.sides[0];
+				const p2 = battle.sides[1];
+				const p3 = battle.sides[2];
+				const p4 = battle.sides[3];
+				const p1active = p1?.active[0];
+				const p2active = p2?.active[0];
+				const p3active = p3?.active[0];
+				const p4active = p4?.active[0];
+				const toID = battle.toID;
+				const player = (input: string) => {
+					input = toID(input);
+					if (/^p[1-9]$/.test(input)) return battle.sides[parseInt(input.slice(1)) - 1];
+					if (/^[1-9]$/.test(input)) return battle.sides[parseInt(input) - 1];
+					for (const side of battle.sides) {
+						if (toID(side.name) === input) return side;
+					}
+					return null;
+				};
+				const pokemon = (side: string | Side, input: string) => {
+					if (typeof side === 'string') side = player(side)!;
+
+					input = toID(input);
+					if (/^[1-9]$/.test(input)) return side.pokemon[parseInt(input) - 1];
+					return side.pokemon.find(p => p.baseSpecies.id === input || p.species.id === input);
+				};
+				let result = eval(message);
+				/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
+
+				if (result?.then) {
+					result.then((unwrappedResult: any) => {
+						unwrappedResult = Utils.visualize(unwrappedResult);
+						battle.add('', 'Promise -> ' + unwrappedResult);
+						battle.sendUpdates();
+					}, (error: Error) => {
+						battle.add('', '<<< error: ' + error.message);
+						battle.sendUpdates();
+					});
+				} else {
+					result = Utils.visualize(result);
+					result = result.replace(/\n/g, '\n||');
+					battle.add('', '<<< ' + result);
+				}
+			} catch (e) {
+				battle.add('', '<<< error: ' + e.message);
+			}
+			break;
+		case 'requestlog':
+			this.push(`requesteddata\n${this.battle!.inputLog.join('\n')}`);
+			break;
+		case 'requestteam':
+			message = message.trim();
+			const slotNum = parseInt(message.slice(1)) - 1;
+			if (isNaN(slotNum) || slotNum < 0) {
+				throw new Error(`Team requested for slot ${message}, but that slot does not exist.`);
+			}
+			const side = this.battle!.sides[slotNum];
+			const team = Teams.pack(side.team);
+			this.push(`requesteddata\n${team}`);
+			break;
+		case 'version':
+		case 'version-origin':
+			break;
+		default:
+			throw new Error(`Unrecognized command ">${type} ${message}"`);
 		}
 	}
 
@@ -223,7 +333,7 @@ export abstract class BattlePlayer {
 
 	receiveLine(line: string) {
 		if (this.debug) console.log(line);
-		if (line.charAt(0) !== '|') return;
+		if (!line.startsWith('|')) return;
 		const [cmd, rest] = splitFirst(line.slice(1), '|');
 		if (cmd === 'request') return this.receiveRequest(JSON.parse(rest));
 		if (cmd === 'error') return this.receiveError(new Error(rest));
@@ -249,9 +359,10 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';
+		void this._listen();
 	}
 
-	async start() {
+	async _listen() {
 		for await (let message of this.battleStream) {
 			if (!message.endsWith('\n')) message += '\n';
 			this.push(message + '\n');

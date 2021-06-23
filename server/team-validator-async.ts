@@ -7,15 +7,13 @@
  * @license MIT
  */
 
-import {crashlogger} from '../lib/crashlogger';
-
-declare let global: any;
+import {TeamValidator} from '../sim/team-validator';
 
 export class TeamValidatorAsync {
 	format: Format;
 
 	constructor(format: string) {
-		this.format = Dex.getFormat(format);
+		this.format = Dex.formats.get(format);
 	}
 
 	validateTeam(team: string, options?: {removeNicknames?: boolean}) {
@@ -41,7 +39,7 @@ export const PM = new QueryProcessManager<{
 	formatid: string, options?: {removeNicknames?: boolean}, team: string,
 }>(module, message => {
 	const {formatid, options, team} = message;
-	const parsedTeam = Dex.fastUnpackTeam(team);
+	const parsedTeam = Teams.unpack(team);
 
 	if (Config.debugvalidatorprocesses && process.send) {
 		process.send('DEBUG\n' + JSON.stringify(message));
@@ -51,12 +49,12 @@ export const PM = new QueryProcessManager<{
 	try {
 		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, options);
 	} catch (err) {
-		crashlogger(err, 'A team validation', {
+		Monitor.crashlog(err, 'A team validation', {
 			formatid,
 			team,
 		});
 		problems = [
-			`Your team crashed the validator. We'll fix this crash within a few minutes (we're automatically notified),` +
+			`Your team crashed the validator. We'll fix this crash within a few hours (we're automatically notified),` +
 			` but if you don't want to wait, just use a different team for now.`,
 		];
 	}
@@ -64,29 +62,20 @@ export const PM = new QueryProcessManager<{
 	if (problems?.length) {
 		return '0' + problems.join('\n');
 	}
-	const packedTeam = Dex.packTeam(parsedTeam);
+	const packedTeam = Teams.pack(parsedTeam);
 	// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
 	// console.log('TO: ' + packedTeam);
 	return '1' + packedTeam;
 });
 
-import {Repl} from '../lib/repl';
-import {Dex as importedDex} from '../sim/dex';
-import {TeamValidator} from '../sim/team-validator';
-import {Config} from './config-loader';
-
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = Config;
+	global.Config = require('./config-loader');
 
-	global.TeamValidator = TeamValidator;
-
-	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source = 'A team validator process', details: any = null) {
+		crashlog(error: Error, source = 'A team validator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			// @ts-ignore
-			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 
@@ -94,20 +83,16 @@ if (!PM.isParentProcess) {
 		process.on('uncaughtException', (err: Error) => {
 			Monitor.crashlog(err, `A team validator process`);
 		});
-		// Typescript doesn't like this call
-		// @ts-ignore
-		process.on('unhandledRejection', (err: Error, promise: Promise) => {
-			if (err instanceof Error) {
-				Monitor.crashlog(err, 'A team validator process Promise');
-			}
+		process.on('unhandledRejection', err => {
+			Monitor.crashlog(err as any || {}, 'A team validator process Promise');
 		});
 	}
 
-	global.Dex = importedDex.includeData();
-	global.toID = Dex.toID;
+	global.Dex = require('../sim/dex').Dex.includeData();
+	global.Teams = require('../sim/teams').Teams;
 
 	// eslint-disable-next-line no-eval
-	Repl.start(`team-validator-${process.pid}`, cmd => eval(cmd));
+	require('../lib/repl').Repl.start(`team-validator-${process.pid}`, (cmd: string) => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.validatorprocesses : 1);
 }

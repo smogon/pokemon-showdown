@@ -37,6 +37,10 @@ describe('Chat', function () {
 			`hi <i>spoiler: <span class="spoiler">bye</span></i> hi again (parenthetical spoiler: <span class="spoiler">bye again (or not!!!!)</span>) that was fun`
 		);
 		assert.equal(
+			Chat.formatText(`hi __||bye||__ hi again (parenthetical ||bye again (or not!!!!)||) that was fun`),
+			`hi <i><span class="spoiler">bye</span></i> hi again (parenthetical <span class="spoiler">bye again (or not!!!!)</span>) that was fun`
+		);
+		assert.equal(
 			Chat.formatText(`hi google.com/__a__ bye >w<`),
 			`hi <a href="http://google.com/__a__" rel="noopener" target="_blank">google.com/__a__</a> bye &gt;w&lt;`
 		);
@@ -88,5 +92,23 @@ describe('Chat', function () {
 			Chat.formatText(`:)`, true),
 			`:)`
 		);
+		assert.equal(
+			Chat.formatText(`a\nb\nc`),
+			`a\nb\nc`
+		);
+		assert.equal(
+			Chat.formatText(`a\nb\nc`, true),
+			`a<br />b<br />c`
+		);
+		assert.equal(
+			Chat.formatText(`a\nb\nc`, false, true),
+			`a<br />b<br />c`
+		);
+	});
+
+	it('should run toDurationString correctly', function () {
+		assert(Chat.toDurationString(1e50));
+
+		assert(!Chat.toDurationString(10000000 * 24 * 60 * 60 * 1000).includes('  '));
 	});
 });

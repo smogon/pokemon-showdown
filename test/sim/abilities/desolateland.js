@@ -14,7 +14,7 @@ describe('Desolate Land', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Abra", ability: 'magicguard', moves: ['teleport']}]});
-		assert.ok(battle.field.isWeather('desolateland'));
+		assert(battle.field.isWeather('desolateland'));
 	});
 
 	it('should increase the damage (not the basePower) of Fire-type attacks', function () {
@@ -25,7 +25,7 @@ describe('Desolate Land', function () {
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
 		assert.hurtsBy(defender, 152, () => battle.makeChoices('move incinerate', 'move splash'));
-		const move = Dex.getMove('incinerate');
+		const move = Dex.moves.get('incinerate');
 		const basePower = battle.runEvent('BasePower', attacker, defender, move, move.basePower, true);
 		assert.equal(basePower, move.basePower);
 	});
@@ -58,9 +58,9 @@ describe('Desolate Land', function () {
 		]});
 		for (let i = 2; i <= 5; i++) {
 			battle.makeChoices('move helpinghand', 'switch ' + i);
-			assert.ok(battle.field.isWeather('desolateland'));
+			assert(battle.field.isWeather('desolateland'));
 			battle.makeChoices('move helpinghand', 'move 1');
-			assert.ok(battle.field.isWeather('desolateland'));
+			assert(battle.field.isWeather('desolateland'));
 		}
 	});
 
@@ -143,5 +143,15 @@ describe('Desolate Land', function () {
 		]]);
 		battle.makeChoices();
 		assert.false(battle.field.isWeather('desolateland'));
+	});
+
+	it(`should cause Water-type Natural Gift to fail`, function () {
+		battle = common.createBattle([[
+			{species: 'Groudon', item: 'Red Orb', moves: ['sleeptalk']},
+		], [
+			{species: 'Wynaut', moves: ['naturalgift']},
+		]]);
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[0]);
 	});
 });

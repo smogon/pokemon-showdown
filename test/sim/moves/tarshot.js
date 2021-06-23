@@ -64,10 +64,10 @@ describe('Tar Shot', function () {
 		battle.setPlayer('p1', {team: [{species: 'Coalossal', ability: 'steamengine', item: 'occaberry', moves: ['tarshot', 'flamecharge']}]});
 		battle.setPlayer('p2', {team: [{species: 'Ferrothorn', ability: 'ironbarbs', moves: ['rest', 'trick']}]});
 		battle.makeChoices('move flamecharge', 'move trick');
-		assert.notStrictEqual(battle.p1.active[0].hp, 0);
+		assert.notEqual(battle.p1.active[0].hp, 0);
 		// Ferrothorn now has the Occa Berry, cancelling out Tar Shot
 		battle.makeChoices('move tarshot', 'move rest');
 		battle.makeChoices('move flamecharge', 'move rest');
-		assert.notStrictEqual(battle.p1.active[0].hp, 0);
+		assert.notEqual(battle.p1.active[0].hp, 0);
 	});
 });

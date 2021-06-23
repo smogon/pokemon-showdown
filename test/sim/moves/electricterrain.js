@@ -15,15 +15,15 @@ describe('Electric Terrain', function () {
 		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'electricterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]});
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.field.isTerrain('electricterrain'));
+		assert(battle.field.isTerrain('electricterrain'));
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.field.isTerrain('electricterrain'));
+		assert(battle.field.isTerrain('electricterrain'));
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.field.isTerrain('electricterrain'));
+		assert(battle.field.isTerrain('electricterrain'));
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.field.isTerrain('electricterrain'));
+		assert(battle.field.isTerrain('electricterrain'));
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.field.isTerrain(''));
+		assert(battle.field.isTerrain(''));
 	});
 
 	it('should increase the base power of Electric-type attacks used by grounded Pokemon', function () {
@@ -32,7 +32,7 @@ describe('Electric Terrain', function () {
 		battle.setPlayer('p2', {team: [{species: "Thundurus", ability: 'defiant', moves: ['thunderwave']}]});
 		battle.makeChoices('move electricterrain', 'move thunderwave');
 		let basePower;
-		const move = Dex.getMove('thunderbolt');
+		const move = Dex.moves.get('thunderbolt');
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);
 		assert.equal(basePower, battle.modify(move.basePower, 1.5));
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
@@ -64,7 +64,7 @@ describe('Electric Terrain', function () {
 		battle.makeChoices('move electricterrain', 'move yawn');
 		battle.makeChoices('move yawn', 'move yawn');
 		assert.equal(battle.p1.active[0].status, '');
-		assert.ok(!battle.p2.active[0].volatiles['yawn']);
+		assert(!battle.p2.active[0].volatiles['yawn']);
 	});
 
 	it('should cause Rest to fail on grounded Pokemon', function () {
@@ -73,7 +73,7 @@ describe('Electric Terrain', function () {
 		battle.setPlayer('p2', {team: [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]});
 		battle.makeChoices('move electricterrain', 'move doubleedge');
 		battle.makeChoices('move rest', 'move rest');
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -94,5 +94,15 @@ describe('Electric Terrain', function () {
 		battle.makeChoices('move electricterrain', 'move naturepower');
 		const resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.equal(resultMove, 'thunderbolt');
+	});
+
+	it.skip(`should block Sleep before the move would have missed`, function () {
+		battle = common.createBattle({seed: [1, 2, 3, 4]}, [[ // Seed ensures Sleep Powder would miss normally
+			{species: 'tapukoko', ability: 'wonderskin', moves: ['electricterrain']},
+		], [
+			{species: 'venusaur', moves: ['sleeppowder']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.includes('|-activate|p1a: Tapu Koko|move: Electric Terrain')));
 	});
 });

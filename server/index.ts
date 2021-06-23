@@ -2,8 +2,8 @@
  * Main file
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is the main Pokemon Showdown app, and the file you should be
- * running to start Pokemon Showdown if you're using it normally.
+ * This is the main Pokemon Showdown app, and the file that the
+ * `pokemon-showdown` script runs if you start Pokemon Showdown normally.
  *
  * This file sets up our SockJS server, which handles communication
  * between users and your server, and also sets up globals. You can
@@ -52,14 +52,13 @@
 try {
 	// I've gotten enough reports by people who don't use the launch
 	// script that this is worth repeating here
-	RegExp("\\p{Emoji}", "u");
+	[].flatMap(x => x);
 } catch (e) {
-	throw new Error("We require Node.js version 10 or later; you're using " + process.version);
+	throw new Error("We require Node.js version 12 or later; you're using " + process.version);
 }
 
 try {
 	require.resolve('../.sim-dist/index');
-	// tslint:disable-next-line
 	const sucraseVersion = require('sucrase').getVersion().split('.');
 	if (
 		parseInt(sucraseVersion[0]) < 3 ||
@@ -71,14 +70,11 @@ try {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
 
-import {FS} from '../lib/fs';
+import {FS, Repl} from '../lib';
 
 /*********************************************************
  * Load configuration
  *********************************************************/
-
-// global becomes much easier to use if declared as an object
-declare const global: any;
 
 import * as ConfigLoader from './config-loader';
 global.Config = ConfigLoader.Config;
@@ -94,6 +90,9 @@ if (Config.watchconfig) {
 	FS(require.resolve('../config/config')).onModify(() => {
 		try {
 			global.Config = ConfigLoader.load(true);
+			// ensure that battle prefixes configured via the chat plugin are not overwritten
+			// by battle prefixes manually specified in config.js
+			Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
 			Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
@@ -108,6 +107,9 @@ if (Config.watchconfig) {
 import {Dex} from '../sim/dex';
 global.Dex = Dex;
 global.toID = Dex.toID;
+
+import {Teams} from '../sim/teams';
+global.Teams = Teams;
 
 import {LoginServer} from './loginserver';
 global.LoginServer = LoginServer;
@@ -146,10 +148,8 @@ if (Config.crashguard) {
 		Monitor.crashlog(err, 'The main process');
 	});
 
-	// Typescript doesn't like this call
-	// @ts-ignore
-	process.on('unhandledRejection', (err: Error, promise: Promise<any>) => {
-		Monitor.crashlog(err, 'A main process Promise');
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as any, 'A main process Promise');
 	});
 }
 
@@ -169,7 +169,12 @@ if (require.main === module) {
 	// in the case of app.js being imported as a module (e.g. unit tests),
 	// postpone launching until app.listen() is called.
 	let port;
-	if (process.argv[2]) port = parseInt(process.argv[2]);
+	for (const arg of process.argv) {
+		if (/^[0-9]+$/.test(arg)) {
+			port = parseInt(arg);
+			break;
+		}
+	}
 	Sockets.listen(port);
 }
 
@@ -185,7 +190,6 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-import {Repl} from '../lib/repl';
 // eslint-disable-next-line no-eval
 Repl.start('app', cmd => eval(cmd));
 
