@@ -708,7 +708,7 @@ export abstract class Searcher {
 			totalLines: 'Average lines per day',
 		};
 		let buf = `<div class="ladder pad"><table><tr><th>`;
-		buf += Object.keys(titles).map(k => titles[k]).join('</th><th>');
+		buf += Object.values(titles).join('</th><th>');
 		buf += `</th></tr><tr>`;
 		for (const k in titles) {
 			buf += `<td>`;
