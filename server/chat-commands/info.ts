@@ -349,6 +349,7 @@ export const commands: Chat.ChatCommands = {
 		if (idPunishments) {
 			for (const p of idPunishments) {
 				const {type: punishType, id: punishUserid, reason} = p;
+				if (!user.can('alts') && !['LOCK', 'BAN'].includes(punishType)) continue;
 				const punishDesc = (Punishments.punishmentTypes.get(punishType)?.desc || punishType);
 				buf += `${punishDesc}: ${punishUserid}`;
 				const expiresIn = Punishments.checkLockExpiration(userid);
