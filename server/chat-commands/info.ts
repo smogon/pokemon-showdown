@@ -147,7 +147,7 @@ export const commands: Chat.ChatCommands = {
 		if (canViewAlts) {
 			let prevNames = targetUser.previousIDs.map(userid => {
 				const punishments = Punishments.userids.get(userid);
-				if (!punishments) return userid;
+				if (!punishments || !user.can('alts')) return userid;
 				return punishments.map(
 					punishment => (
 						`${userid}${punishment ? ` (${Punishments.punishmentTypes.get(punishment.type)?.desc || `punished`}` +
@@ -162,7 +162,7 @@ export const commands: Chat.ChatCommands = {
 				if (targetAlt.tempGroup === '~' && user.tempGroup !== '~') continue;
 
 				const punishments = Punishments.userids.get(targetAlt.id) || [];
-				const punishMsg = punishments.map(punishment => (
+				const punishMsg = !user.can('alts') ? '' : punishments.map(punishment => (
 					` (${Punishments.punishmentTypes.get(punishment.type)?.desc || 'punished'}` +
 					`${punishment.id !== targetAlt.id ? ` as ${punishment.id}` : ''})`
 				)).join(' | ');
@@ -170,7 +170,7 @@ export const commands: Chat.ChatCommands = {
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = targetAlt.previousIDs.map(userid => {
 					const p = Punishments.userids.get(userid);
-					if (!p) return userid;
+					if (!p || !user.can('alts')) return userid;
 					return p.map(
 						cur => `${userid}(${Punishments.punishmentTypes.get(cur.type)?.desc || 'punished'}` + `${cur.id !== targetAlt.id ? ` as ${cur.id}` : ``})`
 					).join(' | ');
