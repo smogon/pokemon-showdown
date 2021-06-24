@@ -987,7 +987,7 @@ export const Punishments = new class {
 				}
 			}
 		}
-		if (Punishments.unpunish(name, 'LOCK')) {
+		if (['LOCK', 'YEARLOCK'].some(type => Punishments.unpunish(name, type))) {
 			if (!success.length) success.push(name);
 		}
 		if (!success.length) return undefined;
