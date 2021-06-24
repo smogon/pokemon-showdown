@@ -164,9 +164,9 @@ class Ladder extends LadderStore {
 			return false;
 		}
 		if (
-			user.settings.blockChallenges &&
-			(user.settings.blockChallenges === true || !Users.globalAuth.atLeast(targetUser, user.settings.blockChallenges)) &&
-			!targetUser.can('bypassblocks')
+			targetUser.settings.blockChallenges &&
+			(targetUser.settings.blockChallenges === true || !Users.globalAuth.atLeast(user, targetUser.settings.blockChallenges)) &&
+			!user.can('bypassblocks', targetUser)
 		) {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
