@@ -694,7 +694,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let level = pokemon.level;
 			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : pokemon;
 			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? pokemon : target;
-			let atkType: AllStatIDs = (move.category === 'Physical') ? 'atk' : 'spa'
+			let atkType: AllStatIDs = (move.category === 'Physical') ? 'atk' : 'spa';
 			if (move.offensiveStat) {
 				if (move.offensiveStat.includes("atk")) {
 					atkType = 'atk';
@@ -711,7 +711,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else if (move.offensiveStat.includes("currenthp")) {
 					atkType = 'currenthp';
 				}
-			};
+			}
 			let defType: AllStatIDs = (move.category === 'Physical') ? 'def' : 'spd';
 			if (move.defensiveStat) {
 				if (move.defensiveStat.includes("atk")) {
@@ -773,7 +773,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					attack = attacker.getStat(atkType, true);
 				}
 			}
-			
+
 			if (move.ignoreDefensive) {
 				if (defType !== 'hp' && defType !== 'currenthp') {
 					this.battle.debug('Negating (sp)def boost/penalty.');

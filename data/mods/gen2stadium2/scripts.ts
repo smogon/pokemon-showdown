@@ -385,21 +385,21 @@ export const Scripts: ModdedBattleScriptsData = {
 					noburndrop = true;
 				}
 			}
-			
+
 			let attack;
 			let defense;
-			
+
 			if (atkType === 'hp') {
 				attack = attacker.maxhp;
 			} else if (atkType === 'currenthp') {
 				attack = attacker.hp;
 			} else {
-				attack = attacker.getStat(atkType, unboosted, noburndrop)
+				attack = attacker.getStat(atkType, unboosted, noburndrop);
 			}
 
 			if (defType === 'hp') {
 				defense = defender.maxhp;
-			} else if(defType === 'currenthp') {
+			} else if (defType === 'currenthp') {
 				defense = defender.hp;
 			} else {
 				defense = defender.getStat(defType, unboosted);
@@ -419,7 +419,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					attack = attacker.getStat(atkType, true, true);
 				}
 			}
-			
+
 			if (move.ignoreDefensive) {
 				if (defType !== 'hp' && defType !== 'currenthp') {
 					this.battle.debug('Negating (sp)def boost/penalty.');

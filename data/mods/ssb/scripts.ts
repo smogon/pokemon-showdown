@@ -730,7 +730,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (defenseStat === 'hp') {
 				defense = defender.maxhp;
-			} else if(defenseStat === 'currenthp') {
+			} else if (defenseStat === 'currenthp') {
 				defense = defender.hp;
 			} else {
 				defense = defender.calculateStat(defenseStat, defBoosts);

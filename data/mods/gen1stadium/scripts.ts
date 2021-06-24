@@ -570,7 +570,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let attack;
 			let defense;
-			
+
 			if (atkType === 'hp') {
 				attack = attacker.maxhp;
 			} else if (atkType === 'currenthp') {
@@ -581,7 +581,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (defType === 'hp') {
 				defense = defender.maxhp;
-			} else if(defType === 'currenthp') {
+			} else if (defType === 'currenthp') {
 				defense = defender.hp;
 			} else {
 				defense = defender.getStat(defType);
@@ -610,7 +610,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					attack = attacker.getStat(atkType, true);
 				}
 			}
-			
+
 			if (move.ignoreDefensive) {
 				if (defType !== 'hp' && defType !== 'currenthp') {
 					this.battle.debug('Negating (sp)def boost/penalty.');
