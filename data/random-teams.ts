@@ -971,6 +971,9 @@ export class RandomTeams {
 			// Fire Fang: Special case for Garchomp, which doesn't want Fire Fang w/o Swords Dance
 			const otherFireMoves = ['heatwave', 'overheat'].some(m => moves.has(m));
 			return {cull: (moves.has('fireblast') && counter.setupType !== 'Physical') || otherFireMoves};
+		case 'flareblitz':
+			// Special case for Solgaleo to prevent Flame Charge + Flare Blitz
+			return {cull: (species.id === 'solgaleo') && moves.has('flamecharge')};
 		case 'overheat':
 			return {cull: moves.has('flareblitz') || (isDoubles && moves.has('calmmind'))};
 		case 'aquatail': case 'flipturn': case 'retaliate':
@@ -1470,7 +1473,7 @@ export class RandomTeams {
 		if (moves.has('hypnosis') && ability === 'Beast Boost') return 'Blunder Policy';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 
-		if (this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles) return 'Heavy-Duty Boots';
+		if (this.dex.getEffectiveness('Rock', species) >= 2 && !species.evos.length && !isDoubles) return 'Heavy-Duty Boots';
 	}
 
 	/** Item generation specific to Random Doubles */
