@@ -122,13 +122,6 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 	}
 }
 
-async function rebuild(context: Chat.CommandContext, force?: boolean) {
-	const [, , stderr] = await bash(`node ./build${force ? ' force' : ''}`, context);
-	if (stderr) {
-		throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
-	}
-}
-
 export const commands: Chat.ChatCommands = {
 	potd(target, room, user) {
 		this.canUseConsole();
@@ -518,8 +511,6 @@ export const commands: Chat.ChatCommands = {
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
-		this.sendReply("Rebuilding...");
-		await rebuild(this);
 
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
@@ -772,7 +763,7 @@ export const commands: Chat.ChatCommands = {
 		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
 		`/hotpatch chat - reloads the chat-commands and chat-plugins directories`,
 		`/hotpatch validator - spawn new team validator processes`,
-		`/hotpatch formats - reload the sim/dex.ts tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
+		`/hotpatch formats - reload the sim/dex.ts tree, reload the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads IPTools datacenters`,
 		`/hotpatch punishments - reloads new punishments code`,
 		`/hotpatch loginserver - reloads new loginserver code`,
@@ -1206,8 +1197,6 @@ export const commands: Chat.ChatCommands = {
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
-		this.sendReply(`Rebuilding...`);
-		await rebuild(this);
 		this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
 
 		Monitor.updateServerLock = false;
@@ -1217,13 +1206,8 @@ export const commands: Chat.ChatCommands = {
 		`/updateserver private - Updates only the server's private code. Requires: console access`,
 	],
 
-	async rebuild(target, room, user, connection) {
-		this.canUseConsole();
-		Monitor.updateServerLock = true;
-		this.sendReply(`Rebuilding...`);
-		await rebuild(this, true);
-		Monitor.updateServerLock = false;
-		this.sendReply(`DONE`);
+	rebuild() {
+		this.errorReply("`/rebuild` is no longer necessary; TypeScript files are automatically transpiled as they are loaded.");
 	},
 
 	/*********************************************************
