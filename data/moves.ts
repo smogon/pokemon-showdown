@@ -16242,8 +16242,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			dustproof: true,
 			chance: 100,
-			onHit(target) {
-				if (target.status === 'brn') target.cureStatus();
+			volatileStatus: 'cureburn',
+		},
+		condition: {
+			duration: 1,
+			onAfterHit(source, target) {
+				if (!source.fainted && target.status === 'brn') target.cureStatus();
 			},
 		},
 		target: "allAdjacent",

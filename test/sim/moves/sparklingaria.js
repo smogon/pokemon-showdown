@@ -12,18 +12,19 @@ describe('Sparkling Aria', function () {
 
 	it(`should cure the target's burn`, function () {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'compoundeyes', moves: ['will-o-wisp', 'sparklingaria']},
+			{species: 'Wynaut', ability: 'compoundeyes', moves: ['will-o-wisp', 'sparklingaria', 'sleeptalk']},
 		], [
 			{species: 'Chansey', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
 		battle.makeChoices('move sparklingaria', 'auto');
-
+		battle.makeChoices('move sleeptalk', 'auto');
+		common.saveReplay(battle, 'sparklingaria.js');
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it.skip(`should not cure the target's burn if the user fainted`, function () {
+	it(`should not cure the target's burn if the user fainted`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Shedinja', moves: ['sparklingaria']},
 			{species: 'Wynaut', level: 1, ability: 'innardsout', moves: ['sleeptalk']},
