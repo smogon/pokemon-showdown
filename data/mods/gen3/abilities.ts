@@ -91,6 +91,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	minus: {
 		inherit: true,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			for (const active of this.getAllActive()) {
+				if (!active.fainted && active.hasAbility('plus')) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
 		onModifySpA(spa, pokemon) {
 			for (const active of this.getAllActive()) {
 				if (!active.fainted && active.hasAbility('plus')) {
@@ -101,6 +109,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	plus: {
 		inherit: true,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			for (const active of this.getAllActive()) {
+				if (!active.fainted && active.hasAbility('minus')) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
 		onModifySpA(spa, pokemon) {
 			for (const active of this.getAllActive()) {
 				if (!active.fainted && active.hasAbility('minus')) {

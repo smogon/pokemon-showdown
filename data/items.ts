@@ -837,6 +837,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		onModifyMove(move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
+		onModifyOffensiveStatPriority: 1,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Physical") return;
+			if (attacker.volatiles['dynamax']) return;
+			return this.chainModify(1.5);
+		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.volatiles['dynamax']) return;
@@ -883,6 +889,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onModifyMove(move, pokemon) {
 			pokemon.addVolatile('choicelock');
+		},
+		onModifyOffensiveStatPriority: 1,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			if (attacker.volatiles['dynamax']) return;
+			return this.chainModify(1.5);
 		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
@@ -1131,6 +1143,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 94,
 		fling: {
 			basePower: 90,
+		},
+		onModifyOffensiveStatPriority: 1,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			if (attacker.baseSpecies.name === 'Clamperl') {
+				return this.chainModify(2);
+			}
 		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
@@ -2917,6 +2936,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 			status: 'par',
+		},
+		onModifyOffensiveStatPriority: 1,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (attacker.baseSpecies.baseSpecies === 'Pikachu') {
+				return this.chainModify(2);
+			}
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
@@ -5449,6 +5474,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 491,
 		fling: {
 			basePower: 90,
+		},
+		onModifyOffensiveStatPriority: 1,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Physical") return;
+			if (attacker.baseSpecies.baseSpecies === 'Cubone' || attacker.baseSpecies.baseSpecies === 'Marowak') {
+				return this.chainModify(2);
+			}
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {

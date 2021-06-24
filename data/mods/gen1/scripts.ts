@@ -632,7 +632,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We check the category and typing to calculate later on the damage.
 			if (!move.category) move.category = 'Physical';
-			if (!move.defensiveCategory) move.defensiveCategory = move.category;
 			// '???' is typeless damage: used for Struggle and Confusion etc
 			if (!move.type) move.type = '???';
 			const type = move.type;
@@ -693,13 +692,64 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We now check attacker's and defender's stats.
 			let level = pokemon.level;
-			let attacker = pokemon;
-			const defender = target;
-			if (move.useTargetOffensive) attacker = target;
-			const atkType: StatIDExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
-			const defType: StatIDExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
-			let attack = attacker.getStat(move.useSourceDefensiveAsOffensive ? defType : atkType);
-			let defense = defender.getStat(defType);
+			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : pokemon;
+			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? pokemon : target;
+			let atkType: AllStatIDs = (move.category === 'Physical') ? 'atk' : 'spa'
+			if (move.offensiveStat) {
+				if (move.offensiveStat.includes("atk")) {
+					atkType = 'atk';
+				} else if (move.offensiveStat.includes("def")) {
+					atkType = 'def';
+				} else if (move.offensiveStat.includes("spa")) {
+					atkType = 'spa';
+				} else if (move.offensiveStat.includes("spd")) {
+					atkType = 'spd';
+				} else if (move.offensiveStat.includes("spe")) {
+					atkType = 'spe';
+				} else if (move.offensiveStat.includes("hp")) {
+					atkType = 'hp';
+				} else if (move.offensiveStat.includes("currenthp")) {
+					atkType = 'currenthp';
+				}
+			};
+			let defType: AllStatIDs = (move.category === 'Physical') ? 'def' : 'spd';
+			if (move.defensiveStat) {
+				if (move.defensiveStat.includes("atk")) {
+					defType = 'atk';
+				} else if (move.defensiveStat.includes("def")) {
+					defType = 'def';
+				} else if (move.defensiveStat.includes("spa")) {
+					defType = 'spa';
+				} else if (move.defensiveStat.includes("spd")) {
+					defType = 'spd';
+				} else if (move.defensiveStat.includes("spe")) {
+					defType = 'spe';
+				} else if (move.defensiveStat.includes("hp")) {
+					defType = 'hp';
+				} else if (move.defensiveStat.includes("currenthp")) {
+					defType = 'currenthp';
+				}
+			}
+
+			let attack;
+			let defense;
+
+			if (atkType === 'hp') {
+				attack = attacker.maxhp;
+			} else if (atkType === 'currenthp') {
+				attack = attacker.hp;
+			} else {
+				attack = attacker.getStat(atkType);
+			}
+
+			if (defType === 'hp') {
+				defense = defender.maxhp;
+			} else if (defType === 'currenthp') {
+				defense = defender.hp;
+			} else {
+				defense = defender.getStat(defType);
+			}
+
 			// In gen 1, screen effect is applied here.
 			if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
 				this.battle.debug('Screen doubling (Sp)Def');
@@ -716,14 +766,20 @@ export const Scripts: ModdedBattleScriptsData = {
 				level *= 2;
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
+
 			if (move.ignoreOffensive) {
-				this.battle.debug('Negating (sp)atk boost/penalty.');
-				attack = attacker.getStat(atkType, true);
+				if (atkType !== 'hp' && atkType !== 'currenthp') {
+					this.battle.debug('Negating (sp)atk boost/penalty.');
+					attack = attacker.getStat(atkType, true);
+				}
 			}
+			
 			if (move.ignoreDefensive) {
-				this.battle.debug('Negating (sp)def boost/penalty.');
-				// No screens
-				defense = target.getStat(defType, true);
+				if (defType !== 'hp' && defType !== 'currenthp') {
+					this.battle.debug('Negating (sp)def boost/penalty.');
+					// No screens
+					defense = target.getStat(defType, true);
+				}
 			}
 
 			// When either attack or defense are higher than 256, both are divided by 4.

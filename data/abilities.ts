@@ -366,6 +366,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 145,
 	},
 	blaze: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Blaze boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp / 3) {
@@ -674,6 +681,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 219,
 	},
 	defeatist: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (attacker.hp <= attacker.maxhp / 2) {
+				return this.chainModify(0.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
@@ -827,6 +840,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 88,
 	},
 	dragonsmaw: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.type === 'Dragon') {
+				this.debug('Dragon\'s Maw boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Dragon') {
@@ -1013,6 +1033,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(target) {
 				this.add('-start', target, 'ability: Flash Fire');
+			},
+			onModifyOffensiveStatPriority: 5,
+			onModifyOffensiveStat(stat, attacker, defender, move) {
+				if (move.type === 'Fire' && attacker.hasAbility('flashfire')) {
+					this.debug('Flash Fire boost');
+					return this.chainModify(1.5);
+				}
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
@@ -1295,6 +1322,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.abilityState.choiceLock || move.isZOrMaxPowered || move.id === 'struggle') return;
 			pokemon.abilityState.choiceLock = move.id;
 		},
+		onModifyOffensiveStatPriority: 1,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Physical") return;
+			if (attacker.volatiles['dynamax']) return;
+			// PLACEHOLDER
+			this.debug('Gorilla Tactics Atk Boost');
+			return this.chainModify(1.5);
+		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.volatiles['dynamax']) return;
@@ -1375,6 +1410,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 241,
 	},
 	guts: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Physical") return;
+			if (attacker.status) {
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.status) {
@@ -1449,6 +1491,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 118,
 	},
 	hugepower: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Physical") return;
+			return this.chainModify(2);
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
 			return this.chainModify(2);
@@ -1470,6 +1517,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	hustle: {
 		// This should be applied directly to the stat as opposed to chaining with the others
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Physical") return;
+			return this.modify(stat, 1.5);
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
 			return this.modify(atk, 1.5);
@@ -2108,6 +2160,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 250,
 	},
 	minus: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			for (const allyActive of attacker.allies()) {
+				if (allyActive.hasAbility(['minus', 'plus'])) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
 			for (const allyActive of pokemon.allies()) {
@@ -2473,6 +2534,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 142,
 	},
 	overgrow: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Overgrow boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) {
@@ -2657,6 +2725,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 182,
 	},
 	plus: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			for (const allyActive of attacker.allies()) {
+				if (allyActive.hasAbility(['minus', 'plus'])) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
 			for (const allyActive of pokemon.allies()) {
@@ -2865,6 +2942,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 244,
 	},
 	purepower: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Physical") return;
+			return this.chainModify(2);
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
 			return this.chainModify(2);
@@ -3419,6 +3501,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			onStart(target) {
 				this.add('-start', target, 'ability: Slow Start');
 			},
+			onModifyOffensiveStatPriority: 5,
+			onModifyOffensiveStat(stat, attacker, defender, move) {
+				if (move.category !== "Physical") return;
+				return this.chainModify(0.5);
+			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
 				return this.chainModify(0.5);
@@ -3481,6 +3568,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 117,
 	},
 	solarpower: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
@@ -3548,6 +3642,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 3,
 	},
 	stakeout: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (!defender.activeTurns) {
+				this.debug('Stakeout boost');
+				return this.chainModify(2);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender) {
 			if (!defender.activeTurns) {
@@ -3634,6 +3735,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 243,
 	},
 	steelworker: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.type === 'Steel') {
+				this.debug('Steelworker boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Steel') {
@@ -3782,6 +3890,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 207,
 	},
 	swarm: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Swarm boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
@@ -3959,6 +4074,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 110,
 	},
 	torrent: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Torrent boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 3) {
@@ -4029,6 +4151,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 36,
 	},
 	transistor: {
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Transistor boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
@@ -4250,6 +4379,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chainModify(0.5);
+			}
+		},
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.type === 'Water') {
+				return this.chainModify(2);
 			}
 		},
 		onModifyAtk(atk, attacker, defender, move) {

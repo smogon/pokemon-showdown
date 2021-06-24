@@ -1399,7 +1399,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		useSourceDefensiveAsOffensive: true,
+		offensiveStat: 'source:def',
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -5633,7 +5633,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		useTargetOffensive: true,
+		offensiveStat: 'target:atk',
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -13320,7 +13320,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		defensiveCategory: "Physical",
+		defensiveStat: 'target:def',
 		name: "Psyshock",
 		pp: 10,
 		priority: 0,
@@ -13335,7 +13335,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
-		defensiveCategory: "Physical",
+		defensiveStat: 'target:def',
 		name: "Psystrike",
 		pp: 10,
 		priority: 0,
@@ -14863,7 +14863,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
-		defensiveCategory: "Physical",
+		defensiveStat: 'target:def',
 		name: "Secret Sword",
 		pp: 10,
 		priority: 0,
@@ -19435,13 +19435,35 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
+			onModifyMove(move, source, target) {
+				if (move.offensiveStat) {
+					if (move.offensiveStat.includes("def")) {
+						move.offensiveStat.replace("def", "spd");
+						this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
+					} else if (move.offensiveStat.includes("spd")) {
+						move.offensiveStat.replace("spd", "def");
+					}
+				}
+				if (move.defensiveStat) {
+					if (move.defensiveStat.includes("def")) {
+						move.defensiveStat.replace("def", "spd");
+					} else if (move.defensiveStat.includes("spd")) {
+						move.defensiveStat.replace("spd", "def");
+					}
+				} else {
+					if (move.category === "Physical") {
+						move.defensiveStat = "target:spd";
+					} else if (move.category === "Special") {
+						move.defensiveStat = "target:def";
+					}
+				}
+			},
 			onFieldStart(field, source) {
 				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('wonderroom');
 			},
-			// Swapping defenses implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 5,
 			onFieldEnd() {

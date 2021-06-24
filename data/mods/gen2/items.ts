@@ -94,6 +94,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	lightball: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
+		onModifyOffensiveStat() {},
 		onModifySpA() {},
 	},
 	luckypunch: {
@@ -213,6 +214,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	thickclub: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
+		onModifyOffensiveStat() {},
 		onModifyAtk() {},
 	},
 	twistedspoon: {

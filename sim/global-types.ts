@@ -23,6 +23,7 @@ type ID = '' | string & {__isID: true};
 type PokemonSlot = '' | string & {__isSlot: true};
 interface AnyObject {[k: string]: any}
 
+type AllStatIDs = 'currenthp' | StatID;
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
 type StatID = 'hp' | StatIDExceptHP;
@@ -199,88 +200,6 @@ interface GameTimerSettings {
 	accelerate: boolean;
 }
 
-<<<<<<< HEAD
-interface FormatData extends EventMethods {
-	name: string;
-
-	banlist?: string[];
-	battle?: ModdedBattleScriptsData;
-	pokemon?: ModdedBattlePokemon;
-	queue?: ModdedBattleQueue;
-	field?: ModdedField;
-	cannotMega?: string[];
-	challengeShow?: boolean;
-	debug?: boolean;
-	defaultLevel?: number;
-	desc?: string;
-	effectType?: string;
-	forcedLevel?: number;
-	gameType?: GameType;
-	maxForcedLevel?: number;
-	maxLevel?: number;
-	mod?: string;
-	onBasePowerPriority?: number;
-	onModifyMovePriority?: number;
-	onModifyTypePriority?: number;
-	onSwitchInPriority?: number;
-	rated?: boolean | string;
-	minSourceGen?: number;
-	restricted?: string[];
-	ruleset?: string[];
-	searchShow?: boolean;
-	team?: string;
-	teamLength?: {validate?: [number, number], battle?: number};
-	threads?: string[];
-	timer?: Partial<GameTimerSettings>;
-	tournamentShow?: boolean;
-	unbanlist?: string[];
-	checkLearnset?: (
-		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
-	) => {type: string, [any: string]: any} | null;
-	getEvoFamily?: (this: Format, speciesid: string) => ID;
-	getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
-	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
-	onBegin?: (this: Battle) => void;
-	onChangeSet?: (
-		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
-	) => string[] | void;
-	onModifySpecies?: (
-		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
-	) => Species | void;
-	onStart?: (this: Battle) => void;
-	onTeamPreview?: (this: Battle) => void;
-	onValidateSet?: (
-		this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject
-	) => string[] | void;
-	onValidateTeam?: (this: TeamValidator, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void;
-	validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
-	validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
-		removeNicknames?: boolean,
-		skipSets?: {[name: string]: {[key: string]: boolean}},
-	}) => string[] | void;
-	section?: string;
-	column?: number;
-}
-
-type FormatList = (FormatData | {section: string, column?: number})[];
-type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
-
-interface Format extends Readonly<BasicEffect & FormatData> {
-	readonly effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
-	readonly baseRuleset: string[];
-	readonly banlist: string[];
-	readonly customRules: string[] | null;
-	readonly defaultLevel: number;
-	readonly maxLevel: number;
-	readonly noLog: boolean;
-	readonly restricted: string[];
-	readonly ruleset: string[];
-	readonly unbanlist: string[];
-	ruleTable: import('./dex-data').RuleTable | null;
-}
-
-=======
->>>>>>> e02b358da5c1e245259415f5f342c97b5e2483b9
 type SpreadMoveTargets = (Pokemon | false | null)[];
 type SpreadMoveDamage = (number | boolean | undefined)[];
 type ZMoveOptions = ({move: string, target: MoveTarget} | null)[];

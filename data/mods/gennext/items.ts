@@ -127,6 +127,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return def * 1.5;
 			}
 		},
+		onModifyOffensiveStat(stat, pokemon, target, move) {
+			if (move.category !== 'Special') return;
+			if (pokemon.species.name === 'Unown') {
+				return stat * 2;
+			}
+		},
 		onModifySpA(spa, pokemon) {
 			if (pokemon.species.name === 'Unown') {
 				return spa * 2;

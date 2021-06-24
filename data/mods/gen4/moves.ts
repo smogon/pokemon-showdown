@@ -85,6 +85,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 1,
+			onModifyOffensiveStatPriority: -101,
+			onModifyOffensiveStat(stat, attacker, defender, move) {
+				if (move.category !== "Physical") return;
+				this.add('-activate', attacker, 'move: Beat Up', '[of] ' + move.allies![0].name);
+				this.event.modifier = 1;
+				return move.allies!.shift()!.species.baseStats.atk;
+			},
 			onModifyAtkPriority: -101,
 			onModifyAtk(atk, pokemon, defender, move) {
 				this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);

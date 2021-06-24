@@ -613,7 +613,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			const category = this.battle.getCategory(move);
-			const defensiveCategory = move.defensiveCategory || category;
 
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
@@ -656,31 +655,42 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const level = pokemon.level;
 
-			const attacker = pokemon;
-			const defender = target;
-			let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
-			const defenseStat: StatIDExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
-			if (this.battle.field.isTerrain('baneterrain')) {
-				if (attacker.getStat('atk') > attacker.getStat('spa')) {
-					attackStat = 'spa';
-				} else {
+			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : pokemon;
+			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? pokemon : target;
+			let attackStat: AllStatIDs = category === 'Physical' ? 'atk' : 'spa';
+			if (move.offensiveStat) {
+				if (move.offensiveStat.includes("atk")) {
 					attackStat = 'atk';
+				} else if (move.offensiveStat.includes("def")) {
+					attackStat = 'def';
+				} else if (move.offensiveStat.includes("spa")) {
+					attackStat = 'spa';
+				} else if (move.offensiveStat.includes("spd")) {
+					attackStat = 'spd';
+				} else if (move.offensiveStat.includes("spe")) {
+					attackStat = 'spe';
+				} else if (move.offensiveStat.includes("hp")) {
+					attackStat = 'hp';
+				} else if (move.offensiveStat.includes("currenthp")) {
+					attackStat = 'currenthp';
 				}
 			}
-			if (move.useSourceDefensiveAsOffensive) {
-				attackStat = defenseStat;
-				// Body press really wants to use the def stat,
-				// so it switches stats to compensate for Wonder Room.
-				// Of course, the game thus miscalculates the boosts...
-				if ('wonderroom' in this.battle.field.pseudoWeather) {
-					if (attackStat === 'def') {
-						attackStat = 'spd';
-					} else if (attackStat === 'spd') {
-						attackStat = 'def';
-					}
-					if (attacker.boosts['def'] || attacker.boosts['spd']) {
-						this.battle.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
-					}
+			let defenseStat: AllStatIDs = category === 'Physical' ? 'def' : 'spd';
+			if (move.defensiveStat) {
+				if (move.defensiveStat.includes("atk")) {
+					defenseStat = 'atk';
+				} else if (move.defensiveStat.includes("def")) {
+					defenseStat = 'def';
+				} else if (move.defensiveStat.includes("spa")) {
+					defenseStat = 'spa';
+				} else if (move.defensiveStat.includes("spd")) {
+					defenseStat = 'spd';
+				} else if (move.defensiveStat.includes("spe")) {
+					defenseStat = 'spe';
+				} else if (move.defensiveStat.includes("hp")) {
+					defenseStat = 'hp';
+				} else if (move.defensiveStat.includes("currenthp")) {
+					defenseStat = 'currenthp';
 				}
 			}
 
@@ -688,9 +698,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			let attack;
 			let defense;
 
-			let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
-			if (move.id === 'imtoxicyoureslippinunder') atkBoosts = defender.boosts['spd'];
-			let defBoosts = defender.boosts[defenseStat];
+			let atkBoosts = (attackStat === 'hp' || attackStat === 'currenthp') ? 0 : attacker.boosts[attackStat];
+			let defBoosts = (defenseStat === 'hp' || defenseStat === 'currenthp') ? 0 : defender.boosts[defenseStat];
 
 			let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 			let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
@@ -711,20 +720,28 @@ export const Scripts: ModdedBattleScriptsData = {
 				defBoosts = 0;
 			}
 
-			if (move.useTargetOffensive) {
-				attack = defender.calculateStat(attackStat, atkBoosts);
-			} else if (move.id === 'imtoxicyoureslippinunder') {
-				attack = defender.calculateStat("spd", atkBoosts);
+			if (attackStat === 'hp') {
+				attack = attacker.maxhp;
+			} else if (attackStat === 'currenthp') {
+				attack = attacker.hp;
 			} else {
 				attack = attacker.calculateStat(attackStat, atkBoosts);
 			}
 
-			attackStat = (category === 'Physical' ? 'atk' : 'spa');
-			defense = defender.calculateStat(defenseStat, defBoosts);
+			if (defenseStat === 'hp') {
+				defense = defender.maxhp;
+			} else if(defenseStat === 'currenthp') {
+				defense = defender.hp;
+			} else {
+				defense = defender.calculateStat(defenseStat, defBoosts);
+			}
 
 			// Apply Stat Modifiers
-			attack = this.battle.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
-			defense = this.battle.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
+			attack = this.battle.runEvent('onModifyOffensiveStat', attacker, defender, move, attack);
+			if (defenseStat !== 'hp' && defenseStat !== 'currenthp') {
+				defense = this.battle.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
+			}
+			defense = this.battle.runEvent('onModifyAnyDefensiveStat', defender, attacker, move, defense);
 
 			if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 				defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);

@@ -415,6 +415,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.abilityState.choiceLock || move.isZOrMaxPowered || move.id === 'struggle') return;
 			pokemon.abilityState.choiceLock = move.id;
 		},
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			if (attacker.volatiles['dynamax']) return;
+			// PLACEHOLDER FOR STURDY MOLD
+			let ignore = false;
+			for (const target of attacker.foes()) {
+				if (target.hasAbility('sturdymold')) {
+					ignore = true;
+					return;
+				}
+			}
+			if (['allAdjacentFoes', 'allAdjacent'].includes(move.target) && ignore) return;
+			// END PLACEHOLDER
+			// PLACEHOLDER
+			this.debug('Fowl Behavior Sp. Atk Boost');
+			return this.chainModify(1.5);
+		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, pokemon, t, move) {
 			if (pokemon.volatiles['dynamax']) return;
@@ -595,6 +613,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	hustle: {
 		// This should be applied directly to the stat as opposed to chaining with the others
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(stat, attacker, defender, move) {
+			if (move.category !== "Physical") return;
+			// PLACEHOLDER FOR STURDY MOLD
+			let ignore = false;
+			for (const target of attacker.foes()) {
+				if (target.hasAbility('sturdymold')) {
+					ignore = true;
+					return;
+				}
+			}
+			if ((move.target === 'allAdjacentFoes' || move.target === 'allAdjacent') && ignore) return;
+			// END PLACEHOLDER
+			return this.modify(stat, 1.5);
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon, t, move) {
 			// PLACEHOLDER FOR STURDY MOLD

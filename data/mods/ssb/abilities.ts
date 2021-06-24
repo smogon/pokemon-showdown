@@ -983,6 +983,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.abilityState.choiceLock || move.isZOrMaxPowered || move.id === 'struggle') return;
 			pokemon.abilityState.choiceLock = move.id;
 		},
+		onModifyOffensiveStatPriority: 1,
+		onModifyOffensiveStat(spa, attacker, defender, move) {
+			if (move.category !== "Special") return;
+			if (attacker.volatiles['dynamax']) return;
+			this.debug('Pollo Diablo Spa Boost');
+			return this.chainModify(1.5);
+		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
 			if (pokemon.volatiles['dynamax']) return;
@@ -2228,6 +2235,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Modified Stakeout for Hubriz to have a failsafe
 	stakeout: {
 		inherit: true,
+		onModifyOffensiveStatPriority: 5,
+		onModifyOffensiveStat(atk, attacker, defender, move) {
+			if (!defender?.activeTurns) {
+				this.debug('Stakeout boost');
+				return this.chainModify(2);
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender) {
 			if (!defender?.activeTurns) {

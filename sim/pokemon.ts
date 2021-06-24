@@ -496,15 +496,6 @@ export class Pokemon {
 		// base stat
 		let stat = this.storedStats[statName];
 
-		// Wonder Room swaps defenses before calculating anything else
-		if ('wonderroom' in this.battle.field.pseudoWeather) {
-			if (statName === 'def') {
-				stat = this.storedStats['spd'];
-			} else if (statName === 'spd') {
-				stat = this.storedStats['def'];
-			}
-		}
-
 		// stat boosts
 		let boosts: SparseBoostsTable = {};
 		const boostName = statName as BoostID;
