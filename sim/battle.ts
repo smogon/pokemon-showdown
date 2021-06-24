@@ -1553,12 +1553,13 @@ export class Battle {
 		}
 
 		// Gen 1 Endless Battle Clause triggers
-		if (this.gen <= 1 && this.sides.every(side => side.pokemonLeft === 1)) {
+		if (this.gen <= 1) {
 			let onlyTransform = true;
 			let onlyGhostsWithStruggle = true;
 			let onlyFrozen = true;
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
+					if (pokemon.fainted) continue;
 					if (pokemon.status !== 'frz' as ID) {
 						onlyFrozen = false;
 					}
