@@ -142,13 +142,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	souldew: {
 		inherit: true,
 		onBasePower() {},
-		onModifyOffensiveStatPriority: 1,
-		onModifyOffensiveStat(stat, attacker, defender, move) {
-			if (move.category !== "Special") return;
-			if (attacker.baseSpecies.num === 380 || attacker.baseSpecies.num === 381) {
-				return this.chainModify(1.5);
-			}
-		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
 			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {

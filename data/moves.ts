@@ -19439,22 +19439,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (move.offensiveStat) {
 					if (move.offensiveStat.includes("def")) {
 						move.offensiveStat.replace("def", "spd");
-						this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
+						if (source.boosts['def'] || source.boosts['spd']) {
+							this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
+						}
 					} else if (move.offensiveStat.includes("spd")) {
 						move.offensiveStat.replace("spd", "def");
-					}
-				}
-				if (move.defensiveStat) {
-					if (move.defensiveStat.includes("def")) {
-						move.defensiveStat.replace("def", "spd");
-					} else if (move.defensiveStat.includes("spd")) {
-						move.defensiveStat.replace("spd", "def");
-					}
-				} else {
-					if (move.category === "Physical") {
-						move.defensiveStat = "target:spd";
-					} else if (move.category === "Special") {
-						move.defensiveStat = "target:def";
 					}
 				}
 			},

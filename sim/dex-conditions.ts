@@ -51,9 +51,7 @@ export interface EventMethods {
 	onModifyCritRatio?: CommonHandlers['ModifierSourceMove'];
 	onModifyDamage?: CommonHandlers['ModifierSourceMove'];
 	onModifyDef?: CommonHandlers['ModifierMove'];
-	onModifyAnyDefensiveStat?: CommonHandlers['ModifierMove'];
 	onModifyMove?: MoveEventMethods['onModifyMove'];
-	onModifyOffensiveStat?: CommonHandlers['ModifierMove'];
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onModifySecondaries?: (
 		this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove
@@ -453,11 +451,9 @@ export interface EventMethods {
 	onModifyAccuracyPriority?: number;
 	onModifyAtkPriority?: number;
 	onModifyCritRatioPriority?: number;
-	onModifyDefensiveStatPriority?: number;
 	onModifyDefPriority?: number;
 	onModifyMovePriority?: number;
 	onModifyPriorityPriority?: number;
-	onModifyOffensiveStatPriority?: number;
 	onModifySpAPriority?: number;
 	onModifySpDPriority?: number;
 	onModifyTypePriority?: number;

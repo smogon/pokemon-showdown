@@ -584,7 +584,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 
 		// For Spandan's custom move and Brandon's ability
-		getDamage(pokemon, target, move, suppressMessages = false) {
+		getDamage(source, target, move, suppressMessages = false) {
 			if (typeof move === 'string') move = this.dex.getActiveMove(move);
 
 			if (typeof move === 'number') {
@@ -605,9 +605,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.ohko) return target.maxhp;
-			if (move.damageCallback) return move.damageCallback.call(this.battle, pokemon, target);
+			if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
 			if (move.damage === 'level') {
-				return pokemon.level;
+				return source.level;
 			} else if (move.damage) {
 				return move.damage;
 			}
@@ -616,13 +616,13 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, pokemon, target, move);
+				basePower = move.basePowerCallback.call(this.battle, source, target, move);
 			}
 			if (!basePower) return basePower === 0 ? undefined : basePower;
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			let critMult;
-			let critRatio = this.battle.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
+			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 			if (this.battle.gen <= 5) {
 				critRatio = this.battle.clampIntRange(critRatio, 0, 5);
 				critMult = [0, 16, 8, 4, 3, 2];
@@ -648,15 +648,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// happens after crit calculation
-			basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower, true);
+			basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 
 			if (!basePower) return 0;
 			basePower = this.battle.clampIntRange(basePower, 1);
 
-			const level = pokemon.level;
+			const level = source.level;
 
-			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : pokemon;
-			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? pokemon : target;
+			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : source;
+			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? source : target;
 			let attackStat: AllStatIDs = category === 'Physical' ? 'atk' : 'spa';
 			if (move.offensiveStat) {
 				if (move.offensiveStat.includes("atk")) {
@@ -736,12 +736,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				defense = defender.calculateStat(defenseStat, defBoosts);
 			}
 
+			attackStat = (category === 'Physical' ? 'atk' : 'spa');
+
 			// Apply Stat Modifiers
-			attack = this.battle.runEvent('onModifyOffensiveStat', attacker, defender, move, attack);
+			attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
 			if (defenseStat !== 'hp' && defenseStat !== 'currenthp') {
-				defense = this.battle.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
+				defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
 			}
-			defense = this.battle.runEvent('onModifyAnyDefensiveStat', defender, attacker, move, defense);
 
 			if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 				defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
@@ -753,7 +754,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
 
 			// Calculate damage modifiers separately (order differs between generations)
-			return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
+			return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
 		},
 
 		runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {

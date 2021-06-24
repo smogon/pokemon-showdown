@@ -209,14 +209,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onStart(target) {
 				this.add('-start', target, 'Slow Start');
 			},
-			onModifyOffensiveStat(atk, pokemon, target, move) {
-				if (move.category !== 'Physical') return;
-				if (pokemon.ability !== 'slowstart') {
-					pokemon.removeVolatile('slowstart');
-					return;
-				}
-				return atk / 2;
-			},
 			onModifyAtk(atk, pokemon) {
 				if (pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');

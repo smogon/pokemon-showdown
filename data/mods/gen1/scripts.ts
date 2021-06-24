@@ -579,7 +579,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return damage;
 		},
 		// This calculates the damage pokemon does to target with move.
-		getDamage(pokemon, target, move, suppressMessages) {
+		getDamage(source, target, move, suppressMessages) {
 			// First of all, we get the move.
 			if (typeof move === 'string') {
 				move = this.battle.dex.getActiveMove(move);
@@ -607,12 +607,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We edit the damage through move's damage callback if necessary.
 			if (move.damageCallback) {
-				return move.damageCallback.call(this.battle, pokemon, target);
+				return move.damageCallback.call(this.battle, source, target);
 			}
 
 			// We take damage from damage=level moves (seismic toss).
 			if (move.damage === 'level') {
-				return pokemon.level;
+				return source.level;
 			}
 
 			// If there's a fix move damage, we return that.
@@ -626,8 +626,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-			if (pokemon.volatiles['partialtrappinglock'] && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
-				return pokemon.volatiles['partialtrappinglock'].damage;
+			if (source.volatiles['partialtrappinglock'] && (target === source.volatiles['partialtrappinglock'].locked)) {
+				return source.volatiles['partialtrappinglock'].damage;
 			}
 
 			// We check the category and typing to calculate later on the damage.
@@ -639,7 +639,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// We get the base power and apply basePowerCallback if necessary.
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, pokemon, target, move);
+				basePower = move.basePowerCallback.call(this.battle, source, target, move);
 			}
 			if (!basePower) {
 				return basePower === 0 ? undefined : basePower;
@@ -651,10 +651,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!isCrit) {
 				// In gen 1, the critical chance is based on speed.
 				// First, we get the base speed, divide it by 2 and floor it. This is our current crit chance.
-				let critChance = Math.floor(pokemon.species.baseStats['spe'] / 2);
+				let critChance = Math.floor(source.species.baseStats['spe'] / 2);
 
 				// Now we check for focus energy volatile.
-				if (pokemon.volatiles['focusenergy']) {
+				if (source.volatiles['focusenergy']) {
 					// If it exists, crit chance is divided by 2 again and floored.
 					critChance = Math.floor(critChance / 2);
 				} else {
@@ -682,7 +682,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Happens after crit calculation.
 			if (basePower) {
-				basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower);
+				basePower = this.battle.runEvent('BasePower', source, target, move, basePower);
 				if (basePower && move.basePowerModifier) {
 					basePower *= move.basePowerModifier;
 				}
@@ -691,9 +691,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// We now check attacker's and defender's stats.
-			let level = pokemon.level;
-			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : pokemon;
-			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? pokemon : target;
+			let level = source.level;
+			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : source;
+			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? source : target;
 			let atkType: AllStatIDs = (move.category === 'Physical') ? 'atk' : 'spa';
 			if (move.offensiveStat) {
 				if (move.offensiveStat.includes("atk")) {
@@ -807,7 +807,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			damage += 2;
 
 			// STAB damage bonus, the "???" type never gets STAB
-			if (type !== '???' && pokemon.hasType(type)) {
+			if (type !== '???' && source.hasType(type)) {
 				damage += Math.floor(damage / 2);
 			}
 

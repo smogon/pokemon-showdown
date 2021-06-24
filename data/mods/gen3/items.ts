@@ -163,7 +163,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyOffensiveStat() {},
 		onModifyAtk() {},
 	},
 	magnet: {

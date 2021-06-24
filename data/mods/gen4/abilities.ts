@@ -239,14 +239,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 98,
 	},
 	minus: {
-		onModifyOffensiveStat(stat, attacker, defender, move) {
-			if (move.category !== "Special") return;
-			for (const ally of attacker.allies()) {
-				if (ally.ability === 'plus') {
-					return stat * 1.5;
-				}
-			}
-		},
 		onModifySpA(spa, pokemon) {
 			for (const ally of pokemon.allies()) {
 				if (ally.ability === 'plus') {
@@ -297,14 +289,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 53,
 	},
 	plus: {
-		onModifyOffensiveStat(stat, attacker, defender, move) {
-			if (move.category !== "Special") return;
-			for (const ally of attacker.allies()) {
-				if (ally.ability === 'minus') {
-					return stat * 1.5;
-				}
-			}
-		},
 		onModifySpA(spa, pokemon) {
 			for (const ally of pokemon.allies()) {
 				if (ally.ability === 'minus') {

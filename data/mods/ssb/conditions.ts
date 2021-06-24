@@ -1920,9 +1920,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'Brilliant');
 		},
-		onModifyOffensiveStat() {
-			return this.chainModify(1.5);
-		},
 		onModifyAtk() {
 			return this.chainModify(1.5);
 		},

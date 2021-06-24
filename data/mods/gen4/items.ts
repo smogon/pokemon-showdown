@@ -95,12 +95,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	deepseatooth: {
 		inherit: true,
-		onModifyOffensiveStat(stat, attacker, defender, move) {
-			if (move.category !== "Special") return;
-			if (attacker.species.name === 'Clamperl') {
-				return this.chainModify(2);
-			}
-		},
 		onModifySpA(spa, pokemon) {
 			if (pokemon.species.name === 'Clamperl') {
 				return this.chainModify(2);
@@ -200,11 +194,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyOffensiveStat(stat, attacker, defender, move) {
-			if (attacker.species.name === 'Pikachu') {
-				return this.chainModify(2);
-			}
-		},
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
@@ -318,12 +307,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	thickclub: {
 		inherit: true,
-		onModifyOffensiveStat(stat, attacker, defender, move) {
-			if (move.category !== "Physical") return;
-			if (attacker.species.name === 'Cubone' || attacker.species.name === 'Marowak') {
-				return this.chainModify(2);
-			}
-		},
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.species.name === 'Cubone' || pokemon.species.name === 'Marowak') {
 				return this.chainModify(2);
