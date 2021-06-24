@@ -1,5 +1,6 @@
-import {FS, Utils, Net} from '../../lib';
+import {FS, Utils, Net, ProcessManager} from '../../lib';
 import {getCommonBattles} from '../chat-commands/info';
+import {checkRipgrepAvailability} from '../config-loader';
 import type {Punishment} from '../punishments';
 import type {PartialModlogEntry, ModlogID} from '../modlog';
 
@@ -26,8 +27,16 @@ interface TicketState {
 	offline?: boolean;
 	/** [main text, context] */
 	text?: [string, string];
-	resolved?: {time: number, result: string, by: string, seen: boolean, staffReason: string};
+	resolved?: ResolvedTicketInfo;
 	meta?: string;
+}
+
+interface ResolvedTicketInfo {
+	time: number;
+	result: string;
+	by: string;
+	seen: boolean;
+	staffReason: string;
 }
 
 interface TextTicketInfo {
@@ -411,6 +420,47 @@ export class HelpTicket extends Rooms.RoomGame {
 	// workaround to modlog for no room
 	static modlog(entry: PartialModlogEntry) {
 		Rooms.Modlog.write('help-texttickets' as ModlogID, entry);
+	}
+	static logTextResult(ticket: TicketState & {text: [string, string], resolved: ResolvedTicketInfo}) {
+		const entry = {
+			text: ticket.text,
+			resolved: ticket.resolved,
+			meta: ticket.meta,
+			created: ticket.created,
+			userid: ticket.userid,
+			type: ticket.type,
+			claimed: ticket.claimed,
+		};
+		const date = Chat.toTimestamp(new Date()).split(' ')[0];
+		void FS(`logs/tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
+	}
+	static async getTextLogs(userid: ID, date?: string) {
+		const results = [];
+		if (await checkRipgrepAvailability()) {
+			const args = [`-e`, `userid":"${userid}`, '--no-filename'];
+			const lines = await ProcessManager.exec([
+				`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
+			]);
+			for (const line of lines.stdout.split('\n')) {
+				if (line.trim()) results.push(JSON.parse(line));
+			}
+		} else {
+			if (!date) throw new Chat.ErrorMessage(`Specify a month.`);
+			const path = FS(`logs/tickets/${date}.jsonl`);
+			if (!path.existsSync()) {
+				throw new Chat.ErrorMessage(`There are no logs for the month "${date}".`);
+			}
+			const stream = path.createReadStream();
+			for await (const line of stream.byLine()) {
+				if (line.trim()) {
+					const data = JSON.parse(line);
+					if (data.userid === userid) {
+						results.push(data);
+					}
+				}
+			}
+		}
+		return results;
 	}
 	static uploadReplaysFrom(text: string, user: User, conn: Connection) {
 		const rooms = getBattleLinks(text);
@@ -1515,6 +1565,61 @@ export const pages: Chat.PageTable = {
 			}
 			return buf;
 		},
+		async logs(query, user, connection) {
+			this.checkCan('lock');
+			const args = query.join('-').split('--');
+			const userid = toID(args.shift());
+			if (!userid) return this.errorReply(`Specify a userid to view ticket logs for.`);
+			const date = args.shift();
+			if (date) {
+				const parsed = new Date(date);
+				if (!/[0-9]{4}-[0-9]{2}/.test(date) || isNaN(parsed.getTime())) {
+					return this.errorReply(`Invalid date.`);
+				}
+			}
+			const logs = await HelpTicket.getTextLogs(userid, date);
+			this.title = `[Ticket Logs] ${userid}${date ? ` (${date})` : ''}`;
+			let buf = `<div class="pad"><h2>Ticket logs for ${userid}${date ? ` in the month of ${date}` : ''}</h2>`;
+			buf += `<button class="button" name="send" value="/join ${this.pageid}"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
+			buf += `<hr />`;
+
+			if (!logs.length) {
+				buf += `<div class="message-error">None found.</div>`;
+				return buf;
+			}
+			const stringifyDate = (num: number) => Chat.toTimestamp(new Date(num)).split(' ')[0];
+			for (const ticket of logs) {
+				buf += `<details class="readmore"><summary>`;
+				buf += `<strong>${ticket.type} - ${stringifyDate(ticket.created)}</strong></summary>`;
+				const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
+				this.title = `[Text Ticket] ${ticket.userid}`;
+				buf += `<h2>Issue: ${ticket.type}</h2>`;
+				buf += `<strong>From: ${ticket.userid}</strong>`;
+				buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
+				buf += `<button class="button" name="send" value="/modlog global,[${ticket.userid}]">Global Modlog</button><br />`;
+				if (ticket.claimed) {
+					buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
+				}
+				buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
+				buf += `<br />`;
+				buf += `<div class="infobox">`;
+				const [text, context] = ticket.text;
+				buf += `<p><strong>Report text:</strong></p><hr />`;
+				buf += Chat.formatText(text);
+				if (ticket.text[1]) {
+					buf += `<br /><hr /><strong>Context given: </strong><br />`;
+					buf += Chat.formatText(context);
+				}
+				buf += `</div>`;
+				buf += Utils.html`<strong>Resolved: by ${ticket.resolved.by}</strong><br />`;
+				buf += Utils.html`<strong>Result:</strong> ${Chat.collapseLineBreaksHTML(ticket.resolved.result)}<br />`;
+				if (ticket.resolved.staffReason.includes('PROOF')) { // a note was added, show it
+					buf += Utils.html`<strong>Resolver notes:</strong> ${Chat.collapseLineBreaksHTML(ticket.resolved.staffReason)}<br />`;
+				}
+				buf += `</details><hr />`;
+			}
+			return buf;
+		},
 		stats(query, user, connection) {
 			// view-help-stats-TABLE-YYYY-MM-COL
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
@@ -2003,6 +2108,7 @@ export const commands: Chat.ChatCommands = {
 				note: privateReason,
 				userid: ticketId,
 			});
+			HelpTicket.logTextResult(ticket as TicketState & {text: [string, string], resolved: ResolvedTicketInfo});
 			notifyStaff();
 			const staffRoom = Rooms.get('staff');
 			if (staffRoom) {
@@ -2210,6 +2316,19 @@ export const commands: Chat.ChatCommands = {
 		},
 		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: &`],
 
+		logs(target, room, user) {
+			this.checkCan('lock');
+			const [targetString, dateString] = Utils.splitFirst(target, ',').map(i => i.trim());
+			const id = toID(targetString);
+			if (!id) return this.errorReply(`Specify a userid.`);
+			return this.parse(`/j view-help-logs-${id}${dateString ? `--${dateString}` : ''}`);
+		},
+		logshelp: [
+			`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. `,
+			`If a [month] is given, searches only that month.`,
+			`Requires: % @ &`,
+		],
+
 	},
 	helptickethelp: [
 		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
@@ -2220,6 +2339,7 @@ export const commands: Chat.ChatCommands = {
 		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`,
 		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`,
 		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
+		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ &`,
 	],
 };
 
