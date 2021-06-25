@@ -1293,7 +1293,7 @@ export const Punishments = new class {
 
 		for (const curUser of affected) {
 			// ensure there aren't roombans so nothing gets mixed up
-			Punishments.roomUnban(room, (curUser).id || curUser);
+			Punishments.roomUnban(room, (curUser as any).id || curUser);
 			if (room.game && room.game.removeBannedUser) {
 				room.game.removeBannedUser(curUser);
 			}

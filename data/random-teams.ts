@@ -973,7 +973,7 @@ export class RandomTeams {
 			return {cull: (moves.has('fireblast') && counter.setupType !== 'Physical') || otherFireMoves};
 		case 'flareblitz':
 			// Special case for Solgaleo to prevent Flame Charge + Flare Blitz
-			return {cull: (species.id === 'solgaleo') && moves.has('flamecharge')};
+			return {cull: species.id === 'solgaleo' && moves.has('flamecharge')};
 		case 'overheat':
 			return {cull: moves.has('flareblitz') || (isDoubles && moves.has('calmmind'))};
 		case 'aquatail': case 'flipturn': case 'retaliate':
@@ -1437,6 +1437,7 @@ export class RandomTeams {
 		if (species.name === 'Unfezant' || moves.has('focusenergy')) return 'Scope Lens';
 		if (species.name === 'Pincurchin') return 'Shuca Berry';
 		if (species.name === 'Wobbuffet' && moves.has('destinybond')) return 'Custap Berry';
+		if (species.name === 'Scyther' && counter.damagingMoves.size === 4) return 'Choice Band';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 
 		// Misc item generation logic
@@ -1473,7 +1474,7 @@ export class RandomTeams {
 		if (moves.has('hypnosis') && ability === 'Beast Boost') return 'Blunder Policy';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 
-		if (this.dex.getEffectiveness('Rock', species) >= 2 && !species.evos.length && !isDoubles) return 'Heavy-Duty Boots';
+		if (this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles) return 'Heavy-Duty Boots';
 	}
 
 	/** Item generation specific to Random Doubles */
