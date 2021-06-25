@@ -438,9 +438,17 @@ export class HelpTicket extends Rooms.RoomGame {
 		const results = [];
 		if (await checkRipgrepAvailability()) {
 			const args = [`-e`, `userid":"${userid}`, '--no-filename'];
-			const lines = await ProcessManager.exec([
-				`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
-			]);
+			let lines;
+			try {
+				lines = await ProcessManager.exec([
+					`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
+				]);
+			} catch (e) {
+				if (e.message.includes("No such file or directory")) {
+					throw new Chat.ErrorMessage(`There are no logs for that date.`);
+				}
+				throw e;
+			}
 			for (const line of lines.stdout.split('\n')) {
 				if (line.trim()) results.push(JSON.parse(line));
 			}
