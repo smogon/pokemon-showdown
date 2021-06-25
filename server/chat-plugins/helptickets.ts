@@ -444,10 +444,17 @@ export class HelpTicket extends Rooms.RoomGame {
 					`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
 				]);
 			} catch (e) {
-				if (e.message.includes("No such file or directory")) {
-					throw new Chat.ErrorMessage(`There are no logs for that date.`);
+				if (e.message.includes('No such file or directory')) {
+					throw new Chat.ErrorMessage(`No ticket logs for that month.`);
 				}
-				throw e;
+				if (e.code !== 1 && !e.message.includes('stdout maxBuffer')) {
+					throw e; // 2 means an error in ripgrep
+				}
+				if (e.stdout) {
+					lines = e;
+				} else {
+					lines = {stdout: ""};
+				}
 			}
 			for (const line of lines.stdout.split('\n')) {
 				if (line.trim()) results.push(JSON.parse(line));
