@@ -59,7 +59,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	blastoise: {
-		randomBattleMoves: ["earthquake", "focusblast", "hydropump", "icebeam", "shellsmash"],
+		randomBattleMoves: ["earthquake", "hydropump", "icebeam", "shellsmash"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["icebeam", "muddywater", "protect", "shellsmash"],
 		randomDoubleBattleLevel: 80,
@@ -675,7 +675,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	slowkinggalar: {
 		randomBattleMoves: ["fireblast", "futuresight", "psyshock", "slackoff", "sludgebomb", "trick"],
 		randomBattleLevel: 84,
-		randomDoubleBattleMoves: ["eeriespell", "fireblast", "protect", "sludgebomb", "trick", "trickroom"],
+		randomDoubleBattleMoves: ["fireblast", "protect", "psychic", "sludgebomb", "trick", "trickroom"],
 		randomDoubleBattleLevel: 86,
 		tier: "OU",
 		doublesTier: "(DUU)",
@@ -856,7 +856,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	marowak: {
-		randomBattleMoves: ["doubleedge", "earthquake", "knockoff", "stealthrock", "stoneedge", "substitute"],
+		randomBattleMoves: ["doubleedge", "earthquake", "knockoff", "stealthrock", "stoneedge", "swordsdance"],
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["bonemerang", "knockoff", "protect", "stealthrock", "stoneedge"],
 		randomDoubleBattleLevel: 88,
@@ -1104,7 +1104,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	magmortar: {
-		randomBattleMoves: ["earthquake", "fireblast", "focusblast", "taunt", "thunderbolt"],
+		randomBattleMoves: ["earthquake", "fireblast", "focusblast", "psychic", "taunt", "thunderbolt"],
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["fireblast", "focusblast", "heatwave", "protect", "thunderbolt"],
 		randomDoubleBattleLevel: 88,
@@ -1595,7 +1595,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	quagsire: {
-		randomBattleMoves: ["earthquake", "encore", "icebeam", "recover", "scald", "toxic"],
+		randomBattleMoves: ["earthquake", "icebeam", "recover", "scald", "toxic"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["highhorsepower", "protect", "recover", "scald", "toxic"],
 		randomDoubleBattleLevel: 88,
@@ -2504,7 +2504,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	dusknoir: {
-		randomBattleMoves: ["earthquake", "icepunch", "painsplit", "poltergeist", "shadowsneak", "substitute", "willowisp"],
+		randomBattleMoves: ["earthquake", "icepunch", "painsplit", "poltergeist", "shadowsneak", "trick", "willowisp"],
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["earthquake", "haze", "icepunch", "poltergeist", "shadowsneak", "trickroom", "willowisp"],
 		randomDoubleBattleLevel: 86,
@@ -3032,7 +3032,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	toxicroak: {
-		randomBattleMoves: ["drainpunch", "gunkshot", "icepunch", "substitute", "suckerpunch", "swordsdance"],
+		randomBattleMoves: ["drainpunch", "gunkshot", "icepunch", "knockoff", "substitute", "suckerpunch", "swordsdance"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["drainpunch", "fakeout", "gunkshot", "icepunch", "protect", "suckerpunch", "swordsdance", "taunt"],
 		randomDoubleBattleLevel: 86,
@@ -4537,7 +4537,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	klefki: {
-		randomBattleMoves: ["foulplay", "magnetrise", "playrough", "spikes", "thunderwave", "toxic"],
+		randomBattleMoves: ["magnetrise", "playrough", "spikes", "thunderwave", "toxic"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["dazzlinggleam", "foulplay", "spikes", "thunderwave"],
 		randomDoubleBattleLevel: 84,
@@ -4949,7 +4949,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	tsareena: {
-		randomBattleMoves: ["highjumpkick", "knockoff", "playrough", "powerwhip", "rapidspin", "synthesis", "uturn"],
+		randomBattleMoves: ["highjumpkick", "knockoff", "powerwhip", "rapidspin", "synthesis", "tripleaxel", "uturn"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["highjumpkick", "knockoff", "playrough", "powerwhip", "rapidspin", "tripleaxel", "uturn"],
 		randomDoubleBattleLevel: 88,
@@ -5284,7 +5284,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	solgaleo: {
-		randomBattleMoves: ["closecombat", "flareblitz", "knockoff", "psychicfangs", "sunsteelstrike"],
+		randomBattleMoves: ["closecombat", "flamecharge", "flareblitz", "knockoff", "psychicfangs", "sunsteelstrike"],
 		randomBattleLevel: 73,
 		randomDoubleBattleMoves: ["closecombat", "flareblitz", "morningsun", "protect", "psychicfangs", "stoneedge", "sunsteelstrike"],
 		randomDoubleBattleLevel: 76,
@@ -5333,7 +5333,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	celesteela: {
-		randomBattleMoves: ["airslash", "autotomize", "earthquake", "fireblast", "flashcannon", "leechseed", "protect"],
+		randomBattleMoves: ["airslash", "earthquake", "fireblast", "flashcannon", "leechseed", "protect"],
 		randomBattleLevel: 78,
 		randomDoubleBattleMoves: ["airslash", "autotomize", "earthquake", "fireblast", "flashcannon"],
 		randomDoubleBattleLevel: 78,
