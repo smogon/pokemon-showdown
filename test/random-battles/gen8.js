@@ -19,8 +19,24 @@ describe('[Gen 8] Random Battle', () => {
 		});
 	});
 
+	it('should not generate Flame Charge + Flare Blitz Solgaleo', () => {
+		testNotBothMoves('solgaleo', options, 'flamecharge', 'flareblitz');
+	});
+
+	it('should not generate Knock Off + Sucker Punch Toxicroak', () => {
+		testNotBothMoves('toxicroak', options, 'knockoff', 'suckerpunch');
+	});
+
 	it('should not generate Swords Dance + Fire Blast Garchomp', () => {
 		testNotBothMoves('garchomp', options, 'swordsdance', 'fireblast');
+	});
+
+	it('should give 4 Attacks Scyther a Choice Band', () => {
+		testSet('scyther', options, set => {
+			if (!set.moves.includes('roost') && !set.moves.includes('swordsdance')) {
+				assert.equal(set.item, "Choice Band");
+			}
+		});
 	});
 
 	it('should give Solid Rock + Shell Smash Carracosta a Weakness Policy', () => {
