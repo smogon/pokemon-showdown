@@ -3,7 +3,6 @@
  * @author mia-pi-git
  */
 import {ProcessWrapper, ProcessManager} from './process-manager';
-import * as Sqlite from 'better-sqlite3';
 import * as child_process from 'child_process';
 import * as path from 'path';
 import {FS} from './fs';
@@ -34,6 +33,13 @@ export type DatabaseQuery = {
 } | {
 	type: 'transaction', num: number, data: DataType,
 };
+
+function getModule() {
+	try {
+		return require('better-sqlite3') as import('better-sqlite3');
+	} catch {}
+	return null;
+}
 
 export class DatabaseWrapper implements ProcessWrapper {
 	statements: Map<string, number>;
@@ -134,14 +140,15 @@ class SQLProcessManager extends ProcessManager {
 }
 
 export const PM = new SQLProcessManager(module);
+const Database = getModule();
 
 if (!PM.isParentProcess) {
 	let statementNum = 0;
 	const statements: Map<number, Sqlite.Statement> = new Map();
 	const transactions: Map<number, Sqlite.Transaction> = new Map();
 	const {file, extension} = process.env;
-	const database = new Sqlite(file!);
-	if (extension) {
+	const database = Database ? new Database(file!) : null;
+	if (extension && database) {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const {functions, storedTransactions} = require(`../${extension}`);
 		for (const k in functions) {
@@ -152,12 +159,13 @@ if (!PM.isParentProcess) {
 			transactions.set(transactions.size + 1, transaction);
 		}
 	}
-	database.pragma(`foreign_keys=on`);
+	database?.pragma(`foreign_keys=on`);
 	process.on('message', (query: DatabaseQuery) => {
 		let statement;
 		let results;
 		switch (query.type) {
 		case 'prepare': {
+			if (!database) return process.send!(-1);
 			const {data} = query;
 			const newStatement = database.prepare(data);
 			const nextNum = statementNum++;
@@ -165,18 +173,30 @@ if (!PM.isParentProcess) {
 			return process.send!(nextNum);
 		}
 		case 'all': {
+			if (!database) {
+				results = [];
+				break;
+			}
 			const {num, data} = query;
 			statement = statements.get(num);
 			results = statement?.all(data);
 		}
 			break;
 		case 'get': {
+			if (!database) {
+				results = null;
+				break;
+			}
 			const {num, data} = query;
 			statement = statements.get(num);
 			results = statement?.get(data);
 		}
 			break;
 		case 'run': {
+			if (!database) {
+				results = null;
+				break;
+			}
 			const {num, data} = query;
 			statement = statements.get(num);
 			results = statement?.run(data);
@@ -188,6 +208,10 @@ if (!PM.isParentProcess) {
 		}
 			break;
 		case 'transaction': {
+			if (!database) {
+				results = null;
+				break;
+			}
 			const {num, data} = query;
 			const transaction = transactions.get(num);
 			if (!transaction) break;
