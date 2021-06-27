@@ -1,6 +1,6 @@
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
-type Operator = '^' | '%' | '/' | '*' | '+' | '-';
+type Operator = '^' | 'negative' | '%' | '/' | '*' | '+' | '-' | '(';
 interface Operators {
 	precedence: number;
 	associativity: "Left" | "Right";
@@ -8,6 +8,10 @@ interface Operators {
 
 const OPERATORS: {[k in Operator]: Operators} = {
 	"^": {
+		precedence: 5,
+		associativity: "Right",
+	},
+	"negative": {
 		precedence: 4,
 		associativity: "Right",
 	},
@@ -31,6 +35,10 @@ const OPERATORS: {[k in Operator]: Operators} = {
 		precedence: 2,
 		associativity: "Left",
 	},
+	"(": {
+		precedence: 1,
+		associativity: "Right",
+	},
 };
 
 const BASE_PREFIXES: {[base: number]: string} = {
@@ -43,7 +51,7 @@ const BASE_PREFIXES: {[base: number]: string} = {
 function parseMathematicalExpression(infix: string) {
 	// Shunting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 	const outputQueue: string[] = [];
-	const operatorStack: string[] = [];
+	const operatorStack: Operator[] = [];
 	infix = infix.replace(/\s+/g, "");
 	const infixArray = infix.split(/([+\-*/%^()])/).filter(token => token);
 	let isExprExpected = true;
@@ -53,20 +61,18 @@ function parseMathematicalExpression(infix: string) {
 		} else if ("^%*/+-".includes(token)) {
 			if (isExprExpected) throw new SyntaxError(`Got "${token}" where an expression should be`);
 			const op = OPERATORS[token as Operator];
-			let prevToken = operatorStack[operatorStack.length - 1];
-			let prevOp = OPERATORS[prevToken as Operator];
-			while ("^%*/+-".includes(prevToken) && (
-				op.associativity === "Left" ? op.precedence <= prevOp.precedence : op.precedence < prevOp.precedence
-			)) {
+			let prevToken = operatorStack[operatorStack.length - 1] || '(';
+			let prevOp = OPERATORS[prevToken];
+			while (op.associativity === "Left" ? op.precedence <= prevOp.precedence : op.precedence < prevOp.precedence) {
 				outputQueue.push(operatorStack.pop()!);
-				prevToken = operatorStack[operatorStack.length - 1];
-				prevOp = OPERATORS[prevToken as Operator];
+				prevToken = operatorStack[operatorStack.length - 1] || '(';
+				prevOp = OPERATORS[prevToken];
 			}
-			operatorStack.push(token);
+			operatorStack.push(token as Operator);
 			isExprExpected = true;
 		} else if (token === "(") {
 			if (!isExprExpected) throw new SyntaxError(`Got "(" where an operator should be`);
-			operatorStack.push(token);
+			operatorStack.push(token as Operator);
 			isExprExpected = true;
 		} else if (token === ")") {
 			if (isExprExpected) throw new SyntaxError(`Got ")" where an expression should be`);
@@ -90,13 +96,27 @@ function parseMathematicalExpression(infix: string) {
 	return outputQueue;
 }
 
-function solveRPN(rpn: string[]) {
+function solveRPN(rpn: string[]): [number, number] {
+	let base = 10;
 	const resultStack: number[] = [];
-	for (const token of rpn) {
+	for (let token of rpn) {
 		if (token === 'negative') {
 			if (!resultStack.length) throw new SyntaxError(`Unknown syntax error`);
 			resultStack.push(-resultStack.pop()!);
 		} else if (!"^%*/+-".includes(token)) {
+			if (token.endsWith('h')) {
+				// Convert h suffix for hexadecimal to 0x prefix
+				token = `0x${token.slice(0, -1)}`;
+			} else if (token.endsWith('o')) {
+				// Convert o suffix for octal to 0o prefix
+				token = `0o${token.slice(0, -1)}`;
+			} else if (token.endsWith('b')) {
+				// Convert b suffix for binary to 0b prefix
+				token = `0b${token.slice(0, -1)}`;
+			}
+			if (token.startsWith('0x')) base = 16;
+			if (token.startsWith('0b')) base = 2;
+			if (token.startsWith('0o')) base = 8;
 			let num = Number(token);
 			if (isNaN(num) && token.toUpperCase() in Math) {
 				// @ts-ignore
@@ -133,22 +153,15 @@ function solveRPN(rpn: string[]) {
 		}
 	}
 	if (resultStack.length !== 1) throw new SyntaxError(`Unknown syntax error`);
-	return resultStack.pop();
+	return [resultStack.pop()!, base];
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	math: "calculate",
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');
-		let base = 10;
-		if (target.includes('0x')) {
-			base = 16;
-		} else if (target.includes('0o')) {
-			base = 8;
-		} else if (target.includes('0b')) {
-			base = 2;
-		}
 
+		let base = 0;
 		const baseMatchResult = (/\b(?:in|to)\s+([a-zA-Z]+)\b/).exec(target);
 		if (baseMatchResult) {
 			switch (toID(baseMatchResult[1])) {
@@ -164,7 +177,8 @@ export const commands: ChatCommands = {
 
 		if (!this.runBroadcast()) return;
 		try {
-			const result = solveRPN(parseMathematicalExpression(expression));
+			const [result, inferredBase] = solveRPN(parseMathematicalExpression(expression));
+			if (!base) base = inferredBase;
 			let baseResult = '';
 			if (result && base !== 10) {
 				baseResult = `${BASE_PREFIXES[base]}${result.toString(base).toUpperCase()}`;

@@ -51,9 +51,9 @@ Cosmetic formes are not listed in the `otherFormes` array, only in the `cosmetic
 
 `{name: "Gastrodon", baseForme: "West", cosmeticFormes: ["gastodoneast"]}`
 
-You will still be able to get a data entry for a cosmetic forme with `getSpecies` as normal, though:
+You will still be able to get a data entry for a cosmetic forme with `Dex.species.get` as normal, though, such as `Dex.species.get('gastrodon-east')`:
 
-`{name: "Gastodon-East", forme: "East", baseSpecies: "Gastrodon"}`
+`{name: "Gastrodon-East", forme: "East", baseSpecies: "Gastrodon"}`
 
 
 Visual formes
@@ -192,6 +192,6 @@ Dynamax and Gigantamax are not considered formes by the games themselves. PS imp
 `pokedex.js`
 ------------
 
-All the data shown here is information available from `Dex.getSpecies`. Data in `pokedex.js` will not necessarily contain the same information.
+All the data shown here is information available from `Dex.species.get`. Data in `pokedex.js` will not necessarily contain the same information.
 
 Most importantly, note that cosmetic formes are not listed in `pokedex.js`, but generated automatically from their base forme entry.

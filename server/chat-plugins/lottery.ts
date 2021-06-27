@@ -1,7 +1,6 @@
 const LOTTERY_FILE = 'config/chat-plugins/lottery.json';
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 
 const lotteriesContents = FS(LOTTERY_FILE).readIfExistsSync();
 const lotteries: {
@@ -46,12 +45,22 @@ function endLottery(roomid: RoomID, winners: string[]) {
 	Object.freeze(lottery);
 	writeLotteries();
 }
+
+function isSignedUp(roomid: RoomID, user: User) {
+	const lottery = lotteries[roomid];
+	if (!lottery) return;
+	const participants = lottery.participants;
+	const participantNames = Object.values(participants).map(toID);
+	if (participantNames.includes(user.id)) return true;
+	if (Config.noipchecks) return false;
+	return !!participants[user.latestIp];
+}
+
 function addUserToLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
-	const userSignedup = participants[user.latestIp] || Object.values(participants).map(toID).includes(user.id);
-	if (!userSignedup) {
+	if (!isSignedUp(roomid, user)) {
 		participants[user.latestIp] = user.name;
 		writeLotteries();
 		return true;
@@ -85,7 +94,7 @@ function getWinnersInLottery(roomid: RoomID) {
 	return winners;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	lottery: {
 		''(target, room) {
 			room = this.requireRoom();
@@ -238,9 +247,9 @@ export const commands: ChatCommands = {
 				return this.errorReply('This room does not have a lottery running.');
 			}
 			const canSeeIps = user.can('ip');
-			const participants = Object.entries(lottery.participants).map(([ip, participant]) => {
-				return `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
-			});
+			const participants = Object.entries(lottery.participants).map(
+				([ip, participant]) => `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`
+			);
 			let buf = '';
 			if (user.can('declare', null, room)) {
 				buf += `<details class="readmore"><summary><strong>List of participants (${participants.length}):</strong></summary>${participants.join('<br>')}</details>`;
@@ -265,7 +274,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	lottery(query, user) {
 		this.title = 'Lottery';
 		const room = this.requireRoom();

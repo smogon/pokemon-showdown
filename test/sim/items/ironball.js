@@ -27,12 +27,12 @@ describe('Iron Ball', function () {
 		]});
 		battle.makeChoices('move earthquake', 'move stealthrock');
 		// Earthquake neutral on Aerodactyl
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'switch 2');
 		// Earthquake neutral on Tropius
-		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not deal neutral type effectiveness to Flying-type Pokemon in Gravity', function () {
@@ -47,12 +47,12 @@ describe('Iron Ball', function () {
 
 		battle.makeChoices('move earthquake', 'move stealthrock');
 		// Earthquake supereffective on Aerodactyl
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'switch 2');
 		// Earthquake not very effective on Tropius
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should negate artificial Ground immunities and deal normal type effectiveness', function () {
@@ -63,11 +63,11 @@ describe('Iron Ball', function () {
 			{species: "Parasect", ability: 'levitate', item: 'ironball', moves: ['rest']},
 		]});
 		battle.makeChoices('move earthquake', 'move rest');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move earthquake', 'switch 2');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should ground Pokemon that are airborne', function () {

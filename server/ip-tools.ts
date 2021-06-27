@@ -19,7 +19,7 @@ const HOSTS_FILE = 'config/hosts.csv';
 const PROXIES_FILE = 'config/proxies.csv';
 
 import * as dns from 'dns';
-import {FS} from '../lib/fs';
+import {FS, Net, Utils} from '../lib';
 
 export interface AddressRange {
 	minIP: number;
@@ -44,9 +44,7 @@ export const IPTools = new class {
 
 	readonly connectionTestCache = new Map<string, boolean>();
 
-	// eslint-disable-next-line max-len
-	readonly ipRegex = /\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\b/;
-	// eslint-disable-next-line max-len
+	readonly ipRegex = /^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$/;
 	readonly ipRangeRegex = /^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]|\*)){0,2}\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]|\*)$/;
 	readonly hostRegex = /^.+\..{2,}$/;
 
@@ -150,6 +148,25 @@ export const IPTools = new class {
 		const high = low + (1 << (32 - bits)) - 1;
 		return {minIP: low, maxIP: high};
 	}
+	/** Is this an IP range supported by `stringToRange`? Note that exact IPs are also valid IP ranges. */
+	isValidRange(range: string): boolean {
+		// "127.0.0.*" format
+		if (this.ipRangeRegex.test(range.trim())) return true;
+
+		// "127.0.0.1 - 127.0.0.1" format
+		const ips = range.split('-');
+		if (ips.length === 2) {
+			const [minIP, maxIP] = ips;
+			return this.ipRegex.test(minIP.trim()) && this.ipRegex.test(maxIP.trim());
+		}
+
+		// "127.0.0.0/24" format
+		const cidrParts = range.split('/');
+		if (cidrParts.length !== 2) return false;
+		const [ip, bits] = cidrParts;
+		return this.ipRegex.test(ip.trim()) && /^[1-3]?[0-9]$/.test(bits.trim());
+	}
+	/** does not check for validity; use `validRange` for that; supports both range formats */
 	stringToRange(range: string): AddressRange | null {
 		if (!range) return null;
 		if (range.endsWith('*')) {
@@ -171,22 +188,9 @@ export const IPTools = new class {
 		return {minIP, maxIP};
 	}
 
-	ipSort(a: string, b: string) {
-		let i = 0;
-		let diff = 0;
-		const aParts = a.split('.');
-		const bParts = b.split('.');
-		while (diff === 0) {
-			diff = (parseInt(aParts[i]) || 0) - (parseInt(bParts[i]) || 0);
-			i++;
-		}
-		return diff;
-	}
-
 	/******************************
 	 * Range management functions *
 	 ******************************/
-
 
 	checkPattern(patterns: AddressRange[], num: number) {
 		for (const pattern of patterns) {
@@ -202,8 +206,8 @@ export const IPTools = new class {
 	 * ranges. The checker function returns true if its passed IP is
 	 * in the range.
 	 */
-	checker(rangeString: string | string[]) {
-		if (!rangeString || !rangeString.length) return () => false;
+	checker(rangeString: string | string[]): (ip: string) => boolean {
+		if (!rangeString?.length) return () => false;
 		let ranges: AddressRange[] = [];
 		if (typeof rangeString === 'string') {
 			const rangePatterns = IPTools.stringToRange(rangeString);
@@ -217,11 +221,12 @@ export const IPTools = new class {
 	/**
 	 * Proxy and host management functions
 	 */
-	ranges: AddressRange[] = [];
-	singleIPOpenProxies: Set<string> = new Set();
-	proxyHosts: Set<string> = new Set();
-	residentialHosts: Set<string> = new Set();
-	mobileHosts: Set<string> = new Set();
+	ranges: (AddressRange & {host: string})[] = [];
+	singleIPOpenProxies = new Set<string>();
+	torProxyIps = new Set<string>();
+	proxyHosts = new Set<string>();
+	residentialHosts = new Set<string>();
+	mobileHosts = new Set<string>();
 	async loadHostsAndRanges() {
 		const data = await FS(HOSTS_FILE).readIfExists() + await FS(PROXIES_FILE).readIfExists();
 		// Strip carriage returns for Windows compatibility
@@ -420,9 +425,8 @@ export const IPTools = new class {
 	}
 
 	sortRanges() {
-		IPTools.ranges.sort((a, b) => a.minIP - b.minIP);
+		Utils.sortBy(IPTools.ranges, range => range.minIP);
 	}
-
 
 	getRange(minIP: number, maxIP: number) {
 		for (const range of IPTools.ranges) {
@@ -430,7 +434,7 @@ export const IPTools = new class {
 		}
 	}
 
-	addRange(range: AddressRange) {
+	addRange(range: AddressRange & {host: string}) {
 		if (IPTools.getRange(range.minIP, range.maxIP)) {
 			IPTools.removeRange(range.minIP, range.maxIP);
 		}
@@ -466,7 +470,7 @@ export const IPTools = new class {
 					resolve(`${ip.split('.').slice(0, 2).join('.')}?/unknown`);
 					return;
 				}
-				if (!hosts || !hosts[0]) {
+				if (!hosts?.[0]) {
 					if (ip.startsWith('50.')) {
 						resolve('comcast.net?/res');
 					} else if (ipNumber >= telstraRange.minIP && ipNumber <= telstraRange.maxIP) {
@@ -557,7 +561,7 @@ export const IPTools = new class {
 		if (Punishments.sharedIps.has(ip)) {
 			return 'shared';
 		}
-		if (this.singleIPOpenProxies.has(ip)) {
+		if (this.singleIPOpenProxies.has(ip) || this.torProxyIps.has(ip)) {
 			// single-IP open proxies
 			return 'proxy';
 		}
@@ -601,12 +605,25 @@ export const IPTools = new class {
 		// rdns entry exists but is unrecognized
 		return 'res?';
 	}
+	async updateTorRanges() {
+		try {
+			const raw = await Net('https://check.torproject.org/torbulkexitlist').get();
+			const torIps = raw.split('\n');
+			for (const ip of torIps) {
+				if (this.ipRegex.test(ip)) {
+					this.torProxyIps.add(ip);
+				}
+			}
+		} catch (e) {}
+	}
 };
 
-const telstraRange: AddressRange = {
+const telstraRange: AddressRange & {host: string} = {
 	minIP: IPTools.ipToNumber("101.160.0.0"),
 	maxIP: IPTools.ipToNumber("101.191.255.255"),
 	host: 'telstra.net?/res',
 };
 
 export default IPTools;
+
+void IPTools.updateTorRanges();

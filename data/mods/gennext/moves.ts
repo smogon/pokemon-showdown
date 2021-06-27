@@ -141,7 +141,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
-				this.effectData.hp = Math.floor(target.maxhp / 4);
+				this.effectState.hp = Math.floor(target.maxhp / 4);
 				delete target.volatiles['partiallytrapped'];
 			},
 			onAccuracyPriority: -100,
@@ -153,7 +153,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target === source || move.flags['authentic'] || move.infiltrates) {
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage) {
 					return null;
 				}
@@ -630,19 +630,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon) {
 				if (pokemon.removeVolatile('bidestall') || pokemon.hp <= 1) return false;
 				pokemon.addVolatile('bidestall');
-				this.effectData.totalDamage = 0;
+				this.effectState.totalDamage = 0;
 				this.add('-start', pokemon, 'Bide');
 			},
 			onDamagePriority: -11,
 			onDamage(damage, target, source, effect) {
 				if (!effect || effect.effectType !== 'Move') return;
-				if (!source || source.side === target.side) return;
+				if (!source || source.isAlly(target)) return;
 				if (effect.effectType === 'Move' && damage >= target.hp) {
 					damage = target.hp - 1;
 				}
-				this.effectData.totalDamage += damage;
-				this.effectData.sourcePosition = source.position;
-				this.effectData.sourceSide = source.side;
+				this.effectState.totalDamage += damage;
+				this.effectState.sourceSlot = source.getSlot();
 				return damage;
 			},
 			onAfterSetStatus(status, pokemon) {
@@ -652,18 +651,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onBeforeMove(pokemon, t, move) {
-				if (this.effectData.duration === 1) {
-					if (!this.effectData.totalDamage) {
+				if (this.effectState.duration === 1) {
+					if (!this.effectState.totalDamage) {
 						this.add('-end', pokemon, 'Bide');
 						this.add('-fail', pokemon);
 						return false;
 					}
 					this.add('-end', pokemon, 'Bide');
-					const target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					const target = this.getAtSlot(this.effectState.sourceSlot);
 					const moveData = {
-						damage: this.effectData.totalDamage * 2,
+						damage: this.effectState.totalDamage * 2,
 					} as unknown as ActiveMove;
-					this.moveHit(target, pokemon, this.dex.getActiveMove('bide'), moveData);
+					this.actions.moveHit(target, pokemon, this.dex.getActiveMove('bide'), moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
@@ -823,7 +822,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		condition: {
 			// this is a side condition
-			onStart(side) {
+			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn(pokemon) {
@@ -863,8 +862,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			self: {
 				onHit(target, source) {
-					const stats: BoostName[] = [];
-					let stat: BoostName;
+					const stats: BoostID[] = [];
+					let stat: BoostID;
 					for (stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
@@ -896,8 +895,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			self: {
 				onHit(target, source) {
-					const stats: BoostName[] = [];
-					let stat: BoostName;
+					const stats: BoostID[] = [];
+					let stat: BoostID;
 					for (stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
@@ -923,8 +922,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			self: {
 				onHit(target, source) {
-					const stats: BoostName[] = [];
-					let stat: BoostName;
+					const stats: BoostID[] = [];
+					let stat: BoostID;
 					for (stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
@@ -1309,7 +1308,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock'];
 			for (const condition of sideConditions) {
 				if (user.side.removeSideCondition(condition)) {
-					this.add('-sideend', user.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + user);
+					this.add('-sideend', user.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + user);
 					doubled = true;
 				}
 			}
@@ -2013,10 +2012,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		onModifyMove(move, user) {
 			if (user.illusion) {
-				const illusionMoves = user.illusion.moves.filter(m => this.dex.getMove(m).category !== 'Status');
+				const illusionMoves = user.illusion.moves.filter(m => this.dex.moves.get(m).category !== 'Status');
 				if (!illusionMoves.length) return;
 				// I'll figure out a better fix for this later
-				(move as any).name = this.dex.getMove(this.sample(illusionMoves)).name;
+				(move as any).name = this.dex.moves.get(this.sample(illusionMoves)).name;
 			}
 		},
 		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",

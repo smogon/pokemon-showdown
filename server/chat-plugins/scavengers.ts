@@ -8,8 +8,7 @@
  * @license MIT license
  */
 
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
+import {FS, Utils} from '../../lib';
 import {ScavMods, TwistEvent} from './scavenger-games.js';
 import {ChatHandler} from '../chat';
 
@@ -66,7 +65,7 @@ function getScavsRoom(room?: Room) {
 
 class Ladder {
 	file: string;
-	data: AnyObject;
+	data: {[userid: string]: AnyObject};
 	constructor(file: string) {
 		this.file = file;
 		this.data = {};
@@ -102,26 +101,27 @@ class Ladder {
 		FS(this.file).writeUpdate(() => JSON.stringify(this.data));
 	}
 
+	visualize(sortBy: string): Promise<({rank: number} & AnyObject)[]>;
+	visualize(sortBy: string, userid: ID): Promise<({rank: number} & AnyObject) | undefined>;
 	visualize(sortBy: string, userid?: ID) {
 		// return a promise for async sorting - make this less exploitable
 		return new Promise((resolve, reject) => {
 			let lowestScore = Infinity;
 			let lastPlacement = 1;
 
-			const ladder: AnyObject[] = Object.keys(this.data)
-				.filter(k => this.data[k][sortBy])
-				.sort((a, b) => this.data[b][sortBy] - this.data[a][sortBy])
-				.map((u, i) => {
-					const chunk = this.data[u];
-					if (chunk[sortBy] !== lowestScore) {
-						lowestScore = chunk[sortBy];
-						lastPlacement = i + 1;
-					}
-					return Object.assign(
-						{rank: lastPlacement},
-						chunk
-					);
-				}); // identify ties
+			const ladder = Utils.sortBy(
+				Object.entries(this.data).filter(([u, bit]) => sortBy in bit),
+				([u, bit]) => -bit[sortBy]
+			).map(([u, chunk], i) => {
+				if (chunk[sortBy] !== lowestScore) {
+					lowestScore = chunk[sortBy];
+					lastPlacement = i + 1;
+				}
+				return {
+					rank: lastPlacement,
+					...chunk,
+				} as {rank: number} & AnyObject;
+			}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
@@ -138,7 +138,7 @@ class PlayerLadder extends Ladder {
 	}
 
 	addPoints(name: string, aspect: string, points: number, noUpdate?: boolean) {
-		if (aspect.indexOf('cumulative-') !== 0) {
+		if (!aspect.startsWith('cumulative-')) {
 			this.addPoints(name, `cumulative-${aspect}`, points, noUpdate);
 		}
 		const userid = toID(name);
@@ -155,8 +155,9 @@ class PlayerLadder extends Ladder {
 	}
 
 	// add the different keys to the history - async for larger leaderboards
+	// FIXME: this is not what "async" means
 	softReset() {
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			for (const u in this.data) {
 				const userData = this.data[u];
 				for (const a in userData) {
@@ -209,9 +210,6 @@ function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, 
 	let buffer;
 	if (queue?.length) {
 		buffer = queue.map((item, index) => {
-			const background = !item.hosts.some(h => h.id === viewer.id) && viewer.id !== item.staffHostId ?
-				` style="background-color: lightgray"` :
-				'';
 			const removeButton = `<button name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button>`;
 			const startButton = `<button name="send" value="/scav next ${index}" style="color: green; background-color: transparent; border: none; padding: 1px;">[start]</button>`;
 			const unratedText = item.gameType === 'unrated' ?
@@ -235,7 +233,7 @@ function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, 
 			} else {
 				questions = `[${item.questions.length / 2} hidden questions]`;
 			}
-			return `<tr${background}><td>${removeButton}${startButton}&nbsp;${unratedText}${hosts}${queuedBy}</td><td>${questions}</td></tr>`;
+			return `<tr><td>${removeButton}${startButton}&nbsp;${unratedText}${hosts}${queuedBy}</td><td>${questions}</td></tr>`;
 		}).join("");
 	} else {
 		buffer = `<tr><td colspan=3>The scavenger queue is currently empty.</td></tr>`;
@@ -474,7 +472,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				"You cannot join your own hunt! If you wish to view your questions, use /viewhunt instead!"
 			);
 		}
-		if (user.ips.some(ip => this.joinedIps.includes(ip))) {
+		if (!Config.noipchecks && user.ips.some(ip => this.joinedIps.includes(ip))) {
 			return user.sendTo(this.room, "You already have one alt in the hunt.");
 		}
 		if (this.runEvent('Join', user)) return false;
@@ -528,18 +526,16 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	// returns whether or not the next action should be stopped
 	runEvent(event_id: string, ...args: any[]) {
-		let events = this.mods['on' + event_id];
+		const events = this.mods['on' + event_id];
 		if (!events) return;
 
-		events = events.sort((a, b) => b.priority - a.priority);
+		Utils.sortBy(events, event => -event.priority);
 		let result = undefined;
 
-		if (events) {
-			for (const event of events) {
-				const subResult = event.exec.call(this, ...args) as any;
-				if (subResult === true) return true;
-				result = subResult;
-			}
+		for (const event of events) {
+			const subResult = event.exec.call(this, ...args) as any;
+			if (subResult === true) return true;
+			result = subResult;
 		}
 
 		return result === false ? true : result;
@@ -573,21 +569,25 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return true;
 	}
 
-	setTimer(minutes: string | number) {
-		minutes = Number(minutes);
-
+	setTimer(minutes: number) {
 		if (this.timer) {
 			clearTimeout(this.timer);
-			delete this.timer;
+			this.timer = null;
 			this.timerEnd = null;
 		}
 
+		if (minutes === 0) {
+			return 'off';
+		}
+		if (minutes > 24 * 60) { // 24 hours
+			throw new Chat.ErrorMessage(`Time limit must be under 24 hours (you asked for ${Chat.toDurationString(minutes * 60000)}).`);
+		}
 		if (minutes && minutes > 0) {
 			this.timer = setTimeout(() => this.onEnd(), minutes * 60000);
 			this.timerEnd = Date.now() + minutes * 60000;
 		}
 
-		return minutes || 'off';
+		return minutes;
 	}
 
 	choose(user: User, value: string) {
@@ -655,21 +655,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return true;
 	}
 
-	forceWrap(answer: string) {
-		return Utils.escapeHTML(answer.replace(/[^\s]{30,}/g, word => {
-			let lastBreak = 0;
-			let brokenWord = '';
-			for (let i = 1; i < word.length; i++) {
-				if (i - lastBreak >= 10 || /[^a-zA-Z0-9([{][a-zA-Z0-9]/.test(word.slice(i - 1, i + 1))) {
-					brokenWord += word.slice(lastBreak, i) + '\u200B';
-					lastBreak = i;
-				}
-			}
-			brokenWord += word.slice(lastBreak);
-			return brokenWord;
-		})).replace(/\u200B/g, '<wbr />');
-	}
-
 	onViewHunt(user: User) {
 		if (this.runEvent('ViewHunt', user)) return;
 
@@ -698,7 +683,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				}</td><td>${
 					i + 1 >= qLimit ?
 						`` :
-						this.forceWrap(q.answer.join(' ; '))
+						Utils.escapeHTMLForceWrap(q.answer.join(' ; '))
 				}</td></tr>`
 			)).join("") +
 			`</table><div>`
@@ -750,8 +735,10 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		if (!reset) {
 			const sliceIndex = this.gameType === 'official' ? 5 : 3;
 
+			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
+
 			this.announce(
-				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
+				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
 				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
 				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
 			);
@@ -865,7 +852,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			this.playerTable[i].destroy();
 		}
 		// destroy this game
-		delete this.room.game;
+		this.room.game = null;
 	}
 
 	announce(msg: string) {
@@ -935,14 +922,12 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		const commandMatch = ACCIDENTAL_LEAKS.exec(msg);
 		if (commandMatch) msgId = msgId.slice(toID(commandMatch[0]).length);
 
-		const filtered = this.questions.some(q => {
-			return q.answer.some(a => {
-				a = toID(a);
-				const md = Math.ceil((a.length - 5) / FILTER_LENIENCY);
-				if (Utils.levenshtein(msgId, a, md) <= md) return true;
-				return false;
-			});
-		});
+		const filtered = this.questions.some(q => q.answer.some(a => {
+			a = toID(a);
+			const md = Math.ceil((a.length - 5) / FILTER_LENIENCY);
+			if (Utils.levenshtein(msgId, a, md) <= md) return true;
+			return false;
+		}));
 
 		if (filtered) return "Please do not leak the answer. Use /scavenge [guess] to submit your guess instead.";
 		return;
@@ -965,7 +950,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		for (const u of hostArray) {
 			const id = toID(u);
 			const user = Users.getExact(id);
-			if (!allowOffline && (!user || !user.connected || !(user.id in room.users))) continue;
+			if (!allowOffline && (!user?.connected || !(user.id in room.users))) continue;
 
 			if (!user) {
 				// simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
@@ -1051,16 +1036,16 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-const ScavengerCommands: ChatCommands = {
+const ScavengerCommands: Chat.ChatCommands = {
 	/**
 	 * Player commands
 	 */
 	""() {
-		this.parse("/join scavengers");
+		return this.parse("/join scavengers");
 	},
 
 	guess(target, room, user) {
-		this.parse(`/choose ${target}`);
+		return this.parse(`/choose ${target}`);
 	},
 
 	join(target, room, user) {
@@ -1276,7 +1261,7 @@ const ScavengerCommands: ChatCommands = {
 					game.announce(`${userid} was removed from "${team.name}."`);
 				} else {
 					const targetUser = Users.getExact(userid);
-					if (!targetUser || !targetUser.connected) {
+					if (!targetUser?.connected) {
 						this.errorReply(`User "${userid}" is not currently online.`);
 						continue;
 					}
@@ -1445,7 +1430,7 @@ const ScavengerCommands: ChatCommands = {
 
 		const elapsedMsg = Chat.toDurationString(Date.now() - game.startTime, {hhmmss: true});
 		const gameTypeMsg = game.gameType ? `<em>${game.gameType}</em> ` : '';
-		const hostersMsg = Chat.toListString(game.hosts.map(h => h.name));
+		const hostersMsg = Utils.escapeHTML(Chat.toListString(game.hosts.map(h => h.name)));
 		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ?
 			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
@@ -1487,7 +1472,12 @@ const ScavengerCommands: ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
-		const result = game.setTimer(target);
+		const minutes = (toID(target) === 'off' ? 0 : parseFloat(target));
+		if (isNaN(minutes) || minutes < 0 || (minutes * 60 * 1000) > Chat.MAX_TIMEOUT_DURATION) {
+			throw new Chat.ErrorMessage(`You must specify a timer length that is a postive number.`);
+		}
+
+		const result = game.setTimer(minutes);
 		const message = `The scavenger timer has been ${(result === 'off' ? "turned off" : `set to ${result} minutes`)}`;
 
 		room.add(message + '.');
@@ -1700,6 +1690,7 @@ const ScavengerCommands: ChatCommands = {
 		}
 		if (!target && this.cmd !== 'queuerecycled') {
 			if (this.cmd === 'queue') {
+				// Necessary for broadcasting: this.runBroadcast();
 				const commandHandler = ScavengerCommands.viewqueue as ChatHandler;
 				commandHandler.call(this, target, room, user, this.connection, this.cmd, this.message);
 				return;
@@ -1793,7 +1784,7 @@ const ScavengerCommands: ChatCommands = {
 		}
 		this.checkCan('mute', null, room);
 
-		if (!room.settings.scavQueue || !room.settings.scavQueue.length) {
+		if (!room.settings.scavQueue?.length) {
 			return this.errorReply("The scavenger hunt queue is currently empty.");
 		}
 		if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
@@ -1869,8 +1860,7 @@ const ScavengerCommands: ChatCommands = {
 	 * Leaderboard Commands
 	 */
 	addpoints(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const parts = target.split(',');
@@ -1882,13 +1872,12 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
-		this.privateModAction(`${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.`);
+		this.privateModAction(`${targetId} was given ${points} points on the current scavengers ladder by ${user.name}.`);
 		this.modlog('SCAV ADDPOINTS', targetId, '' + points);
 	},
 
 	removepoints(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const parts = target.split(',');
@@ -1900,18 +1889,17 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
-		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.`);
+		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the current scavengers ladder.`);
 		this.modlog('SCAV REMOVEPOINTS', targetId, '' + points);
 	},
 
 	resetladder(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('declare', null, room);
 
 		Leaderboard.reset().write();
 
-		this.privateModAction(`${user.name} has reset the monthly scavengers ladder.`);
+		this.privateModAction(`${user.name} has reset the current scavengers ladder.`);
 		this.modlog('SCAV RESETLADDER');
 	},
 	top: 'ladder',
@@ -1928,7 +1916,8 @@ const ScavengerCommands: ChatCommands = {
 		const ladder = await Leaderboard.visualize('points') as AnyObject[];
 		this.sendReply(
 			`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
-				const isStaff = room!.auth.has(toID(entry.name));
+				const roomRank = room!.auth.getDirect(toID(entry.name));
+				const isStaff = Users.Auth.atLeast(roomRank, '+');
 				if (isStaff && hideStaff) return '';
 				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Utils.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Utils.escapeHTML(entry.name)}</strong>` : Utils.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
 			}).join('')}</table></div>` +
@@ -2051,9 +2040,10 @@ const ScavengerCommands: ChatCommands = {
 		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
 			const points = [];
-			const source: [string, number[]][] = Object.entries(
-				Object.assign({}, DEFAULT_POINTS, room.settings.scavSettings.winPoints || {})
-			) as [];
+			const source = Object.entries({
+				...DEFAULT_POINTS,
+				...(room.settings.scavSettings.winPoints as typeof DEFAULT_POINTS || {}),
+			});
 
 			for (const entry of source) {
 				points.push(`${entry[0]}: ${entry[1].map((p: number, i: number) => `(${(i + 1)}) ${p}`).join(', ')}`);
@@ -2150,10 +2140,9 @@ const ScavengerCommands: ChatCommands = {
 		if (!this.runBroadcast()) return false;
 
 		let buffer = `<table><tr><th>Twist</th><th>Description</th></tr>`;
-		buffer += Object.keys(ScavMods.twists).map(twistid => {
-			const twist = ScavMods.twists[twistid];
-			return Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`;
-		}).join('');
+		buffer += Object.values(ScavMods.twists).map(twist => (
+			Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`
+		)).join('');
 		buffer += `</table>`;
 
 		this.sendReply(`|raw|<div class="ladder infobox-limited">${buffer}</div>`);
@@ -2164,17 +2153,15 @@ const ScavengerCommands: ChatCommands = {
 	 */
 	huntcount: 'huntlogs',
 	async huntlogs(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		if (target === 'RESET') {
 			this.checkCan('declare', null, room);
-			HostLeaderboard.softReset().then(() => {
-				HostLeaderboard.write();
-				this.privateModAction(`${user.name} has reset the host log leaderboard into the next month.`);
-				this.modlog('SCAV HUNTLOGS', null, 'RESET');
-			});
+			await HostLeaderboard.softReset();
+			HostLeaderboard.write();
+			this.privateModAction(`${user.name} has reset the host log leaderboard into the next month.`);
+			this.modlog('SCAV HUNTLOGS', null, 'RESET');
 			return;
 		} else if (target === 'HARD RESET') {
 			this.checkCan('declare', null, room);
@@ -2191,32 +2178,35 @@ const ScavengerCommands: ChatCommands = {
 		if (!sortingFields.includes(sortMethod)) sortMethod = 'points'; // default sort method
 
 		const data = await HostLeaderboard.visualize(sortMethod) as AnyObject[];
-		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-huntlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Hunts Created</th><th>Total Hunts Created</th><th>History</th></tr>${
-			data.map((entry: AnyObject) => {
-				const auth = room!.auth.get(toID(entry.name)).trim();
-				const color = auth ? 'inherit' : 'gray';
-				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth || '&nbsp;'}</span>${Utils.escapeHTML(entry.name)}</td>` +
-					`<td style="text-align: right;">${(entry.points || 0)}</td>` +
-					`<td style="text-align: right;">${(entry['cumulative-points'] || 0)}</td>` +
-					`<td style="text-align: left;">${entry['history-points'] ? `<span style="color: gray">{ ${entry['history-points'].join(', ')} }</span>` : ''}</td>` +
-					`</tr>`;
-			}).join('')}</table></div><div style="text-align: center">${sortingFields.map(f => {
-			return `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav huntlogs ${f}, 1">${f}</button>`;
-		}).join(' ')}</div>`);
+		this.sendReply(
+			`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-huntlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Hunts Created</th><th>Total Hunts Created</th><th>History</th></tr>${
+				data.map(entry => {
+					const auth = room!.auth.get(toID(entry.name)).trim();
+					const color = auth ? 'inherit' : 'gray';
+					return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth || '&nbsp;'}</span>${Utils.escapeHTML(entry.name)}</td>` +
+						`<td style="text-align: right;">${(entry.points || 0)}</td>` +
+						`<td style="text-align: right;">${(entry['cumulative-points'] || 0)}</td>` +
+						`<td style="text-align: left;">${entry['history-points'] ? `<span style="color: gray">{ ${entry['history-points'].join(', ')} }</span>` : ''}</td>` +
+						`</tr>`;
+				}).join('')
+			}</table></div><div style="text-align: center">${
+				sortingFields.map(
+					f => `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav huntlogs ${f}, 1">${f}</button>`
+				).join(' ')
+			}</div>`
+		);
 	},
 
 	async playlogs(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		if (target === 'RESET') {
 			this.checkCan('declare', null, room);
-			PlayerLeaderboard.softReset().then(() => {
-				PlayerLeaderboard.write();
-				this.privateModAction(`${user.name} has reset the player log leaderboard into the next month.`);
-				this.modlog('SCAV PLAYLOGS', null, 'RESET');
-			});
+			await PlayerLeaderboard.softReset();
+			PlayerLeaderboard.write();
+			this.privateModAction(`${user.name} has reset the player log leaderboard into the next month.`);
+			this.modlog('SCAV PLAYLOGS', null, 'RESET');
 			return;
 		} else if (target === 'HARD RESET') {
 			this.checkCan('declare', null, room);
@@ -2240,26 +2230,30 @@ const ScavengerCommands: ChatCommands = {
 			return d;
 		});
 
-		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-playlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Finished Hunts</th><th>Joined Hunts</th><th>Ratio</th><th>Infractions</th></tr>${
-			formattedData.map(entry => {
-				const auth = room!.auth.get(toID(entry.name)).trim();
-				const color = auth ? 'inherit' : 'gray';
+		this.sendReply(
+			`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-playlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Finished Hunts</th><th>Joined Hunts</th><th>Ratio</th><th>Infractions</th></tr>${
+				formattedData.map(entry => {
+					const auth = room!.auth.get(toID(entry.name)).trim();
+					const color = auth ? 'inherit' : 'gray';
 
-				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth || '&nbsp;'}</span>${Utils.escapeHTML(entry.name)}</td>` +
-					`<td style="text-align: right;">${(entry.finish || 0)} <span style="color: blue">(${(entry['cumulative-finish'] || 0)})</span>${(entry['history-finish'] ? `<br /><span style="color: gray">(History: ${entry['history-finish'].join(', ')})</span>` : '')}</td>` +
-					`<td style="text-align: right;">${(entry.join || 0)} <span style="color: blue">(${(entry['cumulative-join'] || 0)})</span>${(entry['history-join'] ? `<br /><span style="color: gray">(History: ${entry['history-join'].join(', ')})</span>` : '')}</td>` +
-					`<td style="text-align: right;">${entry.ratio}%<br /><span style="color: blue">(${(entry['cumulative-ratio'] || "0.00")}%)</span></td>` +
-					`<td style="text-align: right;">${(entry.infraction || 0)} <span style="color: blue">(${(entry['cumulative-infraction'] || 0)})</span>${(entry['history-infraction'] ? `<br /><span style="color: gray">(History: ${entry['history-infraction'].join(', ')})</span>` : '')}</td>` +
-					`</tr>`;
-			}).join('')}</table></div><div style="text-align: center">${sortingFields.map(f => {
-			return `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav playlogs ${f}, 1">${f}</button>`;
-		}).join(' ')}</div>`);
+					return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth || '&nbsp;'}</span>${Utils.escapeHTML(entry.name)}</td>` +
+						`<td style="text-align: right;">${(entry.finish || 0)} <span style="color: blue">(${(entry['cumulative-finish'] || 0)})</span>${(entry['history-finish'] ? `<br /><span style="color: gray">(History: ${entry['history-finish'].join(', ')})</span>` : '')}</td>` +
+						`<td style="text-align: right;">${(entry.join || 0)} <span style="color: blue">(${(entry['cumulative-join'] || 0)})</span>${(entry['history-join'] ? `<br /><span style="color: gray">(History: ${entry['history-join'].join(', ')})</span>` : '')}</td>` +
+						`<td style="text-align: right;">${entry.ratio}%<br /><span style="color: blue">(${(entry['cumulative-ratio'] || "0.00")}%)</span></td>` +
+						`<td style="text-align: right;">${(entry.infraction || 0)} <span style="color: blue">(${(entry['cumulative-infraction'] || 0)})</span>${(entry['history-infraction'] ? `<br /><span style="color: gray">(History: ${entry['history-infraction'].join(', ')})</span>` : '')}</td>` +
+						`</tr>`;
+				}).join('')
+			}</table></div><div style="text-align: center">${
+				sortingFields.map(
+					f => `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav playlogs ${f}, 1">${f}</button>`
+				).join(' ')
+			}</div>`
+		);
 	},
 
 	uninfract: "infract",
 	infract(target, room, user) {
-		room = this.requireRoom();
-		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		room = this.requireRoom('scavengers' as RoomID);
 		this.checkCan('mute', null, room);
 
 		const targetId = toID(target);
@@ -2310,7 +2304,7 @@ const ScavengerCommands: ChatCommands = {
 			this.privateModAction(`${user.name} has set multiple connections verification to ${setting[target] ? 'ON' : 'OFF'}.`);
 			this.modlog('SCAV MODSETTINGS IPCHECK', null, setting[target] ? 'ON' : 'OFF');
 
-			this.parse('/scav modsettings update');
+			return this.parse('/scav modsettings update');
 		},
 	},
 
@@ -2417,10 +2411,10 @@ const ScavengerCommands: ChatCommands = {
 			}
 			room.settings.scavSettings.addRecycledHuntsToQueueAutomatically =
 				!room.settings.scavSettings.addRecycledHuntsToQueueAutomatically;
+			this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 			if (params[0] === 'on') {
-				this.parse("/scav queuerecycled");
+				return this.parse("/scav queuerecycled");
 			}
-			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 		}
 	},
 
@@ -2438,7 +2432,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	recycledHunts(query, user, connection) {
 		this.title = 'Recycled Hunts';
 		const room = this.requireRoom();
@@ -2480,7 +2474,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	// general
 	scav: 'scavengers',
 	scavengers: ScavengerCommands,
@@ -2548,53 +2542,68 @@ export const commands: ChatCommands = {
 
 		const userCommands = [
 			"<strong>Player commands:</strong>",
-			"- /scavengers - joins the scavengers room.",
-			"- /joinhunt - joins the current scavenger hunt.",
-			"- /leavehunt - leaves the current scavenger hunt.",
-			"- /scavenge <em>[guess]</em> - submits your answer to the current hint.",
-			"- /scavengerstatus - checks your status in the current game.",
-			"- /scavengerhint - views your latest hint in the current game.",
-			"- /scavladder - views the monthly scavenger leaderboard.",
-			"- /scavrank <em>[user]</em> - views the rank of the user on the monthly scavenger leaderboard.  Defaults to the user if no name is provided.",
+			"- /scavengers: Join the scavengers room.",
+			"- /joinhunt: Join the current scavenger hunt.",
+			"- /leavehunt: Leave the current scavenger hunt. Also resets your progress.",
+			"- /viewhunt: Show the ongoing hunt up to where you solved it.",
+			"- /scavenge <em>[guess]</em>: Submit your answer to the current hint.",
+			"- /scavengerstatus  (or /scav status): Check your status in the current hunt.",
+			"- /scavengers queue (or /scav queue): Showcase the hunts currently in queue, with the answers hidden for any hunt that is not yours.",
+			"- /scavengerhint (or /scav hint): View your latest hint in the current game.",
+			"- /scavladder (or /scav top): View the current scavengers leaderboard.",
+			"- /scavrank <em>[user]</em>: View the rank of the user on the current scavenger leaderboard. Defaults to the user if no name is provided.",
+			"For a more in-depth overview, use /scavhelp staff.",
 		].join('<br />');
 		const staffCommands = [
-			"<strong>Staff commands:</strong>",
-			"- /starthunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt. (Requires: % @ * # &)",
-			"- /start(official/practice/mini/unrated)hunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt, giving points if assigned.  Blitz and wins will count towards the leaderboard. (Requires: % @ * # &)",
-			"- /scav addhint <em>[question number], [value]</em> - adds a hint to a question in the current scavenger hunt. Only the host(s) can add a hint.",
-			"- /scav removehint <em>[question number], [hint number]</em> - removes a hint from a question in the current scavenger hunt. Only the host(s) can remove a hint.",
-			"- /scav edithint <em>[question number], [hint number], [value]</em> - edits a hint to a question in the current scavenger hunt. Only the host(s) can edit a hint.",
-			"- /edithunt <em>[question number], [hint | answer], [value]</em> - edits the current scavenger hunt. Only the host(s) can edit the hunt.",
-			"- /resethunt - resets the current scavenger hunt without revealing the hints and answers. (Requires: % @ * # &)",
-			"- /resethunttoqueue - resets the current scavenger hunt without revealing the hints and answers, and adds it directly to the queue. (Requires: % @ * # &)",
-			"- /endhunt - ends the current scavenger hunt and announces the winners and the answers. (Requires: % @ * # &)",
-			"- /viewhunt - views the current scavenger hunt.  Only the user who started the hunt can use this command. Only the host(s) can view the hunt.",
-			"- /inherithunt - becomes the staff host, gaining staff permissions to the current hunt. (Requires: % @ * # &)",
-			"- /scav timer <em>[minutes | off]</em> - sets a timer to automatically end the current hunt. (Requires: % @ * # &)",
-			"- /scav addpoints <em>[user], [amount]</em> - gives the user the amount of scavenger points towards the monthly ladder. (Requires: % @ * # &)",
-			"- /scav removepoints <em>[user], [amount]</em> - takes the amount of scavenger points from the user towards the monthly ladder. (Requires: % @ * # &)",
-			"- /scav resetladder - resets the monthly scavenger leaderboard. (Requires: # &)",
-			"- /scav setpoints <em>[1st place], [2nd place], [3rd place], [4th place], [5th place], ...</em> - sets the point values for the wins. Use `/scav setpoints` to view what the current point values are. (Requires: # &)",
-			"- /scav setblitz <em>[value]</em> ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # &)",
-			"- /scav queue(rated/unrated) <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # &)",
-			"- /scav queuerecycled <em>[number]</em> - queues a recycled hunt from the database. If number is left blank, then a random hunt is queued.",
-			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # &)",
-			"- /scav defaulttimer <em>[value]</em> - sets the default timer applied to automatically started hunts from the queue.",
-			"- /scav twists - shows a list of all the twists that are available on the server.",
-			"- /scav settwist <em>[twist name]</em> - sets the default twist mode for all official hunts. (Requires: # &)",
-			"- /scav resettwist - resets the default twist mode for all official hunts to nothing. (Requires: # &)",
-			"- /starttwist(hunt/practice/official/mini/unrated) <em>[twist] | [host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em>  - creates a new regular scavenger hunt that uses a twist mode in the specified game type.  This can be used inside a scavenger game mode.",
-			"- /nexthunt - starts the next hunt in the queue.",
-			"- /recycledhunts - Modify the database of recycled hunts and enable/disable autoqueing them. More detailed help can be found in /recycledhuntshelp",
+			"<strong>Staff and auth commands:</strong>",
+			"As a <strong>room voice (+)</strong>, you can use the following Scavengers commands, on top of the regular commands (see /scavhelp):",
+			"- /scav edithunt <em>[question number]</em>, <em>[hint | answer]</em>, <em>[value]</em>: Edit the ongoing scavenger hunt. Only the host(s) can edit the hunt.",
+			"- /scav addhint <em>[question number]</em>, <em>[value]</em>: Add a hint to a question in the ongoing scavenger hunt. Only the host(s) can add a hint.",
+			"- /scav edithint <em>[question number]</em>, <em>[hint number]</em>, <em>[value]</em>: Edit a hint to a question in the ongoing scavenger hunt. Only the host(s) can edit a hint.",
+			"- /scav removehint <em>[question number]</em>, <em>[hint number]<e/m> (or /scav deletehint): Remove a hint from a question in the current scavenger hunt. Only the host(s) can remove a hint.",
+			"- /teamscavshelp: Explains the team scavs plugin.",
+			"<br />As a <strong>room driver (%)</strong>, you can also use the following Scavengers commands:",
+			"- /scav queue (unrated) <em>[host(s)]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | ...: Queue a scavenger hunt to be started after the current hunt is finished.",
+			"- /start(official/practice/mini/unrated)hunt <em>[host]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | </em>[answer]</em> | ...: Create a new (official/practice/mini/unrated) scavenger hunt and start it immediately.",
+			"- /scav viewqueue (or /scav queue): Look at the list of queued scavenger hunts. Now also includes the option to remove hunts from the queue.",
+			"- /resethunt: Reset the current scavenger hunt without revealing the hints and answers, nor giving out points.",
+			"- /resethunttoqueue: Reset the ongoing scavenger hunt without revealing the hints and answers, nor giving out points. Then, add it directly to the queue.",
+			"- /scav timer <em>[minutes]</em>: Set a timer to automatically end the current hunt. Setting [minutes] to 0 turns off the timer.",
+			"- /endhunt: End the current scavenger hunt immediately and announce the winners and the answers.",
+			"- /nexthunt: Start the next hunt in the queue.",
+			"- /viewhunt: View the ongoing scavenger hunt. As a host, you can also view the hunt in its entirety.",
+			"- /inherithunt: Become the staff host, gaining staff permissions to the current hunt.",
+			"- /scav games create <em>[game mode]</em>: start a game of the given mode.",
+			"&nbsp;&nbsp;&nbsp;&nbsp;Game modes include: Jump Start, Point Rally, KO games, Scav games and team scavs.",
+			"- /scav games end: End the game of the given type.",
+			"- /starttwist(hunt / practice / official / mini /unrated) <em>[twist]</em> | <em>[host]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | … : Create and start a new scavenger hunt that uses a specified twist mode. This can be used inside a scavenger game mode.",
+			"- /scav twists: Show a list of all the twists that are available on the server.",
+			"- /scav settwist: View the current default official hunt twist that is in use.",
+			"- /scav setpoints: Show the current point distribution for officials, minis and regular hunts.",
+			"- /scav setblitz: Show the current points awarded for Blitzing an official, mini or regular hunt.",
+			"- /scav defaulttimer: Show the default timer applied to hunts started automatically from the queue.",
+			"- /scav addpoints <em>[user]</em>, <em>[amount]</em>: Give the user the specified amount of points towards the current ladder.",
+			"- /scav removepoints <em>[user]</em>, <em>[amount]</em>: Remove the specified amount of points from the user towards the current ladder.",
+			"- /recycledhunts: Modify the database of recycled hunts and enable/disable autoqueing them.",
+			"- /scav queuerecycled <em>[number]</em>: Queue a recycled hunt from the database. If <em>[number]</em> is left blank, then a random hunt is queued.",
+			"- /recycledhuntshelp: give more info about the recycled hunts.",
+			"<br />As a <strong>room owner (#)</strong>, you can also use the following scavengers commands:",
+			"- /scav resetladder: Reset the current scavenger leaderboard.",
+			"- /scav setpoints <em>[1st place]</em>, <em>[2nd place]</em>, <em>[3rd place]</em>, <em>[4th place]</em>, <em>[5th place]</em>, ...: Set the point values for wins of officials, minis and regular hunts.",
+			"- /scav defaulttimer <em>[value]</em>: Set the default timer applied to automatically started hunts from the queue.",
+			"- /scav setblitz <em>[value]</em> ...: Set the blitz award to the given value.",
+			"- /scav settwist <em>[twist name]</em>: Set the default twist mode for all official hunts.",
+			"- /scav resettwist: Reset the default twist mode for all official hunts to nothing.",
+			"- /scav modsettings: Allow or disallow miscellaneous room settings",
 		].join('<br />');
 
 		const gamesCommands = [
 			"<strong>Game commands:</strong>",
-			"- /scav game create <em>[kogames | pointrally | scavengergames]</em> - starts a new scripted scavenger game. (Requires: % @ * # &)",
-			"- /scav game end - ends the current scavenger game. (Requires: % @ * # &)",
-			"- /scav game kick <em>[user]</em> - kicks the user from the current scavenger game. (Requires: % @ * # &)",
-			"- /scav game score - shows the current scoreboard for any game with a leaderboard.",
-			"- /scav game rank <em>[user]</em> - shows a user's rank in the current scavenger game leaderboard.",
+			"- /scav game create <em>[kogames | pointrally | scavengergames | jumpstart | teamscavs]</em>: Start a new scripted scavenger game. (Requires: % @ * # &)",
+			"- /scav game end: End the current scavenger game. (Requires: % @ * # &)",
+			"- /scav game kick <em>[user]</em>: Kick the user from the current scavenger game. (Requires: % @ * # &)",
+			"- /scav game score: Show the current scoreboard for any game with a leaderboard.",
+			"- /scav game rank <em>[user]</em>: Show a user's rank in the current scavenger game leaderboard.",
 		].join('<br />');
 
 		target = toID(target);
@@ -2602,7 +2611,7 @@ export const commands: ChatCommands = {
 		const display = target === 'all' ?
 			`${userCommands}<br /><br />${staffCommands}<br /><br />${gamesCommands}` :
 			(
-				target === 'staff' ? staffCommands :
+				target === 'staff' || target === 'auth' ? staffCommands :
 				target === 'games' || target === 'game' ? gamesCommands : userCommands
 			);
 

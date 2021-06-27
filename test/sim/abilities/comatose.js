@@ -40,13 +40,14 @@ describe('Comatose', function () {
 	});
 
 	it('should allow the use of Snore and Sleep Talk as if the user were asleep', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Komala", ability: 'comatose', moves: ['snore', 'sleeptalk', 'brickbreak']}]});
-		battle.setPlayer('p2', {team: [{species: "Smeargle", ability: 'technician', moves: ['endure']}]});
+		battle = common.createBattle([[
+			{species: "Komala", item: 'normaliumz', ability: 'comatose', moves: ['snore', 'sleeptalk', 'brickbreak']},
+		], [
+			{species: "Smeargle", moves: ['endure']},
+		]]);
 		const defender = battle.p2.active[0];
-		for (let i = 1; i <= 2; i++) {
-			assert.hurts(defender, () => battle.makeChoices('move ' + i, 'move endure'));
-		}
+		assert.hurts(defender, () => battle.makeChoices('move snore', 'move endure'), "Expected damage from Snore.");
+		assert.hurts(defender, () => battle.makeChoices('move sleeptalk', 'move endure'), "Expected damage from Sleep Talk calling Brick Break.");
 	});
 
 	it('should cause the user to be damaged by Dream Eater as if it were asleep', function () {
@@ -67,9 +68,9 @@ describe('Comatose', function () {
 		});
 
 		battle.makeChoices('move endure', 'move hex');
-		assert.equal(bp, battle.dex.getMove('hex').basePower * 2);
+		assert.equal(bp, battle.dex.moves.get('hex').basePower * 2);
 
 		battle.makeChoices('move endure', 'move wakeupslap');
-		assert.equal(bp, battle.dex.getMove('wakeupslap').basePower * 2);
+		assert.equal(bp, battle.dex.moves.get('wakeupslap').basePower * 2);
 	});
 });

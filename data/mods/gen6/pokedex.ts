@@ -65,15 +65,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	raikou: {
 		inherit: true,
-		abilities: {0: "Pressure"},
+		abilities: {0: "Pressure", H: "Volt Absorb"},
+		unreleasedHidden: true,
 	},
 	entei: {
 		inherit: true,
-		abilities: {0: "Pressure"},
+		abilities: {0: "Pressure", H: "Flash Fire"},
+		unreleasedHidden: true,
 	},
 	suicune: {
 		inherit: true,
-		abilities: {0: "Pressure"},
+		abilities: {0: "Pressure", H: "Water Absorb"},
+		unreleasedHidden: true,
 	},
 	swellow: {
 		inherit: true,
@@ -167,70 +170,87 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	arceusbug: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Insect Plate",
 	},
 	arceusdark: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Dread Plate",
 	},
 	arceusdragon: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Draco Plate",
 	},
 	arceuselectric: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Zap Plate",
 	},
 	arceusfairy: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Pixie Plate",
 	},
 	arceusfighting: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Fist Plate",
 	},
 	arceusfire: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Flame Plate",
 	},
 	arceusflying: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Sky Plate",
 	},
 	arceusghost: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Spooky Plate",
 	},
 	arceusgrass: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Meadow Plate",
 	},
 	arceusground: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Earth Plate",
 	},
 	arceusice: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Icicle Plate",
 	},
 	arceuspoison: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Toxic Plate",
 	},
 	arceuspsychic: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Mind Plate",
 	},
 	arceusrock: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Stone Plate",
 	},
 	arceussteel: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Iron Plate",
 	},
 	arceuswater: {
 		inherit: true,
+		color: "Gray",
 		requiredItem: "Splash Plate",
 	},
 	roggenrola: {

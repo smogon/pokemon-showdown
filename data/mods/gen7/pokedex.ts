@@ -80,7 +80,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	heatran: {
 		inherit: true,
-		abilities: {0: "Flash Fire"},
+		abilities: {0: "Flash Fire", H: "Flame Body"},
+		unreleasedHidden: true,
 	},
 	aegislash: {
 		inherit: true,
@@ -154,6 +155,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	tapufini: {
 		inherit: true,
 		abilities: {0: "Misty Surge"},
+	},
+	voodoom: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 85, def: 80, spa: 105, spd: 80, spe: 110},
 	},
 	justyke: {
 		inherit: true,

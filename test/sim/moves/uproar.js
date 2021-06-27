@@ -18,6 +18,14 @@ describe('Uproar', function () {
 		battle.makeChoices('move uproar', 'move rest');
 		assert.equal(battle.p2.active[0].item, '');
 	});
+
+	it('should end if the user is under the effect of Throat Chop', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: "Zoroark", moves: ['uproar']}]});
+		battle.setPlayer('p2', {team: [{species: "Corsola", moves: ['throatchop']}]});
+		battle.makeChoices('move uproar', 'move throatchop');
+		assert.equal(battle.p1.active[0].volatiles['uproar'], undefined);
+	});
 });
 
 describe('Uproar [Gen 5]', function () {

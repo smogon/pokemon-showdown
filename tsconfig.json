@@ -7,7 +7,9 @@
         "moduleResolution": "node",
         "strict": true,
         "allowJs": true,
-        "checkJs": true
+        "checkJs": true,
+        "incremental": true,
+        "allowUnreachableCode": false
     },
     "types": ["node"],
     "exclude": [
@@ -19,9 +21,11 @@
         "./data/text/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
-        "./lib/*",
+        "./lib/*.ts",
         "./server/**/*.ts",
         "./sim/**/*",
-        "./tools/set-import/*.ts"
+        "./tools/set-import/*.ts",
+        "./tools/modlog/*.ts",
+        "./translations/**/*.ts",
     ]
 }

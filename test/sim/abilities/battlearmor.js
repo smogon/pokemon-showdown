@@ -19,11 +19,11 @@ describe('Battle Armor', function () {
 		battle.onEvent('ModifyDamage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
-				assert.ok(!defender.getMoveHitData(move).crit);
+				assert(!defender.getMoveHitData(move).crit);
 			}
 		});
 		battle.makeChoices('move quickattack', 'move frostbreath');
-		assert.ok(successfulEvent);
+		assert(successfulEvent);
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
@@ -36,10 +36,10 @@ describe('Battle Armor', function () {
 		battle.onEvent('ModifyDamage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
-				assert.ok(defender.getMoveHitData(move).crit);
+				assert(defender.getMoveHitData(move).crit);
 			}
 		});
 		battle.makeChoices('move quickattack', 'move frostbreath');
-		assert.ok(successfulEvent);
+		assert(successfulEvent);
 	});
 });

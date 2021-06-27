@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 type Color = 'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black';
 interface Card {
@@ -245,16 +245,17 @@ export class UNO extends Rooms.RoomGame {
 				this.topCard.changedColor = this.discards[1].changedColor || this.discards[1].color;
 				this.sendToRoom(`|raw|${Utils.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
-
-			if (this.timer) clearTimeout(this.timer);
-			this.nextTurn();
 		}
 		if (this.awaitUno === userid) this.awaitUno = null;
+		if (!this.topCard) {
+			throw new Chat.ErrorMessage(`Unable to disqualify ${name}.`);
+		}
 
 		// put that player's cards into the discard pile to prevent cards from being permanently lost
 		this.discards.push(...this.playerTable[userid].hand);
 
 		this.removePlayer(this.playerTable[userid]);
+		this.nextTurn();
 		return name;
 	}
 
@@ -293,7 +294,7 @@ export class UNO extends Rooms.RoomGame {
 	}
 
 	onAwaitUno() {
-		return new Promise(resolve => {
+		return new Promise<void>(resolve => {
 			if (!this.awaitUno) return resolve();
 
 			this.state = "uno";
@@ -308,23 +309,22 @@ export class UNO extends Rooms.RoomGame {
 	}
 
 	nextTurn(starting?: boolean) {
-		void this.onAwaitUno()
-			.then(x => {
-				if (!starting) this.onNextPlayer();
+		void this.onAwaitUno().then(() => {
+			if (!starting) this.onNextPlayer();
 
-				if (this.timer) clearTimeout(this.timer);
-				const player = this.playerTable[this.currentPlayerid];
+			if (this.timer) clearTimeout(this.timer);
+			const player = this.playerTable[this.currentPlayerid];
 
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name}'s turn.`);
-				this.state = 'play';
-				if (player.cardLock) player.cardLock = null;
-				player.sendDisplay();
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name}'s turn.`);
+			this.state = 'play';
+			if (player.cardLock) player.cardLock = null;
+			player.sendDisplay();
 
-				this.timer = setTimeout(() => {
-					this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name} has been automatically disqualified.`);
-					this.eliminate(this.currentPlayerid);
-				}, this.maxTime * 1000);
-			});
+			this.timer = setTimeout(() => {
+				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name} has been automatically disqualified.`);
+				this.eliminate(this.currentPlayerid);
+			}, this.maxTime * 1000);
+		});
 	}
 
 	onNextPlayer() {
@@ -558,7 +558,7 @@ export class UNO extends Rooms.RoomGame {
 		for (const i in this.playerTable) {
 			this.playerTable[i].destroy();
 		}
-		delete this.room.game;
+		this.room.game = null;
 	}
 }
 
@@ -599,13 +599,13 @@ class UNOPlayer extends Rooms.RoomGamePlayer {
 	}
 
 	buildHand() {
-		return this.hand.sort((a, b) => a.color.localeCompare(b.color) || a.value.localeCompare(b.value))
-			.map((c, i) => cardHTML(c, i === this.hand.length - 1));
+		return Utils.sortBy(this.hand, card => [card.color, card.value])
+			.map((card, i) => cardHTML(card, i === this.hand.length - 1));
 	}
 
 	sendDisplay() {
 		const hand = this.buildHand().join('');
-		const players = `<p><strong>Players (${this.game.playerCount}):</strong></p>${this.game.getPlayers(true)}`;
+		const players = `<p><strong>Players (${this.game.playerCount}):</strong></p> ${this.game.getPlayers(true)}`;
 		const draw = '<button class="button" style="width: 45%; background: rgba(0, 0, 255, 0.05)" name=send value="/uno draw">Draw a card!</button>';
 		const pass = '<button class="button" style=" width: 45%; background: rgba(255, 0, 0, 0.05)" name=send value="/uno pass">Pass!</button>';
 		const uno = `<button class="button" style=" width: 90%; background: rgba(0, 255, 0, 0.05); height: 60px; margin-top: 2px;" name=send value="/uno uno ${this.game.unoId || '0'}">UNO!</button>`;
@@ -626,7 +626,7 @@ class UNOPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	uno: {
 		// roomowner commands
 		off: 'disable',
@@ -680,8 +680,8 @@ export const commands: ChatCommands = {
 		setcap(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = room.getGame(UNO);
-			if (!game || game.state !== 'signups') {
+			const game = this.requireGame(UNO);
+			if (game.state !== 'signups') {
 				throw new Chat.ErrorMessage(`There is no UNO game in the signups phase in this room, so adjusting the player cap would do nothing.`);
 			}
 			let cap = parseInt(target);
@@ -696,8 +696,8 @@ export const commands: ChatCommands = {
 		start(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = room.getGame(UNO);
-			if (!game || game.state !== 'signups') {
+			const game = this.requireGame(UNO);
+			if (game.state !== 'signups') {
 				throw new Chat.ErrorMessage("There is no UNO game in signups phase in this room.");
 			}
 			if (game.onStart()) {
@@ -722,8 +722,7 @@ export const commands: ChatCommands = {
 		timer(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = room.getGame(UNO);
-			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room.");
+			const game = this.requireGame(UNO);
 			const amount = parseInt(target);
 			if (!amount || amount < 5 || amount > 300) {
 				throw new Chat.ErrorMessage("The amount must be a number between 5 and 300.");
@@ -741,8 +740,7 @@ export const commands: ChatCommands = {
 		autostart(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = room.getGame(UNO);
-			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
+			const game = this.requireGame(UNO);
 			if (toID(target) === 'off') {
 				if (!game.autostartTimer) throw new Chat.ErrorMessage("There is no autostart timer running on.");
 				this.addModAction(`${user.name} has turned off the UNO autostart timer.`);
@@ -765,8 +763,7 @@ export const commands: ChatCommands = {
 		disqualify(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			const game = room.getGame(UNO);
-			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
+			const game = this.requireGame(UNO);
 
 			const disqualified = game.eliminate(toID(target));
 			if (disqualified === false) throw new Chat.ErrorMessage(`Unable to disqualify ${target}.`);
@@ -778,9 +775,7 @@ export const commands: ChatCommands = {
 		// player/user commands
 		j: 'join',
 		join(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
-			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
+			const game = this.requireGame(UNO);
 			this.checkChat();
 			if (!game.joinGame(user)) throw new Chat.ErrorMessage("Unable to join the game.");
 
@@ -789,16 +784,13 @@ export const commands: ChatCommands = {
 
 		l: 'leave',
 		leave(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
-			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
+			const game = this.requireGame(UNO);
 			if (!game.leaveGame(user)) throw new Chat.ErrorMessage("Unable to leave the game.");
 			return this.sendReply("You have left the game of UNO.");
 		},
 
 		play(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
 			const player: UNOPlayer | undefined = game.playerTable[user.id];
 			if (!player) throw new Chat.ErrorMessage(`You are not in the game of UNO.`);
@@ -817,8 +809,7 @@ export const commands: ChatCommands = {
 		},
 
 		pass(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
 			if (game.currentPlayerid !== user.id) throw new Chat.ErrorMessage("It is currently not your turn.");
 			const player: UNOPlayer | undefined = game.playerTable[user.id];
@@ -831,9 +822,7 @@ export const commands: ChatCommands = {
 		},
 
 		color(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
-			if (!game) return false;
+			const game = this.requireGame(UNO);
 			const player: UNOPlayer | undefined = game.playerTable[user.id];
 			if (!player) throw new Chat.ErrorMessage(`You are not in the game of UNO.`);
 			let color: Color;
@@ -846,9 +835,7 @@ export const commands: ChatCommands = {
 		},
 
 		uno(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
-			if (!game) return false;
+			const game = this.requireGame(UNO);
 			const player: UNOPlayer | undefined = game.playerTable[user.id];
 			if (!player) throw new Chat.ErrorMessage(`You are not in the game of UNO.`);
 			game.onUno(player, toID(target));
@@ -857,19 +844,23 @@ export const commands: ChatCommands = {
 		// information commands
 		'': 'hand',
 		hand(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
-			if (!game) return this.parse("/help uno");
+			const game = this.requireGame(UNO);
 			game.onSendHand(user);
+		},
+
+		'c': 'cards',
+		cards(target, room, user) {
+			const game = this.requireGame(UNO);
+			if (!this.runBroadcast()) return false;
+			const players = `<strong>Players (${game.playerCount}):</strong></p>${game.getPlayers(true)}`;
+			this.sendReplyBox(`<tr><td colspan="2" style="vertical-align: top; padding: 0px 5px 5px 5px"><div style="overflow-y: scroll">${players}</div></td></tr></table>`);
 		},
 
 		players: 'getusers',
 		users: 'getusers',
 		getplayers: 'getusers',
 		getusers(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
-			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
+			const game = this.requireGame(UNO);
 			if (!this.runBroadcast()) return false;
 			this.sendReplyBox(`<strong>Players (${game.playerCount})</strong>:${game.getPlayers()}`);
 		},
@@ -881,8 +872,7 @@ export const commands: ChatCommands = {
 		// suppression commands
 		suppress(target, room, user) {
 			room = this.requireRoom();
-			const game = room.getGame(UNO);
-			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
+			const game = this.requireGame(UNO);
 			this.checkCan('minigame', null, room);
 
 			target = toID(target);
@@ -902,8 +892,7 @@ export const commands: ChatCommands = {
 		},
 
 		spectate(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
 
 			if (!game.suppressMessages) throw new Chat.ErrorMessage("The current UNO game is not suppressing messages.");
@@ -914,8 +903,7 @@ export const commands: ChatCommands = {
 		},
 
 		unspectate(target, room, user) {
-			room = this.requireRoom();
-			const game = room.getGame(UNO);
+			const game = this.requireGame(UNO);
 			if (!game) throw new Chat.ErrorMessage("There is no UNO game going on in this room right now.");
 
 			if (!game.suppressMessages) throw new Chat.ErrorMessage("The current UNO game is not suppressing messages.");
@@ -935,13 +923,14 @@ export const commands: ChatCommands = {
 		`/uno start - starts the current game of UNO. Requires: % @ # &`,
 		`/uno disqualify [player] - disqualifies the player from the game. Requires: % @ # &`,
 		`/uno hand - displays your own hand.`,
+		`/uno cards - displays the number of cards each player`,
 		`/uno getusers - displays the players still in the game.`,
 		`/uno [spectate|unspectate] - spectate / unspectate the current private UNO game.`,
 		`/uno suppress [on|off] - Toggles suppression of game messages.`,
 	],
 };
 
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "UNO",
 	permission: 'editroom',
 	options: [

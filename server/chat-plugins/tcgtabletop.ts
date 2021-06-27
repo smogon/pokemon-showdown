@@ -6,9 +6,7 @@
 */
 
 
-import {Net} from '../../lib/net';
-import {Utils} from '../../lib/utils';
-
+import {Net, Utils} from '../../lib';
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
 
@@ -42,12 +40,11 @@ async function getCardDetails(site: string, id: string) {
 	return result.items[id];
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	ygo: 'yugioh',
 	yugioh(target, room, user) {
 		this.checkBroadcast();
-		room = this.requireRoom();
-		if (room.roomid !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
+		room = this.requireRoom('tcgtabletop' as RoomID);
 		const subdomain = 'yugioh';
 		const query = target.trim();
 		if (!query) return this.parse('/help yugioh');

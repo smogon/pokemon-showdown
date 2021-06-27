@@ -1,7 +1,7 @@
 Simulator protocol
 ==================
 
-Pokémon Showdown's simulator protocol is implemented as a newline-and-pipe-delimited text stream. For details on how to read to or write from the text stream, see `README.md`.
+Pokémon Showdown's simulator protocol is implemented as a newline-and-pipe-delimited text stream. For details on how to read to or write from the text stream, see [sim/SIMULATOR.md](./SIMULATOR.md).
 
 
 Receiving messages
@@ -59,7 +59,7 @@ The beginning of a battle will look something like this:
 
 `|gametype|GAMETYPE`
 
-> - `GAMETYPE` is `singles`, `doubles`, `triples`, `multi`, or `free-for-all`.
+> - `GAMETYPE` is `singles`, `doubles`, `triples`, `multi`, or `freeforall`.
 
 `|gen|GENNUM`
 

@@ -25,7 +25,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.randomChance(1, 2)) {
 				return;
 			}
-			const damage = this.getDamage(pokemon, pokemon, 40);
+			const damage = this.actions.getConfusionDamage(pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
 			this.damage(damage, pokemon, pokemon, {
 				id: 'confused',
