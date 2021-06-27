@@ -174,7 +174,7 @@ if (!PM.isParentProcess) {
 		}
 		case 'all': {
 			if (!database) {
-				results = null;
+				results = [];
 				break;
 			}
 			const {num, data} = query;
@@ -189,7 +189,7 @@ if (!PM.isParentProcess) {
 			}
 			const {num, data} = query;
 			statement = statements.get(num);
-			results = statement?.get(data);
+			results = statement?.get(data) || null;
 		}
 			break;
 		case 'run': {
@@ -199,7 +199,7 @@ if (!PM.isParentProcess) {
 			}
 			const {num, data} = query;
 			statement = statements.get(num);
-			results = statement?.run(data);
+			results = statement?.run(data) || null;
 		}
 			break;
 		case 'exec': {
@@ -214,7 +214,10 @@ if (!PM.isParentProcess) {
 			}
 			const {num, data} = query;
 			const transaction = transactions.get(num);
-			if (!transaction) break;
+			if (!transaction) {
+				results = null;
+				break;
+			}
 			results = transaction(data);
 		}
 			break;
