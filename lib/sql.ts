@@ -179,7 +179,7 @@ if (!PM.isParentProcess) {
 			}
 			const {num, data} = query;
 			statement = statements.get(num);
-			results = statement?.all(data);
+			results = statement?.all(data) || [];
 		}
 			break;
 		case 'get': {
