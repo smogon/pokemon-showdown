@@ -174,7 +174,7 @@ if (!PM.isParentProcess) {
 		}
 		case 'all': {
 			if (!database) {
-				results = [];
+				results = null;
 				break;
 			}
 			const {num, data} = query;
