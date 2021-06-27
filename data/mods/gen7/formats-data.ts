@@ -1235,7 +1235,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	quagsire: {
 		randomBattleMoves: ["earthquake", "encore", "icebeam", "recover", "scald", "toxic"],
 		randomDoubleBattleMoves: ["earthquake", "icywind", "protect", "recover", "scald", "toxic"],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 	},
 	murkrow: {
