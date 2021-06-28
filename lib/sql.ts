@@ -6,6 +6,7 @@ import {ProcessWrapper, ProcessManager} from './process-manager';
 import * as child_process from 'child_process';
 import * as path from 'path';
 import {FS} from './fs';
+import type * as sqlite from 'better-sqlite3';
 
 interface SQLOptions {
 	file: string;
@@ -14,6 +15,7 @@ interface SQLOptions {
 }
 
 type DataType = unknown[] | Record<string, unknown>;
+type Statement = string | number;
 
 export type DatabaseQuery = {
 	/** Prepare a statement - data is the statement. */
@@ -36,9 +38,10 @@ export type DatabaseQuery = {
 
 function getModule() {
 	try {
-		return require('better-sqlite3') as import('better-sqlite3');
-	} catch {}
-	return null;
+		return require('better-sqlite3') as typeof sqlite;
+	} catch {
+		return null;
+	}
 }
 
 export class DatabaseWrapper implements ProcessWrapper {
@@ -71,7 +74,7 @@ export class DatabaseWrapper implements ProcessWrapper {
 		}
 		return Promise.resolve();
 	}
-	get load() {
+	getLoad() {
 		return this.pendingRequests.length;
 	}
 	runFile(filename: string) {
@@ -90,21 +93,21 @@ export class DatabaseWrapper implements ProcessWrapper {
 		if (typeof int === 'number') this.statements.set(statement, int);
 		return int;
 	}
-	all(statement: string | number, data: DataType = {}) {
+	all(statement: Statement, data: DataType = {}) {
 		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
 		if (num === undefined || ![...this.statements.values()].includes(num)) {
 			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
 		}
 		return this.query({type: 'all', num: num, data});
 	}
-	get(statement: string | number, data: DataType = {}) {
+	get(statement: Statement, data: DataType = {}) {
 		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
 		if (num === undefined || ![...this.statements.values()].includes(num)) {
 			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
 		}
 		return this.query({type: 'get', data, num});
 	}
-	run(statement: string | number, data: DataType) {
+	run(statement: Statement, data: DataType) {
 		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
 		if (num === undefined || ![...this.statements.values()].includes(num)) {
 			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
@@ -144,8 +147,8 @@ const Database = getModule();
 
 if (!PM.isParentProcess) {
 	let statementNum = 0;
-	const statements: Map<number, Sqlite.Statement> = new Map();
-	const transactions: Map<number, Sqlite.Transaction> = new Map();
+	const statements: Map<number, sqlite.Statement> = new Map();
+	const transactions: Map<number, sqlite.Transaction> = new Map();
 	const {file, extension} = process.env;
 	const database = Database ? new Database(file!) : null;
 	if (extension && database) {
@@ -204,7 +207,8 @@ if (!PM.isParentProcess) {
 			break;
 		case 'exec': {
 			const {data} = query;
-			database.exec(data);
+			database?.exec(data);
+			results = !!database;
 		}
 			break;
 		case 'transaction': {
@@ -218,7 +222,7 @@ if (!PM.isParentProcess) {
 				results = null;
 				break;
 			}
-			results = transaction(data);
+			results = transaction(database, data);
 		}
 			break;
 		}
