@@ -1566,13 +1566,13 @@ export class Battle {
 						reasonsUnable.splice(reasonsUnable.indexOf('frz'), 1);
 					}
 
-					/* I want to reevaluate this block because it doesn't cover every case of transform
-					if (!(pokemon.set.moves.map(toID).includes('transform' as ID) && pokemon.set.moves.length <= 1) ||
-            (this.dex.currentMod === 'gen1stadium' && pokemon.species.id === 'ditto')) {
+					if (reasonsUnable.includes('transform') &&
+            (!(pokemon.set.moves.map(toID).includes('transform' as ID) && pokemon.set.moves.length <= 1) ||
+            (this.dex.currentMod === 'gen1stadium' && pokemon.species.id === 'ditto'))) {
 						// Ditto naturally cannot cause an endless battle in Stadium, according to research
-						onlyTransform = false;
+						reasonsUnable.splice(reasonsUnable.indexOf('transform'), 1);
 					}
-          */
+
 					if (reasonsUnable.includes('struggle') && pokemon.status !== 'frz' as ID) {
 						let currentPP = 0;
 						for (const move of pokemon.moveSlots) {
