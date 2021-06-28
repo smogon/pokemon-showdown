@@ -849,7 +849,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["dragonpulse", "energyball", "flamethrower", "protect", "trickroom"],
 		randomDoubleBattleLevel: 88,
-		tier: "(PU)",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	cubone: {
