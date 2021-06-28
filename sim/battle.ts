@@ -1554,36 +1554,47 @@ export class Battle {
 
 		// Gen 1 Endless Battle Clause triggers
 		if (this.gen <= 1) {
-			let onlyTransform = true;
-			let onlyGhostsWithStruggle = true;
-			let onlyFrozen = true;
+			let sidesUnableToMove = 0;
 			for (const side of this.sides) {
+				const reasonsUnable = ['struggle', 'frz', 'transform'];
+				if (this.dex.currentMod === 'gen1stadium') {
+					reasonsUnable.splice(reasonsUnable.indexOf('struggle'), 1);
+				}
 				for (const pokemon of side.pokemon) {
 					if (pokemon.fainted) continue;
-					if (pokemon.status !== 'frz' as ID) {
-						onlyFrozen = false;
+					if (pokemon.status !== 'frz' as ID && reasonsUnable.includes('frz')) {
+						reasonsUnable.splice(reasonsUnable.indexOf('frz'), 1);
 					}
 
+					/* I want to reevaluate this block because it doesn't cover every case of transform
 					if (!(pokemon.set.moves.map(toID).includes('transform' as ID) && pokemon.set.moves.length <= 1) ||
             (this.dex.currentMod === 'gen1stadium' && pokemon.species.id === 'ditto')) {
 						// Ditto naturally cannot cause an endless battle in Stadium, according to research
 						onlyTransform = false;
 					}
-
-					if (!pokemon.getTypes().includes('Ghost') || this.dex.currentMod === 'gen1stadium') {
-						onlyGhostsWithStruggle = false;
-					} else {
+          */
+					if (reasonsUnable.includes('struggle') && pokemon.status !== 'frz' as ID) {
 						let currentPP = 0;
 						for (const move of pokemon.moveSlots) {
 							currentPP += move.pp;
 						}
 						if (currentPP >= 1) {
-							onlyGhostsWithStruggle = false;
+							reasonsUnable.splice(reasonsUnable.indexOf('struggle'), 1);
 						}
 					}
 				}
+				if (reasonsUnable.includes('struggle')) {
+					for (const pokemon of side.foe.pokemon) {
+						if (pokemon.fainted) continue;
+						if (!pokemon.getTypes().includes('Ghost')) {
+							reasonsUnable.splice(reasonsUnable.indexOf('struggle'), 1);
+							break;
+						}
+					}
+				}
+				if (reasonsUnable.length) sidesUnableToMove++;
 			}
-			if (onlyFrozen || onlyGhostsWithStruggle || onlyTransform) {
+			if (sidesUnableToMove > 1) {
 				this.add('-message', `This battle cannot progress, therefore it will end prematurely.`);
 				return this.tie();
 			}
