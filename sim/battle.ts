@@ -1554,48 +1554,27 @@ export class Battle {
 
 		// Gen 1 Endless Battle Clause triggers
 		if (this.gen <= 1) {
-			let sidesUnableToMove = 0;
-			for (const side of this.sides) {
-				const reasonsUnable = ['struggle', 'frz', 'transform'];
-				if (this.dex.currentMod === 'gen1stadium') {
-					reasonsUnable.splice(reasonsUnable.indexOf('struggle'), 1);
-				}
-				for (const pokemon of side.pokemon) {
-					if (pokemon.fainted) continue;
-					if (pokemon.status !== 'frz' as ID && reasonsUnable.includes('frz')) {
-						reasonsUnable.splice(reasonsUnable.indexOf('frz'), 1);
-					}
-
-					if (reasonsUnable.includes('transform') &&
-            (!(pokemon.set.moves.map(toID).includes('transform' as ID) && pokemon.set.moves.length <= 1) ||
-            (this.dex.currentMod === 'gen1stadium' && pokemon.species.id === 'ditto'))) {
-						// Ditto naturally cannot cause an endless battle in Stadium, according to research
-						reasonsUnable.splice(reasonsUnable.indexOf('transform'), 1);
-					}
-
-					if (reasonsUnable.includes('struggle') && pokemon.status !== 'frz' as ID) {
-						let currentPP = 0;
-						for (const move of pokemon.moveSlots) {
-							currentPP += move.pp;
-						}
-						if (currentPP >= 1) {
-							reasonsUnable.splice(reasonsUnable.indexOf('struggle'), 1);
-						}
-					}
-				}
-				if (reasonsUnable.includes('struggle')) {
-					for (const pokemon of side.foe.pokemon) {
-						if (pokemon.fainted) continue;
-						if (!pokemon.getTypes().includes('Ghost')) {
-							reasonsUnable.splice(reasonsUnable.indexOf('struggle'), 1);
-							break;
-						}
-					}
-				}
-				if (reasonsUnable.length) sidesUnableToMove++;
-			}
-			if (sidesUnableToMove > 1) {
-				this.add('-message', `This battle cannot progress, therefore it will end prematurely.`);
+			const noProgressPossible = this.sides.every(side => {
+				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.types.includes('Ghost'));
+				const foeAllTransform = side.foe.pokemon.every(pokemon => (
+					// true if transforming into this pokemon would lead to an endless battle
+					// Transform will fail (depleting PP) if used against Ditto in Stadium 1
+					(this.dex.currentMod !== 'gen1stadium' || pokemon.species.id !== 'ditto') &&
+					// there are some subtleties such as a Mew with only Transform and auto-fail moves,
+					// but it's unlikely to come up in a real game so there's no need to handle it
+					pokemon.moves.every(moveid => moveid === 'transform')
+				));
+				return side.pokemon.every(pokemon => (
+					// frozen pokemon can't thaw in gen 1 without outside help
+					pokemon.status === 'frz' ||
+					// a pokemon can't lose PP if it Transforms into a pokemon with only Transform
+					(pokemon.moves.every(moveid => moveid === 'transform') && foeAllTransform) ||
+					// Struggle can't damage yourself if every foe is a Ghost
+					pokemon.moveSlots.every(slot => slot.pp === 0) && foeAllGhosts
+				));
+			});
+			if (noProgressPossible) {
+				this.add('-message', `This battle cannot progress. Endless Battle Clause activated!`);
 				return this.tie();
 			}
 		}
