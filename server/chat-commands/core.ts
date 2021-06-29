@@ -605,6 +605,8 @@ export const commands: Chat.ChatCommands = {
 		if (!targetId || !message) {
 			return this.parse(`/help msgroom`);
 		}
+		this.checkRecursion();
+		
 		const targetRoom = Rooms.search(targetId.trim());
 		if (!targetRoom) return this.errorReply(`Room not found.`);
 		if (message.trim().startsWith('/msgroom ')) {
@@ -634,6 +636,8 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(this.tr`You forgot the comma.`);
 			return this.parse('/help msg');
 		}
+		this.checkRecursion();
+
 		const {targetUser, targetUsername, rest: message} = this.splitUser(target);
 		if (targetUsername === '~') {
 			this.pmTarget = null;

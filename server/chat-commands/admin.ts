@@ -467,7 +467,11 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	botmsg(target, room, user, connection) {
-		if (!target || !target.includes(',')) return this.parse('/help botmsg');
+		if (!target || !target.includes(',')) {
+			return this.parse('/help botmsg');
+		}
+		this.checkRecursion();
+
 		let {targetUser, rest: message} = this.requireUser(target);
 
 		const auth = this.room ? this.room.auth : Users.globalAuth;
