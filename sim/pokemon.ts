@@ -1130,6 +1130,13 @@ export class Pokemon {
 			return false;
 		}
 
+		if (this.battle.dex.currentMod === 'gen1stadium' && (
+			species.name === 'Ditto' ||
+			(this.species.name === 'Ditto' && pokemon.moves.includes('transform'))
+		)) {
+			return false;
+		}
+
 		if (!this.setSpecies(species, effect, true)) return false;
 
 		this.transformed = true;
