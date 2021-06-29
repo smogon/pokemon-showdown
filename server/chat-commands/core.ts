@@ -606,7 +606,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/help msgroom`);
 		}
 		this.checkRecursion();
-		
+
 		const targetRoom = Rooms.search(targetId.trim());
 		if (!targetRoom) return this.errorReply(`Room not found.`);
 		if (message.trim().startsWith('/msgroom ')) {
