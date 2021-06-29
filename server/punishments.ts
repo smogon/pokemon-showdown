@@ -1454,25 +1454,17 @@ export const Punishments = new class {
 		return '';
 	}
 
-	hasPunishType(name: string, type: string) {
-		return Punishments.userids.get(name)?.some(p => p.type === type);
+	hasPunishType(name: string, types: string | string[], ip?: string) {
+		if (typeof types === 'string') types = [types];
+		const byName = Punishments.userids.get(name)?.some(p => types.includes(p.type));
+		if (!ip) return byName;
+		return byName || Punishments.ipSearch(ip)?.some(p => types.includes(p.type));
 	}
 
-	getRoomPunishType(room: Room, name: string) {
-		const idPunishments = Punishments.roomUserids.nestedGet(room.roomid, toID(name));
-		let punishment = idPunishments?.[0];
-		if (punishment) return punishment.type;
-		const user = Users.get(name);
-		if (!user) return;
-		const ipPunishments = Punishments.roomIps.nestedGet(room.roomid, user.latestIp);
-		punishment = ipPunishments?.[0];
-		if (punishment) return punishment.type;
-		return '';
-	}
-
-	hasRoomPunishType(room: Room | RoomID, name: string, type: string) {
+	hasRoomPunishType(room: Room | RoomID, name: string, types: string | string[]) {
+		if (typeof types === 'string') types = [types];
 		if (typeof (room as Room).roomid === 'string') room = (room as Room).roomid;
-		return Punishments.roomUserids.nestedGet(room as RoomID, name)?.some(p => p.type === type);
+		return Punishments.roomUserids.nestedGet(room as RoomID, name)?.some(p => types.includes(p.type));
 	}
 
 	sortedTypes = ['TICKETBAN', 'LOCK', 'NAMELOCK', 'BAN'];
