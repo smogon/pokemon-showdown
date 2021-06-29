@@ -50,6 +50,7 @@ interface MoveFlags {
 
 export interface HitEffect {
 	onHit?: MoveEventMethods['onHit'];
+	onAfterHit?: MoveEventMethods['onAfterHit'];
 
 	// set pokemon conditions
 	boosts?: SparseBoostsTable | null;
