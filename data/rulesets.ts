@@ -489,7 +489,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'Species Clause: Limit one of each Pokémon');
 		},
 		onValidateTeam(team, format) {
-			const speciesTable: Set<number> = new Set();
+			const speciesTable = new Set<number>();
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				if (speciesTable.has(species.num)) {
@@ -504,7 +504,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Nickname Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same nickname",
 		onValidateTeam(team, format) {
-			const nameTable: Set<string> = new Set();
+			const nameTable = new Set<string>();
 			for (const set of team) {
 				const name = set.name;
 				if (name) {
@@ -527,7 +527,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'Item Clause: Limit one of each item');
 		},
 		onValidateTeam(team) {
-			const itemTable: Set<string> = new Set();
+			const itemTable = new Set<string>();
 			for (const set of team) {
 				const item = this.toID(set.item);
 				if (!item) continue;
@@ -1196,7 +1196,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'Forme Clause: Limit one of each forme of a Pokémon');
 		},
 		onValidateTeam(team) {
-			const formeTable: Set<string> = new Set();
+			const formeTable = new Set<string>();
 			for (const set of team) {
 				let species = this.dex.species.get(set.species);
 				if (species.name !== species.baseSpecies) {
