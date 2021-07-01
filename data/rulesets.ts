@@ -1557,4 +1557,27 @@ export const Rulesets: {[k: string]: FormatData} = {
 			pokemon.setSpecies(newSpecies, null);
 		},
 	},
+	bonustyperule: {
+		name: "Bonus Type Rule",
+		effectType: "Rule",
+		desc: `Pok&eacute;mon can be nicknamed the name of a type to have that type added onto their current ones.`,
+		onBegin() {
+			this.add('rule', 'Bonus Type Rule: Pok\u00e9mon can be nicknamed the name of a type to have that type added onto their current ones.');
+		},
+		onModifySpeciesPriority: 1,
+		onModifySpecies(species, target, source, effect) {
+			if (!target) return; // Chat command
+			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
+			const typesSet = new Set(species.types);
+			const bonusType = this.dex.types.get(target.set.name);
+			if (bonusType.exists) typesSet.add(bonusType.name);
+			return {...species, types: [...typesSet]};
+		},
+		onSwitchIn(pokemon) {
+			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+		},
+		onAfterMega(pokemon) {
+			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+		},
+	},
 };

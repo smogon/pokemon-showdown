@@ -582,47 +582,88 @@ export const Formats: FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 8] Bonus Type",
-		desc: `Pok&eacute;mon can be nicknamed the name of a type to have that type added onto their current ones.`,
+		name: "[Gen 8] First Blood",
+		desc: `The first team to have a Pok&eacute;mon faint loses.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3683173/">Bonus Type</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3682954/">First Blood</a>`,
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard', 'Dynamax Clause', '!Nickname Clause'],
+		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus', 'Genesect',
-			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia',
-			'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa',
-			'Rayquaza', 'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned',
-			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Eternatus', 'Genesect', 'Giratina',
+			'Giratina-Origin', 'Groudon', 'Heatran', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Landorus-Base',
+			'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Porygon-Z',
+			'Rayquaza', 'Reshiram', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
+			'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Magnet Pull', 'Moody', 'Power Construct', 'Shadow Tag', 'Eject Button',
+			'Baton Pass', 'Swagger',
 		],
-		onModifySpeciesPriority: 1,
-		onModifySpecies(species, target, source, effect) {
-			if (!target) return; // Chat command
-			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
-			const typesSet = new Set(species.types);
-			const bonusType = this.dex.types.get(target.set.name);
-			if (bonusType.exists) typesSet.add(bonusType.name);
-			return {...species, types: [...typesSet]};
-		},
-		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-		},
-		onAfterMega(pokemon) {
-			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+		onFaint(target) {
+			this.lose(target.side);
 		},
 	},
 	{
-		name: "[Gen 8] Chimera 1v1",
-		desc: `Bring 6 Pok&eacute;mon and choose their order at Team Preview. The lead Pok&eacute;mon then receives the item, ability, stats, and moves of the other five Pok&eacute;mon, which play no further part in the battle.`,
+		name: "[Gen 8] Partners in Crime",
+		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661215/">Chimera 1v1</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3664347/">Partners in Crime</a>`,
 		],
 
-		mod: 'gen8',
-		ruleset: ['Chimera 1v1 Rule', 'Standard', 'Dynamax Clause', 'Sleep Moves Clause'],
-		banlist: ['Shedinja', 'Huge Power', 'Moody', 'Neutralizing Gas', 'Perish Body', 'Truant', 'Eviolite', 'Focus Sash', 'Perish Song', 'Transform', 'Trick', 'Fishious Rend', 'Bolt Beak', 'Disable', 'Double Iron Bash', 'Switcheroo'],
+		mod: 'partnersincrime',
+		gameType: 'doubles',
+		ruleset: ['[Gen 8] Doubles OU'],
+		banlist: [
+			'Arctovish', 'Arctozolt', 'Dracovish', 'Dracozolt', 'Golisopod', 'Wimpod',
+			'Huge Power', 'Imposter', 'Normalize', 'Pure Power', 'Trace', 'Wonder Guard',
+		],
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			for (const side of this.sides) {
+				if (side.allies().every(ally => ally && !ally.fainted)) {
+					const a = side.active[0];
+					const b = side.active[1];
+					const aInnate = 'ability:' + b.ability;
+					a.volatiles[aInnate] = {id: aInnate, target: a};
+					const bInnate = 'ability:' + a.ability;
+					b.volatiles[bInnate] = {id: bInnate, target: b};
+				}
+			}
+			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+			if (ally && ally.ability !== pokemon.ability) {
+				if (!pokemon.m.innate) {
+					pokemon.m.innate = 'ability:' + ally.ability;
+					delete pokemon.volatiles[pokemon.m.innate];
+					pokemon.addVolatile(pokemon.m.innate);
+				}
+				if (!ally.m.innate) {
+					ally.m.innate = 'ability:' + pokemon.ability;
+					delete ally.volatiles[ally.m.innate];
+					ally.addVolatile(ally.m.innate);
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.m.innate) {
+				pokemon.removeVolatile(pokemon.m.innate);
+				delete pokemon.m.innate;
+			}
+			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+			if (ally && ally.m.innate) {
+				ally.removeVolatile(ally.m.innate);
+				delete ally.m.innate;
+			}
+		},
+		onFaint(pokemon) {
+			if (pokemon.m.innate) {
+				pokemon.removeVolatile(pokemon.m.innate);
+				delete pokemon.m.innate;
+			}
+			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+			if (ally && ally.m.innate) {
+				ally.removeVolatile(ally.m.innate);
+				delete ally.m.innate;
+			}
+		},
 	},
 
 	// Other Metagames
@@ -1827,38 +1868,40 @@ export const Formats: FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 7] UU",
+		name: "[Gen 2] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3621217/">USM UU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3641346/">USM UU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286282/">GSC Ubers</a>`,
 		],
 
-		mod: 'gen7',
-		// searchShow: false,
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought', 'Kommonium Z', 'Mewnium Z'],
-	},
-	{
-		name: "[Gen 3] NU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3503540/">ADV NU Viability Rankings</a>`,
-		],
-
-		mod: 'gen3',
-		// searchShow: false,
-		ruleset: ['[Gen 3] UU', '!NFE Clause'],
-		banlist: ['UU'],
-		unbanlist: ['Baton Pass'],
-	},
-	{
-		name: "[Gen 1] Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286283/">RBY Ubers</a>`,
-		],
-
-		mod: 'gen1',
+		mod: 'gen2',
 		// searchShow: false,
 		ruleset: ['Standard'],
+	},
+	{
+		name: "[Gen 5] RU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3473124/">BW2 RU Viability Rankings</a>`,
+		],
+
+		mod: 'gen5',
+		// searchShow: false,
+		ruleset: ['[Gen 5] UU', '!Sleep Clause Mod', 'Sleep Moves Clause'],
+		banlist: ['UU', 'RUBL', 'Shadow Tag', 'Shell Smash + Baton Pass'],
+	},
+	{
+		name: "[Gen 1] Stadium OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3685877/">Stadium OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen1stadium',
+		// searchShow: false,
+		ruleset: ['Standard', 'Team Preview'],
+		banlist: ['Uber',
+			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
+			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
+		],
 	},
 
 	// Past Gens OU
@@ -2091,6 +2134,18 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard', 'Mega Rayquaza Clause'],
 		banlist: ['Baton Pass'],
+	},
+	{
+		name: "[Gen 7] UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3621217/">USM UU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3641346/">USM UU Viability Rankings</a>`,
+		],
+
+		mod: 'gen7',
+		searchShow: false,
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought', 'Kommonium Z', 'Mewnium Z'],
 	},
 	{
 		name: "[Gen 7] RU",
@@ -2678,18 +2733,6 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'OU', 'UUBL', 'Arena Trap', 'Drought', 'Sand Stream', 'Snow Warning'],
 	},
 	{
-		name: "[Gen 5] RU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3473124/">BW2 RU Viability Rankings</a>`,
-		],
-
-		mod: 'gen5',
-		searchShow: false,
-		ruleset: ['[Gen 5] UU', '!Sleep Clause Mod', 'Sleep Moves Clause'],
-		banlist: ['UU', 'RUBL', 'Shadow Tag', 'Shell Smash + Baton Pass'],
-	},
-	{
 		name: "[Gen 5] NU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
@@ -2997,6 +3040,18 @@ export const Formats: FormatList = [
 		unbanlist: ['Scyther', 'Sand Veil'],
 	},
 	{
+		name: "[Gen 3] NU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503540/">ADV NU Viability Rankings</a>`,
+		],
+
+		mod: 'gen3',
+		searchShow: false,
+		ruleset: ['[Gen 3] UU', '!NFE Clause'],
+		banlist: ['UU'],
+		unbanlist: ['Baton Pass'],
+	},
+	{
 		name: "[Gen 3] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
@@ -3028,16 +3083,6 @@ export const Formats: FormatList = [
 		searchShow: false,
 		debug: true,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
-	},
-	{
-		name: "[Gen 2] Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286282/">GSC Ubers</a>`,
-		],
-
-		mod: 'gen2',
-		searchShow: false,
-		ruleset: ['Standard'],
 	},
 	{
 		name: "[Gen 2] UU",
@@ -3091,6 +3136,16 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+	},
+	{
+		name: "[Gen 1] Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286283/">RBY Ubers</a>`,
+		],
+
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['Standard'],
 	},
 	{
 		name: "[Gen 1] UU",
@@ -3149,17 +3204,6 @@ export const Formats: FormatList = [
 			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Nintendo Cup 1997 Move Legality',
 		],
 		banlist: ['Uber'],
-	},
-	{
-		name: "[Gen 1] Stadium OU",
-
-		mod: 'gen1stadium',
-		searchShow: false,
-		ruleset: ['Standard', 'Team Preview'],
-		banlist: ['Uber',
-			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
-			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
-		],
 	},
 	{
 		name: "[Gen 1] Custom Game",
