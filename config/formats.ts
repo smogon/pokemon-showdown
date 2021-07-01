@@ -266,13 +266,13 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 	},
 	{
-		name: "[Gen 8] Fair and Square",
+		name: "[Gen 8] Water Paradise",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3685517/">Fair and Square Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3687006/">Water Paradise Discussion</a>`,
 		],
 
 		mod: 'gen8',
-		ruleset: ['Flat Rules', 'Galar Expansion Pokedex', '! Species Clause', '! Item Clause', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		ruleset: ['[Gen 8] Battle Stadium Singles', 'Force Monotype = Water'],
 		banlist: ['Sub-Legendary'],
 	},
 	{
