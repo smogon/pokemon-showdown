@@ -1125,7 +1125,9 @@ export class RandomTeams {
 		case 'dragonpulse': case 'spacialrend':
 			return {cull: moves.has('dracometeor') && counter.get('Special') < 4};
 		case 'darkpulse':
-			const pulseIncompatible = ['defog', 'foulplay', 'knockoff', 'suckerpunch'].some(m => moves.has(m));
+			const pulseIncompatible = ['foulplay', 'knockoff'].some(m => moves.has(m)) || (
+				species.id === 'shiftry' && (moves.has('defog') || moves.has('suckerpunch'))
+			);
 			// Special clause to prevent bugged Shiftry sets with Sucker Punch + Nasty Plot
 			const shiftryCase = movePool.includes('nastyplot') && !moves.has('defog');
 			return {cull: pulseIncompatible && !shiftryCase && counter.setupType !== 'Special'};
@@ -1162,7 +1164,7 @@ export class RandomTeams {
 				// Hawlucha doesn't want Roost + 3 attacks
 				(moves.has('stoneedge') && species.id === 'hawlucha') ||
 				// Special cases for Salamence, Dynaless Dragonite, and Scizor to help prevent sets with poor coverage or no setup.
-				(moves.has('dualwingbeat') && ((moves.has('outrage') && !moves.has('defog')) || species.id === 'scizor')),
+				(moves.has('dualwingbeat') && (moves.has('outrage') || species.id === 'scizor')),
 			};
 		case 'reflect': case 'lightscreen':
 			return {cull: !!teamDetails.screens};

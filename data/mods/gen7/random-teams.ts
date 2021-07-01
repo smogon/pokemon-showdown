@@ -1089,8 +1089,11 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 
 				const singlesEnforcement = (
-					!['judgment', 'lightscreen', 'reflect', 'sleeptalk', 'toxic'].includes(moveid) &&
-					(move.category !== 'Status' || !move.flags.heal)
+					!['judgment', 'lightscreen', 'reflect', 'sleeptalk', 'toxic'].includes(moveid) && (
+						move.category !== 'Status' ||
+						// should allow Meganium to cull a recovery move for the sake of STAB
+						!(move.flags.heal && species.id !== 'meganium')
+					)
 				);
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
