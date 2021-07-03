@@ -612,10 +612,10 @@ export const Formats: FormatList = [
 
 		mod: 'partnersincrime',
 		gameType: 'doubles',
-		ruleset: ['[Gen 8] Doubles OU'],
+		ruleset: ['[Gen 8] Doubles OU', 'Sleep Clause Mod'],
 		banlist: [
 			'Arctovish', 'Arctozolt', 'Dracovish', 'Dracozolt', 'Golisopod', 'Wimpod',
-			'Huge Power', 'Imposter', 'Normalize', 'Pure Power', 'Trace', 'Wonder Guard',
+			'Huge Power', 'Imposter', 'Moody', 'Normalize', 'Pure Power', 'Trace', 'Wonder Guard',
 		],
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
