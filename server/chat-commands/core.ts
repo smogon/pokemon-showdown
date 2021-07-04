@@ -587,7 +587,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 	},
-	avatarhelp: [`/avatar [avatar number 1 to 293] - Change your trainer sprite.`],
+	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
 
 	signout: 'logout',
 	logout(target, room, user) {
