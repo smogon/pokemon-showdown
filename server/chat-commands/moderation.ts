@@ -126,6 +126,11 @@ export function runCrisisDemote(userid: ID) {
 	return from;
 }
 
+Punishments.addPunishmentType('YEARLOCK', "Locked for a year", (user, punishment) => {
+	user.locked = user.id;
+	Chat.punishmentfilter(user, punishment);
+});
+
 export const commands: Chat.ChatCommands = {
 	roomowner(target, room, user) {
 		room = this.requireRoom();
@@ -962,7 +967,8 @@ export const commands: Chat.ChatCommands = {
 		Punishments.savePunishments();
 
 		for (const curUser of Users.findUsers([userid], [])) {
-			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
+			const locked = Punishments.hasPunishType(curUser.id, ['LOCK', 'NAMELOCK'], curUser.latestIp);
+			if (curUser.locked && !curUser.locked.startsWith('#') && !locked) {
 				curUser.locked = null;
 				curUser.namelocked = null;
 				curUser.destroyPunishmentTimer();
@@ -1165,7 +1171,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		Punishments.banRange(ip, reason);
 
-		this.addGlobalModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
+		if (!this.room || this.room.roomid !== 'staff') {
+			this.sendReply(`You hour-banned the ${ipDesc}.`);
+		}
+		this.room = Rooms.get('staff') || null;
+		this.addModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
 		this.globalModlog(`RANGEBAN`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
 	},
 	baniphelp: [
@@ -1190,6 +1200,34 @@ export const commands: Chat.ChatCommands = {
 	},
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: &`],
 
+	forceyearlockname: 'yearlockname',
+	yearlockname(target, room, user) {
+		this.checkCan('rangeban');
+		const [targetUsername, rest] = Utils.splitFirst(target, ',').map(k => k.trim());
+		const targetUser = Users.get(targetUsername);
+		const targetUserid = toID(targetUsername);
+		if (!targetUserid || targetUserid.length > 18) {
+			return this.errorReply(`Invalid userid.`);
+		}
+		const force = this.cmd.includes('force');
+		if (targetUser?.registered && !force) {
+			return this.errorReply(`That user is registered. Either permalock them normally or use /forceyearlockname.`);
+		}
+		const punishment = {
+			type: 'YEARLOCK',
+			id: targetUserid,
+			expireTime: Date.now() + 365 * 24 * 60 * 60 * 1000,
+			reason: rest || "",
+		};
+		Punishments.userids.add(targetUserid, punishment);
+		Punishments.savePunishments();
+		this.addGlobalModAction(`${user.name} locked the userid '${targetUserid}' for a year${rest ? ` (${rest})` : ''}.`);
+		this.globalModlog(`${force ? `FORCE` : ''}YEARLOCKNAME`, targetUserid, rest);
+		if (targetUser) {
+			Chat.punishmentfilter(targetUser, punishment);
+			targetUser.locked = targetUserid;
+		}
+	},
 	rangelock: 'lockip',
 	yearlockip: 'lockip',
 	lockip(target, room, user, connection, cmd) {

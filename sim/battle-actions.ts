@@ -823,7 +823,7 @@ export class BattleActions {
 		let hit: number;
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
-			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
+			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			if (targets.every(target => !target?.hp)) break;
 			move.hit = hit;
 			if (move.smartTarget && targets.length > 1) {

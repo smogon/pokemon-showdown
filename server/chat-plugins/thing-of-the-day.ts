@@ -9,7 +9,7 @@ const DATA_FILE = 'config/chat-plugins/otds.json';
 
 export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
-export const otds: Map<string, OtdHandler> = new Map();
+export const otds = new Map<string, OtdHandler>();
 
 const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
 	cotw: async winner => {

@@ -209,7 +209,7 @@ Chat.registerMonitor('autolock', {
 			if (room) {
 				void Punishments.autolock(
 					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
-					`<<${room.roomid}>> ${user.name}: ||${message}${reason ? ` __(${reason})__` : ''}||`, true
+					`<<${room.roomid}>> ${user.name}: ||\`\`${message}\`\`${reason ? ` __(${reason})__` : ''}||`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'${publicReason ? ` ${publicReason}` : ``}.`);

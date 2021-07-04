@@ -467,17 +467,22 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	botmsg(target, room, user, connection) {
-		if (!target || !target.includes(',')) return this.parse('/help botmsg');
+		if (!target || !target.includes(',')) {
+			return this.parse('/help botmsg');
+		}
+		this.checkRecursion();
+
 		let {targetUser, rest: message} = this.requireUser(target);
 
 		const auth = this.room ? this.room.auth : Users.globalAuth;
-		if (auth.get(targetUser) !== '*') {
+		if (!['*', '#'].includes(auth.get(targetUser))) {
 			return this.popupReply(`The user "${targetUser.name}" is not a bot in this room.`);
 		}
 		this.room = null; // shouldn't be in a room
 		this.pmTarget = targetUser;
 
 		message = this.checkChat(message);
+		if (!message) return;
 		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
 	},
 	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
@@ -1446,7 +1451,7 @@ export const pages: Chat.PageTable = {
 		let canSend = Users.globalAuth.get(bot) === '*';
 		let room;
 		for (const curRoom of Rooms.global.chatRooms) {
-			if (curRoom.auth.getDirect(bot.id) === '*') {
+			if (['*', '#'].includes(curRoom.auth.getDirect(bot.id))) {
 				canSend = true;
 				room = curRoom;
 			}

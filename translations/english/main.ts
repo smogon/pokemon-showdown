@@ -128,6 +128,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "",
 		"You can't send the same message again so soon.": "",
@@ -143,6 +144,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "",
 		"You are already available for challenges!": "",
 		"You are available for challenges from now on.": "",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "",
 		"You cannot broadcast all FAQs at once.": "",

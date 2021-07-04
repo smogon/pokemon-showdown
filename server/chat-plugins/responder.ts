@@ -9,7 +9,7 @@
 
 import {FS, Utils} from '../../lib';
 import {LogViewer} from './chatlog';
-import {roomFaqs} from './room-faqs';
+import {roomFaqs, visualizeFaq} from './room-faqs';
 
 const DATA_PATH = 'config/chat-plugins/responder.json';
 const LOG_PATH = 'logs/responder.jsonl';
@@ -79,7 +79,7 @@ export class AutoResponder {
 				return null;
 			}
 		}
-		const faqs = Object.keys(helpFaqs).filter(item => !helpFaqs[item].startsWith('>'));
+		const faqs = Object.keys(helpFaqs).filter(item => !helpFaqs[item].alias);
 		for (const faq of faqs) {
 			const match = this.test(normalized, faq);
 			if (match) {
@@ -98,7 +98,7 @@ export class AutoResponder {
 		if (response) {
 			let buf = '';
 			buf += Utils.html`<strong>You said:</strong> ${question}<br />`;
-			buf += `<strong>Our automated reply:</strong> ${Chat.collapseLineBreaksHTML(Chat.formatText(response, true))}`;
+			buf += `<strong>Our automated reply:</strong> ${Chat.collapseLineBreaksHTML(visualizeFaq(response))}`;
 			if (!hideButton) {
 				buf += Utils.html`<hr /><button class="button" name="send" value="A: ${question}">`;
 				buf += `Send to ${this.room.title} if you weren't answered correctly. </button>`;
@@ -112,11 +112,11 @@ export class AutoResponder {
 		faq = faq.trim();
 		if (!faq) throw new Chat.ErrorMessage(`Your FAQ ID can't be empty.`);
 		const room = this.room;
-		const entry: string = roomFaqs[room.roomid][faq];
+		const entry = roomFaqs[room.roomid][faq];
 		if (!entry) throw new Chat.ErrorMessage(`FAQ ID "${faq}" not found.`);
 
-		if (!entry.startsWith('>')) return faq; // not an alias
-		return entry.slice(1);
+		if (!entry.alias) return faq; // not an alias
+		return entry.source;
 	}
 	async getStatsFor(date: string) {
 		const stream = FS(LOG_PATH).createReadStream();

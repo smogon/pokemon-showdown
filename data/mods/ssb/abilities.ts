@@ -1315,7 +1315,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			// Infinite Loop preventer
-			if (effect && ["Stubbornness"].includes(effect.name)) return;
+			if (effect && effect?.name === 'Stubbornness') return;
 			if (success) {
 				if (!this.effectState.happened) {
 					this.boost({atk: 1, def: 1, spd: 1}, pokemon);

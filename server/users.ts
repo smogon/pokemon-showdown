@@ -308,7 +308,7 @@ export class Connection {
 type ChatQueueEntry = [string, RoomID, Connection];
 
 export interface UserSettings {
-	blockChallenges: boolean;
+	blockChallenges: boolean | AuthLevel;
 	blockPMs: boolean | AuthLevel;
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
