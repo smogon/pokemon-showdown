@@ -16242,13 +16242,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			dustproof: true,
 			chance: 100,
-			volatileStatus: 'cureburn',
-		},
-		condition: {
-			duration: 1,
-			onAfterHit(source, target) {
-				if (!source.fainted && target.status === 'brn') target.cureStatus();
+			onHit(target, source, move) {
+				if (target.status === 'brn') {
+					target.addVolatile('cureburn', source, move);
+				}
 			},
+		},
+		onAfterMove(source, target, move) {
+			if (!source.fainted && target.getVolatile('cureburn')) target.cureStatus();
+			target.removeVolatile('cureburn');
 		},
 		target: "allAdjacent",
 		type: "Water",
