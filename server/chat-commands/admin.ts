@@ -467,7 +467,11 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	botmsg(target, room, user, connection) {
-		if (!target || !target.includes(',')) return this.parse('/help botmsg');
+		if (!target || !target.includes(',')) {
+			return this.parse('/help botmsg');
+		}
+		this.checkRecursion();
+
 		let {targetUser, rest: message} = this.requireUser(target);
 
 		const auth = this.room ? this.room.auth : Users.globalAuth;
@@ -478,6 +482,7 @@ export const commands: Chat.ChatCommands = {
 		this.pmTarget = targetUser;
 
 		message = this.checkChat(message);
+		if (!message) return;
 		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
 	},
 	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
