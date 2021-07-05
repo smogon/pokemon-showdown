@@ -560,6 +560,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return this.random(1, pokemon.level + Math.floor(pokemon.level / 2));
 		},
 	},
+	pursuit: {
+		inherit: true,
+		onModifyMove() {},
+		condition: {
+			duration: 1,
+			onBeforeSwitchOut(pokemon) {
+				this.debug('Pursuit start');
+				let alreadyAdded = false;
+				for (const source of this.effectState.sources) {
+					if (source.speed < pokemon.speed || (source.speed === pokemon.speed && this.random(2) === 0)) {
+						// Destiny Bond ends if the switch action "outspeeds" the attacker, regardless of host
+						pokemon.removeVolatile('destinybond');
+					}
+					if (!this.queue.cancelMove(source) || !source.hp) continue;
+					if (!alreadyAdded) {
+						this.add('-activate', pokemon, 'move: Pursuit');
+						alreadyAdded = true;
+					}
+					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+					// If it is, then Mega Evolve before moving.
+					if (source.canMegaEvo || source.canUltraBurst) {
+						for (const [actionIndex, action] of this.queue.entries()) {
+							if (action.pokemon === source && action.choice === 'megaEvo') {
+								this.actions.runMegaEvo(source);
+								this.queue.list.splice(actionIndex, 1);
+								break;
+							}
+						}
+					}
+					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
+				}
+			},
+		},
+	},
 	razorleaf: {
 		inherit: true,
 		critRatio: 3,

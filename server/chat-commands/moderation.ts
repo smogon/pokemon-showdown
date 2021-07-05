@@ -967,7 +967,8 @@ export const commands: Chat.ChatCommands = {
 		Punishments.savePunishments();
 
 		for (const curUser of Users.findUsers([userid], [])) {
-			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
+			const locked = Punishments.hasPunishType(curUser.id, ['LOCK', 'NAMELOCK'], curUser.latestIp);
+			if (curUser.locked && !curUser.locked.startsWith('#') && !locked) {
 				curUser.locked = null;
 				curUser.namelocked = null;
 				curUser.destroyPunishmentTimer();
