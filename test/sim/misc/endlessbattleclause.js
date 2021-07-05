@@ -192,7 +192,7 @@ describe('Endless Battle Clause (slow)', () => {
 	});
 });
 
-// Endless Battle Caluse doesn't take effect for 100 turns, so we artificially skip turns
+// Endless Battle Clause doesn't take effect for 100 turns, so we artificially skip turns
 // to get the turn counter to be in the range which could possibly trigger the clause
 function skipTurns(battle, turns) {
 	for (let i = 0; i < turns; i++) battle.nextTurn();
