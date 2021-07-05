@@ -19,8 +19,6 @@ describe('Sparkling Aria', function () {
 
 		battle.makeChoices();
 		battle.makeChoices('move sparklingaria', 'auto');
-		battle.makeChoices('move sleeptalk', 'auto');
-		common.saveReplay(battle, 'sparklingaria.js');
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
