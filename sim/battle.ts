@@ -1535,22 +1535,27 @@ export class Battle {
 	maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
-		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
-		// for now, FFA doesn't support the endless battle clause
-		if (this.format.gameType === 'freeforall') return;
+		if (this.turn <= 100) return;
 
-		if ((this.turn >= 500 && this.turn % 100 === 0) ||
-			(this.turn >= 900 && this.turn % 10 === 0) ||
-			(this.turn >= 990)) {
+		// the turn limit is not a part of Endless Battle Clause
+		if (this.turn >= 1000) {
+			this.add('message', `It is turn 1000. You have hit the turn limit!`);
+			this.tie();
+			return true;
+		}
+		if (
+			(this.turn >= 500 && this.turn % 100 === 0) || // every 100 turns past turn 500,
+			(this.turn >= 900 && this.turn % 10 === 0) || // every 10 turns past turn 900,
+			this.turn >= 990 // every turn past turn 990
+		) {
 			const turnsLeft = 1000 - this.turn;
-			if (turnsLeft < 0) {
-				this.add('message', `It is turn 1000. Endless Battle Clause activated!`);
-				this.tie();
-				return true;
-			}
 			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
 			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
 		}
+
+		if (!this.ruleTable.has('endlessbattleclause')) return;
+		// for now, FFA doesn't support Endless Battle Clause
+		if (this.format.gameType === 'freeforall') return;
 
 		// Gen 1 Endless Battle Clause triggers
 		if (this.gen <= 1) {

@@ -172,7 +172,7 @@ export const commands: Chat.ChatCommands = {
 					const p = Punishments.userids.get(userid);
 					if (!p || !user.can('alts')) return userid;
 					return p.map(
-						cur => `${userid}(${Punishments.punishmentTypes.get(cur.type)?.desc || 'punished'}` + `${cur.id !== targetAlt.id ? ` as ${cur.id}` : ``})`
+						cur => `${userid} (${Punishments.punishmentTypes.get(cur.type)?.desc || 'punished'}` + `${cur.id !== targetAlt.id ? ` as ${cur.id}` : ``})`
 					).join(' | ');
 				}).join(", ");
 				if (prevNames) buf += `<br />Previous names: ${prevNames}`;
@@ -2791,6 +2791,6 @@ process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
 		'/htmlbox', '/quote', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
-		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml',
+		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml', '/addhtmlfaq'
 	);
 });
