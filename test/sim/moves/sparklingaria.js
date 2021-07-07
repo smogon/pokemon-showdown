@@ -12,7 +12,7 @@ describe('Sparkling Aria', function () {
 
 	it(`should cure the target's burn`, function () {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'compoundeyes', moves: ['will-o-wisp', 'sparklingaria', 'sleeptalk']},
+			{species: 'Wynaut', ability: 'compoundeyes', moves: ['will-o-wisp', 'sparklingaria']},
 		], [
 			{species: 'Chansey', moves: ['sleeptalk']},
 		]]);
