@@ -16242,15 +16242,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			dustproof: true,
 			chance: 100,
-			onHit(target, source, move) {
-				if (target.status === 'brn') {
-					target.addVolatile('cureburn', source, move);
-				}
-			},
+			volatileStatus: 'sparklingaria',
 		},
 		onAfterMove(source, target, move) {
-			if (!source.fainted && target.getVolatile('cureburn')) target.cureStatus();
-			target.removeVolatile('cureburn');
+			if (target.removeVolatile('sparklingaria') && target.status === 'brn' && !source.fainted) target.cureStatus();
 		},
 		target: "allAdjacent",
 		type: "Water",
