@@ -1145,7 +1145,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results.push(dex[mon].name);
 	}
 
-	if (usedMod === 'letsgo') {
+	if (usedMod === 'gen7letsgo') {
 		results = results.filter(name => {
 			const species = mod.species.get(name);
 			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
