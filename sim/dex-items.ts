@@ -189,7 +189,7 @@ export class DexItems {
 				(item as any).isNonstandard = 'Future';
 			}
 			// hack for allowing mega evolution in LGPE
-			if (this.dex.currentMod === 'letsgo' && !item.isNonstandard && !item.megaStone) {
+			if (this.dex.currentMod === 'gen7letsgo' && !item.isNonstandard && !item.megaStone) {
 				(item as any).isNonstandard = 'Past';
 			}
 		} else {

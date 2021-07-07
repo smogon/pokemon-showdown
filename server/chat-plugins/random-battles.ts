@@ -616,7 +616,7 @@ export const commands: Chat.ChatCommands = {
 		if (!args[0]) return this.parse(`/help randombattles`);
 
 		const {dex} = this.splitFormat(target, true);
-		const isLetsGo = (dex.currentMod === 'letsgo');
+		const isLetsGo = (dex.currentMod === 'gen7letsgo');
 
 		const species = dex.species.get(args[0]);
 		if (!species.exists) {
