@@ -256,6 +256,14 @@ export const Formats: FormatList = [
 		banlist: ['Crucibellite'],
 	},
 	{
+		name: "[Gen 8] Battle Stadium Singles Series 10",
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'Limit One Restricted', 'Dynamax Clause'],
+		restricted: ['Restricted Legendary'],
+	},
+	{
 		name: "[Gen 8] Battle Stadium Singles",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3679374/">BSS Discussion</a>`,
@@ -346,6 +354,14 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Little Cup', 'Dynamax Clause', 'Swagger Clause', 'Sleep Clause Mod'],
 		banlist: ['Corsola-Galar', 'Cutiefly', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix', 'Vulpix-Alola'],
+	},
+	{
+		name: "[Gen 8] VGC 2021 Series 10",
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit One Restricted', 'Dynamax Clause'],
+		restricted: ['Restricted Legendary'],
 	},
 	{
 		name: "[Gen 8] VGC 2021 Series 9",
