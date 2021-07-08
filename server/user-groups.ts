@@ -142,7 +142,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			// Global drivers who are SLs should get room mod powers too
 			Users.globalAuth.atLeast(user, SECTIONLEADER_SYMBOL)) {
 			group = Auth.getGroup('@');
-		} 
+		}
 
 		let jurisdiction = group[permission as GlobalPermission | RoomPermission];
 		if (jurisdiction === true && permission !== 'jurisdiction') {
