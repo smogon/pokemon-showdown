@@ -1503,15 +1503,18 @@ export const pages: Chat.PageTable = {
 				buf += `<td>`;
 				const roomid = 'help-' + ticket.userid;
 				let logUrl = '';
-				if (Config.modloglink) {
-					logUrl = Config.modloglink(new Date(ticket.created), roomid);
+				const created = new Date(ticket.created);
+				if (ticket.text) {
+					logUrl = `/view-help-logs-${ticket.userid}--${created.toISOString().slice(0, -17)}`;
+				} else if (Config.modloglink) {
+					logUrl = Config.modloglink(created, roomid);
 				}
 				const room = Rooms.get(roomid);
 				if (room) {
 					const ticketGame = room.getGame(HelpTicket)!;
 					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
 				} else if (ticket.text) {
-					buf += `<a class="button" href="/view-help-text-${ticket.userid}">View</a>`;
+					buf += `<a class="button" href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
 				}
 				if (logUrl) {
 					buf += `<a href="${logUrl}"><button class="button">${this.tr`Log`}</button></a>`;
