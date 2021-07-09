@@ -16245,7 +16245,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			volatileStatus: 'sparklingaria',
 		},
 		onAfterMove(source, target, move) {
-			if (target.removeVolatile('sparklingaria') && target.status === 'brn' && !source.fainted) target.cureStatus();
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon !== source && pokemon.removeVolatile('sparklingaria') && pokemon.status === 'brn' && !source.fainted) {
+					target.cureStatus();
+				}
+			}
 		},
 		target: "allAdjacent",
 		type: "Water",
