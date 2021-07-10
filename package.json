@@ -4,10 +4,11 @@
   "version": "0.11.7",
   "main": ".sim-dist/index.js",
   "dependencies": {
+    "@swc/core": "^1.2.61",
     "@types/better-sqlite3": "^5.4.0",
     "probe-image-size": "^5.0.0",
     "sockjs": "^0.3.21",
-    "sucrase": "^3.15.0"
+    "ts-node": "^10.0.0"
   },
   "optionalDependencies": {
     "better-sqlite3": "^7.1.0",
@@ -17,13 +18,14 @@
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^3.0.6"
+    "sqlite": "^3.0.6",
+    "sucrase": "^3.15.0"
   },
   "secretDependencies": {
     "node-oom-heapdump": "^1.2.0"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   },
   "scripts": {
     "start": "node pokemon-showdown start",
@@ -33,10 +35,10 @@
     "lint": "eslint . --cache --ext .js,.ts",
     "fix": "eslint . --cache --ext .js,.ts --fix",
     "full-lint": "eslint . --cache --ext .js,.ts --max-warnings 0",
-    "pretest": "npm run lint && npm run build",
+    "pretest": "npm run lint",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "full-test": "npm run full-lint && npm run build && npm run tsc && mocha --forbid-only -g \".*\""
+    "full-test": "npm run full-lint && npm run tsc && mocha --timeout 6000 --forbid-only -g \".*\""
   },
   "husky": {
     "hooks": {
