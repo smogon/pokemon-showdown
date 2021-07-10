@@ -9,6 +9,7 @@ import {Utils, FS, Dashycode, ProcessManager, Repl} from '../../lib';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
 import {Chat} from '../chat';
+import {PostgresDatabase} from "../../lib/postgres";
 
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_RESULTS = 3000;
@@ -172,119 +173,6 @@ export const LogReader = new class {
 	isDay(text: string) {
 		return /[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(text);
 	}
-	async findBattleLog(tier: ID, number: number): Promise<string[] | null> {
-		// binary search!
-		const months = (await FS('logs').readdir()).filter(this.isMonth).sort();
-		if (!months.length) return null;
-
-		// find first day
-		let firstDay!: string;
-		while (months.length) {
-			const month = months[0];
-			try {
-				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
-				firstDay = days[0];
-				break;
-			} catch (err) {}
-			months.shift();
-		}
-		if (!firstDay) return null;
-
-		// find last day
-		let lastDay!: string;
-		while (months.length) {
-			const month = months[months.length - 1];
-			try {
-				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
-				lastDay = days[days.length - 1];
-				break;
-			} catch (err) {}
-			months.pop();
-		}
-		if (!lastDay) throw new Error(`getBattleLog month range search for ${tier}`);
-
-		const getBattleNum = (battleName: string) => Number(battleName.split('-')[1].slice(0, -9));
-
-		const getDayRange = async (day: string) => {
-			const month = day.slice(0, 7);
-
-			try {
-				const battles = (await FS(`logs/${month}/${tier}/${day}`).readdir()).filter(
-					b => b.endsWith('.log.json')
-				);
-				Utils.sortBy(battles, getBattleNum);
-
-				return [getBattleNum(battles[0]), getBattleNum(battles[battles.length - 1])];
-			} catch (err) {
-				return null;
-			}
-		};
-
-		const dayExists = (day: string) => FS(`logs/${day.slice(0, 7)}/${tier}/${day}`).exists();
-
-		const nextExistingDay = async (day: string) => {
-			for (let i = 0; i < 3650; i++) {
-				day = this.nextDay(day);
-				if (await dayExists(day)) return day;
-				if (day === lastDay) return null;
-			}
-			return null;
-		};
-
-		const prevExistingDay = async (day: string) => {
-			for (let i = 0; i < 3650; i++) {
-				day = this.prevDay(day);
-				if (await dayExists(day)) return day;
-				if (day === firstDay) return null;
-			}
-			return null;
-		};
-
-		for (let i = 0; i < 100; i++) {
-			const middleDay = new Date(
-				(new Date(firstDay).getTime() + new Date(lastDay).getTime()) / 2
-			).toISOString().slice(0, 10);
-
-			let currentDay: string | null = middleDay;
-			let dayRange = await getDayRange(middleDay);
-
-			if (!dayRange) {
-				currentDay = await nextExistingDay(middleDay);
-				if (!currentDay) {
-					const lastExistingDay = await prevExistingDay(middleDay);
-					if (!lastExistingDay) throw new Error(`couldn't find existing day`);
-					lastDay = lastExistingDay;
-					continue;
-				}
-				dayRange = await getDayRange(currentDay);
-				if (!dayRange) throw new Error(`existing day was a lie`);
-			}
-
-			const [lowest, highest] = dayRange;
-
-			if (number < lowest) {
-				// before currentDay
-				if (firstDay === currentDay) return null;
-				lastDay = this.prevDay(currentDay);
-			} else if (number > highest) {
-				// after currentDay
-				if (lastDay === currentDay) return null;
-				firstDay = this.nextDay(currentDay);
-			} else {
-				// during currentDay
-				const month = currentDay.slice(0, 7);
-				const path = FS(`logs/${month}/${tier}/${currentDay}/${tier}-${number}.log.json`);
-				if (await path.exists()) {
-					return JSON.parse(path.readSync()).log;
-				}
-				return null;
-			}
-		}
-
-		// 100 iterations is enough to search 2**100 days, which is around 1e30 days
-		// for comparison, a millennium is 365000 days
-		throw new Error(`Infinite loop looking for ${tier}-${number}`);
-	}
 };
 
 export const LogViewer = new class {
@@ -331,10 +219,10 @@ export const LogViewer = new class {
 			throw new Chat.ErrorMessage(`That battle cannot exist, as the number has not been used.`);
 		}
 		const roomid = `battle-${tier}-${number}` as RoomID;
-		context.setHTML(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
-		const log = await PM.query({
-			queryType: 'battlesearch', roomid: toID(tier), search: number,
-		});
+		context.send(`<div class="pad"><h2>Locating battle logs for the battle ${tier}-${number}...</h2></div>`);
+		tier = toID(tier);
+		const info = {queryType: 'battlesearch', roomid: tier, search: number};
+		const log = await (LogSearcher.usePM ? PM.query(info) : LogSearcher.findBattleLog(tier as ID, number));
 		if (!log) return context.setHTML(this.error("Logs not found."));
 		const {connection} = context;
 		context.close();
@@ -518,6 +406,7 @@ export const LogViewer = new class {
 type SearchMatch = readonly [string, string, string, string, string];
 
 export abstract class Searcher {
+	usePM = true;
 	constructUserRegex(user: string) {
 		const id = toID(user);
 		return `.${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*`;
@@ -531,6 +420,119 @@ export abstract class Searcher {
 			return str;
 		}
 		return `^` + searches.filter(Boolean).map(term => `(?=.*${term})`).join('');
+	}
+	async findBattleLog(tier: ID, number: number): Promise<string[] | null> {
+		// binary search!
+		const months = (await FS('logs').readdir()).filter(LogReader.isMonth).sort();
+		if (!months.length) return null;
+
+		// find first day
+		let firstDay!: string;
+		while (months.length) {
+			const month = months[0];
+			try {
+				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(LogReader.isDay).sort();
+				firstDay = days[0];
+				break;
+			} catch (err) {}
+			months.shift();
+		}
+		if (!firstDay) return null;
+
+		// find last day
+		let lastDay!: string;
+		while (months.length) {
+			const month = months[months.length - 1];
+			try {
+				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(LogReader.isDay).sort();
+				lastDay = days[days.length - 1];
+				break;
+			} catch (err) {}
+			months.pop();
+		}
+		if (!lastDay) throw new Error(`getBattleLog month range search for ${tier}`);
+
+		const getBattleNum = (battleName: string) => Number(battleName.split('-')[1].slice(0, -9));
+
+		const getDayRange = async (day: string) => {
+			const month = day.slice(0, 7);
+
+			try {
+				const battles = (await FS(`logs/${month}/${tier}/${day}`).readdir()).filter(
+					b => b.endsWith('.log.json')
+				);
+				Utils.sortBy(battles, getBattleNum);
+
+				return [getBattleNum(battles[0]), getBattleNum(battles[battles.length - 1])];
+			} catch (err) {
+				return null;
+			}
+		};
+
+		const dayExists = (day: string) => FS(`logs/${day.slice(0, 7)}/${tier}/${day}`).exists();
+
+		const nextExistingDay = async (day: string) => {
+			for (let i = 0; i < 3650; i++) {
+				day = LogReader.nextDay(day);
+				if (await dayExists(day)) return day;
+				if (day === lastDay) return null;
+			}
+			return null;
+		};
+
+		const prevExistingDay = async (day: string) => {
+			for (let i = 0; i < 3650; i++) {
+				day = LogReader.prevDay(day);
+				if (await dayExists(day)) return day;
+				if (day === firstDay) return null;
+			}
+			return null;
+		};
+
+		for (let i = 0; i < 100; i++) {
+			const middleDay = new Date(
+				(new Date(firstDay).getTime() + new Date(lastDay).getTime()) / 2
+			).toISOString().slice(0, 10);
+
+			let currentDay: string | null = middleDay;
+			let dayRange = await getDayRange(middleDay);
+
+			if (!dayRange) {
+				currentDay = await nextExistingDay(middleDay);
+				if (!currentDay) {
+					const lastExistingDay = await prevExistingDay(middleDay);
+					if (!lastExistingDay) throw new Error(`couldn't find existing day`);
+					lastDay = lastExistingDay;
+					continue;
+				}
+				dayRange = await getDayRange(currentDay);
+				if (!dayRange) throw new Error(`existing day was a lie`);
+			}
+
+			const [lowest, highest] = dayRange;
+
+			if (number < lowest) {
+				// before currentDay
+				if (firstDay === currentDay) return null;
+				lastDay = LogReader.prevDay(currentDay);
+			} else if (number > highest) {
+				// after currentDay
+				if (lastDay === currentDay) return null;
+				firstDay = LogReader.nextDay(currentDay);
+			} else {
+				// during currentDay
+				const month = currentDay.slice(0, 7);
+				const path = FS(`logs/${month}/${tier}/${currentDay}/${tier}-${number}.log.json`);
+				if (await path.exists()) {
+					return JSON.parse(path.readSync()).log;
+				}
+				return null;
+			}
+		}
+
+		// 100 iterations is enough to search 2**100 days, which is around 1e30 days
+		// for comparison, a millennium is 365000 days
+		throw new Error(`Infinite loop looking for ${tier}-${number}`);
 	}
 	abstract searchLogs(roomid: RoomID, search: string, limit?: number | null, date?: string | null): Promise<string>;
 	abstract searchLinecounts(roomid: RoomID, month: string, user?: ID): Promise<string>;
@@ -615,9 +617,9 @@ export abstract class Searcher {
 	}
 	async sharedBattles(userids: string[]) {
 		let buf = `Logged shared battles between the users ${userids.join(', ')}`;
-		const results: string[] = await PM.query({
-			queryType: 'sharedsearch', search: userids,
-		});
+		const results: string[] = await (this.usePM ?
+			PM.query({queryType: 'sharedsearch', search: userids}) :
+			this.getSharedBattles(userids));
 		if (!results.length) {
 			buf += `:<br />None found.`;
 			return buf;
@@ -625,6 +627,9 @@ export abstract class Searcher {
 		buf += ` (${results.length}):<br />`;
 		buf += results.map(id => `<a href="view-battlelog-${id}">${id}</a>`).join(', ');
 		return buf;
+	}
+	static getTextSearcher() {
+		return Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher;
 	}
 }
 
@@ -1023,7 +1028,45 @@ export class RipgrepLogSearcher extends Searcher {
 	}
 }
 
-export const LogSearcher: Searcher = new (Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher)();
+export class DatabaseLogSearcher extends Searcher {
+	database: PostgresDatabase;
+	/** This is here because we do not yet support SQL roomlogs. */
+	textSearcher: Searcher;
+	SQL: (...args: any) => import('sql-template-strings').SQLStatement;
+	constructor() {
+		super();
+		this.usePM = false;
+		this.database = new PostgresDatabase();
+		this.SQL = require('sql-template-strings');
+		this.textSearcher = new (Searcher.getTextSearcher())();
+	}
+	async findBattleLog(tier: ID, number: number) {
+		const results = await this.database.query(
+			this.SQL`SELECT log FROM battle_logs WHERE roomid = ${number}`
+		);
+		if (!results || !results.length) return null;
+		return results[0].log;
+	}
+	async getSharedBattles(userids: string[]) {
+		const query = this.SQL`SELECT roomid, format FROM battle_logs WHERE `;
+		query.append(this.SQL`(p1id = ${userids[0]} AND p2id = ${userids[1]})`);
+		query.append(` OR `);
+		query.append(this.SQL`(p1id = ${userids[1]} AND p2id = ${userids[0]})`);
+		const response = await this.database.query(query);
+		return response.map(row => (
+			`${row.format}-${row.roomid}`
+		));
+	}
+	// hacky but we dont support this rn
+	searchLinecounts(roomid: RoomID, month: string, user?: ID) {
+		return this.textSearcher.searchLinecounts(roomid, month, user);
+	}
+	searchLogs(roomid: RoomID, search: string, limit?: number | null, date?: string | null) {
+		return this.textSearcher.searchLogs(roomid, search, limit, date);
+	}
+}
+
+export const LogSearcher: Searcher = new (Config.usepostgres ? DatabaseLogSearcher : Searcher.getTextSearcher())();
 
 export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module, async data => {
 	const start = Date.now();
@@ -1041,7 +1084,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module,
 			result = await LogSearcher.getSharedBattles(search);
 			break;
 		case 'battlesearch':
-			result = await LogReader.findBattleLog(roomid, search);
+			result = await LogSearcher.findBattleLog(roomid, search);
 			break;
 		default:
 			return LogViewer.error(`Config.chatlogreader is not configured.`);

@@ -16,6 +16,7 @@ import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
 import type {Tournament} from './tournaments/index';
+import {PostgresDatabase} from "../lib/postgres";
 import {RoomSettings} from './rooms';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
@@ -936,6 +937,41 @@ export class RoomBattle extends RoomGames.RoomGame {
 		await FS(logpath).mkdirp();
 		await FS(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
 		// console.log(JSON.stringify(logData));
+		await this.logPostgres(logData);
+	}
+	static logDatabase = new PostgresDatabase();
+	async logPostgres(logData: AnyObject) {
+		if (!Config.usepostgres) return null;
+		const roomid = Number(this.room.roomid.split('-')[2]);
+		const winner = this.endType === 'tie' ? '' : toID(logData.winner);
+		const {p1, p2} = logData;
+		const p1id = toID(p1);
+		const p2id = toID(p2);
+		const loser = winner ? (p1id === winner ? p2id : p1id) : "";
+		const format = Dex.formats.get(this.format).id;
+		const SQL = require('sql-template-strings');
+
+		const rowid = await Rooms.RoomBattle.logDatabase.transaction(async worker => {
+			const possibleRows = (await worker.query(SQL`SELECT rowid FROM battle_identifiers WHERE format = ${format}`)).rows;
+			if (!possibleRows.length) {
+				const inserted = await worker.query(SQL`INSERT INTO battle_identifiers (format) VALUES (${format}) RETURNING rowid`);
+				return inserted.rows[0].rowid;
+			} else {
+				return possibleRows[0].rowid;
+			}
+		});
+
+		await Rooms.RoomBattle.logDatabase.query(SQL`
+			INSERT INTO battle_logs
+			(roomid, date, winner, loser, p1id, p2id, p1, p2, p1team, p2team, log, inputLog,
+			turns, endType, ladderError, seed, score, p1rating, p2rating, format, battle_identifiers_id)
+			VALUES (
+				${roomid}, ${new Date()}, ${winner}, ${loser}, ${p1id}, ${p2id}, ${p1}, ${p2}, ${logData.p1team},
+				${logData.p2team}, ${logData.log}, ${logData.inputLog}, ${logData.turns}, ${this.endType},
+				${logData.ladderError}, ${logData.seed}, ${logData.score}, ${logData.p1rating}, ${logData.p2rating},
+				${format}, ${rowid}
+			)
+		`);
 	}
 	onConnect(user: User, connection: Connection | null = null) {
 		// this handles joining a battle in which a user is a participant,
@@ -1027,6 +1063,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		void this.stream.write(`>forcewin ${player.slot}`);
 	}
 	tie() {
+		this.endType = 'tie';
 		void this.stream.write(`>forcetie`);
 	}
 	tiebreak() {
