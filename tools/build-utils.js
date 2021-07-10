@@ -207,7 +207,7 @@ exports.transpile = (doForce, decl) => {
 
 	if (sucrase('./sim', './.sim-dist')) {
 		replace('.sim-dist', [
-			{regex: /(require\(.*?)\/(lib|data)/g, replace: `$1/.$2-dist`},
+			{regex: /(require\(.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
 		]);
 	}
 
