@@ -549,11 +549,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					cull = true;
 				}
 
-				const runEnforcementChecker = (checkerName: string) => (
-					this.moveEnforcementCheckers[checkerName]?.(
+				const runEnforcementChecker = (checkerName: string) => {
+					if (!this.moveEnforcementCheckers[checkerName]) return false;
+					return this.moveEnforcementCheckers[checkerName](
 						movePool, moves, abilities, types, counter, species as Species, teamDetails
-					)
-				);
+					);
+				};
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
 					!cull &&

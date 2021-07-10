@@ -1,15 +1,16 @@
 {
     "compilerOptions": {
-        "lib": ["es2019"],
+        "lib": ["es2020"],
         "noEmit": true,
-        "target": "esnext",
-        "module": "commonjs",
+        "target": "es2020",
+        "module": "CommonJS",
         "moduleResolution": "node",
         "strict": true,
         "allowJs": true,
         "checkJs": true,
         "incremental": true,
-        "allowUnreachableCode": false
+        "allowUnreachableCode": false,
+        "esModuleInterop": true
     },
     "types": ["node"],
     "exclude": [
@@ -27,5 +28,10 @@
         "./tools/set-import/*.ts",
         "./tools/modlog/*.ts",
         "./translations/**/*.ts",
-    ]
+    ],
+    "ts-node": {
+        "files": true,
+        "transpileOnly": true,
+        "transpiler": "ts-node/transpilers/swc-experimental",
+    }
 }

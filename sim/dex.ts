@@ -39,8 +39,8 @@ import {Format, DexFormats} from './dex-formats';
 import {Utils} from '../lib';
 
 const BASE_MOD = 'gen8' as ID;
-const DATA_DIR = path.resolve(__dirname, '../.data-dist');
-const MODS_DIR = path.resolve(__dirname, '../.data-dist/mods');
+const DATA_DIR = path.resolve(__dirname, '../data');
+const MODS_DIR = path.resolve(__dirname, '../data/mods');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 

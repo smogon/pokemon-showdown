@@ -6,7 +6,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const hosts = require('../../../.server-dist/chat-plugins/hosts');
+const hosts = require('../../../server/chat-plugins/hosts');
 
 describe("Hosts plugin", () => {
 	it('should properly visualize an empty list of ranges', () => {

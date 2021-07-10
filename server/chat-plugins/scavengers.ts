@@ -9,7 +9,7 @@
  */
 
 import {FS, Utils} from '../../lib';
-import {ScavMods, TwistEvent} from './scavenger-games.js';
+import {ScavMods, TwistEvent} from './scavenger-games';
 import {ChatHandler} from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';

@@ -6,7 +6,7 @@
 
 const assert = require('assert').strict;
 const converter = require('../../../tools/modlog/converter');
-const ml = require('../../../.server-dist/modlog');
+const ml = require('../../../server/modlog');
 
 const garfieldCopypasta = [
 	`[2020-08-24T03:52:00.917Z] (staff) AUTOLOCK: [guest903036] [127.0.0.1]: "Now where could my pipe be?" This... I always come to this, because I was a young man, I'm older now, and I still don't have the secrets, the answers, so this question still rings true, Jon looks up and he thinks: "Now where could my pipe be?", and then it happens, you see it, you see... it's almost like divine intervention, suddenly, it is there, and it overpowers you, a cat is smoking a pipe. It is the mans pipe, it's Jon's pipe, but the cat, this cat, Garfield, is smoking the pipe, and from afar, and from someplace near, but not clear... near but not clear, the man calls out, Jon calls out, he is shocked. "Garfield!" he shouts. Garfield, the cats name. But let's take a step back. Let us examine this from all sides, all perspectives, and when I first came across this comic strip, I was at my fathers house. The newspaper had arrived, and I picked it up for him, and brought it`,

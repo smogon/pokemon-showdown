@@ -227,12 +227,6 @@ exports.transpile = (doForce, decl) => {
 		]);
 	}
 
-	if (sucrase('./tools/modlog', './tools/modlog')) {
-		replace('./tools/modlog/converter.js', [
-			{regex: /(require\(.*?)(server|lib)/g, replace: `$1.$2-dist`},
-		]);
-	}
-
 	if (!fs.existsSync('./.data-dist/README.md')) {
 		const text = '**NOTE**: This folder contains the compiled output of the `data/` directory.\n' +
 			'You should be editing the `.ts` files there and then running `npm run build` or\n' +
