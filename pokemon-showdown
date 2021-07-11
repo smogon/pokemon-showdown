@@ -29,6 +29,12 @@ function readTeam(stream) {
 	});
 }
 
+
+function installDependencies() {
+	console.log(`Installing dependencies...`);
+	require('child_process').execSync('npm install --production', {stdio: 'inherit'});
+}
+
 function registerTSNode() {
 	require('ts-node').register({project: './tsconfig.json', files: true, transpileOnly: true, transpiler: 'ts-node/transpilers/swc-experimental'});
 }
@@ -38,13 +44,27 @@ function setupTSNode() {
 	try {
 		registerTSNode();
 	} catch (e) {
-		console.log(`Installing dependencies...`);
-		require('child_process').execSync('npm install --production', {stdio: 'inherit'});
+		installDependencies();
 		registerTSNode();
 	}
 }
 
+function ensureSucraseIsInstalled() {
+	try {
+		const sucraseVersion = require('sucrase').getVersion().split('.');
+		if (
+			parseInt(sucraseVersion[0]) < 3 ||
+			(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 12)
+		) {
+			throw new Error("Sucrase version too old");
+		}
+	} catch (e) {
+		installDependencies();
+	}
+}
+
 function sucraseBuild() {
+	ensureSucraseIsInstalled();
 	try {
 		require.resolve('./.sim-dist/dex');
 	} catch (err) {
