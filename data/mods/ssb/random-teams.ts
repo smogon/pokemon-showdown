@@ -126,12 +126,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Broadside Barrage',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	Averardo: {
-		species: 'Hattrem', ability: 'Magic Hat', item: 'Eviolite', gender: 'M',
-		moves: ['Nuzzle', 'Flamethrower', 'Healing Wish'],
-		signatureMove: 'Hat of Wisdom',
-		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Sassy',
-	},
 	'awa!': {
 		species: 'Lycanroc', ability: 'Sand Rush', item: 'Life Orb', gender: 'F',
 		moves: ['Earthquake', 'Close Combat', 'Swords Dance'],
@@ -466,6 +460,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: '/nexthunt',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', shiny: true,
 	},
+	Lunala: {
+		species: 'Hattrem', ability: 'Magic Hat', item: 'Eviolite', gender: 'F',
+		moves: ['Nuzzle', 'Flamethrower', 'Healing Wish'],
+		signatureMove: 'Hat of Wisdom',
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Sassy',
+	},
 	'Mad Monty ¾°': {
 		species: 'Zekrom', ability: 'Petrichor', item: 'Damp Rock', gender: 'N',
 		moves: ['Bolt Strike', 'Dragon Claw', 'Liquidation'],
@@ -611,12 +611,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Croak',
 		evs: {hp: 248, def: 8, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
-	quadrophenic: {
-		species: 'Dodrio', ability: 'Extreme Ways', item: 'Choice Band', gender: 'N',
-		moves: ['Dragon Ascent', 'Close Combat', 'U-turn'],
-		signatureMove: 'Triple Threat',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
-	},
 	Rabia: {
 		species: 'Mew', ability: 'Psychic Surge', item: 'Life Orb', gender: 'M',
 		moves: ['Nasty Plot', ['Flamethrower', 'Fire Blast'], 'Roost'],
@@ -679,7 +673,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 204, spa: 200, spe: 104}, nature: 'Hasty',
 		skip: 'Robb576', // This set is transformed into by The Numbers Game ability
 	},
-	SectoniaServant: {
+	Sectonia: {
 		species: 'Reuniclus', ability: 'Royal Aura', item: 'Leftovers', gender: 'M',
 		moves: ['Eerie Spell', 'Moonblast', 'Recover'],
 		signatureMove: 'Homunculus\'s Vanity',

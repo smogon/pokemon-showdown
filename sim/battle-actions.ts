@@ -313,6 +313,8 @@ export class BattleActions {
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
+		this.battle.faintMessages();
+		this.battle.checkWin();
 	}
 	/**
 	 * useMove is the "inside" move caller. It handles effects of the
@@ -478,7 +480,11 @@ export class BattleActions {
 			return false;
 		}
 
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (
+			!move.negateSecondary &&
+			!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
+			!move.isFutureMove
+		) {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
@@ -543,7 +549,7 @@ export class BattleActions {
 			return hitResult === this.battle.NOT_FAIL;
 		}
 
-		let atLeastOneFailure!: boolean;
+		let atLeastOneFailure = false;
 		for (const step of moveSteps) {
 			const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, targets, pokemon, move);
 			if (!hitResults) continue;
@@ -817,7 +823,7 @@ export class BattleActions {
 		let hit: number;
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
-			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
+			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			if (targets.every(target => !target?.hp)) break;
 			move.hit = hit;
 			if (move.smartTarget && targets.length > 1) {
@@ -894,10 +900,10 @@ export class BattleActions {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
+		this.battle.faintMessages(false, false, !pokemon.hp);
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
-		this.battle.faintMessages();
 
 		if (move.recoil && move.totalDamage) {
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');

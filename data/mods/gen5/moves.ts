@@ -510,8 +510,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
-			onSideResidualOrder: 21,
-			onSideResidualSubOrder: 1,
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 2,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Light Screen');
 			},
@@ -662,7 +662,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 1,
-			onStart(target, source) {
+			onSideStart(target, source) {
 				this.add('-singleturn', source, 'Quick Guard');
 			},
 			onTryHitPriority: 4,
@@ -711,7 +711,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
-			onSideResidualOrder: 21,
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 1,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Reflect');
 			},

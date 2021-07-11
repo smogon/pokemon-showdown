@@ -9,7 +9,7 @@ const DATA_FILE = 'config/chat-plugins/otds.json';
 
 export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
-export const otds: Map<string, OtdHandler> = new Map();
+export const otds = new Map<string, OtdHandler>();
 
 const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
 	cotw: async winner => {
@@ -895,6 +895,7 @@ const otdHelp = [
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
 	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
 	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
+	`- /-otd removewinner [nomination] - Remove a winner with the given [nomination] from the winners list. Requires: % @ # &`,
 	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
 	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
 	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
@@ -921,14 +922,16 @@ for (const [k, v] of otds) {
 	commands[`${k}help`] = otdHelp;
 }
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID, room) => {
-	for (const otd in otdData) {
-		const data = otdData[otd];
-		if (data.settings.roomid === oldID) {
-			data.settings.roomid = newID;
-			const handler = otds.get(otd);
-			handler!.room = room as Room;
-			handler!.save();
+export const handlers: Chat.Handlers = {
+	onRenameRoom(oldID, newID, room) {
+		for (const otd in otdData) {
+			const data = otdData[otd];
+			if (data.settings.roomid === oldID) {
+				data.settings.roomid = newID;
+				const handler = otds.get(otd);
+				handler!.room = room as Room;
+				handler!.save();
+			}
 		}
-	}
+	},
 };

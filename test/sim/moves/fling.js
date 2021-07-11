@@ -10,7 +10,7 @@ describe('Fling', function () {
 		battle.destroy();
 	});
 
-	it('should consume the user\'s item after being flung', function () {
+	it(`should consume the user's item after being flung`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'ironball', moves: ['fling']},
 		], [
@@ -20,7 +20,7 @@ describe('Fling', function () {
 		assert.equal(battle.p1.active[0].item, '');
 	});
 
-	it('should apply custom effects when certain items are flung', function () {
+	it(`should apply custom effects when certain items are flung`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'flameorb', moves: ['fling']},
 		], [
@@ -30,7 +30,7 @@ describe('Fling', function () {
 		assert.equal(battle.p2.active[0].status, 'brn');
 	});
 
-	it('should not be usuable in Magic Room', function () {
+	it(`should not be usuable in Magic Room`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'ironball', moves: ['fling']},
 		], [
@@ -40,7 +40,7 @@ describe('Fling', function () {
 		assert.equal(battle.p1.active[0].item, 'ironball');
 	});
 
-	it('should use its item to be flung in damage calculations', function () {
+	it(`should use its item to be flung in damage calculations`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'lifeorb', moves: ['fling']},
 		], [
@@ -55,5 +55,22 @@ describe('Fling', function () {
 
 		// Wynaut should not have taken Life Orb recoil
 		assert.fullHP(battle.p1.active[0]);
+	});
+
+	it(`should Fling, not consume Leppa Berry when using 1 PP Leppa Berry Fling`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['fling', 'sleeptalk']},
+		], [
+			{species: 'cleffa', item: 'leppaberry', moves: ['spite', 'trick', 'sleeptalk']},
+		]]);
+		// Waste 15 Fling PP
+		for (let i = 0; i < 3; i++) battle.makeChoices();
+		battle.makeChoices('move sleeptalk', 'move trick');
+		battle.makeChoices('move fling', 'move sleeptalk');
+
+		const wynaut = battle.p1.active[0];
+		const cleffa = battle.p2.active[0];
+		assert.equal(wynaut.getMoveData('fling').pp, 0);
+		assert.equal(cleffa.getMoveData('spite').pp, 16);
 	});
 });

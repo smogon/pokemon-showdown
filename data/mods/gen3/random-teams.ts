@@ -128,7 +128,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		case 'destinybond':
 			return {cull: !!counter.setupType || moves.has('explosion') || moves.has('selfdestruct')};
 		case 'doubleedge': case 'facade': case 'fakeout': case 'waterspout':
-			return {cull: counter.get('Status') >= 1 || (move.id === 'doubleedge' && moves.has('return'))};
+			return {cull: (
+				(!types.has(move.type) && counter.get('Status') >= 1) ||
+				(move.id === 'doubleedge' && moves.has('return'))
+			)};
 		case 'encore': case 'painsplit': case 'recover': case 'yawn':
 			return {cull: restTalk};
 		case 'explosion': case 'machpunch': case 'selfdestruct':
@@ -204,7 +207,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		case 'gigadrain':
 			return {cull: moves.has('morningsun') || moves.has('toxic')};
 		case 'hiddenpower':
-			const stabCondition = types.has(move.type) && (
+			const stabCondition = types.has(move.type) && counter.get(move.type) > 1 && (
 				(moves.has('substitute') && !counter.setupType && !moves.has('toxic')) ||
 				// This otherwise causes STABless meganium
 				(species.id !== 'meganium' && moves.has('toxic') && !moves.has('substitute')) ||
@@ -358,6 +361,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 			while (moves.size < 4 && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
+				if (moveid.startsWith('hiddenpower')) {
+					if (hasHiddenPower) continue;
+					hasHiddenPower = true;
+				}
 				moves.add(moveid);
 			}
 
@@ -395,9 +402,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					!(types.has('Ghost') && species.baseStats.spa > species.baseStats.atk) &&
 					!(
 						// With Calm Mind, Lugia and pure Normal-types are fine without STAB
-						counter.setupType === 'Special' &&
-						species.id === 'lugia' ||
-						(types.has('Normal') && species.types.length < 2)
+						counter.setupType === 'Special' && (
+							species.id === 'lugia' ||
+							(types.has('Normal') && species.types.length < 2)
+						)
 					) &&
 					!(
 						// With Swords Dance, Dark-types and pure Water-types are fine without STAB
@@ -407,11 +415,12 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					counter.get('physicalpool') + counter.get('specialpool') > 0
 				);
 
-				const runEnforcementChecker = (checkerName: string) => (
-					this.moveEnforcementCheckers[checkerName]?.(
+				const runEnforcementChecker = (checkerName: string) => {
+					if (!this.moveEnforcementCheckers[checkerName]) return false;
+					return this.moveEnforcementCheckers[checkerName](
 						movePool, moves, abilities, types, counter, species as Species, teamDetails
-					)
-				);
+					);
+				};
 
 				if (!cull && !isSetup && moveIsRejectable) {
 					// There may be more important moves that this Pokemon needs
@@ -448,17 +457,20 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				}
 
 				// Remove rejected moves from the move list
+				const moveIsHP = moveid.startsWith('hiddenpower');
 				if (
 					cull &&
-					(movePool.length - availableHP || availableHP && (moveid.startsWith('hiddenpower') || !hasHiddenPower))
+					(movePool.length - availableHP || availableHP && (moveIsHP || !hasHiddenPower))
 				) {
-					if (move.category !== 'Status' && !move.damage && (!moveid.startsWith('hiddenpower') || !availableHP)) {
+					if (move.category !== 'Status' && !move.damage && (!moveIsHP || !availableHP)) {
 						rejectedPool.push(moveid);
 					}
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}
 				if (cull && rejectedPool.length) {
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}

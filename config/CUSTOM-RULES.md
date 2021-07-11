@@ -59,6 +59,8 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- all items` - ban all items
 
+`- no item` - force every pokemon to hold an item (ban empty item slots)
+
 `- all abilities, + No Ability` - ban all abilities (No Ability needs to be specifically allowed to allow Pokemon with no abilities)
 
 ### Complex bans
@@ -133,6 +135,8 @@ Instead of a banlist, you can have a list of allowed things:
 `- all abilities, + No Ability` - ban all abilities
 
 `- all items, + item: Metronome` - allow only the item Metronome
+
+`- all items, - no item, + item: Metronome` - force all Pokémon to carry the item Metronome (unlike abilities, `- all items` does not include not carrying an item)
 
 
 Legality rules

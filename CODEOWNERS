@@ -1,6 +1,6 @@
 config/formats.ts @KrisXV @Marty-D
 data/mods/*/random-teams.ts @AnnikaCodes
-data/mods/ssb/ @HoeenCoder @xInstruct
+data/mods/ssb/ @HoeenCoder @KrisXV
 data/random-teams.ts @AnnikaCodes
 data/text/ @Marty-D
 databases/ @monsanto
@@ -18,5 +18,6 @@ server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
 server/chat-plugins/the-studio.ts @KrisXV
 server/chat-plugins/trivia.ts @AnnikaCodes
 server/friends.ts @mia-pi-git
+server/chat-plugins/username-prefixes.ts @AnnikaCodes
 server/modlog.ts @monsanto
 test/random-battles/* @AnnikaCodes

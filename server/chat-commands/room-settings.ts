@@ -80,7 +80,11 @@ export const commands: Chat.ChatCommands = {
 			const modchatSetting = (room.settings.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
-		this.checkCan('modchat', null, room);
+		if (user.locked) { // would put this below but it behaves weird if there's no modchat set
+			return this.errorReply(`/modchat - Access denied.`);
+		} else {
+			this.checkCan('modchat', null, room);
+		}
 
 		if (
 			room.settings.modchat && room.settings.modchat.length <= 1 &&
@@ -1536,6 +1540,8 @@ export const commands: Chat.ChatCommands = {
 			return;
 		}
 		if (this.meansNo(target)) {
+			delete room.settings.defaultFormat;
+			room.saveSettings();
 			this.modlog(`DEFAULTFORMAT`, null, 'off');
 			this.privateModAction(`${user.name} removed this room's default format.`);
 			return;

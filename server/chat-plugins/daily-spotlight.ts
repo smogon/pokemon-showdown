@@ -64,7 +64,9 @@ export const pages: Chat.PageTable = {
 		this.title = 'Daily Spotlights';
 		const room = this.requireRoom();
 
-		let buf = `<div class="pad ladder"><h2>Daily Spotlights</h2>`;
+		let buf = `<div class="pad ladder">`;
+		buf += `<div class="pad"><button style="float:right;" class="button" name="send" value="/join view-spotlights-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button>`;
+		buf += `<h2>Daily Spotlights</h2>`;
 		if (!spotlights[room.roomid]) {
 			buf += `<p>This room has no daily spotlights.</p></div>`;
 		} else {
@@ -226,7 +228,7 @@ export const commands: Chat.ChatCommands = {
 		const html = await renderSpotlight(room.roomid, key, 0);
 
 		this.sendReplyBox(html);
-		if (!this.broadcasting && user.can('ban', null, room, 'daily')) {
+		if (!this.broadcasting && user.can('ban', null, room, 'setdaily')) {
 			const code = Utils.escapeHTML(description).replace(/\n/g, '<br />');
 			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/setdaily ${key},${image},${code}</code></details>`);
 		}
@@ -256,13 +258,15 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
-	if (spotlights[oldID]) {
-		if (!spotlights[newID]) spotlights[newID] = {};
-		Object.assign(spotlights[newID], spotlights[oldID]);
-		delete spotlights[oldID];
-		saveSpotlights();
-	}
+export const handlers: Chat.Handlers = {
+	onRenameRoom(oldID, newID) {
+		if (spotlights[oldID]) {
+			if (!spotlights[newID]) spotlights[newID] = {};
+			Object.assign(spotlights[newID], spotlights[oldID]);
+			delete spotlights[oldID];
+			saveSpotlights();
+		}
+	},
 };
 
 process.nextTick(() => {

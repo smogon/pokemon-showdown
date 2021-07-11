@@ -2,7 +2,12 @@
  * PRNG
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This file handles the random number generator for battles.
+ * This simulates the on-cartridge PRNG used in the real games.
+ *
+ * In addition to potentially allowing us to read replays from in-game,
+ * this also makes it possible to record an "input log" (a seed +
+ * initial teams + move/switch decisions) and "replay" a simulation to
+ * get the same result.
  *
  * @license MIT license
  */

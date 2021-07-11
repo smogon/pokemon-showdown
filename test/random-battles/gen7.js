@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testNotBothMoves, testSet} = require('./tools');
+const {testNotBothMoves, testSet, testHiddenPower} = require('./tools');
 
 describe('[Gen 7] Random Battle', () => {
 	const options = {format: 'gen7randombattle'};
@@ -32,6 +32,18 @@ describe('[Gen 7] Random Battle', () => {
 			if (set.moves.includes('dragontail')) {
 				assert(set.moves.includes('dracometeor') || set.moves.includes('dragonpulse'), `Goodra: got ${set.moves}`);
 			}
+		});
+	});
+
+	it('should not generate Swords Dance + Ice Beam', () => {
+		testNotBothMoves('arceusground', options, 'swordsdance', 'icebeam');
+	});
+
+	it('should prevent double Hidden Power', () => testHiddenPower('thundurustherian', options));
+
+	it('should give Meganium STAB', () => {
+		testSet('meganium', options, set => {
+			assert(set.moves.includes('gigadrain'), `Meganium: got ${set.moves}`);
 		});
 	});
 });

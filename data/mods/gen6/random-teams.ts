@@ -95,6 +95,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	): {cull: boolean, isSetup?: boolean} {
 		const restTalk = moves.has('rest') && moves.has('sleeptalk');
 
+		if (move.priority > 0 && counter.get('speedsetup')) return {cull: true};
+
 		switch (move.id) {
 		// Not very useful without their supporting moves
 		case 'cottonguard': case 'defendorder':
@@ -774,6 +776,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		const types = new Set(species.types);
 		const abilities = new Set(Object.values(species.abilities));
+		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
@@ -803,6 +806,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 			while (moves.size < 4 && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
+				if (moveid.startsWith('hiddenpower')) {
+					if (hasHiddenPower) continue;
+					hasHiddenPower = true;
+				}
 				moves.add(moveid);
 			}
 
@@ -823,7 +830,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					(move.category === 'Special' && counter.setupType === 'Physical')
 				) {
 					// Reject STABs last in case the setup type changes later on
-					const stabs = counter.get(species.types[0]) + (counter.get(species.types[1]) || 0);
+					const stabs = counter.get(species.types[0]) + counter.get(species.types[1]);
 					if (
 						!SetupException.includes(moveid) &&
 						(!types.has(move.type) || stabs > 1 || counter.get(move.category) < 2)
@@ -857,15 +864,16 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					cull = true;
 				}
 
-				const runEnforcementChecker = (checkerName: string) => (
-					this.moveEnforcementCheckers[checkerName]?.(
+				const runEnforcementChecker = (checkerName: string) => {
+					if (!this.moveEnforcementCheckers[checkerName]) return false;
+					return this.moveEnforcementCheckers[checkerName](
 						movePool, moves, abilities, types, counter, species as Species, teamDetails
-					)
-				);
+					);
+				};
 
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
-					!cull && !isSetup && !move.weather && !!move.damage &&
+					!cull && !isSetup && !move.weather && !move.damage &&
 					(move.category !== 'Status' || !move.flags.heal) &&
 					!['judgment', 'sleeptalk', 'toxic'].includes(moveid) &&
 					(counter.get('physicalsetup') + counter.get('specialsetup') < 2 && (
@@ -945,7 +953,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (hasHiddenPower) {
 			let hpType;
 			for (const move of moves) {
-				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
+				if (move.startsWith('hiddenpower')) {
+					hpType = move.substr(11);
+					break;
+				}
 			}
 			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
 			const HPivs = this.dex.types.get(hpType).HPivs;
@@ -965,7 +976,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			moves.add('thunder');
 		}
 
-		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		const battleOnly = species.battleOnly && !species.requiredAbility;
+		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
+
+		const abilityData = Object.values(baseSpecies.abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
 		if (abilityData.length > 1) {

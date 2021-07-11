@@ -3,28 +3,66 @@ import {FS, Utils} from '../../lib';
 export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
 
-export const roomFaqs: {[k: string]: {[k: string]: string}} = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
+export const roomFaqs: {[k: string]: {[k: string]: RoomFAQ}} = (() => {
+	const data = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
+	let save = false;
+	for (const k in data) {
+		for (const name in data[k]) {
+			if (typeof data[k][name] === 'string') {
+				data[k][name] = convertFaq(data[k][name]);
+				save = true;
+			}
+		}
+	}
+	if (save) saveRoomFaqs(data);
+	return data;
+})();
 
-function saveRoomFaqs() {
-	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(roomFaqs));
+interface RoomFAQ {
+	source: string;
+	alias?: boolean;
+	html?: boolean;
 }
 
-/**
- * Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}
- * This is done to allow easy checking whether a key is associated with
- * a value or alias as well as preserve backwards compatibility.
- */
+function saveRoomFaqs(table?: {[k: string]: {[k: string]: RoomFAQ}}) {
+	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(table || roomFaqs));
+}
+
+function convertFaq(faq: string): RoomFAQ {
+	if (faq.startsWith('>')) {
+		return {
+			alias: true,
+			source: faq.slice(1),
+		};
+	}
+	return {
+		source: faq,
+	};
+}
+
+export function visualizeFaq(faq: RoomFAQ) {
+	if (faq.html) {
+		return faq.source;
+	}
+	return Chat.formatText(faq.source, true);
+}
+
 export function getAlias(roomid: RoomID, key: string) {
 	if (!roomFaqs[roomid]) return false;
 	const value = roomFaqs[roomid][key];
-	if (value && value.startsWith('>')) return value.substr(1);
+	if (value?.alias) return value.source;
 	return false;
 }
 
 export const commands: Chat.ChatCommands = {
+	addhtmlfaq: 'addfaq',
 	addfaq(target, room, user, connection) {
 		room = this.requireRoom();
+		const useHTML = this.cmd.includes('html');
 		this.checkCan('ban', null, room);
+		if (useHTML && !user.can('addhtml', null, room, this.fullCmd)) {
+			return this.errorReply(`You are not allowed to use raw HTML in roomfaqs.`);
+		}
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 		if (!target) return this.parse('/help roomfaq');
 
@@ -45,13 +83,20 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`FAQ entries must include at least one character.`);
 		}
 
-		text = text.replace(/^>/, '&gt;');
+		if (!useHTML) {
+			text = text.replace(/^>/, '&gt;');
+		} else {
+			text = this.checkHTML(text);
+		}
 
 		if (!roomFaqs[room.roomid]) roomFaqs[room.roomid] = {};
 		const exists = topic in roomFaqs[room.roomid];
-		roomFaqs[room.roomid][topic] = text;
+		roomFaqs[room.roomid][topic] = {
+			source: text,
+			html: useHTML,
+		};
 		saveRoomFaqs();
-		this.sendReplyBox(Chat.formatText(text, true));
+		this.sendReplyBox(visualizeFaq(roomFaqs[room.roomid][topic]));
 		this.privateModAction(`${user.name} ${exists ? 'edited' : 'added'} an FAQ for '${topic}'`);
 		this.modlog('RFAQ', null, `${exists ? 'edited' : 'added'} '${topic}'`);
 	},
@@ -97,7 +142,10 @@ export const commands: Chat.ChatCommands = {
 		if (getAlias(room.roomid, topic)) {
 			return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
 		}
-		roomFaqs[room.roomid][alias] = `>${topic}`;
+		roomFaqs[room.roomid][alias] = {
+			alias: true,
+			source: topic,
+		};
 		saveRoomFaqs();
 		this.privateModAction(`${user.name} added an alias for '${topic}': ${alias}`);
 		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
@@ -116,9 +164,9 @@ export const commands: Chat.ChatCommands = {
 		topic = getAlias(room.roomid, topic) || topic;
 
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(Chat.formatText(roomFaqs[room.roomid][topic], true));
+		this.sendReplyBox(visualizeFaq(roomFaqs[room.roomid][topic]));
 		if (!this.broadcasting && user.can('ban', null, room, 'rfaq')) {
-			const code = Utils.escapeHTML(roomFaqs[room.roomid][topic]).replace(/\n/g, '<br />');
+			const code = Utils.escapeHTML(roomFaqs[room.roomid][topic].source).replace(/\n/g, '<br />');
 			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/addfaq ${topic}, ${code}</code></details>`);
 		}
 	},
@@ -126,6 +174,7 @@ export const commands: Chat.ChatCommands = {
 		`/roomfaq - Shows the list of all available FAQ topics`,
 		`/roomfaq <topic> - Shows the FAQ for <topic>.`,
 		`/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: @ # &`,
+		`/addhtmlfaq <topic>, <text> - Adds or updates an entry for <topic> with HTML support. Requires: # &`,
 		`/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: @ # &`,
 		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: @ # &`,
 	],
@@ -152,13 +201,13 @@ export const pages: Chat.PageTable = {
 			buf += `<div class="infobox">`;
 			buf += `<h3>${key}</h3>`;
 			buf += `<hr />`;
-			buf += Chat.formatText(topic, true);
+			buf += visualizeFaq(topic);
 			const aliases = keys.filter(val => getAlias(room.roomid, val) === key);
 			if (aliases.length) {
 				buf += `<hr /><strong>Aliases:</strong> ${aliases.join(', ')}`;
 			}
 			if (user.can('ban', null, room, 'addfaq')) {
-				const src = Utils.escapeHTML(topic).replace(/\n/g, `<br />`);
+				const src = Utils.escapeHTML(topic.source).replace(/\n/g, `<br />`);
 				buf += `<hr /><details><summary>Raw text</summary>`;
 				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/addfaq ${key}, ${src}</code></details>`;
 				buf += `<hr /><button class="button" name="send" value="/msgroom ${room.roomid},/removefaq ${key}">Delete FAQ</button>`;
@@ -170,13 +219,15 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
-	if (roomFaqs[oldID]) {
-		if (!roomFaqs[newID]) roomFaqs[newID] = {};
-		Object.assign(roomFaqs[newID], roomFaqs[oldID]);
-		delete roomFaqs[oldID];
-		saveRoomFaqs();
-	}
+export const handlers: Chat.Handlers = {
+	onRenameRoom(oldID, newID) {
+		if (roomFaqs[oldID]) {
+			if (!roomFaqs[newID]) roomFaqs[newID] = {};
+			Object.assign(roomFaqs[newID], roomFaqs[oldID]);
+			delete roomFaqs[oldID];
+			saveRoomFaqs();
+		}
+	},
 };
 
 process.nextTick(() => {

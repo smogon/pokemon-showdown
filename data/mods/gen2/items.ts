@@ -86,6 +86,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	leftovers: {
+		inherit: true,
+		onResidualOrder: 5,
+		onResidualSubOrder: 1,
+	},
 	lightball: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
@@ -157,14 +162,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Poison') {
 				return damage * 1.1;
-			}
-		},
-	},
-	quickclaw: {
-		inherit: true,
-		onFractionalPriority(priority, pokemon) {
-			if (this.randomChance(60, 256)) {
-				return 0.1;
 			}
 		},
 	},

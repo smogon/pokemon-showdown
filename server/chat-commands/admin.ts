@@ -122,13 +122,6 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 	}
 }
 
-async function rebuild(context: Chat.CommandContext, force?: boolean) {
-	const [, , stderr] = await bash(`node ./build${force ? ' force' : ''}`, context);
-	if (stderr) {
-		throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
-	}
-}
-
 export const commands: Chat.ChatCommands = {
 	potd(target, room, user) {
 		this.canUseConsole();
@@ -420,18 +413,69 @@ export const commands: Chat.ChatCommands = {
 		`If a [highlight] is specified, only highlights them if they have that term on their highlight list.`,
 	],
 
+	changeprivateuhtml: 'sendprivatehtmlbox',
+	sendprivateuhtml: 'sendprivatehtmlbox',
+	sendprivatehtmlbox(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		this.checkCan('addhtml', null, room);
+
+		const {targetUser, rest} = this.requireUser(target);
+
+		if (targetUser.locked && !this.user.can('lock')) {
+			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them private HTML.");
+		}
+
+		if (!(targetUser.id in room.users)) {
+			throw new Chat.ErrorMessage("You cannot send private HTML to users who are not in this room.");
+		}
+
+		let html: string;
+		let messageType: string;
+		let name: string | undefined;
+		const plainHtml = cmd === 'sendprivatehtmlbox';
+		if (plainHtml) {
+			html = rest;
+			messageType = 'html';
+		} else {
+			[name, html] = this.splitOne(rest);
+			if (!name) return this.parse('/help sendprivatehtmlbox');
+
+			messageType = `uhtml${(cmd === 'changeprivateuhtml' ? 'change' : '')}|${name}`;
+		}
+
+		html = this.checkHTML(html);
+		if (!html) return this.parse('/help sendprivatehtmlbox');
+
+		html = `${Utils.html`<div style="color:#888;font-size:8pt">[Private from ${user.name}]</div>`}${Chat.collapseLineBreaksHTML(html)}`;
+		if (plainHtml) html = `<div class="infobox">${html}</div>`;
+
+		targetUser.sendTo(room, `|${messageType}|${html}`);
+
+		this.sendReply(`Sent private HTML to ${targetUser.name}.`);
+	},
+	sendprivatehtmlboxhelp: [
+		`/sendprivatehtmlbox [userid], [html] - Sends [userid] the private [html]. Requires: * # &`,
+		`/sendprivateuhtml [userid], [name], [html] - Sends [userid] the private [html] that can change. Requires: * # &`,
+		`/changeprivateuhtml [userid], [name], [html] - Changes the message previously sent with /sendprivateuhtml [userid], [name], [html]. Requires: * # &`,
+	],
+
 	botmsg(target, room, user, connection) {
-		if (!target || !target.includes(',')) return this.parse('/help botmsg');
+		if (!target || !target.includes(',')) {
+			return this.parse('/help botmsg');
+		}
+		this.checkRecursion();
+
 		let {targetUser, rest: message} = this.requireUser(target);
 
 		const auth = this.room ? this.room.auth : Users.globalAuth;
-		if (auth.get(targetUser) !== '*') {
+		if (!['*', '#'].includes(auth.get(targetUser))) {
 			return this.popupReply(`The user "${targetUser.name}" is not a bot in this room.`);
 		}
 		this.room = null; // shouldn't be in a room
 		this.pmTarget = targetUser;
 
 		message = this.checkChat(message);
+		if (!message) return;
 		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
 	},
 	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
@@ -467,8 +511,6 @@ export const commands: Chat.ChatCommands = {
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
-		this.sendReply("Rebuilding...");
-		await rebuild(this);
 
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
@@ -478,7 +520,7 @@ export const commands: Chat.ChatCommands = {
 
 		target = toID(target);
 		try {
-			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
+			Utils.clearRequireCache({exclude: ['/lib/process-manager']});
 			if (target === 'all') {
 				if (lock['all']) {
 					return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
@@ -512,10 +554,7 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (
-						manager.filename.startsWith(FS('server/chat-plugins').path) ||
-						manager.filename.startsWith(FS('.server-dist/chat-plugins').path)
-					) {
+					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
 						void manager.destroy();
 					}
 				}
@@ -692,7 +731,7 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('.server-dist/modlog').path)) void manager.destroy();
+					if (manager.filename.startsWith(FS('server/modlog').path)) void manager.destroy();
 				}
 
 				const {mainModlog} = require('../modlog');
@@ -725,7 +764,7 @@ export const commands: Chat.ChatCommands = {
 		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
 		`/hotpatch chat - reloads the chat-commands and chat-plugins directories`,
 		`/hotpatch validator - spawn new team validator processes`,
-		`/hotpatch formats - reload the .sim-dist/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
+		`/hotpatch formats - reload the sim/dex.ts tree, reload the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads IPTools datacenters`,
 		`/hotpatch punishments - reloads new punishments code`,
 		`/hotpatch loginserver - reloads new loginserver code`,
@@ -1159,8 +1198,6 @@ export const commands: Chat.ChatCommands = {
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
-		this.sendReply(`Rebuilding...`);
-		await rebuild(this);
 		this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
 
 		Monitor.updateServerLock = false;
@@ -1170,13 +1207,8 @@ export const commands: Chat.ChatCommands = {
 		`/updateserver private - Updates only the server's private code. Requires: console access`,
 	],
 
-	async rebuild(target, room, user, connection) {
-		this.canUseConsole();
-		Monitor.updateServerLock = true;
-		this.sendReply(`Rebuilding...`);
-		await rebuild(this, true);
-		Monitor.updateServerLock = false;
-		this.sendReply(`DONE`);
+	rebuild() {
+		this.errorReply("`/rebuild` is no longer necessary; TypeScript files are automatically transpiled as they are loaded.");
 	},
 
 	/*********************************************************
@@ -1195,7 +1227,6 @@ export const commands: Chat.ChatCommands = {
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
 	async eval(target, room, user, connection) {
-		room = this.requireRoom();
 		this.canUseConsole();
 		if (!this.runBroadcast(true)) return;
 		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
@@ -1214,13 +1245,13 @@ export const commands: Chat.ChatCommands = {
 		let uhtmlId = null;
 		try {
 			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
-			const battle = room.battle;
+			const battle = room?.battle;
 			const me = user;
 			let result = eval(target);
 			/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
 
 			if (result?.then) {
-				uhtmlId = `eval-${room.nextGameNumber()}`;
+				uhtmlId = `eval-${Date.now().toString().slice(-6)}-${Math.random().toFixed(6).slice(-6)}`;
 				this.sendReply(`|uhtml|${uhtmlId}|${generateHTML('<', 'Promise pending')}`);
 				this.update();
 				result = `Promise -> ${Utils.visualize(await result)}`;
@@ -1402,7 +1433,7 @@ export const pages: Chat.PageTable = {
 		let canSend = Users.globalAuth.get(bot) === '*';
 		let room;
 		for (const curRoom of Rooms.global.chatRooms) {
-			if (curRoom.auth.getDirect(bot.id) === '*') {
+			if (['*', '#'].includes(curRoom.auth.getDirect(bot.id))) {
 				canSend = true;
 				room = curRoom;
 			}

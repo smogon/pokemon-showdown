@@ -39,8 +39,10 @@ import {Format, DexFormats} from './dex-formats';
 import {Utils} from '../lib';
 
 const BASE_MOD = 'gen8' as ID;
-const DATA_DIR = path.resolve(__dirname, '../.data-dist');
-const MODS_DIR = path.resolve(__dirname, '../.data-dist/mods');
+// to account for Sucrase
+const DATA_PATH = __dirname.endsWith('.sim-dist') ? `../.data-dist` : `../data`;
+const DATA_DIR = path.resolve(__dirname, DATA_PATH);
+const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
@@ -213,7 +215,6 @@ export class ModdedDex {
 
 		// remove zalgo
 		name = name.replace(
-			// eslint-disable-next-line max-len
 			/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,
 			''
 		);
