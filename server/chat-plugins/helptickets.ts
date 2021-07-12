@@ -2209,7 +2209,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			target = target.trim();
 			if (!target) return this.parse(`/help helpticket removenote`);
-			let [ticketName, staff] = Utils.splitFirst(target, '|').map(i => i.trim());
+			let [ticketName, staff] = Utils.splitFirst(target, ',').map(i => i.trim());
 			const targetId = toID(ticketName);
 			if (!targetId) return this.errorReply(`Specify the userid that created the ticket you want to remove a note from.`);
 			const ticket = tickets[targetId];
@@ -2218,7 +2218,7 @@ export const commands: Chat.ChatCommands = {
 			if (!ticket.notes) return this.errorReply(`${targetId}'s ticket does not have any notes.`);
 			const note = ticket.notes[staff];
 			if (!note) {
-				return this.errorReply(`${staff === user.id ? 'you' : `'${staff}'`} does not have a note on that ticket.`);
+				return this.errorReply(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
 			}
 			if (!room || room.roomid !== 'staff') {
 				this.sendReply(`You removed the note '${note}' (by ${staff}) on ${ticket.userid}'s ticket.`);
@@ -2230,6 +2230,11 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(`${user.name} removed ${staff}'s note ("${note}") from ${ticket.userid}'s helpticket.`);
 			this.globalModlog(`HELPTICKET REMOVENOTE`, ticket.userid, `${note} (originally by ${staff})`);
 		},
+		removenotehelp: [
+			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
+			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
+			`Requires: % @ &`,
+		],
 
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
