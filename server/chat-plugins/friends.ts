@@ -257,7 +257,6 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(this.tr`You are currently blocking friend requests, and so cannot accept your own.`);
 			}
 			if (!target) return this.parse('/help friends');
-			void Chat.Friends.cache.update(user.id);
 			await Friends.approveRequest(user.id, target as ID);
 			const targetUser = Users.get(target);
 			sendPM(`You accepted a friend request from "${target}".`, user.id);
@@ -269,7 +268,8 @@ export const commands: Chat.ChatCommands = {
 				sendPM(`/uhtmlchange sent,`, targetUser.id);
 				sendPM(`/uhtmlchange undo,`, targetUser.id);
 			}
-			void Chat.Friends.cache.update(user.id);
+			await Chat.Friends.cache.update(user.id);
+			await Chat.Friends.cache.update(target);
 		},
 		deny: 'reject',
 		async reject(target, room, user, connection) {
