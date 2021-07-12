@@ -562,7 +562,7 @@ export class Pokemon {
 			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 		}
 
-		if (statName === 'spe' && stat > 10000) stat = 10000;
+		if (statName === 'spe' && stat > 10000 && !this.battle.format.battle?.trunc) stat = 10000;
 		return stat;
 	}
 
