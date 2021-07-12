@@ -4,8 +4,8 @@
 */
 'use strict';
 
-const {FriendsDatabase} = require('../../../.server-dist/friends');
-const {Config} = require('../../../.server-dist/config-loader');
+const {FriendsDatabase} = require('../../../server/friends.ts');
+const {Config} = require('../../../server/config-loader.ts');
 const assert = require('../../assert');
 
 const test = (Config.usesqlite ? it : it.skip);
