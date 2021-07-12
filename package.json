@@ -6,7 +6,6 @@
   "dependencies": {
     "@swc/core": "^1.2.61",
     "@types/better-sqlite3": "^5.4.0",
-    "node-oom-heapdump": "^2.2.0",
     "probe-image-size": "^5.0.0",
     "sockjs": "^0.3.21",
     "ts-node": "^10.0.0"
