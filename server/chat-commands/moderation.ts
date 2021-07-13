@@ -1655,7 +1655,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (notification.length > 300) return this.errorReply(`Notifications should not exceed 300 characters.`);
 			const message = `|tempnotify|${id}|${title}|${notification}`;
-			room.send(message);
+			room.sendUser(targetUser, message);
 		}
 	},
 	notifyuserhelp: [
