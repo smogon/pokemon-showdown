@@ -1642,7 +1642,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse(`/help notifyuser`);
 		this.checkCan('addhtml', null, room);
 		this.checkChat();
-		let {targetUser, targetUsername, rest: titleNotification} = this.splitUser(target);
+		const {targetUser, targetUsername, rest: titleNotification} = this.splitUser(target);
 		if (!targetUser?.connected) return this.errorReply(`User '${targetUsername}' not found.`);
 		const id = `${room.roomid}-user-${toID(targetUsername)}`;
 		if (cmd === 'notifyoffuser') {
