@@ -137,10 +137,12 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 
 		let group = Auth.getGroup(symbol);
 		if (group['root']) return true;
-		if (room?.settings.section &&
+		if (
+			room?.settings.section &&
 			room.settings.section === Users.globalAuth.sectionLeaders.get(user.id) &&
 			// Global drivers who are SLs should get room mod powers too
-			Users.globalAuth.atLeast(user, SECTIONLEADER_SYMBOL)) {
+			Users.globalAuth.atLeast(user, SECTIONLEADER_SYMBOL)
+		) {
 			group = Auth.getGroup('@');
 		}
 
