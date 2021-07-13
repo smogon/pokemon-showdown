@@ -23,6 +23,8 @@ To reload chat commands:
 
 */
 
+import * as path from 'path';
+
 import type {RoomPermission, GlobalPermission} from './user-groups';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
@@ -137,7 +139,9 @@ import ProbeModule = require('probe-image-size');
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
-const TRANSLATION_DIRECTORY = `${__dirname}/../translations`;
+// to account for Sucrase
+const TRANSLATION_PATH = __dirname.endsWith('.server-dist') ? `../.translations-dist` : `../translations`;
+const TRANSLATION_DIRECTORY = path.resolve(__dirname, TRANSLATION_PATH);
 
 class PatternTester {
 	// This class sounds like a RegExp
