@@ -227,7 +227,7 @@ function getQuestions(category: ID): TriviaQuestion[] {
 		const lastCategoryID = toID(triviaData.history?.slice(-1)[0].category).replace("random", "");
 		const categories = Object.keys(MAIN_CATEGORIES).filter(cat => toID(MAIN_CATEGORIES[cat]) !== lastCategoryID);
 		const randCategory = categories[Math.floor(Math.random() * categories.length)];
-		return [...triviaData.questions![randCategory]];
+		return [...(triviaData.questions![randCategory] || [])];
 	} else if (isAll) {
 		const questions: TriviaQuestion[] = [];
 		for (const categoryStr in MAIN_CATEGORIES) {
@@ -235,7 +235,7 @@ function getQuestions(category: ID): TriviaQuestion[] {
 		}
 		return questions;
 	} else if (ALL_CATEGORIES[category]) {
-		return [...triviaData.questions![category]];
+		return [...(triviaData.questions![category] || [])];
 	} else {
 		throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
 	}
