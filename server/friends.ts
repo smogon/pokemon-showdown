@@ -354,7 +354,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 		}
 	} catch (e) {
 		if (!e.name.endsWith('FailureMessage')) {
-			result.error = 'Sorry! The database process crashed. We\'ve been notified and will fix this.';
+			result.error = "Sorry! The database process crashed. We've been notified and will fix this.";
 			Monitor.crashlog(e, "A friends database process", query);
 		} else {
 			result.error = e.message;
