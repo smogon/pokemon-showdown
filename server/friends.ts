@@ -39,7 +39,6 @@ export class FailureMessage extends Error {
 	}
 }
 
-
 export function sendPM(message: string, to: string, from = '&') {
 	const senderID = toID(to);
 	const receiverID = toID(from);

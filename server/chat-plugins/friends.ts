@@ -233,7 +233,7 @@ export const commands: Chat.ChatCommands = {
 			if (connection.openPages?.has('friends-sent')) {
 				this.parse(`/join view-friends-sent`);
 			}
-			return this.sendReply(this.tr`You sent a friend request to '${target}'.`);
+			return this.sendReply(`You sent a friend request to '${target}'.`);
 		},
 		unfriend: 'remove',
 		async remove(target, room, user) {
@@ -242,7 +242,7 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help friends');
 
 			await Friends.removeFriend(user.id, target as ID);
-			return this.sendReply(this.tr`Removed friend '${target}'.`);
+			return this.sendReply(`Removed friend '${target}'.`);
 		},
 		view(target) {
 			return this.parse(`/join view-friends-${target}`);
@@ -280,7 +280,7 @@ export const commands: Chat.ChatCommands = {
 			if (connection.openPages?.has('friends-received')) {
 				this.parse(`/j view-friends-received`);
 			}
-			return sendPM(this.tr`You denied a friend request from '${target}'.`, user.id);
+			return sendPM(`You denied a friend request from '${target}'.`, user.id);
 		},
 		toggle(target, room, user, connection) {
 			Friends.checkCanUse(this);
@@ -317,7 +317,7 @@ export const commands: Chat.ChatCommands = {
 			if (connection.openPages?.has('friends-sent')) {
 				this.parse(`/j view-friends-sent`);
 			}
-			return sendPM(this.tr`You removed your friend request to '${target}'.`, user.id);
+			return sendPM(`You removed your friend request to '${target}'.`, user.id);
 		},
 		hidenotifs: 'viewnotifications',
 		hidenotifications: 'viewnotifications',
