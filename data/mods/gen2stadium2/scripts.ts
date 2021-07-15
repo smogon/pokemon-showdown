@@ -222,7 +222,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Implementing Recoil mechanics from Stadium 2.
 			// If a pokemon caused the other to faint with a recoil move and only one pokemon remains on both sides,
 			// recoil damage will not be taken.
-			if (move.recoil && ((pokemon.side.foePokemonLeft() > 1 && pokemon.side.pokemon.filter(ally => !ally.fainted).length > 1) || target.hp > 0)) {
+			if (move.recoil && move.totalDamage && ((pokemon.side.foePokemonLeft() > 1 && pokemon.side.pokemon.filter(ally => !ally.fainted).length > 1) || target.hp > 0)) {
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
 			}
 			return damage;
