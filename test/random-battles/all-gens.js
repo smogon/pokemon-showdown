@@ -5,7 +5,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {Utils} = require('../../.lib-dist');
+const {Utils} = require('../../lib');
 const {testTeam, isValidSet, validateLearnset} = require('./tools');
 
 const ALL_GENS = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -65,7 +65,7 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 	for (const filename of ['bss-factory-sets', 'mods/gen7/bss-factory-sets', 'mods/gen7/factory-sets', 'mods/gen6/factory-sets']) {
 		it(`${filename}.json should contain valid sets (slow)`, function () {
 			this.timeout(0);
-			const setsJSON = require(`../../.data-dist/${filename}.json`);
+			const setsJSON = require(`../../data/${filename}.json`);
 			const mod = filename.split('/')[1] || 'gen' + Dex.gen;
 			const genNum = isNaN(mod[3]) ? Dex.gen : mod[3];
 

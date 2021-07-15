@@ -86,10 +86,10 @@ export const commands: Chat.ChatCommands = {
 	async dexsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
-		target = target.slice(0, 300);
+		if (target.length > 300) return this.errorReply('Dexsearch queries may not be longer than 300 characters.');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, mod=gen${targetGen}`;
-		const split = target.split(',');
+		const split = target.split(',').map(term => term.trim());
 		const index = split.findIndex(x => x.startsWith('maxgen'));
 		if (index >= 0) {
 			const genNum = parseInt(split[index][split[index].length - 1]);
@@ -462,16 +462,16 @@ export const commands: Chat.ChatCommands = {
 
 function getMod(target: string) {
 	const arr = target.split(',').map(x => x.trim());
-	const usedMod = arr.find(x => {
+	const modTerm = arr.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
-	})?.split('=')[1];
+	});
 	const count = arr.filter(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=');
 	}).length;
-	if (usedMod) arr.splice(arr.indexOf('mod=' + usedMod), 1);
-	return {splitTarget: arr, usedMod: usedMod ? toID(usedMod) : undefined, count};
+	if (modTerm) arr.splice(arr.indexOf(modTerm), 1);
+	return {splitTarget: arr, usedMod: modTerm ? toID(modTerm.split(/ ?= ?/)[1]) : undefined, count};
 }
 
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
@@ -1145,7 +1145,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results.push(dex[mon].name);
 	}
 
-	if (usedMod === 'letsgo') {
+	if (usedMod === 'gen7letsgo') {
 		results = results.filter(name => {
 			const species = mod.species.get(name);
 			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
@@ -1944,23 +1944,29 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
-	const rawSearch = target.split(' ');
+	const rawSearch = target.replace(/gen \d/g, match => toID(match)).split(' ');
 	const searchedWords: string[] = [];
 	let foundItems: string[] = [];
 
 	// Refine searched words
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
-		if (newWord.substr(0, 6) === 'maxgen' && parseInt(newWord[6])) {
-			if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
-			maxGen = parseInt(newWord[6]);
-			if (maxGen < 2 || maxGen > 8) return {error: "The generation must be between 2 and 8"};
-			continue;
-		} else if (newWord.substr(0, 3) === 'gen' && parseInt(newWord[3])) {
-			if (gen) return {error: "You cannot specify 'gen' multiple times."};
-			gen = parseInt(newWord[3]);
-			if (gen < 2 || gen > 8) return {error: "The generation must be between 2 and 8"};
-			continue;
+		if (newWord.substr(0, 6) === 'maxgen') {
+			const parsedGen = parseInt(newWord.substr(6));
+			if (!isNaN(parsedGen)) {
+				if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
+				maxGen = parsedGen;
+				if (maxGen < 2 || maxGen > 8) return {error: "The generation must be between 2 and 8"};
+				continue;
+			}
+		} else if (newWord.substr(0, 3) === 'gen') {
+			const parsedGen = parseInt(newWord.substr(3));
+			if (!isNaN(parsedGen)) {
+				if (gen) return {error: "You cannot specify 'gen' multiple times."};
+				gen = parsedGen;
+				if (gen < 2 || gen > 8) return {error: "The generation must be between 2 and 8"};
+				continue;
+			}
 		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
 		switch (newWord) {
@@ -2190,22 +2196,28 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
-	const rawSearch = target.split(' ');
+	const rawSearch = target.replace(/gen \d/g, match => toID(match)).split(' ');
 	const searchedWords: string[] = [];
 	let foundAbilities: string[] = [];
 
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
-		if (newWord.substr(0, 6) === 'maxgen' && parseInt(newWord[6])) {
-			if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
-			maxGen = parseInt(newWord[6]);
-			if (maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
-			continue;
-		} else if (newWord.substr(0, 3) === 'gen' && parseInt(newWord[3])) {
-			if (gen) return {error: "You cannot specify 'gen' multiple times."};
-			gen = parseInt(newWord[3]);
-			if (gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
-			continue;
+		if (newWord.substr(0, 6) === 'maxgen') {
+			const parsedGen = parseInt(newWord.substr(6));
+			if (parsedGen) {
+				if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
+				maxGen = parsedGen;
+				if (maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
+				continue;
+			}
+		} else if (newWord.substr(0, 3) === 'gen') {
+			const parsedGen = parseInt(newWord.substr(3));
+			if (parsedGen) {
+				if (gen) return {error: "You cannot specify 'gen' multiple times."};
+				gen = parsedGen;
+				if (gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
+				continue;
+			}
 		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
 		switch (newWord) {

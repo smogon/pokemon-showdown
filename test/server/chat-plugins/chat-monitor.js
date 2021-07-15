@@ -8,7 +8,7 @@
 const assert = require('assert').strict;
 const {makeUser} = require('../../users-utils');
 
-const {Filters} = require('../../../.server-dist/chat-plugins/chat-monitor');
+const {Filters} = require('../../../server/chat-plugins/chat-monitor');
 
 describe('Chat monitor', () => {
 	describe('regex generator', () => {
@@ -27,7 +27,7 @@ describe('Chat monitor', () => {
 			assert.deepEqual(Filters.stripWordBoundaries(regex), /test/iu);
 		});
 
-		describe('evasion regexes', () => {
+		describe('evasion regexes', function () {
 			before(() => {
 				this.evasionRegex = Filters.generateRegex('slur', true);
 			});
@@ -49,15 +49,15 @@ describe('Chat monitor', () => {
 		});
 	});
 
-	describe('in-room tests', () => {
+	describe('in-room tests', function () {
 		before(() => {
 			this.room = Rooms.get('lobby');
 			this.user = makeUser("Unit Tester");
 			this.connection = this.user.connections[0];
 			this.user.joinRoom(this.room.roomid, this.connection);
 
+			Chat.loadPlugins();
 			this.parse = async function (message) {
-				Chat.loadPlugins();
 				const context = new Chat.CommandContext({
 					message,
 					room: this.room,

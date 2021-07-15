@@ -137,7 +137,9 @@ import ProbeModule = require('probe-image-size');
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
-const TRANSLATION_DIRECTORY = `${__dirname}/../.translations-dist`;
+// to account for Sucrase
+const TRANSLATION_PATH = __dirname.endsWith('.server-dist') ? `../.translations-dist` : `../translations`;
+const TRANSLATION_DIRECTORY = `${__dirname}/${TRANSLATION_PATH}`;
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -1616,7 +1618,7 @@ export const Chat = new class {
 			const languageID = Dex.toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
-				if (!filename.endsWith('.js')) continue;
+				if (!filename.endsWith('.ts')) continue;
 
 				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
 
@@ -1774,11 +1776,8 @@ export const Chat = new class {
 
 	loadPlugin(file: string) {
 		let plugin;
-		if (file.endsWith('.ts')) {
+		if (file.endsWith('.ts') || file.endsWith('.js')) {
 			plugin = require(`./${file.slice(0, -3)}`);
-		} else if (file.endsWith('.js')) {
-			// Switch to server/ because we'll be in .server-dist/ after this file is compiled
-			plugin = require(`../server/${file}`);
 		} else {
 			return;
 		}

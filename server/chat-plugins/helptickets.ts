@@ -29,6 +29,7 @@ interface TicketState {
 	text?: [string, string];
 	resolved?: ResolvedTicketInfo;
 	meta?: string;
+	notes?: {[userid: string]: string};
 }
 
 interface ResolvedTicketInfo {
@@ -295,6 +296,10 @@ export class HelpTicket extends Rooms.RoomGame {
 	getPreview() {
 		if (!this.ticket.active) return `title="The ticket creator has not spoken yet."`;
 		const hoverText = [];
+		const noteBuf = Object.entries(this.ticket.notes || {})
+			.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
+			.join('&#10;');
+		const notes = this.ticket.notes ? `&#10;Staff notes:&#10;${noteBuf}` : '';
 		for (let i = this.room.log.log.length - 1; i >= 0; i--) {
 			// Don't show anything after the first linebreak for multiline messages
 			const entry = this.room.log.log[i].split('\n')[0].split('|');
@@ -308,8 +313,8 @@ export class HelpTicket extends Rooms.RoomGame {
 			hoverText.push(Utils.html`${message}`);
 			if (hoverText.length >= 3) break;
 		}
-		if (!hoverText.length) return `title="The ticket creator has not spoken yet."`;
-		return `title="${hoverText.reverse().join(`&#10;`)}"`;
+		if (!hoverText.length) return `title="The ticket creator has not spoken yet.${notes}"`;
+		return `title="${hoverText.reverse().join(`&#10;`)}${notes}"`;
 	}
 
 	close(result: boolean | 'ticketban' | 'deleted', staff?: User) {
@@ -538,7 +543,11 @@ export class HelpTicket extends Rooms.RoomGame {
 	static getTextButton(ticket: TicketState & {text: [string, string]}) {
 		let buf = '';
 		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
-		const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
+		const noteBuf = Object.entries(ticket.notes || {})
+			.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
+			.join('&#10;');
+		const notes = ticket.notes ? `&#10;Staff notes:&#10;${noteBuf}` : '';
+		const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}${notes}"`;
 		const language = Users.get(ticket.userid)?.language || '';
 		const languageDisplay = language && language !== 'english' ? ` <small>(${language})</small>` : '';
 		buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
@@ -781,6 +790,20 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 		}
 	} catch (e) {}
 	return null;
+}
+
+function refreshPageFor(page: string, roomid: RoomID, ignoreUsers?: ID[]) {
+	const room = Rooms.get(roomid);
+	if (room) {
+		for (const curUser of Object.values(room.users)) {
+			if (ignoreUsers?.includes(curUser.id)) continue;
+			for (const conn of curUser.connections) {
+				if (conn.openPages?.has(page)) {
+					void Chat.parse(`/j view-${page}`, room, curUser, conn);
+				}
+			}
+		}
+	}
 }
 
 // Prevent a desynchronization issue when hotpatching
@@ -1489,15 +1512,18 @@ export const pages: Chat.PageTable = {
 				buf += `<td>`;
 				const roomid = 'help-' + ticket.userid;
 				let logUrl = '';
-				if (Config.modloglink) {
-					logUrl = Config.modloglink(new Date(ticket.created), roomid);
+				const created = new Date(ticket.created);
+				if (ticket.text) {
+					logUrl = `/view-help-logs-${ticket.userid}--${created.toISOString().slice(0, -17)}`;
+				} else if (Config.modloglink) {
+					logUrl = Config.modloglink(created, roomid);
 				}
 				const room = Rooms.get(roomid);
 				if (room) {
 					const ticketGame = room.getGame(HelpTicket)!;
 					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
 				} else if (ticket.text) {
-					buf += `<a class="button" href="/view-help-text-${ticket.userid}">View</a>`;
+					buf += `<a class="button" href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
 				}
 				if (logUrl) {
 					buf += `<a href="${logUrl}"><button class="button">${this.tr`Log`}</button></a>`;
@@ -1548,6 +1574,7 @@ export const pages: Chat.PageTable = {
 				ticket.claimed = user.id;
 				writeTickets();
 				notifyStaff();
+				refreshPageFor(`help-text-${ticket.userid}`, 'staff', [user.id]);
 			} else if (ticket.claimed) {
 				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br /><br />`;
 			}
@@ -1565,6 +1592,16 @@ export const pages: Chat.PageTable = {
 				buf += Chat.formatText(context);
 			}
 			buf += `</div>`;
+
+			if (ticket.notes) {
+				buf += `<br /><div class="infobox">`;
+				buf += `<details class="readmore"><summary>Hover notes:</summary>`;
+				for (const staff in ticket.notes) {
+					buf += Utils.html`<p>${ticket.notes[staff]} (by ${staff})</p>`;
+				}
+				buf += `</details></div>`;
+			}
+
 			if (!ticket.resolved) {
 				buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
 				buf += `<br /><strong>Resolve:</strong><br />`;
@@ -2003,7 +2040,7 @@ export const commands: Chat.ChatCommands = {
 				`<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}`,
 				`<button class="button" name="send" value="/modlog global, user='${ticket.userid}'"><small>Global Modlog for ${ticket.creator}</small></button>`,
 				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`,
-			].join(' ');
+			].join('<br />');
 			const staffHint = staffContexts[ticketType] || '';
 			let reportTargetInfo = '';
 			if (reportTargetType === 'room') {
@@ -2125,19 +2162,10 @@ export const commands: Chat.ChatCommands = {
 			});
 			HelpTicket.logTextResult(ticket as TicketState & {text: [string, string], resolved: ResolvedTicketInfo});
 			notifyStaff();
-			const staffRoom = Rooms.get('staff');
-			if (staffRoom) {
-				// force a refresh for everyone in it, otherwise we potentially get two punishments at once
-				// from different people clicking at the same time and reading it separately.
-				// Yes. This was a real issue.
-				for (const curUser of Object.values(staffRoom.users)) {
-					for (const conn of curUser.connections) {
-						if (conn.openPages?.has(`help-text-${ticketId}`)) {
-							void Chat.parse(`/j view-help-text-${ticketId}`, staffRoom, user, conn);
-						}
-					}
-				}
-			}
+			// force a refresh for everyone in it, otherwise we potentially get two punishments at once
+			// from different people clicking at the same time and reading it separately.
+			// Yes. This was a real issue.
+			refreshPageFor(`help-text-${ticketId}`, 'staff');
 		},
 
 		list(target, room, user) {
@@ -2151,6 +2179,62 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/join view-help-stats');
 		},
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
+
+		note: 'addnote',
+		addnote(target, room, user) {
+			this.checkCan('lock');
+			target = target.trim();
+			if (!target) return this.parse(`/help helpticket addnote`);
+			const [ticketName, note] = Utils.splitFirst(target, ',').map(i => i.trim());
+			const ticketId = toID(ticketName);
+			if (!ticketId) return this.errorReply(`Specify the userid that created the ticket you want to mark.`);
+			const ticket = tickets[ticketId];
+			if (!ticket) return this.errorReply(`${ticketId} does not have an active ticket.`);
+			if (ticket.resolved) return this.errorReply(`${ticketId}'s ticket has already been resolved.`);
+			if (!note) return this.errorReply(`You must specify a note to add.`);
+			if (!ticket.notes) ticket.notes = {};
+			ticket.notes[user.id] = note;
+			writeTickets();
+			if (!room || room.roomid !== 'staff') this.sendReply(`Added the note "${note}" to ${ticketId}'s ticket.`);
+			this.room = Rooms.get('staff') || null;
+			this.addGlobalModAction(`${user.name} added the note "${note}" to ${ticket.userid}'s helpticket.`);
+			this.globalModlog(`HELPTICKET NOTE`, ticket.userid, note);
+		},
+		addnotehelp: [
+			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text.`,
+			`Requires: % @ &`,
+		],
+
+		removenote(target, room, user) {
+			this.checkCan('lock');
+			target = target.trim();
+			if (!target) return this.parse(`/help helpticket removenote`);
+			let [ticketName, staff] = Utils.splitFirst(target, ',').map(i => i.trim());
+			const targetId = toID(ticketName);
+			if (!targetId) return this.errorReply(`Specify the userid that created the ticket you want to remove a note from.`);
+			const ticket = tickets[targetId];
+			if (!ticket || ticket.resolved) return this.errorReply(`${targetId} does not have a pending ticket.`);
+			staff = toID(staff) || user.id;
+			if (!ticket.notes) return this.errorReply(`${targetId}'s ticket does not have any notes.`);
+			const note = ticket.notes[staff];
+			if (!note) {
+				return this.errorReply(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
+			}
+			if (!room || room.roomid !== 'staff') {
+				this.sendReply(`You removed the note '${note}' (by ${staff}) on ${ticket.userid}'s ticket.`);
+			}
+			delete ticket.notes[staff];
+			if (!Object.keys(ticket.notes).length) delete ticket.notes;
+			writeTickets();
+			this.room = Rooms.get('staff') || null;
+			this.addModAction(`${user.name} removed ${staff}'s note ("${note}") from ${ticket.userid}'s helpticket.`);
+			this.globalModlog(`HELPTICKET REMOVENOTE`, ticket.userid, `${note} (originally by ${staff})`);
+		},
+		removenotehelp: [
+			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
+			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
+			`Requires: % @ &`,
+		],
 
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
