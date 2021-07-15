@@ -1070,7 +1070,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					`Enter either the room name or a room alias.`,
 				];
 			}
-			if (room.settings.isPrivate !== undefined) {
+			if (room.settings.isPrivate) {
 				return ['You may only request help for public rooms.'];
 			}
 			return true;
