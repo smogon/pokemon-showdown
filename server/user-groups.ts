@@ -72,7 +72,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (user.hasSysopAccess()) return true;
 		if (group === 'trusted' || group === 'autoconfirmed') {
 			if (user.trusted && group === 'trusted') return true;
-			if (user.autoconfirmed && group === 'autoconfirmed') return true;
+			if (user.autoconfirmed && !user.locked && group === 'autoconfirmed') return true;
 			group = Config.groupsranking[1];
 		}
 		if (user.locked || user.semilocked) return false;
