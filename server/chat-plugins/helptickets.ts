@@ -1652,8 +1652,8 @@ export const pages: Chat.PageTable = {
 				return buf;
 			}
 			const stringifyDate = (num: number) => {
-				const date = Chat.toTimestamp(new Date(num), {human: true}).split(' ');
-				return {day: date[0], time: date[1]};
+				const dateStrings = Chat.toTimestamp(new Date(num), {human: true}).split(' ');
+				return {day: dateStrings[0], time: dateStrings[1]};
 			};
 
 			Utils.sortBy(logs, log => -log.date);
@@ -1671,7 +1671,12 @@ export const pages: Chat.PageTable = {
 				if (ticket.claimed) {
 					buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
 				}
-				buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection, ticket.state);
+				buf += await ticketInfo.getReviewDisplay(
+					ticket as TicketState & {text: [string, string]},
+					user,
+					connection,
+					ticket.state
+				);
 				buf += `<br />`;
 				buf += `<div class="infobox">`;
 				const [text, context] = ticket.text;
