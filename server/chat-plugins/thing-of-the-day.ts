@@ -792,7 +792,7 @@ export const commands: Chat.ChatCommands = {
 	otd: {
 		create(target, room, user) {
 			room = this.requireRoom();
-			if (room.settings.isPrivate !== undefined) {
+			if (room.settings.isPrivate) {
 				return this.errorReply(`This command is only available in public rooms`);
 			}
 			const count = [...otds.values()].filter(otd => otd.room.roomid === room!.roomid).length;
