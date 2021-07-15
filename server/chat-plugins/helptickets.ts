@@ -1660,8 +1660,8 @@ export const pages: Chat.PageTable = {
 
 			for (const ticket of logs) {
 				buf += `<details class="readmore"><summary>`;
-				const date = stringifyDate(ticket.created);
-				buf += `<strong>${ticket.type} - ${date.day} (${date.time})</strong></summary>`;
+				const curDate = stringifyDate(ticket.created);
+				buf += `<strong>${ticket.type} - ${curDate.day} (${curDate.time})</strong></summary>`;
 				const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
 				this.title = `[Text Ticket] ${ticket.userid}`;
 				buf += `<h2>Issue: ${ticket.type}</h2>`;
