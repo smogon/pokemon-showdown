@@ -225,8 +225,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (
 				move.recoil &&
 				(
-					(pokemon.side.foePokemonLeft() > 1 
-					&& pokemon.side.pokemon.filter(ally => !ally.fainted).length > 1) || target.hp > 0 
+					(pokemon.side.foePokemonLeft() > 1 &&
+					pokemon.side.pokemon.filter(ally => !ally.fainted).length > 1) || target.hp > 0
 				)
 			) {
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
