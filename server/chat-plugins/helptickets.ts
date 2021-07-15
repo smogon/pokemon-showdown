@@ -25,11 +25,16 @@ interface TicketState {
 	ip: string;
 	needsDelayWarning?: boolean;
 	offline?: boolean;
+	// text ticket properties
 	/** [main text, context] */
 	text?: [string, string];
 	resolved?: ResolvedTicketInfo;
 	meta?: string;
 	notes?: {[userid: string]: string};
+	/** Extra info that they might need for displays or whatnot.
+	 * Use `TextTicketInfo#getState` to set it at creation (store properties of the user object, etc)
+	 */
+	state?: AnyObject;
 }
 
 interface ResolvedTicketInfo {
@@ -47,9 +52,10 @@ interface TextTicketInfo {
 	title: string;
 	disclaimer?: string;
 	getReviewDisplay: (
-		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection
+		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection, state?: AnyObject
 	) => Promise<string | void> | string | void;
 	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
+	getState?: (ticket: TicketState, user: User) => AnyObject;
 }
 
 interface BattleInfo {
@@ -435,6 +441,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			userid: ticket.userid,
 			type: ticket.type,
 			claimed: ticket.claimed,
+			state: ticket.state || {},
 		};
 		const date = Chat.toTimestamp(new Date()).split(' ')[0];
 		void FS(`logs/tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
@@ -960,6 +967,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 	},
 	inapname: {
 		title: "What's the inappropriate username?",
+		disclaimer: "If the username is offensive in a non-english language, or if it's not obvious, please be sure to explain.",
 		checker(input) {
 			if (!Users.get(input)) {
 				return [
@@ -1078,6 +1086,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 	},
 	inappokemon: {
 		title: "Please provide replays of the battle with inappropriate Pokemon nicknames",
+		disclaimer: "If the nickname is offensive in a non-english language, or if it's not obvious, please be sure to explain.",
 		checker(input) {
 			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
 			return ['Please provide at least one valid battle or replay URL.'];
@@ -1122,10 +1131,10 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 	},
 	ipappeal: {
 		title: "Where are you currently connecting from?",
-		async getReviewDisplay(ticket, staff, conn) {
+		async getReviewDisplay(ticket, staff, conn, state) {
 			const tarUser = Users.get(ticket.userid);
-			const ips = tarUser ? tarUser.ips : ticket.meta!.split('-');
-			if (!tarUser) ips.shift(); // first one is always 'ips'
+			const ips: string[] = state ? state.ips : tarUser ? tarUser.ips : ticket.meta!.split('-');
+			if (!tarUser && !state) ips.shift(); // first one is always 'ips'
 			const info = await Promise.all(ips.map(i => IPTools.lookup(i)));
 			let buf = `<strong>IPs:</strong><br />`;
 			for (const [i, ip] of ips.entries()) {
@@ -1151,6 +1160,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 
 			return buf;
+		},
+		getState(ticket, user) {
+			return {ips: user.ips};
 		},
 		checker(text, context, pageId, user) {
 			if (!toID(text)) {
@@ -1639,10 +1651,17 @@ export const pages: Chat.PageTable = {
 				buf += `<div class="message-error">None found.</div>`;
 				return buf;
 			}
-			const stringifyDate = (num: number) => Chat.toTimestamp(new Date(num)).split(' ')[0];
+			const stringifyDate = (num: number) => {
+				const date = Chat.toTimestamp(new Date(num), {human: true}).split(' ');
+				return {day: date[0], time: date[1]};
+			};
+
+			Utils.sortBy(logs, log => -log.date);
+
 			for (const ticket of logs) {
 				buf += `<details class="readmore"><summary>`;
-				buf += `<strong>${ticket.type} - ${stringifyDate(ticket.created)}</strong></summary>`;
+				const date = stringifyDate(ticket.created);
+				buf += `<strong>${ticket.type} - ${date.day} (${date.time})</strong></summary>`;
 				const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
 				this.title = `[Text Ticket] ${ticket.userid}`;
 				buf += `<h2>Issue: ${ticket.type}</h2>`;
@@ -1652,7 +1671,7 @@ export const pages: Chat.PageTable = {
 				if (ticket.claimed) {
 					buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
 				}
-				buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
+				buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection, ticket.state);
 				buf += `<br />`;
 				buf += `<div class="infobox">`;
 				const [text, context] = ticket.text;
@@ -1992,6 +2011,9 @@ export const commands: Chat.ChatCommands = {
 				writeTickets();
 				notifyStaff();
 				textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
+				if (textTicket.getState) {
+					ticket.state = textTicket.getState(ticket, user);
+				}
 
 				connection.send(`>view-${pageId}\n|deinit`);
 				return this.popupReply(`Your report has been submitted.`);
