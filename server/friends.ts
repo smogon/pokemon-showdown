@@ -58,6 +58,13 @@ export function sendPM(message: string, to: string, from = '&') {
 	}
 }
 
+function canPM(sender: User, receiver: User | null) {
+	if (!receiver || !receiver.settings.blockPMs) return true;
+	if (receiver.settings.blockPMs === true) return sender.can('lock');
+	if (receiver.settings.blockPMs === 'friends') return false;
+	return Users.globalAuth.atLeast(sender, receiver.settings.blockPMs);
+}
+
 export class FriendsDatabase {
 	file: string;
 	cache: Cache<Set<string>>;
@@ -169,7 +176,7 @@ export class FriendsDatabase {
 		if (receiver?.settings.blockFriendRequests) {
 			throw new Chat.ErrorMessage(`This user is blocking friend requests.`);
 		}
-		if (receiver?.settings.blockPMs) {
+		if (!canPM(user, receiver)) {
 			throw new Chat.ErrorMessage(`This user is blocking PMs, and cannot be friended right now.`);
 		}
 
