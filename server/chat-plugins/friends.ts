@@ -423,7 +423,6 @@ export const pages: Chat.PageTable = {
 			buf += `<hr />`;
 			if (user.settings.blockFriendRequests) {
 				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
-				return toLink(buf);
 			}
 			const {sent} = await Chat.Friends.getRequests(user);
 			if (sent.size < 1) {
