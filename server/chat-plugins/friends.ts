@@ -259,14 +259,14 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help friends');
 			await Friends.approveRequest(user.id, target as ID);
 			const targetUser = Users.get(target);
-			sendPM(`You accepted a friend request from "${target}".`, user.id);
+			sendPM(`You accepted a friend request from "${target}".`, user.id, target);
 			if (connection.openPages?.has('friends-received')) {
 				this.parse(`/j view-friends-received`);
 			}
 			if (targetUser) {
-				sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id);
-				sendPM(`/uhtmlchange sent,`, targetUser.id);
-				sendPM(`/uhtmlchange undo,`, targetUser.id);
+				sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id, user.name);
+				sendPM(`/uhtmlchange sent,`, targetUser.id, user.name);
+				sendPM(`/uhtmlchange undo,`, targetUser.id, user.name);
 			}
 			await Chat.Friends.cache.update(user.id);
 			await Chat.Friends.cache.update(target);
@@ -280,7 +280,7 @@ export const commands: Chat.ChatCommands = {
 			if (connection.openPages?.has('friends-received')) {
 				this.parse(`/j view-friends-received`);
 			}
-			return sendPM(`You denied a friend request from '${target}'.`, user.id);
+			return sendPM(`You denied a friend request from '${target}'.`, user.id, target);
 		},
 		toggle(target, room, user, connection) {
 			Friends.checkCanUse(this);
@@ -317,7 +317,7 @@ export const commands: Chat.ChatCommands = {
 			if (connection.openPages?.has('friends-sent')) {
 				this.parse(`/j view-friends-sent`);
 			}
-			return sendPM(`You removed your friend request to '${target}'.`, user.id);
+			return sendPM(`You removed your friend request to '${target}'.`, user.id, target);
 		},
 		hidenotifs: 'viewnotifications',
 		hidenotifications: 'viewnotifications',
@@ -423,7 +423,7 @@ export const pages: Chat.PageTable = {
 			buf += `<hr />`;
 			if (user.settings.blockFriendRequests) {
 				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
-				return buf;
+				return toLink(buf);
 			}
 			const {sent} = await Chat.Friends.getRequests(user);
 			if (sent.size < 1) {
