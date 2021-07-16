@@ -1636,6 +1636,33 @@ export const commands: Chat.ChatCommands = {
 		`/notifyoffrank [rank] - Closes the notification previously sent with /notifyrank [rank]. Requires: # * &`,
 	],
 
+	notifyoffuser: 'notifyuser',
+	notifyuser(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		if (!target) return this.parse(`/help notifyuser`);
+		this.checkCan('addhtml', null, room);
+		this.checkChat();
+		const {targetUser, targetUsername, rest: titleNotification} = this.splitUser(target);
+		if (!targetUser?.connected) return this.errorReply(`User '${targetUsername}' not found.`);
+		const id = `${room.roomid}-user-${toID(targetUsername)}`;
+		if (cmd === 'notifyoffuser') {
+			room.sendUser(targetUser, `|tempnotifyoff|${id}`);
+		} else {
+			let [title, notification] = this.splitOne(titleNotification);
+			if (!title) title = `${room.title} notification!`;
+			if (!user.can('addhtml')) {
+				title += ` (notification from ${user.name})`;
+			}
+			if (notification.length > 300) return this.errorReply(`Notifications should not exceed 300 characters.`);
+			const message = `|tempnotify|${id}|${title}|${notification}`;
+			room.sendUser(targetUser, message);
+		}
+	},
+	notifyuserhelp: [
+		`/notifyuser [username], [title], [message] - Sends a notification to [user]. Requires: # * &`,
+		`/notifyoffuser [user] - Closes the notification previously sent with /notifyuser [user]. Requires: # * &`,
+	],
+
 	fr: 'forcerename',
 	ofr: 'forcerename',
 	offlineforcerename: 'forcerename',
