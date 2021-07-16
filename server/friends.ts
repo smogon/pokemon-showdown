@@ -325,8 +325,8 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	accept: requests => {
 		for (const request of requests) {
 			const [, receiverID] = request;
-			const results = TRANSACTIONS.removeRequest([request]);
-			if (!results) throw new Chat.ErrorMessage(`You have no request pending from ${receiverID}.`);
+			const {result} = TRANSACTIONS.removeRequest([request]);
+			if (!result.length) throw new Chat.ErrorMessage(`You have no request pending from ${receiverID}.`);
 			TRANSACTIONS.add([request]);
 		}
 		return {result: []};
