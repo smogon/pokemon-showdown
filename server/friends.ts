@@ -180,18 +180,22 @@ export class FriendsDatabase {
 			throw new Chat.ErrorMessage(`This user is blocking PMs, and cannot be friended right now.`);
 		}
 
+		const receiverName = receiver ? receiver.name : receiverID;
 		const result = await this.transaction('send', [user.id, receiverID]);
 		if (receiver) {
-			sendPM(`/text ${Utils.escapeHTML(user.name)} sent you a friend request!`, receiver.id);
-			sendPM(buf, receiver.id);
-			sendPM(disclaimer, receiver.id);
+			sendPM(`/text ${Utils.escapeHTML(user.name)} sent you a friend request!`, receiver.id, user.name);
+			sendPM(buf, receiver.id, user.name);
+			sendPM(disclaimer, receiver.id, user.name);
 		}
-		sendPM(`/nonotify You sent a friend request to ${receiver?.connected ? receiver.name : receiverID}!`, user.id);
+		sendPM(
+			`/nonotify You sent a friend request to ${receiver?.connected ? receiver.name : receiverID}!`,
+			user.name, receiverName,
+		);
 		sendPM(
 			`/uhtml undo,<button class="button" name="send" value="/friends undorequest ${Utils.escapeHTML(receiverID)}">` +
-			`<i class="fa fa-undo"></i> Undo</button>`, user.id
+			`<i class="fa fa-undo"></i> Undo</button>`, user.name, receiverName
 		);
-		sendPM(disclaimer, user.id);
+		sendPM(disclaimer, user.id, receiverName);
 		return result;
 	}
 	async removeRequest(receiverID: ID, senderID: ID) {
