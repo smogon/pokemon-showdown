@@ -56,7 +56,7 @@ export const Friends = new class {
 		};
 		const loginTimes: {[k: string]: number} = {};
 		for (const {friend: friendID, last_login, allowing_login: hideLogin} of [...friends].sort()) {
-			const friend = Users.get(friendID);
+			const friend = Users.getExact(friendID);
 			if (friend?.connected) {
 				categorized[friend.statusType].push(friend.id);
 			} else {

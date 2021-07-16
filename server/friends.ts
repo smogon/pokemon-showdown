@@ -159,8 +159,8 @@ export class FriendsDatabase {
 		return result.result;
 	}
 	async request(user: User, receiverID: ID) {
-		const receiver = Users.get(receiverID);
-		if (receiverID === user.id) {
+		const receiver = Users.getExact(receiverID);
+		if (receiverID === user.id || receiver?.previousIDs.includes(user.id)) {
 			throw new Chat.ErrorMessage(`You can't friend yourself.`);
 		}
 		if (receiver?.settings.blockFriendRequests) {
