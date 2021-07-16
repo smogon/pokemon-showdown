@@ -125,7 +125,7 @@ export class FriendsDatabase {
 		if (user.settings.blockFriendRequests) {
 			// delete any pending requests that may have been sent to them while offline
 			// we used to return but we will not since you can send requests while blocking
-			await this.run('deleteRequest', [user.id]);
+			await this.run('deleteReceivedRequests', [user.id]);
 		}
 		const sentResults = await this.all('getSent', [user.id]);
 		for (const request of sentResults) {
@@ -253,6 +253,7 @@ const ACTIONS = {
 	getReceived: `SELECT receiver, sender FROM friend_requests WHERE receiver = ?`,
 	insertRequest: `INSERT INTO friend_requests(sender, receiver, sent_at) VALUES (?, ?, ?)`,
 	deleteRequest: `DELETE FROM friend_requests WHERE sender = ? AND receiver = ?`,
+	deleteReceivedRequests: `DELETE FROM friend_requests WHERE receiver = ?`,
 	findFriendship: `SELECT * FROM friends WHERE (user1 = $user1 AND user2 = $user2) OR (user2 = $user1 AND user1 = $user2)`,
 	findRequest: (
 		`SELECT count(*) as num FROM friend_requests WHERE ` +
