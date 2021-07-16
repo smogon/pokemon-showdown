@@ -123,9 +123,9 @@ export class FriendsDatabase {
 		const sent: Set<string> = new Set();
 		const received: Set<string> = new Set();
 		if (user.settings.blockFriendRequests) {
-			// delete any pending requests that may have been sent to them while offline and return
+			// delete any pending requests that may have been sent to them while offline
+			// we used to return but we will not since you can send requests while blocking
 			await this.run('deleteRequest', [user.id]);
-			return {sent, received};
 		}
 		const sentResults = await this.all('getSent', [user.id]);
 		for (const request of sentResults) {
