@@ -1106,7 +1106,7 @@ export class CommandContext extends MessageContext {
 				const targetBlock = targetUser.settings.blockPMs;
 				// we check if they can lock the other before this so we're fine here
 				const authAtLeast = targetBlock === true ?
-					user.can('lock', targetUser) :
+					user.can('lock') :
 					Users.globalAuth.atLeast(user, targetBlock as any);
 
 				if (targetBlock && !user.can('lock', targetUser) && !(
