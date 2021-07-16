@@ -361,6 +361,7 @@ export class User extends Chat.MessageContext {
 	lastDisconnected: number;
 	lastConnected: number;
 	foodfight?: {generatedTeam: string[], dish: string, ingredients: string[], timestamp: number};
+	friends?: Set<string>;
 
 	chatQueue: ChatQueueEntry[] | null;
 	chatQueueTimeout: NodeJS.Timeout | null;
