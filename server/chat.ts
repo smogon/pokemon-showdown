@@ -24,6 +24,7 @@ To reload chat commands:
 */
 
 import type {RoomPermission, GlobalPermission} from './user-groups';
+import {FriendsDatabase, PM} from './friends';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 
@@ -1101,9 +1102,16 @@ export class CommandContext extends MessageContext {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					throw new Chat.ErrorMessage(this.tr`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
-				if (targetUser.settings.blockPMs &&
-					(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(user, targetUser.settings.blockPMs)) &&
-					!user.can('lock') && targetUser.id !== user.id) {
+				const targetFriends = Chat.Friends.cache.get(targetUser.id);
+				const targetBlock = targetUser.settings.blockPMs;
+				// we check if they can lock the other before this so we're fine here
+				const authAtLeast = targetBlock === true ?
+					user.can('lock', targetUser) :
+					Users.globalAuth.atLeast(user, targetBlock as any);
+
+				if (targetBlock && !user.can('lock', targetUser) && !(
+					targetBlock === 'friends' ? targetFriends?.has(user.id) : authAtLeast
+				)) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						throw new Chat.ErrorMessage(this.tr`This user is blocking private messages right now.`);
@@ -1112,9 +1120,10 @@ export class CommandContext extends MessageContext {
 						throw new Chat.ErrorMessage(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
 					}
 				}
+				const userFriends = Chat.Friends.cache.get(user.id);
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
-					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock') &&
-					targetUser.id !== user.id) {
+					(user.settings.blockPMs === 'friends' && !userFriends?.has(targetUser.id)) ||
+					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs as AuthLevel)) && !targetUser.can('lock')) {
 					throw new Chat.ErrorMessage(this.tr`You are blocking private messages right now.`);
 				}
 			}
@@ -1203,8 +1212,11 @@ export class CommandContext extends MessageContext {
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
+		const friends = Chat.Friends.cache.get(targetUser.id) || new Set();
 		if (targetUser.settings.blockPMs &&
-			(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs)) &&
+			(targetUser.settings.blockPMs === true ||
+			(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
+			!Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs as AuthLevel)) &&
 			!this.user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
@@ -1441,6 +1453,8 @@ export const Chat = new class {
 	 * which tends to cause unexpected behavior.
 	 */
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
+	readonly Friends = new FriendsDatabase();
+	readonly PM = PM;
 
 	readonly multiLinePattern = new PatternTester();
 
