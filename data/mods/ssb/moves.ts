@@ -853,7 +853,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Spirit Break', target);
 		},
-		offensiveStat: 'source:spd',
+		useOffensiveStatValueAndBoosts: 'source:spd',
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -908,19 +908,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return 5;
 			},
 			onModifyMove(move, attacker, defender) {
-				if (move.offensiveStat && (!move.offensiveStat.includes('atk') || !move.offensiveStat.includes('spa'))) return;
-				if (move.offensiveStat && move.offensiveStat.includes('target')) {
+				if (move.useOffensiveStatValueAndBoosts && (!move.useOffensiveStatValueAndBoosts.includes('atk') || !move.useOffensiveStatValueAndBoosts.includes('spa'))) return;
+				if (move.useOffensiveStatValueAndBoosts && move.useOffensiveStatValueAndBoosts.includes('target')) {
 					if (!defender) return;
 					if (defender.getStat('atk') > defender.getStat('spa')) {
-						move.offensiveStat = 'target:spa';
+						move.useOffensiveStatValueAndBoosts = 'target:spa';
 					} else {
-						move.offensiveStat = 'target:atk';
+						move.useOffensiveStatValueAndBoosts = 'target:atk';
 					}
 				} else {
 					if (attacker.getStat('atk') > attacker.getStat('spa')) {
-						move.offensiveStat = 'source:spa';
+						move.useOffensiveStatValueAndBoosts = 'source:spa';
 					} else {
-						move.offensiveStat = 'source:atk';
+						move.useOffensiveStatValueAndBoosts = 'source:atk';
 					}
 				}
 			},
@@ -4417,7 +4417,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 110,
 		category: "Physical",
-		offensiveStat: 'target:spd',
+		useOffensiveStatValueAndBoosts: 'target:spd',
 		desc: "This move uses the target's Special Defense to calculate damage (like Foul Play). This move is neutrally effective against Steel-types.",
 		shortDesc: "Uses foe's SpD as user's Atk. Hits Steel.",
 		name: "I'm Toxic You're Slippin' Under",
@@ -4587,7 +4587,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Fire') return 1;
 		},
-		offensiveStat: 'source:def',
+		useOffensiveStatValueAndBoosts: 'source:def',
 		secondary: {
 			chance: 10,
 			status: "frz",

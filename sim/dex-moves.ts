@@ -148,8 +148,8 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	noPPBoosts?: boolean;
 
 	// stats used for the move
-	offensiveStat?: `${'target:' | 'source:'}${AllStatIDs}`;
-	defensiveStat?: `${'target:' | 'source:'}${AllStatIDs}`;
+	useOffensiveStatValueAndBoosts?: `${'target:' | 'source:'}${AllStatIDs}`;
+	useDefensiveStatValueAndBoosts?: `${'target:' | 'source:'}${AllStatIDs}`;
 
 	// Z-move data
 	// -----------

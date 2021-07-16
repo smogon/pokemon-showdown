@@ -334,41 +334,44 @@ export const Scripts: ModdedBattleScriptsData = {
 				level = move.allies[0].level;
 			}
 
-			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : pokemon;
-			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? pokemon : target;
+			const attacker =
+				(move.useOffensiveStatValueAndBoosts && move.useOffensiveStatValueAndBoosts.includes('target')) ? target : pokemon;
+			const defender =
+				(move.useDefensiveStatValueAndBoosts && move.useDefensiveStatValueAndBoosts.includes('source')) ? pokemon : target;
+
 			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
-			if (move.offensiveStat) {
-				if (move.offensiveStat.includes("atk")) {
+			if (move.useOffensiveStatValueAndBoosts) {
+				if (move.useOffensiveStatValueAndBoosts.includes("atk")) {
 					atkType = 'atk';
-				} else if (move.offensiveStat.includes("def")) {
+				} else if (move.useOffensiveStatValueAndBoosts.includes("def")) {
 					atkType = 'def';
-				} else if (move.offensiveStat.includes("spa")) {
+				} else if (move.useOffensiveStatValueAndBoosts.includes("spa")) {
 					atkType = 'spa';
-				} else if (move.offensiveStat.includes("spd")) {
+				} else if (move.useOffensiveStatValueAndBoosts.includes("spd")) {
 					atkType = 'spd';
-				} else if (move.offensiveStat.includes("spe")) {
+				} else if (move.useOffensiveStatValueAndBoosts.includes("spe")) {
 					atkType = 'spe';
-				} else if (move.offensiveStat.includes("hp")) {
+				} else if (move.useOffensiveStatValueAndBoosts.includes("hp")) {
 					atkType = 'hp';
-				} else if (move.offensiveStat.includes("currenthp")) {
+				} else if (move.useOffensiveStatValueAndBoosts.includes("currenthp")) {
 					atkType = 'currenthp';
 				}
 			}
 			let defType: AllStatIDs = move.category === 'Physical' ? 'def' : 'spd';
-			if (move.defensiveStat) {
-				if (move.defensiveStat.includes("atk")) {
+			if (move.useDefensiveStatValueAndBoosts) {
+				if (move.useDefensiveStatValueAndBoosts.includes("atk")) {
 					defType = 'atk';
-				} else if (move.defensiveStat.includes("def")) {
+				} else if (move.useDefensiveStatValueAndBoosts.includes("def")) {
 					defType = 'def';
-				} else if (move.defensiveStat.includes("spa")) {
+				} else if (move.useDefensiveStatValueAndBoosts.includes("spa")) {
 					defType = 'spa';
-				} else if (move.defensiveStat.includes("spd")) {
+				} else if (move.useDefensiveStatValueAndBoosts.includes("spd")) {
 					defType = 'spd';
-				} else if (move.defensiveStat.includes("spe")) {
+				} else if (move.useDefensiveStatValueAndBoosts.includes("spe")) {
 					defType = 'spe';
-				} else if (move.defensiveStat.includes("hp")) {
+				} else if (move.useDefensiveStatValueAndBoosts.includes("hp")) {
 					defType = 'hp';
-				} else if (move.defensiveStat.includes("currenthp")) {
+				} else if (move.useDefensiveStatValueAndBoosts.includes("currenthp")) {
 					defType = 'currenthp';
 				}
 			}

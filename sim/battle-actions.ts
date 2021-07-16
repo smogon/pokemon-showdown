@@ -1557,41 +1557,44 @@ export class BattleActions {
 
 		const level = source.level;
 
-		const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : source;
-		const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? source : target;
+		const attacker =
+			(move.useOffensiveStatValueAndBoosts && move.useOffensiveStatValueAndBoosts.includes('target')) ? target : source;
+		const defender =
+			(move.useDefensiveStatValueAndBoosts && move.useDefensiveStatValueAndBoosts.includes('source')) ? source : target;
+
 		let attackStat: AllStatIDs = category === 'Physical' ? 'atk' : 'spa';
-		if (move.offensiveStat) {
-			if (move.offensiveStat.includes("atk")) {
+		if (move.useOffensiveStatValueAndBoosts) {
+			if (move.useOffensiveStatValueAndBoosts.includes("atk")) {
 				attackStat = 'atk';
-			} else if (move.offensiveStat.includes("def")) {
+			} else if (move.useOffensiveStatValueAndBoosts.includes("def")) {
 				attackStat = 'def';
-			} else if (move.offensiveStat.includes("spa")) {
+			} else if (move.useOffensiveStatValueAndBoosts.includes("spa")) {
 				attackStat = 'spa';
-			} else if (move.offensiveStat.includes("spd")) {
+			} else if (move.useOffensiveStatValueAndBoosts.includes("spd")) {
 				attackStat = 'spd';
-			} else if (move.offensiveStat.includes("spe")) {
+			} else if (move.useOffensiveStatValueAndBoosts.includes("spe")) {
 				attackStat = 'spe';
-			} else if (move.offensiveStat.includes("hp")) {
+			} else if (move.useOffensiveStatValueAndBoosts.includes("hp")) {
 				attackStat = 'hp';
-			} else if (move.offensiveStat.includes("currenthp")) {
+			} else if (move.useOffensiveStatValueAndBoosts.includes("currenthp")) {
 				attackStat = 'currenthp';
 			}
 		}
 		let defenseStat: AllStatIDs = category === 'Physical' ? 'def' : 'spd';
-		if (move.defensiveStat) {
-			if (move.defensiveStat.includes("atk")) {
+		if (move.useDefensiveStatValueAndBoosts) {
+			if (move.useDefensiveStatValueAndBoosts.includes("atk")) {
 				defenseStat = 'atk';
-			} else if (move.defensiveStat.includes("def")) {
+			} else if (move.useDefensiveStatValueAndBoosts.includes("def")) {
 				defenseStat = 'def';
-			} else if (move.defensiveStat.includes("spa")) {
+			} else if (move.useDefensiveStatValueAndBoosts.includes("spa")) {
 				defenseStat = 'spa';
-			} else if (move.defensiveStat.includes("spd")) {
+			} else if (move.useDefensiveStatValueAndBoosts.includes("spd")) {
 				defenseStat = 'spd';
-			} else if (move.defensiveStat.includes("spe")) {
+			} else if (move.useDefensiveStatValueAndBoosts.includes("spe")) {
 				defenseStat = 'spe';
-			} else if (move.defensiveStat.includes("hp")) {
+			} else if (move.useDefensiveStatValueAndBoosts.includes("hp")) {
 				defenseStat = 'hp';
-			} else if (move.defensiveStat.includes("currenthp")) {
+			} else if (move.useDefensiveStatValueAndBoosts.includes("currenthp")) {
 				defenseStat = 'currenthp';
 			}
 		}
@@ -1639,12 +1642,11 @@ export class BattleActions {
 		}
 
 		attackStat = (category === 'Physical' ? 'atk' : 'spa');
+		defenseStat = (category === 'Physical' ? 'def' : 'spd');
 
 		// Apply Stat Modifiers
 		attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
-		if (defenseStat !== 'hp' && defenseStat !== 'currenthp') {
-			defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
-		}
+		defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
 
 		if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
