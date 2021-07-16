@@ -149,6 +149,7 @@ function getExactUser(name: string | User) {
 function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boolean, includeTrusted?: boolean} = {}) {
 	const matches: User[] = [];
 	if (options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
+	const ipMatcher = IPTools.checker(ips);
 	for (const user of users.values()) {
 		if (!options.forPunishment && !user.named && !user.connected) continue;
 		if (!options.includeTrusted && user.trusted) continue;
@@ -156,17 +157,8 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
 			matches.push(user);
 			continue;
 		}
-		for (const myIp of ips) {
-			if (user.ips.includes(myIp) || (
-				(myIp.includes('*') || myIp.includes('-')) &&
-				user.ips.map(IPTools.ipToNumber).some(ip => {
-					const range = IPTools.stringToRange(myIp);
-					return range && IPTools.checkPattern([range], ip);
-				})
-			)) {
-				matches.push(user);
-				break;
-			}
+		if (user.ips.some(ipMatcher)) {
+			matches.push(user);
 		}
 	}
 	return matches;
@@ -308,7 +300,7 @@ export class Connection {
 type ChatQueueEntry = [string, RoomID, Connection];
 
 export interface UserSettings {
-	blockChallenges: boolean;
+	blockChallenges: boolean | AuthLevel;
 	blockPMs: boolean | AuthLevel;
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;

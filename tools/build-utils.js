@@ -207,7 +207,7 @@ exports.transpile = (doForce, decl) => {
 
 	if (sucrase('./sim', './.sim-dist')) {
 		replace('.sim-dist', [
-			{regex: /(require\(.*?)\/(lib|data)/g, replace: `$1/.$2-dist`},
+			{regex: /(require\(.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
 		]);
 	}
 
@@ -221,15 +221,9 @@ exports.transpile = (doForce, decl) => {
 
 	sucrase('./translations', './.translations-dist');
 
-	if (sucrase('./tools/set-import', './tools/set-import', null, ['sets'])) {
-		replace('./tools/set-import/importer.js', [
-			{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-		]);
-	}
-
-	if (sucrase('./tools/modlog', './tools/modlog')) {
-		replace('./tools/modlog/converter.js', [
-			{regex: /(require\(.*?)(server|lib)/g, replace: `$1.$2-dist`},
+	if (sucrase('./tools', './tools', null, ['.', 'sets', 'simulate'])) {
+		replace('tools', [
+			{regex: /(require\(.*?)(lib|sim|server)/g, replace: `$1.$2-dist`},
 		]);
 	}
 
