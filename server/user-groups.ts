@@ -141,7 +141,9 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			room?.settings.section &&
 			room.settings.section === Users.globalAuth.sectionLeaders.get(user.id) &&
 			// Global drivers who are SLs should get room mod powers too
-			Users.globalAuth.atLeast(user, SECTIONLEADER_SYMBOL)
+			Users.globalAuth.atLeast(user, SECTIONLEADER_SYMBOL) &&
+			// But dont override ranks above moderator such as room owner
+			(Auth.getGroup('@').rank > group.rank)
 		) {
 			group = Auth.getGroup('@');
 		}
