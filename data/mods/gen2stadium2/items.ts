@@ -2,7 +2,6 @@
 export const Items: {[k: string]: ModdedItemData} = {
 	dragonfang: {
 		inherit: true,
-		onBasePower() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Dragon') {
 				return damage * 1.1;
@@ -11,6 +10,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	dragonscale: {
 		inherit: true,
-		onBasePower() {},
+		onModifyDamage() {},
 	},
 };
