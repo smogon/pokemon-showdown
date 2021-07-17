@@ -273,8 +273,8 @@ const ACTIONS = {
 		`DELETE FROM friend_requests WHERE EXISTS` +
 		`(SELECT sent_at FROM friend_requests WHERE should_expire(sent_at) = 1)`
 	),
-	hideLogin: (
-		`INSERT INTO friend_settings (userid, send_login_data, last_login, public_list) VALUES (?, 1, ?, ?) ` +
+	hideLogin: ( // this works since if the insert works, they have no data, which means no public_list
+		`INSERT INTO friend_settings (userid, send_login_data, last_login, public_list) VALUES (?, 1, ?, 0) ` +
 		`ON CONFLICT (userid) DO UPDATE SET send_login_data = 1`
 	),
 	showLogin: `DELETE FROM friend_settings WHERE userid = ? AND send_login_data = 1`,
