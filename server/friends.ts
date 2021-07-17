@@ -4,7 +4,7 @@
  */
 // @ts-ignore in case it isn't installed
 import type * as Database from 'better-sqlite3';
-import {Utils, FS, ProcessManager, Repl, Cache} from '../lib';
+import {Utils, FS, ProcessManager, Repl} from '../lib';
 import {Config} from './config-loader';
 import * as path from 'path';
 
@@ -67,13 +67,16 @@ function canPM(sender: User, receiver: User | null) {
 
 export class FriendsDatabase {
 	file: string;
-	cache: Cache<Set<string>>;
 	constructor(file: string = DEFAULT_FILE) {
 		this.file = file === ':memory:' ? file : path.resolve(file);
-		this.cache = new Cache<Set<string>>(async user => {
-			const data = await this.getFriends(user as ID);
-			return new Set(data.map(f => f.friend));
-		});
+	}
+	async updateUserCache(user: User) {
+		if (!user.friends) user.friends = new Set();
+		const friends = await this.getFriends(user.id);
+		for (const friend of friends) {
+			user.friends.add(friend.userid);
+		}
+		return user.friends;
 	}
 	static setupDatabase(fileName?: string) {
 		const file = fileName || process.env.filename || DEFAULT_FILE;

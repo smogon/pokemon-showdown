@@ -5,5 +5,4 @@ export * as Streams from './streams';
 export {FS} from './fs';
 export * as Utils from './utils';
 export {crashlogger} from './crashlogger';
-export {Cache} from './cache';
 export * as ProcessManager from './process-manager';
