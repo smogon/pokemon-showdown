@@ -93,7 +93,7 @@ class RawSubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	}
 }
 
-interface ProcessWrapper {
+export interface ProcessWrapper {
 	getLoad: () => number;
 	process: ChildProcess | Worker;
 	release: () => Promise<void>;
@@ -503,7 +503,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		return unspawned;
 	}
 	abstract listen(): void;
-	abstract createProcess(): T;
+	abstract createProcess(...args: any): T;
 	destroyProcess(process: T) {}
 	destroy() {
 		const index = processManagers.indexOf(this);
