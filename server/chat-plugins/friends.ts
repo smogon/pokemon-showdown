@@ -494,7 +494,7 @@ export const pages: Chat.PageTable = {
 			buf += headerButtons('settings', user);
 			buf += `<hr /><h3>Friends Settings:</h3>`;
 			const settings = user.settings;
-			const {public_list} = await Chat.Friends.getSettings(user.id);
+			const {public_list, send_login_data} = await Chat.Friends.getSettings(user.id);
 			buf += `<strong>Notify me when my friends come online:</strong><br />`;
 			buf += `<button class="button${settings.allowFriendNotifications ? `` : ` disabled`}" name="send" `;
 			buf += `value="/friends hidenotifs">Disable</button> `;
@@ -510,6 +510,11 @@ export const pages: Chat.PageTable = {
 			buf += `value="/friends listdisplay yes">Allow</button> `;
 			buf += `<button class="button${public_list ? `` : ` disabled`}" name="send" `;
 			buf += `value="/friends listdisplay no">Hide</button> <br /><br />`;
+			buf += `<strong>Allow others to see my login times</strong><br />`;
+			buf += `<button class="button${send_login_data ? ` disabled` : ''}" name="send" `;
+			buf += `value="/friends hidelogins">Disable</button> `;
+			buf += `<button class="button${send_login_data ? ` disabled` : ''}" name="send" `;
+			buf += `value="/friends showlogins">Enable</button><br /><br />`;
 			break;
 		default:
 			this.title = `[Friends] All Friends`;
