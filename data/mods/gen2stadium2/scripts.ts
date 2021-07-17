@@ -472,9 +472,14 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[i] = boost[i];
-			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+			let boostBy = target.boostBy(currentBoost);
+			let msg = '-boost';
+			if (boost[i]! < 0) {
+				msg = '-unboost';
+				boostBy = -boostBy;
+			}
+			if (boostBy) {
 				success = true;
-				const msg = '-boost';
 				// Check for boost increases deleting attack or speed drops
 				if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
 					target.removeVolatile('brnattackdrop');
@@ -483,9 +488,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					target.removeVolatile('parspeeddrop');
 				}
 				if (!effect || effect.effectType === 'Move') {
-					this.add(msg, target, i, boost[i]);
+					this.add(msg, target, i, boostBy);
 				} else {
-					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+					this.add(msg, target, i, boostBy, '[from] ' + effect.fullname);
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
