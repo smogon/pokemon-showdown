@@ -29,7 +29,7 @@ export const Friends = new class {
 		if (pendingCount < 1) return;
 		if (pendingCount === 1) {
 			const sender = [...friendRequests.received][0];
-			const senderName = Users.get(sender)?.name || sender;
+			const senderName = Users.getExact(sender)?.name || sender;
 			let buf = Utils.html`/uhtml sent,<button class="button" name="send" value="/friends accept ${sender}">Accept</button> | `;
 			buf += Utils.html`<button class="button" name="send" value="/friends reject ${sender}">Deny</button><br /> `;
 			buf += `<small>(You can also stop this user from sending you friend requests with <code>/ignore</code>)</small>`;
