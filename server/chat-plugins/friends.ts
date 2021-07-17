@@ -244,9 +244,9 @@ export const commands: Chat.ChatCommands = {
 			await Friends.removeFriend(user.id, target as ID);
 			this.sendReply(`Removed friend '${target}'.`);
 
-			await Chat.Friends.updateCache(user);
+			await Chat.Friends.updateUserCache(user);
 			const targetUser = Users.get(target);
-			if (targetUser) await Chat.Friends.updateCache(targetUser);
+			if (targetUser) await Chat.Friends.updateUserCache(targetUser);
 		},
 		view(target) {
 			return this.parse(`/join view-friends-${target}`);
@@ -272,8 +272,8 @@ export const commands: Chat.ChatCommands = {
 				sendPM(`/uhtmlchange sent,`, targetUser.id);
 				sendPM(`/uhtmlchange undo,`, targetUser.id);
 			}
-			await Chat.Friends.updateCache(user);
-			if (targetUser) await Chat.Friends.updateCache(targetUser);
+			await Chat.Friends.updateUserCache(user);
+			if (targetUser) await Chat.Friends.updateUserCache(targetUser);
 		},
 		deny: 'reject',
 		async reject(target, room, user, connection) {
@@ -400,7 +400,7 @@ export const commands: Chat.ChatCommands = {
 		invalidatecache(target, room, user) {
 			this.canUseConsole();
 			for (const curUser of Users.users.values()) {
-				void Chat.Friends.updateCache(curUser);
+				void Chat.Friends.updateUserCache(curUser);
 			}
 			Rooms.global.notifyRooms(
 				['staff', 'development'],
@@ -538,5 +538,5 @@ export const loginfilter: Chat.LoginFilter = async user => {
 	// write login time
 	await Chat.Friends.writeLogin(user.id);
 
-	await Chat.Friends.updateCache(user);
+	await Chat.Friends.updateUserCache(user);
 };

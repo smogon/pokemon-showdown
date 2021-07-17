@@ -70,7 +70,7 @@ export class FriendsDatabase {
 	constructor(file: string = DEFAULT_FILE) {
 		this.file = file === ':memory:' ? file : path.resolve(file);
 	}
-	async updateCache(user: User) {
+	async updateUserCache(user: User) {
 		if (!user.friends) user.friends = new Set();
 		const friends = await this.getFriends(user.id);
 		for (const friend of friends) {
