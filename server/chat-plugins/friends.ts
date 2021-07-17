@@ -243,9 +243,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!target) return this.parse('/help friends');
 			await Friends.request(user, target as ID);
-			if (connection.openPages?.has('friends-sent')) {
-				this.parse(`/join view-friends-sent`);
-			}
+			this.refreshPage('friends-sent');
 			return this.sendReply(`You sent a friend request to '${target}'.`);
 		},
 		unfriend: 'remove',
@@ -255,7 +253,12 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help friends');
 
 			await Friends.removeFriend(user.id, target as ID);
-			return this.sendReply(`Removed friend '${target}'.`);
+			this.sendReply(`Removed friend '${target}'.`);
+
+			await Chat.Friends.updateUserCache(user);
+			this.refreshPage('friends-all');
+			const targetUser = Users.get(target);
+			if (targetUser) await Chat.Friends.updateUserCache(targetUser);
 		},
 		view(target) {
 			return this.parse(`/join view-friends-${target}`);
@@ -273,16 +276,14 @@ export const commands: Chat.ChatCommands = {
 			await Friends.approveRequest(user.id, target as ID);
 			const targetUser = Users.get(target);
 			sendPM(`You accepted a friend request from "${target}".`, user.id);
-			if (connection.openPages?.has('friends-received')) {
-				this.parse(`/j view-friends-received`);
-			}
+			this.refreshPage('friends-received');
 			if (targetUser) {
 				sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id);
 				sendPM(`/uhtmlchange sent,`, targetUser.id);
 				sendPM(`/uhtmlchange undo,`, targetUser.id);
 			}
-			await Chat.Friends.cache.update(user.id);
-			await Chat.Friends.cache.update(target);
+			await Chat.Friends.updateUserCache(user);
+			if (targetUser) await Chat.Friends.updateUserCache(targetUser);
 		},
 		deny: 'reject',
 		async reject(target, room, user, connection) {
@@ -290,9 +291,7 @@ export const commands: Chat.ChatCommands = {
 			target = toID(target);
 			if (!target) return this.parse('/help friends');
 			await Friends.removeRequest(user.id, target as ID);
-			if (connection.openPages?.has('friends-received')) {
-				this.parse(`/j view-friends-received`);
-			}
+			this.refreshPage('friends-received');
 			return sendPM(`You denied a friend request from '${target}'.`, user.id);
 		},
 		toggle(target, room, user, connection) {
@@ -313,9 +312,7 @@ export const commands: Chat.ChatCommands = {
 					this.tr(setting ? `You are currently blocking friend requests.` : `You are not blocking friend requests.`)
 				);
 			}
-			if (connection.openPages?.has('friends-settings')) {
-				this.parse(`/j view-friends-settings`);
-			}
+			this.refreshPage('friends-settings');
 			user.update();
 		},
 		async undorequest(target, room, user, connection) {
@@ -327,9 +324,7 @@ export const commands: Chat.ChatCommands = {
 				);
 			}
 			await Friends.removeRequest(target as ID, user.id);
-			if (connection.openPages?.has('friends-sent')) {
-				this.parse(`/j view-friends-sent`);
-			}
+			this.refreshPage('friends-sent');
 			return sendPM(`You removed your friend request to '${target}'.`, user.id);
 		},
 		hidenotifs: 'viewnotifications',
@@ -353,9 +348,7 @@ export const commands: Chat.ChatCommands = {
 					this.tr(setting ? `You are currently allowing friend notifications.` : `Your friend notifications are disabled.`)
 				);
 			}
-			if (connection.openPages?.has('friends-settings')) {
-				this.parse(`/j view-friends-settings`);
-			}
+			this.refreshPage('friends-settings');
 			user.update();
 		},
 		hidelogins: 'togglelogins',
@@ -376,9 +369,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				return this.errorReply(`Invalid setting.`);
 			}
-			if (connection.openPages?.has('friends-settings')) {
-				this.parse(`/j view-friends-settings`);
-			}
+			this.refreshPage('friends-settings');
 			user.update();
 		},
 		async listdisplay(target, room, user, connection) {
@@ -390,26 +381,22 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply(this.tr`You are already allowing other people to view your friends list.`);
 				}
 				await Chat.Friends.setHideList(user.id, true);
-				if (connection.openPages?.has('friends-settings')) {
-					this.parse(`/j view-friends-settings`);
-				}
+				this.refreshPage('friends-settings');
 				return this.sendReply(this.tr`You are now allowing other people to view your friends list.`);
 			} else if (this.meansNo(target)) {
 				if (!setting) {
 					return this.errorReply(this.tr`You are already hiding your friends list.`);
 				}
 				await Chat.Friends.setHideList(user.id, false);
-				if (connection.openPages?.has('friends-settings')) {
-					this.parse(`/j view-friends-settings`);
-				}
+				this.refreshPage('friends-settings');
 				return this.sendReply(this.tr`You are now hiding your friends list.`);
 			}
 			this.sendReply(`You are currently ${setting ? 'displaying' : 'hiding'} your friends list.`);
 		},
 		invalidatecache(target, room, user) {
 			this.canUseConsole();
-			for (const k in Chat.Friends.cache) {
-				void Chat.Friends.cache.update(k);
+			for (const curUser of Users.users.values()) {
+				void Chat.Friends.updateUserCache(curUser);
 			}
 			Rooms.global.notifyRooms(
 				['staff', 'development'],
@@ -547,5 +534,5 @@ export const loginfilter: Chat.LoginFilter = async user => {
 	// write login time
 	await Chat.Friends.writeLogin(user.id);
 
-	await Chat.Friends.cache.update(user.id);
+	await Chat.Friends.updateUserCache(user);
 };

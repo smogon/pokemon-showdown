@@ -1102,7 +1102,7 @@ export class CommandContext extends MessageContext {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					throw new Chat.ErrorMessage(this.tr`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
-				const targetFriends = Chat.Friends.cache.get(targetUser.id);
+				const targetFriends = targetUser.friends || new Set();
 				const targetBlock = targetUser.settings.blockPMs;
 				// we check if they can lock the other before this so we're fine here
 				const authAtLeast = targetBlock === true ?
@@ -1120,7 +1120,7 @@ export class CommandContext extends MessageContext {
 						throw new Chat.ErrorMessage(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
 					}
 				}
-				const userFriends = Chat.Friends.cache.get(user.id);
+				const userFriends = user.friends || new Set();
 				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
 					(user.settings.blockPMs === 'friends' && !userFriends?.has(targetUser.id)) ||
 					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs as AuthLevel)) && !targetUser.can('lock')) {
@@ -1212,7 +1212,7 @@ export class CommandContext extends MessageContext {
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
-		const friends = Chat.Friends.cache.get(targetUser.id) || new Set();
+		const friends = targetUser.friends || new Set();
 		if (targetUser.settings.blockPMs &&
 			(targetUser.settings.blockPMs === true ||
 			(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
