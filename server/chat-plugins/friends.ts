@@ -31,7 +31,7 @@ export const Friends = new class {
 			let buf = Utils.html`/uhtml sent,<button class="button" name="send" value="/friends accept ${user.id}">Accept</button> | `;
 			buf += Utils.html`<button class="button" name="send" value="/friends reject ${user.id}">Deny</button><br /> `;
 			buf += `<small>(You can also stop this user from sending you friend requests with <code>/ignore</code>)</small>`;
-			sendPM(Utils.html`/html <span class="username">${user.name}</span> sent you a friend request!`, user.id);
+			sendPM(Utils.html`/raw <span class="username">${user.name}</span> sent you a friend request!`, user.id);
 			sendPM(buf, user.id);
 			sendPM(
 				`/raw <small>Note: If this request is accepted, your friend will be notified when you come online, ` +
