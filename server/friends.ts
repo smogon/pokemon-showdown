@@ -182,7 +182,7 @@ export class FriendsDatabase {
 
 		const result = await this.transaction('send', [user.id, receiverID]);
 		if (receiver) {
-			sendPM(`/text ${Utils.escapeHTML(user.name)} sent you a friend request!`, receiver.id);
+			sendPM(`/html <span class="username">${user.name}</span> sent you a friend request!`, receiver.id);
 			sendPM(buf, receiver.id);
 			sendPM(disclaimer, receiver.id);
 		}
