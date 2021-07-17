@@ -296,6 +296,8 @@ export const commands: Chat.ChatCommands = {
 		const buffer = Utils.sortBy(
 			Object.entries(rankLists) as [GroupSymbol, string[]][],
 			([symbol]) => -Users.Auth.getGroup(symbol).rank
+		).filter(
+			([symbol]) => symbol !== Users.SECTIONLEADER_SYMBOL
 		).map(
 			([symbol, names]) => (
 				`${(Config.groups[symbol] ? `**${Config.groups[symbol].name}s** (${symbol})` : symbol)}:\n` +
@@ -967,7 +969,8 @@ export const commands: Chat.ChatCommands = {
 		Punishments.savePunishments();
 
 		for (const curUser of Users.findUsers([userid], [])) {
-			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
+			const locked = Punishments.hasPunishType(curUser.id, ['LOCK', 'NAMELOCK'], curUser.latestIp);
+			if (curUser.locked && !curUser.locked.startsWith('#') && !locked) {
 				curUser.locked = null;
 				curUser.namelocked = null;
 				curUser.destroyPunishmentTimer();
@@ -1447,7 +1450,12 @@ export const commands: Chat.ChatCommands = {
 			Users.globalAuth.setSection(userid, section);
 			this.addGlobalModAction(`${name} was appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`SECTION LEADER`, userid, section);
-			if (!staffRoom?.auth.has(userid)) this.parse(`/msgroom staff,/forceroompromote ${userid},▸`);
+			if (targetUser && !Users.globalAuth.atLeast(targetUser, Users.SECTIONLEADER_SYMBOL)) {
+				// do not use global /forcepromote
+				this.parse(`/globalsectionleader ${userid}`);
+			} else {
+				this.sendReply(`User ${userid} is offline and unrecognized, and so can't be globally promoted.`);
+			}
 			targetUser?.popup(`You were appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		} else {
 			const group = Users.globalAuth.get(userid);
@@ -1633,6 +1641,33 @@ export const commands: Chat.ChatCommands = {
 	notifyrankhelp: [
 		`/notifyrank [rank], [title], [message], [highlight] - Sends a notification to users who are [rank] or higher (and highlight on [highlight], if specified). Requires: # * &`,
 		`/notifyoffrank [rank] - Closes the notification previously sent with /notifyrank [rank]. Requires: # * &`,
+	],
+
+	notifyoffuser: 'notifyuser',
+	notifyuser(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		if (!target) return this.parse(`/help notifyuser`);
+		this.checkCan('addhtml', null, room);
+		this.checkChat();
+		const {targetUser, targetUsername, rest: titleNotification} = this.splitUser(target);
+		if (!targetUser?.connected) return this.errorReply(`User '${targetUsername}' not found.`);
+		const id = `${room.roomid}-user-${toID(targetUsername)}`;
+		if (cmd === 'notifyoffuser') {
+			room.sendUser(targetUser, `|tempnotifyoff|${id}`);
+		} else {
+			let [title, notification] = this.splitOne(titleNotification);
+			if (!title) title = `${room.title} notification!`;
+			if (!user.can('addhtml')) {
+				title += ` (notification from ${user.name})`;
+			}
+			if (notification.length > 300) return this.errorReply(`Notifications should not exceed 300 characters.`);
+			const message = `|tempnotify|${id}|${title}|${notification}`;
+			room.sendUser(targetUser, message);
+		}
+	},
+	notifyuserhelp: [
+		`/notifyuser [username], [title], [message] - Sends a notification to [user]. Requires: # * &`,
+		`/notifyoffuser [user] - Closes the notification previously sent with /notifyuser [user]. Requires: # * &`,
 	],
 
 	fr: 'forcerename',

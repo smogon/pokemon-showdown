@@ -1357,7 +1357,6 @@ export const PM = new ProcessManager.StreamProcessManager(module, () => new Room
 if (!PM.isParentProcess) {
 	// This is a child process!
 	global.Config = require('./config-loader').Config;
-	global.Chat = require('./chat').Chat;
 	global.Dex = require('../sim/dex').Dex;
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {

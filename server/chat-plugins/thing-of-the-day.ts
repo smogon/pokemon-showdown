@@ -9,7 +9,7 @@ const DATA_FILE = 'config/chat-plugins/otds.json';
 
 export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
-export const otds: Map<string, OtdHandler> = new Map();
+export const otds = new Map<string, OtdHandler>();
 
 const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
 	cotw: async winner => {
@@ -792,7 +792,7 @@ export const commands: Chat.ChatCommands = {
 	otd: {
 		create(target, room, user) {
 			room = this.requireRoom();
-			if (room.settings.isPrivate !== undefined) {
+			if (room.settings.isPrivate) {
 				return this.errorReply(`This command is only available in public rooms`);
 			}
 			const count = [...otds.values()].filter(otd => otd.room.roomid === room!.roomid).length;
