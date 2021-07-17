@@ -38,7 +38,7 @@ export type DatabaseQuery = {
 
 function getModule() {
 	try {
-		return require('better-sqlite3') as typeof sqlite;
+		return require('better-sqlite3') as typeof sqlite.default;
 	} catch {
 		return null;
 	}
@@ -153,13 +153,31 @@ if (!PM.isParentProcess) {
 	const database = Database ? new Database(file!) : null;
 	if (extension && database) {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const {functions, storedTransactions} = require(`../${extension}`);
-		for (const k in functions) {
-			database.function(k, functions[k]);
+		const {
+			functions,
+			transactions: storedTransactions,
+			statements: storedStatements,
+			onDatabaseStart,
+		} = require(`../${extension}`);
+		if (functions) {
+			for (const k in functions) {
+				database.function(k, functions[k]);
+			}
 		}
-		for (const t in storedTransactions) {
-			const transaction = database.transaction(storedTransactions[t]);
-			transactions.set(transactions.size + 1, transaction);
+		if (storedTransactions) {
+			for (const t in storedTransactions) {
+				const transaction = database.transaction(storedTransactions[t]);
+				transactions.set(transactions.size + 1, transaction);
+			}
+		}
+		if (storedStatements) {
+			for (const k in storedStatements) {
+				const statement = database.prepare(storedStatements[k]);
+				statements.set(statementNum++, statement); // we use statementNum here to track with the rest
+			}
+		}
+		if (onDatabaseStart) {
+			onDatabaseStart(database);
 		}
 	}
 	database?.pragma(`foreign_keys=on`);
