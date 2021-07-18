@@ -372,7 +372,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		isGlobal,
 		loggedBy: null,
 		note: '',
-		time: Math.floor(new Date(timestamp).getTime()) || Date.now(),
+		time: Math.floor(new Date(timestamp).getTime()) || 0,
 	};
 
 	if (bonus.length) log.visualRoomID = `${log.roomID} ${bonus.join(' ')}`;
