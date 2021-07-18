@@ -10,6 +10,7 @@ if (!global.Config) {
 	try {
 		require.resolve('better-sqlite3');
 	} catch (e) {
+		console.warn(`Warning: the modlog conversion script is running without a SQLite library.`);
 		hasSQLite = false;
 	}
 	global.Config = {
@@ -29,7 +30,7 @@ const Database = Config.usesqlite ? require('better-sqlite3') : null;
 type ModlogFormat = 'txt' | 'sqlite';
 
 /** The number of modlog entries to write to the database on each transaction */
-const ENTRIES_TO_BUFFER = 25000;
+const ENTRIES_TO_BUFFER = 50000;
 
 const IP_ONLY_ACTIONS = new Set([
 	'SHAREDIP', 'UNSHAREDIP', 'UNLOCKIP', 'UNLOCKRANGE', 'RANGEBAN', 'RANGELOCK',
@@ -567,13 +568,16 @@ export class ModlogConverterTxt {
 
 	async toSQLite() {
 		const files = this.isTesting ? [...this.isTesting.files.keys()] : await FS(this.textLogDir).readdir();
-		// Read global modlog last to avoid inserting duplicate data to database
+		// Read global modlog first to avoid inserting duplicate data to database
 		if (files.includes('modlog_global.txt')) {
 			files.splice(files.indexOf('modlog_global.txt'), 1);
-			files.push('modlog_global.txt');
+			files.unshift('modlog_global.txt');
 		}
 
-		const globalEntries = [];
+		// we don't want to insert global modlog entries twice, so we keep track of global ones
+		// and don't reinsert them
+		/** roomid:list of modlog entry strings */
+		const globalEntries: {[k: string]: string[]} = {};
 
 		for (const file of files) {
 			if (file === 'README.md') continue;
@@ -585,7 +589,6 @@ export class ModlogConverterTxt {
 			let entriesLogged = 0;
 			let lastLine = undefined;
 			let entries: ModlogEntry[] = [];
-
 
 			const insertEntries = (alwaysShowProgress?: boolean) => {
 				this.modlog.writeSQL(entries);
@@ -606,10 +609,16 @@ export class ModlogConverterTxt {
 				const entry = parseModlog(line, lastLine, roomid === 'global');
 				lastLine = line;
 				if (!entry) continue;
-				if (roomid !== 'global') entries.push(entry);
-				if (entry.isGlobal) {
-					globalEntries.push(entry);
+				if (roomid !== 'global' && globalEntries[entry.roomID]?.includes(line)) {
+					// this is a global modlog entry that has already been inserted
+					continue;
 				}
+				if (entry.isGlobal) {
+					if (!globalEntries[entry.roomID]) globalEntries[entry.roomID] = [];
+					globalEntries[entry.roomID].push(line);
+					if (entry.roomID !== 'global' && !entry.roomID.startsWith('global-')) entry.roomID = `global-${entry.roomID}`;
+				}
+				entries.push(entry);
 				if (entries.length === ENTRIES_TO_BUFFER) insertEntries();
 			}
 			insertEntries(true);
