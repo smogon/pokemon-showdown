@@ -11,7 +11,9 @@
 
 'use strict';
 
-const ModlogConverter = require(`${__dirname}/converter.js`).ModlogConverter;
+// support TypeScript
+require('ts-node').register({project: './tsconfig.json', files: true, transpileOnly: true, transpiler: 'ts-node/transpilers/swc-experimental'});
+const ModlogConverter = require(`${__dirname}/converter.ts`).ModlogConverter;
 const path = require('path');
 
 function parseFlags() {
