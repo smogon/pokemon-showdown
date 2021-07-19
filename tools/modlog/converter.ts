@@ -31,7 +31,9 @@ const {Modlog} = require('../../server/modlog');
 type ModlogFormat = 'txt' | 'sqlite';
 
 /** The number of modlog entries to write to the database on each transaction */
-const ENTRIES_TO_BUFFER = 50000;
+const ENTRIES_TO_BUFFER = 100000;
+const ALTS_REGEX = /\(.*?'s (lock|mut|bann|blacklist)ed alts: (.*)\)/;
+const AUTOCONFIRMED_REGEX = /\(.*?'s ac account: (.*)\)/;
 
 const IP_ONLY_ACTIONS = new Set([
 	'SHAREDIP', 'UNSHAREDIP', 'UNLOCKIP', 'UNLOCKRANGE', 'RANGEBAN', 'RANGELOCK',
@@ -56,20 +58,30 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 	// first we save and remove the timestamp and the roomname
 	const prefix = line.match(/\[.+?\] \(.+?\) /i)?.[0];
 	if (!prefix) return;
-	if (/\]'s\s.*\salts: \[/.test(line)) return;
+	if (ALTS_REGEX.test(line) || AUTOCONFIRMED_REGEX.test(line)) return;
 	line = line.replace(prefix, '');
+	// handle duplicate room bug
+	if (line.startsWith('(')) line = line.replace(/\([a-z0-9-]*\) /, '');
 
 	if (line.startsWith('(') && line.endsWith(')')) {
 		line = line.slice(1, -1);
 	}
 	const getAlts = () => {
-		let alts;
-		const regex = new RegExp(`\\(\\[.*\\]'s (lock|mut|bann|blacklist)ed alts: (\\[.*\\])\\)`);
-		nextLine?.replace(regex, (a, b, rawAlts) => {
-			alts = rawAlts;
+		let alts = '';
+		nextLine?.replace(ALTS_REGEX, (_a, _b, rawAlts) => {
+			if (rawAlts) alts = `alts: [${rawAlts.split(',').map(toID).join('], [')}] `;
 			return '';
 		});
-		return alts ? `alts: ${alts} ` : ``;
+		return alts;
+	};
+
+	const getAutoconfirmed = () => {
+		let autoconfirmed = '';
+		nextLine?.replace(AUTOCONFIRMED_REGEX, (_a, rawAutoconfirmed) => {
+			if (rawAutoconfirmed) autoconfirmed = `ac: [${toID(rawAutoconfirmed)}] `;
+			return '';
+		});
+		return autoconfirmed;
 	};
 
 	// Special cases
@@ -216,7 +228,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				log = log.slice(0, log.indexOf('('));
 			}
 			const actionTaker = toID(log);
-			return `${isName ? 'NAME' : ''}BLACKLIST: [${banned}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `${isName ? 'NAME' : ''}BLACKLIST: [${banned}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 		' was nameblacklisted from ': (log) => modernizerTransformations[' was blacklisted from '](log),
 		' was banned from room ': (log) => {
@@ -229,7 +241,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				log = log.slice(0, log.indexOf('('));
 			}
 			const actionTaker = toID(log);
-			return `ROOMBAN: [${banned}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `ROOMBAN: [${banned}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 		' was muted by ': (log) => {
 			let muted = '';
@@ -247,7 +259,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				isHour = true;
 				actionTaker = actionTaker.replace(/^(.*)(for1hour)$/, (match, staff) => staff) as ID;
 			}
-			return `${isHour ? 'HOUR' : ''}MUTE: [${muted}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `${isHour ? 'HOUR' : ''}MUTE: [${muted}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 		' was locked from talking ': (log) => {
 			const isWeek = log.includes(' was locked from talking for a week ');
@@ -260,7 +272,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				log = log.slice(0, log.indexOf('('));
 			}
 			const actionTaker = toID(log);
-			return `${isWeek ? 'WEEK' : ''}LOCK: [${locked}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `${isWeek ? 'WEEK' : ''}LOCK: [${locked}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 		' was banned ': (log) => {
 			if (log.includes(' was banned from room ')) return modernizerTransformations[' was banned from room '](log);
@@ -273,7 +285,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 				log = log.slice(0, log.indexOf('('));
 			}
 			const actionTaker = toID(log);
-			return `BAN: [${banned}] ${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
+			return `BAN: [${banned}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 
 		'was promoted to ': (log) => {
@@ -337,6 +349,44 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			log = log.slice(index + ' has been caught attempting a hunt with '.length);
 			log = log.replace('. The user has also', '; has also').replace('.', '');
 			return `SCAV CHEATER: [${user}]: caught attempting a hunt with ${log}`;
+		},
+
+		'made this room hidden': (log) => {
+			const user = toID(log.slice(0, log.indexOf(' made this room hidden')));
+			return `HIDDENROOM: by ${user}`;
+		},
+
+		'The tournament auto start timer was set to ': (log) => {
+			log = log.slice('The tournament auto start timer was set to'.length);
+			const [length, setter] = log.split(' by ').map(toID);
+			return `TOUR AUTOSTART: by ${setter}: ${length}`;
+		},
+		'The tournament auto disqualify timer was set to ': (log) => {
+			log = log.slice('The tournament auto disqualify timer was set to'.length);
+			const [length, setter] = log.split(' by ').map(toID);
+			return `TOUR AUTODQ: by ${setter}: ${length}`;
+		},
+		" set the tournament's banlist to ": (log) => {
+			const [setter, banlist] = log.split(` set the tournament's banlist to `);
+			return `TOUR BANLIST: by ${toID(setter)}: ${banlist.slice(0, -1)}`; // remove trailing . from banlist
+		},
+		" set the tournament's custom rules to": (log) => {
+			const [setter, rules] = log.split(` set the tournament's custom rules to `);
+			return `TOUR RULES: by ${toID(setter)}: ${rules.slice(0, -1)}`;
+		},
+		'[agameofhangman] was started by ': (log) => `HANGMAN: by ${toID(log.slice('[agameofhangman] was started by '.length))}`,
+		'[agameofunowas] created by ': (log) => `UNO CREATE: by ${toID(log.slice('[agameofunowas] created by '.length))}`,
+		'[thetournament] was set to autostart': (log) => {
+			const [, user] = log.split(' by ');
+			return `TOUR AUTOSTART: by ${toID(user)}: when playercap is reached`;
+		},
+		'[thetournament] was set to allow scouting': (log) => {
+			const [, user] = log.split(' by ');
+			return `TOUR SCOUT: by ${toID(user)}: allow`;
+		},
+		'[thetournament] was set to disallow scouting': (log) => {
+			const [, user] = log.split(' by ');
+			return `TOUR SCOUT: by ${toID(user)}: disallow`;
 		},
 	};
 
