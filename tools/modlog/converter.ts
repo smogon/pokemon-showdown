@@ -21,11 +21,12 @@ if (!global.Config) {
 }
 
 import type * as DatabaseType from 'better-sqlite3';
+import type {ModlogEntry} from '../../server/modlog';
 import {FS} from '../../lib';
-import {Modlog, ModlogEntry} from '../../server/modlog';
 import {IPTools} from '../../server/ip-tools';
 
 const Database = Config.usesqlite ? require('better-sqlite3') : null;
+const {Modlog} = require('../../server/modlog');
 
 type ModlogFormat = 'txt' | 'sqlite';
 
@@ -550,10 +551,10 @@ export class ModlogConverterSQLite {
 
 export class ModlogConverterTxt {
 	readonly databaseFile: string;
-	readonly modlog: Modlog;
+	readonly modlog: typeof Modlog;
 
 	readonly textLogDir: string;
-	readonly isTesting: {files: Map<string, string>, ml?: Modlog} | null = null;
+	readonly isTesting: {files: Map<string, string>, ml?: typeof Modlog} | null = null;
 	constructor(databaseFile: string, textLogDir: string, isTesting?: Map<string, string>, useFTSExtension?: boolean) {
 		this.databaseFile = databaseFile;
 		this.textLogDir = textLogDir;
