@@ -1168,6 +1168,17 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (!(user.locked || user.namelocked || user.semilocked)) {
 				return ['You are not punished.'];
 			}
+			const punishments = Punishments.search(user.id);
+			const userids = [user.id, ...user.previousIDs];
+
+			if (punishments.length) {
+				for (const [, , punishment] of punishments) {
+					if (userids.includes(punishment.id as ID)) {
+						return ['Your current punishment was explicitly given to you. Please open an Appeal ticket instead.'];
+					}
+				}
+			}
+
 			if (user.ips.some(i => Punishments.sharedIpBlacklist.has(i))) {
 				return [
 					"Your network has too many users who consistently misbehave on it. As such, we cannot unlock you, lest they abuse the unlock.",
