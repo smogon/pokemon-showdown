@@ -52,7 +52,7 @@ export class DatabaseWrapper implements ProcessWrapper {
 		this.statements = new Map();
 		this.pendingRequests = [];
 		this.process = child_process.fork(__filename, [], {
-			env: options as AnyObject, cwd: path.resolve(__dirname, '..'),
+			env: options as AnyObject, cwd: path.resolve(__dirname, '..'), execArgv: ['-r', 'ts-node/register'],
 		});
 		this.listen();
 	}
@@ -152,12 +152,12 @@ if (!PM.isParentProcess) {
 	const {file, extension} = process.env;
 	const database = Database ? new Database(file!) : null;
 	if (extension && database) {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const {
 			functions,
 			transactions: storedTransactions,
 			statements: storedStatements,
 			onDatabaseStart,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
 		} = require(`../${extension}`);
 		if (functions) {
 			for (const k in functions) {
@@ -210,7 +210,7 @@ if (!PM.isParentProcess) {
 			}
 			const {num, data} = query;
 			statement = statements.get(num);
-			results = statement?.get(data) || null;
+			results = statement?.get(...data as any) || null;
 		}
 			break;
 		case 'run': {
@@ -220,7 +220,7 @@ if (!PM.isParentProcess) {
 			}
 			const {num, data} = query;
 			statement = statements.get(num);
-			results = statement?.run(data) || null;
+			results = statement?.run(...data as any) || null;
 		}
 			break;
 		case 'exec': {

@@ -1,5 +1,5 @@
 "use strict";
-const {SQL} = require('../../.lib-dist/sql');
+const {SQL} = require('../../lib/sql');
 const assert = require('../assert').strict;
 
 const database = SQL(`:memory:`);
