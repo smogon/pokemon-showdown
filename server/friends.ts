@@ -71,7 +71,7 @@ export class FriendsDatabase {
 		this.file = file === ':memory:' ? file : path.resolve(file);
 	}
 	async updateUserCache(user: User) {
-		if (!user.friends) user.friends = new Set();
+		user.friends = new Set(); // we clear to account for users who may have been deleted
 		const friends = await this.getFriends(user.id);
 		for (const friend of friends) {
 			user.friends.add(friend.userid);
