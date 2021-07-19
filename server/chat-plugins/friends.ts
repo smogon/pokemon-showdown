@@ -195,9 +195,11 @@ function headerButtons(type: string, user: User) {
 		all: '<i class="fa fa-users"></i>',
 		help: '<i class="fa fa-question-circle"></i>',
 		settings: '<i class="fa fa-cog"></i>',
+		spectate: '<i class="fa fa-binoculars"></i>',
 	};
 	const titles: {[k: string]: string} = {
 		all: 'All Friends',
+		spectate: 'Spectate',
 		sent: 'Sent',
 		received: 'Received',
 		help: 'Help',
@@ -216,7 +218,7 @@ function headerButtons(type: string, user: User) {
 		`<button class="button" name="send" value="/j view-friends${type?.trim() ? `-${type}` : ''}" style="float: right">` +
 		` <i class="fa fa-refresh"></i> ${user.tr('Refresh')}</button>`
 	);
-	return `<div style="line-height:25px">${buf.join(' / ')}${refresh}</div>`;
+	return `<div style="line-height:25px">${buf.join(' / ')}${refresh}</div><hr />`;
 }
 
 export const commands: Chat.ChatCommands = {
@@ -266,7 +268,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/join view-friends-${target}`);
 		},
 		list() {
-			return this.parse(`/join view-friends`);
+			return this.parse(`/join view-friends-all`);
 		},
 		async accept(target, room, user, connection) {
 			Friends.checkCanUse(this);
@@ -406,6 +408,31 @@ export const commands: Chat.ChatCommands = {
 			);
 			this.sendReply(`You invalidated each entry in the friends database cache.`);
 		},
+		sharebattles(target, room, user) {
+			Friends.checkCanUse(this);
+			target = toID(target);
+			if (this.meansYes(target)) {
+				if (user.settings.displayBattlesToFriends) {
+					return this.errorReply(this.tr`You are already sharing your battles with friends.`);
+				}
+				user.settings.displayBattlesToFriends = true;
+				this.sendReply(`You are now allowing your friends to see your ongoing battles.`);
+			} else if (this.meansNo(target)) {
+				if (!user.settings.displayBattlesToFriends) {
+					return this.errorReply(this.tr`You not sharing your battles with friends.`);
+				}
+				user.settings.displayBattlesToFriends = false;
+				this.sendReply(`You are now hiding your ongoing battles from your friends.`);
+			} else {
+				if (!target) return this.parse('/help friends sharebattles');
+				return this.errorReply(`Invalid setting '${target}'. Provide 'on' or 'off'.`);
+			}
+			user.update();
+			this.refreshPage('friends-settings');
+		},
+		sharebattleshelp: [
+			`/friends sharebattles [on|off] - Allow or disallow your friends from seeing your ongoing battles.`,
+		],
 	},
 	friendshelp() {
 		return this.parse('/join view-friends-help');
@@ -422,7 +449,6 @@ export const pages: Chat.PageTable = {
 		case 'outgoing': case 'sent':
 			this.title = `[Friends] Sent`;
 			buf += headerButtons('sent', user);
-			buf += `<hr />`;
 			if (user.settings.blockFriendRequests) {
 				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
 			}
@@ -445,7 +471,6 @@ export const pages: Chat.PageTable = {
 		case 'received': case 'incoming':
 			this.title = `[Friends] Received`;
 			buf += headerButtons('received', user);
-			buf += `<hr />`;
 			const {received} = await Chat.Friends.getRequests(user);
 			if (received.size < 1) {
 				buf += `<strong>You have no pending friend requests.</strong>`;
@@ -475,7 +500,7 @@ export const pages: Chat.PageTable = {
 		case 'help':
 			this.title = `[Friends] Help`;
 			buf += headerButtons('help', user);
-			buf += `<hr /><h3>Help</h3>`;
+			buf += `<h3>Help</h3>`;
 			buf += `<strong>/friend OR /friends OR /friendslist:</strong><br /><ul><li>`;
 			buf += [
 				`<code>/friend list</code> - View current friends.`,
@@ -488,13 +513,14 @@ export const pages: Chat.PageTable = {
 				`<code>/friend viewnotifications</code> OR <code>viewnotifs</code> - Opts into view friend notifications.`,
 				`<code>/friend listdisplay [on/off]</code> - Opts [in/out] of letting others view your friends list.`,
 				`<code>/friend viewlist [user]</code> - View the given [user]'s friend list, if they're allowing others to see.`,
+				`<code>/friends sharebattles [on|off]</code> - Allow or disallow your friends from seeing your ongoing battles.`,
 			].join('</li><li>');
 			buf += `</li></ul>`;
 			break;
 		case 'settings':
 			this.title = `[Friends] Settings`;
 			buf += headerButtons('settings', user);
-			buf += `<hr /><h3>Friends Settings:</h3>`;
+			buf += `<h3>Friends Settings:</h3>`;
 			const settings = user.settings;
 			const {public_list, send_login_data} = await Chat.Friends.getSettings(user.id);
 			buf += `<strong>Notify me when my friends come online:</strong><br />`;
@@ -502,30 +528,108 @@ export const pages: Chat.PageTable = {
 			buf += `value="/friends hidenotifs">Disable</button> `;
 			buf += `<button class="button${settings.allowFriendNotifications ? ` disabled` : ``}" name="send" `;
 			buf += `value="/friends viewnotifs">Enable</button> <br /><br />`;
+
 			buf += `<strong>Receive friend requests:</strong><br />`;
 			buf += `<button class="button${settings.blockFriendRequests ? ` disabled` : ''}" name="send" `;
 			buf += `value="/friends toggle off">Disable</button> `;
 			buf += `<button class="button${settings.blockFriendRequests ? `` : ` disabled`}" name="send" `;
 			buf += `value="/friends toggle on">Enable</button> <br /><br />`;
+
 			buf += `<strong>Allow others to see your list:</strong><br />`;
 			buf += `<button class="button${public_list ? ` disabled` : ''}" name="send" `;
 			buf += `value="/friends listdisplay yes">Allow</button> `;
 			buf += `<button class="button${public_list ? `` : ` disabled`}" name="send" `;
 			buf += `value="/friends listdisplay no">Hide</button> <br /><br />`;
+
 			buf += `<strong>Allow others to see my login times</strong><br />`;
 			buf += `<button class="button${send_login_data ? ` disabled` : ''}" name="send" `;
 			buf += `value="/friends hidelogins">Disable</button> `;
 			buf += `<button class="button${send_login_data ? `` : ' disabled'}" name="send" `;
 			buf += `value="/friends showlogins">Enable</button><br /><br />`;
+
+			buf += `<strong>Allow friends to see my battles:</strong><br />`;
+			buf += `<button class="button${settings.displayBattlesToFriends ? `` : ' disabled'}" name="send" `;
+			buf += `value="/friends sharebattles off">Disable</button> `;
+			buf += `<button class="button${settings.displayBattlesToFriends ? ` disabled` : ``}" name="send" `;
+			buf += `value="/friends sharebattles on">Enable</button> <br /><br />`;
+			break;
+		case 'spectate':
+			this.title = `[Friends] Spectating`;
+			buf += headerButtons('spectate', user);
+			buf += `<h3>Spectate your friends:</h3>`;
+
+			const toggleMessage = user.settings.displayBattlesToFriends ?
+				' disallow your friends from seeing your battles' :
+				' allow your friends to see your battles';
+			buf += `<i><small>Use the <a roomid="view-friends-settings">settings page</a> to ${toggleMessage} on this page.</small></i><br />`;
+			buf += `<br />`;
+			if (!user.friends?.size) {
+				buf += `<h3>You have no friends to spectate.</h3>`;
+				break;
+			}
+			const friends = [];
+			for (const friendID of user.friends) {
+				const friend = Users.getExact(friendID);
+				if (!friend || !friend.settings.displayBattlesToFriends) continue;
+				friends.push(friend);
+			}
+			if (!friends.length) {
+				buf += `<em>None of your friends are currently around to spectate.</em>`;
+				break;
+			}
+
+			const battles: [User, string][] = [];
+			for (const friend of friends) {
+				const curBattles: [User, string][] = [...friend.inRooms]
+					.filter(id => Rooms.get(id)?.battle)
+					.map(id => [friend, id]);
+				if (!curBattles.length) continue;
+				battles.push(...curBattles);
+			}
+			Utils.sortBy(battles, ([, id]) => -Number(id.split('-')[2]));
+
+			if (!battles.length) {
+				buf += `<em>None of your friends are currently in a battle.</em>`;
+			} else {
+				buf += battles.map(([friend, battle]) => {
+					// we've already ensured the battle exists in the filter above
+					// (and .battle only exists if it's a GameRoom, so this cast is safe)
+					const room = Rooms.get(battle) as GameRoom & {battle: Rooms.RoomBattle};
+					const format = Dex.formats.get(room.battle.format).name;
+					const rated = room.battle.rated ? `<small style="float:right">(Rated: ${room.battle.rated})</small>` : '';
+					const title = room.title.includes(friend.name) ?
+						room.title.replace(friend.name, `<strong>${friend.name}</strong>`) :
+						(room.title + ` (with ${friend.name})`);
+					return `<a class="blocklink" href="/${room.roomid}"><small>[${format}]</small>${rated}<br /> ${title}</a>`;
+				}).join('<br />');
+			}
 			break;
 		default:
 			this.title = `[Friends] All Friends`;
 			buf += headerButtons('all', user);
-			buf += `<hr />`;
 			buf += await Friends.visualizeList(user.id);
 		}
 		buf += `</div>`;
 		return toLink(buf);
+	},
+};
+
+export const handlers: Chat.Handlers = {
+	onBattleStart(user, room) {
+		if (!user.friends) return; // probably should never happen
+		if (user.settings.displayBattlesToFriends) {
+			for (const id of user.friends) {
+				// should only work if theyre on that userid, since friends list is by userid
+				const curUser = Users.getExact(id);
+				if (curUser) {
+					for (const conn of curUser.connections) {
+						if (conn.openPages?.has('friends-spectate')) {
+							void Chat.parse('/friends view spectate', null, curUser, conn);
+						}
+					}
+				}
+			}
+		}
 	},
 };
 

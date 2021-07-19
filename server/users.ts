@@ -308,6 +308,7 @@ export interface UserSettings {
 	doNotDisturb: boolean;
 	blockFriendRequests: boolean;
 	allowFriendNotifications: boolean;
+	displayBattlesToFriends: boolean;
 	hideLogins: boolean;
 }
 
@@ -441,6 +442,7 @@ export class User extends Chat.MessageContext {
 			doNotDisturb: false,
 			blockFriendRequests: false,
 			allowFriendNotifications: true,
+			displayBattlesToFriends: false,
 			hideLogins: false,
 		};
 		this.battleSettings = {
