@@ -1510,11 +1510,11 @@ export const Formats: FormatList = [
 				return [`${ability.name} cannot safely function as a trademark.`];
 			}
 			// Contingent trademark bans
-			if (set.moves.map(this.dex.toID).includes(ability.id)) {
-				return [`${set.name} may not use ${ability.name} as both a trademark and one of its moves simultaneously.`];
-			}
 			if (this.ruleTable.isRestricted(`move:${ability.id}`)) {
 				return [`${ability.name} is restricted from being used as a trademark.`];
+			}
+			if (set.moves.map(this.dex.toID).includes(ability.id)) {
+				return [`${set.name} may not use ${ability.name} as both a trademark and one of its moves simultaneously.`];
 			}
 			const customRules = this.format.customRules || [];
 			if (!customRules.includes('!obtainableabilities')) customRules.push('!obtainableabilities');
