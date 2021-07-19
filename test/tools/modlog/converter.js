@@ -208,6 +208,38 @@ describe('Modlog conversion script', () => {
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) (The tournament auto disqualify timeout was set to 2 by Annika)'),
 				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR AUTODQ: by annika: 2'
 			);
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) (The tournament auto disqualify timer was set to 2 by Annika)'),
+				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR AUTODQ: by annika: 2'
+			);
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) (The tournament auto start timer was set to 2 by Annika)'),
+				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR AUTOSTART: by annika: 2'
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-04-23T05:58:24.988Z] (development) (Lady Monita set the tournament's banlist to Leppa Berry.)`),
+				`[2017-04-23T05:58:24.988Z] (development) TOUR BANLIST: by ladymonita: Leppa Berry`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-12-06T18:58:01.953Z] (development) (Hydreigon Specs set the tournament's custom rules to +Landorus, +Zeraora.)`),
+				`[2017-12-06T18:58:01.953Z] (development) TOUR RULES: by hydreigonspecs: +Landorus, +Zeraora`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-12-06T18:58:01.953Z] (development) (Hydreigon Specs set the tournament's custom rules to +Landorus, +Zeraora.)`),
+				`[2017-12-06T18:58:01.953Z] (development) TOUR RULES: by hydreigonspecs: +Landorus, +Zeraora`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-06-22T16:35:33.414Z] (development) ([thetournament] was set to autostart when the player cap is reached by Lady Monita)`),
+				`[2017-06-22T16:35:33.414Z] (development) TOUR AUTOSTART: by ladymonita: when playercap is reached`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to disallow scouting by SparksBlade)`),
+				`[2015-09-19T13:30:44.740Z] (development) TOUR SCOUT: by sparksblade: disallow`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to allow scouting by SparksBlade)`),
+				`[2015-09-19T13:30:44.740Z] (development) TOUR SCOUT: by sparksblade: allow`
+			);
 		});
 
 		it('should correctly parse old-format roombans', () => {
@@ -285,6 +317,14 @@ describe('Modlog conversion script', () => {
 
 			assert.equal(
 				converter.modernizeLog(
+					'[2020-08-23T19:50:49.944Z] (development) heartofetheria was locked from talking for a week by annika (reason)',
+					`[2020-08-23T19:50:49.944Z] (development) (Heart of Etheria's locked alts: annika0, hordeprime)`
+				),
+				'[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [heartofetheria] alts: [annika0], [hordeprime] by annika: reason'
+			);
+
+			assert.equal(
+				converter.modernizeLog(
 					'[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was banned from room development by annika',
 					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s banned alts: [annika0], [hordeprime])`
 				),
@@ -297,6 +337,16 @@ describe('Modlog conversion script', () => {
 					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s blacklisted alts: [annika0], [hordeprime])`
 				),
 				'[2020-08-23T19:50:49.944Z] (development) BLACKLIST: [heartofetheria] alts: [annika0], [hordeprime] by annika'
+			);
+		});
+
+		it('should correctly parse autoconfirmed alts using nextLine', () => {
+			assert.equal(
+				converter.modernizeLog(
+					`[2018-01-18T05:40:14.323Z] (lobby) [cartmanqueen] was muted by GeoffBruedly for 1 hour.`,
+					`[2018-01-18T05:40:14.324Z] (lobby) (Cartman(Queen)'s ac account: cartmanxjews)`
+				),
+				'[2018-01-18T05:40:14.323Z] (lobby) HOURMUTE: [cartmanqueen] ac: [cartmanxjews] by geoffbruedly'
 			);
 		});
 
@@ -402,6 +452,17 @@ describe('Modlog conversion script', () => {
 			assert.equal(
 				converter.modernizeLog(`[2015-07-21T06:04:54.369Z] (lobby) xfix declared GrumpyGungan was promoted to a global voice, feel free to congratulate him :-).`),
 				`[2015-07-21T06:04:54.369Z] (lobby) DECLARE: by xfix: GrumpyGungan was promoted to a global voice, feel free to congratulate him :-).`
+			);
+		});
+
+		it('should handle hangman and UNO games', () => {
+			assert.equal(
+				converter.modernizeLog(`[2016-09-22T19:07:35.411Z] (development) ([agameofhangman] was started by [br3to].)`),
+				`[2016-09-22T19:07:35.411Z] (development) HANGMAN: by br3to`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-05-07T18:34:40.730Z] (development) ([agameofunowas] created by [jinkazaragi].)`),
+				`[2017-05-07T18:34:40.730Z] (development) UNO CREATE: by jinkazaragi`
 			);
 		});
 	});
