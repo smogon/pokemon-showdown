@@ -1503,7 +1503,7 @@ export const Formats: FormatList = [
 				];
 			}
 			const irrevokablyRestricted = [
-				'Assist', 'Copycat', 'Metronome', 'Sleep Talk', // Could call another unsafe trademark
+				'Assist', 'Copycat', 'Metronome', 'Mirror Move', 'Sleep Talk', // Could call another unsafe trademark
 				'Skill Swap', // Self-propagates indefinitely
 			];
 			if (irrevokablyRestricted.includes(ability.name)) {
