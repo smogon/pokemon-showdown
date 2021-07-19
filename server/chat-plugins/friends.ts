@@ -179,6 +179,22 @@ export const Friends = new class {
 	removeRequest(receiverID: ID, senderID: ID) {
 		return Chat.Friends.removeRequest(receiverID, senderID);
 	}
+	updateSpectatorLists(user: User) {
+		if (!user.friends) return; // probably should never happen
+		if (user.settings.displayBattlesToFriends) {
+			for (const id of user.friends) {
+				// should only work if theyre on that userid, since friends list is by userid
+				const curUser = Users.getExact(id);
+				if (curUser) {
+					for (const conn of curUser.connections) {
+						if (conn.openPages?.has('friends-spectate')) {
+							void Chat.parse('/friends view spectate', null, curUser, conn);
+						}
+					}
+				}
+			}
+		}
+	}
 };
 
 /** UI functions chiefly for the chat page. */
@@ -615,21 +631,11 @@ export const pages: Chat.PageTable = {
 };
 
 export const handlers: Chat.Handlers = {
-	onBattleStart(user, room) {
-		if (!user.friends) return; // probably should never happen
-		if (user.settings.displayBattlesToFriends) {
-			for (const id of user.friends) {
-				// should only work if theyre on that userid, since friends list is by userid
-				const curUser = Users.getExact(id);
-				if (curUser) {
-					for (const conn of curUser.connections) {
-						if (conn.openPages?.has('friends-spectate')) {
-							void Chat.parse('/friends view spectate', null, curUser, conn);
-						}
-					}
-				}
-			}
-		}
+	onBattleStart(user) {
+		return Friends.updateSpectatorLists(user);
+	},
+	onBattleLeave(user, room) {
+		return Friends.updateSpectatorLists(user);
 	},
 };
 
