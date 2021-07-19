@@ -64,6 +64,7 @@ export interface Handlers {
 	onRoomClose?: (id: string, user: User, connection: Connection, page: boolean) => any;
 	onRenameRoom?: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
 	onBattleStart?: (user: User, room: GameRoom) => void;
+	onBattleLeave?: (user: User, room: GameRoom) => void;
 }
 
 export interface ChatPlugin {
