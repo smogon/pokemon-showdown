@@ -47,7 +47,8 @@ function getModule() {
 export class DatabaseWrapper implements ProcessWrapper {
 	statements: Map<string, number>;
 	process: child_process.ChildProcess;
-	pendingRequests: ((data: string | DataType | null) => any)[];
+	pendingRequests: [((data: string | DataType | null) => any), (err: Error) => void][];
+	pendingRelease?: () => void;
 	constructor(options: SQLOptions) {
 		this.statements = new Map();
 		this.pendingRequests = [];
@@ -60,19 +61,29 @@ export class DatabaseWrapper implements ProcessWrapper {
 		return this.process;
 	}
 	listen() {
-		this.process.on("message", (message: DataType) => {
-			const resolver = this.pendingRequests.shift();
-			if (resolver) return resolver(message);
+		this.process.on("message", (message: DataType | string) => {
+			const handlers = this.pendingRequests.shift();;
+			if (typeof message === 'string') {
+				if (message.startsWith('THROW\n')) {
+					const error = new Error();
+					error.stack = message.slice(6);
+					if (handlers?.[1]) return handlers[1](error);
+					throw error;
+				}
+			}
+			if (handlers) {
+				if (!this.pendingRequests.length && this.pendingRelease) this.pendingRelease();
+				return handlers[0](message);
+			}
 			throw new Error(`Database wrapper received a message, but there was no pending request.`);
 		});
 	}
-	release() {
+	async release() {
+		await new Promise<void>(resolve => {
+			this.pendingRelease = resolve;
+		});
+		this.process.disconnect();
 		this.statements.clear();
-		this.process.kill();
-		for (const resolver of this.pendingRequests.values()) {
-			resolver(null);
-		}
-		return Promise.resolve();
 	}
 	getLoad() {
 		return this.pendingRequests.length;
@@ -120,8 +131,8 @@ export class DatabaseWrapper implements ProcessWrapper {
 	}
 	query(args: DatabaseQuery) {
 		this.process.send(args);
-		return new Promise<any>(resolve => {
-			this.pendingRequests.push(resolve);
+		return new Promise<any>((resolve, reject) => {
+			this.pendingRequests.push([resolve, reject]);
 		});
 	}
 }
@@ -181,71 +192,83 @@ if (!PM.isParentProcess) {
 		}
 	}
 	database?.pragma(`foreign_keys=on`);
+
+	function crashlog(err: Error, query?: any) {
+		process.send!(`THROW\n@!!@${JSON.stringify([err.name, err.message, 'a SQL process', query])}\n${err.stack}`);
+	}
+
 	process.on('message', (query: DatabaseQuery) => {
 		let statement;
 		let results;
-		switch (query.type) {
-		case 'prepare': {
-			if (!database) return process.send!(-1);
-			const {data} = query;
-			const newStatement = database.prepare(data);
-			const nextNum = statementNum++;
-			statements.set(nextNum, newStatement);
-			return process.send!(nextNum);
-		}
-		case 'all': {
-			if (!database) {
-				results = [];
+		try {
+			switch (query.type) {
+			case 'prepare': {
+				if (!database) return process.send!(-1);
+				const {data} = query;
+				const newStatement = database.prepare(data);
+				const nextNum = statementNum++;
+				statements.set(nextNum, newStatement);
+				return process.send!(nextNum);
+			}
+			case 'all': {
+				if (!database) {
+					results = [];
+					break;
+				}
+				const {num, data} = query;
+				statement = statements.get(num);
+				results = statement?.all(data) || [];
+			}
+				break;
+			case 'get': {
+				if (!database) {
+					results = null;
+					break;
+				}
+				const {num, data} = query;
+				statement = statements.get(num);
+				results = statement?.get(...data as any) || null;
+			}
+				break;
+			case 'run': {
+				if (!database) {
+					results = null;
+					break;
+				}
+				const {num, data} = query;
+				statement = statements.get(num);
+				results = statement?.run(...data as any) || null;
+			}
+				break;
+			case 'exec': {
+				const {data} = query;
+				database?.exec(data);
+				results = !!database;
+			}
+				break;
+			case 'transaction': {
+				if (!database) {
+					results = null;
+					break;
+				}
+				const {num, data} = query;
+				const transaction = transactions.get(num);
+				if (!transaction) {
+					results = null;
+					break;
+				}
+				results = transaction(database, data);
+			}
 				break;
 			}
-			const {num, data} = query;
-			statement = statements.get(num);
-			results = statement?.all(data) || [];
-		}
-			break;
-		case 'get': {
-			if (!database) {
-				results = null;
-				break;
-			}
-			const {num, data} = query;
-			statement = statements.get(num);
-			results = statement?.get(...data as any) || null;
-		}
-			break;
-		case 'run': {
-			if (!database) {
-				results = null;
-				break;
-			}
-			const {num, data} = query;
-			statement = statements.get(num);
-			results = statement?.run(...data as any) || null;
-		}
-			break;
-		case 'exec': {
-			const {data} = query;
-			database?.exec(data);
-			results = !!database;
-		}
-			break;
-		case 'transaction': {
-			if (!database) {
-				results = null;
-				break;
-			}
-			const {num, data} = query;
-			const transaction = transactions.get(num);
-			if (!transaction) {
-				results = null;
-				break;
-			}
-			results = transaction(database, data);
-		}
-			break;
+		} catch (error) {
+			return crashlog(error, query);
 		}
 		process.send!(results);
 	});
+
+	process.on('uncaughtException', err => crashlog(err));
+	process.on('unhandledRejection', err => crashlog(err as any));
 }
 
 /**
