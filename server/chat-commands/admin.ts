@@ -12,7 +12,7 @@
 
 import * as path from 'path';
 import * as child_process from 'child_process';
-import {FS, Utils, ProcessManager} from '../../lib';
+import {FS, Utils, ProcessManager, SQL} from '../../lib';
 
 interface ProcessData {
 	cmd: string;
@@ -1269,7 +1269,7 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 
-	evalsql(target, room) {
+	async evalsql(target, room) {
 		this.canUseConsole();
 		this.runBroadcast(true);
 		if (!Config.usesqlite) return this.errorReply(`SQLite is disabled.`);
@@ -1288,7 +1288,7 @@ export const commands: Chat.ChatCommands = {
 			`<td>${Chat.getReadmoreCodeBlock(query)}</td></tr><table>`
 		);
 		logRoom?.roomlog(`SQLite> ${target}`);
-		const database = new (require('better-sqlite3') as typeof import('better-sqlite3'))(`./databases/${db}.db`);
+		const database = SQL(`./databases/${db}.db`);
 		function formatResult(result: any[] | string) {
 			if (!Array.isArray(result)) {
 				return (
@@ -1312,14 +1312,16 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		let result;
+		let statement;
 		try {
+			statement = await database.prepare(query);
 			// presume it's attempting to get data first
-			result = database.prepare(query).all();
+			result = await database.all(query);
 		} catch (err) {
 			// it's not getting data, but it might still be a valid statement - try to run instead
 			if (err.message?.includes(`Use run() instead`)) {
 				try {
-					result = Utils.visualize(database.prepare(query).run());
+					result = Utils.visualize(await database.run(statement, []));
 				} catch (e) {
 					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 				}

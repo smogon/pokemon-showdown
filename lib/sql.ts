@@ -251,7 +251,7 @@ if (!PM.isParentProcess) {
 /**
  * @param options Either an object of filename, extension, or just the string filename
  */
-export function SQL(options: SQLOptions | string) {
+export function SQL(options: SQLOptions | string): DatabaseWrapper {
 	if (typeof options === 'string') options = {file: options};
-	return PM.createProcess(options);
+	return PM.createProcess(options) as DatabaseWrapper;
 }
