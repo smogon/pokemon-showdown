@@ -62,7 +62,7 @@ export class DatabaseWrapper implements ProcessWrapper {
 	}
 	listen() {
 		this.process.on("message", (message: DataType | string) => {
-			const handlers = this.pendingRequests.shift();;
+			const handlers = this.pendingRequests.shift();
 			if (typeof message === 'string') {
 				if (message.startsWith('THROW\n')) {
 					const error = new Error();
@@ -156,6 +156,10 @@ class SQLProcessManager extends ProcessManager {
 export const PM = new SQLProcessManager(module);
 const Database = getModule();
 
+function crashlog(err: Error, query?: any) {
+	process.send!(`THROW\n@!!@${JSON.stringify([err.name, err.message, 'a SQL process', query])}\n${err.stack}`);
+}
+
 if (!PM.isParentProcess) {
 	let statementNum = 0;
 	const statements: Map<number, sqlite.Statement> = new Map();
@@ -193,9 +197,6 @@ if (!PM.isParentProcess) {
 	}
 	database?.pragma(`foreign_keys=on`);
 
-	function crashlog(err: Error, query?: any) {
-		process.send!(`THROW\n@!!@${JSON.stringify([err.name, err.message, 'a SQL process', query])}\n${err.stack}`);
-	}
 
 	process.on('message', (query: DatabaseQuery) => {
 		let statement;
