@@ -89,7 +89,7 @@ export class FriendsDatabase {
 			try {
 				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
 			} catch (e) {}
-			const actualVersion = FS(`databases/migrations/`).readdirSync().length;
+			const actualVersion = FS(`databases/migrations/friends`).readdirIfExistsSync().length;
 			if (val === undefined) {
 				// hasn't been set up before, write new version.
 				database.exec(FS('databases/schemas/friends.sql').readSync());

@@ -294,6 +294,16 @@ export class FSPath {
 		return fs.readdirSync(this.path);
 	}
 
+	async readdirIfExists(): Promise<string[]> {
+		if (await this.exists()) return this.readdir();
+		return Promise.resolve([]);
+	}
+
+	readdirIfExistsSync() {
+		if (this.existsSync()) return this.readdirSync();
+		return [];
+	}
+
 	createReadStream() {
 		return new FileReadStream(this.path);
 	}
