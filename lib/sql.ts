@@ -17,7 +17,7 @@ interface SQLOptions {
 type DataType = unknown[] | Record<string, unknown>;
 type Statement = string | number;
 
-export type DatabaseQuery = {
+type DatabaseQuery = {
 	/** Prepare a statement - data is the statement. */
 	type: 'prepare', data: string,
 } | {
