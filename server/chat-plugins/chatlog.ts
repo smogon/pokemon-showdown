@@ -1178,7 +1178,7 @@ export class RipgrepLogSearcher extends Searcher {
 			}
 			return `${date} ${line}`;
 		}).filter(Boolean).join(' ')).filter(Boolean);
-		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${originalSearch ? originalSearch : search}:</strong>`;
+		let buf = Utils.html`<div class ="pad"><strong>Results on ${roomid} for ${originalSearch ? originalSearch : search}:</strong>`;
 		buf += limit ? ` ${exactMatches} (capped at ${limit})` : '';
 		buf += `<hr /></div><blockquote>`;
 		buf += sorted.join('<hr />');
