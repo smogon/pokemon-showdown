@@ -1329,6 +1329,7 @@ export const commands: Chat.ChatCommands = {
 				result = ('' + err.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 			}
 		}
+		database.destroy();
 		logRoom?.roomlog(`SQLite< ${result}`);
 		this.sendReply(`|html|${formatResult(result)}`);
 	},
