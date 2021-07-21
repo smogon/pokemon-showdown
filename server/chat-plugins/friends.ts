@@ -299,8 +299,8 @@ export const commands: Chat.ChatCommands = {
 			this.refreshPage('friends-received');
 			if (targetUser) {
 				sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id);
-				sendPM(`/uhtmlchange sent,`, targetUser.id);
-				sendPM(`/uhtmlchange undo,`, targetUser.id);
+				sendPM(`/uhtmlchange sent-${targetUser.id},`, targetUser.id);
+				sendPM(`/uhtmlchange undo-${targetUser.id},`, targetUser.id);
 			}
 			await Chat.Friends.updateUserCache(user);
 			if (targetUser) await Chat.Friends.updateUserCache(targetUser);
@@ -451,6 +451,22 @@ export const commands: Chat.ChatCommands = {
 		],
 	},
 	friendshelp() {
+		this.runBroadcast();
+		if (this.broadcasting) {
+			return this.sendReplyBox([
+				`<code>/friend list</code> - View current friends.`,
+				`<code>/friend add [username]</code> - Send a friend request to [username], if you don't have them added.`,
+				`<code>/friend remove [username]</code> OR <code>/unfriend [username]</code>  - Unfriend the user.`,
+				`<code>/friend accept [username]</code> - Accepts the friend request from [username], if it exists.`,
+				`<code>/friend reject [username]</code> - Rejects the friend request from [username], if it exists.`,
+				`<code>/friend toggle [off/on]</code> - Enable or disable receiving of friend requests.`,
+				`<code>/friend hidenotifications</code> OR <code>hidenotifs</code> - Opts out of receiving friend notifications.`,
+				`<code>/friend viewnotifications</code> OR <code>viewnotifs</code> - Opts into view friend notifications.`,
+				`<code>/friend listdisplay [on/off]</code> - Opts [in/out] of letting others view your friends list.`,
+				`<code>/friend viewlist [user]</code> - View the given [user]'s friend list, if they're allowing others to see.`,
+				`<code>/friends sharebattles [on|off]</code> - Allow or disallow your friends from seeing your ongoing battles.`,
+			].join('<br />'));
+		}
 		return this.parse('/join view-friends-help');
 	},
 };
