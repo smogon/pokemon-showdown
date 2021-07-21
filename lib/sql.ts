@@ -284,7 +284,7 @@ if (!PM.isParentProcess) {
 					results = null;
 					break;
 				}
-				results = transaction(data, database, getStatementTable());
+				results = transaction(data, database, getStatementTable(), statements);
 			}
 				break;
 			}
