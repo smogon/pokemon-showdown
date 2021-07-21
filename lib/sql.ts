@@ -17,6 +17,12 @@ interface SQLOptions {
 type DataType = unknown[] | Record<string, unknown>;
 type Statement = string | number;
 
+export interface TransactionEnvironment {
+	db: sqlite.Database;
+	statementsByText: {[k: string]: sqlite.Statement};
+	statementsMap: Map<number, sqlite.Statement>;
+}
+
 type DatabaseQuery = {
 	/** Prepare a statement - data is the statement. */
 	type: 'prepare', data: string,
@@ -187,7 +193,7 @@ if (!PM.isParentProcess) {
 			}
 		}
 		return statementTable;
-	}
+	};
 
 	const {file, extension} = process.env;
 	database = Database ? new Database(file!) : null;
@@ -254,7 +260,8 @@ if (!PM.isParentProcess) {
 				}
 				const {num, data} = query;
 				statement = statements.get(num);
-				results = statement?.get(...data as any) || null;
+				const args = Array.isArray(data) ? data : [data];
+				results = statement?.get(...args) || null;
 			}
 				break;
 			case 'run': {
@@ -284,12 +291,17 @@ if (!PM.isParentProcess) {
 					results = null;
 					break;
 				}
-				results = transaction(data, database, getStatementTable(), statements);
+				const env: TransactionEnvironment = {
+					db: database,
+					statementsByText: getStatementTable(),
+					statementsMap: statements,
+				};
+				results = transaction(data, env) || null;
 			}
 				break;
 			}
 		} catch (error) {
-			return crashlog(error, query);
+			return crashlog(error, {...query, data: JSON.stringify(query.data)});
 		}
 		process.send!(results);
 	});
