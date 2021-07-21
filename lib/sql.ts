@@ -98,6 +98,9 @@ export class DatabaseWrapper implements ProcessWrapper {
 	getLoad() {
 		return this.pendingRequests.length;
 	}
+	destroy() {
+		void this.release();
+	}
 	runFile(filename: string) {
 		const file = FS(filename);
 		if (!file.existsSync()) throw new Error(`File passed to runFile does not exist.`);
