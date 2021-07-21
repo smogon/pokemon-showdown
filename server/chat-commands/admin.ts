@@ -1316,7 +1316,7 @@ export const commands: Chat.ChatCommands = {
 		try {
 			statement = await database.prepare(query);
 			// presume it's attempting to get data first
-			result = await database.all(query);
+			result = await database.all(statement);
 		} catch (err) {
 			// it's not getting data, but it might still be a valid statement - try to run instead
 			if (err.message?.includes(`Use run() instead`)) {
