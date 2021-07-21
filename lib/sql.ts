@@ -177,6 +177,18 @@ if (!PM.isParentProcess) {
 	let statementNum = 0;
 	const statements: Map<number, sqlite.Statement> = new Map();
 	const transactions: Map<string, sqlite.Transaction> = new Map();
+	let statementTable: {[k: string]: sqlite.Statement} = {};
+
+	const getStatementTable = () => {
+		if (Object.keys(statementTable).length !== statements.size) {
+			statementTable = {};
+			for (const statement of statements.values()) {
+				statementTable[statement.source] = statement;
+			}
+		}
+		return statementTable;
+	}
+
 	const {file, extension} = process.env;
 	database = Database ? new Database(file!) : null;
 	if (extension && database) {
@@ -272,7 +284,7 @@ if (!PM.isParentProcess) {
 					results = null;
 					break;
 				}
-				results = transaction(database, data);
+				results = transaction(data, database, getStatementTable());
 			}
 				break;
 			}
