@@ -33,7 +33,7 @@ type DatabaseQuery = {
 	/** Run a prepared statement. */
 	type: 'run', data: DataType, num: number,
 } | {
-	type: 'transaction', num: number, data: DataType,
+	type: 'transaction', name: string, data: DataType,
 };
 
 function getModule() {
@@ -70,6 +70,10 @@ export class DatabaseWrapper implements ProcessWrapper {
 					if (handlers?.[1]) return handlers[1](error);
 					throw error;
 				}
+				if (message.startsWith('STATEMENTS\n')) {
+					this.statements = new Map(Object.entries(JSON.parse(message.slice(12))));
+					return;
+				}
 			}
 			if (handlers) {
 				if (!this.pendingRequests.length && this.pendingRelease) this.pendingRelease();
@@ -93,7 +97,12 @@ export class DatabaseWrapper implements ProcessWrapper {
 		if (!file.existsSync()) throw new Error(`File passed to runFile does not exist.`);
 		if (!filename.endsWith('.sql')) throw new Error(`File passed to runFile is not a .sql file.`);
 		const content = file.readSync();
-		void this.exec(content);
+		const db = this.getDatabase();
+		if (db) return db.exec(content);
+		return this.exec(content);
+	}
+	getDatabase() {
+		return database;
 	}
 	async prepare(statement: string) {
 		const cachedStatement = this.statements.get(statement);
@@ -135,6 +144,9 @@ export class DatabaseWrapper implements ProcessWrapper {
 			this.pendingRequests.push([resolve, reject]);
 		});
 	}
+	transaction(name: string, data: DataType) {
+		return this.query({type: 'transaction', name, data});
+	}
 }
 
 class SQLProcessManager extends ProcessManager {
@@ -160,12 +172,13 @@ function crashlog(err: Error, query?: any) {
 	process.send!(`THROW\n@!!@${JSON.stringify([err.name, err.message, 'a SQL process', query])}\n${err.stack}`);
 }
 
+let database: sqlite.Database | null;
 if (!PM.isParentProcess) {
 	let statementNum = 0;
 	const statements: Map<number, sqlite.Statement> = new Map();
-	const transactions: Map<number, sqlite.Transaction> = new Map();
+	const transactions: Map<string, sqlite.Transaction> = new Map();
 	const {file, extension} = process.env;
-	const database = Database ? new Database(file!) : null;
+	database = Database ? new Database(file!) : null;
 	if (extension && database) {
 		const {
 			functions,
@@ -182,7 +195,7 @@ if (!PM.isParentProcess) {
 		if (storedTransactions) {
 			for (const t in storedTransactions) {
 				const transaction = database.transaction(storedTransactions[t]);
-				transactions.set(transactions.size + 1, transaction);
+				transactions.set(t, transaction);
 			}
 		}
 		if (storedStatements) {
@@ -190,6 +203,7 @@ if (!PM.isParentProcess) {
 				const statement = database.prepare(storedStatements[k]);
 				statements.set(statementNum++, statement); // we use statementNum here to track with the rest
 			}
+			process.send!(`STATEMENTS\n${JSON.stringify(Object.fromEntries(statements))}\n`);
 		}
 		if (onDatabaseStart) {
 			onDatabaseStart(database);
@@ -252,8 +266,8 @@ if (!PM.isParentProcess) {
 					results = null;
 					break;
 				}
-				const {num, data} = query;
-				const transaction = transactions.get(num);
+				const {name, data} = query;
+				const transaction = transactions.get(name);
 				if (!transaction) {
 					results = null;
 					break;
@@ -277,5 +291,5 @@ if (!PM.isParentProcess) {
  */
 export function SQL(options: SQLOptions | string) {
 	if (typeof options === 'string') options = {file: options};
-	return PM.createProcess(options);
+	return PM.createProcess(options) as DatabaseWrapper;
 }
