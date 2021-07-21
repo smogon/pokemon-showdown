@@ -27,3 +27,6 @@ CREATE TABLE database_settings (
 
 -- set version if not exists
 INSERT INTO database_settings (name, val) VALUES ('version', 0);
+
+CREATE INDEX list ON friends (user1, user2);
+CREATE INDEX request_list ON friend_requests (sender, receiver);
