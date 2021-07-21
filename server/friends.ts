@@ -169,7 +169,7 @@ export class FriendsDatabase {
 		if (receiver?.settings.blockFriendRequests) {
 			throw new Chat.ErrorMessage(`${receiver.name} is blocking friend requests.`);
 		}
-		let buf = Utils.html`/uhtml sent,<button class="button" name="send" value="/friends accept ${user.id}">Accept</button> | `;
+		let buf = Utils.html`/uhtml sent-${user.id},<button class="button" name="send" value="/friends accept ${user.id}">Accept</button> | `;
 		buf += Utils.html`<button class="button" name="send" value="/friends reject ${user.id}">Deny</button><br /> `;
 		buf += `<small>(You can also stop this user from sending you friend requests with <code>/ignore</code>)</small>`;
 		const disclaimer = (
@@ -194,7 +194,7 @@ export class FriendsDatabase {
 			user.name
 		);
 		sendPM(
-			`/uhtml undo,<button class="button" name="send" value="/friends undorequest ${Utils.escapeHTML(receiverID)}">` +
+			`/uhtml undo-${receiverID},<button class="button" name="send" value="/friends undorequest ${Utils.escapeHTML(receiverID)}">` +
 			`<i class="fa fa-undo"></i> Undo</button>`, user.name
 		);
 		sendPM(disclaimer, user.id);
