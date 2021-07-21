@@ -1296,7 +1296,7 @@ export const commands: Chat.ChatCommands = {
 					`SQLite&lt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(result)}</td></tr><table>`
 				);
 			}
-			let buffer = '<div class="ladder pad"><table><tr><th>';
+			let buffer = '<div class="ladder pad" style="overflow-x: auto;"><table><tr><th>';
 			// header
 			if (!result.length) {
 				buffer += `No data in table.</th></tr>`;
