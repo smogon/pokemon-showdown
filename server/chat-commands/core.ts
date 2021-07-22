@@ -393,6 +393,7 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 			autoconfirmed: !!targetUser.autoconfirmed,
 			status: targetUser.getStatus(),
 			rooms: roomList,
+			friended: user.friends?.has(targetUser.id),
 		};
 	},
 	roomlist(target, user, trustable) {
