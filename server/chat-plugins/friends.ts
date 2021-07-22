@@ -181,15 +181,13 @@ export const Friends = new class {
 	}
 	updateSpectatorLists(user: User) {
 		if (!user.friends) return; // probably should never happen
-		if (user.settings.displayBattlesToFriends) {
-			for (const id of user.friends) {
-				// should only work if theyre on that userid, since friends list is by userid
-				const curUser = Users.getExact(id);
-				if (curUser) {
-					for (const conn of curUser.connections) {
-						if (conn.openPages?.has('friends-spectate')) {
-							void Chat.parse('/friends view spectate', null, curUser, conn);
-						}
+		for (const id of user.friends) {
+			// should only work if theyre on that userid, since friends list is by userid
+			const curUser = Users.getExact(id);
+			if (curUser) {
+				for (const conn of curUser.connections) {
+					if (conn.openPages?.has('friends-spectate')) {
+						void Chat.parse('/friends view spectate', null, curUser, conn);
 					}
 				}
 			}
@@ -591,8 +589,8 @@ export const pages: Chat.PageTable = {
 			buf += `<h3>Spectate your friends:</h3>`;
 
 			const toggleMessage = user.settings.displayBattlesToFriends ?
-				' disallow your friends from seeing your battles' :
-				' allow your friends to see your battles';
+				' disallow your friends from seeing your hidden battles' :
+				' allow your friends to see your hidden battles';
 			buf += `<i><small>Use the <a roomid="view-friends-settings">settings page</a> to ${toggleMessage} on this page.</small></i><br />`;
 			buf += `<br />`;
 			if (!user.friends?.size) {
@@ -613,7 +611,10 @@ export const pages: Chat.PageTable = {
 			const battles: [User, string][] = [];
 			for (const friend of friends) {
 				const curBattles: [User, string][] = [...friend.inRooms]
-					.filter(id => Rooms.get(id)?.battle)
+					.filter(id => {
+						const room = Rooms.get(id)?.battle;
+						return room && (!room.roomid.endsWith('pw') || friend.settings.displayBattlesToFriends)
+					})
 					.map(id => [friend, id]);
 				if (!curBattles.length) continue;
 				battles.push(...curBattles);
