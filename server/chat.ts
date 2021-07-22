@@ -1123,9 +1123,15 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				const userFriends = user.friends || new Set();
-				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
-					(user.settings.blockPMs === 'friends' && !userFriends?.has(targetUser.id)) ||
-					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs as AuthLevel)) && !targetUser.can('lock')) {
+				const userBlock = user.settings.blockPMs;
+				// we check if they can lock the other before this so we're fine here
+				const userAuthAtLeast = targetBlock === true ?
+					targetUser.can('lock') :
+					Users.globalAuth.atLeast(targetUser, targetBlock as any);
+
+				if (userBlock && !user.can('lock', targetUser) && !(
+					userBlock === 'friends' ? userFriends.has(user.id) : userAuthAtLeast
+				)) {
 					throw new Chat.ErrorMessage(this.tr`You are blocking private messages right now.`);
 				}
 			}
