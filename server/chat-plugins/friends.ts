@@ -577,7 +577,7 @@ export const pages: Chat.PageTable = {
 			buf += `<button class="button${send_login_data ? `` : ' disabled'}" name="send" `;
 			buf += `value="/friends showlogins">Enable</button><br /><br />`;
 
-			buf += `<strong>Allow friends to see my battles:</strong><br />`;
+			buf += `<strong>Allow friends to see my hidden battles on the spectator list:</strong><br />`;
 			buf += `<button class="button${settings.displayBattlesToFriends ? `` : ' disabled'}" name="send" `;
 			buf += `value="/friends sharebattles off">Disable</button> `;
 			buf += `<button class="button${settings.displayBattlesToFriends ? ` disabled` : ``}" name="send" `;
