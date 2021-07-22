@@ -53,9 +53,7 @@ export const Friends = new class {
 		const friends = await Chat.Friends.getFriends(user.id);
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
 		for (const f of friends) {
-			const {user1, user2} = f;
-			const friend = user1 !== user.id ? user1 : user2;
-			const curUser = Users.get(friend as string);
+			const curUser = Users.get(f.friend);
 			if (curUser?.settings.allowFriendNotifications) {
 				curUser.send(`|pm|&|${curUser.getIdentity()}|${message}`);
 			}
