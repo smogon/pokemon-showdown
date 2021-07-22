@@ -1062,8 +1062,6 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				return this.sendReply(`${name} is a trusted user. If you are sure you would like to ban them use /forceglobalban.`);
 			}
-		} else if (force) {
-			return this.errorReply(`Use /globalban; ${name} is not a trusted user.`);
 		}
 
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);
