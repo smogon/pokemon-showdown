@@ -47,6 +47,7 @@ interface ModlogResults {
 
 interface ModlogSQLQuery<T> {
 	statement: number;
+	queryText: string;
 	args: T[];
 	returnsResults?: boolean;
 }
@@ -433,7 +434,7 @@ export class Modlog {
 		query += ` ${sortAndLimit.query}`;
 		args.push(...sortAndLimit.args);
 
-		return {statement: await this.database.prepare(query), args};
+		return {statement: await this.database.prepare(query), queryText: query, args};
 	}
 
 	async prepareSQLSearch(
