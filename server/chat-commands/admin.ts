@@ -729,13 +729,17 @@ export const commands: Chat.ChatCommands = {
 				const streams = Rooms.Modlog.streams;
 				const sharedStreams = Rooms.Modlog.sharedStreams;
 
-				const processManagers = ProcessManager.processManagers;
-				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('server/modlog').path)) void manager.destroy();
+				const {Modlog, MODLOG_DB_PATH, MODLOG_PATH} = require('../modlog');
+				const ml = new Modlog(MODLOG_PATH, MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions});
+				if (ml.readyPromise) {
+					this.sendReply("Waiting for the new SQLite database to be ready...");
+					await ml.readyPromise;
+				} else {
+					this.sendReply("The new SQLite database is ready!");
 				}
+				Rooms.Modlog.destroyAllSQLite();
 
-				const {mainModlog} = require('../modlog');
-				Rooms.Modlog = mainModlog;
+				Rooms.Modlog = ml;
 				this.sendReply("Re-initializing modlog streams...");
 				Rooms.Modlog.streams = streams;
 				Rooms.Modlog.sharedStreams = sharedStreams;
