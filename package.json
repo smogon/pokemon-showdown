@@ -77,7 +77,7 @@
     "@types/sockjs": "^0.3.32",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
-    "eslint": "^7.12.1",
+    "eslint": "^7.31.0",
     "eslint-plugin-import": "^2.22.1",
     "husky": "^4.3.0",
     "mocha": "^8.2.0",

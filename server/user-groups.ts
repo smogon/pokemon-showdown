@@ -1,11 +1,11 @@
 import {FS} from '../lib/fs';
 import type {RoomSection} from './chat-commands/room-settings';
 
-export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '▸' | '+' | '^' | ' ' | '‽' | '!';
+export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
-export const SECTIONLEADER_SYMBOL: GroupSymbol = '\u25B8';
+export const SECTIONLEADER_SYMBOL: GroupSymbol = '\u00a7';
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
@@ -63,7 +63,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			// At one point bots used to be ranked above drivers, so this checks
 			// driver rank to make sure this function works on servers that
 			// did not reorder the ranks.
-			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, '%');
+			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, SECTIONLEADER_SYMBOL) || Auth.atLeast(rank, '%');
 		} else {
 			return false;
 		}
@@ -135,8 +135,18 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			targetSymbol = Auth.defaultSymbol();
 		}
 
-		const group = Auth.getGroup(symbol);
+		let group = Auth.getGroup(symbol);
 		if (group['root']) return true;
+		if (
+			room?.settings.section &&
+			room.settings.section === Users.globalAuth.sectionLeaders.get(user.id) &&
+			// Global drivers who are SLs should get room mod powers too
+			Users.globalAuth.atLeast(user, SECTIONLEADER_SYMBOL) &&
+			// But dont override ranks above moderator such as room owner
+			(Auth.getGroup('@').rank > group.rank)
+		) {
+			group = Auth.getGroup('@');
+		}
 
 		let jurisdiction = group[permission as GlobalPermission | RoomPermission];
 		if (jurisdiction === true && permission !== 'jurisdiction') {

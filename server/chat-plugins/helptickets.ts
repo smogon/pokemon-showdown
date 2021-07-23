@@ -361,7 +361,6 @@ export class HelpTicket extends Rooms.RoomGame {
 			switch (this.ticket.type) {
 			case 'Appeal':
 			case 'IP-Appeal':
-			case 'ISP-Appeal':
 				this.result = (result ? 'approved' : 'denied');
 				break;
 			case 'PM Harassment':
@@ -841,7 +840,6 @@ const ticketTitles: {[k: string]: string} = {
 	inappokemon: `Inappropriate Pokemon Nicknames`,
 	appeal: `Appeal`,
 	ipappeal: `IP-Appeal`,
-	appealsemi: `ISP-Appeal`,
 	roomhelp: `Public Room Assistance Request`,
 	other: `Other`,
 };
@@ -881,7 +879,6 @@ const ticketPages: {[k: string]: string} = {
 	confirminappokemon: `Report inappropriate Pokemon nicknames`,
 	confirmappeal: `Appeal your lock`,
 	confirmipappeal: `Appeal IP lock`,
-	confirmappealsemi: `Appeal ISP lock`,
 	confirmroomhelp: `Call a Global Staff member to help`,
 	confirmother: `Call a Global Staff member`,
 };
@@ -1171,6 +1168,17 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (!(user.locked || user.namelocked || user.semilocked)) {
 				return ['You are not punished.'];
 			}
+			const punishments = Punishments.search(user.id);
+			const userids = [user.id, ...user.previousIDs];
+
+			if (punishments.length) {
+				for (const [, , punishment] of punishments) {
+					if (userids.includes(punishment.id as ID)) {
+						return ['Your current punishment was explicitly given to you. Please open an Appeal ticket instead.'];
+					}
+				}
+			}
+
 			if (user.ips.some(i => Punishments.sharedIpBlacklist.has(i))) {
 				return [
 					"Your network has too many users who consistently misbehave on it. As such, we cannot unlock you, lest they abuse the unlock.",
@@ -1410,14 +1418,10 @@ export const pages: Chat.PageTable = {
 					break;
 				case 'hasautoconfirmed':
 					buf += `<p>${this.tr`Login to your autoconfirmed account by using the <code>/nick</code> command in any chatroom, and the semilock will automatically be removed. Afterwards, you can use the <code>/nick</code> command to switch back to your current username without being semilocked again.`}</p>`;
-					buf += `<p>${this.tr`If the semilock does not go away, you can try asking a global staff member for help. Click the button below to call a global staff member.`}</p>`;
-					if (!isLast) break;
-					buf += `<p><Button>confirmappealsemi</Button></p>`;
+					buf += `<p>${this.tr`If the semilock does not go away, you can try asking a global staff member for help.`}</p>`;
 					break;
 				case 'lacksautoconfirmed':
-					buf += `<p>${this.tr`If you don't have an autoconfirmed account, you will need to contact a global staff member to appeal your semilock. Click the button below to call a global staff member.`}</p>`;
-					if (!isLast) break;
-					buf += `<p><Button>confirmappealsemi</Button></p>`;
+					buf += `<p>${this.tr`If you don't have an autoconfirmed account, you will need to contact a global staff member to appeal your semilock.`}</p>`;
 					break;
 				case 'appealother':
 					buf += `<p>${this.tr`Please PM the staff member who punished you. If you don't know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.`}</p>`;
@@ -2028,7 +2032,6 @@ export const commands: Chat.ChatCommands = {
 			switch (ticket.type) {
 			case 'Appeal':
 			case 'IP-Appeal':
-			case 'ISP-Appeal':
 				closeButtons = `<button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}">Close Ticket as Appeal Granted</button> <button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}, false">Close Ticket as Appeal Denied</button>`;
 				break;
 			case 'PM Harassment':
