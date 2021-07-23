@@ -121,9 +121,8 @@ export class Modlog {
 			});
 
 			// we can't prepare statements or block on database queries, since constructors must be synchronous
-			this.readyPromise = this.setupDatabase(dbExists).then(async () => {
+			this.readyPromise = this.setupDatabase(dbExists).then(() => {
 				this.databaseReady = true;
-				await this.writeSQL(this.queuedEntries);
 				this.readyPromise = null;
 			});
 		} else {
@@ -169,6 +168,7 @@ export class Modlog {
 			`AND timestamp > ? ` +
 			`AND action IN (${Modlog.formatArray(GLOBAL_PUNISHMENTS, [])})`
 		);
+		await this.writeSQL(this.queuedEntries);
 	}
 
 	/******************
@@ -221,7 +221,7 @@ export class Modlog {
 			time: entry.time || Date.now(),
 		};
 
-		this.writeText([insertableEntry]);
+		// this.writeText([insertableEntry]);
 		if (Config.usesqlitemodlog) {
 			await this.writeSQL([insertableEntry]);
 		}
@@ -268,7 +268,7 @@ export class Modlog {
 		}
 	}
 
-	async destroy(roomid: ModlogID) {
+	async destroyRoomStream(roomid: ModlogID) {
 		const stream = this.streams.get(roomid);
 		if (stream && !this.getSharedID(roomid)) {
 			await stream.writeEnd();
@@ -276,12 +276,23 @@ export class Modlog {
 		this.streams.delete(roomid);
 	}
 
-	async destroyAll() {
+	async destroyText() {
 		const promises = [];
 		for (const id in this.streams) {
-			promises.push(this.destroy(id as ModlogID));
+			promises.push(this.destroyRoomStream(id as ModlogID));
 		}
 		return Promise.all(promises);
+	}
+
+	destroySQLite() {
+		if (!this.database) return;
+		this.database.destroy();
+		this.databaseReady = false;
+	}
+
+	async destroy() {
+		this.destroySQLite();
+		await this.destroyText();
 	}
 
 	async rename(oldID: ModlogID, newID: ModlogID) {
@@ -289,7 +300,7 @@ export class Modlog {
 
 		// rename flat-file modlogs
 		const streamExists = this.streams.has(oldID);
-		if (streamExists) await this.destroy(oldID);
+		if (streamExists) await this.destroyRoomStream(oldID);
 		if (!this.getSharedID(oldID)) {
 			await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
 		}
