@@ -28,6 +28,16 @@ export interface DatabaseResult {
 	result?: any;
 }
 
+export interface Friend {
+	/** Always the same as Friend#friend. Use whichever you want. */
+	userid: ID;
+	/** Always the same as Friend#userid. Use whichever you want. */
+	friend: ID;
+	send_login_data: number;
+	last_login: number | null;
+	public_list: number;
+}
+
 /** Like Chat.ErrorMessage, but made for the subprocess so we can throw errors to the user not using errorMessage
  * because errorMessage crashes when imported (plus we have to spawn dex, etc, all unnecessary - this is easier)
  */
@@ -119,7 +129,7 @@ export class FriendsDatabase {
 		statements.expire.run();
 		return database;
 	}
-	getFriends(userid: ID): Promise<AnyObject[]> {
+	getFriends(userid: ID): Promise<Friend[]> {
 		return this.all('get', [userid, MAX_FRIENDS]);
 	}
 	async getRequests(user: User) {
