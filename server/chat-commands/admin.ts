@@ -1323,7 +1323,7 @@ export const commands: Chat.ChatCommands = {
 			result = await database.all(statement);
 		} catch (err) {
 			// it's not getting data, but it might still be a valid statement - try to run instead
-			if (err.message?.includes(`Use run() instead`)) {
+			if (err.stack?.includes(`Use run() instead`)) {
 				try {
 					result = Utils.visualize(await database.run(statement, []));
 				} catch (e) {
