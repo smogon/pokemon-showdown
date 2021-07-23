@@ -34,8 +34,9 @@ export interface Friend {
 	/** Always the same as Friend#userid. Use whichever you want. */
 	friend: ID;
 	send_login_data: number;
-	last_login: number | null;
+	last_login: number;
 	public_list: number;
+	allowing_login: number;
 }
 
 /** Like Chat.ErrorMessage, but made for the subprocess so we can throw errors to the user not using errorMessage
