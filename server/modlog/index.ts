@@ -113,7 +113,6 @@ export class Modlog {
 
 		if (Config.usesqlite) {
 			const dbExists = FS(databasePath).existsSync();
-			console.log(dbExists, databasePath);
 			this.database = SQL({
 				file: databasePath,
 				extension: 'server/modlog/transactions.ts',
@@ -268,7 +267,7 @@ export class Modlog {
 		}
 	}
 
-	async destroyRoomStream(roomid: ModlogID) {
+	async destroy(roomid: ModlogID) {
 		const stream = this.streams.get(roomid);
 		if (stream && !this.getSharedID(roomid)) {
 			await stream.writeEnd();
@@ -276,23 +275,23 @@ export class Modlog {
 		this.streams.delete(roomid);
 	}
 
-	async destroyText() {
+	async destroyAllText() {
 		const promises = [];
 		for (const id in this.streams) {
-			promises.push(this.destroyRoomStream(id as ModlogID));
+			promises.push(this.destroy(id as ModlogID));
 		}
 		return Promise.all(promises);
 	}
 
-	destroySQLite() {
+	destroyAllSQLite() {
 		if (!this.database) return;
 		this.database.destroy();
 		this.databaseReady = false;
 	}
 
-	async destroy() {
-		this.destroySQLite();
-		await this.destroyText();
+	async destroyAll() {
+		this.destroyAllSQLite();
+		await this.destroyAllText();
 	}
 
 	async rename(oldID: ModlogID, newID: ModlogID) {
@@ -300,7 +299,7 @@ export class Modlog {
 
 		// rename flat-file modlogs
 		const streamExists = this.streams.has(oldID);
-		if (streamExists) await this.destroyRoomStream(oldID);
+		if (streamExists) await this.destroy(oldID);
 		if (!this.getSharedID(oldID)) {
 			await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
 		}

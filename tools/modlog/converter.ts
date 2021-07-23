@@ -31,7 +31,7 @@ const {Modlog} = require('../../server/modlog');
 type ModlogFormat = 'txt' | 'sqlite';
 
 /** The number of modlog entries to write to the database on each transaction */
-const ENTRIES_TO_BUFFER = 10000;
+const ENTRIES_TO_BUFFER = 7500;
 const ALTS_REGEX = /\(.*?'s (lock|mut|bann|blacklist)ed alts: (.*)\)/;
 const AUTOCONFIRMED_REGEX = /\(.*?'s ac account: (.*)\)/;
 

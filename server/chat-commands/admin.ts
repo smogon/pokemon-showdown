@@ -737,7 +737,7 @@ export const commands: Chat.ChatCommands = {
 				} else {
 					this.sendReply("The new SQLite database is ready!");
 				}
-				Rooms.Modlog.destroySQLite();
+				Rooms.Modlog.destroyAllSQLite();
 
 				Rooms.Modlog = ml;
 				this.sendReply("Re-initializing modlog streams...");
