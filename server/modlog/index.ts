@@ -157,45 +157,30 @@ export class Modlog {
 			Monitor.warn(`Modlog database migration complete.`);
 		}
 
-
-		let insertionQuerySource = `INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, is_global, note)`;
-		insertionQuerySource += ` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $isGlobal, $note)`;
-		this.modlogInsertionQuery = await this.database.prepare(insertionQuerySource);
-
+		this.modlogInsertionQuery = await this.database.prepare(
+			`INSERT INTO modlog (timestamp, roomid, visual_roomid, action, userid, autoconfirmed_userid, ip, action_taker_userid, is_global, note)` +
+			` VALUES ($time, $roomID, $visualRoomID, $action, $userid, $autoconfirmedID, $ip, $loggedBy, $isGlobal, $note)`
+		);
 		this.altsInsertionQuery = await this.database.prepare(`INSERT INTO alts (modlog_id, userid) VALUES (?, ?)`);
 		this.renameQuery = await this.database.prepare(`UPDATE modlog SET roomid = ? WHERE roomid = ?`);
-
 		this.globalPunishmentsSearchQuery = await this.database.prepare(
 			`SELECT * FROM modlog WHERE is_global = 1 ` +
 			`AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)) ` +
-			`AND timestamp > $timestamp ` +
-			`AND action IN (${this.formatArray(GLOBAL_PUNISHMENTS, [])})`
+			`AND timestamp > ? ` +
+			`AND action IN (${Modlog.formatArray(GLOBAL_PUNISHMENTS, [])})`
 		);
 	}
 
 	/******************
 	 * Helper methods *
 	 ******************/
-	formatArray(arr: unknown[], args: unknown[]) {
+	static formatArray(arr: unknown[], args: unknown[]) {
 		args.push(...arr);
 		return [...'?'.repeat(arr.length)].join(', ');
 	}
 
 	getSharedID(roomid: ModlogID): ID | false {
 		return roomid.includes('-') ? `${toID(roomid.split('-')[0])}-rooms` as ID : false;
-	}
-
-	generateIDRegex(search: string) {
-		// Ensure the generated regex can never be greater than or equal to the value of
-		// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
-		// search with max length MAX_QUERY_LENGTH. Otherwise, the modlog
-		// child process will crash when attempting to execute any RegExp
-		// constructed with it (i.e. when not configured to use ripgrep).
-		return `[^a-zA-Z0-9]?${[...search].join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
-	}
-
-	escapeRegex(search: string) {
-		return search.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 	}
 
 	/**************************************
@@ -333,6 +318,8 @@ export class Modlog {
 	}
 
 	async getGlobalPunishmentsSQL(userid: ID, days: number) {
+		if (this.readyPromise) await this.readyPromise;
+
 		if (!this.globalPunishmentsSearchQuery) {
 			throw new Error(`Modlog#globalPunishmentsSearchQuery is falsy but an SQL search function was called.`);
 		}
@@ -350,16 +337,23 @@ export class Modlog {
 		onlyPunishments = false,
 	): Promise<ModlogResults> {
 		const startTime = Date.now();
-		const rooms = (roomid === 'public' ?
-			[...Rooms.rooms.values()]
+
+		let rooms: ModlogID[] | 'all';
+		if (roomid === 'public') {
+			rooms = [...Rooms.rooms.values()]
 				.filter(room => !room.settings.isPrivate && !room.settings.isPersonal)
-				.map(room => room.roomid) :
-			[roomid]);
+				.map(room => room.roomid);
+		} else if (roomid === 'all') {
+			rooms = 'all';
+		} else {
+			rooms = [roomid];
+		}
 
 		if (this.readyPromise) await this.readyPromise;
 		if (Config.usesqlite && Config.usesqlitemodlog && this.databaseReady) {
 			const query = await this.prepareSQLSearch(rooms, maxLines, onlyPunishments, search);
-			const results = (await this.database!.all(query.statement, query.args)).map((row: any) => this.dbRowToModlogEntry(row));
+			const results = (await this.database!.all(query.statement, query.args))
+				.map((row: any) => this.dbRowToModlogEntry(row));
 
 			const duration = Date.now() - startTime;
 			if (duration > LONG_QUERY_DURATION) {
@@ -433,7 +427,7 @@ export class Modlog {
 	}
 
 	async prepareSQLSearch(
-		rooms: ModlogID[],
+		rooms: ModlogID[] | 'all',
 		maxLines: number,
 		onlyPunishments: boolean,
 		search: ModlogSearch
@@ -449,9 +443,9 @@ export class Modlog {
 
 		// Limit the query to only the specified rooms, treating "global" as a pseudo-room that checks is_global
 		// (This is because the text modlog system gave global modlog entries their own file, as a room would have.)
-		if (!rooms.includes('all')) {
+		if (rooms !== 'all') {
 			const args: (string | number)[] = [];
-			let roomChecker = `roomid IN (${this.formatArray(rooms, args)})`;
+			let roomChecker = `roomid IN (${Modlog.formatArray(rooms, args)})`;
 			if (rooms.includes('global')) {
 				if (rooms.length > 1) {
 					roomChecker = `(is_global = 1 OR ${roomChecker})`;
@@ -478,7 +472,7 @@ export class Modlog {
 			ors.push({query: `action LIKE ?`, args: [search.action + '%']});
 		} else if (onlyPunishments) {
 			const args: (string | number)[] = [];
-			ors.push({query: `action IN (${this.formatArray(PUNISHMENTS, args)})`, args});
+			ors.push({query: `action IN (${Modlog.formatArray(PUNISHMENTS, args)})`, args});
 		}
 
 		if (search.ip) ors.push({query: `ip LIKE ?`, args: [search.ip + '%']});

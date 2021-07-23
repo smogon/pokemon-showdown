@@ -36,7 +36,9 @@ const from = flags['--from'];
 const to = flags['--to'];
 const newestAllowedTimestamp = parseInt(flags['--newest-allowed-timestamp']);
 
-if (isNaN(newestAllowedTimestamp)) throw new Error(`The newest allowed timestamp must be a number of milliseconds.`);
+if (newestAllowedTimestamp && isNaN(newestAllowedTimestamp)) {
+	throw new Error(`The newest allowed timestamp must be a number of milliseconds.`);
+}
 
 if (
 	!((databasePath || outputLogPath) && textLogPath && from && to) ||

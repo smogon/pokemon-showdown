@@ -1878,7 +1878,7 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
-	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH),
+	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH, {sqliteOptions: {timeout: Config.modlogsqlitetimeout}}),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
