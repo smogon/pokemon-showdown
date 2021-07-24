@@ -371,11 +371,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 		hasValue: true,
 		onValidateRule(value) {
 			if (!this.dex.types.get(value).exists) throw new Error(`Misspelled type "${value}"`);
-			if (!this.dex.types.isName(value)) throw new Error(`Incorrectly capitalized type "${value}"`);
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
-			const type = this.ruleTable.valueRules.get('forcemonotype')!;
+			const type = this.dex.types.get(this.ruleTable.valueRules.get('forcemonotype')!).name;
 			if (!species.types.includes(type)) {
 				return [`${set.species} must have type ${type}`];
 			}
