@@ -441,7 +441,7 @@ export class User extends Chat.MessageContext {
 			blockInvites: false,
 			doNotDisturb: false,
 			blockFriendRequests: false,
-			allowFriendNotifications: true,
+			allowFriendNotifications: false,
 			displayBattlesToFriends: false,
 			hideLogins: false,
 		};
