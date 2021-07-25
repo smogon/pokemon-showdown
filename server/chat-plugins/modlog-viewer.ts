@@ -160,7 +160,7 @@ async function getModlog(
 	const addModlogLinks = !!(
 		Config.modloglink && (user.tempGroup !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
-	if (hideIps && search.ip) {
+	if (hideIps && search.ip.length) {
 		connection.popup(`You cannot search for IPs.`);
 		return;
 	}
