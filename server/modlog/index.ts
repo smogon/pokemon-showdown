@@ -53,12 +53,12 @@ interface ModlogSQLQuery<T> {
 }
 
 export interface ModlogSearch {
-	note?: {searches: string[], isExact?: boolean};
-	user?: {search: string, isExact?: boolean};
+	note: {search: string, isExact?: boolean, isExclusion?: boolean}[];
+	user: {search: string, isExact?: boolean, isExclusion?: boolean}[];
 	anyField?: string;
-	ip?: string;
-	action?: string;
-	actionTaker?: string;
+	ip: {search: string, isExclusion?: boolean}[];
+	action: {search: string, isExclusion?: boolean}[];
+	actionTaker: {search: string, isExclusion?: boolean}[];
 }
 
 export interface ModlogEntry {
@@ -343,7 +343,7 @@ export class Modlog {
 
 	async search(
 		roomid: ModlogID = 'global',
-		search: ModlogSearch = {},
+		search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []},
 		maxLines = 20,
 		onlyPunishments = false,
 	): Promise<ModlogResults> {
@@ -479,35 +479,63 @@ export class Modlog {
 			ors.push({query: `note LIKE ?`, args: [`%${search.anyField}%`]});
 		}
 
-		if (search.action) {
-			ors.push({query: `action LIKE ?`, args: [search.action + '%']});
-		} else if (onlyPunishments) {
+		for (const action of search.action) {
+			const args = [action.search + '%'];
+			if (action.isExclusion) {
+				ands.push({query: `action NOT LIKE ?`, args});
+			} else {
+				ors.push({query: `action LIKE ?`, args});
+			}
+		}
+		if (onlyPunishments) {
 			const args: (string | number)[] = [];
 			ands.push({query: `action IN (${Modlog.formatArray(PUNISHMENTS, args)})`, args});
 		}
 
-		if (search.ip) ors.push({query: `ip LIKE ?`, args: [search.ip + '%']});
-		if (search.actionTaker) ors.push({query: `action_taker_userid LIKE ?`, args: [search.actionTaker + '%']});
-
-		if (search.note) {
-			const tester = search.note.isExact ? `= ?` : `LIKE ?`;
-			for (const noteSearch of search.note.searches) {
-				ors.push({query: `note ${tester}`, args: [(search.note.isExact ? noteSearch + '%' : `%${noteSearch}%`)]});
+		for (const ip of search.ip) {
+			const args = [ip.search + '%'];
+			if (ip.isExclusion) {
+				ands.push({query: `ip NOT LIKE ?`, args});
+			} else {
+				ors.push({query: `ip LIKE ?`, args});
+			}
+		}
+		for (const actionTaker of search.actionTaker) {
+			const args = [actionTaker.search + '%'];
+			if (actionTaker.isExclusion) {
+				ands.push({query: `action_taker_userid NOT LIKE ?`, args});
+			} else {
+				ors.push({query: `action_taker_userid LIKE ?`, args});
 			}
 		}
 
-		if (search.user) {
-			if (search.user.isExact) {
-				const args = [search.user.search];
-				ors.push({query: `userid = ?`, args});
-				ors.push({query: `autoconfirmed_userid = ?`, args});
-				ors.push({query: `EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid = ?)`, args});
+		for (const noteSearch of search.note) {
+			const tester = noteSearch.isExact ? `= ?` : `LIKE ?`;
+			const args = [noteSearch.isExact ? noteSearch + '%' : `%${noteSearch}%`];
+			if (noteSearch.isExclusion) {
+				ands.push({query: `note ${noteSearch.isExact ? '!' : 'NOT '}${tester}`, args});
 			} else {
-				const args = [search.user.search + '%'];
-				ors.push({query: `userid LIKE ?`, args});
-				ors.push({query: `autoconfirmed_userid LIKE ?`, args});
-				ors.push({query: `EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid LIKE ?)`, args});
+				ors.push({query: `note ${tester}`, args});
 			}
+		}
+
+		for (const user of search.user) {
+			let tester;
+			let args;
+			if (user.isExact) {
+				tester = user.isExclusion ? `!= ?` : `= ?`;
+				args = [user.search];
+			} else {
+				tester = user.isExclusion ? `NOT LIKE ?` : `LIKE ?`;
+				args = [user.search + '%'];
+			}
+
+			ors.push({query: `userid ${tester}`, args});
+			ors.push({query: `autoconfirmed_userid ${tester}`, args});
+			ors.push({
+				query: `EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid ${tester})`,
+				args,
+			});
 		}
 		return this.buildParallelIndexScanQuery(select, ors, ands, sortAndLimit);
 	}
