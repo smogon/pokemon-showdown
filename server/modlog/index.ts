@@ -483,7 +483,7 @@ export class Modlog {
 			ors.push({query: `action LIKE ?`, args: [search.action + '%']});
 		} else if (onlyPunishments) {
 			const args: (string | number)[] = [];
-			ors.push({query: `action IN (${Modlog.formatArray(PUNISHMENTS, args)})`, args});
+			ands.push({query: `action IN (${Modlog.formatArray(PUNISHMENTS, args)})`, args});
 		}
 
 		if (search.ip) ors.push({query: `ip LIKE ?`, args: [search.ip + '%']});
