@@ -1652,6 +1652,7 @@ export const commands: Chat.ChatCommands = {
 		const id = `${room.roomid}-user-${toID(targetUsername)}`;
 		if (cmd === 'notifyoffuser') {
 			room.sendUser(targetUser, `|tempnotifyoff|${id}`);
+			this.sendReply(`Closed the notification previously sent to ${targetUser.name}.`);
 		} else {
 			let [title, notification] = this.splitOne(titleNotification);
 			if (!title) title = `${room.title} notification!`;
@@ -1661,6 +1662,7 @@ export const commands: Chat.ChatCommands = {
 			if (notification.length > 300) return this.errorReply(`Notifications should not exceed 300 characters.`);
 			const message = `|tempnotify|${id}|${title}|${notification}`;
 			room.sendUser(targetUser, message);
+			this.sendReply(`Sent a notification to ${targetUser.name}.`);
 		}
 	},
 	notifyuserhelp: [
