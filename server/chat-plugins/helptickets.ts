@@ -937,7 +937,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`,
 			);
 			buf += `<strong>Reported user:</strong> ${reportUserid} </strong>`;
-			buf += `<button class="button" name="send" value="/modlog room=global,user=${reportUserid}">Global Modlog</button><br />`;
+			buf += `<button class="button" name="send" value="/modlog room=global,user='${reportUserid}'">Global Modlog</button><br />`;
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
 				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`,
@@ -1036,7 +1036,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
 					buf += `<br /><strong>Reported user:</strong> ${meta} `;
-					buf += `<button class="button" name="send" value="/modlog room=global,user=${toID(meta)}">Global Modlog</button><br />`;
+					buf += `<button class="button" name="send" value="/modlog room=global,user='${toID(meta)}'">Global Modlog</button><br />`;
 					buf += HelpTicket.displayPunishmentList(
 						toID(meta),
 						proof,
@@ -1596,7 +1596,7 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<strong>From: ${ticket.userid}</strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
-			buf += `<button class="button" name="send" value="/modlog room=global,user=${ticket.userid}">Global Modlog</button><br />`;
+			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
@@ -1671,7 +1671,7 @@ export const pages: Chat.PageTable = {
 				buf += `<h2>Issue: ${ticket.type}</h2>`;
 				buf += `<strong>From: ${ticket.userid}</strong>`;
 				buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
-				buf += `<button class="button" name="send" value="/modlog room=global,user=${ticket.userid}">Global Modlog</button><br />`;
+				buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 				if (ticket.claimed) {
 					buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
 				}
