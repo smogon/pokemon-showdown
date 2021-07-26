@@ -1534,7 +1534,7 @@ export const commands: Chat.ChatCommands = {
 			`A room can be specified using the argument <code>room: [roomid]</code>. Defaults to the room it is used in.<br />` +
 			`A limit can be specified using the argument <code>limit: [number less than or equal to 3000]</code>. Defaults to 500.<br />` +
 			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date: [month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
-			`If you provide a user argument in the form <code>user:username</code>, it will search for messages (that match the other arguments) only from that user` +
+			`If you provide a user argument in the form <code>user:username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
 			"Requires: % @ # &</div>";
