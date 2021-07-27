@@ -656,43 +656,43 @@ export const Scripts: ModdedBattleScriptsData = {
 			const level = source.level;
 
 			const attacker =
-				(move.useOffensiveStatValueAndBoosts && move.useOffensiveStatValueAndBoosts.includes('target')) ? target : source;
+				(move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) ? target : source;
 			const defender =
-				(move.useDefensiveStatValueAndBoosts && move.useDefensiveStatValueAndBoosts.includes('source')) ? source : target;
+				(move.useBaseDefensiveStatAndBoosts && move.useBaseDefensiveStatAndBoosts.includes('source')) ? source : target;
 
 			let attackStat: AllStatIDs = category === 'Physical' ? 'atk' : 'spa';
-			if (move.useOffensiveStatValueAndBoosts) {
-				if (move.useOffensiveStatValueAndBoosts.includes("atk")) {
+			if (move.useBaseOffensiveStatAndBoosts) {
+				if (move.useBaseOffensiveStatAndBoosts.includes("atk")) {
 					attackStat = 'atk';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("def")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("def")) {
 					attackStat = 'def';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("spa")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("spa")) {
 					attackStat = 'spa';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("spd")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("spd")) {
 					attackStat = 'spd';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("spe")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("spe")) {
 					attackStat = 'spe';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("hp")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("hp")) {
 					attackStat = 'hp';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("currenthp")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("currenthp")) {
 					attackStat = 'currenthp';
 				}
 			}
 			let defenseStat: AllStatIDs = category === 'Physical' ? 'def' : 'spd';
-			if (move.useDefensiveStatValueAndBoosts) {
-				if (move.useDefensiveStatValueAndBoosts.includes("atk")) {
+			if (move.useBaseDefensiveStatAndBoosts) {
+				if (move.useBaseDefensiveStatAndBoosts.includes("atk")) {
 					defenseStat = 'atk';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("def")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("def")) {
 					defenseStat = 'def';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("spa")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("spa")) {
 					defenseStat = 'spa';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("spd")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("spd")) {
 					defenseStat = 'spd';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("spe")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("spe")) {
 					defenseStat = 'spe';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("hp")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("hp")) {
 					defenseStat = 'hp';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("currenthp")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("currenthp")) {
 					defenseStat = 'currenthp';
 				}
 			}
@@ -740,11 +740,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			attackStat = (category === 'Physical' ? 'atk' : 'spa');
-			defenseStat = (category === 'Physical' ? 'def' : 'spd');
 
 			// Apply Stat Modifiers
 			attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
-			defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+			if (defenseStat !== 'hp' && defenseStat !== 'currenthp') {
+				defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+			}
 
 			if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 				defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);

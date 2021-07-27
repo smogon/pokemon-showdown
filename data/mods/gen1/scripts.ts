@@ -693,43 +693,43 @@ export const Scripts: ModdedBattleScriptsData = {
 			// We now check attacker's and defender's stats.
 			let level = source.level;
 			const attacker =
-				(move.useOffensiveStatValueAndBoosts && move.useOffensiveStatValueAndBoosts.includes('target')) ? target : source;
+				(move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) ? target : source;
 			const defender =
-				(move.useDefensiveStatValueAndBoosts && move.useDefensiveStatValueAndBoosts.includes('source')) ? source : target;
+				(move.useBaseDefensiveStatAndBoosts && move.useBaseDefensiveStatAndBoosts.includes('source')) ? source : target;
 
 			let atkType: AllStatIDs = (move.category === 'Physical') ? 'atk' : 'spa';
-			if (move.useOffensiveStatValueAndBoosts) {
-				if (move.useOffensiveStatValueAndBoosts.includes("atk")) {
+			if (move.useBaseOffensiveStatAndBoosts) {
+				if (move.useBaseOffensiveStatAndBoosts.includes("atk")) {
 					atkType = 'atk';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("def")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("def")) {
 					atkType = 'def';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("spa")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("spa")) {
 					atkType = 'spa';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("spd")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("spd")) {
 					atkType = 'spd';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("spe")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("spe")) {
 					atkType = 'spe';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("hp")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("hp")) {
 					atkType = 'hp';
-				} else if (move.useOffensiveStatValueAndBoosts.includes("currenthp")) {
+				} else if (move.useBaseOffensiveStatAndBoosts.includes("currenthp")) {
 					atkType = 'currenthp';
 				}
 			}
 			let defType: AllStatIDs = (move.category === 'Physical') ? 'def' : 'spd';
-			if (move.useDefensiveStatValueAndBoosts) {
-				if (move.useDefensiveStatValueAndBoosts.includes("atk")) {
+			if (move.useBaseDefensiveStatAndBoosts) {
+				if (move.useBaseDefensiveStatAndBoosts.includes("atk")) {
 					defType = 'atk';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("def")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("def")) {
 					defType = 'def';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("spa")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("spa")) {
 					defType = 'spa';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("spd")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("spd")) {
 					defType = 'spd';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("spe")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("spe")) {
 					defType = 'spe';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("hp")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("hp")) {
 					defType = 'hp';
-				} else if (move.useDefensiveStatValueAndBoosts.includes("currenthp")) {
+				} else if (move.useBaseDefensiveStatAndBoosts.includes("currenthp")) {
 					defType = 'currenthp';
 				}
 			}
