@@ -765,7 +765,7 @@ class Mafia extends Rooms.RoomGame {
 		}
 
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
-		if (!player?.voting) return this.sendUser(userid, `|error|You are not voting anyone.`);
+		if (!player?.voting) return this.sendUser(userid, `|error|You are not voting for anyone.`);
 		if (player.lastVote + 2000 >= Date.now() && !force) {
 			return this.sendUser(
 				userid,
@@ -797,7 +797,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	/**
-	 * Returns HTML code that contains information on the current vote vote.
+	 * Returns HTML code that contains information about the current vote.
 	 */
 	voteBox() {
 		if (!this.started) return `<strong>The game has not started yet.</strong>`;
