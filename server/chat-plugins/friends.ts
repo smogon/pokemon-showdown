@@ -142,7 +142,7 @@ export const Friends = new class {
 		if (login && typeof login === 'number' && !user?.connected) {
 			// THIS IS A TERRIBLE HACK BUT IT WORKS OKAY
 			const time = Chat.toTimestamp(new Date(Number(login)), {human: true});
-			buf += `Last login: ${time.split(' ').reverse().join(', on ')}`;
+			buf += `Last seen: ${time.split(' ').reverse().join(', on ')}`;
 			buf += ` (${Chat.toDurationString(Date.now() - login, {precision: 1})} ago)`;
 		} else if (typeof login === 'string') {
 			buf += `${login}`;
@@ -651,6 +651,9 @@ export const handlers: Chat.Handlers = {
 	},
 	onBattleLeave(user, room) {
 		return Friends.updateSpectatorLists(user);
+	},
+	onDisconnect(user) {
+		void Chat.Friends.writeLogin(user.id);
 	},
 };
 
