@@ -598,7 +598,7 @@ export const pages: Chat.PageTable = {
 			const friends = [];
 			for (const friendID of user.friends) {
 				const friend = Users.getExact(friendID);
-				if (!friend || !friend.settings.displayBattlesToFriends) continue;
+				if (!friend) continue;
 				friends.push(friend);
 			}
 			if (!friends.length) {
