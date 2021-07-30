@@ -2225,6 +2225,7 @@ export const commands: Chat.ChatCommands = {
 			if (!ticket.notes) ticket.notes = {};
 			ticket.notes[user.id] = note;
 			writeTickets();
+			notifyStaff();
 			if (!room || room.roomid !== 'staff') this.sendReply(`Added the note "${note}" to ${ticketId}'s ticket.`);
 			this.room = Rooms.get('staff') || null;
 			this.addGlobalModAction(`${user.name} added the note "${note}" to ${ticket.userid}'s helpticket.`);
@@ -2256,6 +2257,7 @@ export const commands: Chat.ChatCommands = {
 			delete ticket.notes[staff];
 			if (!Object.keys(ticket.notes).length) delete ticket.notes;
 			writeTickets();
+			notifyStaff();
 			this.room = Rooms.get('staff') || null;
 			this.addModAction(`${user.name} removed ${staff}'s note ("${note}") from ${ticket.userid}'s helpticket.`);
 			this.globalModlog(`HELPTICKET REMOVENOTE`, ticket.userid, `${note} (originally by ${staff})`);
