@@ -347,7 +347,7 @@ export const commands: Chat.ChatCommands = {
 		hidenotifications: 'viewnotifications',
 		viewnotifs: 'viewnotifications',
 		viewnotifications(target, room, user, connection, cmd) {
-			Friends.checkCanUse(this);
+			// Friends.checkCanUse(this);
 			const setting = user.settings.allowFriendNotifications;
 			target = target.trim();
 			if (!cmd.includes('hide') || target && this.meansYes(target)) {
