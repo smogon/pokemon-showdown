@@ -316,7 +316,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/modlog [comma-separated list of parameters]</code>: searches the moderator log, defaulting to the current room unless specified otherwise.<br />` +
 			`If an unnamed parameter is specified, <code>/modlog</code> will search all fields at once.<br />` +
 			`You can replace the <code>=</code> in a parameter with a <code>!=</code> to exclude entries that match that parameter.<br />` +
-			`<details><summary>Parameters:</summary>` +
+			`<details><summary><strong>Parameters</strong></summary>` +
 			`<ul>` +
 			`<li><code>room=[room]</code> - searches a room's modlog</li>` +
 			`<li><code>any=[text]</code> - searches for modlog entries containing the specified text in any field</li>` +
@@ -326,6 +326,14 @@ export const commands: Chat.ChatCommands = {
 			`<li><code>staff=[user]</code> - searches for actions taken by a particular staff member</li>` +
 			`<li><code>action=[type]</code> - searches for a particular type of action</li>` +
 			`<li><code>lines=[number]</code> - displays the given number of lines</li>` +
+			`</ul>` +
+			`</details>` +
+			`<details><summary><strong>Additional commands</strong></summary>` +
+			`<ul>` +
+			`<li><code>/mlid [user]</code> - searches for actions taken against a specific user</li>` +
+			`<li><code>/mlip [IP address]</code> - searches for actions taken against a specific IP address</li>` +
+			`<li><code>/punishlog</code>, <code>/pl</code>, <code>/plid</code>, <code>/plip</code> - like <code>/modlog</code>, but only displays punishments</li>` +
+			`<li><code>/modnotes</code> - searches only modnotes</li>` +
 			`</ul>` +
 			`</details>`
 		);
