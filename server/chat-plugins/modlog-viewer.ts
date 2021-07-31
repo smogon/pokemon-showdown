@@ -216,6 +216,7 @@ export const commands: Chat.ChatCommands = {
 	mlip: 'modlog',
 	plid: 'modlog',
 	plip: 'modlog',
+	modnotes: 'modlog',
 	modlog(target, room, user, connection, cmd) {
 		let roomid: ModlogID = (!room || shouldSearchGlobal.includes(room.roomid) ? 'global' : room.roomid);
 		const onlyPunishments = cmd.startsWith('pl') || cmd.startsWith('punishlog');
@@ -232,6 +233,8 @@ export const commands: Chat.ChatCommands = {
 			targets.unshift(`ip=${targets.shift()}`);
 			break;
 		}
+		if (cmd === 'modnotes') targets.unshift(`action=NOTE`);
+
 		for (const [i, option] of targets.entries()) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
