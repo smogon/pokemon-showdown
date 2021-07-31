@@ -1072,9 +1072,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const speciesTypes: string[] = [];
-				const moveTypes: string[] = [move.type];
+				const moveTypes: string[] = [];
 				for (let i = this.dex.gen; i >= species.gen && i >= move.gen; i--) {
 					const dex = Dex.forGen(i);
+					moveTypes.push(dex.moves.get(move.name).type);
+					
 					const pokemon = dex.species.get(species.name);
 					if (pokemon.forme || pokemon.otherFormes) {
 						const baseSpecies = dex.species.get(pokemon.baseSpecies);
@@ -1102,8 +1104,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 						speciesTypes.push(...prevoSpecies.types);
 						prevo = prevoSpecies.prevo;
 					}
-
-					moveTypes.push(dex.moves.get(move.name).type);
 				}				
 				if (moveTypes.some(m => speciesTypes.includes(m))) return null;
 			}
