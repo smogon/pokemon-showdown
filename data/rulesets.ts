@@ -1072,12 +1072,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const dex = this.dex;
-				let speciesTypes: string[];
+				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [move.type];
 				if (species.forme || species.otherFormes) {
 					const baseSpecies = dex.species.get(species.baseSpecies);
 					const originalForme = dex.species.get(species.changesFrom || species.name);
-					speciesTypes = originalForme.types;
+					speciesTypes.push(...originalForme.types);
 					if (baseSpecies.otherFormes) {
 						for (const formeName of baseSpecies.otherFormes) {
 							if (baseSpecies.prevo) {
@@ -1086,24 +1086,24 @@ export const Rulesets: {[k: string]: FormatData} = {
 							}
 							const forme = dex.species.get(formeName);
 							if (forme.changesFrom === originalForme.name && !forme.battleOnly) {
-								speciesTypes = speciesTypes.concat(forme.types);
+								speciesTypes.push(...forme.types);
 							}
 						}
 					}
 				} else {
-					speciesTypes = species.types;
+					speciesTypes.push(...species.types);
 				}
 
 				let prevo = species.prevo;
 				while (prevo) {
 					const prevoSpecies = dex.species.get(prevo);
-					speciesTypes = speciesTypes.concat(prevoSpecies.types);
+					speciesTypes.push(...prevoSpecies.types);
 					prevo = prevoSpecies.prevo;
 				}
 				// Check for type changes from past generations
 				for (let i = dex.gen - 1; i >= species.gen && i >= move.gen; i--) {
 					const genDex = dex.forGen(i);
-					speciesTypes = speciesTypes.concat(genDex.species.get(species.name).types);
+					speciesTypes.push(...genDex.species.get(species.name).types);
 					moveTypes.push(genDex.moves.get(move.name).type);
 				}
 				if (moveTypes.some(m => speciesTypes.includes(m))) return null;
