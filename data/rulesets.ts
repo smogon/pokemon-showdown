@@ -1076,7 +1076,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				for (let i = this.dex.gen; i >= species.gen && i >= move.gen; i--) {
 					const dex = this.dex.forGen(i);
 					moveTypes.push(dex.moves.get(move.name).type);
-					
+
 					const pokemon = dex.species.get(species.name);
 					if (pokemon.forme || pokemon.otherFormes) {
 						const baseSpecies = dex.species.get(pokemon.baseSpecies);
@@ -1104,7 +1104,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 						speciesTypes.push(...prevoSpecies.types);
 						prevo = prevoSpecies.prevo;
 					}
-				}				
+				}
 				if (moveTypes.some(m => speciesTypes.includes(m))) return null;
 			}
 			return this.checkCanLearn(move, species, setSources, set);
