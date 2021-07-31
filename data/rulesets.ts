@@ -1073,7 +1073,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const dex = this.dex;
 				let speciesTypes: string[];
-				let moveTypes: string[] = [move.type];
+				const moveTypes: string[] = [move.type];
 				if (species.forme || species.otherFormes) {
 					const baseSpecies = dex.species.get(species.baseSpecies);
 					const originalForme = dex.species.get(species.changesFrom || species.name);
