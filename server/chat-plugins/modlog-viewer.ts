@@ -29,7 +29,7 @@ const ALIASES: {[k: string]: string} = {
 
 function getMoreButton(
 	roomid: ModlogID, searchCmd: string,
-	lines: number, maxLines: number, onlyPunishments: boolean
+	lines: number, maxLines: number, onlyPunishments: boolean, onlyNotes: boolean,
 ) {
 	let newLines = 0;
 	for (const increase of MORE_BUTTON_INCREMENTS) {
@@ -41,7 +41,11 @@ function getMoreButton(
 	if (!newLines || lines < maxLines) {
 		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
-		return Utils.html`<br /><div style="text-align:center"><button class="button" name="send" value="/${onlyPunishments ? 'punish' : 'mod'}log room=${roomid}, ${searchCmd}, ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
+		let cmd = `/modlog`;
+		if (onlyNotes) cmd = `/modnotes`;
+		if (onlyPunishments) cmd = `/punishlog`;
+
+		return Utils.html`<br /><div style="text-align:center"><button class="button" name="send" value="${cmd} room=${roomid}, ${searchCmd}, ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
 	}
 }
 
@@ -52,7 +56,7 @@ function getRoomID(id: string) {
 
 function prettifyResults(
 	resultArray: ModlogEntry[], roomid: ModlogID, search: ModlogSearch, searchCmd: string,
-	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
+	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean, onlyNotes: boolean
 ) {
 	if (resultArray === null) {
 		return "|popup|The modlog query crashed.";
@@ -133,13 +137,13 @@ function prettifyResults(
 			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, `${scope}lines`)} of the Moderator Log of ${roomName}.`;
 	}
 	preamble += `</p><p>[${dateString}]<br /><small>[${timestamp}] \u2190 current server time</small>`;
-	const moreButton = getMoreButton(roomid, searchCmd, lines, maxLines, onlyPunishments);
+	const moreButton = getMoreButton(roomid, searchCmd, lines, maxLines, onlyPunishments, onlyNotes);
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
 async function getModlog(
 	connection: Connection, roomid: ModlogID = 'global', search: ModlogSearch,
-	searchCmd: string, maxLines = 20, onlyPunishments = false, timed = false
+	searchCmd: string, maxLines = 20, onlyPunishments = false, timed = false, onlyNotes = false,
 ) {
 	const targetRoom = Rooms.search(roomid);
 	const user = connection.user;
@@ -187,6 +191,7 @@ async function getModlog(
 
 		search.user[i] = userSearch;
 	}
+	if (onlyNotes) search.action.push({search: 'NOTE'});
 
 	const response = await Rooms.Modlog.search(roomid, search, maxLines, onlyPunishments);
 
@@ -199,7 +204,8 @@ async function getModlog(
 			addModlogLinks,
 			hideIps,
 			maxLines,
-			onlyPunishments
+			onlyPunishments,
+			onlyNotes,
 		)
 	);
 	if (timed) connection.popup(`The modlog query took ${response.duration} ms to complete.`);
@@ -233,7 +239,6 @@ export const commands: Chat.ChatCommands = {
 			targets.unshift(`ip=${targets.shift()}`);
 			break;
 		}
-		if (cmd === 'modnotes') targets.unshift(`action=NOTE`);
 
 		for (const [i, option] of targets.entries()) {
 			let [param, value] = option.split('=').map(part => part.trim());
@@ -308,7 +313,8 @@ export const commands: Chat.ChatCommands = {
 			target.replace(/^\s?([^,=]*),\s?/, '').replace(/,?\s*(room|lines)\s*=[^,]*,?/g, ''),
 			lines,
 			onlyPunishments,
-			cmd === 'timedmodlog'
+			cmd === 'timedmodlog',
+			cmd === 'modnotes',
 		);
 	},
 	modloghelp() {
