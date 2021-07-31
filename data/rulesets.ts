@@ -1071,41 +1071,40 @@ export const Rulesets: {[k: string]: FormatData} = {
 		checkCanLearn(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
-				const dex = this.dex;
 				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [move.type];
-				if (species.forme || species.otherFormes) {
-					const baseSpecies = dex.species.get(species.baseSpecies);
-					const originalForme = dex.species.get(species.changesFrom || species.name);
-					speciesTypes.push(...originalForme.types);
-					if (baseSpecies.otherFormes) {
-						for (const formeName of baseSpecies.otherFormes) {
-							if (baseSpecies.prevo) {
-								const prevo = dex.species.get(baseSpecies.prevo);
-								if (prevo.evos.includes(formeName)) continue;
-							}
-							const forme = dex.species.get(formeName);
-							if (forme.changesFrom === originalForme.name && !forme.battleOnly) {
-								speciesTypes.push(...forme.types);
+				for (let i = this.dex.gen; i >= species.gen && i >= move.gen; i--) {
+					const dex = Dex.forGen(i);
+					const pokemon = dex.species.get(species.name);
+					if (pokemon.forme || pokemon.otherFormes) {
+						const baseSpecies = dex.species.get(pokemon.baseSpecies);
+						const originalForme = dex.species.get(pokemon.changesFrom || pokemon.name);
+						speciesTypes.push(...originalForme.types);
+						if (baseSpecies.otherFormes) {
+							for (const formeName of baseSpecies.otherFormes) {
+								if (baseSpecies.prevo) {
+									const prevo = dex.species.get(baseSpecies.prevo);
+									if (prevo.evos.includes(formeName)) continue;
+								}
+								const forme = dex.species.get(formeName);
+								if (forme.changesFrom === originalForme.name && !forme.battleOnly) {
+									speciesTypes.push(...forme.types);
+								}
 							}
 						}
+					} else {
+						speciesTypes.push(...pokemon.types);
 					}
-				} else {
-					speciesTypes.push(...species.types);
-				}
 
-				let prevo = species.prevo;
-				while (prevo) {
-					const prevoSpecies = dex.species.get(prevo);
-					speciesTypes.push(...prevoSpecies.types);
-					prevo = prevoSpecies.prevo;
-				}
-				// Check for type changes from past generations
-				for (let i = dex.gen - 1; i >= species.gen && i >= move.gen; i--) {
-					const genDex = dex.forGen(i);
-					speciesTypes.push(...genDex.species.get(species.name).types);
-					moveTypes.push(genDex.moves.get(move.name).type);
-				}
+					let prevo = pokemon.prevo;
+					while (prevo) {
+						const prevoSpecies = dex.species.get(prevo);
+						speciesTypes.push(...prevoSpecies.types);
+						prevo = prevoSpecies.prevo;
+					}
+
+					moveTypes.push(dex.moves.get(move.name).type);
+				}				
 				if (moveTypes.some(m => speciesTypes.includes(m))) return null;
 			}
 			return this.checkCanLearn(move, species, setSources, set);
