@@ -1074,7 +1074,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [];
 				for (let i = this.dex.gen; i >= species.gen && i >= move.gen; i--) {
-					const dex = Dex.forGen(i);
+					const dex = this.dex.forGen(i);
 					moveTypes.push(dex.moves.get(move.name).type);
 					
 					const pokemon = dex.species.get(species.name);
