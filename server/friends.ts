@@ -166,7 +166,7 @@ export class FriendsDatabase {
 	}
 	private async query(input: DatabaseRequest) {
 		const process = PM.acquire();
-		if (!process) {
+		if (!process || !Config.usesqlite) {
 			return {result: null};
 		}
 		const result = await process.query(input);
