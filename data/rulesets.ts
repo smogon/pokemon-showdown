@@ -1586,4 +1586,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
 	},
+	firstbloodrule: {
+		effectType: "Rule",
+		name: "First Blood Rule",
+		desc: `The first team to have a Pok&eacute;mon faint loses.`,
+		onBegin() {
+			this.add('rule', 'First Blood Rule: The first team to have a Pok\u00e9mon faint loses.');
+		},
+		onFaint(target) {
+			this.lose(target.side);
+		},
+	},
 };
