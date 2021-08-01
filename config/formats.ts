@@ -256,21 +256,21 @@ export const Formats: FormatList = [
 		banlist: ['Crucibellite'],
 	},
 	{
-		name: "[Gen 8] Battle Stadium Singles Series 10",
+		name: "[Gen 8] Battle Stadium Singles",
 
 		mod: 'gen8',
-		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'Limit One Restricted', 'Dynamax Clause'],
 		restricted: ['Restricted Legendary'],
 	},
 	{
-		name: "[Gen 8] Battle Stadium Singles",
+		name: "[Gen 8] Battle Stadium Singles Series 9",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3679374/">BSS Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3672698/">BSS Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
+		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 	},
 	{
@@ -358,6 +358,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
 	},
 	{
