@@ -130,8 +130,8 @@ export class FriendsDatabase {
 		statements.expire.run();
 		return database;
 	}
-	getFriends(userid: ID): Promise<Friend[]> {
-		return this.all('get', [userid, MAX_FRIENDS]);
+	async getFriends(userid: ID): Promise<Friend[]> {
+		return (await this.all('get', [userid, MAX_FRIENDS])) || [];
 	}
 	async getRequests(user: User) {
 		const sent: Set<string> = new Set();
@@ -142,6 +142,7 @@ export class FriendsDatabase {
 			await this.run('deleteReceivedRequests', [user.id]);
 		}
 		const sentResults = await this.all('getSent', [user.id]);
+		if (sentResults === null) return {sent, received};
 		for (const request of sentResults) {
 			sent.add(request.receiver);
 		}
@@ -165,7 +166,9 @@ export class FriendsDatabase {
 	}
 	private async query(input: DatabaseRequest) {
 		const process = PM.acquire();
-		if (!process) throw new Error(`Missing friends process`);
+		if (!process) {
+			return {result: null};
+		}
 		const result = await process.query(input);
 		if (result.error) {
 			throw new Chat.ErrorMessage(result.error);
