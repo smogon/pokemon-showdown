@@ -31,7 +31,7 @@ const {Modlog} = require('../../server/modlog');
 type ModlogFormat = 'txt' | 'sqlite';
 
 /** The number of modlog entries to write to the database on each transaction */
-const ENTRIES_TO_BUFFER = 100000;
+const ENTRIES_TO_BUFFER = 7500;
 const ALTS_REGEX = /\(.*?'s (lock|mut|bann|blacklist)ed alts: (.*)\)/;
 const AUTOCONFIRMED_REGEX = /\(.*?'s ac account: (.*)\)/;
 
@@ -524,13 +524,18 @@ export class ModlogConverterSQLite {
 	readonly databaseFile: string;
 	readonly textLogDir: string;
 	readonly isTesting: {files: Map<string, string>, db: DatabaseType.Database} | null = null;
+	readonly newestAllowedTimestamp?: number;
 
-	constructor(databaseFile: string, textLogDir: string, isTesting?: DatabaseType.Database) {
+	constructor(
+		databaseFile: string, textLogDir: string,
+		isTesting?: DatabaseType.Database, newestAllowedTimestamp?: number
+	) {
 		this.databaseFile = databaseFile;
 		this.textLogDir = textLogDir;
 		if (isTesting || Config.nofswriting) {
 			this.isTesting = {files: new Map<string, string>(), db: isTesting || new Database(':memory:')};
 		}
+		this.newestAllowedTimestamp = newestAllowedTimestamp;
 	}
 
 	async toTxt() {
@@ -562,6 +567,7 @@ export class ModlogConverterSQLite {
 			};
 
 			for (const result of results) {
+				if (this.newestAllowedTimestamp && result.timestamp > this.newestAllowedTimestamp) break;
 				const entry: ModlogEntry = {
 					action: result.action,
 					roomID: result.roomid?.replace(/^global-/, ''),
@@ -570,7 +576,7 @@ export class ModlogConverterSQLite {
 					autoconfirmedID: result.autoconfirmed_userid,
 					alts: result.alts?.split(','),
 					ip: result.ip,
-					isGlobal: result.roomid?.startsWith('global-') || result.roomid === 'global',
+					isGlobal: result.roomid?.startsWith('global-') || result.roomid === 'global' || result.is_global,
 					loggedBy: result.action_taker_userid,
 					note: result.note,
 					time: result.timestamp,
@@ -602,10 +608,16 @@ export class ModlogConverterSQLite {
 export class ModlogConverterTxt {
 	readonly databaseFile: string;
 	readonly modlog: typeof Modlog;
+	readonly newestAllowedTimestamp?: number;
 
 	readonly textLogDir: string;
 	readonly isTesting: {files: Map<string, string>, ml?: typeof Modlog} | null = null;
-	constructor(databaseFile: string, textLogDir: string, isTesting?: Map<string, string>, useFTSExtension?: boolean) {
+	constructor(
+		databaseFile: string,
+		textLogDir: string,
+		isTesting?: Map<string, string>,
+		newestAllowedTimestamp?: number
+	) {
 		this.databaseFile = databaseFile;
 		this.textLogDir = textLogDir;
 		if (isTesting || Config.nofswriting) {
@@ -614,7 +626,14 @@ export class ModlogConverterTxt {
 			};
 		}
 
-		this.modlog = new Modlog(this.textLogDir, this.isTesting ? ':memory:' : this.databaseFile);
+		this.modlog = new Modlog(
+			this.textLogDir,
+			this.isTesting ? ':memory:' : this.databaseFile,
+			// wait 15 seconds for DB to no longer be busy - this is important since I'm trying to do
+			// a no-downtime transfer of text -> SQLite
+			{sqliteOptions: {timeout: 15000}},
+		);
+		this.newestAllowedTimestamp = newestAllowedTimestamp;
 	}
 
 	async toSQLite() {
@@ -640,15 +659,10 @@ export class ModlogConverterTxt {
 			let entriesLogged = 0;
 			let lastLine = undefined;
 			let entries: ModlogEntry[] = [];
-
-			const insertEntries = (alwaysShowProgress?: boolean) => {
-				this.modlog.writeSQL(entries);
+			const insertEntries = async () => {
+				await this.modlog.writeSQL(entries);
 				entriesLogged += entries.length;
-				if (!Config.nofswriting && (
-					alwaysShowProgress ||
-					entriesLogged % ENTRIES_TO_BUFFER === 0 ||
-					entriesLogged < ENTRIES_TO_BUFFER
-				)) {
+				if (!Config.nofswriting) {
 					process.stdout.clearLine(0);
 					process.stdout.cursorTo(0);
 					process.stdout.write(`Inserted ${entriesLogged} entries from '${roomid}'`);
@@ -660,6 +674,7 @@ export class ModlogConverterTxt {
 				const entry = parseModlog(line, lastLine, roomid === 'global');
 				lastLine = line;
 				if (!entry) continue;
+				if (this.newestAllowedTimestamp && entry.time > this.newestAllowedTimestamp) break;
 				if (roomid !== 'global' && globalEntries[entry.roomID]?.includes(line)) {
 					// this is a global modlog entry that has already been inserted
 					continue;
@@ -667,12 +682,12 @@ export class ModlogConverterTxt {
 				if (entry.isGlobal) {
 					if (!globalEntries[entry.roomID]) globalEntries[entry.roomID] = [];
 					globalEntries[entry.roomID].push(line);
-					if (entry.roomID !== 'global' && !entry.roomID.startsWith('global-')) entry.roomID = `global-${entry.roomID}`;
 				}
 				entries.push(entry);
-				if (entries.length === ENTRIES_TO_BUFFER) insertEntries();
+				if (entries.length === ENTRIES_TO_BUFFER) await insertEntries();
 			}
-			insertEntries(true);
+			delete globalEntries[roomid];
+			await insertEntries();
 			if (entriesLogged) process.stdout.write('\n');
 		}
 		return this.modlog.database;
@@ -742,7 +757,7 @@ export class ModlogConverterTest {
 export const ModlogConverter = {
 	async convert(
 		from: ModlogFormat, to: ModlogFormat, databasePath: string,
-		textLogDirectoryPath: string, outputLogPath?: string
+		textLogDirectoryPath: string, outputLogPath?: string, newestAllowedTimestamp?: number,
 	) {
 		if (from === 'txt' && to === 'txt' && outputLogPath) {
 			const converter = new ModlogConverterTest(textLogDirectoryPath, outputLogPath);
@@ -750,12 +765,12 @@ export const ModlogConverter = {
 			console.log("\nDone!");
 			process.exit();
 		} else if (from === 'sqlite' && to === 'txt') {
-			const converter = new ModlogConverterSQLite(databasePath, textLogDirectoryPath);
+			const converter = new ModlogConverterSQLite(databasePath, textLogDirectoryPath, undefined, newestAllowedTimestamp);
 			await converter.toTxt();
 			console.log("\nDone!");
 			process.exit();
 		} else if (from === 'txt' && to === 'sqlite') {
-			const converter = new ModlogConverterTxt(databasePath, textLogDirectoryPath);
+			const converter = new ModlogConverterTxt(databasePath, textLogDirectoryPath, undefined, newestAllowedTimestamp);
 			await converter.toSQLite();
 			console.log("\nDone!");
 			process.exit();

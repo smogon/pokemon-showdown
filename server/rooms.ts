@@ -40,7 +40,7 @@ import {MinorActivity, MinorActivityData} from './room-minor-activity';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
-import {MODLOG_PATH, MODLOG_DB_PATH, mainModlog, PartialModlogEntry} from './modlog';
+import {PartialModlogEntry, Modlog, MODLOG_PATH, MODLOG_DB_PATH} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -1878,9 +1878,7 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
-	MODLOG_PATH,
-	MODLOG_DB_PATH,
-	Modlog: mainModlog,
+	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions}),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with

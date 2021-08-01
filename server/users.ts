@@ -300,7 +300,7 @@ export class Connection {
 type ChatQueueEntry = [string, RoomID, Connection];
 
 export interface UserSettings {
-	blockChallenges: boolean | AuthLevel;
+	blockChallenges: boolean | AuthLevel | 'friends';
 	blockPMs: boolean | AuthLevel | 'friends';
 	ignoreTickets: boolean;
 	hideBattlesFromTrainerCard: boolean;
@@ -441,7 +441,7 @@ export class User extends Chat.MessageContext {
 			blockInvites: false,
 			doNotDisturb: false,
 			blockFriendRequests: false,
-			allowFriendNotifications: true,
+			allowFriendNotifications: false,
 			displayBattlesToFriends: false,
 			hideLogins: false,
 		};
@@ -1149,6 +1149,7 @@ export class User extends Chat.MessageContext {
 	}
 	markDisconnected() {
 		if (!this.connected) return;
+		Chat.runHandlers('Disconnect', this);
 		this.connected = false;
 		Users.onlineCount--;
 		this.lastDisconnected = Date.now();

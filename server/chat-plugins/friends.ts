@@ -53,9 +53,7 @@ export const Friends = new class {
 		const friends = await Chat.Friends.getFriends(user.id);
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
 		for (const f of friends) {
-			const {user1, user2} = f;
-			const friend = user1 !== user.id ? user1 : user2;
-			const curUser = Users.get(friend as string);
+			const curUser = Users.get(f.friend);
 			if (curUser?.settings.allowFriendNotifications) {
 				curUser.send(`|pm|&|${curUser.getIdentity()}|${message}`);
 			}
@@ -144,7 +142,7 @@ export const Friends = new class {
 		if (login && typeof login === 'number' && !user?.connected) {
 			// THIS IS A TERRIBLE HACK BUT IT WORKS OKAY
 			const time = Chat.toTimestamp(new Date(Number(login)), {human: true});
-			buf += `Last login: ${time.split(' ').reverse().join(', on ')}`;
+			buf += `Last seen: ${time.split(' ').reverse().join(', on ')}`;
 			buf += ` (${Chat.toDurationString(Date.now() - login, {precision: 1})} ago)`;
 		} else if (typeof login === 'string') {
 			buf += `${login}`;
@@ -349,7 +347,7 @@ export const commands: Chat.ChatCommands = {
 		hidenotifications: 'viewnotifications',
 		viewnotifs: 'viewnotifications',
 		viewnotifications(target, room, user, connection, cmd) {
-			Friends.checkCanUse(this);
+			// Friends.checkCanUse(this);
 			const setting = user.settings.allowFriendNotifications;
 			target = target.trim();
 			if (!cmd.includes('hide') || target && this.meansYes(target)) {
@@ -600,7 +598,7 @@ export const pages: Chat.PageTable = {
 			const friends = [];
 			for (const friendID of user.friends) {
 				const friend = Users.getExact(friendID);
-				if (!friend || !friend.settings.displayBattlesToFriends) continue;
+				if (!friend) continue;
 				friends.push(friend);
 			}
 			if (!friends.length) {
@@ -653,6 +651,9 @@ export const handlers: Chat.Handlers = {
 	},
 	onBattleLeave(user, room) {
 		return Friends.updateSpectatorLists(user);
+	},
+	onDisconnect(user) {
+		void Chat.Friends.writeLogin(user.id);
 	},
 };
 

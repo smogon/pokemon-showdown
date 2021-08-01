@@ -2,7 +2,7 @@
  * Modlog viewer
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Actually reading, writing, and searching modlog is handled in modlog.ts.
+ * Actually reading, writing, and searching modlog is handled in server/modlog/.
  *
  * @license MIT
  */
@@ -71,11 +71,18 @@ function prettifyResults(
 	const scope = onlyPunishments ? 'punishment-related ' : '';
 	let searchString = ``;
 	if (search.anyField) searchString += `containing ${search.anyField} `;
-	if (search.note) searchString += `with a note including any of: ${search.note.searches.join(', ')} `;
-	if (search.user) searchString += `taken against ${search.user.search} `;
-	if (search.ip) searchString += `taken against a user on the IP ${search.ip} `;
-	if (search.action) searchString += `of the type ${search.action} `;
-	if (search.actionTaker) searchString += `taken by ${search.actionTaker} `;
+	const excludes = search.note.filter(s => s.isExclusion).map(s => s.search) || [];
+	const includes = search.note.filter(s => !s.isExclusion).map(s => s.search) || [];
+	if (includes.length) searchString += `with a note including any of: ${includes.join(', ')} `;
+	if (excludes.length) searchString += `with a note that does not include any of: ${excludes.join(', ')} `;
+	for (const u of search.user) searchString += `${u.isExclusion ? 'not' : ''} taken against ${u.search} `;
+	for (const ip of search.ip) {
+		searchString += `${ip.isExclusion ? 'not' : ''}taken against a user on the IP ${ip.search} `;
+	}
+	for (const action of search.action) searchString += `${action.isExclusion ? 'not' : ''} of the type ${action.search} `;
+	for (const actionTaker of search.actionTaker) {
+		searchString += `${actionTaker.isExclusion ? 'not' : ''} taken by ${actionTaker.search} `;
+	}
 	if (!resultArray.length) {
 		return `|popup|No ${scope}moderator actions ${searchString}found on ${roomName}.`;
 	}
@@ -131,7 +138,7 @@ function prettifyResults(
 }
 
 async function getModlog(
-	connection: Connection, roomid: ModlogID = 'global', search: ModlogSearch = {},
+	connection: Connection, roomid: ModlogID = 'global', search: ModlogSearch,
 	searchCmd: string, maxLines = 20, onlyPunishments = false, timed = false
 ) {
 	const targetRoom = Rooms.search(roomid);
@@ -153,7 +160,7 @@ async function getModlog(
 	const addModlogLinks = !!(
 		Config.modloglink && (user.tempGroup !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
-	if (hideIps && search.ip) {
+	if (hideIps && search.ip.length) {
 		connection.popup(`You cannot search for IPs.`);
 		return;
 	}
@@ -162,21 +169,23 @@ async function getModlog(
 		return;
 	}
 
-	if (search.note?.searches) {
-		for (const [i, noteSearch] of search.note.searches.entries()) {
-			if (/^["'].+["']$/.test(noteSearch)) {
-				search.note.searches[i] = noteSearch.substring(1, noteSearch.length - 1);
-				search.note.isExact = true;
+	if (search.note?.length) {
+		for (const [i, noteSearch] of search.note.entries()) {
+			if (/^["'].+["']$/.test(noteSearch.search)) {
+				search.note[i] = {...noteSearch, search: noteSearch.search.substring(1, noteSearch.search.length - 1)};
+				search.note[i].isExact = true;
 			}
 		}
 	}
 
-	if (search.user) {
-		if (/^["'].+["']$/.test(search.user.search)) {
-			search.user.search = search.user.search.substring(1, search.user.search.length - 1);
-			search.user.isExact = true;
+	for (const [i, userSearch] of search.user.entries()) {
+		if (/^["'].+["']$/.test(userSearch.search)) {
+			userSearch.search = userSearch.search.substring(1, userSearch.search.length - 1);
+			userSearch.isExact = true;
 		}
-		search.user.search = toID(search.user.search);
+		userSearch.search = toID(userSearch.search);
+
+		search.user[i] = userSearch;
 	}
 
 	const response = await Rooms.Modlog.search(roomid, search, maxLines, onlyPunishments);
@@ -207,13 +216,14 @@ export const commands: Chat.ChatCommands = {
 	mlip: 'modlog',
 	plid: 'modlog',
 	plip: 'modlog',
+	modnotes: 'modlog',
 	modlog(target, room, user, connection, cmd) {
 		let roomid: ModlogID = (!room || shouldSearchGlobal.includes(room.roomid) ? 'global' : room.roomid);
 		const onlyPunishments = cmd.startsWith('pl') || cmd.startsWith('punishlog');
 		let lines;
 		const possibleParam = cmd.slice(2);
 		const targets = target.split(',');
-		const search: ModlogSearch = {};
+		const search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []};
 
 		switch (possibleParam) {
 		case 'id':
@@ -223,6 +233,8 @@ export const commands: Chat.ChatCommands = {
 			targets.unshift(`ip=${targets.shift()}`);
 			break;
 		}
+		if (cmd === 'modnotes') targets.unshift(`action=NOTE`);
+
 		for (const [i, option] of targets.entries()) {
 			let [param, value] = option.split('=').map(part => part.trim());
 			if (!value) {
@@ -235,26 +247,27 @@ export const commands: Chat.ChatCommands = {
 					param = 'any';
 				}
 			}
+			const isExclusion = param.endsWith('!');
 			param = toID(param);
 			switch (param) {
 			case 'any':
 				search.anyField = value;
 				break;
 			case 'note': case 'text':
-				if (!search.note?.searches) search.note = {searches: []};
-				search.note.searches.push(value);
+				if (!search.note) search.note = [];
+				search.note.push({search: value, isExclusion});
 				break;
 			case 'user': case 'name': case 'username': case 'userid':
-				search.user = {search: value};
+				search.user.push({search: value});
 				break;
 			case 'ip': case 'ipaddress': case 'ipaddr':
-				search.ip = value;
+				search.ip.push({search: value, isExclusion});
 				break;
 			case 'action': case 'punishment':
-				search.action = value.toUpperCase();
+				search.action.push({search: value.toUpperCase(), isExclusion});
 				break;
 			case 'actiontaker': case 'moderator': case 'staff': case 'mod':
-				search.actionTaker = toID(value);
+				search.actionTaker.push({search: toID(value), isExclusion});
 				break;
 			case 'room': case 'roomid':
 				roomid = value.toLowerCase().replace(/[^a-z0-9-]+/g, '') as ModlogID;
@@ -302,7 +315,8 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(
 			`<code>/modlog [comma-separated list of parameters]</code>: searches the moderator log, defaulting to the current room unless specified otherwise.<br />` +
 			`If an unnamed parameter is specified, <code>/modlog</code> will search all fields at once.<br />` +
-			`<details><summary>Parameters:</summary>` +
+			`You can replace the <code>=</code> in a parameter with a <code>!=</code> to exclude entries that match that parameter.<br />` +
+			`<details><summary><strong>Parameters</strong></summary>` +
 			`<ul>` +
 			`<li><code>room=[room]</code> - searches a room's modlog</li>` +
 			`<li><code>any=[text]</code> - searches for modlog entries containing the specified text in any field</li>` +
@@ -312,6 +326,14 @@ export const commands: Chat.ChatCommands = {
 			`<li><code>staff=[user]</code> - searches for actions taken by a particular staff member</li>` +
 			`<li><code>action=[type]</code> - searches for a particular type of action</li>` +
 			`<li><code>lines=[number]</code> - displays the given number of lines</li>` +
+			`</ul>` +
+			`</details>` +
+			`<details><summary><strong>Additional commands</strong></summary>` +
+			`<ul>` +
+			`<li><code>/mlid [user]</code> - searches for actions taken against a specific user</li>` +
+			`<li><code>/mlip [IP address]</code> - searches for actions taken against a specific IP address</li>` +
+			`<li><code>/punishlog</code>, <code>/pl</code>, <code>/plid</code>, <code>/plip</code> - like <code>/modlog</code>, but only displays punishments</li>` +
+			`<li><code>/modnotes</code> - searches only modnotes</li>` +
 			`</ul>` +
 			`</details>`
 		);
@@ -336,10 +358,10 @@ export const pages: Chat.PageTable = {
 		this.title = `[Modlog Stats] ${target}`;
 		this.setHTML(`<div class="pad"><strong>Running modlog search...</strong></div>`);
 		const entries = await Rooms.Modlog.search('global', {
-			user: {
+			user: [{
 				search: target,
 				isExact: true,
-			},
+			}], note: [], ip: [], action: [], actionTaker: [],
 		}, 1000);
 		if (!entries.results.length) {
 			return this.errorReply(`No data found.`);

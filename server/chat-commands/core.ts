@@ -393,6 +393,7 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 			autoconfirmed: !!targetUser.autoconfirmed,
 			status: targetUser.getStatus(),
 			rooms: roomList,
+			friended: user.friends?.has(targetUser.id),
 		};
 	},
 	roomlist(target, user, trustable) {
@@ -1603,8 +1604,9 @@ export const commands: Chat.ChatCommands = {
 		if (Users.Auth.isAuthLevel(target)) {
 			user.settings.blockChallenges = target;
 			this.sendReply(this.tr`You are now blocking challenges, except from staff and ${target}.`);
-		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
+		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked' || target === 'friends') {
 			user.settings.blockChallenges = target;
+			if (target === 'friends') target = 'friended';
 			target = this.tr(target);
 			this.sendReply(this.tr`You are now blocking challenges, except from staff and ${target} users.`);
 		} else {

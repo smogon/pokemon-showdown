@@ -28,6 +28,17 @@ export interface DatabaseResult {
 	result?: any;
 }
 
+export interface Friend {
+	/** Always the same as Friend#friend. Use whichever you want. */
+	userid: ID;
+	/** Always the same as Friend#userid. Use whichever you want. */
+	friend: ID;
+	send_login_data: number;
+	last_login: number;
+	public_list: number;
+	allowing_login: number;
+}
+
 /** Like Chat.ErrorMessage, but made for the subprocess so we can throw errors to the user not using errorMessage
  * because errorMessage crashes when imported (plus we have to spawn dex, etc, all unnecessary - this is easier)
  */
@@ -119,8 +130,8 @@ export class FriendsDatabase {
 		statements.expire.run();
 		return database;
 	}
-	getFriends(userid: ID): Promise<AnyObject[]> {
-		return this.all('get', [userid, MAX_FRIENDS]);
+	async getFriends(userid: ID): Promise<Friend[]> {
+		return (await this.all('get', [userid, MAX_FRIENDS])) || [];
 	}
 	async getRequests(user: User) {
 		const sent: Set<string> = new Set();
@@ -131,6 +142,7 @@ export class FriendsDatabase {
 			await this.run('deleteReceivedRequests', [user.id]);
 		}
 		const sentResults = await this.all('getSent', [user.id]);
+		if (sentResults === null) return {sent, received};
 		for (const request of sentResults) {
 			sent.add(request.receiver);
 		}
@@ -154,7 +166,9 @@ export class FriendsDatabase {
 	}
 	private async query(input: DatabaseRequest) {
 		const process = PM.acquire();
-		if (!process) throw new Error(`Missing friends process`);
+		if (!process || !Config.usesqlite) {
+			return {result: null};
+		}
 		const result = await process.query(input);
 		if (result.error) {
 			throw new Chat.ErrorMessage(result.error);

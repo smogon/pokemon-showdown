@@ -8,10 +8,12 @@ import * as path from 'path';
 import {FS} from './fs';
 import type * as sqlite from 'better-sqlite3';
 
-interface SQLOptions {
+export interface SQLOptions {
 	file: string;
 	/** file to import database functions from - this should be relative to this filename. */
 	extension?: string;
+	/** options to be passed to better-sqlite3 */
+	sqliteOptions?: sqlite.Options;
 }
 
 type DataType = unknown[] | Record<string, unknown>;
