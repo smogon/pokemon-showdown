@@ -6,7 +6,7 @@
 
 import {FS, Utils} from '../../lib';
 
-const STAFF_REPOS = ['pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex'];
+const STAFF_REPOS = Config.staffrepos || ['pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex'];
 const COOLDOWN = 10 * 60 * 1000;
 
 export const gitData: GitData = JSON.parse(FS("config/chat-plugins/github.json").readIfExistsSync() || "{}");
@@ -83,26 +83,22 @@ export const GitHub = new class {
 	handlePush(repo: string, ref: string, result: Push) {
 		const branch = /[^/]+$/.exec(ref)?.[0] || "";
 		if (branch !== 'master') return;
-		const messages = {
-			staff: [] as string[],
-			development: [] as string[],
+		const messages: {[k: string]: string[]} = {
+			staff: [],
+			development: [],
 		};
 		for (const commit of result.commits) {
 			const {message, url} = commit;
-			let shortened = /.+/.exec(message)?.[0] || "";
-			if (message !== shortened) {
-				shortened += '…';
-			}
 			const username = this.getUsername(commit.author.name);
 			const repoName = this.getRepoName(repo);
 			const id = commit.id.substring(0, 6);
 			messages.development.push(
-				Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href=\"${url}\"><span style="color:#606060">${id}</span></a> ${shortened} <span style="color:#909090">(${username})</span>`
+				Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href=\"${url}\"><span style="color:#606060">${id}</span></a> ${message} <span style="color:#909090">(${username})</span>`
 			);
-			messages.staff.push(Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href=\"${url}\">${shortened}</a> <span style="color:#909090">(${username})</span>`);
+			messages.staff.push(Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href=\"${url}\">${message}</a> <span style="color:#909090">(${username})</span>`);
 		}
 		for (const k in messages) {
-			this.report(k as 'staff', repo, messages[k as 'staff']);
+			this.report(k as RoomID, repo, messages[k as RoomID]);
 		}
 	}
 	handlePull(repo: string, ref: string | undefined, result: PullRequest) {
@@ -118,7 +114,7 @@ export const GitHub = new class {
 		buf += Utils.html`${action} <a href=\"${url}\">PR#${result.number}</a>: ${title}`;
 		this.report('development', repo, buf);
 	}
-	report(roomid: 'staff' | "development", repo: string, messages: string[] | string) {
+	report(roomid: RoomID, repo: string, messages: string[] | string) {
 		if (!STAFF_REPOS.includes(repo) && roomid === 'staff') return;
 		if (Array.isArray(messages)) messages = messages.join('<br />');
 		Rooms.get(roomid)?.add(`|html|<div class="infobox">${messages}</div>`).update();
