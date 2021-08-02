@@ -3,7 +3,7 @@
 const assert = require('assert').strict;
 
 const {makeUser} = require('../../users-utils');
-const trivia = require('../../../.server-dist/chat-plugins/trivia');
+const trivia = require('../../../server/chat-plugins/trivia');
 const Trivia = trivia.Trivia;
 const FirstModeTrivia = trivia.FirstModeTrivia;
 const TimerModeTrivia = trivia.TimerModeTrivia;
@@ -33,7 +33,7 @@ describe('Trivia', function () {
 		const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 		this.user = makeTriviaUser('Morfent', '127.0.0.1');
 		this.tarUser = makeTriviaUser('ReallyNotMorfent', '127.0.0.2');
-		this.game = this.room.game = new Trivia(this.room, 'first', 'ae', true, 'short', questions);
+		this.game = this.room.game = new Trivia(this.room, 'first', ['ae'], true, 'short', questions);
 	});
 
 	afterEach(function () {
@@ -157,7 +157,7 @@ describe('Trivia', function () {
 	context('marking player absence', function () {
 		beforeEach(function () {
 			const questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
-			const game = new FirstModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
+			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
 			this.user = makeTriviaUser('Morfent', '127.0.0.1');
 			this.user2 = makeTriviaUser('user2', '127.0.0.2');
@@ -189,26 +189,19 @@ describe('Trivia', function () {
 			}
 		});
 
-		it('should mark a player absent on leave and pause the game', function () {
+		it('should mark a player absent on leave and unnmark them when they return', function () {
 			this.user.leaveRoom(this.room);
 			assert.equal(this.player.isAbsent, true);
-			assert.equal(this.game.phase, 'limbo');
-			assert.equal(this.game.phaseTimeout, null);
-		});
 
-		it('should unpause the game once enough players have returned', function () {
-			this.user.leaveRoom(this.room);
 			this.user.joinRoom(this.room);
 			assert.equal(this.player.isAbsent, false);
-			assert.equal(this.game.phase, 'question');
-			assert(this.game.phaseTimeout);
 		});
 	});
 
 	context('first mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new FirstModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
+			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
 			this.user = makeTriviaUser('Morfent', '127.0.0.1');
 			this.user2 = makeTriviaUser('user2', '127.0.0.2');
@@ -272,7 +265,7 @@ describe('Trivia', function () {
 	context('timer mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new TimerModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
+			const game = new TimerModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
 			this.user = makeTriviaUser('Morfent', '127.0.0.1');
 			this.user2 = makeTriviaUser('user2', '127.0.0.2');
@@ -347,7 +340,7 @@ describe('Trivia', function () {
 	context('number mode', function () {
 		beforeEach(function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-			const game = new NumberModeTrivia(this.room, 'first', 'ae', true, 'short', questions);
+			const game = new NumberModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
 			this.user = makeTriviaUser('Morfent', '127.0.0.1');
 			this.user2 = makeTriviaUser('user2', '127.0.0.2');

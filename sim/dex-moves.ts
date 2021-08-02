@@ -1,5 +1,5 @@
 import {Utils} from '../lib';
-import {BasicEffect} from './dex-data';
+import {BasicEffect, toID} from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -131,7 +131,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	name: string;
 	/** move index number, used for Metronome rolls */
 	num?: number;
-	condition?: Partial<ConditionData>;
+	condition?: ConditionData;
 	basePower: number;
 	accuracy: true | number;
 	pp: number;
@@ -321,7 +321,7 @@ export interface ActiveMove extends MutableMove {
 type MoveCategory = 'Physical' | 'Special' | 'Status';
 
 export class DataMove extends BasicEffect implements Readonly<BasicEffect & MoveData> {
-	readonly effectType: 'Move';
+	declare readonly effectType: 'Move';
 	/** Move type. */
 	readonly type: string;
 	/** Move target. */
@@ -333,9 +333,9 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Critical hit ratio. Defaults to 1. */
 	readonly critRatio: number;
 	/** Will this move always or never be a critical hit? */
-	readonly willCrit?: boolean;
+	declare readonly willCrit?: boolean;
 	/** Can this move OHKO foes? */
-	readonly ohko?: boolean | string;
+	declare readonly ohko?: boolean | string;
 	/**
 	 * Base move type. This is the move type as specified by the games,
 	 * tracked because it often differs from the real move type.
@@ -386,11 +386,11 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Whether or not this move can receive PP boosts. */
 	readonly noPPBoosts: boolean;
 	/** How many times does this move hit? */
-	readonly multihit?: number | number[];
+	declare readonly multihit?: number | number[];
 	/** Is this move a Z-Move? */
 	readonly isZ: boolean | string;
 	/* Z-Move fields */
-	readonly zMove?: {
+	declare readonly zMove?: {
 		basePower?: number,
 		effect?: string,
 		boost?: SparseBoostsTable,
@@ -398,7 +398,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Is this move a Max move? */
 	readonly isMax: boolean | string;
 	/** Max/G-Max move fields */
-	readonly maxMove?: {
+	declare readonly maxMove?: {
 		basePower: number,
 	};
 	readonly flags: MoveFlags;
@@ -420,9 +420,9 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Whether or not this move hit multiple targets. */
 	readonly spreadHit: boolean;
 	/** Modifier that affects damage when multiple targets are hit. */
-	readonly spreadModifier?: number;
+	declare readonly spreadModifier?: number;
 	/**  Modifier that affects damage when this move is a critical hit. */
-	readonly critModifier?: number;
+	declare readonly critModifier?: number;
 	/** Forces the move to get STAB even if the type doesn't match. */
 	readonly forceSTAB: boolean;
 	/** True if it can't be copied with Sketch. */
@@ -432,8 +432,8 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 
 	readonly volatileStatus?: ID;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `move: ${this.name}`;
@@ -560,5 +560,66 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 				this.gen = 1;
 			}
 		}
+	}
+}
+
+export class DexMoves {
+	readonly dex: ModdedDex;
+	readonly moveCache = new Map<ID, Move>();
+	allCache: readonly Move[] | null = null;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name?: string | Move): Move {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		const id = toID(name);
+		return this.getByID(id);
+	}
+
+	getByID(id: ID): Move {
+		let move = this.moveCache.get(id);
+		if (move) return move;
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			move = this.get(this.dex.data.Aliases[id]);
+			if (move.exists) {
+				this.moveCache.set(id, move);
+			}
+			return move;
+		}
+		if (id.startsWith('hiddenpower')) {
+			id = /([a-z]*)([0-9]*)/.exec(id)![1] as ID;
+		}
+		if (id && this.dex.data.Moves.hasOwnProperty(id)) {
+			const moveData = this.dex.data.Moves[id] as any;
+			const moveTextData = this.dex.getDescs('Moves', id, moveData);
+			move = new DataMove({
+				name: id,
+				...moveData,
+				...moveTextData,
+			});
+			if (move.gen > this.dex.gen) {
+				(move as any).isNonstandard = 'Future';
+			}
+		} else {
+			move = new DataMove({
+				name: id, exists: false,
+			});
+		}
+		if (move.exists) this.moveCache.set(id, move);
+		return move;
+	}
+
+	all(): readonly Move[] {
+		if (this.allCache) return this.allCache;
+		const moves = [];
+		for (const id in this.dex.data.Moves) {
+			moves.push(this.getByID(id as ID));
+		}
+		this.allCache = moves;
+		return this.allCache;
 	}
 }

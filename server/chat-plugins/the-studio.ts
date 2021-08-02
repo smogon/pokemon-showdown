@@ -410,7 +410,7 @@ class RecommendationsInterface {
 export const LastFM = new LastFMInterface();
 export const Recs = new RecommendationsInterface();
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	registerlastfm(target, room, user) {
 		if (!target) return this.parse(`/help registerlastfm`);
 		this.checkChat(target);
@@ -430,11 +430,9 @@ export const commands: ChatCommands = {
 		this.checkChat();
 		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
-		this.splitTarget(target, true);
-		const username = LastFM.getAccountName(target ? target : user.name);
-		this.sendReplyBox(
-			await LastFM.getScrobbleData(username, this.targetUsername ? this.targetUsername : user.named ? user.name : undefined)
-		);
+		const targetUsername = this.splitUser(target).targetUsername || (user.named ? user.name : '');
+		const username = LastFM.getAccountName(targetUsername);
+		this.sendReplyBox(await LastFM.getScrobbleData(username, targetUsername));
 	},
 	lastfmhelp: [
 		`/lastfm [username] - Displays the last scrobbled song for the person using the command or for [username] if provided.`,
@@ -618,7 +616,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async recommendations(query, user, connection) {
 		const room = this.requireRoom();
 		this.checkCan('mute', null, room);

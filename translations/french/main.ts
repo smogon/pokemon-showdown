@@ -18,8 +18,8 @@ export const translations: Translations = {
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Mêmes pouvoirs que les Global Moderators, mais sont des bots",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
 
-		"<strong>Room ranks</strong>": "<strong>Rangs des room</strong>",
-		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Ils n'ont aucun pouvoir, seulement un symbole",
+		"<strong>Room ranks</strong>": "<strong>Rangs des rooms</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Ils n'ont aucun pouvoir, seulement un symbole honorifique",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Comme ci-dessus, en plus de pouvoir mute et warn",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir un utilisateur de la room",
@@ -128,6 +128,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "Ton message contient des mots bannis dans cette room.",
 		"You can't send the same message again so soon.": "Tu ne peux pas renvoyer le même message si tôt.",
@@ -143,10 +144,12 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "Tu bloques déjà les challenges !",
 		"You are already available for challenges!": "Tu es déjà disponible pour les challenges !",
 		"You are available for challenges from now on.": "Tu es maintenant disponible pour les challenges.",
+		"You are now blocking challenges, except from staff and ${rank}.": "Tu bloques maintenant les challenges, sauf ceux du staff et des ${rank}.",
+		"You are now blocking challenges, except from staff and ${status} users.": "Tu bloques maintenant les challenges, sauf ceux du staff et des utilisateurs ${status}.",
 
 		"Staff FAQ": "",
 		"You cannot broadcast all FAQs at once.": "Tu ne peux pas afficher toutes les FAQ d'un seul coup.",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat. However, staff are not obligated to disable modchat": "Un utilisateur est autoconfirmed quand il a gagné au moins un combat classé et qu'il a enregistré son compte une semaine ou plus auparavant. Afin d'empêcher le spam et le troll, la plupart des chatrooms demandent aux utilisateurs d'être autoconfirmed pour parler. Si ce n'est pas ton cas, tu peux demander poliment à un membre du staff (avec un %, @ ou # devant son pseudo) de retirer ce filtre. Néanmoins, il n'est pas obligé de le faire.",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "Un utilisateur est autoconfirmed quand il a gagné au moins un combat classé et qu'il a enregistré son compte une semaine ou plus auparavant. Afin d'empêcher le spam et le troll, la plupart des chatrooms demandent aux utilisateurs d'être autoconfirmed pour parler. Si ce n'est pas ton cas, tu peux demander poliment à un membre du staff (avec un %, @ ou # devant son pseudo) de retirer ce filtre. Néanmoins, il n'est pas obligé de le faire.",
 		"How the ladder works": "Comment le ladder fonctionne",
 		"Tiering FAQ": "FAQ sur le tiering",
 		"Badge FAQ": "FAQ sur les badges",
@@ -158,5 +161,10 @@ export const translations: Translations = {
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
 	},
 };

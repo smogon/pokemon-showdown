@@ -24,6 +24,7 @@ To reload chat commands:
 */
 
 import type {RoomPermission, GlobalPermission} from './user-groups';
+import {FriendsDatabase, PM} from './friends';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 
@@ -59,6 +60,14 @@ export interface AnnotatedChatCommands {
 	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
+export interface Handlers {
+	onRoomClose?: (id: string, user: User, connection: Connection, page: boolean) => any;
+	onRenameRoom?: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
+	onBattleStart?: (user: User, room: GameRoom) => void;
+	onBattleLeave?: (user: User, room: GameRoom) => void;
+	onDisconnect?: (user: User) => void;
+}
+
 export interface ChatPlugin {
 	commands?: AnnotatedChatCommands;
 	pages?: PageTable;
@@ -77,6 +86,9 @@ export type SettingsHandler = (
 	// button label, command | disabled
 	options: [string, string | true][],
 };
+
+export type CRQHandler = (this: CommandContext, target: string, user: User, trustable?: boolean) => any;
+export type RoomCloseHandler = (id: string, user: User, connection: Connection, page: boolean) => any;
 
 /**
  * Chat filters can choose to:
@@ -129,7 +141,9 @@ import ProbeModule = require('probe-image-size');
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
-const TRANSLATION_DIRECTORY = `${__dirname}/../.translations-dist`;
+// to account for Sucrase
+const TRANSLATION_PATH = __dirname.endsWith('.server-dist') ? `../.translations-dist` : `../translations`;
+const TRANSLATION_DIRECTORY = `${__dirname}/${TRANSLATION_PATH}`;
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -232,7 +246,7 @@ export abstract class MessageContext {
 	}
 	meansYes(text: string) {
 		switch (text.toLowerCase().trim()) {
-		case 'on': case 'enable': case 'yes': case 'true': case 'allow':
+		case 'on': case 'enable': case 'yes': case 'true': case 'allow': case '1':
 			return true;
 		}
 		return false;
@@ -243,6 +257,84 @@ export abstract class MessageContext {
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * Given an array of strings (or a comma-delimited string), check the
+	 * first and last string for a format/mod/gen. If it exists, remove
+	 * it from the array.
+	 *
+	 * @returns `format` (null if no format was found), `dex` (the dex
+	 * for the format/mod, or the default dex if none was found), and
+	 * `targets` (the rest of the array).
+	 */
+	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
+		const targets = typeof target === 'string' ? target.split(',') : target;
+		if (!targets[0].trim()) targets.pop();
+
+		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
+			const {dex, format, isMatch} = this.extractFormat(targets[0].trim());
+			if (isMatch) {
+				targets.shift();
+				return {dex, format, targets};
+			}
+		}
+		if (targets.length > 1) {
+			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim());
+			if (isMatch) {
+				targets.pop();
+				return {dex, format, targets};
+			}
+		}
+
+		const room = (this as any as CommandContext).room;
+		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		return {dex, format, targets};
+	}
+	extractFormat(formatOrMod?: string): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
+		if (!formatOrMod) {
+			return {dex: Dex.includeData(), format: null, isMatch: false};
+		}
+
+		const format = Dex.formats.get(formatOrMod);
+		if (format.exists) {
+			return {dex: Dex.forFormat(format), format: format, isMatch: true};
+		}
+
+		if (toID(formatOrMod) in Dex.dexes) {
+			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
+		}
+
+		return this.extractFormat();
+	}
+	splitUser(target: string, {exactName}: {exactName?: boolean} = {}) {
+		const [inputUsername, rest] = this.splitOne(target).map(str => str.trim());
+		const targetUser = Users.get(inputUsername, exactName);
+
+		return {
+			targetUser,
+			inputUsername,
+			targetUsername: targetUser ? targetUser.name : inputUsername,
+			rest,
+		};
+	}
+	requireUser(target: string, options: {allowOffline?: boolean, exactName?: boolean} = {}) {
+		const {targetUser, targetUsername, rest} = this.splitUser(target, options);
+
+		if (!targetUser) {
+			throw new Chat.ErrorMessage(`The user "${targetUsername}" is offline or misspelled.`);
+		}
+		if (!options.allowOffline && !targetUser.connected) {
+			throw new Chat.ErrorMessage(`The user "${targetUsername}" is offline.`);
+		}
+
+		// `inputUsername` and `targetUsername` are never needed because we already handle the "user not found" error messages
+		// just use `targetUser.name` where previously necessary
+		return {targetUser, rest};
+	}
+	getUserOrSelf(target: string, {exactName}: {exactName?: boolean} = {}) {
+		if (!target.trim()) return this.user;
+
+		return Users.get(target, exactName);
 	}
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
 		return Chat.tr(this.language, strings, ...keys);
@@ -310,22 +402,22 @@ export class PageContext extends MessageContext {
 		return room;
 	}
 
-	send(content: string) {
-		if (!content.startsWith('|deinit')) {
-			const roomid = this.room ? `[${this.room.roomid}] ` : '';
-			if (!this.initialized) {
-				content = `|init|html\n|title|${roomid}${this.title}\n|pagehtml|${content}`;
-				this.initialized = true;
-			} else {
-				content = `|title|${roomid}${this.title}\n|pagehtml|${content}`;
-			}
+	setHTML(html: string) {
+		const roomid = this.room ? `[${this.room.roomid}] ` : '';
+		let content = `|title|${roomid}${this.title}\n|pagehtml|${html}`;
+		if (!this.initialized) {
+			content = `|init|html\n${content}`;
+			this.initialized = true;
 		}
-		this.connection.send(`>${this.pageid}\n${content}`);
+		this.send(content);
 	}
 	errorReply(message: string) {
-		this.send(`<div class="pad"><p class="message-error">${message}</p></div>`);
+		this.setHTML(`<div class="pad"><p class="message-error">${message}</p></div>`);
 	}
 
+	send(content: string) {
+		this.connection.send(`>${this.pageid}\n${content}`);
+	}
 	close() {
 		this.send('|deinit');
 	}
@@ -366,14 +458,14 @@ export class PageContext extends MessageContext {
 				room: this.room && this.room.roomid,
 				pageid: this.pageid,
 			});
-			this.send(
+			this.setHTML(
 				`<div class="pad"><div class="broadcast-red">` +
 				`<strong>Pokemon Showdown crashed!</strong><br />Don't worry, we're working on fixing it.` +
 				`</div></div>`
 			);
 		}
 		if (typeof res === 'string') {
-			this.send(res);
+			this.setHTML(res);
 			res = undefined;
 		}
 		return res;
@@ -403,21 +495,21 @@ export class CommandContext extends MessageContext {
 	isQuiet: boolean;
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
+	/** Used only by !rebroadcast */
+	broadcastPrefix: string;
 	broadcastMessage: string;
-	targetUser: User | null;
-	targetUsername: string;
-	inputUsername: string;
-	constructor(
-		options:
-		{message: string, user: User, connection: Connection} &
-		Partial<{room: Room | null, pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string}>
-	) {
+	constructor(options: {
+		message: string, user: User, connection: Connection,
+		room?: Room | null, pmTarget?: User | null, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string,
+		recursionDepth?: number, isQuiet?: boolean, broadcastPrefix?: string,
+	}) {
 		super(
 			options.user, options.room && options.room.settings.language ?
 				options.room.settings.language : options.user.language
 		);
 
 		this.message = options.message || ``;
+		this.recursionDepth = options.recursionDepth || 0;
 
 		// message context
 		this.pmTarget = options.pmTarget || null;
@@ -430,34 +522,31 @@ export class CommandContext extends MessageContext {
 		this.target = options.target || ``;
 		this.fullCmd = options.fullCmd || '';
 		this.handler = null;
-		this.isQuiet = false;
+		this.isQuiet = options.isQuiet || false;
 
 		// broadcast context
 		this.broadcasting = false;
 		this.broadcastToRoom = true;
+		this.broadcastPrefix = options.broadcastPrefix || '';
 		this.broadcastMessage = '';
-
-		// target user
-		this.targetUser = null;
-		this.targetUsername = "";
-		this.inputUsername = "";
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
-	parse(msg?: string, quiet?: boolean): any {
+	parse(msg?: string, options: {isQuiet?: boolean, broadcastPrefix?: string} = {}): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
-			const subcontext = new CommandContext(this);
-			if (quiet) subcontext.isQuiet = true;
-			subcontext.recursionDepth++;
+			const subcontext = new CommandContext({
+				message: msg,
+				user: this.user,
+				connection: this.connection,
+				room: this.room,
+				pmTarget: this.pmTarget,
+				recursionDepth: this.recursionDepth + 1,
+				...options,
+			});
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
 				throw new Error("Too much command recursion");
 			}
-			subcontext.message = msg;
-			subcontext.cmd = '';
-			subcontext.fullCmd = '';
-			subcontext.cmdToken = '';
-			subcontext.target = '';
 			return subcontext.parse();
 		}
 		let message: string | void | boolean | Promise<string | void | boolean> = this.message;
@@ -472,11 +561,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (this.room && !(this.user.id in this.room.users)) {
-			if (this.room.roomid === 'lobby') {
-				this.room = null;
-			} else {
-				return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
-			}
+			return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 		}
 
 		if (this.user.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
@@ -659,15 +744,25 @@ export class CommandContext extends MessageContext {
 		if (!this.room?.game || !this.room.game.onChatMessage) return;
 		return this.room.game.onChatMessage(this.message, this.user);
 	}
-	pmTransform(originalMessage: string) {
-		if (this.room) throw new Error(`Not a PM`);
-		const targetIdentity = this.pmTarget ? this.pmTarget.getIdentity() : '~';
-		const prefix = `|pm|${this.user.getIdentity()}|${targetIdentity}|`;
+	pmTransform(originalMessage: string, sender?: User, receiver?: User | null | string) {
+		if (!sender) {
+			if (this.room) throw new Error(`Not a PM`);
+			sender = this.user;
+			receiver = this.pmTarget;
+		}
+		const targetIdentity = typeof receiver === 'string' ? ` ${receiver}` : receiver ? receiver.getIdentity() : '~';
+		const prefix = `|pm|${sender.getIdentity()}|${targetIdentity}|`;
 		return originalMessage.split('\n').map(message => {
 			if (message.startsWith('||')) {
 				return prefix + `/text ` + message.slice(2);
 			} else if (message.startsWith(`|html|`)) {
 				return prefix + `/raw ` + message.slice(6);
+			} else if (message.startsWith(`|uhtml|`)) {
+				const [uhtmlid, html] = Utils.splitFirst(message.slice(7), '|');
+				return prefix + `/uhtml ${uhtmlid},${html}`;
+			} else if (message.startsWith(`|uhtmlchange|`)) {
+				const [uhtmlid, html] = Utils.splitFirst(message.slice(13), '|');
+				return prefix + `/uhtmlchange ${uhtmlid},${html}`;
 			} else if (message.startsWith(`|modaction|`)) {
 				return prefix + `/log ` + message.slice(11);
 			} else if (message.startsWith(`|raw|`)) {
@@ -760,7 +855,7 @@ export class CommandContext extends MessageContext {
 		}
 		this.roomlog(`(${msg})`);
 	}
-	globalModlog(action: string, user: string | User | null, note?: string | null, ip?: string) {
+	globalModlog(action: string, user: string | User | null = null, note: string | null = null, ip?: string) {
 		const entry: PartialModlogEntry = {
 			action,
 			isGlobal: true,
@@ -813,17 +908,18 @@ export class CommandContext extends MessageContext {
 		}
 		(this.room || Rooms.global).modlog(entry);
 	}
-	parseSpoiler(str: string) {
-		let privateReason = "";
-		if (!str) return {publicReason: "", privateReason};
+	parseSpoiler(reason: string) {
+		if (!reason) return {publicReason: "", privateReason: ""};
 
-		let publicReason = str;
-		const targetLowercase = str.toLowerCase();
+		let publicReason = reason;
+		let privateReason = reason;
+		const targetLowercase = reason.toLowerCase();
 		if (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:')) {
 			const proofIndex = targetLowercase.indexOf(targetLowercase.includes('spoilers:') ? 'spoilers:' : 'spoiler:');
-			const bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
-			privateReason = `(PROOF: ${str.substr(proofIndex + bump, str.length).trim()}) `;
-			publicReason = str.substr(0, proofIndex).trim();
+			const proofOffset = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			const proof = reason.slice(proofIndex + proofOffset).trim();
+			publicReason = reason.slice(0, proofIndex).trim();
+			privateReason = `${publicReason}${proof ? ` (PROOF: ${proof})` : ''}`;
 		}
 		return {publicReason, privateReason};
 	}
@@ -876,7 +972,7 @@ export class CommandContext extends MessageContext {
 	shouldBroadcast() {
 		return this.cmdToken === BROADCAST_TOKEN;
 	}
-	checkBroadcast(ignoreCooldown?: boolean, suppressMessage?: string | null) {
+	checkBroadcast(overrideCooldown?: boolean | string, suppressMessage?: string | null) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			return true;
 		}
@@ -893,11 +989,13 @@ export class CommandContext extends MessageContext {
 
 		// broadcast cooldown
 		const broadcastMessage = (suppressMessage || this.message).toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+		const cooldownMessage = overrideCooldown === true ? null : (overrideCooldown || broadcastMessage);
 
-		if (!ignoreCooldown && this.room && this.room.lastBroadcast === broadcastMessage &&
-			this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
-			!this.user.can('bypassall')) {
-			throw new Chat.ErrorMessage("You can't broadcast this because it was just broadcasted.");
+		if (
+			cooldownMessage && this.room && this.room.lastBroadcast === cooldownMessage &&
+			this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN
+		) {
+			throw new Chat.ErrorMessage(`You can't broadcast this because it was just broadcasted. If this was intentional, use !rebroadcast ${this.message}`);
 		}
 
 		const message = this.checkChat(suppressMessage || this.message);
@@ -910,7 +1008,7 @@ export class CommandContext extends MessageContext {
 		this.broadcastMessage = broadcastMessage;
 		return true;
 	}
-	runBroadcast(ignoreCooldown = false, suppressMessage: string | null = null) {
+	runBroadcast(overrideCooldown?: boolean | string, suppressMessage: string | null = null) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			// Already being broadcast, or the user doesn't intend to broadcast.
 			return true;
@@ -918,22 +1016,23 @@ export class CommandContext extends MessageContext {
 
 		if (!this.broadcastMessage) {
 			// Permission hasn't been checked yet. Do it now.
-			this.checkBroadcast(ignoreCooldown, suppressMessage);
+			this.checkBroadcast(overrideCooldown, suppressMessage);
 		}
 
 		this.broadcasting = true;
 
+		const message = `${this.broadcastPrefix}${suppressMessage || this.message}`;
 		if (this.pmTarget) {
-			this.sendReply('|c~|' + (suppressMessage || this.message));
+			this.sendReply(`|c~|${message}`);
 		} else {
-			this.sendReply('|c|' + this.user.getIdentity(this.room ? this.room.roomid : '') + '|' + (suppressMessage || this.message));
+			this.sendReply(`|c|${this.user.getIdentity(this.room ? this.room.roomid : '')}|${message}`);
 		}
 		if (this.room) {
 			// We don't want broadcasted messages in a room to be translated
 			// according to a user's personal language setting.
 			this.language = this.room.settings.language || null;
-			if (!ignoreCooldown) {
-				this.room.lastBroadcast = this.broadcastMessage;
+			if (overrideCooldown !== true) {
+				this.room.lastBroadcast = overrideCooldown || this.broadcastMessage;
 				this.room.lastBroadcastTime = Date.now();
 			}
 		}
@@ -1006,9 +1105,7 @@ export class CommandContext extends MessageContext {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					throw new Chat.ErrorMessage(this.tr`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
-				if (targetUser.settings.blockPMs &&
-					(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(user, targetUser.settings.blockPMs)) &&
-					!user.can('lock') && targetUser.id !== user.id) {
+				if (!this.checkCanPM(targetUser)) {
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						throw new Chat.ErrorMessage(this.tr`This user is blocking private messages right now.`);
@@ -1017,9 +1114,7 @@ export class CommandContext extends MessageContext {
 						throw new Chat.ErrorMessage(this.tr`This ${Config.groups[targetUser.tempGroup].name} is too busy to answer private messages right now. Please contact a different staff member.`);
 					}
 				}
-				if (user.settings.blockPMs && (user.settings.blockPMs === true ||
-					!Users.globalAuth.atLeast(targetUser, user.settings.blockPMs)) && !targetUser.can('lock') &&
-					targetUser.id !== user.id) {
+				if (!this.checkCanPM(user, targetUser)) {
 					throw new Chat.ErrorMessage(this.tr`You are blocking private messages right now.`);
 				}
 			}
@@ -1037,8 +1132,10 @@ export class CommandContext extends MessageContext {
 		}
 
 		// remove zalgo
-		// eslint-disable-next-line max-len
-		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		message = message.replace(
+			/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,
+			''
+		);
 		if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
 			throw new Chat.ErrorMessage(this.tr`Your message contains banned characters.`);
 		}
@@ -1102,15 +1199,24 @@ export class CommandContext extends MessageContext {
 
 		return message;
 	}
-	checkPMHTML(targetUser: User | null) {
-		if (!targetUser?.connected) {
-			throw new Chat.ErrorMessage(`User ${this.targetUsername} is not currently online.`);
-		}
+	checkCanPM(targetUser: User, user?: User) {
+		if (!user) user = this.user;
+		const setting = targetUser.settings.blockPMs;
+		if (user.can('lock') || !setting) return true;
+		if (setting === true && !user.can('lock')) return false; // this is to appease TS
+		const friends = targetUser.friends || new Set();
+		if (setting === 'friends') return friends.has(user.id);
+		return Users.globalAuth.atLeast(user, setting as AuthLevel);
+	}
+	checkPMHTML(targetUser: User) {
 		if (!(this.room && (targetUser.id in this.room.users)) && !this.user.can('addhtml')) {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
+		const friends = targetUser.friends || new Set();
 		if (targetUser.settings.blockPMs &&
-			(targetUser.settings.blockPMs === true || !Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs)) &&
+			(targetUser.settings.blockPMs === true ||
+			(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
+			!Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs as AuthLevel)) &&
 			!this.user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
@@ -1187,7 +1293,7 @@ export class CommandContext extends MessageContext {
 				// autoclose tags
 				'p', 'li', 'dt', 'dd', 'option', 'tr', 'th', 'td', 'thead', 'tbody', 'tfoot', 'colgroup',
 				// PS custom element
-				'psicon',
+				'psicon', 'youtube',
 			];
 			const stack = [];
 			for (const tag of tags) {
@@ -1242,7 +1348,8 @@ export class CommandContext extends MessageContext {
 					if ((!this.room || this.room.settings.isPersonal || this.room.settings.isPrivate === true) && !this.user.can('lock')) {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
-						const msgCommandRegex = /^\/(?:msg|pm|w|whisper) /i;
+						const msgCommandRegex = /^\/(?:msg|pm|w|whisper|botmsg) /;
+						const botmsgCommandRegex = /^\/msgroom (?:[a-z0-9-]+), ?\/botmsg /;
 						if (buttonName === 'send' && buttonValue && msgCommandRegex.test(buttonValue)) {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
 							const auth = this.room ? this.room.auth : Users.globalAuth;
@@ -1250,11 +1357,13 @@ export class CommandContext extends MessageContext {
 								this.errorReply(`This button is not allowed: <${tagContent}>`);
 								throw new Chat.ErrorMessage(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
 							}
+						} else if (buttonName === 'send' && buttonValue && botmsgCommandRegex.test(buttonValue)) {
+							// no need to validate the bot being an actual bot; `/botmsg` will do it for us and is not abusable
 						} else if (buttonName) {
 							this.errorReply(`This button is not allowed: <${tagContent}>`);
 							this.errorReply(`You do not have permission to use most buttons. Here are the two types you're allowed to use:`);
 							this.errorReply(`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`);
-							throw new Chat.ErrorMessage(`2. Sending a message to a Bot: <button name="send" value="/msg BOT_USERNAME, MESSAGE">send the thing</button>`);
+							throw new Chat.ErrorMessage(`2. Sending a message to a Bot: <button name="send" value="/msgroom BOT_ROOMID, /botmsg BOT_USERNAME, MESSAGE">send the thing</button>`);
 						}
 					}
 				}
@@ -1266,39 +1375,16 @@ export class CommandContext extends MessageContext {
 
 		return htmlContent;
 	}
-	targetUserOrSelf(target: string, exactName: boolean) {
-		if (!target) {
-			this.targetUsername = this.user.name;
-			this.inputUsername = this.user.name;
-			return this.user;
-		}
-		this.splitTarget(target, exactName);
-		return this.targetUser;
-	}
 
 	/**
-	 * Given a message in the form "USERNAME" or "USERNAME, MORE", splits
-	 * it apart:
-	 *
-	 * - `this.targetUser` will be the User corresponding to USERNAME
-	 *   (or null, if not found)
-	 *
-	 * - `this.inputUsername` will be the text of USERNAME, unmodified
-	 *
-	 * - `this.targetUsername` will be the username, if found, or
-	 *   this.inputUsername otherwise
-	 *
-	 * - and the text of MORE will be returned (empty string, if the
-	 *   message has no comma)
-	 *
+	 * This is to be used for commands that replicate other commands
+	 * (for example, `/pm username, command` or `/msgroom roomid, command`)
+	 * to ensure they do not crash with too many levels of recursion.
 	 */
-	splitTarget(target: string, exactName = false) {
-		const [name, rest] = this.splitOne(target);
-
-		this.targetUser = Users.get(name, exactName);
-		this.inputUsername = name.trim();
-		this.targetUsername = this.targetUser ? this.targetUser.name : this.inputUsername;
-		return rest;
+	checkRecursion() {
+		if (this.recursionDepth > 5) {
+			throw new Chat.ErrorMessage(`/${this.cmd} - Too much command recursion has occurred.`);
+		}
 	}
 
 	requireRoom(id?: RoomID) {
@@ -1367,6 +1453,8 @@ export const Chat = new class {
 	 * which tends to cause unexpected behavior.
 	 */
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
+	readonly Friends = new FriendsDatabase();
+	readonly PM = PM;
 
 	readonly multiLinePattern = new PatternTester();
 
@@ -1378,7 +1466,8 @@ export const Chat = new class {
 	basePages!: PageTable;
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
-	readonly renameHandlers: Rooms.RenameHandler[] = [];
+	readonly crqHandlers: {[k: string]: CRQHandler} = {};
+	readonly handlers: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
 	/** Will be empty except during hotpatch */
@@ -1425,8 +1514,11 @@ export const Chat = new class {
 			// \u2E80-\u32FF              CJK symbols
 			// \u3400-\u9FFF              CJK
 			// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
-			// eslint-disable-next-line no-misleading-character-class, max-len
-			name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
+			name = name.replace(
+				// eslint-disable-next-line no-misleading-character-class
+				/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g,
+				''
+			);
 
 			// blacklist
 			// \u00a1 upside-down exclamation mark (i)
@@ -1444,11 +1536,21 @@ export const Chat = new class {
 
 			// Limit the amount of symbols allowed in usernames to 4 maximum, and
 			// disallow (R) and (C) from being used in the middle of names.
-			// eslint-disable-next-line max-len
-			const nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
+			const nameSymbols = name.replace(
+				/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g,
+				''
+			);
 			// \u00ae\u00a9 (R) (C)
-			// eslint-disable-next-line no-misleading-character-class, max-len
-			if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
+			if (
+				nameSymbols.length > 4 ||
+				/[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)
+			) {
+				name = name.replace(
+					// eslint-disable-next-line no-misleading-character-class
+					/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g,
+					''
+				).replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
+			}
 		}
 		name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
 		name = name.replace(/@/g, ""); // Remove @ as this is used to indicate status messages
@@ -1530,7 +1632,7 @@ export const Chat = new class {
 			const languageID = Dex.toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
-				if (!filename.endsWith('.js')) continue;
+				if (!filename.endsWith('.ts')) continue;
 
 				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
 
@@ -1688,11 +1790,8 @@ export const Chat = new class {
 
 	loadPlugin(file: string) {
 		let plugin;
-		if (file.endsWith('.ts')) {
+		if (file.endsWith('.ts') || file.endsWith('.js')) {
 			plugin = require(`./${file.slice(0, -3)}`);
-		} else if (file.endsWith('.js')) {
-			// Switch to server/ because we'll be in .server-dist/ after this file is compiled
-			plugin = require(`../server/${file}`);
 		} else {
 			return;
 		}
@@ -1708,7 +1807,7 @@ export const Chat = new class {
 				const base = commandTable[entry];
 				if (!base) continue;
 				if (!base.aliases) base.aliases = [];
-				base.aliases.push(cmd);
+				if (!base.aliases.includes(cmd)) base.aliases.push(cmd);
 				continue;
 			}
 			if (typeof entry !== 'function') continue;
@@ -1716,7 +1815,7 @@ export const Chat = new class {
 			const handlerCode = entry.toString();
 			entry.requiresRoom = /requireRoom\((?:'|"|`)(.*?)(?:'|"|`)/.exec(handlerCode)?.[1] as RoomID || /this\.requireRoom\(/.test(handlerCode);
 			entry.hasRoomPermissions = /\bthis\.(checkCan|can)\([^,)\n]*, [^,)\n]*,/.test(handlerCode);
-			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run)Broadcast)\(/.test(handlerCode);
+			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run|should)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
 			if (!entry.aliases) entry.aliases = [];
 
@@ -1743,9 +1842,16 @@ export const Chat = new class {
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
-		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
+		if (plugin.pages) {
+			Object.assign(Chat.pages, plugin.pages);
+		}
 
-		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
+		if (plugin.destroy) {
+			Chat.destroyHandlers.push(plugin.destroy);
+		}
+		if (plugin.crqHandlers) {
+			Object.assign(Chat.crqHandlers, plugin.crqHandlers);
+		}
 		if (plugin.roomSettings) {
 			if (!Array.isArray(plugin.roomSettings)) plugin.roomSettings = [plugin.roomSettings];
 			Chat.roomSettings = Chat.roomSettings.concat(plugin.roomSettings);
@@ -1757,7 +1863,21 @@ export const Chat = new class {
 		if (plugin.punishmentfilter) Chat.punishmentfilters.push(plugin.punishmentfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
-		if (plugin.onRenameRoom) Chat.renameHandlers.push(plugin.onRenameRoom);
+		if (plugin.onRenameRoom) {
+			if (!Chat.handlers['RenameRoom']) Chat.handlers['RenameRoom'] = [];
+			Chat.handlers['RenameRoom'].push(plugin.onRenameRoom);
+		}
+		if (plugin.onRoomClose) {
+			if (!Chat.handlers['RoomClose']) Chat.handlers['RoomClose'] = [];
+			Chat.handlers['RoomClose'].push(plugin.onRoomClose);
+		}
+		if (plugin.handlers) {
+			for (const k in plugin.handlers) {
+				const handlerName = k.slice(2);
+				if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
+				Chat.handlers[handlerName].push(plugin.handlers[k]);
+			}
+		}
 		Chat.plugins[name] = plugin;
 	}
 	loadPlugins(oldPlugins?: {[k: string]: ChatPlugin}) {
@@ -1811,7 +1931,12 @@ export const Chat = new class {
 		}
 
 		for (const file of files) {
-			this.loadPlugin(`chat-plugins/${file}`);
+			try {
+				this.loadPlugin(`chat-plugins/${file}`);
+			} catch (e) {
+				Monitor.crashlog(e, "A loading chat plugin");
+				continue;
+			}
 		}
 		Chat.oldPlugins = {};
 		// lower priority should run later
@@ -1823,10 +1948,20 @@ export const Chat = new class {
 		}
 	}
 
-	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
-		for (const handler of Chat.renameHandlers) {
-			handler(oldID, newID, room);
+	runHandlers(name: string, ...args: any) {
+		const handlers = this.handlers[name];
+		if (!handlers) return;
+		for (const h of handlers) {
+			void h.call(this, ...args);
 		}
+	}
+
+	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
+		Chat.runHandlers('RoomRename', oldID, newID, room);
+	}
+
+	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
+		Chat.runHandlers('RoomClose', roomid, user, connection, roomid.startsWith('view-'));
 	}
 
 	/**
@@ -1847,6 +1982,8 @@ export const Chat = new class {
 			message = `/eval ${message.slice(3)}`;
 		} else if (message.startsWith(`>>> `)) {
 			message = `/evalbattle ${message.slice(4)}`;
+		} else if (message.startsWith('>>sql ')) {
+			message = `/evalsql ${message.slice(6)}`;
 		} else if (message.startsWith(`/me`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
 			message = `/mee ${message.slice(3)}`;
 		} else if (message.startsWith(`/ME`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
@@ -1927,14 +2064,17 @@ export const Chat = new class {
 		const results: AnnotatedChatHandler[] = [];
 		for (const cmd in table) {
 			const handler = table[cmd];
-			if (Array.isArray(handler) || !handler || typeof handler === 'string') continue;
+			if (Array.isArray(handler) || !handler || ['string', 'boolean'].includes(typeof handler)) {
+				continue;
+			}
 			if (typeof handler === 'object') {
 				results.push(...this.allCommands(handler));
 				continue;
 			}
 			results.push(handler as AnnotatedChatHandler);
 		}
-		return results;
+		if (table !== Chat.commands) return results;
+		return results.filter((handler, i) => results.indexOf(handler) === i);
 	}
 
 	/**
@@ -1949,7 +2089,7 @@ export const Chat = new class {
 	 */
 	validateRegex(word: string) {
 		word = word.trim();
-		if (word.endsWith('|') || word.startsWith('|')) {
+		if ((word.endsWith('|') && !word.endsWith('\\|')) || word.startsWith('|')) {
 			throw new Chat.ErrorMessage(`Your regex was rejected because it included an unterminated |.`);
 		}
 		try {
@@ -2118,8 +2258,9 @@ export const Chat = new class {
 	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
 		const params = str.slice(+str.startsWith('\n')).split('\n');
 		const output: string[] = [];
-		for (const param of params) {
+		for (const [i, param] of params.entries()) {
 			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
+			if (param.length > cutoff * 160 && i < cutoff) cutoff = i;
 			output.push(Utils[isCode ? 'escapeHTMLForceWrap' : 'escapeHTML'](param));
 		}
 
@@ -2155,7 +2296,7 @@ export const Chat = new class {
 		buf += '</span> ';
 		if (gen >= 3) {
 			buf += '<span style="float:left;min-height:26px">';
-			if (species.abilities['1'] && (gen >= 4 || Dex.getAbility(species.abilities['1']).gen === 3)) {
+			if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
 				buf += '<span class="col twoabilitycol">' + species.abilities['0'] + '<br />' + species.abilities['1'] + '</span>';
 			} else {
 				buf += '<span class="col abilitycol">' + species.abilities['0'] + '</span>';
@@ -2304,22 +2445,27 @@ export const Chat = new class {
 (Chat as any).escapeHTML = Utils.escapeHTML;
 (Chat as any).html = Utils.html;
 (Chat as any).splitFirst = Utils.splitFirst;
-// @ts-ignore
-CommandContext.prototype.can = CommandContext.prototype.checkCan;
-// @ts-ignore
-CommandContext.prototype.canTalk = CommandContext.prototype.checkChat;
-// @ts-ignore
-CommandContext.prototype.canBroadcast = CommandContext.prototype.checkBroadcast;
-// @ts-ignore
-CommandContext.prototype.canHTML = CommandContext.prototype.checkHTML;
-// @ts-ignore
-CommandContext.prototype.canEmbedURI = CommandContext.prototype.checkEmbedURI;
-// @ts-ignore
-CommandContext.prototype.canPMHTML = CommandContext.prototype.checkPMHTML;
-// @ts-ignore
-CommandContext.prototype.privatelyCan = CommandContext.prototype.privatelyCheckCan;
-// @ts-ignore
-CommandContext.prototype.requiresRoom = CommandContext.prototype.requireRoom;
+(CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
+(CommandContext.prototype as any).canTalk = CommandContext.prototype.checkChat;
+(CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;
+(CommandContext.prototype as any).canHTML = CommandContext.prototype.checkHTML;
+(CommandContext.prototype as any).canEmbedURI = CommandContext.prototype.checkEmbedURI;
+(CommandContext.prototype as any).privatelyCan = CommandContext.prototype.privatelyCheckCan;
+(CommandContext.prototype as any).requiresRoom = CommandContext.prototype.requireRoom;
+(CommandContext.prototype as any).targetUserOrSelf = function (this: any, target: string, exactName: boolean) {
+	const user = this.getUserOrSelf(target, exactName);
+	this.targetUser = user;
+	this.inputUsername = target;
+	this.targetUsername = user?.name || target;
+	return user;
+};
+(CommandContext.prototype as any).splitTarget = function (this: any, target: string, exactName: boolean) {
+	const {targetUser, inputUsername, targetUsername, rest} = this.splitUser(target, exactName);
+	this.targetUser = targetUser;
+	this.inputUsername = inputUsername;
+	this.targetUsername = targetUsername;
+	return rest;
+};
 
 /**
  * Used by ChatMonitor.

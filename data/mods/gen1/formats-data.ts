@@ -130,7 +130,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["thunderwave", "surf"],
 		essentialMove: "thunderbolt",
 		exclusiveMoves: ["bodyslam", "thunder", "agility", "seismictoss", "hyperbeam"],
-		tier: "NU",
+		tier: "NUBL",
 	},
 	sandshrew: {
 		randomBattleMoves: ["swordsdance", "bodyslam", "rockslide"],
@@ -368,7 +368,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["sleeppowder", "bodyslam", "stunspore"],
 		essentialMove: "razorleaf",
 		comboMoves: ["swordsdance", "hyperbeam"],
-		tier: "OU",
+		tier: "(OU)",
 	},
 	tentacool: {
 		randomBattleMoves: ["barrier", "hydropump", "surf"],
@@ -665,7 +665,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["surf", "bodyslam", "sing", "rest", "confuseray"],
 		essentialMove: "blizzard",
 		exclusiveMoves: ["thunderbolt", "thunderbolt"],
-		tier: "OU",
+		tier: "(OU)",
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],

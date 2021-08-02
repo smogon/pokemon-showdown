@@ -22,7 +22,7 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Pueden hacer cualquier cosa, como cambiar lo que dice este mensaje",
 
 		"<strong>Room ranks</strong>": "<strong>Rangos de Sala</strong>",
-		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - No tienen ningún poder más allá del símbolo.",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Pueden utilizar comandos con ! como !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Lo mismo que arriba y además pueden sancionar dando advertencias o silenciando",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Lo mismo que arriba y además pueden expulsar a usuarios de la sala",
@@ -128,6 +128,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "Tu mensaje contiene palabras prohíbidas en esta sala.",
 		"You can't send the same message again so soon.": "No puedes mandar el mismo mensaje tan pronto.",
@@ -143,10 +144,12 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "¡Ya estás bloqueando solicitudes de batalla!",
 		"You are already available for challenges!": "¡Ya estás disponible para recibir solicitudes de batalla!",
 		"You are available for challenges from now on.": "Estás disponible para recibir solicitudes de batalla de ahora en adelante.",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "FAQ del Staff",
 		"You cannot broadcast all FAQs at once.": "No puedes mostrar todos los FAQs a la vez.",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat. However, staff are not obligated to disable modchat": "Un usuario es autoconfirmed cuando ha ganado al menos una batalla puntuada y ha estado registrado durante una semana o más. Con la finalidad de evitar spam o trolls, la mayoría de las salas de chat únicamente admiten usuarios autoconfirmed para conversar. Si tú no eres un usuario autoconfirmed, puedes solicitar amablemente por MP a un miembro del staff (los miembros del staff tienen %, @, o # al inicio de su nombre de usuario) de la sala en la que quieres conversar que deshabilite el modchat. Sin embargo, el staff no está obligado a deshabilitar el modchat.",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "Un usuario es autoconfirmed cuando ha ganado al menos una batalla puntuada y ha estado registrado durante una semana o más. Con la finalidad de evitar spam o trolls, la mayoría de las salas de chat únicamente admiten usuarios autoconfirmed para conversar. Si tú no eres un usuario autoconfirmed, puedes solicitar amablemente por MP a un miembro del staff (los miembros del staff tienen %, @, o # al inicio de su nombre de usuario) de la sala en la que quieres conversar que deshabilite el modchat. Sin embargo, el staff no está obligado a deshabilitar el modchat.",
 		"How the ladder works": "Como funciona la ladder",
 		"Tiering FAQ": "FAQ de Tiers",
 		"Badge FAQ": "FAQ de Badges",
@@ -154,9 +157,14 @@ export const translations: Translations = {
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "Para unirte a un torneo, haz click en el botón <strong>Join!</strong> o escribe el comando <code>/tour join</code> en el chat de la sala. Puedes revisar si tu equipo es legal para el torneo al hacer click en el botón <strong>Validate</strong> una vez te hayas unido y seleccionado un equipo. Para jugar contra tu oponente en el torneo, haz click en el botón <strong>Ready!</strong> cuando aparezca. Hay dos tipos diferentes de torneos de sala: elimination (si un usuario pierde más de cierto número de veces, es eliminado) y round robin (todos los usuarios juegan contra todos, y el usuario con más victorias es el ganador).",
 		"Frequently Asked Questions": "Preguntas Frecuentes",
 
-		"pages/faq": "pages/faq",
+		"pages/faq": "pages/faq-es",
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
-		"pages/staff": "pages/staff",
+		"pages/staff": "pages/staff-es",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '- For more information, you can read our <a href="https://${Config.routes.root}/pages/privacy-es">full privacy policy.</a>',
 	},
 };

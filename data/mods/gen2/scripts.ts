@@ -6,6 +6,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen3',
 	gen: 2,
 	pokemon: {
+		inherit: true,
 		getStat(statName, unboosted, unmodified, fastReturn) {
 			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
@@ -66,10 +67,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		boostBy(boost) {
 			let delta = 0;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				delta = boost[i]!;
-				if (delta > 0 && this.getStat(i as StatNameExceptHP, false, true) === 999) {
+				if (delta > 0 && this.getStat(i as StatIDExceptHP, false, true) === 999) {
 					delta = 0;
 					continue;
 				}
@@ -254,7 +255,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				let nullDamage = true;
 				let moveDamage: number | undefined | false;
 
-				const isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
+				const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 				let i: number;
 				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 					if (pokemon.status === 'slp' && !isSleepUsable) break;
@@ -570,8 +571,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			let attacker = pokemon;
 			const defender = target;
 			if (move.useTargetOffensive) attacker = target;
-			let atkType: StatNameExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
-			const defType: StatNameExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
+			let atkType: StatIDExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
+			const defType: StatIDExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 			if (move.useSourceDefensiveAsOffensive) atkType = defType;
 			let unboosted = false;
 			let noburndrop = false;

@@ -63,7 +63,6 @@ export class Side {
 
 	name: string;
 	avatar: string;
-	maxTeamSize: number;
 	foe: Side = null!; // set in battle.start()
 	/** Only exists in multi battle, for the allied side */
 	allySide: Side | null = null; // set in battle.start()
@@ -96,6 +95,7 @@ export class Side {
 	/**
 	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon
 	 * (this is for Counter and Mirror Move)
+	 * This is also used for checking Self-KO clause in Pokemon Stadium 2.
 	 */
 	lastMove: Move | null;
 
@@ -109,16 +109,13 @@ export class Side {
 
 		this.name = name;
 		this.avatar = '';
-		this.maxTeamSize = 6;
 
 		this.team = team;
 		this.pokemon = [];
 		for (let i = 0; i < this.team.length && i < 24; i++) {
 			// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new Pokemon(this.team[i], this));
-		}
-		for (const [i, pokemon] of this.pokemon.entries()) {
-			pokemon.position = i;
+			this.pokemon[i].position = i;
 		}
 
 		switch (this.battle.gameType) {
@@ -230,7 +227,7 @@ export class Side {
 
 	/** Intended as a way to iterate through all foe side conditions - do not use for anything else. */
 	foeSidesWithConditions() {
-		if (this.battle.gameType === 'multi') return this.battle.sides.filter(side => side !== this);
+		if (this.battle.gameType === 'freeforall') return this.battle.sides.filter(side => side !== this);
 
 		return [this.foe];
 	}
@@ -243,16 +240,19 @@ export class Side {
 
 		return this.foe.pokemonLeft;
 	}
-	allies() {
+	allies(all?: boolean) {
 		// called during the first switch-in, so `active` can still contain nulls at this point
-		return this.activeTeam().filter(ally => ally && !ally.fainted);
+		let allies = this.activeTeam().filter(ally => ally);
+		if (!all) allies = allies.filter(ally => !ally.fainted);
+
+		return allies;
 	}
-	foes() {
+	foes(all?: boolean) {
 		if (this.battle.gameType === 'freeforall') {
 			return this.battle.sides.map(side => side.active[0])
-				.filter(pokemon => pokemon && pokemon.side !== this && !pokemon.fainted);
+				.filter(pokemon => pokemon && pokemon.side !== this && (all || !pokemon.fainted));
 		}
-		return this.foe.allies();
+		return this.foe.allies(all);
 	}
 	activeTeam() {
 		if (this.battle.gameType !== 'multi') return this.active;
@@ -271,10 +271,10 @@ export class Side {
 		if (!source) throw new Error(`setting sidecond without a source`);
 		if (!source.getSlot) source = (source as any as Side).active[0];
 
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		if (this.sideConditions[status.id]) {
-			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
+			if (!(status as any).onSideRestart) return false;
+			return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, source, sourceEffect);
 		}
 		this.sideConditions[status.id] = {
 			id: status.id,
@@ -287,7 +287,7 @@ export class Side {
 			this.sideConditions[status.id].duration =
 				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, this.sideConditions[status.id], this, source, sourceEffect)) {
+		if (!this.battle.singleEvent('SideStart', status, this.sideConditions[status.id], this, source, sourceEffect)) {
 			delete this.sideConditions[status.id];
 			return false;
 		}
@@ -295,20 +295,20 @@ export class Side {
 	}
 
 	getSideCondition(status: string | Effect): Effect | null {
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
 
 	getSideConditionData(status: string | Effect): AnyObject {
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		return this.sideConditions[status.id] || null;
 	}
 
 	removeSideCondition(status: string | Effect): boolean {
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
-		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
+		this.battle.singleEvent('SideEnd', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
 		return true;
 	}
@@ -322,7 +322,7 @@ export class Side {
 		if (target instanceof Pokemon) target = target.position;
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.dex.getEffect(status);
+		status = this.battle.dex.conditions.get(status);
 		if (this.slotConditions[target][status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
@@ -347,14 +347,14 @@ export class Side {
 
 	getSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return null;
 		return status;
 	}
 
 	removeSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
-		status = this.battle.dex.getEffect(status) as Effect;
+		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return false;
 		this.battle.singleEvent('End', status, this.slotConditions[target][status.id], this.active[target]);
 		delete this.slotConditions[target][status.id];
@@ -388,7 +388,7 @@ export class Side {
 		if (this.choice.forcedSwitchesLeft) return false;
 
 		if (this.requestState === 'teampreview') {
-			return this.choice.actions.length >= Math.min(this.maxTeamSize, this.pokemon.length);
+			return this.choice.actions.length >= this.pickedTeamSize();
 		}
 
 		// current request is move/switch
@@ -470,7 +470,7 @@ export class Side {
 				break;
 			}
 		}
-		const move = this.battle.dex.getMove(moveid);
+		const move = this.battle.dex.moves.get(moveid);
 
 		// Z-move
 
@@ -482,7 +482,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
 		}
 
-		if (zMove) targetType = this.battle.dex.getMove(zMove).target;
+		if (zMove) targetType = this.battle.dex.moves.get(zMove).target;
 
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
@@ -492,7 +492,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
 
-		if (maxMove) targetType = this.battle.dex.getMove(maxMove).target;
+		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).target;
 
 		// Validate targetting
 
@@ -727,40 +727,65 @@ export class Side {
 		return true;
 	}
 
-	chooseTeam(data?: string) {
-		const autoFill = !data;
-		// default to sending team in order
-		if (!data) data = `123456`;
-		const positions = (('' + data)
-			.split(data.includes(',') ? ',' : '')
-			.map(datum => parseInt(datum) - 1));
+	/**
+	 * The number of pokemon you must choose in Team Preview.
+	 *
+	 * Note that PS doesn't support choosing fewer than this number of pokemon.
+	 * In the games, it is sometimes possible to bring fewer than this, but
+	 * since that's nearly always a mistake, we haven't gotten around to
+	 * supporting it.
+	 */
+	pickedTeamSize() {
+		return Math.min(this.pokemon.length, this.battle.ruleTable.pickedTeamSize || Infinity);
+	}
 
-		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
+	chooseTeam(data = '') {
 		if (this.requestState !== 'teampreview') {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
 
-		// hack for >6 pokemon Custom Game
-		while (positions.length >= 6 && positions.length < this.maxTeamSize && positions.length < this.pokemon.length) {
-			positions.push(positions.length);
+		const ruleTable = this.battle.ruleTable;
+		let positions = data.split(data.includes(',') ? ',' : '')
+			.map(datum => parseInt(datum) - 1);
+		const pickedTeamSize = this.pickedTeamSize();
+
+		// make sure positions is exactly of length pickedTeamSize
+		// - If too big: the client automatically sends a full list, so we just trim it down to size
+		positions.splice(pickedTeamSize);
+		// - If too small: we intentionally support only sending leads and having the sim fill in the rest
+		if (positions.length === 0) {
+			for (let i = 0; i < pickedTeamSize; i++) positions.push(i);
+		} else if (positions.length < pickedTeamSize) {
+			for (let i = 0; i < pickedTeamSize; i++) {
+				if (!positions.includes(i)) positions.push(i);
+				// duplicate in input, let the rest of the code handle the error message
+				if (positions.length >= pickedTeamSize) break;
+			}
 		}
 
-		for (const pos of positions) {
-			const index = this.choice.actions.length;
-			if (index >= this.maxTeamSize || index >= this.pokemon.length) {
-				// client still sends entire team
-				break;
-				// if (autoFill) break;
-				// return this.emitChoiceError(`Can't choose for Team Preview: You are limited to ${this.maxTeamSize} Pokémon`);
-			}
+		for (const [index, pos] of positions.entries()) {
 			if (isNaN(pos) || pos < 0 || pos >= this.pokemon.length) {
 				return this.emitChoiceError(`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`);
 			}
-			if (this.choice.switchIns.has(pos)) {
-				if (autoFill) continue;
+			if (positions.indexOf(pos) !== index) {
 				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
+		}
+		if (ruleTable.maxTotalLevel) {
+			let totalLevel = 0;
+			for (const pos of positions) totalLevel += this.pokemon[pos].level;
 
+			if (totalLevel > ruleTable.maxTotalLevel) {
+				if (!data) {
+					// autoChoose
+					positions = [...this.pokemon.keys()].sort((a, b) => (this.pokemon[a].level - this.pokemon[b].level))
+						.slice(0, pickedTeamSize);
+				} else {
+					return this.emitChoiceError(`Your selected team has a total level of ${totalLevel}, but it can't be above ${ruleTable.maxTotalLevel}; please select a valid team of ${pickedTeamSize} Pokémon`);
+				}
+			}
+		}
+		for (const [index, pos] of positions.entries()) {
 			this.choice.switchIns.add(pos);
 			this.choice.actions.push({
 				choice: 'team',
@@ -896,8 +921,6 @@ export class Side {
 				break;
 			case 'team':
 				if (!this.chooseTeam(data)) return false;
-				// Auto-complete
-				this.chooseTeam();
 				break;
 			case 'pass':
 			case 'skip':

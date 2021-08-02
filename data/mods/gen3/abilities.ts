@@ -80,10 +80,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	lightningrod: {
 		onFoeRedirectTarget(target, source, source2, move) {
 			if (move.type !== 'Electric') return;
-			if (this.validTarget(this.effectData.target, source, move.target)) {
-				return this.effectData.target;
+			if (this.validTarget(this.effectState.target, source, move.target)) {
+				return this.effectState.target;
 			}
 		},
+		isBreakable: true,
 		name: "Lightning Rod",
 		rating: 0,
 		num: 32,
@@ -122,6 +123,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onStart(pokemon) {
 			this.addSplit(pokemon.side.id, ['-ability', pokemon, 'Pressure', '[silent]']);
+		},
+	},
+	raindish: {
+		inherit: true,
+		onWeather() {},
+		onResidualOrder: 10,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				this.heal(pokemon.baseMaxhp / 16);
+			}
 		},
 	},
 	roughskin: {

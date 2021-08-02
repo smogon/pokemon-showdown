@@ -88,6 +88,22 @@ describe('Target Resolution', function () {
 			battle.makeChoices('move watergun -2, auto', 'auto');
 			assert.statStage(redirector, 'spa', 1);
 		});
+
+		it(`should not redirect to another random target if the intended one is fainted in FFA`, function () {
+			battle = common.createBattle({gameType: 'freeforall'}, [[
+				{species: 'Calyrex', moves: ['sleeptalk']},
+			], [
+				{species: 'Victini', ability: 'Victory Star', moves: ['vcreate']},
+			], [
+				{species: 'Chansey', moves: ['sleeptalk']},
+			], [
+				{species: 'Tyrunt', moves: ['crunch']},
+			]]);
+			battle.makeChoices('auto', 'move vcreate 1', 'auto', 'move crunch 1');
+			assert.fainted(battle.sides[0].active[0]);
+			assert.fullHP(battle.sides[1].active[0]);
+			assert.fullHP(battle.sides[2].active[0]);
+		});
 	});
 
 	describe(`Targetted slot is empty`, function () {
@@ -171,31 +187,80 @@ describe('Target Resolution', function () {
 			battle.makeChoices('move watergun -2, pass', 'auto');
 			assert.statStage(redirector, 'spa', 2);
 		});
+	});
 
-		it(`should smart-track targets for Stalwart`, function () {
+	describe(`Smart-tracking targeting effects`, function () {
+		it(`should allow Stalwart to follow its target after an opposing Ally Switch`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
-				{species: 'Ninjask', ability: 'runaway', moves: ['splash']},
+				{species: 'Wynaut', moves: ['sleeptalk']},
 			], [
-				{species: 'Gastrodon', ability: 'runaway', moves: ['splash']},
-				{species: 'Ninjask', ability: 'runaway', moves: ['allyswitch']},
+				{species: 'Gastrodon', moves: ['sleeptalk']},
+				{species: 'Ninjask', moves: ['allyswitch']},
 			]]);
 
-			battle.makeChoices('move watergun 1, move splash', 'auto');
-			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+			const ninjask = battle.p2.active[1];
+			battle.makeChoices('move watergun 2, move sleeptalk', 'auto');
+			assert.false.fullHP(ninjask, `Duraludon should have followed Ninjask's Ally Switch.`);
 		});
 
-		it(`should smart-track targets for Snipe Shot`, function () {
+		it(`should allow Stalwart to bypass Storm Drain redirection`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Duraludon', ability: 'runaway', moves: ['snipeshot']},
-				{species: 'Ninjask', ability: 'runaway', moves: ['splash']},
+				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
+				{species: 'Wynaut', moves: ['sleeptalk']},
 			], [
-				{species: 'Gastrodon', ability: 'runaway', moves: ['splash']},
-				{species: 'Ninjask', ability: 'runaway', moves: ['allyswitch']},
+				{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
+				{species: 'Ninjask', moves: ['sleeptalk']},
 			]]);
 
-			battle.makeChoices('move snipeshot 1, move splash', 'auto');
-			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+			const ninjask = battle.p2.active[1];
+			battle.makeChoices('move watergun 2, move sleeptalk', 'auto');
+			assert.false.fullHP(ninjask, `Duraludon should have ignored Gastrodon's Storm Drain.`);
+		});
+
+		it(`should allow Stalwart to bypass Follow Me redirection`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
+				{species: 'Wynaut', moves: ['sleeptalk']},
+			], [
+				{species: 'Clefable', moves: ['followme']},
+				{species: 'Ninjask', moves: ['sleeptalk']},
+			]]);
+
+			const ninjask = battle.p2.active[1];
+			battle.makeChoices('move watergun 2, move sleeptalk', 'auto');
+			assert.false.fullHP(ninjask, `Duraludon should have ignored Clefable's Follow Me.`);
+		});
+
+		it(`should allow Stalwart to correctly target a Pokemon which switched out and back in another slot`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
+				{species: 'Wynaut', moves: ['sleeptalk']},
+			], [
+				{species: 'Ninjask', moves: ['uturn']},
+				{species: 'Regieleki', moves: ['uturn']},
+				{species: 'Octillery', moves: ['sleeptalk']},
+			]]);
+
+			const regieleki = battle.p2.active[1];
+			battle.makeChoices('move watergun 2, move sleeptalk', 'move uturn -2, move uturn -1');
+			battle.choose('p2', 'switch 3');
+			battle.choose('p2', 'switch 3');
+			assert.false.fullHP(regieleki, `Duraludon should have followed Regieleki through its switch-out.`);
+		});
+
+		it(`should allow Snipe Shot to follow its target after an opposing Ally Switch`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Inteleon', moves: ['snipeshot']},
+				{species: 'Ninjask', moves: ['sleeptalk']},
+			], [
+				{species: 'Gastrodon', moves: ['sleeptalk']},
+				{species: 'Ninjask', moves: ['allyswitch']},
+			]]);
+
+			const ninjask = battle.p2.active[1];
+			battle.makeChoices('move snipeshot 2, move sleeptalk', 'auto');
+			assert.false.fullHP(ninjask, `Inteleon should have followed Ninjask's Ally Switch.`);
 		});
 	});
 
@@ -228,7 +293,7 @@ describe('Target Resolution', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it.skip(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
+	it(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'houndour', level: 1, moves: ['sleeptalk']},
 			{species: 'altaria', moves: ['sleeptalk']},
@@ -243,6 +308,7 @@ describe('Target Resolution', function () {
 		battle.makeChoices('switch 3');
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[1], 'Altaria should be at full HP, because it was not targeted.');
+		assert.false.fullHP(battle.p1.active[0], 'Aggron should not be at full HP, because it was targeted.');
 
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'houndour', level: 1, moves: ['sleeptalk']},
@@ -256,5 +322,24 @@ describe('Target Resolution', function () {
 		battle.makeChoices('auto', 'move phantomforce 1, move sleeptalk');
 		battle.makeChoices('auto', 'move phantomforce 1, move sheercold 1');
 		assert.false.fullHP(battle.p1.active[1], 'Altaria should not be at full HP, because Phantom Force was redirected and targeted it.');
+	});
+
+	it.skip(`should cause Rollout to target the same slot after being called as a submove`, function () {
+		// hardcoded RNG seed to show the erroneous targeting behavior
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
+			{species: 'purrloin', ability: 'compoundeyes', moves: ['rollout', 'sleeptalk']},
+			{species: 'regieleki', moves: ['healbell', 'spore']},
+		], [
+			{species: 'aggron', moves: ['sleeptalk']},
+			{species: 'slowbro', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sleeptalk, move spore -1', 'auto');
+		// Determine which slot was damaged on first turn of Rollout
+		const aggron = battle.p2.active[0];
+		const notTargetedPokemon = aggron.hp === aggron.maxhp ? aggron : battle.p2.active[1];
+
+		for (let i = 0; i < 4; i++) battle.makeChoices();
+		assert.fullHP(notTargetedPokemon);
 	});
 });

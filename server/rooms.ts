@@ -29,17 +29,18 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 const RETRY_AFTER_LOGIN = null;
 
 import {FS, Utils, Streams} from '../lib';
+import {RoomSection, RoomSections} from './chat-commands/room-settings';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
-import {MinorActivity} from './room-minor-activity';
+import {MinorActivity, MinorActivityData} from './room-minor-activity';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
-import {MODLOG_PATH, MODLOG_DB_PATH, mainModlog, PartialModlogEntry} from './modlog';
+import {PartialModlogEntry, Modlog, MODLOG_PATH, MODLOG_DB_PATH} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -56,7 +57,9 @@ interface ChatRoomTable {
 	title: string;
 	desc: string;
 	userCount: number;
+	section?: string;
 	subRooms?: string[];
+	spotlight?: string;
 }
 
 interface ShowRequest {
@@ -80,6 +83,7 @@ export interface RoomSettings {
 	title: string;
 	auth: {[userid: string]: GroupSymbol};
 	creationTime: number;
+	section?: RoomSection;
 
 	readonly autojoin?: boolean;
 	aliases?: string[];
@@ -101,8 +105,7 @@ export interface RoomSettings {
 	hangmanDisabled?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
-	isOfficial?: boolean;
-	pspl?: boolean;
+	spotlight?: string;
 	parentid?: string | null;
 	desc?: string | null;
 	introMessage?: string | null;
@@ -116,6 +119,7 @@ export interface RoomSettings {
 	repeats?: RepeatedPhrase[];
 	autoModchat?: {rank: GroupSymbol, time: number, active: boolean};
 	tournaments?: TournamentRoomSettings;
+	defaultFormat?: string;
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
@@ -130,7 +134,6 @@ export interface RoomSettings {
 }
 
 export type MessageHandler = (room: BasicRoom, message: string) => void;
-export type RenameHandler = (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
 export type Room = GameRoom | ChatRoom;
 
 import type {AnnouncementData} from './chat-plugins/announcements';
@@ -697,7 +700,7 @@ export abstract class BasicRoom {
 		}
 		message += `</div>`;
 		if (this.settings.introMessage) {
-			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(!this.settings.isOfficial ? 'class="infobox-limited"' : '')}>` +
+			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(this.settings.section !== 'official' ? 'class="infobox-limited"' : '')}>` +
 				this.settings.introMessage.replace(/\n/g, '') +
 				`</div></div>`;
 		}
@@ -824,6 +827,34 @@ export abstract class BasicRoom {
 			}
 		}
 	}
+	validateSection(section: string) {
+		const target = toID(section);
+		if (!RoomSections.sections.includes(target as any)) {
+			throw new Chat.ErrorMessage(`"${target}" is not a valid room section. Valid categories include: ${RoomSections.sections.join(', ')}`);
+		}
+		return target as RoomSection;
+	}
+	setSection(section?: string) {
+		if (!this.persist) {
+			throw new Chat.ErrorMessage(`You cannot change the section of temporary rooms.`);
+		}
+		if (section) {
+			const validatedSection = this.validateSection(section);
+			if (this.settings.isPrivate && [true, 'hidden'].includes(this.settings.isPrivate)) {
+				throw new Chat.ErrorMessage(`Only public rooms can change their section.`);
+			}
+			const oldSection = this.settings.section;
+			if (oldSection === section) {
+				throw new Chat.ErrorMessage(`${this.title}'s room section is already set to "${RoomSections.sectionNames[oldSection]}".`);
+			}
+			this.settings.section = validatedSection;
+			this.saveSettings();
+			return validatedSection;
+		}
+		delete this.settings.section;
+		this.saveSettings();
+		return undefined;
+	}
 
 	/**
 	 * Displays a warning popup to all non-staff users users in the room.
@@ -852,6 +883,14 @@ export abstract class BasicRoom {
 		this.title = newTitle;
 		Rooms.rooms.delete(oldID);
 		Rooms.rooms.set(newID, this as Room);
+		if (this.battle && oldID) {
+			for (const player of this.battle.players) {
+				if (player.invite) {
+					const chall = Ladders.challenges.searchByRoom(player.invite, oldID);
+					if (chall) chall.roomid = this.roomid;
+				}
+			}
+		}
 
 		if (oldID === 'lobby') {
 			Rooms.lobby = null;
@@ -994,10 +1033,16 @@ export abstract class BasicRoom {
 	runAutoModchat() {
 		if (!this.settings.autoModchat || this.settings.autoModchat.active) return;
 		// they are staff and online
-		const staff = Object.values(this.users).filter(u => this.auth.isStaff(u.id));
+		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%'));
 		if (!staff.length) {
-			const {rank, time} = this.settings.autoModchat;
+			const {time} = this.settings.autoModchat;
+			if (!time || time < 5) {
+				throw new Error(`Invalid time setting for automodchat (${Utils.visualize(this.settings.autoModchat)})`);
+			}
+			if (this.modchatTimer) clearTimeout(this.modchatTimer);
 			this.modchatTimer = setTimeout(() => {
+				if (!this.settings.autoModchat) return;
+				const {rank} = this.settings.autoModchat;
 				this.settings.modchat = rank;
 				this.add(
 					`|raw|<div class="broadcast-blue"><strong>This room has had no active staff for ${Chat.toDurationString(time)},` +
@@ -1007,13 +1052,13 @@ export abstract class BasicRoom {
 					action: 'AUTOMODCHAT ACTIVATE',
 				});
 				// automodchat will always exist
-				this.settings.autoModchat!.active = true;
+				this.settings.autoModchat.active = true;
 			}, time * 60 * 1000);
 		}
 	}
 
 	checkAutoModchat(user: User) {
-		if (this.auth.isStaff(user.id)) {
+		if (user.can('mute', null, this, 'modchat')) {
 			if (this.modchatTimer) {
 				clearTimeout(this.modchatTimer);
 			}
@@ -1123,14 +1168,14 @@ export class GlobalRoomState {
 				title: 'Lobby',
 				auth: {},
 				creationTime: Date.now(),
-				isOfficial: true,
 				autojoin: true,
+				section: 'official',
 			}, {
 				title: 'Staff',
 				auth: {},
 				creationTime: Date.now(),
 				isPrivate: 'hidden',
-				modjoin: '%',
+				modjoin: Users.SECTIONLEADER_SYMBOL,
 				autojoin: true,
 			}];
 		}
@@ -1260,8 +1305,7 @@ export class GlobalRoomState {
 		let section = '';
 		let prevSection = '';
 		let curColumn = 1;
-		for (const i in Dex.formats) {
-			const format = Dex.formats[i];
+		for (const format of Dex.formats.all()) {
 			if (format.section) section = format.section;
 			if (format.column) curColumn = format.column;
 			if (!format.name) continue;
@@ -1277,7 +1321,8 @@ export class GlobalRoomState {
 			if (format.searchShow) displayCode |= 2;
 			if (format.challengeShow) displayCode |= 4;
 			if (format.tournamentShow) displayCode |= 8;
-			const level = format.maxLevel || format.maxForcedLevel || format.forcedLevel;
+			const ruleTable = Dex.formats.getRuleTable(format);
+			const level = ruleTable.adjustLevel || ruleTable.adjustLevelDown || ruleTable.maxLevel;
 			if (level === 50) displayCode |= 16;
 			if (format.gameType === 'multi') {
 				displayCode |= 32;
@@ -1293,14 +1338,15 @@ export class GlobalRoomState {
 		if (Config.rankList) {
 			return Config.rankList;
 		}
-		let rankList = [];
+		const rankList = [];
 
 		for (const rank in Config.groups) {
 			if (!Config.groups[rank] || !rank) continue;
 
 			const tarGroup = Config.groups[rank];
-			const groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
+			let groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
 				'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
+			if (tarGroup.id === 'sectionleader') groupType = 'staff';
 
 			rankList.push({
 				symbol: rank,
@@ -1310,7 +1356,7 @@ export class GlobalRoomState {
 
 		const typeOrder = ['punishment', 'normal', 'staff', 'leadership'];
 
-		rankList = rankList.sort((a, b) => typeOrder.indexOf(b.type) - typeOrder.indexOf(a.type));
+		Utils.sortBy(rankList, rank => -typeOrder.indexOf(rank.type));
 
 		// add the punishment types at the very end.
 		for (const rank in Config.punishgroups) {
@@ -1356,11 +1402,13 @@ export class GlobalRoomState {
 	}
 	getRooms(user: User) {
 		const roomsData: {
-			official: ChatRoomTable[], pspl: ChatRoomTable[], chat: ChatRoomTable[], userCount: number, battleCount: number,
+			chat: ChatRoomTable[],
+			sectionTitles: string[],
+			userCount: number,
+			battleCount: number,
 		} = {
-			official: [],
-			pspl: [],
 			chat: [],
+			sectionTitles: Object.values(RoomSections.sectionNames),
 			userCount: Users.onlineCount,
 			battleCount: this.battleCount,
 		};
@@ -1372,18 +1420,14 @@ export class GlobalRoomState {
 				title: room.title,
 				desc: room.settings.desc || '',
 				userCount: room.userCount,
+				section: room.settings.section ?
+					(RoomSections.sectionNames[room.settings.section] || room.settings.section) : undefined,
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
+			if (room.settings.spotlight) roomData.spotlight = room.settings.spotlight;
 
-			if (room.settings.isOfficial) {
-				roomsData.official.push(roomData);
-			// @ts-ignore
-			} else if (room.pspl) {
-				roomsData.pspl.push(roomData);
-			} else {
-				roomsData.chat.push(roomData);
-			}
+			roomsData.chat.push(roomData);
 		}
 		return roomsData;
 	}
@@ -1412,7 +1456,7 @@ export class GlobalRoomState {
 
 	prepBattleRoom(format: string) {
 		// console.log('BATTLE START BETWEEN: ' + p1.id + ' ' + p2.id);
-		const roomPrefix = `battle-${toID(Dex.getFormat(format).name)}-`;
+		const roomPrefix = `battle-${toID(Dex.formats.get(format).name)}-`;
 		let battleNum = this.lastBattle;
 		let roomid: RoomID;
 		do {
@@ -1442,6 +1486,9 @@ export class GlobalRoomState {
 		if (Config.logladderip && options.rated) {
 			const ladderIpLogString = players.map(p => `${p.id}: ${p.latestIp}\n`).join('');
 			void this.ladderIpLog.write(ladderIpLogString);
+		}
+		for (const player of players) {
+			Chat.runHandlers('BattleStart', player, room);
 		}
 	}
 
@@ -1607,9 +1654,11 @@ export class GlobalRoomState {
 		this.lastReportedCrash = time;
 
 		const stack = (err && (err.stack || err.message || err.name)) || '';
-		const stackLines = Utils.escapeHTML(stack).split(`\n`);
+		const [stackFirst, stackRest] = Utils.splitFirst(Utils.escapeHTML(stack), `<br />`);
+		let fullStack = `<b>${crasher} crashed:</b> ` + stackFirst;
+		if (stackRest) fullStack = `<details class="readmore"><summary>${fullStack}</summary>${stackRest}</details>`;
 
-		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stackLines.slice(1).join('<br />')}</details></div>`;
+		let crashMessage = `|html|<div class="broadcast-red">${fullStack}</div>`;
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
@@ -1675,7 +1724,7 @@ export class ChatRoom extends BasicRoom {
 }
 
 export class GameRoom extends BasicRoom {
-	readonly type: 'battle';
+	declare readonly type: 'battle';
 	readonly format: string;
 	p1: User | null;
 	p2: User | null;
@@ -1686,10 +1735,9 @@ export class GameRoom extends BasicRoom {
 	 * 0 for unrated battles. 1 for unknown ratings.
 	 */
 	rated: number;
-	battle: RoomBattle | null;
-	game: RoomGame;
+	declare battle: RoomBattle | null;
+	declare game: RoomGame;
 	modchatUser: string;
-	active: boolean;
 	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
@@ -1782,7 +1830,7 @@ export class GameRoom extends BasicRoom {
 		if (!battle) return;
 
 		// retrieve spectator log (0) if there are privacy concerns
-		const format = Dex.getFormat(this.format, true);
+		const format = Dex.formats.get(this.format, true);
 
 		// custom games always show full details
 		// random-team battles show full details if the battle is ended
@@ -1833,9 +1881,7 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
-	MODLOG_PATH,
-	MODLOG_DB_PATH,
-	Modlog: mainModlog,
+	Modlog: new Modlog(MODLOG_PATH, MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions}),
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
@@ -1856,7 +1902,7 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
-	createChatRoom(roomid: RoomID, title: string, options: AnyObject) {
+	createChatRoom(roomid: RoomID, title: string, options: Partial<RoomSettings>) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		const room: ChatRoom = new (BasicRoom as any)(roomid, title, options);
 		Rooms.rooms.set(roomid, room);
@@ -1865,7 +1911,7 @@ export const Rooms = {
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
 		const players: User[] = [options.p1, options.p2, options.p3, options.p4]
 			.filter(Boolean).map(player => player!.user);
-		const gameType = Dex.getFormat(options.format).gameType;
+		const gameType = Dex.formats.get(options.format).gameType;
 		if (gameType !== 'multi' && gameType !== 'freeforall') {
 			if (players.length > 2) {
 				throw new Error(`Four players were provided, but the format is a two-player format.`);
@@ -1926,36 +1972,7 @@ export const Rooms = {
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		const battle = new Rooms.RoomBattle(room, options);
 		room.game = battle;
-		// Special battles have modchat set to Player from the beginning
-		if (p1Special) room.settings.modchat = '\u2606';
-
-		let inviteOnly = false;
-		const privacySetter = new Set<ID>([]);
-		for (const p of ['p1', 'p2', 'p3', 'p4'] as const) {
-			const playerOptions = options[p];
-			if (playerOptions && playerOptions.inviteOnly) {
-				inviteOnly = true;
-				privacySetter.add(playerOptions.user.id);
-			} else if (playerOptions && playerOptions.hidden) {
-				privacySetter.add(playerOptions.user.id);
-			}
-		}
-
-		if (privacySetter.size) {
-			if (battle.forcePublic) {
-				room.setPrivate(false);
-				room.settings.modjoin = null;
-				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name starting with '${battle.forcePublic}'.</div>`);
-			} else if (!options.tour || (room.tour?.allowModjoin)) {
-				room.setPrivate('hidden');
-				if (inviteOnly) room.settings.modjoin = '%';
-				room.privacySetter = privacySetter;
-				if (inviteOnly) {
-					room.settings.modjoin = '%';
-					room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
-				}
-			}
-		}
+		battle.checkPrivacySettings(options);
 
 		for (const p of players) {
 			if (p) {

@@ -127,6 +127,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "Al momento, questo ${Config.groups[targetUser.group].name} è troppo impegnato per rispondere ai messaggi privati. Per favore, contatta un altro membro dello staff.",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "Se hai bisogno di aiuto, prova ad aprire un <a href=\"view-help-request\" class=\"button\">ticket help</a>",
 		"You are blocking private messages right now.": "In questo momento stai bloccando i messaggi privati.",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "Il tuo messaggio conteneva una o più parole non permesse in questa room.",
 		"You can't send the same message again so soon.": "Non puoi inviare lo stesso messaggio di nuovo dopo così poco tempo",
@@ -142,10 +143,12 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "Stai già bloccando le sfide!",
 		"You are already available for challenges!": "Sei già disponibile per le sfide!",
 		"You are available for challenges from now on.": "Da questo momento in poi, sei disponibile per le sfide.",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "FAQ relative allo Staff",
 		"You cannot broadcast all FAQs at once.": "Non puoi mostrare tutte le FAQ in una volta.",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat. However, staff are not obligated to disable modchat": "Un utente è \"autoconfirmed\" quando ha vinto almeno una lotta a punti ed è registrato da una o più settimane. In modo da prevenire episodi di spam e trolling, la maggior parte delle chatroom permette unicamente agli utenti autoconfirmed di parlare. Nel caso in cui tu non sia autoconfirmed, chiedi educatamente ad un membro dello staff (lo staff è contrassegnato dai simboli %, @ o # vicino al loro nome utente) della room nella quale vuoi parlare e chiedi loro di disattivare la modchat. Tuttavia, lo staff non è in alcun modo obbligato a disattivare la modchat.",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "Un utente è \"autoconfirmed\" quando ha vinto almeno una lotta a punti ed è registrato da una o più settimane. In modo da prevenire episodi di spam e trolling, la maggior parte delle chatroom permette unicamente agli utenti autoconfirmed di parlare. Nel caso in cui tu non sia autoconfirmed, chiedi educatamente ad un membro dello staff (lo staff è contrassegnato dai simboli %, @ o # vicino al loro nome utente) della room nella quale vuoi parlare e chiedi loro di disattivare la modchat. Tuttavia, lo staff non è in alcun modo obbligato a disattivare la modchat.",
 		"How the ladder works": "Come funziona la ladder",
 		"Tiering FAQ": "FAQ relative al Tiering",
 		"Badge FAQ": "FAQ relative alle Badge",
@@ -157,5 +160,10 @@ export const translations: Translations = {
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
 	},
 };

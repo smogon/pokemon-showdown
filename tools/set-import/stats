@@ -5,7 +5,8 @@
 
 'use strict';
 
-const Dex = require('../../.sim-dist/dex').Dex;
+require('ts-node').register();
+const Dex = require('../../sim/dex').Dex;
 global.toID = Dex.getId;
 
 const smogon = require('smogon');
@@ -14,7 +15,7 @@ const importer = require('./importer');
 const formats = new Map();
 for (let gen = 1; gen <= 8; gen++) {
 	for (const tier of importer.TIERS) {
-		const format = Dex.getFormat(`gen${gen}${tier}`);
+		const format = Dex.formats.get(`gen${gen}${tier}`);
 		if (format.exists) {
 			formats.set(format.id, {});
 		}

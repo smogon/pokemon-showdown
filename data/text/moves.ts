@@ -603,6 +603,9 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "If this attack does not miss and whether or not the target is immune, the effects of Reflect and Light Screen end for the target's side of the field before damage is calculated.",
 			shortDesc: "Destroys screens, even if the target is immune.",
 		},
+		gen3: {
+			desc: "If this attack does not miss and whether or not the target is immune, the effects of Reflect and Light Screen end for the opponent's side of the field before damage is calculated.",
+		},
 
 		activate: "  [POKEMON] shattered [TEAM]'s protections!",
 	},
@@ -948,6 +951,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		shortDesc: "Removes adjacent Pokemon's held items.",
 
+		fail: "#healblock",
 		removeItem: "  [SOURCE] corroded [POKEMON]'s [ITEM]!",
 	},
 	cosmicpower: {
@@ -1181,9 +1185,9 @@ export const MovesText: {[k: string]: MoveText} = {
 	diamondstorm: {
 		name: "Diamond Storm",
 		desc: "Has a 50% chance to raise the user's Defense by 2 stages.",
-		shortDesc: "50% chance to raise user's Def by 2 for each hit.",
+		shortDesc: "50% chance to raise user's Defense by 2.",
 		gen6: {
-			desc: "Has a 50% chance to raise the user's Defense by 1 stage.",
+			desc: "Has a 50% chance to raise the user's Defense by 1 stage for each hit.",
 			shortDesc: "50% chance to raise user's Def by 1 for each hit.",
 		},
 	},
@@ -4952,12 +4956,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	sandstorm: {
 		name: "Sandstorm",
 		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
-		shortDesc: "For 5 turns, a sandstorm rages.",
+		shortDesc: "For 5 turns, a sandstorm rages. Rock: 1.5x SpD.",
 		gen4: {
 			desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
 		},
 		gen3: {
 			desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Sand Veil Ability. Fails if the current weather is Sandstorm.",
+			shortDesc: "For 5 turns, a sandstorm rages.",
 		},
 		gen2: {
 			desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/8 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type. Fails if the current weather is Sandstorm.",

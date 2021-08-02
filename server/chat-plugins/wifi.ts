@@ -6,7 +6,7 @@
 
 import {FS, Utils} from '../../lib';
 
-Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
+Punishments.addRoomPunishmentType('GIVEAWAYBAN', 'banned from giveaways');
 
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
@@ -108,11 +108,16 @@ class Giveaway {
 	}
 
 	static checkBanned(room: Room, user: User) {
-		return Punishments.getRoomPunishType(room, toID(user)) === 'GIVEAWAYBAN';
+		return Punishments.hasRoomPunishType(room, toID(user), 'GIVEAWAYBAN');
 	}
 
 	static ban(room: Room, user: User, reason: string) {
-		Punishments.roomPunish(room, user, ['GIVEAWAYBAN', toID(user), Date.now() + BAN_DURATION, reason]);
+		Punishments.roomPunish(room, user, {
+			type: 'GIVEAWAYBAN',
+			id: toID(user),
+			expireTime: Date.now() + BAN_DURATION,
+			reason,
+		});
 	}
 
 	static unban(room: Room, user: User) {
@@ -121,41 +126,41 @@ class Giveaway {
 
 	static getSprite(text: string): [Set<string>, string] {
 		text = toPokemonId(text);
-		const mons = new Map();
+		const mons = new Map<string, Species>();
 		let output = '';
-		const monIDs: Set<string> = new Set();
-		for (const i in Dex.data.Pokedex) {
-			let id = i;
-			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].name.includes(' '))) {
-				id = toPokemonId(Dex.data.Pokedex[i].name);
+		const monIDs = new Set<string>();
+		for (const species of Dex.species.all()) {
+			let id: string = species.id;
+			if (species.baseSpecies === species.name && species.name.includes(' ')) {
+				id = toPokemonId(species.name);
 			}
 			const regexp = new RegExp(`\\b${id}\\b`);
 			if (regexp.test(text)) {
-				const mon = Dex.getSpecies(i);
+				const mon = Dex.species.get(species.id);
 				mons.set(mon.baseSpecies, mon);
 			}
 		}
 		// the previous regex doesn't match "nidoran-m" or "nidoran male"
 		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-M', Dex.getSpecies('nidoranm'));
+			mons.set('Nidoran-M', Dex.species.get('nidoranm'));
 		}
 		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-F', Dex.getSpecies('nidoranf'));
+			mons.set('Nidoran-F', Dex.species.get('nidoranf'));
 		}
 		text = toID(text);
 		if (mons.size) {
-			for (const [key, value] of mons) {
-				let spriteid = value.spriteid;
-				if (value.cosmeticFormes) {
-					for (const forme of value.cosmeticFormes.map(toID)) {
+			for (const [name, species] of mons) {
+				let spriteid = species.spriteid;
+				if (species.cosmeticFormes) {
+					for (const forme of species.cosmeticFormes.map(toID)) {
 						if (text.includes(forme)) {
-							spriteid += '-' + forme.slice(key.length);
+							spriteid += '-' + forme.slice(name.length);
 							break; // We don't want to end up with deerling-summer-spring
 						}
 					}
 				}
-				if (value.otherFormes) {
-					for (const forme of value.otherFormes.map(toID)) {
+				if (species.otherFormes) {
+					for (const forme of species.otherFormes.map(toID)) {
 						// Allow "alolan <name>" to match as well.
 						if (forme.endsWith('alola')) {
 							if (/alolan?/.test(text)) {
@@ -171,7 +176,7 @@ class Giveaway {
 							}
 						}
 						if (text.includes(forme)) {
-							spriteid += '-' + forme.substr(key.length);
+							spriteid += '-' + forme.substr(name.length);
 							break; // We don't want to end up with landorus-therian-therian
 						}
 					}
@@ -626,7 +631,7 @@ export class GTSGiveaway {
 	}
 }
 
-const cmds: ChatCommands = {
+const cmds: Chat.ChatCommands = {
 	// question giveaway.
 	quiz: 'question',
 	qg: 'question',
@@ -844,32 +849,28 @@ const cmds: ChatCommands = {
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		target = this.splitTarget(target, false);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
-		if (target.length > 300) {
+		const {targetUser, rest: reason} = this.requireUser(target, {allowOffline: true});
+		if (reason.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		if (Punishments.getRoomPunishType(room, this.targetUsername)) {
-			return this.errorReply(`User '${this.targetUsername}' is already punished in this room.`);
+		if (Punishments.hasRoomPunishType(room, targetUser.name, 'GIVEAWAYBAN')) {
+			return this.errorReply(`User '${targetUser.name}' is already giveawaybanned.`);
 		}
 
-		Giveaway.ban(room, targetUser, target);
+		Giveaway.ban(room, targetUser, reason);
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
-		this.modlog('GIVEAWAYBAN', targetUser, target);
-		if (target) target = ` (${target})`;
-		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${target}`);
+		this.modlog('GIVEAWAYBAN', targetUser, reason);
+		const reasonMessage = reason ? ` (${reason})` : ``;
+		this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${reasonMessage}`);
 	},
 	unban(target, room, user) {
 		if (!target) return false;
 		room = this.requireRoom('wifi' as RoomID);
 		this.checkCan('warn', null, room);
 
-		this.splitTarget(target, false);
-		const targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		const {targetUser} = this.requireUser(target, {allowOffline: true});
 		if (!Giveaway.checkBanned(room, targetUser)) {
-			return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
+			return this.errorReply(`User '${targetUser.name}' isn't banned from entering giveaways.`);
 		}
 
 		Giveaway.unban(room, targetUser);

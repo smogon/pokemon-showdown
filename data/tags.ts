@@ -1,8 +1,12 @@
 interface TagData {
 	name: string;
 	desc?: string;
-	pokemonFilter?: (species: Species) => boolean;
+	speciesFilter?: (species: Species) => boolean;
 	moveFilter?: (move: Move) => boolean;
+	genericFilter?: (thing: Species | Move | Item | Ability) => boolean;
+	speciesNumCol?: (species: Species) => number;
+	moveNumCol?: (move: Move) => number;
+	genericNumCol?: (thing: Species | Move | Item | Ability) => number;
 }
 
 export const Tags: {[id: string]: TagData} = {
@@ -28,7 +32,19 @@ export const Tags: {[id: string]: TagData} = {
 	// ------------
 	mega: {
 		name: "Mega",
-		pokemonFilter: species => !!species.isMega,
+		speciesFilter: species => !!species.isMega,
+	},
+	mythical: {
+		name: "Mythical",
+		speciesFilter: species => species.tags.includes("Mythical"),
+	},
+	sublegendary: {
+		name: "Sub-Legendary",
+		speciesFilter: species => species.tags.includes("Sub-Legendary"),
+	},
+	restrictedlegendary: {
+		name: "Restricted Legendary",
+		speciesFilter: species => species.tags.includes("Restricted Legendary"),
 	},
 
 	// Move tags
@@ -110,120 +126,199 @@ export const Tags: {[id: string]: TagData} = {
 	// -----
 	uber: {
 		name: "Uber",
-		pokemonFilter: species => species.tier === 'Uber',
+		speciesFilter: species => species.tier === 'Uber' || species.tier === '(Uber)' || species.tier === 'AG',
 	},
 	ou: {
 		name: "OU",
-		pokemonFilter: species => species.tier === 'OU',
+		speciesFilter: species => species.tier === 'OU' || species.tier === '(OU)',
 	},
 	uubl: {
 		name: "UUBL",
-		pokemonFilter: species => species.tier === 'UUBL',
+		speciesFilter: species => species.tier === 'UUBL',
 	},
 	uu: {
 		name: "UU",
-		pokemonFilter: species => species.tier === 'UU',
+		speciesFilter: species => species.tier === 'UU',
 	},
 	rubl: {
 		name: "RUBL",
-		pokemonFilter: species => species.tier === 'RUBL',
+		speciesFilter: species => species.tier === 'RUBL',
 	},
 	ru: {
 		name: "RU",
-		pokemonFilter: species => species.tier === 'RU',
+		speciesFilter: species => species.tier === 'RU',
 	},
 	nubl: {
 		name: "NUBL",
-		pokemonFilter: species => species.tier === 'NUBL',
+		speciesFilter: species => species.tier === 'NUBL',
 	},
 	nu: {
 		name: "NU",
-		pokemonFilter: species => species.tier === 'NU',
+		speciesFilter: species => species.tier === 'NU',
 	},
 	publ: {
 		name: "PUBL",
-		pokemonFilter: species => species.tier === 'PUBL',
+		speciesFilter: species => species.tier === 'PUBL',
 	},
 	pu: {
 		name: "PU",
-		pokemonFilter: species => species.tier === 'PU',
+		speciesFilter: species => species.tier === 'PU' || species.tier === '(NU)',
 	},
 	zu: {
 		name: "ZU",
-		pokemonFilter: species => species.tier === '(PU)',
+		speciesFilter: species => species.tier === '(PU)',
 	},
 	nfe: {
 		name: "NFE",
-		pokemonFilter: species => species.tier === 'NFE',
+		speciesFilter: species => species.tier === 'NFE',
 	},
 	lc: {
 		name: "LC",
-		pokemonFilter: species => species.doublesTier === 'LC',
+		speciesFilter: species => species.doublesTier === 'LC',
 	},
-	cap: {
-		name: "CAP",
-		pokemonFilter: species => species.tier === 'CAP',
+	captier: {
+		name: "CAP Tier",
+		speciesFilter: species => species.isNonstandard === 'CAP',
 	},
 	caplc: {
 		name: "CAP LC",
-		pokemonFilter: species => species.tier === 'CAP LC',
+		speciesFilter: species => species.tier === 'CAP LC',
 	},
 	capnfe: {
 		name: "CAP NFE",
-		pokemonFilter: species => species.tier === 'CAP NFE',
+		speciesFilter: species => species.tier === 'CAP NFE',
 	},
 	ag: {
 		name: "AG",
-		pokemonFilter: species => species.tier === 'AG',
+		speciesFilter: species => species.tier === 'AG',
+	},
+	nduubl: {
+		name: "ND UUBL",
+		speciesFilter: species => [
+			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Gyarados-Mega', 'Hawlucha',
+			'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Latias', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Pinsir-Mega', 'Sableye-Mega',
+			'Slowbro-Mega', 'Thundurus', 'Thundurus-Therian', 'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
+		].includes(species.name),
 	},
 
 	// Doubles tiers
 	// -------------
 	duber: {
 		name: "DUber",
-		pokemonFilter: species => species.doublesTier === 'DUber',
+		speciesFilter: species => species.doublesTier === 'DUber' || species.doublesTier === '(DUber)',
 	},
 	dou: {
 		name: "DOU",
-		pokemonFilter: species => species.doublesTier === 'DOU',
+		speciesFilter: species => species.doublesTier === 'DOU',
 	},
 	dbl: {
 		name: "DBL",
-		pokemonFilter: species => species.doublesTier === 'DBL',
+		speciesFilter: species => species.doublesTier === 'DBL',
 	},
 	duu: {
 		name: "DUU",
-		pokemonFilter: species => species.doublesTier === 'DUU',
+		speciesFilter: species => species.doublesTier === 'DUU',
 	},
 	dnu: {
 		name: "DNU",
-		pokemonFilter: species => species.doublesTier === '(DUU)',
+		speciesFilter: species => species.doublesTier === '(DUU)',
 	},
 
 	// Legality tags
 	past: {
 		name: "Past",
-		pokemonFilter: species => species.isNonstandard === 'Past',
-		moveFilter: move => move.isNonstandard === 'Past',
+		genericFilter: thing => thing.isNonstandard === 'Past',
 	},
 	future: {
 		name: "Future",
-		pokemonFilter: species => species.isNonstandard === 'Future',
-		moveFilter: move => move.isNonstandard === 'Future',
-	},
-	unobtainable: {
-		name: "Unobtainable",
-		pokemonFilter: species => species.isNonstandard === 'Unobtainable',
-		moveFilter: move => move.isNonstandard === 'Unobtainable',
+		genericFilter: thing => thing.isNonstandard === 'Future',
 	},
 	lgpe: {
 		name: "LGPE",
-		pokemonFilter: species => species.isNonstandard === 'LGPE',
-		moveFilter: move => move.isNonstandard === 'LGPE',
+		genericFilter: thing => thing.isNonstandard === 'LGPE',
+	},
+	unobtainable: {
+		name: "Unobtainable",
+		genericFilter: thing => thing.isNonstandard === 'Unobtainable',
+	},
+	cap: {
+		name: "CAP",
+		speciesFilter: thing => thing.isNonstandard === 'CAP',
 	},
 	custom: {
 		name: "Custom",
-		pokemonFilter: species => species.isNonstandard === 'Custom',
-		moveFilter: move => move.isNonstandard === 'Custom',
+		genericFilter: thing => thing.isNonstandard === 'Custom',
+	},
+	nonexistent: {
+		name: "Nonexistent",
+		genericFilter: thing => !!thing.isNonstandard && thing.isNonstandard !== 'Unobtainable',
+	},
+
+	// filter columns
+	// --------------
+	introducedgen: {
+		name: "Introduced Gen",
+		genericNumCol: thing => thing.gen,
+	},
+
+	height: {
+		name: "Height",
+		speciesNumCol: species => species.heightm,
+	},
+	weight: {
+		name: "Weight",
+		speciesNumCol: species => species.weightkg,
+	},
+	hp: {
+		name: "HP",
+		desc: "Hit Points",
+		speciesNumCol: species => species.baseStats.hp,
+	},
+	atk: {
+		name: "Atk",
+		desc: "Attack",
+		speciesNumCol: species => species.baseStats.atk,
+	},
+	def: {
+		name: "Def",
+		desc: "Defense",
+		speciesNumCol: species => species.baseStats.def,
+	},
+	spa: {
+		name: "SpA",
+		desc: "Special Attack",
+		speciesNumCol: species => species.baseStats.spa,
+	},
+	spd: {
+		name: "SpD",
+		desc: "Special Defense",
+		speciesNumCol: species => species.baseStats.spd,
+	},
+	spe: {
+		name: "Spe",
+		desc: "Speed",
+		speciesNumCol: species => species.baseStats.spe,
+	},
+	bst: {
+		name: "BST",
+		desc: "Base Stat Total",
+		speciesNumCol: species => species.bst,
+	},
+
+	basepower: {
+		name: "Base Power",
+		moveNumCol: move => move.basePower,
+	},
+	priority: {
+		name: "Priority",
+		moveNumCol: move => move.priority,
+	},
+	accuracy: {
+		name: "Accuracy",
+		moveNumCol: move => move.accuracy === true ? 101 : move.accuracy,
+	},
+	maxpp: {
+		name: "Max PP",
+		moveNumCol: move => move.pp,
 	},
 };

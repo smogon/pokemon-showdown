@@ -13,6 +13,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 	},
+	pokemon: {
+		inherit: true,
+		getActionSpeed() {
+			let speed = this.getStat('spe', false, false);
+			if (this.battle.field.getPseudoWeather('trickroom')) {
+				speed = -speed;
+			}
+			if (this.battle.quickClawRoll && this.hasItem('quickclaw')) {
+				speed = 65535;
+			}
+			return speed;
+		},
+	},
 	actions: {
 		inherit: true,
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
@@ -140,7 +153,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
-			if (sourceEffect) attrs += `|[from]${this.dex.getEffect(sourceEffect)}`;
+			if (sourceEffect) attrs += `|[from]${this.dex.conditions.get(sourceEffect)}`;
 			this.battle.addMove('move', pokemon, movename, target + attrs);
 
 			if (!target) {
@@ -385,7 +398,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				let nullDamage = true;
 				let moveDamage: number | undefined | false;
 				// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
-				const isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
+				const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 				let i: number;
 				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 					if (pokemon.status === 'slp' && !isSleepUsable) break;

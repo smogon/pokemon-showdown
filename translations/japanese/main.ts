@@ -127,6 +127,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "メッセージにこの部屋の禁止ワードが入っています。",
 		"You can't send the same message again so soon.": "高頻度で同じメッセージを送ることはできません。",
@@ -142,6 +143,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "すでに対戦の申し込みをブロックしています。",
 		"You are already available for challenges!": "現在対戦の申し込みをブロックしていません。",
 		"You are available for challenges from now on.": "対戦の申し込みのブロックを解除しました。",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "",
 		"You cannot broadcast all FAQs at once.": "",
@@ -157,5 +160,10 @@ export const translations: Translations = {
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
 	},
 };

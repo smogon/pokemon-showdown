@@ -1,4 +1,4 @@
-export const Formats: {[k: string]: ModdedFormatData} = {
+export const Rulesets: {[k: string]: ModdedFormatData} = {
 	standard: {
 		inherit: true,
 		ruleset: [
@@ -12,5 +12,18 @@ export const Formats: {[k: string]: ModdedFormatData} = {
 			// Sucker Punch: Huntail Gen 4 tutor
 			'Huntail + Shell Smash + Sucker Punch',
 		],
+	},
+	teampreview: {
+		inherit: true,
+		onTeamPreview() {
+			this.add('clearpoke');
+			for (const pokemon of this.getAllPokemon()) {
+				const details = pokemon.details.replace(', shiny', '')
+					.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally|Zacian|Zamazenta|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
+				const item = pokemon.item.includes('mail') ? 'mail' : pokemon.item ? 'item' : '';
+				this.add('poke', pokemon.side.id, details, item);
+			}
+			this.makeRequest('teampreview');
+		},
 	},
 };
