@@ -26,10 +26,6 @@ const searches = new Map<string, {
 	/** userid:BattleReady */
 	searches: Map<ID, BattleReady>,
 }>();
-/**
- * Map<to, Map<from, formatid>>
- */
-const requests = new Map<string, Map<string, ID>>();
 
 /**
  * This keeps track of searches for battles, creating a new battle for a newly
@@ -147,7 +143,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		if (Dex.getFormat(this.formatid).gameType === 'multi' && !noPartner) {
+		if (Dex.formats.get(this.formatid).gameType === 'multi' && !noPartner) {
 			if (!user.battleSettings.teammate) {
 				connection.popup(`You must have a teammate consent to play with you before playing this tier.`);
 				return null;
@@ -535,7 +531,6 @@ export const Ladders = Object.assign(getLadder, {
 
 	searches,
 	challenges,
-	requests,
 	periodicMatchInterval,
 
 	// tells the client to ask the server for format information

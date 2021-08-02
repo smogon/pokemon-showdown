@@ -31,12 +31,10 @@ export class BattleReady {
 		this.time = Date.now();
 	}
 	static averageRatings(readies: BattleReady[]) {
-		const combined = readies.map(r => r.rating).reduce((cur, prev) => cur + prev);
-		const newRating = combined / readies.length;
+		const average = Math.round(readies.map(r => r.rating).reduce((a, b) => a + b) / readies.length);
 		for (const ready of readies) {
-			(ready as any).rating = newRating;
+			(ready as any).rating = average;
 		}
-		return newRating;
 	}
 }
 
