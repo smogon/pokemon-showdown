@@ -93,9 +93,9 @@ export const GitHub = new class {
 			const repoName = this.getRepoName(repo);
 			const id = commit.id.substring(0, 6);
 			messages.development.push(
-				Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href=\"${url}\"><span style="color:#606060">${id}</span></a> ${message} <span style="color:#909090">(${username})</span>`
+				Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}"><span style="color:#606060">${id}</span></a> ${message} <span style="color:#909090">(${username})</span>`
 			);
-			messages.staff.push(Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href=\"${url}\">${message}</a> <span style="color:#909090">(${username})</span>`);
+			messages.staff.push(Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}">${message}</a> <span style="color:#909090">(${username})</span>`);
 		}
 		for (const k in messages) {
 			this.report(k as RoomID, repo, messages[k as RoomID]);
@@ -111,7 +111,7 @@ export const GitHub = new class {
 		const userName = this.getUsername(result.sender.login);
 		const title = result.pull_request.title;
 		let buf = Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <span style="color:#909090">${userName}</span> `;
-		buf += Utils.html`${action} <a href=\"${url}\">PR#${result.number}</a>: ${title}`;
+		buf += Utils.html`${action} <a href="${url}">PR#${result.number}</a>: ${title}`;
 		this.report('development', repo, buf);
 	}
 	report(roomid: RoomID, repo: string, messages: string[] | string) {
@@ -171,7 +171,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			gitData.bans[toID(username)] = reason || " "; // to ensure it's truthy
 			GitHub.save();
-			this.privateModAction(`${user.name} banned their GitHub user ${username} from having their GitHub actions reported to this room.`);
+			this.privateModAction(`${user.name} banned the GitHub user ${username} from having their GitHub actions reported to this server.`);
 			this.modlog('GITHUB BAN', username, reason);
 		},
 		unban(target, room, user) {
@@ -183,7 +183,7 @@ export const commands: Chat.ChatCommands = {
 			delete gitData.bans[target];
 			if (!Object.keys(gitData.bans).length) delete gitData.bans;
 			GitHub.save();
-			this.privateModAction(`${user.name} allowed the GitHub user ${target} to have their GitHub actions reported to this room.`);
+			this.privateModAction(`${user.name} allowed the GitHub user ${target} to have their GitHub actions reported to this server.`);
 			this.modlog('GITHUB UNBAN', target);
 		},
 		bans() {
@@ -200,7 +200,7 @@ export const commands: Chat.ChatCommands = {
 			if (!gitData.usernames) gitData.usernames = {};
 			gitData.usernames[toID(gitName)] = username;
 			GitHub.save();
-			this.privateModAction(`${user.name} set ${gitName}'s name on GitHub actions to be ${username}.`);
+			this.privateModAction(`${user.name} set ${gitName}'s name on reported GitHub actions to be ${username}.`);
 			this.modlog('GITHUB SETNAME', null, `'${gitName}' to '${username}'`);
 		},
 		clearname: 'removeusername',
