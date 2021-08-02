@@ -47,7 +47,7 @@ import {FS, Utils, ProcessManager} from '../lib';
 import {
 	Auth, GlobalAuth, SECTIONLEADER_SYMBOL, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission,
 } from './user-groups';
-import {BattleReady} from './ladders';
+import {BattleReady} from './ladders-challenges';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
