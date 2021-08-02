@@ -746,9 +746,9 @@ class Mafia extends Rooms.RoomGame {
 		this.hasPlurality = null;
 		if (this.getHammerValue(target) <= vote.trueCount) {
 			// HAMMER
-			this.sendDeclare(`Hammer! ${target === 'nolynch' ? 'Nobody' : Utils.escapeHTML(name)} was voted out!`);
+			this.sendDeclare(`Hammer! ${target === 'novote' ? 'Nobody' : Utils.escapeHTML(name)} was voted out!`);
 			this.sendRoom(`|raw|<div class="infobox">${this.voteBox()}</div>`);
-			if (target !== 'nolynch') this.eliminate(target, 'kill');
+			if (target !== 'novote') this.eliminate(target, 'kill');
 			this.night(true);
 			return;
 		}
