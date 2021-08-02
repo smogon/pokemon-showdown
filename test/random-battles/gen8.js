@@ -107,6 +107,13 @@ describe('[Gen 8] Random Battle', () => {
 	it('Landorus-Therian should not get Fly and Stealth Rock on the same set', () => {
 		testNotBothMoves('landorustherian', options, 'fly', 'stealthrock');
 	});
+
+	it('3 Attacks Scyther should get Heavy-Duty Boots', () => {
+		testSet('scyther', options, set => {
+			if (set.moves.every(move => Dex.moves.get(move).category !== 'Status')) return;
+			assert.equal(set.item, 'Heavy-Duty Boots', `set=${JSON.stringify(set)}`);
+		});
+	});
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
