@@ -21,6 +21,9 @@ const STATUS_TITLES: {[k: string]: string} = {
 	offline: 'Offline',
 };
 
+// once every 15 minutes
+const LOGIN_NOTIFY_THROTTLE = 15 * 60 * 1000;
+
 export const Friends = new class {
 	async notifyPending(user: User) {
 		if (user.settings.blockFriendRequests) return;
@@ -47,7 +50,7 @@ export const Friends = new class {
 	}
 	async notifyConnection(user: User) {
 		const connected = await Chat.Friends.getLastLogin(user.id);
-		if (connected && (Date.now() - connected) < 2 * 60 * 1000) {
+		if (connected && (Date.now() - connected) < LOGIN_NOTIFY_THROTTLE) {
 			return;
 		}
 		const friends = await Chat.Friends.getFriends(user.id);
