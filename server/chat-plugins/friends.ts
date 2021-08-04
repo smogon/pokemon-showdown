@@ -613,8 +613,11 @@ export const pages: Chat.PageTable = {
 			for (const friend of friends) {
 				const curBattles: [User, string][] = [...friend.inRooms]
 					.filter(id => {
-						const room = Rooms.get(id)?.battle;
-						return room && (!room.roomid.endsWith('pw') || friend.settings.displayBattlesToFriends);
+						const battle = Rooms.get(id)?.battle;
+						return (
+							battle && battle.playerTable[friend.id] &&
+							(!battle.roomid.endsWith('pw') || friend.settings.displayBattlesToFriends)
+						);
 					})
 					.map(id => [friend, id]);
 				if (!curBattles.length) continue;
