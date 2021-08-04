@@ -1089,7 +1089,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 									if (prevo.evos.includes(formeName)) continue;
 								}
 								const forme = dex.species.get(formeName);
-								if (forme.changesFrom === originalForme.name && !forme.battleOnly) {
+								if (
+									forme.changesFrom === originalForme.name && !forme.battleOnly &&
+									// Temporary workaround
+									forme.forme !== 'Crowned'
+								) {
 									speciesTypes.push(...forme.types);
 								}
 							}
@@ -1117,14 +1121,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 		checkCanLearn(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
-				const letters = [species.id[0]];
+				const letters = [species.id.charAt(0)];
 				let prevo = species.prevo;
+				if (species.changesFrom === 'Silvally') prevo = 'Type: Null';
 				while (prevo) {
 					const prevoSpecies = this.dex.species.get(prevo);
-					letters.push(prevoSpecies.id[0]);
+					letters.push(prevoSpecies.id.charAt(0));
 					prevo = prevoSpecies.prevo;
 				}
-				if (letters.includes(move.id[0])) return null;
+				if (letters.includes(move.id.charAt(0))) return null;
 			}
 			return this.checkCanLearn(move, species, setSources, set);
 		},
