@@ -9,7 +9,7 @@
  */
 
 import {FS, SQL} from '../../lib';
-import type {DatabaseWrapper, SQLOptions} from '../../lib/sql';
+import type {SQLDatabaseManager, SQLOptions} from '../../lib/sql';
 import {formatSQLArray} from '../../lib/utils';
 
 // If a modlog query takes longer than this, it will be logged.
@@ -46,7 +46,7 @@ interface ModlogResults {
 }
 
 interface ModlogSQLQuery<T> {
-	statement: number;
+	statement: string;
 	queryText: string;
 	args: T[];
 	returnsResults?: boolean;
@@ -78,23 +78,23 @@ export interface ModlogEntry {
 
 export interface TransactionArguments extends Record<string, unknown> {
 	entries: Iterable<ModlogEntry>;
-	modlogInsertionStatement: number;
-	altsInsertionStatement: number;
+	modlogInsertionStatement: string;
+	altsInsertionStatement: string;
 }
 
 export type PartialModlogEntry = Partial<ModlogEntry> & {action: string};
 
 export class Modlog {
-	readonly database?: DatabaseWrapper;
+	readonly database?: SQLDatabaseManager;
 	readyPromise: Promise<void> | null;
 	private databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
 
-	modlogInsertionQuery?: number;
-	altsInsertionQuery?: number;
-	renameQuery?: number;
-	globalPunishmentsSearchQuery?: number;
+	modlogInsertionQuery: string | null = null;
+	altsInsertionQuery: string | null = null;
+	renameQuery: string | null = null;
+	globalPunishmentsSearchQuery: string | null = null;
 
 	constructor(databasePath: string, sqliteOptions?: Partial<SQLOptions>) {
 		this.queuedEntries = [];
@@ -102,7 +102,8 @@ export class Modlog {
 
 		if (Config.usesqlite) {
 			const dbExists = FS(databasePath).existsSync();
-			this.database = SQL({
+			// if (process.send) console.log('trying db?');
+			this.database = SQL(module, {
 				file: databasePath,
 				extension: 'server/modlog/transactions.ts',
 				...sqliteOptions,
@@ -119,6 +120,23 @@ export class Modlog {
 				resolve();
 			});
 		}
+		if (this.database) {
+			if (this.database.isParentProcess) {
+				this.database.spawn(Config.modlogprocesses || 1);
+			} else {
+				global.Monitor = {
+					crashlog(error: Error, source = 'A modlog process', details: AnyObject | null = null) {
+						const repr = JSON.stringify([error.name, error.message, source, details]);
+						process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+					},
+				};
+				process.on('uncaughtException', err => {
+					if (Config.crashguard) {
+						Monitor.crashlog(err, 'A modlog child process');
+					}
+				});
+			}
+		}
 	}
 
 	async setupDatabase(dbExists: boolean) {
@@ -132,10 +150,9 @@ export class Modlog {
 			await this.database.runFile(MODLOG_SCHEMA_PATH);
 		}
 
-		const statement = await this.database.prepare(
-			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
-		);
-		const {hasDBInfo} = await this.database.get(statement);
+		const statement = `SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
+		await this.database.prepare(statement);
+		const {hasDBInfo} = await this.database.get(statement, []);
 
 		if (hasDBInfo === 0) {
 			// needs v2 migration
@@ -224,7 +241,7 @@ export class Modlog {
 
 	destroyAllSQLite() {
 		if (!this.database) return;
-		this.database.destroy();
+		void this.database.destroy();
 		this.databaseReady = false;
 	}
 
@@ -364,7 +381,7 @@ export class Modlog {
 		query += ` ${sortAndLimit.query}`;
 		args.push(...sortAndLimit.args);
 
-		return {statement: await this.database.prepare(query), queryText: query, args};
+		return {statement: await this.database.prepare(query) as string, queryText: query, args};
 	}
 
 	async prepareSQLSearch(

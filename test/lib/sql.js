@@ -2,7 +2,7 @@
 const {SQL} = require('../../lib/sql');
 const assert = require('../assert').strict;
 
-const database = SQL(`:memory:`);
+const database = SQL(module, {file: `:memory:`, processes: 1});
 
 describe(`SQLite worker wrapper`, async () => {
 	// prepare statements and set up table

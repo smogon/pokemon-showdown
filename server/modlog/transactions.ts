@@ -7,8 +7,8 @@ import type {TransactionArguments} from '.';
 
 export const transactions = {
 	insertion: (args: TransactionArguments, env: TransactionEnvironment) => {
-		const modlogInsertion = env.statementsMap.get(args.modlogInsertionStatement);
-		const altsInsertion = env.statementsMap.get(args.altsInsertionStatement);
+		const modlogInsertion = env.statements.get(args.modlogInsertionStatement);
+		const altsInsertion = env.statements.get(args.altsInsertionStatement);
 		if (!modlogInsertion) {
 			throw new Error(`Couldn't find prepared statement for provided value (args.modlogInsertionStatement=${args.modlogInsertionStatement}`);
 		}

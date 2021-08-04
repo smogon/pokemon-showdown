@@ -1286,7 +1286,7 @@ export const commands: Chat.ChatCommands = {
 			`<td>${Chat.getReadmoreCodeBlock(query)}</td></tr><table>`
 		);
 		logRoom?.roomlog(`SQLite> ${target}`);
-		const database = SQL(`./databases/${db}.db`);
+		const database = SQL(module, {file: `./databases/${db}.db`});
 		function formatResult(result: any[] | string) {
 			if (!Array.isArray(result)) {
 				return (
@@ -1310,16 +1310,15 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		let result;
-		let statement;
 		try {
-			statement = await database.prepare(query);
+			await database.prepare(query);
 			// presume it's attempting to get data first
-			result = await database.all(statement);
+			result = await database.all(query, []);
 		} catch (err) {
 			// it's not getting data, but it might still be a valid statement - try to run instead
 			if (err.stack?.includes(`Use run() instead`)) {
 				try {
-					result = Utils.visualize(await database.run(statement, []));
+					result = Utils.visualize(await database.run(query, []));
 				} catch (e) {
 					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 				}
@@ -1327,7 +1326,7 @@ export const commands: Chat.ChatCommands = {
 				result = ('' + err.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 			}
 		}
-		database.destroy();
+		await database.destroy();
 		logRoom?.roomlog(`SQLite< ${result}`);
 		this.sendReply(`|html|${formatResult(result)}`);
 	},
