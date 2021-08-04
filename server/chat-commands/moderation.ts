@@ -1201,6 +1201,10 @@ export const commands: Chat.ChatCommands = {
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: &`],
 
 	forceyearlockname: 'yearlockname',
+	yearlockid: 'yearlockname',
+	forceyearlockid: 'yearlockname',
+	yearlockuserid: 'yearlockname',
+	forceyearlockuserid: 'yearlockname',
 	yearlockname(target, room, user) {
 		this.checkCan('rangeban');
 		const [targetUsername, rest] = Utils.splitFirst(target, ',').map(k => k.trim());
