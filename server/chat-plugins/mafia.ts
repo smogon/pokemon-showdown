@@ -105,7 +105,7 @@ Punishments.addRoomPunishmentType('MAFIAHOSTBAN', 'banned from hosting mafia gam
 
 const hostQueue: ID[] = [];
 
-const IDEA_TIMER = 90 * 1000;
+const IDEA_TIMER = 60 * 1000;
 
 function readFile(path: string) {
 	try {
@@ -299,7 +299,7 @@ class Mafia extends Rooms.RoomGame {
 		this.enableNL = true;
 		this.forceVote = false;
 		this.closedSetup = false;
-		this.noReveal = false;
+		this.noReveal = true;
 		this.selfEnabled = false;
 		this.takeIdles = true;
 
@@ -748,7 +748,7 @@ class Mafia extends Rooms.RoomGame {
 			// HAMMER
 			this.sendDeclare(`Hammer! ${target === 'novote' ? 'Nobody' : Utils.escapeHTML(name)} was voted out!`);
 			this.sendRoom(`|raw|<div class="infobox">${this.voteBox()}</div>`);
-			if (target !== 'novote') this.eliminate(this.playerTable[target], 'kill');
+			if (target !== 'novote') this.eliminate(target, 'kill');
 			this.night(true);
 			return;
 		}
@@ -842,9 +842,6 @@ class Mafia extends Rooms.RoomGame {
 	applyVoteModifier(user: User, target: ID, mod: number) {
 		const targetPlayer = this.playerTable[target] || this.dead[target];
 		if (!targetPlayer) return this.sendUser(user, `|error|${target} is not in the game of mafia.`);
-		if (target in this.dead && !targetPlayer.restless) {
-			return this.sendUser(user, `|error|${target} is not alive or a restless spirit, and therefore cannot vote.`);
-		}
 		const oldMod = this.voteModifiers[target];
 		if (mod === oldMod || ((isNaN(mod) || mod === 1) && oldMod === undefined)) {
 			if (isNaN(mod) || mod === 1) return this.sendUser(user, `|error|${target} already has no vote modifier.`);
@@ -969,10 +966,11 @@ class Mafia extends Rooms.RoomGame {
 		return this.hasPlurality;
 	}
 
-	eliminate(player: MafiaPlayer, ability = 'kill') {
-		if (!(player.id in this.playerTable)) return;
+	eliminate(toEliminate: string, ability: string) {
+		if (!(toEliminate in this.playerTable || toEliminate in this.dead)) return;
 		if (!this.started) {
 			// Game has not started, simply kick the player
+			const player = this.playerTable[toEliminate];
 			this.sendDeclare(`${player.safeName} was kicked from the game!`);
 			if (this.hostRequestedSub.includes(player.id)) {
 				this.hostRequestedSub.splice(this.hostRequestedSub.indexOf(player.id), 1);
@@ -986,14 +984,17 @@ class Mafia extends Rooms.RoomGame {
 			player.destroy();
 			return;
 		}
-		this.dead[player.id] = player;
+		if (toEliminate in this.playerTable) this.dead[toEliminate] = this.playerTable[toEliminate];
+		const player = this.dead[toEliminate];
 		let msg = `${player.safeName}`;
 		switch (ability) {
 		case 'treestump':
 			this.dead[player.id].treestump = true;
+			this.dead[player.id].restless = false;
 			msg += ` has been treestumped`;
 			break;
 		case 'spirit':
+			this.dead[player.id].treestump = false;
 			this.dead[player.id].restless = true;
 			msg += ` became a restless spirit`;
 			break;
@@ -1003,9 +1004,13 @@ class Mafia extends Rooms.RoomGame {
 			msg += ` became a restless treestump`;
 			break;
 		case 'kick':
+			this.dead[player.id].treestump = false;
+			this.dead[player.id].restless = false;
 			msg += ` was kicked from the game`;
 			break;
 		default:
+			this.dead[player.id].treestump = false;
+			this.dead[player.id].restless = false;
 			msg += ` was eliminated`;
 		}
 		if (player.voting) this.unvote(player.id, true);
@@ -2473,9 +2478,10 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!target) return this.parse('/help mafia kill');
 			const player = game.playerTable[toID(target)];
-			if (player) {
-				game.eliminate(player, cmd);
-				game.logAction(user, `killed ${player.name}`);
+			const dead = game.dead[toID(target)];
+			if (player || dead) {
+				game.eliminate(toID(target), cmd);
+				game.logAction(user, `${cmd}ed ${game.dead[toID(target)].safeName}`);
 			} else {
 				this.errorReply(`${target.trim()} is not a living player.`);
 			}
