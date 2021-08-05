@@ -207,15 +207,16 @@ export class Modlog {
 	 * Writes to the modlog
 	 */
 	async write(roomid: string, entry: PartialModlogEntry, overrideID?: string) {
+		const roomID = entry.roomID || roomid;
 		const insertableEntry: ModlogEntry = {
 			action: entry.action,
-			roomID: entry.roomID || roomid,
+			roomID,
 			visualRoomID: overrideID || entry.visualRoomID || '',
 			userid: entry.userid || null,
 			autoconfirmedID: entry.autoconfirmedID || null,
 			alts: entry.alts ? [...new Set(entry.alts)] : [],
 			ip: entry.ip || null,
-			isGlobal: entry.isGlobal || false,
+			isGlobal: entry.isGlobal || roomID === 'global' || false,
 			loggedBy: entry.loggedBy || null,
 			note: entry.note || '',
 			time: entry.time || Date.now(),
