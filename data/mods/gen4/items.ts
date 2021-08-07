@@ -206,12 +206,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyAtk(atk, pokemon) {
-			if (pokemon.species.name === 'Pikachu') {
-				return this.chainModify(2);
-			}
-		},
-		onModifySpA(spa, pokemon) {
+		onModifyAtk() {},
+		onModifySpA() {},
+		onBasePower(basePower, pokemon) {
 			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
 			}
