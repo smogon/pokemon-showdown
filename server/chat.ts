@@ -1236,7 +1236,6 @@ export class CommandContext extends MessageContext {
 		} else {
 			throw new Chat.ErrorMessage("Image URLs must begin with 'https://' or 'data:'; 'http://' cannot be used.");
 		}
-		
 	}
 	/**
 	 * This is a quick and dirty first-pass "is this good HTML" check. The full
