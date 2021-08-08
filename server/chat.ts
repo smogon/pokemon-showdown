@@ -1231,10 +1231,9 @@ export class CommandContext extends MessageContext {
 	checkEmbedURI(uri: string, autofix?: boolean) {
 		if (uri.startsWith('https://')) return uri;
 		if (uri.startsWith('//')) return uri;
-		if (uri.startsWith('data:')) return uri;
-		if (!uri.startsWith('http://')) {
+		if (!uri.startsWith('data:')) {
 			if (/^[a-z]+:\/\//.test(uri)) {
-				throw new Chat.ErrorMessage("Image URLs must begin with 'https://' or 'http://' or 'data:'");
+				throw new Chat.ErrorMessage("Image URLs must begin with 'https://' or 'data:'; 'http://' cannot be used.");
 			}
 		} else {
 			uri = uri.slice(7);
