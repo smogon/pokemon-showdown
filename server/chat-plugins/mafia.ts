@@ -2481,7 +2481,7 @@ export const commands: Chat.ChatCommands = {
 			const dead = game.dead[toID(target)];
 			if (player || dead) {
 				game.eliminate(toID(target), cmd);
-				game.logAction(user, `${cmd}ed ${game.dead[toID(target)].safeName}`);
+				game.logAction(user, `${cmd}ed ${(dead || player).safeName}`);
 			} else {
 				this.errorReply(`${target.trim()} is not a living player.`);
 			}
