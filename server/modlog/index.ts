@@ -458,10 +458,10 @@ export class Modlog {
 			let args;
 			if (user.isExact) {
 				tester = user.isExclusion ? `!= ?` : `= ?`;
-				args = [user.search];
+				args = [user.search.toLowerCase()];
 			} else {
 				tester = user.isExclusion ? `NOT LIKE ?` : `LIKE ?`;
-				args = [user.search + '%'];
+				args = [user.search.toLowerCase() + '%'];
 			}
 
 			ors.push({query: `userid ${tester}`, args});
