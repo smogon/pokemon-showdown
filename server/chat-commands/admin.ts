@@ -726,11 +726,8 @@ export const commands: Chat.ChatCommands = {
 				}
 				this.sendReply("Hotpatching modlog...");
 
-				const streams = Rooms.Modlog.streams;
-				const sharedStreams = Rooms.Modlog.sharedStreams;
-
-				const {Modlog, MODLOG_DB_PATH, MODLOG_PATH} = require('../modlog');
-				const ml = new Modlog(MODLOG_PATH, MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions});
+				const {Modlog, MODLOG_DB_PATH} = require('../modlog');
+				const ml = new Modlog(MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions});
 				if (ml.readyPromise) {
 					this.sendReply("Waiting for the new SQLite database to be ready...");
 					await ml.readyPromise;
@@ -740,9 +737,6 @@ export const commands: Chat.ChatCommands = {
 				Rooms.Modlog.destroyAllSQLite();
 
 				Rooms.Modlog = ml;
-				this.sendReply("Re-initializing modlog streams...");
-				Rooms.Modlog.streams = streams;
-				Rooms.Modlog.sharedStreams = sharedStreams;
 				this.sendReply("DONE");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");

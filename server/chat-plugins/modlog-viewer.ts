@@ -194,6 +194,7 @@ async function getModlog(
 	if (onlyNotes) search.action.push({search: 'NOTE'});
 
 	const response = await Rooms.Modlog.search(roomid, search, maxLines, onlyPunishments);
+	if (!response) return connection.popup(`The moderator log is currently disabled.`);
 
 	connection.send(
 		prettifyResults(
@@ -369,7 +370,7 @@ export const pages: Chat.PageTable = {
 				isExact: true,
 			}], note: [], ip: [], action: [], actionTaker: [],
 		}, 1000);
-		if (!entries.results.length) {
+		if (!entries?.results.length) {
 			return this.errorReply(`No data found.`);
 		}
 		const punishmentTable = new Utils.Multiset();

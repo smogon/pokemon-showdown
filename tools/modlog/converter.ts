@@ -627,7 +627,6 @@ export class ModlogConverterTxt {
 		}
 
 		this.modlog = new Modlog(
-			this.textLogDir,
 			this.isTesting ? ':memory:' : this.databaseFile,
 			// wait 15 seconds for DB to no longer be busy - this is important since I'm trying to do
 			// a no-downtime transfer of text -> SQLite
