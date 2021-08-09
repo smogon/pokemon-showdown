@@ -1304,7 +1304,7 @@ export class CommandContext extends MessageContext {
 						this.errorReply(`This image is missing a width/height attribute: <${tagContent}>`);
 						throw new Chat.ErrorMessage(`Images without predefined width/height cause problems with scrolling because loading them changes their height.`);
 					}
-					const srcMatch = / src ?= ?"?([^ "]+)(?: ?")?/i.exec(tagContent);
+					const srcMatch = / src ?= ?(?:"|')?([^ "']+)(?: ?(?:"|'))?/i.exec(tagContent);
 					if (srcMatch) {
 						this.checkEmbedURI(srcMatch[1]);
 					} else {
