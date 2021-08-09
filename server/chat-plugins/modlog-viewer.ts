@@ -79,13 +79,13 @@ function prettifyResults(
 	const includes = search.note.filter(s => !s.isExclusion).map(s => s.search) || [];
 	if (includes.length) searchString += `with a note including any of: ${includes.join(', ')} `;
 	if (excludes.length) searchString += `with a note that does not include any of: ${excludes.join(', ')} `;
-	for (const u of search.user) searchString += `${u.isExclusion ? 'not' : ''} taken against ${u.search} `;
+	for (const u of search.user) searchString += `${u.isExclusion ? 'not ' : ''}taken against ${u.search} `;
 	for (const ip of search.ip) {
-		searchString += `${ip.isExclusion ? 'not' : ''}taken against a user on the IP ${ip.search} `;
+		searchString += `${ip.isExclusion ? 'not ' : ''}taken against a user on the IP ${ip.search} `;
 	}
-	for (const action of search.action) searchString += `${action.isExclusion ? 'not' : ''} of the type ${action.search} `;
+	for (const action of search.action) searchString += `${action.isExclusion ? 'not ' : ''}of the type ${action.search} `;
 	for (const actionTaker of search.actionTaker) {
-		searchString += `${actionTaker.isExclusion ? 'not' : ''} taken by ${actionTaker.search} `;
+		searchString += `${actionTaker.isExclusion ? 'not ' : ''}taken by ${actionTaker.search} `;
 	}
 	if (!resultArray.length) {
 		return `|popup|No ${scope}moderator actions ${searchString}found on ${roomName}.`;
