@@ -16247,7 +16247,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onAfterMove(source, target, move) {
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon !== source && pokemon.removeVolatile('sparklingaria') && pokemon.status === 'brn' && !source.fainted) {
-					target.cureStatus();
+					pokemon.cureStatus();
 				}
 			}
 		},
