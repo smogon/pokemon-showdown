@@ -12,7 +12,7 @@
 
 import * as path from 'path';
 import * as child_process from 'child_process';
-import {FS, Utils, ProcessManager} from '../../lib';
+import {FS, Utils, ProcessManager, SQL} from '../../lib';
 
 interface ProcessData {
 	cmd: string;
@@ -119,13 +119,6 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 		await exec(`git reset --hard ${oldHash}`);
 		if (stashedChanges) await exec(`git stash pop`);
 		return false;
-	}
-}
-
-async function rebuild(context: Chat.CommandContext, force?: boolean) {
-	const [, , stderr] = await bash(`node ./build${force ? ' force' : ''}`, context);
-	if (stderr) {
-		throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
 	}
 }
 
@@ -518,8 +511,6 @@ export const commands: Chat.ChatCommands = {
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
-		this.sendReply("Rebuilding...");
-		await rebuild(this);
 
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
@@ -529,7 +520,7 @@ export const commands: Chat.ChatCommands = {
 
 		target = toID(target);
 		try {
-			Utils.clearRequireCache({exclude: ['/.lib-dist/process-manager']});
+			Utils.clearRequireCache({exclude: ['/lib/process-manager']});
 			if (target === 'all') {
 				if (lock['all']) {
 					return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
@@ -563,13 +554,11 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (
-						manager.filename.startsWith(FS('server/chat-plugins').path) ||
-						manager.filename.startsWith(FS('.server-dist/chat-plugins').path)
-					) {
+					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
 						void manager.destroy();
 					}
 				}
+				void Chat.PM.destroy();
 
 				global.Chat = require('../chat').Chat;
 				global.Tournaments = require('../tournaments').Tournaments;
@@ -740,13 +729,17 @@ export const commands: Chat.ChatCommands = {
 				const streams = Rooms.Modlog.streams;
 				const sharedStreams = Rooms.Modlog.sharedStreams;
 
-				const processManagers = ProcessManager.processManagers;
-				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('.server-dist/modlog').path)) void manager.destroy();
+				const {Modlog, MODLOG_DB_PATH, MODLOG_PATH} = require('../modlog');
+				const ml = new Modlog(MODLOG_PATH, MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions});
+				if (ml.readyPromise) {
+					this.sendReply("Waiting for the new SQLite database to be ready...");
+					await ml.readyPromise;
+				} else {
+					this.sendReply("The new SQLite database is ready!");
 				}
+				Rooms.Modlog.destroyAllSQLite();
 
-				const {mainModlog} = require('../modlog');
-				Rooms.Modlog = mainModlog;
+				Rooms.Modlog = ml;
 				this.sendReply("Re-initializing modlog streams...");
 				Rooms.Modlog.streams = streams;
 				Rooms.Modlog.sharedStreams = sharedStreams;
@@ -775,7 +768,7 @@ export const commands: Chat.ChatCommands = {
 		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
 		`/hotpatch chat - reloads the chat-commands and chat-plugins directories`,
 		`/hotpatch validator - spawn new team validator processes`,
-		`/hotpatch formats - reload the .sim-dist/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
+		`/hotpatch formats - reload the sim/dex.ts tree, reload the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads IPTools datacenters`,
 		`/hotpatch punishments - reloads new punishments code`,
 		`/hotpatch loginserver - reloads new loginserver code`,
@@ -1209,8 +1202,6 @@ export const commands: Chat.ChatCommands = {
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
-		this.sendReply(`Rebuilding...`);
-		await rebuild(this);
 		this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
 
 		Monitor.updateServerLock = false;
@@ -1220,13 +1211,8 @@ export const commands: Chat.ChatCommands = {
 		`/updateserver private - Updates only the server's private code. Requires: console access`,
 	],
 
-	async rebuild(target, room, user, connection) {
-		this.canUseConsole();
-		Monitor.updateServerLock = true;
-		this.sendReply(`Rebuilding...`);
-		await rebuild(this, true);
-		Monitor.updateServerLock = false;
-		this.sendReply(`DONE`);
+	rebuild() {
+		this.errorReply("`/rebuild` is no longer necessary; TypeScript files are automatically transpiled as they are loaded.");
 	},
 
 	/*********************************************************
@@ -1285,6 +1271,71 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`${command}${generateHTML('<', message)}`);
 			logRoom?.roomlog(`<< ${message}`);
 		}
+	},
+
+	async evalsql(target, room) {
+		this.canUseConsole();
+		this.runBroadcast(true);
+		if (!Config.usesqlite) return this.errorReply(`SQLite is disabled.`);
+		const logRoom = Rooms.get('upperstaff') || Rooms.get('staff');
+		if (!target) return this.errorReply(`Specify a database to access and a query.`);
+		const [db, query] = Utils.splitFirst(target, ',').map(item => item.trim());
+		if (!FS('./databases').readdirSync().includes(`${db}.db`)) {
+			return this.errorReply(`The database file ${db}.db was not found.`);
+		}
+		if (room && this.message.startsWith('>>sql')) {
+			this.broadcasting = true;
+			this.broadcastToRoom = true;
+		}
+		this.sendReply(
+			`|html|<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">SQLite&gt; [${db}.db] &nbsp;</td>` +
+			`<td>${Chat.getReadmoreCodeBlock(query)}</td></tr><table>`
+		);
+		logRoom?.roomlog(`SQLite> ${target}`);
+		const database = SQL(`./databases/${db}.db`);
+		function formatResult(result: any[] | string) {
+			if (!Array.isArray(result)) {
+				return (
+					`<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">` +
+					`SQLite&lt;&nbsp;</td><td>${Chat.getReadmoreCodeBlock(result)}</td></tr><table>`
+				);
+			}
+			let buffer = '<div class="ladder pad" style="overflow-x: auto;"><table><tr><th>';
+			// header
+			if (!result.length) {
+				buffer += `No data in table.</th></tr>`;
+				return buffer;
+			}
+			buffer += Object.keys(result[0]).join('</th><th>');
+			buffer += `</th></tr><tr>`;
+			buffer += result.map(item => (
+				`<td>${Object.values(item).map(val => Utils.escapeHTML(val as string)).join('</td><td>')}</td>`
+			)).join('</tr><tr>');
+			buffer += `</tr></table></div>`;
+			return buffer;
+		}
+
+		let result;
+		let statement;
+		try {
+			statement = await database.prepare(query);
+			// presume it's attempting to get data first
+			result = await database.all(statement);
+		} catch (err) {
+			// it's not getting data, but it might still be a valid statement - try to run instead
+			if (err.stack?.includes(`Use run() instead`)) {
+				try {
+					result = Utils.visualize(await database.run(statement, []));
+				} catch (e) {
+					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
+				}
+			} else {
+				result = ('' + err.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
+			}
+		}
+		database.destroy();
+		logRoom?.roomlog(`SQLite< ${result}`);
+		this.sendReply(`|html|${formatResult(result)}`);
 	},
 
 	evalbattle(target, room, user, connection) {

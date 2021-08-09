@@ -24,7 +24,7 @@ describe('Thick Fat', function () {
 		assert.bounded(miltank.maxhp - miltank.hp, damageRange);
 	});
 
-	it.skip(`should halve damage from Fire- or Ice-type attacks in past generations, even when holding a type-boosting item`, function () {
+	it(`should halve damage from Fire- or Ice-type attacks in past generations, even when holding a type-boosting item`, function () {
 		battle = common.gen(3).createBattle([[
 			{species: 'Miltank', ability: 'thickfat', moves: ['recover']},
 		], [
