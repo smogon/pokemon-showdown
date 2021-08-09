@@ -1228,46 +1228,14 @@ export class CommandContext extends MessageContext {
 		return true;
 	}
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
-	checkEmbedURI(uri: string, autofix?: boolean) {
+	checkEmbedURI(uri: string) {
 		if (uri.startsWith('https://')) return uri;
 		if (uri.startsWith('//')) return uri;
-		if (uri.startsWith('data:')) return uri;
-		if (!uri.startsWith('http://')) {
-			if (/^[a-z]+:\/\//.test(uri)) {
-				throw new Chat.ErrorMessage("Image URLs must begin with 'https://' or 'http://' or 'data:'");
-			}
+		if (uri.startsWith('data:')) {
+			return uri;
 		} else {
-			uri = uri.slice(7);
+			throw new Chat.ErrorMessage("Image URLs must begin with 'https://' or 'data:'; 'http://' cannot be used.");
 		}
-		const slashIndex = uri.indexOf('/');
-		let domain = (slashIndex >= 0 ? uri.slice(0, slashIndex) : uri);
-
-		// heuristic that works for all the domains we care about
-		const secondLastDotIndex = domain.lastIndexOf('.', domain.length - 5);
-		if (secondLastDotIndex >= 0) domain = domain.slice(secondLastDotIndex + 1);
-
-		const approvedDomains = [
-			'imgur.com',
-			'gyazo.com',
-			'puu.sh',
-			'rotmgtool.com',
-			'pokemonshowdown.com',
-			'nocookie.net',
-			'blogspot.com',
-			'imageshack.us',
-			'deviantart.net',
-			'd.pr',
-			'pokefans.net',
-		];
-		if (approvedDomains.includes(domain)) {
-			if (autofix) return `//${uri}`;
-			throw new Chat.ErrorMessage(`Please use HTTPS for image "${uri}"`);
-		}
-		if (domain === 'bit.ly') {
-			throw new Chat.ErrorMessage("Please don't use URL shorteners.");
-		}
-		// unknown URI, allow HTTP to be safe
-		return uri;
 	}
 	/**
 	 * This is a quick and dirty first-pass "is this good HTML" check. The full
