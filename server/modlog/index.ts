@@ -445,7 +445,7 @@ export class Modlog {
 
 		for (const noteSearch of search.note) {
 			const tester = noteSearch.isExact ? `= ?` : `LIKE ?`;
-			const args = [noteSearch.isExact ? noteSearch + '%' : `%${noteSearch}%`];
+			const args = [noteSearch.isExact ? noteSearch.search + '%' : `%${noteSearch.search}%`];
 			if (noteSearch.isExclusion) {
 				ands.push({query: `note ${noteSearch.isExact ? '!' : 'NOT '}${tester}`, args});
 			} else {
