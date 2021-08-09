@@ -6,7 +6,7 @@
 'use strict';
 
 const ModlogConstructor = Config.usesqlite ? (require('../../server/modlog')).Modlog : null;
-const modlog = ModlogConstructor ? new ModlogConstructor('/dev/null', ':memory:') : null;
+const modlog = ModlogConstructor ? new ModlogConstructor(':memory:') : null;
 const assert = require('assert').strict;
 
 Config.usesqlitemodlog = true;
@@ -73,7 +73,6 @@ async function lastLine(database, roomid) {
 
 	(Config.usesqlite ? describe : describe.skip)('Modlog#write', () => {
 		it('should write messages serially to the modlog', async () => {
-			modlog.initialize('development');
 			await modlog.write('development', {note: 'This message is logged first', action: 'UNITTEST'});
 			await modlog.write('development', {note: 'This message is logged second', action: 'UNITTEST'});
 			const lines = await modlog.database.all(await modlog.database.prepare(
@@ -86,7 +85,6 @@ async function lastLine(database, roomid) {
 		});
 
 		it('should use overrideID if specified', async () => {
-			modlog.initialize('battle-gen8randombattle-1337');
 			await modlog.write('battle-gen8randombattle-1337', {note: "I'm testing overrideID", action: 'UNITTEST'}, 'heyadora');
 			const line = await lastLine(modlog.database, 'battle-gen8randombattle-1337');
 			assert.equal(line.note, "I'm testing overrideID");
@@ -98,7 +96,6 @@ async function lastLine(database, roomid) {
 		it('should rename modlogs', async () => {
 			const entry = {note: 'This is in a modlog that will be renamed!', action: 'UNITTEST'};
 
-			modlog.initialize('oldroom');
 			await modlog.write('oldroom', entry);
 			await modlog.rename('oldroom', 'newroom');
 			const line = await lastLine(modlog.database, 'newroom');
@@ -119,8 +116,6 @@ async function lastLine(database, roomid) {
 	// Skipped until SQL searching is properly implemented
 	describe.skip('Modlog#search', () => {
 		before(async () => {
-			modlog.initialize('readingtest');
-			modlog.initialize('readingtest2');
 			for (const entry of DATASET_A) {
 				await modlog.write('readingtest', entry);
 			}

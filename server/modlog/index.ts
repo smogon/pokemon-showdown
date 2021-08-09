@@ -17,7 +17,6 @@ const LONG_QUERY_DURATION = 2000;
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
 const MODLOG_V2_MIGRATION_PATH = 'databases/migrations/modlog/v2.sql';
 
-export const MODLOG_PATH = 'logs/modlog';
 export const MODLOG_DB_PATH = Config.nofswriting ? ':memory:' : `${__dirname}/../../databases/modlog.db`;
 
 const GLOBAL_PUNISHMENTS = [
@@ -85,17 +84,7 @@ export interface TransactionArguments extends Record<string, unknown> {
 export type PartialModlogEntry = Partial<ModlogEntry> & {action: string};
 
 export class Modlog {
-	readonly logPath: string;
-	/**
-	 * If a room ID is not in the Map, that means the room's modlog stream
-	 * has not yet been initialized, or was previously destroyed.
-	 * If a room ID is in the Map, its modlog stream is open and ready to be written to.
-	 */
-	sharedStreams = new Map<ID, Streams.WriteStream>();
-	streams = new Map<ModlogID, Streams.WriteStream>();
-
 	readonly database?: DatabaseWrapper;
-
 	readyPromise: Promise<void> | null;
 	private databaseReady: boolean;
 	/** entries to be written once the DB is ready */
@@ -106,9 +95,7 @@ export class Modlog {
 	renameQuery?: number;
 	globalPunishmentsSearchQuery?: number;
 
-
-	constructor(flatFilePath: string, databasePath: string, sqliteOptions?: Partial<SQLOptions>) {
-		this.logPath = flatFilePath;
+	constructor(databasePath: string, sqliteOptions?: Partial<SQLOptions>) {
 		this.queuedEntries = [];
 		this.databaseReady = false;
 
@@ -186,27 +173,20 @@ export class Modlog {
 	/**************************************
 	 * Methods for writing to the modlog. *
 	 **************************************/
-	initialize(roomid: ModlogID) {
-		if (this.streams.get(roomid)) return;
-		const sharedStreamId = this.getSharedID(roomid);
-		if (!sharedStreamId) {
-			return this.streams.set(roomid, FS(`${this.logPath}/modlog_${roomid}.txt`).createAppendStream());
-		}
 
-		let stream = this.sharedStreams.get(sharedStreamId);
-		if (!stream) {
-			const path = `${this.logPath}/modlog_${sharedStreamId}.txt`;
-			stream = FS(path).createAppendStream();
-			if (!stream) throw new Error(`Could not create append stream for ${path}.`);
-			this.sharedStreams.set(sharedStreamId, stream);
-		}
-		this.streams.set(roomid, stream);
+	/**
+	 * @deprecated Modlogs use SQLite and no longer need initialization.
+	 */
+	initialize(roomid: ModlogID) {
+		return;
 	}
+
 
 	/**
 	 * Writes to the modlog
 	 */
 	async write(roomid: string, entry: PartialModlogEntry, overrideID?: string) {
+		if (!Config.usesqlite || !Config.usesqlitemodlog) return;
 		const roomID = entry.roomID || roomid;
 		const insertableEntry: ModlogEntry = {
 			action: entry.action,
@@ -222,10 +202,7 @@ export class Modlog {
 			time: entry.time || Date.now(),
 		};
 
-		// this.writeText([insertableEntry]);
-		if (Config.usesqlitemodlog) {
-			await this.writeSQL([insertableEntry]);
-		}
+		await this.writeSQL([insertableEntry]);
 	}
 
 	async writeSQL(entries: Iterable<ModlogEntry>) {
@@ -242,47 +219,11 @@ export class Modlog {
 		await this.database!.transaction('insertion', toInsert);
 	}
 
-	writeText(entries: Iterable<ModlogEntry>) {
-		const buffers = new Map<ModlogID, string>();
-		for (const entry of entries) {
-			const streamID = entry.roomID as ModlogID;
-
-			let entryText = `[${new Date(entry.time).toJSON()}] (${entry.visualRoomID || entry.roomID}) ${entry.action}:`;
-			if (entry.userid) entryText += ` [${entry.userid}]`;
-			if (entry.autoconfirmedID) entryText += ` ac:[${entry.autoconfirmedID}]`;
-			if (entry.alts.length) entryText += ` alts:[${entry.alts.join('], [')}]`;
-			if (entry.ip) entryText += ` [${entry.ip}]`;
-			if (entry.loggedBy) entryText += ` by ${entry.loggedBy}`;
-			if (entry.note) entryText += `: ${entry.note}`;
-			entryText += `\n`;
-
-			buffers.set(streamID, (buffers.get(streamID) || '') + entryText);
-			if (entry.isGlobal && streamID !== 'global') {
-				buffers.set('global', (buffers.get('global') || '') + entryText);
-			}
-		}
-
-		for (const [streamID, buffer] of buffers) {
-			const stream = this.streams.get(streamID);
-			if (!stream) throw new Error(`Attempted to write to an uninitialized modlog stream for the room '${streamID}'`);
-			void stream.write(buffer);
-		}
-	}
-
+	/**
+	 * @deprecated Modlogs use SQLite and no longer need to be destroyed
+	 */
 	async destroy(roomid: ModlogID) {
-		const stream = this.streams.get(roomid);
-		if (stream && !this.getSharedID(roomid)) {
-			await stream.writeEnd();
-		}
-		this.streams.delete(roomid);
-	}
-
-	async destroyAllText() {
-		const promises = [];
-		for (const id in this.streams) {
-			promises.push(this.destroy(id as ModlogID));
-		}
-		return Promise.all(promises);
+		return Promise.resolve(undefined);
 	}
 
 	destroyAllSQLite() {
@@ -291,34 +232,23 @@ export class Modlog {
 		this.databaseReady = false;
 	}
 
-	async destroyAll() {
+	destroyAll() {
 		this.destroyAllSQLite();
-		await this.destroyAllText();
 	}
 
 	async rename(oldID: ModlogID, newID: ModlogID) {
+		if (!Config.usesqlite) return;
 		if (oldID === newID) return;
 
-		// rename flat-file modlogs
-		const streamExists = this.streams.has(oldID);
-		if (streamExists) await this.destroy(oldID);
-		if (!this.getSharedID(oldID)) {
-			await FS(`${this.logPath}/modlog_${oldID}.txt`).rename(`${this.logPath}/modlog_${newID}.txt`);
-		}
-		if (streamExists) this.initialize(newID);
-
 		// rename SQL modlogs
-		if (Config.usesqlite) {
-			if (this.databaseReady) {
-				await this.database!.run(this.renameQuery!, [newID, oldID]);
-			} else {
-				throw new Error(`Attempted to rename a room's modlog before the SQL database was ready.`);
-			}
+		if (this.readyPromise) await this.readyPromise;
+		if (this.databaseReady) {
+			await this.database!.run(this.renameQuery!, [newID, oldID]);
+		} else {
+			// shouldn't happen since we await the ready promise and check that useslite is on
+			// but will still happen if usesqlite is enabled without a subsequent hotpatch
+			throw new Error(`Attempted to rename a room's modlog before the SQL database was ready.`);
 		}
-	}
-
-	getActiveStreamIDs() {
-		return [...this.streams.keys()];
 	}
 
 	/******************************************
@@ -342,12 +272,18 @@ export class Modlog {
 		return results.length;
 	}
 
+	/**
+	 * Searches the modlog.
+	 *
+	 * @returns Either a promise for ModlogResults or `null` if modlog is disabled.
+	 */
 	async search(
 		roomid: ModlogID = 'global',
 		search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []},
 		maxLines = 20,
 		onlyPunishments = false,
-	): Promise<ModlogResults> {
+	): Promise<ModlogResults | null> {
+		if (!Config.usesqlite || !Config.usesqlitemodlog) return null;
 		const startTime = Date.now();
 
 		let rooms: ModlogID[] | 'all';
@@ -362,19 +298,16 @@ export class Modlog {
 		}
 
 		if (this.readyPromise) await this.readyPromise;
-		if (Config.usesqlite && Config.usesqlitemodlog && this.databaseReady) {
-			const query = await this.prepareSQLSearch(rooms, maxLines, onlyPunishments, search);
-			const results = (await this.database!.all(query.statement, query.args))
-				.map((row: any) => this.dbRowToModlogEntry(row));
+		if (!this.databaseReady) return null;
+		const query = await this.prepareSQLSearch(rooms, maxLines, onlyPunishments, search);
+		const results = (await this.database!.all(query.statement, query.args))
+			.map((row: any) => this.dbRowToModlogEntry(row));
 
-			const duration = Date.now() - startTime;
-			if (duration > LONG_QUERY_DURATION) {
-				Monitor.slow(`[slow SQL modlog search] ${duration}ms - ${JSON.stringify(query)}`);
-			}
-			return {results, duration};
-		} else {
-			return {results: [], duration: -1};
+		const duration = Date.now() - startTime;
+		if (duration > LONG_QUERY_DURATION) {
+			Monitor.slow(`[slow SQL modlog search] ${duration}ms - ${JSON.stringify(query)}`);
 		}
+		return {results, duration};
 	}
 
 	dbRowToModlogEntry(row: any): ModlogEntry {

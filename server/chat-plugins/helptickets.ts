@@ -426,7 +426,6 @@ export class HelpTicket extends Rooms.RoomGame {
 	onChatMessage(message: string, user: User) {
 		HelpTicket.uploadReplaysFrom(message, user, user.connections[0]);
 	}
-	static modlogStream = Rooms.Modlog.initialize('help-texttickets' as ModlogID);
 	// workaround to modlog for no room
 	static async modlog(entry: PartialModlogEntry) {
 		await Rooms.Modlog.write('help-texttickets' as ModlogID, entry);

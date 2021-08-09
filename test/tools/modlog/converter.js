@@ -693,10 +693,8 @@ describe('Modlog conversion script', () => {
 
 	describe.skip('integration tests', () => {
 		it('should convert from SQLite to text', async () => {
-			const modlog = new ml.Modlog('/dev/null', ':memory:', true);
+			const modlog = new ml.Modlog(':memory:');
 			const mlConverter = new converter.ModlogConverterSQLite('', '', modlog.database);
-
-			modlog.initialize('development');
 
 			const entry = {
 				action: 'UNITTEST',
