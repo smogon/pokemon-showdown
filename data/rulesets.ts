@@ -75,7 +75,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
 		ruleset: [
-			'Obtainable', '+Unobtainable', '+Past', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Obtainable', '+Unobtainable', '+Past', 'Gen 8 Sketch', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
 		onValidateSet(set) {
 			// These Pokemon are still unobtainable
@@ -1187,6 +1187,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+    'gen8sketch': {
+        effectType: 'ValidatorRule',
+        name: 'Gen 8 Sketch',
+        desc: "Allows Sketch to be restored into Generation VIII formats.",
+        // Implemented in sim/team-validator.ts
+    },
 	mimicglitch: {
 		effectType: 'ValidatorRule',
 		name: 'Mimic Glitch',

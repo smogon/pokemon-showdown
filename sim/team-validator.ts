@@ -1864,6 +1864,10 @@ export class TeamValidator {
 		 * (This is everything except in Gen 1 Tradeback)
 		 */
 		const noFutureGen = !ruleTable.has('allowtradeback');
+		/**
+		 * The format allows Sketch to copy moves in Gen 8
+		 */
+		const noSketchBlock = ruleTable.has('gen8sketch');
 
 		let tradebackEligible = false;
 		while (species?.name && !alreadyChecked[species.id]) {
@@ -1901,7 +1905,7 @@ export class TeamValidator {
 			} else if (learnset['sketch']) {
 				if (move.noSketch || move.isZ || move.isMax) {
 					cantLearnReason = `can't be Sketched.`;
-				} else if (move.gen > 7 && !ruleTable.has('standardnatdex')) {
+				} else if (move.gen > 7 && !noSketchBlock) {
 					cantLearnReason = `can't be Sketched because it's a Gen 8 move and Sketch isn't available in Gen 8.`;
 				} else {
 					if (!sources) sketch = true;
@@ -1964,7 +1968,7 @@ export class TeamValidator {
 						if (dex.gen >= 5 && learnedGen <= 4 && [
 							'cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb',
 						].includes(moveid)) {
-							cantLearnReason = `can't be transferred from Gen 3 to 4 because it's an HM move.`;
+							cantLearnReason = `can't be transferred from Gen 4 to 5 because it's an HM move.`;
 							continue;
 						}
 						// Defog and Whirlpool can't be transferred together
