@@ -58,16 +58,16 @@ describe('Metronome (item)', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'metronome', moves: ['solarbeam']},
 		], [
-			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'shellarmor', moves: ['sleeptalk', 'softboiled']},
+			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'shellarmor', moves: ['softboiled']},
 		]]);
-		battle.makeChoices('auto', 'move sleeptalk');
-		battle.makeChoices('auto', 'move sleeptalk');
+		battle.makeChoices();
+		battle.makeChoices();
 		const cleffa = battle.p2.active[0];
 		let damage = cleffa.maxhp - cleffa.hp;
 		assert.bounded(damage, [59, 70], `Solar Beam should be Metronome 1 boosted`);
 
-		battle.makeChoices('auto', 'move softboiled');
-		battle.makeChoices('auto', 'move softboiled');
+		battle.makeChoices();
+		battle.makeChoices();
 		damage = cleffa.maxhp - cleffa.hp;
 		assert.bounded(damage, [69, 81], `Solar Beam should be Metronome 2 boosted`);
 	});
@@ -76,16 +76,16 @@ describe('Metronome (item)', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'metronome', moves: ['solarbeam']},
 		], [
-			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'shellarmor', moves: ['sunnyday', 'softboiled']},
-			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'cloudnine', moves: ['sleeptalk', 'softboiled']},
+			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'shellarmor', moves: ['sunnyday']},
+			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'cloudnine', moves: ['softboiled']},
 		]]);
-		battle.makeChoices('auto', 'move sunnyday');
+		battle.makeChoices();
 		const cleffa = battle.p2.active[0];
 		let damage = cleffa.maxhp - cleffa.hp;
 		assert.bounded(damage, [49, 58], `Solar Beam should not be Metronome boosted`);
 
 		battle.makeChoices('auto', 'switch 2');
-		battle.makeChoices('auto', 'move softboiled');
+		battle.makeChoices();
 		const newCleffa = battle.p2.active[0];
 		damage = newCleffa.maxhp - newCleffa.hp;
 		assert.bounded(damage, [59, 70], `Solar Beam should be Metronome 1 boosted`);
