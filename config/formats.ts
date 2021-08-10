@@ -1030,7 +1030,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8bdsp',
-		ruleset: ['Standard'],
+		ruleset: ['Standard', 'Sketch Gen 8 Moves'],
 		banlist: ['Uber', 'Arena Trap', 'Drizzle', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Razor Fang', 'Baton Pass'],
 	},
 	{
@@ -1041,7 +1041,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		searchShow: false,
-		ruleset: ['Standard'],
+		ruleset: ['Standard', 'Sketch Gen 8 Moves'],
 		banlist: ['AG', 'Baton Pass'],
 	},
 	{
@@ -1096,7 +1096,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		searchShow: false,
-		ruleset: ['Little Cup', 'Standard'],
+		ruleset: ['Little Cup', 'Standard', 'Sketch Gen 8 Moves'],
 		banlist: ['Gligar', 'Meditite', 'Misdreavus', 'Munchlax', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Moody', 'Baton Pass', 'Sticky Web'],
 	},
 	{
@@ -1127,7 +1127,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles'],
+		ruleset: ['Standard Doubles', 'Sketch Gen 8 Moves'],
 		banlist: ['DUber', 'Dark Void'],
 	},
 	{
@@ -1139,7 +1139,7 @@ export const Formats: FormatList = [
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Flat Rules', 'Min Source Gen = 8'],
+		ruleset: ['Flat Rules', 'Min Source Gen = 8', 'Sketch Gen 8 Moves'],
 	},
 
 	// Challengeable OMs
