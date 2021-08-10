@@ -54,22 +54,41 @@ describe('Metronome (item)', function () {
 		assert.bounded(damage, [96, 114]);
 	});
 
-	it.skip(`should instantly start moves that use a charging turn at Metronome 1 boost level, then increase linearly`, function () {
+	it(`should instantly start moves that use a charging turn at Metronome 1 boost level, then increase linearly`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'metronome', moves: ['solarbeam']},
 		], [
-			{species: 'cleffa', evs: {hp: 252}, ability: 'shellarmor', moves: ['softboiled']},
+			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'shellarmor', moves: ['sleeptalk', 'softboiled']},
 		]]);
-		battle.makeChoices();
-		battle.makeChoices();
+		battle.makeChoices('auto', 'move sleeptalk');
+		battle.makeChoices('auto', 'move sleeptalk');
 		const cleffa = battle.p2.active[0];
 		let damage = cleffa.maxhp - cleffa.hp;
 		assert.bounded(damage, [59, 70], `Solar Beam should be Metronome 1 boosted`);
 
-		battle.makeChoices();
-		battle.makeChoices();
+		battle.makeChoices('auto', 'move softboiled');
+		battle.makeChoices('auto', 'move softboiled');
 		damage = cleffa.maxhp - cleffa.hp;
 		assert.bounded(damage, [69, 81], `Solar Beam should be Metronome 2 boosted`);
+	});
+
+	it(`should not instantly start moves that skip a charging turn at Metronome 1 boost level`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', item: 'metronome', moves: ['solarbeam']},
+		], [
+			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'shellarmor', moves: ['sunnyday', 'softboiled']},
+			{species: 'cleffa', evs: {hp: 252, spe: 252}, ability: 'cloudnine', moves: ['sleeptalk', 'softboiled']},
+		]]);
+		battle.makeChoices('auto', 'move sunnyday');
+		const cleffa = battle.p2.active[0];
+		let damage = cleffa.maxhp - cleffa.hp;
+		assert.bounded(damage, [49, 58], `Solar Beam should not be Metronome boosted`);
+
+		battle.makeChoices('auto', 'switch 2');
+		battle.makeChoices('auto', 'move softboiled');
+		const newCleffa = battle.p2.active[0];
+		damage = newCleffa.maxhp - newCleffa.hp;
+		assert.bounded(damage, [59, 70], `Solar Beam should be Metronome 1 boosted`);
 	});
 
 	it.skip(`should use called moves to determine the Metronome multiplier`, function () {
