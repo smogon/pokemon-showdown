@@ -344,7 +344,12 @@ export class GlobalAuth extends Auth {
 
 			// handle glitched entries where a user has two entries in usergroups.csv due to bugs
 			const newSymbol = symbol.charAt(0) as GroupSymbol;
-			const preexistingSymbol = super.get(id);
+			// Yes, we HAVE to ensure that it exists in the super. super.get here returns either the group symbol,
+			// or the default symbol if it cannot find a symbol in the map.
+			// the default symbol is truthy, and the symbol for trusted user is ` `
+			// meaning that the preexisting && atLeast would return true, which would skip the row and nuke all trusted users
+			// on a fresh load (aka, a restart).
+			const preexistingSymbol = super.has(id) ? super.get(id) : null;
 			// take a user's highest rank in usergroups.csv
 			if (preexistingSymbol && Auth.atLeast(preexistingSymbol, newSymbol)) continue;
 			super.set(id, newSymbol);
