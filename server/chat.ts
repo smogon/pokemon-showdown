@@ -24,9 +24,10 @@ To reload chat commands:
 */
 
 import type {RoomPermission, GlobalPermission} from './user-groups';
-import {FriendsDatabase, PM} from './friends';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
+import {FriendsDatabase, PM} from './friends';
+import {DatabaseWrapper, SQL} from '../lib/sql';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
@@ -1414,6 +1415,7 @@ export const Chat = new class {
 		void this.loadTranslations().then(() => {
 			Chat.translationsLoaded = true;
 		});
+		if (Config.usesqlite) void this.prepareDatabase();
 	}
 	translationsLoaded = false;
 	/**
@@ -1676,6 +1678,43 @@ export const Chat = new class {
 			translated = reconstructed;
 		}
 		return translated;
+	}
+
+	/**
+	 * SQL handler
+	 *
+	 * All chat plugins share one database.
+	 * Chat.database will be null if SQLite was disabled at the last chat hotpatch or the database is not yet ready.
+	 */
+	database: DatabaseWrapper | null = null;
+
+	async prepareDatabase() {
+		const database = SQL('./databases/chat-plugins.db');
+		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
+		const {hasDBInfo} = await database.get(await database.prepare(
+			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
+		));
+		if (!hasDBInfo) await database.runFile('./databases/schemas/chat-plugins.sql');
+
+		const result = await database.get(await database.prepare(
+			`SELECT value as curVersion FROM db_info WHERE key = 'version'`
+		));
+		const curVersion = parseInt(result.curVersion);
+		if (!curVersion) throw new Error(`db_info table is present, but schema version could not be parsed`);
+
+		// automatically run migrations of the form "v{number}.sql" in the migrations/chat-plugins folder
+		const migrationsToRun = [];
+		for (const migrationFile of (await FS('./databases/migrations/chat-plugins').readdir())) {
+			const migrationVersion = parseInt(/v(\d+)\.sql/.exec(migrationFile)?.[1] || '');
+			if (!migrationVersion) continue;
+			if (migrationVersion > curVersion) migrationsToRun.push({version: migrationVersion, file: migrationFile});
+		}
+		Utils.sortBy(migrationsToRun, ({version}) => version);
+		for (const {file} of migrationsToRun) {
+			await database.runFile(file);
+		}
+		Chat.database = database;
+		Chat.destroyHandlers.push(() => Chat.database?.destroy());
 	}
 
 	readonly MessageContext = MessageContext;
