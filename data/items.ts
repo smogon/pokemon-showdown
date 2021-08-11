@@ -1396,8 +1396,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onAfterMoveSecondaryPriority: 2,
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.isFutureMove) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack) return;
-				if (target.isSkyDropped() || source.isSkyDropped()) return;
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
