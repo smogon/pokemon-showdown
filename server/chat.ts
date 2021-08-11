@@ -1415,7 +1415,7 @@ export const Chat = new class {
 		void this.loadTranslations().then(() => {
 			Chat.translationsLoaded = true;
 		});
-		if (Config.usesqlite) void this.prepareDatabase();
+		void this.prepareDatabase();
 	}
 	translationsLoaded = false;
 	/**
@@ -1684,7 +1684,7 @@ export const Chat = new class {
 	 * SQL handler
 	 *
 	 * All chat plugins share one database.
-	 * Chat.database will be null if SQLite was disabled at the last chat hotpatch or the database is not yet ready.
+	 * Chat.database will be null if the database is not yet ready.
 	 */
 	database: DatabaseWrapper | null = null;
 
@@ -1705,7 +1705,7 @@ export const Chat = new class {
 		// automatically run migrations of the form "v{number}.sql" in the migrations/chat-plugins folder
 		const migrationsToRun = [];
 		for (const migrationFile of (await FS('./databases/migrations/chat-plugins').readdir())) {
-			const migrationVersion = parseInt(/v(\d+)\.sql/.exec(migrationFile)?.[1] || '');
+			const migrationVersion = parseInt(/v(\d+)\.sql$/.exec(migrationFile)?.[1] || '');
 			if (!migrationVersion) continue;
 			if (migrationVersion > curVersion) migrationsToRun.push({version: migrationVersion, file: migrationFile});
 		}
