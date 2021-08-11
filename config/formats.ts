@@ -1569,7 +1569,6 @@ export const Formats: FormatList = [
 			const irrevokablyRestricted = [
 				'Assist', 'Copycat', 'Metronome', 'Mirror Move', 'Sleep Talk', // Could call another unsafe trademark
 				'Skill Swap', // Self-propagates indefinitely
-				'Entrainment', 'Role Play', // Suspected unsafe
 			];
 			if (irrevokablyRestricted.includes(ability.name)) {
 				return [`${ability.name} cannot safely function as a trademark.`];
