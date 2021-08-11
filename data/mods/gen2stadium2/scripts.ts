@@ -222,13 +222,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Implementing Recoil mechanics from Stadium 2.
 			// If a pokemon caused the other to faint with a recoil move and only one pokemon remains on both sides,
 			// recoil damage will not be taken.
-			if (
-				move.recoil && move.totalDamage &&
-				(
-					target.alliesAndSelf().filter(foe => !foe.status).length > 1 ||
-					target.hp > 0 || pokemon.alliesAndSelf().filter(ally => !ally.status).length > 1
-				)
-			) {
+			if (move.recoil && move.totalDamage && (pokemon.side.pokemonLeft > 1 || target.side.pokemonLeft > 1 || target.hp)) {
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
 			}
 			return damage;
@@ -472,9 +466,14 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[i] = boost[i];
-			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+			let boostBy = target.boostBy(currentBoost);
+			let msg = '-boost';
+			if (boost[i]! < 0) {
+				msg = '-unboost';
+				boostBy = -boostBy;
+			}
+			if (boostBy) {
 				success = true;
-				const msg = '-boost';
 				// Check for boost increases deleting attack or speed drops
 				if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
 					target.removeVolatile('brnattackdrop');
@@ -483,9 +482,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					target.removeVolatile('parspeeddrop');
 				}
 				if (!effect || effect.effectType === 'Move') {
-					this.add(msg, target, i, boost[i]);
+					this.add(msg, target, i, boostBy);
 				} else {
-					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+					this.add(msg, target, i, boostBy, '[from] ' + effect.fullname);
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}

@@ -4265,7 +4265,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
 				const noEncore = [
-					'assist', 'copycat', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform',
+					'assist', 'copycat', 'dynamaxcannon', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform',
 				];
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
@@ -11102,7 +11102,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, authentic: 1, mystery: 1},
 		onHit(target, source) {
-			const disallowedMoves = ['chatter', 'mimic', 'sketch', 'struggle', 'transform'];
+			const disallowedMoves = ['chatter', 'dynamaxcannon', 'mimic', 'sketch', 'struggle', 'transform'];
 			const move = target.lastMove;
 			if (source.transformed || !move || disallowedMoves.includes(move.id) || source.moves.includes(move.id)) {
 				return false;
@@ -16242,9 +16242,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			dustproof: true,
 			chance: 100,
-			onHit(target) {
-				if (target.status === 'brn') target.cureStatus();
-			},
+			volatileStatus: 'sparklingaria',
+		},
+		onAfterMove(source, target, move) {
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon !== source && pokemon.removeVolatile('sparklingaria') && pokemon.status === 'brn' && !source.fainted) {
+					pokemon.cureStatus();
+				}
+			}
 		},
 		target: "allAdjacent",
 		type: "Water",
@@ -16564,6 +16569,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit() {
 			this.field.clearTerrain();
 		},
+		onAfterSubDamage() {
+			this.field.clearTerrain();
+		},
 		isZ: "lycaniumz",
 		secondary: null,
 		target: "normal",
@@ -16732,6 +16740,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return !this.field.isTerrain('');
 		},
 		onHit() {
+			this.field.clearTerrain();
+		},
+		onAfterSubDamage() {
 			this.field.clearTerrain();
 		},
 		secondary: null,

@@ -56,7 +56,7 @@ export class FSPath {
 		return new FSPath(pathModule.dirname(this.path));
 	}
 
-	read(options: AnyObject | string = 'utf8'): Promise<string> {
+	read(options: AnyObject | BufferEncoding = 'utf8'): Promise<string> {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
@@ -74,7 +74,7 @@ export class FSPath {
 		return fs.readFileSync(this.path, options as {encoding: 'utf8'});
 	}
 
-	readBuffer(options: AnyObject | string = {}): Promise<Buffer> {
+	readBuffer(options: AnyObject | BufferEncoding = {}): Promise<Buffer> {
 		return new Promise((resolve, reject) => {
 			fs.readFile(this.path, options, (err, data) => {
 				err ? reject(err) : resolve(data as Buffer);
@@ -292,6 +292,16 @@ export class FSPath {
 
 	readdirSync() {
 		return fs.readdirSync(this.path);
+	}
+
+	async readdirIfExists(): Promise<string[]> {
+		if (await this.exists()) return this.readdir();
+		return Promise.resolve([]);
+	}
+
+	readdirIfExistsSync() {
+		if (this.existsSync()) return this.readdirSync();
+		return [];
 	}
 
 	createReadStream() {
