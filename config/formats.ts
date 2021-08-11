@@ -1552,8 +1552,12 @@ export const Formats: FormatList = [
 		validateSet(set, teamHas) {
 			const dex = this.dex;
 			const ability = dex.moves.get(set.ability);
-			if (ability.category !== 'Status' || ability.status === 'slp' ||
-				this.ruleTable.isRestricted(`move:${ability.id}`) || set.moves.map(this.dex.toID).includes(ability.id)) {
+			// Prevent stack overflow
+			const overflowAbilityNames = ['Assist', 'Entrainment', 'Skill Swap'];
+			if (
+				overflowAbilityNames.includes(ability.name) || ability.category !== 'Status' || ability.status === 'slp' ||
+				this.ruleTable.isRestricted(`move:${ability.id}`) || set.moves.map(this.toID).includes(ability.id)
+			) {
 				return this.validateSet(set, teamHas);
 			}
 			if (ability.forceSwitch || ability.selfSwitch) {
