@@ -25,10 +25,16 @@ interface TicketState {
 	ip: string;
 	needsDelayWarning?: boolean;
 	offline?: boolean;
+	// text ticket properties
 	/** [main text, context] */
 	text?: [string, string];
 	resolved?: ResolvedTicketInfo;
 	meta?: string;
+	notes?: {[userid: string]: string};
+	/** Extra info that they might need for displays or whatnot.
+	 * Use `TextTicketInfo#getState` to set it at creation (store properties of the user object, etc)
+	 */
+	state?: AnyObject;
 }
 
 interface ResolvedTicketInfo {
@@ -46,9 +52,10 @@ interface TextTicketInfo {
 	title: string;
 	disclaimer?: string;
 	getReviewDisplay: (
-		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection
+		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection, state?: AnyObject
 	) => Promise<string | void> | string | void;
 	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
+	getState?: (ticket: TicketState, user: User) => AnyObject;
 }
 
 interface BattleInfo {
@@ -295,6 +302,10 @@ export class HelpTicket extends Rooms.RoomGame {
 	getPreview() {
 		if (!this.ticket.active) return `title="The ticket creator has not spoken yet."`;
 		const hoverText = [];
+		const noteBuf = Object.entries(this.ticket.notes || {})
+			.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
+			.join('&#10;');
+		const notes = this.ticket.notes ? `&#10;Staff notes:&#10;${noteBuf}` : '';
 		for (let i = this.room.log.log.length - 1; i >= 0; i--) {
 			// Don't show anything after the first linebreak for multiline messages
 			const entry = this.room.log.log[i].split('\n')[0].split('|');
@@ -308,8 +319,8 @@ export class HelpTicket extends Rooms.RoomGame {
 			hoverText.push(Utils.html`${message}`);
 			if (hoverText.length >= 3) break;
 		}
-		if (!hoverText.length) return `title="The ticket creator has not spoken yet."`;
-		return `title="${hoverText.reverse().join(`&#10;`)}"`;
+		if (!hoverText.length) return `title="The ticket creator has not spoken yet.${notes}"`;
+		return `title="${hoverText.reverse().join(`&#10;`)}${notes}"`;
 	}
 
 	close(result: boolean | 'ticketban' | 'deleted', staff?: User) {
@@ -350,7 +361,6 @@ export class HelpTicket extends Rooms.RoomGame {
 			switch (this.ticket.type) {
 			case 'Appeal':
 			case 'IP-Appeal':
-			case 'ISP-Appeal':
 				this.result = (result ? 'approved' : 'denied');
 				break;
 			case 'PM Harassment':
@@ -416,10 +426,9 @@ export class HelpTicket extends Rooms.RoomGame {
 	onChatMessage(message: string, user: User) {
 		HelpTicket.uploadReplaysFrom(message, user, user.connections[0]);
 	}
-	static modlogStream = Rooms.Modlog.initialize('help-texttickets' as ModlogID);
 	// workaround to modlog for no room
-	static modlog(entry: PartialModlogEntry) {
-		Rooms.Modlog.write('help-texttickets' as ModlogID, entry);
+	static async modlog(entry: PartialModlogEntry) {
+		await Rooms.Modlog.write('help-texttickets' as ModlogID, entry);
 	}
 	static logTextResult(ticket: TicketState & {text: [string, string], resolved: ResolvedTicketInfo}) {
 		const entry = {
@@ -430,6 +439,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			userid: ticket.userid,
 			type: ticket.type,
 			claimed: ticket.claimed,
+			state: ticket.state || {},
 		};
 		const date = Chat.toTimestamp(new Date()).split(' ')[0];
 		void FS(`logs/tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
@@ -538,7 +548,11 @@ export class HelpTicket extends Rooms.RoomGame {
 	static getTextButton(ticket: TicketState & {text: [string, string]}) {
 		let buf = '';
 		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
-		const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}"`;
+		const noteBuf = Object.entries(ticket.notes || {})
+			.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
+			.join('&#10;');
+		const notes = ticket.notes ? `&#10;Staff notes:&#10;${noteBuf}` : '';
+		const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}${notes}"`;
 		const language = Users.get(ticket.userid)?.language || '';
 		const languageDisplay = language && language !== 'english' ? ` <small>(${language})</small>` : '';
 		buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
@@ -825,7 +839,6 @@ const ticketTitles: {[k: string]: string} = {
 	inappokemon: `Inappropriate Pokemon Nicknames`,
 	appeal: `Appeal`,
 	ipappeal: `IP-Appeal`,
-	appealsemi: `ISP-Appeal`,
 	roomhelp: `Public Room Assistance Request`,
 	other: `Other`,
 };
@@ -865,7 +878,6 @@ const ticketPages: {[k: string]: string} = {
 	confirminappokemon: `Report inappropriate Pokemon nicknames`,
 	confirmappeal: `Appeal your lock`,
 	confirmipappeal: `Appeal IP lock`,
-	confirmappealsemi: `Appeal ISP lock`,
 	confirmroomhelp: `Call a Global Staff member to help`,
 	confirmother: `Call a Global Staff member`,
 };
@@ -924,7 +936,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`,
 			);
 			buf += `<strong>Reported user:</strong> ${reportUserid} </strong>`;
-			buf += `<button class="button" name="send" value="/modlog global,[${reportUserid}]">Global Modlog</button><br />`;
+			buf += `<button class="button" name="send" value="/modlog room=global,user='${reportUserid}'">Global Modlog</button><br />`;
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
 				`spoiler:PMs with ${ticket.userid}${replayString ? `, ${replayString}` : ''}`,
@@ -951,6 +963,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 	},
 	inapname: {
 		title: "What's the inappropriate username?",
+		disclaimer: "If the username is offensive in a non-english language, or if it's not obvious, please be sure to explain.",
 		checker(input) {
 			if (!Users.get(input)) {
 				return [
@@ -1022,7 +1035,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				const [type, meta] = ticket.meta.split('-');
 				if (type === 'user') {
 					buf += `<br /><strong>Reported user:</strong> ${meta} `;
-					buf += `<button class="button" name="send" value="/modlog global,[${toID(meta)}]">Global Modlog</button><br />`;
+					buf += `<button class="button" name="send" value="/modlog room=global,user='${toID(meta)}'">Global Modlog</button><br />`;
 					buf += HelpTicket.displayPunishmentList(
 						toID(meta),
 						proof,
@@ -1061,7 +1074,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					`Enter either the room name or a room alias.`,
 				];
 			}
-			if (room.settings.isPrivate !== undefined) {
+			if (room.settings.isPrivate) {
 				return ['You may only request help for public rooms.'];
 			}
 			return true;
@@ -1069,6 +1082,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 	},
 	inappokemon: {
 		title: "Please provide replays of the battle with inappropriate Pokemon nicknames",
+		disclaimer: "If the nickname is offensive in a non-english language, or if it's not obvious, please be sure to explain.",
 		checker(input) {
 			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
 			return ['Please provide at least one valid battle or replay URL.'];
@@ -1113,10 +1127,10 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 	},
 	ipappeal: {
 		title: "Where are you currently connecting from?",
-		async getReviewDisplay(ticket, staff, conn) {
+		async getReviewDisplay(ticket, staff, conn, state) {
 			const tarUser = Users.get(ticket.userid);
-			const ips = tarUser ? tarUser.ips : ticket.meta!.split('-');
-			if (!tarUser) ips.shift(); // first one is always 'ips'
+			const ips: string[] = state ? state.ips : tarUser ? tarUser.ips : ticket.meta!.split('-');
+			if (!tarUser && !state) ips.shift(); // first one is always 'ips'
 			const info = await Promise.all(ips.map(i => IPTools.lookup(i)));
 			let buf = `<strong>IPs:</strong><br />`;
 			for (const [i, ip] of ips.entries()) {
@@ -1131,7 +1145,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					if (str) buf += `Punishments: ${str.join(' | ')}<br />`;
 				}
 				buf += `Host: ${data.shortHost} [${data.hostType}]<br />`;
-				buf += `<button class="button" name="send" value="/modlog global,[${ip}]">Modlog</button><br />`;
+				buf += `<button class="button" name="send" value="/modlog room=global,ip=${ip}">Modlog</button><br />`;
 				if (ipPunishments) {
 					const unlockCmd = staff.can('globalban') ?
 						`/unlockip ${ip}` :
@@ -1143,6 +1157,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 
 			return buf;
 		},
+		getState(ticket, user) {
+			return {ips: user.ips};
+		},
 		checker(text, context, pageId, user) {
 			if (!toID(text)) {
 				return ['Please tell us where you are connecting from.'];
@@ -1150,6 +1167,17 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (!(user.locked || user.namelocked || user.semilocked)) {
 				return ['You are not punished.'];
 			}
+			const punishments = Punishments.search(user.id);
+			const userids = [user.id, ...user.previousIDs];
+
+			if (punishments.length) {
+				for (const [, , punishment] of punishments) {
+					if (userids.includes(punishment.id as ID)) {
+						return ['Your current punishment was explicitly given to you. Please open an Appeal ticket instead.'];
+					}
+				}
+			}
+
 			if (user.ips.some(i => Punishments.sharedIpBlacklist.has(i))) {
 				return [
 					"Your network has too many users who consistently misbehave on it. As such, we cannot unlock you, lest they abuse the unlock.",
@@ -1389,14 +1417,10 @@ export const pages: Chat.PageTable = {
 					break;
 				case 'hasautoconfirmed':
 					buf += `<p>${this.tr`Login to your autoconfirmed account by using the <code>/nick</code> command in any chatroom, and the semilock will automatically be removed. Afterwards, you can use the <code>/nick</code> command to switch back to your current username without being semilocked again.`}</p>`;
-					buf += `<p>${this.tr`If the semilock does not go away, you can try asking a global staff member for help. Click the button below to call a global staff member.`}</p>`;
-					if (!isLast) break;
-					buf += `<p><Button>confirmappealsemi</Button></p>`;
+					buf += `<p>${this.tr`If the semilock does not go away, you can try asking a global staff member for help.`}</p>`;
 					break;
 				case 'lacksautoconfirmed':
-					buf += `<p>${this.tr`If you don't have an autoconfirmed account, you will need to contact a global staff member to appeal your semilock. Click the button below to call a global staff member.`}</p>`;
-					if (!isLast) break;
-					buf += `<p><Button>confirmappealsemi</Button></p>`;
+					buf += `<p>${this.tr`If you don't have an autoconfirmed account, you will need to contact a global staff member to appeal your semilock.`}</p>`;
 					break;
 				case 'appealother':
 					buf += `<p>${this.tr`Please PM the staff member who punished you. If you don't know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.`}</p>`;
@@ -1571,7 +1595,7 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<strong>From: ${ticket.userid}</strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
-			buf += `<button class="button" name="send" value="/modlog global,[${ticket.userid}]">Global Modlog</button><br />`;
+			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
@@ -1583,6 +1607,16 @@ export const pages: Chat.PageTable = {
 				buf += Chat.formatText(context);
 			}
 			buf += `</div>`;
+
+			if (ticket.notes) {
+				buf += `<br /><div class="infobox">`;
+				buf += `<details class="readmore"><summary>Hover notes:</summary>`;
+				for (const staff in ticket.notes) {
+					buf += Utils.html`<p>${ticket.notes[staff]} (by ${staff})</p>`;
+				}
+				buf += `</details></div>`;
+			}
+
 			if (!ticket.resolved) {
 				buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
 				buf += `<br /><strong>Resolve:</strong><br />`;
@@ -1620,20 +1654,32 @@ export const pages: Chat.PageTable = {
 				buf += `<div class="message-error">None found.</div>`;
 				return buf;
 			}
-			const stringifyDate = (num: number) => Chat.toTimestamp(new Date(num)).split(' ')[0];
+			const stringifyDate = (num: number) => {
+				const dateStrings = Chat.toTimestamp(new Date(num), {human: true}).split(' ');
+				return {day: dateStrings[0], time: dateStrings[1]};
+			};
+
+			Utils.sortBy(logs, log => -log.date);
+
 			for (const ticket of logs) {
 				buf += `<details class="readmore"><summary>`;
-				buf += `<strong>${ticket.type} - ${stringifyDate(ticket.created)}</strong></summary>`;
+				const curDate = stringifyDate(ticket.created);
+				buf += `<strong>${ticket.type} - ${curDate.day} (${curDate.time})</strong></summary>`;
 				const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
 				this.title = `[Text Ticket] ${ticket.userid}`;
 				buf += `<h2>Issue: ${ticket.type}</h2>`;
 				buf += `<strong>From: ${ticket.userid}</strong>`;
 				buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
-				buf += `<button class="button" name="send" value="/modlog global,[${ticket.userid}]">Global Modlog</button><br />`;
+				buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 				if (ticket.claimed) {
 					buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
 				}
-				buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
+				buf += await ticketInfo.getReviewDisplay(
+					ticket as TicketState & {text: [string, string]},
+					user,
+					connection,
+					ticket.state
+				);
 				buf += `<br />`;
 				buf += `<div class="infobox">`;
 				const [text, context] = ticket.text;
@@ -1965,7 +2011,7 @@ export const commands: Chat.ChatCommands = {
 				ticket.text = [text, contextString];
 				ticket.active = true;
 				tickets[user.id] = ticket;
-				HelpTicket.modlog({
+				await HelpTicket.modlog({
 					action: 'TEXTTICKET OPEN',
 					loggedBy: user.id,
 					note: `(${ticket.type}) ${text}${contextString ? `, context: ${contextString}` : ''}`,
@@ -1973,6 +2019,9 @@ export const commands: Chat.ChatCommands = {
 				writeTickets();
 				notifyStaff();
 				textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
+				if (textTicket.getState) {
+					ticket.state = textTicket.getState(ticket, user);
+				}
 
 				connection.send(`>view-${pageId}\n|deinit`);
 				return this.popupReply(`Your report has been submitted.`);
@@ -1982,7 +2031,6 @@ export const commands: Chat.ChatCommands = {
 			switch (ticket.type) {
 			case 'Appeal':
 			case 'IP-Appeal':
-			case 'ISP-Appeal':
 				closeButtons = `<button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}">Close Ticket as Appeal Granted</button> <button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}, false">Close Ticket as Appeal Denied</button>`;
 				break;
 			case 'PM Harassment':
@@ -2010,18 +2058,18 @@ export const commands: Chat.ChatCommands = {
 					staffIntroButtons = Utils.html`<button class="button" name="send" value="/forcerename ${reportTarget}">Force-rename ${reportTarget}</button> `;
 					break;
 				}
-				staffIntroButtons += Utils.html`<button class="button" name="send" value="/modlog global, user='${reportTarget}'">Global Modlog for ${reportTarget}</button> <button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button> `;
+				staffIntroButtons += Utils.html`<button class="button" name="send" value="/modlog room=global, user='${reportTarget}'">Global Modlog for ${reportTarget}</button> <button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button> `;
 			}
 			if (ticket.type === 'Appeal') {
-				staffIntroButtons += Utils.html`<button class="button" name="send" value="/modlog global, user='${user.name}'">Global Modlog for ${user.name}</button>`;
+				staffIntroButtons += Utils.html`<button class="button" name="send" value="/modlog room=global, user='${user.name}'">Global Modlog for ${user.name}</button>`;
 			}
 			const introMsg = Utils.html`<h2 style="margin:0">${this.tr`Help Ticket`} - ${user.name}</h2>` +
 				`<p><b>${this.tr`Issue`}</b>: ${ticket.type}<br />${this.tr`A Global Staff member will be with you shortly.`}</p>`;
 			const staffMessage = [
 				`<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}`,
-				`<button class="button" name="send" value="/modlog global, user='${ticket.userid}'"><small>Global Modlog for ${ticket.creator}</small></button>`,
+				`<button class="button" name="send" value="/modlog room=global, user='${ticket.userid}'"><small>Global Modlog for ${ticket.creator}</small></button>`,
 				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`,
-			].join(' ');
+			].join('<br />');
 			const staffHint = staffContexts[ticketType] || '';
 			let reportTargetInfo = '';
 			if (reportTargetType === 'room') {
@@ -2103,7 +2151,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/join view-help-text-${toID(target)}`);
 		},
 
-		resolve(target, room, user) {
+		async resolve(target, room, user) {
 			this.checkCan('lock');
 			const [ticketerName, result] = Utils.splitFirst(target, ',').map(i => i.trim());
 			const ticketId = toID(ticketerName);
@@ -2135,7 +2183,7 @@ export const commands: Chat.ChatCommands = {
 			// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
 			writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tresolved\tvalid\t${user.id}`);
 			this.popupReply(`You resolved ${ticketId}'s ticket.`);
-			HelpTicket.modlog({
+			await HelpTicket.modlog({
 				action: 'TEXTTICKET CLOSE',
 				loggedBy: user.id,
 				note: privateReason,
@@ -2160,6 +2208,64 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/join view-help-stats');
 		},
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
+
+		note: 'addnote',
+		addnote(target, room, user) {
+			this.checkCan('lock');
+			target = target.trim();
+			if (!target) return this.parse(`/help helpticket addnote`);
+			const [ticketName, note] = Utils.splitFirst(target, ',').map(i => i.trim());
+			const ticketId = toID(ticketName);
+			if (!ticketId) return this.errorReply(`Specify the userid that created the ticket you want to mark.`);
+			const ticket = tickets[ticketId];
+			if (!ticket) return this.errorReply(`${ticketId} does not have an active ticket.`);
+			if (ticket.resolved) return this.errorReply(`${ticketId}'s ticket has already been resolved.`);
+			if (!note) return this.errorReply(`You must specify a note to add.`);
+			if (!ticket.notes) ticket.notes = {};
+			ticket.notes[user.id] = note;
+			writeTickets();
+			notifyStaff();
+			if (!room || room.roomid !== 'staff') this.sendReply(`Added the note "${note}" to ${ticketId}'s ticket.`);
+			this.room = Rooms.get('staff') || null;
+			this.addGlobalModAction(`${user.name} added the note "${note}" to ${ticket.userid}'s helpticket.`);
+			this.globalModlog(`HELPTICKET NOTE`, ticket.userid, note);
+		},
+		addnotehelp: [
+			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text.`,
+			`Requires: % @ &`,
+		],
+
+		removenote(target, room, user) {
+			this.checkCan('lock');
+			target = target.trim();
+			if (!target) return this.parse(`/help helpticket removenote`);
+			let [ticketName, staff] = Utils.splitFirst(target, ',').map(i => i.trim());
+			const targetId = toID(ticketName);
+			if (!targetId) return this.errorReply(`Specify the userid that created the ticket you want to remove a note from.`);
+			const ticket = tickets[targetId];
+			if (!ticket || ticket.resolved) return this.errorReply(`${targetId} does not have a pending ticket.`);
+			staff = toID(staff) || user.id;
+			if (!ticket.notes) return this.errorReply(`${targetId}'s ticket does not have any notes.`);
+			const note = ticket.notes[staff];
+			if (!note) {
+				return this.errorReply(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
+			}
+			if (!room || room.roomid !== 'staff') {
+				this.sendReply(`You removed the note '${note}' (by ${staff}) on ${ticket.userid}'s ticket.`);
+			}
+			delete ticket.notes[staff];
+			if (!Object.keys(ticket.notes).length) delete ticket.notes;
+			writeTickets();
+			notifyStaff();
+			this.room = Rooms.get('staff') || null;
+			this.addModAction(`${user.name} removed ${staff}'s note ("${note}") from ${ticket.userid}'s helpticket.`);
+			this.globalModlog(`HELPTICKET REMOVENOTE`, ticket.userid, `${note} (originally by ${staff})`);
+		},
+		removenotehelp: [
+			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
+			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
+			`Requires: % @ &`,
+		],
 
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
@@ -2251,7 +2357,7 @@ export const commands: Chat.ChatCommands = {
 					ticketGame.writeStats('ticketban');
 					helpRoom.destroy();
 				} else if (targetTicket?.text) {
-					HelpTicket.modlog({
+					await HelpTicket.modlog({
 						action: `TICKETBAN`,
 						loggedBy: user.id,
 						note: `(Ticket content: ${targetTicket.text.join(' ').replace(/\n/ig, ' ')})`,

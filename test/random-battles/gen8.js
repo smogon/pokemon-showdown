@@ -5,7 +5,7 @@
 
 const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove} = require('./tools');
 const assert = require('../assert');
-const {Dex} = require('../../.sim-dist/dex');
+const {Dex} = require('../../sim/dex');
 
 describe('[Gen 8] Random Battle', () => {
 	const options = {format: 'gen8randombattle'};
@@ -106,6 +106,13 @@ describe('[Gen 8] Random Battle', () => {
 
 	it('Landorus-Therian should not get Fly and Stealth Rock on the same set', () => {
 		testNotBothMoves('landorustherian', options, 'fly', 'stealthrock');
+	});
+
+	it('3 Attacks Scyther should get Heavy-Duty Boots', () => {
+		testSet('scyther', options, set => {
+			if (set.moves.every(move => Dex.moves.get(move).category !== 'Status')) return;
+			assert.equal(set.item, 'Heavy-Duty Boots', `set=${JSON.stringify(set)}`);
+		});
 	});
 });
 
