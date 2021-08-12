@@ -2339,7 +2339,7 @@ export const commands: Chat.ChatCommands = {
 
 			let displayMessage = '';
 			if (affected.length > 1) {
-				const alts = affected.slice(1).map(userObj => typeof userObj === 'string' ? userObj : userObj.getLastName()).join(", ")
+				const alts = affected.slice(1).map(userObj => typeof userObj === 'string' ? userObj : userObj.getLastName()).join(", ");
 				displayMessage = `${username}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${alts}`;
 				this.privateModAction(displayMessage);
 			} else if (acAccount) {
