@@ -10,6 +10,7 @@
 
 import {FS, SQL} from '../../lib';
 import type {DatabaseWrapper, SQLOptions} from '../../lib/sql';
+import {formatSQLArray} from '../../lib/utils';
 
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
@@ -153,7 +154,7 @@ export class Modlog {
 			`SELECT * FROM modlog WHERE is_global = 1 ` +
 			`AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)) ` +
 			`AND timestamp > ? ` +
-			`AND action IN (${Modlog.formatArray(GLOBAL_PUNISHMENTS, [])})`
+			`AND action IN (${formatSQLArray(GLOBAL_PUNISHMENTS, [])})`
 		);
 		await this.writeSQL(this.queuedEntries);
 	}
@@ -161,11 +162,6 @@ export class Modlog {
 	/******************
 	 * Helper methods *
 	 ******************/
-	static formatArray(arr: unknown[], args: unknown[]) {
-		args.push(...arr);
-		return [...'?'.repeat(arr.length)].join(', ');
-	}
-
 	getSharedID(roomid: ModlogID): ID | false {
 		return roomid.includes('-') ? `${toID(roomid.split('-')[0])}-rooms` as ID : false;
 	}
@@ -390,7 +386,7 @@ export class Modlog {
 		// (This is because the text modlog system gave global modlog entries their own file, as a room would have.)
 		if (rooms !== 'all') {
 			const args: (string | number)[] = [];
-			let roomChecker = `roomid IN (${Modlog.formatArray(rooms, args)})`;
+			let roomChecker = `roomid IN (${formatSQLArray(rooms, args)})`;
 			if (rooms.includes('global')) {
 				if (rooms.length > 1) {
 					roomChecker = `(is_global = 1 OR ${roomChecker})`;
@@ -423,7 +419,7 @@ export class Modlog {
 		}
 		if (onlyPunishments) {
 			const args: (string | number)[] = [];
-			ands.push({query: `action IN (${Modlog.formatArray(PUNISHMENTS, args)})`, args});
+			ands.push({query: `action IN (${formatSQLArray(PUNISHMENTS, args)})`, args});
 		}
 
 		for (const ip of search.ip) {
