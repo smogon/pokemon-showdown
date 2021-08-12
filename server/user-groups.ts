@@ -339,6 +339,11 @@ export class GlobalAuth extends Auth {
 			if (!row) continue;
 			const [name, symbol, sectionid] = row.split(",");
 			const id = toID(name);
+			if (!id) {
+				Monitor.warn('Dropping malformed usergroups line (missing ID):');
+				Monitor.warn(row);
+				continue;
+			}
 			this.usernames.set(id, name);
 			if (sectionid) this.sectionLeaders.set(id, sectionid as RoomSection);
 
