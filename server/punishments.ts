@@ -2000,6 +2000,16 @@ export const Punishments = new class {
 			}
 		}
 	}
+	renameRoom(oldID: RoomID, newID: RoomID) {
+		for (const table of [Punishments.roomUserids, Punishments.roomIps]) {
+			const entry = table.get(oldID);
+			if (entry) {
+				table.set(newID, entry);
+				table.delete(oldID);
+			}
+		}
+		Punishments.saveRoomPunishments();
+	}
 	PunishmentMap = PunishmentMap;
 	NestedPunishmentMap = NestedPunishmentMap;
 }();

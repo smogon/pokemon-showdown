@@ -943,6 +943,8 @@ export abstract class BasicRoom {
 		this.settings.title = newTitle;
 		this.saveSettings();
 
+		Punishments.renameRoom(oldID, newID);
+
 		void this.log.rename(newID);
 	}
 
