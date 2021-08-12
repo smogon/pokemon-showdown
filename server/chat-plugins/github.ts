@@ -58,6 +58,7 @@ export const GitHub = new class {
 	updates: {[k: string]: number} = Object.create(null);
 	constructor() {
 		try {
+			// config.github: https://github.com/nlf/node-github-hook#readme
 			this.hook = (require('githubhook'))(Config.github);
 		} catch {}
 		this.listen();
