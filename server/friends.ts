@@ -342,7 +342,11 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	},
 	accept: requests => {
 		for (const request of requests) {
-			const [senderID] = request;
+			const [senderID, receiverID] = request;
+			const friends = statements.get.all(receiverID, 101);
+			if (friends?.length >= MAX_FRIENDS) {
+				throw new FailureMessage(`You are at the maximum number of friends.`);
+			}
 			const {result} = TRANSACTIONS.removeRequest([request]);
 			if (!result.length) throw new FailureMessage(`You have no request pending from ${senderID}.`);
 			TRANSACTIONS.add([request]);
