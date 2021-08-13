@@ -52,7 +52,7 @@ export type AnnotatedChatHandler = ChatHandler & {
 	isPrivate: boolean,
 	disabled: boolean,
 	aliases: string[],
-	requiredPermission?: GlobalPermission | RoomPermission;
+	requiredPermission?: GlobalPermission | RoomPermission,
 };
 export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | ChatCommands;
