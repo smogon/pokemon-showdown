@@ -95,7 +95,7 @@ export const GitHub = new class {
 			const repoName = this.getRepoName(repo);
 			const id = commit.id.substring(0, 6);
 			messages.development.push(
-				Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}"><span style="color:#606060">${id}</span></a> ${shortMessage} <span style="color:#909090">(${username})</span>`
+				Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}" style="color:#606060">${id}</a> ${shortMessage} <span style="color:#909090">(${username})</span>`
 			);
 			messages.staff.push(Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}">${shortMessage}</a> <span style="color:#909090">(${username})</span>`);
 		}
