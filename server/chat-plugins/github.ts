@@ -152,6 +152,7 @@ export const GitHub = new class {
 };
 
 export const commands: Chat.ChatCommands = {
+	gh: 'github',
 	github: {
 		''() {
 			return this.parse('/help github');

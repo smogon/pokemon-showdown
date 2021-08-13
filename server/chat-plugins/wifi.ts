@@ -969,7 +969,6 @@ const cmds: Chat.ChatCommands = {
 export const commands = {
 	giveaway: cmds,
 	ga: cmds.guess,
-	gh: cmds.help,
 	qg: cmds.question,
 	lg: cmds.lottery,
 	gts: cmds.gts,
