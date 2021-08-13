@@ -90,13 +90,14 @@ export const GitHub = new class {
 		};
 		for (const commit of result.commits) {
 			const {message, url} = commit;
+			const [shortMessage] = message.split('\n\n');
 			const username = this.getUsername(commit.author.name);
 			const repoName = this.getRepoName(repo);
 			const id = commit.id.substring(0, 6);
 			messages.development.push(
-				Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}"><span style="color:#606060">${id}</span></a> ${message} <span style="color:#909090">(${username})</span>`
+				Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}"><span style="color:#606060">${id}</span></a> ${shortMessage} <span style="color:#909090">(${username})</span>`
 			);
-			messages.staff.push(Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}">${message}</a> <span style="color:#909090">(${username})</span>`);
+			messages.staff.push(Utils.html`[<span style="color:#FF00FF">${repoName}</span>] <a href="${url}">${shortMessage}</a> <span style="color:#909090">(${username})</span>`);
 		}
 		for (const k in messages) {
 			this.report(k as RoomID, repo, messages[k as RoomID]);
