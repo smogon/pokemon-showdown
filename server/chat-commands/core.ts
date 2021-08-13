@@ -16,6 +16,7 @@
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib';
 import type {UserSettings} from '../users';
+import type {GlobalPermission} from '../user-groups';
 
 const avatarTable = new Set([
 	'aaron',
@@ -1852,7 +1853,8 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const curHandler = Chat.parseCommand(`/${closestHelp}`)?.handler;
-		if (curHandler?.isPrivate && !user.can('lock')) {
+		const requiredPerm = curHandler?.requiredPermission || 'lock';
+		if (curHandler?.isPrivate && !user.can(requiredPerm as GlobalPermission)) {
 			return this.errorReply(this.tr`The command '/${target}' does not exist.`);
 		}
 
