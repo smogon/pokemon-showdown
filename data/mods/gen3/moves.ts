@@ -27,6 +27,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 30;
 		},
 	},
+	beatup: {
+		inherit: true,
+		onModifyMove(move, pokemon) {
+			pokemon.addVolatile('beatup');
+			move.type = '???';
+			move.category = 'Special';
+			move.allies = pokemon.side.pokemon.filter(ally => !ally.fainted && !ally.status);
+			move.multihit = move.allies.length;
+		},
+	},
 	bide: {
 		inherit: true,
 		accuracy: 100,
