@@ -276,7 +276,8 @@ if (!PM.isParentProcess) {
 				}
 				const {num, data} = query;
 				statement = statements.get(num);
-				results = statement?.run(...data as any) || null;
+				// originally used ...args, but that nukes the support for named parameters
+				results = statement?.run(data) || null;
 			}
 				break;
 			case 'exec': {
