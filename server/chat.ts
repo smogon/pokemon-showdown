@@ -28,6 +28,7 @@ import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 import {FriendsDatabase, PM} from './friends';
 import {DatabaseWrapper, SQL} from '../lib/sql';
+import {resolve} from 'path';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
@@ -134,6 +135,8 @@ const MAX_PARSE_RECURSION = 10;
 
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
+
+const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 
 import {FS, Utils} from '../lib';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
@@ -1415,7 +1418,7 @@ export const Chat = new class {
 		void this.loadTranslations().then(() => {
 			Chat.translationsLoaded = true;
 		});
-		void this.prepareDatabase();
+		this.databaseReadyPromise = this.prepareDatabase();
 	}
 	translationsLoaded = false;
 	/**
@@ -1687,33 +1690,37 @@ export const Chat = new class {
 	 * Chat.database will be null if the database is not yet ready.
 	 */
 	database: DatabaseWrapper | null = null;
+	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
-		const database = SQL('./databases/chat-plugins.db');
+		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
+		this.database = SQL(('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH);
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
-		const {hasDBInfo} = await database.get(await database.prepare(
+		const statement = await this.database.prepare(
 			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
-		));
-		if (!hasDBInfo) await database.runFile('./databases/schemas/chat-plugins.sql');
+		);
+		const {hasDBInfo} = await this.database.get(statement);
+		if (!hasDBInfo) await this.database.runFile('./databases/schemas/chat-plugins.sql');
 
-		const result = await database.get(await database.prepare(
+		const result = await this.database.get(await this.database.prepare(
 			`SELECT value as curVersion FROM db_info WHERE key = 'version'`
 		));
 		const curVersion = parseInt(result.curVersion);
 		if (!curVersion) throw new Error(`db_info table is present, but schema version could not be parsed`);
 
 		// automatically run migrations of the form "v{number}.sql" in the migrations/chat-plugins folder
+		const migrationsFolder = './databases/migrations/chat-plugins';
 		const migrationsToRun = [];
-		for (const migrationFile of (await FS('./databases/migrations/chat-plugins').readdir())) {
+		for (const migrationFile of (await FS(migrationsFolder).readdir())) {
 			const migrationVersion = parseInt(/v(\d+)\.sql$/.exec(migrationFile)?.[1] || '');
 			if (!migrationVersion) continue;
 			if (migrationVersion > curVersion) migrationsToRun.push({version: migrationVersion, file: migrationFile});
 		}
 		Utils.sortBy(migrationsToRun, ({version}) => version);
 		for (const {file} of migrationsToRun) {
-			await database.runFile(file);
+			await this.database.runFile(resolve(migrationsFolder, file));
 		}
-		Chat.database = database;
+
 		Chat.destroyHandlers.push(() => Chat.database?.destroy());
 	}
 
