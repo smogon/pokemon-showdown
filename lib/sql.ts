@@ -14,6 +14,15 @@ export interface SQLOptions {
 	sqliteOptions?: sqlite.Options;
 }
 
+export enum SQLiteErrors {
+	/** Statement needs to be prepared. */
+	StatementNotFound,
+	/** Config.usesqlite is off.
+	 * Should never usually get to this point, but if the consumer doesn't handle it - we will.
+	 */
+	DatabaseNotFound,
+}
+
 type DataType = unknown[] | Record<string, unknown>;
 
 export interface TransactionEnvironment {
@@ -92,7 +101,9 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 				case 'transaction': {
 					const transaction = this.state.transactions.get(query.name);
 					// !transaction covers db not existing, typically, but this is just to appease ts
-					if (!transaction || !this.database) return null;
+					if (!transaction || !this.database) {
+						return SQLiteErrors.DatabaseNotFound;
+					}
 					const env: TransactionEnvironment = {
 						db: this.database,
 						statements: this.state.statements,
@@ -106,31 +117,31 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 				}
 				case 'get': {
 					if (!this.database) {
-						return null;
+						return SQLiteErrors.DatabaseNotFound;
 					}
 					const statement = this.state.statements.get(query.statement);
-					if (!statement) return null;
+					if (!statement) return SQLiteErrors.StatementNotFound;
 					return statement.get(query.data);
 				}
 				case 'run': {
 					if (!this.database) {
-						return {changes: 0};
+						return SQLiteErrors.DatabaseNotFound;
 					}
 					const statement = this.state.statements.get(query.statement);
-					if (!statement) return null;
+					if (!statement) return SQLiteErrors.StatementNotFound;
 					return statement.run(query.data);
 				}
 				case 'all': {
 					if (!this.database) {
-						return [];
+						return SQLiteErrors.DatabaseNotFound;
 					}
 					const statement = this.state.statements.get(query.statement);
-					if (!statement) return null;
+					if (!statement) return SQLiteErrors.StatementNotFound;
 					return statement.all(query.data);
 				}
 				case 'prepare':
 					if (!this.database) {
-						return null;
+						return SQLiteErrors.DatabaseNotFound;
 					}
 					this.state.statements.set(query.data, this.database.prepare(query.data));
 					return query.data;
@@ -217,6 +228,16 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	async runFile(file: string) {
 		const contents = await FS(file).read();
 		return this.query({type: 'exec', data: contents});
+	}
+	async query(data: DatabaseQuery) {
+		const result = await super.query(data);
+		if (result === SQLiteErrors.StatementNotFound) {
+			throw new Error("Prepare a statement before using another database function with SQLDatabase.prepare");
+		}
+		if (result === SQLiteErrors.DatabaseNotFound) {
+			throw new Error("SQLite database was queried, but Config.usesqlite is off");
+		}
+		return result;
 	}
 }
 
