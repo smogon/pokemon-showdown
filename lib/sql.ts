@@ -52,6 +52,27 @@ function getModule() {
 	}
 }
 
+export class Statement {
+	private db: SQLDatabaseManager;
+	private statement: string;
+	constructor(statement: string, db: SQLDatabaseManager) {
+		this.db = db;
+		this.statement = statement;
+	}
+	run(data: DataType) {
+		return this.db.run(this.statement, data);
+	}
+	all(data: DataType) {
+		return this.db.all(this.statement, data);
+	}
+	get(data: DataType) {
+		return this.db.get(this.statement, data);
+	}
+	toString() {
+		return this.statement;
+	}
+}
+
 export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> {
 	options: SQLOptions;
 	database: null | sqlite.Database = null;
@@ -59,9 +80,13 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		transactions: Map<string, sqlite.Transaction>,
 		statements: Map<string, sqlite.Statement>,
 	};
+	private dbReady = false;
 	onError: ErrorHandler;
 	constructor(module: NodeJS.Module, options: SQLOptions, onError?: ErrorHandler) {
 		super(module, query => {
+			if (!this.dbReady) {
+				this.setupDatabase();
+			}
 			try {
 				switch (query.type) {
 				case 'transaction': {
@@ -76,7 +101,8 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 				}
 				case 'exec': {
 					if (!this.database) return {changes: 0};
-					return this.database.exec(query.data);
+					this.database.exec(query.data);
+					return true;
 				}
 				case 'get': {
 					if (!this.database) {
@@ -113,24 +139,28 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 				return this.onError(error, query);
 			}
 		});
-		// if (process.send) console.log('super constructed');
+
 		this.options = options;
 		this.onError = onError || ((err, query) => {
+			if (global.Monitor?.crashlog) {
+				Monitor.crashlog(err, `an ${this.basename} SQLite process`, query);
+				return null;
+			}
 			throw new Error(`SQLite error: ${err.message} (${JSON.stringify(query)})`);
 		});
 		this.state = {
 			transactions: new Map(),
 			statements: new Map(),
 		};
-		if (!this.isParentProcess) {
-			this.setupDatabase();
-		}
+		if (!this.isParentProcess) this.setupDatabase();
 	}
 	setupDatabase() {
+		if (this.dbReady) return;
+		this.dbReady = true;
 		const {file, extension} = this.options;
+		// console.log(`loading database ${file}${extension ? ` and extension ${extension}` : ''}`);
 		const Database = getModule();
 		this.database = Database ? new Database(file) : null;
-		console.log(this.database, Database, this.options);
 		if (extension && this.database) {
 			const {
 				functions,
@@ -161,20 +191,25 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			}
 		}
 	}
-	all<T = any>(statement: string, data: DataType): Promise<T[]> {
+	all<T = any>(statement: string | Statement, data: DataType): Promise<T[]> {
+		if (typeof statement !== 'string') statement = statement.toString();
 		return this.query({type: 'all', statement, data});
 	}
-	get<T = any>(statement: string, data: DataType): Promise<T> {
+	get<T = any>(statement: string | Statement, data: DataType): Promise<T> {
+		if (typeof statement !== 'string') statement = statement.toString();
 		return this.query({type: 'get', statement, data});
 	}
-	run(statement: string, data: DataType): Promise<{changes: number}> {
+	run(statement: string | Statement, data: DataType): Promise<{changes: number}> {
+		if (typeof statement !== 'string') statement = statement.toString();
 		return this.query({type: 'run', statement, data});
 	}
 	transaction<T = any>(name: string, data: DataType): Promise<T> {
 		return this.query({type: 'transaction', name, data});
 	}
-	prepare(statement: string): Promise<string | null> {
-		return this.query({type: 'prepare', data: statement});
+	async prepare(statement: string): Promise<Statement | null> {
+		const source = await this.query({type: 'prepare', data: statement});
+		if (!source) return null;
+		return new Statement(source, this);
 	}
 	exec(data: string): Promise<{changes: number}> {
 		return this.query({type: 'exec', data});
@@ -188,7 +223,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 interface SetupOptions {
 	onError: ErrorHandler;
 	processes: number;
-};
+}
 
 export function SQL(
 	module: NodeJS.Module, input: SQLOptions & Partial<SetupOptions>
@@ -200,4 +235,10 @@ export function SQL(
 		if (processes) PM.spawn(processes);
 	}
 	return PM;
+}
+
+export namespace SQL {
+	export type DatabaseManager = import('./sql').SQLDatabaseManager;
+	export type Statement = import('./sql').Statement;
+	export type Options = import('./sql').SQLOptions;
 }
