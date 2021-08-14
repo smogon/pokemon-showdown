@@ -141,8 +141,8 @@ async function lastLine(database, roomid) {
 		// isExact is currently set up to search for the entire note equalling the search
 		// this could be redesigned, but is what we currently test for.
 		it('note searches should respect isExact', async () => {
-			const notExact = await modlog.search('readingtest', {note: [{search: ['has man'], isExact: false}], user: [], ip: [], action: [], actionTaker: []});
-			const exact = await modlog.search('readingtest', {note: [{search: ['has man'], isExact: true}], user: [], ip: [], action: [], actionTaker: []});
+			const notExact = await modlog.search('readingtest', {note: [{search: 'has man', isExact: false}], user: [], ip: [], action: [], actionTaker: []});
+			const exact = await modlog.search('readingtest', {note: [{search: 'has man', isExact: true}], user: [], ip: [], action: [], actionTaker: []});
 
 			assert.equal(exact.results.length, 0);
 			assert(notExact.results.length);
