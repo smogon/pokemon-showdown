@@ -122,7 +122,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 						return null;
 					}
 					const statement = this.state.statements.get(query.statement);
-					if (!statement) return STATEMENT_NOT_FOUND
+					if (!statement) return STATEMENT_NOT_FOUND;
 					return statement.run(query.data);
 				}
 				case 'all': {
