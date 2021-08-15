@@ -64,6 +64,13 @@ function escapeHTML(str?: string) {
 		.replace(/\//g, '&#x2f;');
 }
 
+function toListString(arr: string[]) {
+	if (!arr.length) return '';
+	if (arr.length === 1) return arr[0];
+	if (arr.length === 2) return `${arr[0]} and ${arr[1]}`;
+	return `${arr.slice(0, -1).join(", ")}, and ${arr.slice(-1)[0]}`;
+}
+
 function checkCanAll(room: Room | null) {
 	if (!room) return false; // no, no good reason for using `all` in pms
 	const {isPersonal, isHelp} = room.settings;
@@ -2440,7 +2447,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	if (setSources.isHidden) {
 		buffer += `${species.abilities['H'] || 'HA'} `;
 	}
-	buffer += `${species.name}` + (problems.length ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
+	buffer += `${species.name}` + (problems.length ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + toListString(moveNames);
 	if (!problems.length) {
 		const sourceNames: {[k: string]: string} = {
 			'7V': "virtual console transfer from gen 1-2", '8V': "Pok&eacute;mon Home transfer from LGPE", E: "", S: "event", D: "dream world", X: "traded-back ", Y: "traded-back event",
@@ -2568,7 +2575,6 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = require('../../sim/dex').Dex;
-	global.Chat = require('../chat').Chat;
 	global.toID = Dex.toID;
 	Dex.includeData();
 
