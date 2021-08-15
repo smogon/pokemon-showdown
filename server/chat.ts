@@ -27,7 +27,7 @@ import type {RoomPermission, GlobalPermission} from './user-groups';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 import {FriendsDatabase, PM} from './friends';
-import {SQL, Repl} from '../lib';
+import {SQL, Repl, FS, Utils} from '../lib';
 import {Dex} from '../sim';
 import {resolve} from 'path';
 
@@ -140,7 +140,6 @@ const BROADCAST_TOKEN = '!';
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
 
-import {FS, Utils} from '../lib';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
@@ -2517,5 +2516,6 @@ if (Chat.database.isParentProcess) {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
 	global.Config = require('./config-loader').Config;
+	// eslint-disable-next-line no-eval
 	Repl.start('chat-db', cmd => eval(cmd));
 }

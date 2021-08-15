@@ -707,7 +707,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	}
 
 	private rowToQuestion(row: AnyObject): Promise<TriviaQuestion> {
-		return Chat.database!.all(this.answersQuery!, [row.question_id]).then(answerRows => ({
+		return Chat.database.all(this.answersQuery!, [row.question_id]).then(answerRows => ({
 			question: row.question,
 			category: row.category,
 			answers: answerRows.map((answerRow: AnyObject) => answerRow.answer),
