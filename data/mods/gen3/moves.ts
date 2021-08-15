@@ -36,6 +36,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			move.allies = pokemon.side.pokemon.filter(ally => !ally.fainted && !ally.status);
 			move.multihit = move.allies.length;
 		},
+		condition: {
+			duration: 1,
+			onModifySpAPriority: -101,
+			onModifySpA(atk, pokemon, defender, move) {
+				this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
+				this.event.modifier = 1;
+				return move.allies!.shift()!.species.baseStats.atk;
+			},
+			onFoeModifySpDPriority: -101,
+			onFoeModifySpD(def, pokemon) {
+				this.event.modifier = 1;
+				return pokemon.species.baseStats.def;
+			},
+		},
 	},
 	bide: {
 		inherit: true,
