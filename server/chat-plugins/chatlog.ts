@@ -55,6 +55,27 @@ interface RoomStats {
 	averagePresent: number;
 }
 
+function count(num: any, pluralSuffix: string, singular = "") {
+	if (num && typeof num.length === 'number') {
+		num = num.length;
+	} else if (num && typeof num.size === 'number') {
+		num = num.size;
+	} else {
+		num = Number(num);
+	}
+	if (!singular) {
+		if (pluralSuffix.endsWith("s")) {
+			singular = pluralSuffix.slice(0, -1);
+		} else if (pluralSuffix.endsWith("s have")) {
+			singular = pluralSuffix.slice(0, -6) + " has";
+		} else if (pluralSuffix.endsWith("s were")) {
+			singular = pluralSuffix.slice(0, -6) + " was";
+		}
+	}
+	const space = singular.startsWith('<') ? '' : ' ';
+	return `${num}${space}${num > 1 ? pluralSuffix : singular}`;
+}
+
 export class LogReaderRoom {
 	roomid: RoomID;
 	constructor(roomid: RoomID) {
@@ -603,7 +624,7 @@ export abstract class Searcher {
 				const dayResults = results[day][user];
 				if (isNaN(dayResults)) continue;
 				buf += `<li>[<a roomid="view-chatlog-${roomid}--${day}">${day}</a>]: `;
-				buf += `${Chat.count(dayResults, 'lines')}</li>`;
+				buf += `${count(dayResults, 'lines')}</li>`;
 			}
 		} else {
 			buf += '<hr /><ol>';
@@ -621,7 +642,7 @@ export abstract class Searcher {
 			)).slice(0, MAX_TOPUSERS);
 			for (const userid of sortedResults) {
 				buf += `<li><span class="username"><username>${userid}</username></span>: `;
-				buf += `${Chat.count(totalResults[userid], 'lines')}</li>`;
+				buf += `${count(totalResults[userid], 'lines')}</li>`;
 			}
 		}
 		buf += `</div>`;
