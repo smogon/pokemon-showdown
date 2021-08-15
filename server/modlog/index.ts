@@ -309,7 +309,7 @@ export class Modlog {
 
 		const duration = Date.now() - startTime;
 		if (duration > LONG_QUERY_DURATION) {
-			Monitor.slow(`[slow SQL modlog search] ${duration}ms - ${JSON.stringify(query)}`);
+			Monitor.slow(`[slow SQL modlog search] ${duration}ms - ${JSON.stringify({...query, statement: query.statement.toString()})}`);
 		}
 		return {results, duration};
 	}
