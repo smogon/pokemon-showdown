@@ -8,9 +8,8 @@
  * @license MIT
  */
 
-import {FS, SQL} from '../../lib';
-import type {DatabaseWrapper, SQLOptions} from '../../lib/sql';
-import {formatSQLArray} from '../../lib/utils';
+import {FS, SQL, Utils} from '../../lib';
+import {Config} from '../config-loader';
 
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
@@ -46,7 +45,7 @@ interface ModlogResults {
 }
 
 interface ModlogSQLQuery<T> {
-	statement: number;
+	statement: SQL.Statement;
 	queryText: string;
 	args: T[];
 	returnsResults?: boolean;
@@ -78,52 +77,61 @@ export interface ModlogEntry {
 
 export interface TransactionArguments extends Record<string, unknown> {
 	entries: Iterable<ModlogEntry>;
-	modlogInsertionStatement: number;
-	altsInsertionStatement: number;
+	modlogInsertionStatement: string;
+	altsInsertionStatement: string;
 }
 
 export type PartialModlogEntry = Partial<ModlogEntry> & {action: string};
 
 export class Modlog {
-	readonly database?: DatabaseWrapper;
+	readonly database: SQL.DatabaseManager;
 	readyPromise: Promise<void> | null;
 	private databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
 
-	modlogInsertionQuery?: number;
-	altsInsertionQuery?: number;
-	renameQuery?: number;
-	globalPunishmentsSearchQuery?: number;
+	modlogInsertionQuery: SQL.Statement | null = null;
+	altsInsertionQuery: SQL.Statement | null = null;
+	renameQuery: SQL.Statement | null = null;
+	globalPunishmentsSearchQuery: SQL.Statement | null = null;
 
-	constructor(databasePath: string, sqliteOptions?: Partial<SQLOptions>) {
+	constructor(databasePath: string, options: Partial<SQL.Options>) {
 		this.queuedEntries = [];
 		this.databaseReady = false;
+		const dbExists = FS(databasePath).existsSync();
+		this.database = SQL(module, {
+			file: MODLOG_DB_PATH,
+			extension: 'server/modlog/transactions.ts',
+			...options,
+		});
 
 		if (Config.usesqlite) {
-			const dbExists = FS(databasePath).existsSync();
-			this.database = SQL({
-				file: databasePath,
-				extension: 'server/modlog/transactions.ts',
-				...sqliteOptions,
-			});
-
-			// we can't prepare statements or block on database queries, since constructors must be synchronous
-			this.readyPromise = this.setupDatabase(dbExists).then(() => {
-				this.databaseReady = true;
-				this.readyPromise = null;
-			});
-		} else {
-			this.readyPromise = new Promise(resolve => {
-				this.readyPromise = null;
-				resolve();
-			});
+			if (this.database.isParentProcess) {
+				this.database.spawn(Config.modlogprocesses || 1);
+			} else {
+				global.Monitor = {
+					crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
+						const repr = JSON.stringify([error.name, error.message, source, details]);
+						process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+					},
+				};
+				process.on('uncaughtException', err => {
+					Monitor.crashlog(err, 'A modlog database process');
+				});
+				process.on('unhandledRejection', err => {
+					Monitor.crashlog(err as Error, 'A modlog database process');
+				});
+			}
 		}
+
+		this.readyPromise = this.setupDatabase(dbExists).then(result => {
+			this.databaseReady = result;
+			this.readyPromise = null;
+		});
 	}
 
 	async setupDatabase(dbExists: boolean) {
-		if (!this.database) return;
-
+		if (!Config.usesqlite) return false;
 		await this.database.exec("PRAGMA foreign_keys = ON;");
 		await this.database.exec(`PRAGMA case_sensitive_like = true;`);
 
@@ -132,10 +140,9 @@ export class Modlog {
 			await this.database.runFile(MODLOG_SCHEMA_PATH);
 		}
 
-		const statement = await this.database.prepare(
-			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
-		);
-		const {hasDBInfo} = await this.database.get(statement);
+		const statement = `SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`;
+		await this.database.prepare(statement);
+		const {hasDBInfo} = await this.database.get(statement, []);
 
 		if (hasDBInfo === 0) {
 			// needs v2 migration
@@ -154,9 +161,10 @@ export class Modlog {
 			`SELECT * FROM modlog WHERE is_global = 1 ` +
 			`AND (userid = ? OR autoconfirmed_userid = ? OR EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND userid = ?)) ` +
 			`AND timestamp > ? ` +
-			`AND action IN (${formatSQLArray(GLOBAL_PUNISHMENTS, [])})`
+			`AND action IN (${Utils.formatSQLArray(GLOBAL_PUNISHMENTS, [])})`
 		);
 		await this.writeSQL(this.queuedEntries);
+		return true;
 	}
 
 	/******************
@@ -209,10 +217,10 @@ export class Modlog {
 		}
 		const toInsert: TransactionArguments = {
 			entries,
-			modlogInsertionStatement: this.modlogInsertionQuery!,
-			altsInsertionStatement: this.altsInsertionQuery!,
+			modlogInsertionStatement: this.modlogInsertionQuery!.toString(),
+			altsInsertionStatement: this.altsInsertionQuery!.toString(),
 		};
-		await this.database!.transaction('insertion', toInsert);
+		await this.database.transaction('insertion', toInsert);
 	}
 
 	/**
@@ -224,7 +232,7 @@ export class Modlog {
 
 	destroyAllSQLite() {
 		if (!this.database) return;
-		this.database.destroy();
+		void this.database.destroy();
 		this.databaseReady = false;
 	}
 
@@ -239,7 +247,7 @@ export class Modlog {
 		// rename SQL modlogs
 		if (this.readyPromise) await this.readyPromise;
 		if (this.databaseReady) {
-			await this.database!.run(this.renameQuery!, [newID, oldID]);
+			await this.database.run(this.renameQuery!, [newID, oldID]);
 		} else {
 			// shouldn't happen since we await the ready promise and check that useslite is on
 			// but will still happen if usesqlite is enabled without a subsequent hotpatch
@@ -264,7 +272,7 @@ export class Modlog {
 		const args: (string | number)[] = [
 			userid, userid, userid, Date.now() - (days * 24 * 60 * 60 * 1000), ...GLOBAL_PUNISHMENTS,
 		];
-		const results = await this.database!.all(this.globalPunishmentsSearchQuery, args);
+		const results = await this.database.all(this.globalPunishmentsSearchQuery, args);
 		return results.length;
 	}
 
@@ -296,7 +304,7 @@ export class Modlog {
 		if (this.readyPromise) await this.readyPromise;
 		if (!this.databaseReady) return null;
 		const query = await this.prepareSQLSearch(rooms, maxLines, onlyPunishments, search);
-		const results = (await this.database!.all(query.statement, query.args))
+		const results = (await this.database.all(query.statement, query.args))
 			.map((row: any) => this.dbRowToModlogEntry(row));
 
 		const duration = Date.now() - startTime;
@@ -364,7 +372,11 @@ export class Modlog {
 		query += ` ${sortAndLimit.query}`;
 		args.push(...sortAndLimit.args);
 
-		return {statement: await this.database.prepare(query), queryText: query, args};
+		return {
+			statement: await this.database.prepare(query) as SQL.Statement,
+			queryText: query,
+			args,
+		};
 	}
 
 	async prepareSQLSearch(
@@ -386,7 +398,7 @@ export class Modlog {
 		// (This is because the text modlog system gave global modlog entries their own file, as a room would have.)
 		if (rooms !== 'all') {
 			const args: (string | number)[] = [];
-			let roomChecker = `roomid IN (${formatSQLArray(rooms, args)})`;
+			let roomChecker = `roomid IN (${Utils.formatSQLArray(rooms, args)})`;
 			if (rooms.includes('global')) {
 				if (rooms.length > 1) {
 					roomChecker = `(is_global = 1 OR ${roomChecker})`;
@@ -419,7 +431,7 @@ export class Modlog {
 		}
 		if (onlyPunishments) {
 			const args: (string | number)[] = [];
-			ands.push({query: `action IN (${formatSQLArray(PUNISHMENTS, args)})`, args});
+			ands.push({query: `action IN (${Utils.formatSQLArray(PUNISHMENTS, args)})`, args});
 		}
 
 		for (const ip of search.ip) {
@@ -470,3 +482,5 @@ export class Modlog {
 		return this.buildParallelIndexScanQuery(select, ors, ands, sortAndLimit);
 	}
 }
+
+export const mainModlog = new Modlog(MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions});
