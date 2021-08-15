@@ -9,7 +9,54 @@ import {FS} from "../../../lib";
 import {formatSQLArray} from "../../../lib/utils";
 import type {Statement} from "../../../lib/sql";
 
-export class TriviaSQLiteDatabase {
+interface TriviaLeaderboards {
+	allTime: TriviaLeaderboard;
+	notAllTime: TriviaLeaderboard;
+}
+export interface TriviaDatabase {
+	updateLeaderboardForUser(
+		userid: ID,
+		additions: {allTime: TriviaLeaderboardScore, notAllTime: TriviaLeaderboardScore}
+	): Promise<void> | void;
+	addHistory(history: Iterable<TriviaHistory>): Promise<void> | void;
+	addQuestions(questions: Iterable<TriviaQuestion>): Promise<void> | void;
+	addQuestionSubmissions(questions: Iterable<TriviaQuestion>): Promise<void> | void;
+	setShouldMoveEventQuestions(shouldMove: boolean): Promise<void> | void;
+	mergeLeaderboardEntries(from: ID, to: ID): Promise<void> | void;
+
+	shouldMoveEventQuestions(): Promise<boolean> | boolean;
+	moveQuestionToCategory(question: string, newCategory: string): Promise<void> | void;
+	migrateCategory(sourceCategory: string, targetCategory: string): Promise<number> | number;
+	acceptSubmissions(submissions: string[]): Promise<void> | void;
+
+	getHistory(numberOfLines: number): Promise<TriviaGame[]> | TriviaGame[];
+	getScoresForLastGame(): Promise<{[k: string]: number}> | {[k: string]: number};
+	getQuestions(
+		categories: string[] | 'all',
+		limit: number,
+		options: {order: 'time' | 'random'}
+	): Promise<TriviaQuestion[]> | TriviaQuestion[];
+	getLeaderboardEntry(id: ID, isAllTime: boolean): Promise<TriviaLeaderboard | null> | TriviaLeaderboard | null;
+	getLeaderboards(): Promise<TriviaLeaderboards> | TriviaLeaderboards;
+
+	checkIfQuestionExists(questionText: string): Promise<boolean> | boolean;
+	ensureQuestionExists(questionText: string): Promise<void> | void;
+	ensureQuestionDoesNotExist(questionText: string): Promise<void> | void;
+	getSubmissions(): Promise<TriviaQuestion[]> | TriviaQuestion[];
+	getQuestionCounts(): Promise<{[k: string]: number, total: number}> | {[k: string]: number, total: number};
+	searchQuestions(
+		search: string,
+		options: {searchSubmissions: boolean, caseSensitive?: boolean}
+	): Promise<TriviaQuestion[]> | TriviaQuestion[];
+
+	clearSubmissions(): Promise<void> | void;
+	clearCategory(category: string): Promise<void> | void;
+	deleteQuestion(questionText: string): Promise<void> | void;
+	deleteLeaderboardEntry(userid: ID, isAllTime: boolean): Promise<void> | void;
+	deleteSubmissions(submissions: string[]): Promise<void> | void;
+}
+
+export class TriviaSQLiteDatabase implements TriviaDatabase {
 	readyPromise: Promise<void> | null;
 
 	private legacyJSONPath?: string;
@@ -96,7 +143,7 @@ export class TriviaSQLiteDatabase {
 	/***************************
 	 * Methods for adding data *
 	 ***************************/
-	 async updateLeaderboardForUser(
+	async updateLeaderboardForUser(
 		userid: ID,
 		additions: {allTime: TriviaLeaderboardScore, notAllTime: TriviaLeaderboardScore}
 	): Promise<void> {
@@ -321,7 +368,7 @@ export class TriviaSQLiteDatabase {
 			throw new Chat.ErrorMessage(`Can't get the Trivia leaderboard scores because there is no SQL database open.`);
 		}
 
-		const result: {allTime: TriviaLeaderboard, notAllTime: TriviaLeaderboard} = {
+		const result: TriviaLeaderboards = {
 			allTime: {},
 			notAllTime: {},
 		};

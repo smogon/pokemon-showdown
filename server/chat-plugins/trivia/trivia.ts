@@ -4,7 +4,7 @@
  */
 
 import {Utils} from '../../../lib';
-import {TriviaSQLiteDatabase} from './database';
+import {TriviaDatabase, TriviaSQLiteDatabase} from './database';
 
 const MAIN_CATEGORIES: {[k: string]: string} = {
 	ae: 'Arts and Entertainment',
@@ -132,7 +132,7 @@ interface TopPlayer {
 	name: string;
 }
 
-export const database = new TriviaSQLiteDatabase('config/chat-plugins/triviadata.json');
+export const database: TriviaDatabase = new TriviaSQLiteDatabase('config/chat-plugins/triviadata.json');
 
 /** from:to Map */
 export const pendingAltMerges = new Map<ID, ID>();
@@ -654,11 +654,8 @@ export class Trivia extends Rooms.RoomGame {
 		this.setTallyTimeout();
 
 		// Move question categories if needed
-		if (question.category === MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY) {
-			void database.shouldMoveEventQuestions().then(async shouldMove => {
-				if (!shouldMove) return;
-				await database.moveQuestionToCategory(question.question, MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY);
-			});
+		if (question.category === MOVE_QUESTIONS_AFTER_USE_FROM_CATEGORY && await database.shouldMoveEventQuestions()) {
+			await database.moveQuestionToCategory(question.question, MOVE_QUESTIONS_AFTER_USE_TO_CATEGORY);
 		}
 	}
 
