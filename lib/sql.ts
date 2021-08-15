@@ -76,6 +76,9 @@ export class Statement {
 	toString() {
 		return this.statement;
 	}
+	toJSON() {
+		return this.statement;
+	}
 }
 
 export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> {
