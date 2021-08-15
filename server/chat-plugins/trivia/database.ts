@@ -4,10 +4,10 @@
  * @author Annika
  */
 
-import type {TriviaGame, TriviaLeaderboard, TriviaLeaderboardScore, TriviaQuestion} from "./trivia";
-import {FS} from "../../lib";
-import {formatSQLArray} from "../../lib/utils";
-import type {Statement} from "../../lib/sql";
+import type {TriviaGame, TriviaHistory, TriviaLeaderboard, TriviaLeaderboardScore, TriviaQuestion} from "./trivia";
+import {FS} from "../../../lib";
+import {formatSQLArray} from "../../../lib/utils";
+import type {Statement} from "../../../lib/sql";
 
 export class TriviaSQLiteDatabase {
 	readyPromise: Promise<void> | null;
@@ -121,48 +121,48 @@ export class TriviaSQLiteDatabase {
 		});
 	}
 
-	async addHistory(history: TriviaGame & {scores: {[k: string]: number}}) {
+	async addHistory(history: Iterable<TriviaHistory>) {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Chat.database) {
 			throw new Chat.ErrorMessage(`Can't add a Trivia game to the history because there is no SQL database open.`);
 		}
 
-		const {lastInsertRowid} = await this.gameHistoryInsertion!.run(
-			[history.mode, history.length, history.category, history.startTime, history.creator, Number(history.givesPoints)]
-		);
-		for (const userid in history.scores) {
-			await this.scoreHistoryInsertion!.run([lastInsertRowid, userid, history.scores[userid]]);
-		}
+		const res = await Chat.database.transaction('addHistory', {
+			history,
+			gameHistoryInsertion: this.gameHistoryInsertion!.toString(),
+			scoreHistoryInsertion: this.scoreHistoryInsertion!.toString(),
+		});
+		if (!res) throw new Error(`Error updating Trivia history.`);
 	}
 
-	async addQuestion(question: TriviaQuestion) {
+	async addQuestions(questions: Iterable<TriviaQuestion>) {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Chat.database) {
 			throw new Chat.ErrorMessage(`Can't add a Trivia question because there is no SQL database open.`);
 		}
 
-		if (!question.addedAt) question.addedAt = Date.now();
-		const {lastInsertRowid} = await this.questionInsertion!.run(
-			[question.question, question.category, question.addedAt, question.user, 0] // 0 for false - not a submission
-		);
-		for (const answer of question.answers) {
-			await this.answerInsertion!.run([lastInsertRowid, answer]);
-		}
+		const res = await Chat.database.transaction('addQuestions', {
+			questions,
+			questionInsertion: this.questionInsertion!.toString(),
+			answerInsertion: this.answerInsertion!.toString(),
+			isSubmission: false,
+		});
+		if (!res) throw new Chat.ErrorMessage(`Error adding Trivia questions.`);
 	}
 
-	async addQuestionSubmission(question: TriviaQuestion) {
+	async addQuestionSubmissions(questions: Iterable<TriviaQuestion>) {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't add a Trivia question because there is no SQL database open.`);
+			throw new Chat.ErrorMessage(`Can't submit a Trivia question for review because there is no SQL database open.`);
 		}
 
-		const {lastInsertRowid} = await Chat.database.run(
-			this.questionInsertion!,
-			[question.question, question.category, question.addedAt, question.user, 1] // 1 for true - is a submission
-		);
-		for (const answer of question.answers) {
-			await this.answerInsertion!.run([lastInsertRowid, answer]);
-		}
+		const res = await Chat.database.transaction('addQuestions', {
+			questions,
+			questionInsertion: this.questionInsertion!.toString(),
+			answerInsertion: this.answerInsertion!.toString(),
+			isSubmission: true,
+		});
+		if (!res) throw new Chat.ErrorMessage(`Error adding Trivia questions for review.`);
 	}
 
 	async setShouldMoveEventQuestions(shouldMove: boolean) {
@@ -355,13 +355,13 @@ export class TriviaSQLiteDatabase {
 
 	async ensureQuestionExists(questionText: string) {
 		if (!(await this.checkIfQuestionExists(questionText))) {
-			throw new Chat.ErrorMessage(`Question "${questionText}" is already awaiting review or in the question database.`);
+			throw new Chat.ErrorMessage(`Question "${questionText}" is not in the question database.`);
 		}
 	}
 
 	async ensureQuestionDoesNotExist(questionText: string) {
 		if (await this.checkIfQuestionExists(questionText)) {
-			throw new Chat.ErrorMessage(`Question "${questionText}" is not in the question database.`);
+			throw new Chat.ErrorMessage(`Question "${questionText}" is already in the question database.`);
 		}
 	}
 
@@ -374,37 +374,6 @@ export class TriviaSQLiteDatabase {
 		const rows = await this.submissionsQuery!.all([]);
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
 	}
-
-	/*****************************
-	 * Methods for deleting data *
-	 * ***************************/
-	async clearSubmissions() {
-		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't clear the Trivia question submissions because there is no SQL database open.`);
-		}
-
-		await this.clearAllSubmissionsQuery!.run([]);
-	}
-
-	async clearCategory(category: string) {
-		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't clear the Trivia questions in category "${category}" because there is no SQL database open.`);
-		}
-
-		await this.clearCategoryQuery!.run([category]);
-	}
-
-	async deleteQuestion(questionText: string) {
-		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't delete the Trivia question because there is no SQL database open.`);
-		}
-
-		await this.deleteQuestionQuery!.run([questionText]);
-	}
-
 
 	async getQuestionCounts(): Promise<{[k: string]: number, total: number}> {
 		if (this.readyPromise) await this.readyPromise;
@@ -436,6 +405,37 @@ export class TriviaSQLiteDatabase {
 		if (options.caseSensitive) await Chat.database.exec(`PRAGMA case_sensitive_like = false;`);
 
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
+	}
+
+
+	/*****************************
+	 * Methods for deleting data *
+	 * ***************************/
+	async clearSubmissions() {
+		if (this.readyPromise) await this.readyPromise;
+		if (!Chat.database) {
+			throw new Chat.ErrorMessage(`Can't clear the Trivia question submissions because there is no SQL database open.`);
+		}
+
+		await Chat.database.run(this.clearAllSubmissionsQuery!, []);
+	}
+
+	async clearCategory(category: string) {
+		if (this.readyPromise) await this.readyPromise;
+		if (!Chat.database) {
+			throw new Chat.ErrorMessage(`Can't clear the Trivia questions in category "${category}" because there is no SQL database open.`);
+		}
+
+		await Chat.database.run(this.clearCategoryQuery!, [category]);
+	}
+
+	async deleteQuestion(questionText: string) {
+		if (this.readyPromise) await this.readyPromise;
+		if (!Chat.database) {
+			throw new Chat.ErrorMessage(`Can't delete the Trivia question because there is no SQL database open.`);
+		}
+
+		await Chat.database.run(this.deleteQuestionQuery!, [questionText]);
 	}
 
 	async deleteLeaderboardEntry(userid: ID, isAllTime: boolean) {
@@ -560,6 +560,7 @@ export class TriviaSQLiteDatabase {
 		);
 
 		await Chat.database.exec("PRAGMA foreign_keys = ON;");
+		await Chat.database.loadExtension('server/chat-plugins/trivia/transactions.ts');
 	}
 
 	private async convertLegacyJSON() {
@@ -621,7 +622,7 @@ export class TriviaSQLiteDatabase {
 					if (!question.addedAt) question.addedAt = addedAt;
 					if (!question.user) question.user = 'unknown user';
 					question.question = question.question.trim();
-					await this.addQuestion(question);
+					await this.addQuestions([question]);
 				}
 			}
 		}
@@ -632,18 +633,16 @@ export class TriviaSQLiteDatabase {
 					if (!question.addedAt) question.addedAt = addedAt;
 					if (!question.user) question.user = 'unknown user';
 					question.question = question.question.trim();
-					await this.addQuestionSubmission(question);
+					await this.addQuestionSubmissions([question]);
 				}
 			}
 		}
 
 		if (Array.isArray(triviaData.history)) {
-			const startTime = Date.now();
+			const now = Date.now();
 			for (const game of triviaData.history) {
-				await this.addHistory({
-					...game,
-					startTime,
-				});
+				if (!game.startTime) game.startTime = now;
+				await this.addHistory([game]);
 			}
 		}
 

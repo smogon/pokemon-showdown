@@ -3,8 +3,8 @@
  * Written by Morfent
  */
 
-import {Utils} from '../../lib';
-import {TriviaSQLiteDatabase} from './trivia-database';
+import {Utils} from '../../../lib';
+import {TriviaSQLiteDatabase} from './database';
 
 const MAIN_CATEGORIES: {[k: string]: string} = {
 	ae: 'Arts and Entertainment',
@@ -113,6 +113,7 @@ export interface TriviaGame {
 }
 
 type TriviaLadder = ID[][];
+export type TriviaHistory = TriviaGame & {scores: {[k: string]: number}};
 
 export interface TriviaData {
 	/** category:questions */
@@ -121,7 +122,7 @@ export interface TriviaData {
 	leaderboard?: TriviaLeaderboard;
 	altLeaderboard?: TriviaLeaderboard;
 	/* `scores` key is a user ID */
-	history?: (TriviaGame & {scores?: {[k: string]: number}})[];
+	history?: TriviaHistory[];
 	moveEventQuestions?: boolean;
 }
 
@@ -787,11 +788,11 @@ export class Trivia extends Rooms.RoomGame {
 
 		const scores = Object.fromEntries(this.getTopPlayers({max: null})
 			.map(player => [player.player.id, player.player.points]));
-		await database.addHistory({
+		await database.addHistory([{
 			...this.game,
 			length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
 			scores,
-		});
+		}]);
 
 		this.destroy();
 	}
@@ -1710,6 +1711,7 @@ const triviaCommands: Chat.ChatCommands = {
 		if (!target) return false;
 		this.checkChat();
 
+		const questions: TriviaQuestion[] = [];
 		const params = target.split('\n').map(str => str.split('|'));
 		for (const param of params) {
 			if (param.length !== 3) {
@@ -1757,24 +1759,25 @@ const triviaCommands: Chat.ChatCommands = {
 				continue;
 			}
 
-			const entry = {
+			questions.push({
 				category: category,
 				question: question,
 				answers: answers,
 				user: user.id,
 				addedAt: Date.now(),
-			};
+			});
+		}
 
-			if (cmd === 'add') {
-				await database.addQuestion(entry);
-				this.modlog('TRIVIAQUESTION', null, `added '${param[1]}'`);
-				this.privateModAction(`Question '${param[1]}' was added to the question database by ${user.name}.`);
-			} else {
-				await database.addQuestionSubmission(entry);
-				if (!user.can('mute', null, room)) this.sendReply(`Question '${param[1]}' was submitted for review.`);
-				this.modlog('TRIVIAQUESTION', null, `submitted '${param[1]}'`);
-				this.privateModAction(`Question '${param[1]}' was submitted to the submission database by ${user.name} for review.`);
-			}
+		const formattedQuestions = questions.map(q => q.question).join("', '");
+		if (cmd === 'add') {
+			await database.addQuestions(questions);
+			this.modlog('TRIVIAQUESTION', null, `added '${formattedQuestions}'`);
+			this.privateModAction(`Questions '${formattedQuestions}' were added to the question database by ${user.name}.`);
+		} else {
+			await database.addQuestionSubmissions(questions);
+			if (!user.can('mute', null, room)) this.sendReply(`Questions '${formattedQuestions}' were submitted for review.`);
+			this.modlog('TRIVIAQUESTION', null, `submitted '${formattedQuestions}'`);
+			this.privateModAction(`Questions '${formattedQuestions}' were submitted to the submission database by ${user.name} for review.`);
 		}
 	},
 	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`],
@@ -1815,10 +1818,8 @@ const triviaCommands: Chat.ChatCommands = {
 		const submissions = await database.getSubmissions();
 
 		if (toID(target) === 'all') {
-			if (isAccepting) {
-				await Promise.all(submissions.map(sub => database.addQuestion(sub)));
-			}
-
+			if (isAccepting) await database.addQuestions(submissions);
+			await database.clearSubmissions();
 			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all from submission database.`);
 			return this.privateModAction(`${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.`);
 		}
