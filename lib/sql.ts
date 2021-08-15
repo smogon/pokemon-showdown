@@ -7,7 +7,7 @@ import type * as sqlite from 'better-sqlite3';
 import {FS} from './fs';
 
 export const DB_NOT_FOUND = null;
-export const STATEMENT_NOT_FOUND = null;
+export const STATEMENT_NOT_FOUND = false;
 
 export interface SQLOptions {
 	file: string;
