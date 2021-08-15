@@ -27,7 +27,8 @@ import type {RoomPermission, GlobalPermission} from './user-groups';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 import {FriendsDatabase, PM} from './friends';
-import {SQL, SQLDatabaseManager} from '../lib/sql';
+import {SQL} from '../lib/sql';
+import {Dex} from '../sim';
 import {resolve} from 'path';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
