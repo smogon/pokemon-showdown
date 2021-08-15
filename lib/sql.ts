@@ -2,11 +2,9 @@
  * Async worker thread wrapper around SQLite, written to improve concurrent performance.
  * @author mia-pi-git
  */
-import {ProcessWrapper, ProcessManager} from './process-manager';
-import * as child_process from 'child_process';
-import * as path from 'path';
-import {FS} from './fs';
+import {QueryProcessManager} from './process-manager';
 import type * as sqlite from 'better-sqlite3';
+import {FS} from './fs';
 
 export interface SQLOptions {
 	file: string;
@@ -16,13 +14,20 @@ export interface SQLOptions {
 	sqliteOptions?: sqlite.Options;
 }
 
+export enum SQLiteErrors {
+	/** Statement needs to be prepared. */
+	StatementNotFound,
+	/** Config.usesqlite is off.
+	 * Should never usually get to this point, but if the consumer doesn't handle it - we will.
+	 */
+	DatabaseNotFound,
+}
+
 type DataType = unknown[] | Record<string, unknown>;
-type Statement = string | number;
 
 export interface TransactionEnvironment {
 	db: sqlite.Database;
-	statementsByText: {[k: string]: sqlite.Statement};
-	statementsMap: Map<number, sqlite.Statement>;
+	statements: Map<string, sqlite.Statement>;
 }
 
 type DatabaseQuery = {
@@ -30,296 +35,230 @@ type DatabaseQuery = {
 	type: 'prepare', data: string,
 } | {
 	/** Get all lines from a statement. Data is the params, num is the statement number. */
-	type: 'all', data: DataType, num: number,
+	type: 'all', data: DataType, statement: string,
 } | {
 	/** Execute raw SQL in the database. */
 	type: "exec", data: string,
 } | {
 	/** Get one line from a prepared statement. */
-	type: 'get', data: DataType, num: number,
+	type: 'get', data: DataType, statement: string,
 } | {
 	/** Run a prepared statement. */
-	type: 'run', data: DataType, num: number,
+	type: 'run', data: DataType, statement: string,
 } | {
 	type: 'transaction', name: string, data: DataType,
+} | {
+	type: 'start', options: SQLOptions,
 };
+
+type ErrorHandler = (error: Error, data: DatabaseQuery) => void;
 
 function getModule() {
 	try {
 		return require('better-sqlite3') as typeof sqlite.default;
-	} catch {
+	} catch (e) {
 		return null;
 	}
 }
 
-export class DatabaseWrapper implements ProcessWrapper {
-	statements: Map<string, number>;
-	process: child_process.ChildProcess;
-	pendingRequests: [((data: string | DataType | null) => any), (err: Error) => void][];
-	pendingRelease?: () => void;
-	constructor(options: SQLOptions) {
-		this.statements = new Map();
-		this.pendingRequests = [];
-		this.process = child_process.fork(__filename, [], {
-			env: options as AnyObject, cwd: path.resolve(__dirname, '..'), execArgv: ['-r', 'ts-node/register'],
-		});
-		this.listen();
+export class Statement {
+	private db: SQLDatabaseManager;
+	private statement: string;
+	constructor(statement: string, db: SQLDatabaseManager) {
+		this.db = db;
+		this.statement = statement;
 	}
-	getProcess() {
-		return this.process;
+	run(data: DataType) {
+		return this.db.run(this.statement, data);
 	}
-	listen() {
-		this.process.on("message", (message: DataType | string) => {
-			const handlers = this.pendingRequests.shift();
-			if (typeof message === 'string') {
-				if (message.startsWith('THROW\n')) {
-					const error = new Error();
-					error.stack = message.slice(6);
-					if (handlers?.[1]) return handlers[1](error);
-					throw error;
+	all(data: DataType) {
+		return this.db.all(this.statement, data);
+	}
+	get(data: DataType) {
+		return this.db.get(this.statement, data);
+	}
+	toString() {
+		return this.statement;
+	}
+}
+
+export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> {
+	options: SQLOptions;
+	database: null | sqlite.Database = null;
+	state: {
+		transactions: Map<string, sqlite.Transaction>,
+		statements: Map<string, sqlite.Statement>,
+	};
+	private dbReady = false;
+	onError: ErrorHandler;
+	constructor(module: NodeJS.Module, options: SQLOptions, onError?: ErrorHandler) {
+		super(module, query => {
+			if (!this.dbReady) {
+				this.setupDatabase();
+			}
+			try {
+				switch (query.type) {
+				case 'transaction': {
+					const transaction = this.state.transactions.get(query.name);
+					// !transaction covers db not existing, typically, but this is just to appease ts
+					if (!transaction || !this.database) {
+						return SQLiteErrors.DatabaseNotFound;
+					}
+					const env: TransactionEnvironment = {
+						db: this.database,
+						statements: this.state.statements,
+					};
+					return transaction(query.data, env) || null;
 				}
-				if (message.startsWith('STATEMENTS\n')) {
-					this.statements = new Map(Object.entries(JSON.parse(message.slice(12))));
-					return;
+				case 'exec': {
+					if (!this.database) return {changes: 0};
+					this.database.exec(query.data);
+					return true;
+				}
+				case 'get': {
+					if (!this.database) {
+						return SQLiteErrors.DatabaseNotFound;
+					}
+					const statement = this.state.statements.get(query.statement);
+					if (!statement) return SQLiteErrors.StatementNotFound;
+					return statement.get(query.data);
+				}
+				case 'run': {
+					if (!this.database) {
+						return SQLiteErrors.DatabaseNotFound;
+					}
+					const statement = this.state.statements.get(query.statement);
+					if (!statement) return SQLiteErrors.StatementNotFound;
+					return statement.run(query.data);
+				}
+				case 'all': {
+					if (!this.database) {
+						return SQLiteErrors.DatabaseNotFound;
+					}
+					const statement = this.state.statements.get(query.statement);
+					if (!statement) return SQLiteErrors.StatementNotFound;
+					return statement.all(query.data);
+				}
+				case 'prepare':
+					if (!this.database) {
+						return SQLiteErrors.DatabaseNotFound;
+					}
+					this.state.statements.set(query.data, this.database.prepare(query.data));
+					return query.data;
+				}
+			} catch (error) {
+				return this.onError(error, query);
+			}
+		});
+
+		this.options = options;
+		this.onError = onError || ((err, query) => {
+			if (global.Monitor?.crashlog) {
+				Monitor.crashlog(err, `an ${this.basename} SQLite process`, query);
+				return null;
+			}
+			throw new Error(`SQLite error: ${err.message} (${JSON.stringify(query)})`);
+		});
+		this.state = {
+			transactions: new Map(),
+			statements: new Map(),
+		};
+		if (!this.isParentProcess) this.setupDatabase();
+	}
+	setupDatabase() {
+		if (this.dbReady) return;
+		this.dbReady = true;
+		const {file, extension} = this.options;
+		const Database = getModule();
+		this.database = Database ? new Database(file) : null;
+		if (extension && this.database) {
+			const {
+				functions,
+				transactions: storedTransactions,
+				statements: storedStatements,
+				onDatabaseStart,
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+			} = require(`../${extension}`);
+			if (functions) {
+				for (const k in functions) {
+					this.database.function(k, functions[k]);
 				}
 			}
-			if (handlers) {
-				if (!this.pendingRequests.length && this.pendingRelease) this.pendingRelease();
-				return handlers[0](message);
+			if (storedTransactions) {
+				for (const t in storedTransactions) {
+					const transaction = this.database.transaction(storedTransactions[t]);
+					this.state.transactions.set(t, transaction);
+				}
 			}
-			throw new Error(`Database wrapper received a message, but there was no pending request.`);
-		});
-	}
-	async release() {
-		await new Promise<void>(resolve => {
-			this.pendingRelease = resolve;
-		});
-		this.process.disconnect();
-		this.statements.clear();
-	}
-	getLoad() {
-		return this.pendingRequests.length;
-	}
-	destroy() {
-		void this.release();
-	}
-	runFile(filename: string) {
-		const file = FS(filename);
-		if (!file.existsSync()) throw new Error(`File passed to runFile does not exist.`);
-		if (!filename.endsWith('.sql')) throw new Error(`File passed to runFile is not a .sql file.`);
-		const content = file.readSync();
-		const db = this.getDatabase();
-		if (db) return db.exec(content);
-		return this.exec(content);
-	}
-	getDatabase() {
-		return database;
-	}
-	async prepare(statement: string) {
-		const cachedStatement = this.statements.get(statement);
-		if (cachedStatement) {
-			return cachedStatement;
+			if (storedStatements) {
+				for (const k in storedStatements) {
+					const statement = this.database.prepare(storedStatements[k]);
+					this.state.statements.set(statement.source, statement);
+				}
+			}
+			if (onDatabaseStart) {
+				onDatabaseStart(this.database);
+			}
 		}
-		const int = await this.query({type: 'prepare', data: statement});
-		if (typeof int === 'number') this.statements.set(statement, int);
-		return int;
 	}
-	all(statement: Statement, data: DataType = {}) {
-		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
-		if (num === undefined || ![...this.statements.values()].includes(num)) {
-			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
-		}
-		return this.query({type: 'all', num: num, data});
+	all<T = any>(statement: string | Statement, data: DataType = []): Promise<T[]> {
+		if (typeof statement !== 'string') statement = statement.toString();
+		return this.query({type: 'all', statement, data});
 	}
-	get(statement: Statement, data: DataType = {}) {
-		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
-		if (num === undefined || ![...this.statements.values()].includes(num)) {
-			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
-		}
-		return this.query({type: 'get', data, num});
+	get<T = any>(statement: string | Statement, data: DataType = []): Promise<T> {
+		if (typeof statement !== 'string') statement = statement.toString();
+		return this.query({type: 'get', statement, data});
 	}
-	run(statement: Statement, data: DataType) {
-		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
-		if (num === undefined || ![...this.statements.values()].includes(num)) {
-			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
-		}
-		return this.query({type: 'run', num, data});
+	run(statement: string | Statement, data: DataType = []): Promise<{changes: number}> {
+		if (typeof statement !== 'string') statement = statement.toString();
+		return this.query({type: 'run', statement, data});
 	}
-	/** We don't want these to be prepared statements, since this should be used SPARINGLY. */
-	exec(statement: string) {
-		return this.query({type: 'exec', data: statement});
-	}
-	query(args: DatabaseQuery) {
-		this.process.send(args);
-		return new Promise<any>((resolve, reject) => {
-			this.pendingRequests.push([resolve, reject]);
-		});
-	}
-	transaction(name: string, data: DataType) {
+	transaction<T = any>(name: string, data: DataType = []): Promise<T> {
 		return this.query({type: 'transaction', name, data});
 	}
+	async prepare(statement: string): Promise<Statement | null> {
+		const source = await this.query({type: 'prepare', data: statement});
+		if (!source) return null;
+		return new Statement(source, this);
+	}
+	exec(data: string): Promise<{changes: number}> {
+		return this.query({type: 'exec', data});
+	}
+	async runFile(file: string) {
+		const contents = await FS(file).read();
+		return this.query({type: 'exec', data: contents});
+	}
+	async query(data: DatabaseQuery) {
+		const result = await super.query(data);
+		if (result === SQLiteErrors.StatementNotFound) {
+			throw new Error("Prepare a statement before using another database function with SQLDatabase.prepare");
+		}
+		if (result === SQLiteErrors.DatabaseNotFound) {
+			throw new Error("SQLite database was queried, but Config.usesqlite is off");
+		}
+		return result;
+	}
 }
 
-class SQLProcessManager extends ProcessManager {
-	constructor(module: NodeJS.Module) {
-		super(module);
-	}
-	createProcess(options: SQLOptions) {
-		const process: ProcessWrapper = new DatabaseWrapper(options);
-		this.processes.push(process);
-		return process;
-	}
-	listen() {}
-	destroyProcess(process: DatabaseWrapper) {
-		void process.release();
-		this.processes.splice(this.processes.indexOf(process), 1);
-	}
+interface SetupOptions {
+	onError: ErrorHandler;
+	processes: number;
 }
 
-export const PM = new SQLProcessManager(module);
-const Database = getModule();
-
-function crashlog(err: Error, query?: any) {
-	process.send!(`THROW\n@!!@${JSON.stringify([err.name, err.message, 'a SQL process', query])}\n${err.stack}`);
-}
-
-let database: sqlite.Database | null;
-if (!PM.isParentProcess) {
-	let statementNum = 0;
-	const statements: Map<number, sqlite.Statement> = new Map();
-	const transactions: Map<string, sqlite.Transaction> = new Map();
-	let statementTable: {[k: string]: sqlite.Statement} = {};
-
-	const getStatementTable = () => {
-		if (Object.keys(statementTable).length !== statements.size) {
-			statementTable = {};
-			for (const statement of statements.values()) {
-				statementTable[statement.source] = statement;
-			}
-		}
-		return statementTable;
-	};
-
-	const {file, extension} = process.env;
-	database = Database ? new Database(file!) : null;
-	if (extension && database) {
-		const {
-			functions,
-			transactions: storedTransactions,
-			statements: storedStatements,
-			onDatabaseStart,
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-		} = require(`../${extension}`);
-		if (functions) {
-			for (const k in functions) {
-				database.function(k, functions[k]);
-			}
-		}
-		if (storedTransactions) {
-			for (const t in storedTransactions) {
-				const transaction = database.transaction(storedTransactions[t]);
-				transactions.set(t, transaction);
-			}
-		}
-		if (storedStatements) {
-			for (const k in storedStatements) {
-				const statement = database.prepare(storedStatements[k]);
-				statements.set(statementNum++, statement); // we use statementNum here to track with the rest
-			}
-			process.send!(`STATEMENTS\n${JSON.stringify(Object.fromEntries(statements))}\n`);
-		}
-		if (onDatabaseStart) {
-			onDatabaseStart(database);
-		}
+export function SQL(
+	module: NodeJS.Module, input: SQLOptions & Partial<SetupOptions>
+) {
+	const {onError, processes} = input;
+	for (const k of ['onError', 'processes'] as const) delete input[k];
+	const PM = new SQLDatabaseManager(module, input, onError);
+	if (PM.isParentProcess) {
+		if (processes) PM.spawn(processes);
 	}
-	database?.pragma(`foreign_keys=on`);
-
-
-	process.on('message', (query: DatabaseQuery) => {
-		let statement;
-		let results;
-		try {
-			switch (query.type) {
-			case 'prepare': {
-				if (!database) return process.send!(-1);
-				const {data} = query;
-				const newStatement = database.prepare(data);
-				const nextNum = statementNum++;
-				statements.set(nextNum, newStatement);
-				return process.send!(nextNum);
-			}
-			case 'all': {
-				if (!database) {
-					results = [];
-					break;
-				}
-				const {num, data} = query;
-				statement = statements.get(num);
-				results = statement?.all(data) || [];
-			}
-				break;
-			case 'get': {
-				if (!database) {
-					results = null;
-					break;
-				}
-				const {num, data} = query;
-				statement = statements.get(num);
-				const args = Array.isArray(data) ? data : [data];
-				results = statement?.get(...args) || null;
-			}
-				break;
-			case 'run': {
-				if (!database) {
-					results = null;
-					break;
-				}
-				const {num, data} = query;
-				statement = statements.get(num);
-				// originally used ...args, but that nukes the support for named parameters
-				results = statement?.run(data) || null;
-			}
-				break;
-			case 'exec': {
-				const {data} = query;
-				database?.exec(data);
-				results = !!database;
-			}
-				break;
-			case 'transaction': {
-				if (!database) {
-					results = null;
-					break;
-				}
-				const {name, data} = query;
-				const transaction = transactions.get(name);
-				if (!transaction) {
-					results = null;
-					break;
-				}
-				const env: TransactionEnvironment = {
-					db: database,
-					statementsByText: getStatementTable(),
-					statementsMap: statements,
-				};
-				results = transaction(data, env) || null;
-			}
-				break;
-			}
-		} catch (error) {
-			return crashlog(error, {...query, data: JSON.stringify(query.data)});
-		}
-		process.send!(results);
-	});
-
-	process.on('uncaughtException', err => crashlog(err));
-	process.on('unhandledRejection', err => crashlog(err as any));
+	return PM;
 }
 
-/**
- * @param options Either an object of filename, extension, or just the string filename
- */
-export function SQL(options: SQLOptions | string): DatabaseWrapper {
-	if (typeof options === 'string') options = {file: options};
-	return PM.createProcess(options) as DatabaseWrapper;
+export namespace SQL {
+	export type DatabaseManager = import('./sql').SQLDatabaseManager;
+	export type Statement = import('./sql').Statement;
+	export type Options = import('./sql').SQLOptions;
 }
