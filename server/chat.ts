@@ -24,9 +24,11 @@ To reload chat commands:
 */
 
 import type {RoomPermission, GlobalPermission} from './user-groups';
-import {FriendsDatabase, PM} from './friends';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
+import {FriendsDatabase, PM} from './friends';
+import {SQL, SQLDatabaseManager} from '../lib/sql';
+import {resolve} from 'path';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
@@ -133,6 +135,8 @@ const MAX_PARSE_RECURSION = 10;
 
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
+
+const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 
 import {FS, Utils} from '../lib';
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
@@ -1414,6 +1418,7 @@ export const Chat = new class {
 		void this.loadTranslations().then(() => {
 			Chat.translationsLoaded = true;
 		});
+		this.databaseReadyPromise = this.prepareDatabase();
 	}
 	translationsLoaded = false;
 	/**
@@ -1676,6 +1681,51 @@ export const Chat = new class {
 			translated = reconstructed;
 		}
 		return translated;
+	}
+
+	/**
+	 * SQL handler
+	 *
+	 * All chat plugins share one database.
+	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
+	 */
+	database: SQLDatabaseManager | null = null;
+	databaseReadyPromise: Promise<void> | null = null;
+
+	async prepareDatabase() {
+		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
+		if (!Config.usesqlite) return;
+		this.database = SQL(module, {file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH});
+		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
+		let statement = await this.database.prepare(
+			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
+		);
+		if (!statement) return; // I was told this is a best practice for the SQL library
+		const {hasDBInfo} = await this.database.get(statement);
+		if (!hasDBInfo) await this.database.runFile('./databases/schemas/chat-plugins.sql');
+
+		statement = await this.database.prepare(
+			`SELECT value as curVersion FROM db_info WHERE key = 'version'`
+		);
+		if (!statement) return;
+		const result = await this.database.get(statement);
+		const curVersion = parseInt(result.curVersion);
+		if (!curVersion) throw new Error(`db_info table is present, but schema version could not be parsed`);
+
+		// automatically run migrations of the form "v{number}.sql" in the migrations/chat-plugins folder
+		const migrationsFolder = './databases/migrations/chat-plugins';
+		const migrationsToRun = [];
+		for (const migrationFile of (await FS(migrationsFolder).readdir())) {
+			const migrationVersion = parseInt(/v(\d+)\.sql$/.exec(migrationFile)?.[1] || '');
+			if (!migrationVersion) continue;
+			if (migrationVersion > curVersion) migrationsToRun.push({version: migrationVersion, file: migrationFile});
+		}
+		Utils.sortBy(migrationsToRun, ({version}) => version);
+		for (const {file} of migrationsToRun) {
+			await this.database.runFile(resolve(migrationsFolder, file));
+		}
+
+		Chat.destroyHandlers.push(() => Chat.database?.destroy());
 	}
 
 	readonly MessageContext = MessageContext;
