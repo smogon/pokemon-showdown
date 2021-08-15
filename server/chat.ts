@@ -1690,13 +1690,12 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database: SQLDatabaseManager | null = null;
+	database = SQL(module, {file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH});
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
 		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
-		this.database = SQL(module, {file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH});
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
 		let statement = await this.database.prepare(
 			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
@@ -2499,4 +2498,21 @@ export interface Monitor {
 	label: string;
 	condition?: string;
 	monitor?: MonitorHandler;
+}
+
+if (Chat.database.isParentProcess) {
+	Chat.database.spawn(Config.chatdbprocesses || 1);
+} else {
+	global.Monitor = {
+		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		Monitor.crashlog(err, 'A chat database process');
+	});
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as Error, 'A chat database process');
+	});
 }
