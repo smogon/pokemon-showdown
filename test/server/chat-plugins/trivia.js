@@ -396,7 +396,7 @@ describe('Trivia', function () {
 		});
 	});
 
-	context('alt merging', () => {
+	(Config.usesqlite ? context : context.skip)('alt merging', () => {
 		it('should only allow merging approved alts', async () => {
 			for (const user of ['annika', 'heartofetheria', 'somerandomreg']) {
 				await trivia.database.updateLeaderboardForUser(user, {
