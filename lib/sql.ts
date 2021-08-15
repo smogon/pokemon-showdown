@@ -6,21 +6,15 @@ import {QueryProcessManager} from './process-manager';
 import type * as sqlite from 'better-sqlite3';
 import {FS} from './fs';
 
+export const DB_NOT_FOUND = null;
+export const STATEMENT_NOT_FOUND = null;
+
 export interface SQLOptions {
 	file: string;
 	/** file to import database functions from - this should be relative to this filename. */
 	extension?: string;
 	/** options to be passed to better-sqlite3 */
 	sqliteOptions?: sqlite.Options;
-}
-
-export enum SQLiteErrors {
-	/** Statement needs to be prepared. */
-	StatementNotFound,
-	/** Config.usesqlite is off.
-	 * Should never usually get to this point, but if the consumer doesn't handle it - we will.
-	 */
-	DatabaseNotFound,
 }
 
 type DataType = unknown[] | Record<string, unknown>;
@@ -102,7 +96,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 					const transaction = this.state.transactions.get(query.name);
 					// !transaction covers db not existing, typically, but this is just to appease ts
 					if (!transaction || !this.database) {
-						return SQLiteErrors.DatabaseNotFound;
+						return null;
 					}
 					const env: TransactionEnvironment = {
 						db: this.database,
@@ -117,31 +111,31 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 				}
 				case 'get': {
 					if (!this.database) {
-						return SQLiteErrors.DatabaseNotFound;
+						return null;
 					}
 					const statement = this.state.statements.get(query.statement);
-					if (!statement) return SQLiteErrors.StatementNotFound;
+					if (!statement) return STATEMENT_NOT_FOUND;
 					return statement.get(query.data);
 				}
 				case 'run': {
 					if (!this.database) {
-						return SQLiteErrors.DatabaseNotFound;
+						return null;
 					}
 					const statement = this.state.statements.get(query.statement);
-					if (!statement) return SQLiteErrors.StatementNotFound;
+					if (!statement) return STATEMENT_NOT_FOUND
 					return statement.run(query.data);
 				}
 				case 'all': {
 					if (!this.database) {
-						return SQLiteErrors.DatabaseNotFound;
+						return null;
 					}
 					const statement = this.state.statements.get(query.statement);
-					if (!statement) return SQLiteErrors.StatementNotFound;
+					if (!statement) return STATEMENT_NOT_FOUND;
 					return statement.all(query.data);
 				}
 				case 'prepare':
 					if (!this.database) {
-						return SQLiteErrors.DatabaseNotFound;
+						return null;
 					}
 					this.state.statements.set(query.data, this.database.prepare(query.data));
 					return query.data;
@@ -230,11 +224,8 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	}
 	async query(data: DatabaseQuery) {
 		const result = await super.query(data);
-		if (result === SQLiteErrors.StatementNotFound) {
+		if (result === STATEMENT_NOT_FOUND) {
 			throw new Error("Prepare a statement before using another database function with SQLDatabase.prepare");
-		}
-		if (result === SQLiteErrors.DatabaseNotFound) {
-			throw new Error("SQLite database was queried, but Config.usesqlite is off");
 		}
 		return result;
 	}
