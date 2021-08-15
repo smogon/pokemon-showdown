@@ -203,7 +203,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		if (typeof statement !== 'string') statement = statement.toString();
 		return this.query({type: 'get', statement, data});
 	}
-	run(statement: string | Statement, data: DataType = []): Promise<{changes: number}> {
+	run(statement: string | Statement, data: DataType = []): Promise<sqlite.RunResult> {
 		if (typeof statement !== 'string') statement = statement.toString();
 		return this.query({type: 'run', statement, data});
 	}
