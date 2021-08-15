@@ -43,6 +43,8 @@ type DatabaseQuery = {
 	type: 'transaction', name: string, data: DataType,
 } | {
 	type: 'start', options: SQLOptions,
+} | {
+	type: 'load-extension', data: string,
 };
 
 type ErrorHandler = (error: Error, data: DatabaseQuery) => void;
@@ -92,6 +94,11 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			}
 			try {
 				switch (query.type) {
+				case 'load-extension': {
+					if (!this.database) return null;
+					this.loadExtensionFile(query.data);
+					return true;
+				}
 				case 'transaction': {
 					const transaction = this.state.transactions.get(query.name);
 					// !transaction covers db not existing, typically, but this is just to appease ts
@@ -165,34 +172,37 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		const {file, extension} = this.options;
 		const Database = getModule();
 		this.database = Database ? new Database(file) : null;
-		if (extension && this.database) {
-			const {
-				functions,
-				transactions: storedTransactions,
-				statements: storedStatements,
-				onDatabaseStart,
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
-			} = require(`../${extension}`);
-			if (functions) {
-				for (const k in functions) {
-					this.database.function(k, functions[k]);
-				}
+		if (extension) this.loadExtensionFile(extension);
+	}
+
+	loadExtensionFile(extension: string) {
+		if (!this.database) return;
+		const {
+			functions,
+			transactions: storedTransactions,
+			statements: storedStatements,
+			onDatabaseStart,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+		} = require(`../${extension}`);
+		if (functions) {
+			for (const k in functions) {
+				this.database.function(k, functions[k]);
 			}
-			if (storedTransactions) {
-				for (const t in storedTransactions) {
-					const transaction = this.database.transaction(storedTransactions[t]);
-					this.state.transactions.set(t, transaction);
-				}
+		}
+		if (storedTransactions) {
+			for (const t in storedTransactions) {
+				const transaction = this.database.transaction(storedTransactions[t]);
+				this.state.transactions.set(t, transaction);
 			}
-			if (storedStatements) {
-				for (const k in storedStatements) {
-					const statement = this.database.prepare(storedStatements[k]);
-					this.state.statements.set(statement.source, statement);
-				}
+		}
+		if (storedStatements) {
+			for (const k in storedStatements) {
+				const statement = this.database.prepare(storedStatements[k]);
+				this.state.statements.set(statement.source, statement);
 			}
-			if (onDatabaseStart) {
-				onDatabaseStart(this.database);
-			}
+		}
+		if (onDatabaseStart) {
+			onDatabaseStart(this.database);
 		}
 	}
 	all<T = any>(statement: string | Statement, data: DataType = []): Promise<T[]> {
@@ -218,6 +228,10 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	exec(data: string): Promise<{changes: number}> {
 		return this.query({type: 'exec', data});
 	}
+	loadExtension(filepath: string) {
+		return this.query({type: 'load-extension', data: filepath});
+	}
+
 	async runFile(file: string) {
 		const contents = await FS(file).read();
 		return this.query({type: 'exec', data: contents});
