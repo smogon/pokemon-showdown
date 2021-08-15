@@ -45,7 +45,7 @@ interface ModlogResults {
 }
 
 interface ModlogSQLQuery<T> {
-	statement: string;
+	statement: SQL.Statement;
 	queryText: string;
 	args: T[];
 	returnsResults?: boolean;
@@ -99,7 +99,6 @@ export class Modlog {
 		this.queuedEntries = [];
 		this.databaseReady = false;
 		const dbExists = FS(databasePath).existsSync();
-		// if (process.send) console.log('trying db?');
 		this.database = SQL(module, {
 			file: MODLOG_DB_PATH,
 			extension: 'server/modlog/transactions.ts',
@@ -373,7 +372,11 @@ export class Modlog {
 		query += ` ${sortAndLimit.query}`;
 		args.push(...sortAndLimit.args);
 
-		return {statement: (await this.database.prepare(query))!.toString(), queryText: query, args};
+		return {
+			statement: await this.database.prepare(query) as SQL.Statement,
+			queryText: query,
+			args,
+		};
 	}
 
 	async prepareSQLSearch(

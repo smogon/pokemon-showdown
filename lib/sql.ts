@@ -169,7 +169,6 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		if (this.dbReady) return;
 		this.dbReady = true;
 		const {file, extension} = this.options;
-		// console.log(`loading database ${file}${extension ? ` and extension ${extension}` : ''}`);
 		const Database = getModule();
 		this.database = Database ? new Database(file) : null;
 		if (extension && this.database) {
