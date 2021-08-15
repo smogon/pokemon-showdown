@@ -202,19 +202,19 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			}
 		}
 	}
-	all<T = any>(statement: string | Statement, data: DataType): Promise<T[]> {
+	all<T = any>(statement: string | Statement, data: DataType = []): Promise<T[]> {
 		if (typeof statement !== 'string') statement = statement.toString();
 		return this.query({type: 'all', statement, data});
 	}
-	get<T = any>(statement: string | Statement, data: DataType): Promise<T> {
+	get<T = any>(statement: string | Statement, data: DataType = []): Promise<T> {
 		if (typeof statement !== 'string') statement = statement.toString();
 		return this.query({type: 'get', statement, data});
 	}
-	run(statement: string | Statement, data: DataType): Promise<{changes: number}> {
+	run(statement: string | Statement, data: DataType = []): Promise<{changes: number}> {
 		if (typeof statement !== 'string') statement = statement.toString();
 		return this.query({type: 'run', statement, data});
 	}
-	transaction<T = any>(name: string, data: DataType): Promise<T> {
+	transaction<T = any>(name: string, data: DataType = []): Promise<T> {
 		return this.query({type: 'transaction', name, data});
 	}
 	async prepare(statement: string): Promise<Statement | null> {
