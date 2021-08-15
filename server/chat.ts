@@ -27,7 +27,7 @@ import type {RoomPermission, GlobalPermission} from './user-groups';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 import {FriendsDatabase, PM} from './friends';
-import {SQL} from '../lib/sql';
+import {SQL, Repl} from '../lib';
 import {Dex} from '../sim';
 import {resolve} from 'path';
 
@@ -1420,7 +1420,6 @@ export const Chat = new class {
 		void this.loadTranslations().then(() => {
 			Chat.translationsLoaded = true;
 		});
-		this.databaseReadyPromise = this.prepareDatabase();
 	}
 	translationsLoaded = false;
 	/**
@@ -1695,7 +1694,7 @@ export const Chat = new class {
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
-		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
+		if (!PM.isParentProcess) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
 		let statement = await this.database.prepare(
@@ -2503,6 +2502,7 @@ export interface Monitor {
 
 if (Chat.database.isParentProcess) {
 	Chat.database.spawn(Config.chatdbprocesses || 1);
+	Chat.databaseReadyPromise = Chat.prepareDatabase();
 } else {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
@@ -2516,4 +2516,6 @@ if (Chat.database.isParentProcess) {
 	process.on('unhandledRejection', err => {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
+	global.Config = require('./config-loader').Config;
+	Repl.start('chat-db', cmd => eval(cmd));
 }

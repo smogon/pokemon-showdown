@@ -8,7 +8,6 @@
 import {Utils, FS, Dashycode, ProcessManager, Repl} from '../../lib';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
-import {Chat} from '../chat';
 
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_RESULTS = 3000;
@@ -1295,7 +1294,6 @@ if (!PM.isParentProcess) {
 	};
 	global.Dex = Dex;
 	global.toID = Dex.toID;
-	global.Chat = Chat;
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
 			Monitor.crashlog(err, 'A chatlog search child process');
