@@ -512,7 +512,10 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	 ****************************************/
 	private async prepareStatements() {
 		if (Chat.databaseReadyPromise) await Chat.databaseReadyPromise;
-		if (!Chat.database) throw new Error(`Awaited Chat.databaseReadyPromise, but Chat.database is still falsy.`);
+		if (!Chat.database) {
+			if (!Config.usesqlite) return;
+			throw new Error(`Awaited Chat.databaseReadyPromise and SQLite is enabled, but Chat.database is still falsy.`);
+		}
 
 		this.leaderboardInsertion = await Chat.database.prepare(
 			`INSERT OR REPLACE INTO trivia_leaderboard (userid, score, total_points, total_correct_answers, is_all_time) VALUES (?, ?, ?, ?, ?) `
