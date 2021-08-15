@@ -1687,7 +1687,7 @@ export const Chat = new class {
 	 * SQL handler
 	 *
 	 * All chat plugins share one database.
-	 * Chat.database will be null if the database is not yet ready.
+	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
 	database: SQLDatabaseManager | null = null;
 	databaseReadyPromise: Promise<void> | null = null;
