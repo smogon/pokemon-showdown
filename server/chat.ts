@@ -27,7 +27,7 @@ import type {RoomPermission, GlobalPermission} from './user-groups';
 import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 import {FriendsDatabase, PM} from './friends';
-import {DatabaseWrapper, SQL} from '../lib/sql';
+import {SQL, SQLDatabaseManager} from '../lib/sql';
 import {resolve} from 'path';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
@@ -1689,22 +1689,26 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.database will be null if the database is not yet ready.
 	 */
-	database: DatabaseWrapper | null = null;
+	database: SQLDatabaseManager | null = null;
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
 		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
-		this.database = SQL(('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH);
+		if (!Config.usesqlite) return;
+		this.database = SQL(module, {file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH});
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
-		const statement = await this.database.prepare(
+		let statement = await this.database.prepare(
 			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
 		);
+		if (!statement) return; // I was told this is a best practice for the SQL library
 		const {hasDBInfo} = await this.database.get(statement);
 		if (!hasDBInfo) await this.database.runFile('./databases/schemas/chat-plugins.sql');
 
-		const result = await this.database.get(await this.database.prepare(
+		statement = await this.database.prepare(
 			`SELECT value as curVersion FROM db_info WHERE key = 'version'`
-		));
+		);
+		if (!statement) return;
+		const result = await this.database.get(statement);
 		const curVersion = parseInt(result.curVersion);
 		if (!curVersion) throw new Error(`db_info table is present, but schema version could not be parsed`);
 
