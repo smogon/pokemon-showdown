@@ -2499,10 +2499,13 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-if (Chat.database.isParentProcess) {
+// explicitly check this so it doesn't happen in other child processes
+if (!process.send) {
 	Chat.database.spawn(Config.chatdbprocesses || 1);
 	Chat.databaseReadyPromise = Chat.prepareDatabase();
-} else {
+	// we need to make sure it is explicitly JUST the child of the original parent db process
+	// no other child processes
+} else if (process.mainModule === module) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
