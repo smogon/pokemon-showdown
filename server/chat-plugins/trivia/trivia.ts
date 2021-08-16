@@ -372,9 +372,9 @@ export class Trivia extends Rooms.RoomGame {
 	curQuestion: string;
 	curAnswers: string[];
 	askedAt: number[];
-	categories: ID[];
+	categories: ID[] | 'all';
 	constructor(
-		room: Room, mode: string, categories: ID[], givesPoints: boolean,
+		room: Room, mode: string, categories: ID[] | 'all', givesPoints: boolean,
 		length: keyof typeof LENGTHS | number, questions: TriviaQuestion[], creator: string,
 		isRandomMode = false, isSubGame = false,
 	) {
@@ -396,7 +396,7 @@ export class Trivia extends Rooms.RoomGame {
 		case 'random':
 			category = this.room.tr`Random (${ALL_CATEGORIES[questions[0].category]})`; break;
 		default:
-			category = this.categories.map(cat => ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat]).join(' + ');
+			category = (this.categories as ID[]).map(cat => ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat]).join(' + ');
 		}
 
 		this.game = {
@@ -1572,6 +1572,7 @@ const triviaCommands: Chat.ChatCommands = {
 			_Trivia = TimerModeTrivia;
 		}
 
+		categories = categories === 'random' ? [questions[0].category] as ID[] : categories;
 		room.game = new _Trivia(room, mode, categories, givesPoints, length, questions, user.name, isRandomMode);
 	},
 	newhelp: [
