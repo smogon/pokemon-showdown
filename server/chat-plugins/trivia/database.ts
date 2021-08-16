@@ -148,8 +148,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		additions: {allTime: TriviaLeaderboardScore, notAllTime: TriviaLeaderboardScore}
 	): Promise<void> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't update the leaderboard for ${userid} because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't update the leaderboard for ${userid} because SQLite is not enabled.`);
 		}
 
 		await this.leaderboardChangeQuery!.run({
@@ -170,8 +170,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async addHistory(history: Iterable<TriviaHistory>) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't add a Trivia game to the history because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't add a Trivia game to the history because SQLite is not enabled.`);
 		}
 
 		const res = await Chat.database.transaction('addHistory', {
@@ -184,8 +184,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async addQuestions(questions: Iterable<TriviaQuestion>) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't add a Trivia question because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't add a Trivia question because SQLite is not enabled.`);
 		}
 
 		const res = await Chat.database.transaction('addQuestions', {
@@ -199,8 +199,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async addQuestionSubmissions(questions: Iterable<TriviaQuestion>) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't submit a Trivia question for review because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't submit a Trivia question for review because SQLite is not enabled.`);
 		}
 
 		const res = await Chat.database.transaction('addQuestions', {
@@ -214,8 +214,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async setShouldMoveEventQuestions(shouldMove: boolean) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't enable/disable moving event questions because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't enable/disable moving event questions because SQLite is not enabled.`);
 		}
 
 		await this.updateMoveEventQuestions!.run([Number(shouldMove)]);
@@ -226,8 +226,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	 ******************************/
 	async mergeLeaderboardEntries(from: ID, to: ID) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't merge ${from} and ${to}'s Trivia leaderboard entries because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't merge ${from} and ${to}'s Trivia leaderboard entries because SQLite is not enabled.`);
 		}
 
 		for (const isAllTime of [true, false]) {
@@ -249,8 +249,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async shouldMoveEventQuestions() {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't find out if we are moving event questions because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't find out if we are moving event questions because SQLite is not enabled.`);
 		}
 
 		return (await this.eventQuestionQuery!.get([]) || {value: false}).value;
@@ -258,16 +258,16 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async moveQuestionToCategory(question: string, newCategory: string) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't move question category because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't move question category because SQLite is not enabled.`);
 		}
 		await this.categoryChangeQuery!.run([newCategory, question]);
 	}
 
 	async migrateCategory(sourceCategory: string, targetCategory: string) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't migrate categories because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't migrate categories because SQLite is not enabled.`);
 		}
 
 		const {changes} = await this.migrateCategoryQuery!.run([targetCategory, sourceCategory]);
@@ -276,8 +276,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async acceptSubmissions(submissions: string[]) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't accept Trivia question submissions because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't accept Trivia question submissions because SQLite is not enabled.`);
 		}
 
 		const query = await Chat.database.prepare(
@@ -291,7 +291,9 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	 *****************************/
 	async getHistory(numberOfLines = 10): Promise<TriviaGame[]> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) throw new Chat.ErrorMessage(`Can't get Trivia game history because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't get Trivia game history because SQLite is not enabled.`);
+		}
 		const rows = await this.historyQuery!.all([numberOfLines]);
 		return rows.map((row: AnyObject): TriviaGame => ({
 			mode: row.mode,
@@ -305,7 +307,9 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async getScoresForLastGame(): Promise<{[k: string]: number}> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) throw new Chat.ErrorMessage(`Can't get Trivia game scores because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't get Trivia game scores because SQLite is not enabled.`);
+		}
 		const {game_id} = await this.historyQuery!.get([1]);
 
 		const results: {[k: string]: number} = {};
@@ -321,7 +325,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		options: {order: 'time' | 'random'}
 	): Promise<TriviaQuestion[]> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) throw new Chat.ErrorMessage(`Can't get Trivia questions because there is no SQL database open.`);
+		if (!Config.usesqlite) throw new Chat.ErrorMessage(`Can't get Trivia questions because SQLite is not enabled.`);
 
 		let query;
 		let args;
@@ -346,8 +350,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async getLeaderboardEntry(id: ID, isAllTime: boolean): Promise<TriviaLeaderboard | null> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't find out if user ${id} has a Trivia leaderboard entry because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't find out if user ${id} has a Trivia leaderboard entry because SQLite is not enabled.`);
 		}
 
 		const row = await this.leaderboardByUserQuery!.get([id, Number(isAllTime)]);
@@ -364,8 +368,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		notAllTime: TriviaLeaderboard,
 	}> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't get the Trivia leaderboard scores because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't get the Trivia leaderboard scores because SQLite is not enabled.`);
 		}
 
 		const result: TriviaLeaderboards = {
@@ -392,8 +396,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async checkIfQuestionExists(questionText: string) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't check if a Trivia question already exists because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't check if a Trivia question already exists because SQLite is not enabled.`);
 		}
 
 		const {count} = await this.questionExistsQuery!.get([questionText]);
@@ -414,8 +418,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async getSubmissions(): Promise<TriviaQuestion[]> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't retrieve the Trivia question submissions because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't retrieve the Trivia question submissions because SQLite is not enabled.`);
 		}
 
 		const rows = await this.submissionsQuery!.all([]);
@@ -424,8 +428,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async getQuestionCounts(): Promise<{[k: string]: number, total: number}> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't retrieve the Trivia question counts because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't retrieve the Trivia question counts because SQLite is not enabled.`);
 		}
 
 		const allCategories = (await this.categoriesQuery!.all([])).map((row: AnyObject) => row.category);
@@ -443,8 +447,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		options: {searchSubmissions: boolean, caseSensitive?: boolean}
 	): Promise<TriviaQuestion[]> {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't search Trivia questions because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't search Trivia questions because SQLite is not enabled.`);
 		}
 
 		if (options.caseSensitive) await Chat.database.exec(`PRAGMA case_sensitive_like = true;`);
@@ -460,8 +464,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	 * ***************************/
 	async clearSubmissions() {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't clear the Trivia question submissions because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't clear the Trivia question submissions because SQLite is not enabled.`);
 		}
 
 		await Chat.database.run(this.clearAllSubmissionsQuery!, []);
@@ -469,8 +473,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async clearCategory(category: string) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't clear the Trivia questions in category "${category}" because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't clear the Trivia questions in category "${category}" because SQLite is not enabled.`);
 		}
 
 		await Chat.database.run(this.clearCategoryQuery!, [category]);
@@ -478,8 +482,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async deleteQuestion(questionText: string) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't delete the Trivia question because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't delete the Trivia question because SQLite is not enabled.`);
 		}
 
 		await Chat.database.run(this.deleteQuestionQuery!, [questionText]);
@@ -487,8 +491,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async deleteLeaderboardEntry(userid: ID, isAllTime: boolean) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't delete leaderboard entries because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't delete leaderboard entries because SQLite is not enabled.`);
 		}
 
 		await this.leaderboardDeletionQuery!.run([userid, Number(isAllTime)]);
@@ -496,8 +500,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async deleteSubmissions(submissions: string[]) {
 		if (this.readyPromise) await this.readyPromise;
-		if (!Chat.database) {
-			throw new Chat.ErrorMessage(`Can't delete Trivia question submissions because there is no SQL database open.`);
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't delete Trivia question submissions because SQLite is not enabled.`);
 		}
 
 		const query = await Chat.database.prepare(
@@ -511,11 +515,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	 * These are not part of the public API *
 	 ****************************************/
 	private async prepareStatements() {
+		if (!Config.usesqlite) return;
 		if (Chat.databaseReadyPromise) await Chat.databaseReadyPromise;
-		if (!Chat.database) {
-			if (!Config.usesqlite) return;
-			throw new Error(`Awaited Chat.databaseReadyPromise and SQLite is enabled, but Chat.database is still falsy.`);
-		}
 
 		this.leaderboardInsertion = await Chat.database.prepare(
 			`INSERT OR REPLACE INTO trivia_leaderboard (userid, score, total_points, total_correct_answers, is_all_time) VALUES (?, ?, ?, ?, ?) `
@@ -614,7 +615,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	}
 
 	private async convertLegacyJSON() {
-		if (!Chat.database || !this.legacyJSONPath) return;
+		if (!Config.usesqlite || !this.legacyJSONPath) return;
 		if (this.readyPromise) await this.readyPromise;
 		let triviaData;
 		try {
