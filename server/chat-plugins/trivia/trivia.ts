@@ -1524,12 +1524,14 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 		if (!MODES[mode]) return this.errorReply(this.tr`"${mode}" is an invalid mode.`);
 
-		const categories = targets[1]
+		let categories: string[] | 'all' | 'random' = targets[1]
 			.split('+')
 			.map(cat => {
 				const id = toID(cat);
 				return CATEGORY_ALIASES[id] || id;
 			});
+		if (categories[0] === 'all') categories = 'all';
+		if (categories[0] === 'random') categories = 'random';
 		if (categories.length > 1 && (categories.includes('all' as ID) || categories.includes('random' as ID))) {
 			throw new Chat.ErrorMessage(`You cannot combine all or random with another category.`);
 		}
@@ -1544,12 +1546,12 @@ const triviaCommands: Chat.ChatCommands = {
 		// Assume that infinite mode will last for at least 75 points
 		const questionsNecessary = typeof length === 'string' ? (LENGTHS[length].cap || 75) / 5 : length;
 		if (questions.length < questionsNecessary) {
-			if (categories[0] === 'random') {
+			if (categories === 'random') {
 				return this.errorReply(
 					this.tr`There are not enough questions in the randomly chosen category to finish a trivia game.`
 				);
 			}
-			if (categories[0] === 'all') {
+			if (categories === 'all') {
 				return this.errorReply(
 					this.tr`There are not enough questions in the trivia database to finish a trivia game.`
 				);
