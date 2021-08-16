@@ -1524,7 +1524,7 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 		if (!MODES[mode]) return this.errorReply(this.tr`"${mode}" is an invalid mode.`);
 
-		let categories: string[] | 'all' | 'random' = targets[1]
+		let categories: ID[] | 'all' | 'random' = targets[1]
 			.split('+')
 			.map(cat => {
 				const id = toID(cat);
