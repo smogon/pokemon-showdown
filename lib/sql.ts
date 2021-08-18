@@ -178,7 +178,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		const statement = query.noPrepare ?
 			this.state.statements.get(query.statement) :
 			this.cacheStatement(query.statement);
-		if (!statement) throw new Error(`Missing cached statement ${query.statement} where required`);
+		if (!statement) throw new Error(`Missing cached statement "${query.statement}" where required`);
 		return statement;
 	}
 	setupDatabase() {
