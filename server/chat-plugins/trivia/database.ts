@@ -280,10 +280,10 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			throw new Chat.ErrorMessage(`Can't accept Trivia question submissions because SQLite is not enabled.`);
 		}
 
-		const query = await Chat.database.prepare(
-			`UPDATE trivia_questions SET is_submission = 1 WHERE question IN (${formatSQLArray(submissions)})`
+		await Chat.database.run(
+			`UPDATE trivia_questions SET is_submission = 1 WHERE question IN (${formatSQLArray(submissions)})`,
+			[submissions]
 		);
-		await query?.run(submissions);
 	}
 
 	/*****************************
@@ -337,14 +337,14 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			}
 			args = [limit];
 		} else {
-			query = await Chat.database.prepare(
+			query = (
 				`SELECT * FROM trivia_questions WHERE category IN (${formatSQLArray(categories)}) AND is_submission = 0 ORDER BY ${options.order === 'time' ? 'added_at DESC' : 'RANDOM()'} LIMIT ?`
 			);
 			args = [...categories, limit];
 		}
 
 		if (!query) throw new Error(`Couldn't prepare query`);
-		const rows = await query.all(args);
+		const rows = await Chat.database.all(query, args);
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
 	}
 

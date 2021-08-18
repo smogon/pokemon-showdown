@@ -45,16 +45,16 @@ async function lastLine(database, roomid) {
 
 	describe('Modlog#prepareSQLSearch', () => {
 		it('should respect the maxLines parameter', async () => {
-			const query = await modlog.prepareSQLSearch(['lobby'], 1337, false, {note: [], user: [], ip: [], action: [], actionTaker: []});
+			const query = modlog.prepareSQLSearch(['lobby'], 1337, false, {note: [], user: [], ip: [], action: [], actionTaker: []});
 			assert(query.queryText.endsWith('LIMIT ?'));
 			assert(query.args.includes(1337));
 
-			const noMaxLines = await modlog.prepareSQLSearch(['lobby'], 0, false, {note: [], user: [], ip: [], action: [], actionTaker: []});
+			const noMaxLines = modlog.prepareSQLSearch(['lobby'], 0, false, {note: [], user: [], ip: [], action: [], actionTaker: []});
 			assert(!noMaxLines.queryText.includes('LIMIT'));
 		});
 
 		it('should attempt to respect onlyPunishments', async () => {
-			const query = await modlog.prepareSQLSearch(['lobby'], 0, true, {note: [], user: [], ip: [], action: [], actionTaker: []});
+			const query = modlog.prepareSQLSearch(['lobby'], 0, true, {note: [], user: [], ip: [], action: [], actionTaker: []});
 			assert(query.queryText.includes('action IN ('));
 			assert(query.args.includes('WEEKLOCK'));
 		});

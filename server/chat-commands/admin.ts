@@ -1311,7 +1311,6 @@ export const commands: Chat.ChatCommands = {
 
 		let result;
 		try {
-			await database.prepare(query);
 			// presume it's attempting to get data first
 			result = await database.all(query, []);
 		} catch (err) {

@@ -7,7 +7,6 @@ import type * as sqlite from 'better-sqlite3';
 import {FS} from './fs';
 
 export const DB_NOT_FOUND = null;
-export const STATEMENT_NOT_FOUND = false;
 
 export interface SQLOptions {
 	file: string;
@@ -28,17 +27,17 @@ type DatabaseQuery = {
 	/** Prepare a statement - data is the statement. */
 	type: 'prepare', data: string,
 } | {
-	/** Get all lines from a statement. Data is the params, num is the statement number. */
-	type: 'all', data: DataType, statement: string,
+	/** Get all lines from a statement. Data is the params. */
+	type: 'all', data: DataType, statement: string, noPrepare?: boolean,
 } | {
 	/** Execute raw SQL in the database. */
 	type: "exec", data: string,
 } | {
 	/** Get one line from a prepared statement. */
-	type: 'get', data: DataType, statement: string,
+	type: 'get', data: DataType, statement: string, noPrepare?: boolean,
 } | {
 	/** Run a prepared statement. */
-	type: 'run', data: DataType, statement: string,
+	type: 'run', data: DataType, statement: string, noPrepare?: boolean,
 } | {
 	type: 'transaction', name: string, data: DataType,
 } | {
@@ -123,25 +122,19 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 					if (!this.database) {
 						return null;
 					}
-					const statement = this.state.statements.get(query.statement);
-					if (!statement) return STATEMENT_NOT_FOUND;
-					return statement.get(query.data);
+					return this.extractStatement(query).get(query.data);
 				}
 				case 'run': {
 					if (!this.database) {
 						return null;
 					}
-					const statement = this.state.statements.get(query.statement);
-					if (!statement) return STATEMENT_NOT_FOUND;
-					return statement.run(query.data);
+					return this.extractStatement(query).run(query.data);
 				}
 				case 'all': {
 					if (!this.database) {
 						return null;
 					}
-					const statement = this.state.statements.get(query.statement);
-					if (!statement) return STATEMENT_NOT_FOUND;
-					return statement.all(query.data);
+					return this.extractStatement(query).all(query.data);
 				}
 				case 'prepare':
 					if (!this.database) {
@@ -168,6 +161,25 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			statements: new Map(),
 		};
 		if (!this.isParentProcess) this.setupDatabase();
+	}
+	private cacheStatement(source: string) {
+		source = source.trim();
+		let statement = this.state.statements.get(source);
+		if (!statement) {
+			statement = this.database!.prepare(source);
+			this.state.statements.set(source, statement);
+		}
+		return statement;
+	}
+	private extractStatement(
+		query: DatabaseQuery & {statement: string, noPrepare?: boolean}
+	) {
+		query.statement = query.statement.trim();
+		const statement = query.noPrepare ?
+			this.state.statements.get(query.statement) :
+			this.cacheStatement(query.statement);
+		if (!statement) throw new Error(`Missing cached statement "${query.statement}" where required`);
+		return statement;
 	}
 	setupDatabase() {
 		if (this.dbReady) return;
@@ -208,17 +220,23 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			onDatabaseStart(this.database);
 		}
 	}
-	all<T = any>(statement: string | Statement, data: DataType = []): Promise<T[]> {
+	all<T = any>(
+		statement: string | Statement, data: DataType = [], noPrepare?: boolean
+	): Promise<T[]> {
 		if (typeof statement !== 'string') statement = statement.toString();
-		return this.query({type: 'all', statement, data});
+		return this.query({type: 'all', statement, data, noPrepare});
 	}
-	get<T = any>(statement: string | Statement, data: DataType = []): Promise<T> {
+	get<T = any>(
+		statement: string | Statement, data: DataType = [], noPrepare?: boolean
+	): Promise<T> {
 		if (typeof statement !== 'string') statement = statement.toString();
-		return this.query({type: 'get', statement, data});
+		return this.query({type: 'get', statement, data, noPrepare});
 	}
-	run(statement: string | Statement, data: DataType = []): Promise<sqlite.RunResult> {
+	run(
+		statement: string | Statement, data: DataType = [], noPrepare?: boolean
+	): Promise<sqlite.RunResult> {
 		if (typeof statement !== 'string') statement = statement.toString();
-		return this.query({type: 'run', statement, data});
+		return this.query({type: 'run', statement, data, noPrepare});
 	}
 	transaction<T = any>(name: string, data: DataType = []): Promise<T> {
 		return this.query({type: 'transaction', name, data});
@@ -238,13 +256,6 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	async runFile(file: string) {
 		const contents = await FS(file).read();
 		return this.query({type: 'exec', data: contents});
-	}
-	async query(data: DatabaseQuery) {
-		const result = await super.query(data);
-		if (result === STATEMENT_NOT_FOUND) {
-			throw new Error("Prepare a statement before using another database function with SQLDatabase.prepare");
-		}
-		return result;
 	}
 }
 

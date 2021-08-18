@@ -1696,18 +1696,14 @@ export const Chat = new class {
 		if (!PM.isParentProcess) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
-		let statement = await this.database.prepare(
+		const {hasDBInfo} = await this.database.get(
 			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
 		);
-		if (!statement) return; // I was told this is a best practice for the SQL library
-		const {hasDBInfo} = await this.database.get(statement);
 		if (!hasDBInfo) await this.database.runFile('./databases/schemas/chat-plugins.sql');
 
-		statement = await this.database.prepare(
+		const result = await this.database.get(
 			`SELECT value as curVersion FROM db_info WHERE key = 'version'`
 		);
-		if (!statement) return;
-		const result = await this.database.get(statement);
 		const curVersion = parseInt(result.curVersion);
 		if (!curVersion) throw new Error(`db_info table is present, but schema version could not be parsed`);
 
