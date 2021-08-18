@@ -45,7 +45,6 @@ interface ModlogResults {
 }
 
 interface ModlogSQLQuery<T> {
-	statement: SQL.Statement;
 	queryText: string;
 	args: T[];
 	returnsResults?: boolean;
@@ -140,9 +139,9 @@ export class Modlog {
 			await this.database.runFile(MODLOG_SCHEMA_PATH);
 		}
 
-		const statement = `SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`;
-		await this.database.prepare(statement);
-		const {hasDBInfo} = await this.database.get(statement, []);
+		const {hasDBInfo} = await this.database.get(
+			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
+		);
 
 		if (hasDBInfo === 0) {
 			// needs v2 migration
@@ -303,8 +302,8 @@ export class Modlog {
 
 		if (this.readyPromise) await this.readyPromise;
 		if (!this.databaseReady) return null;
-		const query = await this.prepareSQLSearch(rooms, maxLines, onlyPunishments, search);
-		const results = (await this.database.all(query.statement, query.args))
+		const query = this.prepareSQLSearch(rooms, maxLines, onlyPunishments, search);
+		const results = (await this.database.all(query.queryText, query.args))
 			.map((row: any) => this.dbRowToModlogEntry(row));
 
 		const duration = Date.now() - startTime;
@@ -340,12 +339,12 @@ export class Modlog {
 	 * @param ands Each AND conditions to be appended to every OR condition (e.g. `roomid = ?`)
 	 * @param sortAndLimit A fragment of the form `ORDER BY ... LIMIT ...`
 	 */
-	async buildParallelIndexScanQuery(
+	buildParallelIndexScanQuery(
 		select: string,
 		ors: SQLQuery[],
 		ands: SQLQuery[],
 		sortAndLimit: SQLQuery
-	): Promise<ModlogSQLQuery<string | number>> {
+	): ModlogSQLQuery<string | number> {
 		if (!this.database) throw new Error(`Parallel index scan queries cannot be built when SQLite is not enabled.`);
 		// assemble AND fragment
 		let andQuery = ``;
@@ -373,18 +372,17 @@ export class Modlog {
 		args.push(...sortAndLimit.args);
 
 		return {
-			statement: await this.database.prepare(query) as SQL.Statement,
 			queryText: query,
 			args,
 		};
 	}
 
-	async prepareSQLSearch(
+	prepareSQLSearch(
 		rooms: ModlogID[] | 'all',
 		maxLines: number,
 		onlyPunishments: boolean,
 		search: ModlogSearch
-	): Promise<ModlogSQLQuery<string | number>> {
+	): ModlogSQLQuery<string | number> {
 		const select = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog`;
 		const ors = [];
 		const ands = [];
