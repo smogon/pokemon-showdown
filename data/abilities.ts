@@ -5147,6 +5147,24 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		rating: 3.5,
 		num: 163,
 	},
+	typeflux: {
+		onResidualPriority: -1,
+		onStart(pokemon) {
+			const possibleTypes = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Infinite', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
+			const type = this.sample(possibleTypes);
+			this.add('-start', pokemon, 'typechange', type, '[from] ability: Type Flux');
+			pokemon.setType(type);
+		},
+		onResidual(pokemon) {
+			const possibleTypes = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Infinite', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
+			const type = this.sample(possibleTypes.filter(t => pokemon.types[0] !== t));
+			this.add('-start', pokemon, 'typechange', type, '[from] ability: Type Flux');
+			pokemon.setType(type);
+		},
+		name: "Type Flux",
+		rating: 3.5,
+		num: -5,
+	},
 	unaware: {
 		name: "Unaware",
 		onAnyModifyBoost(boosts, pokemon) {
