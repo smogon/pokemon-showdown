@@ -285,6 +285,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokemon's Attack is raised by 2 stages for each of its stat stages that is lowered by an opposing Pokemon.",
 		shortDesc: "This Pokemon's Attack is raised by 2 for each of its stats that is lowered by a foe.",
 	},
+	deflagrate: {
+		name: "Deflagrate",
+		desc: "This Pokemon's Normal-type moves become Fire-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Fire type and have 1.2x power.",
+	},
 	deltastream: {
 		name: "Delta Stream",
 		desc: "On switch-in, the weather becomes strong winds that remove the weaknesses of the Flying type from Flying-type Pokemon. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Desolate Land or Primordial Sea.",
@@ -311,6 +316,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Download",
 		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower.",
 		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
+	},
+	dragonscales: {
+		name: "Dragon Scales",
+		desc: "This Pokemon reduces 1/3 damage from Super Effective moves, but double damage from Critical Hits.",
+		shortDesc: "This Pokemon reduces 1/3 damage from Super Effective moves, 2x damage from Critical Hits.",
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
@@ -491,6 +501,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Grassy Surge",
 		shortDesc: "On switch-in, this Pokemon summons Grassy Terrain.",
 	},
+	gravitywell: {
+		name: "Gravity Well",
+		desc: "If Maelstrom is active, this Pokemon restores 1/8th of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Maelstrom.",
+		shortDesc: "If Maelstrom is active, this Pokemon heals 1/8th of its max HP each turn; immunity to Maelstrom.",
+	},
 	grimneigh: {
 		name: "Grim Neigh",
 		desc: "This Pokemon's Special Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
@@ -526,6 +541,14 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	heavymetal: {
 		name: "Heavy Metal",
 		shortDesc: "This Pokemon's weight is doubled.",
+	},
+	herooftheforest: {
+		name: "Hero of the Forest",
+		shortDesc: "If this Pokemon is above half HP, its Grass-type moves have their priority increased by 1.",
+	},
+	highstrung: {
+		name: 'High-Strung',
+		shortDesc: "This Pokemon's Speed is raised by 1 stage after it is damaged by a contact move.",
 	},
 	honeygather: {
 		name: "Honey Gather",
@@ -912,6 +935,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		},
 	},
+	omniforge: {
+		name: "Omniforge",
+		shortDesc: "A random stat of this Pokemon is raised by 2 stages after it is damaged by a Not-Very-Effective move.",
+	},
 	overcoat: {
 		name: "Overcoat",
 		shortDesc: "This Pokemon is immune to powder moves and damage from Sandstorm or Hail.",
@@ -1148,6 +1175,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	regenerator: {
 		name: "Regenerator",
 		shortDesc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
+	},
+	resolutegauntlet: {
+		name: "Resolute Gauntlet",
+		desc: "On switch-in, this Pokemon lowers either the Sp. Att or Speed of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune, as well as users of the Abilities of Intreped Sword, Dauntless Shield, and Resolute Gauntlet.",
+		shortDesc: "On switch-in, this Pokemon lowers the Sp. Att or Speed of adjacent opponents by 1 stage.",
 	},
 	ripen: {
 		name: "Ripen",
@@ -1461,6 +1493,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Super Luck",
 		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
 	},
+	supremebeing: {
+		name: "Supreme Being",
+		desc: "This Pokemon's two highest stats are raised by 1 stage if it attacks and knocks out another Pokemon.",
+		shortDesc: "This Pokemon's two highest stats are raised by 1 if it attacks and KOes another Pokemon.",
+	},
 	surgesurfer: {
 		name: "Surge Surfer",
 		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is doubled.",
@@ -1546,6 +1583,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",
 		},
 	},
+	timetravel: {
+		name: "Time Travel",
+		shortDesc: "This ability changes the signature move of Mebiusan depending on what form it is in.",
+	},
 	tintedlens: {
 		name: "Tinted Lens",
 		shortDesc: "This Pokemon's attacks that are not very effective on a target deal double damage.",
@@ -1608,6 +1649,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		start: "  [POKEMON] is radiating a blazing aura!",
 	},
+	typeflux: {
+		name: "Type Flux",
+		desc: "This Pokemon's Type is randomly changed upon entry and at the end of each full turn it has been on the field.",
+		shortDesc: "This Pokemon's Type is randomly changed upon entry and at the end of each full turn on the field.",
+	},
 	unaware: {
 		name: "Unaware",
 		desc: "This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
@@ -1624,6 +1670,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "While this Pokemon is active, it prevents opposing Pokemon from using their Berries.",
 
 		start: "  [TEAM] is too nervous to eat Berries!",
+	},
+	unownsspell: {
+		name: "Unown's Spell",
+		desc: "If this Pokemon is an Unown in its letter or Origin Forme, it changes to Alphabet Forme when it has 1/2 or less of its maximum HP at the end of the turn.",
+		shortDesc: "If Unown, changes to Alphabet if at 1/2 max HP or less at end of turn.",
 	},
 	unseenfist: {
 		name: "Unseen Fist",
