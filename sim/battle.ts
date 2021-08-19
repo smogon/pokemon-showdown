@@ -2070,7 +2070,7 @@ export class Battle {
 		// This only affects Eternatus-Eternamax in Pure Hackmons.
 		const tr = this.trunc;
 		const nature = this.dex.natures.get(set.nature);
-		let s: StatIDExceptHP;
+		let s: StatID;
 		if (nature.plus) {
 			s = nature.plus;
 			const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 595) : stats[s];
