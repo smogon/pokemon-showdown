@@ -176,8 +176,8 @@ type Format = import('./dex-formats').Format;
 
 interface NatureData {
 	name: string;
-	plus?: StatIDExceptHP;
-	minus?: StatIDExceptHP;
+	plus?: StatID;
+	minus?: StatID;
 }
 
 type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
