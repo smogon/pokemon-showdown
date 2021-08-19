@@ -27,8 +27,41 @@ export const Natures: {[k: string]: NatureData} = {
 		plus: 'spd',
 		minus: 'spa',
 	},
+	cautious: {
+		name: "Cautious",
+		plus: 'hp',
+		minus: 'def',
+	},
+	conscientious: {
+		name: "Conscientious",
+		plus: 'hp',
+		minus: 'spe',
+	},
+	decorus: {
+		name: "Decorus",
+	},
 	docile: {
 		name: "Docile",
+	},
+	facetious: {
+		name: "Facetious",
+		plus: "spa",
+		minus: "hp",
+	},
+	fallacious: {
+		name: "Fallacious",
+		plus: "def",
+		minus: "hp",
+	},
+	fastidious: {
+		name: "Fastidious",
+		plus: "hp",
+		minus: "spa",
+	},
+	frivolous: {
+		name: "Frivolous",
+		plus: "spe",
+		minus: 'hp',
 	},
 	gentle: {
 		name: "Gentle",
@@ -42,6 +75,11 @@ export const Natures: {[k: string]: NatureData} = {
 		name: "Hasty",
 		plus: 'spe',
 		minus: 'def',
+	},
+	humorous: {
+		name: "Humorous",
+		plus: "spd",
+		minus: 'hp',
 	},
 	impish: {
 		name: "Impish",
@@ -62,6 +100,16 @@ export const Natures: {[k: string]: NatureData} = {
 		name: "Lonely",
 		plus: 'atk',
 		minus: 'def',
+	},
+	ludicrous: {
+		name: "Ludicrous",
+		plus: 'atk',
+		minus: 'hp',
+	},
+	meticulous: {
+		name: "Meticulous",
+		plus: 'hp',
+		minus: 'atk'
 	},
 	mild: {
 		name: "Mild",
@@ -105,6 +153,11 @@ export const Natures: {[k: string]: NatureData} = {
 		name: "Sassy",
 		plus: 'spd',
 		minus: 'spe',
+	},
+	scrupulous: {
+		name: "Scrupulous",
+		plus: 'hp',
+		minus: 'spd',
 	},
 	serious: {
 		name: "Serious",
