@@ -14,7 +14,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		// Damage reduction is handled directly in the sim/battle.js damage function
 		onResidualOrder: 10,
 		onResidual(pokemon) {
-			this.damage(pokemon.baseMaxhp / 16);
+			this.damage(pokemon.baseMaxhp / 8);
 		},
 	},
 	par: {
@@ -72,32 +72,23 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return false;
 		},
 	},
-	frz: {
-		name: 'frz',
+	fsb: {
+		name: 'fsb',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			if (sourceEffect && sourceEffect.id === 'frostorb') {
+				this.add('-status', target, 'fsb', '[from] item: Frost Orb');
+			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'fsb', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
 			} else {
-				this.add('-status', target, 'frz');
+				this.add('-status', target, 'fsb');
 			}
-			if (target.species.name === 'Shaymin-Sky' && target.baseSpecies.baseSpecies === 'Shaymin') {
-				target.formeChange('Shaymin', this.effect, true);
-			}
+			this.add('-message', 'The target became Frostbitten!');
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
-			if (move.flags['defrost']) return;
-			if (this.randomChance(1, 5)) {
-				pokemon.cureStatus();
-				return;
-			}
-			this.add('cant', pokemon, 'frz');
-			return false;
-		},
 		onModifyMove(move, pokemon) {
 			if (move.flags['defrost']) {
-				this.add('-curestatus', pokemon, 'frz', '[from] move: ' + move);
+				this.add('-curestatus', pokemon, 'fsb', '[from] move: ' + move);
 				pokemon.setStatus('');
 			}
 		},
@@ -105,6 +96,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
+		},
+		// Damage reduction is handled directly in the sim/battle.js damage function
+		onResidualOrder: 9,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 8);
+			this.add('-message', 'The target is chilled by frostbite!');
 		},
 	},
 	psn: {
@@ -144,6 +141,84 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.effectState.stage++;
 			}
 			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
+		},
+	},
+	bewitchment: {
+		name: 'bewitchment',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'bewitchment', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'bewitchment');
+			}
+			this.add('-message', 'The target became Bewitched!');
+		},
+		onModifySpD(spd, pokemon) {
+			return this.chainModify(0.33);
+		},
+		onBeforeMovePriority: 1,
+		onBeforeMove(pokemon) {
+			if (this.randomChance(1, 4)) {
+				this.add('cant', pokemon, 'bewitchment');
+				return false;
+			}
+		},
+	},
+	whiplash: {
+		name: 'whiplash',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'whiplash', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'whiplash');
+			}
+			this.add('-message', 'The target became Whiplashed!');
+		},
+		onModifyDef(def, pokemon) {
+			return this.chainModify(0.33);
+		},
+		onResidualOrder: 9,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 8);
+			this.add('-message', 'The target suffers from Whiplash!');
+		},
+	},
+	blindness: {
+		name: 'blindness',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'blindness', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'blindness');
+			}
+			this.add('-message', 'The target became Blinded!');
+			this.effectState.startTime = this.random(2, 5);
+			this.effectState.time = this.effectState.startTime;
+		},
+		onModifyMovePriority: 1,
+		onModifyMove(move) {
+			if (typeof move.accuracy === 'number') {
+				move.accuracy *= 0.7;
+			}
+		},
+		onBeforeMovePriority: 10,
+		onBeforeMove(pokemon, target, move) {
+			pokemon.statusState.time--;
+			if (pokemon.statusState.time <= 0) {
+				pokemon.cureStatus();
+				this.add('-message', 'The target became able to see!');
+				return;
+			}
+			return;
+		},
+		onHit(target, source, move) {
+			if (move.thawsTarget || move.type === 'Water' && move.category !== 'Status') {
+				target.cureStatus();
+				this.add('-message', 'The target became able to see!');
+			}
 		},
 	},
 	confusion: {
@@ -205,10 +280,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
-		duration: 5,
+		duration: 3,
 		durationCallback(target, source) {
 			if (source?.hasItem('gripclaw')) return 8;
-			return this.random(5, 7);
+			return this.random(2, 4);
 		},
 		onStart(pokemon, source) {
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, '[of] ' + source);
@@ -350,8 +425,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			pokemon.removeVolatile('truant');
 			return null;
 		},
-		onStart(pokemon) {
-			this.add('-mustrecharge', pokemon);
+		onAfterMove(pokemon, target) {
+			if (!target || target.fainted || target.hp <= 0) {
+				pokemon.removeVolatile('mustrecharge');
+			} else {
+				this.add('-mustrecharge', pokemon);
+			}
 		},
 		onLockMove: 'recharge',
 	},
@@ -459,7 +538,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Water') {
 				this.debug('rain water boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 			if (move.type === 'Fire') {
 				this.debug('rain fire suppress');
@@ -500,7 +579,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Water') {
 				this.debug('Rain water boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 		},
 		onFieldStart(field, source, effect) {
@@ -529,7 +608,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 			if (move.type === 'Water') {
 				this.debug('Sunny Day water suppress');
@@ -608,7 +687,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
 			if (pokemon.hasType('Rock') && this.field.isWeather('sandstorm')) {
-				return this.modify(spd, 1.5);
+				return this.modify(spd, 1.3);
 			}
 		},
 		onFieldStart(field, source, effect) {
@@ -641,6 +720,14 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 			return 5;
 		},
+		// This should be applied directly to the stat before any of the other modifiers are chained
+		// So we give it increased priority.
+		onModifyDefPriority: 10,
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasType('Ice') && this.field.isWeather('hail')) {
+				return this.modify(def, 1.3);
+			}
+		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -659,6 +746,40 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
+		},
+	},
+	maelstrom: {
+		name: 'Maelstrom',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source && source.hasItem('calamitystone')) {
+				return 8;
+			}
+			return 5;
+		},
+		onStart(battle, source, effect) {
+			if (effect && effect.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'Maelstrom', '[from] ability: ' + effect, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Maelstrom');
+			}
+			this.add('-message', 'The Maelstrom turned disastrous!');
+		},
+		onResidualOrder: 1,
+		onResidual() {
+			this.add('-weather', 'Maelstrom', '[upkeep]');
+			this.add('-message', 'The Maelstrom is swirling about!');
+			if (this.field.isWeather('maelstrom')) this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			if (target.hasItem('utilityumbrella')) return;
+			this.damage(target.baseMaxhp / 8);
+		},
+		onEnd() {
+			this.add('-weather', 'none');
+			this.add('-message', 'The Maelstrom died down.');
 		},
 	},
 	deltastream: {
@@ -703,8 +824,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name + '-Gmax');
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
-			// Changes based on dynamax level, 2 is max (at LVL 10)
-			const ratio = 2; // TODO: Implement Dynamax levels
+			// Changes based on dynamax level, 1.5 is max (at LVL 5)
+			const ratio = 1.5; // TODO: Implement Dynamax levels
 
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
