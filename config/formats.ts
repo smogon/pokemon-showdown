@@ -1261,7 +1261,7 @@ export const Formats: FormatList = [
 			natureModify(stats, set) {
 				const tr = this.trunc;
 				const nature = this.dex.natures.get(set.nature);
-				let s: StatIDExceptHP;
+				let s: StatID;
 				if (nature.plus) {
 					s = nature.minus!;
 					const stat = this.ruleTable.has('overflowstatmod') ? Math.min(stats[s], 595) : stats[s];
