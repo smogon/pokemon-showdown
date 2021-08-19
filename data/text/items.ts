@@ -48,6 +48,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Alakazite",
 		desc: "If held by an Alakazam, this item allows it to Mega Evolve in battle.",
 	},
+	alcremiumz: {
+		name: "Alcremium Z",
+		desc: "If held by an Alcremie with Celebrate, it can use Fallacious Pastry.",
+	},
 	aloraichiumz: {
 		name: "Aloraichium Z",
 		desc: "If held by an Alolan Raichu with Thunderbolt, it can use Stoked Sparksurfer.",
@@ -63,6 +67,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	apicotberry: {
 		name: "Apicot Berry",
 		desc: "Raises holder's Sp. Def by 1 stage when at 1/4 max HP or less. Single use.",
+	},
+	arcaninite: {
+		name: "Arcaninite",
+		desc: "If held by an Arcanine, this item allows it to Mega Evolve in battle.",
 	},
 	armorfossil: {
 		name: "Armor Fossil",
@@ -80,6 +88,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Audinite",
 		desc: "If held by an Audino, this item allows it to Mega Evolve in battle.",
 	},
+	aumagaricelebiumz: {
+		name: "Aumagaricelebium Z",
+		desc: "If held by a Celebi-Aumagari with Earth Power or Earthquake, it can use Temporal Desolation.",
+	},
 	babiriberry: {
 		name: "Babiri Berry",
 		desc: "Halves damage taken from a supereffective Steel-type attack. Single use.",
@@ -87,6 +99,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	banettite: {
 		name: "Banettite",
 		desc: "If held by a Banette, this item allows it to Mega Evolve in battle.",
+	},
+	bearticite: {
+		name: "Bearticite",
+		desc: "If held by a Beartic, this item allows it to Mega Evolve in battle.",
 	},
 	beastball: {
 		name: "Beast Ball",
@@ -107,6 +123,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	berrysweet: {
 		name: "Berry Sweet",
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
+	},
+	beserkgene: {
+		name: "Beserk Gene",
+		desc: "On switch-in, raises holder's Attack by 2 only if Mewtwo; confuses on all Pokemon. Single use.",
 	},
 	bigroot: {
 		name: "Big Root",
@@ -146,6 +166,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	blazikenite: {
 		name: "Blazikenite",
 		desc: "If held by a Blaziken, this item allows it to Mega Evolve in battle.",
+	},
+	blissiumz: {
+		name: "Blissium Z",
+		desc: "If held by a Blissey with Softboiled, it can use Bountiful Forgiveness.",
 	},
 	blueorb: {
 		name: "Blue Orb",
@@ -188,6 +212,18 @@ export const ItemsText: {[k: string]: ItemText} = {
 	burndrive: {
 		name: "Burn Drive",
 		desc: "Holder's Techno Blast is Fire type.",
+	},
+	castformite: {
+		name: "Castformite",
+		desc: "If held by a Castform, this item allows it to Mega Evolve in battle.",
+	},
+	celebiumz: {
+		name: "Celebium Z",
+		desc: "If held by a Celebi with Giga Drain, it can use Temporal Reforestation.",
+	},
+	calamitystone: {
+		name: "Calamity Stone",
+		desc: "Holder's use of Maelstrom lasts 8 turns instead of 5.",
 	},
 	cameruptite: {
 		name: "Cameruptite",
@@ -256,6 +292,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Chople Berry",
 		desc: "Halves damage taken from a supereffective Fighting-type attack. Single use.",
 	},
+	cinderacite: {
+		name: "Cinderacite",
+		desc: "If held by a Cinderace, this item allows it to Mega Evolve in battle.",
+	},
 	clawfossil: {
 		name: "Claw Fossil",
 		desc: "Can be revived into Anorith.",
@@ -276,6 +316,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Cornn Berry",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
+	cosmoemiumz: {
+		name: "Cosmoemium Z",
+		desc: "If held by a Cosmoem with Photon Geyser, it can use Infinite Potential Geyser.",
+	},
 	coverfossil: {
 		name: "Cover Fossil",
 		desc: "Can be revived into Tirtouga.",
@@ -283,6 +327,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	crackedpot: {
 		name: "Cracked Pot",
 		desc: "Evolves Sinistea into Polteageist when used.",
+	},
+	cresselite: {
+		name: "Cresselite",
+		desc: "If held by a Cresselia, this item allows it to Mega Evolve in battle.",
 	},
 	custapberry: {
 		name: "Custap Berry",
@@ -309,6 +357,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Darkinium Z",
 		desc: "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
 	},
+	darkraite: {
+		name: "Darkraite",
+		desc: "If held by a Darkrai, this item allows it to Mega Evolve in battle.",
+	},
 	dawnstone: {
 		name: "Dawn Stone",
 		desc: "Evolves male Kirlia into Gallade and female Snorunt into Froslass when used.",
@@ -327,6 +379,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Deep Sea Tooth",
 		desc: "If held by a Clamperl, its Sp. Atk is doubled. Evolves Clamperl into Huntail when traded.",
 		shortDesc: "If held by a Clamperl, its Sp. Atk is doubled.",
+	},
+	delcattite: {
+		name: "Delcattite",
+		desc: "If held by a Delcatty, this item allows it to Mega Evolve in battle.",
 	},
 	destinyknot: {
 		name: "Destiny Knot",
@@ -384,6 +440,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Dragonium Z",
 		desc: "If holder has a Dragon move, this item allows it to use a Dragon Z-Move.",
 	},
+	drashberry: {
+		name: "Drash Berry",
+		desc: "Holder is cured if it is bewitched. Single use.",
+	},
 	dreadplate: {
 		name: "Dread Plate",
 		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type.",
@@ -398,6 +458,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	dubiousdisc: {
 		name: "Dubious Disc",
 		desc: "Evolves Porygon2 into Porygon-Z when traded.",
+	},
+	dunsparcite: {
+		name: "Dunsparcite",
+		desc: "If held by a Dunsparce, this item allows it to Mega Evolve in battle.",
 	},
 	durinberry: {
 		name: "Durin Berry",
@@ -419,6 +483,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	eeviumz: {
 		name: "Eevium Z",
 		desc: "If held by an Eevee with Last Resort, it can use Extreme Evoboost.",
+	},
+	eggantberry: {
+		name: "Eggant Berry",
+		desc: "Holder is cured if it is infatuated. Single use.",
 	},
 	ejectbutton: {
 		name: "Eject Button",
@@ -552,6 +620,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Float Stone",
 		desc: "Holder's weight is halved.",
 	},
+	floatzelite: {
+		name: "Floatzelite",
+		desc: "If held by a Floatzel, this item allows it to Mega Evolve in battle.",
+	},
 	flowersweet: {
 		name: "Flower Sweet",
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
@@ -570,6 +642,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	flyiniumz: {
 		name: "Flyinium Z",
 		desc: "If holder has a Flying move, this item allows it to use a Flying Z-Move.",
+	},
+	flygonite: {
+		name: "Flygonite",
+		desc: "If held by a Flygon, this item allows it to Mega Evolve in battle.",
 	},
 	focusband: {
 		name: "Focus Band",
@@ -609,9 +685,17 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Friend Ball",
 		desc: "A Poke Ball that makes caught Pokemon more friendly.",
 	},
+	frostorb: {
+		name: "Frost Orb",
+		desc: "At the end of every turn, this item attempts to frostbite the holder.",
+	},
 	fullincense: {
 		name: "Full Incense",
 		desc: "Holder moves last in its priority bracket.",
+	},
+	fusioncore: {
+		name: "Fusion Core",
+		desc: "If held by a Nihilego or Guzzlord, this item triggers its Fusion in battle.",
 	},
 	galaricacuff: {
 		name: "Galarica Cuff",
@@ -656,6 +740,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Ghostium Z",
 		desc: "If holder has a Ghost move, this item allows it to use a Ghost Z-Move.",
 	},
+	ginemaberry: {
+		name: "Ginema Berry",
+		desc: "Halves damage taken from a supereffective Infinite-type attack. Single use.",
+	},
 	glalitite: {
 		name: "Glalitite",
 		desc: "If held by a Glalie, this item allows it to Mega Evolve in battle.",
@@ -663,6 +751,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	goldbottlecap: {
 		name: "Gold Bottle Cap",
 		desc: "Used for Hyper Training. All of a Pokemon's stats are calculated with an IV of 31.",
+	},
+	golisopodite: {
+		name: "Golisopodite",
+		desc: "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
 	},
 	grassgem: {
 		name: "Grass Gem",
@@ -735,6 +827,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	healball: {
 		name: "Heal Ball",
 		desc: "A remedial Poke Ball that restores the caught Pokemon's HP and status problem.",
+	},
+	heatmoriumz: {
+		name: "Heatmorium Z",
+		desc: "If held by a Heatmor with Fire Lash, it can use 1,000 Burning Whips.",
 	},
 	heatrock: {
 		name: "Heat Rock",
@@ -809,6 +905,18 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Incinium Z",
 		desc: "If held by an Incineroar with Darkest Lariat, it can use Malicious Moonsault.",
 	},
+	infinitegem: {
+		name: "Infinite Gem",
+		desc: "Holder's first successful Infinite-type attack will have 1.3x power. Single use.",
+	},
+	infinitememory: {
+		name: "Infinie Memory",
+		desc: "Holder's Multi-Attack is Infinite type.",
+	},
+	infinitiumz: {
+		name: "Infinitium Z",
+		desc: "If holder has an Infinite move, this item allows it to use an Infinite Z-Move.",
+	},
 	insectplate: {
 		name: "Insect Plate",
 		desc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type.",
@@ -857,9 +965,17 @@ export const ItemsText: {[k: string]: ItemText} = {
 		desc: "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
+	klinklangite:{
+		name: "Klinklangite",
+		desc: "If held by a Klinklang, this item allows it to Mega Evolve in battle.",
+	},
 	kommoniumz: {
 		name: "Kommonium Z",
 		desc: "If held by a Kommo-o with Clanging Scales, it can use Clangorous Soulblaze.",
+	},
+	kuoberry: {
+		name: "Kuo Berry",
+		desc: "Restores 50% max HP at 1/4 max HP or less, but Paralyzes itself; if this fails, it puts itself to Sleep instead. Single use.",
 	},
 	laggingtail: {
 		name: "Lagging Tail",
@@ -883,6 +999,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		gen3: {
 			desc: "The accuracy of attacks against the holder is 0.95x.",
 		},
+	},
+	lavaseed: {
+		name: "Lava Seed",
+		desc: "If the terrain is Lava Terrain, randomly raises holder's Defense or Special Defense by 1 stage. Single use.",
 	},
 	leafstone: {
 		name: "Leaf Stone",
@@ -982,6 +1102,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Lustrous Orb",
 		desc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
 	},
+	luxrayite: {
+		name: "Luxrayite",
+		desc: "If held by a Luxray, this item allows it to Mega Evolve in battle.",
+	},
 	luxuryball: {
 		name: "Luxury Ball",
 		desc: "A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly.",
@@ -1051,6 +1175,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Medichamite",
 		desc: "If held by a Medicham, this item allows it to Mega Evolve in battle.",
 	},
+	meganiumite: {
+		name: "Meganiumite",
+		desc: "If held by a Meganium, this item allows it to Mega Evolve in battle.",
+	},
 	mentalherb: {
 		name: "Mental Herb",
 		desc: "Cures holder of Attract, Disable, Encore, Heal Block, Taunt, Torment. Single use.",
@@ -1101,6 +1229,14 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Micle Berry",
 		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use.",
 	},
+	mightyenite: {
+		name: "Mightyenite",
+		desc: "If held by a Mightyena, this item allows it to Mega Evolve in battle.",
+	},
+	miloticite: {
+		name: "Miloticite",
+		desc: "If held by a Milotic, this item allows it to Mega Evolve in battle.",
+	},
 	mimikiumz: {
 		name: "Mimikium Z",
 		desc: "If held by a Mimikyu with Play Rough, it can use Let's Snuggle Forever.",
@@ -1133,6 +1269,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Muscle Band",
 		desc: "Holder's physical attacks have 1.1x power.",
 	},
+	mysteriousplate: {
+		name: "Mysterious Plate",
+		desc: "Holder's Same-type attacks have 1.2x power. Judgment is users type.",
+	},
 	mysticwater: {
 		name: "Mystic Water",
 		desc: "Holder's Water-type attacks have 1.2x power.",
@@ -1159,6 +1299,14 @@ export const ItemsText: {[k: string]: ItemText} = {
 			desc: "Holder's Ice-type attacks have 1.1x power.",
 		},
 	},
+	ninikuberry: {
+		name: "Niniku Berry",
+		desc: "Restores 50% max HP at 1/4 max HP or less, but Poisons itself; if this fails, it puts itself to Sleep instead. Single use.",
+	},
+	noivernite: {
+		name: "Noivernite",
+		desc: "If held by a Noivern, this item allows it to Mega Evolve in battle.",
+	},
 	nomelberry: {
 		name: "Nomel Berry",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
@@ -1174,9 +1322,17 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Normalium Z",
 		desc: "If holder has a Normal move, this item allows it to use a Normal Z-Move.",
 	},
+	nutpeaberry: {
+		name: "Nutpea Berry",
+		desc: "Holder is cured if it is blinded. Single use.",
+	},
 	occaberry: {
 		name: "Occa Berry",
 		desc: "Halves damage taken from a supereffective Fire-type attack. Single use.",
+	},
+	octillerite: {
+		name: "Octillerite",
+		desc: "If held by an Octillery, this item allows it to Mega Evolve in battle.",
 	},
 	oddincense: {
 		name: "Odd Incense",
@@ -1351,6 +1507,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Psychium Z",
 		desc: "If holder has a Psychic move, this item allows it to use a Psychic Z-Move.",
 	},
+	pumkinberry: {
+		name: "Pumkin Berry",
+		desc: "Holder is cured if it is whiplashed. Single use.",
+	},
 	qualotberry: {
 		name: "Qualot Berry",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
@@ -1375,6 +1535,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	rabutaberry: {
 		name: "Rabuta Berry",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+	},
+	rapidashite: {
+		name: "Rapidashite",
+		desc: "If held by a Kantonian Rapidash, this item allows it to Mega Evolve in battle.",
 	},
 	rarebone: {
 		name: "Rare Bone",
@@ -1511,6 +1675,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Salamencite",
 		desc: "If held by a Salamence, this item allows it to Mega Evolve in battle.",
 	},
+	samurottite: {
+		name: "Samurottite",
+		desc: "If held by a Samurott, this item allows it to Mega Evolve in battle.",
+	},
 	sceptilite: {
 		name: "Sceptilite",
 		desc: "If held by a Sceptile, this item allows it to Mega Evolve in battle.",
@@ -1529,6 +1697,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		gen3: {
 			desc: "Holder's Water-type attacks have 1.05x power.",
 		},
+	},
+	securityvest: {
+		name: "Security Vest",
+		desc: "Holder is immune to status, but it can only select non-damaging moves.",
 	},
 	sharpbeak: {
 		name: "Sharp Beak",
@@ -1578,6 +1750,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 			desc: "Holder's Bug-type attacks have 1.1x power.",
 		},
 	},
+	sirfetchdite: {
+		name: "Sirfetch'dite",
+		desc: "If held by a Sirfetch'd, this item allows it to Mega Evolve in battle.",
+	},
 	sitrusberry: {
 		name: "Sitrus Berry",
 		desc: "Restores 1/4 max HP when at 1/2 max HP or less. Single use.",
@@ -1592,6 +1768,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	skyplate: {
 		name: "Sky Plate",
 		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type.",
+	},
+	slakingiumz: {
+		name: "Slakingium Z",
+		desc: "If held by a Slaking with Giga Impact, it can use Beastly Awakening Punch.",
 	},
 	slowbronite: {
 		name: "Slowbronite",
@@ -1696,6 +1876,14 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Strawberry Sweet",
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
+	stribberry: {
+		name: "Strib Berry",
+		desc: "Holder is cured if it is flinched. Single use.",
+	},
+	sunflorite: {
+		name: "Sunflorite",
+		desc: "If held by a Sunflora, this item allows it to Mega Evolve in battle.",
+	},
 	sunstone: {
 		name: "Sun Stone",
 		desc: "Evolves Gloom into Bellossom, Sunkern into Sunflora, Cottonee into Whimsicott, Petilil into Lilligant, and Helioptile into Heliolisk when used.",
@@ -1745,9 +1933,29 @@ export const ItemsText: {[k: string]: ItemText} = {
 			desc: "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, and Eelektrik into Eelektross when used.",
 		},
 	},
+	timeplate: {
+		name: "Time Plate",
+		desc: "Holder's Infinite-type attacks have 1.2x power. Judgment is Infinite type.",
+	},
 	timerball: {
 		name: "Timer Ball",
 		desc: "A Poke Ball that becomes better the more turns there are in a battle.",
+	},
+	togekissite: {
+		name: "Togekissite",
+		desc: "If held by a Togekiss, this item allows it to Mega Evolve in battle.",
+	},
+	togepiumz: {
+		name: "Togepium Z",
+		desc: "If held by a Togepi, Togetic, or Togekiss with Metronome, it can use Perfect-Tempo Symphony.",
+	},
+	topoberry: {
+		name: "Topo Berry",
+		desc: "Restores 50% max HP at 1/4 max HP or less, but Bewitches itself; if this fails, it puts itself to Sleep instead. Single use.",
+	},
+	tougaberry: {
+		name: "Touga Berry",
+		desc: "Restores 50% max HP at 1/4 max HP or less, but Burns itself; if this fails, it puts itself to Sleep instead. Single use.",
 	},
 	toxicorb: {
 		name: "Toxic Orb",
@@ -2192,6 +2400,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Venusaurite",
 		desc: "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
 	},
+	vivilloniumz: {
+		name: "Vivillonium Z",
+		desc: "If held by a Vivillon with Bug Buzz, it can use 1,000,000 Butterfly Cascade.",
+	},
 	wacanberry: {
 		name: "Wacan Berry",
 		desc: "Halves damage taken from a supereffective Electric-type attack. Single use.",
@@ -2263,6 +2475,14 @@ export const ItemsText: {[k: string]: ItemText} = {
 	yacheberry: {
 		name: "Yache Berry",
 		desc: "Halves damage taken from a supereffective Ice-type attack. Single use.",
+	},
+	yagoberry: {
+		name: "Yago Berry",
+		desc: "Restores 50% max HP at 1/4 max HP or less, but Whiplashes itself; if this fails, it puts itself to Sleep instead. Single use.",
+	},
+	yanmegite: {
+		name: "Yanmegite",
+		desc: "If held by a Yanmega, this item allows it to Mega Evolve in battle.",
 	},
 	zapplate: {
 		name: "Zap Plate",
