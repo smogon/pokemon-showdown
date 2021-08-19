@@ -1175,19 +1175,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	regenerator: {
 		name: "Regenerator",
 		shortDesc: "This Pokemon restores 1/4 of its maximum HP, rounded down, when it switches out.",
-<<<<<<< HEAD
-	},
-	resolutegauntlet: {
-		name: "Resolute Gauntlet",
-		desc: "On switch-in, this Pokemon lowers either the Sp. Att or Speed of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune, as well as users of the Abilities of Intreped Sword, Dauntless Shield, and Resolute Gauntlet.",
-		shortDesc: "On switch-in, this Pokemon lowers the Sp. Att or Speed of adjacent opponents by 1 stage.",
-=======
->>>>>>> c826b6b7f... added changes to current abilities
-	},
-	resolutegauntlet: {
-		name: "Resolute Gauntlet",
-		desc: "On switch-in, this Pokemon lowers either the Sp. Att or Speed of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune, as well as users of the Abilities of Intreped Sword, Dauntless Shield, and Resolute Gauntlet.",
-		shortDesc: "On switch-in, this Pokemon lowers the Sp. Att or Speed of adjacent opponents by 1 stage.",
 	},
 	resolutegauntlet: {
 		name: "Resolute Gauntlet",
