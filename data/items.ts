@@ -7527,3 +7527,4 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 276,
 		gen: 4,
 	},
+};
