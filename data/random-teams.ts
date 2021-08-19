@@ -325,14 +325,14 @@ export class RandomTeams {
 
 			// Make sure that a base forme does not hold any forme-modifier items.
 			let itemData = this.dex.items.get(item);
-			if (itemData.forcedForme && forme === this.dex.species.get(itemData.forcedForme).baseSpecies) {
+			if (itemData.forcedForme && forme === this.dex.species.get(itemData.forcedForme.find(f => f = species.name)).baseSpecies) {
 				do {
 					item = this.sample(items);
 					itemData = this.dex.items.get(item);
 				} while (
 					itemData.gen > this.gen ||
 					itemData.isNonstandard ||
-					(itemData.forcedForme && forme === this.dex.species.get(itemData.forcedForme).baseSpecies)
+					(itemData.forcedForme && forme === this.dex.species.get(itemData.forcedForme.find(f => f = species.name)).baseSpecies)
 				);
 			}
 
