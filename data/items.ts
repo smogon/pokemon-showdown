@@ -4210,7 +4210,6 @@ export const Items: { [itemid: string]: ItemData } = {
 			"Mimikyu-Busted-Totem",
 		],
 		num: 924,
-
 		gen: 7,
 	},
 	mindplate: {
@@ -4756,7 +4755,6 @@ export const Items: { [itemid: string]: ItemData } = {
 			"Pikachu-Partner",
 		],
 		num: 836,
-
 		gen: 7,
 	},
 	pinapberry: {
