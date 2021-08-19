@@ -90,7 +90,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	readonly isPokeball: boolean;
 
 	declare readonly condition?: ConditionData;
-	declare readonly forcedForme?: string;
+	declare readonly forcedForme?: string[];
 	declare readonly isChoice?: boolean;
 	declare readonly naturalGift?: {basePower: number, type: string};
 	declare readonly spritenum?: number;

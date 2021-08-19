@@ -1245,8 +1245,8 @@ export class TeamValidator {
 
 			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
 			// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
-			if (item.forcedForme && species.name === dex.species.get(item.forcedForme).baseSpecies) {
-				set.species = item.forcedForme;
+			if (item.forcedForme && item.forcedForme.includes(species.name)) {
+				set.species = item.forcedForme.find(f => f = species.name) || item.forcedForme[0];
 			}
 		}
 
