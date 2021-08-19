@@ -5,8 +5,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	adaptability: {
 		name: "Adaptability",
-		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5.",
-		shortDesc: "This Pokemon's same-type attack bonus (STAB) is 2 instead of 1.5.",
+		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 1.8 instead of 1.5.",
+		shortDesc: "This Pokemon's same-type attack bonus (STAB) is 1.8 instead of 1.5.",
 	},
 	aerilate: {
 		name: "Aerilate",
@@ -26,7 +26,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	airlock: {
 		name: "Air Lock",
-		shortDesc: "While this Pokemon is active, the effects of weather conditions are disabled.",
+		shortDesc: "Upon switch-in, weather is cleared.  The effects of future weather is disabled while active.",
 
 		start: "  The effects of the weather disappeared.",
 	},
@@ -109,7 +109,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	battlearmor: {
 		name: "Battle Armor",
-		shortDesc: "This Pokemon cannot be struck by a critical hit.",
+		shortDesc: "This Pokemon only takes 0.5x damage rather than 1.5x when hit by Critical Hits.",
 	},
 	battlebond: {
 		name: "Battle Bond",
@@ -222,13 +222,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	cursedbody: {
 		name: "Cursed Body",
-		desc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets disabled unless one of the attacker's moves is already disabled.",
-		shortDesc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets disabled.",
+		desc: "If this Pokemon is hit by an attack, there is a 25% chance that move gets disabled unless one of the attacker's moves is already disabled.",
+		shortDesc: "If this Pokemon is hit by an attack, there is a 25% chance that move gets disabled.",
 	},
 	cutecharm: {
 		name: "Cute Charm",
-		desc: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
-		shortDesc: "30% chance of infatuating Pokemon of the opposite gender if they make contact.",
+		desc: "There is a 25% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
+		shortDesc: "25% chance of infatuating Pokemon of the opposite gender if they make contact.",
 		gen4: {
 			desc: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -382,9 +382,9 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	flamebody: {
 		name: "Flame Body",
-		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned.",
+		shortDesc: "25% chance a Pokemon making contact with this Pokemon will be burned.",
 		gen4: {
-			desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This effect does not happen if this Pokemon did not lose HP from the attack.",
+			desc: "25% chance a Pokemon making contact with this Pokemon will be burned. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
 		gen3: {
 			desc: "1/3 chance a Pokemon making contact with this Pokemon will be burned. This effect does not happen if this Pokemon did not lose HP from the attack.",
@@ -393,8 +393,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	flareboost: {
 		name: "Flare Boost",
-		desc: "While this Pokemon is burned, the power of its special attacks is multiplied by 1.5.",
-		shortDesc: "While this Pokemon is burned, its special attacks have 1.5x power.",
+		desc: "While this Pokemon is burned, the power of its special attacks is multiplied by 1.5.  Also takes half damage from Burn.",
+		shortDesc: "While this Pokemon is burned, its special attacks have 1.5x power. 1/2 damage from Burn",
 	},
 	flashfire: {
 		name: "Flash Fire",
@@ -467,11 +467,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	furcoat: {
 		name: "Fur Coat",
-		shortDesc: "This Pokemon's Defense is doubled.",
+		shortDesc: "This Pokemon's Defense is multiplied by 1.8.",
 	},
 	galewings: {
 		name: "Gale Wings",
-		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
+		shortDesc: "If this Pokemon is above half HP, its Flying-type moves have their priority increased by 1.",
 		gen6: {
 			shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		},
@@ -491,11 +491,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	gorillatactics: {
 		name: "Gorilla Tactics",
-		shortDesc: "This Pokemon's Attack is 1.5x, but it can only select the first move it executes.",
+		shortDesc: "This Pokemon's Attack is 1.3x, but it can only select the first move it executes.",
 	},
 	grasspelt: {
 		name: "Grass Pelt",
-		shortDesc: "If Grassy Terrain is active, this Pokemon's Defense is multiplied by 1.5.",
+		shortDesc: "If Grassy Terrain is active, this Pokemon's Defense is multiplied by 1.8.",
 	},
 	grassysurge: {
 		name: "Grassy Surge",
@@ -530,8 +530,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	healer: {
 		name: "Healer",
-		desc: "There is a 30% chance of curing an adjacent ally's non-volatile status condition at the end of each turn.",
-		shortDesc: "30% chance of curing an adjacent ally's status at the end of each turn.",
+		desc: "There is a 25% chance of curing an adjacent ally's non-volatile status condition at the end of each turn.",
+		shortDesc: "25% chance of curing an adjacent ally's status at the end of each turn.",
 	},
 	heatproof: {
 		name: "Heatproof",
@@ -556,7 +556,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	hugepower: {
 		name: "Huge Power",
-		shortDesc: "This Pokemon's Attack is doubled.",
+		shortDesc: "This Pokemon's Attack is multiplied by 1.8.",
 	},
 	hungerswitch: {
 		name: "Hunger Switch",
@@ -595,7 +595,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	illuminate: {
 		name: "Illuminate",
-		shortDesc: "No competitive use.",
+		shortDesc: "25% chance a Pokemon making contact with this Pokemon will be blinded.",
 	},
 	illusion: {
 		name: "Illusion",
@@ -646,8 +646,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	intimidate: {
 		name: "Intimidate",
-		desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage. Inner Focus, Oblivious, Own Tempo, Scrappy, and Pokemon behind a substitute are immune.",
-		shortDesc: "On switch-in, this Pokemon lowers the Attack of adjacent opponents by 1 stage.",
+		desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage if faster than target. Inner Focus, Oblivious, Own Tempo, Scrappy, and Pokemon behind a substitute are immune.",
+		shortDesc: "On switch-in, this Pokemon lowers the Attack of adjacent opponents by 1 stage if faster than target.",
 		gen7: {
 			desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune.",
 		},
@@ -794,8 +794,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	megalauncher: {
 		name: "Mega Launcher",
-		desc: "This Pokemon's pulse moves have their power multiplied by 1.5. Heal Pulse restores 3/4 of a target's maximum HP, rounded half down.",
-		shortDesc: "This Pokemon's pulse moves have 1.5x power. Heal Pulse heals 3/4 target's max HP.",
+		desc: "This Pokemon's pulse moves have their power multiplied by 1.3. Heal Pulse restores 3/4 of a target's maximum HP, rounded half down.",
+		shortDesc: "This Pokemon's pulse moves have 1.3x power. Heal Pulse heals 3/4 target's max HP.",
 	},
 	merciless: {
 		name: "Merciless",
@@ -850,8 +850,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	moody: {
 		name: "Moody",
-		desc: "This Pokemon has a random stat other than accuracy or evasion raised by 2 stages and another stat lowered by 1 stage at the end of each turn.",
-		shortDesc: "Boosts a random stat (except accuracy/evasion) +2 and another stat -1 every turn.",
+		desc: "This Pokemon has a random stat other than accuracy or evasion raised by 2 stages and another stat lowered by 2 stages at the end of each turn.",
+		shortDesc: "Raises a random stat by 2 and lowers another stat by 2 at the end of each turn, excluding accuracy and evasion.",
 		gen7: {
 			desc: "This Pokemon has a random stat raised by 2 stages and another stat lowered by 1 stage at the end of each turn.",
 			shortDesc: "Raises a random stat by 2 and lowers another stat by 1 at the end of each turn.",
@@ -1028,9 +1028,9 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	poisonpoint: {
 		name: "Poison Point",
-		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be poisoned.",
+		shortDesc: "25% chance a Pokemon making contact with this Pokemon will be poisoned.",
 		gen4: {
-			desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned. This effect does not happen if this Pokemon did not lose HP from the attack.",
+			desc: "25% chance a Pokemon making contact with this Pokemon will be poisoned. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
 		gen3: {
 			desc: "1/3 chance a Pokemon making contact with this Pokemon will be poisoned. This effect does not happen if this Pokemon did not lose HP from the attack.",
@@ -1039,7 +1039,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	poisontouch: {
 		name: "Poison Touch",
-		shortDesc: "This Pokemon's contact moves have a 30% chance of poisoning.",
+		shortDesc: "This Pokemon's contact moves have a 25% chance of poisoning.",
 	},
 	powerconstruct: {
 		name: "Power Construct",
@@ -1051,8 +1051,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	powerofalchemy: {
 		name: "Power of Alchemy",
-		desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are \"No Ability\", As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
-		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
+		desc: "This Pokemon copies the Ability of a target or ally that faints. Abilities that cannot be copied are Flower Gift, Forecast, Illusion, Imposter, Multitype, Stance Change, Trace, Wonder Guard, and Zen Mode.",
+		shortDesc: "This Pokemon copies the Ability of a target or ally that faints.",
 		gen7: {
 			desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are \"No Ability\", Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
 		},
@@ -1111,7 +1111,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	purepower: {
 		name: "Pure Power",
-		shortDesc: "This Pokemon's Attack is doubled.",
+		shortDesc: "This Pokemon's Attack is multiplied by 1.8.",
 	},
 	queenlymajesty: {
 		name: "Queenly Majesty",
@@ -1174,7 +1174,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	regenerator: {
 		name: "Regenerator",
-		shortDesc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
+		shortDesc: "This Pokemon restores 1/4 of its maximum HP, rounded down, when it switches out.",
 	},
 	resolutegauntlet: {
 		name: "Resolute Gauntlet",
@@ -1190,8 +1190,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	rivalry: {
 		name: "Rivalry",
-		desc: "This Pokemon's attacks have their power multiplied by 1.25 against targets of the same gender or multiplied by 0.75 against targets of the opposite gender. There is no modifier if either this Pokemon or the target is genderless.",
-		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets; 0.75x on opposite gender.",
+		desc: "This Pokemon's attacks have their power multiplied by 1.25 against targets of the same gender. There is no modifier if either this Pokemon or the target is opposite gendered or genderless.",
+		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets.",
 	},
 	rkssystem: {
 		name: "RKS System",
@@ -1269,7 +1269,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	serenegrace: {
 		name: "Serene Grace",
-		shortDesc: "This Pokemon's moves have their secondary effect chance doubled.",
+		shortDesc: "This Pokemon's moves have their secondary effect chance multiplied by 1.5x.",
 	},
 	shadowshield: {
 		name: "Shadow Shield",
@@ -1292,8 +1292,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	sheerforce: {
 		name: "Sheer Force",
-		desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
-		shortDesc: "This Pokemon's attacks with secondary effects have 1.3x power; nullifies the effects.",
+		desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.2, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
+		shortDesc: "This Pokemon's attacks with secondary effects have 1.2x power; nullifies the effects.",
 		gen6: {
 			desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Color Change, Pickpocket, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
 		},
@@ -1336,7 +1336,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	slowstart: {
 		name: "Slow Start",
-		shortDesc: "On switch-in, this Pokemon's Attack and Speed are halved for 5 turns.",
+		shortDesc: "On switch-in, this Pokemon's Attack and Speed are halved for 1 turn.",
 
 		start: "  [POKEMON] can't get it going!",
 		end: "  [POKEMON] finally got its act together!",
@@ -1416,7 +1416,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	static: {
 		name: "Static",
-		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed.",
+		shortDesc: "25% chance a Pokemon making contact with this Pokemon will be paralyzed.",
 		gen4: {
 			desc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -1431,7 +1431,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	steamengine: {
 		name: "Steam Engine",
-		shortDesc: "This Pokemon's Speed is raised by 6 stages after it is damaged by Fire/Water moves.",
+		shortDesc: "This Pokemon's Speed is raised 3 stages after it is hit by a Water-type or Fire-type move, is immune.",
 	},
 	steelworker: {
 		name: "Steelworker",
@@ -1555,7 +1555,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	telepathy: {
 		name: "Telepathy",
-		shortDesc: "This Pokemon does not take damage from attacks made by its allies.",
+		shortDesc: "This Pokemon does not take damage from attacks made by its allies or from spread moves.",
 
 		block: "  [POKEMON] can't be hit by attacks from its ally Pok\u00E9mon!",
 	},
@@ -1602,7 +1602,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	toughclaws: {
 		name: "Tough Claws",
-		shortDesc: "This Pokemon's contact moves have their power multiplied by 1.3.",
+		shortDesc: "This Pokemon's contact moves have their power multiplied by 1.2.",
 	},
 	toxicboost: {
 		name: "Toxic Boost",
@@ -1625,12 +1625,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	triage: {
 		name: "Triage",
-		shortDesc: "This Pokemon's healing moves have their priority increased by 3.",
+		shortDesc: "This Pokemon's healing moves have their priority increased by 1.",
 	},
 	truant: {
 		name: "Truant",
-		shortDesc: "This Pokemon skips every other turn instead of using a move.",
-
+		shortDesc: "This Pokemon will not be able to move the turn after a successful move; heals 1/3 of its max HP on its Truant turn.",
 		cant: "[POKEMON] is loafing around!",
 	},
 	turboblaze: {
@@ -1656,8 +1655,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	unaware: {
 		name: "Unaware",
-		desc: "This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
-		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
+		desc: "This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.  However, the foe's critical hit ratio is raised by 2.",
+		shortDesc: "This Pokemon ignores other Pokemon's stat stages; foes crit ratio +2.",
 	},
 	unburden: {
 		name: "Unburden",
@@ -1712,12 +1711,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	waterbubble: {
 		name: "Water Bubble",
-		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
-		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
+		desc: "This Pokemon's attacking stat is muultiplied by 1.8x while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		shortDesc: "This Pokemon's Water power is 1.8x; it can't be burned; Fire power against it is halved.",
 	},
 	watercompaction: {
 		name: "Water Compaction",
-		shortDesc: "This Pokemon's Defense is raised 2 stages after it is damaged by a Water-type move.",
+		shortDesc: "This Pokemon's Defense is raised 2 stages after it is hit by a Water-type move, is immune.",
 	},
 	waterveil: {
 		name: "Water Veil",
