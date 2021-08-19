@@ -130,8 +130,8 @@ export class BasicEffect implements EffectData {
 
 export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
 	readonly effectType: 'Nature';
-	readonly plus?: StatIDExceptHP;
-	readonly minus?: StatIDExceptHP;
+	readonly plus?: StatID;
+	readonly minus?: StatID;
 	constructor(data: AnyObject) {
 		super(data);
 		data = this;
