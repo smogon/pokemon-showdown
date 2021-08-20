@@ -1626,7 +1626,13 @@ export class BattleActions {
 		attack = this.battle.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
 		defense = this.battle.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
-		if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
+		if (
+			this.battle.gen <= 4 &&
+			['explosion', 'selfdestruct'].includes(move.id) &&
+			defenseStat === 'def' ||
+			// G-Max Annihilation uses the old mechanics for explosion damage
+			move.id === 'gmaxannihilation'
+		) {
 			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
