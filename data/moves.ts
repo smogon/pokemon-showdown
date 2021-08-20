@@ -1555,8 +1555,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 			);
 		},
 		category: "Physical",
-		name: "Beat Up",
-		pp: 10,
+		name: "Beastly Awakening Punch",
+		pp: 1,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, mystery: 1},
 		onModifyMove(move, pokemon) {
@@ -1565,10 +1565,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			);
 			move.multihit = move.allies.length;
 		},
+		isZ: "slakingiumz",
 		secondary: null,
 		target: "normal",
-		type: "Dark",
-		contestType: "Clever",
+		type: "Normal",
+		contestType: "Cool",
 	},
 	behemothbash: {
 		num: 782,
@@ -10693,59 +10694,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Inferno Overdrive",
 		pp: 1,
 		priority: 0,
-		flags: {},
-		isZ: "firiumz",
+		flags: {protect: 1, mirror: 1},
 		secondary: null,
 		target: "normal",
-		type: "Fire",
-		contestType: "Cool",
-	},
-	infestation: {
-		num: 611,
-		accuracy: 100,
-		basePower: 20,
-		category: "Special",
-		name: "Infestation",
-		pp: 20,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		volatileStatus: "partiallytrapped",
-		secondary: null,
-		target: "normal",
-		type: "Bug",
-		contestType: "Cute",
-	},
-	ingrain: {
-		num: 275,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Ingrain",
-		pp: 20,
-		priority: 0,
-		flags: {snatch: 1, nonsky: 1},
-		volatileStatus: "ingrain",
-		condition: {
-			onStart(pokemon) {
-				this.add("-start", pokemon, "move: Ingrain");
-			},
-			onResidualOrder: 7,
-			onResidual(pokemon) {
-				this.heal(pokemon.baseMaxhp / 16);
-			},
-			onTrapPokemon(pokemon) {
-				pokemon.tryTrap();
-			},
-			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
-			onDragOut(pokemon) {
-				this.add("-activate", pokemon, "move: Ingrain");
-				return null;
-			},
-		},
-		secondary: null,
-		target: "self",
-		type: "Grass",
-		zMove: {boost: {spd: 1}},
+		type: "Psychic",
 		contestType: "Clever",
 	},
 	innerpower: {
@@ -14474,10 +14426,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Normal",
-		zMove: {basePower: 185},
-		maxMove: {basePower: 95},
-		contestType: "Tough",
+		type: "Dark",
+		contestType: "Cool",
 	},
 	murkycorruption: {
 		num: -41,

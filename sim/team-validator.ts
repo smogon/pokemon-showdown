@@ -1271,10 +1271,14 @@ export class TeamValidator {
 			// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
 			if (item.forcedForme && item.forcedForme.includes(species.name)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 				set.species = item.forcedForme.find(f => f === species.name) || item.forcedForme[0];
 =======
 				set.species = item.forcedForme.find(f => f = species.name) || item.forcedForme[0];
 >>>>>>> e7fa2bc0b... added new items
+=======
+				set.species = item.forcedForme.find(f => f === species.name) || item.forcedForme[0];
+>>>>>>> 8191e7fab... added new moves but not gmax ones
 			}
 		}
 
