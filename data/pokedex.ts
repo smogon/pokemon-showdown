@@ -14,7 +14,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Restricted Legendary"],
 		otherFormes: ["Mebiusan-Future"],
 		formeOrder: ["Mebiusan-Past", "Mebiusan-Future"],
-
 	},
 	mebiusanfuture: {
 		num: 0,
