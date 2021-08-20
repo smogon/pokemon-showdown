@@ -1398,7 +1398,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMove: {effect: 'clearnegativeboost'},
+		zMove: {effect: "clearnegativeboost"},
 		contestType: "Cute",
 	},
 	beakblast: {
@@ -1507,10 +1507,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			);
 			move.multihit = move.allies.length;
 		},
+		isZ: "slakingiumz",
 		secondary: null,
 		target: "normal",
-		type: "Dark",
-		contestType: "Clever",
+		type: "Normal",
+		contestType: "Cool",
 	},
 	behemothbash: {
 		num: 782,
@@ -14173,10 +14174,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Normal",
-		zMove: {basePower: 185},
-		maxMove: {basePower: 95},
-		contestType: "Tough",
+		type: "Dark",
+		contestType: "Cool",
 	},
 	murkycorruption: {
 		num: -41,
@@ -14624,9 +14623,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryImmunity(target) {
-			return this.dex.getImmunity('trapped', target);
+			return this.dex.getImmunity("trapped", target);
 		},
-		volatileStatus: 'octolock',
+		volatileStatus: "octolock",
 		condition: {
 			duration: 4,
 			onStart(pokemon, source) {
@@ -14639,15 +14638,24 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onResidualOrder: 11,
 			onResidual(pokemon) {
 				const source = this.effectState.source;
-				if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
-					delete pokemon.volatiles['octolock'];
-					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
+				if (
+					source &&
+					(!source.isActive || source.hp <= 0 || !source.activeTurns)
+				) {
+					delete pokemon.volatiles["octolock"];
+					this.add(
+						"-end",
+						pokemon,
+						"Octolock",
+						"[partiallytrapped]",
+						"[silent]"
+					);
 					return;
 				}
 				this.boost({def: -1, spd: -1}, pokemon, source, this.dex.getActiveMove("Octolock"));
 			},
 			onTrapPokemon(pokemon) {
-				if (this.effectState.source && this.effectState.source.isActive) pokemon.tryTrap();
+				if (this.effectState.source && this.effectState.source.isActive) { pokemon.tryTrap(); }
 			},
 		},
 		secondary: null,
@@ -15744,7 +15752,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		volatileStatus: "powertrick",
 		condition: {
 			onStart(pokemon) {
-				this.add('-start', pokemon, 'Power Trick');
+				this.add("-start", pokemon, "Power Trick");
 				const newatk = pokemon.storedStats.def;
 				const newspa = pokemon.storedStats.spd;
 				const newdef = pokemon.storedStats.atk;
@@ -15765,7 +15773,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				pokemon.storedStats.spd = newspd;
 			},
 			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Power Trick');
+				this.add("-end", pokemon, "Power Trick");
 				const newatk = pokemon.storedStats.def;
 				const newspa = pokemon.storedStats.spd;
 				const newdef = pokemon.storedStats.atk;
