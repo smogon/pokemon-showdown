@@ -1606,6 +1606,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
 		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
 	},
+	emaxeternalenergy: {
+		shortDesc: "Boosts all stats by +1, double against Dmax - needs to recharge, ignores Fairy Immunity. BP scales with base move's BP.",
+		name: "E-Max Eternal Energy",
+	},
 	embargo: {
 		name: "Embargo",
 		desc: "For 5 turns, the target's held item has no effect. An item's effect of causing forme changes is unaffected, but any other effects from such items are negated. During the effect, Fling and Natural Gift are prevented from being used by the target. Items thrown at the target with Fling will still activate for it. If the target uses Baton Pass, the replacement will remain unable to use items.",
@@ -2316,6 +2320,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "This move summons Light Screen for 5 turns upon use.",
 		shortDesc: "Summons Light Screen.",
 	},
+	gmaxbattering: {
+		desc: "Flinches or raises user def 1 stage. Base Power scales with the base move's Base Power.",
+		shortDesc: "Flinches or raises user def 1 stage.",
+		name: "G-Max Battering",
+	},
 	gmaxbefuddle: {
 		name: "G-Max Befuddle",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side either falls asleep, becomes poisoned, or becomes paralyzed, even if they have a substitute.",
@@ -2341,6 +2350,10 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		start: "#focusenergy",
 	},
+	gmaxcolossalforce: {
+		shortDesc: "Boosts attack 1 stage, does 2x against opposing D-Max; User must recharge. BP scales with base move.",
+		name: "G-Max Colossal Force",
+	},
 	gmaxcuddle: {
 		name: "G-Max Cuddle",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes infatuated, even if they have a substitute. This effect does not happen for a target if both it and the user are the same gender, if either is genderless, or if the target is already infatuated.",
@@ -2352,6 +2365,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Base move affects power. Foes: last move -2 PP.",
 
 		activate: "  [TARGET]'s PP was reduced!",
+	},
+	gmaxdraconianblow: {
+		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
+		shortDesc: "Base move affects power. Breaks all protection.",
+		name: "G-Max Draconian Blow",
 	},
 	gmaxdrumsolo: {
 		name: "G-Max Drum Solo",
@@ -2373,6 +2391,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the opposing side is lowered by 2 stages, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: -2 Speed.",
 	},
+	"gmaxghostlysting": {
+		shortDesc: "Lowers the opponents Def -1, causes the opponent to be Cursed. BP scales with base move's BP.",
+		name: "G-Max Ghostly Sting",
+	},
 	gmaxgoldrush: {
 		name: "G-Max Gold Rush",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes confused, even if they have a substitute.",
@@ -2388,6 +2410,15 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Power is 160 regardless of the base move's Max Move power. This move and its effects ignore the Abilities of other Pokemon.",
 		shortDesc: "Always 160 power. Ignores Abilities.",
 	},
+	gmaxlandslide: {
+		shortDesc: "Lowers opponents Speed by -1, Blocks the opponent. BP scales w/ base move's BP.",
+		name: "G-Max Landslide",
+	},
+	gmaxlivewire: {
+		desc: "Foe: Burn or Flinch. Base Power scales with the base move's Base Power.",
+		shortDesc: "Foe: Burn or Flinch.",
+		name: "G-Max Live-Wire",
+	},
 	gmaxmalodor: {
 		name: "G-Max Malodor",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes poisoned, even if they have a substitute.",
@@ -2397,6 +2428,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "G-Max Meltdown",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Torment begins for each Pokemon on the opposing side, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: Tormented.",
+	},
+	gmaxnightfall: {
+		shortDesc: "Lowers the opponents Sp. Def by -1, Blinds opponents. BP scales with base move.",
+		name: "G-Max Nightfall",
 	},
 	gmaxoneblow: {
 		name: "G-Max One Blow",
@@ -2466,6 +2501,16 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "G-Max Terror",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If a target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		shortDesc: "Base move affects power. Foes: trapped.",
+	},
+	gmaxtigerstormstrike: {
+		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
+		shortDesc: "Base move affects power. Breaks all protection.",
+		name: "G-Max Tigerstorm Strike",
+	},
+	gmaxvegetation: {
+		desc: "Foe: Leech Seed or Flinch. Base Power scales with the base move's Base Power.",
+		shortDesc: "Foe: Leech Seed or Flinch.",
+		name: "G-Max Vegetation",
 	},
 	gmaxvinelash: {
 		name: "G-Max Vine Lash",
