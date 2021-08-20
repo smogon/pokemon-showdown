@@ -1067,6 +1067,16 @@ export class Pokemon {
 		return boosts;
 	}
 
+	negativeBoosts() {
+		let boosts = 0;
+		let boost: BoostID;
+		for (boost in this.boosts) {
+			if (this.boosts[boost] < 0) boosts += this.boosts[boost];
+		}
+		// this needs to return a positive number for Reconstruction (and other potential moves)
+		return Math.abs(boosts);
+	}
+
 	boostBy(boosts: SparseBoostsTable) {
 		let delta = 0;
 		let boostName: BoostID;
