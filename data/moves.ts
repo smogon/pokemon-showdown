@@ -4933,6 +4933,43 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
+	emaxeternalenergy: {
+		num: 1000,
+		accuracy: true,
+		basePower: 200,
+		category: "Special",
+		isNonstandard: "Gigantamax",
+		name: "E-Max Eternal Energy",
+		pp: 5,
+		priority: 0,
+		flags: {charge: 1, recharge: 1},
+		isMax: "Eternatus",
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, "Geomancy", defender);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		self: {
+			volatileStatus: 'mustrecharge',
+			boosts: {
+				atk: 1,
+				def: 1,
+				spa: 1,
+				spd: 1,
+				spe: 1,
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Dragon",
+		contestType: "Cool",
+	},
 	embargo: {
 		num: 373,
 		accuracy: 100,
@@ -7085,6 +7122,54 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+	gmaxannihilation: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Annihilation",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Victini",
+		// code for reverting to old explosion mechanic in scripts.ts
+		selfdestruct: "always",
+		target: "adjacentFoe",
+		type: "Fire",
+		contestType: "Cool",
+	},
+	gmaxbattering: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Flinches or raises user def 1 stage. Base Power scales with the base move's Base Power.",
+		shortDesc: "Flinches or raises user def 1 stage.",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Battering",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Bashigon",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					const result = this.random(2);
+					if (result === 0) {
+						pokemon.addVolatile('flinch');
+					} else {
+						this.boost({def: 1}, pokemon, source);
+					}
+				}
+			},
+		},
+		target: "adjacentFoe",
+		type: "Steel",
+		contestType: "Cool",
+	},
 	gmaxbefuddle: {
 		num: 1000,
 		accuracy: true,
@@ -7222,6 +7307,37 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+	gmaxcolossalforce: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Boosts attack 1 stage, does 2x against opposing D-Max; User must recharge. BP scales with base move.",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Colossal Force",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Regigigas",
+		onBasePower(basePower, pokemon, target) {
+			if (target.volatiles['dynamax']) {
+				return this.chainModify(2);
+			}
+		},
+		self: {
+			volatileStatus: 'mustrecharge',
+			onHit(source) {
+				if (!source.volatiles['dynamax']) return;
+				for (const pokemon of source.side.active) {
+					this.boost({atk: 1}, pokemon);
+				}
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Normal",
+		contestType: "Cool",
+	},
 	gmaxcuddle: {
 		num: 1000,
 		accuracy: true,
@@ -7278,6 +7394,25 @@ export const Moves: { [moveid: string]: MoveData } = {
 				}
 			},
 		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Dragon",
+		contestType: "Cool",
+	},
+	gmaxdraconianblow: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
+		shortDesc: "Base move affects power. Breaks all protection.",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Draconian Blow",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Urshifu-Dragon-Fist",
+		breaksProtect: true,
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Dragon",
@@ -7363,6 +7498,31 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Water",
 		contestType: "Cool",
 	},
+	"gmaxghostlysting": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Lowers the opponents Def -1, causes the opponent to be Cursed. BP scales with base move's BP.",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Ghostly Sting",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Jellicent",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					this.boost({def: -1}, pokemon);
+					pokemon.addVolatile('curse');
+				}
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Ghost",
+		contestType: "Cool",
+	},
 	gmaxgoldrush: {
 		num: 1000,
 		accuracy: true,
@@ -7404,6 +7564,29 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+	gmaxguardian: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Guardian",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Dragonite",
+		self: {
+			onHit(source) {
+				const side = source.side.allySide!;
+				side.addSideCondition("mist");
+				side.addSideCondition("safeguard");
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Dragon",
+		contestType: "Cool",
+	},
 	gmaxhydrosnipe: {
 		num: 1000,
 		accuracy: true,
@@ -7419,6 +7602,57 @@ export const Moves: { [moveid: string]: MoveData } = {
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Water",
+		contestType: "Cool",
+	},
+	gmaxlandslide: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Landslide",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Tyranitar",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					this.boost({spe: -1}, pokemon);
+					pokemon.addVolatile('block');
+				}
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Rock",
+		contestType: "Cool",
+	},
+	gmaxlivewire: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Live-Wire",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Voltergeist",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					const result = this.random(2);
+					if (result === 0) {
+						pokemon.addVolatile('flinch');
+					} else {
+						pokemon.trySetStatus('brn', source);
+					}
+				}
+			},
+		},
+		target: "adjacentFoe",
+		type: "Electric",
 		contestType: "Cool",
 	},
 	gmaxmalodor: {
@@ -7464,6 +7698,30 @@ export const Moves: { [moveid: string]: MoveData } = {
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Steel",
+		contestType: "Cool",
+	},
+	gmaxnightfall: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Lowers the opponents Sp. Def by -1, Blinds opponents. BP scales with base move.",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Nightfall",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Hydreigon",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					this.boost({spd: -1}, pokemon);
+					pokemon.trySetStatus('blindness', source);
+				}
+			},
+		},
+		target: "adjacentFoe",
+		type: "Dark",
 		contestType: "Cool",
 	},
 	gmaxoneblow: {
@@ -7793,6 +8051,54 @@ export const Moves: { [moveid: string]: MoveData } = {
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Ghost",
+		contestType: "Cool",
+	},
+	gmaxtigerstormstrike: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful and any Pokemon on the opposing side is using Baneful Bunker, Detect, King's Shield, Mat Block, Max Guard, Obstruct, Protect, or Spiky Shield, this move will fully break the protection.",
+		shortDesc: "Base move affects power. Breaks all protection.",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Tigerstorm Strike",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Urshifu-Tiger-Claw",
+		breaksProtect: true,
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Fire",
+		contestType: "Cool",
+	},
+	gmaxvegetation: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Foe: Leech Seed or Flinch. Base Power scales with the base move's Base Power.",
+		shortDesc: "Foe: Leech Seed or Flinch.",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Vegetation",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Carnicreeper",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					const result = this.random(2);
+					if (result === 0) {
+						pokemon.addVolatile('flinch');
+					} else {
+						pokemon.addVolatile('leechseed');
+					}
+				}
+			},
+		},
+		target: "adjacentFoe",
+		type: "Grass",
 		contestType: "Cool",
 	},
 	gmaxvinelash: {
