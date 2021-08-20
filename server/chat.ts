@@ -30,6 +30,7 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import {Dex} from '../sim';
 import {resolve} from 'path';
+import {PrivateMessages} from './private-messages';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void> | string | null | void;
@@ -668,7 +669,7 @@ export class CommandContext extends MessageContext {
 					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
 				}
 			}
-			Chat.sendPM(message, this.user, this.pmTarget);
+			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
 			if (this.room.game && this.room.game.onLogMessage) {
@@ -1429,6 +1430,7 @@ export const Chat = new class {
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
 	readonly Friends = new FriendsDatabase();
 	readonly PM = PM;
+	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
 
@@ -1720,7 +1722,10 @@ export const Chat = new class {
 			await this.database.runFile(resolve(migrationsFolder, file));
 		}
 
-		Chat.destroyHandlers.push(() => Chat.database?.destroy());
+		Chat.destroyHandlers.push(
+			() => Chat.database.destroy(),
+			() => Chat.PrivateMessages.destroy(),
+		);
 	}
 
 	readonly MessageContext = MessageContext;
@@ -1790,14 +1795,6 @@ export const Chat = new class {
 		);
 
 		Monitor.slow(logMessage);
-	}
-	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
-		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
-		if (onlyRecipient) return onlyRecipient.send(buf);
-		user.send(buf);
-		if (pmTarget !== user) pmTarget.send(buf);
-		pmTarget.lastPM = user.id;
-		user.lastPM = pmTarget.id;
 	}
 
 	packageData: AnyObject = {};

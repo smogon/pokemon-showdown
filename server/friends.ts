@@ -128,7 +128,7 @@ export class FriendsDatabase {
 		}
 
 		statements.expire.run();
-		return database;
+		return {database, statements};
 	}
 	async getFriends(userid: ID): Promise<Friend[]> {
 		return (await this.all('get', [userid, MAX_FRIENDS])) || [];
@@ -364,6 +364,25 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	},
 };
 
+/**
+ * API STUFF - For use in other database child processes that may want to interface with the friends list.
+ * todo: should these be under a namespace?
+ */
+
+/** Find if a friendship exists between two users.*/
+export function findFriendship(users: [string, string]) {
+	setup();
+	return !!statements.findFriendship.get({user1: users[0], user2: users[1]});
+}
+
+// internal for child process api - ensures statements are only set up
+const setup = () => {
+	if (!process.send) throw new Error("You should not be using this function in the main process");
+	if (!Object.keys(statements).length) FriendsDatabase.setupDatabase();
+};
+
+/** Process manager for main process use. */
+
 export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, DatabaseResult>(module, query => {
 	const {type, statement, data} = query;
 	const start = Date.now();
@@ -408,22 +427,25 @@ if (!PM.isParentProcess) {
 	if (Config.usesqlite) {
 		FriendsDatabase.setupDatabase();
 	}
-	global.Monitor = {
-		crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-		slow(message: string) {
-			process.send!(`CALLBACK\nSLOW\n${message}`);
-		},
-	};
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			Monitor.crashlog(err, 'A friends child process');
-		}
-	});
-	// eslint-disable-next-line no-eval
-	Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
+	// sine we require this in child processes
+	if (process.mainModule === module) {
+		global.Monitor = {
+			crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
+				const repr = JSON.stringify([error.name, error.message, source, details]);
+				process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			},
+			slow(message: string) {
+				process.send!(`CALLBACK\nSLOW\n${message}`);
+			},
+		};
+		process.on('uncaughtException', err => {
+			if (Config.crashguard) {
+				Monitor.crashlog(err, 'A friends child process');
+			}
+		});
+		// eslint-disable-next-line no-eval
+		Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
+	}
 } else {
 	PM.spawn(Config.friendsprocesses || 1);
 }
