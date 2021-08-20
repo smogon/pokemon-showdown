@@ -965,7 +965,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 		desc: "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
-	klinklangite:{
+	klinklangite: {
 		name: "Klinklangite",
 		desc: "If held by a Klinklang, this item allows it to Mega Evolve in battle.",
 	},
