@@ -109,7 +109,7 @@ export const Natures: {[k: string]: NatureData} = {
 	meticulous: {
 		name: "Meticulous",
 		plus: 'hp',
-		minus: 'atk'
+		minus: 'atk',
 	},
 	mild: {
 		name: "Mild",
