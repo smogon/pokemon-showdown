@@ -8501,6 +8501,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		evos: ["Carnicreeper"],
 		eggGroups: ["Grass"],
+		changesFrom: "Carnicreeper",
 	},
 	carnicreeper: {
 		num: -13,
