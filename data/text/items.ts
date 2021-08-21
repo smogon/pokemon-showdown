@@ -124,8 +124,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Berry Sweet",
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	beserkgene: {
-		name: "Beserk Gene",
+	berserkgene: {
+		name: "Berserk Gene",
 		desc: "On switch-in, raises holder's Attack by 2 only if Mewtwo; confuses on all Pokemon. Single use.",
 	},
 	bigroot: {
@@ -965,7 +965,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 		desc: "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
-	klinklangite:{
+	klinklangite: {
 		name: "Klinklangite",
 		desc: "If held by a Klinklang, this item allows it to Mega Evolve in battle.",
 	},
@@ -2491,69 +2491,5 @@ export const ItemsText: {[k: string]: ItemText} = {
 	zoomlens: {
 		name: "Zoom Lens",
 		desc: "The accuracy of attacks by the holder is 1.2x if it moves after its target.",
-	},
-
-	// Gen 2 items
-
-	berserkgene: {
-		name: "Berserk Gene",
-		desc: "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use.",
-	},
-	berry: {
-		name: "Berry",
-		desc: "(Gen 2) Restores 10 HP when at 1/2 max HP or less. Single use.",
-	},
-	bitterberry: {
-		name: "Bitter Berry",
-		desc: "(Gen 2) Holder is cured if it is confused. Single use.",
-	},
-	burntberry: {
-		name: "Burnt Berry",
-		desc: "(Gen 2) Holder is cured if it is frozen. Single use.",
-	},
-	goldberry: {
-		name: "Gold Berry",
-		desc: "(Gen 2) Restores 30 HP when at 1/2 max HP or less. Single use.",
-	},
-	iceberry: {
-		name: "Ice Berry",
-		desc: "(Gen 2) Holder is cured if it is burned. Single use.",
-	},
-	mintberry: {
-		name: "Mint Berry",
-		desc: "(Gen 2) Holder wakes up if it is asleep. Single use.",
-	},
-	miracleberry: {
-		name: "Miracle Berry",
-		desc: "(Gen 2) Holder cures itself if it is confused or has a status condition. Single use.",
-	},
-	mysteryberry: {
-		name: "Mystery Berry",
-		desc: "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
-
-		activate: "  [POKEMON] restored PP to its [MOVE] move using Mystery Berry!",
-	},
-	pinkbow: {
-		name: "Pink Bow",
-		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
-	},
-	polkadotbow: {
-		name: "Polkadot Bow",
-		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
-	},
-	przcureberry: {
-		name: "PRZ Cure Berry",
-		desc: "(Gen 2) Holder cures itself if it is paralyzed. Single use.",
-	},
-	psncureberry: {
-		name: "PSN Cure Berry",
-		desc: "(Gen 2) Holder is cured if it is poisoned. Single use.",
-	},
-
-	// CAP items
-
-	crucibellite: {
-		name: "Crucibellite",
-		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
 	},
 };
