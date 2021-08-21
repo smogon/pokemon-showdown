@@ -368,8 +368,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	batonpass: {
 		name: "Baton Pass",
-		desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's stat stage changes, confusion, and certain move effects transferred to it.",
-		shortDesc: "User switches, passing stat changes and more.",
+		desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's volatiles such as confusion, and certain move effects transferred to it.",
+		shortDesc: "User switches, passing move volatiles.",
 	},
 	beakblast: {
 		name: "Beak Blast",
