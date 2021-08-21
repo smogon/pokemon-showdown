@@ -353,4 +353,28 @@ describe(`Emergency Exit`, function () {
 
 		assert.equal(battle.requestState, 'switch');
 	});
+
+	it(`should request a switchout after taking regular recoil damage`, function () {
+		battle = common.createBattle([[
+			{species: 'Golisopod', ability: 'Emergency Exit', moves: ['flareblitz']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Chansey', moves: ['sleeptalk']},
+		]])
+		const eePokemon = battle.p1.active[0];
+		battle.makeChoices();
+		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it(`should request a switchout after taking struggle recoil damage`, function () {
+		battle = common.createBattle([[
+			{species: 'Golisopod', ability: 'Emergency Exit', moves: ['sketch']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Klefki', ability: 'Prankster', moves: ['craftyshield']},
+		]])
+		for (var i = 0; i < 3; i++) battle.makeChoices();
+		assert.equal(battle.requestState, 'switch');
+	});
 });
