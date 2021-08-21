@@ -442,6 +442,30 @@ export class TeamValidator {
 				set.gender = 'M';
 			}
 		}
+		if (ability.id === 'battlebond' && species.id === 'delphox') {
+			outOfBattleSpecies = dex.species.get('delphoxserena');
+			if (ruleTable.has('obtainableformes')) {
+				tierSpecies = outOfBattleSpecies;
+			}
+			if (ruleTable.has('obtainablemisc')) {
+				if (set.gender && set.gender !== 'F') {
+					problems.push(`Battle Bond Delphox must be female.`);
+				}
+				set.gender = 'F';
+			}
+		}
+		if (ability.id === 'battlebond' && species.id === 'chesnaught') {
+			outOfBattleSpecies = dex.species.get('chesnaught-clemont');
+			if (ruleTable.has('obtainableformes')) {
+				tierSpecies = outOfBattleSpecies;
+			}
+			if (ruleTable.has('obtainablemisc')) {
+				if (set.gender && set.gender !== 'M') {
+					problems.push(`Battle Bond Chesnaught must be male.`);
+				}
+				set.gender = 'M';
+			}
+		}
 		if (ability.id === 'owntempo' && species.id === 'rockruff') {
 			tierSpecies = outOfBattleSpecies = dex.species.get('rockruffdusk');
 		}
@@ -2123,7 +2147,7 @@ export class TeamValidator {
 			return this.dex.species.get(species.baseSpecies);
 		} else if (species.name === 'Lycanroc-Dusk') {
 			return this.dex.species.get('Rockruff-Dusk');
-		} else if (species.name === 'Greninja-Ash') {
+		} else if (['Delphox-Serena', 'Chesnaught-Clemont', 'Greninja-Ash'].includes(species.name)) {
 			return null;
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
