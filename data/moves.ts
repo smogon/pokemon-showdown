@@ -15305,7 +15305,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: {
 			chance: 10,
-			status: "bewitchment"
+			status: "bewitchment",
 		},
 		target: "normal",
 		type: "Fairy",
@@ -17214,7 +17214,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: {
 			chance: 50,
-			status: "whiplash"
+			status: "whiplash",
 		},
 		target: "normal",
 		type: "Fighting",
