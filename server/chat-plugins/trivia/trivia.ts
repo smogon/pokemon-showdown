@@ -376,7 +376,7 @@ export class Trivia extends Rooms.RoomGame {
 	constructor(
 		room: Room, mode: string, categories: ID[] | 'all', givesPoints: boolean,
 		length: keyof typeof LENGTHS | number, questions: TriviaQuestion[], creator: string,
-		isRandomMode = false, isSubGame = false,
+		isRandomMode = false, isSubGame = false, isRandomCategory = false,
 	) {
 		super(room, isSubGame);
 		this.playerTable = {};
@@ -390,13 +390,12 @@ export class Trivia extends Rooms.RoomGame {
 
 		this.categories = categories;
 		let category: string;
-		switch (this.categories[0]) {
+		switch (this.categories) {
 		case 'all':
 			category = this.room.tr`All`; break;
-		case 'random':
-			category = this.room.tr`Random (${ALL_CATEGORIES[questions[0].category]})`; break;
 		default:
-			category = (this.categories as ID[]).map(cat => ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat]).join(' + ');
+			category = this.categories.map(cat => ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat]).join(' + ');
+			if (isRandomCategory) category = this.room.tr`Random (${category})`;
 		}
 
 		this.game = {
@@ -1530,10 +1529,12 @@ const triviaCommands: Chat.ChatCommands = {
 				const id = toID(cat);
 				return CATEGORY_ALIASES[id] || id;
 			});
-		if (categories[0] === 'all') categories = 'all';
-		if (categories[0] === 'random') categories = 'random';
-		if (categories.length > 1 && (categories.includes('all' as ID) || categories.includes('random' as ID))) {
-			throw new Chat.ErrorMessage(`You cannot combine all or random with another category.`);
+		if (categories[0] === 'all') {
+			if (categories.length > 1) throw new Chat.ErrorMessage(`You cannot combine all with another category.`);
+			categories = 'all';
+		} else if (categories[0] === 'random') {
+			if (categories.length > 1) throw new Chat.ErrorMessage(`You cannot combine random with another category.`);
+			categories = 'random';
 		}
 		const questions = await getQuestions(categories, randomizeQuestionOrder ? 'random' : 'time');
 
@@ -1572,8 +1573,12 @@ const triviaCommands: Chat.ChatCommands = {
 			_Trivia = TimerModeTrivia;
 		}
 
-		categories = categories === 'random' ? [questions[0].category] as ID[] : categories;
-		room.game = new _Trivia(room, mode, categories, givesPoints, length, questions, user.name, isRandomMode);
+		const isRandomCategory = categories === 'random';
+		categories = isRandomCategory ? [questions[0].category] as ID[] : categories as 'all' | ID[];
+		room.game = new _Trivia(
+			room, mode, categories, givesPoints, length, questions,
+			user.name, isRandomMode, false, isRandomCategory
+		);
 	},
 	newhelp: [
 		`/trivia new [mode], [categories], [length] - Begin a new Trivia game.`,
