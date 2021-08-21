@@ -2336,19 +2336,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "This move summons Light Screen for 5 turns upon use.",
 		shortDesc: "Summons Light Screen.",
 	},
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 639989c0c... changes to old moves added
 	gmaxannihilation: {
 		name: "G-Max Annihilation",
 		shortDesc: "At the cost of the user’s life, does massive amounts of damage",
 	},
-<<<<<<< HEAD
-=======
->>>>>>> 5f9a9c712... all moves i beleive are added minus the super brand new ones
-=======
->>>>>>> 639989c0c... changes to old moves added
 	gmaxbattering: {
 		desc: "Flinches or raises user def 1 stage. Base Power scales with the base move's Base Power.",
 		shortDesc: "Flinches or raises user def 1 stage.",
@@ -2420,15 +2411,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the opposing side is lowered by 2 stages, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: -2 Speed.",
 	},
-<<<<<<< HEAD
-<<<<<<< HEAD
 	gmaxghostlysting: {
-=======
-	"gmaxghostlysting": {
->>>>>>> 5f9a9c712... all moves i beleive are added minus the super brand new ones
-=======
-	gmaxghostlysting: {
->>>>>>> 639989c0c... changes to old moves added
 		shortDesc: "Lowers the opponents Def -1, causes the opponent to be Cursed. BP scales with base move's BP.",
 		name: "G-Max Ghostly Sting",
 	},
