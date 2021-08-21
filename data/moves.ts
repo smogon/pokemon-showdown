@@ -13459,13 +13459,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onHit(source) {
 				if (!source.volatiles["dynamax"]) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 83893be6e... i think thats everything
 				const result = this.random(5);
 				if (result === 0) {
 					this.field.setWeather("sunnyday");
 				}
+<<<<<<< HEAD
 =======
 				this.field.setWeather("sunnyday");
 >>>>>>> 3bbfa5c75... added new moves but not gmax ones
+=======
+>>>>>>> 83893be6e... i think thats everything
 			},
 		},
 		target: "adjacentFoe",
@@ -13511,13 +13517,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onHit(source) {
 				if (!source.volatiles["dynamax"]) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 83893be6e... i think thats everything
 				const result = this.random(5);
 				if (result === 0) {
 					this.field.setWeather("raindance");
 				}
+<<<<<<< HEAD
 =======
 				this.field.setWeather("raindance");
 >>>>>>> 3bbfa5c75... added new moves but not gmax ones
+=======
+>>>>>>> 83893be6e... i think thats everything
 			},
 		},
 		target: "adjacentFoe",
@@ -13604,13 +13616,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onHit(source) {
 				if (!source.volatiles["dynamax"]) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 83893be6e... i think thats everything
 				const result = this.random(5);
 				if (result === 0) {
 					this.field.setWeather("hail");
 				}
+<<<<<<< HEAD
 =======
 				this.field.setWeather("hail");
 >>>>>>> 3bbfa5c75... added new moves but not gmax ones
+=======
+>>>>>>> 83893be6e... i think thats everything
 			},
 		},
 		target: "adjacentFoe",
@@ -13656,13 +13674,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onHit(source) {
 				if (!source.volatiles["dynamax"]) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 83893be6e... i think thats everything
 				const result = this.random(5);
 				if (result === 0) {
 					this.field.setTerrain("electricterrain");
 				}
+<<<<<<< HEAD
 =======
 				this.field.setTerrain("electricterrain");
 >>>>>>> 3bbfa5c75... added new moves but not gmax ones
+=======
+>>>>>>> 83893be6e... i think thats everything
 			},
 		},
 		target: "adjacentFoe",
@@ -13683,13 +13707,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onHit(source) {
 				if (!source.volatiles["dynamax"]) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 83893be6e... i think thats everything
 				const result = this.random(5);
 				if (result === 0) {
 					this.field.setTerrain("psychicterrain");
 				}
+<<<<<<< HEAD
 =======
 				this.field.setTerrain("psychicterrain");
 >>>>>>> 3bbfa5c75... added new moves but not gmax ones
+=======
+>>>>>>> 83893be6e... i think thats everything
 			},
 		},
 		target: "adjacentFoe",
@@ -13735,13 +13765,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onHit(source) {
 				if (!source.volatiles["dynamax"]) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 83893be6e... i think thats everything
 				const result = this.random(5);
 				if (result === 0) {
 					this.field.setTerrain("grassyterrain");
 				}
+<<<<<<< HEAD
 =======
 				this.field.setTerrain("grassyterrain");
 >>>>>>> 3bbfa5c75... added new moves but not gmax ones
+=======
+>>>>>>> 83893be6e... i think thats everything
 			},
 		},
 		target: "adjacentFoe",
@@ -13812,13 +13848,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onHit(source) {
 				if (!source.volatiles["dynamax"]) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 83893be6e... i think thats everything
 				const result = this.random(5);
 				if (result === 0) {
 					this.field.setWeather("sandstorm");
 				}
+<<<<<<< HEAD
 =======
 				this.field.setWeather("sandstorm");
 >>>>>>> 3bbfa5c75... added new moves but not gmax ones
+=======
+>>>>>>> 83893be6e... i think thats everything
 			},
 		},
 		target: "adjacentFoe",
@@ -13839,13 +13881,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onHit(source) {
 				if (!source.volatiles["dynamax"]) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 83893be6e... i think thats everything
 				const result = this.random(5);
 				if (result === 0) {
 					this.field.setTerrain("mistyterrain");
 				}
+<<<<<<< HEAD
 =======
 				this.field.setTerrain("mistyterrain");
 >>>>>>> 3bbfa5c75... added new moves but not gmax ones
+=======
+>>>>>>> 83893be6e... i think thats everything
 			},
 		},
 		target: "adjacentFoe",
