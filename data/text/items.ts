@@ -125,12 +125,17 @@ export const ItemsText: {[k: string]: ItemText} = {
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
 <<<<<<< HEAD
+<<<<<<< HEAD
 	berserkgene: {
 		name: "Berserk Gene",
 =======
 	beserkgene: {
 		name: "Beserk Gene",
 >>>>>>> 4a6b5f343... added new items
+=======
+	berserkgene: {
+		name: "Berserk Gene",
+>>>>>>> 330a831fa... server working and most validations are working, will need to test battles soon
 		desc: "On switch-in, raises holder's Attack by 2 only if Mewtwo; confuses on all Pokemon. Single use.",
 	},
 	bigroot: {
@@ -971,10 +976,14 @@ export const ItemsText: {[k: string]: ItemText} = {
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
 <<<<<<< HEAD
+<<<<<<< HEAD
 	klinklangite: {
 =======
 	klinklangite:{
 >>>>>>> 4a6b5f343... added new items
+=======
+	klinklangite: {
+>>>>>>> 330a831fa... server working and most validations are working, will need to test battles soon
 		name: "Klinklangite",
 		desc: "If held by a Klinklang, this item allows it to Mega Evolve in battle.",
 	},
