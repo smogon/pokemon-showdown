@@ -906,10 +906,15 @@ export class BattleActions {
 		}
 
 		if (move.recoil && move.totalDamage) {
+			const hpBeforeRecoil = pokemon.hp;
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
+			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
+				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+			}
 		}
 
 		if (move.struggleRecoil) {
+			const hpBeforeRecoil = pokemon.hp;
 			let recoilDamage;
 			if (this.dex.gen >= 5) {
 				recoilDamage = this.battle.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
@@ -917,6 +922,9 @@ export class BattleActions {
 				recoilDamage = this.battle.clampIntRange(this.battle.trunc(pokemon.maxhp / 4), 1);
 			}
 			this.battle.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as Condition);
+			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
+				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+			}
 		}
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
