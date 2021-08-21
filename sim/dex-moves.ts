@@ -479,37 +479,21 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 				// already initialized to 1
 			} else if (!this.basePower) {
 				this.maxMove.basePower = 100;
-			} else if (['Fighting', 'Poison'].includes(this.type)) {
-				if (this.basePower >= 150) {
-					this.maxMove.basePower = 100;
-				} else if (this.basePower >= 110) {
-					this.maxMove.basePower = 95;
-				} else if (this.basePower >= 75) {
-					this.maxMove.basePower = 90;
-				} else if (this.basePower >= 65) {
-					this.maxMove.basePower = 85;
-				} else if (this.basePower >= 55) {
-					this.maxMove.basePower = 80;
-				} else if (this.basePower >= 45) {
-					this.maxMove.basePower = 75;
-				} else {
-					this.maxMove.basePower = 70;
-				}
 			} else {
 				if (this.basePower >= 150) {
-					this.maxMove.basePower = 150;
-				} else if (this.basePower >= 110) {
 					this.maxMove.basePower = 140;
-				} else if (this.basePower >= 75) {
+				} else if (this.basePower >= 110) {
 					this.maxMove.basePower = 130;
-				} else if (this.basePower >= 65) {
+				} else if (this.basePower >= 75) {
 					this.maxMove.basePower = 120;
-				} else if (this.basePower >= 55) {
+				} else if (this.basePower >= 65) {
 					this.maxMove.basePower = 110;
-				} else if (this.basePower >= 45) {
+				} else if (this.basePower >= 55) {
 					this.maxMove.basePower = 100;
-				} else {
+				} else if (this.basePower >= 45) {
 					this.maxMove.basePower = 90;
+				} else {
+					this.maxMove.basePower = 80;
 				}
 			}
 		}
@@ -520,25 +504,25 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 			if (!basePower) {
 				this.zMove.basePower = 100;
 			} else if (basePower >= 140) {
-				this.zMove.basePower = 200;
-			} else if (basePower >= 130) {
-				this.zMove.basePower = 195;
-			} else if (basePower >= 120) {
 				this.zMove.basePower = 190;
-			} else if (basePower >= 110) {
+			} else if (basePower >= 130) {
 				this.zMove.basePower = 185;
-			} else if (basePower >= 100) {
+			} else if (basePower >= 120) {
 				this.zMove.basePower = 180;
-			} else if (basePower >= 90) {
+			} else if (basePower >= 110) {
 				this.zMove.basePower = 175;
+			} else if (basePower >= 100) {
+				this.zMove.basePower = 170;
+			} else if (basePower >= 90) {
+				this.zMove.basePower = 165;
 			} else if (basePower >= 80) {
-				this.zMove.basePower = 160;
+				this.zMove.basePower = 150;
 			} else if (basePower >= 70) {
-				this.zMove.basePower = 140;
+				this.zMove.basePower = 130;
 			} else if (basePower >= 60) {
-				this.zMove.basePower = 120;
+				this.zMove.basePower = 110;
 			} else {
-				this.zMove.basePower = 100;
+				this.zMove.basePower = 90;
 			}
 		}
 
