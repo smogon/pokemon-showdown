@@ -1549,7 +1549,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 657,
 		onTakeItem: false,
 		zMove: "Extreme Evoboost",
-		zMoveFrom: "Last Resort",
+		zMoveFrom: "Veevee Volley",
 		itemUser: ["Eevee"],
 		num: 805,
 		gen: 7,

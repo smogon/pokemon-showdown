@@ -521,8 +521,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	block: {
 		name: "Block",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Prevents the target from switching out.",
+		desc: "Prevents target from switching for the next three turns. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. Fails if the effect is already active.",
+		shortDesc: "Prevents target from switching for 3 turns.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		},
@@ -1924,8 +1924,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	fissure: {
 		name: "Fissure",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 3/4 target's current HP.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level. Can hit a target using Dig.",
 		},
@@ -2320,6 +2320,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "This move summons Light Screen for 5 turns upon use.",
 		shortDesc: "Summons Light Screen.",
 	},
+	gmaxannihilation: {
+		name: "G-Max Annihilation",
+		shortDesc: "At the cost of the user’s life, does massive amounts of damage",
+	},
 	gmaxbattering: {
 		desc: "Flinches or raises user def 1 stage. Base Power scales with the base move's Base Power.",
 		shortDesc: "Flinches or raises user def 1 stage.",
@@ -2391,7 +2395,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the opposing side is lowered by 2 stages, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: -2 Speed.",
 	},
-	"gmaxghostlysting": {
+	gmaxghostlysting: {
 		shortDesc: "Lowers the opponents Def -1, causes the opponent to be Cursed. BP scales with base move's BP.",
 		name: "G-Max Ghostly Sting",
 	},
@@ -2658,8 +2662,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	guillotine: {
 		name: "Guillotine",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 3/4 target's current HP.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
 		},
@@ -2971,8 +2975,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	horndrill: {
 		name: "Horn Drill",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 3/4 target's current HP.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
 		},
@@ -3375,8 +3379,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	landswrath: {
 		name: "Land's Wrath",
-		desc: "No additional effect.",
-		shortDesc: "No additional effect. Hits adjacent foes.",
+		desc: "Create's a wrath that damages 1/6th per turn on non-ground types.",
+		shortDesc: "Create's a wrath that damages 1/6th per turn on non-ground types.",
 	},
 	laserfocus: {
 		name: "Laser Focus",
@@ -3792,8 +3796,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	meanlook: {
 		name: "Mean Look",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Prevents the target from switching out.",
+		desc: "Prevents target from switching for the next three turns. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. Fails if the effect is already active.",
+		shortDesc: "Prevents target from switching for 3 turns.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		},
@@ -4308,10 +4312,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	octolock: {
 		name: "Octolock",
-		desc: "Prevents the target from switching out. At the end of each turn during effect, the target's Defense and Special Defense are lowered by 1 stage. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Traps target, lowers Def and SpD by 1 each turn.",
+		desc: "Prevents the target from switching out for 3 turns. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field. At the end of every turn, the target's Defense and Special defense stats are lowered by 1 stage.",
+		shortDesc: "Foe can't switch for 3 turns. Lowers Def and SpD every turn.",
 
 		start: "  [POKEMON] can no longer escape because of Octolock!",
+		end: "  [POKEMON] was freed from Octolock!",
 	},
 	odorsleuth: {
 		name: "Odor Sleuth",
@@ -5434,8 +5439,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sheercold: {
 		name: "Sheer Cold",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + X)%, where X is 30 if the user is an Ice type and 20 otherwise, and fails if the target is at a higher level. Ice-type Pokemon and Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs non-Ice targets. Fails if user's lower level.",
+		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 3/4 target's current HP.",
 		gen6: {
 			desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
 			shortDesc: "OHKOs the target. Fails if user is a lower level.",
@@ -5847,8 +5852,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	spiderweb: {
 		name: "Spider Web",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Prevents the target from switching out.",
+		desc: "Prevents target from switching for the next three turns. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. Fails if the effect is already active.",
+		shortDesc: "Prevents target from switching for 3 turns.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		},
@@ -6641,8 +6646,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	toxic: {
 		name: "Toxic",
-		desc: "Badly poisons the target. If a Poison-type Pokemon uses this move, the target cannot avoid the attack, even if the target is in the middle of a two-turn move.",
-		shortDesc: "Badly poisons the target. Poison types can't miss.",
+		shortDesc: "Badly poisons the target.",
 		gen5: {
 			desc: "Badly poisons the target.",
 			shortDesc: "Badly poisons the target.",
