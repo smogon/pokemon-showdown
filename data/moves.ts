@@ -16439,10 +16439,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		secondary: {
 			chance: 10,
 <<<<<<< HEAD
+<<<<<<< HEAD
 			status: "bewitchment",
 =======
 			status: "bewitchment"
 >>>>>>> 639989c0c... changes to old moves added
+=======
+			status: "bewitchment",
+>>>>>>> 401b19641... trailing commas
 		},
 		target: "normal",
 		type: "Fairy",
@@ -18410,10 +18414,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		secondary: {
 			chance: 50,
 <<<<<<< HEAD
+<<<<<<< HEAD
 			status: "whiplash",
 =======
 			status: "whiplash"
 >>>>>>> 639989c0c... changes to old moves added
+=======
+			status: "whiplash",
+>>>>>>> 401b19641... trailing commas
 		},
 		target: "normal",
 		type: "Fighting",
