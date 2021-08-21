@@ -2337,12 +2337,18 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Summons Light Screen.",
 	},
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 639989c0c... changes to old moves added
 	gmaxannihilation: {
 		name: "G-Max Annihilation",
 		shortDesc: "At the cost of the user’s life, does massive amounts of damage",
 	},
+<<<<<<< HEAD
 =======
 >>>>>>> 5f9a9c712... all moves i beleive are added minus the super brand new ones
+=======
+>>>>>>> 639989c0c... changes to old moves added
 	gmaxbattering: {
 		desc: "Flinches or raises user def 1 stage. Base Power scales with the base move's Base Power.",
 		shortDesc: "Flinches or raises user def 1 stage.",
@@ -2415,10 +2421,14 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Base move affects power. Foes: -2 Speed.",
 	},
 <<<<<<< HEAD
+<<<<<<< HEAD
 	gmaxghostlysting: {
 =======
 	"gmaxghostlysting": {
 >>>>>>> 5f9a9c712... all moves i beleive are added minus the super brand new ones
+=======
+	gmaxghostlysting: {
+>>>>>>> 639989c0c... changes to old moves added
 		shortDesc: "Lowers the opponents Def -1, causes the opponent to be Cursed. BP scales with base move's BP.",
 		name: "G-Max Ghostly Sting",
 	},
