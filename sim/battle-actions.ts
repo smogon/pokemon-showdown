@@ -14,6 +14,7 @@ export class BattleActions {
 		Water: 'Max Geyser',
 		Status: 'Max Guard',
 		Ice: 'Max Hailstorm',
+		Infinte: 'Max Destruction',
 		Fighting: 'Max Knuckle',
 		Electric: 'Max Lightning',
 		Psychic: 'Max Mindstorm',
@@ -44,6 +45,7 @@ export class BattleActions {
 		Bug: "Savage Spin-Out",
 		Psychic: "Shattered Psyche",
 		Ice: "Subzero Slammer",
+		Infinite: "Dimensional Distortion",
 		Flying: "Supersonic Skystrike",
 		Ground: "Tectonic Rage",
 		Fairy: "Twinkle Tackle",
@@ -671,7 +673,7 @@ export class BattleActions {
 					}
 				}
 			}
-			if (move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
+			if (move.alwaysHit ||
 					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
 				accuracy = true; // bypasses ohko accuracy modifiers
 			} else {
