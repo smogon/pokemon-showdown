@@ -360,7 +360,7 @@ describe(`Emergency Exit`, function () {
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
 			{species: 'Chansey', moves: ['sleeptalk']},
-		]])
+		]]);
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices();
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
@@ -369,12 +369,13 @@ describe(`Emergency Exit`, function () {
 
 	it(`should request a switchout after taking struggle recoil damage`, function () {
 		battle = common.createBattle([[
-			{species: 'Golisopod', ability: 'Emergency Exit', moves: ['sketch']},
+			{species: 'Golisopod', item: 'Assault Vest', ability: 'Emergency Exit', moves: ['protect']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
-			{species: 'Klefki', ability: 'Prankster', moves: ['craftyshield']},
-		]])
-		for (var i = 0; i < 3; i++) battle.makeChoices();
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices();
 		assert.equal(battle.requestState, 'switch');
 	});
 });
