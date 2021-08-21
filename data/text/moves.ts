@@ -159,14 +159,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
 		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
 	},
-<<<<<<< HEAD
 	antigrav: {
 		name: "Antigrav",
 		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are less than 0, ignores negative offensive drops.",
 		shortDesc: " + 20 power for each of the user's stat drops, ignores negative offensive drops.",
 	},
-=======
->>>>>>> 8191e7fab... added new moves but not gmax ones
 	apocalypticmaelstrom: {
 		name: "Apocalyptic Maelstrom",
 		desc: "Does damage.  If this move is successful, the weather becomes Maelstrom for 5 turns, 8 if holding Calamity Stone.",
@@ -2339,13 +2336,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "This move summons Light Screen for 5 turns upon use.",
 		shortDesc: "Summons Light Screen.",
 	},
-<<<<<<< HEAD
 	gmaxannihilation: {
 		name: "G-Max Annihilation",
 		shortDesc: "At the cost of the user’s life, does massive amounts of damage",
 	},
-=======
->>>>>>> 97da0bb5a... all moves i beleive are added minus the super brand new ones
 	gmaxbattering: {
 		desc: "Flinches or raises user def 1 stage. Base Power scales with the base move's Base Power.",
 		shortDesc: "Flinches or raises user def 1 stage.",
@@ -2417,11 +2411,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the opposing side is lowered by 2 stages, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: -2 Speed.",
 	},
-<<<<<<< HEAD
 	gmaxghostlysting: {
-=======
-	"gmaxghostlysting": {
->>>>>>> 97da0bb5a... all moves i beleive are added minus the super brand new ones
 		shortDesc: "Lowers the opponents Def -1, causes the opponent to be Cursed. BP scales with base move's BP.",
 		name: "G-Max Ghostly Sting",
 	},
@@ -3558,14 +3548,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "User loses 50% max HP. Maximizes Special Attack.",
 		name: "Limit Break",
 	},
-<<<<<<< HEAD
 	liquefaction: {
 		name: "Liquefaction",
 		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target is under the effect of Ingrain, has the Suction Cups Ability, or this move hit a substitute.",
 		shortDesc: "Forces the target to switch to a random ally.",
 	},
-=======
->>>>>>> 8191e7fab... added new moves but not gmax ones
 	liquidation: {
 		name: "Liquidation",
 		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
@@ -3938,7 +3925,6 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "10% chance to raise the user's Attack by 1.",
 	},
 	metalshard: {
-<<<<<<< HEAD
 		name: "Metal Shard",
 		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		shortDesc: "Hurts foes on switch-in. Factors Steel weakness.",
@@ -3946,11 +3932,6 @@ export const MovesText: {[k: string]: MoveText} = {
 		start: "  Metallic shards float in the air around [TEAM]!",
 		end: "  The metallic shards disappeared from around [TEAM]!",
 		damage: "  Metallic shards dug into [POKEMON]!",
-=======
-		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
-		shortDesc: "Hurts foes on switch-in. Factors Steel weakness.",
-		name: "Metal Shard",
->>>>>>> 8191e7fab... added new moves but not gmax ones
 	},
 	metalsound: {
 		name: "Metal Sound",
@@ -4602,14 +4583,11 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		removeItem: "#bugbite",
 	},
-<<<<<<< HEAD
 	plumage: {
 		name: "Plumage",
 		desc: "Raises the user's Special Defense by 3 stages.",
 		shortDesc: "Raises the user's Special Defense by 3.",
 	},
-=======
->>>>>>> 8191e7fab... added new moves but not gmax ones
 	pointypoint: {
 		desc: "This move summons either Spikes or Metal Shard on the foe.",
 		shortDesc: "Summons Spikes or Metal Shard.",
@@ -4901,14 +4879,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		name: "Pyroclastic Blow",
 	},
-<<<<<<< HEAD
 	quantumjump: {
 		name: "Quantum Jump",
 		desc: "For each successful hit on a target, that Pokemon has 2 stats randomly raised and lowered by 1 stage.",
 		shortDesc: "For each successful hit on a target, that Pokemon has 2 stats randomly raised and lowered by 1 stage.",
 	},
-=======
->>>>>>> 8191e7fab... added new moves but not gmax ones
 	quash: {
 		name: "Quash",
 		desc: "Causes the target to take its turn after all other Pokemon this turn, no matter the priority of its selected move. Fails if the target already moved this turn.",
