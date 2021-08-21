@@ -1457,16 +1457,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 40,
 		priority: 0,
 		flags: {},
-		self: {
-			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
-			},
-		},
-		selfSwitch: "copyvolatile",
+		selfSwitch: 'copyvolatile',
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMove: {effect: "clearnegativeboost"},
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	beakblast: {
