@@ -1142,7 +1142,7 @@ export class CommandContext extends MessageContext {
 			/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,
 			''
 		);
-		if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
+		if (/[\u3164\u115f\u1160\u239b-\u23b9]/.test(message)) {
 			throw new Chat.ErrorMessage(this.tr`Your message contains banned characters.`);
 		}
 
