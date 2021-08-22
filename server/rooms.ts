@@ -1262,6 +1262,7 @@ export class GlobalRoomState {
 		const logDatabase = new PostgresDatabase();
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
+			room.battle.frozen = true;
 			const log = await room.battle.getLog();
 			const players: ID[] = room.battle.options.players || [];
 			if (!players.length) {

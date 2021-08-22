@@ -533,6 +533,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	rqid: number;
 	requestCount: number;
 	options: RoomBattleOptions;
+	frozen?: boolean;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
@@ -640,6 +641,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (Rooms.global.battleCount === 0) Rooms.global.automaticKillRequest();
 	}
 	choose(user: User, data: string) {
+		if (this.frozen) {
+			user.popup(`Your battle is currently paused, so you cannot move right now.`);
+			return;
+		}
 		const player = this.playerTable[user.id];
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
