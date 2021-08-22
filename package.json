@@ -6,6 +6,7 @@
   "dependencies": {
     "@swc/core": "^1.2.61",
     "@types/better-sqlite3": "^5.4.0",
+    "@types/pg": "^8.6.1",
     "probe-image-size": "^5.0.0",
     "sockjs": "^0.3.21",
     "ts-node": "^10.0.0"
@@ -18,6 +19,7 @@
     "node-static": "^0.7.11",
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
+    "pg": "^8.7.1",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^3.0.6",
     "sucrase": "^3.15.0"

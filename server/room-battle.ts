@@ -484,6 +484,8 @@ export interface RoomBattleOptions {
 	inputLog?: string;
 	ratedMessage?: string;
 	seed?: PRNGSeed;
+	roomid?: RoomID;
+	players?: ID[];
 }
 
 export class RoomBattle extends RoomGames.RoomGame {
@@ -530,6 +532,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	turn: number;
 	rqid: number;
 	requestCount: number;
+	options: RoomBattleOptions;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
@@ -537,6 +540,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.gameid = 'battle' as ID;
 		this.room = room;
 		this.title = format.name;
+		this.options = options;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
 		this.allowRenames = options.allowRenames !== undefined ? !!options.allowRenames : (!options.rated && !options.tour);
 
@@ -675,6 +679,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 		void this.stream.write(`>${player.slot} undo`);
 	}
 	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
+		if (!this.options.players?.includes(user.id)) {
+			user.popup(`You cannot join this battle, as you were not originally in it.`);
+			return false;
+		}
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;

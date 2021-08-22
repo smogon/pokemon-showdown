@@ -209,6 +209,9 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		case 'requestlog':
 			this.push(`requesteddata\n${this.battle!.inputLog.join('\n')}`);
 			break;
+		case 'requestexport':
+			this.push(`requesteddata\n${this.battle!.prngSeed}\n${this.battle!.inputLog.join('\n')}`);
+			break;
 		case 'requestteam':
 			message = message.trim();
 			const slotNum = parseInt(message.slice(1)) - 1;
