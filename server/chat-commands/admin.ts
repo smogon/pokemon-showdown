@@ -1133,7 +1133,8 @@ export const commands: Chat.ChatCommands = {
 
 	async kill(target, room, user) {
 		this.checkCan('lockdown');
-		const noSave = toID(target) === 'nosave';
+		let noSave = toID(target) === 'nosave';
+		if (!Config.usepostgres) noSave = true;
 
 		if (Rooms.global.lockdown !== true && noSave) {
 			return this.errorReply("For safety reasons, using /kill without saving battles can only be done during lockdown.");

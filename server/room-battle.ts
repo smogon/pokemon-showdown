@@ -680,7 +680,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	}
 	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
 		if (!this.options.players?.includes(user.id)) {
-			user.popup(`You cannot join this battle, as you were not originally in it.`);
+			user.popup(`You cannot join this battle, as you were not originally playing in it.`);
 			return false;
 		}
 		if (user.id in this.playerTable) {
