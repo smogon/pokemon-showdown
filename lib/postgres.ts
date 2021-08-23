@@ -63,11 +63,13 @@ export class PostgresDatabase {
 	stream<T = any>(query: string) {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const db = this;
-		return new Streams.ObjectReadStream<T[]>({
-			async read(this: Streams.ObjectReadStream<T[]>) {
+		return new Streams.ObjectReadStream<T>({
+			async read(this: Streams.ObjectReadStream<T>) {
 				const result = await db.query(query) as T[];
 				if (!result.length) return this.pushEnd();
-				this.buf.push(result);
+				// getting one row at a time means some slower queries
+				// might help with performance
+				this.buf.push(...result);
 			},
 		});
 	}

@@ -1288,7 +1288,7 @@ export class GlobalRoomState {
 		const logDatabase = new PostgresDatabase();
 		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
 		for await (const battle of logDatabase.stream(query)) {
-			const {input_log, players, roomid, title, seed} = battle[0];
+			const {input_log, players, roomid, title, seed} = battle;
 			const [, formatid] = roomid.split('-');
 			const room = Rooms.createBattle({
 				seed,
