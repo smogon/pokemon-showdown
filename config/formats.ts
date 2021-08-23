@@ -815,10 +815,10 @@ export const Formats: FormatList = [
 		onValidateSet(set) {
 			// Temporary fix until battle-only is implemented properly
 			if (this.toID(set.species) === 'zamazentacrowned' && this.toID(set.ability) !== 'dauntlessshield') {
-				return [`Zamazenta-Crowned can only use Dauntless Shield because it is a battle-obly forme.`];
+				return [`Zamazenta-Crowned can only use Dauntless Shield because it is a battle-only forme.`];
 			}
 			if (this.toID(set.species) === 'zaciancrowned' && this.toID(set.ability) !== 'intrepidsword') {
-				return [`Zacian-Crowned can only use Intrepid Sword because it is a battle-obly forme.`];
+				return [`Zacian-Crowned can only use Intrepid Sword because it is a battle-only forme.`];
 			}
 		},
 	},
