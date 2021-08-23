@@ -287,7 +287,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifyMovePriority: -1,
 		onModifyMove(move, attacker) {
-			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash') {
+			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
+				!attacker.transformed) {
 				move.multihit = 3;
 			}
 		},
