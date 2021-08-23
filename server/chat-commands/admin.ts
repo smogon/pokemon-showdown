@@ -1286,7 +1286,12 @@ export const commands: Chat.ChatCommands = {
 			`<td>${Chat.getReadmoreCodeBlock(query)}</td></tr><table>`
 		);
 		logRoom?.roomlog(`SQLite> ${target}`);
-		const database = SQL(module, {file: `./databases/${db}.db`});
+		const database = SQL(module, {
+			file: `./databases/${db}.db`,
+			onError(err) {
+				return {err: err.message, stack: err.stack};
+			},
+		});
 		function formatResult(result: any[] | string) {
 			if (!Array.isArray(result)) {
 				return (
@@ -1309,15 +1314,24 @@ export const commands: Chat.ChatCommands = {
 			return buffer;
 		}
 
+		function parseError(res: any): never {
+			const err = new Error(res.err);
+			err.stack = res.stack;
+			throw err;
+		}
+
 		let result;
 		try {
 			// presume it's attempting to get data first
 			result = await database.all(query, []);
+			if ((result as any).err) parseError(result as any);
 		} catch (err) {
 			// it's not getting data, but it might still be a valid statement - try to run instead
 			if (err.stack?.includes(`Use run() instead`)) {
 				try {
-					result = Utils.visualize(await database.run(query, []));
+					result = await database.run(query, []);
+					if ((result as any).err) parseError(result as any);
+					result = Utils.visualize(result);
 				} catch (e) {
 					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 				}
