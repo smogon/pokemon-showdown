@@ -686,7 +686,7 @@ export abstract class BasicRoom {
 		}
 		this.roomlog(entry);
 	}
-	getIntroMessage(user: User) {
+	getIntroMessage(user: User, connection: Connection) {
 		let message = Utils.html`\n|raw|<div class="infobox"> You joined ${this.title}`;
 		if (this.settings.modchat) {
 			message += ` [${this.settings.modchat} or higher to talk]`;
@@ -700,7 +700,12 @@ export abstract class BasicRoom {
 		}
 		message += `</div>`;
 		if (this.settings.introMessage) {
-			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(this.settings.section !== 'official' ? 'class="infobox-limited"' : '')}>` +
+			if (this.log.log.filter(k => k.startsWith('|uhtml|roomintro-message')).length) {
+				connection.send(`|uhtmlchange|roomintro-message|[Duplicate roomintro hidden]`);
+			}
+			message += `\n|uhtml|roomintro-message|`;
+			message += `<div class="infobox infobox-roomintro">`;
+			message += `<div ${(this.settings.section !== 'official' ? 'class="infobox-limited"' : '')}>` +
 				this.settings.introMessage.replace(/\n/g, '') +
 				`</div></div>`;
 		}
@@ -952,7 +957,8 @@ export abstract class BasicRoom {
 		const userList = this.userList ? this.userList : this.getUserList();
 		this.sendUser(
 			connection,
-			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.log.getScrollback() + this.getIntroMessage(user)
+			'|init|chat\n|title|' + this.title + '\n' + userList +
+			'\n' + this.log.getScrollback() + this.getIntroMessage(user, connection)
 		);
 		this.minorActivity?.onConnect?.(user, connection);
 		this.game?.onConnect?.(user, connection);
