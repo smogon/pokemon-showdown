@@ -37,15 +37,15 @@ export class PostgresDatabase {
 	}
 	async transaction(callback: (conn: PG.PoolClient) => any, depth = 0): Promise<any> {
 		const conn = await this.pool.connect();
-		await conn.query(`BEGIN;`);
+		await conn.query(`BEGIN`);
 		let result;
 		try {
 			// eslint-disable-next-line callback-return
 			result = await callback(conn);
 		} catch (e) {
-			await conn.query(`ROLLBACK;`);
+			await conn.query(`ROLLBACK`);
 			// two concurrent transactions conflicted, try again
-			if (e?.code === '40001' && depth <= 10) {
+			if (e.code === '40001' && depth <= 10) {
 				return this.transaction(callback, depth + 1);
 				// There is a bug in Postgres that causes some
 				// serialization failures to be reported as failed
@@ -57,7 +57,7 @@ export class PostgresDatabase {
 				throw e;
 			}
 		}
-		await conn.query(`COMMIT;`);
+		await conn.query(`COMMIT`);
 		return result;
 	}
 	stream<T = any>(query: string) {
