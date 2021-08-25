@@ -13,7 +13,7 @@ distance: Can target a Pokemon positioned anywhere in a Triple Battle.
 gravity: Prevented from being executed or selected during Gravity's effect.
 heal: Prevented from being executed or selected during Heal Block's effect.
 mirror: Can be copied by Mirror Move.
-mystery: Unknown effect.
+mystery: Animates when used against allies
 nonsky: Prevented from being executed or selected in a Sky Battle.
 powder: Has no effect on Grass-type Pokemon, Pokemon with the Overcoat Ability, and Pokemon holding Safety Goggles.
 protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
