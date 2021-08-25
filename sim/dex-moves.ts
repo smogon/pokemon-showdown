@@ -36,7 +36,7 @@ interface MoveFlags {
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
 	mirror?: 1; // Can be copied by Mirror Move.
-	mystery?: 1; // Unknown effect.
+	mystery?: 1; // The move has an animation when used on an ally.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
 	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
 	protect?: 1; // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
