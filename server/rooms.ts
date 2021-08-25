@@ -1272,11 +1272,12 @@ export class GlobalRoomState {
 					}
 				}
 			}
-			if (!players.length || !log?.length) continue; // ???
+			if (!players.length || !log?.length) continue; // shouldn't happen???
 			await logDatabase.query(
 				`INSERT INTO stored_battles (roomid, input_log, players, title) VALUES ($1, $2, $3, $4)` +
-				` ON CONFLICT (roomid) DO UPDATE SET input_log = $2, players = $3, title = $4`,
-				[room.roomid, log, players, room.title]
+				` ON CONFLICT (roomid) DO UPDATE ` +
+				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title`,
+				[room.roomid, log.join('\n'), players, room.title]
 			);
 			count++;
 		}
@@ -1288,10 +1289,9 @@ export class GlobalRoomState {
 		const logDatabase = new PostgresDatabase();
 		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
 		for await (const battle of logDatabase.stream(query)) {
-			const {input_log, players, roomid, title, seed} = battle;
+			const {input_log, players, roomid, title} = battle;
 			const [, formatid] = roomid.split('-');
 			const room = Rooms.createBattle({
-				seed,
 				format: formatid,
 				inputLog: input_log.join('\n'),
 				roomid,
@@ -1299,13 +1299,13 @@ export class GlobalRoomState {
 				players,
 				delayedStart: true,
 			});
-			if (!room) continue; // ???
-			room.battle?.start();
+			if (!room || !room.battle) continue; // shouldn't happen???
+			room.battle.start();
 			for (const [i, p] of players.entries()) {
 				room.auth.set(p, Users.PLAYER_SYMBOL);
 				const u = Users.getExact(p);
 				if (u) {
-					room.battle?.joinGame(u, `p${i + 1}` as SideID);
+					room.battle.joinGame(u, `p${i + 1}` as SideID);
 				}
 			}
 		}

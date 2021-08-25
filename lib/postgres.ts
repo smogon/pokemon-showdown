@@ -12,7 +12,11 @@ import * as Streams from './streams';
 export class PostgresDatabase {
 	private pool: PG.Pool;
 	constructor(config = PostgresDatabase.getConfig()) {
-		this.pool = config ? new (require('pg').Pool)(config) : null!;
+		try {
+			this.pool = new (require('pg').Pool)(config);
+		} catch (e) {
+			this.pool = null!;
+		}
 	}
 	async query(statement: string | SQLStatement, values?: any[]) {
 		if (!this.pool) {
@@ -51,7 +55,7 @@ export class PostgresDatabase {
 				// serialization failures to be reported as failed
 				// unique constraint checks. Only retrying once since
 				// it could be our fault (thanks chaos for this info / the first half of this comment)
-			} else if (e?.code === '23505' && !depth) {
+			} else if (e.code === '23505' && !depth) {
 				return this.transaction(callback, depth + 1);
 			} else {
 				throw e;
