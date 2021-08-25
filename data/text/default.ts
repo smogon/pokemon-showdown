@@ -105,7 +105,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		clearBoost: "  [POKEMON]'s stat changes were removed!",
 		clearBoostFromZEffect: "  [POKEMON] returned its decreased stats to normal using its Z-Power!",
 		invertBoost: "  [POKEMON]'s stat changes were inverted!",
-		clearAllBoost: "  All stat changes were eliminated!",
+		clearAllBoost: "  All stats changes were eliminated!",
 
 		superEffective: "  It's super effective!",
 		superEffectiveSpread: "  It's super effective on [POKEMON]!",
@@ -146,7 +146,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 	},
 	spd: {
 		statName: "Sp. Def",
-		statShortName: "SpD",
+		statShortName: "SpDe",
 	},
 	spe: {
 		statName: "Speed",
