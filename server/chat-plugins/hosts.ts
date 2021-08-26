@@ -60,7 +60,7 @@ export const pages: Chat.PageTable = {
 		Utils.sortBy(openProxies, ip => {
 			const number = IPTools.ipToNumber(ip);
 			if (number === null) {
-				Monitor.error(`Invalid IP address in IPTools.singleIPOpenProxies: '${ip}'`);
+				Rooms.get('upperstaff')?.add(`|error|Invalid IP address in IPTools.singleIPOpenProxies: '${ip}'`);
 				return -1;
 			}
 			return number;
