@@ -147,9 +147,9 @@ export const translations: Translations = {
 		"${targetUser ? targetUser.name : target} is not ticket banned.": "${targetUser ? targetUser.name : target} non è bannato dall'aprire ticket.",
 		"${targetUser ? targetUser.name : target}'s ticket ban is already expired.": "Il ticketban di ${targetUser ? targetUser.name : target} è già terminato.",
 		"You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.": "Stai già ignorando le notifiche dei ticket help. Usa /helpticket unignore per ricevere nuovamente le notifiche.",
-		"You are now ignoring help ticket notifications.": "Stai ora ignorando le notifiche dei ticket help.",
+		"You are now ignoring help ticket notifications.": "Stai ora ignorando le notifiche dei ticket di aiuto.",
 		"You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.": "Non stai ignorando le notifiche dei ticket help. Usa /helpticket ignore per non ricevere più le notifiche.",
-		"You will now receive help ticket notifications.": "Non riceverai più alcuna notifica dei ticket help.",
+		"You will now receive help ticket notifications.": "Non riceverai più alcuna notifica dei ticket di aiuto.",
 		"${target} does not have a ticket.": "${target} non ha un ticket.",
 		"You deleted ${target}'s ticket.": "Hai eliminato il ticket di ${target}.",
 

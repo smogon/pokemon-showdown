@@ -53,7 +53,7 @@ export const translations: Translations = {
 		"Battle input log re-requested.": "Log input della lotta richiesti nuovamente.",
 		"Invalid input log.": "Log input non valido.",
 		"Your input log contains untrusted code - you must have console access to use it.": "Il tuo log input contiene un codice non sicuro - devi avere accesso alla console per usarlo.",
-		"This command can only be used in a battle.": "Questo comando può essere usato solo in lotta.",
+		"This command can only be used in a battle.": "Questo comando può essere usato solo durante la lotta.",
 		"Only players can extract their team.": "Solo i giocatori possono estrarre il proprio team.",
 		"Use a number between 1-6 to view a specific set.": "Utilizza un numero fra 1 e 6 per visualizzare un set specifico.",
 		"The Pokemon \"${target}\" is not in your team.": "Il Pokémon \"${target}\" non è nel tuo team.",
