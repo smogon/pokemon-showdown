@@ -81,18 +81,18 @@ export const translations: Translations = {
 		"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver": "- /roomdemod, /roomdedriver <em>username</em>: неназначать комната дривер/модератор",
 		"- /roomdeauth <em>username</em>: remove all room auth from a user": "- /roomdeauth <em>username</em>: Удалять всё комнатно власти человека",
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>message</em>: Делать большое синий декларация комнате",
-		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": 	"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room",
+		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room":	"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [width], [height]</em>: show an image to the room",
 		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: менять room settings",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "",
 
-		"Tournament Help:": "",
-		"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.": "",
-		"- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.": "",
-		"- /tour end: forcibly end the tournament in the current room": "",
-		"- /tour start: start the tournament in the current room": "",
-		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)": "",
+		"Tournament Help:": "Помощь о Турниры",
+		"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.": "- /tour create <em>format</em>, elimination: Создавать новой single elimination турнир в комнате.",
+		"- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.": "- /tour create <em>format</em>, roundrobin: Создавать новой round robin турнир в комнате",
+		"- /tour end: forcibly end the tournament in the current room": "/tour end: forcibly end the tournament in the current room",
+		"- /tour start: start the tournament in the current room": "/tour start: Начать турнир в комнате",
+		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)": "- /tour banlist [pokemon], [talent], [...]: Запретить атакы, способности или Покемоны из турнира (первое должен оно создал)",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "",
 
