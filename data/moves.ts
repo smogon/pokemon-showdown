@@ -625,6 +625,26 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+	antigrav: {
+		num: -55,
+		accuracy: 100,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 20 * pokemon.negativeBoosts();
+		},
+		ignoreNegativeOffensive: true,
+		category: "Special",
+		name: "Antigrav",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Infinite",
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
+		contestType: "Popular",
+	},
 	apocalypticmaelstrom: {
 		num: 0,
 		accuracy: 100,
@@ -2752,6 +2772,26 @@ export const Moves: { [moveid: string]: MoveData } = {
 		target: "any",
 		type: "Flying",
 		contestType: "Cute",
+	},
+	chillingshivers: {
+		num: -50,
+		accuracy: 100,
+		basePower: 25,
+		category: "Special",
+		name: "Chilling Shivers",
+		pp: 30,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		multihit: [2, 5],
+		secondary: {
+			chance: 5,
+			status: "fsb",
+		},
+		target: "normal",
+		type: "Ghost",
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
+		contestType: "Popular",
 	},
 	chipaway: {
 		num: 498,
@@ -10017,6 +10057,22 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+	hoarfrost: {
+		num: -51,
+		accuracy: 85,
+		basePower: 0,
+		category: "Status",
+		name: "Hoarfrost",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		status: "fsb",
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+		zMove: {boost: {atk: 1}},
+		contestType: "Popular",
+	},
 	holdback: {
 		num: 610,
 		accuracy: 100,
@@ -10182,6 +10238,27 @@ export const Moves: { [moveid: string]: MoveData } = {
 		target: "normal",
 		type: "Water",
 		contestType: "Beautiful",
+	},
+	hydrodynamicburst: {
+		num: -52,
+		accuracy: 100,
+		basePower: 50,
+		category: "Special",
+		name: "Hydrodynamic Burst",
+		pp: 20,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Water",
+		contestType: "Popular",
 	},
 	hydropump: {
 		num: 56,
@@ -11938,6 +12015,25 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
+	lichenwave: {
+		num: -53,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Lichen Wave",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 10,
+			self: {
+				boosts: {spd: 1},
+			},
+		},
+		target: "allAdjacent",
+		type: "Grass",
+		contestType: "Popular",
+	},
 	lick: {
 		num: 122,
 		accuracy: 100,
@@ -12082,6 +12178,20 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Infinite",
 		zMove: {effect: "heal"},
 		contestType: "Cute",
+	},
+	liquefaction: {
+		num: -48,
+		accuracy: 90,
+		basePower: 60,
+		category: "Special",
+		name: "Liquefaction",
+		pp: 10,
+		priority: -6,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		forceSwitch: true,
+		target: "normal",
+		type: "Ground",
+		contestType: "Popular",
 	},
 	liquidation: {
 		num: 710,
@@ -15006,6 +15116,25 @@ export const Moves: { [moveid: string]: MoveData } = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
+	oilslick: {
+		num: -47,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Oil Slick",
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1, dance: 1},
+		boosts: {
+			spa: 1,
+			spe: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Poison",
+		zMove: {effect: "clearnegativeboost"},
+		contestType: "Popular",
+	},
 	ominouswind: {
 		num: 466,
 		accuracy: 100,
@@ -15743,6 +15872,24 @@ export const Moves: { [moveid: string]: MoveData } = {
 		target: "any",
 		type: "Flying",
 		contestType: "Cute",
+	},
+	plumage: {
+		num: -46,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Plumage",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1},
+		boosts: {
+			spd: 3,
+		},
+		secondary: null,
+		target: "self",
+		type: "Flying",
+		zMove: {effect: "clearnegativeboost"},
+		contestType: "Popular",
 	},
 	pointypoint: {
 		num: -32,
@@ -16583,6 +16730,25 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+	punchbuggy: {
+		num: -49,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Punch Buggy",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
+		secondary: {
+			chance: 10,
+			boosts: {
+				spe: -1,
+			},
+		},
+		target: "normal",
+		type: "Bug",
+		contestType: "Popular",
+	},
 	punishment: {
 		num: 386,
 		accuracy: 100,
@@ -16728,6 +16894,60 @@ export const Moves: { [moveid: string]: MoveData } = {
 		target: "allAdjacent",
 		type: "Rock",
 		contestType: "Beautiful",
+	},
+	quantumjump: {
+		num: -56,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Quantum Jump",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, nonsky: 1},
+		condition: {
+			onHit() {
+				for (const pokemon of this.getAllActive()) {
+					let stats = [];
+					const boost = {};
+					for (const statPlus in pokemon.boosts) {
+						if (statPlus === "accuracy" || statPlus === "evasion") continue;
+						// @ts-ignore
+						if (pokemon.boosts[statPlus] < 6) {
+							stats.push(statPlus);
+						}
+					}
+					let randomStat = stats.length ? this.sample(stats) : "";
+					// @ts-ignore
+					if (randomStat) boost[randomStat] = 1;
+
+					randomStat = stats.length ? this.sample(stats) : "";
+					// @ts-ignore
+					if (randomStat) boost[randomStat] = 1;
+
+					stats = [];
+					for (const statMinus in pokemon.boosts) {
+						if (statMinus === "accuracy" || statMinus === "evasion") { continue; }
+						// @ts-ignore
+						if (pokemon.boosts[statMinus] > -6 && !(statMinus in boost)) {
+							stats.push(statMinus);
+						}
+					}
+					randomStat = stats.length ? this.sample(stats) : "";
+					// @ts-ignore
+					if (randomStat) boost[randomStat] = -1;
+
+					randomStat = stats.length ? this.sample(stats) : "";
+					// @ts-ignore
+					if (randomStat) boost[randomStat] = -1;
+
+					this.boost(boost);
+				}
+			},
+		},
+		secondary: null,
+		target: "allAdjacent",
+		type: "Infinite",
+		contestType: "Popular",
 	},
 	quash: {
 		num: 511,
@@ -18875,6 +19095,24 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Normal",
 		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
+	},
+	singeingshock: {
+		num: -54,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Singeing Shock",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, defrost: 1},
+		thawsTarget: true,
+		secondary: {
+			chance: 25,
+			status: "brn",
+		},
+		target: "normal",
+		type: "Electric",
+		contestType: "Popular",
 	},
 	sinisterarrowraid: {
 		num: 695,

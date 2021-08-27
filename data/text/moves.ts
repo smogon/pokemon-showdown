@@ -159,6 +159,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
 		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
 	},
+	antigrav: {
+		name: "Antigrav",
+		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are less than 0, ignores negative offensive drops.",
+		shortDesc: " + 20 power for each of the user's stat drops, ignores negative offensive drops.",
+	},
 	apocalypticmaelstrom: {
 		name: "Apocalyptic Maelstrom",
 		desc: "Does damage.  If this move is successful, the weather becomes Maelstrom for 5 turns, 8 if holding Calamity Stone.",
@@ -839,6 +844,17 @@ export const MovesText: {[k: string]: MoveText} = {
 		gen4: {
 			desc: "Has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 1, 11, or 31 depending on the volume of Chatot's recorded cry, if any; 1 for no recording or low volume, 11 for medium volume, and 31 for high volume.",
 			shortDesc: "For Chatot, 31% chance to confuse the target.",
+		},
+	},
+	chillingshivers: {
+		name: "Chilling Shivers",
+		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.  Each hit has a 5% chance to induce Frostbite",
+		shortDesc: "Hits 2-5 times in one turn, each hit has 5% chance of Frostbite.",
+		gen4: {
+			desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
+		},
+		gen3: {
+			desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits.",
 		},
 	},
 	chipaway: {
@@ -2954,6 +2970,11 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		damage: "#crash",
 	},
+	hoarfrost: {
+		name: "Hoarfrost",
+		desc: "Induces Frostbite on the target.",
+		shortDesc: "Induces Frostbite on the target.",
+	},
 	holdback: {
 		name: "Hold Back",
 		desc: "Leaves the target with at least 1 HP.",
@@ -3014,6 +3035,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Hydro Cannon",
 		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
 		shortDesc: "User cannot move next turn.",
+	},
+	hydrodynamicburst: {
+		name: "Hydrodynamic Burst",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		shortDesc: "100% chance to raise the user's Speed by 1.",
 	},
 	hydropump: {
 		name: "Hydro Pump",
@@ -3466,6 +3492,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Let's Snuggle Forever",
 		shortDesc: "No additional effect.",
 	},
+	lichenwave: {
+		name: "Lichen Wave",
+		desc: "Has a 10% chance to raise the users Special Defense stat.",
+		shortDesc: "Has a 10% chance to raise the users Special Defense stat.",
+	},
 	lick: {
 		name: "Lick",
 		desc: "Has a 30% chance to paralyze the target.",
@@ -3516,6 +3547,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Raises the user's Special Attack by 12 stages in exchange for the user losing 1/2 of its maximum HP, rounded down. Fails if the user would faint or if its Special Attack stat stage is 6.",
 		shortDesc: "User loses 50% max HP. Maximizes Special Attack.",
 		name: "Limit Break",
+	},
+	liquefaction: {
+		name: "Liquefaction",
+		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target is under the effect of Ingrain, has the Suction Cups Ability, or this move hit a substitute.",
+		shortDesc: "Forces the target to switch to a random ally.",
 	},
 	liquidation: {
 		name: "Liquidation",
@@ -4337,6 +4373,11 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
 		},
 	},
+	oilslick: {
+		name: "Oil Slick",
+		desc: "Raises the user's Special Attack and Speed by 1 stage.",
+		shortDesc: "Raises the user's Special Attack and Speed by 1.",
+	},
 	ominouswind: {
 		name: "Ominous Wind",
 		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
@@ -4541,6 +4582,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		},
 
 		removeItem: "#bugbite",
+	},
+	plumage: {
+		name: "Plumage",
+		desc: "Raises the user's Special Defense by 3 stages.",
+		shortDesc: "Raises the user's Special Defense by 3.",
 	},
 	pointypoint: {
 		desc: "This move summons either Spikes or Metal Shard on the foe.",
@@ -4784,6 +4830,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Pulverizing Pancake",
 		shortDesc: "No additional effect.",
 	},
+	punchbuggy: {
+		name: "Punch Buggy",
+		desc: "Has a 10% chance to lower the target's Speed.",
+		shortDesc: "Has a 10% chance to lower the target's Speed.",
+	},
 	punishment: {
 		name: "Punishment",
 		desc: "Power is equal to 60+(X*20), where X is the target's total stat stage changes that are greater than 0, but not more than 200 power.",
@@ -4827,6 +4878,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		name: "Pyroclastic Blow",
+	},
+	quantumjump: {
+		name: "Quantum Jump",
+		desc: "For each successful hit on a target, that Pokemon has 2 stats randomly raised and lowered by 1 stage.",
+		shortDesc: "For each successful hit on a target, that Pokemon has 2 stats randomly raised and lowered by 1 stage.",
 	},
 	quash: {
 		name: "Quash",
@@ -5295,8 +5351,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	scald: {
 		name: "Scald",
-		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen.",
-		shortDesc: "30% chance to burn the target. Thaws target.",
+		desc: "Has a 25% chance to burn the target. The target thaws out if it is frozen.",
+		shortDesc: "25% chance to burn the target. Thaws target.",
 		gen5: {
 			desc: "Has a 30% chance to burn the target.",
 			shortDesc: "30% chance to burn the target.",
@@ -5519,6 +5575,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	sing: {
 		name: "Sing",
 		shortDesc: "Causes the target to fall asleep.",
+	},
+	singeingshock: {
+		name: "Singeing Shock",
+		desc: "Has a 25% chance to burn the target. The target thaws out if it is frozen.",
+		shortDesc: "25% chance to burn the target. Thaws target.",
 	},
 	sinisterarrowraid: {
 		name: "Sinister Arrow Raid",
