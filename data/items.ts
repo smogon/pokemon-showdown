@@ -212,7 +212,7 @@ export const Items: { [itemid: string]: ItemData } = {
 		onTakeItem: false,
 		zMove: "Fallacious Pastry",
 		zMoveFrom: "Celebrate",
-		itemUser: ["Alcremie-Black-Forest"],
+		itemUser: ["Alcremie-Black-Forest", "Alcremie"],
 		num: -38,
 		gen: 8,
 	},
