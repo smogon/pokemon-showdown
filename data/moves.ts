@@ -625,6 +625,26 @@ export const Moves: { [moveid: string]: MoveData } = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+	antigrav: {
+		num: -55,
+		accuracy: 100,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 20 * pokemon.negativeBoosts();
+		},
+		ignoreNegativeOffensive: true,
+		category: "Special",
+		name: "Antigrav",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Infinite",
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
+		contestType: "Popular",
+	},
 	apocalypticmaelstrom: {
 		num: 0,
 		accuracy: 100,
@@ -16874,6 +16894,60 @@ export const Moves: { [moveid: string]: MoveData } = {
 		target: "allAdjacent",
 		type: "Rock",
 		contestType: "Beautiful",
+	},
+	quantumjump: {
+		num: -56,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Quantum Jump",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, nonsky: 1},
+		condition: {
+			onHit() {
+				for (const pokemon of this.getAllActive()) {
+					let stats = [];
+					const boost = {};
+					for (const statPlus in pokemon.boosts) {
+						if (statPlus === "accuracy" || statPlus === "evasion") continue;
+						// @ts-ignore
+						if (pokemon.boosts[statPlus] < 6) {
+							stats.push(statPlus);
+						}
+					}
+					let randomStat = stats.length ? this.sample(stats) : "";
+					// @ts-ignore
+					if (randomStat) boost[randomStat] = 1;
+
+					randomStat = stats.length ? this.sample(stats) : "";
+					// @ts-ignore
+					if (randomStat) boost[randomStat] = 1;
+
+					stats = [];
+					for (const statMinus in pokemon.boosts) {
+						if (statMinus === "accuracy" || statMinus === "evasion") { continue; }
+						// @ts-ignore
+						if (pokemon.boosts[statMinus] > -6 && !(statMinus in boost)) {
+							stats.push(statMinus);
+						}
+					}
+					randomStat = stats.length ? this.sample(stats) : "";
+					// @ts-ignore
+					if (randomStat) boost[randomStat] = -1;
+
+					randomStat = stats.length ? this.sample(stats) : "";
+					// @ts-ignore
+					if (randomStat) boost[randomStat] = -1;
+
+					this.boost(boost);
+				}
+			},
+		},
+		secondary: null,
+		target: "allAdjacent",
+		type: "Infinite",
+		contestType: "Popular",
 	},
 	quash: {
 		num: 511,
