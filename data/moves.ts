@@ -20123,9 +20123,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (this.checkMoveMakesContact(move, source, target)) {
 					this.damage(source.baseMaxhp / 8, source, target);
 					if (
-						pokemon.species.name === "Chesnaught-Clemont" &&
-						pokemon.hasAbility("battlebond") &&
-						!pokemon.transformed
+						target.species.name === "Chesnaught-Clemont" &&
+						target.hasAbility("battlebond") &&
+						!target.transformed
 					) {
 						this.heal((target.maxhp * 2) / 3);
 					}
@@ -20139,8 +20139,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				) {
 					this.damage(source.baseMaxhp / 8, source, target);
 					if (
-						pokemon.species.name === "Chesnaught-Clemont" &&
-						pokemon.hasAbility("battlebond") &&
+						target.species.name === "Chesnaught-Clemont" &&
+						target.hasAbility("battlebond") &&
 						!pokemon.transformed
 					) {
 						this.heal((target.maxhp * 2) / 3);
