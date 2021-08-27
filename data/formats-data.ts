@@ -15105,6 +15105,18 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
+	tapukauai: {
+		randomBattleMoves: [
+			"flamethrower",
+			"dazzlinggleam",
+			"naturesmadness",
+			"flareblitz",
+			"uturn",
+			"stickyweb",
+		],
+		tier: "OU",
+		doublesTier: "DOU",
+	},
 	cosmog: {
 		tier: "LC",
 	},
