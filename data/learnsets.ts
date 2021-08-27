@@ -71016,7 +71016,6 @@ export const Learnsets: { [speciesid: string]: LearnsetData } = {
 			aerialace: ["8M"],
 			dig: ["8L53"],
 			megahorn: ["8L1"],
-			calmmind: ["8M"],
 			flamecharge: ["8L26"],
 			confide: ["8M"],
 			dazzlinggleam: ["8M"],
