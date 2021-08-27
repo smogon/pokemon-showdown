@@ -20141,7 +20141,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					if (
 						target.species.name === "Chesnaught-Clemont" &&
 						target.hasAbility("battlebond") &&
-						!pokemon.transformed
+						!target.transformed
 					) {
 						this.heal((target.maxhp * 2) / 3);
 					}
