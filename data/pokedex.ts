@@ -14,7 +14,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Restricted Legendary"],
 		otherFormes: ["Mebiusan-Future"],
 		formeOrder: ["Mebiusan-Past", "Mebiusan-Future"],
-		
 	},
 	mebiusanfuture: {
 		num: 0,
@@ -1469,7 +1468,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Fire Stone",
 		eggGroups: ["Field"],
 		otherFormes: ["Arcanine-Mega"],
-		formeOrder: ["Arcanine", "Arcanine-Mega"]
+		formeOrder: ["Arcanine", "Arcanine-Mega"],
 	},
 	arcaninemega: {
 		num: 59,
@@ -3247,7 +3246,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Dragonair",
 		evoLevel: 55,
 		eggGroups: ["Water 1", "Dragon"],
-		canGigantamax: "G-Max Guardian"
+		canGigantamax: "G-Max Guardian",
 	},
 	dragonitegmax: {
 		num: 149,
@@ -3378,7 +3377,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 32,
 		eggGroups: ["Monster", "Grass"],
 		otherFormes: ["Meganium-Mega"],
-		formeOrder: ["Meganium", "Meganium-Mega"]
+		formeOrder: ["Meganium", "Meganium-Mega"],
 	},
 	meganiummega: {
 		num: 154,
@@ -3917,7 +3916,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Sunflora"],
 		eggGroups: ["Grass"],
 		otherFormes: ["Sunflora-Mega"],
-		formeOrder: ["Sunflora", "Sunflora-Mega"]
+		formeOrder: ["Sunflora", "Sunflora-Mega"],
 	},
 	sunfloramega: {
 		num: 192,
@@ -4192,7 +4191,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Field"],
 		otherFormes: ["Dunsparce-Mega"],
-		formeOrder: ["Dunsparce", "Dunsparce-Mega"]
+		formeOrder: ["Dunsparce", "Dunsparce-Mega"],
 	},
 	dunsparcemega: {
 		num: 206,
@@ -4206,7 +4205,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 75.3,
 		color: "Yellow",
 		eggGroups: ["Field"],
-		requiredItem: "Dunsparcite"
+		requiredItem: "Dunsparcite",
 	},
 	gligar: {
 		num: 207,
@@ -4498,7 +4497,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 25,
 		eggGroups: ["Water 1", "Water 2"],
 		otherFormes: ["Octillery-Mega"],
-		formeOrder: ["Octillery", "Octillery-Mega"]
+		formeOrder: ["Octillery", "Octillery-Mega"],
 	},
 	octillerymega: {
 		num: 224,
@@ -4512,7 +4511,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 38.6,
 		color: "Red",
 		eggGroups: ["Water 1", "Water 2"],
-		requiredItem: "Octillerite"
+		requiredItem: "Octillerite",
 	},
 	delibird: {
 		num: 225,
@@ -4540,7 +4539,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Water 1"],
 		canHatch: true,
 		otherFormes: ["Mantine-Aumagari"],
-		formeOrder: ["Mantine", "Mantine-Aumagari"]
+		formeOrder: ["Mantine", "Mantine-Aumagari"],
 	},
 	mantineaumagari: {
 		num: 226,
@@ -4813,7 +4812,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Raikou-Aumagari"],
-		formeOrder: ["Raikou", "Raikou-Aumagari"]
+		formeOrder: ["Raikou", "Raikou-Aumagari"],
 	},
 	raikouaumagari: {
 		num: 243,
@@ -4842,7 +4841,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Entei-Aumagari"],
-		formeOrder: ["Entei", "Entei-Aumagari"]
+		formeOrder: ["Entei", "Entei-Aumagari"],
 	},
 	enteiaumagari: {
 		num: 244,
@@ -4871,7 +4870,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Suicune-Aumagari"],
-		formeOrder: ["Suicune", "Suicune-Aumagari"]
+		formeOrder: ["Suicune", "Suicune-Aumagari"],
 	},
 	suicuneaumagari: {
 		num: 245,
@@ -4927,7 +4926,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Monster"],
 		otherFormes: ["Tyranitar-Mega", "Tyranitar-Gmax"],
 		formeOrder: ["Tyranitar", "Tyranitar-Mega", "Tyranitar-Gmax"],
-		canGigantamax: "G-Max Landslide"
+		canGigantamax: "G-Max Landslide",
 	},
 	tyranitarmega: {
 		num: 248,
@@ -4957,7 +4956,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Pupitar",
 		evoLevel: 55,
 		eggGroups: ["Monster"],
-		changesFrom: "Tyrantiar"
+		changesFrom: "Tyrantiar",
 	},
 	lugia: {
 		num: 249,
@@ -4998,7 +4997,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Celebi-Aumagari"],
-		formeOrder: ["Celebi", "Celebi-Aumagari"]
+		formeOrder: ["Celebi", "Celebi-Aumagari"],
 	},
 	celebiaumagari: {
 		num: 251,
@@ -5215,7 +5214,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 18,
 		eggGroups: ["Field"],
 		otherFormes: ["Mightyena-Mega"],
-		formeOrder: ["Mightyena", "Mightyena-Mega"]
+		formeOrder: ["Mightyena", "Mightyena-Mega"],
 	},
 	mightyenamega: {
 		num: 262,
@@ -5806,7 +5805,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Moon Stone",
 		eggGroups: ["Field", "Fairy"],
 		otherFormes: ["Delcatty-Mega"],
-		formeOrder: ["Delcatty", "Delcatty-Mega"]
+		formeOrder: ["Delcatty", "Delcatty-Mega"],
 	},
 	delcattymega: {
 		num: 301,
@@ -6592,7 +6591,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Prism Scale",
 		eggGroups: ["Water 1", "Dragon"],
 		otherFormes: ["Milotic-Mega"],
-		formeOrder: ["Milotic", "Milotic-Mega"]
+		formeOrder: ["Milotic", "Milotic-Mega"],
 	},
 	miloticmega: {
 		num: 350,
@@ -7643,7 +7642,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 30,
 		eggGroups: ["Field"],
 		otherFormes: ["Luxray-Mega"],
-		formeOrder: ["Luxray", "Luxray-Mega"]
+		formeOrder: ["Luxray", "Luxray-Mega"],
 	},
 	luxraymega: {
 		num: 404,
@@ -7881,7 +7880,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 26,
 		eggGroups: ["Water 1", "Field"],
 		otherFormes: ["Floatzel-Mega"],
-		formeOrder: ["Floatzel", "Floatzel-Mega"]
+		formeOrder: ["Floatzel", "Floatzel-Mega"],
 	},
 	floatzelmega: {
 		num: 419,
@@ -8245,7 +8244,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Gabite"],
 		eggGroups: ["Monster", "Dragon"],
 		otherFormes: ["Gible-Aumagari"],
-		formeOrder: ["Gible", "Gible-Aumagari"]
+		formeOrder: ["Gible", "Gible-Aumagari"],
 	},
 	gibleaumagari: {
 		num: 443,
@@ -8275,7 +8274,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Garchomp"],
 		eggGroups: ["Monster", "Dragon"],
 		otherFormes: ["Gabite-Aumagari"],
-		formeOrder: ["Gabite", "Gabite-Aumagari"]
+		formeOrder: ["Gabite", "Gabite-Aumagari"],
 	},
 	gabiteaumagari: {
 		num: 444,
@@ -8422,7 +8421,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 34,
 		eggGroups: ["Field"],
 		otherFormes: ["Hippowdon-Aumagari"],
-		formeOrder: ["Hippowdon", "Hippowdon-Aumagari"]
+		formeOrder: ["Hippowdon", "Hippowdon-Aumagari"],
 	},
 	hippowdonaumagari: {
 		num: 450,
@@ -8516,7 +8515,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 50,
 		eggGroups: ["Grass"],
 		otherFormes: ["Carnicreeper-Gmax"],
-		canGigantamax: "G-Max Vegetation"
+		canGigantamax: "G-Max Vegetation",
 	},
 	carnicreepergmax: {
 		num: -13,
@@ -8570,7 +8569,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		canHatch: true,
 		otherFormes: ["Mantyke-Aumagari"],
-		formeOrder: ["Mantyke", "Mantyke-Aumagari"]
+		formeOrder: ["Mantyke", "Mantyke-Aumagari"],
 	},
 	mantykeaumagari: {
 		num: 458,
@@ -8744,7 +8743,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Shiny Stone",
 		eggGroups: ["Flying", "Fairy"],
 		otherFormes: ["Togekiss-Mega"],
-		formeOrder: ["Togekiss", "Togekiss-Mega"]
+		formeOrder: ["Togekiss", "Togekiss-Mega"],
 	},
 	togekissmega: {
 		num: 468,
@@ -8774,7 +8773,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoMove: "Ancient Power",
 		eggGroups: ["Bug"],
 		otherFormes: ["Yanmega-Mega"],
-		formeOrder: ["Yanmega", "Yanmega-Mega"]
+		formeOrder: ["Yanmega", "Yanmega-Mega"],
 	},
 	yanmegamega: {
 		num: 469,
@@ -9208,7 +9207,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
-		canGigantamax: "G-Max Colossal Force"
+		canGigantamax: "G-Max Colossal Force",
 	},
 	regigigasgmax: {
 		num: 486,
@@ -9223,7 +9222,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 420,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		changesFrom: "Regigigas"
+		changesFrom: "Regigigas",
 	},
 	giratina: {
 		num: 487,
@@ -9270,7 +9269,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Cresselia-Mega"],
-		formeOrder: ["Cresselia", "Cresselia-Mega"]
+		formeOrder: ["Cresselia", "Cresselia-Mega"],
 	},
 	cresseliamega: {
 		num: 488,
@@ -9326,7 +9325,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Darkrai-Mega"],
-		formeOrder: ["Darkrai", "Darkrai-Mega"]
+		formeOrder: ["Darkrai", "Darkrai-Mega"],
 	},
 	darkraimega: {
 		num: 491,
@@ -9391,7 +9390,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		formeOrder: [
 			"Arceus", "Arceus-Fighting", "Arceus-Flying", "Arceus-Poison", "Arceus-Ground", "Arceus-Rock", "Arceus-Bug", "Arceus-Ghost", "Arceus-Steel",
 			"Arceus-Fire", "Arceus-Water", "Arceus-Grass", "Arceus-Electric", "Arceus-Psychic", "Arceus-Ice", "Arceus-Dragon", "Arceus-Dark", "Arceus-Fairy",
-			"Arceus-Infinite", "Arceus-Aumagari"
+			"Arceus-Infinite", "Arceus-Aumagari",
 		],
 	},
 	arceusaumagari: {
@@ -9723,7 +9722,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 4,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
-		changesFrom: "Victini"
+		changesFrom: "Victini",
 	},
 	snivy: {
 		num: 495,
@@ -9851,7 +9850,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 36,
 		eggGroups: ["Field"],
 		otherFormes: ["Samurott-Mega"],
-		formeOrder: ["Samurott", "Samurott-Mega"]
+		formeOrder: ["Samurott", "Samurott-Mega"],
 	},
 	samurottmega: {
 		num: 503,
@@ -10207,7 +10206,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Excadrill"],
 		eggGroups: ["Field"],
 		otherFormes: ["Drilbur-Aumagari"],
-		formeOrder: ["Drilbur", "Drilbur-Aumagari"]
+		formeOrder: ["Drilbur", "Drilbur-Aumagari"],
 	},
 	drilburaumagari: {
 		num: 529,
@@ -10236,7 +10235,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 31,
 		eggGroups: ["Field"],
 		otherFormes: ["Excadrill-Aumagari"],
-		formeOrder: ["Excadrill", "Excadrill-Aumagari"]
+		formeOrder: ["Excadrill", "Excadrill-Aumagari"],
 	},
 	excadrillaumagari: {
 		num: 530,
@@ -11193,7 +11192,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Frillish",
 		evoLevel: 40,
 		eggGroups: ["Amorphous"],
-		canGigantamax: "G-Max Ghostly Sting"
+		canGigantamax: "G-Max Ghostly Sting",
 	},
 	jellicentgmax: {
 		num: 593,
@@ -11209,7 +11208,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "frillish",
 		evoLevel: 40,
 		eggGroups: ["Amorphous"],
-		changesFrom: "Jellicent"
+		changesFrom: "Jellicent",
 	},
 	alomomola: {
 		num: 594,
@@ -11314,7 +11313,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 49,
 		eggGroups: ["Mineral"],
 		otherFormes: ["Klinklang-Mega"],
-		formeOrder: ["Klinklang", "Klinklang-Mega"]
+		formeOrder: ["Klinklang", "Klinklang-Mega"],
 	},
 	klinklangmega: {
 		num: 601,
@@ -11499,7 +11498,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 37,
 		eggGroups: ["Field"],
 		otherFormes: ["Beartic-Mega"],
-		formeOrder: ["Beartic", "Beartic-Mega"]
+		formeOrder: ["Beartic", "Beartic-Mega"],
 	},
 	bearticmega: {
 		num: 614,
@@ -11513,7 +11512,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 513,
 		color: "White",
 		eggGroups: ["Field"],
-		requiredItem: "Bearticite"
+		requiredItem: "Bearticite",
 	},
 	cryogonal: {
 		num: 615,
@@ -11654,7 +11653,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Bisharp"],
 		eggGroups: ["Human-Like"],
 		otherFormes: ["Pawniard-Aumagari"],
-		formeOrder: ["Pawniard", "Pawniard-Aumagari"]
+		formeOrder: ["Pawniard", "Pawniard-Aumagari"],
 	},
 	pawniardaumagari: {
 		num: 624,
@@ -11821,7 +11820,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Zweilous",
 		evoLevel: 64,
 		eggGroups: ["Dragon"],
-		canGigantamax: "G-Max Nightfall"
+		canGigantamax: "G-Max Nightfall",
 	},
 	hydreigongmax: {
 		num: 635,
@@ -11837,7 +11836,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "zweilous",
 		evoLevel: 64,
 		eggGroups: ["Dragon"],
-		changesFrom: "Hydreigon"
+		changesFrom: "Hydreigon",
 	},
 	larvesta: {
 		num: 636,
@@ -12265,7 +12264,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 36,
 		eggGroups: ["Field"],
 		otherFormes: ["Chesnaught-Clemont"],
-		formeOrder: ["Chesnaught", "Chesnaught", "Chesnaught-Clemont"]
+		formeOrder: ["Chesnaught", "Chesnaught", "Chesnaught-Clemont"],
 	},
 	chesnaughtclemont: {
 		num: 652,
@@ -12325,7 +12324,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 36,
 		eggGroups: ["Field"],
 		otherFormes: ["Delphox-Serena"],
-		formeOrder: ["Delphox", "Delphox", "Delphox-Serena"]
+		formeOrder: ["Delphox", "Delphox", "Delphox-Serena"],
 	},
 	delphoxserena: {
 		num: 655,
@@ -13358,7 +13357,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 48,
 		eggGroups: ["Flying", "Dragon"],
 		otherFormes: ["Noivern-Mega"],
-		formeOrder: ["Noivern", "Noivern-Mega"]
+		formeOrder: ["Noivern", "Noivern-Mega"],
 	},
 	noivernmega: {
 		num: 715,
@@ -14342,7 +14341,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 30,
 		eggGroups: ["Bug", "Water 3"],
 		otherFormes: ["Golisopod-Mega"],
-		formeOrder: ["Golisopod", "Golisopod-Mega"]
+		formeOrder: ["Golisopod", "Golisopod-Mega"],
 	},
 	golisopodmega: {
 		num: 768,
@@ -14425,7 +14424,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Silvally-Bug", "Silvally-Dark", "Silvally-Dragon", "Silvally-Electric", "Silvally-Fairy", "Silvally-Fighting", "Silvally-Fire", "Silvally-Flying", "Silvally-Ghost", "Silvally-Grass", "Silvally-Ground", "Silvally-Ice", "Silvally-Poison", "Silvally-Psychic", "Silvally-Rock", "Silvally-Steel", "Silvally-Water"],
 		formeOrder: [
 			"Silvally", "Silvally-Fighting", "Silvally-Flying", "Silvally-Poison", "Silvally-Ground", "Silvally-Rock", "Silvally-Bug", "Silvally-Ghost", "Silvally-Steel",
-			"Silvally-Fire", "Silvally-Water", "Silvally-Grass", "Silvally-Electric", "Silvally-Psychic", "Silvally-Ice", "Silvally-Dragon", "Silvally-Dark", "Silvally-Fairy", "Silvally-Infinite", 
+			"Silvally-Fire", "Silvally-Water", "Silvally-Grass", "Silvally-Electric", "Silvally-Psychic", "Silvally-Ice", "Silvally-Dragon", "Silvally-Dark", "Silvally-Fairy", "Silvally-Infinite",
 		],
 	},
 	silvallybug: {
@@ -15101,7 +15100,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Nihilego-Fusion"],
-		formeOrder: ["Nihilego", "Nihilego-Fusion"]
+		formeOrder: ["Nihilego", "Nihilego-Fusion"],
 	},
 	nihilegofusion: {
 		num: 793,
@@ -15196,7 +15195,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Guzzlord-Fusion"],
-		formeOrder: ["Guzzlord", "Guzzlord-Fusion"]
+		formeOrder: ["Guzzlord", "Guzzlord-Fusion"],
 	},
 	guzzlordfusion: {
 		num: 799,
@@ -15211,7 +15210,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 999,
 		color: "Black",
 		eggGroups: ["Undiscovered"],
-		requiredItem: "Fusion Core"
+		requiredItem: "Fusion Core",
 	},
 	necrozma: {
 		num: 800,
@@ -16527,7 +16526,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoCondition: "Land 3 critical hits in 1 battle",
 		eggGroups: ["Flying", "Field"],
 		otherFormes: ["Sirfetch'd-Mega"],
-		formeOrder: ["Sirfetch'd", "Sirfetch'd-Mega"]
+		formeOrder: ["Sirfetch'd", "Sirfetch'd-Mega"],
 	},
 	sirfetchdmega: {
 		num: 865,
@@ -17118,7 +17117,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "other",
 		evoCondition: "Defeat the Tiger Claw Tower",
 		eggGroups: ["Undiscovered"],
-		canGigantamax: "G-Max Tigerstorm Strike"
+		canGigantamax: "G-Max Tigerstorm Strike",
 	},
 	urshifugmax: {
 		num: 892,

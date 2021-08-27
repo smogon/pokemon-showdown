@@ -154,11 +154,16 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 		});
 	}
 	safeJSON(obj: string): any {
+		// special cases? undefined should strictly be fine
+		// so let's just return it since we can't parse it
+		if (obj === "undefined") {
+			return undefined;
+		}
 		try {
 			return JSON.parse(obj);
 		} catch (e) {
 			// this is in the parent, so it should usually exist, but it's possible
-			// it's also futureproofing in case other external modules require this
+			// it's also futureproofing in case other external modfules require this
 			// we also specifically do not throw here because this json might be sensitive,
 			// so we only want it to go to emails
 			global.Monitor?.crashlog?.(e, `a ${path.basename(this.file)} process`, {result: obj});

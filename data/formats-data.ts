@@ -15291,7 +15291,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 			"knockoff",
 		],
 		tier: "OU",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 	},
 	guzzlord: {
 		randomBattleMoves: [
