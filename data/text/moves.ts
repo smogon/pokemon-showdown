@@ -3889,9 +3889,13 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "10% chance to raise the user's Attack by 1.",
 	},
 	metalshard: {
+		name: "Metal Shard",
 		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		shortDesc: "Hurts foes on switch-in. Factors Steel weakness.",
-		name: "Metal Shard",
+
+		start: "  Metallic shards float in the air around [TEAM]!",
+		end: "  The metallic shards disappeared from around [TEAM]!",
+		damage: "  Metallic shards dug into [POKEMON]!",
 	},
 	metalsound: {
 		name: "Metal Sound",
