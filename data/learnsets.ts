@@ -76541,6 +76541,7 @@ export const Learnsets: { [speciesid: string]: LearnsetData } = {
 	},
 	alcremie: {
 		learnset: {
+			celebrate: ["8T"], // only here because bleh
 			mistyexplosion: ["8T"],
 			naturalgift: ["8M"],
 			naturepower: ["8M"],

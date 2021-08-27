@@ -2300,6 +2300,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		rating: -1,
 		num: 103,
 	},
+	lavasurge: {
+		onStart(source) {
+			this.field.setTerrain("lavaterrain");
+		},
+		name: "Lava Surge",
+		rating: 4,
+		num: -12,
+	},
 	leafguard: {
 		onSetStatus(status, target, source, effect) {
 			if (["sunnyday", "desolateland"].includes(target.effectiveWeather())) {
