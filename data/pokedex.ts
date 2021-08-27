@@ -4077,7 +4077,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Psychic"],
 		gender: "N",
 		baseStats: {hp: 48, atk: 72, def: 48, spa: 72, spd: 48, spe: 48},
-		abilities: {0: "Levitate"},
+		abilities: {0: "Levitate", S: "Unown's Spell"},
 		heightm: 0.5,
 		weightkg: 5,
 		color: "Black",
