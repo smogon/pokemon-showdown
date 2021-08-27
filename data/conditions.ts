@@ -426,7 +426,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return null;
 		},
 		onAfterMove(pokemon, target) {
-			if (!target || target.fainted || target.hp <= 0) {
+			if ((!target || target.fainted || target.hp <= 0) && target.lastMoveUsed!.name !== 'E-Max Eternal Energy') {
 				pokemon.removeVolatile('mustrecharge');
 			} else {
 				this.add('-mustrecharge', pokemon);
@@ -822,6 +822,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name + '-Gmax');
+			if (pokemon.gigantamax && pokemon.species.name === "Eternatus") {
+				this.add('-formechange', pokemon, pokemon.species.name + '-Eternamax');
+			}
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 1.5 is max (at LVL 5)
