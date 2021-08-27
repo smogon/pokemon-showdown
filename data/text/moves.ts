@@ -159,6 +159,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
 		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
 	},
+	antigrav: {
+		name: "Antigrav",
+		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are less than 0, ignores negative offensive drops.",
+		shortDesc: " + 20 power for each of the user's stat drops, ignores negative offensive drops.",
+	},
 	apocalypticmaelstrom: {
 		name: "Apocalyptic Maelstrom",
 		desc: "Does damage.  If this move is successful, the weather becomes Maelstrom for 5 turns, 8 if holding Calamity Stone.",
@@ -4873,6 +4878,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		name: "Pyroclastic Blow",
+	},
+	quantumjump: {
+		name: "Quantum Jump",
+		desc: "For each successful hit on a target, that Pokemon has 2 stats randomly raised and lowered by 1 stage.",
+		shortDesc: "For each successful hit on a target, that Pokemon has 2 stats randomly raised and lowered by 1 stage.",
 	},
 	quash: {
 		name: "Quash",
