@@ -281,6 +281,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', '-All Pokemon', '+Mythical', '+Restricted Legendary', '+Sub-Legendary'],
+		banlist: ['Eternatus-Eternamax'],
 	},
 	{
 		name: "[Gen 8] Custom Game",
