@@ -1582,9 +1582,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				move &&
 				move.type === "Flying" &&
 				pokemon.hp > pokemon.baseMaxhp / 2
-			) {
-				return priority + 1;
-			}
+			) { return priority + 1; }
 		},
 		name: "Gale Wings",
 		rating: 3,
@@ -4337,7 +4335,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				pokemon.transformed ||
 				!pokemon.hp
 			) { return; }
-
 			if (pokemon.hp > pokemon.maxhp / 2) {
 				if (pokemon.species.forme !== "Meteor") {
 					pokemon.formeChange("Minior-Meteor");
@@ -4718,7 +4715,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (
 				move.type !== "Water" ||
 				["firepledge", "grasspledge", "waterpledge"].includes(move.id)
-
 			) { return; }
 			const redirectTarget = ["randomNormal", "adjacentFoe"].includes(
 				move.target
@@ -5389,7 +5385,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				pokemon.species.id === "unownalphabet" ||
 				pokemon.hp > pokemon.baseMaxhp / 2
 			) { return; }
-
 			this.add("-activate", pokemon, "ability: Unown's Spell");
 			pokemon.formeChange("Unown-Alphabet", this.effect, true);
 			this.heal(pokemon.baseMaxhp);

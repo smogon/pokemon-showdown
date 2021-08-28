@@ -1575,10 +1575,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			);
 			move.multihit = move.allies.length;
 		},
+		isZ: "slakingiumz",
 		secondary: null,
 		target: "normal",
-		type: "Dark",
-		contestType: "Clever",
+		type: "Normal",
+		contestType: "Cool",
 	},
 	behemothbash: {
 		num: 782,
