@@ -335,39 +335,11 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
-				if (move.useBaseOffensiveStatAndBoosts.includes("atk")) {
-					atkType = 'atk';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("def")) {
-					atkType = 'def';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("spa")) {
-					atkType = 'spa';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("spd")) {
-					atkType = 'spd';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("spe")) {
-					atkType = 'spe';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("hp")) {
-					atkType = 'hp';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("currenthp")) {
-					atkType = 'currenthp';
-				}
+				atkType = move.useBaseOffensiveStatAndBoosts.substr(7) as AllStatIDs;
 			}
 			let defType: AllStatIDs = move.category === 'Physical' ? 'def' : 'spd';
 			if (move.useBaseDefensiveStatAndBoosts) {
-				if (move.useBaseDefensiveStatAndBoosts.includes("atk")) {
-					defType = 'atk';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("def")) {
-					defType = 'def';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("spa")) {
-					defType = 'spa';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("spd")) {
-					defType = 'spd';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("spe")) {
-					defType = 'spe';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("hp")) {
-					defType = 'hp';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("currenthp")) {
-					defType = 'currenthp';
-				}
+				defType = move.useBaseDefensiveStatAndBoosts.substr(7) as AllStatIDs;
 			}
 			let unboosted = false;
 			let noburndrop = false;

@@ -662,39 +662,11 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let attackStat: AllStatIDs = category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
-				if (move.useBaseOffensiveStatAndBoosts.includes("atk")) {
-					attackStat = 'atk';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("def")) {
-					attackStat = 'def';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("spa")) {
-					attackStat = 'spa';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("spd")) {
-					attackStat = 'spd';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("spe")) {
-					attackStat = 'spe';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("hp")) {
-					attackStat = 'hp';
-				} else if (move.useBaseOffensiveStatAndBoosts.includes("currenthp")) {
-					attackStat = 'currenthp';
-				}
+				attackStat = move.useBaseOffensiveStatAndBoosts.substr(7) as AllStatIDs;
 			}
 			let defenseStat: AllStatIDs = category === 'Physical' ? 'def' : 'spd';
 			if (move.useBaseDefensiveStatAndBoosts) {
-				if (move.useBaseDefensiveStatAndBoosts.includes("atk")) {
-					defenseStat = 'atk';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("def")) {
-					defenseStat = 'def';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("spa")) {
-					defenseStat = 'spa';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("spd")) {
-					defenseStat = 'spd';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("spe")) {
-					defenseStat = 'spe';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("hp")) {
-					defenseStat = 'hp';
-				} else if (move.useBaseDefensiveStatAndBoosts.includes("currenthp")) {
-					defenseStat = 'currenthp';
-				}
+				defenseStat = move.useBaseDefensiveStatAndBoosts.substr(7) as AllStatIDs;
 			}
 
 			const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
