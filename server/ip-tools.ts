@@ -624,7 +624,7 @@ export const IPTools = new class {
 					this.torProxyIps.add(ip);
 				}
 			}
-		} catch (e) {}
+		} catch {}
 	}
 };
 

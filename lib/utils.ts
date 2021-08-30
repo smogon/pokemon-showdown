@@ -117,7 +117,7 @@ export function visualize(value: any, depth = 0): string {
 					stringValue !== `[object ${constructor}]`) {
 				return `${constructor}(${stringValue})`;
 			}
-		} catch (e) {}
+		} catch {}
 	}
 	let buf = '';
 	for (const key in value) {

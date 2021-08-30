@@ -75,7 +75,7 @@ export const Sockets = new class {
 				const cloudenv = (require as any)('cloud-env');
 				bindAddress = cloudenv.get('IP', bindAddress);
 				port = cloudenv.get('PORT', port);
-			} catch (e) {}
+			} catch {}
 		}
 		if (bindAddress !== undefined) {
 			Config.bindaddress = bindAddress;
@@ -454,7 +454,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		for (const socket of this.sockets.values()) {
 			try {
 				socket.destroy();
-			} catch (e) {}
+			} catch {}
 		}
 		this.sockets.clear();
 		this.rooms.clear();
@@ -477,7 +477,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			// address from connection request headers.
 			try {
 				socket.destroy();
-			} catch (e) {}
+			} catch {}
 			return;
 		}
 

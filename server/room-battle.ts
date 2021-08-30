@@ -1379,7 +1379,7 @@ if (!PM.isParentProcess) {
 		global.__version.head = ('' + head).trim();
 		const origin = ('' + merge).trim();
 		if (origin !== global.__version.head) global.__version.origin = origin;
-	} catch (e) {}
+	} catch {}
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting
