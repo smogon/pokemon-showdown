@@ -50,7 +50,7 @@ export async function renderSpotlight(roomid: RoomID, key: string, index: number
 				const [width, height] = await Chat.fitImage(image, 150, 300);
 				imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
 				spotlights[roomid][key][index].image = [image, width, height];
-			} catch (err: any) {}
+			} catch (e) {}
 		}
 	}
 

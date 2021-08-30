@@ -212,7 +212,7 @@ export const LogReader = new class {
 				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
 				firstDay = days[0];
 				break;
-			} catch (err: any) {}
+			} catch (e) {}
 			months.shift();
 		}
 		if (!firstDay) return null;
@@ -225,7 +225,7 @@ export const LogReader = new class {
 				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
 				lastDay = days[days.length - 1];
 				break;
-			} catch (err: any) {}
+			} catch (e) {}
 			months.pop();
 		}
 		if (!lastDay) throw new Error(`getBattleLog month range search for ${tier}`);

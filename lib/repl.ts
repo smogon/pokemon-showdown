@@ -31,7 +31,7 @@ export const Repl = new class {
 			for (const s of Repl.socketPathnames) {
 				try {
 					fs.unlinkSync(s);
-				} catch (e: any) {}
+				} catch (e) {}
 			}
 			if (code === 129 || code === 130) {
 				process.exitCode = 0;

@@ -793,7 +793,7 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 				url: `https://${Config.routes.replays}/${battle}`,
 			};
 		}
-	} catch (e: any) {}
+	} catch (e) {}
 	return null;
 }
 

@@ -549,7 +549,7 @@ export const Teams = new class Teams {
 					}
 				}
 				return team;
-			} catch (e: any) {}
+			} catch (e) {}
 		}
 
 		const lines = buffer.split("\n");

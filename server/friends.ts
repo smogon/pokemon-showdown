@@ -99,7 +99,7 @@ export class FriendsDatabase {
 			let val;
 			try {
 				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
-			} catch (e: any) {}
+			} catch (e) {}
 			const actualVersion = FS(`databases/migrations/friends`).readdirIfExistsSync().length;
 			if (val === undefined) {
 				// hasn't been set up before, write new version.

@@ -595,7 +595,7 @@ export class DexFormats {
 				try {
 					name = this.validate(name);
 					isTrusted = true;
-				} catch (e: any) {}
+				} catch (e) {}
 			}
 			const [newName, customRulesString] = name.split('@@@', 2);
 			name = newName.trim();

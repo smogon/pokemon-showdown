@@ -704,7 +704,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		// move legacy JSON file
 		try {
 			await FS(this.legacyJSONPath).rename(this.legacyJSONPath + '.converted');
-		} catch (e: any) {}
+		} catch (e) {}
 	}
 
 	private rowToQuestion(row: AnyObject): Promise<TriviaQuestion> {
