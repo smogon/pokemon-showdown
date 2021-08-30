@@ -37,7 +37,7 @@ try {
 	if (save) {
 		FS(HANGMAN_FILE).writeUpdate(() => JSON.stringify(hangmanData));
 	}
-} catch (e) {}
+} catch (e: any) {}
 
 const maxMistakes = 6;
 

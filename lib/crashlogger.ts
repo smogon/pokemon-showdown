@@ -51,7 +51,7 @@ export function crashlogger(
 		if (!transport) {
 			try {
 				require.resolve('nodemailer');
-			} catch (e) {
+			} catch (e: any) {
 				throw new Error(
 					'nodemailer is not installed, but it is required if Config.crashguardemail is configured! ' +
 					'Run npm install --no-save nodemailer and restart the server.'
@@ -65,7 +65,7 @@ export function crashlogger(
 		} else {
 			try {
 				transport = require('nodemailer').createTransport(Config.crashguardemail.options);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Error("Failed to start nodemailer; are you sure you've configured Config.crashguardemail correctly?");
 			}
 

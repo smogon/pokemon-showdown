@@ -256,7 +256,7 @@ export const commands: Chat.ChatCommands = {
 			let result;
 			try {
 				result = IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
-			} catch (e) {
+			} catch (e: any) {
 				return this.errorReply(e.message);
 			}
 			if (typeof result === 'number') {

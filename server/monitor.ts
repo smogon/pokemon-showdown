@@ -83,7 +83,7 @@ export const Monitor = new class {
 				const nlIndex = stack.indexOf('\n');
 				[error.name, error.message, source, details] = JSON.parse(stack.slice(4, nlIndex));
 				error.stack = stack.slice(nlIndex + 1);
-			} catch (e) {}
+			} catch (e: any) {}
 		}
 		const crashType = crashlogger(error, source, details);
 		Rooms.global.reportCrash(error, source);
@@ -349,7 +349,7 @@ export const Monitor = new class {
 
 			await this.sh(`git reset`, options);
 			await index.unlinkIfExists();
-		} catch (err) {}
+		} catch (err: any) {}
 		return hash;
 	}
 };

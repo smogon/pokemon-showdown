@@ -48,7 +48,7 @@ export const PM = new QueryProcessManager<{
 	let problems;
 	try {
 		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, options);
-	} catch (err) {
+	} catch (err: any) {
 		Monitor.crashlog(err, 'A team validation', {
 			formatid,
 			team,

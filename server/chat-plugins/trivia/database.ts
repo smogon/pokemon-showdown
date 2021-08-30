@@ -621,7 +621,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		try {
 			triviaData = JSON.parse(FS(this.legacyJSONPath).readIfExistsSync() || "{}");
 			if (!triviaData) throw new Error(`no JSON`);
-		} catch (e) {
+		} catch (e: any) {
 			return;
 		}
 
@@ -704,7 +704,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		// move legacy JSON file
 		try {
 			await FS(this.legacyJSONPath).rename(this.legacyJSONPath + '.converted');
-		} catch (e) {}
+		} catch (e: any) {}
 	}
 
 	private rowToQuestion(row: AnyObject): Promise<TriviaQuestion> {

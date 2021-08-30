@@ -161,7 +161,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 		}
 		try {
 			return JSON.parse(obj);
-		} catch (e) {
+		} catch (e: any) {
 			// this is in the parent, so it should usually exist, but it's possible
 			// it's also futureproofing in case other external modfules require this
 			// we also specifically do not throw here because this json might be sensitive,
@@ -638,7 +638,7 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 				let value;
 				({value, done} = await stream.next());
 				process.send!(`${taskId}\nPUSH\n${value}`);
-			} catch (err) {
+			} catch (err: any) {
 				process.send!(`${taskId}\nTHROW\n${err.stack}`);
 			}
 		}
@@ -765,7 +765,7 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 				let value;
 				({value, done} = await stream.next());
 				process.send!(value);
-			} catch (err) {
+			} catch (err: any) {
 				process.send!(`THROW\n${err.stack}`);
 			}
 		}

@@ -96,7 +96,7 @@ export class ExhaustiveRunner {
 				}).run();
 
 				if (this.log) this.logProgress(pools);
-			} catch (err) {
+			} catch (err: any) {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +

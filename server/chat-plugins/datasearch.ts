@@ -2551,7 +2551,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		default:
 			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}
-	} catch (err) {
+	} catch (err: any) {
 		Monitor.crashlog(err, 'A search query', query);
 	}
 	return {

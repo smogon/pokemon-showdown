@@ -112,7 +112,7 @@ async function importGen(gen: GenerationNum, index: string) {
 				data[format.id]['stats'] = sets;
 			}
 			data[format.id] = data[format.id] || {};
-		} catch (err) {
+		} catch (err: any) {
 			error(`${stats.url} = ${err}`);
 		}
 	}
@@ -399,7 +399,7 @@ const SMOGON = {
 const getAnalysis = retrying(async (u: string) => {
 	try {
 		return smogon.Analyses.process(await request(u));
-	} catch (err) {
+	} catch (err: any) {
 		// Don't try HTTP errors that we've already retried
 		if (err.message.startsWith('HTTP')) {
 			return Promise.reject(err);
@@ -426,7 +426,7 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 		}
 
 		return analysesByFormat;
-	} catch (err) {
+	} catch (err: any) {
 		error(`Unable to process analysis for ${pokemon} in generation ${gen}`);
 		return undefined;
 	}
@@ -569,7 +569,7 @@ function retrying<I, O>(fn: (args: I) => Promise<O>, retries: number, wait: numb
 	const retry = async (args: I, attempt = 0): Promise<O> => {
 		try {
 			return await fn(args);
-		} catch (err) {
+		} catch (err: any) {
 			if (err instanceof RetryableError) {
 				attempt++;
 				if (attempt > retries) return Promise.reject(err);

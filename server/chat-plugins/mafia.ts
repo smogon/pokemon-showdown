@@ -114,7 +114,7 @@ function readFile(path: string) {
 			return false;
 		}
 		return Object.assign(Object.create(null), JSON.parse(json));
-	} catch (e) {
+	} catch (e: any) {
 		if (e.code !== 'ENOENT') throw e;
 	}
 }
