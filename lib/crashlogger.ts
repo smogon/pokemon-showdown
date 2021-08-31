@@ -24,7 +24,7 @@ let transport: any;
  * to receive them.
  */
 export function crashlogger(
-	error: Error | string | unknown, description: string, data: AnyObject | null = null
+	error: unknown, description: string, data: AnyObject | null = null
 ): string | null {
 	const datenow = Date.now();
 
@@ -65,7 +65,7 @@ export function crashlogger(
 		} else {
 			try {
 				transport = require('nodemailer').createTransport(Config.crashguardemail.options);
-			} catch (e: any) {
+			} catch {
 				throw new Error("Failed to start nodemailer; are you sure you've configured Config.crashguardemail correctly?");
 			}
 

@@ -179,7 +179,7 @@ export const commands: Chat.ChatCommands = {
 			img = img.trim();
 			try {
 				[width, height] = await Chat.fitImage(img);
-			} catch (e: any) {
+			} catch {
 				return this.errorReply(`Invalid image url: ${img}`);
 			}
 		}

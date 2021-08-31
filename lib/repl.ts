@@ -129,7 +129,7 @@ export const Repl = new class {
 			server.once('close', () => {
 				Repl.socketPathnames.delete(pathname);
 			});
-		} catch (err: any) {
+		} catch (err) {
 			console.error(`Could not start REPL server "${filename}": ${err}`);
 		}
 	}

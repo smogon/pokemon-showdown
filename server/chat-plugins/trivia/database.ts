@@ -621,7 +621,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		try {
 			triviaData = JSON.parse(FS(this.legacyJSONPath).readIfExistsSync() || "{}");
 			if (!triviaData) throw new Error(`no JSON`);
-		} catch (e: any) {
+		} catch {
 			return;
 		}
 

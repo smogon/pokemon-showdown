@@ -144,10 +144,6 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 			if (!resolve) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 			this.pendingTasks.delete(taskId);
 			const resp = this.safeJSON(message.slice(nlLoc + 1));
-			if (resp instanceof Error) {
-				// we'd fail here anyway if it crashed, so at least this way we can log it
-				return false;
-			}
 			resolve(resp);
 
 			if (this.resolveRelease && !this.getLoad()) this.destroy();
@@ -167,7 +163,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 			// we also specifically do not throw here because this json might be sensitive,
 			// so we only want it to go to emails
 			global.Monitor?.crashlog?.(e, `a ${path.basename(this.file)} process`, {result: obj});
-			return new Error(e);
+			return undefined;
 		}
 	}
 

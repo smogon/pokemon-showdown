@@ -1812,7 +1812,7 @@ export const Chat = new class {
 			} else {
 				try {
 					this.loadPlugin(path);
-				} catch (e: any) {
+				} catch (e) {
 					Monitor.crashlog(e, "A loading chat plugin");
 					continue;
 				}

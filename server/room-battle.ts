@@ -1320,7 +1320,7 @@ export class RoomBattleStream extends BattleStream {
 		}
 		try {
 			this._writeLines(chunk);
-		} catch (err: any) {
+		} catch (err) {
 			const battle = this.battle;
 			Monitor.crashlog(err, 'A battle', {
 				chunk,

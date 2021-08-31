@@ -47,7 +47,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		let output;
 		try {
 			output = await ProcessManager.exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
-		} catch (error: any) {
+		} catch {
 			return results;
 		}
 		for (const line of output.stdout.split('\n').reverse()) {
@@ -367,7 +367,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
 		}
 		return result;
-	} catch (err: any) {
+	} catch (err) {
 		Monitor.crashlog(err, 'A battle search query', {
 			userids,
 			turnLimit,

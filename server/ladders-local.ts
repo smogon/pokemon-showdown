@@ -73,7 +73,7 @@ export class LadderStore {
 			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.ladder));
 			ladderCaches.set(this.formatid, (this.ladder = ladder));
 			return this.ladder;
-		} catch (err: any) {
+		} catch {
 			// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.ladder));
 		}
 		ladderCaches.set(this.formatid, (this.ladder = []));

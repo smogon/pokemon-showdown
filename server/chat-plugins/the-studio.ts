@@ -82,7 +82,7 @@ export class LastFMInterface {
 					limit: 1, api_key: Config.lastfmkey, format: 'json',
 				},
 			});
-		} catch (e: any) {
+		} catch {
 			throw new Chat.ErrorMessage(`No scrobble data found.`);
 		}
 		const res = JSON.parse(raw);
@@ -158,7 +158,7 @@ export class LastFMInterface {
 		let raw;
 		try {
 			raw = await Net(API_ROOT).get({query});
-		} catch (e: any) {
+		} catch {
 			throw new Chat.ErrorMessage(`No track data found.`);
 		}
 		const req = JSON.parse(raw);

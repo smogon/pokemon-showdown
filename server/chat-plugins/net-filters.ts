@@ -34,7 +34,7 @@ interface TrainingLine {
 function modelExists() {
 	try {
 		require.resolve('brain.js');
-	} catch (e: any) {
+	} catch {
 		return false;
 	}
 	return true;
@@ -49,7 +49,7 @@ export class NeuralNetChecker {
 	constructor(path?: string) {
 		try {
 			this.model = new (require('brain.js').recurrent.LSTM)();
-		} catch (e: any) {
+		} catch {
 			this.model = null;
 		}
 		if (path) this.load(path);
@@ -63,7 +63,7 @@ export class NeuralNetChecker {
 		for (const line of data) {
 			try {
 				this.model.train([line], {iterations});
-			} catch (e: any) {
+			} catch (e) {
 				Monitor.crashlog(e, "a netfilter training process", {
 					line: JSON.stringify(line),
 				});

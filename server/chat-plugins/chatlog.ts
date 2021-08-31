@@ -66,7 +66,7 @@ export class LogReaderRoom {
 		try {
 			const listing = await FS(`logs/chat/${this.roomid}`).readdir();
 			return listing.filter(file => /^[0-9][0-9][0-9][0-9]-[0-9][0-9]$/.test(file));
-		} catch (err: any) {
+		} catch {
 			return [];
 		}
 	}
@@ -75,7 +75,7 @@ export class LogReaderRoom {
 		try {
 			const listing = await FS(`logs/chat/${this.roomid}/${month}`).readdir();
 			return listing.filter(file => file.endsWith(".txt")).map(file => file.slice(0, -4));
-		} catch (err: any) {
+		} catch {
 			return [];
 		}
 	}
@@ -242,7 +242,7 @@ export const LogReader = new class {
 				Utils.sortBy(battles, getBattleNum);
 
 				return [getBattleNum(battles[0]), getBattleNum(battles[battles.length - 1])];
-			} catch (err: any) {
+			} catch {
 				return null;
 			}
 		};

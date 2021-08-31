@@ -168,7 +168,7 @@ function getMastermindGame(room: Room | null) {
 function getTriviaOrMastermindGame(room: Room | null) {
 	try {
 		return getMastermindGame(room);
-	} catch (e: any) {
+	} catch {
 		return getTriviaGame(room);
 	}
 }
@@ -1627,7 +1627,7 @@ const triviaCommands: Chat.ChatCommands = {
 			const mastermindRound = getMastermindGame(room).currentRound;
 			if (!mastermindRound) throw new Error;
 			game = mastermindRound;
-		} catch (e: any) {
+		} catch {
 			game = getTriviaGame(room);
 		}
 

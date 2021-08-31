@@ -114,7 +114,7 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 		}
 
 		return true;
-	} catch (e: any) {
+	} catch {
 		// failed while rebasing or popping the stash
 		await exec(`git reset --hard ${oldHash}`);
 		if (stashedChanges) await exec(`git stash pop`);

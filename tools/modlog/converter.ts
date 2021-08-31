@@ -9,7 +9,7 @@ if (!global.Config) {
 	let hasSQLite = true;
 	try {
 		require.resolve('better-sqlite3');
-	} catch (e: any) {
+	} catch {
 		console.warn(`Warning: the modlog conversion script is running without a SQLite library.`);
 		hasSQLite = false;
 	}

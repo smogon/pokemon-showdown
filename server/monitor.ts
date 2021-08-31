@@ -75,8 +75,8 @@ export const Monitor = new class {
 	/*********************************************************
 	 * Logging
 	 *********************************************************/
-	crashlog(error: Error, source = 'The main process', details: AnyObject | null = null) {
-		if (!error) error = {} as any;
+	crashlog(err: any, source = 'The main process', details: AnyObject | null = null) {
+		const error = (err || {}) as Error;
 		if ((error.stack || '').startsWith('@!!@')) {
 			try {
 				const stack = (error.stack || '');

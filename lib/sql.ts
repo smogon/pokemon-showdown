@@ -51,7 +51,7 @@ type ErrorHandler = (error: Error, data: DatabaseQuery) => void;
 function getModule() {
 	try {
 		return require('better-sqlite3') as typeof sqlite.default;
-	} catch (e: any) {
+	} catch {
 		return null;
 	}
 }

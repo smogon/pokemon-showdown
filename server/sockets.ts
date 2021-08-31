@@ -299,7 +299,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 						`Socket process ${process.pid}`
 					);
 				}
-			} catch (e: any) {
+			} catch {
 				console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
 				key = config.ssl.options.key;
 			}
@@ -396,7 +396,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			try {
 				const deflate = (require as any)('permessage-deflate').configure(config.wsdeflate);
 				options.faye_server_options = {extensions: [deflate]};
-			} catch (e: any) {
+			} catch {
 				crashlogger(
 					new Error("Dependency permessage-deflate is not installed or is otherwise unaccessable. No message compression will take place until server restart."),
 					"Sockets"

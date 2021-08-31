@@ -766,7 +766,7 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 			const body = await replayUrl.get();
 			const data = JSON.parse(body);
 			return data.p1id === submitter ? data.p1id : data.p2id;
-		} catch (e: any) {
+		} catch {
 			return null;
 		}
 	}
