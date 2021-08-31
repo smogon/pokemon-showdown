@@ -1538,7 +1538,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Beat Drop",
 		pp: 5,
 		priority: 1,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
 			const move = action?.choice === "move" ? action.move : null;
@@ -1568,7 +1568,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Beastly Awakening Punch",
 		pp: 1,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, mystery: 1},
+		flags: {protect: 1, mirror: 1, allyanim: 1},
 		onModifyMove(move, pokemon) {
 			move.allies = pokemon.side.pokemon.filter(
 				(ally) => ally === pokemon || (!ally.fainted && !ally.status)
@@ -5648,7 +5648,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Fallacious Pastry",
 		pp: 1,
 		priority: 0,
-		flags: {snatch: 1, distance: 1, authentic: 1},
+		flags: {snatch: 1, distance: 1, bypasssub: 1},
 		onHit(pokemon, source) {
 			this.add("-activate", source, "move: Fallacious Pastry");
 			this.add("-anim", source, "HealBell", source);
@@ -15300,7 +15300,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Past's Assurance",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
 		onHitField() {
 			this.field.removePseudoWeather("magicroom");
 			this.field.removePseudoWeather("wonderroom");
@@ -15448,7 +15448,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Perfect-Tempo Symphony",
 		pp: 1,
 		priority: 0,
-		flags: {sound: 1, authentic: 1},
+		flags: {sound: 1, bypasssub: 1},
 		self: {
 			onHit(pokemon) {
 				let stats = [];
@@ -17228,7 +17228,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Reconstruction",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1, authentic: 1},
+		flags: {snatch: 1, heal: 1, bypasssub: 1},
 		onHit(pokemon) {
 			const totalBoosts =
 				pokemon.positiveBoosts() + pokemon.negativeBoosts();
