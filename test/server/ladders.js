@@ -129,7 +129,7 @@ describe('Matchmaker', function () {
 					p2: {user: this.p1, team: this.s2.team},
 					rated: 1000,
 				});
-			} catch (e) {}
+			} catch {}
 			assert.equal(room, undefined);
 		});
 

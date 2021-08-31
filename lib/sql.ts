@@ -51,7 +51,7 @@ type ErrorHandler = (error: Error, data: DatabaseQuery) => void;
 function getModule() {
 	try {
 		return require('better-sqlite3') as typeof sqlite.default;
-	} catch (e) {
+	} catch {
 		return null;
 	}
 }
@@ -143,7 +143,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 					this.state.statements.set(query.data, this.database.prepare(query.data));
 					return query.data;
 				}
-			} catch (error) {
+			} catch (error: any) {
 				return this.onError(error, query);
 			}
 		});

@@ -113,7 +113,7 @@ function sucrase(src, out, opts, excludeDirs = []) {
 		if (!force && !needsSucrase(src, out) && src !== "./config") {
 			return false;
 		}
-	} catch (e) {}
+	} catch {}
 	const sucraseOptions = {
 		transforms: ["typescript", "imports"],
 		enableLegacyTypeScriptModuleInterop: true,
@@ -255,7 +255,7 @@ exports.transpile = (doForce, decl) => {
 exports.buildDecls = () => {
 	try {
 		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, {stdio: 'inherit'});
-	} catch (e) {}
+	} catch {}
 	for (const file of fs.readdirSync(`./.sim-dist/lib/`)) {
 		fs.renameSync(`./.sim-dist/lib/${file}`, `./.lib-dist/${file}`);
 	}

@@ -23,7 +23,7 @@ function parseJSON(json: string) {
 	const data: {error: string | null, json: any[] | null} = {error: null, json: null};
 	try {
 		data.json = JSON.parse(json);
-	} catch (err) {
+	} catch (err: any) {
 		data.error = err.message;
 	}
 	return data;
@@ -76,7 +76,7 @@ class LoginServerInstance {
 			}
 			this.openRequests--;
 			return [json.json!, null];
-		} catch (error) {
+		} catch (error: any) {
 			this.openRequests--;
 			return [null, error];
 		}
@@ -154,7 +154,7 @@ class LoginServerInstance {
 			}
 
 			this.requestEnd();
-		} catch (error) {
+		} catch (error: any) {
 			for (const resolve of resolvers) {
 				resolve([null, error]);
 			}

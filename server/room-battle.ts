@@ -753,7 +753,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 				if (!this.room) return; // room deleted in the middle of simulation
 				this.receive(next.split('\n'));
 			}
-		} catch (err) {
+		} catch (err: any) {
 			// Disconnected processes are already crashlogged when they happen;
 			// also logging every battle room would overwhelm the crashlogger
 			if (err.message.includes('Process disconnected')) {
@@ -1379,7 +1379,7 @@ if (!PM.isParentProcess) {
 		global.__version.head = ('' + head).trim();
 		const origin = ('' + merge).trim();
 		if (origin !== global.__version.head) global.__version.origin = origin;
-	} catch (e) {}
+	} catch {}
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting

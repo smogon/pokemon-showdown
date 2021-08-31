@@ -100,7 +100,7 @@ try {
 			tickets[t] = ticket;
 		}
 	}
-} catch (e) {
+} catch (e: any) {
 	if (e.code !== 'ENOENT') throw e;
 }
 
@@ -124,7 +124,7 @@ function writeStats(line: string) {
 	const month = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
 	try {
 		FS(`logs/tickets/${month}.tsv`).appendSync(line + '\n');
-	} catch (e) {
+	} catch (e: any) {
 		if (e.code !== 'ENOENT') throw e;
 	}
 }
@@ -453,7 +453,7 @@ export class HelpTicket extends Rooms.RoomGame {
 				lines = await ProcessManager.exec([
 					`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
 				]);
-			} catch (e) {
+			} catch (e: any) {
 				if (e.message.includes('No such file or directory')) {
 					throw new Chat.ErrorMessage(`No ticket logs for that month.`);
 				}
@@ -766,7 +766,7 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 			const body = await replayUrl.get();
 			const data = JSON.parse(body);
 			return data.p1id === submitter ? data.p1id : data.p2id;
-		} catch (e) {
+		} catch {
 			return null;
 		}
 	}
@@ -793,7 +793,7 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 				url: `https://${Config.routes.replays}/${battle}`,
 			};
 		}
-	} catch (e) {}
+	} catch {}
 	return null;
 }
 

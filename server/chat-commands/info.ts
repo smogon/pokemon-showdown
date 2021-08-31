@@ -2475,7 +2475,7 @@ export const commands: Chat.ChatCommands = {
 		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
 			try {
 				dimensions = await Chat.fitImage(link);
-			} catch (e) {
+			} catch {
 				throw new Chat.ErrorMessage('Invalid link.');
 			}
 		}
@@ -2589,7 +2589,7 @@ export const commands: Chat.ChatCommands = {
 				const [width, height, resized] = await Chat.fitImage(link);
 				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
 				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
-			} catch (err) {
+			} catch {
 				return this.errorReply('Invalid image');
 			}
 		}
@@ -2636,7 +2636,7 @@ export const commands: Chat.ChatCommands = {
 		let rawResult;
 		try {
 			rawResult = await Net(`https://${Config.routes.root}/users/${target}.json`).get();
-		} catch (e) {
+		} catch (e: any) {
 			if (e.message.includes('Not found')) throw new Chat.ErrorMessage(`User '${target}' is unregistered.`);
 			throw new Chat.ErrorMessage(e.message);
 		}

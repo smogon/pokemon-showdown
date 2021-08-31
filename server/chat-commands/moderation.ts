@@ -213,11 +213,14 @@ export const commands: Chat.ChatCommands = {
 			const userid = toID(toPromote);
 			if (!userid) return this.parse('/help roompromote');
 
-			const oldSymbol = room.auth.getDirect(userid);
+			// weird ts bug (?) - 7022
+			// it implicitly is 'any' because it has no annotation and is "is referenced directly or indirectly in its own initializer."
+			// dunno why this happens, but for now we can just cast over it.
+			const oldSymbol: GroupSymbol = room.auth.getDirect(userid);
 			let shouldPopup;
 			try {
 				shouldPopup = runPromote(user, room, userid, nextSymbol, toPromote, force);
-			} catch (err) {
+			} catch (err: any) {
 				if (err.name?.endsWith('ErrorMessage')) {
 					this.errorReply(err.message);
 					continue;

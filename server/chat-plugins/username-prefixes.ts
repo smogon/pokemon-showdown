@@ -28,7 +28,7 @@ export class PrefixManager {
 		let data: AnyObject;
 		try {
 			data = JSON.parse(FS(PREFIXES_FILE).readSync());
-		} catch (e) {
+		} catch (e: any) {
 			if (e.code !== 'ENOENT') throw e;
 			return;
 		}

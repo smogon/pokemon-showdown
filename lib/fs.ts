@@ -110,7 +110,7 @@ export class FSPath {
 	readIfExistsSync() {
 		try {
 			return fs.readFileSync(this.path, 'utf8');
-		} catch (err) {
+		} catch (err: any) {
 			if (err.code !== 'ENOENT') throw err;
 		}
 		return '';
@@ -342,7 +342,7 @@ export class FSPath {
 		if (global.Config?.nofswriting) return;
 		try {
 			fs.unlinkSync(this.path);
-		} catch (err) {
+		} catch (err: any) {
 			if (err.code !== 'ENOENT') throw err;
 		}
 	}
@@ -389,7 +389,7 @@ export class FSPath {
 		if (global.Config?.nofswriting) return;
 		try {
 			fs.mkdirSync(this.path, mode);
-		} catch (err) {
+		} catch (err: any) {
 			if (err.code !== 'EEXIST') throw err;
 		}
 	}
@@ -401,7 +401,7 @@ export class FSPath {
 	async mkdirp(mode: string | number = 0o755) {
 		try {
 			await this.mkdirIfNonexistent(mode);
-		} catch (err) {
+		} catch (err: any) {
 			if (err.code !== 'ENOENT') throw err;
 			await this.parentDir().mkdirp(mode);
 			await this.mkdirIfNonexistent(mode);
@@ -415,7 +415,7 @@ export class FSPath {
 	mkdirpSync(mode: string | number = 0o755) {
 		try {
 			this.mkdirIfNonexistentSync(mode);
-		} catch (err) {
+		} catch (err: any) {
 			if (err.code !== 'ENOENT') throw err;
 			this.parentDir().mkdirpSync(mode);
 			this.mkdirIfNonexistentSync(mode);
