@@ -4483,7 +4483,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	soulheart: {
 		onAnyFaintPriority: 1,
-
 		onAnyFaint(target, source) {
 			if (source && source.volatiles["dynamax"]) return;
 			this.boost({spa: 1}, this.effectState.target);
