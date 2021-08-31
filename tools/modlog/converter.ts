@@ -9,7 +9,7 @@ if (!global.Config) {
 	let hasSQLite = true;
 	try {
 		require.resolve('better-sqlite3');
-	} catch (e) {
+	} catch {
 		console.warn(`Warning: the modlog conversion script is running without a SQLite library.`);
 		hasSQLite = false;
 	}
@@ -394,7 +394,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 		if (line.includes(oldAction)) {
 			try {
 				return prefix + modernizerTransformations[oldAction](line);
-			} catch (err) {
+			} catch (err: any) {
 				if (Config.nofswriting) throw err;
 				process.stderr.write(`${err.message}\n`);
 			}

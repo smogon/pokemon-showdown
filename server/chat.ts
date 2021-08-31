@@ -451,7 +451,7 @@ export class PageContext extends MessageContext {
 		try {
 			if (typeof handler !== 'function') this.pageDoesNotExist();
 			res = await handler.call(this, parts, this.user, this.connection);
-		} catch (err) {
+		} catch (err: any) {
 			if (err.name?.endsWith('ErrorMessage')) {
 				if (err.message) this.errorReply(err.message);
 				return;
@@ -598,7 +598,7 @@ export class CommandContext extends MessageContext {
 
 				message = this.checkChat(message);
 			}
-		} catch (err) {
+		} catch (err: any) {
 			if (err.name?.endsWith('ErrorMessage')) {
 				this.errorReply(err.message);
 				this.update();
@@ -2094,7 +2094,7 @@ export const Chat = new class {
 		try {
 			// eslint-disable-next-line no-new
 			new RegExp(word);
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(
 				e.message.startsWith('Invalid regular expression: ') ?
 					e.message :

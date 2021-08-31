@@ -1163,7 +1163,7 @@ export class GlobalRoomState {
 		try {
 			this.settingsList = require('../config/chatrooms.json');
 			if (!Array.isArray(this.settingsList)) this.settingsList = [];
-		} catch (e) {} // file doesn't exist [yet]
+		} catch {} // file doesn't exist [yet]
 
 		if (!this.settingsList.length) {
 			this.settingsList = [{
@@ -1250,7 +1250,7 @@ export class GlobalRoomState {
 		let lastBattle;
 		try {
 			lastBattle = FS('logs/lastbattle.txt').readSync('utf8');
-		} catch (e) {}
+		} catch {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
 	}

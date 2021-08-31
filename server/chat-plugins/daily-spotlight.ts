@@ -11,7 +11,7 @@ export let spotlights: {[k: string]: {[k: string]: {image?: StoredImage, descrip
 
 try {
 	spotlights = JSON.parse(FS(SPOTLIGHT_FILE).readIfExistsSync() || "{}");
-} catch (e) {
+} catch (e: any) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
 if (!spotlights || typeof spotlights !== 'object') spotlights = {};
@@ -50,7 +50,7 @@ export async function renderSpotlight(roomid: RoomID, key: string, index: number
 				const [width, height] = await Chat.fitImage(image, 150, 300);
 				imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
 				spotlights[roomid][key][index].image = [image, width, height];
-			} catch (err) {}
+			} catch {}
 		}
 	}
 
@@ -179,7 +179,7 @@ export const commands: Chat.ChatCommands = {
 			img = img.trim();
 			try {
 				[width, height] = await Chat.fitImage(img);
-			} catch (e) {
+			} catch {
 				return this.errorReply(`Invalid image url: ${img}`);
 			}
 		}

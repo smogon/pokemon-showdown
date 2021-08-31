@@ -138,7 +138,7 @@ export class Roomlog {
 		try {
 			FS(link0).symlinkToSync(relpath); // intentionally a relative link
 			FS(link0).renameSync(basepath + 'today.txt');
-		} catch (e) {} // OS might not support symlinks or atomic rename
+		} catch {} // OS might not support symlinks or atomic rename
 		if (!Roomlogs.rollLogTimer) void Roomlogs.rollLogs();
 	}
 	add(message: string) {
