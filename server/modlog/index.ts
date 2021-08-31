@@ -424,7 +424,7 @@ export class Modlog {
 			if (action.isExclusion) {
 				ands.push({query: `action NOT LIKE ?`, args});
 			} else {
-				ors.push({query: `action LIKE ?`, args});
+				ands.push({query: `action LIKE ?`, args});
 			}
 		}
 		if (onlyPunishments) {
@@ -437,7 +437,7 @@ export class Modlog {
 			if (ip.isExclusion) {
 				ands.push({query: `ip NOT LIKE ?`, args});
 			} else {
-				ors.push({query: `ip LIKE ?`, args});
+				ands.push({query: `ip LIKE ?`, args});
 			}
 		}
 		for (const actionTaker of search.actionTaker) {
@@ -445,7 +445,7 @@ export class Modlog {
 			if (actionTaker.isExclusion) {
 				ands.push({query: `action_taker_userid NOT LIKE ?`, args});
 			} else {
-				ors.push({query: `action_taker_userid LIKE ?`, args});
+				ands.push({query: `action_taker_userid LIKE ?`, args});
 			}
 		}
 
@@ -455,7 +455,7 @@ export class Modlog {
 			if (noteSearch.isExclusion) {
 				ands.push({query: `note ${noteSearch.isExact ? '!' : 'NOT '}${tester}`, args});
 			} else {
-				ors.push({query: `note ${tester}`, args});
+				ands.push({query: `note ${tester}`, args});
 			}
 		}
 
@@ -470,9 +470,9 @@ export class Modlog {
 				args = [user.search.toLowerCase() + '%'];
 			}
 
-			ors.push({query: `userid ${tester}`, args});
-			ors.push({query: `autoconfirmed_userid ${tester}`, args});
-			ors.push({
+			ands.push({query: `userid ${tester}`, args});
+			ands.push({query: `autoconfirmed_userid ${tester}`, args});
+			ands.push({
 				query: `EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid ${tester})`,
 				args,
 			});
