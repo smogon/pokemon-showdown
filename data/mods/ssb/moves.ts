@@ -434,7 +434,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 1,
 		noPPBoosts: true,
-		flags: {authentic: 1, reflectable: 1},
+		flags: {bypasssub: 1, reflectable: 1},
 		priority: 3,
 		onTry(pokemon, target) {
 			if (pokemon.activeMoveActions > 1) {
@@ -517,7 +517,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {authentic: 1},
+		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -692,7 +692,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.accuracy = true;
 				move.target = "self";
 				delete move.flags.protect;
-				move.flags.authentic = 1;
+				move.flags.bypasssub = 1;
 			}
 		},
 		onHit(target, pokemon) {
@@ -1316,7 +1316,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -6,
-		flags: {protect: 1, sound: 1, authentic: 1, mirror: 1},
+		flags: {protect: 1, sound: 1, bypasssub: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1498,7 +1498,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -6,
-		flags: {authentic: 1, protect: 1, mirror: 1, sound: 1, reflectable: 1},
+		flags: {bypasssub: 1, protect: 1, mirror: 1, sound: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1530,7 +1530,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {authentic: 1, contact: 1, protect: 1, mirror: 1},
+		flags: {bypasssub: 1, contact: 1, protect: 1, mirror: 1},
 		gen: 8,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1694,7 +1694,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		ignoreAbility: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1780,7 +1780,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2921,7 +2921,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {reflectable: 1, mirror: 1, sound: 1, authentic: 1, heal: 1},
+		flags: {reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, heal: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3588,7 +3588,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4081,7 +4081,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: -6,
-		flags: {reflectable: 1, protect: 1, sound: 1, authentic: 1},
+		flags: {reflectable: 1, protect: 1, sound: 1, bypasssub: 1},
 		forceSwitch: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -4157,7 +4157,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {authentic: 1, protect: 1, reflectable: 1},
+		flags: {bypasssub: 1, protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4674,7 +4674,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -7,
-		flags: {authentic: 1, protect: 1, reflectable: 1},
+		flags: {bypasssub: 1, protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4816,7 +4816,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},

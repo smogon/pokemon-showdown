@@ -59,7 +59,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.causedCrashDamage) return damage;
 			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'];
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'];
 				if (hitSub) return;
 
 				if (target.eatItem()) {

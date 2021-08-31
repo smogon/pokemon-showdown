@@ -25,7 +25,7 @@ export type MoveTarget =
 
 /** Possible move flags. */
 interface MoveFlags {
-	authentic?: 1; // Ignores a target's substitute.
+	bypasssub?: 1; // Ignores a target's substitute.
 	bite?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
 	charge?: 1; // The user is unable to make a move between turns.
@@ -36,7 +36,7 @@ interface MoveFlags {
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
 	mirror?: 1; // Can be copied by Mirror Move.
-	mystery?: 1; // Unknown effect.
+	allyanim?: 1; // The move has an animation when used on an ally.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
 	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
 	protect?: 1; // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
