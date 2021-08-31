@@ -200,7 +200,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	disable: {
 		inherit: true,
 		accuracy: 55,
-		flags: {protect: 1, mirror: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1},
 		volatileStatus: 'disable',
 		condition: {
 			durationCallback() {
@@ -285,7 +285,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	encore: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1},
 		volatileStatus: 'encore',
 		condition: {
 			durationCallback() {
@@ -624,7 +624,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	taunt: {
 		inherit: true,
-		flags: {protect: 1, authentic: 1},
+		flags: {protect: 1, bypasssub: 1},
 		condition: {
 			duration: 2,
 			onStart(target) {
@@ -656,7 +656,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	tickle: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
 	},
 	vinewhip: {
 		inherit: true,

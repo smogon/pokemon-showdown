@@ -115,7 +115,7 @@ export const Tags: {[id: string]: TagData} = {
 	bypasssubstitute: {
 		name: "Bypass Substitute",
 		desc: "Bypasses but does not break a Substitute.",
-		moveFilter: move => 'authentic' in move.flags,
+		moveFilter: move => 'bypasssub' in move.flags,
 	},
 	gmaxmove: {
 		name: "G-Max Move",

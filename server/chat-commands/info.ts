@@ -711,7 +711,7 @@ export const commands: Chat.ChatCommands = {
 					if (move.flags['bullet']) details["&#10003; Bullet"] = "";
 					if (move.flags['pulse']) details["&#10003; Pulse"] = "";
 					if (!move.flags['protect'] && move.target !== 'self') details["&#10003; Bypasses Protect"] = "";
-					if (move.flags['authentic']) details["&#10003; Bypasses Substitutes"] = "";
+					if (move.flags['bypasssub']) details["&#10003; Bypasses Substitutes"] = "";
 					if (move.flags['defrost']) details["&#10003; Thaws user"] = "";
 					if (move.flags['bite']) details["&#10003; Bite"] = "";
 					if (move.flags['punch']) details["&#10003; Punch"] = "";
