@@ -611,7 +611,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['Standard', '2 Ability Clause', 'Dynamax Clause'],
 		banlist: [
 			'Blacephalon', 'Blaziken', 'Butterfree', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chansey', 'Combusken', 'Cresselia', 'Darmanitan-Galar', 'Dialga', 'Dracovish',
@@ -759,7 +759,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Blissey', 'Calyrex-Shadow', 'Chansey', 'Melmetal', 'Toxapex', 'Zacian', 'Zacian-Crowned', 'Uber > 1', 'AG ++ Uber > 1', 'AG ++ Uber ++ Power Construct > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
 		onModifySpeciesPriority: 3,
