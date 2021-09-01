@@ -34,7 +34,7 @@ interface TicketState {
 	/** Extra info that they might need for displays or whatnot.
 	 * Use `TextTicketInfo#getState` to set it at creation (store properties of the user object, etc)
 	 */
-	state?: AnyObject;
+	state?: AnyObject & {claimTime?: number};
 }
 
 interface ResolvedTicketInfo {
@@ -91,7 +91,8 @@ try {
 					ticketRoom.expire();
 				} else if (ticket.text && ticket.open) {
 					ticket.open = false;
-					writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tdead\tvalid\t`);
+					const startTime = ticket.state?.claimTime || ticket.created;
+					writeStats(`${ticket.type}\t${Date.now() - startTime}\t0\t0\tdead\tvalid\t`);
 				}
 				continue;
 			}
@@ -1573,6 +1574,8 @@ export const pages: Chat.PageTable = {
 			buf += `<h2>Issue: ${ticket.type}</h2>`;
 			if (!ticket.claimed && ticket.open) {
 				ticket.claimed = user.id;
+				if (!ticket.state) ticket.state = {};
+				ticket.state.claimTime = Date.now();
 				writeTickets();
 				notifyStaff();
 				Chat.refreshPageFor(`help-text-${ticket.userid}`, 'staff', false, [user.id]);
@@ -2495,6 +2498,10 @@ export const handlers: Chat.Handlers = {
 		const ticket = tickets[userid];
 		if (ticket?.open && ticket.claimed === user.id) {
 			ticket.claimed = null;
+			if (ticket.state?.claimTime) {
+				delete ticket.state.claimTime;
+				if (!Object.keys(ticket.state).length) delete ticket.state;
+			}
 			writeTickets();
 			notifyStaff();
 		}
