@@ -70,9 +70,11 @@ export const pages: Chat.PageTable = {
 		if (!spotlights[room.roomid]) {
 			buf += `<p>This room has no daily spotlights.</p></div>`;
 		} else {
-			for (const key in spotlights[room.roomid]) {
+			const sortedKeys = Utils.sortBy(Object.keys(spotlights[room.roomid]));
+			for (const key of sortedKeys) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-				for (const [i] of spotlights[room.roomid][key].entries()) {
+				const keys = Utils.sortBy(spotlights[room.roomid][key], str => str.description);
+				for (const [i] of keys.entries()) {
 					const html = await renderSpotlight(room.roomid, key, i);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
 					if (!user.can('announce', null, room)) break;
@@ -114,6 +116,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog(`DAILY REMOVE`, key);
 			this.sendReply(`The daily spotlight named '${key}' has been successfully removed.`);
 		}
+		Chat.refreshPageFor(`spotlights-${room.roomid}`, room);
 	},
 	swapdailies: 'swapdaily',
 	swapdaily(target, room, user) {
@@ -144,6 +147,7 @@ export const commands: Chat.ChatCommands = {
 
 		this.modlog(`DAILY QUEUE SWAP`, key, `${indexA} with ${indexB}`);
 		this.privateModAction(`${user.name} swapped the queued dailies for '${key}' at queue numbers ${indexA} and ${indexB}.`);
+		Chat.refreshPageFor(`spotlights-${room.roomid}`, room);
 	},
 	queuedaily: 'setdaily',
 	queuedailyat: 'setdaily',
@@ -211,6 +215,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		saveSpotlights();
+		Chat.refreshPageFor(`spotlights-${room.roomid}`, room);
 	},
 	async daily(target, room, user) {
 		room = this.requireRoom();
