@@ -1180,7 +1180,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 
 			if (user.ips.some(i => Punishments.sharedIpBlacklist.has(i))) {
 				return [
-					"Your network has too many users who consistently misbehave on it. As such, we cannot unlock you, lest they abuse the unlock.",
+					"Your network has too many users who consistently misbehave on it. As such, we cannot unlock you, to ensure they don't abuse it.",
 					"Apologies for the inconvenience. It should expire in a few days.",
 				];
 			}
