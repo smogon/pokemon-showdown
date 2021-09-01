@@ -106,7 +106,9 @@ export const commands: Chat.ChatCommands = {
 			saveSpotlights();
 
 			this.modlog(`DAILY REMOVE`, `${key}[${queueNumber}]`);
-			this.sendReply(`Removed the ${queueNumber}th entry from the queue of the daily spotlight named '${key}'.`);
+			this.privateModAction(
+				`${user.name} removed the ${queueNumber}th entry from the queue of the daily spotlight named '${key}'.`
+			);
 		} else {
 			spotlights[room.roomid][key].shift();
 			if (!spotlights[room.roomid][key].length) {
@@ -114,7 +116,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			saveSpotlights();
 			this.modlog(`DAILY REMOVE`, key);
-			this.sendReply(`The daily spotlight named '${key}' has been successfully removed.`);
+			this.privateModAction(`${user.name} successfully rmeoved the daily spotlight named '${key}'.`);
 		}
 		Chat.refreshPageFor(`spotlights-${room.roomid}`, room);
 	},
