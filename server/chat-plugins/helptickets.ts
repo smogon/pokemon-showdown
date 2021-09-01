@@ -1648,7 +1648,7 @@ export const pages: Chat.PageTable = {
 				return {day: dateStrings[0], time: dateStrings[1]};
 			};
 
-			Utils.sortBy(logs, log => -log.date);
+			Utils.sortBy(logs, log => -log.resolved.time);
 
 			for (const ticket of logs) {
 				buf += `<details class="readmore"><summary>`;
