@@ -797,20 +797,6 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 	return null;
 }
 
-function refreshPageFor(page: string, roomid: RoomID, ignoreUsers?: ID[]) {
-	const room = Rooms.get(roomid);
-	if (room) {
-		for (const curUser of Object.values(room.users)) {
-			if (ignoreUsers?.includes(curUser.id)) continue;
-			for (const conn of curUser.connections) {
-				if (conn.openPages?.has(page)) {
-					void Chat.parse(`/j view-${page}`, room, curUser, conn);
-				}
-			}
-		}
-	}
-}
-
 // Prevent a desynchronization issue when hotpatching
 for (const room of Rooms.rooms.values()) {
 	if (!room.settings.isHelp || !room.game) continue;
@@ -1589,7 +1575,7 @@ export const pages: Chat.PageTable = {
 				ticket.claimed = user.id;
 				writeTickets();
 				notifyStaff();
-				refreshPageFor(`help-text-${ticket.userid}`, 'staff', [user.id]);
+				Chat.refreshPageFor(`help-text-${ticket.userid}`, 'staff', false, [user.id]);
 			} else if (ticket.claimed) {
 				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br /><br />`;
 			}
@@ -2194,7 +2180,7 @@ export const commands: Chat.ChatCommands = {
 			// force a refresh for everyone in it, otherwise we potentially get two punishments at once
 			// from different people clicking at the same time and reading it separately.
 			// Yes. This was a real issue.
-			refreshPageFor(`help-text-${ticketId}`, 'staff');
+			Chat.refreshPageFor(`help-text-${ticketId}`, 'staff');
 		},
 
 		list(target, room, user) {

@@ -2399,6 +2399,29 @@ export const Chat = new class {
 		return [Math.round(width * ratio), Math.round(height * ratio), true];
 	}
 
+	refreshPageFor(
+		pageid: string,
+		roomid: Room | RoomID,
+		checkPrefix = false,
+		ignoreUsers: ID[] | null = null
+	) {
+		const room = Rooms.get(roomid);
+		if (!room) return false;
+		for (const id in room.users) {
+			if (ignoreUsers?.includes(id as ID)) continue;
+			const u = room.users[id];
+			for (const conn of u.connections) {
+				if (conn.openPages) {
+					for (const page of conn.openPages) {
+						if ((checkPrefix ? page.startsWith(pageid) : page === pageid)) {
+							void this.parse(`/j view-${page}`, room, u, conn);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
 	 */
