@@ -461,20 +461,19 @@ export class Modlog {
 
 		for (const user of search.user) {
 			let tester;
-			let args;
+			let param;
 			if (user.isExact) {
 				tester = user.isExclusion ? `!= ?` : `= ?`;
-				args = [user.search.toLowerCase()];
+				param = user.search.toLowerCase();
 			} else {
 				tester = user.isExclusion ? `NOT LIKE ?` : `LIKE ?`;
-				args = [user.search.toLowerCase() + '%'];
+				param = user.search.toLowerCase() + '%';
 			}
 
-			ands.push({query: `userid ${tester}`, args});
-			ands.push({query: `autoconfirmed_userid ${tester}`, args});
-			ands.push({
+			ors.push({query: `(userid ${tester} OR autoconfirmed_userid ${tester})`, args: [param, param]});
+			ors.push({
 				query: `EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid ${tester})`,
-				args,
+				args: [param],
 			});
 		}
 		return this.buildParallelIndexScanQuery(select, ors, ands, sortAndLimit);
