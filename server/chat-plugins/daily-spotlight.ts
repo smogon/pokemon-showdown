@@ -7,10 +7,27 @@ const NUMBER_REGEX = /^\s*[0-9]+\s*$/;
 /** legacy - string = just url, arr is [url, width, height] */
 type StoredImage = string | [string, number, number];
 
-export let spotlights: {[k: string]: {[k: string]: {image?: StoredImage, description: string}[]}} = {};
+interface Spotlight {
+	image?: StoredImage;
+	description: string;
+	time: number;
+}
+
+export let spotlights: {
+	[roomid: string]: {[k: string]: Spotlight[]},
+} = {};
 
 try {
 	spotlights = JSON.parse(FS(SPOTLIGHT_FILE).readIfExistsSync() || "{}");
+	for (const roomid in spotlights) {
+		for (const k in spotlights[roomid]) {
+			for (const spotlight of spotlights[roomid][k]) {
+				if (!spotlight.time) {
+					spotlight.time = Date.now();
+				}
+			}
+		}
+	}
 } catch (e: any) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
@@ -63,17 +80,55 @@ export const pages: Chat.PageTable = {
 	async spotlights(query, user, connection) {
 		this.title = 'Daily Spotlights';
 		const room = this.requireRoom();
+		query.shift(); // roomid
+		const sortType = toID(query.shift());
+		if (sortType && !['time', 'alphabet'].includes(sortType)) {
+			return this.errorReply(`Invalid sorting type '${sortType}' - must be either 'time', 'alphabet', or not provided.`);
+		}
 
 		let buf = `<div class="pad ladder">`;
-		buf += `<div class="pad"><button style="float:right;" class="button" name="send" value="/join view-spotlights-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button>`;
+		buf += `<div class="pad">`;
+		buf += `<button style="float:right;" class="button" name="send" value="/join view-spotlights-${room.roomid}-${sortType}">`;
+		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<h2>Daily Spotlights</h2>`;
+		// for posterity, all these switches are futureproofing for more sort types
+		if (sortType) {
+			let title = '';
+			switch (sortType) {
+			case 'time':
+				title = 'latest time updated';
+				break;
+			default:
+				title = 'alphabetical';
+				break;
+			}
+			buf += `(sorted by ${title})<br />`;
+		}
 		if (!spotlights[room.roomid]) {
 			buf += `<p>This room has no daily spotlights.</p></div>`;
 		} else {
-			const sortedKeys = Utils.sortBy(Object.keys(spotlights[room.roomid]));
+			const sortedKeys = Utils.sortBy(Object.keys(spotlights[room.roomid]), key => {
+				switch (sortType) {
+				case 'time': {
+					// find most recently added/updated spotlight in that key, sort all by that
+					const sortedSpotlights = Utils.sortBy(spotlights[room.roomid][key].slice(), k => -k.time);
+					return -sortedSpotlights[0].time;
+				}
+				// sort alphabetically by key otherwise
+				default:
+					return key;
+				}
+			});
 			for (const key of sortedKeys) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-				const keys = Utils.sortBy(spotlights[room.roomid][key], str => str.description);
+				const keys = Utils.sortBy(spotlights[room.roomid][key], spotlight => {
+					switch (sortType) {
+					case 'time':
+						return -spotlight.time;
+					default:
+						return spotlight.description;
+					}
+				});
 				for (const [i] of keys.entries()) {
 					const html = await renderSpotlight(room.roomid, key, i);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
@@ -194,7 +249,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply("Descriptions can be at most 500 characters long.");
 		}
 		if (img) img = [img, width, height] as StoredImage;
-		const obj = {image: img, description: desc};
+		const obj = {image: img, description: desc, time: Date.now()};
 		if (!spotlights[room.roomid][key]) spotlights[room.roomid][key] = [];
 		if (cmd === 'setdaily') {
 			spotlights[room.roomid][key].shift();
@@ -246,7 +301,8 @@ export const commands: Chat.ChatCommands = {
 	viewspotlights(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
-		return this.parse(`/join view-spotlights-${room.roomid}`);
+		target = toID(target);
+		return this.parse(`/join view-spotlights-${room.roomid}${target ? `-${target}` : ''}`);
 	},
 
 	dailyhelp() {
@@ -259,7 +315,8 @@ export const commands: Chat.ChatCommands = {
 			`<code>/replacedaily [name], [queue number], [image], [description]</code>: replaces the daily spotlight queued at the specified number. Requires: % @ # &<br />` +
 			`<code>/removedaily [name][, queue number]</code>: if no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # &<br />` +
 			`<code>/swapdaily [name], [queue number], [queue number]</code>: swaps the two queued spotlights at the given queue numbers. Requires: % @ # &<br />` +
-			`<code>/viewspotlights</code>: shows all current spotlights in the room. For staff, also shows queued spotlights.` +
+			`<code>/viewspotlights [sorter]</code>: shows all current spotlights in the room. For staff, also shows queued spotlights.` +
+			`[sorter] can either be unset, 'time', or 'alphabet'. These sort by either the time added, or alphabetical order.` +
 			`</details>`
 		);
 	},
