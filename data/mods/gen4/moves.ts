@@ -1676,7 +1676,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Uproar');
-				this.effectState.duration = this.random(2, 5);
+				// 3-6 turns
+				this.effectState.duration = this.random(3, 7);
 			},
 			onResidual(target) {
 				if (target.volatiles['throatchop']) {
