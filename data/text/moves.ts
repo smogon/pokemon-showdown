@@ -6504,8 +6504,8 @@ export const MovesText: {[k: string]: MoveText} = {
 			shortDesc: "Lasts 3-6 turns. Active Pokemon cannot sleep.",
 		},
 		gen3: {
-			desc: "The user spends three to five turns locked into this move. This move targets an opposing Pokemon at random on each turn. During effect, no active Pokemon can fall asleep by any means, and Pokemon that are already asleep wake up as their turn starts or at the end of each turn, including the last one. If the user is prevented from moving or the attack is not successful against the target during one of the turns, the effect ends.",
-			shortDesc: "Lasts 3-5 turns. Active Pokemon cannot sleep.",
+			desc: "The user spends two to five turns locked into this move. This move targets an opposing Pokemon at random on each turn. During effect, no active Pokemon can fall asleep by any means, and Pokemon that are already asleep wake up as their turn starts or at the end of each turn, including the last one. If the user is prevented from moving or the attack is not successful against the target during one of the turns, the effect ends.",
+			shortDesc: "Lasts 2-5 turns. Active Pokemon cannot sleep.",
 		},
 
 		start: "  [POKEMON] caused an uproar!",
