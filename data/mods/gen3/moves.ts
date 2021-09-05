@@ -658,6 +658,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
 	},
+	uproar: {
+		inherit: true,
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'Uproar');
+				// 2-5 turns
+				this.effectState.duration = this.random(2, 6);
+			},
+			onResidual(target) {
+				if (target.volatiles['throatchop']) {
+					target.removeVolatile('uproar');
+					return;
+				}
+				if (target.lastMove && target.lastMove.id === 'struggle') {
+					// don't lock
+					delete target.volatiles['uproar'];
+				}
+				this.add('-start', target, 'Uproar', '[upkeep]');
+			},
+			onResidualOrder: 10,
+			onResidualSubOrder: 11,
+			onEnd(target) {
+				this.add('-end', target, 'Uproar');
+			},
+			onLockMove: 'uproar',
+			onAnySetStatus(status, pokemon) {
+				if (status.id === 'slp') {
+					if (pokemon === this.effectState.target) {
+						this.add('-fail', pokemon, 'slp', '[from] Uproar', '[msg]');
+					} else {
+						this.add('-fail', pokemon, 'slp', '[from] Uproar');
+					}
+					return null;
+				}
+			},
+		},
+	},
 	vinewhip: {
 		inherit: true,
 		pp: 10,
