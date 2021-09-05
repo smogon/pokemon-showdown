@@ -963,17 +963,22 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		getReviewDisplay(ticket) {
 			let buf = ``;
 			if (!ticket.open) return buf;
-			if (ticket.meta?.startsWith('user-')) {
-				const tar = ticket.meta.slice(5);
-				buf += `<strong>Username: ${tar}</strong><br />`;
-				buf += `<form data-submitsend="/msgroom staff,/forcerename ${tar},{reason}">`;
-			} else {
-				buf += `<strong>Provide a username to forcerename:</strong><br />`;
-				buf += `<form data-submitsend="/msgroom staff,/forcerename {text},{reason}">`;
-				buf += `Name: <input name="text" /><br />`;
+			const cmds: [string, string][] = [
+				['Forcerename', '/forcerename'],
+				['Namelock', '/namelock'],
+				['Weeknamelock', '/weeknamelock'],
+			];
+			const tar = toID(ticket.text[0]); // should always be the reported userid
+			buf += `<br /><strong>Reported user:</strong> ${tar} `;
+			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
+			buf += `<details class="readmore"><summary>Punish <strong>${tar}</strong> (reported user)</summary>`;
+			buf += `<div class="infobox">`;
+			for (const [name, cmd] of cmds) {
+				buf += `<form data-submitsend="/msgroom staff,${cmd} ${tar},{reason}">`;
+				buf += `<button class="button notifying" type="submit">${name}</button><br />`;
+				buf += `Reason (optional:) <input name="reason" /></form><br />`;
 			}
-			buf += `Reason (optional:) <input name="reason" /><br />`;
-			buf += `<br /><button class="button notifying" type="submit">Forcerename</button></form>`;
+			buf += `</div></details>`;
 			return buf;
 		},
 		onSubmit(ticket, text) {
