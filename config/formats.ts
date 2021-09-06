@@ -1202,6 +1202,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3666858/">Inverse</a>`,
 		],
 		mod: 'gen8',
+		searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause', 'Inverse Mod'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Diggersby', 'Dracovish',
@@ -1347,6 +1348,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3680298/">Sketchmons</a>`,
 		],
 		mod: 'gen8',
+		searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause', 'Sketchmons Move Legality'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragapult', 'Eternatus', 'Genesect',
