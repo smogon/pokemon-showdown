@@ -1187,12 +1187,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
-    'gen8sketch': {
-        effectType: 'ValidatorRule',
-        name: 'Gen 8 Sketch',
-        desc: "Allows Sketch to be restored into Generation VIII formats.",
-        // Implemented in sim/team-validator.ts
-    },
+	'gen8sketch': {
+		effectType: 'ValidatorRule',
+		name: 'Gen 8 Sketch',
+		desc: "Allows Sketch to be restored into Generation VIII formats.",
+		// Implemented in sim/team-validator.ts
+	},
 	mimicglitch: {
 		effectType: 'ValidatorRule',
 		name: 'Mimic Glitch',
