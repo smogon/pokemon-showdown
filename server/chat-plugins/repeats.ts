@@ -138,7 +138,8 @@ export const pages: Chat.PageTable = {
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (repeat.isByMessages ? 1 : 60 * 1000);
 			const repeatText = repeat.faq ? roomFaqs[room.roomid][repeat.id].source : repeat.phrase;
-			const phrase = repeat.isHTML ? repeat.phrase : Chat.formatText(repeatText, true);
+			const phrase = repeat.faq ? visualizeFaq(roomFaqs[room.roomid][repeat.id]) :
+				repeat.isHTML ? repeat.phrase : Chat.formatText(repeatText, true);
 			html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeatText)}</td><td>${repeat.isByMessages ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
 			html += `<td><button class="button" name="send" value="/msgroom ${room.roomid},/removerepeat ${repeat.id}">${this.tr`Remove`}</button></td>`;
 		}
