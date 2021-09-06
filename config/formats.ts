@@ -1015,6 +1015,24 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 8] Bonus Type",
+		desc: `Pok&eacute;mon can be nicknamed the name of a type to have that type added onto their current ones.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3683173/">Bonus Type</a>`,
+		],
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['Standard', 'Dynamax Clause', 'Bonus Type Rule', '!Nickname Clause'],
+		banlist: [
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus', 'Genesect',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia',
+			'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa',
+			'Rayquaza', 'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned',
+			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
+		],
+	},
+	{
 		name: "[Gen 8] Camomons",
 		desc: `Pok&eacute;mon change type to match their first two moves.`,
 		threads: [
@@ -1178,6 +1196,24 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 8] Inverse",
+		desc: `The type chart is inverted. Normal is super effective against Ghost, and vice versa, etc.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666858/">Inverse</a>`,
+		],
+		mod: 'gen8',
+		ruleset: ['Standard', 'Dynamax Clause', 'Inverse Mod'],
+		banlist: [
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Diggersby', 'Dracovish',
+			'Dracozolt', 'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana',
+			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo',
+			'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Porygon-Z', 'Rayquaza',
+			'Regidrago', 'Regieleki', 'Reshiram', 'Rillaboom', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas',
+			'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Base', 'Zekrom', 'Arena Trap', 'Moody', 'Power Construct',
+			'Shadow Tag', 'King\'s Rock', 'Baton Pass',
+		],
+	},
+	{
 		name: "[Gen 8] Nature Swap",
 		desc: `Pok&eacute;mon have their base stats swapped depending on their nature.`,
 		threads: [
@@ -1303,6 +1339,28 @@ export const Formats: FormatList = [
 				pokemon.addVolatile(effect);
 			}
 		},
+	},
+	{
+		name: "[Gen 8] Sketchmons",
+		desc: `Pok&eacute;mon can learn one of any move they don't normally learn, barring the few that are banned.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3680298/">Sketchmons</a>`,
+		],
+		mod: 'gen8',
+		ruleset: ['Standard', 'Dynamax Clause', 'Sketchmons Move Legality'],
+		banlist: [
+			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragapult', 'Eternatus', 'Genesect',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia',
+			'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Porygon-Z',
+			'Rayquaza', 'Regieleki', 'Reshiram', 'Rillaboom', 'Shedinja', 'Solgaleo', 'Spectrier', 'Swoobat', 'Urshifu-Base', 'Xerneas',
+			'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zeraora', 'Zygarde-Base', 'Arena Trap',
+			'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Baton Pass',
+		],
+		restricted: [
+			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Bolt Beak', 'Clangorous Soul', 'Double Iron Bash', 'Electrify', 'Extreme Speed',
+			'Fishious Rend', 'Geomancy', 'Glacial Lance', 'Lovely Kiss', 'Octolock', 'Quiver Dance', 'Secret Sword', 'Shell Smash', 'Shift Gear',
+			'Sleep Powder', 'Spore', 'Thousand Arrows', 'Transform', 'V-create', 'Wicked Blow',
+		],
 	},
 	{
 		name: "[Gen 8] The Loser's Game",
