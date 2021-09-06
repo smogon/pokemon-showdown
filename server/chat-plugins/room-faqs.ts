@@ -232,5 +232,5 @@ export const handlers: Chat.Handlers = {
 };
 
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/addfaq ');
+	Chat.multiLinePattern.register('/add(htmlfaq|faq) ');
 });
