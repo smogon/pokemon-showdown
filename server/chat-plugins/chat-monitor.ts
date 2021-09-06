@@ -639,6 +639,9 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			filterWord.word = filterWord.word.trim();
+			if (!filterWord.word) {
+				return this.errorReply(`Invalid word: '${filterWord.word}'.`);
+			}
 			Filters.add(filterWord);
 			const reason = filterWord.reason ? ` (${filterWord.reason})` : '';
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
