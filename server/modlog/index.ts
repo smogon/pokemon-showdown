@@ -145,9 +145,10 @@ export class Modlog {
 
 		if (hasDBInfo === 0) {
 			// needs v2 migration
-			Monitor.warn(`The modlog database is being migrated to version 2; this may take a while.`);
+			const warnFunction = ('Monitor' in global && Monitor.warn) ? Monitor.warn : console.log;
+			warnFunction(`The modlog database is being migrated to version 2; this may take a while.`);
 			await this.database.runFile(MODLOG_V2_MIGRATION_PATH);
-			Monitor.warn(`Modlog database migration complete.`);
+			warnFunction(`Modlog database migration complete.`);
 		}
 
 		this.modlogInsertionQuery = await this.database.prepare(

@@ -636,6 +636,7 @@ export class ModlogConverterTxt {
 	}
 
 	async toSQLite() {
+		await this.modlog.readyPromise;
 		const files = this.isTesting ? [...this.isTesting.files.keys()] : await FS(this.textLogDir).readdir();
 		// Read global modlog first to avoid inserting duplicate data to database
 		if (files.includes('modlog_global.txt')) {
