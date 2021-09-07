@@ -228,8 +228,9 @@ describe('Dex data', function () {
 									assert(Dex.data.Moves[eventMove], `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist`);
 									continue;
 								}
+								assert.equal(eventMove, toID(eventMove), `${species.name}'s event move "${eventMove}" must be an ID`);
 								assert(entry.learnset, `${species.name} has event moves but no learnset`);
-								assert(entry.learnset[eventMove].includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
+								assert(entry.learnset[eventMove]?.includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
 							}
 						}
 					}
