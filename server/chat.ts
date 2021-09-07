@@ -1099,7 +1099,8 @@ export class CommandContext extends MessageContext {
 				}
 			}
 			if (targetUser) {
-				if (!user.registered) {
+				// this accounts for users who are autoconfirmed on another alt, but not registered
+				if (!(user.registered || user.autoconfirmed)) {
 					this.sendReply(
 						this.tr`|html|<div class="message-error">You must be registered to send private messages.</div>` +
 						this.tr`You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`
