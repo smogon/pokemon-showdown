@@ -5976,7 +5976,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["2M", "1M"],
 		},
 		eventData: [
-			{generation: 1, level: 20, moves: ["double kick", "meditate"]},
+			{generation: 1, level: 20, moves: ["doublekick", "meditate"]},
 		],
 		encounters: [
 			{generation: 1, level: 30},
