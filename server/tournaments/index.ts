@@ -211,7 +211,7 @@ export class Tournament extends Rooms.RoomGame {
 	setCustomRules(rules: string) {
 		try {
 			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
 

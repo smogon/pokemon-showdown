@@ -34,7 +34,7 @@ interface TicketState {
 	/** Extra info that they might need for displays or whatnot.
 	 * Use `TextTicketInfo#getState` to set it at creation (store properties of the user object, etc)
 	 */
-	state?: AnyObject;
+	state?: AnyObject & {claimTime?: number};
 }
 
 interface ResolvedTicketInfo {
@@ -91,7 +91,8 @@ try {
 					ticketRoom.expire();
 				} else if (ticket.text && ticket.open) {
 					ticket.open = false;
-					writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tdead\tvalid\t`);
+					const startTime = ticket.state?.claimTime || ticket.created;
+					writeStats(`${ticket.type}\t${Date.now() - startTime}\t0\t0\tdead\tvalid\t`);
 				}
 				continue;
 			}
@@ -100,7 +101,7 @@ try {
 			tickets[t] = ticket;
 		}
 	}
-} catch (e) {
+} catch (e: any) {
 	if (e.code !== 'ENOENT') throw e;
 }
 
@@ -124,7 +125,7 @@ function writeStats(line: string) {
 	const month = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
 	try {
 		FS(`logs/tickets/${month}.tsv`).appendSync(line + '\n');
-	} catch (e) {
+	} catch (e: any) {
 		if (e.code !== 'ENOENT') throw e;
 	}
 }
@@ -453,7 +454,7 @@ export class HelpTicket extends Rooms.RoomGame {
 				lines = await ProcessManager.exec([
 					`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
 				]);
-			} catch (e) {
+			} catch (e: any) {
 				if (e.message.includes('No such file or directory')) {
 					throw new Chat.ErrorMessage(`No ticket logs for that month.`);
 				}
@@ -766,7 +767,7 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 			const body = await replayUrl.get();
 			const data = JSON.parse(body);
 			return data.p1id === submitter ? data.p1id : data.p2id;
-		} catch (e) {
+		} catch {
 			return null;
 		}
 	}
@@ -793,22 +794,8 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 				url: `https://${Config.routes.replays}/${battle}`,
 			};
 		}
-	} catch (e) {}
+	} catch {}
 	return null;
-}
-
-function refreshPageFor(page: string, roomid: RoomID, ignoreUsers?: ID[]) {
-	const room = Rooms.get(roomid);
-	if (room) {
-		for (const curUser of Object.values(room.users)) {
-			if (ignoreUsers?.includes(curUser.id)) continue;
-			for (const conn of curUser.connections) {
-				if (conn.openPages?.has(page)) {
-					void Chat.parse(`/j view-${page}`, room, curUser, conn);
-				}
-			}
-		}
-	}
 }
 
 // Prevent a desynchronization issue when hotpatching
@@ -976,17 +963,22 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		getReviewDisplay(ticket) {
 			let buf = ``;
 			if (!ticket.open) return buf;
-			if (ticket.meta?.startsWith('user-')) {
-				const tar = ticket.meta.slice(5);
-				buf += `<strong>Username: ${tar}</strong><br />`;
-				buf += `<form data-submitsend="/msgroom staff,/forcerename ${tar},{reason}">`;
-			} else {
-				buf += `<strong>Provide a username to forcerename:</strong><br />`;
-				buf += `<form data-submitsend="/msgroom staff,/forcerename {text},{reason}">`;
-				buf += `Name: <input name="text" /><br />`;
+			const cmds: [string, string][] = [
+				['Forcerename', '/forcerename'],
+				['Namelock', '/namelock'],
+				['Weeknamelock', '/weeknamelock'],
+			];
+			const tar = toID(ticket.text[0]); // should always be the reported userid
+			buf += `<br /><strong>Reported user:</strong> ${tar} `;
+			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
+			buf += `<details class="readmore"><summary>Punish <strong>${tar}</strong> (reported user)</summary>`;
+			buf += `<div class="infobox">`;
+			for (const [name, cmd] of cmds) {
+				buf += `<form data-submitsend="/msgroom staff,${cmd} ${tar},{reason}">`;
+				buf += `<button class="button notifying" type="submit">${name}</button><br />`;
+				buf += `Reason (optional:) <input name="reason" /></form><br />`;
 			}
-			buf += `Reason (optional:) <input name="reason" /><br />`;
-			buf += `<br /><button class="button notifying" type="submit">Forcerename</button></form>`;
+			buf += `</div></details>`;
 			return buf;
 		},
 		onSubmit(ticket, text) {
@@ -1180,7 +1172,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 
 			if (user.ips.some(i => Punishments.sharedIpBlacklist.has(i))) {
 				return [
-					"Your network has too many users who consistently misbehave on it. As such, we cannot unlock you, lest they abuse the unlock.",
+					"Your network has too many users who consistently misbehave on it. As such, we cannot unlock you, to ensure they don't abuse it.",
 					"Apologies for the inconvenience. It should expire in a few days.",
 				];
 			}
@@ -1587,9 +1579,11 @@ export const pages: Chat.PageTable = {
 			buf += `<h2>Issue: ${ticket.type}</h2>`;
 			if (!ticket.claimed && ticket.open) {
 				ticket.claimed = user.id;
+				if (!ticket.state) ticket.state = {};
+				ticket.state.claimTime = Date.now();
 				writeTickets();
 				notifyStaff();
-				refreshPageFor(`help-text-${ticket.userid}`, 'staff', [user.id]);
+				Chat.refreshPageFor(`help-text-${ticket.userid}`, 'staff', false, [user.id]);
 			} else if (ticket.claimed) {
 				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br /><br />`;
 			}
@@ -1659,7 +1653,7 @@ export const pages: Chat.PageTable = {
 				return {day: dateStrings[0], time: dateStrings[1]};
 			};
 
-			Utils.sortBy(logs, log => -log.date);
+			Utils.sortBy(logs, log => -log.resolved.time);
 
 			for (const ticket of logs) {
 				buf += `<details class="readmore"><summary>`;
@@ -2194,7 +2188,7 @@ export const commands: Chat.ChatCommands = {
 			// force a refresh for everyone in it, otherwise we potentially get two punishments at once
 			// from different people clicking at the same time and reading it separately.
 			// Yes. This was a real issue.
-			refreshPageFor(`help-text-${ticketId}`, 'staff');
+			Chat.refreshPageFor(`help-text-${ticketId}`, 'staff');
 		},
 
 		list(target, room, user) {
@@ -2509,6 +2503,10 @@ export const handlers: Chat.Handlers = {
 		const ticket = tickets[userid];
 		if (ticket?.open && ticket.claimed === user.id) {
 			ticket.claimed = null;
+			if (ticket.state?.claimTime) {
+				delete ticket.state.claimTime;
+				if (!Object.keys(ticket.state).length) delete ticket.state;
+			}
 			writeTickets();
 			notifyStaff();
 		}

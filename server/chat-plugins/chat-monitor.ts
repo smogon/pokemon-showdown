@@ -68,7 +68,7 @@ export const Filters = new class {
 			} else {
 				return new RegExp((isShortener ? `\\b${word}` : word), (isReplacement ? 'igu' : 'iu'));
 			}
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(
 				e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`
 			);
@@ -153,7 +153,7 @@ export const Filters = new class {
 		let data;
 		try {
 			data = FS(LEGACY_MONITOR_FILE).readSync();
-		} catch (e) {
+		} catch (e: any) {
 			if (e.code !== 'ENOENT') throw e;
 		}
 		if (!data) return;
@@ -639,6 +639,9 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			filterWord.word = filterWord.word.trim();
+			if (!filterWord.word) {
+				return this.errorReply(`Invalid word: '${filterWord.word}'.`);
+			}
 			Filters.add(filterWord);
 			const reason = filterWord.reason ? ` (${filterWord.reason})` : '';
 			if (Chat.monitors[list].punishment === 'FILTERTO') {

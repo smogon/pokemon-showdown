@@ -347,7 +347,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	mls: 'modlogstats',
 	modlogstats(target, room, user) {
-		this.checkCan('globalban');
+		this.checkCan('lock');
 		target = toID(target);
 		if (!target) return this.parse(`/help modlogstats`);
 		return this.parse(`/join view-modlogstats-${target}`);
@@ -357,7 +357,7 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	async modlogstats(query, user) {
-		this.checkCan('globalban');
+		this.checkCan('lock');
 		const target = toID(query.shift());
 		if (!target || target.length > 18) {
 			return this.errorReply(`Invalid userid - must be between 1 and 18 characters long.`);

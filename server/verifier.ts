@@ -21,7 +21,7 @@ export const PM = new QueryProcessManager<{data: string, signature: string}, boo
 	let success = false;
 	try {
 		success = verifier.verify(Config.loginserverpublickey, signature, 'hex');
-	} catch (e) {}
+	} catch {}
 
 	return success;
 });

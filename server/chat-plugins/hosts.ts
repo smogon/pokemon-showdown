@@ -60,7 +60,7 @@ export const pages: Chat.PageTable = {
 		Utils.sortBy(openProxies, ip => {
 			const number = IPTools.ipToNumber(ip);
 			if (number === null) {
-				Monitor.error(`Invalid IP address in IPTools.singleIPOpenProxies: '${ip}'`);
+				Rooms.get('upperstaff')?.add(`|error|Invalid IP address in IPTools.singleIPOpenProxies: '${ip}'`);
 				return -1;
 			}
 			return number;
@@ -140,6 +140,13 @@ export const pages: Chat.PageTable = {
 			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('/proxy')));
 			html += `</table></div>`;
 		}
+		if (['all', 'openproxy'].includes(type)) {
+			html += `<div class="ladder pad"><h2>Single-IP Open Proxies:</h2><table>`;
+			for (const ip of IPTools.singleIPOpenProxies) {
+				html += `<tr><td>${ip}</td></tr>`;
+			}
+			html += `</table></div>`;
+		}
 		return html;
 	},
 
@@ -216,7 +223,7 @@ export const commands: Chat.ChatCommands = {
 		show: 'view',
 		view(target, room, user) {
 			checkCanPerform(this, user, 'globalban');
-			const types = ['all', 'residential', 'res', 'mobile', 'proxy'];
+			const types = ['all', 'residential', 'res', 'mobile', 'proxy', 'openproxy'];
 			const type = target ? toID(target) : 'all';
 			if (!types.includes(type)) {
 				return this.errorReply(`'${type}' isn't a valid host type. Specify one of ${types.join(', ')}.`);
@@ -249,7 +256,7 @@ export const commands: Chat.ChatCommands = {
 			let result;
 			try {
 				result = IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
-			} catch (e) {
+			} catch (e: any) {
 				return this.errorReply(e.message);
 			}
 			if (typeof result === 'number') {

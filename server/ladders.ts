@@ -65,7 +65,7 @@ class Ladder extends LadderStore {
 
 		try {
 			this.formatid = Dex.formats.validate(this.formatid);
-		} catch (e) {
+		} catch (e: any) {
 			connection.popup(`Your selected format is invalid:\n\n- ${e.message}`);
 			return null;
 		}

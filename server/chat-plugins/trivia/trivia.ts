@@ -168,7 +168,7 @@ function getMastermindGame(room: Room | null) {
 function getTriviaOrMastermindGame(room: Room | null) {
 	try {
 		return getMastermindGame(room);
-	} catch (e) {
+	} catch {
 		return getTriviaGame(room);
 	}
 }
@@ -1627,7 +1627,7 @@ const triviaCommands: Chat.ChatCommands = {
 			const mastermindRound = getMastermindGame(room).currentRound;
 			if (!mastermindRound) throw new Error;
 			game = mastermindRound;
-		} catch (e) {
+		} catch {
 			game = getTriviaGame(room);
 		}
 
@@ -2310,7 +2310,7 @@ const triviaCommands: Chat.ChatCommands = {
 		try {
 			await mergeAlts(user.id, altid);
 			return this.sendReply(`Your Trivia leaderboard score has been transferred to '${altid}'!`);
-		} catch (err) {
+		} catch (err: any) {
 			if (!err.message.includes('/trivia mergescore')) throw err;
 
 			await requestAltMerge(altid, user.id);

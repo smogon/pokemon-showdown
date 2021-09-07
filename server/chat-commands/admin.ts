@@ -114,7 +114,7 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 		}
 
 		return true;
-	} catch (e) {
+	} catch {
 		// failed while rebasing or popping the stash
 		await exec(`git reset --hard ${oldHash}`);
 		if (stashedChanges) await exec(`git stash pop`);
@@ -744,7 +744,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				return this.errorReply("Your hot-patch command was unrecognized.");
 			}
-		} catch (e) {
+		} catch (e: any) {
 			Rooms.global.notifyRooms(
 				['development', 'staff'] as RoomID[],
 				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`
@@ -1259,7 +1259,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|html|${generateHTML('<', result)}`);
 			}
 			logRoom?.roomlog(`<< ${result}`);
-		} catch (e) {
+		} catch (e: any) {
 			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			const command = uhtmlId ? `|uhtmlchange|${uhtmlId}|` : '|html|';
 			this.sendReply(`${command}${generateHTML('<', message)}`);
@@ -1325,14 +1325,14 @@ export const commands: Chat.ChatCommands = {
 			// presume it's attempting to get data first
 			result = await database.all(query, []);
 			if ((result as any).err) parseError(result as any);
-		} catch (err) {
+		} catch (err: any) {
 			// it's not getting data, but it might still be a valid statement - try to run instead
 			if (err.stack?.includes(`Use run() instead`)) {
 				try {
 					result = await database.run(query, []);
 					if ((result as any).err) parseError(result as any);
 					result = Utils.visualize(result);
-				} catch (e) {
+				} catch (e: any) {
 					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 				}
 			} else {
