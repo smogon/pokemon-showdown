@@ -2051,6 +2051,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		},
 		encounters: [
 			{generation: 1, level: 18},
+			{generation: 1, level: 15},
 		],
 	},
 	ninetales: {
@@ -2285,6 +2286,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		},
 		encounters: [
 			{generation: 1, level: 22},
+			{generation: 1, level: 3},
 		],
 	},
 	zubat: {
@@ -4302,6 +4304,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["1M"],
 			toxic: ["2M", "1M"],
 		},
+		encounters: [
+			{generation: 1, level: 16},
+		],
 	},
 	ponyta: {
 		learnset: {
@@ -5002,6 +5007,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		},
 		encounters: [
 			{generation: 1, level: 25},
+			{generation: 1, level: 15, japan: true},
 			{generation: 2, level: 5},
 		],
 	},
@@ -5969,6 +5975,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["2M"],
 			toxic: ["2M", "1M"],
 		},
+		eventData: [
+			{generation: 1, level: 20, moves: ["double kick", "meditate"]},
+		],
 		encounters: [
 			{generation: 1, level: 30},
 		],
@@ -6019,6 +6028,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["2M", "2L26", "1L43"],
 			toxic: ["2M", "1M"],
 		},
+		eventData: [
+			{generation: 1, level: 20, moves: ["comet punch", "agility"]},
+		],
 		encounters: [
 			{generation: 1, level: 30},
 		],
@@ -6626,6 +6638,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		],
 		encounters: [
 			{generation: 1, level: 25},
+			{generation: 1, level: 15, japan: true},
 		],
 	},
 	horsea: {
@@ -8164,6 +8177,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["2L1", "2S0", "1L1"],
 		},
 		eventData: [
+			{generation: 1, level: 20, moves: ["water gun", "withdraw"]},
 			{generation: 2, level: 5, shiny: 1, moves: ["constrict", "withdraw", "rockthrow"]},
 		],
 		encounters: [
@@ -8272,6 +8286,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["1M"],
 		},
 		eventData: [
+			{generation: 1, level: 20, moves: ["scratch", "harden"]},
 			{generation: 2, level: 5, shiny: 1, moves: ["scratch", "harden", "rockthrow"]},
 		],
 		encounters: [
