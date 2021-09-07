@@ -1099,6 +1099,13 @@ export class CommandContext extends MessageContext {
 				}
 			}
 			if (targetUser) {
+				if (!user.registered) {
+					this.sendReply(
+						this.tr`|html|<div class="message-error">You must be registered to send private messages.</div>` +
+						this.tr`You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`
+					);
+					throw new Chat.Interruption();
+				}
 				if (lockType && !targetUser.can('lock')) {
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr`Get help with this`}</a>`);
 					throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
