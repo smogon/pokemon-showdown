@@ -1227,7 +1227,7 @@ export class RandomTeams {
 		case 'Blaze':
 			return (isDoubles && abilities.has('Solar Power')) || (!isDoubles && !isNoDynamax && species.id === 'charizard');
 		case 'Bulletproof': case 'Overcoat':
-			return (!!counter.setupType && abilities.has('Soundproof'));
+			return !!counter.setupType;
 		case 'Chlorophyll':
 			return (species.baseStats.spe > 100 || !counter.get('Fire') && !moves.has('sunnyday') && !teamDetails.sun);
 		case 'Cloud Nine':
@@ -2009,7 +2009,7 @@ export class RandomTeams {
 			evs.hp -= 4;
 		}
 
-		if (moves.has('shellsidearm') && item === 'Choice Specs') evs.atk -= 4;
+		if (moves.has('shellsidearm') && item === 'Choice Specs') evs.atk -= 8;
 
 		// Minimize confusion damage
 		if (!counter.get('Physical') && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status'))) {

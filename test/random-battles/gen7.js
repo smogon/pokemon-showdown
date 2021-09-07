@@ -46,4 +46,8 @@ describe('[Gen 7] Random Battle', () => {
 			assert(set.moves.includes('gigadrain'), `Meganium: got ${set.moves}`);
 		});
 	});
+
+	it('should never give Xerneas Assault Vest', () => {
+		testSet('xerneas', options, set => assert.notEqual(set.item, 'Assault Vest'));
+	});
 });
