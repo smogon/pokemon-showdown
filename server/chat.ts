@@ -1107,6 +1107,9 @@ export class CommandContext extends MessageContext {
 					);
 					throw new Chat.Interruption();
 				}
+				if (!(targetUser.registered || targetUser.autoconfirmed)) {
+					throw new Chat.ErrorMessage(this.tr`That user is unregistered and cannot be PMed.`);
+				}
 				if (lockType && !targetUser.can('lock')) {
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr`Get help with this`}</a>`);
 					throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
