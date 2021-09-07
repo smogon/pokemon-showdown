@@ -5984,11 +5984,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	},
 	hitmonchan: {
 		learnset: {
-			agility: ["2L7", "1L1"],
+			agility: ["2L7", "1L1", "1S0"],
 			attract: ["2M"],
 			bide: ["1M"],
 			bodyslam: ["1M"],
-			cometpunch: ["2L1", "1L1"],
+			cometpunch: ["2L1", "1L1", "1S0"],
 			counter: ["2L50", "1M", "1L53"],
 			curse: ["2M"],
 			detect: ["2M", "2L44"],
