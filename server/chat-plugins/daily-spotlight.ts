@@ -121,7 +121,7 @@ export const pages: Chat.PageTable = {
 			});
 			for (const key of sortedKeys) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-				const keys = Utils.sortBy(spotlights[room.roomid][key], spotlight => {
+				const keys = Utils.sortBy(spotlights[room.roomid][key].slice(), spotlight => {
 					switch (sortType) {
 					case 'time':
 						return -spotlight.time;
