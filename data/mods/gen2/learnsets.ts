@@ -8177,8 +8177,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["2L1", "2S0", "1L1", "1S0"],
 		},
 		eventData: [
-			{generation: 1, level: 20, moves: ["watergun", "withdraw"]},
 			{generation: 2, level: 5, shiny: 1, moves: ["constrict", "withdraw", "rockthrow"]},
+			{generation: 1, level: 20, moves: ["watergun", "withdraw"]},
 		],
 		encounters: [
 			{generation: 1, level: 30},
@@ -8286,8 +8286,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["1M"],
 		},
 		eventData: [
-			{generation: 1, level: 20, moves: ["scratch", "harden"]},
 			{generation: 2, level: 5, shiny: 1, moves: ["scratch", "harden", "rockthrow"]},
+			{generation: 1, level: 20, moves: ["scratch", "harden"]},
 		],
 		encounters: [
 			{generation: 1, level: 30},
