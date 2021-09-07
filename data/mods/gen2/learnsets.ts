@@ -6029,7 +6029,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["2M", "1M"],
 		},
 		eventData: [
-			{generation: 1, level: 20, moves: ["comet punch", "agility"]},
+			{generation: 1, level: 20, moves: ["cometpunch", "agility"]},
 		],
 		encounters: [
 			{generation: 1, level: 30},
