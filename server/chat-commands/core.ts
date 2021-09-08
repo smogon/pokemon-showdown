@@ -896,7 +896,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`You already have the temporary symbol '${group}'.`);
 		}
 		if (!Users.Auth.isValidSymbol(group) || !(group in Config.groups) ||
-			(group === Users.SECTIONLEADER_SYMBOL && !(Users.globalAuth.sectionLeaders.has(user.id) || !user.can('bypassall')))) {
+			(group === Users.SECTIONLEADER_SYMBOL && !(Users.globalAuth.sectionLeaders.has(user.id) || user.can('bypassall')))) {
 			return this.errorReply(this.tr`You must specify a valid group symbol.`);
 		}
 		if (!isShow && Config.groups[group].rank > Config.groups[user.tempGroup].rank) {
