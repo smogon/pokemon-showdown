@@ -36,11 +36,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	weedle: {
-		randomBattleMoves: ["poisonsting", "stringshot"],
 		tier: "LC",
 	},
 	kakuna: {
-		randomBattleMoves: ["poisonsting", "stringshot"],
 		tier: "NFE",
 	},
 	beedrill: {
