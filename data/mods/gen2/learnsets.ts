@@ -8172,7 +8172,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["1M"],
 			thief: ["2M"],
 			toxic: ["2M", "1M"],
-			watergun: ["2L19", "1M", "1L1", "1S0"],
+			watergun: ["2L19", "1M", "1L1", "1S1"],
 			whirlpool: ["2M"],
 			withdraw: ["2L1", "2S0", "1L1", "1S0"],
 		},
