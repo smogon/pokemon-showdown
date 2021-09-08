@@ -2128,29 +2128,33 @@ const commands: Chat.ChatCommands = {
 	tournamenthelp() {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
-			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
-			`- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />` +
-			`- cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />` +
-			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
-			`- viewrules/viewbanlist: Shows the custom rules for the tournament.<br />` +
-			`- clearrules/clearbanlist: Clears the custom rules for the tournament before it has started.<br />` +
-			`- name &lt;name>: Sets a custom name for the tournament.<br />` +
-			`- clearname: Clears the custom name of the tournament.<br />` +
-			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
-			`- begin/start: Starts the tournament in the current room.<br />` +
-			`- autostart/setautostart &lt;on|minutes|off>: Sets the automatic start timeout.<br />` +
-			`- dq/disqualify &lt;user>: Disqualifies a user.<br />` +
-			`- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />` +
-			`- runautodq: Manually run the automatic disqualifier.<br />` +
-			`- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />` +
-			`- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />` +
-			`- forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />` +
-			`- forcepublic &lt;on|off>: Forces tournament battles and their replays to be public.<br />` +
-			`- getusers: Lists the users in the current tournament.<br />` +
-			`- announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />` +
-			`- banuser/unbanuser &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks.<br />` +
-			`- sub/replace &lt;olduser>, &lt;newuser>: Substitutes a new user for an old one<br />` +
-			`- settings: Do <code>/help tour settings</code> for more information<br />` +
+			`Tournament Commands<br/>` + 
+			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` + 
+			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` + 
+			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` + 
+			`- begin/start: Starts the tournament in the current room.<br /><br />` + 
+			`<details class="readmore"><summary>More Commands</summary>` + 
+			`- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />` + 
+			`- cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />` + 
+			`- viewrules/viewbanlist: Shows the custom rules for the tournament.<br />` + 
+			`- clearrules/clearbanlist: Clears the custom rules for the tournament before it has started.<br />` + 
+			`- name &lt;name>: Sets a custom name for the tournament.<br />` + 
+			`- clearname: Clears the custom name of the tournament.<br />` + 
+			`- autostart/setautostart &lt;on|minutes|off>: Sets the automatic start timeout.<br />` + 
+			`- dq/disqualify &lt;user>: Disqualifies a user.<br />` + 
+			`- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />` + 
+			`- runautodq: Manually run the automatic disqualifier.<br />` + 
+			`- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />` + 
+			`- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />` + 
+			`- forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />` + 
+			`- forcepublic &lt;on|off>: Forces tournament battles and their replays to be public.<br />` + 
+			`- getusers: Lists the users in the current tournament.<br />` + 
+			`- announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />` + 
+			`- banuser/unbanuser &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks.<br />` + 
+			`- sub/replace &lt;olduser>, &lt;newuser>: Substitutes a new user for an old one<br />` + 
+			`- settings: Do <code>/help tour settings</code> for more information<br />` + 
+			`</details>` + 
+			`<br />` + 
 			`More detailed help can be found <a href="https://www.smogon.com/forums/threads/3570628/#post-6777489">here</a>`
 		);
 	},
