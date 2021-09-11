@@ -10,15 +10,14 @@ describe('Liquid Ooze', function () {
 		battle.destroy();
 	});
 
-	it('should damage the target by the amount it would have healed after it uses a draining move', function () {
+	it('should damage the target after it uses a draining move', function () {
 		battle = common.createBattle([[
 			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
 		], [
 			{species: 'serperior', moves: ['gigadrain']},
 		]]);
 		battle.makeChoices();
-		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-		assert.bounded(damage, [27, 33]);
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it('should damage the target after taking damage from leech seed', function () {
@@ -28,8 +27,7 @@ describe('Liquid Ooze', function () {
 			{species: 'serperior', moves: ['leechseed']},
 		]]);
 		battle.makeChoices();
-		const hp = battle.p2.active[0].maxhp - Math.floor(battle.p1.active[0].maxhp / 8);
-		assert.equal(hp, 254);
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 });
 
@@ -38,15 +36,14 @@ describe('Liquid Ooze [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should damage the target by the amount it would have healed after it uses a draining move', function () {
+	it('should damage the target after it uses a draining move', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
 		], [
 			{species: 'roserade', moves: ['gigadrain']},
 		]]);
 		battle.makeChoices();
-		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-		assert.bounded(damage, [33, 40]);
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it('should damage the target after taking damage from leech seed', function () {
@@ -56,8 +53,7 @@ describe('Liquid Ooze [Gen 4]', function () {
 			{species: 'roserade', moves: ['leechseed']},
 		]]);
 		battle.makeChoices();
-		const hp = battle.p2.active[0].maxhp - Math.floor(battle.p1.active[0].maxhp / 8);
-		assert.equal(hp, 224);
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it('should not damage the target if the target used Dream Eater', function () {
