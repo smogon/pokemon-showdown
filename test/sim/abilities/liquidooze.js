@@ -49,6 +49,17 @@ describe('Liquid Ooze [Gen 4]', function () {
 		assert.bounded(damage, [33, 40]);
 	});
 
+	it('should damage the target after taking damage from leech seed', function () {
+		battle = common.gen(4).createBattle([[
+			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
+		], [
+			{species: 'roserade', moves: ['leechseed']},
+		]]);
+		battle.makeChoices();
+		const hp = battle.p2.active[0].maxhp - Math.floor(battle.p1.active[0].maxhp / 8);
+		assert.equal(hp, 224);
+	});
+
 	it('should not damage the target if the target used Dream Eater', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
