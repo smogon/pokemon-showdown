@@ -187,7 +187,7 @@ function broadcast(room: BasicRoom, title: string, message?: string) {
 
 async function getQuestions(
 	categories: ID[] | 'random' | 'all',
-	order: 'random' | 'time',
+	order: 'newestfirst' | 'oldestfirst' | 'random',
 	limit = 1000
 ): Promise<TriviaQuestion[]> {
 	if (categories === 'random') {
@@ -623,7 +623,7 @@ export class Trivia extends Rooms.RoomGame {
 			if (!cap.questions && !cap.points) {
 				if (this.game.length === 'infinite') {
 					this.questions = await database.getQuestions(this.categories, 1000, {
-						order: this.game.mode.startsWith('Random') ? 'random' : 'time',
+						order: this.game.mode.startsWith('Random') ? 'random' : 'oldestfirst',
 					});
 				}
 				// If there's no score cap, we declare a winner when we run out of questions,
@@ -1536,7 +1536,9 @@ const triviaCommands: Chat.ChatCommands = {
 			if (categories.length > 1) throw new Chat.ErrorMessage(`You cannot combine random with another category.`);
 			categories = 'random';
 		}
-		const questions = await getQuestions(categories, randomizeQuestionOrder ? 'random' : 'time');
+		// Trivia questions are selected with .pop() so sorted fish needs
+		// oldest questions first.
+		const questions = await getQuestions(categories, randomizeQuestionOrder ? 'random' : 'oldestfirst');
 
 		let length: ID | number = toID(targets[2]);
 		if (!LENGTHS[length]) {
@@ -2014,7 +2016,7 @@ const triviaCommands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`'${target}' is not a valid category. View /help trivia for more information.`);
 		}
 
-		const list = await database.getQuestions([category], Number.MAX_SAFE_INTEGER, {order: 'time'});
+		const list = await database.getQuestions([category], Number.MAX_SAFE_INTEGER, {order: 'newestfirst'});
 		if (!list.length) {
 			buffer += `<tr><td>${this.tr`There are no questions in the ${ALL_CATEGORIES[category]} category.`}</td></table></div>`;
 			return this.sendReply(buffer);
