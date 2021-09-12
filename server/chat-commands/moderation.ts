@@ -519,22 +519,25 @@ export const commands: Chat.ChatCommands = {
 	k: 'warn',
 	warn(target, room, user) {
 		if (!target) return this.parse('/help warn');
-		room = this.requireRoom();
 		this.checkChat();
-		if (room.settings.isPersonal && !user.can('warn' as any)) {
+		if (room?.settings.isPersonal && !user.can('warn' as any)) {
 			return this.errorReply("Warning is unavailable in group chats.");
 		}
-		// If used in staff, help tickets or battles, log the warn to the global modlog.
-		const globalWarn = room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
+		// If used in pms, staff, help tickets or battles, log the warn to the global modlog.
+		const globalWarn = !room || room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
 
 		const {targetUser, inputUsername, targetUsername, rest: reason} = this.splitUser(target);
 		const targetID = toID(targetUsername);
 		const {privateReason, publicReason} = this.parseSpoiler(reason);
 
-		const saveReplay = globalWarn && room.battle;
+		const saveReplay = globalWarn && room?.battle;
 		if (!targetUser?.connected) {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${targetUsername}' not found.`);
-			this.checkCan('warn', null, room);
+			if (room) {
+				this.checkCan('warn', null, room);
+			} else {
+				this.checkCan('lock');
+			}
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${publicReason ? ` (${publicReason})` : ``}`);
 			this.globalModlog('WARN OFFLINE', targetUser, privateReason);
@@ -542,13 +545,17 @@ export const commands: Chat.ChatCommands = {
 			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
 		}
-		if (!(targetUser.id in room.users) && !globalWarn) {
+		if (!globalWarn && !(targetUser.id in room.users)) {
 			return this.errorReply(`User ${targetUsername} is not in the room ${room.roomid}.`);
 		}
 		if (publicReason.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
-		this.checkCan('warn', targetUser, room);
+		if (room) {
+			this.checkCan('warn', targetUser, room);
+		} else {
+			this.checkCan('lock', targetUser);
+		}
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to warn upper staff members.");
 
 		const now = Date.now();
@@ -558,18 +565,22 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`You must wait ${remainder} more seconds before you can warn ${targetUser.name} again.`);
 		}
 
-		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(publicReason ? ` (${publicReason})` : ``)}`);
+		const logMessage = `${targetUser.name} was warned by ${user.name}.${(publicReason ? ` (${publicReason})` : ``)}`;
 		if (globalWarn) {
+			this.addGlobalModAction(logMessage);
 			this.globalModlog('WARN', targetUser, privateReason);
 		} else {
+			this.addModAction(logMessage);
 			this.modlog('WARN', targetUser, privateReason, {noalts: 1});
 		}
 		targetUser.send(`|c|~|/warn ${publicReason}`);
 
 		const userid = targetUser.getLastId();
 
-		this.add(`|hidelines|unlink|${userid}`);
-		if (userid !== toID(inputUsername)) this.add(`|hidelines|unlink|${toID(inputUsername)}`);
+		if (room) {
+			this.add(`|hidelines|unlink|${userid}`);
+			if (userid !== toID(inputUsername)) this.add(`|hidelines|unlink|${toID(inputUsername)}`);
+		}
 
 		targetUser.lastWarnedAt = now;
 
