@@ -34,7 +34,7 @@ export interface TriviaDatabase {
 	getQuestions(
 		categories: string[] | 'all',
 		limit: number,
-		options: {order: 'time' | 'random'}
+		options: {order: 'newestfirst' | 'oldestfirst' | 'random'}
 	): Promise<TriviaQuestion[]> | TriviaQuestion[];
 	getLeaderboardEntry(id: ID, isAllTime: boolean): Promise<TriviaLeaderboard | null> | TriviaLeaderboard | null;
 	getLeaderboards(): Promise<TriviaLeaderboards> | TriviaLeaderboards;
@@ -78,7 +78,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	private historyQuery: Statement | null;
 	private historyScoresQuery: Statement | null;
 	private allQuestionsRandomOrderQuery: Statement | null;
-	private allQuestionsTimeOrderQuery: Statement | null;
+	private allQuestionsNewestFirstQuery: Statement | null;
+	private allQuestionsOldestFirstQuery: Statement | null;
 	private answersQuery: Statement | null;
 	private submissionsQuery: Statement | null;
 	private leaderboardQuery: Statement | null;
@@ -115,7 +116,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		this.historyQuery = null;
 		this.historyScoresQuery = null;
 		this.allQuestionsRandomOrderQuery = null;
-		this.allQuestionsTimeOrderQuery = null;
+		this.allQuestionsNewestFirstQuery = null;
+		this.allQuestionsOldestFirstQuery = null;
 		this.answersQuery = null;
 		this.submissionsQuery = null;
 		this.leaderboardQuery = null;
@@ -322,7 +324,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	async getQuestions(
 		categories: string[] | 'all',
 		limit: number,
-		options: {order: 'time' | 'random'}
+		options: {order: 'newestfirst' | 'oldestfirst' | 'random'}
 	): Promise<TriviaQuestion[]> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) throw new Chat.ErrorMessage(`Can't get Trivia questions because SQLite is not enabled.`);
@@ -330,15 +332,17 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		let query;
 		let args;
 		if (categories === 'all') {
-			if (options.order === 'time') {
-				query = this.allQuestionsTimeOrderQuery!;
+			if (options.order === 'newestfirst') {
+				query = this.allQuestionsNewestFirstQuery!;
+			} else if (options.order === 'oldestfirst') {
+				query = this.allQuestionsOldestFirstQuery!;
 			} else {
 				query = this.allQuestionsRandomOrderQuery!;
 			}
 			args = [limit];
 		} else {
 			query = (
-				`SELECT * FROM trivia_questions WHERE category IN (${formatSQLArray(categories)}) AND is_submission = 0 ORDER BY ${options.order === 'time' ? 'added_at DESC' : 'RANDOM()'} LIMIT ?`
+				`SELECT * FROM trivia_questions WHERE category IN (${formatSQLArray(categories)}) AND is_submission = 0 ORDER BY ${options.order === 'random' ? 'RANDOM()' : `added_at ${(options.order === 'oldestfirst' ? 'ASC' : 'DESC')}`} LIMIT ?`
 			);
 			args = [...categories, limit];
 		}
@@ -557,8 +561,11 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		this.allQuestionsRandomOrderQuery = await Chat.database.prepare(
 			`SELECT * FROM trivia_questions WHERE category IN ('ae', 'pokemon', 'sg', 'sh') AND is_submission = 0 ORDER BY RANDOM() LIMIT ?`
 		);
-		this.allQuestionsTimeOrderQuery = await Chat.database.prepare(
+		this.allQuestionsNewestFirstQuery = await Chat.database.prepare(
 			`SELECT * FROM trivia_questions WHERE category IN ('ae', 'pokemon', 'sg', 'sh') AND is_submission = 0 ORDER BY added_at DESC LIMIT ?`
+		);
+		this.allQuestionsOldestFirstQuery = await Chat.database.prepare(
+			`SELECT * FROM trivia_questions WHERE category IN ('ae', 'pokemon', 'sg', 'sh') AND is_submission = 0 ORDER BY added_at ASC LIMIT ?`
 		);
 		this.answersQuery = await Chat.database.prepare(
 			`SELECT * FROM trivia_answers WHERE question_id = ?`
