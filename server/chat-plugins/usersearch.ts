@@ -129,10 +129,13 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 			nameList.push(...targets);
-			Rooms.get('staff')?.addByUser(user, `${user.name} added ${Chat.count(targets, 'terms')} to the usersearch name list.`);
+			const count = Chat.count(targets, 'terms');
+			Rooms.get('staff')?.addByUser(
+				user, `${user.name} added the ${count} "${targets.join(', ')}" to the usersearch name list.`
+			);
 			this.globalModlog(`USERSEARCH ADD`, null, targets.join(', '));
 			if (!room || room.roomid !== 'staff') {
-				this.sendReply(`Added ${Chat.count(targets, 'terms')} to the usersearch name list.`);
+				this.sendReply(`You added the ${count} "${targets.join(', ')}" to the usersearch name list.`);
 			}
 			saveNames();
 		},
@@ -151,10 +154,13 @@ export const commands: Chat.ChatCommands = {
 				}
 				nameList.splice(idx, 1);
 			}
-			Rooms.get('staff')?.addByUser(user, `${user.name} removed ${Chat.count(targets, 'terms')} from the usersearch name list.`);
+			const count = Chat.count(targets, 'terms');
+			Rooms.get('staff')?.addByUser(
+				user, `${user.name} removed the ${count} "${targets.join(', ')}" from the usersearch name list.`
+			);
 			this.globalModlog(`USERSEARCH REMOVE`, null, targets.join(', '));
 			if (!room || room.roomid !== 'staff') {
-				this.sendReply(`You removed ${Chat.count(targets, 'terms')} from the usersearch name list.`);
+				this.sendReply(`You removed the ${count} "${targets.join(', ')}"" from the usersearch name list.`);
 			}
 			saveNames();
 		},
