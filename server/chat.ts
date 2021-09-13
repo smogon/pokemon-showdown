@@ -1190,6 +1190,14 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage(gameFilter);
 		}
 
+		if (room?.settings.highTraffic &&
+			toID(message).replace(/[^a-z]+/, '').length < 2 &&
+			!user.can('show', null, room)) {
+			throw new Chat.ErrorMessage(
+				this.tr`Due to this room being a high traffic room, your message must contain at least two letters.`
+			);
+		}
+
 		if (room) {
 			const normalized = message.trim();
 			if (
@@ -1200,14 +1208,6 @@ export class CommandContext extends MessageContext {
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
-		}
-
-		if (room?.settings.highTraffic &&
-			toID(message).replace(/[^a-z]+/, '').length < 2 &&
-			!user.can('show', null, room)) {
-			throw new Chat.ErrorMessage(
-				this.tr`Due to this room being a high traffic room, your message must contain at least two letters.`
-			);
 		}
 
 		if (Chat.filters.length) {
