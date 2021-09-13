@@ -843,7 +843,9 @@ export const commands: Chat.ChatCommands = {
 		let userid: ID = toID(targetUsername);
 
 		if (!targetUser && !Punishments.search(userid).length && !force) {
-			return this.errorReply(`User '${targetUsername}' not found.`);
+			return this.errorReply(
+				`User '${targetUsername}' not found. Use \`\`/forcelock\`\` if you need to to lock them anyway.`
+			);
 		}
 		if (reason.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
@@ -1776,7 +1778,9 @@ export const commands: Chat.ChatCommands = {
 		const userid = toID(targetUsername);
 
 		if (!targetUser && !force) {
-			return this.errorReply(`User '${targetUsername}' not found.`);
+			return this.errorReply(
+				`User '${targetUsername}' not found. Use \`\`/forcenamelock\`\` if you need to namelock them anyway.`
+			);
 		}
 		if (targetUser && targetUser.id !== toID(inputUsername) && !force) {
 			return this.errorReply(`${inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
