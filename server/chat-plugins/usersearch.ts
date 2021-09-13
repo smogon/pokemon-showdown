@@ -102,6 +102,7 @@ export const commands: Chat.ChatCommands = {
 	usersearchhelp: [
 		`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`,
 		`Adding "page" to the end of the command, i.e. /usersearchpage OR /uspage will bring up a page.`,
+		`See also /usnames for a staff-curated list of the most commonly searched terms.`,
 	],
 	usnames: 'usersearchnames',
 	usersearchnames: {
@@ -158,6 +159,11 @@ export const commands: Chat.ChatCommands = {
 			saveNames();
 		},
 	},
+	usnameshelp: [
+		`/usnames add [...terms]: Adds the given [terms] to the usersearch name list. Requires: % @ &`,
+		`/usnames remove [...terms]: Removes the given [terms] from the usersearch name list. Requires: % @ &`,
+		`/usnames OR /usnames list: Shows the usersearch name list.`,
+	],
 };
 
 export const pages: Chat.PageTable = {
