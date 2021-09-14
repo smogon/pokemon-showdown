@@ -1800,6 +1800,13 @@ export const Punishments = new class {
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
 	}
 
+	isGlobalBanned(user: User): Punishment | undefined {
+		if (!user) throw new Error(`Trying to check if a non-existent user is global banned.`);
+
+		let punishment = Punishments.userids.getByType(user.id, "BAN") || Punishments.userids.getByType(user.id, "FORCEBAN");
+		if (punishment) return punishment;
+	}
+
 	isBlacklistedSharedIp(ip: string) {
 		const num = IPTools.ipToNumber(ip);
 		if (!num) throw new Error(`Invalid IP address: '${ip}'`);
