@@ -73,6 +73,9 @@ export const Repl = new class {
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
 			const directory = path.dirname(path.resolve(__dirname, '..', config.replsocketprefix || 'logs/repl', 'app'));
+			if (!fs.existsSync(directory)) {
+				fs.mkdirSync(directory);
+			}
 			for (const file of fs.readdirSync(directory)) {
 				const pathname = path.resolve(directory, file);
 				const stat = fs.statSync(pathname);
