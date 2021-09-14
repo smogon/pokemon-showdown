@@ -1803,7 +1803,7 @@ export const Punishments = new class {
 	isGlobalBanned(user: User): Punishment | undefined {
 		if (!user) throw new Error(`Trying to check if a non-existent user is global banned.`);
 
-		let punishment = Punishments.userids.getByType(user.id, "BAN") || Punishments.userids.getByType(user.id, "FORCEBAN");
+		const punishment = Punishments.userids.getByType(user.id, "BAN") || Punishments.userids.getByType(user.id, "FORCEBAN");
 		if (punishment) return punishment;
 	}
 
