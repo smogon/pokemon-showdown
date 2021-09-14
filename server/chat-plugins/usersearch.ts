@@ -22,6 +22,7 @@ function searchUsernames(target: string, page = false) {
 	};
 	for (const curUser of Users.users.values()) {
 		if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
+		if (Punishments.isGlobalBanned(curUser)) continue;
 		if (curUser.connected) {
 			results.online.push(`${!page ? ONLINE_SYMBOL : ''} ${curUser.name}`);
 		} else {
