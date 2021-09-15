@@ -2329,7 +2329,7 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`HELPTICKET REMOVENOTE`, ticket.userid, `${note} (originally by ${staff})`);
 		},
 		removenotehelp: [
-			`/helpticket removfenote [ticket userid], [staff] - Removes a note from the [ticket].`,
+			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
 			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
 			`Requires: % @ &`,
 		],
