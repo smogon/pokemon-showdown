@@ -126,9 +126,11 @@ export class LadderStore {
 		}
 
 		if (problem) {
-			// Clear mmrCache for the format to get the users updated rating next search
-			if (p1) delete p1.mmrCache[formatid];
-			if (p2) delete p2.mmrCache[formatid];
+			// We used to clear mmrCache for the format to get the users updated rating next search
+			// we now no longer do that because that results in the user getting paired with other users as though they have 1000 elo
+			// if the next query times out, which happens very frequently. This results in a lot of confusion, so we're just
+			// going to not clear this cache. If the user gets the proper rating later - great. If they don't,
+			// this will ensure they still get matched up in a much more accurate fashion.
 			return [p1score, null, null];
 		}
 
