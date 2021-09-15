@@ -2727,12 +2727,27 @@ export const pages: Chat.PageTable = {
 			`<h2><u>Rules, mods, and clauses</u></h2>`,
 			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
 			`<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`,
-			`<ul>`,
+			`<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th></tr>`,
 		];
 		for (const rule of rules) {
-			rulesets.push(`<li><code>${rule.name}</code>: ${rule.desc}</li>`);
+			if (rule.hasValue) continue;
+			const desc = rule.desc ? rule.desc : "No description.";
+			rulesets.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
 		}
-		rulesets.push(`</ul>`);
+		rulesets.push(
+			`</table></div>`,
+			`<h3>Value rules</h3>`,
+			`<ul><li>Value rules are formatted like [Name] = [value], e.g. "Force Monotype = Water" or "Min Team Size = 4"</li>`,
+			`<li>To remove a value rule, use <code>![rule name]</code>.</li>`,
+			`<li>To override another value rule, use <code>!! [Name] = [new value]</code>. For example, overriding the Min Source Gen on [Gen 8] VGC 2021 Series 10 from 8 to 3 would look like <code>!! Min Source Gen = 3</code>.</li></ul>`,
+			`<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th></tr>`
+		);
+		for (const rule of rules) {
+			if (!rule.hasValue) continue;
+			const desc = rule.desc ? rule.desc : "No description.";
+			rulesets.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
+		}
+		rulesets.push(`</table></div>`);
 		rulesHTML += `${basics.concat(rulesets).join('')}</div>`;
 		return rulesHTML;
 	},
