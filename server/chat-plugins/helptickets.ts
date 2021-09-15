@@ -2542,6 +2542,8 @@ export const commands: Chat.ChatCommands = {
 		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`,
 		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
 		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ &`,
+		`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. `,
+		`Requires: % @ &`,
 	],
 };
 
