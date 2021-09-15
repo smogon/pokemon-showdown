@@ -51,6 +51,8 @@ interface TextTicketInfo {
 	) => boolean | string[] | Promise<boolean | string[]>;
 	title: string;
 	disclaimer?: string;
+	/** Should this be displayed with all the other tickets of the type on a singular page? */
+	listOnly?: boolean;
 	getReviewDisplay: (
 		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection, state?: AnyObject
 	) => Promise<string | void> | string | void;
@@ -949,6 +951,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		},
 	},
 	inapname: {
+		listOnly: true,
 		title: "What's the inappropriate username?",
 		disclaimer: "If the username is offensive in a non-english language, or if it's not obvious, please be sure to explain.",
 		checker(input) {
@@ -1481,6 +1484,58 @@ export const pages: Chat.PageTable = {
 					`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${this.tr(ticketPages[id])}</a>`
 				)
 			);
+			return buf;
+		},
+		async list(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+			this.checkCan('lock');
+			const type = toID(query.shift());
+			let buf = `<div class="pad">`;
+			this.title = '[Help Tickets]';
+			if (!type) {
+				buf += `<h2>Help Tickets</h2><hr />`;
+				const keys = Object.keys(textTickets).filter(id => textTickets[id].listOnly);
+				if (!keys.length) {
+					buf += `<p class="message-error">Currently, no ticket types support mass-view in a list.</p>`;
+					buf += `<p>Use <code>/ht text [username]</code> to view an individual user's ticket instead.</p>`;
+					return buf;
+				}
+				if (type && !keys.includes(type)) {
+					buf += `<p class="message-error">That ticket type does not support mass-view in a list.</p>`;
+					buf += `<p>Use <code>/ht text [username]</code> to view an individual user's ticket instead.</p>`;
+					return buf;
+				}
+				buf += `<p class="message-error">Please specify a valid ticket type.</p>`;
+				buf += `<p>Valid mass-view ticket types:</p>`;
+				buf += keys.map(k => `<a class="button" href="/view-help-list-${k}" target="replace">${k}</a>`).join(' | ');
+				return buf;
+			}
+			this.title += ` ${type}`;
+			buf += `<h2>Help Tickets (${ticketTitles[type]})</h2><hr />`;
+			let count = 0;
+			for (const k in tickets) {
+				const ticket = tickets[k];
+				const typeId = HelpTicket.getTypeId(ticket.type);
+				if (!ticket.resolved && ticket.text && typeId === type) {
+					count++;
+					buf += `<strong>Reporter:</strong> ${ticket.userid}`;
+					buf += await textTickets[typeId].getReviewDisplay(
+						ticket as TicketState & {text: [string, string]},
+						user,
+						this.connection
+					);
+					buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
+					buf += `<br /><strong>Resolve:</strong><br />`;
+					buf += `Respond to reporter: <textarea style="width: 100%" name="text" autocomplete="on"></textarea><br />`;
+					buf += `Staff notes (optional): <textarea style="width: 100%" name="private"></textarea><br />`;
+					buf += `<br /><button class="button notifying" type="submit">Resolve ticket</button></form>`;
+					buf += `<hr />`;
+				}
+			}
+			if (!count) {
+				buf += `<p class="message-error">No active tickets of the type '${ticketTitles[type]}' were found.</p>`;
+				return buf;
+			}
 			return buf;
 		},
 		tickets(query, user, connection) {
@@ -2021,6 +2076,7 @@ export const commands: Chat.ChatCommands = {
 				}
 
 				connection.send(`>view-${pageId}\n|deinit`);
+				Chat.refreshPageFor(`help-list-${HelpTicket.getTypeId(ticket.type)}`, 'staff');
 				return this.popupReply(`Your report has been submitted.`);
 			}
 
@@ -2192,6 +2248,7 @@ export const commands: Chat.ChatCommands = {
 			// from different people clicking at the same time and reading it separately.
 			// Yes. This was a real issue.
 			Chat.refreshPageFor(`help-text-${ticketId}`, 'staff');
+			Chat.refreshPageFor(`help-list-${HelpTicket.getTypeId(ticket.type)}`, 'staff');
 		},
 
 		list(target, room, user) {
@@ -2199,6 +2256,19 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/join view-help-tickets');
 		},
 		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
+
+		inapnames: 'massview',
+		usernames: 'massview',
+		massview(target, room, user) {
+			this.checkCan('lock');
+			target = toID(target);
+			switch (this.cmd) {
+			case 'inapnames': case 'usernames':
+				target = 'inapname';
+				break;
+			}
+			return this.parse(`/j view-help-list${target ? `-${target}` : ""}`);
+		},
 
 		stats(target, room, user) {
 			this.checkCan('lock');
@@ -2259,7 +2329,7 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`HELPTICKET REMOVENOTE`, ticket.userid, `${note} (originally by ${staff})`);
 		},
 		removenotehelp: [
-			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
+			`/helpticket removfenote [ticket userid], [staff] - Removes a note from the [ticket].`,
 			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
 			`Requires: % @ &`,
 		],
