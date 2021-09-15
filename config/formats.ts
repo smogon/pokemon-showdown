@@ -2032,7 +2032,6 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		// searchShow: false,
 		ruleset: ['[Gen 1] OU', 'Allow Tradeback'],
-		banlist: ['Uber'],
 	},
 
 	// Past Gens OU
