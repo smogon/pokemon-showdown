@@ -401,7 +401,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	haze: {
 		inherit: true,
 		onHit(target, source) {
-			this.add('-clearallboost');
+			this.add('-activate', target, 'move: Haze');
+			this.add('-clearallboost', '[silent]');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
 
@@ -417,7 +418,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						pokemon.volatiles[id].counter = 0;
 					} else {
 						pokemon.removeVolatile(id);
-						this.add('-end', pokemon, id);
+						this.add('-end', pokemon, id, '[silent]');
 					}
 				}
 			}
