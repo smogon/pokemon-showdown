@@ -2031,7 +2031,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen1',
 		// searchShow: false,
-		ruleset: ['Obtainable', 'Allow Tradeback', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod'],
+		ruleset: ['[Gen 1] OU', 'Allow Tradeback'],
 		banlist: ['Uber'],
 	},
 
