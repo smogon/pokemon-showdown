@@ -670,6 +670,7 @@ export function notifyStaff() {
 		ticket.open,
 		ticket.open ? [ticket.active, !ticket.claimed, ticket.created] : 0,
 	]);
+	const listOnlyTypes = Object.keys(textTickets).filter(type => textTickets[type].listOnly);
 	let count = 0;
 	let hiddenTicketUnclaimedCount = 0;
 	let hiddenTicketCount = 0;
@@ -677,7 +678,7 @@ export function notifyStaff() {
 	let fourthTicketIndex = 0;
 	let hasAssistRequest = false;
 	for (const ticket of sortedTickets) {
-		if (!ticket.open) continue;
+		if (!ticket.open || listOnlyTypes.includes(HelpTicket.getTypeId(ticket.type))) continue;
 		if (!ticket.active) continue;
 		if (count >= 3) {
 			hiddenTicketCount++;
@@ -707,6 +708,16 @@ export function notifyStaff() {
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
 		buf = buf.slice(0, fourthTicketIndex) +
 			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button>`;
+	}
+	for (const type of listOnlyTypes) {
+		const matches = sortedTickets.filter(
+			ticket => HelpTicket.getTypeId(ticket.type) === type && ticket.open && !ticket.resolved
+		);
+		if (matches.length) {
+			hasUnclaimed = true;
+			count += matches.length;
+			buf += `<button class="button notifying" name="send" value="/j view-help-list-${type}">${ticketTitles[type]} (${matches.length} open)</button> `;
+		}
 	}
 	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox" style="padding: 6px 4px">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
@@ -963,7 +974,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			return true;
 		},
-		getReviewDisplay(ticket) {
+		getReviewDisplay(ticket, staff, conn, state) {
 			let buf = ``;
 			if (!ticket.open) return buf;
 			const cmds: [string, string][] = [
@@ -974,7 +985,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const tar = toID(ticket.text[0]); // should always be the reported userid
 			buf += `<br /><strong>Reported user:</strong> ${tar} `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
-			buf += `<details class="readmore"><summary>Punish <strong>${tar}</strong> (reported user)</summary>`;
+			buf += `<details ${state?.list ? 'open' : ''} class="readmore">`;
+			buf += `<summary>Punish <strong>${tar}</strong> (reported user)</summary>`;
 			buf += `<div class="infobox">`;
 			for (const [name, cmd] of cmds) {
 				buf += `<form data-submitsend="/msgroom staff,${cmd} ${tar},{reason}">`;
@@ -1522,7 +1534,8 @@ export const pages: Chat.PageTable = {
 					buf += await textTickets[typeId].getReviewDisplay(
 						ticket as TicketState & {text: [string, string]},
 						user,
-						this.connection
+						this.connection,
+						{list: true}
 					);
 					buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
 					buf += `<br /><strong>Resolve:</strong><br />`;
