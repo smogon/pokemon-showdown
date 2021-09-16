@@ -539,7 +539,9 @@ export const commands: Chat.ChatCommands = {
 				this.checkCan('lock');
 			}
 
-			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${publicReason ? ` (${publicReason})` : ``}`);
+			this.addGlobalModAction(
+				`${targetUser.name} would be warned by ${user.name} but is offline.${publicReason ? ` (${publicReason})` : ``}`
+			);
 			this.globalModlog('WARN OFFLINE', targetUser, privateReason);
 			Punishments.offlineWarns.set(targetID, reason);
 			if (saveReplay) this.parse('/savereplay forpunishment');
