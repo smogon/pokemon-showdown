@@ -117,7 +117,12 @@ export interface RoomSettings {
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
-	autoModchat?: {rank: GroupSymbol, time: number, active: boolean};
+	autoModchat?: {
+		rank: GroupSymbol,
+		time: number,
+		// stores previous modchat setting. if true, modchat was fully off
+		active: boolean | AuthLevel,
+	};
 	tournaments?: TournamentRoomSettings;
 	defaultFormat?: string;
 
@@ -1045,16 +1050,19 @@ export abstract class BasicRoom {
 			this.modchatTimer = setTimeout(() => {
 				if (!this.settings.autoModchat) return;
 				const {rank} = this.settings.autoModchat;
+				const oldSetting = this.settings.modchat;
 				this.settings.modchat = rank;
 				this.add(
-					`|raw|<div class="broadcast-blue"><strong>This room has had no active staff for ${Chat.toDurationString(time)},` +
+					// always gonna be minutes so we can just use the number directly lol
+					`|raw|<div class="broadcast-blue"><strong>This room has had no active staff for ${time} minutes,` +
 					` and has had modchat set to ${rank}.</strong></div>`
 				).update();
 				this.modlog({
 					action: 'AUTOMODCHAT ACTIVATE',
 				});
 				// automodchat will always exist
-				this.settings.autoModchat.active = true;
+				this.settings.autoModchat.active = oldSetting || true;
+				this.saveSettings();
 			}, time * 60 * 1000);
 		}
 	}
@@ -1065,8 +1073,14 @@ export abstract class BasicRoom {
 				clearTimeout(this.modchatTimer);
 			}
 			if (this.settings.autoModchat?.active) {
-				delete this.settings.modchat;
+				const oldSetting = this.settings.autoModchat.active;
+				if (typeof oldSetting === 'string') {
+					this.settings.modchat = oldSetting;
+				} else {
+					delete this.settings.modchat;
+				}
 				this.settings.autoModchat.active = false;
+				this.saveSettings();
 			}
 		}
 	}
