@@ -313,8 +313,15 @@ export const commands: Chat.ChatCommands = {
 		}
 		room.saveSettings();
 		if (target === 'sync' && !room.settings.modchat) {
-			const lowestStaffGroup = Config.groupsranking.filter(group => Config.groups[group]?.mute)[0];
-			if (lowestStaffGroup) void this.parse(`/modchat ${lowestStaffGroup}`);
+			const lowestGroup = Config.groupsranking.filter(group => {
+				const groupInfo = Users.Auth.getGroup(group);
+				return (
+					groupInfo.symbol !== Users.Auth.defaultSymbol() &&
+					room!.auth.atLeast(user, group) &&
+					Users.Auth.isValidSymbol(groupInfo.symbol)
+				);
+			})[0];
+			if (lowestGroup) void this.parse(`/modchat ${lowestGroup}`);
 		}
 		if (!room.settings.isPrivate) return this.parse('/hiddenroom');
 	},
