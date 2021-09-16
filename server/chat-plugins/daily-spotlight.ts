@@ -171,7 +171,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			saveSpotlights();
 			this.modlog(`DAILY REMOVE`, key);
-			this.privateModAction(`${user.name} successfully rmeoved the daily spotlight named '${key}'.`);
+			this.privateModAction(`${user.name} successfully removed the daily spotlight named '${key}'.`);
 		}
 		Chat.refreshPageFor(`spotlights-${room.roomid}`, room);
 	},
