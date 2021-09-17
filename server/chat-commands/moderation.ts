@@ -1298,14 +1298,14 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('receiveauthmessages', null, room);
 		target = target.replace(/\n/g, "; ");
+		const targetUserid = toID(/\[([^\]]+)\]/.exec(target)?.[1]) || null;
 		if (
-			room.roomid === 'staff' ||
-			room.roomid === 'upperstaff' ||
+			['staff', 'upperstaff'].includes(room.roomid) ||
 			(Rooms.Modlog.getSharedID(room.roomid) && user.can('modlog'))
 		) {
-			this.globalModlog('NOTE', null, target);
+			this.globalModlog('NOTE', targetUserid, target);
 		} else {
-			this.modlog('NOTE', null, target);
+			this.modlog('NOTE', targetUserid, target);
 		}
 
 		this.privateModAction(`${user.name} notes: ${target}`);
