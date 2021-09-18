@@ -201,7 +201,8 @@ export const commands: Chat.ChatCommands = {
 		room.saveSettings();
 	},
 	automodchathelp: [
-		`/automodchat [number], [rank] - Sets modchat [rank] to automatically turn on after [number] minutes. [number] must be between 5 and 480. Requires: # &`,
+		`/automodchat [number], [rank] - Sets modchat [rank] to automatically turn on after [number] minutes with no staff.`,
+		`[number] must be between 5 and 480. Requires: # &`,
 		`/automodchat off - Turns off automodchat.`,
 	],
 
