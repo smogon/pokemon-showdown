@@ -13,6 +13,62 @@ describe('[Gen 7] Random Battle', () => {
 		testNotBothMoves('chimecho', options, 'calmmind', 'yawn');
 	});
 
+	it('should give Azumarill Aqua Jet', () => {
+		testSet('azumarill', options, set => {
+			assert(set.moves.includes('aquajet'), `Azumarill: got ${set.moves}`);
+		});
+	});
+
+	it('should give Typhlosion Eruption', () => {
+		testSet('typhlosion', options, set => {
+			assert(set.moves.includes('eruption'), `Typhlosion: got ${set.moves}`);
+		});
+	});
+
+	it('should not generate Pursuit as the only Dark STAB move', () => {
+		testSet('weavile', options, set => {
+			if (set.moves.includes('pursuit')) {
+				assert(set.moves.includes('knockoff'), `Weavile: got ${set.moves}`);
+			}
+		});
+
+		testSet('mukalola', options, set => {
+			if (set.moves.includes('pursuit')) {
+				assert(set.moves.includes('knockoff'), `Muk-Alola: got ${set.moves}`);
+			}
+		});
+
+		testSet('honchkrow', options, set => {
+			if (set.moves.includes('pursuit')) {
+				assert(set.moves.includes('suckerpunch'), `Honchkrow: got ${set.moves}`);
+			}
+		});
+
+		testSet('tyranitar', options, set => {
+			if (set.moves.includes('pursuit')) {
+				assert(set.moves.includes('crunch'), `Tyranitar: got ${set.moves}`);
+			}
+		});
+
+		testSet('skuntank', options, set => {
+			if (set.moves.includes('pursuit')) {
+				assert(set.moves.includes('crunch'), `Skuntank: got ${set.moves}`);
+			}
+		});
+
+		testSet('spiritomb', options, set => {
+			if (set.moves.includes('pursuit')) {
+				assert(set.moves.includes('darkpulse'), `Spiritomb: got ${set.moves}`);
+			}
+		});
+
+		testSet('krookodile', options, set => {
+			if (set.moves.includes('pursuit')) {
+				assert(set.moves.includes('knockoff'), `Krookodile: got ${set.moves}`);
+			}
+		});
+	});
+
 	it('should not generate Roar + Protect', () => {
 		testNotBothMoves('heatran', options, 'roar', 'protect');
 		testNotBothMoves('vaporeon', options, 'roar', 'protect');
