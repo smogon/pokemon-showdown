@@ -1,3 +1,562 @@
 export const Pokedex: {[k: string]: ModdedSpeciesData} = {
-	// HAs
+	weedle: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	beedrill: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	ekans: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	arbok: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	paras: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	parasect: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	venonat: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	venomoth: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	grimer: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	muk: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	pinsir: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	snorlax: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	aipom: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	pineco: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	forretress: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	heracross: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	wurmple: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	beautifly: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	dustox: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	seedot: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	nuzleaf: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	shiftry: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	shroomish: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	breloom: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	nincada: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	ninjask: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	roselia: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	gulpin: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	swalot: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	zangoose: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	seviper: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	turtwig: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	grotle: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	torterra: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	chimchar: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	monferno: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	infernape: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	piplup: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	prinplup: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	empoleon: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	kricketot: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	kricketune: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	budew: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	roserade: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	combee: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	vespiquen: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	ambipom: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	snivy: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	servine: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	serperior: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	tepig: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	pignite: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	emboar: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	oshawott: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	dewott: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	samurott: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	patrat: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	watchog: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	lillpup: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	herdier: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	stoutland: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	purrloin: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	liepard: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	pansage: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	simisage: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	pansear: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	simisear: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	panpour: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	simipour: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	pidove: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	tranquil: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	unfezant: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	drilbur: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	excadrill: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	audino: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	timburr: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	gurdurr: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	conkeldurr: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	tympole: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	palpitoad: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	seismitoad: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	throh: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	sawk: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	venipede: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	whirlipede: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	scolipede: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	cottonee: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	whimsicott: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	petilil: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	lillgant: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	basculin: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	basculinbluestriped: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	sandile: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	krokorok: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	krookodile: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	maractus: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	dwebble: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	crustle: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	scraggy: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	scrafty: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	sigilyph: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	tirtouga: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	carracosta: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	gothorita: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	gothitelle: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	solosis: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	duosion: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	reuniclus: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	ducklett: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	swanna: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	vanillite: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	vanillish: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	vanilluxe: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	emolga: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	karrablast: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	escavalier: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	alomomola: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	joltik: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	galvantula: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	klink: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	klang: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	klinklang: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	elgyem: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	beheeyem: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	axew: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	fraxure: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	haxorus: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	shelmet: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	accelgor: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	stunfisk: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	druddigon: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	golett: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	golurk: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	pawniard: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	bisharp: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	heatmor: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	durant: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	tornadus: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	thundurus: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	landorus: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 }
