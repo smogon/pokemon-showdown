@@ -97,7 +97,7 @@ export const commands: Chat.ChatCommands = {
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, mod=gen${targetGen}`;
 		const split = target.split(',').map(term => term.trim());
-		const index = split.findIndex(x => /^max ?gen/.test(x.toLowerCase()));
+		const index = split.findIndex(x => /^max\s*gen/i.test(x));
 		if (index >= 0) {
 			const genNum = parseInt(/\d*$/.exec(split[index])?.[0] || '');
 			if (!isNaN(genNum) && !(genNum < 1 || genNum > Dex.gen)) {
@@ -282,7 +282,7 @@ export const commands: Chat.ChatCommands = {
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, mod=gen${targetGen}`;
 		const split = target.split(',').map(term => term.trim());
-		const index = split.findIndex(x => /^max ?gen/.test(x.toLowerCase()));
+		const index = split.findIndex(x => /^max\s*gen/i.test(x));
 		if (index >= 0) {
 			const genNum = parseInt(/\d*$/.exec(split[index])?.[0] || '');
 			if (!isNaN(genNum) && !(genNum < 1 || genNum > Dex.gen)) {
