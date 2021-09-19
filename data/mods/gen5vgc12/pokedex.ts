@@ -187,42 +187,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
-	snivy: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	servine: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	serperior: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	tepig: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	pignite: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	emboar: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	oshawott: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	dewott: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	samurott: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
 	patrat: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -279,11 +243,39 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
-	tranquil: {
+	tranquill: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
 	unfezant: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	blitzle: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	zebstrika: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	roggenrola: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	boldore: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	gigalith: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	woobat: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	swoobat: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
@@ -328,6 +320,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		unreleasedHidden: true,
 	},
 	sawk: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	sewaddle: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	swadloon: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	leavanny: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
@@ -411,6 +415,22 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
+	trubbish: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	garbodor: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	minccino: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	cinccino: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 	gothorita: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -451,6 +471,14 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
+	deerling: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	sawsbuck: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 	emolga: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -463,6 +491,22 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
+	foongus: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	amoonguss: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	frillish: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	jellicent: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 	alomomola: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -472,10 +516,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		unreleasedHidden: true,
 	},
 	galvantula: {
-		inherit: true,
-		unreleasedHidden: true,
-	},
-	klink: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
@@ -507,6 +547,14 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
+	cubchoo: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	beartic: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 	shelmet: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -516,6 +564,14 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		unreleasedHidden: true,
 	},
 	stunfisk: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	mienfoo: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	mienshao: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
@@ -536,6 +592,22 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		unreleasedHidden: true,
 	},
 	bisharp: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	bouffalant: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	braviary: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	vullaby: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	mandibuzz: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
