@@ -3002,7 +3002,7 @@ export const Formats: FormatList = [
 		mod: 'gen5vgc11',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 5] VGC 2012', 'Unova Pokedex'],
+		ruleset: ['[Gen 5] VGC 2012', 'Old Unova Pokedex'],
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",
