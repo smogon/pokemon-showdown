@@ -1647,7 +1647,7 @@ export const commands: Chat.ChatCommands = {
 			return false;
 		}
 
-		this.sendChatMessage(`/text ${user.name} cancelled the challenge.`);
+		this.sendChatMessage(`/log ${user.name} cancelled the challenge.`);
 		return Ladders.challenges.remove(chall);
 	},
 
@@ -1684,7 +1684,7 @@ export const commands: Chat.ChatCommands = {
 			return false;
 		}
 
-		this.sendChatMessage(`/text ${user.name} rejected the challenge.`);
+		this.sendChatMessage(`/nonotify ${user.name} rejected the challenge.`);
 		return Ladders.challenges.remove(chall, false);
 	},
 

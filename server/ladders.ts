@@ -208,7 +208,7 @@ class Ladder extends LadderStore {
 			}
 		}
 		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready));
-		Ladders.challenges.send(user.id, targetUser.id, `/text ${user.name} wants to battle!`);
+		Ladders.challenges.send(user.id, targetUser.id, `/log ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
 		return true;
 	}
