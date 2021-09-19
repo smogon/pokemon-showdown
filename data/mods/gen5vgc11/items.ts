@@ -1,33 +1,25 @@
 export const Items: {[k: string]: ModdedItemData} = {
-	apicotberry: {
+	belueberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	custapberry: {
+	durinberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	ganlonberry: {
+	nomelberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	jabocaberry: {
+	rabutaberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	liechiberry: {
+	spelonberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	petayaberry: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
-	rowapberry: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
-	salacberry: {
+	watmelberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
