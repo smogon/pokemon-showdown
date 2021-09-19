@@ -2996,7 +2996,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	lucario: {
-		randomBattleMoves: ["closecombat", "extremespeed", "icepunch", "meteormash", "swordsdance"],
+		randomBattleMoves: ["closecombat", "extremespeed", "meteormash", "stoneedge", "swordsdance"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["closecombat", "darkpulse", "extremespeed", "icepunch", "meteormash", "protect", "swordsdance"],
 		randomDoubleBattleLevel: 84,
@@ -5057,7 +5057,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	silvallyfairy: {
-		randomBattleMoves: ["firefang", "multiattack", "psychicfangs", "swordsdance"],
+		randomBattleMoves: ["flamecharge", "multiattack", "psychicfangs", "swordsdance"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["flamethrower", "multiattack", "partingshot", "tailwind"],
 		randomDoubleBattleLevel: 88,
@@ -5439,7 +5439,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	zeraora: {
-		randomBattleMoves: ["bulkup", "closecombat", "firepunch", "grassknot", "knockoff", "plasmafists", "playrough", "voltswitch"],
+		randomBattleMoves: ["blazekick", "bulkup", "closecombat", "grassknot", "knockoff", "plasmafists", "playrough", "voltswitch"],
 		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["closecombat", "fakeout", "grassknot", "knockoff", "plasmafists", "playrough", "snarl"],
 		randomDoubleBattleLevel: 78,
@@ -5471,7 +5471,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	rillaboom: {
 		randomBattleMoves: ["grassyglide", "highhorsepower", "knockoff", "uturn", "woodhammer"],
-		randomBattleLevel: 77,
+		randomBattleLevel: 78,
 		randomDoubleBattleMoves: ["fakeout", "grassyglide", "highhorsepower", "protect", "uturn", "woodhammer"],
 		randomDoubleBattleLevel: 80,
 		tier: "OU",
@@ -5592,7 +5592,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	eldegoss: {
-		randomBattleMoves: ["charm", "energyball", "leechseed", "pollenpuff", "rapidspin", "sleeppowder"],
+		randomBattleMoves: ["energyball", "leechseed", "pollenpuff", "rapidspin", "sleeppowder"],
 		randomBattleLevel: 90,
 		randomDoubleBattleMoves: ["charm", "energyball", "helpinghand", "pollenpuff", "protect", "sleeppowder"],
 		randomDoubleBattleLevel: 90,
