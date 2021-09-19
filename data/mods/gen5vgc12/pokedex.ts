@@ -559,4 +559,4 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
-}
+};
