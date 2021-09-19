@@ -26,47 +26,22 @@ describe('[Gen 7] Random Battle', () => {
 	});
 
 	it('should not generate Pursuit as the only Dark STAB move', () => {
-		testSet('weavile', options, set => {
-			if (set.moves.includes('pursuit')) {
-				assert(set.moves.includes('knockoff'), `Weavile: got ${set.moves}`);
-			}
-		});
-
-		testSet('mukalola', options, set => {
-			if (set.moves.includes('pursuit')) {
-				assert(set.moves.includes('knockoff'), `Muk-Alola: got ${set.moves}`);
-			}
-		});
-
-		testSet('honchkrow', options, set => {
-			if (set.moves.includes('pursuit')) {
-				assert(set.moves.includes('suckerpunch'), `Honchkrow: got ${set.moves}`);
-			}
-		});
-
-		testSet('tyranitar', options, set => {
-			if (set.moves.includes('pursuit')) {
-				assert(set.moves.includes('crunch'), `Tyranitar: got ${set.moves}`);
-			}
-		});
-
-		testSet('skuntank', options, set => {
-			if (set.moves.includes('pursuit')) {
-				assert(set.moves.includes('crunch'), `Skuntank: got ${set.moves}`);
-			}
-		});
-
-		testSet('spiritomb', options, set => {
-			if (set.moves.includes('pursuit')) {
-				assert(set.moves.includes('darkpulse'), `Spiritomb: got ${set.moves}`);
-			}
-		});
-
-		testSet('krookodile', options, set => {
-			if (set.moves.includes('pursuit')) {
-				assert(set.moves.includes('knockoff'), `Krookodile: got ${set.moves}`);
-			}
-		});
+    	const dex = Dex.forFormat(options.format);
+		const darkTypesWithPursuit = dex.species
+        	.all()
+        	.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves.includes('pursuit'))
+        	.map(pkmn => pkmn.id);
+    	for (const pokemon of darkTypesWithPursuit) {
+        	testSet(pokemon, options, set => {
+            	if (!set.moves.includes('pursuit')) return;
+            	const darkStab = set.moves.filter(m => {
+                	const move = dex.moves.get(m);
+                	if (move.type !== 'Dark') return false;
+                	return move.category !== 'Status';
+            	});
+            	assert(darkStab.length > 1, `${pokemon}: got ${set.moves}`);
+        	});
+    	}
 	});
 
 	it('should not generate Roar + Protect', () => {
