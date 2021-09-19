@@ -3027,9 +3027,9 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['[Gen 4] OU', 'Baton Pass Clause'],
+		ruleset: ['[Gen 4] OU'],
 		banlist: ['OU', 'UUBL'],
-		unbanlist: ['Arena Trap', 'Sand Veil', 'Baton Pass'],
+		unbanlist: ['Arena Trap'],
 	},
 	{
 		name: "[Gen 4] NU",
@@ -3040,8 +3040,9 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['[Gen 4] UU'],
+		ruleset: ['[Gen 4] UU', 'Baton Pass Clause'],
 		banlist: ['UU', 'NUBL'],
+		unbanlist: ['Sand Veil', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 4] PU",
