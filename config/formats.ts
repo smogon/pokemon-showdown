@@ -2535,14 +2535,8 @@ export const Formats: FormatList = [
 			timeoutAutoChoose: true,
 			dcTimerBank: false,
 		},
-		ruleset: [
-			'Picked Team Size = 4', 'Min Source Gen = 7', 'Adjust Level = 50',
-			'Obtainable', 'Alola Pokedex', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
-		],
-		banlist: [
-			'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zygarde', 'Mega',
-			'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry',
-		],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7'],
+		banlist: ['Mega', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
 	},
 	{
 		name: "[Gen 7] Battle Spot Doubles",
@@ -2766,24 +2760,9 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: [
-			'Picked Team Size = 4', 'Min Source Gen = 6', 'Adjust Level Down = 50',
-			'Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod',
-		],
-		banlist: [
-			'Mythical', 'Soul Dew',
-		],
-		onValidateTeam(team) {
-			const legends = [
-				'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde',
-			];
-			let n = 0;
-			for (const set of team) {
-				const baseSpecies = this.dex.species.get(set.species).baseSpecies;
-				if (legends.includes(baseSpecies)) n++;
-				if (n > 2) return ["You can only use up to two legendary Pok\u00E9mon."];
-			}
-		},
+		ruleset: ['Flat Rules', 'Min Source Gen = 6', 'Limit Two Restricted'],
+		restricted: ['Restricted Legendary'],
+		banlist: ['Soul Dew'],
 	},
 	{
 		name: "[Gen 6] Battle Spot Doubles",
@@ -2796,6 +2775,15 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		banlist: ['Soul Dew'],
+	},
+	{
+		name: "[Gen 6] VGC 2014",
+
+		mod: 'gen6xy',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Flat Rules', 'Kalos Pokedex', 'Min Source Gen = 6'],
 		banlist: ['Soul Dew'],
 	},
 	{
@@ -2991,18 +2979,20 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 5] VGC 2012",
 
-		mod: 'gen5vgc12',
+		mod: 'gen5bw1',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 5] GBU Doubles'],
+		ruleset: ['Flat Rules'],
+		banlist: ['Dark Void', 'Sky Drop', 'Soul Dew'],
 	},
 	{
 		name: "[Gen 5] VGC 2011",
 
-		mod: 'gen5vgc11',
+		mod: 'gen5bw1',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 5] VGC 2012', 'Old Unova Pokedex'],
+		ruleset: ['Flat Rules', 'Old Unova Pokedex'],
+		banlist: ['Sky Drop', 'Soul Dew', 'Belue Berry', 'Durin Berry', 'Nomel Berry', 'Rabuta Berry', 'Rabuta Berry', 'Spelon Berry', 'Watmel Berry'],
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",
