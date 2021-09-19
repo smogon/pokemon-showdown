@@ -2989,6 +2989,22 @@ export const Formats: FormatList = [
 		banlist: ['Dark Void', 'Sky Drop', 'Soul Dew'],
 	},
 	{
+		name: "[Gen 5] VGC 2012",
+
+		mod: 'gen5vgc12',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['[Gen 5] GBU Doubles'],
+	},
+	{
+		name: "[Gen 5] VGC 2011",
+
+		mod: 'gen5vgc11',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['[Gen 5] VGC 2012', 'Unova Pokedex'],
+	},
+	{
 		name: "[Gen 5] Doubles Custom Game",
 
 		mod: 'gen5',
