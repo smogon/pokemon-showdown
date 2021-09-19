@@ -26,22 +26,22 @@ describe('[Gen 7] Random Battle', () => {
 	});
 
 	it('should not generate Pursuit as the only Dark STAB move', () => {
-    	const dex = Dex.forFormat(options.format);
+		const dex = Dex.forFormat(options.format);
 		const darkTypesWithPursuit = dex.species
-        	.all()
-        	.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves.includes('pursuit'))
-        	.map(pkmn => pkmn.id);
-    	for (const pokemon of darkTypesWithPursuit) {
-        	testSet(pokemon, options, set => {
-            	if (!set.moves.includes('pursuit')) return;
-            	const darkStab = set.moves.filter(m => {
-                	const move = dex.moves.get(m);
-                	if (move.type !== 'Dark') return false;
-                	return move.category !== 'Status';
-            	});
-            	assert(darkStab.length > 1, `${pokemon}: got ${set.moves}`);
-        	});
-    	}
+			.all()
+			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves.includes('pursuit'))
+			.map(pkmn => pkmn.id);
+		for (const pokemon of darkTypesWithPursuit) {
+			testSet(pokemon, options, set => {
+				if (!set.moves.includes('pursuit')) return;
+				const darkStab = set.moves.filter(m => {
+					const move = dex.moves.get(m);
+					if (move.type !== 'Dark') return false;
+					return move.category !== 'Status';
+				});
+				assert(darkStab.length > 1, `${pokemon}: got ${set.moves}`);
+			});
+		}
 	});
 
 	it('should not generate Roar + Protect', () => {
