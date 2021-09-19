@@ -29,7 +29,7 @@ describe('[Gen 7] Random Battle', () => {
 		const dex = Dex.forFormat(options.format);
 		const darkTypesWithPursuit = dex.species
 			.all()
-			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves.includes('pursuit'))
+			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves?.includes('pursuit'))
 			.map(pkmn => pkmn.id);
 		for (const pokemon of darkTypesWithPursuit) {
 			testSet(pokemon, options, set => {
