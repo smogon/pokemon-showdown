@@ -19,6 +19,14 @@ describe('[Gen 8] Random Battle', () => {
 		});
 	});
 
+	it('should not generate Stone Edge + Swords Dance Lucario', () => {
+		testNotBothMoves('lucario', options, 'stoneedge', 'swordsdance');
+	});
+
+	it('should not generate Shift Gear + U-turn Genesect', () => {
+		testNotBothMoves('Genesect', options, 'shiftgear', 'uturn');
+	});
+
 	it('should not generate Flame Charge + Flare Blitz Solgaleo', () => {
 		testNotBothMoves('solgaleo', options, 'flamecharge', 'flareblitz');
 	});
