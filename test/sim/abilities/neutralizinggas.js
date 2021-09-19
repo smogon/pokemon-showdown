@@ -257,7 +257,6 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices();
 		assert.species(eiscue, 'Eiscue-Noice');
 		battle.makeChoices('auto', 'switch 2');
-		console.log(battle.getDebugLog());
 		assert.species(eiscue, 'Eiscue-Noice');
 	});
 
