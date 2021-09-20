@@ -51,6 +51,11 @@ interface TextTicketInfo {
 	) => boolean | string[] | Promise<boolean | string[]>;
 	title: string;
 	disclaimer?: string;
+	/**
+	 * Set this to prompt for more specific context beyond
+	 * "Do you have any other information you want to provide? (this is optional)"
+	 */
+	contextMessage?: string;
 	/** Should this be displayed with all the other tickets of the type on a singular page? */
 	listOnly?: boolean;
 	getReviewDisplay: (
@@ -964,7 +969,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 	inapname: {
 		listOnly: true,
 		title: "What's the inappropriate username?",
-		disclaimer: "If the username is offensive in a non-english language, or if it's not obvious, please be sure to explain.",
+		contextMessage: "If the username is offensive in a non-English language, or if it's not obvious, please be sure to explain below.",
 		checker(input) {
 			if (!Users.get(input)) {
 				return [
@@ -1472,7 +1477,11 @@ export const pages: Chat.PageTable = {
 						}
 						buf += `<form data-submitsend="/helpticket submit ${ticketTitles[page.slice(7)]} ${submitMeta} | {text} | {context}">`;
 						buf += `<textarea style="width: 100%" name="text"></textarea><br />`;
-						buf += `<strong>Do you have any other information you want to provide? (this is optional)</strong><br />`;
+						buf += `<strong>${"Do you have any other information you want to provide? (this is optional)"}</strong>`;
+						if (textTicket.contextMessage) {
+							buf += `<br />${textTicket.contextMessage}`;
+						}
+						buf += `<br />`;
 						buf += `<textarea style="width: 100%" name="context"></textarea><br />`;
 						buf += `<br /><button class="button notifying" type="submit">Submit ticket</button></form>`;
 					} else {
