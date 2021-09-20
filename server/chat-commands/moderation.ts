@@ -1252,6 +1252,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	rangelock: 'lockip',
 	yearlockip: 'lockip',
+	yearnamelockip: 'lockip',
 	lockip(target, room, user, connection, cmd) {
 		const [ip, reason] = this.splitOne(target);
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help lockip');
@@ -1260,7 +1261,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('rangeban');
 		const ipDesc = ip.endsWith('*') ? `IP range ${ip}` : `IP ${ip}`;
 
-		const year = cmd === 'yearlockip';
+		const year = cmd.startsWith('year');
 		const curPunishment = Punishments.byWeight(Punishments.ipSearch(ip) || [])[0];
 		if (!year && curPunishment && (curPunishment.type === 'BAN' || curPunishment.type === 'LOCK')) {
 			const punishDesc = curPunishment.type === 'BAN' ? `temporarily banned` : `temporarily locked`;
@@ -1268,18 +1269,20 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const time = year ? Date.now() + 365 * 24 * 60 * 60 * 1000 : null;
-		Punishments.lockRange(ip, reason, time);
+		const type = cmd.includes('name') ? 'NAMELOCK' : 'LOCK';
+		Punishments.punishRange(ip, reason, time, type);
 
 		if (year) {
-			this.addGlobalModAction(`${user.name} year-locked the ${ipDesc}: ${reason}`);
+			this.addGlobalModAction(`${user.name} year-${type.toLowerCase()}ed the ${ipDesc}: ${reason}`);
 		} else {
-			this.addGlobalModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
+			this.addGlobalModAction(`${user.name} hour-${type.toLowerCase()}ed the ${ipDesc}: ${reason}`);
 		}
-		this.globalModlog(`${year ? 'YEAR' : 'RANGE'}LOCK`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
+		this.globalModlog(`${year ? 'YEAR' : 'RANGE'}${type}`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
 	},
 	lockiphelp: [
 		`/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
 		`/yearlockip [ip] - Globally locks this IP or IP range for one year. Accepts wildcards to ban ranges.`,
+		`/yearnamelockip [ip] - Namelocks this IP or IP range for one year. Accepts wildcards to ban ranges.`,
 		`Existing users on the IP will not be banned. Requires: &`,
 	],
 

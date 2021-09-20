@@ -1232,9 +1232,15 @@ export const Punishments = new class {
 		}
 	}
 
-	lockRange(range: string, reason: string, expireTime?: number | null) {
+	punishRange(
+		range: string,
+		reason: string,
+		expireTime?: number | null,
+		punishType?: string
+	) {
 		if (!expireTime) expireTime = Date.now() + RANGELOCK_DURATION;
-		const punishment = {type: 'LOCK', id: '#rangelock', expireTime, reason} as Punishment;
+		if (!punishType) punishType = 'LOCK';
+		const punishment = {type: punishType, id: '#rangelock', expireTime, reason} as Punishment;
 		Punishments.ips.add(range, punishment);
 
 		const ips = [];
@@ -1249,7 +1255,7 @@ export const Punishments = new class {
 		void Punishments.appendPunishment({
 			userids: [],
 			ips,
-			punishType: 'LOCK',
+			punishType,
 			expireTime,
 			reason,
 			rest: [],
@@ -1640,6 +1646,7 @@ export const Punishments = new class {
 						user.locked = punishment.id;
 						if (punishment.type === 'NAMELOCK') {
 							user.namelocked = punishment.id;
+							user.resetName(true);
 						}
 					} else {
 						const info = Punishments.punishmentTypes.get(punishment.type);
