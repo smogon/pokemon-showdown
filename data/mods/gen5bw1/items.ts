@@ -35,4 +35,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	souldew: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 };
