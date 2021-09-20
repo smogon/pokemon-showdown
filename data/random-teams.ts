@@ -97,7 +97,9 @@ export class RandomTeams {
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;
-		this.forceMonotype = ruleTable.valueRules.get('forcemonotype');
+		const forceMonotype = ruleTable.valueRules.get('forcemonotype');
+		this.forceMonotype = forceMonotype && this.dex.types.get(forceMonotype).exists ?
+			this.dex.types.get(forceMonotype).name : undefined;
 
 		this.factoryTier = '';
 		this.format = format;
