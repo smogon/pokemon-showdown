@@ -1809,7 +1809,13 @@ export const Punishments = new class {
 
 	isBlacklistedSharedIp(ip: string) {
 		const num = IPTools.ipToNumber(ip);
-		if (!num) throw new Error(`Invalid IP address: '${ip}'`);
+		if (!num) {
+			if (IPTools.ipRangeRegex.test(ip)) {
+				return this.sharedIpBlacklist.has(ip);
+			} else {
+				throw new Error(`Invalid IP address: '${ip}'`);
+			}
+		}
 		for (const [blacklisted, reason] of this.sharedIpBlacklist) {
 			const range = IPTools.stringToRange(blacklisted);
 			if (!range) throw new Error("Falsy range in sharedIpBlacklist");
