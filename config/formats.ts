@@ -2992,7 +2992,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', 'Old Unova Pokedex'],
-		banlist: ['Sky Drop', 'Soul Dew', 'Belue Berry', 'Durin Berry', 'Nomel Berry', 'Rabuta Berry', 'Rabuta Berry', 'Spelon Berry', 'Watmel Berry'],
+		banlist: ['Sky Drop', 'Soul Dew', 'Belue Berry', 'Durin Berry', 'Nomel Berry', 'Rabuta Berry', 'Spelon Berry', 'Watmel Berry'],
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",
