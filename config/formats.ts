@@ -796,7 +796,7 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: [
-			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Melmetal', 'Toxapex', 'Zacian', 'Zacian-Crowned',
+			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Marowak-Alola', 'Melmetal', 'Toxapex', 'Zacian', 'Zacian-Crowned',
 			'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass',
 		],
 		onValidateTeam(team) {
