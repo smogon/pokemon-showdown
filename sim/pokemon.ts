@@ -562,7 +562,12 @@ export class Pokemon {
 			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 		}
 
-		if (statName === 'spe' && stat > 10000 && !this.battle.format.battle?.trunc) stat = 10000;
+		if (statName === 'spe') {
+			const paralysisMultiplier = this.battle.gen >= 7 ? 50 : 25;
+			if (this.status === 'par' && !this.hasAbility('quickfeet')) stat = Math.floor(stat * paralysisMultiplier / 100);
+			if (stat > 10000 && !this.battle.format.battle?.trunc) stat = 10000;
+		}
+
 		return stat;
 	}
 

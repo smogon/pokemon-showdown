@@ -5,14 +5,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.damage(pokemon.baseMaxhp / 8);
 		},
 	},
-	par: {
-		inherit: true,
-		onModifySpe(spe, pokemon) {
-			if (!pokemon.hasAbility('quickfeet')) {
-				return this.chainModify(0.25);
-			}
-		},
-	},
 	confusion: {
 		inherit: true,
 		onBeforeMove(pokemon) {

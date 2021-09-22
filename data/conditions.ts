@@ -27,11 +27,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.add('-status', target, 'par');
 			}
 		},
-		onModifySpe(spe, pokemon) {
-			if (!pokemon.hasAbility('quickfeet')) {
-				return this.chainModify(0.5);
-			}
-		},
+		// Speed reduction is handled directly in the sim/pokemon.ts getStat function
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
 			if (this.randomChance(1, 4)) {
