@@ -3141,14 +3141,16 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Flat Rules', '! Picked Team Size', 'Max Team Size = 4', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
+		banlist: ['Soul Dew'],
 	},
 	{
 		name: "[Gen 4] VGC 2009",
 
-		mod: 'gen4',
+		mod: 'gen4pt',
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', '! Adjust Level Down', 'Max Level = 50', '! Picked Team Size', 'Max Team Size = 4'],
+		banlist: ['Soul Dew', 'Rotom-Heat', 'Rotom-Wash', 'Rotom-Frost', 'Rotom-Fan', 'Rotom-Mow'],
 	},
 	{
 		name: "[Gen 4] Doubles Custom Game",
