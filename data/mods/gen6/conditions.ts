@@ -5,6 +5,17 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.damage(pokemon.baseMaxhp / 8);
 		},
 	},
+	par: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
+			spe = this.finalModify(spe);
+			if (!pokemon.hasAbility('quickfeet')) {
+				spe = Math.floor(spe * 25 / 100);
+			}
+			return spe;
+		},
+	},
 	confusion: {
 		inherit: true,
 		onBeforeMove(pokemon) {
