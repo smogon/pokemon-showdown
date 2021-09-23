@@ -1218,6 +1218,7 @@ export class CommandContext extends MessageContext {
 	}
 	checkCanPM(targetUser: User, user?: User) {
 		if (!user) user = this.user;
+		if (user.id === targetUser.id) return true; // lol.
 		const setting = targetUser.settings.blockPMs;
 		if (user.can('lock') || !setting) return true;
 		if (setting === true && !user.can('lock')) return false; // this is to appease TS
