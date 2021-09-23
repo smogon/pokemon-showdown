@@ -242,7 +242,7 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
-	it.skip(`should not prevent Ice Face from blocking damage nor reform Ice Face when leaving the field`, function () {
+	it(`should not prevent Ice Face from blocking damage nor reform Ice Face when leaving the field`, function () {
 		battle = common.createBattle([[
 			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk', 'hail']},
 		], [
