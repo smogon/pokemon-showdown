@@ -426,6 +426,17 @@ export const namefilter: Chat.NameFilter = (name, user) => {
 	const id = toID(name);
 	if (Punishments.namefilterwhitelist.has(id)) return name;
 	if (Monitor.forceRenames.has(id)) {
+		if (typeof Monitor.forceRenames.get(id) === 'number') {
+			// we check this for hotpatching reasons, since on the initial chat patch this will still be a Utils.MultiSet
+			// we're gonna assume no one has seen it since that covers people who _haven't_ actually, and those who have
+			// likely will not be attempting to log into it
+			Monitor.forceRenames.set(id, false);
+		}
+		// false means the user has not seen it yet
+		if (!Monitor.forceRenames.get(id)) {
+			user.trackRename = id;
+			Monitor.forceRenames.set(id, true);
+		}
 		// Don't allow reuse of forcerenamed names
 		return '';
 	}
@@ -464,7 +475,7 @@ export const namefilter: Chat.NameFilter = (name, user) => {
 export const loginfilter: Chat.LoginFilter = user => {
 	if (user.namelocked) return;
 	if (user.trackRename) {
-		const manualForceRename = Monitor.forceRenames.get(toID(user.trackRename));
+		const manualForceRename = Monitor.forceRenames.has(toID(user.trackRename));
 		Rooms.global.notifyRooms(
 			['staff'],
 			Utils.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`

@@ -1715,7 +1715,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('forcerename', targetID);
 		const {publicReason, privateReason} = this.parseSpoiler(reason);
 
-		Monitor.forceRenames.add(targetID);
+		Monitor.forceRenames.set(targetID, false);
 
 		let forceRenameMessage;
 		if (targetUser?.connected) {
@@ -1727,7 +1727,7 @@ export const commands: Chat.ChatCommands = {
 			forceRenameMessage = `was forced to choose a new name by ${user.name} while offline${(publicReason ? `: ${publicReason}` : ``)}`;
 			this.globalModlog('FORCERENAME OFFLINE', targetUser, privateReason);
 		}
-		Monitor.forceRenames.add(targetID);
+		Monitor.forceRenames.set(targetID, false);
 
 		if (room?.roomid !== 'staff') {
 			if (room?.roomid.startsWith('help-')) {
