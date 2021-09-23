@@ -390,6 +390,10 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReplyBox(buf);
 	},
+	offlinewhoishelp: [
+		`/offlinewhois [username] - Get details on a username without requiring them to be online.`,
+		`Requires: trusted user. `,
+	],
 
 	sbtl: 'sharedbattles',
 	sharedbattles(target, room) {
@@ -533,6 +537,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.errorReply(`You're using a custom client that doesn't support the ignore command.`);
 	},
+	ignorehelp: [`/ignore [user] - Ignore the given [user].`],
 
 	/*********************************************************
 	 * Data Search Dex
@@ -1512,6 +1517,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
+	uptimehelp: [`/uptime - Shows how long the server has been online for.`],
 
 	st: 'servertime',
 	servertime(target, room, user) {
@@ -1519,6 +1525,7 @@ export const commands: Chat.ChatCommands = {
 		const servertime = new Date();
 		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
 	},
+	servertimehelp: [`/servertime - Shows the current time where the server is.`],
 
 	groups(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1616,11 +1623,13 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
 	},
+	staffhelp: [`/staff - View the staff list.`],
 
 	forums(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/209/">Pok&eacute;mon Showdown Forums</a>`);
 	},
+	forumshelp: [`/forums - Links to the PS forums.`],
 
 	privacypolicy(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1631,6 +1640,7 @@ export const commands: Chat.ChatCommands = {
 			this.tr`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`,
 		].join(`<br />`));
 	},
+	privacypolicyhelp: [`/privacypolicy - Displays PS's privacy policy.`],
 
 	suggest: 'suggestions',
 	suggestion: 'suggestions',
@@ -1638,6 +1648,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
+	suggestionshelp: [`/suggestions - Links to the place to make suggestions for Pokemon Showdown.`],
 
 	bugreport: 'bugs',
 	bugreports: 'bugs',
@@ -1653,6 +1664,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 	},
+	bugshelp: [`/bugs - Links to the various bug reporting services.`],
 
 	avatars(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1668,12 +1680,15 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openOptions" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-cog"></i> Options</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
+	optionsbuttonhelp: [`/optionsbutton - Provides a button to the Options menu.`],
+
 	soundsbutton: 'soundbutton',
 	volumebutton: 'soundbutton',
 	soundbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
+	soundbuttonhelp: [`/soundbutton - Provides a button to the Sounds menu.`],
 
 	introduction: 'intro',
 	intro(target, room, user) {
@@ -1703,6 +1718,7 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://www.smogon.com/forums/threads/3498332">Tiering FAQ</a><br />`
 		);
 	},
+	smogintrohelp: [`/smogintro - Provides an introduction to Smogon.`],
 
 	bsscalc: 'calc',
 	calculator: 'calc',
@@ -1781,6 +1797,7 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-130756055">NickMP vs Khalogie</a>`
 		);
 	},
+	gennexthelp: [`/gennext - Provides information on the Gen-NEXT mod.`],
 
 	battlerules(target, room, user) {
 		return this.parse(`/join view-battlerules`);
@@ -1875,6 +1892,10 @@ export const commands: Chat.ChatCommands = {
 		buf.push(`</table>`);
 		return this.sendReply(`|raw|${buf.join("")}`);
 	},
+	formathelphelp: [
+		`/formathelp [format] - Provides information on the given [format].`,
+		`If no format is given, provides information on how tiers work.`,
+	],
 
 	roomhelp(target, room, user) {
 		room = this.requireRoom();
@@ -2321,6 +2342,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right.`);
 	},
+	registerhelp: [`/register - Provides information on how to register.`],
 
 	/*********************************************************
 	 * Miscellaneous commands
@@ -2562,11 +2584,16 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
 	},
+	approvalloghelp: [`/approvallog - View a log of past media approvals in the current room. Requires: % @ # &`],
 
 	viewapprovals(target, room, user) {
 		room = this.requireRoom();
 		return this.parse(`/join view-approvals-${room.roomid}`);
 	},
+	viewapprovalshelp: [
+		`/viewapprovals - View a list of users who have requested to show media in the current room.`,
+		`Requires: % @ # &`,
+	],
 
 	async show(target, room, user, connection) {
 		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
@@ -2669,6 +2696,7 @@ export const commands: Chat.ChatCommands = {
 			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!'
 		);
 	},
+	pihelp: [`/pi - Displays the first several digits of pi in several notation types.`],
 
 	code(target, room, user, connection) {
 		// target is trimmed by Chat#splitMessage, but leading spaces can be

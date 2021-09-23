@@ -375,6 +375,10 @@ export const commands: Chat.ChatCommands = {
 		if (targetRoom !== room) buffer.unshift(`${targetRoom.title} room auth:`);
 		connection.popup(`${buffer.join("\n\n")}${userLookup}`);
 	},
+	roomauthhelp: [
+		`/roomauth [room] - Shows a list of the staff and authority in the given [room].`,
+		`If no room is given, it defaults to the current room.`,
+	],
 
 	userauth(target, room, user, connection) {
 		const targetId = toID(target) || user.id;
@@ -430,6 +434,10 @@ export const commands: Chat.ChatCommands = {
 		buffer.unshift(`${targetUsername} user auth:`);
 		connection.popup(buffer.join("\n\n"));
 	},
+	userauthhelp: [
+		`/userauth [username] - Shows all authority visible to the user for the given [username].`,
+		`If no username is given, it defaults to the current user.`,
+	],
 
 	sectionleaders(target, room, user, connection) {
 		const usernames = Users.globalAuth.usernames;
@@ -449,6 +457,9 @@ export const commands: Chat.ChatCommands = {
 		if (!buffer.length) throw new Chat.ErrorMessage(`There are no Section Leaders currently.`);
 		connection.popup(buffer.join(`\n\n`));
 	},
+	sectionleadershelp: [
+		`/sectionleaders - Shows the current room sections and their section leaders.`,
+	],
 
 	async autojoin(target, room, user, connection) {
 		const targets = target.split(',');
@@ -469,6 +480,7 @@ export const commands: Chat.ChatCommands = {
 		await Promise.all(promises);
 		connection.autojoins = autojoins.join(',');
 	},
+	autojoinhelp: [`/autojoin [rooms] - Automatically joins all the given rooms.`],
 
 	joim: 'join',
 	j: 'join',
@@ -510,6 +522,7 @@ export const commands: Chat.ChatCommands = {
 		Chat.handleRoomClose(targetRoom.roomid, user, connection);
 		user.leaveRoom(targetRoom, connection);
 	},
+	leavehelp: [`/leave - Leave the current room, or a given room.`],
 
 	/*********************************************************
 	 * Moderating: Punishments

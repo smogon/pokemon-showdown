@@ -711,6 +711,10 @@ export const commands: Chat.ChatCommands = {
 		room.saveSettings();
 		return this.modlog(`SHOWAPPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
 	},
+	showapprovalshelp: [
+		`/showapprovals [setting] - Enable or disable the use of media approvals in the current room.`,
+		`Requires: # &`,
+	],
 
 	showmedia(target, room, user) {
 		this.errorReply(`/showmedia has been deprecated. Use /permissions instead.`);
@@ -1242,6 +1246,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog('UNSUBROOM');
 		return this.addModAction(`This room was unset as a subroom by ${user.name}.`);
 	},
+	unsubroomhelp: [`/unsubroom - Unmarks the current room as a subroom. Requires: &`],
 
 	parentroom: 'subrooms',
 	subrooms(target, room, user, connection, cmd) {
@@ -1306,6 +1311,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog('ROOMDESC', null, `to "${target}"`);
 		room.saveSettings();
 	},
+	roomdeschelp: [`/roomdesc [description] - Sets the [description] of the current room. Requires: &`],
 
 	topic: 'roomintro',
 	roomintro(target, room, user, connection, cmd) {
@@ -1340,6 +1346,10 @@ export const commands: Chat.ChatCommands = {
 
 		room.saveSettings();
 	},
+	roomintrohelp: [
+		`/roomintro - Display the room introduction of the current room.`,
+		`/roomintro [content] - Set an introduction for the room. Requires: # &`,
+	],
 
 	deletetopic: 'deleteroomintro',
 	deleteroomintro(target, room, user) {
@@ -1353,6 +1363,7 @@ export const commands: Chat.ChatCommands = {
 		delete room.settings.introMessage;
 		room.saveSettings();
 	},
+	deleteroomintrohelp: [`/deleteroomintro - Deletes the current room's introduction. Requires: # &`],
 
 	stafftopic: 'staffintro',
 	staffintro(target, room, user, connection, cmd) {
@@ -1387,6 +1398,7 @@ export const commands: Chat.ChatCommands = {
 		this.roomlog(room.settings.staffMessage.replace(/\n/g, ``));
 		room.saveSettings();
 	},
+	staffintrohelp: [`/staffintro [content] - Set an introduction for staff members. Requires: @ # &`],
 
 	deletestafftopic: 'deletestaffintro',
 	deletestaffintro(target, room, user) {
@@ -1400,6 +1412,7 @@ export const commands: Chat.ChatCommands = {
 		delete room.settings.staffMessage;
 		room.saveSettings();
 	},
+	deletestaffintrohelp: [`/deletestaffintro - Deletes the current room's staff introduction. Requires: @ # &`],
 
 	roomalias(target, room, user) {
 		room = this.requireRoom();
