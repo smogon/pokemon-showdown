@@ -1,4 +1,8 @@
 export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+	pikachu: {
+		inherit: true,
+		formeOrder: ["Pikachu"],
+	},
 	articuno: {
 		inherit: true,
 		unreleasedHidden: true,
