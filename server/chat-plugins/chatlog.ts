@@ -1581,11 +1581,23 @@ export const commands: Chat.ChatCommands = {
 		if (target.startsWith('psim.us/')) target = target.slice(8);
 		return this.parse(`/join view-battlelog-${target}`);
 	},
+	battleloghelp: [
+		`/battlelog [battle link] - View the log of the given [battle link], even if the replay was not saved.`,
+		`Requires: % @ &`,
+	],
+
 	logsaccess(target, room, user) {
 		this.checkCan('rangeban');
 		const [type, userid] = target.split(',').map(toID);
 		return this.parse(`/j view-logsaccess-${type || 'all'}${userid ? `-${userid}` : ''}`);
 	},
+	logsaccesshelp: [
+		`/logsaccess [type], [user] - View chatlog access logs for the given [type] and [user].`,
+		`If no arguments are given, shows the entire access log.`,
+		`Requires: &`,
+	],
+
+
 	gcsearch: 'groupchatsearch',
 	async groupchatsearch(target, room, user) {
 		this.checkCan('lock');
@@ -1619,4 +1631,9 @@ export const commands: Chat.ChatCommands = {
 		if (!room) return this.errorReply(`Either use this command in the target room or specify a room.`);
 		return this.parse(`/join view-roominfo-${room}${date ? `--${date}` : ''}`);
 	},
+	roomactivityhelp: [
+		`/roomactibity [room][, date] - View room activity logs for the given room.`,
+		`If a date is provided, it searches for logs from that date. Otherwise, it searches the current month.`,
+		`Requires: &`,
+	],
 };
