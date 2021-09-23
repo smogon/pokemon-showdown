@@ -563,7 +563,6 @@ export class Pokemon {
 		}
 
 		if (statName === 'spe' && stat > 10000 && !this.battle.format.battle?.trunc) stat = 10000;
-
 		return stat;
 	}
 
