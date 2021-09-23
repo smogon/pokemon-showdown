@@ -2474,6 +2474,9 @@ export const commands: Chat.ChatCommands = {
 		link = encodeURI(link);
 		let dimensions;
 		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			if (/data:image\/png;base64/.test(link)) {
+				throw new Chat.ErrorMessage('Please provide an actual link (you probably copied the URL wrong?).');
+			}
 			try {
 				dimensions = await Chat.fitImage(link);
 			} catch {
@@ -2586,6 +2589,9 @@ export const commands: Chat.ChatCommands = {
 			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
 			buf += `<twitch src="${link}" />`;
 		} else {
+			if (/data:image\/png;base64/.test(link)) {
+				throw new Chat.ErrorMessage('Please provide an actual link (you probably copied it wrong?).');
+			}
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
 				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
