@@ -6197,17 +6197,37 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
+	nohface: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
 	kitsunoh: {
 		isNonstandard: "CAP",
 		tier: "CAP",
+	},
+	monohm: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	duohm: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
 	},
 	cyclohm: {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
+	dorsoil: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
 	colossoil: {
 		isNonstandard: "CAP",
 		tier: "CAP",
+	},
+	protowatt: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	krilowatt: {
 		isNonstandard: "CAP",
