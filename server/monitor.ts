@@ -8,7 +8,7 @@
  */
 
 import {exec, ExecException, ExecOptions} from 'child_process';
-import {crashlogger, FS, Utils} from "../lib";
+import {crashlogger, FS} from "../lib";
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
 
@@ -68,9 +68,9 @@ export const Monitor = new class {
 	updateServerLock = false;
 	cleanInterval: NodeJS.Timeout | null = null;
 	/**
-	 * Inappropriate userid : number of times the name has been forcerenamed
+	 * Inappropriate userid : has the user logged in since the FR
 	 */
-	readonly forceRenames = new Utils.Multiset<ID>();
+	readonly forceRenames = new Map<ID, boolean>();
 
 	/*********************************************************
 	 * Logging
