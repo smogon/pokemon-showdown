@@ -1836,7 +1836,7 @@ export class GameRoom extends BasicRoom {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
-	async uploadReplay(user: User, connection: Connection, options?: 'forpunishment' | 'silent') {
+	async uploadReplay(options?: 'forpunishment' | 'silent') {
 		const battle = this.battle;
 		if (!battle) return;
 
@@ -1867,15 +1867,13 @@ export class GameRoom extends BasicRoom {
 		});
 		if (success) battle.replaySaved = true;
 		if (success?.errorip) {
-			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
-			return;
+			return `This server's request IP ${success.errorip} is not a registered server.`;
 		}
-		connection.send('|queryresponse|savereplay|' + JSON.stringify({
+		await LoginServer.request('uploadreplay', {
 			log: data,
-			id: id,
-			password: password,
-			silent: options === 'forpunishment' || options === 'silent',
-		}));
+			id,
+			password,
+		});
 	}
 
 	getReplayData() {

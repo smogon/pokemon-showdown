@@ -1302,7 +1302,8 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const options = (target === 'forpunishment' || target === 'silent') ? target : undefined;
-		await room.uploadReplay(user, connection, options);
+		const result = await room.uploadReplay(options);
+		if (result) connection.popup(result);
 	},
 	savereplayhelp: [`/savereplay - Saves the replay for the current battle.`],
 

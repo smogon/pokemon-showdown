@@ -339,7 +339,7 @@ Chat.registerMonitor('battlefilter', {
 				} else {
 					Monitor.log(text);
 				}
-				void (room as GameRoom).uploadReplay(user, this.connection, 'forpunishment');
+				void (room as GameRoom).uploadReplay('forpunishment');
 			}
 			return false;
 		}

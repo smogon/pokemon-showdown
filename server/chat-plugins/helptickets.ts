@@ -500,7 +500,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		for (const roomid of rooms) {
 			const room = Rooms.get(roomid);
 			if (!room || !('uploadReplay' in (room as GameRoom))) continue;
-			void (room as GameRoom).uploadReplay(user, conn, "forpunishment");
+			void (room as GameRoom).uploadReplay("forpunishment");
 		}
 	}
 	static formatBattleLog(logs: string[], title: string, url: string) {
@@ -2151,7 +2151,7 @@ export const commands: Chat.ChatCommands = {
 				reportTargetInfo = `Reported in room: <a href="/${reportTarget}">${reportTarget}</a>`;
 				const reportRoom = Rooms.get(reportTarget);
 				if (reportRoom && (reportRoom as GameRoom).uploadReplay) {
-					void (reportRoom as GameRoom).uploadReplay(user, connection, 'forpunishment');
+					void (reportRoom as GameRoom).uploadReplay('forpunishment');
 				}
 			} else if (reportTargetType === 'user') {
 				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong><p></p>`;
