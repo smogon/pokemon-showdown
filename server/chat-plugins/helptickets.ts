@@ -988,10 +988,11 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				['Weeknamelock', '/weeknamelock'],
 			];
 			const tar = toID(ticket.text[0]); // should always be the reported userid
-			buf += `<br /><strong>Reported user:</strong> ${tar} `;
+			const name = Utils.escapeHTML(Users.getExact(tar)?.name || tar);
+			buf += `<br /><strong>Reported user:</strong> ${name} `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
 			buf += `<details ${state?.list ? 'open' : ''} class="readmore">`;
-			buf += `<summary>Punish <strong>${tar}</strong> (reported user)</summary>`;
+			buf += `<summary>Punish <strong>${name}</strong> (reported user)</summary>`;
 			buf += `<div class="infobox">`;
 			for (const [name, cmd] of cmds) {
 				buf += `<form data-submitsend="/msgroom staff,${cmd} ${tar},{reason}">`;
