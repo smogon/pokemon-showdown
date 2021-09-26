@@ -994,9 +994,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += `<details ${state?.list ? 'open' : ''} class="readmore">`;
 			buf += `<summary>Punish <strong>${name}</strong> (reported user)</summary>`;
 			buf += `<div class="infobox">`;
-			for (const [name, cmd] of cmds) {
+			for (const [cmdName, cmd] of cmds) {
 				buf += `<form data-submitsend="/msgroom staff,${cmd} ${tar},{reason}">`;
-				buf += `<button class="button notifying" type="submit">${name}</button><br />`;
+				buf += `<button class="button notifying" type="submit">${cmdName}</button><br />`;
 				buf += `Reason (optional:) <input name="reason" /></form><br />`;
 			}
 			buf += `</div></details>`;
