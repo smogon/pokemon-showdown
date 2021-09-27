@@ -1320,7 +1320,7 @@ export const pages: Chat.PageTable = {
 					// buf += `<p><b>${this.tr`What would you like to appeal?`}</b></p>`;
 					if (!isLast) break;
 					if (user.locked || isStaff) {
-						const hostfiltered = user.locked === '#hostfilter' || (user.latestHostType === 'proxy' && user.locked !== user.id)
+						const hostfiltered = user.locked === '#hostfilter' || (user.latestHostType === 'proxy' && user.locked !== user.id);
 						if (!hostfiltered) {
 							buf += `<p><strong>I want to appeal my lock.</strong></p>`;
 							const namelocked = user.named && user.id.startsWith('guest');
