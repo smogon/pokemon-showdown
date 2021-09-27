@@ -1139,7 +1139,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		},
 	},
 	ipappeal: {
-		title: "Where are you currently connecting from?",
+		title: "Where are you currently connecting from? Please give its name, city, and country.",
 		async getReviewDisplay(ticket, staff, conn, state) {
 			const tarUser = Users.get(ticket.userid);
 			const ips: string[] = state ? state.ips : tarUser ? tarUser.ips : ticket.meta!.split('-');
@@ -1320,28 +1320,33 @@ export const pages: Chat.PageTable = {
 					// buf += `<p><b>${this.tr`What would you like to appeal?`}</b></p>`;
 					if (!isLast) break;
 					if (user.locked || isStaff) {
-						buf += `<p><strong>I want to appeal my lock.</strong></p>`;
-						const namelocked = user.named && user.id.startsWith('guest');
-						if (user.locked === user.id || namelocked || isStaff) {
-							if (user.permalocked || isStaff) {
-								buf += `<p><Button>permalock</Button></p>`;
+						const hostfiltered = user.locked === '#hostfilter' || (user.latestHostType === 'proxy' && user.locked !== user.id)
+						if (!hostfiltered) {
+							buf += `<p><strong>I want to appeal my lock.</strong></p>`;
+							const namelocked = user.named && user.id.startsWith('guest');
+							if (user.locked === user.id || namelocked || isStaff) {
+								if (user.permalocked || isStaff) {
+									buf += `<p><Button>permalock</Button></p>`;
+								}
+								if (!user.permalocked || isStaff) {
+									buf += `<p><Button>lock</Button></p>`;
+								}
 							}
-							if (!user.permalocked || isStaff) {
-								buf += `<p><Button>lock</Button></p>`;
+							for (const type of ['timeleft', 'reason', 'startedit']) {
+								buf += `<p><Button>${type}</Button></p>`;
 							}
-						}
-						for (const type of ['timeleft', 'reason', 'startedit']) {
-							buf += `<p><Button>${type}</Button></p>`;
 						}
 						buf += `<p><strong>I'm locked under a name or IP I don't recognize.</strong></p>`;
-						for (const type of ['public', 'homeip', 'mobileip', 'device']) {
-							buf += `<p><Button>${type}</Button></p>`;
-						}
-						if (user.locked === '#hostfilter' || (user.latestHostType === 'proxy' && user.locked !== user.id) || isStaff) {
+						if (hostfiltered) {
 							buf += `<p><Button>hostfilter</Button></p>`;
 						}
-						if ((user.locked !== '#hostfilter' && user.latestHostType !== 'proxy' && user.locked !== user.id) || isStaff) {
-							buf += `<p><Button>ip</Button></p>`;
+						if (!hostfiltered || isStaff) {
+							for (const type of ['public', 'homeip', 'mobileip', 'device']) {
+								buf += `<p><Button>${type}</Button></p>`;
+							}
+							if ((user.locked !== '#hostfilter' && user.latestHostType !== 'proxy' && user.locked !== user.id) || isStaff) {
+								buf += `<p><Button>ip</Button></p>`;
+							}
 						}
 					}
 					buf += `<p><strong>I am punished but do not fall under any of the above.</strong></p>`;
@@ -1421,7 +1426,10 @@ export const pages: Chat.PageTable = {
 					break;
 				case 'hostfilter':
 					buf += `<p>${this.tr`We automatically lock proxies and VPNs to prevent evasion of punishments and other attacks on our server. To get unlocked, you need to disable your proxy or VPN.`}</p>`;
+					buf += `<p>${this.tr`If you must use a proxy / VPN to access Pokemon Showdown (e.g. your school blocks the site normally), you will only be able to battle, not chat. When you go home, you will be unlocked and able to freely chat again.`}</p>`;
 					buf += `<p>For more detailed information, view the  <a href="//${Config.routes.root}/pages/proxyhelp">proxy help guide</a>.</p>`;
+					buf += `<p>${this.tr`If you are certain that you are not currently using a proxy / VPN, please continue and open a ticket. Please explain in detail how you are connecting to Pokemon Showdown.`}</p>`;
+					buf += `<p><Button>confirmipappeal</Button></p>`;
 					break;
 				case 'semilock':
 					buf += `<p>${this.tr`Do you have an autoconfirmed account? An account is autoconfirmed when it has won at least one rated battle and has been registered for one week or longer.`}</p>`;
