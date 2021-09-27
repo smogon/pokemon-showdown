@@ -1,14 +1,14 @@
 export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	tornadustherian: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	thundurustherian: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	landorustherian: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 };
