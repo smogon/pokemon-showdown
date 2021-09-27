@@ -1071,7 +1071,11 @@ export class CommandContext extends MessageContext {
 			if (room) {
 				if (lockType && !room.settings.isHelp) {
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr`Get help with this`}</a>`);
-					throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can't talk in chat. ${lockExpiration}`);
+					if (user.locked === '#hostfilter') {
+						throw new Chat.ErrorMessage(this.tr`You are locked due to your proxy / VPN and can't talk in chat.`);
+					} else {
+						throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can't talk in chat. ${lockExpiration}`);
+					}
 				}
 				if (room.isMuted(user)) {
 					throw new Chat.ErrorMessage(this.tr`You are muted and cannot talk in this room.`);
@@ -1112,7 +1116,11 @@ export class CommandContext extends MessageContext {
 				}
 				if (lockType && !targetUser.can('lock')) {
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr`Get help with this`}</a>`);
-					throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
+					if (user.locked === '#hostfilter') {
+						throw new Chat.ErrorMessage(this.tr`You are locked due to your proxy / VPN and can only private message members of the global moderation team.`);
+					} else {
+						throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
+					}
 				}
 				if (targetUser.locked && !user.can('lock')) {
 					throw new Chat.ErrorMessage(this.tr`The user "${targetUser.name}" is locked and cannot be PMed.`);
