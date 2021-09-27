@@ -553,7 +553,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			this.addGlobalModAction(
-				`${targetUser.name} would be warned by ${user.name} but is offline.${publicReason ? ` (${publicReason})` : ``}`
+				`${targetUser.name} was warned by ${user.name} while offline.${publicReason ? ` (${publicReason})` : ``}`
 			);
 			this.globalModlog('WARN OFFLINE', targetUser, privateReason);
 			Punishments.offlineWarns.set(targetID, reason);
