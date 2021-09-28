@@ -851,6 +851,9 @@ export class CommandContext extends MessageContext {
 				this.room.addByUser(this.user, `(${msg})`);
 			} else {
 				this.room.sendModsByUser(this.user, `(${msg})`);
+				// roomlogging in staff causes a duplicate log message, since we do addByUser
+				// and roomlogging in pms has no effect, so we can _just_ call this here
+				this.roomlog(`(${msg})`);
 			}
 		} else {
 			const data = this.pmTransform(`|modaction|${msg}`);
@@ -859,7 +862,6 @@ export class CommandContext extends MessageContext {
 				this.pmTarget.send(data);
 			}
 		}
-		this.roomlog(`(${msg})`);
 	}
 	globalModlog(action: string, user: string | User | null = null, note: string | null = null, ip?: string) {
 		const entry: PartialModlogEntry = {
