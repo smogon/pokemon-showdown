@@ -1607,7 +1607,29 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Multiple Abilities',
 		desc: "Allows the simulator to recognize that Pok&eacute;mon may have multiple abilities active simulataneously.",
-		// Implemented in sim and data
+		// Implemented mainly in sim and data
+		onSwitchOut(pokemon) {
+			if (!pokemon.m.pseudoAbilities) return;
+
+			// Necessary to end e.g. primal weather pseudoAbilities
+			for (const pseudoAbility of pokemon.m.pseudoAbilities) {
+				const volatileName = 'ability:' + pseudoAbility;
+				const volatile = pokemon.getVolatile(volatileName);
+				if (!volatile) continue;
+				this.singleEvent('End', this.dex.abilities.get(pseudoAbility), pokemon.abilityState, pokemon);
+			}
+		},
+		onFaint(pokemon) {
+			if (!pokemon.m.pseudoAbilities) return;
+
+			// Necessary to end e.g. primal weather pseudoAbilities
+			for (const pseudoAbility of pokemon.m.pseudoAbilities) {
+				const volatileName = 'ability:' + pseudoAbility;
+				const volatile = pokemon.getVolatile(volatileName);
+				if (!volatile) continue;
+				this.singleEvent('End', this.dex.abilities.get(pseudoAbility), pokemon.abilityState, pokemon);
+			}
+		},
 	},
 	pokebilitiesrule: {
 		effectType: 'Rule',
