@@ -3,4 +3,4 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
-}
+};
