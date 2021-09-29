@@ -1685,9 +1685,8 @@ export const pages: Chat.PageTable = {
 			const [text, context] = ticket.text;
 			buf += `<p><strong>Report text:</strong></p><hr />`;
 			buf += Chat.formatText(text);
-			if (ticket.text[1]) {
-				buf += `<br /><hr /><strong>Context given: </strong><br />`;
-				buf += Chat.formatText(context);
+			if (context) {
+				buf += `<br /><hr /><strong>Context given: </strong><br />${context}`;
 			}
 			buf += `</div>`;
 
@@ -2083,6 +2082,8 @@ export const commands: Chat.ChatCommands = {
 					this.parse(`/join view-${pageId}`);
 					return this.popupReply(`Please tell us what is happening.`);
 				}
+				text = text.replace(/\n/ig, ' ');
+				contextString = contextString.split('\n').map(t => Chat.formatText(t)).join('<br />');
 				if (text.length > 8192) {
 					return this.popupReply(`Your report is too long. Please use fewer words.`);
 				}
@@ -2097,7 +2098,7 @@ export const commands: Chat.ChatCommands = {
 				await HelpTicket.modlog({
 					action: 'TEXTTICKET OPEN',
 					loggedBy: user.id,
-					note: `(${ticket.type}) ${text}${contextString ? `, context: ${contextString}` : ''}`,
+					note: `(${ticket.type}) ${text.replace(/<br \/>/ig, ' | ')}${contextString ? `, context: ${contextString}` : ''}`,
 				});
 				writeTickets();
 				notifyStaff();
