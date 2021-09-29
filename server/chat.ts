@@ -2046,8 +2046,8 @@ export const Chat = new class {
 			}
 		} while (commandHandler && typeof commandHandler === 'object');
 
-		if (!commandHandler && curCommands.default) {
-			commandHandler = curCommands.default;
+		if (!commandHandler && (curCommands.default || curCommands[''])) {
+			commandHandler = curCommands.default || curCommands[''];
 			if (typeof commandHandler === 'string') {
 				commandHandler = curCommands[commandHandler];
 			}
