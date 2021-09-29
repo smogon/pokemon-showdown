@@ -40058,6 +40058,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			scratch: ["5L1"],
 			shadowball: ["5M"],
 			shadowclaw: ["5M"],
+			snarl: ["5S0"],
 			substitute: ["5M"],
 			sunnyday: ["5M"],
 			swagger: ["5M"],
