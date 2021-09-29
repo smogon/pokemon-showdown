@@ -2621,6 +2621,8 @@ export const handlers: Chat.Handlers = {
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register(
-		'/ht resolve ', '/helpticket resolve ', '/requesthelp resolve ', '/helprequest resolve ',
+		'/ht resolve ', '/helpticket resolve ',
+		'/requesthelp resolve ', '/helprequest resolve ',
+		'/ht submit ', '/helpticket submit ',
 	);
 });
