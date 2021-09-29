@@ -164,10 +164,11 @@ export const commands: Chat.ChatCommands = {
 		topic = getAlias(room.roomid, topic) || topic;
 
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(visualizeFaq(roomFaqs[room.roomid][topic]));
+		const rfaq = roomFaqs[room.roomid][topic];
+		this.sendReplyBox(visualizeFaq(rfaq));
 		if (!this.broadcasting && user.can('ban', null, room, 'rfaq')) {
-			const code = Utils.escapeHTML(roomFaqs[room.roomid][topic].source).replace(/\n/g, '<br />');
-			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/addfaq ${topic}, ${code}</code></details>`);
+			const code = Utils.escapeHTML(rfaq.source).replace(/\n/g, '<br />');
+			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/add${rfaq.html ? 'html' : ''}faq ${topic}, ${code}</code></details>`);
 		}
 	},
 	roomfaqhelp: [
@@ -231,5 +232,5 @@ export const handlers: Chat.Handlers = {
 };
 
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/addfaq ');
+	Chat.multiLinePattern.register('/add(htmlfaq|faq) ');
 });

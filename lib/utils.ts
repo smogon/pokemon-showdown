@@ -117,7 +117,7 @@ export function visualize(value: any, depth = 0): string {
 					stringValue !== `[object ${constructor}]`) {
 				return `${constructor}(${stringValue})`;
 			}
-		} catch (e) {}
+		} catch {}
 	}
 	let buf = '';
 	for (const key in value) {
@@ -365,6 +365,18 @@ export function waitUntil(time: number): Promise<void> {
 	});
 }
 
+/** Like parseInt, but returns NaN if the int isn't already in normalized form */
+export function parseExactInt(str: string): number {
+	if (!/^-?(0|[1-9][0-9]*)$/.test(str)) return NaN;
+	return parseInt(str);
+}
+
+/** formats an array into a series of question marks and adds the elements to an arguments array */
+export function formatSQLArray(arr: unknown[], args?: unknown[]) {
+	args?.push(...arr);
+	return [...'?'.repeat(arr.length)].join(', ');
+}
+
 export class Multiset<T> extends Map<T, number> {
 	add(key: T) {
 		this.set(key, (this.get(key) ?? 0) + 1);
@@ -380,10 +392,10 @@ export class Multiset<T> extends Map<T, number> {
 
 // backwards compatibility
 export const Utils = {
-	waitUntil, html, escapeHTML,
+	parseExactInt, waitUntil, html, escapeHTML,
 	compare, sortBy, levenshtein,
 	shuffle, deepClone, clearRequireCache,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
-	escapeRegex, Multiset,
+	escapeRegex, formatSQLArray, Multiset,
 };

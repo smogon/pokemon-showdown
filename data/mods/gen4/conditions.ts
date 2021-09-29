@@ -106,6 +106,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onResidualOrder: 10,
 		onResidualSubOrder: 9,
 	},
+	choicelock: {
+		inherit: true,
+		onStart(pokemon) {
+			if (!pokemon.lastMove) return false;
+			this.effectState.move = pokemon.lastMove.id;
+		},
+	},
 	futuremove: {
 		inherit: true,
 		onResidualOrder: 11,

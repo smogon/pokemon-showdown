@@ -64,6 +64,13 @@ function escapeHTML(str?: string) {
 		.replace(/\//g, '&#x2f;');
 }
 
+function toListString(arr: string[]) {
+	if (!arr.length) return '';
+	if (arr.length === 1) return arr[0];
+	if (arr.length === 2) return `${arr[0]} and ${arr[1]}`;
+	return `${arr.slice(0, -1).join(", ")}, and ${arr.slice(-1)[0]}`;
+}
+
 function checkCanAll(room: Room | null) {
 	if (!room) return false; // no, no good reason for using `all` in pms
 	const {isPersonal, isHelp} = room.settings;
@@ -86,10 +93,10 @@ export const commands: Chat.ChatCommands = {
 	async dexsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
-		target = target.slice(0, 300);
+		if (target.length > 300) return this.errorReply('Dexsearch queries may not be longer than 300 characters.');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, mod=gen${targetGen}`;
-		const split = target.split(',');
+		const split = target.split(',').map(term => term.trim());
 		const index = split.findIndex(x => x.startsWith('maxgen'));
 		if (index >= 0) {
 			const genNum = parseInt(split[index][split[index].length - 1]);
@@ -143,7 +150,7 @@ export const commands: Chat.ChatCommands = {
 			`|html| <details class="readmore"><summary><code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
 			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
-			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
+			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.</summary>` +
 			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
 			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
@@ -314,7 +321,7 @@ export const commands: Chat.ChatCommands = {
 			`Inequality ranges use the characters <code>></code> and <code><</code>.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water-type moves.<br/>` +
 			`<code>asc</code> or <code>desc</code> following a move property will arrange the names in ascending or descending order of that property, respectively; e.g., <code>basepower asc</code> will arrange moves in ascending order of their base powers.<br/>` +
-			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, zmove, pivot, and multi-hit.<br/>` +
+			`Valid flags are: bypasssub (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, zmove, pivot, and multi-hit.<br/>` +
 			`A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`<code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`<code>max</code> or <code>gmax</code> as parameters will search for Max Moves and G-Max moves respectively.<br/>` +
@@ -462,16 +469,16 @@ export const commands: Chat.ChatCommands = {
 
 function getMod(target: string) {
 	const arr = target.split(',').map(x => x.trim());
-	const usedMod = arr.find(x => {
+	const modTerm = arr.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
-	})?.split('=')[1];
+	});
 	const count = arr.filter(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('mod=');
 	}).length;
-	if (usedMod) arr.splice(arr.indexOf('mod=' + usedMod), 1);
-	return {splitTarget: arr, usedMod: usedMod ? toID(usedMod) : undefined, count};
+	if (modTerm) arr.splice(arr.indexOf(modTerm), 1);
+	return {splitTarget: arr, usedMod: modTerm ? toID(modTerm.split(/ ?= ?/)[1]) : undefined, count};
 }
 
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
@@ -1145,7 +1152,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results.push(dex[mon].name);
 	}
 
-	if (usedMod === 'letsgo') {
+	if (usedMod === 'gen7letsgo') {
 		results = results.filter(name => {
 			const species = mod.species.get(name);
 			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
@@ -1213,7 +1220,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
-		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
+		'bypasssub', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
 		'multihit', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
 		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
 	];
@@ -1319,7 +1326,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 			}
 
-			if (target === 'bypassessubstitute') target = 'authentic';
+			if (target === 'bypassessubstitute') target = 'bypasssub';
 			if (target === 'z') target = 'zmove';
 			if (target === 'max') target = 'maxmove';
 			if (target === 'gmax') target = 'gmaxmove';
@@ -1944,23 +1951,29 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
-	const rawSearch = target.split(' ');
+	const rawSearch = target.replace(/gen \d/g, match => toID(match)).split(' ');
 	const searchedWords: string[] = [];
 	let foundItems: string[] = [];
 
 	// Refine searched words
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
-		if (newWord.substr(0, 6) === 'maxgen' && parseInt(newWord[6])) {
-			if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
-			maxGen = parseInt(newWord[6]);
-			if (maxGen < 2 || maxGen > 8) return {error: "The generation must be between 2 and 8"};
-			continue;
-		} else if (newWord.substr(0, 3) === 'gen' && parseInt(newWord[3])) {
-			if (gen) return {error: "You cannot specify 'gen' multiple times."};
-			gen = parseInt(newWord[3]);
-			if (gen < 2 || gen > 8) return {error: "The generation must be between 2 and 8"};
-			continue;
+		if (newWord.substr(0, 6) === 'maxgen') {
+			const parsedGen = parseInt(newWord.substr(6));
+			if (!isNaN(parsedGen)) {
+				if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
+				maxGen = parsedGen;
+				if (maxGen < 2 || maxGen > 8) return {error: "The generation must be between 2 and 8"};
+				continue;
+			}
+		} else if (newWord.substr(0, 3) === 'gen') {
+			const parsedGen = parseInt(newWord.substr(3));
+			if (!isNaN(parsedGen)) {
+				if (gen) return {error: "You cannot specify 'gen' multiple times."};
+				gen = parsedGen;
+				if (gen < 2 || gen > 8) return {error: "The generation must be between 2 and 8"};
+				continue;
+			}
 		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
 		switch (newWord) {
@@ -2190,22 +2203,28 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
-	const rawSearch = target.split(' ');
+	const rawSearch = target.replace(/gen \d/g, match => toID(match)).split(' ');
 	const searchedWords: string[] = [];
 	let foundAbilities: string[] = [];
 
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
-		if (newWord.substr(0, 6) === 'maxgen' && parseInt(newWord[6])) {
-			if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
-			maxGen = parseInt(newWord[6]);
-			if (maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
-			continue;
-		} else if (newWord.substr(0, 3) === 'gen' && parseInt(newWord[3])) {
-			if (gen) return {error: "You cannot specify 'gen' multiple times."};
-			gen = parseInt(newWord[3]);
-			if (gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
-			continue;
+		if (newWord.substr(0, 6) === 'maxgen') {
+			const parsedGen = parseInt(newWord.substr(6));
+			if (parsedGen) {
+				if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
+				maxGen = parsedGen;
+				if (maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
+				continue;
+			}
+		} else if (newWord.substr(0, 3) === 'gen') {
+			const parsedGen = parseInt(newWord.substr(3));
+			if (parsedGen) {
+				if (gen) return {error: "You cannot specify 'gen' multiple times."};
+				gen = parsedGen;
+				if (gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
+				continue;
+			}
 		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
 		switch (newWord) {
@@ -2428,7 +2447,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	if (setSources.isHidden) {
 		buffer += `${species.abilities['H'] || 'HA'} `;
 	}
-	buffer += `${species.name}` + (problems.length ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
+	buffer += `${species.name}` + (problems.length ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + toListString(moveNames);
 	if (!problems.length) {
 		const sourceNames: {[k: string]: string} = {
 			'7V': "virtual console transfer from gen 1-2", '8V': "Pok&eacute;mon Home transfer from LGPE", E: "", S: "event", D: "dream world", X: "traded-back ", Y: "traded-back event",
@@ -2556,7 +2575,6 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = require('../../sim/dex').Dex;
-	global.Chat = require('../chat').Chat;
 	global.toID = Dex.toID;
 	Dex.includeData();
 

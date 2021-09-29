@@ -57,7 +57,14 @@ export const pages: Chat.PageTable = {
 
 		const openProxies = [...IPTools.singleIPOpenProxies];
 		const proxyHosts = [...IPTools.proxyHosts];
-		Utils.sortBy(openProxies, IPTools.ipToNumber);
+		Utils.sortBy(openProxies, ip => {
+			const number = IPTools.ipToNumber(ip);
+			if (number === null) {
+				Rooms.get('upperstaff')?.add(`|error|Invalid IP address in IPTools.singleIPOpenProxies: '${ip}'`);
+				return -1;
+			}
+			return number;
+		});
 		proxyHosts.sort();
 		IPTools.sortRanges();
 
@@ -133,6 +140,13 @@ export const pages: Chat.PageTable = {
 			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('/proxy')));
 			html += `</table></div>`;
 		}
+		if (['all', 'openproxy'].includes(type)) {
+			html += `<div class="ladder pad"><h2>Single-IP Open Proxies:</h2><table>`;
+			for (const ip of IPTools.singleIPOpenProxies) {
+				html += `<tr><td>${ip}</td></tr>`;
+			}
+			html += `</table></div>`;
+		}
 		return html;
 	},
 
@@ -146,11 +160,17 @@ export const pages: Chat.PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
 			const sortedSharedIPBlacklist = [...Punishments.sharedIpBlacklist];
-			Utils.sortBy(sortedSharedIPBlacklist, ([ipOrRange]) => (
-				IPTools.ipRegex.test(ipOrRange) ?
-					IPTools.ipToNumber(ipOrRange) :
-					IPTools.stringToRange(ipOrRange)!.minIP
-			));
+			Utils.sortBy(sortedSharedIPBlacklist, ([ipOrRange]) => {
+				if (IPTools.ipRegex.test(ipOrRange)) {
+					const number = IPTools.ipToNumber(ipOrRange);
+					if (number === null) {
+						Monitor.error(`Invalid blacklisted-from-markshared IP: '${ipOrRange}`);
+						return -1;
+					}
+					return number;
+				}
+				return IPTools.stringToRange(ipOrRange)!.minIP;
+			});
 			for (const [ip, reason] of sortedSharedIPBlacklist) {
 				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
 			}
@@ -170,7 +190,14 @@ export const pages: Chat.PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Location</th></tr>`;
 			const sortedSharedIPs = [...Punishments.sharedIps];
-			Utils.sortBy(sortedSharedIPs, ([ip]) => IPTools.ipToNumber(ip));
+			Utils.sortBy(sortedSharedIPs, ([ip]) => {
+				const number = IPTools.ipToNumber(ip);
+				if (number === null) {
+					Monitor.error(`Invalid shared IP address: '${ip}'`);
+					return -1;
+				}
+				return number;
+			});
 
 			for (const [ip, location] of sortedSharedIPs) {
 				buf += `<tr><td>${ip}</td><td>${location}</td></tr>`;
@@ -196,7 +223,7 @@ export const commands: Chat.ChatCommands = {
 		show: 'view',
 		view(target, room, user) {
 			checkCanPerform(this, user, 'globalban');
-			const types = ['all', 'residential', 'res', 'mobile', 'proxy'];
+			const types = ['all', 'residential', 'res', 'mobile', 'proxy', 'openproxy'];
 			const type = target ? toID(target) : 'all';
 			if (!types.includes(type)) {
 				return this.errorReply(`'${type}' isn't a valid host type. Specify one of ${types.join(', ')}.`);
@@ -229,7 +256,7 @@ export const commands: Chat.ChatCommands = {
 			let result;
 			try {
 				result = IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
-			} catch (e) {
+			} catch (e: any) {
 				return this.errorReply(e.message);
 			}
 			if (typeof result === 'number') {

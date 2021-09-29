@@ -5,7 +5,8 @@
 
 'use strict';
 
-const Dex = require('../../.sim-dist/dex').Dex;
+require('ts-node').register();
+const Dex = require('../../sim/dex').Dex;
 global.toID = Dex.getId;
 
 const smogon = require('smogon');

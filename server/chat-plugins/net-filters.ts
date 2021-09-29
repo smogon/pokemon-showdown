@@ -34,7 +34,7 @@ interface TrainingLine {
 function modelExists() {
 	try {
 		require.resolve('brain.js');
-	} catch (e) {
+	} catch {
 		return false;
 	}
 	return true;
@@ -49,7 +49,7 @@ export class NeuralNetChecker {
 	constructor(path?: string) {
 		try {
 			this.model = new (require('brain.js').recurrent.LSTM)();
-		} catch (e) {
+		} catch {
 			this.model = null;
 		}
 		if (path) this.load(path);
@@ -109,7 +109,7 @@ export class NeuralNetChecker {
 		if (!this.model) return result;
 		try {
 			result = this.model.run(data);
-		} catch (e) {}
+		} catch {}
 		// usually means someone didn't train it, carry on
 		// acceptable to drop since training is very slow
 		return result;
@@ -178,7 +178,7 @@ export const PM = new QueryProcessManager<NetQuery, any>(module, async query => 
 		let response = '';
 		try {
 			response = net.run(data as string);
-		} catch (e) {} // uninitialized (usually means intializing, which can be slow) - drop it for now
+		} catch {} // uninitialized (usually means intializing, which can be slow) - drop it for now
 		return response;
 	case 'train':
 		return net.train(data as TrainingLine[], options?.iterations);
@@ -187,7 +187,7 @@ export const PM = new QueryProcessManager<NetQuery, any>(module, async query => 
 	case 'load':
 		try {
 			net.load(data as string);
-		} catch (e) {
+		} catch (e: any) {
 			return e.message;
 		}
 		return 'success';

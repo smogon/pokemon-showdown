@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-global.Ladders = require('../../.server-dist/ladders').Ladders;
+global.Ladders = require('../../server/ladders').Ladders;
 const {makeUser} = require('../users-utils');
 
 describe('Matchmaker', function () {
@@ -129,7 +129,7 @@ describe('Matchmaker', function () {
 					p2: {user: this.p1, team: this.s2.team},
 					rated: 1000,
 				});
-			} catch (e) {}
+			} catch {}
 			assert.equal(room, undefined);
 		});
 
