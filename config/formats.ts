@@ -380,8 +380,8 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
-		onValidateSet: function (set) {
-			let spookyMonsList = [
+		onValidateSet(set) {
+			const spookyMonsList = [
 				'Vileplume', 'Tentacruel', 'Gengar', 'Marowak', 'Weezing', 'Mr. Mime', 'Pinsir', 'Ditto', 'Omastar', 'Kabutops', 'Aerodactyl',
 				'Noctowl', 'Crobat', 'Espeon', 'Umbreon', 'Wobbuffet', 'Shiftry', 'Shedinja', 'Exploud', 'Sableye', 'Mawile', 'Sharpedo',
 				'Lunatone', 'Crawdaunt', 'Baltoy', 'Claydol', 'Absol', 'Glalie', 'Drifblim', 'Skuntank', 'Spiritomb', 'Drapion', 'Toxicroak',
