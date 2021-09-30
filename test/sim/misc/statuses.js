@@ -192,6 +192,19 @@ describe('Freeze', function () {
 		assert.equal(battle.p1.active[0].status, 'frz');
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
 	});
+
+	it(`should not be possible to burn a frozen target when using a move that thaws that target`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'serenegrace', item: 'widelens', moves: ['sleeptalk', 'sacredfire']},
+		], [
+			{species: 'shuckle', moves: ['meteorassault']},
+		]]);
+		battle.makeChoices(); // Use Meteor Assault to force recharge next turn and skip potential thaw
+		const frozenMon = battle.p2.active[0];
+		frozenMon.setStatus('frz');
+		battle.makeChoices('move sacredfire', 'auto');
+		assert.equal(frozenMon.status, '');
+	});
 });
 
 describe('Burn [Gen 6]', function () {
