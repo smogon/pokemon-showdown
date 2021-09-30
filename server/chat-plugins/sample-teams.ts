@@ -1,6 +1,6 @@
 import {FS, Utils} from "../../lib";
 
-const SAMPLE_TEAMS = 'config/chat-plugins/sample-teams.json'
+const SAMPLE_TEAMS = 'config/chat-plugins/sample-teams.json';
 
 interface SampleTeamsFile {
 	whitelist: {[formatid: string]: RoomID[]};
@@ -149,7 +149,7 @@ const SampleTeams = new class SampleTeams {
 	}
 
 	removeTeam(user: User, formatid: string, teamName: string, category: string) {
-		formatid = formatid.trim()
+		formatid = formatid.trim();
 		teamName = teamName.trim();
 		category = category.trim();
 		// Don't sanitize formatid here in case a team was added for a temporary format that got removed
@@ -219,7 +219,7 @@ const SampleTeams = new class SampleTeams {
 		}
 		return match;
 	}
-	
+
 	getFormatName(formatid: string) {
 		return Dex.formats.get(formatid).exists ? Dex.formats.get(formatid).name : formatid;
 	}
@@ -238,7 +238,7 @@ const SampleTeams = new class SampleTeams {
 			}
 		}
 	}
-}
+};
 
 export const destroy = SampleTeams.destroy;
 
@@ -249,7 +249,7 @@ export const handlers: Chat.Handlers = {
 			SampleTeams.unwhitelistRoom(formatid, oldID);
 			SampleTeams.whitelistRooms([formatid], [newID]);
 		}
-	}
+	},
 };
 
 export const commands: Chat.ChatCommands = {
@@ -355,7 +355,7 @@ export const commands: Chat.ChatCommands = {
 					this.checkCan('bypassall');
 				}
 				this.parse(`/j view-sampleteams-whitelist`);
-			}
+			},
 		},
 	},
 	sampleteamshelp: [
@@ -424,7 +424,7 @@ export const pages: Chat.PageTable = {
 					buf += `<li>${formatFakeButton(`view-sampleteams-view-${formatid}`, `${SampleTeams.getFormatName(formatid)}`)}</button></li>`;
 				}
 				buf += `</ul>`;
-			} else if (!file.teams[toID(query[0])] || !Object.keys(file.teams[toID(query[0])]).length || 
+			} else if (!file.teams[toID(query[0])] || !Object.keys(file.teams[toID(query[0])]).length ||
 				(Object.keys(file.teams[toID(query[0])].uncategorized).length &&
 					!Object.keys(file.teams[toID(query[0])]).filter(x => x !== 'uncategorized').length)) {
 				const name = Dex.formats.get(query[0]).exists ? Dex.formats.get(query[0]).name : toID(query[0]);
@@ -465,15 +465,11 @@ export const pages: Chat.PageTable = {
 		},
 		add(query, user, connection) {
 			this.title = `Sample Teams`;
-			const formats = Array
-				.from(new Set(Dex.formats.all().map(format => (
-					format.name.includes('(') ? format.name.slice(0, format.name.indexOf('(')) : format.name).trim()
-				))).map(formatName => Dex.formats.get(formatName)).filter(format => (
-					!format.name.includes('Custom') &&
-					format.effectType === 'Format' &&
-					!format.team &&
-					SampleTeams.checkPermissions(user, SampleTeams.whitelistedRooms(format.id) || [])
-				));
+			const formats = Array.from(new Set(Dex.formats.all().map(format => (format.name.includes('(') ?
+				format.name.slice(0, format.name.indexOf('(')) : format.name).trim()))).map(formatName =>
+				Dex.formats.get(formatName)).filter(format =>
+				!format.name.includes('Custom') && format.effectType === 'Format' && !format.team &&
+				SampleTeams.checkPermissions(user, SampleTeams.whitelistedRooms(format.id) || []));
 			if (!formats.length) return `<div class="pad"><h2>Access denied.</h2></div>`;
 			let buf = `<div class="pad"><h2>Add a sample team</h2>`;
 			if (!query[0] || !Dex.formats.get(query[0]).exists) {
@@ -508,7 +504,7 @@ export const pages: Chat.PageTable = {
 			buf += `</div>`;
 			return buf;
 		},
-	}
+	},
 };
 
 Chat.multiLinePattern.register(`/sampleteams add `);
