@@ -254,8 +254,7 @@ export const handlers: Chat.Handlers = {
 
 export const commands: Chat.ChatCommands = {
 	sampleteams: {
-		'': 'view',
-		view(target, room, user) {
+		''(target, room, user) {
 			this.runBroadcast();
 			if (!this.broadcasting) return this.parse(`/j view-sampleteams-view`);
 			let [formatid, category] = target.split(',');
@@ -479,7 +478,7 @@ export const pages: Chat.PageTable = {
 				}
 				buf += `</ul>`;
 			}
-			if ((!query[1] || !SampleTeams.findCategory(query[0], query[1]) || query[1] === 'addnewcategory')) {
+			if (!query[1] || !SampleTeams.findCategory(query[0], query[1]) || query[1] === 'addnewcategory') {
 				const name = SampleTeams.getFormatName(query[0]);
 				if (query[1] === 'addnewcategory') {
 					buf += `<h3>Add a category for ${name}</h3>`;
