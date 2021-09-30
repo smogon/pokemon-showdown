@@ -555,12 +555,12 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 	static getTextButton(ticket: TicketState & {text: [string, string]}) {
 		let buf = '';
-		const titleBuf = [...ticket.text[0].split('\n'), ...ticket.text[1].split('\n')].slice(0, 3);
+		const titleBuf = [...ticket.text[0].split('\n').map(Utils.escapeHTML), ...ticket.text[1].split('\n')].slice(0, 3);
 		const noteBuf = Object.entries(ticket.notes || {})
 			.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
 			.join('&#10;');
 		const notes = ticket.notes ? `&#10;Staff notes:&#10;${noteBuf}` : '';
-		const title = `title="${titleBuf.map(Utils.escapeHTML).join('&#10;')}${notes}"`;
+		const title = `title="${titleBuf.join('&#10;')}${notes}"`;
 		const language = Users.get(ticket.userid)?.language || '';
 		const languageDisplay = language && language !== 'english' ? ` <small>(${language})</small>` : '';
 		buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
@@ -1767,9 +1767,10 @@ export const pages: Chat.PageTable = {
 				const [text, context] = ticket.text;
 				buf += `<p><strong>Report text:</strong></p><hr />`;
 				buf += Chat.formatText(text);
-				if (ticket.text[1]) {
+				if (context) {
 					buf += `<br /><hr /><strong>Context given: </strong><br />`;
-					buf += Chat.formatText(context);
+					// gotta account for the cases where we didnt escape html in context on submit
+					buf += context.includes('<br />') ? context : Chat.formatText(context);
 				}
 				buf += `</div>`;
 				buf += Utils.html`<strong>Resolved: by ${ticket.resolved.by}</strong><br />`;
