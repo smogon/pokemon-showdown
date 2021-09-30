@@ -2842,6 +2842,6 @@ process.nextTick(() => {
 	Chat.multiLinePattern.register(
 		'/htmlbox', '/quote', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
 		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml', '/addhtmlfaq', 
-		'/sendhtmlpage'
+		'/sendhtmlpage',
 	);
 });
