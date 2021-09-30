@@ -1424,7 +1424,6 @@ export class Battle {
 			let sideStaleness: 'internal' | 'external' | undefined;
 			for (const pokemon of side.active) {
 				if (!pokemon) continue;
-				pokemon.hitSelf = false;
 				pokemon.moveThisTurn = '';
 				pokemon.newlySwitched = false;
 				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
