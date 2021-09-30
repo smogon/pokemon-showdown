@@ -46443,7 +46443,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			spite: ["7T", "6T", "5T", "4T"],
 			stoneedge: ["8M", "7M", "6M", "5M", "4M"],
 			strength: ["6M", "5M", "4M"],
-			substitute: ["8M"],
+			substitute: ["8M", "7M", "6M", "5M", "4M"],
 			suckerpunch: ["8L24", "7L31", "6L31", "5L31", "4T", "4L31"],
 			sunnyday: ["8M", "7M", "6M", "5M", "4M"],
 			superfang: ["7T", "6T", "5T", "4T"],
