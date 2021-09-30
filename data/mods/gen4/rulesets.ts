@@ -3,6 +3,10 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		inherit: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
+	flatrules: {
+		inherit: true,
+		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level Down = 50', 'Cancel Mod'],
+	},
 	teampreview: {
 		inherit: true,
 		onTeamPreview() {
