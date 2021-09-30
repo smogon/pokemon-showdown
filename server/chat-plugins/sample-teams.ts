@@ -1,3 +1,9 @@
+/**
+ * A sample teams plugin
+ *
+ * @author Kris
+ */
+
 import {FS, Utils} from "../../lib";
 
 const SAMPLE_TEAMS = 'config/chat-plugins/sample-teams.json';
