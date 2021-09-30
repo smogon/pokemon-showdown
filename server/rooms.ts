@@ -979,6 +979,7 @@ export abstract class BasicRoom {
 
 		this.minorActivity?.onConnect?.(user, connection);
 		this.game?.onJoin?.(user, connection);
+		Chat.runHandlers('RoomJoin', this, user, connection);
 		return true;
 	}
 	onRename(user: User, oldid: ID, joining: boolean) {
