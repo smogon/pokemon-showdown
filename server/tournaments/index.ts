@@ -2155,7 +2155,7 @@ const commands: Chat.ChatCommands = {
 			`- settings: Do <code>/help tour settings</code> for more information<br />` +
 			`</details>` +
 			`<br />` +
-			`More detailed help can be found <a href="https://www.smogon.com/forums/threads/3570628/#post-6777489">here</a>`
+			`You can also consult <a href="https://www.smogon.com/forums/threads/3570628/#post-6777489">more detailed help</a>.`
 		);
 	},
 };
