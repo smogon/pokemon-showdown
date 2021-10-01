@@ -967,7 +967,6 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		},
 	},
 	inapname: {
-		listOnly: true,
 		title: "What's the inappropriate username?",
 		contextMessage: "If the username is offensive in a non-English language, or if it's not obvious, please be sure to explain below.",
 		checker(input) {
