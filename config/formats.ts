@@ -625,7 +625,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3688892/">Multibility</a>`,
 		],
 
-		mod: 'multibility',
+		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause', '2 Ability Clause'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragonite', 'Eternatus',
