@@ -625,7 +625,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3688892/">Multibility</a>`,
 		],
 
-		mod: 'gen8',
+		mod: 'multibility',
 		ruleset: ['Standard', 'Dynamax Clause', '2 Ability Clause'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragonite', 'Eternatus',
@@ -706,12 +706,31 @@ export const Formats: FormatList = [
 			}
 		},
 		onFaint(pokemon) {
-			this.singleEvent('End', this.dex.items.get(pokemon.item), pokemon.itemState, pokemon);
+			const ability = this.dex.abilities.get(pokemon.item);
+			if (ability.exists) this.singleEvent('End', ability, pokemon.itemState, pokemon);
 		},
 		onSwitchOut(pokemon) {
-			this.singleEvent('End', this.dex.items.get(pokemon.item), pokemon.itemState, pokemon);
+			const ability = this.dex.abilities.get(pokemon.item);
+			if (ability.exists) this.singleEvent('End', ability, pokemon.itemState, pokemon);
+		},
+		onTakeItem(item, pokemon, source, move) {
+			if (this.dex.abilities.get(pokemon.item).exists) return false;
 		},
 		pokemon: {
+			getItem() {
+				const ability = this.battle.dex.abilities.get(this.battle.toID(this.item));
+				if (!ability.exists) return Object.getPrototypeOf(this).getItem.call(this);
+				return {
+					id: ability.id,
+					name: ability.name,
+					onStart(this: Battle, pokemon: Pokemon) {
+						this.singleEvent('Start', ability, pokemon.itemState, pokemon);
+					},
+					toString() {
+						return "";
+					},
+				};
+			},
 			hasItem(item) {
 				const ownItem = this.item;
 				if (this.battle.dex.abilities.get(ownItem).exists) return false;
