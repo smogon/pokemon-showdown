@@ -555,7 +555,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 	static getTextButton(ticket: TicketState & {text: [string, string]}) {
 		let buf = '';
-		const titleBuf = [...ticket.text[0].split('\n').map(Utils.escapeHTML), ...ticket.text[1].split('\n')].slice(0, 3);
+		const titleBuf = [...ticket.text[0].split('\n').map(Utils.escapeHTML), ...ticket.text[1].split('<br />')].slice(0, 3);
 		const noteBuf = Object.entries(ticket.notes || {})
 			.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
 			.join('&#10;');
