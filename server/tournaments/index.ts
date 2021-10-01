@@ -2133,7 +2133,7 @@ const commands: Chat.ChatCommands = {
 			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
 			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
 			`- begin/start: Starts the tournament in the current room.<br /><br />` +
-			`<details class="readmore"><summary>More Commands</summary>` +
+			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />` +
 			`- cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />` +
 			`- viewrules/viewbanlist: Shows the custom rules for the tournament.<br />` +
