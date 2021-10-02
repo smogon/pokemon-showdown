@@ -2563,6 +2563,55 @@ export const commands: Chat.ChatCommands = {
 			`Requires: % @ &`,
 		],
 
+		async private(target, room, user) {
+			this.checkCan('bypassall');
+			if (!target) return this.parse(`/help helpticket`);
+			const [username, date] = target.split(',');
+			const userid = toID(username);
+			if (!userid) return this.parse(`/help helpticket`);
+			if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date)) {
+				return this.errorReply(`Invalid date (must be YYYY-MM-DD format).`);
+			}
+			const logPath = FS(`logs/chat/help-${userid}/${date.slice(0, -3)}/${date}.txt`);
+			if (!(await logPath.exists())) {
+				return this.errorReply(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
+			}
+			if (!(await FS(`logs/private/${userid}`).exists())) {
+				await FS(`logs/private/${userid}`).mkdirp();
+			}
+			await logPath.copyFile(`logs/private/${userid}/${date}.txt`);
+			await logPath.write(''); // empty out the logfile
+			this.globalModlog(`HELPTICKET PRIVATELOGS`, null, `${userid} (${date})`);
+			this.privateGlobalModAction(`${user.name} set the ticket logs for '${userid}' on '${date}' to be private.`);
+		},
+		privatehelp: [
+			`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: &`,
+		],
+		async public(target, room, user) {
+			this.checkCan('bypassall');
+			if (!target) return this.parse(`/help helpticket`);
+			const [username, date] = target.split(',');
+			const userid = toID(username);
+			if (!userid) return this.parse(`/help helpticket`);
+			if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date)) {
+				return this.errorReply(`Invalid date (must be YYYY-MM-DD format).`);
+			}
+			const logPath = FS(`logs/private/${userid}/${date}.txt`);
+			if (!(await logPath.exists())) {
+				return this.errorReply(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
+			}
+			const monthPath = FS(`logs/chat/help-${userid}/${date.slice(0, -3)}`);
+			if (!(await monthPath.exists())) {
+				await monthPath.mkdirp();
+			}
+			await logPath.copyFile(`logs/chat/help-${userid}/${date.slice(0, -3)}/${date}.txt`);
+			await logPath.unlinkIfExists();
+			this.globalModlog(`HELPTICKET PUBLICLOGS`, null, `${userid} (${date})`);
+			this.privateGlobalModAction(`${user.name} set the ticket logs for '${userid}' on '${date}' to be public.`);
+		},
+		publichelp: [
+			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
+		],
 	},
 	helptickethelp: [
 		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
@@ -2576,6 +2625,8 @@ export const commands: Chat.ChatCommands = {
 		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ &`,
 		`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. `,
 		`Requires: % @ &`,
+		`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: &`,
+		`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
 	],
 };
 
