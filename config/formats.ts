@@ -705,16 +705,36 @@ export const Formats: FormatList = [
 				}
 			}
 		},
-		onFaint(pokemon) {
+		onBeforeSwitchIn(pokemon) {
 			const ability = this.dex.abilities.get(pokemon.item);
-			if (ability.exists) this.singleEvent('End', ability, pokemon.itemState, pokemon);
+			if (ability.exists) {
+				const effect = 'ability:' + ability.id;
+				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
+				pokemon.m.secondAbility = ability.id;
+			}
 		},
-		onSwitchOut(pokemon) {
-			const ability = this.dex.abilities.get(pokemon.item);
-			if (ability.exists) this.singleEvent('End', ability, pokemon.itemState, pokemon);
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			if (pokemon.m.secondAbility) {
+				const effect = 'ability:' + pokemon.m.secondAbility;
+				delete pokemon.volatiles[effect];
+				pokemon.addVolatile(effect);
+			}
 		},
 		onTakeItem(item, pokemon, source, move) {
 			if (this.dex.abilities.get(pokemon.item).exists) return false;
+		},
+		field: {
+			suppressingWeather() {
+				for (const pokemon of this.battle.getAllActive()) {
+					if (pokemon && !pokemon.ignoringAbility() &&
+						(pokemon.getAbility().suppressWeather ||
+							(pokemon.m.secondAbility && this.battle.dex.abilities.get(pokemon.m.secondAbility).suppressWeather))) {
+						return true;
+					}
+				}
+				return false;
+			},
 		},
 		pokemon: {
 			getItem() {
@@ -723,9 +743,6 @@ export const Formats: FormatList = [
 				return {
 					id: ability.id,
 					name: ability.name,
-					onStart(this: Battle, pokemon: Pokemon) {
-						this.singleEvent('Start', ability, pokemon.itemState, pokemon);
-					},
 					toString() {
 						return "";
 					},
