@@ -745,6 +745,7 @@ export const Formats: FormatList = [
 				return {
 					id: ability.id,
 					name: ability.name,
+					onTakeItem: false,
 					toString() {
 						return "";
 					},
