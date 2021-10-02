@@ -638,6 +638,8 @@ export const Formats: FormatList = [
 			'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out',
 			'Intrepid Sword', 'Libero', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Simple', 'Speed Boost',
 			'Stakeout', 'Water Bubble', 'Wonder Guard', 'Emergency Exit + Regenerator', 'Wimp Out + Regenerator',
+			// Buggy
+			'Delta Stream', 'Desolate Land', 'Primordial Sea',
 		],
 		validateSet(set, teamHas) {
 			const ability = this.dex.abilities.get(set.ability);
