@@ -742,7 +742,13 @@ export const Formats: FormatList = [
 			getItem() {
 				const ability = this.battle.dex.abilities.get(this.battle.toID(this.item));
 				if (!ability.exists) return Object.getPrototypeOf(this).getItem.call(this);
-				return {...ability, onTakeItem: false};
+				return {
+					id: ability.id,
+					name: ability.name,
+					toString() {
+						return "";
+					},
+				};
 			},
 			hasItem(item) {
 				const ownItem = this.item;
