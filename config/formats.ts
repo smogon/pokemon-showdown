@@ -523,11 +523,10 @@ export const Formats: FormatList = [
 		],
 		// Used to distinguish UU from below UU in the client
 		restricted: [
-			'Absol-Mega', 'Aegislash', 'Aggron-Mega', 'Altaria-Mega', 'Amoonguss', 'Beedrill-Mega', 'Bisharp', 'Breloom', 'Buzzwole', 'Celesteela',
-			'Chesnaught', 'Crobat', 'Donphan', 'Dragonite', 'Hippowdon', 'Honchkrow', 'Hoopa-Unbound', 'Infernape', 'Jirachi', 'Keldeo', 'Krookodile',
-			'Mamoswine', 'Mandibuzz', 'Manectric-Mega', 'Melmetal', 'Mew', 'Mienshao', 'Moltres-Base', 'Nihilego', 'Porygon2', 'Regieleki', 'Ribombee',
-			'Rotom-Heat', 'Rotom-Wash', 'Sableye-Mega', 'Scizor', 'Shuckle', 'Skarmory', 'Slowking', 'Slowking-Galar', 'Staraptor', 'Swampert', 'Tangrowth',
-			'Umbreon', 'Urshifu-Rapid-Strike',
+			'Absol-Mega', 'Aegislash', 'Alomomola', 'Altaria-Mega', 'Amoonguss', 'Beedrill-Mega', 'Bisharp', 'Breloom', 'Celesteela',
+			'Donphan', 'Dragonite', 'Hippowdon', 'Infernape', 'Keldeo', 'Krookodile', 'Mandibuzz', 'Manectric-Mega', 'Melmetal', 'Mew',
+			'Moltres-Base', 'Porygon2', 'Regieleki', 'Rotom-Heat', 'Rotom-Wash', 'Scizor', 'Skarmory', 'Slowking', 'Slowking-Galar',
+			'Swampert-Base', 'Tangrowth', 'Umbreon', 'Urshifu-Rapid-Strike', 'Umbreon', 'Urshifu-Rapid-Strike',
 		],
 	},
 	{
