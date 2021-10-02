@@ -726,9 +726,6 @@ export const Formats: FormatList = [
 		onFaint(pokemon) {
 			if (pokemon.m.secondAbility) pokemon.removeVolatile('ability:' + pokemon.m.secondAbility);
 		},
-		onTakeItem(item, pokemon, source, move) {
-			if (this.dex.abilities.get(pokemon.item).exists) return false;
-		},
 		field: {
 			suppressingWeather() {
 				for (const pokemon of this.battle.getAllActive()) {
@@ -745,13 +742,7 @@ export const Formats: FormatList = [
 			getItem() {
 				const ability = this.battle.dex.abilities.get(this.battle.toID(this.item));
 				if (!ability.exists) return Object.getPrototypeOf(this).getItem.call(this);
-				return {
-					id: ability.id,
-					name: ability.name,
-					toString() {
-						return "";
-					},
-				};
+				return {...ability, onTakeItem: false};
 			},
 			hasItem(item) {
 				const ownItem = this.item;
@@ -762,18 +753,9 @@ export const Formats: FormatList = [
 			},
 			hasAbility(ability) {
 				if (this.ignoringAbility()) return false;
-				const ownAbility = this.ability;
-				if (!Array.isArray(ability)) {
-					return ownAbility === this.battle.toID(ability);
-				} else if (ability.map(this.battle.toID).includes(ownAbility)) {
-					return true;
-				} else {
-					if (!this.item || this.ignoringItem()) return false;
-					const item = this.m.secondAbility;
-					if (!item) return false;
-					if (!Array.isArray(ability)) return item === this.battle.toID(ability);
-					return ability.map(this.battle.toID).includes(item);
-				}
+				if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
+				const abilityid = this.battle.toID(ability);
+				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
 			},
 			ignoringAbility() {
 				// Check if any active pokemon have the ability Neutralizing Gas
