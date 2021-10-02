@@ -639,7 +639,7 @@ export const Formats: FormatList = [
 			'Intrepid Sword', 'Libero', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Simple', 'Speed Boost',
 			'Stakeout', 'Water Bubble', 'Wonder Guard', 'Emergency Exit + Regenerator', 'Wimp Out + Regenerator',
 			// Buggy
-			'Delta Stream', 'Desolate Land', 'Primordial Sea',
+			// 'Delta Stream', 'Desolate Land', 'Primordial Sea',
 		],
 		validateSet(set, teamHas) {
 			const ability = this.dex.abilities.get(set.ability);
@@ -706,34 +706,24 @@ export const Formats: FormatList = [
 				}
 			}
 		},
-		onBeforeSwitchIn(pokemon) {
-			const ability = this.dex.abilities.get(pokemon.item);
-			if (ability.exists) {
-				const effect = 'ability:' + ability.id;
-				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
-				pokemon.m.secondAbility = ability.id;
-			}
-		},
-		onSwitchInPriority: 2,
-		onSwitchIn(pokemon) {
-			if (pokemon.m.secondAbility) {
-				const effect = 'ability:' + pokemon.m.secondAbility;
-				delete pokemon.volatiles[effect];
-				pokemon.addVolatile(effect);
-			}
-		},
 		onSwitchOut(pokemon) {
-			if (pokemon.m.secondAbility) pokemon.removeVolatile('ability:' + pokemon.m.secondAbility);
+			const item = this.dex.abilities.get(pokemon.item);
+			if (item.exists) {
+				this.singleEvent('End', item, pokemon.itemState, pokemon);
+			}
 		},
 		onFaint(pokemon) {
-			if (pokemon.m.secondAbility) pokemon.removeVolatile('ability:' + pokemon.m.secondAbility);
+			const item = this.dex.abilities.get(pokemon.item);
+			if (item.exists) {
+				this.singleEvent('End', item, pokemon.itemState, pokemon);
+			}
 		},
 		field: {
 			suppressingWeather() {
 				for (const pokemon of this.battle.getAllActive()) {
+					const item = this.battle.dex.abilities.get(pokemon.item);
 					if (pokemon && !pokemon.ignoringAbility() &&
-						(pokemon.getAbility().suppressWeather ||
-							(pokemon.m.secondAbility && this.battle.dex.abilities.get(pokemon.m.secondAbility).suppressWeather))) {
+						(pokemon.getAbility().suppressWeather || (item.exists && item.suppressWeather))) {
 						return true;
 					}
 				}
@@ -742,16 +732,9 @@ export const Formats: FormatList = [
 		},
 		pokemon: {
 			getItem() {
-				const ability = this.battle.dex.abilities.get(this.battle.toID(this.item));
+				const ability = this.battle.dex.abilities.get(this.item);
 				if (!ability.exists) return Object.getPrototypeOf(this).getItem.call(this);
-				return {
-					id: ability.id,
-					name: ability.name,
-					onTakeItem: false,
-					toString() {
-						return "";
-					},
-				};
+				return {...ability, onTakeItem: false};
 			},
 			hasItem(item) {
 				const ownItem = this.item;
@@ -764,7 +747,8 @@ export const Formats: FormatList = [
 				if (this.ignoringAbility()) return false;
 				if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
 				const abilityid = this.battle.toID(ability);
-				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
+				const item = this.battle.dex.abilities.get(this.item);
+				return this.ability === abilityid || (item.exists && item.id === abilityid);
 			},
 			ignoringAbility() {
 				// Check if any active pokemon have the ability Neutralizing Gas
