@@ -181,7 +181,7 @@ export class RandomTeams {
 			),
 			Poison: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Poison')) return false;
-				return types.has('Ground') || types.has('Psychic') || !!counter.setupType || movePool.includes('gunkshot');
+				return types.has('Ground') || types.has('Psychic') || types.has('Grass') || !!counter.setupType || movePool.includes('gunkshot');
 			},
 			Psychic: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Psychic')) return false;
@@ -196,7 +196,7 @@ export class RandomTeams {
 			},
 			Water: (movePool, moves, abilities, types, counter, species) => {
 				if (!counter.get('Water') && !moves.has('hypervoice')) return true;
-				if (movePool.includes('hypervoice') || movePool.includes('liquidation')) return true;
+				if (['hypervoice', 'liquidation', 'surgingstrikes'].some(m => movePool.includes(m))) return true;
 				return abilities.has('Huge Power') && movePool.includes('aquajet');
 			},
 		};
@@ -1230,8 +1230,8 @@ export class RandomTeams {
 			return (moves.has('rapidspin') || species.nfe || isDoubles);
 		case 'Blaze':
 			return (isDoubles && abilities.has('Solar Power')) || (!isDoubles && !isNoDynamax && species.id === 'charizard');
-		case 'Bulletproof': case 'Overcoat':
-			return !!counter.setupType;
+		// case 'Bulletproof': case 'Overcoat':
+		// 	return !!counter.setupType;
 		case 'Chlorophyll':
 			return (species.baseStats.spe > 100 || !counter.get('Fire') && !moves.has('sunnyday') && !teamDetails.sun);
 		case 'Cloud Nine':
@@ -1993,7 +1993,7 @@ export class RandomTeams {
 		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			const multipleOfFourNecessary = (moves.has('substitute') && (
+			const multipleOfFourNecessary = (moves.has('substitute') && !['Leftovers', 'Black Sludge'].includes(item) && (
 				item === 'Sitrus Berry' ||
 				item === 'Salac Berry' ||
 				ability === 'Power Construct'
@@ -2017,7 +2017,12 @@ export class RandomTeams {
 		if (moves.has('shellsidearm') && item === 'Choice Specs') evs.atk -= 8;
 
 		// Minimize confusion damage
-		if (!counter.get('Physical') && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status'))) {
+		const noAttackStatMoves = [...moves].every(m => {
+			const move = this.dex.moves.get(m);
+			if (move.damageCallback || move.damage) return false;
+			return move.category !== 'Physical' || move.id === 'bodypress';
+		});
+		if (noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status'))) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}

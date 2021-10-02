@@ -122,6 +122,19 @@ describe('[Gen 8] Random Battle', () => {
 			assert.equal(set.item, 'Heavy-Duty Boots', `set=${JSON.stringify(set)}`);
 		});
 	});
+
+	it('should guarantee Poison STAB on all Grass/Poison types (slow)', function () {
+		// This test takes more than 2000ms
+		this.timeout(0);
+
+		const dex = Dex.forFormat(options.format);
+		const pokemon = dex.species
+			.all()
+			.filter(pkmn => pkmn.randomBattleMoves && pkmn.types.includes('Grass') && pkmn.types.includes('Poison'));
+		for (const pkmn of pokemon) {
+			testHasSTAB(pkmn.name, options, ['Poison']);
+		}
+	});
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
@@ -141,6 +154,14 @@ describe('[Gen 8] Random Doubles Battle', () => {
 
 	it('should give Galarian Darmanitan a Choice Item', () => {
 		testSet('darmanitangalar', options, set => assert(set.item.startsWith('Choice ')));
+	});
+
+	it('should always give Urshifu-Rapid-Strike Surging Strikes', () => {
+		testAlwaysHasMove('urshifurapidstrike', options, 'surgingstrikes');
+	});
+
+	it('should always give Urshifu Wicked Blow', () => {
+		testAlwaysHasMove('urshifu', options, 'wickedblow');
 	});
 });
 
