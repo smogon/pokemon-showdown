@@ -647,7 +647,7 @@ export const Formats: FormatList = [
 			if (ability.id === item.id) {
 				problems.push(`${set.species} has ${ability.name} as an ability and as an item.`);
 			}
-			if (this.ruleTable.isRestricted(`ability:${item.id}`)) {
+			if (this.ruleTable.isRestricted(`ability:${item.id}`) || this.ruleTable.isBanned(`ability:${item.id}`)) {
 				problems.push(`${set.species}'s second ability (${item.name}) can only be used as an ability.`);
 			}
 			if ((ability.id === 'regenerator' && ['emergencyexit', 'wimpout'].includes(item.id)) ||
