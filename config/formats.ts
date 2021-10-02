@@ -720,6 +720,12 @@ export const Formats: FormatList = [
 				pokemon.addVolatile(effect);
 			}
 		},
+		onSwitchOut(pokemon) {
+			if (pokemon.m.secondAbility) pokemon.removeVolatile('ability:' + pokemon.m.secondAbility);
+		},
+		onFaint(pokemon) {
+			if (pokemon.m.secondAbility) pokemon.removeVolatile('ability:' + pokemon.m.secondAbility);
+		},
 		onTakeItem(item, pokemon, source, move) {
 			if (this.dex.abilities.get(pokemon.item).exists) return false;
 		},
@@ -763,9 +769,10 @@ export const Formats: FormatList = [
 					return true;
 				} else {
 					if (!this.item || this.ignoringItem()) return false;
-					const item = this.battle.dex.items.get(this.item);
-					if (!Array.isArray(ability)) return item.id === this.battle.toID(ability);
-					return ability.map(this.battle.toID).includes(item.id);
+					const item = this.m.secondAbility;
+					if (!item) return false;
+					if (!Array.isArray(ability)) return item === this.battle.toID(ability);
+					return ability.map(this.battle.toID).includes(item);
 				}
 			},
 			ignoringAbility() {
