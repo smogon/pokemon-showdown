@@ -2231,7 +2231,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen2stadium2',
-		ruleset: ['[Gen 2] Nintendo Cup 2000', '!Nintendo Cup 2000 Move Legality'],
+		ruleset: ['[Gen 2] Nintendo Cup 2000', 'Evasion Moves Clause', 'OHKO Clause', '!Nintendo Cup 2000 Move Legality'],
 	},
 
 	// Past Gens OU
