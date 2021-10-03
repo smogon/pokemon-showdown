@@ -84,7 +84,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			weatherball: ["5S3"],
 			workup: ["7M"],
 			worryseed: ["7L31", "6T", "6L31", "5T", "5L31", "4T", "4L31"],
-		}
+		},
 	},
 	ivysaur: {
 		inherit: true,
@@ -154,7 +154,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L9", "7V", "6L9", "5L9", "4L9", "3L10"],
 			workup: ["7M"],
 			worryseed: ["7L36", "6T", "6L36", "5T", "5L36", "4T", "4L36"],
-		}
+		},
 	},
 	venusaur: {
 		inherit: true,
@@ -235,7 +235,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L9", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			workup: ["7M"],
 			worryseed: ["7L39", "6T", "6L39", "5T", "5L39", "4T", "4L39"],
-		}
+		},
 	},
 	charmander: {
 		inherit: true,
@@ -338,7 +338,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	charmeleon: {
 		inherit: true,
@@ -425,7 +425,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	charizard: {
 		inherit: true,
@@ -537,7 +537,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 			wingattack: ["7L1", "6L36", "5L36", "4L36", "3L36", "3S0"],
 			workup: ["7M"],
-		}
+		},
 	},
 	squirtle: {
 		inherit: true,
@@ -636,7 +636,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			yawn: ["7E", "6E", "5E", "4E", "3E"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	wartortle: {
 		inherit: true,
@@ -716,7 +716,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["7L10", "7V", "6L10", "5L10", "4L10", "3L10"],
 			workup: ["7M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	blastoise: {
 		inherit: true,
@@ -813,7 +813,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["7L10", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			workup: ["7M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	caterpie: {
 		inherit: true,
@@ -823,7 +823,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			snore: ["6T", "5T", "4T"],
 			stringshot: ["7L1", "7V", "6L1", "5L1", "4T", "4L1", "3L1"],
 			tackle: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	metapod: {
 		inherit: true,
@@ -833,7 +833,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			harden: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			irondefense: ["6T", "5T", "4T"],
 			stringshot: ["4T"],
-		}
+		},
 	},
 	butterfree: {
 		inherit: true,
@@ -914,7 +914,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			venoshock: ["7M", "6M", "5M"],
 			whirlwind: ["7L29", "7V", "6L22", "5L22", "4L22", "3L23"],
-		}
+		},
 	},
 	weedle: {
 		inherit: true,
@@ -923,7 +923,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			electroweb: ["6T", "5T"],
 			poisonsting: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			stringshot: ["7L1", "7V", "6L1", "5L1", "4T", "4L1", "3L1"],
-		}
+		},
 	},
 	kakuna: {
 		inherit: true,
@@ -933,7 +933,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			harden: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			irondefense: ["6T", "5T", "4T"],
 			stringshot: ["4T"],
-		}
+		},
 	},
 	beedrill: {
 		inherit: true,
@@ -1012,7 +1012,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			venoshock: ["7M", "7L23", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	pidgey: {
 		inherit: true,
@@ -1078,7 +1078,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L17", "7V", "6L17", "5L17", "4L17", "3L19"],
 			wingattack: ["7L33", "7V", "6L33", "5L33", "4L33", "3L25"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	pidgeotto: {
 		inherit: true,
@@ -1141,7 +1141,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L17", "7V", "6L17", "5L17", "4L17", "3L20"],
 			wingattack: ["7L37", "7V", "6L37", "5L37", "4L37", "3L27", "3S0"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	pidgeot: {
 		inherit: true,
@@ -1205,7 +1205,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L17", "7V", "6L17", "5L17", "5S0", "4L17", "3L20"],
 			wingattack: ["7L38", "7V", "6L38", "5L38", "5S0", "4L38", "3L27"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	rattata: {
 		inherit: true,
@@ -1289,7 +1289,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	rattataalola: {
 		inherit: true,
@@ -1348,7 +1348,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			uproar: ["7E"],
 			uturn: ["7M"],
-		}
+		},
 	},
 	raticate: {
 		inherit: true,
@@ -1442,7 +1442,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	raticatealola: {
 		inherit: true,
@@ -1498,7 +1498,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			uturn: ["7M"],
 			venoshock: ["7M"],
-		}
+		},
 	},
 	spearow: {
 		inherit: true,
@@ -1569,7 +1569,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			whirlwind: ["7E", "7V", "6E", "5E", "4E"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	fearow: {
 		inherit: true,
@@ -1635,7 +1635,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			whirlwind: ["7V"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	ekans: {
 		inherit: true,
@@ -1720,7 +1720,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
 			wrap: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S0", "3S1"],
-		}
+		},
 	},
 	arbok: {
 		inherit: true,
@@ -1804,7 +1804,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
 			wrap: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	pichu: {
 		inherit: true,
@@ -1885,7 +1885,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			volttackle: ["6E", "5E", "4E", "4S4", "4S5", "3E"],
 			wildcharge: ["7M", "6M", "5M"],
 			wish: ["7E", "6E", "5E", "4E", "3E", "3S1"],
-		}
+		},
 	},
 	pichuspikyeared: {
 		inherit: true,
@@ -1933,7 +1933,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["4M"],
 			uproar: ["4T"],
 			volttackle: ["4S0"],
-		}
+		},
 	},
 	pikachu: {
 		inherit: true,
@@ -2043,7 +2043,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "7L50", "6M", "6L50", "5M"],
 			wish: ["7E"],
 			yawn: ["4S19"],
-		}
+		},
 	},
 	pikachucosplay: {
 		inherit: true,
@@ -2102,7 +2102,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["6M"],
 			voltswitch: ["6M"],
 			wildcharge: ["6M", "6L50"],
-		}
+		},
 	},
 	pikachurockstar: {
 		inherit: true,
@@ -2162,7 +2162,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["6M"],
 			voltswitch: ["6M"],
 			wildcharge: ["6M", "6L50"],
-		}
+		},
 	},
 	pikachubelle: {
 		inherit: true,
@@ -2222,7 +2222,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["6M"],
 			voltswitch: ["6M"],
 			wildcharge: ["6M", "6L50"],
-		}
+		},
 	},
 	pikachupopstar: {
 		inherit: true,
@@ -2282,7 +2282,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["6M"],
 			voltswitch: ["6M"],
 			wildcharge: ["6M", "6L50"],
-		}
+		},
 	},
 	pikachuphd: {
 		inherit: true,
@@ -2342,7 +2342,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["6M"],
 			voltswitch: ["6M"],
 			wildcharge: ["6M", "6L50"],
-		}
+		},
 	},
 	pikachulibre: {
 		inherit: true,
@@ -2402,7 +2402,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["6M"],
 			voltswitch: ["6M"],
 			wildcharge: ["6M", "6L50"],
-		}
+		},
 	},
 	pikachuoriginal: {
 		inherit: true,
@@ -2446,7 +2446,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M"],
 			volttackle: ["7T"],
 			wildcharge: ["7M", "7L50"],
-		}
+		},
 	},
 	pikachuhoenn: {
 		inherit: true,
@@ -2491,7 +2491,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M"],
 			volttackle: ["7T"],
 			wildcharge: ["7M", "7L50"],
-		}
+		},
 	},
 	pikachusinnoh: {
 		inherit: true,
@@ -2536,7 +2536,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M"],
 			volttackle: ["7T", "7S0"],
 			wildcharge: ["7M", "7L50"],
-		}
+		},
 	},
 	pikachuunova: {
 		inherit: true,
@@ -2581,7 +2581,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M"],
 			volttackle: ["7T", "7S0"],
 			wildcharge: ["7M", "7L50"],
-		}
+		},
 	},
 	pikachukalos: {
 		inherit: true,
@@ -2626,7 +2626,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M"],
 			volttackle: ["7T"],
 			wildcharge: ["7M", "7L50"],
-		}
+		},
 	},
 	pikachualola: {
 		inherit: true,
@@ -2671,7 +2671,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M"],
 			volttackle: ["7T"],
 			wildcharge: ["7M", "7L50"],
-		}
+		},
 	},
 	raichu: {
 		inherit: true,
@@ -2749,7 +2749,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	raichualola: {
 		inherit: true,
@@ -2793,7 +2793,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			voltswitch: ["7M"],
 			wildcharge: ["7M"],
-		}
+		},
 	},
 	sandshrew: {
 		inherit: true,
@@ -2879,7 +2879,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	sandshrewalola: {
 		inherit: true,
@@ -2941,7 +2941,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			workup: ["7M"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	sandslash: {
 		inherit: true,
@@ -3025,7 +3025,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	sandslashalola: {
 		inherit: true,
@@ -3074,7 +3074,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			workup: ["7M"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	nidoranf: {
 		inherit: true,
@@ -3155,7 +3155,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7E", "6E"],
 			venoshock: ["7M", "6M", "5M"],
 			waterpulse: ["6T", "4M", "3M"],
-		}
+		},
 	},
 	nidorina: {
 		inherit: true,
@@ -3229,7 +3229,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
-		}
+		},
 	},
 	nidoqueen: {
 		inherit: true,
@@ -3345,7 +3345,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	nidoranm: {
 		inherit: true,
@@ -3426,7 +3426,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7E", "6E"],
 			venoshock: ["7M", "6M", "5M"],
 			waterpulse: ["6T", "4M", "3M"],
-		}
+		},
 	},
 	nidorino: {
 		inherit: true,
@@ -3500,7 +3500,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
-		}
+		},
 	},
 	nidoking: {
 		inherit: true,
@@ -3620,7 +3620,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	cleffa: {
 		inherit: true,
@@ -3717,7 +3717,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	clefairy: {
 		inherit: true,
@@ -3856,7 +3856,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	clefable: {
 		inherit: true,
@@ -3975,7 +3975,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	vulpix: {
 		inherit: true,
@@ -4053,7 +4053,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "7L20", "6M", "6L20", "5M", "5L31", "4M", "4L14", "3L17", "3S0"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	vulpixalola: {
 		inherit: true,
@@ -4112,7 +4112,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tailslap: ["7E"],
 			tailwhip: ["7L4", "7S0"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	ninetales: {
 		inherit: true,
@@ -4182,7 +4182,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "5S0", "4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	ninetalesalola: {
 		inherit: true,
@@ -4222,7 +4222,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			substitute: ["7M"],
 			swagger: ["7M"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	igglybuff: {
 		inherit: true,
@@ -4309,7 +4309,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	jigglypuff: {
 		inherit: true,
@@ -4429,7 +4429,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			wish: ["7E"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	wigglytuff: {
 		inherit: true,
@@ -4539,7 +4539,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	zubat: {
 		inherit: true,
@@ -4620,7 +4620,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7E", "7V", "6E", "5E", "4E", "3E"],
 			wingattack: ["7L13", "7V", "6L13", "5L17", "4L17", "3L21"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
-		}
+		},
 	},
 	golbat: {
 		inherit: true,
@@ -4695,7 +4695,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7V"],
 			wingattack: ["7L13", "7V", "6L13", "5L17", "4L17", "3L21"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	crobat: {
 		inherit: true,
@@ -4768,7 +4768,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["7L13", "6L13", "5L17", "4L17", "3L21"],
 			xscissor: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	oddish: {
 		inherit: true,
@@ -4837,7 +4837,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L35", "7V", "6M", "6L35", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	gloom: {
 		inherit: true,
@@ -4901,7 +4901,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L39", "7V", "6M", "6L39", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	vileplume: {
 		inherit: true,
@@ -4965,7 +4965,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	bellossom: {
 		inherit: true,
@@ -5026,7 +5026,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	paras: {
 		inherit: true,
@@ -5113,7 +5113,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7E", "6E"],
 			worryseed: ["6T", "5T", "4T"],
 			xscissor: ["7M", "7L54", "6M", "6L54", "5M", "5L54", "4M", "4L43"],
-		}
+		},
 	},
 	parasect: {
 		inherit: true,
@@ -5190,7 +5190,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
 			xscissor: ["7M", "7L66", "6M", "6L66", "5M", "5L66", "4M", "4L55"],
-		}
+		},
 	},
 	venonat: {
 		inherit: true,
@@ -5255,7 +5255,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxicspikes: ["7E", "6E", "5E", "4E"],
 			venoshock: ["7M", "6M", "5M"],
 			zenheadbutt: ["7L37", "6T", "6L37", "5T", "5L37", "4T", "4L37"],
-		}
+		},
 	},
 	venomoth: {
 		inherit: true,
@@ -5334,7 +5334,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			whirlwind: ["7V"],
 			zenheadbutt: ["7L41", "6T", "6L41", "5T", "5L41", "4T", "4L41"],
-		}
+		},
 	},
 	diglett: {
 		inherit: true,
@@ -5402,7 +5402,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			uproar: ["7E", "6E", "5T", "5E", "4E", "3E"],
-		}
+		},
 	},
 	diglettalola: {
 		inherit: true,
@@ -5457,7 +5457,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thrash: ["7E"],
 			toxic: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	dugtrio: {
 		inherit: true,
@@ -5525,7 +5525,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			triattack: ["7L1", "6L1", "5L1", "4L1", "3L1", "3S0"],
 			uproar: ["5T"],
-		}
+		},
 	},
 	dugtrioalola: {
 		inherit: true,
@@ -5577,7 +5577,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			triattack: ["7L1"],
 			workup: ["7M"],
-		}
+		},
 	},
 	meowth: {
 		inherit: true,
@@ -5675,7 +5675,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	meowthalola: {
 		inherit: true,
@@ -5739,7 +5739,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			uturn: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	persian: {
 		inherit: true,
@@ -5833,7 +5833,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	persianalola: {
 		inherit: true,
@@ -5892,7 +5892,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			uturn: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	psyduck: {
 		inherit: true,
@@ -5996,7 +5996,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["6T", "5T", "4T"],
 			yawn: ["7E", "6E", "5E", "4E"],
 			zenheadbutt: ["7L25", "6T", "6L29", "5T", "5L44", "4T", "4L40"],
-		}
+		},
 	},
 	golduck: {
 		inherit: true,
@@ -6096,7 +6096,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["7L51", "6T", "6L60", "5T", "5L69"],
 			worryseed: ["6T", "5T", "4T"],
 			zenheadbutt: ["7L25", "6T", "6L25", "5T", "5L50", "4T", "4L44"],
-		}
+		},
 	},
 	mankey: {
 		inherit: true,
@@ -6210,7 +6210,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			vacuumwave: ["4T"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	primeape: {
 		inherit: true,
@@ -6319,7 +6319,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			vacuumwave: ["4T"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	growlithe: {
 		inherit: true,
@@ -6396,7 +6396,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	arcanine: {
 		inherit: true,
@@ -6471,7 +6471,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "7S1", "6M", "5M", "4M"],
-		}
+		},
 	},
 	poliwag: {
 		inherit: true,
@@ -6541,7 +6541,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			watersport: ["7L1", "7E", "6L1", "6E", "5L1", "5E", "4L1", "4E", "3E"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	poliwhirl: {
 		inherit: true,
@@ -6620,7 +6620,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			watersport: ["7L1", "6L1", "5L1", "4L1"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	poliwrath: {
 		inherit: true,
@@ -6707,7 +6707,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	politoed: {
 		inherit: true,
@@ -6780,7 +6780,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["3L1"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	abra: {
 		inherit: true,
@@ -6874,7 +6874,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	kadabra: {
 		inherit: true,
@@ -6971,7 +6971,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	alakazam: {
 		inherit: true,
@@ -7071,7 +7071,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	machop: {
 		inherit: true,
@@ -7168,7 +7168,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vitalthrow: ["7L25", "6L25", "5L31", "4L25", "3L31"],
 			wakeupslap: ["7L27", "6L27", "5L37", "4L34"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	machoke: {
 		inherit: true,
@@ -7255,7 +7255,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vitalthrow: ["7L25", "6L25", "5L32", "4L25", "3L33"],
 			wakeupslap: ["7L27", "6L27", "5L40", "4L36"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	machamp: {
 		inherit: true,
@@ -7348,7 +7348,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wakeupslap: ["7L27", "6L27", "5L40", "4L36"],
 			wideguard: ["7L1", "6L1", "6S1", "5L1"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	bellsprout: {
 		inherit: true,
@@ -7423,7 +7423,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 			wrap: ["7L11", "7V", "6L11", "5L11", "4L11", "3L11"],
 			wringout: ["7L50", "6L47", "5L47", "4L47"],
-		}
+		},
 	},
 	weepinbell: {
 		inherit: true,
@@ -7490,7 +7490,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["6T", "5T", "4T"],
 			wrap: ["7L11", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			wringout: ["7L58", "6L47", "5L47", "4L47"],
-		}
+		},
 	},
 	victreebel: {
 		inherit: true,
@@ -7561,7 +7561,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			worryseed: ["6T", "5T", "4T"],
 			wrap: ["7V"],
-		}
+		},
 	},
 	tentacool: {
 		inherit: true,
@@ -7644,7 +7644,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wrap: ["7L19", "7V", "6L19", "5L22", "4L22", "3L30"],
 			wringout: ["7L49", "6L49", "5L54", "4L43"],
-		}
+		},
 	},
 	tentacruel: {
 		inherit: true,
@@ -7720,7 +7720,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wrap: ["7L19", "7V", "6L19", "5L22", "4L22", "3L30"],
 			wringout: ["7L56", "7L1", "6L1", "5L61", "4L55"],
-		}
+		},
 	},
 	geodude: {
 		inherit: true,
@@ -7805,7 +7805,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["6T", "5T", "4T"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			wideguard: ["7E", "6E"],
-		}
+		},
 	},
 	geodudealola: {
 		inherit: true,
@@ -7867,7 +7867,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			voltswitch: ["7M"],
 			wideguard: ["7E"],
-		}
+		},
 	},
 	graveler: {
 		inherit: true,
@@ -7947,7 +7947,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7V"],
 			thunderpunch: ["6T", "5T", "4T"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
-		}
+		},
 	},
 	graveleralola: {
 		inherit: true,
@@ -7999,7 +7999,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["7L22"],
 			toxic: ["7M"],
 			voltswitch: ["7M"],
-		}
+		},
 	},
 	golem: {
 		inherit: true,
@@ -8088,7 +8088,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7V"],
 			thunderpunch: ["6T", "5T", "4T"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
-		}
+		},
 	},
 	golemalola: {
 		inherit: true,
@@ -8147,7 +8147,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			voltswitch: ["7M"],
 			wildcharge: ["7M"],
-		}
+		},
 	},
 	ponyta: {
 		inherit: true,
@@ -8214,7 +8214,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	rapidash: {
 		inherit: true,
@@ -8283,7 +8283,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	slowpoke: {
 		inherit: true,
@@ -8385,7 +8385,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["7E", "6T", "6E", "5T", "5E"],
 			yawn: ["7L1", "6L1", "5L1", "5D", "4L1", "3L1", "3S1"],
 			zenheadbutt: ["7L32", "7E", "6T", "6L32", "6E", "5T", "5L32", "5E", "4T", "4L34", "4E"],
-		}
+		},
 	},
 	slowbro: {
 		inherit: true,
@@ -8502,7 +8502,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			yawn: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			zenheadbutt: ["7L32", "6T", "6L32", "5T", "5L32", "4T", "4L34"],
-		}
+		},
 	},
 	slowking: {
 		inherit: true,
@@ -8609,7 +8609,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			yawn: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			zenheadbutt: ["7L32", "6T", "6L32", "5T", "5L32", "4T", "4L34"],
-		}
+		},
 	},
 	magnemite: {
 		inherit: true,
@@ -8675,7 +8675,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L49", "6L49", "5L59", "4L54", "3L50"],
-		}
+		},
 	},
 	magneton: {
 		inherit: true,
@@ -8746,7 +8746,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L63", "7L1", "6L1", "5L66", "4L60", "3L62"],
-		}
+		},
 	},
 	magnezone: {
 		inherit: true,
@@ -8814,7 +8814,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L63", "7L1", "6L1", "5L66", "4L60"],
-		}
+		},
 	},
 	farfetchd: {
 		inherit: true,
@@ -8906,7 +8906,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["3S0"],
 			workup: ["7M", "5M"],
 			yawn: ["3S0"],
-		}
+		},
 	},
 	doduo: {
 		inherit: true,
@@ -8975,7 +8975,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L29", "6T", "6L23", "5T", "5L23", "4T", "4L23", "3L33"],
 			whirlwind: ["7V"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	dodrio: {
 		inherit: true,
@@ -9043,7 +9043,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L29", "6T", "6L23", "5T", "5L23", "4T", "4L23", "3L38"],
 			whirlwind: ["7V"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	seel: {
 		inherit: true,
@@ -9119,7 +9119,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			watersport: ["7L7", "6L7", "5L7", "4L7"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	dewgong: {
 		inherit: true,
@@ -9187,7 +9187,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	grimer: {
 		inherit: true,
@@ -9274,7 +9274,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	grimeralola: {
 		inherit: true,
@@ -9344,7 +9344,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M"],
 			toxic: ["7M"],
 			venoshock: ["7M"],
-		}
+		},
 	},
 	muk: {
 		inherit: true,
@@ -9427,7 +9427,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			venomdrench: ["7L1", "6L38"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	mukalola: {
 		inherit: true,
@@ -9491,7 +9491,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			venomdrench: ["7L1"],
 			venoshock: ["7M"],
-		}
+		},
 	},
 	shellder: {
 		inherit: true,
@@ -9560,7 +9560,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			whirlpool: ["7L40", "6L40", "5L40", "4M", "4L37"],
 			withdraw: ["7L4", "7V", "6L4", "5L4", "5D", "4L4", "3L1", "3S0", "3S1"],
-		}
+		},
 	},
 	cloyster: {
 		inherit: true,
@@ -9631,7 +9631,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			withdraw: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	gastly: {
 		inherit: true,
@@ -9719,7 +9719,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M", "4E", "3E"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	haunter: {
 		inherit: true,
@@ -9801,7 +9801,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	gengar: {
 		inherit: true,
@@ -9907,7 +9907,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "6S3", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	onix: {
 		inherit: true,
@@ -9990,7 +9990,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			twister: ["4T"],
-		}
+		},
 	},
 	steelix: {
 		inherit: true,
@@ -10075,7 +10075,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			twister: ["4T"],
-		}
+		},
 	},
 	drowzee: {
 		inherit: true,
@@ -10175,7 +10175,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			wish: ["3S0"],
 			zenheadbutt: ["7L41", "6T", "6L41", "5T", "5L41", "4T", "4L50"],
-		}
+		},
 	},
 	hypno: {
 		inherit: true,
@@ -10273,7 +10273,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T", "4T"],
 			trickroom: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["7L41", "6T", "6L41", "5T", "5L41", "4T", "4L64"],
-		}
+		},
 	},
 	krabby: {
 		inherit: true,
@@ -10353,7 +10353,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	kingler: {
 		inherit: true,
@@ -10431,7 +10431,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wideguard: ["7L1", "6L1", "5L1"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	voltorb: {
 		inherit: true,
@@ -10493,7 +10493,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	electrode: {
 		inherit: true,
@@ -10558,7 +10558,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	exeggcute: {
 		inherit: true,
@@ -10640,7 +10640,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L1", "6T", "6L1", "5T", "5L1", "4T", "4L1", "3L1"],
 			wish: ["3S0"],
 			worryseed: ["7L33", "6T", "6L33", "5T", "5L33", "4T", "4L33"],
-		}
+		},
 	},
 	exeggutor: {
 		inherit: true,
@@ -10717,7 +10717,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			woodhammer: ["7L37", "6L37", "5L37", "4L37"],
 			worryseed: ["6T", "5T", "4T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	exeggutoralola: {
 		inherit: true,
@@ -10772,7 +10772,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			trickroom: ["7M"],
 			woodhammer: ["7L37"],
-		}
+		},
 	},
 	cubone: {
 		inherit: true,
@@ -10870,7 +10870,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			watergun: ["7V"],
-		}
+		},
 	},
 	marowak: {
 		inherit: true,
@@ -10967,7 +10967,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			watergun: ["7V"],
-		}
+		},
 	},
 	marowakalola: {
 		inherit: true,
@@ -11031,7 +11031,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderbolt: ["7M"],
 			toxic: ["7M"],
 			willowisp: ["7M", "7L23"],
-		}
+		},
 	},
 	tyrogue: {
 		inherit: true,
@@ -11093,7 +11093,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			vacuumwave: ["7E", "6E", "5E", "4T", "4E"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	hitmonlee: {
 		inherit: true,
@@ -11183,7 +11183,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["7E", "4T"],
 			wideguard: ["7L41", "6L41", "5L41"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	hitmonchan: {
 		inherit: true,
@@ -11267,7 +11267,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			vacuumwave: ["7L26", "7E", "6L26", "5L26", "4T", "4L26"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	hitmontop: {
 		inherit: true,
@@ -11347,7 +11347,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["7E", "4T"],
 			wideguard: ["7L46", "6L46", "5L46"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	lickitung: {
 		inherit: true,
@@ -11463,7 +11463,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["7L17", "7V", "6L17", "5L17", "4L17", "3L29"],
 			wringout: ["7L57", "6L57", "5L57", "4L53"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E", "4T"],
-		}
+		},
 	},
 	lickilicky: {
 		inherit: true,
@@ -11555,7 +11555,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["7L17", "6L17", "5L17", "4L17"],
 			wringout: ["7L57", "7L1", "6L1", "5L57", "4L53"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	koffing: {
 		inherit: true,
@@ -11629,7 +11629,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			venoshock: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M", "4E", "3E"],
-		}
+		},
 	},
 	weezing: {
 		inherit: true,
@@ -11696,7 +11696,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			venoshock: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	rhyhorn: {
 		inherit: true,
@@ -11794,7 +11794,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderfang: ["7E", "6E", "5E", "4E"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	rhydon: {
 		inherit: true,
@@ -11910,7 +11910,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			watergun: ["7V"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	rhyperior: {
 		inherit: true,
@@ -12011,7 +12011,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			uproar: ["6T", "5T", "4T"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	happiny: {
 		inherit: true,
@@ -12081,7 +12081,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	chansey: {
 		inherit: true,
@@ -12208,7 +12208,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["3S0"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	blissey: {
 		inherit: true,
@@ -12322,7 +12322,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	tangela: {
 		inherit: true,
@@ -12403,7 +12403,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L7", "7V", "6L7", "5L19", "4L19", "3L22"],
 			worryseed: ["6T", "5T", "4T"],
 			wringout: ["7L46", "6L46", "5L50", "4L50"],
-		}
+		},
 	},
 	tangrowth: {
 		inherit: true,
@@ -12483,7 +12483,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L7", "6L7", "5L19", "4L19"],
 			worryseed: ["6T", "5T", "4T"],
 			wringout: ["7L49", "6L49", "5L50", "4L50"],
-		}
+		},
 	},
 	kangaskhan: {
 		inherit: true,
@@ -12603,7 +12603,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["3S0"],
 			workup: ["7M", "5M"],
 			yawn: ["3S0"],
-		}
+		},
 	},
 	horsea: {
 		inherit: true,
@@ -12672,7 +12672,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L13", "7V", "6L1", "5L11", "4L11", "3L22"],
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	seadra: {
 		inherit: true,
@@ -12733,7 +12733,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L13", "7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S0"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	kingdra: {
 		inherit: true,
@@ -12796,7 +12796,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			yawn: ["7L1", "6L1", "5L1", "4L1"],
-		}
+		},
 	},
 	goldeen: {
 		inherit: true,
@@ -12867,7 +12867,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L16", "6T", "6L16", "5L17", "5D", "4M", "4L17", "3M"],
 			watersport: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	seaking: {
 		inherit: true,
@@ -12934,7 +12934,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L16", "6T", "6L16", "5L17", "5D", "4M", "4L17", "3M"],
 			watersport: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	staryu: {
 		inherit: true,
@@ -13009,7 +13009,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L4", "7V", "6L4", "5L6", "5D", "4L6", "3L6", "3S1"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	starmie: {
 		inherit: true,
@@ -13093,7 +13093,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	mimejr: {
 		inherit: true,
@@ -13181,7 +13181,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			wakeupslap: ["7E", "6E", "5E", "4E"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	mrmime: {
 		inherit: true,
@@ -13301,7 +13301,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7L1", "6L1", "5L1"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	scyther: {
 		inherit: true,
@@ -13378,7 +13378,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["7L1", "6L1", "5L1", "4L1"],
 			wingattack: ["7L21", "7V", "6L21", "5L21", "5S2", "4L21", "3L26"],
 			xscissor: ["7M", "7L41", "6M", "6L41", "5M", "5L41", "4M", "4L41"],
-		}
+		},
 	},
 	scizor: {
 		inherit: true,
@@ -13454,7 +13454,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "6S7", "5M", "4M"],
 			venoshock: ["7M", "6M", "5M"],
 			xscissor: ["7M", "7L41", "6M", "6L41", "6S4", "5M", "5L41", "4M", "4L41", "4S1"],
-		}
+		},
 	},
 	smoochum: {
 		inherit: true,
@@ -13544,7 +13544,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	jynx: {
 		inherit: true,
@@ -13655,7 +13655,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["7E"],
 			wringout: ["7L49", "6L49", "5L49", "4L44"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	elekid: {
 		inherit: true,
@@ -13731,7 +13731,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	electabuzz: {
 		inherit: true,
@@ -13823,7 +13823,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	electivire: {
 		inherit: true,
@@ -13901,7 +13901,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	magby: {
 		inherit: true,
@@ -13977,7 +13977,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	magmar: {
 		inherit: true,
@@ -14068,7 +14068,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["7E", "6T", "5T", "4T", "3T", "3S1"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	magmortar: {
 		inherit: true,
@@ -14140,7 +14140,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M"],
 			toxic: ["7M", "6M", "5M", "4M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	pinsir: {
 		inherit: true,
@@ -14225,7 +14225,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			visegrip: ["7L1", "7V", "6L1", "5L1", "5D", "4L1", "3L1"],
 			vitalthrow: ["7L18", "6L18", "5L25", "4L25"],
 			xscissor: ["7M", "7L29", "6M", "6L29", "6S1", "5M", "5L30", "4M", "4L30"],
-		}
+		},
 	},
 	tauros: {
 		inherit: true,
@@ -14308,7 +14308,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "7L29", "6L29", "5M", "5L29"],
 			zenheadbutt: ["7L35", "6T", "6L35", "5T", "5L35", "4T", "4L29"],
-		}
+		},
 	},
 	magikarp: {
 		inherit: true,
@@ -14320,7 +14320,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			hydropump: ["5S5"],
 			splash: ["7L1", "7S7", "7V", "6L1", "6S6", "5L1", "5S5", "5D", "4L1", "4S0", "4S1", "4S2", "4S3", "4S4", "3L1"],
 			tackle: ["7L15", "7V", "6L15", "5L15", "4L15", "3L15"],
-		}
+		},
 	},
 	gyarados: {
 		inherit: true,
@@ -14409,7 +14409,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	lapras: {
 		inherit: true,
@@ -14504,13 +14504,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L14", "6T", "6L14", "5L14", "4M", "4L14", "3M"],
 			whirlpool: ["7E", "6E", "5E", "4M", "4E"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	ditto: {
 		inherit: true,
 		learnset: {
 			transform: ["7L1", "7V", "7S0", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	eevee: {
 		inherit: true,
@@ -14581,7 +14581,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 			workup: ["7M", "5M"],
 			yawn: ["7E", "6E", "5E", "4E"],
-		}
+		},
 	},
 	vaporeon: {
 		inherit: true,
@@ -14663,7 +14663,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L17", "6T", "6L17", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	jolteon: {
 		inherit: true,
@@ -14739,7 +14739,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "7S2", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	flareon: {
 		inherit: true,
@@ -14815,7 +14815,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "7S2", "6M", "5M", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	espeon: {
 		inherit: true,
@@ -14891,7 +14891,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	umbreon: {
 		inherit: true,
@@ -14966,7 +14966,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7S3", "6M", "5M", "4M", "3M"],
 			wonderroom: ["6T", "5T"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	leafeon: {
 		inherit: true,
@@ -15036,7 +15036,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	glaceon: {
 		inherit: true,
@@ -15102,7 +15102,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			waterpulse: ["6T", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	porygon: {
 		inherit: true,
@@ -15181,7 +15181,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			zapcannon: ["7L62", "6L62", "5L62", "4L62", "3L48"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	porygon2: {
 		inherit: true,
@@ -15253,7 +15253,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			zapcannon: ["7L62", "7L1", "6L1", "5L62", "4L62", "3L48"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	porygonz: {
 		inherit: true,
@@ -15325,7 +15325,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["5T"],
 			zapcannon: ["7L62", "7L1", "6L1", "5L62", "4L62"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	omanyte: {
 		inherit: true,
@@ -15406,7 +15406,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["7E", "6E", "5E", "4M"],
 			withdraw: ["7L1", "7V", "6L1", "5L1", "5S0", "4L1", "3L1"],
 			wringout: ["7E", "6E", "5E", "4E"],
-		}
+		},
 	},
 	omastar: {
 		inherit: true,
@@ -15486,7 +15486,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			withdraw: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	kabuto: {
 		inherit: true,
@@ -15566,7 +15566,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			wringout: ["7L50", "6L50", "5L51", "4L51"],
-		}
+		},
 	},
 	kabutops: {
 		inherit: true,
@@ -15662,7 +15662,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wringout: ["7L63", "6L63", "5L63", "4L63"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	aerodactyl: {
 		inherit: true,
@@ -15756,7 +15756,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7E", "7V", "6E", "5E", "4E", "3E"],
 			wideguard: ["7E", "6E"],
 			wingattack: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	munchlax: {
 		inherit: true,
@@ -15850,7 +15850,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7E", "6E", "5E", "4E"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
-		}
+		},
 	},
 	snorlax: {
 		inherit: true,
@@ -15967,7 +15967,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "5M"],
 			yawn: ["7L20", "6L20", "5L20", "4L20", "3L21"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	articuno: {
 		inherit: true,
@@ -16044,7 +16044,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7V"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlwind: ["7V"],
-		}
+		},
 	},
 	zapdos: {
 		inherit: true,
@@ -16120,7 +16120,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7V"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L99", "6L1", "5L92"],
-		}
+		},
 	},
 	moltres: {
 		inherit: true,
@@ -16193,7 +16193,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7V"],
 			willowisp: ["7M", "6M", "5M", "4M", "3S2"],
 			wingattack: ["7L1", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	dratini: {
 		inherit: true,
@@ -16271,7 +16271,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7E", "6T", "6E", "5E", "5D", "4M", "3M"],
 			whirlpool: ["4M"],
 			wrap: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	dragonair: {
 		inherit: true,
@@ -16344,7 +16344,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			wrap: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	dragonite: {
 		inherit: true,
@@ -16460,7 +16460,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wingattack: ["7L1", "6L55", "5L55", "5S4", "5S5", "4L55", "3L55", "3S0"],
 			wrap: ["7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	mewtwo: {
 		inherit: true,
@@ -16601,7 +16601,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	mew: {
 		inherit: true,
@@ -16848,7 +16848,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["7M", "6M", "5M", "4M"],
 			zapcannon: ["3S12", "3S13"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	chikorita: {
 		inherit: true,
@@ -16919,7 +16919,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			worryseed: ["6T", "5T", "4T"],
 			wringout: ["7E", "6E", "5E", "4E"],
-		}
+		},
 	},
 	bayleef: {
 		inherit: true,
@@ -16981,7 +16981,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			workup: ["7M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	meganium: {
 		inherit: true,
@@ -17053,7 +17053,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			workup: ["7M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	cyndaquil: {
 		inherit: true,
@@ -17122,7 +17122,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	quilava: {
 		inherit: true,
@@ -17186,7 +17186,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	typhlosion: {
 		inherit: true,
@@ -17272,7 +17272,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	totodile: {
 		inherit: true,
@@ -17363,7 +17363,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7E", "6E", "5E", "4E", "3E"],
 			whirlpool: ["4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	croconaw: {
 		inherit: true,
@@ -17450,7 +17450,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	feraligatr: {
 		inherit: true,
@@ -17549,7 +17549,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	sentret: {
 		inherit: true,
@@ -17639,7 +17639,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	furret: {
 		inherit: true,
@@ -17732,7 +17732,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	hoothoot: {
 		inherit: true,
@@ -17810,7 +17810,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["7E", "6E", "5E", "4E", "3E"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7L16", "6T", "6L37", "5T", "5L37", "4T", "4L33"],
-		}
+		},
 	},
 	noctowl: {
 		inherit: true,
@@ -17882,7 +17882,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L39", "6T", "6L13", "5T", "5L13", "4T", "4L13"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7L16", "6T", "6L42", "5T", "5L42", "4T", "4L37"],
-		}
+		},
 	},
 	ledyba: {
 		inherit: true,
@@ -17958,7 +17958,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			uturn: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	ledian: {
 		inherit: true,
@@ -18033,7 +18033,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			uturn: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	spinarak: {
 		inherit: true,
@@ -18106,7 +18106,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twineedle: ["7E", "6E", "5E"],
 			venoshock: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	ariados: {
 		inherit: true,
@@ -18175,7 +18175,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7L1", "6L1"],
 			venoshock: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	chinchou: {
 		inherit: true,
@@ -18246,7 +18246,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			whirlpool: ["7E", "6E", "5E", "4M", "4E"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	lanturn: {
 		inherit: true,
@@ -18318,7 +18318,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	togepi: {
 		inherit: true,
@@ -18415,7 +18415,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "5M"],
 			yawn: ["7L13", "6L13", "5L13", "4L15", "3L13", "3S0"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	togetic: {
 		inherit: true,
@@ -18530,7 +18530,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "5M"],
 			yawn: ["7L13", "6L13", "5L13", "4L15", "3L13"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	togekiss: {
 		inherit: true,
@@ -18617,7 +18617,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	natu: {
 		inherit: true,
@@ -18708,7 +18708,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			wish: ["7L28", "6L28", "5L28", "4L28", "3L30"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
-		}
+		},
 	},
 	xatu: {
 		inherit: true,
@@ -18796,7 +18796,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			wish: ["7L29", "6L29", "5L30", "4L30", "3L35"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	mareep: {
 		inherit: true,
@@ -18863,7 +18863,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["7M", "7L4", "6M", "6L4", "6S3", "5M", "5L14", "4M", "4L14", "3T", "3L16", "3S0", "3S2"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	flaaffy: {
 		inherit: true,
@@ -18935,7 +18935,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	ampharos: {
 		inherit: true,
@@ -19018,7 +19018,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L1", "6L1"],
-		}
+		},
 	},
 	azurill: {
 		inherit: true,
@@ -19086,7 +19086,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L5", "7E", "6L5", "6E", "5L5", "5E"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	marill: {
 		inherit: true,
@@ -19171,7 +19171,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L5", "7E", "6L5", "6E", "5L5", "5E"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	azumarill: {
 		inherit: true,
@@ -19250,7 +19250,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L5", "7L1", "6L1", "5L1"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	bonsly: {
 		inherit: true,
@@ -19315,7 +19315,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M", "6M", "5M", "4M"],
 			toxic: ["7M", "6M", "5M", "4M"],
 			uproar: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	sudowoodo: {
 		inherit: true,
@@ -19400,7 +19400,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			woodhammer: ["7L1", "6L1", "5L1", "4L1"],
-		}
+		},
 	},
 	hoppip: {
 		inherit: true,
@@ -19467,7 +19467,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uturn: ["7M", "7L37", "6M", "6L37", "5M", "5L37", "4M", "4L31"],
 			worryseed: ["7L40", "7E", "6T", "6L40", "6E", "5T", "5L40", "5E", "4T", "4L34", "4E"],
-		}
+		},
 	},
 	skiploom: {
 		inherit: true,
@@ -19528,7 +19528,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uturn: ["7M", "7L44", "6M", "6L44", "5M", "5L44", "4M", "4L36"],
 			worryseed: ["7L48", "6T", "6L48", "5T", "5L48", "4T", "4L40"],
-		}
+		},
 	},
 	jumpluff: {
 		inherit: true,
@@ -19592,7 +19592,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uturn: ["7M", "7L49", "6M", "6L49", "5M", "5L49", "4M", "4L36"],
 			worryseed: ["7L54", "6T", "6L54", "5T", "5L54", "4T", "4L40"],
-		}
+		},
 	},
 	aipom: {
 		inherit: true,
@@ -19696,7 +19696,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	ambipom: {
 		inherit: true,
@@ -19784,7 +19784,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			waterpulse: ["6T", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	sunkern: {
 		inherit: true,
@@ -19844,7 +19844,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			worryseed: ["7L19", "6T", "6L19", "5T", "5L25", "4T", "4L25"],
-		}
+		},
 	},
 	sunflora: {
 		inherit: true,
@@ -19905,7 +19905,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			worryseed: ["7L19", "6T", "6L19", "5T", "5L25", "4T", "4L25"],
-		}
+		},
 	},
 	yanma: {
 		inherit: true,
@@ -19972,7 +19972,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "7L49", "6M", "6L49", "5M", "5L49", "4M", "4L49"],
 			whirlwind: ["7E", "6E", "5E", "4E", "3E"],
 			wingattack: ["7L43", "6L43", "5L43", "4L43", "3L39"],
-		}
+		},
 	},
 	yanmega: {
 		inherit: true,
@@ -20039,7 +20039,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			uproar: ["7L27", "6T", "6L27", "5T", "5L27", "4T", "4L27"],
 			uturn: ["7M", "7L49", "6M", "6L49", "5M", "5L49", "4M", "4L46"],
-		}
+		},
 	},
 	wooper: {
 		inherit: true,
@@ -20120,7 +20120,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			yawn: ["7L29", "6L29", "5L29", "4L29", "3L31"],
-		}
+		},
 	},
 	quagsire: {
 		inherit: true,
@@ -20206,7 +20206,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			yawn: ["7L31", "6L31", "5L31", "4L31", "3L35"],
-		}
+		},
 	},
 	murkrow: {
 		inherit: true,
@@ -20289,7 +20289,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			whirlwind: ["7E", "6E", "5E", "4E", "3E"],
 			wingattack: ["7L15", "7E", "6L15", "6E", "5L15", "5E", "4L15", "4E", "3E"],
-		}
+		},
 	},
 	honchkrow: {
 		inherit: true,
@@ -20360,7 +20360,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["4T"],
 			uproar: ["6T", "5T", "4T"],
 			wingattack: ["7L1", "6L1", "5L1", "4L1"],
-		}
+		},
 	},
 	misdreavus: {
 		inherit: true,
@@ -20449,7 +20449,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	mismagius: {
 		inherit: true,
@@ -20526,13 +20526,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	unown: {
 		inherit: true,
 		learnset: {
 			hiddenpower: ["7M", "7L1", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	wynaut: {
 		inherit: true,
@@ -20545,7 +20545,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			safeguard: ["7M", "7L15", "6M", "6L15", "5L15", "4L15", "3L15"],
 			splash: ["7L1", "6L1", "5L1", "4L1", "3L1", "3S0"],
 			tickle: ["3S0"],
-		}
+		},
 	},
 	wobbuffet: {
 		inherit: true,
@@ -20556,7 +20556,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			encore: ["5D"],
 			mirrorcoat: ["7L1", "6L1", "6S3", "5L1", "5D", "4L1", "3L1", "3S0", "3S1"],
 			safeguard: ["7M", "7L1", "6M", "6L1", "5L1", "4L1", "3L1", "3S0", "3S1"],
-		}
+		},
 	},
 	girafarig: {
 		inherit: true,
@@ -20653,7 +20653,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7L32", "6T", "6L32", "5T", "5L41", "4T", "4L41"],
-		}
+		},
 	},
 	pineco: {
 		inherit: true,
@@ -20723,7 +20723,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			toxicspikes: ["7E", "6E", "5E", "5D", "4E"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	forretress: {
 		inherit: true,
@@ -20798,7 +20798,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			voltswitch: ["7M", "6M", "5M"],
 			zapcannon: ["7L60", "7L1", "6L1", "5L64", "4L62", "3L31"],
-		}
+		},
 	},
 	dunsparce: {
 		inherit: true,
@@ -20891,7 +20891,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			yawn: ["7L13", "6L16", "5L8", "4L9", "3L11"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	gligar: {
 		inherit: true,
@@ -20984,7 +20984,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			wingattack: ["7E", "6E", "5E", "4E", "3E"],
 			xscissor: ["7M", "7L40", "6M", "6L40", "5M", "5L45", "4M", "4L42"],
-		}
+		},
 	},
 	gliscor: {
 		inherit: true,
@@ -21069,7 +21069,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "7L30", "6M", "6L30", "5M", "5L42", "4M", "4L38"],
 			venoshock: ["7M", "6M", "5M"],
 			xscissor: ["7M", "7L40", "6M", "6L40", "5M", "5L45", "4M", "4L42"],
-		}
+		},
 	},
 	snubbull: {
 		inherit: true,
@@ -21168,7 +21168,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	granbull: {
 		inherit: true,
@@ -21271,7 +21271,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	qwilfish: {
 		inherit: true,
@@ -21353,7 +21353,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1", "6L1", "5L13", "4L13", "3L13"],
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	shuckle: {
 		inherit: true,
@@ -21431,7 +21431,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			withdraw: ["7L1", "6L1", "5L1", "4L1", "3L1", "3S0"],
 			wrap: ["7L9", "6L9", "5L13", "4L22", "3L9", "3S0"],
-		}
+		},
 	},
 	heracross: {
 		inherit: true,
@@ -21517,7 +21517,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["4T"],
 			venoshock: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	sneasel: {
 		inherit: true,
@@ -21618,7 +21618,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			whirlpool: ["4M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	weavile: {
 		inherit: true,
@@ -21708,7 +21708,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			whirlpool: ["4M"],
 			xscissor: ["7M", "6M", "6S1", "5M", "4M"],
-		}
+		},
 	},
 	teddiursa: {
 		inherit: true,
@@ -21805,7 +21805,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			workup: ["7M", "5M"],
 			yawn: ["7E", "6E", "5E", "4E", "3E"],
-		}
+		},
 	},
 	ursaring: {
 		inherit: true,
@@ -21900,7 +21900,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	slugma: {
 		inherit: true,
@@ -21970,7 +21970,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			yawn: ["7L1", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	magcargo: {
 		inherit: true,
@@ -22046,7 +22046,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			yawn: ["7L1", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	swinub: {
 		inherit: true,
@@ -22116,7 +22116,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			takedown: ["7L28", "7E", "6L28", "6E", "5L32", "5E", "4L32", "4E", "3L28", "3E"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
-		}
+		},
 	},
 	piloswine: {
 		inherit: true,
@@ -22183,7 +22183,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7L28", "6L28", "5L32", "4L32", "3L28"],
 			thrash: ["7L41", "6L41", "5L41"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
-		}
+		},
 	},
 	mamoswine: {
 		inherit: true,
@@ -22252,7 +22252,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7L28", "6L28", "5L32", "5S0", "4L32"],
 			thrash: ["7L41", "6L41", "5L41"],
 			toxic: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	corsola: {
 		inherit: true,
@@ -22346,7 +22346,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	remoraid: {
 		inherit: true,
@@ -22420,7 +22420,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L26", "7E", "6T", "6L26", "6E", "5L32", "5E", "4M", "4L32", "3M"],
 			waterspout: ["7E", "6E", "5E", "4E"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	octillery: {
 		inherit: true,
@@ -22495,7 +22495,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			wringout: ["7L28", "6L28", "5L36", "4L36"],
-		}
+		},
 	},
 	delibird: {
 		inherit: true,
@@ -22571,7 +22571,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["6T", "4M", "3M"],
-		}
+		},
 	},
 	mantyke: {
 		inherit: true,
@@ -22639,7 +22639,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wideguard: ["7L23", "7E", "6L23", "6E", "5L23", "5E"],
 			wingattack: ["7L14", "6L14", "5L22", "4L22"],
-		}
+		},
 	},
 	mantine: {
 		inherit: true,
@@ -22723,7 +22723,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wideguard: ["7L23", "7E", "6L23", "6E", "5L23", "5E"],
 			wingattack: ["7L14", "6L14", "5L22", "4L22", "3L36"],
-		}
+		},
 	},
 	skarmory: {
 		inherit: true,
@@ -22805,7 +22805,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["4T"],
 			whirlwind: ["7E", "6E", "5E", "4E", "3E"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	houndour: {
 		inherit: true,
@@ -22889,7 +22889,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			willowisp: ["7M", "6M", "5M", "4M", "4E", "3E"],
-		}
+		},
 	},
 	houndoom: {
 		inherit: true,
@@ -22968,7 +22968,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	phanpy: {
 		inherit: true,
@@ -23034,7 +23034,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			takedown: ["7L28", "6L10", "5L10", "4L10", "3L25"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
-		}
+		},
 	},
 	donphan: {
 		inherit: true,
@@ -23109,7 +23109,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M", "6M", "5M", "4M", "3T"],
 			thunderfang: ["7L1", "6L1", "5L1", "4L1"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
-		}
+		},
 	},
 	stantler: {
 		inherit: true,
@@ -23198,7 +23198,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7L38", "7E", "6T", "6L38", "6E", "5T", "5L38", "5E", "4T", "4L38", "4E"],
-		}
+		},
 	},
 	smeargle: {
 		inherit: true,
@@ -23210,7 +23210,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			sketch: ["7L91", "7L81", "7L71", "7L61", "7L51", "7L41", "7L31", "7L21", "7L11", "7L1", "6L1", "5L1", "5D", "4L1", "3L1", "3S0"],
 			sleeptalk: ["5D"],
 			spore: ["5S1"],
-		}
+		},
 	},
 	miltank: {
 		inherit: true,
@@ -23305,7 +23305,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7L29", "6T", "6L29", "5T", "5L29", "4T", "4L29"],
-		}
+		},
 	},
 	raikou: {
 		inherit: true,
@@ -23377,7 +23377,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			weatherball: ["4S3"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["4S3"],
-		}
+		},
 	},
 	entei: {
 		inherit: true,
@@ -23449,7 +23449,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swift: ["4T", "3T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	suicune: {
 		inherit: true,
@@ -23525,7 +23525,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	larvitar: {
 		inherit: true,
@@ -23598,7 +23598,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	pupitar: {
 		inherit: true,
@@ -23665,7 +23665,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	tyranitar: {
 		inherit: true,
@@ -23777,7 +23777,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	lugia: {
 		inherit: true,
@@ -23881,7 +23881,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L1", "6L1", "5L1", "5S4", "4L1", "3L1"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	hooh: {
 		inherit: true,
@@ -23970,7 +23970,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L1", "6L1", "5L1", "5S3", "4L1", "3L1"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	celebi: {
 		inherit: true,
@@ -24061,7 +24061,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			worryseed: ["6T", "5T", "4T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	treecko: {
 		inherit: true,
@@ -24151,7 +24151,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			workup: ["7M"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
-		}
+		},
 	},
 	grovyle: {
 		inherit: true,
@@ -24235,7 +24235,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			worryseed: ["6T", "5T", "4T"],
 			xscissor: ["7M", "7L43", "6M", "6L43", "5M", "4M"],
-		}
+		},
 	},
 	sceptile: {
 		inherit: true,
@@ -24334,7 +24334,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			worryseed: ["6T", "5T", "4T"],
 			xscissor: ["7M", "7L45", "6M", "6L16", "5M", "5L16", "4M", "4L16"],
-		}
+		},
 	},
 	torchic: {
 		inherit: true,
@@ -24413,7 +24413,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	combusken: {
 		inherit: true,
@@ -24498,7 +24498,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	blaziken: {
 		inherit: true,
@@ -24599,7 +24599,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	mudkip: {
 		inherit: true,
@@ -24680,7 +24680,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7E", "6E", "5E"],
 			workup: ["7M"],
 			yawn: ["7E", "6E", "5E", "4E"],
-		}
+		},
 	},
 	marshtomp: {
 		inherit: true,
@@ -24761,7 +24761,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	swampert: {
 		inherit: true,
@@ -24854,7 +24854,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	poochyena: {
 		inherit: true,
@@ -24928,7 +24928,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			yawn: ["7L37", "7E", "6E", "5E", "4E", "3E"],
-		}
+		},
 	},
 	mightyena: {
 		inherit: true,
@@ -25000,7 +25000,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			yawn: ["7L44"],
-		}
+		},
 	},
 	zigzagoon: {
 		inherit: true,
@@ -25084,7 +25084,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	linoone: {
 		inherit: true,
@@ -25170,7 +25170,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	wurmple: {
 		inherit: true,
@@ -25181,7 +25181,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			snore: ["6T", "5T", "5D", "4T"],
 			stringshot: ["7L1", "6L1", "5L1", "4T", "4L1", "3L1"],
 			tackle: ["7L1", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	silcoon: {
 		inherit: true,
@@ -25191,7 +25191,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			harden: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			irondefense: ["6T", "5T", "4T"],
 			stringshot: ["4T"],
-		}
+		},
 	},
 	beautifly: {
 		inherit: true,
@@ -25255,7 +25255,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			venoshock: ["7M", "6M", "5M"],
 			whirlwind: ["7L30", "6L27", "5L27", "4L27", "3L27"],
-		}
+		},
 	},
 	cascoon: {
 		inherit: true,
@@ -25265,7 +25265,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			harden: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			irondefense: ["6T", "5T", "4T"],
 			stringshot: ["4T"],
-		}
+		},
 	},
 	dustox: {
 		inherit: true,
@@ -25329,7 +25329,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			venoshock: ["7M", "7L20", "6M", "6L20", "5M"],
 			whirlwind: ["7L30", "6L27", "5L27", "4L27", "3L27"],
-		}
+		},
 	},
 	lotad: {
 		inherit: true,
@@ -25397,7 +25397,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "5D", "4M", "3M"],
 			whirlpool: ["4M"],
 			zenheadbutt: ["7L33", "6T", "6L31", "5T", "5L31", "4T", "4L27"],
-		}
+		},
 	},
 	lombre: {
 		inherit: true,
@@ -25474,7 +25474,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L20", "6L19", "5L19", "4L19", "3L31"],
 			whirlpool: ["4M"],
 			zenheadbutt: ["7L40", "6T", "6L31", "5T", "5L31", "4T", "4L27"],
-		}
+		},
 	},
 	ludicolo: {
 		inherit: true,
@@ -25558,7 +25558,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	seedot: {
 		inherit: true,
@@ -25623,7 +25623,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7E", "6E", "5E", "4E", "3E"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
-		}
+		},
 	},
 	nuzleaf: {
 		inherit: true,
@@ -25704,7 +25704,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "7L9", "6M", "6L16", "5M", "5L25", "4M", "4L25", "3M", "3L25"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	shiftry: {
 		inherit: true,
@@ -25801,7 +25801,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L1", "6L1", "5L1", "4L1"],
 			worryseed: ["6T", "5T", "4T"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	taillow: {
 		inherit: true,
@@ -25868,7 +25868,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7E", "6E", "5E", "4E"],
 			wingattack: ["7L13", "6L13", "5L13", "4L13", "3L13"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	swellow: {
 		inherit: true,
@@ -25929,7 +25929,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			wingattack: ["7L13", "6L13", "5L13", "4L13", "3L13"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	wingull: {
 		inherit: true,
@@ -25997,7 +25997,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7E", "6E", "5E", "4E", "3E"],
 			wideguard: ["7E", "6E"],
 			wingattack: ["7L8", "6L8", "5L11", "4L11", "3L13"],
-		}
+		},
 	},
 	pelipper: {
 		inherit: true,
@@ -26071,7 +26071,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			whirlpool: ["4M"],
 			wingattack: ["7L8", "7L1", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	ralts: {
 		inherit: true,
@@ -26171,7 +26171,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["3S0"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	kirlia: {
 		inherit: true,
@@ -26259,7 +26259,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	gardevoir: {
 		inherit: true,
@@ -26354,7 +26354,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["7L14", "6L14", "5L17", "4L17"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	gallade: {
 		inherit: true,
@@ -26465,7 +26465,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "5M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	surskit: {
 		inherit: true,
@@ -26531,7 +26531,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["6T", "4M", "3M"],
 			watersport: ["7L14", "6L14", "5L19", "4L19", "3L19"],
-		}
+		},
 	},
 	masquerain: {
 		inherit: true,
@@ -26602,7 +26602,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			watersport: ["7L14", "7L1", "6L1", "5L1", "4L1", "3L1"],
 			whirlwind: ["7L48", "7L1", "6L1", "5L54", "4L54", "3L53"],
-		}
+		},
 	},
 	shroomish: {
 		inherit: true,
@@ -26661,7 +26661,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			wakeupslap: ["7E", "6E", "5E", "4E"],
 			worryseed: ["7L22", "7E", "6T", "6L22", "6E", "5T", "5L29", "5E", "4T", "4L29", "4E"],
-		}
+		},
 	},
 	breloom: {
 		inherit: true,
@@ -26745,7 +26745,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	slakoth: {
 		inherit: true,
@@ -26832,7 +26832,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
 			yawn: ["7L1", "6L1", "5L1", "5D", "4L1", "3L1"],
-		}
+		},
 	},
 	vigoroth: {
 		inherit: true,
@@ -26919,7 +26919,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L9", "7L1", "6T", "6L1", "5T", "5L1", "4T", "4L1", "3L1"],
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	slaking: {
 		inherit: true,
@@ -27013,7 +27013,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
 			yawn: ["7L1", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	nincada: {
 		inherit: true,
@@ -27070,7 +27070,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M", "6M", "5M", "4M", "3T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	ninjask: {
 		inherit: true,
@@ -27137,7 +27137,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			uturn: ["7M", "6M", "5M", "4M"],
 			xscissor: ["7M", "7L47", "6M", "6L47", "5M", "5L52", "4M", "4L52"],
-		}
+		},
 	},
 	shedinja: {
 		inherit: true,
@@ -27206,7 +27206,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T", "4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			xscissor: ["7M", "6M", "5M", "4M", "4S6"],
-		}
+		},
 	},
 	whismur: {
 		inherit: true,
@@ -27283,7 +27283,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "5D", "4T"],
-		}
+		},
 	},
 	loudred: {
 		inherit: true,
@@ -27365,7 +27365,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	exploud: {
 		inherit: true,
@@ -27460,7 +27460,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	makuhita: {
 		inherit: true,
@@ -27551,7 +27551,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L16", "6L16", "5L16", "4L16", "3L22"],
 			wideguard: ["7E", "6E", "5E"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	hariyama: {
 		inherit: true,
@@ -27638,7 +27638,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			whirlwind: ["7L16", "6L16", "5L16", "4L16", "3L22"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	nosepass: {
 		inherit: true,
@@ -27715,7 +27715,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wideguard: ["7E", "6E"],
 			zapcannon: ["7L43", "6L43", "5L67", "4L61", "3L43"],
-		}
+		},
 	},
 	probopass: {
 		inherit: true,
@@ -27789,7 +27789,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wideguard: ["7L1", "6L1"],
 			zapcannon: ["7L43", "6L43", "5L67", "4L61"],
-		}
+		},
 	},
 	skitty: {
 		inherit: true,
@@ -27877,7 +27877,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
-		}
+		},
 	},
 	delcatty: {
 		inherit: true,
@@ -27952,7 +27952,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	sableye: {
 		inherit: true,
@@ -28068,7 +28068,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "6S3", "6S4", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["7L34", "6T", "6L1", "5T", "5L53", "4T", "4L50"],
-		}
+		},
 	},
 	mawile: {
 		inherit: true,
@@ -28175,7 +28175,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			visegrip: ["7L17", "6L17", "5L21", "4L21", "3L21", "3S1"],
-		}
+		},
 	},
 	aron: {
 		inherit: true,
@@ -28251,7 +28251,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			waterpulse: ["6T", "4M", "3M"],
-		}
+		},
 	},
 	lairon: {
 		inherit: true,
@@ -28321,7 +28321,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
 			waterpulse: ["6T", "4M", "3M"],
-		}
+		},
 	},
 	aggron: {
 		inherit: true,
@@ -28435,7 +28435,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	meditite: {
 		inherit: true,
@@ -28533,7 +28533,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["4T"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	medicham: {
 		inherit: true,
@@ -28626,7 +28626,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["4T"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7L1", "6T", "6L1", "5T", "4T"],
-		}
+		},
 	},
 	electrike: {
 		inherit: true,
@@ -28693,7 +28693,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7E", "6T", "6E", "5T", "5E", "4E", "3E"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L39", "6M", "6L39", "5M", "5L49"],
-		}
+		},
 	},
 	manectric: {
 		inherit: true,
@@ -28758,7 +28758,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			voltswitch: ["7M", "6M", "6S1", "5M"],
 			wildcharge: ["7M", "7L42", "6M", "6L42", "5M", "5L61"],
-		}
+		},
 	},
 	plusle: {
 		inherit: true,
@@ -28839,7 +28839,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			wish: ["7E", "6E", "5E", "4E", "3E"],
-		}
+		},
 	},
 	minun: {
 		inherit: true,
@@ -28921,7 +28921,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["3S0"],
 			wildcharge: ["7M", "6M", "5M"],
 			wish: ["7E", "6E", "5E", "4E", "3E"],
-		}
+		},
 	},
 	volbeat: {
 		inherit: true,
@@ -29004,7 +29004,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			waterpulse: ["6T", "4M", "3M"],
 			zenheadbutt: ["7L33", "6T", "6L33", "5T", "5L37", "4T", "4L37"],
-		}
+		},
 	},
 	illumise: {
 		inherit: true,
@@ -29091,7 +29091,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wish: ["7L22", "6L21", "5L21", "4L21", "3L21"],
 			zenheadbutt: ["7L33", "6T", "6L33", "5T", "5L37", "4T", "4L37"],
-		}
+		},
 	},
 	budew: {
 		inherit: true,
@@ -29152,7 +29152,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			watersport: ["7L7", "6L7", "5L7", "4L7"],
 			worryseed: ["7L16", "6T", "6L16", "5T", "5L16", "4T", "4L16"],
-		}
+		},
 	},
 	roselia: {
 		inherit: true,
@@ -29226,7 +29226,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxicspikes: ["7L28", "6L28", "5L28", "4L28"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	roserade: {
 		inherit: true,
@@ -29283,7 +29283,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "6M", "5M"],
 			weatherball: ["7L1", "6L1", "5L1", "4L1"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	gulpin: {
 		inherit: true,
@@ -29362,7 +29362,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wringout: ["7L44", "6L44", "5L54", "4L49"],
 			yawn: ["7L5", "6L5", "5L6", "4L6", "3L6"],
-		}
+		},
 	},
 	swalot: {
 		inherit: true,
@@ -29441,7 +29441,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wringout: ["7L54", "7L1", "6L1", "5L66", "4L59"],
 			yawn: ["7L5", "7L1", "6L1", "5L1", "4L1", "3L1"],
-		}
+		},
 	},
 	carvanha: {
 		inherit: true,
@@ -29513,7 +29513,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M", "3S0"],
 			whirlpool: ["4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	sharpedo: {
 		inherit: true,
@@ -29594,7 +29594,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	wailmer: {
 		inherit: true,
@@ -29664,7 +29664,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterspout: ["7L33", "6L34", "5L34", "4L34", "3L41"],
 			whirlpool: ["7L13", "6L13", "5L14", "4M", "4L14", "3L19"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	wailord: {
 		inherit: true,
@@ -29733,7 +29733,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterspout: ["7L33", "6L33", "5L34", "4L34", "3L44", "3S0", "3S1"],
 			whirlpool: ["7L13", "6L13", "5L14", "4M", "4L14", "3L19"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	numel: {
 		inherit: true,
@@ -29807,7 +29807,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			yawn: ["7L36", "7E", "6L36", "6E", "5L36", "5E", "4E"],
-		}
+		},
 	},
 	camerupt: {
 		inherit: true,
@@ -29882,7 +29882,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			yawn: ["7L39", "6L39", "6S0", "5L39"],
-		}
+		},
 	},
 	torkoal: {
 		inherit: true,
@@ -29960,7 +29960,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 			withdraw: ["7L7", "6L7", "5L7", "4L7"],
 			yawn: ["7E", "6E", "5E", "4E", "3E"],
-		}
+		},
 	},
 	spoink: {
 		inherit: true,
@@ -30037,7 +30037,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["3S0"],
 			whirlwind: ["7E", "6E", "5E"],
 			zenheadbutt: ["7L26", "7E", "6T", "6L26", "6E", "5T", "5L26", "5E", "4T", "4L26", "4E"],
-		}
+		},
 	},
 	grumpig: {
 		inherit: true,
@@ -30127,7 +30127,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T", "4T"],
 			trickroom: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["7L26", "6T", "6L26", "5T", "5L26", "4T", "4L26"],
-		}
+		},
 	},
 	spinda: {
 		inherit: true,
@@ -30233,7 +30233,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	trapinch: {
 		inherit: true,
@@ -30293,7 +30293,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			superpower: ["7L40", "6T", "6L1", "5T", "5L67"],
 			swagger: ["7M", "6M", "5M", "4M", "3T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
-		}
+		},
 	},
 	vibrava: {
 		inherit: true,
@@ -30368,7 +30368,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["4T"],
 			uproar: ["7L40", "6T", "6L40"],
 			uturn: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	flygon: {
 		inherit: true,
@@ -30457,7 +30457,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["4T"],
 			uproar: ["7L40", "6T", "6L40"],
 			uturn: ["7M", "6M", "5M", "4M", "4S1"],
-		}
+		},
 	},
 	cacnea: {
 		inherit: true,
@@ -30545,7 +30545,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E", "4T"],
-		}
+		},
 	},
 	cacturne: {
 		inherit: true,
@@ -30632,7 +30632,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	swablu: {
 		inherit: true,
@@ -30708,7 +30708,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			twister: ["4T"],
 			uproar: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	altaria: {
 		inherit: true,
@@ -30793,7 +30793,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["4T"],
 			uproar: ["6T", "5T", "4T"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	zangoose: {
 		inherit: true,
@@ -30902,7 +30902,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			workup: ["7M", "5M"],
 			xscissor: ["7M", "7L40", "6M", "6L36", "5M", "5L48", "4M", "4L48"],
-		}
+		},
 	},
 	seviper: {
 		inherit: true,
@@ -30986,7 +30986,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["7L1", "6L1", "5L1", "4L1", "3L1", "3S0", "3S2"],
 			wringout: ["7L46", "7E", "6L49", "6E", "5L61", "5E", "4L55"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	lunatone: {
 		inherit: true,
@@ -31073,7 +31073,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			trickroom: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	solrock: {
 		inherit: true,
@@ -31163,7 +31163,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["7L49", "6T", "6L1", "5T", "5L64"],
 			zenheadbutt: ["6T", "5T", "5D", "4T"],
-		}
+		},
 	},
 	barboach: {
 		inherit: true,
@@ -31225,7 +31225,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L17", "6T", "6L17", "5L22", "4M", "4L22", "3M"],
 			watersport: ["7L6", "6L6", "5L6", "4L6", "3L6"],
 			whirlpool: ["7E", "6E", "5E", "4M", "4E", "3E"],
-		}
+		},
 	},
 	whiscash: {
 		inherit: true,
@@ -31290,7 +31290,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L6", "7L1", "6L1", "5L1", "4L1", "3L1"],
 			whirlpool: ["4M"],
 			zenheadbutt: ["7L1", "6T", "6L1", "5T", "5L1", "4T", "4L1", "4S0"],
-		}
+		},
 	},
 	corphish: {
 		inherit: true,
@@ -31371,7 +31371,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["3S0"],
 			whirlpool: ["4M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	crawdaunt: {
 		inherit: true,
@@ -31454,7 +31454,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	baltoy: {
 		inherit: true,
@@ -31535,7 +31535,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "5D", "4T"],
-		}
+		},
 	},
 	claydol: {
 		inherit: true,
@@ -31621,7 +31621,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	lileep: {
 		inherit: true,
@@ -31692,7 +31692,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			worryseed: ["6T", "5T", "4T"],
 			wringout: ["7L52", "7E", "6L52", "6E", "5L64", "5E", "4L64", "4E"],
-		}
+		},
 	},
 	cradily: {
 		inherit: true,
@@ -31767,7 +31767,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			worryseed: ["6T", "5T", "4T"],
 			wringout: ["7L61", "7L1", "6L1", "5L76", "4L76"],
-		}
+		},
 	},
 	anorith: {
 		inherit: true,
@@ -31836,7 +31836,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L7", "6L7", "5L13", "5S0", "4L13", "3L19"],
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			xscissor: ["7M", "7L44", "6M", "6L44", "5M", "5L61", "4M", "4L61"],
-		}
+		},
 	},
 	armaldo: {
 		inherit: true,
@@ -31913,7 +31913,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L7", "7L1", "6L1", "5L1", "4L1", "3L1"],
 			waterpulse: ["6T", "4M", "3M"],
 			xscissor: ["7M", "7L46", "6M", "6L46", "5M", "5L73", "4M", "4L73"],
-		}
+		},
 	},
 	feebas: {
 		inherit: true,
@@ -31966,7 +31966,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	milotic: {
 		inherit: true,
@@ -32032,7 +32032,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L4", "7L1", "6L4", "5L5", "4L5", "3L10"],
 			whirlpool: ["4M"],
 			wrap: ["7L1", "6L1", "5L1", "4L1", "3L5"],
-		}
+		},
 	},
 	castform: {
 		inherit: true,
@@ -32106,7 +32106,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "5D", "4M", "3M"],
 			weatherball: ["7L25", "6L25", "5L40", "4L30", "3L30"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	kecleon: {
 		inherit: true,
@@ -32222,7 +32222,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wonderroom: ["6T", "5T"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	shuppet: {
 		inherit: true,
@@ -32303,7 +32303,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["7L50", "6T", "6L50", "5T", "5L55", "4T", "4L50"],
 			trickroom: ["7M", "6M", "5M", "4M"],
 			willowisp: ["7M", "7L16", "6M", "6L13", "5M", "5L23", "4M", "4L23", "3L32", "3S0"],
-		}
+		},
 	},
 	banette: {
 		inherit: true,
@@ -32385,7 +32385,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["7L58", "6T", "6L58", "5T", "5L75", "4T", "4L66"],
 			trickroom: ["7M", "6M", "5M", "4M"],
 			willowisp: ["7M", "7L16", "6M", "6L13", "5M", "5L23", "4M", "4L23", "3L32"],
-		}
+		},
 	},
 	duskull: {
 		inherit: true,
@@ -32465,7 +32465,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			willowisp: ["7M", "7L25", "6M", "6L25", "5M", "5L33", "4M", "4L33", "3L38", "3S0"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	dusclops: {
 		inherit: true,
@@ -32561,7 +32561,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			willowisp: ["7M", "7L25", "6M", "6L25", "5M", "5L33", "4M", "4L33", "3L41"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	dusknoir: {
 		inherit: true,
@@ -32648,7 +32648,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			willowisp: ["7M", "7L25", "6M", "6L25", "5M", "5L33", "4M", "4L33"],
 			wonderroom: ["6T"],
-		}
+		},
 	},
 	tropius: {
 		inherit: true,
@@ -32730,7 +32730,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["4T"],
 			whirlwind: ["7L21", "6L21", "5L27", "4L27", "3L27"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	chingling: {
 		inherit: true,
@@ -32808,7 +32808,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["7L1", "6L1", "5L1", "4L1"],
 			yawn: ["7L13", "6L13"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	chimecho: {
 		inherit: true,
@@ -32895,7 +32895,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["7L1", "6L1", "5L1", "5D", "4L1", "3L1", "3S0"],
 			yawn: ["7L13", "6L13", "5L25", "4L25", "3L25"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	absol: {
 		inherit: true,
@@ -33008,7 +33008,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["3S0"],
 			xscissor: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
-		}
+		},
 	},
 	snorunt: {
 		inherit: true,
@@ -33065,7 +33065,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["6T", "5D", "4M", "3M", "3S0"],
 			weatherball: ["7E", "6E", "5E", "5D", "4E"],
-		}
+		},
 	},
 	glalie: {
 		inherit: true,
@@ -33131,7 +33131,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M", "3M"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["6T", "4M", "3M"],
-		}
+		},
 	},
 	froslass: {
 		inherit: true,
@@ -33204,7 +33204,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wakeupslap: ["7L37", "6L28", "5L28", "4L28"],
 			waterpulse: ["6T", "4M"],
 			willowisp: ["7M", "7L28"],
-		}
+		},
 	},
 	spheal: {
 		inherit: true,
@@ -33275,7 +33275,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7E", "6E", "5E", "4E", "3E"],
 			whirlpool: ["4M"],
 			yawn: ["7E", "6E", "5E", "4E", "3E"],
-		}
+		},
 	},
 	sealeo: {
 		inherit: true,
@@ -33337,7 +33337,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	walrein: {
 		inherit: true,
@@ -33407,7 +33407,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	clamperl: {
 		inherit: true,
@@ -33457,7 +33457,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			waterpulse: ["7E", "6T", "6E", "5E", "4M", "3M"],
 			whirlpool: ["7L1", "6L1", "5L1", "5D", "4M", "4L1", "3L1"],
-		}
+		},
 	},
 	huntail: {
 		inherit: true,
@@ -33517,7 +33517,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["7L14", "6T", "6L14", "5L15", "4M", "4L15", "3M", "3L22"],
 			whirlpool: ["7L1", "6L1", "5L1", "4M", "4L1", "3L1"],
-		}
+		},
 	},
 	gorebyss: {
 		inherit: true,
@@ -33578,7 +33578,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L14", "6T", "6L14", "5L15", "4M", "4L15", "3M", "3L22"],
 			watersport: ["7L5", "6L5"],
 			whirlpool: ["7L1", "6L1", "5L1", "4M", "4L1", "3L1"],
-		}
+		},
 	},
 	relicanth: {
 		inherit: true,
@@ -33654,7 +33654,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			yawn: ["7L35", "6L22", "5L22", "4L22", "3L22"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	luvdisc: {
 		inherit: true,
@@ -33716,7 +33716,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L17", "6T", "6L17", "5L22", "4M", "4L31", "3M"],
 			watersport: ["7E", "6E", "5E", "4E", "3E"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	bagon: {
 		inherit: true,
@@ -33785,7 +33785,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["7E", "6E", "5E", "4T", "4E", "3E"],
 			wish: ["3S0"],
 			zenheadbutt: ["7L34", "6T", "6L34", "5T", "5L35", "4T", "4L35"],
-		}
+		},
 	},
 	shelgon: {
 		inherit: true,
@@ -33848,7 +33848,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			twister: ["4T"],
 			zenheadbutt: ["7L35", "6T", "6L35", "5T", "5L37", "4T", "4L37"],
-		}
+		},
 	},
 	salamence: {
 		inherit: true,
@@ -33933,7 +33933,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			twister: ["4T"],
 			zenheadbutt: ["7L35", "6T", "6L35", "5T", "5L37", "4T", "4L37"],
-		}
+		},
 	},
 	beldum: {
 		inherit: true,
@@ -33944,7 +33944,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			ironhead: ["6T", "6S0", "5T", "5D", "4T"],
 			takedown: ["7L1", "6L1", "5L1", "5D", "4L1", "3L1"],
 			zenheadbutt: ["6T", "6S0", "5T", "5D", "4T"],
-		}
+		},
 	},
 	metang: {
 		inherit: true,
@@ -34027,7 +34027,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			trick: ["6T", "5T", "4T"],
 			zenheadbutt: ["7L32", "6T", "6L29", "5T", "5L52", "4T", "4L52"],
-		}
+		},
 	},
 	metagross: {
 		inherit: true,
@@ -34112,7 +34112,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			trick: ["6T", "5T", "4T"],
 			zenheadbutt: ["7L32", "6T", "6L29", "5T", "5L62", "5S2", "5S3", "4T", "4L62", "4S0"],
-		}
+		},
 	},
 	regirock: {
 		inherit: true,
@@ -34193,7 +34193,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["7M", "6M", "5M", "4M", "3T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			zapcannon: ["7L55", "6L1", "5L65", "5S3", "4L65", "3L49"],
-		}
+		},
 	},
 	regice: {
 		inherit: true,
@@ -34274,7 +34274,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["7M", "6M", "5M", "4M", "3T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			zapcannon: ["7L55", "6L1", "5L65", "5S3", "4L65", "3L49"],
-		}
+		},
 	},
 	registeel: {
 		inherit: true,
@@ -34356,7 +34356,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["7M", "6M", "5M", "4M", "3T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			zapcannon: ["7L55", "6L1", "5L65", "5S3", "4L65", "3L49"],
-		}
+		},
 	},
 	latias: {
 		inherit: true,
@@ -34458,7 +34458,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wish: ["7L1", "6L1", "5L5", "4L5", "3L5"],
 			zenheadbutt: ["7L41", "6T", "6L40", "5T", "5L40", "4T", "4L40", "4S4"],
-		}
+		},
 	},
 	latios: {
 		inherit: true,
@@ -34555,7 +34555,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["7L41", "6T", "6L40", "5T", "5L40", "4T", "4L40", "4S4"],
-		}
+		},
 	},
 	kyogre: {
 		inherit: true,
@@ -34627,7 +34627,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L1", "6T", "6L1", "5L1", "4M", "4L1", "3M", "3L1"],
 			waterspout: ["7L90", "6L50", "6S6", "5L50", "5S3", "5S4", "4L50", "4S2", "3L75"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	groudon: {
 		inherit: true,
@@ -34721,7 +34721,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["7M", "6M", "5M", "4M", "3T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	rayquaza: {
 		inherit: true,
@@ -34819,7 +34819,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M", "6M", "5M", "4M", "3M"],
 			waterpulse: ["6T", "4M", "3M"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	jirachi: {
 		inherit: true,
@@ -34916,7 +34916,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "3M"],
 			wish: ["7L1", "7S22", "6L1", "6S17", "6S18", "6S19", "6S20", "6S21", "5L1", "5S14", "5S15", "5S16", "4L1", "4S11", "4S12", "3L1", "3S0", "3S1", "3S2", "3S3", "3S4", "3S5", "3S6", "3S7", "3S8", "3S9"],
 			zenheadbutt: ["7L35", "6T", "6L35", "5T", "5L35", "4T", "4L35"],
-		}
+		},
 	},
 	deoxys: {
 		inherit: true,
@@ -35035,7 +35035,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["7L1", "6L1", "5L1", "4L1", "4S8", "3L1"],
 			zapcannon: ["7L61", "6L61", "5L81", "4L81", "4S4", "3L40"],
 			zenheadbutt: ["7L49", "6T", "6L49", "5T", "5L65", "4T", "4L65"],
-		}
+		},
 	},
 	turtwig: {
 		inherit: true,
@@ -35108,7 +35108,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["7L5", "6L5", "5L5", "5S0", "5S1", "4L5"],
 			workup: ["7M"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
-		}
+		},
 	},
 	grotle: {
 		inherit: true,
@@ -35169,7 +35169,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["7L5", "7L1", "6L1", "5L1", "4L1"],
 			workup: ["7M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	torterra: {
 		inherit: true,
@@ -35245,7 +35245,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			woodhammer: ["7L1", "6L1", "5L1", "5S0", "4L1"],
 			workup: ["7M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	chimchar: {
 		inherit: true,
@@ -35332,7 +35332,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	monferno: {
 		inherit: true,
@@ -35418,7 +35418,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	infernape: {
 		inherit: true,
@@ -35513,7 +35513,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	piplup: {
 		inherit: true,
@@ -35587,7 +35587,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["7L32", "7S5", "6L32", "5L32", "4M", "4L32"],
 			workup: ["7M"],
 			yawn: ["7E", "6E", "5E", "4E"],
-		}
+		},
 	},
 	prinplup: {
 		inherit: true,
@@ -35657,7 +35657,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L11", "6L11", "5L11", "4L11"],
 			whirlpool: ["7L37", "6L37", "5L37", "4M", "4L37"],
 			workup: ["7M"],
-		}
+		},
 	},
 	empoleon: {
 		inherit: true,
@@ -35741,7 +35741,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			whirlpool: ["7L39", "6L39", "5L39", "4M", "4L39"],
 			workup: ["7M"],
-		}
+		},
 	},
 	starly: {
 		inherit: true,
@@ -35805,7 +35805,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L21", "6L21", "5L21", "4L21"],
 			wingattack: ["7L9", "6L9", "5L9", "4L9"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	staravia: {
 		inherit: true,
@@ -35861,7 +35861,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L23", "6L23", "5L23", "4L23"],
 			wingattack: ["7L9", "6L9", "5L9", "5D", "4L9"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	staraptor: {
 		inherit: true,
@@ -35920,7 +35920,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L23", "6L23", "5L23", "4L23"],
 			wingattack: ["7L9", "7L1", "6L1", "5L1", "4L1"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	bidoof: {
 		inherit: true,
@@ -35994,7 +35994,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7E", "6E", "5E", "4E"],
 			workup: ["7M", "5M"],
 			yawn: ["7L21", "6L25", "5L25", "4L25"],
-		}
+		},
 	},
 	bibarel: {
 		inherit: true,
@@ -36077,7 +36077,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
 			yawn: ["7L23", "6L28", "5L28", "4L28"],
-		}
+		},
 	},
 	kricketot: {
 		inherit: true,
@@ -36091,7 +36091,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			stringshot: ["4T"],
 			strugglebug: ["7L6", "6M", "6L6", "5L6", "5D"],
 			uproar: ["6T", "5T", "5D", "4T"],
-		}
+		},
 	},
 	kricketune: {
 		inherit: true,
@@ -36157,7 +36157,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			uproar: ["6T", "5T", "4T"],
 			xscissor: ["7M", "7L30", "6M", "6L30", "5M", "5L30", "4M", "4L26"],
-		}
+		},
 	},
 	shinx: {
 		inherit: true,
@@ -36222,7 +36222,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L45", "6M", "6L45", "5M", "5L45"],
-		}
+		},
 	},
 	luxio: {
 		inherit: true,
@@ -36277,7 +36277,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L53", "6M", "6L53", "5M", "5L53"],
-		}
+		},
 	},
 	luxray: {
 		inherit: true,
@@ -36336,7 +36336,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L63", "6M", "6L63", "5M", "5L63"],
-		}
+		},
 	},
 	cranidos: {
 		inherit: true,
@@ -36420,7 +36420,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			whirlwind: ["7E", "6E", "5E", "4E"],
 			zenheadbutt: ["7L37", "6T", "6L37", "5T", "5L37", "4T", "4L33"],
-		}
+		},
 	},
 	rampardos: {
 		inherit: true,
@@ -36508,7 +36508,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			whirlpool: ["4M"],
 			zenheadbutt: ["7L43", "6T", "6L43", "5T", "5L43", "4T", "4L36"],
-		}
+		},
 	},
 	shieldon: {
 		inherit: true,
@@ -36582,7 +36582,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M", "5M", "4M"],
 			toxic: ["7M", "6M", "5M", "4M"],
 			wideguard: ["7E", "6E", "5E"],
-		}
+		},
 	},
 	bastiodon: {
 		inherit: true,
@@ -36651,7 +36651,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderbolt: ["7M", "6M", "5M", "4M"],
 			torment: ["7M", "6M", "5M", "4M"],
 			toxic: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	burmy: {
 		inherit: true,
@@ -36663,7 +36663,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			snore: ["6T", "5T", "5D", "4T"],
 			stringshot: ["4T"],
 			tackle: ["7L10", "6L10", "5L10", "4L10"],
-		}
+		},
 	},
 	wormadam: {
 		inherit: true,
@@ -36726,7 +36726,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	wormadamsandy: {
 		inherit: true,
@@ -36790,7 +36790,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			uproar: ["6T", "5T", "4T"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	wormadamtrash: {
 		inherit: true,
@@ -36852,7 +36852,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			uproar: ["6T", "5T", "4T"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	mothim: {
 		inherit: true,
@@ -36920,7 +36920,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["4T"],
 			uturn: ["7M", "6M", "5M", "4M"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	combee: {
 		inherit: true,
@@ -36937,7 +36937,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			sweetscent: ["7L1", "6L1", "5L1", "4L1"],
 			swift: ["4T"],
 			tailwind: ["6T", "5T", "5D", "4T"],
-		}
+		},
 	},
 	vespiquen: {
 		inherit: true,
@@ -37006,7 +37006,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			venoshock: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	pachirisu: {
 		inherit: true,
@@ -37080,7 +37080,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			uturn: ["7M", "6M", "5M", "4M"],
 			voltswitch: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	buizel: {
 		inherit: true,
@@ -37153,7 +37153,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "5D", "4M"],
 			watersport: ["7L7", "6L7", "5L1", "5D", "4L1"],
 			whirlpool: ["7L31", "6L31", "5L36", "4M", "4L36"],
-		}
+		},
 	},
 	floatzel: {
 		inherit: true,
@@ -37225,7 +37225,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			watersport: ["7L7", "7L1", "6L1", "5L1", "4L1"],
 			whirlpool: ["7L35", "6L35", "5L39", "4M", "4L39"],
-		}
+		},
 	},
 	cherubi: {
 		inherit: true,
@@ -37283,7 +37283,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			weatherball: ["7E", "6E", "5E", "4E"],
 			worryseed: ["7L28", "6T", "6L28", "5T", "5L28", "4T", "4L28"],
-		}
+		},
 	},
 	cherrim: {
 		inherit: true,
@@ -37334,7 +37334,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7L35", "6L35", "5L35", "4L35"],
 			toxic: ["7M", "6M", "5M", "4M"],
 			worryseed: ["7L30", "6T", "6L30", "5T", "5L30", "4T", "4L30"],
-		}
+		},
 	},
 	shellos: {
 		inherit: true,
@@ -37397,7 +37397,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L7", "6T", "6L7", "5L7", "4M", "4L7"],
 			whirlpool: ["4M"],
 			yawn: ["7E", "6E", "5E", "5D", "4E"],
-		}
+		},
 	},
 	gastrodon: {
 		inherit: true,
@@ -37461,7 +37461,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M", "6M", "5M", "4M"],
 			waterpulse: ["7L7", "7L1", "6T", "6L1", "5L1", "4M", "4L1"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	drifloon: {
 		inherit: true,
@@ -37544,7 +37544,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T", "4T"],
 			weatherball: ["7E", "6E", "5E", "4E"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	drifblim: {
 		inherit: true,
@@ -37623,7 +37623,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			trick: ["6T", "5T", "4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	buneary: {
 		inherit: true,
@@ -37711,7 +37711,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			waterpulse: ["6T", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	lopunny: {
 		inherit: true,
@@ -37798,7 +37798,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T", "4T"],
 			waterpulse: ["6T", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	glameow: {
 		inherit: true,
@@ -37876,7 +37876,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wakeupslap: ["7E", "6E", "5E"],
 			waterpulse: ["6T", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	purugly: {
 		inherit: true,
@@ -37951,7 +37951,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M", "4M"],
 			waterpulse: ["6T", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	stunky: {
 		inherit: true,
@@ -38030,7 +38030,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L27", "6M", "6L27", "5M", "5L27", "4M", "4L20"],
 			venomdrench: ["7L37"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	skuntank: {
 		inherit: true,
@@ -38102,7 +38102,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L27", "6M", "6L27", "5M", "5L27", "4M", "4L20"],
 			venomdrench: ["7L37"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	bronzor: {
 		inherit: true,
@@ -38172,7 +38172,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T", "4T"],
 			trickroom: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	bronzong: {
 		inherit: true,
@@ -38250,7 +38250,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	chatot: {
 		inherit: true,
@@ -38314,7 +38314,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L45", "6T", "6L45", "5T", "5L45", "4T", "4L37"],
 			uturn: ["7M", "6M", "5M", "4M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	spiritomb: {
 		inherit: true,
@@ -38386,7 +38386,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
-		}
+		},
 	},
 	gible: {
 		inherit: true,
@@ -38457,7 +38457,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thrash: ["7E", "6E", "5E", "4E"],
 			toxic: ["7M", "6M", "5M", "4M"],
 			twister: ["7E", "6E", "5E", "4T", "4E"],
-		}
+		},
 	},
 	gabite: {
 		inherit: true,
@@ -38522,7 +38522,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7L15", "6L15", "5L15", "4L15"],
 			toxic: ["7M", "6M", "5M", "4M"],
 			twister: ["4T"],
-		}
+		},
 	},
 	garchomp: {
 		inherit: true,
@@ -38601,7 +38601,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			twister: ["4T"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	riolu: {
 		inherit: true,
@@ -38687,7 +38687,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["7E", "6E", "5E", "4T", "4E"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	lucario: {
 		inherit: true,
@@ -38789,7 +38789,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M", "4S0"],
 			workup: ["7M", "7L42", "5M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	hippopotas: {
 		inherit: true,
@@ -38847,7 +38847,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			whirlwind: ["7E", "6E", "5E"],
 			yawn: ["7L13", "6L13", "5L13", "4L13"],
-		}
+		},
 	},
 	hippowdon: {
 		inherit: true,
@@ -38904,7 +38904,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			waterpulse: ["6T", "4M"],
 			yawn: ["7L13", "7L1", "6L1", "5L1", "4L1"],
-		}
+		},
 	},
 	skorupi: {
 		inherit: true,
@@ -38983,7 +38983,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "7L27", "6M", "6L27", "5M", "5L50"],
 			whirlwind: ["7E", "6E", "5E", "4E"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	drapion: {
 		inherit: true,
@@ -39066,7 +39066,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxicspikes: ["7L34", "6L34", "5L28", "4L28"],
 			venoshock: ["7M", "7L27", "6M", "6L27", "5M", "5L56"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	croagunk: {
 		inherit: true,
@@ -39162,7 +39162,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wakeupslap: ["7E", "6E", "5E", "4E"],
 			workup: ["7M", "5M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	toxicroak: {
 		inherit: true,
@@ -39251,7 +39251,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M", "7L36", "6M", "6L36", "5M", "5L36"],
 			workup: ["7M", "5M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	carnivine: {
 		inherit: true,
@@ -39322,7 +39322,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L11", "6L11", "5L11", "4L11"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 			wringout: ["7L47", "6L47", "5L47", "4L41"],
-		}
+		},
 	},
 	finneon: {
 		inherit: true,
@@ -39387,7 +39387,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L6", "6L6", "5L6", "4L6"],
 			waterpulse: ["7L22", "6T", "6L22", "5L22", "5D", "4M", "4L22"],
 			whirlpool: ["7L38", "6L38", "5L38", "4M", "4L38"],
-		}
+		},
 	},
 	lumineon: {
 		inherit: true,
@@ -39445,7 +39445,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L6", "7L1", "6L1", "5L1", "4L1"],
 			waterpulse: ["7L22", "6T", "6L22", "5L22", "4M", "4L22"],
 			whirlpool: ["7L42", "6L42", "5L42", "4M", "4L42"],
-		}
+		},
 	},
 	snover: {
 		inherit: true,
@@ -39510,7 +39510,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			woodhammer: ["7L36", "6L36", "5L36", "4L36"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	abomasnow: {
 		inherit: true,
@@ -39584,7 +39584,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			woodhammer: ["7L36", "6L36", "5L36", "4L36"],
 			worryseed: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	rotom: {
 		inherit: true,
@@ -39643,37 +39643,37 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L8", "6T", "6L8", "5T", "5L8", "5S0", "4T", "4L8"],
 			voltswitch: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	rotomheat: {
 		inherit: true,
 		learnset: {
 			overheat: ["7L1", "6L1", "5T", "4T"],
-		}
+		},
 	},
 	rotomwash: {
 		inherit: true,
 		learnset: {
 			hydropump: ["7L1", "6L1", "5T", "4T"],
-		}
+		},
 	},
 	rotomfrost: {
 		inherit: true,
 		learnset: {
 			blizzard: ["7L1", "6L1", "5T", "4T"],
-		}
+		},
 	},
 	rotomfan: {
 		inherit: true,
 		learnset: {
 			airslash: ["7L1", "6L1", "5T", "4T"],
-		}
+		},
 	},
 	rotommow: {
 		inherit: true,
 		learnset: {
 			leafstorm: ["7L1", "6L1", "5T", "4T"],
-		}
+		},
 	},
 	uxie: {
 		inherit: true,
@@ -39756,7 +39756,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			yawn: ["7L31", "6L31", "6S3", "5L31", "4L31", "4S0", "4S1"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	mesprit: {
 		inherit: true,
@@ -39837,7 +39837,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	azelf: {
 		inherit: true,
@@ -39923,7 +39923,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T", "4M"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	dialga: {
 		inherit: true,
@@ -40008,7 +40008,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			trickroom: ["7M", "6M", "5M", "4M"],
 			twister: ["4T"],
-		}
+		},
 	},
 	palkia: {
 		inherit: true,
@@ -40095,7 +40095,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["4T"],
 			waterpulse: ["7L6", "6T", "6L6", "5L6", "4M", "4L6", "4S0"],
 			whirlpool: ["4M"],
-		}
+		},
 	},
 	heatran: {
 		inherit: true,
@@ -40166,7 +40166,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			uproar: ["6T", "5T", "4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	regigigas: {
 		inherit: true,
@@ -40240,7 +40240,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			wideguard: ["7L40", "6L40", "6S4", "5L40", "5S3"],
 			zenheadbutt: ["7L50", "6T", "6L50", "6S4", "5T", "5L50", "5S3", "4T", "4L50", "4S0"],
-		}
+		},
 	},
 	giratina: {
 		inherit: true,
@@ -40332,7 +40332,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			twister: ["4T"],
 			willowisp: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	cresselia: {
 		inherit: true,
@@ -40401,7 +40401,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T", "5S1", "4T"],
 			trickroom: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	phione: {
 		inherit: true,
@@ -40459,7 +40459,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L46", "6T", "6L46", "5L46", "4M", "4L46"],
 			watersport: ["7L1", "6L1", "5L1", "4L1"],
 			whirlpool: ["7L39", "6L39", "5L39", "4M", "4L39"],
-		}
+		},
 	},
 	manaphy: {
 		inherit: true,
@@ -40529,7 +40529,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L46", "6T", "6L46", "5L46", "4M", "4L46", "4S2", "4S3"],
 			watersport: ["7L1", "6L1", "6S4", "6S5", "5L1", "4L1", "4S0", "4S1", "4S3"],
 			whirlpool: ["7L39", "6L39", "5L39", "4M", "4L39", "4S2"],
-		}
+		},
 	},
 	darkrai: {
 		inherit: true,
@@ -40622,7 +40622,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 			wonderroom: ["6T", "5T"],
 			xscissor: ["7M", "6M", "5M", "4M"],
-		}
+		},
 	},
 	shaymin: {
 		inherit: true,
@@ -40687,7 +40687,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M", "4M"],
 			worryseed: ["7L55", "6T", "6L55", "5T", "5L55", "4T", "4L55"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	arceus: {
 		inherit: true,
@@ -40823,7 +40823,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "5M"],
 			xscissor: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["6T", "5T", "4T"],
-		}
+		},
 	},
 	victini: {
 		inherit: true,
@@ -40913,7 +40913,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7L49", "6T", "6L49", "5T", "5L49"],
-		}
+		},
 	},
 	snivy: {
 		inherit: true,
@@ -40985,7 +40985,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["6T", "5T"],
 			wrap: ["7L10", "6L10", "5L10"],
 			wringout: ["7L37", "6L37", "5L37"],
-		}
+		},
 	},
 	servine: {
 		inherit: true,
@@ -41046,7 +41046,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["6T", "5T"],
 			wrap: ["7L10", "7L1", "6L1", "5L1"],
 			wringout: ["7L44", "6L44", "5L44"],
-		}
+		},
 	},
 	serperior: {
 		inherit: true,
@@ -41117,7 +41117,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["6T", "5T"],
 			wrap: ["7L10", "7L1", "6L1", "5L1"],
 			wringout: ["7L50", "6L50", "6S1", "5L50"],
-		}
+		},
 	},
 	tepig: {
 		inherit: true,
@@ -41183,7 +41183,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			yawn: ["7E", "6E", "5E"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	pignite: {
 		inherit: true,
@@ -41256,7 +41256,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	emboar: {
 		inherit: true,
@@ -41340,7 +41340,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	oshawott: {
 		inherit: true,
@@ -41407,7 +41407,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L11", "6L11", "5L11"],
 			workup: ["7M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	dewott: {
 		inherit: true,
@@ -41466,7 +41466,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L11", "7L1", "6L1", "5L1"],
 			workup: ["7M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	samurott: {
 		inherit: true,
@@ -41537,7 +41537,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7L11", "7L1", "6L1", "5L1"],
 			workup: ["7M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	patrat: {
 		inherit: true,
@@ -41602,7 +41602,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			workup: ["7M", "7L28", "6L26", "5M", "5L26"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	watchog: {
 		inherit: true,
@@ -41682,7 +41682,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	lillipup: {
 		inherit: true,
@@ -41746,7 +41746,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "7L19", "6L19", "5M", "5L19"],
 			yawn: ["7E", "6E", "5E"],
-		}
+		},
 	},
 	herdier: {
 		inherit: true,
@@ -41800,7 +41800,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "7L20", "6L20", "5M", "5L20"],
-		}
+		},
 	},
 	stoutland: {
 		inherit: true,
@@ -41861,7 +41861,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "7L20", "6L20", "5M", "5L20"],
-		}
+		},
 	},
 	purrloin: {
 		inherit: true,
@@ -41934,7 +41934,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T"],
 			uturn: ["7M", "6M", "5M"],
 			yawn: ["7E", "6E", "5E"],
-		}
+		},
 	},
 	liepard: {
 		inherit: true,
@@ -42003,7 +42003,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			trick: ["6T", "5T"],
 			uturn: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	pansage: {
 		inherit: true,
@@ -42079,7 +42079,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L10", "6L10", "5L10", "5S1"],
 			workup: ["7M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	simisage: {
 		inherit: true,
@@ -42147,7 +42147,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			workup: ["7M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	pansear: {
 		inherit: true,
@@ -42222,7 +42222,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			yawn: ["7L16", "6L16", "5L16"],
-		}
+		},
 	},
 	simisear: {
 		inherit: true,
@@ -42292,7 +42292,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			willowisp: ["7M", "6M", "5M"],
 			workup: ["7M", "6S0", "5M"],
-		}
+		},
 	},
 	panpour: {
 		inherit: true,
@@ -42371,7 +42371,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T"],
 			watersport: ["7L16", "6L16", "5L16"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	simipour: {
 		inherit: true,
@@ -42442,7 +42442,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpledge: ["7T"],
 			waterpulse: ["6T"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	munna: {
 		inherit: true,
@@ -42515,7 +42515,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["6T", "5T"],
 			yawn: ["7L7", "6L7", "5L7"],
 			zenheadbutt: ["7L23", "6T", "6L23", "5T", "5L23"],
-		}
+		},
 	},
 	musharna: {
 		inherit: true,
@@ -42577,7 +42577,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			worryseed: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	pidove: {
 		inherit: true,
@@ -42628,7 +42628,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M"],
 			wish: ["7E", "6E", "5E"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	tranquill: {
 		inherit: true,
@@ -42673,7 +42673,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			uturn: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	unfezant: {
 		inherit: true,
@@ -42721,7 +42721,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			uturn: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	blitzle: {
 		inherit: true,
@@ -42774,7 +42774,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L39", "6M", "6L39", "5M", "5L39"],
-		}
+		},
 	},
 	zebstrika: {
 		inherit: true,
@@ -42824,7 +42824,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L47", "6M", "6L47", "5M", "5L47"],
-		}
+		},
 	},
 	roggenrola: {
 		inherit: true,
@@ -42876,7 +42876,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7E", "6E", "5E"],
 			toxic: ["7M", "6M", "5M"],
 			wideguard: ["7E", "6E"],
-		}
+		},
 	},
 	boldore: {
 		inherit: true,
@@ -42924,7 +42924,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M", "6M", "5M"],
 			tackle: ["7L1", "6L1", "5L1"],
 			toxic: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	gigalith: {
 		inherit: true,
@@ -42975,7 +42975,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M", "6M", "5M"],
 			tackle: ["7L1", "6L1", "5L1"],
 			toxic: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	woobat: {
 		inherit: true,
@@ -43058,7 +43058,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M"],
 			venomdrench: ["7E", "6E"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	swoobat: {
 		inherit: true,
@@ -43135,7 +43135,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			uturn: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	drilbur: {
 		inherit: true,
@@ -43191,7 +43191,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swordsdance: ["7M", "7L36", "6M", "6L36", "5M", "5L36"],
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	excadrill: {
 		inherit: true,
@@ -43251,7 +43251,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swordsdance: ["7M", "7L42", "6M", "6L42", "5M", "5L42"],
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	audino: {
 		inherit: true,
@@ -43354,7 +43354,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "5M"],
 			yawn: ["7E", "6E", "5E", "5D"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	timburr: {
 		inherit: true,
@@ -43427,7 +43427,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wakeupslap: ["7L20", "6L20", "5L20"],
 			wideguard: ["7E", "6E", "5E"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	gurdurr: {
 		inherit: true,
@@ -43491,7 +43491,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			wakeupslap: ["7L20", "6L20", "5L20"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	conkeldurr: {
 		inherit: true,
@@ -43558,7 +43558,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			wakeupslap: ["7L20", "6L20", "5L20"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	tympole: {
 		inherit: true,
@@ -43608,7 +43608,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			uproar: ["7L23", "6T", "6L23", "5T", "5L23"],
 			waterpulse: ["7E", "6T", "6E", "5E", "5D"],
-		}
+		},
 	},
 	palpitoad: {
 		inherit: true,
@@ -43659,7 +43659,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			uproar: ["7L23", "6T", "6L23", "5T", "5L23"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	seismitoad: {
 		inherit: true,
@@ -43730,7 +43730,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L23", "6T", "6L23", "5T", "5L23"],
 			venoshock: ["7M", "6M", "5M"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	throh: {
 		inherit: true,
@@ -43799,7 +43799,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7L37", "6L45", "5L45"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	sawk: {
 		inherit: true,
@@ -43865,7 +43865,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	sewaddle: {
 		inherit: true,
@@ -43924,7 +43924,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1", "6L1", "5L1"],
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	swadloon: {
 		inherit: true,
@@ -43971,7 +43971,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1", "6L1", "5L1"],
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	leavanny: {
 		inherit: true,
@@ -44037,7 +44037,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T"],
 			xscissor: ["7M", "7L39", "6M", "6L39", "5M", "5L39"],
-		}
+		},
 	},
 	venipede: {
 		inherit: true,
@@ -44087,7 +44087,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxicspikes: ["7E", "6E", "5E"],
 			twineedle: ["7E", "6E", "5E"],
 			venoshock: ["7M", "7L38", "7L26", "6M", "6L26", "5M", "5L26"],
-		}
+		},
 	},
 	whirlipede: {
 		inherit: true,
@@ -44133,7 +44133,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L41", "6M", "6L41", "5M", "5L41"],
 			venomdrench: ["7L43", "6L43"],
 			venoshock: ["7M", "7L28", "6M", "6L28", "5M", "5L28"],
-		}
+		},
 	},
 	scolipede: {
 		inherit: true,
@@ -44198,7 +44198,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7L47", "6L47"],
 			venoshock: ["7M", "7L28", "6M", "6L28", "5M", "5L28"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	cottonee: {
 		inherit: true,
@@ -44257,7 +44257,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tickle: ["7E", "6E", "5E"],
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E", "5D"],
-		}
+		},
 	},
 	whimsicott: {
 		inherit: true,
@@ -44313,7 +44313,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M"],
 			uturn: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	petilil: {
 		inherit: true,
@@ -44369,7 +44369,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			synthesis: ["7L17", "6T", "6L17", "5T", "5L17"],
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	lilligant: {
 		inherit: true,
@@ -44419,7 +44419,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			teeterdance: ["7L10", "6L10", "5L10"],
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	basculin: {
 		inherit: true,
@@ -44481,7 +44481,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1", "6L1", "5L1"],
 			whirlpool: ["7E", "6E", "5E"],
 			zenheadbutt: ["6T", "5T", "5D"],
-		}
+		},
 	},
 	sandile: {
 		inherit: true,
@@ -44551,7 +44551,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "7L10", "6M", "6L10", "5M", "5L10"],
 			toxic: ["7M", "6M", "5M"],
 			uproar: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	krokorok: {
 		inherit: true,
@@ -44622,7 +44622,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "7L10", "6M", "6L10", "5M", "5L10"],
 			toxic: ["7M", "6M", "5M"],
 			uproar: ["6T", "5T"],
-		}
+		},
 	},
 	krookodile: {
 		inherit: true,
@@ -44707,7 +44707,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "7L10", "6M", "6L10", "5M", "5L10"],
 			toxic: ["7M", "6M", "5M"],
 			uproar: ["6T", "5T"],
-		}
+		},
 	},
 	darumaka: {
 		inherit: true,
@@ -44774,7 +44774,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "7L25", "6L25", "5M", "5L25"],
 			yawn: ["7E", "6E", "5E"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	darmanitan: {
 		inherit: true,
@@ -44846,7 +44846,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M", "5M"],
 			workup: ["7M", "7L25", "6L25", "5M", "5L25"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	maractus: {
 		inherit: true,
@@ -44908,7 +44908,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			woodhammer: ["7E", "6E", "5E"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	dwebble: {
 		inherit: true,
@@ -44972,7 +44972,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7E", "6E"],
 			withdraw: ["7L7", "6L7", "5L7"],
 			xscissor: ["7M", "7L35", "6M", "6L35", "5M", "5L35"],
-		}
+		},
 	},
 	crustle: {
 		inherit: true,
@@ -45031,7 +45031,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			withdraw: ["7L7", "7L1", "6L1", "5L1"],
 			xscissor: ["7M", "7L38", "6M", "6L38", "5M", "5L38"],
-		}
+		},
 	},
 	scraggy: {
 		inherit: true,
@@ -45114,7 +45114,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	scrafty: {
 		inherit: true,
@@ -45195,7 +45195,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	sigilyph: {
 		inherit: true,
@@ -45272,7 +45272,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M"],
 			whirlwind: ["7L14", "6L14", "5L14"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	yamask: {
 		inherit: true,
@@ -45345,7 +45345,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "7L21", "6M", "6L21", "5M", "5L21"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	cofagrigus: {
 		inherit: true,
@@ -45413,7 +45413,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "7L21", "6M", "6L21", "5M", "5L21"],
 			wonderroom: ["6T", "5T"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	tirtouga: {
 		inherit: true,
@@ -45482,7 +45482,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7L25", "6L25", "5L25"],
 			withdraw: ["7L1", "6L1", "5L1"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	carracosta: {
 		inherit: true,
@@ -45550,7 +45550,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7L25", "6L25", "5L25"],
 			withdraw: ["7L1", "6L1", "5L1"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	archen: {
 		inherit: true,
@@ -45623,7 +45623,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "7L41", "6M", "6L41", "5M", "5L41"],
 			wingattack: ["7L1", "6L1", "5L1", "5S0"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	archeops: {
 		inherit: true,
@@ -45698,7 +45698,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "7L45", "6M", "6L45", "5M", "5L45"],
 			wingattack: ["7L1", "6L1", "5L1"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	trubbish: {
 		inherit: true,
@@ -45756,7 +45756,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L36", "6M", "6L36", "5M", "5L36"],
 			toxicspikes: ["7L7", "6L7", "5L7"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	garbodor: {
 		inherit: true,
@@ -45815,7 +45815,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L39", "6M", "6L39", "5M", "5L39"],
 			toxicspikes: ["7L7", "7L1", "6L1", "5L1"],
 			venoshock: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	zorua: {
 		inherit: true,
@@ -45887,7 +45887,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T"],
 			uproar: ["6T", "5T"],
 			uturn: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	zoroark: {
 		inherit: true,
@@ -45962,7 +45962,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T"],
 			uproar: ["6T", "5T"],
 			uturn: ["7M", "7L1", "6M", "6L1", "5M", "5L1"],
-		}
+		},
 	},
 	minccino: {
 		inherit: true,
@@ -46028,7 +46028,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M"],
 			wakeupslap: ["7L31", "6L31", "5L31"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	cinccino: {
 		inherit: true,
@@ -46086,7 +46086,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			uturn: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	gothita: {
 		inherit: true,
@@ -46167,7 +46167,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M"],
 			uproar: ["7E", "6T", "6E", "5T", "5E"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	gothorita: {
 		inherit: true,
@@ -46245,7 +46245,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M"],
 			uproar: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	gothitelle: {
 		inherit: true,
@@ -46326,7 +46326,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M"],
 			uproar: ["6T", "5T"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	solosis: {
 		inherit: true,
@@ -46396,7 +46396,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M"],
 			wonderroom: ["7L48", "6T", "6L48", "5T", "5L48"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	duosion: {
 		inherit: true,
@@ -46462,7 +46462,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M"],
 			wonderroom: ["7L53", "6T", "6L53", "5T", "5L53"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	reuniclus: {
 		inherit: true,
@@ -46543,7 +46543,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M", "5M"],
 			wonderroom: ["7L59", "6T", "6L59", "5T", "5L59"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	ducklett: {
 		inherit: true,
@@ -46597,7 +46597,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L13", "6T", "6L13", "5L13"],
 			watersport: ["7L3", "6L3", "5L3"],
 			wingattack: ["7L9", "6L9", "5L9"],
-		}
+		},
 	},
 	swanna: {
 		inherit: true,
@@ -46647,7 +46647,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L13", "6T", "6L13", "5L13"],
 			watersport: ["7L3", "7L1", "6L1", "5L1"],
 			wingattack: ["7L9", "7L1", "6L1", "5L1"],
-		}
+		},
 	},
 	vanillite: {
 		inherit: true,
@@ -46698,7 +46698,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			uproar: ["7L10", "6T", "6L10", "5T", "5L10"],
 			waterpulse: ["7E", "6T", "6E", "5E"],
-		}
+		},
 	},
 	vanillish: {
 		inherit: true,
@@ -46746,7 +46746,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			uproar: ["7L10", "7L1", "6T", "6L1", "5T", "5L1"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	vanilluxe: {
 		inherit: true,
@@ -46796,7 +46796,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7L10", "7L1", "6T", "6L1", "5T", "5L1"],
 			waterpulse: ["6T"],
 			weatherball: ["7L1", "6L1", "5L1"],
-		}
+		},
 	},
 	deerling: {
 		inherit: true,
@@ -46856,7 +46856,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	sawsbuck: {
 		inherit: true,
@@ -46917,7 +46917,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	emolga: {
 		inherit: true,
@@ -46981,7 +46981,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M"],
 			voltswitch: ["7M", "7L42", "6M", "6L42", "5M", "5L42"],
 			wildcharge: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	karrablast: {
 		inherit: true,
@@ -47036,7 +47036,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7L37", "6L37", "5L37", "5S1"],
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["7M", "7L44", "6M", "6L44", "5M", "5L44", "5S1"],
-		}
+		},
 	},
 	escavalier: {
 		inherit: true,
@@ -47091,7 +47091,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			twineedle: ["7L13", "7L1", "6L1", "5L1"],
 			xscissor: ["7M", "7L44", "6M", "6L44", "5M", "5L44"],
-		}
+		},
 	},
 	foongus: {
 		inherit: true,
@@ -47146,7 +47146,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L32", "6M", "6L32", "5M", "5L32"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	amoonguss: {
 		inherit: true,
@@ -47197,7 +47197,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L32", "6M", "6L32", "5M", "5L32"],
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	frillish: {
 		inherit: true,
@@ -47265,7 +47265,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterspout: ["7L61", "6L61", "5L61"],
 			willowisp: ["7M", "6M", "5M"],
 			wringout: ["7L55", "6L55", "5L55"],
-		}
+		},
 	},
 	jellicent: {
 		inherit: true,
@@ -47331,7 +47331,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterspout: ["7L69", "7L1", "6L1", "5L69"],
 			willowisp: ["7M", "6M", "5M"],
 			wringout: ["7L61", "7L1", "6L1", "5L61"],
-		}
+		},
 	},
 	alomomola: {
 		inherit: true,
@@ -47393,7 +47393,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["7L49"],
 			wideguard: ["7L61", "7L1", "6L1", "5L53"],
 			wish: ["7L37", "6L37", "5L37"],
-		}
+		},
 	},
 	joltik: {
 		inherit: true,
@@ -47457,7 +47457,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	galvantula: {
 		inherit: true,
@@ -47519,7 +47519,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	ferroseed: {
 		inherit: true,
@@ -47578,7 +47578,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["7M", "6M", "5M"],
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	ferrothorn: {
 		inherit: true,
@@ -47646,7 +47646,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["7M", "6M", "5M"],
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["6T", "5T"],
-		}
+		},
 	},
 	klink: {
 		inherit: true,
@@ -47697,7 +47697,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L54", "6L54", "5L54"],
-		}
+		},
 	},
 	klang: {
 		inherit: true,
@@ -47748,7 +47748,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L60", "6L60", "5L60"],
-		}
+		},
 	},
 	klinklang: {
 		inherit: true,
@@ -47804,7 +47804,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L66", "6L1", "5L66"],
-		}
+		},
 	},
 	tynamo: {
 		inherit: true,
@@ -47814,7 +47814,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			spark: ["7L1", "6L1", "5L1"],
 			tackle: ["7L1", "6L1", "5L1"],
 			thunderwave: ["7M", "7L1", "6M", "6L1", "5L1"],
-		}
+		},
 	},
 	eelektrik: {
 		inherit: true,
@@ -47867,7 +47867,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L59", "6M", "6L59", "5M", "5L59"],
 			zapcannon: ["7L69", "6L69", "5L69"],
-		}
+		},
 	},
 	eelektross: {
 		inherit: true,
@@ -47942,7 +47942,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L1", "6L1"],
-		}
+		},
 	},
 	elgyem: {
 		inherit: true,
@@ -48022,7 +48022,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			wonderroom: ["7L56", "6T", "6L56", "5T", "5L56"],
 			zenheadbutt: ["7L32", "6T", "6L32", "5T", "5L32"],
-		}
+		},
 	},
 	beheeyem: {
 		inherit: true,
@@ -48097,7 +48097,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			wonderroom: ["7L68", "7L1", "6T", "6L1", "5T", "5L68"],
 			zenheadbutt: ["7L32", "6T", "6L32", "5T", "5L32"],
-		}
+		},
 	},
 	litwick: {
 		inherit: true,
@@ -48166,7 +48166,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T"],
 			trickroom: ["7M", "6M", "5M"],
 			willowisp: ["7M", "7L16", "6M", "6L16", "5M", "5L16"],
-		}
+		},
 	},
 	lampent: {
 		inherit: true,
@@ -48228,7 +48228,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T"],
 			trickroom: ["7M", "6M", "5M"],
 			willowisp: ["7M", "7L16", "6M", "6L16", "5M", "5L16"],
-		}
+		},
 	},
 	chandelure: {
 		inherit: true,
@@ -48283,7 +48283,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["6T", "5T"],
 			trickroom: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	axew: {
 		inherit: true,
@@ -48348,7 +48348,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			taunt: ["7M", "7L36", "6M", "6L36", "5M", "5L36"],
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	fraxure: {
 		inherit: true,
@@ -48409,7 +48409,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			taunt: ["7M", "7L36", "6M", "6L36", "5M", "5L36"],
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	haxorus: {
 		inherit: true,
@@ -48479,7 +48479,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			taunt: ["7M", "7L36", "6M", "6L36", "5M", "5L36"],
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M", "5S0"],
-		}
+		},
 	},
 	cubchoo: {
 		inherit: true,
@@ -48543,7 +48543,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			waterpulse: ["6T"],
 			yawn: ["7E", "6E", "5E"],
-		}
+		},
 	},
 	beartic: {
 		inherit: true,
@@ -48614,7 +48614,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thrash: ["7L59", "7L1", "6L1", "5L59"],
 			toxic: ["7M", "6M", "5M"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	cryogonal: {
 		inherit: true,
@@ -48670,7 +48670,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M", "6M", "5M"],
 			toxic: ["7M", "6M", "5M"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	shelmet: {
 		inherit: true,
@@ -48724,7 +48724,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			venoshock: ["7M", "6M", "5M"],
 			yawn: ["7L25", "6L25", "5L25", "5S0"],
-		}
+		},
 	},
 	accelgor: {
 		inherit: true,
@@ -48774,7 +48774,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "7L40", "6M", "6L40", "5M", "5L40"],
 			venoshock: ["7M", "6M", "5M"],
 			watershuriken: ["7L1", "6L1"],
-		}
+		},
 	},
 	stunfisk: {
 		inherit: true,
@@ -48848,7 +48848,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1", "6L1"],
 			waterpulse: ["6T"],
 			yawn: ["7E", "6E", "5E", "5D"],
-		}
+		},
 	},
 	mienfoo: {
 		inherit: true,
@@ -48923,7 +48923,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "7L41", "6M", "6L41", "5M", "5L41"],
 			vitalthrow: ["7E", "6E", "5E"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	mienshao: {
 		inherit: true,
@@ -48993,7 +48993,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "7L41", "6M", "6L41", "5M", "5L41"],
 			wideguard: ["7L45", "6L45", "5L45"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	druddigon: {
 		inherit: true,
@@ -49082,7 +49082,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["6T", "5T"],
 			torment: ["7M", "6M", "5M"],
 			toxic: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	golett: {
 		inherit: true,
@@ -49153,7 +49153,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M", "6M", "5M"],
 			thunderpunch: ["6T", "5T", "5D"],
 			toxic: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	golurk: {
 		inherit: true,
@@ -49236,7 +49236,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["6T", "5T"],
 			toxic: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	pawniard: {
 		inherit: true,
@@ -49314,7 +49314,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "7L14", "6M", "6L14", "5M", "5L14"],
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	bisharp: {
 		inherit: true,
@@ -49390,7 +49390,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "7L14", "7L1", "6M", "6L1", "5M", "5L1"],
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	bouffalant: {
 		inherit: true,
@@ -49458,7 +49458,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	rufflet: {
 		inherit: true,
@@ -49513,7 +49513,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7L55", "6L55", "5L55"],
 			wingattack: ["7L10", "6L10", "5L10"],
 			workup: ["7M", "5M"],
-		}
+		},
 	},
 	braviary: {
 		inherit: true,
@@ -49572,7 +49572,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["7L10", "7L1", "6L1", "5L1", "5S0"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	vullaby: {
 		inherit: true,
@@ -49637,7 +49637,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			uturn: ["7M", "6M", "5M"],
 			whirlwind: ["7L55", "6L55", "5L55"],
-		}
+		},
 	},
 	mandibuzz: {
 		inherit: true,
@@ -49703,7 +49703,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			uturn: ["7M", "6M", "5M"],
 			whirlwind: ["7L57", "7L1", "6L1", "5L57"],
-		}
+		},
 	},
 	heatmor: {
 		inherit: true,
@@ -49781,7 +49781,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M"],
 			wrap: ["7E", "6E", "5E"],
-		}
+		},
 	},
 	durant: {
 		inherit: true,
@@ -49842,7 +49842,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			visegrip: ["7L1", "6L1", "5L1"],
 			xscissor: ["7M", "7L41", "6M", "6L51", "5M", "5L51"],
-		}
+		},
 	},
 	deino: {
 		inherit: true,
@@ -49907,7 +49907,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			workup: ["7M", "7L38", "6L38", "5M", "5L38"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	zweilous: {
 		inherit: true,
@@ -49964,7 +49964,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T", "5T"],
 			workup: ["7M", "7L38", "6L38", "5M", "5L38"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	hydreigon: {
 		inherit: true,
@@ -50047,7 +50047,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M"],
 			workup: ["7M", "7L38", "6L38", "5M", "5L38"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	larvesta: {
 		inherit: true,
@@ -50104,7 +50104,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M"],
 			zenheadbutt: ["7E", "6T", "6E", "5T", "5E"],
-		}
+		},
 	},
 	volcarona: {
 		inherit: true,
@@ -50170,7 +50170,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	cobalion: {
 		inherit: true,
@@ -50234,7 +50234,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "7L49", "6L1", "5M", "5L61", "5S2"],
 			xscissor: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	terrakion: {
 		inherit: true,
@@ -50295,7 +50295,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "7L49", "6L1", "5M", "5L61", "5S2"],
 			xscissor: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	virizion: {
 		inherit: true,
@@ -50359,7 +50359,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["6T", "5T"],
 			xscissor: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	tornadus: {
 		inherit: true,
@@ -50428,7 +50428,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			uproar: ["7L1", "6T", "6L1", "5T", "5L1", "5S1"],
 			uturn: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	thundurus: {
 		inherit: true,
@@ -50503,7 +50503,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M", "5M"],
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M", "5S2"],
-		}
+		},
 	},
 	reshiram: {
 		inherit: true,
@@ -50575,7 +50575,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M", "5M"],
 			willowisp: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	zekrom: {
 		inherit: true,
@@ -50650,7 +50650,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "6M", "5M"],
 			zenheadbutt: ["7L43", "6T", "6L43", "6S3", "5T", "5L43", "5S0", "5S1"],
-		}
+		},
 	},
 	landorus: {
 		inherit: true,
@@ -50715,7 +50715,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swordsdance: ["7M", "7L31", "6M", "6L37", "6S2", "5M", "5L37"],
 			toxic: ["7M", "6M", "5M"],
 			uturn: ["7M", "6M", "6S3", "5M"],
-		}
+		},
 	},
 	kyurem: {
 		inherit: true,
@@ -50783,7 +50783,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M", "6M", "5M"],
 			toxic: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	kyuremblack: {
 		inherit: true,
@@ -50851,7 +50851,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M", "6M", "5M"],
 			toxic: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	kyuremwhite: {
 		inherit: true,
@@ -50919,7 +50919,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M", "6M", "5M"],
 			toxic: ["7M", "6M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	keldeo: {
 		inherit: true,
@@ -50982,7 +50982,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T"],
 			workup: ["7M", "7L61", "6L61", "5M", "5L61"],
 			xscissor: ["7M", "6M", "5M"],
-		}
+		},
 	},
 	meloetta: {
 		inherit: true,
@@ -51076,7 +51076,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T", "5T"],
 			workup: ["7M", "5M"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	genesect: {
 		inherit: true,
@@ -51156,7 +51156,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["7M", "7L51", "6M", "6L51", "5M", "5L51"],
 			zapcannon: ["7L66", "6L66", "5L66"],
 			zenheadbutt: ["6T", "5T"],
-		}
+		},
 	},
 	chespin: {
 		inherit: true,
@@ -51244,7 +51244,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			worryseed: ["6T"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	quilladin: {
 		inherit: true,
@@ -51329,7 +51329,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			worryseed: ["6T"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	chesnaught: {
 		inherit: true,
@@ -51425,7 +51425,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			worryseed: ["6T"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	fennekin: {
 		inherit: true,
@@ -51484,7 +51484,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "7L38", "6M", "6L38"],
 			wish: ["7E", "6E"],
 			workup: ["7M"],
-		}
+		},
 	},
 	braixen: {
 		inherit: true,
@@ -51551,7 +51551,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T"],
 			workup: ["7M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	delphox: {
 		inherit: true,
@@ -51630,7 +51630,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T"],
 			workup: ["7M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	froakie: {
 		inherit: true,
@@ -51695,7 +51695,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L14", "6T", "6L14"],
 			watersport: ["7E", "6E"],
 			workup: ["7M"],
-		}
+		},
 	},
 	frogadier: {
 		inherit: true,
@@ -51758,7 +51758,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpledge: ["7T", "6T"],
 			waterpulse: ["7L14", "6T", "6L14"],
 			workup: ["7M"],
-		}
+		},
 	},
 	greninja: {
 		inherit: true,
@@ -51834,7 +51834,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L14", "6T", "6L14"],
 			watershuriken: ["7L1", "6L36", "6S0"],
 			workup: ["7M"],
-		}
+		},
 	},
 	greninjaash: {
 		inherit: true,
@@ -51894,7 +51894,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L14"],
 			watershuriken: ["7L1", "7S0"],
 			workup: ["7M"],
-		}
+		},
 	},
 	bunnelby: {
 		inherit: true,
@@ -51961,7 +51961,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M"],
 			wildcharge: ["7M", "6M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	diggersby: {
 		inherit: true,
@@ -52044,7 +52044,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M"],
 			wildcharge: ["7M", "6M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	fletchling: {
 		inherit: true,
@@ -52091,7 +52091,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			uturn: ["7M", "6M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	fletchinder: {
 		inherit: true,
@@ -52142,7 +52142,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M"],
 			willowisp: ["7M", "6M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	talonflame: {
 		inherit: true,
@@ -52200,7 +52200,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M"],
 			willowisp: ["7M", "6M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	scatterbug: {
 		inherit: true,
@@ -52211,7 +52211,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			stringshot: ["7L1", "6L1"],
 			stunspore: ["7L6", "7E", "6L6", "6E"],
 			tackle: ["7L1", "6L1"],
-		}
+		},
 	},
 	spewpa: {
 		inherit: true,
@@ -52221,7 +52221,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			harden: ["7L1", "6L1"],
 			irondefense: ["6T"],
 			protect: ["7M", "7L1", "6M", "6L9"],
-		}
+		},
 	},
 	vivillon: {
 		inherit: true,
@@ -52280,7 +52280,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M", "6M"],
 			toxic: ["7M", "6M"],
 			uturn: ["7M", "6M"],
-		}
+		},
 	},
 	vivillonfancy: {
 		inherit: true,
@@ -52340,7 +52340,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["6M"],
 			toxic: ["6M"],
 			uturn: ["6M"],
-		}
+		},
 	},
 	vivillonpokeball: {
 		inherit: true,
@@ -52399,7 +52399,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["6M"],
 			toxic: ["6M"],
 			uturn: ["6M"],
-		}
+		},
 	},
 	litleo: {
 		inherit: true,
@@ -52461,7 +52461,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "6M"],
 			workup: ["7M", "7L8", "6L8"],
 			yawn: ["7E", "6E"],
-		}
+		},
 	},
 	pyroar: {
 		inherit: true,
@@ -52522,7 +52522,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M"],
 			willowisp: ["7M", "6M"],
 			workup: ["7M", "7L8", "7L1", "6L8"],
-		}
+		},
 	},
 	flabebe: {
 		inherit: true,
@@ -52581,7 +52581,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L1", "6L1"],
 			wish: ["7L20", "6L20"],
 			worryseed: ["6T"],
-		}
+		},
 	},
 	floette: {
 		inherit: true,
@@ -52637,7 +52637,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["7L1", "6L1"],
 			wish: ["7L20", "6L20"],
 			worryseed: ["6T"],
-		}
+		},
 	},
 	floetteeternal: {
 		inherit: true,
@@ -52683,7 +52683,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["6M"],
 			vinewhip: ["6L1"],
 			wish: ["6L20"],
-		}
+		},
 	},
 	florges: {
 		inherit: true,
@@ -52740,7 +52740,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			wish: ["7L1", "6L1"],
 			worryseed: ["6T"],
-		}
+		},
 	},
 	skiddo: {
 		inherit: true,
@@ -52799,7 +52799,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			worryseed: ["7L16", "6T", "6L16"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	gogoat: {
 		inherit: true,
@@ -52862,7 +52862,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			worryseed: ["7L16", "6T", "6L16"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	pancham: {
 		inherit: true,
@@ -52951,7 +52951,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vitalthrow: ["7L27", "6L27"],
 			workup: ["7M", "7L10", "6L10"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	pangoro: {
 		inherit: true,
@@ -53052,7 +53052,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "7L10", "7L1", "6L10"],
 			xscissor: ["7M", "6M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	furfrou: {
 		inherit: true,
@@ -53114,7 +53114,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M"],
 			workup: ["7M", "7E", "6E"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	espurr: {
 		inherit: true,
@@ -53181,7 +53181,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			yawn: ["7E", "6E"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	meowstic: {
 		inherit: true,
@@ -53257,7 +53257,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["6T"],
 			workup: ["7M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	meowsticf: {
 		inherit: true,
@@ -53319,7 +53319,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			trickroom: ["7M", "6M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	honedge: {
 		inherit: true,
@@ -53371,7 +53371,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1", "6L1"],
 			toxic: ["7M", "6M"],
 			wideguard: ["7E", "6E"],
-		}
+		},
 	},
 	doublade: {
 		inherit: true,
@@ -53421,7 +53421,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swordsdance: ["7M", "7L1", "6M", "6L1"],
 			tackle: ["7L1", "6L1"],
 			toxic: ["7M", "6M"],
-		}
+		},
 	},
 	aegislash: {
 		inherit: true,
@@ -53478,7 +53478,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swordsdance: ["7M", "7L1", "6M", "6L1"],
 			toxic: ["7M", "6M"],
 			wideguard: ["6S0"],
-		}
+		},
 	},
 	spritzee: {
 		inherit: true,
@@ -53539,7 +53539,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			trickroom: ["7M", "6M"],
 			wish: ["7E", "6E"],
-		}
+		},
 	},
 	aromatisse: {
 		inherit: true,
@@ -53604,7 +53604,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M"],
 			toxic: ["7M", "6M"],
 			trickroom: ["7M", "6M", "6S0"],
-		}
+		},
 	},
 	swirlix: {
 		inherit: true,
@@ -53661,7 +53661,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			wish: ["7L45", "6L45"],
 			yawn: ["7E", "6E"],
-		}
+		},
 	},
 	slurpuff: {
 		inherit: true,
@@ -53718,7 +53718,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderbolt: ["7M", "6M"],
 			toxic: ["7M", "6M"],
 			wish: ["7L45", "6L45"],
-		}
+		},
 	},
 	inkay: {
 		inherit: true,
@@ -53786,7 +53786,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M"],
 			toxic: ["7M", "6M"],
 			trickroom: ["7M", "6M"],
-		}
+		},
 	},
 	malamar: {
 		inherit: true,
@@ -53855,7 +53855,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M", "6M"],
 			toxic: ["7M", "6M"],
 			trickroom: ["7M", "6M"],
-		}
+		},
 	},
 	binacle: {
 		inherit: true,
@@ -53938,7 +53938,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["7E", "6E"],
 			withdraw: ["7L7", "6L7"],
 			xscissor: ["7M", "6M"],
-		}
+		},
 	},
 	barbaracle: {
 		inherit: true,
@@ -54028,7 +54028,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["6T"],
 			withdraw: ["7L7", "6L7"],
 			xscissor: ["7M", "6M"],
-		}
+		},
 	},
 	skrelp: {
 		inherit: true,
@@ -54084,7 +54084,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M", "6M"],
 			watergun: ["7L1", "6L1"],
 			waterpulse: ["7L25", "6T", "6L25"],
-		}
+		},
 	},
 	dragalge: {
 		inherit: true,
@@ -54142,7 +54142,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M", "6M"],
 			watergun: ["7L1", "6L1"],
 			waterpulse: ["7L25", "6T", "6L25"],
-		}
+		},
 	},
 	clauncher: {
 		inherit: true,
@@ -54197,7 +54197,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1", "6L1"],
 			waterpulse: ["7L34", "6T", "6L34"],
 			watersport: ["7L7", "6L7"],
-		}
+		},
 	},
 	clawitzer: {
 		inherit: true,
@@ -54257,7 +54257,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1", "6L1"],
 			waterpulse: ["7L34", "6T", "6L34"],
 			watersport: ["7L7", "7L1", "6L7"],
-		}
+		},
 	},
 	helioptile: {
 		inherit: true,
@@ -54318,7 +54318,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M"],
 			voltswitch: ["7M", "7L40", "6M", "6L40"],
 			wildcharge: ["7M", "6M"],
-		}
+		},
 	},
 	heliolisk: {
 		inherit: true,
@@ -54381,7 +54381,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M"],
 			voltswitch: ["7M", "6M"],
 			wildcharge: ["7M", "6M"],
-		}
+		},
 	},
 	tyrunt: {
 		inherit: true,
@@ -54448,7 +54448,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderfang: ["7E", "6E"],
 			toxic: ["7M", "6M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	tyrantrum: {
 		inherit: true,
@@ -54513,7 +54513,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thrash: ["7L42", "6L42"],
 			toxic: ["7M", "6M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	amaura: {
 		inherit: true,
@@ -54588,7 +54588,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			waterpulse: ["6T"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	aurorus: {
 		inherit: true,
@@ -54664,7 +54664,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			waterpulse: ["6T"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	sylveon: {
 		inherit: true,
@@ -54723,7 +54723,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tailwhip: ["7L1", "6L1"],
 			toxic: ["7M", "6M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	hawlucha: {
 		inherit: true,
@@ -54808,7 +54808,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			xscissor: ["7M", "6M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	dedenne: {
 		inherit: true,
@@ -54870,7 +54870,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M", "6M"],
 			voltswitch: ["7M", "7L26", "6M", "6L26"],
 			wildcharge: ["7M", "6M"],
-		}
+		},
 	},
 	carbink: {
 		inherit: true,
@@ -54929,7 +54929,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			trickroom: ["7M", "6M"],
 			wonderroom: ["6T"],
-		}
+		},
 	},
 	goomy: {
 		inherit: true,
@@ -54976,7 +54976,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderbolt: ["7M", "6M"],
 			toxic: ["7M", "6M"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	sliggoo: {
 		inherit: true,
@@ -55020,7 +55020,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderbolt: ["7M", "6M"],
 			toxic: ["7M", "6M"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	goodra: {
 		inherit: true,
@@ -55085,7 +55085,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["6T"],
 			toxic: ["7M", "6M"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	klefki: {
 		inherit: true,
@@ -55145,7 +55145,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["7M", "6M"],
 			torment: ["7M", "7L32", "6M", "6L32"],
 			toxic: ["7M", "6M"],
-		}
+		},
 	},
 	phantump: {
 		inherit: true,
@@ -55215,7 +55215,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["7M", "7L31", "6M", "6L31"],
 			woodhammer: ["7L49", "6L49"],
 			worryseed: ["6T"],
-		}
+		},
 	},
 	trevenant: {
 		inherit: true,
@@ -55292,7 +55292,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			woodhammer: ["7L49", "6L49"],
 			worryseed: ["6T"],
 			xscissor: ["7M", "6M"],
-		}
+		},
 	},
 	pumpkaboo: {
 		inherit: true,
@@ -55359,7 +55359,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M"],
 			willowisp: ["7M", "6M"],
 			worryseed: ["7L11", "6T", "6L11"],
-		}
+		},
 	},
 	gourgeist: {
 		inherit: true,
@@ -55427,7 +55427,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M", "6M"],
 			willowisp: ["7M", "6M"],
 			worryseed: ["7L11", "6T", "6L11"],
-		}
+		},
 	},
 	bergmite: {
 		inherit: true,
@@ -55484,7 +55484,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7L15", "6L15"],
 			toxic: ["7M", "6M"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	avalugg: {
 		inherit: true,
@@ -55549,7 +55549,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7L15", "6L15"],
 			toxic: ["7M", "6M"],
 			waterpulse: ["6T"],
-		}
+		},
 	},
 	noibat: {
 		inherit: true,
@@ -55618,7 +55618,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M"],
 			wingattack: ["7L16", "6L16"],
 			xscissor: ["7M", "6M"],
-		}
+		},
 	},
 	noivern: {
 		inherit: true,
@@ -55694,7 +55694,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "6M"],
 			wingattack: ["7L16", "6L16"],
 			xscissor: ["7M", "6M"],
-		}
+		},
 	},
 	xerneas: {
 		inherit: true,
@@ -55757,7 +55757,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			wonderroom: ["6T"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	yveltal: {
 		inherit: true,
@@ -55819,7 +55819,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			uturn: ["7M", "6M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	zygarde: {
 		inherit: true,
@@ -55882,7 +55882,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thousandwaves: ["7T"],
 			toxic: ["7M", "6M"],
 			zenheadbutt: ["6T"],
-		}
+		},
 	},
 	diancie: {
 		inherit: true,
@@ -55948,7 +55948,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "6M"],
 			trickroom: ["7M", "7L46", "6M", "6L46"],
 			wonderroom: ["6T"],
-		}
+		},
 	},
 	hoopa: {
 		inherit: true,
@@ -56034,7 +56034,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["6T"],
 			wonderroom: ["7L50", "6T", "6L50"],
 			zenheadbutt: ["7L46", "6T", "6L46"],
-		}
+		},
 	},
 	volcanion: {
 		inherit: true,
@@ -56096,7 +56096,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L21", "6T", "6L21"],
 			weatherball: ["7L40", "6L40"],
 			willowisp: ["7M", "6M"],
-		}
+		},
 	},
 	rowlet: {
 		inherit: true,
@@ -56151,7 +56151,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1"],
 			toxic: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	dartrix: {
 		inherit: true,
@@ -56200,7 +56200,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1"],
 			toxic: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	decidueye: {
 		inherit: true,
@@ -56257,7 +56257,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			uturn: ["7M", "7L1"],
 			workup: ["7M"],
-		}
+		},
 	},
 	litten: {
 		inherit: true,
@@ -56311,7 +56311,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			willowisp: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	torracat: {
 		inherit: true,
@@ -56359,7 +56359,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			willowisp: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	incineroar: {
 		inherit: true,
@@ -56424,7 +56424,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			willowisp: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	popplio: {
 		inherit: true,
@@ -56475,7 +56475,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpledge: ["7T"],
 			wonderroom: ["7E"],
 			workup: ["7M"],
-		}
+		},
 	},
 	brionne: {
 		inherit: true,
@@ -56520,7 +56520,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1"],
 			waterpledge: ["7T"],
 			workup: ["7M"],
-		}
+		},
 	},
 	primarina: {
 		inherit: true,
@@ -56575,7 +56575,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1"],
 			waterpledge: ["7T"],
 			workup: ["7M"],
-		}
+		},
 	},
 	pikipek: {
 		inherit: true,
@@ -56622,7 +56622,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["7E"],
 			uturn: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	trumbeak: {
 		inherit: true,
@@ -56665,7 +56665,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			uturn: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	toucannon: {
 		inherit: true,
@@ -56711,7 +56711,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			uturn: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	yungoos: {
 		inherit: true,
@@ -56757,7 +56757,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			workup: ["7M"],
 			yawn: ["7L40"],
-		}
+		},
 	},
 	gumshoos: {
 		inherit: true,
@@ -56804,7 +56804,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			workup: ["7M"],
 			yawn: ["7L47"],
-		}
+		},
 	},
 	grubbin: {
 		inherit: true,
@@ -56845,7 +56845,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M"],
 			wildcharge: ["7M"],
 			xscissor: ["7M", "7L25"],
-		}
+		},
 	},
 	charjabug: {
 		inherit: true,
@@ -56885,7 +56885,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["7M"],
 			wildcharge: ["7M"],
 			xscissor: ["7M", "7L31"],
-		}
+		},
 	},
 	vikavolt: {
 		inherit: true,
@@ -56935,7 +56935,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M"],
 			xscissor: ["7M"],
 			zapcannon: ["7L41"],
-		}
+		},
 	},
 	crabrawler: {
 		inherit: true,
@@ -56987,7 +56987,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			wideguard: ["7E"],
 			workup: ["7M"],
-		}
+		},
 	},
 	crabominable: {
 		inherit: true,
@@ -57041,7 +57041,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M"],
 			toxic: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	oricorio: {
 		inherit: true,
@@ -57091,7 +57091,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			uturn: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	cutiefly: {
 		inherit: true,
@@ -57142,7 +57142,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M"],
 			toxic: ["7M"],
 			uturn: ["7M"],
-		}
+		},
 	},
 	ribombee: {
 		inherit: true,
@@ -57191,7 +57191,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["7M"],
 			toxic: ["7M"],
 			uturn: ["7M"],
-		}
+		},
 	},
 	rockruff: {
 		inherit: true,
@@ -57234,7 +57234,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thrash: ["7E"],
 			thunderfang: ["7E"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	lycanroc: {
 		inherit: true,
@@ -57278,7 +57278,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1"],
 			taunt: ["7M"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	lycanrocmidnight: {
 		inherit: true,
@@ -57323,7 +57323,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1"],
 			taunt: ["7M", "7L1"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	wishiwashi: {
 		inherit: true,
@@ -57370,7 +57370,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["7L1"],
 			waterpulse: ["7E"],
 			watersport: ["7E"],
-		}
+		},
 	},
 	mareanie: {
 		inherit: true,
@@ -57417,7 +57417,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7L41"],
 			venoshock: ["7M", "7L25"],
 			wideguard: ["7L17"],
-		}
+		},
 	},
 	toxapex: {
 		inherit: true,
@@ -57463,7 +57463,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7L44"],
 			venoshock: ["7M", "7L25"],
 			wideguard: ["7L17"],
-		}
+		},
 	},
 	mudbray: {
 		inherit: true,
@@ -57507,7 +57507,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			superpower: ["7L45"],
 			swagger: ["7M"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	mudsdale: {
 		inherit: true,
@@ -57548,7 +57548,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			superpower: ["7L60"],
 			swagger: ["7M"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	dewpider: {
 		inherit: true,
@@ -57594,7 +57594,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M"],
 			watersport: ["7L1"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	araquanid: {
 		inherit: true,
@@ -57639,7 +57639,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M"],
 			wideguard: ["7L1"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	fomantis: {
 		inherit: true,
@@ -57685,7 +57685,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			weatherball: ["7E"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	lurantis: {
 		inherit: true,
@@ -57733,7 +57733,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			synthesis: ["7L28"],
 			toxic: ["7M"],
 			xscissor: ["7M", "7L1"],
-		}
+		},
 	},
 	morelull: {
 		inherit: true,
@@ -57780,7 +57780,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M"],
 			thunderwave: ["7M"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	shiinotic: {
 		inherit: true,
@@ -57823,7 +57823,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M"],
 			thunderwave: ["7M"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	salandit: {
 		inherit: true,
@@ -57875,7 +57875,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7L45"],
 			venoshock: ["7M", "7L37"],
 			willowisp: ["7M"],
-		}
+		},
 	},
 	salazzle: {
 		inherit: true,
@@ -57928,7 +57928,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7L51"],
 			venoshock: ["7M", "7L39"],
 			willowisp: ["7M"],
-		}
+		},
 	},
 	stufful: {
 		inherit: true,
@@ -57981,7 +57981,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			wideguard: ["7E"],
 			workup: ["7M"],
-		}
+		},
 	},
 	bewear: {
 		inherit: true,
@@ -58032,7 +58032,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thrash: ["7L43"],
 			toxic: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	bounsweet: {
 		inherit: true,
@@ -58075,7 +58075,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			synthesis: ["7E"],
 			teeterdance: ["7L25"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	steenee: {
 		inherit: true,
@@ -58119,7 +58119,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			sweetscent: ["7L17", "7S0"],
 			teeterdance: ["7L25"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	tsareena: {
 		inherit: true,
@@ -58167,7 +58167,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			tropkick: ["7L1"],
 			uturn: ["7M"],
-		}
+		},
 	},
 	comfey: {
 		inherit: true,
@@ -58227,7 +58227,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			vinewhip: ["7L1"],
 			wrap: ["7L16"],
-		}
+		},
 	},
 	oranguru: {
 		inherit: true,
@@ -58287,7 +58287,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["7E"],
 			workup: ["7M"],
 			zenheadbutt: ["7L29"],
-		}
+		},
 	},
 	passimian: {
 		inherit: true,
@@ -58350,7 +58350,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			vitalthrow: ["7E"],
 			workup: ["7M"],
-		}
+		},
 	},
 	wimpod: {
 		inherit: true,
@@ -58383,7 +58383,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			waterfall: ["7M"],
 			wideguard: ["7E"],
-		}
+		},
 	},
 	golisopod: {
 		inherit: true,
@@ -58445,7 +58445,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["7M"],
 			waterfall: ["7M"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	sandygast: {
 		inherit: true,
@@ -58492,7 +58492,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			swagger: ["7M"],
 			swallow: ["7E"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	palossand: {
 		inherit: true,
@@ -58538,7 +58538,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			substitute: ["7M"],
 			swagger: ["7M"],
 			toxic: ["7M"],
-		}
+		},
 	},
 	pyukumuku: {
 		inherit: true,
@@ -58578,7 +58578,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M", "7L45"],
 			venomdrench: ["7E"],
 			watersport: ["7L1"],
-		}
+		},
 	},
 	typenull: {
 		inherit: true,
@@ -58629,7 +58629,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			workup: ["7M"],
 			xscissor: ["7M", "7L35", "7S0"],
-		}
+		},
 	},
 	silvally: {
 		inherit: true,
@@ -58699,7 +58699,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["7M"],
 			workup: ["7M"],
 			xscissor: ["7M", "7L35"],
-		}
+		},
 	},
 	minior: {
 		inherit: true,
@@ -58754,7 +58754,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			takedown: ["7L29"],
 			toxic: ["7M"],
 			uturn: ["7M"],
-		}
+		},
 	},
 	komala: {
 		inherit: true,
@@ -58804,7 +58804,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			woodhammer: ["7L41"],
 			workup: ["7M"],
 			yawn: ["7L16"],
-		}
+		},
 	},
 	turtonator: {
 		inherit: true,
@@ -58867,7 +58867,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7E", "7S0"],
 			willowisp: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	togedemaru: {
 		inherit: true,
@@ -58925,7 +58925,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["7E"],
 			workup: ["7M"],
 			zingzap: ["7L33"],
-		}
+		},
 	},
 	mimikyu: {
 		inherit: true,
@@ -58989,7 +58989,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			woodhammer: ["7L1"],
 			workup: ["7M"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	bruxish: {
 		inherit: true,
@@ -59048,7 +59048,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterfall: ["7M"],
 			watergun: ["7L1"],
 			waterpulse: ["7E"],
-		}
+		},
 	},
 	drampa: {
 		inherit: true,
@@ -59118,7 +59118,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			twister: ["7L5"],
 			workup: ["7M"],
-		}
+		},
 	},
 	dhelmise: {
 		inherit: true,
@@ -59175,7 +59175,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			whirlpool: ["7L27"],
 			wrap: ["7L9"],
-		}
+		},
 	},
 	jangmoo: {
 		inherit: true,
@@ -59229,7 +59229,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			workup: ["7M", "7L29"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	hakamoo: {
 		inherit: true,
@@ -59284,7 +59284,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			workup: ["7M", "7L29"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	kommoo: {
 		inherit: true,
@@ -59347,7 +59347,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			workup: ["7M", "7L29"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	tapukoko: {
 		inherit: true,
@@ -59410,7 +59410,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M", "7L32"],
 			withdraw: ["7L1"],
 			workup: ["7M"],
-		}
+		},
 	},
 	tapulele: {
 		inherit: true,
@@ -59468,7 +59468,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			torment: ["7M"],
 			toxic: ["7M"],
 			withdraw: ["7L1"],
-		}
+		},
 	},
 	tapubulu: {
 		inherit: true,
@@ -59533,7 +59533,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			woodhammer: ["7L1"],
 			workup: ["7M"],
 			zenheadbutt: ["7L48", "7S0"],
-		}
+		},
 	},
 	tapufini: {
 		inherit: true,
@@ -59590,21 +59590,21 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["7L8"],
 			whirlpool: ["7L14"],
 			withdraw: ["7L1"],
-		}
+		},
 	},
 	cosmog: {
 		inherit: true,
 		learnset: {
 			splash: ["7L1", "7S0"],
 			teleport: ["7L23"],
-		}
+		},
 	},
 	cosmoem: {
 		inherit: true,
 		learnset: {
 			cosmicpower: ["7L1"],
 			teleport: ["7L1"],
-		}
+		},
 	},
 	solgaleo: {
 		inherit: true,
@@ -59666,7 +59666,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M"],
 			workup: ["7M"],
 			zenheadbutt: ["7L19", "7S0"],
-		}
+		},
 	},
 	lunala: {
 		inherit: true,
@@ -59729,7 +59729,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["7L67"],
 			willowisp: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 	nihilego: {
 		inherit: true,
@@ -59783,7 +59783,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venomdrench: ["7L53", "7S0"],
 			venoshock: ["7M", "7L23"],
 			wonderroom: ["7L67"],
-		}
+		},
 	},
 	buzzwole: {
 		inherit: true,
@@ -59837,7 +59837,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			vitalthrow: ["7L19"],
 			workup: ["7M"],
-		}
+		},
 	},
 	pheromosa: {
 		inherit: true,
@@ -59889,7 +59889,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			triplekick: ["7L43", "7S0"],
 			uturn: ["7M"],
-		}
+		},
 	},
 	xurkitree: {
 		inherit: true,
@@ -59943,7 +59943,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["7M"],
 			wrap: ["7L1"],
 			zapcannon: ["7L73"],
-		}
+		},
 	},
 	celesteela: {
 		inherit: true,
@@ -59998,7 +59998,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["7L1"],
 			toxic: ["7M"],
 			wideguard: ["7L1"],
-		}
+		},
 	},
 	kartana: {
 		inherit: true,
@@ -60038,7 +60038,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			vacuumwave: ["7L1"],
 			xscissor: ["7M", "7L47", "7S0"],
-		}
+		},
 	},
 	guzzlord: {
 		inherit: true,
@@ -60096,7 +60096,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			wideguard: ["7L1"],
 			wringout: ["7L67", "7S0"],
-		}
+		},
 	},
 	necrozma: {
 		inherit: true,
@@ -60161,7 +60161,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M"],
 			wringout: ["7L67", "7S0"],
 			xscissor: ["7M"],
-		}
+		},
 	},
 	magearna: {
 		inherit: true,
@@ -60218,7 +60218,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M"],
 			trumpcard: ["7L97"],
 			voltswitch: ["7M"],
-		}
+		},
 	},
 	magearnaoriginal: {
 		inherit: true,
@@ -60275,7 +60275,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["7M"],
 			trumpcard: ["7L97"],
 			voltswitch: ["7M"],
-		}
+		},
 	},
 	marshadow: {
 		inherit: true,
@@ -60336,6 +60336,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["7M"],
 			willowisp: ["7M"],
 			workup: ["7M"],
-		}
+		},
 	},
 };
