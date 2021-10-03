@@ -43,13 +43,4 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		return stats;
 	},
-
-	pokemon: {
-		getWeight() {
-			let weighthg = this.battle.runEvent('ModifyWeight', this, null, null, this.weighthg);
-			if (weighthg < 1) weighthg = 1;
-			const weightModifierFinal = 20 * Math.random() * 0.01;
-			return weighthg + (weighthg * (this.battle.random(2) === 1 ? 1 : -1) * weightModifierFinal);
-		},
-	},
 };
