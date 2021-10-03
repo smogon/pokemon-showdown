@@ -933,7 +933,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		const logsubfolder = Chat.toTimestamp(date).split(' ')[0];
 		const logfolder = logsubfolder.split('-', 2).join('-');
-		const tier = this.room.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
+		const tier = Dex.formats.get(this.room.format).id;
 		const logpath = `logs/${logfolder}/${tier}/${logsubfolder}/`;
 
 		await FS(logpath).mkdirp();
