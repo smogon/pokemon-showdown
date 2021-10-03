@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testSet, testAlwaysHasMove} = require('./tools');
+const {testSet, testAlwaysHasMove, testHiddenPower} = require('./tools');
 
 describe('[Gen 3] Random Battle', () => {
 	const options = {format: 'gen3randombattle'};
@@ -21,5 +21,10 @@ describe('[Gen 3] Random Battle', () => {
 		));
 
 		testAlwaysHasMove('delcatty', options, 'doubleedge');
+	});
+
+	it('should prevent double Hidden Power', () => {
+		testHiddenPower('kingler', options);
+		testHiddenPower('moltres', options);
 	});
 });

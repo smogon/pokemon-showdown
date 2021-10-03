@@ -68,7 +68,7 @@ export const commands: Chat.ChatCommands = {
 		if (target.length > 8192) {
 			return this.errorReply(`Your quote cannot exceed 8192 characters.`);
 		}
-		if (room.settings.isPrivate !== undefined && roomQuotes.length >= MAX_QUOTES) {
+		if (room.settings.isPrivate && roomQuotes.length >= MAX_QUOTES) {
 			return this.errorReply(`This room already has ${MAX_QUOTES} quotes, which is the maximum for private rooms.`);
 		}
 		roomQuotes.push({userid: user.id, quote: target, date: Date.now()});
@@ -141,11 +141,13 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const onRenameRoom: Rooms.RenameHandler = (oldID, newID) => {
-	if (quotes[oldID]) {
-		if (!quotes[newID]) quotes[newID] = [];
-		quotes[newID].push(...quotes[oldID]);
-		delete quotes[oldID];
-		saveQuotes();
-	}
+export const handlers: Chat.Handlers = {
+	onRenameRoom(oldID, newID) {
+		if (quotes[oldID]) {
+			if (!quotes[newID]) quotes[newID] = [];
+			quotes[newID].push(...quotes[oldID]);
+			delete quotes[oldID];
+			saveQuotes();
+		}
+	},
 };

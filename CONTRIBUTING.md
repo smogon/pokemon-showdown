@@ -4,15 +4,15 @@ Contributing to Pokémon Showdown
 Building and running
 ------------------------------------------------------------------------
 
-The README contains most of the relevant information here.
-
-https://github.com/smogon/pokemon-showdown/blob/master/README.md
+[README.md](./README.md) contains most of the relevant information here.
 
 Our build script does most of the work here: You can mostly just run `./pokemon-showdown` to start a server. (Windows users will have to replace `./whatever` with `node whatever`, every time it appears)
 
 PS has other useful command-line invocations, which you can investigate with `./pokemon-showdown help`.
 
 Unit tests can be run with `npm test`. You can run specific unit tests with `npx mocha -g "text"`, which will run all unit tests whose name contains "text", or you can just edit the unit test from `it` to `it.only`.
+
+Packaging for npm is done by running `./build decl && npm publish`. Only Zarel has the NPM credentials to do this, but feel free to request a new NPM package if you need something.
 
 
 Contributing
@@ -28,7 +28,7 @@ Also useful is the Suggestions forum (you don't need to worry about approval if 
 
 Also useful is the Mechanics Bugs kanban board: https://github.com/smogon/pokemon-showdown/projects/3
 
-There's no need to worry about code standards too much (unit tests will automatically catch most of what we care about, we'll point out the rest if you make a pull request), but there here if you want them.
+There's no need to worry about code standards too much (unit tests will automatically catch most of what we care about, we'll point out the rest if you make a pull request), but they're here if you want them.
 
 We try to respond to pull requests within a few days, but feel free to bump yours if it seems like we forget about it. Sometimes we did, and sometimes there might be a miscommunication in terms of who is waiting for what.
 
@@ -68,13 +68,21 @@ Similar to unnecessary clicks - if a user has a large screen and you show them a
 
 ### D5. Affordances are important
 
+An affordance is a hint for what you're supposed to do. A button looking like a physical button you can click is an example of an affordance. Or a button you can't use not looking clickable.
+
 This is why we depart from flat design: Years of UX research have taught us that it's important for buttons look like buttons. Making clickable things "look 3D and pressable" or underlining them is good practice. We can't always do this (dropdown menus would look pretty ugly if every item was beveled and embossed) but we do what we can.
 
 ### D6. Feedback is important
 
+Users should be shown enough information not to be confused about what's going on.
+
 If a button doesn't react instantly, it should be replaced with a "Loading" screen or some other indication that it's doing something. If something's failed, it should come with an error message so the user knows what's wrong.
 
 There's a famous story of a CEO of a company who clicked the "email everyone" button, but it didn't react, so he clicked it a few more times, accidentally spamming a bunch of users and getting their company marked as spam by a bunch of email services.
+
+This is why we notify for ignored messages once per session. If your friend sends you "here is the code for you to use" and you say "I never got it", there needs to be some way to understand what happened. Options can exist, but options that hide the fact that you turned them on should be avoided.
+
+Part of this overlaps with D5 (buttons that shouldn't be clicked multiple times should be disabled after the first click), but part of this is about not hiding information if it would confuse users. This does conflict with D1 (less is better) a bit, so a useful rule is that if the user has trouble understanding what's going on (e.g. because you replaced some text with a confusing symbol), you've taken D1 too far.
 
 
 Comment standards
@@ -284,6 +292,8 @@ We care a lot about performance, but also readability. Fortunately, recent versi
 In general, we prefer modern ways of writing things as long as they're supported by the most recent LTS release of Node. For instance, we prefer `{...foo}` to `Object.assign({}, foo)`.
 
 - `.forEach`: Don't use; we always prefer `for`...`of` for readability as well as perf (others like `map`/`filter` are fine, though)
+
+- `.reduce`: we usually prefer `for`...`of` for readability, but you can use it in code that you code-own if you really want to
 
 - Multiline template strings: A frequent source of bugs, so we prefer to explicitly use `\n` and concatenate over multiple lines.
 

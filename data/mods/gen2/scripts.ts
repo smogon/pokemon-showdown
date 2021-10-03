@@ -6,6 +6,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen3',
 	gen: 2,
 	pokemon: {
+		inherit: true,
 		getStat(statName, unboosted, unmodified, fastReturn) {
 			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");

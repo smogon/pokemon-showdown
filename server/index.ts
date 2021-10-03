@@ -24,7 +24,7 @@
  *
  *   It exports the global table `Rooms.rooms`.
  *
- * Dex - from .sim-dist/dex.ts
+ * Dex - from sim/dex.ts
  *
  *   Handles getting data about Pokemon, items, etc.
  *
@@ -48,96 +48,83 @@
 // features, so that it doesn't crash old versions of Node.js, so we
 // can successfully print the "We require Node.js 8+" message.
 
-// Check for version and dependencies
-try {
-	// I've gotten enough reports by people who don't use the launch
-	// script that this is worth repeating here
-	[].flatMap(x => x);
-} catch (e) {
-	throw new Error("We require Node.js version 12 or later; you're using " + process.version);
-}
-
-try {
-	require.resolve('../.sim-dist/index');
-	const sucraseVersion = require('sucrase').getVersion().split('.');
-	if (
-		parseInt(sucraseVersion[0]) < 3 ||
-		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 12)
-	) {
-		throw new Error("Sucrase version too old");
-	}
-} catch (e) {
-	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
+// Check for version
+const nodeVersion = parseInt(process.versions.node);
+if (isNaN(nodeVersion) || nodeVersion < 14) {
+	throw new Error("We require Node.js version 14 or later; you're using " + process.version);
 }
 
 import {FS, Repl} from '../lib';
 
 /*********************************************************
- * Load configuration
- *********************************************************/
-
-import * as ConfigLoader from './config-loader';
-global.Config = ConfigLoader.Config;
-
-import {Monitor} from './monitor';
-global.Monitor = Monitor;
-global.__version = {head: ''};
-void Monitor.version().then((hash: any) => {
-	global.__version.tree = hash;
-});
-
-if (Config.watchconfig) {
-	FS(require.resolve('../config/config')).onModify(() => {
-		try {
-			global.Config = ConfigLoader.load(true);
-			Monitor.notice('Reloaded ../config/config.js');
-		} catch (e) {
-			Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
-		}
-	});
-}
-
-/*********************************************************
  * Set up most of our globals
+ * This is in a function because swc runs `import` before any code,
+ * and many of our imports require the `Config` global to be set up.
  *********************************************************/
+function setupGlobals() {
+	const ConfigLoader = require('./config-loader');
+	global.Config = ConfigLoader.Config;
 
-import {Dex} from '../sim/dex';
-global.Dex = Dex;
-global.toID = Dex.toID;
+	const {Monitor} = require('./monitor');
+	global.Monitor = Monitor;
+	global.__version = {head: ''};
+	void Monitor.version().then((hash: any) => {
+		global.__version.tree = hash;
+	});
 
-import {Teams} from '../sim/teams';
-global.Teams = Teams;
+	if (Config.watchconfig) {
+		FS(require.resolve('../config/config')).onModify(() => {
+			try {
+				global.Config = ConfigLoader.load(true);
+				// ensure that battle prefixes configured via the chat plugin are not overwritten
+				// by battle prefixes manually specified in config.js
+				Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
+				Monitor.notice('Reloaded ../config/config.js');
+			} catch (e: any) {
+				Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
+			}
+		});
+	}
 
-import {LoginServer} from './loginserver';
-global.LoginServer = LoginServer;
+	const {Dex} = require('../sim/dex');
+	global.Dex = Dex;
+	global.toID = Dex.toID;
 
-import {Ladders} from './ladders';
-global.Ladders = Ladders;
+	const {Teams} = require('../sim/teams');
+	global.Teams = Teams;
 
-import {Chat} from './chat';
-global.Chat = Chat;
+	const {LoginServer} = require('./loginserver');
+	global.LoginServer = LoginServer;
 
-import {Users} from './users';
-global.Users = Users;
+	const {Ladders} = require('./ladders');
+	global.Ladders = Ladders;
 
-import {Punishments} from './punishments';
-global.Punishments = Punishments;
+	const {Chat} = require('./chat');
+	global.Chat = Chat;
 
-import {Rooms} from './rooms';
-global.Rooms = Rooms;
-// We initialize the global room here because roomlogs.ts needs the Rooms global
-Rooms.global = new Rooms.GlobalRoomState();
+	const {Users} = require('./users');
+	global.Users = Users;
 
-import * as Verifier from './verifier';
-global.Verifier = Verifier;
-Verifier.PM.spawn();
+	const {Punishments} = require('./punishments');
+	global.Punishments = Punishments;
 
-import {Tournaments} from './tournaments';
-global.Tournaments = Tournaments;
+	const {Rooms} = require('./rooms');
+	global.Rooms = Rooms;
+	// We initialize the global room here because roomlogs.ts needs the Rooms global
+	Rooms.global = new Rooms.GlobalRoomState();
 
-import {IPTools} from './ip-tools';
-global.IPTools = IPTools;
-void IPTools.loadHostsAndRanges();
+	const Verifier = require('./verifier');
+	global.Verifier = Verifier;
+	Verifier.PM.spawn();
+
+	const {Tournaments} = require('./tournaments');
+	global.Tournaments = Tournaments;
+
+	const {IPTools} = require('./ip-tools');
+	global.IPTools = IPTools;
+	void IPTools.loadHostsAndRanges();
+}
+setupGlobals();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
@@ -201,7 +188,7 @@ if (Config.startuphook) {
 if (Config.ofemain) {
 	try {
 		require.resolve('node-oom-heapdump');
-	} catch (e) {
+	} catch (e: any) {
 		if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 		throw new Error(
 			'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +

@@ -52,7 +52,7 @@ describe('Sky Drop', function () {
 		assert.species(battle.p2.active[0], 'Armaldo');
 	});
 
-	it.skip(`should prevent both the user and the target from being forced out by Eject Button`, function () {
+	it(`should prevent both the user and the target from being forced out by Eject Button`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Aerodactyl', item: 'ejectbutton', moves: ['skydrop']},
 			{species: 'Machamp', ability: 'noguard', moves: ['tackle']},
@@ -256,7 +256,7 @@ describe('Sky Drop', function () {
 		assert.statStage(battle.p2.active[0], 'spe', 1);
 	});
 
-	it.skip(`should not claim to have dropped a Pokemon if it is already fainted`, function () {
+	it(`should not claim to have dropped a Pokemon if it is already fainted`, function () {
 		battle = common.createBattle([[
 			{species: 'Shedinja', item: 'stickybarb', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},

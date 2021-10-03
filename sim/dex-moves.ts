@@ -25,7 +25,7 @@ export type MoveTarget =
 
 /** Possible move flags. */
 interface MoveFlags {
-	authentic?: 1; // Ignores a target's substitute.
+	bypasssub?: 1; // Ignores a target's substitute.
 	bite?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
 	charge?: 1; // The user is unable to make a move between turns.
@@ -36,7 +36,7 @@ interface MoveFlags {
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
 	mirror?: 1; // Can be copied by Mirror Move.
-	mystery?: 1; // Unknown effect.
+	allyanim?: 1; // The move has an animation when used on an ally.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
 	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
 	protect?: 1; // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
@@ -321,7 +321,7 @@ export interface ActiveMove extends MutableMove {
 type MoveCategory = 'Physical' | 'Special' | 'Status';
 
 export class DataMove extends BasicEffect implements Readonly<BasicEffect & MoveData> {
-	readonly effectType: 'Move';
+	declare readonly effectType: 'Move';
 	/** Move type. */
 	readonly type: string;
 	/** Move target. */
@@ -333,9 +333,9 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Critical hit ratio. Defaults to 1. */
 	readonly critRatio: number;
 	/** Will this move always or never be a critical hit? */
-	readonly willCrit?: boolean;
+	declare readonly willCrit?: boolean;
 	/** Can this move OHKO foes? */
-	readonly ohko?: boolean | string;
+	declare readonly ohko?: boolean | string;
 	/**
 	 * Base move type. This is the move type as specified by the games,
 	 * tracked because it often differs from the real move type.
@@ -386,11 +386,11 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Whether or not this move can receive PP boosts. */
 	readonly noPPBoosts: boolean;
 	/** How many times does this move hit? */
-	readonly multihit?: number | number[];
+	declare readonly multihit?: number | number[];
 	/** Is this move a Z-Move? */
 	readonly isZ: boolean | string;
 	/* Z-Move fields */
-	readonly zMove?: {
+	declare readonly zMove?: {
 		basePower?: number,
 		effect?: string,
 		boost?: SparseBoostsTable,
@@ -398,7 +398,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Is this move a Max move? */
 	readonly isMax: boolean | string;
 	/** Max/G-Max move fields */
-	readonly maxMove?: {
+	declare readonly maxMove?: {
 		basePower: number,
 	};
 	readonly flags: MoveFlags;
@@ -420,9 +420,9 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Whether or not this move hit multiple targets. */
 	readonly spreadHit: boolean;
 	/** Modifier that affects damage when multiple targets are hit. */
-	readonly spreadModifier?: number;
+	declare readonly spreadModifier?: number;
 	/**  Modifier that affects damage when this move is a critical hit. */
-	readonly critModifier?: number;
+	declare readonly critModifier?: number;
 	/** Forces the move to get STAB even if the type doesn't match. */
 	readonly forceSTAB: boolean;
 	/** True if it can't be copied with Sketch. */

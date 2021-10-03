@@ -9,7 +9,10 @@ export class RandomGen7Teams extends RandomTeams {
 
 		this.moveEnforcementCheckers = {
 			Bug: movePool => movePool.includes('megahorn') || movePool.includes('pinmissile'),
-			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark') && !abilities.has('Protean'),
+			Dark: (movePool, moves, abilities, types, counter, species) => (
+				(!counter.get('Dark') && !abilities.has('Protean')) ||
+				(moves.has('pursuit') && species.types.length > 1 && counter.get('Dark') === 1)
+			),
 			Dragon: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Dragon') &&
 				!abilities.has('Aerilate') && !abilities.has('Pixilate') &&
@@ -21,10 +24,11 @@ export class RandomGen7Teams extends RandomTeams {
 			),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting') || !counter.get('stab'),
 			Fire: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Fire') || movePool.includes('flareblitz') || movePool.includes('quiverdance')
+				!counter.get('Fire') || ['eruption', 'flareblitz', 'quiverdance'].some(m => movePool.includes(m))
 			),
-			Flying: (movePool, moves, abilities, types, counter) => (
+			Flying: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Flying') && (
+					species.id === 'rotomfan' ||
 					abilities.has('Gale Wings') ||
 					abilities.has('Serene Grace') || (
 						types.has('Normal') && (movePool.includes('beakblast') || movePool.includes('bravebird'))
@@ -72,7 +76,8 @@ export class RandomGen7Teams extends RandomTeams {
 			Water: (movePool, moves, abilities, types, counter, species) => (
 				(!counter.get('Water') && !abilities.has('Protean')) ||
 				!counter.get('stab') ||
-				movePool.includes('crabhammer')
+				movePool.includes('crabhammer') ||
+				(abilities.has('Huge Power') && movePool.includes('aquajet'))
 			),
 			Adaptability: (movePool, moves, abilities, types, counter, species) => (
 				!counter.setupType &&
@@ -1010,7 +1015,7 @@ export class RandomGen7Teams extends RandomTeams {
 		const types = new Set(species.types);
 		const abilities = new Set<string>();
 		for (const abilityName of Object.values(species.abilities)) {
-			if (abilityName === species.abilities.S) continue;
+			if (abilityName === species.abilities.S || (species.unreleasedHidden && abilityName === species.abilities.H)) continue;
 			abilities.add(abilityName);
 		}
 
@@ -1040,15 +1045,20 @@ export class RandomGen7Teams extends RandomTeams {
 			}
 			while (moves.size < 4 && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
+				if (moveid.startsWith('hiddenpower')) {
+					if (hasHiddenPower) continue;
+					hasHiddenPower = true;
+				}
 				moves.add(moveid);
 			}
 
 			counter = this.queryMoves(moves, species.types, abilities, movePool);
-			const runEnforcementChecker = (checkerName: string) => (
-				this.moveEnforcementCheckers[checkerName]?.(
+			const runEnforcementChecker = (checkerName: string) => {
+				if (!this.moveEnforcementCheckers[checkerName]) return false;
+				return this.moveEnforcementCheckers[checkerName](
 					movePool, moves, abilities, types, counter, species as Species, teamDetails
-				)
-			);
+				);
+			};
 
 			// Iterate through the moves again, this time to cull them:
 			for (const moveid of moves) {
@@ -1085,8 +1095,11 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 
 				const singlesEnforcement = (
-					!['judgment', 'lightscreen', 'reflect', 'sleeptalk', 'toxic'].includes(moveid) &&
-					(move.category !== 'Status' || !move.flags.heal)
+					!['judgment', 'lightscreen', 'reflect', 'sleeptalk', 'toxic'].includes(moveid) && (
+						move.category !== 'Status' ||
+						// should allow Meganium to cull a recovery move for the sake of STAB
+						!(move.flags.heal && species.id !== 'meganium')
+					)
 				);
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
@@ -1162,23 +1175,26 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 
 				// Remove rejected moves from the move list
+				const moveIsHP = moveid.startsWith('hiddenpower');
 				if (cull && (
 					movePool.length - availableHP ||
-					(availableHP && (moveid.startsWith('hiddenpower') || !hasHiddenPower))
+					(availableHP && (moveIsHP || !hasHiddenPower))
 				)) {
 					if (
 						move.category !== 'Status' &&
 						!move.damage &&
 						!move.flags.charge &&
-						(!moveid.startsWith('hiddenpower') || !availableHP)
+						(!moveIsHP || !availableHP)
 					) {
 						rejectedPool.push(moveid);
 					}
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}
 
 				if (cull && rejectedPool.length) {
+					if (moveIsHP) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}
@@ -1368,6 +1384,9 @@ export class RandomGen7Teams extends RandomTeams {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
+
+		// Ensure Nihilego's Beast Boost gives it Special Attack boosts instead of Special Defense
+		if (forme === 'Nihilego') evs.spd -= 32;
 
 		if (ability === 'Beast Boost' && counter.get('Special') < 1) {
 			evs.spa = 0;

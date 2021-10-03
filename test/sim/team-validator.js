@@ -1,8 +1,8 @@
 'use strict';
 
 const assert = require('assert').strict;
-const TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;
-const Teams = require('../../.sim-dist/teams').Teams;
+const TeamValidator = require('../../sim/team-validator').TeamValidator;
+const Teams = require('../../sim/teams').Teams;
 
 describe('Team Validator', function () {
 	it('should have valid formats to work with', function () {
@@ -128,6 +128,14 @@ describe('Team Validator', function () {
 			{species: 'pikachu', ability: 'static', moves: ['thunderbolt'], happiness: 'invalidHappinessValue', evs: {hp: 1}},
 		];
 		const illegal = TeamValidator.get('gen7customgame').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should validate EVs', function () {
+		const team = [
+			{species: 'pikachu', ability: 'static', moves: ['thunderbolt'], evs: {hp: 252, atk: 252, def: 252}},
+		];
+		const illegal = TeamValidator.get('gen8ou').validateTeam(team);
 		assert(illegal);
 	});
 
@@ -470,6 +478,12 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen8ou').validateTeam(team);
 		assert.equal(illegal, null);
+
+		team = [
+			{species: 'weezing-galar', ability: 'levitate', moves: ['zapcannon'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8ou').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should correctly validate USUM Rockruff', function () {
@@ -707,13 +721,23 @@ describe('Team Validator', function () {
 	});
 
 	it('should enforce Gen 1 minimum levels', () => {
-		const team = [
-			{species: 'onix', level: 12, moves: ['explosion'], evs: {hp: 1}},
+		let team = [
+			{species: 'onix', level: 12, moves: ['headbutt']},
 		];
 		let illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert(illegal);
 
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'slowbro', level: 15, moves: ['earthquake']},
+			{species: 'voltorb', level: 14, moves: ['thunderbolt']},
+			{species: 'scyther', level: 15, moves: ['quickattack']},
+			{species: 'pinsir', level: 15, moves: ['visegrip']},
+		];
+
+		illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert.equal(illegal, null);
 	});
 

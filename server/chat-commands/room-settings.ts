@@ -201,7 +201,8 @@ export const commands: Chat.ChatCommands = {
 		room.saveSettings();
 	},
 	automodchathelp: [
-		`/automodchat [number], [rank] - Sets modchat [rank] to automatically turn on after [number] minutes. [number] must be between 5 and 480. Requires: # &`,
+		`/automodchat [number], [rank] - Sets modchat [rank] to automatically turn on after [number] minutes with no staff.`,
+		`[number] must be between 5 and 480. Requires: # &`,
 		`/automodchat off - Turns off automodchat.`,
 	],
 
@@ -313,8 +314,15 @@ export const commands: Chat.ChatCommands = {
 		}
 		room.saveSettings();
 		if (target === 'sync' && !room.settings.modchat) {
-			const lowestStaffGroup = Config.groupsranking.filter(group => Config.groups[group]?.mute)[0];
-			if (lowestStaffGroup) void this.parse(`/modchat ${lowestStaffGroup}`);
+			const lowestGroup = Config.groupsranking.filter(group => {
+				const groupInfo = Users.Auth.getGroup(group);
+				return (
+					groupInfo.symbol !== Users.Auth.defaultSymbol() &&
+					room!.auth.atLeast(user, group) &&
+					Users.Auth.isValidSymbol(groupInfo.symbol)
+				);
+			})[0];
+			if (lowestGroup) void this.parse(`/modchat ${lowestGroup}`);
 		}
 		if (!room.settings.isPrivate) return this.parse('/hiddenroom');
 	},
@@ -703,6 +711,10 @@ export const commands: Chat.ChatCommands = {
 		room.saveSettings();
 		return this.modlog(`SHOWAPPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
 	},
+	showapprovalshelp: [
+		`/showapprovals [setting] - Enable or disable the use of media approvals in the current room.`,
+		`Requires: # &`,
+	],
 
 	showmedia(target, room, user) {
 		this.errorReply(`/showmedia has been deprecated. Use /permissions instead.`);
@@ -1234,6 +1246,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog('UNSUBROOM');
 		return this.addModAction(`This room was unset as a subroom by ${user.name}.`);
 	},
+	unsubroomhelp: [`/unsubroom - Unmarks the current room as a subroom. Requires: &`],
 
 	parentroom: 'subrooms',
 	subrooms(target, room, user, connection, cmd) {
@@ -1298,6 +1311,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog('ROOMDESC', null, `to "${target}"`);
 		room.saveSettings();
 	},
+	roomdeschelp: [`/roomdesc [description] - Sets the [description] of the current room. Requires: &`],
 
 	topic: 'roomintro',
 	roomintro(target, room, user, connection, cmd) {
@@ -1332,6 +1346,10 @@ export const commands: Chat.ChatCommands = {
 
 		room.saveSettings();
 	},
+	roomintrohelp: [
+		`/roomintro - Display the room introduction of the current room.`,
+		`/roomintro [content] - Set an introduction for the room. Requires: # &`,
+	],
 
 	deletetopic: 'deleteroomintro',
 	deleteroomintro(target, room, user) {
@@ -1345,6 +1363,7 @@ export const commands: Chat.ChatCommands = {
 		delete room.settings.introMessage;
 		room.saveSettings();
 	},
+	deleteroomintrohelp: [`/deleteroomintro - Deletes the current room's introduction. Requires: # &`],
 
 	stafftopic: 'staffintro',
 	staffintro(target, room, user, connection, cmd) {
@@ -1379,6 +1398,7 @@ export const commands: Chat.ChatCommands = {
 		this.roomlog(room.settings.staffMessage.replace(/\n/g, ``));
 		room.saveSettings();
 	},
+	staffintrohelp: [`/staffintro [content] - Set an introduction for staff members. Requires: @ # &`],
 
 	deletestafftopic: 'deletestaffintro',
 	deletestaffintro(target, room, user) {
@@ -1392,6 +1412,7 @@ export const commands: Chat.ChatCommands = {
 		delete room.settings.staffMessage;
 		room.saveSettings();
 	},
+	deletestaffintrohelp: [`/deletestaffintro - Deletes the current room's staff introduction. Requires: @ # &`],
 
 	roomalias(target, room, user) {
 		room = this.requireRoom();
@@ -1540,6 +1561,8 @@ export const commands: Chat.ChatCommands = {
 			return;
 		}
 		if (this.meansNo(target)) {
+			delete room.settings.defaultFormat;
+			room.saveSettings();
 			this.modlog(`DEFAULTFORMAT`, null, 'off');
 			this.privateModAction(`${user.name} removed this room's default format.`);
 			return;

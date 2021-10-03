@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-const {MultiRandomRunner} = require('../../../.sim-dist/tools/multi-random-runner');
+const {MultiRandomRunner} = require('../../../sim/tools/multi-random-runner');
 
 describe('MultiRandomRunner (slow)', async function () {
 	it('should run successfully', async function () {

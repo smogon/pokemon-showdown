@@ -101,8 +101,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 				pokemon.setStatus('');
 			}
 		},
-		onHit(target, source, move) {
-			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
+		onAfterMoveSecondary(target, source, move) {
+			if (move.thawsTarget) {
+				target.cureStatus();
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
 		},
@@ -385,6 +390,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
+				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
+			}
+
 			this.checkWin();
 		},
 	},

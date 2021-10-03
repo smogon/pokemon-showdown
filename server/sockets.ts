@@ -75,7 +75,7 @@ export const Sockets = new class {
 				const cloudenv = (require as any)('cloud-env');
 				bindAddress = cloudenv.get('IP', bindAddress);
 				port = cloudenv.get('PORT', port);
-			} catch (e) {}
+			} catch {}
 		}
 		if (bindAddress !== undefined) {
 			Config.bindaddress = bindAddress;
@@ -293,13 +293,13 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				if (!fs.statSync(key).isFile()) throw new Error();
 				try {
 					key = fs.readFileSync(key);
-				} catch (e) {
+				} catch (e: any) {
 					crashlogger(
 						new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`),
 						`Socket process ${process.pid}`
 					);
 				}
-			} catch (e) {
+			} catch {
 				console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
 				key = config.ssl.options.key;
 			}
@@ -310,13 +310,13 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				if (!fs.statSync(cert).isFile()) throw new Error();
 				try {
 					cert = fs.readFileSync(cert);
-				} catch (e) {
+				} catch (e: any) {
 					crashlogger(
 						new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`),
 						`Socket process ${process.pid}`
 					);
 				}
-			} catch (e) {
+			} catch (e: any) {
 				console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
 				cert = config.ssl.options.cert;
 			}
@@ -325,7 +325,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				try {
 					// In case there are additional SSL config settings besides the key and cert...
 					this.serverSsl = https.createServer({...config.ssl.options, key, cert});
-				} catch (e) {
+				} catch (e: any) {
 					crashlogger(new Error(`The SSL settings are misconfigured:\n${e.stack}`), `Socket process ${process.pid}`);
 				}
 			}
@@ -370,7 +370,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 			this.server.on('request', staticRequestHandler);
 			if (this.serverSsl) this.serverSsl.on('request', staticRequestHandler);
-		} catch (e) {
+		} catch (e: any) {
 			if (e.message === 'disablenodestatic') {
 				console.log('node-static is disabled');
 			} else {
@@ -396,7 +396,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			try {
 				const deflate = (require as any)('permessage-deflate').configure(config.wsdeflate);
 				options.faye_server_options = {extensions: [deflate]};
-			} catch (e) {
+			} catch {
 				crashlogger(
 					new Error("Dependency permessage-deflate is not installed or is otherwise unaccessable. No message compression will take place until server restart."),
 					"Sockets"
@@ -454,7 +454,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		for (const socket of this.sockets.values()) {
 			try {
 				socket.destroy();
-			} catch (e) {}
+			} catch {}
 		}
 		this.sockets.clear();
 		this.rooms.clear();
@@ -477,7 +477,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			// address from connection request headers.
 			try {
 				socket.destroy();
-			} catch (e) {}
+			} catch {}
 			return;
 		}
 
@@ -559,7 +559,7 @@ if (!PM.isParentProcess) {
 	if (Config.sockets) {
 		try {
 			require.resolve('node-oom-heapdump');
-		} catch (e) {
+		} catch (e: any) {
 			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 			throw new Error(
 				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofesockets is set to true! ' +

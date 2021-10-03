@@ -40,7 +40,7 @@ import {MinorActivity, MinorActivityData} from './room-minor-activity';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
-import {MODLOG_PATH, MODLOG_DB_PATH, mainModlog, PartialModlogEntry} from './modlog';
+import {PartialModlogEntry, mainModlog} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -117,7 +117,12 @@ export interface RoomSettings {
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
-	autoModchat?: {rank: GroupSymbol, time: number, active: boolean};
+	autoModchat?: {
+		rank: GroupSymbol,
+		time: number,
+		// stores previous modchat setting. if true, modchat was fully off
+		active: boolean | AuthLevel,
+	};
 	tournaments?: TournamentRoomSettings;
 	defaultFormat?: string;
 
@@ -134,7 +139,6 @@ export interface RoomSettings {
 }
 
 export type MessageHandler = (room: BasicRoom, message: string) => void;
-export type RenameHandler = (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
 export type Room = GameRoom | ChatRoom;
 
 import type {AnnouncementData} from './chat-plugins/announcements';
@@ -884,6 +888,14 @@ export abstract class BasicRoom {
 		this.title = newTitle;
 		Rooms.rooms.delete(oldID);
 		Rooms.rooms.set(newID, this as Room);
+		if (this.battle && oldID) {
+			for (const player of this.battle.players) {
+				if (player.invite) {
+					const chall = Ladders.challenges.searchByRoom(player.invite, oldID);
+					if (chall) chall.roomid = this.roomid;
+				}
+			}
+		}
 
 		if (oldID === 'lobby') {
 			Rooms.lobby = null;
@@ -936,6 +948,8 @@ export abstract class BasicRoom {
 		this.settings.title = newTitle;
 		this.saveSettings();
 
+		Punishments.renameRoom(oldID, newID);
+
 		void this.log.rename(newID);
 	}
 
@@ -965,6 +979,7 @@ export abstract class BasicRoom {
 
 		this.minorActivity?.onConnect?.(user, connection);
 		this.game?.onJoin?.(user, connection);
+		Chat.runHandlers('RoomJoin', this, user, connection);
 		return true;
 	}
 	onRename(user: User, oldid: ID, joining: boolean) {
@@ -1028,30 +1043,45 @@ export abstract class BasicRoom {
 		// they are staff and online
 		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%'));
 		if (!staff.length) {
-			const {rank, time} = this.settings.autoModchat;
+			const {time} = this.settings.autoModchat;
+			if (!time || time < 5) {
+				throw new Error(`Invalid time setting for automodchat (${Utils.visualize(this.settings.autoModchat)})`);
+			}
+			if (this.modchatTimer) clearTimeout(this.modchatTimer);
 			this.modchatTimer = setTimeout(() => {
+				if (!this.settings.autoModchat) return;
+				const {rank} = this.settings.autoModchat;
+				const oldSetting = this.settings.modchat;
 				this.settings.modchat = rank;
 				this.add(
-					`|raw|<div class="broadcast-blue"><strong>This room has had no active staff for ${Chat.toDurationString(time)},` +
+					// always gonna be minutes so we can just use the number directly lol
+					`|raw|<div class="broadcast-blue"><strong>This room has had no active staff for ${time} minutes,` +
 					` and has had modchat set to ${rank}.</strong></div>`
 				).update();
 				this.modlog({
 					action: 'AUTOMODCHAT ACTIVATE',
 				});
 				// automodchat will always exist
-				this.settings.autoModchat!.active = true;
+				this.settings.autoModchat.active = oldSetting || true;
+				this.saveSettings();
 			}, time * 60 * 1000);
 		}
 	}
 
 	checkAutoModchat(user: User) {
-		if (this.auth.atLeast(user, '%')) {
+		if (user.can('mute', null, this, 'modchat')) {
 			if (this.modchatTimer) {
 				clearTimeout(this.modchatTimer);
 			}
 			if (this.settings.autoModchat?.active) {
-				delete this.settings.modchat;
+				const oldSetting = this.settings.autoModchat.active;
+				if (typeof oldSetting === 'string') {
+					this.settings.modchat = oldSetting;
+				} else {
+					delete this.settings.modchat;
+				}
 				this.settings.autoModchat.active = false;
+				this.saveSettings();
 			}
 		}
 	}
@@ -1111,7 +1141,7 @@ export abstract class BasicRoom {
 		}
 		this.logUserStatsInterval = null;
 
-		void this.log.destroy(true);
+		void this.log.destroy();
 
 		Rooms.rooms.delete(this.roomid);
 		if (this.roomid === 'lobby') Rooms.lobby = null;
@@ -1148,7 +1178,7 @@ export class GlobalRoomState {
 		try {
 			this.settingsList = require('../config/chatrooms.json');
 			if (!Array.isArray(this.settingsList)) this.settingsList = [];
-		} catch (e) {} // file doesn't exist [yet]
+		} catch {} // file doesn't exist [yet]
 
 		if (!this.settingsList.length) {
 			this.settingsList = [{
@@ -1162,7 +1192,7 @@ export class GlobalRoomState {
 				auth: {},
 				creationTime: Date.now(),
 				isPrivate: 'hidden',
-				modjoin: '%',
+				modjoin: Users.SECTIONLEADER_SYMBOL,
 				autojoin: true,
 			}];
 		}
@@ -1216,8 +1246,6 @@ export class GlobalRoomState {
 			// of GlobalRoom can have.
 			this.ladderIpLog = new Streams.WriteStream({write() { return undefined; }});
 		}
-		// Create writestream for modlog
-		Rooms.Modlog.initialize('global');
 
 		this.reportUserStatsInterval = setInterval(
 			() => this.reportUserStats(),
@@ -1237,7 +1265,7 @@ export class GlobalRoomState {
 		let lastBattle;
 		try {
 			lastBattle = FS('logs/lastbattle.txt').readSync('utf8');
-		} catch (e) {}
+		} catch {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
 	}
@@ -1328,8 +1356,9 @@ export class GlobalRoomState {
 			if (!Config.groups[rank] || !rank) continue;
 
 			const tarGroup = Config.groups[rank];
-			const groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
+			let groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
 				'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
+			if (tarGroup.id === 'sectionleader') groupType = 'staff';
 
 			rankList.push({
 				symbol: rank,
@@ -1469,6 +1498,9 @@ export class GlobalRoomState {
 		if (Config.logladderip && options.rated) {
 			const ladderIpLogString = players.map(p => `${p.id}: ${p.latestIp}\n`).join('');
 			void this.ladderIpLog.write(ladderIpLogString);
+		}
+		for (const player of players) {
+			Chat.runHandlers('BattleStart', player, room);
 		}
 	}
 
@@ -1704,7 +1736,7 @@ export class ChatRoom extends BasicRoom {
 }
 
 export class GameRoom extends BasicRoom {
-	readonly type: 'battle';
+	declare readonly type: 'battle';
 	readonly format: string;
 	p1: User | null;
 	p2: User | null;
@@ -1715,10 +1747,9 @@ export class GameRoom extends BasicRoom {
 	 * 0 for unrated battles. 1 for unknown ratings.
 	 */
 	rated: number;
-	battle: RoomBattle | null;
-	game: RoomGame;
+	declare battle: RoomBattle | null;
+	declare game: RoomGame;
 	modchatUser: string;
-	active: boolean;
 	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
 		options.noLogTimes = true;
 		options.noAutoTruncate = true;
@@ -1862,8 +1893,6 @@ function getRoom(roomid?: string | BasicRoom) {
 }
 
 export const Rooms = {
-	MODLOG_PATH,
-	MODLOG_DB_PATH,
 	Modlog: mainModlog,
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a

@@ -37,33 +37,41 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	blackbelt: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Fighting') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Fighting') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	blackglasses: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Dark') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Dark') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	charcoal: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Fire') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Fire') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	dragonfang: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Dragon') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Dragon') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
@@ -99,9 +107,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	hardstone: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Rock') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Rock') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
@@ -163,13 +173,20 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyAtk() {},
+		onModifySpA(spa, pokemon) {
+			if (pokemon.species.name === 'Pikachu') {
+				return this.chainModify(2);
+			}
+		},
+		onBasePower() {},
 	},
 	magnet: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Electric') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Electric') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
@@ -186,33 +203,41 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	metalcoat: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Steel') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Steel') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	miracleseed: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Grass') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Grass') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	mysticwater: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Water') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Water') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	nevermeltice: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Ice') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Ice') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
@@ -240,19 +265,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	poisonbarb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Poison') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Poison') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	quickclaw: {
 		inherit: true,
-		onFractionalPriority(priority, pokemon) {
-			if (this.randomChance(1, 5)) {
-				return 0.1;
-			}
-		},
+		onFractionalPriority() {},
+		// implemented in Pokemon#getActionSpeed()
 	},
 	salacberry: {
 		inherit: true,
@@ -267,33 +291,41 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	seaincense: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Water') {
-				return basePower * 1.05;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Water') {
+				return this.chainModify(1.05);
 			}
 		},
 	},
 	sharpbeak: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Flying') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Flying') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	silkscarf: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Normal') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Normal') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	silverpowder: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Bug') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Bug') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
@@ -313,17 +345,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	softsand: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Ground') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Ground') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
 	spelltag: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Ghost') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, user, target, move) {
+			if (move?.type === 'Ghost') {
+				return this.chainModify(1.1);
 			}
 		},
 	},
@@ -340,9 +376,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	twistedspoon: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Psychic') {
-				return basePower * 1.1;
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, user, target, move) {
+			if (move?.type === 'Psychic') {
+				return this.chainModify(1.1);
 			}
 		},
 	},

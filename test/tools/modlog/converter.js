@@ -6,7 +6,7 @@
 
 const assert = require('assert').strict;
 const converter = require('../../../tools/modlog/converter');
-const ml = require('../../../.server-dist/modlog');
+const ml = require('../../../server/modlog');
 
 const garfieldCopypasta = [
 	`[2020-08-24T03:52:00.917Z] (staff) AUTOLOCK: [guest903036] [127.0.0.1]: "Now where could my pipe be?" This... I always come to this, because I was a young man, I'm older now, and I still don't have the secrets, the answers, so this question still rings true, Jon looks up and he thinks: "Now where could my pipe be?", and then it happens, you see it, you see... it's almost like divine intervention, suddenly, it is there, and it overpowers you, a cat is smoking a pipe. It is the mans pipe, it's Jon's pipe, but the cat, this cat, Garfield, is smoking the pipe, and from afar, and from someplace near, but not clear... near but not clear, the man calls out, Jon calls out, he is shocked. "Garfield!" he shouts. Garfield, the cats name. But let's take a step back. Let us examine this from all sides, all perspectives, and when I first came across this comic strip, I was at my fathers house. The newspaper had arrived, and I picked it up for him, and brought it`,
@@ -208,6 +208,38 @@ describe('Modlog conversion script', () => {
 				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) (The tournament auto disqualify timeout was set to 2 by Annika)'),
 				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR AUTODQ: by annika: 2'
 			);
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) (The tournament auto disqualify timer was set to 2 by Annika)'),
+				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR AUTODQ: by annika: 2'
+			);
+			assert.equal(
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (tournaments) (The tournament auto start timer was set to 2 by Annika)'),
+				'[2020-08-23T19:50:49.944Z] (tournaments) TOUR AUTOSTART: by annika: 2'
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-04-23T05:58:24.988Z] (development) (Lady Monita set the tournament's banlist to Leppa Berry.)`),
+				`[2017-04-23T05:58:24.988Z] (development) TOUR BANLIST: by ladymonita: Leppa Berry`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-12-06T18:58:01.953Z] (development) (Hydreigon Specs set the tournament's custom rules to +Landorus, +Zeraora.)`),
+				`[2017-12-06T18:58:01.953Z] (development) TOUR RULES: by hydreigonspecs: +Landorus, +Zeraora`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-12-06T18:58:01.953Z] (development) (Hydreigon Specs set the tournament's custom rules to +Landorus, +Zeraora.)`),
+				`[2017-12-06T18:58:01.953Z] (development) TOUR RULES: by hydreigonspecs: +Landorus, +Zeraora`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-06-22T16:35:33.414Z] (development) ([thetournament] was set to autostart when the player cap is reached by Lady Monita)`),
+				`[2017-06-22T16:35:33.414Z] (development) TOUR AUTOSTART: by ladymonita: when playercap is reached`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to disallow scouting by SparksBlade)`),
+				`[2015-09-19T13:30:44.740Z] (development) TOUR SCOUT: by sparksblade: disallow`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to allow scouting by SparksBlade)`),
+				`[2015-09-19T13:30:44.740Z] (development) TOUR SCOUT: by sparksblade: allow`
+			);
 		});
 
 		it('should correctly parse old-format roombans', () => {
@@ -285,6 +317,14 @@ describe('Modlog conversion script', () => {
 
 			assert.equal(
 				converter.modernizeLog(
+					'[2020-08-23T19:50:49.944Z] (development) heartofetheria was locked from talking for a week by annika (reason)',
+					`[2020-08-23T19:50:49.944Z] (development) (Heart of Etheria's locked alts: annika0, hordeprime)`
+				),
+				'[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [heartofetheria] alts: [annika0], [hordeprime] by annika: reason'
+			);
+
+			assert.equal(
+				converter.modernizeLog(
 					'[2020-08-23T19:50:49.944Z] (development) [heartofetheria] was banned from room development by annika',
 					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s banned alts: [annika0], [hordeprime])`
 				),
@@ -297,6 +337,16 @@ describe('Modlog conversion script', () => {
 					`[2020-08-23T19:50:49.944Z] (development) ([heartofetheria]'s blacklisted alts: [annika0], [hordeprime])`
 				),
 				'[2020-08-23T19:50:49.944Z] (development) BLACKLIST: [heartofetheria] alts: [annika0], [hordeprime] by annika'
+			);
+		});
+
+		it('should correctly parse autoconfirmed alts using nextLine', () => {
+			assert.equal(
+				converter.modernizeLog(
+					`[2018-01-18T05:40:14.323Z] (lobby) [cartmanqueen] was muted by GeoffBruedly for 1 hour.`,
+					`[2018-01-18T05:40:14.324Z] (lobby) (Cartman(Queen)'s ac account: cartmanxjews)`
+				),
+				'[2018-01-18T05:40:14.323Z] (lobby) HOURMUTE: [cartmanqueen] ac: [cartmanxjews] by geoffbruedly'
 			);
 		});
 
@@ -402,6 +452,17 @@ describe('Modlog conversion script', () => {
 			assert.equal(
 				converter.modernizeLog(`[2015-07-21T06:04:54.369Z] (lobby) xfix declared GrumpyGungan was promoted to a global voice, feel free to congratulate him :-).`),
 				`[2015-07-21T06:04:54.369Z] (lobby) DECLARE: by xfix: GrumpyGungan was promoted to a global voice, feel free to congratulate him :-).`
+			);
+		});
+
+		it('should handle hangman and UNO games', () => {
+			assert.equal(
+				converter.modernizeLog(`[2016-09-22T19:07:35.411Z] (development) ([agameofhangman] was started by [br3to].)`),
+				`[2016-09-22T19:07:35.411Z] (development) HANGMAN: by br3to`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2017-05-07T18:34:40.730Z] (development) ([agameofunowas] created by [jinkazaragi].)`),
+				`[2017-05-07T18:34:40.730Z] (development) UNO CREATE: by jinkazaragi`
 			);
 		});
 	});
@@ -632,10 +693,8 @@ describe('Modlog conversion script', () => {
 
 	describe.skip('integration tests', () => {
 		it('should convert from SQLite to text', async () => {
-			const modlog = new ml.Modlog('/dev/null', ':memory:', true);
+			const modlog = new ml.Modlog(':memory:');
 			const mlConverter = new converter.ModlogConverterSQLite('', '', modlog.database);
-
-			modlog.initialize('development');
 
 			const entry = {
 				action: 'UNITTEST',
@@ -700,7 +759,7 @@ describe('Modlog conversion script', () => {
 
 			const database = await mlConverter.toSQLite();
 			const globalEntries = database
-				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE roomid LIKE 'global-%'`)
+				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE is_global = 1'`)
 				.all();
 			const entries = database
 				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE roomid IN (?, ?) ORDER BY timestamp ASC`)
@@ -716,7 +775,7 @@ describe('Modlog conversion script', () => {
 			assert(!globalEntries[0].visual_roomid);
 
 			assert.equal(globalEntries[0].timestamp, 1598212249945);
-			assert.equal(globalEntries[0].roomid.replace(/^global-/, ''), 'development');
+			assert.equal(globalEntries[0].roomid, 'development');
 			assert.equal(globalEntries[0].action, 'GLOBAL UNITTEST');
 			assert.equal(globalEntries[0].action_taker_userid, 'yourmom');
 			assert.equal(globalEntries[0].userid, 'annika');

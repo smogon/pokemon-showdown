@@ -1,7 +1,7 @@
 Simulator protocol
 ==================
 
-Pokémon Showdown's simulator protocol is implemented as a newline-and-pipe-delimited text stream. For details on how to read to or write from the text stream, see `README.md`.
+Pokémon Showdown's simulator protocol is implemented as a newline-and-pipe-delimited text stream. For details on how to read to or write from the text stream, see [sim/SIMULATOR.md](./SIMULATOR.md).
 
 
 Receiving messages
@@ -443,6 +443,10 @@ stat boosts are minor actions.
 `|-sideend|SIDE|CONDITION`
 
 > Indicates that the side condition `CONDITION` ended for the given `SIDE`.
+
+`|-swapsideconditions`
+
+> Swaps side conditions between sides. Used for Court Change.
 
 `|-start|POKEMON|EFFECT`
 

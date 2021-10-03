@@ -444,6 +444,7 @@ export interface EventMethods {
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;
 	onFoeModifyDefPriority?: number;
+	onFoeModifySpDPriority?: number;
 	onFoeRedirectTargetPriority?: number;
 	onFoeTrapPokemonPriority?: number;
 	onFractionalPriorityPriority?: number;
@@ -613,14 +614,14 @@ export type ModdedConditionData = ConditionData & {inherit?: true};
 
 export class Condition extends BasicEffect implements
 	Readonly<BasicEffect & SideConditionData & FieldConditionData & PokemonConditionData> {
-	readonly effectType: 'Condition' | 'Weather' | 'Status';
-	readonly counterMax?: number;
+	declare readonly effectType: 'Condition' | 'Weather' | 'Status';
+	declare readonly counterMax?: number;
 
-	readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
-	readonly onCopy?: (this: Battle, pokemon: Pokemon) => void;
-	readonly onEnd?: (this: Battle, target: Pokemon) => void;
-	readonly onRestart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
-	readonly onStart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	declare readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
+	declare readonly onCopy?: (this: Battle, pokemon: Pokemon) => void;
+	declare readonly onEnd?: (this: Battle, target: Pokemon) => void;
+	declare readonly onRestart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	declare readonly onStart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
 
 	constructor(data: AnyObject) {
 		super(data);

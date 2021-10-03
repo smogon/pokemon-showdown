@@ -3,6 +3,22 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		inherit: true,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
+	flatrules: {
+		inherit: true,
+		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level Down = 50', 'Cancel Mod'],
+	},
+	teampreview: {
+		inherit: true,
+		onTeamPreview() {
+			this.add('clearpoke');
+			for (const pokemon of this.getAllPokemon()) {
+				const details = pokemon.details.replace(', shiny', '')
+					.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally|Zacian|Zamazenta|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
+				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
+			}
+			this.makeRequest('teampreview');
+		},
+	},
 	validatestats: {
 		inherit: true,
 		onValidateSet(set) {

@@ -65,7 +65,7 @@ class Ladder extends LadderStore {
 
 		try {
 			this.formatid = Dex.formats.validate(this.formatid);
-		} catch (e) {
+		} catch (e: any) {
 			connection.popup(`Your selected format is invalid:\n\n- ${e.message}`);
 			return null;
 		}
@@ -163,7 +163,11 @@ class Ladder extends LadderStore {
 			connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
 			return false;
 		}
-		if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser)) {
+		if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser) && (
+			targetUser.settings.blockChallenges === true ||
+			targetUser.settings.blockChallenges === 'friends' && targetUser.friends?.has(user.id) ||
+			!Users.globalAuth.atLeast(user, targetUser.settings.blockChallenges as AuthLevel)
+		)) {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;
@@ -204,7 +208,7 @@ class Ladder extends LadderStore {
 			}
 		}
 		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready));
-		Ladders.challenges.send(user.id, targetUser.id, `/text ${user.name} wants to battle!`);
+		Ladders.challenges.send(user.id, targetUser.id, `/log ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
 		return true;
 	}

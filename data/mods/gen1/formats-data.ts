@@ -368,7 +368,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["sleeppowder", "bodyslam", "stunspore"],
 		essentialMove: "razorleaf",
 		comboMoves: ["swordsdance", "hyperbeam"],
-		tier: "OU",
+		tier: "(OU)",
 	},
 	tentacool: {
 		randomBattleMoves: ["barrier", "hydropump", "surf"],
@@ -445,7 +445,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	dewgong: {
 		randomBattleMoves: ["surf", "blizzard", "bodyslam"],
 		exclusiveMoves: ["rest", "rest", "mimic", "hyperbeam"],
-		tier: "NU",
+		tier: "UU",
 	},
 	grimer: {
 		randomBattleMoves: ["sludge", "bodyslam"],
@@ -665,7 +665,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["surf", "bodyslam", "sing", "rest", "confuseray"],
 		essentialMove: "blizzard",
 		exclusiveMoves: ["thunderbolt", "thunderbolt"],
-		tier: "OU",
+		tier: "(OU)",
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],
@@ -719,7 +719,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	aerodactyl: {
 		randomBattleMoves: ["skyattack", "fireblast", "doubleedge", "hyperbeam"],
-		tier: "NU",
+		tier: "UU",
 	},
 	snorlax: {
 		randomBattleMoves: ["rest", "thunderbolt", "bodyslam", "selfdestruct"],

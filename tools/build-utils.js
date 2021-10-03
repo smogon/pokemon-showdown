@@ -3,6 +3,7 @@
 const {transform} = require("sucrase");
 const fs = require("fs");
 const path = require("path");
+const child_process = require("child_process");
 
 let force = false;
 
@@ -112,7 +113,7 @@ function sucrase(src, out, opts, excludeDirs = []) {
 		if (!force && !needsSucrase(src, out) && src !== "./config") {
 			return false;
 		}
-	} catch (e) {}
+	} catch {}
 	const sucraseOptions = {
 		transforms: ["typescript", "imports"],
 		enableLegacyTypeScriptModuleInterop: true,
@@ -190,7 +191,7 @@ function copyOverDataJSON(file) {
 	});
 }
 
-exports.transpile = (doForce) => {
+exports.transpile = (doForce, decl) => {
 	if (doForce) force = true;
 	if (sucrase('./config', './.config-dist')) {
 		replace('.config-dist', [
@@ -206,7 +207,7 @@ exports.transpile = (doForce) => {
 
 	if (sucrase('./sim', './.sim-dist')) {
 		replace('.sim-dist', [
-			{regex: /(require\(.*?)\/(lib|data)/g, replace: `$1/.$2-dist`},
+			{regex: /(require\(.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
 		]);
 	}
 
@@ -220,15 +221,9 @@ exports.transpile = (doForce) => {
 
 	sucrase('./translations', './.translations-dist');
 
-	if (sucrase('./tools/set-import', './tools/set-import', null, ['sets'])) {
-		replace('./tools/set-import/importer.js', [
-			{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-		]);
-	}
-
-	if (sucrase('./tools/modlog', './tools/modlog')) {
-		replace('./tools/modlog/converter.js', [
-			{regex: /(require\(.*?)(server|lib)/g, replace: `$1.$2-dist`},
+	if (sucrase('./tools', './tools', null, ['.', 'sets', 'simulate'])) {
+		replace('tools', [
+			{regex: /(require\(.*?)(lib|sim|server)/g, replace: `$1.$2-dist`},
 		]);
 	}
 
@@ -252,4 +247,19 @@ exports.transpile = (doForce) => {
 	copyOverDataJSON('mods/gen6/factory-sets.json');
 
 	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
+	if (decl) {
+		exports.buildDecls();
+	}
+};
+
+exports.buildDecls = () => {
+	try {
+		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, {stdio: 'inherit'});
+	} catch {}
+	for (const file of fs.readdirSync(`./.sim-dist/lib/`)) {
+		fs.renameSync(`./.sim-dist/lib/${file}`, `./.lib-dist/${file}`);
+	}
+	for (const file of fs.readdirSync(`./.sim-dist/sim/`)) {
+		fs.renameSync(`./.sim-dist/sim/${file}`, `./.sim-dist/${file}`);
+	}
 };

@@ -304,7 +304,7 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 		if (sigMove.flags['bullet']) details["&#10003; Bullet"] = "";
 		if (sigMove.flags['pulse']) details["&#10003; Pulse"] = "";
 		if (!sigMove.flags['protect'] && !/(ally|self)/i.test(sigMove.target)) details["&#10003; Bypasses Protect"] = "";
-		if (sigMove.flags['authentic']) details["&#10003; Bypasses Substitutes"] = "";
+		if (sigMove.flags['bypasssub']) details["&#10003; Bypasses Substitutes"] = "";
 		if (sigMove.flags['defrost']) details["&#10003; Thaws user"] = "";
 		if (sigMove.flags['bite']) details["&#10003; Bite"] = "";
 		if (sigMove.flags['punch']) details["&#10003; Punch"] = "";
@@ -609,23 +609,20 @@ export const commands: Chat.ChatCommands = {
 	randbats: 'randombattles',
 	randombattles(target, room, user) {
 		if (!this.runBroadcast()) return;
+		if (room?.battle?.format.includes('nodmax')) return this.parse(`/randombattlenodmax ${target}`);
+		if (room?.battle?.format.includes('doubles')) return this.parse(`/randomdoublesbattle ${target}`);
+
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
-		let dex = Dex;
-		let isLetsGo = false;
-		if (args[1] && toID(args[1]) in Dex.dexes) {
-			dex = Dex.dexes[toID(args[1])];
-			if (toID(args[1]) === 'letsgo') isLetsGo = true;
-		} else if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-			if (format.mod === 'letsgo') isLetsGo = true;
-		}
+
+		const {dex} = this.splitFormat(target, true);
+		const isLetsGo = (dex.currentMod === 'gen7letsgo');
+
 		const species = dex.species.get(args[0]);
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		let formatName = dex.formats.get(`gen${dex.gen}randombattle`).name;
+		let formatName = dex.formats.get(`gen${dex.gen}${isLetsGo ? 'letsgo' : ''}randombattle`).name;
 
 		const movesets = [];
 		if (dex.gen === 1) {
@@ -650,7 +647,11 @@ export const commands: Chat.ChatCommands = {
 				if (!pokemon.randomBattleMoves || pokemon.isNonstandard === 'Future') continue;
 				const randomMoves = pokemon.randomBattleMoves.slice();
 				const m = randomMoves.sort().map(formatMove);
-				movesets.push(`<span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:</span><br />${m.join(`, `)}`);
+				movesets.push(
+					`<details${!movesets.length ? ' open' : ''}>` +
+					`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:<span style="color:#999999;"></summary>` +
+					`${m.join(`, `)}</details>`
+				);
 			}
 		}
 
@@ -668,44 +669,30 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randomdoublesbattle`);
-		let dex = Dex;
-		if (args[1] && toID(args[1]) in Dex.dexes) {
-			dex = Dex.dexes[toID(args[1])];
-		} else if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-		}
-		if (parseInt(toID(args[1])[3]) < 4) {
-			if (room?.battle) {
-				const format = Dex.formats.get(room.battle.format);
-				dex = Dex.mod(format.mod);
-			} else {
-				return this.parse(`/help randomdoublesbattle`);
-			}
-		}
-		let species = dex.species.get(args[0]);
+
+		const {dex} = this.splitFormat(target, true);
+		if (dex.gen < 4) return this.parse(`/help randomdoublesbattle`);
+
+		const species = dex.species.get(args[0]);
 		const formatName = dex.gen > 6 ? dex.formats.get(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
 			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
 				'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		let randomMoves = species.randomDoubleBattleMoves;
-		if (!randomMoves) {
-			const gmaxSpecies = dex.species.get(`${args[0]}gmax`);
-			if (!gmaxSpecies.exists || !gmaxSpecies.randomDoubleBattleMoves) {
-				return this.errorReply(`Error: No doubles moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
-			}
-			species = gmaxSpecies;
-			randomMoves = gmaxSpecies.randomDoubleBattleMoves;
+
+		const setsToCheck = [species];
+		if (dex.gen > 7) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
+		if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
+
+		const movesets = [];
+		for (const pokemon of setsToCheck) {
+			if (!pokemon.randomDoubleBattleMoves) continue;
+			const moves: string[] = [...pokemon.randomDoubleBattleMoves];
+			const m = moves.sort().map(formatMove);
+			movesets.push(`<span style="color:#999999;">Doubles moves for ${pokemon.name} in ${formatName}:</span><br />${m.join(`, `)}`);
 		}
-		const moves: string[] = [];
-		// Done because species.randomDoubleBattleMoves is readonly
-		for (const move of randomMoves) {
-			moves.push(move);
-		}
-		const m = moves.sort().map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${species.name} in ${formatName}:</span><br />${m.join(`, `)}`);
+		this.sendReplyBox(movesets.join('<hr />'));
 	},
 	randomdoublesbattlehelp: [
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,
@@ -714,7 +701,7 @@ export const commands: Chat.ChatCommands = {
 	randsnodmax: 'randombattlenodmax',
 	randombattlenodmax(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!target) return this.parse(`/help randombattlenodynamax`);
+		if (!target) return this.parse(`/help randombattlenodmax`);
 
 		const dex = Dex.forFormat('gen8randombattlenodmax');
 		let species = dex.species.get(target);

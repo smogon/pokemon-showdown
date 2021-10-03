@@ -22,11 +22,55 @@ function build() {
 	built = true;
 }
 
-try {
-	require.resolve('./.sim-dist/dex');
-} catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
-	build();
+function readTeam(stream) {
+	return stream.readLine().then(line => {
+		if (line.startsWith('[') || line.includes('|')) return line;
+		return stream.readAll().then(all => (line + '\n' + all));
+	});
+}
+
+
+function installDependencies() {
+	console.log(`Installing dependencies...`);
+	require('child_process').execSync('npm install --production', {stdio: 'inherit'});
+}
+
+function registerTSNode() {
+	require('ts-node').register({project: './tsconfig.json', files: true, transpileOnly: true, transpiler: 'ts-node/transpilers/swc-experimental'});
+}
+
+// enable require()ing TypeScript files
+function setupTSNode() {
+	try {
+		registerTSNode();
+	} catch (e) {
+		installDependencies();
+		registerTSNode();
+	}
+}
+
+function ensureSucraseIsInstalled() {
+	try {
+		const sucraseVersion = require('sucrase').getVersion().split('.');
+		if (
+			parseInt(sucraseVersion[0]) < 3 ||
+			(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 12)
+		) {
+			throw new Error("Sucrase version too old");
+		}
+	} catch (e) {
+		installDependencies();
+	}
+}
+
+function sucraseBuild() {
+	ensureSucraseIsInstalled();
+	try {
+		require.resolve('./.sim-dist/dex');
+	} catch (err) {
+		if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+		build();
+	}
 }
 
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
@@ -36,9 +80,8 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// when launching with this file the same way app.js normally allows, e.g. to
 	// host on port 9000:
 	// $ ./pokemon-showdown 9000
-
-	if (!built) build();
-	require('module')._load('./.server-dist', module, true);
+	setupTSNode();
+	require('module')._load('./server', module, true);
 } else switch (process.argv[2]) {
 	case 'help':
 	case 'h':
@@ -68,16 +111,17 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
 		console.log('  Protocol is documented in ./.sim-dist/README.md');
 		console.log('');
-		console.log('pokemon-showdown unpack-team');
+		console.log('pokemon-showdown json-team');
 		console.log('');
-		console.log('  Reads a team from stdin, writes the unpacked JSON to stdout');
+		console.log('  Reads a team in any format from stdin, writes the unpacked JSON to stdout');
 		console.log('');
 		console.log('pokemon-showdown pack-team');
 		console.log('');
-		console.log('  Reads a JSON team from stdin, writes the packed team to stdout');
-		console.log('  NOTE for all team-processing functions: We can only handle JSON teams');
-		console.log('  and packed teams; the PS server is incapable of processing exported');
-		console.log('  teams.');
+		console.log('  Reads a team in any format from stdin, writes the packed team to stdout');
+		console.log('');
+		console.log('pokemon-showdown export-team');
+		console.log('');
+		console.log('  Reads a team in any format from stdin, writes the exported (human-readable) team to stdout');
 		console.log('');
 		console.log('pokemon-showdown help');
 		console.log('');
@@ -86,15 +130,13 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'start':
 		{
 			process.argv.splice(2, 1);
-			if (process.argv.includes('--skip-build')) {
-				built = true;
-			}
-			if (!built) build();
-			require('module')._load('./.server-dist', module, true);
+			setupTSNode();
+			require('module')._load('./server', module, true);
 			break;
 		}
 	case 'generate-team':
 		{
+			sucraseBuild();
 			var Teams = require('./.sim-dist/teams').Teams;
 			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
 			console.log(Teams.pack(Teams.generate(process.argv[3], {seed})));
@@ -102,15 +144,16 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'validate-team':
 		{
+			sucraseBuild();
 			var Teams = require('./.sim-dist/teams').Teams;
 			var TeamValidator = require('./.sim-dist/team-validator').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
-			stdin.readLine().then(function (textTeam) {
+			readTeam(stdin).then(function (textTeam) {
 				try {
-					var team = Teams.unpack(textTeam);
+					var team = Teams.import(textTeam);
 					var result = validator.validateTeam(team);
 					if (result) {
 						console.error(result.join('\n'));
@@ -126,6 +169,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'simulate-battle':
 		{
+			sucraseBuild();
 			var BattleTextStream = require('./.sim-dist/battle-stream').BattleTextStream;
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
@@ -175,14 +219,16 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		}
 		break;
 	case 'unpack-team':
+	case 'json-team':
 		{
+			sucraseBuild();
 			var Teams = require('./.sim-dist/teams').Teams;
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
-			stdin.readLine().then(function (packedTeam) {
+			readTeam(stdin).then(function (team) {
 				try {
-					var unpackedTeam = Teams.unpack(packedTeam);
+					var unpackedTeam = Teams.unpack(Teams.import(team));
 					console.log(JSON.stringify(unpackedTeam));
 					process.exit(0);
 				} catch (e) {
@@ -194,14 +240,34 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'pack-team':
 		{
+			sucraseBuild();
 			var Teams = require('./.sim-dist/teams').Teams;
 			var Streams = require('./.lib-dist/streams');
 			var stdin = Streams.stdin();
 
-			stdin.readLine().then(function (unpackedTeam) {
+			readTeam(stdin).then(function (team) {
 				try {
-					var packedTeam = Teams.pack(JSON.parse(unpackedTeam));
+					var packedTeam = Teams.pack(Teams.import(team));
 					console.log(packedTeam);
+					process.exit(0);
+				} catch (e) {
+					console.error(e);
+					process.exit(1);
+				}
+			});
+		}
+		break;
+	case 'export-team':
+		{
+			sucraseBuild();
+			var Teams = require('./.sim-dist/teams').Teams;
+			var Streams = require('./.lib-dist/streams');
+			var stdin = Streams.stdin();
+
+			readTeam(stdin).then(function (team) {
+				try {
+					var exportedTeam = Teams.export(Teams.import(team));
+					console.log(exportedTeam);
 					process.exit(0);
 				} catch (e) {
 					console.error(e);

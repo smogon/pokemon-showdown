@@ -170,7 +170,7 @@ export class YoutubeInterface {
 			raw = await Net(`${ROOT}videos`).get({
 				query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
 			});
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Failed to retrieve video data: ${e.message}.`);
 		}
 		const res = JSON.parse(raw);
@@ -336,7 +336,7 @@ export const Twitch = new class {
 				},
 				query: {query: channel},
 			});
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Error retrieving twitch channel: ${e.message}`);
 		}
 		const data = JSON.parse(res);
@@ -503,9 +503,7 @@ export class TwitchStream extends Rooms.RoomGame {
 	}
 	getStreamDisplay() {
 		let buf = `<p style="background: #6441a5; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
-		buf += `<br /><br /><strong>Watching ${this.data.display_name}</strong><br />`;
-		buf += `<twitch src="${this.data.url}">`;
-		buf += `<br />`.repeat(4);
+		buf += `<twitch src="${this.data.url}" width="600" height="330" />`;
 		return buf;
 	}
 }

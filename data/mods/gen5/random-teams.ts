@@ -461,6 +461,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const ivs: SparseStatsTable = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		const types = new Set(species.types);
 		const abilities = new Set(Object.values(species.abilities));
+		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
@@ -486,6 +487,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 			while (moves.size < 4 && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
+				if (moveid.startsWith('hiddenpower')) {
+					if (hasHiddenPower) {
+						continue;
+					}
+					hasHiddenPower = true;
+				}
 				moves.add(moveid);
 			}
 
@@ -542,11 +549,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					cull = true;
 				}
 
-				const runEnforcementChecker = (checkerName: string) => (
-					this.moveEnforcementCheckers[checkerName]?.(
+				const runEnforcementChecker = (checkerName: string) => {
+					if (!this.moveEnforcementCheckers[checkerName]) return false;
+					return this.moveEnforcementCheckers[checkerName](
 						movePool, moves, abilities, types, counter, species as Species, teamDetails
-					)
-				);
+					);
+				};
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
 					!cull &&
@@ -613,16 +621,17 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				}
 
 				// Remove rejected moves from the move list
+				const isHP = moveid.startsWith('hiddenpower');
 				if (
 					cull &&
-					(movePool.length - availableHP || availableHP && (moveid.startsWith('hiddenpower') || !hasHiddenPower))
+					(movePool.length - availableHP || availableHP && (isHP || !hasHiddenPower))
 				) {
 					if (
 						move.category !== 'Status' && !move.damage && !move.flags.charge &&
-						(moveid !== 'hiddenpower' || !availableHP)
+						(!isHP || !availableHP)
 					) rejectedPool.push(moveid);
 					moves.delete(moveid);
-					if (moveid.startsWith('hiddenpower')) hasHiddenPower = false;
+					if (isHP) hasHiddenPower = false;
 					break;
 				}
 				if (cull && rejectedPool.length) {

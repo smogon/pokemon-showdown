@@ -32,22 +32,34 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	choiceband: {
 		inherit: true,
-		onStart() { },
+		onStart() {},
+		onModifyMove() {},
+		onAfterMove(pokemon) {
+			pokemon.addVolatile('choicelock');
+		},
 	},
 	choicescarf: {
 		inherit: true,
-		onStart() { },
+		onStart() {},
+		onModifyMove() {},
+		onAfterMove(pokemon) {
+			pokemon.addVolatile('choicelock');
+		},
 	},
 	choicespecs: {
 		inherit: true,
-		onStart() { },
+		onStart() {},
+		onModifyMove() {},
+		onAfterMove(pokemon) {
+			pokemon.addVolatile('choicelock');
+		},
 	},
 	chopleberry: {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.causedCrashDamage) return damage;
 			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'];
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'];
 				if (hitSub) return;
 
 				if (target.eatItem()) {
@@ -180,7 +192,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			return basePower;
 		},
 		onModifyDamagePhase2(damage, source, target, move) {
-			return damage * 1.3;
+			if (!move.isFutureMove) return damage * 1.3;
 		},
 		condition: {
 			duration: 1,
@@ -194,12 +206,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyAtk(atk, pokemon) {
-			if (pokemon.species.name === 'Pikachu') {
-				return this.chainModify(2);
-			}
-		},
-		onModifySpA(spa, pokemon) {
+		onModifyAtk() {},
+		onModifySpA() {},
+		onBasePower(basePower, pokemon) {
 			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
 			}

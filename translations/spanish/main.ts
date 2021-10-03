@@ -16,7 +16,8 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Rangos Globales</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Pueden utilizar comandos con ! como !groups",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Lo mismo que arriba y también pueden dar locks y revisar las alts",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Supervisan las salas de una sección en particular",
+		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Como los Voice, y también pueden dar locks y revisar las alts",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Lo mismo que arriba y además pueden expulsar globalmente del servidor",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Igual que un moderador, pero el símbolo identifica que es un Bot",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Pueden hacer cualquier cosa, como cambiar lo que dice este mensaje",
@@ -128,6 +129,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "Tu mensaje contiene palabras prohíbidas en esta sala.",
 		"You can't send the same message again so soon.": "No puedes mandar el mismo mensaje tan pronto.",
@@ -143,6 +145,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "¡Ya estás bloqueando solicitudes de batalla!",
 		"You are already available for challenges!": "¡Ya estás disponible para recibir solicitudes de batalla!",
 		"You are available for challenges from now on.": "Estás disponible para recibir solicitudes de batalla de ahora en adelante.",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "FAQ del Staff",
 		"You cannot broadcast all FAQs at once.": "No puedes mostrar todos los FAQs a la vez.",

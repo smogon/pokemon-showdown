@@ -15,14 +15,14 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Poke
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
-	readonly effectType: 'Ability';
+	declare readonly effectType: 'Ability';
 
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
 	readonly suppressWeather: boolean;
-	readonly condition?: ConditionData;
-	readonly isPermanent?: boolean;
-	readonly isBreakable?: boolean;
+	declare readonly condition?: ConditionData;
+	declare readonly isPermanent?: boolean;
+	declare readonly isBreakable?: boolean;
 
 	constructor(data: AnyObject) {
 		super(data);
@@ -83,10 +83,10 @@ export class DexAbilities {
 			if (ability.gen > this.dex.gen) {
 				(ability as any).isNonstandard = 'Future';
 			}
-			if (this.dex.currentMod === 'letsgo' && ability.id !== 'noability') {
+			if (this.dex.currentMod === 'gen7letsgo' && ability.id !== 'noability') {
 				(ability as any).isNonstandard = 'Past';
 			}
-			if ((this.dex.currentMod === 'letsgo' || this.dex.gen <= 2) && ability.id === 'noability') {
+			if ((this.dex.currentMod === 'gen7letsgo' || this.dex.gen <= 2) && ability.id === 'noability') {
 				(ability as any).isNonstandard = null;
 			}
 		} else {

@@ -30,31 +30,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	destinybond: {
 		inherit: true,
-		condition: {
-			onStart(pokemon) {
-				if (pokemon.alliesAndSelf().filter(mon => !mon.status).length === 1) {
-					this.add('-fail', pokemon);
-					this.hint("In Pokemon Stadium 2, Destiny Bond fails if it is being used by your last Pokemon.");
-				} else {
-					this.add('-singlemove', pokemon, 'Destiny Bond');
-				}
-			},
-			onFaint(target, source, effect) {
-				if (!source || !effect || target.isAlly(source)) return;
-				if (effect.effectType === 'Move' && !effect.isFutureMove) {
-					this.add('-activate', target, 'move: Destiny Bond');
-					source.faint();
-				}
-			},
-			onBeforeMovePriority: -1,
-			onBeforeMove(pokemon, target, move) {
-				if (move.id === 'destinybond') return;
-				this.debug('removing Destiny Bond before attack');
-				pokemon.removeVolatile('destinybond');
-			},
-			onMoveAborted(pokemon, target, move) {
-				pokemon.removeVolatile('destinybond');
-			},
+		onPrepareHit(pokemon) {
+			if (pokemon.side.pokemonLeft === 1) {
+				this.hint("In Pokemon Stadium 2, Destiny Bond fails if it is being used by your last Pokemon.");
+				return false;
+			}
 		},
 	},
 	/**
@@ -69,37 +49,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
-				for (const id of Object.keys(pokemon.volatiles)) {
-					pokemon.removeVolatile(id);
-					this.add('-end', pokemon, id);
-				}
+				pokemon.removeVolatile('brnattackdrop');
+				pokemon.removeVolatile('parspeeddrop');
 			}
 		},
 	},
 	perishsong: {
 		inherit: true,
-		onHitField(target, source, move) {
-			let result = false;
-			let message = false;
-			if (source.alliesAndSelf().filter(ally => !ally.status).length === 1) {
-				this.add('-fail', source);
+		onPrepareHit(pokemon) {
+			if (pokemon.side.pokemonLeft === 1) {
 				this.hint("In Pokemon Stadium 2, Perish Song fails if it is being used by your last Pokemon.");
-			} else {
-				for (const pokemon of this.getAllActive()) {
-					if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
-						this.add('-miss', source, pokemon);
-						result = true;
-					} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
-						result = true;
-					} else if (!pokemon.volatiles['perishsong']) {
-						pokemon.addVolatile('perishsong');
-						this.add('-start', pokemon, 'perish3', '[silent]');
-						result = true;
-						message = true;
-					}
-				}
-				if (!result) return false;
-				if (message) this.add('-fieldactivate', 'move: Perish Song');
+				return false;
 			}
 		},
 	},

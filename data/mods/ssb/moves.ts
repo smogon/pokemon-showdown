@@ -434,7 +434,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 1,
 		noPPBoosts: true,
-		flags: {authentic: 1, reflectable: 1},
+		flags: {bypasssub: 1, reflectable: 1},
 		priority: 3,
 		onTry(pokemon, target) {
 			if (pokemon.activeMoveActions > 1) {
@@ -517,7 +517,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {authentic: 1},
+		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -692,7 +692,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.accuracy = true;
 				move.target = "self";
 				delete move.flags.protect;
-				move.flags.authentic = 1;
+				move.flags.bypasssub = 1;
 			}
 		},
 		onHit(target, pokemon) {
@@ -702,52 +702,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-	},
-
-	// Averardo
-	hatofwisdom: {
-		accuracy: 100,
-		basePower: 110,
-		category: "Special",
-		desc: "The user switches out, and this move deals damage one turn after it is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Future Sight, or Doom Desire is already in effect for the target's position.",
-		shortDesc: "Hits 1 turn after being used. User switches.",
-		name: "Hat of Wisdom",
-		gen: 8,
-		pp: 15,
-		priority: 0,
-		flags: {},
-		ignoreImmunity: true,
-		isFutureMove: true,
-		onTry(source, target) {
-			this.attrLastMove('[still]');
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-			this.add('-anim', source, 'Calm Mind', target);
-			this.add('-anim', source, 'Teleport', target);
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 2,
-				move: 'hatofwisdom',
-				source: source,
-				moveData: {
-					id: 'hatofwisdom',
-					name: "Hat of Wisdom",
-					accuracy: 100,
-					basePower: 110,
-					category: "Special",
-					priority: 0,
-					flags: {},
-					ignoreImmunity: false,
-					effectType: 'Move',
-					isFutureMove: true,
-					type: 'Psychic',
-				},
-			});
-			this.add('-start', source, 'move: Hat of Wisdom');
-			source.switchFlag = 'hatofwisdom' as ID;
-			return this.NOT_FAIL;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Psychic",
 	},
 
 	// awa
@@ -1362,7 +1316,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -6,
-		flags: {protect: 1, sound: 1, authentic: 1, mirror: 1},
+		flags: {protect: 1, sound: 1, bypasssub: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1544,7 +1498,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -6,
-		flags: {authentic: 1, protect: 1, mirror: 1, sound: 1, reflectable: 1},
+		flags: {bypasssub: 1, protect: 1, mirror: 1, sound: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1576,7 +1530,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {authentic: 1, contact: 1, protect: 1, mirror: 1},
+		flags: {bypasssub: 1, contact: 1, protect: 1, mirror: 1},
 		gen: 8,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1740,7 +1694,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		ignoreAbility: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1826,7 +1780,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2848,6 +2802,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Lunala
+	hatofwisdom: {
+		accuracy: 100,
+		basePower: 110,
+		category: "Special",
+		desc: "The user switches out, and this move deals damage one turn after it is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Future Sight, or Doom Desire is already in effect for the target's position.",
+		shortDesc: "Hits 1 turn after being used. User switches.",
+		name: "Hat of Wisdom",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {},
+		ignoreImmunity: true,
+		isFutureMove: true,
+		onTry(source, target) {
+			this.attrLastMove('[still]');
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			this.add('-anim', source, 'Calm Mind', target);
+			this.add('-anim', source, 'Teleport', target);
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 2,
+				move: 'hatofwisdom',
+				source: source,
+				moveData: {
+					id: 'hatofwisdom',
+					name: "Hat of Wisdom",
+					accuracy: 100,
+					basePower: 110,
+					category: "Special",
+					priority: 0,
+					flags: {},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Psychic',
+				},
+			});
+			this.add('-start', source, 'move: Hat of Wisdom');
+			source.switchFlag = 'hatofwisdom' as ID;
+			return this.NOT_FAIL;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
+
 	// Mad Monty ¾°
 	callamaty: {
 		accuracy: 100,
@@ -2921,7 +2921,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {reflectable: 1, mirror: 1, sound: 1, authentic: 1, heal: 1},
+		flags: {reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, heal: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3588,7 +3588,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3675,69 +3675,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Ground",
-	},
-
-	// quadrophenic
-	triplethreat: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Physical",
-		desc: "Has a 40, 60, or 100 Base Power and a 10%, 25%, or 40% chance to apply any non-volatile status aside from freeze; the status chance and base power increase for each consecutive hit up to 3.",
-		shortDesc: "Chance to random status. Chance&BP+ per use.",
-		name: "Triple Threat",
-		gen: 8,
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('triplethreat');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Tri Attack', target);
-		},
-		secondary: {
-			chance: 10,
-			onHit(target, source) {
-				const hax = this.sample(['slp', 'brn', 'par', 'psn', 'tox']);
-				target.trySetStatus(hax, source);
-			},
-		},
-		condition: {
-			onStart(pokemon) {
-				this.effectState.numConsecutive = 0;
-				this.effectState.lastMove = 'triplethreat';
-			},
-			onTryMovePriority: -2,
-			onTryMove(pokemon, target, move) {
-				if (move.id !== 'triplethreat') {
-					pokemon.removeVolatile('triplethreat');
-					return;
-				}
-				if (this.effectState.lastMove === move.id) {
-					this.effectState.numConsecutive++;
-				} else {
-					this.effectState.numConsecutive = 0;
-				}
-				if (this.effectState.numConsecutive >= 3) this.effectState.numConsecutive = 0;
-				this.effectState.lastMove = move.id;
-			},
-			onModifyMove(move) {
-				if (move.secondaries && move.id === 'triplethreat') {
-					const bpModif = [40, 60, 100];
-					const secModif = [10, 25, 40];
-					const numConsecutive = this.effectState.numConsecutive > 2 ? 2 : this.effectState.numConsecutive;
-					move.basePower = bpModif[numConsecutive];
-					for (const secondary of move.secondaries) {
-						if (secondary.chance) secondary.chance = secModif[numConsecutive];
-					}
-				}
-			},
-		},
-		target: "normal",
-		type: "Normal",
 	},
 
 	// Rabia
@@ -4144,7 +4081,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: -6,
-		flags: {reflectable: 1, protect: 1, sound: 1, authentic: 1},
+		flags: {reflectable: 1, protect: 1, sound: 1, bypasssub: 1},
 		forceSwitch: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -4167,7 +4104,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
-	// SectoniaServant
+	// Sectonia
 	homunculussvanity: {
 		accuracy: true,
 		basePower: 0,
@@ -4200,7 +4137,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				this.boost({def: 1, spd: 1}, source);
-				this.add(`c|${getName('SectoniaServant')}|Jelly baby ;w;`);
+				this.add(`c|${getName('Sectonia')}|Jelly baby ;w;`);
 			},
 		},
 		secondary: null,
@@ -4220,7 +4157,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {authentic: 1, protect: 1, reflectable: 1},
+		flags: {bypasssub: 1, protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4737,7 +4674,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: -7,
-		flags: {authentic: 1, protect: 1, reflectable: 1},
+		flags: {bypasssub: 1, protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4879,7 +4816,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},

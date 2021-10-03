@@ -16,7 +16,8 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>全服權限</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>全服信任用戶</strong> -可以使用!廣播指令，比如!groups，並可以在限制發言期間發言",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>全服見習管理</strong> - 同上，並可以鎖定用戶或查看他們的小號",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>分部頭領</strong> - 負責掌管一個分部的房間",
+		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>全服見習管理</strong> - 同信任用戶，並可以鎖定用戶或查看他們的小號 ",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>全服管理員</strong> - 同上，並可以將用戶從服務器封禁",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>全服機器人</strong> - 跟全服管理員一樣，隻不過是機器",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>全服總管</strong> - 可以在服務器做任何事，例如修改你現在看到的這條信息",
@@ -127,6 +128,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "發言內容包含了房間內禁止詞匯",
 		"You can't send the same message again so soon.": "同樣的句子不能及時發出",
@@ -142,6 +144,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "您已屏蔽挑戰請求",
 		"You are already available for challenges!": "您已能夠接收挑戰請求",
 		"You are available for challenges from now on.": "您從現在開始接收挑戰請求",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "管理FAQ",
 		"You cannot broadcast all FAQs at once.": "無法同時廣播所有FAQ",
