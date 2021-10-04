@@ -24,7 +24,10 @@ let transport: any;
  * to receive them.
  */
 export function crashlogger(
-	error: unknown, description: string, data: AnyObject | null = null
+	error: unknown,
+	description: string,
+	data: AnyObject | null = null,
+	emailConfig: AnyObject | null = null,
 ): string | null {
 	const datenow = Date.now();
 
@@ -45,7 +48,8 @@ export function crashlogger(
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 
-	if (Config.crashguardemail && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
+	const emailOpts = emailConfig || Config.crashguardemail;
+	if (emailOpts && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
 		lastCrashLog = datenow;
 
 		if (!transport) {
@@ -64,7 +68,7 @@ export function crashlogger(
 			text += `again with this stack trace:\n${stack}`;
 		} else {
 			try {
-				transport = require('nodemailer').createTransport(Config.crashguardemail.options);
+				transport = require('nodemailer').createTransport(emailOpts.options);
 			} catch {
 				throw new Error("Failed to start nodemailer; are you sure you've configured Config.crashguardemail correctly?");
 			}
@@ -73,9 +77,9 @@ export function crashlogger(
 		}
 
 		transport.sendMail({
-			from: Config.crashguardemail.from,
-			to: Config.crashguardemail.to,
-			subject: Config.crashguardemail.subject,
+			from: emailOpts.from,
+			to: emailOpts.to,
+			subject: emailOpts.subject,
 			text,
 		}, (err: Error | null) => {
 			if (err) console.error(`Error sending email: ${err}`);
