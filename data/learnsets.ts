@@ -46376,7 +46376,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			coaching: ["8T"],
 			confide: ["7M", "6M"],
 			corrosivegas: ["8T"],
-			covet: ["7T", "6T", "5T"],
 			crosspoison: ["8M"],
 			cut: ["6M", "5M", "4M"],
 			darkpulse: ["8M", "7M", "6M", "5T", "4M"],
