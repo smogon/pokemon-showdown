@@ -644,7 +644,7 @@ export const Formats: FormatList = [
 			const item = this.dex.abilities.get(set.item);
 			if (!item.exists) return this.validateSet(set, teamHas) || [];
 			const problems = [];
-			if (item.isNonstandard) {
+			if (item.isNonstandard && !this.ruleTable.has(`+ability:${item.id}`)) {
 				problems.push(`${item.name} is banned.`);
 			}
 			if (ability.id === item.id) {
@@ -1855,8 +1855,8 @@ export const Formats: FormatList = [
 			'Calyrex-Ice', 'Dialga', 'Dragapult', 'Dragonite', 'Eternatus', 'Genesect', 'Gengar', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Kartana', 'Keldeo', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Therian', 'Lugia', 'Lunala',
 			'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza',
-			'Regigigas', 'Reshiram', 'Spectrier', 'Tapu Koko', 'Urshifu', 'Urshifu-Rapid-Strike', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Zygarde-Base', 'Zygarde-Complete',
+			'Regigigas', 'Reshiram', 'Tapu Koko', 'Thundurus', 'Thundurus-Therian', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Zeraora', 'Zygarde-Base', 'Zygarde-Complete',
 			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Bolt Beak', 'Boomburst', 'Clangorous Soul', 'Double Iron Bash',
 			'Extreme Speed', 'Fishious Rend', 'Geomancy', 'Glacial Lance', 'Lovely Kiss', 'Precipice Blades', 'Shell Smash',
 			'Shift Gear', 'Sleep Powder', 'Spore', 'Thousand Arrows', 'Transform', 'V-create', 'Wicked Blow',
