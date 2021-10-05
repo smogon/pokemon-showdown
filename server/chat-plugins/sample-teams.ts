@@ -19,16 +19,21 @@ interface SampleTeamsteamData {
 	};
 }
 
-export const teamData: SampleTeamsteamData = JSON.parse(
-	FS(SAMPLE_TEAMS).readIfExistsSync() || `{"whitelist": {}, "teams": {}}`
-);
+export const teamData: SampleTeamsteamData = (() => {
+	try {
+		return JSON.parse(FS(SAMPLE_TEAMS).readIfExistsSync());
+	} catch {
+		return {
+			whitelist: {},
+			teams: {},
+		};
+	}
+})();
 
 function save() {
 	FS(SAMPLE_TEAMS).writeUpdate(() => JSON.stringify(teamData));
 }
 
-if (!teamData.whitelist) teamData.whitelist = {};
-if (!teamData.teams) teamData.teams = {};
 for (const formatid in teamData.teams) {
 	if (!teamData.teams[formatid].uncategorized) teamData.teams[formatid].uncategorized = {};
 }
@@ -419,6 +424,8 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<button style="float:right" class="button" name="send" value="/j view-sampleteams-view${query.join('-') ? `-${query.join('-')}` : ``}"><i class="fa fa-refresh"></i> Refresh</button>`;
 			buf += `<center><h2>Sample Teams</h2></center><hr />`;
+			const q0Teams = teamData.teams[query[0]];
+			const q0TeamKeys = Object.keys(q0Teams);
 			if (!query[0]) {
 				const formats = Object.keys(teamData.teams);
 				if (!formats.length) return `${buf}<p>No teams found.</p></div>`;
@@ -428,9 +435,8 @@ export const pages: Chat.PageTable = {
 					buf += `<li>${formatFakeButton(`view-sampleteams-view-${formatid}`, `${SampleTeams.getFormatName(formatid)}`)}</button></li>`;
 				}
 				buf += `</ul>`;
-			} else if (!teamData.teams[query[0]] || !Object.keys(teamData.teams[query[0]]).length ||
-				(Object.keys(teamData.teams[query[0]].uncategorized).length &&
-					!Object.keys(teamData.teams[query[0]]).filter(x => x !== 'uncategorized').length)) {
+			} else if (!q0Teams || !q0TeamKeys.length ||
+				(!Object.keys(q0Teams.uncategorized).length && !q0TeamKeys.filter(x => x !== 'uncategorized').length)) {
 				const name = Dex.formats.get(query[0]).exists ? Dex.formats.get(query[0]).name : query[0];
 				return `${buf}<p>No teams for ${name} were found.</p></div>`;
 			} else if (!query[1] || (!SampleTeams.findCategory(query[0], query[1]) && query[1] !== 'allteams')) {
