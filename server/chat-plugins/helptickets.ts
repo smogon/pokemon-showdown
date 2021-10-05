@@ -575,10 +575,19 @@ export class HelpTicket extends Rooms.RoomGame {
 		const userid = toID(user);
 		const userObj = Users.get(user);
 		if (userObj) user = userObj;
+		let duration = Date.now() + TICKET_BAN_DURATION;
+		const punishments = Punishments.userids.get(userid) || [];
+		// we're not gonna grab by IP because we don't wanna risk nuking schools
+		for (const punishment of punishments) {
+			// find the punishment with the highest expire time, take that time instead
+			if (punishment.expireTime > duration) {
+				duration = punishment.expireTime;
+			}
+		}
 		return Punishments.punish(user, {
 			type: 'TICKETBAN',
 			id: userid,
-			expireTime: Date.now() + TICKET_BAN_DURATION,
+			expireTime: duration,
 			reason,
 		}, false);
 	}
