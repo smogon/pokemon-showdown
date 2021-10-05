@@ -428,21 +428,21 @@ export const pages: Chat.PageTable = {
 					buf += `<li>${formatFakeButton(`view-sampleteams-view-${formatid}`, `${SampleTeams.getFormatName(formatid)}`)}</button></li>`;
 				}
 				buf += `</ul>`;
-			} else if (!teamData.teams[toID(query[0])] || !Object.keys(teamData.teams[toID(query[0])]).length ||
-				(Object.keys(teamData.teams[toID(query[0])].uncategorized).length &&
-					!Object.keys(teamData.teams[toID(query[0])]).filter(x => x !== 'uncategorized').length)) {
-				const name = Dex.formats.get(query[0]).exists ? Dex.formats.get(query[0]).name : toID(query[0]);
+			} else if (!teamData.teams[query[0]] || !Object.keys(teamData.teams[query[0]]).length ||
+				(Object.keys(teamData.teams[query[0]].uncategorized).length &&
+					!Object.keys(teamData.teams[query[0]]).filter(x => x !== 'uncategorized').length)) {
+				const name = Dex.formats.get(query[0]).exists ? Dex.formats.get(query[0]).name : query[0];
 				return `${buf}<p>No teams for ${name} were found.</p></div>`;
 			} else if (!query[1] || (!SampleTeams.findCategory(query[0], query[1]) && query[1] !== 'allteams')) {
 				buf += `<h3>Pick a category</h3><ul>`;
-				for (const category of Object.keys(teamData.teams[toID(query[0])])) {
+				for (const category of Object.keys(teamData.teams[query[0]])) {
 					buf += `<li><a class="button" style="text-decoration:inherit;color:inherit" target="replace" href="view-sampleteams-view-${query[0]}-${toID(category)}">${category}</button></li>`;
 				}
 				buf += `<li><a class="button" style="text-decoration:inherit;color:inherit" target="replace" href="view-sampleteams-view-${query[0]}-allteams">ALL</button></li></ul>`;
 			} else if (query[1] === 'allteams') {
 				buf += `<h3>All teams for ${SampleTeams.getFormatName(query[0])}</h3>`;
-				for (const categoryName in teamData.teams[toID(query[0])]) {
-					const category = teamData.teams[toID(query[0])][categoryName];
+				for (const categoryName in teamData.teams[query[0]]) {
+					const category = teamData.teams[query[0]][categoryName];
 					if (!Object.keys(category).length) continue;
 					buf += `<details><summary><h4 style="display:inline">${categoryName}</h4></summary>`;
 					for (const teamName in category) {
@@ -453,8 +453,8 @@ export const pages: Chat.PageTable = {
 						buf += SampleTeams.formatTeam(teamName, team);
 					}
 					buf += `</details>`;
-					const index = Object.keys(teamData.teams[toID(query[0])]).indexOf(categoryName);
-					if (index !== Object.keys(teamData.teams[toID(query[0])]).length - 1) buf += `<hr />`;
+					const index = Object.keys(teamData.teams[query[0]]).indexOf(categoryName);
+					if (index !== Object.keys(teamData.teams[query[0]]).length - 1) buf += `<hr />`;
 				}
 			} else if (SampleTeams.findCategory(query[0], query[1])) {
 				const categoryName = SampleTeams.findCategory(query[0], query[1])!;
