@@ -134,6 +134,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] RU'],
 		banlist: ['RU', 'NUBL', 'Drizzle', 'Drought', 'Snow Warning'],
+		unbanlist: ['Snorlax'],
 	},
 	{
 		name: "[Gen 8] PU",
@@ -144,7 +145,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] NU'],
-		banlist: ['NU', 'PUBL'],
+		banlist: ['NU', 'PUBL', 'Snorlax'],
 	},
 	{
 		name: "[Gen 8] LC",
