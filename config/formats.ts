@@ -637,7 +637,7 @@ export const Formats: FormatList = [
 		restricted: [
 			'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out',
 			'Intrepid Sword', 'Libero', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Simple', 'Speed Boost',
-			'Stakeout', 'Water Bubble', 'Wonder Guard', 'Emergency Exit + Regenerator', 'Wimp Out + Regenerator',
+			'Stakeout', 'Unaware', 'Water Bubble', 'Wonder Guard', 'Emergency Exit + Regenerator', 'Wimp Out + Regenerator',
 		],
 		validateSet(set, teamHas) {
 			const ability = this.dex.abilities.get(set.ability);
