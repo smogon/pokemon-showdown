@@ -8,7 +8,7 @@ import {FS, Utils} from "../../lib";
 
 const SAMPLE_TEAMS = 'config/chat-plugins/sample-teams.json';
 
-interface SampleTeamsFile {
+interface SampleTeamsteamData {
 	whitelist: {[formatid: string]: RoomID[]};
 	/** Teams are stored in the packed format */
 	teams: {
@@ -19,16 +19,18 @@ interface SampleTeamsFile {
 	};
 }
 
-const file: SampleTeamsFile = JSON.parse(FS(SAMPLE_TEAMS).readIfExistsSync() || `{"whitelist": {}, "teams": {}}`);
+const teamData: SampleTeamsteamData = JSON.parse(
+	FS(SAMPLE_TEAMS).readIfExistsSync() || `{"whitelist": {}, "teams": {}}`
+);
 
 function save() {
-	FS(SAMPLE_TEAMS).writeUpdate(() => JSON.stringify(file));
+	FS(SAMPLE_TEAMS).writeUpdate(() => JSON.stringify(teamData));
 }
 
-if (!file.whitelist) file.whitelist = {};
-if (!file.teams) file.teams = {};
-for (const formatid in file.teams) {
-	if (!file.teams[formatid].uncategorized) file.teams[formatid].uncategorized = {};
+if (!teamData.whitelist) teamData.whitelist = {};
+if (!teamData.teams) teamData.teams = {};
+for (const formatid in teamData.teams) {
+	if (!teamData.teams[formatid].uncategorized) teamData.teams[formatid].uncategorized = {};
 }
 save();
 
@@ -46,38 +48,39 @@ const SampleTeams = new class SampleTeams {
 		return matched;
 	}
 
+	isDevMod(user: User) {
+		return !!Rooms.get('development')?.auth.atLeast(user, '@');
+	}
+
 	checkPermissions(user: User, roomids: RoomID[]) {
 		// Give Development room mods access to help fix crashes
-		return this.isRoomStaff(user, roomids) || user.can('bypassall') || !!Rooms.get('development')?.auth.atLeast(user, '@');
+		return this.isRoomStaff(user, roomids) || user.can('bypassall') || this.isDevMod(user);
 	}
 
 	whitelistedRooms(formatid: string, names = false) {
 		formatid = this.sanitizeFormat(formatid);
-		if (!file.whitelist[formatid]?.length) return undefined;
-		if (names) {
-			return Utils.sortBy(file.whitelist[formatid], (x) => {
-				const room = Rooms.search(x);
-				if (!room) throw new Error(`Room ${x} not found`);
-				return room.title;
-			});
-		} else {
-			return Utils.sortBy(file.whitelist[formatid]);
-		}
+		if (!teamData.whitelist[formatid]?.length) return null;
+		return Utils.sortBy(teamData.whitelist[formatid], (x) => {
+			if (!names) return x;
+			const room = Rooms.search(x);
+			if (!room) throw new Error(`Room ${x} not found`);
+			return room.title;
+		});
 	}
 
 	whitelistRooms(formatids: string[], roomids: string[]) {
 		for (const unsanitizedFormatid of formatids) {
 			const formatid = this.sanitizeFormat(unsanitizedFormatid);
-			if (!file.whitelist[formatid]) file.whitelist[formatid] = [];
+			if (!teamData.whitelist[formatid]) teamData.whitelist[formatid] = [];
 			for (const roomid of roomids) {
 				const targetRoom = Rooms.search(roomid);
 				if (!targetRoom?.persist) {
 					throw new Chat.ErrorMessage(`Room ${roomid} not found. Check spelling?`);
 				}
-				if (file.whitelist[formatid].includes(targetRoom.roomid)) {
+				if (teamData.whitelist[formatid].includes(targetRoom.roomid)) {
 					throw new Chat.ErrorMessage(`Room ${targetRoom.title} is already added.`);
 				}
-				file.whitelist[formatid].push(targetRoom.roomid);
+				teamData.whitelist[formatid].push(targetRoom.roomid);
 				save();
 			}
 		}
@@ -88,13 +91,13 @@ const SampleTeams = new class SampleTeams {
 		formatid = toID(formatid);
 		const targetRoom = Rooms.search(roomid);
 		if (!targetRoom?.persist) throw new Chat.ErrorMessage(`Room ${roomid} not found. Check spelling?`);
-		if (!file.whitelist[formatid]?.length) throw new Chat.ErrorMessage(`No rooms are whitelisted for ${formatid}.`);
-		if (!file.whitelist[formatid].includes(targetRoom.roomid)) {
+		if (!teamData.whitelist[formatid]?.length) throw new Chat.ErrorMessage(`No rooms are whitelisted for ${formatid}.`);
+		if (!teamData.whitelist[formatid].includes(targetRoom.roomid)) {
 			throw new Chat.ErrorMessage(`Room ${targetRoom.title} isn't whitelisted.`);
 		}
-		const index = file.whitelist[formatid].indexOf(targetRoom.roomid);
-		file.whitelist[formatid].splice(index, 1);
-		if (!file.whitelist[formatid].length) delete file.whitelist[formatid];
+		const index = teamData.whitelist[formatid].indexOf(targetRoom.roomid);
+		teamData.whitelist[formatid].splice(index, 1);
+		if (!teamData.whitelist[formatid].length) delete teamData.whitelist[formatid];
 		save();
 	}
 
@@ -104,29 +107,29 @@ const SampleTeams = new class SampleTeams {
 			throw new Chat.ErrorMessage(`Format "${formatid.trim()}" not found. Check spelling?`);
 		}
 		if (format.team) {
-			throw new Chat.ErrorMessage(`Formats with team generations can't have team storage.`);
+			throw new Chat.ErrorMessage(`Formats with computer-generated teams can't have team storage.`);
 		}
 		return format.id;
 	}
 
 	initializeFormat(formatid: string) {
-		if (!file.teams[formatid]) {
-			file.teams[formatid] = {uncategorized: {}};
+		if (!teamData.teams[formatid]) {
+			teamData.teams[formatid] = {uncategorized: {}};
 			save();
 		}
 	}
 
 	addCategory(user: User, formatid: string, category: string) {
-		if (!this.checkPermissions(user, file.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(file.whitelist[formatid], "or")} to add teams for ${formatid}`);
+		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
+			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
 		}
 		formatid = this.sanitizeFormat(formatid);
 		category = category.trim();
 		this.initializeFormat(formatid);
-		if (file.teams[formatid][category]) {
+		if (teamData.teams[formatid][category]) {
 			throw new Chat.ErrorMessage(`The category named ${category} already exists.`);
 		}
-		file.teams[formatid][category] = {};
+		teamData.teams[formatid][category] = {};
 		save();
 	}
 
@@ -138,20 +141,20 @@ const SampleTeams = new class SampleTeams {
 	 * @param category - Category the team will go in, defaults to uncategorized
 	 */
 	addTeam(user: User, formatid: string, teamName: string, team: string, category = "uncategorized") {
-		if (!this.checkPermissions(user, file.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(file.whitelist[formatid], "or")} to add teams for ${formatid}`);
+		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
+			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
 		}
 		teamName = teamName.trim();
 		category = category.trim();
 		formatid = this.sanitizeFormat(formatid);
 		this.initializeFormat(formatid);
-		if (file.teams[formatid][category]?.[teamName]) {
+		if (teamData.teams[formatid][category]?.[teamName]) {
 			throw new Chat.ErrorMessage(`There is already a team for ${formatid} with the name ${teamName} in the ${category} category.`);
 		}
-		if (!file.teams[formatid][category]) this.addCategory(user, formatid, category);
-		file.teams[formatid][category][teamName] = Teams.pack(Teams.import(team.trim()));
+		if (!teamData.teams[formatid][category]) this.addCategory(user, formatid, category);
+		teamData.teams[formatid][category][teamName] = Teams.pack(Teams.import(team.trim()));
 		save();
-		return file.teams[formatid][category][teamName];
+		return teamData.teams[formatid][category][teamName];
 	}
 
 	removeTeam(user: User, formatid: string, teamName: string, category: string) {
@@ -159,20 +162,20 @@ const SampleTeams = new class SampleTeams {
 		teamName = teamName.trim();
 		category = category.trim();
 		// Don't sanitize formatid here in case a team was added for a temporary format that got removed
-		if (!this.checkPermissions(user, file.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(file.whitelist[formatid], "or")} to add teams for ${formatid}`);
+		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
+			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
 		}
 		const categoryName = this.findCategory(formatid, category);
 		if (!categoryName) {
 			throw new Chat.ErrorMessage(`There are no teams for ${formatid} under the category ${category.trim()}. Check spelling?`);
 		}
-		if (!file.teams[formatid][category][teamName]) {
+		if (!teamData.teams[formatid][category][teamName]) {
 			throw new Chat.ErrorMessage(`There is no team for ${formatid} with the name of "${teamName}". Check spelling?`);
 		}
-		const oldTeam = file.teams[formatid][category][teamName];
-		delete file.teams[formatid][category][teamName];
-		if (!Object.keys(file.teams[formatid][category]).length) delete file.teams[formatid][category];
-		if (!Object.keys(file.teams[formatid]).filter(x => x !== 'uncategorized').length) delete file.teams[formatid];
+		const oldTeam = teamData.teams[formatid][category][teamName];
+		delete teamData.teams[formatid][category][teamName];
+		if (!Object.keys(teamData.teams[formatid][category]).length) delete teamData.teams[formatid][category];
+		if (!Object.keys(teamData.teams[formatid]).filter(x => x !== 'uncategorized').length) delete teamData.teams[formatid];
 		save();
 		return oldTeam;
 	}
@@ -217,7 +220,7 @@ const SampleTeams = new class SampleTeams {
 		formatid = toID(formatid);
 		categoryid = toID(categoryid);
 		let match: string | null = null;
-		for (const categoryName in file.teams[formatid] || []) {
+		for (const categoryName in teamData.teams[formatid] || []) {
 			if (toID(categoryName) === categoryid) {
 				match = categoryName;
 				break;
@@ -230,16 +233,12 @@ const SampleTeams = new class SampleTeams {
 		return Dex.formats.get(formatid).exists ? Dex.formats.get(formatid).name : formatid;
 	}
 
-	save() {
-		FS(SAMPLE_TEAMS).writeUpdate(() => JSON.stringify(file));
-	}
-
 	destroy() {
-		for (const formatid in file.whitelist) {
-			for (const [i, roomid] of file.whitelist[formatid].entries()) {
+		for (const formatid in teamData.whitelist) {
+			for (const [i, roomid] of teamData.whitelist[formatid].entries()) {
 				const room = Rooms.search(roomid);
 				if (room) continue;
-				file.whitelist[formatid].splice(i, 1);
+				teamData.whitelist[formatid].splice(i, 1);
 				save();
 			}
 		}
@@ -250,7 +249,7 @@ export const destroy = SampleTeams.destroy;
 
 export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID) {
-		for (const formatid in file.whitelist) {
+		for (const formatid in teamData.whitelist) {
 			if (!SampleTeams.whitelistedRooms(formatid)?.includes(oldID)) continue;
 			SampleTeams.unwhitelistRoom(formatid, oldID);
 			SampleTeams.whitelistRooms([formatid], [newID]);
@@ -266,18 +265,18 @@ export const commands: Chat.ChatCommands = {
 			let [formatid, category] = target.split(',');
 			if (!formatid) return this.parse(`/help sampleteams`);
 			formatid = SampleTeams.sanitizeFormat(formatid);
-			if (!file.teams[formatid]) {
+			if (!teamData.teams[formatid]) {
 				throw new Chat.ErrorMessage(`No teams for ${SampleTeams.getFormatName(formatid)} found. Check spelling?`);
 			}
 			let buf = ``;
 			if (!category) {
-				for (const categoryName in file.teams[formatid]) {
-					if (!Object.keys(file.teams[formatid][categoryName]).length) continue;
+				for (const categoryName in teamData.teams[formatid]) {
+					if (!Object.keys(teamData.teams[formatid][categoryName]).length) continue;
 					if (buf) buf += `<hr />`;
-					buf += `<details${Object.keys(file.teams[formatid]).length < 2 ? ` open` : ``}><summary><strong style="letter-spacing:1.2pt">${categoryName.toUpperCase()}</strong></summary>`;
-					for (const [i, teamName] of Object.keys(file.teams[formatid][categoryName]).entries()) {
+					buf += `<details${Object.keys(teamData.teams[formatid]).length < 2 ? ` open` : ``}><summary><strong style="letter-spacing:1.2pt">${categoryName.toUpperCase()}</strong></summary>`;
+					for (const [i, teamName] of Object.keys(teamData.teams[formatid][categoryName]).entries()) {
 						if (i) buf += `<hr />`;
-						buf += SampleTeams.formatTeam(teamName, file.teams[formatid][categoryName][teamName], true);
+						buf += SampleTeams.formatTeam(teamName, teamData.teams[formatid][categoryName][teamName], true);
 					}
 					buf += `</details>`;
 				}
@@ -291,14 +290,15 @@ export const commands: Chat.ChatCommands = {
 				if (!categoryName) {
 					throw new Chat.ErrorMessage(`No teams for ${SampleTeams.getFormatName(formatid)} in the ${category} category found. Check spelling?`);
 				}
-				for (const teamName in file.teams[formatid][categoryName]) {
-					buf += SampleTeams.formatTeam(teamName, file.teams[formatid][categoryName][teamName], true);
+				for (const teamName in teamData.teams[formatid][categoryName]) {
+					buf += SampleTeams.formatTeam(teamName, teamData.teams[formatid][categoryName][teamName], true);
 				}
 			}
 			this.sendReplyBox(buf);
 		},
 		stopview(target, room, user, connection) {
 			connection.send(`>view-sampleteams-view\n|deinit`);
+			connection.openPages?.delete(`sampleteams-view`);
 		},
 		addcategory(target, room, user) {
 			const [formatid, categoryName] = target.split(',');
@@ -333,7 +333,7 @@ export const commands: Chat.ChatCommands = {
 		whitelist: {
 			add(target, room, user) {
 				// Allow development roommods to whitelist to help debug
-				if (!Rooms.get('development')?.auth.atLeast(user, '@')) {
+				if (!SampleTeams.isDevMod(user)) {
 					this.checkCan('bypassall');
 				}
 				const [formatids, roomids] = target.split('|').map(x => x.split(','));
@@ -345,7 +345,7 @@ export const commands: Chat.ChatCommands = {
 			},
 			remove(target, room, user) {
 				// Allow development roommods to whitelist to help debug
-				if (!Rooms.get('development')?.auth.atLeast(user, '@')) {
+				if (!SampleTeams.isDevMod(user)) {
 					this.checkCan('bypassall');
 				}
 				const [formatid, roomid] = target.split(',');
@@ -356,7 +356,7 @@ export const commands: Chat.ChatCommands = {
 			'': 'view',
 			view(target, room, user) {
 				// Allow development roommods to whitelist to help debug
-				if (!Rooms.get('development')?.auth.atLeast(user, '@')) {
+				if (!SampleTeams.isDevMod(user)) {
 					this.checkCan('bypassall');
 				}
 				this.parse(`/j view-sampleteams-whitelist`);
@@ -380,27 +380,26 @@ export const pages: Chat.PageTable = {
 	sampleteams: {
 		whitelist(query, user, connection) {
 			this.title = `Sample Teams Whitelist`;
-			const isDevMod = Rooms.get('development')?.auth.atLeast(user, '@');
-			if (!isDevMod || !user.can('bypassall')) {
+			if (!SampleTeams.isDevMod(user) || !user.can('bypassall')) {
 				return `<div class="pad"><h2>Access denied.</h2></div>`;
 			}
 			const staffRoomAccess = Rooms.get('staff')?.checkModjoin(user);
 			let buf = `<div class="pad"><button style="float:right" class="button" name="send" value="/j view-sampleteams-whitelist${query.length ? `-${query.join('-')}` : ''}"><i class="fa fa-refresh"></i> Refresh</button><h2>Sample Teams Rooms Whitelist</h2>`;
-			if ((!file.whitelist || !Object.keys(file.whitelist).length) && !query.length) {
+			if ((!teamData.whitelist || !Object.keys(teamData.whitelist).length) && !query.length) {
 				buf += `<p>No rooms are whitelisted for any formats.</p>`;
 			}
 			if (query[0] === 'add') {
-				buf += `<form data-submitsend="${staffRoomAccess ? `/msgroom staff,` : isDevMod ? `/msgroom development,` : ``}/sampleteams whitelist add {formats}|{roomids}">`;
+				buf += `<form data-submitsend="${staffRoomAccess ? `/msgroom staff,` : SampleTeams.isDevMod(user) ? `/msgroom development,` : ``}/sampleteams whitelist add {formats}|{roomids}">`;
 				buf += `<label>Enter a list formats, separated by comma: <input name="formats" /></label><br /><br />`;
 				buf += `<label>Enter a list of rooms, separated by comma: <input name="roomids" /></label><br />`;
 				buf += `<br /><button class="button" type="submit">Whitelist rooms</button></form>`;
 				buf += `<br />${formatFakeButton("view-sampleteams-whitelist", "Return to list")}`;
 			} else {
 				buf += `<dl>`;
-				for (const formatid of Object.keys(file.whitelist).sort().reverse()) {
-					if (!file.whitelist[formatid]?.length) continue;
+				for (const formatid of Object.keys(teamData.whitelist).sort().reverse()) {
+					if (!teamData.whitelist[formatid]?.length) continue;
 					buf += `<dt>${SampleTeams.getFormatName(formatid)}</dt>`;
-					for (const roomid of file.whitelist[formatid]) {
+					for (const roomid of teamData.whitelist[formatid]) {
 						buf += `<dd>${Rooms.get(roomid)?.title || roomid}`;
 						buf += ` <button class="button" name="send" value="/sampleteams whitelist remove ${formatid},${roomid}">Remove</button></dd>`;
 					}
@@ -421,7 +420,7 @@ export const pages: Chat.PageTable = {
 			buf += `<button style="float:right" class="button" name="send" value="/j view-sampleteams-view${query.join('-') ? `-${query.join('-')}` : ``}"><i class="fa fa-refresh"></i> Refresh</button>`;
 			buf += `<center><h2>Sample Teams</h2></center><hr />`;
 			if (!query[0]) {
-				const formats = Object.keys(file.teams);
+				const formats = Object.keys(teamData.teams);
 				if (!formats.length) return `${buf}<p>No teams found.</p></div>`;
 				buf += `<h3>Pick a format</h3><ul>`;
 				for (const formatid of formats) {
@@ -429,39 +428,39 @@ export const pages: Chat.PageTable = {
 					buf += `<li>${formatFakeButton(`view-sampleteams-view-${formatid}`, `${SampleTeams.getFormatName(formatid)}`)}</button></li>`;
 				}
 				buf += `</ul>`;
-			} else if (!file.teams[toID(query[0])] || !Object.keys(file.teams[toID(query[0])]).length ||
-				(Object.keys(file.teams[toID(query[0])].uncategorized).length &&
-					!Object.keys(file.teams[toID(query[0])]).filter(x => x !== 'uncategorized').length)) {
+			} else if (!teamData.teams[toID(query[0])] || !Object.keys(teamData.teams[toID(query[0])]).length ||
+				(Object.keys(teamData.teams[toID(query[0])].uncategorized).length &&
+					!Object.keys(teamData.teams[toID(query[0])]).filter(x => x !== 'uncategorized').length)) {
 				const name = Dex.formats.get(query[0]).exists ? Dex.formats.get(query[0]).name : toID(query[0]);
 				return `${buf}<p>No teams for ${name} were found.</p></div>`;
 			} else if (!query[1] || (!SampleTeams.findCategory(query[0], query[1]) && query[1] !== 'allteams')) {
 				buf += `<h3>Pick a category</h3><ul>`;
-				for (const category of Object.keys(file.teams[toID(query[0])])) {
+				for (const category of Object.keys(teamData.teams[toID(query[0])])) {
 					buf += `<li><a class="button" style="text-decoration:inherit;color:inherit" target="replace" href="view-sampleteams-view-${query[0]}-${toID(category)}">${category}</button></li>`;
 				}
 				buf += `<li><a class="button" style="text-decoration:inherit;color:inherit" target="replace" href="view-sampleteams-view-${query[0]}-allteams">ALL</button></li></ul>`;
 			} else if (query[1] === 'allteams') {
 				buf += `<h3>All teams for ${SampleTeams.getFormatName(query[0])}</h3>`;
-				for (const categoryName in file.teams[toID(query[0])]) {
-					const category = file.teams[toID(query[0])][categoryName];
+				for (const categoryName in teamData.teams[toID(query[0])]) {
+					const category = teamData.teams[toID(query[0])][categoryName];
 					if (!Object.keys(category).length) continue;
 					buf += `<details><summary><h4 style="display:inline">${categoryName}</h4></summary>`;
 					for (const teamName in category) {
 						const team = category[teamName];
-						if (SampleTeams.checkPermissions(user, file.whitelist[query[0]] || [])) {
+						if (SampleTeams.checkPermissions(user, teamData.whitelist[query[0]] || [])) {
 							buf += `<button class="button" style="float:right" name="send" value="/sampleteams remove ${query[0]},${categoryName},${teamName}">Delete team</button>`;
 						}
 						buf += SampleTeams.formatTeam(teamName, team);
 					}
 					buf += `</details>`;
-					const index = Object.keys(file.teams[toID(query[0])]).indexOf(categoryName);
-					if (index !== Object.keys(file.teams[toID(query[0])]).length - 1) buf += `<hr />`;
+					const index = Object.keys(teamData.teams[toID(query[0])]).indexOf(categoryName);
+					if (index !== Object.keys(teamData.teams[toID(query[0])]).length - 1) buf += `<hr />`;
 				}
 			} else if (SampleTeams.findCategory(query[0], query[1])) {
 				const categoryName = SampleTeams.findCategory(query[0], query[1])!;
 				buf += `<h3>Sample teams for ${SampleTeams.getFormatName(query[0])} in the ${categoryName} category</h3>`;
-				for (const teamName in file.teams[query[0]][categoryName]) {
-					const team = file.teams[query[0]][categoryName][teamName];
+				for (const teamName in teamData.teams[query[0]][categoryName]) {
+					const team = teamData.teams[query[0]][categoryName][teamName];
 					buf += SampleTeams.formatTeam(teamName, team);
 				}
 			}
@@ -470,11 +469,14 @@ export const pages: Chat.PageTable = {
 		},
 		add(query, user, connection) {
 			this.title = `Sample Teams`;
-			const formats = Array.from(new Set(Dex.formats.all().map(format => (format.name.includes('(') ?
-				format.name.slice(0, format.name.indexOf('(')) : format.name).trim()))).map(formatName =>
-				Dex.formats.get(formatName)).filter(format =>
-				!format.name.includes('Custom') && format.effectType === 'Format' && !format.team &&
-				SampleTeams.checkPermissions(user, SampleTeams.whitelistedRooms(format.id) || []));
+			const trimFormatName = (name: string) => (name.includes('(') ? name.slice(0, name.indexOf('(')) : name).trim();
+			const formatsSet = new Set(Dex.formats.all().map(format => trimFormatName(format.name)));
+			const formatsArr = Array.from(formatsSet);
+			const formats = formatsArr.map(formatName => Dex.formats.get(formatName))
+				.filter(format => (
+					!format.name.includes('Custom') && format.effectType === 'Format' &&
+					!format.team && SampleTeams.checkPermissions(user, SampleTeams.whitelistedRooms(format.id) || [])
+				));
 			if (!formats.length) return `<div class="pad"><h2>Access denied.</h2></div>`;
 			let buf = `<div class="pad"><h2>Add a sample team</h2>`;
 			if (!query[0] || !Dex.formats.get(query[0]).exists) {
@@ -493,14 +495,14 @@ export const pages: Chat.PageTable = {
 					buf += `<button class="button" type="submit">Add category</button></form>`;
 				} else {
 					buf += `<h3>Pick a category for ${name}</h3><ul>`;
-					for (const category of Object.keys(file.teams[query[0]] || {}) || []) {
+					for (const category of Object.keys(teamData.teams[query[0]] || {}) || []) {
 						buf += `<li style="padding-top:5px">${formatFakeButton(`view-sampleteams-add-${query[0]}-${toID(category)}-submit`, category)}</li>`;
 					}
 					buf += `<li style="padding-top:5px">${formatFakeButton(`view-sampleteams-add-${query[0]}-addnewcategory`, `<strong>Add new category</strong>`)}</li></ul>`;
 				}
 			}
-			if (query[2] === 'submit' && SampleTeams.findCategory(query[0], query[1])) {
-				const categoryName = SampleTeams.findCategory(query[0], query[1]);
+			const categoryName = SampleTeams.findCategory(query[0], query[1]);
+			if (query[2] === 'submit' && categoryName) {
 				buf += `<form data-submitsend="/sampleteams add ${query[0]}, ${categoryName}, {teamName}, {team}">`;
 				buf += `<h3>Enter a team name</h3><input name="teamName" />`;
 				buf += `<h3>Enter team importable</h3><textarea style="width:100%;height:400px" name="team"></textarea><br />`;
