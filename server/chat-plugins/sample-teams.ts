@@ -19,7 +19,7 @@ interface SampleTeamsteamData {
 	};
 }
 
-const teamData: SampleTeamsteamData = JSON.parse(
+export const teamData: SampleTeamsteamData = JSON.parse(
 	FS(SAMPLE_TEAMS).readIfExistsSync() || `{"whitelist": {}, "teams": {}}`
 );
 
@@ -34,7 +34,7 @@ for (const formatid in teamData.teams) {
 }
 save();
 
-const SampleTeams = new class SampleTeams {
+export const SampleTeams = new class SampleTeams {
 	isRoomStaff(user: User, roomids: RoomID[]) {
 		let matched = false;
 		if (!roomids?.length) return false;
