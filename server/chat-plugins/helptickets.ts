@@ -1174,7 +1174,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					const unlockCmd = staff.can('globalban') ?
 						`/unlockip ${ip}` :
 						`Can someone \`\`/unlockip ${ip}\`\` (${data.hostType} host)`;
-					buf += `<button class="button" name="send" value="/msgroom staff,${unlockCmd}&#10;/join view-help-text-${ticket.userid}">Unlock IP</button>`;
+					buf += `<button class="button" name="send" value="/msgroom staff,${unlockCmd}">Unlock IP</button>`;
 				}
 				buf += `</details>`;
 			}
