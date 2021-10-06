@@ -337,7 +337,7 @@ export class Pokemon {
 		this.status = '';
 		this.statusState = {};
 		this.volatiles = {};
-		this.showCure = false;
+		this.showCure = undefined;
 
 		if (!this.set.evs) {
 			this.set.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
