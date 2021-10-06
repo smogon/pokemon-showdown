@@ -257,6 +257,13 @@ export const Formats: FormatList = [
 		banlist: ['Crucibellite'],
 	},
 	{
+		name: "[Gen 8] CAP LC",
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['[Gen 8] LC', '+CAP'],
+	},
+	{
 		name: "[Gen 8] Battle Stadium Singles",
 
 		mod: 'gen8',
