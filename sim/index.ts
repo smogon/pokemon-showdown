@@ -27,4 +27,5 @@ export {TeamValidator} from './team-validator';
 
 // misc libraries
 
+export * from './tools';
 export * from '../lib';
