@@ -2707,7 +2707,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3590391/">VGC 2017 Sample Teams</a>`,
 		],
 
-		mod: 'vgc17',
+		mod: 'gen7sm',
 		gameType: 'doubles',
 		searchShow: false,
 		timer: {
@@ -2719,7 +2719,7 @@ export const Formats: FormatList = [
 			timeoutAutoChoose: true,
 			dcTimerBank: false,
 		},
-		ruleset: ['Flat Rules', 'Alola Pokedex', '!! Adjust Level = 50', 'Min Source Gen = 7'],
+		ruleset: ['Flat Rules', 'Old Alola Pokedex', '!! Adjust Level = 50', 'Min Source Gen = 7'],
 		banlist: ['Mega', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
 	},
 	{
@@ -2949,17 +2949,18 @@ export const Formats: FormatList = [
 		banlist: ['Soul Dew'],
 	},
 	{
-		name: "[Gen 6] Battle Spot Doubles",
+		name: "[Gen 6] VGC 2015",
 		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3524352/">VGC 2015 Rules</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3560820/">ORAS Battle Spot Doubles Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3560824/">ORAS BSD Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3530547/">VGC 2015 Viability Rankings</a>`,
 		],
 
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
-		banlist: ['Soul Dew'],
+		banlist: ['Soul Dew', 'Articuno + Snow Cloak', 'Zapdos + Static', 'Moltres + Flame Body', 'Dragonite + Barrier'],
 	},
 	{
 		name: "[Gen 6] VGC 2014",
@@ -2972,6 +2973,19 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', 'Kalos Pokedex', 'Min Source Gen = 6'],
+	},
+	{
+		name: "[Gen 6] Battle Spot Doubles",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3560820/">ORAS Battle Spot Doubles Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3560824/">ORAS BSD Viability Rankings</a>`,
+		],
+
+		mod: 'gen6',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
+		banlist: ['Soul Dew'],
 	},
 	{
 		name: "[Gen 6] Doubles Custom Game",
@@ -3145,7 +3159,7 @@ export const Formats: FormatList = [
 		banlist: ['DUber', 'Soul Dew', 'Dark Void', 'Gravity'],
 	},
 	{
-		name: "[Gen 5] GBU Doubles",
+		name: "[Gen 5] VGC 2013",
 
 		mod: 'gen5',
 		gameType: 'doubles',
