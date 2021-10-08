@@ -633,7 +633,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard', 'Dynamax Clause', '2 Ability Clause'],
+		ruleset: ['Standard', 'Dynamax Clause', '2 Ability Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragonite', 'Eternatus',
 			'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
@@ -650,7 +650,7 @@ export const Formats: FormatList = [
 		validateSet(set, teamHas) {
 			const ability = this.dex.abilities.get(set.ability);
 			const item = this.dex.abilities.get(set.item);
-			if (!item.exists) return this.validateSet(set, teamHas) || [];
+			if (!item.exists) return this.validateSet(set, teamHas);
 			const problems = [];
 			if (item.isNonstandard && !this.ruleTable.has(`+ability:${item.id}`)) {
 				problems.push(`${item.name} is banned.`);
