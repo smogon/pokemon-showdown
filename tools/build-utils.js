@@ -156,7 +156,7 @@ function replace(file, replacements) {
 		if (err) throw err;
 		if (stats.isSymbolicLink()) return;
 		if (stats.isFile()) {
-			if (!file.endsWith('.js')) return;
+			if (!file.endsWith('.js') && !file.endsWith('.d.ts')) return;
 			fs.readFile(file, "utf-8", function (err, text) {
 				if (err) throw err;
 				let anyMatch = false;
@@ -208,6 +208,7 @@ exports.transpile = (doForce, decl) => {
 	if (sucrase('./sim', './.sim-dist')) {
 		replace('.sim-dist', [
 			{regex: /(require\(.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
+			{regex: /(from '.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
 		]);
 	}
 
