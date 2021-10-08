@@ -1,26 +1,26 @@
 export const Items: {[k: string]: ModdedItemData} = {
 	kommoniumz: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: "Future",
 	},
 	lunaliumz: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: "Future",
 	},
 	lycaniumz: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: "Future",
 	},
 	mimikiumz: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: "Future",
 	},
 	solganiumz: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: "Future",
 	},
 	ultranecroziumz: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: "Future",
 	},
 };
