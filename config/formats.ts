@@ -1795,7 +1795,7 @@ export const Formats: FormatList = [
 			const dex = this.dex;
 			const ability = dex.moves.get(set.ability);
 			// Prevent stack overflow
-			const overflowAbilityNames = ['Assist', 'Entrainment', 'Skill Swap'];
+			const overflowAbilityNames = ['Assist', 'Entrainment', 'Role Play', 'Skill Swap'];
 			if (
 				overflowAbilityNames.includes(ability.name) || ability.category !== 'Status' || ability.status === 'slp' ||
 				this.ruleTable.isRestricted(`move:${ability.id}`) || set.moves.map(this.toID).includes(ability.id)
