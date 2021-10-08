@@ -1837,7 +1837,33 @@ export class GameRoom extends BasicRoom {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
+	/**
+	 * Sends this room's replay to the connection to be uploaded to the replay
+	 * server. To be clear, the replay goes:
+	 *
+	 * PS server -> user -> loginserver
+	 *
+	 * NOT: PS server -> loginserver
+	 *
+	 * That's why this function requires a connection. For details, see the top
+	 * comment inside this function.
+	 */
 	async uploadReplay(user: User, connection: Connection, options?: 'forpunishment' | 'silent') {
+		// The reason we don't upload directly to the loginserver, unlike every
+		// other interaction with the loginserver, is because it takes so much
+		// bandwidth that it can get identified as a DoS attack by PHP, Apache, or
+		// Cloudflare, and blocked.
+
+		// While I'm sure this is configurable, it's a huge pain, and getting it
+		// wrong, especially while migrating infrastructure, leads to everything
+		// being unusable and panic while we figure out how to unblock our servers
+		// from each other. It's just easier to "spread out" the bandwidth.
+
+		// TODO: My ideal long-term fix would be to just have a database (probably
+		// Postgres) shared between client and server, acting as both the server's
+		// battle logs as well as the client's replay database, which both client
+		// and server have write access to.
+
 		const battle = this.battle;
 		if (!battle) return;
 
@@ -1855,6 +1881,11 @@ export class GameRoom extends BasicRoom {
 		let rating = 0;
 		if (battle.ended && this.rated) rating = this.rated;
 		const {id, password} = this.getReplayData();
+
+		// STEP 1: Directly tell the login server that a replay is coming
+		// (also include all the data, including a hash of the replay itself,
+		// so it can't be spoofed.)
+
 		const [success] = await LoginServer.request('prepreplay', {
 			id: id,
 			loghash: datahash,
@@ -1871,6 +1902,9 @@ export class GameRoom extends BasicRoom {
 			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
 			return;
 		}
+
+		// STEP 2: Tell the user to upload the replay to the login server
+
 		connection.send('|queryresponse|savereplay|' + JSON.stringify({
 			log: data,
 			id: id,
