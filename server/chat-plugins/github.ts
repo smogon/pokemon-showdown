@@ -59,7 +59,7 @@ export const GitHub = new class {
 	constructor() {
 		try {
 			// config.github: https://github.com/nlf/node-github-hook#readme
-			this.hook = (require('githubhook'))(Config.github);
+			if (Config.github) this.hook = (require('githubhook'))(Config.github);
 		} catch {}
 		this.listen();
 	}
