@@ -2326,6 +2326,7 @@ export class RandomTeams {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		for (let species of this.dex.species.all()) {
+			if (this.dex.formats.getRuleTable(this.format).isBannedSpecies(species)) continue;
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
 			if (this.dex.currentMod === 'gen8bdsp' && species.gen > 4) continue;
 			if (isMonotype) {
