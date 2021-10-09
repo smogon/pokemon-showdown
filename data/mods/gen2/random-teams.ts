@@ -148,7 +148,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool: string[] = [];
 		const moves = new Set<string>();
 
@@ -301,7 +301,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			name: species.name,
 			species: species.name,
 			moves: Array.from(moves),
-			ability: 'None',
+			ability: 'No Ability',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
 			ivs,
 			item: this.getItem('None', types, moves, counter, species),

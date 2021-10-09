@@ -25,13 +25,12 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		}
 
 		let formeCounter = 0;
-		for (const id in this.dex.data.Pokedex) {
-			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
+		for (const species of this.dex.species.all()) {
+			if (!(species.num in hasDexNumber)) continue;
 
-			const species = this.dex.species.get(id);
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
-			const learnset = this.dex.species.getLearnset(id as ID);
+			const learnset = this.dex.species.getLearnset(species.id);
 			if (!learnset || species.forme) continue;
 			formes[hasDexNumber[species.num]].push(species.name);
 			if (++formeCounter >= 6) {
@@ -109,7 +108,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				species: species.name,
 				moves: this.multipleSamplesNoReplace(pool, 4),
 				gender: false,
-				ability: 'None',
+				ability: 'No Ability',
 				evs: evs,
 				ivs: ivs,
 				item: '',
@@ -136,10 +135,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const pokemonPool = [];
 		/** Pokémon that are not wholly incompatible with the team, but still pretty bad */
 		const rejectedButNotInvalidPool = [];
-		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.species.get(id);
+		for (const species of this.dex.species.all()) {
 			if (!species.isNonstandard && species.randomBattleMoves) {
-				pokemonPool.push(id);
+				pokemonPool.push(species.id);
 			}
 		}
 
@@ -380,7 +378,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			name: species.name,
 			species: species.name,
 			moves: Array.from(moves),
-			ability: 'None',
+			ability: 'No Ability',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
 			ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30},
 			item: '',
@@ -393,7 +391,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	randomHCTeam(): PokemonSet[] {
 		const team = [];
 
-		const movePool = Object.keys(this.dex.data.Moves);
+		const movePool = [...this.dex.moves.all()];
 		const typesPool = ['Bird', ...this.dex.types.names()];
 
 		const randomN = this.randomNPokemon(this.maxTeamSize);
@@ -426,10 +424,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Random unique moves
 			const moves = [];
 			do {
-				const moveid = this.sampleNoReplace(movePool);
-				const move = this.dex.moves.get(moveid);
+				const move = this.sampleNoReplace(movePool);
 				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
-					moves.push(moveid);
+					moves.push(move.id);
 				}
 			} while (moves.length < 4);
 
@@ -490,7 +487,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				species: species.name,
 				gender: species.gender,
 				item: '',
-				ability: 'None',
+				ability: 'No Ability',
 				moves,
 				evs,
 				ivs,

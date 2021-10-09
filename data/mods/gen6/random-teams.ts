@@ -770,7 +770,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		let ability = '';
 
