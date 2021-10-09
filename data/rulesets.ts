@@ -1190,7 +1190,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	'sketchgen8moves': {
 		effectType: 'ValidatorRule',
 		name: 'Sketch Gen 8 Moves',
-		desc: "Allows Sketch to be restored into Generation VIII formats.",
+		desc: "Allows Pokémon who learn Sketch to learn any Gen 8 move (normally, Sketch is not usable in Gen 8).",
 		// Implemented in sim/team-validator.ts
 	},
 	mimicglitch: {
