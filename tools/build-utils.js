@@ -98,12 +98,7 @@ function findFiles(options) {
 	if (!outArr.length) {
 		return outArr;
 	}
-	if (!fs.existsSync(outDirPath)) {
-		fs.mkdirSync(outDirPath, {recursive: true});
-	}
-	if (!fs.existsSync(path.join(outDirPath, "sourceMaps"))) {
-		fs.mkdirSync(path.join(outDirPath, "sourceMaps"));
-	}
+	fs.mkdirSync(path.join(outDirPath, "sourceMaps"), {recursive: true});
 
 	return outArr;
 }
