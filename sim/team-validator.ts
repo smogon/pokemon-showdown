@@ -1338,7 +1338,7 @@ export class TeamValidator {
 		if (isGmax) {
 			banReason = ruleTable.check('pokemon:' + tierSpecies.id + 'gmax');
 			if (banReason) {
-				return `${species.name}-Gmax is ${banReason}.`;
+				return `Gigantamaxing ${species.name} is ${banReason}.`;
 			}
 		}
 
