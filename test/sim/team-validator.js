@@ -721,13 +721,23 @@ describe('Team Validator', function () {
 	});
 
 	it('should enforce Gen 1 minimum levels', () => {
-		const team = [
-			{species: 'onix', level: 12, moves: ['explosion'], evs: {hp: 1}},
+		let team = [
+			{species: 'onix', level: 12, moves: ['headbutt']},
 		];
 		let illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert(illegal);
 
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'slowbro', level: 15, moves: ['earthquake']},
+			{species: 'voltorb', level: 14, moves: ['thunderbolt']},
+			{species: 'scyther', level: 15, moves: ['quickattack']},
+			{species: 'pinsir', level: 15, moves: ['visegrip']},
+		];
+
+		illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert.equal(illegal, null);
 	});
 

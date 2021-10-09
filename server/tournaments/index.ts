@@ -211,7 +211,7 @@ export class Tournament extends Rooms.RoomGame {
 	setCustomRules(rules: string) {
 		try {
 			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
 
@@ -1692,7 +1692,7 @@ const commands: Chat.ChatCommands = {
 				return this.sendReply(`Usage: /tour ${cmd} <on|minutes|off>`);
 			}
 			const option = target.toLowerCase();
-			if (this.meansYes(option) || option === 'start') {
+			if ((this.meansYes(option) && option !== '1') || option === 'start') {
 				if (tournament.isTournamentStarted) {
 					return this.errorReply("The tournament has already started.");
 				} else if (!tournament.playerCap) {
@@ -2006,7 +2006,7 @@ const commands: Chat.ChatCommands = {
 					} else {
 						throw new Chat.ErrorMessage(`Autostart is already disabled for every tournament.`);
 					}
-				} else if (this.meansYes(target)) {
+				} else if (this.meansYes(target) && target !== '1') {
 					if (room.settings.tournaments.autostart === true) {
 						throw new Chat.ErrorMessage(`Autostart for every tournament is already set to true.`);
 					}
@@ -2128,16 +2128,18 @@ const commands: Chat.ChatCommands = {
 	tournamenthelp() {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
+			`Tournament Commands<br/>` +
 			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
+			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
+			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
+			`- begin/start: Starts the tournament in the current room.<br /><br />` +
+			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />` +
 			`- cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />` +
-			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
 			`- viewrules/viewbanlist: Shows the custom rules for the tournament.<br />` +
 			`- clearrules/clearbanlist: Clears the custom rules for the tournament before it has started.<br />` +
 			`- name &lt;name>: Sets a custom name for the tournament.<br />` +
 			`- clearname: Clears the custom name of the tournament.<br />` +
-			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
-			`- begin/start: Starts the tournament in the current room.<br />` +
 			`- autostart/setautostart &lt;on|minutes|off>: Sets the automatic start timeout.<br />` +
 			`- dq/disqualify &lt;user>: Disqualifies a user.<br />` +
 			`- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />` +
@@ -2151,7 +2153,9 @@ const commands: Chat.ChatCommands = {
 			`- banuser/unbanuser &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks.<br />` +
 			`- sub/replace &lt;olduser>, &lt;newuser>: Substitutes a new user for an old one<br />` +
 			`- settings: Do <code>/help tour settings</code> for more information<br />` +
-			`More detailed help can be found <a href="https://www.smogon.com/forums/threads/3570628/#post-6777489">here</a>`
+			`</details>` +
+			`<br />` +
+			`You can also consult <a href="https://www.smogon.com/forums/threads/3570628/#post-6777489">more detailed help</a>.`
 		);
 	},
 };

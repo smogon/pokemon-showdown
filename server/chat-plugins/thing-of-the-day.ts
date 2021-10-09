@@ -394,7 +394,7 @@ class OtdHandler {
 			try {
 				const [width, height] = await Chat.fitImage(winner.image, 100, 100);
 				output += Utils.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
-			} catch (err) {}
+			} catch {}
 		}
 		output += `<td style="text-align:right;margin:5px;">`;
 		if (winner.event) output += Utils.html `<b>Event:</b> ${winner.event}<br />`;

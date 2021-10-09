@@ -13,7 +13,8 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Rangs globaux</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Ils supervisent les rooms d'une section donnée",
+		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir des utilisateurs du site",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Mêmes pouvoirs que les Global Moderators, mais sont des bots",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",

@@ -1,7 +1,7 @@
 {
   "root": true,
   "parserOptions": {
-    "ecmaVersion": 9,
+    "ecmaVersion": 11,
     "sourceType": "script",
     "ecmaFeatures": {
       "globalReturn": true
@@ -190,7 +190,7 @@
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        "ecmaVersion": 9,
+        "ecmaVersion": 11,
         "sourceType": "module",
         "tsconfigRootDir": ".",
         "project": ["./tsconfig.json"]

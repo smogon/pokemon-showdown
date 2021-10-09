@@ -336,7 +336,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dugtrio: {
-		randomBattleMoves: ["earthquake", "memento", "reversal", "stealthrock", "stoneedge", "substitute", "suckerpunch"],
+		randomBattleMoves: ["earthquake", "reversal", "stealthrock", "stoneedge", "substitute", "suckerpunch"],
 		randomDoubleBattleMoves: ["earthquake", "protect", "rockslide", "stoneedge", "suckerpunch"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -378,7 +378,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	primeape: {
-		randomBattleMoves: ["closecombat", "earthquake", "encore", "gunkshot", "icepunch", "stoneedge", "uturn"],
+		randomBattleMoves: ["closecombat", "earthquake", "gunkshot", "icepunch", "stoneedge", "uturn"],
 		randomDoubleBattleMoves: ["closecombat", "icepunch", "poisonjab", "protect", "rockslide", "stompingtantrum", "stoneedge", "taunt", "uturn"],
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -684,7 +684,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	hitmonchan: {
-		randomBattleMoves: ["bulkup", "drainpunch", "firepunch", "icepunch", "machpunch", "rapidspin"],
+		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "machpunch", "rapidspin", "stoneedge"],
 		randomDoubleBattleMoves: ["drainpunch", "fakeout", "firepunch", "icepunch", "machpunch", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -1003,7 +1003,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	zapdos: {
-		randomBattleMoves: ["defog", "heatwave", "hiddenpowerice", "roost", "thunderbolt", "toxic", "uturn"],
+		randomBattleMoves: ["defog", "discharge", "heatwave", "hiddenpowerice", "roost", "toxic", "uturn"],
 		randomDoubleBattleMoves: ["heatwave", "hiddenpowergrass", "hiddenpowerice", "protect", "roost", "tailwind", "thunderbolt"],
 		tier: "OU",
 		doublesTier: "DOU",
@@ -2705,7 +2705,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	palkia: {
-		randomBattleMoves: ["dracometeor", "dragontail", "fireblast", "hydropump", "spacialrend", "thunderwave"],
+		randomBattleMoves: ["dracometeor", "fireblast", "hydropump", "spacialrend", "thunderwave"],
 		randomDoubleBattleMoves: ["dracometeor", "fireblast", "hydropump", "protect", "spacialrend", "thunderbolt"],
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -3499,7 +3499,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	cobalion: {
-		randomBattleMoves: ["closecombat", "hiddenpowerice", "ironhead", "stealthrock", "stoneedge", "swordsdance", "taunt", "voltswitch"],
+		randomBattleMoves: ["closecombat", "hiddenpowerice", "ironhead", "stealthrock", "stoneedge", "swordsdance", "voltswitch"],
 		randomDoubleBattleMoves: ["closecombat", "ironhead", "protect", "stoneedge", "swordsdance", "thunderwave"],
 		tier: "UU",
 		doublesTier: "(DUU)",
@@ -3978,7 +3978,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	xerneas: {
-		randomBattleMoves: ["closecombat", "focusblast", "geomancy", "hiddenpowerfire", "moonblast", "psyshock", "rockslide", "thunderbolt"],
+		randomBattleMoves: ["focusblast", "geomancy", "hiddenpowerfire", "moonblast", "psyshock", "thunderbolt"],
 		randomDoubleBattleMoves: ["closecombat", "dazzlinggleam", "focusblast", "geomancy", "hiddenpowerfire", "protect", "psyshock", "rockslide", "thunderbolt"],
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -4314,7 +4314,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	pyukumuku: {
-		randomBattleMoves: ["block", "counter", "lightscreen", "recover", "toxic"],
+		randomBattleMoves: ["block", "recover", "soak", "toxic"],
 		randomDoubleBattleMoves: ["counter", "helpinghand", "lightscreen", "memento", "reflect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -4513,7 +4513,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	tapulele: {
-		randomBattleMoves: ["calmmind", "focusblast", "hiddenpowerfire", "moonblast", "psychic", "psyshock", "taunt"],
+		randomBattleMoves: ["calmmind", "focusblast", "hiddenpowerfire", "moonblast", "psychic", "psyshock"],
 		randomDoubleBattleMoves: ["dazzlinggleam", "focusblast", "moonblast", "protect", "psychic", "taunt"],
 		tier: "OU",
 		doublesTier: "DOU",

@@ -18,7 +18,7 @@ export let answererData: {[roomid: string]: PluginData} = {};
 
 try {
 	answererData = JSON.parse(FS(DATA_PATH).readSync());
-} catch (e) {}
+} catch {}
 
 /**
  * A message caught by the filter.

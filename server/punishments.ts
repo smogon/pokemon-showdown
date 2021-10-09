@@ -1232,9 +1232,15 @@ export const Punishments = new class {
 		}
 	}
 
-	lockRange(range: string, reason: string, expireTime?: number | null) {
+	punishRange(
+		range: string,
+		reason: string,
+		expireTime?: number | null,
+		punishType?: string
+	) {
 		if (!expireTime) expireTime = Date.now() + RANGELOCK_DURATION;
-		const punishment = {type: 'LOCK', id: '#rangelock', expireTime, reason} as Punishment;
+		if (!punishType) punishType = 'LOCK';
+		const punishment = {type: punishType, id: '#rangelock', expireTime, reason} as Punishment;
 		Punishments.ips.add(range, punishment);
 
 		const ips = [];
@@ -1249,7 +1255,7 @@ export const Punishments = new class {
 		void Punishments.appendPunishment({
 			userids: [],
 			ips,
-			punishType: 'LOCK',
+			punishType,
 			expireTime,
 			reason,
 			rest: [],
@@ -1640,6 +1646,7 @@ export const Punishments = new class {
 						user.locked = punishment.id;
 						if (punishment.type === 'NAMELOCK') {
 							user.namelocked = punishment.id;
+							user.resetName(true);
 						}
 					} else {
 						const info = Punishments.punishmentTypes.get(punishment.type);
@@ -1800,9 +1807,22 @@ export const Punishments = new class {
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
 	}
 
+	isGlobalBanned(user: User): Punishment | undefined {
+		if (!user) throw new Error(`Trying to check if a non-existent user is global banned.`);
+
+		const punishment = Punishments.userids.getByType(user.id, "BAN") || Punishments.userids.getByType(user.id, "FORCEBAN");
+		if (punishment) return punishment;
+	}
+
 	isBlacklistedSharedIp(ip: string) {
 		const num = IPTools.ipToNumber(ip);
-		if (!num) throw new Error(`Invalid IP address: '${ip}'`);
+		if (!num) {
+			if (IPTools.ipRangeRegex.test(ip)) {
+				return this.sharedIpBlacklist.has(ip);
+			} else {
+				throw new Error(`Invalid IP address: '${ip}'`);
+			}
+		}
 		for (const [blacklisted, reason] of this.sharedIpBlacklist) {
 			const range = IPTools.stringToRange(blacklisted);
 			if (!range) throw new Error("Falsy range in sharedIpBlacklist");
@@ -1999,6 +2019,16 @@ export const Punishments = new class {
 				Monitor.log(`[PunishmentMonitor] ${(user as User).name || userid} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
 			}
 		}
+	}
+	renameRoom(oldID: RoomID, newID: RoomID) {
+		for (const table of [Punishments.roomUserids, Punishments.roomIps]) {
+			const entry = table.get(oldID);
+			if (entry) {
+				table.set(newID, entry);
+				table.delete(oldID);
+			}
+		}
+		Punishments.saveRoomPunishments();
 	}
 	PunishmentMap = PunishmentMap;
 	NestedPunishmentMap = NestedPunishmentMap;

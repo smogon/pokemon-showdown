@@ -56,7 +56,7 @@ export const Friends = new class {
 		const friends = await Chat.Friends.getFriends(user.id);
 		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
 		for (const f of friends) {
-			const curUser = Users.get(f.friend);
+			const curUser = Users.getExact(f.friend);
 			if (curUser?.settings.allowFriendNotifications) {
 				curUser.send(`|pm|&|${curUser.getIdentity()}|${message}`);
 			}
@@ -244,6 +244,9 @@ export const commands: Chat.ChatCommands = {
 	friendslist: 'friends',
 	friends: {
 		''(target) {
+			if (toID(target)) {
+				return this.parse(`/friend add ${target}`);
+			}
 			return this.parse(`/friends list`);
 		},
 		viewlist(target, room, user) {
@@ -454,7 +457,7 @@ export const commands: Chat.ChatCommands = {
 		if (this.broadcasting) {
 			return this.sendReplyBox([
 				`<code>/friend list</code> - View current friends.`,
-				`<code>/friend add [username]</code> - Send a friend request to [username], if you don't have them added.`,
+				`<code>/friend add [name]</code> OR <code>/friend [name]</code> - Send a friend request to [name], if you don't have them added.`,
 				`<code>/friend remove [username]</code> OR <code>/unfriend [username]</code>  - Unfriend the user.`,
 				`<code>/friend accept [username]</code> - Accepts the friend request from [username], if it exists.`,
 				`<code>/friend reject [username]</code> - Rejects the friend request from [username], if it exists.`,
@@ -535,7 +538,7 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>/friend OR /friends OR /friendslist:</strong><br /><ul><li>`;
 			buf += [
 				`<code>/friend list</code> - View current friends.`,
-				`<code>/friend add [username]</code> - Send a friend request to [username], if you don't have them added.`,
+				`<code>/friend add [name]</code> OR <code>/friend [name]</code> - Send a friend request to [name], if you don't have them added.`,
 				`<code>/friend remove [username]</code> OR <code>/unfriend [username]</code>  - Unfriend the user.`,
 				`<code>/friend accept [username]</code> - Accepts the friend request from [username], if it exists.`,
 				`<code>/friend reject [username]</code> - Rejects the friend request from [username], if it exists.`,

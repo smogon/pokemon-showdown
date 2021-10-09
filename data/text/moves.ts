@@ -2598,6 +2598,9 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "Resets the stat stages of both Pokemon to 0 and removes stat reductions due to burn and paralysis. Resets Toxic counters to 0 and removes the effect of confusion, Disable, Focus Energy, Leech Seed, Light Screen, Mist, and Reflect from both Pokemon. Removes the opponent's non-volatile status condition.",
 			shortDesc: "Resets all stat changes. Removes foe's status.",
 		},
+
+		// Only used in Gen 1
+		activate: "  All STATUS changes are eliminated!",
 	},
 	headbutt: {
 		name: "Headbutt",
@@ -3848,9 +3851,13 @@ export const MovesText: {[k: string]: MoveText} = {
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "While active, user is protected from stat drops.",
+			start: "  [POKEMON]'s shrouded in MIST!",
+			block: "  [POKEMON]'s protected by MIST.",
 		},
 		gen1: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon, unless caused by the secondary effect of a move. Fails if the user already has the effect. If any Pokemon uses Haze, this effect ends.",
+			start: "  [POKEMON]'s shrouded in mist!",
+			block: "  But, it failed!",
 		},
 
 		start: "  [TEAM] became shrouded in mist!",
@@ -6504,8 +6511,8 @@ export const MovesText: {[k: string]: MoveText} = {
 			shortDesc: "Lasts 3-6 turns. Active Pokemon cannot sleep.",
 		},
 		gen3: {
-			desc: "The user spends three to five turns locked into this move. This move targets an opposing Pokemon at random on each turn. During effect, no active Pokemon can fall asleep by any means, and Pokemon that are already asleep wake up as their turn starts or at the end of each turn, including the last one. If the user is prevented from moving or the attack is not successful against the target during one of the turns, the effect ends.",
-			shortDesc: "Lasts 3-5 turns. Active Pokemon cannot sleep.",
+			desc: "The user spends two to five turns locked into this move. This move targets an opposing Pokemon at random on each turn. During effect, no active Pokemon can fall asleep by any means, and Pokemon that are already asleep wake up as their turn starts or at the end of each turn, including the last one. If the user is prevented from moving or the attack is not successful against the target during one of the turns, the effect ends.",
+			shortDesc: "Lasts 2-5 turns. Active Pokemon cannot sleep.",
 		},
 
 		start: "  [POKEMON] caused an uproar!",

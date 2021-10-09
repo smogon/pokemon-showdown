@@ -99,7 +99,7 @@ export class FriendsDatabase {
 			let val;
 			try {
 				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
-			} catch (e) {}
+			} catch {}
 			const actualVersion = FS(`databases/migrations/friends`).readdirIfExistsSync().length;
 			if (val === undefined) {
 				// hasn't been set up before, write new version.
@@ -118,7 +118,7 @@ export class FriendsDatabase {
 		for (const k in ACTIONS) {
 			try {
 				statements[k] = database.prepare(ACTIONS[k as keyof typeof ACTIONS]);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Error(`Friends DB statement crashed: ${ACTIONS[k as keyof typeof ACTIONS]} (${e.message})`);
 			}
 		}
@@ -342,7 +342,11 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	},
 	accept: requests => {
 		for (const request of requests) {
-			const [senderID] = request;
+			const [senderID, receiverID] = request;
+			const friends = statements.get.all(receiverID, 101);
+			if (friends?.length >= MAX_FRIENDS) {
+				throw new FailureMessage(`You are at the maximum number of friends.`);
+			}
 			const {result} = TRANSACTIONS.removeRequest([request]);
 			if (!result.length) throw new FailureMessage(`You have no request pending from ${senderID}.`);
 			TRANSACTIONS.add([request]);
@@ -379,7 +383,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 			result.result = statements[statement].all(data);
 			break;
 		}
-	} catch (e) {
+	} catch (e: any) {
 		if (!e.name.endsWith('FailureMessage')) {
 			result.error = "Sorry! The database process crashed. We've been notified and will fix this.";
 			Monitor.crashlog(e, "A friends database process", query);

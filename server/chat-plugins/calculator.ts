@@ -191,7 +191,7 @@ export const commands: Chat.ChatCommands = {
 				resultStr = `<strong>${result}</strong>`;
 			}
 			this.sendReplyBox(`${expression}<br />= ${resultStr}`);
-		} catch (e) {
+		} catch (e: any) {
 			this.sendReplyBox(
 				Utils.html`${expression}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
 			);

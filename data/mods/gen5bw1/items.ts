@@ -1,25 +1,41 @@
 export const Items: {[k: string]: ModdedItemData} = {
-	kommoniumz: {
+	apicotberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	lunaliumz: {
+	custapberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	lycaniumz: {
+	ganlonberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	mimikiumz: {
+	jabocaberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	solganiumz: {
+	liechiberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	ultranecroziumz: {
+	micleberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	petayaberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	rowapberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	salacberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	souldew: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},

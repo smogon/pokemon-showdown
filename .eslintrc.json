@@ -5,7 +5,7 @@
       "files": ["./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        "ecmaVersion": 9,
+        "ecmaVersion": 11,
         "sourceType": "module",
         "tsconfigRootDir": ".",
         "project": ["./tsconfig.json"]

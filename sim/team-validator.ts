@@ -672,7 +672,7 @@ export class TeamValidator {
 			for (const encounter of learnsetSpecies.encounters || []) {
 				if (encounter.generation !== 1) continue;
 				if (!encounter.level) continue;
-				if (lowestEncounterLevel && encounter.level < lowestEncounterLevel) continue;
+				if (lowestEncounterLevel && encounter.level > lowestEncounterLevel) continue;
 
 				lowestEncounterLevel = encounter.level;
 			}

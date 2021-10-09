@@ -45,16 +45,16 @@ async function lastLine(database, roomid) {
 
 	describe('Modlog#prepareSQLSearch', () => {
 		it('should respect the maxLines parameter', async () => {
-			const query = await modlog.prepareSQLSearch(['lobby'], 1337, false, {note: [], user: [], ip: [], action: [], actionTaker: []});
+			const query = modlog.prepareSQLSearch(['lobby'], 1337, false, {note: [], user: [], ip: [], action: [], actionTaker: []});
 			assert(query.queryText.endsWith('LIMIT ?'));
 			assert(query.args.includes(1337));
 
-			const noMaxLines = await modlog.prepareSQLSearch(['lobby'], 0, false, {note: [], user: [], ip: [], action: [], actionTaker: []});
+			const noMaxLines = modlog.prepareSQLSearch(['lobby'], 0, false, {note: [], user: [], ip: [], action: [], actionTaker: []});
 			assert(!noMaxLines.queryText.includes('LIMIT'));
 		});
 
 		it('should attempt to respect onlyPunishments', async () => {
-			const query = await modlog.prepareSQLSearch(['lobby'], 0, true, {note: [], user: [], ip: [], action: [], actionTaker: []});
+			const query = modlog.prepareSQLSearch(['lobby'], 0, true, {note: [], user: [], ip: [], action: [], actionTaker: []});
 			assert(query.queryText.includes('action IN ('));
 			assert(query.args.includes('WEEKLOCK'));
 		});
@@ -141,8 +141,8 @@ async function lastLine(database, roomid) {
 		// isExact is currently set up to search for the entire note equalling the search
 		// this could be redesigned, but is what we currently test for.
 		it('note searches should respect isExact', async () => {
-			const notExact = await modlog.search('readingtest', {note: [{search: ['has man'], isExact: false}], user: [], ip: [], action: [], actionTaker: []});
-			const exact = await modlog.search('readingtest', {note: [{search: ['has man'], isExact: true}], user: [], ip: [], action: [], actionTaker: []});
+			const notExact = await modlog.search('readingtest', {note: [{search: 'has man', isExact: false}], user: [], ip: [], action: [], actionTaker: []});
+			const exact = await modlog.search('readingtest', {note: [{search: 'has man', isExact: true}], user: [], ip: [], action: [], actionTaker: []});
 
 			assert.equal(exact.results.length, 0);
 			assert(notExact.results.length);
