@@ -73,20 +73,23 @@ export const Repl = new class {
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
 			const directory = path.dirname(path.resolve(__dirname, '..', config.replsocketprefix || 'logs/repl', 'app'));
-			if (!fs.existsSync(directory)) {
-				fs.mkdirSync(directory);
-			}
-			for (const file of fs.readdirSync(directory)) {
-				const pathname = path.resolve(directory, file);
-				const stat = fs.statSync(pathname);
-				if (!stat.isSocket()) continue;
+			let files;
+			try {
+				files = fs.readdirSync(directory);
+			} catch {}
+			if (files) {
+				for (const file of files) {
+					const pathname = path.resolve(directory, file);
+					const stat = fs.statSync(pathname);
+					if (!stat.isSocket()) continue;
 
-				const socket = net.connect(pathname, () => {
-					socket.end();
-					socket.destroy();
-				}).on('error', () => {
-					fs.unlink(pathname, () => {});
-				});
+					const socket = net.connect(pathname, () => {
+						socket.end();
+						socket.destroy();
+					}).on('error', () => {
+						fs.unlink(pathname, () => {});
+					});
+				}
 			}
 		}
 
