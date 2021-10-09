@@ -1295,6 +1295,12 @@ export class TeamValidator {
 			}
 		}
 
+		let isGmax = false;
+		if (tierSpecies.canGigantamax && set.gigantamax) {
+			setHas['pokemon:' + tierSpecies.id + 'gmax'] = true;
+			isGmax = true;
+		}
+
 		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
 		const tierTag = 'pokemontag:' + toID(tier);
 		setHas[tierTag] = true;
@@ -1326,6 +1332,13 @@ export class TeamValidator {
 			banReason = ruleTable.check('pokemontag:mega', setHas);
 			if (banReason) {
 				return `Mega evolutions are ${banReason}.`;
+			}
+		}
+
+		if (isGmax) {
+			banReason = ruleTable.check('pokemon:' + tierSpecies.id + 'gmax');
+			if (banReason) {
+				return `Gigantamaxing ${species.name} is ${banReason}.`;
 			}
 		}
 
