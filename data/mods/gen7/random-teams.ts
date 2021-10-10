@@ -3,6 +3,19 @@ import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
+export interface BattleFactorySpecies {
+	flags: {megaOnly?: 1, zmoveOnly?: 1, limEevee?: 1};
+	sets: BattleFactorySet[];
+}
+interface BattleFactorySet {
+	species: string;
+	item: string;
+	ability: string;
+	nature: string;
+	moves: string[];
+	evs?: Partial<StatsTable>;
+	ivs?: Partial<StatsTable>;
+}
 export class RandomGen7Teams extends RandomTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -1578,7 +1591,7 @@ export class RandomGen7Teams extends RandomTeams {
 		return pokemon;
 	}
 
-	randomFactorySets: AnyObject = require('./factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
@@ -1686,12 +1699,16 @@ export class RandomGen7Teams extends RandomTeams {
 
 	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
 		const forceResult = (depth >= 4);
+		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
 
 		// The teams generated depend on the tier choice in such a way that
 		// no exploitable information is leaked from rolling the tier in getTeam(p1).
-		const availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'LC', 'Mono'];
-		if (!this.factoryTier) this.factoryTier = this.sample(availableTiers);
-		const chosenTier = this.factoryTier;
+		if (!this.factoryTier) {
+			this.factoryTier = isMonotype ? 'Mono' : this.sample(['Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'LC']);
+		} else if (isMonotype && this.factoryTier !== 'Mono') {
+			// I don't think this can ever happen?
+			throw new Error(`Can't generate a Monotype Battle Factory set in a battle with factory tier ${this.factoryTier}`);
+		}
 
 		const tierValues: {[k: string]: number} = {
 			Uber: 5,
@@ -1703,7 +1720,7 @@ export class RandomGen7Teams extends RandomTeams {
 		};
 
 		const pokemon = [];
-		const pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
+		const pokemonPool = Object.keys(this.randomFactorySets[this.factoryTier]);
 
 		const typePool = this.dex.types.names();
 		const type = this.sample(typePool);
@@ -1739,11 +1756,11 @@ export class RandomGen7Teams extends RandomTeams {
 
 			// Lessen the need of deleting sets of Pokemon after tier shifts
 			if (
-				chosenTier in tierValues && species.tier in tierValues &&
-				tierValues[species.tier] > tierValues[chosenTier]
+				this.factoryTier in tierValues && species.tier in tierValues &&
+				tierValues[species.tier] > tierValues[this.factoryTier]
 			) continue;
 
-			const speciesFlags = this.randomFactorySets[chosenTier][species.id].flags;
+			const speciesFlags = this.randomFactorySets[this.factoryTier][species.id].flags;
 
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[species.baseSpecies]) continue;
@@ -1752,7 +1769,7 @@ export class RandomGen7Teams extends RandomTeams {
 			if (!teamData.megaCount) teamData.megaCount = 0;
 			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
 
-			const set = this.randomFactorySet(species, teamData, chosenTier);
+			const set = this.randomFactorySet(species, teamData, this.factoryTier);
 			if (!set) continue;
 
 			const itemData = this.dex.items.get(set.item);
@@ -1768,7 +1785,7 @@ export class RandomGen7Teams extends RandomTeams {
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
 			// Enforce Monotype
-			if (chosenTier === 'Mono') {
+			if (isMonotype) {
 				// Prevents Mega Evolutions from breaking the type limits
 				if (itemData.megaStone) {
 					const megaSpecies = this.dex.species.get(itemData.megaStone);
@@ -1976,7 +1993,7 @@ export class RandomGen7Teams extends RandomTeams {
 
 		const teamData: TeamData = {
 			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0,
-			eeveeLimCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {},
+			eeveeLimCount: 0, has: {}, forceResult, weaknesses: {}, resistances: {},
 		};
 		const requiredMoveFamilies: string[] = [];
 		const requiredMoves: {[k: string]: string} = {};
