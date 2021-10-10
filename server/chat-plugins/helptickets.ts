@@ -438,6 +438,16 @@ export class HelpTicket extends Rooms.RoomGame {
 	static async modlog(entry: PartialModlogEntry) {
 		await Rooms.Modlog.write('help-texttickets' as ModlogID, entry);
 	}
+	static list(sorter?: (ticket: TicketState) => Utils.Comparable) {
+		if (!sorter) {
+			sorter = ticket => [
+				!ticket.offline,
+				ticket.open,
+				ticket.open ? [ticket.active, !ticket.claimed, ticket.created] : 0,
+			];
+		}
+		return Utils.sortBy(Object.values(tickets), sorter);
+	}
 	static logTextResult(ticket: TicketState & {text: [string, string], resolved: ResolvedTicketInfo}) {
 		const entry = {
 			text: ticket.text,
@@ -682,11 +692,7 @@ export function notifyStaff() {
 	const room = Rooms.get('staff');
 	if (!room) return;
 	let buf = ``;
-	const sortedTickets = Utils.sortBy(Object.values(tickets), ticket => [
-		!ticket.offline,
-		ticket.open,
-		ticket.open ? [ticket.active, !ticket.claimed, ticket.created] : 0,
-	]);
+	const sortedTickets = HelpTicket.list();
 	const listOnlyTypes = Object.keys(textTickets).filter(type => textTickets[type].listOnly);
 	let count = 0;
 	let hiddenTicketUnclaimedCount = 0;
@@ -785,10 +791,9 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 	// we can't determine this for FFA - valid guesses can be made for 2 player, but not 4p. not at all.
 	if (room?.battle) {
 		if (room.battle.playerCap > 2) return null;
-		for (const player of room.battle.players) {
-			const p = player.getUser();
-			if (!p || p.id === submitter) continue;
-			return p.id;
+		for (const k in room.battle.playerTable) {
+			if (k === submitter) continue;
+			return k;
 		}
 	}
 	if (!room) {
@@ -796,7 +801,7 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 		try {
 			const body = await replayUrl.get();
 			const data = JSON.parse(body);
-			return data.p1id === submitter ? data.p1id : data.p2id;
+			return data.p1id === submitter ? data.p2id : data.p1id;
 		} catch {
 			return null;
 		}
@@ -1588,7 +1593,7 @@ export const pages: Chat.PageTable = {
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">${this.tr`Help tickets`}</h1></th></tr>`;
 			buf += `<tr><th>${this.tr`Status`}</th><th>${this.tr`Creator`}</th><th>${this.tr`Ticket Type`}</th><th>${this.tr`Claimed by`}</th><th>${this.tr`Action`}</th></tr>`;
 
-			const sortedTickets = Utils.sortBy(Object.values(tickets), ticket => [
+			const sortedTickets = HelpTicket.list(ticket => [
 				ticket.open,
 				ticket.open ? [ticket.active, ticket.created] : -ticket.created,
 			]);
