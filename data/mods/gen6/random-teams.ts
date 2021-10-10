@@ -1,5 +1,5 @@
 import {MoveCounter, TeamData} from '../../random-teams';
-import RandomGen7Teams from '../gen7/random-teams';
+import RandomGen7Teams, {BattleFactorySpecies} from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -1101,7 +1101,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 	}
 
-	randomFactorySets: AnyObject = require('./factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species,
@@ -1203,7 +1203,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
 		const teamData: TeamData = {
-			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult,
+			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult,
 			weaknesses: {}, resistances: {},
 		};
 		const requiredMoveFamilies = ['hazardSet', 'hazardClear'];
