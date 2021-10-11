@@ -977,16 +977,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 				} else {
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
-				if (this.gen >= 7) {
-					const item = this.dex.items.get(set.item);
-					if (item.megaStone && species.baseSpecies === item.megaEvolves) {
-						species = this.dex.species.get(item.megaStone);
-						typeTable = typeTable.filter(type => species.types.includes(type));
-					}
-					if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
-						species = this.dex.species.get("Necrozma-Ultra");
-						typeTable = typeTable.filter(type => species.types.includes(type));
-					}
+				const item = this.dex.items.get(set.item);
+				if (item.megaStone && species.baseSpecies === item.megaEvolves) {
+					species = this.dex.species.get(item.megaStone);
+					typeTable = typeTable.filter(type => species.types.includes(type));
+				}
+				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
+					species = this.dex.species.get("Necrozma-Ultra");
+					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				if (!typeTable.length) return [`Your team must share a type.`];
 			}
