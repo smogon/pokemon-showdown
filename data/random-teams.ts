@@ -534,10 +534,9 @@ export class RandomTeams {
 			// Random unique moves
 			const m = [];
 			do {
-				const moveid = this.sampleNoReplace(movePool);
-				const move = this.dex.moves.get(moveid);
+				const move = this.sampleNoReplace(movePool);
 				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
-					m.push(moveid);
+					m.push(move.id);
 				}
 			} while (m.length < 4);
 
