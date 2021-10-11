@@ -629,8 +629,8 @@ export class TeamValidator {
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			}
-		} else if (ruleTable.has('obtainablemisc') && learnsetSpecies.eventOnly ||
-			(outOfBattleSpecies.prevo && dex.species.getLearnsetData(this.toID(outOfBattleSpecies.prevo)).eventOnly)) {
+		} else if (ruleTable.has('obtainablemisc') && (learnsetSpecies.eventOnly ||
+			(outOfBattleSpecies.prevo && dex.species.getLearnsetData(this.toID(outOfBattleSpecies.prevo)).eventOnly))) {
 			let eventSpecies = !learnsetSpecies.eventData &&
 			outOfBattleSpecies.baseSpecies !== outOfBattleSpecies.name ?
 				dex.species.get(outOfBattleSpecies.baseSpecies) : outOfBattleSpecies;
