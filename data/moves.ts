@@ -2181,7 +2181,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	clangoroussoul: {
 		num: 775,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		name: "Clangorous Soul",
