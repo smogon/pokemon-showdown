@@ -629,10 +629,15 @@ export class TeamValidator {
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			}
-		} else if (ruleTable.has('obtainablemisc') && learnsetSpecies.eventOnly) {
-			const eventSpecies = !learnsetSpecies.eventData &&
+		} else if (ruleTable.has('obtainablemisc') && learnsetSpecies.eventOnly ||
+			(outOfBattleSpecies.prevo && dex.species.getLearnsetData(this.toID(outOfBattleSpecies.prevo)).eventOnly)) {
+			let eventSpecies = !learnsetSpecies.eventData &&
 			outOfBattleSpecies.baseSpecies !== outOfBattleSpecies.name ?
 				dex.species.get(outOfBattleSpecies.baseSpecies) : outOfBattleSpecies;
+			if (!learnsetSpecies.eventData && eventSpecies.prevo &&
+				dex.species.getLearnsetData(this.toID(eventSpecies.prevo)).eventData) {
+				eventSpecies = dex.species.get(eventSpecies.prevo);
+			}
 			const eventData = learnsetSpecies.eventData ||
 				dex.species.getLearnsetData(eventSpecies.id).eventData;
 			if (!eventData) throw new Error(`Event-only species ${species.name} has no eventData table`);
