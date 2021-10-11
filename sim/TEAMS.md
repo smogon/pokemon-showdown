@@ -210,6 +210,9 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
 
 - `GIGANTAMAX` is `G` for Gmax, blank for non-Gmax.
 
+- If `POKEBALL`, `HIDDENPOWERTYPE`, `DYNAMAXLEVEL` and `GIGANTAMAX`
+  are all blank, the commas will be left off.
+
 
 Converting between formats
 --------------------------

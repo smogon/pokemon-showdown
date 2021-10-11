@@ -379,7 +379,7 @@ export const Teams = new class Teams {
 		if (set.shiny) {
 			out += `Shiny: Yes  \n`;
 		}
-		if (typeof set.happiness === `number` && set.happiness !== 255 && !isNaN(set.happiness)) {
+		if (typeof set.happiness === 'number' && set.happiness !== 255 && !isNaN(set.happiness)) {
 			out += `Happiness: ${set.happiness}  \n`;
 		}
 		if (set.pokeball) {
@@ -388,7 +388,7 @@ export const Teams = new class Teams {
 		if (set.hpType) {
 			out += `Hidden Power: ${set.hpType}  \n`;
 		}
-		if (typeof set.dynamaxLevel === `number` && set.dynamaxLevel !== 10 && !isNaN(set.dynamaxLevel)) {
+		if (typeof set.dynamaxLevel === 'number' && set.dynamaxLevel !== 10 && !isNaN(set.dynamaxLevel)) {
 			out += `Dynamax Level: ${set.dynamaxLevel}  \n`;
 		}
 		if (set.gigantamax) {
