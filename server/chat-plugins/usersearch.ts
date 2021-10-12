@@ -24,9 +24,9 @@ function searchUsernames(target: string, page = false) {
 		if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
 		if (Punishments.isGlobalBanned(curUser)) continue;
 		if (curUser.connected) {
-			results.online.push(Utils.html`${!page ? ONLINE_SYMBOL : ''} ${curUser.name}`);
+			results.online.push(`${!page ? ONLINE_SYMBOL : ''} ${curUser.name}`);
 		} else {
-			results.offline.push(Utils.html`${!page ? OFFLINE_SYMBOL : ''} ${curUser.name}`);
+			results.offline.push(`${!page ? OFFLINE_SYMBOL : ''} ${curUser.name}`);
 		}
 	}
 	for (const k in results) {
@@ -55,7 +55,7 @@ function searchUsernames(target: string, page = false) {
 				buf += `<div class="ladder pad"><h3>Online users</h3><table><tr><th>Username</th><th>Punish</th></tr>`;
 				for (const username of results.online) {
 					// don't need to escape here since we escape above when fetching results
-					buf += `<tr><td><username>${username}</username></td>`;
+					buf += Utils.html`<tr><td><username>${username}</username></td>`;
 					buf += `<td>${getPunishmentHTML(toID(username), target)}</td></tr>`;
 				}
 				buf += `</table></div>`;
@@ -66,7 +66,7 @@ function searchUsernames(target: string, page = false) {
 					buf += `<div class="ladder pad"><h3>Offline users</h3><table><tr><th>Username</th><th>Punish</th></tr>`;
 					for (const username of results.offline) {
 						// don't need to escape here since we escape above when fetching results
-						buf += `<tr><td><username>${username}</username></td>`;
+						buf += Utils.html`<tr><td><username>${username}</username></td>`;
 						buf += `<td>${getPunishmentHTML(toID(username), target)}</td></tr>`;
 					}
 				}
