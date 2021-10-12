@@ -1730,6 +1730,13 @@ export const commands: Chat.ChatCommands = {
 			}
 			return this.errorReply(`User '${inputUsername}' not found. (use /offlineforcerename to rename anyway.)`);
 		}
+		if (Punishments.namefilterwhitelist.has(targetID)) {
+			this.errorReply(`That name is blocked from being forcerenamed.`);
+			if (user.can('bypassall')) {
+				this.errorReply(`Use /noforcerename remove to remove it from the list if you wish to rename it.`);
+			}
+			return false;
+		}
 		this.checkCan('forcerename', targetID);
 		const {publicReason, privateReason} = this.parseSpoiler(reason);
 
@@ -1764,14 +1771,42 @@ export const commands: Chat.ChatCommands = {
 		);
 
 		targetUser?.resetName(true);
-		if (Punishments.namefilterwhitelist.has(targetID)) {
-			Punishments.unwhitelistName(targetID);
-		}
 		return true;
 	},
 	forcerenamehelp: [
 		`/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ &`,
 		`/allowname [username] - Unmarks a forcerenamed username, stopping staff from being notified when it is used. Requires % @ &`,
+	],
+
+	nfr: 'noforcerename',
+	noforcerename: {
+		add(target, room, user) {
+			const {targetUsername, rest} = this.splitUser(target);
+			const targetId = toID(targetUsername);
+			if (!targetId) return this.parse('/help noforcerename');
+			this.checkCan('bypassall');
+			if (!Punishments.whitelistName(target, user.name)) {
+				return this.errorReply(`${targetUsername} is already on the noforcerename list.`);
+			}
+			this.addGlobalModAction(`${user.name} added the name ${targetId} to the no forcerename list.${rest ? ` (${rest})` : ''}`);
+			this.globalModlog('NOFORCERENAME', targetId, rest);
+		},
+		remove(target, room, user) {
+			const {targetUsername, rest} = this.splitUser(target);
+			const targetId = toID(targetUsername);
+			if (!targetId) return this.parse('/help noforcerename');
+			this.checkCan('bypassall');
+			if (!Punishments.namefilterwhitelist.has(targetId)) {
+				return this.errorReply(`${targetUsername} is not on the noforcerename list.`);
+			}
+			Punishments.unwhitelistName(target);
+			this.addGlobalModAction(`${user.name} removed ${targetId} from the no forcerename list.${rest ? ` (${rest})` : ''}`);
+			this.globalModlog('UNNOFORCERENAME', targetId, rest);
+		},
+	},
+	noforcerenamehelp: [
+		`/noforcerename add OR /nfr add [username] - Adds [username] to the list of users who can't be forcerenamed by staff.`,
+		`/noforcerename remove OR /nfr remove [username] - Removes [username] from the list of users who can't be forcerenamed by staff.`,
 	],
 
 	forceclearstatus(target, room, user) {

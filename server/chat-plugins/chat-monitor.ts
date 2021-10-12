@@ -765,7 +765,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('forcerename');
 		target = toID(target);
 		if (!target) return this.errorReply(`Syntax: /allowname username`);
-		if (!Punishments.whitelistName(target, user.name)) {
+		if (Punishments.namefilterwhitelist.has(target)) {
 			return this.errorReply(`${target} is already allowed as a username.`);
 		}
 
@@ -776,6 +776,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(msg);
 		}
 		this.globalModlog(`ALLOWNAME`, target);
+		Monitor.forceRenames.delete(target as ID);
 	},
 };
 
