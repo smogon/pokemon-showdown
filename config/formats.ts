@@ -384,6 +384,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Spooky Cup 2021",
+		threads: [
+			`&bull; <a href="https://www.smogon.com/forums/threads/3691909/">Spooky Cup 2021</a>`,
+		],
 
 		mod: 'gen8',
 		gameType: 'doubles',
