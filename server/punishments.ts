@@ -516,7 +516,7 @@ export const Punishments = new class {
 		lines.shift();
 		for (const line of lines) {
 			const [userid, whitelister] = line.split('\t');
-			this.namefilterwhitelist.set(userid, whitelister);
+			this.namefilterwhitelist.set(toID(userid), toID(whitelister));
 		}
 	}
 
