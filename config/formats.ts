@@ -748,7 +748,7 @@ export const Formats: FormatList = [
 			getItem() {
 				const ability = this.battle.dex.abilities.get(this.item);
 				if (!ability.exists) return Object.getPrototypeOf(this).getItem.call(this);
-				return {...ability, onTakeItem: false};
+				return {...ability, ignoreKlutz: true, onTakeItem: false};
 			},
 			hasItem(item) {
 				const ownItem = this.item;
@@ -775,13 +775,45 @@ export const Formats: FormatList = [
 						break;
 					}
 				}
-				const item = this.battle.dex.abilities.get(this.item);
 				return !!(
 					(this.battle.gen >= 5 && !this.isActive) ||
-					((this.volatiles['gastroacid'] || (neutralizinggas &&
-						this.ability !== ('neutralizinggas' as ID) && this.item !== ('neutralizinggas' as ID))) &&
-						(!this.getAbility().isPermanent || (item.exists && !item.isPermanent)))
-				);
+					((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID) &&
+						this.item !== ('neutralizinggas' as ID))) && !this.getAbility().isPermanent));
+			},
+			ignoringItem() {
+				let nGas = false;
+				for (const pokemon of this.battle.getAllActive()) {
+					// can't use hasAbility because it would lead to infinite recursion
+					if (((pokemon.ability === ('neutralizinggas' as ID) && !pokemon.abilityState.ending) ||
+						(pokemon.item === ('neutralizinggas' as ID) && !pokemon.itemState.ending)) &&
+						!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending) {
+						nGas = true;
+						break;
+					}
+				}
+				const item = this.battle.dex.abilities.get(this.item);
+				return !!((this.battle.gen >= 5 && !this.isActive) ||
+					(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
+					this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom'] ||
+					(item.exists && item.id !== 'neutralizinggas' && (nGas || this.volatiles['gastroacid'])));
+			},
+			takeItem(source) {
+				if (!this.isActive) return false;
+				if (!this.item) return false;
+				if (this.battle.dex.abilities.get(this.item).exists) return false;
+				if (!source) source = this;
+				if (this.battle.gen === 4) {
+					if (toID(this.ability) === 'multitype') return false;
+					if (source && toID(source.ability) === 'multitype') return false;
+				}
+				const item = this.getItem();
+				if (this.battle.runEvent('TakeItem', this, source, null, item)) {
+					this.item = '';
+					this.itemState = {id: '', target: this};
+					this.pendingStaleness = undefined;
+					return item;
+				}
+				return false;
 			},
 		},
 	},
