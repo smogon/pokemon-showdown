@@ -117,6 +117,11 @@ class Giveaway extends Rooms.RoomGame {
 		[this.monIDs, this.sprite] = Giveaway.getSprite(prize.species);
 	}
 
+	destroy() {
+		this.clearTimer();
+		super.destroy();
+	}
+
 	generateReminder() {}
 
 	send(content: string) {
@@ -306,7 +311,9 @@ export class QuestionGiveaway extends Giveaway {
 		if (!targetUser.autoconfirmed) {
 			throw new Chat.ErrorMessage(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
 		}
-		if (Giveaway.checkBanned(context.room!, targetUser)) throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
+		if (Giveaway.checkBanned(context.room!, targetUser)) {
+			throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
+		}
 		return {targetUser, ot, tid, prize, question, answers};
 	}
 
@@ -360,12 +367,12 @@ export class QuestionGiveaway extends Giveaway {
 		}
 	}
 
-	change(key: string, value: string, user: User) {
+	change(value: string, user: User, answer = false) {
 		if (user.id !== this.host.id) return user.sendTo(this.room, "Only the host can edit the giveaway.");
 		if (this.phase !== 'pending') {
 			return user.sendTo(this.room, "You cannot change the question or answer once the giveaway has started.");
 		}
-		if (key === 'question') {
+		if (!answer) {
 			this.question = value;
 			return user.sendTo(this.room, `The question has been changed to ${value}.`);
 		}
@@ -411,7 +418,7 @@ export class QuestionGiveaway extends Giveaway {
 			}
 		}
 
-		delete this.room.giveaway;
+		this.destroy();
 	}
 
 	static sanitize(str: string) {
@@ -455,6 +462,35 @@ export class LotteryGiveaway extends Giveaway {
 		this.send(this.generateReminder(false));
 
 		this.timer = setTimeout(() => this.drawLottery(), 1000 * 60 * 2);
+	}
+
+	static splitTarget(target: string, sep = '|', context: Chat.CommandContext) {
+		let [giver, ot, tid, prize, winners] = target.split(sep).map(param => param.trim());
+		if (!(giver && ot && tid && prize)) {
+			throw new Chat.ErrorMessage("Invalid arguments specified - /lottery giver | ot | tid | prize | winners");
+		}
+		tid = toID(tid);
+		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) throw new Chat.ErrorMessage("Invalid TID");
+		const targetUser = Users.get(giver);
+		if (!targetUser?.connected) throw new Chat.ErrorMessage(`User '${giver}' is not online.`);
+		if (context.user !== targetUser && !context.user.can('show', null, context.room!)) {
+			context.checkCan('warn', null, context.room!);
+		}
+		if (!targetUser.autoconfirmed) {
+			throw new Chat.ErrorMessage(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
+		}
+		if (Giveaway.checkBanned(context.room!, targetUser)) {
+			throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
+		}
+
+		let numWinners = 1;
+		if (winners) {
+			numWinners = parseInt(winners);
+			if (isNaN(numWinners) || numWinners < 1 || numWinners > 5) {
+				throw new Chat.ErrorMessage("The lottery giveaway can have a minimum of 1 and a maximum of 5 winners.");
+			}
+		}
+		return {targetUser, ot, tid, prize, winners: numWinners};
 	}
 
 	generateReminder(joined = false) {
@@ -520,7 +556,7 @@ export class LotteryGiveaway extends Giveaway {
 		const userlist = Object.values(this.joined);
 		if (userlist.length === 0) {
 			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
-			delete this.room.giveaway;
+			this.destroy();
 			return this.room.send("The giveaway has been forcibly ended as there are no participants.");
 		}
 
@@ -562,7 +598,7 @@ export class LotteryGiveaway extends Giveaway {
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${winnerNames}`);
 			Giveaway.updateStats(this.monIDs);
 		}
-		delete this.room.giveaway;
+		this.destroy();
 	}
 }
 
@@ -732,39 +768,10 @@ const cmds: Chat.ChatCommands = {
 		}
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
-		room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, prize, question, answers);
+		// room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, prize, question, answers);
 
 		this.privateModAction(`${user.name} started a question giveaway for ${targetUser.name}`);
 		this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
-	},
-	changeanswer: 'changequestion',
-	changequestion(target, room, user, conn, cmd) {
-		room = this.requireRoom('wifi' as RoomID);
-		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (room.giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
-
-		target = target.trim();
-		if (!target) return this.errorReply("You must include a question or an answer.");
-		(room.giveaway as QuestionGiveaway).change(cmd.substr(6), target, user);
-	},
-	showanswer: 'viewanswer',
-	viewanswer(target, room, user) {
-		room = this.requireRoom('wifi' as RoomID);
-		const giveaway = room.giveaway as QuestionGiveaway;
-		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
-		if (user.id !== giveaway.host.id && user.id !== giveaway.giver.id) return;
-
-		this.sendReply(`The giveaway question is ${giveaway.question}.\n` +
-			`The answer${Chat.plural(giveaway.answers, 's are', ' is')} ${giveaway.answers.join(', ')}.`);
-	},
-	guessanswer: 'guess',
-	guess(target, room, user) {
-		room = this.requireRoom('wifi' as RoomID);
-		this.checkChat();
-		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (room.giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
-		(room.giveaway as QuestionGiveaway).guessAnswer(user, target);
 	},
 
 	// lottery giveaway.
@@ -1042,10 +1049,15 @@ const cmds: Chat.ChatCommands = {
 
 export const commands: Chat.ChatCommands = {
 	giveaway: {
+		view: {
+			''() {},
+			stored() {},
+			submitted() {},
+		},
 		new: 'create',
 		start: 'create',
 		create: {
-			question(target, room, user, connection, cmd) {
+			question(target, room, user) {
 				room = this.room = Rooms.search('wifi') || null;
 				if (!room) {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
@@ -1060,6 +1072,43 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(`${user.name} started a question giveaway for ${targetUser.name}.`);
 				this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 			},
+			lottery(target, room, user) {
+				room = this.room = Rooms.search('wifi') || null;
+				if (!room) {
+					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
+				}
+				if (room.game) throw new Chat.ErrorMessage(`There is already a room game (${room.game.constructor.name}) going on.`);
+				const {targetUser, ot, tid, prize, winners} = LotteryGiveaway.splitTarget(target, '|', this);
+				const set = Teams.import(prize)?.[0];
+				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
+
+				room.game = new LotteryGiveaway(user, targetUser, room, ot, tid, set, winners);
+
+				this.privateModAction(`${user.name} started a lottery giveaway for ${targetUser.name}.`);
+				this.modlog('LOTTERY GIVEAWAY', null, `for ${targetUser.getLastId()}`);
+			},
+		},
+		guess(target, room, user) {
+			room = this.requireRoom('wifi' as RoomID);
+			this.checkChat();
+			const giveaway = this.requireGame(QuestionGiveaway);
+			giveaway.guessAnswer(user, target);
+		},
+		changeanswer: 'changequestion',
+		changequestion(target, room, user, connection, cmd) {
+			room = this.requireRoom('wifi' as RoomID);
+			const giveaway = this.requireGame(QuestionGiveaway);
+			target = target.trim();
+			if (!target) throw new Chat.ErrorMessage("You must include a question or an answer.");
+			giveaway.change(target, user, cmd.includes('answer'));
+		},
+		showanswer: 'viewanswer',
+		viewanswer(target, room, user) {
+			room = this.requireRoom('wifi' as RoomID);
+			const giveaway = this.requireGame(QuestionGiveaway);
+			if (user.id !== giveaway.host.id && user.id !== giveaway.giver.id) return;
+	
+			this.sendReply(`The giveaway question is ${giveaway.question}.\nThe answer${Chat.plural(giveaway.answers, 's are', ' is')} ${giveaway.answers.join(', ')}.`);
 		},
 		save: 'store',
 		store: {
@@ -1085,17 +1134,17 @@ export const commands: Chat.ChatCommands = {
 				if (!room) {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
 				}
-				const {targetUser, ot, tid, prize, question, answers} = QuestionGiveaway.splitTarget(target, '|', this);
+				const {targetUser, ot, tid, prize, winners} = LotteryGiveaway.splitTarget(target, '|', this);
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
-				if (!wifiData.storedGiveaways.question) wifiData.storedGiveaways.question = [];
-				const data = {targetUserid: targetUser.id, ot, tid, prize: set, question, answers};
-				wifiData.storedGiveaways.question.push(data);
+				if (!wifiData.storedGiveaways.lottery) wifiData.storedGiveaways.lottery = [];
+				const data = {targetUserid: targetUser.id, ot, tid, prize: set, winners};
+				wifiData.storedGiveaways.lottery.push(data);
 				saveData();
 
 				this.privateModAction(`${user.name} saved a question giveaway for ${targetUser.name}.`);
-				this.modlog('QUESTION GIVEAWAY SAVE', null, `${Object.keys(data).map(x => `${x}: ${Array.isArray((data as any)[x]) ? ((data as any)[x] as string[]).join(',') : typeof x === 'string' ? x : Teams.pack([data[x]])}`)}`);
+				this.modlog('LOTTERY GIVEAWAY SAVE', null, `${Object.keys(data).map(x => `${x}: ${Array.isArray((data as any)[x]) ? ((data as any)[x] as string[]).join(',') : typeof x === 'string' ? x : Teams.pack([data[x]])}`)}`);
 			},
 		},
 	},

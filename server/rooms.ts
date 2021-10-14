@@ -200,7 +200,6 @@ export abstract class BasicRoom {
 
 	scavgame: ScavengerGameTemplate | null;
 	scavLeaderboard: AnyObject;
-	giveaway?: QuestionGiveaway | LotteryGiveaway | null;
 	gtsga?: GTSGiveaway | null;
 	responder?: AutoResponder | null;
 	privacySetter?: Set<ID> | null;
