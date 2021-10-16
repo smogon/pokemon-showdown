@@ -803,8 +803,8 @@ export const Formats: FormatList = [
 				if (this.battle.dex.abilities.get(this.item).exists) return false;
 				if (!source) source = this;
 				if (this.battle.gen === 4) {
-					if (toID(this.ability) === 'multitype') return false;
-					if (source && toID(source.ability) === 'multitype') return false;
+					if (this.battle.toID(this.ability) === 'multitype') return false;
+					if (source && this.battle.toID(source.ability) === 'multitype') return false;
 				}
 				const item = this.getItem();
 				if (this.battle.runEvent('TakeItem', this, source, null, item)) {
