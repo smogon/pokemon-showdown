@@ -110,6 +110,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL', 'Light Clay'],
+		unbanlist: ['Latias'],
 	},
 	{
 		name: "[Gen 8] RU",
@@ -121,7 +122,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] UU'],
-		banlist: ['UU', 'RUBL'],
+		banlist: ['UU', 'RUBL', 'Latias'],
 	},
 	{
 		name: "[Gen 8] NU",
