@@ -274,4 +274,47 @@ describe('Future Sight', function () {
 		damage = blissey.maxhp - blissey.hp;
 		assert.bounded(damage, [46, 55]); // only boosted by Power Spot
 	});
+
+	it(`should use the user's most recent current Special Attack stat if the user is on the field`, function () {
+		battle = common.createBattle([[
+			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
+		], [
+			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover']},
+		]]);
+
+		for (let i = 0; i < 3; i++) battle.makeChoices();
+		const hooh = battle.p2.active[0];
+		let damage = hooh.maxhp - hooh.hp;
+		assert.bounded(damage, [79, 94]); // Blade Forme damage
+
+		battle.makeChoices();
+		battle.makeChoices('move kingsshield', 'auto');
+		battle.makeChoices('move kingsshield', 'auto');
+		damage = hooh.maxhp - hooh.hp;
+		assert.bounded(damage, [34, 41]); // Shield Forme damage
+	});
+
+	it.skip(`should use the user's most recent current Special Attack stat, even if the user is not on the field`, function () {
+		battle = common.createBattle([[
+			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover', 'flareblitz']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices('switch wynaut', 'auto');
+		battle.makeChoices();
+		const hooh = battle.p2.active[0];
+		let damage = hooh.maxhp - hooh.hp;
+		assert.bounded(damage, [79, 94], `Future Sight should deal Blade Forme damage, even though Aegislash switched out in Blade Forme`);
+
+		battle.makeChoices('switch aegislash', 'auto');
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move flareblitz');
+		battle.makeChoices(); // switch in Wynaut
+		battle.makeChoices();
+		damage = hooh.maxhp - hooh.hp;
+		assert.bounded(damage, [79, 94], `Future Sight should deal Blade Forme damage, even though Aegislash was KOed in Blade Forme.`);
+	});
 });
