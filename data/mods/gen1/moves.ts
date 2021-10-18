@@ -82,7 +82,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (this.effectState.duration === 1) {
 					this.add('-end', pokemon, 'Bide');
 					if (!this.effectState.totalDamage) {
-						this.debug("Bide failed due to 0 damage taken");
+						this.debug("Bide failed as 0 damage taken");
 						this.add('-fail', pokemon);
 						return false;
 					}
