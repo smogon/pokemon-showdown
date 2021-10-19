@@ -1121,6 +1121,28 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const [text, context] = ticket.text;
 			let links = getBattleLinks(text);
 			if (context) links.push(...getBattleLinks(context));
+			let proof = links.join(', ');
+			const opps = new Utils.Multiset<string>();
+			for (const link of links) {
+				const opp = await getOpponent(link, ticket.userid);
+				if (opp) opps.add(opp);
+			}
+			const opp = toID(Utils.sortBy([...opps], ([, num]) => -num)[0]?.[0]);
+			buf += HelpTicket.displayPunishmentList(
+				ticket.userid,
+				proof,
+				ticket,
+				`Punish <strong>${ticket.userid}</strong> (reporter)`,
+				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`
+			);
+			if (opp) {
+				buf += HelpTicket.displayPunishmentList(
+					opp,
+					proof,
+					ticket,
+					`Punish <strong>${ticket.userid}</strong> (reported)`,
+				);
+			}
 			buf += `<p><strong>Battle links given:</strong><p>`;
 			links = links.filter((url, i) => links.indexOf(url) === i);
 			buf += links.map(uri => Chat.formatText(`<<${uri}>>`)).join(', ');
