@@ -1121,7 +1121,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			const [text, context] = ticket.text;
 			let links = getBattleLinks(text);
 			if (context) links.push(...getBattleLinks(context));
-			let proof = links.join(', ');
+			const proof = links.join(', ');
 			const opps = new Utils.Multiset<string>();
 			for (const link of links) {
 				const opp = await getOpponent(link, ticket.userid);
