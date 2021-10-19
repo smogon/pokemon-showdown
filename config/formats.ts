@@ -827,7 +827,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: ['Abra', 'Gastly', 'Pawniard', 'Rufflet', 'Woobat', 'Arena Trap', 'Shadow Tag', 'Eviolite', 'Light Ball', 'Baton Pass'],
+		banlist: ['Abra', 'Calyrex-Shadow', 'Gastly', 'Pawniard', 'Rufflet', 'Woobat', 'Zacian-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'Eviolite', 'Light Ball', 'Baton Pass'],
 		onModifySpecies(species, target, source, effect) {
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const newSpecies = this.dex.deepClone(species);
