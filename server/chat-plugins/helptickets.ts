@@ -818,7 +818,7 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 			url: `/${battle}`,
 		};
 	}
-	battle = battle.replace(`battle-`, '').replace(/-[a-z0-9]pw/, '');
+	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
 	try {
 		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
 		const data = JSON.parse(raw);
@@ -1027,9 +1027,26 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 	},
 	battleharassment: {
 		title: "Please provide a link to the battle (taken from the \"Upload and share\" button or copied from the browser URL)",
-		checker(input) {
-			if (BATTLES_REGEX.test(input) || REPLAY_REGEX.test(input)) return true;
-			return ['Please provide at least one valid battle or replay URL.'];
+		async checker(input, context) {
+			const replays = getBattleLinks(input).concat(getBattleLinks(context));
+			if (!replays.length) {
+				return ['Please provide at least one valid battle or replay URL.'];
+			}
+			let atLeastOne = false;
+			for (const replay of replays) {
+				const log = await getBattleLog(replay);
+				if (log) {
+					atLeastOne = true;
+					break;
+				}
+			}
+			if (!atLeastOne) {
+				return [
+					'None of the battle links provided are valid.',
+					'They may have expired, or you may have misspelled the URL.',
+				];
+			}
+			return true;
 		},
 		async onSubmit(ticket, text, submitter, conn) {
 			for (const part of text) {
