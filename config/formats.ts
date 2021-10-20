@@ -259,6 +259,11 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] CAP LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3691918/">CAP LC Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8997714/">CAP LC Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8997713/">CAP LC Viability Rankings</a>`,
+		],
 
 		mod: 'gen8',
 		searchShow: false,
