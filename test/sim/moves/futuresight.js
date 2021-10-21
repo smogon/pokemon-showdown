@@ -275,6 +275,22 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [46, 55]); // only boosted by Power Spot
 	});
 
+	it.skip(`should not ignore the target's Unaware`, function () {
+		battle = common.createBattle([[
+			{species: 'Manaphy', ability: 'simple', moves: ['tailglow', 'futuresight']},
+		], [
+			{species: 'Ho-Oh', ability: 'unaware', moves: ['luckychant']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices('move futuresight', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		const hooh = battle.p2.active[0];
+		const damage = hooh.maxhp - hooh.hp;
+		assert.bounded(damage, [60, 71]); // Damage would be 236-278 if Unaware was being ignored
+	});
+
 	it(`should use the user's most recent current Special Attack stat if the user is on the field`, function () {
 		battle = common.createBattle([[
 			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
