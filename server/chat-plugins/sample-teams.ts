@@ -8,7 +8,7 @@ import {FS, Utils} from "../../lib";
 
 const SAMPLE_TEAMS = 'config/chat-plugins/sample-teams.json';
 
-interface SampleTeamsteamData {
+interface SampleTeamsData {
 	whitelist: {[formatid: string]: RoomID[]};
 	/** Teams are stored in the packed format */
 	teams: {
@@ -19,7 +19,7 @@ interface SampleTeamsteamData {
 	};
 }
 
-export const teamData: SampleTeamsteamData = (() => {
+export const teamData: SampleTeamsData = (() => {
 	try {
 		return JSON.parse(FS(SAMPLE_TEAMS).readIfExistsSync());
 	} catch {
@@ -187,7 +187,7 @@ export const SampleTeams = new class SampleTeams {
 
 	formatTeam(teamName: string, teamStr: string, broadcasting = false) {
 		const team = Teams.unpack(teamStr);
-		if (!team) return `Team was imported wrong. PM room staff to fix the formatting.`;
+		if (!team) return `Team is not correctly formatted. PM room staff to fix the formatting.`;
 		let buf = ``;
 		if (!broadcasting) {
 			buf += `<center><strong style="letter-spacing:1.2pt">${team.map(x => `<psicon pokemon="${x.species}" />`).join('')}`;
