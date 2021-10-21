@@ -40,7 +40,7 @@ for (const formatid in teamData.teams) {
 save();
 
 export const SampleTeams = new class SampleTeams {
-	isRoomStaff(user: User, roomids: RoomID[]) {
+	private isRoomStaff(user: User, roomids: RoomID[]) {
 		let matched = false;
 		if (!roomids?.length) return false;
 		for (const roomid of roomids) {
