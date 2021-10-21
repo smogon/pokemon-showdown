@@ -1291,9 +1291,9 @@ export const pages: Chat.PageTable = {
 				} else {
 					if (helpRoom) {
 						if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
+						user.joinRoom(`help-${ticket.userid}` as RoomID);
 					}
 					connection.popup(this.tr`You already have a Help ticket.`);
-					user.joinRoom(`help-${ticket.userid}` as RoomID);
 					return this.close();
 				}
 			}
