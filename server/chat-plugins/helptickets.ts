@@ -1284,12 +1284,14 @@ export const pages: Chat.PageTable = {
 			if (ticket?.open || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
-				if (!helpRoom) {
+				if (!helpRoom && !ticket.text) {
 					// Should never happen
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
-					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
+					if (helpRoom) {
+						if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
+					}
 					connection.popup(this.tr`You already have a Help ticket.`);
 					user.joinRoom(`help-${ticket.userid}` as RoomID);
 					return this.close();
