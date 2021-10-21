@@ -16,10 +16,13 @@ const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
 
 const DATA_FILE = 'config/chat-plugins/wifi.json';
 
+type Game = 'swsh' | 'bdsp';
+
 interface QuestionGiveawayData {
 	targetUserid: string;
 	ot: string;
 	tid: string;
+	game: Game;
 	prize: PokemonSet;
 	question: string;
 	answers: string[];
@@ -29,6 +32,7 @@ interface LotteryGiveawayData {
 	targetUserid: string;
 	ot: string;
 	tid: string;
+	game: Game;
 	prize: PokemonSet;
 	winners: number;
 }
@@ -86,6 +90,7 @@ class Giveaway extends Rooms.RoomGame {
 	room: Room;
 	ot: string;
 	tid: string;
+	game: Game;
 	prize: PokemonSet;
 	phase: string;
 	joined: {[k: string]: ID};
@@ -95,7 +100,7 @@ class Giveaway extends Rooms.RoomGame {
 
 	constructor(
 		host: User, giver: User, room: Room,
-		ot: string, tid: string, prize: PokemonSet
+		ot: string, tid: string, prize: PokemonSet, game: Game = 'bdsp'
 	) {
 		super(room);
 		this.gaNumber = room.nextGameNumber();
@@ -105,6 +110,7 @@ class Giveaway extends Rooms.RoomGame {
 		this.ot = ot;
 		this.tid = tid;
 
+		this.game = game;
 		this.prize = prize;
 		this.phase = 'pending';
 
@@ -281,9 +287,9 @@ export class QuestionGiveaway extends Giveaway {
 
 	constructor(
 		host: User, giver: User, room: Room, ot: string, tid: string,
-		prize: PokemonSet, question: string, answers: string[]
+		game: Game, prize: PokemonSet, question: string, answers: string[]
 	) {
-		super(host, giver, room, ot, tid, prize);
+		super(host, giver, room, ot, tid, prize, game);
 		this.type = 'question';
 		this.phase = 'pending';
 
@@ -297,10 +303,11 @@ export class QuestionGiveaway extends Giveaway {
 	}
 
 	static splitTarget(target: string, sep = '|', context: Chat.CommandContext) {
-		let [giver, ot, tid, prize, question, ...answers] = target.split(sep).map(param => param.trim());
+		let [giver, ot, tid, game, prize, question, ...answers] = target.split(sep).map(param => param.trim());
 		if (!(giver && ot && tid && prize && question && answers.length)) {
 			throw new Chat.ErrorMessage("Invalid arguments specified - /qg giver | ot | tid | prize | question | answer(s)");
 		}
+		if (!game) game = 'swsh';
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) throw new Chat.ErrorMessage("Invalid TID");
 		const targetUser = Users.get(giver);
@@ -314,7 +321,7 @@ export class QuestionGiveaway extends Giveaway {
 		if (Giveaway.checkBanned(context.room!, targetUser)) {
 			throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
 		}
-		return {targetUser, ot, tid, prize, question, answers};
+		return {targetUser, ot, tid, game: game as Game, prize, question, answers};
 	}
 
 	generateQuestion() {
@@ -447,10 +454,10 @@ export class LotteryGiveaway extends Giveaway {
 	maxWinners: number;
 
 	constructor(
-		host: User, giver: User, room: Room, ot: string,
-		tid: string, prize: PokemonSet, winners: number
+		host: User, giver: User, room: Room, ot: string, tid: string,
+		game: Game, prize: PokemonSet, winners: number
 	) {
-		super(host, giver, room, ot, tid, prize);
+		super(host, giver, room, ot, tid, prize, game);
 
 		this.type = 'lottery';
 		this.phase = 'pending';
@@ -602,7 +609,7 @@ export class LotteryGiveaway extends Giveaway {
 	}
 }
 
-export class GTSGiveaway {
+export class GTS {
 	gtsNumber: number;
 	room: Room;
 	giver: User;
@@ -625,7 +632,7 @@ export class GTSGiveaway {
 		this.giver = giver;
 		this.left = amount;
 		this.summary = summary;
-		this.deposit = GTSGiveaway.linkify(Utils.escapeHTML(deposit));
+		this.deposit = GTS.linkify(Utils.escapeHTML(deposit));
 		this.lookfor = lookfor;
 
 		this.monIDs = new Set();
@@ -1063,11 +1070,11 @@ export const commands: Chat.ChatCommands = {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
 				}
 				if (room.game) throw new Chat.ErrorMessage(`There is already a room game (${room.game.constructor.name}) going on.`);
-				const {targetUser, ot, tid, prize, question, answers} = QuestionGiveaway.splitTarget(target, '|', this);
+				const {targetUser, ot, tid, game, prize, question, answers} = QuestionGiveaway.splitTarget(target, '|', this);
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
-				room.game = new QuestionGiveaway(user, targetUser, room, ot, tid, set, question, answers);
+				room.game = new QuestionGiveaway(user, targetUser, room, ot, tid, game, set, question, answers);
 
 				this.privateModAction(`${user.name} started a question giveaway for ${targetUser.name}.`);
 				this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
