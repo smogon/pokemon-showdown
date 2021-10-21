@@ -6,11 +6,11 @@ import {FS, Utils} from '../../lib';
 
 export const commandData: {
 	[command: string]: {
-		owner: string;
+		owner: string,
 		/** Bot's command prefix. */
-		prefix: string;
+		prefix: string,
 		/** The actual bot command (ie for the bot command ~foo, it would be foo) */
-		command: string;
+		command: string,
 	},
 } = {};
 
@@ -42,7 +42,10 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`The bot '${data.owner}' is not connected, and so their commands cannot be used.`);
 		}
 		if (!bot.inRooms.has(room.roomid)) {
-			return this.errorReply(`You must share a room with the bot ${bot.name} in order to use its commands.`);
+			return this.errorReply(
+				`You must share a room with the bot ${bot.name} in order to use its commands ` +
+				`(these are not native to PS, and are handled by an external bot).`
+			);
 		}
 		bot.sendTo(
 			room.roomid, `|c|${user.getIdentity()}|${data.prefix}${data.command} ${cmdTarget}`
@@ -132,7 +135,7 @@ export const pages: Chat.PageTable = {
 		}
 		return buf;
 	},
-}
+};
 
 export const parseCommand: Chat.CommandParser = (message, user, room, conn) => {
 	if (!room) return null;
