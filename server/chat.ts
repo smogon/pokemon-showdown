@@ -72,6 +72,10 @@ export interface Handlers {
 	onDisconnect?: (user: User) => void;
 }
 
+export type CommandParser = (
+	message: string, user: User, room: Room | null, connection: Connection
+) => ReturnType<typeof Chat.parseCommand>;
+
 export interface ChatPlugin {
 	commands?: AnnotatedChatCommands;
 	pages?: PageTable;
@@ -557,7 +561,13 @@ export class CommandContext extends MessageContext {
 		}
 		let message: string | void | boolean | Promise<string | void | boolean> = this.message;
 
-		const parsedCommand = Chat.parseCommand(message);
+		let parsedCommand = Chat.parseCommand(message);
+		if (parsedCommand && !parsedCommand.handler && this.room) {
+			for (const parser of Chat.commandParsers) {
+				parsedCommand = parser(this.message, this.user, this.room, this.connection);
+				if (parsedCommand) break;
+			}
+		}
 		if (parsedCommand) {
 			this.cmd = parsedCommand.cmd;
 			this.fullCmd = parsedCommand.fullCmd;
@@ -1463,6 +1473,8 @@ export const Chat = new class {
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [];
 	readonly crqHandlers: {[k: string]: CRQHandler} = {};
+	/** Custom command parsers exported from plugins. */
+	readonly commandParsers: CommandParser[] = [];
 	readonly handlers: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
 	/** The key is the name of the plugin. */
 	readonly plugins: {[k: string]: ChatPlugin} = {};
@@ -1905,6 +1917,9 @@ export const Chat = new class {
 		}
 		if (plugin.crqHandlers) {
 			Object.assign(Chat.crqHandlers, plugin.crqHandlers);
+		}
+		if (plugin.parseCommand) {
+			Chat.commandParsers.push(plugin.parseCommand);
 		}
 		if (plugin.roomSettings) {
 			if (!Array.isArray(plugin.roomSettings)) plugin.roomSettings = [plugin.roomSettings];
@@ -2428,15 +2443,15 @@ export const Chat = new class {
 
 	refreshPageFor(
 		pageid: string,
-		roomid: Room | RoomID,
+		roomid: Room | RoomID | null = null,
 		checkPrefix = false,
 		ignoreUsers: ID[] | null = null
 	) {
-		const room = Rooms.get(roomid);
-		if (!room) return false;
-		for (const id in room.users) {
+		const room = roomid ? Rooms.get(roomid) : null;
+		const users = room?.users ? Object.entries(room.users) : Users.users;
+		if (room === undefined) return false;
+		for (const [id, u] of users) {
 			if (ignoreUsers?.includes(id as ID)) continue;
-			const u = room.users[id];
 			for (const conn of u.connections) {
 				if (conn.openPages) {
 					for (const page of conn.openPages) {
