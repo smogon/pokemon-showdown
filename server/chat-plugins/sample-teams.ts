@@ -138,6 +138,18 @@ export const SampleTeams = new class SampleTeams {
 		save();
 	}
 
+	removeCategory(user: User, formatid: string, category: string) {
+		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
+			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
+		}
+		formatid = this.sanitizeFormat(formatid);
+		if (!teamData.teams[formatid]?.[category.trim()]) {
+			throw new Chat.ErrorMessage(`There's no category named "${category.trim()}" for the format ${formatid}.`);
+		}
+		delete teamData.teams[formatid]?.[category.trim()];
+		save();
+	}
+
 	/**
 	 * @param user
 	 * @param formatid
@@ -315,6 +327,16 @@ export const commands: Chat.ChatCommands = {
 			);
 			this.sendReply(`Added ${categoryName.trim()} as a category for ${formatid}.`);
 		},
+		removecategory(target, room, user) {
+			const [formatid, categoryName] = target.split(',');
+			if (!(formatid && categoryName)) return this.parse(`/help sampleteams`);
+			SampleTeams.removeCategory(user, formatid, categoryName);
+			SampleTeams.modlog(
+				this, formatid, 'REMOVETEAMCATEGORY', categoryName.trim(),
+				`${user.name} removed ${categoryName.trim()} as a category for ${formatid}.`
+			);
+			this.sendReply(`Removed ${categoryName.trim()} as a category for ${formatid}.`);
+		},
 		add(target, room, user) {
 			const [formatid, category, teamName, team] = target.split(',');
 			if (!(formatid && category && teamName && team)) return this.parse('/j view-sampleteams-add');
@@ -370,6 +392,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	sampleteamshelp: [
 		`/sampleteams [format] - Lists the sample teams for [format], if there are any.`,
+		`/sampleteams addcategory/removecategory [format], [category] - Adds/removes categories for [format].`,
 		`/sampleteams add [format], [category], [team name], [team] - Adds a sample team for [format]. If there's no dedicated [category] for the team, just leave the category blank. Team can be in the multi-line form. Requires: Room staff in dedicated tier room, &`,
 		`/sampleteams remove [format], [category], [team name] - Removes a sample team for [format] in [category].`,
 		`/sampleteams whitelist add [formatid], [roomid], [roomid], ... - Whitelists room staff for the provided roomids to add sample teams. Requires: &`,
