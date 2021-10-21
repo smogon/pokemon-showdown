@@ -42,8 +42,6 @@ describe('Seeds', function () {
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
-		const log = battle.getDebugLog();
-		console.log(log);
 		const redOrbIndex = log.indexOf('Groudon-Primal');
 		const electricSeedIndex = log.indexOf('Electric Seed');
 		assert(redOrbIndex < electricSeedIndex, 'Groudon should undergo Primal Reversion first, then Electric Seed should activate, because Groudon is faster.');

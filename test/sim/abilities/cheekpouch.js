@@ -18,7 +18,6 @@ describe(`Cheek Pouch`, function () {
 		]]);
 		const wynaut = battle.p1.active[0];
 		battle.makeChoices();
-		console.log(battle.getDebugLog());
 		assert.fullHP(wynaut);
 	});
 
