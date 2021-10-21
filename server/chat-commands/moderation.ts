@@ -1781,7 +1781,7 @@ export const commands: Chat.ChatCommands = {
 	nfr: 'noforcerename',
 	noforcerename: {
 		add(target, room, user) {
-			const {targetUsername, rest} = this.splitUser(target);
+			const [targetUsername, rest] = Utils.splitFirst(target, ',').map(f => f.trim());
 			const targetId = toID(targetUsername);
 			if (!targetId) return this.parse('/help noforcerename');
 			this.checkCan('bypassall');
