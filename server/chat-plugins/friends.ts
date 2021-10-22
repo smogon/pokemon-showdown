@@ -142,13 +142,15 @@ export const Friends = new class {
 		} else if (curUser && curUser.id !== userid) {
 			buf += `<small>On an alternate account</small><br />`;
 		}
-		if (login && typeof login === 'number' && !user?.connected) {
-			// THIS IS A TERRIBLE HACK BUT IT WORKS OKAY
-			const time = Chat.toTimestamp(new Date(Number(login)), {human: true});
-			buf += `Last seen: ${time.split(' ').reverse().join(', on ')}`;
-			buf += ` (${Chat.toDurationString(Date.now() - login, {precision: 1})} ago)`;
-		} else if (typeof login === 'string') {
-			buf += `${login}`;
+		if (login) {
+			if (typeof login === 'number' && !user?.connected) {
+				// THIS IS A TERRIBLE HACK BUT IT WORKS OKAY
+				const time = Chat.toTimestamp(new Date(Number(login)), {human: true});
+				buf += `Last seen: ${time.split(' ').reverse().join(', on ')}`;
+				buf += ` (${Chat.toDurationString(Date.now() - login, {precision: 1})} ago)`;
+			} else if (typeof login === 'string') {
+				buf += `${login}`;
+			}
 		}
 		buf = `<div class="infobox">${buf}</div>`;
 		return toLink(buf);
