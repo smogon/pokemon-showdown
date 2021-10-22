@@ -364,9 +364,9 @@ export const commands: Chat.ChatCommands = {
 					this.checkCan('bypassall');
 				}
 				const [formatids, roomids] = target.split('|').map(x => x.split(','));
-				if (!(formatids.length && roomids.length)) return this.parse(`/help sampleteams`);
+				if (!(formatids?.length && roomids?.length)) return this.parse(`/help sampleteams`);
 				SampleTeams.whitelistRooms(formatids, roomids);
-				this.privateGlobalModAction(`${user.id} whitelisted ${Chat.toListString(roomids.map(x => Rooms.get(x)!.title))} to handle sample teams for ${Chat.toListString(formatids)}.`);
+				this.privateGlobalModAction(`${user.name} whitelisted ${Chat.toListString(roomids.map(x => Rooms.get(x)!.title))} to handle sample teams for ${Chat.toListString(formatids)}.`);
 				this.globalModlog(`SAMPLETEAMS WHITELIST`, null, roomids.join(', '));
 				this.sendReply(`Whitelisted ${Chat.toListString(roomids)} to handle sample teams for ${Chat.toListString(formatids)}.`);
 			},
@@ -395,7 +395,7 @@ export const commands: Chat.ChatCommands = {
 		`/sampleteams addcategory/removecategory [format], [category] - Adds/removes categories for [format].`,
 		`/sampleteams add [format], [category], [team name], [team] - Adds a sample team for [format]. If there's no dedicated [category] for the team, just leave the category blank. Team can be in the multi-line form. Requires: Room staff in dedicated tier room, &`,
 		`/sampleteams remove [format], [category], [team name] - Removes a sample team for [format] in [category].`,
-		`/sampleteams whitelist add [formatid], [roomid], [roomid], ... - Whitelists room staff for the provided roomids to add sample teams. Requires: &`,
+		`/sampleteams whitelist add [formatid], [formatid] | [roomid], [roomid], ... - Whitelists room staff for the provided roomids to add sample teams. Requires: &`,
 		`/sampleteams whitelist remove [formatid], [roomid] - Unwhitelists room staff for the provided room to add sample teams. Requires: &`,
 	],
 };
