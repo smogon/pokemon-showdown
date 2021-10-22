@@ -2246,11 +2246,11 @@ export const Chat = new class {
 	/**
 	 * Takes an array and turns it into a sentence string by adding commas and the word "and"
 	 */
-	toListString(arr: string[]) {
+	toListString(arr: string[], conjunction = "and") {
 		if (!arr.length) return '';
 		if (arr.length === 1) return arr[0];
-		if (arr.length === 2) return `${arr[0]} and ${arr[1]}`;
-		return `${arr.slice(0, -1).join(", ")}, and ${arr.slice(-1)[0]}`;
+		if (arr.length === 2) return `${arr[0]} ${conjunction.trim()} ${arr[1]}`;
+		return `${arr.slice(0, -1).join(", ")}, ${conjunction.trim()} ${arr.slice(-1)[0]}`;
 	}
 
 	/**
