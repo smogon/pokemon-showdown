@@ -776,14 +776,20 @@ function checkIp(ip: string) {
 }
 
 export function getBattleLinks(text: string) {
-	const rooms: string[] = [];
+	const rooms = new Set<string>();
 	const battles = text.match(BATTLES_REGEX);
 	// typescript-eslint is having trouble detecting REPLAY_REGEX as a global regex
 	// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 	const replays = text.match(REPLAY_REGEX);
-	if (battles) rooms.push(...battles);
-	if (replays) rooms.push(...replays.map(r => `battle-${r.split('/').pop()!}`));
-	return rooms;
+	if (battles) {
+		for (const battle of battles) rooms.add(battle);
+	}
+	if (replays) {
+		for (const r of replays) {
+			rooms.add(`battle-${r.split('/').pop()!}`);
+		}
+	}
+	return [...rooms];
 }
 
 export async function getOpponent(link: string, submitter: ID): Promise<string | null> {
