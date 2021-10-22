@@ -366,7 +366,7 @@ export const commands: Chat.ChatCommands = {
 				const [formatids, roomids] = target.split('|').map(x => x.split(','));
 				if (!(formatids?.length && roomids?.length)) return this.parse(`/help sampleteams`);
 				SampleTeams.whitelistRooms(formatids, roomids);
-				this.privateGlobalModAction(`${user.name} whitelisted ${Chat.toListString(roomids.map(x => Rooms.get(x)!.title))} to handle sample teams for ${Chat.toListString(formatids)}.`);
+				this.privateGlobalModAction(`${user.name} whitelisted ${Chat.toListString(roomids.map(x => Rooms.search(x)!.title))} to handle sample teams for ${Chat.toListString(formatids)}.`);
 				this.globalModlog(`SAMPLETEAMS WHITELIST`, null, roomids.join(', '));
 				this.sendReply(`Whitelisted ${Chat.toListString(roomids)} to handle sample teams for ${Chat.toListString(formatids)}.`);
 			},
@@ -408,7 +408,7 @@ export const pages: Chat.PageTable = {
 	sampleteams: {
 		whitelist(query, user, connection) {
 			this.title = `Sample Teams Whitelist`;
-			if (!SampleTeams.isDevMod(user) || !user.can('bypassall')) {
+			if (!(SampleTeams.isDevMod(user) || user.can('bypassall'))) {
 				return `<div class="pad"><h2>Access denied.</h2></div>`;
 			}
 			const staffRoomAccess = Rooms.get('staff')?.checkModjoin(user);
