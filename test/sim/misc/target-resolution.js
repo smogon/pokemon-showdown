@@ -75,7 +75,7 @@ describe('Target Resolution', function () {
 			assert.statStage(redirector, 'spa', 1);
 		});
 
-		it(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
+		it.skip(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
 			battle = common.gen(6).createBattle({gameType: 'triples'}, [[
 				{species: 'Shuckle', moves: ['watergun']},
 				{species: 'Magikarp', moves: ['swordsdance']},
