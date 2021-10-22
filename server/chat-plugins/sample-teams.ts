@@ -278,8 +278,14 @@ export const commands: Chat.ChatCommands = {
 	sampleteams: {
 		''(target, room, user) {
 			this.runBroadcast();
-			if (!this.broadcasting) return this.parse(`/j view-sampleteams-view`);
 			let [formatid, category] = target.split(',');
+			if (!this.broadcasting) {
+				if (!formatid) return this.parse(`/j view-sampleteams-view`);
+				formatid = SampleTeams.sanitizeFormat(formatid);
+				if (!category) return this.parse(`/j view-sampleteams-view-${SampleTeams.sanitizeFormat(formatid)}`);
+				const categoryName = SampleTeams.findCategory(formatid, category);
+				return this.parse(`/j view-sampleteams-view-${formatid}${categoryName ? '-' + toID(categoryName) : ''}`);
+			}
 			if (!formatid) return this.parse(`/help sampleteams`);
 			formatid = SampleTeams.sanitizeFormat(formatid);
 			if (!teamData.teams[formatid]) {
