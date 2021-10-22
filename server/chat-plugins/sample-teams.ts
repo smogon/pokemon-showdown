@@ -126,12 +126,12 @@ export const SampleTeams = new class SampleTeams {
 
 	addCategory(user: User, formatid: string, category: string) {
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
+			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}.`);
 		}
 		formatid = this.sanitizeFormat(formatid);
 		category = category.trim();
 		this.initializeFormat(formatid);
-		if (teamData.teams[formatid][category]) {
+		if (this.findCategory(formatid, category)) {
 			throw new Chat.ErrorMessage(`The category named ${category} already exists.`);
 		}
 		teamData.teams[formatid][category] = {};
@@ -140,13 +140,14 @@ export const SampleTeams = new class SampleTeams {
 
 	removeCategory(user: User, formatid: string, category: string) {
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
+			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}.`);
 		}
 		formatid = this.sanitizeFormat(formatid);
-		if (!teamData.teams[formatid]?.[category.trim()]) {
+		const categoryName = this.findCategory(formatid, category);
+		if (!categoryName) {
 			throw new Chat.ErrorMessage(`There's no category named "${category.trim()}" for the format ${formatid}.`);
 		}
-		delete teamData.teams[formatid]?.[category.trim()];
+		delete teamData.teams[formatid][categoryName];
 		save();
 	}
 
@@ -165,7 +166,7 @@ export const SampleTeams = new class SampleTeams {
 		category = category.trim();
 		formatid = this.sanitizeFormat(formatid);
 		this.initializeFormat(formatid);
-		if (teamData.teams[formatid][category]?.[teamName]) {
+		if (this.findTeamName(formatid, category, teamName)) {
 			throw new Chat.ErrorMessage(`There is already a team for ${formatid} with the name ${teamName} in the ${category} category.`);
 		}
 		if (!teamData.teams[formatid][category]) this.addCategory(user, formatid, category);
@@ -174,9 +175,8 @@ export const SampleTeams = new class SampleTeams {
 		return teamData.teams[formatid][category][teamName];
 	}
 
-	removeTeam(user: User, formatid: string, teamName: string, category: string) {
+	removeTeam(user: User, formatid: string, teamid: string, category: string) {
 		formatid = formatid.trim();
-		teamName = teamName.trim();
 		category = category.trim();
 		// Don't sanitize formatid here in case a team was added for a temporary format that got removed
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
@@ -186,8 +186,9 @@ export const SampleTeams = new class SampleTeams {
 		if (!categoryName) {
 			throw new Chat.ErrorMessage(`There are no teams for ${formatid} under the category ${category.trim()}. Check spelling?`);
 		}
-		if (!teamData.teams[formatid][category][teamName]) {
-			throw new Chat.ErrorMessage(`There is no team for ${formatid} with the name of "${teamName}". Check spelling?`);
+		const teamName = this.findTeamName(formatid, category, teamid);
+		if (!teamName) {
+			throw new Chat.ErrorMessage(`There is no team for ${formatid} with the name of "${teamid}". Check spelling?`);
 		}
 		const oldTeam = teamData.teams[formatid][category][teamName];
 		delete teamData.teams[formatid][category][teamName];
@@ -237,9 +238,22 @@ export const SampleTeams = new class SampleTeams {
 		formatid = toID(formatid);
 		categoryid = toID(categoryid);
 		let match: string | null = null;
-		for (const categoryName in teamData.teams[formatid] || []) {
+		for (const categoryName in teamData.teams[formatid] || {}) {
 			if (toID(categoryName) === categoryid) {
 				match = categoryName;
+				break;
+			}
+		}
+		return match;
+	}
+
+	findTeamName(formatid: string, categoryid: string, teamid: string) {
+		const categoryName = this.findCategory(formatid, categoryid);
+		if (!categoryName) return null;
+		let match: string | null = null;
+		for (const teamName in teamData.teams[formatid][categoryName] || {}) {
+			if (toID(teamName) === teamid) {
+				match = teamName;
 				break;
 			}
 		}
@@ -256,6 +270,7 @@ export const SampleTeams = new class SampleTeams {
 				const room = Rooms.search(roomid);
 				if (room) continue;
 				teamData.whitelist[formatid].splice(i, 1);
+				if (!teamData.whitelist[formatid].length) delete teamData.whitelist[formatid];
 				save();
 			}
 		}
@@ -282,7 +297,7 @@ export const commands: Chat.ChatCommands = {
 			if (!this.broadcasting) {
 				if (!formatid) return this.parse(`/j view-sampleteams-view`);
 				formatid = SampleTeams.sanitizeFormat(formatid);
-				if (!category) return this.parse(`/j view-sampleteams-view-${SampleTeams.sanitizeFormat(formatid)}`);
+				if (!category) return this.parse(`/j view-sampleteams-view-${formatid}`);
 				const categoryName = SampleTeams.findCategory(formatid, category);
 				return this.parse(`/j view-sampleteams-view-${formatid}${categoryName ? '-' + toID(categoryName) : ''}`);
 			}
@@ -319,13 +334,10 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.sendReplyBox(buf);
 		},
-		stopview(target, room, user, connection) {
-			connection.send(`>view-sampleteams-view\n|deinit`);
-			connection.openPages?.delete(`sampleteams-view`);
-		},
 		addcategory(target, room, user) {
-			const [formatid, categoryName] = target.split(',');
+			let [formatid, categoryName] = target.split(',');
 			if (!(formatid && categoryName)) return this.parse(`/help sampleteams`);
+			if (!categoryName.trim()) categoryName = "uncategorized";
 			SampleTeams.addCategory(user, formatid, categoryName.trim());
 			SampleTeams.modlog(
 				this, formatid, 'ADDTEAMCATEGORY', categoryName.trim(),
@@ -336,6 +348,9 @@ export const commands: Chat.ChatCommands = {
 		removecategory(target, room, user) {
 			const [formatid, categoryName] = target.split(',');
 			if (!(formatid && categoryName)) return this.parse(`/help sampleteams`);
+			if (toID(categoryName) === 'uncategorized') {
+				throw new Chat.ErrorMessage(`The uncategorized category cannot be removed.`);
+			}
 			SampleTeams.removeCategory(user, formatid, categoryName);
 			SampleTeams.modlog(
 				this, formatid, 'REMOVETEAMCATEGORY', categoryName.trim(),
@@ -346,7 +361,7 @@ export const commands: Chat.ChatCommands = {
 		add(target, room, user) {
 			const [formatid, category, teamName, team] = target.split(',');
 			if (!(formatid && category && teamName && team)) return this.parse('/j view-sampleteams-add');
-			const packedTeam = SampleTeams.addTeam(user, formatid, teamName, team, category || "uncategorized");
+			const packedTeam = SampleTeams.addTeam(user, formatid, teamName, team, category.trim() || "uncategorized");
 			SampleTeams.modlog(
 				this, formatid, 'ADDTEAM', `${category || "uncategorized"}: ${teamName}: ${packedTeam}`,
 				`${user.name} added a team for ${formatid}${category ? ` in the ${category} category` : ''}.`
@@ -449,7 +464,7 @@ export const pages: Chat.PageTable = {
 			if (query.slice(0, query.length - 1).join('-')) {
 				buf += `${formatFakeButton(`view-sampleteams-view-${query.slice(0, query.length - 1).join('-')}`, "&laquo; Back")}`;
 			} else {
-				buf += `<button class="button disabled" name="send" value="/sampleteams stopview" disabled>&laquo; Back</button>`;
+				buf += `<button class="button disabled" disabled>&laquo; Back</button>`;
 			}
 			buf += `<button style="float:right" class="button" name="send" value="/j view-sampleteams-view${query.join('-') ? `-${query.join('-')}` : ``}"><i class="fa fa-refresh"></i> Refresh</button>`;
 			buf += `<center><h2>Sample Teams</h2></center><hr />`;
