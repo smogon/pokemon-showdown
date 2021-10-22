@@ -448,7 +448,7 @@ export const pages: Chat.PageTable = {
 			buf += `<button style="float:right" class="button" name="send" value="/j view-sampleteams-view${query.join('-') ? `-${query.join('-')}` : ``}"><i class="fa fa-refresh"></i> Refresh</button>`;
 			buf += `<center><h2>Sample Teams</h2></center><hr />`;
 			const q0Teams = teamData.teams[query[0]];
-			const q0TeamKeys = Object.keys(q0Teams);
+			const q0TeamKeys = q0Teams ? Object.keys(q0Teams) : [];
 			if (!query[0]) {
 				const formats = Object.keys(teamData.teams);
 				if (!formats.length) return `${buf}<p>No teams found.</p></div>`;
