@@ -2146,7 +2146,7 @@ const commands: Chat.ChatCommands = {
 						throw new Chat.ErrorMessage(`Sample teams are already shown for every tournament.`);
 					}
 				} else if (this.meansNo(target)) {
-					if (!room.settings.tournaments.showSampleTeams) {
+					if (room.settings.tournaments.showSampleTeams) {
 						delete room.settings.tournaments.showSampleTeams;
 						room.saveSettings();
 						this.privateModAction(`Show Sample Teams was set to OFF for every tournament by ${user.name}`);

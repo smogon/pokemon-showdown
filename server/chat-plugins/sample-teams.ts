@@ -528,15 +528,23 @@ export const pages: Chat.PageTable = {
 					!format.team && SampleTeams.checkPermissions(user, SampleTeams.whitelistedRooms(format.id) || [])
 				));
 			if (!formats.length) return `<div class="pad"><h2>Access denied.</h2></div>`;
-			let buf = `<div class="pad"><h2>Add a sample team</h2>`;
+			let buf = `<div class="pad">`;
+			if (query.slice(0, query.length - 1).join('-')) {
+				buf += `${formatFakeButton(`view-sampleteams-add-${query.slice(0, query.length - 1).join('-')}`, "&laquo; Back")}`;
+			} else {
+				buf += `<button class="button disabled" disabled>&laquo; Back</button>`;
+			}
+			let buttonTitle = 'Refresh';
+			if (query[2] === 'submit') buttonTitle = 'Add another team';
+			buf += `<button style="float:right" class="button" name="send" value="/j view-sampleteams-add${query.join('-') ? `-${query.join('-')}` : ``}"><i class="fa fa-refresh"></i> ${buttonTitle}</button>`;
+			buf += `<div class="pad"><h2>Add a sample team</h2>`;
 			if (!query[0] || !Dex.formats.get(query[0]).exists) {
 				buf += `<h3>Pick a format</h3><ul>`;
 				for (const format of formats) {
 					buf += `<li>${formatFakeButton(`view-sampleteams-add-${format.id}`, format.name)}</button></li>`;
 				}
 				buf += `</ul>`;
-			}
-			if (!query[1] || !SampleTeams.findCategory(query[0], query[1]) || query[1] === 'addnewcategory') {
+			} else if (!query[1] || !SampleTeams.findCategory(query[0], query[1]) || query[1] === 'addnewcategory') {
 				const name = SampleTeams.getFormatName(query[0]);
 				if (query[1] === 'addnewcategory') {
 					buf += `<h3>Add a category for ${name}</h3>`;
@@ -552,7 +560,7 @@ export const pages: Chat.PageTable = {
 				}
 			}
 			const categoryName = SampleTeams.findCategory(query[0], query[1]);
-			if (query[2] === 'submit' && categoryName) {
+			if (categoryName) {
 				buf += `<form data-submitsend="/sampleteams add ${query[0]}, ${categoryName}, {teamName}, {team}">`;
 				buf += `<h3>Enter a team name</h3><input name="teamName" />`;
 				buf += `<h3>Enter team importable</h3><textarea style="width:100%;height:400px" name="team"></textarea><br />`;
