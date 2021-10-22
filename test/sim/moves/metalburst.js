@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 let battle;
 
-describe.only('Metal Burst', function () {
+describe('Metal Burst', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
