@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 let battle;
 
-describe.only(`Hyper Beam`, function () {
+describe(`Hyper Beam`, function () {
 	afterEach(function () {
 		battle.destroy();
 	});
