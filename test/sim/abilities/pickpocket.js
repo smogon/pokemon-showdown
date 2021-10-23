@@ -22,7 +22,7 @@ describe('Pickpocket', function () {
 		assert.false.holdsItem(battle.p2.active[0]);
 	});
 
-	it(`should not steal a foe's item the user switched out through Eject Button`, function () {
+	it(`should not steal a foe's item if the Pickpocket user switched out through Eject Button`, function () {
 		battle = common.createBattle([[
 			{species: 'Weavile', ability: 'pickpocket', item: 'ejectbutton', moves: ['agility']},
 			{species: 'Chansey', moves: ['softboiled']},
