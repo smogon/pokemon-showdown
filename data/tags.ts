@@ -209,7 +209,7 @@ export const Tags: {[id: string]: TagData} = {
 	},
 	dou: {
 		name: "DOU",
-		speciesFilter: species => species.doublesTier === 'DOU',
+		speciesFilter: species => species.doublesTier === 'DOU' || species.doublesTier === '(DOU)',
 	},
 	dbl: {
 		name: "DBL",
