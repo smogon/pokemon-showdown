@@ -173,6 +173,12 @@ export class FriendsDatabase {
 		if (result.error) {
 			throw new Chat.ErrorMessage(result.error);
 		}
+		if (!('result' in result)) {
+			Monitor.crashlog(new Error(`Missing database result`), 'a friends process', {...input, result});
+			throw new Chat.ErrorMessage(
+				`Sorry! The database crashed. We've been notified and will fix this ASAP.`
+			);
+		}
 		return result.result;
 	}
 	async request(user: User, receiverID: ID) {
