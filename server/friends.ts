@@ -146,7 +146,7 @@ export class FriendsDatabase {
 		for (const request of sentResults) {
 			sent.add(request.receiver);
 		}
-		const receivedResults = await this.all('getReceived', [user.id]);
+		const receivedResults = await this.all('getReceived', [user.id]) || [];
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
