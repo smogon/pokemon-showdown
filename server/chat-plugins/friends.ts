@@ -155,11 +155,11 @@ export const Friends = new class {
 	}
 	checkCanUse(context: Chat.CommandContext | Chat.PageContext) {
 		const user = context.user;
-		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
-			throw new Chat.ErrorMessage(`You are locked, and so cannot use the friends feature.`);
-		}
 		if (!user.autoconfirmed) {
 			throw new Chat.ErrorMessage(context.tr`You must be autoconfirmed to use the friends feature.`);
+		}
+		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
+			throw new Chat.ErrorMessage(`You are locked, and so cannot use the friends feature.`);
 		}
 		if (!Config.usesqlitefriends || !Config.usesqlite) {
 			throw new Chat.ErrorMessage(`The friends list feature is currently disabled.`);
