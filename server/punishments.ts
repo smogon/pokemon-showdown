@@ -467,6 +467,8 @@ export const Punishments = new class {
 				const pattern = IPTools.stringToRange(ip);
 				if (pattern) {
 					Punishments.sharedRanges.set(pattern, note);
+				} else {
+					Monitor.adminlog(`Invalid range data in '${SHAREDIPS_FILE}': "${row}".`);
 				}
 				continue;
 			}
