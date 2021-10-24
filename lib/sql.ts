@@ -203,7 +203,6 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			transactions: storedTransactions,
 			statements: storedStatements,
 			onDatabaseStart,
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
 		} = imports;
 		// migrations usually are run here, so this needs to be first
 		if (onDatabaseStart) {

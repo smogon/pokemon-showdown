@@ -1,5 +1,5 @@
 /**
- * Private message handling, particulary for offline messages.
+ * Private message handling, particularly for offline messages.
  * By Mia.
  * @author mia-pi-git
  */
@@ -48,7 +48,7 @@ export const PrivateMessages = new class {
 	checkCanUse(user: User, forceBool = false) {
 		if (!this.offlineIsEnabled) {
 			if (forceBool) return false;
-			throw new Chat.ErrorMessage(`Offline PMs are presently disabled.`);
+			throw new Chat.ErrorMessage(`Offline PMs are currently disabled.`);
 		}
 		if (!user.autoconfirmed) {
 			if (forceBool) return false;

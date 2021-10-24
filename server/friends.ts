@@ -382,7 +382,6 @@ const setup = () => {
 };
 
 /** Process manager for main process use. */
-
 export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, DatabaseResult>(module, query => {
 	const {type, statement, data} = query;
 	const start = Date.now();
@@ -427,7 +426,7 @@ if (!PM.isParentProcess) {
 	if (Config.usesqlite) {
 		FriendsDatabase.setupDatabase();
 	}
-	// sine we require this in child processes
+	// since we require this in child processes
 	if (process.mainModule === module) {
 		global.Monitor = {
 			crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
