@@ -768,7 +768,7 @@ export function notifyStaff() {
 
 function checkIp(ip: string) {
 	for (const t in tickets) {
-		if (tickets[t].ip === ip && tickets[t].open && !Punishments.sharedIps.has(ip)) {
+		if (tickets[t].ip === ip && tickets[t].open && !Punishments.isSharedIp(ip)) {
 			return tickets[t];
 		}
 	}
@@ -2097,7 +2097,7 @@ export const commands: Chat.ChatCommands = {
 				return this.parse(`/join help-${ticket.userid}`);
 			}
 			if (Monitor.countTickets(user.latestIp)) {
-				const maxTickets = Punishments.sharedIps.has(user.latestIp) ? `50` : `5`;
+				const maxTickets = Punishments.isSharedIp(user.latestIp) ? `50` : `5`;
 				return this.popupReply(this.tr`Due to high load, you are limited to creating ${maxTickets} tickets every hour.`);
 			}
 			let [
