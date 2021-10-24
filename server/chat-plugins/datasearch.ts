@@ -97,9 +97,9 @@ export const commands: Chat.ChatCommands = {
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, mod=gen${targetGen}`;
 		const split = target.split(',').map(term => term.trim());
-		const index = split.findIndex(x => x.startsWith('maxgen'));
+		const index = split.findIndex(x => /^max\s*gen/i.test(x));
 		if (index >= 0) {
-			const genNum = parseInt(split[index][split[index].length - 1]);
+			const genNum = parseInt(/\d*$/.exec(split[index])?.[0] || '');
 			if (!isNaN(genNum) && !(genNum < 1 || genNum > Dex.gen)) {
 				split[index] = `mod=gen${genNum}`;
 				target = split.join(',');
@@ -281,10 +281,10 @@ export const commands: Chat.ChatCommands = {
 		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, mod=gen${targetGen}`;
-		const split = target.split(',');
-		const index = split.findIndex(x => x.startsWith('maxgen'));
+		const split = target.split(',').map(term => term.trim());
+		const index = split.findIndex(x => /^max\s*gen/i.test(x));
 		if (index >= 0) {
-			const genNum = parseInt(split[index][split[index].length - 1]);
+			const genNum = parseInt(/\d*$/.exec(split[index])?.[0] || '');
 			if (!isNaN(genNum) && !(genNum < 1 || genNum > Dex.gen)) {
 				split[index] = `mod=gen${genNum}`;
 				target = split.join(',');
@@ -1951,7 +1951,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
-	const rawSearch = target.replace(/gen \d/g, match => toID(match)).split(' ');
+	const rawSearch = target.replace(/(max ?)?gen \d/g, match => toID(match)).split(' ');
 	const searchedWords: string[] = [];
 	let foundItems: string[] = [];
 
@@ -2203,7 +2203,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
-	const rawSearch = target.replace(/gen \d/g, match => toID(match)).split(' ');
+	const rawSearch = target.replace(/(max ?)?gen \d/g, match => toID(match)).split(' ');
 	const searchedWords: string[] = [];
 	let foundAbilities: string[] = [];
 
