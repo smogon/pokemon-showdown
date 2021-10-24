@@ -1390,7 +1390,7 @@ export const Punishments = new class {
 
 		for (const user of Users.users.values()) {
 			const sharedIp = user.ips.some(
-				cur => (isRange ? IPTools.checkPattern([pattern], IPTools.ipToNumber(cur)) : cur === ip)
+				curIP => (isRange ? IPTools.checkPattern([pattern], IPTools.ipToNumber(curIP)) : curIP === ip)
 			);
 			if (user.locked && user.locked !== user.id && sharedIp) {
 				if (!user.autoconfirmed) {
