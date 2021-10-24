@@ -3,6 +3,7 @@
  * @author mia-pi-git
  */
 import {FS, Utils} from '../../lib';
+import type {CommandParser} from '../chat';
 
 export const commandData: {
 	[command: string]: {
@@ -121,7 +122,7 @@ export const pages: Chat.PageTable = {
 		buf += `<tr><th>Command</th><th>Bot</th><th>Prefix</th><th>Bot command</th>`;
 		if (manage) buf += `<th>Manage</th>`;
 		buf += `<tr />`;
-		for (const [command, data] of Object.entries(commandData)) {
+		for (const data of Object.values(commandData)) {
 			buf += `<tr>`;
 			buf += `<td><code>/${k}</code></td>`;
 			buf += Utils.html`<td>${Users.get(data.owner)?.name || data.owner}</td>`;
