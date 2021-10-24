@@ -902,7 +902,7 @@ export const commands: Chat.ChatCommands = {
 		let affected = [];
 
 		if (targetUser) {
-			const ignoreAlts = Punishments.sharedIps.has(targetUser.latestIp);
+			const ignoreAlts = Punishments.isSharedIp(targetUser.latestIp);
 			affected = await Punishments.lock(targetUser, duration, null, ignoreAlts, publicReason);
 		} else {
 			affected = await Punishments.lock(userid, duration, null, false, publicReason);

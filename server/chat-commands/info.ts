@@ -243,7 +243,7 @@ export const commands: Chat.ChatCommands = {
 						status.push(punishMsg);
 					}
 				}
-				if (Punishments.sharedIps.has(ip)) {
+				if (Punishments.isSharedIp(ip)) {
 					let sharedStr = 'shared';
 					if (Punishments.sharedIps.get(ip)) {
 						sharedStr += `: ${Punishments.sharedIps.get(ip)}`;

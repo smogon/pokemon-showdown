@@ -149,7 +149,7 @@ function getExactUser(name: string | User) {
  */
 function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boolean, includeTrusted?: boolean} = {}) {
 	const matches: User[] = [];
-	if (options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
+	if (options.forPunishment) ips = ips.filter(ip => !Punishments.isSharedIp(ip));
 	const ipMatcher = IPTools.checker(ips);
 	for (const user of users.values()) {
 		if (!options.forPunishment && !user.named && !user.connected) continue;
