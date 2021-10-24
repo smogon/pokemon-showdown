@@ -1218,7 +1218,7 @@ export const Punishments = new class {
 		if (punishment) return punishment;
 		// skip if the user is autoconfirmed and on a shared ip
 		// [0] is forced to be the latestIp
-		if (Punishments.isSharedIp(ips[0])) return false;
+		if (ips.some(ip => Punishments.isSharedIp(ip))) return false;
 
 		for (const ip of ips) {
 			const curPunishment = Punishments.ips.getByType(ip, 'TICKETBAN');
