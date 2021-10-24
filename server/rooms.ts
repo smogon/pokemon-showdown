@@ -1339,9 +1339,6 @@ export class GlobalRoomState {
 			const ruleTable = Dex.formats.getRuleTable(format);
 			const level = ruleTable.adjustLevel || ruleTable.adjustLevelDown || ruleTable.maxLevel;
 			if (level === 50) displayCode |= 16;
-			if (format.gameType === 'multi') {
-				displayCode |= 32;
-			}
 			this.formatList += ',' + displayCode.toString(16);
 		}
 		return this.formatList;
@@ -2009,9 +2006,9 @@ export const Rooms = {
 		const p1name = p1 ? p1.name : "Player 1";
 		const p2name = p2 ? p2.name : "Player 2";
 		let roomTitle;
-		if (format.gameType === 'multi') {
+		if (gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
-		} else if (format.gameType === 'freeforall') {
+		} else if (gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
 		} else {
