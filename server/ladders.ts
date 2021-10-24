@@ -256,6 +256,9 @@ class Ladder extends LadderStore {
 			formatTable.searches.delete(user.id);
 			cancelCount++;
 		}
+		if (user.battleSettings.teammate) {
+			delete user.battleSettings.teammate;
+		}
 
 		Ladder.updateSearch(user);
 		return cancelCount;
