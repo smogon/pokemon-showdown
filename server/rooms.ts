@@ -1957,10 +1957,10 @@ export const Rooms = {
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
 		const players: User[] = [options.p1, options.p2, options.p3, options.p4]
 			.filter(Boolean).map(player => player!.user);
-		const format = Dex.formats.get(options.format);
-		if (format.gameType !== 'multi' && format.gameType !== 'freeforall') {
+		const gameType = Dex.formats.get(options.format).gameType;
+		if (gameType !== 'multi' && gameType !== 'freeforall') {
 			if (players.length > 2) {
-				throw new Error(`Four players were provided, but the format ${format.id} is a two-player format.`);
+				throw new Error(`Four players were provided, but the format is a two-player format.`);
 			}
 		}
 		if (new Set(players).size < players.length) {
