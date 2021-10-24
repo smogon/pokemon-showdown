@@ -122,7 +122,8 @@ export const pages: Chat.PageTable = {
 		buf += `<tr><th>Command</th><th>Bot</th><th>Prefix</th><th>Bot command</th>`;
 		if (manage) buf += `<th>Manage</th>`;
 		buf += `<tr />`;
-		for (const data of Object.values(commandData)) {
+		for (const k in commandData) {
+			const data = commandData[k];
 			buf += `<tr>`;
 			buf += `<td><code>/${k}</code></td>`;
 			buf += Utils.html`<td>${Users.get(data.owner)?.name || data.owner}</td>`;
