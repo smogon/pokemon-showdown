@@ -1,5 +1,5 @@
 /**
- * Miscellanous utilies to for bots, most prevalently the ability to register /commands.
+ * Miscellaneous utilities for bots, most prevalently the ability to register /commands.
  * @author mia-pi-git
  */
 import {FS, Utils} from '../../lib';
@@ -38,7 +38,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`That bot command is not yet registered.`);
 		}
 		const bot = Users.get(data.owner);
-		if (!bot || !bot.connected) {
+		if (!bot?.connected) {
 			return this.errorReply(`The bot '${data.owner}' is not connected, and so their commands cannot be used.`);
 		}
 		if (!bot.inRooms.has(room.roomid)) {
@@ -52,7 +52,7 @@ export const commands: Chat.ChatCommands = {
 		);
 	},
 	runbotcommandhelp: [
-		`/runbotcommand [command], [target] - Runs [command] given with the [target], if it is registered to a bot.`,
+		`/runbotcommand [command], [target] - Runs the given registered bot command with [target] as its parameters.`,
 	],
 	registerbotcommand(target, room, user) {
 		this.checkCan('globalban');
@@ -121,8 +121,7 @@ export const pages: Chat.PageTable = {
 		buf += `<tr><th>Command</th><th>Bot</th><th>Prefix</th><th>Bot command</th>`;
 		if (manage) buf += `<th>Manage</th>`;
 		buf += `<tr />`;
-		for (const k in commandData) {
-			const data = commandData[k];
+		for (const [command, data] of Object.entries(commandData)) {
 			buf += `<tr>`;
 			buf += `<td><code>/${k}</code></td>`;
 			buf += Utils.html`<td>${Users.get(data.owner)?.name || data.owner}</td>`;
@@ -152,7 +151,7 @@ export const parseCommand: Chat.CommandParser = (message, user, room, conn) => {
 	if (!bot.inRooms.has(room.roomid)) {
 		conn.sendTo(
 			room.roomid,
-			`|error|You can only use that command in a room shared with the bot that owns it (${bot.name})`
+			`|error|You can only use that command in a room shared with the bot that owns it (${bot.name}).`
 		);
 		return null;
 	}
