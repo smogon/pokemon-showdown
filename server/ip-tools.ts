@@ -368,7 +368,6 @@ export const IPTools = new class {
 	rangeIntersects(a: AddressRange, b: AddressRange) {
 		try {
 			this.checkRangeConflicts(a, [b]);
-			this.checkRangeConflicts(b, [a]);
 		} catch {
 			return true;
 		}
