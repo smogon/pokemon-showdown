@@ -138,7 +138,7 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const parseCommand: Chat.CommandParser = (message, user, room, conn) => {
+export const parseCommand: CommandParser = (message, user, room, conn) => {
 	if (!room) return null;
 	let [possibleCmd, target] = Utils.splitFirst(message, ' ');
 	possibleCmd = toID(possibleCmd);
