@@ -493,7 +493,7 @@ export const Punishments = new class {
 		for (const [note, ip] of Punishments.sharedIps) {
 			buf += `${ip}\tSHARED\t${note}\r\n`;
 		}
-		for (const [note, range] of Punishments.sharedRanges) {
+		for (const [range, note] of Punishments.sharedRanges) {
 			buf += `${IPTools.rangeToString(range)}\tSHARED\t${note}\r\n`;
 		}
 
