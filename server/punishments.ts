@@ -490,12 +490,12 @@ export const Punishments = new class {
 
 	saveSharedIps() {
 		let buf = 'IP\tType\tNote\r\n';
-		Punishments.sharedIps.forEach((note, ip) => {
+		for (const [note, ip] of Punishments.sharedIps) {
 			buf += `${ip}\tSHARED\t${note}\r\n`;
-		});
-		Punishments.sharedRanges.forEach((note, range) => {
+		}
+		for (const [note, range] of Punishments.sharedRanges) {
 			buf += `${IPTools.rangeToString(range)}\tSHARED\t${note}\r\n`;
-		});
+		}
 
 		return FS(SHAREDIPS_FILE).write(buf);
 	}
