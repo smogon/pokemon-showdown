@@ -118,7 +118,6 @@ export const translations: Translations = {
 		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "このチャット部屋はスローチャットが設定されているため、 ${time} 秒以内に複数のメッセージを送ることができません。",
 		"Your username contains a phrase banned by this room.": "ユーザー名にこの部屋の禁止ワードが入っています。",
 		"Your status message contains a phrase banned by this room.": "ステータスにこの部屋の禁止ワードが入っています。",
-		
 		"You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}": "${lockType}状態のためプライベートメッセージを送信できるのはグローバルスタッフのみに制限されています。${lockExpiration}",
 		"Get help with this": "ヘルプ",
 		"The user \"${targetUser.name}\" is locked and cannot be PMed.": "\"${targetUser.name}\"はロックされているためプライベートメッセージを送信することができません。",
@@ -156,10 +155,10 @@ export const translations: Translations = {
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "チャットルームのトーナメントに参加するには、<strong>Join!</strong>のボタンをクリックするか<code>/tour join</code>を部屋のチャットで送信します。<strong>Validate</strong>をクリックすることによって選択したチームがトーナメントのルールに適合しているか確認することができます。<strong>Ready!</strong>ボタンが表示されたときにそれをクリックすると、トーナメントの対戦相手とバトルを開始します。また、2つの形式のトーナメントが存在します。Elimination(トーナメント形式。規定された回数を負け越すと強制的にトーナメントから敗退になります。)とRound Robin(総当たり。トーナメントの参加者全員とバトルをします。勝った回数が1番多いユーザーが優勝になります。)",
 		"Frequently Asked Questions": "よくある質問",
 
-		"pages/faq": "pages/faq",
-		"pages/ladderhelp": "interstice?uri=https%3A%2F%2Fdocs.google.com%2Fdocument%2Fd%2Fe%2F2PACX-1vTww62_gyYb8SRqGATPfIyOBMs7QYfrGWgVPGlB_binqi_XwnC8Q-mNPwC6tyDOp2t1EpgB1bNJOQMB%2Fpub",
-		"pages/rng": "interstice?uri=https%3A%2F%2Fdocs.google.com%2Fdocument%2Fd%2Fe%2F2PACX-1vRMQCbc2iVw1fooQ1N3kKoRZAjDa4uZLIe3HzJ0EQyC6_vxSd6iM0XrIkem1XlwPZy39fJ4gE59wXRM%2Fpub",
-		"pages/staff": "interstice?uri=https%3A%2F%2Fdocs.google.com%2Fdocument%2Fd%2Fe%2F2PACX-1vQcpqSiE3npJs1LJzR1jTvS2JTULPlLegg9Ry2aa0HJi5-A4lottAsxktOOcbyzcZrrcix415karrbM%2Fpub",
+		"pages/faq": "pages/faq-jp",
+		"pages/ladderhelp": "pages/ladderhelp-jp",
+		"pages/rng": "pages/rng-jp",
+		"pages/staff": "pages/staff-jp",
 		
 		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "PMはユーザーからの報告などに備えて記録されていますが、罰の執行など正当な理由がない限り閲覧することはできません。",
 		"- We log IPs to enforce bans and mutes.": "IPアドレスはBANやミュートのために記録されています。",
