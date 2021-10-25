@@ -68,7 +68,9 @@ export interface Punishment {
  */
 export interface PunishInfo {
 	desc: string;
-	callback?: (user: User, punishment: Punishment, room: Room | null, isExactMatch: boolean) => void;
+	onActivate?: (user: User, punishment: Punishment, room: Room | null, isExactMatch: boolean) => void;
+	/** For room punishments - should they count for punishmentmonitor? default to no. */
+	activatePunishMonitor?: boolean;
 }
 
 interface PunishmentEntry {
@@ -289,9 +291,9 @@ export const Punishments = new class {
 		// references to global.Punishments? are here because if you hotpatch punishments without hotpatching chat,
 		// old punishment types won't be loaded into here, which might cause issues. This guards against that.
 		...(global.Punishments?.roomPunishmentTypes || []),
-		['ROOMBAN', {desc: 'banned'}],
-		['BLACKLIST', {desc: 'blacklisted'}],
-		['MUTE', {desc: 'muted'}],
+		['ROOMBAN', {desc: 'banned', activatePunishMonitor: true}],
+		['BLACKLIST', {desc: 'blacklisted', activatePunishMonitor: true}],
+		['MUTE', {desc: 'muted', activatePunishMonitor: true}],
 	]);
 	constructor() {
 		setImmediate(() => {
@@ -874,13 +876,32 @@ export const Punishments = new class {
 		return success;
 	}
 
-	addRoomPunishmentType(type: string, desc: string, callback?: PunishInfo['callback']) {
-		this.roomPunishmentTypes.set(type, {desc, callback});
-		if (!this.sortedRoomTypes.includes(type)) this.sortedRoomTypes.unshift(type);
+	addRoomPunishmentType(
+		opts: PunishInfo & {type: string} | string,
+		// backwards compat - todo make only PunishInfo & {type: string}
+		desc?: string,
+		callback?: PunishInfo['onActivate']
+	) {
+		if (typeof opts === 'string') {
+			if (!desc) throw new Error('Desc argument must be provided if type is string');
+			opts = {onActivate: callback, desc, type: opts};
+		}
+		this.roomPunishmentTypes.set(opts.type, opts);
+		if (!this.sortedRoomTypes.includes(opts.type)) this.sortedRoomTypes.unshift(opts.type);
 	}
-	addPunishmentType(type: string, desc: string, callback?: PunishInfo['callback']) {
-		this.punishmentTypes.set(type, {desc, callback});
-		if (!this.sortedTypes.includes(type)) this.sortedTypes.unshift(type);
+
+	addPunishmentType(
+		opts: PunishInfo & {type: string} | string,
+		// backwards compat - todo make only PunishInfo & {type: string}
+		desc?: string,
+		callback?: PunishInfo['onActivate']
+	) {
+		if (typeof opts === 'string') {
+			if (!desc) throw new Error('Desc argument must be provided if type is string');
+			opts = {onActivate: callback, desc, type: opts};
+		}
+		this.punishmentTypes.set(opts.type, opts);
+		if (!this.sortedTypes.includes(opts.type)) this.sortedTypes.unshift(opts.type);
 	}
 
 	/*********************************************************
@@ -1661,8 +1682,8 @@ export const Punishments = new class {
 			user.notified.lock = true;
 			user.locked = punishUserid;
 			user.updateIdentity();
-		} else if (punishmentInfo?.callback) {
-			punishmentInfo.callback.call(this, user, punishment, null, punishment.id === user.id);
+		} else if (punishmentInfo?.onActivate) {
+			punishmentInfo.onActivate.call(this, user, punishment, null, punishment.id === user.id);
 		}
 		Punishments.checkPunishmentTime(user, punishment);
 	}
@@ -1692,7 +1713,7 @@ export const Punishments = new class {
 						}
 					} else {
 						const info = Punishments.punishmentTypes.get(punishment.type);
-						info?.callback?.call(this, user, punishment, null, punishment.id === user.id);
+						info?.onActivate?.call(this, user, punishment, null, punishment.id === user.id);
 					}
 				}
 			}
@@ -1770,8 +1791,8 @@ export const Punishments = new class {
 		if (punishments) {
 			for (const punishment of punishments) {
 				const info = this.roomPunishmentTypes.get(punishment.type);
-				if (info?.callback) {
-					info.callback.call(this, user, punishment, Rooms.get(roomid)!, punishment.id === user.id);
+				if (info?.onActivate) {
+					info.onActivate.call(this, user, punishment, Rooms.get(roomid)!, punishment.id === user.id);
 					continue;
 				}
 				if (punishment.type !== 'ROOMBAN' && punishment.type !== 'BLACKLIST') return null;
@@ -2018,7 +2039,10 @@ export const Punishments = new class {
 		const minPunishments = (typeof Config.monitorminpunishments === 'number' ? Config.monitorminpunishments : 3);
 		if (!minPunishments) return;
 
-		const punishments = Punishments.getRoomPunishments(user, {checkIps: true, publicOnly: true});
+		let punishments = Punishments.getRoomPunishments(user, {checkIps: true, publicOnly: true});
+		punishments = punishments.filter(([room, punishment]) => (
+			Punishments.roomPunishmentTypes.get(punishment.type)?.activatePunishMonitor
+		));
 
 		if (punishments.length >= minPunishments) {
 			let points = 0;

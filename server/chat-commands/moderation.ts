@@ -126,9 +126,13 @@ export function runCrisisDemote(userid: ID) {
 	return from;
 }
 
-Punishments.addPunishmentType('YEARLOCK', "Locked for a year", (user, punishment) => {
-	user.locked = user.id;
-	Chat.punishmentfilter(user, punishment);
+Punishments.addPunishmentType({
+	type: 'YEARLOCK',
+	desc: "Locked for a year",
+	onActivate: (user, punishment) => {
+		user.locked = user.id;
+		Chat.punishmentfilter(user, punishment);
+	},
 });
 
 export const commands: Chat.ChatCommands = {

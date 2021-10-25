@@ -12,7 +12,10 @@ const REPLAY_REGEX = new RegExp(
 	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
 );
 
-Punishments.addPunishmentType('TICKETBAN', 'banned from creating help tickets');
+Punishments.addPunishmentType({
+	type: 'TICKETBAN',
+	desc: 'banned from creating help tickets',
+});
 
 interface TicketState {
 	creator: string;
