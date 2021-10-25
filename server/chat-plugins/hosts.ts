@@ -477,9 +477,24 @@ export const commands: Chat.ChatCommands = {
 	unmarkshared(target, room, user) {
 		if (!target) return this.parse('/help unmarkshared');
 		checkCanPerform(this, user, 'globalban');
-		if (!IPTools.ipRegex.test(target)) return this.errorReply("Please enter a valid IP address.");
+		target = target.trim();
+		const pattern = IPTools.stringToRange(target);
+		if (!pattern) return this.errorReply("Please enter a valid IP address.");
+		if (pattern.minIP !== pattern.maxIP && !user.can('rangeban')) {
+			return this.errorReply(`Only administrators can unmarkshare ranges.`);
+		}
 
-		if (!Punishments.isSharedIp(target)) return this.errorReply("This IP isn't marked as shared.");
+		let shared = false;
+		if (pattern.minIP !== pattern.maxIP) {
+			for (const range of Punishments.sharedRanges.keys()) {
+				shared = range.minIP === pattern.minIP && range.maxIP === pattern.maxIP;
+				if (shared) break;
+			}
+		} else {
+			shared = Punishments.sharedIps.has(target);
+		}
+
+		if (!shared) return this.errorReply(`That IP/range isn't marked as shared.`);
 
 		Punishments.removeSharedIp(target);
 
