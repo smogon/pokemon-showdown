@@ -235,7 +235,7 @@ export const Punishments = new class {
 	 * AddressRange:note map. In a separate map so we iterate a massive map a lot less.
 	 * (AddressRange is a bit of a premature optimization, but it saves us a conversion call on some trafficked spots)
 	 */
-	readonly sharedRanges = new Map<AddressRange, string>();
+	sharedRanges = new Map<AddressRange, string>();
 	/**
 	 * sharedIpBlacklist is an ip:note Map
 	 */
@@ -1438,7 +1438,17 @@ export const Punishments = new class {
 	}
 
 	removeSharedIp(ip: string) {
-		Punishments.sharedIps.delete(ip);
+		const pattern = IPTools.stringToRange(ip);
+		if (pattern && pattern.minIP !== pattern.maxIP) {
+			// i don't _like_ this, but map.delete on an object doesn't work.
+			Punishments.sharedRanges = new Map(
+				[...Punishments.sharedRanges].filter(([range]) => (
+					!(range.minIP === pattern.minIP && range.maxIP === pattern.maxIP)
+				)
+			));
+		} else {
+			Punishments.sharedIps.delete(ip);
+		}
 		void Punishments.saveSharedIps();
 	}
 
