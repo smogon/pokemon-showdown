@@ -1182,7 +1182,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 						if (!user) continue;
 						const team = await room.battle!.getTeam(user);
 						if (team) {
-							const teamNames = team.map(p => p.name ? `${p.name} (${p.species})` : p.species);
+							const teamNames = team.map(p => (
+								p.name !== p.species ? Utils.html`${p.name} (${p.species})` : p.species
+							));
 							names.push(`<strong>${user.id}:</strong> ${teamNames.join(', ')}`);
 						}
 					}
