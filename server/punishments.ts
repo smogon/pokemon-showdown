@@ -1441,11 +1441,10 @@ export const Punishments = new class {
 		const pattern = IPTools.stringToRange(ip);
 		if (pattern && pattern.minIP !== pattern.maxIP) {
 			// i don't _like_ this, but map.delete on an object doesn't work.
-			Punishments.sharedRanges = new Map(
-				[...Punishments.sharedRanges].filter(([range]) => (
-					!(range.minIP === pattern.minIP && range.maxIP === pattern.maxIP)
-				)
-			));
+			const isMatch = (range: AddressRange) => (
+				range.minIP === pattern.minIP && range.maxIP === pattern.maxIP
+			);
+			Punishments.sharedRanges = new Map([...Punishments.sharedRanges].filter(([range]) => !isMatch(range)));
 		} else {
 			Punishments.sharedIps.delete(ip);
 		}
