@@ -40,7 +40,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onModifySpAPriority: -101,
 			onModifySpA(atk, pokemon, defender, move) {
-				this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
+				// https://www.smogon.com/forums/posts/8992145/
+				// this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
 				this.event.modifier = 1;
 				return move.allies!.shift()!.species.baseStats.atk;
 			},
