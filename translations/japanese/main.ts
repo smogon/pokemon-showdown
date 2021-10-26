@@ -138,13 +138,12 @@ export const translations: Translations = {
 		"You are now blocking private messages, except from staff.": "プライベートメッセージをブロックしました。グローバルスタッフからはブロックされません。",
 		"You are not blocking private messages! To block, use /blockpms": "プライベートメッセージをブロックしていません。ブロックしたい場合は、/blockpms を使ってください。",
 		"You are no longer blocking private messages.": "プライベートメッセージのブロックを解除しました。",
-		"You are now blocking all incoming challenge requests.": " 対戦の申し込みをブロックしました。",
+		"You are now blocking all incoming challenge requests.": "対戦の申し込みをブロックしました。",
 		"You are already blocking challenges!": "すでに対戦の申し込みをブロックしています。",
 		"You are already available for challenges!": "現在対戦の申し込みをブロックしていません。",
 		"You are available for challenges from now on.": "対戦の申し込みのブロックを解除しました。",
 		"You are now blocking challenges, except from staff and ${rank}.": "対戦の申し込みをブロックしました。グローバルスタッフと${rank}権限を持つユーザーからはブロックされません。",
 		"You are now blocking challenges, except from staff and ${status} users.": "対戦の申し込みをブロックしました。グローバルスタッフと${status}状態のユーザーからはブロックされません。",
-		
 		"Staff FAQ": "スタッフに関するよくある質問",
 		"You cannot broadcast all FAQs at once.": "1回でFAQを全て表示させることはできません。",
 		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "レートが有効なバトルで1回以上勝利し、アカウントを登録してから1週間が経過するアカウントが自動承認されます(autoconfirmed)。承認されていないユーザーはグローバルスタッフ(いかなる場所でも名前の前に %、 @、 & がついています)以外にPMを送信することができません。また、チャットルームでは荒らしを防止するためにmodchatで承認済みのユーザーのみが発言できるようにすることができます。もしあなたが承認されていない場合はルームスタッフ(名前の前に %、@、# がついているユーザーです)にPMを送信し、modchatを無効にするように依頼することができますが、スタッフは無効化する義務はありません。",
@@ -159,7 +158,6 @@ export const translations: Translations = {
 		"pages/ladderhelp": "pages/ladderhelp-jp",
 		"pages/rng": "pages/rng-jp",
 		"pages/staff": "pages/staff-jp",
-		
 		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "PMはユーザーからの報告などに備えて記録されていますが、罰の執行など正当な理由がない限り閲覧することはできません。",
 		"- We log IPs to enforce bans and mutes.": "IPアドレスはBANやミュートのために記録されています。",
 		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "ログイン情報やチームの保存、Googleアナリティクスやアドセンスのためにクッキーが使用されています。",
