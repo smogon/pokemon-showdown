@@ -462,9 +462,17 @@ export const Punishments = new class {
 	async loadSharedIps() {
 		const data = await FS(SHAREDIPS_FILE).readIfExists();
 		if (!data) return;
+		let needsSave = false; // do we need to re-save to fix malformed data?
 		for (const row of data.replace('\r', '').split("\n")) {
 			if (!row) continue;
 			const [ip, type, note] = row.trim().split("\t");
+			if (IPTools.ipRegex.test(note)) {
+				// this is handling a bug where data accidentally got reversed
+				// (into note,shared,ip format instead of ip,shared,note format)
+				Punishments.sharedIps.set(note, ip);
+				needsSave = true;
+				continue;
+			}
 			if (!IPTools.ipRegex.test(ip)) {
 				const pattern = IPTools.stringToRange(ip);
 				if (pattern) {
@@ -477,6 +485,9 @@ export const Punishments = new class {
 			if (type !== 'SHARED') continue;
 
 			Punishments.sharedIps.set(ip, note);
+		}
+		if (needsSave) {
+			Punishments.saveSharedIps();
 		}
 	}
 
@@ -492,7 +503,7 @@ export const Punishments = new class {
 
 	saveSharedIps() {
 		let buf = 'IP\tType\tNote\r\n';
-		for (const [note, ip] of Punishments.sharedIps) {
+		for (const [ip, note] of Punishments.sharedIps) {
 			buf += `${ip}\tSHARED\t${note}\r\n`;
 		}
 		for (const [range, note] of Punishments.sharedRanges) {
