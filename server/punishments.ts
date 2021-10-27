@@ -487,7 +487,7 @@ export const Punishments = new class {
 			Punishments.sharedIps.set(ip, note);
 		}
 		if (needsSave) {
-			Punishments.saveSharedIps();
+			void Punishments.saveSharedIps();
 		}
 	}
 
