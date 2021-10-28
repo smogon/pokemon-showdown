@@ -438,9 +438,24 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse('/help markshared');
 		checkCanPerform(this, user, 'globalban');
 		const [ip, note] = this.splitOne(target);
-		if (!IPTools.ipRegex.test(ip)) return this.errorReply("Please enter a valid IP address.");
+		if (!IPTools.ipRegex.test(ip)) {
+			const pattern = IPTools.stringToRange(ip);
+			if (!pattern) {
+				return this.errorReply("Please enter a valid IP address.");
+			}
+			if (!user.can('rangeban')) {
+				return this.errorReply('Only upper staff can markshare ranges.');
+			}
+			for (const range of Punishments.sharedRanges.keys()) {
+				if (IPTools.rangeIntersects(range, pattern)) {
+					return this.errorReply(
+						`Range ${IPTools.rangeToString(pattern)} intersects with shared range ${IPTools.rangeToString(range)}`
+					);
+				}
+			}
+		}
 
-		if (Punishments.sharedIps.has(ip)) return this.errorReply("This IP is already marked as shared.");
+		if (Punishments.isSharedIp(ip)) return this.errorReply("This IP is already marked as shared.");
 		if (Punishments.isBlacklistedSharedIp(ip)) {
 			return this.errorReply(`This IP is blacklisted from being marked as shared.`);
 		}
@@ -462,9 +477,24 @@ export const commands: Chat.ChatCommands = {
 	unmarkshared(target, room, user) {
 		if (!target) return this.parse('/help unmarkshared');
 		checkCanPerform(this, user, 'globalban');
-		if (!IPTools.ipRegex.test(target)) return this.errorReply("Please enter a valid IP address.");
+		target = target.trim();
+		const pattern = IPTools.stringToRange(target);
+		if (!pattern) return this.errorReply("Please enter a valid IP address.");
+		if (pattern.minIP !== pattern.maxIP && !user.can('rangeban')) {
+			return this.errorReply(`Only administrators can unmarkshare ranges.`);
+		}
 
-		if (!Punishments.sharedIps.has(target)) return this.errorReply("This IP isn't marked as shared.");
+		let shared = false;
+		if (pattern.minIP !== pattern.maxIP) {
+			for (const range of Punishments.sharedRanges.keys()) {
+				shared = range.minIP === pattern.minIP && range.maxIP === pattern.maxIP;
+				if (shared) break;
+			}
+		} else {
+			shared = Punishments.sharedIps.has(target);
+		}
+
+		if (!shared) return this.errorReply(`That IP/range isn't marked as shared.`);
 
 		Punishments.removeSharedIp(target);
 
@@ -512,7 +542,7 @@ export const commands: Chat.ChatCommands = {
 					}
 				}
 			} else {
-				if (Punishments.sharedIps.has(ip)) this.parse(`/unmarkshared ${ip}`);
+				if (Punishments.isSharedIp(ip)) this.parse(`/unmarkshared ${ip}`);
 			}
 			const reason = reasonArr.join(',');
 

@@ -12,7 +12,10 @@ const REPLAY_REGEX = new RegExp(
 	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
 );
 
-Punishments.addPunishmentType('TICKETBAN', 'banned from creating help tickets');
+Punishments.addPunishmentType({
+	type: 'TICKETBAN',
+	desc: 'banned from creating help tickets',
+});
 
 interface TicketState {
 	creator: string;
@@ -768,7 +771,7 @@ export function notifyStaff() {
 
 function checkIp(ip: string) {
 	for (const t in tickets) {
-		if (tickets[t].ip === ip && tickets[t].open && !Punishments.sharedIps.has(ip)) {
+		if (tickets[t].ip === ip && tickets[t].open && !Punishments.isSharedIp(ip)) {
 			return tickets[t];
 		}
 	}
@@ -1179,7 +1182,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 						if (!user) continue;
 						const team = await room.battle!.getTeam(user);
 						if (team) {
-							const teamNames = team.map(p => p.name ? `${p.name} (${p.species})` : p.species);
+							const teamNames = team.map(p => (
+								p.name !== p.species ? Utils.html`${p.name} (${p.species})` : p.species
+							));
 							names.push(`<strong>${user.id}:</strong> ${teamNames.join(', ')}`);
 						}
 					}
@@ -2097,7 +2102,7 @@ export const commands: Chat.ChatCommands = {
 				return this.parse(`/join help-${ticket.userid}`);
 			}
 			if (Monitor.countTickets(user.latestIp)) {
-				const maxTickets = Punishments.sharedIps.has(user.latestIp) ? `50` : `5`;
+				const maxTickets = Punishments.isSharedIp(user.latestIp) ? `50` : `5`;
 				return this.popupReply(this.tr`Due to high load, you are limited to creating ${maxTickets} tickets every hour.`);
 			}
 			let [

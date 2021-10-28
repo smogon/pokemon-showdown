@@ -26,7 +26,10 @@ const MAX_REASON_LENGTH = 300;
 const MAX_CUSTOM_NAME_LENGTH = 100;
 const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
 
-Punishments.addRoomPunishmentType('TOURBAN', 'banned from tournaments');
+Punishments.addRoomPunishmentType({
+	type: 'TOURBAN',
+	desc: 'banned from tournaments',
+});
 
 const TournamentGenerators = {
 	__proto__: null,

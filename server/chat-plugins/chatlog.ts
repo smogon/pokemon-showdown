@@ -1503,17 +1503,17 @@ export const commands: Chat.ChatCommands = {
 		let limit = '500';
 		let targetRoom: RoomID | undefined = room?.roomid;
 		for (const arg of args) {
-			if (arg.startsWith('room:')) {
+			if (arg.startsWith('room=')) {
 				const id = arg.slice(5).trim().toLowerCase() as RoomID;
 				if (!FS(`logs/chat/${id}`).existsSync()) {
 					return this.errorReply(`Room "${id}" not found.`);
 				}
 				targetRoom = id;
-			} else if (arg.startsWith('limit:')) {
+			} else if (arg.startsWith('limit=')) {
 				limit = arg.slice(6);
-			} else if (arg.startsWith('date:')) {
+			} else if (arg.startsWith('date=')) {
 				date = arg.slice(5);
-			} else if (arg.startsWith('user:')) {
+			} else if (arg.startsWith('user=')) {
 				args.push(`user-${toID(arg.slice(5))}`);
 			} else {
 				searches.push(arg);
@@ -1530,10 +1530,10 @@ export const commands: Chat.ChatCommands = {
 	searchlogshelp() {
 		const buffer = `<details class="readmore"><summary><code>/searchlogs [arguments]</code>: ` +
 			`searches logs in the current room using the <code>[arguments]</code>.</summary>` +
-			`A room can be specified using the argument <code>room: [roomid]</code>. Defaults to the room it is used in.<br />` +
-			`A limit can be specified using the argument <code>limit: [number less than or equal to 3000]</code>. Defaults to 500.<br />` +
-			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date: [month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
-			`If you provide a user argument in the form <code>user:username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
+			`A room can be specified using the argument <code>room=[roomid]</code>. Defaults to the room it is used in.<br />` +
+			`A limit can be specified using the argument <code>limit=[number less than or equal to 3000]</code>. Defaults to 500.<br />` +
+			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date=[month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
+			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
 			"Requires: % @ # &</div>";
