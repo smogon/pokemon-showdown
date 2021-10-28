@@ -160,7 +160,11 @@ export const SampleTeams = new class SampleTeams {
 	 */
 	addTeam(user: User, formatid: string, teamName: string, team: string, category = "uncategorized") {
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
+			let rankNeeded = `a global administrator`;
+			if (teamData.whitelist[formatid]?.length) {
+				rankNeeded = `staff in ${Chat.toListString(teamData.whitelist[formatid], "or")}`;
+			}
+			throw new Chat.ErrorMessage(`Access denied. You need to be ${rankNeeded} to add teams for ${formatid}`);
 		}
 		teamName = teamName.trim();
 		category = category.trim();
