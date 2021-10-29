@@ -184,8 +184,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
-		onEnd() {
+		onEnd(pokemon) {
 			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) return;
+			for (const foe of pokemon.foes()) {
+				foe.hitSelf = false;
+			}
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -206,8 +210,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
-		onEnd() {
+		onEnd(pokemon) {
 			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) return;
+			for (const foe of pokemon.foes()) {
+				foe.hitSelf = false;
+			}
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -4142,8 +4150,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
-		onEnd() {
+		onEnd(pokemon) {
 			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) return;
+			for (const foe of pokemon.foes()) {
+				foe.hitSelf = false;
+			}
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
