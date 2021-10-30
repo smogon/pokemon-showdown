@@ -151,6 +151,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dive: {
+		inherit: true,
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1},
+	},
 	dizzypunch: {
 		inherit: true,
 		isNonstandard: null,
@@ -643,6 +647,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	ominouswind: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	pollenpuff: {
+		inherit: true,
+		flags: {bullet: 1, protect: 1, mirror: 1},
 	},
 	powder: {
 		inherit: true,
