@@ -692,43 +692,18 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We now check attacker's and defender's stats.
 			let level = source.level;
-			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : source;
-			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? source : target;
-			let atkType: AllStatIDs = (move.category === 'Physical') ? 'atk' : 'spa';
-			if (move.offensiveStat) {
-				if (move.offensiveStat.includes("atk")) {
-					atkType = 'atk';
-				} else if (move.offensiveStat.includes("def")) {
-					atkType = 'def';
-				} else if (move.offensiveStat.includes("spa")) {
-					atkType = 'spa';
-				} else if (move.offensiveStat.includes("spd")) {
-					atkType = 'spd';
-				} else if (move.offensiveStat.includes("spe")) {
-					atkType = 'spe';
-				} else if (move.offensiveStat.includes("hp")) {
-					atkType = 'hp';
-				} else if (move.offensiveStat.includes("currenthp")) {
-					atkType = 'currenthp';
-				}
+			const attacker =
+				(move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) ? target : source;
+			const defender =
+				(move.useBaseDefensiveStatAndBoosts && move.useBaseDefensiveStatAndBoosts.includes('source')) ? source : target;
+
+			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
+			if (move.useBaseOffensiveStatAndBoosts) {
+				atkType = move.useBaseOffensiveStatAndBoosts.substr(7) as AllStatIDs;
 			}
-			let defType: AllStatIDs = (move.category === 'Physical') ? 'def' : 'spd';
-			if (move.defensiveStat) {
-				if (move.defensiveStat.includes("atk")) {
-					defType = 'atk';
-				} else if (move.defensiveStat.includes("def")) {
-					defType = 'def';
-				} else if (move.defensiveStat.includes("spa")) {
-					defType = 'spa';
-				} else if (move.defensiveStat.includes("spd")) {
-					defType = 'spd';
-				} else if (move.defensiveStat.includes("spe")) {
-					defType = 'spe';
-				} else if (move.defensiveStat.includes("hp")) {
-					defType = 'hp';
-				} else if (move.defensiveStat.includes("currenthp")) {
-					defType = 'currenthp';
-				}
+			let defType: AllStatIDs = move.category === 'Physical' ? 'def' : 'spd';
+			if (move.useBaseDefensiveStatAndBoosts) {
+				defType = move.useBaseDefensiveStatAndBoosts.substr(7) as AllStatIDs;
 			}
 
 			let attack;

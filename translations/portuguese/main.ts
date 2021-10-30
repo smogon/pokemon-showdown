@@ -129,6 +129,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "Este ${Config.groups[targetUser.group].name} está muito ocupado para responder mensagens privadas no momento. Por favor, contate outro membro da staff.",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "Se você precisa de ajuda, tente abrir um <a href=\"view-help-request\" class=\"button\">pedido de ajuda</a>",
 		"You are blocking private messages right now.": "Você está bloquando mensagens privadas no momento.",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "Sua mensagem continha palavras banidas nesta sala.",
 		"You can't send the same message again so soon.": "Você não pode enviar a mesma mensagem de novo tão cedo.",
@@ -144,6 +145,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "Você já está bloqueando desafios",
 		"You are already available for challenges!": "Você já está disponível para desafios!",
 		"You are available for challenges from now on.": "Você está disponível para desafios a partir de agora.",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "Perguntas Frequentes sobre Staff",
 		"You cannot broadcast all FAQs at once.": "Você não pode exibir publicamente todos os FAQs (Perguntas Frequentes) de uma vez.",

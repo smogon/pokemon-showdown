@@ -140,8 +140,8 @@ const avatarTable = new Set([
 	'harlequin',
 	'hexmaniac-gen3jp', 'hexmaniac-gen3',
 	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen2', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
-	'hilbert-dueldisk', 'hilbert',
-	'hilda-dueldisk', 'hilda',
+	'hilbert-wonderlauncher', 'hilbert',
+	'hilda-wonderlauncher', 'hilda',
 	'hooligans',
 	'hoopster',
 	'hugh',
@@ -197,7 +197,7 @@ const avatarTable = new Set([
 	'morty-gen2', 'morty',
 	'mrfuji-gen3',
 	'musician',
-	'nate-dueldisk', 'nate',
+	'nate-wonderlauncher', 'nate',
 	'ninjaboy-gen3', 'ninjaboy',
 	'noland-gen3',
 	'norman-gen3', 'norman',
@@ -244,7 +244,7 @@ const avatarTable = new Set([
 	'rocketexecutivef-gen2',
 	'rocketexecutive-gen2',
 	'rood',
-	'rosa-dueldisk', 'rosa',
+	'rosa-wonderlauncher', 'rosa',
 	'roughneck-gen4', 'roughneck',
 	'roxanne-gen3', 'roxanne',
 	'roxie',
@@ -393,6 +393,7 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 			autoconfirmed: !!targetUser.autoconfirmed,
 			status: targetUser.getStatus(),
 			rooms: roomList,
+			friended: user.friends?.has(targetUser.id),
 		};
 	},
 	roomlist(target, user, trustable) {
@@ -587,7 +588,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 	},
-	avatarhelp: [`/avatar [avatar number 1 to 293] - Change your trainer sprite.`],
+	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
 
 	signout: 'logout',
 	logout(target, room, user) {
@@ -605,6 +606,8 @@ export const commands: Chat.ChatCommands = {
 		if (!targetId || !message) {
 			return this.parse(`/help msgroom`);
 		}
+		this.checkRecursion();
+
 		const targetRoom = Rooms.search(targetId.trim());
 		if (!targetRoom) return this.errorReply(`Room not found.`);
 		if (message.trim().startsWith('/msgroom ')) {
@@ -634,6 +637,8 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(this.tr`You forgot the comma.`);
 			return this.parse('/help msg');
 		}
+		this.checkRecursion();
+
 		const {targetUser, targetUsername, rest: message} = this.splitUser(target);
 		if (targetUsername === '~') {
 			this.pmTarget = null;
@@ -712,7 +717,10 @@ export const commands: Chat.ChatCommands = {
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			user.settings.blockPMs = target;
 			target = this.tr(target);
-			this.sendReply(this.tr`You are now blocking private messages, except from staff and ${target} users.`);
+			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target} users.`);
+		} else if (target === 'friends') {
+			user.settings.blockPMs = target;
+			this.sendReply(this.tr`You are now blocking private messages, except from staff and friends.`);
 		} else {
 			user.settings.blockPMs = true;
 			this.sendReply(this.tr`You are now blocking private messages, except from staff.`);
@@ -1589,10 +1597,23 @@ export const commands: Chat.ChatCommands = {
 	blockchall: 'blockchallenges',
 	blockchalls: 'blockchallenges',
 	blockchallenges(target, room, user) {
-		if (user.settings.blockChallenges) return this.errorReply(this.tr`You are already blocking challenges!`);
-		user.settings.blockChallenges = true;
+		if (toID(target) === 'ac') target = 'autoconfirmed';
+		if (user.settings.blockChallenges === (target || true)) {
+			return this.errorReply(this.tr`You are already blocking challenges!`);
+		}
+		if (Users.Auth.isAuthLevel(target)) {
+			user.settings.blockChallenges = target;
+			this.sendReply(this.tr`You are now blocking challenges, except from staff and ${target}.`);
+		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked' || target === 'friends') {
+			user.settings.blockChallenges = target;
+			if (target === 'friends') target = 'friended';
+			target = this.tr(target);
+			this.sendReply(this.tr`You are now blocking challenges, except from staff and ${target} users.`);
+		} else {
+			user.settings.blockChallenges = true;
+			this.sendReply(this.tr`You are now blocking all incoming challenge requests.`);
+		}
 		user.update();
-		this.sendReply(this.tr`You are now blocking all incoming challenge requests.`);
 	},
 	blockchallengeshelp: [
 		`/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.`,
@@ -1852,7 +1873,7 @@ process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.
 	Chat.multiLinePattern.register(
 		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash ', '!code ', '/code ', '/modnote ', '/mn ',
-		'/eval', '!eval', '/evalbattle',
+		'/eval', '!eval', '/evalbattle', '/evalsql', '>>sql',
 		'/importinputlog '
 	);
 });

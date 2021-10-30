@@ -630,11 +630,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 					cull = true;
 				}
 
-				const runEnforcementChecker = (checkerName: string) => (
-					this.moveEnforcementCheckers[checkerName]?.(
+				const runEnforcementChecker = (checkerName: string) => {
+					if (!this.moveEnforcementCheckers[checkerName]) return false;
+					return this.moveEnforcementCheckers[checkerName](
 						movePool, moves, abilities, types, counter, species as Species, teamDetails
-					)
-				);
+					);
+				};
 
 				const moveIsRejectable = (
 					!move.weather &&

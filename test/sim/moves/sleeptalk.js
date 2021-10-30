@@ -19,4 +19,23 @@ describe('Sleep Talk', function () {
 		assert.fullHP(battle.p2.active[0]);
 		assert.match(battle.log[battle.lastMoveLine + 1], /^\|cant.*move: Gravity|High Jump Kick$/, 'should log that High Jump Kick failed');
 	});
+
+	it('should fail and lose PP on subsequent turns while Choice locked, prior to Gen 5', function () {
+		battle = common.gen(4).createBattle({seed: [1, 1, 1, 1]}, [[
+			{species: 'Breloom', moves: ['spore', 'snore']},
+		], [
+			{species: 'Chansey', item: 'choiceband', moves: ['sleeptalk', 'pound']},
+		]]);
+		const breloom = battle.p1.active[0];
+		const chansey = battle.p2.active[0];
+		const move = chansey.getMoveData(Dex.moves.get('sleeptalk'));
+		battle.makeChoices('move spore', 'move sleeptalk');
+		assert.false.fullHP(breloom);
+		assert.equal(move.pp, move.maxpp - 1);
+		const hp = breloom.hp;
+		battle.makeChoices('move snore', 'move sleeptalk');
+		assert.equal(chansey.status, 'slp');
+		assert.equal(breloom.hp, hp);
+		assert.equal(move.pp, move.maxpp - 2);
+	});
 });

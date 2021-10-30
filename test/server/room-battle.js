@@ -39,7 +39,7 @@ describe('Simulator abstraction layer features', function () {
 	describe('BattleStream', function () {
 		it('should work (slow)', async function () {
 			Config.simulatorprocesses = 1;
-			const PM = require('../../.server-dist/room-battle').PM;
+			const PM = require('../../server/room-battle').PM;
 			assert.equal(PM.processes.length, 0);
 			PM.spawn(1, true);
 			assert.equal(PM.processes[0].getLoad(), 0);

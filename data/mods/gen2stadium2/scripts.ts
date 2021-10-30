@@ -222,13 +222,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Implementing Recoil mechanics from Stadium 2.
 			// If a pokemon caused the other to faint with a recoil move and only one pokemon remains on both sides,
 			// recoil damage will not be taken.
-			if (
-				move.recoil && move.totalDamage &&
-				(
-					target.alliesAndSelf().filter(foe => !foe.status).length > 1 ||
-					target.hp > 0 || pokemon.alliesAndSelf().filter(ally => !ally.status).length > 1
-				)
-			) {
+			if (move.recoil && move.totalDamage && (pokemon.side.pokemonLeft > 1 || target.side.pokemonLeft > 1 || target.hp)) {
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
 			}
 			return damage;
@@ -334,43 +328,18 @@ export const Scripts: ModdedBattleScriptsData = {
 				level = move.allies[0].level;
 			}
 
-			const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : pokemon;
-			const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? pokemon : target;
+			const attacker =
+				(move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) ? target : pokemon;
+			const defender =
+				(move.useBaseDefensiveStatAndBoosts && move.useBaseDefensiveStatAndBoosts.includes('source')) ? pokemon : target;
+
 			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
-			if (move.offensiveStat) {
-				if (move.offensiveStat.includes("atk")) {
-					atkType = 'atk';
-				} else if (move.offensiveStat.includes("def")) {
-					atkType = 'def';
-				} else if (move.offensiveStat.includes("spa")) {
-					atkType = 'spa';
-				} else if (move.offensiveStat.includes("spd")) {
-					atkType = 'spd';
-				} else if (move.offensiveStat.includes("spe")) {
-					atkType = 'spe';
-				} else if (move.offensiveStat.includes("hp")) {
-					atkType = 'hp';
-				} else if (move.offensiveStat.includes("currenthp")) {
-					atkType = 'currenthp';
-				}
+			if (move.useBaseOffensiveStatAndBoosts) {
+				atkType = move.useBaseOffensiveStatAndBoosts.substr(7) as AllStatIDs;
 			}
 			let defType: AllStatIDs = move.category === 'Physical' ? 'def' : 'spd';
-			if (move.defensiveStat) {
-				if (move.defensiveStat.includes("atk")) {
-					defType = 'atk';
-				} else if (move.defensiveStat.includes("def")) {
-					defType = 'def';
-				} else if (move.defensiveStat.includes("spa")) {
-					defType = 'spa';
-				} else if (move.defensiveStat.includes("spd")) {
-					defType = 'spd';
-				} else if (move.defensiveStat.includes("spe")) {
-					defType = 'spe';
-				} else if (move.defensiveStat.includes("hp")) {
-					defType = 'hp';
-				} else if (move.defensiveStat.includes("currenthp")) {
-					defType = 'currenthp';
-				}
+			if (move.useBaseDefensiveStatAndBoosts) {
+				defType = move.useBaseDefensiveStatAndBoosts.substr(7) as AllStatIDs;
 			}
 			let unboosted = false;
 			let noburndrop = false;
@@ -525,9 +494,14 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[i] = boost[i];
-			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+			let boostBy = target.boostBy(currentBoost);
+			let msg = '-boost';
+			if (boost[i]! < 0) {
+				msg = '-unboost';
+				boostBy = -boostBy;
+			}
+			if (boostBy) {
 				success = true;
-				const msg = '-boost';
 				// Check for boost increases deleting attack or speed drops
 				if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
 					target.removeVolatile('brnattackdrop');
@@ -536,9 +510,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					target.removeVolatile('parspeeddrop');
 				}
 				if (!effect || effect.effectType === 'Move') {
-					this.add(msg, target, i, boost[i]);
+					this.add(msg, target, i, boostBy);
 				} else {
-					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+					this.add(msg, target, i, boostBy, '[from] ' + effect.fullname);
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}

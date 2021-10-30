@@ -503,9 +503,7 @@ export class TwitchStream extends Rooms.RoomGame {
 	}
 	getStreamDisplay() {
 		let buf = `<p style="background: #6441a5; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
-		buf += `<br /><br /><strong>Watching ${this.data.display_name}</strong><br />`;
-		buf += `<twitch src="${this.data.url}">`;
-		buf += `<br />`.repeat(4);
+		buf += `<twitch src="${this.data.url}" width="600" height="330" />`;
 		return buf;
 	}
 }

@@ -459,6 +459,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ["Grass"],
 	},
+	basculinbluestriped: {
+		inherit: true,
+		abilities: {0: "Rock Head", 1: "Adaptability", H: "Mold Breaker", S: "Reckless"},
+	},
 	krookodile: {
 		inherit: true,
 		baseStats: {hp: 95, atk: 117, def: 70, spa: 65, spd: 70, spe: 92},

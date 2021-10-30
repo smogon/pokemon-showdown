@@ -1399,7 +1399,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		offensiveStat: 'source:def',
+		useBaseOffensiveStatAndBoosts: 'source:def',
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -5633,7 +5633,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		offensiveStat: 'target:atk',
+		useBaseOffensiveStatAndBoosts: 'target:atk',
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -13320,7 +13320,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		defensiveStat: 'target:def',
+		useBaseDefensiveStatAndBoosts: 'target:def',
 		name: "Psyshock",
 		pp: 10,
 		priority: 0,
@@ -13335,7 +13335,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
-		defensiveStat: 'target:def',
+		useBaseDefensiveStatAndBoosts: 'target:def',
 		name: "Psystrike",
 		pp: 10,
 		priority: 0,
@@ -14863,7 +14863,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
-		defensiveStat: 'target:def',
+		useBaseDefensiveStatAndBoosts: 'target:def',
 		name: "Secret Sword",
 		pp: 10,
 		priority: 0,
@@ -16564,6 +16564,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit() {
 			this.field.clearTerrain();
 		},
+		onAfterSubDamage() {
+			this.field.clearTerrain();
+		},
 		isZ: "lycaniumz",
 		secondary: null,
 		target: "normal",
@@ -16732,6 +16735,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return !this.field.isTerrain('');
 		},
 		onHit() {
+			this.field.clearTerrain();
+		},
+		onAfterSubDamage() {
 			this.field.clearTerrain();
 		},
 		secondary: null,
@@ -19436,14 +19442,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onModifyMove(move, source, target) {
-				if (move.offensiveStat) {
-					if (move.offensiveStat.includes("def")) {
-						move.offensiveStat.replace("def", "spd");
+				if (move.useBaseOffensiveStatAndBoosts) {
+					if (move.useBaseOffensiveStatAndBoosts.includes("def")) {
+						move.useBaseOffensiveStatAndBoosts.replace("def", "spd");
 						if (source.boosts['def'] || source.boosts['spd']) {
 							this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
 						}
-					} else if (move.offensiveStat.includes("spd")) {
-						move.offensiveStat.replace("spd", "def");
+					} else if (move.useBaseOffensiveStatAndBoosts.includes("spd")) {
+						move.useBaseOffensiveStatAndBoosts.replace("spd", "def");
 					}
 				}
 			},

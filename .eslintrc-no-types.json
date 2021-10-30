@@ -315,6 +315,12 @@
       "rules": {
         "no-var": "off"
       }
+    },
+    {
+      "files": ["server/chat-plugins/private/*"],
+      "parserOptions": {
+        "ecmaVersion": 2021
+      }
     }
   ]
 }

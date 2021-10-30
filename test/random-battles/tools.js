@@ -7,8 +7,8 @@
 'use strict';
 
 const assert = require("../assert");
-const Teams = require('./../../.sim-dist/teams').Teams;
-const TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;
+const Teams = require('./../../sim/teams').Teams;
+const TeamValidator = require('../../sim/team-validator').TeamValidator;
 
 /**
  * Unit test helper for Pokemon sets

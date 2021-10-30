@@ -1,7 +1,7 @@
 'use strict';
 
 /** @type {typeof import('../lib/streams').ObjectReadWriteStream} */
-const ObjectReadWriteStream = require('../.lib-dist/streams').ObjectReadWriteStream;
+const ObjectReadWriteStream = require('../lib/streams').ObjectReadWriteStream;
 
 /** @extends {ObjectReadWriteStream<string>} */
 class WorkerStream extends ObjectReadWriteStream {

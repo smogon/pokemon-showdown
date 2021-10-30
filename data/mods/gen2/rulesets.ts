@@ -71,7 +71,6 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			const species = this.dex.species.get(set.species || set.name);
 			const learnsetData = {...(this.dex.data.Learnsets[species.id]?.learnset || {})};
 			const legalityList = illegalCombos[species.id];
-			if (!legalityList) return;
 			const problems = [];
 			let prevo = species.prevo;
 			while (prevo) {
@@ -89,29 +88,31 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			for (const moveid of set.moves.map(this.toID)) {
 				// Diglett Magnemite Shellder
 				if (!learnsetData[moveid]) continue;
-				const list = learnsetData[moveid].filter(x => !x.includes(legalityList[moveid]));
-				if (!list.length) {
-					switch (legalityList[moveid]) {
-					case 'L':
-						// Converted to a set to remove duplicate entries
-						const levels = new Set(learnsetData[moveid].filter(x => x.includes(legalityList[moveid])).map(x => x.slice(2)));
-						problems.push(
-							`${species.name} can't learn ${this.dex.moves.get(moveid).name}.`,
-							`(It learns ${this.dex.moves.get(moveid).name} in Pok\u00e9mon Crystal at the following levels: ${[...levels].join(', ')})`
-						);
-						break;
-					case 'S':
-						problems.push(
-							`${species.name} can't learn ${this.dex.moves.get(moveid).name}.`,
-							`(It only learns ${this.dex.moves.get(moveid).name} in Pok\u00e9mon Crystal via special in-game events.)`
-						);
-						break;
-					case 'E':
-						problems.push(
-							`${species.name} can't learn ${this.dex.moves.get(moveid).name}.`,
-							`(It only learns ${this.dex.moves.get(moveid).name} as an egg move in Pok\u00e9mon Crystal only.)`
-						);
-						break;
+				if (legalityList) {
+					const list = learnsetData[moveid].filter(x => !x.includes(legalityList[moveid]));
+					if (!list.length) {
+						switch (legalityList[moveid]) {
+						case 'L':
+							// Converted to a set to remove duplicate entries
+							const levels = new Set(learnsetData[moveid].filter(x => x.includes(legalityList[moveid])).map(x => x.slice(2)));
+							problems.push(
+								`${species.name} can't learn ${this.dex.moves.get(moveid).name}.`,
+								`(It learns ${this.dex.moves.get(moveid).name} in Pok\u00e9mon Crystal at the following levels: ${[...levels].join(', ')})`
+							);
+							break;
+						case 'S':
+							problems.push(
+								`${species.name} can't learn ${this.dex.moves.get(moveid).name}.`,
+								`(It only learns ${this.dex.moves.get(moveid).name} in Pok\u00e9mon Crystal via special in-game events.)`
+							);
+							break;
+						case 'E':
+							problems.push(
+								`${species.name} can't learn ${this.dex.moves.get(moveid).name}.`,
+								`(It only learns ${this.dex.moves.get(moveid).name} as an egg move in Pok\u00e9mon Crystal.)`
+							);
+							break;
+						}
 					}
 				}
 				for (const id of notUsableAsTM) {

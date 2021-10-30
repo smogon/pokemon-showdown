@@ -1748,7 +1748,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	infernape: {
 		randomBattleMoves: ["closecombat", "flareblitz", "hiddenpowerice", "machpunch", "overheat", "swordsdance", "thunderpunch", "uturn"],
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DOU",
 	},
 	piplup: {

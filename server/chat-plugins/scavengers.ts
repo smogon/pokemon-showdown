@@ -9,7 +9,7 @@
  */
 
 import {FS, Utils} from '../../lib';
-import {ScavMods, TwistEvent} from './scavenger-games.js';
+import {ScavMods, TwistEvent} from './scavenger-games';
 import {ChatHandler} from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
@@ -1609,6 +1609,13 @@ const ScavengerCommands: Chat.ChatCommands = {
 		game.questions[question].spoilers.push(hint);
 
 		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${hint}`);
+		const playersOnQ = game.players.filter(player => player.currentQuestion === question && !player.completed);
+		const notif = `|notify|Scavenger hint for Q${question + 1}`;
+		for (const player of playersOnQ) {
+			const playerObj = Users.get(player.id);
+			if (!playerObj?.connected) continue;
+			room.sendUser(playerObj, notif);
+		}
 	},
 
 	deletehint: 'removehint',
@@ -1658,6 +1665,13 @@ const ScavengerCommands: Chat.ChatCommands = {
 		game.questions[question].spoilers[hint] = value;
 
 		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${value}`);
+		const playersOnQ = game.players.filter(player => player.currentQuestion === question && !player.completed);
+		const notif = `|notify|Scavenger hint for Q${question + 1}`;
+		for (const player of playersOnQ) {
+			const playerObj = Users.get(player.id);
+			if (!playerObj?.connected) continue;
+			room.sendUser(playerObj, notif);
+		}
 		return this.sendReply("Hint has been modified.");
 	},
 

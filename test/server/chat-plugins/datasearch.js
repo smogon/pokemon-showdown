@@ -6,7 +6,7 @@
 
 const assert = require('../../assert').strict;
 
-const datasearch = require('../../../.server-dist/chat-plugins/datasearch');
+const datasearch = require('../../../server/chat-plugins/datasearch');
 
 describe("Datasearch Plugin", () => {
 	it('should return pokemon with pivot moves', async () => {

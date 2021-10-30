@@ -1557,43 +1557,18 @@ export class BattleActions {
 
 		const level = source.level;
 
-		const attacker = (move.offensiveStat && move.offensiveStat.includes('target')) ? target : source;
-		const defender = (move.defensiveStat && move.defensiveStat.includes('source')) ? source : target;
+		const attacker =
+			(move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) ? target : source;
+		const defender =
+			(move.useBaseDefensiveStatAndBoosts && move.useBaseDefensiveStatAndBoosts.includes('source')) ? source : target;
+
 		let attackStat: AllStatIDs = category === 'Physical' ? 'atk' : 'spa';
-		if (move.offensiveStat) {
-			if (move.offensiveStat.includes("atk")) {
-				attackStat = 'atk';
-			} else if (move.offensiveStat.includes("def")) {
-				attackStat = 'def';
-			} else if (move.offensiveStat.includes("spa")) {
-				attackStat = 'spa';
-			} else if (move.offensiveStat.includes("spd")) {
-				attackStat = 'spd';
-			} else if (move.offensiveStat.includes("spe")) {
-				attackStat = 'spe';
-			} else if (move.offensiveStat.includes("hp")) {
-				attackStat = 'hp';
-			} else if (move.offensiveStat.includes("currenthp")) {
-				attackStat = 'currenthp';
-			}
+		if (move.useBaseOffensiveStatAndBoosts) {
+			attackStat = move.useBaseOffensiveStatAndBoosts.substr(7) as AllStatIDs;
 		}
 		let defenseStat: AllStatIDs = category === 'Physical' ? 'def' : 'spd';
-		if (move.defensiveStat) {
-			if (move.defensiveStat.includes("atk")) {
-				defenseStat = 'atk';
-			} else if (move.defensiveStat.includes("def")) {
-				defenseStat = 'def';
-			} else if (move.defensiveStat.includes("spa")) {
-				defenseStat = 'spa';
-			} else if (move.defensiveStat.includes("spd")) {
-				defenseStat = 'spd';
-			} else if (move.defensiveStat.includes("spe")) {
-				defenseStat = 'spe';
-			} else if (move.defensiveStat.includes("hp")) {
-				defenseStat = 'hp';
-			} else if (move.defensiveStat.includes("currenthp")) {
-				defenseStat = 'currenthp';
-			}
+		if (move.useBaseDefensiveStatAndBoosts) {
+			defenseStat = move.useBaseDefensiveStatAndBoosts.substr(7) as AllStatIDs;
 		}
 
 		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};

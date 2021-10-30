@@ -5,9 +5,9 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {PrefixManager} = require('../../../.server-dist/chat-plugins/username-prefixes');
+const {PrefixManager} = require('../../../server/chat-plugins/username-prefixes');
 
-describe('PrefixManager', () => {
+describe('PrefixManager', function () {
 	beforeEach(() => {
 		this.prefixManager = new PrefixManager();
 		Config.forcedprefixes = {privacy: [], modchat: []};

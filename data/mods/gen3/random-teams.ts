@@ -415,11 +415,12 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					counter.get('physicalpool') + counter.get('specialpool') > 0
 				);
 
-				const runEnforcementChecker = (checkerName: string) => (
-					this.moveEnforcementCheckers[checkerName]?.(
+				const runEnforcementChecker = (checkerName: string) => {
+					if (!this.moveEnforcementCheckers[checkerName]) return false;
+					return this.moveEnforcementCheckers[checkerName](
 						movePool, moves, abilities, types, counter, species as Species, teamDetails
-					)
-				);
+					);
+				};
 
 				if (!cull && !isSetup && moveIsRejectable) {
 					// There may be more important moves that this Pokemon needs
