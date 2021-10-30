@@ -2282,7 +2282,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Coaching",
 		pp: 10,
 		priority: 0,
-		flags: {bypasssub: 1},
+		flags: {bypasssub: 1, allyanim: 1},
 		secondary: null,
 		boosts: {
 			atk: 1,
@@ -3387,7 +3387,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Dive",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1},
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, allyanim: 1},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -7148,7 +7148,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Grassy Glide",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, allyanim: 1},
+		flags: {contact: 1, protect: 1},
 		onModifyPriority(priority, source, target, move) {
 			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
 				return priority + 1;
@@ -12727,7 +12727,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Pollen Puff",
 		pp: 15,
 		priority: 0,
-		flags: {bullet: 1, protect: 1, mirror: 1},
+		flags: {bullet: 1, protect: 1, mirror: 1, allyanim: 1},
 		onTryHit(target, source, move) {
 			if (source.isAlly(target)) {
 				move.basePower = 0;
