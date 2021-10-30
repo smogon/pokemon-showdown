@@ -19446,10 +19446,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 					if (move.useBaseOffensiveStatAndBoosts.includes("def")) {
 						move.useBaseOffensiveStatAndBoosts.replace("def", "spd");
 						if (source.boosts['def'] || source.boosts['spd']) {
-							this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
+							this.hint(move.name + " uses Sp. Def boosts when Wonder Room is active.");
 						}
 					} else if (move.useBaseOffensiveStatAndBoosts.includes("spd")) {
 						move.useBaseOffensiveStatAndBoosts.replace("spd", "def");
+						if (source.boosts['def'] || source.boosts['spd']) {
+							this.hint(move.name + " uses Def boosts when Wonder Room is active.");
+						}
 					}
 				}
 			},
