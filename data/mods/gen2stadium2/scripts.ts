@@ -382,19 +382,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Moves that ignore offense and defense respectively.
-			if (move.ignoreOffensive) {
-				if (atkType !== 'hp' && atkType !== 'currenthp') {
-					this.battle.debug('Negating (sp)atk boost/penalty.');
-					attack = attacker.getStat(atkType, true, true);
-				}
+			if (move.ignoreOffensive && atkType !== 'hp' && atkType !== 'currenthp') {
+				this.battle.debug('Negating (sp)atk boost/penalty.');
+				attack = attacker.getStat(atkType, true, true);
 			}
 
-			if (move.ignoreDefensive) {
-				if (defType !== 'hp' && defType !== 'currenthp') {
-					this.battle.debug('Negating (sp)def boost/penalty.');
-					// No screens
-					defense = target.getStat(defType, true, true);
-				}
+			if (move.ignoreDefensive && defType !== 'hp' && defType !== 'currenthp') {
+				this.battle.debug('Negating (sp)def boost/penalty.');
+				// No screens
+				defense = target.getStat(defType, true, true);
 			}
 
 			if (attack >= 256 || defense >= 256) {

@@ -579,19 +579,15 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
 
-			if (move.ignoreOffensive) {
-				if (atkType !== 'hp' && atkType !== 'currenthp') {
-					this.battle.debug('Negating (sp)atk boost/penalty.');
-					attack = attacker.getStat(atkType, true);
-				}
+			if (move.ignoreOffensive && atkType !== 'hp' && atkType !== 'currenthp') {
+				this.battle.debug('Negating (sp)atk boost/penalty.');
+				attack = attacker.getStat(atkType, true);
 			}
 
-			if (move.ignoreDefensive) {
-				if (defType !== 'hp' && defType !== 'currenthp') {
-					this.battle.debug('Negating (sp)def boost/penalty.');
-					// No screens
-					defense = target.getStat(defType, true);
-				}
+			if (move.ignoreDefensive && defType !== 'hp' && defType !== 'currenthp') {
+				this.battle.debug('Negating (sp)def boost/penalty.');
+				// No screens
+				defense = target.getStat(defType, true);
 			}
 
 			// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
