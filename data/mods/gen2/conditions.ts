@@ -59,7 +59,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			return false;
 		},
 		onModifyMove() {},
-		onHit() {},
+		onDamagingHit() {},
 		onAfterMoveSecondary(target, source, move) {
 			if ((move.secondary && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
 				target.cureStatus();

@@ -223,6 +223,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onTryHit() {},
 		rating: 0,
 	},
+	liquidooze: {
+		inherit: true,
+		onSourceTryHeal(damage, target, source, effect) {
+			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			const canOoze = ['drain', 'leechseed'];
+			if (canOoze.includes(effect.id) && this.activeMove?.id !== 'dreameater') {
+				this.damage(damage, null, null, null, true);
+				return 0;
+			}
+		},
+	},
 	magicguard: {
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {

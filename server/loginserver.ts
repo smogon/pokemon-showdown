@@ -20,11 +20,11 @@ TimeoutError.prototype.name = TimeoutError.name;
 
 function parseJSON(json: string) {
 	if (json.startsWith(']')) json = json.substr(1);
-	const data = {error: null, json: null};
+	const data: {error: string | null, json: any[] | null} = {error: null, json: null};
 	try {
 		data.json = JSON.parse(json);
-	} catch (err) {
-		data.error = err;
+	} catch (err: any) {
+		data.error = err.message;
 	}
 	return data;
 }
@@ -72,11 +72,11 @@ class LoginServerInstance {
 			const json = parseJSON(buffer);
 			this.openRequests--;
 			if (json.error) {
-				return [null, new Error(json.error!)];
+				return [null, new Error(json.error)];
 			}
 			this.openRequests--;
 			return [json.json!, null];
-		} catch (error) {
+		} catch (error: any) {
 			this.openRequests--;
 			return [null, error];
 		}
@@ -154,7 +154,7 @@ class LoginServerInstance {
 			}
 
 			this.requestEnd();
-		} catch (error) {
+		} catch (error: any) {
 			for (const resolve of resolvers) {
 				resolve([null, error]);
 			}

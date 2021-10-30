@@ -5,6 +5,7 @@ data/random-teams.ts @AnnikaCodes
 data/text/ @Marty-D
 databases/ @monsanto
 server/chat-plugins/friends.ts @mia-pi-git
+server/chat-plugins/github.ts @mia-pi-git
 server/chat-plugins/hosts.ts @AnnikaCodes
 server/chat-plugins/mafia.ts @HoeenCoder
 server/chat-plugins/net-filters.ts @mia-pi-git
@@ -14,10 +15,11 @@ server/chat-plugins/random-battles.ts @KrisXV @AnnikaCodes
 server/chat-plugins/repeats.ts @AnnikaCodes
 server/chat-plugins/responder.ts @mia-pi-git
 server/chat-plugins/rock-paper-scissors.ts @mia-pi-git
+server/chat-plugins/sample-teams.ts @KrisXV
 server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
 server/chat-plugins/the-studio.ts @KrisXV
-server/chat-plugins/trivia.ts @AnnikaCodes
-server/friends.ts @mia-pi-git
+server/chat-plugins/trivia/ @AnnikaCodes
 server/chat-plugins/username-prefixes.ts @AnnikaCodes
-server/modlog.ts @monsanto
+server/friends.ts @mia-pi-git
+server/modlog/* @monsanto @AnnikaCodes
 test/random-battles/* @AnnikaCodes

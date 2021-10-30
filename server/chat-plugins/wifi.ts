@@ -6,7 +6,10 @@
 
 import {FS, Utils} from '../../lib';
 
-Punishments.addRoomPunishmentType('GIVEAWAYBAN', 'banned from giveaways');
+Punishments.addRoomPunishmentType({
+	type: 'GIVEAWAYBAN',
+	desc: 'banned from giveaways',
+});
 
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
@@ -969,7 +972,6 @@ const cmds: Chat.ChatCommands = {
 export const commands = {
 	giveaway: cmds,
 	ga: cmds.guess,
-	gh: cmds.help,
 	qg: cmds.question,
 	lg: cmds.lottery,
 	gts: cmds.gts,

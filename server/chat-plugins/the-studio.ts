@@ -82,7 +82,7 @@ export class LastFMInterface {
 					limit: 1, api_key: Config.lastfmkey, format: 'json',
 				},
 			});
-		} catch (e) {
+		} catch {
 			throw new Chat.ErrorMessage(`No scrobble data found.`);
 		}
 		const res = JSON.parse(raw);
@@ -108,7 +108,7 @@ export class LastFMInterface {
 			let videoIDs: string[] | undefined;
 			try {
 				videoIDs = await YouTube.searchVideo(trackName, 1);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
 			}
 			if (!videoIDs?.length) {
@@ -158,7 +158,7 @@ export class LastFMInterface {
 		let raw;
 		try {
 			raw = await Net(API_ROOT).get({query});
-		} catch (e) {
+		} catch {
 			throw new Chat.ErrorMessage(`No track data found.`);
 		}
 		const req = JSON.parse(raw);
@@ -182,7 +182,7 @@ export class LastFMInterface {
 			let videoIDs: string[] | undefined;
 			try {
 				videoIDs = await YouTube.searchVideo(searchName, 1);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
 			}
 			if (!videoIDs?.length) {

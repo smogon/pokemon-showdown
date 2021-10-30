@@ -693,10 +693,8 @@ describe('Modlog conversion script', () => {
 
 	describe.skip('integration tests', () => {
 		it('should convert from SQLite to text', async () => {
-			const modlog = new ml.Modlog('/dev/null', ':memory:', true);
+			const modlog = new ml.Modlog(':memory:');
 			const mlConverter = new converter.ModlogConverterSQLite('', '', modlog.database);
-
-			modlog.initialize('development');
 
 			const entry = {
 				action: 'UNITTEST',
@@ -761,7 +759,7 @@ describe('Modlog conversion script', () => {
 
 			const database = await mlConverter.toSQLite();
 			const globalEntries = database
-				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE roomid LIKE 'global-%'`)
+				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE is_global = 1'`)
 				.all();
 			const entries = database
 				.prepare(`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog WHERE roomid IN (?, ?) ORDER BY timestamp ASC`)
@@ -777,7 +775,7 @@ describe('Modlog conversion script', () => {
 			assert(!globalEntries[0].visual_roomid);
 
 			assert.equal(globalEntries[0].timestamp, 1598212249945);
-			assert.equal(globalEntries[0].roomid.replace(/^global-/, ''), 'development');
+			assert.equal(globalEntries[0].roomid, 'development');
 			assert.equal(globalEntries[0].action, 'GLOBAL UNITTEST');
 			assert.equal(globalEntries[0].action_taker_userid, 'yourmom');
 			assert.equal(globalEntries[0].userid, 'annika');

@@ -65,7 +65,7 @@ class Ladder extends LadderStore {
 
 		try {
 			this.formatid = Dex.formats.validate(this.formatid);
-		} catch (e) {
+		} catch (e: any) {
 			connection.popup(`Your selected format is invalid:\n\n- ${e.message}`);
 			return null;
 		}
@@ -208,7 +208,7 @@ class Ladder extends LadderStore {
 			}
 		}
 		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready));
-		Ladders.challenges.send(user.id, targetUser.id, `/text ${user.name} wants to battle!`);
+		Ladders.challenges.send(user.id, targetUser.id, `/log ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
 		return true;
 	}

@@ -182,6 +182,9 @@ export class UNO extends Rooms.RoomGame {
 	}
 
 	joinGame(user: User) {
+		if (user.id in this.playerTable) {
+			throw new Chat.ErrorMessage("You have already joined the game of UNO.");
+		}
 		if (this.state === 'signups' && this.addPlayer(user)) {
 			this.sendToRoom(`${user.name} has joined the game of UNO.`);
 			return true;

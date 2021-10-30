@@ -1,5 +1,5 @@
 import {MoveCounter, TeamData} from '../../random-teams';
-import RandomGen7Teams from '../gen7/random-teams';
+import RandomGen7Teams, {BattleFactorySpecies} from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -7,6 +7,7 @@ import {toID} from '../../../sim/dex';
 export class RandomGen6Teams extends RandomGen7Teams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
+		this.noStab = [...this.noStab, 'aquajet', 'fakeout', 'iceshard', 'machpunch', 'quickattack', 'vacuumwave'];
 
 		this.moveEnforcementCheckers = {
 			Bug: movePool => movePool.includes('megahorn') || movePool.includes('pinmissile'),
@@ -314,6 +315,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			)};
 		case 'shadowsneak':
 			return {cull: restTalk || (types.has('Ghost') && species.types.length > 1 && counter.get('stab') < 2)};
+		case 'hex':
+			return {cull: moves.has('shadowball') && !moves.has('willowisp')};
 		case 'gigadrain': case 'powerwhip':
 			return {cull: (
 				moves.has('seedbomb') ||
@@ -767,7 +770,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		let ability = '';
 
@@ -1098,7 +1101,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 	}
 
-	randomFactorySets: AnyObject = require('./factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species,
@@ -1200,7 +1203,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
 		const teamData: TeamData = {
-			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult,
+			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult,
 			weaknesses: {}, resistances: {},
 		};
 		const requiredMoveFamilies = ['hazardSet', 'hazardClear'];

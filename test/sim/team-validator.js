@@ -651,7 +651,7 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
-	it.skip('should not allow evolutions of Shiny-locked events to be Shiny', function () {
+	it('should not allow evolutions of Shiny-locked events to be Shiny', function () {
 		const team = [
 			{species: 'urshifu', ability: 'unseenfist', shiny: true, moves: ['snore'], evs: {hp: 1}},
 			{species: 'cosmoem', ability: 'sturdy', shiny: true, moves: ['teleport'], evs: {hp: 1}},
@@ -721,13 +721,23 @@ describe('Team Validator', function () {
 	});
 
 	it('should enforce Gen 1 minimum levels', () => {
-		const team = [
-			{species: 'onix', level: 12, moves: ['explosion'], evs: {hp: 1}},
+		let team = [
+			{species: 'onix', level: 12, moves: ['headbutt']},
 		];
 		let illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert(illegal);
 
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'slowbro', level: 15, moves: ['earthquake']},
+			{species: 'voltorb', level: 14, moves: ['thunderbolt']},
+			{species: 'scyther', level: 15, moves: ['quickattack']},
+			{species: 'pinsir', level: 15, moves: ['visegrip']},
+		];
+
+		illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert.equal(illegal, null);
 	});
 

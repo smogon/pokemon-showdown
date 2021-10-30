@@ -99,7 +99,7 @@ export class FriendsDatabase {
 			let val;
 			try {
 				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
-			} catch (e) {}
+			} catch {}
 			const actualVersion = FS(`databases/migrations/friends`).readdirIfExistsSync().length;
 			if (val === undefined) {
 				// hasn't been set up before, write new version.
@@ -118,7 +118,7 @@ export class FriendsDatabase {
 		for (const k in ACTIONS) {
 			try {
 				statements[k] = database.prepare(ACTIONS[k as keyof typeof ACTIONS]);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Error(`Friends DB statement crashed: ${ACTIONS[k as keyof typeof ACTIONS]} (${e.message})`);
 			}
 		}
@@ -130,8 +130,8 @@ export class FriendsDatabase {
 		statements.expire.run();
 		return database;
 	}
-	getFriends(userid: ID): Promise<Friend[]> {
-		return this.all('get', [userid, MAX_FRIENDS]);
+	async getFriends(userid: ID): Promise<Friend[]> {
+		return (await this.all('get', [userid, MAX_FRIENDS])) || [];
 	}
 	async getRequests(user: User) {
 		const sent: Set<string> = new Set();
@@ -142,10 +142,11 @@ export class FriendsDatabase {
 			await this.run('deleteReceivedRequests', [user.id]);
 		}
 		const sentResults = await this.all('getSent', [user.id]);
+		if (sentResults === null) return {sent, received};
 		for (const request of sentResults) {
 			sent.add(request.receiver);
 		}
-		const receivedResults = await this.all('getReceived', [user.id]);
+		const receivedResults = await this.all('getReceived', [user.id]) || [];
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
@@ -165,7 +166,9 @@ export class FriendsDatabase {
 	}
 	private async query(input: DatabaseRequest) {
 		const process = PM.acquire();
-		if (!process) throw new Error(`Missing friends process`);
+		if (!process || !Config.usesqlite) {
+			return {result: null};
+		}
 		const result = await process.query(input);
 		if (result.error) {
 			throw new Chat.ErrorMessage(result.error);
@@ -339,7 +342,11 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	},
 	accept: requests => {
 		for (const request of requests) {
-			const [senderID] = request;
+			const [senderID, receiverID] = request;
+			const friends = statements.get.all(receiverID, 101);
+			if (friends?.length >= MAX_FRIENDS) {
+				throw new FailureMessage(`You are at the maximum number of friends.`);
+			}
 			const {result} = TRANSACTIONS.removeRequest([request]);
 			if (!result.length) throw new FailureMessage(`You have no request pending from ${senderID}.`);
 			TRANSACTIONS.add([request]);
@@ -376,7 +383,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 			result.result = statements[statement].all(data);
 			break;
 		}
-	} catch (e) {
+	} catch (e: any) {
 		if (!e.name.endsWith('FailureMessage')) {
 			result.error = "Sorry! The database process crashed. We've been notified and will fix this.";
 			Monitor.crashlog(e, "A friends database process", query);

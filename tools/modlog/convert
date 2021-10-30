@@ -34,6 +34,11 @@ const textLogPath = flags['--logdir'];
 const outputLogPath = flags['--outputlogdir'];
 const from = flags['--from'];
 const to = flags['--to'];
+const newestAllowedTimestamp = parseInt(flags['--newest-allowed-timestamp']);
+
+if (newestAllowedTimestamp && isNaN(newestAllowedTimestamp)) {
+	throw new Error(`The newest allowed timestamp must be a number of milliseconds.`);
+}
 
 if (
 	!((databasePath || outputLogPath) && textLogPath && from && to) ||
@@ -44,4 +49,4 @@ if (
 }
 
 console.log(`Converting ${from === 'txt' ? `the text modlog files in ${textLogPath}` : `${databasePath}`} from ${from} to ${to}...`);
-ModlogConverter.convert(from, to, path.resolve(databasePath || ""), path.resolve(textLogPath), path.resolve(outputLogPath || ""));
+ModlogConverter.convert(from, to, path.resolve(databasePath || ""), path.resolve(textLogPath), path.resolve(outputLogPath || ""), newestAllowedTimestamp);

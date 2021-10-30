@@ -66,7 +66,7 @@ export class LogReaderRoom {
 		try {
 			const listing = await FS(`logs/chat/${this.roomid}`).readdir();
 			return listing.filter(file => /^[0-9][0-9][0-9][0-9]-[0-9][0-9]$/.test(file));
-		} catch (err) {
+		} catch {
 			return [];
 		}
 	}
@@ -75,7 +75,7 @@ export class LogReaderRoom {
 		try {
 			const listing = await FS(`logs/chat/${this.roomid}/${month}`).readdir();
 			return listing.filter(file => file.endsWith(".txt")).map(file => file.slice(0, -4));
-		} catch (err) {
+		} catch {
 			return [];
 		}
 	}
@@ -212,7 +212,7 @@ export const LogReader = new class {
 				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
 				firstDay = days[0];
 				break;
-			} catch (err) {}
+			} catch {}
 			months.shift();
 		}
 		if (!firstDay) return null;
@@ -225,7 +225,7 @@ export const LogReader = new class {
 				const days = (await FS(`logs/${month}/${tier}/`).readdir()).filter(this.isDay).sort();
 				lastDay = days[days.length - 1];
 				break;
-			} catch (err) {}
+			} catch {}
 			months.pop();
 		}
 		if (!lastDay) throw new Error(`getBattleLog month range search for ${tier}`);
@@ -242,7 +242,7 @@ export const LogReader = new class {
 				Utils.sortBy(battles, getBattleNum);
 
 				return [getBattleNum(battles[0]), getBattleNum(battles[battles.length - 1])];
-			} catch (err) {
+			} catch {
 				return null;
 			}
 		};
@@ -1066,7 +1066,7 @@ export class RipgrepLogSearcher extends Searcher {
 	async ripgrepSearchMonth(opts: ChatlogSearch) {
 		let {raw, search, room: roomid, date: month, args} = opts;
 		let results: string[];
-		let count = 0;
+		let lineCount = 0;
 		if (!raw) {
 			search = this.constructSearchRegex(search);
 		}
@@ -1085,7 +1085,7 @@ export class RipgrepLogSearcher extends Searcher {
 				cwd: `${__dirname}/../../`,
 			});
 			results = stdout.split(resultSep);
-		} catch (e) {
+		} catch (e: any) {
 			if (e.code !== 1 && !e.message.includes('stdout maxBuffer') && !e.message.includes('No such file or directory')) {
 				throw e; // 2 means an error in ripgrep
 			}
@@ -1095,8 +1095,8 @@ export class RipgrepLogSearcher extends Searcher {
 				results = [];
 			}
 		}
-		count += results.length;
-		return {results, count};
+		lineCount += results.length;
+		return {results, lineCount};
 	}
 	async searchLogs(
 		roomid: RoomID,
@@ -1111,7 +1111,7 @@ export class RipgrepLogSearcher extends Searcher {
 			else if (date.length < 7) date = date.substr(0, 4);
 		}
 		const months = (date && toID(date) !== 'all' ? [date] : await new LogReaderRoom(roomid).listMonths()).reverse();
-		let count = 0;
+		let linecount = 0;
 		let results: string[] = [];
 		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		if (!date) date = 'all';
@@ -1128,7 +1128,7 @@ export class RipgrepLogSearcher extends Searcher {
 				.join('');
 			search = `\\|c\\|${this.constructUserRegex(id)}\\|${rest}`;
 		}
-		while (count < MAX_RESULTS) {
+		while (linecount < MAX_RESULTS) {
 			const month = months.shift();
 			if (!month) break;
 			const output = await this.ripgrepSearchMonth({
@@ -1136,10 +1136,10 @@ export class RipgrepLogSearcher extends Searcher {
 				limit, args: [`-m`, `${limit}`, '-C', '3', '--engine=auto'], raw: !!userSearch,
 			});
 			results = results.concat(output.results);
-			count += output.count;
+			linecount += output.lineCount;
 		}
-		if (count > MAX_RESULTS) {
-			const diff = count - MAX_RESULTS;
+		if (linecount > MAX_RESULTS) {
+			const diff = linecount - MAX_RESULTS;
 			results = results.slice(0, -diff);
 		}
 		return this.renderSearchResults(results, roomid, search, limit, date, originalSearch);
@@ -1230,7 +1230,7 @@ export class RipgrepLogSearcher extends Searcher {
 				const battleName = name.split('/').pop()!;
 				results.push(battleName.slice(0, -9));
 			}
-		} catch (e) {
+		} catch (e: any) {
 			if (e.code !== 1) throw e;
 		}
 		return results.filter(Boolean);
@@ -1268,7 +1268,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module,
 			Monitor.slow(`[Slow chatlog query]: ${elapsedTime}ms: ${JSON.stringify(data)}`);
 		}
 		return result;
-	} catch (e) {
+	} catch (e: any) {
 		if (e.name?.endsWith('ErrorMessage')) {
 			return LogViewer.error(e.message);
 		}
@@ -1295,7 +1295,6 @@ if (!PM.isParentProcess) {
 	};
 	global.Dex = Dex;
 	global.toID = Dex.toID;
-	global.Chat = Chat;
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
 			Monitor.crashlog(err, 'A chatlog search child process');
@@ -1504,17 +1503,17 @@ export const commands: Chat.ChatCommands = {
 		let limit = '500';
 		let targetRoom: RoomID | undefined = room?.roomid;
 		for (const arg of args) {
-			if (arg.startsWith('room:')) {
+			if (arg.startsWith('room=')) {
 				const id = arg.slice(5).trim().toLowerCase() as RoomID;
 				if (!FS(`logs/chat/${id}`).existsSync()) {
 					return this.errorReply(`Room "${id}" not found.`);
 				}
 				targetRoom = id;
-			} else if (arg.startsWith('limit:')) {
+			} else if (arg.startsWith('limit=')) {
 				limit = arg.slice(6);
-			} else if (arg.startsWith('date:')) {
+			} else if (arg.startsWith('date=')) {
 				date = arg.slice(5);
-			} else if (arg.startsWith('user:')) {
+			} else if (arg.startsWith('user=')) {
 				args.push(`user-${toID(arg.slice(5))}`);
 			} else {
 				searches.push(arg);
@@ -1531,10 +1530,10 @@ export const commands: Chat.ChatCommands = {
 	searchlogshelp() {
 		const buffer = `<details class="readmore"><summary><code>/searchlogs [arguments]</code>: ` +
 			`searches logs in the current room using the <code>[arguments]</code>.</summary>` +
-			`A room can be specified using the argument <code>room: [roomid]</code>. Defaults to the room it is used in.<br />` +
-			`A limit can be specified using the argument <code>limit: [number less than or equal to 3000]</code>. Defaults to 500.<br />` +
-			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date: [month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
-			`If you provide a user argument in the form <code>user:username</code>, it will search for messages (that match the other arguments) only from that user` +
+			`A room can be specified using the argument <code>room=[roomid]</code>. Defaults to the room it is used in.<br />` +
+			`A limit can be specified using the argument <code>limit=[number less than or equal to 3000]</code>. Defaults to 500.<br />` +
+			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date=[month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
+			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
 			"Requires: % @ # &</div>";
@@ -1582,11 +1581,23 @@ export const commands: Chat.ChatCommands = {
 		if (target.startsWith('psim.us/')) target = target.slice(8);
 		return this.parse(`/join view-battlelog-${target}`);
 	},
+	battleloghelp: [
+		`/battlelog [battle link] - View the log of the given [battle link], even if the replay was not saved.`,
+		`Requires: % @ &`,
+	],
+
 	logsaccess(target, room, user) {
 		this.checkCan('rangeban');
 		const [type, userid] = target.split(',').map(toID);
 		return this.parse(`/j view-logsaccess-${type || 'all'}${userid ? `-${userid}` : ''}`);
 	},
+	logsaccesshelp: [
+		`/logsaccess [type], [user] - View chatlog access logs for the given [type] and [user].`,
+		`If no arguments are given, shows the entire access log.`,
+		`Requires: &`,
+	],
+
+
 	gcsearch: 'groupchatsearch',
 	async groupchatsearch(target, room, user) {
 		this.checkCan('lock');
@@ -1620,4 +1631,9 @@ export const commands: Chat.ChatCommands = {
 		if (!room) return this.errorReply(`Either use this command in the target room or specify a room.`);
 		return this.parse(`/join view-roominfo-${room}${date ? `--${date}` : ''}`);
 	},
+	roomactivityhelp: [
+		`/roomactibity [room][, date] - View room activity logs for the given room.`,
+		`If a date is provided, it searches for logs from that date. Otherwise, it searches the current month.`,
+		`Requires: &`,
+	],
 };

@@ -444,6 +444,7 @@ export interface EventMethods {
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;
 	onFoeModifyDefPriority?: number;
+	onFoeModifySpDPriority?: number;
 	onFoeRedirectTargetPriority?: number;
 	onFoeTrapPokemonPriority?: number;
 	onFractionalPriorityPriority?: number;

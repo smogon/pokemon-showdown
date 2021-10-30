@@ -651,9 +651,8 @@ export class Side {
 			return this.emitChoiceError(`Can't switch: You sent more choices than unfainted Pokémon`);
 		}
 		const pokemon = this.active[index];
-		const autoChoose = !slotText;
 		let slot;
-		if (autoChoose) {
+		if (!slotText) {
 			if (this.requestState !== 'switch') {
 				return this.emitChoiceError(`Can't switch: You need to select a Pokémon to switch in`);
 			}
@@ -661,7 +660,7 @@ export class Side {
 			slot = this.active.length;
 			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 		} else {
-			slot = parseInt(slotText!) - 1;
+			slot = parseInt(slotText) - 1;
 		}
 		if (isNaN(slot) || slot < 0) {
 			// maybe it's a name/species id!

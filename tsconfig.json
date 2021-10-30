@@ -3,6 +3,7 @@
         "lib": ["es2020"],
         "noEmit": true,
         "target": "es2020",
+        "skipLibCheck": true,
         "module": "CommonJS",
         "moduleResolution": "node",
         "strict": true,

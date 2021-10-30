@@ -98,12 +98,7 @@ function findFiles(options) {
 	if (!outArr.length) {
 		return outArr;
 	}
-	if (!fs.existsSync(outDirPath)) {
-		fs.mkdirSync(outDirPath, {recursive: true});
-	}
-	if (!fs.existsSync(path.join(outDirPath, "sourceMaps"))) {
-		fs.mkdirSync(path.join(outDirPath, "sourceMaps"));
-	}
+	fs.mkdirSync(path.join(outDirPath, "sourceMaps"), {recursive: true});
 
 	return outArr;
 }
@@ -113,7 +108,7 @@ function sucrase(src, out, opts, excludeDirs = []) {
 		if (!force && !needsSucrase(src, out) && src !== "./config") {
 			return false;
 		}
-	} catch (e) {}
+	} catch {}
 	const sucraseOptions = {
 		transforms: ["typescript", "imports"],
 		enableLegacyTypeScriptModuleInterop: true,
@@ -156,7 +151,7 @@ function replace(file, replacements) {
 		if (err) throw err;
 		if (stats.isSymbolicLink()) return;
 		if (stats.isFile()) {
-			if (!file.endsWith('.js')) return;
+			if (!file.endsWith('.js') && !file.endsWith('.d.ts')) return;
 			fs.readFile(file, "utf-8", function (err, text) {
 				if (err) throw err;
 				let anyMatch = false;
@@ -208,6 +203,7 @@ exports.transpile = (doForce, decl) => {
 	if (sucrase('./sim', './.sim-dist')) {
 		replace('.sim-dist', [
 			{regex: /(require\(.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
+			{regex: /(from '.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
 		]);
 	}
 
@@ -255,7 +251,7 @@ exports.transpile = (doForce, decl) => {
 exports.buildDecls = () => {
 	try {
 		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, {stdio: 'inherit'});
-	} catch (e) {}
+	} catch {}
 	for (const file of fs.readdirSync(`./.sim-dist/lib/`)) {
 		fs.renameSync(`./.sim-dist/lib/${file}`, `./.lib-dist/${file}`);
 	}

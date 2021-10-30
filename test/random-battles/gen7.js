@@ -13,6 +13,37 @@ describe('[Gen 7] Random Battle', () => {
 		testNotBothMoves('chimecho', options, 'calmmind', 'yawn');
 	});
 
+	it('should give Azumarill Aqua Jet', () => {
+		testSet('azumarill', options, set => {
+			assert(set.moves.includes('aquajet'), `Azumarill: got ${set.moves}`);
+		});
+	});
+
+	it('should give Typhlosion Eruption', () => {
+		testSet('typhlosion', options, set => {
+			assert(set.moves.includes('eruption'), `Typhlosion: got ${set.moves}`);
+		});
+	});
+
+	it('should not generate Pursuit as the only Dark STAB move', () => {
+		const dex = Dex.forFormat(options.format);
+		const darkTypesWithPursuit = dex.species
+			.all()
+			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves?.includes('pursuit'))
+			.map(pkmn => pkmn.id);
+		for (const pokemon of darkTypesWithPursuit) {
+			testSet(pokemon, options, set => {
+				if (!set.moves.includes('pursuit')) return;
+				const darkStab = set.moves.filter(m => {
+					const move = dex.moves.get(m);
+					if (move.type !== 'Dark') return false;
+					return move.category !== 'Status';
+				});
+				assert(darkStab.length > 1, `${pokemon}: got ${set.moves}`);
+			});
+		}
+	});
+
 	it('should not generate Roar + Protect', () => {
 		testNotBothMoves('heatran', options, 'roar', 'protect');
 		testNotBothMoves('vaporeon', options, 'roar', 'protect');
@@ -45,5 +76,9 @@ describe('[Gen 7] Random Battle', () => {
 		testSet('meganium', options, set => {
 			assert(set.moves.includes('gigadrain'), `Meganium: got ${set.moves}`);
 		});
+	});
+
+	it('should never give Xerneas Assault Vest', () => {
+		testSet('xerneas', options, set => assert.notEqual(set.item, 'Assault Vest'));
 	});
 });

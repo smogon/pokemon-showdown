@@ -21,6 +21,9 @@ const STATUS_TITLES: {[k: string]: string} = {
 	offline: 'Offline',
 };
 
+// once every 15 minutes
+const LOGIN_NOTIFY_THROTTLE = 15 * 60 * 1000;
+
 export const Friends = new class {
 	async notifyPending(user: User) {
 		if (user.settings.blockFriendRequests) return;
@@ -47,13 +50,13 @@ export const Friends = new class {
 	}
 	async notifyConnection(user: User) {
 		const connected = await Chat.Friends.getLastLogin(user.id);
-		if (connected && (Date.now() - connected) < 2 * 60 * 1000) {
+		if (connected && (Date.now() - connected) < LOGIN_NOTIFY_THROTTLE) {
 			return;
 		}
 		const friends = await Chat.Friends.getFriends(user.id);
-		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
+		const message = `/nonotify Your friend <username class="username">${Utils.escapeHTML(user.name)}</username> has just connected!`;
 		for (const f of friends) {
-			const curUser = Users.get(f.friend);
+			const curUser = Users.getExact(f.friend);
 			if (curUser?.settings.allowFriendNotifications) {
 				curUser.send(`|pm|&|${curUser.getIdentity()}|${message}`);
 			}
@@ -142,7 +145,7 @@ export const Friends = new class {
 		if (login && typeof login === 'number' && !user?.connected) {
 			// THIS IS A TERRIBLE HACK BUT IT WORKS OKAY
 			const time = Chat.toTimestamp(new Date(Number(login)), {human: true});
-			buf += `Last login: ${time.split(' ').reverse().join(', on ')}`;
+			buf += `Last seen: ${time.split(' ').reverse().join(', on ')}`;
 			buf += ` (${Chat.toDurationString(Date.now() - login, {precision: 1})} ago)`;
 		} else if (typeof login === 'string') {
 			buf += `${login}`;
@@ -152,11 +155,11 @@ export const Friends = new class {
 	}
 	checkCanUse(context: Chat.CommandContext | Chat.PageContext) {
 		const user = context.user;
-		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
-			throw new Chat.ErrorMessage(`You are locked, and so cannot use the friends feature.`);
-		}
 		if (!user.autoconfirmed) {
 			throw new Chat.ErrorMessage(context.tr`You must be autoconfirmed to use the friends feature.`);
+		}
+		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
+			throw new Chat.ErrorMessage(`You are locked, and so cannot use the friends feature.`);
 		}
 		if (!Config.usesqlitefriends || !Config.usesqlite) {
 			throw new Chat.ErrorMessage(`The friends list feature is currently disabled.`);
@@ -241,6 +244,9 @@ export const commands: Chat.ChatCommands = {
 	friendslist: 'friends',
 	friends: {
 		''(target) {
+			if (toID(target)) {
+				return this.parse(`/friend add ${target}`);
+			}
 			return this.parse(`/friends list`);
 		},
 		viewlist(target, room, user) {
@@ -347,7 +353,7 @@ export const commands: Chat.ChatCommands = {
 		hidenotifications: 'viewnotifications',
 		viewnotifs: 'viewnotifications',
 		viewnotifications(target, room, user, connection, cmd) {
-			Friends.checkCanUse(this);
+			// Friends.checkCanUse(this);
 			const setting = user.settings.allowFriendNotifications;
 			target = target.trim();
 			if (!cmd.includes('hide') || target && this.meansYes(target)) {
@@ -451,7 +457,7 @@ export const commands: Chat.ChatCommands = {
 		if (this.broadcasting) {
 			return this.sendReplyBox([
 				`<code>/friend list</code> - View current friends.`,
-				`<code>/friend add [username]</code> - Send a friend request to [username], if you don't have them added.`,
+				`<code>/friend add [name]</code> OR <code>/friend [name]</code> - Send a friend request to [name], if you don't have them added.`,
 				`<code>/friend remove [username]</code> OR <code>/unfriend [username]</code>  - Unfriend the user.`,
 				`<code>/friend accept [username]</code> - Accepts the friend request from [username], if it exists.`,
 				`<code>/friend reject [username]</code> - Rejects the friend request from [username], if it exists.`,
@@ -532,7 +538,7 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>/friend OR /friends OR /friendslist:</strong><br /><ul><li>`;
 			buf += [
 				`<code>/friend list</code> - View current friends.`,
-				`<code>/friend add [username]</code> - Send a friend request to [username], if you don't have them added.`,
+				`<code>/friend add [name]</code> OR <code>/friend [name]</code> - Send a friend request to [name], if you don't have them added.`,
 				`<code>/friend remove [username]</code> OR <code>/unfriend [username]</code>  - Unfriend the user.`,
 				`<code>/friend accept [username]</code> - Accepts the friend request from [username], if it exists.`,
 				`<code>/friend reject [username]</code> - Rejects the friend request from [username], if it exists.`,
@@ -598,7 +604,7 @@ export const pages: Chat.PageTable = {
 			const friends = [];
 			for (const friendID of user.friends) {
 				const friend = Users.getExact(friendID);
-				if (!friend || !friend.settings.displayBattlesToFriends) continue;
+				if (!friend) continue;
 				friends.push(friend);
 			}
 			if (!friends.length) {
@@ -610,8 +616,11 @@ export const pages: Chat.PageTable = {
 			for (const friend of friends) {
 				const curBattles: [User, string][] = [...friend.inRooms]
 					.filter(id => {
-						const room = Rooms.get(id)?.battle;
-						return room && (!room.roomid.endsWith('pw') || friend.settings.displayBattlesToFriends);
+						const battle = Rooms.get(id)?.battle;
+						return (
+							battle && battle.playerTable[friend.id] &&
+							(!battle.roomid.endsWith('pw') || friend.settings.displayBattlesToFriends)
+						);
 					})
 					.map(id => [friend, id]);
 				if (!curBattles.length) continue;
@@ -651,6 +660,9 @@ export const handlers: Chat.Handlers = {
 	},
 	onBattleLeave(user, room) {
 		return Friends.updateSpectatorLists(user);
+	},
+	onDisconnect(user) {
+		void Chat.Friends.writeLogin(user.id);
 	},
 };
 

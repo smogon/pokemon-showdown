@@ -115,7 +115,7 @@ export const Tags: {[id: string]: TagData} = {
 	bypasssubstitute: {
 		name: "Bypass Substitute",
 		desc: "Bypasses but does not break a Substitute.",
-		moveFilter: move => 'authentic' in move.flags,
+		moveFilter: move => 'bypasssub' in move.flags,
 	},
 	gmaxmove: {
 		name: "G-Max Move",
@@ -195,9 +195,9 @@ export const Tags: {[id: string]: TagData} = {
 	nduubl: {
 		name: "ND UUBL",
 		speciesFilter: species => [
-			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Gyarados-Mega', 'Hawlucha',
-			'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Latias', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Pinsir-Mega', 'Sableye-Mega',
-			'Slowbro-Mega', 'Thundurus', 'Thundurus-Therian', 'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
+			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Gyarados-Mega',
+			'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi', 'Latias', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Mew',
+			'Pinsir-Mega', 'Sableye-Mega', 'Slowbro-Mega', 'Slowking-Galar', 'Thundurus', 'Thundurus-Therian', 'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
 		].includes(species.name),
 	},
 
@@ -209,7 +209,7 @@ export const Tags: {[id: string]: TagData} = {
 	},
 	dou: {
 		name: "DOU",
-		speciesFilter: species => species.doublesTier === 'DOU',
+		speciesFilter: species => species.doublesTier === 'DOU' || species.doublesTier === '(DOU)',
 	},
 	dbl: {
 		name: "DBL",

@@ -11,7 +11,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onModifyMove(move, pokemon) {
 			move.type = '???';
-			move.category = 'Physical';
+			move.category = 'Special';
 			move.allies = pokemon.side.pokemon.filter(ally => !ally.fainted && !ally.status);
 			move.multihit = move.allies.length;
 		},
@@ -459,6 +459,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(lastMove, pokemon);
 		},
 		noSketch: true,
+	},
+	mist: {
+		num: 54,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Mist",
+		pp: 30,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'mist',
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Mist');
+			},
+			onBoost(boost, target, source, effect) {
+				if (source && target !== source) {
+					let showMsg = false;
+					let i: BoostID;
+					for (i in boost) {
+						if (boost[i]! < 0) {
+							delete boost[i];
+							showMsg = true;
+						}
+					}
+					if (showMsg && !(effect as ActiveMove).secondaries) {
+						this.add('-activate', target, 'move: Mist');
+					}
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Ice",
 	},
 	moonlight: {
 		inherit: true,

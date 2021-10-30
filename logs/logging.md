@@ -19,3 +19,4 @@ By default, Pokémon Showdown does not log chat rooms. However, you can
 enable their logging by setting the `logchat` option in `config.js`.
 If you enable it, the logs are written in the subdirectory named `chat`.
 Each room gets their own subdirectory within, which are furthermore classified by month.
+

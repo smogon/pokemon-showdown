@@ -2,6 +2,7 @@
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
 import {Utils} from '../../lib';
+import {SampleTeams, teamData} from '../chat-plugins/sample-teams';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
@@ -12,6 +13,7 @@ export interface TournamentRoomSettings {
 	forcePublic?: boolean;
 	forceTimer?: boolean;
 	playerCap?: number;
+	showSampleTeams?: boolean;
 }
 
 type Generator = RoundRobin | Elimination;
@@ -24,7 +26,10 @@ const MAX_REASON_LENGTH = 300;
 const MAX_CUSTOM_NAME_LENGTH = 100;
 const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
 
-Punishments.addRoomPunishmentType('TOURBAN', 'banned from tournaments');
+Punishments.addRoomPunishmentType({
+	type: 'TOURBAN',
+	desc: 'banned from tournaments',
+});
 
 const TournamentGenerators = {
 	__proto__: null,
@@ -211,7 +216,7 @@ export class Tournament extends Rooms.RoomGame {
 	setCustomRules(rules: string) {
 		try {
 			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
 
@@ -890,6 +895,23 @@ export class Tournament extends Rooms.RoomGame {
 		this.autostartcap = true;
 		this.room.add(`The tournament will start once ${this.playerCap} players have joined.`);
 	}
+	showSampleTeams() {
+		if (teamData.teams[this.baseFormat]) {
+			let buf = ``;
+			for (const categoryName in teamData.teams[this.baseFormat]) {
+				if (!Object.keys(teamData.teams[this.baseFormat][categoryName]).length) continue;
+				if (buf) buf += `<hr />`;
+				buf += `<details${Object.keys(teamData.teams[this.baseFormat]).length < 2 ? ` open` : ``}><summary><strong style="letter-spacing:1.2pt">${categoryName.toUpperCase()}</strong></summary>`;
+				for (const [i, teamName] of Object.keys(teamData.teams[this.baseFormat][categoryName]).entries()) {
+					if (i) buf += `<hr />`;
+					buf += SampleTeams.formatTeam(teamName, teamData.teams[this.baseFormat][categoryName][teamName], true);
+				}
+				buf += `</details>`;
+			}
+			if (!buf) return;
+			this.room.add(`|html|<div class="infobox"><center><h3>Sample Teams for ${SampleTeams.getFormatName(this.baseFormat)}</h3></center><hr />${buf}</div>`).update();
+		}
+	}
 
 	async challenge(user: User, targetUserid: ID, output: Chat.CommandContext) {
 		if (!this.isTournamentStarted) {
@@ -1224,6 +1246,7 @@ function createTournament(
 		if (settings.forceTimer) tour.setForceTimer(true);
 		if (settings.allowModjoin === false) tour.setModjoin(false);
 		if (settings.allowScouting === false) tour.setScouting(false);
+		if (settings.showSampleTeams) tour.showSampleTeams();
 	}
 	return tour;
 }
@@ -1692,7 +1715,7 @@ const commands: Chat.ChatCommands = {
 				return this.sendReply(`Usage: /tour ${cmd} <on|minutes|off>`);
 			}
 			const option = target.toLowerCase();
-			if (this.meansYes(option) || option === 'start') {
+			if ((this.meansYes(option) && option !== '1') || option === 'start') {
 				if (tournament.isTournamentStarted) {
 					return this.errorReply("The tournament has already started.");
 				} else if (!tournament.playerCap) {
@@ -2006,7 +2029,7 @@ const commands: Chat.ChatCommands = {
 					} else {
 						throw new Chat.ErrorMessage(`Autostart is already disabled for every tournament.`);
 					}
-				} else if (this.meansYes(target)) {
+				} else if (this.meansYes(target) && target !== '1') {
 					if (room.settings.tournaments.autostart === true) {
 						throw new Chat.ErrorMessage(`Autostart for every tournament is already set to true.`);
 					}
@@ -2109,6 +2132,35 @@ const commands: Chat.ChatCommands = {
 					return this.sendReply(`Usage: ${this.cmdToken}${this.fullCmd} <number|off>`);
 				}
 			},
+			sampleteams(target, room, user) {
+				room = this.requireRoom();
+				this.checkCan('announce', null, room);
+				if (!target) return this.parse(`/help tour settings`);
+				const tour = room.getGame(Tournament);
+				if (!room.settings.tournaments) room.settings.tournaments = {};
+				if (this.meansYes(target)) {
+					if (!room.settings.tournaments.showSampleTeams) {
+						if (tour && !tour.isTournamentStarted) tour.showSampleTeams();
+						room.settings.tournaments.showSampleTeams = true;
+						room.saveSettings();
+						this.privateModAction(`Show Sample Teams was set to ON for every tournament by ${user.name}`);
+						this.modlog('TOUR SETTINGS', null, `show sample teams: ON`);
+					} else {
+						throw new Chat.ErrorMessage(`Sample teams are already shown for every tournament.`);
+					}
+				} else if (this.meansNo(target)) {
+					if (room.settings.tournaments.showSampleTeams) {
+						delete room.settings.tournaments.showSampleTeams;
+						room.saveSettings();
+						this.privateModAction(`Show Sample Teams was set to OFF for every tournament by ${user.name}`);
+						this.modlog('TOUR SETTINGS', null, `show sample teams: OFF`);
+					} else {
+						throw new Chat.ErrorMessage(`Sample teams are already not shown for every tournament.`);
+					}
+				} else {
+					return this.sendReply(`Usage: ${this.cmdToken}${this.fullCmd} <on|off>`);
+				}
+			},
 			'': 'help',
 			help() {
 				this.parse(`${this.cmdToken}help tour settings`);
@@ -2122,22 +2174,25 @@ const commands: Chat.ChatCommands = {
 			`/tour settings modjoin <on|off> - Specifies whether users can modjoin their battles for every tournament.`,
 			`/tour settings playercap <number> - Sets the playercap for every tournament.`,
 			`/tour settings scouting <on|off> - Specifies whether users can spectate other participants for every tournament.`,
+			`/tour settings sampleteams <on|off> - Specifies whether sample teams are shown for every tournament.`,
 			`Requires: # &`,
 		],
 	},
 	tournamenthelp() {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
+			`Tournament Commands<br/>` +
 			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
+			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
+			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
+			`- begin/start: Starts the tournament in the current room.<br /><br />` +
+			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />` +
 			`- cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />` +
-			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
 			`- viewrules/viewbanlist: Shows the custom rules for the tournament.<br />` +
 			`- clearrules/clearbanlist: Clears the custom rules for the tournament before it has started.<br />` +
 			`- name &lt;name>: Sets a custom name for the tournament.<br />` +
 			`- clearname: Clears the custom name of the tournament.<br />` +
-			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
-			`- begin/start: Starts the tournament in the current room.<br />` +
 			`- autostart/setautostart &lt;on|minutes|off>: Sets the automatic start timeout.<br />` +
 			`- dq/disqualify &lt;user>: Disqualifies a user.<br />` +
 			`- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />` +
@@ -2151,7 +2206,9 @@ const commands: Chat.ChatCommands = {
 			`- banuser/unbanuser &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks.<br />` +
 			`- sub/replace &lt;olduser>, &lt;newuser>: Substitutes a new user for an old one<br />` +
 			`- settings: Do <code>/help tour settings</code> for more information<br />` +
-			`More detailed help can be found <a href="https://www.smogon.com/forums/threads/3570628/#post-6777489">here</a>`
+			`</details>` +
+			`<br />` +
+			`You can also consult <a href="https://www.smogon.com/forums/threads/3570628/#post-6777489">more detailed help</a>.`
 		);
 	},
 };
