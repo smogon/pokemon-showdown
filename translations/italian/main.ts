@@ -16,13 +16,14 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Ruoli Globali</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Possono utilizzare i comandi con !, come !groups",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Supervisionano le room di una sezione specifica",
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Come i Global Voice, e possono lockare gli utenti e controllare i loro alts",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Come i Global Driver, e possono bannare globalmente gli utenti",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Come i Global Moderator, ma il simbolo specifica che l'utente è un bot",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Possono fare di tutto, anche cambiare il contenuto di questo messaggio e promuovere globalmente gli utenti",
 
 		"<strong>Room ranks</strong>": "<strong>Ruoli della Room</strong>",
-		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Non hanno alcun poter eccezion fatta per un simbolo",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Non hanno alcun potere, eccezion fatta per un segno distintivo",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Possono utilizzare i comandi con !, come !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Come i Voice, e possono mutare gli utenti",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Come i Driver, e possono bannare gli utenti dalla room",
@@ -127,7 +128,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "Al momento, questo ${Config.groups[targetUser.group].name} è troppo impegnato per rispondere ai messaggi privati. Per favore, contatta un altro membro dello staff.",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "Se hai bisogno di aiuto, prova ad aprire un <a href=\"view-help-request\" class=\"button\">ticket help</a>",
 		"You are blocking private messages right now.": "In questo momento stai bloccando i messaggi privati.",
-		"You are blocking challenges right now.": "",
+		"You are blocking challenges right now.": "In questo momento stai bloccando le sfide.",
 
 		"Your message contained banned words in this room.": "Il tuo messaggio conteneva una o più parole non permesse in questa room.",
 		"You can't send the same message again so soon.": "Non puoi inviare lo stesso messaggio di nuovo dopo così poco tempo",
@@ -143,8 +144,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "Stai già bloccando le sfide!",
 		"You are already available for challenges!": "Sei già disponibile per le sfide!",
 		"You are available for challenges from now on.": "Da questo momento in poi, sei disponibile per le sfide.",
-		"You are now blocking challenges, except from staff and ${rank}.": "",
-		"You are now blocking challenges, except from staff and ${status} users.": "",
+		"You are now blocking challenges, except from staff and ${rank}.": "Ora stai bloccando le sfide, tranne da parte dello staff e ${rank}.",
+		"You are now blocking challenges, except from staff and ${status} users.": "Ora stai bloccando le sfide, tranne da parte dello staff e gli utenti ${status}.",
 
 		"Staff FAQ": "FAQ relative allo Staff",
 		"You cannot broadcast all FAQs at once.": "Non puoi mostrare tutte le FAQ in una volta.",
@@ -161,9 +162,9 @@ export const translations: Translations = {
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
 
-		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
-		"- We log IPs to enforce bans and mutes.": "",
-		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
-		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "- Controlliamo i messaggi privati che ci vengono segnalati - lo staff non può vederli senza permesso tranne che per motivi legali.",
+		"- We log IPs to enforce bans and mutes.": "- Controlliamo gli IP in modo tale che i ban e i mute vengano rispettati.",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "- Utilizziamo i cookie per salvare credenziali di accesso e team, e per sfruttare Google Analytics e AdSense.",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '- Per maggiori informazioni, puoi leggere la nostra <a href="https://${Config.routes.root}/privacy">policy completa sulla privacy.</a>',
 	},
 };
