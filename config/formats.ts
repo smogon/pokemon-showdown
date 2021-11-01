@@ -629,7 +629,6 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		searchShow: true,
 		ruleset: ['Standard', 'Dynamax Clause', 'Sketchmons Move Legality'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dragapult', 'Eternatus', 'Excadrill',
