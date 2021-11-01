@@ -567,25 +567,23 @@ export const Scripts: ModdedBattleScriptsData = {
 				level = move.allies[0].level;
 			}
 
-			const attacker =
-				(move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) ? target : source;
-			const defender =
-				(move.useBaseDefensiveStatAndBoosts && move.useBaseDefensiveStatAndBoosts.includes('source')) ? source : target;
+			const attacker = move.useBaseOffensiveStatAndBoosts?.includes('target') ? target : source;
+			const defender = move.useBaseDefensiveStatAndBoosts?.includes('source') ? source : target;
 
 			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
-				atkType = move.useBaseOffensiveStatAndBoosts.substr(7) as AllStatIDs;
+				atkType = move.useBaseOffensiveStatAndBoosts[1];
 			}
 			let defType: AllStatIDs = move.category === 'Physical' ? 'def' : 'spd';
 			if (move.useBaseDefensiveStatAndBoosts) {
-				defType = move.useBaseDefensiveStatAndBoosts.substr(7) as AllStatIDs;
+				defType = move.useBaseDefensiveStatAndBoosts[1];
 			}
 			let unboosted = false;
 			let noburndrop = false;
 
 			if (isCrit) {
 				if (!suppressMessages) this.battle.add('-crit', target);
-				// Stat level modifications are ignored if they are neutral to or favour) the defender.
+				// Stat level modifications are ignored if they are neutral to or favour the defender.
 				// Reflect and Light Screen defensive boosts are only ignored if stat level modifications were also ignored as a result of that.
 				if ((atkType === 'hp' || atkType === 'currenthp') ? 0 : attacker.boosts[atkType] <=
 					((defType === 'hp' || defType === 'currenthp') ? 0 : defender.boosts[defType])) {

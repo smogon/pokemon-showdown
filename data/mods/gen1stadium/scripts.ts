@@ -534,11 +534,11 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
-				atkType = move.useBaseOffensiveStatAndBoosts.substr(7) as AllStatIDs;
+				atkType = move.useBaseOffensiveStatAndBoosts[1];
 			}
 			let defType: AllStatIDs = move.category === 'Physical' ? 'def' : 'spd';
 			if (move.useBaseDefensiveStatAndBoosts) {
-				defType = move.useBaseDefensiveStatAndBoosts.substr(7) as AllStatIDs;
+				defType = move.useBaseDefensiveStatAndBoosts[1];
 			}
 
 			let attack;

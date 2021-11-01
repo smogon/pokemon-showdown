@@ -853,7 +853,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Spirit Break', target);
 		},
-		useBaseOffensiveStatAndBoosts: 'source:spd',
+		useBaseOffensiveStatAndBoosts: ['source', 'spd'],
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -908,20 +908,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return 5;
 			},
 			onModifyMove(move, attacker, defender) {
-				if (move.useBaseOffensiveStatAndBoosts &&
-					(!move.useBaseOffensiveStatAndBoosts.includes('atk') && !move.useBaseOffensiveStatAndBoosts.includes('spa'))) return;
-				if (move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) {
+				if (!move.useBaseOffensiveStatAndBoosts?.includes('atk') &&
+					!move.useBaseOffensiveStatAndBoosts?.includes('spa')) return;
+				if (move.useBaseOffensiveStatAndBoosts.includes('target')) {
 					if (!defender) return;
 					if (defender.getStat('atk') > defender.getStat('spa')) {
-						move.useBaseOffensiveStatAndBoosts = 'target:spa';
+						move.useBaseOffensiveStatAndBoosts[1] = 'spa';
 					} else {
-						move.useBaseOffensiveStatAndBoosts = 'target:atk';
+						move.useBaseOffensiveStatAndBoosts[1] = 'atk';
 					}
 				} else {
 					if (attacker.getStat('atk') > attacker.getStat('spa')) {
-						move.useBaseOffensiveStatAndBoosts = 'source:spa';
+						move.useBaseOffensiveStatAndBoosts[1] = 'spa';
 					} else {
-						move.useBaseOffensiveStatAndBoosts = 'source:atk';
+						move.useBaseOffensiveStatAndBoosts[1] = 'atk';
 					}
 				}
 			},
@@ -4418,7 +4418,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 110,
 		category: "Physical",
-		useBaseOffensiveStatAndBoosts: 'target:spd',
+		useBaseOffensiveStatAndBoosts: ['target', 'spd'],
 		desc: "This move uses the target's Special Defense to calculate damage (like Foul Play). This move is neutrally effective against Steel-types.",
 		shortDesc: "Uses foe's SpD as user's Atk. Hits Steel.",
 		name: "I'm Toxic You're Slippin' Under",
@@ -4588,7 +4588,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Fire') return 1;
 		},
-		useBaseOffensiveStatAndBoosts: 'source:def',
+		useBaseOffensiveStatAndBoosts: ['source', 'def'],
 		secondary: {
 			chance: 10,
 			status: "frz",

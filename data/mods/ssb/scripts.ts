@@ -655,18 +655,16 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const level = source.level;
 
-			const attacker =
-				(move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) ? target : source;
-			const defender =
-				(move.useBaseDefensiveStatAndBoosts && move.useBaseDefensiveStatAndBoosts.includes('source')) ? source : target;
+			const attacker = move.useBaseOffensiveStatAndBoosts?.includes('target') ? target : source;
+			const defender = move.useBaseDefensiveStatAndBoosts?.includes('source') ? source : target;
 
 			let attackStat: AllStatIDs = category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
-				attackStat = move.useBaseOffensiveStatAndBoosts.substr(7) as AllStatIDs;
+				attackStat = move.useBaseOffensiveStatAndBoosts[1];
 			}
 			let defenseStat: AllStatIDs = category === 'Physical' ? 'def' : 'spd';
 			if (move.useBaseDefensiveStatAndBoosts) {
-				defenseStat = move.useBaseDefensiveStatAndBoosts.substr(7) as AllStatIDs;
+				defenseStat = move.useBaseDefensiveStatAndBoosts[1];
 			}
 
 			const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
