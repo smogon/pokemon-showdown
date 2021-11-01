@@ -287,6 +287,27 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 	},
 	{
+		name: "[Gen 8] Gym Challenge",
+
+		mod: 'gen8',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		onValidateSet(set) {
+			const gymMonsList = [
+				'ninetales', 'arcanine', 'machamp', 'ponytagalar', 'rapidashgalar', 'gengar', 'weezinggalar', 'goldeen', 'seaking', 'lapras', 'bellossom',
+				'quagsire', 'shuckle', 'hitmontop', 'tyranitar', 'ludicolo', 'shiftry', 'pelipper', 'gardevoir', 'mawile', 'torkoal', 'flygon', 'cherrim',
+				'skuntank', 'croagunk', 'toxicroak', 'togekiss', 'dusknoir', 'liepard', 'gigalith', 'darmanitangalar', 'scraggy', 'scrafty', 'yamaskgalar',
+				'gothita', 'gothorita', 'solosis', 'duosion', 'chandelure', 'pangoro', 'malamar', 'barbaracle', 'sylveon', 'hawlucha', 'goodra', 'toxapex',
+				'salazzle', 'tsareena', 'golisopod', 'turtonator', 'mimikyu', 'gossifleur', 'eldegoss', 'drednaw', 'coalossal', 'flapple', 'appletun',
+				'sandaconda', 'arrokuda', 'barraskewda', 'toxtricitylowkey', 'centiskorch', 'grapploct', 'polteageist', 'hatenna', 'hattrem', 'hatterene',
+				'grimmsnarl', 'obstagoon', 'cursola', 'sirfetchd', 'mrrime', 'runerigus', 'falinks', 'frosmoth', 'stonjourner', 'eiscue', 'morpeko', 'duraludon',
+			];
+			const species = this.dex.species.get(set.species);
+			if (!gymMonsList.includes(species.id) && !species.id.startsWith('alcremie')) {
+				return [`${species.name} is not allowed in this competition.`];
+			}
+		},
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
@@ -381,34 +402,6 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
-	},
-	{
-		name: "[Gen 8] Spooky Cup 2021",
-		threads: [
-			`&bull; <a href="https://www.smogon.com/forums/threads/3691909/">Spooky Cup 2021</a>`,
-		],
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
-		onValidateSet(set) {
-			const spookyMonsList = [
-				'Vileplume', 'Tentacruel', 'Gengar', 'Marowak', 'Weezing', 'Mr. Mime', 'Pinsir', 'Ditto', 'Omastar', 'Kabutops', 'Aerodactyl',
-				'Noctowl', 'Crobat', 'Espeon', 'Umbreon', 'Wobbuffet', 'Shiftry', 'Shedinja', 'Exploud', 'Sableye', 'Mawile', 'Sharpedo',
-				'Lunatone', 'Crawdaunt', 'Baltoy', 'Claydol', 'Absol', 'Glalie', 'Drifblim', 'Skuntank', 'Spiritomb', 'Drapion', 'Toxicroak',
-				'Abomasnow', 'Weavile', 'Tangrowth', 'Electivire', 'Magmortar', 'Dusknoir', 'Froslass', 'Rotom', 'Liepard', 'Gigalith',
-				'Swoobat', 'Scolipede', 'Basculin', 'Krookodile', 'Sigilyph', 'Cofagrigus', 'Garbodor', 'Zoroark', 'Gothitelle', 'Jellicent',
-				'Galvantula', 'Beheeyem', 'Chandelure', 'Golurk', 'Bisharp', 'Mandibuzz', 'Hydreigon', 'Volcarona', 'Pangoro', 'Meowstic',
-				'Aegislash', 'Slurpuff', 'Malamar', 'Trevenant', 'Gourgeist', 'Noivern', 'Decidueye', 'Incineroar', 'Toxapex', 'Araquanid',
-				'Shiinotic', 'Salazzle', 'Bewear', 'Golisopod', 'Palossand', 'Silvally', 'Mimikyu', 'Dhelmise', 'Nihilego', 'Xurkitree',
-				'Guzzlord', 'Poipole', 'Naganadel', 'Blacephalon', 'Corviknight', 'Orbeetle', 'Thievul', 'Coalossal', 'Centiskorch', 'Grapploct',
-				'Polteageist', 'Hatterene', 'Grimmsnarl', 'Obstagoon', 'Cursola', 'Mr. Rime', 'Runerigus', 'Dracovish', 'Dragapult', 'Spectrier',
-			];
-			const species = this.dex.species.get(set.species);
-			if (!spookyMonsList.includes(species.baseSpecies) && species.id !== 'lycanrocmidnight') {
-				return [`${species.name} is banned for not looking spooky enough.`];
-			}
-		},
 	},
 	{
 		name: "[Gen 8] 2v2 Doubles",
