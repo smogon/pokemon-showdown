@@ -529,10 +529,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We now check attacker's and defender's stats.
 			let level = source.level;
-			const attacker =
-				(move.useBaseOffensiveStatAndBoosts && move.useBaseOffensiveStatAndBoosts.includes('target')) ? target : source;
-			const defender =
-				(move.useBaseDefensiveStatAndBoosts && move.useBaseDefensiveStatAndBoosts.includes('source')) ? source : target;
+			const attacker = move.useBaseOffensiveStatAndBoosts?.includes('target') ? target : source;
+			const defender = move.useBaseDefensiveStatAndBoosts?.includes('source') ? source : target;
 
 			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
