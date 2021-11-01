@@ -7,9 +7,9 @@ import type {PartialModlogEntry, ModlogID} from '../modlog';
 const TICKET_FILE = 'config/tickets.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
-const BATTLES_REGEX = /battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g;
+const BATTLES_REGEX = /\bbattle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?/g;
 const REPLAY_REGEX = new RegExp(
-	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
+	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?`, "g"
 );
 
 Punishments.addPunishmentType({
