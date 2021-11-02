@@ -1492,7 +1492,7 @@ export class BattleActions {
 	 * undefined = success, null = silent failure, false = loud failure
 	 */
 	 getDamage(
-		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
+		source: Pokemon, target: Pokemon, move: string | number | ActiveMove,
 		suppressMessages = false
 	): number | undefined | null | false {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
@@ -1515,9 +1515,9 @@ export class BattleActions {
 		}
 
 		if (move.ohko) return target.maxhp;
-		if (move.damageCallback) return move.damageCallback.call(this.battle, pokemon, target);
+		if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
 		if (move.damage === 'level') {
-			return pokemon.level;
+			return source.level;
 		} else if (move.damage) {
 			return move.damage;
 		}
@@ -1527,13 +1527,13 @@ export class BattleActions {
 
 		let basePower: number | false | null = move.basePower;
 		if (move.basePowerCallback) {
-			basePower = move.basePowerCallback.call(this.battle, pokemon, target, move);
+			basePower = move.basePowerCallback.call(this.battle, source, target, move);
 		}
 		if (!basePower) return basePower === 0 ? undefined : basePower;
 		basePower = this.battle.clampIntRange(basePower, 1);
 
 		let critMult;
-		let critRatio = this.battle.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
+		let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 		if (this.battle.gen <= 5) {
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
 			critMult = [0, 16, 8, 4, 3, 2];
@@ -1559,14 +1559,14 @@ export class BattleActions {
 		}
 
 		// happens after crit calculation
-		basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower, true);
+		basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 
 		if (!basePower) return 0;
 		basePower = this.battle.clampIntRange(basePower, 1);
 
-		const level = pokemon.level;
+		const level = source.level;
 
-		const attacker = pokemon;
+		const attacker = source;
 		const defender = target;
 		let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
 		const defenseStat: StatIDExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
@@ -1636,7 +1636,7 @@ export class BattleActions {
 		const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
 
 		// Calculate damage modifiers separately (order differs between generations)
-		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
+		return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
 	}
 
 	modifyDamage(
