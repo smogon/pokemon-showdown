@@ -405,7 +405,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			return damage;
 		},
-		getDamage(pokemon, target, move, suppressMessages) {
+		getDamage(source, target, move, suppressMessages) {
 			// First of all, we get the move.
 			if (typeof move === 'string') {
 				move = this.dex.getActiveMove(move);
@@ -433,12 +433,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We edit the damage through move's damage callback if necessary.
 			if (move.damageCallback) {
-				return move.damageCallback.call(this.battle, pokemon, target);
+				return move.damageCallback.call(this.battle, source, target);
 			}
 
 			// We take damage from damage=level moves (seismic toss).
 			if (move.damage === 'level') {
-				return pokemon.level;
+				return source.level;
 			}
 
 			// If there's a fix move damage, we return that.
@@ -452,8 +452,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-			if (pokemon.volatiles['partialtrappinglock'] && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
-				return pokemon.volatiles['partialtrappinglock'].damage;
+			if (source.volatiles['partialtrappinglock'] && (target === source.volatiles['partialtrappinglock'].locked)) {
+				return source.volatiles['partialtrappinglock'].damage;
 			}
 
 			// We check the category and typing to calculate later on the damage.
@@ -466,7 +466,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// We get the base power and apply basePowerCallback if necessary.
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, pokemon, target, move);
+				basePower = move.basePowerCallback.call(this.battle, source, target, move);
 			}
 			if (!basePower) {
 				return basePower === 0 ? undefined : basePower;
@@ -478,13 +478,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!isCrit) {
 				// In Stadium, the critical chance is based on speed.
 				// First, we get the base speed and store it. Then we add 76. This is our current crit chance.
-				let critChance = pokemon.species.baseStats['spe'] + 76;
+				let critChance = source.species.baseStats['spe'] + 76;
 
 				// Now we right logical shift it two places, essentially dividing by 4 and flooring it.
 				critChance = critChance >> 2;
 
 				// Now we check for focus energy volatile.
-				if (pokemon.volatiles['focusenergy']) {
+				if (source.volatiles['focusenergy']) {
 					// If it exists, crit chance is multiplied by 4 and floored with a logical left shift.
 					critChance = critChance << 2;
 					// Then we add 160.
@@ -520,7 +520,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Happens after crit calculation.
 			if (basePower) {
-				basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower);
+				basePower = this.battle.runEvent('BasePower', source, target, move, basePower);
 				if (basePower && move.basePowerModifier) {
 					basePower *= move.basePowerModifier;
 				}
@@ -529,8 +529,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// We now check attacker's and defender's stats.
-			let level = pokemon.level;
-			let attacker = pokemon;
+			let level = source.level;
+			let attacker = source;
 			const defender = target;
 			if (move.useTargetOffensive) attacker = target;
 			let atkType: StatIDExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
@@ -588,7 +588,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			damage += 2;
 
 			// STAB damage bonus, the "???" type never gets STAB
-			if (type !== '???' && pokemon.hasType(type)) {
+			if (type !== '???' && source.hasType(type)) {
 				damage += Math.floor(damage / 2);
 			}
 

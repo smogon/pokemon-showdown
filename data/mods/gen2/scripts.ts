@@ -466,7 +466,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return damage;
 		},
-		getDamage(pokemon, target, move, suppressMessages) {
+		getDamage(source, target, move, suppressMessages) {
 			// First of all, we get the move.
 			if (typeof move === 'string') {
 				move = this.dex.getActiveMove(move);
@@ -494,12 +494,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We edit the damage through move's damage callback
 			if (move.damageCallback) {
-				return move.damageCallback.call(this.battle, pokemon, target);
+				return move.damageCallback.call(this.battle, source, target);
 			}
 
 			// We take damage from damage=level moves
 			if (move.damage === 'level') {
-				return pokemon.level;
+				return source.level;
 			}
 
 			// If there's a fix move damage, we run it
@@ -517,7 +517,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// We get the base power and apply basePowerCallback if necessary
 			let basePower: number | false | null | undefined = move.basePower;
 			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, pokemon, target, move);
+				basePower = move.basePowerCallback.call(this.battle, source, target, move);
 			}
 
 			// We check for Base Power
@@ -528,7 +528,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// Checking for the move's Critical Hit ratio
-			let critRatio = this.battle.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
+			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
 			const critMult = [0, 16, 8, 4, 3, 2];
 			let isCrit = move.willCrit || false;
@@ -547,10 +547,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				// confusion damage
 				if (move.isConfusionSelfHit) {
 					move.type = move.baseMoveType!;
-					basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower, true);
+					basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 					move.type = '???';
 				} else {
-					basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower, true);
+					basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 				}
 				if (basePower && move.basePowerModifier) {
 					basePower *= move.basePowerModifier;
@@ -560,15 +560,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// We now check for attacker and defender
-			let level = pokemon.level;
+			let level = source.level;
 
 			// Using Beat Up
 			if (move.allies) {
-				this.battle.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies[0].name);
+				this.battle.add('-activate', source, 'move: Beat Up', '[of] ' + move.allies[0].name);
 				level = move.allies[0].level;
 			}
 
-			let attacker = pokemon;
+			let attacker = source;
 			const defender = target;
 			if (move.useTargetOffensive) attacker = target;
 			let atkType: StatIDExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
@@ -666,7 +666,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// STAB damage bonus, the "???" type never gets STAB
-			if (type !== '???' && pokemon.hasType(type)) {
+			if (type !== '???' && source.hasType(type)) {
 				damage += Math.floor(damage / 2);
 			}
 
