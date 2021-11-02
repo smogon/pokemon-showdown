@@ -1248,7 +1248,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(err.message + '\n' + err.stack);
 		}
 		if (!result) return this.errorReply('No result received.');
-		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`)
+		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
 		if (result.actionerror) {
 			return this.errorReply(result.actionerror);
 		}
