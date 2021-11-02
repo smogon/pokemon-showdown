@@ -19437,17 +19437,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onModifyMove(move, source, target) {
-				if (move.useBaseOffensiveStatAndBoosts?.includes("def")) {
-					move.useBaseOffensiveStatAndBoosts[1] = "spd";
-					if (source.boosts['def'] || source.boosts['spd']) {
-						this.hint(move.name + " uses Sp. Def boosts when Wonder Room is active.");
-					}
-				} else if (move.useBaseOffensiveStatAndBoosts?.includes("spd")) {
-					move.useBaseOffensiveStatAndBoosts[1] = "def";
-					if (source.boosts['def'] || source.boosts['spd']) {
-						this.hint(move.name + " uses Def boosts when Wonder Room is active.");
-					}
-				}
+				if (!move.useBaseOffensiveStatAndBoosts) return;
+				const statAndBoosts = move.useBaseOffensiveStatAndBoosts[1];
+				if (!['def', 'spd'].includes(statAndBoosts)) return;
+				move.useBaseOffensiveStatAndBoosts[1] = statAndBoosts === 'def' ? 'spd' : 'def';
+				this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp. '}Def boosts when Wonder Room is active.`);
 			},
 			onFieldStart(field, source) {
 				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
