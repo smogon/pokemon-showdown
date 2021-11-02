@@ -1604,7 +1604,7 @@ export class BattleActions {
 		let attack = attackStat === 'hp' ? attacker.maxhp :
 			attackStat === 'currenthp' ? attacker.hp : attacker.calculateStat(attackStat, atkBoosts);
 		let defense = defenseStat === 'hp' ? defender.maxhp :
-			defenseStat === 'currenthp' ? defender.hp : defender.calculateStat(defenseStat, atkBoosts);
+			defenseStat === 'currenthp' ? defender.hp : defender.calculateStat(defenseStat, defBoosts);
 
 		attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
