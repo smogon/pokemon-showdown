@@ -541,24 +541,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				defType = move.useBaseDefensiveStatAndBoosts[1];
 			}
 
-			let attack;
-			let defense;
-
-			if (atkType === 'hp') {
-				attack = attacker.maxhp;
-			} else if (atkType === 'currenthp') {
-				attack = attacker.hp;
-			} else {
-				attack = attacker.getStat(atkType);
-			}
-
-			if (defType === 'hp') {
-				defense = defender.maxhp;
-			} else if (defType === 'currenthp') {
-				defense = defender.hp;
-			} else {
-				defense = defender.getStat(defType);
-			}
+			let attack = atkType === 'hp' ? attacker.maxhp : (atkType === 'currenthp' ? attacker.hp : attacker.getStat(atkType));
+			let defense = defType === 'hp' ? defender.maxhp : (defType === 'currenthp' ? defender.hp : defender.getStat(defType));
 
 			// In gen 1, screen effect is applied here.
 			if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {

@@ -592,24 +592,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			let attack;
-			let defense;
-
-			if (atkType === 'hp') {
-				attack = attacker.maxhp;
-			} else if (atkType === 'currenthp') {
-				attack = attacker.hp;
-			} else {
-				attack = attacker.getStat(atkType, unboosted, noburndrop);
-			}
-
-			if (defType === 'hp') {
-				defense = defender.maxhp;
-			} else if (defType === 'currenthp') {
-				defense = defender.hp;
-			} else {
-				defense = defender.getStat(defType, unboosted);
-			}
+			let attack = atkType === 'hp' ? attacker.maxhp :
+				atkType === 'currenthp' ? attacker.hp : attacker.getStat(atkType, unboosted, noburndrop);
+			let defense = defType === 'hp' ? defender.maxhp :
+				defType === 'currenthp' ? defender.hp : defender.getStat(defType, unboosted);
 
 			// Using Beat Up
 			if (move.allies) {

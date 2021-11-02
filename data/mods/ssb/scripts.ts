@@ -668,8 +668,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
-			let attack;
-			let defense;
 
 			let atkBoosts = (attackStat === 'hp' || attackStat === 'currenthp') ? 0 : attacker.boosts[attackStat];
 			let defBoosts = (defenseStat === 'hp' || defenseStat === 'currenthp') ? 0 : defender.boosts[defenseStat];
@@ -693,21 +691,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				defBoosts = 0;
 			}
 
-			if (attackStat === 'hp') {
-				attack = attacker.maxhp;
-			} else if (attackStat === 'currenthp') {
-				attack = attacker.hp;
-			} else {
-				attack = attacker.calculateStat(attackStat, atkBoosts);
-			}
-
-			if (defenseStat === 'hp') {
-				defense = defender.maxhp;
-			} else if (defenseStat === 'currenthp') {
-				defense = defender.hp;
-			} else {
-				defense = defender.calculateStat(defenseStat, defBoosts);
-			}
+			let attack = attackStat === 'hp' ? attacker.maxhp :
+				attackStat === 'currenthp' ? attacker.hp : attacker.calculateStat(attackStat, atkBoosts);
+			let defense = defenseStat === 'hp' ? defender.maxhp :
+				defenseStat === 'currenthp' ? defender.hp : defender.calculateStat(defenseStat, atkBoosts);
 
 			attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
