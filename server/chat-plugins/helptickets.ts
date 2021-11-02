@@ -7,9 +7,9 @@ import type {PartialModlogEntry, ModlogID} from '../modlog';
 const TICKET_FILE = 'config/tickets.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
-const BATTLES_REGEX = /battle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?/g;
+const BATTLES_REGEX = /\bbattle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?/g;
 const REPLAY_REGEX = new RegExp(
-	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]+pw)?`, "g"
+	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?`, "g"
 );
 
 Punishments.addPunishmentType({
@@ -304,9 +304,18 @@ export class HelpTicket extends Rooms.RoomGame {
 		const creator = (
 			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
 		);
+		const user = Users.get(this.ticket.creator);
+		let namelockedDisplay = '';
+		if (user?.namelocked && !this.ticket.state?.namelocked) {
+			if (!this.ticket.state) this.ticket.state = {};
+			this.ticket.state.namelocked = user.namelocked;
+		}
+		if (this.ticket.state?.namelocked) {
+			namelockedDisplay = ` [${this.ticket.state?.namelocked}]`;
+		}
 		return (
 			`<a class="button ${color}" href="/help-${this.ticket.userid}"` +
-			` ${this.getPreview()}>Help ${creator}: ${this.ticket.type}</a> `
+			` ${this.getPreview()}>Help ${creator}${namelockedDisplay}: ${this.ticket.type}</a> `
 		);
 	}
 
@@ -577,10 +586,21 @@ export class HelpTicket extends Rooms.RoomGame {
 			.join('&#10;');
 		const notes = ticket.notes ? `&#10;Staff notes:&#10;${noteBuf}` : '';
 		const title = `title="${titleBuf.join('&#10;')}${notes}"`;
-		const language = Users.get(ticket.userid)?.language || '';
+		const user = Users.get(ticket.userid);
+		const language = user?.language || '';
+		let namelockDisplay = '';
+		if (user?.namelocked && !ticket.state?.namelocked) {
+			if (!ticket.state) ticket.state = {};
+			ticket.state.namelocked = user.namelocked;
+		}
+		if (ticket.state?.namelocked) {
+			namelockDisplay = ` <small>[${ticket.state.namelocked}]</small>`;
+		}
 		const languageDisplay = language && language !== 'english' ? ` <small>(${language})</small>` : '';
 		buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
-		buf +=	ticket.claimed ? `${ticket.userid}${languageDisplay}:` : `<strong>${ticket.userid}</strong>${languageDisplay}:`;
+		buf += ticket.claimed ?
+			`${ticket.userid}${namelockDisplay}${languageDisplay}:` :
+			`<strong>${ticket.userid}</strong>${namelockDisplay}${languageDisplay}:`;
 		buf += ` ${ticket.type}</a>`;
 		return buf;
 	}
