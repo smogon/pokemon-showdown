@@ -6511,7 +6511,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
-					if (!pokemon.volatiles['dynamax']) pokemon.addVolatile('torment');
+					if (!pokemon.volatiles['dynamax']) pokemon.addVolatile('torment', source, this.dex.getActiveMove('gmaxmeltdown'));
 				}
 			},
 		},
@@ -18312,7 +18312,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'torment',
 		condition: {
 			noCopy: true,
-			onStart(pokemon) {
+			onStart(pokemon, source, effect) {
+				if (effect?.id === 'gmaxmeltdown') this.effectState.duration = 3;
 				if (pokemon.volatiles['dynamax']) {
 					delete pokemon.volatiles['torment'];
 					return false;
