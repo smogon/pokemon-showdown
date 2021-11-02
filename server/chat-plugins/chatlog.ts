@@ -1542,17 +1542,74 @@ export const commands: Chat.ChatCommands = {
 	topusers: 'linecount',
 	roomstats: 'linecount',
 	linecount(target, room, user) {
-		let [roomid, month, userid] = target.split(',').map(item => item.trim());
-		const tarRoom = roomid ? Rooms.search(roomid) : room;
-		if (!tarRoom) return this.errorReply(`You must specify a valid room.`);
-		if (!month) month = LogReader.getMonth();
-		return this.parse(`/join view-roomstats-${tarRoom.roomid}--${month}--${toID(userid)}`);
+		const params = target.split(',').map(f => f.trim());
+		const search: Partial<{roomid: RoomID, date: string, user: string}> = {};
+		for (const [i, param] of params.entries()) {
+			let [key, val] = param.split('=');
+			if (!val) {
+				// backwards compatibility
+				switch (i) {
+				case 0:
+					val = key;
+					key = 'room';
+					break;
+				case 1:
+					val = key;
+					key = 'date';
+					break;
+				case 2:
+					val = key;
+					key = 'user';
+					break;
+				default:
+					return this.parse(`/help linecount`);
+				}
+			}
+			key = key.toLowerCase().replace(/ /g, '');
+			switch (key) {
+			case 'room': case 'roomid':
+				const tarRoom = Rooms.search(val);
+				if (!tarRoom) {
+					return this.errorReply(`Room '${key}' not found.`);
+				}
+				search.roomid = tarRoom.roomid;
+				break;
+			case 'user': case 'id': case 'userid':
+				search.user = toID(val);
+				break;
+			case 'date': case 'month': case 'time':
+				if (!LogReader.isMonth(val)) {
+					return this.errorReply(`Invalid date.`);
+				}
+				search.date = val;
+			}
+		}
+		if (!search.roomid) {
+			if (!room) {
+				return this.errorReply(`If you're not specifying a room, you must use this command in a room.`);
+			}
+			search.roomid = room.roomid;
+		}
+		if (!search.date) {
+			search.date = LogReader.getMonth();
+		}
+		return this.parse(`/join view-roomstats-${search.roomid}--${search.date}${search.user ? `--${search.user}` : ''}`);
 	},
-	linecounthelp: [
-		`/topusers OR /linecount [room], [month], [userid] - View room stats in the given [room].`,
-		`If a user is provided, searches only for that user, else the top 100 users are shown.`,
-		`Requires: % @ # &`,
-	],
+	linecounthelp() {
+		return this.sendReplyBox(
+			`<code>/linecount OR /roomstats OR /topusers</code> [<code>key=value</code> formatted parameters] - ` +
+			`Searches linecounts with the given parameters.<br />` +
+			`<details class="readmore"><summary><strong>Parameters:</strong></summary>` +
+			`- <code>room</code> (aliases: <code>roomid</code>) - Select a room to search. If no room is given, defaults to current room.</br />` +
+			`- <code>date</code> (aliases: <code>month</code>, <code>time</code>) - ` +
+			`Select a month to search linecounts on (requires YYYY-MM format). Defaults to current month.<br />` +
+			`- <code>user</code> (aliases: <code>id</code>, <code>userid</code>) - ` +
+			`Searches for linecounts only from a given user. ` +
+			`If this is not provided, /linecount instead shows line counts for all users from that month.</details>` +
+			`Parameters may also be specified without a [key]. When using this, arguments are provided in the format ` +
+			`<code>/linecount [room], [month], [user].</code>. This does not use any defaults.<br />`
+		);
+	},
 	slb: 'sharedloggedbattles',
 	async sharedloggedbattles(target, room, user) {
 		this.checkCan('lock');
