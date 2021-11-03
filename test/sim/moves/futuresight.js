@@ -333,4 +333,26 @@ describe('Future Sight', function () {
 		damage = hooh.maxhp - hooh.hp;
 		assert.bounded(damage, [79, 94], `Future Sight should deal Blade Forme damage, even though Aegislash was KOed in Blade Forme.`);
 	});
+
+	it(`should only use Sp. Atk stat boosts/drops if the user is on the field`, function () {
+		battle = common.createBattle([[
+			{species: 'Flapple', moves: ['futuresight', 'nastyplot', 'sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices('move nastyplot', 'auto');
+		battle.makeChoices();
+		const hooh = battle.p2.active[0];
+		let damage = hooh.maxhp - hooh.hp;
+		assert.bounded(damage, [113, 134], `Future Sight should deal damage with +2 Sp. Atk`);
+
+		battle.makeChoices();
+		battle.makeChoices('switch wynaut', 'auto');
+		battle.makeChoices();
+		damage = hooh.maxhp - hooh.hp;
+		assert.bounded(damage, [57, 68], `Future Sight should deal damage with +0 Sp. Atk`);
+	});
 });
