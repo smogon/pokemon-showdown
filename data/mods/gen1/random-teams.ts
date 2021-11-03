@@ -14,8 +14,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
 
-		for (let forme of randomN) {
-			const species = this.dex.species.get(forme);
+		for (const pokemon of randomN) {
+			const species = this.dex.species.get(pokemon);
 			const learnset = this.dex.species.getLearnset(species.id);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
