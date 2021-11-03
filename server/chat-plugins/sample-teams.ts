@@ -375,7 +375,7 @@ export const commands: Chat.ChatCommands = {
 		remove(target, room, user) {
 			const [formatid, category, teamName] = target.split(',').map(x => x.trim());
 			if (!(formatid && category && teamName)) return this.parse(`/help sampleteams`);
-			const team = SampleTeams.removeTeam(user, formatid, teamName, category || 'uncategorized');
+			const team = SampleTeams.removeTeam(user, formatid, toID(teamName), category || 'uncategorized');
 			SampleTeams.modlog(
 				this, formatid, 'REMOVETEAM', `${category || "uncategorized"}: ${teamName}: ${team}`,
 				`${user.name} removed a team from ${formatid}${category ? ` in the ${category} category` : ''}.`
