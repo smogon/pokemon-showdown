@@ -125,21 +125,20 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	// Random team generation for Gen 1 Random Battles.
 	randomTeam() {
 		// Get what we need ready.
-		const pokemon = [];
 		const seed = this.prng.seed;
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
+		// For Monotype
+		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const typePool = this.dex.types.names();
+		const type = this.forceMonotype || this.sample(typePool);
+
+		/** Pokémon that are not wholly incompatible with the team, but still pretty bad */
+		const rejectedButNotInvalidPool: string[] = [];
 		const handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
 		const nuTiers = ['UU', 'UUBL', 'NFE', 'LC', 'NU'];
 		const uuTiers = ['NFE', 'UU', 'UUBL', 'NU'];
-
-		const pokemonPool = [];
-		/** Pokémon that are not wholly incompatible with the team, but still pretty bad */
-		const rejectedButNotInvalidPool = [];
-		for (const species of this.dex.species.all()) {
-			if (!species.isNonstandard && species.randomBattleMoves) {
-				pokemonPool.push(species.id);
-			}
-		}
 
 		// Now let's store what we are getting.
 		const typeCount: {[k: string]: number} = {};
@@ -148,9 +147,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let nuCount = 0;
 		let hasShitmon = false;
 
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists) continue;
+			if (!species.exists || !species.randomBattleMoves) continue;
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
 			// to face each other.
@@ -162,8 +162,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				rejectedButNotInvalidPool.push(species.id);
 				continue;
 			}
-
-			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
