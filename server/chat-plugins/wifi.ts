@@ -1,7 +1,7 @@
 /**
  * Wi-Fi chat-plugin. Only works in a room with id 'wifi'
  * Handles giveaways in the formats: question, lottery, gts
- * Written by bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
+ * Written by Kris and bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
  */
 
 import {FS, Utils} from '../../lib';
@@ -216,6 +216,19 @@ class Giveaway extends Rooms.RoomGame {
 			}
 		}
 		const shiny = set.shiny ? '-shiny' : '';
+		
+		const validFemale = [
+			'abomasnow', 'aipom', 'ambipom', 'beautifly', 'bibarel', 'bidoof', 'blaziken', 'buizel', 'cacturne', 'camerupt', 'combee',
+			'combusken', 'croagunk', 'donphan', 'dustox', 'finneon', 'floatzel', 'frillish', 'gabite', 'garchomp', 'gible', 'girafarig',
+			'gligar', 'golbat', 'gulpin', 'heracross', 'hippopotas', 'hippowdon', 'houndoom', 'indeedee', 'jellicent', 'kerfluffle', 'kitsunoh',
+			'kricketot', 'kricketune', 'ledian', 'ledyba', 'ludicolo', 'lumineon', 'luxio', 'luxray', 'magikarp', 'mamoswine', 'medicham',
+			'meditite', 'meganium', 'meowstic', 'milotic', 'murkrow', 'nidoran', 'numel', 'nuzleaf', 'octillery', 'pachirisu', 'pikachu',
+			'pikachu-starter', 'piloswine', 'politoed', 'protowatt', 'pyroar', 'quagsire', 'raticate', 'rattata', 'relicanth', 'rhydon',
+			'rhyperior', 'roselia', 'roserade', 'rotom', 'scizor', 'scyther', 'shiftry', 'shinx', 'sneasel', 'snover', 'staraptor', 'staravia',
+			'starly', 'steelix', 'sudowoodo', 'swalot', 'tangrowth', 'torchic', 'toxicroak', 'unfezant', 'unown', 'ursaring', 'voodoom',
+			'weavile', 'wobbuffet', 'wooper', 'xatu', 'zubat',
+		];
+		if (set.gender === 'F' && validFemale.includes(species.id)) spriteid += '-f';
 		const output = `<img src="/sprites/ani${shiny}/${spriteid}.gif" />`;
 		return [species.id, output];
 	}
