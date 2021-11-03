@@ -184,7 +184,11 @@ export const SampleTeams = new class SampleTeams {
 		category = category.trim();
 		// Don't sanitize formatid here in case a team was added for a temporary format that got removed
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
+			let required = `an administrator`;
+			if (teamData.whitelist[formatid]) {
+				required = `staff in ${Chat.toListString(teamData.whitelist[formatid], "or")}`;
+			}
+			throw new Chat.ErrorMessage(`Access denied. You need to be ${required} to add teams for ${formatid}`);
 		}
 		const categoryName = this.findCategory(formatid, category);
 		if (!categoryName) {
