@@ -158,18 +158,16 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	checkJoined(user: User) {
-		for (const ip in this.joined) {
+		for (const [ip, id] of this.joined) {
 			if (user.latestIp === ip && !Config.noipchecks) return ip;
-			const joined = this.joined.get(ip);
-			if (joined && user.previousIDs.includes(joined)) return joined;
+			if (user.previousIDs.includes(id)) return id;
 		}
 		return false;
 	}
 
 	kickUser(user: User) {
-		for (const ip in this.joined) {
-			if (user.latestIp === ip && !Config.noipchecks ||
-				(this.joined.get(ip) && user.previousIDs.includes(this.joined.get(ip)!))) {
+		for (const [ip, id] of this.joined) {
+			if (user.latestIp === ip && !Config.noipchecks || user.previousIDs.includes(id)) {
 				user.sendTo(
 					this.room,
 					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${this.generateReminder()}</div>`
@@ -201,7 +199,7 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	static unban(room: Room, user: User) {
-		Punishments.roomUnpunish(room, toID(user), 'GIVEAWAYBAN', false);
+		Punishments.roomUnpunish(room, user.id, 'GIVEAWAYBAN', false);
 	}
 
 	static getSprite(set: PokemonSet): [ID, string] {
@@ -545,8 +543,8 @@ export class LotteryGiveaway extends Giveaway {
 	removeUser(user: User) {
 		if (this.phase !== 'pending') return user.sendTo(this.room, "The join phase of the lottery giveaway has ended.");
 		if (!this.checkJoined(user)) return user.sendTo(this.room, "You have not joined the lottery giveaway.");
-		for (const ip in this.joined) {
-			if (ip === user.latestIp && !Config.noipchecks || this.joined.get(ip) === user.id) {
+		for (const [ip, id] of this.joined) {
+			if (ip === user.latestIp && !Config.noipchecks || id === user.id) {
 				this.joined.delete(ip);
 			}
 		}
@@ -590,7 +588,7 @@ export class LotteryGiveaway extends Giveaway {
 			});
 			this.send(this.generateWindow(
 				`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p>` +
-				`<p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />` +
+				`<p style="text-align:center;">${this.joined.size} users joined the giveaway.<br />` +
 				`Our lucky winner${Chat.plural(this.winners)}: <b>${Utils.escapeHTML(winnerNames)}!</b><br />Congratulations!</p>`
 			));
 			for (const winner of this.winners) {
