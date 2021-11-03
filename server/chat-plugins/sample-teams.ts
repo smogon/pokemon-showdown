@@ -194,9 +194,9 @@ export const SampleTeams = new class SampleTeams {
 		if (!teamName) {
 			throw new Chat.ErrorMessage(`There is no team for ${formatid} with the name of "${teamid}". Check spelling?`);
 		}
-		const oldTeam = teamData.teams[formatid][category][teamName];
-		delete teamData.teams[formatid][category][teamName];
-		if (!Object.keys(teamData.teams[formatid][category]).length) delete teamData.teams[formatid][category];
+		const oldTeam = teamData.teams[formatid][categoryName][teamName];
+		delete teamData.teams[formatid][categoryName][teamName];
+		if (!Object.keys(teamData.teams[formatid][categoryName]).length) delete teamData.teams[formatid][categoryName];
 		if (!Object.keys(teamData.teams[formatid]).filter(x => x !== 'uncategorized').length) delete teamData.teams[formatid];
 		save();
 		return oldTeam;
