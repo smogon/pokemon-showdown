@@ -26,6 +26,8 @@ interface QuestionGiveawayData {
 	prize: PokemonSet;
 	question: string;
 	answers: string[];
+	ball: string;
+	extraInfo: string;
 }
 
 interface LotteryGiveawayData {
@@ -35,6 +37,8 @@ interface LotteryGiveawayData {
 	game: Game;
 	prize: PokemonSet;
 	winners: number;
+	ball: string;
+	extraInfo: string;
 }
 
 interface WifiData {
@@ -89,17 +93,19 @@ class Giveaway extends Rooms.RoomGame {
 	game: Game;
 	prize: PokemonSet;
 	phase: string;
+	ball: string;
+	extraInfo: string;
 	/**
 	 * IP:userid
 	 */
 	joined: Map<string, ID>;
 	timer: NodeJS.Timer | null;
-	monIDs: Set<string>;
+	monID: ID;
 	sprite: string;
 
 	constructor(
-		host: User, giver: User, room: Room,
-		ot: string, tid: string, prize: PokemonSet, game: Game = 'bdsp'
+		host: User, giver: User, room: Room, ot: string, tid: string,
+		prize: PokemonSet, game: Game = 'bdsp', ball: string, extraInfo: string
 	) {
 		// Make into a sub-game if the gts ever opens up again
 		super(room);
@@ -109,7 +115,8 @@ class Giveaway extends Rooms.RoomGame {
 		this.room = room;
 		this.ot = ot;
 		this.tid = tid;
-
+		this.ball = ball;
+		this.extraInfo = extraInfo;
 		this.game = game;
 		this.prize = prize;
 		this.phase = 'pending';
@@ -118,9 +125,8 @@ class Giveaway extends Rooms.RoomGame {
 
 		this.timer = null;
 
-		this.monIDs = new Set();
 		this.sprite = '';
-		[this.monIDs, this.sprite] = Giveaway.getSprite(prize.species);
+		[this.monID, this.sprite] = Giveaway.getSprite(prize);
 	}
 
 	destroy() {
@@ -130,13 +136,17 @@ class Giveaway extends Rooms.RoomGame {
 
 	generateReminder() {}
 
+	giveawayStyle() {
+		if (this.game === 'bdsp') return `style="background-color: #aa66a9;color: #fff;padding: 2px 4px;"`;
+		return `class="broadcast-blue"`;
+	}
+
 	send(content: string) {
-		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${content}</div>`);
-		this.room.update();
+		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${content}</div>`).update();
 	}
 
 	changeUhtml(content: string) {
-		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, `<div class="broadcast-blue">${content}</div>`);
+		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, `<div ${this.giveawayStyle()}>${content}</div>`);
 		this.room.update();
 	}
 
@@ -158,10 +168,11 @@ class Giveaway extends Rooms.RoomGame {
 
 	kickUser(user: User) {
 		for (const ip in this.joined) {
-			if (user.latestIp === ip && !Config.noipchecks || (this.joined.get(ip) && user.previousIDs.includes(this.joined.get(ip)!))) {
+			if (user.latestIp === ip && !Config.noipchecks ||
+				(this.joined.get(ip) && user.previousIDs.includes(this.joined.get(ip)!))) {
 				user.sendTo(
 					this.room,
-					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder()}</div>`
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${this.generateReminder()}</div>`
 				);
 				this.joined.delete(ip);
 			}
@@ -193,73 +204,20 @@ class Giveaway extends Rooms.RoomGame {
 		Punishments.roomUnpunish(room, toID(user), 'GIVEAWAYBAN', false);
 	}
 
-	static getSprite(text: string): [Set<string>, string] {
-		text = toID(text);
-		const mons = new Map<string, Species>();
-		let output = '';
-		const monIDs = new Set<string>();
-		for (const species of Dex.species.all()) {
-			let id: string = species.id;
-			if (species.baseSpecies === species.name && species.name.includes(' ')) {
-				id = toID(species.name);
-			}
-			const regexp = new RegExp(`\\b${id}\\b`);
-			if (regexp.test(text)) {
-				const mon = Dex.species.get(species.id);
-				mons.set(mon.baseSpecies, mon);
-			}
-		}
-		// the previous regex doesn't match "nidoran-m" or "nidoran male"
-		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-M', Dex.species.get('nidoranm'));
-		}
-		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-F', Dex.species.get('nidoranf'));
-		}
-		text = toID(text);
-		if (mons.size) {
-			for (const [name, species] of mons) {
-				let spriteid = species.spriteid;
-				if (species.cosmeticFormes) {
-					for (const forme of species.cosmeticFormes.map(toID)) {
-						if (text.includes(forme)) {
-							spriteid += '-' + forme.slice(name.length);
-							break; // We don't want to end up with deerling-summer-spring
-						}
-					}
-				}
-				if (species.otherFormes) {
-					for (const forme of species.otherFormes.map(toID)) {
-						// Allow "alolan <name>" to match as well.
-						if (forme.endsWith('alola')) {
-							if (/alolan?/.test(text)) {
-								spriteid += '-alola';
-								break;
-							}
-						}
-						// Allow "galarian <name>" to match as well.
-						if (forme.endsWith('galar')) {
-							if (/galar(ian)?/.test(text)) {
-								spriteid += '-galar';
-								break;
-							}
-						}
-						if (text.includes(forme)) {
-							spriteid += '-' + forme.substr(name.length);
-							break; // We don't want to end up with landorus-therian-therian
-						}
-					}
-				}
-				monIDs.add(spriteid);
-				if (mons.size > 1) {
-					output += `<psicon pokemon="${spriteid}" />`;
-				} else {
-					const shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
-					output += `<img src="/sprites/ani${shiny}/${spriteid}.gif">`;
+	static getSprite(set: PokemonSet): [ID, string] {
+		const species = Dex.species.get(set.species);
+		let spriteid = species.spriteid;
+		if (species.cosmeticFormes) {
+			for (const forme of species.cosmeticFormes.map(toID)) {
+				if (toID(set.species).includes(forme)) {
+					spriteid += '-' + forme.slice(species.baseSpecies.length);
+					break; // We don't want to end up with deerling-summer-spring
 				}
 			}
 		}
-		return [monIDs, output];
+		const shiny = set.shiny ? '-shiny' : '';
+		const output = `<img src="/sprites/ani${shiny}/${spriteid}.gif" />`;
+		return [species.id, output];
 	}
 
 	static updateStats(monIDs: Set<string>) {
@@ -271,10 +229,24 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	generateWindow(rightSide: string) {
-		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
-			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${Utils.escapeHTML(this.host.name)}</p>` +
-			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Chat.formatText(this.prize.species, true)}<br />OT: ${Utils.escapeHTML(this.ot)}, TID: ${this.tid}</td>` +
-			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> You must have a Switch, Pokémon Sword/Shield, and Nintendo Switch Online to receive the prize. Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pokémon, unless it is explicitly allowed.</p>`;
+		let buf = `<center><h3>It's giveaway time!</h3>`;
+		buf += Utils.html`<small>Giveaway started by ${this.host.name}</small>`;
+		buf += `<table style="margin-left:auto;margin-right:auto">`;
+		buf += Utils.html`<tr><td colspan="2" style="text-align:center"><strong>Giver:</strong> <username>${this.giver.name}</username><br /><strong>OT:</strong> ${this.ot}, <strong>TID:</strong> ${this.tid}</td></tr>`;
+		buf += `<tr><td style="text-align:center;width:45%"><psicon item="${this.ball}" /> ${this.sprite} <psicon item="${this.ball}" />`;
+		buf += `<p>${Chat.formatText(Teams.exportSet(this.prize), true)}</p></td>`;
+		buf += `<td style="text-align:center;width:45%">${rightSide}</td></tr>`;
+		if (this.extraInfo?.trim().length) {
+			this.extraInfo = this.extraInfo.replace(/<br \/>/g, '\n');
+			buf += `<tr><td colspan="2" style="text-align:center;">${Chat.formatText(this.extraInfo.trim(), true)}</td></tr>`;
+		}
+		buf += `</table>`;
+		const gameName: {[k in Game]: string} = {
+			swsh: 'Sword/Shield',
+			bdsp: 'Brilliant Diamond/Shining Pearl',
+		};
+		buf += `<p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> You must have a Switch, Pok&eacute;mon ${gameName[this.game]}, and Nintendo Switch Online to receive the prize. Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pok&eacute;mon, unless it is explicitly allowed.</p>`;
+		return buf;
 	}
 }
 
@@ -287,10 +259,10 @@ export class QuestionGiveaway extends Giveaway {
 	winner: User | null;
 
 	constructor(
-		host: User, giver: User, room: Room, ot: string, tid: string,
-		game: Game, prize: PokemonSet, question: string, answers: string[]
+		host: User, giver: User, room: Room, ot: string, tid: string, game: Game,
+		prize: PokemonSet, question: string, answers: string[], ball: string, extraInfo: string
 	) {
-		super(host, giver, room, ot, tid, prize, game);
+		super(host, giver, room, ot, tid, prize, game, ball, extraInfo);
 		this.type = 'question';
 		this.phase = 'pending';
 
@@ -298,17 +270,22 @@ export class QuestionGiveaway extends Giveaway {
 		this.answers = QuestionGiveaway.sanitizeAnswers(answers);
 		this.answered = {};
 		this.winner = null;
-		this.send(this.generateWindow('The question will be displayed in one minute! Use /ga to answer.'));
+		this.send(this.generateWindow('The question will be displayed in one minute! Use /guess to answer.'));
 
 		this.timer = setTimeout(() => this.start(), 1000 * 60);
 	}
 
 	static splitTarget(target: string, sep = '|', context: Chat.CommandContext) {
-		let [giver, ot, tid, game, prize, question, ...answers] = target.split(sep).map(param => param.trim());
-		if (!(giver && ot && tid && prize && question && answers.length)) {
-			throw new Chat.ErrorMessage("Invalid arguments specified - /qg giver | ot | tid | prize | question | answer(s)");
+		let [giver, ot, tid, game, question, answers, ball, extraInfo, ...prize] = target.split(sep).map(param => param.trim());
+		if (!(giver && ot && tid && prize?.length && question && answers?.split(',').length)) {
+			throw new Chat.ErrorMessage("Invalid arguments specified - /qg giver | ot | tid | game | question | answer(s) | pokeball | prize");
 		}
-		if (!game) game = 'swsh';
+		if (!game) game = 'bdsp';
+		if (!ball) ball = 'pokeball';
+		if (!ball.endsWith('ball')) ball += 'ball';
+		if (!Dex.items.get(ball).isPokeball) {
+			throw new Chat.ErrorMessage(`${Dex.items.get(ball).name} is not a Pok\u00e9 Ball.`);
+		}
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) throw new Chat.ErrorMessage("Invalid TID");
 		const targetUser = Users.get(giver);
@@ -322,11 +299,14 @@ export class QuestionGiveaway extends Giveaway {
 		if (Giveaway.checkBanned(context.room!, targetUser)) {
 			throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
 		}
-		return {targetUser, ot, tid, game: game as Game, prize, question, answers};
+		return {
+			targetUser, ot, tid, game: game as Game, question,
+			answers: answers.split(','), ball, extraInfo, prize: prize.join('|'),
+		};
 	}
 
 	generateQuestion() {
-		return this.generateWindow(`<p style="text-align:center;font-size:13pt;">Giveaway Question: <b>${this.question}</b></p><p style="text-align:center;">use /ga to guess.</p>`);
+		return this.generateWindow(`<p style="text-align:center;font-size:13pt;">Giveaway Question: <b>${this.question}</b></p><p style="text-align:center;">use /guess to answer.</p>`);
 	}
 
 	start() {
@@ -336,7 +316,7 @@ export class QuestionGiveaway extends Giveaway {
 		this.timer = setTimeout(() => this.end(false), 1000 * 60 * 5);
 	}
 
-	guessAnswer(user: User, guess: string) {
+	choose(user: User, guess: string) {
 		if (this.phase !== 'started') return user.sendTo(this.room, "The giveaway has not started yet.");
 
 		if (this.checkJoined(user) && !Object.values(this.joined).includes(user.id)) {
@@ -422,7 +402,7 @@ export class QuestionGiveaway extends Giveaway {
 					this.winner.popup(`You have won the giveaway. PM **${this.giver.name}** to claim your prize!`);
 				}
 				if (this.giver.connected) this.giver.popup(`${this.winner.name} has won your question giveaway!`);
-				Giveaway.updateStats(this.monIDs);
+				Giveaway.updateStats(new Set([this.monID]));
 			}
 		}
 
@@ -456,9 +436,9 @@ export class LotteryGiveaway extends Giveaway {
 
 	constructor(
 		host: User, giver: User, room: Room, ot: string, tid: string,
-		game: Game, prize: PokemonSet, winners: number
+		game: Game, prize: PokemonSet, winners: number, ball: string, extraInfo: string
 	) {
-		super(host, giver, room, ot, tid, prize, game);
+		super(host, giver, room, ot, tid, prize, game, ball, extraInfo);
 
 		this.type = 'lottery';
 		this.phase = 'pending';
@@ -473,11 +453,16 @@ export class LotteryGiveaway extends Giveaway {
 	}
 
 	static splitTarget(target: string, sep = '|', context: Chat.CommandContext) {
-		let [giver, ot, tid, game, prize, winners] = target.split(sep).map(param => param.trim());
-		if (!(giver && ot && tid && prize)) {
+		let [giver, ot, tid, game, winners, ball, extraInfo, ...prize] = target.split(sep).map(param => param.trim());
+		if (!(giver && ot && tid && prize?.length)) {
 			throw new Chat.ErrorMessage("Invalid arguments specified - /lottery giver | ot | tid | prize | winners");
 		}
-		if (!game) game = 'swsh';
+		if (!game) game = 'bdsp';
+		if (!ball) ball = 'pokeball';
+		if (!ball.endsWith('ball')) ball += 'ball';
+		if (!Dex.items.get(ball).isPokeball) {
+			throw new Chat.ErrorMessage(`${Dex.items.get(ball).name} is not a Pok\u00e9 Ball.`);
+		}
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) throw new Chat.ErrorMessage("Invalid TID");
 		const targetUser = Users.get(giver);
@@ -499,12 +484,12 @@ export class LotteryGiveaway extends Giveaway {
 				throw new Chat.ErrorMessage("The lottery giveaway can have a minimum of 1 and a maximum of 5 winners.");
 			}
 		}
-		return {targetUser, ot, tid, game: game as Game, prize, winners: numWinners};
+		return {targetUser, ot, tid, game: game as Game, winners: numWinners, ball, extraInfo, prize: prize.join('|')};
 	}
 
 	generateReminder(joined = false) {
 		const cmd = (joined ? 'Leave' : 'Join');
-		const button = `<button style="margin:4px;" name="send" value="/giveaway ${toID(cmd)}lottery"><font size=1><b>${cmd}</b></font></button>`;
+		const button = `<button class="button" name="send" value="/giveaway ${toID(cmd)}lottery"><strong>${cmd}</strong></button>`;
 		return this.generateWindow(`The lottery drawing will occur in 2 minutes, and with ${Chat.count(this.maxWinners, "winners")}!<br />${button}</p>`);
 	}
 
@@ -517,12 +502,12 @@ export class LotteryGiveaway extends Giveaway {
 			if (this.checkJoined(thisUser)) {
 				thisUser.sendTo(
 					this.room,
-					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${joined}</div>`
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${joined}</div>`
 				);
 			} else {
 				thisUser.sendTo(
 					this.room,
-					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${notJoined}</div>`
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${notJoined}</div>`
 				);
 			}
 		}
@@ -539,7 +524,7 @@ export class LotteryGiveaway extends Giveaway {
 		this.joined.set(user.latestIp, user.id);
 		user.sendTo(
 			this.room,
-			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(true)}</div>`
+			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${this.generateReminder(true)}</div>`
 		);
 		user.sendTo(this.room, "You have successfully joined the lottery giveaway.");
 	}
@@ -554,7 +539,7 @@ export class LotteryGiveaway extends Giveaway {
 		}
 		user.sendTo(
 			this.room,
-			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(false)}</div>`
+			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${this.generateReminder(false)}</div>`
 		);
 		user.sendTo(this.room, "You have left the lottery giveaway.");
 	}
@@ -574,7 +559,7 @@ export class LotteryGiveaway extends Giveaway {
 			if (!winner) continue;
 			this.winners.push(winner);
 		}
-		this.end();
+		this.end(this.joined.size >= this.winners.length);
 	}
 
 	end(force = false) {
@@ -605,7 +590,7 @@ export class LotteryGiveaway extends Giveaway {
 				}
 			}
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${winnerNames}`);
-			Giveaway.updateStats(this.monIDs);
+			Giveaway.updateStats(new Set([this.monID]));
 		}
 		this.destroy();
 	}
@@ -619,7 +604,7 @@ export class GTS extends Rooms.RoomGame {
 	summary: string;
 	deposit: string;
 	lookfor: string;
-	monIDs: Set<string>;
+	monID: ID;
 	sprite: string;
 	sent: string[];
 	noDeposits: boolean;
@@ -639,9 +624,10 @@ export class GTS extends Rooms.RoomGame {
 		this.deposit = GTS.linkify(Utils.escapeHTML(deposit));
 		this.lookfor = lookfor;
 
-		this.monIDs = new Set();
+		this.monID = '';
 		this.sprite = '';
-		[this.monIDs, this.sprite] = Giveaway.getSprite(this.summary);
+		// Deprecated, just typed like this to prevent errors, will rewrite when GTS is planned to be used again
+		[this.monID, this.sprite] = Giveaway.getSprite({species: summary} as PokemonSet);
 
 		this.sent = [];
 		this.noDeposits = false;
@@ -722,7 +708,7 @@ export class GTS extends Rooms.RoomGame {
 				note: `their GTS giveaway for "${this.summary}"`,
 			});
 			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Utils.escapeHTML(this.lookfor)}</strong>" has finished.</p>`);
-			Giveaway.updateStats(this.monIDs);
+			Giveaway.updateStats(new Set([this.monID]));
 		}
 		this.room.subGame = null;
 		return this.left;
@@ -768,56 +754,6 @@ export const handlers: Chat.Handlers = {
 	},
 };
 
-const cmds: Chat.ChatCommands = {
-	'': 'help',
-	help(target, room, user) {
-		room = this.requireRoom('wifi' as RoomID);
-
-		let reply = '';
-		switch (target) {
-		case 'staff':
-			this.checkCan('show', null, room);
-			reply = '<strong>Staff commands:</strong><br />' +
-					'- question or qg <em>User | OT | TID | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # &)<br />' +
-					'- lottery or lg <em>User | OT | TID | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # &)<br />' +
-					'- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
-					'- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
-					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
-					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # &)<br />' +
-					'- end - Forcibly ends the current giveaway (Requires: % @ # &)<br />' +
-					'- count <em>Mon</em> - Displays how often a certain mon has been given away. Use <code>!giveaway count</code> to broadcast this to the entire room<br />';
-			break;
-		case 'gts':
-			this.checkCan('show', null, room);
-			reply = '<strong>GTS giveaway commands:</strong><br />' +
-					'- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ # &)<br />' +
-					'- gts left <em>Amount</em> - Updates the amount left for the current GTS giveaway. Without an amount specified, shows how many Pokémon are left, and who the latest winners are.<br />' +
-					'- gts sent <em>IGN</em> - Adds an ign to the list of latest winners, and updates left count accordingly.<br />' +
-					'- gts full - Signifies enough mons have been received, and will update the GTS giveaway to reflect that.<br />' +
-					'- gts end - Forcibly ends the current gts giveaway (Requires: % @ # &)<br />';
-			break;
-		case 'game':
-		case 'giveaway':
-		case 'user':
-			if (!this.runBroadcast()) return;
-			reply = '<strong>Giveaway participation commands: </strong> (start with /giveaway, except for /ga) <br />' +
-					'- guess or /ga <em>answer</em> - Guesses the answer for a question giveaway<br />' +
-					'- viewanswer - Shows the answer in a question giveaway (only to host/giver)<br />' +
-					'- remind - Shows the details of the current giveaway (can be broadcast)<br />' +
-					'- join or joinlottery - Joins a lottery giveaway<br />' +
-					'- leave or leavelottery - Leaves a lottery giveaway<br />';
-			break;
-		default:
-			if (!this.runBroadcast()) return;
-			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
-			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: + % @ # &)<br />' +
-			'- help gts - shows gts giveaway commands (Requires: + % @ # &)';
-		}
-		this.sendReplyBox(reply);
-	},
-};
-
 export const commands: Chat.ChatCommands = {
 	gts: {
 		new: 'start',
@@ -831,6 +767,8 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage(`There is already a GTS Giveaway going on.`);
 			}
 
+			return this.parse(`/help gts`);
+			/*
 			const [giver, amountStr, summary, deposit, lookfor] = target.split(target.includes('|') ? '|' : ',').map(
 				param => param.trim()
 			);
@@ -853,6 +791,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.privateModAction(`${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon`);
 			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
+			*/
 		},
 		left(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
@@ -910,14 +849,21 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(`The giveaway was forcibly ended by ${user.name} with ${amount} left${target}`);
 		},
 	},
-	gtshelp: [],
+	gtshelp: [
+		`GTS giveaways are currently disabled. If you are a Room Owner and would like them to be re-enabled, contact Kris.`,
+	],
 	ga: 'giveaway',
 	giveaway: {
 		help() {
 			this.run('giveawayhelp');
 		},
 		view: {
-			''() {},
+			''(target, room, user) {
+				this.room = room = Rooms.search('wifi') || null;
+				if (!room) throw new Chat.ErrorMessage(`The Wi-Fi room doesn't exist on this server.`);
+				this.checkCan('warn', null, room);
+				this.parse(`/j view-giveaways-default`);
+			},
 			stored(target, room, user) {
 				this.room = room = Rooms.search('wifi') || null;
 				if (!room) throw new Chat.ErrorMessage(`The Wi-Fi room doesn't exist on this server.`);
@@ -935,9 +881,8 @@ export const commands: Chat.ChatCommands = {
 		remind(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
 			if (!this.runBroadcast()) return;
-			let game: QuestionGiveaway | LotteryGiveaway | null = null;
 			if (room.getGame(QuestionGiveaway)) {
-				game = room.getGame(QuestionGiveaway)!;
+				const game = room.getGame(QuestionGiveaway)!;
 				if (game.phase !== 'started') {
 					throw new Chat.ErrorMessage(`The giveaway has not started yet.`);
 				}
@@ -978,7 +923,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			Giveaway.ban(room, targetUser, reason);
-			if (room.getGame(Giveaway)) room.getGame(Giveaway)!.kickUser(targetUser);
+			(room.getGame(LotteryGiveaway) || room.getGame(QuestionGiveaway))?.kickUser(targetUser);
 			this.modlog('GIVEAWAYBAN', targetUser, reason);
 			const reasonMessage = reason ? ` (${reason})` : ``;
 			this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${reasonMessage}`);
@@ -987,12 +932,12 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return false;
 			room = this.requireRoom('wifi' as RoomID);
 			this.checkCan('warn', null, room);
-	
+
 			const {targetUser} = this.requireUser(target, {allowOffline: true});
 			if (!Giveaway.checkBanned(room, targetUser)) {
 				return this.errorReply(`User '${targetUser.name}' isn't banned from entering giveaways.`);
 			}
-	
+
 			Giveaway.unban(room, targetUser);
 			this.privateModAction(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
 			this.modlog('GIVEAWAYUNBAN', targetUser, null, {noip: 1, noalts: 1});
@@ -1003,19 +948,24 @@ export const commands: Chat.ChatCommands = {
 			''(target, room, user) {
 				room = this.requireRoom('wifi' as RoomID);
 				this.checkCan('warn', null, room);
-				this.parse('/j view-giveaway-create');
+				this.parse('/j view-giveaways-create');
 			},
 			question(target, room, user) {
 				room = this.room = Rooms.search('wifi') || null;
 				if (!room) {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
 				}
-				if (room.subGame) throw new Chat.ErrorMessage(`There is already a room game (${room.subGame.constructor.name}) going on.`);
-				const {targetUser, ot, tid, game, prize, question, answers} = QuestionGiveaway.splitTarget(target, '|', this);
+				if (room.game) {
+					throw new Chat.ErrorMessage(`There is already a room game (${room.game.constructor.name}) going on.`);
+				}
+				// Syntax: giver|ot|tid|game|question|answer1,answer2,etc|pokeball|packed set
+				const {
+					targetUser, ot, tid, game, question, answers, ball, extraInfo, prize,
+				} = QuestionGiveaway.splitTarget(target, '|', this);
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
-				room.subGame = new QuestionGiveaway(user, targetUser, room, ot, tid, game, set, question, answers);
+				room.game = new QuestionGiveaway(user, targetUser, room, ot, tid, game, set, question, answers, ball, extraInfo);
 
 				this.privateModAction(`${user.name} started a question giveaway for ${targetUser.name}.`);
 				this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
@@ -1026,11 +976,12 @@ export const commands: Chat.ChatCommands = {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
 				}
 				if (room.game) throw new Chat.ErrorMessage(`There is already a room game (${room.game.constructor.name}) going on.`);
-				const {targetUser, ot, tid, game, prize, winners} = LotteryGiveaway.splitTarget(target, '|', this);
+				// Syntax: giver|ot|tid|game|# of winners|pokeball|info|packed set
+				const {targetUser, ot, tid, game, winners, ball, prize, extraInfo} = LotteryGiveaway.splitTarget(target, '|', this);
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
-				room.game = new LotteryGiveaway(user, targetUser, room, ot, tid, game, set, winners);
+				room.game = new LotteryGiveaway(user, targetUser, room, ot, tid, game, set, winners, ball, extraInfo);
 
 				this.privateModAction(`${user.name} started a lottery giveaway for ${targetUser.name}.`);
 				this.modlog('LOTTERY GIVEAWAY', null, `for ${targetUser.getLastId()}`);
@@ -1039,12 +990,12 @@ export const commands: Chat.ChatCommands = {
 		stop: 'end',
 		end(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
-			if (!room.game?.title.includes('Giveaway')) {
+			if (!room.game?.constructor.name.includes('Giveaway')) {
 				throw new Chat.ErrorMessage(`There is no giveaway going on at the moment.`);
 			}
 			const game = room.game as LotteryGiveaway | QuestionGiveaway;
 			if (user.id !== game.host.id) this.checkCan('warn', null, room);
-	
+
 			if (target && target.length > 300) {
 				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 			}
@@ -1054,10 +1005,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(`The giveaway was forcibly ended by ${user.name}${target}`);
 		},
 		guess(target, room, user) {
-			room = this.requireRoom('wifi' as RoomID);
-			this.checkChat();
-			const giveaway = this.requireGame(QuestionGiveaway);
-			giveaway.guessAnswer(user, target);
+			this.parse(`/guess ${target}`);
 		},
 		changeanswer: 'changequestion',
 		changequestion(target, room, user, connection, cmd) {
@@ -1072,22 +1020,29 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom('wifi' as RoomID);
 			const giveaway = this.requireGame(QuestionGiveaway);
 			if (user.id !== giveaway.host.id && user.id !== giveaway.giver.id) return;
-	
+
 			this.sendReply(`The giveaway question is ${giveaway.question}.\nThe answer${Chat.plural(giveaway.answers, 's are', ' is')} ${giveaway.answers.join(', ')}.`);
 		},
 		save: 'store',
 		store: {
+			''(target, room, user) {
+				room = this.requireRoom('wifi' as RoomID);
+				this.checkCan('warn', null, room);
+				this.parse('/j view-giveaways-stored-add');
+			},
 			question(target, room, user) {
 				room = this.room = Rooms.search('wifi') || null;
 				if (!room) {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
 				}
-				const {targetUser, ot, tid, game, prize, question, answers} = QuestionGiveaway.splitTarget(target, '|', this);
+				const {
+					targetUser, ot, tid, game, prize, question, answers, ball, extraInfo,
+				} = QuestionGiveaway.splitTarget(target, '|', this);
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
 				if (!wifiData.storedGiveaways.question) wifiData.storedGiveaways.question = [];
-				const data = {targetUserid: targetUser.id, ot, tid, game, prize: set, question, answers};
+				const data = {targetUserid: targetUser.id, ot, tid, game, prize: set, question, answers, ball, extraInfo};
 				wifiData.storedGiveaways.question.push(data);
 				saveData();
 
@@ -1099,12 +1054,12 @@ export const commands: Chat.ChatCommands = {
 				if (!room) {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
 				}
-				const {targetUser, ot, tid, game, prize, winners} = LotteryGiveaway.splitTarget(target, '|', this);
+				const {targetUser, ot, tid, game, prize, winners, ball, extraInfo} = LotteryGiveaway.splitTarget(target, '|', this);
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
 				if (!wifiData.storedGiveaways.lottery) wifiData.storedGiveaways.lottery = [];
-				const data = {targetUserid: targetUser.id, ot, tid, game, prize: set, winners};
+				const data = {targetUserid: targetUser.id, ot, tid, game, prize: set, winners, ball, extraInfo};
 				wifiData.storedGiveaways.lottery.push(data);
 				saveData();
 
@@ -1118,12 +1073,14 @@ export const commands: Chat.ChatCommands = {
 				if (!room) {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
 				}
-				const {targetUser, ot, tid, game, prize, question, answers} = QuestionGiveaway.splitTarget(target, '|', this);
+				const {
+					targetUser, ot, tid, game, prize, question, answers, ball, extraInfo,
+				} = QuestionGiveaway.splitTarget(target, '|', this);
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
 				if (!wifiData.submittedGiveaways.question) wifiData.submittedGiveaways.question = [];
-				const data = {targetUserid: targetUser.id, ot, tid, game, prize: set, question, answers};
+				const data = {targetUserid: targetUser.id, ot, tid, game, prize: set, question, answers, ball, extraInfo};
 				wifiData.submittedGiveaways.question.push(data);
 				saveData();
 
@@ -1135,12 +1092,12 @@ export const commands: Chat.ChatCommands = {
 				if (!room) {
 					throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
 				}
-				const {targetUser, ot, tid, game, prize, winners} = LotteryGiveaway.splitTarget(target, '|', this);
+				const {targetUser, ot, tid, game, prize, winners, ball, extraInfo} = LotteryGiveaway.splitTarget(target, '|', this);
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
 				if (!wifiData.submittedGiveaways.lottery) wifiData.submittedGiveaways.lottery = [];
-				const data = {targetUserid: targetUser.id, ot, tid, game, prize: set, winners};
+				const data = {targetUserid: targetUser.id, ot, tid, game, prize: set, winners, ball, extraInfo};
 				wifiData.submittedGiveaways.lottery.push(data);
 				saveData();
 
@@ -1157,62 +1114,422 @@ export const commands: Chat.ChatCommands = {
 		approve(target, room, user) {
 			room = this.room = Rooms.search('wifi') || null;
 			if (!room) {
-				throw new Chat.ErrorMessage(`This command must be used in ths Wi-Fi room.`);
+				throw new Chat.ErrorMessage(`This command must be used in the Wi-Fi room.`);
 			}
 			const targetUser = Users.get(target);
 			if (!targetUser?.connected) {
-				this.refreshPage('giveaway-submitted');
+				this.refreshPage('giveaways-submitted');
 				throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} is offline, so their giveaway can't be run.`);
 			}
 			const hasGiveaway = hasSubmittedGiveaway(targetUser);
 			if (!hasGiveaway) {
-				this.refreshPage('giveaway-submitted');
-				throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} is offline, so their giveaway can't be run.`);
+				this.refreshPage('giveaways-submitted');
+				throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} doesn't have any submitted giveaways.`);
 			}
 			const giveaway = wifiData.submittedGiveaways[hasGiveaway.type][hasGiveaway.index];
 			if (hasGiveaway.type === 'question') {
 				const data = giveaway as QuestionGiveawayData;
-				this.parse(`/giveaway create question ${data.targetUserid}|${data.ot}|${data.tid}|${data.game}|${Teams.exportSet(data.prize)}|${data.question}|${data.answers.join(',')}|true`);
+				this.parse(`/giveaway create question ${data.targetUserid}|${data.ot}|${data.tid}|${data.game}|${data.question}|${data.answers.join(',')}|${data.ball}|${data.extraInfo}|${Teams.pack([data.prize])!}`);
 			} else {
 				const data = giveaway as LotteryGiveawayData;
-				this.parse(`/giveaway create lottery ${data.targetUserid}|${data.ot}|${data.tid}|${data.game}|${Teams.exportSet(data.prize)}|${data.winners}|true`);
+				this.parse(`/giveaway create lottery ${data.targetUserid}|${data.ot}|${data.tid}|${data.game}|${data.winners}|${data.ball}|${data.extraInfo}|${Teams.pack([data.prize])!}`);
 			}
+			wifiData.submittedGiveaways[hasGiveaway.type].splice(hasGiveaway.index, 1);
+			saveData();
+			this.refreshPage(`giveaways-submitted`);
 			targetUser.send(`${user.name} has approved your ${hasGiveaway.type} giveaway!`);
 			this.privateModAction(`${user.name} approved a ${hasGiveaway.type} giveaway by ${targetUser.name}.`);
 			this.modlog(`GIVEAWAY APPROVE ${hasGiveaway.type.toUpperCase()}`, targetUser, null, {noalts: true, noip: true});
 		},
+		deny: 'delete',
+		delete(target, room, user, connection, cmd) {
+			room = this.room = Rooms.search('wifi') || null;
+			if (!room) {
+				throw new Chat.ErrorMessage(`This command must be used in the Wi-Fi room.`);
+			}
+			const del = cmd === 'delete';
+			this.refreshPage(del ? `giveaways-stored` : 'giveaways-submitted');
+			if (del) {
+				const [type, index] = target.split(',');
+				if (!(type && index) || !['question', 'lottery'].includes(toID(type)) || isNaN(parseInt(index))) {
+					return this.parse(`/help giveaway`);
+				}
+				const typedType = toID(type) as 'question' | 'lottery';
+				const giveaway = wifiData.storedGiveaways[typedType][parseInt(index)];
+				wifiData.storedGiveaways[typedType].splice(parseInt(index), 1);
+				saveData();
+				this.privateModAction(`${user.name} deleted a ${typedType} giveaway by ${giveaway.targetUserid}.`);
+				this.modlog(`GIVEAWAY DELETE ${typedType.toUpperCase()}`);
+			} else {
+				if (!target) return this.parse(`/help giveaway`);
+				const {targetUser, rest: reason} = this.splitUser(target);
+				if (!targetUser?.connected) {
+					throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} is offline, so their giveaway can't be run.`);
+				}
+				const hasGiveaway = hasSubmittedGiveaway(targetUser);
+				if (!hasGiveaway) {
+					this.refreshPage('giveaways-submitted');
+					throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} doesn't have any submitted giveaways.`);
+				}
+				wifiData.submittedGiveaways[hasGiveaway.type].splice(hasGiveaway.index, 1);
+				saveData();
+				targetUser?.send(`Staff have rejected your giveaway${reason ? `: ${reason}` : '.'}`);
+				this.privateModAction(`${user.name} denied a ${hasGiveaway.type} giveaway by ${targetUser.name}.`);
+				this.modlog(`GIVEAWAY DENY ${hasGiveaway.type.toUpperCase()}`, targetUser, reason || null, {noalts: true, noip: true});
+			}
+		},
 		count(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
-			target = [...Giveaway.getSprite(target)[0]][0];
-			if (!target) throw new Chat.ErrorMessage(`No Pok\u00e9mon entered. Proper syntax: /giveaway count pokemon`);
+			if (!Dex.species.get(target).exists) {
+				throw new Chat.ErrorMessage(`No Pok\u00e9mon entered. Proper syntax: /giveaway count pokemon`);
+			}
+			target = Dex.species.get(target).id;
 			if (!this.runBroadcast()) return;
-	
+
 			const count = wifiData.stats[target];
-	
+
 			if (!count) return this.sendReplyBox("This Pokémon has never been given away.");
 			const recent = count.filter(val => val + RECENT_THRESHOLD > Date.now()).length;
-	
+
 			this.sendReplyBox(`This Pokémon has been given away ${Chat.count(count, "times")}, a total of ${Chat.count(recent, "times")} in the past month.`);
 		},
 	},
-	giveawayhelp: [],
+	giveawayhelp(target, room, user) {
+		room = this.requireRoom('wifi' as RoomID);
+		const buf = [];
+		if (user.can('show', null, room)) {
+			buf.push(
+				`<details><summary>Staff commands</summary>` +
+				`<code>/giveaway create - Pulls up a page to create a giveaway. Requires: + % @ # &`
+			);
+			buf.push(
+				`<code>/giveaway create question Giver | OT | TID | Game | Question | Answer 1, Answer 2, Answer 3 | Pok&eacute; Ball | Extra Info | Prize</code>` +
+				` - Start a new question giveaway (voices can only host their own). Requires: + % @ # &`,
+			);
+			buf.push(
+				`<code>/giveaway create lottery Giver | OT | TID | Game | # of Winners | Pok&eacute; Ball | Extra Info | Prize</code>` +
+				` - Start a new lottery giveaway (voices can only host their own). Requires: + % @ # &`,
+			);
+			buf.push(`<code>/giveaway changequestion/changeanswer</code> - Changes the question/answer of a question giveaway. Requires: Being giveaway host`);
+			buf.push(`<code>/giveaway viewanswer</code> - Shows the answer of a question giveaway. Requires: Being giveaway host/giver`);
+			buf.push(`<code>/giveaway ban [user], [reason]</code> - Temporarily bans [user] from entering giveaways. Requires: % @ # &`);
+			buf.push(`<code>/giveaway end</code> - Forcibly ends the current giveaway. Requires: % @ # &`);
+			buf.push(`<code>/giveaway count [pokemon]</code> - Shows how frequently a certain Pok&eacute;mon has been given away.</details>`);
+		}
+		// Giveaway stuff
+		buf.push(
+			`<details><summary>Giveaway participation commands</summary>` +
+			`<code>/guess [target]</code> - Guesses an answer for a question giveaway.`
+		);
+		buf.push(`<code>/giveaway viewanswer</code> - Guesses an answer for a question giveaway. Requires: Giveaway host/giver`);
+		buf.push(`<code>/giveaway remind</code> - Shows the details of the current giveaway.`);
+		buf.push(`<code>/giveaway join/leave</code> - Joins/leaves a lottery giveaway.</details>`);
+		this.sendReplyBox(buf.join('<br />'));
+	},
 };
 
-function makePageHeader() {
-	return ``;
+function makePageHeader(pageid?: string) {
+	const icons: {[k: string]: string} = {
+		create: `<i class="fa fa-sticky-note"></i>`,
+		stored: `<i class="fa fa-paste"></i>`,
+		'stored-add': `<i class="fa fa-paste"></i>`,
+		submitted: `<i class="fa fa-inbox"></i>`,
+		'submitted-add': `<i class="fa fa-inbox"></i>`,
+	};
+	const titles: {[k: string]: string} = {
+		create: `Create`,
+		stored: `View Stored`,
+		'stored-add': 'Store',
+		submitted: `View Submitted`,
+		'submitted-add': `Submit`,
+	};
+	let buf = `<button class="button" style="float:right" name="send" value="/j view-giveaways${pageid?.trim() ? `-${pageid.trim()}` : ''}"><i class="fa fa-refresh"></i> Refresh</button>`;
+	buf += `<h1>Wi-Fi Giveaways</h1>`;
+	const urls = [];
+	for (const i in titles) {
+		const title = titles[i];
+		const icon = icons[i];
+		if (pageid === i) {
+			urls.push(`${icon} <strong>${title}</strong>`);
+		} else {
+			urls.push(`${icon} <a href="/view-giveaways-${i}" target="replace">${title}</a>`);
+		}
+	}
+	buf += urls.join(` / `);
+	buf += `<hr />`;
+	return `<center>${buf}</center>`;
+}
+
+function formatFakeButton(url: string, text: string) {
+	return `<a class="button" style="text-decoration:inherit" target="replace" href="${url}">${text}</a>`;
+}
+
+function generatePokeballDropdown() {
+	const pokeballs = Dex.items.all().filter(item => item.isPokeball).sort((a, b) => a.num - b.num);
+	let buf = `<label for="ball">Pok&eacute; Ball type: </label><select name="ball"><option value="">Please select a Pok&eacute; Ball</option>`;
+	for (const pokeball of pokeballs) {
+		buf += `<option value="${pokeball.id}">${Utils.escapeHTML(pokeball.name)}</option>`;
+	}
+	buf += `</select>`;
+	return buf;
 }
 
 export const pages: Chat.PageTable = {
-	giveaway: {
+	giveaways: {
+		default() {
+			this.title = `[Giveaways]`;
+			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
+			this.checkCan('warn', null, Rooms.search('wifi')!);
+			return `<div class="pad">${makePageHeader()}</div>`;
+		},
 		create(args, user) {
-			if (!Rooms.get('wifi')) return `<h2>There is no Wi-Fi room on this server.</h2>`;
-			this.checkCan('warn', null, Rooms.get('wifi')!);
+			this.title = `[Create Giveaways]`;
+			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
+			if (!user.can('show', null, Rooms.get('wifi')!)) this.checkCan('warn', null, Rooms.search('wifi')!);
 			const [type] = args;
+			let buf = `<div class="pad">`;
+			buf += makePageHeader('create');
 			if (!type || !['lottery', 'question'].includes(type)) {
-
+				buf += `<center><h2>Pick a Giveaway type</h2>`;
+				buf += formatFakeButton(`/view-giveaways-create-lottery`, `<i class="fa fa-random"></i> Lottery`);
+				buf += ` | `;
+				buf += formatFakeButton(`/view-giveaways-create-question`, `<i class="fa fa-question"></i> Question`);
+				buf += `</center>`;
+			} else {
+				switch (type) {
+				case 'lottery':
+					buf += `<h2>Make a Lottery Giveaway</h2>`;
+					buf += `<form data-submitsend="/giveaway create lottery {giver}|{ot}|{tid}|{game}|{winners}|{ball}|{info}|{set}">`;
+					buf += `<label for="giver">Giver: </label><input name="giver" /><br /><br />`;
+					buf += `<label for="ot">OT: </label><input name="ot" /><br /><br />`;
+					buf += `<label for="tid">TID: </label><input name="tid" /><br /><br />`;
+					buf += `Game: <div><input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label><input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label></div>`;
+					buf += `<br /><label for="winners">Number of winners: </label><input name="winners" /><br /><br />`;
+					buf += generatePokeballDropdown();
+					buf += `<br /><br /><label for="set">Prize:</label><br /><textarea style="width:70%;height:300px" placeholder="Paste set importable" name="set"></textarea>`;
+					buf += `<br /><br /><label for="info">Additional information (if any):</label><br /><textarea style="width:50%;height:100px" placeholder="Add any additional info" name="info"></textarea>`;
+					buf += `<br /><br /><button class="button" type="submit">Create Lottery Giveaway</button>`;
+					buf += `</form>`;
+					break;
+				case 'question':
+					buf += `<h2>Make a Question Giveaway</h2>`;
+					buf += `<form data-submitsend="/giveaway create question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ball}|{info}|{set}">`;
+					buf += `<label for="giver">Giver:</label><input name="giver" /><br /><br />`;
+					buf += `<label for="ot">OT:</label><input name="ot" /><br /><br />`;
+					buf += `<label for="tid">TID:</label><input name="tid" /><br /><br />`;
+					buf += `Game:<div><input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label><input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label></div>`;
+					buf += `<br /><label for="question">Question:</label><input name="question" /><br /><br />`;
+					buf += `<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />`;
+					buf += generatePokeballDropdown();
+					buf += `<br /><br /><label for="set"></label><textarea style="width:70%;height:300px" placeholder="Paste set importable here" name="set"></textarea>`;
+					buf += `<br /><br /><label for="info">Additional information (if any):</label><br /><textarea style="width:50%;height:100px" placeholder="Add any additional info" name="info"></textarea>`;
+					buf += `<br /><br /><button class="button" type="submit">Create Question Giveaway</button>`;
+					buf += `</form>`;
+					break;
+				}
 			}
+			buf += `</div>`;
+			return buf;
+		},
+		stored(args, user) {
+			this.title = `[Stored Giveaways]`;
+			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
+			this.checkCan('warn', null, Rooms.search('wifi')!);
+			let buf = `<div class="pad">${makePageHeader(args[0] === 'add' ? 'stored-add' : 'stored')}`;
+			const [add, type] = args;
+			const giveaways = [
+				...((wifiData.storedGiveaways || {}).lottery || []),
+				...((wifiData.storedGiveaways || {}).question || []),
+			];
+			if (!giveaways.length && (!add || add !== 'add')) return `${buf}<h2>There are no giveaways stored</h2></div>`;
+			if (!add || add !== 'add') {
+				buf += `<h2>Stored Giveaways</h2>`;
+				for (let giveaway of giveaways) {
+					if (wifiData.storedGiveaways.lottery.includes(giveaway as any)) {
+						giveaway = giveaway as LotteryGiveawayData;
+						buf += `<div class="infobox"><h3 style="text-align:center">Lottery</h3><hr />`;
+						buf += Utils.html`<strong>Game:</strong> ${giveaway.game.toUpperCase()}, <strong>Giver:</strong> ${giveaway.targetUserid}, <strong>OT:</strong> ${giveaway.ot}, <strong>TID:</strong> ${giveaway.tid}, <strong># of winners:</strong> ${giveaway.winners}`;
+						buf += `<br /><strong>Pok&eacute; Ball:</strong> <psicon item="${giveaway.ball}" />`;
+						buf += `<details><summary><psicon pokemon="${giveaway.prize.species}" /> Prize</summary>`;
+						buf += `${Chat.formatText(Teams.exportSet(giveaway.prize), true)}</details>`;
+						if (giveaway.extraInfo?.trim()) {
+							buf += `<hr /><details><summary>Extra Info</summary>${Chat.formatText(giveaway.extraInfo.trim(), true)}</details>`;
+						}
+						buf += `<hr />`;
+						buf += `<button class="button" name="send" value="/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway)}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
+						if (!Users.get(giveaway.targetUserid)?.connected) {
+							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
+						} else {
+							buf += `<button class="button" style="float:right" name="send" value="/giveaway create lottery ${giveaway.targetUserid}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.winners}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}">Create giveaway</button>`;
+						}
+						buf += `</div>`;
+					} else {
+						giveaway = giveaway as QuestionGiveawayData;
+						buf += `<div class="infobox"><h3 style="text-align:center">Lottery</h3><hr />`;
+						buf += Utils.html`<strong>Game:</strong> ${giveaway.game.toUpperCase()}, <strong>Giver:</strong> ${giveaway.targetUserid}, <strong>OT:</strong> ${giveaway.ot}, <strong>TID:</strong> ${giveaway.tid}`;
+						buf += Utils.html`<br /><strong>Question:</strong> ${giveaway.question}`;
+						buf += `<br /><strong>Answer${Chat.plural(giveaway.answers.length, "s")}:</strong> ${giveaway.answers.join(', ')}`;
+						buf += `<br /><strong>Pok&eacute; Ball:</strong> <psicon item="${giveaway.ball}" />`;
+						buf += `<details><summary><psicon pokemon="${giveaway.prize.species}" /> Prize</summary>`;
+						buf += `${Chat.formatText(Teams.exportSet(giveaway.prize), true)}</details>`;
+						if (giveaway.extraInfo?.trim()) {
+							buf += `<hr /><details><summary>Extra Info</summary>${Chat.formatText(giveaway.extraInfo.trim(), true)}</details>`;
+						}
+						buf += `<hr />`;
+						buf += `<button class="button" name="send" value="/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway)}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
+						if (!Users.get(giveaway.targetUserid)?.connected) {
+							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
+						} else {
+							buf += `<button class="button" style="float:right" name="send" value="/giveaway create question ${giveaway.targetUserid}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.question}|${giveaway.answers.join(',')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}">Create giveaway</button>`;
+						}
+						buf += `</div>`;
+					}
+				}
+			} else {
+				buf += `<h2>Store a Giveaway</h2>`;
+				if (!type || !['question', 'lottery'].includes(type)) {
+					buf += `<center><h3>Pick a giveaway type</h3>`;
+					buf += formatFakeButton(`/view-giveaways-stored-add-lottery`, `<i class="fa fa-random"></i> Lottery`);
+					buf += ` | `;
+					buf += formatFakeButton(`/view-giveaways-stored-add-question`, `<i class="fa fa-question"></i> Question`);
+					buf += `</center>`;
+				} else {
+					switch (type) {
+					case 'lottery':
+						buf += `<form data-submitsend="/giveaway store lottery {giver}|{ot}|{tid}|{game}|{winners}|{ball}|{info}|{set}">`;
+						buf += `<label for="giver">Giver: </label><input name="giver" /><br /><br />`;
+						buf += `<label for="ot">OT: </label><input name="ot" /><br /><br />`;
+						buf += `<label for="tid">TID: </label><input name="tid" /><br /><br />`;
+						buf += `Game: <div><input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label><input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label></div>`;
+						buf += `<br /><label for="winners">Number of winners: </label><input name="winners" /><br /><br />`;
+						buf += generatePokeballDropdown();
+						buf += `<br /><br /><label for="set">Prize:</label><br /><textarea style="width:70%;height:300px" placeholder="Paste set importable" name="set"></textarea>`;
+						buf += `<br /><br /><label for="info">Additional information (if any):</label><br /><textarea style="width:50%;height:100px" placeholder="Add any additional info" name="info"></textarea>`;
+						buf += `<br /><br /><button class="button" type="submit">Store Lottery Giveaway</button>`;
+						buf += `</form>`;
+						break;
+					case 'question':
+						buf += `<h2>Make a Question Giveaway</h2>`;
+						buf += `<form data-submitsend="/giveaway store question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ball}|{info}|{set}">`;
+						buf += `<label for="giver">Giver:</label><input name="giver" /><br /><br />`;
+						buf += `<label for="ot">OT:</label><input name="ot" /><br /><br />`;
+						buf += `<label for="tid">TID:</label><input name="tid" /><br /><br />`;
+						buf += `Game:<div><input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label><input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label></div>`;
+						buf += `<br /><label for="question">Question:</label><input name="question" /><br /><br />`;
+						buf += `<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />`;
+						buf += generatePokeballDropdown();
+						buf += `<br /><br /><label for="set"></label><textarea style="width:70%;height:300px" placeholder="Paste set importable here" name="set"></textarea>`;
+						buf += `<br /><br /><label for="info">Additional information (if any):</label><br /><textarea style="width:50%;height:100px" placeholder="Add any additional info" name="info"></textarea>`;
+						buf += `<br /><br /><button class="button" type="submit">Store Question Giveaway</button>`;
+						buf += `</form>`;
+						break;
+					}
+				}
+			}
+			buf += `</div>`;
+			return buf;
+		},
+		submitted(args, user) {
+			this.title = `[Submitted Giveaways]`;
+			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
+			this.checkCan('warn', null, Rooms.search('wifi')!);
+			let buf = `<div class="pad">${makePageHeader(args[0] === 'add' ? 'submitted-add' : 'submitted')}`;
+			const [add, type] = args;
+			const giveaways = [
+				...((wifiData.submittedGiveaways || {}).lottery || []),
+				...((wifiData.submittedGiveaways || {}).question || []),
+			];
+			if (!giveaways.length && (!add || add !== 'add')) return `${buf}<h2>There are no submitted giveaways.</h2></div>`;
+			if (!add || add !== 'add') {
+				buf += `<h2>Submitted Giveaways</h2>`;
+				for (let giveaway of giveaways) {
+					if (wifiData.submittedGiveaways.lottery.includes(giveaway as any)) {
+						giveaway = giveaway as LotteryGiveawayData;
+						buf += `<div class="infobox"><h3 style="text-align:center">Lottery</h3><hr />`;
+						buf += Utils.html`<strong>Game:</strong> ${giveaway.game.toUpperCase()}, <strong>Giver:</strong> ${giveaway.targetUserid}, <strong>OT:</strong> ${giveaway.ot}, <strong>TID:</strong> ${giveaway.tid}, <strong># of winners:</strong> ${giveaway.winners}`;
+						buf += `<br /><strong>Pok&eacute; Ball:</strong> <psicon item="${giveaway.ball}" />`;
+						buf += `<details><summary><psicon pokemon="${giveaway.prize.species}" /> Prize</summary>`;
+						buf += `${Chat.formatText(Teams.exportSet(giveaway.prize), true)}</details>`;
+						if (giveaway.extraInfo?.trim()) {
+							buf += `<hr /><details><summary>Extra Info</summary>${Chat.formatText(giveaway.extraInfo.trim(), true)}</details>`;
+						}
+						buf += `<hr />`;
+						if (!Users.get(giveaway.targetUserid)?.connected) {
+							buf += `<button title="The giver is offline" disabled class="button disabled"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
+							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
+						} else {
+							buf += `<button class="button" name="send" value="/giveaway deny ${giveaway.targetUserid}}"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
+							buf += `<button class="button" style="float:right" name="send" value="/giveaway approve ${giveaway.targetUserid}">Create giveaway</button>`;
+						}
+						buf += `</div>`;
+					} else {
+						giveaway = giveaway as QuestionGiveawayData;
+						buf += `<div class="infobox"><h3 style="text-align:center">Lottery</h3><hr />`;
+						buf += Utils.html`<strong>Game:</strong> ${giveaway.game.toUpperCase()}, <strong>Giver:</strong> ${giveaway.targetUserid}, <strong>OT:</strong> ${giveaway.ot}, <strong>TID:</strong> ${giveaway.tid}`;
+						buf += Utils.html`<br /><strong>Question:</strong> ${giveaway.question}`;
+						buf += `<br /><strong>Answer${Chat.plural(giveaway.answers.length, "s")}:</strong> ${giveaway.answers.join(', ')}`;
+						buf += `<br /><strong>Pok&eacute; Ball:</strong> <psicon item="${giveaway.ball}" />`;
+						buf += `<details><summary><psicon pokemon="${giveaway.prize.species}" /> Prize</summary>`;
+						buf += `${Chat.formatText(Teams.exportSet(giveaway.prize), true)}</details>`;
+						if (giveaway.extraInfo?.trim()) {
+							buf += `<hr /><details><summary>Extra Info</summary>${Chat.formatText(giveaway.extraInfo.trim(), true)}</details>`;
+						}
+						buf += `<hr />`;
+						if (!Users.get(giveaway.targetUserid)?.connected) {
+							buf += `<button title="The giver is offline" disabled class="button disabled"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
+							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
+						} else {
+							buf += `<button class="button" name="send" value="/giveaway deny ${giveaway.targetUserid}}"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
+							buf += `<button class="button" style="float:right" name="send" value="/giveaway approve ${giveaway.targetUserid}">Create giveaway</button>`;
+						}
+						buf += `</div>`;
+					}
+				}
+			} else {
+				buf += `<h2>Submit a Giveaway</h2>`;
+				if (!type || !['question', 'lottery'].includes(type)) {
+					buf += `<center><h3>Pick a giveaway type</h3>`;
+					buf += formatFakeButton(`/view-giveaways-submitted-add-lottery`, `<i class="fa fa-random"></i> Lottery`);
+					buf += ` | `;
+					buf += formatFakeButton(`/view-giveaways-submitted-add-question`, `<i class="fa fa-question"></i> Question`);
+					buf += `</center>`;
+				} else {
+					switch (type) {
+					case 'lottery':
+						buf += `<form data-submitsend="/giveaway submit lottery {giver}|{ot}|{tid}|{game}|{winners}|{ball}|{info}|{set}">`;
+						buf += `<label for="giver">Giver: </label><input name="giver" /><br /><br />`;
+						buf += `<label for="ot">OT: </label><input name="ot" /><br /><br />`;
+						buf += `<label for="tid">TID: </label><input name="tid" /><br /><br />`;
+						buf += `Game: <div><input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label><input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label></div>`;
+						buf += `<br /><label for="winners">Number of winners: </label><input name="winners" /><br /><br />`;
+						buf += generatePokeballDropdown();
+						buf += `<br /><br /><label for="set">Prize:</label><br /><textarea style="width:70%;height:300px" placeholder="Paste set importable" name="set"></textarea>`;
+						buf += `<br /><br /><label for="info">Additional information (if any):</label><br /><textarea style="width:50%;height:100px" placeholder="Add any additional info" name="info"></textarea>`;
+						buf += `<br /><br /><button class="button" type="submit">Submit Lottery Giveaway</button>`;
+						buf += `</form>`;
+						break;
+					case 'question':
+						buf += `<h2>Make a Question Giveaway</h2>`;
+						buf += `<form data-submitsend="/giveaway submit question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ball}|{info}|{set}">`;
+						buf += `<label for="giver">Giver:</label><input name="giver" /><br /><br />`;
+						buf += `<label for="ot">OT:</label><input name="ot" /><br /><br />`;
+						buf += `<label for="tid">TID:</label><input name="tid" /><br /><br />`;
+						buf += `Game:<div><input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label><input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label></div>`;
+						buf += `<br /><label for="question">Question:</label><input name="question" /><br /><br />`;
+						buf += `<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />`;
+						buf += generatePokeballDropdown();
+						buf += `<br /><br /><label for="set"></label><textarea style="width:70%;height:300px" placeholder="Paste set importable here" name="set"></textarea>`;
+						buf += `<br /><br /><label for="info">Additional information (if any):</label><br /><textarea style="width:50%;height:100px" placeholder="Add any additional info" name="info"></textarea>`;
+						buf += `<br /><br /><button class="button" type="submit">Submit Question Giveaway</button>`;
+						buf += `</form>`;
+						break;
+					}
+				}
+			}
+			buf += `</div>`;
+			return buf;
 		},
 	},
 };
 
-Chat.multiLinePattern.register(`/giveaway (create|new|start) (question|lottery) `);
+Chat.multiLinePattern.register(`/giveaway (create|new|start|store|submit|save) (question|lottery) `);
