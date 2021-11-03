@@ -1565,12 +1565,14 @@ export const commands: Chat.ChatCommands = {
 					return this.parse(`/help linecount`);
 				}
 			}
+			if (!toID(val)) continue; // unset, continue and allow defaults to apply
+
 			key = key.toLowerCase().replace(/ /g, '');
 			switch (key) {
 			case 'room': case 'roomid':
 				const tarRoom = Rooms.search(val);
 				if (!tarRoom) {
-					return this.errorReply(`Room '${key}' not found.`);
+					return this.errorReply(`Room '${val}' not found.`);
 				}
 				search.roomid = tarRoom.roomid;
 				break;
