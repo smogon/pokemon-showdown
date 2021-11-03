@@ -12,37 +12,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	randomCCTeam() {
 		const team = [];
 
-		const hasDexNumber: {[k: string]: number} = {};
-		const formes: string[][] = [[], [], [], [], [], []];
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
 
-		// Pick six random Pokémon, no repeats.
-		let num: number;
-		for (let i = 0; i < this.maxTeamSize; i++) {
-			do {
-				num = this.random(151) + 1;
-			} while (num in hasDexNumber);
-			hasDexNumber[num] = i;
-		}
-
-		let formeCounter = 0;
-		for (const species of this.dex.species.all()) {
-			if (!(species.num in hasDexNumber)) continue;
-
-			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
-
-			const learnset = this.dex.species.getLearnset(species.id);
-			if (!learnset || species.forme) continue;
-			formes[hasDexNumber[species.num]].push(species.name);
-			if (++formeCounter >= 6) {
-				// Gen 1 had no alternate formes, so we can break out of the loop already.
-				break;
-			}
-		}
-
-		for (let i = 0; i < this.maxTeamSize; i++) {
-			// Choose forme.
-			const poke = this.sample(formes[i]);
-			const species = this.dex.species.get(poke);
+		for (let forme of randomN) {
+			const species = this.dex.species.get(forme);
 			const learnset = this.dex.species.getLearnset(species.id);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
@@ -104,7 +77,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			}
 
 			team.push({
-				name: poke,
+				name: species.baseSpecies,
 				species: species.name,
 				moves: this.multipleSamplesNoReplace(pool, 4),
 				gender: false,
