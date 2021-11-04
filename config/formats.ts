@@ -652,13 +652,12 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		ruleset: ['Standard', 'Dynamax Clause', '2 Ability Clause', '!Obtainable Abilities'],
+		ruleset: ['[Gen 8] Doubles OU', 'Sleep Clause Mod', '2 Ability Clause', '!Obtainable Abilities'],
 		banlist: [
-			'DUber', 'Kartana', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Zygarde-Base', 'Urshifu-Rapid-Strike',
-			'Anger Point', 'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion',
-			'Imposter', 'Innards Out', 'Intrepid Sword', 'Libero', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Rattled',
-			'Serene Grace', 'Shadow Tag', 'Simple', 'Soul-Heart', 'Stakeout', 'Steam Engine', 'Speed Boost', 'Water Bubble', 'Wonder Guard',
-			'Weakness Policy', 'Beat Up', 'Stored Power',
+			'Kyurem-Black', 'Regigigas', 'Shedinja', 'Urshifu-Rapid-Strike', 'Zygarde-Base', 'Anger Point', 'Arena Trap', 'Comatose', 'Contrary',
+			'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Intrepid Sword', 'Libero',
+			'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Rattled', 'Serene Grace', 'Simple', 'Soul-Heart', 'Stakeout',
+			'Steam Engine', 'Speed Boost', 'Water Bubble', 'Wonder Guard', 'Weakness Policy', 'Beat Up', 'Stored Power',
 		],
 	},
 
