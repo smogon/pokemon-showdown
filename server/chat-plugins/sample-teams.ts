@@ -184,7 +184,11 @@ export const SampleTeams = new class SampleTeams {
 		category = category.trim();
 		// Don't sanitize formatid here in case a team was added for a temporary format that got removed
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
+			let required = `an administrator`;
+			if (teamData.whitelist[formatid]) {
+				required = `staff in ${Chat.toListString(teamData.whitelist[formatid], "or")}`;
+			}
+			throw new Chat.ErrorMessage(`Access denied. You need to be ${required} to add teams for ${formatid}`);
 		}
 		const categoryName = this.findCategory(formatid, category);
 		if (!categoryName) {
@@ -194,9 +198,9 @@ export const SampleTeams = new class SampleTeams {
 		if (!teamName) {
 			throw new Chat.ErrorMessage(`There is no team for ${formatid} with the name of "${teamid}". Check spelling?`);
 		}
-		const oldTeam = teamData.teams[formatid][category][teamName];
-		delete teamData.teams[formatid][category][teamName];
-		if (!Object.keys(teamData.teams[formatid][category]).length) delete teamData.teams[formatid][category];
+		const oldTeam = teamData.teams[formatid][categoryName][teamName];
+		delete teamData.teams[formatid][categoryName][teamName];
+		if (!Object.keys(teamData.teams[formatid][categoryName]).length) delete teamData.teams[formatid][categoryName];
 		if (!Object.keys(teamData.teams[formatid]).filter(x => x !== 'uncategorized').length) delete teamData.teams[formatid];
 		save();
 		return oldTeam;
@@ -375,7 +379,7 @@ export const commands: Chat.ChatCommands = {
 		remove(target, room, user) {
 			const [formatid, category, teamName] = target.split(',').map(x => x.trim());
 			if (!(formatid && category && teamName)) return this.parse(`/help sampleteams`);
-			const team = SampleTeams.removeTeam(user, formatid, teamName, category || 'uncategorized');
+			const team = SampleTeams.removeTeam(user, formatid, toID(teamName), category || 'uncategorized');
 			SampleTeams.modlog(
 				this, formatid, 'REMOVETEAM', `${category || "uncategorized"}: ${teamName}: ${team}`,
 				`${user.name} removed a team from ${formatid}${category ? ` in the ${category} category` : ''}.`
