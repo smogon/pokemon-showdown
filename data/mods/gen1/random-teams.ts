@@ -160,31 +160,34 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			let skip = false;
 
-			// Limit 2 of any type as well. Diversity and minor weakness count.
-			// The second of a same type has halved chance of being added.
-			for (const type of species.types) {
-				if (typeCount[type] >= 2 * limitFactor ||
-					(typeCount[type] >= 1 * limitFactor && this.randomChance(1, 2) && pokemonPool.length > 1)) {
-					skip = true;
-					break;
+			if (!isMonotype && !this.forceMonotype) {
+				// Limit 2 of any type as well. Diversity and minor weakness count.
+				// The second of a same type has halved chance of being added.
+				for (const typeName of species.types) {
+					if (typeCount[typeName] >= 2 * limitFactor ||
+						(typeCount[typeName] >= 1 * limitFactor && this.randomChance(1, 2) && pokemonPool.length > 1)) {
+						skip = true;
+						break;
+					}
 				}
-			}
-			if (skip) {
-				rejectedButNotInvalidPool.push(species.id);
-				continue;
+
+				if (skip) {
+					rejectedButNotInvalidPool.push(species.id);
+					continue;
+				}
 			}
 
 			// We need a weakness count of spammable attacks to avoid being swept by those.
 			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard, Earthquake.
 			const pokemonWeaknesses = [];
-			for (const type in weaknessCount) {
-				const increaseCount = this.dex.getImmunity(type, species) && this.dex.getEffectiveness(type, species) > 0;
+			for (const typeName in weaknessCount) {
+				const increaseCount = this.dex.getImmunity(typeName, species) && this.dex.getEffectiveness(typeName, species) > 0;
 				if (!increaseCount) continue;
-				if (weaknessCount[type] >= 2 * limitFactor) {
+				if (weaknessCount[typeName] >= 2 * limitFactor) {
 					skip = true;
 					break;
 				}
-				pokemonWeaknesses.push(type);
+				pokemonWeaknesses.push(typeName);
 			}
 
 			if (skip) {
@@ -197,11 +200,11 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Now let's increase the counters.
 			// Type counter.
-			for (const type of species.types) {
-				if (typeCount[type]) {
-					typeCount[type]++;
+			for (const typeName of species.types) {
+				if (typeCount[typeName]) {
+					typeCount[typeName]++;
 				} else {
-					typeCount[type] = 1;
+					typeCount[typeName] = 1;
 				}
 			}
 
