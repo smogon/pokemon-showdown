@@ -16,7 +16,7 @@ const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
 
 const DATA_FILE = 'config/chat-plugins/wifi.json';
 
-type Game = 'swsh' | 'bdsp';
+type Game = 'SwSh' | 'BDSP';
 
 interface QuestionGiveawayData {
 	targetUserID: string;
@@ -88,8 +88,12 @@ if (!wifiData.stats && !wifiData.storedGiveaways && !wifiData.submittedGiveaways
 const statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
 
 const gameName: {[k in Game]: string} = {
-	swsh: 'Sword/Shield',
-	bdsp: 'Brilliant Diamond/Shining Pearl',
+	SwSh: 'Sword/Shield',
+	BDSP: 'Brilliant Diamond/Shining Pearl',
+};
+const gameidToGame: {[k: string]: Game} = {
+	swsh: 'SwSh',
+	bdsp: 'BDSP',
 };
 
 class Giveaway extends Rooms.RoomGame {
@@ -115,7 +119,7 @@ class Giveaway extends Rooms.RoomGame {
 
 	constructor(
 		host: User, giver: User, room: Room, ot: string, tid: string, ivs: string[],
-		prize: PokemonSet, game: Game = 'bdsp', ball: string, extraInfo: string
+		prize: PokemonSet, game: Game = 'BDSP', ball: string, extraInfo: string
 	) {
 		// Make into a sub-game if the gts ever opens up again
 		super(room);
@@ -148,13 +152,13 @@ class Giveaway extends Rooms.RoomGame {
 	generateReminder() {}
 
 	getStyle() {
-		if (this.game === 'bdsp') return `style="background-color: #aa66a9;color: #fff;padding: 2px 4px;"`;
+		if (this.game === 'BDSP') return `style="background-color: #aa66a9;color: #fff;padding: 2px 4px;"`;
 		return `class="broadcast-blue"`;
 	}
 
 	send(content: string) {
 		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${content}</div>`);
-		this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|It's ${gameName[this.game]} giveaway time!`);
+		this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|It's ${this.game} giveaway time!`);
 		this.room.update();
 	}
 
@@ -285,7 +289,7 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	generateWindow(rightSide: string) {
-		let buf = `<center><h3>It's ${gameName[this.game]} giveaway time!</h3>`;
+		let buf = `<center><h3>It's ${this.game} giveaway time!</h3>`;
 		buf += Utils.html`<small>Giveaway started by ${this.host.name}</small>`;
 		buf += `<table style="margin-left:auto;margin-right:auto">`;
 		buf += Utils.html`<tr><td colspan="2" style="text-align:center"><strong>Giver:</strong> <username>${this.giver.name}</username><br /><strong>OT:</strong> ${this.ot}, <strong>TID:</strong> ${this.tid}</td></tr>`;
@@ -343,9 +347,11 @@ export class QuestionGiveaway extends Giveaway {
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
 		}
-		if (!game) game = 'bdsp';
+		if (!game) game = 'BDSP';
+		game = gameidToGame[toID(game)] || game as Game;
+		if (!game) throw new Chat.ErrorMessage(`The game must be "BDSP" or "SwSh".`);
 		if (!ball) ball = 'pokeball';
-		if (!ball.endsWith('ball')) ball += 'ball';
+		if (!toID(ball).endsWith('ball')) ball = toID(ball) + 'ball';
 		if (!Dex.items.get(ball).isPokeball) {
 			throw new Chat.ErrorMessage(`${Dex.items.get(ball).name} is not a Pok\u00e9 Ball.`);
 		}
@@ -358,7 +364,7 @@ export class QuestionGiveaway extends Giveaway {
 			throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
 		}
 		return {
-			targetUser, ot, tid, game: game as Game, question, answers: answers.split(','),
+			targetUser, ot, tid, game, question, answers: answers.split(','),
 			ivs: ivs.split('/'), ball, extraInfo, prize: prize.join('|'),
 		};
 	}
@@ -522,9 +528,11 @@ export class LotteryGiveaway extends Giveaway {
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
 		}
-		if (!game) game = 'bdsp';
+		if (!game) game = 'BDSP';
+		game = gameidToGame[toID(game)] || game as Game;
+		if (!game) throw new Chat.ErrorMessage(`The game must be "BDSP" or "SwSh".`);
 		if (!ball) ball = 'pokeball';
-		if (!ball.endsWith('ball')) ball += 'ball';
+		if (!toID(ball).endsWith('ball')) ball = toID(ball) + 'ball';
 		if (!Dex.items.get(ball).isPokeball) {
 			throw new Chat.ErrorMessage(`${Dex.items.get(ball).name} is not a Pok\u00e9 Ball.`);
 		}
@@ -1306,19 +1314,19 @@ export const commands: Chat.ChatCommands = {
 };
 
 function makePageHeader(pageid?: string) {
-	const icons: {[k: string]: string} = {
-		create: `<i class="fa fa-sticky-note"></i>`,
-		stored: `<i class="fa fa-paste"></i>`,
-		'stored-add': `<i class="fa fa-paste"></i>`,
-		submitted: `<i class="fa fa-inbox"></i>`,
-		'submitted-add': `<i class="fa fa-inbox"></i>`,
-	};
 	const titles: {[k: string]: string} = {
 		create: `Create`,
 		stored: `View Stored`,
 		'stored-add': 'Store',
 		submitted: `View Submitted`,
 		'submitted-add': `Submit`,
+	};
+	const icons: Record<keyof typeof titles, string> = {
+		create: `<i class="fa fa-sticky-note"></i>`,
+		stored: `<i class="fa fa-paste"></i>`,
+		'stored-add': `<i class="fa fa-paste"></i>`,
+		submitted: `<i class="fa fa-inbox"></i>`,
+		'submitted-add': `<i class="fa fa-inbox"></i>`,
 	};
 	let buf = `<button class="button" style="float:right" name="send" value="/j view-giveaways${pageid?.trim() ? `-${pageid.trim()}` : ''}"><i class="fa fa-refresh"></i> Refresh</button>`;
 	buf += `<h1>Wi-Fi Giveaways</h1>`;
