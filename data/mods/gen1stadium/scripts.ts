@@ -532,17 +532,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			const attacker = move.useBaseOffensiveStatAndBoosts?.includes('target') ? target : source;
 			const defender = move.useBaseDefensiveStatAndBoosts?.includes('source') ? source : target;
 
-			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
+			let atkType: StatIDExceptHP = move.category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
 				atkType = move.useBaseOffensiveStatAndBoosts[1];
 			}
-			let defType: AllStatIDs = move.category === 'Physical' ? 'def' : 'spd';
+			let defType: StatIDExceptHP = move.category === 'Physical' ? 'def' : 'spd';
 			if (move.useBaseDefensiveStatAndBoosts) {
 				defType = move.useBaseDefensiveStatAndBoosts[1];
 			}
 
-			let attack = atkType === 'hp' ? attacker.maxhp : (atkType === 'currenthp' ? attacker.hp : attacker.getStat(atkType));
-			let defense = defType === 'hp' ? defender.maxhp : (defType === 'currenthp' ? defender.hp : defender.getStat(defType));
+			let attack = attacker.getStat(atkType);
+			let defense = defender.getStat(defType);
 
 			// In gen 1, screen effect is applied here.
 			if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
@@ -561,12 +561,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
 
-			if (move.ignoreOffensive && atkType !== 'hp' && atkType !== 'currenthp') {
+			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
 				attack = attacker.getStat(atkType, true);
 			}
 
-			if (move.ignoreDefensive && defType !== 'hp' && defType !== 'currenthp') {
+			if (move.ignoreDefensive) {
 				this.battle.debug('Negating (sp)def boost/penalty.');
 				// No screens
 				defense = target.getStat(defType, true);

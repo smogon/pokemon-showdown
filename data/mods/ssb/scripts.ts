@@ -658,19 +658,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			const attacker = move.useBaseOffensiveStatAndBoosts?.includes('target') ? target : source;
 			const defender = move.useBaseDefensiveStatAndBoosts?.includes('source') ? source : target;
 
-			let attackStat: AllStatIDs = category === 'Physical' ? 'atk' : 'spa';
+			let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
 				attackStat = move.useBaseOffensiveStatAndBoosts[1];
 			}
-			let defenseStat: AllStatIDs = category === 'Physical' ? 'def' : 'spd';
+			let defenseStat: StatIDExceptHP = category === 'Physical' ? 'def' : 'spd';
 			if (move.useBaseDefensiveStatAndBoosts) {
 				defenseStat = move.useBaseDefensiveStatAndBoosts[1];
 			}
 
 			const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 
-			let atkBoosts = (attackStat === 'hp' || attackStat === 'currenthp') ? 0 : attacker.boosts[attackStat];
-			let defBoosts = (defenseStat === 'hp' || defenseStat === 'currenthp') ? 0 : defender.boosts[defenseStat];
+			let atkBoosts = attacker.boosts[attackStat];
+			let defBoosts = defender.boosts[defenseStat];
 
 			let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 			let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
@@ -691,18 +691,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				defBoosts = 0;
 			}
 
-			let attack = attackStat === 'hp' ? attacker.maxhp :
-				attackStat === 'currenthp' ? attacker.hp : attacker.calculateStat(attackStat, atkBoosts);
-			let defense = defenseStat === 'hp' ? defender.maxhp :
-				defenseStat === 'currenthp' ? defender.hp : defender.calculateStat(defenseStat, defBoosts);
+			let attack = attacker.calculateStat(attackStat, atkBoosts);
+			let defense = defender.calculateStat(defenseStat, defBoosts);
 
 			attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
 			// Apply Stat Modifiers
 			attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
-			if (defenseStat !== 'hp' && defenseStat !== 'currenthp') {
-				defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
-			}
+			defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
 
 			if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 				defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);

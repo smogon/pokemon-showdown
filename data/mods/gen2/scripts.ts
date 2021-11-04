@@ -570,11 +570,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			const attacker = move.useBaseOffensiveStatAndBoosts?.includes('target') ? target : source;
 			const defender = move.useBaseDefensiveStatAndBoosts?.includes('source') ? source : target;
 
-			let atkType: AllStatIDs = move.category === 'Physical' ? 'atk' : 'spa';
+			let atkType: StatIDExceptHP = move.category === 'Physical' ? 'atk' : 'spa';
 			if (move.useBaseOffensiveStatAndBoosts) {
 				atkType = move.useBaseOffensiveStatAndBoosts[1];
 			}
-			let defType: AllStatIDs = move.category === 'Physical' ? 'def' : 'spd';
+			let defType: StatIDExceptHP = move.category === 'Physical' ? 'def' : 'spd';
 			if (move.useBaseDefensiveStatAndBoosts) {
 				defType = move.useBaseDefensiveStatAndBoosts[1];
 			}
@@ -585,17 +585,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!suppressMessages) this.battle.add('-crit', target);
 				// Stat level modifications are ignored if they are neutral to or favour the defender.
 				// Reflect and Light Screen defensive boosts are only ignored if stat level modifications were also ignored as a result of that.
-				if ((atkType === 'hp' || atkType === 'currenthp') ? 0 : attacker.boosts[atkType] <=
-					((defType === 'hp' || defType === 'currenthp') ? 0 : defender.boosts[defType])) {
+				if (attacker.boosts[atkType] <= defender.boosts[defType]) {
 					unboosted = true;
 					noburndrop = true;
 				}
 			}
 
-			let attack = atkType === 'hp' ? attacker.maxhp :
-				atkType === 'currenthp' ? attacker.hp : attacker.getStat(atkType, unboosted, noburndrop);
-			let defense = defType === 'hp' ? defender.maxhp :
-				defType === 'currenthp' ? defender.hp : defender.getStat(defType, unboosted);
+			let attack = attacker.getStat(atkType, unboosted, noburndrop);
+			let defense = defender.getStat(defType, unboosted);
 
 			// Using Beat Up
 			if (move.allies) {
@@ -605,12 +602,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Moves that ignore offense and defense respectively.
-			if (move.ignoreOffensive && atkType !== 'hp' && atkType !== 'currenthp') {
+			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
 				attack = attacker.getStat(atkType, true, true);
 			}
 
-			if (move.ignoreDefensive && defType !== 'hp' && defType !== 'currenthp') {
+			if (move.ignoreDefensive) {
 				this.battle.debug('Negating (sp)def boost/penalty.');
 				// No screens
 				defense = target.getStat(defType, true, true);
