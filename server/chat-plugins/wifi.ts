@@ -153,7 +153,9 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	send(content: string) {
-		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${content}</div>`).update();
+		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${content}</div>`);
+		this.room.add(`|C:|${Math.floor(Date.now() / 1000)}|&|It's ${gameName[this.game]} giveaway time!`);
+		this.room.update();
 	}
 
 	changeUhtml(content: string) {
@@ -502,7 +504,7 @@ export class LotteryGiveaway extends Giveaway {
 
 		this.send(this.generateReminder(false));
 
-		this.timer = setTimeout(() => this.drawLottery(), 1000 * 60 * 0.5);
+		this.timer = setTimeout(() => this.drawLottery(), 1000 * 60 * 2);
 	}
 
 	static splitTarget(target: string, sep = '|', context: Chat.CommandContext, forCreate = false) {
