@@ -281,7 +281,7 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	generateWindow(rightSide: string) {
-		let buf = `<center><h3>It's giveaway time!</h3>`;
+		let buf = `<center><h3>It's ${gameName[this.game]} giveaway time!</h3>`;
 		buf += Utils.html`<small>Giveaway started by ${this.host.name}</small>`;
 		buf += `<table style="margin-left:auto;margin-right:auto">`;
 		buf += Utils.html`<tr><td colspan="2" style="text-align:center"><strong>Giver:</strong> <username>${this.giver.name}</username><br /><strong>OT:</strong> ${this.ot}, <strong>TID:</strong> ${this.tid}</td></tr>`;
