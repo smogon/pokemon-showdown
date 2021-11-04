@@ -19449,6 +19449,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('wonderroom');
 			},
+			// Swapping defenses partially implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 5,
 			onFieldEnd() {

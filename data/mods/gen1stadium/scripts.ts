@@ -568,7 +568,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ignoreDefensive) {
 				this.battle.debug('Negating (sp)def boost/penalty.');
-				// No screens
 				defense = target.getStat(defType, true);
 			}
 

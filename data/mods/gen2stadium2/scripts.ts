@@ -370,7 +370,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ignoreDefensive) {
 				this.battle.debug('Negating (sp)def boost/penalty.');
-				// No screens
+				// The attack drop from the burn is only applied when attacker's attack level is higher than defender's defense level.
 				defense = target.getStat(defType, true, true);
 			}
 
