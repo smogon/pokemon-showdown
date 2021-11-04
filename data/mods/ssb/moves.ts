@@ -908,21 +908,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return 5;
 			},
 			onModifyMove(move, attacker, defender) {
-				if (!move.useBaseOffensiveStatAndBoosts?.includes('atk') &&
-					!move.useBaseOffensiveStatAndBoosts?.includes('spa')) return;
-				if (move.useBaseOffensiveStatAndBoosts.includes('target')) {
+				const offensiveAndBoosts = move.useBaseOffensiveStatAndBoosts;
+				if (!offensiveAndBoosts) return;
+				if (!['atk', 'spa'].includes(offensiveAndBoosts[1])) return;
+				if (offensiveAndBoosts[0] === 'target') {
 					if (!defender) return;
-					if (defender.getStat('atk') > defender.getStat('spa')) {
-						move.useBaseOffensiveStatAndBoosts[1] = 'spa';
-					} else {
-						move.useBaseOffensiveStatAndBoosts[1] = 'atk';
-					}
+					move.useBaseOffensiveStatAndBoosts[1] = defender.getStat('atk') > defender.getStat('spa') ? 'spa' : 'atk';
 				} else {
-					if (attacker.getStat('atk') > attacker.getStat('spa')) {
-						move.useBaseOffensiveStatAndBoosts[1] = 'spa';
-					} else {
-						move.useBaseOffensiveStatAndBoosts[1] = 'atk';
-					}
+					move.useBaseOffensiveStatAndBoosts[1] = attacker.getStat('atk') > attacker.getStat('spa') ? 'spa' : 'atk';
 				}
 			},
 			// Stat modifying in scripts.ts
