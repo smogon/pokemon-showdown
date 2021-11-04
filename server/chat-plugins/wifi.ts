@@ -349,7 +349,7 @@ export class QuestionGiveaway extends Giveaway {
 		}
 		if (!game) game = 'BDSP';
 		game = gameidToGame[toID(game)] || game as Game;
-		if (!game) throw new Chat.ErrorMessage(`The game must be "BDSP" or "SwSh".`);
+		if (!game || !['BDSP', 'SwSh'].includes(game)) throw new Chat.ErrorMessage(`The game must be "BDSP" or "SwSh".`);
 		if (!ball) ball = 'pokeball';
 		if (!toID(ball).endsWith('ball')) ball = toID(ball) + 'ball';
 		if (!Dex.items.get(ball).isPokeball) {
@@ -530,7 +530,7 @@ export class LotteryGiveaway extends Giveaway {
 		}
 		if (!game) game = 'BDSP';
 		game = gameidToGame[toID(game)] || game as Game;
-		if (!game) throw new Chat.ErrorMessage(`The game must be "BDSP" or "SwSh".`);
+		if (!game || !['BDSP', 'SwSh'].includes(game)) throw new Chat.ErrorMessage(`The game must be "BDSP" or "SwSh".`);
 		if (!ball) ball = 'pokeball';
 		if (!toID(ball).endsWith('ball')) ball = toID(ball) + 'ball';
 		if (!Dex.items.get(ball).isPokeball) {
