@@ -287,6 +287,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Gym Challenge",
+		threads: [
+			`&bullet; <a href="https://www.pokemon.com/us/pokemon-news/register-for-the-pokemon-gym-challenge-online-competition/">Gym Challenge Registration</a>`,
+		],
 
 		mod: 'gen8',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
