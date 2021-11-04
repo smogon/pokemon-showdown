@@ -266,18 +266,20 @@ class Giveaway extends Rooms.RoomGame {
 			const array = Object.keys(convertedIVs).map((x, i) => `${convertedIVs[x as StatID]} ${statNames[i]}`);
 			ivsStr = `IVs: ${array.join(' / ')}  `;
 		}
-		if (/\nivs:/i.test(set)) {
-			const arr = set.split('\n');
-			const index = arr.findIndex(x => /^ivs:/i.test(x));
-			arr[index] = ivsStr;
-			set = arr.join('\n');
-		} else if (/nature\n:/i.test(set)) {
-			const arr = set.split('\n');
-			const index = arr.findIndex(x => /nature$/i.test(x));
-			arr.splice(index + 1, 0, ivsStr);
-			set = arr.join('\n');
-		} else {
-			set += `\n${ivsStr}`;
+		if (ivsStr) {
+			if (/\nivs:/i.test(set)) {
+				const arr = set.split('\n');
+				const index = arr.findIndex(x => /^ivs:/i.test(x));
+				arr[index] = ivsStr;
+				set = arr.join('\n');
+			} else if (/nature\n/i.test(set)) {
+				const arr = set.split('\n');
+				const index = arr.findIndex(x => /nature$/i.test(x));
+				arr.splice(index + 1, 0, ivsStr);
+				set = arr.join('\n');
+			} else {
+				set += `\n${ivsStr}`;
+			}
 		}
 		return set;
 	}
