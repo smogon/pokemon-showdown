@@ -810,7 +810,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 				const request = JSON.parse(lines[2].slice(9));
 				if (request === null) {
 					this.forfeitPlayer(player, 'silent');
-					player.sendRoom(`|request|null`);
 					break;
 				}
 				request.rqid = this.rqid;
