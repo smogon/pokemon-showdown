@@ -13,7 +13,7 @@ import {RoomSection, RoomSections} from './room-settings';
 
 /* eslint no-else-return: "error" */
 
-const MAX_REASON_LENGTH = 300;
+const MAX_REASON_LENGTH = 600;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
 const DAY = 24 * 60 * 60 * 1000;
