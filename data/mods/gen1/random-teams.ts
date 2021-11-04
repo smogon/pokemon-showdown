@@ -240,7 +240,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			pokemon.push(this.randomSet(species));
 		}
 
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !isMonotype) {
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !isMonotype && !this.hasBans) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 

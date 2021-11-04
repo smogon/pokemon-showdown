@@ -85,6 +85,7 @@ export class RandomTeams {
 	format: Format;
 	prng: PRNG;
 	noStab: string[];
+	hasBans: boolean;
 	readonly maxTeamSize: number;
 	readonly forceMonotype: string | undefined;
 
@@ -100,6 +101,7 @@ export class RandomTeams {
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.noStab = NoStab;
+		this.hasBans = false;
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;
@@ -2326,7 +2328,10 @@ export class RandomTeams {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		for (let species of this.dex.species.all()) {
-			if (this.dex.formats.getRuleTable(this.format).isBannedSpecies(species)) continue;
+			if (this.dex.formats.getRuleTable(this.format).isBannedSpecies(species)) {
+				this.hasBans = true;
+				continue;
+			}
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
 			if (this.dex.currentMod === 'gen8bdsp' && species.gen > 4) continue;
 			if (isMonotype) {
@@ -2506,7 +2511,7 @@ export class RandomTeams {
 			// For setting Zoroark's level
 			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !this.hasBans) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 
