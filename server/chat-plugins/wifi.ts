@@ -147,19 +147,19 @@ class Giveaway extends Rooms.RoomGame {
 
 	generateReminder() {}
 
-	giveawayStyle() {
+	getStyle() {
 		if (this.game === 'bdsp') return `style="background-color: #aa66a9;color: #fff;padding: 2px 4px;"`;
 		return `class="broadcast-blue"`;
 	}
 
 	send(content: string) {
-		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${content}</div>`);
-		this.room.add(`|C:|${Math.floor(Date.now() / 1000)}|&|It's ${gameName[this.game]} giveaway time!`);
+		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${content}</div>`);
+		this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|It's ${gameName[this.game]} giveaway time!`);
 		this.room.update();
 	}
 
 	changeUhtml(content: string) {
-		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, `<div ${this.giveawayStyle()}>${content}</div>`);
+		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, `<div ${this.getStyle()}>${content}</div>`);
 		this.room.update();
 	}
 
@@ -183,7 +183,7 @@ class Giveaway extends Rooms.RoomGame {
 			if (user.latestIp === ip && !Config.noipchecks || user.previousIDs.includes(id)) {
 				user.sendTo(
 					this.room,
-					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${this.generateReminder()}</div>`
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${this.generateReminder()}</div>`
 				);
 				this.joined.delete(ip);
 			}
@@ -565,12 +565,12 @@ export class LotteryGiveaway extends Giveaway {
 			if (this.checkJoined(thisUser)) {
 				thisUser.sendTo(
 					this.room,
-					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${joined}</div>`
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${joined}</div>`
 				);
 			} else {
 				thisUser.sendTo(
 					this.room,
-					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${notJoined}</div>`
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${notJoined}</div>`
 				);
 			}
 		}
@@ -587,7 +587,7 @@ export class LotteryGiveaway extends Giveaway {
 		this.joined.set(user.latestIp, user.id);
 		user.sendTo(
 			this.room,
-			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${this.generateReminder(true)}</div>`
+			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${this.generateReminder(true)}</div>`
 		);
 		user.sendTo(this.room, "You have successfully joined the lottery giveaway.");
 	}
@@ -602,7 +602,7 @@ export class LotteryGiveaway extends Giveaway {
 		}
 		user.sendTo(
 			this.room,
-			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.giveawayStyle()}>${this.generateReminder(false)}</div>`
+			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${this.generateReminder(false)}</div>`
 		);
 		user.sendTo(this.room, "You have left the lottery giveaway.");
 	}
@@ -1353,7 +1353,7 @@ function generatePokeballDropdown() {
 
 export const pages: Chat.PageTable = {
 	giveaways: {
-		default() {
+		''() {
 			this.title = `[Giveaways]`;
 			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
 			this.checkCan('warn', null, Rooms.search('wifi')!);
