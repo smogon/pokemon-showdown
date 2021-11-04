@@ -524,7 +524,7 @@ export class TeamValidator {
 		problem = this.checkItem(set, item, setHas);
 		if (problem) problems.push(problem);
 		if (ruleTable.has('obtainablemisc')) {
-			if (dex.gen <= 1 || ruleTable.has('allowavs')) {
+			if (dex.gen <= 1) {
 				if (item.id) {
 					// no items allowed
 					set.item = '';
