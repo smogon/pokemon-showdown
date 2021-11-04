@@ -253,7 +253,7 @@ class Giveaway extends Rooms.RoomGame {
 
 	// Wi-Fi uses special IV syntax to show hyper trained IVs
 	static convertIVs(setObj: PokemonSet, ivs: string[]) {
-		let set = Teams.exportSet(setObj, {showAllInvestment: 'iv'});
+		let set = Teams.exportSet(setObj);
 		let ivsStr = '';
 		if (ivs.length) {
 			const convertedIVs = {hp: '31', atk: '31', def: '31', spa: '31', spd: '31', spe: '31'};

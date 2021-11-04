@@ -339,7 +339,7 @@ export const Teams = new class Teams {
 	/**
 	 * Exports a team in human-readable PS export format
 	 */
-	export(team: PokemonSet[], options?: {hideStats?: boolean, showAllInvestment?: 'both' | 'ev' | 'iv'}) {
+	export(team: PokemonSet[], options?: {hideStats?: boolean}) {
 		let output = '';
 		for (const set of team) {
 			output += this.exportSet(set, options) + `\n`;
@@ -347,7 +347,7 @@ export const Teams = new class Teams {
 		return output;
 	}
 
-	exportSet(set: PokemonSet, options: {hideStats?: boolean, showAllInvestment?: 'both' | 'ev' | 'iv'} = {}) {
+	exportSet(set: PokemonSet, {hideStats}: {hideStats?: boolean} = {}) {
 		let out = ``;
 
 		// core
@@ -386,15 +386,12 @@ export const Teams = new class Teams {
 		}
 
 		// stats
-		if (!options.hideStats) {
+		if (!hideStats) {
 			if (set.evs) {
-				let stats = Dex.stats.ids().map(
+				const stats = Dex.stats.ids().map(
 					stat => set.evs[stat] ?
 						`${set.evs[stat]} ${Dex.stats.shortNames[stat]}` : ``
 				).filter(Boolean);
-				if (options.showAllInvestment === 'both' || options.showAllInvestment === 'ev') {
-					stats = Dex.stats.ids().map(stat => `${set.evs[stat]} ${Dex.stats.shortNames[stat]}`).filter(Boolean);
-				}
 				if (stats.length) {
 					out += `EVs: ${stats.join(" / ")}  \n`;
 				}
@@ -403,13 +400,10 @@ export const Teams = new class Teams {
 				out += `${set.nature} Nature  \n`;
 			}
 			if (set.ivs) {
-				let stats = Dex.stats.ids().map(
+				const stats = Dex.stats.ids().map(
 					stat => (set.ivs[stat] !== 31 && set.ivs[stat] !== undefined) ?
 						`${set.ivs[stat] || 0} ${Dex.stats.shortNames[stat]}` : ``
 				).filter(Boolean);
-				if (options.showAllInvestment === 'both' || options.showAllInvestment === 'iv') {
-					stats = Dex.stats.ids().map(stat => `${set.ivs[stat] || 0} ${Dex.stats.shortNames[stat]}`).filter(Boolean);
-				}
 				if (stats.length) {
 					out += `IVs: ${stats.join(" / ")}  \n`;
 				}
