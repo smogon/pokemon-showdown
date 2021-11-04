@@ -133,6 +133,13 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		onResidualOrder: 11,
+		onResidual(pokemon) {
+			if (pokemon.hitSelf) return;
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+				pokemon.eatItem();
+			}
+		},
 		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
@@ -1696,6 +1703,13 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		onResidualOrder: 12,
+		onResidual(pokemon) {
+			if (pokemon.hitSelf) return;
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+				pokemon.eatItem();
+			}
+		},
 		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
@@ -2430,6 +2444,13 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onDamagingHit(damage, pokemon) {
+			if (pokemon.hitSelf) return;
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 11,
+		onResidual(pokemon) {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
@@ -3178,6 +3199,13 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		onResidualOrder: 11,
+		onResidual(pokemon) {
+			if (pokemon.hitSelf) return;
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+				pokemon.eatItem();
+			}
+		},
 		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
@@ -3769,6 +3797,13 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onDamagingHit(damage, pokemon) {
+			if (pokemon.hitSelf) return;
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 12,
+		onResidual(pokemon) {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -5015,6 +5050,13 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onDamagingHit(damage, pokemon) {
+			if (pokemon.hitSelf) return;
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 12,
+		onResidual(pokemon) {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -6770,6 +6812,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onDamagingHit(damage, pokemon) {
 			if (pokemon.hitSelf) return;
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 11,
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
