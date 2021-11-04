@@ -908,10 +908,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return 5;
 			},
 			onModifyMove(move, attacker, defender) {
-				const offensiveAndBoosts = move.useBaseOffensiveStatAndBoosts;
-				if (!offensiveAndBoosts) return;
-				if (!['atk', 'spa'].includes(offensiveAndBoosts[1])) return;
-				if (offensiveAndBoosts[0] === 'target') {
+				if (!move.useBaseOffensiveStatAndBoosts) return;
+				if (!['atk', 'spa'].includes(move.useBaseOffensiveStatAndBoosts[1])) return;
+				if (move.useBaseOffensiveStatAndBoosts[0] === 'target') {
 					if (!defender) return;
 					move.useBaseOffensiveStatAndBoosts[1] = defender.getStat('atk') > defender.getStat('spa') ? 'spa' : 'atk';
 				} else {
