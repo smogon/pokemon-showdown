@@ -1457,11 +1457,10 @@ export class RandomGen7Teams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon = [];
 
 		// For Monotype
-		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
@@ -1731,7 +1730,7 @@ export class RandomGen7Teams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const forceResult = (depth >= 4);
-		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
 
 		// The teams generated depend on the tier choice in such a way that
 		// no exploitable information is leaked from rolling the tier in getTeam(p1).

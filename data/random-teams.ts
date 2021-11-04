@@ -86,6 +86,7 @@ export class RandomTeams {
 	prng: PRNG;
 	noStab: string[];
 	hasBans: boolean;
+	readonly ruleTable: RuleTable;
 	readonly maxTeamSize: number;
 	readonly forceMonotype: string | undefined;
 
@@ -101,13 +102,13 @@ export class RandomTeams {
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.noStab = NoStab;
-		this.hasBans = false;
 
-		const ruleTable = Dex.formats.getRuleTable(format);
-		this.maxTeamSize = ruleTable.maxTeamSize;
-		const forceMonotype = ruleTable.valueRules.get('forcemonotype');
+		this.ruleTable = Dex.formats.getRuleTable(format);
+		this.maxTeamSize = this.ruleTable.maxTeamSize;
+		const forceMonotype = this.ruleTable.valueRules.get('forcemonotype');
 		this.forceMonotype = forceMonotype && this.dex.types.get(forceMonotype).exists ?
 			this.dex.types.get(forceMonotype).name : undefined;
+		this.hasBans = false;
 
 		this.factoryTier = '';
 		this.format = format;
@@ -2328,7 +2329,7 @@ export class RandomTeams {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		for (let species of this.dex.species.all()) {
-			if (this.dex.formats.getRuleTable(this.format).isBannedSpecies(species)) {
+			if (this.ruleTable.isBannedSpecies(species)) {
 				this.hasBans = true;
 				continue;
 			}
@@ -2350,16 +2351,15 @@ export class RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
-		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff
-		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
+		const usePotD = global.Config && Config.potd && this.ruleTable.has('potd');
 		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
 
 		const baseFormes: {[k: string]: number} = {};
@@ -2456,7 +2456,7 @@ export class RandomTeams {
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0,
-				this.format.gameType !== 'singles', this.dex.formats.getRuleTable(this.format).has('dynamaxclause'));
+				this.format.gameType !== 'singles', this.ruleTable.has('dynamaxclause'));
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
