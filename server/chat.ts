@@ -442,7 +442,7 @@ export class PageContext extends MessageContext {
 			if (typeof handler === 'function') {
 				break;
 			}
-			handler = handler[parts.shift() || 'default'];
+			handler = handler[parts.shift() || 'default'] || handler[''];
 		}
 
 		this.args = parts;
