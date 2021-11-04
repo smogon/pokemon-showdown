@@ -1573,8 +1573,8 @@ export class BattleActions {
 			attackStat = move.overrideOffensiveStat;
 		}
 		let defenseStat: StatIDExceptHP = category === 'Physical' ? 'def' : 'spd';
-		if (move.overrideOffensiveStat) {
-			defenseStat = move.overrideOffensiveStat;
+		if (move.overrideDefensiveStat) {
+			defenseStat = move.overrideDefensiveStat;
 		}
 
 		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
