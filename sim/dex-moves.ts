@@ -147,10 +147,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	contestType?: string;
 	noPPBoosts?: boolean;
 
-	// stats used for the move
-	useBaseOffensiveStatAndBoosts?: ['target' | 'source', StatIDExceptHP];
-	useBaseDefensiveStatAndBoosts?: ['target' | 'source', StatIDExceptHP];
-
 	// Z-move data
 	// -----------
 	/**
@@ -207,6 +203,16 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	basePowerModifier?: number;
 	critModifier?: number;
 	critRatio?: number;
+	/**
+	 * controls which pokemon it draws the attack stats from. This does not use the pokemon's ability or item
+	 */
+	overrideOffensivePokemon?: 'target' | 'source';
+	overrideOffensiveStat?: StatIDExceptHP;
+	/**
+	 * controls which pokemon it draws the defense stats from. This does not use the pokemon's ability or item
+	 */
+	overrideDefensivePokemon?: 'target' | 'source';
+	overrideDefensiveStat?: StatIDExceptHP;
 	forceSTAB?: boolean;
 	ignoreAbility?: boolean;
 	ignoreAccuracy?: boolean;

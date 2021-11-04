@@ -1565,16 +1565,16 @@ export class BattleActions {
 
 		const level = source.level;
 
-		const attacker = move.useBaseOffensiveStatAndBoosts?.includes('target') ? target : source;
-		const defender = move.useBaseDefensiveStatAndBoosts?.includes('source') ? source : target;
+		const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+		const defender = move.overrideDefensivePokemon === 'source' ? source : target;
 
 		let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
-		if (move.useBaseOffensiveStatAndBoosts) {
-			attackStat = move.useBaseOffensiveStatAndBoosts[1];
+		if (move.overrideOffensiveStat) {
+			attackStat = move.overrideOffensiveStat;
 		}
 		let defenseStat: StatIDExceptHP = category === 'Physical' ? 'def' : 'spd';
-		if (move.useBaseDefensiveStatAndBoosts) {
-			defenseStat = move.useBaseDefensiveStatAndBoosts[1];
+		if (move.overrideOffensiveStat) {
+			defenseStat = move.overrideOffensiveStat;
 		}
 
 		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};

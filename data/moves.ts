@@ -1399,7 +1399,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		useBaseOffensiveStatAndBoosts: ['source', 'def'],
+		overrideOffensiveStat: 'def',
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -5621,7 +5621,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		useBaseOffensiveStatAndBoosts: ['target', 'atk'],
+		overrideOffensivePokemon: 'target',
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -13309,7 +13309,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		useBaseDefensiveStatAndBoosts: ['target', 'def'],
+		overrideDefensiveStat: 'def',
 		name: "Psyshock",
 		pp: 10,
 		priority: 0,
@@ -13324,7 +13324,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
-		useBaseDefensiveStatAndBoosts: ['target', 'def'],
+		overrideDefensiveStat: 'def',
 		name: "Psystrike",
 		pp: 10,
 		priority: 0,
@@ -14852,7 +14852,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
-		useBaseDefensiveStatAndBoosts: ['target', 'def'],
+		overrideDefensiveStat: 'def',
 		name: "Secret Sword",
 		pp: 10,
 		priority: 0,
@@ -19437,10 +19437,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onModifyMove(move, source, target) {
-				if (!move.useBaseOffensiveStatAndBoosts) return;
-				const statAndBoosts = move.useBaseOffensiveStatAndBoosts[1];
+				if (!move.overrideOffensiveStat) return;
+				const statAndBoosts = move.overrideOffensiveStat;
 				if (!['def', 'spd'].includes(statAndBoosts)) return;
-				move.useBaseOffensiveStatAndBoosts[1] = statAndBoosts === 'def' ? 'spd' : 'def';
+				move.overrideOffensiveStat = statAndBoosts === 'def' ? 'spd' : 'def';
 				this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp. '}Def boosts when Wonder Room is active.`);
 			},
 			onFieldStart(field, source) {

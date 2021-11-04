@@ -328,16 +328,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				level = move.allies[0].level;
 			}
 
-			const attacker = move.useBaseOffensiveStatAndBoosts?.includes('target') ? target : source;
-			const defender = move.useBaseDefensiveStatAndBoosts?.includes('source') ? source : target;
+			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+			const defender = move.overrideDefensivePokemon === 'source' ? source : target;
 
 			let atkType: StatIDExceptHP = move.category === 'Physical' ? 'atk' : 'spa';
-			if (move.useBaseOffensiveStatAndBoosts) {
-				atkType = move.useBaseOffensiveStatAndBoosts[1];
+			if (move.overrideOffensiveStat) {
+				atkType = move.overrideOffensiveStat;
 			}
 			let defType: StatIDExceptHP = move.category === 'Physical' ? 'def' : 'spd';
-			if (move.useBaseDefensiveStatAndBoosts) {
-				defType = move.useBaseDefensiveStatAndBoosts[1];
+			if (move.overrideDefensiveStat) {
+				defType = move.overrideDefensiveStat;
 			}
 			let unboosted = false;
 			let noburndrop = false;
