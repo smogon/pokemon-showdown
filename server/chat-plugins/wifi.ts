@@ -1138,6 +1138,11 @@ export const commands: Chat.ChatCommands = {
 			},
 		},
 		submit: {
+			''(target, room, user) {
+				room = this.requireRoom('wifi' as RoomID);
+				this.checkChat();
+				this.parse('/j view-giveaways-submitted-add');
+			},
 			question(target, room, user) {
 				room = this.room = Rooms.search('wifi') || null;
 				if (!room) {
@@ -1301,6 +1306,7 @@ export const commands: Chat.ChatCommands = {
 			`<details><summary>Giveaway participation commands</summary>` +
 			`<code>/guess [target]</code> - Guesses an answer for a question giveaway.`
 		);
+		buf.push(`<code>/giveaway submit</code> - Allows users to submit giveaways. They must remain online after submitting for it to go through.`);
 		buf.push(`<code>/giveaway viewanswer</code> - Guesses an answer for a question giveaway. Requires: Giveaway host/giver`);
 		buf.push(`<code>/giveaway remind</code> - Shows the details of the current giveaway.`);
 		buf.push(`<code>/giveaway join/leave</code> - Joins/leaves a lottery giveaway.</details>`);
