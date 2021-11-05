@@ -49,7 +49,7 @@ interface WifiData {
 	submittedGiveaways: {question: QuestionGiveawayData[], lottery: LotteryGiveawayData[]};
 }
 
-const wifiData: WifiData = (() => {
+export let wifiData: WifiData = (() => {
 	try {
 		return JSON.parse(FS(DATA_FILE).readSync());
 	} catch (e: any) {
@@ -74,15 +74,9 @@ function saveData() {
 
 // Convert old file type
 if (!wifiData.stats && !wifiData.storedGiveaways && !wifiData.submittedGiveaways) {
-	const stats = wifiData;
-	for (const i in wifiData) {
-		delete (wifiData as any)[i];
-	}
-	(wifiData as any).stats = stats;
-	wifiData.storedGiveaways = wifiData.submittedGiveaways = {
-		question: [],
-		lottery: [],
-	};
+	// we cast under the assumption that it's the old file format
+	const stats = {...wifiData} as unknown as {[k: string]: number[]};
+	wifiData = {stats, storedGiveaways: {question: [], lottery: []}, submittedGiveaways: {question: [], lottery: []}};
 	saveData();
 }
 
