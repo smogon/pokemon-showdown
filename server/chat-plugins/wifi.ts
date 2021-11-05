@@ -1134,7 +1134,7 @@ export const commands: Chat.ChatCommands = {
 				wifiData.storedGiveaways.lottery.push(data);
 				saveData();
 
-				this.privateModAction(`${user.name} saved a question giveaway for ${targetUser.name}.`);
+				this.privateModAction(`${user.name} saved a lottery giveaway for ${targetUser.name}.`);
 				this.modlog('LOTTERY GIVEAWAY SAVE');
 			},
 		},
