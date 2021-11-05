@@ -327,17 +327,24 @@ export class QuestionGiveaway extends Giveaway {
 		this.timer = setTimeout(() => this.start(), 1000 * 60);
 	}
 
-	static splitTarget(target: string, sep = '|', context: Chat.CommandContext, forCreate = false) {
+	static splitTarget(
+		target: string, sep = '|', context: Chat.CommandContext,
+		user: User, type: 'create' | 'store' | 'submit'
+	) {
 		let [
 			giver, ot, tid, game, question, answers, ivs, ball, extraInfo, ...prize
 		] = target.split(sep).map(param => param.trim());
 		if (!(giver && ot && tid && prize?.length && question && answers?.split(',').length)) {
-			return context.parse(`/help giveaway`);
+			context.parse(`/help giveaway`);
+			throw new Chat.Interruption();
 		}
 		const targetUser = Users.get(giver);
 		if (!targetUser?.connected) throw new Chat.ErrorMessage(`User '${giver}' is not online.`);
-		if (!forCreate || (context.user.id !== targetUser.id && !context.user.can('show', null, context.room!))) {
+		if (type === 'create' && !(user.id === targetUser.id && user.can('show', null, context.room!))) {
 			context.checkCan('warn', null, context.room!);
+		}
+		if (type !== 'create' && user.id !== targetUser.id) {
+			throw new Chat.ErrorMessage(`You can't ${type} giveways for other users.`);
 		}
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
@@ -359,7 +366,7 @@ export class QuestionGiveaway extends Giveaway {
 			throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
 		}
 		return {
-			targetUser, ot, tid, game, question, answers: answers.split(','),
+			targetUser, ot, tid, game: game as Game, question, answers: answers.split(','),
 			ivs: ivs.split('/'), ball, extraInfo, prize: prize.join('|'),
 		};
 	}
@@ -510,7 +517,10 @@ export class LotteryGiveaway extends Giveaway {
 		this.timer = setTimeout(() => this.drawLottery(), 1000 * 60 * 2);
 	}
 
-	static splitTarget(target: string, sep = '|', context: Chat.CommandContext, forCreate = false) {
+	static splitTarget(
+		target: string, sep = '|', context: Chat.CommandContext,
+		user: User, type: 'create' | 'store' | 'submit'
+	) {
 		let [giver, ot, tid, game, winners, ivs, ball, extraInfo, ...prize] = target.split(sep).map(param => param.trim());
 		if (!(giver && ot && tid && prize?.length)) {
 			context.parse(`/help giveaway`);
@@ -518,8 +528,11 @@ export class LotteryGiveaway extends Giveaway {
 		}
 		const targetUser = Users.get(giver);
 		if (!targetUser?.connected) throw new Chat.ErrorMessage(`User '${giver}' is not online.`);
-		if (forCreate && context.user.id !== targetUser.id && !context.user.can('show', null, context.room!)) {
+		if (type === 'create' && !(user.id === targetUser.id && user.can('show', null, context.room!))) {
 			context.checkCan('warn', null, context.room!);
+		}
+		if (type !== 'create' && user.id !== targetUser.id) {
+			throw new Chat.ErrorMessage(`You can't ${type} giveways for other users.`);
 		}
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
@@ -923,6 +936,7 @@ export const commands: Chat.ChatCommands = {
 	giveaway: {
 		help: '',
 		''() {
+			this.runBroadcast();
 			this.run('giveawayhelp');
 		},
 		view: {
@@ -1029,7 +1043,7 @@ export const commands: Chat.ChatCommands = {
 				// Syntax: giver|ot|tid|game|question|answer1,answer2,etc|ivs/format/like/this|pokeball|packed set
 				const {
 					targetUser, ot, tid, game, question, answers, ivs, ball, extraInfo, prize,
-				} = QuestionGiveaway.splitTarget(target, '|', this, true);
+				} = QuestionGiveaway.splitTarget(target, '|', this, user, 'create');
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
@@ -1047,7 +1061,7 @@ export const commands: Chat.ChatCommands = {
 				// Syntax: giver|ot|tid|game|# of winners|ivs/like/this|pokeball|info|packed set
 				const {
 					targetUser, ot, tid, game, winners, ivs, ball, prize, extraInfo,
-				} = LotteryGiveaway.splitTarget(target, '|', this, true);
+				} = LotteryGiveaway.splitTarget(target, '|', this, user, 'create');
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
@@ -1107,7 +1121,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				const {
 					targetUser, ot, tid, game, prize, question, answers, ball, extraInfo, ivs,
-				} = QuestionGiveaway.splitTarget(target, '|', this);
+				} = QuestionGiveaway.splitTarget(target, '|', this, user, 'store');
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
@@ -1126,7 +1140,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				const {
 					targetUser, ot, tid, game, prize, winners, ball, extraInfo, ivs,
-				} = LotteryGiveaway.splitTarget(target, '|', this);
+				} = LotteryGiveaway.splitTarget(target, '|', this, user, 'store');
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
@@ -1152,7 +1166,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				const {
 					targetUser, ot, tid, game, prize, question, answers, ball, extraInfo, ivs,
-				} = QuestionGiveaway.splitTarget(target, '|', this);
+				} = QuestionGiveaway.splitTarget(target, '|', this, user, 'submit');
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
@@ -1177,7 +1191,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				const {
 					targetUser, ot, tid, game, prize, winners, ball, extraInfo, ivs,
-				} = LotteryGiveaway.splitTarget(target, '|', this);
+				} = LotteryGiveaway.splitTarget(target, '|', this, user, 'submit');
 				const set = Teams.import(prize)?.[0];
 				if (!set) throw new Chat.ErrorMessage(`Please submit the prize in the form of a PS set importable.`);
 
@@ -1293,14 +1307,14 @@ export const commands: Chat.ChatCommands = {
 		if (user.can('show', null, room)) {
 			buf.push(
 				`<details><summary>Staff commands</summary>` +
-				`<code>/giveaway create - Pulls up a page to create a giveaway. Requires: + % @ # &`
+				`<code>/giveaway create</code> - Pulls up a page to create a giveaway. Requires: + % @ # &`
 			);
 			buf.push(
-				`<code>/giveaway create question Giver | OT | TID | Game | Question | Answer 1, Answer 2, Answer 3 | Pok&eacute; Ball | Extra Info | Prize</code>` +
+				`<code>/giveaway create question Giver | OT | TID | Game | Question | Answer 1, Answer 2, Answer 3 | IV/IV/IV/IV/IV/IV | Pok&eacute; Ball | Extra Info | Prize</code>` +
 				` - Start a new question giveaway (voices can only host their own). Requires: + % @ # &`,
 			);
 			buf.push(
-				`<code>/giveaway create lottery Giver | OT | TID | Game | # of Winners | Pok&eacute; Ball | Extra Info | Prize</code>` +
+				`<code>/giveaway create lottery Giver | OT | TID | Game | # of Winners | IV/IV/IV/IV/IV/IV | Pok&eacute; Ball | Extra Info | Prize</code>` +
 				` - Start a new lottery giveaway (voices can only host their own). Requires: + % @ # &`,
 			);
 			buf.push(`<code>/giveaway changequestion/changeanswer</code> - Changes the question/answer of a question giveaway. Requires: Being giveaway host`);
@@ -1454,8 +1468,9 @@ export const pages: Chat.PageTable = {
 						}
 						buf += `<hr />`;
 						buf += `<button class="button" name="send" value="/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway)}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
-						if (!Users.get(giveaway.targetUserID)?.connected) {
-							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
+						const targetUser = Users.get(giveaway.targetUserID);
+						if (!targetUser?.connected || targetUser.id !== user.id) {
+							buf += `<button title="The giver is offline or you are not them" disabled class="button disabled" style="float:right">Create giveaway</button>`;
 						} else {
 							buf += `<button class="button" style="float:right" name="send" value="/giveaway create lottery ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.winners}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}">Create giveaway</button>`;
 						}
@@ -1474,8 +1489,9 @@ export const pages: Chat.PageTable = {
 						}
 						buf += `<hr />`;
 						buf += `<button class="button" name="send" value="/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway)}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
-						if (!Users.get(giveaway.targetUserID)?.connected) {
-							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
+						const targetUser = Users.get(giveaway.targetUserID);
+						if (!targetUser?.connected || targetUser.id !== user.id) {
+							buf += `<button title="The giver is offline or you are not them" disabled class="button disabled" style="float:right">Create giveaway</button>`;
 						} else {
 							buf += `<button class="button" style="float:right" name="send" value="/giveaway create question ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.question}|${giveaway.answers.join(',')}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}">Create giveaway</button>`;
 						}
