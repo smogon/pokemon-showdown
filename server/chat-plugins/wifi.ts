@@ -1517,7 +1517,6 @@ export const pages: Chat.PageTable = {
 		submitted(args, user) {
 			this.title = `[Submitted Giveaways]`;
 			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
-			this.checkCan('warn', null, Rooms.search('wifi')!);
 			let buf = `<div class="pad">${makePageHeader(args[0] === 'add' ? 'submitted-add' : 'submitted')}`;
 			const [add, type] = args;
 			const giveaways = [
