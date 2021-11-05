@@ -1517,14 +1517,16 @@ export const pages: Chat.PageTable = {
 		submitted(args, user) {
 			this.title = `[Submitted Giveaways]`;
 			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
-			let buf = `<div class="pad">${makePageHeader(args[0] === 'add' ? 'submitted-add' : 'submitted')}`;
 			const [add, type] = args;
+			const adding = add === 'add';
+			if (!adding) this.checkCan('warn', null, Rooms.get('wifi')!);
+			let buf = `<div class="pad">${makePageHeader(args[0] === 'add' ? 'submitted-add' : 'submitted')}`;
 			const giveaways = [
 				...((wifiData.submittedGiveaways || {}).lottery || []),
 				...((wifiData.submittedGiveaways || {}).question || []),
 			];
-			if (!giveaways.length && (!add || add !== 'add')) return `${buf}<h2>There are no submitted giveaways.</h2></div>`;
-			if (!add || add !== 'add') {
+			if (!giveaways.length && !adding) return `${buf}<h2>There are no submitted giveaways.</h2></div>`;
+			if (!adding) {
 				buf += `<h2>Submitted Giveaways</h2>`;
 				for (let giveaway of giveaways) {
 					if (wifiData.submittedGiveaways.lottery.includes(giveaway as any)) {
