@@ -51,8 +51,9 @@ interface WifiData {
 
 const wifiData: WifiData = (() => {
 	try {
-		return JSON.parse(FS(DATA_FILE).readIfExistsSync());
-	} catch {
+		return JSON.parse(FS(DATA_FILE).readSync());
+	} catch (e: any) {
+		if (e.code !== 'ENOENT') throw e;
 		return {
 			stats: {},
 			storedGiveaways: {
