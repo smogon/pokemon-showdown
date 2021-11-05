@@ -20,6 +20,7 @@ server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
 server/chat-plugins/the-studio.ts @KrisXV
 server/chat-plugins/trivia/ @AnnikaCodes
 server/chat-plugins/username-prefixes.ts @AnnikaCodes
+server/chat-plugins/wifi.ts @KrisXV
 server/friends.ts @mia-pi-git
 server/modlog/* @monsanto @AnnikaCodes
 test/random-battles/* @AnnikaCodes
