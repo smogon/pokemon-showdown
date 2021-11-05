@@ -165,4 +165,59 @@ describe("Dynamax", function () {
 		assert.statStage(wynaut, 'def', 0, 'Wynaut should not have used Max Steelspike this turn.');
 		assert(wynaut.volatiles['dynamax'], 'Wynaut should be currently Dynamaxed.');
 	});
+
+	describe(`Hacked Max Moves`, function () {
+		it(`should not activate Max Move side effects when used without Dynamaxing`, function () {
+			battle = common.createBattle([[
+				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
+			], [
+				{species: 'shuckle', moves: ['sleeptalk']},
+			]]);
+			battle.makeChoices('move maxflare', 'auto');
+			assert.equal(battle.field.weather, '');
+
+			battle.makeChoices('move maxairstream', 'auto');
+			assert.statStage(battle.p1.active[0], 'spe', 0);
+		});
+
+		it.skip(`should treat Max Moves as 0 BP when used without Dynamaxing`, function () {
+			battle = common.createBattle([[
+				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
+			], [
+				{species: 'shuckle', ability: 'shellarmor', moves: ['sleeptalk']},
+			]]);
+			battle.makeChoices('move maxflare', 'auto');
+			battle.makeChoices('move maxairstream', 'auto');
+
+			const shuckle = battle.p2.active[0];
+			assert.bounded(shuckle.maxhp - shuckle.hp, [2, 4], `0 BP should cause the move's damage to only be 2 after base damage calculation, resulting in 1-2 final damage for each Max Move.`);
+		});
+
+		it(`should treat Max Moves as physical moves when used without Dynamaxing`, function () {
+			battle = common.createBattle([[
+				{species: 'wynaut', moves: ['maxflare']},
+			], [
+				{species: 'shuckle', item: 'keeberry', moves: ['sleeptalk']},
+			]]);
+			battle.makeChoices();
+			assert.statStage(battle.p2.active[0], 'def', 1);
+		});
+
+		it.skip(`should prevent effects that affect regular Max Moves, like Sleep Talk and Instruct`, function () {
+			battle = common.createBattle([[
+				{species: 'wynaut', moves: ['maxflare', 'sleeptalk']},
+			], [
+				{species: 'shuckle', ability: 'shellarmor', moves: ['instruct', 'spore']},
+			]]);
+			battle.makeChoices();
+			const wynaut = battle.p1.active[0];
+			let move = wynaut.getMoveData(Dex.moves.get('maxflare'));
+			assert.equal(move.pp, move.maxpp - 1, `Max Flare should only have been used once.`);
+
+			battle.makeChoices('auto', 'move spore');
+			battle.makeChoices('move sleeptalk', 'move spore');
+			move = wynaut.getMoveData(Dex.moves.get('sleeptalk'));
+			assert.equal(move.pp, move.maxpp, `Sleep Talk should have failed in calling a move and so not use PP.`);
+		});
+	});
 });
