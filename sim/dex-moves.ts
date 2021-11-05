@@ -204,14 +204,20 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	critModifier?: number;
 	critRatio?: number;
 	/**
-	 * controls which pokemon it draws the attack stats from. This does not use the pokemon's ability or item
+	 * Pokemon for the attack stat. Ability and Item damage modifiers still come from the real attacker.
 	 */
 	overrideOffensivePokemon?: 'target' | 'source';
+	/**
+	 * Physical moves use attack stat modifiers, special moves use special attack stat modifiers.
+	 */
 	overrideOffensiveStat?: StatIDExceptHP;
 	/**
-	 * controls which pokemon it draws the defense stats from. This does not use the pokemon's ability or item
+	 * Pokemon for the defense stat. Ability and Item damage modifiers still come from the real defender.
 	 */
 	overrideDefensivePokemon?: 'target' | 'source';
+	/**
+	 * uses modifiers that match the new stat
+	 */
 	overrideDefensiveStat?: StatIDExceptHP;
 	forceSTAB?: boolean;
 	ignoreAbility?: boolean;

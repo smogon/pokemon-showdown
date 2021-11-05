@@ -1568,14 +1568,9 @@ export class BattleActions {
 		const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
 		const defender = move.overrideDefensivePokemon === 'source' ? source : target;
 
-		let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
-		if (move.overrideOffensiveStat) {
-			attackStat = move.overrideOffensiveStat;
-		}
-		let defenseStat: StatIDExceptHP = category === 'Physical' ? 'def' : 'spd';
-		if (move.overrideDefensiveStat) {
-			defenseStat = move.overrideDefensiveStat;
-		}
+		const isPhysical = move.category === 'Physical';
+		let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
+		const defenseStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'def' : 'spd');
 
 		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 

@@ -331,14 +331,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
 			const defender = move.overrideDefensivePokemon === 'source' ? source : target;
 
-			let atkType: StatIDExceptHP = move.category === 'Physical' ? 'atk' : 'spa';
-			if (move.overrideOffensiveStat) {
-				atkType = move.overrideOffensiveStat;
-			}
-			let defType: StatIDExceptHP = move.category === 'Physical' ? 'def' : 'spd';
-			if (move.overrideDefensiveStat) {
-				defType = move.overrideDefensiveStat;
-			}
+			const isPhysical = move.category === 'Physical';
+			const atkType: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
+			const defType: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'def' : 'spd');
+
 			let unboosted = false;
 			let noburndrop = false;
 
