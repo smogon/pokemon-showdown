@@ -513,7 +513,8 @@ export class LotteryGiveaway extends Giveaway {
 	static splitTarget(target: string, sep = '|', context: Chat.CommandContext, forCreate = false) {
 		let [giver, ot, tid, game, winners, ivs, ball, extraInfo, ...prize] = target.split(sep).map(param => param.trim());
 		if (!(giver && ot && tid && prize?.length)) {
-			return context.parse(`/help giveaway`);
+			context.parse(`/help giveaway`);
+			throw new Chat.Interruption();
 		}
 		const targetUser = Users.get(giver);
 		if (!targetUser?.connected) throw new Chat.ErrorMessage(`User '${giver}' is not online.`);
