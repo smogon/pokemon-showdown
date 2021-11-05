@@ -151,9 +151,9 @@ class Giveaway extends Rooms.RoomGame {
 		return `class="broadcast-blue"`;
 	}
 
-	send(content: string) {
+	send(content: string, isStart = false) {
 		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${content}</div>`);
-		this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|It's ${this.game} giveaway time!`);
+		if (isStart) this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|It's ${this.game} giveaway time!`);
 		this.room.update();
 	}
 
@@ -322,7 +322,7 @@ export class QuestionGiveaway extends Giveaway {
 		this.answers = QuestionGiveaway.sanitizeAnswers(answers);
 		this.answered = new Utils.Multiset();
 		this.winner = null;
-		this.send(this.generateWindow('The question will be displayed in one minute! Use /guess to answer.'));
+		this.send(this.generateWindow('The question will be displayed in one minute! Use /guess to answer.'), true);
 
 		this.timer = setTimeout(() => this.start(), 1000 * 60);
 	}
@@ -371,7 +371,7 @@ export class QuestionGiveaway extends Giveaway {
 	start() {
 		this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has started! Scroll down to see the question.</p>');
 		this.phase = 'started';
-		this.send(this.generateQuestion());
+		this.send(this.generateQuestion(), true);
 		this.timer = setTimeout(() => this.end(false), 1000 * 60 * 5);
 	}
 
@@ -505,7 +505,7 @@ export class LotteryGiveaway extends Giveaway {
 
 		this.maxWinners = winners || 1;
 
-		this.send(this.generateReminder(false));
+		this.send(this.generateReminder(false), true);
 
 		this.timer = setTimeout(() => this.drawLottery(), 1000 * 60 * 2);
 	}
@@ -920,7 +920,8 @@ export const commands: Chat.ChatCommands = {
 	],
 	ga: 'giveaway',
 	giveaway: {
-		help() {
+		help: '',
+		''() {
 			this.run('giveawayhelp');
 		},
 		view: {
@@ -1234,13 +1235,19 @@ export const commands: Chat.ChatCommands = {
 			const del = cmd === 'delete';
 			this.refreshPage(del ? `giveaways-stored` : 'giveaways-submitted');
 			if (del) {
-				const [type, index] = target.split(',');
-				if (!(type && index) || !['question', 'lottery'].includes(toID(type)) || isNaN(parseInt(index))) {
+				const [type, indexStr] = target.split(',');
+				const index = parseInt(indexStr);
+				if (!(type && index) || !['question', 'lottery'].includes(toID(type)) || isNaN(index)) {
 					return this.parse(`/help giveaway`);
 				}
 				const typedType = toID(type) as 'question' | 'lottery';
-				const giveaway = wifiData.storedGiveaways[typedType][parseInt(index)];
-				wifiData.storedGiveaways[typedType].splice(parseInt(index), 1);
+				const giveaway = wifiData.storedGiveaways[typedType][index];
+				if (!giveaway) {
+					throw new Chat.ErrorMessage(
+						`There is no giveaway at index ${index}. Indices must be integers between 0 and ${wifiData.storedGiveaways[typedType].length - 1}.`
+					);
+				}
+				wifiData.storedGiveaways[typedType].splice(index, 1);
 				saveData();
 				this.privateModAction(`${user.name} deleted a ${typedType} giveaway by ${giveaway.targetUserID}.`);
 				this.modlog(`GIVEAWAY DELETE ${typedType.toUpperCase()}`);
