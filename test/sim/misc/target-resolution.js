@@ -75,6 +75,20 @@ describe('Target Resolution', function () {
 			assert.statStage(redirector, 'spa', 1);
 		});
 
+		it.skip(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
+			battle = common.gen(6).createBattle({gameType: 'triples'}, [[
+				{species: 'Shuckle', moves: ['watergun']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+			], [
+				{species: 'Beartic', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+				{species: 'Victini', moves: ['finalgambit']},
+			]]);
+			battle.makeChoices('move watergun 3, auto', 'move swordsdance, move swordsdance, move finalgambit -2');
+			assert.fullHP(battle.p2.active[0], `Beartic should not be damaged by a Water Gun because it is out of range`);
+		});
+
 		it(`should support RedirectTarget event for a fainted ally and type 'any'`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},

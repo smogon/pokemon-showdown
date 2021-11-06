@@ -391,10 +391,10 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 			avatar: targetUser.avatar,
 			group: group,
 			customgroup: sectionleader ? "Section Leader" : undefined,
-			autoconfirmed: !!targetUser.autoconfirmed,
-			status: targetUser.getStatus(),
+			autoconfirmed: targetUser.autoconfirmed ? true : undefined,
+			status: targetUser.getStatus() || undefined,
 			rooms: roomList,
-			friended: user.id === targetUser.id ? undefined : user.friends?.has(targetUser.id),
+			friended: user.friends?.has(targetUser.id) || undefined,
 		};
 	},
 	roomlist(target, user, trustable) {
