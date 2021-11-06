@@ -697,7 +697,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const isPhysical = move.category === 'Physical';
 			const atkType: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
-			const defType: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'def' : 'spd');
+			const defType: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
 			let attack = attacker.getStat(atkType);
 			let defense = defender.getStat(defType);
