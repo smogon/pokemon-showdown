@@ -907,17 +907,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return 5;
 			},
-			onModifyMove(move, attacker, defender) {
+			onModifyMove(move, source, target) {
 				if (!move.overrideOffensiveStat) {
 					move.overrideOffensiveStat = move.category === "Physical" ? 'atk' : 'spa';
 				}
 				if (!['atk', 'spa'].includes(move.overrideOffensiveStat)) return;
-				if (move.overrideOffensivePokemon === 'target') {
-					if (!defender) return;
-					move.overrideOffensiveStat = defender.getStat('atk') > defender.getStat('spa') ? 'spa' : 'atk';
-				} else {
-					move.overrideOffensiveStat = attacker.getStat('atk') > attacker.getStat('spa') ? 'spa' : 'atk';
-				}
+				const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+				if (!attacker) return;
+				move.overrideOffensiveStat = attacker.getStat('atk') > attacker.getStat('spa') ? 'spa' : 'atk';
 			},
 			// Stat modifying in scripts.ts
 			onFieldStart(field, source, effect) {
