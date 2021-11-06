@@ -135,7 +135,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Poison Point"},
 	},
-	mrmmime: {
+	mrmime: {
 		inherit: true,
 		abilities: {0: "Soundproof"},
 	},
