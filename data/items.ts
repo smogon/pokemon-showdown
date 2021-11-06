@@ -123,6 +123,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Dragon",
 		},
 		onStart(pokemon) {
+			this.effectState.holder = pokemon;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -131,6 +132,14 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
+			}
+		},
+		onFoeSwitchOut(pokemon) {
+			const holder = this.effectState.holder;
+			if (pokemon.hasAbility(['unnerve', 'asonespectrier', 'asoneglastrier'])) {
+				if (holder.hp <= holder.maxhp / 4 || (holder.hp <= holder.maxhp / 2 && holder.hasAbility('gluttony'))) {
+					holder.eatItem();
+				}
 			}
 		},
 		onResidualOrder: 11,
@@ -1693,6 +1702,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Bug",
 		},
 		onStart(pokemon) {
+			this.effectState.holder = pokemon;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -1701,6 +1711,14 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
+			}
+		},
+		onFoeSwitchOut(pokemon) {
+			const holder = this.effectState.holder;
+			if (pokemon.hasAbility(['unnerve', 'asonespectrier', 'asoneglastrier'])) {
+				if (holder.hp <= holder.maxhp / 4 || (holder.hp <= holder.maxhp / 2 && holder.hasAbility('gluttony'))) {
+					holder.eatItem();
+				}
 			}
 		},
 		onResidualOrder: 12,
@@ -2439,6 +2457,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Dark",
 		},
 		onStart(pokemon) {
+			this.effectState.holder = pokemon;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -2447,6 +2466,14 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
+			}
+		},
+		onFoeSwitchOut(pokemon) {
+			const holder = this.effectState.holder;
+			if (pokemon.hasAbility(['unnerve', 'asonespectrier', 'asoneglastrier'])) {
+				if (holder.hp <= holder.maxhp / 4 || (holder.hp <= holder.maxhp / 2 && holder.hasAbility('gluttony'))) {
+					holder.eatItem();
+				}
 			}
 		},
 		onResidualOrder: 11,
@@ -3189,6 +3216,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Ghost",
 		},
 		onStart(pokemon) {
+			this.effectState.holder = pokemon;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -3197,6 +3225,14 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
+			}
+		},
+		onFoeSwitchOut(pokemon) {
+			const holder = this.effectState.holder;
+			if (pokemon.hasAbility(['unnerve', 'asonespectrier', 'asoneglastrier'])) {
+				if (holder.hp <= holder.maxhp / 4 || (holder.hp <= holder.maxhp / 2 && holder.hasAbility('gluttony'))) {
+					holder.eatItem();
+				}
 			}
 		},
 		onResidualOrder: 11,
@@ -3792,6 +3828,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Poison",
 		},
 		onStart(pokemon) {
+			this.effectState.holder = pokemon;
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -3800,6 +3837,14 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
+			}
+		},
+		onFoeSwitchOut(pokemon) {
+			const holder = this.effectState.holder;
+			if (pokemon.hasAbility(['unnerve', 'asonespectrier', 'asoneglastrier'])) {
+				if (holder.hp <= holder.maxhp / 2) {
+					holder.eatItem();
+				}
 			}
 		},
 		onResidualOrder: 12,
@@ -5045,6 +5090,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Psychic",
 		},
 		onStart(pokemon) {
+			this.effectState.holder = pokemon;
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -5053,6 +5099,14 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
+			}
+		},
+		onFoeSwitchOut(pokemon) {
+			const holder = this.effectState.holder;
+			if (pokemon.hasAbility(['unnerve', 'asonespectrier', 'asoneglastrier'])) {
+				if (holder.hp <= holder.maxhp / 2) {
+					holder.eatItem();
+				}
 			}
 		},
 		onResidualOrder: 12,
@@ -6806,6 +6860,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Rock",
 		},
 		onStart(pokemon) {
+			this.effectState.holder = pokemon;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -6814,6 +6869,14 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (pokemon.hitSelf) return;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
+			}
+		},
+		onFoeSwitchOut(pokemon) {
+			const holder = this.effectState.holder;
+			if (pokemon.hasAbility(['unnerve', 'asonespectrier', 'asoneglastrier'])) {
+				if (holder.hp <= holder.maxhp / 4 || (holder.hp <= holder.maxhp / 2 && holder.hasAbility('gluttony'))) {
+					holder.eatItem();
+				}
 			}
 		},
 		onResidualOrder: 11,

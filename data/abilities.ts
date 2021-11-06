@@ -186,7 +186,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEnd(pokemon) {
 			this.effectState.unnerved = false;
-			if (this.effectState.unnerved) return;
 			for (const foe of pokemon.foes()) {
 				foe.hitSelf = false;
 			}
@@ -212,7 +211,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEnd(pokemon) {
 			this.effectState.unnerved = false;
-			if (this.effectState.unnerved) return;
 			for (const foe of pokemon.foes()) {
 				foe.hitSelf = false;
 			}
@@ -4152,10 +4150,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEnd(pokemon) {
 			this.effectState.unnerved = false;
-			if (this.effectState.unnerved) return;
-			for (const foe of pokemon.foes()) {
-				foe.hitSelf = false;
-			}
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
