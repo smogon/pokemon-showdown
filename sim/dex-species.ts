@@ -1,4 +1,3 @@
-import { Dex } from '.';
 import {toID, BasicEffect} from './dex-data';
 
 interface SpeciesAbility {
@@ -478,7 +477,7 @@ export class DexSpecies {
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
 			if (this.dex.gen < 5) delete species.abilities['H'];
-			if (Dex.abilities.get(species.abilities['1']).gen > this.dex.gen) delete species.abilities['1'];
+			if (this.dex.abilities.get(species.abilities['1']).gen > this.dex.gen) delete species.abilities['1'];
 		} else {
 			species = new Species({
 				id, name: id,
