@@ -110,7 +110,7 @@ describe('broader, more integrated Punishments tests', function () {
 		});
 	});
 
-	describe('locks', () => {
+	describe('locks (network) (slow)', () => {
 		before(() => {
 			this.user = makeUser("Lock Me Please", '127.0.0.3');
 			this.connection = this.user.connections[0];
@@ -170,7 +170,7 @@ describe('broader, more integrated Punishments tests', function () {
 		});
 	});
 
-	describe('namelocks', () => {
+	describe('namelocks (network) (slow)', () => {
 		before(() => {
 			this.user = makeUser("Namelock Me Please", '127.0.0.6');
 			this.connection = this.user.connections[0];
@@ -201,7 +201,7 @@ describe('broader, more integrated Punishments tests', function () {
 		});
 	});
 
-	describe('global bans', () => {
+	describe('global bans (network) (slow)', () => {
 		before(() => {
 			this.user = makeUser("Ban Me Please", '127.0.0.7');
 			this.connection = this.user.connections[0];
