@@ -6,6 +6,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	par: {
 		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (!pokemon.hasAbility('quickfeet')) {
+				return this.chainModify(0.25);
+			}
+			return spe;
+		},
 		onBeforeMove(pokemon) {
 			if (!pokemon.hasAbility('magicguard') && this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
