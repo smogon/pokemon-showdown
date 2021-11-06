@@ -908,7 +908,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return 5;
 			},
 			onModifyMove(move, attacker, defender) {
-				if (!move.overrideOffensiveStat) return;
+				if (!move.overrideOffensiveStat) {
+					move.overrideOffensiveStat = move.category === "Physical" ? 'atk' : 'spa';
+				}
 				if (!['atk', 'spa'].includes(move.overrideOffensiveStat)) return;
 				if (move.overrideOffensivePokemon === 'target') {
 					if (!defender) return;
