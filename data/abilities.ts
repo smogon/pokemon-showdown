@@ -186,8 +186,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEnd(pokemon) {
 			this.effectState.unnerved = false;
-			for (const foe of pokemon.foes()) {
-				foe.hitSelf = false;
+			const berries = ['aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry'];
+			let allyUnnerve = false;
+			for (const ally of pokemon.allies()) {
+				if (ally.hasAbility(['unnerve', 'asoneglastrier', 'asonespectrier'])) allyUnnerve = true;
+			}
+			if (!allyUnnerve) {
+				for (const foe of pokemon.foes()) {
+					if (berries.includes(foe.item.toString())) {
+						this.singleEvent('Start', foe.getItem(), foe.itemState, foe);
+					}
+				}
 			}
 		},
 		onFoeTryEatItem() {
@@ -211,8 +220,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEnd(pokemon) {
 			this.effectState.unnerved = false;
-			for (const foe of pokemon.foes()) {
-				foe.hitSelf = false;
+			const berries = ['aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry'];
+			let allyUnnerve = false;
+			for (const ally of pokemon.allies()) {
+				if (ally.hasAbility(['unnerve', 'asoneglastrier', 'asonespectrier'])) allyUnnerve = true;
+			}
+			if (!allyUnnerve) {
+				for (const foe of pokemon.foes()) {
+					if (berries.includes(foe.item.toString())) {
+						this.singleEvent('Start', foe.getItem(), foe.itemState, foe);
+					}
+				}
 			}
 		},
 		onFoeTryEatItem() {
@@ -4150,6 +4168,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEnd(pokemon) {
 			this.effectState.unnerved = false;
+			const berries = ['aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry'];
+			let allyUnnerve = false;
+			for (const ally of pokemon.allies()) {
+				if (ally.hasAbility(['unnerve', 'asoneglastrier', 'asonespectrier'])) allyUnnerve = true;
+			}
+			if (!allyUnnerve) {
+				for (const foe of pokemon.foes()) {
+					if (berries.includes(foe.item.toString())) {
+						this.singleEvent('Start', foe.getItem(), foe.itemState, foe);
+					}
+				}
+			}
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
