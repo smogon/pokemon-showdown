@@ -267,7 +267,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Intimidate"},
 	},
-	zigzagzoon: {
+	zigzagoon: {
 		inherit: true,
 		abilities: {0: "Pickup"},
 	},
