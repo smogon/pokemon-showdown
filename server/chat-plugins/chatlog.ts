@@ -1701,7 +1701,7 @@ export const commands: Chat.ChatCommands = {
 
 		return this.sendReplyBox(
 			Utils.html`<strong>Chat messages in the battle '${roomid}'` +
-			(userid ? `from the user '${userid}'` : "") +
+			(userid ? `from the user '${userid}'` : "") + `</strong>` +
 			buf
 		);
 	},
