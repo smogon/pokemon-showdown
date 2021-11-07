@@ -53,7 +53,6 @@ interface ModlogSQLQuery<T> {
 export interface ModlogSearch {
 	note: {search: string, isExact?: boolean, isExclusion?: boolean}[];
 	user: {search: string, isExact?: boolean, isExclusion?: boolean}[];
-	anyField?: string;
 	ip: {search: string, isExclusion?: boolean}[];
 	action: {search: string, isExclusion?: boolean}[];
 	actionTaker: {search: string, isExclusion?: boolean}[];
@@ -408,16 +407,6 @@ export class Modlog {
 				}
 			}
 			ands.push({query: roomChecker, args});
-		}
-
-		if (search.anyField) {
-			for (const or of [
-				`action LIKE ?`, `userid LIKE ?`, `autoconfirmed_userid LIKE ?`, `ip LIKE ?`, `action_taker_userid LIKE ?`,
-				`EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid LIKE ?)`,
-			]) {
-				ors.push({query: or, args: [search.anyField + '%']});
-			}
-			ors.push({query: `note LIKE ?`, args: [`%${search.anyField}%`]});
 		}
 
 		for (const action of search.action) {

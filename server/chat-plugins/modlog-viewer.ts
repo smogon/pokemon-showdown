@@ -74,7 +74,6 @@ function prettifyResults(
 	}
 	const scope = onlyPunishments ? 'punishment-related ' : '';
 	let searchString = ``;
-	if (search.anyField) searchString += `containing ${search.anyField} `;
 	const excludes = search.note.filter(s => s.isExclusion).map(s => s.search) || [];
 	const includes = search.note.filter(s => !s.isExclusion).map(s => s.search) || [];
 	if (includes.length) searchString += `with a note including any of: ${includes.join(', ')} `;
@@ -250,15 +249,13 @@ export const commands: Chat.ChatCommands = {
 					// they might mean a roomid, as per the old format of /modlog
 					param = 'room';
 				} else {
-					param = 'any';
+					this.errorReply(`You must specify a search type and search value.`);
+					return this.parse(`/help modlog`);
 				}
 			}
 			const isExclusion = param.endsWith('!');
 			param = toID(param);
 			switch (param) {
-			case 'any':
-				search.anyField = value;
-				break;
 			case 'note': case 'text':
 				if (!search.note) search.note = [];
 				search.note.push({search: value, isExclusion});
