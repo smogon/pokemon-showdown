@@ -1686,18 +1686,24 @@ export const commands: Chat.ChatCommands = {
 		}
 		log = log.filter(l => l.startsWith('|c|'));
 
-		let buf = Utils.html`<strong>Chat messages in the battle '${roomid}'`;
-		if (userid) buf += ` from the user '${userid}'`;
-		buf += `</strong>`;
+		let buf = '';
 		let atLeastOne = false;
+		let i = 0;
 		for (const line of log) {
 			const [,, username, message] = Utils.splitFirst(line, '|', 3);
 			if (userid && toID(username) !== userid) continue;
+			i++;
 			buf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
 			atLeastOne = true;
 		}
-		if (!atLeastOne) buf += `None found.`;
-		return this.sendReplyBox(buf);
+		if (i > 20) buf = `<details class="readmore">${buf}</details>`;
+		if (!atLeastOne) buf = `None found.`;
+
+		return this.sendReplyBox(
+			Utils.html`<strong>Chat messages in the battle '${roomid}'` +
+			(userid ? `from the user '${userid}'` : "") +
+			buf
+		);
 	},
 	getbattlechathelp: [
 		`/getbattlechat [battle link][, username] - Gets all battle chat logs from the given [battle link].`,
