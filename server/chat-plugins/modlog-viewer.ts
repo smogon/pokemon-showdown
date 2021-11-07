@@ -228,7 +228,7 @@ export const commands: Chat.ChatCommands = {
 		const onlyPunishments = cmd.startsWith('pl') || cmd.startsWith('punishlog');
 		let lines;
 		const possibleParam = cmd.slice(2);
-		const targets = target.split(',');
+		const targets = target.split(',').map(f => f.trim()).filter(Boolean);
 		const search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []};
 
 		switch (possibleParam) {
@@ -245,7 +245,7 @@ export const commands: Chat.ChatCommands = {
 			if (!value) {
 				// If no specific parameter is specified, we should search all fields
 				value = param.trim();
-				if (i === 0 && targets.length > 1) {
+				if (i === 0 && value) {
 					// they might mean a roomid, as per the old format of /modlog
 					param = 'room';
 				} else {
