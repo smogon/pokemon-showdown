@@ -364,6 +364,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return true;
 		},
 		onAfterMoveSecondary(target, source, move) {
+			const healingItems = [
+				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
+			];
 			target.abilityState.checkedBerserk = true;
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
@@ -371,6 +374,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({spa: 1});
+				// berserk hardcode
+				if (target.item && healingItems.includes(target.item)) this.runEvent('TakeDamage', target, null, null, damage);
 			}
 		},
 		name: "Berserk",
