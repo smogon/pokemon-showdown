@@ -1650,6 +1650,12 @@ export const commands: Chat.ChatCommands = {
 	async getbattlechat(target, room, user) {
 		this.checkCan('lock');
 		let [roomName, userName] = Utils.splitFirst(target, ',').map(f => f.trim());
+		if (!roomName) {
+			if (!room) {
+				return this.errorReply(`If you are not specifying a room, use this command in a room.`);
+			}
+			roomName = room.roomid;
+		}
 		if (roomName.startsWith('http://')) roomName = roomName.slice(7);
 		if (roomName.startsWith('https://')) roomName = roomName.slice(8);
 		if (roomName.startsWith(`${Config.routes.client}/`)) {
@@ -1666,23 +1672,21 @@ export const commands: Chat.ChatCommands = {
 		if (!roomid.startsWith('battle-')) return this.errorReply(`You must specify a battle.`);
 		const tarRoom = Rooms.get(roomid);
 
-		let log: string[], title: string;
+		let log: string[];
 		if (tarRoom) {
 			log = tarRoom.log.log;
-			title = tarRoom.title;
 		} else {
 			try {
 				const raw = await Net(`https://${Config.routes.replays}/${roomid.slice('battle-'.length)}.json`).get();
 				const data = JSON.parse(raw);
 				log = data.log ? data.log.split('\n') : [];
-				title = data.title;
 			} catch {
 				return this.errorReply(`No room or replay found for that battle.`);
 			}
 		}
 		log = log.filter(l => l.startsWith('|c|'));
 
-		let buf = Utils.html`<strong>Chat messages in the battle '${title}'`;
+		let buf = Utils.html`<strong>Chat messages in the battle '${roomid}'`;
 		if (userid) buf += ` from the user '${userid}'`;
 		buf += `</strong>`;
 		let atLeastOne = false;
