@@ -372,6 +372,22 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly priority: number;
 	/** Move category. */
 	readonly category: MoveCategory;
+	/**
+	 * Pokemon for the attack stat. Ability and Item damage modifiers still come from the real attacker.
+	 */
+	 readonly overrideOffensivePokemon?: 'target' | 'source';
+	/**
+	 * Physical moves use attack stat modifiers, special moves use special attack stat modifiers.
+	 */
+	 readonly overrideOffensiveStat?: StatIDExceptHP;
+	/**
+	 * Pokemon for the defense stat. Ability and Item damage modifiers still come from the real defender.
+	 */
+	 readonly overrideDefensivePokemon?: 'target' | 'source';
+	/**
+	 * uses modifiers that match the new stat
+	 */
+	 readonly overrideDefensiveStat?: StatIDExceptHP;
 	/** Whether or not this move ignores negative attack boosts. */
 	readonly ignoreNegativeOffensive: boolean;
 	/** Whether or not this move ignores positive defense boosts. */
@@ -452,6 +468,14 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || null;
 		this.priority = Number(data.priority) || 0;
 		this.category = data.category!;
+		this.overrideOffensiveStat =
+			typeof data.overrideOffensiveStat === 'string' ? (data.overrideOffensiveStat as StatIDExceptHP) : undefined;
+		this.overrideOffensivePokemon =
+			data.overrideOffensivePokemon ? (data.overrideOffensivePokemon === "target" ? "target" : "source") : undefined;
+		this.overrideDefensiveStat =
+			typeof data.overrideDefensiveStat === 'string' ? (data.overrideDefensiveStat as StatIDExceptHP) : undefined;
+		this.overrideDefensivePokemon =
+			data.overrideDefensivePokemon ? (data.overrideDefensivePokemon === "source" ? "source" : "target") : undefined;
 		this.ignoreNegativeOffensive = !!data.ignoreNegativeOffensive;
 		this.ignorePositiveDefensive = !!data.ignorePositiveDefensive;
 		this.ignoreOffensive = !!data.ignoreOffensive;

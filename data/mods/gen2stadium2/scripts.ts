@@ -361,12 +361,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Moves that ignore offense and defense respectively.
 			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
+				// The attack drop from the burn is only applied when attacker's attack level is higher than defender's defense level.
 				attack = attacker.getStat(atkType, true, true);
 			}
 
 			if (move.ignoreDefensive) {
 				this.battle.debug('Negating (sp)def boost/penalty.');
-				// The attack drop from the burn is only applied when attacker's attack level is higher than defender's defense level.
 				defense = target.getStat(defType, true, true);
 			}
 
