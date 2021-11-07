@@ -318,7 +318,6 @@ export const commands: Chat.ChatCommands = {
 	modloghelp() {
 		this.sendReplyBox(
 			`<code>/modlog [comma-separated list of parameters]</code>: searches the moderator log, defaulting to the current room unless specified otherwise.<br />` +
-			`If an unnamed parameter is specified, <code>/modlog</code> will search all fields at once.<br />` +
 			`You can replace the <code>=</code> in a parameter with a <code>!=</code> to exclude entries that match that parameter.<br />` +
 			`<details><summary><strong>Parameters</strong></summary>` +
 			`<ul>` +
