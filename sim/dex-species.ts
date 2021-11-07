@@ -468,7 +468,8 @@ export class DexSpecies {
 			if (this.dex.currentMod === 'gen7letsgo' && !species.isNonstandard) {
 				const isLetsGo = (
 					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
-					(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
+					(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
+					species.name !== 'Pikachu-Alola'))
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
