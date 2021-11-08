@@ -1523,7 +1523,6 @@ export class BattleActions {
 		}
 
 		const category = this.battle.getCategory(move);
-		const defensiveCategory = move.defensiveCategory || category;
 
 		let basePower: number | false | null = move.basePower;
 		if (move.basePowerCallback) {
@@ -1566,32 +1565,16 @@ export class BattleActions {
 
 		const level = source.level;
 
-		const attacker = source;
-		const defender = target;
-		let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
-		const defenseStat: StatIDExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
-		if (move.useSourceDefensiveAsOffensive) {
-			attackStat = defenseStat;
-			// Body press really wants to use the def stat,
-			// so it switches stats to compensate for Wonder Room.
-			// Of course, the game thus miscalculates the boosts...
-			if ('wonderroom' in this.battle.field.pseudoWeather) {
-				if (attackStat === 'def') {
-					attackStat = 'spd';
-				} else if (attackStat === 'spd') {
-					attackStat = 'def';
-				}
-				if (attacker.boosts['def'] || attacker.boosts['spd']) {
-					this.battle.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
-				}
-			}
-		}
+		const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+		const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+
+		const isPhysical = move.category === 'Physical';
+		let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
+		const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
 		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
-		let attack;
-		let defense;
 
-		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+		let atkBoosts = attacker.boosts[attackStat];
 		let defBoosts = defender.boosts[defenseStat];
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
@@ -1613,18 +1596,14 @@ export class BattleActions {
 			defBoosts = 0;
 		}
 
-		if (move.useTargetOffensive) {
-			attack = defender.calculateStat(attackStat, atkBoosts);
-		} else {
-			attack = attacker.calculateStat(attackStat, atkBoosts);
-		}
+		let attack = attacker.calculateStat(attackStat, atkBoosts);
+		let defense = defender.calculateStat(defenseStat, defBoosts);
 
 		attackStat = (category === 'Physical' ? 'atk' : 'spa');
-		defense = defender.calculateStat(defenseStat, defBoosts);
 
 		// Apply Stat Modifiers
-		attack = this.battle.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
-		defense = this.battle.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
+		attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
+		defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
 
 		if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);

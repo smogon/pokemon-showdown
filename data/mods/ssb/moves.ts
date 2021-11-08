@@ -853,7 +853,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Spirit Break', target);
 		},
-		useSourceDefensiveAsOffensive: true,
+		overrideOffensiveStat: 'spd',
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -906,6 +906,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return 8;
 				}
 				return 5;
+			},
+			onModifyMove(move, source, target) {
+				if (move.overrideOffensiveStat && !['atk', 'spa'].includes(move.overrideOffensiveStat)) return;
+				const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+				if (!attacker) return;
+				move.overrideOffensiveStat = attacker.getStat('atk') > attacker.getStat('spa') ? 'spa' : 'atk';
 			},
 			// Stat modifying in scripts.ts
 			onFieldStart(field, source, effect) {
@@ -4400,6 +4406,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 110,
 		category: "Physical",
+		overrideOffensivePokemon: 'target',
+		overrideOffensiveStat: 'spd',
 		desc: "This move uses the target's Special Defense to calculate damage (like Foul Play). This move is neutrally effective against Steel-types.",
 		shortDesc: "Uses foe's SpD as user's Atk. Hits Steel.",
 		name: "I'm Toxic You're Slippin' Under",
@@ -4569,7 +4577,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Fire') return 1;
 		},
-		useSourceDefensiveAsOffensive: true,
+		overrideOffensiveStat: 'def',
 		secondary: {
 			chance: 10,
 			status: "frz",
