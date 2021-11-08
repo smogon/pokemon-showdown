@@ -27,13 +27,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	userid: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Username')}|Switch In Message`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Username')}|Switch In Message`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Username')}|Switch Out Message`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Username')}|Switch Out Message`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Username')}|Faint Message`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Username')}|Faint Message`);
 		},
 		// Innate effects go here
 	},
@@ -43,213 +43,213 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	abdelrahman: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Abdelrahman')}|good morning, i'm town`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Abdelrahman')}|good morning, i'm town`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Abdelrahman')}|brb gonna go lynch scum`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Abdelrahman')}|brb gonna go lynch scum`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Abdelrahman')}|I CC COP TOWN FAILED`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Abdelrahman')}|I CC COP TOWN FAILED`);
 		},
 	},
 	adri: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Adri')}|This time will definitely be the one !`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Adri')}|This time will definitely be the one !`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Adri')}|//afk`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Adri')}|//afk`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Adri')}|Until next time...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Adri')}|Until next time...`);
 		},
 	},
 	aelita: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Aelita')}|The Scyphozoa's absorbing Aelita's memories!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aelita')}|The Scyphozoa's absorbing Aelita's memories!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Aelita')}|We scared it away but it will be back. We can't let it get ahold of Aelita's memories.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aelita')}|We scared it away but it will be back. We can't let it get ahold of Aelita's memories.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Aelita')}|X.A.N.A. is finally finished for good.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aelita')}|X.A.N.A. is finally finished for good.`);
 		},
 	},
 	aegii: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('aegii')}|shoot! take a pano~rama~ https://youtu.be/G8GaQdW2wHc`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('aegii')}|shoot! take a pano~rama~ https://youtu.be/G8GaQdW2wHc`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('aegii')}|${this.sample([`brb, buying albums`, `brb, downloading fancams`, `brb, streaming mvs`, `brb, learning choreos`])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('aegii')}|${this.sample([`brb, buying albums`, `brb, downloading fancams`, `brb, streaming mvs`, `brb, learning choreos`])}`);
 		},
 		onFaint() {
-			this.add(`c|${getName('aegii')}|i forgot to stan loona...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('aegii')}|i forgot to stan loona...`);
 		},
 	},
 	aeonic: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Aeonic')}|What's bonkin?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aeonic')}|What's bonkin?`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Aeonic')}|I am thou, thou art I`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aeonic')}|I am thou, thou art I`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Aeonic')}|Guys the emoji movie wasn't __that bad__`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aeonic')}|Guys the emoji movie wasn't __that bad__`);
 		},
 	},
 	aethernum: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Aethernum')}|Hlelo ^_^ Lotad is so cute, don't you think? But don't underestimate him!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aethernum')}|Hlelo ^_^ Lotad is so cute, don't you think? But don't underestimate him!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Aethernum')}|Sinking in this sea of possibilities for now...but i'll float back once again!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aethernum')}|Sinking in this sea of possibilities for now...but i'll float back once again!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Aethernum')}|Ok, ok, i have procrastinated enough here, time to go ^_^' See ya around!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aethernum')}|Ok, ok, i have procrastinated enough here, time to go ^_^' See ya around!`);
 		},
 	},
 	akir: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Akir')}|hey whats up`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Akir')}|hey whats up`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Akir')}|let me get back to you`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Akir')}|let me get back to you`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Akir')}|ah well maybe next time`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Akir')}|ah well maybe next time`);
 		},
 	},
 	alpha: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Alpha')}|eccomi dimmi`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Alpha')}|eccomi dimmi`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Alpha')}|FRATM FACI FRIDDU`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Alpha')}|FRATM FACI FRIDDU`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Alpha')}|caio`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Alpha')}|caio`);
 		},
 	},
 	andrew: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Andrew')}|/me vents in`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Andrew')}|/me vents in`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Andrew')}|purple sus`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Andrew')}|purple sus`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Andrew')}|tidal otter is impostor! He vented in front of me in admin! Vote him out next!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Andrew')}|tidal otter is impostor! He vented in front of me in admin! Vote him out next!`);
 		},
 	},
 	annika: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Annika')}|The circumstances of one's birth are irrelevant; it is what you do with the gift of life that determines who you are.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Annika')}|The circumstances of one's birth are irrelevant; it is what you do with the gift of life that determines who you are.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Annika')}|I'll be stronger when I'm back ^_^`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Annika')}|I'll be stronger when I'm back ^_^`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Annika')}|oh, I crashed the server again...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Annika')}|oh, I crashed the server again...`);
 		},
 	},
 	aquagtothepast: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('A Quag To The Past')}|Whatever happens, happens.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('A Quag To The Past')}|Whatever happens, happens.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('A Quag To The Past')}|See you space cowboy...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('A Quag To The Past')}|See you space cowboy...`);
 		},
 		onFaint() {
-			this.add(`c|${getName('A Quag To The Past')}|You're gonna carry that weight.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('A Quag To The Past')}|You're gonna carry that weight.`);
 		},
 	},
 	arby: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Arby')}|Time to win this :)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Arby')}|Time to win this :)`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Arby')}|MSU need a sub`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Arby')}|MSU need a sub`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Arby')}|Authhate is real.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Arby')}|Authhate is real.`);
 		},
 	},
 	archas: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Archas')}|Ready the main batteries, gentlemen! Hit ‘em hard and fast!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Archas')}|Ready the main batteries, gentlemen! Hit ‘em hard and fast!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Archas')}|Helmsman, full reverse at speed!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Archas')}|Helmsman, full reverse at speed!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Archas')}|They say the captain always goes down with the ship...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Archas')}|They say the captain always goes down with the ship...`);
 		},
 	},
 	arcticblast: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Arcticblast')}|words are difficult`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Arcticblast')}|words are difficult`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Arcticblast')}|oh no`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Arcticblast')}|oh no`);
 		},
 		onFaint() {
 			if (this.randomChance(1, 100)) {
-				this.add(`c|${getName('Arcticblast')}|get **mished** kid`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Arcticblast')}|get **mished** kid`);
 			} else {
-				this.add(`c|${getName('Arcticblast')}|single battles are bad anyway, why am I here?`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Arcticblast')}|single battles are bad anyway, why am I here?`);
 			}
 		},
 	},
 	awauser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('awa!')}|awa!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('awa!')}|awa!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('awa!')}|well, at least i didn't lose the game`);
-			this.add(`c|${getName('awa!')}|or did i?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('awa!')}|well, at least i didn't lose the game`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('awa!')}|or did i?`);
 		},
 		onFaint() {
-			this.add(`c|${getName('awa!')}|awawa?! awa awawawa awawa >:(`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('awa!')}|awawa?! awa awawawa awawa >:(`);
 		},
 	},
 	beowulf: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Beowulf')}|:^)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Beowulf')}|:^)`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Beowulf')}|/me buzzes`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Beowulf')}|/me buzzes`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Beowulf')}|time for my own isekai`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Beowulf')}|time for my own isekai`);
 		},
 		onSourceFaint() {
-			this.add(`c|${getName('Beowulf')}|another one reincarnating into an isekai`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Beowulf')}|another one reincarnating into an isekai`);
 		},
 	},
 	biggie: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('biggie')}|gonna take you for a ride`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('biggie')}|gonna take you for a ride`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('biggie')}|mahvel baybee!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('biggie')}|mahvel baybee!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('biggie')}|it was all a dream`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('biggie')}|it was all a dream`);
 		},
 	},
 	billo: {
@@ -257,13 +257,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(source) {
 			let activeMon = source.side.foe.active[0].species.name;
 			if (!activeMon) activeMon = "Pokemon";
-			this.add(`c|${getName('Billo')}|Your ${activeMon} looks hacked.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Billo')}|Your ${activeMon} looks hacked.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Billo')}|Let me inspect your Pokemon, brb`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Billo')}|Let me inspect your Pokemon, brb`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Billo')}|Yep, definitely hacked.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Billo')}|Yep, definitely hacked.`);
 		},
 		innateName: "Unaware",
 		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
@@ -288,39 +288,39 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	blaz: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Blaz')}|Give me, give me, give me the truth now oh oh oh oh`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Blaz')}|Give me, give me, give me the truth now oh oh oh oh`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Blaz')}|Tell me... why? Please tell me why do we worry? Why? Why do we worry at all?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Blaz')}|Tell me... why? Please tell me why do we worry? Why? Why do we worry at all?`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Blaz')}|the game (lol u lost)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Blaz')}|the game (lol u lost)`);
 		},
 	},
 	brandon: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Brandon')}|I didn't come here to play. I came here to slay!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Brandon')}|I didn't come here to play. I came here to slay!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Brandon')}|${this.sample([`I need to catch my breath`, `brb getting a snack`])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Brandon')}|${this.sample([`I need to catch my breath`, `brb getting a snack`])}`);
 		},
 		onFaint(pokemon) {
 			const foeName = pokemon.side.foe.active[0].illusion ?
 				pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name;
-			this.add(`c|${getName('Brandon')}|${this.sample([`This battle was rigga morris!`, `At least I'll snag Miss Congeniality...`, `This battle was rigged for ${foeName} anyway >:(`])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Brandon')}|${this.sample([`This battle was rigga morris!`, `At least I'll snag Miss Congeniality...`, `This battle was rigged for ${foeName} anyway >:(`])}`);
 		},
 	},
 	brouha: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('brouha')}|lmf`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('brouha')}|lmf`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('brouha')}|....`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('brouha')}|....`);
 		},
 		onFaint() {
-			this.add(`c|${getName('brouha')}|sobL`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('brouha')}|sobL`);
 		},
 	},
 	buffy: {
@@ -332,7 +332,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		innateName: "h",
 		shortDesc: "On switch-in and at the end of every turn, this Pokemon changes type randomly.",
 		onStart(target, pokemon) {
-			this.add(`c|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Cake')}|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`);
 			// h innate
 			if (pokemon.illusion) return;
 			const typeList = [...this.dex.types.names()];
@@ -347,10 +347,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			pokemon.setType(newTypes);
 		},
 		onSwitchOut(pokemon) {
-			this.add(`c|${getName('Cake')}|${pokemon.side.name} is a nerd`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Cake')}|${pokemon.side.name} is a nerd`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Cake')}|Chowder was a good show`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Cake')}|Chowder was a good show`);
 		},
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
@@ -373,13 +373,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	cantsay: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('cant say')}|haha volc go brrrr`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('cant say')}|haha volc go brrrr`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('cant say')}|lol CTed`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('cant say')}|lol CTed`);
 		},
 		onFaint() {
-			this.add(`c|${getName('cant say')}|${this.sample(['imagine taking pokemon seriously when you can just get haxed', '/me plays curb your enthusiasm theme', 'bad players always get lucky'])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('cant say')}|${this.sample(['imagine taking pokemon seriously when you can just get haxed', '/me plays curb your enthusiasm theme', 'bad players always get lucky'])}`);
 		},
 		innateName: "Magic Guard",
 		shortDesc: "This Pokemon can only be damaged by direct attacks.",
@@ -395,25 +395,25 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	celine: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Celine')}|Support has arrived!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Celine')}|Support has arrived!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Celine')}|Brb writing`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Celine')}|Brb writing`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Celine')}|'Tis only a flesh wound!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Celine')}|'Tis only a flesh wound!`);
 		},
 	},
 	ckilgannon: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('c.kilgannon')}|Take a look to the sky just before you die`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('c.kilgannon')}|Take a look to the sky just before you die`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('c.kilgannon')}|Death does wait; there's no debate.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('c.kilgannon')}|Death does wait; there's no debate.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('c.kilgannon')}|Memento mori.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('c.kilgannon')}|Memento mori.`);
 		},
 	},
 	coconut: {
@@ -423,15 +423,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	dogknees: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('dogknees')}|Your opinion is wrong if you think cats are better than dogs ૮・ﻌ・ა`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('dogknees')}|Your opinion is wrong if you think cats are better than dogs ૮・ﻌ・ა`);
 			if (source.illusion) return;
 			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('dogknees')}|Yes, dogs do have knees. Stop asking me.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('dogknees')}|Yes, dogs do have knees. Stop asking me.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('dogknees')}|Nap time!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('dogknees')}|Nap time!`);
 		},
 	},
 	dragonwhale: {
@@ -441,89 +441,89 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	drampasgrandpa: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('drampa\'s grandpa')}|Where are my glasses?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('drampa\'s grandpa')}|Where are my glasses?`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('drampa\'s grandpa')}|Darn kids...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('drampa\'s grandpa')}|Darn kids...`);
 		},
 		onFaint() {
-			this.add(`c|${getName('drampa\'s grandpa')}|Bah humbug!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('drampa\'s grandpa')}|Bah humbug!`);
 		},
 	},
 	dream: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('dream')}|It's Prime Time`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('dream')}|It's Prime Time`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('dream')}|oh no please god tell me we're dreaming`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('dream')}|oh no please god tell me we're dreaming`);
 		},
 		onFaint() {
-			this.add(`c|${getName('dream')}|perdemos`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('dream')}|perdemos`);
 		},
 	},
 	elgino: {
 		noCopy: true,
 		onStart(target, pokemon) {
-			this.add(`c|${getName('Elgino')}|Time to save Hyrule!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Elgino')}|Time to save Hyrule!`);
 			if (pokemon.illusion) return;
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Elgino')}|Hold on I need to stock up on ${this.sample(['Bombs', 'Arrows', 'Magic', 'Seeds'])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Elgino')}|Hold on I need to stock up on ${this.sample(['Bombs', 'Arrows', 'Magic', 'Seeds'])}`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Elgino')}|I'm out of fairies D:!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Elgino')}|I'm out of fairies D:!`);
 		},
 	},
 	emeri: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Emeri')}|hey !`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Emeri')}|hey !`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Emeri')}|//busy`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Emeri')}|//busy`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Emeri')}|don't forget to chall SFG or Agarica in gen8ou`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Emeri')}|don't forget to chall SFG or Agarica in gen8ou`);
 		},
 	},
 	epicnikolai: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('EpicNikolai')}|I never give up until I get something right, which means destroying you ☜(ﾟヮﾟ☜)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('EpicNikolai')}|I never give up until I get something right, which means destroying you ☜(ﾟヮﾟ☜)`);
 			if (source.species.id !== 'garchompmega' || source.illusion) return;
 			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('EpicNikolai')}|This wasn't as fun as I thought it would be, I'm out ¯_( ͡~ ͜ʖ ͡°)_/¯`); // eslint-disable-line no-irregular-whitespace
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('EpicNikolai')}|This wasn't as fun as I thought it would be, I'm out ¯_( ͡~ ͜ʖ ͡°)_/¯`); // eslint-disable-line no-irregular-whitespace
 		},
 		onFaint() {
-			this.add(`c|${getName('EpicNikolai')}|I like to keep a positive attitude even though it is hard sometimes <('o'<)~*/`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('EpicNikolai')}|I like to keep a positive attitude even though it is hard sometimes <('o'<)~*/`);
 		},
 	},
 	estarossa: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('estarossa')}|honestly best pairing for hazard coverage wtih molt is like molt + tsareena/dhelmise`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('estarossa')}|honestly best pairing for hazard coverage wtih molt is like molt + tsareena/dhelmise`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('estarossa')}|sand balance <333`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('estarossa')}|sand balance <333`);
 		},
 		onFaint() {
-			this.add(`c|${getName('estarossa')}|*eurgh*`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('estarossa')}|*eurgh*`);
 		},
 	},
 	explodingdaisies: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('explodingdaisies')}|Turn and run now, and I will mercifully pretend this never happened.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('explodingdaisies')}|Turn and run now, and I will mercifully pretend this never happened.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('explodingdaisies')}|You are beneath me, and it shows.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('explodingdaisies')}|You are beneath me, and it shows.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('explodingdaisies')}|Unacceptable!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('explodingdaisies')}|Unacceptable!`);
 		},
 	},
 	fart: {
@@ -534,19 +534,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			activeMon = activeMon.illusion ? activeMon.illusion.name : activeMon.name;
 			const family = ['aethernum', 'trickster', 'celestial', 'gimmick', 'zalm', 'aelita', 'biggie'];
 			if (this.toID(activeMon) === 'hoeenhero') {
-				this.add(`c|${getName('fart')}|🎵 it's friday, friday, gotta get down on friday 🎵`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|🎵 it's friday, friday, gotta get down on friday 🎵`);
 			} else if (this.toID(activeMon) === 'grimauxiliatrix') {
-				this.add(`c|${getName('fart')}|howdy ho, neighbor`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|howdy ho, neighbor`);
 			} else if (this.toID(activeMon) === 'fart') {
-				this.add(`c|${getName('fart')}|How Can Mirrors Be Real If Our Eyes Aren't Real`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|How Can Mirrors Be Real If Our Eyes Aren't Real`);
 			} else if (family.includes(this.toID(activeMon))) {
-				this.add(`c|${getName('fart')}|hey, hey, hey. ${activeMon} is OK`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|hey, hey, hey. ${activeMon} is OK`);
 			} else {
-				this.add(`c|${getName('fart')}|rats, rats, we are the rats`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|rats, rats, we are the rats`);
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('fart')}|if I can't win this game, then I'll make it boring for everyone.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|if I can't win this game, then I'll make it boring for everyone.`);
 		},
 		onFaint(pokemon) {
 			let activeMon;
@@ -554,24 +554,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			activeMon = this.toID(activeMon.illusion ? activeMon.illusion.name : activeMon.name);
 			const family = ['aethernum', 'trickster', 'celestial', 'gimmick', 'zalm', 'aelita', 'biggie'];
 			if (family.includes(activeMon)) {
-				this.add(`c|${getName('fart')}|at least I wasn't boring, right?`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|at least I wasn't boring, right?`);
 			} else {
-				this.add(`c|${getName('fart')}|oy, I die`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|oy, I die`);
 			}
 		},
 	},
 	felucia: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('Felucia')}|battlesignup! I dropped my dice somewhere and now all I can do is make you play with them (join using %join one)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Felucia')}|battlesignup! I dropped my dice somewhere and now all I can do is make you play with them (join using %join one)`);
 			if (source.illusion) return;
 			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Felucia')}|battlesignup: I lost connection to a player so I guess I'll get a new one (/me in to sub)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Felucia')}|battlesignup: I lost connection to a player so I guess I'll get a new one (/me in to sub)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Felucia')}|%remp Felucia`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Felucia')}|%remp Felucia`);
 		},
 	},
 	finland: {
@@ -590,7 +590,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			} else {
 				message = 'poog';
 			}
-			this.add(`c|${getName('Finland')}|${message}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Finland')}|${message}`);
 			if (source.illusion) return;
 			this.boost({spa: 1, spd: 1}, source);
 		},
@@ -608,51 +608,51 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		innateName: "Fickle Decorator",
 		shortDesc: "Calm Mind on switch-in. Changes boosts depending on move used.",
 		onSwitchOut() {
-			this.add(`c|${getName('Finland')}|i hope running away is safe on shield?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Finland')}|i hope running away is safe on shield?`);
 		},
 		onFaint() {
 			if (this.randomChance(99, 100)) {
-				this.add(`c|${getName('Finland')}|FINLAND!!!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Finland')}|FINLAND!!!`);
 			} else {
 				// personally i like young link from oot3d and mm3d - sp
-				this.add(`c|${getName('Finland')}|i hate young link. i hate you i hate you i hate you. i hate you. young link i hate you. i despise you. i loathe you. your existence is an affront to my person. to my own existence. it's an offense. a despicable crime. a wretched abomination. even worse than mega man. a cruel barbarity. an awful curse from capricious, pernicious fate. oh do i hate young link. i scorn you. i cast you away to ignominy and hatred even worse than mega man. you are shameful young link, and you should never show your face again`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Finland')}|i hate young link. i hate you i hate you i hate you. i hate you. young link i hate you. i despise you. i loathe you. your existence is an affront to my person. to my own existence. it's an offense. a despicable crime. a wretched abomination. even worse than mega man. a cruel barbarity. an awful curse from capricious, pernicious fate. oh do i hate young link. i scorn you. i cast you away to ignominy and hatred even worse than mega man. you are shameful young link, and you should never show your face again`);
 			}
 		},
 	},
 	frostyicelad: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('frostyicelad ❆')}|Oh i guess its my turn now! Time to sweep!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('frostyicelad ❆')}|Oh i guess its my turn now! Time to sweep!`);
 		},
 		onSwitchOut(source) {
-			this.add(`c|${getName('frostyicelad ❆')}|Hey! ${source.side.name} why dont you keep me in and let me sweep? Mean.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('frostyicelad ❆')}|Hey! ${source.side.name} why dont you keep me in and let me sweep? Mean.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('frostyicelad ❆')}|So c-c-cold`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('frostyicelad ❆')}|So c-c-cold`);
 		},
 	},
 	gallantspear: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('gallant\'s pear')}|**Rejoice! The one to inherit all Rider powers, the time king who will rule over the past and the future.**`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('gallant\'s pear')}|**Rejoice! The one to inherit all Rider powers, the time king who will rule over the past and the future.**`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('gallant\'s pear')}|My Overlord..`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('gallant\'s pear')}|My Overlord..`);
 		},
 		onFaint() {
-			this.add(`c|${getName('gallant\'s pear')}|Damn you, Decade!!!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('gallant\'s pear')}|Damn you, Decade!!!`);
 		},
 	},
 	gimmick: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Gimmick')}|Mama, they say I'm a TRRST`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Gimmick')}|Mama, they say I'm a TRRST`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Gimmick')}|Ic3peak to you later`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Gimmick')}|Ic3peak to you later`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Gimmick')}|I did nothing wrong (but I got on the blacklist)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Gimmick')}|I did nothing wrong (but I got on the blacklist)`);
 		},
 		// Unburden Innate
 		onAfterUseItem(item, pokemon) {
@@ -672,88 +672,88 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	gmars: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('GMars')}|It's ya boy GEEEEEEEEMARS`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('GMars')}|It's ya boy GEEEEEEEEMARS`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('GMars')}|Who switches out a Minior in prime position?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('GMars')}|Who switches out a Minior in prime position?`);
 		},
 		onFaint() {
-			this.add(`c|${getName('GMars')}|Follow me on bandcamp`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('GMars')}|Follow me on bandcamp`);
 		},
 	},
 	grimauxiliatrix: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('grimAuxiliatrix')}|${this.sample(['THE JUICE IS LOOSE', 'TOOTHPASTE\'S OUT OF THE TUBE', 'PREPARE TO DISCORPORATE'])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('grimAuxiliatrix')}|${this.sample(['THE JUICE IS LOOSE', 'TOOTHPASTE\'S OUT OF THE TUBE', 'PREPARE TO DISCORPORATE'])}`);
 		},
 		onFaint() {
-			this.add(`c|${getName('grimAuxiliatrix')}|${this.sample(['NOT LIKE THIS', 'HALT - MODULE CORE HEMORRHAGE', 'AAAAAAAAAAAAAAAAAAA', 'Change da world... my final message. Goodb ye.'])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('grimAuxiliatrix')}|${this.sample(['NOT LIKE THIS', 'HALT - MODULE CORE HEMORRHAGE', 'AAAAAAAAAAAAAAAAAAA', 'Change da world... my final message. Goodb ye.'])}`);
 		},
 	},
 	hoeenhero: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('HoeenHero')}|A storm is brewing...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('HoeenHero')}|A storm is brewing...`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('HoeenHero')}|The eye of the hurricane provides a brief respite from the storm.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('HoeenHero')}|The eye of the hurricane provides a brief respite from the storm.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('HoeenHero')}|All storms eventually disipate.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('HoeenHero')}|All storms eventually disipate.`);
 		},
 	},
 	hubriz: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Hubriz')}|Free hugs!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Hubriz')}|Free hugs!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Hubriz')}|The soil's pH level is too high. I'm out!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Hubriz')}|The soil's pH level is too high. I'm out!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Hubriz')}|Delicate Flower Quest failed...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Hubriz')}|Delicate Flower Quest failed...`);
 		},
 	},
 	hydro: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c|${getName('Hydro')}|Person reading this is a qt nerd and there is absolutely NOTHING u can do about it :)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Hydro')}|Person reading this is a qt nerd and there is absolutely NOTHING u can do about it :)`);
 			if (pokemon.illusion) return;
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Hydro')}|brb, taking a break from ur nerdiness`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Hydro')}|brb, taking a break from ur nerdiness`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Hydro')}|RUUUUUDEEE`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Hydro')}|RUUUUUDEEE`);
 		},
 	},
 	inactive: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Inactive')}|Are you my nightmare? Or am I yours?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Inactive')}|Are you my nightmare? Or am I yours?`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Inactive')}|This is not the end...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Inactive')}|This is not the end...`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Inactive')}|/me turns to stone and crumbles`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Inactive')}|/me turns to stone and crumbles`);
 		},
 	},
 	instructuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('instruct')}|lets drink to a great time!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('instruct')}|lets drink to a great time!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Swagn')}|Hey, instruct. Here's those 15,000 walls of text you ordered. :3`);
-			this.add(`c|${getName('instruct')}|ya know, why __do__ you always flood my dms?`);
-			this.add(`c|${getName('instruct')}|whatever im just gonna go get some more coke`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Swagn')}|Hey, instruct. Here's those 15,000 walls of text you ordered. :3`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('instruct')}|ya know, why __do__ you always flood my dms?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('instruct')}|whatever im just gonna go get some more coke`);
 		},
 		onFaint() {
-			this.add(`c|${getName('instruct')}|wait did we run out of coca-cola?`);
-			this.add(`c|${getName('instruct')}|laaaaaaaaaaame`);
-			this.add(`c|${getName('instruct')}|yall suck im going home`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('instruct')}|wait did we run out of coca-cola?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('instruct')}|laaaaaaaaaaame`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('instruct')}|yall suck im going home`);
 		},
 		innateName: "Last Laugh",
 		desc: "Upon fainting to an opponent's direct attack, this Pokemon deals damage to all Pokemon that have made contact with it equal to 50% of their max HP. This damage cannot KO Pokemon.",
@@ -794,76 +794,76 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	iyarito: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Iyarito')}|Madre de Dios, ¡es el Pollo Diablo!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Iyarito')}|Madre de Dios, ¡es el Pollo Diablo!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Iyarito')}|Well, you're not taking me without a fight!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Iyarito')}|Well, you're not taking me without a fight!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Iyarito')}|RIP Patrona`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Iyarito')}|RIP Patrona`);
 		},
 	},
 	jett: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Jett')}|It's a good day for a hunt.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jett')}|It's a good day for a hunt.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Jett')}|I'll be back for more.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jett')}|I'll be back for more.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Jett')}|They got lucky.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jett')}|They got lucky.`);
 		},
 	},
 	jho: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Jho')}|Hey there party people`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jho')}|Hey there party people`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Jho')}|The Terminator(1984), 00:57:10`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jho')}|The Terminator(1984), 00:57:10`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Jho')}|Unfortunately, CAP no longer accepts custom elements`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jho')}|Unfortunately, CAP no longer accepts custom elements`);
 		},
 	},
 	jordy: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Jordy')}|I heard there's a badge here. Please give it to me immediately.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jordy')}|I heard there's a badge here. Please give it to me immediately.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Jordy')}|Au Revoir. Was that right?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jordy')}|Au Revoir. Was that right?`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Jordy')}|hjb`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jordy')}|hjb`);
 		},
 	},
 	kaijubunny: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('Kaiju Bunny')}|I heard SOMEONE wasn't getting enough affection! ￣( ÒㅅÓ)￣`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kaiju Bunny')}|I heard SOMEONE wasn't getting enough affection! ￣( ÒㅅÓ)￣`);
 			if (source.species.id !== 'lopunnymega' || source.illusion) return;
 			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Kaiju Bunny')}|Brb, need more coffee ￣( =ㅅ=)￣`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kaiju Bunny')}|Brb, need more coffee ￣( =ㅅ=)￣`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Kaiju Bunny')}|Wow, okay, r00d ￣(ಥㅅಥ)￣`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kaiju Bunny')}|Wow, okay, r00d ￣(ಥㅅಥ)￣`);
 		},
 	},
 	kalalokki: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Kalalokki')}|(•_•)`);
-			this.add(`c|${getName('Kalalokki')}|( •_•)>⌐■-■`);
-			this.add(`c|${getName('Kalalokki')}|(⌐■_■)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kalalokki')}|(•_•)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kalalokki')}|( •_•)>⌐■-■`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kalalokki')}|(⌐■_■)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Kalalokki')}|(⌐■_■)`);
-			this.add(`c|${getName('Kalalokki')}|( •_•)>⌐■-■`);
-			this.add(`c|${getName('Kalalokki')}|(x_x)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kalalokki')}|(⌐■_■)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kalalokki')}|( •_•)>⌐■-■`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kalalokki')}|(x_x)`);
 		},
 		innateName: "Sturdy",
 		shortDesc: "If this Pokemon is at full HP, it survives one hit with at least 1 HP. Immune to OHKO.",
@@ -887,61 +887,61 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	kennedy: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Kennedy')}|up the reds`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kennedy')}|up the reds`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Kennedy')}|brb Jayi is PMing me (again) -_-`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kennedy')}|brb Jayi is PMing me (again) -_-`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Kennedy')}|I'm not meant to score goals anyway, I'm a defensive striker.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kennedy')}|I'm not meant to score goals anyway, I'm a defensive striker.`);
 		},
 	},
 	kev: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Kev')}|Sorry for raining on your parade`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kev')}|Sorry for raining on your parade`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Kev')}|Rain, rain, go away, come again another day`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kev')}|Rain, rain, go away, come again another day`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Kev')}|I guess I'm all washed up...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kev')}|I guess I'm all washed up...`);
 		},
 	},
 	kingbaruk: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Kingbaruk')}|:cute:`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kingbaruk')}|:cute:`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Kingbaruk')}|//none`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kingbaruk')}|//none`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Kingbaruk')}|Fijne avond nog`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kingbaruk')}|Fijne avond nog`);
 		},
 	},
 	kingswordyt: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('KingSwordYT')}|Mucho texto`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('KingSwordYT')}|Mucho texto`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('KingSwordYT')}|Hasta la próximaaaa`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('KingSwordYT')}|Hasta la próximaaaa`);
 		},
 		onFaint() {
-			this.add(`c|${getName('KingSwordYT')}|**__Se anula el host__**`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('KingSwordYT')}|**__Se anula el host__**`);
 		},
 	},
 	kipkluif: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Kipkluif')}|Please play LCUU, it's fun`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kipkluif')}|Please play LCUU, it's fun`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Kipkluif')}| /teleport`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kipkluif')}| /teleport`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Kipkluif')}|I've failed you.. I pray you hurry.. with those reinforcments.. you promised..`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kipkluif')}|I've failed you.. I pray you hurry.. with those reinforcments.. you promised..`);
 		},
 	},
 	kris: {
@@ -953,27 +953,27 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			const foeName = source.side.foe.active[0].illusion ?
 				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
 			if (foeName === 'Aeonic' || source.side.foe.name === 'Aeonic') {
-				this.add(`c|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
 			} else {
-				this.add(`c|${getName('Kris')}|hi ${foeName}`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|hi ${foeName}`);
 			}
 		},
 		onSwitchOut(source) {
 			const foeName = source.side.foe.active[0].illusion ?
 				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
 			if (foeName === 'Aeonic' || source.side.foe.name === 'Aeonic') {
-				this.add(`c|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
 			} else {
-				this.add(`c|${getName('Kris')}|bye ${foeName}`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|bye ${foeName}`);
 			}
 		},
 		onFaint(target) {
 			const foeName = target.illusion ?
 				target.illusion.name : target.name;
 			if (foeName === 'Aeonic' || target.side.name === 'Aeonic') {
-				this.add(`c|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|HAPPY BIRTHDAY AEONIC!!!!`);
 			} else {
-				this.add(`c|${getName('Kris')}|Fortnite Battle Royale`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|Fortnite Battle Royale`);
 			}
 		},
 		// phuck innate
@@ -996,18 +996,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			const currentLetter = currentFormeID.charAt(5) || 'a';
 			const chosenLetter = this.sample(unownLetters.filter(letter => letter !== currentLetter));
 			// Change is permanent so when you switch out you keep the letter
-			this.add(`c|${getName('Kris')}|watch this`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|watch this`);
 			if (chosenLetter === 'w') {
 				this.add('-activate', pokemon, 'ability: phuck');
 				pokemon.formeChange(`unownw`, this.effect, true);
-				this.add(`c|${getName('Kris')}|W? More like L`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|W? More like L`);
 				this.add('-activate', pokemon, 'ability: phuck');
 				pokemon.formeChange(`unownl`, this.effect, true);
 				this.hint(`There are no W Pokemon that work with Kris's signature move, so we're counting this as a loss`);
 			} else if (chosenLetter === 'u') {
 				this.add('-activate', pokemon, 'ability: phuck');
 				pokemon.formeChange(`unownu`, this.effect, true);
-				this.add(`c|${getName('Kris')}|U? I'm already an Unown, no`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Kris')}|U? I'm already an Unown, no`);
 				this.add('-activate', pokemon, 'ability: phuck');
 				const chosenLetter2 = this.sample(unownLetters.filter(letter => letter !== 'u' && letter !== 'w'));
 				pokemon.formeChange(`unown${chosenLetter2}`, this.effect, true);
@@ -1021,145 +1021,145 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	lamp: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c|${getName('Lamp')}|DUDE HI ${pokemon.side.foe.name} (:`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lamp')}|DUDE HI ${pokemon.side.foe.name} (:`);
 		},
 		onSwitchOut(pokemon) {
-			this.add(`c|${getName('Lamp')}|bye ${pokemon.side.foe.name} :)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lamp')}|bye ${pokemon.side.foe.name} :)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Lamp')}|no u`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lamp')}|no u`);
 		},
 	},
 	lionyx: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Lionyx')}|Hi, this is ps-chan, how may I help you, user-kun? (｡◕‿‿◕｡)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lionyx')}|Hi, this is ps-chan, how may I help you, user-kun? (｡◕‿‿◕｡)`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Lionyx')}|Teclis au secours`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lionyx')}|Teclis au secours`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Lionyx')}|The cold never bothered me anyway...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lionyx')}|The cold never bothered me anyway...`);
 		},
 	},
 	litteleven: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Litt♥Eleven')}|The coin is flipped, what follows is destiny alone.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Litt♥Eleven')}|The coin is flipped, what follows is destiny alone.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Litt♥Eleven')}|Looks like my business is finished here... for now.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Litt♥Eleven')}|Looks like my business is finished here... for now.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Litt♥Eleven')}|Perhaps, coin tossing isn't the optimal way to win a war...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Litt♥Eleven')}|Perhaps, coin tossing isn't the optimal way to win a war...`);
 		},
 	},
 	lunalauser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Lunala')}|o bella`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lunala')}|o bella`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Lunala')}|Condivido schermo cosi' guardiamo i tre porcellini?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lunala')}|Condivido schermo cosi' guardiamo i tre porcellini?`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Lunala')}|BE... Ok mejo chiudere gioco... vedo documentario su Bibbia`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Lunala')}|BE... Ok mejo chiudere gioco... vedo documentario su Bibbia`);
 		},
 	},
 	madmonty: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Mad Monty ¾°')}|Ah, the sweet smell of rain... Oh! Hi there!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Mad Monty ¾°')}|Ah, the sweet smell of rain... Oh! Hi there!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Mad Monty ¾°')}|Hey, I was enjoying the weather! Awww...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Mad Monty ¾°')}|Hey, I was enjoying the weather! Awww...`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Mad Monty ¾°')}|Nooo, if I go, who will stop the llamas?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Mad Monty ¾°')}|Nooo, if I go, who will stop the llamas?`);
 		},
 	},
 	majorbowman: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('MajorBowman')}|Aaaand Cracktion!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('MajorBowman')}|Aaaand Cracktion!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('MajorBowman')}|This isn't Maury Povich!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('MajorBowman')}|This isn't Maury Povich!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('MajorBowman')}|Never loved ya.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('MajorBowman')}|Never loved ya.`);
 		},
 	},
 	marshmallon: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Marshmallon')}|I'm hungry. Are you edible? c:`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Marshmallon')}|I'm hungry. Are you edible? c:`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Marshmallon')}|RAWWWR`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Marshmallon')}|RAWWWR`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Marshmallon')}|I'm still hungry. rawr. :c`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Marshmallon')}|I'm still hungry. rawr. :c`);
 		},
 	},
 	meicoo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Meicoo')}|cool quiz`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Meicoo')}|cool quiz`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Meicoo')}|/leavehunt`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Meicoo')}|/leavehunt`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Meicoo')}|/endhunt`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Meicoo')}|/endhunt`);
 		},
 	},
 	mitsuki: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Mitsuki')}|alguem quer batalha?????`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Mitsuki')}|alguem quer batalha?????`);
 		},
 		onSwitchOut(source) {
-			this.add(`c|${getName('Mitsuki')}|You're weak, ${source.side.foe.name}. Why? Because you lack... hatred.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Mitsuki')}|You're weak, ${source.side.foe.name}. Why? Because you lack... hatred.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Mitsuki')}|THIS WORLD SHALL KNOW P A I N`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Mitsuki')}|THIS WORLD SHALL KNOW P A I N`);
 		},
 	},
 	n10sit: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('n10siT')}|Heheheh... were you surprised?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('n10siT')}|Heheheh... were you surprised?`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('n10siT')}|Heheheh... did I scare you?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('n10siT')}|Heheheh... did I scare you?`);
 		},
 		onFaint() {
-			this.add(`c|${getName('n10siT')}|Hoopa never saw one of those!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('n10siT')}|Hoopa never saw one of those!`);
 		},
 	},
 	naziel: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Naziel')}|ay ola soy nasieeeeeeel`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Naziel')}|ay ola soy nasieeeeeeel`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Naziel')}|YAY, I WILL NOT DIE THIS TIME`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Naziel')}|YAY, I WILL NOT DIE THIS TIME`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Naziel')}|Toy xikito no puedo ;-;`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Naziel')}|Toy xikito no puedo ;-;`);
 		},
 	},
 	nol: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Nol')}|What's up nerds`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Nol')}|What's up nerds`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Nol')}|cya nerds later`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Nol')}|cya nerds later`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Nol')}|nerd`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Nol')}|nerd`);
 		},
 		innateName: "RSUA",
 		shortDesc: "+1 priority to status moves. 1.5x Defense and Special Defense.",
@@ -1184,183 +1184,183 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	notater517: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Notater517')}|nyaa~... I mean, 'tis a swell day to twirl one's mustache, isn't it?!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Notater517')}|nyaa~... I mean, 'tis a swell day to twirl one's mustache, isn't it?!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Notater517')}|/me corrupt trivia noises`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Notater517')}|/me corrupt trivia noises`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Notater517')}|This is probably a good time to fix my sleep schedule`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Notater517')}|This is probably a good time to fix my sleep schedule`);
 		},
 	},
 	nui: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('nui')}|/html <img src="https://cdn.discordapp.com/emojis/699527334730137630.png" />`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('nui')}|/html <img src="https://cdn.discordapp.com/emojis/699527334730137630.png" />`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('nui')}|/html <img src="https://static-cdn.jtvnw.net/emoticons/v1/301048958/1.0" />`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('nui')}|/html <img src="https://static-cdn.jtvnw.net/emoticons/v1/301048958/1.0" />`);
 		},
 		onFaint() {
-			this.add(`c|${getName('nui')}|/html <img src="https://static-cdn.jtvnw.net/emoticons/v1/302587418/1.0" />`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('nui')}|/html <img src="https://static-cdn.jtvnw.net/emoticons/v1/302587418/1.0" />`);
 		},
 	},
 	overneat: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('Overneat')}|Lets end this ${source.side.foe.name}!!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Overneat')}|Lets end this ${source.side.foe.name}!!`);
 			if (source.species.id !== 'absolmega' || source.illusion) return;
 			this.add('-start', source, 'typechange', source.types.join('/'), '[silent]');
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Overneat')}|I can do better!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Overneat')}|I can do better!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Overneat')}|I was to cocky...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Overneat')}|I was to cocky...`);
 		},
 	},
 	om: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('OM~!')}|What's Up Gamers`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('OM~!')}|What's Up Gamers`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('OM~!')}|Let me just ${this.sample(['host murder for the 100th time', 'clean out scum zzz', 'ladder mnm rq'])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('OM~!')}|Let me just ${this.sample(['host murder for the 100th time', 'clean out scum zzz', 'ladder mnm rq'])}`);
 		},
 		onFaint() {
-			this.add(`c|${getName('OM~!')}|ugh, I ${this.sample(['rolled a 1, damnit.', 'got killed night 1, seriously?', 'got v-create\'d by fucking dragapult lmaoo'])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('OM~!')}|ugh, I ${this.sample(['rolled a 1, damnit.', 'got killed night 1, seriously?', 'got v-create\'d by fucking dragapult lmaoo'])}`);
 		},
 	},
 	pants: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('pants')}|neat`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('pants')}|neat`);
 		},
 		onSwitchOut(source) {
 			if (source.side.sideConditions.givewistfulthinking) {
-				this.add(`c|${getName('pants')}|brb contemplating things`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('pants')}|brb contemplating things`);
 			} else {
-				this.add(`c|${getName('pants')}|brb dying a little`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('pants')}|brb dying a little`);
 			}
 		},
 		onFaint() {
-			this.add(`c|${getName('pants')}|how do you even knock out something that's already dead? i call bs`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('pants')}|how do you even knock out something that's already dead? i call bs`);
 		},
 	},
 	paradise: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Paradise ╱╲☼')}|You ever notice that the first thing a PS tryhard does is put their PS auth in their smogon signature?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Paradise ╱╲☼')}|You ever notice that the first thing a PS tryhard does is put their PS auth in their smogon signature?`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Paradise ╱╲☼')}|Pokemon Showdown copypastas have to be among the worst I've seen on any website. People spam garbage over and over until eventually the mods get fed up and clamp down on spam. I don't blame them for it. Have you ever seen a copypasta fail as hard as the dead memes on this website? There are mods on here who still think that "Harambe" and "Damn Daniel" are the peak of comedy. Not to mention that there are rooms on here that don't even talk about pokemon lol. Yeah, I don't see this website lasting more than 2 years, I'd suggest becoming a mod somewhere else.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Paradise ╱╲☼')}|Pokemon Showdown copypastas have to be among the worst I've seen on any website. People spam garbage over and over until eventually the mods get fed up and clamp down on spam. I don't blame them for it. Have you ever seen a copypasta fail as hard as the dead memes on this website? There are mods on here who still think that "Harambe" and "Damn Daniel" are the peak of comedy. Not to mention that there are rooms on here that don't even talk about pokemon lol. Yeah, I don't see this website lasting more than 2 years, I'd suggest becoming a mod somewhere else.`);
 		},
 		onFaint(pokemon) {
-			this.add(`c|${getName('Paradise ╱╲☼')}|Paradise has been kicked, not banned, therefore you could still potentially invite them back. However, do not do this @${pokemon.side.name}, unless of course, you want to be banned too, because if you invite them back you and Paradise will both be banned.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Paradise ╱╲☼')}|Paradise has been kicked, not banned, therefore you could still potentially invite them back. However, do not do this @${pokemon.side.name}, unless of course, you want to be banned too, because if you invite them back you and Paradise will both be banned.`);
 		},
 	},
 	partman: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('PartMan')}|${this.sample([`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`, `Greetings, today we are all gathered here to pay respects to - wait, this is only ${source.side.foe.name}'s funeral. Never mind.`, `__I'm on fiiiiiiiiiiire__`, `/me hugs`, `A SACRIFICE FOR SNOM`, `${source.side.name} more like nerd`, `NER`])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PartMan')}|${this.sample([`OMA HI ${source.side.name.toUpperCase()} BIG FAN`, `HYDRO IS A NERD`, `Greetings, today we are all gathered here to pay respects to - wait, this is only ${source.side.foe.name}'s funeral. Never mind.`, `__I'm on fiiiiiiiiiiire__`, `/me hugs`, `A SACRIFICE FOR SNOM`, `${source.side.name} more like nerd`, `NER`])}`);
 		},
 		onSwitchOut(source) {
-			this.add(`c|${getName('PartMan')}|Hi ${source.side.name}, I'm PartMan!`);
-			this.add(`c|${getName('PartMan')}|Hi PartMan, I'm PartMan!`);
-			this.add(`c|${getName('PartMan')}|Hi PartMan, I'm PartMan!`);
-			this.add(`c|${getName('Hydro')}|/log PartMan was muted by Hydro for 7 minutes. (flood)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PartMan')}|Hi ${source.side.name}, I'm PartMan!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PartMan')}|Hi PartMan, I'm PartMan!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PartMan')}|Hi PartMan, I'm PartMan!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Hydro')}|/log PartMan was muted by Hydro for 7 minutes. (flood)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('PartMan')}|${this.sample(['B-booli. >.<', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:', '/html <img src="https://allyourmeme.com/wp-content/uploads/2019/05/damn-it-hurts-right-in-my-meow-meow.jpeg" height=50% width=50% />'])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PartMan')}|${this.sample(['B-booli. >.<', 'Remember to dab on iph', 'Excuse me what', 'RUDE', ':pout:', '/html <img src="https://allyourmeme.com/wp-content/uploads/2019/05/damn-it-hurts-right-in-my-meow-meow.jpeg" height=50% width=50% />'])}`);
 		},
 	},
 	peapodc: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('peapod c')}|/me sprints into the room`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('peapod c')}|/me sprints into the room`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('peapod c')}|Must maintain m o m e n t u m`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('peapod c')}|Must maintain m o m e n t u m`);
 		},
 		onFaint() {
-			this.add(`c|${getName('peapod c')}|They say sleep is the cousin of death — but even ghosts need to sleep!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('peapod c')}|They say sleep is the cousin of death — but even ghosts need to sleep!`);
 		},
 	},
 	perishsonguser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Perish Song')}|(╯°□°）╯︵ ┻━┻`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Perish Song')}|(╯°□°）╯︵ ┻━┻`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Perish Song')}|┬──┬◡ﾉ(° -°ﾉ)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Perish Song')}|┬──┬◡ﾉ(° -°ﾉ)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Perish Song')}|Thanks for coming to my TED talk.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Perish Song')}|Thanks for coming to my TED talk.`);
 		},
 	},
 	phiwings99: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('phiwings99')}|Pick.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('phiwings99')}|Pick.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('phiwings99')}|I'm boated.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('phiwings99')}|I'm boated.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('phiwings99')}|God, Nalei is fucking terrible at this game.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('phiwings99')}|God, Nalei is fucking terrible at this game.`);
 		},
 	},
 	piloswinegripado: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('piloswine gripado')}|Suave?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('piloswine gripado')}|Suave?`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('piloswine gripado')}|cya frend :)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('piloswine gripado')}|cya frend :)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('piloswine gripado')}|This was lame :/`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('piloswine gripado')}|This was lame :/`);
 		},
 	},
 	pirateprincess: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('PiraTe Princess')}|Ahoy! o/`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PiraTe Princess')}|Ahoy! o/`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('PiraTe Princess')}|brb making tea`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PiraTe Princess')}|brb making tea`);
 		},
 		onFaint() {
-			this.add(`c|${getName('PiraTe Princess')}|I failed my death save`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PiraTe Princess')}|I failed my death save`);
 		},
 		onHit(target, source, move) {
 			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
-				this.add(`c|${getName('PiraTe Princess')}|NATURAL 20!!!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PiraTe Princess')}|NATURAL 20!!!`);
 			}
 		},
 	},
 	psynergy: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Psynergy')}|Will you survive?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Psynergy')}|Will you survive?`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Psynergy')}|yadon moment`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Psynergy')}|yadon moment`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Psynergy')}|oh`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Psynergy')}|oh`);
 		},
 	},
 	ptoad: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('ptoad')}|I'm ptoad.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('ptoad')}|I'm ptoad.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('ptoad')}|Bye, ribbitch!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('ptoad')}|Bye, ribbitch!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('ptoad')}|OKKKK DUUUDE`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('ptoad')}|OKKKK DUUUDE`);
 		},
 		innateName: "Sticky Hold",
 		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's attack.",
@@ -1377,87 +1377,87 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	rabia: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Rabia')}|eternally`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rabia')}|eternally`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Rabia')}|rabia`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rabia')}|rabia`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
 		},
 	},
 	rach: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Rach')}|Hel-lo`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|Hel-lo`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Rach')}|I was doing better alone`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|I was doing better alone`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Rach')}|I'm all good already, so moved on, it's scary`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|I'm all good already, so moved on, it's scary`);
 		},
 	},
 	rageuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Rage')}|/html <img src="https://media1.tenor.com/images/2eada1bbeb4ed4182079cf00070324a2/tenor.gif" />`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rage')}|/html <img src="https://media1.tenor.com/images/2eada1bbeb4ed4182079cf00070324a2/tenor.gif" />`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Rage')}|im off, cya lads`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rage')}|im off, cya lads`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Rage')}|/me quits`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rage')}|/me quits`);
 		},
 	},
 	raihankibana: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Raihan Kibana')}|Hi gm`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Raihan Kibana')}|Hi gm`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Raihan Kibana')}|Ight Imma head out`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Raihan Kibana')}|Ight Imma head out`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Raihan Kibana')}|Grr bork bork :(`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Raihan Kibana')}|Grr bork bork :(`);
 		},
 	},
 	rajshoot: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Raj.Shoot')}|Plaza Power!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Raj.Shoot')}|Plaza Power!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Raj.Shoot')}|We'll be back!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Raj.Shoot')}|We'll be back!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Raj.Shoot')}|You'll join me in the shadow realm soon....`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Raj.Shoot')}|You'll join me in the shadow realm soon....`);
 		},
 	},
 	ransei: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Ransei')}|Sup! This is Gen 8 so imma run an Eternamax set. Best of luck. You’ll need it :^)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Ransei')}|Sup! This is Gen 8 so imma run an Eternamax set. Best of luck. You’ll need it :^)`);
 		},
 		onFaint(pokemon) {
 			const target = pokemon.side.foe.active[0];
 			if (!target || target.fainted || target.hp <= 0) {
-				this.add(`c|${getName('Ransei')}|Ahah yes you got rekt! Welcome to Hackmons! gg m8!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Ransei')}|Ahah yes you got rekt! Welcome to Hackmons! gg m8!`);
 			} else {
-				this.add(`c|${getName('Ransei')}|ripsei... Ok look you might’ve won this time but I kid you not you’re losing next game!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Ransei')}|ripsei... Ok look you might’ve won this time but I kid you not you’re losing next game!`);
 			}
 		},
 	},
 	ravioliqueen: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('RavioliQueen')}|The Noodle Noble has Arrived!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('RavioliQueen')}|The Noodle Noble has Arrived!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('RavioliQueen')}|Time to spaghett out of here!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('RavioliQueen')}|Time to spaghett out of here!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('RavioliQueen')}|This is impastable!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('RavioliQueen')}|This is impastable!`);
 		},
 		innateName: "Pitch Black Witch",
 		desc: "When this Pokemon sets or switches into Pitch Black errain, its Special Attack and Special Defense are boosted by 1 stage. If this Pokemon gets hit while Pitch Black Terrain is up, it gets +1 speed",
@@ -1468,140 +1468,140 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		noCopy: true,
 		onStart(target, pokemon) {
 			if (pokemon.side.pokemonLeft === 1) {
-				this.add(`c|${getName('Robb576')}|This is our last stand. Give it everything you got ${pokemon.side.name}!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Robb576')}|This is our last stand. Give it everything you got ${pokemon.side.name}!`);
 			} else {
-				this.add(`c|${getName('Robb576')}|1, 2, 3, 4, dunno how to count no more!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Robb576')}|1, 2, 3, 4, dunno how to count no more!`);
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Robb576')}|5, 7, 6, I will be right back into the mix!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Robb576')}|5, 7, 6, I will be right back into the mix!`);
 		},
 		onFaint(pokemon) {
 			if (pokemon.species.name === "Necrozma-Ultra") {
-				this.add(`c|${getName('Robb576')}|gg better luck next time. Sorry I couldn't handle them all :^(`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Robb576')}|gg better luck next time. Sorry I couldn't handle them all :^(`);
 			} else {
-				this.add(`c|${getName('Robb576')}|8, 9, 10, it has been a pleasure man!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Robb576')}|8, 9, 10, it has been a pleasure man!`);
 			}
 		},
 	},
 	sectonia: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Sectonia')}|I love one (1) queen bee`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Sectonia')}|I love one (1) queen bee`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Sectonia')}|My search for my lost queen continues....`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Sectonia')}|My search for my lost queen continues....`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Sectonia')}|NOOOOOO NOT THE JELLY BABY`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Sectonia')}|NOOOOOO NOT THE JELLY BABY`);
 		},
 	},
 	segmr: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Segmr')}|*awakens conquerors haki* Greetings.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Segmr')}|*awakens conquerors haki* Greetings.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Segmr')}|Lemme show you this`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Segmr')}|Lemme show you this`);
 			this.add(`l|Segmr`);
 		},
 		onFaint(pokemon) {
 			const name = pokemon.side.foe.active[0].illusion ?
 				pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name;
-			this.add(`c|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me?`);
 		},
 	},
 	sejesensei: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('sejesensei')}|yoyo, what’ve you been reading lately`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('sejesensei')}|yoyo, what’ve you been reading lately`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('sejesensei')}|bbl, gonna go read some manga`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('sejesensei')}|bbl, gonna go read some manga`);
 		},
 		onFaint() {
-			this.add(`c|${getName('sejesensei')}|B-but, this didn’t happen in the manga…`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('sejesensei')}|B-but, this didn’t happen in the manga…`);
 		},
 	},
 	seso: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Seso')}|I have good spacial awareness, and I'm pretty comfortable with a sword.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Seso')}|I have good spacial awareness, and I'm pretty comfortable with a sword.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Seso')}|In the blink of an eye.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Seso')}|In the blink of an eye.`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Seso')}|I feel just, you know, defeated.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Seso')}|I feel just, you know, defeated.`);
 		},
 	},
 	shadecession: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Shadecession')}|Better put on my Shadecessions`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Shadecession')}|Better put on my Shadecessions`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Shadecession')}|⌐■_■`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Shadecession')}|⌐■_■`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Shadecession')}|ah, gg fam`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Shadecession')}|ah, gg fam`);
 		},
 	},
 	softflex: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Soft Flex')}|:]`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Soft Flex')}|:]`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Soft Flex')}|:[`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Soft Flex')}|:[`);
 		},
 	},
 	spandan: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Spandan')}|Mareanie!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Spandan')}|Mareanie!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Spandan')}|You can't end this toxic relationship just like that!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Spandan')}|You can't end this toxic relationship just like that!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Spandan')}|You didnt do shit. I coded myself to faint.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Spandan')}|You didnt do shit. I coded myself to faint.`);
 		},
 	},
 	struchni: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Struchni')}|~tt newgame`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Struchni')}|~tt newgame`);
 		},
 		onSwitchOut(source) {
-			this.add(`c|${getName('Struchni')}|~tt endgame`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Struchni')}|~tt endgame`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Struchni')}|**selfveto**`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Struchni')}|**selfveto**`);
 		},
 	},
 	teclis: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Teclis')}|Fire at will!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Teclis')}|Fire at will!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Teclis')}|A spark remains...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Teclis')}|A spark remains...`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Teclis')}|You set my soul on fire!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Teclis')}|You set my soul on fire!`);
 		},
 	},
 	temp: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('temp')}|hi, i'm here to drop dracos`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('temp')}|hi, i'm here to drop dracos`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('temp')}|how did I not win yet`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('temp')}|how did I not win yet`);
 		},
 		onFaint() {
-			this.add(`c|${getName('temp')}|oh I died`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('temp')}|oh I died`);
 		},
 	},
 	theimmortal: {
@@ -1609,114 +1609,114 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(source) {
 			const foe = source.side.foe.active[0];
 			const foeName = foe.illusion ? foe.illusion.name : foe.name;
-			this.add(`c|${getName('The Immortal')}|${!foe || foe.fainted || foe.hp <= 0 ? 'hi' : foeName}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('The Immortal')}|${!foe || foe.fainted || foe.hp <= 0 ? 'hi' : foeName}`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('The Immortal')}|ok`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('The Immortal')}|ok`);
 		},
 		onFaint() {
-			this.add(`c|${getName('The Immortal')}|ban stall`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('The Immortal')}|ban stall`);
 		},
 	},
 	thewaffleman: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('thewaffleman')}|Whats Good Youtube its your boy thewaffleman`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('thewaffleman')}|Whats Good Youtube its your boy thewaffleman`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('thewaffleman')}|Never Gonna Give You Up`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('thewaffleman')}|Never Gonna Give You Up`);
 		},
 		onFaint() {
-			this.add(`c|${getName('thewaffleman')}|coyg`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('thewaffleman')}|coyg`);
 		},
 	},
 	tiki: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('tiki')}|just tiki.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('tiki')}|just tiki.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('tiki')}|/html <img src="https://i.imgur.com/0ZRGwvv.png" />`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('tiki')}|/html <img src="https://i.imgur.com/0ZRGwvv.png" />`);
 		},
 		onFaint() {
-			this.add(`c|${getName('tiki')}|aksfgkjag o k`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('tiki')}|aksfgkjag o k`);
 		},
 	},
 	traceuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('trace')}|Daishouri!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('trace')}|Daishouri!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('trace')}|¯\\_(ツ)_/¯`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('trace')}|¯\\_(ツ)_/¯`);
 		},
 		onFaint() {
-			this.add(`c|${getName('trace')}|sucks to sucks`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('trace')}|sucks to sucks`);
 		},
 	},
 	trickster: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Trickster')}|(¤﹏¤)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Trickster')}|(¤﹏¤)`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Trickster')}|(︶︹︺)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Trickster')}|(︶︹︺)`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Trickster')}|(ಥ﹏ಥ)`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Trickster')}|(ಥ﹏ಥ)`);
 		},
 	},
 	vexen: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Vexen')}|Most unlucky for you!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Vexen')}|Most unlucky for you!`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Vexen')}|brb reading Bleach`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Vexen')}|brb reading Bleach`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Vexen')}|Wait this wasn't supposed to happen`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Vexen')}|Wait this wasn't supposed to happen`);
 		},
 	},
 	vivalospride: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('vivalospride')}|hola mi amore`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('vivalospride')}|hola mi amore`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('vivalospride')}|no hablo español`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('vivalospride')}|no hablo español`);
 		},
 		onFaint() {
-			this.add(`c|${getName('vivalospride')}|classic honestly`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('vivalospride')}|classic honestly`);
 		},
 	},
 	volco: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Volco')}|/me loud controller noises`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Volco')}|/me loud controller noises`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Volco')}|/me controller clicking fades`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Volco')}|/me controller clicking fades`);
 		},
 		onFaint(source, target, effect) {
 			if (effect?.id === 'glitchexploiting') {
-				this.add(`c|${getName('Volco')}|Dammit, time for a reset.`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Volco')}|Dammit, time for a reset.`);
 				return;
 			}
-			this.add(`c|${getName('Volco')}|Looks like the game fro-`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Volco')}|Looks like the game fro-`);
 			this.add(`raw|<div class="broadcast-red"><strong>This Pokemon Showdown battle has frozen!</strong><br />Don't worry, we're working on fixing it, so just carry on like you never saw this.<br /><small>(Do not report this, this is intended.)</small></div>`);
 		},
 	},
 	vooper: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('vooper')}|${this.sample(['Paws out, claws out!', 'Ready for the prowl!'])}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('vooper')}|${this.sample(['Paws out, claws out!', 'Ready for the prowl!'])}`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('vooper')}|Must... eat... bamboo...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('vooper')}|Must... eat... bamboo...`);
 		},
 		onFaint() {
-			this.add(`c|${getName('vooper')}|I guess Kung Fu isn't for everyone...`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('vooper')}|I guess Kung Fu isn't for everyone...`);
 		},
 	},
 	yuki: {
@@ -1736,66 +1736,66 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			} else {
 				message = 'Sometimes, you go for it';
 			}
-			this.add(`c|${getName('yuki')}|${message}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('yuki')}|${message}`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('yuki')}|Catch me if you can!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('yuki')}|Catch me if you can!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('yuki')}|You'll never extinguish our hopes!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('yuki')}|You'll never extinguish our hopes!`);
 		},
 	},
 	zalm: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Zalm')}|<(:O)000>`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zalm')}|<(:O)000>`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Zalm')}|Run for the hills!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zalm')}|Run for the hills!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Zalm')}|Woah`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zalm')}|Woah`);
 		},
 	},
 	zarel: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Zarel')}|the melo-p represents PS's battles, and the melo-a represents PS's chatrooms`);
-			this.add(`c|${getName('Zarel')}|THIS melo-a represents kicking your ass, though`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zarel')}|the melo-p represents PS's battles, and the melo-a represents PS's chatrooms`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zarel')}|THIS melo-a represents kicking your ass, though`);
 		},
 	},
 	zodiax: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|${getName('Zodiax')}|Zodiax is here to Zodihax`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zodiax')}|Zodiax is here to Zodihax`);
 
 			// Easter Egg
 			const activeMon = this.toID(
 				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
 			);
 			if (activeMon === 'aeonic') {
-				this.add(`c|${getName('Zodiax')}|Happy Birthday Aeonic`);
-				this.add(`c|${getName('Aeonic')}|THIS JOKE IS AS BORING AS YOU ARE`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zodiax')}|Happy Birthday Aeonic`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Aeonic')}|THIS JOKE IS AS BORING AS YOU ARE`);
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Zodiax')}|Don't worry I'll be back again`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zodiax')}|Don't worry I'll be back again`);
 		},
 		onFaint(pokemon) {
 			const name = pokemon.side.foe.name;
-			this.add(`c|${getName('Zodiax')}|${name}, Why would you hurt this poor little pompombirb :(`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zodiax')}|${name}, Why would you hurt this poor little pompombirb :(`);
 		},
 	},
 	zyguser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|${getName('Zyg')}|Free Swirlyder.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zyg')}|Free Swirlyder.`);
 		},
 		onSwitchOut() {
-			this.add(`c|${getName('Zyg')}|/me sighs... what is there to say?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zyg')}|/me sighs... what is there to say?`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Zyg')}|At least I have a tier.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zyg')}|At least I have a tier.`);
 		},
 	},
 	// Heavy Hailstorm status support for Alpha
@@ -2493,7 +2493,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 				if (move.id === 'randomscreaming') {
-					this.add(`c|${getName('Gimmick')}|Give me some more paaain, baaaby`);
+					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Gimmick')}|Give me some more paaain, baaaby`);
 				}
 			}
 		},
