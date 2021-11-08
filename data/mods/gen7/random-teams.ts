@@ -506,6 +506,7 @@ export class RandomGen7Teams extends RandomTeams {
 			return {cull: (
 				counter.get('Physical') + counter.get('Special') < 2 ||
 				hasRestTalk ||
+				moves.has('rest') ||
 				(!types.has('Water') && !counter.get('Water'))
 			)};
 		case 'sunnyday':

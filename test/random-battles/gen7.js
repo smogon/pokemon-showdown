@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testNotBothMoves, testSet, testHiddenPower} = require('./tools');
+const {testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove} = require('./tools');
 
 describe('[Gen 7] Random Battle', () => {
 	const options = {format: 'gen7randombattle'};
@@ -80,5 +80,13 @@ describe('[Gen 7] Random Battle', () => {
 
 	it('should never give Xerneas Assault Vest', () => {
 		testSet('xerneas', options, set => assert.notEqual(set.item, 'Assault Vest'));
+	});
+
+	it('should always give Gastrodon Recover', () => {
+		testAlwaysHasMove('gastrodon', options, 'recover');
+	});
+
+	it('should never give Poliwrath both Rain Dance and Rest', () => {
+		testNotBothMoves('poliwrath', options, 'raindance', 'rest');
 	});
 });
