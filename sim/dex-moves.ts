@@ -468,14 +468,10 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || null;
 		this.priority = Number(data.priority) || 0;
 		this.category = data.category!;
-		this.overrideOffensiveStat =
-			typeof data.overrideOffensiveStat === 'string' ? (data.overrideOffensiveStat as StatIDExceptHP) : undefined;
-		this.overrideOffensivePokemon =
-			data.overrideOffensivePokemon ? (data.overrideOffensivePokemon === "target" ? "target" : "source") : undefined;
-		this.overrideDefensiveStat =
-			typeof data.overrideDefensiveStat === 'string' ? (data.overrideDefensiveStat as StatIDExceptHP) : undefined;
-		this.overrideDefensivePokemon =
-			data.overrideDefensivePokemon ? (data.overrideDefensivePokemon === "source" ? "source" : "target") : undefined;
+		this.overrideOffensiveStat = data.overrideOffensiveStat || undefined;
+		this.overrideOffensivePokemon = data.overrideOffensivePokemon || undefined;
+		this.overrideDefensiveStat = data.overrideDefensiveStat || undefined;
+		this.overrideDefensivePokemon = data.overrideDefensivePokemon || undefined;
 		this.ignoreNegativeOffensive = !!data.ignoreNegativeOffensive;
 		this.ignorePositiveDefensive = !!data.ignorePositiveDefensive;
 		this.ignoreOffensive = !!data.ignoreOffensive;
