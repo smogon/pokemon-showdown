@@ -1697,7 +1697,11 @@ export const commands: Chat.ChatCommands = {
 			atLeastOne = true;
 		}
 		if (i > 20) buf = `<details class="readmore">${buf}</details>`;
-		if (!atLeastOne) buf = `None found.`;
+		if (!atLeastOne) buf = `<br />None found.`;
+
+		if (this.pmTarget?.isStaff || room?.roomid === 'staff') {
+			this.runBroadcast();
+		}
 
 		return this.sendReplyBox(
 			Utils.html`<strong>Chat messages in the battle '${roomid}'` +
