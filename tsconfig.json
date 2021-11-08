@@ -2,6 +2,9 @@
     "compilerOptions": {
         "lib": ["es2020"],
         "noEmit": true,
+        "jsx": "react",
+        "jsxFactory": "preact.h",
+        "jsxFragmentFactory": "preact.Fragment",
         "target": "es2020",
         "skipLibCheck": true,
         "module": "CommonJS",

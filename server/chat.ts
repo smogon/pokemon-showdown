@@ -30,9 +30,11 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import {Dex} from '../sim';
 import {resolve} from 'path';
+import preact from 'preact';
+import render from 'preact-render-to-string';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
-=> Promise<string | null | void> | string | null | void;
+=> Promise<string | null | void | preact.VNode> | string | null | void | preact.VNode;
 export interface PageTable {
 	[k: string]: PageHandler | PageTable;
 }
@@ -470,6 +472,7 @@ export class PageContext extends MessageContext {
 				`</div></div>`
 			);
 		}
+		if (typeof res === 'object' && res) res = Chat.renderNode(res);
 		if (typeof res === 'string') {
 			this.setHTML(res);
 			res = undefined;
@@ -803,10 +806,12 @@ export class CommandContext extends MessageContext {
 	errorReply(message: string) {
 		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
 	}
-	addBox(htmlContent: string) {
+	addBox(htmlContent: string | preact.VNode) {
+		if (typeof htmlContent !== 'string') htmlContent = Chat.renderNode(htmlContent);
 		this.add(`|html|<div class="infobox">${htmlContent}</div>`);
 	}
-	sendReplyBox(htmlContent: string) {
+	sendReplyBox(htmlContent: string | preact.VNode) {
+		if (typeof htmlContent !== 'string') htmlContent = Chat.renderNode(htmlContent);
 		this.sendReply(`|c|${this.room && this.broadcasting ? this.user.getIdentity() : '~'}|/raw <div class="infobox">${htmlContent}</div>`);
 	}
 	popupReply(message: string) {
@@ -2313,6 +2318,10 @@ export const Chat = new class {
 				output.join('<br />')
 			}</${tag}>`;
 		}
+	}
+
+	renderNode(node: preact.VNode) {
+		return render(node);
 	}
 
 	getReadmoreCodeBlock(str: string, cutoff?: number) {
