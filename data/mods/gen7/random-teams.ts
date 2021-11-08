@@ -1457,7 +1457,7 @@ export class RandomGen7Teams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.seed;
-		const pokemon = [];
+		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
 		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
