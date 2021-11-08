@@ -587,7 +587,6 @@ export class HelpTicket extends Rooms.RoomGame {
 		const notes = ticket.notes ? `&#10;Staff notes:&#10;${noteBuf}` : '';
 		const title = `title="${titleBuf.join('&#10;')}${notes}"`;
 		const user = Users.get(ticket.userid);
-		const language = user?.language || '';
 		let namelockDisplay = '';
 		if (user?.namelocked && !ticket.state?.namelocked) {
 			if (!ticket.state) ticket.state = {};
@@ -596,11 +595,10 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (ticket.state?.namelocked) {
 			namelockDisplay = ` <small>[${ticket.state.namelocked}]</small>`;
 		}
-		const languageDisplay = language && language !== 'english' ? ` <small>(${language})</small>` : '';
 		buf += `<a class="button${ticket.claimed ? `` : ` notifying`}" ${title} href="/view-help-text-${ticket.userid}">`;
 		buf += ticket.claimed ?
-			`${ticket.userid}${namelockDisplay}${languageDisplay}:` :
-			`<strong>${ticket.userid}</strong>${namelockDisplay}${languageDisplay}:`;
+			`${ticket.userid}${namelockDisplay}:` :
+			`<strong>${ticket.userid}</strong>${namelockDisplay}:`;
 		buf += ` ${ticket.type}</a>`;
 		return buf;
 	}
@@ -1688,9 +1686,7 @@ export const pages: Chat.PageTable = {
 
 				const ticketRoom = Rooms.get(`help-${ticket.userid}`);
 				buf += `<tr><td>${icon}</td>`;
-				const language = Chat.languages.get(ticketRoom?.settings.language || '');
-				const languageString = language && toID(language) !== "english" ? ` <small>(${language})</small>` : '';
-				buf += `<td>${Utils.escapeHTML(ticket.creator)}${languageString}</td>`;
+				buf += `<td>${Utils.escapeHTML(ticket.creator)}</td>`;
 				buf += `<td>${ticket.type}</td>`;
 				buf += Utils.html`<td>${ticket.claimed ? ticket.claimed : `-`}</td>`;
 				buf += `<td>`;
