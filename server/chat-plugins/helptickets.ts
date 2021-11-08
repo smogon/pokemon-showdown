@@ -1684,7 +1684,6 @@ export const pages: Chat.PageTable = {
 					}
 				}
 
-				const ticketRoom = Rooms.get(`help-${ticket.userid}`);
 				buf += `<tr><td>${icon}</td>`;
 				buf += `<td>${Utils.escapeHTML(ticket.creator)}</td>`;
 				buf += `<td>${ticket.type}</td>`;
