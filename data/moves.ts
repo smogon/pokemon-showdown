@@ -19438,6 +19438,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onModifyMove(move, source, target) {
+				// This code is for moves that use defensive stats as the attacking stat; see below for most of the implementation
 				if (!move.overrideOffensiveStat) return;
 				const statAndBoosts = move.overrideOffensiveStat;
 				if (!['def', 'spd'].includes(statAndBoosts)) return;
