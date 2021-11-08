@@ -458,7 +458,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We check the category and typing to calculate later on the damage.
 			if (!move.category) move.category = 'Physical';
-			if (!move.defensiveCategory) move.defensiveCategory = move.category;
 			// '???' is typeless damage: used for Struggle and Confusion etc
 			if (!move.type) move.type = '???';
 			const type = move.type;
@@ -530,14 +529,16 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We now check attacker's and defender's stats.
 			let level = source.level;
-			let attacker = source;
-			const defender = target;
-			if (move.useTargetOffensive) attacker = target;
-			let atkType: StatIDExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
-			const defType: StatIDExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
-			if (move.useSourceDefensiveAsOffensive) atkType = defType;
+			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+			const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+
+			const isPhysical = move.category === 'Physical';
+			const atkType: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
+			const defType: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
+
 			let attack = attacker.getStat(atkType);
 			let defense = defender.getStat(defType);
+
 			// In gen 1, screen effect is applied here.
 			if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
 				this.battle.debug('Screen doubling (Sp)Def');
@@ -554,10 +555,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				level *= 2;
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
+
 			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
 				attack = attacker.getStat(atkType, true);
 			}
+
 			if (move.ignoreDefensive) {
 				this.battle.debug('Negating (sp)def boost/penalty.');
 				defense = target.getStat(defType, true);

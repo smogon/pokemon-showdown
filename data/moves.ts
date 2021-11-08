@@ -1399,7 +1399,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		useSourceDefensiveAsOffensive: true,
+		overrideOffensiveStat: 'def',
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -5621,7 +5621,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		useTargetOffensive: true,
+		overrideOffensivePokemon: 'target',
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -13309,7 +13309,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		defensiveCategory: "Physical",
+		overrideDefensiveStat: 'def',
 		name: "Psyshock",
 		pp: 10,
 		priority: 0,
@@ -13324,7 +13324,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
-		defensiveCategory: "Physical",
+		overrideDefensiveStat: 'def',
 		name: "Psystrike",
 		pp: 10,
 		priority: 0,
@@ -14852,7 +14852,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
-		defensiveCategory: "Physical",
+		overrideDefensiveStat: 'def',
 		name: "Secret Sword",
 		pp: 10,
 		priority: 0,
@@ -19437,13 +19437,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
+			onModifyMove(move, source, target) {
+				// This code is for moves that use defensive stats as the attacking stat; see below for most of the implementation
+				if (!move.overrideOffensiveStat) return;
+				const statAndBoosts = move.overrideOffensiveStat;
+				if (!['def', 'spd'].includes(statAndBoosts)) return;
+				move.overrideOffensiveStat = statAndBoosts === 'def' ? 'spd' : 'def';
+				this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp. '}Def boosts when Wonder Room is active.`);
+			},
 			onFieldStart(field, source) {
 				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('wonderroom');
 			},
-			// Swapping defenses implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
+			// Swapping defenses partially implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 5,
 			onFieldEnd() {
