@@ -630,8 +630,8 @@ export class LotteryGiveaway extends Giveaway {
 		const userlist = [...this.joined.values()];
 		if (userlist.length === 0) {
 			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
-			this.destroy();
-			return this.room.send("The giveaway has been forcibly ended as there are no participants.");
+			this.room.send("The giveaway has been forcibly ended as there are no participants.");
+			return this.destroy();
 		}
 
 		while (this.winners.length < this.maxWinners && userlist.length > 0) {
