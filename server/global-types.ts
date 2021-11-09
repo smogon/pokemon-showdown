@@ -65,7 +65,12 @@ namespace Streams {
 }
 
 namespace JSX {
-	export type IntrinsicElements = import('preact').JSX.IntrinsicElements;
+	export type IntrinsicElements = import('preact').JSX.IntrinsicElements & {
+		youtube: {src: string},
+		twitch: {src: string},
+		spotify: {src: string},
+		username: {name?: string},
+	};
 }
 
 // Users

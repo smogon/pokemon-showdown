@@ -19,30 +19,3 @@ export function html(strings: TemplateStringsArray, ...args: (preact.VNode | str
 	}
 	return buf;
 }
-
-// PS custom elements
-export class Youtube extends preact.Component<{src: string}> {
-	render() {
-		return `<youtube src="${this.props.src}" />`;
-	}
-};
-
-export class Twitch extends preact.Component<{src: string}> {
-	render() {
-		return <span dangerouslySetInnerHTML={{__html: `<twitch src="${this.props.src}" />`}} />;
-	}
-};
-
-export class Spotify extends preact.Component<{src: string}> {
-	render() {
-		return <span dangerouslySetInnerHTML={{__html: `<spotify src="${this.props.src}" />`}} />;
-	}
-};
-
-export class Username extends preact.Component<{name?: string}> {
-	render() {
-		return <span dangerouslySetInnerHTML={{
-			__html: `<username>${this.props.name}</username>`
-		}}>{this.props.children}</span>;
-	}
-}
