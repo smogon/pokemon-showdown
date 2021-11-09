@@ -79,7 +79,7 @@ export class RPSGame extends Rooms.RoomGame {
 			<div style={{textAlign: 'center'}}><strong>Make your choice, quick! You have {Chat.toDurationString(TIMEOUT)}!</strong><br />
 			{['Rock', 'Paper', 'Scissors'].map(choice => (
 				<button class="button" name="send" value={`/choose ${choice}`} style={{width: '6em'}}>
-				<span style={{fontSize: '24px'}}>{ICONS[choice]}</span><br />{choice || ' '}</button>
+				<span style={{fontSize: '24px'}}>{ICONS[choice]}</span><br />{choice || '\u00A0'}</button>
 			))}<br /><br /><button class="button" name="send" value="/rps end">End game</button></div>
 		);
 	}
@@ -99,10 +99,10 @@ export class RPSGame extends Rooms.RoomGame {
 				borderRadius: '20px',
 				paddingBottom: '5px',
 				margin: '0 auto',
-			}}>{ICONS[choice] || ' '}<br />
+			}}>{ICONS[choice] || '\u00A0'}<br />
 			<small style={{fontSize: '40px'}}>
 				<small style={{fontSize: '32px', display: 'block'}}>
-					{choice || ' '}
+					{choice || '\u00A0'}
 				</small>
 			</small></div>;
 		}
@@ -116,7 +116,7 @@ export class RPSGame extends Rooms.RoomGame {
 				borderRadius: '15px',
 				paddingBottom: '5px',
 				margin: '20px auto 0'
-			}}>{exists ? '<i class="fa fa-check"></i>' : ' '}</div>;
+			}}>{exists ? '<i class="fa fa-check"></i>' : '\u00A0'}</div>;
 		}
 
 		return <table style={{width: '100%', textAlign: 'center', fontSize:'18px'}}><tr>
