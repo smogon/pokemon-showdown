@@ -78,7 +78,7 @@ export class RPSGame extends Rooms.RoomGame {
 		player.sendControls(
 			<div style={{textAlign: 'center'}}><strong>Make your choice, quick! You have {Chat.toDurationString(TIMEOUT)}!</strong><br />
 			{['Rock', 'Paper', 'Scissors'].map(choice => (
-				<button class="button" name="send" value="/choose ${choice}" style={{width: '6em'}}>
+				<button class="button" name="send" value={`/choose ${choice}`} style={{width: '6em'}}>
 				<span style={{fontSize: '24px'}}>{ICONS[choice]}</span><br />{choice || ' '}</button>
 			))}<br /><br /><button class="button" name="send" value="/rps end">End game</button></div>
 		);
