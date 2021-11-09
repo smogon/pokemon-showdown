@@ -45,7 +45,7 @@ export class RPSGame extends Rooms.RoomGame {
 		this.players = [];
 
 		this.room.update();
-		this.controls(<div style={{textAlign: 'center'}}>Waiting for another player to join....</div>)
+		this.controls(<div style={{textAlign: 'center'}}>Waiting for another player to join....</div>);
 		this.sendField();
 	}
 	controls(node: preact.VNode) {
@@ -104,11 +104,11 @@ export class RPSGame extends Rooms.RoomGame {
 				paddingBottom: '5px',
 				margin: '0 auto',
 			}}>{ICONS[choice] || '\u00A0'}<br />
-			<small style={{fontSize: '40px'}}>
-				<small style={{fontSize: '32px', display: 'block'}}>
-					{choice || '\u00A0'}
-				</small>
-			</small></div>;
+				<small style={{fontSize: '40px'}}>
+					<small style={{fontSize: '32px', display: 'block'}}>
+						{choice || '\u00A0'}
+					</small>
+				</small></div>;
 		}
 
 		function renderCurrentChoice(exists?: boolean) {
@@ -119,18 +119,18 @@ export class RPSGame extends Rooms.RoomGame {
 				color: 'white',
 				borderRadius: '15px',
 				paddingBottom: '5px',
-				margin: '20px auto 0'
+				margin: '20px auto 0',
 			}}>{exists ? '<i class="fa fa-check"></i>' : '\u00A0'}</div>;
 		}
 
-		return <table style={{width: '100%', textAlign: 'center', fontSize:'18px'}}><tr>
+		return <table style={{width: '100%', textAlign: 'center', fontSize: '18px'}}><tr>
 			<td><div style={{padding: '8px 0'}}><strong>{p1.name}</strong> ({p1.score})</div>
-			{renderBigChoice(p1.prevChoice, p1.prevWinner)}
-			{renderCurrentChoice(!!p1.choice)}</td>
+				{renderBigChoice(p1.prevChoice, p1.prevWinner)}
+				{renderCurrentChoice(!!p1.choice)}</td>
 			<td><em style={{fontSize: '24px'}}>vs</em></td>
 			<td><div style={{padding: '8px 0'}}><strong>{p2.name}</strong> ({p2.score})</div>
-			{renderBigChoice(p2.prevChoice, p2.prevWinner)}
-			{renderCurrentChoice(!!p2.choice)}</td>
+				{renderBigChoice(p2.prevChoice, p2.prevWinner)}
+				{renderCurrentChoice(!!p2.choice)}</td>
 		</tr></table>;
 	}
 	sendField() {
