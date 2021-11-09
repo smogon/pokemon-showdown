@@ -3,6 +3,7 @@
  * @author mia-pi-git
  */
 import {Utils} from '../../lib';
+
 const MAX_ROUNDS = 200;
 const TIMEOUT = 10 * 1000;
 const ICONS: {[k: string]: Chat.Node} = {
