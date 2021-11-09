@@ -6,7 +6,7 @@ import preact from 'preact';
 
 const MAX_ROUNDS = 200;
 const TIMEOUT = 10 * 1000;
-const ICONS: {[k: string]: JSX.Element} = {
+const ICONS: {[k: string]: preact.VNode} = {
 	Rock: <i className="fa fa-hand-rock-o"></i>,
 	Paper: <i className="fa fa-hand-paper-o"></i>,
 	Scissors: <i className="fa fa-hand-scissors-o"></i>,
@@ -54,7 +54,7 @@ export class RPSGame extends Rooms.RoomGame {
 		this.room.send(`|controlshtml|` + Chat.renderNode(node));
 	}
 	onConnect(user: User, connection: Connection) {
-		this.room.sendUser(connection, this.getField());
+		this.room.sendUser(connection, '|fieldhtml|' + Chat.renderNode(this.getField()));
 	}
 	static getWinner(p1: RPSPlayer, p2: RPSPlayer) {
 		const p1Choice = p1.choice;
