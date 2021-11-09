@@ -32,6 +32,7 @@ import {Dex} from '../sim';
 import {resolve} from 'path';
 import preact from 'preact';
 import render from 'preact-render-to-string';
+import * as Components from './chat-components';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | preact.VNode> | string | null | void | preact.VNode;
@@ -1766,6 +1767,8 @@ export const Chat = new class {
 	readonly PageContext = PageContext;
 	readonly ErrorMessage = ErrorMessage;
 	readonly Interruption = Interruption;
+	// Preact handling.
+	readonly Components = Components;
 	/**
 	 * Command parser
 	 *
@@ -1861,6 +1864,8 @@ export const Chat = new class {
 		let plugin;
 		if (file.endsWith('.ts') || file.endsWith('.js')) {
 			plugin = require(file.slice(0, -3));
+		} else if (file.endsWith('.tsx') || file.endsWith('.jsx')) {
+			plugin = require(file.slice(0, -4));
 		} else {
 			return;
 		}
