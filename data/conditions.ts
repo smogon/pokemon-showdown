@@ -28,9 +28,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onModifySpe(spe, pokemon) {
+			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
+			spe = this.finalModify(spe);
 			if (!pokemon.hasAbility('quickfeet')) {
-				return this.chainModify(0.5);
+				spe = Math.floor(spe * 50 / 100);
 			}
+			return spe;
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {

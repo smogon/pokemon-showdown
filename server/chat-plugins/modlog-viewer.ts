@@ -74,7 +74,6 @@ function prettifyResults(
 	}
 	const scope = onlyPunishments ? 'punishment-related ' : '';
 	let searchString = ``;
-	if (search.anyField) searchString += `containing ${search.anyField} `;
 	const excludes = search.note.filter(s => s.isExclusion).map(s => s.search) || [];
 	const includes = search.note.filter(s => !s.isExclusion).map(s => s.search) || [];
 	if (includes.length) searchString += `with a note including any of: ${includes.join(', ')} `;
@@ -229,7 +228,7 @@ export const commands: Chat.ChatCommands = {
 		const onlyPunishments = cmd.startsWith('pl') || cmd.startsWith('punishlog');
 		let lines;
 		const possibleParam = cmd.slice(2);
-		const targets = target.split(',');
+		const targets = target.split(',').map(f => f.trim()).filter(Boolean);
 		const search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []};
 
 		switch (possibleParam) {
@@ -246,19 +245,17 @@ export const commands: Chat.ChatCommands = {
 			if (!value) {
 				// If no specific parameter is specified, we should search all fields
 				value = param.trim();
-				if (i === 0 && targets.length > 1) {
+				if (i === 0 && value) {
 					// they might mean a roomid, as per the old format of /modlog
 					param = 'room';
 				} else {
-					param = 'any';
+					this.errorReply(`You must specify a search type and search value.`);
+					return this.parse(`/help modlog`);
 				}
 			}
 			const isExclusion = param.endsWith('!');
 			param = toID(param);
 			switch (param) {
-			case 'any':
-				search.anyField = value;
-				break;
 			case 'note': case 'text':
 				if (!search.note) search.note = [];
 				search.note.push({search: value, isExclusion});
@@ -321,7 +318,6 @@ export const commands: Chat.ChatCommands = {
 	modloghelp() {
 		this.sendReplyBox(
 			`<code>/modlog [comma-separated list of parameters]</code>: searches the moderator log, defaulting to the current room unless specified otherwise.<br />` +
-			`If an unnamed parameter is specified, <code>/modlog</code> will search all fields at once.<br />` +
 			`You can replace the <code>=</code> in a parameter with a <code>!=</code> to exclude entries that match that parameter.<br />` +
 			`<details><summary><strong>Parameters</strong></summary>` +
 			`<ul>` +

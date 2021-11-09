@@ -135,6 +135,14 @@ describe('[Gen 8] Random Battle', () => {
 			testHasSTAB(pkmn.name, options, ['Poison']);
 		}
 	});
+
+	it('should not allow Swords Dance + Dragon Dance Rayquaza', () => {
+		testNotBothMoves('rayquaza', options, 'swordsdance', 'dragondance');
+	});
+
+	it('should not allow Extreme Speed + Dragon Dance Rayquaza', () => {
+		testNotBothMoves('rayquaza', options, 'extremespeed', 'dragondance');
+	});
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {

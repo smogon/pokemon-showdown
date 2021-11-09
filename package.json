@@ -38,7 +38,7 @@
     "pretest": "npm run lint",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "full-test": "npm run full-lint && npm run tsc && mocha --timeout 6000 --forbid-only -g \".*\""
+    "full-test": "npm run full-lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\""
   },
   "husky": {
     "hooks": {

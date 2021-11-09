@@ -1614,98 +1614,111 @@ export const Punishments = new class {
 		for (const roomid of user.inRooms) {
 			Punishments.checkNewNameInRoom(user, userid, roomid);
 		}
-		let punishment: Punishment | undefined;
+		let punishments: Punishment[] = [];
 
 		const idPunishments = Punishments.userids.get(userid);
 		if (idPunishments) {
-			punishment = idPunishments[0];
+			punishments = idPunishments;
 		}
 
 		const battleban = Punishments.isBattleBanned(user);
-		if (!punishment && user.namelocked) {
-			punishment = Punishments.userids.get(user.namelocked)?.[0];
+		if (battleban) punishments.push(battleban);
+		if (user.namelocked) {
+			let punishment = Punishments.userids.get(user.namelocked)?.[0];
 			if (!punishment) punishment = {type: 'NAMELOCK', id: user.namelocked, expireTime: 0, reason: ''};
+			punishments.push(punishment);
 		}
-		if (!punishment && user.locked) {
-			punishment = Punishments.userids.get(user.locked)?.[0];
+		if (user.locked) {
+			let punishment = Punishments.userids.get(user.locked)?.[0];
 			if (!punishment) punishment = {type: 'LOCK', id: user.locked, expireTime: 0, reason: ''};
+			punishments.push(punishment);
 		}
 
 		const ticket = Chat.pages?.help ?
 			`<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>` : '';
 
-		if (battleban) {
-			if (battleban.id !== user.id && Punishments.isSharedIp(user.latestIp) && user.autoconfirmed) {
-				Punishments.unpunish(userid, 'BATTLEBAN');
-			} else {
-				void Punishments.punish(user, battleban, false);
-				user.cancelReady();
-				if (!punishment) {
-					const appealLink = ticket || (Config.appealurl ? `appeal at: ${Config.appealurl}` : ``);
-					// Prioritize popups for other global punishments
-					user.send(`|popup||html|You are banned from battling${battleban.id !== userid ? ` because you have the same IP as banned user: ${battleban.id}` : ''}. Your battle ban will expire in a few days.${battleban.reason ? Utils.html `\n\nReason: ${battleban.reason}` : ``}${appealLink ? `\n\nOr you can ${appealLink}.` : ``}`);
-					user.notified.punishment = true;
-					return;
+		if (!punishments.length) return;
+		Punishments.byWeight(punishments);
+
+		for (const punishment of punishments) {
+			const id = punishment.type;
+			const punishmentInfo = this.punishmentTypes.get(id);
+			const punishUserid = punishment.id;
+			const reason = punishment.reason ? Utils.html`\n\nReason: ${punishment.reason}` : '';
+			let appeal = ``;
+			if (user.permalocked && Config.appealurl) {
+				appeal += `\n\nPermanent punishments can be appealed: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+			} else if (ticket) {
+				appeal += `\n\nIf you feel you were unfairly punished or wish to otherwise appeal, you can ${ticket}.`;
+			} else if (Config.appealurl) {
+				appeal += `\n\nIf you wish to appeal your punishment, please use: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+			}
+			const bannedUnder = punishUserid !== userid ? ` because you have the same IP as banned user: ${punishUserid}` : '';
+
+			if (id === 'BATTLEBAN') {
+				if (punishUserid !== user.id && Punishments.isSharedIp(user.latestIp) && user.autoconfirmed) {
+					Punishments.unpunish(userid, 'BATTLEBAN');
+				} else {
+					void Punishments.punish(user, punishment, false);
+					user.cancelReady();
+					if (!Punishments.userids.getByType(userid, 'BATTLEBAN')) {
+						const appealLink = ticket || (Config.appealurl ? `appeal at: ${Config.appealurl}` : ``);
+						// Prioritize popups for other global punishments
+						user.send(
+							`|popup||html|You are banned from battling` +
+							`${punishment.id !== userid ? ` because you have the same IP as banned user: ${punishUserid}` : ''}. ` +
+							`Your battle ban will expire in a few days.` +
+							`${punishment.reason ? Utils.html `\n\nReason: ${punishment.reason}` : ``}` +
+							`${appealLink ? `\n\nOr you can ${appealLink}.` : ``}`
+						);
+						user.notified.punishment = true;
+						continue;
+					}
 				}
 			}
-		}
-		if (!punishment) return;
 
-		const id = punishment.type;
-		const punishmentInfo = this.punishmentTypes.get(id);
-		const punishUserid = punishment.id;
-		const reason = punishment.reason ? Utils.html`\n\nReason: ${punishment.reason}` : '';
-		let appeal = ``;
-		if (user.permalocked && Config.appealurl) {
-			appeal += `\n\nPermanent punishments can be appealed: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
-		} else if (ticket) {
-			appeal += `\n\nIf you feel you were unfairly punished or wish to otherwise appeal, you can ${ticket}.`;
-		} else if (Config.appealurl) {
-			appeal += `\n\nIf you wish to appeal your punishment, please use: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
-		}
-		const bannedUnder = punishUserid !== userid ? ` because you have the same IP as banned user: ${punishUserid}` : '';
-
-		if ((id === 'LOCK' || id === 'NAMELOCK') && punishUserid !== userid && Punishments.isSharedIp(user.latestIp)) {
-			if (!user.autoconfirmed) {
-				user.semilocked = `#sharedip ${user.locked}` as PunishType;
+			if ((id === 'LOCK' || id === 'NAMELOCK') && punishUserid !== userid && Punishments.isSharedIp(user.latestIp)) {
+				if (!user.autoconfirmed) {
+					user.semilocked = `#sharedip ${user.locked}` as PunishType;
+				}
+				user.locked = null;
+				user.namelocked = null;
+				user.destroyPunishmentTimer();
+				user.updateIdentity();
+				return;
 			}
-			user.locked = null;
-			user.namelocked = null;
-			user.destroyPunishmentTimer();
-			user.updateIdentity();
-			return;
-		}
-		if (id === 'BAN') {
-			user.popup(
-				`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}` +
-				`${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`
-			);
-			user.notified.punishment = true;
-			if (registered) void Punishments.punish(user, punishment, false);
-			user.disconnectAll();
-			return;
-		}
-		if (id === 'NAMELOCK' || user.namelocked) {
-			user.send(`|popup||html|You are namelocked and can't have a username${bannedUnder}. Your namelock will expire in a few days.${reason}${appeal}`);
-			user.locked = punishUserid;
-			user.namelocked = punishUserid;
-			user.resetName();
-			user.updateIdentity();
-		} else if (id === 'LOCK') {
-			if (punishUserid === '#hostfilter' || punishUserid === '#ipban') {
-				user.send(`|popup||html|Your IP (${user.latestIp}) is currently locked due to being a proxy. We automatically lock these connections since they are used to spam, hack, or otherwise attack our server. Disable any proxies you are using to connect to PS.\n\n<a href="view-help-request--appeal"><button class="button">Help me with a lock from a proxy</button></a>`);
-			} else if (user.latestHostType === 'proxy' && user.locked !== user.id) {
-				user.send(`|popup||html|You are locked${bannedUnder} on the IP (${user.latestIp}), which is a proxy. We automatically lock these connections since they are used to spam, hack, or otherwise attack our server. Disable any proxies you are using to connect to PS.\n\n<a href="view-help-request--appeal"><button class="button">Help me with a lock from a proxy</button></a>`);
-			} else if (!user.notified.lock) {
-				user.send(`|popup||html|You are locked${bannedUnder}. ${user.permalocked ? `This lock is permanent.` : `Your lock will expire in a few days.`}${reason}${appeal}`);
+			if (id === 'BAN') {
+				user.popup(
+					`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}` +
+					`${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`
+				);
+				user.notified.punishment = true;
+				if (registered) void Punishments.punish(user, punishment, false);
+				user.disconnectAll();
+				return; // end the loop here
 			}
-			user.notified.lock = true;
-			user.locked = punishUserid;
-			user.updateIdentity();
-		} else if (punishmentInfo?.onActivate) {
-			punishmentInfo.onActivate.call(this, user, punishment, null, punishment.id === user.id);
+			if (id === 'NAMELOCK' || user.namelocked) {
+				user.send(`|popup||html|You are namelocked and can't have a username${bannedUnder}. Your namelock will expire in a few days.${reason}${appeal}`);
+				user.locked = punishUserid;
+				user.namelocked = punishUserid;
+				user.resetName();
+				user.updateIdentity();
+			} else if (id === 'LOCK') {
+				if (punishUserid === '#hostfilter' || punishUserid === '#ipban') {
+					user.send(`|popup||html|Your IP (${user.latestIp}) is currently locked due to being a proxy. We automatically lock these connections since they are used to spam, hack, or otherwise attack our server. Disable any proxies you are using to connect to PS.\n\n<a href="view-help-request--appeal"><button class="button">Help me with a lock from a proxy</button></a>`);
+				} else if (user.latestHostType === 'proxy' && user.locked !== user.id) {
+					user.send(`|popup||html|You are locked${bannedUnder} on the IP (${user.latestIp}), which is a proxy. We automatically lock these connections since they are used to spam, hack, or otherwise attack our server. Disable any proxies you are using to connect to PS.\n\n<a href="view-help-request--appeal"><button class="button">Help me with a lock from a proxy</button></a>`);
+				} else if (!user.notified.lock) {
+					user.send(`|popup||html|You are locked${bannedUnder}. ${user.permalocked ? `This lock is permanent.` : `Your lock will expire in a few days.`}${reason}${appeal}`);
+				}
+				user.notified.lock = true;
+				user.locked = punishUserid;
+				user.updateIdentity();
+			} else if (punishmentInfo?.onActivate) {
+				punishmentInfo.onActivate.call(this, user, punishment, null, punishment.id === user.id);
+			}
+			Punishments.checkPunishmentTime(user, punishment);
 		}
-		Punishments.checkPunishmentTime(user, punishment);
 	}
 
 	checkIp(user: User, connection: Connection) {

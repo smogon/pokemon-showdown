@@ -1987,7 +1987,6 @@ export class RandomTeams {
 			level = 80;
 		}
 
-
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
 		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
