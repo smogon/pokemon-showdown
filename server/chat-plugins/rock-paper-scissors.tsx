@@ -2,11 +2,9 @@
  * Rock Paper Scissors plugin by Mia
  * @author mia-pi-git
  */
-import preact from 'preact';
-
 const MAX_ROUNDS = 200;
 const TIMEOUT = 10 * 1000;
-const ICONS: {[k: string]: preact.VNode} = {
+const ICONS: {[k: string]: Chat.Node} = {
 	Rock: <i className="fa fa-hand-rock-o"></i>,
 	Paper: <i className="fa fa-hand-paper-o"></i>,
 	Scissors: <i className="fa fa-hand-scissors-o"></i>,
@@ -67,11 +65,9 @@ export class RPSGame extends Rooms.RoomGame {
 	}
 	sendControls(player: RPSPlayer) {
 		if (!this.roundTimer) {
-			return player.sendControls(
-				<div style={{textAlign: 'center'}}>The game is paused.<br /><br />
+			return player.sendControls(<div style={{textAlign: 'center'}}>The game is paused.<br /><br />
 				<button className="button" name="send" value="/rps resume">Resume game</button>
-				</div>
-			);
+				</div>);
 		}
 		if (player.choice) {
 			player.sendControls(

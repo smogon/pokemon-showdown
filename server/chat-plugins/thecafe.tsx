@@ -1,6 +1,5 @@
 import {FS} from '../../lib/fs';
 import {Utils} from '../../lib/utils';
-import preact from 'preact';
 
 const DISHES_FILE = 'config/chat-plugins/thecafe-foodfight.json';
 const FOODFIGHT_COOLDOWN = 5 * 60 * 1000;
@@ -111,9 +110,9 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
 		}
 		return this.sendReplyBox(
-			<div class="ladder">
-				<table style="text-align:center;">
-					<tr><th colSpan={7} style="font-size:10pt;">
+			<div className="ladder">
+				<table style={{textAlign: 'center'}}>
+					<tr><th colSpan={7} style={{fontSize: '10pt'}}>
 						{self ? `Your` : `${targetUser.name}'s`} dish is: <u>{targetUser.foodfight.dish}</u>
 					</th></tr>
 					<tr><th>Team</th>{targetUser.foodfight.generatedTeam.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr>
@@ -195,14 +194,12 @@ export const pages: Chat.PageTable = {
 			([dish, ...ingredients]) => <tr><td>{dish}</td><td>{ingredients.join(', ')}</td></tr>
 		).join('');
 
-		return <>
-			<div class="pad ladder">
-				<h2>Foodfight Dish list</h2>
+		return <div className="pad ladder">
+			<h2>Foodfight Dish list</h2>
 				{content ?
 					<table><tr><th><h3>Dishes</h3></th><th><h3>Ingredients</h3></th></tr>{content}</table> :
 					<p>There are no dishes in the database.</p>
 				}
 			</div>
-		</>
 	},
 };

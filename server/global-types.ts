@@ -27,6 +27,7 @@ namespace Chat {
 	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 	export type AnnotatedChatHandler = import('./chat').AnnotatedChatHandler;
 	export type Handlers = import('./chat').Handlers;
+	export type Node = import('preact').VNode;
 }
 
 // Rooms

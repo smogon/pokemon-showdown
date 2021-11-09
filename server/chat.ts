@@ -2323,6 +2323,8 @@ export const Chat = new class {
 	renderNode(node: preact.VNode) {
 		return render(node);
 	}
+	readonly h = preact.h;
+	readonly Fragment = preact.Fragment;
 
 	getReadmoreCodeBlock(str: string, cutoff?: number) {
 		return Chat.getReadmoreBlock(str, true, cutoff);
