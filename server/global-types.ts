@@ -65,12 +65,7 @@ namespace Streams {
 }
 
 namespace JSX {
-	export type IntrinsicElements = import('preact').JSX.IntrinsicElements & {
-		youtube: {src: string},
-		twitch: {src: string},
-		spotify: {src: string},
-		username: {name?: string},
-	};
+	export type IntrinsicElements = import('preact').JSX.IntrinsicElements & import('./chat-jsx').PSElements;
 }
 
 // Users

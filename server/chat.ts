@@ -32,7 +32,7 @@ import {Dex} from '../sim';
 import {resolve} from 'path';
 import preact from 'preact';
 import render from 'preact-render-to-string';
-import * as Components from './chat-components';
+import * as JSX from './chat-jsx';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | preact.VNode> | string | null | void | preact.VNode;
@@ -1768,7 +1768,7 @@ export const Chat = new class {
 	readonly ErrorMessage = ErrorMessage;
 	readonly Interruption = Interruption;
 	// Preact handling.
-	readonly Components = Components;
+	readonly JSX = JSX;
 	/**
 	 * Command parser
 	 *
@@ -1852,24 +1852,13 @@ export const Chat = new class {
 				this.loadPluginDirectory(path, depth);
 			} else {
 				try {
-					this.loadPlugin(path);
+					this.loadPluginData(require(path), path.split('/').pop()?.slice(0, -3) || path);
 				} catch (e) {
 					Monitor.crashlog(e, "A loading chat plugin");
 					continue;
 				}
 			}
 		}
-	}
-	loadPlugin(file: string) {
-		let plugin;
-		if (file.endsWith('.ts') || file.endsWith('.js')) {
-			plugin = require(file.slice(0, -3));
-		} else if (file.endsWith('.tsx') || file.endsWith('.jsx')) {
-			plugin = require(file.slice(0, -4));
-		} else {
-			return;
-		}
-		this.loadPluginData(plugin, file.split('/').pop()?.slice(0, -3) || file);
 	}
 	annotateCommands(commandTable: AnyObject, namespace = ''): AnnotatedChatCommands {
 		for (const cmd in commandTable) {

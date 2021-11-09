@@ -19,3 +19,14 @@ export function html(strings: TemplateStringsArray, ...args: (preact.VNode | str
 	}
 	return buf;
 }
+
+// misc preact props needed. this exists to make TS happy.
+type Props<T> = T & {children: any};
+
+// Typedefs for our client-side custom elements.
+export interface PSElements {
+	youtube: Props<{src: string}>;
+	twitch: Props<{src: string}>;
+	spotify: Props<{src: string}>;
+	username: Props<{name?: string}>;
+};

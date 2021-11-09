@@ -26,8 +26,8 @@ export class RPSPlayer extends Rooms.RoomGamePlayer {
 	prevChoice = '';
 	prevWinner = false;
 	score = 0;
-	sendControls(node: preact.VNode) {
-		this.sendRoom(Chat.Components.html`|controlshtml|${node}`);
+	sendControls(node: Chat.Node) {
+		this.sendRoom(Chat.JSX.html`|controlshtml|${node}`);
 	}
 }
 
@@ -48,11 +48,11 @@ export class RPSGame extends Rooms.RoomGame {
 		this.controls(<div style={{textAlign: 'center'}}>Waiting for another player to join....</div>);
 		this.sendField();
 	}
-	controls(node: preact.VNode) {
-		this.room.send(Chat.Components.html`|controlshtml|${node}`);
+	controls(node: Chat.Node) {
+		this.room.send(Chat.JSX.html`|controlshtml|${node}`);
 	}
 	onConnect(user: User, connection: Connection) {
-		this.room.sendUser(connection, Chat.Components.html`|fieldhtml|${this.getField()}`);
+		this.room.sendUser(connection, Chat.JSX.html`|fieldhtml|${this.getField()}`);
 	}
 	static getWinner(p1: RPSPlayer, p2: RPSPlayer) {
 		const p1Choice = p1.choice;
@@ -134,7 +134,7 @@ export class RPSGame extends Rooms.RoomGame {
 		</tr></table>;
 	}
 	sendField() {
-		this.room.send(Chat.Components.html`|fieldhtml|${this.getField()}`);
+		this.room.send(Chat.JSX.html`|fieldhtml|${this.getField()}`);
 	}
 	end() {
 		const [p1, p2] = this.players;
