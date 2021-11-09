@@ -28,6 +28,7 @@
         "./dev-tools/*.ts",
         "./lib/*.ts",
         "./server/**/*.ts",
+        "./server/**/*.tsx",
         "./sim/**/*",
         "./tools/set-import/*.ts",
         "./tools/modlog/*.ts",
