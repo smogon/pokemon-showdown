@@ -64,6 +64,10 @@ namespace Streams {
 	export type ObjectReadWriteStream<T> = import('../lib/streams').ObjectReadWriteStream<T>;
 }
 
+namespace JSX {
+	export type IntrinsicElements = import('preact').JSX.IntrinsicElements;
+}
+
 // Users
 type User = Users.User;
 type Connection = Users.Connection;
