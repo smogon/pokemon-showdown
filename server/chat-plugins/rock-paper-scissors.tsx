@@ -5,9 +5,9 @@
 const MAX_ROUNDS = 200;
 const TIMEOUT = 10 * 1000;
 const ICONS: {[k: string]: Chat.Node} = {
-	Rock: <i className="fa fa-hand-rock-o"></i>,
-	Paper: <i className="fa fa-hand-paper-o"></i>,
-	Scissors: <i className="fa fa-hand-scissors-o"></i>,
+	Rock: <i class="fa fa-hand-rock-o"></i>,
+	Paper: <i class="fa fa-hand-paper-o"></i>,
+	Scissors: <i class="fa fa-hand-scissors-o"></i>,
 };
 
 const MATCHUPS = new Map<string, string>([
@@ -66,7 +66,7 @@ export class RPSGame extends Rooms.RoomGame {
 	sendControls(player: RPSPlayer) {
 		if (!this.roundTimer) {
 			return player.sendControls(<div style={{textAlign: 'center'}}>The game is paused.<br /><br />
-				<button className="button" name="send" value="/rps resume">Resume game</button>
+				<button class="button" name="send" value="/rps resume">Resume game</button>
 				</div>);
 		}
 		if (player.choice) {
@@ -78,9 +78,9 @@ export class RPSGame extends Rooms.RoomGame {
 		player.sendControls(
 			<div style={{textAlign: 'center'}}><strong>Make your choice, quick! You have {Chat.toDurationString(TIMEOUT)}!</strong><br />
 			{['Rock', 'Paper', 'Scissors'].map(choice => (
-				<button className="button" name="send" value="/choose ${choice}" style={{width: '6em'}}>
+				<button class="button" name="send" value="/choose ${choice}" style={{width: '6em'}}>
 				<span style={{fontSize: '24px'}}>{ICONS[choice]}</span><br />{choice || ' '}</button>
-			))}<br /><br /><button className="button" name="send" value="/rps end">End game</button></div>
+			))}<br /><br /><button class="button" name="send" value="/rps end">End game</button></div>
 		);
 	}
 	getField() {
@@ -150,7 +150,7 @@ export class RPSGame extends Rooms.RoomGame {
 		this.ended = true;
 		this.room.add(`|-message|The game has ended.`); // for the benefit of those in the room
 		for (const player of this.players) {
-			player.sendControls(<div className="pad">The game has ended.</div>);
+			player.sendControls(<div class="pad">The game has ended.</div>);
 			player.unlinkUser();
 		}
 	}

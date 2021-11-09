@@ -110,7 +110,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
 		}
 		return this.sendReplyBox(
-			<div className="ladder">
+			<div class="ladder">
 				<table style={{textAlign: 'center'}}>
 					<tr><th colSpan={7} style={{fontSize: '10pt'}}>
 						{self ? `Your` : `${targetUser.name}'s`} dish is: <u>{targetUser.foodfight.dish}</u>
@@ -194,7 +194,7 @@ export const pages: Chat.PageTable = {
 			([dish, ...ingredients]) => <tr><td>{dish}</td><td>{ingredients.join(', ')}</td></tr>
 		).join('');
 
-		return <div className="pad ladder">
+		return <div class="pad ladder">
 			<h2>Foodfight Dish list</h2>
 				{content ?
 					<table><tr><th><h3>Dishes</h3></th><th><h3>Ingredients</h3></th></tr>{content}</table> :
