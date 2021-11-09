@@ -15,6 +15,8 @@
  *   that if it's English-specific, it should be left out of here.
  */
 
+import {render} from "preact-render-to-string";
+
 export type Comparable = number | string | boolean | Comparable[] | {reverse: Comparable};
 
 /**
@@ -221,13 +223,13 @@ export function splitFirst(str: string, delimiter: string, limit = 1) {
 }
 
 /**
- * Template string tag function for escaping HTML
+ * Template string tag function for escaping HTML & rendering Preact nodes.
  */
 export function html(strings: TemplateStringsArray, ...args: any) {
 	let buf = strings[0];
 	let i = 0;
 	while (i < args.length) {
-		buf += escapeHTML(args[i]);
+		buf += typeof args[i] === 'object' ? render(args[i]) : escapeHTML(args[i]);
 		buf += strings[++i];
 	}
 	return buf;

@@ -2,6 +2,7 @@
  * Rock Paper Scissors plugin by Mia
  * @author mia-pi-git
  */
+import {Utils} from '../../lib';
 const MAX_ROUNDS = 200;
 const TIMEOUT = 10 * 1000;
 const ICONS: {[k: string]: Chat.Node} = {
@@ -27,7 +28,7 @@ export class RPSPlayer extends Rooms.RoomGamePlayer {
 	prevWinner = false;
 	score = 0;
 	sendControls(node: preact.VNode) {
-		this.sendRoom(`|controlshtml|` + Chat.renderNode(node));
+		this.sendRoom(Utils.html`|controlshtml|${node}`);
 	}
 }
 
@@ -49,10 +50,10 @@ export class RPSGame extends Rooms.RoomGame {
 		this.sendField();
 	}
 	controls(node: preact.VNode) {
-		this.room.send(`|controlshtml|` + Chat.renderNode(node));
+		this.room.send(Utils.html`|controlshtml|${node}`);
 	}
 	onConnect(user: User, connection: Connection) {
-		this.room.sendUser(connection, '|fieldhtml|' + Chat.renderNode(this.getField()));
+		this.room.sendUser(connection, Utils.html`|fieldhtml|${this.getField()}`);
 	}
 	static getWinner(p1: RPSPlayer, p2: RPSPlayer) {
 		const p1Choice = p1.choice;
@@ -130,7 +131,7 @@ export class RPSGame extends Rooms.RoomGame {
 			</tr></table>;
 	}
 	sendField() {
-		this.room.send('|fieldhtml|' + Chat.renderNode(this.getField()));
+		this.room.send(Utils.html`|fieldhtml|${this.getField()}`);
 	}
 	end() {
 		const [p1, p2] = this.players;
