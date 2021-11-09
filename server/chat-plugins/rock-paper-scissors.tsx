@@ -65,9 +65,10 @@ export class RPSGame extends Rooms.RoomGame {
 	}
 	sendControls(player: RPSPlayer) {
 		if (!this.roundTimer) {
-			return player.sendControls(<div style={{textAlign: 'center'}}>The game is paused.<br /><br />
+			return player.sendControls(<div style={{textAlign: 'center'}}>
+				The game is paused.<br /><br />
 				<button class="button" name="send" value="/rps resume">Resume game</button>
-				</div>);
+			</div>);
 		}
 		if (player.choice) {
 			player.sendControls(
@@ -75,13 +76,16 @@ export class RPSGame extends Rooms.RoomGame {
 			);
 			return;
 		}
-		player.sendControls(
-			<div style={{textAlign: 'center'}}><strong>Make your choice, quick! You have {Chat.toDurationString(TIMEOUT)}!</strong><br />
+		player.sendControls(<div style={{textAlign: 'center'}}>
+			<strong>Make your choice, quick! You have {Chat.toDurationString(TIMEOUT)}!</strong><br />
 			{['Rock', 'Paper', 'Scissors'].map(choice => (
 				<button class="button" name="send" value={`/choose ${choice}`} style={{width: '6em'}}>
-				<span style={{fontSize: '24px'}}>{ICONS[choice]}</span><br />{choice || '\u00A0'}</button>
-			))}<br /><br /><button class="button" name="send" value="/rps end">End game</button></div>
-		);
+					<span style={{fontSize: '24px'}}>{ICONS[choice]}</span><br />
+					{choice || '\u00A0'}
+				</button>
+			))}<br /><br />
+			<button class="button" name="send" value="/rps end">End game</button>
+		</div>);
 	}
 	getField() {
 		if (this.players.length < 2) {
@@ -127,7 +131,7 @@ export class RPSGame extends Rooms.RoomGame {
 			<td><div style={{padding: '8px 0'}}><strong>{p2.name}</strong> ({p2.score})</div>
 			{renderBigChoice(p2.prevChoice, p2.prevWinner)}
 			{renderCurrentChoice(!!p2.choice)}</td>
-			</tr></table>;
+		</tr></table>;
 	}
 	sendField() {
 		this.room.send(Chat.Components.html`|fieldhtml|${this.getField()}`);

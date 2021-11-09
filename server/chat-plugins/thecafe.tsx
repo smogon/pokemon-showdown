@@ -109,17 +109,15 @@ export const commands: Chat.ChatCommands = {
 		if (!targetUser.foodfight) {
 			return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
 		}
-		return this.sendReplyBox(
-			<div class="ladder">
-				<table style={{textAlign: 'center'}}>
-					<tr><th colSpan={7} style={{fontSize: '10pt'}}>
-						{self ? `Your` : `${targetUser.name}'s`} dish is: <u>{targetUser.foodfight.dish}</u>
-					</th></tr>
-					<tr><th>Team</th>{targetUser.foodfight.generatedTeam.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr>
-					<tr><th>Ingredients</th>{targetUser.foodfight.ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>
-				</table>
-			</div>
-		);
+		return this.sendReplyBox(<div class="ladder">
+			<table style={{textAlign: 'center'}}>
+				<tr><th colSpan={7} style={{fontSize: '10pt'}}>
+					{self ? `Your` : `${targetUser.name}'s`} dish is: <u>{targetUser.foodfight.dish}</u>
+				</th></tr>
+				<tr><th>Team</th>{targetUser.foodfight.generatedTeam.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr>
+				<tr><th>Ingredients</th>{targetUser.foodfight.ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>
+			</table>
+		</div>);
 	},
 	addingredients: 'adddish',
 	adddish(target, room, user, connection, cmd) {
@@ -196,10 +194,10 @@ export const pages: Chat.PageTable = {
 
 		return <div class="pad ladder">
 			<h2>Foodfight Dish list</h2>
-				{content ?
-					<table><tr><th><h3>Dishes</h3></th><th><h3>Ingredients</h3></th></tr>{content}</table> :
-					<p>There are no dishes in the database.</p>
-				}
-			</div>
+			{content ?
+				<table><tr><th><h3>Dishes</h3></th><th><h3>Ingredients</h3></th></tr>{content}</table> :
+				<p>There are no dishes in the database.</p>
+			}
+		</div>;
 	},
 };
