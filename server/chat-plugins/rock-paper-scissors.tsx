@@ -96,41 +96,37 @@ export class RPSGame extends Rooms.RoomGame {
 
 		function renderBigChoice(choice: string, isWinner?: boolean) {
 			return <div style={{
-				width: '180px',
-				fontSize: '120px',
-				background: isWinner ? '#595' : '#888',
-				color: 'white',
-				borderRadius: '20px',
-				paddingBottom: '5px',
-				margin: '0 auto',
-			}}>{ICONS[choice] || '\u00A0'}<br />
+				width: '180px', fontSize: '120px', background: isWinner ? '#595' : '#888', color: 'white', borderRadius: '20px', paddingBottom: '5px', margin: '0 auto',
+			}}>
+				{ICONS[choice] || '\u00A0'}<br />
 				<small style={{fontSize: '40px'}}>
 					<small style={{fontSize: '32px', display: 'block'}}>
 						{choice || '\u00A0'}
 					</small>
-				</small></div>;
+				</small>
+			</div>;
 		}
 
 		function renderCurrentChoice(exists?: boolean) {
 			return <div style={{
-				width: '100px',
-				fontSize: '60px',
-				background: '#888',
-				color: 'white',
-				borderRadius: '15px',
-				paddingBottom: '5px',
-				margin: '20px auto 0',
-			}}>{exists ? '<i class="fa fa-check"></i>' : '\u00A0'}</div>;
+				width: '100px', fontSize: '60px', background: '#888', color: 'white', borderRadius: '15px', paddingBottom: '5px', margin: '20px auto 0',
+			}}>{exists ? <i class="fa fa-check"></i> : '\u00A0'}</div>;
 		}
 
 		return <table style={{width: '100%', textAlign: 'center', fontSize: '18px'}}><tr>
-			<td><div style={{padding: '8px 0'}}><strong>{p1.name}</strong> ({p1.score})</div>
+			<td>
+				<div style={{padding: '8px 0'}}><strong>{p1.name}</strong> ({p1.score})</div>
 				{renderBigChoice(p1.prevChoice, p1.prevWinner)}
-				{renderCurrentChoice(!!p1.choice)}</td>
-			<td><em style={{fontSize: '24px'}}>vs</em></td>
-			<td><div style={{padding: '8px 0'}}><strong>{p2.name}</strong> ({p2.score})</div>
+				{renderCurrentChoice(!!p1.choice)}
+			</td>
+			<td>
+				<em style={{fontSize: '24px'}}>vs</em>
+			</td>
+			<td>
+				<div style={{padding: '8px 0'}}><strong>{p2.name}</strong> ({p2.score})</div>
 				{renderBigChoice(p2.prevChoice, p2.prevWinner)}
-				{renderCurrentChoice(!!p2.choice)}</td>
+				{renderCurrentChoice(!!p2.choice)}
+			</td>
 		</tr></table>;
 	}
 	sendField() {
