@@ -1770,6 +1770,8 @@ export const Chat = new class {
 	// JSX handling
 	readonly JSX = JSX;
 	readonly html = JSX.html;
+	readonly h = JSX.h;
+	readonly Fragment = JSX.Fragment;
 
 	/**
 	 * Command parser
@@ -2321,9 +2323,6 @@ export const Chat = new class {
 			}</${tag}>`;
 		}
 	}
-
-	readonly h = JSX.h;
-	readonly Fragment = JSX.Fragment;
 
 	getReadmoreCodeBlock(str: string, cutoff?: number) {
 		return Chat.getReadmoreBlock(str, true, cutoff);
