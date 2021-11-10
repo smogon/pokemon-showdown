@@ -1164,7 +1164,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	if (usedMod === 'gen8bdsp') {
 		results = results.filter(name => {
 			const species = mod.species.get(name);
-			return species.gen <= 4 && species.id !== 'pichuspikyeared';
+			return species.gen <= 4 && species.num >= 1 && species.id !== 'pichuspikyeared';
 		});
 	}
 

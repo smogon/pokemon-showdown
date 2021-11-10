@@ -475,7 +475,7 @@ export class DexSpecies {
 			}
 			if (this.dex.currentMod === 'gen8bdsp' &&
 				(!species.isNonstandard || species.isNonstandard === "Gigantamax")) {
-				if (species.gen > 4 || species.id === 'pichuspikyeared') {
+				if (species.gen > 4 || species.num < 1 || species.id === 'pichuspikyeared') {
 					species.isNonstandard = 'Past';
 					species.tier = species.doublesTier = 'Illegal';
 				}

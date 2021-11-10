@@ -49,6 +49,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
+	beedrillmega: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+	},
 	pidgey: {
 		tier: "LC",
 	},
@@ -58,6 +62,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	pidgeot: {
 		tier: "OU",
 		doublesTier: "DOU",
+	},
+	pidgeotmega: {
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	rattata: {
 		tier: "LC",
