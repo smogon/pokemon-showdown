@@ -840,6 +840,14 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 8 BDSP] OU",
+		threads: [`None yet :3`],
+
+		mod: 'gen8bdsp',
+		ruleset: ['Standard'],
+		banlist: ['Uber'],
+	},
+	{
 		section: "Challengeable OMs",
 		column: 2,
 	},
