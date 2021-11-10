@@ -65,7 +65,7 @@ namespace Streams {
 }
 
 namespace JSX {
-	export type IntrinsicElements = import('preact').JSX.IntrinsicElements & import('./chat-jsx').PSElements;
+	export type IntrinsicElements = import('./chat-jsx').PSElements;
 }
 
 // Users
