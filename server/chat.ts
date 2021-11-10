@@ -1853,7 +1853,7 @@ export const Chat = new class {
 				this.loadPluginDirectory(path, depth);
 			} else {
 				try {
-					this.loadPluginData(require(path), path.split('/').pop()?.slice(0, -3) || path);
+					this.loadPluginData(require(path), path.split('/').pop()?.split('.').shift() || path);
 				} catch (e) {
 					Monitor.crashlog(e, "A loading chat plugin");
 					continue;
