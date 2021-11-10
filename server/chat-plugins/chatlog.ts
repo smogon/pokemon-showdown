@@ -194,10 +194,10 @@ export const LogReader = new class {
 		return Chat.toTimestamp(new Date()).slice(0, 10);
 	}
 	isMonth(text: string) {
-		return /[0-9]{4}-[0-9]{2}/.test(text);
+		return /^[0-9]{4}-[0-9]{2}$/.test(text);
 	}
 	isDay(text: string) {
-		return /[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(text);
+		return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(text);
 	}
 	async findBattleLog(tier: ID, number: number): Promise<string[] | null> {
 		// binary search!
@@ -1404,8 +1404,8 @@ export const pages: Chat.PageTable = {
 		if (isNaN(new Date(date).getTime())) {
 			return this.errorReply(`Invalid date.`);
 		}
-		if (!/[0-9]{4}-[0-9]{2}/.test(date)) {
-			return this.errorReply(`You must specify a full date - both a year and a month.`);
+		if (!LogReader.isMonth(date)) {
+			return this.errorReply(`You must specify an exact month - both a year and a month.`);
 		}
 		this.title = `[Log Stats] ${date}`;
 		return LogSearcher.runLinecountSearch(this, room ? room.roomid : args[2] as RoomID, date, toID(target));
