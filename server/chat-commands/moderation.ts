@@ -736,6 +736,7 @@ export const commands: Chat.ChatCommands = {
 	wrb: 'ban',
 	forceroomban: 'ban',
 	forceweekban: 'ban',
+	weekroomban: 'ban',
 	forcerb: 'ban',
 	roomban: 'ban',
 	b: 'ban',
@@ -743,7 +744,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		if (!target) return this.parse('/help ban');
 		this.checkChat();
-		const week = ['wrb', 'wb', 'forceweekban', 'weekban'].includes(cmd);
+		const week = ['wrb', 'wb'].includes(cmd) || cmd.includes('week');
 
 		const {targetUser, inputUsername, targetUsername, rest: reason} = this.splitUser(target);
 		const {publicReason, privateReason} = this.parseSpoiler(reason);
