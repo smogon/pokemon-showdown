@@ -140,6 +140,7 @@ const BROADCAST_TOKEN = '!';
 
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
+const VALID_PLUGIN_ENDINGS = ['.jsx', '.tsx', '.js', '.ts'];
 
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
@@ -1844,6 +1845,12 @@ export const Chat = new class {
 
 	packageData: AnyObject = {};
 
+	loadPluginFile(file: string) {
+		if (!VALID_PLUGIN_ENDINGS.some(ext => file.endsWith(ext))) return;
+		const filename = file.split('/').pop() || "";
+		this.loadPlugin(require(file), filename.slice(0, filename.lastIndexOf('.')) || file);
+	}
+
 	loadPluginDirectory(dir: string, depth = 0) {
 		for (const file of FS(dir).readdirSync()) {
 			const path = resolve(dir, file);
@@ -1853,7 +1860,7 @@ export const Chat = new class {
 				this.loadPluginDirectory(path, depth);
 			} else {
 				try {
-					this.loadPluginData(require(path), path.split('/').pop()?.split('.').shift() || path);
+					this.loadPluginFile(path);
 				} catch (e) {
 					Monitor.crashlog(e, "A loading chat plugin");
 					continue;
@@ -1903,7 +1910,7 @@ export const Chat = new class {
 		}
 		return commandTable;
 	}
-	loadPluginData(plugin: AnyObject, name: string) {
+	loadPlugin(plugin: AnyObject, name: string) {
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
@@ -1965,8 +1972,8 @@ export const Chat = new class {
 		Chat.pages = Object.assign(Object.create(null), Chat.basePages);
 
 		// Load filters from Config
-		this.loadPluginData(Config, 'config');
-		this.loadPluginData(Tournaments, 'tournaments');
+		this.loadPlugin(Config, 'config');
+		this.loadPlugin(Tournaments, 'tournaments');
 
 		this.loadPluginDirectory('server/chat-plugins');
 		Chat.oldPlugins = {};
