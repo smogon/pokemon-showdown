@@ -106,19 +106,20 @@ export const commands: Chat.ChatCommands = {
 		if (!targetUser) return this.errorReply(`User ${target} not found.`);
 		const self = targetUser === user;
 		if (!self) this.checkCan('mute', targetUser, room);
-		if (!targetUser.foodfight) {
+		const foodfight = targetUser.foodfight;
+		if (!foodfight) {
 			return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
 		}
 		return this.sendReplyBox(<div class="ladder">
 			<table style={{textAlign: 'center'}}>
 				<tr><th colSpan={7} style={{fontSize: '10pt'}}>
-					{self ? `Your` : `${targetUser.name}'s`} dish is: <u>{targetUser.foodfight.dish}</u>
+					{self ? `Your` : `${targetUser.name}'s`} dish is: <u>{foodfight.dish}</u>
 				</th></tr>
 				<tr>
-					<th>Team</th>{targetUser.foodfight.generatedTeam.map(mon => <td><psicon pokemon={mon} /> {mon}</td>)}
+					<th>Team</th>{foodfight.generatedTeam.map(mon => <td><psicon pokemon={mon} /> {mon}</td>)}
 				</tr>
 				<tr>
-					<th>Ingredients</th>{targetUser.foodfight.ingredients.map(ingredient => <td>{ingredient}</td>)}
+					<th>Ingredients</th>{foodfight.ingredients.map(ingredient => <td>{ingredient}</td>)}
 				</tr>
 			</table>
 		</div>);
