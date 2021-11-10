@@ -115,10 +115,10 @@ export const commands: Chat.ChatCommands = {
 					{self ? `Your` : `${targetUser.name}'s`} dish is: <u>{targetUser.foodfight.dish}</u>
 				</th></tr>
 				<tr>
-					<th>Team</th>{targetUser.foodfight.generatedTeam.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}
+					<th>Team</th>{targetUser.foodfight.generatedTeam.map(mon => <td><psicon pokemon={mon} /> {mon}</td>)}
 				</tr>
 				<tr>
-					<th>Ingredients</th>{targetUser.foodfight.ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}
+					<th>Ingredients</th>{targetUser.foodfight.ingredients.map(ingredient => <td>{ingredient}</td>)}
 				</tr>
 			</table>
 		</div>);
