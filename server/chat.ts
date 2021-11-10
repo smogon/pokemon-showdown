@@ -30,12 +30,10 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import {Dex} from '../sim';
 import {resolve} from 'path';
-import preact from 'preact';
-import render from 'preact-render-to-string';
 import * as JSX from './chat-jsx';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
-=> Promise<string | null | void | preact.VNode> | string | null | void | preact.VNode;
+=> Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
 export interface PageTable {
 	[k: string]: PageHandler | PageTable;
 }
@@ -473,7 +471,7 @@ export class PageContext extends MessageContext {
 				`</div></div>`
 			);
 		}
-		if (typeof res === 'object' && res) res = Chat.renderNode(res);
+		if (typeof res === 'object' && res) res = JSX.render(res);
 		if (typeof res === 'string') {
 			this.setHTML(res);
 			res = undefined;
@@ -807,12 +805,12 @@ export class CommandContext extends MessageContext {
 	errorReply(message: string) {
 		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
 	}
-	addBox(htmlContent: string | preact.VNode) {
-		if (typeof htmlContent !== 'string') htmlContent = Chat.renderNode(htmlContent);
+	addBox(htmlContent: string | JSX.VNode) {
+		if (typeof htmlContent !== 'string') htmlContent = JSX.render(htmlContent);
 		this.add(`|html|<div class="infobox">${htmlContent}</div>`);
 	}
-	sendReplyBox(htmlContent: string | preact.VNode) {
-		if (typeof htmlContent !== 'string') htmlContent = Chat.renderNode(htmlContent);
+	sendReplyBox(htmlContent: string | JSX.VNode) {
+		if (typeof htmlContent !== 'string') htmlContent = JSX.render(htmlContent);
 		this.sendReply(`|c|${this.room && this.broadcasting ? this.user.getIdentity() : '~'}|/raw <div class="infobox">${htmlContent}</div>`);
 	}
 	popupReply(message: string) {
@@ -1767,8 +1765,11 @@ export const Chat = new class {
 	readonly PageContext = PageContext;
 	readonly ErrorMessage = ErrorMessage;
 	readonly Interruption = Interruption;
-	// Preact handling.
+
+	// JSX handling
 	readonly JSX = JSX;
+	readonly html = JSX.html;
+
 	/**
 	 * Command parser
 	 *
@@ -2314,11 +2315,8 @@ export const Chat = new class {
 		}
 	}
 
-	renderNode(node: preact.VNode) {
-		return render(node);
-	}
-	readonly h = preact.h;
-	readonly Fragment = preact.Fragment;
+	readonly h = JSX.h;
+	readonly Fragment = JSX.Fragment;
 
 	getReadmoreCodeBlock(str: string, cutoff?: number) {
 		return Chat.getReadmoreBlock(str, true, cutoff);

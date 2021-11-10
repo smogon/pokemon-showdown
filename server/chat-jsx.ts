@@ -1,19 +1,20 @@
 /**
  * PS custom HTML elements and Preact handling.
- * By Mia.
- * @author mia-pi-git
+ * By Mia and Zarel
  */
 import preact from 'preact';
 import render from 'preact-render-to-string';
 import {Utils} from '../lib';
 
-/** For easy concenation of Preact nodes with strings. */
-export function html(strings: TemplateStringsArray, ...args: (preact.VNode | string)[]) {
+/** For easy concenation of Preact nodes with strings */
+export function html(
+	strings: TemplateStringsArray, ...args: (preact.VNode | string | number | null | undefined)[]
+) {
 	let buf = strings[0];
 	let i = 0;
 	while (i < args.length) {
-		buf += typeof args[i] === 'string' ?
-			Utils.escapeHTML(args[i] as string) :
+		buf += typeof args[i] === 'string' || typeof args[i] === 'number' ?
+			Utils.escapeHTML(args[i] as string | number) :
 			render(args[i] as preact.VNode);
 		buf += strings[++i];
 	}
@@ -27,3 +28,10 @@ export interface PSElements extends preact.JSX.IntrinsicElements {
 	spotify: {src: string};
 	username: {name?: string, children: string};
 }
+
+export {render};
+
+export type VNode = preact.VNode;
+
+export const h = preact.h;
+export const Fragment = preact.Fragment;
