@@ -1252,7 +1252,7 @@ export const commands: Chat.ChatCommands = {
 			if (del) {
 				const [type, indexStr] = target.split(',');
 				const index = parseInt(indexStr);
-				if (!(type && index) || !['question', 'lottery'].includes(toID(type)) || isNaN(index)) {
+				if (!type || !indexStr || index <= -1 || !['question', 'lottery'].includes(toID(type)) || isNaN(index)) {
 					return this.parse(`/help giveaway`);
 				}
 				const typedType = toID(type) as 'question' | 'lottery';
