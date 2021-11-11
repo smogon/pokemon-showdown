@@ -840,12 +840,27 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		section: "BD/SP",
+		column: 2,
+	},
+	{
 		name: "[Gen 8 BDSP] OU",
 		threads: [`&bullet <a href="https://www.smogon.com/forums/threads/3693408/">BDSP OU</a>`],
 
 		mod: 'gen8bdsp',
 		ruleset: ['Standard'],
 		banlist: ['Uber'],
+	},
+	{
+		name: "[Gen 8 BDSP] Pure Hackmons",
+		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656851/">Pure Hackmons</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
 		section: "Challengeable OMs",
@@ -1363,17 +1378,6 @@ export const Formats: FormatList = [
 				return stats;
 			},
 		},
-	},
-	{
-		name: "[Gen 8] Pure Hackmons",
-		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656851/">Pure Hackmons</a>`,
-		],
-
-		mod: 'gen8',
-		searchShow: false,
-		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
 		name: "[Gen 8] Shared Power",

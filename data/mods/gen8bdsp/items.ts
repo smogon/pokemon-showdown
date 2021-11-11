@@ -203,10 +203,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	leek: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	lovesweet: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -258,6 +254,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	msychicseed: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	razorfang: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	redcard: {
 		inherit: true,
@@ -330,10 +330,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	steelmemory: {
 		inherit: true,
 		isNonstandard: "Past",
-	},
-	stick: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	stoneplate: {
 		inherit: true,
