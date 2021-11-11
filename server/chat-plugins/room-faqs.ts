@@ -166,7 +166,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const rfaq = roomFaqs[room.roomid][topic];
 		this.sendReplyBox(visualizeFaq(rfaq));
-		if (!this.broadcasting && user.can('ban', null, room, 'rfaq')) {
+		if (!this.broadcasting && user.can('ban', null, room, 'addfaq')) {
 			const code = Utils.escapeHTML(rfaq.source).replace(/\n/g, '<br />');
 			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/add${rfaq.html ? 'html' : ''}faq ${topic}, ${code}</code></details>`);
 		}
