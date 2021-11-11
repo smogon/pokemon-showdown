@@ -197,7 +197,11 @@ export const Teams = new class Teams {
 		if (!buf) return null;
 		if (typeof buf !== 'string') return buf;
 		if (buf.startsWith('[') && buf.endsWith(']')) {
-			buf = this.pack(JSON.parse(buf));
+			try {
+				buf = this.pack(JSON.parse(buf));
+			} catch {
+				return null;
+			}
 		}
 
 		const team = [];
