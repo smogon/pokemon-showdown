@@ -2531,8 +2531,8 @@ export const commands: Chat.ChatCommands = {
 				displayMessage = `${username}'s ac account: ${acAccount}`;
 				this.privateModAction(displayMessage);
 			}
-			if (user.previousIDs.length) {
-				affected.push(...user.previousIDs);
+			if (targetUser?.previousIDs.length) {
+				affected.push(...targetUser.previousIDs);
 			}
 
 			this.globalModlog(`TICKETBAN`, targetUser || userid, reason);
