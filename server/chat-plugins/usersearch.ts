@@ -52,13 +52,15 @@ function searchUsernames(target: string, page = false) {
 			if (!results.offline.length && !results.online.length) {
 				buf += `<p>No users found.</p>`;
 			} else {
-				buf += `<div class="ladder pad"><h3>Online users</h3><table><tr><th>Username</th><th>Punish</th></tr>`;
-				for (const username of results.online) {
-					// don't need to escape here since we escape above when fetching results
-					buf += Utils.html`<tr><td><username>${username}</username></td>`;
-					buf += `<td>${getPunishmentHTML(toID(username), target)}</td></tr>`;
+				if (results.online.length) {
+					buf += `<div class="ladder pad"><h3>Online users</h3><table><tr><th>Username</th><th>Punish</th></tr>`;
+					for (const username of results.online) {
+						// don't need to escape here since we escape above when fetching results
+						buf += Utils.html`<tr><td><username>${username}</username></td>`;
+						buf += `<td>${getPunishmentHTML(toID(username), target)}</td></tr>`;
+					}
+					buf += `</table></div>`;
 				}
-				buf += `</table></div>`;
 				if (results.offline.length && results.online.length) {
 					buf += `<hr />`;
 				}
