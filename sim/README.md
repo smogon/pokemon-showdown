@@ -1,6 +1,15 @@
 Node.js package
 ===============
 
+Pokémon Showdown has a Node.js API. It currently only works in Node, not browsers, although we're working on unifying it to work in browsers.
+
+You can install it with the usual:
+
+    npm install pokemon-showdown
+
+And you can use it to do the following things:
+
+
 Simulating battles
 ------------------
 
