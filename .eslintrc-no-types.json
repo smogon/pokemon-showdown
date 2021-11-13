@@ -185,7 +185,7 @@
   "overrides": [
     {
       "files": [
-        "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts",
+        "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./server/**/*.tsx", "./sim/**/*.ts",
         "./tools/set-import/*.ts", "./tools/modlog/*.ts", "./translations/**/*.ts"
       ],
       "parser": "@typescript-eslint/parser",

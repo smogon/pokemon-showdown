@@ -2,6 +2,9 @@
     "compilerOptions": {
         "lib": ["es2020"],
         "noEmit": true,
+        "jsx": "react",
+        "jsxFactory": "Chat.h",
+        "jsxFragmentFactory": "Chat.Fragment",
         "target": "es2020",
         "skipLibCheck": true,
         "module": "CommonJS",
@@ -25,6 +28,7 @@
         "./dev-tools/*.ts",
         "./lib/*.ts",
         "./server/**/*.ts",
+        "./server/**/*.tsx",
         "./sim/**/*",
         "./tools/set-import/*.ts",
         "./tools/modlog/*.ts",

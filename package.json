@@ -5,6 +5,8 @@
   "main": ".sim-dist/index.js",
   "dependencies": {
     "@swc/core": "^1.2.61",
+    "preact": "^10.5.15",
+    "preact-render-to-string": "^5.1.19",
     "probe-image-size": "^5.0.0",
     "sockjs": "^0.3.21",
     "ts-node": "^10.0.0"
@@ -31,9 +33,9 @@
     "start": "node pokemon-showdown start",
     "build": "node build",
     "tsc": "tsc",
-    "fast-lint": "eslint . --config .eslintrc-no-types.json --cache --cache-location .eslintcache-no-types --ext .js,.ts",
-    "lint": "eslint . --cache --ext .js,.ts",
-    "fix": "eslint . --cache --ext .js,.ts --fix",
+    "fast-lint": "eslint . --config .eslintrc-no-types.json --cache --cache-location .eslintcache-no-types --ext .js,.ts,.tsx",
+    "lint": "eslint . --cache --ext .js,.ts,.tsx",
+    "fix": "eslint . --cache --ext .js,.ts,.tsx --fix",
     "full-lint": "eslint . --cache --ext .js,.ts --max-warnings 0",
     "pretest": "npm run lint",
     "test": "mocha",
