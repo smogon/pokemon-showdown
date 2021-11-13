@@ -57,22 +57,21 @@ export const GitHub = new class {
 	readonly hook: GitHookHandler | null = null;
 	updates: {[k: string]: number} = Object.create(null);
 	constructor() {
+		// config.github: https://github.com/nlf/node-github-hook#readme
+		if (!Config.github) return;
+
 		try {
-			const config = this.getConfig();
-			// config.github: https://github.com/nlf/node-github-hook#readme
-			if (config) this.hook = (require('githubhook'))(config);
-		} catch {}
-		this.listen();
-	}
-	getConfig() {
-		if (!Config.github) return Config.github;
-		if (!Config.github.logger) { // respect custom loggers
-			Config.github.logger = {
-				log: (args: string) => Monitor.debug(args),
-				error: (args: string) => Monitor.notice(args),
-			};
+			this.hook = require('githubhook')({
+				logger: {
+					log: (line: string) => Monitor.debug(line),
+					error: (line: string) => Monitor.notice(line),
+				},
+				...Config.github,
+			});
+		} catch (err) {
+			Monitor.crashlog(err, "GitHub hook");
 		}
-		return Config.github;
+		this.listen();
 	}
 	listen() {
 		if (!this.hook) return;
