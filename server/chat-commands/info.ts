@@ -26,7 +26,12 @@ export function getCommonBattles(
 			(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID1) === Users.PLAYER_SYMBOL) &&
 			(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID2) === Users.PLAYER_SYMBOL)
 		) {
-			if (connection) void curRoom.uploadReplay(connection.user, connection, "forpunishment");
+			if (connection) {
+				void curRoom.uploadReplay(connection.user, connection, "forpunishment");
+				// ensure that replay is saved again when battle ends
+				// in case this is halfway through the battle (staff reviewing later may want the full log)
+				curRoom.battle.replaySaved = true;
+			}
 			battles.push(curRoom.roomid);
 		}
 	}

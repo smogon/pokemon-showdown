@@ -520,9 +520,12 @@ export class HelpTicket extends Rooms.RoomGame {
 	static uploadReplaysFrom(text: string, user: User, conn: Connection) {
 		const rooms = getBattleLinks(text);
 		for (const roomid of rooms) {
-			const room = Rooms.get(roomid);
-			if (!room || !('uploadReplay' in (room as GameRoom))) continue;
-			void (room as GameRoom).uploadReplay(user, conn, "forpunishment");
+			const room = Rooms.get(roomid) as GameRoom | undefined;
+			if (!room || !('uploadReplay' in room)) continue;
+			void room.uploadReplay(user, conn, "forpunishment");
+			// ensure that replay is saved again when battle ends
+			// in case this is halfway through the battle (staff reviewing later may want the full log)
+			if (room.battle) room.battle.replaySaved = true;
 		}
 	}
 	static formatBattleLog(logs: string[], title: string, url: string) {
@@ -2244,9 +2247,12 @@ export const commands: Chat.ChatCommands = {
 			let reportTargetInfo = '';
 			if (reportTargetType === 'room') {
 				reportTargetInfo = `Reported in room: <a href="/${reportTarget}">${reportTarget}</a>`;
-				const reportRoom = Rooms.get(reportTarget);
-				if (reportRoom && (reportRoom as GameRoom).uploadReplay) {
-					void (reportRoom as GameRoom).uploadReplay(user, connection, 'forpunishment');
+				const reportRoom = Rooms.get(reportTarget) as GameRoom | undefined;
+				if (reportRoom && 'uploadReplay' in reportRoom) {
+					void reportRoom.uploadReplay(user, connection, 'forpunishment');
+					// ensure that replay is saved again when battle ends
+					// in case this is halfway through the battle (staff reviewing later may want the full log)
+					if (reportRoom.battle) reportRoom.battle.replaySaved = true;
 				}
 			} else if (reportTargetType === 'user') {
 				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong><p></p>`;
