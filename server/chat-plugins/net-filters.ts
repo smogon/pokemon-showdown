@@ -161,9 +161,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room, connec
 					`|c|&|/log [ERPMonitor] Suspicious messages detected in <<${room.roomid}>>`
 				).update();
 				hits[room.roomid][user.id] = 0; // so they can't spam messages
-				if ('uploadReplay' in (room as GameRoom)) {
-					void (room as GameRoom).uploadReplay(user, connection, "silent");
-				}
+				void (room as GameRoom).uploadReplay?.(user, connection, "silent");
 			}
 		}
 	})();
