@@ -672,7 +672,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching tournaments...");
 
 				global.Tournaments = require('../tournaments').Tournaments;
-				Chat.loadPluginData(Tournaments, 'tournaments');
+				Chat.loadPlugin(Tournaments, 'tournaments');
 				this.sendReply("DONE");
 			} else if (target === 'formats' || target === 'battles') {
 				if (lock['formats']) {

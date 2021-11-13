@@ -30,9 +30,10 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import {Dex} from '../sim';
 import {resolve} from 'path';
+import * as JSX from './chat-jsx';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
-=> Promise<string | null | void> | string | null | void;
+=> Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
 export interface PageTable {
 	[k: string]: PageHandler | PageTable;
 }
@@ -139,6 +140,7 @@ const BROADCAST_TOKEN = '!';
 
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
+const VALID_PLUGIN_ENDINGS = ['.jsx', '.tsx', '.js', '.ts'];
 
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
@@ -470,6 +472,7 @@ export class PageContext extends MessageContext {
 				`</div></div>`
 			);
 		}
+		if (typeof res === 'object' && res) res = JSX.render(res);
 		if (typeof res === 'string') {
 			this.setHTML(res);
 			res = undefined;
@@ -803,10 +806,12 @@ export class CommandContext extends MessageContext {
 	errorReply(message: string) {
 		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
 	}
-	addBox(htmlContent: string) {
+	addBox(htmlContent: string | JSX.VNode) {
+		if (typeof htmlContent !== 'string') htmlContent = JSX.render(htmlContent);
 		this.add(`|html|<div class="infobox">${htmlContent}</div>`);
 	}
-	sendReplyBox(htmlContent: string) {
+	sendReplyBox(htmlContent: string | JSX.VNode) {
+		if (typeof htmlContent !== 'string') htmlContent = JSX.render(htmlContent);
 		this.sendReply(`|c|${this.room && this.broadcasting ? this.user.getIdentity() : '~'}|/raw <div class="infobox">${htmlContent}</div>`);
 	}
 	popupReply(message: string) {
@@ -1761,6 +1766,13 @@ export const Chat = new class {
 	readonly PageContext = PageContext;
 	readonly ErrorMessage = ErrorMessage;
 	readonly Interruption = Interruption;
+
+	// JSX handling
+	readonly JSX = JSX;
+	readonly html = JSX.html;
+	readonly h = JSX.h;
+	readonly Fragment = JSX.Fragment;
+
 	/**
 	 * Command parser
 	 *
@@ -1835,6 +1847,12 @@ export const Chat = new class {
 
 	packageData: AnyObject = {};
 
+	loadPluginFile(file: string) {
+		if (!VALID_PLUGIN_ENDINGS.some(ext => file.endsWith(ext))) return;
+		const filename = file.split('/').pop() || "";
+		this.loadPlugin(require(file), filename.slice(0, filename.lastIndexOf('.')) || file);
+	}
+
 	loadPluginDirectory(dir: string, depth = 0) {
 		for (const file of FS(dir).readdirSync()) {
 			const path = resolve(dir, file);
@@ -1844,22 +1862,13 @@ export const Chat = new class {
 				this.loadPluginDirectory(path, depth);
 			} else {
 				try {
-					this.loadPlugin(path);
+					this.loadPluginFile(path);
 				} catch (e) {
 					Monitor.crashlog(e, "A loading chat plugin");
 					continue;
 				}
 			}
 		}
-	}
-	loadPlugin(file: string) {
-		let plugin;
-		if (file.endsWith('.ts') || file.endsWith('.js')) {
-			plugin = require(file.slice(0, -3));
-		} else {
-			return;
-		}
-		this.loadPluginData(plugin, file.split('/').pop()?.slice(0, -3) || file);
 	}
 	annotateCommands(commandTable: AnyObject, namespace = ''): AnnotatedChatCommands {
 		for (const cmd in commandTable) {
@@ -1903,7 +1912,7 @@ export const Chat = new class {
 		}
 		return commandTable;
 	}
-	loadPluginData(plugin: AnyObject, name: string) {
+	loadPlugin(plugin: AnyObject, name: string) {
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
@@ -1965,8 +1974,8 @@ export const Chat = new class {
 		Chat.pages = Object.assign(Object.create(null), Chat.basePages);
 
 		// Load filters from Config
-		this.loadPluginData(Config, 'config');
-		this.loadPluginData(Tournaments, 'tournaments');
+		this.loadPlugin(Config, 'config');
+		this.loadPlugin(Tournaments, 'tournaments');
 
 		this.loadPluginDirectory('server/chat-plugins');
 		Chat.oldPlugins = {};
