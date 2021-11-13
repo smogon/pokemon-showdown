@@ -281,7 +281,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			default:
 				this.errorReply(`Invalid modlog parameter: '${param}'.`);
-				return this.errorReply(`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', 'any', or 'lines'.`);
+				return this.errorReply(`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', or 'lines'.`);
 			}
 		}
 
@@ -322,7 +322,6 @@ export const commands: Chat.ChatCommands = {
 			`<details><summary><strong>Parameters</strong></summary>` +
 			`<ul>` +
 			`<li><code>room=[room]</code> - searches a room's modlog</li>` +
-			`<li><code>any=[text]</code> - searches for modlog entries containing the specified text in any field</li>` +
 			`<li><code>userid=[user]</code> - searches for a username (or fragment of one)</li>` +
 			`<li><code>note=[text]</code> - searches the contents of notes/reasons</li>` +
 			`<li><code>ip=[IP address]</code> - searches for an IP address (or fragment of one)</li>` +
