@@ -58,10 +58,21 @@ export const GitHub = new class {
 	updates: {[k: string]: number} = Object.create(null);
 	constructor() {
 		try {
+			const config = this.getConfig();
 			// config.github: https://github.com/nlf/node-github-hook#readme
-			if (Config.github) this.hook = (require('githubhook'))(Config.github);
+			if (config) this.hook = (require('githubhook'))(config);
 		} catch {}
 		this.listen();
+	}
+	getConfig() {
+		if (!Config.github) return Config.github;
+		if (!Config.github.logger) { // respect custom loggers
+			Config.github.logger = {
+				log: (args: string) => Monitor.debug(args),
+				error: (args: string) => Monitor.notice(args),
+			};
+		}
+		return Config.github;
 	}
 	listen() {
 		if (!this.hook) return;
