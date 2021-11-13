@@ -1294,7 +1294,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	onChatMessage(message: string, user: User) {
 		const parts = message.split('\n');
 		for (const line of parts) {
-			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room.roomid)}|${line}`);
+			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room)}|${line}`);
 		}
 	}
 	async getLog(): Promise<string[] | void> {
