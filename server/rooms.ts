@@ -1885,6 +1885,7 @@ export class GameRoom extends BasicRoom {
 		// (also include all the data, including a hash of the replay itself,
 		// so it can't be spoofed.)
 
+		battle.replaySaved = true;
 		const [success] = await LoginServer.request('prepreplay', {
 			id: id,
 			loghash: datahash,
@@ -1896,7 +1897,6 @@ export class GameRoom extends BasicRoom {
 				'2' : this.settings.isPrivate || this.hideReplay ? '1' : '',
 			inputlog: battle.inputLog?.join('\n') || null,
 		});
-		if (success) battle.replaySaved = true;
 		if (success?.errorip) {
 			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
 			return;

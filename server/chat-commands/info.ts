@@ -28,9 +28,6 @@ export function getCommonBattles(
 		) {
 			if (connection) {
 				void curRoom.uploadReplay(connection.user, connection, "forpunishment");
-				// ensure that replay is saved again when battle ends
-				// in case this is halfway through the battle (staff reviewing later may want the full log)
-				curRoom.battle.replaySaved = true;
 			}
 			battles.push(curRoom.roomid);
 		}
