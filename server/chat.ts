@@ -670,7 +670,7 @@ export class CommandContext extends MessageContext {
 			}
 			Chat.sendPM(message, this.user, this.pmTarget);
 		} else if (this.room) {
-			this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
+			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
 			if (this.room.game && this.room.game.onLogMessage) {
 				this.room.game.onLogMessage(message, this.user);
 			}
@@ -1033,7 +1033,7 @@ export class CommandContext extends MessageContext {
 		if (this.pmTarget) {
 			this.sendReply(`|c~|${message}`);
 		} else {
-			this.sendReply(`|c|${this.user.getIdentity(this.room ? this.room.roomid : '')}|${message}`);
+			this.sendReply(`|c|${this.user.getIdentity(this.room)}|${message}`);
 		}
 		if (this.room) {
 			// We don't want broadcasted messages in a room to be translated

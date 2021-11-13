@@ -508,17 +508,13 @@ export class User extends Chat.MessageContext {
 	popup(message: string) {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
-	getIdentity(roomid: RoomID = '') {
+	getIdentity(room: BasicRoom | null = null) {
 		const punishgroups = Config.punishgroups || {locked: null, muted: null};
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (punishgroups.locked && punishgroups.locked.symbol || '\u203d');
 			return lockedSymbol + this.name;
 		}
-		if (roomid) {
-			const room = Rooms.get(roomid);
-			if (!room) {
-				throw new Error(`Room doesn't exist: ${roomid}`);
-			}
+		if (room) {
 			if (room.isMuted(this)) {
 				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 				return mutedSymbol + this.name;
@@ -531,8 +527,8 @@ export class User extends Chat.MessageContext {
 		}
 		return this.tempGroup + this.name;
 	}
-	getIdentityWithStatus(roomid: RoomID = '') {
-		const identity = this.getIdentity(roomid);
+	getIdentityWithStatus(room: BasicRoom | null = null) {
+		const identity = this.getIdentity(room);
 		const status = this.statusType === 'online' ? '' : '@!';
 		return `${identity}${status}`;
 	}
