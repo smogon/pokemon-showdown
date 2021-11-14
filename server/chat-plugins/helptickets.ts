@@ -812,6 +812,23 @@ export function getBattleLinks(text: string) {
 	return [...rooms];
 }
 
+function getReportedUser(ticket: TicketState) {
+	if (!ticket.meta?.startsWith('user-')) return null;
+	return toID(ticket.meta.slice(5)) || null;
+}
+
+export async function listOpponentsFrom(
+	ticket: TicketState & {text: [string, string]}
+) {
+	const opps = new Utils.Multiset<string>();
+	const links = getBattleLinks(ticket.text[0]).concat(getBattleLinks(ticket.text[1]));
+	for (const link of links) {
+		const opp = await getOpponent(link, ticket.userid);
+		if (opp && opp !== ticket.userid) opps.add(opp);
+	}
+	return Utils.sortBy([...opps], ([, count]) => -count).map(opp => toID(opp[0]));
+}
+
 export async function getOpponent(link: string, submitter: ID): Promise<string | null> {
 	const room = Rooms.get(link) as GameRoom | undefined;
 	// we can't determine this for FFA - valid guesses can be made for 2 player, but not 4p. not at all.
@@ -1074,16 +1091,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			return true;
 		},
-		async onSubmit(ticket, text, submitter, conn) {
+		onSubmit(ticket, text, submitter, conn) {
 			for (const part of text) {
 				HelpTicket.uploadReplaysFrom(part, submitter, conn);
-			}
-			// if there's no report meta, or there is and it isn't a user
-			if (!ticket.meta || ticket.meta.startsWith('room-')) {
-				const replays = getBattleLinks(text[0]);
-				const link = replays.shift()!;
-				const opp = await getOpponent(link, submitter.id);
-				if (opp) ticket.meta = `user-${opp}`;
 			}
 		},
 		async getReviewDisplay(ticket, staff, connection) {
@@ -1094,6 +1104,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			if (context) {
 				rooms.push(...getBattleLinks(context));
 			}
+			if (ticket.meta?.startsWith('room-')) {
+				rooms.push(...getBattleLinks(ticket.meta.slice(5)));
+			}
 			rooms = rooms.filter((url, index) => rooms.indexOf(url) === index);
 			const proof = rooms.map(u => `https://${Config.routes.client}/${u}`).join(', ');
 			buf += HelpTicket.displayPunishmentList(
@@ -1103,20 +1116,16 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				`Punish <strong>${ticket.userid}</strong> (reporter)`,
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`
 			);
-			if (ticket.meta) {
-				const [type, meta] = ticket.meta.split('-');
-				if (type === 'user') {
-					buf += `<br /><strong>Reported user:</strong> ${meta} `;
-					buf += `<button class="button" name="send" value="/modlog room=global,user='${toID(meta)}'">Global Modlog</button><br />`;
-					buf += HelpTicket.displayPunishmentList(
-						toID(meta),
-						proof,
-						ticket,
-						`Punish <strong>${toID(meta)}</strong> (reported user)`
-					);
-				} else if (type === 'room' && BATTLES_REGEX.test(meta)) {
-					rooms.push(meta);
-				}
+			const opp = getReportedUser(ticket) || (await listOpponentsFrom(ticket))[0];
+			if (opp) {
+				buf += `<br /><strong>Reported user:</strong> ${opp} `;
+				buf += `<button class="button" name="send" value="/modlog room=global,user='${opp}'">Global Modlog</button><br />`;
+				buf += HelpTicket.displayPunishmentList(
+					opp,
+					proof,
+					ticket,
+					`Punish <strong>${opp}</strong> (reported user)`
+				);
 			}
 			buf += `<strong>Battle links:</strong> ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			buf += `<br />`;
@@ -1165,12 +1174,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			let links = getBattleLinks(text);
 			if (context) links.push(...getBattleLinks(context));
 			const proof = links.join(', ');
-			const opps = new Utils.Multiset<string>();
-			for (const link of links) {
-				const opp = await getOpponent(link, ticket.userid);
-				if (opp) opps.add(opp);
-			}
-			const opp = toID(Utils.sortBy([...opps], ([, num]) => -num)[0]?.[0]);
+			const opp = getReportedUser(ticket) || (await listOpponentsFrom(ticket))[0];
 			buf += HelpTicket.displayPunishmentList(
 				ticket.userid,
 				proof,
