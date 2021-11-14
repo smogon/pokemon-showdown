@@ -259,6 +259,7 @@ export class RandomTeams {
 	 */
 	sampleNoReplace(list: any[]) {
 		const length = list.length;
+		if (length === 0) return null;
 		const index = this.random(length);
 		return this.fastPop(list, index);
 	}
@@ -498,18 +499,58 @@ export class RandomTeams {
 	}
 
 	randomHCTeam(): PokemonSet[] {
-		const team = [];
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		const hasNonexistentBan = ruleTable.check('nonexistent');
 
-		const itemPool = [...this.dex.items.all()];
+		// Item Pool
+		const itemPool = [];
+		const hasAllItemsBan = ruleTable.check('pokemontag:allitems');
+		for (const item of this.dex.items.all()) {
+			const banReason = ruleTable.check('item:' + item.id);
+			if (banReason) continue;
+			if (banReason === '') {
+				itemPool.push(item);
+				continue;
+			}
+			if (hasAllItemsBan) continue;
+			if (hasNonexistentBan && item.isNonstandard && item.isNonstandard !== 'Unobtainable') {
+				if (['Past', 'Future'].includes(item.isNonstandard)) continue;
+			}
+			itemPool.push(item);
+		}
+		if (ruleTable.check('item:noitem')) {
+			const complexWorstCaseItemPool = [];
+			for (const item of itemPool) {
+				const itemTag = 'item:' + item.id;
+				if (ruleTable.isThingInComplexBan(itemTag)) continue;
+				complexWorstCaseItemPool.push(item);
+			}
+			if (complexWorstCaseItemPool.length < this.maxTeamSize) {
+				throw new Error(`Insufficient legal items to support Max Team Size (${complexWorstCaseItemPool.length} / ${this.maxTeamSize}).`);
+			}
+		}
+		// FIXME: Need to do more to support complex bans properly (inside choose forme area)
+
 		const abilityPool = [...this.dex.abilities.all()];
 		const movePool = [...this.dex.moves.all()];
 		const naturePool = this.dex.natures.all();
 
+		const team = [];
 		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
 
 		for (const forme of randomN) {
 			// Choose forme
 			const species = this.dex.species.get(forme);
+
+			// (Handling moves first seems better for ban support because every Pokemon needs at least one move)
+			// Random unique moves
+			const m = [];
+			do {
+				const move = this.sampleNoReplace(movePool);
+				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
+					m.push(move.id);
+				}
+			} while (m.length < 4);
 
 			// Random unique item
 			let item = '';
@@ -517,8 +558,8 @@ export class RandomTeams {
 			if (this.gen >= 2) {
 				do {
 					itemData = this.sampleNoReplace(itemPool);
-					item = itemData.name;
-				} while (itemData.gen > this.gen || itemData.isNonstandard);
+					item = itemData?.name;
+				} while (itemData?.gen > this.gen || itemData?.isNonstandard);
 			}
 
 			// Random unique ability
@@ -530,15 +571,6 @@ export class RandomTeams {
 					ability = abilityData.name;
 				} while (abilityData.gen > this.gen || abilityData.isNonstandard);
 			}
-
-			// Random unique moves
-			const m = [];
-			do {
-				const move = this.sampleNoReplace(movePool);
-				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
-					m.push(move.id);
-				}
-			} while (m.length < 4);
 
 			// Random EVs
 			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
