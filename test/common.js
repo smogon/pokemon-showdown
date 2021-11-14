@@ -130,6 +130,14 @@ class TestTools {
 			out.end();
 		});
 	}
+	hasModule(mod) {
+		try {
+			require(mod);
+			return true;
+		} catch {
+			return false;
+		}
+	}
 }
 
 const common = exports = module.exports = new TestTools();

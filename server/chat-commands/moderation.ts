@@ -549,7 +549,7 @@ export const commands: Chat.ChatCommands = {
 
 		const saveReplay = globalWarn && room?.battle;
 		if (!targetUser?.connected) {
-			if (!targetUser || !globalWarn) return this.errorReply(`User '${targetUsername}' not found.`);
+			if (!globalWarn) return this.errorReply(`User '${targetUsername}' not found.`);
 			if (room) {
 				this.checkCan('warn', null, room);
 			} else {
@@ -557,9 +557,9 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			this.addGlobalModAction(
-				`${targetUser.name} was warned by ${user.name} while offline.${publicReason ? ` (${publicReason})` : ``}`
+				`${targetID} was warned by ${user.name} while offline.${publicReason ? ` (${publicReason})` : ``}`
 			);
-			this.globalModlog('WARN OFFLINE', targetUser, privateReason);
+			this.globalModlog('WARN OFFLINE', targetUser || targetID, privateReason);
 			Punishments.offlineWarns.set(targetID, reason);
 			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
