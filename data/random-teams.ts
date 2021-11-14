@@ -519,14 +519,14 @@ export class RandomTeams {
 			itemPool.push(item);
 		}
 		if (ruleTable.check('item:noitem')) {
-			const complexWorstCaseItemPool = [];
+			let complexWorstCaseCount = 0;
 			for (const item of itemPool) {
 				const itemTag = 'item:' + item.id;
 				if (ruleTable.isThingInComplexBan(itemTag)) continue;
-				complexWorstCaseItemPool.push(item);
+				complexWorstCaseCount++;
 			}
-			if (complexWorstCaseItemPool.length < this.maxTeamSize) {
-				throw new Error(`Insufficient legal items to support Max Team Size (${complexWorstCaseItemPool.length} / ${this.maxTeamSize}).`);
+			if (complexWorstCaseCount < this.maxTeamSize) {
+				throw new Error(`Legal item count may be insufficient to support Max Team Size (${complexWorstCaseCount} / ${this.maxTeamSize}).`);
 			}
 		}
 		// FIXME: Need to do more to support complex bans properly (inside choose forme area)
