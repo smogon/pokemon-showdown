@@ -969,8 +969,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	celebi: {
-		tier: "OU",
-		doublesTier: "DOU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	treecko: {
 		tier: "LC",
@@ -1467,20 +1467,20 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	deoxys: {
-		tier: "Uber",
-		doublesTier: "DUber",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	deoxysattack: {
-		tier: "Uber",
-		doublesTier: "DUber",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	deoxysdefense: {
-		tier: "OU",
-		doublesTier: "DOU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	deoxysspeed: {
-		tier: "OU",
-		doublesTier: "DOU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	turtwig: {
 		tier: "LC",

@@ -85,7 +85,17 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	ejectbutton: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
+		onAfterMoveSecondary(target, source, move) {
+			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.isFutureMove) {
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.switchFlag === true) return;
+				}
+				target.switchFlag = true;
+				source.switchFlag = false;
+			}
+		},
 	},
 	ejectpack: {
 		inherit: true,
@@ -101,7 +111,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	eviolite: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
+		// TODO: Figure out calculation
 	},
 	fairymemory: {
 		inherit: true,
