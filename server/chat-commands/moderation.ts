@@ -1790,7 +1790,7 @@ export const commands: Chat.ChatCommands = {
 			const targetId = toID(targetUsername);
 			if (!targetId) return this.parse('/help noforcerename');
 			this.checkCan('bypassall');
-			if (!Punishments.whitelistName(target, user.name)) {
+			if (!Punishments.whitelistName(targetId, user.name)) {
 				return this.errorReply(`${targetUsername} is already on the noforcerename list.`);
 			}
 			this.addGlobalModAction(`${user.name} added the name ${targetId} to the no forcerename list.${rest ? ` (${rest})` : ''}`);
@@ -1804,7 +1804,7 @@ export const commands: Chat.ChatCommands = {
 			if (!Punishments.namefilterwhitelist.has(targetId)) {
 				return this.errorReply(`${targetUsername} is not on the noforcerename list.`);
 			}
-			Punishments.unwhitelistName(target);
+			Punishments.unwhitelistName(targetId);
 			this.addGlobalModAction(`${user.name} removed ${targetId} from the no forcerename list.${rest ? ` (${rest})` : ''}`);
 			this.globalModlog('UNNOFORCERENAME', targetId, rest);
 		},
