@@ -293,30 +293,6 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 	},
 	{
-		name: "[Gen 8] Gym Challenge",
-		threads: [
-			`&bullet; <a href="https://www.pokemon.com/us/pokemon-news/register-for-the-pokemon-gym-challenge-online-competition/">Gym Challenge Registration</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
-		onValidateSet(set) {
-			const gymMonsList = [
-				'ninetales', 'arcanine', 'machamp', 'ponytagalar', 'rapidashgalar', 'gengar', 'weezinggalar', 'goldeen', 'seaking', 'lapras', 'bellossom',
-				'quagsire', 'shuckle', 'hitmontop', 'tyranitar', 'ludicolo', 'shiftry', 'pelipper', 'gardevoir', 'mawile', 'torkoal', 'flygon', 'cherrim',
-				'skuntank', 'croagunk', 'toxicroak', 'togekiss', 'dusknoir', 'liepard', 'gigalith', 'darmanitangalar', 'scraggy', 'scrafty', 'yamaskgalar',
-				'gothita', 'gothorita', 'solosis', 'duosion', 'chandelure', 'pangoro', 'malamar', 'barbaracle', 'sylveon', 'hawlucha', 'goodra', 'toxapex',
-				'salazzle', 'tsareena', 'golisopod', 'turtonator', 'mimikyu', 'gossifleur', 'eldegoss', 'drednaw', 'coalossal', 'flapple', 'appletun',
-				'sandaconda', 'arrokuda', 'barraskewda', 'toxtricitylowkey', 'centiskorch', 'grapploct', 'polteageist', 'hatenna', 'hattrem', 'hatterene',
-				'grimmsnarl', 'obstagoon', 'cursola', 'sirfetchd', 'mrrime', 'runerigus', 'falinks', 'frosmoth', 'stonjourner', 'eiscue', 'morpeko', 'duraludon',
-			];
-			const species = this.dex.species.get(set.species);
-			if (!gymMonsList.includes(species.id) && !species.id.startsWith('alcremie')) {
-				return [`${species.name} is not allowed in this competition.`];
-			}
-		},
-	},
-	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
