@@ -46,7 +46,7 @@ export const SampleTeams = new class SampleTeams {
 		for (const roomid of roomids) {
 			const room = Rooms.search(roomid);
 			// Malformed entry from botched room rename
-			if (!room) throw new Error(`Room ${roomid} not found`);
+			if (!room) continue;
 			matched = room.auth.isStaff(user.id);
 			if (matched) break;
 		}
@@ -68,7 +68,7 @@ export const SampleTeams = new class SampleTeams {
 		return Utils.sortBy(teamData.whitelist[formatid], (x) => {
 			if (!names) return x;
 			const room = Rooms.search(x);
-			if (!room) throw new Error(`Room ${x} not found`);
+			if (!room) return x;
 			return room.title;
 		});
 	}
@@ -227,7 +227,7 @@ export const SampleTeams = new class SampleTeams {
 		if (whitelistedRooms?.length) {
 			for (const roomid of whitelistedRooms) {
 				const room = Rooms.get(roomid);
-				if (!room) throw new Error(`Room ${roomid} not found`);
+				if (!room) continue;
 				context.room = room;
 				context.modlog(action, null, `${formatid}: ${note}`);
 				context.privateModAction(log);
