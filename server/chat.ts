@@ -71,6 +71,7 @@ export interface Handlers {
 	onBattleStart?: (user: User, room: GameRoom) => void;
 	onBattleLeave?: (user: User, room: GameRoom) => void;
 	onDisconnect?: (user: User) => void;
+	onConfigRefresh?: () => void;
 }
 
 export interface ChatPlugin {

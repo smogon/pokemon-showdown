@@ -76,9 +76,7 @@ function setupGlobals() {
 		FS(require.resolve('../config/config')).onModify(() => {
 			try {
 				global.Config = ConfigLoader.load(true);
-				// ensure that battle prefixes configured via the chat plugin are not overwritten
-				// by battle prefixes manually specified in config.js
-				Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
+				Chat.runHandlers('ConfigRefresh');
 				Monitor.notice('Reloaded ../config/config.js');
 			} catch (e: any) {
 				Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);

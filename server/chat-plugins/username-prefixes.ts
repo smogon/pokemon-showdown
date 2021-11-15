@@ -126,3 +126,11 @@ export const commands: Chat.ChatCommands = {
 		);
 	},
 };
+
+export const handlers: Chat.Handlers = {
+	onConfigRefresh() {
+		// ensure that battle prefixes configured via the chat plugin are not overwritten
+		// by battle prefixes manually specified in config.js
+		prefixManager.refreshConfig(true);
+	},
+};
