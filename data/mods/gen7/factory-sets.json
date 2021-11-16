@@ -6948,7 +6948,14 @@
 				"ability": ["Limber"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
-				"moves": [["Knock Off"], ["Pursuit"], ["Play Rough"], ["U-turn", "Sucker Punch", "Copycat"]]
+				"moves": [["Knock Off"], ["Pursuit"], ["Play Rough"], ["U-turn", "Sucker Punch"]]
+			}, {
+				"species": "Liepard",
+				"item": ["Choice Band"],
+				"ability": ["Prankster"],
+				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"nature": "Jolly",
+				"moves": [["Knock Off"], ["Pursuit"], ["Play Rough"], ["Copycat"]]
 			}]
 		},
 		"ludicolo": {
