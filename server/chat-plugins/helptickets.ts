@@ -814,7 +814,9 @@ export function getBattleLinks(text: string) {
 
 function getReportedUser(ticket: TicketState) {
 	if (!ticket.meta?.startsWith('user-')) return null;
-	return toID(ticket.meta.slice(5)) || null;
+	const id = toID(ticket.meta.slice(5));
+	// ignoreit if they report themselves for w/e reason
+	return (!id || id === ticket.userid) ? null : id;
 }
 
 export async function listOpponentsFrom(
