@@ -1855,8 +1855,12 @@ export const pages: Chat.PageTable = {
 				buf += Chat.formatText(text);
 				if (context) {
 					buf += `<br /><hr /><strong>Context given: </strong><br />`;
-					// gotta account for the cases where we didnt escape html in context on submit
-					buf += context.includes('<br />') ? context : Chat.formatText(context);
+					// gotta account for the cases where we didn't escape html in context on submit
+					// If it includes <br />, it has been escaped and has several lines.
+					// If we can strip raw html out of it, it should be escaped.
+					// Otherwise, let it be.
+					const noEscape = !context.includes('<br />') ? Chat.stripHTML(context) !== context : false;
+					buf += noEscape ? Chat.formatText(context) : context;
 				}
 				buf += `</div>`;
 				buf += Utils.html`<strong>Resolved: by ${ticket.resolved.by}</strong><br />`;
