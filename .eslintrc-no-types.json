@@ -198,9 +198,6 @@
       "extends": [
         "plugin:@typescript-eslint/recommended"
       ],
-      "plugins": [
-        "import"
-      ],
       "rules": {
         // TODO revisit
         "@typescript-eslint/explicit-function-return-type": "off",
@@ -249,7 +246,6 @@
         "@typescript-eslint/no-extra-non-null-assertion": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
-        "import/no-extraneous-dependencies": "error",
         "no-dupe-class-members": "off",
         "no-unused-expressions": "off", // ternary is used to convert callbacks to Promises
         "@typescript-eslint/no-unused-expressions": ["error", {"allowTernary": true}], // ternary is used to convert callbacks to Promises
