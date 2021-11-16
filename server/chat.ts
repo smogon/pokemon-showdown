@@ -2512,7 +2512,6 @@ export const Chat = new class {
 // backwards compatibility; don't actually use these
 // they're just there so forks have time to slowly transition
 (Chat as any).escapeHTML = Utils.escapeHTML;
-(Chat as any).html = Utils.html;
 (Chat as any).splitFirst = Utils.splitFirst;
 (CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
 (CommandContext.prototype as any).canTalk = CommandContext.prototype.checkChat;
