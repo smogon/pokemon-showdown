@@ -194,6 +194,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	icestone: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	icicleplate: {
 		inherit: true,
 		isNonstandard: null,

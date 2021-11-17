@@ -855,6 +855,23 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 8 BDSP] Doubles OU",
+
+		mod: 'gen8bdsp',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles'],
+		banlist: ['DUber'],
+	},
+	{
+		name: "[Gen 8 BDSP] Battle Festival Doubles",
+
+		mod: 'gen8bdsp',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit One Restricted'],
+		restricted: ['Restricted Legendary'],
+	},
+	{
 		name: "[Gen 8 BDSP] Pure Hackmons",
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		threads: [
