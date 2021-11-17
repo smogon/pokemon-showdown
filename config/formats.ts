@@ -868,8 +868,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit One Restricted'],
-		restricted: ['Restricted Legendary'],
+		// VGC Timer is temporary
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
 	},
 	{
 		name: "[Gen 8 BDSP] Pure Hackmons",
