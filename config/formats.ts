@@ -2841,8 +2841,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen5',
 		searchShow: false,
-		ruleset: ['[Gen 5] RU', '!Sleep Moves Clause', 'Sleep Clause Mod', '+Shadow Tag'],
-		banlist: ['RU', 'NUBL', 'Prankster + Assist'],
+		ruleset: ['[Gen 5] RU', '!Sleep Moves Clause', 'Sleep Clause Mod'],
+		banlist: ['RU', 'NUBL', 'Assist', 'Copycat'],
 	},
 	{
 		name: "[Gen 5] PU",
