@@ -25054,7 +25054,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["8L39"],
 		},
 		eventData: [
-			{generation: 8, shiny: 1, moves: ['tailglow', 'watergun'], pokeball: 'pokeball'},
+			{generation: 8, moves: ['tailglow', 'watergun'], pokeball: 'pokeball'},
 		],
 		eventOnly: true,
 	},
