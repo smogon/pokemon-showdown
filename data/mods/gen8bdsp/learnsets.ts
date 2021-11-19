@@ -19496,7 +19496,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["8L28"],
 		},
 		eventData: [
-			{generation: 8, level: 1, moves: ['confusion', 'wish']},
+			{generation: 8, level: 5, moves: ['confusion', 'wish']},
 		],
 		eventOnly: true,
 	},
