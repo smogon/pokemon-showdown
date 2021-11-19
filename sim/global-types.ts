@@ -301,6 +301,7 @@ interface ModdedBattleActions {
 }
 
 interface ModdedBattleSide {
+	canDynamaxNow?: (this: Side) => boolean;
 	getRequestData?: (this: Side, forAlly?: boolean) => {name: string, id: ID, pokemon: AnyObject[]};
 }
 

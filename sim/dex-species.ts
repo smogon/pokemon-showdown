@@ -473,6 +473,13 @@ export class DexSpecies {
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
+			if (this.dex.currentMod === 'gen8bdsp' &&
+				(!species.isNonstandard || species.isNonstandard === "Gigantamax")) {
+				if (species.gen > 4 || species.num < 1 || species.id === 'pichuspikyeared') {
+					species.isNonstandard = 'Past';
+					species.tier = species.doublesTier = 'Illegal';
+				}
+			}
 			species.nfe = !!(species.evos.length && this.get(species.evos[0]).gen <= this.dex.gen);
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
