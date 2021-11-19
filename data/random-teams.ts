@@ -1954,8 +1954,10 @@ export class RandomTeams {
 		}
 
 		let level: number;
+		// doubles levelling
 		if (isDoubles && species.randomDoubleBattleLevel) {
 			level = species.randomDoubleBattleLevel;
+		// No Dmax levelling
 		} else if (isNoDynamax) {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
 			const tierScale: {[k: string]: number} = {
@@ -1981,8 +1983,28 @@ export class RandomTeams {
 				decidueye: 87, noivern: 85, magnezone: 82, slowking: 81,
 			};
 			level = customScale[species.id] || tierScale[tier];
+		// BDSP tier levelling
+		} else if (this.dex.currentMod === 'gen8bdsp') {
+			const tierScale: {[k: string]: number} = {
+				Uber: 76,
+				OU: 80,
+				UUBL: 81,
+				UU: 82,
+				RUBL: 83,
+				RU: 84,
+				NUBL: 85,
+				NU: 86,
+				PUBL: 87,
+				PU: 88, "(PU)": 88, NFE: 88,
+			};
+			// to override tier scaling if needed
+			const customScale: {[k: string]: number} = {};
+			
+			level = customScale[species.id] || tierScale[species.tier];
+		// Arbitrary levelling base on data files (typically winrate-influenced)
 		} else if (species.randomBattleLevel) {
 			level = species.randomBattleLevel;
+		// Default to level 80
 		} else {
 			level = 80;
 		}
