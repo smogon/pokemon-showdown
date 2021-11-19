@@ -1999,7 +1999,7 @@ export class RandomTeams {
 			};
 			// to override tier scaling if needed
 			const customScale: {[k: string]: number} = {};
-			
+
 			level = customScale[species.id] || tierScale[species.tier];
 		// Arbitrary levelling base on data files (typically winrate-influenced)
 		} else if (species.randomBattleLevel) {
