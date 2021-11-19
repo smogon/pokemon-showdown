@@ -1529,7 +1529,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	kecleon: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["fakeout", "stealthrock", "drainpunch", "thunderwave", "shadowsneak"].
+		randomBattleMoves: ["fakeout", "stealthrock", "drainpunch", "thunderwave", "shadowsneak"],
 	},
 	shuppet: {
 		tier: "LC",
