@@ -49,9 +49,7 @@ export const IPTools = new class {
 	readonly hostRegex = /^.+\..{2,}$/;
 
 	async lookup(ip: string) {
-		// known TypeScript bug
-		// https://github.com/microsoft/TypeScript/issues/33752
-		const [dnsbl, host] = await Promise.all<string | null, string>([
+		const [dnsbl, host] = await Promise.all([
 			IPTools.queryDnsbl(ip),
 			IPTools.getHost(ip),
 		]);
