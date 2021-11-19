@@ -1704,6 +1704,14 @@ export const Formats: FormatList = [
 		column: 2,
 	},
 	{
+		name: "[Gen 8] BD/SP Random Battle",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
+
+		mod: 'gen8bdsp',
+		team: 'random',
+		ruleset: ['[Gen 8] Random Battle'],
+	},
+	{
 		name: "[Gen 8] Monotype Random Battle",
 
 		mod: 'gen8',
