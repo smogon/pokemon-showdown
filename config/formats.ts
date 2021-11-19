@@ -849,6 +849,9 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		team: 'random',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
 		ruleset: ['[Gen 8] Random Battle'],
 	},
 	{
