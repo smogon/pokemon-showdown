@@ -464,7 +464,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	hitmontop: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randombattleMoves: ["closecombat", "rapidspin", "stoneedge", "machpunch", "suckerpunch"],
+		randomBattleMoves: ["closecombat", "rapidspin", "stoneedge", "machpunch", "suckerpunch"],
 	},
 	lickitung: {
 		tier: "LC",
@@ -515,7 +515,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	kangaskhan: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattlesMoves: ["doubleedge", "crunch", "hammerarm", "earthquake", "fakeout"],
+		randomBattleMoves: ["doubleedge", "crunch", "hammerarm", "earthquake", "fakeout"],
 	},
 	horsea: {
 		tier: "LC",
