@@ -844,6 +844,14 @@ export const Formats: FormatList = [
 		column: 2,
 	},
 	{
+		name: "[Gen 8 BDSP] Random Battle",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
+
+		mod: 'gen8bdsp',
+		team: 'random',
+		ruleset: ['[Gen 8] Random Battle'],
+	},
+	{
 		name: "[Gen 8 BDSP] OU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3693629/">BDSP OU Metagame Discussion</a>`,
@@ -1702,14 +1710,6 @@ export const Formats: FormatList = [
 	{
 		section: "Randomized Metas",
 		column: 2,
-	},
-	{
-		name: "[Gen 8] BD/SP Random Battle",
-		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
-
-		mod: 'gen8bdsp',
-		team: 'random',
-		ruleset: ['[Gen 8] Random Battle'],
 	},
 	{
 		name: "[Gen 8] Monotype Random Battle",
