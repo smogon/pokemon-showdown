@@ -1089,7 +1089,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [];
-				for (let i = this.dex.gen; i >= species.gen && i >= move.gen; i--) {
+				// BDSP can't import Pokemon from Home, so it shouldn't grant moves from archaic species types
+				const minObtainableSpeciesGen = this.dex.currentMod === 'gen8bdsp' ? this.dex.gen : species.gen;
+				for (let i = this.dex.gen; i >= minObtainableSpeciesGen && i >= move.gen; i--) {
 					const dex = this.dex.forGen(i);
 					moveTypes.push(dex.moves.get(move.name).type);
 
