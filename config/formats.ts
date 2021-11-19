@@ -840,6 +840,49 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		section: "BD/SP",
+		column: 2,
+	},
+	{
+		name: "[Gen 8 BDSP] OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693629/">BDSP OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693620/">BDSP OU Viability List</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 8 BDSP] Doubles OU",
+
+		mod: 'gen8bdsp',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles'],
+		banlist: ['DUber'],
+	},
+	{
+		name: "[Gen 8 BDSP] Battle Festival Doubles",
+
+		mod: 'gen8bdsp',
+		gameType: 'doubles',
+		// VGC Timer is temporary
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
+	},
+	{
+		name: "[Gen 8 BDSP] Pure Hackmons",
+		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656851/">Pure Hackmons</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+	},
+	{
 		section: "Challengeable OMs",
 		column: 2,
 	},
@@ -1355,17 +1398,6 @@ export const Formats: FormatList = [
 				return stats;
 			},
 		},
-	},
-	{
-		name: "[Gen 8] Pure Hackmons",
-		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656851/">Pure Hackmons</a>`,
-		],
-
-		mod: 'gen8',
-		searchShow: false,
-		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
 		name: "[Gen 8] Shared Power",
