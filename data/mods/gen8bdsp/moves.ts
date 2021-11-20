@@ -693,7 +693,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	psychoboost: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Unobtainable",
 	},
 	purify: {
 		inherit: true,
