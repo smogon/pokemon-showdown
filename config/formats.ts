@@ -886,7 +886,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8 BDSP] Pure Hackmons",
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656851/">Pure Hackmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693868/">Pure Hackmons</a>`,
 		],
 
 		mod: 'gen8bdsp',
