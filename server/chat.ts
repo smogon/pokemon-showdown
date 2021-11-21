@@ -1848,10 +1848,9 @@ export const Chat = new class {
 	packageData: AnyObject = {};
 
 	getPluginName(file: string) {
-		const ext = pathModule.extname(file);
-		const folder = file.includes('chat-commands') ? 'chat-commands' : 'chat-plugins';
+		const folder = file.replace(__dirname, '').includes('chat-commands') ? 'chat-commands' : 'chat-plugins';
 		// the .slice(1, ...) removes the / from the beginning
-		let name = file.slice(file.indexOf(folder) + folder.length).slice(1, -ext.length);
+		let name = file.slice(file.indexOf(folder) + folder.length).slice(1, -file.lastIndexOf('.'));
 		if (name.endsWith('/index')) name = name.slice(0, -6);
 		return name;
 	}
