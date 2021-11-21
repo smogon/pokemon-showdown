@@ -8,8 +8,6 @@ export class RandomBDSPTeams extends RandomTeams {
 		super(format, prng);
 	}
 
-	
-
 	getHighPriorityItem(
 		ability: string,
 		types: Set<string>,
@@ -61,7 +59,7 @@ export class RandomBDSPTeams extends RandomTeams {
 		if (moves.has('rest') && !moves.has('sleeptalk') && ability !== 'Shed Skin') return 'Chesto Berry';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 	}
-	
+
 	getMediumPriorityItem(
 		ability: string,
 		moves: Set<string>,
@@ -71,7 +69,6 @@ export class RandomBDSPTeams extends RandomTeams {
 		isDoubles: boolean,
 		isNoDynamax: boolean
 	): string | undefined {
-
 		// Choice items
 		if (
 			counter.get('Physical') >= 4 && ability !== 'Serene Grace' &&
