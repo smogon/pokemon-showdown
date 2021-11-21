@@ -867,6 +867,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8 BDSP] Doubles OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693891/">BDSP Doubles OU</a>`,
+		],
 
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
