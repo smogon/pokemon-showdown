@@ -293,30 +293,6 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 	},
 	{
-		name: "[Gen 8] Gym Challenge",
-		threads: [
-			`&bullet; <a href="https://www.pokemon.com/us/pokemon-news/register-for-the-pokemon-gym-challenge-online-competition/">Gym Challenge Registration</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
-		onValidateSet(set) {
-			const gymMonsList = [
-				'ninetales', 'arcanine', 'machamp', 'ponytagalar', 'rapidashgalar', 'gengar', 'weezinggalar', 'goldeen', 'seaking', 'lapras', 'bellossom',
-				'quagsire', 'shuckle', 'hitmontop', 'tyranitar', 'ludicolo', 'shiftry', 'pelipper', 'gardevoir', 'mawile', 'torkoal', 'flygon', 'cherrim',
-				'skuntank', 'croagunk', 'toxicroak', 'togekiss', 'dusknoir', 'liepard', 'gigalith', 'darmanitangalar', 'scraggy', 'scrafty', 'yamaskgalar',
-				'gothita', 'gothorita', 'solosis', 'duosion', 'chandelure', 'pangoro', 'malamar', 'barbaracle', 'sylveon', 'hawlucha', 'goodra', 'toxapex',
-				'salazzle', 'tsareena', 'golisopod', 'turtonator', 'mimikyu', 'gossifleur', 'eldegoss', 'drednaw', 'coalossal', 'flapple', 'appletun',
-				'sandaconda', 'arrokuda', 'barraskewda', 'toxtricitylowkey', 'centiskorch', 'grapploct', 'polteageist', 'hatenna', 'hattrem', 'hatterene',
-				'grimmsnarl', 'obstagoon', 'cursola', 'sirfetchd', 'mrrime', 'runerigus', 'falinks', 'frosmoth', 'stonjourner', 'eiscue', 'morpeko', 'duraludon',
-			];
-			const species = this.dex.species.get(set.species);
-			if (!gymMonsList.includes(species.id) && !species.id.startsWith('alcremie')) {
-				return [`${species.name} is not allowed in this competition.`];
-			}
-		},
-	},
-	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
@@ -864,6 +840,60 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		section: "BD/SP",
+		column: 2,
+	},
+	{
+		name: "[Gen 8 BDSP] Random Battle",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
+
+		mod: 'gen8bdsp',
+		team: 'random',
+		searchShow: false,
+		challengeShow: false,
+		tournamentShow: false,
+		ruleset: ['[Gen 8] Random Battle'],
+	},
+	{
+		name: "[Gen 8 BDSP] OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693629/">BDSP OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693620/">BDSP OU Viability List</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'Arena Trap', 'Drizzle', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 8 BDSP] Doubles OU",
+
+		mod: 'gen8bdsp',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles'],
+		banlist: ['DUber'],
+	},
+	{
+		name: "[Gen 8 BDSP] Battle Festival Doubles",
+
+		mod: 'gen8bdsp',
+		gameType: 'doubles',
+		// VGC Timer is temporary
+		ruleset: ['Flat Rules', 'Min Source Gen = 8', 'VGC Timer'],
+	},
+	{
+		name: "[Gen 8 BDSP] Pure Hackmons",
+		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656851/">Pure Hackmons</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+	},
+	{
 		section: "Challengeable OMs",
 		column: 2,
 	},
@@ -1379,17 +1409,6 @@ export const Formats: FormatList = [
 				return stats;
 			},
 		},
-	},
-	{
-		name: "[Gen 8] Pure Hackmons",
-		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656851/">Pure Hackmons</a>`,
-		],
-
-		mod: 'gen8',
-		searchShow: false,
-		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
 		name: "[Gen 8] Shared Power",
@@ -2865,8 +2884,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen5',
 		searchShow: false,
-		ruleset: ['[Gen 5] RU', '!Sleep Moves Clause', 'Sleep Clause Mod', '+Shadow Tag'],
-		banlist: ['RU', 'NUBL', 'Prankster + Assist'],
+		ruleset: ['[Gen 5] RU', '!Sleep Moves Clause', 'Sleep Clause Mod'],
+		banlist: ['RU', 'NUBL', 'Assist', 'Copycat'],
 	},
 	{
 		name: "[Gen 5] PU",
@@ -2877,7 +2896,7 @@ export const Formats: FormatList = [
 		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['[Gen 5] NU', 'Sleep Moves Clause'],
-		banlist: ['NU', 'Combusken', 'Gothorita', 'Linoone', 'Riolu', 'Rotom-Frost', 'Throh', 'Vigoroth'],
+		banlist: ['NU', 'Combusken', 'Gothorita', 'Linoone', 'Riolu', 'Rotom-Frost', 'Simipour', 'Throh', 'Vigoroth'],
 	},
 	{
 		name: "[Gen 5] LC",
