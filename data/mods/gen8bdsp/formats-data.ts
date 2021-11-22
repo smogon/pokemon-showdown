@@ -2141,4 +2141,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["roar", "judgment", "defog", "icebeam", "recover"],
 	},
+	// Because it's marked as Unobtainable in the main file for some reason
+	eternatuseternamax: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 };
