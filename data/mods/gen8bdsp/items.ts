@@ -266,7 +266,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	msychicseed: {
+	psychicseed: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
