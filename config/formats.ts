@@ -847,6 +847,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8 BDSP] Random Battle",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693955/">BDSP Random Battle Set Discussion</a>`,
+		],
 
 		mod: 'gen8bdsp',
 		team: 'random',
