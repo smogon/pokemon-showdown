@@ -15857,6 +15857,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onRestart(pokemon) {
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					this.queue.cancelMove(pokemon);
+					pokemon.removeVolatile('twoturnmove');
 					this.add('-start', pokemon, 'Smack Down');
 				}
 			},
