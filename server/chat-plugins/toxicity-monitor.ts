@@ -288,6 +288,13 @@ export const commands: Chat.ChatCommands = {
 			const {targetUsername, rest} = this.splitUser(target);
 			const targetId = toID(targetUsername);
 			if (!targetId) return this.parse(`/help toxmonitor`);
+			if (user.lastCommand !== `tm userclear ${targetId}`) {
+				user.lastCommand = `tm userclear ${targetId}`;
+				this.errorReply(`Are you sure you want to clear toxicity monitor database records for ${targetId}?`);
+				this.errorReply(`Retype the command if you're sure.`);
+				return;
+			}
+			user.lastCommand = '';
 			const results = await Chat.database.run(
 				'DELETE FROM perspective_logs WHERE userid = ?', [targetId]
 			);
@@ -499,7 +506,7 @@ export const pages: Chat.PageTable = {
 			}
 			const userid = toID(query.shift());
 			let logQuery = `SELECT rowid, * FROM perspective_logs `;
-			let args = [];
+			const args = [];
 			if (userid) {
 				logQuery += `WHERE userid = ? `;
 				args.push(userid);
