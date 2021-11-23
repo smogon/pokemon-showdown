@@ -273,7 +273,8 @@ export const commands: Chat.ChatCommands = {
 		},
 		logs(target) {
 			checkAccess(this);
-			this.parse(`/join view-toxicitymonitor-logs-${toID(target)}`);
+			const [count, userid] = Utils.splitFirst(target, ',').map(toID);
+			this.parse(`/join view-toxicitymonitor-logs-${count || '200'}${userid ? `-${userid}` : ""}`);
 		},
 		async respawn(target, room, user) {
 			checkAccess(this);
@@ -417,7 +418,8 @@ export const commands: Chat.ChatCommands = {
 			`/tm threshold [number] - Set the toxicity monitor trigger threshold. Requires: whitelist &`,
 			`/tm resolve [room] - Mark a toxicity monitor flagged room as handled by staff. Requires: % @ &`,
 			`/tm respawn - Respawns toxicity monitor processes. Requires: whitelist &`,
-			`/tm logs - View logs of recent matches by the toxicity monitor. Requires: whitelist &`,
+			`/tm logs [count][, userid] - View logs of recent matches by the toxicity monitor. `,
+			`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
 			`/tm userclear [user] - Clear all logged toxicity monitor hits for a user. Requires: whitelist &`,
 			`/tm deletelog [number] - Deletes a toxicity monitor log matching the row ID [number] given. Requires: whitelist &`,
 			`/tm editspecial [type], [percent], [score] - Sets a special case for the toxicity monitor. Requires: whitelist &`,
@@ -495,26 +497,36 @@ export const pages: Chat.PageTable = {
 					return buf;
 				}
 			}
+			const userid = toID(query.shift());
+			let logQuery = `SELECT rowid, * FROM perspective_logs `;
+			let args = [];
+			if (userid) {
+				logQuery += `WHERE userid = ? `;
+				args.push(userid);
+			}
+			logQuery += `ORDER BY rowid DESC LIMIT ?`;
+			args.push(count);
 
-			const logs = await Chat.database.all(
-				'SELECT rowid, * FROM perspective_logs ORDER BY time DESC LIMIT ?',
-				[count]
-			);
+			const logs = await Chat.database.all(logQuery, args);
 			if (!logs.length) {
-				buf += `<p class="message-error">No logs found.</p>`;
+				buf += `<p class="message-error">No logs found${userid ? ` for the user ${userid}` : ""}.</p>`;
 				return buf;
 			}
 			Utils.sortBy(logs, log => [-log.time, log.roomid, log.userid]);
 			buf += `<p>${logs.length} log(s) found.</p>`;
 			buf += `<div class="ladder pad">`;
-			buf += `<table><tr><th>Room</th><th>User</th><th>Message</th>`;
+			buf += `<table><tr><th>Room</th>`;
+			if (!userid) {
+				buf += `<th>User</th>`;
+			}
+			buf += `<th>Message</th>`;
 			buf += `<th>Time</th><th>Score / Flags</th><th>Other data</th><th>Manage</th></tr>`;
 			const prettifyFlag = (flag: string) => flag.toLowerCase().replace(/_/g, ' ');
 			for (const log of logs) {
 				const {roomid} = log;
 				buf += `<tr>`;
 				buf += `<td><a href="https://${Config.routes.replays}/${roomid.slice(7)}">${roomid}</a></td>`;
-				buf += `<td>${log.userid}</td>`;
+				if (!userid) buf += `<td>${log.userid}</td>`;
 				buf += Utils.html`<td>${log.message}</td>`;
 				buf += `<td>${Chat.toTimestamp(new Date(log.time))}</td>`;
 				buf += `<td>${log.score} (${log.flags.split(',').map(prettifyFlag).join(', ')})</td>`;
