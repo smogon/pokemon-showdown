@@ -1949,7 +1949,7 @@ export class RandomTeams {
 		if (item === 'Leftovers' && types.has('Poison')) {
 			item = 'Black Sludge';
 		}
-		if (species.baseSpecies === 'Pikachu' && !gmax) {
+		if (species.baseSpecies === 'Pikachu' && !gmax && this.dex.currentMod !== 'gen8bdsp') {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
@@ -2080,6 +2080,7 @@ export class RandomTeams {
 		const pokemonPool = [];
 		for (let species of this.dex.species.all()) {
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
+			if (this.dex.currentMod === 'gen8bdsp' && species.gen > 4) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
 				if (typeof species.battleOnly === 'string') {
@@ -2120,9 +2121,9 @@ export class RandomTeams {
 
 			// Check if the forme has moves for random battle
 			if (this.format.gameType === 'singles') {
-				if (!species.randomBattleMoves) continue;
+				if (!species.randomBattleMoves?.length) continue;
 			} else {
-				if (!species.randomDoubleBattleMoves) continue;
+				if (!species.randomDoubleBattleMoves?.length) continue;
 			}
 
 			// Limit to one of each species (Species Clause)
