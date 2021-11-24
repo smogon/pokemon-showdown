@@ -622,7 +622,8 @@ export const commands: Chat.ChatCommands = {
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		let formatName = dex.formats.get(`gen${dex.gen}${isLetsGo ? 'letsgo' : ''}randombattle`).name;
+		const extraFormatModifier = isLetsGo ? 'letsgo' : (dex.currentMod === 'gen8bdsp' ? 'bdsp' : '');
+		let formatName = dex.formats.get(`gen${dex.gen}${extraFormatModifier}randombattle`).name;
 
 		const movesets = [];
 		if (dex.gen === 1) {
