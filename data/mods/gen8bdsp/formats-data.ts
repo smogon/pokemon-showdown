@@ -1800,12 +1800,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	wormadamsandy: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["earthquake", "stealthrock"],
+		randomBattleMoves: ["bugbuzz", "earthquake", "rockblast", "stealthrock"],
 	},
 	wormadamtrash: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["ironhead", "stealthrock"],
+		randomBattleMoves: ["bugbuzz", "dig", "ironhead", "stealthrock"],
 	},
 	mothim: {
 		tier: "OU",
