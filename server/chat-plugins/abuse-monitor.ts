@@ -30,7 +30,7 @@ export const cache: {
 		notified?: boolean,
 		flags: Set<string>,
 	},
-} = global.Chat?.oldPlugins['net-filters']?.cache || {};
+} = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
 
 const defaults: FilterSettings = {
 	threshold: 4,
@@ -103,7 +103,7 @@ export const PM = new ProcessManager.QueryProcessManager<any, any>(module, async
 	if (!result) return {score: 0, flags: []}; // crash. logged already.
 	const delta = Date.now() - now;
 	if (delta > 1000) {
-		Monitor.slow(`[Toxicity Monitor] ${delta}ms - ${JSON.stringify({comment})}`);
+		Monitor.slow(`[Abuse Monitor] ${delta}ms - ${JSON.stringify({comment})}`);
 	}
 	let score = 0;
 	const flags = new Set<string>();
@@ -210,16 +210,15 @@ function checkAccess(context: Chat.CommandContext | Chat.PageContext) {
 }
 
 export const commands: Chat.ChatCommands = {
-	tm: 'toxicitymonitor',
-	toxmonitor: 'toxicitymonitor',
-	toxicitymonitor: {
+	am: 'abusemonitor',
+	abusemonitor: {
 		''() {
-			return this.parse('/join view-toxicitymonitor-flagged');
+			return this.parse('/join view-abusemonitor-flagged');
 		},
 		async test(target, room, user) {
 			checkAccess(this);
 			const text = target.trim();
-			if (!text) return this.parse(`/help toxmonitor`);
+			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
 			const {score, flags} = await PM.query({comment: text});
 			this.sendReplyBox(
@@ -231,30 +230,30 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const setting = this.meansYes(target);
 			if (settings.disabled === setting) {
-				return this.errorReply(`The toxicity monitor is already ${setting ? 'enabled' : 'disabled'}.`);
+				return this.errorReply(`The abuse monitor is already ${setting ? 'enabled' : 'disabled'}.`);
 			}
 			settings.disabled = setting;
 			saveSettings();
-			this.privateGlobalModAction(`${this.user.name} ${setting ? 'enabled' : 'disabled'} the toxicity monitor.`);
-			this.globalModlog('TOXICITYMONITOR', null, setting ? 'enable' : 'disable');
+			this.privateGlobalModAction(`${this.user.name} ${setting ? 'enabled' : 'disabled'} the abuse monitor.`);
+			this.globalModlog('ABUSEMONITOR', null, setting ? 'enable' : 'disable');
 		},
 		threshold(target) {
 			checkAccess(this);
 			if (!target) {
-				return this.sendReply(`The current toxicity monitor threshold is ${settings.threshold}.`);
+				return this.sendReply(`The current abuse monitor threshold is ${settings.threshold}.`);
 			}
 			const num = parseInt(target);
 			if (isNaN(num)) {
 				this.errorReply(`Invalid number: ${target}`);
-				return this.parse(`/help toxmonitor`);
+				return this.parse(`/help abusemonitor`);
 			}
 			if (settings.threshold === num) {
-				return this.errorReply(`The toxicity monitor threshold is already ${num}.`);
+				return this.errorReply(`The abuse monitor threshold is already ${num}.`);
 			}
 			settings.threshold = num;
 			saveSettings();
-			this.privateGlobalModAction(`${this.user.name} set the toxicity monitor trigger threshold to ${num}.`);
-			this.globalModlog('TOXICITYMONITOR THRESHOLD', null, `${num}`);
+			this.privateGlobalModAction(`${this.user.name} set the abuse monitor trigger threshold to ${num}.`);
+			this.globalModlog('ABUSEMONITOR THRESHOLD', null, `${num}`);
 			this.sendReply(
 				`|html|Remember to use <code>/tm respawn</code> to deploy the settings to the child process.`
 			);
@@ -262,9 +261,9 @@ export const commands: Chat.ChatCommands = {
 		resolve(target) {
 			this.checkCan('lock');
 			target = target.toLowerCase().trim().replace(/ /ig, '');
-			if (!target) return this.parse(`/help toxmonitor`);
+			if (!target) return this.parse(`/help abusemonitor`);
 			if (!cache[target]?.notified) {
-				return this.popupReply(`That room has not been flagged by the toxicity monitor.`);
+				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
 			}
 			// we delete the cache because if more stuff happens in it
 			// post punishment, we want to know about it
@@ -274,23 +273,23 @@ export const commands: Chat.ChatCommands = {
 		logs(target) {
 			checkAccess(this);
 			const [count, userid] = Utils.splitFirst(target, ',').map(toID);
-			this.parse(`/join view-toxicitymonitor-logs-${count || '200'}${userid ? `-${userid}` : ""}`);
+			this.parse(`/join view-abusemonitor-logs-${count || '200'}${userid ? `-${userid}` : ""}`);
 		},
 		async respawn(target, room, user) {
 			checkAccess(this);
 			this.sendReply(`Respawning...`);
 			const unspawned = await PM.respawn();
 			this.sendReply(`DONE. ${Chat.count(unspawned, 'processes', 'process')} unspawned.`);
-			this.addGlobalModAction(`${user.name} used /toxicitymonitor respawn`);
+			this.addGlobalModAction(`${user.name} used /abusemonitor respawn`);
 		},
 		async userclear(target, room, user) {
 			checkAccess(this);
 			const {targetUsername, rest} = this.splitUser(target);
 			const targetId = toID(targetUsername);
-			if (!targetId) return this.parse(`/help toxmonitor`);
+			if (!targetId) return this.parse(`/help abusemonitor`);
 			if (user.lastCommand !== `tm userclear ${targetId}`) {
 				user.lastCommand = `tm userclear ${targetId}`;
-				this.errorReply(`Are you sure you want to clear toxicity monitor database records for ${targetId}?`);
+				this.errorReply(`Are you sure you want to clear abuse monitor database records for ${targetId}?`);
 				this.errorReply(`Retype the command if you're sure.`);
 				return;
 			}
@@ -302,13 +301,13 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`No logs for ${targetUsername} found.`);
 			}
 			this.sendReply(`${results.changes} log(s) cleared for ${targetId}.`);
-			this.privateGlobalModAction(`${user.name} cleared toxicity monitor logs for ${targetUsername}${rest ? ` (${rest})` : ""}.`);
-			this.globalModlog('TOXICITYMONITOR CLEAR', targetId, rest);
+			this.privateGlobalModAction(`${user.name} cleared abuse monitor logs for ${targetUsername}${rest ? ` (${rest})` : ""}.`);
+			this.globalModlog('ABUSEMONITOR CLEAR', targetId, rest);
 		},
 		async deletelog(target, room, user) {
 			checkAccess(this);
 			target = toID(target);
-			if (!target) return this.parse(`/help toxmonitor`);
+			if (!target) return this.parse(`/help abusemonitor`);
 			const num = parseInt(target);
 			if (isNaN(num)) {
 				return this.errorReply(`Invalid log number: ${target}`);
@@ -323,17 +322,17 @@ export const commands: Chat.ChatCommands = {
 				'DELETE FROM perspective_logs WHERE rowid = ?', [num]
 			);
 			this.sendReply(`Log ${num} deleted.`);
-			this.privateGlobalModAction(`${user.name} deleted a toxicity monitor log for the user ${row.userid}.`);
+			this.privateGlobalModAction(`${user.name} deleted a abuse monitor log for the user ${row.userid}.`);
 			this.stafflog(
 				`Message: "${row.message}", room: ${row.roomid}, time: ${Chat.toTimestamp(new Date(row.time))}`
 			);
-			this.globalModlog("TOXICITYMONITOR DELETELOG", row.userid, `${num}`);
-			Chat.refreshPageFor('toxicitymonitor-logs', 'staff', true);
+			this.globalModlog("ABUSEMONITOR DELETELOG", row.userid, `${num}`);
+			Chat.refreshPageFor('abusemonitor-logs', 'staff', true);
 		},
 		es: 'editspecial',
 		editspecial(target, room, user) {
 			checkAccess(this);
-			if (!toID(target)) return this.parse(`/help toxicitymonitor`);
+			if (!toID(target)) return this.parse(`/help abusemonitor`);
 			let [rawType, rawPercent, rawScore] = target.split(',');
 			const type = toID(rawType).toUpperCase();
 			rawScore = toID(rawScore).toUpperCase();
@@ -355,8 +354,8 @@ export const commands: Chat.ChatCommands = {
 			if (!settings.specials[type]) settings.specials[type] = {};
 			settings.specials[type][percent] = score;
 			saveSettings();
-			this.privateGlobalModAction(`${user.name} set the toxicity monitor special case for ${type} at ${percent}% to ${score}.`);
-			this.globalModlog("TOXICITYMONITOR SPECIAL", type, `${percent}% to ${score}`);
+			this.privateGlobalModAction(`${user.name} set the abuse monitor special case for ${type} at ${percent}% to ${score}.`);
+			this.globalModlog("ABUSEMONITOR SPECIAL", type, `${percent}% to ${score}`);
 			this.sendReply(`|html|Remember to use <code>/tm respawn</code> to deploy the settings to the child processes.`);
 		},
 		ds: 'deletespecial',
@@ -380,8 +379,8 @@ export const commands: Chat.ChatCommands = {
 				delete settings.specials[type];
 			}
 			saveSettings();
-			this.privateGlobalModAction(`${user.name} deleted the toxicity monitor special case for ${type} at ${percent}%.`);
-			this.globalModlog("TOXICITYMONITOR DELETESPECIAL", type, `${percent}%`);
+			this.privateGlobalModAction(`${user.name} deleted the abuse monitor special case for ${type} at ${percent}%.`);
+			this.globalModlog("ABUSEMONITOR DELETESPECIAL", type, `${percent}%`);
 			this.sendReply(`|html|Remember to use <code>/tm respawn</code> to deploy the settings to the child processes.`);
 		},
 		em: 'editmin',
@@ -393,15 +392,15 @@ export const commands: Chat.ChatCommands = {
 			}
 			settings.minScore = num;
 			saveSettings();
-			this.privateGlobalModAction(`${user.name} set the toxicity monitor minimum score to ${num}.`);
-			this.globalModlog("TOXICITYMONITOR MIN", null, "" + num);
+			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
+			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/tm respawn</code> to deploy the settings to the child processes.`);
 		},
 		vs: 'viewsettings',
 		settings: 'viewsettings',
 		viewsettings() {
 			checkAccess(this);
-			let buf = `<strong>Toxicity Monitor Settings</strong><hr />`;
+			let buf = `<strong>Abuse Monitor Settings</strong><hr />`;
 			const specials = Object.keys(settings.specials);
 			if (specials.length) {
 				buf += `<strong>Special cases:</strong><br />`;
@@ -421,29 +420,29 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 		help: [
-			`/tm toggle - Toggle the toxicity monitor on and off. Requires: whitelist &`,
-			`/tm threshold [number] - Set the toxicity monitor trigger threshold. Requires: whitelist &`,
-			`/tm resolve [room] - Mark a toxicity monitor flagged room as handled by staff. Requires: % @ &`,
-			`/tm respawn - Respawns toxicity monitor processes. Requires: whitelist &`,
-			`/tm logs [count][, userid] - View logs of recent matches by the toxicity monitor. `,
+			`/tm toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
+			`/tm threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist &`,
+			`/tm resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ &`,
+			`/tm respawn - Respawns abuse monitor processes. Requires: whitelist &`,
+			`/tm logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
 			`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
-			`/tm userclear [user] - Clear all logged toxicity monitor hits for a user. Requires: whitelist &`,
-			`/tm deletelog [number] - Deletes a toxicity monitor log matching the row ID [number] given. Requires: whitelist &`,
-			`/tm editspecial [type], [percent], [score] - Sets a special case for the toxicity monitor. Requires: whitelist &`,
+			`/tm userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
+			`/tm deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
+			`/tm editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
 			`[score] can be either a number or MAXIMUM, which will set it to the maximum score possible (that will trigger an action)`,
-			`/tm deletespecial [type], [percent] - Deletes a special case for the toxicity monitor. Requires: whitelist &`,
+			`/tm deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
 			`/tm editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
-			`/tm viewsettings - View the current settings for the toxicity monitor. Requires: whitelist &`,
+			`/tm viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
 		],
 	},
 };
 
 export const pages: Chat.PageTable = {
-	toxicitymonitor: {
+	abusemonitor: {
 		flagged(query, user) {
 			checkAccess(this);
 			const ids = getFlaggedRooms();
-			this.title = '[Toxicity Monitor] Flagged rooms';
+			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
 			buf += `<h2>Flagged rooms</h2>`;
 			if (!ids.length) {
@@ -492,9 +491,9 @@ export const pages: Chat.PageTable = {
 		},
 		async logs(query, user) {
 			checkAccess(this);
-			this.title = '[Toxicity Monitor] Logs';
+			this.title = '[Abuse Monitor] Logs';
 			let buf = `<div class="pad">`;
-			buf += `<h2>Toxicity Monitor Logs</h2><hr />`;
+			buf += `<h2>Abuse Monitor Logs</h2><hr />`;
 			const rawCount = query.shift() || "";
 			let count = 200;
 			if (rawCount) {
@@ -538,7 +537,7 @@ export const pages: Chat.PageTable = {
 				buf += `<td>${Chat.toTimestamp(new Date(log.time))}</td>`;
 				buf += `<td>${log.score} (${log.flags.split(',').map(prettifyFlag).join(', ')})</td>`;
 				buf += `<td>Hit threshold: ${log.hit_threshold ? 'Yes' : 'No'}</td><td>`;
-				buf += `<button class="button" name="send" value="/msgroom staff,/toxmonitor deletelog ${log.rowid}">Delete</button>`;
+				buf += `<button class="button" name="send" value="/msgroom staff,/abusemonitor deletelog ${log.rowid}">Delete</button>`;
 				buf += `</td>`;
 				buf += `</tr>`;
 			}
