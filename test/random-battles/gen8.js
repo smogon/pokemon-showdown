@@ -189,3 +189,24 @@ describe('[Gen 8] Free-for-All Random Battle', () => {
 		}
 	});
 });
+
+describe('[Gen 8 BDSP] Random Battle', () => {
+	const options = {format: 'gen8bdsprandombattle'};
+
+	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];
+	const dex = Dex.forFormat(options.format);
+	for (const species of dex.species.all()) {
+		if (!species.randomBattleMoves) continue;
+		if (species.id === 'ditto') continue; // Ditto always wants Choice Scarf
+
+		// This test is marked as slow because although each individual test is fairly fast to run,
+		// ~500 tests are generated, so they can dramatically slow down the process of unit testing.
+		it(`should not generate Choice items on ${species.name} sets with status moves, unless an item-switching move or Healing Wish is generated (slow)`, () => {
+			testSet(species.id, {...options, rounds: 500}, set => {
+				if (set.item.startsWith('Choice') && !okToHaveChoiceMoves.some(okMove => set.moves.includes(okMove))) {
+					assert(set.moves.every(m => dex.moves.get(m).category !== 'Status'), `Choice item and status moves on set ${JSON.stringify(set)}`);
+				}
+			});
+		});
+	}
+});
