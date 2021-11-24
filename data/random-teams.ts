@@ -1745,12 +1745,19 @@ export class RandomTeams {
 
 		const moves = new Set<string>();
 		let counter: MoveCounter;
+		// This is just for BDSP Unown;
+		// it can be removed from this file if BDSP gets its own random-teams file in the future.
+		let hasHiddenPower = false;
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			const pool = (movePool.length ? movePool : rejectedPool);
 			while (moves.size < 4 && pool.length) {
 				const moveid = this.sampleNoReplace(pool);
+				if (moveid.startsWith('hiddenpower')) {
+					if (hasHiddenPower) continue;
+					hasHiddenPower = true;
+				}
 				moves.add(moveid);
 			}
 
@@ -1841,11 +1848,13 @@ export class RandomTeams {
 
 				// Remove rejected moves from the move list
 				if (cull && movePool.length) {
+					if (moveid.startsWith('hiddenpower')) hasHiddenPower = false;
 					if (move.category !== 'Status' && !move.damage) rejectedPool.push(moveid);
 					moves.delete(moveid);
 					break;
 				}
 				if (cull && rejectedPool.length) {
+					if (moveid.startsWith('hiddenpower')) hasHiddenPower = false;
 					moves.delete(moveid);
 					break;
 				}
@@ -2172,7 +2181,10 @@ export class RandomTeams {
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
 			// Limit one Pokemon per tier, two for Monotype
+			// This limitation is not applied to BD/SP team generation, because tiering for BD/SP is not yet complete,
+			// meaning that most Pokémon are in OU.
 			if (
+				this.dex.currentMod !== 'gen8bdsp' &&
 				(tierCount[tier] >= (this.forceMonotype || isMonotype ? 2 : 1) * limitFactor) &&
 				!this.randomChance(1, Math.pow(5, tierCount[tier]))
 			) {
@@ -2202,7 +2214,6 @@ export class RandomTeams {
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
-
 			if (pokemon.length === this.maxTeamSize) {
 				// Set Zoroark's level to be the same as the last Pokemon
 				const illusion = teamDetails.illusion;
