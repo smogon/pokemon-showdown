@@ -209,4 +209,15 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 			});
 		});
 	}
+
+	it('should give Tropius Harvest + Sitrus Berry', () => {
+		testSet('tropius', options, set => {
+			assert.equal(set.item, 'Sitrus Berry');
+			assert.equal(set.ability, 'Harvest');
+		});
+	});
+
+	it('should give Unown a Choice item', () => {
+		testSet('unown', options, set => assert.match(set.item, /^Choice /));
+	});
 });

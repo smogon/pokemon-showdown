@@ -31,7 +31,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	blastoise: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["scald", "rapidspin", "protect", "icebeam", "roar"],
+		randomBattleMoves: ["earthquake", "icebeam", "protect", "rapidspin", "roar", "scald"],
 	},
 	caterpie: {
 		tier: "LC",
@@ -42,7 +42,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	butterfree: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["quiverdance", "bugbuzz", "airslash", "sleeppowder", "airslash", "gigadrain"],
+		randomBattleMoves: ["quiverdance", "bugbuzz", "airslash", "sleeppowder", "gigadrain"],
 	},
 	weedle: {
 		tier: "LC",
@@ -902,6 +902,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	honchkrow: {
 		tier: "OU",
 		doublesTier: "DOU",
+		randomBattleMoves: ["bravebird", "suckerpunch", "roost", "taunt"],
 	},
 	misdreavus: {
 		tier: "LC",
@@ -909,6 +910,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	mismagius: {
 		tier: "OU",
 		doublesTier: "DOU",
+		randomBattleMoves: ["dazzlinggleam", "destinybond", "nastyplot", "shadowball", "substitute", "thunderwave"],
 	},
 	unown: {
 		tier: "OU",
@@ -1031,7 +1033,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	mantine: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["scald", "icebeam", "defog", "rest", "sleeptalk"],
+		randomBattleMoves: ["scald", "icebeam", "defog", "roost"],
 	},
 	skarmory: {
 		tier: "OU",
@@ -1398,7 +1400,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	wailord: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["icebeam", "hydropump", "icebeam", "waterspout"],
+		randomBattleMoves: ["icebeam", "hydropump", "rest", "sleeptalk", "waterspout"],
 	},
 	numel: {
 		tier: "LC",
@@ -1805,7 +1807,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	wormadamtrash: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["bugbuzz", "dig", "ironhead", "stealthrock"],
+		randomBattleMoves: ["bugbuzz", "dig", "flashcannon", "quiverdance", "stealthrock"],
 	},
 	mothim: {
 		tier: "OU",

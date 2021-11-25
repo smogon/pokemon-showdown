@@ -1994,22 +1994,8 @@ export class RandomTeams {
 			level = customScale[species.id] || tierScale[tier];
 		// BDSP tier levelling
 		} else if (this.dex.currentMod === 'gen8bdsp') {
-			const tierScale: {[k: string]: number} = {
-				Uber: 76,
-				OU: 80,
-				UUBL: 81,
-				UU: 82,
-				RUBL: 83,
-				RU: 84,
-				NUBL: 85,
-				NU: 86,
-				PUBL: 87,
-				PU: 88, "(PU)": 88, NFE: 88,
-			};
-			// to override tier scaling if needed
-			const customScale: {[k: string]: number} = {};
-
-			level = customScale[species.id] || tierScale[species.tier];
+			// TODO: figure out BDSP levelling based on the in-room poll
+			level = 80;
 		// Arbitrary levelling base on data files (typically winrate-influenced)
 		} else if (species.randomBattleLevel) {
 			level = species.randomBattleLevel;
