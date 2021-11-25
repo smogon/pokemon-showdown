@@ -1727,7 +1727,10 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database = SQL(module, {file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH});
+	database = SQL(module, {
+		file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH,
+		processes: global.Config?.chatdbprocesses || 1,
+	});
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
