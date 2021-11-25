@@ -36,7 +36,7 @@ export class RandomBDSPTeams extends RandomTeams {
 		if ((moves.has('bellydrum') || moves.has('tailglow')) && moves.has('substitute')) return 'Salac Berry';
 
 		// Ability based logic and miscellaneous logic
-		if (species.name === 'Wobbuffet' || ability === 'Ripen') return 'Sitrus Berry';
+		if (species.name === 'Wobbuffet' || ability === 'Ripen' || ability === 'Harvest') return 'Sitrus Berry';
 		if (ability === 'Gluttony') return this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
 		if (ability === 'Imposter') return 'Choice Scarf';
 		if (ability === 'Guts' && counter.get('Physical') > 2) {
@@ -70,6 +70,17 @@ export class RandomBDSPTeams extends RandomTeams {
 		isNoDynamax: boolean
 	): string | undefined {
 		// Choice items
+		if (moves.size === 1) {
+			switch (this.dex.moves.get([...moves][0]).category) {
+			case 'Status':
+				return 'Choice Scarf';
+			case 'Physical':
+				return 'Choice Band';
+			case 'Special':
+				return 'Choice Specs';
+			}
+		}
+
 		if (
 			counter.get('Physical') >= 4 && ability !== 'Serene Grace' &&
 			['fakeout', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
