@@ -570,6 +570,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		isLead: boolean
 	): string | undefined {
 		if (species.requiredItem) return species.requiredItem;
+		if (species.requiredItems) return this.sample(species.requiredItems);
 
 		// First, the extra high-priority items
 		if (species.name === 'Marowak') return 'Thick Club';
