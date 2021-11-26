@@ -869,7 +869,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8 BDSP] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3694036/">BDSP OU Discussion &amp; Resources</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694036/">BDSP Ubers Discussion &amp; Resources</a>`,
 		],
 
 		mod: 'gen8bdsp',
