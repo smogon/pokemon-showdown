@@ -115,7 +115,7 @@ function testTeam(options, test) {
 /**
  * Checks if a set is valid.
  *
- * @param {format} the format that the team is being validated in
+ * @param {Format} format the format that the team is being validated in
  * @param {RandomTeamsTypes.RandomSet} set
  */
 function assertSetValidity(format, set) {
@@ -138,6 +138,15 @@ function assertSetValidity(format, set) {
 		assert(ability.gen <= dex.gen, `The ability "${ability.name}" is from a newer generation. (set: ${JSON.stringify(set)})`);
 	} else {
 		assert(dex.gen < 3, `This set does not have an ability, but is intended for use in Gen 3 or later. (set: ${JSON.stringify(set)})`);
+	}
+
+	// Arceus plate check
+	if (
+		species.baseSpecies === 'Arceus' &&
+		species.types[0] !== 'Normal' &&
+		(dex.gen !== 7 || !set.item.endsWith(' Z'))
+	) {
+		assert(set.item.endsWith(' Plate'), `${species.name} doesn't have a Plate (got "${set.item}" instead)`);
 	}
 
 	assert(set.moves.filter(m => m.startsWith('hiddenpower')).length <= 1, `This set has multiple Hidden Power moves. (set: ${JSON.stringify(set)})`);

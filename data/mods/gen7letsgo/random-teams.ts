@@ -197,6 +197,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		// Minimize confusion damage
 		if (!counter.get('Physical') && !moves.has('transform')) ivs.atk = 0;
 
+		const requiredItem = species.requiredItem || (species.requiredItems ? this.sample(species.requiredItems) : null);
 		return {
 			name: species.baseSpecies,
 			species: forme,
@@ -204,7 +205,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 			gender: species.gender,
 			happiness: 70,
 			shiny: this.randomChance(1, 1024),
-			item: (species.requiredItem || ''),
+			item: (requiredItem || ''),
 			ability: 'No Ability',
 			evs: {hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20},
 			moves: Array.from(moves),

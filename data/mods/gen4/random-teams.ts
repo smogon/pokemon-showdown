@@ -380,6 +380,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		isLead: boolean,
 	): string | undefined {
 		if (species.requiredItem) return species.requiredItem;
+		if (species.requiredItems) return this.sample(species.requiredItems);
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
