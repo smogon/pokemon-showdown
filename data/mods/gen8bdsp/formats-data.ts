@@ -1130,7 +1130,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	blaziken: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 		randomBattleMoves: ["swordsdance", "stoneedge", "closecombat", "flareblitz", "earthquake"],
 	},
