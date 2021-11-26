@@ -867,6 +867,14 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'Arena Trap', 'Drizzle', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 8 BDSP] Ubers",
+		// Thread coming soon
+
+		mod: 'gen8bdsp',
+		ruleset: ['Standard'],
+		banlist: ['AG'],
+	},
+	{
 		name: "[Gen 8 BDSP] Doubles OU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3693891/">BDSP Doubles OU</a>`,
@@ -874,7 +882,6 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
-		searchShow: false,
 		ruleset: ['Standard Doubles'],
 		banlist: ['DUber', 'Swagger'],
 	},
