@@ -105,6 +105,10 @@ export const commands: Chat.ChatCommands = {
 				target = split.join(',');
 			}
 		}
+		if (!target.includes('mod=')) {
+			const dex = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex;
+			if (dex) target += `, mod=${dex.currentMod}`;
+		}
 		if (targetGen === 5) {
 			const targArray = target.split(',');
 			for (const [i, arg] of targArray.entries()) {
@@ -289,6 +293,10 @@ export const commands: Chat.ChatCommands = {
 				split[index] = `mod=gen${genNum}`;
 				target = split.join(',');
 			}
+		}
+		if (!target.includes('mod=')) {
+			const dex = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex;
+			if (dex) target += `, mod=${dex.currentMod}`;
 		}
 		if (cmd === 'nms') target += ', natdex';
 		const response = await runSearch({
