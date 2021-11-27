@@ -48,7 +48,7 @@ interface ResolvedTicketInfo {
 	staffReason: string;
 }
 
-interface TextTicketInfo {
+export interface TextTicketInfo {
 	checker?: (
 		input: string, context: string, pageId: string, user: User, reportTarget?: string
 	) => boolean | string[] | Promise<boolean | string[]>;
