@@ -367,6 +367,11 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] VGC 2021 Series 11",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677186/">VGC 2021 Series 11 Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693427/">VGC 2021 Series 11 Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693284/">VGC 2021 Series 11 Viability Rankings</a>`,
+		],
 
 		mod: 'gen8',
 		gameType: 'doubles',
