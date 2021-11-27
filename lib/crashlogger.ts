@@ -48,7 +48,7 @@ export function crashlogger(
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 
-	const emailOpts = emailConfig || Config.crashguardemail;
+	const emailOpts = emailConfig || global.Config?.crashguardemail;
 	if (emailOpts && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
 		lastCrashLog = datenow;
 
