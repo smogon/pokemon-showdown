@@ -260,9 +260,9 @@ class OtdHandler {
 		return buffer;
 	}
 
-	display(update = false) {
+	async display(update = false) {
 		if (update) {
-			this.room.uhtmlchange('otd', this.generateNomWindow());
+			await this.room.uhtmlchange('otd', this.generateNomWindow());
 		} else {
 			this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
 		}
@@ -305,7 +305,7 @@ class OtdHandler {
 		return true;
 	}
 
-	removeNomination(name: string) {
+	async removeNomination(name: string) {
 		name = toID(name);
 
 		let success = false;
@@ -324,7 +324,7 @@ class OtdHandler {
 			}
 		}
 
-		if (this.voting) this.display();
+		if (this.voting) await this.display();
 		return success;
 	}
 
@@ -575,7 +575,7 @@ export const otdCommands: Chat.ChatCommands = {
 	},
 	viewhelp: [`/-otd view - View the current nominations for the Thing of the Day.`],
 
-	remove(target, room, user) {
+	async remove(target, room, user) {
 		this.checkChat();
 
 		const handler = selectHandler(this.message);
@@ -587,7 +587,7 @@ export const otdCommands: Chat.ChatCommands = {
 		const userid = toID(target);
 		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
 
-		if (handler.removeNomination(userid)) {
+		if (await handler.removeNomination(userid)) {
 			this.privateModAction(`${user.name} removed ${target}'s nomination for the ${handler.name} of the ${handler.timeLabel}.`);
 			this.modlog(`${handler.id.toUpperCase()} REMOVENOM`, userid);
 		} else {

@@ -203,7 +203,7 @@ export const commands: Chat.ChatCommands = {
 		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * # &`,
 	],
 	changeuhtml: 'adduhtml',
-	adduhtml(target, room, user, connection, cmd) {
+	async adduhtml(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (!target) return this.parse('/help ' + cmd);
 		this.checkChat();
@@ -218,7 +218,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (cmd === 'changeuhtml') {
-			room.attributedUhtmlchange(user, name, html);
+			await room.attributedUhtmlchange(user, name, html);
 		} else {
 			return `/uhtml ${name},${html}`;
 		}

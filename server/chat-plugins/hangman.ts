@@ -232,22 +232,28 @@ export class Hangman extends Rooms.RoomGame {
 		}
 	}
 
-	update() {
-		this.room.uhtmlchange(`hangman${this.gameNumber}`, this.generateWindow());
+	async update() {
+		await this.room.uhtmlchange(`hangman${this.gameNumber}`, this.generateWindow());
 
 		if (this.incorrectGuesses === maxMistakes) {
 			this.finish();
 		}
 	}
 
-	end() {
-		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman was ended.)</div>');
+	async end() {
+		await this.room.uhtmlchange(
+			`hangman${this.gameNumber}`,
+			'<div class="infobox">(The game of hangman was ended.)</div>'
+		);
 		this.room.add("The game of hangman was ended.");
 		this.room.game = null;
 	}
 
-	finish() {
-		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
+	async finish() {
+		await this.room.uhtmlchange(
+			`hangman${this.gameNumber}`,
+			'<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>'
+		);
 		this.room.add(`|html|${this.generateWindow()}`);
 		this.room.game = null;
 	}

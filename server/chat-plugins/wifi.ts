@@ -157,8 +157,11 @@ class Giveaway extends Rooms.RoomGame {
 		this.room.update();
 	}
 
-	changeUhtml(content: string) {
-		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, `<div ${this.getStyle()}>${content}</div>`);
+	async changeUhtml(content: string) {
+		await this.room.uhtmlchange(
+			`giveaway${this.gaNumber}${this.phase}`,
+			`<div ${this.getStyle()}>${content}</div>`
+		);
 		this.room.update();
 	}
 
@@ -324,7 +327,7 @@ export class QuestionGiveaway extends Giveaway {
 		this.winner = null;
 		this.send(this.generateWindow('The question will be displayed in one minute! Use /guess to answer.'), true);
 
-		this.timer = setTimeout(() => this.start(), 1000 * 60);
+		this.timer = setTimeout(() => void this.start(), 1000 * 60);
 	}
 
 	static splitTarget(
@@ -375,8 +378,11 @@ export class QuestionGiveaway extends Giveaway {
 		return this.generateWindow(`<p style="text-align:center;font-size:13pt;">Giveaway Question: <b>${this.question}</b></p><p style="text-align:center;">use /guess to answer.</p>`);
 	}
 
-	start() {
-		this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has started! Scroll down to see the question.</p>');
+	async start() {
+		await this.changeUhtml(
+			'<p style="text-align:center;font-size:13pt;font-weight:bold;">' +
+			'The giveaway has started! Scroll down to see the question.</p>'
+		);
 		this.phase = 'started';
 		this.send(this.generateQuestion(), true);
 		this.timer = setTimeout(() => this.end(false), 1000 * 60 * 5);
@@ -437,17 +443,17 @@ export class QuestionGiveaway extends Giveaway {
 		user.sendTo(this.room, `The answer${Chat.plural(ans, "s have", "has")} been changed to ${ans.join(', ')}.`);
 	}
 
-	end(force: boolean) {
+	async end(force: boolean) {
 		if (force) {
 			this.clearTimer();
-			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
 			if (!this.winner) {
-				this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+				await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 				this.room.send("The giveaway has been forcibly ended as no one has answered the question.");
 			} else {
-				this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
+				await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
 				this.phase = 'ended';
 				this.clearTimer();
 				this.room.modlog({
@@ -514,7 +520,7 @@ export class LotteryGiveaway extends Giveaway {
 
 		this.send(this.generateReminder(false), true);
 
-		this.timer = setTimeout(() => this.drawLottery(), 1000 * 60 * 2);
+		this.timer = setTimeout(() => void this.drawLottery(), 1000 * 60 * 2);
 	}
 
 	static splitTarget(
@@ -624,12 +630,12 @@ export class LotteryGiveaway extends Giveaway {
 		user.sendTo(this.room, "You have left the lottery giveaway.");
 	}
 
-	drawLottery() {
+	async drawLottery() {
 		this.clearTimer();
 
 		const userlist = [...this.joined.values()];
 		if (userlist.length === 0) {
-			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway has been forcibly ended as there are no participants.");
 			return this.destroy();
 		}
@@ -639,16 +645,16 @@ export class LotteryGiveaway extends Giveaway {
 			if (!winner) continue;
 			this.winners.push(winner);
 		}
-		this.end();
+		return this.end();
 	}
 
-	end(force = false) {
+	async end(force = false) {
 		if (force) {
 			this.clearTimer();
-			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
-			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${Chat.plural(this.winners)}.</p>`);
+			await this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${Chat.plural(this.winners)}.</p>`);
 			this.phase = 'ended';
 			const winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog({
@@ -721,8 +727,11 @@ export class GTS extends Rooms.RoomGame {
 		this.room.update();
 	}
 
-	changeUhtml(content: string) {
-		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, `<div class="broadcast-blue">${content}</div>`);
+	async changeUhtml(content: string) {
+		await this.room.uhtmlchange(
+			`gtsga${this.gtsNumber}`,
+			`<div class="broadcast-blue">${content}</div>`
+		);
 		this.room.update();
 	}
 
@@ -754,7 +763,7 @@ export class GTS extends Rooms.RoomGame {
 		this.left = num;
 		if (this.left < 1) return this.end();
 
-		this.changeUhtml(this.generateWindow());
+		return this.changeUhtml(this.generateWindow());
 	}
 
 	updateSent(ign: string) {
@@ -764,24 +773,28 @@ export class GTS extends Rooms.RoomGame {
 		this.sent.push(Utils.escapeHTML(ign));
 		if (this.sent.length > 5) this.sent.shift();
 
-		this.changeUhtml(this.generateWindow());
+		return this.changeUhtml(this.generateWindow());
 	}
 
 	stopDeposits() {
 		this.noDeposits = true;
 
 		this.room.send(`|html|<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
-		this.changeUhtml(this.generateWindow());
+		return this.changeUhtml(this.generateWindow());
 	}
 
-	end(force = false) {
+	async end(force = false) {
 		if (force) {
 			this.clearTimer();
-			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway was forcibly ended.</p>');
+			await this.changeUhtml(
+				'<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway was forcibly ended.</p>'
+			);
 			this.room.send("The GTS giveaway was forcibly ended.");
 		} else {
 			this.clearTimer();
-			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
+			await this.changeUhtml(
+				`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`
+			);
 			this.room.modlog({
 				action: 'GTS FINISHED',
 				userid: this.giver.id,
@@ -873,7 +886,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
 			*/
 		},
-		left(target, room, user) {
+		async left(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
 			const game = this.requireGame(GTS, true);
 			if (!user.can('warn', null, room) && user !== game.giver) {
@@ -892,9 +905,9 @@ export const commands: Chat.ChatCommands = {
 				this.modlog(`GTS GIVEAWAY`, null, `set from ${game.left} to ${newamount} left`);
 			}
 
-			game.updateLeft(newamount);
+			await game.updateLeft(newamount);
 		},
-		sent(target, room, user) {
+		async sent(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
 			const game = this.requireGame(GTS, true);
 			if (!user.can('warn', null, room) && user !== game.giver) {
@@ -903,9 +916,9 @@ export const commands: Chat.ChatCommands = {
 
 			if (!target || target.length > 12) return this.errorReply("Please enter a valid IGN.");
 
-			game.updateSent(target);
+			await game.updateSent(target);
 		},
-		full(target, room, user) {
+		async full(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
 			const game = this.requireGame(GTS, true);
 			if (!user.can('warn', null, room) && user !== game.giver) {
@@ -913,7 +926,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (game.noDeposits) return this.errorReply("The GTS giveaway was already set to not accept deposits.");
 
-			game.stopDeposits();
+			await game.stopDeposits();
 		},
 		end(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);

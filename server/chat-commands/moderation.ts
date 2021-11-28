@@ -804,7 +804,7 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(displayMessage);
 			}
 		}
-		room.hideText([
+		void room.hideText([
 			...affected.map(u => u.id),
 			toID(inputUsername),
 		]);
@@ -921,7 +921,7 @@ export const commands: Chat.ChatCommands = {
 		this.addGlobalModAction(`${name} was locked from talking${durationMsg} by ${user.name}.` + (publicReason ? ` (${publicReason})` : ""));
 
 		if (room && !room.settings.isHelp) {
-			room.hideText([
+			void room.hideText([
 				...affected.map(u => u.id),
 				toID(inputUsername),
 			]);
@@ -1132,7 +1132,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(displayMessage);
 		}
 
-		room?.hideText([
+		void room?.hideText([
 			...affected.map(u => u.id),
 			toID(inputUsername),
 		]);
@@ -1964,7 +1964,7 @@ export const commands: Chat.ChatCommands = {
 			message = `${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
 			room.sendByUser(sender, message);
 			this.modlog('HIDEALTSTEXT', targetUser, reason, {noip: 1});
-			room.hideText([
+			void room.hideText([
 				userid,
 				...targetUser.previousIDs,
 				...targetUser.getAltUsers(true).map((curUser: User) => curUser.getLastId()),
@@ -1978,7 +1978,7 @@ export const commands: Chat.ChatCommands = {
 				room.sendByUser(sender, message);
 			}
 			this.modlog('HIDETEXT', targetUser || userid, reason, {noip: 1, noalts: 1});
-			room.hideText([userid], lineCount, hideRevealButton);
+			void room.hideText([userid], lineCount, hideRevealButton);
 			this.roomlog(`|c|${user.getIdentity()}|/log ${message}`);
 		}
 	},
