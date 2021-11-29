@@ -890,7 +890,7 @@ export const Formats: FormatList = [
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles'],
-		banlist: ['DUber', 'Swagger'],
+		banlist: ['DUber'],
 	},
 	{
 		name: "[Gen 8 BDSP] Battle Festival Doubles",
