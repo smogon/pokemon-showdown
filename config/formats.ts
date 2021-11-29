@@ -879,7 +879,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		ruleset: ['Standard'],
-		banlist: ['AG'],
+		banlist: ['AG', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 8 BDSP] Doubles OU",
