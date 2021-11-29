@@ -65,6 +65,8 @@ export class MemoryScrollback implements Scrollback {
 			this.log.reverse();
 		}
 		for (let i = 0; i < this.log.length; i++) {
+			// wants us to return cb(log[i], i) but. no.
+			// eslint-disable-next-line callback-return
 			const result = cb(this.log[i], i);
 			if (result === false) {
 				this.log.splice(i, 1);
@@ -132,6 +134,8 @@ export class RedisScrollback implements Scrollback {
 		const modified = [];
 		for (const [i, log] of logs.entries()) {
 			const redisIdx = i + 1;
+			// wants us to return cb(log[i], i) but. no.
+			// eslint-disable-next-line callback-return
 			const result = cb(log, i);
 			if (result === false) {
 				await this.redis.lrem(`scrollback:${this.room.roomid}`, 1, log);
@@ -300,7 +304,7 @@ export class Roomlog {
 	}
 	async hasUsername(username: string) {
 		const userid = toID(username);
-		for (const line of await this.scrollback.get()) {
+		for (const line of await this.get()) {
 			if (line.startsWith('|c:|')) {
 				const curUserid = toID(line.split('|', 4)[3]);
 				if (curUserid === userid) return true;

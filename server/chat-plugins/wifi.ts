@@ -1001,7 +1001,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				game.send(game.generateQuestion());
 			} else if (room.getGame(LotteryGiveaway)) {
-				await room.getGame(LotteryGiveaway)!.display();
+				room.getGame(LotteryGiveaway)!.display();
 			} else {
 				throw new Chat.ErrorMessage(`There is no giveaway going on right now.`);
 			}
@@ -1103,7 +1103,7 @@ export const commands: Chat.ChatCommands = {
 			},
 		},
 		stop: 'end',
-		end(target, room, user) {
+		async end(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
 			if (!room.game?.constructor.name.includes('Giveaway')) {
 				throw new Chat.ErrorMessage(`There is no giveaway going on at the moment.`);
@@ -1114,7 +1114,7 @@ export const commands: Chat.ChatCommands = {
 			if (target && target.length > 300) {
 				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 			}
-			game.end(true);
+			await game.end(true);
 			this.modlog('GIVEAWAY END', null, target);
 			if (target) target = `: ${target}`;
 			this.privateModAction(`The giveaway was forcibly ended by ${user.name}${target}`);
