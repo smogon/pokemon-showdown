@@ -161,6 +161,6 @@ export const translations: Translations = {
 		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "PMはユーザーからの報告などに備えて記録されていますが、罰の執行など正当な理由がない限り閲覧することはできません。",
 		"- We log IPs to enforce bans and mutes.": "IPアドレスはBANやミュートのために記録されています。",
 		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "ログイン情報やチームの保存、Googleアナリティクスやアドセンスのためにクッキーが使用されています。",
-		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': 'もっと知りたい場合は、<a href="https://${Config.routes.root}/privacy">をお読みください。',
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': 'もっと知りたい場合は、<a href="https://${Config.routes.root}/privacy">をお読みください。</a>',
 	},
 };
