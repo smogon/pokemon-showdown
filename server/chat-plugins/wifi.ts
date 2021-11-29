@@ -991,7 +991,7 @@ export const commands: Chat.ChatCommands = {
 			},
 		},
 		rm: 'remind',
-		async remind(target, room, user) {
+		remind(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
 			this.runBroadcast();
 			if (room.getGame(QuestionGiveaway)) {

@@ -85,33 +85,36 @@ export class MemoryScrollback implements Scrollback {
 	}
 }
 
+// @ts-ignore in case not installed
+type RedisDriver = import('ioredis').Redis;
+
 export class RedisScrollback implements Scrollback {
 	room: BasicRoom;
-	// @ts-ignore in case not installed
-	redis: import('ioredis').Redis;
+	static driver = require('ioredis').createClient(
+		Config.redis || Config.redislogs
+	) as RedisDriver;
 	gettingLog: Promise<string[]> | null = null;
 	logsWhileGetting: string[] | null = null;
 	constructor(room: BasicRoom) {
 		this.room = room;
-		this.redis = require('ioredis').createClient(Config.redis || Config.redislogs);
 	}
 	async add(message: string) {
-		await this.redis.lpush(`scrollback:${this.room.roomid}`, message);
+		await RedisScrollback.driver.lpush(`scrollback:${this.room.roomid}`, message);
 	}
 	private getLength() {
-		return this.redis.llen(`scrollback:${this.room.roomid}`);
+		return RedisScrollback.driver.llen(`scrollback:${this.room.roomid}`);
 	}
 	async truncate() {
 		const start = await this.getLength();
 		if (start < 100) return 0;
-		await this.redis.ltrim(`scrollback:${this.room.roomid}`, 0, 99);
+		await RedisScrollback.driver.ltrim(`scrollback:${this.room.roomid}`, 0, 99);
 		return start - await this.getLength();
 	}
 	async get() {
 		if (this.gettingLog) return this.gettingLog;
 		this.logsWhileGetting = [];
 		this.gettingLog = (async () => {
-			const fetched = await this.redis.lrange(`scrollback:${this.room.roomid}`, 0, 99);
+			const fetched = await RedisScrollback.driver.lrange(`scrollback:${this.room.roomid}`, 0, 99);
 			const logs = fetched.reverse().concat(this.logsWhileGetting || []);
 			this.gettingLog = this.logsWhileGetting = null;
 			return logs;
@@ -120,10 +123,9 @@ export class RedisScrollback implements Scrollback {
 	}
 	async destroy() {
 		await this.clear();
-		this.redis.disconnect();
 	}
 	async clear() {
-		await this.redis.del(`scrollback:${this.room.roomid}`);
+		await RedisScrollback.driver.del(`scrollback:${this.room.roomid}`);
 	}
 	async modify(
 		cb: (log: string, index: number) => boolean | string | void | undefined,
@@ -138,11 +140,11 @@ export class RedisScrollback implements Scrollback {
 			// eslint-disable-next-line callback-return
 			const result = cb(log, i);
 			if (result === false) {
-				await this.redis.lrem(`scrollback:${this.room.roomid}`, 1, log);
+				await RedisScrollback.driver.lrem(`scrollback:${this.room.roomid}`, 1, log);
 				modified.push(i);
 			} else if (typeof result === 'string') {
 				logs[i] = result;
-				await this.redis.lset(`scrollback:${this.room.roomid}`, redisIdx, result);
+				await RedisScrollback.driver.lset(`scrollback:${this.room.roomid}`, redisIdx, result);
 				modified.push(i);
 			}
 		}
