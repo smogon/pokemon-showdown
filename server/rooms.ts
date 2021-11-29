@@ -313,6 +313,8 @@ export abstract class BasicRoom {
 		this.game = null;
 		this.battle = null;
 		this.validateTitle(this.title, this.roomid);
+
+		this.add(`|html|<div class="broadcast-blue"><b>The server was restarted.</b></div>`).update();
 	}
 
 	toString() {
