@@ -1678,7 +1678,7 @@ export const commands: Chat.ChatCommands = {
 
 		let log: string[];
 		if (tarRoom) {
-			log = tarRoom.log.log;
+			log = await tarRoom.log.get();
 		} else {
 			try {
 				const raw = await Net(`https://${Config.routes.replays}/${roomid.slice('battle-'.length)}.json`).get();
