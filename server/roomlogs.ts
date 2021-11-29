@@ -25,7 +25,8 @@ export interface Scrollback {
 	clear(): void | Promise<void>;
 	/** return false to delete the entry, string to change it, or undefined to keep it unchanged*/
 	modify(
-		cb: (log: string, index: number) => boolean | string | void | undefined
+		cb: (log: string, index: number) => boolean | string | void | undefined,
+		desc?: boolean
 	): Promise<number[]> | number[];
 }
 
@@ -55,8 +56,14 @@ export class MemoryScrollback implements Scrollback {
 	clear() {
 		this.log = [];
 	}
-	modify(cb: (log: string, index: number) => boolean | string | void | undefined) {
+	modify(
+		cb: (log: string, index: number) => boolean | string | void | undefined,
+		desc = false
+	) {
 		const modified = [];
+		if (desc) {
+			this.log.reverse();
+		}
 		for (let i = 0; i < this.log.length; i++) {
 			const result = cb(this.log[i], i);
 			if (result === false) {
@@ -67,6 +74,10 @@ export class MemoryScrollback implements Scrollback {
 				this.log[i] = result;
 				modified.push(i);
 			}
+		}
+		// undo the reverse, since this is in place
+		if (desc) {
+			this.log.reverse();
 		}
 		return modified;
 	}
@@ -112,8 +123,12 @@ export class RedisScrollback implements Scrollback {
 	async clear() {
 		await this.redis.del(`scrollback:${this.room.roomid}`);
 	}
-	async modify(cb: (log: string, index: number) => boolean | string | void | undefined) {
+	async modify(
+		cb: (log: string, index: number) => boolean | string | void | undefined,
+		desc = false
+	) {
 		const logs = await this.get();
+		if (desc) logs.reverse();
 		const modified = [];
 		for (const [i, log] of logs.entries()) {
 			const redisIdx = i + 1;
@@ -313,7 +328,7 @@ export class Roomlog {
 				}
 			}
 			return true;
-		});
+		}, true);
 		return cleared;
 	}
 	async uhtmlchange(name: string, message: string) {

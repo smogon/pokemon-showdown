@@ -789,7 +789,7 @@ export const commands: Chat.ChatCommands = {
 	subroomgroupchat: 'makegroupchat',
 	srgc: 'makegroupchat',
 	mgc: 'makegroupchat',
-	makegroupchat(target, room, user, connection, cmd) {
+	async makegroupchat(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkChat();
 		if (!user.trusted) {
@@ -870,7 +870,7 @@ export const commands: Chat.ChatCommands = {
 		// The creator is a Room Owner in subroom groupchats and a Host otherwise..
 		targetRoom.auth.set(user.id, parent ? '#' : Users.HOST_SYMBOL);
 		// Join after creating room. No other response is given.
-		user.joinRoom(targetRoom.roomid);
+		await user.joinRoom(targetRoom.roomid);
 		user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
 		if (parent) this.modlog('SUBROOMGROUPCHAT', null, title);
 	},

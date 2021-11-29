@@ -132,7 +132,7 @@ export class Hangman extends Rooms.RoomGame {
 				this.guesses.push(letter);
 				this.letterGuesses.push(`${letter}1`);
 				this.lastGuesser = guesser;
-				this.finish();
+				void this.finish();
 				return true;
 			}
 			this.letterGuesses.push(`${letter}1`);
@@ -143,7 +143,7 @@ export class Hangman extends Rooms.RoomGame {
 
 		this.guesses.push(letter);
 		this.lastGuesser = guesser;
-		this.update();
+		void this.update();
 		return true;
 	}
 
@@ -159,13 +159,13 @@ export class Hangman extends Rooms.RoomGame {
 			this.incorrectGuesses = -1;
 			this.guesses.push(word);
 			this.lastGuesser = guesser;
-			this.finish();
+			void this.finish();
 			return true;
 		} else if (ourWord.length === guessedWord.length) {
 			this.incorrectGuesses++;
 			this.guesses.push(word);
 			this.lastGuesser = guesser;
-			this.update();
+			void this.update();
 			return true;
 		}
 		return false;
@@ -236,7 +236,7 @@ export class Hangman extends Rooms.RoomGame {
 		await this.room.uhtmlchange(`hangman${this.gameNumber}`, this.generateWindow());
 
 		if (this.incorrectGuesses === maxMistakes) {
-			this.finish();
+			await this.finish();
 		}
 	}
 
@@ -340,12 +340,12 @@ export const commands: Chat.ChatCommands = {
 		],
 
 		stop: 'end',
-		end(target, room, user) {
+		async end(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
 			const game = this.requireGame(Hangman);
-			game.end();
+			await game.end();
 			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`The game of hangman was ended by ${user.name}.`);
 		},

@@ -319,16 +319,17 @@ export class HelpTicket extends Rooms.RoomGame {
 		);
 	}
 
-	getPreview() {
+	async getPreview() {
+		const log = await this.room.log.scrollback.get();
 		if (!this.ticket.active) return `title="The ticket creator has not spoken yet."`;
 		const hoverText = [];
 		const noteBuf = Object.entries(this.ticket.notes || {})
 			.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
 			.join('&#10;');
 		const notes = this.ticket.notes ? `&#10;Staff notes:&#10;${noteBuf}` : '';
-		for (let i = this.room.log.log.length - 1; i >= 0; i--) {
+		for (let i = log.length - 1; i >= 0; i--) {
 			// Don't show anything after the first linebreak for multiline messages
-			const entry = this.room.log.log[i].split('\n')[0].split('|');
+			const entry = log[i].split('\n')[0].split('|');
 			entry.shift(); // Remove empty string
 			if (!/c:?/.test(entry[0])) continue;
 			if (entry[0] === 'c:') entry.shift(); // c: includes a timestamp and needs an extra shift
@@ -857,8 +858,9 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	if (battleRoom && battleRoom.type !== 'chat') {
+		const log = await battleRoom.log.scrollback.get();
 		return {
-			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
+			log: log.filter(k => k.startsWith('|c|')),
 			title: battleRoom.title,
 			url: `/${battle}`,
 		};
@@ -1325,7 +1327,7 @@ export const pages: Chat.PageTable = {
 				} else {
 					if (helpRoom) {
 						if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
-						user.joinRoom(`help-${ticket.userid}` as RoomID);
+						void user.joinRoom(`help-${ticket.userid}` as RoomID);
 					}
 					connection.popup(this.tr`You already have a Help ticket.`);
 					return this.close();

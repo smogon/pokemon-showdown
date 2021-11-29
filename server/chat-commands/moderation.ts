@@ -470,7 +470,7 @@ export const commands: Chat.ChatCommands = {
 		if (targets.length > 16 || connection.inRooms.size > 1) {
 			return connection.popup("To prevent DoS attacks, you can only use /autojoin for 16 or fewer rooms, when you haven't joined any rooms yet. Please use /join for each room separately.");
 		}
-		Rooms.global.autojoinRooms(user, connection);
+		await Rooms.global.autojoinRooms(user, connection);
 		const autojoins: string[] = [];
 
 		const promises = targets.map(
@@ -1920,7 +1920,7 @@ export const commands: Chat.ChatCommands = {
 	clearaltstext: 'hidetext',
 	clearlines: 'hidetext',
 	forcecleartext: 'hidetext',
-	hidetext(target, room, user, connection, cmd) {
+	async hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 		room = this.requireRoom();
 		const hasLineCount = cmd.includes('lines');
@@ -1944,7 +1944,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
 
-		if (!targetUser && !room.log.hasUsername(name)) {
+		if (!targetUser && !(await room.log.hasUsername(name))) {
 			return this.errorReply(`User ${name} not found or has no roomlogs.`);
 		}
 		if (lineCount && showAlts) {
@@ -1964,7 +1964,7 @@ export const commands: Chat.ChatCommands = {
 			message = `${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`;
 			room.sendByUser(sender, message);
 			this.modlog('HIDEALTSTEXT', targetUser, reason, {noip: 1});
-			void room.hideText([
+			await room.hideText([
 				userid,
 				...targetUser.previousIDs,
 				...targetUser.getAltUsers(true).map((curUser: User) => curUser.getLastId()),
@@ -1978,7 +1978,7 @@ export const commands: Chat.ChatCommands = {
 				room.sendByUser(sender, message);
 			}
 			this.modlog('HIDETEXT', targetUser || userid, reason, {noip: 1, noalts: 1});
-			void room.hideText([userid], lineCount, hideRevealButton);
+			await room.hideText([userid], lineCount, hideRevealButton);
 			this.roomlog(`|c|${user.getIdentity()}|/log ${message}`);
 		}
 	},

@@ -385,7 +385,7 @@ export class QuestionGiveaway extends Giveaway {
 		);
 		this.phase = 'started';
 		this.send(this.generateQuestion(), true);
-		this.timer = setTimeout(() => this.end(false), 1000 * 60 * 5);
+		this.timer = setTimeout(() => void this.end(false), 1000 * 60 * 5);
 	}
 
 	choose(user: User, guess: string) {
@@ -446,14 +446,23 @@ export class QuestionGiveaway extends Giveaway {
 	async end(force: boolean) {
 		if (force) {
 			this.clearTimer();
-			await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			await this.changeUhtml(
+				'<p style="text-align:center;font-size:13pt;font-weight:bold;">' +
+				'The giveaway was forcibly ended.</p>'
+			);
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
 			if (!this.winner) {
-				await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+				await this.changeUhtml(
+					'<p style="text-align:center;font-size:13pt;font-weight:bold;">' +
+					'The giveaway was forcibly ended.</p>'
+				);
 				this.room.send("The giveaway has been forcibly ended as no one has answered the question.");
 			} else {
-				await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
+				await this.changeUhtml(
+					'<p style="text-align:center;font-size:13pt;font-weight:bold;">' +
+					'The giveaway has ended! Scroll down to see the answer.</p>'
+				);
 				this.phase = 'ended';
 				this.clearTimer();
 				this.room.modlog({
@@ -635,7 +644,10 @@ export class LotteryGiveaway extends Giveaway {
 
 		const userlist = [...this.joined.values()];
 		if (userlist.length === 0) {
-			await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			await this.changeUhtml(
+				'<p style="text-align:center;font-size:13pt;font-weight:bold;">' +
+				'The giveaway was forcibly ended.</p>'
+			);
 			this.room.send("The giveaway has been forcibly ended as there are no participants.");
 			return this.destroy();
 		}
@@ -651,10 +663,16 @@ export class LotteryGiveaway extends Giveaway {
 	async end(force = false) {
 		if (force) {
 			this.clearTimer();
-			await this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			await this.changeUhtml(
+				'<p style="text-align:center;font-size:13pt;font-weight:bold;">' +
+				'The giveaway was forcibly ended.</p>'
+			);
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
-			await this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${Chat.plural(this.winners)}.</p>`);
+			await this.changeUhtml(
+				`<p style="text-align:center;font-size:13pt;font-weight:bold;">` +
+				`The giveaway has ended! Scroll down to see the winner${Chat.plural(this.winners)}.</p>`
+			);
 			this.phase = 'ended';
 			const winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog({
@@ -973,7 +991,7 @@ export const commands: Chat.ChatCommands = {
 			},
 		},
 		rm: 'remind',
-		remind(target, room, user) {
+		async remind(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
 			this.runBroadcast();
 			if (room.getGame(QuestionGiveaway)) {
@@ -983,7 +1001,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				game.send(game.generateQuestion());
 			} else if (room.getGame(LotteryGiveaway)) {
-				room.getGame(LotteryGiveaway)!.display();
+				await room.getGame(LotteryGiveaway)!.display();
 			} else {
 				throw new Chat.ErrorMessage(`There is no giveaway going on right now.`);
 			}

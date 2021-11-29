@@ -1540,12 +1540,12 @@ export class GlobalRoomState {
 		room.destroy();
 		return true;
 	}
-	autojoinRooms(user: User, connection: Connection) {
+	async autojoinRooms(user: User, connection: Connection) {
 		// we only autojoin regular rooms if the client requests it with /autojoin
 		// note that this restriction doesn't apply to modjoined autojoin rooms
 		let includesLobby = false;
 		for (const roomName of this.autojoinList) {
-			user.joinRoom(roomName, connection);
+			await user.joinRoom(roomName, connection);
 			if (roomName === 'lobby') includesLobby = true;
 		}
 		if (!includesLobby && Config.serverid !== 'showdown') user.send(`>lobby\n|deinit`);
@@ -1560,7 +1560,7 @@ export class GlobalRoomState {
 				continue;
 			}
 			if (room.checkModjoin(user)) {
-				user.joinRoom(room.roomid, connection);
+				void user.joinRoom(room.roomid, connection);
 			}
 		}
 		for (const conn of user.connections) {
@@ -2022,7 +2022,7 @@ export const Rooms = {
 
 		for (const p of players) {
 			if (p) {
-				p.joinRoom(room);
+				void p.joinRoom(room);
 				Monitor.countBattle(p.latestIp, p.name);
 			}
 		}
