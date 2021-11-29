@@ -541,7 +541,10 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply("Warning is unavailable in group chats.");
 		}
 		// If used in pms, staff, help tickets or battles, log the warn to the global modlog.
-		const globalWarn = !room || room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
+		const globalWarn = (
+			!room || ['staff', 'adminlog'].includes(room.roomid) ||
+			room.roomid.startsWith('help-') || (room.battle && !room.parent)
+		);
 
 		const {targetUser, inputUsername, targetUsername, rest: reason} = this.splitUser(target);
 		const targetID = toID(targetUsername);
