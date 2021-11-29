@@ -15,34 +15,34 @@ export const translations: Translations = {
 		"${room} room rules": "${room}部屋のルール",
 
 		"<strong>Global ranks</strong>": "<strong>グローバルユーザーランク</strong>",
-		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "<strong>グローバルボイス</strong>(+)：「!コマンド」を使ってコマンドの結果を部屋に表示することができる。",
+		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "<strong>グローバルボイス</strong>(+)：「!プレフィックス」を使ってコマンドの結果を部屋に表示することができる。",
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%)：上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@)：上記に加えてユーザーをサイト全体からBANできる。",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>グローバルボット</strong>(*)：権限はモデレータと同じだが、ボットだと分かるためのランク。",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;)：何でもできる。この文章も編集できる。",
 
 		"<strong>Room ranks</strong>": "<strong>日本語部屋のユーザーランク</strong>",
-		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
-		"+ <strong>Voice</strong> - They can use ! commands like !groups": "<strong>ボイス</strong>(+)：「!コマンド」を使ってコマンドの結果を部屋に表示することができる。",
-		"% <strong>Driver</strong> - The above, and they can mute and warn": "<strong>ドライバー</strong>(%)：上記に加えて警告メッセージを出したりユーザーを短時間喋れなく（ミュート）することができる。",
-		"@ <strong>Moderator</strong> - The above, and they can room ban users": "<strong>モデレータ</strong>(@)：上記に加えてユーザーを部屋からBANすることができる。",
-		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>ボット</strong>(*)：権限はモデレータと同じだが、ボットだと分かるためのランク。",
-		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "<strong>ルームオーナー</strong>(#)：この部屋のリーダーでほとんどのことができる。",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "<strong>プライズウィナー</strong>(^): 部屋のシンボルや象徴であり、何も権限を持ちません。",
+		"+ <strong>Voice</strong> - They can use ! commands like !groups": "<strong>ボイス</strong>(+): 「!プレフィックス」を使ってコマンドの結果を部屋に表示することができる。",
+		"% <strong>Driver</strong> - The above, and they can mute and warn": "<strong>ドライバー</strong>(%): 上記に加えて警告メッセージを出したりユーザーを短時間喋れなく（ミュート）することができる。",
+		"@ <strong>Moderator</strong> - The above, and they can room ban users": "<strong>モデレータ</strong>(@): 上記に加えてユーザーを部屋からBANすることができる。",
+		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>ボット</strong>(*): 権限はモデレータと同じだが、ボットだと分かるためのランク。",
+		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "<strong>ルームオーナー</strong>(#): この部屋のリーダーでほとんどのことができる。",
 
 		"/help OR /h OR /? - Gives you help.": "/help 又は /h 又は /? - ヘルプを表示する",
 		"For an overview of room commands, use /roomhelp": "チャット部屋専用のコマンドは、/roomhelpで参照できます",
-		"For details of a specific command, use something like: /help data": "特定のコマンドのヘルプは /help [コマンド] で表示されます。例： /help data",
+		"For details of a specific command, use something like: /help data": "特定のコマンドのヘルプは /help [コマンド] で表示されます。例: /help data",
 
 		"COMMANDS": "コマンド一覧",
 		"BATTLE ROOM COMMANDS": "対戦チャット用コマンド",
 		"OPTION COMMANDS": "設定コマンド",
 		"INFORMATIONAL/RESOURCE COMMANDS": "情報コマンド",
 		"DATA COMMANDS": "ポケモンデータコマンド",
-		"DRIVER COMMANDS": "ドライバー（％）コマンド",
-		"MODERATOR COMMANDS": "モデレーター（＠）コマンド",
-		"ADMIN COMMANDS": "アドミニストレーター（＆）コマンド",
+		"DRIVER COMMANDS": "ドライバー(%)コマンド",
+		"MODERATOR COMMANDS": "モデレーター(@)コマンド",
+		"ADMIN COMMANDS": "アドミニストレーター(&)コマンド",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "（「/」の代わりに「!」を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。）",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(「/」の代わりに「!」を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。)",
 
 		"<strong>Room punishments</strong>:": "<strong>チャット罰則一覧</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - ユーザーにチャットルールのポップアップが表示されます。",
@@ -57,7 +57,7 @@ export const translations: Translations = {
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - 2日間ロックせれ、ユーザー名も使えなくなります。",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - 1週間全てのチャット部屋とバトルからバンされます。",
 
-		"<strong>Room drivers (%)</strong> can use:": "<strong>ドライバー（％）</strong> コマンド:",
+		"<strong>Room drivers (%)</strong> can use:": "<strong>ドライバー（%）</strong> コマンド:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn 又は /k <em>ユーザー名</em>: ユーザーが警告され、当サイトのルールのウィンドウが表示されます。",
 		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute 又は /m <em>ユーザー名</em>: 7分間ミュート状態にします。",
 		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /hourmute 又は /hm <em>ユーザー名</em>: 1時間ミュート状態にします。",
@@ -67,7 +67,7 @@ export const translations: Translations = {
 		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>ユーザー名</em>: ユーザーに関するチャット部屋の管理ログを表示します。",
 		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>メッセージ</em>: メッセージをチャット部屋の管理ログに追加します。",
 
-		"<strong>Room moderators (@)</strong> can also use:": "<strong>モデレーター（＠）</strong> コマンド:",
+		"<strong>Room moderators (@)</strong> can also use:": "<strong>モデレーター（@）</strong> コマンド:",
 		"- /roomban OR /rb <em>username</em>: ban user from the room": "- /roomban 又は /rb <em>ユーザー名</em>: ユーザーをチャット部屋からBAN（追放）します。",
 		"- /roomunban <em>username</em>: unban user from the room": "- /roomunban <em>ユーザー名</em>: ユーザーのBAN状態を解除します。",
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>ユーザー名</em>: ユーザーにボイス（＋）権限を与えます。",
@@ -75,7 +75,7 @@ export const translations: Translations = {
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>イントロ</em>: スタッフがチャット部屋に入る際表示されるイントロを設定します。",
 		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: チャット部屋の設定が表示されます。modchatなどを変更することができます。",
 
-		"<strong>Room owners (#)</strong> can also use:": "<strong>ルームオーナー（＃）</strong> コマンド:",
+		"<strong>Room owners (#)</strong> can also use:": "<strong>ルームオーナー（#）</strong> コマンド:",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>イントロ</em>: ユーザーがチャット部屋に入る際表示されるイントロを設定します。",
 		"- /rules <em>rules link</em>: set the room rules link seen when using /rules": "- /rules <em>リンク</em>: /rules使用時に表示するチャット部屋のルールが記載されているリンクを設定します。",
 		"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver": "- /roommod, /roomdriver <em>ユーザー名</em>: ユーザーにモデレーターやドライバー権限を与えます。",
@@ -86,7 +86,7 @@ export const translations: Translations = {
 		"- !showimage <em>, [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [width], [height]</em>: チャット部屋に画像を表示します。",
 		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: チャット部屋の設定が表示されます。modchat, capsfilterなど様々な設定を行えます。",
 
-		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "もっと詳しく知りたい場合、<a href=\"https://www.smogon.com/forums/posts/6774654/\">スタッフガイド（英語）</a>をご参照ください。",
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "もっと詳しく知りたい場合、<a href=\"https://www.smogon.com/forums/posts/6774654/\">スタッフガイド(英語)</a>をご参照ください。",
 
 		"Tournament Help:": "大会ヘルプ:",
 		"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.": "- /tour create <em>対戦ルール</em>, elimination: チャット部屋にトーナメント方式の大会を開催します。",
@@ -95,7 +95,7 @@ export const translations: Translations = {
 		"- /tour start: start the tournament in the current room": "- /tour start: 大会を開始します。",
 		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)": "- /tour banlist [ポケモン], [特性], [...]: 開催中の大会に指定するポケモンや特性などを使用禁止にします。",
 
-		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "もっと詳しく知りたい場合、<a href=\"https://www.smogon.com/forums/posts/6777489/\">大会ガイド（英語）</a>をご参照ください。",
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "もっと詳しく知りたい場合、<a href=\"https://www.smogon.com/forums/posts/6777489/\">大会ガイド(英語)</a>をご参照ください。",
 
 		"Your status cannot be updated while you are locked or semilocked.": "ロック・セミロック状態のため、ステータスを変更することはできません。",
 		"Your status is too long; it must be under ${maxLength} characters.": "ステータスが長すぎます。 ${maxLength} 文字以内のステータスを設定してください。",
@@ -161,6 +161,6 @@ export const translations: Translations = {
 		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "PMはユーザーからの報告などに備えて記録されていますが、罰の執行など正当な理由がない限り閲覧することはできません。",
 		"- We log IPs to enforce bans and mutes.": "IPアドレスはBANやミュートのために記録されています。",
 		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "ログイン情報やチームの保存、Googleアナリティクスやアドセンスのためにクッキーが使用されています。",
-		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': 'もっと知りたい場合は、<a href="https://${Config.routes.root}/privacy">をお読みください。</a>',
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '詳しくは、<a href="https://${Config.routes.root}/privacy">ここ</a>をご覧ください。',
 	},
 };
