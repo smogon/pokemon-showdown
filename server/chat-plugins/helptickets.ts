@@ -320,7 +320,7 @@ export class HelpTicket extends Rooms.RoomGame {
 	}
 
 	async getPreview() {
-		const log = await this.room.log.scrollback.get();
+		const log = await this.room.log.get();
 		if (!this.ticket.active) return `title="The ticket creator has not spoken yet."`;
 		const hoverText = [];
 		const noteBuf = Object.entries(this.ticket.notes || {})
@@ -858,7 +858,7 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	if (battleRoom && battleRoom.type !== 'chat') {
-		const log = await battleRoom.log.scrollback.get();
+		const log = await battleRoom.log.get();
 		return {
 			log: log.filter(k => k.startsWith('|c|')),
 			title: battleRoom.title,

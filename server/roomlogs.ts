@@ -213,8 +213,15 @@ export class Roomlog {
 
 		void this.setupRoomlogStream(true);
 	}
+	/**
+	 * Returns full, unsanitized, untransformed scrollback.
+	 * If you want something to show to users, use getScrollback.
+	 */
+	get() {
+		return this.scrollback.get();
+	}
 	async getScrollback(channel = 0) {
-		let log = await this.scrollback.get();
+		let log = await this.get();
 		if (!this.noLogTimes) log = [`|:|${~~(Date.now() / 1000)}`].concat(log);
 		if (!this.isMultichannel) {
 			return log.join('\n') + '\n';
