@@ -85,7 +85,7 @@ describe('Rooms features', function () {
 			assert.equal(room.auth.get(makeUser().id), '%');
 		});
 
-		it('should prevent overriding tournament room auth by a tournament player', function () {
+		it('should prevent overriding tournament room auth by a tournament player', async () => {
 			parent = Rooms.createChatRoom('parentroom2');
 			parent.auth.get = () => '%';
 			const p1 = makeUser();
@@ -110,8 +110,8 @@ describe('Rooms features', function () {
 					room: parent,
 				},
 			});
-			roomStaff.joinRoom(room);
-			administrator.joinRoom(room);
+			await roomStaff.joinRoom(room);
+			await administrator.joinRoom(room);
 			assert.equal(room.auth.get(roomStaff), '%', 'before promotion attempt');
 			Chat.parse("/roomvoice Room auth", room, p1, p1.connections[0]);
 			assert.equal(room.auth.get(roomStaff), '%', 'after promotion attempt');
@@ -154,7 +154,7 @@ describe('Rooms features', function () {
 			it("should move the users and their connections", async function () {
 				room = Rooms.createChatRoom("test", "Test");
 				const user = makeUser();
-				user.joinRoom(room);
+				await user.joinRoom(room);
 				await room.rename("Test2");
 				assert.equal(user.inRooms.has("test"), false);
 				assert.equal(user.inRooms.has("test2"), true);

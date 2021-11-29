@@ -90,13 +90,16 @@ type RedisDriver = import('ioredis').Redis;
 
 export class RedisScrollback implements Scrollback {
 	room: BasicRoom;
-	static driver = require('ioredis').createClient(
-		Config.redis || Config.redislogs
-	) as RedisDriver;
+	static driver = RedisScrollback.getDriver()!;
 	gettingLog: Promise<string[]> | null = null;
 	logsWhileGetting: string[] | null = null;
 	constructor(room: BasicRoom) {
 		this.room = room;
+	}
+	static getDriver() {
+		const config = Config.redis || Config.redislogs;
+		if (!config) return;
+		return require('ioredis').createClient(config) as RedisDriver;
 	}
 	async add(message: string) {
 		await RedisScrollback.driver.lpush(`scrollback:${this.room.roomid}`, message);

@@ -81,10 +81,10 @@ describe('broader, more integrated Punishments tests', function () {
 	});
 
 	describe('room bans', () => {
-		before(() => {
+		before(async () => {
 			this.user = makeUser("Roomban Me Please", '127.0.0.8');
 			this.connection = this.user.connections[0];
-			this.user.joinRoom(this.room.roomid, this.connection);
+			await this.user.joinRoom(this.room.roomid, this.connection);
 		});
 
 		beforeEach(async () => Punishments.roomBan(this.room, this.user, Date.now() + TEST_PUNISHMENT_DURATION, this.user.id, false, 'test'));
@@ -111,25 +111,25 @@ describe('broader, more integrated Punishments tests', function () {
 	});
 
 	describe('locks (network) (slow)', () => {
-		before(() => {
+		before(async () => {
 			this.user = makeUser("Lock Me Please", '127.0.0.3');
 			this.connection = this.user.connections[0];
-			this.user.joinRoom(this.room.roomid, this.connection);
+			await this.user.joinRoom(this.room.roomid, this.connection);
 		});
 
 		beforeEach(async () => Punishments.lock(this.user, Date.now() + TEST_PUNISHMENT_DURATION, this.user.id, false, 'test'));
 		afterEach(() => Punishments.unlock(this.user.id));
 
 		it('should prevent users from chatting in rooms while they are locked', async () => {
-			const initialLogLength = this.room.log.log.length;
+			const initialLogLength = this.room.log.logLength;
 
 			await this.parse("Hi! I'm a locked user!");
-			assert.equal(this.room.log.log.length, initialLogLength, `user should be unable to sucessfully chat while locked`);
+			assert.equal(this.room.log.logLength, initialLogLength, `user should be unable to sucessfully chat while locked`);
 
 			Punishments.unlock(this.user.id);
 			await this.parse("/msgroom lobby,Hi! I'm no longer locked!");
 			// we can't just check the roomlog length because unlocking adds a |n| message to
-			const lastMessage = this.room.log.log.pop();
+			const lastMessage = (await this.room.log.get()).pop();
 			assert(lastMessage.endsWith(` Lock Me Please|Hi! I'm no longer locked!`), `user should have sucessfuly sent a message after being locked`);
 		});
 
@@ -171,10 +171,10 @@ describe('broader, more integrated Punishments tests', function () {
 	});
 
 	describe('namelocks (network) (slow)', () => {
-		before(() => {
+		before(async () => {
 			this.user = makeUser("Namelock Me Please", '127.0.0.6');
 			this.connection = this.user.connections[0];
-			this.user.joinRoom(this.room.roomid, this.connection);
+			await this.user.joinRoom(this.room.roomid, this.connection);
 		});
 
 		beforeEach(async () => Punishments.namelock(this.user, Date.now() + TEST_PUNISHMENT_DURATION, this.user.id, false, 'test'));
@@ -202,10 +202,10 @@ describe('broader, more integrated Punishments tests', function () {
 	});
 
 	describe('global bans (network) (slow)', () => {
-		before(() => {
+		before(async () => {
 			this.user = makeUser("Ban Me Please", '127.0.0.7');
 			this.connection = this.user.connections[0];
-			this.user.joinRoom(this.room.roomid, this.connection);
+			await this.user.joinRoom(this.room.roomid, this.connection);
 		});
 
 		beforeEach(async () => Punishments.ban(this.user, Date.now() + TEST_PUNISHMENT_DURATION, this.user.id, false, 'test'));

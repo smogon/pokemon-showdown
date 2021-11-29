@@ -170,10 +170,10 @@ describe('Users features', function () {
 					target.tempGroup = '&';
 					assert.equal(user.can('globalban', target), false, 'targeting higher rank');
 				});
-				it(`should not allow users to demote themselves`, function () {
+				it(`should not allow users to demote themselves`, async function () {
 					room = Rooms.createChatRoom("test");
 					const user = makeUser("User");
-					user.joinRoom(room);
+					await user.joinRoom(room);
 					for (const group of [' ', '+', '@']) {
 						room.auth.set(user.id, group);
 						assert.equal(room.auth.get(user.id), group, 'before demotion attempt');
