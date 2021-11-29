@@ -542,8 +542,8 @@ export const commands: Chat.ChatCommands = {
 		}
 		// If used in pms, staff, help tickets or battles, log the warn to the global modlog.
 		const globalWarn = (
-				!room || ['staff', 'adminlog'].includes(room.roomid) || 
-				room.roomid.startsWith('help-') || (room.battle && !room.parent)
+			!room || ['staff', 'adminlog'].includes(room.roomid) ||
+			room.roomid.startsWith('help-') || (room.battle && !room.parent)
 		);
 
 		const {targetUser, inputUsername, targetUsername, rest: reason} = this.splitUser(target);
