@@ -22,12 +22,12 @@ export interface Scrollback {
 	add(entry: string): Promise<void>;
 	truncate(): Promise<number> | number;
 	destroy(): Promise<void>;
-	clear(): void | Promise<void>;
+	clear(): Promise<void>;
 	/** return false to delete the entry, string to change it, or undefined to keep it unchanged*/
 	modify(
 		cb: (log: string, index: number) => boolean | string | void | undefined,
 		desc?: boolean
-	): Promise<number[]> | number[];
+	): Promise<number[]>;
 }
 
 export class MemoryScrollback implements Scrollback {
@@ -52,9 +52,12 @@ export class MemoryScrollback implements Scrollback {
 		}
 		return 0;
 	}
-	destroy() { return Promise.resolve(); }
+	destroy() {
+		return this.clear();
+	}
 	clear() {
 		this.log = [];
+		return Promise.resolve();
 	}
 	modify(
 		cb: (log: string, index: number) => boolean | string | void | undefined,
@@ -81,7 +84,7 @@ export class MemoryScrollback implements Scrollback {
 		if (desc) {
 			this.log.reverse();
 		}
-		return modified;
+		return Promise.resolve(modified);
 	}
 }
 
