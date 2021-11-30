@@ -66,6 +66,11 @@ export interface PerspectiveRequest {
 	comment: {text: string};
 }
 
+export interface PMResult {
+	score: number;
+	flags: string[];
+}
+
 export async function classify(text: string) {
 	const request: PerspectiveRequest = {
 		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
@@ -97,7 +102,7 @@ export async function classify(text: string) {
 	}
 }
 
-export const PM = new ProcessManager.QueryProcessManager<any, any>(module, async ({comment}) => {
+export const PM = new ProcessManager.QueryProcessManager<{comment: string}, PMResult>(module, async ({comment}) => {
 	const now = Date.now();
 	const result = await classify(comment);
 	if (!result) return {score: 0, flags: []}; // crash. logged already.
