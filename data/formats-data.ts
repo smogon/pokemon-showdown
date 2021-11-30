@@ -1965,7 +1965,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	zigzagoon: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	zigzagoongalar: {
 		tier: "LC",
