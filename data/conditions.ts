@@ -396,6 +396,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
 				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
 			}
+			this.activeMove = null;
 
 			this.checkWin();
 		},
