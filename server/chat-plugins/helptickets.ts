@@ -1189,7 +1189,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					opp,
 					proof,
 					ticket,
-					`Punish <strong>${ticket.userid}</strong> (reported)`,
+					`Punish <strong>${opp}</strong> (reported)`,
 				);
 			}
 			buf += `<p><strong>Battle links given:</strong><p>`;
