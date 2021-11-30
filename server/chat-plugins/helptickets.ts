@@ -1231,12 +1231,24 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		title: "Where are you currently connecting from? Please give its name, city, and country.",
 		async getReviewDisplay(ticket, staff, conn, state) {
 			const tarUser = Users.get(ticket.userid);
-			const ips: string[] = state ? state.ips : tarUser ? tarUser.ips : ticket.meta!.split('-');
-			if (!tarUser && !state) ips.shift(); // first one is always 'ips'
-			const info = await Promise.all(ips.map(i => IPTools.lookup(i)));
+			let info = state?.ips;
+			const stringIps = info?.some((f: any) => typeof f === 'string');
+			if (!info || stringIps) {
+				const ips = stringIps ? [...info] : tarUser?.ips;
+				info = [];
+				if (ips?.length) {
+					for (const ip of ips) {
+						info.push({...await IPTools.lookup(ip), ip});
+					}
+					if (!ticket.state) {
+						ticket.state = info;
+						writeTickets();
+					}
+				}
+			}
 			let buf = `<strong>IPs:</strong><br />`;
-			for (const [i, ip] of ips.entries()) {
-				const data = info[i];
+			for (const data of info) {
+				const ip = data.ip;
 				buf += `<details class="readmore"><summary>`;
 				buf += `<strong><a href="https://whatismyipaddress.com/ip/${ip}">${ip}</a></strong></summary>`;
 				const ipPunishments = Punishments.ips.get(ip);
@@ -1288,8 +1300,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			return true;
 		},
-		onSubmit(ticket, text, user) {
-			ticket.meta = `ip-${user.ips.join('-')}`;
+		async onSubmit(ticket, text, user) {
+			const ips = [];
+			for (const ip of user.ips) {
+				ips.push({...await IPTools.lookup(ip), ip});
+			}
+			ticket.state = ips;
 			writeTickets();
 		},
 	},
