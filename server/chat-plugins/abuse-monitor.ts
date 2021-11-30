@@ -16,7 +16,7 @@ const WHITELIST = ["mia"];
 // 20m. this is mostly here so we can use Monitor.slow()
 const PM_TIMEOUT = 20 * 60 * 1000;
 const ATTRIBUTES = {
-	'SEVERE_TOXICITY': {},
+	"SEVERE_TOXICITY": {},
 	"TOXICITY": {},
 	"IDENTITY_ATTACK": {},
 	"INSULT": {},
@@ -349,14 +349,14 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Invalid score: ${score}. Must be a positive integer or "MAXIMUM".`);
 			}
 			if (settings.specials[type]?.[percent] && !this.cmd.includes('f')) {
-				return this.errorReply(`That special case already exists. Use /tm forceeditspecial to change it.`);
+				return this.errorReply(`That special case already exists. Use /am forceeditspecial to change it.`);
 			}
 			if (!settings.specials[type]) settings.specials[type] = {};
 			settings.specials[type][percent] = score;
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} set the abuse monitor special case for ${type} at ${percent}% to ${score}.`);
 			this.globalModlog("ABUSEMONITOR SPECIAL", type, `${percent}% to ${score}`);
-			this.sendReply(`|html|Remember to use <code>/tm respawn</code> to deploy the settings to the child processes.`);
+			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
 		},
 		ds: 'deletespecial',
 		deletespecial(target, room, user) {
@@ -381,7 +381,7 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} deleted the abuse monitor special case for ${type} at ${percent}%.`);
 			this.globalModlog("ABUSEMONITOR DELETESPECIAL", type, `${percent}%`);
-			this.sendReply(`|html|Remember to use <code>/tm respawn</code> to deploy the settings to the child processes.`);
+			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
 		},
 		em: 'editmin',
 		editmin(target, room, user) {
@@ -394,7 +394,7 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
-			this.sendReply(`|html|Remember to use <code>/tm respawn</code> to deploy the settings to the child processes.`);
+			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
 		},
 		vs: 'viewsettings',
 		settings: 'viewsettings',
@@ -420,19 +420,19 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(buf);
 		},
 		help: [
-			`/tm toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
-			`/tm threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist &`,
-			`/tm resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ &`,
-			`/tm respawn - Respawns abuse monitor processes. Requires: whitelist &`,
-			`/tm logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
+			`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
+			`/am threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist &`,
+			`/am resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ &`,
+			`/am respawn - Respawns abuse monitor processes. Requires: whitelist &`,
+			`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
 			`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
-			`/tm userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
-			`/tm deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
-			`/tm editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
+			`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
+			`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
+			`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
 			`[score] can be either a number or MAXIMUM, which will set it to the maximum score possible (that will trigger an action)`,
-			`/tm deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
-			`/tm editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
-			`/tm viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
+			`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
+			`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
+			`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
 		],
 	},
 };
@@ -484,7 +484,7 @@ export const pages: Chat.PageTable = {
 					}
 					buf += `</div></details><br />`;
 				}
-				buf += `<button class="button" name="send" value="/msgroom staff, /tm resolve ${room.roomid}">Mark resolved</button>`;
+				buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid}">Mark resolved</button>`;
 				buf += `<br /></details><hr />`;
 			}
 			return buf;
@@ -546,7 +546,7 @@ export const pages: Chat.PageTable = {
 			// if there's less than the count we requested, that's as far as it goes.
 			if (count === logs.length) {
 				buf += `<center>`;
-				buf += `<button class="button" name="send" value="/msgroom staff, /tm logs ${count + 100}">Show 100 more</button>`;
+				buf += `<button class="button" name="send" value="/msgroom staff, /am logs ${count + 100}">Show 100 more</button>`;
 				buf += `</center>`;
 			}
 			return buf;
