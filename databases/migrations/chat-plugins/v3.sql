@@ -10,7 +10,7 @@ CREATE TABLE perspective_logs (
 	roomid TEXT NOT NULL,
 	time NUMBER NOT NULL,
 	-- boolean, was this time enough to push their score above the threshold?
-	hit_threshold NUMBER NOT NULL
+	hit_threshold TINYINT(1) NOT NULL
 );
 
 CREATE INDEX userid_idx ON perspective_logs (userid);

@@ -136,7 +136,7 @@ if (!PM.isParentProcess) {
 	// This is a child process!
 	global.Config = Config;
 	global.Monitor = {
-		crashlog(error: Error, source = 'A netfilter child process', details: AnyObject | null = null) {
+		crashlog(error: Error, source = 'An abuse monitor child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
@@ -173,7 +173,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 				cache[roomid].notified = true;
 				notifyStaff();
 				hitThreshold = 1;
-				void (room)?.uploadReplay?.(user, this.connection, "forpunishment");
+				void room?.uploadReplay?.(user, this.connection, "forpunishment");
 			}
 			await Chat.database.run(
 				'INSERT INTO perspective_logs (userid, message, score, flags, roomid, time, hit_threshold) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -255,7 +255,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${this.user.name} set the abuse monitor trigger threshold to ${num}.`);
 			this.globalModlog('ABUSEMONITOR THRESHOLD', null, `${num}`);
 			this.sendReply(
-				`|html|Remember to use <code>/tm respawn</code> to deploy the settings to the child process.`
+				`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child process.`
 			);
 		},
 		resolve(target) {
