@@ -11,6 +11,13 @@ const BATTLES_REGEX = /\bbattle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?/g;
 const REPLAY_REGEX = new RegExp(
 	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?`, "g"
 );
+const REPORT_NAMECOLORS: {[k: string]: string} = {
+	p1: 'DodgerBlue',
+	p2: 'Crimson',
+	p3: '#FBa92C',
+	p4: '#228B22',
+	other: '#000000',
+};
 
 Punishments.addPunishmentType({
 	type: 'TICKETBAN',
@@ -72,6 +79,7 @@ interface BattleInfo {
 	log: string[];
 	url: string;
 	title: string;
+	players: {p1: ID, p2: ID, p3?: ID, p4?: ID};
 }
 
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
@@ -524,17 +532,29 @@ export class HelpTicket extends Rooms.RoomGame {
 			void room?.uploadReplay?.(user, conn, "forpunishment");
 		}
 	}
-	static formatBattleLog(logs: string[], title: string, url: string) {
+	static colorName(id: ID, info: BattleInfo) {
+		for (const k in info.players) {
+			const player = info.players[k as SideID];
+			if (player === id) {
+				return REPORT_NAMECOLORS[k];
+			}
+		}
+		return REPORT_NAMECOLORS.other;
+	}
+	static formatBattleLog(logs: string[], info: BattleInfo, reported?: ID) {
 		const log = logs.filter(l => l.startsWith('|c|'));
 		let buf = ``;
 		for (const line of log) {
 			const [,, username, message] = Utils.splitFirst(line, '|', 3);
-			buf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
+			const userid = toID(username);
+			buf += `<div class="chat chatmessage${reported === userid ? ' highlighted' : ""}">`;
+			buf += `<span class="username"><strong style="color: ${this.colorName(userid, info)}">`;
+			buf += Utils.html`${username}:</strong></span> ${message}</div>`;
 		}
-		if (buf) buf = `<div class="infobox"><strong><a href="${url}">${title}</a></strong><hr />${buf}</div>`;
+		if (buf) buf = `<div class="infobox"><strong><a href="${info.url}">${info.title}</a></strong><hr />${buf}</div>`;
 		return buf;
 	}
-	static async visualizeBattleLogs(rooms: string[]) {
+	static async visualizeBattleLogs(rooms: string[], reported?: ID) {
 		const logs = [];
 		for (const room of rooms) {
 			const log = await getBattleLog(room);
@@ -543,7 +563,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		const existingRooms = logs.filter(Boolean);
 		if (existingRooms.length) {
 			const chatBuffer = existingRooms
-				.map(room => this.formatBattleLog(room.log, room.title, room.url))
+				.map(room => this.formatBattleLog(room.log, room, reported))
 				.filter(Boolean)
 				.join('');
 			if (chatBuffer) {
@@ -857,10 +877,20 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	if (battleRoom && battleRoom.type !== 'chat') {
+		const playerTable: Partial<BattleInfo['players']> = {};
+		// i kinda hate this, but this will always be accurate to the battle players.
+		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
+		const playerLines = battleRoom.log.log.filter(line => line.startsWith('|player|'));
+		for (const line of playerLines) {
+			// |player|p1|Mia|miapi.png|1000
+			const [, , playerSlot, name] = line.split('|');
+			playerTable[playerSlot as SideID] = toID(name);
+		}
 		return {
 			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
 			title: battleRoom.title,
 			url: `/${battle}`,
+			players: playerTable as BattleInfo['players'],
 		};
 	}
 	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
@@ -872,6 +902,12 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 				log: data.log.split('\n').filter((k: string) => k.startsWith('|c|')),
 				title: `${data.p1} vs ${data.p2}`,
 				url: `https://${Config.routes.replays}/${battle}`,
+				players: {
+					p1: toID(data.p1),
+					p2: toID(data.p2),
+					p3: toID(data.p3),
+					p4: toID(data.p4),
+				},
 			};
 		}
 	} catch {}
@@ -1012,7 +1048,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			);
 
 			if (replays.length) {
-				const battleLogHTML = await HelpTicket.visualizeBattleLogs(replays);
+				const battleLogHTML = await HelpTicket.visualizeBattleLogs(replays, reportUserid);
 				if (battleLogHTML) {
 					buf += `<br />`;
 					buf += battleLogHTML;
@@ -1131,7 +1167,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			buf += `<strong>Battle links:</strong> ${rooms.map(url => Chat.formatText(`<<${url}>>`)).join(', ')}<br />`;
 			buf += `<br />`;
-			const battleLogHTML = await HelpTicket.visualizeBattleLogs(rooms);
+			const battleLogHTML = await HelpTicket.visualizeBattleLogs(rooms, opp);
 			if (battleLogHTML) buf += battleLogHTML;
 			return buf;
 		},
