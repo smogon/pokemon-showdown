@@ -536,7 +536,7 @@ export class BattleActions {
 			[moveSteps[2], moveSteps[4]] = [moveSteps[4], moveSteps[2]];
 		}
 
-		if (!notActive) this.battle.setActiveMove(move, pokemon, targets[0]);
+		if (notActive) this.battle.setActiveMove(move, pokemon, targets[0]);
 
 		const hitResult = this.battle.singleEvent('Try', move, null, pokemon, targets[0], move) &&
 			this.battle.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move) &&

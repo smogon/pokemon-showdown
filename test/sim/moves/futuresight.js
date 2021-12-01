@@ -275,7 +275,7 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [46, 55]); // only boosted by Power Spot
 	});
 
-	it.skip(`should not ignore the target's Unaware`, function () {
+	it(`should not ignore the target's Unaware`, function () {
 		battle = common.createBattle([[
 			{species: 'Manaphy', ability: 'simple', moves: ['tailglow', 'futuresight']},
 		], [
