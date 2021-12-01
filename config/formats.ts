@@ -876,9 +876,6 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8 BDSP] UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3694299/">BDSP UU</a>`,
-		],
 
 		mod: 'gen8bdsp',
 		ruleset: ['[Gen 8 BDSP] OU'],
