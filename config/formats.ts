@@ -875,6 +875,19 @@ export const Formats: FormatList = [
 		banlist: ['AG', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 8 BDSP] Monotype",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694267/">BDSP Monotype</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		ruleset: ['Standard', 'Same Type Clause'],
+		banlist: [
+			'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza',
+			'Arena Trap', 'Moody', 'Shadow Tag', 'Damp Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
+		],
+	},
+	{
 		name: "[Gen 8 BDSP] Doubles OU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3693891/">BDSP Doubles OU</a>`,
@@ -887,6 +900,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8 BDSP] Battle Festival Doubles",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694269/">Battle Festival Doubles</a>`,
+		],
 
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
