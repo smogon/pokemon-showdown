@@ -875,6 +875,13 @@ export const Formats: FormatList = [
 		banlist: ['AG', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 8 BDSP] UU",
+
+		mod: 'gen8bdsp',
+		ruleset: ['[Gen 8 BDSP] OU'],
+		banlist: ['OU', 'UUBL'],
+	},
+	{
 		name: "[Gen 8 BDSP] Monotype",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3694267/">BDSP Monotype</a>`,
