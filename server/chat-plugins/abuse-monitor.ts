@@ -292,8 +292,8 @@ export const commands: Chat.ChatCommands = {
 			const {targetUsername, rest} = this.splitUser(target);
 			const targetId = toID(targetUsername);
 			if (!targetId) return this.parse(`/help abusemonitor`);
-			if (user.lastCommand !== `tm userclear ${targetId}`) {
-				user.lastCommand = `tm userclear ${targetId}`;
+			if (user.lastCommand !== `am userclear ${targetId}`) {
+				user.lastCommand = `am userclear ${targetId}`;
 				this.errorReply(`Are you sure you want to clear abuse monitor database records for ${targetId}?`);
 				this.errorReply(`Retype the command if you're sure.`);
 				return;
