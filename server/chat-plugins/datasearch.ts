@@ -548,7 +548,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let megaSearch = null;
 	let gmaxSearch = null;
 	let tierSearch = null;
-	let capSearch = null;
+	let capSearch: boolean | null = null;
 	let nationalSearch = null;
 	let fullyEvolvedSearch = null;
 	let singleTypeSearch = null;
@@ -1172,7 +1172,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	if (usedMod === 'gen8bdsp') {
 		results = results.filter(name => {
 			const species = mod.species.get(name);
-			return species.gen <= 4 && species.num >= 1 && species.id !== 'pichuspikyeared';
+			if (species.id === 'pichuspikyeared') return false;
+			if (capSearch) return species.gen <= 4;
+			return species.gen <= 4 && species.num >= 1;
 		});
 	}
 
