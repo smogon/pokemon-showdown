@@ -156,7 +156,7 @@ if (!PM.isParentProcess) {
 		}
 	});
 	// eslint-disable-next-line no-eval
-	Repl.start(`netfilters-${process.pid}`, cmd => eval(cmd));
+	Repl.start(`abusemonitor-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(Config.netfilterprocesses || 1);
 }
@@ -205,8 +205,8 @@ function saveSettings() {
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
 	if (staffRoom) {
-		// staffRoom.add(`|uhtml|netfilters|${buf}`).update();
-		Chat.refreshPageFor('netfilters', staffRoom);
+		// staffRoom.add(`|uhtml|abusemonitor|${buf}`).update();
+		Chat.refreshPageFor('abusemonitor-flagged', staffRoom);
 	}
 }
 
