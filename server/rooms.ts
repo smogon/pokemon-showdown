@@ -662,7 +662,6 @@ export abstract class BasicRoom {
 	}
 	expire() {
 		this.send('|expire|');
-		Chat.runHandlers('RoomExpire', this.roomid);
 		this.destroy();
 	}
 	reportJoin(type: 'j' | 'l' | 'n', entry: string, user: User) {
@@ -1103,6 +1102,8 @@ export abstract class BasicRoom {
 
 		this.setParent(null);
 		this.clearSubRooms();
+
+		Chat.runHandlers('RoomDestroy', this.roomid);
 
 		Rooms.global.deregisterChatRoom(this.roomid);
 		Rooms.global.delistChatRoom(this.roomid);

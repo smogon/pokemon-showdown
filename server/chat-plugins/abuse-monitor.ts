@@ -189,7 +189,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 };
 
 export const handlers: Chat.Handlers = {
-	onRoomExpire(roomid) {
+	onRoomDestroy(roomid) {
 		if (cache[roomid]) delete cache[roomid];
 	},
 };
