@@ -150,7 +150,7 @@ export class FriendsDatabase {
 		if (!Array.isArray(receivedResults)) {
 			Monitor.crashlog(new Error("Malformed results received"), 'A friends process', {
 				user: user.id,
-				result: JSON.stringify(receivedResult),
+				result: JSON.stringify(receivedResults),
 			});
 			return {received, sent};
 		}
