@@ -16,7 +16,7 @@ const REPORT_NAMECOLORS: {[k: string]: string} = {
 	p2: 'Crimson',
 	p3: '#FBa92C',
 	p4: '#228B22',
-	other: '#000000',
+	other: '#00000',
 };
 
 Punishments.addPunishmentType({
