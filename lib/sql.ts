@@ -5,6 +5,8 @@
 import {QueryProcessManager} from './process-manager';
 import type * as sqlite from 'better-sqlite3';
 import {FS} from './fs';
+// @ts-ignore in case not installed
+import type {SQLStatement} from 'sql-template-strings';
 
 export const DB_NOT_FOUND = null;
 
@@ -17,6 +19,8 @@ export interface SQLOptions {
 }
 
 type DataType = unknown[] | Record<string, unknown>;
+export type SQLInput = string | number | null;
+export interface ResultRow {[k: string]: SQLInput}
 
 export interface TransactionEnvironment {
 	db: sqlite.Database;
@@ -259,12 +263,154 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	}
 }
 
+export const tables = new Map<string, DatabaseTable<any>>();
+
+export class DatabaseTable<T> {
+	database: SQLDatabaseManager;
+	name: string;
+	primaryKeyName: string;
+	constructor(
+		name: string,
+		primaryKeyName: string,
+		database: SQLDatabaseManager
+	) {
+		this.name = name;
+		this.database = database;
+		this.primaryKeyName = primaryKeyName;
+		tables.set(this.name, this);
+	}
+	private SQL: typeof import('sql-template-strings').SQL = (() => {
+		try {
+			return require('sql-template-strings');
+		} catch {
+			return () => {
+				throw new Error("Using SQL-template-strings without it installed");
+			};
+		}
+	})();
+	async selectOne(
+		entries: string | string[],
+		where?: SQLStatement
+	): Promise<T | null> {
+		const query = where || this.SQL``;
+		query.append(' LIMIT 1');
+		const rows = await this.selectAll(entries, query);
+		return rows?.[0] || null;
+	}
+	selectAll(
+		entries: string | string[],
+		where?: SQLStatement
+	): Promise<T[]> {
+		const query = this.SQL`SELECT `;
+		if (typeof entries === 'string') {
+			query.append(' * ');
+		} else {
+			for (let i = 0; i < entries.length; i++) {
+				query.append(entries[i]);
+				if (typeof entries[i + 1] !== 'undefined') query.append(', ');
+			}
+			query.append(' ');
+		}
+		query.append(`FROM ${this.name} `);
+		if (where) {
+			query.append(' WHERE ');
+			query.append(where);
+		}
+		return this.all(query);
+	}
+	get(entries: string | string[], keyId: SQLInput) {
+		const query = this.SQL``;
+		query.append(this.primaryKeyName);
+		query.append(this.SQL` = ${keyId}`);
+		return this.selectOne(entries, query);
+	}
+	updateAll(toParams: Partial<T>, where?: SQLStatement, limit?: number) {
+		const to = Object.entries(toParams);
+		const query = this.SQL`UPDATE `;
+		query.append(this.name + ' SET ');
+		for (let i = 0; i < to.length; i++) {
+			const [k, v] = to[i];
+			query.append(`${k} = `);
+			query.append(this.SQL`${v}`);
+			if (typeof to[i + 1] !== 'undefined') {
+				query.append(', ');
+			}
+		}
+
+		if (where) {
+			query.append(` WHERE `);
+			query.append(where);
+		}
+		if (limit) query.append(this.SQL` LIMIT ${limit}`);
+		return this.run(query);
+	}
+	updateOne(to: Partial<T>, where?: SQLStatement) {
+		return this.updateAll(to, where, 1);
+	}
+	deleteAll(where?: SQLStatement, limit?: number) {
+		const query = this.SQL`DELETE FROM `;
+		query.append(this.name);
+		if (where) {
+			query.append(' WHERE ');
+			query.append(where);
+		}
+		if (limit) {
+			query.append(this.SQL` LIMIT ${limit}`);
+		}
+		return this.run(query);
+	}
+	delete(keyEntry: SQLInput) {
+		const query = this.SQL``;
+		query.append(this.primaryKeyName);
+		query.append(this.SQL` = ${keyEntry}`);
+		return this.deleteOne(query);
+	}
+	deleteOne(where: SQLStatement) {
+		return this.deleteAll(where, 1);
+	}
+	insert(colMap: Partial<T>, rest?: SQLStatement, isReplace = false) {
+		const query = this.SQL``;
+		query.append(`${isReplace ? 'REPLACE' : 'INSERT'} INTO ${this.name} (`);
+		const keys = Object.keys(colMap);
+		for (let i = 0; i < keys.length; i++) {
+			query.append(keys[i]);
+			if (typeof keys[i + 1] !== 'undefined') query.append(', ');
+		}
+		query.append(') VALUES (');
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			query.append(this.SQL`${colMap[key as keyof T]}`);
+			if (typeof keys[i + 1] !== 'undefined') query.append(', ');
+		}
+		query.append(') ');
+		if (rest) query.append(rest);
+		return this.database.run(query.sql, query.values);
+	}
+	replace(cols: Partial<T>, rest?: SQLStatement) {
+		return this.insert(cols, rest, true);
+	}
+	update(primaryKey: SQLInput, data: Partial<T>) {
+		const query = this.SQL``;
+		query.append(this.primaryKeyName + ' = ');
+		query.append(this.SQL`${primaryKey}`);
+		return this.updateOne(data, query);
+	}
+
+	// catch-alls for "we can't fit this query into any of the wrapper functions"
+	run(sql: SQLStatement) {
+		return this.database.run(sql.sql, sql.values) as Promise<{changes: number}>;
+	}
+	all(sql: SQLStatement) {
+		return this.database.all(sql.sql, sql.values) as Promise<T[]>;
+	}
+}
+
 interface SetupOptions {
 	onError: ErrorHandler;
 	processes: number;
 }
 
-export function SQL(
+function getSQL(
 	module: NodeJS.Module, input: SQLOptions & Partial<SetupOptions>
 ) {
 	const {onError, processes} = input;
@@ -276,8 +422,15 @@ export function SQL(
 	return PM;
 }
 
+export const SQL = Object.assign(getSQL, {
+	DatabaseTable,
+	SQLDatabaseManager,
+	tables,
+});
+
 export namespace SQL {
 	export type DatabaseManager = import('./sql').SQLDatabaseManager;
 	export type Statement = import('./sql').Statement;
 	export type Options = import('./sql').SQLOptions;
+	export type DatabaseTable<T> = import('./sql').DatabaseTable<T>;
 }
