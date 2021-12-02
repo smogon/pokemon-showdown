@@ -147,6 +147,13 @@ export class FriendsDatabase {
 			sent.add(request.receiver);
 		}
 		const receivedResults = await this.all('getReceived', [user.id]) || [];
+		if (!Array.isArray(receivedResults)) {
+			Monitor.crashlog(new Error("Malformed results received"), 'A friends process', {
+				user: user.id,
+				result: JSON.stringify(receivedResult),
+			});
+			return {received, sent};
+		}
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
