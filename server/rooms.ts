@@ -1103,6 +1103,8 @@ export abstract class BasicRoom {
 		this.setParent(null);
 		this.clearSubRooms();
 
+		Chat.runHandlers('RoomDestroy', this.roomid);
+
 		Rooms.global.deregisterChatRoom(this.roomid);
 		Rooms.global.delistChatRoom(this.roomid);
 
