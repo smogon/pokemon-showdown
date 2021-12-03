@@ -187,6 +187,8 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 		}
 	})();
 };
+// run last, so our other filters don't interfere
+chatfilter.priority = -9;
 
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
