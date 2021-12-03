@@ -474,7 +474,7 @@ export const pages: Chat.PageTable = {
 				buf += `<details class="readmore"><summary><strong>Chat:</strong> `;
 				buf += `<small>(click to see)</small></summary><div class="infobox">`;
 				// we parse users specifically from the log so we can see it after they leave the room
-				const users = new Set<string>();
+				const users = new Utils.Multiset<string>();
 				// assume logs exist - why else would the filter activate?
 				for (const line of room.log.log) {
 					const data = room.log.parseChatLine(line);
@@ -485,7 +485,7 @@ export const pages: Chat.PageTable = {
 				}
 				buf += `</div></details>`;
 				buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
-				for (const id of users) {
+				for (const [id] of Utils.sortBy([...users], ([, num]) => -num)) {
 					const curUser = Users.get(id);
 					const proof = `https://${Config.routes.replays}/${room.roomid.slice('battle-'.length)}`;
 
