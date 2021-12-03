@@ -333,7 +333,7 @@ export const commands: Chat.ChatCommands = {
 				'DELETE FROM perspective_logs WHERE rowid = ?', [num]
 			);
 			this.sendReply(`Log ${num} deleted.`);
-			this.privateGlobalModAction(`${user.name} deleted a abuse monitor log for the user ${row.userid}.`);
+			this.privateGlobalModAction(`${user.name} deleted an abuse monitor log for the user ${row.userid}.`);
 			this.stafflog(
 				`Message: "${row.message}", room: ${row.roomid}, time: ${Chat.toTimestamp(new Date(row.time))}`
 			);
