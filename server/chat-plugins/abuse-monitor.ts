@@ -91,6 +91,7 @@ export async function classify(text: string) {
 			headers: {
 				'Content-Type': "application/json",
 			},
+			timeout: 10 * 1000, // 10s
 		});
 		const data = JSON.parse(raw);
 		if (data.error) throw new Error(data.message);
