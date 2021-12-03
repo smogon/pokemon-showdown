@@ -233,14 +233,18 @@ export const commands: Chat.ChatCommands = {
 		},
 		toggle(target) {
 			checkAccess(this);
-			const setting = this.meansYes(target);
-			if (settings.disabled === setting) {
-				return this.errorReply(`The abuse monitor is already ${setting ? 'enabled' : 'disabled'}.`);
+			if (this.meansYes(target)) {
+				if (!settings.disabled) return this.errorReply(`The abuse monitor is already enabled.`);
+				settings.disabled = false;
+			} else if (this.meansNo(target)) {
+				if (settings.disabled) return this.errorReply(`The abuse monitor is already disabled.`);
+				settings.disabled = true;
+			} else {
+				return this.errorReply(`Invalid setting. Must be 'on' or 'off'.`);
 			}
-			settings.disabled = setting;
 			saveSettings();
-			this.privateGlobalModAction(`${this.user.name} ${setting ? 'enabled' : 'disabled'} the abuse monitor.`);
-			this.globalModlog('ABUSEMONITOR', null, setting ? 'enable' : 'disable');
+			this.privateGlobalModAction(`${this.user.name} ${!settings.disabled ? 'enabled' : 'disabled'} the abuse monitor.`);
+			this.globalModlog('ABUSEMONITOR', null, !settings.disabled ? 'enable' : 'disable');
 		},
 		threshold(target) {
 			checkAccess(this);
