@@ -387,17 +387,11 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
-		banlist: ['All Pokemon'],
-		unbanlist: [
-			'Bulbasaur', 'Charmander', 'Squirtle', 'Caterpie', 'Sandshrew', 'Nidoran-M', 'Nidoran-F', 'Vulpix', 'Zubat', 'Oddish', 'Diglett', 'Meowth', 'Psyduck', 'Growlithe', 'Poliwag', 'Abra', 'Machop', 'Tentacool', 'Ponyta', 'Magnemite', 'Farfetch\u2019d-Galar', 'Shellder', 'Krabby', 'Exeggcute', 'Cubone', 'Koffing', 'Rhyhorn', 'Tangela', 'Horsea', 'Goldeen', 'Staryu', 'Magikarp', 'Eevee', 'Porygon', 'Omanyte', 'Kabuto',
-			'Hoothoot', 'Chinchou', 'Pichu', 'Cleffa', 'Igglybuff', 'Togepi', 'Natu', 'Wooper', 'Sneasel', 'Swinub', 'Corsola-Galar', 'Remoraid', 'Tyrogue', 'Smoochum', 'Elekid', 'Magby', 'Larvitar',
-			'Treecko', 'Torchic', 'Mudkip', 'Zigzagoon', 'Lotad', 'Seedot', 'Wingull', 'Ralts', 'Nincada', 'Whismur', 'Azurill', 'Aron', 'Electrike', 'Carvanha', 'Trapinch', 'Swablu', 'Barboach', 'Corphish', 'Baltoy', 'Lileep', 'Anorith', 'Feebas', 'Duskull', 'Wynaut', 'Snorunt', 'Spheal', 'Bagon', 'Beldum',
-			'Shinx', 'Budew', 'Combee', 'Cherubi', 'Shellos', 'Drifloon', 'Buneary', 'Stunky', 'Bronzor', 'Bonsly', 'Mime Jr.', 'Happiny', 'Gible', 'Munchlax', 'Riolu', 'Hippopotas', 'Skorupi', 'Croagunk', 'Mantyke', 'Snover',
-			'Lillipup', 'Purrloin', 'Munna', 'Pidove', 'Roggenrola', 'Woobat', 'Drilbur', 'Timburr', 'Tympole', 'Venipede', 'Cottonee', 'Petilil', 'Sandile', 'Darumaka', 'Dwebble', 'Scraggy', 'Yamask', 'Tirtouga', 'Archen', 'Trubbish', 'Zorua', 'Minccino', 'Gothita', 'Solosis', 'Vanillite', 'Karrablast', 'Foongus', 'Joltik', 'Ferroseed', 'Klink', 'Elgyem', 'Litwick', 'Axew', 'Cubchoo', 'Shelmet', 'Mienfoo', 'Golett', 'Pawniard', 'Rufflet', 'Vullaby', 'Deino',
-			'Bunnelby', 'Fletchling', 'Pancham', 'Espurr', 'Honedge', 'Spritzee', 'Swirlix', 'Inkay', 'Binacle', 'Skrelp', 'Clauncher', 'Helioptile', 'Tyrunt', 'Goomy', 'Phantump', 'Pumpkaboo', 'Bergmite', 'Noibat',
-			'Rowlet', 'Litten', 'Popplio', 'Grubbin', 'Cutiefly', 'Rockruff', 'Mareanie', 'Mudbray', 'Dewpider', 'Fomantis', 'Morelull', 'Salandit', 'Stufful', 'Bounsweet', 'Wimpod', 'Sandygast', 'Jangmo-o', 'Poipole',
-			'Grookey', 'Scorbunny', 'Sobble', 'Skwovet', 'Rookidee', 'Blipbug', 'Nickit', 'Gossifleur', 'Wooloo', 'Chewtle', 'Yamper', 'Rolycoly', 'Applin', 'Arrokuda', 'Toxel', 'Sizzlipede', 'Clobbopus', 'Sinistea', 'Hatenna', 'Impidimp', 'Milcery', 'Snom', 'Dreepy', 'Kubfu',
-		],
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			if (!species.nfe || species.prevo) return [`Non-first-stage Pok\u00e9mon cannot be used in Tiny Tourney.`];
+			if (species.heightm > 1) return [`${species.name} is too tall to be used in Tiny Tourney.`];
+		},
 	},
 	{
 		name: "[Gen 8] VGC 2021 Series 9",
