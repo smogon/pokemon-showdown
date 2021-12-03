@@ -218,7 +218,7 @@ export class Roomlog {
 		}
 		this.broadcastBuffer.push(fullMessage);
 	}
-	private parseChatLine(line: string) {
+	parseChatLine(line: string) {
 		const messageStart = !this.noLogTimes ? '|c:|' : '|c|';
 		const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		if (line.startsWith(messageStart)) {

@@ -71,6 +71,7 @@ export interface Handlers {
 	onBattleStart?: (user: User, room: GameRoom) => void;
 	onBattleLeave?: (user: User, room: GameRoom) => void;
 	onDisconnect?: (user: User) => void;
+	onRoomDestroy?: (roomid: RoomID) => void;
 }
 
 export interface ChatPlugin {
@@ -109,7 +110,7 @@ export type ChatFilter = ((
 	connection: Connection,
 	targetUser: User | null,
 	originalMessage: string
-) => string | false | null | undefined) & {priority?: number};
+) => string | false | null | undefined | void) & {priority?: number};
 
 export type NameFilter = (name: string, user: User) => string;
 export type NicknameFilter = (name: string, user: User) => string | false;
