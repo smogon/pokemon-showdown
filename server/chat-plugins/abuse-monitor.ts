@@ -428,29 +428,29 @@ export const commands: Chat.ChatCommands = {
 			buf += `<br /><strong>Score threshold:</strong> ${settings.threshold}`;
 			this.sendReplyBox(buf);
 		},
-		help: [
-			`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
-			`/am threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist &`,
-			`/am resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ &`,
-			`/am respawn - Respawns abuse monitor processes. Requires: whitelist &`,
-			`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
-			`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
-			`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
-			`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
-			`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
-			`[score] can be either a number or MAXIMUM, which will set it to the maximum score possible (that will trigger an action)`,
-			`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
-			`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
-			`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
-		],
 	},
+	abusemonitorhelp: [
+		`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
+		`/am threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist &`,
+		`/am resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ &`,
+		`/am respawn - Respawns abuse monitor processes. Requires: whitelist &`,
+		`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
+		`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
+		`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
+		`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
+		`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
+		`[score] can be either a number or MAXIMUM, which will set it to the maximum score possible (that will trigger an action)`,
+		`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
+		`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
+		`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
+	],
 };
 
 export const pages: Chat.PageTable = {
 	abusemonitor: {
 		flagged(query, user) {
 			checkAccess(this);
-			const ids = getFlaggedRooms();
+		 	const ids = getFlaggedRooms();
 			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
 			buf += `<h2>Flagged rooms</h2>`;
