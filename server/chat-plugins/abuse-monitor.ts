@@ -450,7 +450,7 @@ export const pages: Chat.PageTable = {
 	abusemonitor: {
 		flagged(query, user) {
 			checkAccess(this);
-		 	const ids = getFlaggedRooms();
+			const ids = getFlaggedRooms();
 			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
 			buf += `<h2>Flagged rooms</h2>`;
@@ -466,7 +466,8 @@ export const pages: Chat.PageTable = {
 					continue;
 				}
 				buf += Utils.html`<details class="readmore"><summary><a href="/${room.roomid}">${room.title}</a></summary>`;
-				buf += `<details class="readmore"><summary><strong>Chat:</strong></summary><div class="infobox">`;
+				buf += `<details class="readmore"><summary><strong>Chat:</strong>`;
+				buf += `<small>(click to see)</small></summary><div class="infobox">`;
 				// we parse users specifically from the log so we can see it after they leave the room
 				const users = new Set<string>();
 				// assume logs exist - why else would the filter activate?
