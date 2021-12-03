@@ -25,12 +25,16 @@ const ATTRIBUTES = {
 };
 
 export const cache: {
-	[roomid: string]: {
-		users: {[userid: string]: number},
-		notified?: boolean,
-		flags: Set<string>,
-	},
+	[roomid: string]: {[userid: string]: number} & {staffNotified?: boolean},
 } = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
+
+for (const k in cache) {
+	const entry = cache[k] as any;
+	if (entry.flags) delete entry.flags;
+	if (entry.users) {
+		cache[k] = {...entry.users, staffNotified: entry.notified};
+	}
+}
 
 const defaults: FilterSettings = {
 	threshold: 4,
@@ -162,20 +166,19 @@ if (!PM.isParentProcess) {
 }
 
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
-	if (!room?.battle?.rated || settings.disabled || cache[room.roomid]?.notified) return;
+	if (!room?.battle?.rated || settings.disabled || cache[room.roomid]?.staffNotified) return;
 	if (!Config.perspectiveKey) return;
 
 	const roomid = room.roomid;
 	void (async () => {
 		const {score, flags} = await PM.query({comment: message});
 		if (score) {
-			if (!cache[roomid]) cache[roomid] = {users: {}, flags: new Set()};
-			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
-			cache[roomid].users[user.id] += score;
-			for (const flag of flags) cache[roomid].flags.add(flag);
+			if (!cache[roomid]) cache[roomid] = {};
+			if (!cache[roomid][user.id]) cache[roomid][user.id] = 0;
+			cache[roomid][user.id] += score;
 			let hitThreshold = 0;
-			if (cache[roomid].users[user.id] >= settings.threshold) {
-				cache[roomid].notified = true;
+			if (cache[roomid][user.id] >= settings.threshold) {
+				cache[roomid].staffNotified = true;
 				notifyStaff();
 				hitThreshold = 1;
 				void room?.uploadReplay?.(user, this.connection, "forpunishment");
@@ -187,8 +190,6 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 		}
 	})();
 };
-// run last, so our other filters don't interfere
-chatfilter.priority = -9;
 
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
@@ -197,7 +198,7 @@ export const handlers: Chat.Handlers = {
 };
 
 function getFlaggedRooms() {
-	return Object.keys(cache).filter(roomid => cache[roomid].notified);
+	return Object.keys(cache).filter(roomid => cache[roomid].staffNotified);
 }
 
 function saveSettings() {
@@ -273,7 +274,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			target = target.toLowerCase().trim().replace(/ /ig, '');
 			if (!target) return this.parse(`/help abusemonitor`);
-			if (!cache[target]?.notified) {
+			if (!cache[target]?.staffNotified) {
 				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
 			}
 			// we delete the cache because if more stuff happens in it
