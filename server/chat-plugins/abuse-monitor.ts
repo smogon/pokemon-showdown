@@ -119,7 +119,7 @@ export const PM = new ProcessManager.QueryProcessManager<{comment: string}, PMRe
 	const flags = new Set<string>();
 	for (const type in result) {
 		const data = result[type];
-		if (data < settings.minScore) continue;
+		if (settings.minScore && data < settings.minScore) continue;
 		const curScore = score;
 		if (settings.specials[type]) {
 			for (const k in settings.specials[type]) {
@@ -132,7 +132,12 @@ export const PM = new ProcessManager.QueryProcessManager<{comment: string}, PMRe
 				}
 			}
 		}
-		if (score < 1) score = 1;
+		if (settings.minScore) {
+			// min score ensures that if a category is above that minimum score, they will get
+			// at least a point.
+			// we previously ensured that this was above minScore if set, so this is fine
+			if (score < 1) score = 1;
+		}
 		if (score !== curScore) flags.add(type);
 	}
 	return {score, flags: [...flags]};
