@@ -348,7 +348,7 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			if (!toID(target)) return this.parse(`/help abusemonitor`);
 			let [rawType, rawPercent, rawScore] = target.split(',');
-			const type = rawType.toUpperCase().replace(/\s/g, '_');;
+			const type = rawType.toUpperCase().replace(/\s/g, '_');
 			rawScore = toID(rawScore);
 			const types = {...ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
@@ -471,7 +471,7 @@ export const pages: Chat.PageTable = {
 					continue;
 				}
 				buf += Utils.html`<details class="readmore"><summary><a href="/${room.roomid}">${room.title}</a></summary>`;
-				buf += `<details class="readmore"><summary><strong>Chat:</strong>`;
+				buf += `<details class="readmore"><summary><strong>Chat:</strong> `;
 				buf += `<small>(click to see)</small></summary><div class="infobox">`;
 				// we parse users specifically from the log so we can see it after they leave the room
 				const users = new Set<string>();
