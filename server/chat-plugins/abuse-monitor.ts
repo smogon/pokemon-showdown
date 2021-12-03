@@ -348,8 +348,8 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			if (!toID(target)) return this.parse(`/help abusemonitor`);
 			let [rawType, rawPercent, rawScore] = target.split(',');
-			const type = toID(rawType).toUpperCase();
-			rawScore = toID(rawScore).toUpperCase();
+			const type = rawType.toUpperCase().replace(/\s/g, '_');;
+			rawScore = toID(rawScore);
 			const types = {...ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
@@ -376,7 +376,7 @@ export const commands: Chat.ChatCommands = {
 		deletespecial(target, room, user) {
 			checkAccess(this);
 			const [rawType, rawPercent] = target.split(',');
-			const type = toID(rawType).toUpperCase();
+			const type = rawType.toUpperCase().replace(/\s/g, '_');
 			const types = {...ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
