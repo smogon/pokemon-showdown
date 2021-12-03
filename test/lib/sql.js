@@ -1,10 +1,11 @@
 "use strict";
 const {SQL} = require('../../lib/sql');
 const assert = require('../assert').strict;
+const common = require('../common');
 
 const database = SQL(module, {file: `:memory:`, processes: 1});
 
-describe(`SQLite worker wrapper`, async () => {
+(common.hasModule('better-sqlite3') ? describe : describe.skip)(`SQLite worker wrapper`, async () => {
 	// prepare statements and set up table
 	await database.exec(`CREATE TABLE IF NOT EXISTS test (col TEXT, col2 TEXT)`);
 	const select = await database.prepare(`SELECT * FROM test`); // 0
