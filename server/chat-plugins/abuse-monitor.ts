@@ -167,7 +167,8 @@ if (!PM.isParentProcess) {
 
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	if (!room?.battle?.rated || settings.disabled || cache[room.roomid]?.staffNotified) return;
-	if (!Config.perspectiveKey) return;
+	// startsWith('!') - broadcasting command, ignore it.
+	if (!Config.perspectiveKey || message.startsWith('!')) return;
 
 	const roomid = room.roomid;
 	void (async () => {
