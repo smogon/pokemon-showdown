@@ -391,8 +391,8 @@ export const commands: Chat.ChatCommands = {
 		em: 'editmin',
 		editmin(target, room, user) {
 			checkAccess(this);
-			const num = parseInt(toID(target));
-			if (isNaN(num) || num < 0) {
+			const num = parseFloat(target);
+			if (isNaN(num) || num < 0 || num > 1) {
 				return this.errorReply(`Invalid minimum score: ${num}. Must be a positive integer.`);
 			}
 			settings.minScore = num;
