@@ -379,6 +379,21 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
+		name: "[Gen 8] Tiny Tourney",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694047/">Tiny Tourney Metagame Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			if (!species.nfe || species.prevo) return [`Non-first-stage Pok\u00e9mon cannot be used in Tiny Tourney.`];
+			if (species.heightm > 1) return [`${species.name} is too tall to be used in Tiny Tourney.`];
+		},
+	},
+	{
 		name: "[Gen 8] VGC 2021 Series 9",
 
 		mod: 'gen8',
