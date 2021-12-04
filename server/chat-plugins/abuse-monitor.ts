@@ -104,7 +104,12 @@ export async function classify(text: string) {
 			result[k] = score.summaryScore.value;
 		}
 		return result;
-	} catch (e) {
+	} catch (e: any) {
+		if (e.message.startsWith('Request timeout')) {
+			// just ignore this. error on their end not ours.
+			// todo maybe stop sending requests for a bit?
+			return null;
+		}
 		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(request)});
 		return null;
 	}
