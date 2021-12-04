@@ -200,6 +200,9 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 		}
 	})();
 };
+// to avoid conflicts with other filters
+chatfilter.priority = -100;
+
 
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
