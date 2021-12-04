@@ -2336,4 +2336,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Crucibellite",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
 	},
+	vilevial: {
+		name: "Vile Vial",
+		desc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
+	},
 };
