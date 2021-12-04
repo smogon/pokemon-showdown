@@ -59,10 +59,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	custapberry: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
 	darkmemory: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -96,7 +92,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
-				this.add("-activate", target, "item: Eject Button");
 				target.switchFlag = true;
 				source.switchFlag = false;
 			}
