@@ -25,7 +25,10 @@ const ATTRIBUTES = {
 };
 
 export const cache: {
-	[roomid: string]: {[userid: string]: number} & {staffNotified?: boolean},
+	[roomid: string]: {[userid: string]: number} & {
+		staffNotified?: boolean,
+		claimed?: ID,
+	},
 } = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
 
 for (const k in cache) {
@@ -202,6 +205,14 @@ export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
 		if (cache[roomid]) delete cache[roomid];
 	},
+	onRoomClose(roomid) {
+		if (!roomid.startsWith('view-abusemonitor-view')) return;
+		const targetId = roomid.slice('view-abusemonitor-view-'.length);
+		if (cache[targetId]) {
+			delete cache[targetId].claimed;
+			notifyStaff();
+		}
+	},
 };
 
 function getFlaggedRooms() {
@@ -288,6 +299,10 @@ export const commands: Chat.ChatCommands = {
 			// post punishment, we want to know about it
 			delete cache[target];
 			notifyStaff();
+			Chat.refreshPageFor(`abusemonitor-view-${target}`, 'staff');
+		},
+		view(target, room, user) {
+			return this.parse(`/j view-abusemonitor-view-${target.toLowerCase().trim()}`);
 		},
 		logs(target) {
 			checkAccess(this);
@@ -469,44 +484,91 @@ export const pages: Chat.PageTable = {
 				return buf;
 			}
 			buf += `<p>Currently flagged rooms: ${ids.length}</p>`;
+			buf += `<div class="ladder pad">`;
+			buf += `<table><tr><th>Status</th><th>Room</th><th>Claimed by</th><th>Action</th></tr>`;
 			for (const roomid of ids) {
-				const room = Rooms.get(roomid);
-				if (!room) {
-					delete cache[roomid]; // ??
-					continue;
+				const entry = cache[roomid];
+				buf += `<tr>`;
+				if (entry.claimed) {
+					buf += `<td><span style="color:green">`;
+					buf += `<i class="fa fa-circle-o"></i> <strong>Claimed</strong></span></td>`;
+				} else {
+					buf += `<td><span style="color:orange">`;
+					buf += `<i class="fa fa-circle-o"></i> <strong>Unclaimed</strong></span></td>`;
 				}
-				buf += Utils.html`<details class="readmore"><summary><a href="/${room.roomid}">${room.title}</a></summary>`;
-				buf += `<details class="readmore"><summary><strong>Chat:</strong> `;
-				buf += `<small>(click to see)</small></summary><div class="infobox">`;
-				// we parse users specifically from the log so we can see it after they leave the room
-				const users = new Utils.Multiset<string>();
-				// assume logs exist - why else would the filter activate?
-				for (const line of room.log.log) {
-					const data = room.log.parseChatLine(line);
-					if (!data) continue; // not chat
-					users.add(toID(data.user));
-					buf += `<div class="chat"><span class="username">`;
-					buf += Utils.html`<username>${data.user}:</username></span> ${data.message}</div>`;
-				}
-				buf += `</div></details>`;
-				buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
-				for (const [id] of Utils.sortBy([...users], ([, num]) => -num)) {
-					const curUser = Users.get(id);
-					const proof = `https://${Config.routes.replays}/${room.roomid.slice('battle-'.length)}`;
-
-					buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id}</summary><div class="infobox">`;
-					const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
-					for (const name of punishments) {
-						buf += `<form data-submitsend="/msgroom staff,/${toID(name)} ${id},{reason} spoiler: ${proof}">`;
-						buf += `<button class="button notifying" type="submit">${name}</button><br />`;
-						buf += `Optional reason: <input name="reason" />`;
-						buf += `</form><br />`;
-					}
-					buf += `</div></details><br />`;
-				}
-				buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid}">Mark resolved</button>`;
-				buf += `<br /></details><hr />`;
+				// should never happen, fallback just in case
+				buf += `<td><a href="/${roomid}">${Rooms.get(roomid)?.title || roomid}</a></td>`;
+				buf += `<td>${entry.claimed ? entry.claimed : '-'}</td>`;
+				buf += `<td><button class="button" name="send" value="/am view ${roomid}">`;
+				buf += `${entry.claimed ? 'Join' : 'Claim'}</button></td>`;
+				buf += `</tr>`;
 			}
+			buf += `</table></div>`;
+			return buf;
+		},
+		view(query, user) {
+			this.checkCan('lock');
+			const roomid = query.join('-');
+			this.title = `[Abuse Monitor] ${roomid}`;
+			let buf = `<div class="pad">`;
+			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
+			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
+			buf += Utils.html`<h2>Abuse Monitor - <a href="/${roomid}">${roomid}</a></h2>`;
+			const room = Rooms.get(roomid);
+			if (!room) {
+				if (cache[roomid]) delete cache[roomid];
+				buf += `<hr /><p class="error">No such room.</p>`;
+				return buf;
+			}
+			if (!cache[roomid]) {
+				buf += `<hr /><p class="error">The abuse monitor has not flagged the given room.</p>`;
+				return buf;
+			}
+			buf += `<hr />`;
+			if (!cache[roomid].claimed) {
+				cache[roomid].claimed = user.id;
+				notifyStaff();
+			} else {
+				buf += `<p><strong>Claimed:</strong> ${cache[roomid].claimed}</p>`;
+			}
+
+			buf += `<details class="readmore"><summary><strong>Chat:</strong></summary><div class="infobox">`;
+			// we parse users specifically from the log so we can see it after they leave the room
+			const users = new Utils.Multiset<string>();
+			// assume logs exist - why else would the filter activate?
+			for (const line of room.log.log) {
+				const data = room.log.parseChatLine(line);
+				if (!data) continue; // not chat
+				users.add(toID(data.user));
+				buf += `<div class="chat"><span class="username">`;
+				buf += Utils.html`<username>${data.user}:</username></span> ${data.message}</div>`;
+			}
+			buf += `</div></details>`;
+			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
+			for (const [id] of Utils.sortBy([...users], ([, num]) => -num)) {
+				const curUser = Users.get(id);
+				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id}</summary><div class="infobox">`;
+				const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
+				for (const name of punishments) {
+					let cmdParts = [Utils.html`/msgroom ${roomid},/${toID(name)} ${id},{reason}`];
+					if (!user.inRooms.has(room.roomid)) {
+						cmdParts = [
+							// we want the punishment to be shown in the room
+							// so that the users are aware
+							Utils.html`/join ${roomid}`,
+							'', // needed to give time to join
+							...cmdParts,
+							Utils.html`/msgroom ${roomid},/part`,
+						];
+					}
+					buf += `<form data-submitsend="${cmdParts.join('&#10;')}">`;
+					buf += `<button class="button notifying" type="submit">${name}</button><br />`;
+					buf += `Optional reason: <input name="reason" />`;
+					buf += `</form><br />`;
+				}
+				buf += `</div></details><br />`;
+			}
+			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid}">Mark resolved</button>`;
 			return buf;
 		},
 		async logs(query, user) {
