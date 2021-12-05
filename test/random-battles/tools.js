@@ -8,7 +8,7 @@
 
 const assert = require("../assert");
 const Teams = require('./../../sim/teams').Teams;
-const TeamValidator = require('../../sim/team-validator').TeamValidator;
+const {TeamValidator, PokemonSources} = require('../../sim/team-validator');
 
 /**
  * Unit test helper for Pokemon sets
@@ -107,7 +107,7 @@ function testTeam(options, test) {
 
 	for (let i = 0; i < rounds; i++) {
 		const generator = Teams.getGenerator(options.format, options.seed || [i, i, i, i]);
-		const team = generator.randomTeam();
+		const team = generator.getTeam();
 		test(team);
 	}
 }
@@ -121,6 +121,17 @@ function testTeam(options, test) {
 function assertSetValidity(format, set) {
 	const dex = Dex.forFormat(format);
 	const species = dex.species.get(set.species || set.name);
+
+	// According to Random Battles room staff, we should not ensure that HP IVs are valid for
+	// BSS formats. This is because level 100 Pokémon can be hypertrained
+	// and then automatically downleveled to level 100 for the Battle Spot.
+	if (!format.id.includes('bss')) {
+		const valid = (new TeamValidator(format))
+			.validateStats(set, species, new PokemonSources())
+			// Suppress errors about mistaken EV quantities
+			.filter(f => !f.includes(' EVs'));
+		assert.equal(valid.length, 0, `Invalid stats: ${valid} (set: ${JSON.stringify(set)})`);
+	}
 
 	// We check `dex.gen` here because Format#gen is 0 in the current gen, while ModdedDex#gen is never 0.
 	assert(species.exists, `The species "${species.name}" does not exist. (set: ${JSON.stringify(set)})`);
@@ -144,7 +155,8 @@ function assertSetValidity(format, set) {
 	if (
 		species.baseSpecies === 'Arceus' &&
 		species.types[0] !== 'Normal' &&
-		(dex.gen !== 7 || !set.item.endsWith(' Z'))
+		(dex.gen !== 7 || !set.item.endsWith(' Z')) &&
+		!format.id.includes('hackmons')
 	) {
 		assert(set.item.endsWith(' Plate'), `${species.name} doesn't have a Plate (got "${set.item}" instead)`);
 	}
