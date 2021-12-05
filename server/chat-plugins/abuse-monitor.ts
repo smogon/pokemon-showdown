@@ -517,7 +517,6 @@ export const pages: Chat.PageTable = {
 		view(query, user) {
 			this.checkCan('lock');
 			const roomid = query.join('-');
-			this.title = `[Abuse Monitor] ${roomid}`;
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
@@ -532,6 +531,11 @@ export const pages: Chat.PageTable = {
 				buf += `<hr /><p class="error">The abuse monitor has not flagged the given room.</p>`;
 				return buf;
 			}
+			const titleParts = room.roomid.split('-');
+			if (titleParts[titleParts.length - 1].endsWith('pw')) {
+				titleParts.pop(); // remove password
+			}
+			this.title = `[Abuse Monitor] ${titleParts.join('-')}`;
 			buf += `<hr />`;
 			if (!cache[roomid].claimed) {
 				cache[roomid].claimed = user.id;
