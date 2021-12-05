@@ -1687,15 +1687,14 @@ export const Chat = new class {
 		// If strings is an array (normally the case), combine before translating.
 		const trString = typeof strings === 'string' ? strings : strings.join('${}');
 
-		if (!Chat.translations.has(language)) {
-			if (!Chat.translationsLoaded) return trString;
+		if (Chat.translationsLoaded && !Chat.translations.has(language)) {
 			throw new Error(`Trying to translate to a nonexistent language: ${language}`);
 		}
 		if (!strings.length) {
 			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => Chat.tr(language, fStrings, ...fKeys));
 		}
 
-		const entry = Chat.translations.get(language)!.get(trString);
+		const entry = Chat.translations.get(language)?.get(trString);
 		let [translated, keyLabels, valLabels] = entry || ["", [], []];
 		if (!translated) translated = trString;
 
