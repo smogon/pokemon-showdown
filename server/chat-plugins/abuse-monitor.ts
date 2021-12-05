@@ -307,7 +307,18 @@ export const commands: Chat.ChatCommands = {
 			// post punishment, we want to know about it
 			delete cache[target];
 			notifyStaff();
-			Chat.refreshPageFor(`abusemonitor-view-${target}`, 'staff');
+			this.closePage(`abusemonitor-view-${target}`);
+		},
+		run(target, room, user) {
+			this.checkCan('lock');
+			const [roomid, cmd] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const tarRoom = Rooms.get(roomid) || Rooms.get('staff');
+			if (!tarRoom) return this.popupReply(`The room "${roomid}" does not exist.`);
+			this.room = tarRoom;
+			if (!user.inRooms.has(tarRoom.roomid)) {
+				user.joinRoom(tarRoom, this.connection);
+			}
+			this.parse(cmd);
 		},
 		view(target, room, user) {
 			return this.parse(`/j view-abusemonitor-view-${target.toLowerCase().trim()}`);
@@ -520,21 +531,22 @@ export const pages: Chat.PageTable = {
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
-			buf += Utils.html`<h2>Abuse Monitor - <a href="/${roomid}">${roomid}</a></h2>`;
+			buf += `<h2>Abuse Monitor`;
 			const room = Rooms.get(roomid);
 			if (!room) {
 				if (cache[roomid]) delete cache[roomid];
-				buf += `<hr /><p class="error">No such room.</p>`;
+				buf += `</h2><hr /><p class="error">No such room.</p>`;
 				return buf;
 			}
 			if (!cache[roomid]) {
-				buf += `<hr /><p class="error">The abuse monitor has not flagged the given room.</p>`;
+				buf += `</h2><hr /><p class="error">The abuse monitor has not flagged the given room.</p>`;
 				return buf;
 			}
 			const titleParts = room.roomid.split('-');
 			if (titleParts[titleParts.length - 1].endsWith('pw')) {
 				titleParts.pop(); // remove password
 			}
+			buf += Utils.html` - ${room.title}</h2>`;
 			this.title = `[Abuse Monitor] ${titleParts.join('-')}`;
 			buf += `<hr />`;
 			if (!cache[roomid].claimed) {
@@ -562,18 +574,7 @@ export const pages: Chat.PageTable = {
 				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id}</summary><div class="infobox">`;
 				const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
 				for (const name of punishments) {
-					let cmdParts = [Utils.html`/msgroom ${roomid},/${toID(name)} ${id},{reason}`];
-					if (!user.inRooms.has(room.roomid)) {
-						cmdParts = [
-							// we want the punishment to be shown in the room
-							// so that the users are aware
-							Utils.html`/join ${roomid}`,
-							'', // needed to give time to join
-							...cmdParts,
-							Utils.html`/msgroom ${roomid},/part`,
-						];
-					}
-					buf += `<form data-submitsend="${cmdParts.join('&#10;')}">`;
+					buf += `<form data-submitsend="/am run ${roomid},/${toID(name)} ${id},{reason}">`;
 					buf += `<button class="button notifying" type="submit">${name}</button><br />`;
 					buf += `Optional reason: <input name="reason" />`;
 					buf += `</form><br />`;
