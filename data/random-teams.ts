@@ -1983,7 +1983,7 @@ export class RandomTeams {
 		// No Dmax levelling
 		} else if (isNoDynamax) {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
-			const tierScale: {[k: string]: number} = {
+			const tierScale: Partial<Record<Species['tier'], number>> = {
 				Uber: 76,
 				OU: 80,
 				UUBL: 81,
@@ -2005,11 +2005,24 @@ export class RandomTeams {
 				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, solrock: 90, arctozolt: 88, reuniclus: 87,
 				decidueye: 87, noivern: 85, magnezone: 82, slowking: 81,
 			};
-			level = customScale[species.id] || tierScale[tier];
+			level = customScale[species.id] || tierScale[tier] || 80;
 		// BDSP tier levelling
 		} else if (this.dex.currentMod === 'gen8bdsp') {
-			// TODO: figure out BDSP levelling based on the in-room poll
-			level = 80;
+			const tierScale: Partial<Record<Species['tier'], number>> = {
+				Uber: 76, Unreleased: 76,
+				OU: 80,
+				UUBL: 81,
+				UU: 82,
+				RUBL: 83,
+				RU: 84,
+				NUBL: 85,
+				NU: 86,
+				PUBL: 87,
+				PU: 88, "(PU)": 88, NFE: 88,
+			};
+			const customScale: {[k: string]: number} = {};
+
+			level = customScale[species.id] || tierScale[species.tier] || 80;
 		// Arbitrary levelling base on data files (typically winrate-influenced)
 		} else if (species.randomBattleLevel) {
 			level = species.randomBattleLevel;
