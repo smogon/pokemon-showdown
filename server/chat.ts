@@ -1451,6 +1451,17 @@ export class CommandContext extends MessageContext {
 			this.parse(`/join view-${pageid}`);
 		}
 	}
+	closePage(pageid: string) {
+		for (const connection of this.user.connections) {
+			if (connection.openPages?.has(pageid)) {
+				connection.send(`>view-${pageid}\n|deinit`);
+				connection.openPages.delete(pageid);
+				if (!connection.openPages.size) {
+					connection.openPages = null;
+				}
+			}
+		}
+	}
 }
 
 export const Chat = new class {
