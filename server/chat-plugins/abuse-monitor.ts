@@ -548,6 +548,7 @@ export const pages: Chat.PageTable = {
 			}
 			buf += Utils.html` - ${room.title}</h2>`;
 			this.title = `[Abuse Monitor] ${titleParts.join('-')}`;
+			buf += `<p>${Chat.formatText(`<<${room.roomid}>>`)}</p>`;
 			buf += `<hr />`;
 			if (!cache[roomid].claimed) {
 				cache[roomid].claimed = user.id;
