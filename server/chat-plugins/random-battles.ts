@@ -935,6 +935,10 @@ export const commands: Chat.ChatCommands = {
 		if (!species.exists) {
 			throw new Chat.ErrorMessage(`Species ${species.name} does not exist in the specified format.`);
 		}
+		if (!species.randomBattleMoves && !species.randomDoubleBattleMoves && !species.randomBattleNoDynamaxMoves) {
+			const modMessage = dex.currentMod === 'base' ? format.name : dex.currentMod;
+			throw new Chat.ErrorMessage(`${species.name} does not have random battle moves in ${modMessage}.`);
+		}
 
 		// Criteria
 		const criteria: SetCriteria = {
