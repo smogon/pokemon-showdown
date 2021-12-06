@@ -878,7 +878,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	sunflora: {
 		tier: "UU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["energyball", "sludgebomb", "sythesis", "lightscreen"],
+		randomBattleMoves: ["energyball", "sludgebomb", "synthesis", "lightscreen"],
 	},
 	yanma: {
 		tier: "LC",
