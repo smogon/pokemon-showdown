@@ -276,6 +276,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['[Gen 8] LC', '+CAP'],
+		banlist: ['Cawdet'],
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
