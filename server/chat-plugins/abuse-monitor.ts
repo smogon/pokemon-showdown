@@ -81,7 +81,7 @@ export interface PMResult {
 
 let throttleTime: number | null = null;
 export const request = throttling(
-	Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post, 100, 1000, 300
+	Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post, 40, 1000, 200
 );
 
 export async function classify(text: string) {
