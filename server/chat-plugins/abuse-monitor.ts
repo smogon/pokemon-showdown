@@ -23,6 +23,13 @@ const ATTRIBUTES = {
 	"PROFANITY": {},
 	"THREAT": {},
 };
+const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
+	'lock': '/lock',
+	'weeklock': '/weeklock',
+	'warn': '/warn',
+	'weeknamelock': '/wnl',
+	'namelock': '/nl',
+};
 
 export const cache: {
 	[roomid: string]: {
@@ -366,16 +373,27 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff();
 			this.closePage(`abusemonitor-view-${target}`);
 		},
-		run(target, room, user) {
+		async nojoinpunish(target, room, user) {
 			this.checkCan('lock');
-			const [roomid, cmd] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const [roomid, type, rest] = Utils.splitFirst(target, ',', 3).map(f => f.trim());
 			const tarRoom = Rooms.get(roomid) || Rooms.get('staff');
 			if (!tarRoom) return this.popupReply(`The room "${roomid}" does not exist.`);
-			this.room = tarRoom;
-			if (!user.inRooms.has(tarRoom.roomid)) {
-				user.joinRoom(tarRoom, this.connection);
+			const cmd = NOJOIN_COMMAND_WHITELIST[toID(type)];
+			if (!cmd) {
+				return this.errorReply(
+					`Invalid punishment given. ` +
+					`Must be one of ${Object.keys(NOJOIN_COMMAND_WHITELIST).join(', ')}.`
+				);
 			}
-			this.parse(cmd);
+			this.room = tarRoom;
+			this.room.reportJoin('j', user.getIdentityWithStatus(this.room), user);
+			const result = await this.parse(`${cmd} ${rest}`, {bypassRoomCheck: true});
+			if (result) { // command succeeded - send followup
+				this.addModAction(
+					'If you have questions about this action, please contact staff by typing ``/ht`` in any chat.'
+				);
+			}
+			this.room.reportJoin('l', user.getIdentityWithStatus(this.room), user);
 		},
 		view(target, room, user) {
 			return this.parse(`/j view-abusemonitor-view-${target.toLowerCase().trim()}`);
@@ -632,7 +650,7 @@ export const pages: Chat.PageTable = {
 				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id}</summary><div class="infobox">`;
 				const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
 				for (const name of punishments) {
-					buf += `<form data-submitsend="/am run ${roomid},/${toID(name)} ${id},{reason}">`;
+					buf += `<form data-submitsend="/am nojoinpunish ${roomid},${toID(name)},${id},{reason}">`;
 					buf += `<button class="button notifying" type="submit">${name}</button><br />`;
 					buf += `Optional reason: <input name="reason" />`;
 					buf += `</form><br />`;
