@@ -143,6 +143,19 @@ describe('[Gen 8] Random Battle', () => {
 	it('should not allow Extreme Speed + Dragon Dance Rayquaza', () => {
 		testNotBothMoves('rayquaza', options, 'extremespeed', 'dragondance');
 	});
+
+	it('should not generate Noctowl with three attacks and Roost', () => {
+		const dex = Dex.forFormat(options.format);
+		testSet('noctowl', options, set => {
+			const attacks = set.moves.filter(m => dex.moves.get(m).category !== 'Status');
+			assert(
+				!(set.moves.includes('roost') && attacks.length === 3),
+				`Noctowl should not get three attacks and Roost (got ${set.moves})`
+			);
+		});
+	});
+
+	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
@@ -219,5 +232,32 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 
 	it('should give Unown a Choice item', () => {
 		testSet('unown', options, set => assert.match(set.item, /^Choice /));
+	});
+
+	it('should give Toxic Orb to Gliscor and Zangoose', () => {
+		testSet('gliscor', options, set => assert.equal(set.item, 'Toxic Orb'));
+		testSet('zangoose', options, set => assert.equal(set.item, 'Toxic Orb', set.ability));
+	});
+
+	it('should not generate Power Herb + Solar Beam on Drought sets', () => {
+		for (const species of ['ninetales', 'torkoal']) {
+			testSet(species, options, set => {
+				if (set.ability !== 'Drought') return;
+				if (!set.moves.includes('solarbeam')) return;
+				assert.notEqual(set.item, 'Power Herb', `${species} should not get Power Herb with Solar Beam + Drought`);
+			});
+		}
+	});
+
+	it('should not give Unown Leftovers', () => {
+		testSet('unown', options, set => assert.notEqual(set.item, 'Leftovers'));
+	});
+
+	it('should always give Jumpluff Acrobatics', () => {
+		testAlwaysHasMove('jumpluff', options, 'acrobatics');
+	});
+
+	it('should always give Smeargle Spore', () => {
+		testAlwaysHasMove('smeargle', options, 'spore');
 	});
 });
