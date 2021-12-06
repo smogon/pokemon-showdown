@@ -80,7 +80,7 @@ export interface PMResult {
 }
 
 let throttleTime: number | null = null;
-export const request = throttling(Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post, 20, 1000, 100);
+export const request = throttling(Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post, 50, 1000, 100);
 
 export async function classify(text: string) {
 	if (throttleTime && Date.now() - throttleTime < 5000) {
