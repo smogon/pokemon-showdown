@@ -710,7 +710,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["bravebird", "closecombat", "firstimpression", "knockoff", "swordsdance"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["bravebird", "closecombat", "firstimpression", "knockoff", "poisonjab", "protect", "swordsdance"],
-		randomDoubleBattleLevel: 84,
+		randomDoubleBattleLevel: 85,
 		randomBattleNoDynamaxMoves: ["bravebird", "closecombat", "firstimpression", "knockoff", "poisonjab", "swordsdance"],
 		tier: "NU",
 		doublesTier: "(DUU)",
@@ -3443,7 +3443,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	audino: {
 		randomBattleMoves: ["healbell", "knockoff", "protect", "toxic", "wish"],
-		randomBattleLevel: 88,
+		randomBattleLevel: 90,
 		randomDoubleBattleMoves: ["bodyslam", "healpulse", "helpinghand", "knockoff", "protect", "thunderwave"],
 		randomDoubleBattleLevel: 89,
 		tier: "PU",
@@ -3832,7 +3832,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["bugbuzz", "gigadrain", "stickyweb", "thunder", "voltswitch"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["bugbuzz", "electroweb", "energyball", "protect", "stickyweb", "thunder"],
-		randomDoubleBattleLevel: 86,
+		randomDoubleBattleLevel: 85,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -4194,7 +4194,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	keldeoresolute: {
 		randomBattleMoves: ["airslash", "calmmind", "hydropump", "icywind", "scald", "secretsword", "substitute"],
-		randomBattleLevel: 80,
+		randomBattleLevel: 79,
 	},
 	meloetta: {
 		isNonstandard: "Past",
@@ -5936,7 +5936,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	dracozolt: {
 		randomBattleMoves: ["aerialace", "boltbeak", "earthquake", "lowkick", "outrage"],
-		randomBattleLevel: 79,
+		randomBattleLevel: 78,
 		randomDoubleBattleMoves: ["aerialace", "boltbeak", "dragonclaw", "highhorsepower", "rockslide"],
 		randomDoubleBattleLevel: 82,
 		randomBattleNoDynamaxMoves: ["boltbeak", "dragonclaw", "earthquake", "outrage"],
