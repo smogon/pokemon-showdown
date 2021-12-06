@@ -85,7 +85,7 @@ export const request = throttling(
 );
 
 export async function classify(text: string) {
-	if (throttleTime && Date.now() - throttleTime < 5000) {
+	if (throttleTime && (Date.now() - throttleTime < 10000)) {
 		return null;
 	}
 	if (throttleTime) throttleTime = null;
@@ -116,13 +116,10 @@ export async function classify(text: string) {
 		}
 		return result;
 	} catch (e: any) {
+		throttleTime = Date.now();
 		if (e.message.startsWith('Request timeout')) {
 			// just ignore this. error on their end not ours.
 			// todo maybe stop sending requests for a bit?
-			return null;
-		}
-		if (e.statusCode === 429) {
-			throttleTime = Date.now();
 			return null;
 		}
 		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(request)});
