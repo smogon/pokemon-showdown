@@ -79,57 +79,57 @@ export interface PMResult {
 }
 
 function time() {
-    return Math.floor(Date.now() / 1000);
+	return Math.floor(Date.now() / 1000);
 }
 
 export class Limiter {
-    second = time();
-    countThisSecond = 0;
-    private counts = [] as number[];
-    private period: number;
-    max: number;
-    constructor(max: number, period: number) {
-        this.max = max;
-        this.period = period;
-    }
-    shouldRequest(depth = 0) {
-        const now = time();
-        if (this.second !== now) {
-            this.counts.push(this.countThisSecond);
-            this.trimCounts();
-            this.second = now;
-            this.countThisSecond = 0;
-        }
-        const count = this.countThisSecond + 1;
-        const total = this.counts
-            .concat([count])
-            .reduce((a, b) => a+b);
-        const avg = total / (this.counts.length + 1);
-        // if it'd go over, queue instead
-        if (avg > this.max) {
-            return false;
-        }
-        // if it'd succeed, now we increment the count since 
-        // we're going to allow it to happen
-        this.countThisSecond++;
-        return true;
-    }
-    /*private enqueue(depth = 0) {
-    
+	second = time();
+	countThisSecond = 0;
+	private counts = [] as number[];
+	private period: number;
+	max: number;
+	constructor(max: number, period: number) {
+		this.max = max;
+		this.period = period;
+	}
+	shouldRequest(depth = 0) {
+		const now = time();
+		if (this.second !== now) {
+			this.counts.push(this.countThisSecond);
+			this.trimCounts();
+			this.second = now;
+			this.countThisSecond = 0;
+		}
+		const count = this.countThisSecond + 1;
+		const total = this.counts
+			.concat([count])
+			.reduce((a, b) => a + b);
+		const avg = total / (this.counts.length + 1);
+		// if it'd go over, queue instead
+		if (avg > this.max) {
+			return false;
+		}
+		// if it'd succeed, now we increment the count since
+		// we're going to allow it to happen
+		this.countThisSecond++;
+		return true;
+	}
+	/* private enqueue(depth = 0) {
+
         return new Promise<boolean>(resolve => {
             setTimeout(() => resolve(this.shouldRequest(depth + 1)), 1000);
         });
     }*/
-    getCounts() {
-        this.trimCounts();
-        return this.counts;
-    }
-    private trimCounts() {
-        if (this.counts.length > this.period) {
-            // oldest first
-            while (this.counts.length > this.period) this.counts.shift();
-        }
-    }
+	getCounts() {
+		this.trimCounts();
+		return this.counts;
+	}
+	private trimCounts() {
+		if (this.counts.length > this.period) {
+			// oldest first
+			while (this.counts.length > this.period) this.counts.shift();
+		}
+	}
 }
 
 function isCommon(message: string) {
@@ -145,7 +145,7 @@ export async function classify(text: string) {
 		return null;
 	}
 	if (throttleTime) throttleTime = null;
-	
+
 	const requestData: PerspectiveRequest = {
 		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
 		languages: ['en'],
@@ -179,7 +179,7 @@ export async function classify(text: string) {
 			// todo maybe stop sending requests for a bit?
 			return null;
 		}
-		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(request)});
+		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
 		return null;
 	}
 }
