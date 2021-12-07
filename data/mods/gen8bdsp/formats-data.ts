@@ -1063,7 +1063,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	smeargle: {
 		tier: "UU",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		randomBattleMoves: ["stealthrock", "spikes", "spore", "toxicspikes", "stickyweb"],
 	},
 	miltank: {
