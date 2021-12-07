@@ -11,7 +11,6 @@
 import {FS, Utils, Net, ProcessManager, Repl} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
-import {throttling} from '../../tools/set-import/importer';
 
 const WHITELIST = ["mia"];
 // 20m. this is mostly here so we can use Monitor.slow()
@@ -80,7 +79,7 @@ export interface PMResult {
 }
 
 let throttleTime: number | null = null;
-export const request = throttling(
+export const request = Utils.throttling(
 	Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post, 40, 1000, 200
 );
 
