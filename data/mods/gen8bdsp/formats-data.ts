@@ -1063,7 +1063,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	smeargle: {
 		tier: "UU",
-		doublesTier: "DUbers",
+		doublesTier: "DUber",
 		randomBattleMoves: ["stealthrock", "spikes", "spore", "toxicspikes", "stickyweb", "whirlwind"],
 	},
 	miltank: {
@@ -2033,7 +2033,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	giratina: {
 		tier: "Uber",
 		doublesTier: "DUber",
-		randomBattleMoves: ["shadowball", "dragonpulse", "rest", "sleeptalk", "aurasphere"],
+		randomBattleMoves: ["shadowball", "dragonpulse", "rest", "sleeptalk", "aurasphere", "calmmind"],
 	},
 	giratinaorigin: {
 		tier: "Uber",
