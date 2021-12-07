@@ -82,60 +82,48 @@ function time() {
 	return Math.floor(Date.now() / 1000);
 }
 
+export class RollingCounter {
+	counts: number[] = [0];
+	readonly size: number;
+	constructor(limit: number) {
+		this.size = limit;
+	}
+	increment() {
+		this.counts[this.counts.length - 1]++;
+	}
+	rollOver(amount: number) {
+		if (amount > this.size) {
+			this.counts = Array(this.size).fill(0);
+			return;
+		}
+		for (let i = 0; i < amount; i++) {
+			this.counts.push(0);
+			if (this.counts.length > this.size) this.counts.shift();
+		}
+	}
+	mean() {
+		let total = 0;
+		for (const elem of this.counts) total++;
+		return total / this.counts.length;
+	}
+}
+
 export class Limiter {
-	second = time();
-	countThisSecond = 0;
-	private counts = [] as number[];
-	private period: number;
-	max: number;
+	readonly counter: RollingCounter;
+	readonly max: number;
+	lastCounterRoll = time();
 	constructor(max: number, period: number) {
 		this.max = max;
-		this.period = period;
+		this.counter = new RollingCounter(period);
 	}
 	shouldRequest() {
 		const now = time();
-		if (this.second !== now) {
-			const diff = now - this.second;
-			if (diff <= this.period) {
-				for (let i = 0; i < (diff - 1); i++) {
-					this.counts.push(0);
-				}
-			} else {
-				this.counts = Array(this.period).fill(0);
-			}
-			this.counts.push(this.countThisSecond);
-			this.trimCounts();
-			this.second = now;
-			this.countThisSecond = 0;
-		}
-		const count = this.countThisSecond + 1;
-		const counts = this.getCounts();
-		const total = [...counts, count].reduce((a, b) => a + b);
-		const avg = total / (counts.length + 1);
-		// if it'd go over, queue instead
-		if (avg > this.max) {
-			return false;
-		}
-		// if it'd succeed, now we increment the count since
-		// we're going to allow it to happen
-		this.countThisSecond++;
-		return true;
-	}
-	/* private enqueue(depth = 0) {
+		this.counter.rollOver(now - this.lastCounterRoll);
+		this.lastCounterRoll = now;
 
-        return new Promise<boolean>(resolve => {
-            setTimeout(() => resolve(this.shouldRequest(depth + 1)), 1000);
-        });
-    }*/
-	getCounts() {
-		this.trimCounts();
-		return this.counts;
-	}
-	private trimCounts() {
-		if (this.counts.length > this.period) {
-			// oldest first
-			while (this.counts.length > this.period) this.counts.shift();
-		}
+		if (this.counter.mean() > this.max) return false;
+		this.counter.increment();
+		return true;
 	}
 }
 
