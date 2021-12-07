@@ -377,44 +377,6 @@ export function formatSQLArray(arr: unknown[], args?: unknown[]) {
 	return [...'?'.repeat(arr.length)].join(', ');
 }
 
-export function throttling<I, O>(
-	fn: (args: I) => Promise<O>, limit: number, interval: number, maxPoolSize?: number
-): (args: I) => Promise<O | null> {
-	const queue = new Map();
-	let currentTick = 0;
-	let activeCount = 0;
-
-	const throttled = (args: I) => {
-		if (maxPoolSize && queue.size >= maxPoolSize) {
-			return Promise.resolve(null);
-		}
-		let timeout: NodeJS.Timeout;
-		return new Promise<O>((resolve, reject) => {
-			const execute = () => {
-				resolve(fn(args));
-				queue.delete(timeout);
-			};
-
-			const now = Date.now();
-
-			if (now - currentTick > interval) {
-				activeCount = 1;
-				currentTick = now;
-			} else if (activeCount < limit) {
-				activeCount++;
-			} else {
-				currentTick += interval;
-				activeCount = 1;
-			}
-
-			timeout = setTimeout(execute, currentTick - now);
-			queue.set(timeout, reject);
-		});
-	};
-
-	return throttled;
-}
-
 export class Multiset<T> extends Map<T, number> {
 	add(key: T) {
 		this.set(key, (this.get(key) ?? 0) + 1);
