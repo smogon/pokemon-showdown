@@ -128,7 +128,7 @@ export class Limiter {
 }
 
 function isCommon(message: string) {
-	message = message.replace(/\?!\., ;:/ig, '');
+	message = message.toLowerCase().replace(/\?!\., ;:/g, '');
 	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
 }
 
