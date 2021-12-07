@@ -78,16 +78,74 @@ export interface PMResult {
 	flags: string[];
 }
 
-let throttleTime: number | null = null;
-export const request = Utils.throttling(
-	Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post, 40, 1000, 200
-);
+function time() {
+    return Math.floor(Date.now() / 1000);
+}
 
+export class Limiter {
+    second = time();
+    countThisSecond = 0;
+    private counts = [] as number[];
+    private period: number;
+    max: number;
+    constructor(max: number, period: number) {
+        this.max = max;
+        this.period = period;
+    }
+    shouldRequest(depth = 0) {
+        const now = time();
+        if (this.second !== now) {
+            this.counts.push(this.countThisSecond);
+            this.trimCounts();
+            this.second = now;
+            this.countThisSecond = 0;
+        }
+        const count = this.countThisSecond + 1;
+        const total = this.counts
+            .concat([count])
+            .reduce((a, b) => a+b);
+        const avg = total / (this.counts.length + 1);
+        // if it'd go over, queue instead
+        if (avg > this.max) {
+            return false;
+        }
+        // if it'd succeed, now we increment the count since 
+        // we're going to allow it to happen
+        this.countThisSecond++;
+        return true;
+    }
+    /*private enqueue(depth = 0) {
+    
+        return new Promise<boolean>(resolve => {
+            setTimeout(() => resolve(this.shouldRequest(depth + 1)), 1000);
+        });
+    }*/
+    getCounts() {
+        this.trimCounts();
+        return this.counts;
+    }
+    private trimCounts() {
+        if (this.counts.length > this.period) {
+            // oldest first
+            while (this.counts.length > this.period) this.counts.shift();
+        }
+    }
+}
+
+function isCommon(message: string) {
+	message = message.replace(/\?!\., ;:/ig, '');
+	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
+}
+
+const limiter = new Limiter(10, 200);
+let throttleTime: number | null = null;
 export async function classify(text: string) {
+	if (!limiter.shouldRequest() || isCommon(text)) return null;
 	if (throttleTime && (Date.now() - throttleTime < 10000)) {
 		return null;
 	}
 	if (throttleTime) throttleTime = null;
+	
 	const requestData: PerspectiveRequest = {
 		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
 		languages: ['en'],
@@ -95,7 +153,7 @@ export async function classify(text: string) {
 		comment: {text},
 	};
 	try {
-		const raw = await request({
+		const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
 			query: {
 				key: Config.perspectiveKey,
 			},
