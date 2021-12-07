@@ -63,7 +63,7 @@ export async function importAll() {
 
 	const imports = [];
 	for (let gen = 1; gen <= 8; gen++) {
-		imports.push(importGen(gen as GenerationNum, index!));
+		imports.push(importGen(gen as GenerationNum, index));
 	}
 
 	return Promise.all(imports);
@@ -105,7 +105,7 @@ async function importGen(gen: GenerationNum, index: string) {
 		const stats = await getStatisticsURL(index, format);
 		if (!stats) continue;
 		try {
-			const statistics = smogon.Statistics.process((await request(stats.url))!);
+			const statistics = smogon.Statistics.process(await request(stats.url));
 			const sets = importUsageBasedSets(gen, format, statistics, stats.count);
 			if (Object.keys(sets).length) {
 				data[format.id] = data[format.id] || {};
@@ -398,7 +398,7 @@ const SMOGON = {
 
 const getAnalysis = retrying(async (u: string) => {
 	try {
-		return smogon.Analyses.process((await request(u))!);
+		return smogon.Analyses.process(await request(u));
 	} catch (err: any) {
 		// Don't try HTTP errors that we've already retried
 		if (err.message.startsWith('HTTP')) {
@@ -588,17 +588,12 @@ function retrying<I, O>(fn: (args: I) => Promise<O>, retries: number, wait: numb
 	return retry;
 }
 
-export function throttling<I, O>(
-	fn: (args: I) => Promise<O>, limit: number, interval: number, maxPoolSize?: number
-): (args: I) => Promise<O | null> {
+function throttling<I, O>(fn: (args: I) => Promise<O>, limit: number, interval: number): (args: I) => Promise<O> {
 	const queue = new Map();
 	let currentTick = 0;
 	let activeCount = 0;
 
 	const throttled = (args: I) => {
-		if (maxPoolSize && queue.size >= maxPoolSize) {
-			return Promise.resolve(null);
-		}
 		let timeout: NodeJS.Timeout;
 		return new Promise<O>((resolve, reject) => {
 			const execute = () => {
