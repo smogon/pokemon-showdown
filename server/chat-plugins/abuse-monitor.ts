@@ -92,9 +92,17 @@ export class Limiter {
 		this.max = max;
 		this.period = period;
 	}
-	shouldRequest(depth = 0) {
+	shouldRequest() {
 		const now = time();
 		if (this.second !== now) {
+			const diff = now - this.second;
+			if (diff <= this.period) {
+				for (let i = 0; i < (diff - 1); i++) {
+					this.counts.push(0);
+				}
+			} else {
+				this.counts = Array(this.period).fill(0);
+			}
 			this.counts.push(this.countThisSecond);
 			this.trimCounts();
 			this.second = now;
