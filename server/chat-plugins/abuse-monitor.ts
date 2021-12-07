@@ -103,7 +103,7 @@ export class RollingCounter {
 	}
 	mean() {
 		let total = 0;
-		for (const elem of this.counts) total++;
+		for (const elem of this.counts) total += elem;
 		return total / this.counts.length;
 	}
 }
@@ -362,7 +362,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		resolve(target) {
 			this.checkCan('lock');
-			target = target.toLowerCase().trim().replace(/ /ig, '');
+			target = target.toLowerCase().trim().replace(/ +/g, '');
 			if (!target) return this.parse(`/help abusemonitor`);
 			if (!cache[target]?.staffNotified) {
 				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
