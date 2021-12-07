@@ -101,8 +101,9 @@ export class Limiter {
 			this.countThisSecond = 0;
 		}
 		const count = this.countThisSecond + 1;
-		const total = [...this.counts, count].reduce((a, b) => a + b);
-		const avg = total / (this.counts.length + 1);
+		const counts = this.getCounts();
+		const total = [...counts, count].reduce((a, b) => a + b);
+		const avg = total / (counts.length + 1);
 		// if it'd go over, queue instead
 		if (avg > this.max) {
 			return false;
