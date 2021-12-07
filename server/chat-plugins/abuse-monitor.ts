@@ -137,10 +137,10 @@ function isCommon(message: string) {
 	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
 }
 
-const limiter = new Limiter(10, 200);
+const limiter = new Limiter(10, 10);
 let throttleTime: number | null = null;
 export async function classify(text: string) {
-	if (!limiter.shouldRequest() || isCommon(text)) return null;
+	if (isCommon(text) || !limiter.shouldRequest()) return null;
 	if (throttleTime && (Date.now() - throttleTime < 10000)) {
 		return null;
 	}
