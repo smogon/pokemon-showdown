@@ -1063,7 +1063,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	smeargle: {
 		tier: "UU",
-		doublesTier: "DOU",
+		doublesTier: "DUbers",
 		randomBattleMoves: ["stealthrock", "spikes", "spore", "toxicspikes", "stickyweb", "whirlwind"],
 	},
 	miltank: {
@@ -1973,7 +1973,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	rotomheat: {
 		tier: "UU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["thunderbolt", "overheat", "voltswitch", "willowisp", "trick", "nastyplot],
+		randomBattleMoves: ["thunderbolt", "overheat", "voltswitch", "willowisp", "trick", "nastyplot"],
 	},
 	rotomwash: {
 		tier: "OU",
@@ -2101,7 +2101,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	arceusfire: {
 		isNonstandard: "Unobtainable",
-		randomBattleMoves: ["thunderbolt", "judgment", "surf", "recover"],
+		randomBattleMoves: ["thunderbolt", "judgment", "surf", "recover", "calmmind"],
 	},
 	arceusflying: {
 		isNonstandard: "Unobtainable",
