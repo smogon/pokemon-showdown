@@ -1,4 +1,4 @@
- /**
+/**
  * Utils library
  *
  * Miscellaneous utility functions that don't really have a better place.
