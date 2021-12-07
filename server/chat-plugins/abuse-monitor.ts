@@ -25,19 +25,12 @@ const ATTRIBUTES = {
 };
 
 export const cache: {
-	[roomid: string]: {[userid: string]: number} & {
+	[roomid: string]: {
+		users: Record<string, number>,
 		staffNotified?: boolean,
 		claimed?: ID,
 	},
 } = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
-
-for (const k in cache) {
-	const entry = cache[k] as any;
-	if (entry.flags) delete entry.flags;
-	if (entry.users) {
-		cache[k] = {...entry.users, staffNotified: entry.notified};
-	}
-}
 
 const defaults: FilterSettings = {
 	threshold: 4,
@@ -252,11 +245,11 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	void (async () => {
 		const {score, flags} = await PM.query({comment: message});
 		if (score) {
-			if (!cache[roomid]) cache[roomid] = {};
-			if (!cache[roomid][user.id]) cache[roomid][user.id] = 0;
-			cache[roomid][user.id] += score;
+			if (!cache[roomid]) cache[roomid] = {users: {}};
+			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
+			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
-			if (cache[roomid][user.id] >= settings.threshold) {
+			if (cache[roomid].users[user.id] >= settings.threshold) {
 				cache[roomid].staffNotified = true;
 				notifyStaff();
 				hitThreshold = 1;
