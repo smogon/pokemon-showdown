@@ -1116,7 +1116,7 @@ export class CommandContext extends MessageContext {
 						this.tr`Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
 					);
 				}
-				if (!(user.id in room.users)) {
+				if (!this.bypassRoomCheck && !(user.id in room.users)) {
 					connection.popup(`You can't send a message to this room without being in it.`);
 					return null;
 				}
