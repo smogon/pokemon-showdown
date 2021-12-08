@@ -811,6 +811,11 @@ export class CommandContext extends MessageContext {
 		}
 	}
 	errorReply(message: string) {
+		if (this.bypassRoomCheck) { // if they're not in the room, we still want a good error message for them
+			return this.popupReply(
+				`|html|<strong class="message-error">${message.replace(/\n/ig, '<br />')}</strong>`
+			);
+		}
 		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
 	}
 	addBox(htmlContent: string | JSX.VNode) {
