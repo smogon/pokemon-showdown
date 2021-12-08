@@ -912,7 +912,7 @@ export class DexFormats {
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
 					const species: Species = table[id] as Species;
-					if (species.otherFormes && ruleid !== species.id + toID(species.baseForme)) {
+					if ((species.otherFormes || species.cosmeticFormes) && ruleid !== species.id + toID(species.baseForme)) {
 						matches.push('basepokemon:' + id);
 						continue;
 					}
