@@ -389,8 +389,9 @@ export const commands: Chat.ChatCommands = {
 			this.room.reportJoin('j', user.getIdentityWithStatus(this.room), user);
 			const result = await this.parse(`${cmd} ${rest}`, {bypassRoomCheck: true});
 			if (result) { // command succeeded - send followup
-				this.addModAction(
-					'If you have questions about this action, please contact staff by typing ``/ht`` in any chat.'
+				this.add(
+					'|c|&|/raw If you have questions about this action, please contact staff ' +
+					'by making a <a href="view-help-request" class="button">help ticket</a>'
 				);
 			}
 			this.room.reportJoin('l', user.getIdentityWithStatus(this.room), user);
