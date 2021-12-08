@@ -375,7 +375,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		async nojoinpunish(target, room, user) {
 			this.checkCan('lock');
-			const [roomid, type, rest] = Utils.splitFirst(target, ',', 3).map(f => f.trim());
+			const [roomid, type, rest] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
 			const tarRoom = Rooms.get(roomid) || Rooms.get('staff');
 			if (!tarRoom) return this.popupReply(`The room "${roomid}" does not exist.`);
 			const cmd = NOJOIN_COMMAND_WHITELIST[toID(type)];
