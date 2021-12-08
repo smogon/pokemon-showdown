@@ -608,6 +608,7 @@ export const commands: Chat.ChatCommands = {
 
 		// Automatically upload replays as evidence/reference to the punishment
 		if (saveReplay) this.parse('/savereplay forpunishment');
+		return true;
 	},
 	warnhelp: [
 		`/warn OR /k [username], [reason] - Warns a user showing them the site rules and [reason] in an overlay.`,
