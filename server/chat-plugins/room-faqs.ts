@@ -86,6 +86,7 @@ export const commands: Chat.ChatCommands = {
 		if (!useHTML) {
 			text = text.replace(/^>/, '&gt;');
 		} else {
+			text = text.replace(/\n/ig, '<br />');
 			text = this.checkHTML(text);
 		}
 
