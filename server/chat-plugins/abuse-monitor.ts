@@ -23,21 +23,21 @@ const ATTRIBUTES = {
 	"PROFANITY": {},
 	"THREAT": {},
 };
+const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
+	'lock': '/lock',
+	'weeklock': '/weeklock',
+	'warn': '/warn',
+	'weeknamelock': '/wnl',
+	'namelock': '/nl',
+};
 
 export const cache: {
-	[roomid: string]: {[userid: string]: number} & {
+	[roomid: string]: {
+		users: Record<string, number>,
 		staffNotified?: boolean,
 		claimed?: ID,
 	},
 } = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
-
-for (const k in cache) {
-	const entry = cache[k] as any;
-	if (entry.flags) delete entry.flags;
-	if (entry.users) {
-		cache[k] = {...entry.users, staffNotified: entry.notified};
-	}
-}
 
 const defaults: FilterSettings = {
 	threshold: 4,
@@ -78,8 +78,70 @@ export interface PMResult {
 	flags: string[];
 }
 
+function time() {
+	return Math.floor(Date.now() / 1000);
+}
+
+export class RollingCounter {
+	counts: number[] = [0];
+	readonly size: number;
+	constructor(limit: number) {
+		this.size = limit;
+	}
+	increment() {
+		this.counts[this.counts.length - 1]++;
+	}
+	rollOver(amount: number) {
+		if (amount > this.size) {
+			this.counts = Array(this.size).fill(0);
+			return;
+		}
+		for (let i = 0; i < amount; i++) {
+			this.counts.push(0);
+			if (this.counts.length > this.size) this.counts.shift();
+		}
+	}
+	mean() {
+		let total = 0;
+		for (const elem of this.counts) total += elem;
+		return total / this.counts.length;
+	}
+}
+
+export class Limiter {
+	readonly counter: RollingCounter;
+	readonly max: number;
+	lastCounterRoll = time();
+	constructor(max: number, period: number) {
+		this.max = max;
+		this.counter = new RollingCounter(period);
+	}
+	shouldRequest() {
+		const now = time();
+		this.counter.rollOver(now - this.lastCounterRoll);
+		this.lastCounterRoll = now;
+
+		if (this.counter.mean() > this.max) return false;
+		this.counter.increment();
+		return true;
+	}
+}
+
+function isCommon(message: string) {
+	message = message.toLowerCase().replace(/\?!\., ;:/g, '');
+	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
+}
+
+const limiter = new Limiter(15, 10);
+let throttleTime: number | null = null;
 export async function classify(text: string) {
-	const request: PerspectiveRequest = {
+	if (isCommon(text) || !limiter.shouldRequest()) return null;
+	if (throttleTime && (Date.now() - throttleTime < 10000)) {
+		return null;
+	}
+	if (throttleTime) throttleTime = null;
+
+	const requestData: PerspectiveRequest = {
 		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
 		languages: ['en'],
 		requestedAttributes: ATTRIBUTES,
@@ -90,12 +152,13 @@ export async function classify(text: string) {
 			query: {
 				key: Config.perspectiveKey,
 			},
-			body: JSON.stringify(request),
+			body: JSON.stringify(requestData),
 			headers: {
 				'Content-Type': "application/json",
 			},
 			timeout: 10 * 1000, // 10s
 		});
+		if (!raw) return null;
 		const data = JSON.parse(raw);
 		if (data.error) throw new Error(data.message);
 		const result: {[k: string]: number} = {};
@@ -105,12 +168,13 @@ export async function classify(text: string) {
 		}
 		return result;
 	} catch (e: any) {
+		throttleTime = Date.now();
 		if (e.message.startsWith('Request timeout')) {
 			// just ignore this. error on their end not ours.
 			// todo maybe stop sending requests for a bit?
 			return null;
 		}
-		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(request)});
+		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
 		return null;
 	}
 }
@@ -188,11 +252,11 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	void (async () => {
 		const {score, flags} = await PM.query({comment: message});
 		if (score) {
-			if (!cache[roomid]) cache[roomid] = {};
-			if (!cache[roomid][user.id]) cache[roomid][user.id] = 0;
-			cache[roomid][user.id] += score;
+			if (!cache[roomid]) cache[roomid] = {users: {}};
+			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
+			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
-			if (cache[roomid][user.id] >= settings.threshold) {
+			if (cache[roomid].users[user.id] >= settings.threshold) {
 				cache[roomid].staffNotified = true;
 				notifyStaff();
 				hitThreshold = 1;
@@ -298,7 +362,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		resolve(target) {
 			this.checkCan('lock');
-			target = target.toLowerCase().trim().replace(/ /ig, '');
+			target = target.toLowerCase().trim().replace(/ +/g, '');
 			if (!target) return this.parse(`/help abusemonitor`);
 			if (!cache[target]?.staffNotified) {
 				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
@@ -309,16 +373,28 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff();
 			this.closePage(`abusemonitor-view-${target}`);
 		},
-		run(target, room, user) {
+		async nojoinpunish(target, room, user) {
 			this.checkCan('lock');
-			const [roomid, cmd] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const [roomid, type, rest] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
 			const tarRoom = Rooms.get(roomid) || Rooms.get('staff');
 			if (!tarRoom) return this.popupReply(`The room "${roomid}" does not exist.`);
-			this.room = tarRoom;
-			if (!user.inRooms.has(tarRoom.roomid)) {
-				user.joinRoom(tarRoom, this.connection);
+			const cmd = NOJOIN_COMMAND_WHITELIST[toID(type)];
+			if (!cmd) {
+				return this.errorReply(
+					`Invalid punishment given. ` +
+					`Must be one of ${Object.keys(NOJOIN_COMMAND_WHITELIST).join(', ')}.`
+				);
 			}
-			this.parse(cmd);
+			this.room = tarRoom;
+			this.room.reportJoin('j', user.getIdentityWithStatus(this.room), user);
+			const result = await this.parse(`${cmd} ${rest}`, {bypassRoomCheck: true});
+			if (result) { // command succeeded - send followup
+				this.add(
+					'|c|&|/raw If you have questions about this action, please contact staff ' +
+					'by making a <a href="view-help-request" class="button">help ticket</a>'
+				);
+			}
+			this.room.reportJoin('l', user.getIdentityWithStatus(this.room), user);
 		},
 		view(target, room, user) {
 			return this.parse(`/j view-abusemonitor-view-${target.toLowerCase().trim()}`);
@@ -575,7 +651,7 @@ export const pages: Chat.PageTable = {
 				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id}</summary><div class="infobox">`;
 				const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
 				for (const name of punishments) {
-					buf += `<form data-submitsend="/am run ${roomid},/${toID(name)} ${id},{reason}">`;
+					buf += `<form data-submitsend="/am nojoinpunish ${roomid},${toID(name)},${id},{reason}">`;
 					buf += `<button class="button notifying" type="submit">${name}</button><br />`;
 					buf += `Optional reason: <input name="reason" />`;
 					buf += `</form><br />`;

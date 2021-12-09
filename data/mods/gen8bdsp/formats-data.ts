@@ -390,7 +390,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["shellsmash", "iciclespear", "rockblast", "hydropump"],
 	},
 	gastly: {
-		tier: "NFE",
+		tier: "LC",
 	},
 	haunter: {
 		tier: "NFE",
@@ -1064,7 +1064,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	smeargle: {
 		tier: "UU",
 		doublesTier: "DUber",
-		randomBattleMoves: ["stealthrock", "spikes", "spore", "toxicspikes", "stickyweb", "whirlwind"],
+		randomBattleMoves: ["stealthrock", "spikes", "spore", "toxicspikes", "stickyweb"],
 	},
 	miltank: {
 		tier: "UU",
