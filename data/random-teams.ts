@@ -2334,6 +2334,9 @@ export class RandomTeams {
 				continue;
 			}
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
+			if (this.dex.currentMod === 'gen7letsgo' && (species.num > 151 && ![808, 809].includes(species.num))) {
+				continue;
+			}
 			if (this.dex.currentMod === 'gen8bdsp' && species.gen > 4) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
