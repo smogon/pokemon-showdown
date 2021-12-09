@@ -93,7 +93,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 					if (pokemon.switchFlag === true) return;
 				}
 				// TODO: Confirm mechanics
-				this.add("-activate", target, "item: Eject Pack");
+				this.add("-activate", target, "item: Eject Button");
 				target.switchFlag = true;
 				source.switchFlag = false;
 			}
