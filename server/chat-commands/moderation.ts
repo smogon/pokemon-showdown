@@ -1600,7 +1600,7 @@ export const commands: Chat.ChatCommands = {
 	htmldeclare(target, room, user) {
 		if (!target) return this.parse('/help htmldeclare');
 		room = this.requireRoom();
-		this.checkCan('gdeclare');
+		this.checkCan('declare', null, room);
 		this.checkChat();
 		this.checkHTML(target);
 
@@ -1613,7 +1613,7 @@ export const commands: Chat.ChatCommands = {
 		this.add(`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
 		this.modlog(`HTMLDECLARE`, null, target);
 	},
-	htmldeclarehelp: [`/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: &`],
+	htmldeclarehelp: [`/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: # * &`],
 
 	gdeclare: 'globaldeclare',
 	globaldeclare(target, room, user) {
