@@ -86,6 +86,7 @@ export const commands: Chat.ChatCommands = {
 		if (!useHTML) {
 			text = text.replace(/^>/, '&gt;');
 		} else {
+			text = text.replace(/\n/ig, '<br />');
 			text = this.checkHTML(text);
 		}
 
@@ -168,7 +169,8 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(visualizeFaq(rfaq));
 		if (!this.broadcasting && user.can('ban', null, room, 'addfaq')) {
 			const code = Utils.escapeHTML(rfaq.source).replace(/\n/g, '<br />');
-			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/add${rfaq.html ? 'html' : ''}faq ${topic}, ${code}</code></details>`);
+			const command = rfaq.html ? 'addhtmlfaq' : 'addfaq';
+			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/${command} ${topic}, ${code}</code></details>`);
 		}
 	},
 	roomfaqhelp: [
@@ -209,8 +211,9 @@ export const pages: Chat.PageTable = {
 			}
 			if (user.can('ban', null, room, 'addfaq')) {
 				const src = Utils.escapeHTML(topic.source).replace(/\n/g, `<br />`);
+				const command = topic.html ? 'addhtmlfaq' : 'addfaq';
 				buf += `<hr /><details><summary>Raw text</summary>`;
-				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/addfaq ${key}, ${src}</code></details>`;
+				buf += `<code style="white-space: pre-wrap; display: table; tab-size: 3;">/${command} ${key}, ${src}</code></details>`;
 				buf += `<hr /><button class="button" name="send" value="/msgroom ${room.roomid},/removefaq ${key}">Delete FAQ</button>`;
 			}
 			buf += `</div>`;

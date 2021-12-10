@@ -16,6 +16,19 @@ interface BattleFactorySet {
 	evs?: Partial<StatsTable>;
 	ivs?: Partial<StatsTable>;
 }
+
+const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
+	grass: {hp: 30, spa: 30},
+	fire: {spa: 30, spe: 30},
+	ice: {def: 30},
+	ground: {spa: 30, spd: 30},
+	fighting: {def: 30, spa: 30, spd: 30, spe: 30},
+	electric: {def: 30, spe: 30},
+	psychic: {spe: 30},
+	flying: {spa: 30, spd: 30, spe: 30},
+	rock: {def: 30, spd: 30, spe: 30},
+};
+
 export class RandomGen7Teams extends RandomTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -1410,6 +1423,20 @@ export class RandomGen7Teams extends RandomTeams {
 		if (['gyroball', 'metalburst', 'trickroom'].some(m => moves.has(m))) {
 			evs.spe = 0;
 			ivs.spe = 0;
+		}
+
+		// Fix IVs for non-Bottle Cap-able sets
+		if (hasHiddenPower && level < 100) {
+			let hpType;
+			for (const move of moves) {
+				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
+			}
+			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
+			const HPivs = ivs.atk === 0 ? ZeroAttackHPIVs[hpType] : this.dex.types.get(hpType).HPivs;
+			let iv: StatID;
+			for (iv in HPivs) {
+				ivs[iv] = HPivs[iv]!;
+			}
 		}
 
 		return {
