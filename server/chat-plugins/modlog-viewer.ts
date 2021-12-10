@@ -248,6 +248,11 @@ export const commands: Chat.ChatCommands = {
 				if (i === 0 && value) {
 					// they might mean a roomid, as per the old format of /modlog
 					param = 'room';
+					// if the room exists, they probably mean a roomid. otherwise, assume they're misusing it.
+					// we except gdrivers+ from this because drivers can access deleted room modlogs
+					if (!Rooms.search(toID(value)) && !user.can('lock')) {
+						return this.parse(`/help modlog`);
+					}
 				} else {
 					this.errorReply(`You must specify a search type and search value.`);
 					return this.parse(`/help modlog`);
