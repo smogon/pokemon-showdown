@@ -17,7 +17,9 @@ const AVATARS_FILE = 'config/avatars.json';
  * - 'example.png' - side server custom avatars in config/avatars/ in your server
  */
 type AvatarID = string;
-const AVATAR_FORMATS_MESSAGE = "Avatars should look like: 'cynthia' for official avatars, '#splxraiders' for hosted custom avatars, and 'example.png' for side server avatars.";
+const AVATAR_FORMATS_MESSAGE = Config.serverid === 'showdown' ?
+	"Custom avatars start with '#', like '#splxraiders'." :
+	"Custom avatars look like 'example.png'. Custom avatars should be put in `config/avatars/`. Your server must be registered for custom avatars to work.";
 
 interface AvatarEntry {
 	timeReceived?: number;
@@ -40,7 +42,25 @@ const customAvatars: {[userid: string]: AvatarEntry} = Object.create(null);
 try {
 	const configAvatars = JSON.parse(FS(AVATARS_FILE).readSync());
 	Object.assign(customAvatars, configAvatars);
-} catch {}
+} catch {
+	if (Config.customavatars) {
+		for (const userid in Config.customavatars) {
+			customAvatars[userid] = {allowed: [Config.customavatars[userid]]};
+		}
+	}
+	if (Config.allowedavatars) {
+		for (const avatar in Config.customavatars) {
+			for (const userid of Config.customavatars[avatar]) {
+				customAvatars[userid] ??= {allowed: [null]};
+				customAvatars[userid].allowed.push(avatar);
+			}
+		}
+	}
+	FS(AVATARS_FILE).writeSync(JSON.stringify(customAvatars));
+}
+if ((Config.customavatars && Object.keys(Config.customavatars).length) || Config.allowedavatars) {
+	Monitor.crashlog("Please remove 'customavatars' and 'allowedavatars' from Config (config/config.js). Your avatars have been migrated to the new '/addavatar' system.");
+}
 function saveCustomAvatars(instant?: boolean) {
 	FS(AVATARS_FILE).writeUpdate(() => JSON.stringify(customAvatars), {throttle: instant ? null : 60_000});
 }
