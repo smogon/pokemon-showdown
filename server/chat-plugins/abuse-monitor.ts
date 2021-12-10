@@ -372,6 +372,9 @@ export const commands: Chat.ChatCommands = {
 			delete cache[target];
 			notifyStaff();
 			this.closePage(`abusemonitor-view-${target}`);
+			// bring the listing page to the front - need to close and reopen
+			this.closePage(`abusemonitor-flagged`);
+			return this.parse(`/j view-abusemonitor-flagged`);
 		},
 		async nojoinpunish(target, room, user) {
 			this.checkCan('lock');
@@ -640,7 +643,9 @@ export const pages: Chat.PageTable = {
 			for (const line of room.log.log) {
 				const data = room.log.parseChatLine(line);
 				if (!data) continue; // not chat
-				users.add(toID(data.user));
+				const id = toID(data.user);
+				if (!id) continue;
+				users.add(id);
 				buf += `<div class="chat"><span class="username">`;
 				buf += Utils.html`<username>${data.user}:</username></span> ${data.message}</div>`;
 			}
@@ -648,7 +653,9 @@ export const pages: Chat.PageTable = {
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
 			for (const [id] of Utils.sortBy([...users], ([, num]) => -num)) {
 				const curUser = Users.get(id);
-				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id}</summary><div class="infobox">`;
+				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id} `;
+				buf += `<button class="button" name="send" value="/mlid ${id},room=global">Modlog</button>`;
+				buf += `</summary><div class="infobox">`;
 				const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
 				for (const name of punishments) {
 					buf += `<form data-submitsend="/am nojoinpunish ${roomid},${toID(name)},${id},{reason}">`;
