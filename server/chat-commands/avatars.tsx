@@ -26,7 +26,8 @@ interface AvatarEntry {
 	timeUpdated?: number;
 	notNotified?: boolean;
 	/**
-	 * first entry is the personal avatar
+	 * First entry is the personal avatar.
+	 * Will never only contain `null` - the entry should just be deleted if it does.
 	 */
 	allowed: [AvatarID | null, ...AvatarID[]];
 	/**
@@ -574,7 +575,7 @@ export const commands: Chat.ChatCommands = {
 	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
 
 	avatars(target, room, user) {
-		if (!this.runBroadcast()) return;
+		this.runBroadcast();
 
 		if (target.startsWith('#')) return this.parse(`/avatarusers ${target}`);
 
@@ -734,7 +735,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`You don't have access to avatar "${target}"`);
 		}
 
-		if (!this.runBroadcast()) return;
+		this.runBroadcast();
 
 		const users = [];
 		for (const userid in customAvatars) {
