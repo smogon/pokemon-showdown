@@ -1499,11 +1499,25 @@ export const commands: Chat.ChatCommands = {
 
 		let currentBestHelp: {help: string[] | Chat.AnnotatedChatHandler, for: string[]} | null = null;
 
+		function getHelp(ns: Chat.AnnotatedChatCommands, cmd: string): string[] | Chat.AnnotatedChatHandler | null {
+			let help = ns[`${cmd}help`];
+			if (Array.isArray(help) || typeof help === 'function') {
+				return help;
+			}
+			if (typeof help === 'string') {
+				help = ns[help];
+				if (Array.isArray(help) || typeof help === 'function') {
+					return help;
+				}
+			}
+			return null;
+		}
+
 		for (const [i, cmd] of cmds.entries()) {
 			let nextNamespace = namespace[cmd];
 			if (typeof nextNamespace === 'string') {
-				const help = namespace[`${nextNamespace}help`];
-				if (Array.isArray(help) || typeof help === 'function') {
+				const help = getHelp(namespace, nextNamespace);
+				if (help) {
 					currentBestHelp = {
 						help, for: cmds.slice(0, i + 1),
 					};
@@ -1531,8 +1545,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(this.tr`The command '/${target}' does not exist.`);
 			}
 
-			const help = namespace[`${cmd}help`];
-			if (Array.isArray(help) || typeof help === 'function') {
+			const help = getHelp(namespace, cmd);
+			if (help) {
 				currentBestHelp = {
 					help, for: cmds.slice(0, i + 1),
 				};

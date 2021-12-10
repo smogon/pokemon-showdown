@@ -10,6 +10,15 @@ import {FS, Net} from "../../lib";
 
 const AVATARS_FILE = 'config/avatars.json';
 
+/**
+ * Avatar IDs should be in one of these formats:
+ * - 'cynthia' - official avatars in https://play.pokemonshowdown.com/sprites/trainers/
+ * - '#splxraiders' - hosted custom avatars in https://play.pokemonshowdown.com/sprites/trainers-custom/
+ * - 'example.png' - side server custom avatars in config/avatars/ in your server
+ */
+type AvatarID = string;
+const AVATAR_FORMATS_MESSAGE = "Avatars should look like: 'cynthia' for official avatars, '#splxraiders' for hosted custom avatars, and 'example.png' for side server avatars.";
+
 interface AvatarEntry {
 	timeReceived?: number;
 	timeUpdated?: number;
@@ -17,12 +26,13 @@ interface AvatarEntry {
 	/**
 	 * first entry is the personal avatar
 	 */
-	allowed: [string | null, ...string[]];
+	allowed: [AvatarID | null, ...AvatarID[]];
 	/**
-	 * undefined = personal avatar
+	 * undefined = personal avatar;
+	 * null = no default (shouldn't occur in practice);
 	 * (ignored during Christmas, where the any avatar is default if it ends in `xmas`.)
 	 */
-	default?: string | null;
+	default?: AvatarID | null;
 }
 
 const customAvatars: {[userid: string]: AvatarEntry} = Object.create(null);
@@ -37,7 +47,7 @@ function saveCustomAvatars(instant?: boolean) {
 
 export const Avatars = new class {
 	avatars = customAvatars;
-	userCanUse(user: User, avatar: string): string | null {
+	userCanUse(user: User, avatar: string): AvatarID | null {
 		let validatedAvatar = null;
 		for (const id of [user.id, ...user.previousIDs]) {
 			validatedAvatar = Avatars.canUse(id, avatar);
@@ -45,7 +55,7 @@ export const Avatars = new class {
 		}
 		return validatedAvatar;
 	}
-	canUse(userid: ID, avatar: string): string | null {
+	canUse(userid: ID, avatar: string): AvatarID | null {
 		avatar = avatar.toLowerCase().replace(/[^a-z0-9-]+/g, '');
 		if (avatarTable.has(avatar)) return avatar;
 
@@ -54,22 +64,48 @@ export const Avatars = new class {
 
 		if (customs.includes(avatar)) return avatar;
 		if (customs.includes('#' + avatar)) return '#' + avatar;
+		if (avatar.startsWith('#') && customs.includes(avatar.slice(1))) return avatar.slice(1);
 		return null;
 	}
 	save(instant?: boolean) {
 		saveCustomAvatars(instant);
 	}
-	src(avatar: string) {
+	src(avatar: AvatarID) {
+		if (avatar.includes('.')) return '';
 		const avatarUrl = avatar.startsWith('#') ? `trainers-custom/${avatar.slice(1)}.png` : `trainers/${avatar}.png`;
 		return `https://${Config.routes.client}/sprites/${avatarUrl}`;
 	}
 	exists(avatar: string) {
+		if (avatar.includes('.')) {
+			return FS(`config/avatars/${avatar}`).isFile();
+		}
 		return Net(Avatars.src(avatar)).get().then(() => true).catch(() => false);
 	}
-	img(avatar: string, noAlt?: boolean) {
+	convert(avatar: string) {
+		if (avatar.startsWith('#') && avatar.includes('.')) return avatar.slice(1);
+		return avatar;
+	}
+	rejectOfficial(avatar: AvatarID) {
+		if (/^[a-z0-9-]+$/.test(avatar)) {
+			throw new Chat.ErrorMessage(`Avatar "${avatar}" is an official avatar that doesn't need any special permission to use.`);
+		}
+	}
+	async validate(avatar: string) {
+		avatar = this.convert(avatar);
+		if (!/^#?[a-z0-9-]+$/.test(avatar) && !/^[a-z0-9.-]+$/.test(avatar)) {
+			throw new Chat.ErrorMessage(`Avatar "${avatar}" is not in a valid format. ${AVATAR_FORMATS_MESSAGE}`);
+		}
+
+		if (!await this.exists(avatar)) {
+			throw new Chat.ErrorMessage(`Avatar "${avatar}" doesn't exist. ${AVATAR_FORMATS_MESSAGE}`);
+		}
+		return avatar;
+	}
+	img(avatar: AvatarID, noAlt?: boolean) {
+		const src = Avatars.src(avatar);
+		if (!src) return <strong><code>{avatar}</code></strong>;
 		return <img
-			src={Avatars.src(avatar)} alt={noAlt ? '' : avatar}
-			width="80" height="80" class="pixelated" style={{verticalAlign: 'middle'}}
+			src={src} alt={noAlt ? '' : avatar} width="80" height="80" class="pixelated" style={{verticalAlign: 'middle'}}
 		/>;
 	}
 	getDefault(userid: ID) {
@@ -82,7 +118,7 @@ export const Avatars = new class {
 		return entry.default === undefined ? entry.allowed[0] : entry.default;
 	}
 	/** does not include validation */
-	setDefault(userid: ID, avatar: string | null) {
+	setDefault(userid: ID, avatar: AvatarID | null) {
 		if (avatar === this.getDefault(userid)) return;
 
 		const entry = (customAvatars[userid] ??= {allowed: [null]});
@@ -93,7 +129,7 @@ export const Avatars = new class {
 		}
 		saveCustomAvatars();
 	}
-	addAllowed(userid: ID, avatar: string | null) {
+	addAllowed(userid: ID, avatar: AvatarID | null) {
 		const entry = (customAvatars[userid] ??= {allowed: [null]});
 		if (entry.allowed.includes(avatar)) return false;
 
@@ -102,7 +138,7 @@ export const Avatars = new class {
 		this.tryNotify(Users.get(userid));
 		return true;
 	}
-	removeAllowed(userid: ID, avatar: string | null) {
+	removeAllowed(userid: ID, avatar: AvatarID | null) {
 		const entry = customAvatars[userid];
 		if (!entry?.allowed.includes(avatar)) return false;
 
@@ -112,10 +148,11 @@ export const Avatars = new class {
 			entry.allowed = entry.allowed.filter(a => a !== avatar) as any;
 		}
 		if (!entry.allowed.some(Boolean)) delete customAvatars[userid];
+		return true;
 	}
-	addPersonal(userid: ID, avatar: string | null) {
+	addPersonal(userid: ID, avatar: AvatarID | null) {
 		const entry = (customAvatars[userid] ??= {allowed: [null]});
-		if (entry.allowed.includes(avatar)) return;
+		if (entry.allowed.includes(avatar)) return false;
 
 		entry.timeReceived ||= Date.now();
 		entry.timeUpdated = Date.now();
@@ -127,6 +164,7 @@ export const Avatars = new class {
 		delete entry.default;
 		entry.notNotified = true;
 		this.tryNotify(Users.get(userid));
+		return true;
 	}
 	handleLogin(user: User) {
 		const avatar = this.getDefault(user.id);
@@ -571,8 +609,106 @@ export const commands: Chat.ChatCommands = {
 	},
 	avatarshelp: [
 		`/avatars - Explains how to change avatars.`,
+		`/avatars [username] - Shows custom avatars available to a user.`,
 		`!avatars - Show everyone that information. Requires: + % @ # &`,
 	],
+
+	addavatar() {
+		this.sendReply("Is this a personal avatar or a group avatar?");
+		return this.parse(`/help addavatar`);
+	},
+	addavatarhelp: [
+		`/defaultavatar [username], [avatar] - Gives a user a default (personal) avatar.`,
+		`/allowavatar [username], [avatar] - Gives a user an allowed (group) avatar.`,
+		`/removeavatar [username], [avatar] - Removes access to an avatar from a user.`,
+		`/removeavatar [username] - Removes access to all custom avatars from a user.`,
+		AVATAR_FORMATS_MESSAGE,
+	],
+
+	personalavatar: 'defaultavatar',
+	async defaultavatar(target, room, user) {
+		this.checkCan('bypassall');
+		if (!target) return this.parse(`/help defaultavatar`);
+		const [inputUsername, inputAvatar] = this.splitOne(target);
+		if (!Users.isUsername(inputUsername)) {
+			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
+		}
+		const userid = toID(inputUsername);
+		const avatar = await Avatars.validate(inputAvatar);
+		Avatars.rejectOfficial(avatar);
+
+		if (!Avatars.addPersonal(userid, avatar)) {
+			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
+		}
+		this.globalModlog('PAVATAR', userid, avatar);
+		this.sendReplyBox(<div>
+			{Avatars.img(avatar)}<br />
+			Added to <username class="username">{inputUsername}</username>
+		</div>);
+	},
+	defaultavatarhelp: 'addavatarhelp',
+
+	allowedavatar: 'allowavatar',
+	groupavatar: 'allowavatar',
+	async allowavatar(target, room, user) {
+		this.checkCan('bypassall');
+		if (!target) return this.parse(`/help defaultavatar`);
+		const [inputUsername, inputAvatar] = this.splitOne(target);
+		if (!Users.isUsername(inputUsername)) {
+			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
+		}
+		const userid = toID(inputUsername);
+		const avatar = await Avatars.validate(inputAvatar);
+		Avatars.rejectOfficial(avatar);
+
+		if (!Avatars.addAllowed(userid, avatar)) {
+			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
+		}
+		this.globalModlog('GAVATAR', userid, avatar);
+		this.sendReplyBox(<div>
+			{Avatars.img(avatar)}<br />
+			Added to <username class="username">{inputUsername}</username>
+		</div>);
+	},
+	allowavatarhelp: 'addavatarhelp',
+
+	denyavatar: 'removeavatar',
+	disallowavatar: 'removeavatar',
+	removeavatar(target, room, user) {
+		this.checkCan('bypassall');
+		if (!target) return this.parse(`/help defaultavatar`);
+		const [inputUsername, inputAvatar] = this.splitOne(target);
+		if (!Users.isUsername(inputUsername)) {
+			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
+		}
+		const userid = toID(inputUsername);
+		const avatar = Avatars.convert(inputAvatar);
+
+		const allowed = customAvatars[userid]?.allowed.filter(Boolean);
+		if (!allowed) {
+			throw new Chat.ErrorMessage(`${inputUsername} doesn't have any custom avatars.`);
+		}
+		if (avatar) {
+			if (!Avatars.removeAllowed(userid, avatar)) {
+				throw new Chat.ErrorMessage(`${inputUsername} doesn't have access to avatar "${avatar}"`);
+			}
+			this.globalModlog('REMOVE AVATAR', userid, avatar);
+			this.sendReplyBox(<div>
+				{Avatars.img(avatar)}<br />
+				Removed from <username class="username">{inputUsername}</username>
+			</div>);
+		} else {
+			// delete all
+			delete customAvatars[userid];
+			Avatars.save();
+			this.globalModlog('REMOVE AVATAR', userid, allowed.join(','));
+			this.sendReplyBox(<div>
+				{allowed.map(curAvatar => [Avatars.img(curAvatar!), ' '])}<br />
+				Removed from <username class="username">{inputUsername}</username>
+			</div>);
+		}
+	},
+	removeavatarhelp: 'addavatarhelp',
 
 	async avatarusers(target, room, user) {
 		target = '#' + toID(target);
@@ -603,27 +739,6 @@ export const commands: Chat.ChatCommands = {
 		</>);
 	},
 
-	async addpavatar(target, room, user) {
-		this.checkCan('bypassall');
-		const [username, avatar] = this.splitOne(target);
-		const userid = toID(username);
-		if (!userid || !avatar) return this.parse(`/help addpavatar`);
-		if (!Users.isUsername(username)) {
-			throw new Chat.ErrorMessage(`Invalid username "${username}"`);
-		}
-		if (!/^#[a-z0-9-]+$/.test(avatar)) {
-			throw new Chat.ErrorMessage(`Avatar "${avatar}" in incorrect format (custom avatar IDs start with #)`);
-		}
-		if (!await Avatars.exists(avatar)) {
-			throw new Chat.ErrorMessage(`Avatar "${avatar}" doesn't exist`);
-		}
-
-		Avatars.addPersonal(userid, avatar);
-		this.sendReplyBox(<div>
-			{Avatars.img(avatar)}<br />
-			Added to <username class="username">{userid}</username>
-		</div>);
-	},
 	async masspavatar(target, room, user) {
 		this.checkCan('bypassall');
 
@@ -633,15 +748,14 @@ export const commands: Chat.ChatCommands = {
 			if (!Users.isUsername(username)) {
 				throw new Chat.ErrorMessage(`Invalid username "${username}"`);
 			}
-			if (!await Avatars.exists('#' + username)) {
-				throw new Chat.ErrorMessage(`Avatar "#${username}" doesn't exist`);
-			}
+			await Avatars.validate('#' + toID(username));
 		}
 
 		const userids = usernames.map(toID);
 		for (const userid of userids) {
 			const avatar = '#' + userid;
 			Avatars.addPersonal(userid, avatar);
+			this.globalModlog('PAVATAR', userid, avatar);
 		}
 		this.sendReplyBox(<div>
 			{userids.map(userid => Avatars.img('#' + userid))}<br />
@@ -658,15 +772,14 @@ export const commands: Chat.ChatCommands = {
 			if (!Users.isUsername(username)) {
 				throw new Chat.ErrorMessage(`Invalid username "${username}"`);
 			}
-			if (!await Avatars.exists(`#${toID(username)}xmas`)) {
-				throw new Chat.ErrorMessage(`Avatar "#${toID(username)}xmas" doesn't exist`);
-			}
+			await Avatars.validate(`#${toID(username)}xmas`);
 		}
 
 		const userids = usernames.map(toID);
 		for (const userid of userids) {
 			const avatar = `#${userid}xmas`;
 			Avatars.addAllowed(userid, avatar);
+			this.globalModlog('GAVATAR', userid, avatar);
 		}
 		this.sendReplyBox(<div>
 			{userids.map(userid => Avatars.img(`#${userid}xmas`))}<br />
@@ -681,13 +794,7 @@ export const commands: Chat.ChatCommands = {
 		const toUpdate: Record<string, Set<ID>> = Object.create(null);
 		for (const arg of args) {
 			if (arg.startsWith('#')) {
-				if (!/^#[a-z0-9-]+$/.test(arg)) {
-					throw new Chat.ErrorMessage(`Unknown avatar format "${arg}"`);
-				}
-				if (!await Avatars.exists(arg)) {
-					throw new Chat.ErrorMessage(`Avatar "${arg}" doesn't exist`);
-				}
-				curAvatar = arg;
+				curAvatar = await Avatars.validate(arg);
 			} else {
 				if (!curAvatar) return this.parse(`/help massgavatar`);
 				if (!/[A-Za-z0-9]/.test(arg.charAt(0)) || !/[A-Za-z]/.test(arg)) {
@@ -713,6 +820,7 @@ export const commands: Chat.ChatCommands = {
 				if (!oldUsers.has(newUser)) {
 					Avatars.addAllowed(newUser, avatar);
 					added.push(newUser);
+					this.globalModlog('GAVATAR', newUser, avatar);
 				}
 			}
 			const removed: ID[] = [];
@@ -720,7 +828,7 @@ export const commands: Chat.ChatCommands = {
 				if (!newUsers.has(oldUser)) {
 					Avatars.removeAllowed(oldUser, avatar);
 					removed.push(oldUser);
-					this.globalModlog('REMOVE GAVATAR', oldUser, avatar);
+					this.globalModlog('REMOVE AVATAR', oldUser, avatar);
 				}
 			}
 
