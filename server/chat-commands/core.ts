@@ -1493,89 +1493,66 @@ export const commands: Chat.ChatCommands = {
 			return;
 		}
 
-		const cmds = target.split(' ');
+		const getHelp = (namespace: Chat.AnnotatedChatCommands, cmds: string[]): boolean => {
+			const [cmd, ...subCmds] = cmds;
 
-		let namespace = Chat.commands;
-
-		let currentBestHelp: {help: string[] | Chat.AnnotatedChatHandler, for: string[]} | null = null;
-
-		function getHelp(ns: Chat.AnnotatedChatCommands, cmd: string): string[] | Chat.AnnotatedChatHandler | null {
-			let help = ns[`${cmd}help`];
-			if (Array.isArray(help) || typeof help === 'function') {
-				return help;
+			if (subCmds.length) {
+				// more specific help first
+				const subNamespace = namespace[cmd];
+				if (typeof subNamespace === 'object' && !Array.isArray(subNamespace)) {
+					if (getHelp(subNamespace, subCmds)) {
+						return true;
+					}
+				}
 			}
+
+			let help = namespace[`${cmd}help`];
 			if (typeof help === 'string') {
-				help = ns[help];
-				if (Array.isArray(help) || typeof help === 'function') {
-					return help;
-				}
+				help = namespace[help];
 			}
-			return null;
-		}
+			if (!help && namespace !== Chat.commands && namespace['help']) {
+				help = namespace['help'];
+			}
 
-		for (const [i, cmd] of cmds.entries()) {
-			let nextNamespace = namespace[cmd];
-			if (typeof nextNamespace === 'string') {
-				const help = getHelp(namespace, nextNamespace);
-				if (help) {
-					currentBestHelp = {
-						help, for: cmds.slice(0, i + 1),
-					};
-				}
-				nextNamespace = namespace[nextNamespace];
+			const curHandler = namespace[cmd] as Chat.AnnotatedChatHandler;
+			const requiredPerm = curHandler?.requiredPermission || 'lock';
+			if (curHandler?.isPrivate && !user.can(requiredPerm as GlobalPermission)) {
+				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
 			}
-			if (typeof nextNamespace === 'string') {
-				throw new Error(`Recursive alias in "${target}"`);
+
+			if (typeof help === 'function') {
+				// If the help command is a function, parse it instead
+				this.run(help);
+				return true;
 			}
-			if (Array.isArray(nextNamespace)) {
-				const command = cmds.slice(0, i + 1).join(' ');
-				this.sendReply(this.tr`'/${command}' is a help command.`);
-				return this.parse(`/${target}`);
+			if (Array.isArray(help)) {
+				this.sendReply(help.map(line => this.tr(line)).join('\n'));
+				return true;
 			}
-			if (!nextNamespace) {
+
+			if (!curHandler) {
 				for (const g in Config.groups) {
 					const groupid = Config.groups[g].id;
-					if (new RegExp(`(global)?(un|de)?${groupid}`).test(target)) {
+					if (new RegExp(`(global)?(un|de)?${groupid}`).test(cmd)) {
 						return this.parse(`/help promote`);
 					}
-					if (new RegExp(`room(un|de)?${groupid}`).test(target)) {
+					if (new RegExp(`room(un|de)?${groupid}`).test(cmd)) {
 						return this.parse(`/help roompromote`);
 					}
 				}
-				return this.errorReply(this.tr`The command '/${target}' does not exist.`);
+				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
 			}
 
-			const help = getHelp(namespace, cmd);
-			if (help) {
-				currentBestHelp = {
-					help, for: cmds.slice(0, i + 1),
-				};
+			if (cmd.endsWith('help')) {
+				this.sendReply(this.tr`'/${target}' is a help command.`);
+				return true;
 			}
 
-			if (typeof nextNamespace === 'function') break;
-			namespace = nextNamespace;
-		}
+			return false;
+		};
 
-		if (!currentBestHelp) {
-			return this.errorReply(this.tr`Could not find help for '/${target}'. Try /help for general help.`);
-		}
-
-		const closestHelp = currentBestHelp.for.join(' ');
-		if (currentBestHelp.for.length < cmds.length) {
-			this.errorReply(this.tr`Could not find help for '/${target}' - displaying help for '/${closestHelp}' instead`);
-		}
-
-		const curHandler = Chat.parseCommand(`/${closestHelp}`)?.handler;
-		const requiredPerm = curHandler?.requiredPermission || 'lock';
-		if (curHandler?.isPrivate && !user.can(requiredPerm as GlobalPermission)) {
-			return this.errorReply(this.tr`The command '/${target}' does not exist.`);
-		}
-
-		if (typeof currentBestHelp.help === 'function') {
-			// If the help command is a function, parse it instead
-			this.run(currentBestHelp.help);
-		} else if (Array.isArray(currentBestHelp.help)) {
-			this.sendReply(currentBestHelp.help.map(line => this.tr(line)).join('\n'));
+		if (!getHelp(Chat.commands, target.split(' '))) {
+			throw new Chat.ErrorMessage(this.tr`Could not find help for '/${target}'. Try /help for general help.`);
 		}
 	},
 	helphelp: [
