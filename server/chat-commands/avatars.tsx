@@ -57,7 +57,7 @@ export const Avatars = new class {
 	}
 	canUse(userid: ID, avatar: string): AvatarID | null {
 		avatar = avatar.toLowerCase().replace(/[^a-z0-9-]+/g, '');
-		if (avatarTable.has(avatar)) return avatar;
+		if (OFFICIAL_AVATARS.has(avatar)) return avatar;
 
 		const customs = customAvatars[userid]?.allowed;
 		if (!customs) return null;
@@ -79,25 +79,25 @@ export const Avatars = new class {
 		if (avatar.includes('.')) {
 			return FS(`config/avatars/${avatar}`).isFile();
 		}
+		if (!avatar.startsWith('#')) {
+			return OFFICIAL_AVATARS.has(avatar);
+		}
 		return Net(Avatars.src(avatar)).get().then(() => true).catch(() => false);
 	}
 	convert(avatar: string) {
 		if (avatar.startsWith('#') && avatar.includes('.')) return avatar.slice(1);
 		return avatar;
 	}
-	rejectOfficial(avatar: AvatarID) {
-		if (/^[a-z0-9-]+$/.test(avatar)) {
-			throw new Chat.ErrorMessage(`Avatar "${avatar}" is an official avatar that doesn't need any special permission to use.`);
-		}
-	}
-	async validate(avatar: string) {
+	async validate(avatar: string, options?: {rejectOfficial?: boolean}) {
 		avatar = this.convert(avatar);
 		if (!/^#?[a-z0-9-]+$/.test(avatar) && !/^[a-z0-9.-]+$/.test(avatar)) {
 			throw new Chat.ErrorMessage(`Avatar "${avatar}" is not in a valid format. ${AVATAR_FORMATS_MESSAGE}`);
 		}
-
 		if (!await this.exists(avatar)) {
 			throw new Chat.ErrorMessage(`Avatar "${avatar}" doesn't exist. ${AVATAR_FORMATS_MESSAGE}`);
+		}
+		if (options?.rejectOfficial && /^[a-z0-9-]+$/.test(avatar)) {
+			throw new Chat.ErrorMessage(`Avatar "${avatar}" is an official avatar that all users already have access to.`);
 		}
 		return avatar;
 	}
@@ -198,7 +198,7 @@ function listUsers(users: string[]) {
 	return users.flatMap((userid, i) => [i ? ', ' : null, <username class="username">{userid}</username>]);
 }
 
-const avatarTable = new Set([
+const OFFICIAL_AVATARS = new Set([
 	'aaron',
 	'acetrainercouple-gen3', 'acetrainercouple',
 	'acetrainerf-gen1', 'acetrainerf-gen1rb', 'acetrainerf-gen2', 'acetrainerf-gen3', 'acetrainerf-gen3rs', 'acetrainerf-gen4dp', 'acetrainerf-gen4', 'acetrainerf',
@@ -502,7 +502,7 @@ const avatarTable = new Set([
 	'zinzolin',
 ]);
 
-const avatarTableBeliot419 = new Set([
+const OFFICIAL_AVATARS_BELIOT419 = new Set([
 	'acerola', 'aetheremployee', 'aetheremployeef', 'aetherfoundation', 'aetherfoundationf', 'anabel',
 	'beauty-gen7', 'blue-gen7', 'burnet', 'colress-gen7', 'dexio', 'elio', 'faba', 'gladion-stance',
 	'gladion', 'grimsley-gen7', 'hapu', 'hau-stance', 'hau', 'hiker-gen7', 'ilima', 'kahili', 'kiawe',
@@ -513,14 +513,14 @@ const avatarTableBeliot419 = new Set([
 	'wicke', 'youngathlete', 'youngathletef', 'youngster-gen7',
 ]);
 
-const avatarTableGnomowladny = new Set([
+const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 	'az', 'brawly-gen6', 'bryony', 'drasna', 'evelyn', 'furisodegirl-black', 'furisodegirl-pink', 'guzma',
 	'hala', 'korrina', 'malva', 'nita', 'olympia', 'ramos', 'shelly', 'sidney', 'siebold', 'tierno',
 	'valerie', 'viola', 'wallace-gen6', 'wikstrom', 'winona-gen6', 'wulfric', 'xerosic', 'youngn', 'zinnia',
 ]);
 
-for (const avatar of avatarTableBeliot419) avatarTable.add(avatar);
-for (const avatar of avatarTableGnomowladny) avatarTable.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -543,10 +543,10 @@ export const commands: Chat.ChatCommands = {
 				`${this.tr`Avatar changed to:`}\n` +
 				Chat.html`|raw|${Avatars.img(avatar)}`
 			);
-			if (avatarTableBeliot419.has(avatar)) {
+			if (OFFICIAL_AVATARS_BELIOT419.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
 			}
-			if (avatarTableGnomowladny.has(avatar)) {
+			if (OFFICIAL_AVATARS_GNOMOWLADNY.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Gnomowladny)`);
 			}
 		}
@@ -634,8 +634,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
 		}
 		const userid = toID(inputUsername);
-		const avatar = await Avatars.validate(inputAvatar);
-		Avatars.rejectOfficial(avatar);
+		const avatar = await Avatars.validate(inputAvatar, {rejectOfficial: true});
 
 		if (!Avatars.addPersonal(userid, avatar)) {
 			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
@@ -658,8 +657,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
 		}
 		const userid = toID(inputUsername);
-		const avatar = await Avatars.validate(inputAvatar);
-		Avatars.rejectOfficial(avatar);
+		const avatar = await Avatars.validate(inputAvatar, {rejectOfficial: true});
 
 		if (!Avatars.addAllowed(userid, avatar)) {
 			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
