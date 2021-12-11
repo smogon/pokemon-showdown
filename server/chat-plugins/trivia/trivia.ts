@@ -645,7 +645,7 @@ export class Trivia extends Rooms.RoomGame {
 		this.phase = QUESTION_PHASE;
 		this.askedAt = process.hrtime();
 
-		const question = this.questions.pop()!;
+		const question = this.questions.shift()!;
 		this.questionNumber++;
 		this.curQuestion = question.question;
 		this.curAnswers = question.answers;
@@ -1536,8 +1536,7 @@ const triviaCommands: Chat.ChatCommands = {
 			if (categories.length > 1) throw new Chat.ErrorMessage(`You cannot combine random with another category.`);
 			categories = 'random';
 		}
-		// Trivia questions are selected with .pop() so sorted fish needs
-		// oldest questions first.
+
 		const questions = await getQuestions(categories, randomizeQuestionOrder ? 'random' : 'oldestfirst');
 
 		let length: ID | number = toID(targets[2]);
@@ -2016,7 +2015,7 @@ const triviaCommands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`'${target}' is not a valid category. View /help trivia for more information.`);
 		}
 
-		const list = await database.getQuestions([category], Number.MAX_SAFE_INTEGER, {order: 'newestfirst'});
+		const list = await database.getQuestions([category], Number.MAX_SAFE_INTEGER, {order: 'oldestfirst'});
 		if (!list.length) {
 			buffer += `<tr><td>${this.tr`There are no questions in the ${ALL_CATEGORIES[category]} category.`}</td></table></div>`;
 			return this.sendReply(buffer);
