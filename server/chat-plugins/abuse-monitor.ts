@@ -73,9 +73,15 @@ export interface PerspectiveRequest {
 	comment: {text: string};
 }
 
-export interface PMResult {
+interface PMResult {
 	score: number;
 	flags: string[];
+	response?: Record<string, number>;
+}
+
+interface PMRequest {
+	comment: string;
+	fullResponse?: boolean;
 }
 
 function time() {
@@ -179,13 +185,13 @@ export async function classify(text: string) {
 	}
 }
 
-export const PM = new ProcessManager.QueryProcessManager<{comment: string}, PMResult>(module, async ({comment}) => {
+export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(module, async query => {
 	const now = Date.now();
-	const result = await classify(comment);
-	if (!result) return {score: 0, flags: []}; // crash. logged already.
+	const result = await classify(query.comment);
+	if (!result) return {score: 0, flags: []};
 	const delta = Date.now() - now;
 	if (delta > 1000) {
-		Monitor.slow(`[Abuse Monitor] ${delta}ms - ${JSON.stringify({comment})}`);
+		Monitor.slow(`[Abuse Monitor] ${delta}ms - ${JSON.stringify(query)}`);
 	}
 	let score = 0;
 	const flags = new Set<string>();
@@ -212,7 +218,12 @@ export const PM = new ProcessManager.QueryProcessManager<{comment: string}, PMRe
 		}
 		if (score !== curScore) flags.add(type);
 	}
-	return {score, flags: [...flags]};
+	return {
+		score,
+		flags: [...flags],
+		// undefined so that json.stringify ignores it - save bandwidth
+		response: query.fullResponse ? result : undefined,
+	};
 }, PM_TIMEOUT, message => {
 	if (message.startsWith('SLOW\n')) {
 		Monitor.slow(message.slice(5));
@@ -272,7 +283,6 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 // to avoid conflicts with other filters
 chatfilter.priority = -100;
 
-
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
 		if (cache[roomid]) delete cache[roomid];
@@ -318,11 +328,15 @@ export const commands: Chat.ChatCommands = {
 			const text = target.trim();
 			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
-			const {score, flags} = await PM.query({comment: text});
-			this.sendReplyBox(
-				`Score for "${text}": ${score}<br />` +
-				`Flags: ${flags.join(', ')}`
-			);
+			let {score, flags, response} = await PM.query({comment: text, fullResponse: true});
+			if (!response) response = {};
+			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
+			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
+			buf += `<strong>Score breakdown:</strong><br />`;
+			for (const k in response) {
+				buf += `&bull; ${k}: ${response[k]}<br />`;
+			}
+			this.sendReplyBox(buf);
 		},
 		toggle(target) {
 			checkAccess(this);
