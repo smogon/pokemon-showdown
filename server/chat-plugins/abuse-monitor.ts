@@ -22,6 +22,8 @@ const ATTRIBUTES = {
 	"INSULT": {},
 	"PROFANITY": {},
 	"THREAT": {},
+	"SEXUALLY_EXPLICIT": {},
+	"FLIRTATION": {},
 };
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
