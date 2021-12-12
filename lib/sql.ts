@@ -60,21 +60,21 @@ function getModule() {
 	}
 }
 
-export class Statement<T = any> {
+export class Statement<R extends DataType> {
 	private db: SQLDatabaseManager;
 	private statement: string;
 	constructor(statement: string, db: SQLDatabaseManager) {
 		this.db = db;
 		this.statement = statement;
 	}
-	run<R extends DataType>(data: R) {
+	run(data: R) {
 		return this.db.run(this.statement, data);
 	}
-	all<R extends DataType>(data: R) {
-		return this.db.all<T>(this.statement, data);
+	all(data: R) {
+		return this.db.all(this.statement, data);
 	}
-	get<R extends DataType>(data: R) {
-		return this.db.get<T>(this.statement, data);
+	get(data: R) {
+		return this.db.get(this.statement, data);
 	}
 	toString() {
 		return this.statement;
