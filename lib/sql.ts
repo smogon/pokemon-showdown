@@ -67,14 +67,14 @@ export class Statement<T = any> {
 		this.db = db;
 		this.statement = statement;
 	}
-	run(data: DataType) {
+	run<R extends DataType>(data: R) {
 		return this.db.run(this.statement, data);
 	}
-	all(data: DataType) {
-		return this.db.all(this.statement, data) as Promise<T[]>;
+	all<R extends DataType>(data: R) {
+		return this.db.all<T>(this.statement, data);
 	}
-	get(data: DataType) {
-		return this.db.get(this.statement, data) as Promise<T>;
+	get<R extends DataType>(data: R) {
+		return this.db.get<T>(this.statement, data);
 	}
 	toString() {
 		return this.statement;
