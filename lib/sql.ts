@@ -60,7 +60,7 @@ function getModule() {
 	}
 }
 
-export class Statement {
+export class Statement<T = any> {
 	private db: SQLDatabaseManager;
 	private statement: string;
 	constructor(statement: string, db: SQLDatabaseManager) {
@@ -71,10 +71,10 @@ export class Statement {
 		return this.db.run(this.statement, data);
 	}
 	all(data: DataType) {
-		return this.db.all(this.statement, data);
+		return this.db.all(this.statement, data) as Promise<T[]>;
 	}
 	get(data: DataType) {
-		return this.db.get(this.statement, data);
+		return this.db.get(this.statement, data) as Promise<T>;
 	}
 	toString() {
 		return this.statement;
