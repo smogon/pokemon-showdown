@@ -200,8 +200,8 @@ assert.doesNotThrowAsync = async function (fn, message) {
 		await fn();
 	} catch (e) {
 		throw new AssertionError({
-			message: message || `Expected function not to throw an error.`,
-			stackStartFunction: assert.throwsAsync,
+			message: message || `Expected function not to throw an error (threw ${e}).`,
+			stackStartFunction: assert.doesNotThrowAsync,
 		});
 	}
 };
