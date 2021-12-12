@@ -288,7 +288,7 @@ class Ladder {
 						rank++;
 						max = score;
 					}
-					if (key === 'score' && rank < 15) {
+					if (key === 'score' && rank < 500) {
 						if (!ladder[rank]) ladder[rank] = [];
 						ladder[rank].push(leader as ID);
 					}
