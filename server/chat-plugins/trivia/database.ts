@@ -242,8 +242,16 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		}
 
 		for (const lbDiscrim of Object.values(LEADERBOARD_ENUM)) {
-			const fromScores = await this.scoreAndPointsByUser!.get([from, lbDiscrim]);
-			const toScores = (await this.scoreAndPointsByUser!.get([to, lbDiscrim]));
+			const fromScores = await this.scoreAndPointsByUser!.get([from, lbDiscrim]) || {
+				score: 0,
+				totalCorrectAnswers: 0,
+				totalPoints: 0,
+			};
+			const toScores = (await this.scoreAndPointsByUser!.get([to, lbDiscrim])) || {
+				score: 0,
+				totalCorrectAnswers: 0,
+				totalPoints: 0,
+			};
 
 			toScores.score += fromScores.score;
 			toScores.totalCorrectAnswers += fromScores.totalCorrectAnswers;
