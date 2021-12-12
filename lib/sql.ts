@@ -60,7 +60,7 @@ function getModule() {
 	}
 }
 
-export class Statement<R extends DataType> {
+export class Statement<R extends DataType = DataType, T = any> {
 	private db: SQLDatabaseManager;
 	private statement: string;
 	constructor(statement: string, db: SQLDatabaseManager) {
@@ -71,10 +71,10 @@ export class Statement<R extends DataType> {
 		return this.db.run(this.statement, data);
 	}
 	all(data: R) {
-		return this.db.all(this.statement, data);
+		return this.db.all<T>(this.statement, data);
 	}
 	get(data: R) {
-		return this.db.get(this.statement, data);
+		return this.db.get<T>(this.statement, data);
 	}
 	toString() {
 		return this.statement;
@@ -401,7 +401,7 @@ export class DatabaseTable<T> {
 		return this.database.run(sql.sql, sql.values) as Promise<{changes: number}>;
 	}
 	all(sql: SQLStatement) {
-		return this.database.all(sql.sql, sql.values) as Promise<T[]>;
+		return this.database.all<T>(sql.sql, sql.values);
 	}
 }
 
