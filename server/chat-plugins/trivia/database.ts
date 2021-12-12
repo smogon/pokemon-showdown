@@ -15,8 +15,8 @@ export type Leaderboard = 'alltime' | 'nonAlltime' | 'cycle';
  * Values are the corresponding integer values of the SQLite `leaderboard` column.
  */
 export const LEADERBOARD_ENUM: Record<Leaderboard, number> = {
-	alltime: 0,
-	nonAlltime: 1,
+	alltime: 1,
+	nonAlltime: 0,
 	cycle: 2,
 };
 
