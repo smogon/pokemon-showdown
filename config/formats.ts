@@ -646,7 +646,7 @@ export const Formats: FormatList = [
 			'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Noivern', 'Palkia',
 			'Pheromosa', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Magnet Pull', 'Moody', 'Power Construct', 'Shadow Tag',
-			'King\'s Rock', 'Baton Pass',
+			'King\'s Rock', 'Baton Pass', 'Barraskewda',
 		],
 		restricted: ['Bolt Beak', 'U-turn', 'Volt Switch'],
 	},
