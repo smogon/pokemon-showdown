@@ -1791,7 +1791,7 @@ export class RandomTeams {
 				const isLowBP = move.basePower && move.basePower < 50;
 
 				// Genesect-Douse should never reject Techno Blast
-				const moveIsRejectable = /* !(species.id === 'genesectdouse' && move.id === 'technoblast') && */ (
+				const moveIsRejectable = !(species.id === 'genesectdouse' && move.id === 'technoblast') && (
 					move.category === 'Status' ||
 					!types.has(move.type) ||
 					(isLowBP && !move.multihit && !abilities.has('Technician'))

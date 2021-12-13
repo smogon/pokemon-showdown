@@ -503,6 +503,7 @@ export class CommandContext extends MessageContext {
 	handler: AnnotatedChatHandler | null;
 
 	isQuiet: boolean;
+	bypassRoomCheck?: boolean;
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
 	/** Used only by !rebroadcast */
@@ -511,7 +512,7 @@ export class CommandContext extends MessageContext {
 	constructor(options: {
 		message: string, user: User, connection: Connection,
 		room?: Room | null, pmTarget?: User | null, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string,
-		recursionDepth?: number, isQuiet?: boolean, broadcastPrefix?: string,
+		recursionDepth?: number, isQuiet?: boolean, broadcastPrefix?: string, bypassRoomCheck?: boolean,
 	}) {
 		super(
 			options.user, options.room && options.room.settings.language ?
@@ -533,6 +534,7 @@ export class CommandContext extends MessageContext {
 		this.fullCmd = options.fullCmd || '';
 		this.handler = null;
 		this.isQuiet = options.isQuiet || false;
+		this.bypassRoomCheck = options.bypassRoomCheck || false;
 
 		// broadcast context
 		this.broadcasting = false;
@@ -542,7 +544,10 @@ export class CommandContext extends MessageContext {
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
-	parse(msg?: string, options: {isQuiet?: boolean, broadcastPrefix?: string} = {}): any {
+	parse(
+		msg?: string,
+		options: Partial<{isQuiet: boolean, broadcastPrefix: string, bypassRoomCheck: boolean}> = {}
+	): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
 			const subcontext = new CommandContext({
@@ -552,6 +557,7 @@ export class CommandContext extends MessageContext {
 				room: this.room,
 				pmTarget: this.pmTarget,
 				recursionDepth: this.recursionDepth + 1,
+				bypassRoomCheck: this.bypassRoomCheck,
 				...options,
 			});
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
@@ -570,7 +576,7 @@ export class CommandContext extends MessageContext {
 			this.handler = parsedCommand.handler;
 		}
 
-		if (this.room && !(this.user.id in this.room.users)) {
+		if (!this.bypassRoomCheck && this.room && !(this.user.id in this.room.users)) {
 			return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 		}
 
@@ -805,6 +811,11 @@ export class CommandContext extends MessageContext {
 		}
 	}
 	errorReply(message: string) {
+		if (this.bypassRoomCheck) { // if they're not in the room, we still want a good error message for them
+			return this.popupReply(
+				`|html|<strong class="message-error">${message.replace(/\n/ig, '<br />')}</strong>`
+			);
+		}
 		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
 	}
 	addBox(htmlContent: string | JSX.VNode) {
@@ -1105,7 +1116,7 @@ export class CommandContext extends MessageContext {
 						this.tr`Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
 					);
 				}
-				if (!(user.id in room.users)) {
+				if (!this.bypassRoomCheck && !(user.id in room.users)) {
 					connection.popup(`You can't send a message to this room without being in it.`);
 					return null;
 				}

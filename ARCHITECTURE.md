@@ -33,9 +33,9 @@ Client
 
 The client is built in a mix of TypeScript and JavaScript, with a mostly hand-rolled framework built on Backbone. There’s a rewrite to migrate it to Preact but it’s very stalled.
 
-Its entry point is [index.template.html][https://github.com/smogon/pokemon-showdown-client/blob/master/index.template.html].
+Its entry point is [index.template.html](https://github.com/smogon/pokemon-showdown-client/blob/master/index.template.html).
 
-It was written long ago, so instead of a single JS entry point, it includes a lot of JS files. Everything important is launched from [js/client.js][https://github.com/smogon/pokemon-showdown-client/blob/master/js/client.js].
+It was written long ago, so instead of a single JS entry point, it includes a lot of JS files. Everything important is launched from [js/client.js](https://github.com/smogon/pokemon-showdown-client/blob/master/js/client.js).
 
 
 Login server
@@ -43,4 +43,4 @@ Login server
 
 The client’s login server, which handles logins and most database interaction, is written in PHP, with a rewrite to TypeScript in progress. The backend is split between a MySQL InnoDB database and a Percona database, with a migration to Postgres planned.
 
-Its entry point is [action.php][https://github.com/smogon/pokemon-showdown-client/blob/master/action.php].
+Its entry point is [action.php](https://github.com/smogon/pokemon-showdown-client/blob/master/action.php).

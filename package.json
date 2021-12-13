@@ -13,7 +13,6 @@
   },
   "optionalDependencies": {
     "better-sqlite3": "^7.1.0",
-    "brain.js": "^2.0.0-beta.2",
     "cloud-env": "^0.2.3",
     "githubhook": "^1.9.3",
     "node-static": "^0.7.11",
