@@ -37,7 +37,7 @@ const REPORT_NAMECOLORS: {[k: string]: string} = {
 	p2: 'Crimson',
 	p3: '#FBa92C',
 	p4: '#228B22',
-	other: '#00000',
+	other: '', // black - empty since handled by dark mode
 };
 
 export const cache: {
@@ -124,7 +124,7 @@ function colorName(id: ID, info: BattleInfo) {
 	for (const k in info.players) {
 		const player = info.players[k as SideID];
 		if (player === id) {
-			return REPORT_NAMECOLORS[k];
+			return ` style="color: ${REPORT_NAMECOLORS[k]}"`;
 		}
 	}
 	return REPORT_NAMECOLORS.other;
@@ -710,7 +710,7 @@ export const pages: Chat.PageTable = {
 				if (!id) continue;
 				users.add(id);
 				buf += `<div class="chat chatmessage${cache[roomid].staffNotified === id ? ` highlighted` : ``}">`;
-				buf += `<strong style="color: ${colorName(id, logData)}">`;
+				buf += `<strong${colorName(id, logData)}>`;
 				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
