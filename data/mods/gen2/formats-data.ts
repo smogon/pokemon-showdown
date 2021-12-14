@@ -691,7 +691,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	azumarill: {
-		randomBattleMoves: ["perishsong", "rest", "toxic", "whirlpool"],
+		randomBattleMoves: ["perishsong", "rest", "surf", "whirlpool"],
 		tier: "NU",
 	},
 	sudowoodo: {
