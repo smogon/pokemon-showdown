@@ -411,21 +411,6 @@ exports.autolockdown = true;
 exports.noguestsecurity = false;
 
 /**
- * Custom avatars.
- * This allows you to specify custom avatar images for users on your server.
- * Place custom avatar files under the /config/avatars/ directory.
- * Users must be specified as userids -- that is, you must make the name all
- * lowercase and remove non-alphanumeric characters.
- *
- * Your server *must* be registered in order for your custom avatars to be
- * displayed in the client.
- * @type {{[userid: string]: string}}
- */
-exports.customavatars = {
-	// 'userid': 'customavatar.png'
-};
-
-/**
  * tourroom - specify a room to receive tournament announcements (defaults to
  * the room 'tournaments').
  * tourannouncements - announcements are only allowed in these rooms
