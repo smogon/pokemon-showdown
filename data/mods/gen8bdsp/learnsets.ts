@@ -25122,6 +25122,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	},
 	shaymin: {
 		learnset: {
+			airslash: ["8L64"],
 			aromatherapy: ["8L64"],
 			bulletseed: ["8M"],
 			dazzlinggleam: ["8M"],
@@ -25136,11 +25137,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			growth: ["8L1"],
 			healingwish: ["8L46", "8L91"],
 			hyperbeam: ["8M"],
+			leafstorm: ["8L91"],
 			leechseed: ["8L19"],
 			magicalleaf: ["8L10"],
 			protect: ["8M"],
 			psychic: ["8M"],
 			psychup: ["8M"],
+			quickattack: ["8L28"],
 			rest: ["8M"],
 			safeguard: ["8M"],
 			seedflare: ["8L100"],

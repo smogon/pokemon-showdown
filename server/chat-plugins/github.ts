@@ -148,6 +148,8 @@ export const GitHub = new class {
 		if (action === 'synchronize') return 'updated';
 		if (action === 'review_requested') {
 			return 'requested a review for';
+		} else if (action === 'review_request_removed') {
+			return 'removed a review request for';
 		}
 		if (['ready_for_review', 'labeled', 'unlabeled', 'converted_to_draft'].includes(action)) {
 			return null;
