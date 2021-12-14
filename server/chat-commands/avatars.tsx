@@ -639,8 +639,8 @@ export const commands: Chat.ChatCommands = {
 		return this.parse(`/help addavatar`);
 	},
 	addavatarhelp: [
-		`/defaultavatar [username], [avatar] - Gives a user a default (personal) avatar.`,
-		`/allowavatar [username], [avatar] - Gives a user an allowed (group) avatar.`,
+		`/personalavatar [username], [avatar] - Gives a user a default (personal) avatar.`,
+		`/groupavatar [username], [avatar] - Gives a user an allowed (group) avatar.`,
 		`/removeavatar [username], [avatar] - Removes access to an avatar from a user.`,
 		`/removeavatar [username] - Removes access to all custom avatars from a user.`,
 		AVATAR_FORMATS_MESSAGE,
@@ -660,7 +660,7 @@ export const commands: Chat.ChatCommands = {
 		if (!Avatars.addPersonal(userid, avatar)) {
 			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
 		}
-		this.globalModlog('PAVATAR', userid, avatar);
+		this.globalModlog('PERSONAL AVATAR', userid, avatar);
 		this.sendReplyBox(<div>
 			{Avatars.img(avatar)}<br />
 			Added to <username class="username">{inputUsername}</username>
@@ -683,7 +683,7 @@ export const commands: Chat.ChatCommands = {
 		if (!Avatars.addAllowed(userid, avatar)) {
 			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
 		}
-		this.globalModlog('GAVATAR', userid, avatar);
+		this.globalModlog('GROUP AVATAR', userid, avatar);
 		this.sendReplyBox(<div>
 			{Avatars.img(avatar)}<br />
 			Added to <username class="username">{inputUsername}</username>
@@ -693,6 +693,7 @@ export const commands: Chat.ChatCommands = {
 
 	denyavatar: 'removeavatar',
 	disallowavatar: 'removeavatar',
+	removeavatars: 'removeavatar',
 	removeavatar(target, room, user) {
 		this.checkCan('bypassall');
 		if (!target) return this.parse(`/help defaultavatar`);
@@ -720,7 +721,7 @@ export const commands: Chat.ChatCommands = {
 			// delete all
 			delete customAvatars[userid];
 			Avatars.save();
-			this.globalModlog('REMOVE AVATAR', userid, allowed.join(','));
+			this.globalModlog('REMOVE AVATARS', userid, allowed.join(','));
 			this.sendReplyBox(<div>
 				{allowed.map(curAvatar => [Avatars.img(curAvatar!), ' '])}<br />
 				Removed from <username class="username">{inputUsername}</username>
@@ -774,7 +775,7 @@ export const commands: Chat.ChatCommands = {
 		for (const userid of userids) {
 			const avatar = '#' + userid;
 			Avatars.addPersonal(userid, avatar);
-			this.globalModlog('PAVATAR', userid, avatar);
+			this.globalModlog('PERSONAL AVATAR', userid, avatar);
 		}
 		this.sendReplyBox(<div>
 			{userids.map(userid => Avatars.img('#' + userid))}<br />
@@ -798,7 +799,7 @@ export const commands: Chat.ChatCommands = {
 		for (const userid of userids) {
 			const avatar = `#${userid}xmas`;
 			Avatars.addAllowed(userid, avatar);
-			this.globalModlog('GAVATAR', userid, avatar);
+			this.globalModlog('GROUP AVATAR', userid, avatar);
 		}
 		this.sendReplyBox(<div>
 			{userids.map(userid => Avatars.img(`#${userid}xmas`))}<br />
@@ -839,7 +840,7 @@ export const commands: Chat.ChatCommands = {
 				if (!oldUsers.has(newUser)) {
 					Avatars.addAllowed(newUser, avatar);
 					added.push(newUser);
-					this.globalModlog('GAVATAR', newUser, avatar);
+					this.globalModlog('GROUP AVATAR', newUser, avatar);
 				}
 			}
 			const removed: ID[] = [];
