@@ -588,7 +588,7 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	abusemonitor: {
 		flagged(query, user) {
-			checkAccess(this);
+			this.checkCan('lock');
 			const ids = getFlaggedRooms();
 			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
