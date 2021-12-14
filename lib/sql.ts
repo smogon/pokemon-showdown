@@ -288,19 +288,19 @@ export class DatabaseTable<T> {
 			};
 		}
 	})();
-	async selectOne(
+	async selectOne<R = T>(
 		entries: string | string[],
 		where?: SQLStatement
-	): Promise<T | null> {
+	): Promise<R | null> {
 		const query = where || this.SQL``;
 		query.append(' LIMIT 1');
-		const rows = await this.selectAll(entries, query);
+		const rows = await this.selectAll<R>(entries, query);
 		return rows?.[0] || null;
 	}
-	selectAll(
+	selectAll<R = T>(
 		entries: string | string[],
 		where?: SQLStatement
-	): Promise<T[]> {
+	): Promise<R[]> {
 		const query = this.SQL`SELECT `;
 		if (typeof entries === 'string') {
 			query.append(' * ');
@@ -316,7 +316,7 @@ export class DatabaseTable<T> {
 			query.append(' WHERE ');
 			query.append(where);
 		}
-		return this.all(query);
+		return this.all<R>(query);
 	}
 	get(entries: string | string[], keyId: SQLInput) {
 		const query = this.SQL``;
@@ -400,8 +400,8 @@ export class DatabaseTable<T> {
 	run(sql: SQLStatement) {
 		return this.database.run(sql.sql, sql.values) as Promise<{changes: number}>;
 	}
-	all(sql: SQLStatement) {
-		return this.database.all<T>(sql.sql, sql.values);
+	all<R = T>(sql: SQLStatement) {
+		return this.database.all<R>(sql.sql, sql.values);
 	}
 }
 
