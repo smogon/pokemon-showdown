@@ -611,10 +611,10 @@ export const pages: Chat.PageTable = {
 					buf += `<i class="fa fa-circle-o"></i> <strong>Unclaimed</strong></span></td>`;
 				}
 				// should never happen, fallback just in case
-				buf += `<td><a href="/${roomid}">${Rooms.get(roomid)?.title || roomid}</a></td>`;
+				buf += Utils.html`<td>${Rooms.get(roomid)?.title || roomid}</td>`;
 				buf += `<td>${entry.claimed ? entry.claimed : '-'}</td>`;
 				buf += `<td><button class="button" name="send" value="/am view ${roomid}">`;
-				buf += `${entry.claimed ? 'Join' : 'Claim'}</button></td>`;
+				buf += `${entry.claimed ? 'Show' : 'Claim'}</button></td>`;
 				buf += `</tr>`;
 			}
 			buf += `</table></div>`;
