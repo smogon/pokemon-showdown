@@ -32,11 +32,18 @@ const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'weeknamelock': '/wnl',
 	'namelock': '/nl',
 };
+const REPORT_NAMECOLORS: {[k: string]: string} = {
+	p1: 'DodgerBlue',
+	p2: 'Crimson',
+	p3: '#FBa92C',
+	p4: '#228B22',
+	other: '#00000',
+};
 
 export const cache: {
 	[roomid: string]: {
 		users: Record<string, number>,
-		staffNotified?: boolean,
+		staffNotified?: ID,
 		claimed?: ID,
 	},
 } = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
@@ -84,6 +91,43 @@ interface PMResult {
 interface PMRequest {
 	comment: string;
 	fullResponse?: boolean;
+}
+
+interface BattleInfo {
+	players: Record<SideID, ID>;
+	log: string[];
+}
+
+// Mostly stolen from my code in helptickets.
+// Necessary because we can't require this in without also requiring in a LOT of other
+// modules, most of which crash the child process. Lot messier to fix that than it is to do this.
+export function getBattleLog(battle: string) {
+	const battleRoom = Rooms.get(battle);
+	if (battleRoom && battleRoom.type !== 'chat') {
+		const playerTable: Partial<BattleInfo['players']> = {};
+		// i kinda hate this, but this will always be accurate to the battle players.
+		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
+		const playerLines = battleRoom.log.log.filter(line => line.startsWith('|player|'));
+		for (const line of playerLines) {
+			const [, , playerSlot, name] = line.split('|');
+			playerTable[playerSlot as SideID] = toID(name);
+		}
+		return {
+			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
+			players: playerTable as BattleInfo['players'],
+		};
+	}
+	return null;
+}
+// see above comment.
+function colorName(id: ID, info: BattleInfo) {
+	for (const k in info.players) {
+		const player = info.players[k as SideID];
+		if (player === id) {
+			return REPORT_NAMECOLORS[k];
+		}
+	}
+	return REPORT_NAMECOLORS.other;
 }
 
 function time() {
@@ -270,7 +314,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
 			if (cache[roomid].users[user.id] >= settings.threshold) {
-				cache[roomid].staffNotified = true;
+				cache[roomid].staffNotified = user.id;
 				notifyStaff();
 				hitThreshold = 1;
 				void room?.uploadReplay?.(user, this.connection, "forpunishment");
@@ -655,15 +699,19 @@ export const pages: Chat.PageTable = {
 			buf += `<details class="readmore"><summary><strong>Chat:</strong></summary><div class="infobox">`;
 			// we parse users specifically from the log so we can see it after they leave the room
 			const users = new Utils.Multiset<string>();
+			const logData = getBattleLog(room.roomid);
+			// should only extremely rarely happen - if the room expires while this is happening.
+			if (!logData) return `<div class="pad"><p class="error">No such room.</p></div>`;
 			// assume logs exist - why else would the filter activate?
-			for (const line of room.log.log) {
+			for (const line of logData.log) {
 				const data = room.log.parseChatLine(line);
 				if (!data) continue; // not chat
 				const id = toID(data.user);
 				if (!id) continue;
 				users.add(id);
-				buf += `<div class="chat"><span class="username">`;
-				buf += Utils.html`<username>${data.user}:</username></span> ${data.message}</div>`;
+				buf += `<div class="chat chatmessage${cache[roomid].staffNotified === id ? ` highlighted` : ``}">`;
+				buf += `<strong style="color: ${colorName(id, logData)}">`;
+				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
