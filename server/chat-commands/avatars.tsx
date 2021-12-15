@@ -77,7 +77,7 @@ export const Avatars = new class {
 		return validatedAvatar;
 	}
 	canUse(userid: ID, avatar: string): AvatarID | null {
-		avatar = avatar.toLowerCase().replace(/[^a-z0-9-]+/g, '');
+		avatar = avatar.toLowerCase().replace(/[^a-z0-9-.]+/g, '');
 		if (OFFICIAL_AVATARS.has(avatar)) return avatar;
 
 		const customs = customAvatars[userid]?.allowed;
