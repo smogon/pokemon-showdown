@@ -827,12 +827,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	knockoff: {
 		inherit: true,
-		onAfterHit(target, source) {
+		onAfterHit(target, source, move) {
 			if (!target.item || target.itemState.knockedOff) return;
 			const item = target.getItem();
-			if (this.runEvent('TakeItem', target, target, null, item)) {
+			if (this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) {
 				target.itemState.knockedOff = true;
 				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+				this.hint("Prior to Gen 5, Knock Off did not actually remove the target's item. Instead, the item would be unusable for the rest of the battle, and the target would not be able to obtain a new item.", true);
 			}
 		},
 	},
