@@ -2830,6 +2830,51 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	protean: {
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced || move.sourceEffect === 'snatch') return;
+			if (move.name === 'Mirror Coat') {
+				if (!source.volatiles['mirrorcoat']) return;
+				if (source.volatiles['mirrorcoat'].slot === null) return;
+			}
+			if (move.name === 'Counter') {
+				if (!source.volatiles['counter']) return;
+				if (source.volatiles['counter'].slot === null) return;
+			}
+			if (move.name === 'Metal Burst') {
+				const lastDamagedBy = source.getLastDamagedBy(true);
+				if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return;
+			}
+			if (move.name === 'Fling') {
+				if (source.ignoringItem()) return;
+				const item = source.getItem();
+				if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return;
+				if (!item.fling) return;
+			}
+			if (move.name === 'Sucker Punch') {
+				const action = this.queue.willMove(target);
+				const targetMove = action?.choice === 'move' ? action.move : null;
+				if (!targetMove || (targetMove.category === 'Status' && targetMove.id !== 'mefirst') || target.volatiles['mustrecharge']) {
+					return;
+				}
+			}
+			if (move.name === 'Steel Roller') {
+				if (this.field.isTerrain('')) return;
+			}
+			if (move.name === 'Aura Wheel') {
+				if (source.species.baseSpecies !== 'Morpeko') return;
+			}
+			if (move.name === 'Magnet Rise') {
+				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return;
+
+				// Additional Gravity check for Z-move variant
+				if (this.field.getPseudoWeather('Gravity')) {
+					return;
+				}
+			}
+			if (move.name === 'Burn Up') {
+				if (!(source.hasType('Fire'))) return;
+			}
+			if (move.name === 'Aurora Veil') {
+				if (!this.field.isWeather('hail')) return;
+			}
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
