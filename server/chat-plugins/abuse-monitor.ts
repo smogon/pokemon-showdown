@@ -460,7 +460,9 @@ export const commands: Chat.ChatCommands = {
 			this.room.reportJoin('l', user.getIdentityWithStatus(this.room), user);
 		},
 		view(target, room, user) {
-			return this.parse(`/j view-abusemonitor-view-${target.toLowerCase().trim()}`);
+			target = target.toLowerCase().trim();
+			if (!target) return this.parse(`/help am`);
+			return this.parse(`/j view-abusemonitor-view-${target}`);
 		},
 		logs(target) {
 			checkAccess(this);
@@ -667,6 +669,9 @@ export const pages: Chat.PageTable = {
 		view(query, user) {
 			this.checkCan('lock');
 			const roomid = query.join('-');
+			if (!toID(roomid)) {
+				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
+			}
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
