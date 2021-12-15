@@ -785,9 +785,12 @@ export class Pokemon {
 	}
 
 	ignoringItem() {
-		return !!((this.battle.gen >= 5 && !this.isActive) ||
+		return !!(
+			this.itemState.knockedOff || // Gen 3-4
+			(this.battle.gen >= 5 && !this.isActive) ||
 			(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
-			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']);
+			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']
+		);
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -1649,10 +1652,11 @@ export class Pokemon {
 	takeItem(source?: Pokemon) {
 		if (!this.isActive) return false;
 		if (!this.item) return false;
+		if (this.itemState.knockedOff) return false;
 		if (!source) source = this;
 		if (this.battle.gen === 4) {
 			if (toID(this.ability) === 'multitype') return false;
-			if (source && toID(source.ability) === 'multitype') return false;
+			if (toID(source.ability) === 'multitype') return false;
 		}
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
