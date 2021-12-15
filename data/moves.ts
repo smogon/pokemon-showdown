@@ -7706,11 +7706,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1, distance: 1, bypasssub: 1},
-		onHit(pokemon, source) {
+		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			const side = pokemon.side;
 			let success = false;
-			for (const ally of side.pokemon) {
+			for (const pokemon of source.side.pokemon) {				
+				if (pokemon !== source && pokemon.hasAbility('soundproof')) continue;
+				if (pokemon.cureStatus()) success = true;
+			}
+			for (const ally of target.side.pokemon) {
 				if (ally !== source && ally.hasAbility('soundproof')) continue;
 				if (ally.cureStatus()) success = true;
 			}

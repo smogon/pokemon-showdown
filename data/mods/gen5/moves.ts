@@ -355,6 +355,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const pokemon of source.side.pokemon) {
 				pokemon.cureStatus();
 			}
+			for (const ally of target.side.pokemon) {
+				ally.cureStatus();
+			}
 		},
 	},
 	healpulse: {

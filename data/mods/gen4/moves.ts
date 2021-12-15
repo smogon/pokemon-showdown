@@ -701,6 +701,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const pokemon of source.side.pokemon) {
 				if (!pokemon.hasAbility('soundproof')) pokemon.cureStatus(true);
 			}
+			for (const ally of target.side.pokemon) {
+				if (!ally.hasAbility('soundproof')) ally.cureStatus(true);
+			}
 		},
 	},
 	healblock: {

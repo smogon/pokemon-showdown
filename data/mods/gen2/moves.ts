@@ -314,6 +314,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const pokemon of source.side.pokemon) {
 				pokemon.clearStatus();
 			}
+			for (const ally of target.side.pokemon) {
+				ally.cureStatus();
+			}
 		},
 	},
 	highjumpkick: {
