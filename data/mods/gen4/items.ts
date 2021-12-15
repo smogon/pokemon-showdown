@@ -147,7 +147,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return this.chainModify(1.2);
 			}
 		},
-		onTakeItem: false,
 	},
 	ironball: {
 		inherit: true,
