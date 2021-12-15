@@ -829,9 +829,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onAfterHit(target, source) {
 			if (!target.item || target.itemState.knockedOff) return;
-			target.itemState.knockedOff = true;
 			const item = target.getItem();
-			this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+			if (this.runEvent('TakeItem', target, target, null, item)) {
+				target.itemState.knockedOff = true;
+				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+			}
 		},
 	},
 	lastresort: {
