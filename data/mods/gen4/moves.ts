@@ -828,7 +828,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	knockoff: {
 		inherit: true,
 		onAfterHit(target, source) {
-			if (!target.item) return;
+			if (!target.item || target.itemState.knockedOff) return;
 			target.itemState.knockedOff = true;
 			const item = target.getItem();
 			this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);

@@ -1575,7 +1575,7 @@ export class Pokemon {
 	}
 
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
-		if (!this.item) return false;
+		if (!this.item || this.itemState.knockedOff) return false;
 		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -1615,7 +1615,7 @@ export class Pokemon {
 
 	useItem(source?: Pokemon, sourceEffect?: Effect) {
 		if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
-		if (!this.item) return false;
+		if (!this.item || this.itemState.knockedOff) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -1651,8 +1651,7 @@ export class Pokemon {
 
 	takeItem(source?: Pokemon) {
 		if (!this.isActive) return false;
-		if (!this.item) return false;
-		if (this.itemState.knockedOff) return false;
+		if (!this.item || this.itemState.knockedOff) return false;
 		if (!source) source = this;
 		if (this.battle.gen === 4) {
 			if (toID(this.ability) === 'multitype') return false;
