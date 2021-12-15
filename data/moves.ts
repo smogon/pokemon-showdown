@@ -7709,7 +7709,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
 			let success = false;
-			for (const pokemon of source.side.pokemon) {				
+			for (const pokemon of source.side.pokemon) {
 				if (pokemon !== source && pokemon.hasAbility('soundproof')) continue;
 				if (pokemon.cureStatus()) success = true;
 			}
