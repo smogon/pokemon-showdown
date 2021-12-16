@@ -355,7 +355,15 @@ function saveSettings() {
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
 	if (staffRoom) {
-		// staffRoom.add(`|uhtml|abusemonitor|${buf}`).update();
+		const flagged = getFlaggedRooms();
+		let buf = '';
+		if (flagged.length) {
+			buf = `<button class="button notifying" name="send" value="/am">`;
+			buf += `${Chat.count(flagged.length, 'flagged battles')}</button>`;
+		} else {
+			buf = 'No battles flagged.';
+		}
+		staffRoom.add(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`).update();
 		Chat.refreshPageFor('abusemonitor-flagged', staffRoom);
 	}
 }
