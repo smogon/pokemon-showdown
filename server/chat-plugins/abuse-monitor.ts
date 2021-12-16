@@ -331,8 +331,11 @@ chatfilter.priority = -100;
 
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
-		if (cache[roomid]) delete cache[roomid];
-		notifyStaff();
+		const entry = cache[roomid];
+		if (entry) {
+			if (entry.staffNotified) notifyStaff();
+			delete cache[roomid];
+		}
 	},
 	onRoomClose(roomid, user) {
 		if (!roomid.startsWith('view-abusemonitor-view')) return;
