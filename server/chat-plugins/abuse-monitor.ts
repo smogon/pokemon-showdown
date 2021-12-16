@@ -723,6 +723,9 @@ export const pages: Chat.PageTable = {
 			for (const line of logData.log) {
 				const data = room.log.parseChatLine(line);
 				if (!data) continue; // not chat
+				if (['/log', '/raw'].some(prefix => data.message.startsWith(prefix))) {
+					continue;
+				}
 				const id = toID(data.user);
 				if (!id) continue;
 				users.add(id);
