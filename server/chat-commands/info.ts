@@ -1753,7 +1753,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 		this.sendReplyBox(
-			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko &amp; Austin)<br />` +
+			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, &amp; Kris)<br />` +
 			`- <a href="https://calc.pokemonshowdown.com/index.html">Damage Calculator</a>`
 		);
 	},
