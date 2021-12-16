@@ -366,7 +366,7 @@ export function notifyStaff() {
 		} else {
 			buf = 'No battles flagged.';
 		}
-		staffRoom.add(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`).update();
+		staffRoom.send(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`);
 		Chat.refreshPageFor('abusemonitor-flagged', staffRoom);
 	}
 }
