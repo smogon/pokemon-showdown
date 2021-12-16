@@ -132,7 +132,7 @@ export class Hangman extends Rooms.RoomGame {
 				this.guesses.push(letter);
 				this.letterGuesses.push(`${letter}1`);
 				this.lastGuesser = guesser;
-				this.finish();
+				void this.finish();
 				return true;
 			}
 			this.letterGuesses.push(`${letter}1`);
@@ -143,7 +143,7 @@ export class Hangman extends Rooms.RoomGame {
 
 		this.guesses.push(letter);
 		this.lastGuesser = guesser;
-		this.update();
+		void this.update();
 		return true;
 	}
 
@@ -159,13 +159,13 @@ export class Hangman extends Rooms.RoomGame {
 			this.incorrectGuesses = -1;
 			this.guesses.push(word);
 			this.lastGuesser = guesser;
-			this.finish();
+			void this.finish();
 			return true;
 		} else if (ourWord.length === guessedWord.length) {
 			this.incorrectGuesses++;
 			this.guesses.push(word);
 			this.lastGuesser = guesser;
-			this.update();
+			void this.update();
 			return true;
 		}
 		return false;
@@ -232,22 +232,28 @@ export class Hangman extends Rooms.RoomGame {
 		}
 	}
 
-	update() {
-		this.room.uhtmlchange(`hangman${this.gameNumber}`, this.generateWindow());
+	async update() {
+		await this.room.uhtmlchange(`hangman${this.gameNumber}`, this.generateWindow());
 
 		if (this.incorrectGuesses === maxMistakes) {
-			this.finish();
+			await this.finish();
 		}
 	}
 
-	end() {
-		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman was ended.)</div>');
+	async end() {
+		await this.room.uhtmlchange(
+			`hangman${this.gameNumber}`,
+			'<div class="infobox">(The game of hangman was ended.)</div>'
+		);
 		this.room.add("The game of hangman was ended.");
 		this.room.game = null;
 	}
 
-	finish() {
-		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
+	async finish() {
+		await this.room.uhtmlchange(
+			`hangman${this.gameNumber}`,
+			'<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>'
+		);
 		this.room.add(`|html|${this.generateWindow()}`);
 		this.room.game = null;
 	}
@@ -334,12 +340,12 @@ export const commands: Chat.ChatCommands = {
 		],
 
 		stop: 'end',
-		end(target, room, user) {
+		async end(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
 			this.checkChat();
 			const game = this.requireGame(Hangman);
-			game.end();
+			await game.end();
 			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`The game of hangman was ended by ${user.name}.`);
 		},

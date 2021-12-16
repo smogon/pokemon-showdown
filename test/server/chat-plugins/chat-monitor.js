@@ -50,11 +50,11 @@ describe('Chat monitor', () => {
 	});
 
 	describe('in-room tests', function () {
-		before(() => {
+		before(async () => {
 			this.room = Rooms.get('lobby');
 			this.user = makeUser("Unit Tester");
 			this.connection = this.user.connections[0];
-			this.user.joinRoom(this.room.roomid, this.connection);
+			await this.user.joinRoom(this.room.roomid, this.connection);
 
 			Chat.loadPlugins();
 			this.parse = async function (message) {
@@ -80,7 +80,8 @@ describe('Chat monitor', () => {
 			await this.parse("haha autolock me pls");
 
 			assert(this.user.locked);
-			assert.notEqual(this.room.log.log.pop(), "haha autolock me pls");
+			const log = [...await this.room.log.get()];
+			assert.notEqual(log.pop(), "haha autolock me pls");
 		});
 
 		it('should lock users who evade evasion phrases', async () => {
@@ -92,7 +93,8 @@ describe('Chat monitor', () => {
 
 			await this.parse("sl ur");
 			assert(this.user.locked);
-			assert.notEqual(this.room.log.log.pop(), "sl ur");
+			const log = [...await this.room.log.get()];
+			assert.notEqual(log.pop(), "sl ur");
 		});
 
 		it('should replace words filtered to other words', async () => {
@@ -104,8 +106,9 @@ describe('Chat monitor', () => {
 			});
 
 			await this.parse("Hello! replace me pls! thanks, and remember to replace me.");
+			const log = [...await this.room.log.get()];
 			assert.equal(
-				this.room.log.log.pop().replace(/^\|c:\|[0-9]+\| Unit Tester\|/, ''),
+				log.pop().replace(/^\|c:\|[0-9]+\| Unit Tester\|/, ''),
 				"Hello! i got replaced pls! thanks, and remember to i got replaced."
 			);
 		});
@@ -118,7 +121,9 @@ describe('Chat monitor', () => {
 			});
 
 			await this.parse("mild slur");
-			assert.notEqual(this.room.log.log.pop(), "mild slur");
+			// note: None of the log tests work. these check for things it can literally never be.
+			const log = [...await this.room.log.get()];
+			assert.notEqual(log.pop(), "mild slur");
 		});
 
 		it('should prevent banwords and evasion banwords from being used in usernames', () => {

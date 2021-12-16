@@ -1293,15 +1293,15 @@ export class User extends Chat.MessageContext {
 			connection.send(`>${roomid}\n|deinit`);
 		}
 
-		this.joinRoom(room, connection);
+		await this.joinRoom(room, connection);
 		return true;
 	}
-	joinRoom(roomid: RoomID | Room, connection: Connection | null = null) {
+	async joinRoom(roomid: RoomID | Room, connection: Connection | null = null) {
 		const room = Rooms.get(roomid);
 		if (!room) throw new Error(`Room not found: ${roomid}`);
 		if (!connection) {
 			for (const curConnection of this.connections) {
-				this.joinRoom(room, curConnection);
+				await this.joinRoom(room, curConnection);
 			}
 			return;
 		}
@@ -1311,7 +1311,7 @@ export class User extends Chat.MessageContext {
 				room.onJoin(this, connection);
 			}
 			connection.joinRoom(room);
-			room.onConnect(this, connection);
+			await room.onConnect(this, connection);
 		}
 	}
 	leaveRoom(room: Room | string, connection: Connection | null = null) {

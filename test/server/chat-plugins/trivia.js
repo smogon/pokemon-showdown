@@ -9,10 +9,10 @@ const FirstModeTrivia = trivia.FirstModeTrivia;
 const TimerModeTrivia = trivia.TimerModeTrivia;
 const NumberModeTrivia = trivia.NumberModeTrivia;
 
-function makeTriviaUser(name, ip) {
+async function makeTriviaUser(name, ip) {
 	const user = makeUser(name, ip);
 	assert.equal(Users.users.get(user.id), user);
-	user.joinRoom('trivia');
+	await user.joinRoom('trivia');
 	return user;
 }
 
@@ -29,10 +29,10 @@ describe('Trivia', function () {
 		this.room = Rooms.get('trivia');
 	});
 
-	beforeEach(function () {
+	beforeEach(async function () {
 		const questions = [{question: '', answers: ['answer'], category: 'ae'}];
-		this.user = makeTriviaUser('Morfent', '127.0.0.1');
-		this.tarUser = makeTriviaUser('ReallyNotMorfent', '127.0.0.2');
+		this.user = await makeTriviaUser('Morfent', '127.0.0.1');
+		this.tarUser = await makeTriviaUser('ReallyNotMorfent', '127.0.0.2');
 		this.game = this.room.game = new Trivia(this.room, 'first', ['ae'], true, 'short', questions);
 	});
 
@@ -64,24 +64,24 @@ describe('Trivia', function () {
 		assert.equal(this.game.playerCount, 1);
 	});
 
-	it('should not add a player if another one on the same IP has joined', function () {
+	it('should not add a player if another one on the same IP has joined', async function () {
 		this.game.addTriviaPlayer(this.user);
 
-		const user2 = makeTriviaUser('Not Morfent', '127.0.0.1');
+		const user2 = await makeTriviaUser('Not Morfent', '127.0.0.1');
 		assert.throws(() => this.game.addTriviaPlayer(user2));
 
 		assert.equal(this.game.playerCount, 1);
 		destroyUser(user2);
 	});
 
-	it('should not add a player if another player had their username previously', function () {
+	it('should not add a player if another player had their username previously', async function () {
 		const userid = this.user.id;
 		const name = this.user.name;
 		this.game.addTriviaPlayer(this.user);
 		this.user.forceRename('Not Morfent', true);
 		this.user.previousIDs.push(userid);
 
-		const user2 = makeTriviaUser(name, '127.0.0.3');
+		const user2 = await makeTriviaUser(name, '127.0.0.3');
 		assert.throws(() => this.game.addTriviaPlayer(user2));
 
 		assert.equal(this.game.playerCount, 1);
@@ -117,14 +117,14 @@ describe('Trivia', function () {
 		assert.equal(this.game.playerCount, 0);
 	});
 
-	it('should not add users who were kicked under another IP', function () {
+	it('should not add users who were kicked under another IP', async function () {
 		this.game.addTriviaPlayer(this.tarUser);
 		this.game.kick(this.tarUser, this.user);
 
 		const name = this.tarUser.name;
 		this.tarUser.resetName();
 
-		const user2 = makeTriviaUser(name, '127.0.0.2');
+		const user2 = await makeTriviaUser(name, '127.0.0.2');
 		assert.throws(() => this.game.addTriviaPlayer(user2));
 		assert.equal(this.game.playerCount, 0);
 		destroyUser(user2);
@@ -159,16 +159,14 @@ describe('Trivia', function () {
 			const questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
 			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
-			this.user = makeTriviaUser('Morfent', '127.0.0.1');
-			this.user2 = makeTriviaUser('user2', '127.0.0.2');
-			this.user3 = makeTriviaUser('user3', '127.0.0.3');
+			this.user = await makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = await makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = await makeTriviaUser('user3', '127.0.0.3');
 
-			this.user.joinRoom(this.room);
-			game.addTriviaPlayer(this.user);
-			this.user2.joinRoom(this.room);
-			game.addTriviaPlayer(this.user2);
-			this.user3.joinRoom(this.room);
-			game.addTriviaPlayer(this.user3);
+			for (const user of [this.user, this.user2, this.user3]) {
+				await user.joinRoom(this.room);
+				game.addTriviaPlayer(user);
+			}
 			game.start();
 			await game.askQuestion();
 			clearTimeout(game.phaseTimeout);
@@ -189,11 +187,11 @@ describe('Trivia', function () {
 			}
 		});
 
-		it('should mark a player absent on leave and unnmark them when they return', function () {
+		it('should mark a player absent on leave and unnmark them when they return', async function () {
 			this.user.leaveRoom(this.room);
 			assert.equal(this.player.isAbsent, true);
 
-			this.user.joinRoom(this.room);
+			await this.user.joinRoom(this.room);
 			assert.equal(this.player.isAbsent, false);
 		});
 	});
@@ -203,9 +201,9 @@ describe('Trivia', function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
-			this.user = makeTriviaUser('Morfent', '127.0.0.1');
-			this.user2 = makeTriviaUser('user2', '127.0.0.2');
-			this.user3 = makeTriviaUser('user3', '127.0.0.3');
+			this.user = await makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = await makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = await makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);
@@ -267,9 +265,9 @@ describe('Trivia', function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new TimerModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
-			this.user = makeTriviaUser('Morfent', '127.0.0.1');
-			this.user2 = makeTriviaUser('user2', '127.0.0.2');
-			this.user3 = makeTriviaUser('user3', '127.0.0.3');
+			this.user = await makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = await makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = await makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);
@@ -342,9 +340,9 @@ describe('Trivia', function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new NumberModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
-			this.user = makeTriviaUser('Morfent', '127.0.0.1');
-			this.user2 = makeTriviaUser('user2', '127.0.0.2');
-			this.user3 = makeTriviaUser('user3', '127.0.0.3');
+			this.user = await makeTriviaUser('Morfent', '127.0.0.1');
+			this.user2 = await makeTriviaUser('user2', '127.0.0.2');
+			this.user3 = await makeTriviaUser('user3', '127.0.0.3');
 
 			game.addTriviaPlayer(this.user);
 			game.addTriviaPlayer(this.user2);

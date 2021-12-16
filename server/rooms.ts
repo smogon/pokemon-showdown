@@ -313,6 +313,8 @@ export abstract class BasicRoom {
 		this.game = null;
 		this.battle = null;
 		this.validateTitle(this.title, this.roomid);
+
+		this.add(`|html|<div class="broadcast-blue"><b>The server was restarted.</b></div>`).update();
 	}
 
 	toString() {
@@ -373,13 +375,13 @@ export abstract class BasicRoom {
 		return this;
 	}
 	uhtmlchange(name: string, message: string) {
-		this.log.uhtmlchange(name, message);
+		return this.log.uhtmlchange(name, message);
 	}
 	attributedUhtmlchange(user: User, name: string, message: string) {
-		this.log.attributedUhtmlchange(user, name, message);
+		return this.log.attributedUhtmlchange(user, name, message);
 	}
-	hideText(userids: ID[], lineCount = 0, hideRevealButton?: boolean) {
-		const cleared = this.log.clearText(userids, lineCount);
+	async hideText(userids: ID[], lineCount = 0, hideRevealButton?: boolean) {
+		const cleared = await this.log.clearText(userids, lineCount);
 		for (const userid of cleared) {
 			this.send(`|hidelines|${hideRevealButton ? 'delete' : 'hide'}|${userid}|${lineCount}`);
 		}
@@ -420,7 +422,7 @@ export abstract class BasicRoom {
 		}
 		this.send(this.log.broadcastBuffer.join('\n'));
 		this.log.broadcastBuffer = [];
-		this.log.truncate();
+		void this.log.truncate();
 
 		this.pokeExpireTimer();
 	}
@@ -952,11 +954,12 @@ export abstract class BasicRoom {
 		void this.log.rename(newID);
 	}
 
-	onConnect(user: User, connection: Connection) {
+	async onConnect(user: User, connection: Connection) {
 		const userList = this.userList ? this.userList : this.getUserList();
+		const log = await this.log.getScrollback();
 		this.sendUser(
 			connection,
-			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.log.getScrollback() + this.getIntroMessage(user)
+			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + log + this.getIntroMessage(user)
 		);
 		this.minorActivity?.onConnect?.(user, connection);
 		this.game?.onConnect?.(user, connection);
@@ -1541,12 +1544,12 @@ export class GlobalRoomState {
 		room.destroy();
 		return true;
 	}
-	autojoinRooms(user: User, connection: Connection) {
+	async autojoinRooms(user: User, connection: Connection) {
 		// we only autojoin regular rooms if the client requests it with /autojoin
 		// note that this restriction doesn't apply to modjoined autojoin rooms
 		let includesLobby = false;
 		for (const roomName of this.autojoinList) {
-			user.joinRoom(roomName, connection);
+			await user.joinRoom(roomName, connection);
 			if (roomName === 'lobby') includesLobby = true;
 		}
 		if (!includesLobby && Config.serverid !== 'showdown') user.send(`>lobby\n|deinit`);
@@ -1561,7 +1564,7 @@ export class GlobalRoomState {
 				continue;
 			}
 			if (room.checkModjoin(user)) {
-				user.joinRoom(room.roomid, connection);
+				void user.joinRoom(room.roomid, connection);
 			}
 		}
 		for (const conn of user.connections) {
@@ -1834,8 +1837,8 @@ export class GameRoom extends BasicRoom {
 			return "Modchat can only be changed by the user who turned it on, or by staff";
 		}
 	}
-	onConnect(user: User, connection: Connection) {
-		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
+	async onConnect(user: User, connection: Connection) {
+		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + await this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
 	/**
@@ -1877,7 +1880,7 @@ export class GameRoom extends BasicRoom {
 		let hideDetails = !format.id.includes('customgame');
 		if (format.team && battle.ended) hideDetails = false;
 
-		const data = this.getLog(hideDetails ? 0 : -1);
+		const data = await this.getLog(hideDetails ? 0 : -1);
 		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let rating = 0;
 		if (battle.ended && this.rated) rating = this.rated;
@@ -2023,7 +2026,7 @@ export const Rooms = {
 
 		for (const p of players) {
 			if (p) {
-				p.joinRoom(room);
+				void p.joinRoom(room);
 				Monitor.countBattle(p.latestIp, p.name);
 			}
 		}

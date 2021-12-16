@@ -145,7 +145,7 @@ class OtdHandler {
 	startVote() {
 		this.voting = true;
 		this.timer = setTimeout(() => this.rollWinner(), 20 * MINUTE);
-		this.display();
+		return this.display();
 	}
 
 	finish() {
@@ -223,7 +223,7 @@ class OtdHandler {
 		}
 
 		if (this.settings.updateOnNom) {
-			this.display(updateOnly);
+			void this.display(updateOnly);
 		}
 	}
 
@@ -260,9 +260,9 @@ class OtdHandler {
 		return buffer;
 	}
 
-	display(update = false) {
+	async display(update = false) {
 		if (update) {
-			this.room.uhtmlchange('otd', this.generateNomWindow());
+			await this.room.uhtmlchange('otd', this.generateNomWindow());
 		} else {
 			this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
 		}
@@ -305,7 +305,7 @@ class OtdHandler {
 		return true;
 	}
 
-	removeNomination(name: string) {
+	async removeNomination(name: string) {
 		name = toID(name);
 
 		let success = false;
@@ -324,7 +324,7 @@ class OtdHandler {
 			}
 		}
 
-		if (this.voting) this.display();
+		if (this.voting) await this.display();
 		return success;
 	}
 
@@ -497,7 +497,7 @@ function selectHandler(message: string) {
 }
 
 export const otdCommands: Chat.ChatCommands = {
-	start(target, room, user, connection, cmd) {
+	async start(target, room, user, connection, cmd) {
 		this.checkChat();
 
 		const handler = selectHandler(this.message);
@@ -511,7 +511,7 @@ export const otdCommands: Chat.ChatCommands = {
 				`The nomination for the ${handler.name} of the ${handler.timeLabel} nomination is already in progress.`
 			);
 		}
-		handler.startVote();
+		await handler.startVote();
 
 		this.privateModAction(`${user.name} has started nominations for the ${handler.name} of the ${handler.timeLabel}.`);
 		this.modlog(`${handler.id.toUpperCase()} START`, null);
@@ -558,7 +558,7 @@ export const otdCommands: Chat.ChatCommands = {
 	},
 	nomhelp: [`/-otd nom [nomination] - Nominate something for Thing of the Day.`],
 
-	view(target, room, user, connection) {
+	async view(target, room, user, connection) {
 		this.checkChat();
 		if (!this.runBroadcast()) return false;
 
@@ -568,14 +568,14 @@ export const otdCommands: Chat.ChatCommands = {
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
 		if (this.broadcasting) {
-			selectHandler(this.message).display();
+			await selectHandler(this.message).display();
 		} else {
 			selectHandler(this.message).displayTo(connection);
 		}
 	},
 	viewhelp: [`/-otd view - View the current nominations for the Thing of the Day.`],
 
-	remove(target, room, user) {
+	async remove(target, room, user) {
 		this.checkChat();
 
 		const handler = selectHandler(this.message);
@@ -587,7 +587,7 @@ export const otdCommands: Chat.ChatCommands = {
 		const userid = toID(target);
 		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
 
-		if (handler.removeNomination(userid)) {
+		if (await handler.removeNomination(userid)) {
 			this.privateModAction(`${user.name} removed ${target}'s nomination for the ${handler.name} of the ${handler.timeLabel}.`);
 			this.modlog(`${handler.id.toUpperCase()} REMOVENOM`, userid);
 		} else {

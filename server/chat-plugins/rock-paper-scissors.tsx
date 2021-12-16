@@ -199,13 +199,14 @@ export class RPSGame extends Rooms.RoomGame {
 	message(message: string) {
 		this.room.add(`|message|${message}`).update();
 	}
-	start() {
+	async start() {
 		if (this.players.length < 2) {
 			throw new Chat.ErrorMessage(`There are not enough players to start. Use /rps start to start when all players are ready.`);
 		}
-		if (this.room.log.log.length > 1000) {
+		const log = await this.room.log.getScrollback();
+		if (log.length > 1000) {
 			// prevent logs from ballooning too much
-			this.room.log.log = [];
+			await this.room.log.scrollback.clear();
 		}
 		const [p1, p2] = this.players;
 		this.room.add(

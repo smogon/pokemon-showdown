@@ -16,6 +16,147 @@ interface RoomlogOptions {
 	noLogTimes?: boolean;
 }
 
+export interface Scrollback {
+	room: BasicRoom;
+	get(): Promise<string[]>;
+	add(entry: string): Promise<void>;
+	truncate(): Promise<number> | number;
+	destroy(): Promise<void>;
+	clear(): Promise<void>;
+	/** return false to delete the entry, string to change it, or undefined to keep it unchanged*/
+	modify(
+		cb: (log: string, index: number) => boolean | string | void | undefined,
+		desc?: boolean
+	): Promise<number[]>;
+}
+
+export class MemoryScrollback implements Scrollback {
+	room: BasicRoom;
+	private log: string[] = [];
+	constructor(room: BasicRoom) {
+		this.room = room;
+	}
+	get() {
+		return Promise.resolve(this.log);
+	}
+	add(message: string) {
+		this.log.push(message);
+		return Promise.resolve();
+	}
+	truncate() {
+		if (this.room.log.noAutoTruncate) return 0;
+		if (this.log.length > 100) {
+			const truncationLength = this.log.length - 100;
+			this.log.splice(0, truncationLength);
+			return truncationLength;
+		}
+		return 0;
+	}
+	destroy() {
+		return this.clear();
+	}
+	clear() {
+		this.log = [];
+		return Promise.resolve();
+	}
+	modify(
+		cb: (log: string, index: number) => boolean | string | void | undefined,
+		desc = false
+	) {
+		const modified = [];
+		if (desc) {
+			this.log.reverse();
+		}
+		for (let i = 0; i < this.log.length; i++) {
+			// wants us to return cb(log[i], i) but. no.
+			// eslint-disable-next-line callback-return
+			const result = cb(this.log[i], i);
+			if (result === false) {
+				this.log.splice(i, 1);
+				modified.push(i);
+				i--;
+			} else if (typeof result === 'string') {
+				this.log[i] = result;
+				modified.push(i);
+			}
+		}
+		// undo the reverse, since this is in place
+		if (desc) {
+			this.log.reverse();
+		}
+		return Promise.resolve(modified);
+	}
+}
+
+// @ts-ignore in case not installed
+type RedisDriver = import('ioredis').Redis;
+
+export class RedisScrollback implements Scrollback {
+	room: BasicRoom;
+	static driver = RedisScrollback.getDriver()!;
+	gettingLog: Promise<string[]> | null = null;
+	logsWhileGetting: string[] | null = null;
+	constructor(room: BasicRoom) {
+		this.room = room;
+	}
+	static getDriver() {
+		const config = Config.redis || Config.redislogs;
+		if (!config) return;
+		return require('ioredis').createClient(config) as RedisDriver;
+	}
+	async add(message: string) {
+		await RedisScrollback.driver.lpush(`scrollback:${this.room.roomid}`, message);
+	}
+	private getLength() {
+		return RedisScrollback.driver.llen(`scrollback:${this.room.roomid}`);
+	}
+	async truncate() {
+		const start = await this.getLength();
+		if (start < 100) return 0;
+		await RedisScrollback.driver.ltrim(`scrollback:${this.room.roomid}`, 0, 99);
+		return start - await this.getLength();
+	}
+	async get() {
+		if (this.gettingLog) return this.gettingLog;
+		this.logsWhileGetting = [];
+		this.gettingLog = (async () => {
+			const fetched = await RedisScrollback.driver.lrange(`scrollback:${this.room.roomid}`, 0, 99);
+			const logs = fetched.reverse().concat(this.logsWhileGetting || []);
+			this.gettingLog = this.logsWhileGetting = null;
+			return logs;
+		})();
+		return this.gettingLog;
+	}
+	async destroy() {
+		await this.clear();
+	}
+	async clear() {
+		await RedisScrollback.driver.del(`scrollback:${this.room.roomid}`);
+	}
+	async modify(
+		cb: (log: string, index: number) => boolean | string | void | undefined,
+		desc = false
+	) {
+		const logs = await this.get();
+		if (desc) logs.reverse();
+		const modified = [];
+		for (const [i, log] of logs.entries()) {
+			const redisIdx = i + 1;
+			// wants us to return cb(log[i], i) but. no.
+			// eslint-disable-next-line callback-return
+			const result = cb(log, i);
+			if (result === false) {
+				await RedisScrollback.driver.lrem(`scrollback:${this.room.roomid}`, 1, log);
+				modified.push(i);
+			} else if (typeof result === 'string') {
+				logs[i] = result;
+				await RedisScrollback.driver.lset(`scrollback:${this.room.roomid}`, redisIdx, result);
+				modified.push(i);
+			}
+		}
+		return modified;
+	}
+}
 /**
  * Most rooms have three logs:
  * - scrollback
@@ -23,7 +164,7 @@ interface RoomlogOptions {
  * - modlog
  * This class keeps track of all three.
  *
- * The scrollback is stored in memory, and is the log you get when you
+ * The scrollback is stored in Redis (if enabled, else memory), and is the log you get when you
  * join the room. It does not get moderator messages.
  *
  * The modlog is stored in
@@ -55,7 +196,8 @@ export class Roomlog {
 	/**
 	 * Scrollback log
 	 */
-	log: string[];
+	scrollback: Scrollback;
+	logLength = 0;
 	visibleMessageCount = 0;
 	broadcastBuffer: string[];
 	/**
@@ -73,36 +215,43 @@ export class Roomlog {
 		this.noAutoTruncate = !!options.noAutoTruncate;
 		this.noLogTimes = !!options.noLogTimes;
 
-		this.log = [];
 		this.broadcastBuffer = [];
 
 		this.roomlogStream = undefined;
 		this.roomlogFilename = '';
 
 		this.numTruncatedLines = 0;
+		this.scrollback = Config.redis || Config.redislogs ? new RedisScrollback(room) : new MemoryScrollback(room);
 
 		void this.setupRoomlogStream(true);
 	}
-	getScrollback(channel = 0) {
-		let log = this.log;
+	/**
+	 * Returns full, unsanitized, untransformed scrollback.
+	 * If you want something to show to users, use getScrollback.
+	 */
+	get() {
+		return this.scrollback.get();
+	}
+	async getScrollback(channel = 0) {
+		let log = await this.get();
 		if (!this.noLogTimes) log = [`|:|${~~(Date.now() / 1000)}`].concat(log);
 		if (!this.isMultichannel) {
 			return log.join('\n') + '\n';
 		}
-		log = [];
-		for (let i = 0; i < this.log.length; ++i) {
-			const line = this.log[i];
+		const sanitized = [];
+		for (let i = 0; i < log.length; ++i) {
+			const line = log[i];
 			const split = /\|split\|p(\d)/g.exec(line);
 			if (split) {
 				const canSeePrivileged = (channel === Number(split[0]) || channel === -1);
-				const ownLine = this.log[i + (canSeePrivileged ? 1 : 2)];
-				if (ownLine) log.push(ownLine);
+				const ownLine = log[i + (canSeePrivileged ? 1 : 2)];
+				if (ownLine) sanitized.push(ownLine);
 				i += 2;
 			} else {
-				log.push(line);
+				sanitized.push(line);
 			}
 		}
-		return log.join('\n') + '\n';
+		return sanitized.join('\n') + '\n';
 	}
 	async setupRoomlogStream(sync = false) {
 		if (this.roomlogStream === null) return;
@@ -150,7 +299,7 @@ export class Roomlog {
 			this.visibleMessageCount++;
 		}
 		message = this.withTimestamp(message);
-		this.log.push(message);
+		void Promise.resolve(this.scrollback.add(message)).then(() => this.logLength++);
 		this.broadcastBuffer.push(message);
 		return this;
 	}
@@ -161,9 +310,9 @@ export class Roomlog {
 			return message;
 		}
 	}
-	hasUsername(username: string) {
+	async hasUsername(username: string) {
 		const userid = toID(username);
-		for (const line of this.log) {
+		for (const line of await this.get()) {
 			if (line.startsWith('|c:|')) {
 				const curUserid = toID(line.split('|', 4)[3]);
 				if (curUserid === userid) return true;
@@ -174,10 +323,15 @@ export class Roomlog {
 		}
 		return false;
 	}
-	clearText(userids: ID[], lineCount = 0) {
+	async truncate() {
+		const count = await this.scrollback.truncate();
+		this.logLength -= count;
+		this.numTruncatedLines += count;
+	}
+	async clearText(userids: ID[], lineCount = 0) {
 		const cleared: ID[] = [];
 		const clearAll = (lineCount === 0);
-		this.log = this.log.reverse().filter(line => {
+		await this.scrollback.modify((line) => {
 			const parsed = this.parseChatLine(line);
 			if (parsed) {
 				const userid = toID(parsed.user);
@@ -193,29 +347,27 @@ export class Roomlog {
 				}
 			}
 			return true;
-		}).reverse();
+		}, true);
 		return cleared;
 	}
-	uhtmlchange(name: string, message: string) {
+	async uhtmlchange(name: string, message: string) {
 		const originalStart = '|uhtml|' + name + '|';
 		const fullMessage = originalStart + message;
-		for (const [i, line] of this.log.entries()) {
+		await this.scrollback.modify(line => {
 			if (line.startsWith(originalStart)) {
-				this.log[i] = fullMessage;
-				break;
+				return fullMessage;
 			}
-		}
+		});
 		this.broadcastBuffer.push(fullMessage);
 	}
-	attributedUhtmlchange(user: User, name: string, message: string) {
+	async attributedUhtmlchange(user: User, name: string, message: string) {
 		const start = `/uhtmlchange ${name},`;
 		const fullMessage = this.withTimestamp(`|c|${user.getIdentity()}|${start}${message}`);
-		for (const [i, line] of this.log.entries()) {
+		await this.scrollback.modify(line => {
 			if (this.parseChatLine(line)?.message.startsWith(start)) {
-				this.log[i] = fullMessage;
-				break;
+				return fullMessage;
 			}
-		}
+		});
 		this.broadcastBuffer.push(fullMessage);
 	}
 	parseChatLine(line: string) {
@@ -270,19 +422,11 @@ export class Roomlog {
 		nextMidnight.setHours(0, 0, 1);
 		Roomlogs.rollLogTimer = setTimeout(() => void Roomlog.rollLogs(), nextMidnight.getTime() - time);
 	}
-	truncate() {
-		if (this.noAutoTruncate) return;
-		if (this.log.length > 100) {
-			const truncationLength = this.log.length - 100;
-			this.log.splice(0, truncationLength);
-			this.numTruncatedLines += truncationLength;
-		}
-	}
 	/**
 	 * Returns the total number of lines in the roomlog, including truncated lines.
 	 */
 	getLineCount(onlyVisible = true) {
-		return (onlyVisible ? this.visibleMessageCount : this.log.length) + this.numTruncatedLines;
+		return (onlyVisible ? this.visibleMessageCount : this.logLength) + this.numTruncatedLines;
 	}
 
 	destroy() {
@@ -291,6 +435,7 @@ export class Roomlog {
 			promises.push(this.roomlogStream.writeEnd());
 			this.roomlogStream = null;
 		}
+		promises.push(this.scrollback.destroy());
 		Roomlogs.roomlogs.delete(this.roomid);
 		return Promise.all(promises);
 	}

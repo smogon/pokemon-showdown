@@ -696,7 +696,7 @@ export const commands: Chat.ChatCommands = {
 			);
 			room.send(`|tempnotify|youtube|New groupwatch - ${title}!`);
 			this.update();
-			user.joinRoom(gameRoom);
+			await user.joinRoom(gameRoom);
 		},
 		endwatch(target, room, user) {
 			room = this.requireRoom();
@@ -762,7 +762,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Invalid channel`);
 			}
 			const gameRoom = await TwitchStream.createStreamWatch(room, target);
-			user.joinRoom(gameRoom);
+			await user.joinRoom(gameRoom);
 			room.add(
 				`|uhtml|ts-${gameRoom.roomid}|` +
 				`<button class="button" name="send" value="/j ${gameRoom.roomid}">Join the ongoing stream watch!</button>`

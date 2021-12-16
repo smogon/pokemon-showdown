@@ -14,6 +14,8 @@ npm-debug.log
 package-lock.json
 /tools/set-import/sets
 databases/*.db*
+# redis files
+*.rdb
 *.o
 *.o.dSYM
 # Typescript build artifacts
