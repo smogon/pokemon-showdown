@@ -355,14 +355,22 @@ function saveSettings() {
 	FS('config/chat-plugins/nf.json').writeUpdate(() => JSON.stringify(settings));
 }
 
+
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
 	if (staffRoom) {
 		const flagged = getFlaggedRooms();
 		let buf = '';
 		if (flagged.length) {
-			buf = `<button class="button notifying" name="send" value="/am">`;
-			buf += `${Chat.count(flagged.length, 'flagged battles')}</button>`;
+			const unclaimed = flagged.filter(f => f in cache && !cache[f].claimed);
+			// if none are unclaimed, remove the notifying property so it's regular grey
+			buf = `<button class="button${!unclaimed.length ? '' : ' notifying'}" name="send" value="/am">`;
+			buf += `${Chat.count(flagged.length, 'flagged battles')}`;
+			// if some are unclaimed, tell staff how many
+			if (unclaimed.length) {
+				buf += ` (${unclaimed.length} unclaimed)`;
+			}
+			buf += `</button>`;
 		} else {
 			buf = 'No battles flagged.';
 		}
