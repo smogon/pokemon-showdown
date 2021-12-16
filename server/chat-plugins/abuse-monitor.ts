@@ -32,11 +32,18 @@ const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'weeknamelock': '/wnl',
 	'namelock': '/nl',
 };
+const REPORT_NAMECOLORS: {[k: string]: string} = {
+	p1: 'DodgerBlue',
+	p2: 'Crimson',
+	p3: '#FBa92C',
+	p4: '#228B22',
+	other: '', // black - empty since handled by dark mode
+};
 
 export const cache: {
 	[roomid: string]: {
 		users: Record<string, number>,
-		staffNotified?: boolean,
+		staffNotified?: ID,
 		claimed?: ID,
 	},
 } = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
@@ -84,6 +91,43 @@ interface PMResult {
 interface PMRequest {
 	comment: string;
 	fullResponse?: boolean;
+}
+
+interface BattleInfo {
+	players: Record<SideID, ID>;
+	log: string[];
+}
+
+// Mostly stolen from my code in helptickets.
+// Necessary because we can't require this in without also requiring in a LOT of other
+// modules, most of which crash the child process. Lot messier to fix that than it is to do this.
+export function getBattleLog(battle: string) {
+	const battleRoom = Rooms.get(battle);
+	if (battleRoom && battleRoom.type !== 'chat') {
+		const playerTable: Partial<BattleInfo['players']> = {};
+		// i kinda hate this, but this will always be accurate to the battle players.
+		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
+		const playerLines = battleRoom.log.log.filter(line => line.startsWith('|player|'));
+		for (const line of playerLines) {
+			const [, , playerSlot, name] = line.split('|');
+			playerTable[playerSlot as SideID] = toID(name);
+		}
+		return {
+			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
+			players: playerTable as BattleInfo['players'],
+		};
+	}
+	return null;
+}
+// see above comment.
+function colorName(id: ID, info: BattleInfo) {
+	for (const k in info.players) {
+		const player = info.players[k as SideID];
+		if (player === id) {
+			return ` style="color: ${REPORT_NAMECOLORS[k]}"`;
+		}
+	}
+	return REPORT_NAMECOLORS.other;
 }
 
 function time() {
@@ -270,7 +314,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
 			if (cache[roomid].users[user.id] >= settings.threshold) {
-				cache[roomid].staffNotified = true;
+				cache[roomid].staffNotified = user.id;
 				notifyStaff();
 				hitThreshold = 1;
 				void room?.uploadReplay?.(user, this.connection, "forpunishment");
@@ -287,12 +331,16 @@ chatfilter.priority = -100;
 
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
-		if (cache[roomid]) delete cache[roomid];
+		const entry = cache[roomid];
+		if (entry) {
+			if (entry.staffNotified) notifyStaff();
+			delete cache[roomid];
+		}
 	},
-	onRoomClose(roomid) {
+	onRoomClose(roomid, user) {
 		if (!roomid.startsWith('view-abusemonitor-view')) return;
 		const targetId = roomid.slice('view-abusemonitor-view-'.length);
-		if (cache[targetId]) {
+		if (cache[targetId]?.claimed === user.id) {
 			delete cache[targetId].claimed;
 			notifyStaff();
 		}
@@ -310,7 +358,15 @@ function saveSettings() {
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
 	if (staffRoom) {
-		// staffRoom.add(`|uhtml|abusemonitor|${buf}`).update();
+		const flagged = getFlaggedRooms();
+		let buf = '';
+		if (flagged.length) {
+			buf = `<button class="button notifying" name="send" value="/am">`;
+			buf += `${Chat.count(flagged.length, 'flagged battles')}</button>`;
+		} else {
+			buf = 'No battles flagged.';
+		}
+		staffRoom.send(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`);
 		Chat.refreshPageFor('abusemonitor-flagged', staffRoom);
 	}
 }
@@ -416,7 +472,9 @@ export const commands: Chat.ChatCommands = {
 			this.room.reportJoin('l', user.getIdentityWithStatus(this.room), user);
 		},
 		view(target, room, user) {
-			return this.parse(`/j view-abusemonitor-view-${target.toLowerCase().trim()}`);
+			target = target.toLowerCase().trim();
+			if (!target) return this.parse(`/help am`);
+			return this.parse(`/j view-abusemonitor-view-${target}`);
 		},
 		logs(target) {
 			checkAccess(this);
@@ -588,7 +646,7 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	abusemonitor: {
 		flagged(query, user) {
-			checkAccess(this);
+			this.checkCan('lock');
 			const ids = getFlaggedRooms();
 			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
@@ -611,10 +669,10 @@ export const pages: Chat.PageTable = {
 					buf += `<i class="fa fa-circle-o"></i> <strong>Unclaimed</strong></span></td>`;
 				}
 				// should never happen, fallback just in case
-				buf += `<td><a href="/${roomid}">${Rooms.get(roomid)?.title || roomid}</a></td>`;
+				buf += Utils.html`<td>${Rooms.get(roomid)?.title || roomid}</td>`;
 				buf += `<td>${entry.claimed ? entry.claimed : '-'}</td>`;
 				buf += `<td><button class="button" name="send" value="/am view ${roomid}">`;
-				buf += `${entry.claimed ? 'Join' : 'Claim'}</button></td>`;
+				buf += `${entry.claimed ? 'Show' : 'Claim'}</button></td>`;
 				buf += `</tr>`;
 			}
 			buf += `</table></div>`;
@@ -623,6 +681,9 @@ export const pages: Chat.PageTable = {
 		view(query, user) {
 			this.checkCan('lock');
 			const roomid = query.join('-');
+			if (!toID(roomid)) {
+				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
+			}
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
@@ -655,15 +716,22 @@ export const pages: Chat.PageTable = {
 			buf += `<details class="readmore"><summary><strong>Chat:</strong></summary><div class="infobox">`;
 			// we parse users specifically from the log so we can see it after they leave the room
 			const users = new Utils.Multiset<string>();
+			const logData = getBattleLog(room.roomid);
+			// should only extremely rarely happen - if the room expires while this is happening.
+			if (!logData) return `<div class="pad"><p class="error">No such room.</p></div>`;
 			// assume logs exist - why else would the filter activate?
-			for (const line of room.log.log) {
+			for (const line of logData.log) {
 				const data = room.log.parseChatLine(line);
 				if (!data) continue; // not chat
+				if (['/log', '/raw'].some(prefix => data.message.startsWith(prefix))) {
+					continue;
+				}
 				const id = toID(data.user);
 				if (!id) continue;
 				users.add(id);
-				buf += `<div class="chat"><span class="username">`;
-				buf += Utils.html`<username>${data.user}:</username></span> ${data.message}</div>`;
+				buf += `<div class="chat chatmessage${cache[roomid].staffNotified === id ? ` highlighted` : ``}">`;
+				buf += `<strong${colorName(id, logData)}>`;
+				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
