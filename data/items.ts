@@ -7115,12 +7115,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === -67 && ['Poison', 'Flying'].includes(move.type)) {
+			if (user.baseSpecies.num === -66 && ['Poison', 'Flying'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === -67 || pokemon.baseSpecies.num === -67) {
+			if (source?.baseSpecies.num === -66 || pokemon.baseSpecies.num === -66) {
 				return false;
 			}
 			return true;
