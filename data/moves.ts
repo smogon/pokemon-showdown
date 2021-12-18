@@ -11090,7 +11090,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, bypasssub: 1, allyanim: 1},
 		onHit(target, source) {
-			const disallowedMoves = ['behemothbash', 'behemothblade', 'chatter', 'dynamaxcannon', 'mimic', 'sketch', 'struggle', 'transform'];
+			const disallowedMoves = [
+				'behemothbash', 'behemothblade', 'chatter', 'dynamaxcannon', 'mimic', 'sketch', 'struggle', 'transform',
+			];
 			const move = target.lastMove;
 			if (source.transformed || !move || disallowedMoves.includes(move.id) || source.moves.includes(move.id)) {
 				return false;
