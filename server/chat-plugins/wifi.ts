@@ -453,7 +453,7 @@ export class QuestionGiveaway extends Giveaway {
 				this.room.modlog({
 					action: 'GIVEAWAY WIN',
 					userid: this.winner.id,
-					note: `${this.giver.name}'s giveaway for a "${this.prize}" (OT: ${this.ot} TID: ${this.tid})`,
+					note: `${this.giver.name}'s giveaway for a "${this.prize.species}" (OT: ${this.ot} TID: ${this.tid})`,
 				});
 				this.send(this.generateWindow(
 					`<p style="text-align:center;font-size:12pt;"><b>${Utils.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
