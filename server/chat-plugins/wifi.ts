@@ -1336,7 +1336,7 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-function makePageHeader(pageid?: string) {
+function makePageHeader(user: User, pageid?: string) {
 	const titles: {[k: string]: string} = {
 		create: `Create`,
 		stored: `View Stored`,
@@ -1354,7 +1354,11 @@ function makePageHeader(pageid?: string) {
 	let buf = `<button class="button" style="float:right" name="send" value="/j view-giveaways${pageid?.trim() ? `-${pageid.trim()}` : ''}"><i class="fa fa-refresh"></i> Refresh</button>`;
 	buf += `<h1>Wi-Fi Giveaways</h1>`;
 	const urls = [];
+	const room = Rooms.get('wifi')!; // we validate before using that wifi exists
 	for (const i in titles) {
+		if (!user.can('mute', null, room) && i !== 'submitted-add') {
+			continue;
+		}
 		const title = titles[i];
 		const icon = icons[i];
 		if (pageid === i) {
@@ -1388,7 +1392,7 @@ export const pages: Chat.PageTable = {
 			this.title = `[Giveaways]`;
 			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
 			this.checkCan('warn', null, Rooms.search('wifi')!);
-			return `<div class="pad">${makePageHeader()}</div>`;
+			return `<div class="pad">${makePageHeader(this.user)}</div>`;
 		},
 		create(args, user) {
 			this.title = `[Create Giveaways]`;
@@ -1396,7 +1400,7 @@ export const pages: Chat.PageTable = {
 			if (!user.can('show', null, Rooms.get('wifi')!)) this.checkCan('warn', null, Rooms.search('wifi')!);
 			const [type] = args;
 			let buf = `<div class="pad">`;
-			buf += makePageHeader('create');
+			buf += makePageHeader(this.user, 'create');
 			if (!type || !['lottery', 'question'].includes(type)) {
 				buf += `<center><h2>Pick a Giveaway type</h2>`;
 				buf += formatFakeButton(`/view-giveaways-create-lottery`, `<i class="fa fa-random"></i> Lottery`);
@@ -1445,7 +1449,7 @@ export const pages: Chat.PageTable = {
 			this.title = `[Stored Giveaways]`;
 			if (!Rooms.search('wifi')) return `<h1>There is no Wi-Fi room on this server.</h1>`;
 			this.checkCan('warn', null, Rooms.search('wifi')!);
-			let buf = `<div class="pad">${makePageHeader(args[0] === 'add' ? 'stored-add' : 'stored')}`;
+			let buf = `<div class="pad">${makePageHeader(this.user, args[0] === 'add' ? 'stored-add' : 'stored')}`;
 			const [add, type] = args;
 			const giveaways = [
 				...((wifiData.storedGiveaways || {}).lottery || []),
@@ -1550,7 +1554,7 @@ export const pages: Chat.PageTable = {
 			const [add, type] = args;
 			const adding = add === 'add';
 			if (!adding) this.checkCan('warn', null, Rooms.get('wifi')!);
-			let buf = `<div class="pad">${makePageHeader(args[0] === 'add' ? 'submitted-add' : 'submitted')}`;
+			let buf = `<div class="pad">${makePageHeader(this.user, args[0] === 'add' ? 'submitted-add' : 'submitted')}`;
 			const giveaways = [
 				...((wifiData.submittedGiveaways || {}).lottery || []),
 				...((wifiData.submittedGiveaways || {}).question || []),
