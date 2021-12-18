@@ -921,7 +921,8 @@ export class RandomTeams {
 				!!counter.setupType ||
 				!!counter.get('speedsetup') ||
 				!!teamDetails.stealthRock ||
-				['rest', 'substitute', 'trickroom', 'teleport'].some(m => moves.has(m)),
+				['rest', 'substitute', 'trickroom', 'teleport'].some(m => moves.has(m)) ||
+				(species.id === 'palossand' && movePool.includes('shoreup')),
 			};
 		case 'stickyweb':
 			return {cull: counter.setupType === 'Special' || !!teamDetails.stickyWeb};
@@ -1218,7 +1219,7 @@ export class RandomTeams {
 		isNoDynamax: boolean
 	): boolean {
 		if ([
-			'Flare Boost', 'Hydration', 'Ice Body', 'Innards Out', 'Insomnia', 'Misty Surge',
+			'Flare Boost', 'Hydration', 'Ice Body', 'Immunity', 'Innards Out', 'Insomnia', 'Misty Surge',
 			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -1637,7 +1638,6 @@ export class RandomTeams {
 			!counter.get('drain') && !counter.get('recoil') && !counter.get('recovery') &&
 			((defensiveStatTotal <= 250 && counter.get('hazards')) || defensiveStatTotal <= 210)
 		) return 'Focus Sash';
-		if (!isDoubles && ability === 'Water Bubble') return 'Mystic Water';
 		if (
 			moves.has('clangoroussoul') ||
 			// We manually check for speed-boosting moves, rather than using `counter.get('speedsetup')`,
@@ -1861,6 +1861,20 @@ export class RandomTeams {
 			}
 		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
 
+		// for BD/SP only
+		if (hasHiddenPower) {
+			let hpType;
+			for (const move of moves) {
+				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
+			}
+			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
+			const HPivs = this.dex.types.get(hpType).HPivs;
+			let iv: StatID;
+			for (iv in HPivs) {
+				ivs[iv] = HPivs[iv]!;
+			}
+		}
+
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
@@ -1969,7 +1983,7 @@ export class RandomTeams {
 		// No Dmax levelling
 		} else if (isNoDynamax) {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
-			const tierScale: {[k: string]: number} = {
+			const tierScale: Partial<Record<Species['tier'], number>> = {
 				Uber: 76,
 				OU: 80,
 				UUBL: 81,
@@ -1991,11 +2005,24 @@ export class RandomTeams {
 				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, solrock: 90, arctozolt: 88, reuniclus: 87,
 				decidueye: 87, noivern: 85, magnezone: 82, slowking: 81,
 			};
-			level = customScale[species.id] || tierScale[tier];
+			level = customScale[species.id] || tierScale[tier] || 80;
 		// BDSP tier levelling
 		} else if (this.dex.currentMod === 'gen8bdsp') {
-			// TODO: figure out BDSP levelling based on the in-room poll
-			level = 80;
+			const tierScale: Partial<Record<Species['tier'], number>> = {
+				Uber: 76, Unreleased: 76,
+				OU: 80,
+				UUBL: 81,
+				UU: 82,
+				RUBL: 83,
+				RU: 84,
+				NUBL: 85,
+				NU: 86,
+				PUBL: 87,
+				PU: 88, "(PU)": 88, NFE: 88,
+			};
+			const customScale: {[k: string]: number} = {};
+
+			level = customScale[species.id] || tierScale[species.tier] || 80;
 		// Arbitrary levelling base on data files (typically winrate-influenced)
 		} else if (species.randomBattleLevel) {
 			level = species.randomBattleLevel;

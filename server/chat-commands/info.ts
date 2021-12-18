@@ -1669,15 +1669,6 @@ export const commands: Chat.ChatCommands = {
 	},
 	bugshelp: [`/bugs - Links to the various bug reporting services.`],
 
-	avatars(target, room, user) {
-		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.`);
-	},
-	avatarshelp: [
-		`/avatars - Explains how to change avatars.`,
-		`!avatars - Show everyone that information. Requires: + % @ # &`,
-	],
-
 	optionbutton: 'optionsbutton',
 	optionsbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1762,7 +1753,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 		this.sendReplyBox(
-			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko &amp; Austin)<br />` +
+			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, &amp; Kris)<br />` +
 			`- <a href="https://calc.pokemonshowdown.com/index.html">Damage Calculator</a>`
 		);
 	},

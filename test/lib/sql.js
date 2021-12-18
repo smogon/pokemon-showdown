@@ -1,17 +1,24 @@
 "use strict";
 const {SQL} = require('../../lib/sql');
 const assert = require('../assert').strict;
-const common = require('../common');
 
 const database = SQL(module, {file: `:memory:`, processes: 1});
 
 const test = (common.hasModule('better-sqlite3') ? describe : describe.skip);
-test(`SQLite worker wrapper`, async function () {
+test(`SQLite worker wrapper`, () => {
 	// prepare statements and set up table
+	let select, insert;
 	before(async () => {
 		await database.exec(`CREATE TABLE IF NOT EXISTS test (col TEXT, col2 TEXT)`);
-		this.select = await database.prepare(`SELECT * FROM test`); // 0
-		this.insert = await database.prepare(`INSERT INTO test (col, col2) VALUES (?, ?)`); // 1
+		select = await database.prepare(`SELECT * FROM test`);
+		insert = await database.prepare(`INSERT INTO test (col, col2) VALUES (?, ?)`);
+	});
+	it(`should require you to prepare a statement before running`, async () => {
+		database.get('SELECT col FROM test').then(() => {
+			assert(false, 'expected error');
+		}).catch(() => {
+			assert(true, 'received error');
+		});
 	});
 	it(`should support both statement strings and corresponding statement classes`, async () => {
 		await database.run(`INSERT INTO test (col, col2) VALUES (?, ?)`, ['a', 'b']);

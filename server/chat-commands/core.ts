@@ -18,330 +18,6 @@ import {Utils} from '../../lib';
 import type {UserSettings} from '../users';
 import type {GlobalPermission} from '../user-groups';
 
-const avatarTable = new Set([
-	'aaron',
-	'acetrainercouple-gen3', 'acetrainercouple',
-	'acetrainerf-gen1', 'acetrainerf-gen1rb', 'acetrainerf-gen2', 'acetrainerf-gen3', 'acetrainerf-gen3rs', 'acetrainerf-gen4dp', 'acetrainerf-gen4', 'acetrainerf',
-	'acetrainer-gen1', 'acetrainer-gen1rb', 'acetrainer-gen2', 'acetrainer-gen3jp', 'acetrainer-gen3', 'acetrainer-gen3rs', 'acetrainer-gen4dp', 'acetrainer-gen4', 'acetrainer',
-	'acetrainersnowf',
-	'acetrainersnow',
-	'agatha-gen1', 'agatha-gen1rb', 'agatha-gen3',
-	'alder',
-	'anabel-gen3',
-	'archer',
-	'archie-gen3',
-	'argenta',
-	'ariana',
-	'aromalady-gen3', 'aromalady-gen3rs', 'aromalady',
-	'artist-gen4', 'artist',
-	'ash-alola', 'ash-hoenn', 'ash-kalos', 'ash-unova', 'ash-capbackward', 'ash-johto', 'ash-sinnoh', 'ash',
-	'backersf',
-	'backers',
-	'backpackerf',
-	'backpacker',
-	'baker',
-	'barry',
-	'battlegirl-gen3', 'battlegirl-gen4', 'battlegirl',
-	'beauty-gen1', 'beauty-gen1rb', 'beauty-gen2jp', 'beauty-gen2', 'beauty-gen3', 'beauty-gen3rs', 'beauty-gen4dp', 'beauty-gen5bw2', 'beauty',
-	'bellelba',
-	'bellepa',
-	'benga',
-	'bertha',
-	'bianca-pwt', 'bianca',
-	'biker-gen1', 'biker-gen1rb', 'biker-gen2', 'biker-gen3', 'biker-gen4', 'biker',
-	'bill-gen3',
-	'birch-gen3',
-	'birdkeeper-gen1', 'birdkeeper-gen1rb', 'birdkeeper-gen2', 'birdkeeper-gen3', 'birdkeeper-gen3rs', 'birdkeeper-gen4dp', 'birdkeeper',
-	'blackbelt-gen1', 'blackbelt-gen1rb', 'blackbelt-gen2', 'blackbelt-gen3', 'blackbelt-gen3rs', 'blackbelt-gen4dp', 'blackbelt-gen4', 'blackbelt',
-	'blaine-gen1', 'blaine-gen1rb', 'blaine-gen2', 'blaine-gen3', 'blaine',
-	'blue-gen1champion', 'blue-gen1', 'blue-gen1rbchampion', 'blue-gen1rb', 'blue-gen1rbtwo', 'blue-gen1two', 'blue-gen2', 'blue-gen3champion', 'blue-gen3', 'blue-gen3two', 'blue',
-	'boarder-gen2', 'boarder',
-	'brandon-gen3',
-	'brawly-gen3', 'brawly',
-	'brendan-gen3', 'brendan-gen3rs',
-	'brock-gen1', 'brock-gen1rb', 'brock-gen2', 'brock-gen3', 'brock',
-	'bruno-gen1', 'bruno-gen1rb', 'bruno-gen2', 'bruno-gen3', 'bruno',
-	'brycenman',
-	'brycen',
-	'buck',
-	'bugcatcher-gen1', 'bugcatcher-gen1rb', 'bugcatcher-gen2', 'bugcatcher-gen3', 'bugcatcher-gen3rs', 'bugcatcher-gen4dp', 'bugcatcher',
-	'bugmaniac-gen3',
-	'bugsy-gen2', 'bugsy',
-	'burgh',
-	'burglar-gen1', 'burglar-gen1rb', 'burglar-gen2', 'burglar-gen3', 'burglar',
-	'byron',
-	'caitlin',
-	'cameraman',
-	'camper-gen2', 'camper-gen3', 'camper-gen3rs', 'camper',
-	'candice',
-	'channeler-gen1', 'channeler-gen1rb', 'channeler-gen3',
-	'cheren-gen5bw2', 'cheren',
-	'cheryl',
-	'chili',
-	'chuck-gen2', 'chuck',
-	'cilan',
-	'clair-gen2', 'clair',
-	'clay',
-	'clemont',
-	'clerkf',
-	'clerk-boss', 'clerk',
-	'clown',
-	'collector-gen3', 'collector',
-	'colress',
-	'courtney-gen3',
-	'cowgirl',
-	'crasherwake',
-	'cress',
-	'crushgirl-gen3',
-	'crushkin-gen3',
-	'cueball-gen1', 'cueball-gen1rb', 'cueball-gen3',
-	'cyclistf-gen4', 'cyclistf',
-	'cyclist-gen4', 'cyclist',
-	'cynthia-gen4', 'cynthia',
-	'cyrus',
-	'dahlia',
-	'daisy-gen3',
-	'dancer',
-	'darach',
-	'dawn-gen4pt', 'dawn',
-	'depotagent',
-	'doctor',
-	'doubleteam',
-	'dragontamer-gen3', 'dragontamer',
-	'drake-gen3',
-	'drayden',
-	'elesa-gen5bw2', 'elesa',
-	'emmet',
-	'engineer-gen1', 'engineer-gen1rb', 'engineer-gen3',
-	'erika-gen1', 'erika-gen1rb', 'erika-gen2', 'erika-gen3', 'erika',
-	'ethan-gen2c', 'ethan-gen2', 'ethan-pokeathlon', 'ethan',
-	'eusine-gen2', 'eusine',
-	'expertf-gen3',
-	'expert-gen3',
-	'falkner-gen2',
-	'falkner',
-	'fantina',
-	'firebreather-gen2',
-	'firebreather',
-	'fisherman-gen1', 'fisherman-gen1rb', 'fisherman-gen2jp', 'fisherman-gen3', 'fisherman-gen3rs', 'fisherman-gen4', 'fisherman',
-	'flannery-gen3', 'flannery',
-	'flint',
-	'galacticgruntf',
-	'galacticgrunt',
-	'gambler-gen1', 'gambler-gen1rb', 'gambler',
-	'gamer-gen3',
-	'gardenia',
-	'gentleman-gen1', 'gentleman-gen1rb', 'gentleman-gen2', 'gentleman-gen3', 'gentleman-gen3rs', 'gentleman-gen4dp', 'gentleman-gen4', 'gentleman',
-	'ghetsis-gen5bw', 'ghetsis',
-	'giovanni-gen1', 'giovanni-gen1rb', 'giovanni-gen3', 'giovanni',
-	'glacia-gen3',
-	'greta-gen3',
-	'grimsley',
-	'guitarist-gen2', 'guitarist-gen3', 'guitarist-gen4', 'guitarist',
-	'harlequin',
-	'hexmaniac-gen3jp', 'hexmaniac-gen3',
-	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen2', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
-	'hilbert-wonderlauncher', 'hilbert',
-	'hilda-wonderlauncher', 'hilda',
-	'hooligans',
-	'hoopster',
-	'hugh',
-	'idol',
-	'infielder',
-	'ingo',
-	'interviewers-gen3',
-	'interviewers',
-	'iris-gen5bw2', 'iris',
-	'janine-gen2', 'janine',
-	'janitor',
-	'jasmine-gen2', 'jasmine',
-	'jessiejames-gen1',
-	'jogger',
-	'jrtrainerf-gen1', 'jrtrainerf-gen1rb',
-	'jrtrainer-gen1', 'jrtrainer-gen1rb',
-	'juan-gen3',
-	'juan',
-	'juggler-gen1', 'juggler-gen1rb', 'juggler-gen2', 'juggler-gen3', 'juggler',
-	'jupiter',
-	'karen-gen2', 'karen',
-	'kimonogirl-gen2', 'kimonogirl',
-	'kindler-gen3',
-	'koga-gen1', 'koga-gen2', 'koga-gen1rb', 'koga-gen3', 'koga',
-	'kris-gen2',
-	'lady-gen3', 'lady-gen3rs', 'lady-gen4', 'lady',
-	'lance-gen1', 'lance-gen1rb', 'lance-gen2', 'lance-gen3', 'lance',
-	'lass-gen1', 'lass-gen1rb', 'lass-gen2', 'lass-gen3', 'lass-gen3rs', 'lass-gen4dp', 'lass-gen4', 'lass',
-	'leaf-gen3',
-	'lenora',
-	'linebacker',
-	'li',
-	'liza',
-	'lorelei-gen1', 'lorelei-gen1rb', 'lorelei-gen3',
-	'ltsurge-gen1', 'ltsurge-gen1rb', 'ltsurge-gen2', 'ltsurge-gen3', 'ltsurge',
-	'lucas-gen4pt', 'lucas',
-	'lucian',
-	'lucy-gen3',
-	'lyra-pokeathlon', 'lyra',
-	'madame-gen4dp', 'madame-gen4', 'madame',
-	'maid-gen4', 'maid',
-	'marley',
-	'marlon',
-	'marshal',
-	'mars',
-	'matt-gen3',
-	'maxie-gen3',
-	'may-gen3', 'may-gen3rs',
-	'maylene',
-	'medium-gen2jp', 'medium',
-	'mira',
-	'misty-gen1', 'misty-gen2', 'misty-gen1rb', 'misty-gen3', 'misty',
-	'morty-gen2', 'morty',
-	'mrfuji-gen3',
-	'musician',
-	'nate-wonderlauncher', 'nate',
-	'ninjaboy-gen3', 'ninjaboy',
-	'noland-gen3',
-	'norman-gen3', 'norman',
-	'n',
-	'nurse',
-	'nurseryaide',
-	'oak-gen1', 'oak-gen1rb', 'oak-gen2', 'oak-gen3',
-	'officer-gen2',
-	'oldcouple-gen3',
-	'painter-gen3',
-	'palmer',
-	'parasollady-gen3', 'parasollady-gen4', 'parasollady',
-	'petrel',
-	'phoebe-gen3',
-	'picnicker-gen2', 'picnicker-gen3', 'picnicker-gen3rs', 'picnicker',
-	'pilot',
-	'plasmagruntf-gen5bw', 'plasmagruntf',
-	'plasmagrunt-gen5bw', 'plasmagrunt',
-	'pokefanf-gen2', 'pokefanf-gen3', 'pokefanf-gen4', 'pokefanf',
-	'pokefan-gen2', 'pokefan-gen3', 'pokefan-gen4', 'pokefan',
-	'pokekid',
-	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen2', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
-	'pokemonbreederf-gen3', 'pokemonbreederf-gen3frlg', 'pokemonbreederf-gen4', 'pokemonbreederf',
-	'pokemonbreeder-gen3', 'pokemonbreeder-gen4', 'pokemonbreeder',
-	'pokemonrangerf-gen3', 'pokemonrangerf-gen3rs', 'pokemonrangerf-gen4', 'pokemonrangerf',
-	'pokemonranger-gen3', 'pokemonranger-gen3rs', 'pokemonranger-gen4', 'pokemonranger',
-	'policeman-gen4', 'policeman',
-	'preschoolerf',
-	'preschooler',
-	'proton',
-	'pryce-gen2', 'pryce',
-	'psychicf-gen3', 'psychicf-gen3rs', 'psychicf-gen4', 'psychicfjp-gen3', 'psychicf',
-	'psychic-gen1', 'psychic-gen1rb', 'psychic-gen2', 'psychic-gen3', 'psychic-gen3rs', 'psychic-gen4', 'psychic',
-	'rancher',
-	'red-gen1main', 'red-gen1', 'red-gen1rb', 'red-gen1title', 'red-gen2', 'red-gen3', 'red',
-	'reporter',
-	'richboy-gen3', 'richboy-gen4', 'richboy',
-	'riley',
-	'roark',
-	'rocker-gen1', 'rocker-gen1rb', 'rocker-gen3',
-	'rocket-gen1', 'rocket-gen1rb',
-	'rocketgruntf-gen2', 'rocketgruntf',
-	'rocketgrunt-gen2', 'rocketgrunt',
-	'rocketexecutivef-gen2',
-	'rocketexecutive-gen2',
-	'rood',
-	'rosa-wonderlauncher', 'rosa',
-	'roughneck-gen4', 'roughneck',
-	'roxanne-gen3', 'roxanne',
-	'roxie',
-	'ruinmaniac-gen3', 'ruinmaniac-gen3rs', 'ruinmaniac',
-	'sabrina-gen1', 'sabrina-gen1rb', 'sabrina-gen2', 'sabrina-gen3', 'sabrina',
-	'sage-gen2', 'sage-gen2jp', 'sage',
-	'sailor-gen1', 'sailor-gen1rb', 'sailor-gen2', 'sailor-gen3jp', 'sailor-gen3', 'sailor-gen3rs', 'sailor',
-	'saturn',
-	'schoolboy-gen2',
-	'schoolkidf-gen3', 'schoolkidf-gen4', 'schoolkidf',
-	'schoolkid-gen3', 'schoolkid-gen4dp', 'schoolkid-gen4', 'schoolkid',
-	'scientistf',
-	'scientist-gen1', 'scientist-gen1rb', 'scientist-gen2', 'scientist-gen3', 'scientist-gen4dp', 'scientist-gen4', 'scientist',
-	'shadowtriad',
-	'shauntal',
-	'shelly-gen3',
-	'sidney-gen3',
-	'silver-gen2kanto', 'silver-gen2', 'silver',
-	'sisandbro-gen3', 'sisandbro-gen3rs', 'sisandbro',
-	'skierf-gen4dp', 'skierf',
-	'skier-gen2', 'skier',
-	'skyla',
-	'smasher',
-	'spenser-gen3',
-	'srandjr-gen3',
-	'steven-gen3', 'steven',
-	'striker',
-	'supernerd-gen1', 'supernerd-gen1rb', 'supernerd-gen2', 'supernerd-gen3', 'supernerd',
-	'swimmerf-gen2', 'swimmerf-gen3', 'swimmerf-gen3rs', 'swimmerf-gen4dp', 'swimmerf-gen4', 'swimmerfjp-gen2', 'swimmerf',
-	'swimmer-gen1', 'swimmer-gen1rb', 'swimmer-gen4dp', 'swimmer-gen4jp', 'swimmer-gen4', 'swimmerm-gen2', 'swimmerm-gen3', 'swimmerm-gen3rs', 'swimmer',
-	'tabitha-gen3',
-	'tamer-gen1', 'tamer-gen1rb', 'tamer-gen3',
-	'tateandliza-gen3',
-	'tate',
-	'teacher-gen2', 'teacher',
-	'teamaquabeta-gen3',
-	'teamaquagruntf-gen3',
-	'teamaquagruntm-gen3',
-	'teammagmagruntf-gen3',
-	'teammagmagruntm-gen3',
-	'teamrocketgruntf-gen3',
-	'teamrocketgruntm-gen3',
-	'teamrocket',
-	'thorton',
-	'triathletebikerf-gen3',
-	'triathletebikerm-gen3',
-	'triathleterunnerf-gen3',
-	'triathleterunnerm-gen3',
-	'triathleteswimmerf-gen3',
-	'triathleteswimmerm-gen3',
-	'tuberf-gen3', 'tuberf-gen3rs', 'tuberf',
-	'tuber-gen3', 'tuber',
-	'tucker-gen3',
-	'twins-gen2', 'twins-gen3', 'twins-gen3rs', 'twins-gen4dp', 'twins-gen4', 'twins',
-	'unknownf',
-	'unknown',
-	'veteranf',
-	'veteran-gen4', 'veteran',
-	'volkner',
-	'waiter-gen4dp', 'waiter-gen4', 'waiter',
-	'waitress-gen4', 'waitress',
-	'wallace-gen3', 'wallace-gen3rs', 'wallace',
-	'wally-gen3',
-	'wattson-gen3', 'wattson',
-	'whitney-gen2', 'whitney',
-	'will-gen2', 'will',
-	'winona-gen3', 'winona',
-	'worker-gen4',
-	'workerice',
-	'worker',
-	'yellow',
-	'youngcouple-gen3', 'youngcouple-gen3rs', 'youngcouple-gen4dp', 'youngcouple',
-	'youngster-gen1', 'youngster-gen1rb', 'youngster-gen2', 'youngster-gen3', 'youngster-gen3rs', 'youngster-gen4', 'youngster-gen4dp', 'youngster',
-	'zinzolin',
-]);
-
-const avatarTableBeliot419 = new Set([
-	'acerola', 'aetheremployee', 'aetheremployeef', 'aetherfoundation', 'aetherfoundationf', 'anabel',
-	'beauty-gen7', 'blue-gen7', 'burnet', 'colress-gen7', 'dexio', 'elio', 'faba', 'gladion-stance',
-	'gladion', 'grimsley-gen7', 'hapu', 'hau-stance', 'hau', 'hiker-gen7', 'ilima', 'kahili', 'kiawe',
-	'kukui-stand', 'kukui', 'lana', 'lass-gen7', 'lillie-z', 'lillie', 'lusamine-nihilego', 'lusamine',
-	'mallow', 'mina', 'molayne', 'nanu', 'officeworker', 'olivia', 'plumeria', 'pokemonbreeder-gen7',
-	'pokemonbreederf-gen7', 'preschoolers', 'red-gen7', 'risingstar', 'risingstarf', 'ryuki',
-	'samsonoak', 'selene', 'sightseer', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally',
-	'wicke', 'youngathlete', 'youngathletef', 'youngster-gen7',
-]);
-
-const avatarTableGnomowladny = new Set([
-	'az', 'brawly-gen6', 'bryony', 'drasna', 'evelyn', 'furisodegirl-black', 'furisodegirl-pink', 'guzma',
-	'hala', 'korrina', 'malva', 'nita', 'olympia', 'ramos', 'shelly', 'sidney', 'siebold', 'tierno',
-	'valerie', 'viola', 'wallace-gen6', 'wikstrom', 'winona-gen6', 'wulfric', 'xerosic', 'youngn', 'zinnia',
-]);
-
-for (const avatar of avatarTableBeliot419) avatarTable.add(avatar);
-for (const avatar of avatarTableGnomowladny) avatarTable.add(avatar);
-
 export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 	userdetails(target, user, trustable) {
 		if (target.length > 18) {
@@ -540,63 +216,6 @@ export const commands: Chat.ChatCommands = {
 		`/battle! [format] - Starts a battle in the given [format].`,
 		`If none is given, defaults to current generation random battle.`,
 	],
-
-	avatar(target, room, user) {
-		if (!target) return this.parse(`${this.cmdToken}avatars`);
-		const parts = target.split(',');
-		let avatar = parts[0].toLowerCase().replace(/[^a-z0-9-]+/g, '');
-		let avatarIsValid = true;
-		if (!avatarTable.has(avatar)) {
-			const avatarNum = parseInt(avatar);
-			if (!avatarNum || avatarNum > 294 || avatarNum < 1) {
-				avatarIsValid = false;
-			} else {
-				avatar = '' + avatarNum;
-			}
-		}
-
-		const avatarsAuto = Config.customavatars || {};
-		const avatarsManual = Config.allowedavatars || {};
-		function customAvatarIsValid(userid: ID) {
-			if (avatarsAuto[userid] === avatar) {
-				return true;
-			}
-			if (avatarsAuto[userid] === '#' + avatar) {
-				avatar = '#' + avatar;
-				return true;
-			}
-			if (Object.hasOwnProperty.call(avatarsManual, '#' + avatar)) {
-				avatar = '#' + avatar;
-			}
-			if (Object.hasOwnProperty.call(avatarsManual, avatar)) {
-				if (avatarsManual[avatar].includes(userid)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		avatarIsValid = avatarIsValid || [user.id, ...user.previousIDs].some(customAvatarIsValid);
-
-		if (!avatarIsValid) {
-			if (parts[1]) return false;
-			if (avatar.startsWith('#')) {
-				this.errorReply(this.tr`Access denied for custom avatar - make sure you're on the right account?`);
-			} else {
-				this.errorReply(this.tr`Invalid avatar.`);
-			}
-			return false;
-		}
-
-		user.avatar = avatar;
-		const avatarUrl = avatar.startsWith('#') ? `trainers-custom/${avatar.slice(1)}.png` : `trainers/${avatar}.png`;
-		if (!parts[1]) {
-			this.sendReply(`${this.tr`Avatar changed to:`}\n|raw|<img src="//${Config.routes.client}/sprites/${avatarUrl}" alt="${avatar}" width="80" height="80" class="pixelated" />`);
-			if (avatarTableBeliot419.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
-			}
-		}
-	},
-	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
 
 	signout: 'logout',
 	logout(target, room, user) {
@@ -1859,7 +1478,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) {
 			const broadcastMsg = this.tr`(replace / with ! to broadcast. Broadcasting requires: + % @ # &)`;
 
-			this.sendReply(`${this.tr`COMMANDS`}: /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /report, /join, /leave, /userauth, /roomauth`);
+			this.sendReply(`${this.tr`COMMANDS`}: /report, /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /join, /leave, /userauth, /roomauth`);
 			this.sendReply(`${this.tr`BATTLE ROOM COMMANDS`}: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit`);
 			this.sendReply(`${this.tr`OPTION COMMANDS`}: /nick, /avatar, /ignore, /status, /away, /busy, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms`);
 			this.sendReply(`${this.tr`INFORMATIONAL/RESOURCE COMMANDS`}: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq ${broadcastMsg}`);
@@ -1874,75 +1493,66 @@ export const commands: Chat.ChatCommands = {
 			return;
 		}
 
-		const cmds = target.split(' ');
+		const getHelp = (namespace: Chat.AnnotatedChatCommands, cmds: string[]): boolean => {
+			const [cmd, ...subCmds] = cmds;
 
-		let namespace = Chat.commands;
-
-		let currentBestHelp: {help: string[] | Chat.AnnotatedChatHandler, for: string[]} | null = null;
-
-		for (const [i, cmd] of cmds.entries()) {
-			let nextNamespace = namespace[cmd];
-			if (typeof nextNamespace === 'string') {
-				const help = namespace[`${nextNamespace}help`];
-				if (Array.isArray(help) || typeof help === 'function') {
-					currentBestHelp = {
-						help, for: cmds.slice(0, i + 1),
-					};
+			if (subCmds.length) {
+				// more specific help first
+				const subNamespace = namespace[cmd];
+				if (typeof subNamespace === 'object' && !Array.isArray(subNamespace)) {
+					if (getHelp(subNamespace, subCmds)) {
+						return true;
+					}
 				}
-				nextNamespace = namespace[nextNamespace];
 			}
-			if (typeof nextNamespace === 'string') {
-				throw new Error(`Recursive alias in "${target}"`);
+
+			let help = namespace[`${cmd}help`];
+			if (typeof help === 'string') {
+				help = namespace[help];
 			}
-			if (Array.isArray(nextNamespace)) {
-				const command = cmds.slice(0, i + 1).join(' ');
-				this.sendReply(this.tr`'/${command}' is a help command.`);
-				return this.parse(`/${target}`);
+			if (!help && namespace !== Chat.commands && namespace['help']) {
+				help = namespace['help'];
 			}
-			if (!nextNamespace) {
+
+			const curHandler = namespace[cmd] as Chat.AnnotatedChatHandler;
+			const requiredPerm = curHandler?.requiredPermission || 'lock';
+			if (curHandler?.isPrivate && !user.can(requiredPerm as GlobalPermission)) {
+				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
+			}
+
+			if (typeof help === 'function') {
+				// If the help command is a function, parse it instead
+				this.run(help);
+				return true;
+			}
+			if (Array.isArray(help)) {
+				this.sendReply(help.map(line => this.tr(line)).join('\n'));
+				return true;
+			}
+
+			if (!curHandler) {
 				for (const g in Config.groups) {
 					const groupid = Config.groups[g].id;
-					if (new RegExp(`(global)?(un|de)?${groupid}`).test(target)) {
+					if (new RegExp(`(global)?(un|de)?${groupid}`).test(cmd)) {
 						return this.parse(`/help promote`);
 					}
-					if (new RegExp(`room(un|de)?${groupid}`).test(target)) {
+					if (new RegExp(`room(un|de)?${groupid}`).test(cmd)) {
 						return this.parse(`/help roompromote`);
 					}
 				}
-				return this.errorReply(this.tr`The command '/${target}' does not exist.`);
+				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
 			}
 
-			const help = namespace[`${cmd}help`];
-			if (Array.isArray(help) || typeof help === 'function') {
-				currentBestHelp = {
-					help, for: cmds.slice(0, i + 1),
-				};
+			if (cmd.endsWith('help')) {
+				this.sendReply(this.tr`'/${target}' is a help command.`);
+				return true;
 			}
 
-			if (typeof nextNamespace === 'function') break;
-			namespace = nextNamespace;
-		}
+			return false;
+		};
 
-		if (!currentBestHelp) {
-			return this.errorReply(this.tr`Could not find help for '/${target}'. Try /help for general help.`);
-		}
-
-		const closestHelp = currentBestHelp.for.join(' ');
-		if (currentBestHelp.for.length < cmds.length) {
-			this.errorReply(this.tr`Could not find help for '/${target}' - displaying help for '/${closestHelp}' instead`);
-		}
-
-		const curHandler = Chat.parseCommand(`/${closestHelp}`)?.handler;
-		const requiredPerm = curHandler?.requiredPermission || 'lock';
-		if (curHandler?.isPrivate && !user.can(requiredPerm as GlobalPermission)) {
-			return this.errorReply(this.tr`The command '/${target}' does not exist.`);
-		}
-
-		if (typeof currentBestHelp.help === 'function') {
-			// If the help command is a function, parse it instead
-			this.run(currentBestHelp.help);
-		} else if (Array.isArray(currentBestHelp.help)) {
-			this.sendReply(currentBestHelp.help.map(line => this.tr(line)).join('\n'));
+		if (!getHelp(Chat.commands, target.split(' '))) {
+			throw new Chat.ErrorMessage(this.tr`Could not find help for '/${target}'. Try /help for general help.`);
 		}
 	},
 	helphelp: [

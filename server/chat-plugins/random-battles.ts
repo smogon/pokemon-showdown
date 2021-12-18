@@ -75,8 +75,12 @@ function setProbability(
 		if (criteria.nature.mustHave && set.nature !== criteria.nature.mustHave.name) continue;
 		if (criteria.nature.mustNotHave.some(nature => nature.name === set.nature)) continue;
 
-		if (!criteria.moves.mustHave.every(move => set.moves.includes(move.id))) continue;
-		if (criteria.moves.mustNotHave.some(move => set.moves.includes(move.id))) continue;
+		const setHasMove = (move: Move) => {
+			const id = move.id === 'hiddenpower' ? `${move.id}${toID(move.type)}` : move.id;
+			return set.moves.includes(id);
+		};
+		if (!criteria.moves.mustHave.every(setHasMove)) continue;
+		if (criteria.moves.mustNotHave.some(setHasMove)) continue;
 
 		results.matches++;
 	}
@@ -935,6 +939,10 @@ export const commands: Chat.ChatCommands = {
 		if (!species.exists) {
 			throw new Chat.ErrorMessage(`Species ${species.name} does not exist in the specified format.`);
 		}
+		if (!species.randomBattleMoves && !species.randomDoubleBattleMoves && !species.randomBattleNoDynamaxMoves) {
+			const modMessage = dex.currentMod === 'base' ? format.name : dex.currentMod;
+			throw new Chat.ErrorMessage(`${species.name} does not have random battle moves in ${modMessage}.`);
+		}
 
 		// Criteria
 		const criteria: SetCriteria = {
@@ -1041,7 +1049,7 @@ export const commands: Chat.ChatCommands = {
 			`<li><code>moves</code>: matches all generated sets that contain every move specified. <code>[matching value]</code> should be a list of moves separated with <code>&amp;</code>.` +
 			`<li><code>item</code>: matches all generated sets that have the specified item. <code>[matching value]</code> should be an item name.` +
 			`<li><code>ability</code>: matches all generated sets with the specified ability. <code>[matching value]</code> should be an ability name.` +
-			`<li><code>nature</code>: matches all generated sets with the specified nature. <code>[matching value]</code> should be an nature name.` +
+			`<li><code>nature</code>: matches all generated sets with the specified nature. <code>[matching value]</code> should be a nature name.` +
 			`</ul>` +
 			`The given probability is for a set that matches EVERY provided condition. ` +
 			`Conditions can be negated by prefixing the <code>[matching value]</code> with <code>!</code>.<br />` +
