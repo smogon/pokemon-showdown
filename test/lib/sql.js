@@ -22,13 +22,13 @@ test(`SQLite worker wrapper`, () => {
 	});
 	it(`should support both statement strings and corresponding statement classes`, async () => {
 		await database.run(`INSERT INTO test (col, col2) VALUES (?, ?)`, ['a', 'b']);
-		await database.run(this.insert, ['a', 'b']);
+		await database.run(insert, ['a', 'b']);
 	});
 	it(`should support both inline and object params`, async () => {
-		await database.run(this.insert, ['a', 'b']);
+		await database.run(insert, ['a', 'b']);
 		await database.run(`INSERT INTO test (col, col2) VALUES($col, $col2)`, {col: 'a', col2: 'b'});
 	});
 	it(`should retrieve one line from Database.get`, async () => {
-		assert(!!await database.get(this.select), 1);
+		assert(!!await database.get(select), 1);
 	});
 });
