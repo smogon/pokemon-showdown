@@ -1292,7 +1292,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			// we ensure it exists above
 			const giveaway = wifiData.submittedGiveaways[hasGiveaway.type][hasGiveaway.index];
-			if (giveaway.claimed) return this.errorReply(`That giveaway is already claimed by ${giveaway.claimed}.`);
+			if (giveaway.claimed) throw new Chat.ErrorMessage(`That giveaway is already claimed by ${giveaway.claimed}.`);
 			giveaway.claimed = user.id;
 			Chat.refreshPageFor('giveaways-submitted', room);
 			this.privateModAction(`${user.name} claimed ${targetUser.name}'s giveaway`);
@@ -1309,7 +1309,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			// we ensure it exists above
 			const giveaway = wifiData.submittedGiveaways[hasGiveaway.type][hasGiveaway.index];
-			if (!giveaway.claimed) return this.errorReply(`That giveaway not claimed.`);
+			if (!giveaway.claimed) throw new Chat.ErrorMessage(`That giveaway is not claimed.`);
 			delete giveaway.claimed;
 			Chat.refreshPageFor('giveaways-submitted', room);
 			saveData();
