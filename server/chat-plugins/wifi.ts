@@ -391,7 +391,7 @@ export class QuestionGiveaway extends Giveaway {
 		if (Giveaway.checkBanned(this.room, user)) return user.sendTo(this.room, "You are banned from entering giveaways.");
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
-		if (this.answered.get(user.id) ?? 0 >= 3) {
+		if ((this.answered.get(user.id) ?? 0) >= 3) {
 			return user.sendTo(
 				this.room,
 				"You have already guessed three times. You cannot guess anymore in this.giveaway."
@@ -410,7 +410,7 @@ export class QuestionGiveaway extends Giveaway {
 
 		this.joined.set(user.latestIp, user.id);
 		this.answered.add(user.id);
-		if (this.answered.get(user.id) ?? 0 >= 3) {
+		if ((this.answered.get(user.id) ?? 0) >= 3) {
 			user.sendTo(
 				this.room,
 				`Your guess '${guess}' is wrong. You have used up all of your guesses. Better luck next time!`
