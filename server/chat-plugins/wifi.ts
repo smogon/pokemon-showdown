@@ -1471,7 +1471,7 @@ export const pages: Chat.PageTable = {
 							buf += `<hr /><details><summary>Extra Info</summary>${Chat.formatText(giveaway.extraInfo.trim(), true)}</details>`;
 						}
 						buf += `<hr />`;
-						buf += `<button class="button" name="send" value="/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway)}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
+						buf += `<button class="button" name="send" value="/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway) + 1}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
 						const targetUser = Users.get(giveaway.targetUserID);
 						if (!targetUser?.connected || targetUser.id !== user.id) {
 							buf += `<button title="The giver is offline or you are not them" disabled class="button disabled" style="float:right">Create giveaway</button>`;
@@ -1492,7 +1492,7 @@ export const pages: Chat.PageTable = {
 							buf += `<hr /><details><summary>Extra Info</summary>${Chat.formatText(giveaway.extraInfo.trim(), true)}</details>`;
 						}
 						buf += `<hr />`;
-						buf += `<button class="button" name="send" value="/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway)}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
+						buf += `<button class="button" name="send" value="/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway) + 1}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
 						const targetUser = Users.get(giveaway.targetUserID);
 						if (!targetUser?.connected || targetUser.id !== user.id) {
 							buf += `<button title="The giver is offline or you are not them" disabled class="button disabled" style="float:right">Create giveaway</button>`;
