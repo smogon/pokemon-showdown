@@ -378,7 +378,7 @@ export class QuestionGiveaway extends Giveaway {
 	start() {
 		this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has started! Scroll down to see the question.</p>');
 		this.phase = 'started';
-		this.send(this.generateQuestion(), true);
+		this.send(this.generateQuestion());
 		this.timer = setTimeout(() => this.end(false), 1000 * 60 * 5);
 	}
 
