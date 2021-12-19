@@ -287,7 +287,7 @@ class Giveaway extends Rooms.RoomGame {
 		let buf = `<center><h3>It's ${this.game} giveaway time!</h3>`;
 		buf += Utils.html`<small>Giveaway started by ${this.host.name}</small>`;
 		buf += `<table style="margin-left:auto;margin-right:auto">`;
-		buf += Utils.html`<tr><td colspan="2" style="text-align:center"><strong>Giver:</strong> <username>${this.giver.name}</username><br /><strong>OT:</strong> ${this.ot}, <strong>TID:</strong> ${this.tid}</td></tr>`;
+		buf += Utils.html`<tr><td colspan="2" style="text-align:center"><strong>Giver: </strong>${this.giver.name}<br /><strong>OT:</strong> ${this.ot}, <strong>TID:</strong> ${this.tid}</td></tr>`;
 		buf += `<tr><td style="text-align:center;width:45%"><psicon item="${this.ball}" /> ${this.sprite} <psicon item="${this.ball}" />`;
 		const set = Giveaway.convertIVs(this.prize, this.ivs);
 		buf += `<p>${Chat.formatText(set, true)}</p></td>`;
