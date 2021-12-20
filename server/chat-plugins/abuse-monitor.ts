@@ -301,7 +301,9 @@ if (!PM.isParentProcess) {
 }
 
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
-	if (!room?.battle?.rated || settings.disabled || cache[room.roomid]?.staffNotified) return;
+	// 2 lines to not hit max-len
+	if (!room?.battle || !['rated', 'unrated'].includes(room.battle.challengeType)) return;
+	if (settings.disabled || cache[room.roomid]?.staffNotified) return;
 	// startsWith('!') - broadcasting command, ignore it.
 	if (!Config.perspectiveKey || message.startsWith('!')) return;
 
