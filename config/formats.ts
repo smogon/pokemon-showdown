@@ -2174,8 +2174,8 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen3',
-		ruleset: ['Standard', '3 Baton Pass Clause'],
-		banlist: ['Uber', 'Mr. Mime', 'Smeargle + Baton Pass', 'Sand Veil'],
+		ruleset: ['Standard', 'One Boost Passer Clause'],
+		banlist: ['Uber', 'Sand Veil'],
 	},
 	{
 		name: "[Gen 2] OU",
