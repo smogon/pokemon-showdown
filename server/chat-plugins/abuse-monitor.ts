@@ -98,6 +98,12 @@ interface BattleInfo {
 	log: string[];
 }
 
+// stolen from chatlog. necessary here, but importing chatlog sucks.
+function nextMonth(month: string) {
+	const nextMonth = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
+	return nextMonth.toISOString().slice(0, 7);
+}
+
 // Mostly stolen from my code in helptickets.
 // Necessary because we can't require this in without also requiring in a LOT of other
 // modules, most of which crash the child process. Lot messier to fix that than it is to do this.
@@ -467,11 +473,11 @@ export const commands: Chat.ChatCommands = {
 			// bring the listing page to the front - need to close and reopen
 			this.closePage(`abusemonitor-flagged`);
 			await Chat.database.run(
-				`INSERT INTO perspective_stats (staff, roomid, result, date, timestamp) VALUES ($staff, $roomid, $result, $date, $timestamp) ` +
+				`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
 				// on conflict in case it's re-triggered later.
 				// (we want it to be updated to success if it is now a success where it was previously inaccurate)
 				`ON CONFLICT (roomid) DO UPDATE SET result = $result, date = $date, timestamp = $timestamp`,
-				{staff: this.user.id, roomid, result, date: Chat.toTimestamp(new Date()).split(' ')[0], timestamp: Date.now()}
+				{staff: this.user.id, roomid, result, timestamp: Date.now()}
 			);
 			return this.parse(`/j view-abusemonitor-flagged`);
 		},
@@ -859,8 +865,8 @@ export const pages: Chat.PageTable = {
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
 			buf += `<h2>Abuse Monitor stats for ${month}</h2><hr />`;
 			const logs = await Chat.database.all(
-				`SELECT * FROM perspective_stats WHERE date LIKE ?`,
-				[month + '%']
+				`SELECT * FROM perspective_stats WHERE timestamp > ? AND timestamp < ?`,
+				[new Date(month).getTime(), new Date(nextMonth(month)).getTime()]
 			);
 			this.title = '[Abuse Monitor] Stats';
 			if (!logs.length) {
