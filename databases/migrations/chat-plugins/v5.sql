@@ -5,7 +5,6 @@ CREATE TABLE perspective_stats (
 	staff TEXT NOT NULL,
 	roomid TEXT NOT NULL PRIMARY KEY,
 	result TINYINT(1) NOT NULL,
-	date TEXT NOT NULL, -- YYYY-MM-DD - for easy stat searching.
 	timestamp INTEGER NOT NULL
 );
 
