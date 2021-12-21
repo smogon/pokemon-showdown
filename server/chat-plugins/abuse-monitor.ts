@@ -100,8 +100,8 @@ interface BattleInfo {
 
 // stolen from chatlog. necessary here, but importing chatlog sucks.
 function nextMonth(month: string) {
-	const nextMonth = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
-	return nextMonth.toISOString().slice(0, 7);
+	const next = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
+	return next.toISOString().slice(0, 7);
 }
 
 // Mostly stolen from my code in helptickets.
