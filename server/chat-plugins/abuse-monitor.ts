@@ -476,7 +476,7 @@ export const commands: Chat.ChatCommands = {
 				`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
 				// on conflict in case it's re-triggered later.
 				// (we want it to be updated to success if it is now a success where it was previously inaccurate)
-				`ON CONFLICT (roomid) DO UPDATE SET result = $result, date = $date, timestamp = $timestamp`,
+				`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
 				{staff: this.user.id, roomid, result, timestamp: Date.now()}
 			);
 			return this.parse(`/j view-abusemonitor-flagged`);
