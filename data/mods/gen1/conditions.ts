@@ -190,9 +190,9 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
+			pokemon.maybePartialTrappingLock = true;
 			return false;
 		},
-		onLockMove: 'fight',
 	},
 	partialtrappinglock: {
 		name: 'partialtrappinglock',
@@ -218,6 +218,9 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				}
 			}
 		},
+		onBeforeMove(pokemon) {
+			pokemon.maybePartialTrappingLock = true;
+		}
 	},
 	mustrecharge: {
 		inherit: true,
