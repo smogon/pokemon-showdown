@@ -388,7 +388,8 @@ export class Pokemon {
 		this.trapped = false;
 		this.maybeTrapped = false;
 		this.maybeDisabled = false;
-
+		this.maybePartialTrappingLock = false;
+		
 		this.illusion = null;
 		this.transformed = false;
 
@@ -860,13 +861,6 @@ export class Pokemon {
 				return [{
 					move: 'Recharge',
 					id: 'recharge',
-				}];
-			}
-			if (lockedMove === 'fight') {
-				this.trapped = false;
-				return [{
-					move: 'Fight',
-					id: 'fight',
 				}];
 			}
 			for (const moveSlot of this.moveSlots) {
