@@ -510,7 +510,16 @@ export class Side {
 				return this.emitChoiceError(`Can't move: You can't choose a target for ${move.name}`);
 			}
 		}
-
+		if (pokemon.maybePartialTrappingLock) {
+			this.choice.cantUndo = true;
+			if (!pokemon.volatiles['partiallytrapped'] && !pokemon.volatiles['partialtrappinglock']) {
+				this.choice.cantUndo=false;
+				const status = this.emitChoiceError(`Your Pokemon is able to choose an attack now.`, true);
+				this.emitRequest(this.activeRequest!);
+				pokemon.maybePartialTrappingLock = false;
+				return status;
+			}
+		}
 		const lockedMove = pokemon.getLockedMove();
 		if (lockedMove) {
 			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
