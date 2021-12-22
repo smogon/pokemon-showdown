@@ -8,8 +8,6 @@ CREATE TABLE perspective_stats (
 	timestamp INTEGER NOT NULL
 );
 
-CREATE INDEX staff_idx ON perspective_stats(staff);
-CREATE INDEX result_idx ON perspective_stats(result);
 CREATE INDEX date_idx ON perspective_stats(date);
 
 -- update database version
