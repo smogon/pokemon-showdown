@@ -18,29 +18,26 @@ const DATA_FILE = 'config/chat-plugins/wifi.json';
 
 type Game = 'SwSh' | 'BDSP';
 
-interface QuestionGiveawayData {
+interface GiveawayData {
 	targetUserID: string;
 	ot: string;
 	tid: string;
 	game: Game;
 	prize: PokemonSet;
 	ivs: string[];
-	question: string;
-	answers: string[];
 	ball: string;
 	extraInfo: string;
+	/** Staff handling it. */
+	claimed?: ID;
 }
 
-interface LotteryGiveawayData {
-	targetUserID: string;
-	ot: string;
-	tid: string;
-	game: Game;
-	prize: PokemonSet;
-	ivs: string[];
+interface QuestionGiveawayData extends GiveawayData {
+	question: string;
+	answers: string[];
+}
+
+interface LotteryGiveawayData extends GiveawayData {
 	winners: number;
-	ball: string;
-	extraInfo: string;
 }
 
 interface WifiData {
@@ -1284,6 +1281,39 @@ export const commands: Chat.ChatCommands = {
 				this.modlog(`GIVEAWAY DENY ${hasGiveaway.type.toUpperCase()}`, targetUser, reason || null, {noalts: true, noip: true});
 			}
 		},
+		claim(target, room, user) {
+			room = this.requireRoom('wifi' as RoomID);
+			this.checkCan('mute', null, room);
+			const {targetUser} = this.requireUser(target);
+			const hasGiveaway = hasSubmittedGiveaway(targetUser);
+			if (!hasGiveaway) {
+				this.refreshPage('giveaways-submitted');
+				throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} doesn't have any submitted giveaways.`);
+			}
+			// we ensure it exists above
+			const giveaway = wifiData.submittedGiveaways[hasGiveaway.type][hasGiveaway.index];
+			if (giveaway.claimed) throw new Chat.ErrorMessage(`That giveaway is already claimed by ${giveaway.claimed}.`);
+			giveaway.claimed = user.id;
+			Chat.refreshPageFor('giveaways-submitted', room);
+			this.privateModAction(`${user.name} claimed ${targetUser.name}'s giveaway`);
+			saveData();
+		},
+		unclaim(target, room, user) {
+			room = this.requireRoom('wifi' as RoomID);
+			this.checkCan('mute', null, room);
+			const {targetUser} = this.requireUser(target);
+			const hasGiveaway = hasSubmittedGiveaway(targetUser);
+			if (!hasGiveaway) {
+				this.refreshPage('giveaways-submitted');
+				throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} doesn't have any submitted giveaways.`);
+			}
+			// we ensure it exists above
+			const giveaway = wifiData.submittedGiveaways[hasGiveaway.type][hasGiveaway.index];
+			if (!giveaway.claimed) throw new Chat.ErrorMessage(`That giveaway is not claimed.`);
+			delete giveaway.claimed;
+			Chat.refreshPageFor('giveaways-submitted', room);
+			saveData();
+		},
 		count(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
 			if (!Dex.species.get(target).exists) {
@@ -1567,25 +1597,22 @@ export const pages: Chat.PageTable = {
 						giveaway = giveaway as LotteryGiveawayData;
 						buf += `<div class="infobox"><h3 style="text-align:center">Lottery</h3><hr />`;
 						buf += Utils.html`<strong>Game:</strong> ${gameName[giveaway.game]}, <strong>Giver:</strong> ${giveaway.targetUserID}, <strong>OT:</strong> ${giveaway.ot}, <strong>TID:</strong> ${giveaway.tid}, <strong># of winners:</strong> ${giveaway.winners}`;
+						if (giveaway.claimed) {
+							buf += Utils.html`<br /><strong>Claimed:</strong> ${giveaway.claimed}`;
+						}
 						buf += `<br /><strong>Pok&eacute; Ball:</strong> <psicon item="${giveaway.ball}" />`;
 						buf += `<details><summary><psicon pokemon="${giveaway.prize.species}" /> Prize</summary>`;
 						buf += `${Chat.formatText(Giveaway.convertIVs(giveaway.prize, giveaway.ivs), true)}</details>`;
 						if (giveaway.extraInfo?.trim()) {
 							buf += `<hr /><details><summary>Extra Info</summary>${Chat.formatText(giveaway.extraInfo.trim(), true)}</details>`;
 						}
-						buf += `<hr />`;
-						if (!Users.get(giveaway.targetUserID)?.connected) {
-							buf += `<button title="The giver is offline" disabled class="button disabled"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
-							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
-						} else {
-							buf += `<button class="button" name="send" value="/giveaway deny ${giveaway.targetUserID}}"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
-							buf += `<button class="button" style="float:right" name="send" value="/giveaway approve ${giveaway.targetUserID}">Create giveaway</button>`;
-						}
-						buf += `</div>`;
 					} else {
 						giveaway = giveaway as QuestionGiveawayData;
 						buf += `<div class="infobox"><h3 style="text-align:center">Question</h3><hr />`;
 						buf += Utils.html`<strong>Game:</strong> ${gameName[giveaway.game]}, <strong>Giver:</strong> ${giveaway.targetUserID}, <strong>OT:</strong> ${giveaway.ot}, <strong>TID:</strong> ${giveaway.tid}`;
+						if (giveaway.claimed) {
+							buf += Utils.html`<br /><strong>Claimed:</strong> ${giveaway.claimed}`;
+						}
 						buf += Utils.html`<br /><strong>Question:</strong> ${giveaway.question}`;
 						buf += `<br /><strong>Answer${Chat.plural(giveaway.answers.length, "s")}:</strong> ${giveaway.answers.join(', ')}`;
 						buf += `<br /><strong>Pok&eacute; Ball:</strong> <psicon item="${giveaway.ball}" />`;
@@ -1594,16 +1621,25 @@ export const pages: Chat.PageTable = {
 						if (giveaway.extraInfo?.trim()) {
 							buf += `<hr /><details><summary>Extra Info</summary>${Chat.formatText(giveaway.extraInfo.trim(), true)}</details>`;
 						}
-						buf += `<hr />`;
-						if (!Users.get(giveaway.targetUserID)?.connected) {
-							buf += `<button title="The giver is offline" disabled class="button disabled"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
-							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
-						} else {
-							buf += `<button class="button" name="send" value="/giveaway deny ${giveaway.targetUserID}}"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
-							buf += `<button class="button" style="float:right" name="send" value="/giveaway approve ${giveaway.targetUserID}">Create giveaway</button>`;
-						}
-						buf += `</div>`;
 					}
+					buf += `<hr />`;
+					const claimCmd = giveaway.claimed === user.id ?
+						`/giveaway unclaim ${giveaway.targetUserID}` :
+						`/giveaway claim ${giveaway.targetUserID}`;
+					const claimedTitle = giveaway.claimed === user.id ?
+						"Unclaim" :
+						giveaway.claimed ? `Claimed by ${giveaway.claimed}` : `Claim`;
+					const disabled = giveaway.claimed && giveaway.claimed !== user.id ? " disabled" : "";
+					if (!Users.get(giveaway.targetUserID)?.connected) {
+						buf += `<button title="The giver is offline" disabled class="button disabled"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
+						buf += `<button style="float: center" class="button${disabled}"name="send" value="/msgroom wifi,${claimCmd}">${claimedTitle}</button>`;
+						buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
+					} else {
+						buf += `<button class="button" name="send" value="/giveaway deny ${giveaway.targetUserID}}"><i class="fa fa-times-circle"></i> Deny giveaway</button>`;
+						buf += `<button style="float: center"  class="button${disabled}"name="send" value="/msgroom wifi,${claimCmd}">${claimedTitle}</button>`;
+						buf += `<button class="button" style="float:right" name="send" value="/giveaway approve ${giveaway.targetUserID}">Create giveaway</button>`;
+					}
+					buf += `</div>`;
 				}
 			} else {
 				buf += `<h2>Submit a Giveaway</h2>`;
