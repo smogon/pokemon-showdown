@@ -118,7 +118,8 @@ export class Pokemon {
 	trapped: boolean | "hidden";
 	maybeTrapped: boolean;
 	maybeDisabled: boolean;
-
+	maybePartialTrappingLock: boolean | "hidden";
+	
 	illusion: Pokemon | null;
 	transformed: boolean;
 
