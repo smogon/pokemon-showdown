@@ -461,7 +461,7 @@ export const commands: Chat.ChatCommands = {
 		async nojoinpunish(target, room, user) {
 			this.checkCan('lock');
 			const [roomid, type, rest] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
-			const tarRoom = Rooms.get(roomid) || Rooms.get('staff');
+			const tarRoom = Rooms.get(roomid);
 			if (!tarRoom) return this.popupReply(`The room "${roomid}" does not exist.`);
 			const cmd = NOJOIN_COMMAND_WHITELIST[toID(type)];
 			if (!cmd) {
@@ -704,6 +704,7 @@ export const pages: Chat.PageTable = {
 				buf += `</h2><hr /><p class="error">No such room.</p>`;
 				return buf;
 			}
+			room.pokeExpireTimer(); // don't want it to expire while staff are reviewing
 			if (!cache[roomid]) {
 				buf += `</h2><hr /><p class="error">The abuse monitor has not flagged the given room.</p>`;
 				return buf;
