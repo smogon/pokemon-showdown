@@ -43,20 +43,23 @@ describe('Heal Bell', function () {
 		assert.equal(battle.p2.pokemon[1].status, '', `Diggersby should not be poisoned.`);
 		assert.equal(battle.p4.pokemon[0].status, '', `Wynaut should not be poisoned.`);
 
+		// Heal Bell should work from p2 as well as p4
 		battle = common.createBattle({gameType: 'multi'}, [[
 			{species: 'Machamp', ability: 'noguard', moves: ['poisongas']},
 		], [
-			{species: 'Diggersby', moves: ['sleeptalk', 'healbell']},
+			{species: 'Wynaut', moves: ['sleeptalk', 'healbell']},
 		], [
 			{species: 'Marowak', moves: ['sleeptalk']},
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{species: 'Cubone', moves: ['sleeptalk']},
+			{species: 'Diggersby', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
-		battle.makeChoices('auto', 'move healbell', 'auto', 'auto');
-		assert.equal(battle.p2.pokemon[0].status, '', `Diggersby should not be poisoned.`);
-		assert.equal(battle.p4.pokemon[0].status, '', `Wynaut should not be poisoned.`);
+		battle.makeChoices('auto', 'move healbell', 'auto', 'switch diggersby');
+		assert.equal(battle.p4.pokemon[0].status, '', `Cubone should not be poisoned.`);
+		assert.equal(battle.p4.pokemon[1].status, '', `Diggersby should not be poisoned.`);
+		assert.equal(battle.p2.pokemon[0].status, '', `Wynaut should not be poisoned.`);
 	});
 
 	it(`in a Free-For-All, should heal the major status conditions of the user's team, and not any opposing teams`, function () {
