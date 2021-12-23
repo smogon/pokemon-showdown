@@ -98,6 +98,12 @@ interface BattleInfo {
 	log: string[];
 }
 
+// stolen from chatlog. necessary here, but importing chatlog sucks.
+function nextMonth(month: string) {
+	const next = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
+	return next.toISOString().slice(0, 7);
+}
+
 // Mostly stolen from my code in helptickets.
 // Necessary because we can't require this in without also requiring in a LOT of other
 // modules, most of which crash the child process. Lot messier to fix that than it is to do this.
@@ -442,20 +448,39 @@ export const commands: Chat.ChatCommands = {
 				`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child process.`
 			);
 		},
-		resolve(target) {
+		async resolve(target) {
 			this.checkCan('lock');
 			target = target.toLowerCase().trim().replace(/ +/g, '');
-			if (!target) return this.parse(`/help abusemonitor`);
-			if (!cache[target]?.staffNotified) {
+			let [roomid, rawResult] = Utils.splitFirst(target, ',').map(f => f.trim());
+			if (!cache[roomid]?.staffNotified) {
 				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
+			}
+			if (roomid.includes('-') && roomid.endsWith('pw')) {
+				// cut off passwords
+				roomid = roomid.split('-').slice(0, -1).join('-');
+			}
+			let result = toID(rawResult) === 'success' ? 1 : toID(rawResult) === 'failure' ? 0 : null;
+			if (!result) return this.popupReply(`Invalid result - must be 'success' or 'failure'.`);
+			const inserted = await Chat.database.get(`SELECT result FROM perspective_stats WHERE roomid = ?`, [roomid]);
+			if (inserted?.result) {
+				// has already been logged as accurate - ensure if one success is logged it's still a success if it's hit again
+				// (even if it's a failure now, it was a success before - that's what's relevant.)
+				result = inserted.result;
 			}
 			// we delete the cache because if more stuff happens in it
 			// post punishment, we want to know about it
-			delete cache[target];
+			delete cache[roomid];
 			notifyStaff();
-			this.closePage(`abusemonitor-view-${target}`);
+			this.closePage(`abusemonitor-view-${roomid}`);
 			// bring the listing page to the front - need to close and reopen
 			this.closePage(`abusemonitor-flagged`);
+			await Chat.database.run(
+				`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
+				// on conflict in case it's re-triggered later.
+				// (we want it to be updated to success if it is now a success where it was previously inaccurate)
+				`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
+				{staff: this.user.id, roomid, result, timestamp: Date.now()}
+			);
 			return this.parse(`/j view-abusemonitor-flagged`);
 		},
 		async nojoinpunish(target, room, user) {
@@ -490,6 +515,10 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const [count, userid] = Utils.splitFirst(target, ',').map(toID);
 			this.parse(`/join view-abusemonitor-logs-${count || '200'}${userid ? `-${userid}` : ""}`);
+		},
+		stats(target) {
+			checkAccess(this);
+			return this.parse(`/join view-abusemonitor-stats${target ? `-${target}` : ''}`);
 		},
 		async respawn(target, room, user) {
 			checkAccess(this);
@@ -760,7 +789,9 @@ export const pages: Chat.PageTable = {
 				}
 				buf += `</div></details><br />`;
 			}
-			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid}">Mark resolved</button>`;
+			buf += `<hr /><strong>Mark resolved:</strong><br />`;
+			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid},success">As accurate flag</button> | `;
+			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid},failure">As inaccurate flag</button>`;
 			return buf;
 		},
 		async logs(query, user) {
@@ -823,6 +854,51 @@ export const pages: Chat.PageTable = {
 				buf += `<button class="button" name="send" value="/msgroom staff, /am logs ${count + 100}">Show 100 more</button>`;
 				buf += `</center>`;
 			}
+			return buf;
+		},
+		async stats(query, user) {
+			checkAccess(this);
+			const date = new Date(query.join('-') || Chat.toTimestamp(new Date()).split(' ')[0]);
+			if (isNaN(date.getTime())) {
+				return this.errorReply(`Invalid date: ${date}`);
+			}
+			const month = Chat.toTimestamp(date).split(' ')[0].slice(0, -3);
+			let buf = `<div class="pad">`;
+			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
+			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
+			buf += `<h2>Abuse Monitor stats for ${month}</h2><hr />`;
+			const logs = await Chat.database.all(
+				`SELECT * FROM perspective_stats WHERE timestamp > ? AND timestamp < ?`,
+				[new Date(month).getTime(), new Date(nextMonth(month)).getTime()]
+			);
+			this.title = '[Abuse Monitor] Stats';
+			if (!logs.length) {
+				buf += `<p class="message-error">No logs found for the month ${month}.</p>`;
+				return buf;
+			}
+			this.title += ` ${month}`;
+			buf += `<p>${Chat.count(logs.length, 'logs')} found.</p>`;
+			let successes = 0;
+			let failures = 0;
+			const staffStats: Record<string, number> = {};
+			for (const log of logs) {
+				if (log.result) {
+					successes++;
+				} else {
+					failures++;
+				}
+				if (!staffStats[log.staff]) staffStats[log.staff] = 0;
+				staffStats[log.staff]++;
+			}
+			buf += `<p><strong>Success rate:</strong> ${(successes / logs.length) * 100}%</p>`;
+			buf += `<p><strong>Failure rate:</strong> ${(failures / logs.length) * 100}%</p>`;
+			buf += `<p><strong>Staff stats:</strong></p>`;
+			buf += `<div class="ladder pad"><table>`;
+			buf += `<tr><th>User</th><th>Total</th><th>Percent total</th></tr>`;
+			for (const id of Utils.sortBy(Object.keys(staffStats), k => -staffStats[k])) {
+				buf += `<tr><td>${id}</td><td>${staffStats[id]}</td><td>${(staffStats[id] / logs.length) * 100}%</td></tr>`;
+			}
+			buf += `</table></div>`;
 			return buf;
 		},
 	},
