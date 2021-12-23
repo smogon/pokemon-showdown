@@ -300,6 +300,21 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 	},
 	{
+		name: "[Gen 8] Test Your Luck!",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3695144/">Test Your Luck! Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		banlist: ['Azelf', 'Mesprit', 'Uxie'],
+		onValidateSet(set, format) {
+			if (set.moves.length !== 1 || this.dex.moves.get(set.moves[0]).id !== 'metronome') {
+				return [`${set.name || set.species} has illegal moves.`, `(${format.name} only allows the move Metronome)`];
+			}
+		},
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
@@ -383,21 +398,6 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit One Restricted'],
 		restricted: ['Restricted Legendary'],
-	},
-	{
-		name: "[Gen 8] Tiny Tourney",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3694047/">Tiny Tourney Metagame Discussion</a>`,
-		],
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
-		onValidateSet(set) {
-			const species = this.dex.species.get(set.species);
-			if (!species.nfe || species.prevo) return [`Non-first-stage Pok\u00e9mon cannot be used in Tiny Tourney.`];
-			if (species.heightm > 1) return [`${species.name} is too tall to be used in Tiny Tourney.`];
-		},
 	},
 	{
 		name: "[Gen 8] VGC 2021 Series 9",
