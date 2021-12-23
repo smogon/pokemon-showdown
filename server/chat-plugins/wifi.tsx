@@ -88,6 +88,12 @@ const gameidToGame: {[k: string]: Game} = {
 	bdsp: 'BDSP',
 };
 
+const render = Chat.JSX.render;
+
+function renderString(str: string) {
+	return <div dangerouslySetInnerHTML={{__html: Chat.formatText(str, true)}} />;
+}
+
 class Giveaway extends Rooms.RoomGame {
 	gaNumber: number;
 	host: User;
@@ -152,23 +158,20 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	sendToUser(user: User, content: string | Chat.VNode) {
-		if (typeof content !== 'string') content = Chat.JSX.render(content);
 		user.sendTo(
 			this.room,
-			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|${Chat.html`${<div {...this.getStyle()}>{content}</div>}`}`
+			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|${render(<div {...this.getStyle()}>{content}</div>)}`
 		);
 	}
 
 	send(content: string | Chat.VNode, isStart = false) {
-		if (typeof content !== 'string') content = Chat.JSX.render(content);
-		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|<div ${this.getStyle()}>${content}</div>`);
+		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|${render(<div {...this.getStyle()}>{content}</div>)}`);
 		if (isStart) this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|It's ${this.game} giveaway time!`);
 		this.room.update();
 	}
 
 	changeUhtml(content: string | Chat.VNode) {
-		if (typeof content !== 'string') content = Chat.JSX.render(content);
-		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, `<div ${this.getStyle()}>${content}</div>`);
+		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, render(<div {...this.getStyle()}>{content}</div>));
 		this.room.update();
 	}
 
@@ -292,38 +295,38 @@ class Giveaway extends Rooms.RoomGame {
 
 	generateWindow(rightSide: Chat.VNode | string) {
 		const set = Giveaway.convertIVs(this.prize, this.ivs);
-		return Chat.JSX.render(<center>
-			<h3>It's {this.game} giveaway time!</h3>`;
-			{Chat.html`${<small>Giveaway started by {this.host.name}</small>}`}
+		return <center>
+			<h3>It's {this.game} giveaway time!</h3>
+			<small>Giveaway started by {this.host.name}</small>
 			<table style={{marginLeft: 'auto', marginRight: 'auto'}}>
-				{Chat.html`${<tr>
+				<tr>
 					<td colSpan={2} style={{textAlign: 'center'}}>
 						<strong>Giver:</strong> {this.giver.name}<br />
 						<strong>OT:</strong> {this.ot}, <strong>TID:</strong> {this.tid}
 					</td>
-				</tr>}`}
+				</tr>
 				<tr>
 					<td style={{textAlign: 'center', width: '45%'}}>
 						<psicon item={this.ball} /> {this.sprite} <psicon item={this.ball} />
-						<p>{Chat.formatText(set, true)}</p>
+						<p>{renderString(set)}</p>
 					</td>
 					<td style={{textAlign: 'center', width: '45%'}}>{rightSide}</td>
 				</tr>
 				{this.extraInfo?.trim().length ?
-					Chat.html`${<tr>
+					<tr>
 						<td colSpan={2} style={{textAlign: 'center'}}>
 							<strong>Extra Information</strong><br />
-							{Chat.formatText(this.extraInfo.trim().replace(/<br \/>/g, '\n'), true)}
+							{renderString(this.extraInfo.trim().replace(/<br \/>/g, '\n'))}
 						</td>
-					</tr>}` : ''}
+					</tr> : ''}
 			</table>
 			<p style={{textAlign: 'center', fontSize: '7pt', fontWeight: 'bold'}}>
 				<u>Note:</u> You must have a Switch, Pok&eacute;mon {gameName[this.game]},
-				&nbsp;and Nintendo Switch Online to receive the prize.
-				&nbsp;Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pok&eacute;mon,
-				&nbsp;unless it is explicitly allowed.
+				&#32;and Nintendo Switch Online to receive the prize.
+				&#32;Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pok&eacute;mon,
+				&#32;unless it is explicitly allowed.
 			</p>
-		</center>);
+		</center>;
 	}
 }
 
@@ -748,12 +751,12 @@ export class GTS extends Rooms.RoomGame {
 	}
 
 	send(content: string) {
-		this.room.add(`|uhtml|gtsga${this.gtsNumber}|<div class="broadcast-blue">${content}</div>`);
+		this.room.add(`|uhtml|gtsga${this.gtsNumber}|${render(<div class="broadcast-blue">{content}</div>)}`);
 		this.room.update();
 	}
 
 	changeUhtml(content: string) {
-		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, `<div class="broadcast-blue">${content}</div>`);
+		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, render(<div class="broadcast-blue">{content}</div>));
 		this.room.update();
 	}
 
@@ -767,18 +770,33 @@ export class GTS extends Rooms.RoomGame {
 	generateWindow() {
 		const sentModifier = this.sent.length ? 5 : 0;
 		const rightSide = this.noDeposits ?
-			`<strong>More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted.
-			If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</strong>
-			` :
-			`To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Utils.escapeHTML(this.lookfor)}</strong>`;
-		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">There is a GTS giveaway going on!</p>` +
-			`<p style="text-align:center;font-size:10pt;margin-top:0px;">Hosted by: ${Utils.escapeHTML(this.giver.name)} | Left: <b>${this.left}</b></p>` +
-			`<table style="margin-left:auto;margin-right:auto;"><tr>` +
-			(sentModifier ?
-				`<td style="text-align:center;width:10%"><b>Last winners:</b><br/>${this.sent.join('<br/>')}</td>` :
-				'') +
-			`<td style="text-align:center;width:15%">${this.sprite}</td><td style="text-align:center;width:${40 - sentModifier}%">${Chat.formatText(this.summary, true)}</td>` +
-			`<td style="text-align:center;width:${35 - sentModifier}%">${rightSide}</td></tr></table>`;
+			<strong>
+				More Pok&eacute;mon have been deposited than there are prizes in this giveaway and new deposits will not be accepted.
+				&#32;If you have already deposited a Pok&eacute;mon, please be patient, and do not withdraw your Pok&eacute;mon.
+			</strong> : <>
+				To participate, deposit <strong>{this.deposit}</strong> into the GTS and look for <strong>
+					{Utils.escapeHTML(this.lookfor)}
+				</strong>
+			</>;
+		return <>
+			<p style={{textAlign: 'center', fontSize: '14pt', fontWeight: 'bold', marginBottom: '2px'}}>
+				There is a GTS giveaway going on!
+			</p>
+			<p style={{textAlign: 'center', fontSize: '10pt', marginTop: 0}}>
+				Hosted by: {Utils.escapeHTML(this.giver.name)} | Left: <b>{this.left}</b>
+			</p>
+			<table style={{margin: 'inherit auto'}}>
+				<tr>
+					{sentModifier ? <td style={{textAlign: 'center', width: '10%'}}>
+						<b>Last winners:</b><br />
+						{this.sent.join(<br />)}
+					</td> : ''}
+					<td style={{textAlign: 'center', width: '15%'}}>{this.sprite}</td>
+					<td style={{textAlign: 'center', width: `${40 - sentModifier}%`}}>{renderString(this.summary)}</td>
+					<td style={{textAlign: 'center', width: `${35 - sentModifier}%`}}>{rightSide}</td>
+				</tr>
+			</table>
+		</>;
 	}
 
 	updateLeft(num: number) {
@@ -792,7 +810,7 @@ export class GTS extends Rooms.RoomGame {
 		this.left--;
 		if (this.left < 1) return this.end();
 
-		this.sent.push(Utils.escapeHTML(ign));
+		this.sent.push(ign);
 		if (this.sent.length > 5) this.sent.shift();
 
 		this.changeUhtml(this.generateWindow());
@@ -801,24 +819,35 @@ export class GTS extends Rooms.RoomGame {
 	stopDeposits() {
 		this.noDeposits = true;
 
-		this.room.send(`|html|<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
+		this.room.send(`|html|${render(<p style={{textAlign: 'center', fontSize: '11pt'}}>
+			More Pok&eacute;mon have been deposited than there are prizes in this giveaway and new deposits will not be accepted.
+			&#32;If you have already deposited a Pok&eacute;mon, please be patient, and do not withdraw your Pok&eacute;mon.
+		</p>)}`);
 		this.changeUhtml(this.generateWindow());
 	}
 
 	end(force = false) {
 		if (force) {
 			this.clearTimer();
-			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway was forcibly ended.</p>');
+			this.changeUhtml(
+				<p style={{textAlign: 'center', fontSize: '13pt', fontWeight: 'bold'}}>The GTS giveaway was forcibly ended.</p>
+			);
 			this.room.send("The GTS giveaway was forcibly ended.");
 		} else {
 			this.clearTimer();
-			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
+			this.changeUhtml(
+				<p style={{textAlign: 'center', fontSize: '13pt', fontWeight: 'bold'}}>The GTS giveaway has finished.</p>
+			);
 			this.room.modlog({
 				action: 'GTS FINISHED',
 				userid: this.giver.id,
 				note: `their GTS giveaway for "${this.summary}"`,
 			});
-			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Utils.escapeHTML(this.lookfor)}</strong>" has finished.</p>`);
+			this.send(
+				render(<p style={{textAlign: 'center', fontSize: '11pt'}}>
+					The GTS giveaway for a "<strong>{Utils.escapeHTML(this.lookfor)}</strong>" has finished.
+				</p>)
+			);
 			Giveaway.updateStats(new Set([this.pokemonID]));
 		}
 		this.room.subGame = null;
@@ -837,7 +866,13 @@ export class GTS extends Rooms.RoomGame {
 			const res = regexp.exec(parsed);
 			if (res) {
 				const num = String(species.num).padStart(3, '0');
-				return `${text.slice(0, res.index)}<a href="http://www.serebii.net/pokedex-sm/location/${num}.shtml">${text.slice(res.index, res.index + res[0].length)}</a>${text.slice(res.index + res[0].length)}`;
+				return <>
+					{text.slice(0, res.index)}
+					<a href={`http://www.serebii.net/pokedex-sm/location/${num}.shtml`}>
+						{text.slice(res.index, res.index + res[0].length)}
+					</a>
+					{text.slice(res.index + res[0].length)}
+				</>;
 			}
 		}
 		return text;
@@ -900,8 +935,8 @@ export const commands: Chat.ChatCommands = {
 
 			room.subGame = new GTS(room, targetUser, amount, summary, deposit, lookfor);
 
-			this.privateModAction(`${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon`);
-			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
+			this.privateModAction(`${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pok&eacute;mon`);
+			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pok&eacute;mon`);
 			*/
 		},
 		left(target, room, user) {
@@ -912,7 +947,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!target) {
 				this.runBroadcast();
-				let output = `The GTS giveaway from ${game.giver} has ${game.left} Pokémon remaining!`;
+				let output = `The GTS giveaway from ${game.giver} has ${game.left} Pok&eacute;mon remaining!`;
 				if (game.sent.length) output += `Last winners: ${game.sent.join(', ')}`;
 				return this.sendReply(output);
 			}
@@ -1211,8 +1246,10 @@ export const commands: Chat.ChatCommands = {
 					`|${user.name} has requested to start a question giveaway for ${set.species}.|new question giveaway request`;
 				room.sendRankedUsers(message, '%');
 				room.sendMods(
-					Chat.html`|uhtml|giveaway-request-${user.id}|<div class="infobox">${user.name} wants to start a question giveaway for ${set.species}<br>` +
-					`<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button></div>`
+					`|uhtml|giveaway-request-${user.id}|${render(<div class="infobox">
+						{user.name} wants to start a question giveaway for {set.species}<br />
+						<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
+					</div>)}`
 				);
 			},
 			lottery(target, room, user) {
@@ -1235,10 +1272,10 @@ export const commands: Chat.ChatCommands = {
 				const message = `|tempnotify|pendingapprovals|Pending lottery giveaway request!` +
 					`|${user.name} has requested to start a lottery giveaway for ${set.species}.|new lottery giveaway request`;
 				room.sendRankedUsers(message, '%');
-				room.sendMods(Chat.html`|uhtml|giveaway-request-${user.id}|${<div class="infobox">
+				room.sendMods(`|uhtml|giveaway-request-${user.id}|${render(<div class="infobox">
 					{user.name} wants to start a lottery giveaway for {set.species}<br />
 					<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
-				</div>}`);
+				</div>)}`);
 			},
 		},
 		approve(target, room, user) {
@@ -1358,10 +1395,10 @@ export const commands: Chat.ChatCommands = {
 
 			const count = wifiData.stats[target];
 
-			if (!count) return this.sendReplyBox("This Pokémon has never been given away.");
+			if (!count) return this.sendReplyBox("This Pok&eacute;mon has never been given away.");
 			const recent = count.filter(val => val + RECENT_THRESHOLD > Date.now()).length;
 
-			this.sendReplyBox(`This Pokémon has been given away ${Chat.count(count, "times")}, a total of ${Chat.count(recent, "times")} in the past month.`);
+			this.sendReplyBox(`This Pok&eacute;mon has been given away ${Chat.count(count, "times")}, a total of ${Chat.count(recent, "times")} in the past month.`);
 		},
 	},
 	giveawayhelp(target, room, user) {
@@ -1474,7 +1511,7 @@ export const pages: Chat.PageTable = {
 					return <center>
 						<h2>Pick a Giveaway type</h2>
 						{
-						formatFakeButton(`/view-giveaways-create-lottery`, <><i class="fa fa-random"></i> Lottery</>)
+							formatFakeButton(`/view-giveaways-create-lottery`, <><i class="fa fa-random"></i> Lottery</>)
 						} | {
 							formatFakeButton(`/view-giveaways-create-question`, <><i class="fa fa-question"></i> Question</>)
 						}
@@ -1560,21 +1597,21 @@ export const pages: Chat.PageTable = {
 								buf.push(<div class="infobox">
 									<h3 style={{textAlign: 'center'}}>Lottery</h3>
 									<hr />
-									{Chat.html`${<>
-										<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
-										&nbsp;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid},
-										&nbsp;<strong># of winners:</strong> {giveaway.winners}
-									</>}`}
+									<strong>Game:</strong> {gameName[giveaway.game]}
+									<br />
+									<strong>Giver:</strong> {giveaway.targetUserID},
+									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
+									<br /><strong># of winners:</strong> {giveaway.winners}
 									<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-										{Chat.formatText(Giveaway.convertIVs(giveaway.prize, giveaway.ivs), true)}
+										{renderString(Giveaway.convertIVs(giveaway.prize, giveaway.ivs))}
 									</details>
 									{giveaway.extraInfo?.trim() ? <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
-											{Chat.formatText(giveaway.extraInfo.trim(), true)}
+											{renderString(giveaway.extraInfo.trim())}
 										</details>
 									</> : ''}
 									<hr />
@@ -1596,23 +1633,22 @@ export const pages: Chat.PageTable = {
 								buf.push(<div class="infobox">
 									<h3 style={{textAlign: 'center'}}>Lottery</h3>
 									<hr />
-									{Chat.html`${<>
-										<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
-										&nbsp;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
-									</>}`}
+									<strong>Game:</strong> {gameName[giveaway.game]}
 									<br />
-									<strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}
+									<strong>Giver:</strong> {giveaway.targetUserID},
+									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
+									<br /><strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}
 									<br /><strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}
 									<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-										{Chat.formatText(Giveaway.convertIVs(giveaway.prize, giveaway.ivs), true)}
+										{renderString(Giveaway.convertIVs(giveaway.prize, giveaway.ivs))}
 									</details>
 									{giveaway.extraInfo?.trim() ? <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
-											{Chat.formatText(giveaway.extraInfo.trim(), true)}
+											{renderString(giveaway.extraInfo.trim())}
 										</details>
 									</> : ''}
 									<hr />
@@ -1640,9 +1676,9 @@ export const pages: Chat.PageTable = {
 									return <center>
 										<h3>Pick a giveaway type</h3>
 										{
-											formatFakeButton(`/view-giveaways-stored-add-lottery`, `<i class="fa fa-random"></i> Lottery`)
+											formatFakeButton(`/view-giveaways-stored-add-lottery`, <><i class="fa fa-random"></i> Lottery</>)
 										} |  {
-											formatFakeButton(`/view-giveaways-stored-add-question`, `<i class="fa fa-question"></i> Question`)
+											formatFakeButton(`/view-giveaways-stored-add-question`, <><i class="fa fa-question"></i> Question</>)
 										}
 									</center>;
 								} else {
@@ -1731,8 +1767,8 @@ export const pages: Chat.PageTable = {
 											<h3 style={{textAlign: 'center'}}>Lottery</h3>
 											<hr />
 											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
-											&nbsp;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid},
-											&nbsp;<strong># of winners:</strong> {giveaway.winners}
+											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid},
+											&#32;<strong># of winners:</strong> {giveaway.winners}
 											{giveaway.claimed ? <><br /><strong>Claimed:</strong> {Utils.escapeHTML(giveaway.claimed)}</> : ''}
 											<br />
 											<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
@@ -1744,32 +1780,30 @@ export const pages: Chat.PageTable = {
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
-													{Chat.formatText(giveaway.extraInfo.trim(), true).replace(/<br \/>/g, <br />)}
-												</details></> : ''
-											}
+													{renderString(giveaway.extraInfo.trim())}
+												</details>
+											</> : ''}
 										</>;
 									} else {
 										giveaway = giveaway as QuestionGiveawayData;
 										return <>
 											<h3 style={{textAlign: 'center'}}>Question</h3>
 											<hr />
-											{Chat.html`${<>
-												<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
-												&nbsp;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
-											</>}`}
+											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
+											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
 											{giveaway.claimed ? <><br /><strong>Claimed:</strong> {Utils.escapeHTML(giveaway.claimed)}</> : ''}
 											<br /><strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}
 											<br /><strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}
 											<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-												{Chat.formatText(Giveaway.convertIVs(giveaway.prize, giveaway.ivs), true).replace(/<br \/>/g, <br />)}
+												{renderString(Giveaway.convertIVs(giveaway.prize, giveaway.ivs))}
 											</details>
 											{giveaway.extraInfo?.trim() ? <>
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
-													{Chat.formatText(giveaway.extraInfo.trim(), true).replace(/<br \/>/g, <br />)}
+													{renderString(giveaway.extraInfo.trim())}
 												</details></> : ''
 											}
 										</>;
