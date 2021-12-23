@@ -10420,16 +10420,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-				/** moves blocked by Max Guard but not Protect */
-				const overrideBypassProtect = [
-					'block', 'flowershield', 'gearup', 'magneticflux', 'phantomforce', 'psychup', 'shadowforce', 'teatime', 'transform', 'whirlwind',
+				const bypassesMaxGuard = [
+					'acupressure', 'afteryou', 'allyswitch', 'aromatherapy', 'aromaticmist', 'coaching', 'confide', 'copycat', 'curse', 'decorate', 'doomdesire', 'feint', 'futuresight', 'gmaxoneblow', 'gmaxrapidflow', 'healbell', 'holdhands', 'howl', 'junglehealing', 'lifedew', 'meanlook', 'perishsong', 'playnice', 'powertrick', 'roar', 'roleplay', 'tearfullook',
 				];
-				const blockedByMaxGuard = (this.dex.moves.get(move.id).flags['protect'] ||
-						move.isZ || move.isMax || overrideBypassProtect.includes(move.id));
-				if (!blockedByMaxGuard) {
-					return;
-				}
+				if (bypassesMaxGuard.includes(move.id)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
