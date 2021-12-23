@@ -126,7 +126,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it.skip(`should deduct additional PP from submoves that target Pressure`, function () {
+	it(`should deduct additional PP from submoves that target Pressure`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['assist']},
 			{species: 'yveltal', moves: ['darkpulse']},
@@ -152,6 +152,22 @@ describe(`Pressure`, function () {
 		battle.makeChoices('move stealthrock', 'auto');
 		move = wynaut.getMoveData(Dex.moves.get('stealthrock'));
 		assert.equal(move.pp, move.maxpp - 2);
+	});
+	it(`should not deduct additional PP from moves reflected by Magic Coat`, function () {
+		battle = common.createBattle([[
+			{species: 'reuniclus', moves: ['magiccoat', 'confuseray']},
+		], [
+			{species: 'dusclops', ability: 'pressure', moves: ['confuseray']},
+		]]);
+		battle.makeChoices();
+		// Reuniclus
+		let move = battle.p1.active[0].getMoveData(Dex.moves.get('magiccoat'));
+		assert.equal(move.pp, move.maxpp - 1);
+		move = battle.p1.active[0].getMoveData(Dex.moves.get('confuseray'));
+		assert.equal(move.pp, move.maxpp);
+		// Dusclops
+		move = battle.p2.active[0].getMoveData(Dex.moves.get('confuseray'));
+		assert.equal(move.pp, move.maxpp - 1);
 	});
 });
 
