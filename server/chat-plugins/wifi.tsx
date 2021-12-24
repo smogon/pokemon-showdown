@@ -88,8 +88,6 @@ const gameidToGame: {[k: string]: Game} = {
 	bdsp: 'BDSP',
 };
 
-const render = Chat.JSX.render;
-
 function renderString(str: string) {
 	return <div dangerouslySetInnerHTML={{__html: Chat.formatText(str, true)}} />;
 }
@@ -160,18 +158,18 @@ class Giveaway extends Rooms.RoomGame {
 	sendToUser(user: User, content: string | Chat.VNode) {
 		user.sendTo(
 			this.room,
-			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|${render(<div {...this.getStyle()}>{content}</div>)}`
+			Chat.html`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|${<div {...this.getStyle()}>{content}</div>}`
 		);
 	}
 
 	send(content: string | Chat.VNode, isStart = false) {
-		this.room.add(`|uhtml|giveaway${this.gaNumber}${this.phase}|${render(<div {...this.getStyle()}>{content}</div>)}`);
+		this.room.add(Chat.html`|uhtml|giveaway${this.gaNumber}${this.phase}|${<div {...this.getStyle()}>{content}</div>}`);
 		if (isStart) this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|It's ${this.game} giveaway time!`);
 		this.room.update();
 	}
 
 	changeUhtml(content: string | Chat.VNode) {
-		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, render(<div {...this.getStyle()}>{content}</div>));
+		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, Chat.html`${<div {...this.getStyle()}>{content}</div>}`);
 		this.room.update();
 	}
 
@@ -321,10 +319,10 @@ class Giveaway extends Rooms.RoomGame {
 					</tr> : ''}
 			</table>
 			<p style={{textAlign: 'center', fontSize: '7pt', fontWeight: 'bold'}}>
-				<u>Note:</u> You must have a Switch, Pok&eacute;mon {gameName[this.game]},
-				&#32;and Nintendo Switch Online to receive the prize.
-				&#32;Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pok&eacute;mon,
-				&#32;unless it is explicitly allowed.
+				<u>Note:</u> You must have a Switch, Pok&eacute;mon {gameName[this.game]}, {}
+				and Nintendo Switch Online to receive the prize. {}
+				Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pok&eacute;mon, {}
+				unless it is explicitly allowed.
 			</p>
 		</center>;
 	}
@@ -751,12 +749,12 @@ export class GTS extends Rooms.RoomGame {
 	}
 
 	send(content: string) {
-		this.room.add(`|uhtml|gtsga${this.gtsNumber}|${render(<div class="broadcast-blue">{content}</div>)}`);
+		this.room.add(Chat.html`|uhtml|gtsga${this.gtsNumber}|${<div class="broadcast-blue">{content}</div>}`);
 		this.room.update();
 	}
 
 	changeUhtml(content: string) {
-		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, render(<div class="broadcast-blue">{content}</div>));
+		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, Chat.html`${<div class="broadcast-blue">{content}</div>}`);
 		this.room.update();
 	}
 
@@ -771,8 +769,8 @@ export class GTS extends Rooms.RoomGame {
 		const sentModifier = this.sent.length ? 5 : 0;
 		const rightSide = this.noDeposits ?
 			<strong>
-				More Pok&eacute;mon have been deposited than there are prizes in this giveaway and new deposits will not be accepted.
-				&#32;If you have already deposited a Pok&eacute;mon, please be patient, and do not withdraw your Pok&eacute;mon.
+				More Pok&eacute;mon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. {}
+				If you have already deposited a Pok&eacute;mon, please be patient, and do not withdraw your Pok&eacute;mon.
 			</strong> : <>
 				To participate, deposit <strong>{this.deposit}</strong> into the GTS and look for <strong>
 					{Utils.escapeHTML(this.lookfor)}
@@ -819,10 +817,10 @@ export class GTS extends Rooms.RoomGame {
 	stopDeposits() {
 		this.noDeposits = true;
 
-		this.room.send(`|html|${render(<p style={{textAlign: 'center', fontSize: '11pt'}}>
-			More Pok&eacute;mon have been deposited than there are prizes in this giveaway and new deposits will not be accepted.
-			&#32;If you have already deposited a Pok&eacute;mon, please be patient, and do not withdraw your Pok&eacute;mon.
-		</p>)}`);
+		this.room.send(Chat.html`|html|${<p style={{textAlign: 'center', fontSize: '11pt'}}>
+			More Pok&eacute;mon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. {}
+			If you have already deposited a Pok&eacute;mon, please be patient, and do not withdraw your Pok&eacute;mon.
+		</p>}`);
 		this.changeUhtml(this.generateWindow());
 	}
 
@@ -843,11 +841,9 @@ export class GTS extends Rooms.RoomGame {
 				userid: this.giver.id,
 				note: `their GTS giveaway for "${this.summary}"`,
 			});
-			this.send(
-				render(<p style={{textAlign: 'center', fontSize: '11pt'}}>
-					The GTS giveaway for a "<strong>{Utils.escapeHTML(this.lookfor)}</strong>" has finished.
-				</p>)
-			);
+			this.send(Chat.html`${<p style={{textAlign: 'center', fontSize: '11pt'}}>
+				The GTS giveaway for a "<strong>{Utils.escapeHTML(this.lookfor)}</strong>" has finished.
+			</p>}`);
 			Giveaway.updateStats(new Set([this.pokemonID]));
 		}
 		this.room.subGame = null;
@@ -1246,10 +1242,10 @@ export const commands: Chat.ChatCommands = {
 					`|${user.name} has requested to start a question giveaway for ${set.species}.|new question giveaway request`;
 				room.sendRankedUsers(message, '%');
 				room.sendMods(
-					`|uhtml|giveaway-request-${user.id}|${render(<div class="infobox">
+					Chat.html`|uhtml|giveaway-request-${user.id}|${<div class="infobox">
 						{user.name} wants to start a question giveaway for {set.species}<br />
 						<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
-					</div>)}`
+					</div>}`
 				);
 			},
 			lottery(target, room, user) {
@@ -1272,10 +1268,10 @@ export const commands: Chat.ChatCommands = {
 				const message = `|tempnotify|pendingapprovals|Pending lottery giveaway request!` +
 					`|${user.name} has requested to start a lottery giveaway for ${set.species}.|new lottery giveaway request`;
 				room.sendRankedUsers(message, '%');
-				room.sendMods(`|uhtml|giveaway-request-${user.id}|${render(<div class="infobox">
+				room.sendMods(Chat.html`|uhtml|giveaway-request-${user.id}|${<div class="infobox">
 					{user.name} wants to start a lottery giveaway for {set.species}<br />
 					<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
-				</div>)}`);
+				</div>}`);
 			},
 		},
 		approve(target, room, user) {
