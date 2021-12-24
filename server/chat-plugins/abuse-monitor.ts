@@ -452,7 +452,8 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			target = target.toLowerCase().trim().replace(/ +/g, '');
 			let [roomid, rawResult] = Utils.splitFirst(target, ',').map(f => f.trim());
-			if (!cache[roomid]?.staffNotified) {
+			const tarRoom = Rooms.get(roomid);
+			if (!tarRoom || !cache[tarRoom.roomid] || !cache[tarRoom.roomid]?.staffNotified) {
 				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
 			}
 			if (roomid.includes('-') && roomid.endsWith('pw')) {
@@ -469,9 +470,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			// we delete the cache because if more stuff happens in it
 			// post punishment, we want to know about it
-			delete cache[roomid];
+			delete cache[tarRoom.roomid];
 			notifyStaff();
-			this.closePage(`abusemonitor-view-${roomid}`);
+			this.closePage(`abusemonitor-view-${tarRoom.roomid}`);
 			// bring the listing page to the front - need to close and reopen
 			this.closePage(`abusemonitor-flagged`);
 			await Chat.database.run(
