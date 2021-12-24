@@ -460,7 +460,7 @@ export const commands: Chat.ChatCommands = {
 				roomid = roomid.split('-').slice(0, -1).join('-');
 			}
 			let result = toID(rawResult) === 'success' ? 1 : toID(rawResult) === 'failure' ? 0 : null;
-			if (!result) return this.popupReply(`Invalid result - must be 'success' or 'failure'.`);
+			if (result === null) return this.popupReply(`Invalid result - must be 'success' or 'failure'.`);
 			const inserted = await Chat.database.get(`SELECT result FROM perspective_stats WHERE roomid = ?`, [roomid]);
 			if (inserted?.result) {
 				// has already been logged as accurate - ensure if one success is logged it's still a success if it's hit again
