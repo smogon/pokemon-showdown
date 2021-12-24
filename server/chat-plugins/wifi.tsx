@@ -491,8 +491,8 @@ export class QuestionGiveaway extends Giveaway {
 				});
 				this.send(this.generateWindow(<>
 					<p style={{textAlign: 'center', fontSize: '12pt'}}>
-						<b>{Utils.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations
-					!</p>
+						<b>{Utils.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!
+					</p>
 					<p style={{textAlign: 'center'}}>
 						{this.question}<br />
 						Correct answer{Chat.plural(this.answers)}: {this.answers.join(', ')}
