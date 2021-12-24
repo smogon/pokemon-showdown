@@ -8,7 +8,7 @@ CREATE TABLE perspective_stats (
 	timestamp INTEGER NOT NULL
 );
 
-CREATE INDEX date_idx ON perspective_stats(date);
+CREATE INDEX timestamp_idx ON perspective_stats(timestamp);
 
 -- update database version
 UPDATE db_info SET value = '5' WHERE key = 'version';
