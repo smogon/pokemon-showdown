@@ -27149,7 +27149,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			headbutt: ["7V", "4T"],
 			hiddenpower: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			highhorsepower: ["8M"],
-			hornattack: ["7V", "3L1"],
+			hornattack: ["3L1"],
 			hyperbeam: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			icebeam: ["8M", "7M", "6M", "5M", "4M", "3M"],
 			icefang: ["8M", "8L0", "7L24", "6L24", "5L28", "4L28"],
