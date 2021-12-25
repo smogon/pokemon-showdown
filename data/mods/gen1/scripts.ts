@@ -66,7 +66,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				let stat = this.species.baseStats[i];
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
 				this.modifiedStats![i] = this.storedStats[i] = Math.floor(stat);
-				this.modifyStat!(i, 1);
 			}
 		},
 	},
