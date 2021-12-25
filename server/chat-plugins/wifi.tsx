@@ -288,7 +288,7 @@ class Giveaway extends Rooms.RoomGame {
 		return set;
 	}
 
-	generateWindow(rightSide: Chat.VNode | string) {
+	generateWindow(rightSide: Chat.VNode | string): Chat.VNode {
 		const set = Giveaway.convertIVs(this.prize, this.ivs);
 		return <center>
 			<h3>It's {this.game} giveaway time!</h3>
@@ -787,7 +787,9 @@ export class GTS extends Rooms.RoomGame {
 						{this.sent.join(<br />)}
 					</td> : ''}
 					<td style={{textAlign: 'center', width: '15%'}}>{this.sprite}</td>
-					<td style={{textAlign: 'center', width: `${40 - sentModifier}%`}}><Chat.JSX.FormatText isTrusted={true}>{this.summary}</Chat.JSX.FormatText></td>
+					<td style={{textAlign: 'center', width: `${40 - sentModifier}%`}}>
+						<Chat.JSX.FormatText isTrusted={true}>{this.summary}</Chat.JSX.FormatText>
+					</td>
 					<td style={{textAlign: 'center', width: `${35 - sentModifier}%`}}>{rightSide}</td>
 				</tr>
 			</table>
@@ -1473,7 +1475,7 @@ function makePageHeader(user: User, pageid?: string) {
 	return <center>{buf}</center>;
 }
 
-function formatFakeButton(url: string, text: string) {
+function formatFakeButton(url: string, text: Chat.VNode): Chat.VNode {
 	return <a className="button" style={{textDecoration: 'inherit'}} target="replace" href={url}>{text}</a>;
 }
 
@@ -1584,7 +1586,7 @@ export const pages: Chat.PageTable = {
 					if (!adding) {
 						const buf = [];
 						for (let giveaway of giveaways) {
-							if (wifiData.storedGiveaways.lottery.includes(giveaway as any)) {
+							if (wifiData.storedGiveaways.lottery.includes(giveaway as LotteryGiveawayData)) {
 								giveaway = giveaway as LotteryGiveawayData;
 								const targetUser = Users.get(giveaway.targetUserID);
 								buf.push(<div className="infobox">
@@ -1754,7 +1756,7 @@ export const pages: Chat.PageTable = {
 							const disabled = giveaway.claimed && giveaway.claimed !== user.id ? " disabled" : "";
 							buf.push(<div className="infobox">
 								{(() => {
-									if (wifiData.submittedGiveaways.lottery.includes(giveaway as any)) {
+									if (wifiData.submittedGiveaways.lottery.includes(giveaway as LotteryGiveawayData)) {
 										giveaway = giveaway as LotteryGiveawayData;
 										return <>
 											<h3 style={{textAlign: 'center'}}>Lottery</h3>
