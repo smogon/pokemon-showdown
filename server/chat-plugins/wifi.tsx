@@ -88,10 +88,6 @@ const gameidToGame: {[k: string]: Game} = {
 	bdsp: 'BDSP',
 };
 
-function renderString(str: string) {
-	return <div dangerouslySetInnerHTML={{__html: Chat.formatText(str, true)}} />;
-}
-
 class Giveaway extends Rooms.RoomGame {
 	gaNumber: number;
 	host: User;
@@ -307,7 +303,7 @@ class Giveaway extends Rooms.RoomGame {
 				<tr>
 					<td style={{textAlign: 'center', width: '45%'}}>
 						<psicon item={this.ball} /> {this.sprite} <psicon item={this.ball} />
-						<p>{renderString(set)}</p>
+						<Chat.JSX.FormatText isTrusted={true}>{set}</Chat.JSX.FormatText>
 					</td>
 					<td style={{textAlign: 'center', width: '45%'}}>{rightSide}</td>
 				</tr>
@@ -315,7 +311,7 @@ class Giveaway extends Rooms.RoomGame {
 					<tr>
 						<td colSpan={2} style={{textAlign: 'center'}}>
 							<strong>Extra Information</strong><br />
-							{renderString(this.extraInfo.trim().replace(/<br \/>/g, '\n'))}
+							<Chat.JSX.FormatText isTrusted={true}>{this.extraInfo.trim().replace(/<br \/>/g, '\n')}</Chat.JSX.FormatText>
 						</td>
 					</tr> : ''}
 			</table>
@@ -791,7 +787,7 @@ export class GTS extends Rooms.RoomGame {
 						{this.sent.join(<br />)}
 					</td> : ''}
 					<td style={{textAlign: 'center', width: '15%'}}>{this.sprite}</td>
-					<td style={{textAlign: 'center', width: `${40 - sentModifier}%`}}>{renderString(this.summary)}</td>
+					<td style={{textAlign: 'center', width: `${40 - sentModifier}%`}}><Chat.JSX.FormatText isTrusted={true}>{this.summary}</Chat.JSX.FormatText></td>
 					<td style={{textAlign: 'center', width: `${35 - sentModifier}%`}}>{rightSide}</td>
 				</tr>
 			</table>
@@ -1602,13 +1598,13 @@ export const pages: Chat.PageTable = {
 									<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-										{renderString(Giveaway.convertIVs(giveaway.prize, giveaway.ivs))}
+										<Chat.JSX.FormatText isTrusted={true}>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 									</details>
 									{giveaway.extraInfo?.trim() ? <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
-											{renderString(giveaway.extraInfo.trim())}
+											<Chat.JSX.FormatText isTrusted={true}>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 										</details>
 									</> : ''}
 									<hr />
@@ -1639,13 +1635,13 @@ export const pages: Chat.PageTable = {
 									<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-										{renderString(Giveaway.convertIVs(giveaway.prize, giveaway.ivs))}
+										<Chat.JSX.FormatText isTrusted={true}>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 									</details>
 									{giveaway.extraInfo?.trim() ? <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
-											{renderString(giveaway.extraInfo.trim())}
+											<Chat.JSX.FormatText isTrusted={true}>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 										</details>
 									</> : ''}
 									<hr />
@@ -1777,7 +1773,7 @@ export const pages: Chat.PageTable = {
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
-													{renderString(giveaway.extraInfo.trim())}
+													<Chat.JSX.FormatText isTrusted={true}>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 												</details>
 											</> : ''}
 										</>;
@@ -1794,13 +1790,13 @@ export const pages: Chat.PageTable = {
 											<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-												{renderString(Giveaway.convertIVs(giveaway.prize, giveaway.ivs))}
+												<Chat.JSX.FormatText isTrusted={true}>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 											</details>
 											{giveaway.extraInfo?.trim() ? <>
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
-													{renderString(giveaway.extraInfo.trim())}
+													<Chat.JSX.FormatText isTrusted={true}>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 												</details></> : ''
 											}
 										</>;
