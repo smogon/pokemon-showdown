@@ -1814,7 +1814,9 @@ export const pages: Chat.PageTable = {
 									<button style={{textAlign: 'center'}} className={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
 										{claimedTitle}
 									</button>
-									<button title="The giver is offline" disabled className="button disabled" style={{float: 'right'}}>Create giveaway</button>
+									<button title="The giver is offline" disabled className="button disabled" style={{float: 'right'}}>
+										Create giveaway
+									</button>
 								</> : <>
 									<button className="button" name="send" value={`/giveaway deny ${giveaway.targetUserID}`}>
 										<i className="fa fa-times-circle"></i> Deny giveaway
