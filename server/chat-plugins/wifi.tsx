@@ -303,7 +303,7 @@ class Giveaway extends Rooms.RoomGame {
 				<tr>
 					<td style={{textAlign: 'center', width: '45%'}}>
 						<psicon item={this.ball} /> {this.sprite} <psicon item={this.ball} />
-						<Chat.JSX.FormatText isTrusted={true}>{set}</Chat.JSX.FormatText>
+						<Chat.JSX.FormatText isTrusted>{set}</Chat.JSX.FormatText>
 					</td>
 					<td style={{textAlign: 'center', width: '45%'}}>{rightSide}</td>
 				</tr>
@@ -311,7 +311,7 @@ class Giveaway extends Rooms.RoomGame {
 					<tr>
 						<td colSpan={2} style={{textAlign: 'center'}}>
 							<strong>Extra Information</strong><br />
-							<Chat.JSX.FormatText isTrusted={true}>{this.extraInfo.trim().replace(/<br \/>/g, '\n')}</Chat.JSX.FormatText>
+							<Chat.JSX.FormatText isTrusted>{this.extraInfo.trim().replace(/<br \/>/g, '\n')}</Chat.JSX.FormatText>
 						</td>
 					</tr> : ''}
 			</table>
@@ -788,7 +788,7 @@ export class GTS extends Rooms.RoomGame {
 					</td> : ''}
 					<td style={{textAlign: 'center', width: '15%'}}>{this.sprite}</td>
 					<td style={{textAlign: 'center', width: `${40 - sentModifier}%`}}>
-						<Chat.JSX.FormatText isTrusted={true}>{this.summary}</Chat.JSX.FormatText>
+						<Chat.JSX.FormatText isTrusted>{this.summary}</Chat.JSX.FormatText>
 					</td>
 					<td style={{textAlign: 'center', width: `${35 - sentModifier}%`}}>{rightSide}</td>
 				</tr>
@@ -1521,7 +1521,7 @@ export const pages: Chat.PageTable = {
 								<label for="ot">OT: </label><input name="ot" /><br /><br />
 								<label for="tid">TID: </label><input name="tid" /><br /><br />
 								Game: <div>
-									<input type="radio" id="bdsp" name="game" value="bdsp" checked={true} /><label for="bdsp">BDSP</label>
+									<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 									<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
 								</div>
 								<br />
@@ -1545,7 +1545,7 @@ export const pages: Chat.PageTable = {
 								<label for="ot">OT:</label><input name="ot" /><br /><br />
 								<label for="tid">TID:</label><input name="tid" /><br /><br />
 								Game: <div>
-									<input type="radio" id="bdsp" name="game" value="bdsp" checked={true} /><label for="bdsp">BDSP</label>
+									<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 									<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
 								</div>
 								<br />
@@ -1600,13 +1600,13 @@ export const pages: Chat.PageTable = {
 									<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-										<Chat.JSX.FormatText isTrusted={true}>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
+										<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 									</details>
 									{giveaway.extraInfo?.trim() ? <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
-											<Chat.JSX.FormatText isTrusted={true}>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
+											<Chat.JSX.FormatText isTrusted>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 										</details>
 									</> : ''}
 									<hr />
@@ -1637,13 +1637,13 @@ export const pages: Chat.PageTable = {
 									<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-										<Chat.JSX.FormatText isTrusted={true}>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
+										<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 									</details>
 									{giveaway.extraInfo?.trim() ? <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
-											<Chat.JSX.FormatText isTrusted={true}>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
+											<Chat.JSX.FormatText isTrusted>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 										</details>
 									</> : ''}
 									<hr />
@@ -1684,7 +1684,7 @@ export const pages: Chat.PageTable = {
 											<label for="ot">OT: </label><input name="ot" /><br /><br />
 											<label for="tid">TID: </label><input name="tid" /><br /><br />
 											Game: <div>
-												<input type="radio" id="bdsp" name="game" value="bdsp" checked={true} /><label for="bdsp">BDSP</label>
+												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
 											</div>
 											<br /><label for="winners">Number of winners: </label><input name="winners" /><br /><br />
@@ -1704,7 +1704,7 @@ export const pages: Chat.PageTable = {
 											<label for="ot">OT:</label><input name="ot" /><br /><br />
 											<label for="tid">TID:</label><input name="tid" /><br /><br />
 											Game: <div>
-												<input type="radio" id="bdsp" name="game" value="bdsp" checked={true} /><label for="bdsp">BDSP</label>
+												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
 											</div>
 											<br /><label for="question">Question:</label><input name="question" /><br /><br />
@@ -1775,7 +1775,7 @@ export const pages: Chat.PageTable = {
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
-													<Chat.JSX.FormatText isTrusted={true}>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
+													<Chat.JSX.FormatText isTrusted>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 												</details>
 											</> : ''}
 										</>;
@@ -1792,13 +1792,13 @@ export const pages: Chat.PageTable = {
 											<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-												<Chat.JSX.FormatText isTrusted={true}>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
+												<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 											</details>
 											{giveaway.extraInfo?.trim() ? <>
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
-													<Chat.JSX.FormatText isTrusted={true}>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
+													<Chat.JSX.FormatText isTrusted>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 												</details></> : ''
 											}
 										</>;
@@ -1806,7 +1806,7 @@ export const pages: Chat.PageTable = {
 								})()}
 								<hr />
 								{!Users.get(giveaway.targetUserID)?.connected ? <>
-									<button title="The giver is offline" className="button disabled" disabled={true}>
+									<button title="The giver is offline" className="button disabled" disabled>
 										<i className="fa fa-times-circle"></i> Deny giveaway
 									</button>
 									<button style={{textAlign: 'center'}} className={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
@@ -1850,7 +1850,7 @@ export const pages: Chat.PageTable = {
 											<label for="ot">OT: </label><input name="ot" /><br /><br />
 											<label for="tid">TID: </label><input name="tid" /><br /><br />
 											Game: <div>
-												<input type="radio" id="bdsp" name="game" value="bdsp" checked={true} /><label for="bdsp">BDSP</label>
+												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
 											</div>
 											<br /><label for="winners">Number of winners: </label><input name="winners" /><br /><br />
