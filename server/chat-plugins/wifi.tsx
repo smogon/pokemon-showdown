@@ -932,8 +932,8 @@ export const commands: Chat.ChatCommands = {
 
 			room.subGame = new GTS(room, targetUser, amount, summary, deposit, lookfor);
 
-			this.privateModAction(`${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pok&eacute;mon`);
-			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pok&eacute;mon`);
+			this.privateModAction(`${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon`);
+			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
 			*/
 		},
 		left(target, room, user) {
@@ -944,7 +944,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!target) {
 				this.runBroadcast();
-				let output = `The GTS giveaway from ${game.giver} has ${game.left} Pok&eacute;mon remaining!`;
+				let output = `The GTS giveaway from ${game.giver} has ${game.left} Pokémon remaining!`;
 				if (game.sent.length) output += `Last winners: ${game.sent.join(', ')}`;
 				return this.sendReply(output);
 			}
@@ -1392,10 +1392,10 @@ export const commands: Chat.ChatCommands = {
 
 			const count = wifiData.stats[target];
 
-			if (!count) return this.sendReplyBox("This Pok&eacute;mon has never been given away.");
+			if (!count) return this.sendReplyBox("This Pokémon has never been given away.");
 			const recent = count.filter(val => val + RECENT_THRESHOLD > Date.now()).length;
 
-			this.sendReplyBox(`This Pok&eacute;mon has been given away ${Chat.count(count, "times")}, a total of ${Chat.count(recent, "times")} in the past month.`);
+			this.sendReplyBox(`This Pokémon has been given away ${Chat.count(count, "times")}, a total of ${Chat.count(recent, "times")} in the past month.`);
 		},
 	},
 	giveawayhelp(target, room, user) {
