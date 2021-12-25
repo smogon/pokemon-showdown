@@ -151,8 +151,9 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	getStyle() {
-		if (this.game === 'BDSP') return {style: {backgroundColor: '#aa88a9', color: '#fff', padding: '2px 4px'}};
-		return {class: "broadcast-blue"};
+		const css: {[k: string]: string | {[k: string]: string}} = {className: "broadcast-blue"};
+		if (this.game === 'BDSP') css.style = {backgroundColor: '#aa88a9'};
+		return css;
 	}
 
 	sendToUser(user: User, content: string | Chat.VNode) {
@@ -608,7 +609,7 @@ export class LotteryGiveaway extends Giveaway {
 		const cmd = (joined ? 'Leave' : 'Join');
 		return this.generateWindow(<>
 			The lottery drawing will occur in 2 minutes, and with {Chat.count(this.maxWinners, "winners")}!<br />
-			<button class="button" name="send" value={`/giveaway ${toID(cmd)}lottery`}><strong>{cmd}</strong></button>
+			<button className="button" name="send" value={`/giveaway ${toID(cmd)}lottery`}><strong>{cmd}</strong></button>
 		</>);
 	}
 
@@ -749,12 +750,12 @@ export class GTS extends Rooms.RoomGame {
 	}
 
 	send(content: string) {
-		this.room.add(Chat.html`|uhtml|gtsga${this.gtsNumber}|${<div class="broadcast-blue">{content}</div>}`);
+		this.room.add(Chat.html`|uhtml|gtsga${this.gtsNumber}|${<div className="broadcast-blue">{content}</div>}`);
 		this.room.update();
 	}
 
 	changeUhtml(content: string) {
-		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, Chat.html`${<div class="broadcast-blue">{content}</div>}`);
+		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, Chat.html`${<div className="broadcast-blue">{content}</div>}`);
 		this.room.update();
 	}
 
@@ -1242,9 +1243,9 @@ export const commands: Chat.ChatCommands = {
 					`|${user.name} has requested to start a question giveaway for ${set.species}.|new question giveaway request`;
 				room.sendRankedUsers(message, '%');
 				room.sendMods(
-					Chat.html`|uhtml|giveaway-request-${user.id}|${<div class="infobox">
+					Chat.html`|uhtml|giveaway-request-${user.id}|${<div className="infobox">
 						{user.name} wants to start a question giveaway for {set.species}<br />
-						<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
+						<button className="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
 					</div>}`
 				);
 			},
@@ -1268,9 +1269,9 @@ export const commands: Chat.ChatCommands = {
 				const message = `|tempnotify|pendingapprovals|Pending lottery giveaway request!` +
 					`|${user.name} has requested to start a lottery giveaway for ${set.species}.|new lottery giveaway request`;
 				room.sendRankedUsers(message, '%');
-				room.sendMods(Chat.html`|uhtml|giveaway-request-${user.id}|${<div class="infobox">
+				room.sendMods(Chat.html`|uhtml|giveaway-request-${user.id}|${<div className="infobox">
 					{user.name} wants to start a lottery giveaway for {set.species}<br />
-					<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
+					<button className="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
 				</div>}`);
 			},
 		},
@@ -1444,17 +1445,17 @@ function makePageHeader(user: User, pageid?: string) {
 		'submitted-add': `Submit`,
 	};
 	const icons: Record<keyof typeof titles, Chat.VNode> = {
-		create: <i class="fa fa-sticky-note"></i>,
-		stored: <i class="fa fa-paste"></i>,
-		'stored-add': <i class="fa fa-paste"></i>,
-		submitted: <i class="fa fa-inbox"></i>,
-		'submitted-add': <i class="fa fa-inbox"></i>,
+		create: <i className="fa fa-sticky-note"></i>,
+		stored: <i className="fa fa-paste"></i>,
+		'stored-add': <i className="fa fa-paste"></i>,
+		submitted: <i className="fa fa-inbox"></i>,
+		'submitted-add': <i className="fa fa-inbox"></i>,
 	};
 	const buf = [];
-	buf.push(<button class="button" style={{float: 'right'}} name="send" value={
+	buf.push(<button className="button" style={{float: 'right'}} name="send" value={
 		`/j view-giveaways${pageid?.trim() ? `-${pageid.trim()}` : ''}`
 	}>
-		<i class="fa fa-refresh"></i> Refresh
+		<i className="fa fa-refresh"></i> Refresh
 	</button>);
 	buf.push(<h1>Wi-Fi Giveaways</h1>);
 	const urls = [];
@@ -1477,7 +1478,7 @@ function makePageHeader(user: User, pageid?: string) {
 }
 
 function formatFakeButton(url: string, text: string) {
-	return <a class="button" style={{textDecoration: 'inherit'}} target="replace" href={url}>{text}</a>;
+	return <a className="button" style={{textDecoration: 'inherit'}} target="replace" href={url}>{text}</a>;
 }
 
 function generatePokeballDropdown() {
@@ -1495,21 +1496,21 @@ export const pages: Chat.PageTable = {
 			this.title = `[Giveaways]`;
 			if (!Rooms.search('wifi')) return <h1>There is no Wi-Fi room on this server.</h1>;
 			this.checkCan('warn', null, Rooms.search('wifi')!);
-			return <div class="pad">{makePageHeader(this.user)}</div>;
+			return <div className="pad">{makePageHeader(this.user)}</div>;
 		},
 		create(args, user) {
 			this.title = `[Create Giveaways]`;
 			if (!Rooms.search('wifi')) return <h1>There is no Wi-Fi room on this server.</h1>;
 			if (!user.can('show', null, Rooms.get('wifi')!)) this.checkCan('warn', null, Rooms.search('wifi')!);
 			const [type] = args;
-			return <div class="pad">{makePageHeader(this.user, 'create')}{(() => {
+			return <div className="pad">{makePageHeader(this.user, 'create')}{(() => {
 				if (!type || !['lottery', 'question'].includes(type)) {
 					return <center>
 						<h2>Pick a Giveaway type</h2>
 						{
-							formatFakeButton(`/view-giveaways-create-lottery`, <><i class="fa fa-random"></i> Lottery</>)
+							formatFakeButton(`/view-giveaways-create-lottery`, <><i className="fa fa-random"></i> Lottery</>)
 						} | {
-							formatFakeButton(`/view-giveaways-create-question`, <><i class="fa fa-question"></i> Question</>)
+							formatFakeButton(`/view-giveaways-create-question`, <><i className="fa fa-question"></i> Question</>)
 						}
 					</center>;
 				} else {
@@ -1533,7 +1534,7 @@ export const pages: Chat.PageTable = {
 								<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea>
 								<br /><br /><label for="info">Additional information (if any):</label><br />
 								<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-								<br /><br /><button class="button" type="submit">Create Lottery Giveaway</button>
+								<br /><br /><button className="button" type="submit">Create Lottery Giveaway</button>
 							</form>
 						</>;
 					case 'question':
@@ -1558,7 +1559,7 @@ export const pages: Chat.PageTable = {
 								<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable here" name="set"></textarea>
 								<br /><br /><label for="info">Additional information (if any):</label><br />
 								<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-								<br /><br /><button class="button" type="submit">Create Question Giveaway</button>
+								<br /><br /><button className="button" type="submit">Create Question Giveaway</button>
 							</form>
 						</>;
 					}
@@ -1576,12 +1577,12 @@ export const pages: Chat.PageTable = {
 			];
 			const adding = add === 'add';
 			if (!giveaways.length && !adding) {
-				return <div class="pad">
+				return <div className="pad">
 					{makePageHeader(this.user, adding ? 'stored-add' : 'stored')}
 					<h2>There are no giveaways stored</h2>
 				</div>;
 			}
-			return <div class="pad">
+			return <div className="pad">
 				{makePageHeader(this.user, adding ? 'stored-add' : 'stored')}
 				{(() => {
 					if (!adding) {
@@ -1590,7 +1591,7 @@ export const pages: Chat.PageTable = {
 							if (wifiData.storedGiveaways.lottery.includes(giveaway as any)) {
 								giveaway = giveaway as LotteryGiveawayData;
 								const targetUser = Users.get(giveaway.targetUserID);
-								buf.push(<div class="infobox">
+								buf.push(<div className="infobox">
 									<h3 style={{textAlign: 'center'}}>Lottery</h3>
 									<hr />
 									<strong>Game:</strong> {gameName[giveaway.game]}
@@ -1611,14 +1612,14 @@ export const pages: Chat.PageTable = {
 										</details>
 									</> : ''}
 									<hr />
-									<button class="button" name="send" value={
+									<button className="button" name="send" value={
 										`/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway) + 1}`
 									}><i class="fa fa-trash"></i> Delete giveaway</button>
 									{!targetUser?.connected ?
 										<button title="The giver is offline" disabled class="button disabled" style={{float: 'right'}}>
 											Create giveaway
 										</button> :
-										<button class="button" style={{float: 'right'}} name="send" value={
+										<button className="button" style={{float: 'right'}} name="send" value={
 											`/giveaway create lottery ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.winners}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}`
 										}>Create giveaway</button>
 									}
@@ -1626,7 +1627,7 @@ export const pages: Chat.PageTable = {
 							} else {
 								giveaway = giveaway as QuestionGiveawayData;
 								const targetUser = Users.get(giveaway.targetUserID);
-								buf.push(<div class="infobox">
+								buf.push(<div className="infobox">
 									<h3 style={{textAlign: 'center'}}>Lottery</h3>
 									<hr />
 									<strong>Game:</strong> {gameName[giveaway.game]}
@@ -1648,16 +1649,16 @@ export const pages: Chat.PageTable = {
 										</details>
 									</> : ''}
 									<hr />
-									<button class="button" name="send" value={
+									<button className="button" name="send" value={
 										`/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway) + 1}`
 									}>
-										<i class="fa fa-trash"></i> Delete giveaway
+										<i className="fa fa-trash"></i> Delete giveaway
 									</button>
 									{!targetUser?.connected ?
 										<button title="The giver is offline" disabled class="button disabled" style={{float: 'right'}}>
 											Create giveaway
 										</button> :
-										<button class="button" style={{float: 'right'}} name="send" value={
+										<button className="button" style={{float: 'right'}} name="send" value={
 											`/giveaway create question ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.question}|${giveaway.answers.join(',')}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}`
 										}>Create giveaway</button>
 									}
@@ -1672,9 +1673,9 @@ export const pages: Chat.PageTable = {
 									return <center>
 										<h3>Pick a giveaway type</h3>
 										{
-											formatFakeButton(`/view-giveaways-stored-add-lottery`, <><i class="fa fa-random"></i> Lottery</>)
+											formatFakeButton(`/view-giveaways-stored-add-lottery`, <><i className="fa fa-random"></i> Lottery</>)
 										} |  {
-											formatFakeButton(`/view-giveaways-stored-add-question`, <><i class="fa fa-question"></i> Question</>)
+											formatFakeButton(`/view-giveaways-stored-add-question`, <><i className="fa fa-question"></i> Question</>)
 										}
 									</center>;
 								} else {
@@ -1695,7 +1696,7 @@ export const pages: Chat.PageTable = {
 											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea>
 											<br /><br /><label for="info">Additional information (if any):</label><br />
 											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br /><button class="button" type="submit">Store Lottery Giveaway</button>
+											<br /><br /><button className="button" type="submit">Store Lottery Giveaway</button>
 										</form>;
 									case 'question':
 										return <form data-submitsend={
@@ -1716,7 +1717,7 @@ export const pages: Chat.PageTable = {
 											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable here" name="set"></textarea>
 											<br /><br /><label for="info">Additional information (if any):</label><br />
 											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br /><button class="button" type="submit">Store Question Giveaway</button>
+											<br /><br /><button className="button" type="submit">Store Question Giveaway</button>
 										</form>;
 									}
 								}
@@ -1737,12 +1738,12 @@ export const pages: Chat.PageTable = {
 				...((wifiData.submittedGiveaways || {}).question || []),
 			];
 			if (!giveaways.length && !adding) {
-				return <div class="pad">
+				return <div className="pad">
 					{makePageHeader(this.user, args[0] === 'add' ? 'submitted-add' : 'submitted')}
 					<h2>There are no submitted giveaways.</h2>
 				</div>;
 			}
-			return <div class="pad">
+			return <div className="pad">
 				{makePageHeader(this.user, args[0] === 'add' ? 'submitted-add' : 'submitted')}
 				{(() => {
 					if (!adding) {
@@ -1755,7 +1756,7 @@ export const pages: Chat.PageTable = {
 								"Unclaim" :
 								giveaway.claimed ? `Claimed by ${giveaway.claimed}` : `Claim`;
 							const disabled = giveaway.claimed && giveaway.claimed !== user.id ? " disabled" : "";
-							buf.push(<div class="infobox">
+							buf.push(<div className="infobox">
 								{(() => {
 									if (wifiData.submittedGiveaways.lottery.includes(giveaway as any)) {
 										giveaway = giveaway as LotteryGiveawayData;
@@ -1807,21 +1808,21 @@ export const pages: Chat.PageTable = {
 								})()}
 								<hr />
 								{!Users.get(giveaway.targetUserID)?.connected ? <>
-									<button title="The giver is offline" class="button disabled" disabled={true}>
-										<i class="fa fa-times-circle"></i> Deny giveaway
+									<button title="The giver is offline" className="button disabled" disabled={true}>
+										<i className="fa fa-times-circle"></i> Deny giveaway
 									</button>
-									<button style={{textAlign: 'center'}} class={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
+									<button style={{textAlign: 'center'}} className={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
 										{claimedTitle}
 									</button>
-									<button title="The giver is offline" disabled class="button disabled" style={{float: 'right'}}>Create giveaway</button>
+									<button title="The giver is offline" disabled className="button disabled" style={{float: 'right'}}>Create giveaway</button>
 								</> : <>
-									<button class="button" name="send" value={`/giveaway deny ${giveaway.targetUserID}`}>
-										<i class="fa fa-times-circle"></i> Deny giveaway
+									<button className="button" name="send" value={`/giveaway deny ${giveaway.targetUserID}`}>
+										<i className="fa fa-times-circle"></i> Deny giveaway
 									</button>
-									<button style={{textAlign: 'center'}} class={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
+									<button style={{textAlign: 'center'}} className={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
 										{claimedTitle}
 									</button>
-									<button class="button" style={{float: 'right'}} name="send" value={`/giveaway approve ${giveaway.targetUserID}`}>
+									<button className="button" style={{float: 'right'}} name="send" value={`/giveaway approve ${giveaway.targetUserID}`}>
 										Create giveaway
 									</button>
 								</>}
@@ -1836,9 +1837,9 @@ export const pages: Chat.PageTable = {
 									return <center>
 										<h3>Pick a giveaway type</h3>
 										{
-											formatFakeButton(`/view-giveaways-submitted-add-lottery`, <><i class="fa fa-random"></i> Lottery</>)
+											formatFakeButton(`/view-giveaways-submitted-add-lottery`, <><i className="fa fa-random"></i> Lottery</>)
 										} | {
-											formatFakeButton(`/view-giveaways-submitted-add-question`, <><i class="fa fa-question"></i> Question</>)
+											formatFakeButton(`/view-giveaways-submitted-add-question`, <><i className="fa fa-question"></i> Question</>)
 										}
 									</center>;
 								} else {
@@ -1859,7 +1860,7 @@ export const pages: Chat.PageTable = {
 											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea>
 											<br /><br /><label for="info">Additional information (provide a link of proof here):</label><br />
 											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br /><button class="button" type="submit">Submit Lottery Giveaway</button>
+											<br /><br /><button className="button" type="submit">Submit Lottery Giveaway</button>
 										</form>;
 									case 'question':
 										return <form data-submitsend={
@@ -1880,7 +1881,7 @@ export const pages: Chat.PageTable = {
 											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea>
 											<br /><br /><label for="info">Additional information (provide a link of proof here):</label><br />
 											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br /><button class="button" type="submit">Submit Question Giveaway</button>
+											<br /><br /><button className="button" type="submit">Submit Question Giveaway</button>
 										</form>;
 									}
 								}
