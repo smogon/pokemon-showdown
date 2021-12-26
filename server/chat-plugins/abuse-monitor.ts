@@ -25,6 +25,7 @@ const ATTRIBUTES = {
 	"SEXUALLY_EXPLICIT": {},
 	"FLIRTATION": {},
 };
+const PUNISHMENTS = ['WARN', 'MUTE', 'LOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
@@ -45,6 +46,7 @@ export const cache: {
 		users: Record<string, number>,
 		staffNotified?: ID,
 		claimed?: ID,
+		recommended?: {type: string, reason: string},
 	},
 } = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
 
@@ -55,6 +57,10 @@ const defaults: FilterSettings = {
 		THREAT: {0.96: 'MAXIMUM'},
 		IDENTITY_ATTACK: {0.8: 2},
 		SEVERE_TOXICITY: {0.8: 2},
+	},
+	punishments: {
+		IDENTITY_ATTACK: {0.93: {punishment: 'WARN', count: 2}},
+		THREAT: {0.98: {punishment: 'WARN', count: 2}},
 	},
 };
 
@@ -69,23 +75,23 @@ export const settings: FilterSettings = (() => {
 	}
 })();
 
+interface PunishmentSettings {
+	count?: number;
+	punishment: string;
+}
+
 interface FilterSettings {
 	disabled?: boolean;
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
+	punishments: {[type: string]: {[certainty: number]: PunishmentSettings}};
 }
 
 export interface PerspectiveRequest {
 	languages: string[];
 	requestedAttributes: AnyObject;
 	comment: {text: string};
-}
-
-interface PMResult {
-	score: number;
-	flags: string[];
-	response?: Record<string, number>;
 }
 
 interface PMRequest {
@@ -237,15 +243,49 @@ export async function classify(text: string) {
 	}
 }
 
-export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(module, async query => {
-	const now = Date.now();
-	const result = await classify(query.comment);
-	if (!result) return {score: 0, flags: []};
-	const delta = Date.now() - now;
-	if (delta > 1000) {
-		Monitor.slow(`[Abuse Monitor] ${delta}ms - ${JSON.stringify(query)}`);
+async function recommend(user: User, room: GameRoom, response: Record<string, number>) {
+	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
+	const prevRecommend = cache[room.roomid]?.recommended;
+	const recommended: [string, string][] = [];
+	for (const type of keys) {
+		const punishments = settings.punishments[type];
+		if (!punishments) continue;
+		const sorted = Utils.sortBy(Object.keys(punishments).map(Number), n => -n);
+		for (const num of sorted) {
+			const punishment = punishments[num];
+			if (response[type] >= num) {
+				if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
+					if (PUNISHMENTS.indexOf(punishment.punishment) <= PUNISHMENTS.indexOf(prevRecommend?.type)) continue;
+				}
+				if (punishment.count) {
+					const hits = await Chat.database.all(
+						`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
+						[user.id, type, num]
+					);
+					if (hits.length < punishment.count) continue;
+				}
+				recommended.push([punishment.punishment, type]);
+			}
+		}
 	}
+	if (recommended.length) {
+		Utils.sortBy(recommended, ([punishment]) => -PUNISHMENTS.indexOf(punishment));
+		// go by most severe
+		const [punishment, reason] = recommended[0];
+		if (cache[room.roomid]) {
+			cache[room.roomid].recommended = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
+		}
+		Rooms.get('abuselog')?.add(
+			`|c|&|/log [Abuse-Monitor] ` +
+			`<<${room.roomid}>> - punishment ${punishment} recommended for ${user.id} ` +
+			`(${reason.replace(/_/g, ' ').toLowerCase()})`
+		).update();
+	}
+}
+
+function makeScore(result: Record<string, number>) {
 	let score = 0;
+	let main = '';
 	const flags = new Set<string>();
 	for (const type in result) {
 		const data = result[type];
@@ -257,8 +297,12 @@ export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(mo
 				const num = settings.specials[type][k];
 				if (num === 'MAXIMUM') {
 					score = settings.threshold;
+					main = type;
 				} else {
-					if (num > score) score = num;
+					if (num > score) {
+						score = num;
+						main = type;
+					}
 				}
 			}
 		}
@@ -266,16 +310,21 @@ export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(mo
 			// min score ensures that if a category is above that minimum score, they will get
 			// at least a point.
 			// we previously ensured that this was above minScore if set, so this is fine
-			if (score < 1) score = 1;
+			if (score < 1) {
+				score = 1;
+				main = type;
+			}
 		}
 		if (score !== curScore) flags.add(type);
 	}
-	return {
-		score,
-		flags: [...flags],
-		// undefined so that json.stringify ignores it - save bandwidth
-		response: query.fullResponse ? result : undefined,
-	};
+	return {score, flags: [...flags], main};
+}
+
+type PMResult = Record<string, number> | null;
+export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(module, async query => {
+	const result = await classify(query.comment);
+	if (!result) return null;
+	return result;
 }, PM_TIMEOUT, message => {
 	if (message.startsWith('SLOW\n')) {
 		Monitor.slow(message.slice(5));
@@ -309,13 +358,14 @@ if (!PM.isParentProcess) {
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	// 2 lines to not hit max-len
 	if (!room?.battle || !['rated', 'unrated'].includes(room.battle.challengeType)) return;
-	if (settings.disabled || cache[room.roomid]?.staffNotified) return;
+	if (settings.disabled) return;
 	// startsWith('!') - broadcasting command, ignore it.
 	if (!Config.perspectiveKey || message.startsWith('!')) return;
 
 	const roomid = room.roomid;
 	void (async () => {
-		const {score, flags} = await PM.query({comment: message});
+		const response = await PM.query({comment: message});
+		const {score, flags, main} = makeScore(response || {});
 		if (score) {
 			if (!cache[roomid]) cache[roomid] = {users: {}};
 			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
@@ -326,6 +376,12 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 				notifyStaff();
 				hitThreshold = 1;
 				void room?.uploadReplay?.(user, this.connection, "forpunishment");
+				await Chat.database.run(
+					`INSERT INTO perspective_flags (userid, score, certainty, type, roomid, time) VALUES (?, ?, ?, ?, ?, ?)`,
+					// response exists if we got this far
+					[user.id, score, response![main], main, room.roomid, Date.now()]
+				);
+				void recommend(user, room, response || {});
 			}
 			await Chat.database.run(
 				'INSERT INTO perspective_logs (userid, message, score, flags, roomid, time, hit_threshold) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -362,7 +418,6 @@ function getFlaggedRooms() {
 function saveSettings() {
 	FS('config/chat-plugins/nf.json').writeUpdate(() => JSON.stringify(settings));
 }
-
 
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
@@ -402,8 +457,9 @@ export const commands: Chat.ChatCommands = {
 			const text = target.trim();
 			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
-			let {score, flags, response} = await PM.query({comment: text, fullResponse: true});
+			let response = await PM.query({comment: text, fullResponse: true});
 			if (!response) response = {};
+			const {score, flags} = makeScore(response);
 			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
 			buf += `<strong>Score breakdown:</strong><br />`;
@@ -642,6 +698,71 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
 		},
+		ap: 'addpunishment',
+		addpunishment(target, room, user) {
+			checkAccess(this);
+			const [
+				rawType, rawCertainty, rawPunishment, rawCount,
+			] = Utils.splitFirst(target, ',', 3).map(f => f.trim());
+
+			if (!toID(rawType) || !toID(rawCertainty) || !toID(rawPunishment)) {
+				return this.parse(`/help abusemonitor`);
+			}
+			const certainty = parseFloat(rawCertainty);
+			if (isNaN(certainty) || certainty < 0 || certainty > 1) {
+				return this.errorReply(`Certainty must be above 0 and below 1.`);
+			}
+			const type = rawType.replace(/\s/g, '_').toUpperCase();
+			if (!(type in ATTRIBUTES)) {
+				return this.errorReply(
+					`Invalid type '${rawType}'. Valid types: ${Object.keys(ATTRIBUTES).join(', ')}.`
+				);
+			}
+			let count;
+			if (toID(rawCount)) {
+				count = parseInt(rawCount);
+				if (isNaN(count) || count < 1) {
+					return this.errorReply(`Invalid count. Must be a number above 0.`);
+				}
+			}
+
+			const punishment = toID(rawPunishment).toUpperCase();
+			if (!PUNISHMENTS.includes(punishment)) {
+				return this.errorReply(`Invalid punishment. Must be ${PUNISHMENTS.join(', ')}.`);
+			}
+
+			if (!settings.punishments[type]) settings.punishments[type] = {};
+			settings.punishments[type][certainty] = {count, punishment};
+			saveSettings();
+			this.privateGlobalModAction(
+				`${user.name} set the abuse-monitor recommendation for ${certainty}% certainty on ${type}` +
+				`${count ? ` after ${Chat.count(count, 'hits')} ` : ' '}to ${punishment}`
+			);
+			this.globalModlog(`ABUSEMONITOR RECOMMEND`, null, `${punishment} (${certainty}%${count ? ` after ${count}` : ""})`);
+		},
+		dp: 'deletepunishment',
+		deletepunishment(target, room, user) {
+			checkAccess(this);
+			const [rawType, rawCertainty] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const type = rawType.replace(/\s/g, '_').toUpperCase();
+			if (!(type in ATTRIBUTES)) {
+				return this.errorReply(`Invalid type '${rawType}'.`);
+			}
+			const certainty = parseFloat(rawCertainty);
+			if (isNaN(certainty)) {
+				return this.errorReply(`Invalid certainty '${rawCertainty}'.`);
+			}
+			if (!(type in settings.punishments)) {
+				return this.errorReply(`${type} has no punishment settings.`);
+			}
+			if (!(certainty in settings.punishments[type])) {
+				return this.errorReply(`${certainty} is not a punishment setting for ${type}.`);
+			}
+			delete settings.punishments[type][certainty];
+			saveSettings();
+			this.privateGlobalModAction(`${user.name} removed the abuse-monitor recommendation for ${type} at ${certainty}% certainty.`);
+			this.globalModlog(`ABUSEMONITOR REMOVERECOMMEND`, null, `${type} (${certainty})`);
+		},
 		vs: 'viewsettings',
 		settings: 'viewsettings',
 		viewsettings() {
@@ -661,8 +782,19 @@ export const commands: Chat.ChatCommands = {
 					buf += `<br />`;
 				}
 			}
-			buf += `<br /><strong>Minimum percent to process:</strong> ${settings.minScore}`;
-			buf += `<br /><strong>Score threshold:</strong> ${settings.threshold}`;
+			const punishments = Object.keys(settings.punishments);
+			if (punishments.length) {
+				buf += `<br /><strong>Punishment settings</strong><br />`;
+				for (const p of punishments) {
+					const data = settings.punishments[p];
+					for (const certainty in data) {
+						const cur = data[certainty];
+						buf += `&bull; ${p}: ${certainty} - ${cur.punishment}${cur.count ? ` (minimum ${cur.count})` : ""}<br />`;
+					}
+				}
+			}
+			buf += `<strong>Minimum percent to process:</strong> ${settings.minScore}<br />`;
+			buf += `<strong>Score threshold:</strong> ${settings.threshold}`;
 			this.sendReplyBox(buf);
 		},
 	},
@@ -775,6 +907,10 @@ export const pages: Chat.PageTable = {
 				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
+			const rec = cache[roomid].recommended;
+			if (rec) {
+				buf += `<p><strong>Recommended action:</strong> ${rec.type} (${rec.reason})</p>`;
+			}
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
 			for (const [id] of Utils.sortBy([...users], ([, num]) => -num)) {
 				const curUser = Users.get(id);
