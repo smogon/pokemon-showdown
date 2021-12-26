@@ -1245,10 +1245,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!target) return this.parse('/help giveaway');
 			const del = cmd === 'delete';
-			this.refreshPage(del ? `giveaways-stored` : 'giveaways-submitted');
 			if (del) {
 				const [type, indexStr] = target.split(',');
-				const index = parseInt(indexStr);
+				const index = parseInt(indexStr) - 1;
 				if (!type || !indexStr || index <= -1 || !['question', 'lottery'].includes(toID(type)) || isNaN(index)) {
 					return this.parse(`/help giveaway`);
 				}
@@ -1280,6 +1279,7 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(`${user.name} denied a ${hasGiveaway.type} giveaway by ${targetUser.name}.`);
 				this.modlog(`GIVEAWAY DENY ${hasGiveaway.type.toUpperCase()}`, targetUser, reason || null, {noalts: true, noip: true});
 			}
+			this.refreshPage(del ? `giveaways-stored` : 'giveaways-submitted');
 		},
 		claim(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
