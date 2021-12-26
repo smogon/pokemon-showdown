@@ -147,7 +147,7 @@ class Giveaway extends Rooms.RoomGame {
 	}
 
 	getStyle() {
-		const css: {[k: string]: string | {[k: string]: string}} = {className: "broadcast-blue"};
+		const css: {[k: string]: string | {[k: string]: string}} = {class: "broadcast-blue"};
 		if (this.game === 'BDSP') css.style = {backgroundColor: '#aa88a9'};
 		return css;
 	}
@@ -605,7 +605,7 @@ export class LotteryGiveaway extends Giveaway {
 		const cmd = (joined ? 'Leave' : 'Join');
 		return this.generateWindow(<>
 			The lottery drawing will occur in 2 minutes, and with {Chat.count(this.maxWinners, "winners")}!<br />
-			<button className="button" name="send" value={`/giveaway ${toID(cmd)}lottery`}><strong>{cmd}</strong></button>
+			<button class="button" name="send" value={`/giveaway ${toID(cmd)}lottery`}><strong>{cmd}</strong></button>
 		</>);
 	}
 
@@ -746,12 +746,12 @@ export class GTS extends Rooms.RoomGame {
 	}
 
 	send(content: string) {
-		this.room.add(Chat.html`|uhtml|gtsga${this.gtsNumber}|${<div className="broadcast-blue">{content}</div>}`);
+		this.room.add(Chat.html`|uhtml|gtsga${this.gtsNumber}|${<div class="broadcast-blue">{content}</div>}`);
 		this.room.update();
 	}
 
 	changeUhtml(content: string) {
-		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, Chat.html`${<div className="broadcast-blue">{content}</div>}`);
+		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, Chat.html`${<div class="broadcast-blue">{content}</div>}`);
 		this.room.update();
 	}
 
@@ -840,9 +840,9 @@ export class GTS extends Rooms.RoomGame {
 				userid: this.giver.id,
 				note: `their GTS giveaway for "${this.summary}"`,
 			});
-			this.send(Chat.html`${<p style={{textAlign: 'center', fontSize: '11pt'}}>
+			this.send(<p style={{textAlign: 'center', fontSize: '11pt'}}>
 				The GTS giveaway for a "<strong>{Utils.escapeHTML(this.lookfor)}</strong>" has finished.
-			</p>}`);
+			</p>);
 			Giveaway.updateStats(new Set([this.pokemonID]));
 		}
 		this.room.subGame = null;
@@ -1241,9 +1241,9 @@ export const commands: Chat.ChatCommands = {
 					`|${user.name} has requested to start a question giveaway for ${set.species}.|new question giveaway request`;
 				room.sendRankedUsers(message, '%');
 				room.sendMods(
-					Chat.html`|uhtml|giveaway-request-${user.id}|${<div className="infobox">
+					Chat.html`|uhtml|giveaway-request-${user.id}|${<div class="infobox">
 						{user.name} wants to start a question giveaway for {set.species}<br />
-						<button className="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
+						<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
 					</div>}`
 				);
 			},
@@ -1267,9 +1267,9 @@ export const commands: Chat.ChatCommands = {
 				const message = `|tempnotify|pendingapprovals|Pending lottery giveaway request!` +
 					`|${user.name} has requested to start a lottery giveaway for ${set.species}.|new lottery giveaway request`;
 				room.sendRankedUsers(message, '%');
-				room.sendMods(Chat.html`|uhtml|giveaway-request-${user.id}|${<div className="infobox">
+				room.sendMods(Chat.html`|uhtml|giveaway-request-${user.id}|${<div class="infobox">
 					{user.name} wants to start a lottery giveaway for {set.species}<br />
-					<button className="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
+					<button class="button" name="send" value="/j view-giveaways-submitted">View pending giveaways</button>
 				</div>}`);
 			},
 		},
@@ -1402,33 +1402,33 @@ export const commands: Chat.ChatCommands = {
 		const buf = [];
 		if (user.can('show', null, room)) {
 			buf.push(<details><summary>Staff commands</summary>
-				<code>/giveaway create</code> - Pulls up a page to create a giveaway. Requires: + % @ # &amp;
-				<br /><code>
+				<code>/giveaway create</code> - Pulls up a page to create a giveaway. Requires: + % @ # &amp;<br />
+				<code>
 					/giveaway create question Giver | OT | TID | Game | Question | Answer 1, Answer 2, Answer 3 | IV/IV/IV/IV/IV/IV | Pok&eacute; Ball | Extra Info | Prize
-				</code> - Start a new question giveaway (voices can only host their own). Requires: + % @ # &amp;
-				<br /><code>
+				</code> - Start a new question giveaway (voices can only host their own). Requires: + % @ # &amp;<br />
+				<code>
 					/giveaway create lottery Giver | OT | TID | Game | # of Winners | IV/IV/IV/IV/IV/IV | Pok&eacute; Ball | Extra Info | Prize
-				</code> - Start a new lottery giveaway (voices can only host their own). Requires: + % @ # &amp;
-				<br /><code>
+				</code> - Start a new lottery giveaway (voices can only host their own). Requires: + % @ # &amp;<br />
+				<code>
 					/giveaway changequestion/changeanswer
-				</code> - Changes the question/answer of a question giveaway. Requires: Being giveaway host
-				<br /><code>/giveaway viewanswer</code> - Shows the answer of a question giveaway. Requires: Being giveaway host/giver
-				<br /><code>
+				</code> - Changes the question/answer of a question giveaway. Requires: Being giveaway host<br />
+				<code>/giveaway viewanswer</code> - Shows the answer of a question giveaway. Requires: Being giveaway host/giver<br />
+				<code>
 					/giveaway ban [user], [reason]
-				</code> - Temporarily bans [user] from entering giveaways. Requires: % @ # &amp;
-				<br /><code>/giveaway end</code> - Forcibly ends the current giveaway. Requires: % @ # &amp;
-				<br /><code>/giveaway count [pokemon]</code> - Shows how frequently a certain Pok&eacute;mon has been given away.
+				</code> - Temporarily bans [user] from entering giveaways. Requires: % @ # &amp;<br />
+				<code>/giveaway end</code> - Forcibly ends the current giveaway. Requires: % @ # &amp;<br />
+				<code>/giveaway count [pokemon]</code> - Shows how frequently a certain Pok&eacute;mon has been given away.
 			</details>);
 		}
 		// Giveaway stuff
 		buf.push(<details><summary>Giveaway participation commands</summary>
-			<code>/guess [target]</code> - Guesses an answer for a question giveaway.
-			<br /><code>
+			<code>/guess [target]</code> - Guesses an answer for a question giveaway.<br />
+			<code>
 				/giveaway submit
-			</code> - Allows users to submit giveaways. They must remain online after submitting for it to go through.
-			<br /><code>/giveaway viewanswer</code> - Guesses an answer for a question giveaway. Requires: Giveaway host/giver
-			<br /><code>/giveaway remind</code> - Shows the details of the current giveaway.
-			<br /><code>/giveaway join/leave</code> - Joins/leaves a lottery giveaway.
+			</code> - Allows users to submit giveaways. They must remain online after submitting for it to go through.<br />
+			<code>/giveaway viewanswer</code> - Guesses an answer for a question giveaway. Requires: Giveaway host/giver<br />
+			<code>/giveaway remind</code> - Shows the details of the current giveaway.<br />
+			<code>/giveaway join/leave</code> - Joins/leaves a lottery giveaway.
 		</details>);
 		this.sendReplyBox(<>{buf}</>);
 	},
@@ -1443,17 +1443,17 @@ function makePageHeader(user: User, pageid?: string) {
 		'submitted-add': `Submit`,
 	};
 	const icons: Record<keyof typeof titles, Chat.VNode> = {
-		create: <i className="fa fa-sticky-note"></i>,
-		stored: <i className="fa fa-paste"></i>,
-		'stored-add': <i className="fa fa-paste"></i>,
-		submitted: <i className="fa fa-inbox"></i>,
-		'submitted-add': <i className="fa fa-inbox"></i>,
+		create: <i class="fa fa-sticky-note"></i>,
+		stored: <i class="fa fa-paste"></i>,
+		'stored-add': <i class="fa fa-paste"></i>,
+		submitted: <i class="fa fa-inbox"></i>,
+		'submitted-add': <i class="fa fa-inbox"></i>,
 	};
 	const buf = [];
-	buf.push(<button className="button" style={{float: 'right'}} name="send" value={
+	buf.push(<button class="button" style={{float: 'right'}} name="send" value={
 		`/j view-giveaways${pageid?.trim() ? `-${pageid.trim()}` : ''}`
 	}>
-		<i className="fa fa-refresh"></i> Refresh
+		<i class="fa fa-refresh"></i> Refresh
 	</button>);
 	buf.push(<h1>Wi-Fi Giveaways</h1>);
 	const urls = [];
@@ -1476,7 +1476,7 @@ function makePageHeader(user: User, pageid?: string) {
 }
 
 function formatFakeButton(url: string, text: Chat.VNode): Chat.VNode {
-	return <a className="button" style={{textDecoration: 'inherit'}} target="replace" href={url}>{text}</a>;
+	return <a class="button" style={{textDecoration: 'inherit'}} target="replace" href={url}>{text}</a>;
 }
 
 function generatePokeballDropdown() {
@@ -1494,21 +1494,21 @@ export const pages: Chat.PageTable = {
 			this.title = `[Giveaways]`;
 			if (!Rooms.search('wifi')) return <h1>There is no Wi-Fi room on this server.</h1>;
 			this.checkCan('warn', null, Rooms.search('wifi')!);
-			return <div className="pad">{makePageHeader(this.user)}</div>;
+			return <div class="pad">{makePageHeader(this.user)}</div>;
 		},
 		create(args, user) {
 			this.title = `[Create Giveaways]`;
 			if (!Rooms.search('wifi')) return <h1>There is no Wi-Fi room on this server.</h1>;
 			if (!user.can('show', null, Rooms.get('wifi')!)) this.checkCan('warn', null, Rooms.search('wifi')!);
 			const [type] = args;
-			return <div className="pad">{makePageHeader(this.user, 'create')}{(() => {
+			return <div class="pad">{makePageHeader(this.user, 'create')}{(() => {
 				if (!type || !['lottery', 'question'].includes(type)) {
 					return <center>
 						<h2>Pick a Giveaway type</h2>
 						{
-							formatFakeButton(`/view-giveaways-create-lottery`, <><i className="fa fa-random"></i> Lottery</>)
+							formatFakeButton(`/view-giveaways-create-lottery`, <><i class="fa fa-random"></i> Lottery</>)
 						} | {
-							formatFakeButton(`/view-giveaways-create-question`, <><i className="fa fa-question"></i> Question</>)
+							formatFakeButton(`/view-giveaways-create-question`, <><i class="fa fa-question"></i> Question</>)
 						}
 					</center>;
 				} else {
@@ -1523,16 +1523,16 @@ export const pages: Chat.PageTable = {
 								Game: <div>
 									<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 									<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-								</div>
-								<br />
+								</div><br />
 								<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
-								{generatePokeballDropdown()}
-								<br /><br /><label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" />
-								<br /><br /><label for="set">Prize:</label><br />
-								<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea>
-								<br /><br /><label for="info">Additional information (if any):</label><br />
+								{generatePokeballDropdown()}<br /><br />
+								<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+								<label for="set">Prize:</label><br />
+								<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
+								<label for="info">Additional information (if any):</label><br />
 								<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-								<br /><br /><button className="button" type="submit">Create Lottery Giveaway</button>
+								<br /><br />
+								<button class="button" type="submit">Create Lottery Giveaway</button>
 							</form>
 						</>;
 					case 'question':
@@ -1547,17 +1547,18 @@ export const pages: Chat.PageTable = {
 								Game: <div>
 									<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 									<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-								</div>
-								<br />
+								</div><br />
 								<label for="question">Question:</label><input name="question" /><br /><br />
 								<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
-								{generatePokeballDropdown()}
-								<br /><br /><label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" />
-								<br /><br /><label for="set"></label>
+								{generatePokeballDropdown()}<br /><br />
+								<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+								<label for="set"></label>
 								<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable here" name="set"></textarea>
-								<br /><br /><label for="info">Additional information (if any):</label><br />
+								<br /><br />
+								<label for="info">Additional information (if any):</label><br />
 								<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-								<br /><br /><button className="button" type="submit">Create Question Giveaway</button>
+								<br /><br />
+								<button class="button" type="submit">Create Question Giveaway</button>
 							</form>
 						</>;
 					}
@@ -1575,12 +1576,12 @@ export const pages: Chat.PageTable = {
 			];
 			const adding = add === 'add';
 			if (!giveaways.length && !adding) {
-				return <div className="pad">
+				return <div class="pad">
 					{makePageHeader(this.user, adding ? 'stored-add' : 'stored')}
 					<h2>There are no giveaways stored</h2>
 				</div>;
 			}
-			return <div className="pad">
+			return <div class="pad">
 				{makePageHeader(this.user, adding ? 'stored-add' : 'stored')}
 				{(() => {
 					if (!adding) {
@@ -1589,15 +1590,14 @@ export const pages: Chat.PageTable = {
 							if (wifiData.storedGiveaways.lottery.includes(giveaway as LotteryGiveawayData)) {
 								giveaway = giveaway as LotteryGiveawayData;
 								const targetUser = Users.get(giveaway.targetUserID);
-								buf.push(<div className="infobox">
+								buf.push(<div class="infobox">
 									<h3 style={{textAlign: 'center'}}>Lottery</h3>
 									<hr />
-									<strong>Game:</strong> {gameName[giveaway.game]}
-									<br />
+									<strong>Game:</strong> {gameName[giveaway.game]}<br />
 									<strong>Giver:</strong> {giveaway.targetUserID},
-									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
-									<br /><strong># of winners:</strong> {giveaway.winners}
-									<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
+									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}<br />
+									<strong># of winners:</strong> {giveaway.winners}<br />
+									<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 										<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
@@ -1610,14 +1610,14 @@ export const pages: Chat.PageTable = {
 										</details>
 									</> : ''}
 									<hr />
-									<button className="button" name="send" value={
+									<button class="button" name="send" value={
 										`/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway) + 1}`
 									}><i class="fa fa-trash"></i> Delete giveaway</button>
 									{!targetUser?.connected ?
 										<button title="The giver is offline" disabled class="button disabled" style={{float: 'right'}}>
 											Create giveaway
 										</button> :
-										<button className="button" style={{float: 'right'}} name="send" value={
+										<button class="button" style={{float: 'right'}} name="send" value={
 											`/giveaway create lottery ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.winners}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}`
 										}>Create giveaway</button>
 									}
@@ -1625,16 +1625,15 @@ export const pages: Chat.PageTable = {
 							} else {
 								giveaway = giveaway as QuestionGiveawayData;
 								const targetUser = Users.get(giveaway.targetUserID);
-								buf.push(<div className="infobox">
+								buf.push(<div class="infobox">
 									<h3 style={{textAlign: 'center'}}>Lottery</h3>
 									<hr />
-									<strong>Game:</strong> {gameName[giveaway.game]}
-									<br />
+									<strong>Game:</strong> {gameName[giveaway.game]}<br />
 									<strong>Giver:</strong> {giveaway.targetUserID},
-									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
-									<br /><strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}
-									<br /><strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}
-									<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
+									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}<br />
+									<strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}<br />
+									<strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}<br />
+									<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 										<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
@@ -1647,16 +1646,16 @@ export const pages: Chat.PageTable = {
 										</details>
 									</> : ''}
 									<hr />
-									<button className="button" name="send" value={
+									<button class="button" name="send" value={
 										`/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway) + 1}`
 									}>
-										<i className="fa fa-trash"></i> Delete giveaway
+										<i class="fa fa-trash"></i> Delete giveaway
 									</button>
 									{!targetUser?.connected ?
 										<button title="The giver is offline" disabled class="button disabled" style={{float: 'right'}}>
 											Create giveaway
 										</button> :
-										<button className="button" style={{float: 'right'}} name="send" value={
+										<button class="button" style={{float: 'right'}} name="send" value={
 											`/giveaway create question ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.question}|${giveaway.answers.join(',')}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}`
 										}>Create giveaway</button>
 									}
@@ -1671,9 +1670,9 @@ export const pages: Chat.PageTable = {
 									return <center>
 										<h3>Pick a giveaway type</h3>
 										{
-											formatFakeButton(`/view-giveaways-stored-add-lottery`, <><i className="fa fa-random"></i> Lottery</>)
+											formatFakeButton(`/view-giveaways-stored-add-lottery`, <><i class="fa fa-random"></i> Lottery</>)
 										} |  {
-											formatFakeButton(`/view-giveaways-stored-add-question`, <><i className="fa fa-question"></i> Question</>)
+											formatFakeButton(`/view-giveaways-stored-add-question`, <><i class="fa fa-question"></i> Question</>)
 										}
 									</center>;
 								} else {
@@ -1686,15 +1685,16 @@ export const pages: Chat.PageTable = {
 											Game: <div>
 												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-											</div>
-											<br /><label for="winners">Number of winners: </label><input name="winners" /><br /><br />
-											{generatePokeballDropdown()}
-											<br /><br /><label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" />
-											<br /><br /><label for="set">Prize:</label><br />
-											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea>
-											<br /><br /><label for="info">Additional information (if any):</label><br />
+											</div><br />
+											<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
+											{generatePokeballDropdown()}<br /><br />
+											<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+											<label for="set">Prize:</label><br />
+											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
+											<label for="info">Additional information (if any):</label><br />
 											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br /><button className="button" type="submit">Store Lottery Giveaway</button>
+											<br /><br />
+											<button class="button" type="submit">Store Lottery Giveaway</button>
 										</form>;
 									case 'question':
 										return <form data-submitsend={
@@ -1706,16 +1706,18 @@ export const pages: Chat.PageTable = {
 											Game: <div>
 												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-											</div>
-											<br /><label for="question">Question:</label><input name="question" /><br /><br />
+											</div><br />
+											<label for="question">Question:</label><input name="question" /><br /><br />
 											<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
-											{generatePokeballDropdown()}
-											<br /><br /><label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" />
-											<br /><br /><label for="set"></label>
+											{generatePokeballDropdown()}<br /><br />
+											<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+											<label for="set"></label>
 											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable here" name="set"></textarea>
-											<br /><br /><label for="info">Additional information (if any):</label><br />
+											<br /><br />
+											<label for="info">Additional information (if any):</label><br />
 											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br /><button className="button" type="submit">Store Question Giveaway</button>
+											<br /><br />
+											<button class="button" type="submit">Store Question Giveaway</button>
 										</form>;
 									}
 								}
@@ -1736,12 +1738,12 @@ export const pages: Chat.PageTable = {
 				...((wifiData.submittedGiveaways || {}).question || []),
 			];
 			if (!giveaways.length && !adding) {
-				return <div className="pad">
+				return <div class="pad">
 					{makePageHeader(this.user, args[0] === 'add' ? 'submitted-add' : 'submitted')}
 					<h2>There are no submitted giveaways.</h2>
 				</div>;
 			}
-			return <div className="pad">
+			return <div class="pad">
 				{makePageHeader(this.user, args[0] === 'add' ? 'submitted-add' : 'submitted')}
 				{(() => {
 					if (!adding) {
@@ -1754,7 +1756,7 @@ export const pages: Chat.PageTable = {
 								"Unclaim" :
 								giveaway.claimed ? `Claimed by ${giveaway.claimed}` : `Claim`;
 							const disabled = giveaway.claimed && giveaway.claimed !== user.id ? " disabled" : "";
-							buf.push(<div className="infobox">
+							buf.push(<div class="infobox">
 								{(() => {
 									if (wifiData.submittedGiveaways.lottery.includes(giveaway as LotteryGiveawayData)) {
 										giveaway = giveaway as LotteryGiveawayData;
@@ -1764,8 +1766,7 @@ export const pages: Chat.PageTable = {
 											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
 											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid},
 											&#32;<strong># of winners:</strong> {giveaway.winners}
-											{giveaway.claimed ? <><br /><strong>Claimed:</strong> {Utils.escapeHTML(giveaway.claimed)}</> : ''}
-											<br />
+											{giveaway.claimed ? <><br /><strong>Claimed:</strong> {Utils.escapeHTML(giveaway.claimed)}</> : ''}<br />
 											<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
@@ -1786,10 +1787,10 @@ export const pages: Chat.PageTable = {
 											<hr />
 											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
 											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
-											{giveaway.claimed ? <><br /><strong>Claimed:</strong> {Utils.escapeHTML(giveaway.claimed)}</> : ''}
-											<br /><strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}
-											<br /><strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}
-											<br /><strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
+											{giveaway.claimed ? <><br /><strong>Claimed:</strong> {Utils.escapeHTML(giveaway.claimed)}</> : ''}<br />
+											<strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}<br />
+											<strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}<br />
+											<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 												<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
@@ -1806,23 +1807,23 @@ export const pages: Chat.PageTable = {
 								})()}
 								<hr />
 								{!Users.get(giveaway.targetUserID)?.connected ? <>
-									<button title="The giver is offline" className="button disabled" disabled>
-										<i className="fa fa-times-circle"></i> Deny giveaway
+									<button title="The giver is offline" class="button disabled" disabled>
+										<i class="fa fa-times-circle"></i> Deny giveaway
 									</button>
-									<button style={{textAlign: 'center'}} className={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
+									<button style={{textAlign: 'center'}} class={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
 										{claimedTitle}
 									</button>
-									<button title="The giver is offline" disabled className="button disabled" style={{float: 'right'}}>
+									<button title="The giver is offline" disabled class="button disabled" style={{float: 'right'}}>
 										Create giveaway
 									</button>
 								</> : <>
-									<button className="button" name="send" value={`/giveaway deny ${giveaway.targetUserID}`}>
-										<i className="fa fa-times-circle"></i> Deny giveaway
+									<button class="button" name="send" value={`/giveaway deny ${giveaway.targetUserID}`}>
+										<i class="fa fa-times-circle"></i> Deny giveaway
 									</button>
-									<button style={{textAlign: 'center'}} className={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
+									<button style={{textAlign: 'center'}} class={`button${disabled}`} name="send" value={`/msgroom wifi,${claimCmd}`}>
 										{claimedTitle}
 									</button>
-									<button className="button" style={{float: 'right'}} name="send" value={`/giveaway approve ${giveaway.targetUserID}`}>
+									<button class="button" style={{float: 'right'}} name="send" value={`/giveaway approve ${giveaway.targetUserID}`}>
 										Create giveaway
 									</button>
 								</>}
@@ -1837,9 +1838,9 @@ export const pages: Chat.PageTable = {
 									return <center>
 										<h3>Pick a giveaway type</h3>
 										{
-											formatFakeButton(`/view-giveaways-submitted-add-lottery`, <><i className="fa fa-random"></i> Lottery</>)
+											formatFakeButton(`/view-giveaways-submitted-add-lottery`, <><i class="fa fa-random"></i> Lottery</>)
 										} | {
-											formatFakeButton(`/view-giveaways-submitted-add-question`, <><i className="fa fa-question"></i> Question</>)
+											formatFakeButton(`/view-giveaways-submitted-add-question`, <><i class="fa fa-question"></i> Question</>)
 										}
 									</center>;
 								} else {
@@ -1852,15 +1853,16 @@ export const pages: Chat.PageTable = {
 											Game: <div>
 												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-											</div>
-											<br /><label for="winners">Number of winners: </label><input name="winners" /><br /><br />
-											{generatePokeballDropdown()}
-											<br /><br /><label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" />
-											<br /><br /><label for="set">Prize:</label><br />
-											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea>
-											<br /><br /><label for="info">Additional information (provide a link of proof here):</label><br />
+											</div><br />
+											<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
+											{generatePokeballDropdown()}<br /><br />
+											<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+											<label for="set">Prize:</label><br />
+											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
+											<label for="info">Additional information (provide a link of proof here):</label><br />
 											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br /><button className="button" type="submit">Submit Lottery Giveaway</button>
+											<br /><br />
+											<button class="button" type="submit">Submit Lottery Giveaway</button>
 										</form>;
 									case 'question':
 										return <form data-submitsend={
@@ -1872,16 +1874,17 @@ export const pages: Chat.PageTable = {
 											Game: <div>
 												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
 												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-											</div>
-											<br /><label for="question">Question:</label><input name="question" /><br /><br />
+											</div><br />
+											<label for="question">Question:</label><input name="question" /><br /><br />
 											<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
-											{generatePokeballDropdown()}
-											<br /><br /><label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" />
-											<br /><br /><label for="set"></label>
-											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea>
-											<br /><br /><label for="info">Additional information (provide a link of proof here):</label><br />
+											{generatePokeballDropdown()}<br /><br />
+											<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+											<label for="set"></label>
+											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
+											<label for="info">Additional information (provide a link of proof here):</label><br />
 											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br /><button className="button" type="submit">Submit Question Giveaway</button>
+											<br /><br />
+											<button class="button" type="submit">Submit Question Giveaway</button>
 										</form>;
 									}
 								}

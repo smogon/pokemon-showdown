@@ -40,18 +40,12 @@ export const Fragment = preact.Fragment;
 
 function subRender(
 	child: preact.ComponentChild, opts?: {isTrusted?: boolean, replaceLinebreaks?: boolean}
-): preact.VNode {
-	switch (typeof child) {
-	case 'string':
+): preact.ComponentChild {
+	if (typeof child === 'string') {
 		return <div dangerouslySetInnerHTML={{__html: Chat.formatText(child, opts?.isTrusted, opts?.replaceLinebreaks)}} />;
-	case 'bigint':
-	case 'number':
-	case 'boolean':
-	case 'object':
-		return <>{child ? child.toString() : '' + child}</>;
-	default:
-		return preact.isValidElement(child) ? child : <>{'' + child}</>;
 	}
+	if (preact.isValidElement(child)) return child;
+	throw new Error(`Invalid props.children type: ${!child ? child : typeof child}`);
 }
 
 export class FormatText extends preact.Component<{isTrusted?: boolean, replaceLinebreaks?: boolean}> {
