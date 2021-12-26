@@ -29,8 +29,9 @@ const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
 	'warn': '/warn',
-	'weeknamelock': '/wnl',
+	'forcerename': '/fr',
 	'namelock': '/nl',
+	'weeknamelock': '/wnl',
 };
 const REPORT_NAMECOLORS: {[k: string]: string} = {
 	p1: 'DodgerBlue',
@@ -781,7 +782,7 @@ export const pages: Chat.PageTable = {
 				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id} `;
 				buf += `<button class="button" name="send" value="/mlid ${id},room=global">Modlog</button>`;
 				buf += `</summary><div class="infobox">`;
-				const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
+				const punishments = ['Warn', 'Lock', 'Weeklock', 'Forcerename', 'Namelock', 'Weeknamelock'];
 				for (const name of punishments) {
 					buf += `<form data-submitsend="/am nojoinpunish ${roomid},${toID(name)},${id},{reason}">`;
 					buf += `<button class="button notifying" type="submit">${name}</button><br />`;
