@@ -10,8 +10,7 @@ CREATE TABLE perspective_flags (
 	time NUMBER NOT NULL
 );
 
-CREATE INDEX type_idx ON perspective_flags(type);
-CREATE INDEX user_idx ON perspective_flags(userid);
+CREATE INDEX search_idx ON perspective_flags(type, userid);
 -- update database version
 UPDATE db_info SET value = '6' WHERE key = 'version';
 COMMIT;
