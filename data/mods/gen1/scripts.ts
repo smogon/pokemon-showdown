@@ -57,6 +57,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return changed;
 		},
+		clearBoosts() {
+			let i: BoostID;
+			for (i in this.boosts) {
+				this.boosts[i] = 0;
+				// Recalculate the modified stat
+				if (i === 'evasion' || i === 'accuracy') continue;
+				let stat = this.species.baseStats[i];
+				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
+				this.modifiedStats![i] = this.storedStats[i] = Math.floor(stat);
+			}
+		},
 	},
 	actions: {
 		// This function is the main one when running a move.
