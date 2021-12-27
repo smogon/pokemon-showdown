@@ -307,7 +307,7 @@ class Giveaway extends Rooms.RoomGame {
 					</td>
 					<td style={{textAlign: 'center', width: '45%'}}>{rightSide}</td>
 				</tr>
-				{this.extraInfo?.trim().length && <tr>
+				{!!this.extraInfo?.trim().length && <tr>
 					<td colSpan={2} style={{textAlign: 'center'}}>
 						<strong>Extra Information</strong><br />
 						<Chat.JSX.FormatText isTrusted>{this.extraInfo.trim().replace(/<br \/>/g, '\n')}</Chat.JSX.FormatText>
@@ -779,7 +779,7 @@ export class GTS extends Rooms.RoomGame {
 			</p>
 			<table style={{margin: 'inherit auto'}}>
 				<tr>
-					{sentModifier && <td style={{textAlign: 'center', width: '10%'}}>
+					{!!sentModifier && <td style={{textAlign: 'center', width: '10%'}}>
 						<b>Last winners:</b><br />
 						{this.sent.join(<br />)}
 					</td>}
@@ -1599,7 +1599,7 @@ export const pages: Chat.PageTable = {
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 										<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 									</details>
-									{giveaway.extraInfo?.trim() && <>
+									{!!giveaway.extraInfo?.trim() && <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
@@ -1635,7 +1635,7 @@ export const pages: Chat.PageTable = {
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 										<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 									</details>
-									{giveaway.extraInfo?.trim() && <>
+									{!!giveaway.extraInfo?.trim() && <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
@@ -1763,13 +1763,13 @@ export const pages: Chat.PageTable = {
 											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
 											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid},
 											&#32;<strong># of winners:</strong> {giveaway.winners}
-											{giveaway.claimed && <><br /><strong>Claimed:</strong> {giveaway.claimed}</>}<br />
+											{!!giveaway.claimed && <><br /><strong>Claimed:</strong> {giveaway.claimed}</>}<br />
 											<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 												{Giveaway.convertIVs(giveaway.prize, giveaway.ivs).replace(/\n/g, '<br />')}
 											</details>
-											{giveaway.extraInfo?.trim() && <>
+											{!!giveaway.extraInfo?.trim() && <>
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
@@ -1784,7 +1784,7 @@ export const pages: Chat.PageTable = {
 											<hr />
 											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
 											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
-											{giveaway.claimed && <><br /><strong>Claimed:</strong> {giveaway.claimed}</>}<br />
+											{!!giveaway.claimed && <><br /><strong>Claimed:</strong> {giveaway.claimed}</>}<br />
 											<strong>Question:</strong> {giveaway.question}<br />
 											<strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}<br />
 											<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
@@ -1792,7 +1792,7 @@ export const pages: Chat.PageTable = {
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 												<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 											</details>
-											{giveaway.extraInfo?.trim() && <>
+											{!!giveaway.extraInfo?.trim() && <>
 												<hr />
 												<details>
 													<summary>Extra Info</summary>

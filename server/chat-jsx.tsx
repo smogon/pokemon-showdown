@@ -38,28 +38,15 @@ export type VNode = preact.VNode;
 export const h = preact.h;
 export const Fragment = preact.Fragment;
 
-function subRender(
-	child: preact.ComponentChild, opts?: {isTrusted?: boolean, replaceLinebreaks?: boolean}
-): preact.ComponentChild {
-	if (typeof child === 'string') {
-		return <span dangerouslySetInnerHTML={{__html: Chat.formatText(child, opts?.isTrusted, opts?.replaceLinebreaks)}} />;
-	}
-	if (preact.isValidElement(child)) return child;
-	throw new Error(`Invalid props.children type: ${!child ? child : typeof child}`);
-}
-
 export class FormatText extends preact.Component<{isTrusted?: boolean, replaceLinebreaks?: boolean}> {
 	render() {
-		if (Array.isArray(this.props.children)) {
-			const buf = [];
-			for (const child of this.props.children) {
-				buf.push(subRender(child, {isTrusted: this.props.isTrusted, replaceLinebreaks: this.props.replaceLinebreaks}));
-			}
-			return <>{buf}</>;
-		} else {
-			return subRender(this.props.children, {
-				isTrusted: this.props.isTrusted, replaceLinebreaks: this.props.replaceLinebreaks,
-			});
+		const child = this.props.children;
+		if (typeof child === 'string') {
+			return <span dangerouslySetInnerHTML={
+				{__html: Chat.formatText(child, this.props.isTrusted, this.props.replaceLinebreaks)}
+			} />;
 		}
+		if (preact.isValidElement(child)) return child;
+		throw new Error(`Invalid props.children type: ${!child ? child : typeof child}`);
 	}
 }
