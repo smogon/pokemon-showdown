@@ -307,13 +307,12 @@ class Giveaway extends Rooms.RoomGame {
 					</td>
 					<td style={{textAlign: 'center', width: '45%'}}>{rightSide}</td>
 				</tr>
-				{this.extraInfo?.trim().length ?
-					<tr>
-						<td colSpan={2} style={{textAlign: 'center'}}>
-							<strong>Extra Information</strong><br />
-							<Chat.JSX.FormatText isTrusted>{this.extraInfo.trim().replace(/<br \/>/g, '\n')}</Chat.JSX.FormatText>
-						</td>
-					</tr> : ''}
+				{this.extraInfo?.trim().length && <tr>
+					<td colSpan={2} style={{textAlign: 'center'}}>
+						<strong>Extra Information</strong><br />
+						<Chat.JSX.FormatText isTrusted>{this.extraInfo.trim().replace(/<br \/>/g, '\n')}</Chat.JSX.FormatText>
+					</td>
+				</tr>}
 			</table>
 			<p style={{textAlign: 'center', fontSize: '7pt', fontWeight: 'bold'}}>
 				<u>Note:</u> You must have a Switch, Pok&eacute;mon {gameName[this.game]}, {}
@@ -486,7 +485,7 @@ export class QuestionGiveaway extends Giveaway {
 				});
 				this.send(this.generateWindow(<>
 					<p style={{textAlign: 'center', fontSize: '12pt'}}>
-						<b>{Utils.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!
+						<b>{this.winner.name}</b> won the giveaway! Congratulations!
 					</p>
 					<p style={{textAlign: 'center'}}>
 						{this.question}<br />
@@ -687,7 +686,7 @@ export class LotteryGiveaway extends Giveaway {
 			this.send(this.generateWindow(<>
 				<p style={{textAlign: 'center', fontSize: '10pt', fontWeight: 'bold'}}>Lottery Draw</p>
 				<p style={{textAlign: 'center'}}>{this.joined.size} users joined the giveaway.<br />
-				Our lucky winner{Chat.plural(this.winners)}: <b>{Utils.escapeHTML(winnerNames)}</b>!<br />Congratulations!</p>
+				Our lucky winner{Chat.plural(this.winners)}: <b>{winnerNames}</b>!<br />Congratulations!</p>
 			</>));
 			for (const winner of this.winners) {
 				winner.sendTo(
@@ -769,23 +768,21 @@ export class GTS extends Rooms.RoomGame {
 				More Pok&eacute;mon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. {}
 				If you have already deposited a Pok&eacute;mon, please be patient, and do not withdraw your Pok&eacute;mon.
 			</strong> : <>
-				To participate, deposit <strong>{this.deposit}</strong> into the GTS and look for <strong>
-					{Utils.escapeHTML(this.lookfor)}
-				</strong>
+				To participate, deposit <strong>{this.deposit}</strong> into the GTS and look for <strong>{this.lookfor}</strong>
 			</>;
 		return <>
 			<p style={{textAlign: 'center', fontSize: '14pt', fontWeight: 'bold', marginBottom: '2px'}}>
 				There is a GTS giveaway going on!
 			</p>
 			<p style={{textAlign: 'center', fontSize: '10pt', marginTop: 0}}>
-				Hosted by: {Utils.escapeHTML(this.giver.name)} | Left: <b>{this.left}</b>
+				Hosted by: {this.giver.name} | Left: <b>{this.left}</b>
 			</p>
 			<table style={{margin: 'inherit auto'}}>
 				<tr>
-					{sentModifier ? <td style={{textAlign: 'center', width: '10%'}}>
+					{sentModifier && <td style={{textAlign: 'center', width: '10%'}}>
 						<b>Last winners:</b><br />
 						{this.sent.join(<br />)}
-					</td> : ''}
+					</td>}
 					<td style={{textAlign: 'center', width: '15%'}}>{this.sprite}</td>
 					<td style={{textAlign: 'center', width: `${40 - sentModifier}%`}}>
 						<Chat.JSX.FormatText isTrusted>{this.summary}</Chat.JSX.FormatText>
@@ -841,7 +838,7 @@ export class GTS extends Rooms.RoomGame {
 				note: `their GTS giveaway for "${this.summary}"`,
 			});
 			this.send(<p style={{textAlign: 'center', fontSize: '11pt'}}>
-				The GTS giveaway for a "<strong>{Utils.escapeHTML(this.lookfor)}</strong>" has finished.
+				The GTS giveaway for a "<strong>{this.lookfor}</strong>" has finished.
 			</p>);
 			Giveaway.updateStats(new Set([this.pokemonID]));
 		}
@@ -1483,7 +1480,7 @@ function generatePokeballDropdown() {
 	const pokeballs = Dex.items.all().filter(item => item.isPokeball).sort((a, b) => a.num - b.num);
 	const pokeballsObj = [<option value="">Please select a Pok&eacute; Ball</option>];
 	for (const pokeball of pokeballs) {
-		pokeballsObj.push(<option value={pokeball.id}>{Utils.escapeHTML(pokeball.name)}</option>);
+		pokeballsObj.push(<option value={pokeball.id}>{pokeball.name}</option>);
 	}
 	return <><label for="ball">Pok&eacute; Ball type: </label><select name="ball">{pokeballsObj}</select></>;
 }
@@ -1602,13 +1599,13 @@ export const pages: Chat.PageTable = {
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 										<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 									</details>
-									{giveaway.extraInfo?.trim() ? <>
+									{giveaway.extraInfo?.trim() && <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
 											<Chat.JSX.FormatText isTrusted>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 										</details>
-									</> : ''}
+									</>}
 									<hr />
 									<button class="button" name="send" value={
 										`/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway) + 1}`
@@ -1631,20 +1628,20 @@ export const pages: Chat.PageTable = {
 									<strong>Game:</strong> {gameName[giveaway.game]}<br />
 									<strong>Giver:</strong> {giveaway.targetUserID},
 									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}<br />
-									<strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}<br />
+									<strong>Question:</strong> {giveaway.question}<br />
 									<strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}<br />
 									<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
 										<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 										<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 									</details>
-									{giveaway.extraInfo?.trim() ? <>
+									{giveaway.extraInfo?.trim() && <>
 										<hr />
 										<details>
 											<summary>Extra Info</summary>
 											<Chat.JSX.FormatText isTrusted>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 										</details>
-									</> : ''}
+									</>}
 									<hr />
 									<button class="button" name="send" value={
 										`/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway) + 1}`
@@ -1753,8 +1750,8 @@ export const pages: Chat.PageTable = {
 								`/giveaway unclaim ${giveaway.targetUserID}` :
 								`/giveaway claim ${giveaway.targetUserID}`;
 							const claimedTitle = giveaway.claimed === user.id ?
-								"Unclaim" :
-								giveaway.claimed ? `Claimed by ${giveaway.claimed}` : `Claim`;
+								"Unclaim" : giveaway.claimed ?
+									`Claimed by ${giveaway.claimed}` : `Claim`;
 							const disabled = giveaway.claimed && giveaway.claimed !== user.id ? " disabled" : "";
 							buf.push(<div class="infobox">
 								{(() => {
@@ -1766,19 +1763,19 @@ export const pages: Chat.PageTable = {
 											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
 											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid},
 											&#32;<strong># of winners:</strong> {giveaway.winners}
-											{giveaway.claimed ? <><br /><strong>Claimed:</strong> {Utils.escapeHTML(giveaway.claimed)}</> : ''}<br />
+											{giveaway.claimed && <><br /><strong>Claimed:</strong> {giveaway.claimed}</>}<br />
 											<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 												{Giveaway.convertIVs(giveaway.prize, giveaway.ivs).replace(/\n/g, '<br />')}
 											</details>
-											{giveaway.extraInfo?.trim() ? <>
+											{giveaway.extraInfo?.trim() && <>
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
 													<Chat.JSX.FormatText isTrusted>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
 												</details>
-											</> : ''}
+											</>}
 										</>;
 									} else {
 										giveaway = giveaway as QuestionGiveawayData;
@@ -1787,21 +1784,21 @@ export const pages: Chat.PageTable = {
 											<hr />
 											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
 											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
-											{giveaway.claimed ? <><br /><strong>Claimed:</strong> {Utils.escapeHTML(giveaway.claimed)}</> : ''}<br />
-											<strong>Question:</strong> {Utils.escapeHTML(giveaway.question)}<br />
+											{giveaway.claimed && <><br /><strong>Claimed:</strong> {giveaway.claimed}</>}<br />
+											<strong>Question:</strong> {giveaway.question}<br />
 											<strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}<br />
 											<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
 												<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 											</details>
-											{giveaway.extraInfo?.trim() ? <>
+											{giveaway.extraInfo?.trim() && <>
 												<hr />
 												<details>
 													<summary>Extra Info</summary>
 													<Chat.JSX.FormatText isTrusted>{giveaway.extraInfo.trim()}</Chat.JSX.FormatText>
-												</details></> : ''
-											}
+												</details>
+											</>}
 										</>;
 									}
 								})()}
