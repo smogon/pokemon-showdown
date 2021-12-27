@@ -340,7 +340,7 @@ export class QuestionGiveaway extends Giveaway {
 		if (type === 'create' && !(user.id === targetUser.id && user.can('show', null, context.room!))) {
 			context.checkCan('warn', null, context.room!);
 		}
-		if (type !== 'create' && user.id !== targetUser.id) {
+		if (!user.can('warn', null, context.room!) && type !== 'create' && user.id !== targetUser.id) {
 			throw new Chat.ErrorMessage(`You can't ${type} giveways for other users.`);
 		}
 		if (!!ivs && ivs.split('/').length !== 6) {
@@ -528,7 +528,7 @@ export class LotteryGiveaway extends Giveaway {
 		if (type === 'create' && !(user.id === targetUser.id && user.can('show', null, context.room!))) {
 			context.checkCan('warn', null, context.room!);
 		}
-		if (type !== 'create' && user.id !== targetUser.id) {
+		if (!user.can('warn', null, context.room!) && type !== 'create' && user.id !== targetUser.id) {
 			throw new Chat.ErrorMessage(`You can't ${type} giveways for other users.`);
 		}
 		if (!!ivs && ivs.split('/').length !== 6) {
