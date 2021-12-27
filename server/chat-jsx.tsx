@@ -42,7 +42,7 @@ function subRender(
 	child: preact.ComponentChild, opts?: {isTrusted?: boolean, replaceLinebreaks?: boolean}
 ): preact.ComponentChild {
 	if (typeof child === 'string') {
-		return <div dangerouslySetInnerHTML={{__html: Chat.formatText(child, opts?.isTrusted, opts?.replaceLinebreaks)}} />;
+		return <span dangerouslySetInnerHTML={{__html: Chat.formatText(child, opts?.isTrusted, opts?.replaceLinebreaks)}} />;
 	}
 	if (preact.isValidElement(child)) return child;
 	throw new Error(`Invalid props.children type: ${!child ? child : typeof child}`);
