@@ -1503,8 +1503,8 @@ export const pages: Chat.PageTable = {
 						buf += `<hr />`;
 						buf += `<button class="button" name="send" value="/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway) + 1}"><i class="fa fa-trash"></i> Delete giveaway</button>`;
 						const targetUser = Users.get(giveaway.targetUserID);
-						if (!targetUser?.connected || targetUser.id !== user.id) {
-							buf += `<button title="The giver is offline or you are not them" disabled class="button disabled" style="float:right">Create giveaway</button>`;
+						if (!targetUser?.connected) {
+							buf += `<button title="The giver is offline" disabled class="button disabled" style="float:right">Create giveaway</button>`;
 						} else {
 							buf += `<button class="button" style="float:right" name="send" value="/giveaway create lottery ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.winners}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}">Create giveaway</button>`;
 						}
