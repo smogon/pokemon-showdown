@@ -180,7 +180,7 @@ describe("Dynamax", function () {
 			assert.statStage(battle.p1.active[0], 'spe', 0);
 		});
 
-		it.skip(`should treat Max Moves as 0 BP when used without Dynamaxing`, function () {
+		it(`should treat Max Moves as 0 BP when used without Dynamaxing`, function () {
 			battle = common.createBattle([[
 				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
 			], [
