@@ -4574,7 +4574,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pseudoWeather: 'fairylock',
 		condition: {
 			duration: 2,
-			onStart(target) {
+			onFieldStart(target) {
 				this.add('-fieldactivate', 'move: Fairy Lock');
 			},
 			onTrapPokemon(pokemon) {
@@ -9077,7 +9077,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pseudoWeather: 'iondeluge',
 		condition: {
 			duration: 1,
-			onStart(target, source, sourceEffect) {
+			onFieldStart(target, source, sourceEffect) {
 				this.add('-fieldactivate', 'move: Ion Deluge');
 				this.hint(`Normal-type moves become Electric-type after using ${sourceEffect}.`);
 			},
