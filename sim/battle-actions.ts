@@ -1436,7 +1436,6 @@ export class BattleActions {
 				break;
 			case 'healreplacement':
 				pokemon.side.addSlotCondition(pokemon, 'healreplacement', pokemon);
-				// move.self = {slotCondition: 'healreplacement'};
 				break;
 			case 'clearnegativeboost':
 				const boosts: SparseBoostsTable = {};
