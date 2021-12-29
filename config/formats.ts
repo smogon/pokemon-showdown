@@ -987,6 +987,15 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8 BDSP] OU', '+CAP'],
 	},
 	{
+		name: "[Gen 8 BDSP] 3v3 Singles",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3695092/">BDSP 3v3 Singles</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		ruleset: ['Flat Rules', 'Min Source Gen = 8'],
+	},
+	{
 		name: "[Gen 8 BDSP] Doubles OU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3693891/">BDSP Doubles OU</a>`,
