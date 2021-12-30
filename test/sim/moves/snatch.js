@@ -100,7 +100,7 @@ describe('Snatch [Gen 4]', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind']},
 		], [
-		{species: 'Dialga', moves: ['snatch']},
+			{species: 'Dialga', moves: ['snatch']},
 		]]);
 		battle.makeChoices();
 		const move = battle.p2.active[0].getMoveData(Dex.moves.get('snatch'));
