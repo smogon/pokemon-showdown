@@ -195,6 +195,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	bellossom: {
 		tier: "UU",
 		doublesTier: "DOU",
+		randomBattleMoves: ["gigadrain", "moonblast", "quiverdance", "sleeppowder", "strengthsap"],
 	},
 	paras: {
 		tier: "LC",
@@ -526,6 +527,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	kingdra: {
 		tier: "UU",
 		doublesTier: "DOU",
+		randomBattleMoves: ["dracometeor", "hydropump", "icebeam", "raindance"],
 	},
 	goldeen: {
 		tier: "LC",
@@ -553,6 +555,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	scyther: {
 		tier: "LC",
+		randomBattleMoves: ["aerialace", "brickbreak", "quickattack", "roost", "swordsdance", "thief", "uturn"],
 	},
 	scizor: {
 		tier: "OU",
@@ -1054,7 +1057,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	donphan: {
 		tier: "UU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["stealthrock", "earthquake", "rapidspin", "stoneedge", "iceshard"],
+		randomBattleMoves: ["stealthrock", "earthquake", "rapidspin", "stoneedge", "iceshard", "knockoff"],
 	},
 	stantler: {
 		tier: "UU",
@@ -1781,7 +1784,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	rampardos: {
 		tier: "UU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["headsmash", "zenheadbutt", "stealthrock", "crunch", "rockpolish"],
+		randomBattleMoves: ["headsmash", "zenheadbutt", "stealthrock", "crunch", "rockpolish", "earthquake"],
 	},
 	shieldon: {
 		tier: "LC",
