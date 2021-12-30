@@ -592,7 +592,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Invalid percent: ${percent}. Must be between 0 and 1.`);
 			}
 			const score = parseInt(rawScore);
-			if ((isNaN(score) && toID(rawScore) !== 'MAXIMUM') || (!isNaN(score) && score < 0)) {
+			if ((isNaN(score) && toID(rawScore) !== 'maximum') || (!isNaN(score) && score < 0)) {
 				return this.errorReply(`Invalid score: ${score}. Must be a positive integer or "MAXIMUM".`);
 			}
 			if (settings.specials[type]?.[percent] && !this.cmd.includes('f')) {
