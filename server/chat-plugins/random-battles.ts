@@ -75,8 +75,12 @@ function setProbability(
 		if (criteria.nature.mustHave && set.nature !== criteria.nature.mustHave.name) continue;
 		if (criteria.nature.mustNotHave.some(nature => nature.name === set.nature)) continue;
 
-		if (!criteria.moves.mustHave.every(move => set.moves.includes(move.id))) continue;
-		if (criteria.moves.mustNotHave.some(move => set.moves.includes(move.id))) continue;
+		const setHasMove = (move: Move) => {
+			const id = move.id === 'hiddenpower' ? `${move.id}${toID(move.type)}` : move.id;
+			return set.moves.includes(id);
+		};
+		if (!criteria.moves.mustHave.every(setHasMove)) continue;
+		if (criteria.moves.mustNotHave.some(setHasMove)) continue;
 
 		results.matches++;
 	}
