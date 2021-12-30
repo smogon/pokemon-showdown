@@ -83,7 +83,7 @@ describe('Snatch [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should benefit the slowest user of Snatch if multiple Pokemon use Snatch in the same turn', function () {
+	it('should Snatch moves that were called by another user of Snatch', function () {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: 'weavile', moves: ['snatch']},
 			{species: 'wynaut', moves: ['howl']},
