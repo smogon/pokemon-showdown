@@ -342,8 +342,8 @@ export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
 		const entry = cache[roomid];
 		if (entry) {
-			if (entry.staffNotified) notifyStaff();
 			delete cache[roomid];
+			if (entry.staffNotified) notifyStaff();
 		}
 	},
 	onRoomClose(roomid, user) {
@@ -731,7 +731,10 @@ export const pages: Chat.PageTable = {
 			buf += `<h2>Abuse Monitor`;
 			const room = Rooms.get(roomid);
 			if (!room) {
-				if (cache[roomid]) delete cache[roomid];
+				if (cache[roomid]) {
+					delete cache[roomid];
+					notifyStaff();
+				}
 				buf += `</h2><hr /><p class="error">No such room.</p>`;
 				return buf;
 			}
