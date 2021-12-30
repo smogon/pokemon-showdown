@@ -32,12 +32,12 @@ describe(`Memento`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it.skip(`should set the Z-Memento healing flag even if the Memento itself was not successful`, function () {
+	it(`should set the Z-Memento healing flag even if the Memento itself was not successful`, function () {
 		battle = common.createBattle([[
-			{species: 'landorus', ability: 'noguard', moves: ['sleeptalk']},
-			{species: 'whimsicott', ability: 'noguard', item: 'darkiniumz', moves: ['memento']},
+			{species: 'landorus', moves: ['sleeptalk']},
+			{species: 'whimsicott', item: 'darkiniumz', moves: ['memento']},
 		], [
-			{species: 'wynaut', ability: 'prankster', moves: ['circlethrow', 'substitute']},
+			{species: 'wynaut', ability: 'noguard', moves: ['circlethrow', 'substitute']},
 		]]);
 		battle.makeChoices('auto', 'move substitute');
 		battle.makeChoices();
