@@ -22,7 +22,8 @@ export const MODLOG_DB_PATH = Config.nofswriting ? ':memory:' : `${__dirname}/..
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
 	'TICKETBAN', 'AUTOLOCK', 'AUTONAMELOCK', 'NAMELOCK', 'AUTOBAN', 'MONTHLOCK',
-	'AUTOWEEKLOCK', 'WEEKNAMELOCK',
+	'AUTOWEEKLOCK', 'WEEKNAMELOCK', 'FORCEWEEKLOCK', 'FORCELOCK', 'FORCEMONTHLOCK',
+	'FORCERENAME OFFLINE',
 ];
 
 const PUNISHMENTS = [
@@ -53,7 +54,6 @@ interface ModlogSQLQuery<T> {
 export interface ModlogSearch {
 	note: {search: string, isExact?: boolean, isExclusion?: boolean}[];
 	user: {search: string, isExact?: boolean, isExclusion?: boolean}[];
-	anyField?: string;
 	ip: {search: string, isExclusion?: boolean}[];
 	action: {search: string, isExclusion?: boolean}[];
 	actionTaker: {search: string, isExclusion?: boolean}[];
@@ -408,16 +408,6 @@ export class Modlog {
 				}
 			}
 			ands.push({query: roomChecker, args});
-		}
-
-		if (search.anyField) {
-			for (const or of [
-				`action LIKE ?`, `userid LIKE ?`, `autoconfirmed_userid LIKE ?`, `ip LIKE ?`, `action_taker_userid LIKE ?`,
-				`EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid LIKE ?)`,
-			]) {
-				ors.push({query: or, args: [search.anyField + '%']});
-			}
-			ors.push({query: `note LIKE ?`, args: [`%${search.anyField}%`]});
 		}
 
 		for (const action of search.action) {

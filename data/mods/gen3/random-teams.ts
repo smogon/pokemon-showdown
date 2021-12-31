@@ -327,7 +327,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -476,6 +476,19 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				}
 			}
 		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
+
+		if (hasHiddenPower) {
+			let hpType;
+			for (const move of moves) {
+				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
+			}
+			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
+			const HPivs = this.dex.types.get(hpType).HPivs;
+			let iv: StatID;
+			for (iv in HPivs) {
+				ivs[iv] = HPivs[iv]!;
+			}
+		}
 
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a)).filter(a => a.gen === 3);
 		Utils.sortBy(abilityData, abil => -abil.rating);

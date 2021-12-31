@@ -2374,6 +2374,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	neutralizinggas: {
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
 		onPreStart(pokemon) {
+			if (pokemon.transformed) return;
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			const isMultipleAbilities = this.ruleTable.has('multipleabilities');
@@ -2405,6 +2406,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onEnd(source) {
+			if (source.transformed) return;
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon !== source && pokemon.hasAbility('Neutralizing Gas')) {
 					return;
@@ -2575,7 +2577,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	parentalbond: {
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
-			if (['endeavor', 'fling', 'iceball', 'rollout'].includes(move.id)) return;
+			if (['dynamaxcannon', 'endeavor', 'fling', 'iceball', 'rollout'].includes(move.id)) return;
 			if (!move.flags['charge'] && !move.spreadHit && !move.isZ && !move.isMax) {
 				move.multihit = 2;
 				move.multihitType = 'parentalbond';

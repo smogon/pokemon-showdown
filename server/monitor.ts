@@ -206,7 +206,7 @@ export const Monitor = new class {
 		if (Config.noipchecks || Config.nothrottle) return false;
 		const count = this.battlePreps.increment(ip, 3 * 60 * 1000)[0];
 		if (count <= 12) return false;
-		if (count < 120 && Punishments.sharedIps.has(ip)) return false;
+		if (count < 120 && Punishments.isSharedIp(ip)) return false;
 		connection.popup('Due to high load, you are limited to 12 battles and team validations every 3 minutes.');
 		return true;
 	}
@@ -236,7 +236,7 @@ export const Monitor = new class {
 		if (Config.noipchecks || Config.nothrottle) return false;
 		const [count] = this.netRequests.increment(ip, 1 * 60 * 1000);
 		if (count <= 10) return false;
-		if (count < 120 && Punishments.sharedIps.has(ip)) return false;
+		if (count < 120 && Punishments.isSharedIp(ip)) return false;
 		return true;
 	}
 
@@ -246,7 +246,7 @@ export const Monitor = new class {
 	countTickets(ip: string) {
 		if (Config.noipchecks || Config.nothrottle) return false;
 		const count = this.tickets.increment(ip, 60 * 60 * 1000)[0];
-		if (Punishments.sharedIps.has(ip)) {
+		if (Punishments.isSharedIp(ip)) {
 			return count >= 20;
 		} else {
 			return count >= 5;

@@ -1,4 +1,4 @@
-// Note: These are the rules that formats use
+﻿// Note: These are the rules that formats use
 
 import {Utils} from "../lib";
 
@@ -75,7 +75,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
 		ruleset: [
-			'Obtainable', '+Unobtainable', '+Past', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Obtainable', '+Unobtainable', '+Past', 'Sketch Gen 8 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
 		onValidateSet(set) {
 			// These Pokemon are still unobtainable
@@ -280,9 +280,25 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
-	alolapokedex: {
+	oldalolapokedex: {
 		effectType: 'ValidatorRule',
-		name: 'Alola Pokedex',
+		name: 'Old Alola Pokedex',
+		desc: "Only allows Pok&eacute;mon native to the Alola region (SUMO)",
+		banlist: ['Pikachu-Partner', 'Marowak-Alola-Totem', 'Ribombee-Totem', 'Araquanid-Totem', 'Lycanroc-Dusk', 'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings'],
+		onValidateSet(set, format) {
+			const alolaDex = [
+				"Rowlet", "Dartrix", "Decidueye", "Litten", "Torracat", "Incineroar", "Popplio", "Brionne", "Primarina", "Pikipek", "Trumbeak", "Toucannon", "Yungoos", "Gumshoos", "Rattata-Alola", "Raticate-Alola", "Caterpie", "Metapod", "Butterfree", "Ledyba", "Ledian", "Spinarak", "Ariados", "Pichu", "Pikachu", "Raichu-Alola", "Grubbin", "Charjabug", "Vikavolt", "Bonsly", "Sudowoodo", "Happiny", "Chansey", "Blissey", "Munchlax", "Snorlax", "Slowpoke", "Slowbro", "Slowking", "Wingull", "Pelipper", "Abra", "Kadabra", "Alakazam", "Meowth-Alola", "Persian-Alola", "Magnemite", "Magneton", "Magnezone", "Grimer-Alola", "Muk-Alola", "Growlithe", "Arcanine", "Drowzee", "Hypno", "Makuhita", "Hariyama", "Smeargle", "Crabrawler", "Crabominable", "Gastly", "Haunter", "Gengar", "Drifloon", "Drifblim", "Misdreavus", "Mismagius", "Zubat", "Golbat", "Crobat", "Diglett-Alola", "Dugtrio-Alola", "Spearow", "Fearow", "Rufflet", "Braviary", "Vullaby", "Mandibuzz", "Mankey", "Primeape", "Delibird", "Oricorio", "Cutiefly", "Ribombee", "Petilil", "Lilligant", "Cottonee", "Whimsicott", "Psyduck", "Golduck", "Magikarp", "Gyarados", "Barboach", "Whiscash", "Machop", "Machoke", "Machamp", "Roggenrola", "Boldore", "Gigalith", "Carbink", "Sableye", "Rockruff", "Lycanroc", "Spinda", "Tentacool", "Tentacruel", "Finneon", "Lumineon", "Wishiwashi", "Luvdisc", "Corsola", "Mareanie", "Toxapex", "Shellder", "Cloyster", "Bagon", "Shelgon", "Salamence", "Lillipup", "Herdier", "Stoutland", "Eevee", "Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Mudbray", "Mudsdale", "Igglybuff", "Jigglypuff", "Wigglytuff", "Tauros", "Miltank", "Surskit", "Masquerain", "Dewpider", "Araquanid", "Fomantis", "Lurantis", "Morelull", "Shiinotic", "Paras", "Parasect", "Poliwag", "Poliwhirl", "Poliwrath", "Politoed", "Goldeen", "Seaking", "Feebas", "Milotic", "Alomomola", "Fletchling", "Fletchinder", "Talonflame", "Salandit", "Salazzle", "Cubone", "Marowak-Alola", "Kangaskhan", "Magby", "Magmar", "Magmortar", "Stufful", "Bewear", "Bounsweet", "Steenee", "Tsareena", "Comfey", "Pinsir", "Oranguru", "Passimian", "Goomy", "Sliggoo", "Goodra", "Castform", "Wimpod", "Golisopod", "Staryu", "Starmie", "Sandygast", "Palossand", "Cranidos", "Rampardos", "Shieldon", "Bastiodon", "Archen", "Archeops", "Tirtouga", "Carracosta", "Phantump", "Trevenant", "Nosepass", "Probopass", "Pyukumuku", "Chinchou", "Lanturn", "Type: Null", "Silvally", "Zygarde", "Trubbish", "Garbodor", "Skarmory", "Ditto", "Cleffa", "Clefairy", "Clefable", "Minior", "Beldum", "Metang", "Metagross", "Porygon", "Porygon2", "Porygon-Z", "Pancham", "Pangoro", "Komala", "Torkoal", "Turtonator", "Togedemaru", "Elekid", "Electabuzz", "Electivire", "Geodude-Alola", "Graveler-Alola", "Golem-Alola", "Sandile", "Krokorok", "Krookodile", "Trapinch", "Vibrava", "Flygon", "Gible", "Gabite", "Garchomp", "Klefki", "Mimikyu", "Bruxish", "Drampa", "Absol", "Snorunt", "Glalie", "Froslass", "Sneasel", "Weavile", "Sandshrew-Alola", "Sandslash-Alola", "Vulpix-Alola", "Ninetales-Alola", "Vanillite", "Vanillish", "Vanilluxe", "Snubbull", "Granbull", "Shellos", "Gastrodon", "Relicanth", "Dhelmise", "Carvanha", "Sharpedo", "Wailmer", "Wailord", "Lapras", "Exeggcute", "Exeggutor-Alola", "Jangmo-o", "Hakamo-o", "Kommo-o", "Emolga", "Scyther", "Scizor", "Murkrow", "Honchkrow", "Riolu", "Lucario", "Dratini", "Dragonair", "Dragonite", "Aerodactyl", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", "Cosmoem", "Solgaleo", "Lunala", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Necrozma", "Magearna", "Marshadow",
+			];
+			const species = this.dex.species.get(set.species || set.name);
+			if (!alolaDex.includes(species.baseSpecies) && !alolaDex.includes(species.name) &&
+				!this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} is not in the Old Alola Pokédex.`];
+			}
+		},
+	},
+	newalolapokedex: {
+		effectType: 'ValidatorRule',
+		name: 'New Alola Pokedex',
 		desc: "Only allows Pok&eacute;mon native to the Alola region (US/UM)",
 		onValidateSet(set, format) {
 			const alolaDex = [
@@ -291,7 +307,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const species = this.dex.species.get(set.species || set.name);
 			if (!alolaDex.includes(species.baseSpecies) && !alolaDex.includes(species.name) &&
 				!this.ruleTable.has('+' + species.id)) {
-				return [`${species.baseSpecies} is not in the Alola Pokédex.`];
+				return [`${species.baseSpecies} is not in the New Alola Pokédex.`];
 			}
 		},
 	},
@@ -550,6 +566,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', '2 Ability Clause: Limit two of each ability');
 		},
 		onValidateTeam(team) {
+			if (this.format.id === 'gen8multibility') return;
 			const abilityTable = new Map<string, number>();
 			const base: {[k: string]: string} = {
 				airlock: 'cloudnine',
@@ -774,13 +791,42 @@ export const Rulesets: {[k: string]: FormatData} = {
 			];
 		},
 	},
-	"3batonpassclause": {
+	oneboostpasserclause: {
 		effectType: 'ValidatorRule',
-		name: '3 Baton Pass Clause',
-		desc: "Stops teams from having more than three Pok&eacute;mon with Baton Pass",
-		banlist: ["Baton Pass > 3"],
+		name: 'One Boost Passer Clause',
+		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has multiple ways to boost its stats, and no more than one Baton Passer may be able to boost its stats",
 		onBegin() {
-			this.add('rule', '3 Baton Pass Clause: Limit three Baton Passers');
+			this.add('rule', 'One Boost Passer Clause: Limit one Baton Passer that has a way to boost its stats');
+		},
+		onValidateTeam(team) {
+			const boostingEffects = [
+				'acidarmor', 'agility', 'amnesia', 'apicotberry', 'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cosmicpower', 'curse',
+				'defensecurl', 'dragondance', 'ganlonberry', 'growth', 'harden', 'howl', 'irondefense', 'liechiberry', 'meditate',
+				'petayaberry', 'salacberry', 'sharpen', 'speedboost', 'starfberry', 'swordsdance', 'tailglow', 'withdraw',
+			];
+			let passers = 0;
+			for (const set of team) {
+				if (!set.moves.includes('Baton Pass')) continue;
+				let passableBoosts = 0;
+				const item = this.toID(set.item);
+				const ability = this.toID(set.ability);
+				for (const move of set.moves) {
+					if (boostingEffects.includes(this.toID(move))) passableBoosts++;
+				}
+				if (boostingEffects.includes(item)) passableBoosts++;
+				if (boostingEffects.includes(ability)) passableBoosts++;
+				if (passableBoosts === 1) passers++;
+				if (passableBoosts > 1) {
+					return [
+						`${set.name || set.species} has Baton Pass and multiple ways to boost its stats, which is banned by One Boost Passer Clause.`,
+					];
+				}
+				if (passers > 1) {
+					return [
+						`Multiple Pokemon have Baton Pass and a way to boost their stats, which is banned by One Boost Passer Clause.`,
+					];
+				}
+			}
 		},
 	},
 	cfzclause: {
@@ -960,16 +1006,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 				} else {
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
-				if (this.gen >= 7) {
-					const item = this.dex.items.get(set.item);
-					if (item.megaStone && species.baseSpecies === item.megaEvolves) {
-						species = this.dex.species.get(item.megaStone);
-						typeTable = typeTable.filter(type => species.types.includes(type));
-					}
-					if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
-						species = this.dex.species.get("Necrozma-Ultra");
-						typeTable = typeTable.filter(type => species.types.includes(type));
-					}
+				const item = this.dex.items.get(set.item);
+				if (item.megaStone && species.baseSpecies === item.megaEvolves) {
+					species = this.dex.species.get(item.megaStone);
+					typeTable = typeTable.filter(type => species.types.includes(type));
+				}
+				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
+					species = this.dex.species.get("Necrozma-Ultra");
+					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				if (!typeTable.length) return [`Your team must share a type.`];
 			}
@@ -1074,7 +1118,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [];
-				for (let i = this.dex.gen; i >= species.gen && i >= move.gen; i--) {
+				// BDSP can't import Pokemon from Home, so it shouldn't grant moves from archaic species types
+				const minObtainableSpeciesGen = this.dex.currentMod === 'gen8bdsp' ? this.dex.gen : species.gen;
+				for (let i = this.dex.gen; i >= minObtainableSpeciesGen && i >= move.gen; i--) {
 					const dex = this.dex.forGen(i);
 					moveTypes.push(dex.moves.get(move.name).type);
 
@@ -1187,6 +1233,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`${set.species} is banned due to NFE Clause.`];
 			}
 		},
+	},
+	'sketchgen8moves': {
+		effectType: 'ValidatorRule',
+		name: 'Sketch Gen 8 Moves',
+		desc: "Allows Pokémon who learn Sketch to learn any Gen 8 move (normally, Sketch is not usable in Gen 8).",
+		// Implemented in sim/team-validator.ts
 	},
 	mimicglitch: {
 		effectType: 'ValidatorRule',
@@ -1371,7 +1423,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		hasValue: 'positive-integer',
 		// hardcoded in sim/side
 		onValidateRule() {
-			if (!this.ruleTable.has('teampreview')) {
+			if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
 				throw new Error(`The "Picked Team Size" rule${this.ruleTable.blame('pickedteamsize')} requires Team Preview.`);
 			}
 		},
@@ -1601,6 +1653,202 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onFaint(target) {
 			this.lose(target.side);
+		},
+	},
+	tiershiftmod: {
+		effectType: "Rule",
+		name: "Tier Shift Mod",
+		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.`,
+		ruleset: ['Overflow Stat Mod'],
+		onBegin() {
+			this.add('rule', 'Tier Shift Mod: Pok\u00e9mon get stat buffs depending on their tier, excluding HP.');
+		},
+		onModifySpecies(species, target, source, effect) {
+			if (!species.baseStats) return;
+			const boosts: {[tier: string]: number} = {
+				uu: 10,
+				rubl: 10,
+				ru: 20,
+				nubl: 20,
+				nu: 30,
+				publ: 30,
+				pu: 40,
+				nfe: 40,
+				lc: 40,
+			};
+			let tier: string = this.toID(species.tier);
+			if (!(tier in boosts)) return;
+			// Non-Pokemon bans in lower tiers
+			if (target) {
+				if (target.set.item === 'lightclay') return;
+				if (['drizzle', 'drought', 'snowwarning'].includes(target.set.ability) && boosts[tier] > 20) tier = 'nubl';
+			}
+			const pokemon = this.dex.deepClone(species);
+			pokemon.bst = pokemon.baseStats['hp'];
+			const boost = boosts[tier];
+			let statName: StatID;
+			for (statName in pokemon.baseStats as StatsTable) {
+				if (statName === 'hp') continue;
+				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+				pokemon.bst += pokemon.baseStats[statName];
+			}
+			return pokemon;
+		},
+	},
+	crossevolutionmod: {
+		effectType: "Rule",
+		name: "Cross Evolution Mod",
+		desc: "Give a Pok&eacute;mon a Pok&eacute;mon name of the next evolution stage as a nickname to inherit stat changes, typing, abilities, and up to 2 moves from the next stage Pok&eacute;mon.",
+		ruleset: ['Overflow Stat Mod'],
+		onValidateTeam(team) {
+			const names = new Set<ID>();
+			for (const set of team) {
+				const name = set.name;
+				if (names.has(this.dex.toID(name))) {
+					return [
+						`Your Pok\u00e9mon must have different nicknames.`,
+						`(You have more than one Pok\u00e9mon named '${name}')`,
+					];
+				}
+				names.add(this.dex.toID(name));
+			}
+			if (!names.size) {
+				return [
+					`${this.format.name} works using nicknames; your team has 0 nicknamed Pok\u00e9mon.`,
+					`(If this was intentional, add a nickname to one Pok\u00e9mon that isn't the name of a Pok\u00e9mon species.)`,
+				];
+			}
+		},
+		checkCanLearn(move, species, lsetData, set) {
+			// @ts-ignore
+			if (!set.sp?.exists || !set.crossSpecies?.exists) {
+				return this.checkCanLearn(move, species, lsetData, set);
+			}
+			// @ts-ignore
+			const problem = this.checkCanLearn(move, set.sp);
+			if (!problem) return null;
+			// @ts-ignore
+			if (!set.crossMovesLeft) return problem;
+			// @ts-ignore
+			if (this.checkCanLearn(move, set.crossSpecies)) return problem;
+			// @ts-ignore
+			set.crossMovesLeft--;
+			return null;
+		},
+		validateSet(set, teamHas) {
+			const crossSpecies = this.dex.species.get(set.name);
+			const onChangeSet = this.dex.formats.get('Pokemon').onChangeSet;
+			let problems = onChangeSet?.call(this, set, this.format) || null;
+			if (Array.isArray(problems) && problems.length) return problems;
+			const crossNonstandard = !this.ruleTable.has('standardnatdex') && crossSpecies.isNonstandard === 'Past';
+			const crossIsCap = !this.ruleTable.has('+pokemontag:cap') && crossSpecies.isNonstandard === 'CAP';
+			if (!crossSpecies.exists || crossNonstandard || crossIsCap) return this.validateSet(set, teamHas);
+			const species = this.dex.species.get(set.species);
+			const check = this.checkSpecies(set, species, species, {});
+			if (check) return [check];
+			const nonstandard = !this.ruleTable.has('standardnatdex') && species.isNonstandard === 'Past';
+			const isCap = !this.ruleTable.has('+pokemontag:cap') && species.isNonstandard === 'CAP';
+			if (!species.exists || nonstandard || isCap || species === crossSpecies) return this.validateSet(set, teamHas);
+			if (!species.nfe) return [`${species.name} cannot cross evolve because it doesn't evolve.`];
+			const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable");
+			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) {
+				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it isn't an evolution.`];
+			}
+			if (this.ruleTable.isRestrictedSpecies(crossSpecies)) {
+				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it is banned.`];
+			}
+			const crossPrevoSpecies = this.dex.species.get(crossSpecies.prevo);
+			if (!crossPrevoSpecies.prevo !== !species.prevo) {
+				return [
+					`${species.name} cannot cross evolve into ${crossSpecies.name} because they are not consecutive evolution stages.`,
+				];
+			}
+			const ability = this.dex.abilities.get(set.ability);
+			if (!this.ruleTable.isRestricted(`ability:${ability.id}`) || Object.values(species.abilities).includes(ability.name)) {
+				set.species = crossSpecies.name;
+			}
+
+			// @ts-ignore
+			set.sp = species;
+			// @ts-ignore
+			set.crossSpecies = crossSpecies;
+			// @ts-ignore
+			set.crossMovesLeft = 2;
+			problems = this.validateSet(set, teamHas);
+			set.name = crossSpecies.name;
+			set.species = species.name;
+			return problems;
+		},
+		onModifySpecies(species, target, source, effect) {
+			if (!target) return; // chat
+			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
+			if (target.set.name === target.set.species) return;
+			const crossSpecies = this.dex.species.get(target.set.name);
+			if (!crossSpecies.exists) return;
+			if (species.battleOnly || !species.nfe) return;
+			const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable");
+			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) return;
+			const crossPrevoSpecies = this.dex.species.get(crossSpecies.prevo);
+			if (!crossPrevoSpecies.prevo !== !species.prevo) return;
+
+			const mixedSpecies = this.dex.deepClone(species);
+			mixedSpecies.baseSpecies = mixedSpecies.name = `${species.name}-${crossSpecies.name}`;
+			mixedSpecies.weightkg =
+				Math.max(0.1, +(species.weightkg + crossSpecies.weightkg - crossPrevoSpecies.weightkg)).toFixed(1);
+			mixedSpecies.nfe = false;
+			mixedSpecies.evos = [];
+			mixedSpecies.eggGroups = crossSpecies.eggGroups;
+			mixedSpecies.abilities = crossSpecies.abilities;
+			mixedSpecies.bst = 0;
+			let i: StatID;
+			for (i in species.baseStats) {
+				const statChange = crossSpecies.baseStats[i] - crossPrevoSpecies.baseStats[i];
+				mixedSpecies.baseStats[i] = this.clampIntRange(species.baseStats[i] + statChange, 1, 255);
+				mixedSpecies.bst += mixedSpecies.baseStats[i];
+			}
+			if (crossSpecies.types[0] !== crossPrevoSpecies.types[0]) mixedSpecies.types[0] = crossSpecies.types[0];
+			if (crossSpecies.types[1] !== crossPrevoSpecies.types[1]) {
+				mixedSpecies.types[1] = crossSpecies.types[1] || crossSpecies.types[0];
+			}
+			if (mixedSpecies.types[0] === mixedSpecies.types[1]) mixedSpecies.types = [mixedSpecies.types[0]];
+
+			return mixedSpecies;
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.baseSpecies = pokemon.species;
+			}
+		},
+	},
+	revelationmonsmod: {
+		effectType: "Rule",
+		name: "Revelationmons Mod",
+		desc: `The moves in the first slot(s) of a Pok&eacute;mon's set have their types changed to match the Pok&eacute;mon's type(s).`,
+		onBegin() {
+			this.add('rule', 'Revelationmons Mod: The first moveslots have their types changed to match the Pok&eacute;mon\'s types');
+		},
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const slotIndex = species.types.length - 1;
+			const problems = [];
+			for (const [i, moveid] of set.moves.entries()) {
+				const move = this.dex.moves.get(moveid);
+				if (!this.ruleTable.isRestricted(`move:${move.id}`)) continue;
+				if (i <= slotIndex) {
+					problems.push(`${move.name} can't be in moveslot ${i + 1} because it's restricted from being in the first ${slotIndex + 1 > 1 ? `${slotIndex + 1} slots` : 'slot'}.`);
+				}
+			}
+			return problems;
+		},
+		onModifyMove(move, pokemon, target) {
+			const types = pokemon.getTypes(true);
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (noModifyType.includes(move.id)) return;
+			for (const [i, type] of types.entries()) {
+				if (pokemon.moveSlots[i] && move.id === pokemon.moveSlots[i].id) move.type = type;
+			}
 		},
 	},
 	multipleabilities: {

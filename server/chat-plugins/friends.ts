@@ -54,7 +54,7 @@ export const Friends = new class {
 			return;
 		}
 		const friends = await Chat.Friends.getFriends(user.id);
-		const message = `/nonotify Your friend ${Utils.escapeHTML(user.name)} has just connected!`;
+		const message = `/nonotify Your friend <username class="username">${Utils.escapeHTML(user.name)}</username> has just connected!`;
 		for (const f of friends) {
 			const curUser = Users.getExact(f.friend);
 			if (curUser?.settings.allowFriendNotifications) {
@@ -155,11 +155,11 @@ export const Friends = new class {
 	}
 	checkCanUse(context: Chat.CommandContext | Chat.PageContext) {
 		const user = context.user;
-		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
-			throw new Chat.ErrorMessage(`You are locked, and so cannot use the friends feature.`);
-		}
 		if (!user.autoconfirmed) {
 			throw new Chat.ErrorMessage(context.tr`You must be autoconfirmed to use the friends feature.`);
+		}
+		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
+			throw new Chat.ErrorMessage(`You are locked, and so cannot use the friends feature.`);
 		}
 		if (!Config.usesqlitefriends || !Config.usesqlite) {
 			throw new Chat.ErrorMessage(`The friends list feature is currently disabled.`);
@@ -244,6 +244,9 @@ export const commands: Chat.ChatCommands = {
 	friendslist: 'friends',
 	friends: {
 		''(target) {
+			if (toID(target)) {
+				return this.parse(`/friend add ${target}`);
+			}
 			return this.parse(`/friends list`);
 		},
 		viewlist(target, room, user) {
@@ -454,7 +457,7 @@ export const commands: Chat.ChatCommands = {
 		if (this.broadcasting) {
 			return this.sendReplyBox([
 				`<code>/friend list</code> - View current friends.`,
-				`<code>/friend add [username]</code> - Send a friend request to [username], if you don't have them added.`,
+				`<code>/friend add [name]</code> OR <code>/friend [name]</code> - Send a friend request to [name], if you don't have them added.`,
 				`<code>/friend remove [username]</code> OR <code>/unfriend [username]</code>  - Unfriend the user.`,
 				`<code>/friend accept [username]</code> - Accepts the friend request from [username], if it exists.`,
 				`<code>/friend reject [username]</code> - Rejects the friend request from [username], if it exists.`,
@@ -535,7 +538,7 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>/friend OR /friends OR /friendslist:</strong><br /><ul><li>`;
 			buf += [
 				`<code>/friend list</code> - View current friends.`,
-				`<code>/friend add [username]</code> - Send a friend request to [username], if you don't have them added.`,
+				`<code>/friend add [name]</code> OR <code>/friend [name]</code> - Send a friend request to [name], if you don't have them added.`,
 				`<code>/friend remove [username]</code> OR <code>/unfriend [username]</code>  - Unfriend the user.`,
 				`<code>/friend accept [username]</code> - Accepts the friend request from [username], if it exists.`,
 				`<code>/friend reject [username]</code> - Rejects the friend request from [username], if it exists.`,

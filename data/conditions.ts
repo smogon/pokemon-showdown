@@ -28,9 +28,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onModifySpe(spe, pokemon) {
+			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
+			spe = this.finalModify(spe);
 			if (!pokemon.hasAbility('quickfeet')) {
-				return this.chainModify(0.5);
+				spe = Math.floor(spe * 50 / 100);
 			}
+			return spe;
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
@@ -101,8 +104,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 				pokemon.setStatus('');
 			}
 		},
-		onHit(target, source, move) {
-			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
+		onAfterMoveSecondary(target, source, move) {
+			if (move.thawsTarget) {
+				target.cureStatus();
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
 		},
@@ -388,6 +396,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
 				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
 			}
+			this.activeMove = null;
 
 			this.checkWin();
 		},

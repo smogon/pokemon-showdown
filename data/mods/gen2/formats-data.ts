@@ -691,7 +691,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	azumarill: {
-		randomBattleMoves: ["charm", "rest", "sleeptalk", "surf", "toxic"],
+		randomBattleMoves: ["perishsong", "rest", "surf", "whirlpool"],
 		tier: "NU",
 	},
 	sudowoodo: {
@@ -817,7 +817,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	octillery: {
-		randomBattleMoves: ["fireblast", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"],
+		randomBattleMoves: ["flamethrower", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"],
 		tier: "NU",
 	},
 	delibird: {

@@ -122,6 +122,40 @@ describe('[Gen 8] Random Battle', () => {
 			assert.equal(set.item, 'Heavy-Duty Boots', `set=${JSON.stringify(set)}`);
 		});
 	});
+
+	it('should guarantee Poison STAB on all Grass/Poison types (slow)', function () {
+		// This test takes more than 2000ms
+		this.timeout(0);
+
+		const dex = Dex.forFormat(options.format);
+		const pokemon = dex.species
+			.all()
+			.filter(pkmn => pkmn.randomBattleMoves && pkmn.types.includes('Grass') && pkmn.types.includes('Poison'));
+		for (const pkmn of pokemon) {
+			testHasSTAB(pkmn.name, options, ['Poison']);
+		}
+	});
+
+	it('should not allow Swords Dance + Dragon Dance Rayquaza', () => {
+		testNotBothMoves('rayquaza', options, 'swordsdance', 'dragondance');
+	});
+
+	it('should not allow Extreme Speed + Dragon Dance Rayquaza', () => {
+		testNotBothMoves('rayquaza', options, 'extremespeed', 'dragondance');
+	});
+
+	it('should not generate Noctowl with three attacks and Roost', () => {
+		const dex = Dex.forFormat(options.format);
+		testSet('noctowl', options, set => {
+			const attacks = set.moves.filter(m => dex.moves.get(m).category !== 'Status');
+			assert(
+				!(set.moves.includes('roost') && attacks.length === 3),
+				`Noctowl should not get three attacks and Roost (got ${set.moves})`
+			);
+		});
+	});
+
+	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
@@ -142,6 +176,14 @@ describe('[Gen 8] Random Doubles Battle', () => {
 	it('should give Galarian Darmanitan a Choice Item', () => {
 		testSet('darmanitangalar', options, set => assert(set.item.startsWith('Choice ')));
 	});
+
+	it('should always give Urshifu-Rapid-Strike Surging Strikes', () => {
+		testAlwaysHasMove('urshifurapidstrike', options, 'surgingstrikes');
+	});
+
+	it('should always give Urshifu Wicked Blow', () => {
+		testAlwaysHasMove('urshifu', options, 'wickedblow');
+	});
 });
 
 describe('[Gen 8] Random Battle (No Dmax)', () => {
@@ -158,5 +200,64 @@ describe('[Gen 8] Free-for-All Random Battle', () => {
 		for (const pkmn of ['pinsir', 'pikachu', 'zygarde']) {
 			testHasSTAB(pkmn, options);
 		}
+	});
+});
+
+describe('[Gen 8 BDSP] Random Battle', () => {
+	const options = {format: 'gen8bdsprandombattle'};
+
+	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];
+	const dex = Dex.forFormat(options.format);
+	for (const species of dex.species.all()) {
+		if (!species.randomBattleMoves) continue;
+		if (species.id === 'ditto') continue; // Ditto always wants Choice Scarf
+
+		// This test is marked as slow because although each individual test is fairly fast to run,
+		// ~500 tests are generated, so they can dramatically slow down the process of unit testing.
+		it(`should not generate Choice items on ${species.name} sets with status moves, unless an item-switching move or Healing Wish is generated (slow)`, () => {
+			testSet(species.id, {...options, rounds: 500}, set => {
+				if (set.item.startsWith('Choice') && !okToHaveChoiceMoves.some(okMove => set.moves.includes(okMove))) {
+					assert(set.moves.every(m => dex.moves.get(m).category !== 'Status'), `Choice item and status moves on set ${JSON.stringify(set)}`);
+				}
+			});
+		});
+	}
+
+	it('should give Tropius Harvest + Sitrus Berry', () => {
+		testSet('tropius', options, set => {
+			assert.equal(set.item, 'Sitrus Berry');
+			assert.equal(set.ability, 'Harvest');
+		});
+	});
+
+	it('should give Unown a Choice item', () => {
+		testSet('unown', options, set => assert.match(set.item, /^Choice /));
+	});
+
+	it('should give Toxic Orb to Gliscor and Zangoose', () => {
+		testSet('gliscor', options, set => assert.equal(set.item, 'Toxic Orb'));
+		testSet('zangoose', options, set => assert.equal(set.item, 'Toxic Orb', set.ability));
+	});
+
+	it('should not generate Power Herb + Solar Beam on Drought sets', () => {
+		for (const species of ['ninetales', 'torkoal']) {
+			testSet(species, options, set => {
+				if (set.ability !== 'Drought') return;
+				if (!set.moves.includes('solarbeam')) return;
+				assert.notEqual(set.item, 'Power Herb', `${species} should not get Power Herb with Solar Beam + Drought`);
+			});
+		}
+	});
+
+	it('should not give Unown Leftovers', () => {
+		testSet('unown', options, set => assert.notEqual(set.item, 'Leftovers'));
+	});
+
+	it('should always give Jumpluff Acrobatics', () => {
+		testAlwaysHasMove('jumpluff', options, 'acrobatics');
+	});
+
+	it('should always give Smeargle Spore', () => {
+		testAlwaysHasMove('smeargle', options, 'spore');
 	});
 });

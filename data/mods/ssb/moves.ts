@@ -648,7 +648,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', target, 'Close Combat', target);
 			this.add('-anim', target, 'Earthquake', target);
-			this.add(`c|${getName('Archas')}|Fire all guns! Fiiiiire!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Archas')}|Fire all guns! Fiiiiire!`);
 		},
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Steel') return 1;
@@ -696,7 +696,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onHit(target, pokemon) {
-			this.add(`c|${getName('Arcticblast')}|YEET`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Arcticblast')}|YEET`);
 			if (pokemon.volatiles['brilliant']) pokemon.removeVolatile('brilliant');
 		},
 		secondary: null,
@@ -853,7 +853,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Spirit Break', target);
 		},
-		useSourceDefensiveAsOffensive: true,
+		overrideOffensiveStat: 'spd',
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -906,6 +906,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return 8;
 				}
 				return 5;
+			},
+			onModifyMove(move, source, target) {
+				if (move.overrideOffensiveStat && !['atk', 'spa'].includes(move.overrideOffensiveStat)) return;
+				const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+				if (!attacker) return;
+				move.overrideOffensiveStat = attacker.getStat('atk') > attacker.getStat('spa') ? 'spa' : 'atk';
 			},
 			// Stat modifying in scripts.ts
 			onFieldStart(field, source, effect) {
@@ -1324,7 +1330,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Boomburst', target);
 		},
 		onHit() {
-			this.add(`c|${getName('drampa\'s grandpa')}|GET OFF MY LAWN!!!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('drampa\'s grandpa')}|GET OFF MY LAWN!!!`);
 		},
 		secondary: null,
 		forceSwitch: true,
@@ -1539,7 +1545,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Endeavor', target);
 		},
 		onHit(target, source) {
-			this.add(`c|${getName('explodingdaisies')}|You have no hope ${target.name}!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('explodingdaisies')}|You have no hope ${target.name}!`);
 		},
 		secondary: null,
 		target: "normal",
@@ -1582,9 +1588,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source) {
 			this.add('-anim', source, 'Spectral Thief', target);
 			if (this.randomChance(1, 2)) {
-				this.add(`c|${getName('fart')}|I hl on soup`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|I hl on soup`);
 			} else {
-				this.add(`c|${getName('fart')}|I walk with purpose. bring me soup.`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('fart')}|I walk with purpose. bring me soup.`);
 			}
 		},
 		condition: {
@@ -1797,7 +1803,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 10,
 			status: 'frz',
 			onHit() {
-				this.add(`c|${getName('Gimmick')}|Show me some more paaain, baaaby`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Gimmick')}|Show me some more paaain, baaaby`);
 			},
 		},
 		thawsTarget: true,
@@ -1860,7 +1866,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
 				(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
 			if (shiny) this.add('replace', target, details);
-			if (message) this.add(`c|${getName('GMars')}|${message}`);
+			if (message) this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('GMars')}|${message}`);
 			target.setAbility('capsulearmor');
 			target.baseAbility = target.ability;
 			if (target.set.shiny) return;
@@ -2145,7 +2151,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (!target || target.fainted || target.hp <= 0) {
-				this.add(`c|${getName('Jett')}|Owned!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Jett')}|Owned!`);
 			}
 		},
 		condition: {
@@ -2959,12 +2965,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source) {
 			for (const move of ['Haze', 'Worry Seed', 'Poison Powder', 'Stun Spore', 'Leech Seed']) {
 				this.actions.useMove(move, source);
-				this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Meicoo')}|That is not the answer - try again!`);
 			}
 			const strgl = this.dex.getActiveMove('Struggle');
 			strgl.basePower = 150;
 			this.actions.useMove(strgl, source);
-			this.add(`c|${getName('Meicoo')}|That is not the answer - try again!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Meicoo')}|That is not the answer - try again!`);
 		},
 		secondary: null,
 		target: "self",
@@ -3130,7 +3136,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Never-Ending Nightmare', target);
 		},
 		onHit() {
-			this.add(`c|${getName('Notater517')}|/html For more phantasmic music, check out <a href = "http://spo.ink/tunes">this link.</a>`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Notater517')}|/html For more phantasmic music, check out <a href = "http://spo.ink/tunes">this link.</a>`);
 		},
 		self: {
 			volatileStatus: 'mustrecharge',
@@ -3194,7 +3200,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'U-turn', target);
 		},
 		onHit() {
-			this.add(`c|${getName('OM~!')}|Bang Bang`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('OM~!')}|Bang Bang`);
 		},
 		flags: {protect: 1, mirror: 1},
 		selfSwitch: true,
@@ -3356,7 +3362,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (!target || target.fainted || target.hp <= 0) {
-				this.add(`c|${getName('PartMan')}|FOR SNOM!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PartMan')}|FOR SNOM!`);
 				this.boost({spa: 1}, pokemon, pokemon, move);
 			}
 		},
@@ -3415,7 +3421,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Trick", target);
 		},
 		onHit(target, source, effect) {
-			this.add(`c|${getName('Perish Song')}|/html <img src="https://i.imgflip.com/3rt1d8.png" width="262" height="150" />`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Perish Song')}|/html <img src="https://i.imgflip.com/3rt1d8.png" width="262" height="150" />`);
 			const item = target.takeItem(source);
 			if (!target.item) {
 				if (item) this.add('-enditem', target, item.name, '[from] move: Trickery', '[of] ' + source);
@@ -3521,7 +3527,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Shell Smash', source);
 		},
 		onHit(target, source, move) {
-			this.add(`c|${getName('PiraTe Princess')}|did someone say d&d?`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PiraTe Princess')}|did someone say d&d?`);
 			target.addVolatile('trapped', source, move, 'trapper');
 			if (!target.hasType('Dragon') && target.addType('Dragon')) {
 				this.add('-start', target, 'typeadd', 'Dragon', '[from] move: Dungeons & Dragons');
@@ -3843,7 +3849,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onHit() {
-			this.add(`c|${getName('Raihan Kibana')}|Let the winds blow! Stream forward, Sandstorm!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Raihan Kibana')}|Let the winds blow! Stream forward, Sandstorm!`);
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Rock Slide', target);
@@ -4137,7 +4143,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				this.boost({def: 1, spd: 1}, source);
-				this.add(`c|${getName('Sectonia')}|Jelly baby ;w;`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Sectonia')}|Jelly baby ;w;`);
 			},
 		},
 		secondary: null,
@@ -4166,7 +4172,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Curse', target);
 		},
 		onHit(pokemon, source, move) {
-			this.add(`c|${getName('Segmr')}|I don't like naruto actually let someone else write this message plz.`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Segmr')}|I don't like naruto actually let someone else write this message plz.`);
 			this.directDamage(source.maxhp / 4, source, source);
 			pokemon.addVolatile('curse');
 			pokemon.addVolatile('trapped', source, move, 'trapper');
@@ -4196,7 +4202,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Sludge Bomb', target);
 		},
 		onHit() {
-			this.add(`c|${getName('sejesensei')}|Please go read To Love-Ru I swear its really good, wait... don’t leave…`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('sejesensei')}|Please go read To Love-Ru I swear its really good, wait... don’t leave…`);
 		},
 		self: {
 			boosts: {
@@ -4219,9 +4225,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const move = action?.choice === 'move' ? action.move : null;
 			if (!move || (move.category === 'Status' && move.id !== 'mefirst') || target.volatiles['mustrecharge']) {
 				if (move?.category === 'Status') {
-					this.add(`c|${getName('Seso')}|Irritating a better swordsman than yourself is always a good way to end up dead.`);
+					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Seso')}|Irritating a better swordsman than yourself is always a good way to end up dead.`);
 				} else {
-					this.add(`c|${getName('Seso')}|Scars on the back are a swordsman's shame.`);
+					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Seso')}|Scars on the back are a swordsman's shame.`);
 				}
 				return false;
 			}
@@ -4242,7 +4248,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add(`c|${getName('Seso')}|FORWARD!`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Seso')}|FORWARD!`);
 			this.add('-anim', source, 'Gear Grind', target);
 			this.add('-anim', source, 'Thief', target);
 		},
@@ -4400,6 +4406,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 110,
 		category: "Physical",
+		overrideOffensivePokemon: 'target',
+		overrideOffensiveStat: 'spd',
 		desc: "This move uses the target's Special Defense to calculate damage (like Foul Play). This move is neutrally effective against Steel-types.",
 		shortDesc: "Uses foe's SpD as user's Atk. Hits Steel.",
 		name: "I'm Toxic You're Slippin' Under",
@@ -4452,7 +4460,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source) {
 			if (source.m.statsRaisedLastTurn) {
-				this.add(`c|${getName('Struchni')}|**veto**`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Struchni')}|**veto**`);
 			}
 		},
 		target: "normal",
@@ -4569,7 +4577,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Fire') return 1;
 		},
-		useSourceDefensiveAsOffensive: true,
+		overrideOffensiveStat: 'def',
 		secondary: {
 			chance: 10,
 			status: "frz",
@@ -4608,9 +4616,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				successes++;
 			}
 			if (successes === 1) {
-				this.add(`c|${getName('tiki')}|truly a dumpster fire`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('tiki')}|truly a dumpster fire`);
 			} else if (successes >= 4) {
-				this.add(`c|${getName('tiki')}|whos ${source.side.foe.name}?`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('tiki')}|whos ${source.side.foe.name}?`);
 			}
 		},
 		secondary: null,
@@ -4771,7 +4779,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.faint(source, move);
 				source.faint(source, move);
 			} else if ([1024, 2048, 3072, 4096].includes(random)) {
-				this.add(`c|${getName('Volco')}|haha memory corruption go brrr...`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Volco')}|haha memory corruption go brrr...`);
 				target.forceSwitchFlag = true;
 				source.forceSwitchFlag = true;
 			} else if (random === 69) {
@@ -4784,7 +4792,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				chance: 5,
 				onHit(target, source) {
 					const status = this.sample(['frz', 'par']);
-					this.add(`c|${getName('Volco')}|Ever just screw up the trick and corrupt the memory and cause the wrong thing to happen possibly ruining a run? No? Just me? okay...`);
+					this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Volco')}|Ever just screw up the trick and corrupt the memory and cause the wrong thing to happen possibly ruining a run? No? Just me? okay...`);
 					if (this.randomChance(1, 2)) {
 						target.trySetStatus(status);
 					} else {
@@ -4926,7 +4934,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (source.hp && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Ingredient Foraging', '[of] ' + source);
 				this.heal(source.maxhp / 2, source);
-				this.add(`c|${getName('Zalm')}|Yum`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zalm')}|Yum`);
 				source.ateBerry = true;
 			}
 		},
@@ -4986,7 +4994,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit() {
-			this.add(`c|${getName('Zodiax')}|There is a hail no storm okayyyyyy`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zodiax')}|There is a hail no storm okayyyyyy`);
 		},
 		onTry(pokemon, target) {
 			pokemon.addVolatile('bigstormcomingmod');

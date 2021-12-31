@@ -672,7 +672,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching tournaments...");
 
 				global.Tournaments = require('../tournaments').Tournaments;
-				Chat.loadPluginData(Tournaments, 'tournaments');
+				Chat.loadPlugin(Tournaments, 'tournaments');
 				this.sendReply("DONE");
 			} else if (target === 'formats' || target === 'battles') {
 				if (lock['formats']) {
@@ -1374,8 +1374,9 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		await database.destroy();
-		logRoom?.roomlog(`SQLite< ${result}`);
-		this.sendReply(`|html|${formatResult(result)}`);
+		const formattedResult = `|html|${formatResult(result)}`;
+		logRoom?.roomlog(formattedResult);
+		this.sendReply(formattedResult);
 	},
 	evalsqlhelp: [
 		`/evalsql [database], [query] - Evaluates the given SQL [query] in the given [database].`,

@@ -5054,7 +5054,7 @@
 			"sets": [{
 				"species": "Passimian",
 				"item": ["Choice Scarf"],
-				"ability": ["Receiver"],
+				"ability": ["Defiant"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Close Combat"], ["U-turn"], ["Knock Off"], ["Gunk Shot"]]
@@ -5702,7 +5702,7 @@
 				"evs": {"hp": 252, "def": 252, "spd": 4},
 				"nature": "Impish",
 				"moves": [["Stealth Rock"], ["Dragon Tail"], ["Earthquake"], ["Toxic"]]
- 
+
 			}, {
 				"species": "Druddigon",
 				"item": ["Roseli Berry"],
@@ -5982,7 +5982,7 @@
 			"sets": [{
 				"species": "Passimian",
 				"item": ["Choice Scarf", "Choice Band"],
-				"ability": ["Receiver"],
+				"ability": ["Defiant"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Close Combat"], ["U-turn"], ["Knock Off"], ["Gunk Shot"]]
@@ -6948,7 +6948,14 @@
 				"ability": ["Limber"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
-				"moves": [["Knock Off"], ["Pursuit"], ["Play Rough"], ["U-turn", "Sucker Punch", "Copycat"]]
+				"moves": [["Knock Off"], ["Pursuit"], ["Play Rough"], ["U-turn", "Sucker Punch"]]
+			}, {
+				"species": "Liepard",
+				"item": ["Choice Band"],
+				"ability": ["Prankster"],
+				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"nature": "Jolly",
+				"moves": [["Knock Off"], ["Pursuit"], ["Play Rough"], ["Copycat"]]
 			}]
 		},
 		"ludicolo": {
@@ -8491,7 +8498,7 @@
 				"item": ["Life Orb"],
 				"ability": ["Vital Spirit"],
 				"evs": {"spa": 240, "spe": 236},
-				"ivs": {"hp": 1, "atk": 0},
+				"ivs": {"hp": 1, "atk": 0, "spa": 30},
 				"nature": "Timid",
 				"moves": [["Thunderbolt"], ["Psychic"], ["Hidden Power Grass"], ["Volt Switch"]]
 			}, {
@@ -8970,7 +8977,7 @@
 				"item": ["Life Orb"],
 				"ability": ["Scrappy"],
 				"evs": {"def": 36, "spa": 196, "spd": 36, "spe": 236},
-				"ivs": {"hp": 19},
+				"ivs": {"hp": 19, "spa": 30, "spd": 30},
 				"nature": "Naive",
 				"moves": [["Boomburst"], ["Heat Wave", "Hidden Power Ground"], ["Brave Bird"], ["U-turn"]]
 			}, {
@@ -9174,7 +9181,7 @@
 				"item": ["Life Orb"],
 				"ability": ["Corrosion"],
 				"evs": {"def": 36, "spa": 192, "spd": 40, "spe": 220},
-				"ivs": {"hp": 3},
+				"ivs": {"hp": 3, "def": 30, "spa": 30},
 				"nature": "Timid",
 				"moves": [["Sludge Bomb"], ["Fire Blast"], ["Hidden Power Grass"], ["Nasty Plot", "Flame Charge"]]
 			}]

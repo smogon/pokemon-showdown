@@ -185,7 +185,7 @@
   "overrides": [
     {
       "files": [
-        "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts",
+        "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./server/**/*.tsx", "./sim/**/*.ts",
         "./tools/set-import/*.ts", "./tools/modlog/*.ts", "./translations/**/*.ts"
       ],
       "parser": "@typescript-eslint/parser",
@@ -197,9 +197,6 @@
       },
       "extends": [
         "plugin:@typescript-eslint/recommended"
-      ],
-      "plugins": [
-        "import"
       ],
       "rules": {
         // TODO revisit
@@ -236,6 +233,7 @@
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-use-before-define": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
 
         // probably bugs
         "@typescript-eslint/ban-types": ["error", {
@@ -249,7 +247,6 @@
         "@typescript-eslint/no-extra-non-null-assertion": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
-        "import/no-extraneous-dependencies": "error",
         "no-dupe-class-members": "off",
         "no-unused-expressions": "off", // ternary is used to convert callbacks to Promises
         "@typescript-eslint/no-unused-expressions": ["error", {"allowTernary": true}], // ternary is used to convert callbacks to Promises

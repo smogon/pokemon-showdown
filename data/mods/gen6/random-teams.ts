@@ -1,5 +1,5 @@
 import {MoveCounter, TeamData} from '../../random-teams';
-import RandomGen7Teams from '../gen7/random-teams';
+import RandomGen7Teams, {BattleFactorySpecies} from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -350,7 +350,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'endeavor':
 			return {cull: !isLead && !abilities.has('Defeatist')};
 		case 'explosion':
-			return {cull: !!counter.setupType || (abilities.has('Refrigerate') && moves.has('freezedry')) || moves.has('wish')};
+			return {cull: (
+				!!counter.setupType ||
+				(abilities.has('Refrigerate') && (moves.has('freezedry') || movePool.includes('return'))) ||
+				moves.has('wish')
+			)};
 		case 'extremespeed':
 			return {cull: counter.setupType !== 'Physical' && moves.has('vacuumwave')};
 		case 'hiddenpower':
@@ -570,6 +574,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		isLead: boolean
 	): string | undefined {
 		if (species.requiredItem) return species.requiredItem;
+		if (species.requiredItems) return this.sample(species.requiredItems);
 
 		// First, the extra high-priority items
 		if (species.name === 'Marowak') return 'Thick Club';
@@ -770,7 +775,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		let ability = '';
 
@@ -1101,7 +1106,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 	}
 
-	randomFactorySets: AnyObject = require('./factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species,
@@ -1203,7 +1208,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
 		const teamData: TeamData = {
-			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult,
+			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult,
 			weaknesses: {}, resistances: {},
 		};
 		const requiredMoveFamilies = ['hazardSet', 'hazardClear'];

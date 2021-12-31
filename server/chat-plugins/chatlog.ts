@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-import {Utils, FS, Dashycode, ProcessManager, Repl} from '../../lib';
+import {Utils, FS, Dashycode, ProcessManager, Repl, Net} from '../../lib';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
 import {Chat} from '../chat';
@@ -194,10 +194,15 @@ export const LogReader = new class {
 		return Chat.toTimestamp(new Date()).slice(0, 10);
 	}
 	isMonth(text: string) {
-		return /[0-9]{4}-[0-9]{2}/.test(text);
+		return /^[0-9]{4}-(?:0[0-9]|1[0-2])$/.test(text);
 	}
 	isDay(text: string) {
-		return /[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(text);
+		// yes, this exactly matches JavaScript's built-in validation for `new Date`
+		// 02-31? oh yeah that's just the 3rd of March
+		// 02-32? invalid date
+		// which makes this a pretty useful function for validating that `nextDay`
+		// won't crash on the input text.
+		return /^[0-9]{4}-(?:0[0-9]|1[0-2])-(?:[0-2][0-9]|3[0-1])$/.test(text);
 	}
 	async findBattleLog(tier: ID, number: number): Promise<string[] | null> {
 		// binary search!
@@ -1030,8 +1035,8 @@ export class FSLogSearcher extends Searcher {
 			buf += `<br /><strong>Max results reached, capped at ${limit}</strong>`;
 			buf += `<br /><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
-				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:${limit + 100}">View 100 more<br />&#x25bc;</button>`;
-				buf += `<button class="button" name="send" value="/sl ${search},room:${roomid},date:${month},limit:3000">View all<br />&#x25bc;</button></div>`;
+				buf += `<button class="button" name="send" value="/sl ${search},room=${roomid},date=${month},limit=${limit + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search},room=${roomid},date=${month},limit=3000">View all<br />&#x25bc;</button></div>`;
 			}
 		}
 		buf += `</div>`;
@@ -1164,7 +1169,7 @@ export class RipgrepLogSearcher extends Searcher {
 			const [name, text] = rawLine.split(sep);
 			let line = LogViewer.renderLine(text, 'all');
 			if (!line || name.includes('today')) return null;
-				 // gets rid of some edge cases / duplicates
+			// gets rid of some edge cases / duplicates
 			let date = name.replace(`logs/chat/${roomid}${toID(month) === 'all' ? '' : `/${month}`}`, '').slice(9);
 			if (searchRegex.test(rawLine)) {
 				if (++exactMatches > limit) return null;
@@ -1193,7 +1198,6 @@ export class RipgrepLogSearcher extends Searcher {
 	}
 	async searchLinecounts(room: RoomID, month: string, user?: ID) {
 		// don't need to check if logs exist since ripgrepSearchMonth does that
-		// eslint-disable-next-line no-useless-escape
 		const regexString = user ? `\\|c\\|${this.constructUserRegex(user)}\\|` : `\\|c\\|`;
 		const args: string[] = user ? ['--count'] : [];
 		const {results: rawResults} = await this.ripgrepSearchMonth({
@@ -1404,8 +1408,8 @@ export const pages: Chat.PageTable = {
 		if (isNaN(new Date(date).getTime())) {
 			return this.errorReply(`Invalid date.`);
 		}
-		if (!/[0-9]{4}-[0-9]{2}/.test(date)) {
-			return this.errorReply(`You must specify a full date - both a year and a month.`);
+		if (!LogReader.isMonth(date)) {
+			return this.errorReply(`You must specify an exact month - both a year and a month.`);
 		}
 		this.title = `[Log Stats] ${date}`;
 		return LogSearcher.runLinecountSearch(this, room ? room.roomid : args[2] as RoomID, date, toID(target));
@@ -1503,17 +1507,17 @@ export const commands: Chat.ChatCommands = {
 		let limit = '500';
 		let targetRoom: RoomID | undefined = room?.roomid;
 		for (const arg of args) {
-			if (arg.startsWith('room:')) {
+			if (arg.startsWith('room=')) {
 				const id = arg.slice(5).trim().toLowerCase() as RoomID;
 				if (!FS(`logs/chat/${id}`).existsSync()) {
 					return this.errorReply(`Room "${id}" not found.`);
 				}
 				targetRoom = id;
-			} else if (arg.startsWith('limit:')) {
+			} else if (arg.startsWith('limit=')) {
 				limit = arg.slice(6);
-			} else if (arg.startsWith('date:')) {
+			} else if (arg.startsWith('date=')) {
 				date = arg.slice(5);
-			} else if (arg.startsWith('user:')) {
+			} else if (arg.startsWith('user=')) {
 				args.push(`user-${toID(arg.slice(5))}`);
 			} else {
 				searches.push(arg);
@@ -1530,10 +1534,10 @@ export const commands: Chat.ChatCommands = {
 	searchlogshelp() {
 		const buffer = `<details class="readmore"><summary><code>/searchlogs [arguments]</code>: ` +
 			`searches logs in the current room using the <code>[arguments]</code>.</summary>` +
-			`A room can be specified using the argument <code>room: [roomid]</code>. Defaults to the room it is used in.<br />` +
-			`A limit can be specified using the argument <code>limit: [number less than or equal to 3000]</code>. Defaults to 500.<br />` +
-			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date: [month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
-			`If you provide a user argument in the form <code>user:username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
+			`A room can be specified using the argument <code>room=[roomid]</code>. Defaults to the room it is used in.<br />` +
+			`A limit can be specified using the argument <code>limit=[number less than or equal to 3000]</code>. Defaults to 500.<br />` +
+			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date=[month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
+			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
 			"Requires: % @ # &</div>";
@@ -1542,17 +1546,76 @@ export const commands: Chat.ChatCommands = {
 	topusers: 'linecount',
 	roomstats: 'linecount',
 	linecount(target, room, user) {
-		let [roomid, month, userid] = target.split(',').map(item => item.trim());
-		const tarRoom = roomid ? Rooms.search(roomid) : room;
-		if (!tarRoom) return this.errorReply(`You must specify a valid room.`);
-		if (!month) month = LogReader.getMonth();
-		return this.parse(`/join view-roomstats-${tarRoom.roomid}--${month}--${toID(userid)}`);
+		const params = target.split(',').map(f => f.trim());
+		const search: Partial<{roomid: RoomID, date: string, user: string}> = {};
+		for (const [i, param] of params.entries()) {
+			let [key, val] = param.split('=');
+			if (!val) {
+				// backwards compatibility
+				switch (i) {
+				case 0:
+					val = key;
+					key = 'room';
+					break;
+				case 1:
+					val = key;
+					key = 'date';
+					break;
+				case 2:
+					val = key;
+					key = 'user';
+					break;
+				default:
+					return this.parse(`/help linecount`);
+				}
+			}
+			if (!toID(val)) continue; // unset, continue and allow defaults to apply
+
+			key = key.toLowerCase().replace(/ /g, '');
+			switch (key) {
+			case 'room': case 'roomid':
+				const tarRoom = Rooms.search(val);
+				if (!tarRoom) {
+					return this.errorReply(`Room '${val}' not found.`);
+				}
+				search.roomid = tarRoom.roomid;
+				break;
+			case 'user': case 'id': case 'userid':
+				search.user = toID(val);
+				break;
+			case 'date': case 'month': case 'time':
+				if (!LogReader.isMonth(val)) {
+					return this.errorReply(`Invalid date.`);
+				}
+				search.date = val;
+			}
+		}
+		if (!search.roomid) {
+			if (!room) {
+				return this.errorReply(`If you're not specifying a room, you must use this command in a room.`);
+			}
+			search.roomid = room.roomid;
+		}
+		if (!search.date) {
+			search.date = LogReader.getMonth();
+		}
+		return this.parse(`/join view-roomstats-${search.roomid}--${search.date}${search.user ? `--${search.user}` : ''}`);
 	},
-	linecounthelp: [
-		`/topusers OR /linecount [room], [month], [userid] - View room stats in the given [room].`,
-		`If a user is provided, searches only for that user, else the top 100 users are shown.`,
-		`Requires: % @ # &`,
-	],
+	linecounthelp() {
+		return this.sendReplyBox(
+			`<code>/linecount OR /roomstats OR /topusers</code> [<code>key=value</code> formatted parameters] - ` +
+			`Searches linecounts with the given parameters.<br />` +
+			`<details class="readmore"><summary><strong>Parameters:</strong></summary>` +
+			`- <code>room</code> (aliases: <code>roomid</code>) - Select a room to search. If no room is given, defaults to current room.</br />` +
+			`- <code>date</code> (aliases: <code>month</code>, <code>time</code>) - ` +
+			`Select a month to search linecounts on (requires YYYY-MM format). Defaults to current month.<br />` +
+			`- <code>user</code> (aliases: <code>id</code>, <code>userid</code>) - ` +
+			`Searches for linecounts only from a given user. ` +
+			`If this is not provided, /linecount instead shows line counts for all users from that month.</details>` +
+			`Parameters may also be specified without a [key]. When using this, arguments are provided in the format ` +
+			`<code>/linecount [room], [month], [user].</code>. This does not use any defaults.<br />`
+		);
+	},
 	slb: 'sharedloggedbattles',
 	async sharedloggedbattles(target, room, user) {
 		this.checkCan('lock');
@@ -1583,6 +1646,76 @@ export const commands: Chat.ChatCommands = {
 	},
 	battleloghelp: [
 		`/battlelog [battle link] - View the log of the given [battle link], even if the replay was not saved.`,
+		`Requires: % @ &`,
+	],
+
+
+	gbc: 'getbattlechat',
+	async getbattlechat(target, room, user) {
+		this.checkCan('lock');
+		let [roomName, userName] = Utils.splitFirst(target, ',').map(f => f.trim());
+		if (!roomName) {
+			if (!room) {
+				return this.errorReply(`If you are not specifying a room, use this command in a room.`);
+			}
+			roomName = room.roomid;
+		}
+		if (roomName.startsWith('http://')) roomName = roomName.slice(7);
+		if (roomName.startsWith('https://')) roomName = roomName.slice(8);
+		if (roomName.startsWith(`${Config.routes.client}/`)) {
+			roomName = roomName.slice(Config.routes.client.length + 1);
+		}
+		if (roomName.startsWith(`${Config.routes.replays}/`)) {
+			roomName = `battle-${roomName.slice(Config.routes.replays.length + 1)}`;
+		}
+		if (roomName.startsWith('psim.us/')) roomName = roomName.slice(8);
+		const roomid = roomName.toLowerCase().replace(/[^a-z0-9-]+/g, '') as RoomID;
+		if (!roomid) return this.parse('/help getbattlechat');
+		const userid = toID(userName);
+		if (userName && !userid) return this.errorReply(`Invalid username.`);
+		if (!roomid.startsWith('battle-')) return this.errorReply(`You must specify a battle.`);
+		const tarRoom = Rooms.get(roomid);
+
+		let log: string[];
+		if (tarRoom) {
+			log = tarRoom.log.log;
+		} else {
+			try {
+				const raw = await Net(`https://${Config.routes.replays}/${roomid.slice('battle-'.length)}.json`).get();
+				const data = JSON.parse(raw);
+				log = data.log ? data.log.split('\n') : [];
+			} catch {
+				return this.errorReply(`No room or replay found for that battle.`);
+			}
+		}
+		log = log.filter(l => l.startsWith('|c|'));
+
+		let buf = '';
+		let atLeastOne = false;
+		let i = 0;
+		for (const line of log) {
+			const [,, username, message] = Utils.splitFirst(line, '|', 3);
+			if (userid && toID(username) !== userid) continue;
+			i++;
+			buf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
+			atLeastOne = true;
+		}
+		if (i > 20) buf = `<details class="readmore">${buf}</details>`;
+		if (!atLeastOne) buf = `<br />None found.`;
+
+		if (this.pmTarget?.isStaff || room?.roomid === 'staff') {
+			this.runBroadcast();
+		}
+
+		return this.sendReplyBox(
+			Utils.html`<strong>Chat messages in the battle '${roomid}'` +
+			(userid ? `from the user '${userid}'` : "") + `</strong>` +
+			buf
+		);
+	},
+	getbattlechathelp: [
+		`/getbattlechat [battle link][, username] - Gets all battle chat logs from the given [battle link].`,
+		`If a [username] is given, searches only chat messages from the given username.`,
 		`Requires: % @ &`,
 	],
 

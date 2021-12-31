@@ -26,7 +26,9 @@ export function getCommonBattles(
 			(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID1) === Users.PLAYER_SYMBOL) &&
 			(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID2) === Users.PLAYER_SYMBOL)
 		) {
-			if (connection) void curRoom.uploadReplay(connection.user, connection, "forpunishment");
+			if (connection) {
+				void curRoom.uploadReplay(connection.user, connection, "forpunishment");
+			}
 			battles.push(curRoom.roomid);
 		}
 	}
@@ -205,27 +207,28 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
-			const battlebanned = Punishments.isBattleBanned(targetUser);
-			if (battlebanned) {
-				buf += `<br />BATTLEBANNED: ${battlebanned.id}`;
-				buf += ` ${Punishments.checkPunishmentExpiration(battlebanned)}`;
-				if (battlebanned.reason) buf += Utils.html` (reason: ${battlebanned.reason})`;
-			}
+			if (user.can('lock')) {
+				const battlebanned = Punishments.isBattleBanned(targetUser);
+				if (battlebanned) {
+					buf += `<br />BATTLEBANNED: ${battlebanned.id}`;
+					buf += ` ${Punishments.checkPunishmentExpiration(battlebanned)}`;
+					if (battlebanned.reason) buf += Utils.html` (reason: ${battlebanned.reason})`;
+				}
 
-			const groupchatbanned = Punishments.isGroupchatBanned(targetUser);
-			if (groupchatbanned) {
-				buf += `<br />Banned from using groupchats${groupchatbanned.id !== targetUser.id ? `: ${groupchatbanned.id}` : ``}`;
-				buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
-				if (groupchatbanned.reason) buf += Utils.html` (reason: ${groupchatbanned.reason})`;
-			}
+				const groupchatbanned = Punishments.isGroupchatBanned(targetUser);
+				if (groupchatbanned) {
+					buf += `<br />Banned from using groupchats${groupchatbanned.id !== targetUser.id ? `: ${groupchatbanned.id}` : ``}`;
+					buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
+					if (groupchatbanned.reason) buf += Utils.html` (reason: ${groupchatbanned.reason})`;
+				}
 
-			const ticketbanned = Punishments.isTicketBanned(targetUser.id);
-			if (ticketbanned) {
-				buf += `<br />Banned from creating help tickets${ticketbanned.id !== targetUser.id ? `: ${ticketbanned.id}` : ``}`;
-				buf += ` ${Punishments.checkPunishmentExpiration(ticketbanned)}`;
-				if (ticketbanned.reason) buf += Utils.html` (reason: ${ticketbanned.reason})`;
+				const ticketbanned = Punishments.isTicketBanned(targetUser.id);
+				if (ticketbanned) {
+					buf += `<br />Banned from creating help tickets${ticketbanned.id !== targetUser.id ? `: ${ticketbanned.id}` : ``}`;
+					buf += ` ${Punishments.checkPunishmentExpiration(ticketbanned)}`;
+					if (ticketbanned.reason) buf += Utils.html` (reason: ${ticketbanned.reason})`;
+				}
 			}
-
 			if (targetUser.semilocked) {
 				buf += `<br />Semilocked: ${user.can('lock') ? targetUser.semilocked : "(reason hidden)"}`;
 			}
@@ -242,7 +245,7 @@ export const commands: Chat.ChatCommands = {
 						status.push(punishMsg);
 					}
 				}
-				if (Punishments.sharedIps.has(ip)) {
+				if (Punishments.isSharedIp(ip)) {
 					let sharedStr = 'shared';
 					if (Punishments.sharedIps.get(ip)) {
 						sharedStr += `: ${Punishments.sharedIps.get(ip)}`;
@@ -473,7 +476,7 @@ export const commands: Chat.ChatCommands = {
 			// ip
 			this.sendReply(`Users with IP ${ipOrHost}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
-				if (curUser.latestIp !== ipOrHost) continue;
+				if (!curUser.ips.some(ip => ip === ipOrHost)) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
@@ -483,7 +486,7 @@ export const commands: Chat.ChatCommands = {
 			const checker = IPTools.checker(ipOrHost);
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
-				if (!checker(curUser.latestIp)) continue;
+				if (!curUser.ips.some(ip => checker(ip))) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
@@ -1666,15 +1669,6 @@ export const commands: Chat.ChatCommands = {
 	},
 	bugshelp: [`/bugs - Links to the various bug reporting services.`],
 
-	avatars(target, room, user) {
-		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.`);
-	},
-	avatarshelp: [
-		`/avatars - Explains how to change avatars.`,
-		`!avatars - Show everyone that information. Requires: + % @ # &`,
-	],
-
 	optionbutton: 'optionsbutton',
 	optionsbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1759,7 +1753,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 		this.sendReplyBox(
-			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko &amp; Austin)<br />` +
+			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, &amp; Kris)<br />` +
 			`- <a href="https://calc.pokemonshowdown.com/index.html">Damage Calculator</a>`
 		);
 	},
@@ -2841,6 +2835,7 @@ process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
 		'/htmlbox', '/quote', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
-		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml', '/addhtmlfaq'
+		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml', '/addhtmlfaq',
+		'/sendhtmlpage',
 	);
 });

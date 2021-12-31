@@ -3729,7 +3729,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	mimic: {
 		name: "Mimic",
-		desc: "While the user remains active, this move is replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, if the user already knows the move, or if the move is Chatter, Dynamax Cannon, Mimic, Sketch, Struggle, Transform, or any Z-Move.",
+		desc: "While the user remains active, this move is replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, if the user already knows the move, or if the move is Behemoth Bash, Behemoth Blade, Chatter, Dynamax Cannon, Mimic, Sketch, Struggle, Transform, or any Z-Move.",
 		shortDesc: "The last move the target used replaces this one.",
 		gen6: {
 			desc: "While the user remains active, this move is replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, if the user already knows the move, or if the move is Chatter, Mimic, Sketch, Struggle, or Transform.",
