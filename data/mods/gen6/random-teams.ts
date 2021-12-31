@@ -350,7 +350,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'endeavor':
 			return {cull: !isLead && !abilities.has('Defeatist')};
 		case 'explosion':
-			return {cull: !!counter.setupType || (abilities.has('Refrigerate') && moves.has('freezedry')) || moves.has('wish')};
+			return {cull: (
+				!!counter.setupType ||
+				(abilities.has('Refrigerate') && (moves.has('freezedry') || movePool.includes('return'))) ||
+				moves.has('wish')
+			)};
 		case 'extremespeed':
 			return {cull: counter.setupType !== 'Physical' && moves.has('vacuumwave')};
 		case 'hiddenpower':
@@ -570,6 +574,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		isLead: boolean
 	): string | undefined {
 		if (species.requiredItem) return species.requiredItem;
+		if (species.requiredItems) return this.sample(species.requiredItems);
 
 		// First, the extra high-priority items
 		if (species.name === 'Marowak') return 'Thick Club';

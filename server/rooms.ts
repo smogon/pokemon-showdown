@@ -1103,6 +1103,8 @@ export abstract class BasicRoom {
 		this.setParent(null);
 		this.clearSubRooms();
 
+		Chat.runHandlers('RoomDestroy', this.roomid);
+
 		Rooms.global.deregisterChatRoom(this.roomid);
 		Rooms.global.delistChatRoom(this.roomid);
 
@@ -1657,14 +1659,14 @@ export class GlobalRoomState {
 			if (curRoom) curRoom.add(message).update();
 		}
 	}
-	reportCrash(err: Error, crasher = "The server") {
+	reportCrash(err: Error | string, crasher = "The server") {
 		const time = Date.now();
 		if (time - this.lastReportedCrash < CRASH_REPORT_THROTTLE) {
 			return;
 		}
 		this.lastReportedCrash = time;
 
-		const stack = (err && (err.stack || err.message || err.name)) || '';
+		const stack = typeof err === 'string' ? err : err?.stack || err?.message || err?.name || '';
 		const [stackFirst, stackRest] = Utils.splitFirst(Utils.escapeHTML(stack), `<br />`);
 		let fullStack = `<b>${crasher} crashed:</b> ` + stackFirst;
 		if (stackRest) fullStack = `<details class="readmore"><summary>${fullStack}</summary>${stackRest}</details>`;

@@ -10,7 +10,6 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-declare const Config: any;
 
 const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
@@ -48,7 +47,7 @@ export function crashlogger(
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 
-	const emailOpts = emailConfig || Config.crashguardemail;
+	const emailOpts = emailConfig || global.Config?.crashguardemail;
 	if (emailOpts && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
 		lastCrashLog = datenow;
 

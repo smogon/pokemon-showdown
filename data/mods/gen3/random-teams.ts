@@ -477,6 +477,19 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
 
+		if (hasHiddenPower) {
+			let hpType;
+			for (const move of moves) {
+				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
+			}
+			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
+			const HPivs = this.dex.types.get(hpType).HPivs;
+			let iv: StatID;
+			for (iv in HPivs) {
+				ivs[iv] = HPivs[iv]!;
+			}
+		}
+
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a)).filter(a => a.gen === 3);
 		Utils.sortBy(abilityData, abil => -abil.rating);
 		let ability0 = abilityData[0];

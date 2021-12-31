@@ -19,6 +19,7 @@
     "types": ["node"],
     "exclude": [
         "./.*-dist/**/*",
+        "./server/chat-plugins/private/*/*.d.ts"
     ],
     "include": [
         "./config/*.ts",

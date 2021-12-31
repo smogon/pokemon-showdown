@@ -325,6 +325,7 @@ export const Punishments = new class {
 				continue;
 			}
 			for (const key of keys) {
+				if (!key.trim()) continue; // ignore empty ips / userids
 				if (!USERID_REGEX.test(key)) {
 					Punishments.ips.add(key, punishment);
 				} else {

@@ -92,6 +92,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
+				// TODO: Confirm mechanics
+				this.add("-activate", target, "item: Eject Button");
 				target.switchFlag = true;
 				source.switchFlag = false;
 			}
@@ -266,7 +268,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	msychicseed: {
+	psychicseed: {
 		inherit: true,
 		isNonstandard: "Past",
 	},

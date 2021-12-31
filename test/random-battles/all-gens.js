@@ -6,9 +6,8 @@
 
 const assert = require('../assert');
 const {Utils} = require('../../lib');
-const {testTeam, isValidSet, validateLearnset} = require('./tools');
-
-const ALL_GENS = [1, 2, 3, 4, 5, 6, 7, 8];
+const {testTeam, assertSetValidity, validateLearnset} = require('./tools');
+const {default: Dex} = require('../../sim/dex');
 
 describe('value rule support', () => {
 	it('should generate teams of the proper length for the format (i.e. support Max Team Size)', () => {
@@ -21,44 +20,23 @@ describe('value rule support', () => {
 	});
 });
 
-describe(`random teams should be valid (slow)`, () => {
-	for (const gen of ALL_GENS) {
-		for (const format of ['Random Battle', 'Challenge Cup', 'Hackmons Cup']) {
-			it(`should create valid [Gen ${gen}] ${format} teams`, function () {
-				this.timeout(0);
-				const formatID = `gen${gen}${toID(format)}`;
-				if (Teams.getGenerator(format).gen !== gen) return; // format doesn't exist for this gen
+describe(`randomly generated teams should be valid (slow)`, () => {
+	for (const format of Dex.formats.all()) {
+		if (!format.team) continue; // format doesn't use randomly generated teams
 
-				testTeam({format: formatID}, team => {
-					assert.equal(team.length, 6, `Team with less than 6 Pokémon: ${JSON.stringify(team)}`);
+		it(`should generate valid ${format} teams`, function () {
+			this.timeout(0);
 
-					const badSet = team.find(set => !isValidSet(gen, set));
-					assert(!badSet, `Invalid set: ${JSON.stringify(badSet)}`);
-				});
-			});
-		}
-	}
+			const targetTeamSize = Dex.formats.getRuleTable(format).maxTeamSize;
+			testTeam({format: format.id}, team => {
+				assert.equal(team.length, targetTeamSize, `Team of incorrect size (should have ${targetTeamSize} Pokémon but actually has ${team.length} Pokémon): ${JSON.stringify(team)}`);
 
-	it(`should create valid gen8monotyperandombattle teams`, function () {
-		this.timeout(0);
-		testTeam({format: 'gen8monotyperandombattle'}, team => {
-			if (team.length < 6) throw new Error(`Team with less than 6 Pokemon: ${JSON.stringify(team)}`);
-
-			let types;
-			for (const set of team) {
-				if (!isValidSet(8, set)) throw new Error(`Invalid set: ${JSON.stringify(set)}`);
-				const species = Dex.species.get(set.species || set.name);
-				if (types) {
-					assert(types.some(t => species.types.includes(t)), `Not a monotype team: ${JSON.stringify(team)}`);
-					if (types.length > 1) {
-						types = types.filter(type => species.types.includes(type));
-					}
-				} else {
-					types = species.types;
+				for (const set of team) {
+					assertSetValidity(format, set);
 				}
-			}
+			});
 		});
-	});
+	}
 });
 
 describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
