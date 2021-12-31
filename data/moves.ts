@@ -13417,11 +13417,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source) {
 			if (!target.cureStatus()) return this.NOT_FAIL;
 			const success = !!this.heal(Math.ceil(source.maxhp * 0.5), source);
-			if (!success) {
-				this.add('-fail', target, 'heal');
-				return this.NOT_FAIL;
-			}
-			return success;
+			return success ? success : this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "normal",
