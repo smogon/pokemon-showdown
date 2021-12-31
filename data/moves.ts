@@ -9226,7 +9226,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {heal: 1, bypasssub: 1, allyanim: 1},
 		onHit(pokemon) {
 			const success = pokemon.cureStatus() || !!this.heal(this.modify(pokemon.maxhp, 0.25));
-			return success ? success : this.NOT_FAIL;
+			return success || this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "allies",
@@ -13417,7 +13417,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target, source) {
 			if (!target.cureStatus()) return this.NOT_FAIL;
 			const success = !!this.heal(Math.ceil(source.maxhp * 0.5), source);
-			return success ? success : this.NOT_FAIL;
+			return success || this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "normal",
@@ -17413,7 +17413,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			if (!success) this.add('-fail', pokemon, 'heal');
 			pokemon.removeVolatile('stockpile');
-			return success ? success : this.NOT_FAIL;
+			return success || this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "self",
