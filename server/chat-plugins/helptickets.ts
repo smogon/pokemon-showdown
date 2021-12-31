@@ -2579,7 +2579,7 @@ export const commands: Chat.ChatCommands = {
 		removeresponse(target, room, user) {
 			this.checkCan('lock');
 			const [type, name] = Utils.splitFirst(target, ',').map(f => f.trim());
-			if (!toID(type) || !toID(name)) return this.parse(`/help helpticket removenote`);
+			if (!toID(type) || !toID(name)) return this.parse(`/help helpticket removeresponse`);
 			const typeId = HelpTicket.getTypeId(type);
 			if (!(type in textTickets)) {
 				return this.errorReply(`'${type}' is not a valid text ticket type.`);
