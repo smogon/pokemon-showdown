@@ -17411,12 +17411,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			const healAmount = [0.25, 0.5, 1];
 			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			if (!success) this.add('-fail', pokemon, 'heal');
 			pokemon.removeVolatile('stockpile');
-			if (!success) {
-				this.add('-fail', pokemon, 'heal');
-				return this.NOT_FAIL;
-			}
-			return success;
+			return success ? success : this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "self",
