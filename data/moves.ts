@@ -13416,8 +13416,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, heal: 1},
 		onHit(target, source) {
 			if (!target.cureStatus()) return this.NOT_FAIL;
-			const success = !!this.heal(Math.ceil(source.maxhp * 0.5), source);
-			return success || this.NOT_FAIL;
+			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: null,
 		target: "normal",
