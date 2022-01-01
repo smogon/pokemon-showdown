@@ -819,7 +819,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	purify: {
 		inherit: true,
 		onHit(target, source) {
-			if (!target.cureStatus()) false;
+			if (!target.cureStatus()) return false;
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 	},
