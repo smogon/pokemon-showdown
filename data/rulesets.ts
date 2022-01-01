@@ -791,6 +791,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			];
 		},
 	},
+	onebatonpassclause: {
+		effectType: 'ValidatorRule',
+		name: 'One Baton Pass Clause',
+		desc: "Stops teams from having more than one Pok&eacute;mon with Baton Pass",
+		banlist: ["Baton Pass > 1"],
+		onBegin() {
+			this.add('rule', 'One Baton Pass Clause: Limit one Baton Passer');
+		},
+	},
 	oneboostpasserclause: {
 		effectType: 'ValidatorRule',
 		name: 'One Boost Passer Clause',
