@@ -35,8 +35,9 @@ Ratings and how they work:
 export const Abilities: {[abilityid: string]: AbilityData} = {
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp ||
-				pokemon.species.id === 'silvallyflying' && move.id === 'multiattack' && pokemon.hp === pokemon.maxhp) {
+			if (move && (move.type === 'Flying' ||
+				(pokemon.species.id === 'silvallyflying' &&
+					move.id === 'multiattack')) && pokemon.hp === pokemon.maxhp) {
 				return priority + 1;
 			}
 		},
