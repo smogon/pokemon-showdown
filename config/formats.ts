@@ -615,14 +615,16 @@ export const Formats: FormatList = [
 			'Cramorant-Gorging', 'Eiscue', 'Eiscue-Noice', 'Mimikyu', 'Mimikyu-Sparkstone', 'Morpeko-Marsh', 'Morvilant', 'Zygarde-Wyrm', 'Zygarde-Canid', 'Zygarde-Goliath',
 		],
 		onValidateTeam(team, format) {
-			const speciesTable: any = {};
+			const speciesTable = new Set<string>();
 			for (const set of team) {
-				const template = this.dex.species.get(set.species);
-				if (speciesTable[template.id]) {
-					return ["You are limited to one of each Pokémon by Species Clause (except for different formes). ",
-						"You have more than one " + template.id + "."];
+				const species = this.dex.species.get(set.species);
+				if (speciesTable.has(species.id)) {
+					return [
+						`You are limited to one of each Pokémon by Species Clause (except for different formes).`,
+						`(You have more than one ${species.id}.)`,
+					];
 				}
-				speciesTable[template.id] = true;
+				speciesTable.add(species.id);
 			}
 		},
 	},
