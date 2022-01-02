@@ -691,10 +691,9 @@ export class RandomTeams {
 		if (!hasCustomRules) {
 			movePool = [...this.dex.moves.all()].filter(move => (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')));
 		} else {
-			// FIXME: Special error for specific Hidden Power unban attempts?
 			const hasAllMovesBan = ruleTable.check('pokemontag:allmoves');
 			for (const move of this.dex.moves.all()) {
-				if (move.name.startsWith('Hidden Power ')) continue;
+				if (move.name.startsWith('Hidden Power ')) continue; // Legality of specific HP types can't be altered in built formats anyway
 				let banReason = ruleTable.check('move:' + move.id);
 				if (banReason) continue;
 				if (banReason !== '') {
