@@ -638,7 +638,7 @@ export const Formats: FormatList = [
 
 		mod: 'randomdex',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
-		banlist: ['All Pokemon', 'Past', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Bright Powder', 'Lax Incense', 'King\'s Rock', 
+		banlist: ['All Pokemon', 'Past', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Bright Powder', 'Lax Incense', 'King\'s Rock',
 			'Razor Fang', 'Kangaskhanite', 'Medichamite'],
 		unbanlist: ["Aerodactyl", "Arbok", "Arcanine", "Archeops", "Articuno-Galar", "Banette", "Bellossom", "Bibarel", "Boltund",
 			"Charizard", "Chimecho", "Clawitzer", "Coalossal", "Copperajah", "Cradily", "Cursola", "Dedenne", "Dragalge", "Drampa",
