@@ -2904,7 +2904,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			return this.chainModify([5324, 4096]);
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status') {
+			if (source && source !== target && move && move.category !== 'Status' && target.item !== 'redcard') {
 				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 			}
 		},
@@ -4877,8 +4877,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.totalDamage) {
-				this.heal(move.totalDamage / 8, pokemon);
+			if (move.totalDamage && target.item !== 'redcard') {
+        this.heal(move.totalDamage / 8, pokemon);
 			}
 		},
 		num: 253,
@@ -7132,3 +7132,4 @@ export const Items: {[itemid: string]: ItemData} = {
 		isNonstandard: "CAP",
 	},
 };
+
