@@ -592,7 +592,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Alternatium",
-		desc: `<b>Restrictions</b>: A metagame made up of only Pokemon with alternate forms, with all of them being seperate and unique Pokemon.`,
+		desc: `A metagame made up of only Pok&eacute;mon with alternate forms, with all of them being separate and unique.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3683767/">Alternatium</a>`,
 			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1bvvkPg1CrUBJFJJeuwkts8elfJcEcahGOoHm-vGBXOI/edit?usp=sharing">Spreadsheet</a>`,
