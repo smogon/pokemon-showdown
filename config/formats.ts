@@ -635,6 +635,7 @@ export const Formats: FormatList = [
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/random-dex.3690182/">Thread in Pet Mods</a>`,
 		],
+
 		mod: 'randomdex',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
 		banlist: ['All Pokemon', 'Past', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
