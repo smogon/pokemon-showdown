@@ -715,7 +715,39 @@ export class RandomTeams {
 			this.checkCustomPoolSizeNoComplexBans('move', movePool, this.maxTeamSize * setMoveCount, 'Max Team Size * Max Move Count');
 		}
 
-		const naturePool = this.dex.natures.all();
+		// Nature Pool
+		const doNaturesExist = this.gen > 2;
+		let naturePool : Nature[] = [];
+		if (doNaturesExist) {
+			if (!hasCustomRules) {
+				if (!hasCustomRules) {
+					naturePool = [...this.dex.natures.all()];
+				} else {
+					const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
+					for (const nature of this.dex.natures.all()) {
+						let banReason = ruleTable.check('nature:' + nature.id);
+						if (banReason) continue;
+						if (banReason !== '') {
+							if (nature.id) {
+								if (hasAllNaturesBan) continue;
+								if (nature.isNonstandard) {
+									banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+									if (banReason) continue;
+									if (banReason !== '') {
+										if (nature.isNonstandard !== 'Unobtainable') {
+											if (hasNonexistentBan) continue;
+											if (!hasNonexistentWhitelist) continue;
+										}
+									}
+								}
+							}
+						}
+						naturePool.push(nature);
+					}
+					// There is no 'nature:nonature' rule so do not constrain pool size
+				}
+			}
+		}
 
 		let randomN : string[] = [];
 		if (!hasCustomRules) {
@@ -780,7 +812,10 @@ export class RandomTeams {
 			};
 
 			// Random nature
-			const nature = this.sample(naturePool).name;
+			let nature = '';
+			if (doNaturesExist && (naturePool.length > 0)) {
+				nature = this.sample(naturePool).name;
+			}
 
 			// Level balance
 			const mbstmin = 1307;
