@@ -281,11 +281,25 @@ export class RandomTeams {
 	}
 
 	/**
+	 * Check if user has directly tried to ban/unban/restrict things in a custom battle.
+	 * Doesn't count bans nested inside other formats/rules.
+	 */
+	private hasDirectCustomBanlistChanges() {
+		if (!this.format.customRules) return false;
+		for (const rule of this.format.customRules) {
+			for (const banlistOperator of ['-','+','*']) {
+				if (rule.startsWith(banlistOperator)) return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Inform user when custom bans are unsupported in a team generator.
 	 */
 	protected enforceNoDirectCustomBanlistChanges() {
 		if (!this.hasDirectCustomBanlistChanges()) return;
-		throw new Error(`Custom bans are not supported in ${this.format.name}.`);
+		throw new Error(`Custom bans are not currently supported in ${this.format.name}.`);
 	}
 
 	/**
@@ -293,7 +307,7 @@ export class RandomTeams {
 	 */
 	protected enforceNoComplexBans(ruleTable: RuleTable) {
 		if (!ruleTable.hasComplexBans()) return;
-		throw new Error(`Complex bans are not supported in ${this.format.name}.`);
+		throw new Error(`Complex bans are not currently supported in ${this.format.name}.`);
 	}
 
 	/**
@@ -528,20 +542,6 @@ export class RandomTeams {
 			nPokemon.push(this.sample(formes[i]));
 		}
 		return nPokemon;
-	}
-
-	/**
-	 * Check if user has directly tried to ban/unban/restrict things in a custom battle.
-	 * Doesn't count bans nested inside other formats/rules.
-	 */
-	private hasDirectCustomBanlistChanges() {
-		if (!this.format.customRules) return false;
-		for (const rule of this.format.customRules) {
-			for (const banlistOperator of ['-','+','*']) {
-				if (rule.startsWith(banlistOperator)) return true;
-			}
-		}
-		return false;
 	}
 
 	customRandomNPokemon(ruleTable: RuleTable, n: number, requiredType?: string) {

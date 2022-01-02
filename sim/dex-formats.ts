@@ -318,21 +318,6 @@ export class RuleTable extends Map<string, string> {
 		}
 	}
 
-	private isThingInComplexBanInner(thing: string, complexBans: ComplexBan[]) {
-		for (const ban of complexBans) {
-			for (const elem of ban[3]) {
-				if (thing === elem) return true;
-			}
-		}
-		return false;
-	}
-
-	isThingInComplexBan(thing: string) {
-		if (this.isThingInComplexBanInner(thing, this.complexBans)) return true;
-		if (this.isThingInComplexBanInner(thing, this.complexTeamBans)) return true;
-		return false;
-	}
-
 	hasComplexBans() {
 		return (this.complexBans?.length > 0) || (this.complexTeamBans?.length > 0);
 	}
