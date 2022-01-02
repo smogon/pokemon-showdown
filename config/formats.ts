@@ -633,7 +633,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] Random Dex",
 		desc: `A micrometagame project consisting of 80 randomly selected fully-evolved Pok&eacute;mon.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/random-dex.3690182/">Thread in Pet Mods</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3690182/">Random Dex</a>`,
 		],
 
 		mod: 'randomdex',
