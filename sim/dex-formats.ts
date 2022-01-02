@@ -332,6 +332,10 @@ export class RuleTable extends Map<string, string> {
 		if (this.isThingInComplexBanInner(thing, this.complexTeamBans)) return true;
 		return false;
 	}
+
+	hasComplexBans() {
+		return (this.complexBans?.length > 0) || (this.complexTeamBans?.length > 0);
+	}
 }
 
 export class Format extends BasicEffect implements Readonly<BasicEffect> {

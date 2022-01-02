@@ -500,28 +500,16 @@ export class RandomTeams {
 		return nPokemon;
 	}
 
-	private checkCustomPoolSize(
-		ruleTable: RuleTable,
+	private checkCustomPoolSizeNoComplexBans(
 		effectTypeName: string,
 		basicEffectPool: BasicEffect[],
 		requiredCount: number,
 		requiredCountExplanation: string) {
-		let complexWorstCaseCount = 0;
-		for (const effect of basicEffectPool) {
-			if (ruleTable.isThingInComplexBan(`${effectTypeName}:${effect.id}`)) continue;
-			complexWorstCaseCount++;
-		}
-		if (complexWorstCaseCount < requiredCount) {
-			return `Legal ${effectTypeName} count may be insufficient to support ${requiredCountExplanation} (${complexWorstCaseCount} / ${requiredCount}).`;
-		}
-		return null;
+		if (basicEffectPool.length >= requiredCount) return;
+		throw new Error(`Legal ${effectTypeName} count is insufficient to support ${requiredCountExplanation} (${basicEffectPool.length} / ${requiredCount}).`);
 	}
 
-	customRandomNPokemon(
-		ruleTable: RuleTable,
-		n: number,
-		requiredType?: string,
-		minSourceGen?: number) {
+	customRandomNPokemon(ruleTable: RuleTable, n: number, requiredType?: string) {
 		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
@@ -625,12 +613,16 @@ export class RandomTeams {
 
 	randomHCTeam(): PokemonSet[] {
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
-		const hasCustomRules = true; // FIXME: Implement
+		const hasCustomRules = !!this.format.customRules;
 		const hasNonexistentBan = ruleTable.check('nonexistent');
 		const hasNonexistentWhitelist = (hasNonexistentBan === '');
 
+		if (hasCustomRules && ruleTable.hasComplexBans()) {
+			throw new Error(`Complex bans are not supported in ${this.format.name}.`);
+		}
+
 		// Item Pool
-		const doItemsExist = (this.gen > 1);
+		const doItemsExist = this.gen > 1;
 		let itemPool : Item[] = [];
 		if (doItemsExist) {
 			if (!hasCustomRules) {
@@ -658,12 +650,10 @@ export class RandomTeams {
 					itemPool.push(item);
 				}
 				if (ruleTable.check('item:noitem')) {
-					const poolSizeError = this.checkCustomPoolSize(ruleTable, 'item', itemPool, this.maxTeamSize, 'Max Team Size');
-					if (poolSizeError) throw new Error(poolSizeError);
+					this.checkCustomPoolSizeNoComplexBans('item', itemPool, this.maxTeamSize, 'Max Team Size');
 				}
 			}
 		}
-		// FIXME: Need to do more to support complex bans properly (inside choose forme area)
 
 		// Ability Pool
 		const doAbilitiesExist = (this.gen > 2) && (this.dex.currentMod !== 'gen7letsgo');
@@ -690,8 +680,7 @@ export class RandomTeams {
 					abilityPool.push(ability);
 				}
 				if (ruleTable.check('ability:noability')) {
-					const poolSizeError = this.checkCustomPoolSize(ruleTable, 'ability', abilityPool, this.maxTeamSize, 'Max Team Size');
-					if (poolSizeError) throw new Error(poolSizeError);
+					this.checkCustomPoolSizeNoComplexBans('ability', abilityPool, this.maxTeamSize, 'Max Team Size');
 				}
 			}
 		}
@@ -723,8 +712,7 @@ export class RandomTeams {
 				}
 				movePool.push(move);
 			}
-			const poolSizeError = this.checkCustomPoolSize(ruleTable, 'move', movePool, this.maxTeamSize * setMoveCount, 'Max Team Size * Max Move Count');
-			if (poolSizeError) throw new Error(poolSizeError);
+			this.checkCustomPoolSizeNoComplexBans('move', movePool, this.maxTeamSize * setMoveCount, 'Max Team Size * Max Move Count');
 		}
 
 		const naturePool = this.dex.natures.all();
@@ -732,53 +720,15 @@ export class RandomTeams {
 		let randomN : string[] = [];
 		if (!hasCustomRules) {
 			randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
-			if (randomN) { throw new Error(`Pokemon pool size insufficient to support Max Team Size: ${this.maxTeamSize}`); }
 		} else {
 			randomN = this.customRandomNPokemon(ruleTable, this.maxTeamSize, this.forceMonotype);
-			let complexWorstCaseCount = 0;
-			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
-			const existencePool: {[k: string]: boolean} = {};
-			for (const tag of EXISTENCE_TAG) { // FIXME: Probably don't need this here
-				existencePool[tag] = ruleTable.isThingInComplexBan(`pokemontag:${toID(tag)}`);
-			}
-			const megaInComplexBan = ruleTable.isThingInComplexBan(`pokemontag:mega`);
-			for (const forme of randomN) {
-				const species = this.dex.species.get(forme);
-				if (ruleTable.isThingInComplexBan(`pokemon:${species.id}`)) continue;
-				if (ruleTable.isThingInComplexBan(`basepokemon:${toID(species.baseSpecies)}`)) continue;
-				const tier = species.tier === '(PU)' ? 'ZU' : species.tier === '(NU)' ? 'PU' : species.tier;
-				if (ruleTable.isThingInComplexBan(`pokemontag:${toID(tier)}`)) continue;
-				const doublesTier = species.doublesTier === '(DUU)' ? 'DNU' : species.doublesTier;
-				if (ruleTable.isThingInComplexBan(`pokemontag:${toID(doublesTier)}`)) continue;
-				if (megaInComplexBan && species.isMega) continue;
-
-				let passExistenceCheck = true;
-				for (const tag of EXISTENCE_TAG) {
-					if (!existencePool[tag]) continue;
-					passExistenceCheck = (tag !== toID(species.isNonstandard));
-					if (!passExistenceCheck) break;
-				}
-				if (!passExistenceCheck) continue;
-
-				complexWorstCaseCount++;
-			}
-			if (complexWorstCaseCount < this.maxTeamSize) {
-				throw new Error(`Legal Pokemon count may be insufficient to support Max Team Size: (${randomN.length} / ${this.maxTeamSize}).`);
-			}
 		}
+		if (randomN?.length < this.maxTeamSize) { throw new Error(`Pokemon pool size is insufficient to support Max Team Size: ${this.maxTeamSize}`); }
 
 		const team = [];
 		for (const forme of randomN) {
 			// Choose forme
 			const species = this.dex.species.get(forme);
-
-			// (Handling moves first seems better for ban support because every Pokemon needs at least one move)
-			// Random unique moves
-			const m = [];
-			do {
-				const move = this.sampleNoReplace(movePool);
-				m.push(move.id);
-			} while (m.length < setMoveCount);
 
 			// Random unique item
 			let item = '';
@@ -795,6 +745,13 @@ export class RandomTeams {
 				abilityData = this.sampleNoReplace(abilityPool);
 				ability = abilityData?.name;
 			}
+
+			// Random unique moves
+			const m = [];
+			do {
+				const move = this.sampleNoReplace(movePool);
+				m.push(move.id);
+			} while (m.length < setMoveCount);
 
 			// Random EVs
 			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
