@@ -305,9 +305,13 @@ export class RandomTeams {
 	/**
 	 * Inform user when complex bans are unsupported in a team generator.
 	 */
-	protected enforceNoComplexBans(ruleTable: RuleTable) {
-		if (!ruleTable.hasComplexBans()) return;
-		throw new Error(`Complex bans are not currently supported in ${this.format.name}.`);
+	protected enforceNoDirectComplexBans() {
+		if (!this.format.customRules) return false;
+		for (const rule of this.format.customRules) {
+			if (rule.includes('+') && !rule.startsWith('+')) {
+				throw new Error(`Complex bans are not currently supported in ${this.format.name}.`);;
+			}
+		}
 	}
 
 	/**
@@ -636,7 +640,7 @@ export class RandomTeams {
 		const hasNonexistentWhitelist = hasCustomBans && (hasNonexistentBan === '');
 
 		if (hasCustomBans) {
-			this.enforceNoComplexBans(ruleTable);
+			this.enforceNoDirectComplexBans();
 		}
 
 		// Item Pool
