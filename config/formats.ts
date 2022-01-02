@@ -765,6 +765,35 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 8] Almost Any Ability",
+		desc: `Pok&eacute;mon have access to almost any ability.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656414/">Almost Any Ability</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3682690/">AAA Resources</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['Obtainable', '!Obtainable Abilities', 'Species Clause', 'Nickname Clause', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Sleep Moves Clause', 'Endless Battle Clause'],
+		banlist: [
+			'Archeops', 'Blacephalon', 'Buzzwole', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus', 'Gengar', 'Giratina',
+			'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Keldeo', 'Kyogre', 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow',
+			'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Noivern', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shedinja',
+			'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Base', 'Zekrom',
+			'Zeraora', 'Zygarde-Base', 'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter',
+			'Innards Out', 'Intrepid Sword', 'Libero', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Protean', 'Pure Power',
+			'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
+		],
+		onValidateSet(set) {
+			// Temporary fix until battle-only is implemented properly
+			if (this.toID(set.species) === 'zamazentacrowned' && this.toID(set.ability) !== 'dauntlessshield') {
+				return [`Zamazenta-Crowned can only use Dauntless Shield because it is a battle-only forme.`];
+			}
+			if (this.toID(set.species) === 'zaciancrowned' && this.toID(set.ability) !== 'intrepidsword') {
+				return [`Zacian-Crowned can only use Intrepid Sword because it is a battle-only forme.`];
+			}
+		},
+	},
+	{
 		name: "[Gen 8] Mix and Mega",
 		desc: `Mega evolve any Pok&eacute;mon with any mega stone and no limit. Boosts based on mega evolution from gen 7.`,
 		threads: [
@@ -822,35 +851,6 @@ export const Formats: FormatList = [
 			const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
 			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
 				this.add('-end', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
-			}
-		},
-	},
-	{
-		name: "[Gen 8] Almost Any Ability",
-		desc: `Pok&eacute;mon have access to almost any ability.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656414/">Almost Any Ability</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3682690/">AAA Resources</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['Obtainable', '!Obtainable Abilities', 'Species Clause', 'Nickname Clause', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Sleep Moves Clause', 'Endless Battle Clause'],
-		banlist: [
-			'Archeops', 'Blacephalon', 'Buzzwole', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dracovish', 'Dragapult', 'Dragonite', 'Eternatus', 'Gengar', 'Giratina',
-			'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Keldeo', 'Kyogre', 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow',
-			'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Noivern', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shedinja',
-			'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Base', 'Zekrom',
-			'Zeraora', 'Zygarde-Base', 'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter',
-			'Innards Out', 'Intrepid Sword', 'Libero', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Protean', 'Pure Power',
-			'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
-		],
-		onValidateSet(set) {
-			// Temporary fix until battle-only is implemented properly
-			if (this.toID(set.species) === 'zamazentacrowned' && this.toID(set.ability) !== 'dauntlessshield') {
-				return [`Zamazenta-Crowned can only use Dauntless Shield because it is a battle-only forme.`];
-			}
-			if (this.toID(set.species) === 'zaciancrowned' && this.toID(set.ability) !== 'intrepidsword') {
-				return [`Zacian-Crowned can only use Intrepid Sword because it is a battle-only forme.`];
 			}
 		},
 	},
