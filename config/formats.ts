@@ -548,7 +548,7 @@ export const Formats: FormatList = [
 		restricted: [
 			'Aegislash', 'Alakazam-Base', 'Altaria-Mega', 'Amoonguss', 'Beedrill-Mega', 'Blaziken-Base', 'Breloom', 'Celesteela',
 			'Chandelure', 'Donphan', 'Dracozolt', 'Dragonite', 'Feraligatr', 'Gastrodon', 'Hatterene', 'Hippowdon', 'Infernape',
-			'Keldeo', 'Krookodile', 'Mamoswine', 'Mandibuzz', 'Manectric-Mega', 'Medicham-Mega', 'Melmetal', 'Mienshao', 'Moltres-Base',
+			'Keldeo', 'Krookodile', 'Mamoswine', 'Mandibuzz', 'Manectric-Mega', 'Melmetal', 'Mienshao', 'Moltres-Base',
 			'Nidoking', 'Nidoqueen', 'Nihilego', 'Quagsire', 'Regieleki', 'Ribombee', 'Rotom-Heat', 'Rotom-Wash', 'Salamence',
 			'Scizor', 'Skarmory', 'Slowking-Base', 'Swampert-Base', 'Talonflame', 'Tangrowth', 'Tornadus-Base', 'Umbreon',
 			'Urshifu-Rapid-Strike',
