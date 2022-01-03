@@ -507,7 +507,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["stealthrock", "seismictoss", "softboiled", "thunderwave"],
 	},
 	tangela: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	tangrowth: {
 		tier: "OU",
@@ -555,7 +555,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["psychic", "dazzlinggleam", "focusblast", "nastyplot", "thunderbolt"],
 	},
 	scyther: {
-		tier: "LC",
+		tier: "NFE",
 		randomBattleMoves: ["aerialace", "brickbreak", "quickattack", "roost", "swordsdance", "thief", "uturn"],
 	},
 	scizor: {
@@ -885,7 +885,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["energyball", "sludgebomb", "synthesis", "lightscreen"],
 	},
 	yanma: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	yanmega: {
 		tier: "UU",
@@ -901,7 +901,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["earthquake", "recover", "scald", "toxic"],
 	},
 	murkrow: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	honchkrow: {
 		tier: "UU",
@@ -948,7 +948,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["bodyslam", "bite", "roost", "coil"],
 	},
 	gligar: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	gliscor: {
 		tier: "OU",
@@ -979,7 +979,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["facade", "megahorn", "closecombat", "throatchop", "stoneedge"],
 	},
 	sneasel: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	weavile: {
 		tier: "OU",
@@ -1336,7 +1336,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["headsmash", "earthquake", "superpower", "heavyslam", "rockpolish"],
 	},
 	meditite: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	medicham: {
 		tier: "RU",
