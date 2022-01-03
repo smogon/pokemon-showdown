@@ -524,7 +524,7 @@ export class RandomBDSPTeams extends RandomTeams {
 		switch (ability) {
 		// Abilities which are primarily useful for certain moves
 		case 'Contrary': case 'Serene Grace': case 'Skill Link':
-			return !counter.get(toID(ability));
+			return !counter.get(ability.toLowerCase().replace(/\s/g, ''));
 		case 'Analytic':
 			return (moves.has('rapidspin') || species.nfe || isDoubles);
 		case 'Blaze':
