@@ -591,14 +591,24 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(percent) || percent > 1 || percent < 0) {
 				return this.errorReply(`Invalid percent: ${percent}. Must be between 0 and 1.`);
 			}
-			const score = parseInt(rawScore);
-			if ((isNaN(score) && toID(rawScore) !== 'maximum') || (!isNaN(score) && score < 0)) {
-				return this.errorReply(`Invalid score: ${score}. Must be a positive integer or "MAXIMUM".`);
+			const score = parseInt(rawScore) || toID(rawScore).toUpperCase() as 'MAXIMUM';
+			switch (typeof score) {
+			case 'string':
+				if (score !== 'MAXIMUM') {
+					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+				}
+				break;
+			case 'number':
+				if (isNaN(score) || score < 0) {
+					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+				}
+				break;
 			}
 			if (settings.specials[type]?.[percent] && !this.cmd.includes('f')) {
 				return this.errorReply(`That special case already exists. Use /am forceeditspecial to change it.`);
 			}
 			if (!settings.specials[type]) settings.specials[type] = {};
+			// checked above to ensure it's a valid number or MAXIMUM
 			settings.specials[type][percent] = score;
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} set the abuse monitor special case for ${type} at ${percent}% to ${score}.`);
