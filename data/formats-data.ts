@@ -1455,7 +1455,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	noctowl: {
-		randomBattleMoves: ["airslash", "defog", "heatwave", "hurricane", "nastyplot", "roost"],
+		randomBattleMoves: ["defog", "heatwave", "hurricane", "nastyplot", "roost"],
 		randomBattleLevel: 88,
 		randomDoubleBattleMoves: ["airslash", "heatwave", "hypervoice", "nastyplot", "roost", "tailwind"],
 		randomDoubleBattleLevel: 84,
