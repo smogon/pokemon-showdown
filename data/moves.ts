@@ -5320,6 +5320,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (success && !target.isAlly(source)) {
 				target.staleness = 'external';
 			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return this.NOT_FAIL;
+			}
 			return success;
 		},
 		secondary: null,
@@ -7854,6 +7858,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (success && !target.isAlly(source)) {
 				target.staleness = 'external';
 			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return this.NOT_FAIL;
+			}
 			return success;
 		},
 		secondary: null,
@@ -9217,8 +9225,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {heal: 1, bypasssub: 1, allyanim: 1},
 		onHit(pokemon) {
-			const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
-			return pokemon.cureStatus() || success;
+			const success = pokemon.cureStatus() || !!this.heal(this.modify(pokemon.maxhp, 0.25));
+			return success || this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "allies",
@@ -11514,7 +11522,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				factor = 0.25;
 				break;
 			}
-			return !!this.heal(this.modify(pokemon.maxhp, factor));
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 		secondary: null,
 		target: "self",
@@ -11545,7 +11558,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				factor = 0.25;
 				break;
 			}
-			return !!this.heal(this.modify(pokemon.maxhp, factor));
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 		secondary: null,
 		target: "self",
@@ -12734,6 +12752,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
 					this.add('-immune', target);
+					return this.NOT_FAIL;
 				}
 			}
 		},
@@ -13396,7 +13415,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1},
 		onHit(target, source) {
-			if (!target.cureStatus()) return false;
+			if (!target.cureStatus()) return this.NOT_FAIL;
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: null,
@@ -15255,7 +15274,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (this.field.isWeather('sandstorm')) {
 				factor = 0.667;
 			}
-			return !!this.heal(this.modify(pokemon.maxhp, factor));
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 		secondary: null,
 		target: "self",
@@ -17385,9 +17409,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onHit(pokemon) {
 			const healAmount = [0.25, 0.5, 1];
-			const healedBy = this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			if (!success) this.add('-fail', pokemon, 'heal');
 			pokemon.removeVolatile('stockpile');
-			return !!healedBy;
+			return success || this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "self",
@@ -17550,7 +17575,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				factor = 0.25;
 				break;
 			}
-			return !!this.heal(this.modify(pokemon.maxhp, factor));
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 		secondary: null,
 		target: "self",
