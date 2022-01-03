@@ -407,8 +407,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.clearBoosts();
 
 				if (pokemon !== source) {
-					// Clears the status from the opponent
-					pokemon.setStatus('');
+					pokemon.cureStatus(true);
 				}
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
