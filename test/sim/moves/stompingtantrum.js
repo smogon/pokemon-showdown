@@ -105,6 +105,75 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});
 
+	it(`should double its Base Power on some failure conditions of Rest`, function () {
+		battle = common.createBattle([[
+			{species: 'Magikarp', ability: 'comatose', moves: ['rest', 'stompingtantrum']},
+			{species: 'Feebas', ability: 'insomnia', moves: ['rest', 'stompingtantrum']},
+		], [
+			{species: 'Accelgor', moves: ['sleeptalk', 'nightshade']},
+		]]);
+
+		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
+		});
+
+		battle.makeChoices('move rest', 'auto'); // Rest while user already asleep or Comatose
+		battle.makeChoices('move stompingtantrum', 'auto');
+
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('move rest', 'auto'); // Rest while user at full HP
+		battle.makeChoices('move stompingtantrum', 'auto');
+
+		battle.makeChoices('move rest', 'move nightshade'); // Rest while has Insomnia
+		battle.makeChoices('move stompingtantrum', 'auto');
+	});
+
+	it.skip(`should not double its Base Power on other failure conditions of Rest`, function () {
+		battle = common.createBattle([[
+			{species: 'Magikarp', moves: ['rest', 'stompingtantrum', 'defog']},
+		], [
+			{species: 'Accelgor', moves: ['sleeptalk', 'nightshade', 'electricterrain', 'mistyterrain']},
+		]]);
+
+		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
+		});
+
+		battle.makeChoices('move rest', 'move electricterrain');
+		battle.makeChoices('move rest', 'move nightshade'); // Rest in Electric Terrain
+		battle.makeChoices('move stompingtantrum', 'auto');
+
+		battle.makeChoices('move rest', 'move mistyterrain'); // Rest in Misty Terrain
+		battle.makeChoices('move stompingtantrum', 'auto');
+
+		battle.makeChoices('move defog', 'auto');
+		battle.makeChoices('move rest', 'move uproar'); // Rest in Uproar
+		battle.makeChoices('move stompingtantrum', 'auto');
+	});
+
+	it.skip(`should not double its Base Power on most failed healing effects`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Magikarp', moves: ['roost', 'lifedew', 'healpulse', 'stompingtantrum']},
+			{species: 'Feebas', moves: ['shoreup', 'junglehealing', 'pollenpuff', 'stompingtantrum']},
+		], [
+			{species: 'Accelgor', moves: ['sleeptalk']},
+			{species: 'Accelgor', moves: ['sleeptalk']},
+		]]);
+
+		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
+		});
+
+		battle.makeChoices('move roost, move shoreup', 'auto');
+		battle.makeChoices('move stompingtantrum 1, move stompingtantrum 1', 'auto');
+
+		battle.makeChoices('move lifedew, move junglehealing', 'auto');
+		battle.makeChoices('move stompingtantrum 1, move stompingtantrum 1', 'auto');
+
+		battle.makeChoices('move healpulse -2, move pollenpuff -1', 'auto');
+		battle.makeChoices('move stompingtantrum 1, move stompingtantrum 1', 'auto');
+	});
+
 	it(`should cause Gravity-negated moves to double in BP, even Z-moves`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: "Magikarp", item: 'normaliumz', moves: ['splash', 'stompingtantrum']},
