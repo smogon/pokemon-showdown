@@ -226,7 +226,7 @@ export class Tournament extends Rooms.RoomGame {
 				const testTeamSeed = PRNG.generateSeed();
 				const testTeamGenerator = Teams.getGenerator(format, testTeamSeed);
 				testTeamGenerator.getTeam(); // Throws error if generation fails
-			} 
+			}
 		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
