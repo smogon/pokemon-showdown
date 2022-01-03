@@ -1029,6 +1029,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8 BDSP] LC",
 
 		mod: 'gen8bdsp',
+		searchShow: false,
 		ruleset: ['Little Cup', 'Standard'],
 		banlist: ['Gligar', 'Meditite', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma', 'Baton Pass'],
 	},
