@@ -42,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "モデレーター(@)コマンド",
 		"ADMIN COMMANDS": "アドミニストレーター(&)コマンド",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(\/の代わりに!を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(/の代わりに!を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。)",
 
 		"<strong>Room punishments</strong>:": "<strong>チャット罰則一覧</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - ユーザーにチャットルールのポップアップが表示されます。",
