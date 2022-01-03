@@ -712,7 +712,7 @@ export class RandomTeams {
 		const setMoveCount = ruleTable.maxMoveCount;
 		let movePool: Move[] = [];
 		if (!hasCustomBans) {
-			movePool = [...this.dex.moves.all()].filter(move => 
+			movePool = [...this.dex.moves.all()].filter(move =>
 				(move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')));
 		} else {
 			const hasAllMovesBan = ruleTable.check('pokemontag:allmoves');
