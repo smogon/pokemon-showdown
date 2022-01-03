@@ -190,7 +190,8 @@ export class RandomBDSPTeams extends RandomTeams {
 		}
 		// Spore is really, really good and should be forced onto all sets.
 		// zzzzzz
-		if (movePool.includes('spore')) {
+		// Substitute is a hardcode for Breloom.
+		if (movePool.includes('spore') && move.id !== 'substitute') {
 			return {cull: true};
 		}
 
@@ -210,6 +211,8 @@ export class RandomBDSPTeams extends RandomTeams {
 			return {cull: moves.has('earthquake') && movePool.includes('substitute')};
 		case 'flamecharge':
 			return {cull: movePool.includes('swordsdance')};
+		case 'focuspunch':
+			return {cull: !moves.has('substitute')};
 		case 'rest':
 			const bulkySetup = !moves.has('sleeptalk') && ['bulkup', 'calmmind', 'coil', 'curse'].some(m => movePool.includes(m));
 			// Registeel would otherwise get Curse sets without Rest, which are very bad generally
@@ -482,7 +485,11 @@ export class RandomBDSPTeams extends RandomTeams {
 			// Special case to prevent Scaldless Slowking
 			return {cull: species.id === 'slowking' && !moves.has('scald')};
 		case 'substitute':
-			const moveBasedCull = ['bulkup', 'nastyplot', 'painsplit', 'roost', 'swordsdance'].some(m => movePool.includes(m));
+			const moveBasedCull = (
+				// Breloom is OK with Substitute + Swords Dance (for subpunch sets)
+				species.id !== 'breloom' &&
+				['bulkup', 'nastyplot', 'painsplit', 'roost', 'swordsdance'].some(m => movePool.includes(m))
+			);
 			const shayminCase = abilities.has('Serene Grace') && movePool.includes('airslash') && !moves.has('airslash');
 			return {cull: moves.has('rest') || moveBasedCull || shayminCase};
 		case 'helpinghand':
