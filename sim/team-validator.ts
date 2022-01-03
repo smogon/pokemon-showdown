@@ -241,7 +241,7 @@ export class TeamValidator {
 			const testTeamSeed = PRNG.generateSeed();
 			try {
 				const testTeamGenerator = Teams.getGenerator(format, testTeamSeed);
-				testTeamGenerator.getTeam(options); // Throw error if generation fails
+				testTeamGenerator.getTeam(options); // Throws error if generation fails
 			} catch (e) {
 				return [
 					`${format.name}'s team generator (${format.team}) failed using these rules and seed (${testTeamSeed}):-`,
