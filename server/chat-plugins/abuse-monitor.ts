@@ -591,14 +591,24 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(percent) || percent > 1 || percent < 0) {
 				return this.errorReply(`Invalid percent: ${percent}. Must be between 0 and 1.`);
 			}
-			const score = parseInt(rawScore);
-			if ((isNaN(score) && toID(rawScore) !== 'maximum') || (!isNaN(score) && score < 0)) {
-				return this.errorReply(`Invalid score: ${score}. Must be a positive integer or "MAXIMUM".`);
+			const score = parseInt(rawScore) || toID(rawScore).toUpperCase() as 'MAXIMUM';
+			switch (typeof score) {
+			case 'string':
+				if (score !== 'MAXIMUM') {
+					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+				}
+				break;
+			case 'number':
+				if (isNaN(score) || score < 0) {
+					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+				}
+				break;
 			}
 			if (settings.specials[type]?.[percent] && !this.cmd.includes('f')) {
 				return this.errorReply(`That special case already exists. Use /am forceeditspecial to change it.`);
 			}
 			if (!settings.specials[type]) settings.specials[type] = {};
+			// checked above to ensure it's a valid number or MAXIMUM
 			settings.specials[type][percent] = score;
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} set the abuse monitor special case for ${type} at ${percent}% to ${score}.`);
@@ -886,17 +896,45 @@ export const pages: Chat.PageTable = {
 			let successes = 0;
 			let failures = 0;
 			const staffStats: Record<string, number> = {};
+			const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
 			for (const log of logs) {
+				const cur = Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0];
+				if (!dayStats[cur]) dayStats[cur] = {successes: 0, failures: 0, total: 0};
 				if (log.result) {
 					successes++;
+					dayStats[cur].successes++;
 				} else {
 					failures++;
+					dayStats[cur].failures++;
 				}
 				if (!staffStats[log.staff]) staffStats[log.staff] = 0;
 				staffStats[log.staff]++;
+				dayStats[cur].total++;
 			}
-			buf += `<p><strong>Success rate:</strong> ${(successes / logs.length) * 100}%</p>`;
-			buf += `<p><strong>Failure rate:</strong> ${(failures / logs.length) * 100}%</p>`;
+			buf += `<p><strong>Success rate:</strong> ${Math.floor((successes / logs.length) * 100)}%</p>`;
+			buf += `<p><strong>Failure rate:</strong> ${Math.floor((failures / logs.length) * 100)}%</p>`;
+			buf += `<p><strong>Day stats:</strong></p>`;
+			buf += `<div class="ladder pad"><table>`;
+			let header = '';
+			let data = '';
+			const sortedDays = Utils.sortBy(Object.keys(dayStats), d => new Date(d).getTime());
+			for (const [i, day] of sortedDays.entries()) {
+				const cur = dayStats[day];
+				if (!cur.total) continue;
+				header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+				data += `<td>${cur.successes} (${Math.floor((cur.successes / cur.total) * 100)}%)`;
+				if (cur.failures) data += ` | ${cur.failures} (${Math.floor((cur.failures / cur.total) * 100)}%)</td>`;
+				// i + 1 ensures it's above 0 always (0 % 5 === 0)
+				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+					buf += `<tr>${header}</tr><tr>${data}</tr>`;
+					buf += `</div></table>`;
+					buf += `<div class="ladder pad"><table>`;
+					header = '';
+					data = '';
+				}
+			}
+			buf += `<tr>${header}</tr><tr>${data}</tr>`;
+			buf += `</div></table>`;
 			buf += `<p><strong>Staff stats:</strong></p>`;
 			buf += `<div class="ladder pad"><table>`;
 			buf += `<tr><th>User</th><th>Total</th><th>Percent total</th></tr>`;
