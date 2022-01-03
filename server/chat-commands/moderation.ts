@@ -376,7 +376,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (curRoom.settings.isPrivate === 'hidden' || curRoom.settings.isPrivate === 'voice') {
 			buffer.push(`${curRoom.title} is a hidden room, so global auth with no relevant roomauth will have authority in this room. The names in **bold** are online.`);
 		} else {
-			buffer.push(`The names in **bold** are online.`)
+			buffer.push(`The names in **bold** are online.`);
 		}
 		if (targetRoom !== room) buffer.unshift(`${targetRoom.title} room auth:`);
 		connection.popup(`${buffer.join("\n\n")}${userLookup}`);
