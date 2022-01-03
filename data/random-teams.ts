@@ -287,7 +287,7 @@ export class RandomTeams {
 	private hasDirectCustomBanlistChanges() {
 		if (!this.format.customRules) return false;
 		for (const rule of this.format.customRules) {
-			for (const banlistOperator of ['-',　'+',　'*']) {
+			for (const banlistOperator of ['-', '+', '*']) {
 				if (rule.startsWith(banlistOperator)) return true;
 			}
 		}
@@ -322,7 +322,7 @@ export class RandomTeams {
 		basicEffectPool: BasicEffect[],
 		requiredCount: number,
 		requiredCountExplanation: string
-		) {
+	) {
 		if (basicEffectPool.length >= requiredCount) return;
 		throw new Error(`Legal ${effectTypeName} count is insufficient to support ${requiredCountExplanation} (${basicEffectPool.length} / ${requiredCount}).`);
 	}
@@ -712,8 +712,8 @@ export class RandomTeams {
 		const setMoveCount = ruleTable.maxMoveCount;
 		let movePool: Move[] = [];
 		if (!hasCustomBans) {
-			movePool = [...this.dex.moves.all()].filter(
-				move => (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')));
+			movePool = [...this.dex.moves.all()].filter(move => 
+				(move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')));
 		} else {
 			const hasAllMovesBan = ruleTable.check('pokemontag:allmoves');
 			for (const move of this.dex.moves.all()) {
@@ -780,7 +780,8 @@ export class RandomTeams {
 			randomN = this.customRandomNPokemon(ruleTable, this.maxTeamSize, this.forceMonotype);
 		}
 		if (randomN?.length < this.maxTeamSize) {
-			throw new Error(`Pokemon pool size is insufficient to support Max Team Size: ${this.maxTeamSize}`); }
+			throw new Error(`Pokemon pool size is insufficient to support Max Team Size: ${this.maxTeamSize}`);
+		}
 
 		const team = [];
 		for (const forme of randomN) {
