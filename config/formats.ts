@@ -289,15 +289,12 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
-		name: "[Gen 8] Battle Stadium Singles Series 9",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3679374/">BSS Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672698/">BSS Viability Rankings</a>`,
-		],
+		name: "[Gen 8] Battle Stadium Singles Series 12",
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'Limit Two Restricted'],
+		restricted: ['Restricted Legendary'],
 	},
 	{
 		name: "[Gen 8] Test Your Luck!",
