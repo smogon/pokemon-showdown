@@ -1252,7 +1252,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	breloom: {
 		tier: "OU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["bulletseed", "focuspunch", "machpunch", "rocktomb", "spore", "swordsdance"],
+		randomBattleMoves: ["bulletseed", "focuspunch", "machpunch", "rocktomb", "spore", "substitute", "swordsdance"],
 	},
 	slakoth: {
 		tier: "LC",

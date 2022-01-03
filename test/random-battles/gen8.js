@@ -311,7 +311,9 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 		testSet('bibarel', options, set => assert.equal(set.ability, 'Simple'));
 	});
 
-	it('should not give Breloom Focus Punch + Substitute', () => {
-		testNotBothMoves('breloom', options, 'focuspunch', 'substitute');
+	it('should not give Breloom Focus Punch without Substitute', () => {
+		testSet('breloom', options, set => {
+			if (set.moves.includes('focuspunch')) assert(set.moves.includes('substitute'), `Breloom has Focus Punch and no Substitute (${set.moves})`);
+		});
 	});
 });
