@@ -885,7 +885,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	hooh: {
-		randomBattleMoves: ["curse", "earthquake", "hiddenpowerflying", "sacredfire", "recover", "thunder", "thunderbolt"],
+		randomBattleMoves: ["curse", "earthquake", "hiddenpowerflying", "recover", "sacredfire", "thunder", "thunderbolt"],
 		tier: "Uber",
 	},
 	celebi: {
