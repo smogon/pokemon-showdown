@@ -1,18 +1,24 @@
+// Note: These are the rules that formats use
+// The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
+	// Allows various formes of the same pokemon to show up properly on the same team in team preview
 	teampreview: {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
-		onTeamPreview() {
+		onBegin() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu|Silvino)(-[a-zA-Z?-]+)?/g, '$1-*');
+					.replace(/(Pumpkaboo)(-[a-zA-Z?-]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, '');
 			}
+		},
+		onTeamPreview() {
 			this.makeRequest('teampreview');
 		},
 	},
+	// Shows the stats, abilities, and typing of pokemon when they switch in, because the client won't show that properly
 	datamod: {
 		effectType: 'Rule',
 		name: 'Data Mod',
@@ -98,47 +104,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 					}
 				}
 			}
-		},
-	},
-	megadatamod: {
-		effectType: 'Rule',
-		name: 'Mega Data Mod',
-		desc: 'Gives data on stats, Ability and types when a Pokémon Mega Evolves or undergoes Ultra Burst.',
-		onSwitchIn(pokemon) {
-			const mon = pokemon.illusion || pokemon;
-			if (mon.species.isMega || mon.species.forme.startsWith('Ultra')) {
-				this.add('-start', pokemon, 'typechange', mon.getTypes(true).join('/'), '[silent]');
-			}
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (target.hasAbility('illusion')) {
-				if (target.species.forme.startsWith('Mega') || target.species.forme.startsWith('Ultra')) {
-					this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[silent]');
-				} else {
-					const types = target.baseSpecies.types;
-					if (target.getTypes().join() === types.join()) {
-						this.add('-end', target, 'typechange', '[silent]');
-					}
-				}
-			}
-		},
-		onAfterMega(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
-			const species = pokemon.species;
-			const abilities = Object.values(species.abilities).join(' / ');
-			const baseStats = species.baseStats;
-			const type = species.types[0];
-			const type2 = species.types[1];
-			this.add(
-				`raw|<ul class="utilichart"><li class="result"><span class="col pokemonnamecol" style="white-space: nowrap">${species.name}</span> ` +
-				`<span class="col typecol"><psicon type="${type}" />${type2 ? `<psicon type="${type2}" />` : ''}</span> ` +
-				`<span style="float: left ; min-height: 26px"><span class="col abilitycol">${abilities}</span><span class="col abilitycol"></span>` +
-				`</span><span style="float: left ; min-height: 26px"><span class="col statcol"><em>HP</em><br>` +
-				`${baseStats.hp}</span> <span class="col statcol"><em>Atk</em><br>${baseStats.atk}</span> <span class="col statcol"><em>Def</em><br>` +
-				`${baseStats.def}</span> <span class="col statcol"><em>SpA</em><br>${baseStats.spa}</span> <span class="col statcol"><em>SpD</em><br>` +
-				`${baseStats.spd}</span> <span class="col statcol"><em>Spe</em><br>${baseStats.spe}</span> </span></li><li style="clear: both"></li></ul>`
-			);
-			pokemon.m.switchedIn = true;
 		},
 	},
 };
