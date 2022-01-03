@@ -589,37 +589,64 @@ export const Formats: FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 8] Fusion Evolution UU",
+		name: "[Gen 8] Alternatium",
+		desc: `A metagame made up of only Pok&eacute;mon with alternate forms, with all of them being separate and unique.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3674163/">Fusion Evolution UU</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3683767/">Alternatium</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1bvvkPg1CrUBJFJJeuwkts8elfJcEcahGOoHm-vGBXOI/edit?usp=sharing">Spreadsheet</a>`,
 		],
 
-		mod: "fusionevolutionuu",
-		searchShow: false,
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause', 'Data Mod', 'Mega Data Mod'],
-		banlist: [
-			'All Pokemon', 'Lopunnite', 'Tapu Lop-Mega', 'Red Orb', 'Grousle-Primal',
-		],
+		mod: 'alternatium',
+		ruleset: ['Standard NatDex', 'Z-Move Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
+		banlist: ['All Pokemon', 'Past'],
 		unbanlist: [
-			'Volquag', 'Toxalure', 'Kingtsar', 'Tanette', 'Slowton',
-			'Flaant', 'Umbat', 'Chomplim', 'Chomplim-Mega', 'Xotalion', 'Miemie', 'Dusking', 'Jelliswine',
-			'Pigapult', 'Lycanserker-Dusk', 'Tapu Lop', 'Dragontler', 'Eternabat',
-			'Grimmlurk', 'Manicuno-Galar', 'Yacian-Crowned', 'Cryogolem', 'Stoudrago',
-			'Grousle', 'Dongoro', 'Slurpum',
-			'Corveot', 'Corveot-Mega', 'Igglyzenta-Crowned', 'Arctres-Galar', 'Garborude', 'Noicity', 'Ferros',
-			'Landmaldo-Therian', 'Tentoxys-Defense', 'Strikados-Galar', 'Hooporant',
-
-			'Silvino-Bug', 'Silvino-Dark', 'Silvino-Dragon', 'Silvino-Electric', 'Silvino-Fairy', 'Silvino-Fighting',
-			'Silvino-Fire', 'Silvino-Flying', 'Silvino-Ghost', 'Silvino-Grass', 'Silvino-Ground', 'Silvino-Ice',
-			'Silvino-Poison', 'Silvino-Psychic', 'Silvino-Rock', 'Silvino-Steel', 'Silvino-Water', 'Silvino',
-
-			'Silvino-Bug-Mega', 'Silvino-Dark-Mega', 'Silvino-Dragon-Mega',
-			'Silvino-Electric-Mega', 'Silvino-Fairy-Mega', 'Silvino-Fighting-Mega',
-			'Silvino-Fire-Mega', 'Silvino-Flying-Mega', 'Silvino-Ghost-Mega',
-			'Silvino-Grass-Mega', 'Silvino-Ground-Mega', 'Silvino-Ice-Mega',
-			'Silvino-Poison-Mega', 'Silvino-Psychic-Mega', 'Silvino-Rock-Mega',
-			'Silvino-Steel-Mega', 'Silvino-Water-Mega', 'Silvino-Mega',
+			'Silvally', 'Silvally-Bug', 'Silvally-Dark', 'Silvally-Dragon', 'Silvally-Electric', 'Silvally-Fairy', 'Silvally-Fighting', 'Silvally-Fire', 'Silvally-Flying', 'Silvally-Ghost',
+			'Silvally-Grass', 'Silvally-Ground', 'Silvally-Ice', 'Silvally-Poison', 'Silvally-Psychic', 'Silvally-Rock', 'Silvally-Steel', 'Silvally-Water', 'Pikachu', 'Pikachu-Rock-Star',
+			'Pikachu-Belle', 'Pikachu-Idol', 'Pikachu-PhD', 'Pikachu-Libre', 'Pikachu-Partner', 'Pikachu-Starter', 'Darmanitan', 'Darmanitan-Zen', 'Darmanitan-Galar', 'Darmanitan-Galar-Zen',
+			'Aegishield', 'Aegislash', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Rotom', 'Rotom-Heat', 'Rotom-Wash', 'Rotom-Frost', 'Rotom-Fan', 'Rotom-Mow', 'Dugtrio',
+			'Dugtrio-Alola', 'Muk', 'Muk-Oilslick', 'Slowbro', 'Slowbro-Galar', 'Slowking', 'Slowking-Galar', 'Tornadus', 'Cummulus', 'Thundurus', 'Thundurus-Therian', 'Landorus', 'Landorus-Bengal',
+			'Vivillon-Fancy', 'Vivillon-Spirit', 'Vivillon-Combat', 'Genesect', 'Genesect-Password', 'Genesect-Molten', 'Genesect-Freezer', 'Genesect-Type-Delta', 'Groudon', 'Groudon-Primal', 'Kyogre',
+			'Kyogre-Primal', 'Deoxys-Wood', 'Deoxys-Gem', 'Deoxys-Tank', 'Deoxys-Speed', 'Sandslash-Lustrous', 'Sandslash-Alola', 'Ninetales-Steamwork', 'Ninetales-Alola', 'Giratina', 'Giratina-Shadow',
+			'Eternatus', 'Manustorm', 'Exeggutor', 'Exeggutor-Lighthouse', 'Weezing', 'Weezing-King', 'Raticate', 'Raticate-Alola', 'Linoone', 'Linoone-Punk', 'Catastroform', 'Castform-Firestorm',
+			'Castform-Thunderstorm', 'Castform-Snowy', 'Wormadam', 'Wormadam-Sandy', 'Fibormadam', 'Farfetch\u2019d', 'Farfetch\u2019d-Galar', 'Corsola', 'Corsoul', 'Shaymin', 'Shaymin-Sky', 'Keldeo',
+			'Swordeo', 'Meloetta', 'Meloetta-Fighter', 'Lycanday', 'Lycanroc-Spectre', 'Lycanroc-Dusk', 'Gourgeist', 'Gourgeist-Fae', 'Gourgeist-Pulpy', 'Supergeist', 'Cramorant', 'Cramorant-Swimmer',
+			'Cramorant-Gorging', 'Eiscue', 'Eiscue-Noice', 'Mimikyu', 'Mimikyu-Sparkstone', 'Morpeko-Marsh', 'Morvilant', 'Zygarde-Wyrm', 'Zygarde-Canid', 'Zygarde-Goliath',
 		],
+		onValidateTeam(team, format) {
+			const speciesTable = new Set<string>();
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				if (speciesTable.has(species.id)) {
+					return [
+						`You are limited to one of each Pokémon by Species Clause (except for different formes).`,
+						`(You have more than one ${species.id}.)`,
+					];
+				}
+				speciesTable.add(species.id);
+			}
+		},
+	},
+	{
+		name: "[Gen 8] Random Dex",
+		desc: `A micrometagame project consisting of 80 randomly selected fully-evolved Pok&eacute;mon.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3690182/">Random Dex</a>`,
+		],
+
+		mod: 'randomdex',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
+		banlist: ['All Pokemon', 'Past', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Bright Powder', 'Lax Incense', 'King\'s Rock',
+			'Razor Fang', 'Kangaskhanite', 'Medichamite'],
+		unbanlist: ["Aerodactyl", "Arbok", "Arcanine", "Archeops", "Articuno-Galar", "Banette", "Bellossom", "Bibarel", "Boltund",
+			"Charizard", "Chimecho", "Clawitzer", "Coalossal", "Copperajah", "Cradily", "Cursola", "Dedenne", "Dragalge", "Drampa",
+			"Drednaw", "Druddigon", "Dugtrio", "Espeon", "Excadrill", "Feraligatr", "Flareon", "Florges", "Froslass", "Frosmoth",
+			"Girafarig", "Glaceon", "Glalie", "Golurk", "Grimmsnarl", "Hippowdon", "Hitmonchan", "Hitmonlee", "Hitmontop", "Houndoom",
+			"Indeedee", "Infernape", "Inteleon", "Jolteon", "Kangaskhan", "Klefki", "Komala", "Kyurem", "Landorus", "Landorus-Therian",
+			"Latias", "Leafeon", "Linoone", "Luvdisc", "Malamar", "Manectric", "Moltres", "Moltres-Galar", "Mr. Mime", "Obstagoon",
+			"Octillery", "Omastar", "Palossand", "Probopass", "Pyukumuku", "Regice", "Relicanth", "Runerigus", "Salazzle",
+			"Sandslash-Alola", "Sawk", "Sirfetch'd", "Spectrier", "Spinda", "Stakataka", "Stoutland", "Stunfisk-Galar", "Swellow",
+			"Sylveon", "Tapu Bulu", "Tapu Fini", "Tauros", "Togedemaru", "Tyrantrum", "Umbreon", "Vaporeon", "Venusaur", "Vileplume",
+			"Volbeat", "Whimsicott", "Zarude"],
 	},
 	{
 		name: "[Gen 6] NEXT OU",
