@@ -72,6 +72,10 @@ const Hazards = [
 	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
 ];
 
+function sereneGraceBenefits(move: Move) {
+	return move.secondary?.chance && move.secondary.chance >= 20 && move.secondary.chance < 100;
+}
+
 export class RandomTeams {
 	dex: ModdedDex;
 	gen: number;
@@ -684,7 +688,7 @@ export class RandomTeams {
 			// Moves with secondary effects:
 			if (move.secondary) {
 				counter.add('sheerforce');
-				if (move.secondary.chance && move.secondary.chance >= 20 && move.secondary.chance < 100) {
+				if (sereneGraceBenefits(move)) {
 					counter.add('serenegrace');
 				}
 			}
@@ -1073,10 +1077,6 @@ export class RandomTeams {
 		case 'airslash':
 			return {cull:
 				(species.id === 'naganadel' && moves.has('nastyplot')) ||
-				// I'm told that Nasty Plot Noctowl wants Air Slash (presumably for consistent damage),
-				// and Defog Noctowl wants Hurricane—presumably for a high-risk, high-reward damaging move
-				// after its main job of removing hazards is done.
-				(species.id === 'noctowl' && !counter.setupType) ||
 				hasRestTalk ||
 				(abilities.has('Simple') && !!counter.get('recovery')) ||
 				counter.setupType === 'Physical',
@@ -1085,9 +1085,7 @@ export class RandomTeams {
 			// Special case for Mew, which only wants Brave Bird with Swords Dance
 			return {cull: moves.has('dragondance')};
 		case 'hurricane':
-			// Special case for Noctowl, which wants Air Slash if Nasty Plot instead
-			const noctowlCase = (!isNoDynamax && !isDoubles && species.id === 'noctowl' && !!counter.setupType);
-			return {cull: counter.setupType === 'Physical' || noctowlCase};
+			return {cull: counter.setupType === 'Physical'};
 		case 'futuresight':
 			return {cull: moves.has('psyshock') || moves.has('trick') || movePool.includes('teleport')};
 		case 'photongeyser':
@@ -1772,7 +1770,6 @@ export class RandomTeams {
 			// Iterate through the moves again, this time to cull them:
 			for (const moveid of moves) {
 				const move = this.dex.moves.get(moveid);
-
 				let {cull, isSetup} = this.shouldCullMove(
 					move, types, moves, abilities, counter,
 					movePool, teamDetails, species, isLead, isDoubles, isNoDynamax
@@ -1803,7 +1800,6 @@ export class RandomTeams {
 					(counter.get(counter.setupType) + counter.get('Status') > 3 && !counter.get('hazards')) ||
 					(move.category !== counter.setupType && move.category !== 'Status')
 				);
-
 				if (moveIsRejectable && (
 					!cull && !isSetup && !move.weather && !move.stallingMove && notImportantSetup && !move.damage &&
 					(isDoubles ? this.unrejectableMovesInDoubles(move) : this.unrejectableMovesInSingles(move))
@@ -1825,7 +1821,8 @@ export class RandomTeams {
 					) {
 						cull = true;
 					// Pokemon should have moves that benefit their typing
-					} else if (move.id !== 'stickyweb') { // Don't cull Sticky Web in type-based enforcement
+					// Don't cull Sticky Web in type-based enforcement, and make sure Azumarill always has Aqua Jet
+					} else if (move.id !== 'stickyweb' && !(species.id === 'azumarill' && move.id === 'aquajet')) {
 						for (const type of types) {
 							if (runEnforcementChecker(type)) {
 								cull = true;
@@ -1845,6 +1842,7 @@ export class RandomTeams {
 						}
 					}
 				}
+
 
 				// Remove rejected moves from the move list
 				if (cull && movePool.length) {
