@@ -2603,19 +2603,28 @@ export const commands: Chat.ChatCommands = {
 		lr: 'listresponses',
 		listresponses(target, room, user) {
 			this.checkCan('lock');
-			let buf = `<strong>Help ticket response buttons</strong><hr />`;
-			if (!Object.keys(settings.responses).length) {
+			let buf = `<strong>Help ticket response buttons `;
+			target = toID(target);
+			if (target && !(target in textTickets)) {
+				return this.errorReply(`Invalid ticket type: ${target}.`);
+			}
+			buf += `${target ? `for the type ${target}:` : ""}</strong><hr />`;
+			const table = target ? {[target]: settings.responses[target]} : settings.responses;
+			if (!Object.keys(table).length) {
 				buf += `<p class="message-error">None</p>`;
 				return this.sendReplyBox(buf);
 			}
-			buf += Object.keys(settings.responses).map(type => (
+			buf += Object.keys(table).map(type => (
 				`<p>${ticketTitles[type]}<p>` +
 				Object.keys(settings.responses[type])
 					.map(name => Utils.html`<p>- ${name}: "${settings.responses[type][name]}"</p>`).join('')
 			)).join('<hr />');
 			return this.sendReplyBox(buf);
 		},
-		listresponseshelp: [`/helpticket listresponses - List current response buttons for text tickets. Requires: % @ &`],
+		listresponseshelp: [
+			`/helpticket listresponses [optional type] - List current response buttons for text tickets. `,
+			`If a [type] is given, lists responses only for that type. Requires: % @ &`,
+		],
 
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
