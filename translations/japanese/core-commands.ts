@@ -31,7 +31,7 @@ export const translations: Translations = {
 		"You must specify a valid group symbol.": "有効なランクの記号を特定する必要があります。",
 		"You may only set a temporary symbol below your current rank.": "現在のランクより下の一時的なシンボルしか設定できません。",
 		"Your temporary group symbol is now": "あなたの一時的なランクの記号",
-		"Currently, you're viewing Pokémon Showdown in ${language}.": "現在、Pokémon Showdownを${languege}で表示しています。",
+		"Currently, you're viewing Pokémon Showdown in ${language}.": "現在、Pokémon Showdownを${language}で表示しています。",
 		"Valid languages are: ${languages}": "有効な言語一覧: ${languages}",
 		"Pokémon Showdown will now be displayed in ${language} (except in language rooms).": "Pokémon Showdownは言語部屋以外の場所は${language}で表示されます。",
 		"Note that rooms can set their own language, which will override this setting.": "言語部屋ではそれぞれが独自の言語を設定でき、その場合はユーザー設定より部屋の設定が優先されます。",
