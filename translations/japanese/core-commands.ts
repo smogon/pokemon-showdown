@@ -35,7 +35,7 @@ export const translations: Translations = {
 		"Valid languages are: ${languages}": "有効な言語一覧: ${languages}",
 		"Pokémon Showdown will now be displayed in ${language} (except in language rooms).": "Pokémon Showdownは言語部屋以外の場所は${language}で表示されます。",
 		"Note that rooms can set their own language, which will override this setting.": "言語部屋ではそれぞれが独自の言語を設定でき、その場合はユーザー設定より部屋の設定が優先されます。",
-		"/updatesettings expects JSON encoded object.": "/updatesettings を使用するには、JSONに変換されたファイルが必要です。",
+		"/updatesettings expects JSON encoded object.": "/updatesettings を使用するには、JSONにエンコードされたデータが必要です。",
 		"Unable to parse settings in /updatesettings!": "/updatesettings において、設定に使用するJSONを解析することができません。",
 		"Must be in a battle.": "バトルの中でなければいけません。",
 		"User ${target} not found.": "ユーザー ${target} は見つかりませんでした。",
