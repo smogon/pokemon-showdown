@@ -1244,14 +1244,13 @@ export const commands: Chat.ChatCommands = {
 	 * Low-level administration commands
 	 *********************************************************/
 
-	bash(target, room, user, connection) {
+	async bash(target, room, user, connection) {
 		this.canUseConsole();
 		if (!target) return this.parse('/help bash');
-
-		connection.sendTo(room, `$ ${target}`);
-		child_process.exec(target, (error, stdout, stderr) => {
-			connection.sendTo(room, (`${stdout}${stderr}`));
-		});
+		this.sendReply(`$ ${target}`);
+		const [, stdout, stderr] = await bash(target, this);
+		this.runBroadcast();
+		this.sendReply(`${stdout}${stderr}`);
 	},
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
