@@ -1591,8 +1591,8 @@ export const pages: Chat.PageTable = {
 									<h3 style={{textAlign: 'center'}}>Lottery</h3>
 									<hr />
 									<strong>Game:</strong> {gameName[giveaway.game]}<br />
-									<strong>Giver:</strong> {giveaway.targetUserID},
-									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}<br />
+									<strong>Giver:</strong> {giveaway.targetUserID}, {}
+									<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}<br />
 									<strong># of winners:</strong> {giveaway.winners}<br />
 									<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 									<details>
@@ -1626,8 +1626,8 @@ export const pages: Chat.PageTable = {
 									<h3 style={{textAlign: 'center'}}>Lottery</h3>
 									<hr />
 									<strong>Game:</strong> {gameName[giveaway.game]}<br />
-									<strong>Giver:</strong> {giveaway.targetUserID},
-									&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}<br />
+									<strong>Giver:</strong> {giveaway.targetUserID}, {}
+									<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}<br />
 									<strong>Question:</strong> {giveaway.question}<br />
 									<strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}<br />
 									<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
@@ -1668,7 +1668,7 @@ export const pages: Chat.PageTable = {
 										<h3>Pick a giveaway type</h3>
 										{
 											formatFakeButton(`/view-giveaways-stored-add-lottery`, <><i class="fa fa-random"></i> Lottery</>)
-										} |  {
+										} | {
 											formatFakeButton(`/view-giveaways-stored-add-question`, <><i class="fa fa-question"></i> Question</>)
 										}
 									</center>;
@@ -1760,14 +1760,14 @@ export const pages: Chat.PageTable = {
 										return <>
 											<h3 style={{textAlign: 'center'}}>Lottery</h3>
 											<hr />
-											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
-											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid},
-											&#32;<strong># of winners:</strong> {giveaway.winners}
+											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID}, {}
+											<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}, {}
+											<strong># of winners:</strong> {giveaway.winners}
 											{!!giveaway.claimed && <><br /><strong>Claimed:</strong> {giveaway.claimed}</>}<br />
 											<strong>Pok&eacute; Ball:</strong> <psicon item={giveaway.ball} />
 											<details>
 												<summary><psicon pokemon={giveaway.prize.species} /> Prize</summary>
-												{Giveaway.convertIVs(giveaway.prize, giveaway.ivs).replace(/\n/g, '<br />')}
+												<Chat.JSX.FormatText isTrusted>{Giveaway.convertIVs(giveaway.prize, giveaway.ivs)}</Chat.JSX.FormatText>
 											</details>
 											{!!giveaway.extraInfo?.trim() && <>
 												<hr />
@@ -1782,8 +1782,8 @@ export const pages: Chat.PageTable = {
 										return <>
 											<h3 style={{textAlign: 'center'}}>Question</h3>
 											<hr />
-											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID},
-											&#32;<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
+											<strong>Game:</strong> {gameName[giveaway.game]}, <strong>Giver:</strong> {giveaway.targetUserID}, {}
+											<strong>OT:</strong> {giveaway.ot}, <strong>TID:</strong> {giveaway.tid}
 											{!!giveaway.claimed && <><br /><strong>Claimed:</strong> {giveaway.claimed}</>}<br />
 											<strong>Question:</strong> {giveaway.question}<br />
 											<strong>Answer{Chat.plural(giveaway.answers.length, "s")}:</strong> {giveaway.answers.join(', ')}<br />
