@@ -68,7 +68,7 @@ export interface AnnotatedChatCommands {
 export interface Handlers {
 	onRoomClose?: (id: string, user: User, connection: Connection, page: boolean) => any;
 	onRenameRoom?: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
-	onBattleStart?: (room: GameRoom, users: User[]) => void;
+	onBattleStart?: (room: Rooms.RoomBattle, users: User[]) => void;
 	onBattleLeave?: (user: User, room: GameRoom) => void;
 	onDisconnect?: (user: User) => void;
 	onRoomDestroy?: (roomid: RoomID) => void;
@@ -2015,8 +2015,8 @@ export const Chat = new class {
 		}
 	}
 
-	runHandlers(name: string, ...args: any) {
-		const handlers = this.handlers[name];
+	runHandlers<T = keyof Chat.Handlers>(name: T, ...args: Parameters<Chat.Handlers[`on${T}`]>) {
+		const handlers = this.handlers[name as any as string];
 		if (!handlers) return;
 		for (const h of handlers) {
 			void h.call(this, ...args);
