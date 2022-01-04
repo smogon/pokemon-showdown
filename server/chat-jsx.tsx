@@ -28,7 +28,7 @@ export interface PSElements extends preact.JSX.IntrinsicElements {
 	spotify: {src: string};
 	username: {name?: string, class?: string};
 	psicon: {pokemon: string} | {item: string} | {type: string} | {category: string};
-	center: {};
+	center: {class?: string};
 }
 
 export {render};
