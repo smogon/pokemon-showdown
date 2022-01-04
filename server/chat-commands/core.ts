@@ -1510,6 +1510,9 @@ export const commands: Chat.ChatCommands = {
 			if (typeof help === 'string') {
 				help = namespace[help];
 			}
+			if (!help && typeof namespace[cmd] === 'string') {
+				help = namespace[`${namespace[cmd]}help`];
+			}
 			if (!help && namespace !== Chat.commands && namespace['help']) {
 				help = namespace['help'];
 			}
