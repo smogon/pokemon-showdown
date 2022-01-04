@@ -73,6 +73,7 @@ export interface Handlers {
 	onDisconnect?: (user: User) => void;
 	onRoomDestroy?: (roomid: RoomID) => void;
 	onBattleEnd?: (battle: RoomBattle, winner: ID, players: ID[]) => void;
+	onLadderSearch?: (user: User, connection: Connection, format: ID) => void;
 }
 
 export interface ChatPlugin {
