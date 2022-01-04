@@ -240,6 +240,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	floralhealing: {
+		inherit: true,
+		onHit(target, source) {
+			let success = false;
+			if (this.field.isTerrain('grassyterrain')) {
+				success = !!this.heal(this.modify(target.baseMaxhp, 0.667));
+			} else {
+				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
+			}
+			if (success && !target.isAlly(source)) {
+				target.staleness = 'external';
+			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return null;
+			}
+			return success;
+		},
+	},
 	foresight: {
 		inherit: true,
 		isNonstandard: null,
@@ -358,6 +377,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	healorder: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	healpulse: {
+		inherit: true,
+		onHit(target, source) {
+			let success = false;
+			if (source.hasAbility('megalauncher')) {
+				success = !!this.heal(this.modify(target.baseMaxhp, 0.75));
+			} else {
+				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
+			}
+			if (success && !target.isAlly(source)) {
+				target.staleness = 'external';
+			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return null;
+			}
+			return success;
+		},
 	},
 	heartstamp: {
 		inherit: true,
@@ -608,6 +646,54 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	moonlight: {
+		inherit: true,
+		onHit(pokemon) {
+			let factor = 0.5;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				factor = 0.667;
+				break;
+			case 'raindance':
+			case 'primordialsea':
+			case 'sandstorm':
+			case 'hail':
+				factor = 0.25;
+				break;
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return null;
+			}
+			return success;
+		},
+	},
+	morningsun: {
+		inherit: true,
+		onHit(pokemon) {
+			let factor = 0.5;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				factor = 0.667;
+				break;
+			case 'raindance':
+			case 'primordialsea':
+			case 'sandstorm':
+			case 'hail':
+				factor = 0.25;
+				break;
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return null;
+			}
+			return success;
+		},
+	},
 	mudbomb: {
 		inherit: true,
 		isNonstandard: null,
@@ -651,6 +737,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	pollenpuff: {
 		inherit: true,
 		flags: {bullet: 1, protect: 1, mirror: 1},
+		onHit(target, source) {
+			if (source.isAlly(target)) {
+				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
+					this.add('-immune', target);
+					return null;
+				}
+			}
+		},
 	},
 	powder: {
 		inherit: true,
@@ -721,6 +815,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	punishment: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	purify: {
+		inherit: true,
+		onHit(target, source) {
+			if (!target.cureStatus()) return false;
+			this.heal(Math.ceil(source.maxhp * 0.5), source);
+		},
 	},
 	pursuit: {
 		inherit: true,
@@ -815,6 +916,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	shoreup: {
+		inherit: true,
+		onHit(pokemon) {
+			let factor = 0.5;
+			if (this.field.isWeather('sandstorm')) {
+				factor = 0.667;
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return null;
+			}
+			return success;
+		},
+	},
 	signalbeam: {
 		inherit: true,
 		isNonstandard: null,
@@ -898,6 +1014,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	swallow: {
+		inherit: true,
+		onHit(pokemon) {
+			const healAmount = [0.25, 0.5, 1];
+			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			if (!success) this.add('-fail', pokemon, 'heal');
+			pokemon.removeVolatile('stockpile');
+			return success || null;
+		},
+	},
 	switcheroo: {
 		inherit: true,
 		onHit(target, source, move) {
@@ -934,6 +1060,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	synchronoise: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	synthesis: {
+		inherit: true,
+		onHit(pokemon) {
+			let factor = 0.5;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				factor = 0.667;
+				break;
+			case 'raindance':
+			case 'primordialsea':
+			case 'sandstorm':
+			case 'hail':
+				factor = 0.25;
+				break;
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return null;
+			}
+			return success;
+		},
 	},
 	tailglow: {
 		inherit: true,
