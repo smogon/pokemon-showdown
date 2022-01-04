@@ -2015,8 +2015,8 @@ export const Chat = new class {
 		}
 	}
 
-	runHandlers<T = keyof Chat.Handlers>(name: T, ...args: Parameters<Chat.Handlers[`on${T}`]>) {
-		const handlers = this.handlers[name as any as string];
+	runHandlers(name: string, ...args: any) {
+		const handlers = this.handlers[name];
 		if (!handlers) return;
 		for (const h of handlers) {
 			void h.call(this, ...args);
