@@ -3067,6 +3067,23 @@ export const Formats: FormatList = [
 		unbanlist: ['Genesect', 'Landorus', 'Manaphy', 'Thundurus', 'Tornadus-Therian'],
 	},
 	{
+		name: "[Gen 5] ZU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8034680/">BW2 ZU</a>`,
+		],
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['[Gen 5] PU'],
+		banlist: [
+			'Audino', 'Banette', 'Beheeyem', 'Dodrio', 'Duosion', 'Dwebble', 'Ferroseed', 'Fraxure', 'Gabite', 'Golduck', 'Glalie', 'Huntail',
+			'Jumpluff', 'Klang', 'Krokorok', 'Machoke', 'Mantine', 'Maractus', 'Marowak', 'Mawile', 'Monferno', 'Murkrow', 'Omanyte', 'Purugly',
+			'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Scraggy', 'Shiftry', 'Sneasel', 'Simisage', 'Stoutland', 'Stunfisk', 'Swanna',
+			'Swoobat', 'Tentacool', 'Torterra', 'Trubbish', 'Ursaring', 'Victreebel', 'Vileplume', 'Volbeat', 'Whirlipede', 'Wynaut', 'Zebstrika',
+			'Zweilous', 'Sand Stream', 'Snow Warning', 'Baton Pass',
+		],
+	},
+	{
 		name: "[Gen 5] GBU Singles",
 
 		mod: 'gen5',
