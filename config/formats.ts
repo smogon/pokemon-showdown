@@ -1055,7 +1055,7 @@ export const Formats: FormatList = [
 		mod: 'gen8bdsp',
 		searchShow: false,
 		ruleset: ['Little Cup', 'Standard'],
-		banlist: ['Gligar', 'Meditite', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma', 'Baton Pass'],
+		banlist: ['Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 8 BDSP] Monotype",
