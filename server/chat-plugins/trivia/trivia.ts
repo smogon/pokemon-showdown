@@ -2174,15 +2174,18 @@ const triviaCommands: Chat.ChatCommands = {
 	},
 	rankhelp: [`/trivia rank [username] - View the rank of the specified user. If no name is given, view your own.`],
 
-	noncycleladder: 'ladder',
-	alltimeladder: 'ladder',
+	alltimescoreladder: 'ladder',
+	scoreladder: 'ladder',
+	winsladder: 'ladder',
+	alltimewinsladder: 'ladder',
 	async ladder(target, room, user, connection, cmd) {
 		room = this.requireRoom('trivia' as RoomID);
 		if (!this.runBroadcast()) return false;
 
 		let leaderboard: Leaderboard = 'cycle';
-		if (cmd === 'alltimeladder') leaderboard = 'alltime';
-		if (cmd === 'noncycleladder') leaderboard = 'nonAlltime';
+		// TODO: rename leaderboards in the code once the naming scheme has been stable for a few months
+		if (cmd.includes('wins')) leaderboard = 'alltime';
+		if (cmd.includes('score')) leaderboard = 'nonAlltime';
 
 		const ladder = (await cachedLadder.get(leaderboard))?.ladder;
 		if (!ladder?.length) return this.errorReply(this.tr`No Trivia games have been played yet.`);
