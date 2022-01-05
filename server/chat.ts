@@ -68,7 +68,7 @@ export interface AnnotatedChatCommands {
 export interface Handlers {
 	onRoomClose?: (id: string, user: User, connection: Connection, page: boolean) => any;
 	onRenameRoom?: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
-	onBattleStart?: (room: Rooms.RoomBattle, users: User[]) => void;
+	onBattleStart?: (user: User, room: GameRoom) => void;
 	onBattleLeave?: (user: User, room: GameRoom) => void;
 	onDisconnect?: (user: User) => void;
 	onRoomDestroy?: (roomid: RoomID) => void;
