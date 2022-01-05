@@ -1213,7 +1213,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (this.missingBattleStartMessage === 'multi') {
 			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);
 		}
-		Chat.runHandlers('BattleStart', this, users);
 	}
 
 	invitesFull() {

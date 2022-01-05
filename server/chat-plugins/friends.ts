@@ -655,8 +655,8 @@ export const pages: Chat.PageTable = {
 };
 
 export const handlers: Chat.Handlers = {
-	onBattleStart(battle, users) {
-		for (const user of users) Friends.updateSpectatorLists(user);
+	onBattleStart(user) {
+		return Friends.updateSpectatorLists(user);
 	},
 	onBattleLeave(user, room) {
 		return Friends.updateSpectatorLists(user);
