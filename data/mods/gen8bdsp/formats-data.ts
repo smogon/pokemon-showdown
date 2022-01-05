@@ -909,7 +909,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["bravebird", "roost", "suckerpunch", "taunt"],
 	},
 	misdreavus: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	mismagius: {
 		tier: "UU",
