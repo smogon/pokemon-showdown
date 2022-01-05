@@ -2402,11 +2402,11 @@ export const Formats: FormatList = [
 		mod: 'gen5',
 		ruleset: ['[Gen 5] PU'],
 		banlist: [
-			'Audino', 'Banette', 'Beheeyem', 'Dodrio', 'Duosion', 'Dwebble', 'Ferroseed', 'Fraxure', 'Gabite', 'Golduck', 'Glalie', 'Huntail',
-			'Jumpluff', 'Klang', 'Krokorok', 'Machoke', 'Mantine', 'Maractus', 'Marowak', 'Mawile', 'Monferno', 'Murkrow', 'Omanyte', 'Purugly',
-			'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Scraggy', 'Shiftry', 'Sneasel', 'Simisage', 'Stoutland', 'Stunfisk', 'Swanna',
-			'Swoobat', 'Tentacool', 'Torterra', 'Trubbish', 'Ursaring', 'Victreebel', 'Vileplume', 'Volbeat', 'Whirlipede', 'Wynaut', 'Zebstrika',
-			'Zweilous', 'Baton Pass',
+			'Audino', 'Banette', 'Beheeyem', 'Bronzor', 'Dodrio', 'Duosion', 'Dwebble', 'Ferroseed', 'Fraxure', 'Gabite', 'Golduck', 'Glalie',
+			'Huntail', 'Jumpluff', 'Klang', 'Krokorok', 'Machoke', 'Mantine', 'Maractus', 'Marowak', 'Mawile', 'Monferno', 'Murkrow', 'Natu',
+			'Omanyte', 'Purugly', 'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Scraggy', 'Shiftry', 'Sneasel', 'Simisage', 'Stoutland',
+			'Stunfisk', 'Swanna', 'Swoobat', 'Tentacool', 'Torterra', 'Trubbish', 'Ursaring', 'Victreebel', 'Vileplume', 'Volbeat', 'Whirlipede',
+			'Wynaut', 'Zebstrika', 'Zweilous', 'Baton Pass',
 		],
 	},
 
