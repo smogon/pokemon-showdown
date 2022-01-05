@@ -655,11 +655,18 @@ export const pages: Chat.PageTable = {
 };
 
 export const handlers: Chat.Handlers = {
-	onBattleStart(user) {
-		return Friends.updateSpectatorLists(user);
+	onBattleStart(battle, users) {
+		for (const user of users) Friends.updateSpectatorLists(user);
 	},
 	onBattleLeave(user, room) {
 		return Friends.updateSpectatorLists(user);
+	},
+	onBattleEnd(battle, winner, players) {
+		for (const id of players) {
+			const user = Users.get(id);
+			if (!user) continue;
+			Friends.updateSpectatorLists(user);
+		}
 	},
 	onDisconnect(user) {
 		void Chat.Friends.writeLogin(user.id);
