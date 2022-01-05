@@ -3080,7 +3080,7 @@ export const Formats: FormatList = [
 			'Jumpluff', 'Klang', 'Krokorok', 'Machoke', 'Mantine', 'Maractus', 'Marowak', 'Mawile', 'Monferno', 'Murkrow', 'Omanyte', 'Purugly',
 			'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Scraggy', 'Shiftry', 'Sneasel', 'Simisage', 'Stoutland', 'Stunfisk', 'Swanna',
 			'Swoobat', 'Tentacool', 'Torterra', 'Trubbish', 'Ursaring', 'Victreebel', 'Vileplume', 'Volbeat', 'Whirlipede', 'Wynaut', 'Zebstrika',
-			'Zweilous', 'Snow Warning', 'Baton Pass',
+			'Zweilous', 'Baton Pass',
 		],
 	},
 	{
