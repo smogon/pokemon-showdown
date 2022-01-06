@@ -73,7 +73,7 @@ export const settings: FilterSettings = (() => {
 
 interface FilterSettings {
 	disabled?: boolean;
-	thresholdIncrement: {turns: number, amount: number, minTurns?: number};
+	thresholdIncrement?: {turns: number, amount: number, minTurns?: number};
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
@@ -344,7 +344,7 @@ function calcThreshold(roomid: RoomID) {
 	const incr = settings.thresholdIncrement;
 	let num = settings.threshold;
 	const room = Rooms.get(roomid);
-	if (!room || !room.battle) return num; // should never happen
+	if (!room || !room.battle || !incr) return num;
 	if (!incr.minTurns || room.battle.turn >= incr.minTurns) {
 		num += (Math.floor(room.battle.turn / incr.turns) * incr.amount);
 	}
@@ -689,8 +689,10 @@ export const commands: Chat.ChatCommands = {
 			buf += `<br /><strong>Score threshold:</strong> ${settings.threshold}`;
 			buf += `<br /><strong>Threshold increments:</strong>`;
 			const incr = settings.thresholdIncrement;
-			buf += `<br /> &bull; Increases ${incr.amount} every ${incr.turns} turns`;
-			if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
+			if (incr) {
+				buf += `<br /> &bull; Increases ${incr.amount} every ${incr.turns} turns`;
+				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
+			}
 			this.sendReplyBox(buf);
 		},
 		ti: 'thresholdincrement',
@@ -725,6 +727,15 @@ export const commands: Chat.ChatCommands = {
 				`ABUSEMONITOR INCREMENT`, null, `${increment} every ${turns} turn(s)${min ? ` after ${min} turn(s)` : ""}`
 			);
 		},
+		di: 'deleteincrement',
+		deleteincrement(target, room, user) {
+			checkAccess(this);
+			if (!settings.thresholdIncrement) return this.errorReply(`The threshold increment is already disabled.`);
+			delete settings.thresholdIncrement;
+			saveSettings();
+			this.privateGlobalModAction(`${user.name} disabled the abuse-monitor threshold increment.`);
+			this.globalModlog(`ABUSEMONITOR DISABLEINCREMENT`);
+		},
 	},
 	abusemonitorhelp: [
 		`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
@@ -742,6 +753,7 @@ export const commands: Chat.ChatCommands = {
 		`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
 		`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
 		`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
+		`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
 	],
 };
 
