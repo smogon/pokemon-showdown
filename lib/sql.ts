@@ -14,6 +14,13 @@ export interface SQLOptions {
 	extension?: string;
 	/** options to be passed to better-sqlite3 */
 	sqliteOptions?: sqlite.Options;
+	/**
+	 * You can choose to return custom error information, or just crashlog and return void.
+	 * doing that will make it reject in main as normal.
+	 * (it only returns a diff result if you do, otherwise it's a default error).
+	 * You can also choose to only handle errors in the parent - see the third param, isParentProcess.
+	 */
+	onError?: ErrorHandler;
 }
 
 type DataType = unknown[] | Record<string, unknown>;
@@ -46,7 +53,7 @@ type DatabaseQuery = {
 	type: 'load-extension', data: string,
 };
 
-type ErrorHandler = (error: Error, data: DatabaseQuery) => void;
+type ErrorHandler = (error: Error, data: DatabaseQuery, isParentProcess: boolean) => any;
 
 function getModule() {
 	try {
@@ -88,8 +95,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		statements: Map<string, sqlite.Statement>,
 	};
 	private dbReady = false;
-	onError: ErrorHandler;
-	constructor(module: NodeJS.Module, options: SQLOptions, onError?: ErrorHandler) {
+	constructor(module: NodeJS.Module, options: SQLOptions) {
 		super(module, query => {
 			if (!this.dbReady) {
 				this.setupDatabase();
@@ -149,18 +155,24 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		});
 
 		this.options = options;
-		this.onError = onError || ((err, query) => {
-			if (global.Monitor?.crashlog) {
-				Monitor.crashlog(err, `an ${this.basename} SQLite process`, query);
-				return null;
-			}
-			throw new Error(`SQLite error: ${err.message} (${JSON.stringify(query)})`);
-		});
 		this.state = {
 			transactions: new Map(),
 			statements: new Map(),
 		};
 		if (!this.isParentProcess) this.setupDatabase();
+	}
+	private onError(err: Error, query: DatabaseQuery) {
+		if (this.options.onError) {
+			const result = this.options.onError(err, query, false);
+			if (result) return result;
+		}
+		return {
+			queryError: {
+				stack: err.stack,
+				message: err.message,
+				query,
+			},
+		};
 	}
 	private cacheStatement(source: string) {
 		source = source.trim();
@@ -220,6 +232,19 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			onDatabaseStart(this.database);
 		}
 	}
+	async query(input: DatabaseQuery) {
+		const result = await super.query(input);
+		if (result?.queryError) {
+			const err = new Error(result.queryError.message);
+			err.stack = result.queryError.stack;
+			if (this.options.onError) {
+				const errResult = this.options.onError(err, result.queryError.query, true);
+				if (errResult) return errResult;
+			}
+			throw err;
+		}
+		return result;
+	}
 	all<T = any>(
 		statement: string | Statement, data: DataType = [], noPrepare?: boolean
 	): Promise<T[]> {
@@ -259,17 +284,11 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	}
 }
 
-interface SetupOptions {
-	onError: ErrorHandler;
-	processes: number;
-}
-
 export function SQL(
-	module: NodeJS.Module, input: SQLOptions & Partial<SetupOptions>
+	module: NodeJS.Module, input: SQLOptions & {processes?: number}
 ) {
-	const {onError, processes} = input;
-	for (const k of ['onError', 'processes'] as const) delete input[k];
-	const PM = new SQLDatabaseManager(module, input, onError);
+	const {processes} = input;
+	const PM = new SQLDatabaseManager(module, input);
 	if (PM.isParentProcess) {
 		if (processes) PM.spawn(processes);
 	}
