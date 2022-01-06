@@ -2220,8 +2220,8 @@ const triviaCommands: Chat.ChatCommands = {
 	},
 	ladderhelp: [
 		`/trivia ladder [n] - Displays the top [n] users on the cycle-specific Trivia leaderboard. If [n] isn't specified, shows 15 users.`,
-		`/trivia alltimeladder [n] - Like /trivia ladder, but displays the all-time Trivia leaderboard.`,
-		`/trivia noncycleladder [n] - Like /trivia ladder, but displays the Trivia leaderboard which is neither all-time nor cycle-specific.`,
+		`/trivia alltimewinsladder [n] - Like /trivia ladder, but displays the all-time Trivia leaderboard.`,
+		`/trivia alltimescoreladder [n] - Like /trivia ladder, but displays the Trivia leaderboard which is neither all-time nor cycle-specific.`,
 	],
 
 	resetladder: 'resetcycleleaderboard',
@@ -2447,8 +2447,8 @@ const triviaCommands: Chat.ChatCommands = {
 			`</ul></details>` +
 			`<details><summary><strong>Leaderboard commands</strong></summary><ul>` +
 				`<li><code>/trivia ladder [n]</code> - Displays the top <code>[n]</code> users on the cycle-specific Trivia leaderboard. If <code>[n]</code> isn't specified, shows 15 users.</li>` +
-				`<li><code>/trivia alltimeladder</code> - Like <code>/trivia ladder</code>, but displays the all-time Trivia leaderboard.</li>` +
-				`<li><code>/trivia noncycleladder</code> - Like <code>/trivia ladder</code>, but displays the Trivia leaderboard which is neither all-time nor cycle-specific.</li>` +
+				`<li><code>/trivia alltimewinsladder</code> - Like <code>/trivia ladder</code>, but displays the all-time wins Trivia leaderboard (formerly all-time).</li>` +
+				`<li><code>/trivia alltimescoreladder</code> - Like <code>/trivia ladder</code>, but displays the all-time score Trivia leaderboard (formerly non—all-time)</li>` +
 				`<li><code>/trivia resetcycleleaderboard</code> - Resets the cycle-specific Trivia leaderboard. Requires: # &` +
 				`<li><code>/trivia mergescore [user]</code> — Merge another user's Trivia leaderboard score with yours.</li>` +
 				`<li><code>/trivia addpoints [user], [points]</code> - Add points to a given user's score on the Trivia leaderboard. Requires: # &</li>` +
