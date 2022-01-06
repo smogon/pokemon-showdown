@@ -2219,7 +2219,7 @@ const triviaCommands: Chat.ChatCommands = {
 		return this.sendReply(buffer);
 	},
 	ladderhelp: [
-		`/trivia ladder [n] - Displays the top [n] users on the cycle-specific Trivia leaderboard. If [n] isn't specified, shows 15 users.`,
+		`/trivia ladder [n] - Displays the top [n] users on the cycle-specific Trivia leaderboard. If [n] isn't specified, shows 100 users.`,
 		`/trivia alltimewinsladder [n] - Like /trivia ladder, but displays the all-time Trivia leaderboard.`,
 		`/trivia alltimescoreladder [n] - Like /trivia ladder, but displays the Trivia leaderboard which is neither all-time nor cycle-specific.`,
 	],
@@ -2446,7 +2446,7 @@ const triviaCommands: Chat.ChatCommands = {
 				`<li><code>/trivia lastofficialscore</code> - View the scores from the last Trivia game. Intended for bots.</li>` +
 			`</ul></details>` +
 			`<details><summary><strong>Leaderboard commands</strong></summary><ul>` +
-				`<li><code>/trivia ladder [n]</code> - Displays the top <code>[n]</code> users on the cycle-specific Trivia leaderboard. If <code>[n]</code> isn't specified, shows 15 users.</li>` +
+				`<li><code>/trivia ladder [n]</code> - Displays the top <code>[n]</code> users on the cycle-specific Trivia leaderboard. If <code>[n]</code> isn't specified, shows 100 users.</li>` +
 				`<li><code>/trivia alltimewinsladder</code> - Like <code>/trivia ladder</code>, but displays the all-time wins Trivia leaderboard (formerly all-time).</li>` +
 				`<li><code>/trivia alltimescoreladder</code> - Like <code>/trivia ladder</code>, but displays the all-time score Trivia leaderboard (formerly non—all-time)</li>` +
 				`<li><code>/trivia resetcycleleaderboard</code> - Resets the cycle-specific Trivia leaderboard. Requires: # &` +
