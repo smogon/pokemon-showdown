@@ -9225,8 +9225,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {heal: 1, bypasssub: 1, allyanim: 1},
 		onHit(pokemon) {
-			const success = pokemon.cureStatus() || !!this.heal(this.modify(pokemon.maxhp, 0.25));
-			return success || this.NOT_FAIL;
+			const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
+			return pokemon.cureStatus() || success;
 		},
 		secondary: null,
 		target: "allies",
