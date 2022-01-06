@@ -16,7 +16,8 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>グローバルユーザーランク</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "<strong>グローバルボイス</strong>(+): プレフィックスとして\"/\"の代わりに\"!\"を使ってコマンドの結果を部屋に表示することができる。",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%): 上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>セクションリーダー</strong> - 各々に割り当てられた部屋を監視する。"
+		"% <strong>Global Driver</strong> - Like Voice, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%): ボイスに似ているが上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@): 上記に加えてユーザーをサイト全体からBANできる。",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>グローバルボット</strong>(*): 権限はモデレータと同じだが、ボットだと分かるためのランク。",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;): 何でもできる。この文章を編集したり、ユーザーをグローバルに昇格させたりできる。",
