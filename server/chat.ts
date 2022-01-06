@@ -77,7 +77,6 @@ interface Handlers {
 	onRoomDestroy: (roomid: RoomID) => void;
 	onBattleEnd: (battle: RoomBattle, winner: ID, players: ID[]) => void;
 	onLadderSearch: (user: User, connection: Connection, format: ID) => void;
-	// Chat.runHandlers('BattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
 	onBattleRanked: (
 		battle: Rooms.RoomBattle, winner: ID, ratings: (AnyObject | null | undefined)[], players: ID[]
 	) => void;

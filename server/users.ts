@@ -1147,7 +1147,7 @@ export class User extends Chat.MessageContext {
 	}
 	markDisconnected() {
 		if (!this.connected) return;
-		Chat.runHandlers('Disconnect', this);
+		Chat.runHandlers('onDisconnect', this);
 		this.connected = false;
 		Users.onlineCount--;
 		this.lastDisconnected = Date.now();
