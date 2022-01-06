@@ -2127,6 +2127,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 	async rank(target, room, user) {
 		room = this.requireRoom('trivia' as RoomID);
+		this.runBroadcast();
 
 		let name;
 		let userid;
@@ -2149,27 +2150,35 @@ const triviaCommands: Chat.ChatCommands = {
 		const ranks = (await cachedLadder.get('nonAlltime'))?.ranks[userid];
 		const allTimeRanks = (await cachedLadder.get('alltime'))?.ranks[userid];
 		const cycleRanks = (await cachedLadder.get('cycle'))?.ranks[userid];
+
+		function display(
+			scores: TriviaLeaderboardScore | null,
+			ranking: TriviaLeaderboardScore | undefined,
+			key: keyof TriviaLeaderboardScore,
+		) {
+			if (!scores?.[key]) return `<td>N/A</td>`;
+			return Utils.html`<td>${scores[key]}${ranking?.[key] ? ` (rank ${ranking[key]})` : ``}</td>`;
+		}
+
 		this.sendReplyBox(
-			this.tr`User: <strong>${name}</strong>` + `<br />` +
-
-			`Leaderboard score: <strong>${score.score}</strong>${ranks ? ` (#${ranks.score})` : ""}, ` +
-			`all time: <strong>${allTimeScore.score}</strong>${allTimeRanks ? ` (#${allTimeRanks.score})` : ""}` +
-			(cycleScore ? `, cycle: <strong>${cycleScore.score}</strong>${cycleRanks ? ` (#${cycleRanks.score})` : ""}` : ``) +
-			`<br />` +
-
-			`Total game points: <strong>${score.totalPoints}</strong>${ranks ? ` (#${ranks.totalPoints})` : ""}, ` +
-			`all time: <strong>${allTimeScore.totalPoints}</strong>${allTimeRanks ? ` (#${allTimeRanks.totalPoints})` : ""}` +
-			(cycleScore ?
-				`, cycle: <strong>${cycleScore.totalPoints}</strong>${cycleRanks ? ` (#${cycleRanks.totalPoints})` : ""}` :
-				``
-			) + `<br />` +
-
-			`Total correct answers: <strong>${score.totalCorrectAnswers}</strong>${ranks ? ` (#${ranks.totalCorrectAnswers})` : ""}, ` +
-			`all time: <strong>${allTimeScore.totalCorrectAnswers}</strong>${allTimeRanks ? ` (#${allTimeRanks.totalCorrectAnswers})` : ""}` +
-			(cycleScore ?
-				`, cycle: <strong>${cycleScore.totalCorrectAnswers}</strong>${cycleRanks ? ` (#${cycleRanks.totalCorrectAnswers})` : ""}` :
-				``
-			) + `<br />`
+			`<div class="ladder"><table>` +
+			`<tr><th>${name}</th><th>Cycle Ladder</th><th>All-time Score Ladder</th><th>All-time Wins Ladder</th></tr>` +
+			`<tr><td>Leaderboard score</td>` +
+				display(cycleScore, cycleRanks, 'score') +
+				display(score, ranks, 'score') +
+				display(allTimeScore, allTimeRanks, 'score') +
+			`</tr>` +
+			`<tr><td>Total game points</td>` +
+				display(cycleScore, cycleRanks, 'totalPoints') +
+				display(score, ranks, 'totalPoints') +
+				display(allTimeScore, allTimeRanks, 'totalPoints') +
+			`</tr>` +
+			`<tr><td>Total correct answers</td>` +
+				display(cycleScore, cycleRanks, 'totalCorrectAnswers') +
+				display(score, ranks, 'totalCorrectAnswers') +
+				display(allTimeScore, allTimeRanks, 'totalCorrectAnswers') +
+			`</tr>` +
+			`</table></div>`
 		);
 	},
 	rankhelp: [`/trivia rank [username] - View the rank of the specified user. If no name is given, view your own.`],
