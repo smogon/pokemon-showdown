@@ -51,6 +51,7 @@ export const cache: {
 
 const defaults: FilterSettings = {
 	threshold: 4,
+	thresholdIncrement: {turns: 5, amount: 1},
 	minScore: 0.65,
 	specials: {
 		THREAT: {0.96: 'MAXIMUM'},
@@ -72,6 +73,7 @@ export const settings: FilterSettings = (() => {
 
 interface FilterSettings {
 	disabled?: boolean;
+	thresholdIncrement: {turns: number, amount: number, minTurns?: number};
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
@@ -322,7 +324,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
 			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
-			if (cache[roomid].users[user.id] >= settings.threshold) {
+			if (cache[roomid].users[user.id] >= calcThreshold(roomid)) {
 				cache[roomid].staffNotified = user.id;
 				notifyStaff();
 				hitThreshold = 1;
@@ -337,6 +339,17 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 };
 // to avoid conflicts with other filters
 chatfilter.priority = -100;
+
+function calcThreshold(roomid: RoomID) {
+	const incr = settings.thresholdIncrement;
+	let num = settings.threshold;
+	const room = Rooms.get(roomid);
+	if (!room || !room.battle) return num; // should never happen
+	if (!incr.minTurns || room.battle.turn >= incr.minTurns) {
+		num += (Math.floor(room.battle.turn / incr.turns) * incr.amount);
+	}
+	return num;
+}
 
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
@@ -674,7 +687,43 @@ export const commands: Chat.ChatCommands = {
 			}
 			buf += `<br /><strong>Minimum percent to process:</strong> ${settings.minScore}`;
 			buf += `<br /><strong>Score threshold:</strong> ${settings.threshold}`;
+			buf += `<br /><strong>Threshold increments:</strong>`;
+			const incr = settings.thresholdIncrement;
+			buf += `<br /> &bull; Increases ${incr.amount} every ${incr.turns} turns`;
+			if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
 			this.sendReplyBox(buf);
+		},
+		ti: 'thresholdincrement',
+		thresholdincrement(target, room, user) {
+			checkAccess(this);
+			if (!toID(target)) {
+				return this.parse(`/help am`);
+			}
+			const [rawTurns, rawIncrement, rawMin] = Utils.splitFirst(target, ',', 2).map(toID);
+			const turns = parseInt(rawTurns);
+			if (isNaN(turns) || turns < 0) {
+				return this.errorReply(`Turns must be a number above 0.`);
+			}
+			const increment = parseInt(rawIncrement);
+			if (isNaN(increment) || increment < 0) {
+				return this.errorReply(`The increment must be a number above 0.`);
+			}
+			const min = parseInt(rawMin);
+			if (rawMin && isNaN(min)) {
+				return this.errorReply(`Invalid minimum (must be a number).`);
+			}
+			settings.thresholdIncrement = {amount: increment, turns};
+			if (min) {
+				settings.thresholdIncrement.minTurns = min;
+			}
+			saveSettings();
+			this.privateGlobalModAction(
+				`${user.name} set the abuse-monitor threshold increment ${increment} every ${Chat.count(turns, 'turns')}` +
+				`${min ? `after ${Chat.count(min, 'turns')}` : ""}`
+			);
+			this.globalModlog(
+				`ABUSEMONITOR INCREMENT`, null, `${increment} every ${turns} turn(s)${min ? ` after ${min} turn(s)` : ""}`
+			);
 		},
 	},
 	abusemonitorhelp: [
@@ -691,6 +740,8 @@ export const commands: Chat.ChatCommands = {
 		`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
 		`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
 		`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
+		`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
+		`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
 	],
 };
 
