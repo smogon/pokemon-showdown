@@ -1508,57 +1508,56 @@ export const pages: Chat.PageTable = {
 							formatFakeButton(`/view-giveaways-create-question`, <><i class="fa fa-question"></i> Question</>)
 						}
 					</center>;
-				} else {
-					switch (type) {
-					case 'lottery':
-						return <>
-							<h2>Make a Lottery Giveaway</h2>
-							<form data-submitsend={"/giveaway create lottery {giver}|{ot}|{tid}|{game}|{winners}|{ivs}|{ball}|{info}|{set}"}>
-								<label for="giver">Giver: </label><input name="giver" /><br /><br />
-								<label for="ot">OT: </label><input name="ot" /><br /><br />
-								<label for="tid">TID: </label><input name="tid" /><br /><br />
-								Game: <div>
-									<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
-									<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-								</div><br />
-								<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
-								{generatePokeballDropdown()}<br /><br />
-								<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
-								<label for="set">Prize:</label><br />
-								<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
-								<label for="info">Additional information (if any):</label><br />
-								<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-								<br /><br />
-								<button class="button" type="submit">Create Lottery Giveaway</button>
-							</form>
-						</>;
-					case 'question':
-						return <>
-							<h2>Make a Question Giveaway</h2>
-							<form data-submitsend={
-								"/giveaway create question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
-							}>
-								<label for="giver">Giver:</label><input name="giver" /><br /><br />
-								<label for="ot">OT:</label><input name="ot" /><br /><br />
-								<label for="tid">TID:</label><input name="tid" /><br /><br />
-								Game: <div>
-									<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
-									<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-								</div><br />
-								<label for="question">Question:</label><input name="question" /><br /><br />
-								<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
-								{generatePokeballDropdown()}<br /><br />
-								<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
-								<label for="set"></label>
-								<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable here" name="set"></textarea>
-								<br /><br />
-								<label for="info">Additional information (if any):</label><br />
-								<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-								<br /><br />
-								<button class="button" type="submit">Create Question Giveaway</button>
-							</form>
-						</>;
-					}
+				}
+				switch (type) {
+				case 'lottery':
+					return <>
+						<h2>Make a Lottery Giveaway</h2>
+						<form data-submitsend={"/giveaway create lottery {giver}|{ot}|{tid}|{game}|{winners}|{ivs}|{ball}|{info}|{set}"}>
+							<label for="giver">Giver: </label><input name="giver" /><br /><br />
+							<label for="ot">OT: </label><input name="ot" /><br /><br />
+							<label for="tid">TID: </label><input name="tid" /><br /><br />
+							Game: <div>
+								<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
+								<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
+							</div><br />
+							<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
+							{generatePokeballDropdown()}<br /><br />
+							<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+							<label for="set">Prize:</label><br />
+							<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
+							<label for="info">Additional information (if any):</label><br />
+							<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
+							<br /><br />
+							<button class="button" type="submit">Create Lottery Giveaway</button>
+						</form>
+					</>;
+				case 'question':
+					return <>
+						<h2>Make a Question Giveaway</h2>
+						<form data-submitsend={
+							"/giveaway create question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
+						}>
+							<label for="giver">Giver:</label><input name="giver" /><br /><br />
+							<label for="ot">OT:</label><input name="ot" /><br /><br />
+							<label for="tid">TID:</label><input name="tid" /><br /><br />
+							Game: <div>
+								<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
+								<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
+							</div><br />
+							<label for="question">Question:</label><input name="question" /><br /><br />
+							<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
+							{generatePokeballDropdown()}<br /><br />
+							<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+							<label for="set"></label>
+							<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable here" name="set"></textarea>
+							<br /><br />
+							<label for="info">Additional information (if any):</label><br />
+							<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
+							<br /><br />
+							<button class="button" type="submit">Create Question Giveaway</button>
+						</form>
+					</>;
 				}
 			})()}</div>;
 		},
@@ -1672,51 +1671,50 @@ export const pages: Chat.PageTable = {
 											formatFakeButton(`/view-giveaways-stored-add-question`, <><i class="fa fa-question"></i> Question</>)
 										}
 									</center>;
-								} else {
-									switch (type) {
-									case 'lottery':
-										return <form data-submitsend="/giveaway store lottery {giver}|{ot}|{tid}|{game}|{winners}|{ivs}|{ball}|{info}|{set}">
-											<label for="giver">Giver: </label><input name="giver" /><br /><br />
-											<label for="ot">OT: </label><input name="ot" /><br /><br />
-											<label for="tid">TID: </label><input name="tid" /><br /><br />
-											Game: <div>
-												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
-												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-											</div><br />
-											<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
-											{generatePokeballDropdown()}<br /><br />
-											<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
-											<label for="set">Prize:</label><br />
-											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
-											<label for="info">Additional information (if any):</label><br />
-											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br />
-											<button class="button" type="submit">Store Lottery Giveaway</button>
-										</form>;
-									case 'question':
-										return <form data-submitsend={
-											"/giveaway store question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
-										}>
-											<label for="giver">Giver:</label><input name="giver" /><br /><br />
-											<label for="ot">OT:</label><input name="ot" /><br /><br />
-											<label for="tid">TID:</label><input name="tid" /><br /><br />
-											Game: <div>
-												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
-												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-											</div><br />
-											<label for="question">Question:</label><input name="question" /><br /><br />
-											<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
-											{generatePokeballDropdown()}<br /><br />
-											<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
-											<label for="set"></label>
-											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable here" name="set"></textarea>
-											<br /><br />
-											<label for="info">Additional information (if any):</label><br />
-											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br />
-											<button class="button" type="submit">Store Question Giveaway</button>
-										</form>;
-									}
+								}
+								switch (type) {
+								case 'lottery':
+									return <form data-submitsend="/giveaway store lottery {giver}|{ot}|{tid}|{game}|{winners}|{ivs}|{ball}|{info}|{set}">
+										<label for="giver">Giver: </label><input name="giver" /><br /><br />
+										<label for="ot">OT: </label><input name="ot" /><br /><br />
+										<label for="tid">TID: </label><input name="tid" /><br /><br />
+										Game: <div>
+											<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
+											<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
+										</div><br />
+										<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
+										{generatePokeballDropdown()}<br /><br />
+										<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+										<label for="set">Prize:</label><br />
+										<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
+										<label for="info">Additional information (if any):</label><br />
+										<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
+										<br /><br />
+										<button class="button" type="submit">Store Lottery Giveaway</button>
+									</form>;
+								case 'question':
+									return <form data-submitsend={
+										"/giveaway store question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
+									}>
+										<label for="giver">Giver:</label><input name="giver" /><br /><br />
+										<label for="ot">OT:</label><input name="ot" /><br /><br />
+										<label for="tid">TID:</label><input name="tid" /><br /><br />
+										Game: <div>
+											<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
+											<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
+										</div><br />
+										<label for="question">Question:</label><input name="question" /><br /><br />
+										<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
+										{generatePokeballDropdown()}<br /><br />
+										<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+										<label for="set"></label>
+										<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable here" name="set"></textarea>
+										<br /><br />
+										<label for="info">Additional information (if any):</label><br />
+										<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
+										<br /><br />
+										<button class="button" type="submit">Store Question Giveaway</button>
+									</form>;
 								}
 							})()}
 						</>;
@@ -1840,50 +1838,49 @@ export const pages: Chat.PageTable = {
 											formatFakeButton(`/view-giveaways-submitted-add-question`, <><i class="fa fa-question"></i> Question</>)
 										}
 									</center>;
-								} else {
-									switch (type) {
-									case 'lottery':
-										return <form data-submitsend="/giveaway submit lottery {giver}|{ot}|{tid}|{game}|{winners}|{ivs}|{ball}|{info}|{set}">
-											<label for="giver">Giver: </label><input name="giver" /><br /><br />
-											<label for="ot">OT: </label><input name="ot" /><br /><br />
-											<label for="tid">TID: </label><input name="tid" /><br /><br />
-											Game: <div>
-												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
-												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-											</div><br />
-											<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
-											{generatePokeballDropdown()}<br /><br />
-											<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
-											<label for="set">Prize:</label><br />
-											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
-											<label for="info">Additional information (provide a link of proof here):</label><br />
-											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br />
-											<button class="button" type="submit">Submit Lottery Giveaway</button>
-										</form>;
-									case 'question':
-										return <form data-submitsend={
-											"/giveaway submit question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
-										}>
-											<label for="giver">Giver:</label><input name="giver" /><br /><br />
-											<label for="ot">OT:</label><input name="ot" /><br /><br />
-											<label for="tid">TID:</label><input name="tid" /><br /><br />
-											Game: <div>
-												<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
-												<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
-											</div><br />
-											<label for="question">Question:</label><input name="question" /><br /><br />
-											<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
-											{generatePokeballDropdown()}<br /><br />
-											<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
-											<label for="set"></label>
-											<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
-											<label for="info">Additional information (provide a link of proof here):</label><br />
-											<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
-											<br /><br />
-											<button class="button" type="submit">Submit Question Giveaway</button>
-										</form>;
-									}
+								}
+								switch (type) {
+								case 'lottery':
+									return <form data-submitsend="/giveaway submit lottery {giver}|{ot}|{tid}|{game}|{winners}|{ivs}|{ball}|{info}|{set}">
+										<label for="giver">Giver: </label><input name="giver" /><br /><br />
+										<label for="ot">OT: </label><input name="ot" /><br /><br />
+										<label for="tid">TID: </label><input name="tid" /><br /><br />
+										Game: <div>
+											<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
+											<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
+										</div><br />
+										<label for="winners">Number of winners: </label><input name="winners" /><br /><br />
+										{generatePokeballDropdown()}<br /><br />
+										<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+										<label for="set">Prize:</label><br />
+										<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
+										<label for="info">Additional information (provide a link of proof here):</label><br />
+										<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
+										<br /><br />
+										<button class="button" type="submit">Submit Lottery Giveaway</button>
+									</form>;
+								case 'question':
+									return <form data-submitsend={
+										"/giveaway submit question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
+									}>
+										<label for="giver">Giver:</label><input name="giver" /><br /><br />
+										<label for="ot">OT:</label><input name="ot" /><br /><br />
+										<label for="tid">TID:</label><input name="tid" /><br /><br />
+										Game: <div>
+											<input type="radio" id="bdsp" name="game" value="bdsp" checked /><label for="bdsp">BDSP</label>
+											<input type="radio" id="swsh" name="game" value="swsh" /><label for="swsh">SwSh</label>
+										</div><br />
+										<label for="question">Question:</label><input name="question" /><br /><br />
+										<label for="answers">Answers (separated by comma):</label><input name="answers" /><br /><br />
+										{generatePokeballDropdown()}<br /><br />
+										<label for="ivs">IVs (Formatted like "1/30/31/X/HT/30"): </label><input name="ivs" /><br /><br />
+										<label for="set"></label>
+										<textarea style={{width: '70%', height: '300px'}} placeholder="Paste set importable" name="set"></textarea><br /><br />
+										<label for="info">Additional information (provide a link of proof here):</label><br />
+										<textarea style={{width: '50%', height: '100px'}} placeholder="Add any additional info" name="info"></textarea>
+										<br /><br />
+										<button class="button" type="submit">Submit Question Giveaway</button>
+									</form>;
 								}
 							})()}
 						</>;
