@@ -48,7 +48,7 @@ export interface TriviaDatabase {
 	getLeaderboardEntry(
 		id: ID,
 		leaderboard: Leaderboard
-	): Promise<TriviaLeaderboardData | null> | TriviaLeaderboardData | null;
+	): Promise<TriviaLeaderboardScore | null> | TriviaLeaderboardScore | null;
 	getLeaderboards(): Promise<TriviaLeaderboards> | TriviaLeaderboards;
 
 	checkIfQuestionExists(questionText: string): Promise<boolean> | boolean;
@@ -368,7 +368,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
 	}
 
-	async getLeaderboardEntry(id: ID, leaderboard: Leaderboard): Promise<TriviaLeaderboardData | null> {
+	async getLeaderboardEntry(id: ID, leaderboard: Leaderboard): Promise<TriviaLeaderboardScore | null> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't find out if user ${id} has a Trivia leaderboard entry because SQLite is not enabled.`);
