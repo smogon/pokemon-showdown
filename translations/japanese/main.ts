@@ -16,10 +16,10 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>グローバルユーザーランク</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "<strong>グローバルボイス</strong>(+): プレフィックスとして\"/\"の代わりに\"!\"を使ってコマンドの結果を部屋に表示することができる。",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%)：上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
-		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@)：上記に加えてユーザーをサイト全体からBANできる。",
-		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>グローバルボット</strong>(*)：権限はモデレータと同じだが、ボットだと分かるためのランク。",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;)：何でもできる。この文章も編集できる。",
+		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%): 上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
+		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@): 上記に加えてユーザーをサイト全体からBANできる。",
+		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>グローバルボット</strong>(*): 権限はモデレータと同じだが、ボットだと分かるためのランク。",
+		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;): 何でもできる。この文章を編集したり、ユーザーをグローバルに昇格させたりできる。",
 
 		"<strong>Room ranks</strong>": "<strong>日本語部屋のユーザーランク</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "<strong>プライズウィナー</strong>(^): 部屋のシンボルや象徴であり、何も権限を持ちません。",
@@ -86,7 +86,7 @@ export const translations: Translations = {
 		"- !showimage <em>, [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [width], [height]</em>: チャット部屋に画像を表示します。",
 		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: チャット部屋の設定が表示されます。modchat, capsfilterなど様々な設定を行えます。",
 
-		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "もっと詳しく知りたい場合、<a href=\"https://www.smogon.com/forums/posts/6774654/\">スタッフガイド(英語)</a>をご参照ください。",
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "詳しくは<a href=\"https://www.smogon.com/forums/posts/6774654/\">スタッフガイド(英語)</a>をご覧ください。",
 
 		"Tournament Help:": "大会ヘルプ:",
 		"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.": "- /tour create <em>対戦ルール</em>, elimination: チャット部屋にトーナメント方式の大会を開催します。",
@@ -106,7 +106,7 @@ export const translations: Translations = {
 		"You are no longer marked as busy.": "「取り込み中」状態が解除されました。",
 
 		"You must choose a name before you can talk.": "チャットするには、ユーザー名を設定する必要があります。",
-		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "${lockType} されているため、チャットすることはできません。ロック期限： ${lockExpiration}",
+		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "${lockType} されているため、チャットすることはできません。ロック期限: ${lockExpiration}",
 		"Get help with [TN: your lock]this": "ヘルプ",
 		"You are muted and cannot talk in this room.": "ミュートされているため、チャットすることはできません。",
 		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "このチャット部屋はモデレートチャットが設定されているため、登録してから1週間以上経ってレートで1勝以上しているユーザーしかチャットすることができません。",
