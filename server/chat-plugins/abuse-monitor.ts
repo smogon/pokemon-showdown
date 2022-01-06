@@ -699,14 +699,23 @@ export const commands: Chat.ChatCommands = {
 			if (!toID(target)) {
 				return this.parse(`/help am`);
 			}
-			const [turns, increment, min] = Utils.splitFirst(target, ',', 2).map(r => parseInt(toID(r)));
+			const [rawTurns, rawIncrement, rawMin] = Utils.splitFirst(target, ',', 2).map(toID);
+			const turns = parseInt(rawTurns);
 			if (isNaN(turns) || turns < 0) {
 				return this.errorReply(`Turns must be a number above 0.`);
 			}
+			const increment = parseInt(rawIncrement);
 			if (isNaN(increment) || increment < 0) {
 				return this.errorReply(`The increment must be a number above 0.`);
 			}
-			settings.thresholdIncrement = {amount: increment, turns, minTurns: min || 0};
+			const min = parseInt(rawMin);
+			if (rawMin && isNaN(min)) {
+				return this.errorReply(`Invalid minimum (must be a number).`);
+			}
+			settings.thresholdIncrement = {amount: increment, turns};
+			if (min) {
+				settings.thresholdIncrement.minTurns = min;
+			}
 			saveSettings();
 			this.privateGlobalModAction(
 				`${user.name} set the abuse-monitor threshold increment ${increment} every ${Chat.count(turns, 'turns')}` +
