@@ -430,11 +430,6 @@ export class DatabaseTable<T> {
 	}
 }
 
-interface SetupOptions {
-	onError: ErrorHandler;
-	processes: number;
-}
-
 function getSQL(
 	module: NodeJS.Module, input: SQLOptions & {processes?: number}
 ) {
