@@ -29,20 +29,29 @@ const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
 	'warn': '/warn',
-	'weeknamelock': '/wnl',
+	'forcerename': '/fr',
 	'namelock': '/nl',
+	'weeknamelock': '/wnl',
+};
+const REPORT_NAMECOLORS: {[k: string]: string} = {
+	p1: 'DodgerBlue',
+	p2: 'Crimson',
+	p3: '#FBa92C',
+	p4: '#228B22',
+	other: '', // black - empty since handled by dark mode
 };
 
 export const cache: {
 	[roomid: string]: {
 		users: Record<string, number>,
-		staffNotified?: boolean,
+		staffNotified?: ID,
 		claimed?: ID,
 	},
 } = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
 
 const defaults: FilterSettings = {
 	threshold: 4,
+	thresholdIncrement: {turns: 5, amount: 1},
 	minScore: 0.65,
 	specials: {
 		THREAT: {0.96: 'MAXIMUM'},
@@ -64,6 +73,7 @@ export const settings: FilterSettings = (() => {
 
 interface FilterSettings {
 	disabled?: boolean;
+	thresholdIncrement?: {turns: number, amount: number, minTurns?: number};
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
@@ -84,6 +94,49 @@ interface PMResult {
 interface PMRequest {
 	comment: string;
 	fullResponse?: boolean;
+}
+
+interface BattleInfo {
+	players: Record<SideID, ID>;
+	log: string[];
+}
+
+// stolen from chatlog. necessary here, but importing chatlog sucks.
+function nextMonth(month: string) {
+	const next = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
+	return next.toISOString().slice(0, 7);
+}
+
+// Mostly stolen from my code in helptickets.
+// Necessary because we can't require this in without also requiring in a LOT of other
+// modules, most of which crash the child process. Lot messier to fix that than it is to do this.
+export function getBattleLog(battle: string) {
+	const battleRoom = Rooms.get(battle);
+	if (battleRoom && battleRoom.type !== 'chat') {
+		const playerTable: Partial<BattleInfo['players']> = {};
+		// i kinda hate this, but this will always be accurate to the battle players.
+		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
+		const playerLines = battleRoom.log.log.filter(line => line.startsWith('|player|'));
+		for (const line of playerLines) {
+			const [, , playerSlot, name] = line.split('|');
+			playerTable[playerSlot as SideID] = toID(name);
+		}
+		return {
+			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
+			players: playerTable as BattleInfo['players'],
+		};
+	}
+	return null;
+}
+// see above comment.
+function colorName(id: ID, info: BattleInfo) {
+	for (const k in info.players) {
+		const player = info.players[k as SideID];
+		if (player === id) {
+			return ` style="color: ${REPORT_NAMECOLORS[k]}"`;
+		}
+	}
+	return REPORT_NAMECOLORS.other;
 }
 
 function time() {
@@ -257,7 +310,9 @@ if (!PM.isParentProcess) {
 }
 
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
-	if (!room?.battle?.rated || settings.disabled || cache[room.roomid]?.staffNotified) return;
+	// 2 lines to not hit max-len
+	if (!room?.battle || !['rated', 'unrated'].includes(room.battle.challengeType)) return;
+	if (settings.disabled || cache[room.roomid]?.staffNotified) return;
 	// startsWith('!') - broadcasting command, ignore it.
 	if (!Config.perspectiveKey || message.startsWith('!')) return;
 
@@ -269,8 +324,8 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
 			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
-			if (cache[roomid].users[user.id] >= settings.threshold) {
-				cache[roomid].staffNotified = true;
+			if (cache[roomid].users[user.id] >= calcThreshold(roomid)) {
+				cache[roomid].staffNotified = user.id;
 				notifyStaff();
 				hitThreshold = 1;
 				void room?.uploadReplay?.(user, this.connection, "forpunishment");
@@ -285,14 +340,29 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 // to avoid conflicts with other filters
 chatfilter.priority = -100;
 
+function calcThreshold(roomid: RoomID) {
+	const incr = settings.thresholdIncrement;
+	let num = settings.threshold;
+	const room = Rooms.get(roomid);
+	if (!room || !room.battle || !incr) return num;
+	if (!incr.minTurns || room.battle.turn >= incr.minTurns) {
+		num += (Math.floor(room.battle.turn / incr.turns) * incr.amount);
+	}
+	return num;
+}
+
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
-		if (cache[roomid]) delete cache[roomid];
+		const entry = cache[roomid];
+		if (entry) {
+			delete cache[roomid];
+			if (entry.staffNotified) notifyStaff();
+		}
 	},
-	onRoomClose(roomid) {
+	onRoomClose(roomid, user) {
 		if (!roomid.startsWith('view-abusemonitor-view')) return;
 		const targetId = roomid.slice('view-abusemonitor-view-'.length);
-		if (cache[targetId]) {
+		if (cache[targetId]?.claimed === user.id) {
 			delete cache[targetId].claimed;
 			notifyStaff();
 		}
@@ -307,10 +377,26 @@ function saveSettings() {
 	FS('config/chat-plugins/nf.json').writeUpdate(() => JSON.stringify(settings));
 }
 
+
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
 	if (staffRoom) {
-		// staffRoom.add(`|uhtml|abusemonitor|${buf}`).update();
+		const flagged = getFlaggedRooms();
+		let buf = '';
+		if (flagged.length) {
+			const unclaimed = flagged.filter(f => f in cache && !cache[f].claimed);
+			// if none are unclaimed, remove the notifying property so it's regular grey
+			buf = `<button class="button${!unclaimed.length ? '' : ' notifying'}" name="send" value="/am">`;
+			buf += `${Chat.count(flagged.length, 'flagged battles')}`;
+			// if some are unclaimed, tell staff how many
+			if (unclaimed.length) {
+				buf += ` (${unclaimed.length} unclaimed)`;
+			}
+			buf += `</button>`;
+		} else {
+			buf = 'No battles flagged.';
+		}
+		staffRoom.send(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`);
 		Chat.refreshPageFor('abusemonitor-flagged', staffRoom);
 	}
 }
@@ -376,26 +462,46 @@ export const commands: Chat.ChatCommands = {
 				`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child process.`
 			);
 		},
-		resolve(target) {
+		async resolve(target) {
 			this.checkCan('lock');
 			target = target.toLowerCase().trim().replace(/ +/g, '');
-			if (!target) return this.parse(`/help abusemonitor`);
-			if (!cache[target]?.staffNotified) {
+			let [roomid, rawResult] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const tarRoom = Rooms.get(roomid);
+			if (!tarRoom || !cache[tarRoom.roomid] || !cache[tarRoom.roomid]?.staffNotified) {
 				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
+			}
+			if (roomid.includes('-') && roomid.endsWith('pw')) {
+				// cut off passwords
+				roomid = roomid.split('-').slice(0, -1).join('-');
+			}
+			let result = toID(rawResult) === 'success' ? 1 : toID(rawResult) === 'failure' ? 0 : null;
+			if (result === null) return this.popupReply(`Invalid result - must be 'success' or 'failure'.`);
+			const inserted = await Chat.database.get(`SELECT result FROM perspective_stats WHERE roomid = ?`, [roomid]);
+			if (inserted?.result) {
+				// has already been logged as accurate - ensure if one success is logged it's still a success if it's hit again
+				// (even if it's a failure now, it was a success before - that's what's relevant.)
+				result = inserted.result;
 			}
 			// we delete the cache because if more stuff happens in it
 			// post punishment, we want to know about it
-			delete cache[target];
+			delete cache[tarRoom.roomid];
 			notifyStaff();
-			this.closePage(`abusemonitor-view-${target}`);
+			this.closePage(`abusemonitor-view-${tarRoom.roomid}`);
 			// bring the listing page to the front - need to close and reopen
 			this.closePage(`abusemonitor-flagged`);
+			await Chat.database.run(
+				`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
+				// on conflict in case it's re-triggered later.
+				// (we want it to be updated to success if it is now a success where it was previously inaccurate)
+				`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
+				{staff: this.user.id, roomid, result, timestamp: Date.now()}
+			);
 			return this.parse(`/j view-abusemonitor-flagged`);
 		},
 		async nojoinpunish(target, room, user) {
 			this.checkCan('lock');
 			const [roomid, type, rest] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
-			const tarRoom = Rooms.get(roomid) || Rooms.get('staff');
+			const tarRoom = Rooms.get(roomid);
 			if (!tarRoom) return this.popupReply(`The room "${roomid}" does not exist.`);
 			const cmd = NOJOIN_COMMAND_WHITELIST[toID(type)];
 			if (!cmd) {
@@ -416,12 +522,18 @@ export const commands: Chat.ChatCommands = {
 			this.room.reportJoin('l', user.getIdentityWithStatus(this.room), user);
 		},
 		view(target, room, user) {
-			return this.parse(`/j view-abusemonitor-view-${target.toLowerCase().trim()}`);
+			target = target.toLowerCase().trim();
+			if (!target) return this.parse(`/help am`);
+			return this.parse(`/j view-abusemonitor-view-${target}`);
 		},
 		logs(target) {
 			checkAccess(this);
 			const [count, userid] = Utils.splitFirst(target, ',').map(toID);
 			this.parse(`/join view-abusemonitor-logs-${count || '200'}${userid ? `-${userid}` : ""}`);
+		},
+		stats(target) {
+			checkAccess(this);
+			return this.parse(`/join view-abusemonitor-stats${target ? `-${target}` : ''}`);
 		},
 		async respawn(target, room, user) {
 			checkAccess(this);
@@ -492,14 +604,24 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(percent) || percent > 1 || percent < 0) {
 				return this.errorReply(`Invalid percent: ${percent}. Must be between 0 and 1.`);
 			}
-			const score = parseInt(rawScore);
-			if ((isNaN(score) && rawScore !== 'MAXIMUM') || score < 0) {
-				return this.errorReply(`Invalid score: ${score}. Must be a positive integer or "MAXIMUM".`);
+			const score = parseInt(rawScore) || toID(rawScore).toUpperCase() as 'MAXIMUM';
+			switch (typeof score) {
+			case 'string':
+				if (score !== 'MAXIMUM') {
+					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+				}
+				break;
+			case 'number':
+				if (isNaN(score) || score < 0) {
+					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+				}
+				break;
 			}
 			if (settings.specials[type]?.[percent] && !this.cmd.includes('f')) {
 				return this.errorReply(`That special case already exists. Use /am forceeditspecial to change it.`);
 			}
 			if (!settings.specials[type]) settings.specials[type] = {};
+			// checked above to ensure it's a valid number or MAXIMUM
 			settings.specials[type][percent] = score;
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} set the abuse monitor special case for ${type} at ${percent}% to ${score}.`);
@@ -565,7 +687,54 @@ export const commands: Chat.ChatCommands = {
 			}
 			buf += `<br /><strong>Minimum percent to process:</strong> ${settings.minScore}`;
 			buf += `<br /><strong>Score threshold:</strong> ${settings.threshold}`;
+			buf += `<br /><strong>Threshold increments:</strong>`;
+			const incr = settings.thresholdIncrement;
+			if (incr) {
+				buf += `<br /> &bull; Increases ${incr.amount} every ${incr.turns} turns`;
+				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
+			}
 			this.sendReplyBox(buf);
+		},
+		ti: 'thresholdincrement',
+		thresholdincrement(target, room, user) {
+			checkAccess(this);
+			if (!toID(target)) {
+				return this.parse(`/help am`);
+			}
+			const [rawTurns, rawIncrement, rawMin] = Utils.splitFirst(target, ',', 2).map(toID);
+			const turns = parseInt(rawTurns);
+			if (isNaN(turns) || turns < 0) {
+				return this.errorReply(`Turns must be a number above 0.`);
+			}
+			const increment = parseInt(rawIncrement);
+			if (isNaN(increment) || increment < 0) {
+				return this.errorReply(`The increment must be a number above 0.`);
+			}
+			const min = parseInt(rawMin);
+			if (rawMin && isNaN(min)) {
+				return this.errorReply(`Invalid minimum (must be a number).`);
+			}
+			settings.thresholdIncrement = {amount: increment, turns};
+			if (min) {
+				settings.thresholdIncrement.minTurns = min;
+			}
+			saveSettings();
+			this.privateGlobalModAction(
+				`${user.name} set the abuse-monitor threshold increment ${increment} every ${Chat.count(turns, 'turns')}` +
+				`${min ? `after ${Chat.count(min, 'turns')}` : ""}`
+			);
+			this.globalModlog(
+				`ABUSEMONITOR INCREMENT`, null, `${increment} every ${turns} turn(s)${min ? ` after ${min} turn(s)` : ""}`
+			);
+		},
+		di: 'deleteincrement',
+		deleteincrement(target, room, user) {
+			checkAccess(this);
+			if (!settings.thresholdIncrement) return this.errorReply(`The threshold increment is already disabled.`);
+			delete settings.thresholdIncrement;
+			saveSettings();
+			this.privateGlobalModAction(`${user.name} disabled the abuse-monitor threshold increment.`);
+			this.globalModlog(`ABUSEMONITOR DISABLEINCREMENT`);
 		},
 	},
 	abusemonitorhelp: [
@@ -582,6 +751,9 @@ export const commands: Chat.ChatCommands = {
 		`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
 		`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
 		`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
+		`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
+		`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
+		`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
 	],
 };
 
@@ -623,16 +795,23 @@ export const pages: Chat.PageTable = {
 		view(query, user) {
 			this.checkCan('lock');
 			const roomid = query.join('-');
+			if (!toID(roomid)) {
+				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
+			}
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
 			buf += `<h2>Abuse Monitor`;
 			const room = Rooms.get(roomid);
 			if (!room) {
-				if (cache[roomid]) delete cache[roomid];
+				if (cache[roomid]) {
+					delete cache[roomid];
+					notifyStaff();
+				}
 				buf += `</h2><hr /><p class="error">No such room.</p>`;
 				return buf;
 			}
+			room.pokeExpireTimer(); // don't want it to expire while staff are reviewing
 			if (!cache[roomid]) {
 				buf += `</h2><hr /><p class="error">The abuse monitor has not flagged the given room.</p>`;
 				return buf;
@@ -655,15 +834,22 @@ export const pages: Chat.PageTable = {
 			buf += `<details class="readmore"><summary><strong>Chat:</strong></summary><div class="infobox">`;
 			// we parse users specifically from the log so we can see it after they leave the room
 			const users = new Utils.Multiset<string>();
+			const logData = getBattleLog(room.roomid);
+			// should only extremely rarely happen - if the room expires while this is happening.
+			if (!logData) return `<div class="pad"><p class="error">No such room.</p></div>`;
 			// assume logs exist - why else would the filter activate?
-			for (const line of room.log.log) {
+			for (const line of logData.log) {
 				const data = room.log.parseChatLine(line);
 				if (!data) continue; // not chat
+				if (['/log', '/raw'].some(prefix => data.message.startsWith(prefix))) {
+					continue;
+				}
 				const id = toID(data.user);
 				if (!id) continue;
 				users.add(id);
-				buf += `<div class="chat"><span class="username">`;
-				buf += Utils.html`<username>${data.user}:</username></span> ${data.message}</div>`;
+				buf += `<div class="chat chatmessage${cache[roomid].staffNotified === id ? ` highlighted` : ``}">`;
+				buf += `<strong${colorName(id, logData)}>`;
+				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
@@ -672,7 +858,7 @@ export const pages: Chat.PageTable = {
 				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id} `;
 				buf += `<button class="button" name="send" value="/mlid ${id},room=global">Modlog</button>`;
 				buf += `</summary><div class="infobox">`;
-				const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
+				const punishments = ['Warn', 'Lock', 'Weeklock', 'Forcerename', 'Namelock', 'Weeknamelock'];
 				for (const name of punishments) {
 					buf += `<form data-submitsend="/am nojoinpunish ${roomid},${toID(name)},${id},{reason}">`;
 					buf += `<button class="button notifying" type="submit">${name}</button><br />`;
@@ -681,7 +867,9 @@ export const pages: Chat.PageTable = {
 				}
 				buf += `</div></details><br />`;
 			}
-			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid}">Mark resolved</button>`;
+			buf += `<hr /><strong>Mark resolved:</strong><br />`;
+			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid},success">As accurate flag</button> | `;
+			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid},failure">As inaccurate flag</button>`;
 			return buf;
 		},
 		async logs(query, user) {
@@ -744,6 +932,79 @@ export const pages: Chat.PageTable = {
 				buf += `<button class="button" name="send" value="/msgroom staff, /am logs ${count + 100}">Show 100 more</button>`;
 				buf += `</center>`;
 			}
+			return buf;
+		},
+		async stats(query, user) {
+			checkAccess(this);
+			const date = new Date(query.join('-') || Chat.toTimestamp(new Date()).split(' ')[0]);
+			if (isNaN(date.getTime())) {
+				return this.errorReply(`Invalid date: ${date}`);
+			}
+			const month = Chat.toTimestamp(date).split(' ')[0].slice(0, -3);
+			let buf = `<div class="pad">`;
+			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
+			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
+			buf += `<h2>Abuse Monitor stats for ${month}</h2><hr />`;
+			const logs = await Chat.database.all(
+				`SELECT * FROM perspective_stats WHERE timestamp > ? AND timestamp < ?`,
+				[new Date(month).getTime(), new Date(nextMonth(month)).getTime()]
+			);
+			this.title = '[Abuse Monitor] Stats';
+			if (!logs.length) {
+				buf += `<p class="message-error">No logs found for the month ${month}.</p>`;
+				return buf;
+			}
+			this.title += ` ${month}`;
+			buf += `<p>${Chat.count(logs.length, 'logs')} found.</p>`;
+			let successes = 0;
+			let failures = 0;
+			const staffStats: Record<string, number> = {};
+			const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
+			for (const log of logs) {
+				const cur = Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0];
+				if (!dayStats[cur]) dayStats[cur] = {successes: 0, failures: 0, total: 0};
+				if (log.result) {
+					successes++;
+					dayStats[cur].successes++;
+				} else {
+					failures++;
+					dayStats[cur].failures++;
+				}
+				if (!staffStats[log.staff]) staffStats[log.staff] = 0;
+				staffStats[log.staff]++;
+				dayStats[cur].total++;
+			}
+			buf += `<p><strong>Success rate:</strong> ${Math.floor((successes / logs.length) * 100)}%</p>`;
+			buf += `<p><strong>Failure rate:</strong> ${Math.floor((failures / logs.length) * 100)}%</p>`;
+			buf += `<p><strong>Day stats:</strong></p>`;
+			buf += `<div class="ladder pad"><table>`;
+			let header = '';
+			let data = '';
+			const sortedDays = Utils.sortBy(Object.keys(dayStats), d => new Date(d).getTime());
+			for (const [i, day] of sortedDays.entries()) {
+				const cur = dayStats[day];
+				if (!cur.total) continue;
+				header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+				data += `<td>${cur.successes} (${Math.floor((cur.successes / cur.total) * 100)}%)`;
+				if (cur.failures) data += ` | ${cur.failures} (${Math.floor((cur.failures / cur.total) * 100)}%)</td>`;
+				// i + 1 ensures it's above 0 always (0 % 5 === 0)
+				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+					buf += `<tr>${header}</tr><tr>${data}</tr>`;
+					buf += `</div></table>`;
+					buf += `<div class="ladder pad"><table>`;
+					header = '';
+					data = '';
+				}
+			}
+			buf += `<tr>${header}</tr><tr>${data}</tr>`;
+			buf += `</div></table>`;
+			buf += `<p><strong>Staff stats:</strong></p>`;
+			buf += `<div class="ladder pad"><table>`;
+			buf += `<tr><th>User</th><th>Total</th><th>Percent total</th></tr>`;
+			for (const id of Utils.sortBy(Object.keys(staffStats), k => -staffStats[k])) {
+				buf += `<tr><td>${id}</td><td>${staffStats[id]}</td><td>${(staffStats[id] / logs.length) * 100}%</td></tr>`;
+			}
+			buf += `</table></div>`;
 			return buf;
 		},
 	},

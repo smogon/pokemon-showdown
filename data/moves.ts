@@ -4574,7 +4574,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pseudoWeather: 'fairylock',
 		condition: {
 			duration: 2,
-			onStart(target) {
+			onFieldStart(target) {
 				this.add('-fieldactivate', 'move: Fairy Lock');
 			},
 			onTrapPokemon(pokemon) {
@@ -5319,6 +5319,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 			if (success && !target.isAlly(source)) {
 				target.staleness = 'external';
+			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return this.NOT_FAIL;
 			}
 			return success;
 		},
@@ -7854,6 +7858,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (success && !target.isAlly(source)) {
 				target.staleness = 'external';
 			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return this.NOT_FAIL;
+			}
 			return success;
 		},
 		secondary: null,
@@ -9077,7 +9085,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pseudoWeather: 'iondeluge',
 		condition: {
 			duration: 1,
-			onStart(target, source, sourceEffect) {
+			onFieldStart(target, source, sourceEffect) {
 				this.add('-fieldactivate', 'move: Ion Deluge');
 				this.hint(`Normal-type moves become Electric-type after using ${sourceEffect}.`);
 			},
@@ -10420,16 +10428,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-				/** moves blocked by Max Guard but not Protect */
-				const overrideBypassProtect = [
-					'block', 'flowershield', 'gearup', 'magneticflux', 'phantomforce', 'psychup', 'shadowforce', 'teatime', 'transform', 'whirlwind',
+				const bypassesMaxGuard = [
+					'acupressure', 'afteryou', 'allyswitch', 'aromatherapy', 'aromaticmist', 'coaching', 'confide', 'copycat', 'curse', 'decorate', 'doomdesire', 'feint', 'futuresight', 'gmaxoneblow', 'gmaxrapidflow', 'healbell', 'holdhands', 'howl', 'junglehealing', 'lifedew', 'meanlook', 'perishsong', 'playnice', 'powertrick', 'roar', 'roleplay', 'tearfullook',
 				];
-				const blockedByMaxGuard = (this.dex.moves.get(move.id).flags['protect'] ||
-						move.isZ || move.isMax || overrideBypassProtect.includes(move.id));
-				if (!blockedByMaxGuard) {
-					return;
-				}
+				if (bypassesMaxGuard.includes(move.id)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -11090,7 +11092,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, bypasssub: 1, allyanim: 1},
 		onHit(target, source) {
-			const disallowedMoves = ['chatter', 'dynamaxcannon', 'mimic', 'sketch', 'struggle', 'transform'];
+			const disallowedMoves = [
+				'behemothbash', 'behemothblade', 'chatter', 'dynamaxcannon', 'mimic', 'sketch', 'struggle', 'transform',
+			];
 			const move = target.lastMove;
 			if (source.transformed || !move || disallowedMoves.includes(move.id) || source.moves.includes(move.id)) {
 				return false;
@@ -11518,7 +11522,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				factor = 0.25;
 				break;
 			}
-			return !!this.heal(this.modify(pokemon.maxhp, factor));
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 		secondary: null,
 		target: "self",
@@ -11549,7 +11558,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				factor = 0.25;
 				break;
 			}
-			return !!this.heal(this.modify(pokemon.maxhp, factor));
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 		secondary: null,
 		target: "self",
@@ -12738,6 +12752,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
 					this.add('-immune', target);
+					return this.NOT_FAIL;
 				}
 			}
 		},
@@ -13400,7 +13415,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1},
 		onHit(target, source) {
-			if (!target.cureStatus()) return false;
+			if (!target.cureStatus()) return this.NOT_FAIL;
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: null,
@@ -15259,7 +15274,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (this.field.isWeather('sandstorm')) {
 				factor = 0.667;
 			}
-			return !!this.heal(this.modify(pokemon.maxhp, factor));
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 		secondary: null,
 		target: "self",
@@ -15752,7 +15772,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				const moveid = moveSlot.id;
 				if (!moveid) continue;
 				const move = this.dex.moves.get(moveid);
-				if (noSleepTalk.includes(moveid) || move.flags['charge'] || (move.isZ && move.basePower !== 1)) {
+				if (noSleepTalk.includes(moveid) || move.flags['charge'] || (move.isZ && move.basePower !== 1) || move.isMax) {
 					continue;
 				}
 				moves.push(moveid);
@@ -17389,9 +17409,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onHit(pokemon) {
 			const healAmount = [0.25, 0.5, 1];
-			const healedBy = this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			if (!success) this.add('-fail', pokemon, 'heal');
 			pokemon.removeVolatile('stockpile');
-			return !!healedBy;
+			return success || this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "self",
@@ -17554,7 +17575,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				factor = 0.25;
 				break;
 			}
-			return !!this.heal(this.modify(pokemon.maxhp, factor));
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 		secondary: null,
 		target: "self",

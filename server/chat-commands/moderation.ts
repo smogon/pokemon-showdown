@@ -363,7 +363,7 @@ export const commands: Chat.ChatCommands = {
 			const inheritedUserType = (modjoinSetting ? ` of rank ${modjoinSetting} and above` : '');
 			if (curRoom.parent) {
 				const also = buffer.length === 0 ? `` : ` also`;
-				buffer.push(`${curRoom.title} is a ${roomType}subroom of ${curRoom.parent.title}, so ${curRoom.parent.title} users${inheritedUserType}${also} have authority in this room.`);
+				buffer.push(`${curRoom.title} is a ${roomType}subroom of ${curRoom.parent.title}, so ${curRoom.parent.title} users${inheritedUserType}${also} have authority in this room. Names in **bold** are online.`);
 			}
 			curRoom = curRoom.parent;
 		}
@@ -372,9 +372,11 @@ export const commands: Chat.ChatCommands = {
 			return;
 		}
 		if (!curRoom.settings.isPrivate) {
-			buffer.push(`${curRoom.title} is a public room, so global auth with no relevant roomauth will have authority in this room.`);
+			buffer.push(`${curRoom.title} is a public room, so global auth with no relevant roomauth will have authority in this room. Names in **bold** are online.`);
 		} else if (curRoom.settings.isPrivate === 'hidden' || curRoom.settings.isPrivate === 'voice') {
-			buffer.push(`${curRoom.title} is a hidden room, so global auth with no relevant roomauth will have authority in this room.`);
+			buffer.push(`${curRoom.title} is a hidden room, so global auth with no relevant roomauth will have authority in this room. Names in **bold** are online.`);
+		} else {
+			buffer.push(`Names in **bold** are online.`);
 		}
 		if (targetRoom !== room) buffer.unshift(`${targetRoom.title} room auth:`);
 		connection.popup(`${buffer.join("\n\n")}${userLookup}`);

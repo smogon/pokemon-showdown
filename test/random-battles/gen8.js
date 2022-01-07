@@ -156,6 +156,7 @@ describe('[Gen 8] Random Battle', () => {
 	});
 
 	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
+	it('should always give Azumarill Aqua Jet', () => testAlwaysHasMove('azumarill', options, 'aquajet'));
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {
@@ -210,17 +211,38 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 	const dex = Dex.forFormat(options.format);
 	for (const species of dex.species.all()) {
 		if (!species.randomBattleMoves) continue;
-		if (species.id === 'ditto') continue; // Ditto always wants Choice Scarf
 
-		// This test is marked as slow because although each individual test is fairly fast to run,
-		// ~500 tests are generated, so they can dramatically slow down the process of unit testing.
-		it(`should not generate Choice items on ${species.name} sets with status moves, unless an item-switching move or Healing Wish is generated (slow)`, () => {
-			testSet(species.id, {...options, rounds: 500}, set => {
-				if (set.item.startsWith('Choice') && !okToHaveChoiceMoves.some(okMove => set.moves.includes(okMove))) {
-					assert(set.moves.every(m => dex.moves.get(m).category !== 'Status'), `Choice item and status moves on set ${JSON.stringify(set)}`);
-				}
+		// Pokémon with Sniper should always have Scope Lens
+		if (Object.values(species.abilities).includes('Sniper')) {
+			it(`should always give ${species} Scope Lens if it has Sniper`, () => {
+				testSet(species, options, set => {
+					if (set.ability !== 'Sniper') return;
+					assert.equal(set.item, 'Scope Lens', `got ${set.item} instead of Scope Lens`);
+				});
 			});
-		});
+		}
+
+		// Pokemon with Fake Out should not have Choice Items
+		if (species.randomBattleMoves.includes('fakeout')) {
+			it(`should not give ${species} a Choice Item if it has Fake Out`, () => {
+				testSet(species, options, set => {
+					if (!set.moves.includes('fakeout')) return;
+					assert.doesNotMatch(set.item, /Choice /, `got Choice Item '${set.item}' on a Fake Out set (${set.moves})`);
+				});
+			});
+		}
+
+		if (species.id !== 'ditto') { // Ditto always wants Choice Scarf
+			// This test is marked as slow because although each individual test is fairly fast to run,
+			// ~500 tests are generated, so they can dramatically slow down the process of unit testing.
+			it(`should not generate Choice items on ${species.name} sets with status moves, unless an item-switching move or Healing Wish is generated (slow)`, () => {
+				testSet(species.id, {...options, rounds: 500}, set => {
+					if (set.item.startsWith('Choice') && !okToHaveChoiceMoves.some(okMove => set.moves.includes(okMove))) {
+						assert(set.moves.every(m => dex.moves.get(m).category !== 'Status'), `Choice item and status moves on set ${JSON.stringify(set)}`);
+					}
+				});
+			});
+		}
 	}
 
 	it('should give Tropius Harvest + Sitrus Berry', () => {
@@ -259,5 +281,39 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 
 	it('should always give Smeargle Spore', () => {
 		testAlwaysHasMove('smeargle', options, 'spore');
+	});
+
+	it('should give No Guard to Dynamic Punch Machamp', () => {
+		testSet('machamp', options, set => {
+			if (set.moves.includes('dynamicpunch')) assert.equal(set.ability, 'No Guard', set.moves);
+		});
+	});
+
+	it('should not give Shell Smash Blastoise Roar', () => {
+		testSet('blastoise', options, set => {
+			if (set.moves.includes('roar')) {
+				assert(!set.moves.includes('shellsmash'), `Blastoise has Roar and Shell Smash (${set.moves})`);
+			}
+		});
+	});
+
+	it('should always give Smeargle a Focus Sash', () => {
+		testSet('smeargle', options, set => assert.equal(set.item, 'Focus Sash'));
+	});
+
+	it('should always give Shaymin-Sky Air Slash', () => testAlwaysHasMove('shayminsky', options, 'airslash'));
+
+	it('should always give Hitmonlee Reckless', () => {
+		testSet('hitmonlee', options, set => assert.equal(set.ability, 'Reckless'));
+	});
+
+	it('should always give Bibarel Simple', () => {
+		testSet('bibarel', options, set => assert.equal(set.ability, 'Simple'));
+	});
+
+	it('should not give Breloom Focus Punch without Substitute', () => {
+		testSet('breloom', options, set => {
+			if (set.moves.includes('focuspunch')) assert(set.moves.includes('substitute'), `Breloom has Focus Punch and no Substitute (${set.moves})`);
+		});
 	});
 });
