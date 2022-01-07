@@ -58,6 +58,8 @@ Buttons and links that say "Click here" or "Look at this" are bad for a number o
 
 In addition, blind users in particular navigate by link text, so a blind user will have a much harder time figuring out where a link goes if it only says "click here".
 
+For similar reasons, buttons should not say "Yes" or "No" or "Confirm". Instead of "Delete this file? [Yes] [No]", you should just use "[Delete] [Cancel]". This is especially important for complex questions where it could be easy to lose track of which side is "yes" and which side is "no".
+
 ### D3. Remove unnecessary clicks
 
 Whenever you give a user a button to click, always think, "In what situations would a user want to click this? In what situations would a user not want to click this?" Dialogs like "Are you sure?" can often be replaced with just doing the thing with an "Undo" button. Buttons to show more details can often be replaced with simply showing more details by default.
