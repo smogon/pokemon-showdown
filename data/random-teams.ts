@@ -727,11 +727,9 @@ export class RandomTeams {
 								if (nature.isNonstandard) {
 									banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
 									if (banReason) continue;
-									if (banReason !== '') {
-										if (nature.isNonstandard !== 'Unobtainable') {
-											if (hasNonexistentBan) continue;
-											if (!hasNonexistentWhitelist) continue;
-										}
+									if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
+										if (hasNonexistentBan) continue;
+										if (!hasNonexistentWhitelist) continue;
 									}
 								}
 							}
