@@ -1935,7 +1935,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		team: 'randomHC',
-		ruleset: ['Obtainable Formes', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
 	},
 	{
 		name: "[Gen 8] Doubles Hackmons Cup",
@@ -1944,7 +1945,8 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		team: 'randomHC',
 		searchShow: false,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
 	},
 	{
 		name: "[Gen 8] CAP 1v1",
@@ -2020,6 +2022,7 @@ export const Formats: FormatList = [
 		team: 'randomHC',
 		searchShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
 	},
 	{
 		name: "[Gen 7 Let's Go] Random Battle",
@@ -2096,6 +2099,7 @@ export const Formats: FormatList = [
 		team: 'randomHC',
 		searchShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Team Type Preview'],
+		banlist: ['Nonexistent'],
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return;
 			return {...species, ...(target.set as any).hc};
