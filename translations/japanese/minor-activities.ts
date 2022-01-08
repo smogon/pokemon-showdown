@@ -13,7 +13,7 @@ export const translations: Translations = {
 		"Invalid time given.": "不正な時間の引数です。",
 		"The announcement timer is off.": "アナウンスのタイマーはオフになっています。",
 		"The announcement was ended by ${user.name}.": "${user.name}がアナウンスを終了しました",
-		"Accepts the following commands:": "",
+		"Accepts the following commands:": "コマンド一覧",
 
 		"That option is not selected.": "その選択肢は選択されていません。",
 		"You have already voted for this poll.": "すでに投票しているため、投票できません。",
