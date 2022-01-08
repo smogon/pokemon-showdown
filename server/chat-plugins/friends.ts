@@ -661,6 +661,13 @@ export const handlers: Chat.Handlers = {
 	onBattleLeave(user, room) {
 		return Friends.updateSpectatorLists(user);
 	},
+	onBattleEnd(battle, winner, players) {
+		for (const id of players) {
+			const user = Users.get(id);
+			if (!user) continue;
+			Friends.updateSpectatorLists(user);
+		}
+	},
 	onDisconnect(user) {
 		void Chat.Friends.writeLogin(user.id);
 	},

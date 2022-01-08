@@ -30,8 +30,9 @@ const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
 	'warn': '/warn',
-	'weeknamelock': '/wnl',
+	'forcerename': '/fr',
 	'namelock': '/nl',
+	'weeknamelock': '/wnl',
 };
 const REPORT_NAMECOLORS: {[k: string]: string} = {
 	p1: 'DodgerBlue',
@@ -52,6 +53,7 @@ export const cache: {
 
 const defaults: FilterSettings = {
 	threshold: 4,
+	thresholdIncrement: null,
 	minScore: 0.65,
 	specials: {
 		THREAT: {0.96: 'MAXIMUM'},
@@ -82,6 +84,7 @@ interface PunishmentSettings {
 
 interface FilterSettings {
 	disabled?: boolean;
+	thresholdIncrement: {turns: number, amount: number, minTurns?: number} | null;
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
@@ -371,7 +374,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
 			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
-			if (cache[roomid].users[user.id] >= settings.threshold) {
+			if (cache[roomid].users[user.id] >= calcThreshold(roomid)) {
 				cache[roomid].staffNotified = user.id;
 				notifyStaff();
 				hitThreshold = 1;
@@ -393,12 +396,23 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 // to avoid conflicts with other filters
 chatfilter.priority = -100;
 
+function calcThreshold(roomid: RoomID) {
+	const incr = settings.thresholdIncrement;
+	let num = settings.threshold;
+	const room = Rooms.get(roomid);
+	if (!room || !room.battle || !incr) return num;
+	if (!incr.minTurns || room.battle.turn >= incr.minTurns) {
+		num += (Math.floor(room.battle.turn / incr.turns) * incr.amount);
+	}
+	return num;
+}
+
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
 		const entry = cache[roomid];
 		if (entry) {
-			if (entry.staffNotified) notifyStaff();
 			delete cache[roomid];
+			if (entry.staffNotified) notifyStaff();
 		}
 	},
 	onRoomClose(roomid, user) {
@@ -646,14 +660,24 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(percent) || percent > 1 || percent < 0) {
 				return this.errorReply(`Invalid percent: ${percent}. Must be between 0 and 1.`);
 			}
-			const score = parseInt(rawScore);
-			if ((isNaN(score) && rawScore !== 'MAXIMUM') || score < 0) {
-				return this.errorReply(`Invalid score: ${score}. Must be a positive integer or "MAXIMUM".`);
+			const score = parseInt(rawScore) || toID(rawScore).toUpperCase() as 'MAXIMUM';
+			switch (typeof score) {
+			case 'string':
+				if (score !== 'MAXIMUM') {
+					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+				}
+				break;
+			case 'number':
+				if (isNaN(score) || score < 0) {
+					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+				}
+				break;
 			}
 			if (settings.specials[type]?.[percent] && !this.cmd.includes('f')) {
 				return this.errorReply(`That special case already exists. Use /am forceeditspecial to change it.`);
 			}
 			if (!settings.specials[type]) settings.specials[type] = {};
+			// checked above to ensure it's a valid number or MAXIMUM
 			settings.specials[type][percent] = score;
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} set the abuse monitor special case for ${type} at ${percent}% to ${score}.`);
@@ -795,7 +819,54 @@ export const commands: Chat.ChatCommands = {
 			}
 			buf += `<strong>Minimum percent to process:</strong> ${settings.minScore}<br />`;
 			buf += `<strong>Score threshold:</strong> ${settings.threshold}`;
+			buf += `<br /><strong>Threshold increments:</strong>`;
+			const incr = settings.thresholdIncrement;
+			if (incr) {
+				buf += `<br /> &bull; Increases ${incr.amount} every ${incr.turns} turns`;
+				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
+			}
 			this.sendReplyBox(buf);
+		},
+		ti: 'thresholdincrement',
+		thresholdincrement(target, room, user) {
+			checkAccess(this);
+			if (!toID(target)) {
+				return this.parse(`/help am`);
+			}
+			const [rawTurns, rawIncrement, rawMin] = Utils.splitFirst(target, ',', 2).map(toID);
+			const turns = parseInt(rawTurns);
+			if (isNaN(turns) || turns < 0) {
+				return this.errorReply(`Turns must be a number above 0.`);
+			}
+			const increment = parseInt(rawIncrement);
+			if (isNaN(increment) || increment < 0) {
+				return this.errorReply(`The increment must be a number above 0.`);
+			}
+			const min = parseInt(rawMin);
+			if (rawMin && isNaN(min)) {
+				return this.errorReply(`Invalid minimum (must be a number).`);
+			}
+			settings.thresholdIncrement = {amount: increment, turns};
+			if (min) {
+				settings.thresholdIncrement.minTurns = min;
+			}
+			saveSettings();
+			this.privateGlobalModAction(
+				`${user.name} set the abuse-monitor threshold increment ${increment} every ${Chat.count(turns, 'turns')}` +
+				`${min ? ` after ${Chat.count(min, 'turns')}` : ""}`
+			);
+			this.globalModlog(
+				`ABUSEMONITOR INCREMENT`, null, `${increment} every ${turns} turn(s)${min ? ` after ${min} turn(s)` : ""}`
+			);
+		},
+		di: 'deleteincrement',
+		deleteincrement(target, room, user) {
+			checkAccess(this);
+			if (!settings.thresholdIncrement) return this.errorReply(`The threshold increment is already disabled.`);
+			settings.thresholdIncrement = null;
+			saveSettings();
+			this.privateGlobalModAction(`${user.name} disabled the abuse-monitor threshold increment.`);
+			this.globalModlog(`ABUSEMONITOR DISABLEINCREMENT`);
 		},
 	},
 	abusemonitorhelp: [
@@ -812,6 +883,9 @@ export const commands: Chat.ChatCommands = {
 		`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
 		`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
 		`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
+		`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
+		`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
+		`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
 	],
 };
 
@@ -862,7 +936,10 @@ export const pages: Chat.PageTable = {
 			buf += `<h2>Abuse Monitor`;
 			const room = Rooms.get(roomid);
 			if (!room) {
-				if (cache[roomid]) delete cache[roomid];
+				if (cache[roomid]) {
+					delete cache[roomid];
+					notifyStaff();
+				}
 				buf += `</h2><hr /><p class="error">No such room.</p>`;
 				return buf;
 			}
@@ -917,7 +994,7 @@ export const pages: Chat.PageTable = {
 				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id} `;
 				buf += `<button class="button" name="send" value="/mlid ${id},room=global">Modlog</button>`;
 				buf += `</summary><div class="infobox">`;
-				const punishments = ['Warn', 'Lock', 'Weeklock', 'Namelock', 'Weeknamelock'];
+				const punishments = ['Warn', 'Lock', 'Weeklock', 'Forcerename', 'Namelock', 'Weeknamelock'];
 				for (const name of punishments) {
 					buf += `<form data-submitsend="/am nojoinpunish ${roomid},${toID(name)},${id},{reason}">`;
 					buf += `<button class="button notifying" type="submit">${name}</button><br />`;
@@ -1018,17 +1095,45 @@ export const pages: Chat.PageTable = {
 			let successes = 0;
 			let failures = 0;
 			const staffStats: Record<string, number> = {};
+			const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
 			for (const log of logs) {
+				const cur = Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0];
+				if (!dayStats[cur]) dayStats[cur] = {successes: 0, failures: 0, total: 0};
 				if (log.result) {
 					successes++;
+					dayStats[cur].successes++;
 				} else {
 					failures++;
+					dayStats[cur].failures++;
 				}
 				if (!staffStats[log.staff]) staffStats[log.staff] = 0;
 				staffStats[log.staff]++;
+				dayStats[cur].total++;
 			}
-			buf += `<p><strong>Success rate:</strong> ${(successes / logs.length) * 100}%</p>`;
-			buf += `<p><strong>Failure rate:</strong> ${(failures / logs.length) * 100}%</p>`;
+			buf += `<p><strong>Success rate:</strong> ${Math.floor((successes / logs.length) * 100)}%</p>`;
+			buf += `<p><strong>Failure rate:</strong> ${Math.floor((failures / logs.length) * 100)}%</p>`;
+			buf += `<p><strong>Day stats:</strong></p>`;
+			buf += `<div class="ladder pad"><table>`;
+			let header = '';
+			let data = '';
+			const sortedDays = Utils.sortBy(Object.keys(dayStats), d => new Date(d).getTime());
+			for (const [i, day] of sortedDays.entries()) {
+				const cur = dayStats[day];
+				if (!cur.total) continue;
+				header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+				data += `<td>${cur.successes} (${Math.floor((cur.successes / cur.total) * 100)}%)`;
+				if (cur.failures) data += ` | ${cur.failures} (${Math.floor((cur.failures / cur.total) * 100)}%)</td>`;
+				// i + 1 ensures it's above 0 always (0 % 5 === 0)
+				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+					buf += `<tr>${header}</tr><tr>${data}</tr>`;
+					buf += `</div></table>`;
+					buf += `<div class="ladder pad"><table>`;
+					header = '';
+					data = '';
+				}
+			}
+			buf += `<tr>${header}</tr><tr>${data}</tr>`;
+			buf += `</div></table>`;
 			buf += `<p><strong>Staff stats:</strong></p>`;
 			buf += `<div class="ladder pad"><table>`;
 			buf += `<tr><th>User</th><th>Total</th><th>Percent total</th></tr>`;

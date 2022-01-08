@@ -5,6 +5,7 @@ import type {Punishment} from '../punishments';
 import type {PartialModlogEntry, ModlogID} from '../modlog';
 
 const TICKET_FILE = 'config/tickets.json';
+const SETTINGS_FILE = 'config/chat-plugins/ticket-settings.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const BATTLES_REGEX = /\bbattle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?/g;
@@ -23,6 +24,11 @@ Punishments.addPunishmentType({
 	type: 'TICKETBAN',
 	desc: 'banned from creating help tickets',
 });
+
+interface TicketSettings {
+	// {[ticketType]: {[button title]: response}}
+	responses: {[ticketType: string]: {[title: string]: string}};
+}
 
 interface TicketState {
 	creator: string;
@@ -84,7 +90,18 @@ interface BattleInfo {
 
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
+const defaults: TicketSettings = {responses: {}};
+
 export const tickets: {[k: string]: TicketState} = {};
+export const settings: TicketSettings = (() => {
+	try {
+		// this ensures that if new settings are added to the defaults, they are added
+		// to the JSON as well
+		return {...defaults, ...JSON.parse(FS(SETTINGS_FILE).readSync())};
+	} catch {
+		return {...defaults};
+	}
+})();
 
 try {
 	const ticketData = JSON.parse(FS(TICKET_FILE).readSync());
@@ -127,6 +144,10 @@ export function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(
 		() => JSON.stringify(tickets), {throttle: 5000}
 	);
+}
+
+export function writeSettings() {
+	FS(SETTINGS_FILE).writeUpdate(() => JSON.stringify(settings));
 }
 
 async function convertRoomPunishments() {
@@ -1840,6 +1861,18 @@ export const pages: Chat.PageTable = {
 			}
 
 			if (!ticket.resolved) {
+				const typeId = HelpTicket.getTypeId(ticket.type);
+				const responses = settings.responses[typeId];
+				if (Object.keys(responses || {}).length) {
+					buf += `<br /><div class="infobox">`;
+					buf += `<details class="readmore"><summary><strong>Responses</strong></summary>`;
+					const responseKeys = Object.keys(responses);
+					for (const [i, name] of responseKeys.entries()) {
+						buf += `<button class="button" name="send" value="/helpticket resolve ${ticket.userid},${responses[name]}">${name}</button>`;
+						if (responseKeys[i + 1]) buf += `<br />`;
+					}
+					buf += `</details></div><br />`;
+				}
 				buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
 				buf += `<br /><strong>Resolve:</strong><br />`;
 				buf += `Respond to reporter: <textarea style="width: 100%" name="text" autocomplete="on"></textarea><br />`;
@@ -2509,6 +2542,88 @@ export const commands: Chat.ChatCommands = {
 			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
 			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
 			`Requires: % @ &`,
+		],
+
+		ar: 'addresponse',
+		forceaddresponse: 'addresponse',
+		far: 'addresponse',
+		addresponse(target, room, user) {
+			this.checkCan('lock');
+			const [type, name, response] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
+			if (!toID(type) || !toID(name) || !toID(response)) {
+				return this.parse(`/help helpticket addresponse`);
+			}
+			const typeId = HelpTicket.getTypeId(type);
+			if (!(typeId in textTickets)) {
+				this.errorReply(`'${type}' is not a valid text ticket type.`);
+				return this.errorReply(`Valid types: ${Object.keys(textTickets).join(', ')}.`);
+			}
+			if (!settings.responses[typeId]) {
+				settings.responses[typeId] = {};
+			}
+			if (settings.responses[typeId][name] && !this.cmd.includes('f')) {
+				this.errorReply(`That button already exists for that ticket type.`);
+				return this.errorReply(`Use /ht forceaddresponse to override it if you're sure.`);
+			}
+			settings.responses[typeId][name] = response;
+			writeSettings();
+			this.privateGlobalModAction(`${user.name} added a response button '${name}' for the ticket type ${typeId} ("${response}")`);
+			this.globalModlog(`HELPTICKET ADDRESPONSE`, null, `'${response}' named ${name} for ${typeId}`);
+		},
+		addresponsehelp: [
+			`/helpticket addresponse [type], [name], [response] - Adds a [response] button to the given ticket [type] with the given [name].`,
+			`Requires: % @ &`,
+		],
+
+		rr: 'removeresponse',
+		removeresponse(target, room, user) {
+			this.checkCan('lock');
+			const [type, name] = Utils.splitFirst(target, ',').map(f => f.trim());
+			if (!toID(type) || !toID(name)) return this.parse(`/help helpticket removeresponse`);
+			const typeId = HelpTicket.getTypeId(type);
+			if (!(type in textTickets)) {
+				return this.errorReply(`'${type}' is not a valid text ticket type.`);
+			}
+			if (!settings.responses[typeId]?.[name]) {
+				return this.errorReply(`'${name}' is not a response for the ${typeId} ticket type .`);
+			}
+			delete settings.responses[typeId][name];
+			if (!Object.keys(settings.responses[typeId]).length) {
+				delete settings.responses[typeId];
+			}
+			writeSettings();
+			this.privateGlobalModAction(`${user.name} removed the response named '${name}' from the responses for ${typeId} tickets`);
+			this.globalModlog('HELPTICKET REMOVERESPONSE', null, `${name} (from ${typeId})`);
+		},
+		removeresponsehelp: [
+			`/helpticket removeresponse [type], [name] - Removes the response button with the given [name] from the given ticket [type].`,
+			`Requires: % @ &`,
+		],
+
+		lr: 'listresponses',
+		listresponses(target, room, user) {
+			this.checkCan('lock');
+			let buf = `<strong>Help ticket response buttons `;
+			target = toID(target);
+			if (target && !(target in textTickets)) {
+				return this.errorReply(`Invalid ticket type: ${target}.`);
+			}
+			buf += `${target ? `for the type ${target}:` : ""}</strong><hr />`;
+			const table = target ? {[target]: settings.responses[target]} : settings.responses;
+			if (!Object.keys(table).length) {
+				buf += `<p class="message-error">None</p>`;
+				return this.sendReplyBox(buf);
+			}
+			buf += Object.keys(table).map(type => (
+				`<p>${ticketTitles[type]}<p>` +
+				Object.keys(settings.responses[type])
+					.map(name => Utils.html`<p>- ${name}: "${settings.responses[type][name]}"</p>`).join('')
+			)).join('<hr />');
+			return this.sendReplyBox(buf);
+		},
+		listresponseshelp: [
+			`/helpticket listresponses [optional type] - List current response buttons for text tickets. `,
+			`If a [type] is given, lists responses only for that type. Requires: % @ &`,
 		],
 
 		close(target, room, user) {
