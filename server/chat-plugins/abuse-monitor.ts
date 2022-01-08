@@ -51,7 +51,7 @@ export const cache: {
 
 const defaults: FilterSettings = {
 	threshold: 4,
-	thresholdIncrement: {turns: 5, amount: 1},
+	thresholdIncrement: null,
 	minScore: 0.65,
 	specials: {
 		THREAT: {0.96: 'MAXIMUM'},
@@ -73,7 +73,7 @@ export const settings: FilterSettings = (() => {
 
 interface FilterSettings {
 	disabled?: boolean;
-	thresholdIncrement?: {turns: number, amount: number, minTurns?: number};
+	thresholdIncrement: {turns: number, amount: number, minTurns?: number} | null;
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
@@ -721,7 +721,7 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.privateGlobalModAction(
 				`${user.name} set the abuse-monitor threshold increment ${increment} every ${Chat.count(turns, 'turns')}` +
-				`${min ? `after ${Chat.count(min, 'turns')}` : ""}`
+				`${min ? ` after ${Chat.count(min, 'turns')}` : ""}`
 			);
 			this.globalModlog(
 				`ABUSEMONITOR INCREMENT`, null, `${increment} every ${turns} turn(s)${min ? ` after ${min} turn(s)` : ""}`
@@ -731,7 +731,7 @@ export const commands: Chat.ChatCommands = {
 		deleteincrement(target, room, user) {
 			checkAccess(this);
 			if (!settings.thresholdIncrement) return this.errorReply(`The threshold increment is already disabled.`);
-			delete settings.thresholdIncrement;
+			settings.thresholdIncrement = null;
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} disabled the abuse-monitor threshold increment.`);
 			this.globalModlog(`ABUSEMONITOR DISABLEINCREMENT`);
