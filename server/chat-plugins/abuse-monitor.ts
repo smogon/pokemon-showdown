@@ -60,10 +60,9 @@ const defaults: FilterSettings = {
 		IDENTITY_ATTACK: {0.8: 2},
 		SEVERE_TOXICITY: {0.8: 2},
 	},
-	punishments: {
-		IDENTITY_ATTACK: {0.93: {punishment: 'WARN', count: 2}},
-		THREAT: {0.98: {punishment: 'WARN', count: 2}},
-	},
+	punishments: [
+		{certainty: 0.93, type: 'IDENTITY_ATTACK', punishment: 'WARN', count: 2},
+	],
 };
 
 export const settings: FilterSettings = (() => {
@@ -79,6 +78,8 @@ export const settings: FilterSettings = (() => {
 
 interface PunishmentSettings {
 	count?: number;
+	certainty?: number;
+	type?: string;
 	punishment: string;
 }
 
@@ -88,7 +89,7 @@ interface FilterSettings {
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
-	punishments: {[type: string]: {[certainty: number]: PunishmentSettings}};
+	punishments: PunishmentSettings[];
 }
 
 export interface PerspectiveRequest {
@@ -250,23 +251,17 @@ async function recommend(user: User, room: GameRoom, response: Record<string, nu
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const prevRecommend = cache[room.roomid]?.recommended;
 	const recommended: [string, string][] = [];
-	for (const type of keys) {
-		const punishments = settings.punishments[type];
-		if (!punishments) continue;
-		const sorted = Utils.sortBy(Object.keys(punishments).map(Number), n => -n);
-		for (const num of sorted) {
-			const punishment = punishments[num];
-			if (response[type] >= num) {
-				if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
-					if (PUNISHMENTS.indexOf(punishment.punishment) <= PUNISHMENTS.indexOf(prevRecommend?.type)) continue;
-				}
-				if (punishment.count) {
-					const hits = await Chat.database.all(
-						`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
-						[user.id, type, num]
-					);
-					if (hits.length < punishment.count) continue;
-				}
+	for (const punishment of settings.punishments) {
+		for (const type of keys) {
+			const num = response[type];
+			if (punishment.type && punishment.type !== type) continue;
+			if (punishment.certainty && punishment.certainty > num) continue;
+			if (punishment.count) {
+				const hits = await Chat.database.all(
+					`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
+					[user.id, type, num]
+				);
+				if (hits.length < punishment.count) continue;
 				recommended.push([punishment.punishment, type]);
 			}
 		}
@@ -725,67 +720,97 @@ export const commands: Chat.ChatCommands = {
 		ap: 'addpunishment',
 		addpunishment(target, room, user) {
 			checkAccess(this);
-			const [
-				rawType, rawCertainty, rawPunishment, rawCount,
-			] = Utils.splitFirst(target, ',', 3).map(f => f.trim());
-
-			if (!toID(rawType) || !toID(rawCertainty) || !toID(rawPunishment)) {
-				return this.parse(`/help abusemonitor`);
-			}
-			const certainty = parseFloat(rawCertainty);
-			if (isNaN(certainty) || certainty < 0 || certainty > 1) {
-				return this.errorReply(`Certainty must be above 0 and below 1.`);
-			}
-			const type = rawType.replace(/\s/g, '_').toUpperCase();
-			if (!(type in ATTRIBUTES)) {
-				return this.errorReply(
-					`Invalid type '${rawType}'. Valid types: ${Object.keys(ATTRIBUTES).join(', ')}.`
-				);
-			}
-			let count;
-			if (toID(rawCount)) {
-				count = parseInt(rawCount);
-				if (isNaN(count) || count < 1) {
-					return this.errorReply(`Invalid count. Must be a number above 0.`);
+			if (!toID(target)) return this.parse(`/help am`);
+			const targets = target.split(',').map(f => f.trim());
+			const punishment: Partial<PunishmentSettings> = {};
+			for (const cur of targets) {
+				let [key, value] = Utils.splitFirst(cur, '=').map(f => f.trim());
+				key = toID(key);
+				switch (key) {
+				case 'punishment': case 'p':
+					if (punishment.punishment) {
+						return this.errorReply(`Duplicate punishment values.`);
+					}
+					value = toID(value).toUpperCase();
+					if (PUNISHMENTS.indexOf(value) < 0) {
+						return this.errorReply(`Invalid punishment: ${value}. Valid punishments: ${PUNISHMENTS.join(', ')}.`);
+					}
+					punishment.punishment = value;
+					break;
+				case 'count': case 'num': case 'c':
+					if (punishment.count) {
+						return this.errorReply(`Duplicate count values.`);
+					}
+					const num = parseInt(value);
+					if (isNaN(num)) {
+						return this.errorReply(`Invalid count '${value}'. Must be a number.`);
+					}
+					punishment.count = num;
+					break;
+				case 'type': case 't':
+					if (punishment.type) {
+						return this.errorReply(`Duplicate type values.`);
+					}
+					value = value.replace(/\s/g, '_').toUpperCase();
+					if (!ATTRIBUTES[value as keyof typeof ATTRIBUTES]) {
+						return this.errorReply(
+							`Invalid attribute: ${value}. `+
+							`Valid attributes: ${Object.keys(ATTRIBUTES).join(', ')}.`
+						);
+					}
+					punishment.type = value;
+					break;
+				case 'certainty': case 'ct':
+					if (punishment.certainty) {
+						return this.errorReply(`Duplicate certainty values.`);
+					}
+					const certainty = parseFloat(value);
+					if (isNaN(certainty) || certainty > 1 || certainty < 0) {
+						return this.errorReply(`Invalid certainty '${value}'. Must be a number above 0 and below 1.`);
+					}
+					punishment.certainty = certainty;
+					break;
+				default:
+					this.errorReply(`Invalid key:  ${key}`);
+					return this.parse(`/help am`);
 				}
 			}
-
-			const punishment = toID(rawPunishment).toUpperCase();
-			if (!PUNISHMENTS.includes(punishment)) {
-				return this.errorReply(`Invalid punishment. Must be ${PUNISHMENTS.join(', ')}.`);
+			if (!punishment.punishment) {
+				return this.errorReply(`A punishment type must be specified.`);
 			}
-
-			if (!settings.punishments[type]) settings.punishments[type] = {};
-			settings.punishments[type][certainty] = {count, punishment};
+			for (const [i, p] of settings.punishments.entries()) {
+				let matches = 0;
+				for (const k in p) {
+					if (p[k as keyof PunishmentSettings] === punishment[k as keyof PunishmentSettings]) matches++;
+				}
+				if (matches === Object.keys(p).length) {
+					return this.errorReply(`This punishment is already stored at ${i + 1}.`);
+				}
+			}
+			settings.punishments.push(punishment as PunishmentSettings);
 			saveSettings();
-			this.privateGlobalModAction(
-				`${user.name} set the abuse-monitor recommendation for ${certainty}% certainty on ${type}` +
-				`${count ? ` after ${Chat.count(count, 'hits')} ` : ' '}to ${punishment}`
-			);
-			this.globalModlog(`ABUSEMONITOR RECOMMEND`, null, `${punishment} (${certainty}%${count ? ` after ${count}` : ""})`);
+			this.privateGlobalModAction(`${user.name} added a ${punishment.punishment} abuse-monitor punishment.`);
+			const str = Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ');
+			this.stafflog(`Info: ${str}`);
+			this.globalModlog(`ABUSEMONITOR ADDPUNISHMENT`, null, str);
 		},
 		dp: 'deletepunishment',
 		deletepunishment(target, room, user) {
 			checkAccess(this);
-			const [rawType, rawCertainty] = Utils.splitFirst(target, ',').map(f => f.trim());
-			const type = rawType.replace(/\s/g, '_').toUpperCase();
-			if (!(type in ATTRIBUTES)) {
-				return this.errorReply(`Invalid type '${rawType}'.`);
+			const idx = parseInt(target) - 1;
+			if (isNaN(idx)) return this.errorReply(`Invalid number.`);
+			const punishment = settings.punishments[idx];
+			if (!punishment) {
+				return this.errorReply(`No punishments exist at index ${idx + 1}.`);
 			}
-			const certainty = parseFloat(rawCertainty);
-			if (isNaN(certainty)) {
-				return this.errorReply(`Invalid certainty '${rawCertainty}'.`);
-			}
-			if (!(type in settings.punishments)) {
-				return this.errorReply(`${type} has no punishment settings.`);
-			}
-			if (!(certainty in settings.punishments[type])) {
-				return this.errorReply(`${certainty} is not a punishment setting for ${type}.`);
-			}
-			delete settings.punishments[type][certainty];
+			settings.punishments.splice(idx, 1);
 			saveSettings();
-			this.privateGlobalModAction(`${user.name} removed the abuse-monitor recommendation for ${type} at ${certainty}% certainty.`);
-			this.globalModlog(`ABUSEMONITOR REMOVERECOMMEND`, null, `${type} (${certainty})`);
+			this.privateGlobalModAction(`${user.name} removed the abuse-monitor punishment indexed at ${idx + 1}.`);
+			this.stafflog(
+				`Punishment: ` +
+				`${Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ')}`
+			);
+			this.globalModlog(`ABUSEMONITOR REMOVEPUNISHMENT`, null, `${idx + 1}`);
 		},
 		vs: 'viewsettings',
 		settings: 'viewsettings',
@@ -806,15 +831,12 @@ export const commands: Chat.ChatCommands = {
 					buf += `<br />`;
 				}
 			}
-			const punishments = Object.keys(settings.punishments);
-			if (punishments.length) {
+			if (settings.punishments.length) {
 				buf += `<br /><strong>Punishment settings</strong><br />`;
-				for (const p of punishments) {
-					const data = settings.punishments[p];
-					for (const certainty in data) {
-						const cur = data[certainty];
-						buf += `&bull; ${p}: ${certainty} - ${cur.punishment}${cur.count ? ` (minimum ${cur.count})` : ""}<br />`;
-					}
+				for (const [i, p] of settings.punishments.entries()) {
+					buf += `&bull; ${i + 1}: `;
+					buf += Object.keys(p).map(f => `${f}: ${p[f as keyof PunishmentSettings]}`).join(', ');
+					buf += `<br />`;
 				}
 			}
 			buf += `<strong>Minimum percent to process:</strong> ${settings.minScore}<br />`;
