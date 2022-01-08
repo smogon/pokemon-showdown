@@ -10300,7 +10300,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxairstream: {
 		num: 766,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Airstream",
 		pp: 10,
@@ -10322,7 +10322,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxdarkness: {
 		num: 772,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Darkness",
 		pp: 10,
@@ -10344,7 +10344,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxflare: {
 		num: 757,
 		accuracy: true,
-		basePower: 100,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Flare",
 		pp: 10,
@@ -10364,7 +10364,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxflutterby: {
 		num: 758,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Flutterby",
 		pp: 10,
@@ -10386,7 +10386,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxgeyser: {
 		num: 765,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Geyser",
 		pp: 10,
@@ -10455,7 +10455,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxhailstorm: {
 		num: 763,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Hailstorm",
 		pp: 10,
@@ -10475,7 +10475,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxknuckle: {
 		num: 761,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Knuckle",
 		pp: 10,
@@ -10497,7 +10497,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxlightning: {
 		num: 759,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Lightning",
 		pp: 10,
@@ -10517,7 +10517,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxmindstorm: {
 		num: 769,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Mindstorm",
 		pp: 10,
@@ -10537,7 +10537,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxooze: {
 		num: 764,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Ooze",
 		pp: 10,
@@ -10559,7 +10559,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxovergrowth: {
 		num: 773,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Overgrowth",
 		pp: 10,
@@ -10579,7 +10579,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxphantasm: {
 		num: 762,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Phantasm",
 		pp: 10,
@@ -10601,7 +10601,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxquake: {
 		num: 771,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Quake",
 		pp: 10,
@@ -10623,7 +10623,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxrockfall: {
 		num: 770,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Rockfall",
 		pp: 10,
@@ -10643,7 +10643,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxstarfall: {
 		num: 767,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Starfall",
 		pp: 10,
@@ -10663,7 +10663,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxsteelspike: {
 		num: 774,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Steelspike",
 		pp: 10,
@@ -10685,7 +10685,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxstrike: {
 		num: 760,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Strike",
 		pp: 10,
@@ -10707,7 +10707,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	maxwyrmwind: {
 		num: 768,
 		accuracy: true,
-		basePower: 10,
+		basePower: 1,
 		category: "Physical",
 		name: "Max Wyrmwind",
 		pp: 10,
