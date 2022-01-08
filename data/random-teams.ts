@@ -298,8 +298,9 @@ export class RandomTeams {
 	 * Inform user when custom bans are unsupported in a team generator.
 	 */
 	protected enforceNoDirectCustomBanlistChanges() {
-		if (!this.hasDirectCustomBanlistChanges()) return;
-		throw new Error(`Custom bans are not currently supported in ${this.format.name}.`);
+		if (this.hasDirectCustomBanlistChanges()) {
+			throw new Error(`Custom bans are not currently supported in ${this.format.name}.`);
+		}
 	}
 
 	/**
