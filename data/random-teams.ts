@@ -625,18 +625,14 @@ export class RandomTeams {
 				for (const item of this.dex.items.all()) {
 					let banReason = ruleTable.check('item:' + item.id);
 					if (banReason) continue;
-					if (banReason !== '') {
-						if (item.id) {
-							if (hasAllItemsBan) continue;
-							if (item.isNonstandard) {
-								banReason = ruleTable.check('pokemontag:' + toID(item.isNonstandard));
-								if (banReason) continue;
-								if (banReason !== '') {
-									if (item.isNonstandard !== 'Unobtainable') {
-										if (hasNonexistentBan) continue;
-										if (!hasNonexistentWhitelist) continue;
-									}
-								}
+					if (banReason !== '' && item.id) {
+						if (hasAllItemsBan) continue;
+						if (item.isNonstandard) {
+							banReason = ruleTable.check('pokemontag:' + toID(item.isNonstandard));
+							if (banReason) continue;
+							if (banReason !== '' && item.isNonstandard !== 'Unobtainable') {
+								if (hasNonexistentBan) continue;
+								if (!hasNonexistentWhitelist) continue;
 							}
 						}
 					}
@@ -696,11 +692,9 @@ export class RandomTeams {
 					if (move.isNonstandard) {
 						banReason = ruleTable.check('pokemontag:' + toID(move.isNonstandard));
 						if (banReason) continue;
-						if (banReason !== '') {
-							if (move.isNonstandard !== 'Unobtainable') {
-								if (hasNonexistentBan) continue;
-								if (!hasNonexistentWhitelist) continue;
-							}
+						if (banReason !== '' && move.isNonstandard !== 'Unobtainable') {
+							if (hasNonexistentBan) continue;
+							if (!hasNonexistentWhitelist) continue;
 						}
 					}
 				}
@@ -721,16 +715,14 @@ export class RandomTeams {
 					for (const nature of this.dex.natures.all()) {
 						let banReason = ruleTable.check('nature:' + nature.id);
 						if (banReason) continue;
-						if (banReason !== '') {
-							if (nature.id) {
-								if (hasAllNaturesBan) continue;
-								if (nature.isNonstandard) {
-									banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
-									if (banReason) continue;
-									if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
-										if (hasNonexistentBan) continue;
-										if (!hasNonexistentWhitelist) continue;
-									}
+						if (banReason !== '' && nature.id) {
+							if (hasAllNaturesBan) continue;
+							if (nature.isNonstandard) {
+								banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+								if (banReason) continue;
+								if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
+									if (hasNonexistentBan) continue;
+									if (!hasNonexistentWhitelist) continue;
 								}
 							}
 						}
@@ -741,7 +733,8 @@ export class RandomTeams {
 			}
 		}
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined, hasCustomBans ? ruleTable : undefined);
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined,
+			hasCustomBans ? ruleTable : undefined);
 
 		const team = [];
 		for (const forme of randomN) {
