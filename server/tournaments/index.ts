@@ -3,6 +3,7 @@ import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
 import {Utils} from '../../lib';
 import {SampleTeams, teamData} from '../chat-plugins/sample-teams';
+import {PRNG} from '../../sim/prng';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
@@ -214,13 +215,23 @@ export class Tournament extends Rooms.RoomGame {
 	}
 
 	setCustomRules(rules: string) {
+		let format;
 		try {
 			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
+			format = Dex.formats.get(this.fullFormat, true);
+
+			// In tours of formats with generated teams, custom rule errors should be checked for here,
+			// since users can't edit their teams to avoid them at matching time
+			if (format.team) {
+				const testTeamSeed = PRNG.generateSeed();
+				const testTeamGenerator = Teams.getGenerator(format, testTeamSeed);
+				testTeamGenerator.getTeam(); // Throws error if generation fails
+			}
 		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
 
-		const customRules = Dex.formats.get(this.fullFormat, true).customRules;
+		const customRules = format.customRules;
 		if (!customRules) {
 			throw new Chat.ErrorMessage(`Invalid rules.`);
 		}
