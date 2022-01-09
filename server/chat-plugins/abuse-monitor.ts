@@ -250,7 +250,11 @@ export async function classify(text: string) {
 async function recommend(user: User, room: GameRoom, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string][] = [];
+	const prevRecommend = cache[room.roomid]?.recommended;
 	for (const punishment of settings.punishments) {
+		if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
+			if (PUNISHMENTS.indexOf(punishment.punishment) <= PUNISHMENTS.indexOf(prevRecommend?.type)) continue;
+		}
 		for (const type of keys) {
 			const num = response[type];
 			if (punishment.type && punishment.type !== type) continue;
