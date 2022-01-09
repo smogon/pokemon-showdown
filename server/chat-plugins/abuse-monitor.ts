@@ -249,7 +249,6 @@ export async function classify(text: string) {
 
 async function recommend(user: User, room: GameRoom, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
-	const prevRecommend = cache[room.roomid]?.recommended;
 	const recommended: [string, string][] = [];
 	for (const punishment of settings.punishments) {
 		for (const type of keys) {
@@ -732,7 +731,7 @@ export const commands: Chat.ChatCommands = {
 						return this.errorReply(`Duplicate punishment values.`);
 					}
 					value = toID(value).toUpperCase();
-					if (PUNISHMENTS.indexOf(value) < 0) {
+					if (!PUNISHMENTS.includes(value)) {
 						return this.errorReply(`Invalid punishment: ${value}. Valid punishments: ${PUNISHMENTS.join(', ')}.`);
 					}
 					punishment.punishment = value;
@@ -754,7 +753,7 @@ export const commands: Chat.ChatCommands = {
 					value = value.replace(/\s/g, '_').toUpperCase();
 					if (!ATTRIBUTES[value as keyof typeof ATTRIBUTES]) {
 						return this.errorReply(
-							`Invalid attribute: ${value}. `+
+							`Invalid attribute: ${value}. ` +
 							`Valid attributes: ${Object.keys(ATTRIBUTES).join(', ')}.`
 						);
 					}
