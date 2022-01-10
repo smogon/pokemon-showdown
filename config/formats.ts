@@ -2409,13 +2409,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] PU'],
-		banlist: [
-			'Audino', 'Banette', 'Beheeyem', 'Bronzor', 'Dodrio', 'Duosion', 'Dwebble', 'Ferroseed', 'Fraxure', 'Gabite', 'Golduck', 'Glalie',
-			'Huntail', 'Jumpluff', 'Klang', 'Krokorok', 'Machoke', 'Mantine', 'Maractus', 'Marowak', 'Mawile', 'Monferno', 'Murkrow', 'Natu',
-			'Omanyte', 'Purugly', 'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Scraggy', 'Shiftry', 'Sneasel', 'Simisage', 'Stoutland',
-			'Stunfisk', 'Swanna', 'Swoobat', 'Tentacool', 'Torterra', 'Trubbish', 'Ursaring', 'Victreebel', 'Vileplume', 'Volbeat', 'Whirlipede',
-			'Wynaut', 'Zebstrika', 'Zweilous', 'Baton Pass',
-		],
+		banlist: ['PU', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede', 'Baton Pass'],
 	},
 
 	// US/UM Singles
@@ -3061,7 +3055,7 @@ export const Formats: FormatList = [
 		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['[Gen 5] NU', 'Sleep Moves Clause'],
-		banlist: ['NU', 'Combusken', 'Gothorita', 'Linoone', 'Riolu', 'Rotom-Frost', 'Simipour', 'Throh', 'Vigoroth'],
+		banlist: ['NU', 'PUBL'],
 	},
 	{
 		name: "[Gen 5] Monotype",
