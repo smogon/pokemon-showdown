@@ -1053,9 +1053,11 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8 BDSP] LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3696004/">BDSP LC</a>`,
+		],
 
 		mod: 'gen8bdsp',
-		searchShow: false,
 		ruleset: ['Little Cup', 'Standard'],
 		banlist: ['Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Baton Pass'],
 	},
