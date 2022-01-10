@@ -152,7 +152,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["calmmind", "fireblast", "moonblast", "moonlight", "stealthrock", "thunderwave"],
 	},
 	vulpix: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	ninetales: {
 		tier: "RU",
