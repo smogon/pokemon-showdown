@@ -1962,7 +1962,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	hippowdon: {
 		randomBattleMoves: ["earthquake", "icefang", "slackoff", "stealthrock", "toxic", "whirlwind"],
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DUU",
 	},
 	skorupi: {
