@@ -297,21 +297,6 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
-		name: "[Gen 8] Test Your Luck!",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3695144/">Test Your Luck! Discussion</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'VGC Timer', 'Min Source Gen = 8'],
-		banlist: ['Azelf', 'Mesprit', 'Uxie'],
-		onValidateSet(set, format) {
-			if (set.moves.length !== 1 || this.dex.moves.get(set.moves[0]).id !== 'metronome') {
-				return [`${set.name || set.species} has illegal moves.`, `(${format.name} only allows the move Metronome)`];
-			}
-		},
-	},
-	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
