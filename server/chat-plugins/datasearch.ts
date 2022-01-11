@@ -109,28 +109,6 @@ export const commands: Chat.ChatCommands = {
 			const dex = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex;
 			if (dex) target += `, mod=${dex.currentMod}`;
 		}
-		if (targetGen === 5) {
-			const targArray = target.split(',');
-			for (const [i, arg] of targArray.entries()) {
-				if (arg.includes('|')) {
-					const orArray = arg.split('|');
-					for (const [j, a] of orArray.entries()) {
-						if (toID(a) === 'pu') {
-							orArray.splice(j, 1);
-							orArray.push('untiered');
-							continue;
-						}
-					}
-					targArray[i] = orArray.join('|');
-				} else {
-					if (toID(arg) === 'pu') {
-						targArray.splice(i, 1);
-						targArray.push('untiered');
-					}
-				}
-			}
-			target = targArray.join(',');
-		}
 		if (cmd === 'nds') target += ', natdex';
 		const response = await runSearch({
 			target,
@@ -502,7 +480,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
 		uubl: 'UUBL', uu: 'UU',
 		rubl: 'RUBL', ru: 'RU',
-		nubl: 'NUBL', nu: 'NU', untiered: '(NU)',
+		nubl: 'NUBL', nu: 'NU',
 		publ: 'PUBL', pu: 'PU', zu: '(PU)',
 		nfe: 'NFE',
 		lc: 'LC',
@@ -994,7 +972,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
-				if (tier.startsWith('(') && tier !== '(PU)' && tier !== '(NU)') tier = tier.slice(1, -1) as TierTypes.Singles;
+				if (tier.startsWith('(') && tier !== '(PU)') tier = tier.slice(1, -1) as TierTypes.Singles;
 				// if (tier === 'New') tier = 'OU';
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
