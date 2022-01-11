@@ -443,7 +443,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	marowak: {
 		randomBattleMoves: ["bonemerang", "doubleedge", "earthquake", "firepunch", "stoneedge", "substitute"],
-		tier: "PU",
+		tier: "(PU)",
 		doublesTier: "DUU",
 	},
 	tyrogue: {
@@ -1604,7 +1604,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	glalie: {
 		randomBattleMoves: ["earthquake", "explosion", "icebeam", "spikes", "taunt"],
-		tier: "PU",
+		tier: "(PU)",
 		doublesTier: "DUU",
 	},
 	froslass: {
@@ -2064,7 +2064,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	regigigas: {
 		randomBattleMoves: ["confuseray", "return", "rockslide", "substitute", "thunderwave"],
-		tier: "PU",
+		tier: "(PU)",
 		doublesTier: "DUU",
 	},
 	giratina: {
