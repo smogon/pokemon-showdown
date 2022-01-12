@@ -1204,7 +1204,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	shiftry: {
 		tier: "RU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["brickbreak", "fakeout", "leafblade", "nightslash", "suckerpunch", "swordsdance", "defog"],
+		randomBattleMoves: ["brickbreak", "fakeout", "leafblade", "nightslash", "suckerpunch", "swordsdance"],
 	},
 	taillow: {
 		tier: "LC",
