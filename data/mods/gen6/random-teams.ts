@@ -1196,6 +1196,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	}
 
 	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const forceResult = (depth >= 4);
 
 		// The teams generated depend on the tier choice in such a way that

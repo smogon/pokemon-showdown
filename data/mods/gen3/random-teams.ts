@@ -19,7 +19,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
-			Normal: (movePool, moves, abilities, types, counter) => !counter.get('Normal') && counter.setupType === 'Physical',
+			Normal: (movePool, moves, abilities, types, counter, species) => {
+				if (species.id === 'blissey' && movePool.includes('softboiled')) return true;
+				return !counter.get('Normal') && counter.setupType === 'Physical';
+			},
 			Psychic: (movePool, moves, abilities, types, counter, species) => (
 				types.has('Psychic') &&
 				(movePool.includes('psychic') || movePool.includes('psychoboost')) &&
@@ -32,6 +35,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// If the Pokémon has this move, the other move will be forced
 			protect: movePool => movePool.includes('wish'),
 			sunnyday: movePool => movePool.includes('solarbeam'),
+			sleeptalk: movePool => movePool.includes('rest'),
 		};
 	}
 
@@ -73,11 +77,12 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Not very useful without their supporting moves
 		case 'amnesia': case 'sleeptalk':
+			if (!moves.has('rest')) return {cull: true};
 			if (movePool.length > 1) {
 				const rest = movePool.indexOf('rest');
 				if (rest >= 0) this.fastPop(movePool, rest);
 			}
-			return {cull: !moves.has('rest')};
+			break;
 		case 'barrier':
 			return {cull: !moves.has('calmmind') && !moves.has('batonpass') && !moves.has('mirrorcoat')};
 		case 'batonpass':
@@ -566,6 +571,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	}
 
 	randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const seed = this.prng.seed;
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];

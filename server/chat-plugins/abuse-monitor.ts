@@ -492,6 +492,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Invalid setting. Must be 'on' or 'off'.`);
 			}
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${this.user.name} ${!settings.disabled ? 'enabled' : 'disabled'} the abuse monitor.`);
 			this.globalModlog('ABUSEMONITOR', null, !settings.disabled ? 'enable' : 'disable');
 		},
@@ -510,6 +511,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			settings.threshold = num;
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${this.user.name} set the abuse monitor trigger threshold to ${num}.`);
 			this.globalModlog('ABUSEMONITOR THRESHOLD', null, `${num}`);
 			this.sendReply(
@@ -678,6 +680,7 @@ export const commands: Chat.ChatCommands = {
 			// checked above to ensure it's a valid number or MAXIMUM
 			settings.specials[type][percent] = score;
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} set the abuse monitor special case for ${type} at ${percent}% to ${score}.`);
 			this.globalModlog("ABUSEMONITOR SPECIAL", type, `${percent}% to ${score}`);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
@@ -703,6 +706,7 @@ export const commands: Chat.ChatCommands = {
 				delete settings.specials[type];
 			}
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} deleted the abuse monitor special case for ${type} at ${percent}%.`);
 			this.globalModlog("ABUSEMONITOR DELETESPECIAL", type, `${percent}%`);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
@@ -716,6 +720,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			settings.minScore = num;
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
@@ -819,38 +824,7 @@ export const commands: Chat.ChatCommands = {
 		settings: 'viewsettings',
 		viewsettings() {
 			checkAccess(this);
-			let buf = `<strong>Abuse Monitor Settings</strong><hr />`;
-			const specials = Object.keys(settings.specials);
-			if (specials.length) {
-				buf += `<strong>Special cases:</strong><br />`;
-				for (const type of specials) {
-					buf += `&bull; ${type}: `;
-					const special = settings.specials[type];
-					const specialKeys = Object.keys(special);
-					for (const percent of specialKeys) {
-						buf += `${percent}%: ${special[percent as any]}, `;
-					}
-					buf = buf.slice(0, -2);
-					buf += `<br />`;
-				}
-			}
-			if (settings.punishments.length) {
-				buf += `<br /><strong>Punishment settings</strong><br />`;
-				for (const [i, p] of settings.punishments.entries()) {
-					buf += `&bull; ${i + 1}: `;
-					buf += Object.keys(p).map(f => `${f}: ${p[f as keyof PunishmentSettings]}`).join(', ');
-					buf += `<br />`;
-				}
-			}
-			buf += `<strong>Minimum percent to process:</strong> ${settings.minScore}<br />`;
-			buf += `<strong>Score threshold:</strong> ${settings.threshold}`;
-			buf += `<br /><strong>Threshold increments:</strong>`;
-			const incr = settings.thresholdIncrement;
-			if (incr) {
-				buf += `<br /> &bull; Increases ${incr.amount} every ${incr.turns} turns`;
-				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
-			}
-			this.sendReplyBox(buf);
+			return this.parse(`/join view-abusemonitor-settings`);
 		},
 		ti: 'thresholdincrement',
 		thresholdincrement(target, room, user) {
@@ -876,6 +850,7 @@ export const commands: Chat.ChatCommands = {
 				settings.thresholdIncrement.minTurns = min;
 			}
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(
 				`${user.name} set the abuse-monitor threshold increment ${increment} every ${Chat.count(turns, 'turns')}` +
 				`${min ? ` after ${Chat.count(min, 'turns')}` : ""}`
@@ -890,6 +865,7 @@ export const commands: Chat.ChatCommands = {
 			if (!settings.thresholdIncrement) return this.errorReply(`The threshold increment is already disabled.`);
 			settings.thresholdIncrement = null;
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} disabled the abuse-monitor threshold increment.`);
 			this.globalModlog(`ABUSEMONITOR DISABLEINCREMENT`);
 		},
@@ -1166,6 +1142,58 @@ export const pages: Chat.PageTable = {
 				buf += `<tr><td>${id}</td><td>${staffStats[id]}</td><td>${(staffStats[id] / logs.length) * 100}%</td></tr>`;
 			}
 			buf += `</table></div>`;
+			return buf;
+		},
+		settings() {
+			checkAccess(this);
+			this.title = `[Abuse Monitor] Settings`;
+			let buf = `<div class="pad"><h2>Abuse Monitor Settings</h2>`;
+			buf += `<button class="button" name="send" value="/msgroom staff,/am respawn">Reload processes</button>`;
+			buf += `<button class="button" name="send" value="/am vs">Reload page</button>`;
+			buf += `<div class="infobox"><h3>Miscellaneous settings</h3><hr />`;
+			buf += `Minimum percent to process: <form data-submitsend="/msgroom staff,/am editmin {num}">`;
+			buf += `<input name="num" value="${settings.minScore}"/>`;
+			buf += `<button class="button notifying" type="submit">Change minimum</button></form>`;
+			buf += `<br />Score threshold: <form data-submitsend="/msgroom staff,/am threshold {num}">`;
+			buf += `<input name="num" value="${settings.threshold}"/>`;
+			buf += `<button class="button notifying" type="submit">Change threshold</button></form>`;
+			const incr = settings.thresholdIncrement;
+			if (incr) {
+				buf += `<br />Threshold increments: `;
+				buf += `Increases ${incr.amount} every ${incr.turns} turns`;
+				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
+				buf += `<br />`;
+			}
+      if (settings.punishments.length) {
+        // todo formify this like the scoring buttons
+				buf += `<br />Punishment settings<br />`;
+				for (const [i, p] of settings.punishments.entries()) {
+					buf += `&bull; ${i + 1}: `;
+					buf += Object.keys(p).map(f => `${f}: ${p[f as keyof PunishmentSettings]}`).join(', ');
+					buf += `<br />`;
+				}
+			}
+			buf += `</div><div class="infobox"><h3>Scoring:</h3><hr />`;
+			const keys = Utils.sortBy(Object.keys(ATTRIBUTES), k => [-Object.keys(settings.specials[k] || {}).length, k]);
+			for (const k of keys) {
+				buf += `<strong>${k}</strong>:<br />`;
+				if (settings.specials[k]) {
+					for (const percent in settings.specials[k]) {
+						buf += `&bull; ${percent}%: ${settings.specials[k][percent]} `;
+						buf += `(<button class="button" name="send" value="/msgroom staff,/am ds ${k},${percent}">Delete</button>)`;
+						buf += `<br />`;
+					}
+				}
+				buf += `<br />`;
+				buf += `<details class="readmore"><summary>Add a special case</summary>`;
+				buf += `<form data-submitsend="/msgroom staff,/am es ${k},{percent},{score}">`;
+				buf += `Percent needed: <input type="text" name="percent" /><br />`;
+				buf += `Score: <input type="text" name="score" /><br />`;
+				buf += `<button class="button notifying" type="submit">Add</button>`;
+				buf += `</form></details>`;
+				buf += `<hr />`;
+			}
+			buf += `</div>`;
 			return buf;
 		},
 	},

@@ -1,6 +1,8 @@
 import {Dex, toID} from '../sim/dex';
 import {Utils} from '../lib';
 import {PRNG, PRNGSeed} from '../sim/prng';
+import {RuleTable} from '../sim/dex-formats';
+import {Tags} from './tags';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
@@ -263,6 +265,7 @@ export class RandomTeams {
 	 */
 	sampleNoReplace(list: any[]) {
 		const length = list.length;
+		if (length === 0) return null;
 		const index = this.random(length);
 		return this.fastPop(list, index);
 	}
@@ -281,6 +284,54 @@ export class RandomTeams {
 		return samples;
 	}
 
+	/**
+	 * Check if user has directly tried to ban/unban/restrict things in a custom battle.
+	 * Doesn't count bans nested inside other formats/rules.
+	 */
+	private hasDirectCustomBanlistChanges() {
+		if (!this.format.customRules) return false;
+		for (const rule of this.format.customRules) {
+			for (const banlistOperator of ['-', '+', '*']) {
+				if (rule.startsWith(banlistOperator)) return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Inform user when custom bans are unsupported in a team generator.
+	 */
+	protected enforceNoDirectCustomBanlistChanges() {
+		if (this.hasDirectCustomBanlistChanges()) {
+			throw new Error(`Custom bans are not currently supported in ${this.format.name}.`);
+		}
+	}
+
+	/**
+	 * Inform user when complex bans are unsupported in a team generator.
+	 */
+	protected enforceNoDirectComplexBans() {
+		if (!this.format.customRules) return false;
+		for (const rule of this.format.customRules) {
+			if (rule.includes('+') && !rule.startsWith('+')) {
+				throw new Error(`Complex bans are not currently supported in ${this.format.name}.`);
+			}
+		}
+	}
+
+	/**
+	 * Validate set element pool size is sufficient to support size requirements after simple bans.
+	 */
+	private enforceCustomPoolSizeNoComplexBans(
+		effectTypeName: string,
+		basicEffectPool: BasicEffect[],
+		requiredCount: number,
+		requiredCountExplanation: string
+	) {
+		if (basicEffectPool.length >= requiredCount) return;
+		throw new Error(`Legal ${effectTypeName} count is insufficient to support ${requiredCountExplanation} (${basicEffectPool.length} / ${requiredCount}).`);
+	}
+
 	unrejectableMovesInSingles(move: Move) {
 		// These moves cannot be rejected in favor of a forced move in singles
 		return (move.category !== 'Status' || !move.flags.heal) && ![
@@ -295,6 +346,8 @@ export class RandomTeams {
 	}
 
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const dex = this.dex;
 		const team = [];
 
@@ -454,7 +507,7 @@ export class RandomTeams {
 		return team;
 	}
 
-	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number) {
+	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable) {
 		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
@@ -465,15 +518,65 @@ export class RandomTeams {
 			throw new Error(`"${requiredType}" is not a valid type.`);
 		}
 
+		const isNotCustom = !ruleTable;
+
 		const pool: number[] = [];
-		for (const species of this.dex.species.all()) {
-			if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
-			if (requiredType && !species.types.includes(requiredType)) continue;
-			if (minSourceGen && species.gen < minSourceGen) continue;
-			const num = species.num;
-			if (num <= 0 || pool.includes(num)) continue;
-			if (num > last) break;
-			pool.push(num);
+		let speciesPool: Species[] = [];
+		if (isNotCustom) {
+			speciesPool = [...this.dex.species.all()];
+			for (const species of speciesPool) {
+				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
+				if (requiredType && !species.types.includes(requiredType)) continue;
+				if (minSourceGen && species.gen < minSourceGen) continue;
+				const num = species.num;
+				if (num <= 0 || pool.includes(num)) continue;
+				if (num > last) break;
+				pool.push(num);
+			}
+		} else {
+			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
+			const nonexistentBanReason = ruleTable.check('nonexistent');
+			// Assume tierSpecies does not differ from species here (mega formes can be used without their stone, etc)
+			for (const species of this.dex.species.all()) {
+				if (requiredType && !species.types.includes(requiredType)) continue;
+
+				let banReason = ruleTable.check('pokemon:' + species.id);
+				if (banReason) continue;
+				if (banReason !== '') {
+					if (species.isMega && ruleTable.check('pokemontag:mega')) continue;
+
+					banReason = ruleTable.check('basepokemon:' + toID(species.baseSpecies));
+					if (banReason) continue;
+					if (banReason !== '' || this.dex.species.get(species.baseSpecies).isNonstandard === species.isNonstandard) {
+						const nonexistentCheck = Tags.nonexistent.genericFilter!(species) && nonexistentBanReason;
+						let tagWhitelisted = false;
+						let tagBlacklisted = false;
+						for (const ruleid of ruleTable.tagRules) {
+							if (ruleid.startsWith('*')) continue;
+							const tagid = ruleid.slice(12);
+							const tag = Tags[tagid];
+							if ((tag.speciesFilter || tag.genericFilter)!(species)) {
+								const existenceTag = EXISTENCE_TAG.includes(tagid);
+								if (ruleid.startsWith('+')) {
+									if (!existenceTag && nonexistentCheck) continue;
+									tagWhitelisted = true;
+									break;
+								}
+								tagBlacklisted = true;
+								break;
+							}
+						}
+						if (tagBlacklisted) continue;
+						if (!tagWhitelisted) {
+							if (ruleTable.check('pokemontag:allpokemon')) continue;
+						}
+					}
+				}
+				const num = species.num;
+				if (pool.includes(num)) continue;
+				pool.push(num);
+				speciesPool.push(species);
+			}
 		}
 
 		const hasDexNumber: {[k: string]: number} = {};
@@ -483,12 +586,16 @@ export class RandomTeams {
 		}
 
 		const formes: string[][] = [];
-		for (const species of this.dex.species.all()) {
+		for (const species of speciesPool) {
 			if (!(species.num in hasDexNumber)) continue;
-			if (species.gen <= this.gen && (!species.isNonstandard || species.isNonstandard === 'Unobtainable')) {
-				if (!formes[hasDexNumber[species.num]]) formes[hasDexNumber[species.num]] = [];
-				formes[hasDexNumber[species.num]].push(species.name);
-			}
+			if (isNotCustom && (species.gen > this.gen ||
+				(species.isNonstandard && species.isNonstandard !== 'Unobtainable'))) continue;
+			if (!formes[hasDexNumber[species.num]]) formes[hasDexNumber[species.num]] = [];
+			formes[hasDexNumber[species.num]].push(species.name);
+		}
+
+		if (formes.length < n) {
+			throw new Error(`Legal Pokemon forme count insufficient to support Max Team Size: (${formes.length} / ${n}).`);
 		}
 
 		const nPokemon = [];
@@ -502,15 +609,138 @@ export class RandomTeams {
 	}
 
 	randomHCTeam(): PokemonSet[] {
+		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		const hasNonexistentBan = hasCustomBans && ruleTable.check('nonexistent');
+		const hasNonexistentWhitelist = hasCustomBans && (hasNonexistentBan === '');
+
+		if (hasCustomBans) {
+			this.enforceNoDirectComplexBans();
+		}
+
+		// Item Pool
+		const doItemsExist = this.gen > 1;
+		let itemPool: Item[] = [];
+		if (doItemsExist) {
+			if (!hasCustomBans) {
+				itemPool = [...this.dex.items.all()].filter(item => (item.gen <= this.gen && !item.isNonstandard));
+			} else {
+				const hasAllItemsBan = ruleTable.check('pokemontag:allitems');
+				for (const item of this.dex.items.all()) {
+					let banReason = ruleTable.check('item:' + item.id);
+					if (banReason) continue;
+					if (banReason !== '' && item.id) {
+						if (hasAllItemsBan) continue;
+						if (item.isNonstandard) {
+							banReason = ruleTable.check('pokemontag:' + toID(item.isNonstandard));
+							if (banReason) continue;
+							if (banReason !== '' && item.isNonstandard !== 'Unobtainable') {
+								if (hasNonexistentBan) continue;
+								if (!hasNonexistentWhitelist) continue;
+							}
+						}
+					}
+					itemPool.push(item);
+				}
+				if (ruleTable.check('item:noitem')) {
+					this.enforceCustomPoolSizeNoComplexBans('item', itemPool, this.maxTeamSize, 'Max Team Size');
+				}
+			}
+		}
+
+		// Ability Pool
+		const doAbilitiesExist = (this.gen > 2) && (this.dex.currentMod !== 'gen7letsgo');
+		let abilityPool: Ability[] = [];
+		if (doAbilitiesExist) {
+			if (!hasCustomBans) {
+				abilityPool = [...this.dex.abilities.all()].filter(ability => (ability.gen <= this.gen && !ability.isNonstandard));
+			} else {
+				const hasAllAbilitiesBan = ruleTable.check('pokemontag:allabilities');
+				for (const ability of this.dex.abilities.all()) {
+					let banReason = ruleTable.check('ability:' + ability.id);
+					if (banReason) continue;
+					if (banReason !== '') {
+						if (hasAllAbilitiesBan) continue;
+						if (ability.isNonstandard) {
+							banReason = ruleTable.check('pokemontag:' + toID(ability.isNonstandard));
+							if (banReason) continue;
+							if (banReason !== '') {
+								if (hasNonexistentBan) continue;
+								if (!hasNonexistentWhitelist) continue;
+							}
+						}
+					}
+					abilityPool.push(ability);
+				}
+				if (ruleTable.check('ability:noability')) {
+					this.enforceCustomPoolSizeNoComplexBans('ability', abilityPool, this.maxTeamSize, 'Max Team Size');
+				}
+			}
+		}
+
+		// Move Pool
+		const setMoveCount = ruleTable.maxMoveCount;
+		let movePool: Move[] = [];
+		if (!hasCustomBans) {
+			movePool = [...this.dex.moves.all()].filter(move =>
+				(move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')));
+		} else {
+			const hasAllMovesBan = ruleTable.check('pokemontag:allmoves');
+			for (const move of this.dex.moves.all()) {
+				// Legality of specific HP types can't be altered in built formats anyway
+				if (move.name.startsWith('Hidden Power ')) continue;
+				let banReason = ruleTable.check('move:' + move.id);
+				if (banReason) continue;
+				if (banReason !== '') {
+					if (hasAllMovesBan) continue;
+					if (move.isNonstandard) {
+						banReason = ruleTable.check('pokemontag:' + toID(move.isNonstandard));
+						if (banReason) continue;
+						if (banReason !== '' && move.isNonstandard !== 'Unobtainable') {
+							if (hasNonexistentBan) continue;
+							if (!hasNonexistentWhitelist) continue;
+						}
+					}
+				}
+				movePool.push(move);
+			}
+			this.enforceCustomPoolSizeNoComplexBans('move', movePool, this.maxTeamSize * setMoveCount, 'Max Team Size * Max Move Count');
+		}
+
+		// Nature Pool
+		const doNaturesExist = this.gen > 2;
+		let naturePool: Nature[] = [];
+		if (doNaturesExist) {
+			if (!hasCustomBans) {
+				if (!hasCustomBans) {
+					naturePool = [...this.dex.natures.all()];
+				} else {
+					const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
+					for (const nature of this.dex.natures.all()) {
+						let banReason = ruleTable.check('nature:' + nature.id);
+						if (banReason) continue;
+						if (banReason !== '' && nature.id) {
+							if (hasAllNaturesBan) continue;
+							if (nature.isNonstandard) {
+								banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+								if (banReason) continue;
+								if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
+									if (hasNonexistentBan) continue;
+									if (!hasNonexistentWhitelist) continue;
+								}
+							}
+						}
+						naturePool.push(nature);
+					}
+					// There is no 'nature:nonature' rule so do not constrain pool size
+				}
+			}
+		}
+
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined,
+			hasCustomBans ? ruleTable : undefined);
+
 		const team = [];
-
-		const itemPool = [...this.dex.items.all()];
-		const abilityPool = [...this.dex.abilities.all()];
-		const movePool = [...this.dex.moves.all()];
-		const naturePool = this.dex.natures.all();
-
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
-
 		for (const forme of randomN) {
 			// Choose forme
 			const species = this.dex.species.get(forme);
@@ -518,31 +748,25 @@ export class RandomTeams {
 			// Random unique item
 			let item = '';
 			let itemData;
-			if (this.gen >= 2) {
-				do {
-					itemData = this.sampleNoReplace(itemPool);
-					item = itemData.name;
-				} while (itemData.gen > this.gen || itemData.isNonstandard);
+			if (doItemsExist) {
+				itemData = this.sampleNoReplace(itemPool);
+				item = itemData?.name;
 			}
 
 			// Random unique ability
 			let ability = 'No Ability';
 			let abilityData;
-			if (this.gen >= 3) {
-				do {
-					abilityData = this.sampleNoReplace(abilityPool);
-					ability = abilityData.name;
-				} while (abilityData.gen > this.gen || abilityData.isNonstandard);
+			if (doAbilitiesExist) {
+				abilityData = this.sampleNoReplace(abilityPool);
+				ability = abilityData?.name;
 			}
 
 			// Random unique moves
 			const m = [];
 			do {
 				const move = this.sampleNoReplace(movePool);
-				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
-					m.push(move.id);
-				}
-			} while (m.length < 4);
+				m.push(move.id);
+			} while (m.length < setMoveCount);
 
 			// Random EVs
 			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
@@ -571,7 +795,10 @@ export class RandomTeams {
 			};
 
 			// Random nature
-			const nature = this.sample(naturePool).name;
+			let nature = '';
+			if (doNaturesExist && (naturePool.length > 0)) {
+				nature = this.sample(naturePool).name;
+			}
 
 			// Level balance
 			const mbstmin = 1307;
@@ -2114,6 +2341,8 @@ export class RandomTeams {
 	}
 
 	randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const seed = this.prng.seed;
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
@@ -2286,6 +2515,8 @@ export class RandomTeams {
 	randomCAP1v1Sets: AnyObject = require('./cap-1v1-sets.json');
 
 	randomCAP1v1Team() {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const pokemon = [];
 		const pokemonPool = Object.keys(this.randomCAP1v1Sets);
 
@@ -2389,6 +2620,8 @@ export class RandomTeams {
 	}
 
 	randomBSSFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const forceResult = (depth >= 4);
 
 		const pokemon = [];
