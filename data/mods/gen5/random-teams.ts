@@ -718,8 +718,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			RU: 84,
 			NUBL: 86,
 			NU: 86,
-			'(NU)': 88, 
-			PUBL: 88, 
+			'(NU)': 88,
+			PUBL: 88,
 			PU: 88,
 			'(PU)': 90,
 		};
