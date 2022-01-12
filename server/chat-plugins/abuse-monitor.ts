@@ -1164,8 +1164,8 @@ export const pages: Chat.PageTable = {
 				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
 				buf += `<br />`;
 			}
-      if (settings.punishments.length) {
-        // todo formify this like the scoring buttons
+			if (settings.punishments.length) {
+				// todo formify this like the scoring buttons
 				buf += `<br />Punishment settings<br />`;
 				for (const [i, p] of settings.punishments.entries()) {
 					buf += `&bull; ${i + 1}: `;
