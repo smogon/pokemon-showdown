@@ -1182,7 +1182,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	dustox: {
 		tier: "RU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["bugbuzz", "roost", "sludgebomb", "toxic", "u-turn", "defog"],
+		randomBattleMoves: ["bugbuzz", "roost", "sludgebomb", "toxic", "uturn", "defog"],
 	},
 	lotad: {
 		tier: "LC",
