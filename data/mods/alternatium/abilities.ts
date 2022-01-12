@@ -342,8 +342,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.hint("Power Core prevents stat changes for the user.");
 			}
 		},
+		onSetStatus(status, target, source, effect) {
+			if (effect && effect.id === 'toxicspikes') return false;
+		},
 		onDamage(damage, target, source, effect) {
-			const hazards = ['stealthrock', 'spikes', 'toxicspikes'];
+			const hazards = ['stealthrock', 'spikes'];
 			if (effect && hazards.includes(effect.id)) {
 				return false;
 			}
