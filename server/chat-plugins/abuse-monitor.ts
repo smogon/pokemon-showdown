@@ -862,7 +862,7 @@ export const pages: Chat.PageTable = {
 			buf += `</div></details>`;
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
 			for (const [id] of Utils.sortBy([...users], ([, num]) => -num)) {
-				const curUser = Users.get(id);
+				const curUser = Users.getExact(id);
 				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id} `;
 				buf += `<button class="button" name="send" value="/mlid ${id},room=global">Modlog</button>`;
 				buf += `</summary><div class="infobox">`;
