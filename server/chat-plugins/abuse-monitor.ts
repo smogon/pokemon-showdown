@@ -720,6 +720,30 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} disabled the abuse-monitor threshold increment.`);
 			this.globalModlog(`ABUSEMONITOR DISABLEINCREMENT`);
 		},
+		async failures(target) {
+			checkAccess(this);
+			if (!toID(target)) {
+				target = Chat.toTimestamp(new Date()).split(' ')[0];
+			}
+			const timeNum = new Date(target).getTime();
+			if (isNaN(timeNum)) {
+				return this.errorReply(`Invalid date.`);
+			}
+			let logs = await Chat.database.all(
+				'SELECT * FROM perspective_stats WHERE result = 0 AND timestamp > ? AND timestamp < ?',
+				[timeNum, timeNum + 24 * 60 * 60 * 1000]
+			);
+			logs = logs.filter(log => ( // proofing against node's stupid date lib
+				Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0] === target
+			));
+			if (!logs.length) {
+				return this.errorReply(`No logs found for that date.`);
+			}
+			this.sendReplyBox(
+				`<strong>${Chat.count(logs, 'logs')}</strong> found on the date ${target}:<hr />` +
+				logs.map(f => `<a href="/${f.roomid}">${f.roomid}</a>`).join('<br />')
+			);
+		},
 	},
 	abusemonitorhelp: [
 		`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
