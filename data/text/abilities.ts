@@ -270,8 +270,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	dazzling: {
 		name: "Dazzling",
-		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
-		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
+		desc: "Priority moves used by opposing Pokemon targeting this Pokemon or its allies are prevented from having an effect.",
+		shortDesc: "This Pokemon and its allies are protected from opposing priority moves.",
 
 		block: "#damp",
 	},
@@ -1088,8 +1088,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	queenlymajesty: {
 		name: "Queenly Majesty",
-		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
-		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
+		desc: "Priority moves used by opposing Pokemon targeting this Pokemon or its allies are prevented from having an effect.",
+		shortDesc: "This Pokemon and its allies are protected from opposing priority moves.",
 
 		block: "#damp",
 	},
