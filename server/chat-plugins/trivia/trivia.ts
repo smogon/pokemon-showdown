@@ -2005,9 +2005,9 @@ const triviaCommands: Chat.ChatCommands = {
 
 		await database.ensureQuestionExists(oldQuestionText);
 
-		let newQuestionText;
+		let newQuestionText: string | undefined;
 		if (!isAnswersOnly) {
-			newQuestionText = Utils.escapeHTML(args.shift() || '');
+			newQuestionText = args.shift();
 			if (!newQuestionText) {
 				isAnswersOnly = true; // for modlog formatting
 			} else {
@@ -2047,8 +2047,9 @@ const triviaCommands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`You must specify at least one answer.`);
 		}
 		await database.editQuestion(
-			oldQuestionText,
-			isAnswersOnly ? undefined : newQuestionText,
+			Utils.escapeHTML(oldQuestionText),
+			// Cast is safe because if `newQuestionText` is undefined, `isAnswersOnly` is true.
+			isAnswersOnly ? undefined : Utils.escapeHTML(newQuestionText!),
 			isQuestionOnly ? undefined : answers
 		);
 
