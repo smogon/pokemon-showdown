@@ -42,7 +42,6 @@ export const transactions = {
 			env.db.prepare('DELETE FROM trivia_answers WHERE question_id = ?').run(questionID);
 			const insert = env.db.prepare('INSERT INTO trivia_answers (question_id, answer) VALUES (?, ?)');
 			for (const answer of newAnswers) {
-				console.log(1, answer, questionID);
 				insert.run([questionID, answer]);
 			}
 		}
