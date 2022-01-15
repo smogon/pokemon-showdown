@@ -10,7 +10,7 @@ describe(`Serene Grace`, function () {
 		battle.destroy();
 	});
 
-	it(`should not stack Pledge Rainbow for flinches`, function () {
+	it(`should not stack with Pledge Rainbow for flinches`, function () {
 		// hardcoded RNG seed to not flinch if it was 60% odds
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 5]}, [[
 			{species: 'wynaut', ability: 'serenegrace', moves: ['bite', 'waterpledge']},
