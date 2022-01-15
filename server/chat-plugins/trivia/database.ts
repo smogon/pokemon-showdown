@@ -37,6 +37,7 @@ export interface TriviaDatabase {
 	moveQuestionToCategory(question: string, newCategory: string): Promise<void> | void;
 	migrateCategory(sourceCategory: string, targetCategory: string): Promise<number> | number;
 	acceptSubmissions(submissions: string[]): Promise<void> | void;
+	editQuestion(oldQuestionText: string, newQuestionText?: string, newAnswers?: string[]): Promise<void>;
 
 	getHistory(numberOfLines: number): Promise<TriviaGame[]> | TriviaGame[];
 	getScoresForLastGame(): Promise<{[k: string]: number}> | {[k: string]: number};
@@ -302,6 +303,19 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			`UPDATE trivia_questions SET is_submission = 1 WHERE question IN (${formatSQLArray(submissions)})`,
 			[submissions]
 		);
+	}
+
+	async editQuestion(oldQuestionText: string, newQuestionText?: string, newAnswers?: string[]) {
+		if (this.readyPromise) await this.readyPromise;
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't edit Trivia question because SQLite is not enabled.`);
+		}
+
+		await Chat.database.transaction('editQuestion', {
+			oldQuestionText,
+			newQuestionText,
+			newAnswers,
+		});
 	}
 
 	/*****************************
