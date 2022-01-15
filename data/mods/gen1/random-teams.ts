@@ -133,6 +133,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// to face each other.
 			if (species.id === 'ditto' && this.battleHasDitto) continue;
 
+			// Really bad Pokémon shouldn't be leads.
+			if (pokemon.length === 0 && handicapMons.includes(species.id)) continue;
+
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
 			if (handicapMons.includes(species.id) && hasShitmon) {
