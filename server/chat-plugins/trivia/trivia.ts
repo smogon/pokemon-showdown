@@ -2001,7 +2001,7 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 		if (!oldQuestionText) return this.parse(`/help trivia edit`);
 
-		await database.ensureQuestionExists(oldQuestionText);
+		await database.ensureQuestionExists(Utils.escapeHTML(oldQuestionText));
 
 		let newQuestionText: string | undefined;
 		if (!isAnswersOnly) {
