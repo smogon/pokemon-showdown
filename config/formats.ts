@@ -2397,7 +2397,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] PU'],
-		banlist: ['PU', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede', 'Baton Pass'],
+		banlist: ['PU', 'Dragonair', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede', 'Baton Pass'],
 	},
 
 	// US/UM Singles
