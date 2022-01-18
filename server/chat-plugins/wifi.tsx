@@ -107,7 +107,7 @@ class Giveaway extends Rooms.RoomGame {
 	joined: Map<string, ID>;
 	timer: NodeJS.Timer | null;
 	pokemonID: ID;
-	sprite: string;
+	sprite: Chat.VNode;
 
 	constructor(
 		host: User, giver: User, room: Room, ot: string, tid: string, ivs: string[],
@@ -132,7 +132,6 @@ class Giveaway extends Rooms.RoomGame {
 
 		this.timer = null;
 
-		this.sprite = '';
 		[this.pokemonID, this.sprite] = Giveaway.getSprite(prize);
 	}
 
@@ -219,7 +218,7 @@ class Giveaway extends Rooms.RoomGame {
 		Punishments.roomUnpunish(room, user.id, 'GIVEAWAYBAN', false);
 	}
 
-	static getSprite(set: PokemonSet): [ID, string] {
+	static getSprite(set: PokemonSet): [ID, Chat.VNode] {
 		const species = Dex.species.get(set.species);
 		let spriteid = species.spriteid;
 		if (species.cosmeticFormes) {
@@ -229,6 +228,9 @@ class Giveaway extends Rooms.RoomGame {
 					break; // We don't want to end up with deerling-summer-spring
 				}
 			}
+		}
+		if (!spriteid.includes('-') && species.forme) { // for stuff like unown letters
+			spriteid += '-' + toID(species.forme);
 		}
 		const shiny = set.shiny ? '-shiny' : '';
 
@@ -244,8 +246,10 @@ class Giveaway extends Rooms.RoomGame {
 			'weavile', 'wobbuffet', 'wooper', 'xatu', 'zubat',
 		];
 		if (set.gender === 'F' && validFemale.includes(species.id)) spriteid += '-f';
-		const output = <img src={`/sprites/ani${shiny}/${spriteid}.gif`} />;
-		return [species.id, output];
+		return [
+			species.id,
+			<img src={`/sprites/ani${shiny}/${spriteid}.gif`} />,
+		];
 	}
 
 	static updateStats(pokemonIDs: Set<string>) {
@@ -713,7 +717,7 @@ export class GTS extends Rooms.RoomGame {
 	deposit: string;
 	lookfor: string;
 	pokemonID: ID;
-	sprite: string;
+	sprite: Chat.VNode;
 	sent: string[];
 	noDeposits: boolean;
 	timer: NodeJS.Timer | null;
@@ -732,8 +736,6 @@ export class GTS extends Rooms.RoomGame {
 		this.deposit = GTS.linkify(Utils.escapeHTML(deposit));
 		this.lookfor = lookfor;
 
-		this.pokemonID = '';
-		this.sprite = '';
 		// Deprecated, just typed like this to prevent errors, will rewrite when GTS is planned to be used again
 		[this.pokemonID, this.sprite] = Giveaway.getSprite({species: summary} as PokemonSet);
 
