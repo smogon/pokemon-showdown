@@ -16917,7 +16917,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Poison", "Flying"],
 		gender: "N",
 		baseStats: {hp: 85, atk: 70, def: 113, spa: 118, spd: 90, spe: 64},
-		abilities: {0: "Stamina"},
+		abilities: {0: "Stamina", H: "Power of Alchemy"},
 		heightm: 0.8,
 		weightkg: 11.5,
 		color: "Purple",
