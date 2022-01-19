@@ -367,6 +367,13 @@ export const handlers: Chat.Handlers = {
 			notifyStaff();
 		}
 	},
+	onRenameRoom(oldId, newId, room) {
+		if (cache[oldId]) {
+			cache[newId] = cache[oldId];
+			delete cache[oldId];
+			notifyStaff();
+		}
+	},
 };
 
 function getFlaggedRooms() {
