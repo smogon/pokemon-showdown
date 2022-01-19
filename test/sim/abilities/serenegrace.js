@@ -38,8 +38,13 @@ describe(`Serene Grace`, function () {
 
 		// Modding secondary chances so it will either always apply or never apply
 		// (64 * 2 * 2) % 256 === 0
-		Dex.moves.get('poweruppunch').secondaries[0].chance = 64;
-		Dex.moves.get('acidspray').secondaries[0].chance = 64;
+		battle.onEvent('ModifyMove', battle.format, 1, function (move) {
+			if (move.secondaries) {
+				for (const secondary of move.secondaries) {
+					secondary.chance = 64;
+				}
+			}
+		});
 
 		battle.makeChoices('move waterpledge 1, move firepledge 1', 'auto');
 		battle.makeChoices('move poweruppunch 1, move acidspray 2', 'auto');
@@ -61,8 +66,13 @@ describe(`Serene Grace`, function () {
 
 		// Modding secondary chances so it will either always apply or never apply
 		// (64 * 2 * 2) % 256 === 0
-		Dex.moves.get('nuzzle').secondaries[0].chance = 64;
-		Dex.moves.get('flamethrower').secondaries[0].chance = 64;
+		battle.onEvent('ModifyMove', battle.format, 1, function (move) {
+			if (move.secondaries) {
+				for (const secondary of move.secondaries) {
+					secondary.chance = 64;
+				}
+			}
+		});
 
 		battle.makeChoices('move waterpledge 1, move firepledge 1', 'auto');
 		battle.makeChoices('move nuzzle 1, move flamethrower 2', 'auto');
