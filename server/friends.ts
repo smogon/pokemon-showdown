@@ -305,6 +305,9 @@ const ACTIONS = {
 		`INSERT INTO friend_settings (userid, send_login_data, last_login, public_list) VALUES (?, 0, 0, ?) ` +
 		`ON CONFLICT (userid) DO UPDATE SET public_list = ?`
 	),
+	// can't run two updates at once, and we want the perf improvements from caching, so we gotta do this
+	transferUser1: `UPDATE friends SET user1 = $user2 WHERE user1 = $user1`,
+	transferUser2: `UPDATE friends SET user2 = $user1 WHERE user2 = $user2`,
 };
 
 const FUNCTIONS: {[k: string]: (...input: any[]) => any} = {
@@ -366,6 +369,16 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 			const [to, from] = request;
 			const {changes} = statements.deleteRequest.run(to, from);
 			if (changes) result.push(changes);
+		}
+		return {result};
+	},
+	transfer: requests => {
+		const result = [];
+		for (const {user1, user2} of requests) {
+			let num = 0;
+			num += statements.transferUser1.run({user1, user2}).changes;
+			num += statements.transferUser2.run({user1, user2}).changes;
+			result.push(num);
 		}
 		return {result};
 	},
