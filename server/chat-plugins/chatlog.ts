@@ -1189,9 +1189,9 @@ export class RipgrepLogSearcher extends Searcher {
 		buf += sorted.join('<hr />');
 		if (limit) {
 			buf += `</details></blockquote><div class="pad"><hr /><strong>Capped at ${limit}.</strong><br />`;
-			buf += `<button class="button" name="send" value="/sl ${originalSearch},room:${roomid},limit:${limit + 200}">`;
+			buf += `<button class="button" name="send" value="/sl ${originalSearch},room=${roomid},limit=${limit + 200}">`;
 			buf += `View 200 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${originalSearch},room:${roomid},limit:3000">`;
+			buf += `<button class="button" name="send" value="/sl ${originalSearch},room=${roomid},limit=3000">`;
 			buf += `View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
