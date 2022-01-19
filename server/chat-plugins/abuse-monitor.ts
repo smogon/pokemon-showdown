@@ -80,7 +80,7 @@ interface PunishmentSettings {
 	count?: number;
 	certainty?: number;
 	type?: string;
-	punishment: string;
+	punishment: typeof PUNISHMENTS[number];
 }
 
 interface FilterSettings {
