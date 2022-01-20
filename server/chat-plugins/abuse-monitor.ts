@@ -356,7 +356,15 @@ export const handlers: Chat.Handlers = {
 		const entry = cache[roomid];
 		if (entry) {
 			delete cache[roomid];
-			if (entry.staffNotified) notifyStaff();
+			if (entry.staffNotified) {
+				notifyStaff();
+				void Chat.database.run(
+					`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
+					`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
+					// 2 means dead
+					{staff: '', roomid, result: 2, timestamp: Date.now()}
+				);
+			}
 		}
 	},
 	onRoomClose(roomid, user) {
@@ -486,7 +494,7 @@ export const commands: Chat.ChatCommands = {
 			let result = toID(rawResult) === 'success' ? 1 : toID(rawResult) === 'failure' ? 0 : null;
 			if (result === null) return this.popupReply(`Invalid result - must be 'success' or 'failure'.`);
 			const inserted = await Chat.database.get(`SELECT result FROM perspective_stats WHERE roomid = ?`, [roomid]);
-			if (inserted?.result) {
+			if (inserted?.result === 1) { // (hardcode on 1 because 2 is dead)
 				// has already been logged as accurate - ensure if one success is logged it's still a success if it's hit again
 				// (even if it's a failure now, it was a success before - that's what's relevant.)
 				result = inserted.result;
@@ -994,24 +1002,32 @@ export const pages: Chat.PageTable = {
 			buf += `<p>${Chat.count(logs.length, 'logs')} found.</p>`;
 			let successes = 0;
 			let failures = 0;
+			let dead = 0;
 			const staffStats: Record<string, number> = {};
-			const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
+			const dayStats: Record<string, {successes: number, failures: number, dead: number, total: number}> = {};
 			for (const log of logs) {
 				const cur = Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0];
-				if (!dayStats[cur]) dayStats[cur] = {successes: 0, failures: 0, total: 0};
-				if (log.result) {
+				if (!dayStats[cur]) dayStats[cur] = {successes: 0, failures: 0, dead: 0, total: 0};
+				if (log.result === 2) {
+					dead++;
+					dayStats[cur].dead++;
+				} else if (log.result === 1) {
 					successes++;
 					dayStats[cur].successes++;
 				} else {
 					failures++;
 					dayStats[cur].failures++;
 				}
-				if (!staffStats[log.staff]) staffStats[log.staff] = 0;
-				staffStats[log.staff]++;
+				if (log.staff) { // dead tickets have falsy staff
+					if (!staffStats[log.staff]) staffStats[log.staff] = 0;
+					staffStats[log.staff]++;
+				}
 				dayStats[cur].total++;
 			}
-			buf += `<p><strong>Success rate:</strong> ${Math.floor((successes / logs.length) * 100)}%</p>`;
-			buf += `<p><strong>Failure rate:</strong> ${Math.floor((failures / logs.length) * 100)}%</p>`;
+			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+			buf += `<p><strong>Success rate:</strong> ${percent(successes, logs.length)}% (${successes})</p>`;
+			buf += `<p><strong>Failure rate:</strong> ${percent(failures, logs.length)}% (${failures})</p>`;
+			buf += `<p><strong>Dead rate:</strong> ${percent(dead, logs.length)}% (${dead})</p>`;
 			buf += `<p><strong>Day stats:</strong></p>`;
 			buf += `<div class="ladder pad"><table>`;
 			let header = '';
@@ -1021,8 +1037,14 @@ export const pages: Chat.PageTable = {
 				const cur = dayStats[day];
 				if (!cur.total) continue;
 				header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
-				data += `<td>${cur.successes} (${Math.floor((cur.successes / cur.total) * 100)}%)`;
-				if (cur.failures) data += ` | ${cur.failures} (${Math.floor((cur.failures / cur.total) * 100)}%)</td>`;
+				data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
+				if (cur.failures) {
+					data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
+				} else { // so one cannot confuse dead tickets & false hit tickets
+					data += ' | 0 (0%)';
+				}
+				if (cur.dead) data += ` | ${cur.dead} (${percent(cur.dead, cur.total)}%)`;
+				data += '</small></td>';
 				// i + 1 ensures it's above 0 always (0 % 5 === 0)
 				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
 					buf += `<tr>${header}</tr><tr>${data}</tr>`;
