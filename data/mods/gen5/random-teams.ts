@@ -719,6 +719,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			NUBL: 86,
 			NU: 86,
 			'(NU)': 88,
+			PUBL: 88,
+			PU: 88,
+			'(PU)': 90,
 		};
 		const customScale: {[forme: string]: number} = {
 			Delibird: 100, 'Farfetch\u2019d': 100, Luvdisc: 100, Unown: 100,
@@ -770,6 +773,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	}
 
 	randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const seed = this.prng.seed;
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];

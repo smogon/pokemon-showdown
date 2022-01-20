@@ -203,21 +203,22 @@ describe("Dynamax", function () {
 			assert.statStage(battle.p2.active[0], 'def', 1);
 		});
 
-		it.skip(`should prevent effects that affect regular Max Moves, like Sleep Talk and Instruct`, function () {
+		it(`should prevent effects that affect regular Max Moves, like Sleep Talk and Instruct`, function () {
 			battle = common.createBattle([[
 				{species: 'wynaut', moves: ['maxflare', 'sleeptalk']},
 			], [
-				{species: 'shuckle', ability: 'shellarmor', moves: ['instruct', 'spore']},
+				{species: 'shuckle', moves: ['instruct', 'spore', 'roost']},
 			]]);
 			battle.makeChoices();
 			const wynaut = battle.p1.active[0];
-			let move = wynaut.getMoveData(Dex.moves.get('maxflare'));
+			const move = wynaut.getMoveData(Dex.moves.get('maxflare'));
 			assert.equal(move.pp, move.maxpp - 1, `Max Flare should only have been used once.`);
 
-			battle.makeChoices('auto', 'move spore');
+			battle.makeChoices('auto', 'move roost');
 			battle.makeChoices('move sleeptalk', 'move spore');
-			move = wynaut.getMoveData(Dex.moves.get('sleeptalk'));
-			assert.equal(move.pp, move.maxpp, `Sleep Talk should have failed in calling a move and so not use PP.`);
+			battle.makeChoices('move sleeptalk', 'move spore');
+			const shuckle = battle.p2.active[0];
+			assert.fullHP(shuckle, `Sleep Talk should have failed in calling a move and so not dealt damage.`);
 		});
 	});
 });

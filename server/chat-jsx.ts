@@ -26,7 +26,7 @@ export interface PSElements extends preact.JSX.IntrinsicElements {
 	youtube: {src: string};
 	twitch: {src: string, width?: number, height?: number};
 	spotify: {src: string};
-	username: {name?: string, class?: string};
+	username: {name?: string, class?: string, children?: preact.VNode | string};
 	psicon: {pokemon: string} | {item: string} | {type: string} | {category: string};
 }
 

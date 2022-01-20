@@ -214,6 +214,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 	}
 
 	randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		const pokemonPool: string[] = [];

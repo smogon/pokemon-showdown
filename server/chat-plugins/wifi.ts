@@ -222,6 +222,9 @@ class Giveaway extends Rooms.RoomGame {
 				}
 			}
 		}
+		if (!spriteid.includes('-') && species.forme) { // for stuff like unown letters
+			spriteid += '-' + toID(species.forme);
+		}
 		const shiny = set.shiny ? '-shiny' : '';
 
 		const validFemale = [
@@ -236,8 +239,10 @@ class Giveaway extends Rooms.RoomGame {
 			'weavile', 'wobbuffet', 'wooper', 'xatu', 'zubat',
 		];
 		if (set.gender === 'F' && validFemale.includes(species.id)) spriteid += '-f';
-		const output = `<img src="/sprites/ani${shiny}/${spriteid}.gif" />`;
-		return [species.id, output];
+		return [
+			species.id,
+			`<img src="/sprites/ani${shiny}/${spriteid}.gif" />`,
+		];
 	}
 
 	static updateStats(pokemonIDs: Set<string>) {
