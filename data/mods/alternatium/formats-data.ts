@@ -303,7 +303,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	vivillonspirit: {
+	vivillon: {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -311,7 +311,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-	vivilloncombat: {
+	vivillonpokeball: {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
