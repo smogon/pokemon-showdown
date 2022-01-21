@@ -8636,6 +8636,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["8M"],
 			tickle: ["8E"],
 			voltswitch: ["8M"],
+			volttackle: ["8R"],
 			wish: ["8E"],
 		},
 	},
