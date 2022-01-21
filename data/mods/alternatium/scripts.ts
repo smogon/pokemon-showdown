@@ -1,4 +1,11 @@
 export const Scripts: ModdedBattleScriptsData = {
+	init() {
+		for (const i in this.data.Moves) {
+			if (!(this.data.Moves[i].isNonstandard && this.data.Moves[i].isNonstandard === 'Past') ||
+				this.data.Moves[i].isZ) continue;
+			this.modData('Moves', i).isNonstandard = undefined;
+		}
+	},
 	// included for Aura Break
 	pokemon: {
 		ignoringAbility() {

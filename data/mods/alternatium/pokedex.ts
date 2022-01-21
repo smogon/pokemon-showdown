@@ -866,9 +866,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 82.5,
 		eggGroups: ["Undiscovered"],
 	},
-	vivillonspirit: {
+	vivillon: {
 		num: 666,
-		name: "Vivillon-Spirit",
+		name: "Vivillon",
 		types: ["Bug", "Ghost"],
 		baseStats: {hp: 80, atk: 125, def: 95, spa: 55, spd: 80, spe: 105},
 		abilities: {0: "Shield Dust", 1: "Cursed Body", H: "Multiscale"},
@@ -892,9 +892,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		forme: undefined,
 		changesFrom: undefined,
 	},
-	vivilloncombat: {
+	vivillonpokeball: {
 		num: 666,
-		name: "Vivillon-Combat",
+		name: "Vivillon-Pokeball",
 		types: ["Bug", "Fighting"],
 		baseStats: {hp: 100, atk: 55, def: 90, spa: 95, spd: 110, spe: 90},
 		abilities: {0: "Levitate", 1: "No Guard"},

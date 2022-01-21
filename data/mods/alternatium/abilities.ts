@@ -76,7 +76,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	rkssystem: {
 		onStart(pokemon) {
-			console.log(pokemon.species.id);
 			switch (pokemon.species.id) {
 			case 'silvally':
 				this.add('-ability', pokemon, 'Adaptability', '[from] ability: RKS System', '[of] ' + pokemon);
@@ -341,6 +340,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				boost[i] = 0;
 				this.add('-ability', target, 'Power Core');
 				this.hint("Power Core prevents stat changes for the user.");
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (effect && effect.id === 'toxicspikes') return false;
+		},
+		onDamage(damage, target, source, effect) {
+			const hazards = ['stealthrock', 'spikes'];
+			if (effect && hazards.includes(effect.id)) {
+				return false;
 			}
 		},
 		name: "Power Core",
