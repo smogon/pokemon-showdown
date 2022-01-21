@@ -1011,6 +1011,8 @@ export const pages: Chat.PageTable = {
 				if (log.result === 2) {
 					dead++;
 					dayStats[cur].dead++;
+					// don't increment total - we don't want dead to count in the percentages
+					continue;
 				} else if (log.result === 1) {
 					successes++;
 					dayStats[cur].successes++;
@@ -1018,16 +1020,18 @@ export const pages: Chat.PageTable = {
 					failures++;
 					dayStats[cur].failures++;
 				}
-				if (log.staff) { // dead tickets have falsy staff
-					if (!staffStats[log.staff]) staffStats[log.staff] = 0;
-					staffStats[log.staff]++;
-				}
+				if (!staffStats[log.staff]) staffStats[log.staff] = 0;
+				staffStats[log.staff]++;
 				dayStats[cur].total++;
 			}
 			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+			buf += `<p><strong>Success rate:</strong> ${percent(successes, successes + failures)}% (${successes})</p>`;
+			buf += `<p><strong>Failure rate:</strong> ${percent(failures, successes + failures)}% (${failures})</p>`;
+			buf += `<p><details class="readmore"><summary><strong>Stats including dead flags</strong></summary>`;
+			buf += `<p><strong>Total dead: ${dead}</strong></p>`;
 			buf += `<p><strong>Success rate:</strong> ${percent(successes, logs.length)}% (${successes})</p>`;
 			buf += `<p><strong>Failure rate:</strong> ${percent(failures, logs.length)}% (${failures})</p>`;
-			buf += `<p><strong>Dead rate:</strong> ${percent(dead, logs.length)}% (${dead})</p>`;
+			buf += `</summary></details></p>`;
 			buf += `<p><strong>Day stats:</strong></p>`;
 			buf += `<div class="ladder pad"><table>`;
 			let header = '';
@@ -1043,7 +1047,7 @@ export const pages: Chat.PageTable = {
 				} else { // so one cannot confuse dead tickets & false hit tickets
 					data += ' | 0 (0%)';
 				}
-				if (cur.dead) data += ` | ${cur.dead} (${percent(cur.dead, cur.total)}%)`;
+				if (cur.dead) data += ` | ${cur.dead}%)`;
 				data += '</small></td>';
 				// i + 1 ensures it's above 0 always (0 % 5 === 0)
 				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
