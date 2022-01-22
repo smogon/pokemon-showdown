@@ -765,7 +765,7 @@ export const commands: Chat.ChatCommands = {
 		if (!from || !to) {
 			return this.parse(`/help moveavatars`);
 		}
-		if (!customAvatars[from] || !customAvatars[from].allowed.length) {
+		if (!customAvatars[from]?.allowed.length) {
 			return this.errorReply(`That user has no avatars.`);
 		}
 		const existing = customAvatars[to]?.allowed.filter(Boolean);
