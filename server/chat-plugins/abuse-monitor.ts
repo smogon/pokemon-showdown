@@ -1047,7 +1047,7 @@ export const pages: Chat.PageTable = {
 				} else { // so one cannot confuse dead tickets & false hit tickets
 					data += ' | 0 (0%)';
 				}
-				if (cur.dead) data += ` | ${cur.dead}%)`;
+				if (cur.dead) data += ` | ${cur.dead}`;
 				data += '</small></td>';
 				// i + 1 ensures it's above 0 always (0 % 5 === 0)
 				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
