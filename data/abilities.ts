@@ -186,15 +186,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEnd(pokemon) {
 			this.effectState.unnerved = false;
-			const berries = ['aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'wikiberry',
-				'sitrusberry', 'oranberry', 'liechiberry', 'ganlonberry', 'salacberry', 'petayaberry', 'apicotberry', 'lansatberry', 'starfberry'];
+			const berries = pokemon.getItem().isBerry;
 			let allyUnnerve = false;
 			for (const ally of pokemon.allies()) {
 				if (ally.hasAbility(['unnerve', 'asoneglastrier', 'asonespectrier'])) allyUnnerve = true;
 			}
 			if (!allyUnnerve) {
 				for (const foe of pokemon.foes()) {
-					if (berries.includes(foe.item.toString())) {
+					if (berries) {
 						this.singleEvent('Start', foe.getItem(), foe.itemState, foe);
 					}
 				}
