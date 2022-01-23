@@ -51,13 +51,10 @@ describe('Sitrus Berry', function () {
 		]]);
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move confuseray');
-		battle.makeChoices('move sleeptalk', 'move sleeptalk');
-		const hasItemA = Boolean(holder.item);
-		const hpA = holder.hp;
+		battle.makeChoices('move sleeptalk', 'move sleeptalk'); //Confusion hit is here
+		assert.holdsItem(holder);
 		battle.makeChoices('move sleeptalk', 'move falseswipe');
-		const hpB = holder.hp;
-		const hasItemB = Boolean(holder.item);
-		assert.notEqual(hasItemA, hasItemB);
-		assert.notEqual(hpA, hpB);
+		//Should eat the berry after the false swipe damage
+		assert.false.holdsItem(holder);
 	});
 });

@@ -1949,6 +1949,9 @@ export class Battle {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
+		// check if damage is caused by a confusion self hit
+		if (target && this.effect.id !== 'confused') target.hitSelf = false;
+
 		return this.spreadDamage([damage], [target], source, effect, instafaint)[0];
 	}
 
