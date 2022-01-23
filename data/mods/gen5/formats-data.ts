@@ -658,7 +658,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	glaceon: {
-		randomBattleMoves: ["hiddenpowerground", "icebeam", "protect", "shadowball", "wish"],
+		randomBattleMoves: ["hiddenpowerground", "icebeam", "protect", "shadowball", "toxic", "wish"],
 		tier: "(PU)",
 		doublesTier: "DUU",
 	},
