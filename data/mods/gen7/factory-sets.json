@@ -7458,7 +7458,7 @@
 				"species": "Combusken",
 				"item": ["Firium Z", "Fightinium Z", "Eviolite"],
 				"ability": ["Speed Boost"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Protect"], ["Swords Dance"], ["Flare Blitz"], ["Sky Uppercut", "Low Kick"]]
 			}]
