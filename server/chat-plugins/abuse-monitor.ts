@@ -769,6 +769,9 @@ export const commands: Chat.ChatCommands = {
 			for (const cur of targets) {
 				let [key, value] = Utils.splitFirst(cur, '=').map(f => f.trim());
 				key = toID(key);
+				if (!key || !value) { // sent from the page, val wasn't sent.
+					continue;
+				}
 				switch (key) {
 				case 'punishment': case 'p':
 					if (punishment.punishment) {
@@ -832,6 +835,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			settings.punishments.push(punishment as PunishmentSettings);
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} added a ${punishment.punishment} abuse-monitor punishment.`);
 			const str = Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ');
 			this.stafflog(`Info: ${str}`);
@@ -848,6 +852,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			settings.punishments.splice(idx, 1);
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} removed the abuse-monitor punishment indexed at ${idx + 1}.`);
 			this.stafflog(
 				`Punishment: ` +
@@ -1266,15 +1271,24 @@ export const pages: Chat.PageTable = {
 				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
 				buf += `<br />`;
 			}
+			buf += `</div><div class="infobox"><h3>Punishment settings</h3><hr />`;
 			if (settings.punishments.length) {
-				// todo formify this like the scoring buttons
-				buf += `<br />Punishment settings<br />`;
 				for (const [i, p] of settings.punishments.entries()) {
 					buf += `&bull; ${i + 1}: `;
 					buf += Object.keys(p).map(f => `${f}: ${p[f as keyof PunishmentSettings]}`).join(', ');
+					buf += ` (<button class="button" name="send" value="/msgroom staff,/am dp ${i + 1}">delete</button>)`;
 					buf += `<br />`;
 				}
+				buf += `<br />`;
 			}
+			buf += `<details class="readmore"><summary>Add a punishment</summary>`;
+			buf += `<form data-submitsend="/msgroom staff,/am ap p={punishment},t={type},ct={certainty},c={count}">`;
+			buf += `Punishment: <input name="punishment" /> <small>(required)</small><br />`;
+			buf += `Type: <input name="type" /> <small>(required)</small><br />`;
+			buf += `Certainty: <input name="certainty" /> <small>(optional)</small><br />`;
+			buf += `Count: <input name="count" /> <small>(optional)</small><br />`;
+			buf += `<button class="button notifying" type="submit">Add punishment</button></details>`;
+			buf += `</form><br />`;
 			buf += `</div><div class="infobox"><h3>Scoring:</h3><hr />`;
 			const keys = Utils.sortBy(Object.keys(ATTRIBUTES), k => [-Object.keys(settings.specials[k] || {}).length, k]);
 			for (const k of keys) {
