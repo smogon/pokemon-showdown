@@ -284,7 +284,7 @@ async function recommend(user: User, room: GameRoom, response: Record<string, nu
 	}
 }
 
-function makeScore(result: Record<string, number>) {
+function makeScore(roomid: RoomID, result: Record<string, number>) {
 	let score = 0;
 	let main = '';
 	const flags = new Set<string>();
@@ -297,7 +297,7 @@ function makeScore(result: Record<string, number>) {
 				if (data < Number(k)) continue;
 				const num = settings.specials[type][k];
 				if (num === 'MAXIMUM') {
-					score = settings.threshold;
+					score = calcThreshold(roomid);
 					main = type;
 				} else {
 					if (num > score) {
@@ -366,7 +366,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	const roomid = room.roomid;
 	void (async () => {
 		const response = await PM.query({comment: message});
-		const {score, flags, main} = makeScore(response || {});
+		const {score, flags, main} = makeScore(roomid, response || {});
 		if (score) {
 			if (!cache[roomid]) cache[roomid] = {users: {}};
 			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
@@ -486,7 +486,8 @@ export const commands: Chat.ChatCommands = {
 			this.runBroadcast();
 			let response = await PM.query({comment: text, fullResponse: true});
 			if (!response) response = {};
-			const {score, flags} = makeScore(response);
+			// intentionally hardcoded to staff to ensure threshold is never altered.
+			const {score, flags} = makeScore('staff', response);
 			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
 			buf += `<strong>Score breakdown:</strong><br />`;
