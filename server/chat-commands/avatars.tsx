@@ -759,7 +759,7 @@ export const commands: Chat.ChatCommands = {
 		</>);
 	},
 
-	async moveavatars(target, room, user) {
+	moveavatars(target, room, user) {
 		this.checkCan('bypassall');
 		const [from, to] = target.split(',').map(toID);
 		if (!from || !to) {
@@ -784,7 +784,7 @@ export const commands: Chat.ChatCommands = {
 		Avatars.tryNotify(Users.get(to));
 	},
 	moveavatarshelp: [
-		`/moveavatars [from user], [to user] - Move all of the custom avatars from [from user] to [to user]. Requires: &`
+		`/moveavatars [from user], [to user] - Move all of the custom avatars from [from user] to [to user]. Requires: &`,
 	],
 
 	async masspavatar(target, room, user) {
