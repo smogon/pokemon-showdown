@@ -2289,7 +2289,6 @@ export const commands: Chat.ChatCommands = {
 
 				connection.send(`>view-${pageId}\n|deinit`);
 				Chat.refreshPageFor(`help-list-${HelpTicket.getTypeId(ticket.type)}`, 'staff');
-				Chat.runHandlers('TicketCreate', ticket, user);
 				return this.popupReply(`Your report has been submitted.`);
 			}
 
@@ -2407,7 +2406,6 @@ export const commands: Chat.ChatCommands = {
 			tickets[user.id] = ticket;
 			writeTickets();
 			notifyStaff();
-			Chat.runHandlers('TicketCreate', ticket, user);
 			connection.send(`>view-help-request\n|deinit`);
 		},
 

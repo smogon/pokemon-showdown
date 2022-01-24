@@ -65,15 +65,21 @@ export interface AnnotatedChatCommands {
 	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
-export interface Handlers {
-	onRoomClose?: (id: string, user: User, connection: Connection, page: boolean) => any;
-	onRenameRoom?: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
-	onBattleStart?: (user: User, room: GameRoom) => void;
-	onBattleLeave?: (user: User, room: GameRoom) => void;
-	onDisconnect?: (user: User) => void;
-	onRoomDestroy?: (roomid: RoomID) => void;
-	onBattleEnd?: (battle: RoomBattle, winner: ID, players: ID[]) => void;
-	onLadderSearch?: (user: User, connection: Connection, format: ID) => void;
+export type HandlerTable = {[key in keyof Handlers]?: Handlers[key]};
+
+interface Handlers {
+	onRoomClose: (id: string, user: User, connection: Connection, page: boolean) => any;
+	onRenameRoom: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
+	onBattleStart: (user: User, room: GameRoom) => void;
+	onBattleLeave: (user: User, room: GameRoom) => void;
+	onRoomJoin: (room: BasicRoom, user: User, connection: Connection) => void;
+	onDisconnect: (user: User) => void;
+	onRoomDestroy: (roomid: RoomID) => void;
+	onBattleEnd: (battle: RoomBattle, winner: ID, players: ID[]) => void;
+	onLadderSearch: (user: User, connection: Connection, format: ID) => void;
+	onBattleRanked: (
+		battle: Rooms.RoomBattle, winner: ID, ratings: (AnyObject | null | undefined)[], players: ID[]
+	) => void;
 }
 
 export interface ChatPlugin {
@@ -1972,18 +1978,17 @@ export const Chat = new class {
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 		if (plugin.onRenameRoom) {
-			if (!Chat.handlers['RenameRoom']) Chat.handlers['RenameRoom'] = [];
-			Chat.handlers['RenameRoom'].push(plugin.onRenameRoom);
+			if (!Chat.handlers['onRenameRoom']) Chat.handlers['onRenameRoom'] = [];
+			Chat.handlers['onRenameRoom'].push(plugin.onRenameRoom);
 		}
 		if (plugin.onRoomClose) {
-			if (!Chat.handlers['RoomClose']) Chat.handlers['RoomClose'] = [];
-			Chat.handlers['RoomClose'].push(plugin.onRoomClose);
+			if (!Chat.handlers['onRoomClose']) Chat.handlers['onRoomClose'] = [];
+			Chat.handlers['onRoomClose'].push(plugin.onRoomClose);
 		}
 		if (plugin.handlers) {
-			for (const k in plugin.handlers) {
-				const handlerName = k.slice(2);
+			for (const handlerName in plugin.handlers) {
 				if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
-				Chat.handlers[handlerName].push(plugin.handlers[k]);
+				Chat.handlers[handlerName].push(plugin.handlers[handlerName]);
 			}
 		}
 		Chat.plugins[name] = plugin;
@@ -2023,7 +2028,7 @@ export const Chat = new class {
 		}
 	}
 
-	runHandlers(name: string, ...args: any) {
+	runHandlers(name: keyof Handlers, ...args: Parameters<Handlers[typeof name]>) {
 		const handlers = this.handlers[name];
 		if (!handlers) return;
 		for (const h of handlers) {
@@ -2032,11 +2037,11 @@ export const Chat = new class {
 	}
 
 	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
-		Chat.runHandlers('RoomRename', oldID, newID, room);
+		Chat.runHandlers('onRenameRoom', oldID, newID, room);
 	}
 
 	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
-		Chat.runHandlers('RoomClose', roomid, user, connection, roomid.startsWith('view-'));
+		Chat.runHandlers('onRoomClose', roomid, user, connection, roomid.startsWith('view-'));
 	}
 
 	/**
