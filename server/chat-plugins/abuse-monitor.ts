@@ -25,7 +25,7 @@ const ATTRIBUTES = {
 	"SEXUALLY_EXPLICIT": {},
 	"FLIRTATION": {},
 };
-const PUNISHMENTS = ['WARN', 'MUTE', 'LOCK'];
+const PUNISHMENTS = ['WARN', 'MUTE', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
