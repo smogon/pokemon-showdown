@@ -1352,7 +1352,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	registeel: {
-		randomBattleMoves: ["protect", "rest", "seismictoss", "sleeptalk", "toxic"],
+		randomBattleMoves: ["rest", "seismictoss", "sleeptalk", "toxic"],
 		tier: "UUBL",
 	},
 	latias: {
