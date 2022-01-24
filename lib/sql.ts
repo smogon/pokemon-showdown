@@ -328,7 +328,7 @@ export class DatabaseTable<T> {
 	): Promise<R[]> {
 		const query = this.SQL`SELECT `;
 		if (typeof entries === 'string') {
-			query.append(' * ');
+			query.append(` ${entries} `);
 		} else {
 			for (let i = 0; i < entries.length; i++) {
 				query.append(entries[i]);
