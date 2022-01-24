@@ -1237,7 +1237,7 @@ export const commands: Chat.ChatCommands = {
 				);
 				return false;
 			}
-			Chat.runHandlers('LadderSearch', user, connection, ladder.formatid);
+			Chat.runHandlers('onLadderSearch', user, connection, ladder.formatid as ID);
 			return ladder.searchBattle(user, connection);
 		}
 		return Ladders.cancelSearches(user);
