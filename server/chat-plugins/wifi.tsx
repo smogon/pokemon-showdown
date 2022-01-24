@@ -147,7 +147,7 @@ class Giveaway extends Rooms.RoomGame {
 
 	getStyle() {
 		const css: {[k: string]: string | {[k: string]: string}} = {class: "broadcast-blue"};
-		if (this.game === 'BDSP') css.style = {background: '#aa88a9', color: '#fff'};
+		if (this.game === 'BDSP') css.style = {background: '#aa66a9', color: '#fff'};
 		return css;
 	}
 
