@@ -45,7 +45,9 @@ const REPORT_NAMECOLORS: {[k: string]: string} = {
 export const cache: {
 	[roomid: string]: {
 		users: Record<string, number>,
-		staffNotified?: ID,
+		// can be a string and not string[] if it was added to the object before this patch was done.
+		// todo: move this to just ID[]
+		staffNotified?: ID | ID[],
 		claimed?: ID,
 		recommended?: {type: string, reason: string},
 	},
@@ -112,6 +114,13 @@ interface BattleInfo {
 function nextMonth(month: string) {
 	const next = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
 	return next.toISOString().slice(0, 7);
+}
+
+function isFlaggedUserid(name: string, room: RoomID) {
+	const id = toID(name);
+	const entry = cache[room]?.staffNotified;
+	if (!entry) return false;
+	return typeof entry === 'string' ? entry === id : entry.includes(id);
 }
 
 // Mostly stolen from my code in helptickets.
@@ -373,7 +382,17 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
 			if (cache[roomid].users[user.id] >= calcThreshold(roomid)) {
-				cache[roomid].staffNotified = user.id;
+				let notified = cache[roomid].staffNotified;
+				if (notified) {
+					if (!Array.isArray(notified)) {
+						cache[roomid].staffNotified = notified = [notified];
+					}
+					if (!notified.includes(user.id)) {
+						notified.push(user.id);
+					}
+				} else {
+					cache[roomid].staffNotified = [user.id];
+				}
 				notifyStaff();
 				hitThreshold = 1;
 				void room?.uploadReplay?.(user, this.connection, "forpunishment");
@@ -985,7 +1004,7 @@ export const pages: Chat.PageTable = {
 		},
 		view(query, user) {
 			this.checkCan('lock');
-			const roomid = query.join('-');
+			const roomid = query.join('-') as RoomID;
 			if (!toID(roomid)) {
 				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
 			}
@@ -1038,7 +1057,7 @@ export const pages: Chat.PageTable = {
 				const id = toID(data.user);
 				if (!id) continue;
 				users.add(id);
-				buf += `<div class="chat chatmessage${cache[roomid].staffNotified === id ? ` highlighted` : ``}">`;
+				buf += `<div class="chat chatmessage">`;
 				buf += `<strong${colorName(id, logData)}>`;
 				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
@@ -1049,7 +1068,7 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
 			const sortedUsers = Utils.sortBy([...users], ([id, num]) => (
-				[cache[roomid].staffNotified === id, -num]
+				[isFlaggedUserid(id, roomid), -num, id]
 			));
 			for (const [id] of sortedUsers) {
 				const curUser = Users.getExact(id);
