@@ -228,9 +228,9 @@ Value rules
 
 Certain rules can specify a value.
 
-`Max Level = 50` - ban Pokémon above level 50
+`Max Level = 100` - ban Pokémon above level 100
 
-`Min Level = 10` - ban Pokémon below level 10
+`Min Level = 5` - ban Pokémon below level 5
 
 `Max Total Level = 200` - only allow Pokémon whose combined levels add up to 200 or below (if combined with `Picked Team Size`, only the picked team needs to be below that combined level)
 
