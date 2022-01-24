@@ -306,7 +306,7 @@ class Giveaway extends Rooms.RoomGame {
 				</tr>
 				<tr>
 					<td style={{textAlign: 'center', width: '45%'}}>
-						<psicon item={this.ball} /> {this.sprite} <psicon item={this.ball} />
+						<psicon item={this.ball} /> {this.sprite} <psicon item={this.ball} /><br />
 						<Chat.JSX.FormatText isTrusted>{set}</Chat.JSX.FormatText>
 					</td>
 					<td style={{textAlign: 'center', width: '45%'}}>{rightSide}</td>
