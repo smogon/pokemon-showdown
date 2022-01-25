@@ -234,6 +234,10 @@ export class RoomBattleTimer {
 	start(requester?: User) {
 		const userid = requester ? requester.id : 'staff' as ID;
 		if (this.timerRequesters.has(userid)) return false;
+		if (this.battle.ended && requester) {
+			this.battle.playerTable[requester.id].sendRoom(`|inactiveoff|The timer can't be enabled after a battle has ended.`);
+			return false;
+		}
 		if (this.timer) {
 			this.battle.room.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`).update();
 			this.timerRequesters.add(userid);
