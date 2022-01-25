@@ -3861,7 +3861,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	avalugg: {
 		randomBattleMoves: ["avalanche", "earthquake", "rapidspin", "recover", "roar", "toxic"],
 		randomDoubleBattleMoves: ["avalanche", "earthquake", "protect", "recover"],
-		tier: "(PU)",
+		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	noibat: {
