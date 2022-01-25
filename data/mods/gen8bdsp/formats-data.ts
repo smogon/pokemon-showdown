@@ -2055,7 +2055,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["icebeam", "raindance", "rest", "scald"],
 	},
 	manaphy: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DUU",
 		randomBattleMoves: ["energyball", "icebeam", "substitute", "surf", "tailglow"],
 	},
