@@ -1454,7 +1454,10 @@ export class RandomGen7Teams extends RandomTeams {
 	}
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		if (hasCustomBans) {
+			this.enforceNoDirectComplexBans();
+		}
 
 		const seed = this.prng.seed;
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
@@ -1613,7 +1616,7 @@ export class RandomGen7Teams extends RandomTeams {
 				if (set.moves.includes('rapidspin')) teamDetails.rapidSpin = 1;
 			}
 		}
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !this.hasBans) {
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !hasCustomBans) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 

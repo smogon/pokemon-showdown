@@ -99,7 +99,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 	// Random team generation for Gen 1 Random Battles.
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		if (hasCustomBans) {
+			this.enforceNoDirectComplexBans();
+		}
 
 		// Get what we need ready.
 		const seed = this.prng.seed;
@@ -239,7 +242,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			pokemon.push(this.randomSet(species));
 		}
 
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !isMonotype && !this.hasBans) {
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !isMonotype && !hasCustomBans) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 
