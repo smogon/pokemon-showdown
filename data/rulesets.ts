@@ -1834,7 +1834,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: "Revelationmons Mod",
 		desc: `The moves in the first slot(s) of a Pok&eacute;mon's set have their types changed to match the Pok&eacute;mon's type(s).`,
 		onBegin() {
-			this.add('rule', 'Revelationmons Mod: The first moveslots have their types changed to match the Pok&eacute;mon\'s types');
+			this.add('rule', 'Revelationmons Mod: The first moveslots have their types changed to match the Pok\u00e9mon\'s types');
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
@@ -1856,6 +1856,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			];
 			if (noModifyType.includes(move.id)) return;
 			for (const [i, type] of types.entries()) {
+				if (!this.dex.types.isName(type)) continue;
 				if (pokemon.moveSlots[i] && move.id === pokemon.moveSlots[i].id) move.type = type;
 			}
 		},
