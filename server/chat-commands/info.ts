@@ -2596,7 +2596,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
 		}
 
-		const [link, comment] = Utils.splitFirst(target, ',');
+		const [link, comment] = Utils.splitFirst(target, ',').map(f => f.trim());
 
 		let buf;
 		if (YouTube.linkRegex.test(link)) {
@@ -2625,7 +2625,7 @@ export const commands: Chat.ChatCommands = {
 			if (this.checkChat(comment) !== comment) {
 				return this.errorReply(`You cannot use filtered words in comments.`);
 			}
-			buf += Utils.html`<br />(${comment.trim()})</div>`;
+			buf += Utils.html`<br />(${comment})</div>`;
 		}
 
 		this.checkBroadcast();
