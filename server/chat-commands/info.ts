@@ -2621,7 +2621,12 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('Invalid image');
 			}
 		}
-		if (comment) buf += Utils.html`<br />(${comment.trim()})</div>`;
+		if (comment) {
+			if (this.checkChat(comment) !== comment) {
+				return this.errorReply(`You cannot use filtered words in comments.`);
+			}
+			buf += Utils.html`<br />(${comment.trim()})</div>`;
+		}
 
 		this.checkBroadcast();
 		if (this.broadcastMessage) {
