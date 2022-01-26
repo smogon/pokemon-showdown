@@ -235,7 +235,7 @@ export class RoomBattleTimer {
 		const userid = requester ? requester.id : 'staff' as ID;
 		if (this.timerRequesters.has(userid)) return false;
 		if (this.battle.ended && requester) {
-			this.battle.playerTable[requester.id].sendRoom(`|inactiveoff|The timer can't be enabled after a battle has ended.`);
+			requester.sendTo(this.battle.roomid, `|inactiveoff|The timer can't be enabled after a battle has ended.`);
 			return false;
 		}
 		if (this.timer) {
