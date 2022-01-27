@@ -3175,7 +3175,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
-	dialgalord: {
+	dialgaorigin: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
@@ -3187,7 +3187,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
-	palkialord: {
+	palkiaorigin: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},

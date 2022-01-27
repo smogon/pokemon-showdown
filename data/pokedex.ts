@@ -8540,7 +8540,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 484,
 		name: "Palkia-Origin",
 		baseSpecies: "Palkia",
-		forme: "Lord",
+		forme: "Origin",
 		types: ["Water", "Dragon"],
 		gender: "N",
 		baseStats: {hp: 90, atk: 100, def: 100, spa: 150, spd: 120, spe: 120},
