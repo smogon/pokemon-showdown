@@ -6226,15 +6226,15 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
+	ursaluna: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 	basculegion: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
 	basculegionf: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	ursaluna: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
