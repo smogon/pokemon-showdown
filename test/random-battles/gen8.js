@@ -155,6 +155,13 @@ describe('[Gen 8] Random Battle', () => {
 		});
 	});
 
+	it(`should minimize Chansey's attack stat`, () => {
+		testSet('chansey', options, set => {
+			const [atkIV, atkEV] = [set.ivs.atk, set.evs.atk];
+			assert(atkIV === 0 && atkEV === 0, `Chansey should have minimum attack (Atk IV: ${atkIV}, Atk EV: ${atkEV})`);
+		});
+	});
+
 	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 	it('should always give Azumarill Aqua Jet', () => testAlwaysHasMove('azumarill', options, 'aquajet'));
 });
