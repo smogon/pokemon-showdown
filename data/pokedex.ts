@@ -1455,7 +1455,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		forme: "Hisui",
 		types: ["Fire", "Rock"],
 		genderRatio: {M: 0.75, F: 0.25},
-		baseStats: {hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95},
+		baseStats: {hp: 95, atk: 115, def: 80, spa: 95, spd: 80, spe: 90},
 		abilities: {0: "Intimidate", 1: "Flash Fire", H: "Justified"},
 		heightm: 2,
 		weightkg: 168,
