@@ -42,6 +42,8 @@ const REPORT_NAMECOLORS: {[k: string]: string} = {
 	other: '', // black - empty since handled by dark mode
 };
 
+export let migrated = global.Chat?.oldPlugins['abuse-monitor']?.migrated || false;
+
 export const cache: {
 	[roomid: string]: {
 		users: Record<string, number>,
@@ -49,9 +51,22 @@ export const cache: {
 		// todo: move this to just ID[]
 		staffNotified?: ID | ID[],
 		claimed?: ID,
-		recommended?: {type: string, reason: string},
+		recommended?: Record<string, {type: string, reason: string}>,
 	},
-} = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
+} = (() => {
+	const plugin = global.Chat?.oldPlugins['abuse-monitor'];
+	if (!plugin?.cache) return {};
+	if (plugin.migrated) return plugin.cache;
+	for (const k in plugin.cache) {
+		const cur = plugin.cache[k];
+		if (typeof cur.recommended?.type === 'string') { // would be object if it was the new entry
+			// we cannot feasibly determine who it was (but it __is__ logged in <<abuselog>>, so staff can)
+			delete cur.recommended;
+		}
+	}
+	migrated = true;
+	return plugin.cache;
+})();
 
 const defaults: FilterSettings = {
 	threshold: 4,
@@ -259,7 +274,7 @@ export async function classify(text: string) {
 async function recommend(user: User, room: GameRoom, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string][] = [];
-	const prevRecommend = cache[room.roomid]?.recommended;
+	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
 	for (const punishment of settings.punishments) {
 		if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
 			if (PUNISHMENTS.indexOf(punishment.punishment) <= PUNISHMENTS.indexOf(prevRecommend?.type)) continue;
@@ -283,7 +298,8 @@ async function recommend(user: User, room: GameRoom, response: Record<string, nu
 		// go by most severe
 		const [punishment, reason] = recommended[0];
 		if (cache[room.roomid]) {
-			cache[room.roomid].recommended = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
+			if (!cache[room.roomid].recommended) cache[room.roomid].recommended = {};
+			cache[room.roomid].recommended![user.id] = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
 		}
 		Rooms.get('abuselog')?.add(
 			`|c|&|/log [Abuse-Monitor] ` +
@@ -1067,9 +1083,12 @@ export const pages: Chat.PageTable = {
 				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
-			const rec = cache[roomid].recommended;
-			if (rec) {
-				buf += `<p><strong>Recommended action:</strong> ${rec.type} (${rec.reason})</p>`;
+			const recs = cache[roomid].recommended || {};
+			if (Object.keys(recs).length) {
+				for (const id in recs) {
+					const rec = recs[id];
+					buf += `<p><strong>Recommended action for ${id}:</strong> ${rec.type} (${rec.reason})</p>`;
+				}
 			}
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
 			const sortedUsers = Utils.sortBy([...users], ([id, num]) => (
