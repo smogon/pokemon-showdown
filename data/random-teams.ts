@@ -2287,7 +2287,7 @@ export class RandomTeams {
 		// Minimize confusion damage
 		const noAttackStatMoves = [...moves].every(m => {
 			const move = this.dex.moves.get(m);
-			if (move.damageCallback || move.damage) return false;
+			if (move.damageCallback || move.damage) return true;
 			return move.category !== 'Physical' || move.id === 'bodypress';
 		});
 		if (noAttackStatMoves && !moves.has('transform') && (!moves.has('shellsidearm') || !counter.get('Status'))) {
