@@ -12366,7 +12366,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Goodra-Hisui",
 		baseSpecies: "Goodra",
 		forme: "Hisui",
-		types: ["Dragon"],
+		types: ["Steel", "Dragon"],
 		baseStats: {hp: 80, atk: 100, def: 100, spa: 110, spd: 150, spe: 60},
 		abilities: {0: "Sap Sipper", 1: "Overcoat", H: "Gooey"},
 		heightm: 1.7,
