@@ -917,9 +917,9 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause', 'Sleep Moves Clause'],
 		banlist: [
-			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Dragapult', 'Hawlucha', 'Marowak-Alola', 'Melmetal', 'Pikachu', 'Toxapex',
+			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Dragapult', 'Hawlucha', 'Mantine', 'Marowak-Alola', 'Melmetal', 'Pikachu', 'Toxapex',
 			'Xerneas', 'Zacian', 'Zacian-Crowned', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power',
-			'Shadow Tag', 'Baton Pass',
+			'Shadow Tag', 'Baton Pass', 'King\'s Rock', 'Quick Claw', 'Bright Powder', 'Lax Incense', 'Focus Band',
 		],
 		onValidateTeam(team) {
 			const gods = new Set<string>();
