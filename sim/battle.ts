@@ -1535,6 +1535,34 @@ export class Battle {
 	maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
+		// Gen 1 Endless Battle Clause triggers
+		// These are checked before the 100 turn minimum as the battle cannot progress if they are true
+		if (this.gen <= 1) {
+			const noProgressPossible = this.sides.every(side => {
+				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.types.includes('Ghost'));
+				const foeAllTransform = side.foe.pokemon.every(pokemon => (
+					// true if transforming into this pokemon would lead to an endless battle
+					// Transform will fail (depleting PP) if used against Ditto in Stadium 1
+					(this.dex.currentMod !== 'gen1stadium' || pokemon.species.id !== 'ditto') &&
+					// there are some subtleties such as a Mew with only Transform and auto-fail moves,
+					// but it's unlikely to come up in a real game so there's no need to handle it
+					pokemon.moves.every(moveid => moveid === 'transform')
+				));
+				return side.pokemon.every(pokemon => (
+					// frozen pokemon can't thaw in gen 1 without outside help
+					pokemon.status === 'frz' ||
+					// a pokemon can't lose PP if it Transforms into a pokemon with only Transform
+					(pokemon.moves.every(moveid => moveid === 'transform') && foeAllTransform) ||
+					// Struggle can't damage yourself if every foe is a Ghost
+					(pokemon.moveSlots.every(slot => slot.pp === 0) && foeAllGhosts)
+				));
+			});
+			if (noProgressPossible) {
+				this.add('-message', `This battle cannot progress. Endless Battle Clause activated!`);
+				return this.tie();
+			}
+		}
+
 		if (this.turn <= 100) return;
 
 		// the turn limit is not a part of Endless Battle Clause
@@ -1556,33 +1584,6 @@ export class Battle {
 		if (!this.ruleTable.has('endlessbattleclause')) return;
 		// for now, FFA doesn't support Endless Battle Clause
 		if (this.format.gameType === 'freeforall') return;
-
-		// Gen 1 Endless Battle Clause triggers
-		if (this.gen <= 1) {
-			const noProgressPossible = this.sides.every(side => {
-				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.types.includes('Ghost'));
-				const foeAllTransform = side.foe.pokemon.every(pokemon => (
-					// true if transforming into this pokemon would lead to an endless battle
-					// Transform will fail (depleting PP) if used against Ditto in Stadium 1
-					(this.dex.currentMod !== 'gen1stadium' || pokemon.species.id !== 'ditto') &&
-					// there are some subtleties such as a Mew with only Transform and auto-fail moves,
-					// but it's unlikely to come up in a real game so there's no need to handle it
-					pokemon.moves.every(moveid => moveid === 'transform')
-				));
-				return side.pokemon.every(pokemon => (
-					// frozen pokemon can't thaw in gen 1 without outside help
-					pokemon.status === 'frz' ||
-					// a pokemon can't lose PP if it Transforms into a pokemon with only Transform
-					(pokemon.moves.every(moveid => moveid === 'transform') && foeAllTransform) ||
-					// Struggle can't damage yourself if every foe is a Ghost
-					pokemon.moveSlots.every(slot => slot.pp === 0) && foeAllGhosts
-				));
-			});
-			if (noProgressPossible) {
-				this.add('-message', `This battle cannot progress. Endless Battle Clause activated!`);
-				return this.tie();
-			}
-		}
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
 		if (!stalenessBySide.every(s => !!s) || !stalenessBySide.some(s => s === 'external')) return;
