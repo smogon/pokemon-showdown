@@ -25,4 +25,8 @@ describe('[Gen 5] Random Battle', () => {
 	it('should prevent unreleased HAs from being used', () => {
 		testSet('chandelure', options, set => assert.notEqual(set.ability, 'Shadow Tag'));
 	});
+
+	it('should not give Ursaring Eviolite', () => {
+		testSet('ursaring', options, set => assert.notEqual(set.item, 'Eviolite'));
+	});
 });

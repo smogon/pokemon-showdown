@@ -30,4 +30,8 @@ describe('[Gen 6] Random Battle', () => {
 	it('should prevent double Hidden Power', () => testHiddenPower('thundurustherian', options));
 
 	it('should always give Mega Glalie Return', () => testAlwaysHasMove('glaliemega', options, 'return'));
+
+	it('should not give Ursaring Eviolite', () => {
+		testSet('ursaring', options, set => assert.notEqual(set.item, 'Eviolite'));
+	});
 });
