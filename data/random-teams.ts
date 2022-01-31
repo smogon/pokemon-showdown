@@ -1681,7 +1681,7 @@ export class RandomTeams {
 			this.dex.getEffectiveness('Rock', species) >= 2 &&
 			!isDoubles
 		);
-		if (species.evos.length && !HDBBetterThanEviolite) return 'Eviolite';
+		if (species.evos.some(s => !this.dex.species.get(s).isNonstandard) && !HDBBetterThanEviolite) return 'Eviolite';
 
 		// Ability based logic and miscellaneous logic
 		if (species.name === 'Wobbuffet' || ['Cheek Pouch', 'Harvest', 'Ripen'].includes(ability)) return 'Sitrus Berry';
