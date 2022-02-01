@@ -373,6 +373,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	init?: (this: ModdedDex) => void;
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable;
 	nextTurn?: (this: Battle) => void;
+	runAction?: (this: Battle, action: Action) => void;
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
 	suppressingWeather?: (this: Battle) => boolean;
 	trunc?: (n: number) => number;
