@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon, target) {
