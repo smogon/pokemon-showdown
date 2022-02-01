@@ -600,9 +600,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
-		if (species.evos.some(s => !this.dex.species.get(s).isNonstandard)) {
-			return (ability === 'Technician' && counter.get('Physical') >= 4) ? 'Choice Band' : 'Eviolite';
-		}
+		if (species.nfe) return (ability === 'Technician' && counter.get('Physical') >= 4) ? 'Choice Band' : 'Eviolite';
 		if (moves.has('copycat') && counter.get('Physical') >= 3) return 'Choice Band';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 		if (

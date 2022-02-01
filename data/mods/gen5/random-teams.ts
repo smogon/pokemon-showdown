@@ -336,7 +336,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
-		if (species.evos.some(s => !this.dex.species.get(s).isNonstandard)) return 'Eviolite';
+		if (species.nfe) return 'Eviolite';
 		if (moves.has('shellsmash')) return 'White Herb';
 		if (ability === 'Harvest' || moves.has('bellydrum')) return 'Sitrus Berry';
 		if ((ability === 'Magic Guard' || ability === 'Sheer Force') && counter.damagingMoves.size > 1) return 'Life Orb';
