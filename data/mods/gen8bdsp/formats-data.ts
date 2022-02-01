@@ -687,7 +687,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["knockoff", "liquidation", "rapidspin", "stoneedge", "swordsdance"],
 	},
 	aerodactyl: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 		randomBattleMoves: ["earthquake", "roost", "stealthrock", "stoneedge", "defog"],
 	},
@@ -959,7 +959,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	granbull: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 		randomBattleMoves: ["crunch", "earthquake", "healbell", "playrough", "thunderwave"],
 	},
@@ -1415,7 +1415,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["earthpower", "explosion", "fireblast", "lavaplume", "stealthrock"],
 	},
 	torkoal: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["earthquake", "lavaplume", "rapidspin", "solarbeam", "stealthrock"],
 	},
