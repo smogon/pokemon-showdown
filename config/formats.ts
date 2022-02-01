@@ -754,12 +754,11 @@ export const Formats: FormatList = [
 			'Baneful Bunker', 'Bounce', 'Protect', 'Detect', 'Dig', 'Dive', 'Fly', 'King\'s Shield', 'Nature\'s Madness', 'Night Shade',
 			'Obstruct', 'Phantom Force', 'Seismic Toss', 'Shadow Force', 'Sky Drop', 'Spiky Shield', 'Super Fang',
 		],
-		onValidateSet(set, format) {
-			const restricted = format.restricted || [];
+		onValidateSet(set) {
 			const problems = [];
 			for (const [i, moveid] of set.moves.entries()) {
 				const move = this.dex.moves.get(moveid);
-				if ([0, 1].includes(i) && restricted.includes(move.name)) {
+				if ([0, 1].includes(i) && this.ruleTable.isRestricted(`move:${move.id}`)) {
 					problems.push(`${set.name || set.species}'s move ${move.name} cannot be linked.`);
 				}
 			}
