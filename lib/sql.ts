@@ -304,20 +304,11 @@ export class DatabaseTable<T> {
 		this.primaryKeyName = primaryKeyName;
 		tables.set(this.name, this);
 	}
-	private SQL: typeof import('sql-template-strings').SQL = (() => {
-		try {
-			return require('sql-template-strings');
-		} catch {
-			return () => {
-				throw new Error("Using SQL-template-strings without it installed");
-			};
-		}
-	})();
 	async selectOne<R = T>(
 		entries: string | string[],
 		where?: SQLStatement
 	): Promise<R | null> {
-		const query = where || this.SQL``;
+		const query = where || SQL.SQL``;
 		query.append(' LIMIT 1');
 		const rows = await this.selectAll<R>(entries, query);
 		return rows?.[0] || null;
@@ -326,7 +317,7 @@ export class DatabaseTable<T> {
 		entries: string | string[],
 		where?: SQLStatement
 	): Promise<R[]> {
-		const query = this.SQL`SELECT `;
+		const query = SQL.SQL`SELECT `;
 		if (typeof entries === 'string') {
 			query.append(` ${entries} `);
 		} else {
@@ -344,19 +335,19 @@ export class DatabaseTable<T> {
 		return this.all<R>(query);
 	}
 	get(entries: string | string[], keyId: SQLInput) {
-		const query = this.SQL``;
+		const query = SQL.SQL``;
 		query.append(this.primaryKeyName);
-		query.append(this.SQL` = ${keyId}`);
+		query.append(SQL.SQL` = ${keyId}`);
 		return this.selectOne(entries, query);
 	}
 	updateAll(toParams: Partial<T>, where?: SQLStatement, limit?: number) {
 		const to = Object.entries(toParams);
-		const query = this.SQL`UPDATE `;
+		const query = SQL.SQL`UPDATE `;
 		query.append(this.name + ' SET ');
 		for (let i = 0; i < to.length; i++) {
 			const [k, v] = to[i];
 			query.append(`${k} = `);
-			query.append(this.SQL`${v}`);
+			query.append(SQL.SQL`${v}`);
 			if (typeof to[i + 1] !== 'undefined') {
 				query.append(', ');
 			}
@@ -366,35 +357,35 @@ export class DatabaseTable<T> {
 			query.append(` WHERE `);
 			query.append(where);
 		}
-		if (limit) query.append(this.SQL` LIMIT ${limit}`);
+		if (limit) query.append(SQL.SQL` LIMIT ${limit}`);
 		return this.run(query);
 	}
 	updateOne(to: Partial<T>, where?: SQLStatement) {
 		return this.updateAll(to, where, 1);
 	}
 	deleteAll(where?: SQLStatement, limit?: number) {
-		const query = this.SQL`DELETE FROM `;
+		const query = SQL.SQL`DELETE FROM `;
 		query.append(this.name);
 		if (where) {
 			query.append(' WHERE ');
 			query.append(where);
 		}
 		if (limit) {
-			query.append(this.SQL` LIMIT ${limit}`);
+			query.append(SQL.SQL` LIMIT ${limit}`);
 		}
 		return this.run(query);
 	}
 	delete(keyEntry: SQLInput) {
-		const query = this.SQL``;
+		const query = SQL.SQL``;
 		query.append(this.primaryKeyName);
-		query.append(this.SQL` = ${keyEntry}`);
+		query.append(SQL.SQL` = ${keyEntry}`);
 		return this.deleteOne(query);
 	}
 	deleteOne(where: SQLStatement) {
 		return this.deleteAll(where, 1);
 	}
 	insert(colMap: Partial<T>, rest?: SQLStatement, isReplace = false) {
-		const query = this.SQL``;
+		const query = SQL.SQL``;
 		query.append(`${isReplace ? 'REPLACE' : 'INSERT'} INTO ${this.name} (`);
 		const keys = Object.keys(colMap);
 		for (let i = 0; i < keys.length; i++) {
@@ -404,7 +395,7 @@ export class DatabaseTable<T> {
 		query.append(') VALUES (');
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
-			query.append(this.SQL`${colMap[key as keyof T]}`);
+			query.append(SQL.SQL`${colMap[key as keyof T]}`);
 			if (typeof keys[i + 1] !== 'undefined') query.append(', ');
 		}
 		query.append(') ');
@@ -415,9 +406,9 @@ export class DatabaseTable<T> {
 		return this.insert(cols, rest, true);
 	}
 	update(primaryKey: SQLInput, data: Partial<T>) {
-		const query = this.SQL``;
+		const query = SQL.SQL``;
 		query.append(this.primaryKeyName + ' = ');
-		query.append(this.SQL`${primaryKey}`);
+		query.append(SQL.SQL`${primaryKey}`);
 		return this.updateOne(data, query);
 	}
 
@@ -445,6 +436,15 @@ export const SQL = Object.assign(getSQL, {
 	DatabaseTable,
 	SQLDatabaseManager,
 	tables,
+	SQL: (() => {
+		try {
+			return require('sql-template-strings');
+		} catch {
+			return () => {
+				throw new Error("Using SQL-template-strings without it installed");
+			};
+		}
+	})() as typeof import('sql-template-strings').SQL,
 });
 
 export namespace SQL {
