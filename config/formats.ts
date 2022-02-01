@@ -1088,7 +1088,15 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		ruleset: ['[Gen 8 BDSP] UU'],
-		banlist: ['UU', 'RUBL'],
+		banlist: ['UU', 'RUBL', 'Drought'],
+	},
+	{
+		name: "[Gen 8 BDSP] NU",
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['[Gen 8 BDSP] RU'],
+		banlist: ['RU', 'NUBL'],
 	},
 	{
 		name: "[Gen 8 BDSP] LC",
