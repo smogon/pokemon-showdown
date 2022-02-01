@@ -910,19 +910,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 	const dex: {[k: string]: Species} = {};
 	for (const species of mod.species.all()) {
-		const megaSearchResult = (
-			megaSearch === null || (megaSearch === true && species.isMega) ||
-			(megaSearch === false && !species.isMega)
-		);
-		const gmaxSearchResult = (
-			gmaxSearch === null || (gmaxSearch === true && species.name.endsWith('-Gmax')) ||
-			(gmaxSearch === false && !species.name.endsWith('-Gmax'))
-		);
-		const fullyEvolvedSearchResult = (
-			fullyEvolvedSearch === null ||
-			(fullyEvolvedSearch === true && !species.nfe) ||
-			(fullyEvolvedSearch === false && species.nfe)
-		);
+		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
+		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
+		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch === species.nfe;
 		if (
 			species.gen <= mod.gen &&
 			(
@@ -983,7 +973,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (
 					alts.tiers.LC &&
 					!dex[mon].prevo &&
-					dex[mon].evos.some(evo => mod.species.get(evo).gen <= mod.gen) &&
+					dex[mon].nfe &&
 					!Dex.formats.getRuleTable(format).isBannedSpecies(dex[mon])
 				) {
 					const lsetData = mod.species.getLearnsetData(dex[mon].id);

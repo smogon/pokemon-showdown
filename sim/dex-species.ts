@@ -481,8 +481,10 @@ export class DexSpecies {
 					species.tier = species.doublesTier = 'Illegal';
 				}
 			}
-			const legalEvos = species.evos.filter(mon => !this.get(mon).isNonstandard);
-			species.nfe = !!(legalEvos.length && this.get(legalEvos[0]).gen <= this.dex.gen);
+			species.nfe = species.evos.some(evo => {
+				const evoSpecies = this.get(evo);
+				return !evoSpecies.isNonstandard || evoSpecies.isNonstandard === species?.isNonstandard;
+			});
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
