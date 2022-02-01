@@ -29,7 +29,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Linked mod
 			const linkedMoves: [string, string] = action.pokemon.getLinkedMoves();
 			let linkIndex = -1;
-			if (linkedMoves.length && !move.isZ && !move.isMax && (linkIndex = linkedMoves.indexOf(toID(action.move))) >= 0) {
+			if (linkedMoves.length && !move.isZ && !move.isMax && (linkIndex = linkedMoves.indexOf(this.toID(action.move))) >= 0) {
 				const linkedActions = action.linked || linkedMoves.map(moveid => this.dex.getActiveMove(moveid));
 				const altMove = linkedActions[1 - linkIndex];
 				const thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], priority);
@@ -480,7 +480,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 					const linkedMoves: [string, string] = action.pokemon.getLinkedMoves();
 					if (linkedMoves.length && !action.pokemon.getItem().isChoice && !action.zmove && !action.maxMove) {
-						const decisionMove = toID(action.move);
+						const decisionMove = this.battle.toID(action.move);
 						if (linkedMoves.includes(decisionMove)) {
 							action.linked = linkedMoves.map(moveid => this.battle.dex.getActiveMove(moveid));
 							const linkedOtherMove = action.linked[1 - linkedMoves.indexOf(decisionMove)];
