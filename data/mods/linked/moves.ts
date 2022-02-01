@@ -259,8 +259,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectState.turnsActivated[this.turn]++;
 				if (!Array.isArray(this.effectState.move)) {
-					const nextAction = this.queue.willMove(pokemon);
-					if (nextAction) this.queue.list.splice(this.queue.list.indexOf(nextAction), 1);
+					this.queue.cancelAction(pokemon);
 					if (move.id !== this.effectState.move) return this.effectState.move;
 					return;
 				}
