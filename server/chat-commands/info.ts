@@ -2772,7 +2772,7 @@ export const pages: Chat.PageTable = {
 			`<h3>Value rules</h3>`,
 			`<ul><li>Value rules are formatted like [Name] = [value], e.g. "Force Monotype = Water" or "Min Team Size = 4"</li>`,
 			`<li>To remove a value rule, use <code>![rule name]</code>.</li>`,
-			`<li>To override another value rule, use <code>!! [Name] = [new value]</code>. For example, overriding the Min Source Gen on [Gen 8] VGC 2021 Series 10 from 8 to 3 would look like <code>!! Min Source Gen = 3</code>.</li></ul>`,
+			`<li>To override another value rule, use <code>!! [Name] = [new value]</code>. For example, overriding the Min Source Gen on [Gen 8] VGC 2021 from 8 to 3 would look like <code>!! Min Source Gen = 3</code>.</li></ul>`,
 			`<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th></tr>`
 		);
 		for (const rule of rules) {
