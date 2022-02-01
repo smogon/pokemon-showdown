@@ -719,9 +719,7 @@ export class RandomGen7Teams extends RandomTeams {
 		if (ability === 'Harvest' || ability === 'Emergency Exit' && !!counter.get('Status')) return 'Sitrus Berry';
 		if (ability === 'Imposter') return 'Choice Scarf';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
-		if (species.evos.some(s => !this.dex.species.get(s).isNonstandard)) {
-			return (ability === 'Technician' && counter.get('Physical') >= 4) ? 'Choice Band' : 'Eviolite';
-		}
+		if (species.nfe) return (ability === 'Technician' && counter.get('Physical') >= 4) ? 'Choice Band' : 'Eviolite';
 		if (moves.has('switcheroo') || moves.has('trick')) {
 			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108) {
 				return 'Choice Scarf';
