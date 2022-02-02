@@ -111,7 +111,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					};
 					this.queue.unshift(pseudoAction);
 				}
-				break;
+				return;
 			}
 			this.actions.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
 				action.zmove, undefined, action.maxMove, action.originalTarget);
@@ -416,7 +416,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.runMove(move.id, dancer, dancer.getLocOf(dancersTarget), this.dex.abilities.get('dancer'), undefined, true);
 				}
 			}
-			if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
+			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
+			this.battle.faintMessages();
+			this.battle.checkWin();
 		},
 	},
 	queue: {
@@ -479,7 +481,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 					const linkedMoves: [string, string] = action.pokemon.getLinkedMoves();
-					if (linkedMoves.length && !action.pokemon.getItem().isChoice && !action.zmove && !action.maxMove) {
+					if (linkedMoves.length && !action.pokemon.volatiles['choicelock'] && !action.zmove && !action.maxMove) {
 						const decisionMove = this.battle.toID(action.move);
 						if (linkedMoves.includes(decisionMove)) {
 							action.linked = linkedMoves.map(moveid => this.battle.dex.getActiveMove(moveid));
