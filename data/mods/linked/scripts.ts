@@ -481,7 +481,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 					action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 					const linkedMoves: [string, string] = action.pokemon.getLinkedMoves();
-					if (linkedMoves.length && !action.pokemon.volatiles['choicelock'] && !action.zmove && !action.maxMove) {
+					if (linkedMoves.length &&
+							!(action.pokemon.getItem().isChoice || action.pokemon.hasAbility('gorillatactics')) &&
+							!action.zmove && !action.maxMove) {
 						const decisionMove = this.battle.toID(action.move);
 						if (linkedMoves.includes(decisionMove)) {
 							action.linked = linkedMoves.map(moveid => this.battle.dex.getActiveMove(moveid));
