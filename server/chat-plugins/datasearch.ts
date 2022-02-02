@@ -912,7 +912,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	for (const species of mod.species.all()) {
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
 		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
-		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch === species.nfe;
+		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
 		if (
 			species.gen <= mod.gen &&
 			(
