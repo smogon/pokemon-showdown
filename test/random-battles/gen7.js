@@ -93,4 +93,6 @@ describe('[Gen 7] Random Battle', () => {
 	it('should not give Ursaring Eviolite', () => {
 		testSet('ursaring', options, set => assert.notEqual(set.item, 'Eviolite'));
 	});
+
+	it('should always give Mega Glalie Return', () => testAlwaysHasMove('glaliemega', options, 'return'));
 });
