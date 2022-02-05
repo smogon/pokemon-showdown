@@ -1518,10 +1518,8 @@ const triviaCommands: Chat.ChatCommands = {
 		if (['triforce', 'tri'].includes(mode)) mode = 'triumvirate';
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
-			const recentHistory = await database.getHistory(10);
-			const recentFirstMode = recentHistory.some(game => game.mode === 'First');
-			const modes = recentFirstMode ? Object.keys(MODES).filter(curMode => curMode !== 'first') : Object.keys(MODES);
-			mode = Utils.shuffle(modes)[0];
+			const acceptableModes = Object.keys(MODES).filter(curMode => curMode !== 'first');
+			mode = Utils.shuffle(acceptableModes)[0];
 		}
 		if (!MODES[mode]) return this.errorReply(this.tr`"${mode}" is an invalid mode.`);
 
