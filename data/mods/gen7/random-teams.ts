@@ -435,7 +435,11 @@ export class RandomGen7Teams extends RandomTeams {
 		case 'endeavor':
 			return {cull: !isLead && !abilities.has('Defeatist')};
 		case 'explosion':
-			return {cull: !!counter.setupType || moves.has('wish') || abilities.has('Refrigerate') && moves.has('freezedry')};
+			return {cull: (
+				!!counter.setupType ||
+				moves.has('wish') ||
+				(abilities.has('Refrigerate') && (moves.has('freezedry') || movePool.includes('return')))
+			)};
 		case 'extremespeed': case 'skyattack':
 			return {cull: moves.has('substitute') || counter.setupType !== 'Physical' && moves.has('vacuumwave')};
 		case 'facade':

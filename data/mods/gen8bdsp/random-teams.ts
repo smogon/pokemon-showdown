@@ -31,7 +31,7 @@ export class RandomBDSPTeams extends RandomTeams {
 		if (species.baseSpecies === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Shuckle' && moves.has('stickyweb')) return 'Mental Herb';
-		if (['Sniper', 'Super Luck'].includes(ability) || moves.has('focusenergy')) return 'Scope Lens';
+		if (ability !== 'Sniper' && (ability === 'Super Luck' || moves.has('focusenergy'))) return 'Scope Lens';
 		if (species.name === 'Wobbuffet' && moves.has('destinybond')) return 'Custap Berry';
 		if (species.name === 'Scyther' && counter.damagingMoves.size > 3) return 'Choice Band';
 		if ((moves.has('bellydrum') || moves.has('tailglow')) && moves.has('substitute')) return 'Salac Berry';
@@ -94,7 +94,6 @@ export class RandomBDSPTeams extends RandomTeams {
 			return (scarfReqs && this.randomChance(2, 3)) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (moves.has('sunnyday')) return 'Heat Rock';
-		if (moves.has('raindance')) return 'Damp Rock';
 		if (counter.get('Special') >= 4 && !moves.has('uturn')) {
 			const scarfReqs = (
 				species.baseStats.spa >= 100 &&
@@ -284,7 +283,11 @@ export class RandomBDSPTeams extends RandomTeams {
 			);
 			return {cull: substituteCullCondition || preferHJKOverCCCullCondition};
 		case 'defog':
-			return {cull: !!counter.setupType || moves.has('healbell') || moves.has('toxicspikes') || !!teamDetails.defog};
+			return {cull: (
+				!!counter.setupType ||
+				['healbell', 'toxicspikes', 'stealthrock', 'spikes'].some(m => moves.has(m)) ||
+				!!teamDetails.defog
+			)};
 		case 'fakeout':
 			return {cull: !!counter.setupType || ['protect', 'rapidspin', 'substitute', 'uturn'].some(m => moves.has(m))};
 		case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
@@ -362,7 +365,7 @@ export class RandomBDSPTeams extends RandomTeams {
 			return {cull: !!counter.get('speedsetup') || !!counter.get('recovery') || otherMoves};
 		case 'quickattack':
 			return {cull: !!counter.get('speedsetup') || (types.has('Rock') && !!counter.get('Status'))};
-		case 'flamethrower':
+		case 'flamethrower': case 'lavaplume':
 			const otherFireMoves = ['heatwave', 'overheat'].some(m => moves.has(m));
 			return {cull: (moves.has('fireblast') && counter.setupType !== 'Physical') || otherFireMoves};
 		case 'overheat':
@@ -625,7 +628,9 @@ export class RandomBDSPTeams extends RandomTeams {
 			return (
 				// For Butterfree
 				(moves.has('hurricane') && abilities.has('Compound Eyes')) ||
-				(counter.get('Status') > 2 && !counter.setupType)
+				(counter.get('Status') > 2 && !counter.setupType) ||
+				// For Yanmega
+				moves.has('protect')
 			);
 		case 'Unaware':
 			return species.id === 'bibarel';

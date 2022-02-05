@@ -1441,7 +1441,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	flygon: {
 		tier: "UU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["dragondance", "earthquake", "outrage", "superpower", "uturn", "roost", "defog"],
+		randomBattleMoves: ["defog", "dragondance", "earthquake", "outrage", "superpower", "uturn", "roost"],
 	},
 	cacnea: {
 		tier: "LC",
