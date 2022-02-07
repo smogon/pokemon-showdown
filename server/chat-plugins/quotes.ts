@@ -113,6 +113,7 @@ export const commands: Chat.ChatCommands = {
 		if (!roomQuotes[index]) {
 			return this.errorReply(`Quote not found.`);
 		}
+		this.runBroadcast(true);
 		const {quote, date, userid} = roomQuotes[index];
 		const time = Chat.toTimestamp(new Date(date), {human: true});
 		const attribution = toID(showAuthor) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
