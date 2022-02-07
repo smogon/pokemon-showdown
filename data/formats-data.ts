@@ -5440,7 +5440,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["calmmind", "earthpower", "heatwave", "moonlight", "photongeyser", "protect"],
 		randomDoubleBattleLevel: 80,
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DOU",
 	},
 	necrozmaduskmane: {
