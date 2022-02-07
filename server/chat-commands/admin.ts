@@ -1422,7 +1422,7 @@ export const commands: Chat.ChatCommands = {
 			[player, pokemon, value] = targets.map(f => f.trim());
 			[player, pokemon] = [player, pokemon].map(toID);
 			void battle.stream.write(
-				`>eval let p=pokemon('${pokemon}', '${pokemon}');p.sethp(${parseInt(value)});` +
+				`>eval let p=pokemon('${player}', '${pokemon}');p.sethp(${parseInt(value)});` +
 				`if (p.isActive)battle.add('-damage',p,p.getHealth);`
 			);
 			break;
