@@ -19,6 +19,7 @@ export interface PollOptions {
 	pendingVotes?: {[userid: string]: number[]};
 	voters?: {[k: string]: number[]};
 	voterIps?: {[k: string]: number[]};
+	maxVotes?: number;
 	totalVotes?: number;
 	timeoutMins?: number;
 	timerEnd?: number;
@@ -41,6 +42,8 @@ export class Poll extends Rooms.MinorActivity {
 	voterIps: {[k: string]: number[]};
 	totalVotes: number;
 	isQuiz: boolean;
+	/** Max votes of 0 means no vote cap */
+	maxVotes: number;
 	answers: Map<number, PollAnswer>;
 	constructor(room: Room, options: PollOptions) {
 		super(room);
@@ -52,6 +55,7 @@ export class Poll extends Rooms.MinorActivity {
 		this.voters = options.voters || {};
 		this.voterIps = options.voterIps || {};
 		this.totalVotes = options.totalVotes || 0;
+		this.maxVotes = options.maxVotes || 0;
 
 		// backwards compatibility
 		if (!options.answers) options.answers = (options as any).questions;
@@ -110,6 +114,12 @@ export class Poll extends Rooms.MinorActivity {
 		}
 		delete this.pendingVotes[userid];
 		this.totalVotes++;
+		if (this.maxVotes && this.totalVotes >= this.maxVotes) {
+			this.end(this.room);
+			return this.room
+				.add(`|c|&|/log The poll hit the max vote cap of ${this.maxVotes}, and has ended.`)
+				.update();
+		}
 
 		this.update();
 		this.save();
@@ -583,6 +593,33 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		displayhelp: [`/poll display - Displays the poll`],
+
+		mv: 'maxvotes',
+		maxvotes(target, room, user) {
+			room = this.requireRoom();
+			this.checkCan('mute', null, room);
+			const poll = this.requireMinorActivity(Poll);
+			let num = parseInt(target);
+			if (this.meansNo(target)) { // special case for convenience
+				num = 0;
+			}
+			if (isNaN(num)) {
+				return this.errorReply(`Invalid max vote cap: '${target}'`);
+			}
+			if (poll.maxVotes === num) {
+				return this.errorReply(`The poll's vote cap is already set to ${num}.`);
+			}
+			poll.maxVotes = num;
+			this.addModAction(`${user.name} set the poll's vote cap to ${num}.`);
+			let ended = false;
+			if (poll.totalVotes > poll.maxVotes) {
+				poll.end(room);
+				this.addModAction(`The poll has more votes than the maximum vote cap, and has ended.`);
+				ended = true;
+			}
+			if (!ended) poll.save();
+			this.modlog('POLL MAXVOTES', null, `${poll.maxVotes}${ended ? ` (ended poll)` : ""}`);
+		},
 	},
 	pollhelp() {
 		this.sendReply(
@@ -600,6 +637,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/poll deletequeue [number]</code> - Deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).<br />` +
 			`<code>/poll clearqueue</code> - Deletes the queue of polls. Requires: % @ # &.<br />` +
 			`<code>/poll viewqueue</code> - View the queue of polls in the room. Requires: % @ # &<br />` +
+			`<code>/poll maxvotes [number]</code> - Set the max poll votes to the given [number]. Requires: % @ # &<br />` +
 			`</details>`
 		);
 	},
