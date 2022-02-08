@@ -883,7 +883,7 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 		// i kinda hate this, but this will always be accurate to the battle players.
 		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
 		for (const line of log) {
-      	if (!line.startsWith('|player|')) continue;
+			if (!line.startsWith('|player|')) continue;
 			// |player|p1|Mia|miapi.png|1000
 			const [, , playerSlot, name] = line.split('|');
 			playerTable[playerSlot as SideID] = toID(name);
