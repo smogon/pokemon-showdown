@@ -95,7 +95,7 @@ export const translations: Translations = {
 		"This game doesn't support /leavegame": "このゲームは /leavegame が使えません。",
 		"You can only do this in unrated non-tour battles.": "これはトーナメントでなくかつレートが有効ではないバトルでのみ有効です。",
 		"User ${targetUsername} not found.": "ユーザー ${targetuser.name} は見つかりませんでした。",
-		"${targetUser.name} was kicked from a battle by ${user.name} ${displayTarget}": "",
+		"${targetUser.name} was kicked from a battle by ${user.name} ${displayReason}": "${targetUser.name}は${user.name}によってバトルからキックされました。(${displayReason})",
 		"You can only set the timer from inside a battle room.": "タイマーはバトル部屋の中で設定できます。",
 		"This game's timer is managed by a different command.": "このゲームのタイマーは他のコマンドで管理されています。",
 		"The game timer is OFF.": "ゲームのタイマーがオフになりました。",
