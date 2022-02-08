@@ -1548,6 +1548,19 @@ export class TeamValidator {
 
 		setHas['ability:' + ability.id] = true;
 
+		if (this.format.id === 'gen8pokebilities') {
+			const species = dex.species.get(set.species);
+			const unSeenAbilities = Object.keys(species.abilities)
+				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S"]);
+
+			if (ability.id !== this.toID(species.abilities['S'])) {
+				for (const abilityName of unSeenAbilities) {
+					setHas['ability:' + toID(abilityName)] = true;
+				}
+			}
+		}
+
 		let banReason = ruleTable.check('ability:' + ability.id);
 		if (banReason) {
 			return `${set.name}'s ability ${ability.name} is ${banReason}.`;
