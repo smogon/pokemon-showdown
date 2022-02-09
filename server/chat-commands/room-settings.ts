@@ -724,7 +724,7 @@ export const commands: Chat.ChatCommands = {
 	hightraffic(target, room, user) {
 		room = this.requireRoom();
 		if (!target) {
-			return this.sendReply(`This room is: ${!room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
+			return this.sendReply(`This room is: ${room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
 		}
 		this.checkCan('makeroom');
 
