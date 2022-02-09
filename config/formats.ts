@@ -362,6 +362,11 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] VGC 2022",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677186/">VGC 2022 Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3695848/">VGC 2022 Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3696395/">VGC 2022 Viability Rankings</a>`,
+		],
 
 		mod: 'gen8',
 		gameType: 'doubles',
