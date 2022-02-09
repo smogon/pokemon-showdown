@@ -2627,7 +2627,13 @@ export const commands: Chat.ChatCommands = {
 		],
 
 		close(target, room, user) {
-			if (!target) return this.parse(`/help helpticket close`);
+			if (!target) {
+				if (room?.roomid.startsWith('help-')) {
+					target = room.roomid.slice(5);
+				} else {
+					return this.parse(`/help helpticket close`);
+				}
+			}
 			const [targetUsername, rest] = this.splitOne(target);
 			let result = rest !== 'false';
 			const ticket = tickets[toID(targetUsername)];
