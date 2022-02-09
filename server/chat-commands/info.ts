@@ -1567,7 +1567,7 @@ export const commands: Chat.ChatCommands = {
 		`/groups [global|room] - Explains only global or room symbols.`,
 		`!groups - Shows everyone that information. Requires: + % @ # &`,
 	],
-	
+
 	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = toID(target);
