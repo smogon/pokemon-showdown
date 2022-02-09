@@ -1879,12 +1879,12 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Random Battle Mayhem",
-		desc: `[Gen 8] Random Battle with elements of Camomons, Inverse, Scalemons, and Shared Power.`,
+		desc: `[Gen 8] Random Battle (No Dmax) with Team Preview and elements of Camomons, Inverse, Scalemons, and Shared Power.`,
 
 		mod: 'sharedpower',
 		team: 'random',
 		searchShow: false,
-		ruleset: ['[Gen 8] Random Battle', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
+		ruleset: ['[Gen 8] Random Battle', 'Team Preview', 'Dynamax Clause', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
 		onBeforeSwitchIn(pokemon) {
 			let format = this.format;
 			if (!format.getSharedPower) format = this.dex.formats.get('gen8sharedpower');
