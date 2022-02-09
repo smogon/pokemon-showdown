@@ -1567,7 +1567,7 @@ export const commands: Chat.ChatCommands = {
 		`/groups [global|room] - Explains only global or room symbols.`,
 		`!groups - Shows everyone that information. Requires: + % @ # &`,
 	],
-
+	
 	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = toID(target);
@@ -1592,10 +1592,19 @@ export const commands: Chat.ChatCommands = {
 			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
+		const indefinitePunishments = [
+			`<strong>Indefinite global punishments</strong>:`,
+			`<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ` +
+				`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
+				` forum after at least 3 months without incident.`,
+			`<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.`,
+		];
+
 		this.sendReplyBox(
 			(showRoom ? roomPunishments.map(str => this.tr(str)).join('<br />') : ``) +
 			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``)
+			(showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``) +
+			(showGlobal ? `<br /><br />${indefinitePunishments.map(str => this.tr(str)).join('<br />')}` : ``)
 		);
 	},
 	punishmentshelp: [
