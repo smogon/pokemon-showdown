@@ -1,4 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+set -o errexit
+set -o errtrace
 cd server/artemis/
 python3 -m pip install -r requirements.txt > /dev/null
 echo "Dependencies installed. Starting model installation..."

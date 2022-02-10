@@ -24,19 +24,17 @@ def now():
 
 logfile = open("logs/artemis.log", "a")
 def log(message):
-	if not debug:
-		return None
-
-	logfile.write(str(now()) + ":" + str.rstrip(message) + "\n")
-	logfile.flush()
+	if debug:
+		logfile.write(f"{str(now())}:{str.rstrip(message)}\n")
+		logfile.flush()
 
 print("ready", flush=True)
 log("ready")
 try:
 	for line in sys.stdin:
-		log("in:" + line)
+		log(f"in:{line}")
 		parts = line.split("|")
-		out = parts.pop(0) + "|"
+		out = f"{parts.pop(0)}|"
 		try:
 			res = model.predict("|".join(parts))
 			for key in res: res[key] = str(res[key]) # json.dumps doesn't like floats
@@ -44,7 +42,7 @@ try:
 		except BaseException as e:
 			out += json.dumps({'error': f"{e}"})
 
-		log("out:" + out)
+		log(f"out:{out}")
 
 		print(out, flush=True)
 except BaseException as e:
