@@ -56,6 +56,12 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 		this.tasks.add(taskId);
 		this.process.stdin.write(`${taskId}|${message}\n`);
 	}
+	destroy() {
+		try {
+			this.process.kill();
+		} catch {}
+		this.pushEnd();
+	}
 }
 
 export const PM = new ProcessManager.StreamProcessManager(module, () => new ArtemisStream(), message => {
@@ -66,6 +72,11 @@ export const PM = new ProcessManager.StreamProcessManager(module, () => new Arte
 
 export class LocalClassifier {
 	static readonly PM = PM;
+	static classifiers: LocalClassifier[] = [];
+	static destroy() {
+		for (const classifier of this.classifiers) classifier.destroy();
+		return this.PM.destroy();
+	}
 	/** If stream exists, model is usable */
 	stream?: Streams.ObjectReadWriteStream<string>;
 	enabled = false;
@@ -73,6 +84,7 @@ export class LocalClassifier {
 	lastTask = 0;
 	readyPromise: Promise<boolean> | null = null;
 	constructor() {
+		LocalClassifier.classifiers.push(this);
 		void this.setupProcesses();
 	}
 	async setupProcesses() {
@@ -106,6 +118,7 @@ export class LocalClassifier {
 		}
 	}
 	destroy() {
+		LocalClassifier.classifiers.splice(LocalClassifier.classifiers.indexOf(this), 1);
 		return this.stream?.destroy();
 	}
 	async classify(text: string) {
