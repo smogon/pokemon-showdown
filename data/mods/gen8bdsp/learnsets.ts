@@ -25431,6 +25431,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			rocktomb: ["8M"],
 			safeguard: ["8M"],
 			seedbomb: ["8L32"],
+			slackoff: ["8L1"],
 			sleeptalk: ["8M"],
 			solarbeam: ["8M"],
 			stealthrock: ["8M"],
