@@ -156,6 +156,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Misty Surge"},
 	},
+	pyroak: {
+		inherit: true,
+		abilities: {0: "Rock Head", 1: "Battle Armor", H: "White Smoke"},
+	},
 	voodoom: {
 		inherit: true,
 		baseStats: {hp: 90, atk: 85, def: 80, spa: 105, spd: 80, spe: 110},
