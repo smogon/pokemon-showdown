@@ -442,7 +442,7 @@ export const pages: Chat.PageTable = {
 			buf += `<div class="ladder pad"><table>`;
 			buf += `<tr><th></th>${keys.map(k => `<th>${k}</th>`).join("")}</tr>`;
 			for (const [ip, table] of punishmentsByIp) {
-				buf += `<tr><td><a href="https://whatismyipaddress/ip/${ip}">${ip}</a></td>`;
+				buf += `<tr><td><a href="https://whatismyipaddress.com/ip/${ip}">${ip}</a></td>`;
 				for (const key of keys) {
 					buf += `<td>${table.get(key) || 0}</td>`;
 				}
