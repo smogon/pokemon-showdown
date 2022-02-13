@@ -22506,27 +22506,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Beautiful",
 	},
-	mindpulse: {
-		num: 968,
-		accuracy: 95,
-		basePower: 80,
-		category: "Special",
-		name: "Mind Pulse",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
-		secondary: {
-			chance: 10,
-			self: {
-				boosts: {
-					spa: 1,
-				},
-			},
-		},
-		target: "any",
-		type: "Psychic",
-		contestType: "Beautiful",
-	},
 	neurotoxicdart: {
 		num: 969,
 		accuracy: 100,

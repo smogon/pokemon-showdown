@@ -6234,12 +6234,6 @@ export const MovesText = {
 		shortDesc: "Hits 2-5 times in one turn.",
 		newmeta: "true",
 	},
-	mindpulse: {
-		name: "Mind Pulse",
-		desc: "Has a 10% chance to raise the user's Special Attack by 1 stage.",
-		shortDesc: "10% chance to raise the user's Special Attack by 1.",
-		newmeta: "true",
-	},
 	neurotoxicdart: {
 		name: "Neurotoxic Dart",
 		desc: "Has a 30% chance to flinch the target.",
