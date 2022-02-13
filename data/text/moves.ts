@@ -5702,8 +5702,8 @@ export const MovesText = {
 	},
 	lordslap: {
 		name: "Lord Slap",
-		desc: "Technical move.",
-		shortDesc: "Technical move.",
+		desc: "OHKO. Do not anger him.",
+		shortDesc: "OHKO. Do not anger him.",
 		newmeta: "true",
 	},dirtydeed: {
 		name: "Dirty Deed",
