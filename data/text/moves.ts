@@ -6221,12 +6221,6 @@ export const MovesText = {
 		shortDesc: "Until Toxic Cloud ends, allies are immune to cloud damage. Toxic Cloud only.",
 		newmeta: "true",
 	},
-	ironmaw: {
-		name: "Iron Maw",
-		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "20% chance to lower the target's Def by 1.",
-		newmeta: "true",
-	},
 	veiloflight: {
 		name: "Veil of Light",
 		desc: "Sets up a Veil of Light on the opposing side of the field, damaging opposing Pokemon that switches out. Fails if 2 layers are already set on the foe. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Light type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively.",

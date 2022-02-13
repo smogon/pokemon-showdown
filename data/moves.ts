@@ -22445,25 +22445,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
-	ironmaw: {
-		num: 964,
-		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		name: "Iron Maw",
-		pp: 15,
-		priority: 0,
-		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		secondary: {
-			chance: 20,
-			boosts: {
-				def: -1,
-			},
-		},
-		target: "normal",
-		type: "Steel",
-		contestType: "Tough",
-	},
 	veiloflight: {
 		num: 965,
 		accuracy: 100,
