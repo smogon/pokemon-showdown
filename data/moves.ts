@@ -19926,11 +19926,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	phazingphantasm: {
 		num: 850,
-		accuracy: 85,
+		accuracy: 80,
 		basePower: 100,
 		category: "Special",
 		name: "Phazing Phantasm",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		critRatio: 2,
