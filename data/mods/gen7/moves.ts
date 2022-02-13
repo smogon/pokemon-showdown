@@ -15,6 +15,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	astralapocalypse: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	baddybad: {
 		inherit: true,
 		accuracy: 100,
@@ -485,6 +489,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	jumpkick: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	kaleidoscopecannon: {
 		inherit: true,
 		isNonstandard: null,
 	},

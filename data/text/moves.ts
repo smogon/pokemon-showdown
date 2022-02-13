@@ -5702,8 +5702,8 @@ export const MovesText = {
 	},
 	lordslap: {
 		name: "Lord Slap",
-		desc: "Technical move.",
-		shortDesc: "Technical move.",
+		desc: "OHKO. Do not anger him.",
+		shortDesc: "OHKO. Do not anger him.",
 		newmeta: "true",
 	},dirtydeed: {
 		name: "Dirty Deed",
@@ -5811,18 +5811,14 @@ export const MovesText = {
 		// start: "  [POKEMON] foresaw an attack!",
 		// activate: "  [TARGET] took the Toxic Fortune attack!",
 	// },
-	// frostychaw: {
-		// name: "Frosty Chaw",
-		// desc: "Has a 10% chance to freeze the target.",
-		// shortDesc: "10% chance to freeze.",
-		// newmeta: "true",
-	// },
+	/*
 	venomousrend: {
 		name: "Venomous Rend",
 		desc: "Has a 40% chance to poison the target.",
 		shortDesc: "40% chance to poison.",
 		newmeta: "true",
 	},
+	*/
 	clearlight: {
 		name: "Clear Light",
 		shortDesc: "Clears user status. Boosts the user's acc. by 1.",
@@ -6207,22 +6203,10 @@ export const MovesText = {
 		shortDesc: "Heals the user by 25% of its max HP. Raises the user's Sp. Atk by 1.",
 		newmeta: "true",
 	},
-	cloakedassault: {
-		name: "Cloaked Assault",
-		desc: "If the weather is Toxic Cloud, this move does not check accuracy.",
-		shortDesc: "Can't miss in toxic cloud.",
-		newmeta: "true",
-	},
 	antidote: {
 		name: "Antidote",
 		desc: "Until Toxic Cloud ends, allies are immune to cloud damage. Toxic Cloud only.",
 		shortDesc: "Until Toxic Cloud ends, allies are immune to cloud damage. Toxic Cloud only.",
-		newmeta: "true",
-	},
-	ironmaw: {
-		name: "Iron Maw",
-		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "20% chance to lower the target's Def by 1.",
 		newmeta: "true",
 	},
 	veiloflight: {
@@ -6244,12 +6228,6 @@ export const MovesText = {
 		shortDesc: "Hits 2-5 times in one turn.",
 		newmeta: "true",
 	},
-	mindpulse: {
-		name: "Mind Pulse",
-		desc: "Has a 10% chance to raise the user's Special Attack by 1 stage.",
-		shortDesc: "10% chance to raise the user's Special Attack by 1.",
-		newmeta: "true",
-	},
 	neurotoxicdart: {
 		name: "Neurotoxic Dart",
 		desc: "Has a 30% chance to flinch the target.",
@@ -6267,12 +6245,6 @@ export const MovesText = {
 		shortDesc: "High critical hit ratio.",
 		newmeta: "true",
 	},
-	primordialfang: {
-		name: "Primordial Fang",
-		desc: "Has a higher chance for a critical hit. Has a 20% chance to flinch the target.",
-		shortDesc: "High critical hit ratio, 20% chance to flinch the target.",
-		newmeta: "true",
-	},
 	dunewave: {
 		name: "Dune Wave",
 		desc: "Has a 10% chance to start a Sandstorm.",
@@ -6282,12 +6254,6 @@ export const MovesText = {
 	nostalgia: {
 		name: "Nostalgia",
 		shortDesc: "Resets all of the user's stat stages to 0.",
-		newmeta: "true",
-	},
-	blazingtail: {
-		name: "Blazing Tail",
-		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the target.",
 		newmeta: "true",
 	},
 	electrotail: {
@@ -6308,4 +6274,14 @@ export const MovesText = {
 		shortDesc: "Power doubles if target is asleep, and wakes it.",
 		newmeta: "true",
 	},
+	astralapocalypse: {
+		name: "Astral Apocalypse",
+		shortDesc: "Power is equal to the base move's Z-Power.",
+		newmeta: "true"
+	},
+	kaleidoscopecannon: {
+		name: "Kaleidoscope Cannon",
+		shortDesc: "Power is equal to the base move's Z-Power.",
+		newmeta: "true"
+	}
 };

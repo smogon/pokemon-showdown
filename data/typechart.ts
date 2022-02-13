@@ -286,7 +286,7 @@ export const TypeChart: {[k: string]: TypeData} = {
 			Grass: 2,
 			Ground: 2,
 			Ice: 1,
-			Light: 3,
+			Light: 2,
 			Normal: 0,
 			Neutral: 0,
 			Poison: 1,

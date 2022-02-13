@@ -2270,12 +2270,12 @@ export const ItemsText = {
 		newmeta: "true",
 	},
 	lightiumz: {
-		name: "Buginium Z",
+		name: "Lightium Z",
 		desc: "If holder has a Light move, this item allows it to use a Light Z-Move.",
 		newmeta: "true",
 	},
 	cosmiumz: {
-		name: "Buginium Z",
+		name: "Cosmium Z",
 		desc: "If holder has a Cosmic move, this item allows it to use a Cosmic Z-Move.",
 		newmeta: "true",
 	},
