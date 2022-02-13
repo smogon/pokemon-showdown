@@ -5817,12 +5817,14 @@ export const MovesText = {
 		// shortDesc: "10% chance to freeze.",
 		// newmeta: "true",
 	// },
+	/*
 	venomousrend: {
 		name: "Venomous Rend",
 		desc: "Has a 40% chance to poison the target.",
 		shortDesc: "40% chance to poison.",
 		newmeta: "true",
 	},
+	*/
 	clearlight: {
 		name: "Clear Light",
 		shortDesc: "Clears user status. Boosts the user's acc. by 1.",

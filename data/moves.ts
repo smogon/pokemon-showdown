@@ -20919,6 +20919,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Cool",
 	},
+	/*
 	venomousrend: {
 		num: 899,
 		accuracy: 100,
@@ -20938,6 +20939,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Cool",
 	},
+	*/
 	clearlight: {
 		num: 900,
 		accuracy: true,
