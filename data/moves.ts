@@ -22390,27 +22390,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
-	cloakedassault: {
-		num: 962,
-		accuracy: 70,
-		basePower: 110,
-		category: "Physical",
-		name: "Cloaked Assault",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, distance: 1, wind: 1},
-		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
-			case 'toxiccloud':
-				move.accuracy = true;
-				break;
-			}
-		},
-		secondary: null,
-		target: "any",
-		type: "Dark",
-		contestType: "Tough",
-	},
 	antidote: {
 		num: 963,
 		accuracy: true,

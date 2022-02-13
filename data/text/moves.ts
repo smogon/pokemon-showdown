@@ -6209,12 +6209,6 @@ export const MovesText = {
 		shortDesc: "Heals the user by 25% of its max HP. Raises the user's Sp. Atk by 1.",
 		newmeta: "true",
 	},
-	cloakedassault: {
-		name: "Cloaked Assault",
-		desc: "If the weather is Toxic Cloud, this move does not check accuracy.",
-		shortDesc: "Can't miss in toxic cloud.",
-		newmeta: "true",
-	},
 	antidote: {
 		name: "Antidote",
 		desc: "Until Toxic Cloud ends, allies are immune to cloud damage. Toxic Cloud only.",
