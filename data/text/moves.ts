@@ -6268,12 +6268,6 @@ export const MovesText = {
 		shortDesc: "Resets all of the user's stat stages to 0.",
 		newmeta: "true",
 	},
-	blazingtail: {
-		name: "Blazing Tail",
-		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the target.",
-		newmeta: "true",
-	},
 	electrotail: {
 		name: "Electro Tail",
 		desc: "Has a 10% chance to paralyze the target.",
