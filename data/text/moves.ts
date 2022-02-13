@@ -6269,12 +6269,6 @@ export const MovesText = {
 		shortDesc: "High critical hit ratio.",
 		newmeta: "true",
 	},
-	primordialfang: {
-		name: "Primordial Fang",
-		desc: "Has a higher chance for a critical hit. Has a 20% chance to flinch the target.",
-		shortDesc: "High critical hit ratio, 20% chance to flinch the target.",
-		newmeta: "true",
-	},
 	dunewave: {
 		name: "Dune Wave",
 		desc: "Has a 10% chance to start a Sandstorm.",

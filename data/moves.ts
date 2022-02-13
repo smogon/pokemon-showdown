@@ -22611,23 +22611,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Flying",
 	},
-	primordialfang: {
-		num: 972,
-		accuracy: 95,
-		basePower: 75,
-		category: "Physical",
-		name: "Primordial Fang",
-		pp: 15,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, bite: 1},
-		secondary: {
-			chance: 20,
-			volatileStatus: 'flinch',
-		},
-		critRatio: 2,
-		target: "normal",
-		type: "Rock",
-	},
 	dunewave: {
 		num: 973,
 		accuracy: 90,
