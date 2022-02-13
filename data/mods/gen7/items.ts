@@ -101,6 +101,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	cosmiumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	coverfossil: {
 		inherit: true,
 		isNonstandard: null,
@@ -340,6 +344,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	leafstone: {
 		inherit: true,
 		desc: "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
+	},
+	lightiumz: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	lopunnite: {
 		inherit: true,

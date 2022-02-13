@@ -6308,4 +6308,14 @@ export const MovesText = {
 		shortDesc: "Power doubles if target is asleep, and wakes it.",
 		newmeta: "true",
 	},
+	astralapocalypse: {
+		name: "Astral Apocalypse",
+		shortDesc: "Power is equal to the base move's Z-Power.",
+		newmeta: "true"
+	},
+	kaleidoscopecannon: {
+		name: "Kaleidoscope Cannon",
+		shortDesc: "Power is equal to the base move's Z-Power.",
+		newmeta: "true"
+	}
 };
