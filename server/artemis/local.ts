@@ -40,7 +40,6 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 			}
 		});
 		this.process.stderr.on('data', data => {
-			data += "";
 			Monitor.crashlog(new Error(data), "An Artemis process");
 		});
 		this.process.on('error', err => {
