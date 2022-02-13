@@ -5811,12 +5811,6 @@ export const MovesText = {
 		// start: "  [POKEMON] foresaw an attack!",
 		// activate: "  [TARGET] took the Toxic Fortune attack!",
 	// },
-	// frostychaw: {
-		// name: "Frosty Chaw",
-		// desc: "Has a 10% chance to freeze the target.",
-		// shortDesc: "10% chance to freeze.",
-		// newmeta: "true",
-	// },
 	/*
 	venomousrend: {
 		name: "Venomous Rend",

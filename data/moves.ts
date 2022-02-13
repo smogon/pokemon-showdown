@@ -20900,25 +20900,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		// type: "Poison",
 		// contestType: "Clever",
 	// },
-	frostychaw: {
-		num: 898,
-		accuracy: 85,
-		basePower: 90,
-		category: "Physical",
-		name: "Frosty Chaw",
-		pp: 15,
-		priority: 0,
-		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		secondaries: [
-			{
-				chance: 10,
-				status: 'frz',
-			},
-		],
-		target: "normal",
-		type: "Ice",
-		contestType: "Cool",
-	},
 	/*
 	venomousrend: {
 		num: 899,
