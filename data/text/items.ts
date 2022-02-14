@@ -2325,9 +2325,8 @@ export const ItemsText = {
 		name: "Fog Machine",
 		desc: "Holder is protected from critical strikes. Single use.",
 		newmeta: "true",
-		
+
 		end: "  [POKEMON] blocked a crit thanks to its Fog Machine!",
-		newmeta: "true",
 	},
 	crawshell: {
 		name: "Craw Shell",
@@ -2360,5 +2359,12 @@ export const ItemsText = {
 		newmeta: "true",
 
 		end: "  [POKEMON] held up its Shame Card against [TARGET]!",
+	},
+	cosmicbrownie: {
+		name: "Cosmic Brownie",
+		desc: "Increases damage of user's next move by 1.5x if hit by a Cosmic-type attack. Single use.",
+		newmeta: "true",
+
+		end: "  [POKEMON] ate its Cosmic Brownie and feels powerful!",
 	},
 };

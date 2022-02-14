@@ -7657,6 +7657,20 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 10028,
 		gen: 5,
 	},
+	cosmicbrownie: {
+		name: "Cosmic Brownie",
+		spritenum: 460,
+		fling: {
+			basePower: 30,
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Cosmic') {
+				target.useItem();
+				target.addVolatile('cosmicbrownie');
+			}
+		},
+
+	}
 	// glowingorb: {
 		// name: "Glowing Orb",
 		// spritenum: 180,

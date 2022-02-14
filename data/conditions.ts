@@ -470,6 +470,16 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
+	cosmicbrownie: {
+		name: 'cosmicbrownie',
+		duration: 1,
+		affectsFainted: false,
+		onBasePowerPriority: 14,
+		onBasePower(basePower, user, target, move) {
+			this.debug('Cosmic Brownie Boost');
+			return this.chainModify([0x1800, 0x1000]);
+		},
+	},
 
 	// weather is implemented here since it's so important to the game
 
