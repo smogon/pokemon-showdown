@@ -10,7 +10,9 @@ export const Formats: {[k: string]: FormatData} = {
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 
+			'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Accuracy Items Clause', 
+			"King's Rock Clause"
 		],
 	},
 	standardnext: {
@@ -1138,6 +1140,33 @@ export const Formats: {[k: string]: FormatData} = {
 				newSpecies.bst += newSpecies.baseStats[stat];
 			}
 			return newSpecies;
+		},
+	},
+	timereverseclause: {
+		effectType: 'ValidatorRule',
+		name: 'Time Reverse Clause',
+		desc: "Stops teams from having more than one Pok&eacute;mon with Time Reverse",
+		banlist: ["Time Reverse > 1"],
+		onBegin() {
+			this.add('rule', 'Time Reverse Clause: Limit one Pok&eacute;mon with Time Reverse');
+		},
+	},
+	accuracyitemsclause: {
+		effectType: 'ValidatorRule',
+		name: 'Accuracy Items Clause',
+		desc: "Bans items that reduce foe's accuracy",
+		banlist: ['Lax Incense', 'Bright Powder'],
+		onBegin() {
+			this.add('rule', "Accuracy Items Clause: Items that reduce foe's accuracy are banned");
+		},
+	},
+	kingsrockclause: {
+		effectType: 'ValidatorRule',
+		name: "King's Rock Clause",
+		desc: "Bans the item King's Rock",
+		banlist: ["King's Rock"],
+		onBegin() {
+			this.add('rule', "King's Rock Clause: King's Rock is banned");
 		},
 	},
 };
