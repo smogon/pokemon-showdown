@@ -38,7 +38,9 @@ export class PrefixManager {
 				}
 				Config.forcedprefixes = convertedPrefixes;
 			}
-			Config.forcedprefixes.map((x: any) => x.prefix = toID(x.prefix));
+			for (const entry of Config.forcedprefixes) {
+				entry.prefix = toID(entry.prefix);
+			}
 		}
 
 		let data: AnyObject[];
@@ -128,9 +130,7 @@ export const commands: Chat.ChatCommands = {
 
 			const types = target ? [prefixManager.validateType(toID(target))] : ['privacy', 'modchat'];
 
-			const entries = Config.forcedprefixes.filter((x: any) => types.includes(x.type)).map((x: any) => {
-				return x.prefix;
-			});
+			const entries = Config.forcedprefixes.filter((x: any) => types.includes(x.type)).map((x: any) => x.prefix);
 
 			return this.sendReplyBox(types.map(type => {
 				const info = entries.filter((x: any) => x.type === type).length ?
