@@ -6449,35 +6449,4 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	pupavo: {
 		tier: "OU",
 	},
-	bidree: {
-		tier: "NFE",
-	},
-	djiarana:{
-		tier: "UU",
-	},
-	mirrorus:{
-		tier: "UU",
-	},
-	beemeow: {
-		tier: "NFE",
-	},
-	honeline:{
-		tier: "RU",
-	},
-	wigglytuffjohto:{
-		tier: "PU",
-	},
-	rampharos:{
-		tier: "RU",
-	},
-	doubragon:{
-		tier: "RU",
-	},
-	jestrick:{
-		tier:"UU",
-		doublesTier:"DOU",
-	},
-	solanca:{
-		tier: "PU",
-	},
 };
