@@ -37,7 +37,11 @@
 
         // syntax style (local syntactical, usually autofixable formatting decisions)
         "@typescript-eslint/no-unnecessary-qualifier": "off",
-        "@typescript-eslint/no-unnecessary-type-arguments": "error",
+
+        // Disabled because of a bug in typescript-eslint.
+        // See https://github.com/typescript-eslint/typescript-eslint/issues/4554
+        "@typescript-eslint/no-unnecessary-type-arguments": "off",
+
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/prefer-regexp-exec": "error",
         "@typescript-eslint/prefer-string-starts-ends-with": "error"
