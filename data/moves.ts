@@ -11486,7 +11486,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "self",
-		type: "Normal",
+		type: "Light",
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
