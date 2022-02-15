@@ -4,7 +4,7 @@ export const translations: Translations = {
 	strings: {
 		"Server version: <b>${version}</b>": "サーバーのバージョン: <b>${version}</b>",
 		"/mee - must not start with a letter or number": "文字や数字を最初においてはいけません。",
-		"What?! How are you not more excited to battle?! Try /battle! to show me you're ready.": "バトルが盛り上がってないって!?覚悟を決めて、/battle だ!",
+		"What?! How are you not more excited to battle?! Try /battle! to show me you're ready.": "バトルが盛り上がってないって!?覚悟を決めて、/battle! だ!",
 		"Access denied for custom avatar - make sure you're on the right account?": "このカスタムアバターを使用する権限がありません。許可されているアカウントでログインしてください。",
 		"Invalid avatar.": "アバター名が正しくありません。",
 		"Avatar changed to:": "アバターを次のものに変更しました。",
