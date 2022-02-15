@@ -164,7 +164,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	vileplume: {
-		randomBattleMoves: ["energyball", "moonlight", "sleeppowder", "sludgebomb", "solarbeam", "sunnyday"],
+		randomBattleMoves: ["energyball", "hiddenpowerfire", "moonlight", "sleeppowder", "sludgebomb", "solarbeam", "sunnyday"],
 		tier: "NU",
 	},
 	bellossom: {
@@ -474,7 +474,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	starmie: {
-		randomBattleMoves: ["hydropump", "icebeam", "rapidspin", "recover", "surf", "thunderbolt"],
+		randomBattleMoves: ["hydropump", "icebeam", "psychic", "rapidspin", "recover", "surf", "thunderbolt"],
 		tier: "OU",
 	},
 	mimejr: {
@@ -987,7 +987,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	blaziken: {
-		randomBattleMoves: ["agility", "fireblast", "flareblitz", "hiddenpowerice", "lowkick", "stoneedge", "superpower", "thunderpunch", "vacuumwave"],
+		randomBattleMoves: ["agility", "fireblast", "flareblitz", "stoneedge", "superpower", "thunderpunch", "vacuumwave"],
 		tier: "UU",
 	},
 	mudkip: {
@@ -1666,7 +1666,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	garchomp: {
-		randomBattleMoves: ["dragonclaw", "earthquake", "firefang", "outrage", "stealthrock", "stoneedge", "substitute", "swordsdance"],
+		randomBattleMoves: ["dragonclaw", "earthquake", "fireblast", "outrage", "stealthrock", "stoneedge", "substitute", "swordsdance"],
 		tier: "Uber",
 	},
 	riolu: {
