@@ -40,6 +40,16 @@ export class PrefixManager {
 			}
 			for (const entry of Config.forcedprefixes) {
 				entry.prefix = toID(entry.prefix);
+				if (!this.timeouts.get(entry.prefix)) {
+					const expireTime = entry.expireAt - Date.now();
+					if (expireTime < 0) {
+						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
+						continue;
+					}
+					this.timeouts.set(entry.prefix, setTimeout(() => {
+						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
+					}, expireTime));
+				}
 			}
 		}
 
@@ -54,6 +64,16 @@ export class PrefixManager {
 			for (const entry of data) {
 				if (Config.forcedprefixes.includes(entry)) continue;
 				Config.forcedprefixes.push(entry);
+				if (!this.timeouts.get(entry.prefix)) {
+					const expireTime = entry.expireAt - Date.now();
+					if (expireTime < 0) {
+						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
+						continue;
+					}
+					this.timeouts.set(entry.prefix, setTimeout(() => {
+						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
+					}, expireTime));
+				}
 			}
 		}
 	}
@@ -79,6 +99,10 @@ export class PrefixManager {
 		}
 
 		Config.forcedprefixes.splice(entry, 1);
+		if (this.timeouts.get(prefix)) {
+			clearTimeout(this.timeouts.get(prefix)!);
+			this.timeouts.delete(prefix);
+		}
 		this.save();
 	}
 
