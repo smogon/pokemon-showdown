@@ -37,6 +37,7 @@ export type VNode = preact.VNode;
 
 export const h = preact.h;
 export const Fragment = preact.Fragment;
+export const Component = preact.Component;
 
 export class FormatText extends preact.Component<{isTrusted?: boolean, replaceLinebreaks?: boolean}> {
 	render() {

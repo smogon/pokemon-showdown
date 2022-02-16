@@ -7,76 +7,101 @@ export const nameList = new Set<string>(JSON.parse(
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
-function getPunishmentHTML(userid: ID, target: string) {
-	return [
-		'Forcerename', 'Namelock', 'Weeknamelock',
-	].map((cmd) => (
-		`<button class="button" name="send" value="/msgroom staff,/${toID(cmd)} ${userid}&#10;/uspage ${target}">${cmd}</button>`
-	)).join(' | ');
+class PunishmentHTML extends Chat.JSX.Component<{userid: ID, target: string}> {
+	render() {
+		const {userid, target} = {...this.props};
+		const buf = [];
+		for (const cmdName of ['Forcerename', 'Namelock', 'Weeknamelock']) {
+			// We have to use dangerouslySetInnerHTML here because otherwise the `value`
+			// property of the button tag is auto escaped, making &#10; into &amp;#10;
+			buf.push(<span dangerouslySetInnerHTML={
+				{
+					__html: `<button class="button" name="send" value="/msgroom staff,/${toID(cmdName)} ${userid}` +
+					`&#10;/uspage ${target}">${cmdName}</button>`,
+				}
+			} />);
+		}
+		return buf;
+	}
 }
 
-function searchUsernames(target: string, page = false) {
-	const results: {offline: string[], online: string[]} = {
-		offline: [],
-		online: [],
-	};
-	for (const curUser of Users.users.values()) {
-		if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
-		if (Punishments.isGlobalBanned(curUser)) continue;
-		if (curUser.connected) {
-			results.online.push(`${!page ? ONLINE_SYMBOL : ''} ${curUser.name}`);
-		} else {
-			results.offline.push(`${!page ? OFFLINE_SYMBOL : ''} ${curUser.name}`);
-		}
-	}
-	for (const k in results) {
-		Utils.sortBy(results[k as keyof typeof results], result => toID(result));
-	}
-	let buf = ``;
-	if (!page) {
-		buf = `Users with a name matching '${target}':<br />`;
-		if (!results.offline.length && !results.online.length) {
-			buf += `No users found.`;
-		} else {
-			buf += results.online.join('; ');
-			if (results.offline.length) {
-				if (results.online.length) buf += `<br /><br />`;
-				buf += results.offline.join('; ');
-			}
-		}
-	} else {
-		buf += `<div class="pad"><h3>Usernames containing "${target}"</h3>`;
-		if (!results.offline.length && !results.online.length) {
-			buf += `<p>No results found.</p>`;
-		} else {
-			if (!results.offline.length && !results.online.length) {
-				buf += `<p>No users found.</p>`;
+class SearchUsernames extends Chat.JSX.Component<{target: string, page?: boolean}> {
+	render() {
+		const {target, page} = {...this.props};
+		const results: {offline: string[], online: string[]} = {
+			offline: [],
+			online: [],
+		};
+		for (const curUser of Users.users.values()) {
+			if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
+			if (Punishments.isGlobalBanned(curUser)) continue;
+			if (curUser.connected) {
+				results.online.push(`${!page ? ONLINE_SYMBOL : ''} ${curUser.name}`);
 			} else {
-				if (results.online.length) {
-					buf += `<div class="ladder pad"><h3>Online users</h3><table><tr><th>Username</th><th>Punish</th></tr>`;
-					for (const username of results.online) {
-						// don't need to escape here since we escape above when fetching results
-						buf += Utils.html`<tr><td><username>${username}</username></td>`;
-						buf += `<td>${getPunishmentHTML(toID(username), target)}</td></tr>`;
-					}
-					buf += `</table></div>`;
-				}
-				if (results.offline.length && results.online.length) {
-					buf += `<hr />`;
-				}
-				if (results.offline.length) {
-					buf += `<div class="ladder pad"><h3>Offline users</h3><table><tr><th>Username</th><th>Punish</th></tr>`;
-					for (const username of results.offline) {
-						// don't need to escape here since we escape above when fetching results
-						buf += Utils.html`<tr><td><username>${username}</username></td>`;
-						buf += `<td>${getPunishmentHTML(toID(username), target)}</td></tr>`;
-					}
-				}
+				results.offline.push(`${!page ? OFFLINE_SYMBOL : ''} ${curUser.name}`);
 			}
 		}
-		buf += `</div>`;
+		for (const k in results) {
+			Utils.sortBy(results[k as keyof typeof results], result => toID(result));
+		}
+		if (!page) {
+			return <>
+				Users with a name matching '{target}':<br />
+				{!results.offline.length && !results.online.length ?
+					<>No users found.</> : <>
+						{results.online.join('; ')}
+						{!!results.offline.length &&
+							<>{!!results.online.length && <><br /><br /></>}{results.offline.join('; ')}</>}
+					</>
+				}
+			</>;
+		}
+		return <div class="pad">
+			<h2>Usernames containing "{target}"</h2>
+			{!results.online.length && !results.offline.length ?
+				<p>No results found.</p> :
+				<>{!!results.online.length && <div class="ladder pad">
+					<h3>Online users</h3>
+					<table>
+						<tr>
+							<th>Username</th>
+							<th>Punish</th>
+						</tr>
+						{(() => {
+							const online = [];
+							for (const username of results.online) {
+								online.push(<tr>
+									<td><username>{username}</username></td>
+									<td><PunishmentHTML userid={toID(username)} target={target} /></td>
+								</tr>);
+							}
+							return online;
+						})()}
+					</table>
+				</div>}
+				{!!(results.online.length && results.offline.length) && <hr />}
+				{!!results.offline.length && <div class="ladder pad">
+					<h3>Offline users</h3>
+					<table>
+						<tr>
+							<th>Username</th>
+							<th>Punish</th>
+						</tr>
+						{(() => {
+							const offline = [];
+							for (const username of results.offline) {
+								offline.push(<tr>
+									<td><username>{username}</username></td>
+									<td><PunishmentHTML userid={toID(username)} target={target} /></td>
+								</tr>);
+							}
+							return offline;
+						})()}
+					</table>
+				</div>}</>
+			}
+		</div>;
 	}
-	return buf;
 }
 
 function saveNames() {
@@ -102,7 +127,7 @@ export const commands: Chat.ChatCommands = {
 			this.parse(`/j view-usersearch-${target}`);
 			return;
 		}
-		return this.sendReplyBox(searchUsernames(target));
+		return this.sendReplyBox(<SearchUsernames target={target} />);
 	},
 	usersearchhelp: [
 		`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`,
@@ -189,13 +214,6 @@ export const pages: Chat.PageTable = {
 		const target = toID(query.shift());
 		if (!target) {
 			this.title = `[Usersearch Terms]`;
-			let buf = `<div class="pad"><strong>Usersearch term list</strong>`;
-			buf += `<button style="float:right;" class="button" name="send" value="/uspage"><i class="fa fa-refresh"></i> Refresh</button>`;
-			buf += `<hr />`;
-			if (!nameList.size) {
-				buf += `None found.`;
-				return buf;
-			}
 			const sorted: {[k: string]: number} = {};
 			for (const curUser of Users.users.values()) {
 				for (const term of nameList) {
@@ -205,18 +223,39 @@ export const pages: Chat.PageTable = {
 					}
 				}
 			}
-			buf += `<div class="ladder pad"><table>`;
-			buf += `<tr><th>Term</th><th>Current matches</th><th></th></tr>`;
-			for (const k of Utils.sortBy(Object.keys(sorted), v => -sorted[v])) {
-				buf += `<tr>`;
-				buf += `<td>${k}</td>`;
-				buf += `<td>${sorted[k]}</td>`;
-				buf += `<td><button class="button" name="send" value="/uspage ${k}">Search</button></td>`;
-				buf += `</tr>`;
-			}
-			return buf;
+			return <div class="pad">
+				<strong>Usersearch term list</strong>
+				<button style={{float: 'right'}} class="button" name="send" value="/uspage">
+					<i class="fa fa-refresh"></i> Refresh
+				</button>
+				<hr />
+				{!nameList.size ?
+					<p>None found.</p> :
+					<div class="ladder pad">
+						<table>
+							<tr>
+								<th>Term</th>
+								<th>Current Matches</th>
+								<th></th>
+							</tr>
+							{(() => {
+								const buf = [];
+								for (const k of Utils.sortBy(Object.keys(sorted), v => -sorted[v])) {
+									buf.push(<tr>
+										<td>{k}</td>
+										<td>{sorted[k]}</td>
+										<td><button class="button" name="send" value={`/uspage ${k}`}>Search</button></td>
+									</tr>);
+								}
+								if (!buf.length) return <tr><td colSpan={3} style={{textAlign: 'center'}}>No names found.</td></tr>;
+								return buf;
+							})()}
+						</table>
+					</div>
+				}
+			</div>;
 		}
 		this.title = `[Usersearch] ${target}`;
-		return searchUsernames(target, true);
+		return <SearchUsernames target={target} page />;
 	},
 };
