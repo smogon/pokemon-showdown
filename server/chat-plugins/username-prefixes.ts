@@ -13,9 +13,7 @@ export class PrefixManager {
 	timeouts = new Map<ID, NodeJS.Timeout>();
 	constructor() {
 		// after a restart/newly using the plugin, load prefixes from config.js
-		if (!Chat.oldPlugins['username-prefixes']) {
-			this.refreshConfig(true);
-		}
+		if (!Chat.oldPlugins['username-prefixes']) this.refreshConfig(true);
 	}
 
 	save() {
@@ -117,6 +115,7 @@ export class PrefixManager {
 export const prefixManager = new PrefixManager();
 
 export const commands: Chat.ChatCommands = {
+	forceprefix: 'usernameprefix',
 	forcedprefix: 'usernameprefix',
 	forcedprefixes: 'usernameprefix',
 	usernameprefixes: 'usernameprefix',
@@ -154,11 +153,12 @@ export const commands: Chat.ChatCommands = {
 
 			const types = target ? [prefixManager.validateType(toID(target))] : ['privacy', 'modchat'];
 
-			const entries = Config.forcedprefixes.filter((x: any) => types.includes(x.type)).map((x: any) => x.prefix);
+			const entries = Config.forcedprefixes.filter((x: any) => types.includes(x.type));
 
 			return this.sendReplyBox(types.map(type => {
-				const info = entries.filter((x: any) => x.type === type).length ?
-					`<code>${entries.filter((x: any) => x.type === type).join('</code>, <code>')}</code>` : `none`;
+				const prefixes = entries.filter((x: any) => x.type === type).map((x: any) => x.prefix);
+				const info = prefixes.length ?
+					`<code>${prefixes.join('</code>, <code>')}</code>` : `none`;
 				return `Username prefixes that disable <strong>${type}</strong>: ${info}.`;
 			}).join('<br />'));
 		},
