@@ -6,7 +6,7 @@
 
 const assert = require('assert').strict;
 const {PrefixManager} = require('../../../server/chat-plugins/username-prefixes');
-const WEEK = 24 * 7 * 60 * 60 * 1000;
+const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
 
 describe('PrefixManager', function () {
 	beforeEach(() => {
@@ -29,7 +29,7 @@ describe('PrefixManager', function () {
 	});
 
 	it('should not overwrite manually specified prefixes', () => {
-		const time = Date.now() + WEEK;
+		const time = Date.now() + PREFIX_DURATION;
 		Config.forcedprefixes = [{prefix: 'manual', type: 'modchat', expireAt: time}];
 		this.prefixManager.addPrefix('nomodchat', 'modchat');
 

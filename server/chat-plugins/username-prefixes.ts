@@ -28,10 +28,10 @@ export class PrefixManager {
 				const convertedPrefixes = [];
 				for (const type in Config.forcedprefixes) {
 					for (const prefix of Config.forcedprefixes[type]) {
-						convertedPrefixes.push({type, prefix, expireAt: Date.now() + WEEK});
+						convertedPrefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
 						this.timeouts.set(prefix, setTimeout(() => {
 							this.removePrefix(prefix, type as 'privacy' | 'modchat');
-						}, WEEK));
+						}, PREFIX_DURATION));
 					}
 				}
 				Config.forcedprefixes = convertedPrefixes;
@@ -83,10 +83,10 @@ export class PrefixManager {
 			throw new Chat.ErrorMessage(`Username prefix '${prefix}' is already configured to force ${type}.`);
 		}
 
-		Config.forcedprefixes.push({type, prefix, expireAt: Date.now() + WEEK});
+		Config.forcedprefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
 		this.timeouts.set(prefix, setTimeout(() => {
 			this.removePrefix(prefix, type);
-		}, WEEK));
+		}, PREFIX_DURATION));
 		this.save();
 	}
 
