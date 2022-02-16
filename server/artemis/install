@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o errtrace
+cd server/artemis/
+python3 -m pip install -r requirements.txt > /dev/null
+echo "Dependencies installed. Starting model installation..."
+python3 -c "import detoxify; detoxify.Detoxify('unbiased')" > /dev/null
+echo "Model installed. Local classifier is ready to use."
