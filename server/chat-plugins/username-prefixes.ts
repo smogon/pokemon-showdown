@@ -6,7 +6,7 @@
 import {FS} from '../../lib';
 
 const PREFIXES_FILE = 'config/chat-plugins/username-prefixes.json';
-const WEEK = 24 * 7 * 60 * 60 * 1000;
+const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
 
 export class PrefixManager {
 	/** prefix:timeout */
