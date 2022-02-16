@@ -28,6 +28,7 @@ import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
+import * as Artemis from './artemis';
 import {Dex} from '../sim';
 import {resolve} from 'path';
 import * as JSX from './chat-jsx';
@@ -1515,7 +1516,7 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [];
+	readonly destroyHandlers: (() => void)[] = [Artemis.destroy];
 	readonly crqHandlers: {[k: string]: CRQHandler} = {};
 	readonly handlers: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
 	/** The key is the name of the plugin. */
