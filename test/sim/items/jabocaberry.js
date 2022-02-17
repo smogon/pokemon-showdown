@@ -33,4 +33,16 @@ describe('Jaboca Berry', function () {
 		const morpeko = battle.p1.active[0];
 		assert.hurtsBy(morpeko, morpeko.maxhp / 8, () => battle.makeChoices());
 	});
+
+	it(`should not activate after a physical move used by a Pokemon with Magic Guard`, function () {
+		battle = common.createBattle([[
+			{species: "Clefable", ability: 'magicguard', moves: ['pound']},
+		], [
+			{species: "Cramorant", item: 'jabocaberry', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[0]);
+		assert.holdsItem(battle.p2.active[0]);
+	});
 });
