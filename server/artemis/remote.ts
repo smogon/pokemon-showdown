@@ -129,7 +129,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 
 // main module check necessary since this gets required in other non-parent processes sometimes
 // when that happens we do not want to take over or set up or anything
-if (!PM.isParentProcess && require.main === module) {
+if (require.main === module) {
 	// This is a child process!
 	global.Config = Config;
 	global.Monitor = {
@@ -149,7 +149,7 @@ if (!PM.isParentProcess && require.main === module) {
 	});
 	// eslint-disable-next-line no-eval
 	Repl.start(`abusemonitor-remote-${process.pid}`, cmd => eval(cmd));
-} else if (PM.isParentProcess) {
+} else if (!process.send) {
 	PM.spawn(Config.remoteartemisprocesses || 1);
 }
 
