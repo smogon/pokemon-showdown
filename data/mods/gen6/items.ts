@@ -56,7 +56,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	jabocaberry: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Physical') {
+			if (move.category === 'Physical' && !source.hasAbility('magicguard')) {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
@@ -128,7 +128,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	rowapberry: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Special') {
+			if (move.category === 'Special' && !source.hasAbility('magicguard')) {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
