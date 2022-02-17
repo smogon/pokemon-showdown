@@ -75,6 +75,15 @@ export const PM = new ProcessManager.StreamProcessManager(module, () => new Arte
 
 export class LocalClassifier {
 	static readonly PM = PM;
+	static readonly ATTRIBUTES: Record<string, unknown> = {
+		sexual_explicit: {},
+		severe_toxicity: {},
+		toxicity: {},
+		obscene: {},
+		identity_attack: {},
+		insult: {},
+		threat: {},
+	};
 	static classifiers: LocalClassifier[] = [];
 	static destroy() {
 		for (const classifier of this.classifiers) classifier.destroy();

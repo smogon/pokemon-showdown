@@ -8,6 +8,7 @@ server/artemis/* @mia-pi-git
 server/chat-plugins/friends.ts @mia-pi-git
 server/chat-plugins/github.ts @mia-pi-git
 server/chat-plugins/hosts.ts @AnnikaCodes
+server/chat-plugins/helptickets*.ts @mia-pi-git
 server/chat-plugins/mafia.ts @HoeenCoder
 server/chat-plugins/othermetas.ts @KrisXV
 server/chat-plugins/quotes.ts @mia-pi-git @KrisXV
