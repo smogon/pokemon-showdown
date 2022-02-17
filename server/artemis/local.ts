@@ -40,6 +40,10 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 			}
 		});
 		this.process.stderr.on('data', data => {
+			if (/Downloading: ([0-9]+)%/i.test(data)) {
+				// this prints to stderr fsr and it should not be throwing
+				return;
+			}
 			Monitor.crashlog(new Error(data), "An Artemis process");
 		});
 		this.process.on('error', err => {
