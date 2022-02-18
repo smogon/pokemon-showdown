@@ -651,7 +651,7 @@ export const Formats: FormatList = [
 			'Giratina-Origin', 'Genesect', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Lugia', 'Lunala', 'Magearna', 'Marowak-Alola', 'Marshadow', 'Melmetal',
 			'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Spectrier',
 			'Urshifu-Base', 'Victini', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base',
-			'Arena Trap', 'Moody', 'Neutralizing Gas', 'Power Construct', 'Shadow Tag', 'Trace', 'Baton Pass',
+			'Arena Trap', 'Moody', 'Neutralizing Gas', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
 		restricted: [
 			'Baneful Bunker', 'Block', 'Copycat', 'Corrosive Gas', 'Detect', 'Destiny Bond', 'Disable', 'Encore', 'Fairy Lock', 'Hypnosis', 'Ingrain',
@@ -686,8 +686,15 @@ export const Formats: FormatList = [
 			}
 			const irrevokablyRestricted = [
 				'Assist', 'Copycat', 'Metronome', 'Mirror Move', 'Sleep Talk', // Could call another unsafe trademark
+				'Recycle', 'Trace', // Causes endless turns
 				'Skill Swap', // Self-propagates indefinitely
 			];
+			for (const m of set.moves) {
+				const move = dex.moves.get(m);
+				if (irrevokablyRestricted.includes(move.name)) {
+					return [`${move.name} is banned from Trademark, irrespective of custom rules, because it can cause endless turns.`];
+				}
+			}
 			if (irrevokablyRestricted.includes(ability.name)) {
 				return [`${ability.name} cannot safely function as a trademark.`];
 			}
