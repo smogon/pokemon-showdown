@@ -25,7 +25,7 @@ describe('Heal Bell', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it.skip(`in a Multi Battle, should heal the major status conditions of the ally's team`, function () {
+	it(`in a Multi Battle, should heal the major status conditions of the ally's team`, function () {
 		battle = common.createBattle({gameType: 'multi'}, [[
 			{species: 'Machamp', ability: 'noguard', moves: ['poisongas']},
 		], [

@@ -502,8 +502,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, distance: 1},
 		onHit(pokemon, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
+			const side = pokemon.side;
+			let allies = side.pokemon;
+			if (side.allySide) allies = allies.concat(side.allySide.pokemon);
 			let success = false;
-			for (const ally of pokemon.side.pokemon) {
+			for (const ally of allies) {
 				if (ally !== source && ((ally.hasAbility('sapsipper')) ||
 						(ally.volatiles['substitute'] && !move.infiltrates))) {
 					continue;
@@ -7713,8 +7716,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(pokemon, source) {
 			this.add('-activate', source, 'move: Heal Bell');
 			const side = pokemon.side;
+			let allies = side.pokemon;
+			if (side.allySide) allies = allies.concat(side.allySide.pokemon);
 			let success = false;
-			for (const ally of side.pokemon) {
+			for (const ally of allies) {
 				if (ally !== source && ally.hasAbility('soundproof')) continue;
 				if (ally.cureStatus()) success = true;
 			}
