@@ -56,7 +56,7 @@ describe('Heal Bell', function () {
 		]]);
 
 		battle.makeChoices();
-		battle.makeChoices('auto', 'switch diggersby', 'auto', 'move healbell');
+		battle.makeChoices('auto', 'move healbell', 'auto', 'switch diggersby');
 		assert.equal(battle.p4.pokemon[0].status, '', `Cubone should not be poisoned.`);
 		assert.equal(battle.p4.pokemon[1].status, '', `Diggersby should not be poisoned.`);
 		assert.equal(battle.p2.pokemon[0].status, '', `Wynaut should not be poisoned.`);
