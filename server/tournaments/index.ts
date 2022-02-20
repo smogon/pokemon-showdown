@@ -15,6 +15,8 @@ export interface TournamentRoomSettings {
 	forceTimer?: boolean;
 	playerCap?: number;
 	showSampleTeams?: boolean;
+	recentToursLength?: number;
+	recentTours?: {name: string, time: number}[];
 }
 
 type Generator = RoundRobin | Elimination;
@@ -1185,6 +1187,19 @@ export class Tournament extends Rooms.RoomGame {
 			bracketData: this.getBracketData(),
 		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
+		const settings = this.room.settings.tournaments;
+		if (settings?.recentToursLength) {
+			if (!settings.recentTours) settings.recentTours = [];
+			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
+				`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
+			settings.recentTours.unshift({name, time: Date.now()});
+			// Use a while loop here in case the threshold gets lowered with /tour settings recenttours
+			// to trim down multiple at once
+			while (settings.recentTours.length > settings.recentToursLength) {
+				settings.recentTours.splice(settings.recentTours.length - 1, 1);
+			}
+			this.room.saveSettings();
+		}
 		this.remove();
 	}
 }
@@ -1263,6 +1278,29 @@ function createTournament(
 }
 
 const commands: Chat.ChatCommands = {
+	recenttours(target, room, user) {
+		this.runBroadcast();
+		room = this.requireRoom();
+		if (!room.settings.tournaments?.recentToursLength) {
+			throw new Chat.ErrorMessage(`Recent tournaments aren't documented in this room.`);
+		}
+		if (!room.settings.tournaments?.recentTours?.length) {
+			throw new Chat.ErrorMessage(`There haven't been any documented tournaments in this room recently.`);
+		}
+		// Shorten array if the recentToursLength gets adjusted
+		const array = room.settings.tournaments.recentTours.filter((x, i) => (
+			i <= room!.settings.tournaments!.recentToursLength! - 1
+		));
+		const {name, time} = array[0];
+		let buf = `The last tournament ended ${Chat.toDurationString(Date.now() - time)} ago - ${name}`;
+		if (array.length > 1) {
+			buf += `<hr /><strong>Previous tournments:</strong> `;
+			buf += array.filter((x, i) => i !== 0).map(x => x.name).join(', ');
+		}
+		this.sendReplyBox(buf);
+	},
+	recenttourshelp: [`/recenttours - Displays the n most recent tour(s).`],
+
 	tour: 'tournament',
 	tours: 'tournament',
 	tournaments: 'tournament',
@@ -1907,7 +1945,7 @@ const commands: Chat.ChatCommands = {
 		settings: {
 			modjoin(target, room, user) {
 				room = this.requireRoom();
-				this.checkCan('announce', null, room);
+				this.checkCan('declare', null, room);
 				if (!target || (!this.meansYes(target) && !this.meansNo(target))) {
 					return this.parse(`/help tour settings`);
 				}
@@ -1937,7 +1975,7 @@ const commands: Chat.ChatCommands = {
 			},
 			scouting(target, room, user) {
 				room = this.requireRoom();
-				this.checkCan('announce', null, room);
+				this.checkCan('declare', null, room);
 				if (!target || (!this.meansYes(target) && !this.meansNo(target))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
 				if (!room.settings.tournaments) room.settings.tournaments = {};
@@ -1965,7 +2003,7 @@ const commands: Chat.ChatCommands = {
 			},
 			forcepublic(target, room, user) {
 				room = this.requireRoom();
-				this.checkCan('announce', null, room);
+				this.checkCan('declare', null, room);
 				if (!target || (!this.meansNo(target) && !this.meansYes(target))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
 				if (!room.settings.tournaments) room.settings.tournaments = {};
@@ -1993,7 +2031,7 @@ const commands: Chat.ChatCommands = {
 			},
 			forcetimer(target, room, user) {
 				room = this.requireRoom();
-				this.checkCan('announce', null, room);
+				this.checkCan('declare', null, room);
 				if (!target || (!this.meansNo(target) && !this.meansYes(target))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
 				if (!room.settings.tournaments) room.settings.tournaments = {};
@@ -2021,7 +2059,7 @@ const commands: Chat.ChatCommands = {
 			},
 			autostart(target, room, user) {
 				room = this.requireRoom();
-				this.checkCan('announce', null, room);
+				this.checkCan('declare', null, room);
 				const num = Number(target);
 				if (!target || (!this.meansYes(target) && !this.meansNo(target) && isNaN(num))) {
 					return this.parse(`/help tour settings`);
@@ -2068,7 +2106,7 @@ const commands: Chat.ChatCommands = {
 			},
 			autodq(target, room, user) {
 				room = this.requireRoom();
-				this.checkCan('announce', null, room);
+				this.checkCan('declare', null, room);
 				const num = Number(target);
 				if (!target || (!this.meansNo(target) && isNaN(num))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
@@ -2104,7 +2142,7 @@ const commands: Chat.ChatCommands = {
 			},
 			playercap(target, room, user) {
 				room = this.requireRoom();
-				this.checkCan('announce', null, room);
+				this.checkCan('declare', null, room);
 				const num = parseInt(target);
 				if (!target || (!this.meansNo(target) && isNaN(num))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
@@ -2145,7 +2183,7 @@ const commands: Chat.ChatCommands = {
 			},
 			sampleteams(target, room, user) {
 				room = this.requireRoom();
-				this.checkCan('announce', null, room);
+				this.checkCan('declare', null, room);
 				if (!target) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
 				if (!room.settings.tournaments) room.settings.tournaments = {};
@@ -2172,6 +2210,45 @@ const commands: Chat.ChatCommands = {
 					return this.sendReply(`Usage: ${this.cmdToken}${this.fullCmd} <on|off>`);
 				}
 			},
+			recenttours(target, room, user) {
+				room = this.requireRoom();
+				this.checkCan('declare', null, room);
+				const num = parseInt(target);
+				if (!target ||
+					(!this.meansNo(target) && toID(target) !== 'forcedelete' &&
+						(isNaN(num) || num > 15 || num < 0))) {
+					return this.parse(`/help tour settings`);
+				}
+				if (!room.settings.tournaments) room.settings.tournaments = {};
+				if (!isNaN(num) && num <= 15 && num > 1) {
+					if (!room.settings.tournaments.recentToursLength) room.settings.tournaments.recentToursLength = 0;
+					if (room.settings.tournaments.recentToursLength === num) {
+						throw new Chat.ErrorMessage(`Recent tournament threshold is already set to ${num}.`);
+					}
+					room.settings.tournaments.recentToursLength = num;
+					room.saveSettings();
+					this.privateModAction(`Recent tournament threshold was set to ${num} by ${user.name}.`);
+					this.modlog('TOUR SETTINGS', null, `recent threshold: ${num}`);
+				} else if (this.meansNo(target) || toID(target) === 'forcedelete') {
+					if (room.settings.tournaments.recentToursLength) {
+						delete room.settings.tournaments.recentToursLength;
+						if (toID(target) === 'forcedelete') {
+							delete room.settings.tournaments.recentTours;
+							this.privateModAction(`Recent tournaments list was deleted by ${user.name}.`);
+							this.modlog('TOUR SETTINGS', null, `recent tours: delete`);
+						}
+						room.saveSettings();
+						this.privateModAction(`Recent tournament threshold was turned off by ${user.name}.`);
+						this.modlog('TOUR SETTINGS', null, `recent threshold: off`);
+					} else {
+						if (toID(target) !== 'forcedelete') {
+							throw new Chat.ErrorMessage(`Recent tournament threshold is already disabled.`);
+						}
+					}
+				} else {
+					this.sendReply(`Usage: ${this.cmdToken}${this.fullCmd} <number|off|forcedelete>`);
+				}
+			},
 			'': 'help',
 			help() {
 				this.parse(`${this.cmdToken}help tour settings`);
@@ -2184,6 +2261,7 @@ const commands: Chat.ChatCommands = {
 			`/tour settings forcetimer <on|off> - Specifies whether users can toggle the timer for every tournament.`,
 			`/tour settings modjoin <on|off> - Specifies whether users can modjoin their battles for every tournament.`,
 			`/tour settings playercap <number> - Sets the playercap for every tournament.`,
+			`/tour settings recenttours <number|off|forcedelete> - Specifies the amount of recent tournaments to list in /recenttours.`,
 			`/tour settings scouting <on|off> - Specifies whether users can spectate other participants for every tournament.`,
 			`/tour settings sampleteams <on|off> - Specifies whether sample teams are shown for every tournament.`,
 			`Requires: # &`,
