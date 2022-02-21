@@ -311,9 +311,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-cureteam', source, '[from] move: Heal Bell');
-			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
-			for (const ally of allies) {
-				ally.clearStatus();
+			for (const pokemon of target.side.pokemon) {
+				pokemon.clearStatus();
 			}
 		},
 	},
