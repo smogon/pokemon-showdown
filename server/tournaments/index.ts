@@ -1197,7 +1197,7 @@ export class Tournament extends Rooms.RoomGame {
 			// Use a while loop here in case the threshold gets lowered with /tour settings recenttours
 			// to trim down multiple at once
 			while (settings.recentTours.length > settings.recentToursLength) {
-				settings.recentTours.splice(settings.recentTours.length - 1, 1);
+				settings.recentTours.pop();
 			}
 			this.room.saveSettings();
 		}
@@ -1250,8 +1250,7 @@ function createTournament(
 	}
 	const settings = room.settings.tournaments;
 	if (settings?.blockRecents && settings.recentTours && settings.recentToursLength) {
-		const recentTours = settings.recentTours
-			.filter((x, i) => i <= settings.recentToursLength! - 1).map(x => x.baseFormat);
+		const recentTours = settings.recentTours.map(x => x.baseFormat);
 		if (recentTours.includes(format.id)) {
 			output.errorReply(`A ${format.name} tournament was made too recently.`);
 			return;
@@ -1298,9 +1297,7 @@ const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`There haven't been any documented tournaments in this room recently.`);
 		}
 		// Shorten array if the recentToursLength gets adjusted
-		const array = room.settings.tournaments.recentTours.filter((x, i) => (
-			i <= room!.settings.tournaments!.recentToursLength! - 1
-		));
+		const array = room.settings.tournaments.recentTours;
 		const {name, time} = array[0];
 		let buf = `The last tournament ended ${Chat.toDurationString(Date.now() - time)} ago - ${name}`;
 		if (array.length > 1) {
@@ -1309,7 +1306,7 @@ const commands: Chat.ChatCommands = {
 		}
 		this.sendReplyBox(buf);
 	},
-	recenttourshelp: [`/recenttours - Displays the n most recent tour(s).`],
+	recenttourshelp: [`/recenttours - Displays the n most recent tour(s), where n represents the number defined by staff (i.e. the 6 most recent tours).`],
 
 	tour: 'tournament',
 	tours: 'tournament',
@@ -2224,34 +2221,40 @@ const commands: Chat.ChatCommands = {
 				room = this.requireRoom();
 				this.checkCan('declare', null, room);
 				const num = parseInt(target);
+				const force = toID(target) === 'forcedelete';
 				if (!target ||
-					(!this.meansNo(target) && toID(target) !== 'forcedelete' &&
+					(!this.meansNo(target) && !force &&
 						(isNaN(num) || num > 15 || num < 0))) {
 					return this.parse(`/help tour settings`);
 				}
 				if (!room.settings.tournaments) room.settings.tournaments = {};
 				if (!isNaN(num) && num <= 15 && num >= 1) {
 					if (room.settings.tournaments.recentToursLength === num) {
-						throw new Chat.ErrorMessage(`Recent tournament threshold is already set to ${num}.`);
+						throw new Chat.ErrorMessage(`Number of recent tournaments to record is already set to ${num}.`);
 					}
 					room.settings.tournaments.recentToursLength = num;
+					if (room.settings.tournaments.recentTours) {
+						while (room.settings.tournaments.recentTours.length > num) {
+							room.settings.tournaments.recentTours.pop();
+						}
+					}
 					room.saveSettings();
-					this.privateModAction(`Recent tournament threshold was set to ${num} by ${user.name}.`);
-					this.modlog('TOUR SETTINGS', null, `recent threshold: ${num}`);
-				} else if (this.meansNo(target) || toID(target) === 'forcedelete') {
+					this.privateModAction(`Number of recent tournaments to record was set to ${num} by ${user.name}.`);
+					this.modlog('TOUR SETTINGS', null, `recent tours: ${num} most recent`);
+				} else if (this.meansNo(target) || force) {
 					if (room.settings.tournaments.recentToursLength) {
 						delete room.settings.tournaments.recentToursLength;
-						if (toID(target) === 'forcedelete') {
+						if (force) {
 							delete room.settings.tournaments.recentTours;
 							this.privateModAction(`Recent tournaments list was deleted by ${user.name}.`);
 							this.modlog('TOUR SETTINGS', null, `recent tours: delete`);
 						}
 						room.saveSettings();
-						this.privateModAction(`Recent tournament threshold was turned off by ${user.name}.`);
-						this.modlog('TOUR SETTINGS', null, `recent threshold: off`);
+						this.privateModAction(`Number of recent tournaments to record was turned off by ${user.name}.`);
+						this.modlog('TOUR SETTINGS', null, `recent tours: off`);
 					} else {
-						if (toID(target) !== 'forcedelete') {
-							throw new Chat.ErrorMessage(`Recent tournament threshold is already disabled.`);
+						if (!force) {
+							throw new Chat.ErrorMessage(`Number of recent tournaments to record is already disabled.`);
 						}
 					}
 				} else {
