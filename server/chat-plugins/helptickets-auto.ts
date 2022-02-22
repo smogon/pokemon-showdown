@@ -53,8 +53,6 @@ function saveSettings() {
 	return FS('config/chat-plugins/ht-auto.json').writeUpdate(() => JSON.stringify(settings));
 }
 
-// partial is just to accept the 'partial' autopunishments done when they're created
-// (they aren't really partial but even if they are, it doesn't matter)
 function visualizePunishment(punishment: AutoPunishment) {
 	const buf = [`punishment: ${punishment.punishment?.toUpperCase()}`];
 	buf.push(`ticket type: ${punishment.ticketType}`);
@@ -97,6 +95,7 @@ export function determinePunishment(
 			for (const type of punishment.severity.type) {
 				if (results[type] < punishment.severity.certainty) continue;
 				hit = true;
+				break;
 			}
 			if (!hit) continue;
 		}
