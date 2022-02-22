@@ -8,6 +8,15 @@ import * as Artemis from '../artemis';
 const ORDERED_PUNISHMENTS = ['WARN', 'FORCERENAME', 'LOCK', 'NAMELOCK', 'WEEKLOCK', 'WEEKNAMELOCK'];
 const PMLOG_IGNORE_TIME = 24 * 60 * 60 * 1000;
 const WHITELIST = ['mia'];
+const REASONS: Record<string, string> = {
+	sexual_explicit: 'explicit messages',
+	severe_toxicity: 'extreme harassment',
+	toxicity: 'harassment',
+	obscene: 'obscene messages',
+	identity_attack: 'using identity-based insults',
+	insult: 'insulting others',
+	threat: 'threatening others',
+};
 
 export interface AutoPunishment {
 	modlogCount?: number;
@@ -86,6 +95,7 @@ export function determinePunishment(
 ) {
 	const punishments = punishmentsFor(ticketType);
 	let action: string | null = null;
+	const types = [];
 	Utils.sortBy(punishments, p => -ORDERED_PUNISHMENTS.indexOf(p.punishment));
 	for (const punishment of punishments) {
 		if (isSingleMessage && !punishment.isSingleMessage) continue;
@@ -95,6 +105,7 @@ export function determinePunishment(
 			for (const type of punishment.severity.type) {
 				if (results[type] < punishment.severity.certainty) continue;
 				hit = true;
+				types.push(type);
 				break;
 			}
 			if (!hit) continue;
@@ -103,7 +114,7 @@ export function determinePunishment(
 			action = punishment.punishment;
 		}
 	}
-	return action;
+	return {action, types};
 }
 
 export function globalModlog(action: string, user: User | ID | null, note: string, roomid?: string) {
@@ -145,7 +156,7 @@ function closeTicket(ticket: TicketState, msg?: string) {
 		by: 'the Artemis AI', // we want it to be clear to end users that it was not a human
 		seen: false,
 		staffReason: '',
-		result: msg || "",
+		result: msg || '',
 		note: `Want to learn more about the AI? <a href="https://570628/#post-9056769">Visit the information thread</a>.`,
 	};
 	writeTickets();
@@ -208,7 +219,7 @@ export const actionHandlers: {
 		user.trackRename = id;
 		Monitor.forceRenames.set(id, true);
 		user.send(
-			'|nametaken|Staff considers your name inappropriate. ' +
+			'|nametaken|Your name was detected to be breaking our name rules. ' +
 			`${result.reason ? `Reason: ${result.reason}. ` : ""}` +
 			'Please change it, or submit a help ticket by typing /ht in chat to appeal this action.'
 		);
@@ -304,7 +315,7 @@ export const checkers: {
 					ip: user.latestIp,
 					actions: ['FORCERENAME', 'NAMELOCK', 'WEEKNAMELOCK'],
 				});
-				let action = determinePunishment('inapname', result, modlog);
+				let {action} = determinePunishment('inapname', result, modlog);
 				if (!action) action = 'forcerename';
 				return new Map([[user.id, {
 					action,
@@ -321,7 +332,8 @@ export const checkers: {
 		for (const link of links) {
 			const log = await getBattleLog(link);
 			if (!log) continue;
-			for (const [userid, pokemon] of Object.entries(log.pokemon)) {
+			for (const [user, pokemon] of Object.entries(log.pokemon)) {
+				const userid = toID(user);
 				let result: {
 					action: string, name: string, result: Record<string, number>, replay: string,
 				} | null = null;
@@ -330,16 +342,15 @@ export const checkers: {
 					const results = await classifier.classify(set.name);
 					if (!results) continue;
 					// atm don't factor in modlog
-					const curAction = determinePunishment('inappokemon', results, []);
+					const curAction = determinePunishment('inappokemon', results, []).action;
 					if (curAction && (!result || supersedes(curAction, result.action))) {
 						result = {action: curAction, name: set.name, result: results, replay: link};
 					}
 				}
 				if (result) {
-					// if action exists, the rest will exist. this is just for TS
-					actions.set(toID(userid), {
+					actions.set(user, {
 						action: result.action,
-						user: toID(userid),
+						user: userid,
 						result: result.result,
 						reason: `Pokemon name detected to be breaking rules - '${result.name}'`,
 						roomid: link,
@@ -365,20 +376,20 @@ export const checkers: {
 			}
 			for (const [id, messageList] of Object.entries(messages)) {
 				const {averages, classified} = await getMessageAverages(messageList);
-				const punishment = determinePunishment('battleharassment', averages, []);
-				if (!punishment) continue;
+				const {action, types} = determinePunishment('battleharassment', averages, []);
+				if (!action) continue;
 				const existingPunishment = actions.get(id);
-				if (!existingPunishment || supersedes(punishment, existingPunishment.action)) {
+				if (!existingPunishment || supersedes(action, existingPunishment.action)) {
 					actions.set(id, {
-						action: punishment,
+						action,
 						user: toID(id),
 						result: averages,
-						reason: `Not following rules in battles`,
+						reason: `Not following rules in battles (${types.map(r => REASONS[r])})`,
 						proof: urls.join(', '),
 					});
 				}
 				for (const result of classified) {
-					const curPunishment = determinePunishment('battleharassment', result, [], true);
+					const curPunishment = determinePunishment('battleharassment', result, [], true).action;
 					if (!curPunishment) continue;
 					const exists = actions.get(id);
 					if (!exists || supersedes(curPunishment, exists.action)) {
@@ -427,7 +438,7 @@ export const checkers: {
 		for (const id of ids) {
 			let punishment;
 			const {averages, classified} = await getMessageAverages(messages[id]);
-			const curPunishment = determinePunishment('pmharassment', averages, []);
+			const curPunishment = determinePunishment('pmharassment', averages, []).action;
 			if (!curPunishment) continue;
 			if (!punishment || supersedes(curPunishment, punishment)) {
 				punishment = curPunishment;
@@ -441,15 +452,15 @@ export const checkers: {
 				});
 			}
 			for (const result of classified) {
-				const singlePunishment = determinePunishment('pmharassment', result, [], true);
-				if (!singlePunishment) continue;
+				const {action, types} = determinePunishment('pmharassment', result, [], true);
+				if (!action) continue;
 				const exists = actions.get(id);
-				if (!exists || supersedes(singlePunishment, exists.action)) {
+				if (!exists || supersedes(action, exists.action)) {
 					actions.set(id, {
-						action: singlePunishment,
+						action,
 						user: id,
 						result: {},
-						reason: "PM harassment",
+						reason: `PM harassment (${types.map(r => REASONS[r])})`,
 					});
 				}
 			}
@@ -507,12 +518,13 @@ export async function runPunishments(ticket: TicketState & {text: [string, strin
 
 export const commands: Chat.ChatCommands = {
 	ath: 'autohelpticket',
-	aht: "autohelpticket",
+	aht: 'autohelpticket',
 	autohelpticket: {
 		''() {
 			return this.parse(`/help autohelpticket`);
 		},
 		ap: 'addpunishment',
+		add: 'addpunishment',
 		addpunishment(target, room, user) {
 			checkAccess(this);
 			if (!toID(target)) return this.parse(`/help autohelpticket`);
@@ -613,6 +625,7 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`AUTOHELPTICKET ADDPUNISHMENT`, null, visualizePunishment(punishment as AutoPunishment));
 		},
 		dp: 'deletepunishment',
+		delete: 'deletepunishment',
 		deletepunishment(target, room, user) {
 			checkAccess(this);
 			const num = parseInt(target) - 1;
@@ -626,6 +639,7 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`AUTOHELPTICKET REMOVE`, null, visualizePunishment(punishment));
 		},
 		vp: 'viewpunishments',
+		view: 'viewpunishments',
 		viewpunishments() {
 			checkAccess(this);
 			let buf = `<strong>Artemis helpticket punishments</strong><hr />`;
