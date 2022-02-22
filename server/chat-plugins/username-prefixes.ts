@@ -160,7 +160,7 @@ export const commands: Chat.ChatCommands = {
 				const info = prefixes.length ?
 					`<code>${prefixes.join('</code>, <code>')}</code>` : `none`;
 				return `Username prefixes that disable <strong>${type}</strong>: ${info}.`;
-			}).join('<br />'));
+			}).join(`<br />`));
 		},
 	},
 	usernameprefixhelp() {
