@@ -511,10 +511,19 @@ export class HelpTicket extends Rooms.RoomGame {
 		const date = Chat.toTimestamp(new Date()).split(' ')[0];
 		void FS(`logs/tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
 	}
-	static async getTextLogs(userid: ID, date?: string) {
+
+	/**
+	 * @param search [search key, search value] (ie ['userid', 'mia']
+	 * returns tickets where the userid property === mia)
+	 * If the [value] is omitted (index 1), searches just for tickets with the given property.
+	 */
+	static async getTextLogs(search: [string, string] | [string], date?: string) {
 		const results = [];
 		if (await checkRipgrepAvailability()) {
-			const args = [`-e`, `userid":"${userid}`, '--no-filename'];
+			const args = [
+				`-e`, search[1] ? `${search[0]}":"${search[1]}` : `${search[0]}":`,
+				'--no-filename',
+			];
 			let lines;
 			try {
 				lines = await ProcessManager.exec([
@@ -546,9 +555,10 @@ export class HelpTicket extends Rooms.RoomGame {
 			for await (const line of stream.byLine()) {
 				if (line.trim()) {
 					const data = JSON.parse(line);
-					if (data.userid === userid) {
-						results.push(data);
-					}
+					const searched = data[search[0]];
+					let matched = !!searched;
+					if (search[1]) matched = searched === search[1];
+					if (matched) results.push(data);
 				}
 			}
 		}
@@ -1919,7 +1929,14 @@ export const pages: Chat.PageTable = {
 				} else {
 					buf += `<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
 				}
-				buf += `<br /><br />`;
+				if (!ticket.state?.recommendResult) {
+					buf += `<br />`;
+					buf += `Rate accuracy of result: `;
+					for (const [title, result] of [['Accurate', 'success'], ['Inaccurate', 'failure']]) {
+						buf += `<button class="button" name="send" value="/aht resolve ${ticket.userid},${result}">${title}</button>`;
+					}
+				}
+				buf += `<br />`;
 			}
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
@@ -1980,7 +1997,7 @@ export const pages: Chat.PageTable = {
 					return this.errorReply(`Invalid date.`);
 				}
 			}
-			const logs = await HelpTicket.getTextLogs(userid, date);
+			const logs = await HelpTicket.getTextLogs(['userid', userid], date);
 			this.title = `[Ticket Logs] ${userid}${date ? ` (${date})` : ''}`;
 			let buf = `<div class="pad"><h2>Ticket logs for ${userid}${date ? ` in the month of ${date}` : ''}</h2>`;
 			buf += `<button class="button" name="send" value="/join ${this.pageid}"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;

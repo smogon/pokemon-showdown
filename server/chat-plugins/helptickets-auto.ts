@@ -1,7 +1,9 @@
 import {FS, Utils} from '../../lib';
 import type {ModlogSearch, ModlogEntry} from '../modlog';
 import {
-	TicketState, getBattleLog, getBattleLinks, writeTickets, notifyStaff, writeStats, HelpTicket,
+	TicketState, getBattleLog, getBattleLinks,
+	writeTickets, notifyStaff, writeStats, HelpTicket,
+	tickets,
 } from './helptickets';
 import * as Artemis from '../artemis';
 
@@ -674,11 +676,105 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`AUTOHELPTICKET TOGGLE`, null, settings.applyPunishments ? 'on' : 'off');
 			saveSettings();
 		},
+		stats(target) {
+			if (!target) target = Chat.toTimestamp(new Date()).split(' ')[0];
+			return this.parse(`/j view-autohelpticketstats-${target}`);
+		},
+		resolve(target, room, user) {
+			this.checkCan('lock');
+			const [ticketId, result] = Utils.splitFirst(target, ',').map(toID);
+			const ticket = tickets[ticketId];
+			if (!ticket?.open) {
+				return this.popupReply(`The user '${ticketId}' does not have a ticket open at present.`);
+			}
+			if (!['success', 'failure'].includes(result)) {
+				return this.popupReply(`The result must be 'success' or 'failure'.`);
+			}
+			(ticket.state ||= {}).recommendResult = result;
+			writeTickets();
+			Chat.refreshPageFor(`help-text-${ticketId}`, 'staff');
+		},
 	},
 	autohelptickethelp: [
 		`/aht addpunishment [args] - Adds a punishment with the given [args]. Requires: whitelist &`,
 		`/aht deletepunishment [index] - Deletes the automatic helpticket punishment at [index]. Requires: whitelist &`,
 		`/aht viewpunishments - View automatic helpticket punishments. Requires: whitelist &`,
 		`/aht togglepunishments [on | off] - Turn [on | off] automatic helpticket punishments. Requires: whitelist &`,
+		`/aht stats - View success rates of the Artemis ticket handler. Requires: whitelist &`,
 	],
+};
+
+export const pages: Chat.PageTable = {
+	async autohelpticketstats(query, user) {
+		checkAccess(this);
+		let month;
+		if (query.length) {
+			month = /[0-9]{4}-[0-9]{2}/.exec(query.join('-'))?.[0];
+		} else {
+			month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
+		}
+		if (!month) {
+			return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
+		}
+
+		this.title = `[Artmeis Ticket Stats] ${month}`;
+		this.setHTML(`<div class="pad"><h3>Artemis ticket stats</h3><hr />Searching...`);
+
+		const found = await HelpTicket.getTextLogs(['recommendResult'], month);
+		const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+
+		let buf = `<div class="pad">`;
+		buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
+		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
+		buf += `<h3>Artemis ticket stats</h3><hr />`;
+		const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
+		const total = {successes: 0, failures: 0, total: 0};
+		for (const ticket of found) {
+			const day = Chat.toTimestamp(new Date(ticket.created)).split(' ')[0];
+			if (!dayStats[day]) dayStats[day] = {successes: 0, failures: 0, total: 0};
+			dayStats[day].total++;
+			total.total++;
+			switch (ticket.state.recommendResult) {
+			case 'success':
+				dayStats[day].successes++;
+				total.successes++;
+				break;
+			case 'failure':
+				dayStats[day].failures++;
+				total.failures++;
+				break;
+			}
+		}
+		buf += `<strong>Total:</strong> ${total.total}<br />`;
+		buf += `<strong>Success rate:</strong> ${percent(total.successes, total.total)}% (${total.successes})<br />`;
+		buf += `<strong>Failure rate:</strong> ${percent(total.failures, total.total)}% (${total.failures})<br />`;
+		buf += `<strong>Day stats:</strong><br />`;
+		buf += `<div class="ladder pad"><table>`;
+		let header = '';
+		let data = '';
+		const sortedDays = Utils.sortBy(Object.keys(dayStats), d => new Date(d).getTime());
+		for (const [i, day] of sortedDays.entries()) {
+			const cur = dayStats[day];
+			if (!cur.total) continue;
+			header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+			data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
+			if (cur.failures) {
+				data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
+			} else { // so one cannot confuse dead tickets & false hit tickets
+				data += ' | 0 (0%)';
+			}
+			data += '</small></td>';
+			// i + 1 ensures it's above 0 always (0 % 5 === 0)
+			if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+				buf += `<tr>${header}</tr><tr>${data}</tr>`;
+				buf += `</div></table>`;
+				buf += `<div class="ladder pad"><table>`;
+				header = '';
+				data = '';
+			}
+		}
+		buf += `<tr>${header}</tr><tr>${data}</tr>`;
+		buf += `</div></table>`;
+		return buf;
+	},
 };
