@@ -59,7 +59,7 @@ export const translations: Translations = {
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - एक सप्ताह के लिए वैश्विक तौर पे निष्कासित करता (connect और खेलने होने से रोकता) है.",
 
 		"<strong>Indefinite global punishments</strong>:": "<strong>अनिश्चितकालीन वैश्विक दंड</strong>:",
-		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - लगातार बुरे व्यवहार के लिए मिलने वाला दंड. तीन माह तक किसी भी दुर्व्यवहार से दूर रहने के बाद ही इसे",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - लगातार बुरे व्यवहार के लिए मिलने वाला दंड. तीन माह तक किसी भी दुर्व्यवहार से दूर रहने के बाद ही इसे ",
 		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '<a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a> forum पर अपील कर सकते हैं.',
 		" forum after at least 3 months without incident.": "",
 		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - सबसे गंभीर मामलों के लिए मिला हुआ स्थाई निष्काशन. ये दंड अपील के लिए अयोग्य है.",

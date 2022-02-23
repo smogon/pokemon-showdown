@@ -60,9 +60,9 @@ export const translations: Translations = {
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Expulsa globalmente a un usuario (le impide conectarse al servidor y poder jugar) por una semana.",
 
 		"<strong>Indefinite global punishments</strong>:": "<strong>Sanciones globales de duración indeterminada</strong>:",
-		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Aplicado ante múltiples instancias de mal comportamiento, rara vez por una sola acción.",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Aplicado ante múltiples instancias de mal comportamiento, rara vez por una sola acción. ",
 		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': 'Puede apelarse en el <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">foro de apelaciones disciplinarias</a>',
-		" forum after at least 3 months without incident.": "después de mínimo 3 meses sin incidentes.",
+		" forum after at least 3 months without incident.": " después de mínimo 3 meses sin incidentes.",
 		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - Expulsión global inapelable, generalmente aplicada por ofensas extremadamente graves o inapropiadas.",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Los drivers de la sala (%)</strong> pueden usar:",

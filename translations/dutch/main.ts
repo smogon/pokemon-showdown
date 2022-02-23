@@ -59,9 +59,9 @@ export const translations: Translations = {
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Verbant een gebruiker globaal (maakt het onmogelijk met de website te verbinden) voor een week.",
 
 		"<strong>Indefinite global punishments</strong>:": "<strong>Globale straffen van onbepaalde tijd</strong>:",
-		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Uitgegeven voor herhaalde gevallen van slecht gedrag. Deze straf is zelden het resultaat van slechts één enkele actie.",
-		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': 'Dit kan door te posten in het <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a> forum.',
-		" forum after at least 3 months without incident.": " Tegen deze straf kan bezwaar gemaakt worden, mits er ten minste 3 maanden lang geen overige incidenten optreden.",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Uitgegeven voor herhaalde gevallen van slecht gedrag. Deze straf is zelden het resultaat van slechts één enkele actie. ",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': ' Tegen deze straf kan bezwaar gemaakt worden, mits er ten minste 3 maanden lang geen overige incidenten optreden.',
+		" forum after at least 3 months without incident.": ' Dit kan door te posten in het <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a> forum.',
 		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - Een globale verbanning waar geen bezwaar op gemaakt kan worden. Deze straf wordt meestal uitgegeven in extreme gevallen van offensief/ongepast gedrag.",
 
 		"<strong>Roomdrivers (%)</strong> can use:": "<strong>Roomdrivers (%)</strong> kunnen de volgende commando's gebruiken:",
