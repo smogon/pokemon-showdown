@@ -49,6 +49,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "",
 		"<strong>blacklist</strong> - Bans a user for a year.": "",
 
 		"<strong>Global punishments</strong>:": "",
@@ -56,6 +57,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "",
+
+		"<strong>Indefinite global punishments</strong>:": "",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '',
+		" forum after at least 3 months without incident.": "",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "",
 
 		"<strong>Room drivers (%)</strong> can use:": "",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "",
