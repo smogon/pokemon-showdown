@@ -50,6 +50,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - 禁言用戶（不能發言）七分鐘。",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - 禁言用戶一個小時。",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - 將用戶封鎖（不能進入該房內）兩天。",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - 將用戶封禁（ 不能進入該房內 ）一個星期。",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - 將用戶封鎖，一年之內不能進入房裡。",
 
 		"<strong>Global punishments</strong>:": "<strong>全服處罰</strong>:",
@@ -57,6 +58,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - 封鎖用戶一個星期。",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - 封鎖用戶ip，兩天內不能使用任何用戶名。",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - 全服封禁（使用戶不能連接和玩游戲）一個星期。",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>無期限的全服懲罰</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - 多是由於反復的糟糕行為，而很少是一次違規所導致。若自懲罰起3個月無再犯，可以在",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '<a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">紀律申訴</a>',
+		" forum after at least 3 months without incident.": "論壇申訴。",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - 無法申訴的全服封禁。多是由最嚴重的冒犯或不當行為導致的。",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>見習管理（%）</strong> 可以使用",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pokémon Showdown rules": "- /warn 或 /k <em>用戶名</em>: 警告用戶並顯示Pokémon Showdown的規則",

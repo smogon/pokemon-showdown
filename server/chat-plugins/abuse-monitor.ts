@@ -7,24 +7,12 @@
  * by Mia.
  * @author mia-pi-git
  */
-
-import {FS, Utils, Net, ProcessManager, Repl} from '../../lib';
+import * as Artemis from '../artemis';
+import {FS, Utils} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 
 const WHITELIST = ["mia"];
-// 20m. this is mostly here so we can use Monitor.slow()
-const PM_TIMEOUT = 20 * 60 * 1000;
-const ATTRIBUTES = {
-	"SEVERE_TOXICITY": {},
-	"TOXICITY": {},
-	"IDENTITY_ATTACK": {},
-	"INSULT": {},
-	"PROFANITY": {},
-	"THREAT": {},
-	"SEXUALLY_EXPLICIT": {},
-	"FLIRTATION": {},
-};
 const PUNISHMENTS = ['WARN', 'MUTE', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
@@ -109,16 +97,6 @@ interface FilterSettings {
 	punishments: PunishmentSettings[];
 }
 
-export interface PerspectiveRequest {
-	languages: string[];
-	requestedAttributes: AnyObject;
-	comment: {text: string};
-}
-
-interface PMRequest {
-	comment: string;
-	fullResponse?: boolean;
-}
 
 interface BattleInfo {
 	players: Record<SideID, ID>;
@@ -170,106 +148,7 @@ function colorName(id: ID, info: BattleInfo) {
 	return REPORT_NAMECOLORS.other;
 }
 
-function time() {
-	return Math.floor(Date.now() / 1000);
-}
-
-export class RollingCounter {
-	counts: number[] = [0];
-	readonly size: number;
-	constructor(limit: number) {
-		this.size = limit;
-	}
-	increment() {
-		this.counts[this.counts.length - 1]++;
-	}
-	rollOver(amount: number) {
-		if (amount > this.size) {
-			this.counts = Array(this.size).fill(0);
-			return;
-		}
-		for (let i = 0; i < amount; i++) {
-			this.counts.push(0);
-			if (this.counts.length > this.size) this.counts.shift();
-		}
-	}
-	mean() {
-		let total = 0;
-		for (const elem of this.counts) total += elem;
-		return total / this.counts.length;
-	}
-}
-
-export class Limiter {
-	readonly counter: RollingCounter;
-	readonly max: number;
-	lastCounterRoll = time();
-	constructor(max: number, period: number) {
-		this.max = max;
-		this.counter = new RollingCounter(period);
-	}
-	shouldRequest() {
-		const now = time();
-		this.counter.rollOver(now - this.lastCounterRoll);
-		this.lastCounterRoll = now;
-
-		if (this.counter.mean() > this.max) return false;
-		this.counter.increment();
-		return true;
-	}
-}
-
-function isCommon(message: string) {
-	message = message.toLowerCase().replace(/\?!\., ;:/g, '');
-	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
-}
-
-const limiter = new Limiter(15, 10);
-let throttleTime: number | null = null;
-export async function classify(text: string) {
-	if (isCommon(text) || !limiter.shouldRequest()) return null;
-	if (throttleTime && (Date.now() - throttleTime < 10000)) {
-		return null;
-	}
-	if (throttleTime) throttleTime = null;
-
-	const requestData: PerspectiveRequest = {
-		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
-		languages: ['en'],
-		requestedAttributes: ATTRIBUTES,
-		comment: {text},
-	};
-	try {
-		const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
-			query: {
-				key: Config.perspectiveKey,
-			},
-			body: JSON.stringify(requestData),
-			headers: {
-				'Content-Type': "application/json",
-			},
-			timeout: 10 * 1000, // 10s
-		});
-		if (!raw) return null;
-		const data = JSON.parse(raw);
-		if (data.error) throw new Error(data.message);
-		const result: {[k: string]: number} = {};
-		for (const k in data.attributeScores) {
-			const score = data.attributeScores[k];
-			result[k] = score.summaryScore.value;
-		}
-		return result;
-	} catch (e: any) {
-		throttleTime = Date.now();
-		if (e.message.startsWith('Request timeout')) {
-			// just ignore this. error on their end not ours.
-			// todo maybe stop sending requests for a bit?
-			return null;
-		}
-		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
-		return null;
-	}
-}
+export const classifier = new Artemis.RemoteClassifier();
 
 async function recommend(user: User, room: GameRoom, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
@@ -346,41 +225,6 @@ function makeScore(roomid: RoomID, result: Record<string, number>) {
 	return {score, flags: [...flags], main};
 }
 
-type PMResult = Record<string, number> | null;
-export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(module, async query => {
-	const result = await classify(query.comment);
-	if (!result) return null;
-	return result;
-}, PM_TIMEOUT, message => {
-	if (message.startsWith('SLOW\n')) {
-		Monitor.slow(message.slice(5));
-	}
-});
-
-if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = Config;
-	global.Monitor = {
-		crashlog(error: Error, source = 'An abuse monitor child process', details: AnyObject | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-		slow(text: string) {
-			process.send!(`CALLBACK\nSLOW\n${text}`);
-		},
-	};
-	global.toID = toID;
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			Monitor.crashlog(err, 'A netfilter child process');
-		}
-	});
-	// eslint-disable-next-line no-eval
-	Repl.start(`abusemonitor-${process.pid}`, cmd => eval(cmd));
-} else {
-	PM.spawn(Config.netfilterprocesses || 1);
-}
-
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	// 2 lines to not hit max-len
 	if (!room?.battle || !['rated', 'unrated'].includes(room.battle.challengeType)) return;
@@ -390,7 +234,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 
 	const roomid = room.roomid;
 	void (async () => {
-		const response = await PM.query({comment: message});
+		const response = await classifier.classify(message);
 		const {score, flags, main} = makeScore(roomid, response || {});
 		if (score) {
 			if (!cache[roomid]) cache[roomid] = {users: {}};
@@ -519,7 +363,7 @@ export const commands: Chat.ChatCommands = {
 			const text = target.trim();
 			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
-			let response = await PM.query({comment: text, fullResponse: true});
+			let response = await classifier.classify(text);
 			if (!response) response = {};
 			// intentionally hardcoded to staff to ensure threshold is never altered.
 			const {score, flags} = makeScore('staff', response);
@@ -645,7 +489,7 @@ export const commands: Chat.ChatCommands = {
 		async respawn(target, room, user) {
 			checkAccess(this);
 			this.sendReply(`Respawning...`);
-			const unspawned = await PM.respawn();
+			const unspawned = await classifier.respawn();
 			this.sendReply(`DONE. ${Chat.count(unspawned, 'processes', 'process')} unspawned.`);
 			this.addGlobalModAction(`${user.name} used /abusemonitor respawn`);
 		},
@@ -703,7 +547,7 @@ export const commands: Chat.ChatCommands = {
 			let [rawType, rawPercent, rawScore] = target.split(',');
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
 			rawScore = toID(rawScore);
-			const types = {...ATTRIBUTES, "ALL": {}};
+			const types = {...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
@@ -741,7 +585,7 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const [rawType, rawPercent] = target.split(',');
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
-			const types = {...ATTRIBUTES, "ALL": {}};
+			const types = {...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
@@ -814,10 +658,10 @@ export const commands: Chat.ChatCommands = {
 						return this.errorReply(`Duplicate type values.`);
 					}
 					value = value.replace(/\s/g, '_').toUpperCase();
-					if (!ATTRIBUTES[value as keyof typeof ATTRIBUTES]) {
+					if (!Artemis.RemoteClassifier.ATTRIBUTES[value as keyof typeof Artemis.RemoteClassifier.ATTRIBUTES]) {
 						return this.errorReply(
 							`Invalid attribute: ${value}. ` +
-							`Valid attributes: ${Object.keys(ATTRIBUTES).join(', ')}.`
+							`Valid attributes: ${Object.keys(Artemis.RemoteClassifier.ATTRIBUTES).join(', ')}.`
 						);
 					}
 					punishment.type = value;
@@ -1185,7 +1029,12 @@ export const pages: Chat.PageTable = {
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
-			buf += `<h2>Abuse Monitor stats for ${month}</h2><hr />`;
+			buf += `<h2>Abuse Monitor stats for ${month}</h2>`;
+			const next = nextMonth(month);
+			const prev = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
+			buf += `<a class="button" target="replace" href="/view-abusemonitor-stats-${prev}-15">Previous month</a> | `;
+			buf += `<a class="button" target="replace" href="/view-abusemonitor-stats-${next}-15">Next month</a>`;
+			buf += `<hr />`;
 			const logs = await Chat.database.all(
 				`SELECT * FROM perspective_stats WHERE timestamp > ? AND timestamp < ?`,
 				[new Date(month).getTime(), new Date(nextMonth(month)).getTime()]
@@ -1309,7 +1158,10 @@ export const pages: Chat.PageTable = {
 			buf += `<button class="button notifying" type="submit">Add punishment</button></details>`;
 			buf += `</form><br />`;
 			buf += `</div><div class="infobox"><h3>Scoring:</h3><hr />`;
-			const keys = Utils.sortBy(Object.keys(ATTRIBUTES), k => [-Object.keys(settings.specials[k] || {}).length, k]);
+			const keys = Utils.sortBy(
+				Object.keys(Artemis.RemoteClassifier.ATTRIBUTES),
+				k => [-Object.keys(settings.specials[k] || {}).length, k]
+			);
 			for (const k of keys) {
 				buf += `<strong>${k}</strong>:<br />`;
 				if (settings.specials[k]) {

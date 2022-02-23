@@ -1731,13 +1731,14 @@ export const Punishments = new class {
 		}
 
 		if (punishments) {
-			let shared = false;
+			const isSharedIP = Punishments.isSharedIp(ip);
+			let sharedAndHasPunishment = false;
 			for (const punishment of punishments) {
-				if (Punishments.isSharedIp(user.latestIp)) {
+				if (isSharedIP) {
 					if (!user.locked && !user.autoconfirmed) {
 						user.semilocked = `#sharedip ${punishment.id}` as PunishType;
 					}
-					shared = true;
+					sharedAndHasPunishment = true;
 				} else {
 					if (['BAN', 'LOCK', 'NAMELOCK'].includes(punishment.type)) {
 						user.locked = punishment.id;
@@ -1751,7 +1752,7 @@ export const Punishments = new class {
 					}
 				}
 			}
-			if (!shared) Punishments.checkPunishmentTime(user, Punishments.byWeight(punishments)[0]);
+			if (!sharedAndHasPunishment) Punishments.checkPunishmentTime(user, Punishments.byWeight(punishments)[0]);
 		}
 
 		return IPTools.lookup(ip).then(({dnsbl, host, hostType}) => {

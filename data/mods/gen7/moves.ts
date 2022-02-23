@@ -344,11 +344,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	healbell: {
 		inherit: true,
-		onHit(pokemon, source) {
+		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			const side = pokemon.side;
 			let success = false;
-			for (const ally of side.pokemon) {
+			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+			for (const ally of allies) {
 				if (ally.hasAbility('soundproof')) continue;
 				if (ally.cureStatus()) success = true;
 			}

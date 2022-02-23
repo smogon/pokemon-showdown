@@ -55,6 +55,12 @@ export const translations: Translations = {
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Sperrt einen Nutzer für 2 Tage und hindert ihn daran, einen Nutzernamen zu haben.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Verbannt einen Nutzer für 1 Woche vom Server (verbietet es ihm, sich zu verbinden und zu kämpfen).",
 
+		"<strong>Indefinite global punishments</strong>:": "",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '',
+		" forum after at least 3 months without incident.": "",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "",
+
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Raum-Driver (%)</strong> können nutzen:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn oder /k <em>Nutzernamen</em>: Verwarnt einen Nutzer und zeigt ihm die Regeln von Pok&eacute;mon Showdown",
 		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute oder /m <em>Nutzername</em>: Schaltet einen Nutzer für 7 Minuten stumm",
