@@ -55,7 +55,14 @@ export const translations: Translations = {
 		"<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.": "<strong>lock</strong> - 2日間ロックされ、全てのチャット部屋とプライベートメッセージで発言できなくなります。（グローバルスタッフとのPM除く）",
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - 1週間ロックされます",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - 2日間ロックせれ、ユーザー名も使えなくなります。",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - 1週間その部屋からBANされます。",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - 1週間全てのチャット部屋とバトルからバンされます。",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>無期限の懲罰</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - 基本的に複数回にわたる違反行為に対して取られる処置であり、一度の違反行為でこの処置が取られることは稀です。3ヶ月以上問題がなければ、",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '<a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>',
+		" forum after at least 3 months without incident.": "にて控訴することが可能になります。",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - 最も深刻な違反行為に対して取られる処置であり、控訴することは不可能です。",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>ドライバー（%）</strong> コマンド:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn 又は /k <em>ユーザー名</em>: ユーザーが警告され、当サイトのルールのウィンドウが表示されます。",
