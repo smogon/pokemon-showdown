@@ -152,11 +152,9 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('rangeban');
 
 			const types = target ? [prefixManager.validateType(toID(target))] : ['privacy', 'modchat'];
-
-			const entries = Config.forcedprefixes.filter((x: any) => types.includes(x.type));
-
+			
 			return this.sendReplyBox(types.map(type => {
-				const prefixes = entries.filter((x: any) => x.type === type).map((x: any) => x.prefix);
+				const prefixes = Config.forcedprefixes[type] || [];
 				const info = prefixes.length ?
 					`<code>${prefixes.join('</code>, <code>')}</code>` : `none`;
 				return `Username prefixes that disable <strong>${type}</strong>: ${info}.`;
