@@ -159,7 +159,10 @@ function closeTicket(ticket: TicketState, msg?: string) {
 		seen: false,
 		staffReason: '',
 		result: msg || '',
-		note: `Want to learn more about the AI? <a href="https://570628/#post-9056769">Visit the information thread</a>.`,
+		note: (
+			`Want to learn more about the AI? ` +
+			`<a href="https://www.smogon.com/forums/threads/\3570628/#post-9056769">Visit the information thread</a>.`
+		),
 	};
 	writeTickets();
 	notifyStaff();
@@ -519,7 +522,6 @@ export async function runPunishments(ticket: TicketState & {text: [string, strin
 }
 
 export const commands: Chat.ChatCommands = {
-	ath: 'autohelpticket',
 	aht: 'autohelpticket',
 	autohelpticket: {
 		''() {
