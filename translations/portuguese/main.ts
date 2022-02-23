@@ -60,7 +60,7 @@ export const translations: Translations = {
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Bane globalmente um usu&aacute;rio (ou seja, impede-o de se conectar ao servidor e de jogar) por uma semana.",
 
 		"<strong>Indefinite global punishments</strong>:": "<strong>Punições globais de duração indeterminada</strong>:",
-		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - aplicado em múltiplos casos de má conduta e raramente é resultado de uma única ação.",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - aplicado em múltiplos casos de má conduta e raramente é resultado de uma única ação. ",
 		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': 'É possível fazer um apelo no <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">fórum Discipline Appeals</a>',
 		" forum after at least 3 months without incident.": " após pelo menos 3 meses sem um incidente.",
 		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - trata-se de um banimento global geralmente aplicado aos casos mais severos de comportamentos ofensivos e/ou inapropriados. Não é possível fazer um apelo.",

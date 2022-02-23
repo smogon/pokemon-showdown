@@ -1592,20 +1592,20 @@ export const commands: Chat.ChatCommands = {
 			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
-		const indefinitePunishments = [
-			`<strong>Indefinite global punishments</strong>:`,
-			`<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ` +
-				`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
-				` forum after at least 3 months without incident.`,
-			`<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.`,
-		];
+        const indefinitePunishments = [
+            this.tr`<strong>Indefinite global punishments</strong>:`,
+            this.tr`<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ` +
+                this.tr`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
+                this.tr` forum after at least 3 months without incident.`,
+            this.tr`<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.`,
+        ];
 
-		this.sendReplyBox(
-			(showRoom ? roomPunishments.map(str => this.tr(str)).join('<br />') : ``) +
-			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``) +
-			(showGlobal ? `<br /><br />${indefinitePunishments.map(str => this.tr(str)).join('<br />')}` : ``)
-		);
+        this.sendReplyBox(
+            (showRoom ? roomPunishments.map(str => this.tr(str)).join('<br />') : ``) +
+            (showRoom && showGlobal ? `<br /><br />` : ``) +
+            (showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``) +
+            (showGlobal ? `<br /><br />${indefinitePunishments.join('<br />')}` : ``)
+        );
 	},
 	punishmentshelp: [
 		`/punishments - Explains punishments.`,
