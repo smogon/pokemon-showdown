@@ -161,7 +161,7 @@ function closeTicket(ticket: TicketState, msg?: string) {
 		result: msg || '',
 		note: (
 			`Want to learn more about the AI? ` +
-			`<a href="https://www.smogon.com/forums/threads/\3570628/#post-9056769">Visit the information thread</a>.`
+			`<a href="https://www.smogon.com/forums/threads/3570628/#post-9056769">Visit the information thread</a>.`
 		),
 	};
 	writeTickets();
