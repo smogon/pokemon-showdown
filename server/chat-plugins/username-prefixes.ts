@@ -22,8 +22,7 @@ export class PrefixManager {
 
 	refreshConfig(configJustLoaded = false) {
 		if (!Config.forcedprefixes) Config.forcedprefixes = [];
-		if (configJustLoaded) {
-			// if we just loaded the config file, ensure that all prefixes are IDs
+		if (!Array.isArray(Config.forcedprefixes)) { // ensure everything is in the right format
 			if (!Array.isArray(Config.forcedprefixes)) {
 				const convertedPrefixes = [];
 				for (const type in Config.forcedprefixes) {
@@ -36,6 +35,8 @@ export class PrefixManager {
 				}
 				Config.forcedprefixes = convertedPrefixes;
 			}
+		}
+		if (configJustLoaded) {
 			for (const entry of Config.forcedprefixes) {
 				entry.prefix = toID(entry.prefix);
 				if (!this.timeouts.get(entry.prefix)) {
@@ -152,9 +153,11 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('rangeban');
 
 			const types = target ? [prefixManager.validateType(toID(target))] : ['privacy', 'modchat'];
-			
+
+			const entries = Config.forcedprefixes.filter((x: any) => types.includes(x.type));
+
 			return this.sendReplyBox(types.map(type => {
-				const prefixes = Config.forcedprefixes[type] || [];
+				const prefixes = entries.filter((x: any) => x.type === type).map((x: any) => x.prefix);
 				const info = prefixes.length ?
 					`<code>${prefixes.join('</code>, <code>')}</code>` : `none`;
 				return `Username prefixes that disable <strong>${type}</strong>: ${info}.`;
