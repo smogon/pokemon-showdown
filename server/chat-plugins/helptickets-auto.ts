@@ -382,17 +382,19 @@ export const checkers: {
 			for (const [id, messageList] of Object.entries(messages)) {
 				const {averages, classified} = await getMessageAverages(messageList);
 				const {action, types} = determinePunishment('battleharassment', averages, []);
-				if (!action) continue;
-				const existingPunishment = actions.get(id);
-				if (!existingPunishment || supersedes(action, existingPunishment.action)) {
-					actions.set(id, {
-						action,
-						user: toID(id),
-						result: averages,
-						reason: `Not following rules in battles (${types.map(r => REASONS[r])})`,
-						proof: urls.join(', '),
-					});
+				if (action) {
+					const existingPunishment = actions.get(id);
+					if (!existingPunishment || supersedes(action, existingPunishment.action)) {
+						actions.set(id, {
+							action,
+							user: toID(id),
+							result: averages,
+							reason: `Not following rules in battles (${types.map(r => REASONS[r])})`,
+							proof: urls.join(', '),
+						});
+					}
 				}
+
 				for (const result of classified) {
 					const curPunishment = determinePunishment('battleharassment', result, [], true).action;
 					if (!curPunishment) continue;
@@ -402,7 +404,7 @@ export const checkers: {
 							action: curPunishment,
 							user: toID(id),
 							result: averages,
-							reason: `Not following rules in battles`,
+							reason: `Not following rules in battles (${types.map(r => REASONS[r])})`,
 							proof: urls.join(', '),
 						});
 					}
@@ -444,17 +446,18 @@ export const checkers: {
 			let punishment;
 			const {averages, classified} = await getMessageAverages(messages[id]);
 			const curPunishment = determinePunishment('pmharassment', averages, []).action;
-			if (!curPunishment) continue;
-			if (!punishment || supersedes(curPunishment, punishment)) {
-				punishment = curPunishment;
-			}
-			if (punishment) {
-				actions.set(id, {
-					action: punishment,
-					user: id,
-					result: {},
-					reason: "PM harassment",
-				});
+			if (curPunishment) {
+				if (!punishment || supersedes(curPunishment, punishment)) {
+					punishment = curPunishment;
+				}
+				if (punishment) {
+					actions.set(id, {
+						action: punishment,
+						user: id,
+						result: {},
+						reason: "PM harassment",
+					});
+				}
 			}
 			for (const result of classified) {
 				const {action, types} = determinePunishment('pmharassment', result, [], true);
@@ -731,7 +734,6 @@ export const pages: Chat.PageTable = {
 		buf += `<h3>Artemis ticket stats</h3><hr />`;
 		const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
 		const total = {successes: 0, failures: 0, total: 0};
-		const failed = [];
 		for (const ticket of found) {
 			const day = Chat.toTimestamp(new Date(ticket.created)).split(' ')[0];
 			if (!dayStats[day]) dayStats[day] = {successes: 0, failures: 0, total: 0};
@@ -745,7 +747,6 @@ export const pages: Chat.PageTable = {
 			case 'failure':
 				dayStats[day].failures++;
 				total.failures++;
-				failed.push([ticket.userid, ticket.type]);
 				break;
 			}
 		}
@@ -779,14 +780,6 @@ export const pages: Chat.PageTable = {
 		}
 		buf += `<tr>${header}</tr><tr>${data}</tr>`;
 		buf += `</div></table>`;
-		buf += `<br />`;
-		if (failed.length) {
-			buf += `<details class="readmore"><summary>Marked as inaccurate</summary>`;
-			buf += failed.map(([userid, type]) => (
-				`<a href="/view-help-text-${userid}">${userid}</a> (${type})`
-			)).join('<br />');
-			buf += `</details>`;
-		}
 		return buf;
 	},
 };
