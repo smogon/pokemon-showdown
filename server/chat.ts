@@ -2455,6 +2455,20 @@ export const Chat = new class {
 		return probe(url);
 	}
 
+	parseArguments(str: string, delim = ',', paramDelim = '=', useIDs = true) {
+		const result: Record<string, string[]> = {};
+		for (const part of str.split(delim)) {
+			let [key, val] = Utils.splitFirst(part, paramDelim).map(f => f.trim());
+			if (useIDs) key = toID(key);
+			if (!toID(key) || !toID(val)) {
+				throw new Chat.ErrorMessage(`Invalid option ${part}. Must be in [key]${paramDelim}[value] format.`);
+			}
+			if (!result[key]) result[key] = [];
+			result[key].push(val);
+		}
+		return result;
+	}
+
 	/**
 	 * Normalize a message for the purposes of applying chat filters.
 	 *
