@@ -734,6 +734,7 @@ export const pages: Chat.PageTable = {
 		buf += `<h3>Artemis ticket stats</h3><hr />`;
 		const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
 		const total = {successes: 0, failures: 0, total: 0};
+		const failed = [];
 		for (const ticket of found) {
 			const day = Chat.toTimestamp(new Date(ticket.created)).split(' ')[0];
 			if (!dayStats[day]) dayStats[day] = {successes: 0, failures: 0, total: 0};
@@ -747,6 +748,7 @@ export const pages: Chat.PageTable = {
 			case 'failure':
 				dayStats[day].failures++;
 				total.failures++;
+				failed.push([ticket.userid, ticket.type]);
 				break;
 			}
 		}
@@ -780,6 +782,14 @@ export const pages: Chat.PageTable = {
 		}
 		buf += `<tr>${header}</tr><tr>${data}</tr>`;
 		buf += `</div></table>`;
+		buf += `<br />`;
+		if (failed.length) {
+			buf += `<details class="readmore"><summary>Marked as inaccurate</summary>`;
+			buf += failed.map(([userid, type]) => (
+				`<a href="/view-help-text-${userid}">${userid}</a> (${type})`
+			)).join('<br />');
+			buf += `</details>`;
+		}
 		return buf;
 	},
 };
