@@ -1140,14 +1140,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 	static battleForcedSetting(user: User, key: 'modchat' | 'privacy') {
 		if (Config.forcedpublicprefixes) {
-			if (!Config.forcedprefixes) Config.forcedprefixes = {};
-			if (!Config.forcedprefixes.privacy) Config.forcedprefixes.privacy = [];
-			Config.forcedprefixes.privacy.push(...Config.forcedpublicprefixes);
+			for (const prefix of Config.forcedpublicprefixes) {
+				Chat.plugins['username-prefixes']?.prefixManager.addPrefix(prefix, 'privacy');
+			}
 			delete Config.forcedpublicprefixes;
 		}
-		if (!Config.forcedprefixes?.[key]) return null;
-		for (const prefix of Config.forcedprefixes[key]) {
-			if (user.id.startsWith(toID(prefix))) return prefix;
+		if (!Config.forcedprefixes) return null;
+		for (const {type, prefix} of Config.forcedprefixes) {
+			if (user.id.startsWith(toID(prefix)) && type === key) return prefix;
 		}
 		return null;
 	}
