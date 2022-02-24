@@ -695,7 +695,11 @@ export const commands: Chat.ChatCommands = {
 		},
 		stats(target) {
 			if (!target) target = Chat.toTimestamp(new Date()).split(' ')[0];
-			return this.parse(`/j view-autohelpticketstats-${target}`);
+			return this.parse(`/j view-autohelpticket-stats-${target}`);
+		},
+		logs(target) {
+			if (!target) target = Chat.toTimestamp(new Date()).split(' ')[0];
+			return this.parse(`/j view-autohelpticket-logs-${target}`);
 		},
 		resolve(target, room, user) {
 			this.checkCan('lock');
@@ -722,86 +726,116 @@ export const commands: Chat.ChatCommands = {
 };
 
 export const pages: Chat.PageTable = {
-	async autohelpticketstats(query, user) {
-		checkAccess(this);
-		let month;
-		if (query.length) {
-			month = /[0-9]{4}-[0-9]{2}/.exec(query.join('-'))?.[0];
-		} else {
-			month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-		}
-		if (!month) {
-			return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
-		}
-
-		this.title = `[Artemis Ticket Stats] ${month}`;
-		this.setHTML(`<div class="pad"><h3>Artemis ticket stats</h3><hr />Searching...`);
-
-		const found = await HelpTicket.getTextLogs(['recommendResult'], month);
-		const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
-
-		let buf = `<div class="pad">`;
-		buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
-		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
-		buf += `<h3>Artemis ticket stats</h3><hr />`;
-		const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
-		const total = {successes: 0, failures: 0, total: 0};
-		const failed = [];
-		for (const ticket of found) {
-			const day = Chat.toTimestamp(new Date(ticket.created)).split(' ')[0];
-			if (!dayStats[day]) dayStats[day] = {successes: 0, failures: 0, total: 0};
-			dayStats[day].total++;
-			total.total++;
-			switch (ticket.state.recommendResult) {
-			case 'success':
-				dayStats[day].successes++;
-				total.successes++;
-				break;
-			case 'failure':
-				dayStats[day].failures++;
-				total.failures++;
-				failed.push([ticket.userid, ticket.type]);
-				break;
+	autohelpticket: {
+		async stats(query, user) {
+			checkAccess(this);
+			let month;
+			if (query.length) {
+				month = /[0-9]{4}-[0-9]{2}/.exec(query.join('-'))?.[0];
+			} else {
+				month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 			}
-		}
-		buf += `<strong>Total:</strong> ${total.total}<br />`;
-		buf += `<strong>Success rate:</strong> ${percent(total.successes, total.total)}% (${total.successes})<br />`;
-		buf += `<strong>Failure rate:</strong> ${percent(total.failures, total.total)}% (${total.failures})<br />`;
-		buf += `<strong>Day stats:</strong><br />`;
-		buf += `<div class="ladder pad"><table>`;
-		let header = '';
-		let data = '';
-		const sortedDays = Utils.sortBy(Object.keys(dayStats), d => new Date(d).getTime());
-		for (const [i, day] of sortedDays.entries()) {
-			const cur = dayStats[day];
-			if (!cur.total) continue;
-			header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
-			data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
-			if (cur.failures) {
-				data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
-			} else { // so one cannot confuse dead tickets & false hit tickets
-				data += ' | 0 (0%)';
+			if (!month) {
+				return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
 			}
-			data += '</small></td>';
-			// i + 1 ensures it's above 0 always (0 % 5 === 0)
-			if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
-				buf += `<tr>${header}</tr><tr>${data}</tr>`;
-				buf += `</div></table>`;
-				buf += `<div class="ladder pad"><table>`;
-				header = '';
-				data = '';
+
+			this.title = `[Artemis Ticket Stats] ${month}`;
+			this.setHTML(`<div class="pad"><h3>Artemis ticket stats</h3><hr />Searching...`);
+
+			const found = await HelpTicket.getTextLogs(['recommendResult'], month);
+			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+
+			let buf = `<div class="pad">`;
+			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
+			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
+			buf += `<h3>Artemis ticket stats</h3><hr />`;
+			const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
+			const total = {successes: 0, failures: 0, total: 0};
+			const failed = [];
+			for (const ticket of found) {
+				const day = Chat.toTimestamp(new Date(ticket.created)).split(' ')[0];
+				if (!dayStats[day]) dayStats[day] = {successes: 0, failures: 0, total: 0};
+				dayStats[day].total++;
+				total.total++;
+				switch (ticket.state.recommendResult) {
+				case 'success':
+					dayStats[day].successes++;
+					total.successes++;
+					break;
+				case 'failure':
+					dayStats[day].failures++;
+					total.failures++;
+					failed.push([ticket.userid, ticket.type]);
+					break;
+				}
 			}
-		}
-		buf += `<tr>${header}</tr><tr>${data}</tr>`;
-		buf += `</div></table>`;
-		buf += `<br />`;
-		if (failed.length) {
-			buf += `<details class="readmore"><summary>Marked as inaccurate</summary>`;
-			buf += failed.map(([userid, type]) => (
-				`<a href="/view-help-text-${userid}">${userid}</a> (${type})`
-			)).join('<br />');
-			buf += `</details>`;
-		}
-		return buf;
+			buf += `<strong>Total:</strong> ${total.total}<br />`;
+			buf += `<strong>Success rate:</strong> ${percent(total.successes, total.total)}% (${total.successes})<br />`;
+			buf += `<strong>Failure rate:</strong> ${percent(total.failures, total.total)}% (${total.failures})<br />`;
+			buf += `<strong>Day stats:</strong><br />`;
+			buf += `<div class="ladder pad"><table>`;
+			let header = '';
+			let data = '';
+			const sortedDays = Utils.sortBy(Object.keys(dayStats), d => new Date(d).getTime());
+			for (const [i, day] of sortedDays.entries()) {
+				const cur = dayStats[day];
+				if (!cur.total) continue;
+				header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+				data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
+				if (cur.failures) {
+					data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
+				} else { // so one cannot confuse dead tickets & false hit tickets
+					data += ' | 0 (0%)';
+				}
+				data += '</small></td>';
+				// i + 1 ensures it's above 0 always (0 % 5 === 0)
+				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+					buf += `<tr>${header}</tr><tr>${data}</tr>`;
+					buf += `</div></table>`;
+					buf += `<div class="ladder pad"><table>`;
+					header = '';
+					data = '';
+				}
+			}
+			buf += `<tr>${header}</tr><tr>${data}</tr>`;
+			buf += `</div></table>`;
+			buf += `<br />`;
+			if (failed.length) {
+				buf += `<details class="readmore"><summary>Marked as inaccurate</summary>`;
+				buf += failed.map(([userid, type]) => (
+					`<a href="/view-help-text-${userid}">${userid}</a> (${type})`
+				)).join('<br />');
+				buf += `</details>`;
+			}
+			return buf;
+		},
+		async logs(query, user) {
+			checkAccess(this);
+			let month;
+			if (query.length) {
+				month = /[0-9]{4}-[0-9]{2}/.exec(query.join('-'))?.[0];
+			} else {
+				month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
+			}
+			if (!month) {
+				return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
+			}
+			this.title = `[Artemis Ticket Logs]`;
+			let buf = `<div class="pad"><h3>Artemis ticket logs</h3><hr />`;
+			const allHits = await HelpTicket.getTextLogs(['recommended'], month);
+			Utils.sortBy(allHits, h => -h.created);
+			if (allHits.length) {
+				buf += `<strong>All hits:</strong><hr />`;
+				for (const hit of allHits) {
+					if (!hit.recommended) continue; // ???
+					buf += `<a href="/view-help-text-${hit.userid}">${hit.userid}</a> (${hit.type}) `;
+					buf += `[${Chat.toTimestamp(new Date(hit.created))}]<br />`;
+					buf += `&bull; <code><small>${hit.recommended.join(', ')}</small></code><hr />`;
+				}
+			} else {
+				buf += `<div class="message-error">No hits found.</div>`;
+			}
+			return buf;
+		},
 	},
 };
