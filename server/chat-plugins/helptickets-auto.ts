@@ -719,7 +719,7 @@ export const pages: Chat.PageTable = {
 			return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
 		}
 
-		this.title = `[Artmeis Ticket Stats] ${month}`;
+		this.title = `[Artemis Ticket Stats] ${month}`;
 		this.setHTML(`<div class="pad"><h3>Artemis ticket stats</h3><hr />Searching...`);
 
 		const found = await HelpTicket.getTextLogs(['recommendResult'], month);
