@@ -530,6 +530,18 @@ export const commands: Chat.ChatCommands = {
 		''() {
 			return this.parse(`/help autohelpticket`);
 		},
+		async test(target) {
+			checkAccess(this);
+			target = target.trim();
+			const response = await classifier.classify(target) || {};
+			let buf = Utils.html`<strong>Results for "${target}":</strong><br />`;
+			buf += `<strong>Score breakdown:</strong><br />`;
+			for (const k in response) {
+				buf += `&bull; ${k}: ${response[k]}<br />`;
+			}
+			this.runBroadcast();
+			this.sendReplyBox(buf);
+		},
 		ap: 'addpunishment',
 		add: 'addpunishment',
 		addpunishment(target, room, user) {
