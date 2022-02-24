@@ -521,7 +521,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		const results = [];
 		if (await checkRipgrepAvailability()) {
 			const args = [
-				`-e`, search[1] ? `${search[0]}":"${search[1]}` : `${search[0]}":`,
+				`-e`, search.length > 1 ? `${search[0]}":"${search[1]}` : `${search[0]}":`,
 				'--no-filename',
 			];
 			let lines;
