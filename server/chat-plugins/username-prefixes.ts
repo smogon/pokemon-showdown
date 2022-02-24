@@ -22,19 +22,18 @@ export class PrefixManager {
 
 	refreshConfig(configJustLoaded = false) {
 		if (!Config.forcedprefixes) Config.forcedprefixes = [];
-		if (!Array.isArray(Config.forcedprefixes)) { // ensure everything is in the right format
-			if (!Array.isArray(Config.forcedprefixes)) {
-				const convertedPrefixes = [];
-				for (const type in Config.forcedprefixes) {
-					for (const prefix of Config.forcedprefixes[type]) {
-						convertedPrefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
-						this.timeouts.set(prefix, setTimeout(() => {
-							this.removePrefix(prefix, type as 'privacy' | 'modchat');
-						}, PREFIX_DURATION));
-					}
+		// ensure everything is in the right format
+		if (!Array.isArray(Config.forcedprefixes)) {
+			const convertedPrefixes = [];
+			for (const type in Config.forcedprefixes) {
+				for (const prefix of Config.forcedprefixes[type]) {
+					convertedPrefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
+					this.timeouts.set(prefix, setTimeout(() => {
+						this.removePrefix(prefix, type as 'privacy' | 'modchat');
+					}, PREFIX_DURATION));
 				}
-				Config.forcedprefixes = convertedPrefixes;
 			}
+			Config.forcedprefixes = convertedPrefixes;
 		}
 		if (configJustLoaded) {
 			for (const entry of Config.forcedprefixes) {
