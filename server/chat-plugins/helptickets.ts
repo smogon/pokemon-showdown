@@ -507,6 +507,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			type: ticket.type,
 			claimed: ticket.claimed,
 			state: ticket.state || {},
+			recommended: ticket.recommended,
 		};
 		const date = Chat.toTimestamp(new Date()).split(' ')[0];
 		void FS(`logs/tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
@@ -520,8 +521,13 @@ export class HelpTicket extends Rooms.RoomGame {
 	static async getTextLogs(search: [string, string] | [string], date?: string) {
 		const results = [];
 		if (await checkRipgrepAvailability()) {
+			const searchString = search.length > 1 ?
+				// regex escaped to handle things like searching for arrays or objects
+				// (JSON.stringify accounts for " strings are wrapped in and stuff. generally ensures that searching is easier.)
+				Utils.escapeRegex(JSON.stringify(search[1]).slice(0, -1)) :
+				"";
 			const args = [
-				`-e`, search.length > 1 ? `${search[0]}":"${search[1]}` : `${search[0]}":`,
+				`-e`, search.length > 1 ? `${search[0]}":${searchString}` : `${search[0]}":`,
 				'--no-filename',
 			];
 			let lines;
