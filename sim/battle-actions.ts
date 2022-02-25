@@ -183,6 +183,25 @@ export class BattleActions {
 		pokemon.draggedIn = null;
 		return true;
 	}
+	rotateIn(pokemon: Pokemon) {
+		const side = pokemon.side;
+		if (pokemon === side.pokemon[1]) {
+			side.pokemon.unshift(...side.pokemon.splice(1, 2));
+			side.active[0].isActive = false;
+			side.active[0] = pokemon;
+			pokemon.isActive = true;
+			this.battle.add('rotateright', side);
+		} else if (pokemon === side.pokemon[2]) {
+			side.pokemon.unshift(...side.pokemon.splice(2, 1));
+			side.active[0].isActive = false;
+			side.active[0] = pokemon;
+			pokemon.isActive = true;
+			this.battle.add('rotateleft', side);
+		}
+		for (let i = 0; i < side.pokemon.length; i++) {
+			side.pokemon[i].position = i;
+		}
+	}
 
 	// #endregion
 

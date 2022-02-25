@@ -20,6 +20,8 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		faint: "[POKEMON] fainted!",
 		swap: "[POKEMON] and [TARGET] switched places!",
 		swapCenter: "[POKEMON] moved to the center!",
+		rotateRight: "[TRAINER]'s Pok\u00E9mon rotated to the right!",
+		rotateLeft: "[TRAINER]'s Pok\u00E9mon rotated to the left!",
 
 		// Multi Battles only
 		canDynamax: "  [TRAINER] can dynamax now!",

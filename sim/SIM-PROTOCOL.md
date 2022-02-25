@@ -295,6 +295,11 @@ message).
 > Moves already active `POKEMON` to active field `POSITION` where the
 > leftmost position is 0 and each position to the right counts up by 1.
 
+`|rotateleft|SIDE` or `|rotateright|SIDE`
+
+> In a Rotation Battle, `SIDE`'s Pokémon rotated in the given direction,
+> and their 2nd or 3rd Pokémon is now active, respectively
+
 `|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
 
 > The Pokémon `POKEMON` could not perform a move because of the indicated
@@ -686,6 +691,9 @@ To be exact, `CHOICE` is one of:
 - `move MOVESPEC zmove`, to use a z-move version of a move
 
 - `move MOVESPEC max`, to Dynamax/Gigantamax and make a move
+
+- `rotateright move MOVESPEC ...` or `rotateleft move MOVESPEC ...`, 
+in Rotation Battles to rotate to your second or third Pokémon, respectively, and use its move
 
 - `switch SWITCHSPEC`, to make a switch
 

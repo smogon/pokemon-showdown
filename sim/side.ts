@@ -27,7 +27,7 @@ import {toID} from './dex';
 
 /** A single action that can be chosen. */
 export interface ChosenAction {
-	choice: 'move' | 'switch' | 'instaswitch' | 'team' | 'shift' | 'pass'; 	// action type
+	choice: 'move' | 'switch' | 'instaswitch' | 'team' | 'shift' | 'rotate' | 'pass'; 	// action type
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
@@ -49,6 +49,7 @@ export interface Choice {
 	forcedSwitchesLeft: number; // number of switches left that need to be performed
 	forcedPassesLeft: number; // number of passes left that need to be performed
 	switchIns: Set<number>; // indexes of pokemon chosen to switch in
+	willRotate: null | 'left' | 'right'; // Rotation Battles: left or right if we will rotate before moving, null otherwise
 	zMove: boolean; // true if a Z-move has already been selected
 	mega: boolean; // true if a mega evolution has already been selected
 	ultra: boolean; // true if an ultra burst has already been selected
@@ -122,7 +123,7 @@ export class Side {
 		case 'doubles':
 			this.active = [null!, null!];
 			break;
-		case 'triples': case 'rotation':
+		case 'triples':
 			this.active = [null!, null!, null!];
 			break;
 		default:
@@ -148,6 +149,7 @@ export class Side {
 			forcedSwitchesLeft: 0,
 			forcedPassesLeft: 0,
 			switchIns: new Set(),
+			willRotate: null,
 			zMove: false,
 			mega: false,
 			ultra: false,
@@ -191,6 +193,7 @@ export class Side {
 				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.zmove) details += ` zmove`;
 				if (action.maxMove) details += ` dynamax`;
+				if (this.choice.willRotate) details += `rotate${this.choice.willRotate} `;
 				return `move ${action.moveid}${details}`;
 			case 'switch':
 			case 'instaswitch':
@@ -405,8 +408,17 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You sent more choices than unfainted Pokémon.`);
 		}
 		const autoChoose = !moveText;
-		const pokemon: Pokemon = this.active[index];
+		let pokemon: Pokemon;
 
+		if (this.choice.willRotate) {
+			if (this.active[0].getLockedMove()) {
+				return this.emitChoiceError(`Can't rotate: Your ${this.active[0].name} is locked into a move`);
+			}
+			pokemon = this.pokemon[this.choice.willRotate === 'right' ? 1 : 2];
+			if (pokemon.fainted) return this.emitChoiceError(`Can't rotate: Your ${pokemon.name} has fainted`);
+		} else {
+			pokemon = this.active[index];
+		}
 		// Parse moveText (name or index)
 		// If the move is not found, the action is invalid without requiring further inspection.
 
@@ -592,7 +604,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
 		let dynamax = (megaDynaOrZ === 'dynamax');
-		const canDynamax = this.activeRequest?.active[this.active.indexOf(pokemon)].canDynamax;
+		const canDynamax = this.activeRequest?.active[this.pokemon.indexOf(pokemon)].canDynamax;
 		if (dynamax && (this.choice.dynamax || !canDynamax)) {
 			if (pokemon.volatiles['dynamax']) {
 				dynamax = false;
@@ -606,6 +618,14 @@ export class Side {
 				}
 				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 			}
+		}
+
+		if (this.choice.willRotate) {
+			this.choice.actions.push({
+				choice: 'rotate',
+				pokemon: this.active[0],
+				target: pokemon,
+			} as ChosenAction);
 		}
 
 		this.choice.actions.push({
@@ -677,7 +697,7 @@ export class Side {
 		}
 		if (slot >= this.pokemon.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);
-		} else if (slot < this.active.length) {
+		} else if (slot < this.active.length || (this.battle.gameType === 'rotation' && slot < 3)) {
 			return this.emitChoiceError(`Can't switch: You can't switch to an active Pokémon`);
 		} else if (this.choice.switchIns.has(slot)) {
 			return this.emitChoiceError(`Can't switch: The Pokémon in slot ${slot + 1} can only switch in once`);
@@ -834,6 +854,7 @@ export class Side {
 			forcedSwitchesLeft: forcedSwitches,
 			forcedPassesLeft: forcedPasses,
 			switchIns: new Set(),
+			willRotate: null,
 			zMove: false,
 			mega: false,
 			ultra: false,
@@ -841,7 +862,7 @@ export class Side {
 		};
 	}
 
-	choose(input: string) {
+	choose(input: string, recursive?: boolean): boolean {
 		if (!this.requestState) {
 			return this.emitChoiceError(
 				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`
@@ -852,7 +873,7 @@ export class Side {
 			return this.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
 		}
 
-		this.clearChoice();
+		if (!recursive) this.clearChoice();
 
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
@@ -918,6 +939,12 @@ export class Side {
 				if (data) return this.emitChoiceError(`Unrecognized data after "shift": ${data}`);
 				if (!this.chooseShift()) return false;
 				break;
+			case 'rotateright':
+			case 'rotateleft':
+				if (this.battle.gameType !== 'rotation') return this.emitChoiceError("Can't rotate: Not a rotation battle");
+				if (!data.startsWith('move ')) return this.emitChoiceError("Rotations must be followed by a move choice");
+				this.choice.willRotate = choiceType === 'rotateleft' ? 'left' : 'right';
+				return this.choose(data, true);
 			case 'team':
 				if (!this.chooseTeam(data)) return false;
 				break;

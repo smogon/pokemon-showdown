@@ -671,6 +671,7 @@ export class Pokemon {
 	getAtLoc(targetLoc: number) {
 		let side = this.battle.sides[targetLoc < 0 ? this.side.n % 2 : (this.side.n + 1) % 2];
 		targetLoc = Math.abs(targetLoc);
+		if (this.battle.gameType === 'rotation') return side.pokemon[targetLoc - 1];
 		if (targetLoc > side.active.length) {
 			targetLoc -= side.active.length;
 			side = this.battle.sides[side.n + 2];
