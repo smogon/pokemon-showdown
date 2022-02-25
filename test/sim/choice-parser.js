@@ -401,4 +401,37 @@ describe('Choice parser', function () {
 			});
 		});
 	});
+
+	describe('Rotation requests', function () {
+		it("should reject rotations in non-Rotation Battles", function () {
+			battle = common.gen(5).createBattle({gameType: 'triples'});
+			battle.setPlayer('p1', {team: [
+				{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
+				{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
+				{species: "Gastly", ability: 'levitate', moves: ['lunardance']},
+			]});
+			battle.setPlayer('p2', {team: [
+				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+			]});
+			assert.throws(() => battle.choose('p1', 'rotateright move selfdestruct'));
+		});
+
+		it("should reject rotations that aren't followed by moves", function () {
+			battle = common.gen(5).createBattle({gameType: 'rotation'});
+			battle.setPlayer('p1', {team: [
+				{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
+				{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
+				{species: "Gastly", ability: 'levitate', moves: ['lunardance']},
+			]});
+			battle.setPlayer('p2', {team: [
+				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+				{species: "Forretress", ability: 'levitate', moves: ['spikes']},
+			]});
+			assert.throws(() => battle.choose('p2', 'rotateright switch 4'));
+		});
+	});
 });
