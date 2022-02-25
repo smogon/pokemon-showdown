@@ -295,10 +295,10 @@ message).
 > Moves already active `POKEMON` to active field `POSITION` where the
 > leftmost position is 0 and each position to the right counts up by 1.
 
-`|rotateleft|SIDE` or `|rotateright|SIDE`
+`|rotate|DIRECTION|SIDE`
 
-> In a Rotation Battle, `SIDE`'s Pokémon rotated in the given direction,
-> and their 2nd or 3rd Pokémon is now active, respectively
+> In a Rotation Battle, `SIDE`'s Pokémon rotated in the given direction
+> (`right` or `left`), and their 2nd or 3rd Pokémon is now active, respectively.
 
 `|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
 

@@ -190,13 +190,13 @@ export class BattleActions {
 			side.active[0].isActive = false;
 			side.active[0] = pokemon;
 			pokemon.isActive = true;
-			this.battle.add('rotateright', side);
+			this.battle.add('rotate', 'right', side);
 		} else if (pokemon === side.pokemon[2]) {
 			side.pokemon.unshift(...side.pokemon.splice(2, 1));
 			side.active[0].isActive = false;
 			side.active[0] = pokemon;
 			pokemon.isActive = true;
-			this.battle.add('rotateleft', side);
+			this.battle.add('rotate', 'left', side);
 		}
 		for (let i = 0; i < side.pokemon.length; i++) {
 			side.pokemon[i].position = i;
