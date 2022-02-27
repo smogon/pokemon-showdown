@@ -2065,13 +2065,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["darkpulse", "focusblast", "hypnosis", "nastyplot"],
 	},
 	shaymin: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "OU",
+		doublesTier: "DOU",
 		randomBattleMoves: ["healingwish", "leechseed", "psychic", "rest", "seedflare", "substitute"],
 	},
 	shayminsky: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "OU",
+		doublesTier: "DOU",
 		randomBattleMoves: ["airslash", "leechseed", "seedflare", "substitute", "synthesis"],
 	},
 	arceus: {
