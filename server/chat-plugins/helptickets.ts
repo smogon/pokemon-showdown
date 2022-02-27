@@ -2532,6 +2532,12 @@ export const commands: Chat.ChatCommands = {
 			if (!ticket.text) {
 				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
 			}
+			if (ticket.recommended?.length && !ticket.state?.recommendResult) {
+				return this.popupReply(
+					`You must rate the accuracy of the Artemis recommendations ` +
+					`(click accurate/inaccurate) before closing the ticket.`
+				);
+			}
 			const {publicReason, privateReason} = this.parseSpoiler(result);
 			ticket.resolved = {
 				result: publicReason,
