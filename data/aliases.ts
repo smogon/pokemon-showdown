@@ -14,8 +14,8 @@ export const Aliases: {[alias: string]: string} = {
 	mono: "[Gen 8] Monotype",
 	ag: "[Gen 8] Anything Goes",
 	bss: "[Gen 8] Battle Stadium Singles",
-	vgc: "[Gen 8] VGC 2021 Series 11",
-	bsd: "[Gen 8] VGC 2021 Series 11",
+	vgc: "[Gen 8] VGC 2022",
+	bsd: "[Gen 8] VGC 2022",
 	randdubs: "[Gen 8] Random Doubles Battle",
 	doubles: "[Gen 8] Doubles OU",
 	dou: "[Gen 8] Doubles OU",
@@ -67,8 +67,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6mono: "[Gen 6] Monotype",
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 8] Cross Evolution",
-	omotm: "[Gen 8] Pokebilities",
-	lcotm: "[Gen 8] Camomons",
+	omotm: "[Gen 8] Trademarked",
+	lcotm: "[Gen 8] Linked",
 
 	// mega evos
 	fabio: "Ampharos-Mega",

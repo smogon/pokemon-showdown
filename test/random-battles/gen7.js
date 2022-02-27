@@ -89,4 +89,10 @@ describe('[Gen 7] Random Battle', () => {
 	it('should never give Poliwrath both Rain Dance and Rest', () => {
 		testNotBothMoves('poliwrath', options, 'raindance', 'rest');
 	});
+
+	it('should not give Ursaring Eviolite', () => {
+		testSet('ursaring', options, set => assert.notEqual(set.item, 'Eviolite'));
+	});
+
+	it('should always give Mega Glalie Return', () => testAlwaysHasMove('glaliemega', options, 'return'));
 });

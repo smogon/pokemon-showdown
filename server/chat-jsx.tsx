@@ -26,8 +26,9 @@ export interface PSElements extends preact.JSX.IntrinsicElements {
 	youtube: {src: string};
 	twitch: {src: string, width?: number, height?: number};
 	spotify: {src: string};
-	username: {name?: string, class?: string};
+	username: {name?: string, class?: string, children?: preact.VNode | string};
 	psicon: {pokemon: string} | {item: string} | {type: string} | {category: string};
+	center: {class?: string};
 }
 
 export {render};
@@ -36,3 +37,14 @@ export type VNode = preact.VNode;
 
 export const h = preact.h;
 export const Fragment = preact.Fragment;
+export const Component = preact.Component;
+
+export class FormatText extends preact.Component<{isTrusted?: boolean, replaceLinebreaks?: boolean}> {
+	render() {
+		const child = this.props.children;
+		if (typeof child !== 'string') throw new Error(`Invalid props.children type: ${!child ? child : typeof child}`);
+		return <span dangerouslySetInnerHTML={
+			{__html: Chat.formatText(child, this.props.isTrusted, this.props.replaceLinebreaks)}
+		} />;
+	}
+}

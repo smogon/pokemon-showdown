@@ -7,24 +7,13 @@
  * by Mia.
  * @author mia-pi-git
  */
-
-import {FS, Utils, Net, ProcessManager, Repl} from '../../lib';
+import * as Artemis from '../artemis';
+import {FS, Utils} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 
 const WHITELIST = ["mia"];
-// 20m. this is mostly here so we can use Monitor.slow()
-const PM_TIMEOUT = 20 * 60 * 1000;
-const ATTRIBUTES = {
-	"SEVERE_TOXICITY": {},
-	"TOXICITY": {},
-	"IDENTITY_ATTACK": {},
-	"INSULT": {},
-	"PROFANITY": {},
-	"THREAT": {},
-	"SEXUALLY_EXPLICIT": {},
-	"FLIRTATION": {},
-};
+const PUNISHMENTS = ['WARN', 'MUTE', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
@@ -41,22 +30,44 @@ const REPORT_NAMECOLORS: {[k: string]: string} = {
 	other: '', // black - empty since handled by dark mode
 };
 
+export let migrated = global.Chat?.oldPlugins['abuse-monitor']?.migrated || false;
+
 export const cache: {
 	[roomid: string]: {
 		users: Record<string, number>,
-		staffNotified?: ID,
+		// can be a string and not string[] if it was added to the object before this patch was done.
+		// todo: move this to just ID[]
+		staffNotified?: ID | ID[],
 		claimed?: ID,
+		recommended?: Record<string, {type: string, reason: string}>,
 	},
-} = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
+} = (() => {
+	const plugin = global.Chat?.oldPlugins['abuse-monitor'];
+	if (!plugin?.cache) return {};
+	if (plugin.migrated) return plugin.cache;
+	for (const k in plugin.cache) {
+		const cur = plugin.cache[k];
+		if (typeof cur.recommended?.type === 'string') { // would be object if it was the new entry
+			// we cannot feasibly determine who it was (but it __is__ logged in <<abuselog>>, so staff can)
+			delete cur.recommended;
+		}
+	}
+	migrated = true;
+	return plugin.cache;
+})();
 
 const defaults: FilterSettings = {
 	threshold: 4,
+	thresholdIncrement: null,
 	minScore: 0.65,
 	specials: {
 		THREAT: {0.96: 'MAXIMUM'},
 		IDENTITY_ATTACK: {0.8: 2},
 		SEVERE_TOXICITY: {0.8: 2},
 	},
+	punishments: [
+		{certainty: 0.93, type: 'IDENTITY_ATTACK', punishment: 'WARN', count: 2},
+	],
 };
 
 export const settings: FilterSettings = (() => {
@@ -70,29 +81,22 @@ export const settings: FilterSettings = (() => {
 	}
 })();
 
+interface PunishmentSettings {
+	count?: number;
+	certainty?: number;
+	type?: string;
+	punishment: typeof PUNISHMENTS[number];
+}
+
 interface FilterSettings {
 	disabled?: boolean;
+	thresholdIncrement: {turns: number, amount: number, minTurns?: number} | null;
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
+	punishments: PunishmentSettings[];
 }
 
-export interface PerspectiveRequest {
-	languages: string[];
-	requestedAttributes: AnyObject;
-	comment: {text: string};
-}
-
-interface PMResult {
-	score: number;
-	flags: string[];
-	response?: Record<string, number>;
-}
-
-interface PMRequest {
-	comment: string;
-	fullResponse?: boolean;
-}
 
 interface BattleInfo {
 	players: Record<SideID, ID>;
@@ -103,6 +107,13 @@ interface BattleInfo {
 function nextMonth(month: string) {
 	const next = new Date(new Date(`${month}-15`).getTime() + 30 * 24 * 60 * 60 * 1000);
 	return next.toISOString().slice(0, 7);
+}
+
+function isFlaggedUserid(name: string, room: RoomID) {
+	const id = toID(name);
+	const entry = cache[room]?.staffNotified;
+	if (!entry) return false;
+	return typeof entry === 'string' ? entry === id : entry.includes(id);
 }
 
 // Mostly stolen from my code in helptickets.
@@ -137,116 +148,49 @@ function colorName(id: ID, info: BattleInfo) {
 	return REPORT_NAMECOLORS.other;
 }
 
-function time() {
-	return Math.floor(Date.now() / 1000);
-}
+export const classifier = new Artemis.RemoteClassifier();
 
-export class RollingCounter {
-	counts: number[] = [0];
-	readonly size: number;
-	constructor(limit: number) {
-		this.size = limit;
-	}
-	increment() {
-		this.counts[this.counts.length - 1]++;
-	}
-	rollOver(amount: number) {
-		if (amount > this.size) {
-			this.counts = Array(this.size).fill(0);
-			return;
+async function recommend(user: User, room: GameRoom, response: Record<string, number>) {
+	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
+	const recommended: [string, string][] = [];
+	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
+	for (const punishment of settings.punishments) {
+		if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
+			if (PUNISHMENTS.indexOf(punishment.punishment) <= PUNISHMENTS.indexOf(prevRecommend?.type)) continue;
 		}
-		for (let i = 0; i < amount; i++) {
-			this.counts.push(0);
-			if (this.counts.length > this.size) this.counts.shift();
+		for (const type of keys) {
+			const num = response[type];
+			if (punishment.type && punishment.type !== type) continue;
+			if (punishment.certainty && punishment.certainty > num) continue;
+			if (punishment.count) {
+				const hits = await Chat.database.all(
+					`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
+					[user.id, type, num]
+				);
+				if (hits.length < punishment.count) continue;
+				recommended.push([punishment.punishment, type]);
+			}
 		}
 	}
-	mean() {
-		let total = 0;
-		for (const elem of this.counts) total += elem;
-		return total / this.counts.length;
-	}
-}
-
-export class Limiter {
-	readonly counter: RollingCounter;
-	readonly max: number;
-	lastCounterRoll = time();
-	constructor(max: number, period: number) {
-		this.max = max;
-		this.counter = new RollingCounter(period);
-	}
-	shouldRequest() {
-		const now = time();
-		this.counter.rollOver(now - this.lastCounterRoll);
-		this.lastCounterRoll = now;
-
-		if (this.counter.mean() > this.max) return false;
-		this.counter.increment();
-		return true;
-	}
-}
-
-function isCommon(message: string) {
-	message = message.toLowerCase().replace(/\?!\., ;:/g, '');
-	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
-}
-
-const limiter = new Limiter(15, 10);
-let throttleTime: number | null = null;
-export async function classify(text: string) {
-	if (isCommon(text) || !limiter.shouldRequest()) return null;
-	if (throttleTime && (Date.now() - throttleTime < 10000)) {
-		return null;
-	}
-	if (throttleTime) throttleTime = null;
-
-	const requestData: PerspectiveRequest = {
-		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
-		languages: ['en'],
-		requestedAttributes: ATTRIBUTES,
-		comment: {text},
-	};
-	try {
-		const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
-			query: {
-				key: Config.perspectiveKey,
-			},
-			body: JSON.stringify(requestData),
-			headers: {
-				'Content-Type': "application/json",
-			},
-			timeout: 10 * 1000, // 10s
-		});
-		if (!raw) return null;
-		const data = JSON.parse(raw);
-		if (data.error) throw new Error(data.message);
-		const result: {[k: string]: number} = {};
-		for (const k in data.attributeScores) {
-			const score = data.attributeScores[k];
-			result[k] = score.summaryScore.value;
+	if (recommended.length) {
+		Utils.sortBy(recommended, ([punishment]) => -PUNISHMENTS.indexOf(punishment));
+		// go by most severe
+		const [punishment, reason] = recommended[0];
+		if (cache[room.roomid]) {
+			if (!cache[room.roomid].recommended) cache[room.roomid].recommended = {};
+			cache[room.roomid].recommended![user.id] = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
 		}
-		return result;
-	} catch (e: any) {
-		throttleTime = Date.now();
-		if (e.message.startsWith('Request timeout')) {
-			// just ignore this. error on their end not ours.
-			// todo maybe stop sending requests for a bit?
-			return null;
-		}
-		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
-		return null;
+		Rooms.get('abuselog')?.add(
+			`|c|&|/log [Abuse-Monitor] ` +
+			`<<${room.roomid}>> - punishment ${punishment} recommended for ${user.id} ` +
+			`(${reason.replace(/_/g, ' ').toLowerCase()})`
+		).update();
 	}
 }
 
-export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(module, async query => {
-	const now = Date.now();
-	const result = await classify(query.comment);
-	if (!result) return {score: 0, flags: []};
-	const delta = Date.now() - now;
-	if (delta > 1000) {
-		Monitor.slow(`[Abuse Monitor] ${delta}ms - ${JSON.stringify(query)}`);
-	}
+function makeScore(roomid: RoomID, result: Record<string, number>) {
 	let score = 0;
+	let main = '';
 	const flags = new Set<string>();
 	for (const type in result) {
 		const data = result[type];
@@ -257,9 +201,13 @@ export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(mo
 				if (data < Number(k)) continue;
 				const num = settings.specials[type][k];
 				if (num === 'MAXIMUM') {
-					score = settings.threshold;
+					score = calcThreshold(roomid);
+					main = type;
 				} else {
-					if (num > score) score = num;
+					if (num > score) {
+						score = num;
+						main = type;
+					}
 				}
 			}
 		}
@@ -267,66 +215,53 @@ export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(mo
 			// min score ensures that if a category is above that minimum score, they will get
 			// at least a point.
 			// we previously ensured that this was above minScore if set, so this is fine
-			if (score < 1) score = 1;
+			if (score < 1) {
+				score = 1;
+				main = type;
+			}
 		}
 		if (score !== curScore) flags.add(type);
 	}
-	return {
-		score,
-		flags: [...flags],
-		// undefined so that json.stringify ignores it - save bandwidth
-		response: query.fullResponse ? result : undefined,
-	};
-}, PM_TIMEOUT, message => {
-	if (message.startsWith('SLOW\n')) {
-		Monitor.slow(message.slice(5));
-	}
-});
-
-if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = Config;
-	global.Monitor = {
-		crashlog(error: Error, source = 'An abuse monitor child process', details: AnyObject | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-		slow(text: string) {
-			process.send!(`CALLBACK\nSLOW\n${text}`);
-		},
-	};
-	global.toID = toID;
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			Monitor.crashlog(err, 'A netfilter child process');
-		}
-	});
-	// eslint-disable-next-line no-eval
-	Repl.start(`abusemonitor-${process.pid}`, cmd => eval(cmd));
-} else {
-	PM.spawn(Config.netfilterprocesses || 1);
+	return {score, flags: [...flags], main};
 }
 
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	// 2 lines to not hit max-len
 	if (!room?.battle || !['rated', 'unrated'].includes(room.battle.challengeType)) return;
-	if (settings.disabled || cache[room.roomid]?.staffNotified) return;
+	if (settings.disabled) return;
 	// startsWith('!') - broadcasting command, ignore it.
 	if (!Config.perspectiveKey || message.startsWith('!')) return;
 
 	const roomid = room.roomid;
 	void (async () => {
-		const {score, flags} = await PM.query({comment: message});
+		const response = await classifier.classify(message);
+		const {score, flags, main} = makeScore(roomid, response || {});
 		if (score) {
 			if (!cache[roomid]) cache[roomid] = {users: {}};
 			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
 			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
-			if (cache[roomid].users[user.id] >= settings.threshold) {
-				cache[roomid].staffNotified = user.id;
+			if (cache[roomid].users[user.id] >= calcThreshold(roomid)) {
+				let notified = cache[roomid].staffNotified;
+				if (notified) {
+					if (!Array.isArray(notified)) {
+						cache[roomid].staffNotified = notified = [notified];
+					}
+					if (!notified.includes(user.id)) {
+						notified.push(user.id);
+					}
+				} else {
+					cache[roomid].staffNotified = [user.id];
+				}
 				notifyStaff();
 				hitThreshold = 1;
 				void room?.uploadReplay?.(user, this.connection, "forpunishment");
+				await Chat.database.run(
+					`INSERT INTO perspective_flags (userid, score, certainty, type, roomid, time) VALUES (?, ?, ?, ?, ?, ?)`,
+					// response exists if we got this far
+					[user.id, score, response![main], main, room.roomid, Date.now()]
+				);
+				void recommend(user, room, response || {});
 			}
 			await Chat.database.run(
 				'INSERT INTO perspective_logs (userid, message, score, flags, roomid, time, hit_threshold) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -338,12 +273,31 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 // to avoid conflicts with other filters
 chatfilter.priority = -100;
 
+function calcThreshold(roomid: RoomID) {
+	const incr = settings.thresholdIncrement;
+	let num = settings.threshold;
+	const room = Rooms.get(roomid);
+	if (!room || !room.battle || !incr) return num;
+	if (!incr.minTurns || room.battle.turn >= incr.minTurns) {
+		num += (Math.floor(room.battle.turn / incr.turns) * incr.amount);
+	}
+	return num;
+}
+
 export const handlers: Chat.Handlers = {
 	onRoomDestroy(roomid) {
 		const entry = cache[roomid];
 		if (entry) {
 			delete cache[roomid];
-			if (entry.staffNotified) notifyStaff();
+			if (entry.staffNotified) {
+				notifyStaff();
+				void Chat.database.run(
+					`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
+					`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
+					// 2 means dead
+					{staff: '', roomid, result: 2, timestamp: Date.now()}
+				);
+			}
 		}
 	},
 	onRoomClose(roomid, user) {
@@ -354,16 +308,22 @@ export const handlers: Chat.Handlers = {
 			notifyStaff();
 		}
 	},
+	onRenameRoom(oldId, newId, room) {
+		if (cache[oldId]) {
+			cache[newId] = cache[oldId];
+			delete cache[oldId];
+			notifyStaff();
+		}
+	},
 };
 
 function getFlaggedRooms() {
 	return Object.keys(cache).filter(roomid => cache[roomid].staffNotified);
 }
 
-function saveSettings() {
-	FS('config/chat-plugins/nf.json').writeUpdate(() => JSON.stringify(settings));
+function saveSettings(isBackup = false) {
+	FS(`config/chat-plugins/nf${isBackup ? ".backup" : ""}.json`).writeUpdate(() => JSON.stringify(settings));
 }
-
 
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
@@ -403,8 +363,10 @@ export const commands: Chat.ChatCommands = {
 			const text = target.trim();
 			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
-			let {score, flags, response} = await PM.query({comment: text, fullResponse: true});
+			let response = await classifier.classify(text);
 			if (!response) response = {};
+			// intentionally hardcoded to staff to ensure threshold is never altered.
+			const {score, flags} = makeScore('staff', response);
 			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
 			buf += `<strong>Score breakdown:</strong><br />`;
@@ -425,6 +387,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Invalid setting. Must be 'on' or 'off'.`);
 			}
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${this.user.name} ${!settings.disabled ? 'enabled' : 'disabled'} the abuse monitor.`);
 			this.globalModlog('ABUSEMONITOR', null, !settings.disabled ? 'enable' : 'disable');
 		},
@@ -443,6 +406,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			settings.threshold = num;
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${this.user.name} set the abuse monitor trigger threshold to ${num}.`);
 			this.globalModlog('ABUSEMONITOR THRESHOLD', null, `${num}`);
 			this.sendReply(
@@ -464,7 +428,7 @@ export const commands: Chat.ChatCommands = {
 			let result = toID(rawResult) === 'success' ? 1 : toID(rawResult) === 'failure' ? 0 : null;
 			if (result === null) return this.popupReply(`Invalid result - must be 'success' or 'failure'.`);
 			const inserted = await Chat.database.get(`SELECT result FROM perspective_stats WHERE roomid = ?`, [roomid]);
-			if (inserted?.result) {
+			if (inserted?.result === 1) { // (hardcode on 1 because 2 is dead)
 				// has already been logged as accurate - ensure if one success is logged it's still a success if it's hit again
 				// (even if it's a failure now, it was a success before - that's what's relevant.)
 				result = inserted.result;
@@ -525,7 +489,7 @@ export const commands: Chat.ChatCommands = {
 		async respawn(target, room, user) {
 			checkAccess(this);
 			this.sendReply(`Respawning...`);
-			const unspawned = await PM.respawn();
+			const unspawned = await classifier.respawn();
 			this.sendReply(`DONE. ${Chat.count(unspawned, 'processes', 'process')} unspawned.`);
 			this.addGlobalModAction(`${user.name} used /abusemonitor respawn`);
 		},
@@ -583,7 +547,7 @@ export const commands: Chat.ChatCommands = {
 			let [rawType, rawPercent, rawScore] = target.split(',');
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
 			rawScore = toID(rawScore);
-			const types = {...ATTRIBUTES, "ALL": {}};
+			const types = {...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
@@ -611,6 +575,7 @@ export const commands: Chat.ChatCommands = {
 			// checked above to ensure it's a valid number or MAXIMUM
 			settings.specials[type][percent] = score;
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} set the abuse monitor special case for ${type} at ${percent}% to ${score}.`);
 			this.globalModlog("ABUSEMONITOR SPECIAL", type, `${percent}% to ${score}`);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
@@ -620,7 +585,7 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const [rawType, rawPercent] = target.split(',');
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
-			const types = {...ATTRIBUTES, "ALL": {}};
+			const types = {...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
@@ -636,6 +601,7 @@ export const commands: Chat.ChatCommands = {
 				delete settings.specials[type];
 			}
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} deleted the abuse monitor special case for ${type} at ${percent}%.`);
 			this.globalModlog("ABUSEMONITOR DELETESPECIAL", type, `${percent}%`);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
@@ -649,32 +615,201 @@ export const commands: Chat.ChatCommands = {
 			}
 			settings.minScore = num;
 			saveSettings();
+			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
+		},
+		ap: 'addpunishment',
+		addpunishment(target, room, user) {
+			checkAccess(this);
+			if (!toID(target)) return this.parse(`/help am`);
+			const targets = target.split(',').map(f => f.trim());
+			const punishment: Partial<PunishmentSettings> = {};
+			for (const cur of targets) {
+				let [key, value] = Utils.splitFirst(cur, '=').map(f => f.trim());
+				key = toID(key);
+				if (!key || !value) { // sent from the page, val wasn't sent.
+					continue;
+				}
+				switch (key) {
+				case 'punishment': case 'p':
+					if (punishment.punishment) {
+						return this.errorReply(`Duplicate punishment values.`);
+					}
+					value = toID(value).toUpperCase();
+					if (!PUNISHMENTS.includes(value)) {
+						return this.errorReply(`Invalid punishment: ${value}. Valid punishments: ${PUNISHMENTS.join(', ')}.`);
+					}
+					punishment.punishment = value;
+					break;
+				case 'count': case 'num': case 'c':
+					if (punishment.count) {
+						return this.errorReply(`Duplicate count values.`);
+					}
+					const num = parseInt(value);
+					if (isNaN(num)) {
+						return this.errorReply(`Invalid count '${value}'. Must be a number.`);
+					}
+					punishment.count = num;
+					break;
+				case 'type': case 't':
+					if (punishment.type) {
+						return this.errorReply(`Duplicate type values.`);
+					}
+					value = value.replace(/\s/g, '_').toUpperCase();
+					if (!Artemis.RemoteClassifier.ATTRIBUTES[value as keyof typeof Artemis.RemoteClassifier.ATTRIBUTES]) {
+						return this.errorReply(
+							`Invalid attribute: ${value}. ` +
+							`Valid attributes: ${Object.keys(Artemis.RemoteClassifier.ATTRIBUTES).join(', ')}.`
+						);
+					}
+					punishment.type = value;
+					break;
+				case 'certainty': case 'ct':
+					if (punishment.certainty) {
+						return this.errorReply(`Duplicate certainty values.`);
+					}
+					const certainty = parseFloat(value);
+					if (isNaN(certainty) || certainty > 1 || certainty < 0) {
+						return this.errorReply(`Invalid certainty '${value}'. Must be a number above 0 and below 1.`);
+					}
+					punishment.certainty = certainty;
+					break;
+				default:
+					this.errorReply(`Invalid key:  ${key}`);
+					return this.parse(`/help am`);
+				}
+			}
+			if (!punishment.punishment) {
+				return this.errorReply(`A punishment type must be specified.`);
+			}
+			for (const [i, p] of settings.punishments.entries()) {
+				let matches = 0;
+				for (const k in p) {
+					if (p[k as keyof PunishmentSettings] === punishment[k as keyof PunishmentSettings]) matches++;
+				}
+				if (matches === Object.keys(p).length) {
+					return this.errorReply(`This punishment is already stored at ${i + 1}.`);
+				}
+			}
+			settings.punishments.push(punishment as PunishmentSettings);
+			saveSettings();
+			this.refreshPage('abusemonitor-settings');
+			this.privateGlobalModAction(`${user.name} added a ${punishment.punishment} abuse-monitor punishment.`);
+			const str = Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ');
+			this.stafflog(`Info: ${str}`);
+			this.globalModlog(`ABUSEMONITOR ADDPUNISHMENT`, null, str);
+		},
+		dp: 'deletepunishment',
+		deletepunishment(target, room, user) {
+			checkAccess(this);
+			const idx = parseInt(target) - 1;
+			if (isNaN(idx)) return this.errorReply(`Invalid number.`);
+			const punishment = settings.punishments[idx];
+			if (!punishment) {
+				return this.errorReply(`No punishments exist at index ${idx + 1}.`);
+			}
+			settings.punishments.splice(idx, 1);
+			saveSettings();
+			this.refreshPage('abusemonitor-settings');
+			this.privateGlobalModAction(`${user.name} removed the abuse-monitor punishment indexed at ${idx + 1}.`);
+			this.stafflog(
+				`Punishment: ` +
+				`${Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ')}`
+			);
+			this.globalModlog(`ABUSEMONITOR REMOVEPUNISHMENT`, null, `${idx + 1}`);
 		},
 		vs: 'viewsettings',
 		settings: 'viewsettings',
 		viewsettings() {
 			checkAccess(this);
-			let buf = `<strong>Abuse Monitor Settings</strong><hr />`;
-			const specials = Object.keys(settings.specials);
-			if (specials.length) {
-				buf += `<strong>Special cases:</strong><br />`;
-				for (const type of specials) {
-					buf += `&bull; ${type}: `;
-					const special = settings.specials[type];
-					const specialKeys = Object.keys(special);
-					for (const percent of specialKeys) {
-						buf += `${percent}%: ${special[percent as any]}, `;
-					}
-					buf = buf.slice(0, -2);
-					buf += `<br />`;
-				}
+			return this.parse(`/join view-abusemonitor-settings`);
+		},
+		ti: 'thresholdincrement',
+		thresholdincrement(target, room, user) {
+			checkAccess(this);
+			if (!toID(target)) {
+				return this.parse(`/help am`);
 			}
-			buf += `<br /><strong>Minimum percent to process:</strong> ${settings.minScore}`;
-			buf += `<br /><strong>Score threshold:</strong> ${settings.threshold}`;
-			this.sendReplyBox(buf);
+			const [rawTurns, rawIncrement, rawMin] = Utils.splitFirst(target, ',', 2).map(toID);
+			const turns = parseInt(rawTurns);
+			if (isNaN(turns) || turns < 0) {
+				return this.errorReply(`Turns must be a number above 0.`);
+			}
+			const increment = parseInt(rawIncrement);
+			if (isNaN(increment) || increment < 0) {
+				return this.errorReply(`The increment must be a number above 0.`);
+			}
+			const min = parseInt(rawMin);
+			if (rawMin && isNaN(min)) {
+				return this.errorReply(`Invalid minimum (must be a number).`);
+			}
+			settings.thresholdIncrement = {amount: increment, turns};
+			if (min) {
+				settings.thresholdIncrement.minTurns = min;
+			}
+			saveSettings();
+			this.refreshPage('abusemonitor-settings');
+			this.privateGlobalModAction(
+				`${user.name} set the abuse-monitor threshold increment ${increment} every ${Chat.count(turns, 'turns')}` +
+				`${min ? ` after ${Chat.count(min, 'turns')}` : ""}`
+			);
+			this.globalModlog(
+				`ABUSEMONITOR INCREMENT`, null, `${increment} every ${turns} turn(s)${min ? ` after ${min} turn(s)` : ""}`
+			);
+		},
+		di: 'deleteincrement',
+		deleteincrement(target, room, user) {
+			checkAccess(this);
+			if (!settings.thresholdIncrement) return this.errorReply(`The threshold increment is already disabled.`);
+			settings.thresholdIncrement = null;
+			saveSettings();
+			this.refreshPage('abusemonitor-settings');
+			this.privateGlobalModAction(`${user.name} disabled the abuse-monitor threshold increment.`);
+			this.globalModlog(`ABUSEMONITOR DISABLEINCREMENT`);
+		},
+		async failures(target) {
+			checkAccess(this);
+			if (!toID(target)) {
+				target = Chat.toTimestamp(new Date()).split(' ')[0];
+			}
+			const timeNum = new Date(target).getTime();
+			if (isNaN(timeNum)) {
+				return this.errorReply(`Invalid date.`);
+			}
+			let logs = await Chat.database.all(
+				'SELECT * FROM perspective_stats WHERE result = 0 AND timestamp > ? AND timestamp < ?',
+				[timeNum, timeNum + 24 * 60 * 60 * 1000]
+			);
+			logs = logs.filter(log => ( // proofing against node's stupid date lib
+				Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0] === target
+			));
+			if (!logs.length) {
+				return this.errorReply(`No logs found for that date.`);
+			}
+			this.sendReplyBox(
+				`<strong>${Chat.count(logs, 'logs')}</strong> found on the date ${target}:<hr />` +
+				logs.map(f => `<a href="/${f.roomid}">${f.roomid}</a>`).join('<br />')
+			);
+		},
+		bs: 'backupsettings',
+		backupsettings(target, room, user) {
+			checkAccess(this);
+			saveSettings(true);
+			this.addGlobalModAction(`${user.name} used /abusemonitor backupsettings`);
+			this.refreshPage('abusemonitor-settings');
+		},
+		lb: 'loadbackup',
+		async loadbackup(target, room, user) {
+			checkAccess(this);
+			const backup = await FS('config/chat-plugins/nf.backup.json').readIfExists();
+			if (!backup) return this.errorReply(`No backup settings saved.`);
+			const backupSettings = JSON.parse(backup);
+			Object.assign(settings, backupSettings);
+			saveSettings();
+			this.addGlobalModAction(`${user.name} used /abusemonitor loadbackup`);
+			this.refreshPage('abusemonitor-settings');
 		},
 	},
 	abusemonitorhelp: [
@@ -691,6 +826,9 @@ export const commands: Chat.ChatCommands = {
 		`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
 		`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
 		`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
+		`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
+		`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
+		`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
 	],
 };
 
@@ -731,7 +869,7 @@ export const pages: Chat.PageTable = {
 		},
 		view(query, user) {
 			this.checkCan('lock');
-			const roomid = query.join('-');
+			const roomid = query.join('-') as RoomID;
 			if (!toID(roomid)) {
 				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
 			}
@@ -784,14 +922,24 @@ export const pages: Chat.PageTable = {
 				const id = toID(data.user);
 				if (!id) continue;
 				users.add(id);
-				buf += `<div class="chat chatmessage${cache[roomid].staffNotified === id ? ` highlighted` : ``}">`;
+				buf += `<div class="chat chatmessage">`;
 				buf += `<strong${colorName(id, logData)}>`;
 				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
+			const recs = cache[roomid].recommended || {};
+			if (Object.keys(recs).length) {
+				for (const id in recs) {
+					const rec = recs[id];
+					buf += `<p><strong>Recommended action for ${id}:</strong> ${rec.type} (${rec.reason})</p>`;
+				}
+			}
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
-			for (const [id] of Utils.sortBy([...users], ([, num]) => -num)) {
-				const curUser = Users.get(id);
+			const sortedUsers = Utils.sortBy([...users], ([id, num]) => (
+				[isFlaggedUserid(id, roomid), -num, id]
+			));
+			for (const [id] of sortedUsers) {
+				const curUser = Users.getExact(id);
 				buf += Utils.html`<details class="readmore"><summary>${curUser?.name || id} `;
 				buf += `<button class="button" name="send" value="/mlid ${id},room=global">Modlog</button>`;
 				buf += `</summary><div class="infobox">`;
@@ -881,7 +1029,12 @@ export const pages: Chat.PageTable = {
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
-			buf += `<h2>Abuse Monitor stats for ${month}</h2><hr />`;
+			buf += `<h2>Abuse Monitor stats for ${month}</h2>`;
+			const next = nextMonth(month);
+			const prev = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
+			buf += `<a class="button" target="replace" href="/view-abusemonitor-stats-${prev}-15">Previous month</a> | `;
+			buf += `<a class="button" target="replace" href="/view-abusemonitor-stats-${next}-15">Next month</a>`;
+			buf += `<hr />`;
 			const logs = await Chat.database.all(
 				`SELECT * FROM perspective_stats WHERE timestamp > ? AND timestamp < ?`,
 				[new Date(month).getTime(), new Date(nextMonth(month)).getTime()]
@@ -895,12 +1048,18 @@ export const pages: Chat.PageTable = {
 			buf += `<p>${Chat.count(logs.length, 'logs')} found.</p>`;
 			let successes = 0;
 			let failures = 0;
+			let dead = 0;
 			const staffStats: Record<string, number> = {};
-			const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
+			const dayStats: Record<string, {successes: number, failures: number, dead: number, total: number}> = {};
 			for (const log of logs) {
 				const cur = Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0];
-				if (!dayStats[cur]) dayStats[cur] = {successes: 0, failures: 0, total: 0};
-				if (log.result) {
+				if (!dayStats[cur]) dayStats[cur] = {successes: 0, failures: 0, dead: 0, total: 0};
+				if (log.result === 2) {
+					dead++;
+					dayStats[cur].dead++;
+					// don't increment total - we don't want dead to count in the percentages
+					continue;
+				} else if (log.result === 1) {
 					successes++;
 					dayStats[cur].successes++;
 				} else {
@@ -911,8 +1070,14 @@ export const pages: Chat.PageTable = {
 				staffStats[log.staff]++;
 				dayStats[cur].total++;
 			}
-			buf += `<p><strong>Success rate:</strong> ${Math.floor((successes / logs.length) * 100)}%</p>`;
-			buf += `<p><strong>Failure rate:</strong> ${Math.floor((failures / logs.length) * 100)}%</p>`;
+			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+			buf += `<p><strong>Success rate:</strong> ${percent(successes, successes + failures)}% (${successes})</p>`;
+			buf += `<p><strong>Failure rate:</strong> ${percent(failures, successes + failures)}% (${failures})</p>`;
+			buf += `<p><details class="readmore"><summary><strong>Stats including dead flags</strong></summary>`;
+			buf += `<p><strong>Total dead: ${dead}</strong></p>`;
+			buf += `<p><strong>Success rate:</strong> ${percent(successes, logs.length)}% (${successes})</p>`;
+			buf += `<p><strong>Failure rate:</strong> ${percent(failures, logs.length)}% (${failures})</p>`;
+			buf += `</summary></details></p>`;
 			buf += `<p><strong>Day stats:</strong></p>`;
 			buf += `<div class="ladder pad"><table>`;
 			let header = '';
@@ -922,8 +1087,14 @@ export const pages: Chat.PageTable = {
 				const cur = dayStats[day];
 				if (!cur.total) continue;
 				header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
-				data += `<td>${cur.successes} (${Math.floor((cur.successes / cur.total) * 100)}%)`;
-				if (cur.failures) data += ` | ${cur.failures} (${Math.floor((cur.failures / cur.total) * 100)}%)</td>`;
+				data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
+				if (cur.failures) {
+					data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
+				} else { // so one cannot confuse dead tickets & false hit tickets
+					data += ' | 0 (0%)';
+				}
+				if (cur.dead) data += ` | ${cur.dead}`;
+				data += '</small></td>';
 				// i + 1 ensures it's above 0 always (0 % 5 === 0)
 				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
 					buf += `<tr>${header}</tr><tr>${data}</tr>`;
@@ -942,6 +1113,74 @@ export const pages: Chat.PageTable = {
 				buf += `<tr><td>${id}</td><td>${staffStats[id]}</td><td>${(staffStats[id] / logs.length) * 100}%</td></tr>`;
 			}
 			buf += `</table></div>`;
+			return buf;
+		},
+		async settings() {
+			checkAccess(this);
+			this.title = `[Abuse Monitor] Settings`;
+			let buf = `<div class="pad"><h2>Abuse Monitor Settings</h2>`;
+			buf += `<button class="button" name="send" value="/am vs">Reload page</button>`;
+			buf += `<button class="button" name="send" value="/msgroom staff,/am respawn">Reload processes</button>`;
+			buf += `<button class="button" name="send" value="/msgroom staff,/am bs">Backup settings</button>`;
+			if (await FS('config/chat-plugins/nf.backup.json').exists()) {
+				buf += `<button class="button" name="send" value="/msgroom staff,/am lb">Load backup</button>`;
+			}
+			buf += `<div class="infobox"><h3>Miscellaneous settings</h3><hr />`;
+			buf += `Minimum percent to process: <form data-submitsend="/msgroom staff,/am editmin {num}">`;
+			buf += `<input name="num" value="${settings.minScore}"/>`;
+			buf += `<button class="button notifying" type="submit">Change minimum</button></form>`;
+			buf += `<br />Score threshold: <form data-submitsend="/msgroom staff,/am threshold {num}">`;
+			buf += `<input name="num" value="${settings.threshold}"/>`;
+			buf += `<button class="button notifying" type="submit">Change threshold</button></form>`;
+			const incr = settings.thresholdIncrement;
+			if (incr) {
+				buf += `<br />Threshold increments: `;
+				buf += `Increases ${incr.amount} every ${incr.turns} turns`;
+				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
+				buf += `<br />`;
+			}
+			buf += `</div><div class="infobox"><h3>Punishment settings</h3><hr />`;
+			if (settings.punishments.length) {
+				for (const [i, p] of settings.punishments.entries()) {
+					buf += `&bull; ${i + 1}: `;
+					buf += Object.keys(p).map(f => `${f}: ${p[f as keyof PunishmentSettings]}`).join(', ');
+					buf += ` (<button class="button" name="send" value="/msgroom staff,/am dp ${i + 1}">delete</button>)`;
+					buf += `<br />`;
+				}
+				buf += `<br />`;
+			}
+			buf += `<details class="readmore"><summary>Add a punishment</summary>`;
+			buf += `<form data-submitsend="/msgroom staff,/am ap p={punishment},t={type},ct={certainty},c={count}">`;
+			buf += `Punishment: <input name="punishment" /> <small>(required)</small><br />`;
+			buf += `Type: <input name="type" /> <small>(required)</small><br />`;
+			buf += `Certainty: <input name="certainty" /> <small>(optional)</small><br />`;
+			buf += `Count: <input name="count" /> <small>(optional)</small><br />`;
+			buf += `<button class="button notifying" type="submit">Add punishment</button></details>`;
+			buf += `</form><br />`;
+			buf += `</div><div class="infobox"><h3>Scoring:</h3><hr />`;
+			const keys = Utils.sortBy(
+				Object.keys(Artemis.RemoteClassifier.ATTRIBUTES),
+				k => [-Object.keys(settings.specials[k] || {}).length, k]
+			);
+			for (const k of keys) {
+				buf += `<strong>${k}</strong>:<br />`;
+				if (settings.specials[k]) {
+					for (const percent in settings.specials[k]) {
+						buf += `&bull; ${percent}%: ${settings.specials[k][percent]} `;
+						buf += `(<button class="button" name="send" value="/msgroom staff,/am ds ${k},${percent}">Delete</button>)`;
+						buf += `<br />`;
+					}
+				}
+				buf += `<br />`;
+				buf += `<details class="readmore"><summary>Add a special case</summary>`;
+				buf += `<form data-submitsend="/msgroom staff,/am es ${k},{percent},{score}">`;
+				buf += `Percent needed: <input type="text" name="percent" /><br />`;
+				buf += `Score: <input type="text" name="score" /><br />`;
+				buf += `<button class="button notifying" type="submit">Add</button>`;
+				buf += `</form></details>`;
+				buf += `<hr />`;
+			}
+			buf += `</div>`;
 			return buf;
 		},
 	},

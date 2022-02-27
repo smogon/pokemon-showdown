@@ -10,6 +10,8 @@
 import {Dex, toID} from './dex';
 import {Utils} from '../lib';
 import {Tags} from '../data/tags';
+import {Teams} from './teams';
+import {PRNG} from './prng';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -234,6 +236,16 @@ export class TeamValidator {
 				return [
 					`This format doesn't let you use your own team.`,
 					`If you're not using a custom client, please report this as a bug. If you are, remember to use \`/utm null\` before starting a game in this format.`,
+				];
+			}
+			const testTeamSeed = PRNG.generateSeed();
+			try {
+				const testTeamGenerator = Teams.getGenerator(format, testTeamSeed);
+				testTeamGenerator.getTeam(options); // Throws error if generation fails
+			} catch (e) {
+				return [
+					`${format.name}'s team generator (${format.team}) failed using these rules and seed (${testTeamSeed}):-`,
+					`${e}`,
 				];
 			}
 			return null;
@@ -1535,6 +1547,19 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 
 		setHas['ability:' + ability.id] = true;
+
+		if (this.format.id === 'gen8pokebilities') {
+			const species = dex.species.get(set.species);
+			const unSeenAbilities = Object.keys(species.abilities)
+				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S"]);
+
+			if (ability.id !== this.toID(species.abilities['S'])) {
+				for (const abilityName of unSeenAbilities) {
+					setHas['ability:' + toID(abilityName)] = true;
+				}
+			}
+		}
 
 		let banReason = ruleTable.check('ability:' + ability.id);
 		if (banReason) {

@@ -37,6 +37,7 @@ export interface TriviaDatabase {
 	moveQuestionToCategory(question: string, newCategory: string): Promise<void> | void;
 	migrateCategory(sourceCategory: string, targetCategory: string): Promise<number> | number;
 	acceptSubmissions(submissions: string[]): Promise<void> | void;
+	editQuestion(oldQuestionText: string, newQuestionText?: string, newAnswers?: string[]): Promise<void>;
 
 	getHistory(numberOfLines: number): Promise<TriviaGame[]> | TriviaGame[];
 	getScoresForLastGame(): Promise<{[k: string]: number}> | {[k: string]: number};
@@ -48,7 +49,7 @@ export interface TriviaDatabase {
 	getLeaderboardEntry(
 		id: ID,
 		leaderboard: Leaderboard
-	): Promise<TriviaLeaderboardData | null> | TriviaLeaderboardData | null;
+	): Promise<TriviaLeaderboardScore | null> | TriviaLeaderboardScore | null;
 	getLeaderboards(): Promise<TriviaLeaderboards> | TriviaLeaderboards;
 
 	checkIfQuestionExists(questionText: string): Promise<boolean> | boolean;
@@ -304,6 +305,19 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		);
 	}
 
+	async editQuestion(oldQuestionText: string, newQuestionText?: string, newAnswers?: string[]) {
+		if (this.readyPromise) await this.readyPromise;
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't edit Trivia question because SQLite is not enabled.`);
+		}
+
+		await Chat.database.transaction('editQuestion', {
+			oldQuestionText,
+			newQuestionText,
+			newAnswers,
+		});
+	}
+
 	/*****************************
 	 * Methods for fetching data *
 	 *****************************/
@@ -368,7 +382,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
 	}
 
-	async getLeaderboardEntry(id: ID, leaderboard: Leaderboard): Promise<TriviaLeaderboardData | null> {
+	async getLeaderboardEntry(id: ID, leaderboard: Leaderboard): Promise<TriviaLeaderboardScore | null> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't find out if user ${id} has a Trivia leaderboard entry because SQLite is not enabled.`);

@@ -155,6 +155,13 @@ describe('[Gen 8] Random Battle', () => {
 		});
 	});
 
+	it(`should minimize Chansey's attack stat`, () => {
+		testSet('chansey', options, set => {
+			const [atkIV, atkEV] = [set.ivs.atk, set.evs.atk];
+			assert(atkIV === 0 && atkEV === 0, `Chansey should have minimum attack (Atk IV: ${atkIV}, Atk EV: ${atkEV})`);
+		});
+	});
+
 	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 	it('should always give Azumarill Aqua Jet', () => testAlwaysHasMove('azumarill', options, 'aquajet'));
 });
@@ -212,12 +219,12 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 	for (const species of dex.species.all()) {
 		if (!species.randomBattleMoves) continue;
 
-		// Pokémon with Sniper should always have Scope Lens
+		// Pokémon with Sniper should never have Scope Lens
 		if (Object.values(species.abilities).includes('Sniper')) {
-			it(`should always give ${species} Scope Lens if it has Sniper`, () => {
+			it(`should never give ${species} Scope Lens if it has Sniper`, () => {
 				testSet(species, options, set => {
 					if (set.ability !== 'Sniper') return;
-					assert.equal(set.item, 'Scope Lens', `got ${set.item} instead of Scope Lens`);
+					assert.notEqual(set.item, 'Scope Lens', `got Scope Lens (set=${JSON.stringify(set)})`);
 				});
 			});
 		}
@@ -314,6 +321,40 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 	it('should not give Breloom Focus Punch without Substitute', () => {
 		testSet('breloom', options, set => {
 			if (set.moves.includes('focuspunch')) assert(set.moves.includes('substitute'), `Breloom has Focus Punch and no Substitute (${set.moves})`);
+		});
+	});
+
+	it('should never give Flygon Defog and Dragon Dance', () => {
+		testSet('flygon', options, set => {
+			if (set.moves.includes('defog')) {
+				assert(!set.moves.includes('dragondance'), `Flygon has Defog and Dragon Dance (${set.moves})`);
+			}
+		});
+	});
+
+	for (const pokemon of ['arceussteel', 'empoleon']) {
+		it(`should not give ${pokemon} Defog and Stealth Rock`, () => {
+			testSet(pokemon, options, set => {
+				if (set.moves.includes('defog')) {
+					assert(!set.moves.includes('stealthrock'), `${pokemon} has Defog and Stealth Rock (${set.moves})`);
+				}
+			});
+		});
+	}
+
+	it('should not give Magcargo Fire Blast and Lava Plume', () => {
+		testSet('magcargo', options, set => {
+			if (set.moves.includes('fireblast')) {
+				assert(!set.moves.includes('lavaplume'), `Magcargo has Fire Blast and Lava Plume (${set.moves})`);
+			}
+		});
+	});
+
+	it('should not give Yanmega Protect + Tinted Lens', () => {
+		testSet('yanmega', options, set => {
+			if (set.moves.includes('protect')) {
+				assert.notEqual(set.ability, 'Tinted Lens', `Yanmega has Protect and Tinted Lens (set=${JSON.stringify(set)})`);
+			}
 		});
 	});
 });

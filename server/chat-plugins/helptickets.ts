@@ -3,13 +3,14 @@ import {getCommonBattles} from '../chat-commands/info';
 import {checkRipgrepAvailability} from '../config-loader';
 import type {Punishment} from '../punishments';
 import type {PartialModlogEntry, ModlogID} from '../modlog';
+import {runPunishments} from './helptickets-auto';
 
 const TICKET_FILE = 'config/tickets.json';
 const SETTINGS_FILE = 'config/chat-plugins/ticket-settings.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
-const BATTLES_REGEX = /\bbattle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?/g;
-const REPLAY_REGEX = new RegExp(
+export const BATTLES_REGEX = /\bbattle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?/g;
+export const REPLAY_REGEX = new RegExp(
 	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?`, "g"
 );
 const REPORT_NAMECOLORS: {[k: string]: string} = {
@@ -30,7 +31,7 @@ interface TicketSettings {
 	responses: {[ticketType: string]: {[title: string]: string}};
 }
 
-interface TicketState {
+export interface TicketState {
 	creator: string;
 	userid: ID;
 	open: boolean;
@@ -51,6 +52,8 @@ interface TicketState {
 	 * Use `TextTicketInfo#getState` to set it at creation (store properties of the user object, etc)
 	 */
 	state?: AnyObject & {claimTime?: number};
+	/** Recommendations from the Artemis monitor, if it is set to only recommend. */
+	recommended?: string[];
 }
 
 interface ResolvedTicketInfo {
@@ -59,6 +62,8 @@ interface ResolvedTicketInfo {
 	by: string;
 	seen: boolean;
 	staffReason: string;
+	/** <small> note under the resolved */
+	note?: string;
 }
 
 export interface TextTicketInfo {
@@ -86,6 +91,7 @@ interface BattleInfo {
 	url: string;
 	title: string;
 	players: {p1: ID, p2: ID, p3?: ID, p4?: ID};
+	pokemon: Record<string, {species: string, name?: string}[]>;
 }
 
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
@@ -158,7 +164,7 @@ async function convertRoomPunishments() {
 	}
 }
 
-function writeStats(line: string) {
+export function writeStats(line: string) {
 	// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
 	const date = new Date();
 	const month = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
@@ -280,11 +286,13 @@ export class HelpTicket extends Rooms.RoomGame {
 		if (user.isStaff && this.ticket.userid !== user.id) this.involvedStaff.add(user.id);
 		if (this.ticket.active) return;
 		const blockedMessages = [
-			'hi', 'hello', 'hullo', 'hey', 'yo', 'ok',
+			'hello', 'hullo', 'hey',
 			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore',
 			'help', 'yes',
 		];
-		if ((!user.isStaff || this.ticket.userid === user.id) && blockedMessages.includes(toID(message))) {
+		if (
+			(!user.isStaff || this.ticket.userid === user.id) && (message.length < 3 || blockedMessages.includes(toID(message)))
+		) {
 			this.room.add(`|c|&Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
 			this.room.add(`|c|&Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
 			this.room.update();
@@ -499,14 +507,29 @@ export class HelpTicket extends Rooms.RoomGame {
 			type: ticket.type,
 			claimed: ticket.claimed,
 			state: ticket.state || {},
+			recommended: ticket.recommended,
 		};
 		const date = Chat.toTimestamp(new Date()).split(' ')[0];
 		void FS(`logs/tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
 	}
-	static async getTextLogs(userid: ID, date?: string) {
+
+	/**
+	 * @param search [search key, search value] (ie ['userid', 'mia']
+	 * returns tickets where the userid property === mia)
+	 * If the [value] is omitted (index 1), searches just for tickets with the given property.
+	 */
+	static async getTextLogs(search: [string, string] | [string], date?: string) {
 		const results = [];
 		if (await checkRipgrepAvailability()) {
-			const args = [`-e`, `userid":"${userid}`, '--no-filename'];
+			const searchString = search.length > 1 ?
+				// regex escaped to handle things like searching for arrays or objects
+				// (JSON.stringify accounts for " strings are wrapped in and stuff. generally ensures that searching is easier.)
+				Utils.escapeRegex(JSON.stringify(search[1]).slice(0, -1)) :
+				"";
+			const args = [
+				`-e`, search.length > 1 ? `${search[0]}":${searchString}` : `${search[0]}":`,
+				'--no-filename',
+			];
 			let lines;
 			try {
 				lines = await ProcessManager.exec([
@@ -538,9 +561,10 @@ export class HelpTicket extends Rooms.RoomGame {
 			for await (const line of stream.byLine()) {
 				if (line.trim()) {
 					const data = JSON.parse(line);
-					if (data.userid === userid) {
-						results.push(data);
-					}
+					const searched = data[search[0]];
+					let matched = !!searched;
+					if (search[1]) matched = searched === search[1];
+					if (matched) results.push(data);
 				}
 			}
 		}
@@ -677,12 +701,15 @@ export class HelpTicket extends Rooms.RoomGame {
 		return `You are banned from creating help tickets.`;
 	}
 	static notifyResolved(user: User, ticket: TicketState, userid = user.id) {
-		const {result, time, by, seen} = ticket.resolved as {result: string, time: number, by: string, seen: boolean};
+		const {result, time, by, seen, note} = ticket.resolved as ResolvedTicketInfo;
 		if (seen) return;
 		const timeString = (Date.now() - time) > 1000 ? `, ${Chat.toDurationString(Date.now() - time)} ago.` : '.';
 		user.send(`|pm|&Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
 		if (result?.trim()) {
 			user.send(`|pm|&Staff|${user.getIdentity()}|The result was "${result}"`);
+		}
+		if (note?.trim()) {
+			user.send(`|pm|&Staff|${user.getIdentity()}|/raw <small>${note}</small>`);
 		}
 		tickets[userid].resolved!.seen = true;
 		writeTickets();
@@ -897,21 +924,54 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 
 export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
+	const seenPokemon = new Set<string>();
 	if (battleRoom && battleRoom.type !== 'chat') {
 		const playerTable: Partial<BattleInfo['players']> = {};
+		const monTable: BattleInfo['pokemon'] = {};
 		// i kinda hate this, but this will always be accurate to the battle players.
 		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
-		const playerLines = battleRoom.log.log.filter(line => line.startsWith('|player|'));
-		for (const line of playerLines) {
-			// |player|p1|Mia|miapi.png|1000
-			const [, , playerSlot, name] = line.split('|');
-			playerTable[playerSlot as SideID] = toID(name);
+		for (const line of battleRoom.log.log) {
+			// |switch|p2a: badnite|Dragonite, M|323/323
+			if (line.startsWith('|switch|')) { // name cannot have been seen until it switches in
+				const [, , playerWithNick, speciesWithGender] = line.split('|');
+				let [slot, name] = playerWithNick.split(':');
+				const species = speciesWithGender.split(',')[0].trim(); // should always exist
+				slot = slot.slice(0, -1); // p2a -> p2
+				if (!monTable[slot]) monTable[slot] = [];
+				const identifier = `${name || ""}-${species}`;
+				if (seenPokemon.has(identifier)) continue;
+				// technically, if several mons have the same name and species, this will ignore them.
+				// BUT if they have the same name and species we only need to see it once
+				// so it doesn't matter
+				seenPokemon.add(identifier);
+				name = name?.trim() || "";
+				monTable[slot].push({
+					species,
+					name: species === name ? undefined : name,
+				});
+			}
+			if (line.startsWith('|player|')) {
+				// |player|p1|Mia|miapi.png|1000
+				const [, , playerSlot, name] = line.split('|');
+				playerTable[playerSlot as SideID] = toID(name);
+			}
+			for (const k in monTable) {
+				// SideID => userID, cannot do conversion at time of collection
+				// because the playerID => userid mapping might not be there.
+				// strictly, yes it will, but this is for maximum safety.
+				const userid = playerTable[k as SideID];
+				if (userid) {
+					monTable[userid] = monTable[k];
+					delete monTable[k];
+				}
+			}
 		}
 		return {
 			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
 			title: battleRoom.title,
 			url: `/${battle}`,
 			players: playerTable as BattleInfo['players'],
+			pokemon: monTable,
 		};
 	}
 	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
@@ -919,16 +979,43 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
 		const data = JSON.parse(raw);
 		if (data.log?.length) {
+			const log = data.log.split('\n');
+			const players = {
+				p1: toID(data.p1),
+				p2: toID(data.p2),
+				p3: toID(data.p3),
+				p4: toID(data.p4),
+			};
+			const chat = [];
+			const mons: BattleInfo['pokemon'] = {};
+			for (const line of log) {
+				if (line.startsWith('|c|')) {
+					chat.push(line);
+				} else if (line.startsWith('|switch|')) {
+					const [, , playerWithNick, speciesWithGender] = line.split('|');
+					const species = speciesWithGender.split(',')[0].trim(); // should always exist
+					let [slot, name] = playerWithNick.split(':');
+					slot = slot.slice(0, -1); // p2a -> p2
+					// safe to not check here bc this should always exist in the players table.
+					// if it doesn't, there's a problem
+					const id = players[slot as SideID];
+					if (!mons[id]) mons[id] = [];
+					name = name?.trim() || "";
+					const setId = `${name || ""}-${species}`;
+					if (seenPokemon.has(setId)) continue;
+					seenPokemon.add(setId);
+					mons[id].push({
+						species, // don't want to see a name if it's the same as the species
+						name: name === species ? undefined : name,
+					});
+				}
+			}
 			return {
-				log: data.log.split('\n').filter((k: string) => k.startsWith('|c|')),
+				log: chat,
 				title: `${data.p1} vs ${data.p2}`,
 				url: `https://${Config.routes.replays}/${battle}`,
-				players: {
-					p1: toID(data.p1),
-					p2: toID(data.p2),
-					p3: toID(data.p3),
-					p4: toID(data.p4),
-				},
+				players,
+				pokemon: mons,
 			};
 		}
 	} catch {}
@@ -1840,6 +1927,23 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>From: ${ticket.userid}</strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
+			if (ticket.recommended?.length) {
+				if (ticket.recommended.length > 1) {
+					buf += `<details class="readmore"><summary><strong>Recommended from Artemis</strong></summary>`;
+					buf += ticket.recommended.join('<br />');
+					buf += `</details>`;
+				} else {
+					buf += `<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
+				}
+				if (!ticket.state?.recommendResult) {
+					buf += `<br />`;
+					buf += `Rate accuracy of result: `;
+					for (const [title, result] of [['Accurate', 'success'], ['Inaccurate', 'failure']]) {
+						buf += `<button class="button" name="send" value="/aht resolve ${ticket.userid},${result}">${title}</button>`;
+					}
+				}
+				buf += `<br />`;
+			}
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
@@ -1899,7 +2003,7 @@ export const pages: Chat.PageTable = {
 					return this.errorReply(`Invalid date.`);
 				}
 			}
-			const logs = await HelpTicket.getTextLogs(userid, date);
+			const logs = await HelpTicket.getTextLogs(['userid', userid], date);
 			this.title = `[Ticket Logs] ${userid}${date ? ` (${date})` : ''}`;
 			let buf = `<div class="pad"><h2>Ticket logs for ${userid}${date ? ` in the month of ${date}` : ''}</h2>`;
 			buf += `<button class="button" name="send" value="/join ${this.pageid}"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
@@ -2281,13 +2385,13 @@ export const commands: Chat.ChatCommands = {
 				writeTickets();
 				notifyStaff();
 				textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
+				void runPunishments(ticket as TicketState & {text: [string, string]}, typeId);
 				if (textTicket.getState) {
 					ticket.state = textTicket.getState(ticket, user);
 				}
 
 				connection.send(`>view-${pageId}\n|deinit`);
 				Chat.refreshPageFor(`help-list-${HelpTicket.getTypeId(ticket.type)}`, 'staff');
-				Chat.runHandlers('TicketCreate', ticket, user);
 				return this.popupReply(`Your report has been submitted.`);
 			}
 
@@ -2405,7 +2509,6 @@ export const commands: Chat.ChatCommands = {
 			tickets[user.id] = ticket;
 			writeTickets();
 			notifyStaff();
-			Chat.runHandlers('TicketCreate', ticket, user);
 			connection.send(`>view-help-request\n|deinit`);
 		},
 
@@ -2603,22 +2706,37 @@ export const commands: Chat.ChatCommands = {
 		lr: 'listresponses',
 		listresponses(target, room, user) {
 			this.checkCan('lock');
-			let buf = `<strong>Help ticket response buttons</strong><hr />`;
-			if (!Object.keys(settings.responses).length) {
+			let buf = `<strong>Help ticket response buttons `;
+			target = toID(target);
+			if (target && !(target in textTickets)) {
+				return this.errorReply(`Invalid ticket type: ${target}.`);
+			}
+			buf += `${target ? `for the type ${target}:` : ""}</strong><hr />`;
+			const table = target ? {[target]: settings.responses[target]} : settings.responses;
+			if (!Object.keys(table).length) {
 				buf += `<p class="message-error">None</p>`;
 				return this.sendReplyBox(buf);
 			}
-			buf += Object.keys(settings.responses).map(type => (
+			buf += Object.keys(table).map(type => (
 				`<p>${ticketTitles[type]}<p>` +
 				Object.keys(settings.responses[type])
 					.map(name => Utils.html`<p>- ${name}: "${settings.responses[type][name]}"</p>`).join('')
 			)).join('<hr />');
 			return this.sendReplyBox(buf);
 		},
-		listresponseshelp: [`/helpticket listresponses - List current response buttons for text tickets. Requires: % @ &`],
+		listresponseshelp: [
+			`/helpticket listresponses [optional type] - List current response buttons for text tickets. `,
+			`If a [type] is given, lists responses only for that type. Requires: % @ &`,
+		],
 
 		close(target, room, user) {
-			if (!target) return this.parse(`/help helpticket close`);
+			if (!target) {
+				if (room?.roomid.startsWith('help-')) {
+					target = room.roomid.slice(5);
+				} else {
+					return this.parse(`/help helpticket close`);
+				}
+			}
 			const [targetUsername, rest] = this.splitOne(target);
 			let result = rest !== 'false';
 			const ticket = tickets[toID(targetUsername)];

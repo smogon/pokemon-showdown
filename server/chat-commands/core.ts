@@ -1237,6 +1237,7 @@ export const commands: Chat.ChatCommands = {
 				);
 				return false;
 			}
+			Chat.runHandlers('onLadderSearch', user, connection, ladder.formatid as ID);
 			return ladder.searchBattle(user, connection);
 		}
 		return Ladders.cancelSearches(user);
@@ -1509,6 +1510,9 @@ export const commands: Chat.ChatCommands = {
 			let help = namespace[`${cmd}help`];
 			if (typeof help === 'string') {
 				help = namespace[help];
+			}
+			if (!help && typeof namespace[cmd] === 'string') {
+				help = namespace[`${namespace[cmd]}help`];
 			}
 			if (!help && namespace !== Chat.commands && namespace['help']) {
 				help = namespace['help'];

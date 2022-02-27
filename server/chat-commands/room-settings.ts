@@ -281,6 +281,7 @@ export const commands: Chat.ChatCommands = {
 			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
 			this.addModAction(`${user.name} turned off modjoin.`);
 			this.modlog('MODJOIN', null, 'OFF');
+			if (room.battle) room.battle.inviteOnlySetter = null;
 			room.saveSettings();
 			return;
 		} else if (target === 'sync') {
@@ -724,7 +725,7 @@ export const commands: Chat.ChatCommands = {
 	hightraffic(target, room, user) {
 		room = this.requireRoom();
 		if (!target) {
-			return this.sendReply(`This room is: ${!room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
+			return this.sendReply(`This room is: ${room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
 		}
 		this.checkCan('makeroom');
 

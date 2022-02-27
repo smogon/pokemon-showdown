@@ -759,6 +759,34 @@ export const commands: Chat.ChatCommands = {
 		</>);
 	},
 
+	moveavatars(target, room, user) {
+		this.checkCan('bypassall');
+		const [from, to] = target.split(',').map(toID);
+		if (!from || !to) {
+			return this.parse(`/help moveavatars`);
+		}
+		if (!customAvatars[from]?.allowed.length) {
+			return this.errorReply(`That user has no avatars.`);
+		}
+		const existing = customAvatars[to]?.allowed.filter(Boolean);
+		customAvatars[to] = {...customAvatars[from]};
+		delete customAvatars[from];
+		if (existing) {
+			for (const avatar of existing) {
+				if (!customAvatars[to].allowed.includes(avatar)) {
+					customAvatars[to].allowed.push(avatar);
+				}
+			}
+		}
+		Avatars.save(true);
+		this.sendReply(`Moved ${from}'s avatars to '${to}'.`);
+		this.globalModlog(`MOVEAVATARS`, to, `from ${from}`);
+		Avatars.tryNotify(Users.get(to));
+	},
+	moveavatarshelp: [
+		`/moveavatars [from user], [to user] - Move all of the custom avatars from [from user] to [to user]. Requires: &`,
+	],
+
 	async masspavatar(target, room, user) {
 		this.checkCan('bypassall');
 

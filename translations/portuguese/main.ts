@@ -50,6 +50,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Silencia um usu&aacute;rio (ou seja, impede-o de falar) por 7 minutos.",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Silencia um usu&aacute;rio por 60 minutos.",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Bane um usu&aacute;rio (ou seja, impede-o de entrar na sala) por 2 dias.",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - Bane um usuário da sala por uma semana.",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Bane um usu&aacute;rio por um ano.",
 
 		"<strong>Global punishments</strong>:": "<strong>Puni&ccedil;&otilde;es globais</strong>",
@@ -57,6 +58,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Bloqueia um usu&aacute;rio por uma semana.",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Bloqueia um usu&aacute;rio e o impede de escolher um nome por 2 dias.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Bane globalmente um usu&aacute;rio (ou seja, impede-o de se conectar ao servidor e de jogar) por uma semana.",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>Punições globais de duração indeterminada</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - aplicado em múltiplos casos de má conduta e raramente é resultado de uma única ação. ",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': 'É possível fazer um apelo no <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">fórum Discipline Appeals</a>',
+		" forum after at least 3 months without incident.": " após pelo menos 3 meses sem um incidente.",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - trata-se de um banimento global geralmente aplicado aos casos mais severos de comportamentos ofensivos e/ou inapropriados. Não é possível fazer um apelo.",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Room drivers (%)</strong> podem usar:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn OU /k <em>nome</em>: d&aacute; um aviso a um usu&aacute;rio e mostra as regras do Pok&eacute;mon Showdown",

@@ -27,4 +27,26 @@ describe('[Gen 3] Random Battle', () => {
 		testHiddenPower('kingler', options);
 		testHiddenPower('moltres', options);
 	});
+
+	it('should not give Magneton Sleep Talk without Rest', () => {
+		testSet('magneton', options, set => {
+			if (set.moves.includes('sleeptalk')) {
+				assert(set.moves.includes('rest'), `bad Magneton set: ${JSON.stringify(set.moves)}`);
+			}
+		});
+	});
+
+	it('should give Blissey Soft-Boiled', () => {
+		testSet('blissey', options, set => {
+			assert(set.moves.includes('softboiled'), `bad Blissey set: ${JSON.stringify(set.moves)}`);
+		});
+	});
+
+	it('should not give Registeel Sleep Talk and Protect', () => {
+		testSet('registeel', options, set => {
+			if (set.moves.includes('sleeptalk')) {
+				assert(!set.moves.includes('protect'), `Registeel with Sleep Talk + Protect (${set.moves})`);
+			}
+		});
+	});
 });
