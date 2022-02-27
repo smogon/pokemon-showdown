@@ -2070,7 +2070,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["healingwish", "leechseed", "psychic", "rest", "seedflare", "substitute"],
 	},
 	shayminsky: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 		randomBattleMoves: ["airslash", "leechseed", "seedflare", "substitute", "synthesis"],
 	},
