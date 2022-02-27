@@ -25160,7 +25160,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["8L55"],
 		},
 		eventData: [
-			{generation: 4, level: 30, shiny: 1, moves: ["growth", "magicalleaf", "leechseed", "synthesis"], pokeball: "pokeball"},
+			{generation: 8, level: 30, shiny: 1, moves: ["growth", "magicalleaf", "leechseed", "synthesis"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
