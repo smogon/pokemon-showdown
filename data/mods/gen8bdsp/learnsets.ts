@@ -25135,12 +25135,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			gigadrain: ["8M"],
 			gigaimpact: ["8M"],
 			grassknot: ["8M"],
-			growth: ["8L1"],
+			growth: ["8L1", "8S0"],
 			healingwish: ["8L46", "8L91"],
 			hyperbeam: ["8M"],
 			leafstorm: ["8L91"],
-			leechseed: ["8L19"],
-			magicalleaf: ["8L10"],
+			leechseed: ["8L19", "8S0"],
+			magicalleaf: ["8L10", "8S0"],
 			protect: ["8M"],
 			psychic: ["8M"],
 			psychup: ["8M"],
@@ -25156,9 +25156,16 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			sweetkiss: ["8L82"],
 			sweetscent: ["8L37"],
 			swordsdance: ["8M"],
-			synthesis: ["8L28"],
+			synthesis: ["8L28", "8S0"],
 			worryseed: ["8L55"],
 		},
+		eventData: [
+			{generation: 4, level: 30, shiny: 1, moves: ["growth", "magicalleaf", "leechseed", "synthesis"], pokeball: "pokeball"},
+		],
+		eventOnly: true,
+	},
+	shayminsky: {
+		eventOnly: true,
 	},
 	arceus: {
 		learnset: {
