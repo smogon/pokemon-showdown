@@ -692,7 +692,7 @@ To be exact, `CHOICE` is one of:
 
 - `move MOVESPEC max`, to Dynamax/Gigantamax and make a move
 
-- `rotateright move MOVESPEC ...` or `rotateleft move MOVESPEC ...`, 
+- `rotate DIRECTION move MOVESPEC ...`, where `DIRECTION` is either `left` or `right`,
 in Rotation Battles to rotate to your second or third Pokémon, respectively, and use its move
 
 - `switch SWITCHSPEC`, to make a switch

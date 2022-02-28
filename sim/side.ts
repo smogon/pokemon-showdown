@@ -193,7 +193,7 @@ export class Side {
 				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.zmove) details += ` zmove`;
 				if (action.maxMove) details += ` dynamax`;
-				if (this.choice.willRotate) details += `rotate${this.choice.willRotate} `;
+				if (this.choice.willRotate) details += `rotate ${this.choice.willRotate} `;
 				return `move ${action.moveid}${details}`;
 			case 'switch':
 			case 'instaswitch':
@@ -862,7 +862,7 @@ export class Side {
 		};
 	}
 
-	choose(input: string, recursive?: boolean): boolean {
+	choose(input: string) {
 		if (!this.requestState) {
 			return this.emitChoiceError(
 				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`
@@ -873,7 +873,7 @@ export class Side {
 			return this.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
 		}
 
-		if (!recursive) this.clearChoice();
+		this.clearChoice();
 
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
@@ -888,6 +888,16 @@ export class Side {
 			data = data.trim();
 
 			switch (choiceType) {
+			case 'rotate':
+				if (this.battle.gameType !== 'rotation') return this.emitChoiceError("Can't rotate: Not a rotation battle");
+				let direction;
+				[direction, data] = Utils.splitFirst(data, ' ');
+				data = data.trim();
+				if (!['left', 'right'].includes(direction)) return this.emitChoiceError(`Rotation direction must be "left" or "right"`);
+				if (!data.startsWith('move ')) return this.emitChoiceError("Rotations must be followed by a move choice");
+				data = Utils.splitFirst(data, ' ')[1].trim();
+				this.choice.willRotate = direction as 'left' | 'right';
+				// falls through
 			case 'move':
 				const original = data;
 				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
@@ -939,12 +949,6 @@ export class Side {
 				if (data) return this.emitChoiceError(`Unrecognized data after "shift": ${data}`);
 				if (!this.chooseShift()) return false;
 				break;
-			case 'rotateright':
-			case 'rotateleft':
-				if (this.battle.gameType !== 'rotation') return this.emitChoiceError("Can't rotate: Not a rotation battle");
-				if (!data.startsWith('move ')) return this.emitChoiceError("Rotations must be followed by a move choice");
-				this.choice.willRotate = choiceType === 'rotateleft' ? 'left' : 'right';
-				return this.choose(data, true);
 			case 'team':
 				if (!this.chooseTeam(data)) return false;
 				break;

@@ -415,7 +415,22 @@ describe('Choice parser', function () {
 				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 			]});
-			assert.throws(() => battle.choose('p1', 'rotateright move selfdestruct'));
+			assert.throws(() => battle.choose('p1', 'rotate right move selfdestruct'));
+		});
+
+		it("should reject rotation directions that aren't 'left' or 'right'", function () {
+			battle = common.gen(5).createBattle({gameType: 'rotation'});
+			battle.setPlayer('p1', {team: [
+				{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
+				{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
+				{species: "Gastly", ability: 'levitate', moves: ['lunardance']},
+			]});
+			battle.setPlayer('p2', {team: [
+				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+			]});
+			assert.throws(() => battle.choose('p1', 'rotate forward move selfdestruct'));
 		});
 
 		it("should reject rotations that aren't followed by moves", function () {
@@ -431,7 +446,7 @@ describe('Choice parser', function () {
 				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 				{species: "Forretress", ability: 'levitate', moves: ['spikes']},
 			]});
-			assert.throws(() => battle.choose('p2', 'rotateright switch 4'));
+			assert.throws(() => battle.choose('p2', 'rotate right switch 4'));
 		});
 	});
 });

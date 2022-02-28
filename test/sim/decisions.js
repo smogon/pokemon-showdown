@@ -488,7 +488,7 @@ describe('Choices', function () {
 		it("should allow rotations in rotation battles", function () {
 			battle = common.gen(5).createBattle({gameType: 'rotation'}, TRIPLES_TEAMS.full);
 
-			battle.makeChoices('rotateright move tackle', 'rotateleft move tackle');
+			battle.makeChoices('rotate right move tackle', 'rotate left move tackle');
 			assert.species(battle.p1.active[0], "Ivysaur");
 			assert.species(battle.p2.active[0], "Blastoise");
 		});
@@ -505,9 +505,9 @@ describe('Choices', function () {
 			]]);
 
 			battle.makeChoices('move memento', 'move memento');
-			assert.throws(() => battle.choose('p1', 'rotateleft move memento'));
-			battle.makeChoices('move tackle', 'rotateright move tackle');
-			assert.throws(() => battle.choose('p2', 'rotateright move memento'));
+			assert.throws(() => battle.choose('p1', 'rotate left move memento'));
+			battle.makeChoices('move tackle', 'rotate right move tackle');
+			assert.throws(() => battle.choose('p2', 'rotate right move memento'));
 		});
 
 		it("should not allow rotating out of a locked move", function () {
@@ -522,8 +522,8 @@ describe('Choices', function () {
 			]]);
 
 			battle.makeChoices('move petaldance', 'move growl');
-			assert.throws(() => battle.choose('p1', 'rotateright move tackle'));
-			assert.throws(() => battle.choose('p1', 'rotateleft move tackle'));
+			assert.throws(() => battle.choose('p1', 'rotate right move tackle'));
+			assert.throws(() => battle.choose('p1', 'rotate left move tackle'));
 		});
 	});
 
