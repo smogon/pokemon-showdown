@@ -10,15 +10,6 @@ import * as Artemis from '../artemis';
 const ORDERED_PUNISHMENTS = ['WARN', 'FORCERENAME', 'LOCK', 'NAMELOCK', 'WEEKLOCK', 'WEEKNAMELOCK'];
 const PMLOG_IGNORE_TIME = 24 * 60 * 60 * 1000;
 const WHITELIST = ['mia'];
-const REASONS: Record<string, string> = {
-	sexual_explicit: 'explicit messages',
-	severe_toxicity: 'extreme harassment',
-	toxicity: 'harassment',
-	obscene: 'obscene messages',
-	identity_attack: 'using identity-based insults',
-	insult: 'insulting others',
-	threat: 'threatening others',
-};
 
 export interface AutoPunishment {
 	modlogCount?: number;
@@ -392,7 +383,7 @@ export const checkers: {
 			}
 			for (const [id, messageList] of Object.entries(messages)) {
 				const {averages, classified} = await getMessageAverages(messageList);
-				const {action, types} = determinePunishment('battleharassment', averages, []);
+				const {action} = determinePunishment('battleharassment', averages, []);
 				if (action) {
 					const existingPunishment = actions.get(id);
 					if (!existingPunishment || supersedes(action, existingPunishment.action)) {
@@ -400,7 +391,7 @@ export const checkers: {
 							action,
 							user: toID(id),
 							result: averages,
-							reason: `Not following rules in battles (${types.map(r => REASONS[r])})`,
+							reason: `Not following rules in battles (https://${Config.routes.client}/${url})`,
 							proof: urls.join(', '),
 						});
 					}
@@ -415,7 +406,7 @@ export const checkers: {
 							action: curPunishment,
 							user: toID(id),
 							result: averages,
-							reason: `Not following rules in battles (${types.map(r => REASONS[r])})`,
+							reason: `Not following rules in battles (https://${Config.routes.client}/${url})`,
 							proof: urls.join(', '),
 						});
 					}
@@ -466,12 +457,12 @@ export const checkers: {
 						action: punishment,
 						user: id,
 						result: {},
-						reason: "PM harassment",
+						reason: `PM harassment (against ${ticket.userid === id ? targetId : ticket.userid})`,
 					});
 				}
 			}
 			for (const result of classified) {
-				const {action, types} = determinePunishment('pmharassment', result, [], true);
+				const {action} = determinePunishment('pmharassment', result, [], true);
 				if (!action) continue;
 				const exists = actions.get(id);
 				if (!exists || supersedes(action, exists.action)) {
@@ -479,7 +470,7 @@ export const checkers: {
 						action,
 						user: id,
 						result: {},
-						reason: `PM harassment (${types.map(r => REASONS[r])})`,
+						reason: `PM harassment (against ${ticket.userid === id ? targetId : ticket.userid})`,
 					});
 				}
 			}
@@ -841,7 +832,7 @@ export const pages: Chat.PageTable = {
 					if (!hit.recommended) continue; // ???
 					buf += `<a href="/view-help-text-${hit.userid}">${hit.userid}</a> (${hit.type}) `;
 					buf += `[${Chat.toTimestamp(new Date(hit.created))}]<br />`;
-					buf += `&bull; <code><small>${hit.recommended.join(', ')}</small></code><hr />`;
+					buf += Utils.html`&bull; <code><small>${hit.recommended.join(', ')}</small></code><hr />`;
 				}
 			} else {
 				buf += `<div class="message-error">No hits found.</div>`;
