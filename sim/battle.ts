@@ -1219,9 +1219,7 @@ export class Battle {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
 				if (!side.pokemonLeft) continue;
-				let active = side.active;
-				if (this.gameType === 'rotation') active = active.concat(side.pokemon.slice(1, 3));
-				const activeData = active.map(pokemon => pokemon?.getMoveRequestData());
+				const activeData = side.activeAndSubActives.map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 				if (side.allySide) {
 					requests[i].ally = side.allySide.getRequestData(true);
@@ -1354,8 +1352,7 @@ export class Battle {
 		if (!side.pokemonLeft) return [];
 
 		const canSwitchIn = [];
-		const startPos = this.gameType === 'rotation' ? 3 : side.active.length;
-		for (let i = startPos; i < side.pokemon.length; i++) {
+		for (let i = side.activeAndSubActives.length; i < side.pokemon.length; i++) {
 			const pokemon = side.pokemon[i];
 			if (!pokemon.fainted) {
 				canSwitchIn.push(pokemon);
@@ -2382,15 +2379,13 @@ export class Battle {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
-				if (this.gameType === 'rotation') {
-					for (let i = 1; i < 3; i++) {
-						// temporarily flag as active for Illusion, etc
-						// TODO is this actually needed?
-						side.pokemon[i].isActive = true;
-						this.runEvent('BeforeSwitchIn', side.pokemon[i]);
-						this.add('switch', side.pokemon[i], side.pokemon[i].getDetails);
-						side.pokemon[i].isActive = false;
-					}
+				for (const pokemon of side.subActives) {
+					// temporarily flag as active for Illusion, etc
+					// TODO is this actually needed?
+					pokemon.isActive = true;
+					this.runEvent('BeforeSwitchIn', pokemon);
+					this.add('switch', pokemon, pokemon.getDetails);
+					pokemon.isActive = false;
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
