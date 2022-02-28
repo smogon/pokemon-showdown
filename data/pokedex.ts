@@ -17402,7 +17402,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		forme: "Epilogue",
 		types: ["Poison", "Flying"],
 		gender: "N",
-		baseStats: {hp: 85, atk: 110, def: 85, spa: 55, spd: 85, spe: 120},
+		baseStats: {hp: 85, atk: 102, def: 85, spa: 63, spd: 85, spe: 120},
 		abilities: {0: "Tinted Lens"},
 		heightm: 0.8,
 		weightkg: 12.4,
