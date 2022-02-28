@@ -21,7 +21,7 @@ export const translations: Translations = {
 		"you will not be able to vote after viewing results": "投票結果を見た後は投票できません。",
 		"View results": "結果を見る",
 		"You can't vote after viewing results": "投票結果を見た後は投票できません。",
-		"The poll has ended &ndash; scroll down to see the results": "",
+		"The poll has ended &ndash; scroll down to see the results": "投票が終了しました &ndash; 下にスクロールすると結果が見られます。",
 		"Vote for ${num}": "${num}に投票する",
 		"Submit your vote": "投票を確定する",
 		"Quiz": "クイズ",
