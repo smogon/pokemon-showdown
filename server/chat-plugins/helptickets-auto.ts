@@ -527,7 +527,7 @@ export async function runPunishments(ticket: TicketState & {text: [string, strin
 			ticket.recommended = [];
 			for (const res of result.values()) {
 				Rooms.get('abuselog')?.add(
-					`[${ticket.type} Monitor] Recommended: ${res.action}: for ${res.user} (${res.reason})`
+					`|c|&|/log [${ticket.type} Monitor] Recommended: ${res.action}: for ${res.user} (${res.reason})`
 				).update();
 				ticket.recommended.push(`${res.action}: for ${res.user} (${res.reason})`);
 			}
