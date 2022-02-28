@@ -272,10 +272,21 @@ export const actionHandlers: {
 	},
 };
 
+function shouldNotProcess(message: string) {
+	return (
+		// special 'command', blocks things like /log, /raw, /html
+		// (but not a // message)
+		(message.startsWith('/') && !message.startsWith('//')) ||
+		// broadcasted chat command
+		message.startsWith('!')
+	);
+}
+
 export async function getMessageAverages(messages: string[]) {
 	const counts: Record<string, {count: number, raw: number}> = {};
 	const classified = [];
 	for (const message of messages) {
+		if (shouldNotProcess(message)) continue;
 		const res = await classifier.classify(message);
 		if (!res) continue;
 		classified.push(res);
