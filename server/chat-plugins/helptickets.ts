@@ -1930,10 +1930,10 @@ export const pages: Chat.PageTable = {
 			if (ticket.recommended?.length) {
 				if (ticket.recommended.length > 1) {
 					buf += `<details class="readmore"><summary><strong>Recommended from Artemis</strong></summary>`;
-					buf += ticket.recommended.join('<br />');
+					buf += ticket.recommended.map(Utils.escapeHTML).join('<br />');
 					buf += `</details>`;
 				} else {
-					buf += `<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
+					buf += Utils.html`<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
 				}
 				if (!ticket.state?.recommendResult) {
 					buf += `<br />`;
