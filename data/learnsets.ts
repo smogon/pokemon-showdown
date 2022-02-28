@@ -82844,7 +82844,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			snore: ["8M"],
 			stealthrock: ["8M"],
 			substitute: ["8M"],
-			swordsdance: ["8M"],
 			thunderwave: ["8M"],
 			toxic: ["8L1"],
 			uturn: ["8M"],
