@@ -404,7 +404,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 			// already destroyed
 			return;
 		}
-		this.stream.destroy();
+		void this.stream.destroy();
 		this.process.disconnect();
 		return;
 	}
