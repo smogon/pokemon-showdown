@@ -82,7 +82,7 @@ export interface TextTicketInfo {
 	getReviewDisplay: (
 		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection, state?: AnyObject
 	) => Promise<string | void> | string | void;
-	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
+	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void | Promise<void>;
 	getState?: (ticket: TicketState, user: User) => AnyObject;
 }
 
@@ -2384,7 +2384,7 @@ export const commands: Chat.ChatCommands = {
 				});
 				writeTickets();
 				notifyStaff();
-				textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
+				void textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
 				void runPunishments(ticket as TicketState & {text: [string, string]}, typeId);
 				if (textTicket.getState) {
 					ticket.state = textTicket.getState(ticket, user);
