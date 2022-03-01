@@ -486,9 +486,17 @@ describe('Choices', function () {
 
 	describe("Rotation requests", function () {
 		it("should allow rotations in rotation battles", function () {
-			battle = common.gen(5).createBattle({gameType: 'rotation'}, TRIPLES_TEAMS.full);
+			battle = common.gen(5).createBattle({gameType: 'rotation'}, [[
+				{species: 'Bulbasaur', ability: 'overgrow', moves: ['growth']},
+				{species: 'Ivysaur', ability: 'overgrow', moves: ['sludge']},
+				{species: 'Venusaur', ability: 'overgrow', moves: ['razorleaf']},
+			], [
+				{species: 'Squirtle', ability: 'torrent', moves: ['sleeptalk']},
+				{species: 'Wartortle', ability: 'torrent', moves: ['rapidspin']},
+				{species: 'Blastoise', ability: 'torrent', moves: ['tackle']},
+			]]);
 
-			battle.makeChoices('rotate right move tackle', 'rotate left move tackle');
+			battle.makeChoices('rotate right move sludge', 'rotate left move tackle');
 			assert.species(battle.p1.active[0], "Ivysaur");
 			assert.species(battle.p2.active[0], "Blastoise");
 		});
