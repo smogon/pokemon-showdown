@@ -1219,7 +1219,7 @@ export class Battle {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
 				if (!side.pokemonLeft) continue;
-				const activeData = side.activeAndSubActives.map(pokemon => pokemon?.getMoveRequestData());
+				const activeData = side.activeAndSubActives().map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 				if (side.allySide) {
 					requests[i].ally = side.allySide.getRequestData(true);
@@ -1352,7 +1352,7 @@ export class Battle {
 		if (!side.pokemonLeft) return [];
 
 		const canSwitchIn = [];
-		for (let i = side.activeAndSubActives.length; i < side.pokemon.length; i++) {
+		for (let i = side.activeAndSubActives().length; i < side.pokemon.length; i++) {
 			const pokemon = side.pokemon[i];
 			if (!pokemon.fainted) {
 				canSwitchIn.push(pokemon);
@@ -2379,7 +2379,7 @@ export class Battle {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
-				for (const pokemon of side.subActives) {
+				for (const pokemon of side.subActives()) {
 					// temporarily flag as active for Illusion, etc
 					// TODO is this actually needed?
 					pokemon.isActive = true;

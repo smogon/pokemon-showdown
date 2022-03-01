@@ -265,11 +265,11 @@ export class Side {
 	hasAlly(pokemon: Pokemon) {
 		return pokemon.side === this || pokemon.side === this.allySide;
 	}
-	get subActives() {
+	subActives() {
 		return this.battle.gameType === 'rotation' ? this.pokemon.slice(1, 3) : [];
 	}
-	get activeAndSubActives() {
-		return this.active.concat(this.subActives);
+	activeAndSubActives() {
+		return this.active.concat(this.subActives());
 	}
 
 	addSideCondition(
@@ -703,7 +703,7 @@ export class Side {
 		}
 		if (slot >= this.pokemon.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);
-		} else if (slot < this.activeAndSubActives.length) {
+		} else if (slot < this.activeAndSubActives().length) {
 			return this.emitChoiceError(`Can't switch: You can't switch to an active Pokémon`);
 		} else if (this.choice.switchIns.has(slot)) {
 			return this.emitChoiceError(`Can't switch: The Pokémon in slot ${slot + 1} can only switch in once`);

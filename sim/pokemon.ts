@@ -671,12 +671,12 @@ export class Pokemon {
 	getAtLoc(targetLoc: number) {
 		let side = this.battle.sides[targetLoc < 0 ? this.side.n % 2 : (this.side.n + 1) % 2];
 		targetLoc = Math.abs(targetLoc);
-		if (targetLoc > side.activeAndSubActives.length) {
+		if (targetLoc > side.activeAndSubActives().length) {
 			// Multi battle ally
 			targetLoc -= side.active.length;
 			side = this.battle.sides[side.n + 2];
 		}
-		return side.activeAndSubActives[targetLoc - 1];
+		return side.activeAndSubActives()[targetLoc - 1];
 	}
 
 	/**
