@@ -1938,7 +1938,9 @@ export const pages: Chat.PageTable = {
 				if (!ticket.state?.recommendResult) {
 					buf += `<br />`;
 					buf += `Rate accuracy of result: `;
-					for (const [title, result] of [['Accurate', 'success'], ['Inaccurate', 'failure']]) {
+					for (const [title, result] of [
+						['Accurate (or too lenient)', 'success'], ['Inaccurate (too harsh)', 'failure'],
+					]) {
 						buf += `<button class="button" name="send" value="/aht resolve ${ticket.userid},${result}">${title}</button>`;
 					}
 				}
