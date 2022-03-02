@@ -540,8 +540,16 @@ const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 	'valerie', 'viola', 'wallace-gen6', 'wikstrom', 'winona-gen6', 'wulfric', 'xerosic', 'youngn', 'zinnia',
 ]);
 
+const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
+	'allister', 'avery', 'ballguy', 'bea', 'bede', 'bede-leader', 'doctor-gen8', 'gloria', 'gordie',
+	'hop', 'kabu', 'klara', 'leon', 'leon-tower', 'magnolia', 'marnie', 'melony', 'milo', 'mustard',
+	'mustard-master', 'nessa', 'oleana', 'opal', 'peonia', 'peony', 'piers', 'raihan', 'rose', 'shielbert',
+	'sonia', 'sonia-professor', 'sordward', 'victor', 'victor-dojo', 'yellgrunt', 'yellgruntf',
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -569,6 +577,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (OFFICIAL_AVATARS_GNOMOWLADNY.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Gnomowladny)`);
+			}
+			if (OFFICIAL_AVATARS_BRUMIRAGE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}Brumirage)`);
 			}
 		}
 	},
