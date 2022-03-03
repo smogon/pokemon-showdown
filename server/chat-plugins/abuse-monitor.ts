@@ -162,11 +162,8 @@ async function runActions(user: User, room: GameRoom, response: Record<string, n
 		}
 		for (const type of keys) {
 			const num = response[type];
-			console.log(punishment.type);
 			if (punishment.type && punishment.type !== type) continue;
-			console.log(punishment.certainty, num);
 			if (punishment.certainty && punishment.certainty > num) continue;
-			console.log(punishment.count);
 			if (punishment.count) {
 				const hits = await Chat.database.all(
 					`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
