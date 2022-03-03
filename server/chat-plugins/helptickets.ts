@@ -175,7 +175,7 @@ export function writeStats(line: string) {
 	}
 }
 
-export class HelpTicket extends Rooms.RoomGame {
+export class HelpTicket extends Rooms.SimpleRoomGame {
 	room: ChatRoom;
 	ticket: TicketState;
 	claimQueue: string[];
