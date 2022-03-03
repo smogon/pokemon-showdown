@@ -565,13 +565,11 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReply(`|html|${await Recs.render(Recs.getRandomRecommendation())}`);
 		}
 		const matches: Recommendation[] = [];
-		if (target) {
-			target = target.slice(0, 300);
-			const args = target.split(',');
-			for (const rec of recommendations.saved) {
-				if (!args.every(x => rec.tags.map(toID).includes(toID(x)))) continue;
-				matches.push(rec);
-			}
+		target = target.slice(0, 300);
+		const args = target.split(',');
+		for (const rec of recommendations.saved) {
+			if (!args.every(x => rec.tags.map(toID).includes(toID(x)))) continue;
+			matches.push(rec);
 		}
 		if (!matches.length) {
 			throw new Chat.ErrorMessage(`No matches found.`);
