@@ -541,10 +541,11 @@ const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 ]);
 
 const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
-	'allister', 'avery', 'ballguy', 'bea', 'bede', 'bede-leader', 'doctor-gen8', 'gloria', 'gordie',
-	'hop', 'kabu', 'klara', 'leon', 'leon-tower', 'magnolia', 'marnie', 'melony', 'milo', 'mustard',
-	'mustard-master', 'nessa', 'oleana', 'opal', 'peonia', 'peony', 'piers', 'raihan', 'rose', 'shielbert',
-	'sonia', 'sonia-professor', 'sordward', 'victor', 'victor-dojo', 'yellgrunt', 'yellgruntf',
+	'agatha-lgpe', 'allister', 'archie-gen6', 'avery', 'ballguy', 'bea', 'bede', 'bede-leader', 'brendan-contest',
+	'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hop', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower',
+	'lorelei-lgpe', 'magnolia', 'marnie', 'may-contest', 'melony', 'milo', 'mustard', 'mustard-master', 'nessa',
+	'oleana', 'opal', 'peonia', 'peony', 'phoebe-gen6', 'piers', 'raihan', 'rose', 'shielbert', 'sonia',
+	'sonia-professor', 'sordward', 'tateandliza-gen6', 'victor', 'victor-dojo', 'yellgrunt', 'yellgruntf',
 ]);
 
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
