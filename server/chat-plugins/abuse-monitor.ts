@@ -13,7 +13,7 @@ import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 
 const WHITELIST = ["mia"];
-const PUNISHMENTS = ['WARN', 'MUTE', 'LOCK', 'WEEKLOCK'];
+const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
@@ -65,6 +65,7 @@ const defaults: FilterSettings = {
 		IDENTITY_ATTACK: {0.8: 2},
 		SEVERE_TOXICITY: {0.8: 2},
 	},
+	recommendOnly: false,
 	punishments: [
 		{certainty: 0.93, type: 'IDENTITY_ATTACK', punishment: 'WARN', count: 2},
 	],
@@ -95,8 +96,9 @@ interface FilterSettings {
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
 	punishments: PunishmentSettings[];
+	/** Should it make recommendations, or punish? */
+	recommendOnly?: boolean;
 }
-
 
 interface BattleInfo {
 	players: Record<SideID, ID>;
@@ -150,7 +152,7 @@ function colorName(id: ID, info: BattleInfo) {
 
 export const classifier = new Artemis.RemoteClassifier();
 
-async function recommend(user: User, room: GameRoom, response: Record<string, number>) {
+async function runActions(user: User, room: GameRoom, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string][] = [];
 	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
@@ -160,33 +162,161 @@ async function recommend(user: User, room: GameRoom, response: Record<string, nu
 		}
 		for (const type of keys) {
 			const num = response[type];
+			console.log(punishment.type);
 			if (punishment.type && punishment.type !== type) continue;
+			console.log(punishment.certainty, num);
 			if (punishment.certainty && punishment.certainty > num) continue;
+			console.log(punishment.count);
 			if (punishment.count) {
 				const hits = await Chat.database.all(
 					`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
 					[user.id, type, num]
 				);
 				if (hits.length < punishment.count) continue;
-				recommended.push([punishment.punishment, type]);
 			}
+			recommended.push([punishment.punishment, type]);
 		}
 	}
 	if (recommended.length) {
 		Utils.sortBy(recommended, ([punishment]) => -PUNISHMENTS.indexOf(punishment));
 		// go by most severe
 		const [punishment, reason] = recommended[0];
-		if (cache[room.roomid]) {
-			if (!cache[room.roomid].recommended) cache[room.roomid].recommended = {};
-			cache[room.roomid].recommended![user.id] = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
+		if (settings.recommendOnly) {
+			if (cache[room.roomid]) {
+				if (!cache[room.roomid].recommended) cache[room.roomid].recommended = {};
+				cache[room.roomid].recommended![user.id] = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
+			}
+			Rooms.get('abuselog')?.add(
+				`|c|&|/log [Abuse-Monitor] ` +
+				`<<${room.roomid}>> - punishment ${punishment} recommended for ${user.id} ` +
+				`(${reason.replace(/_/g, ' ').toLowerCase()})`
+			).update();
+		} else {
+			room.mute(user);
+			const result = await punishmentHandlers[toID(punishment)]?.(user, room);
+			if (result !== false) {
+				// returning false means not to close the 'ticket'
+				const notified = cache[room.roomid].staffNotified;
+				if (notified) {
+					if (typeof notified === 'string') {
+						if (notified === user.id) delete cache[room.roomid].staffNotified;
+					} else {
+						notified.splice(notified.indexOf(user.id), 1);
+						if (!notified.length) {
+							delete cache[room.roomid].staffNotified;
+						}
+					}
+				}
+				delete cache[room.roomid].users[user.id]; // user has been punished, reset their counter
+				// keep the cache object only if there are other users in it, since they still need to be monitored
+				if (!Object.keys(cache[room.roomid].users).length) {
+					delete cache[room.roomid];
+				}
+				notifyStaff();
+			}
 		}
-		Rooms.get('abuselog')?.add(
-			`|c|&|/log [Abuse-Monitor] ` +
-			`<<${room.roomid}>> - punishment ${punishment} recommended for ${user.id} ` +
-			`(${reason.replace(/_/g, ' ').toLowerCase()})`
-		).update();
 	}
 }
+
+function globalModlog(
+	action: string, user: User | ID | null, note: string, roomid?: string | GameRoom
+) {
+	if (typeof roomid === 'object') roomid = roomid.roomid;
+	user = Users.get(user) || user;
+	void Rooms.Modlog.write(roomid || 'global', {
+		isGlobal: true,
+		action,
+		ip: user && typeof user === 'object' ? user.latestIp : undefined,
+		userid: toID(user) || undefined,
+		loggedBy: 'artemis' as ID,
+		note,
+	});
+}
+
+function addGlobalModAction(message: string, room: GameRoom) {
+	room.add(`|c|&|/log ${message}`).update();
+	Rooms.get(`staff`)?.add(`|c|&|/log <<${room.roomid}>> ${message}`).update();
+}
+
+const DISCLAIMER = (
+	'<small>This action was done automatically.' +
+	' Want to learn more about the AI? ' +
+	'<a href="https://www.smogon.com/forums/threads/3570628/#post-9056769">Visit the information thread</a>.</small>'
+);
+
+export async function lock(user: User, room: GameRoom, reason: string, isWeek?: boolean) {
+	const affected = await Punishments.lock(
+		user,
+		isWeek ? 7 * 24 * 60 * 60 * 1000 : null,
+		user.id,
+		false,
+		reason
+	);
+	globalModlog(`${isWeek ? 'WEEK' : ''}LOCK`, user, reason, room);
+	addGlobalModAction(`${user.name} was locked from talking by Artemis ${isWeek ? 'for a week ' : ""}(${reason})`, room);
+	if (affected.length > 1) {
+		Rooms.get('staff')?.add(
+			`|c|&|/log (${user.id}'s ` +
+			`locked alts: ${affected.slice(1).map(curUser => curUser.getLastName()).join(", ")})`
+		);
+	}
+	room.add(`|c|&|/raw ${DISCLAIMER}`).update();
+	room.hideText(affected.map(f => f.id), undefined, true);
+	let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users`;
+	message += ` ${isWeek ? "for two days" : "for a week"}`;
+	message += `\n\nReason: ${reason}`;
+	let appeal = '';
+	if (Chat.pages.help) {
+		appeal += `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`;
+	} else if (Config.appealurl) {
+		appeal += `appeal: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+	}
+
+	if (appeal) message += `\n\nIf you feel that your lock was unjustified, you can ${appeal}.`;
+	message += `\n\nYour lock will expire in a few days.`;
+	user.send(message);
+
+	const roomauth = Rooms.global.destroyPersonalRooms(user.id);
+	if (roomauth.length) {
+		Monitor.log(
+			`[CrisisMonitor] Locked user ${user.name} ` +
+			`has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`
+		);
+	}
+}
+
+const punishmentHandlers: Record<string, (user: User, room: GameRoom) => void | boolean | Promise<void | boolean>> = {
+	warn(user, room) {
+		const reason = `Not following rules in battle (https://${Config.routes.client}/${room.roomid})`;
+		if (!user.connected) {
+			Punishments.offlineWarns.set(user.id, reason);
+		} else {
+			user.send(`|c|~|/warn ${reason}`);
+		}
+		globalModlog('WARN', user, reason, room);
+		addGlobalModAction(`${user.name} was warned by Artemis (${reason})`, room);
+		room.add(`|c|&|/raw ${DISCLAIMER}`).update();
+		room.hideText([user.id], undefined, true);
+	},
+	/**
+	 * Upper staff have requested that temporarily, locks & weeklocks should only log, but warns/mutes
+	 * should still go through as a second trial period.
+	 * Given this will be a short period of time, I have elected to just comment out the code
+	 * for the time being, as i do not think it's worth it to build real infrastructure for it.
+	 * */
+	lock(user, room) {
+		// return lock(user, room, `Not following rules in battle (https://${Config.routes.client}/${room.roomid})`);
+		Rooms.get('staff')?.add(`|c|&|/log [Artemis] <<${room.roomid}>> LOCK recommended for ${user.id}`).update();
+		room.hideText([user.id], undefined, true);
+		return false;
+	},
+	weeklock(user, room) {
+		// return lock(user, room, `Not following rules in battle (https://${Config.routes.client}/${room.roomid})`, true);
+		Rooms.get('staff')?.add(`|c|&|/log [Artemis] <<${room.roomid}>> WEEKLOCK recommended for ${user.id}`).update();
+		room.hideText([user.id], undefined, true);
+		return false;
+	},
+};
 
 function makeScore(roomid: RoomID, result: Record<string, number>) {
 	let score = 0;
@@ -261,7 +391,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 					// response exists if we got this far
 					[user.id, score, response![main], main, room.roomid, Date.now()]
 				);
-				void recommend(user, room, response || {});
+				void runActions(user, room, response || {});
 			}
 			await Chat.database.run(
 				'INSERT INTO perspective_logs (userid, message, score, flags, roomid, time, hit_threshold) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -810,6 +940,28 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.addGlobalModAction(`${user.name} used /abusemonitor loadbackup`);
 			this.refreshPage('abusemonitor-settings');
+		},
+		togglepunishments(target, room, user) {
+			checkAccess(this);
+			let message;
+			if (this.meansYes(target)) {
+				if (!settings.recommendOnly) {
+					return this.errorReply(`Automatic punishments are already enabled.`);
+				}
+				settings.recommendOnly = false;
+				message = `${user.name} enabled automatic punishments for the Artemis battle monitor`;
+			} else if (this.meansNo(target)) {
+				if (settings.recommendOnly) {
+					return this.errorReply(`Automatic punishments are already disabled.`);
+				}
+				settings.recommendOnly = true;
+				message = `${user.name} disabled automatic punishments for the Artemis battle monitor`;
+			} else {
+				return this.errorReply(`Invalid setting. Must be 'on' or 'off'.`);
+			}
+			this.privateGlobalModAction(message);
+			this.globalModlog(`ABUSEMONITOR TOGGLE`, null, settings.recommendOnly ? 'off' : 'on');
+			saveSettings();
 		},
 	},
 	abusemonitorhelp: [
