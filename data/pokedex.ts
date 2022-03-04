@@ -13405,7 +13405,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		evos: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
 		eggGroups: ["Field"],
-		formeOrder: ["Rockruff", "Rockruff"], 
+		formeOrder: ["Rockruff", "Rockruff"],
 		// TODO: Rockruff-Dusk
 	},
 	lycanroc: {
@@ -18107,7 +18107,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 10035,
 		name: "Scarkraken",
 		types: ["Water", "Ghost"],
-		baseStats: {hp: 95, atk: 140, def: 80, spa: 80, spd: 80, spe: 85},
+		baseStats: {hp: 100, atk: 140, def: 90, spa: 80, spd: 75, spe: 55},
 		abilities: {0: "Undead", 1: "Cursed Body", H: "Suction Cups"},
 		heightm: 1.9,
 		weightkg: 80,
