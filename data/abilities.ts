@@ -5172,37 +5172,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 0,
 		num: 1036,
 	},
-	tracker: {
-		onStart(pokemon) {
-			console.log("firstOnStart");
-			let activated = false;
-            for (const target of pokemon.side.foe.active) {
-                if (!target || !this.isAdjacent(target, pokemon)) continue;
-                if (!activated) {
-                    //this.add('-ability', pokemon, 'Tracker', 'boost');
-                    activated = true;
-                    //this.add('-immune', target);
-                    target.addVolatile('trackertrap');
-				}
-            }
-		},
-		onEnd(pokemon) {
-			console.log("firstOnEnd");
-			let activated = false;
-            for (const target of pokemon.side.foe.active) {
-                if (!target || !this.isAdjacent(target, pokemon)) continue;
-				if (!activated) {
-                    //this.add('-ability', pokemon, 'Tracker', 'boost');
-                    activated = true;
-                    target.removeVolatile('trackertrap');
-					//this.add('-end', target, 'Tracker Trap', '[silent]');
-				}
-            }
-		},
-		name: "Tracker",
-		rating: 2,
-		num: 1036,
-	},
 	radiance: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
