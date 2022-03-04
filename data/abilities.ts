@@ -4878,18 +4878,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         rating: 3,
         num: 1015,
     },
-	slapper: {
-        onBasePowerPriority: 23,
-        onBasePower(basePower, attacker, defender, move) {
-            if (move.flags['slap']) {
-                this.debug('Slapper boost');
-                return this.chainModify(1.3);
-            }
-        },
-        name: "Slapper",
-        rating: 3,
-        num: 1016,
-    },
 	petrify: {
 		onStart(pokemon) {
 			let activated = false;
