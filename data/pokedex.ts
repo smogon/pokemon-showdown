@@ -18108,6 +18108,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Scarkraken",
 		types: ["Water", "Ghost"],
 		baseStats: {hp: 100, atk: 140, def: 90, spa: 80, spd: 70, spe: 55},
+		baseStats: {hp: 100, atk: 140, def: 90, spa: 80, spd: 75, spe: 55},
 		abilities: {0: "Undead", 1: "Cursed Body", H: "Suction Cups"},
 		heightm: 1.9,
 		weightkg: 80,
