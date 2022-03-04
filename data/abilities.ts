@@ -642,25 +642,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 219,
 	},
 	defeatist: {
-		onStart(pokemon) {
-			this.boost({spa: 1});
-			this.boost({atk: 1});
-		},
-		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 3) {
 				return this.chainModify(0.5);
 			}
 		},
-		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				return this.chainModify(0.5);
-			}
-		},
-		onModifySpePriority: 5,
-		onModifySpe(spe, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 3) {
 				return this.chainModify(0.5);
 			}
 		},
