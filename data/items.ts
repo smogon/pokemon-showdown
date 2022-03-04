@@ -7548,7 +7548,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onCriticalHit(target, source, move) {
 			if (target.useItem(source)) {
-				console.log('crit detected');
 				this.add('-item', target, 'Fog Machine');
 				return false;
 			}
@@ -7620,7 +7619,6 @@ export const Items: {[itemid: string]: ItemData} = {
         name: "Cursed Flute",
         spritenum: 2,
 		onFaint(target, source, effect) {
-			console.log("add confusion");
 			source.addVolatile('confusion');
 		},
         num: 10027,

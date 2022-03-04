@@ -211,6 +211,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly exclusiveMoves?: readonly ID[];
 	readonly comboMoves?: readonly ID[];
 	readonly essentialMove?: ID;
+	readonly newmeta?: string;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
