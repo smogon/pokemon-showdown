@@ -5658,25 +5658,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3.5,
 		num: 1067,
 	},
-	desperation: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
-				this.debug('Desperation boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
-				this.debug('Desperation boost');
-				return this.chainModify(1.5);
-			}
-		},
-		name: "Desperation",
-		rating: 2,
-		num: 1068,
-	},
 	chainstriker: {
 		onStart(pokemon) {
 			pokemon.addVolatile('chainstriker');
