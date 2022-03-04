@@ -803,7 +803,6 @@ export const Formats: FormatList = [
 			if (!crossPrevoSpecies.prevo !== !species.prevo) return;
 
 			const mixedSpecies = this.dex.deepClone(species);
-			mixedSpecies.baseSpecies = mixedSpecies.name = `${species.name}-${crossSpecies.name}`;
 			mixedSpecies.weightkg =
 				Math.max(0.1, +(species.weightkg + crossSpecies.weightkg - crossPrevoSpecies.weightkg)).toFixed(1);
 			mixedSpecies.nfe = false;
