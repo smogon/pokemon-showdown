@@ -1766,13 +1766,6 @@ export class BattleActions {
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!speciesid) return false;
 
-		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of pokemon.foes()) {
-			if (foeActive.volatiles['skydrop']?.source === pokemon) {
-				return false;
-			}
-		}
-
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
 
 		// Limit one mega evolution

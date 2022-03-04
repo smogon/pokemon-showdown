@@ -27,13 +27,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			// @ts-ignore
 			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo || pokemon.canUltraBurst);
 
-			// Pokémon affected by Sky Drop cannot Mega Evolve. Enforce it here for now.
-			for (const foeActive of pokemon.foes()) {
-				if (foeActive.volatiles['skydrop']?.source === pokemon) {
-					return false;
-				}
-			}
-
 			// Do we have a proper sprite for it?
 			// @ts-ignore assert non-null pokemon.canMegaEvo
 			if (isUltraBurst || this.dex.species.get(pokemon.canMegaEvo).baseSpecies === pokemon.m.originalSpecies) {
