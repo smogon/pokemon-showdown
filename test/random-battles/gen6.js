@@ -34,4 +34,24 @@ describe('[Gen 6] Random Battle', () => {
 	it('should not give Ursaring Eviolite', () => {
 		testSet('ursaring', options, set => assert.notEqual(set.item, 'Eviolite'));
 	});
+
+	it('should always give Quagsire Unaware', () => {
+		testSet('quagsire', options, set => assert.equal(set.ability, 'Unaware'));
+	});
+
+	it('should always give Quagsire Recover', () => {
+		testAlwaysHasMove('quagsire', options, 'recover');
+	});
+
+	it('should not give Raikou Volt Absorb', () => {
+		testSet('raikou', options, set => assert.notEqual(set.ability, 'Volt Absorb'));
+	});
+
+	it('should not give Suicune Water Absorb', () => {
+		testSet('suicune', options, set => assert.notEqual(set.ability, 'Water Absorb'));
+	});
+
+	it('should not give Entei Flash Fire', () => {
+		testSet('entei', options, set => assert.notEqual(set.ability, 'Flash Fire'));
+	});
 });
