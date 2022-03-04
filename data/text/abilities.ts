@@ -254,8 +254,8 @@ export const AbilitiesText = {
 	},
 	defeatist: {
 		name: "Defeatist",
-		desc: "While this Pokemon has 1/2 or less of its maximum HP, its Speed, Attack and Special Attack are halved. Boosts Attack and Special Attack 1 stage when comes on terrain.",
-		shortDesc: "HP > 50%: Atk, SpA boosted 1 stage; HP < 50%: Atk, SpA, Spe halved.",
+		desc: "While this Pokemon has 1/3 or less of its max HP, its Attack and Sp. Atk are halved.",
+		shortDesc: "HP < 33%: Atk, SpA halved.",
 	},
 	defiant: {
 		name: "Defiant",

@@ -642,25 +642,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 219,
 	},
 	defeatist: {
-		onStart(pokemon) {
-			this.boost({spa: 1});
-			this.boost({atk: 1});
-		},
-		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 3) {
 				return this.chainModify(0.5);
 			}
 		},
-		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				return this.chainModify(0.5);
-			}
-		},
-		onModifySpePriority: 5,
-		onModifySpe(spe, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 3) {
 				return this.chainModify(0.5);
 			}
 		},
@@ -4878,18 +4866,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         rating: 3,
         num: 1015,
     },
-	slapper: {
-        onBasePowerPriority: 23,
-        onBasePower(basePower, attacker, defender, move) {
-            if (move.flags['slap']) {
-                this.debug('Slapper boost');
-                return this.chainModify(1.3);
-            }
-        },
-        name: "Slapper",
-        rating: 3,
-        num: 1016,
-    },
 	petrify: {
 		onStart(pokemon) {
 			let activated = false;
@@ -5184,37 +5160,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 0,
 		num: 1036,
 	},
-	tracker: {
-		onStart(pokemon) {
-			console.log("firstOnStart");
-			let activated = false;
-            for (const target of pokemon.side.foe.active) {
-                if (!target || !this.isAdjacent(target, pokemon)) continue;
-                if (!activated) {
-                    //this.add('-ability', pokemon, 'Tracker', 'boost');
-                    activated = true;
-                    //this.add('-immune', target);
-                    target.addVolatile('trackertrap');
-				}
-            }
-		},
-		onEnd(pokemon) {
-			console.log("firstOnEnd");
-			let activated = false;
-            for (const target of pokemon.side.foe.active) {
-                if (!target || !this.isAdjacent(target, pokemon)) continue;
-				if (!activated) {
-                    //this.add('-ability', pokemon, 'Tracker', 'boost');
-                    activated = true;
-                    target.removeVolatile('trackertrap');
-					//this.add('-end', target, 'Tracker Trap', '[silent]');
-				}
-            }
-		},
-		name: "Tracker",
-		rating: 2,
-		num: 1036,
-	},
 	radiance: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
@@ -5359,17 +5304,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 1045,
 	},
-	grassygloves: {
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.flags['contact']) {
-				this.debug('Grassy Gloves neutralize');
-				return this.chainModify(0.75);
-			}
-		},
-		name: "Grassy Gloves",
-		rating: 3,
-		num: 1046,
-	},
 	lovetouch: {
 		// upokecenter says this is implemented as an added secondary effect
 		onModifyMove(move) {
@@ -5491,24 +5425,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Phytogenetic",
 		rating: 3.5,
 		num: 1054,
-	},
-	sorcererscurse: {
-		onSourceModifyAccuracyPriority: 9,
-		onSourceModifyAccuracy(accuracy, target, source, move) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('Sorcerers Curse - enhancing accuracy');
-			return true;
-		},
-		onModifyMove(move, pokemon) {
-			if (move.secondaries) {
-				delete move.secondaries;
-				// Technically not a secondary effect, but it is negated
-				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
-			}
-		},
-		name: "Sorcerers Curse",
-		rating: 2,
-		num: 1055,
 	},
 	transmutation: {
 		onSetStatus(status, target, source, effect) {
@@ -5729,25 +5645,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Ignition",
 		rating: 3.5,
 		num: 1067,
-	},
-	desperation: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
-				this.debug('Desperation boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
-				this.debug('Desperation boost');
-				return this.chainModify(1.5);
-			}
-		},
-		name: "Desperation",
-		rating: 2,
-		num: 1068,
 	},
 	chainstriker: {
 		onStart(pokemon) {
