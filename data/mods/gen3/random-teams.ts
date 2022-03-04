@@ -467,7 +467,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				const moveIsHP = moveid.startsWith('hiddenpower');
 				if (
 					cull &&
-					(movePool.length - availableHP || (availableHP && moveIsHP) || !hasHiddenPower)
+					(movePool.length - availableHP || availableHP && (moveIsHP || !hasHiddenPower))
 				) {
 					if (move.category !== 'Status' && !move.damage && (!moveIsHP || !availableHP)) {
 						rejectedPool.push(moveid);
