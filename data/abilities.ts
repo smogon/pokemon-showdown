@@ -5316,17 +5316,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 1045,
 	},
-	grassygloves: {
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.flags['contact']) {
-				this.debug('Grassy Gloves neutralize');
-				return this.chainModify(0.75);
-			}
-		},
-		name: "Grassy Gloves",
-		rating: 3,
-		num: 1046,
-	},
 	lovetouch: {
 		// upokecenter says this is implemented as an added secondary effect
 		onModifyMove(move) {
