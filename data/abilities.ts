@@ -5480,24 +5480,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3.5,
 		num: 1054,
 	},
-	sorcererscurse: {
-		onSourceModifyAccuracyPriority: 9,
-		onSourceModifyAccuracy(accuracy, target, source, move) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('Sorcerers Curse - enhancing accuracy');
-			return true;
-		},
-		onModifyMove(move, pokemon) {
-			if (move.secondaries) {
-				delete move.secondaries;
-				// Technically not a secondary effect, but it is negated
-				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
-			}
-		},
-		name: "Sorcerers Curse",
-		rating: 2,
-		num: 1055,
-	},
 	transmutation: {
 		onSetStatus(status, target, source, effect) {
 			if (status.id === 'psn' || status.id === 'tox') {
