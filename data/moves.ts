@@ -14899,7 +14899,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	shadowclaw: {
 		num: 421,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 75,
 		category: "Physical",
 		name: "Shadow Claw",
 		pp: 15,
@@ -20145,7 +20145,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				delete source.volatiles['dualstrikefirst'];
 				source.addVolatile('dualstrikesecond');
 				console.log("onTryHit with volatileStatus type: "+move.type);
-			} 
+			}
 			else {
 				source.addVolatile('dualstrikefirst');
 				move.type = source.getTypes()[0];
@@ -22113,7 +22113,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	brightclaw: {
 		num: 951,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 75,
 		category: "Physical",
 		name: "Bright Claw",
 		pp: 15,
