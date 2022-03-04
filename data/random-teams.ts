@@ -2245,7 +2245,7 @@ export class RandomTeams {
 				PUBL: 87,
 				PU: 88, "(PU)": 88, NFE: 88,
 			};
-			const customScale: {[k: string]: number} = {delibird: 100, luvdisc: 100, spinda: 100, unown: 100};
+			const customScale: {[k: string]: number} = {delibird: 100, glalie: 76, luvdisc: 100, spinda: 100, unown: 100};
 
 			level = customScale[species.id] || tierScale[species.tier] || 80;
 		// Arbitrary levelling base on data files (typically winrate-influenced)

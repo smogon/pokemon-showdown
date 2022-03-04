@@ -855,7 +855,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	sudowoodo: {
 		tier: "NU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["earthquake", "headsmash", "selfdestruct", "stealthrock", "suckerpunch"],
+		randomBattleMoves: ["earthquake", "headsmash", "explosion", "stealthrock", "suckerpunch"],
 	},
 	hoppip: {
 		tier: "LC",

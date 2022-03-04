@@ -32,6 +32,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				!counter.get('Ground') && !moves.has('rest') && !moves.has('sleeptalk')
 			),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
+			Normal: (movePool, moves, abilities, types, counter, species) => (
+				movePool.includes('return') && species.baseStats.atk > 80
+			),
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter) => !counter.get('Steel') && abilities.has('Technician'),
 			Water: (movePool, moves, abilities, types, counter) => (

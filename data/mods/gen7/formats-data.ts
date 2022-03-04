@@ -405,7 +405,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	politoed: {
-		randomBattleMoves: ["encore", "hypnosis", "perishsong", "protect", "rest", "scald", "toxic"],
+		randomBattleMoves: ["encore", "icebeam", "protect", "rest", "scald", "toxic"],
 		randomDoubleBattleMoves: ["encore", "helpinghand", "hypnosis", "icywind", "protect", "scald"],
 		tier: "(PU)",
 		doublesTier: "DOU",
