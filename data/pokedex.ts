@@ -7668,7 +7668,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Cherubi",
 		types: ["Grass"],
 		baseStats: {hp: 45, atk: 35, def: 45, spa: 62, spd: 53, spe: 35},
-		abilities: {0: "Chlorophyll"},
+		abilities: {0: "Chlorophyll", 1: "Solar Power"},
 		heightm: 0.4,
 		weightkg: 3.3,
 		color: "Pink",
