@@ -90189,7 +90189,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			firefang: ["8M", "7M"],
 			icefang: ["8M", "7M"],
 			crunch: ["8M", "7M"],
-			closecombat: ["8M", "7M"],
 			agility: ["8M", "7M"],
 			psychicfangs: ["8M", "7M"],
 			willowisp: ["8M", "7M"],
