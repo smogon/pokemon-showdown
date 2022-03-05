@@ -547,7 +547,7 @@ export class RandomTeams {
 
 					banReason = ruleTable.check('basepokemon:' + toID(species.baseSpecies));
 					if (banReason) continue;
-					if (banReason !== '' || this.dex.species.get(species.baseSpecies).isNonstandard === species.isNonstandard) {
+					if (banReason !== '' || this.dex.species.get(species.baseSpecies).isNonstandard !== species.isNonstandard) {
 						const nonexistentCheck = Tags.nonexistent.genericFilter!(species) && nonexistentBanReason;
 						let tagWhitelisted = false;
 						let tagBlacklisted = false;
@@ -572,10 +572,10 @@ export class RandomTeams {
 						}
 					}
 				}
+				speciesPool.push(species);
 				const num = species.num;
 				if (pool.includes(num)) continue;
 				pool.push(num);
-				speciesPool.push(species);
 			}
 		}
 
