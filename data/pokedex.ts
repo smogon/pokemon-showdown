@@ -5127,7 +5127,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 269,
 		name: "Dustox",
 		types: ["Bug", "Poison"],
-		baseStats: {hp: 60, atk: 50, def: 70, spa: 50, spd: 90, spe: 65},
+		baseStats: {hp: 60, atk: 50, def: 70, spa: 50, spd: 100, spe: 65},
 		abilities: {0: "Shield Dust", 1: "Poison Cloak", H: "Compound Eyes"},
 		heightm: 1.2,
 		weightkg: 31.6,
