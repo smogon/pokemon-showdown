@@ -47219,6 +47219,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	shieldon: {
 		learnset: {
+			slackoff: ["8M"],
 			ancientpower: ["7L28", "6L28", "5L28", "4T", "4L28"],
 			attract: ["7M", "6M", "5M", "4M"],
 			blizzard: ["7M", "6M", "5M", "4M"],
