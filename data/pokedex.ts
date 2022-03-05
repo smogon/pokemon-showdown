@@ -5537,7 +5537,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Azurill",
 		types: ["Normal", "Fairy"],
 		genderRatio: {M: 0.25, F: 0.75},
-		baseStats: {hp: 50, atk: 20, def: 40, spa: 20, spd: 40, spe: 20},
+		baseStats: {hp: 60, atk: 20, def: 55, spa: 20, spd: 55, spe: 20},
 		abilities: {0: "Thick Fat", 1: "Huge Power", H: "Sap Sipper"},
 		heightm: 0.2,
 		weightkg: 2,
