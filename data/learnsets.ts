@@ -91814,6 +91814,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	beatboon: {
 		learnset: {
+			aurasphere: ["8M"],
 			hypervoice: ["8M", "7M"],
 			snarl: ["8M", "7M"],
 			dragondance: ["8M", "7M"],
