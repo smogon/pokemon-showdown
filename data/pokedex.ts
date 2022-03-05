@@ -11155,7 +11155,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Golett",
 		types: ["Ground", "Ghost"],
 		gender: "N",
-		baseStats: {hp: 59, atk: 74, def: 50, spa: 35, spd: 50, spe: 35},
+		baseStats: {hp: 69, atk: 74, def: 55, spa: 35, spd: 55, spe: 35},
 		abilities: {0: "Iron Fist", 1: "Klutz", H: "No Guard"},
 		heightm: 1,
 		weightkg: 92,
