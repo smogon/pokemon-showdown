@@ -90498,6 +90498,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	corchi: {
 		learnset: {
+			windblast: ["8M"],
 			anticyclone: ["8M", "7M"],
 			chillingwave: ["8M", "7M"],
 			steelwing: ["8M", "7M"],
