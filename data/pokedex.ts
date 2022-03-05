@@ -6696,7 +6696,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 363,
 		name: "Spheal",
 		types: ["Ice", "Water"],
-		baseStats: {hp: 70, atk: 40, def: 50, spa: 55, spd: 50, spe: 25},
+		baseStats: {hp: 70, atk: 55, def: 55, spa: 55, spd: 55, spe: 25},
 		abilities: {0: "Thick Fat", 1: "Ice Body", H: "Oblivious"},
 		heightm: 0.8,
 		weightkg: 39.5,
