@@ -61350,6 +61350,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	elgyem: {
 		learnset: {
+			implosion: ["8M", "7M"],
+			wormhole: ["8M", "7M"],
 			afteryou: ["7T", "6T", "5T"],
 			agility: ["8M"],
 			allyswitch: ["8M", "7T", "7E", "6E", "5M"],
@@ -61444,6 +61446,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	beheeyem: {
 		learnset: {
+			implosion: ["8M", "7M"],
+			wormhole: ["8M", "7M"],
 			afteryou: ["7T", "6T", "5T"],
 			magicroom: ["8M"],
 			agility: ["8M"],
