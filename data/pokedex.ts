@@ -18502,7 +18502,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Pupavo",
 		types: ["Psychic", "Flying"],
 		baseStats: {hp: 50, atk: 90, def: 40, spa: 110, spd: 110, spe: 110},
-		abilities: {0: "Protean", H: "Color Change"},
+		abilities: {0: "Protean", H: "Anger Point"},
 		heightm: 8.6,
 		weightkg: 380,
 		color: "Blue",
