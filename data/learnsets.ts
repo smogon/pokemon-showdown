@@ -43199,6 +43199,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	spheal: {
 		learnset: {
+			freezedry: ["8M", "7M"],
+			slackoff: ["8M", "7M"],
 			aquaring: ["8E", "7E", "6E", "5E", "4E"],
 			aquatail: ["7T", "6T", "5T", "5D", "4T"],
 			attract: ["8M", "7M", "6M", "5M", "4M", "3M"],
@@ -43274,6 +43276,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sealeo: {
 		learnset: {
+			slackoff: ["8M", "7M"],
+			freezedry: ["8M", "7M"],
 			aquatail: ["7T", "6T", "5T", "4T"],
 			attract: ["8M", "7M", "6M", "5M", "4M", "3M"],
 			aurorabeam: ["8L28", "7L21", "6L21", "5L25", "4L25", "3L25"],
@@ -43342,6 +43346,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	walrein: {
 		learnset: {
+			freezedry: ["8M", "7M"],
 			aquatail: ["7T", "6T", "5T", "4T"],
 			attract: ["8M", "7M", "6M", "5M", "4M", "3M"],
 			aurorabeam: ["8L28", "7L19", "6L19", "5L25", "4L25", "3L25"],
