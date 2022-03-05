@@ -11,7 +11,6 @@ describe('[Gen 6] Random Battle', () => {
 
 	it('should not give mega evolution abilities to base formes', () => {
 		testSet('manectricmega', {rounds: 1, ...options}, set => {
-			console.log(set.ability);
 			assert(set.ability !== 'Intimidate', 'Mega Manectric should not have Intimidate before it mega evolves');
 		});
 	});
