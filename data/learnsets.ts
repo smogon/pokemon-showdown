@@ -21707,6 +21707,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			bide: ["7V"],
 			bind: ["7T", "6T", "5T"],
 			blizzard: ["8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
+			blazingtail: ["8M"],
 			bodypress: ["8M"],
 			bodyslam: ["8M", "7V", "3T"],
 			breakingswipe: ["8M"],
