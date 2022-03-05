@@ -3659,7 +3659,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Mareep",
 		types: ["Electric", "Light"],
 		baseStats: {hp: 70, atk: 40, def: 50, spa: 80, spd: 60, spe: 35},
-		abilities: {0: "Static", 1: "Thunder Delight", H: "Plus"},
+		abilities: {0: "Static", 1: "Thunder Delight", H: "Illuminate"},
 		heightm: 0.6,
 		weightkg: 7.8,
 		color: "White",
