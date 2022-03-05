@@ -3825,6 +3825,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sandslash: {
 		learnset: {
+			spikes: ["8M", "7M"],
 			aerialace: ["7M", "6M", "5M", "4M", "3M"],
 			agility: ["8M"],
 			amnesia: ["8M"],
@@ -3930,6 +3931,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sandslashalola: {
 		learnset: {
+			spikes: ["8M", "7M"],
 			aerialace: ["7M"],
 			agility: ["8M"],
 			amnesia: ["8M"],
