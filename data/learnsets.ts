@@ -8295,6 +8295,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	poliwag: {
 		learnset: {
+			sleepbubble: ["8M", "7M"],
 			amnesia: ["7V"],
 			attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			bellydrum: ["8L48", "7L31", "7V", "6L31", "5L31", "4L31", "3L37"],
@@ -9588,6 +9589,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	tentacool: {
 		learnset: {
+			sleepbubble: ["8M", "7M"],
 			acid: ["8L4", "8V", "7L10", "7V", "6L10", "5L12", "4L12", "3L19"],
 			acidarmor: ["8L32"],
 			acidspray: ["7L22", "6L22", "5L26"],
@@ -16318,6 +16320,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	horsea: {
 		learnset: {
+			sleepbubble: ["8M", "7M"],
 			agility: ["8M", "8L30", "8V", "7L36", "7V", "6L23", "5L23", "4L23", "3L36"],
 			attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			aurorabeam: ["8E", "7E", "7V", "6E", "5E", "4E", "3E"],
@@ -43459,6 +43462,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			watergun: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			waterpulse: ["7T", "7E", "6T", "6E", "5E", "4M", "3M"],
 			whirlpool: ["7L1", "6L1", "5L1", "5D", "4M", "4L1", "3L1"],
+			sleepbubble: ["8M", "7M"],
 		},
 	},
 	huntail: {
@@ -48111,6 +48115,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	shellos: {
 		learnset: {
+			sleepbubble: ["8M", "7M"],
 			acidarmor: ["8E", "7E", "6E"],
 			amnesia: ["8M", "7E", "6E", "5E", "4E"],
 			ancientpower: ["8L20", "4T"],
@@ -60352,6 +60357,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			willowisp: ["8M", "7M", "6M", "5M"],
 			wringout: ["7L55", "6L55", "5L55"],
 			phazingphantasm: ["8M", "7M"],
+			sleepbubble: ["8M", "7M"],
 		},
 	},
 	jellicent: {
@@ -69341,6 +69347,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	skrelp: {
 		learnset: {
+			sleepbubble: ["8M", "7M"],
 			acid: ["8L5", "7L15", "6L15"],
 			acidarmor: ["8E", "7E", "6E"],
 			aquatail: ["8L45", "7T", "7L35", "6T", "6L35"],
@@ -72431,6 +72438,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	popplio: {
 		learnset: {
+			sleepbubble: ["8M", "7M"],
 			acrobatics: ["8M", "7M"],
 			amnesia: ["8M", "7E"],
 			aquajet: ["8L9", "7L14"],
@@ -79641,6 +79649,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sobble: {
 		learnset: {
+			sleepbubble: ["8M", "7M"],
 			aquajet: ["8E"],
 			aquaring: ["8E"],
 			attract: ["8M"],
