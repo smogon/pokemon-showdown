@@ -46438,6 +46438,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	staraptorunova: {
 		learnset: {
+			closecombat: ["8M", "7M"],
 			abduction: ["8M", "7M"],
 			aerialace: ["8M", "7M"],
 			agility: ["8M", "7M"],
