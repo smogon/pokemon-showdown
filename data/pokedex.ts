@@ -2588,7 +2588,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 118,
 		name: "Goldeen",
 		types: ["Water"],
-		baseStats: {hp: 45, atk: 67, def: 60, spa: 35, spd: 50, spe: 63},
+		baseStats: {hp: 45, atk: 77, def: 60, spa: 35, spd: 50, spe: 63},
 		abilities: {0: "Swift Swim", 1: "Water Veil", H: "Lightning Rod"},
 		heightm: 0.6,
 		weightkg: 15,
