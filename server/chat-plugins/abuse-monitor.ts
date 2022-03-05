@@ -788,6 +788,39 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
 		},
+		ep: 'exportpunishments', // exports punishment settings to something easily copy/pastable
+		exportpunishments() {
+			checkAccess(this);
+			let buf = settings.punishments.map(punishment => {
+				const line = [];
+				for (const key in punishment) {
+					const val = punishment[key as keyof PunishmentSettings];
+					switch (key) {
+					case 'modlogCount':
+						line.push(`mlc=${val}`);
+						break;
+					case 'modlogActions':
+						line.push(`${(val as string[]).map(f => `mla=${f}`).join(', ')}`);
+						break;
+					case 'punishment':
+						line.push(`p=${val}`);
+						break;
+					case 'type':
+						line.push(`t=${val}`);
+						break;
+					case 'count':
+						line.push(`c=${val}`);
+						break;
+					case 'certainty':
+						line.push(`ct=${val}`);
+						break;
+					}
+				}
+				return line.join(', ');
+			}).join('<br />');
+			if (!buf) buf = 'None found';
+			this.sendReplyBox(buf);
+		},
 		ap: 'addpunishment',
 		addpunishment(target, room, user) {
 			checkAccess(this);
