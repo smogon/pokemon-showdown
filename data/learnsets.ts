@@ -39112,6 +39112,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	numel: {
 		learnset: {
+			magmabath: ["8M", "7M"],
 			afteryou: ["7T", "6T", "5T"],
 			amnesia: ["7L19", "6L19", "5L31", "4L25", "3L31"],
 			ancientpower: ["7E", "6E", "5E", "4E"],
