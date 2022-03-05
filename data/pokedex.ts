@@ -7460,7 +7460,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Rock"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 67, atk: 125, def: 40, spa: 30, spd: 30, spe: 58},
-		abilities: {0: "Mold Breaker", H: "Sheer Force"},
+		abilities: {0: "Mold Breaker", 1: "Reckless", H: "Sheer Force"},
 		heightm: 0.9,
 		weightkg: 31.5,
 		color: "Blue",
