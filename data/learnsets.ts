@@ -40082,6 +40082,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	swablu: {
 		learnset: {
+			dragondance: ["8M"],
 			aerialace: ["7M", "6M", "5M", "4M", "3M"],
 			agility: ["8M", "7E", "6E", "5E", "4E", "3E"],
 			aircutter: ["4T"],
