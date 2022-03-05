@@ -5166,7 +5166,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 272,
 		name: "Ludicolo",
 		types: ["Water", "Grass"],
-		baseStats: {hp: 100, atk: 70, def: 90, spa: 90, spd: 100, spe: 70},
+		baseStats: {hp: 80, atk: 70, def: 70, spa: 90, spd: 100, spe: 70},
 		abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Own Tempo"},
 		heightm: 1.5,
 		weightkg: 55,
