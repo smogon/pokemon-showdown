@@ -23921,6 +23921,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	chinchou: {
 		learnset: {
+			recover: ["8M", "7M"],
 			agility: ["8M", "7E", "6E", "5E", "4E"],
 			amnesia: ["8M", "7E", "6E", "5E", "5D", "4E", "3E"],
 			aquaring: ["8L32", "7L42", "6L42", "5L42", "4L39"],
