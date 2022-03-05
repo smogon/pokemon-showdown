@@ -479,7 +479,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Spearow",
 		types: ["Normal", "Flying"],
 		baseStats: {hp: 40, atk: 60, def: 30, spa: 31, spd: 31, spe: 70},
-		abilities: {0: "Keen Eye", H: "Sniper"},
+		abilities: {0: "Keen Eye", 1: "Moxie", H: "Sniper"},
 		heightm: 0.3,
 		weightkg: 2,
 		color: "Brown",
