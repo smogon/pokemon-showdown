@@ -4656,6 +4656,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	cleffa: {
 		learnset: {
 			afteryou: ["7T", "6T", "5T"],
+			gammaray: ["8M", "7M"],
 			amnesia: ["8M", "7E", "7V", "6E", "5E", "4E", "3E"],
 			aromatherapy: ["8E", "7E", "6E", "5E", "5D", "4E"],
 			attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -4918,6 +4919,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			vacuumray: ["8M", "7M"],
 			brightslap: ["8M", "7M"],
 			swift: ["8M", "7M"],
+			gammaray: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 1, level: 8},
