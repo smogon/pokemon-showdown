@@ -16642,7 +16642,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	steelwing: {
 		num: 211,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		name: "Steel Wing",
