@@ -12800,7 +12800,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 712,
 		name: "Bergmite",
 		types: ["Ice"],
-		baseStats: {hp: 55, atk: 69, def: 85, spa: 32, spd: 35, spe: 28},
+		baseStats: {hp: 55, atk: 75, def: 105, spa: 32, spd: 54, spe: 18},
 		abilities: {0: "Own Tempo", 1: "Ice Body", H: "Sturdy"},
 		heightm: 1,
 		weightkg: 99.5,
