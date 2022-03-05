@@ -89581,8 +89581,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			solarbeam: ["8M", "7M"],
 			roar: ["8M", "7M"],
 			dragontail: ["8M", "7M"],
-			taunt: ["8M", "7M"],
-			knockoff: ["8M", "7M"],
 			lavaplume: ["8M", "7M"],
 			scorchingsands: ["8M", "7M"],
 			dragonbreath: ["8M", "7M"],
