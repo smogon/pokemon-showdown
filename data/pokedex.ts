@@ -18442,7 +18442,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 10060,
 		name: "Shoggoz",
 		types: ["Normal"],
-		baseStats: {hp: 100, atk: 120, def: 100, spa: 120, spd: 100, spe: 101},
+		baseStats: {hp: 80, atk: 140, def: 100, spa: 140, spd: 100, spe: 120},
 		abilities: {0: "Transmutation"},
 		heightm: 8.6,
 		weightkg: 380,
