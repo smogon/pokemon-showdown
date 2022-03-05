@@ -38610,6 +38610,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	gulpin: {
 		learnset: {
+			recover: ["8M", "7M"],
 			acidarmor: ["7E", "6E", "5E", "5D", "4E", "3E"],
 			acidspray: ["7L17", "6L17", "5L34"],
 			amnesia: ["7L12", "6L12", "5L17", "4L17", "3L17"],
