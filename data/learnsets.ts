@@ -57341,7 +57341,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			willowisp: ["8M", "7M", "6M", "5M"],
 			workup: ["8M", "8L16", "7M", "7L25", "6L25", "5M", "5L25"],
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
-			firejet: ["8M", "7M"],
 			limitbreaker: ["8M", "7M"],
 			purifyingflame: ["8M", "7M"],
 			cometpunch: ["8M", "7M"],
