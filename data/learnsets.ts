@@ -86724,7 +86724,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			vacuumwave: ["4T"],
 			workup: ["8M", "7M"],
 			wrap: ["8L1", "7L1", "4L1"],
-			nightmaredance: ["8M", "7M"],
+			suckerpunch: ["8M", "7M"],
 			darkmelody: ["8M", "7M"],
 		},
 	},
