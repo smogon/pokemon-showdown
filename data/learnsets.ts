@@ -61360,6 +61360,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			imprison: ["8M", "8L6", "7L25", "6L25", "5L25"],
 			lightscreen: ["8M", "7M", "6M", "5M"],
 			magiccoat: ["7T", "6T", "5T"],
+			magicroom: ["8M"],
 			meteorbeam: ["8T"],
 			miracleeye: ["7L11", "6L11", "5L11"],
 			nastyplot: ["8M", "7E", "6E", "5E", "5D"],
@@ -61420,6 +61421,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	beheeyem: {
 		learnset: {
 			afteryou: ["7T", "6T", "5T"],
+			magicroom: ["8M"],
 			agility: ["8M"],
 			allyswitch: ["8M", "7T", "5M"],
 			attract: ["8M", "7M", "6M", "5M"],
