@@ -25235,6 +25235,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	azurill: {
 		learnset: {
+			quickattack: ["8M"],
+			playrough: ["8M"],
 			aquajet: ["8E"],
 			attract: ["8M", "7M", "6M", "5M", "4M", "3M"],
 			bellydrum: ["8E"],
