@@ -5101,7 +5101,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Beautifly",
 		types: ["Bug", "Flying"],
 		baseStats: {hp: 60, atk: 70, def: 50, spa: 100, spd: 50, spe: 65},
-		abilities: {0: "Swarm", H: "Rivalry"},
+		abilities: {0: "Swarm", 1: "Enthusiasm", H: "Rivalry"},
 		heightm: 1,
 		weightkg: 28.4,
 		color: "Yellow",
