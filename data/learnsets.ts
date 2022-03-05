@@ -54862,6 +54862,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			voltswitch: ["7M", "6M", "5M"],
 			wildcharge: ["7M", "7L39", "6M", "6L39", "5M", "5L39"],
 			firejet: ["8M", "7M"],
+			zapkick: ["8M", "7M"],
 		},
 	},
 	zebstrika: {
