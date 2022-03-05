@@ -32306,6 +32306,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	torchic: {
 		learnset: {
+			kicker: ["8M"],
 			aerialace: ["8L18", "7M", "6M", "5M", "4M", "3M"],
 			agility: ["8M", "7E", "6E", "5E", "4E"],
 			assurance: ["8M"],
@@ -32396,6 +32397,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	combusken: {
 		learnset: {
+			kicker: ["8M"],
 			aerialace: ["8L20", "7M", "6M", "5M", "4M", "3M"],
 			agility: ["8M"],
 			assurance: ["8M"],
