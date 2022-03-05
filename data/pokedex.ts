@@ -17863,7 +17863,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 10016,
 		name: "Colburnire",
 		types: ["Fire", "Ice"],
-		baseStats: {hp: 71, atk: 131, def: 57, spa: 131, spd: 57, spe: 123},
+		baseStats: {hp: 71, atk: 146, def: 57, spa: 146, spd: 57, spe: 123},
 		abilities: {0: "Drought", 1: "Snow Warning"},
 		heightm: 1.6,
 		weightkg: 130,
