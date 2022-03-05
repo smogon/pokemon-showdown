@@ -1138,7 +1138,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Oddish",
 		types: ["Grass", "Poison"],
 		baseStats: {hp: 45, atk: 50, def: 55, spa: 75, spd: 65, spe: 30},
-		abilities: {0: "Chlorophyll", H: "Run Away"},
+		abilities: {0: "Chlorophyll", H: "Rattled"},
 		heightm: 0.5,
 		weightkg: 5.4,
 		color: "Blue",
