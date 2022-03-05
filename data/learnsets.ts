@@ -70833,6 +70833,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dirtydeed: ["8M", "7M"],
 			darkwhispers: ["8M", "7M"],
 			phazingphantasm: ["8M", "7M"],
+			shadowsneak: ["8M", "7M"],
 		},
 	},
 	trevenant: {
@@ -70926,6 +70927,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			darkwhispers: ["8M", "7M"],
 			phazingphantasm: ["8M", "7M"],
 			spiritcalling: ["8M", "7M"],
+			shadowsneak: ["8M", "7M"],
 		},
 	},
 	pumpkaboo: {
