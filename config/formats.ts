@@ -2041,7 +2041,6 @@ export const Formats: FormatList = [
 
 		mod: 'sharedpower',
 		team: 'random',
-		searchShow: false,
 		ruleset: ['[Gen 8] Random Battle', 'Team Preview', 'Dynamax Clause', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
 		onBeforeSwitchIn(pokemon) {
 			let format = this.format;
