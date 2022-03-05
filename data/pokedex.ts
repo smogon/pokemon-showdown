@@ -3484,7 +3484,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 167,
 		name: "Spinarak",
 		types: ["Bug", "Poison"],
-		baseStats: {hp: 40, atk: 60, def: 40, spa: 40, spd: 40, spe: 30},
+		baseStats: {hp: 40, atk: 70, def: 40, spa: 40, spd: 40, spe: 35},
 		abilities: {0: "Swarm", 1: "Insomnia", H: "Paralyzing Venom"},
 		heightm: 0.5,
 		weightkg: 8.5,
