@@ -13164,7 +13164,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Toucannon",
 		types: ["Normal", "Flying"],
 		baseStats: {hp: 80, atk: 120, def: 75, spa: 75, spd: 75, spe: 60},
-		abilities: {0: "Keen Eye", 1: "Skill Link", H: "Sheer Force"},
+		abilities: {0: "Keen Eye", 1: "Skill Link", H: "Artillery"},
 		heightm: 1.1,
 		weightkg: 26,
 		color: "Black",
