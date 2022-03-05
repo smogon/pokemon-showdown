@@ -87,6 +87,8 @@ interface PunishmentSettings {
 	certainty?: number;
 	type?: string;
 	punishment: typeof PUNISHMENTS[number];
+	modlogCount?: number;
+	modlogActions?: string[];
 }
 
 interface FilterSettings {
@@ -150,6 +152,37 @@ function colorName(id: ID, info: BattleInfo) {
 	return REPORT_NAMECOLORS.other;
 }
 
+async function searchModlog(
+	query: {user?: ID, ip?: string | string[], actions?: string[]}
+) {
+	const search: import('../modlog').ModlogSearch = {
+		user: [],
+		ip: [],
+		note: [],
+		actionTaker: [],
+		action: [],
+	};
+	if (query.user) search.user.push({search: query.user, isExact: true});
+	if (query.ip) {
+		if (!Array.isArray(query.ip)) query.ip = [query.ip];
+		for (const ip of query.ip) {
+			search.ip.push({search: ip});
+		}
+	}
+	const modlog = await Rooms.Modlog.search('global', search);
+	if (!modlog) return [];
+	if (query.actions) {
+		// have to do this because using actions in the search treats it like
+		// AND action = foo AND action = bar
+		for (const [i, entry] of modlog.results.entries()) {
+			if (!query.actions.includes(entry.action)) {
+				modlog.results.splice(i, 1);
+			}
+		}
+	}
+	return modlog.results;
+}
+
 export const classifier = new Artemis.RemoteClassifier();
 
 async function runActions(user: User, room: GameRoom, response: Record<string, number>) {
@@ -164,6 +197,14 @@ async function runActions(user: User, room: GameRoom, response: Record<string, n
 			const num = response[type];
 			if (punishment.type && punishment.type !== type) continue;
 			if (punishment.certainty && punishment.certainty > num) continue;
+			if (punishment.modlogCount) {
+				// todo: support configuration for ip searches
+				const modlog = await searchModlog({
+					user: user.id,
+					actions: punishment.modlogActions,
+				});
+				if (modlog.length < punishment.modlogCount) continue;
+			}
 			if (punishment.count) {
 				const hits = await Chat.database.all(
 					`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
@@ -802,6 +843,26 @@ export const commands: Chat.ChatCommands = {
 						return this.errorReply(`Invalid certainty '${value}'. Must be a number above 0 and below 1.`);
 					}
 					punishment.certainty = certainty;
+					break;
+				case 'mla': case 'modlogaction':
+					value = value.toUpperCase();
+					if (!punishment.modlogActions) {
+						punishment.modlogActions = [];
+					}
+					if (punishment.modlogActions.includes(value)) {
+						return this.errorReply(`Duplicate modlog action values - '${value}'.`);
+					}
+					punishment.modlogActions.push(value);
+					break;
+				case 'mlc': case 'modlogcount':
+					if (punishment.modlogCount) {
+						return this.errorReply(`Duplicate modlog count values.`);
+					}
+					const count = parseInt(value);
+					if (isNaN(count)) {
+						return this.errorReply(`Invalid modlog count.`);
+					}
+					punishment.modlogCount = count;
 					break;
 				default:
 					this.errorReply(`Invalid key:  ${key}`);
