@@ -89,6 +89,8 @@ interface PunishmentSettings {
 	punishment: typeof PUNISHMENTS[number];
 	modlogCount?: number;
 	modlogActions?: string[];
+	/** Other types of a given certainty needed beyond the primary */
+	secondaryTypes?: Record<string, number>;
 }
 
 interface FilterSettings {
@@ -118,6 +120,15 @@ function isFlaggedUserid(name: string, room: RoomID) {
 	const entry = cache[room]?.staffNotified;
 	if (!entry) return false;
 	return typeof entry === 'string' ? entry === id : entry.includes(id);
+}
+
+function visualizePunishmentKey(punishment: PunishmentSettings, key: keyof PunishmentSettings) {
+	if (key === 'secondaryTypes') {
+		if (!punishment.secondaryTypes) return '';
+		const keys = Utils.sortBy(Object.keys(punishment.secondaryTypes));
+		return `${keys.map(k => `${k}: ${punishment.secondaryTypes![k]}`).join(', ')}`;
+	}
+	return punishment[key]?.toString() || "";
 }
 
 // Mostly stolen from my code in helptickets.
@@ -185,7 +196,7 @@ async function searchModlog(
 
 export const classifier = new Artemis.RemoteClassifier();
 
-async function runActions(user: User, room: GameRoom, response: Record<string, number>) {
+export async function runActions(user: User, room: GameRoom, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string][] = [];
 	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
@@ -204,6 +215,13 @@ async function runActions(user: User, room: GameRoom, response: Record<string, n
 					actions: punishment.modlogActions,
 				});
 				if (modlog.length < punishment.modlogCount) continue;
+			}
+			if (punishment.secondaryTypes) {
+				let matches = 0;
+				for (const curType in punishment.secondaryTypes) {
+					if (response[curType] >= punishment.secondaryTypes[curType]) matches++;
+				}
+				if (matches < Object.keys(punishment.secondaryTypes).length) continue;
 			}
 			if (punishment.count) {
 				const hits = await Chat.database.all(
@@ -793,8 +811,10 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			let buf = settings.punishments.map(punishment => {
 				const line = [];
-				for (const key in punishment) {
-					const val = punishment[key as keyof PunishmentSettings];
+				for (const k in punishment) {
+					// simplifies code to not need to cast every time.
+					const key = k as keyof PunishmentSettings;
+					const val = punishment[key];
 					switch (key) {
 					case 'modlogCount':
 						line.push(`mlc=${val}`);
@@ -813,6 +833,11 @@ export const commands: Chat.ChatCommands = {
 						break;
 					case 'certainty':
 						line.push(`ct=${val}`);
+						break;
+					case 'secondaryTypes':
+						for (const type in (val as any)) {
+							line.push(`st=${type}|${(val as any)[type]}`);
+						}
 						break;
 					}
 				}
@@ -897,6 +922,30 @@ export const commands: Chat.ChatCommands = {
 					}
 					punishment.modlogCount = count;
 					break;
+				case 'st': case 's': case 'secondary':
+					let [sType, sValue] = Utils.splitFirst(value, '|').map(f => f.trim());
+					if (!sType || !sValue) {
+						return this.errorReply(`Invalid secondary type/certainty.`);
+					}
+					sType = sType.replace(/\s/g, '_').toUpperCase();
+					if (!Artemis.RemoteClassifier.ATTRIBUTES[sType as keyof typeof Artemis.RemoteClassifier.ATTRIBUTES]) {
+						return this.errorReply(
+							`Invalid secondary attribute: ${sType}. ` +
+							`Valid attributes: ${Object.keys(Artemis.RemoteClassifier.ATTRIBUTES).join(', ')}.`
+						);
+					}
+					const sCertainty = parseFloat(sValue);
+					if (isNaN(sCertainty) || sCertainty > 1 || sCertainty < 0) {
+						return this.errorReply(`Invalid secondary certainty '${sValue}'. Must be a number above 0 and below 1.`);
+					}
+					if (!punishment.secondaryTypes) {
+						punishment.secondaryTypes = {};
+					}
+					if (punishment.secondaryTypes[sType]) {
+						return this.errorReply(`Duplicate secondary type.`);
+					}
+					punishment.secondaryTypes[sType] = sCertainty;
+					break;
 				default:
 					this.errorReply(`Invalid key:  ${key}`);
 					return this.parse(`/help am`);
@@ -908,7 +957,9 @@ export const commands: Chat.ChatCommands = {
 			for (const [i, p] of settings.punishments.entries()) {
 				let matches = 0;
 				for (const k in p) {
-					if (p[k as keyof PunishmentSettings] === punishment[k as keyof PunishmentSettings]) matches++;
+					const key = k as keyof PunishmentSettings;
+					const val = visualizePunishmentKey(punishment as PunishmentSettings, key);
+					if (val && val === visualizePunishmentKey(p, key)) matches++;
 				}
 				if (matches === Object.keys(p).length) {
 					return this.errorReply(`This punishment is already stored at ${i + 1}.`);
@@ -918,7 +969,9 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} added a ${punishment.punishment} abuse-monitor punishment.`);
-			const str = Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ');
+			const str = Object.keys(punishment).map(
+				f => `${f}: ${visualizePunishmentKey(punishment as PunishmentSettings, f as keyof PunishmentSettings)}`
+			).join(', ');
 			this.stafflog(`Info: ${str}`);
 			this.globalModlog(`ABUSEMONITOR ADDPUNISHMENT`, null, str);
 		},
@@ -1386,7 +1439,9 @@ export const pages: Chat.PageTable = {
 			if (settings.punishments.length) {
 				for (const [i, p] of settings.punishments.entries()) {
 					buf += `&bull; ${i + 1}: `;
-					buf += Object.keys(p).map(f => `${f}: ${p[f as keyof PunishmentSettings]}`).join(', ');
+					buf += Object.keys(p).map(
+						f => `${f}: ${visualizePunishmentKey(p, f as keyof PunishmentSettings)}`
+					).join(', ');
 					buf += ` (<button class="button" name="send" value="/msgroom staff,/am dp ${i + 1}">delete</button>)`;
 					buf += `<br />`;
 				}
