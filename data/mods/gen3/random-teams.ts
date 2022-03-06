@@ -77,6 +77,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Not very useful without their supporting moves
 		case 'amnesia': case 'sleeptalk':
+			if (moves.has('roar')) return {cull: true};
 			if (!moves.has('rest')) return {cull: true};
 			if (movePool.length > 1) {
 				const rest = movePool.indexOf('rest');
@@ -167,6 +168,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return {cull: !!counter.setupType || moves.has('rest') || !!teamDetails.rapidSpin};
 		case 'reflect':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup')};
+		case 'roar':
+			return {cull: moves.has('sleeptalk') || moves.has('rest')};
 		case 'seismictoss':
 			return {cull: !!counter.setupType || moves.has('thunderbolt')};
 		case 'spikes':
@@ -388,7 +391,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				) {
 					cull = true;
 				}
-
 				const moveIsRejectable = (
 					!move.weather &&
 					(move.category !== 'Status' || !move.flags.heal) &&

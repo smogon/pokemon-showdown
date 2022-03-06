@@ -86,7 +86,7 @@ export class LocalClassifier {
 	};
 	static classifiers: LocalClassifier[] = [];
 	static destroy() {
-		for (const classifier of this.classifiers) classifier.destroy();
+		for (const classifier of this.classifiers) void classifier.destroy();
 		return this.PM.destroy();
 	}
 	/** If stream exists, model is usable */

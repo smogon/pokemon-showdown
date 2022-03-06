@@ -82,7 +82,7 @@ export interface TextTicketInfo {
 	getReviewDisplay: (
 		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection, state?: AnyObject
 	) => Promise<string | void> | string | void;
-	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
+	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void | Promise<void>;
 	getState?: (ticket: TicketState, user: User) => AnyObject;
 }
 
@@ -1930,15 +1930,17 @@ export const pages: Chat.PageTable = {
 			if (ticket.recommended?.length) {
 				if (ticket.recommended.length > 1) {
 					buf += `<details class="readmore"><summary><strong>Recommended from Artemis</strong></summary>`;
-					buf += ticket.recommended.join('<br />');
+					buf += ticket.recommended.map(Utils.escapeHTML).join('<br />');
 					buf += `</details>`;
 				} else {
-					buf += `<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
+					buf += Utils.html`<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
 				}
 				if (!ticket.state?.recommendResult) {
 					buf += `<br />`;
 					buf += `Rate accuracy of result: `;
-					for (const [title, result] of [['Accurate', 'success'], ['Inaccurate', 'failure']]) {
+					for (const [title, result] of [
+						['Accurate (or too lenient)', 'success'], ['Inaccurate (too harsh)', 'failure'],
+					]) {
 						buf += `<button class="button" name="send" value="/aht resolve ${ticket.userid},${result}">${title}</button>`;
 					}
 				}
@@ -2384,7 +2386,7 @@ export const commands: Chat.ChatCommands = {
 				});
 				writeTickets();
 				notifyStaff();
-				textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
+				void textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
 				void runPunishments(ticket as TicketState & {text: [string, string]}, typeId);
 				if (textTicket.getState) {
 					ticket.state = textTicket.getState(ticket, user);
@@ -2531,6 +2533,12 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!ticket.text) {
 				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
+			}
+			if (ticket.recommended?.length && !ticket.state?.recommendResult) {
+				return this.popupReply(
+					`You must rate the accuracy of the Artemis recommendations ` +
+					`(click accurate/inaccurate) before closing the ticket.`
+				);
 			}
 			const {publicReason, privateReason} = this.parseSpoiler(result);
 			ticket.resolved = {

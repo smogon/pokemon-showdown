@@ -398,7 +398,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'originpulse': case 'surf':
 			return {cull: moves.has('hydropump') || moves.has('scald')};
 		case 'scald':
-			return {cull: moves.has('waterfall') || moves.has('waterpulse')};
+			return {cull: (
+				moves.has('waterfall') ||
+				moves.has('waterpulse') ||
+				(species.id === 'quagsire' && movePool.includes('recover'))
+			)};
 
 		// Status:
 		case 'glare': case 'headbutt':
@@ -556,7 +560,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Unburden':
 			return (!!species.isMega || abilities.has('Prankster') || !counter.setupType && !moves.has('acrobatics'));
 		case 'Water Absorb':
-			return (moves.has('raindance') || abilities.has('Drizzle') || abilities.has('Volt Absorb'));
+			return (moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(a => abilities.has(a)));
 		case 'Weak Armor':
 			return counter.setupType !== 'Physical';
 		}
@@ -783,9 +787,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = new Set(species.types);
-		const abilities = new Set(Object.values(species.abilities));
+		let abilities = new Set(Object.values(species.abilities));
 		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
-
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
 			if (setMoveid.startsWith('hiddenpower')) availableHP++;
@@ -984,10 +987,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			moves.add('thunder');
 		}
 
-		const battleOnly = species.battleOnly && !species.requiredAbility;
-		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
-
-		const abilityData = Object.values(baseSpecies.abilities).map(a => this.dex.abilities.get(a));
+		if (species.battleOnly && !species.requiredAbility) {
+			abilities = new Set(Object.values(this.dex.species.get(species.battleOnly as string).abilities));
+		}
+		const abilityData = [...abilities].map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
 		if (abilityData.length > 1) {

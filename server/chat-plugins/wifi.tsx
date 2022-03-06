@@ -1345,7 +1345,6 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(`${user.name} deleted a ${typedType} giveaway by ${giveaway.targetUserID}.`);
 				this.modlog(`GIVEAWAY DELETE ${typedType.toUpperCase()}`);
 			} else {
-				if (!target) return this.parse(`/help giveaway`);
 				const {targetUser, rest: reason} = this.splitUser(target);
 				if (!targetUser?.connected) {
 					throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} is offline, so their giveaway can't be run.`);
