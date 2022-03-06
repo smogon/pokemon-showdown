@@ -260,6 +260,12 @@ export async function runActions(user: User, room: GameRoom, response: Record<st
 						notified.splice(notified.indexOf(user.id), 1);
 						if (!notified.length) {
 							delete cache[room.roomid].staffNotified;
+							void Chat.database.run(
+								`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
+								`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
+								// todo: maybe use 3 to indicate punishment?
+								{staff: '', roomid: room.roomid, result: 1, timestamp: Date.now()}
+							);
 						}
 					}
 				}
