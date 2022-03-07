@@ -248,6 +248,14 @@ export async function runActions(user: User, room: GameRoom, response: Record<st
 				`(${reason.replace(/_/g, ' ').toLowerCase()})`
 			).update();
 		} else {
+			if (user.trusted) {
+				// force just logging for any sort of punishment. requested by staff
+				Rooms.get('staff')?.add(
+					`|c|&|/log [Artemis] <<${room.roomid}>> ${punishment} recommended for trusted user ${user.id}` +
+					`${user.trusted !== user.id ? ` [${user.trusted}]` : ''} `
+				).update();
+				return; // we want nothing else to be executed. staff want trusted users to be reviewed manually for now
+			}
 			room.mute(user);
 			const result = await punishmentHandlers[toID(punishment)]?.(user, room);
 			if (result !== false) {
