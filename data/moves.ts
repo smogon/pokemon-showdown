@@ -13172,7 +13172,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	psychoboost: {
 		num: 354,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 140,
 		category: "Special",
 		//isNonstandard: "Past",
@@ -16642,7 +16642,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	steelwing: {
 		num: 211,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		name: "Steel Wing",
@@ -22525,7 +22525,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Wind Scythe",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, blade: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, blade: 1, wind: 1},
 		critRatio: 2,
 		secondary: null,
 		target: "normal",
