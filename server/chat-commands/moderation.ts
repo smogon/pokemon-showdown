@@ -1839,11 +1839,12 @@ export const commands: Chat.ChatCommands = {
 	forcenamelock: 'namelock',
 	weeknamelock: 'namelock',
 	wnl: 'namelock',
+	fwnl: 'namelock',
 	forceweeknamelock: 'namelock',
 	async namelock(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help namelock');
 		const week = cmd.includes('w');
-		const force = cmd.includes('force');
+		const force = cmd.includes('f');
 
 		const {targetUser, inputUsername, targetUsername, rest: reason} = this.splitUser(target);
 		const userid = toID(targetUsername);
