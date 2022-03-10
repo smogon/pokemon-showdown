@@ -260,7 +260,7 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 	});
 
 	it('should give Unown a Choice item', () => {
-		testSet('unown', options, set => assert.match(set.item, /^Choice /));
+		testSet('unown', options, set => assert(set.item.startsWith('Choice')));
 	});
 
 	it('should give Toxic Orb to Gliscor and Zangoose', () => {
@@ -369,7 +369,7 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 	it('Ambipom should only get Switcheroo if it has a Choice item', () => {
 		testSet('ambipom', options, set => {
 			if (!set.moves.includes('switcheroo')) return;
-			assert.match(set.item, /^Choice /, `Ambipom has Switcheroo and no Choice item (set=${JSON.stringify(set)})`);
+			assert(set.item.startsWith('Choice'), `Ambipom has Switcheroo and no Choice item (set=${JSON.stringify(set)})`);
 		});
 	});
 
