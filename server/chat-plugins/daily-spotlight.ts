@@ -88,7 +88,7 @@ export const pages: Chat.PageTable = {
 
 		let buf = `<div class="pad ladder">`;
 		buf += `<div class="pad">`;
-		buf += `<button style="float:right;" class="button" name="send" value="/join view-spotlights-${room.roomid}-${sortType}">`;
+		buf += `<button style="float:right;" class="button" name="send" value="/join view-spotlights-${room.roomid}${sortType ? '-' + sortType : ''}">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<h2>Daily Spotlights</h2>`;
 		// for posterity, all these switches are futureproofing for more sort types
