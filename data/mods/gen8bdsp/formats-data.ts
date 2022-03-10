@@ -1161,7 +1161,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	linoone: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["bellydrum", "extremespeed", "irontail", "shadowclaw"],
 	},
@@ -1460,7 +1460,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["dracometeor", "fireblast", "haze", "hurricane", "roost"],
 	},
 	zangoose: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["closecombat", "facade", "quickattack", "shadowclaw", "swordsdance"],
 	},
@@ -1756,7 +1756,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	bibarel: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["aquajet", "aquatail", "curse", "quickattack", "rest"],
 	},
