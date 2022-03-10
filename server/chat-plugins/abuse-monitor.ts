@@ -65,6 +65,7 @@ const defaults: FilterSettings = {
 		IDENTITY_ATTACK: {0.8: 2},
 		SEVERE_TOXICITY: {0.8: 2},
 	},
+	replacements: {},
 	recommendOnly: false,
 	punishments: [
 		{certainty: 0.93, type: 'IDENTITY_ATTACK', punishment: 'WARN', count: 2},
@@ -99,6 +100,8 @@ interface FilterSettings {
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
+	/** Replaces [key] with [value] before processing the string. */
+	replacements: Record<string, string>;
 	punishments: PunishmentSettings[];
 	/** Should it make recommendations, or punish? */
 	recommendOnly?: boolean;
@@ -434,6 +437,9 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 
 	const roomid = room.roomid;
 	void (async () => {
+		for (const k in settings.replacements) {
+			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
+		}
 		const response = await classifier.classify(message);
 		const {score, flags, main} = makeScore(roomid, response || {});
 		if (score) {
@@ -1121,6 +1127,34 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`ABUSEMONITOR TOGGLE`, null, settings.recommendOnly ? 'off' : 'on');
 			saveSettings();
 		},
+		replace(target, room, user) {
+			checkAccess(this);
+			if (!target) return this.parse(`/help am`);
+			const [old, newWord] = target.split(',').map(val => val.trim());
+			if (!old || !newWord) return this.errorReply(`Invalid arguments - must be [oldWord], [newWord].`);
+			if (toID(old) === toID(newWord)) return this.errorReply(`The old word and the new word are the same.`);
+			if (settings.replacements[old]) {
+				return this.errorReply(`The old word '${old}' is already in use (for '${settings.replacements[old]}').`);
+			}
+			settings.replacements[old] = newWord;
+			saveSettings();
+			this.privateGlobalModAction(`${user.name} added an Artemis replacement for '${old}' to '${newWord}'.`);
+			this.globalModlog(`ABUSEMONITOR REPLACE`, null, `'${old}' to '${newWord}'`);
+			this.refreshPage('abusemonitor-settings');
+		},
+		removereplace(target, room, user) {
+			checkAccess(this);
+			if (!target) return this.parse(`/help am`);
+			const replaceTo = settings.replacements[target];
+			if (!replaceTo) {
+				return this.errorReply(`${target} is not a currently set replacement.`);
+			}
+			delete settings.replacements[target];
+			saveSettings();
+			this.privateGlobalModAction(`${user.name} removed the Artemis replacement for ${target}`);
+			this.globalModlog(`ABUSEMONITOR REMOVEREPLACEMENT`, null, `${target} (=> ${replaceTo})`);
+			this.refreshPage('abusemonitor-settings');
+		},
 	},
 	abusemonitorhelp: [
 		`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
@@ -1447,6 +1481,12 @@ export const pages: Chat.PageTable = {
 				buf += `<br />Threshold increments: `;
 				buf += `Increases ${incr.amount} every ${incr.turns} turns`;
 				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
+				buf += `<br />`;
+			}
+			const replacements = Object.keys(settings.replacements);
+			if (replacements.length) {
+				buf += `<br />Replacements: `;
+				buf += replacements.map(k => `${k}: ${settings.replacements[k]}`).join(', ');
 				buf += `<br />`;
 			}
 			buf += `</div><div class="infobox"><h3>Punishment settings</h3><hr />`;
