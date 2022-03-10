@@ -1152,7 +1152,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		ruleset: ['[Gen 8 BDSP] RU'],
-		banlist: ['RU', 'NUBL'],
+		banlist: ['RU', 'NUBL', 'Heat Rock'],
 	},
 	{
 		name: "[Gen 8 BDSP] LC",
