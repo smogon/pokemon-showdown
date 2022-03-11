@@ -1190,7 +1190,7 @@ export const commands: Chat.ChatCommands = {
 			};
 			displayResolved(review);
 			Chat.refreshPageFor('abusemonitor-reviews', 'staff');
-    },
+		},
 		replace(target, room, user) {
 			checkAccess(this);
 			if (!target) return this.parse(`/help am`);
