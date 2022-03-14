@@ -1739,7 +1739,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	empoleon: {
 		tier: "UU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["agility", "defog", "flashcannon", "icebeam", "scald", "stealthrock"],
+		randomBattleMoves: ["agility", "defog", "grassknot", "icebeam", "scald", "stealthrock"],
 	},
 	starly: {
 		tier: "LC",
