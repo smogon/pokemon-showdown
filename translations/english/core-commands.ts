@@ -83,7 +83,7 @@ export const translations: Translations = {
 		"${user.name} hid the replay of this battle.": "",
 		"You can only do this in battle rooms.": "",
 		"You can only add a Player to unrated battles.": "",
-    "Player must be set to \"p1\" or \"p2\", not \"${target}\".": "",
+		"Player must be set to \"p1\" or \"p2\", not \"${target}\".": "",
 		"User ${name} not found.": "",
 		"Player 2": "",
 		"Players could not be restored (maybe this battle already has two players?).": "",

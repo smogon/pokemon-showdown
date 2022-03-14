@@ -83,7 +83,7 @@ export const translations: Translations = {
 		"${user.name} hid the replay of this battle.": "${user.name} ha nascosto il replay di questa lotta.",
 		"You can only do this in battle rooms.": "Puoi farlo solamente nelle room di lotta.",
 		"You can only add a Player to unrated battles.": "Puoi aggiungere un giocatore solamente nelle lotte senza punteggio.",
-    "Player must be set to \"p1\" or \"p2\", not \"${target}\".": "I giocatori devono essere impostati come \"p1\" o \"p2\", non \"${target}\".",
+		"Player must be set to \"p1\" or \"p2\", not \"${target}\".": "I giocatori devono essere impostati come \"p1\" o \"p2\", non \"${target}\".",
 		"User ${name} not found.": "Utente ${name} non trovato.",
 		"Player 2": "Giocatore 2",
 		"Players could not be restored (maybe this battle already has two players?).": "Non è stato possibile ripristinare i giocatori (forse questa lotta ha già due giocatori?).",
