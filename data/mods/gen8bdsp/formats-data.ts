@@ -599,7 +599,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["closecombat", "earthquake", "stealthrock", "stoneedge", "xscissor"],
 	},
 	tauros: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["earthquake", "rockclimb", "rockslide", "zenheadbutt"],
 	},
@@ -1123,7 +1123,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	sceptile: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["earthquake", "focusblast", "gigadrain", "leafstorm", "leechseed", "rockslide", "substitute"],
 	},
