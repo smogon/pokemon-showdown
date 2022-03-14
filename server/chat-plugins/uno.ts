@@ -79,9 +79,7 @@ function createDeck() {
 	]; // 108 cards
 }
 
-export class UNO extends Rooms.RoomGame {
-	playerTable: {[userid: string]: UNOPlayer};
-	players: UNOPlayer[];
+export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	playerCap: number;
 	allowRenames: boolean;
 	maxTime: number;
@@ -102,9 +100,6 @@ export class UNO extends Rooms.RoomGame {
 
 	constructor(room: Room, cap: number, suppressMessages: boolean) {
 		super(room);
-
-		this.playerTable = Object.create(null);
-		this.players = [];
 
 		this.gameNumber = room.nextGameNumber();
 
@@ -570,15 +565,13 @@ export class UNO extends Rooms.RoomGame {
 	}
 }
 
-class UNOPlayer extends Rooms.RoomGamePlayer {
+class UNOPlayer extends Rooms.RoomGamePlayer<UNO> {
 	hand: Card[];
-	game: UNO;
 	cardLock: string | null;
 
 	constructor(user: User, game: UNO) {
 		super(user, game);
 		this.hand = [];
-		this.game = game;
 		this.cardLock = null;
 	}
 

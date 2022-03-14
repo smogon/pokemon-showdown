@@ -45,7 +45,7 @@ function usersToNames(users: TournamentPlayer[]) {
 	return users.map(user => user.name);
 }
 
-export class TournamentPlayer extends Rooms.RoomGamePlayer {
+export class TournamentPlayer extends Rooms.RoomGamePlayer<Tournament> {
 	readonly availableMatches: Set<TournamentPlayer>;
 	isBusy: boolean;
 	inProgressMatch: {to: TournamentPlayer, room: GameRoom} | null;
@@ -82,9 +82,7 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-export class Tournament extends Rooms.RoomGame {
-	readonly playerTable: {[userid: string]: TournamentPlayer};
-	readonly players: TournamentPlayer[];
+export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	readonly isTournament: true;
 	readonly completedMatches: Set<RoomID>;
 	/** Format ID not including custom rules */
@@ -124,11 +122,6 @@ export class Tournament extends Rooms.RoomGame {
 		super(room);
 		this.gameid = 'tournament' as ID;
 		const formatId = toID(format);
-
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		this.playerTable = Object.create(null);
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		this.players = [];
 
 		this.title = format.name + ' tournament';
 		this.isTournament = true;
@@ -430,8 +423,8 @@ export class Tournament extends Rooms.RoomGame {
 			output.sendReply(`|tournament|error|BracketFrozen`);
 			return;
 		}
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		const player = this.addPlayer(user) as TournamentPlayer;
+
+		const player = this.addPlayer(user);
 		if (!player) throw new Error("Failed to add player.");
 
 		this.playerTable[user.id] = player;

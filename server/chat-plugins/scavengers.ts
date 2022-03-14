@@ -331,9 +331,7 @@ class ScavengerHuntDatabase {
 		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
 	}
 }
-export class ScavengerHunt extends Rooms.RoomGame {
-	playerTable: {[userid: string]: ScavengerHuntPlayer};
-	players: ScavengerHuntPlayer[];
+export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
@@ -361,9 +359,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		mod?: string | string[]
 	) {
 		super(room);
-
-		this.playerTable = Object.create(null);
-		this.players = [];
 
 		this.allowRenames = true;
 		this.gameType = gameType;
@@ -987,8 +982,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	}
 }
 
-export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
-	game: ScavengerHunt;
+export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	lastGuess: number;
 	completed: boolean;
 	joinIps: string[];
@@ -997,7 +991,6 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor(user: User, game: ScavengerHunt) {
 		super(user, game);
-		this.game = game;
 
 		this.joinIps = user.ips.slice();
 

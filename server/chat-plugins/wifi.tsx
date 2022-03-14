@@ -94,7 +94,7 @@ const gameidToGame: {[k: string]: Game} = {
 	bdsp: 'BDSP',
 };
 
-class Giveaway extends Rooms.RoomGame {
+class Giveaway extends Rooms.SimpleRoomGame {
 	gaNumber: number;
 	host: User;
 	giver: User;
@@ -725,7 +725,7 @@ export class LotteryGiveaway extends Giveaway {
 	}
 }
 
-export class GTS extends Rooms.RoomGame {
+export class GTS extends Rooms.SimpleRoomGame {
 	gtsNumber: number;
 	room: Room;
 	giver: User;

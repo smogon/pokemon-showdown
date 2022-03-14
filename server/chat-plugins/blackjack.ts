@@ -17,7 +17,7 @@ type Deck =
 type Symbols = '♥' | '♦' | '♣' | '♠';
 type SymbolName = 'Hearts' | 'Diamonds' | 'Clubs' | 'Spades';
 
-export class Blackjack extends Rooms.RoomGame {
+export class Blackjack extends Rooms.RoomGame<BlackjackPlayer> {
 	room: Room;
 
 	roomID: RoomID;
@@ -51,7 +51,6 @@ export class Blackjack extends Rooms.RoomGame {
 
 	dealer: BlackjackDealer;
 	deck: Deck[];
-	playerTable: {[k: string]: BlackjackPlayer};
 	gameNumber: number;
 
 	constructor(room: Room, user: User, autostartMinutes = 0) {
@@ -73,7 +72,6 @@ export class Blackjack extends Rooms.RoomGame {
 		this.cardHeight = 85;
 
 		this.spectators = Object.create(null);
-		this.playerTable = Object.create(null);
 		this.dealer = new BlackjackDealer();
 
 		this.symbols = {
@@ -485,7 +483,7 @@ export class Blackjack extends Rooms.RoomGame {
 		this.turnLog += turnLine;
 		if (player.cards.length > 2) this.display(turnLine, false, player.name);
 
-		if (player === this.dealer) {
+		if (player instanceof BlackjackDealer) {
 			if (player.points > 21) {
 				let cards = '';
 				for (const card of player.cards) {
@@ -504,7 +502,7 @@ export class Blackjack extends Rooms.RoomGame {
 				return;
 			}
 		} else if (player.points > 21) {
-			(player as BlackjackPlayer).status = 'bust';
+			player.status = 'bust';
 			let cards = '';
 			for (const card of player.cards) {
 				cards += `[${card}] `;
@@ -514,7 +512,7 @@ export class Blackjack extends Rooms.RoomGame {
 			this.display(turnLine, false, player.name);
 			this.clear();
 		} else if (player.points === 21) {
-			(player as BlackjackPlayer).status = 'stand';
+			player.status = 'stand';
 			turnLine = Utils.html`<br /><strong>${player.name}</strong> has blackjack!`;
 			this.turnLog += turnLine;
 			this.display(turnLine, false, player.name);
@@ -591,9 +589,8 @@ export class Blackjack extends Rooms.RoomGame {
 	}
 }
 
-class BlackjackPlayer extends Rooms.RoomGamePlayer {
+class BlackjackPlayer extends Rooms.RoomGamePlayer<Blackjack> {
 	user: User;
-	game: Blackjack;
 
 	points: number;
 	slide: number;
@@ -609,7 +606,6 @@ class BlackjackPlayer extends Rooms.RoomGamePlayer {
 	constructor(user: User, game: Blackjack) {
 		super(user, game);
 		this.user = user;
-		this.game = game;
 
 		this.cards = [];
 		this.points = 0;

@@ -51,7 +51,7 @@ const DISCONNECTION_BANK_TIME = 300;
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * SECONDS;
 
-export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
+export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	readonly slot: SideID;
 	readonly channelIndex: ChannelIndex;
 	request: BattleRequestTracker;
@@ -490,7 +490,7 @@ export interface RoomBattleOptions {
 	seed?: PRNGSeed;
 }
 
-export class RoomBattle extends RoomGames.RoomGame {
+export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	readonly gameid: ID;
 	readonly room: GameRoom;
 	readonly title: string;
@@ -517,8 +517,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 	active: boolean;
 	replaySaved: boolean;
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
-	playerTable: {[userid: string]: RoomBattlePlayer};
-	players: RoomBattlePlayer[];
 	p1: RoomBattlePlayer;
 	p2: RoomBattlePlayer;
 	p3: RoomBattlePlayer;
@@ -555,11 +553,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.ended = false;
 		this.active = false;
 		this.replaySaved = false;
-
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		this.playerTable = Object.create(null);
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		this.players = [];
 
 		this.playerCap = this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2;
 		this.p1 = null!;
@@ -1067,8 +1060,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	 * (so the player isn't recreated)
 	 */
 	addPlayer(user: User | null, playerOpts?: RoomBattlePlayerOptions) {
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		const player = super.addPlayer(user) as RoomBattlePlayer;
+		const player = super.addPlayer(user);
 		if (!player) return null;
 		const slot = player.slot;
 		this[slot] = player;

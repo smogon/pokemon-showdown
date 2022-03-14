@@ -302,7 +302,7 @@ class Ladder {
 
 export const cachedLadder = new Ladder();
 
-class TriviaPlayer extends Rooms.RoomGamePlayer {
+class TriviaPlayer extends Rooms.RoomGamePlayer<Trivia> {
 	points: number;
 	correctAnswers: number;
 	answer: string;
@@ -312,7 +312,7 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 	isCorrect: boolean;
 	isAbsent: boolean;
 
-	constructor(user: User, game: RoomGame) {
+	constructor(user: User, game: Trivia) {
 		super(user, game);
 		this.points = 0;
 		this.correctAnswers = 0;
@@ -355,8 +355,7 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-export class Trivia extends Rooms.RoomGame {
-	playerTable: {[k: string]: TriviaPlayer};
+export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 	gameid: ID;
 	kickedUsers: Set<string>;
 	canLateJoin: boolean;
@@ -376,7 +375,6 @@ export class Trivia extends Rooms.RoomGame {
 		isRandomMode = false, isSubGame = false, isRandomCategory = false,
 	) {
 		super(room, isSubGame);
-		this.playerTable = {};
 		this.gameid = 'trivia' as ID;
 		this.title = 'Trivia';
 		this.allowRenames = true;
@@ -1185,7 +1183,7 @@ export class TriumvirateModeTrivia extends Trivia {
  * and the top n players from those personal rounds go on to the finals,
  * which is a game of First mode trivia that ends after a specified interval.
  */
-export class Mastermind extends Rooms.RoomGame {
+export class Mastermind extends Rooms.SimpleRoomGame {
 	/** userid:score Map */
 	leaderboard: Map<ID, {score: number, hasLeft?: boolean}>;
 	phase: string;
