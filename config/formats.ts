@@ -514,11 +514,11 @@ export const Formats: FormatList = [
 		],
 		// Used to distinguish UU from below UU in the client
 		restricted: [
-			'Aegislash', 'Altaria-Mega', 'Amoonguss', 'Azumarill', 'Beedrill-Mega', 'Blaziken-Base', 'Breloom', 'Celesteela', 'Chandelure',
-			'Donphan', 'Dracozolt', 'Dragonite', 'Feraligatr', 'Gastrodon', 'Hatterene', 'Hippowdon', 'Infernape', 'Keldeo', 'Krookodile',
-			'Mamoswine', 'Mandibuzz', 'Manectric-Mega', 'Melmetal', 'Mienshao', 'Moltres-Base', 'Nidoking', 'Nidoqueen', 'Nihilego', 'Quagsire',
-			'Regieleki', 'Ribombee', 'Rotom-Heat', 'Rotom-Wash', 'Salamence', 'Scizor', 'Skarmory', 'Slowking-Base', 'Swampert-Base',
-			'Talonflame', 'Tangrowth', 'Tornadus-Base', 'Umbreon', 'Urshifu-Rapid-Strike',
+			'Aegislash', 'Altaria-Mega', 'Amoonguss', 'Azumarill', 'Beedrill-Mega', 'Breloom', 'Celesteela', 'Chandelure', 'Donphan', 'Dracozolt',
+			'Dragonite', 'Feraligatr', 'Gastrodon', 'Hatterene', 'Hippowdon', 'Infernape', 'Keldeo', 'Krookodile', 'Mamoswine', 'Mandibuzz',
+			'Manectric-Mega', 'Melmetal', 'Mienshao', 'Moltres-Base', 'Nidoking', 'Nidoqueen', 'Nihilego', 'Quagsire', 'Regieleki', 'Ribombee',
+			'Rotom-Heat', 'Rotom-Wash', 'Salamence', 'Scizor', 'Skarmory', 'Slowking-Base', 'Swampert-Base', 'Talonflame', 'Tangrowth', 'Tornadus-Base',
+			'Umbreon', 'Urshifu-Rapid-Strike',
 		],
 	},
 	{
