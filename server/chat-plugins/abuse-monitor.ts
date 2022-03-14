@@ -1176,7 +1176,7 @@ export const commands: Chat.ChatCommands = {
 			if (!reviews[userid]) {
 				return this.errorReply(`No reviews found by that user.`);
 			}
-			const review = reviews[userid].find(f => f.room === roomid);
+			const review = reviews[userid].find(f => getBattleLinks(f.room).includes(roomid));
 			if (!review) {
 				return this.errorReply(`No reviews found by that user for that room.`);
 			}
@@ -1607,12 +1607,15 @@ export const pages: Chat.PageTable = {
 			buf += `<hr />`;
 			let atLeastOne = false;
 			for (const userid in reviews) {
-				const curReviews = reviews[userid];
-				buf += `<strong>${Chat.count(curReviews, 'reviews')} from ${userid}:</strong><hr />`;
+				const curReviews = reviews[userid].filter(f => !f.resolved);
+				if (curReviews.length) {
+					buf += `<strong>${Chat.count(curReviews, 'reviews')} from ${userid}:</strong><hr />`;
+				} else {
+					continue;
+				}
 				for (const review of curReviews) {
-					if (review.resolved) continue;
 					buf += `<div class="infobox">`;
-					buf += `Battle: <a href="https://${Config.routes.client}/${review.room}">${review.room}</a><br />`;
+					buf += `Battle: <a href="//${Config.routes.client}/${review.room}">${review.room}</a><br />`;
 					buf += Utils.html`<details class="readmore"><summary>Review details:</summary>${review.details}</details>`;
 					buf += `<form data-submitsend="/msgroom staff,/am resolvereview ${review.staff},${review.room},{response}">`;
 					buf += `Respond: <br /><textarea name="response" rows="3" cols="40"></textarea><br />`;
