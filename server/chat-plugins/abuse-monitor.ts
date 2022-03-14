@@ -11,6 +11,7 @@ import * as Artemis from '../artemis';
 import {FS, Utils} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
+import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
 
 const WHITELIST = ["mia"];
 const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
@@ -21,13 +22,6 @@ const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'forcerename': '/fr',
 	'namelock': '/nl',
 	'weeknamelock': '/wnl',
-};
-const REPORT_NAMECOLORS: {[k: string]: string} = {
-	p1: 'DodgerBlue',
-	p2: 'Crimson',
-	p3: '#FBa92C',
-	p4: '#228B22',
-	other: '', // black - empty since handled by dark mode
 };
 
 export let migrated = global.Chat?.oldPlugins['abuse-monitor']?.migrated || false;
@@ -83,6 +77,14 @@ export const settings: FilterSettings = (() => {
 	}
 })();
 
+export const reviews: Record<string, ReviewRequest[]> = (() => {
+	try {
+		return JSON.parse(FS(`config/chat-plugins/artemis-reviews.json`).readSync());
+	} catch {
+		return {};
+	}
+})();
+
 interface PunishmentSettings {
 	count?: number;
 	certainty?: number;
@@ -107,9 +109,12 @@ interface FilterSettings {
 	recommendOnly?: boolean;
 }
 
-interface BattleInfo {
-	players: Record<SideID, ID>;
-	log: string[];
+interface ReviewRequest {
+	staff: string;
+	room: string;
+	details: string;
+	time: number;
+	resolved?: {by: string, time: number, details: string};
 }
 
 // stolen from chatlog. necessary here, but importing chatlog sucks.
@@ -134,36 +139,24 @@ function visualizePunishmentKey(punishment: PunishmentSettings, key: keyof Punis
 	return punishment[key]?.toString() || "";
 }
 
-// Mostly stolen from my code in helptickets.
-// Necessary because we can't require this in without also requiring in a LOT of other
-// modules, most of which crash the child process. Lot messier to fix that than it is to do this.
-export function getBattleLog(battle: string) {
-	const battleRoom = Rooms.get(battle);
-	if (battleRoom && battleRoom.type !== 'chat') {
-		const playerTable: Partial<BattleInfo['players']> = {};
-		// i kinda hate this, but this will always be accurate to the battle players.
-		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
-		const playerLines = battleRoom.log.log.filter(line => line.startsWith('|player|'));
-		for (const line of playerLines) {
-			const [, , playerSlot, name] = line.split('|');
-			playerTable[playerSlot as SideID] = toID(name);
-		}
-		return {
-			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
-			players: playerTable as BattleInfo['players'],
-		};
+function displayResolved(review: ReviewRequest) {
+	const user = Users.get(review.staff);
+	if (!user) return;
+	const resolved = review.resolved;
+	if (!resolved) return;
+	const prefix = `|pm|&|${user.getIdentity()}|`;
+	user.send(
+		prefix +
+		`Your Artemis review was resolved by ${resolved.by}, ` +
+		`${Chat.toDurationString(Date.now() - resolved.time)} ago.`
+	);
+	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
+	const idx = reviews[user.id].findIndex(r => r === review); // object references!
+	if (idx > -1) reviews[user.id].splice(idx, 1);
+	if (!reviews[user.id]?.length) {
+		delete reviews[user.id];
 	}
-	return null;
-}
-// see above comment.
-function colorName(id: ID, info: BattleInfo) {
-	for (const k in info.players) {
-		const player = info.players[k as SideID];
-		if (player === id) {
-			return ` style="color: ${REPORT_NAMECOLORS[k]}"`;
-		}
-	}
-	return REPORT_NAMECOLORS.other;
+	saveReviews();
 }
 
 async function searchModlog(
@@ -479,6 +472,14 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 // to avoid conflicts with other filters
 chatfilter.priority = -100;
 
+export const loginfilter: Chat.LoginFilter = user => {
+	if (reviews[user.id]?.length) {
+		for (const r of reviews[user.id]) {
+			displayResolved(r);
+		}
+	}
+};
+
 function calcThreshold(roomid: RoomID) {
 	const incr = settings.thresholdIncrement;
 	let num = settings.threshold;
@@ -529,6 +530,10 @@ function getFlaggedRooms() {
 
 function saveSettings(isBackup = false) {
 	FS(`config/chat-plugins/nf${isBackup ? ".backup" : ""}.json`).writeUpdate(() => JSON.stringify(settings));
+}
+
+function saveReviews() {
+	FS(`config/chat-plugins/artemis-reviews.json`).writeUpdate(() => JSON.stringify(reviews));
 }
 
 export function notifyStaff() {
@@ -1127,6 +1132,65 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`ABUSEMONITOR TOGGLE`, null, settings.recommendOnly ? 'off' : 'on');
 			saveSettings();
 		},
+		review() {
+			this.checkCan('lock');
+			return this.parse(`/join view-abusemonitor-review`);
+		},
+		reviews() {
+			checkAccess(this);
+			return this.parse(`/join view-abusemonitor-reviews`);
+		},
+		async submitreview(target, room, user) {
+			this.checkCan('lock');
+			if (!target) return this.parse(`/help abusemonitor submitreview`);
+			const [roomid, reason] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const log = await getBattleLog(getBattleLinks(roomid)[0] || "");
+			if (!log) {
+				return this.popupReply(`No logs found for that roomid.`);
+			}
+			if (reviews[user.id]?.some(f => f.room === roomid)) {
+				return this.popupReply(`You have already submitted a review for this room.`);
+			}
+			if (reason.length < 1 || reason.length > 2000) {
+				return this.popupReply(`Your review must be between 1 and 2000 characters.`);
+			}
+			(reviews[user.id] ||= []).push({
+				room: roomid,
+				details: reason,
+				staff: user.id,
+				time: Date.now(),
+			});
+			saveReviews();
+			Chat.refreshPageFor('abusemonitor-reviews', 'staff');
+			this.closePage('abusemonitor-review');
+			this.popupReply(`Your review has been submitted.`);
+		},
+		resolvereview(target, room, user) {
+			checkAccess(this);
+			let [userid, roomid, result] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
+			userid = toID(userid);
+			roomid = getBattleLinks(roomid)[0] || "";
+			if (!userid || !roomid || !result) {
+				return this.parse(`/help abusemonitor resolvereview`);
+			}
+			if (!reviews[userid]) {
+				return this.errorReply(`No reviews found by that user.`);
+			}
+			const review = reviews[userid].find(f => f.room === roomid);
+			if (!review) {
+				return this.errorReply(`No reviews found by that user for that room.`);
+			}
+			if (review.resolved) {
+				return this.errorReply(`That review has already been resolved.`);
+			}
+			review.resolved = {
+				by: user.id,
+				time: Date.now(),
+				details: result || "",
+			};
+			displayResolved(review);
+			Chat.refreshPageFor('abusemonitor-reviews', 'staff');
+		},
 		replace(target, room, user) {
 			checkAccess(this);
 			if (!target) return this.parse(`/help am`);
@@ -1211,7 +1275,7 @@ export const pages: Chat.PageTable = {
 			buf += `</table></div>`;
 			return buf;
 		},
-		view(query, user) {
+		async view(query, user) {
 			this.checkCan('lock');
 			const roomid = query.join('-') as RoomID;
 			if (!toID(roomid)) {
@@ -1253,7 +1317,7 @@ export const pages: Chat.PageTable = {
 			buf += `<details class="readmore"><summary><strong>Chat:</strong></summary><div class="infobox">`;
 			// we parse users specifically from the log so we can see it after they leave the room
 			const users = new Utils.Multiset<string>();
-			const logData = getBattleLog(room.roomid);
+			const logData = await getBattleLog(room.roomid, true);
 			// should only extremely rarely happen - if the room expires while this is happening.
 			if (!logData) return `<div class="pad"><p class="error">No such room.</p></div>`;
 			// assume logs exist - why else would the filter activate?
@@ -1267,7 +1331,7 @@ export const pages: Chat.PageTable = {
 				if (!id) continue;
 				users.add(id);
 				buf += `<div class="chat chatmessage">`;
-				buf += `<strong${colorName(id, logData)}>`;
+				buf += `<strong${HelpTicket.colorName(id, logData)}>`;
 				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
@@ -1533,6 +1597,53 @@ export const pages: Chat.PageTable = {
 				buf += `<hr />`;
 			}
 			buf += `</div>`;
+			return buf;
+		},
+		reviews() {
+			checkAccess(this);
+			this.title = `[Abuse Monitor] Reviews`;
+			let buf = `<div class="pad"><h2>Artemis recommendation reviews</h2>`;
+			buf += `<button class="button" name="send" value="/msgroom staff,/am reviews">Reload reviews</button>`;
+			buf += `<hr />`;
+			let atLeastOne = false;
+			for (const userid in reviews) {
+				const curReviews = reviews[userid];
+				buf += `<strong>${Chat.count(curReviews, 'reviews')} from ${userid}:</strong><hr />`;
+				for (const review of curReviews) {
+					if (review.resolved) continue;
+					buf += `<div class="infobox">`;
+					buf += `Battle: <a href="https://${Config.routes.client}/${review.room}">${review.room}</a><br />`;
+					buf += Utils.html`<details class="readmore"><summary>Review details:</summary>${review.details}</details>`;
+					buf += `<form data-submitsend="/msgroom staff,/am resolvereview ${review.staff},${review.room},{response}">`;
+					buf += `Respond: <br /><textarea name="response" rows="3" cols="40"></textarea><br />`;
+					buf += `<button class="button notifying" type="submit">Resolve</button>`;
+					buf += `</form></div><br />`;
+					atLeastOne = true;
+				}
+				buf += `<hr />`;
+			}
+			if (!atLeastOne) {
+				buf += `No reviews to display.`;
+				return buf;
+			}
+			return buf;
+		},
+		review() {
+			this.checkCan('lock');
+			this.title = `[Abuse Monitor] Review`;
+			let buf = `<div class="pad"><h2>Artemis recommendation review</h2>`;
+			buf += `<hr />`;
+			buf += `<form data-submitsend="/msgroom staff,/am submitreview {room},{details}">`;
+			buf += `<label>Enter a room ID (replay URL will work):</label>`;
+			buf += `<br />`;
+			buf += `<input type="text" name="room" />`;
+			buf += `<br />`;
+			buf += `<label>Tell what was inaccurate and why:</label> `;
+			buf += `<br />`;
+			buf += `<textarea name="details" rows="3" cols="20"></textarea>`;
+			buf += `<br />`;
+			buf += `<button class="button notifying" type="submit">Submit</button>`;
+			buf += `</form>`;
 			return buf;
 		},
 	},
