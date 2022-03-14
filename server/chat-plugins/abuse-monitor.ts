@@ -1331,7 +1331,7 @@ export const pages: Chat.PageTable = {
 				if (!id) continue;
 				users.add(id);
 				buf += `<div class="chat chatmessage">`;
-				buf += `<strong${HelpTicket.colorName(id, logData)}>`;
+				buf += `<strong style="color: ${HelpTicket.colorName(id, logData)}">`;
 				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
