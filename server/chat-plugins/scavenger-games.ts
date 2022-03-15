@@ -1,6 +1,5 @@
 /**
  * Scavengers Games Plugin
- * by sparkychild
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
  * This plugin stores the different possible game modes and twists that take place in scavengers room
@@ -35,8 +34,8 @@ interface GameMode {
 
 function toSeconds(time: string) {
 	// hhmmss => ss
-	let parts = time.split(':').reverse();
-	let seconds = parts.map((value: string, index: number) => parseInt(value) * Math.pow(60, index));
+	const parts = time.split(':').reverse();
+	const seconds = parts.map((value: string, index: number) => parseInt(value) * Math.pow(60, index));
 	return seconds.reduce((a, b) => a + b);
 }
 
@@ -229,17 +228,17 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
 			if (!player.incorrect) player.incorrect = [];
-			let id = `${player.currentQuestion}-${value}`;
+			const id = `${player.currentQuestion}-${value}`;
 			if (player.incorrect.includes(id)) return;
 
-			player.incorrect.push(id);	
+			player.incorrect.push(id);
 		},
 
 		onComplete(player, time, blitz) {
 			if (!player.incorrect) return;
-			let deduction = 30 * player.incorrect.length;
-			let total = toSeconds(time) + deduction;
-			let final_time = Chat.toDurationString(total * 1000, {hhmmss: true});
+			const deduction = 30 * player.incorrect.length;
+			const total = toSeconds(time) + deduction;
+			const final_time = Chat.toDurationString(total * 1000, {hhmmss: true});
 			if (total > 60) blitz = false;
 
 			return {name: player.name, total, blitz, time: final_time, original_time: time};
@@ -248,13 +247,17 @@ const TWISTS: {[k: string]: Twist} = {
 		onConfirmCompletion(player, time, blitz, place, result) {
 			blitz = result.blitz;
 			time = result.time;
-			let deduction_message = player.incorrect?.length ? `${player.incorrect.length} incorrect ${Chat.plural(player.incorrect.length, "guesses", "guess")}` : "Perfect!";
+			const deduction_message = player.incorrect?.length ?
+				`${player.incorrect.length} incorrect ${Chat.plural(player.incorrect.length, "guesses", "guess")}` :
+				"Perfect!";
 			return `<em>${Utils.escapeHTML(player.name)}</em> has finished the hunt! (Final Time: ${time} - ${deduction_message}${(blitz ? " - BLITZ" : "")})`;
 		},
 
 		onEnd() {
+			console.log(this.completed)
 			this.completed.sort((a, b) => a.total - b.total);
-		}
+			console.log(this.completed)
+		},
 	},
 
 	blindincognito: {
