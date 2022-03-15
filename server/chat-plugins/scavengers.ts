@@ -986,7 +986,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	}
 }
 
-export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
+export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	lastGuess: number;
 	completed: boolean;
 	joinIps: string[];
