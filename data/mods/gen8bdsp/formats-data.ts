@@ -352,7 +352,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	magnezone: {
 		tier: "OU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["flashcannon", "mirrorcoat", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["flashcannon", "mirrorcoat", "thunderbolt", "triattack", "voltswitch"],
 	},
 	farfetchd: {
 		tier: "NU",
@@ -493,7 +493,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	rhyperior: {
 		tier: "RU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["earthquake", "firefang", "megahorn", "stoneedge", "swordsdance"],
+		randomBattleMoves: ["earthquake", "firefang", "megahorn", "rockpolish", "stoneedge", "swordsdance"],
 	},
 	happiny: {
 		tier: "LC",
@@ -504,7 +504,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	blissey: {
 		tier: "OU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["seismictoss", "softboiled", "stealthrock", "thunderwave"],
+		randomBattleMoves: ["icebeam", "seismictoss", "softboiled", "stealthrock", "thunderwave"],
 	},
 	tangela: {
 		tier: "NFE",
@@ -632,7 +632,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	jolteon: {
 		tier: "RU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["batonpass", "shadowball", "thunderbolt", "voltswitch", "yawn"],
+		randomBattleMoves: ["shadowball", "thunderbolt", "voltswitch", "yawn"],
 	},
 	flareon: {
 		tier: "NU",
@@ -733,7 +733,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	mew: {
 		tier: "UU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["aurasphere", "calmmind", "psychic", "roost", "shadowball", "defog"],
+		randomBattleMoves: ["aurasphere", "calmmind", "icebeam", "psychic", "roost", "shadowball", "defog"],
 	},
 	chikorita: {
 		tier: "LC",
