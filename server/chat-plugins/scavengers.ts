@@ -710,8 +710,8 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		const completion_message = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
 		this.announce(
 			completion_message ?
-			completion_message :
-			Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
+				completion_message :
+				Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
 		);
 
 		player.destroy(); // remove from user.games;
