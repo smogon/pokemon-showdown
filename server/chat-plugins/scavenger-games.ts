@@ -235,9 +235,11 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onComplete(player, time, blitz) {
-			if (!player.incorrect) return;
+			const seconds = toSeconds(time);
+			if (!player.incorrect) return {name: player.name, total: seconds, blitz, time, original_time: time};
+
 			const deduction = 30 * player.incorrect.length;
-			const total = toSeconds(time) + deduction;
+			const total = seconds + deduction;
 			const final_time = Chat.toDurationString(total * 1000, {hhmmss: true});
 			if (total > 60) blitz = false;
 
@@ -254,9 +256,7 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onEnd() {
-			console.log(this.completed)
 			this.completed.sort((a, b) => a.total - b.total);
-			console.log(this.completed)
 		},
 	},
 
