@@ -83,6 +83,7 @@ export const translations: Translations = {
 		"${user.name} hid the replay of this battle.": "${user.name}がこのバトルのリプレイを非表示にしました。",
 		"You can only do this in battle rooms.": "これはバトル部屋のみで使えます。",
 		"You can only add a Player to unrated battles.": "プレイヤーを追加できるのはレートが有効でないバトルのみです。",
+		"Player must be set to \"p1\" or \"p2\", not \"${target}\".": "プレイヤーは\"${target}\"ではなく\"p1\"か\"p2\"に設定しなければなりません。",
 		"User ${name} not found.": "ユーザー ${name} は見つかりませんでした。",
 		"Player 2": "プレイヤー2",
 		"Players could not be restored (maybe this battle already has two players?).": "プレイヤーの復元ができませんでした。(このバトルにすでに2人プレイヤーがからかもしれません。)",
