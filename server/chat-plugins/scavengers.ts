@@ -331,7 +331,9 @@ class ScavengerHuntDatabase {
 		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
 	}
 }
-export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
+export class ScavengerHunt extends Rooms.RoomGame {
+	playerTable: {[userid: string]: ScavengerHuntPlayer};
+	players: ScavengerHuntPlayer[];
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
@@ -359,6 +361,9 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		mod?: string | string[]
 	) {
 		super(room);
+
+		this.playerTable = Object.create(null);
+		this.players = [];
 
 		this.allowRenames = true;
 		this.gameType = gameType;
@@ -702,8 +707,8 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		this.completed.push(result);
 		const place = formatOrder(this.completed.length);
 
-		this.runEvent('ConfirmCompletion', player, time, blitz);
-		this.announce(Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
+		const completion_message = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
+		this.announce(completion_message || Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
 
 		player.destroy(); // remove from user.games;
 	}
@@ -982,7 +987,8 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	}
 }
 
-export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
+export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
+	game: ScavengerHunt;
 	lastGuess: number;
 	completed: boolean;
 	joinIps: string[];
@@ -991,6 +997,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor(user: User, game: ScavengerHunt) {
 		super(user, game);
+		this.game = game;
 
 		this.joinIps = user.ips.slice();
 
