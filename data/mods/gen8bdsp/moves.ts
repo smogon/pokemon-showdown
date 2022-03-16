@@ -501,7 +501,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	judgment: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	junglehealing: {
 		inherit: true,

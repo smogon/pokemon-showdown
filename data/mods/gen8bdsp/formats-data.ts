@@ -2075,76 +2075,58 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["airslash", "leechseed", "seedflare", "substitute", "synthesis"],
 	},
 	arceus: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "Uber",
 		randomBattleMoves: ["earthquake", "extremespeed", "recover", "shadowclaw", "swordsdance"],
 	},
 	arceusbug: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["earthquake", "extremespeed", "recover", "stoneedge", "swordsdance", "xscissor"],
 	},
 	arceusdark: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "fireblast", "judgment", "recover", "sludgebomb"],
 	},
 	arceusdragon: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "fireblast", "judgment", "recover", "sludgebomb"],
 	},
 	arceuselectric: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "earthpower", "icebeam", "judgment", "recover"],
 	},
 	arceusfairy: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "earthpower", "fireblast", "judgment", "recover"],
 	},
 	arceusfighting: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "icebeam", "judgment", "recover", "shadowball"],
 	},
 	arceusfire: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "judgment", "recover", "surf", "thunderbolt"],
 	},
 	arceusflying: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "earthpower", "fireblast", "icebeam", "judgment", "recover"],
 	},
 	arceusghost: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["brickbreak", "extremespeed", "recover", "shadowclaw", "swordsdance"],
 	},
 	arceusgrass: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "fireblast", "icebeam", "judgment", "recover"],
 	},
 	arceusground: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["earthquake", "extremespeed", "recover", "stoneedge", "swordsdance"],
 	},
 	arceusice: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "fireblast", "judgment", "recover", "thunderbolt"],
 	},
 	arceuspoison: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "defog", "earthpower", "recover", "sludgebomb"],
 	},
 	arceuspsychic: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["calmmind", "fireblast", "icebeam", "judgment", "recover"],
 	},
 	arceusrock: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["earthquake", "extremespeed", "recover", "stoneedge", "swordsdance"],
 	},
 	arceussteel: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["defog", "judgment", "recover", "roar", "stealthrock", "surf", "willowisp"],
 	},
 	arceuswater: {
-		isNonstandard: "Unobtainable",
 		randomBattleMoves: ["defog", "icebeam", "judgment", "recover", "roar"],
 	},
 	// Because it's marked as Unobtainable in the main file for some reason
