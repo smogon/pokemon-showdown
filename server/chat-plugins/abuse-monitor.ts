@@ -139,6 +139,13 @@ function visualizePunishmentKey(punishment: PunishmentSettings, key: keyof Punis
 	return punishment[key]?.toString() || "";
 }
 
+function visualizePunishment(punishment: PunishmentSettings) {
+	return Utils
+		.sortBy(Object.keys(punishment))
+		.map(k => `${k}: ${visualizePunishmentKey(punishment, k as keyof PunishmentSettings)}`)
+		.join(', ');
+}
+
 function displayResolved(review: ReviewRequest) {
 	const user = Users.get(review.staff);
 	if (!user) return;
@@ -580,6 +587,52 @@ export const commands: Chat.ChatCommands = {
 			const {score, flags} = makeScore('staff', response);
 			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
+			const punishments: {punishment: PunishmentSettings, desc: string[], index: number}[] = [];
+			for (const [i, p] of settings.punishments.entries()) {
+				const matches = [];
+				let userBased = false;
+				for (const k in response) {
+					const descriptors = [];
+					if (p.type) {
+						if (p.type !== k) continue;
+						descriptors.push('type');
+					}
+					if (p.certainty) {
+						if (response[k] < p.certainty) continue;
+						descriptors.push('certainty');
+					}
+					const secondaries = Object.entries(p.secondaryTypes || {});
+					if (secondaries.length) {
+						if (!secondaries.every(([sK, sV]) => response![sK] >= sV)) continue;
+						descriptors.push('secondary');
+					}
+					if (!descriptors.length) {
+						userBased = true;
+					} else {
+						matches.push(`${k} (${descriptors.map(f => `${f} match`).join(', ')})`);
+						userBased = false;
+					}
+				}
+				if (userBased && !matches.length) {
+					// userBased should never be true if matches.length but
+					// doing this just to be safe
+					matches.push('user-based (modlog, history) matches');
+				}
+				if (matches.length) {
+					punishments.push({
+						punishment: p,
+						desc: matches,
+						index: i,
+					});
+				}
+			}
+			if (punishments.length) {
+				buf += `<strong>Punishments:</strong><br />`;
+				buf += punishments.map(p => (
+					`&bull; ${p.index + 1}: <code>${visualizePunishment(p.punishment)}</code>: ${p.desc.join(', ')}`
+				)).join('<br />');
+				buf += `<br />`;
+			}
 			buf += `<strong>Score breakdown:</strong><br />`;
 			for (const k in response) {
 				buf += `&bull; ${k}: ${response[k]}<br />`;
@@ -994,9 +1047,7 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} added a ${punishment.punishment} abuse-monitor punishment.`);
-			const str = Object.keys(punishment).map(
-				f => `${f}: ${visualizePunishmentKey(punishment as PunishmentSettings, f as keyof PunishmentSettings)}`
-			).join(', ');
+			const str = visualizePunishment(punishment as PunishmentSettings);
 			this.stafflog(`Info: ${str}`);
 			this.globalModlog(`ABUSEMONITOR ADDPUNISHMENT`, null, str);
 		},
