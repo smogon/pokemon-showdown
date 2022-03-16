@@ -2076,6 +2076,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	arceus: {
 		tier: "Uber",
+		doublesTier: "DUber",
 		randomBattleMoves: ["earthquake", "extremespeed", "recover", "shadowclaw", "swordsdance"],
 	},
 	arceusbug: {
