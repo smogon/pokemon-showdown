@@ -702,10 +702,10 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		this.completed.push(result);
 		const place = formatOrder(this.completed.length);
 
-		const completion_message = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
+		const completionMessage = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
 		this.announce(
-			completion_message ?
-				completion_message :
+			completionMessage ?
+				completionMessage :
 				Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
 		);
 
