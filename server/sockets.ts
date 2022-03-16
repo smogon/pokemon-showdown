@@ -15,12 +15,10 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
-import {crashlogger} from '../lib/crashlogger';
-import {RawProcessManager, StreamWorker} from '../lib/process-manager';
+import {crashlogger, ProcessManager, Streams, Repl} from '../lib';
 import {IPTools} from './ip-tools';
-import {Repl} from '../lib/repl';
-import * as Streams from './../lib/streams';
 
+type StreamWorker = ProcessManager.StreamWorker;
 type ChannelID = 0 | 1 | 2 | 3 | 4;
 
 export const Sockets = new class {
@@ -77,7 +75,7 @@ export const Sockets = new class {
 				const cloudenv = (require as any)('cloud-env');
 				bindAddress = cloudenv.get('IP', bindAddress);
 				port = cloudenv.get('PORT', port);
-			} catch (e) {}
+			} catch {}
 		}
 		if (bindAddress !== undefined) {
 			Config.bindaddress = bindAddress;
@@ -147,6 +145,124 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 	isTrustedProxyIp: (ip: string) => boolean;
 
+	receivers: {[k: string]: (this: ServerStream, data: string) => void} = {
+		'$'(data) {
+			// $code
+			// eslint-disable-next-line no-eval
+			eval(data.substr(1));
+		},
+		'!'(data) {
+			// !socketid
+			// destroy
+			const socketid = data.substr(1);
+			const socket = this.sockets.get(socketid);
+			if (!socket) return;
+			socket.destroy();
+			this.sockets.delete(socketid);
+			for (const [curRoomid, curRoom] of this.rooms) {
+				curRoom.delete(socketid);
+				const roomChannel = this.roomChannels.get(curRoomid);
+				if (roomChannel) roomChannel.delete(socketid);
+				if (!curRoom.size) {
+					this.rooms.delete(curRoomid);
+					if (roomChannel) this.roomChannels.delete(curRoomid);
+				}
+			}
+		},
+		'>'(data) {
+			// >socketid, message
+			// message to single connection
+			const nlLoc = data.indexOf('\n');
+			const socketid = data.substr(1, nlLoc - 1);
+			const socket = this.sockets.get(socketid);
+			if (!socket) return;
+			const message = data.substr(nlLoc + 1);
+			socket.write(message);
+		},
+		'#'(data) {
+			// #roomid, message
+			// message to all connections in room
+			// #, message
+			// message to all connections
+			const nlLoc = data.indexOf('\n');
+			const roomid = data.substr(1, nlLoc - 1) as RoomID;
+			const room = roomid ? this.rooms.get(roomid) : this.sockets;
+			if (!room) return;
+			const message = data.substr(nlLoc + 1);
+			for (const curSocket of room.values()) curSocket.write(message);
+		},
+		'+'(data) {
+			// +roomid, socketid
+			// join room with connection
+			const nlLoc = data.indexOf('\n');
+			const socketid = data.substr(nlLoc + 1);
+			const socket = this.sockets.get(socketid);
+			if (!socket) return;
+			const roomid = data.substr(1, nlLoc - 1) as RoomID;
+			let room = this.rooms.get(roomid);
+			if (!room) {
+				room = new Map();
+				this.rooms.set(roomid, room);
+			}
+			room.set(socketid, socket);
+		},
+		'-'(data) {
+			// -roomid, socketid
+			// leave room with connection
+			const nlLoc = data.indexOf('\n');
+			const roomid = data.slice(1, nlLoc) as RoomID;
+			const room = this.rooms.get(roomid);
+			if (!room) return;
+			const socketid = data.slice(nlLoc + 1);
+			room.delete(socketid);
+			const roomChannel = this.roomChannels.get(roomid);
+			if (roomChannel) roomChannel.delete(socketid);
+			if (!room.size) {
+				this.rooms.delete(roomid);
+				if (roomChannel) this.roomChannels.delete(roomid);
+			}
+		},
+		'.'(data) {
+			// .roomid, channelid, socketid
+			// move connection to different channel in room
+			const nlLoc = data.indexOf('\n');
+			const roomid = data.slice(1, nlLoc) as RoomID;
+			const nlLoc2 = data.indexOf('\n', nlLoc + 1);
+			const channelid = Number(data.slice(nlLoc + 1, nlLoc2)) as ChannelID;
+			const socketid = data.slice(nlLoc2 + 1);
+
+			let roomChannel = this.roomChannels.get(roomid);
+			if (!roomChannel) {
+				roomChannel = new Map();
+				this.roomChannels.set(roomid, roomChannel);
+			}
+			if (channelid === 0) {
+				roomChannel.delete(socketid);
+			} else {
+				roomChannel.set(socketid, channelid);
+			}
+		},
+		':'(data) {
+			// :roomid, message
+			// message to a room, splitting `|split` by channel
+			const nlLoc = data.indexOf('\n');
+			const roomid = data.slice(1, nlLoc) as RoomID;
+			const room = this.rooms.get(roomid);
+			if (!room) return;
+
+			const messages: [string | null, string | null, string | null, string | null, string | null] = [
+				null, null, null, null, null,
+			];
+			const message = data.substr(nlLoc + 1);
+			const roomChannel = this.roomChannels.get(roomid);
+			for (const [curSocketid, curSocket] of room) {
+				const channelid = roomChannel?.get(curSocketid) || 0;
+				if (!messages[channelid]) messages[channelid] = this.extractChannel(message, channelid);
+				curSocket.write(messages[channelid]!);
+			}
+		},
+	};
+
 	constructor(config: {
 		port: number,
 		bindaddress?: string,
@@ -177,13 +293,13 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				if (!fs.statSync(key).isFile()) throw new Error();
 				try {
 					key = fs.readFileSync(key);
-				} catch (e) {
+				} catch (e: any) {
 					crashlogger(
 						new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`),
 						`Socket process ${process.pid}`
 					);
 				}
-			} catch (e) {
+			} catch {
 				console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
 				key = config.ssl.options.key;
 			}
@@ -194,13 +310,13 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				if (!fs.statSync(cert).isFile()) throw new Error();
 				try {
 					cert = fs.readFileSync(cert);
-				} catch (e) {
+				} catch (e: any) {
 					crashlogger(
 						new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`),
 						`Socket process ${process.pid}`
 					);
 				}
-			} catch (e) {
+			} catch (e: any) {
 				console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
 				cert = config.ssl.options.cert;
 			}
@@ -209,7 +325,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				try {
 					// In case there are additional SSL config settings besides the key and cert...
 					this.serverSsl = https.createServer({...config.ssl.options, key, cert});
-				} catch (e) {
+				} catch (e: any) {
 					crashlogger(new Error(`The SSL settings are misconfigured:\n${e.stack}`), `Socket process ${process.pid}`);
 				}
 			}
@@ -254,7 +370,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 			this.server.on('request', staticRequestHandler);
 			if (this.serverSsl) this.serverSsl.on('request', staticRequestHandler);
-		} catch (e) {
+		} catch (e: any) {
 			if (e.message === 'disablenodestatic') {
 				console.log('node-static is disabled');
 			} else {
@@ -280,7 +396,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			try {
 				const deflate = (require as any)('permessage-deflate').configure(config.wsdeflate);
 				options.faye_server_options = {extensions: [deflate]};
-			} catch (e) {
+			} catch {
 				crashlogger(
 					new Error("Dependency permessage-deflate is not installed or is otherwise unaccessable. No message compression will take place until server restart."),
 					"Sockets"
@@ -338,7 +454,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		for (const socket of this.sockets.values()) {
 			try {
 				socket.destroy();
-			} catch (e) {}
+			} catch {}
 		}
 		this.sockets.clear();
 		this.rooms.clear();
@@ -361,7 +477,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			// address from connection request headers.
 			try {
 				socket.destroy();
-			} catch (e) {}
+			} catch {}
 			return;
 		}
 
@@ -410,137 +526,9 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 	_write(data: string) {
 		// console.log('worker received: ' + data);
-		let socket: import('sockjs').Connection | undefined = undefined;
-		let socketid = '';
-		let room: Map<string, import('sockjs').Connection> | undefined = undefined;
-		let roomid = '' as RoomID;
-		let roomChannel: Map<string, ChannelID> | undefined = undefined;
-		let channelid: ChannelID = 0;
-		let nlLoc = -1;
-		let message = '';
 
-		switch (data.charAt(0)) {
-		case '$': // $code
-			// eslint-disable-next-line no-eval
-			eval(data.substr(1));
-			break;
-
-		case '!': // !socketid
-			// destroy
-			socketid = data.substr(1);
-			socket = this.sockets.get(socketid);
-			if (!socket) return;
-			socket.destroy();
-			this.sockets.delete(socketid);
-			for (const [curRoomid, curRoom] of this.rooms) {
-				curRoom.delete(socketid);
-				roomChannel = this.roomChannels.get(curRoomid);
-				if (roomChannel) roomChannel.delete(socketid);
-				if (!curRoom.size) {
-					this.rooms.delete(curRoomid);
-					if (roomChannel) this.roomChannels.delete(curRoomid);
-				}
-			}
-			break;
-
-		case '>':
-			// >socketid, message
-			// message to single connection
-			nlLoc = data.indexOf('\n');
-			socketid = data.substr(1, nlLoc - 1);
-			socket = this.sockets.get(socketid);
-			if (!socket) return;
-			message = data.substr(nlLoc + 1);
-			socket.write(message);
-			break;
-
-		case '#':
-			// #roomid, message
-			// message to all connections in room
-			// #, message
-			// message to all connections
-			nlLoc = data.indexOf('\n');
-			roomid = data.substr(1, nlLoc - 1) as RoomID;
-			room = roomid ? this.rooms.get(roomid) : this.sockets;
-			if (!room) return;
-			message = data.substr(nlLoc + 1);
-			for (const curSocket of room.values()) curSocket.write(message);
-			break;
-
-		case '+':
-			// +roomid, socketid
-			// join room with connection
-			nlLoc = data.indexOf('\n');
-			socketid = data.substr(nlLoc + 1);
-			socket = this.sockets.get(socketid);
-			if (!socket) return;
-			roomid = data.substr(1, nlLoc - 1) as RoomID;
-			room = this.rooms.get(roomid);
-			if (!room) {
-				room = new Map();
-				this.rooms.set(roomid, room);
-			}
-			room.set(socketid, socket);
-			break;
-
-		case '-':
-			// -roomid, socketid
-			// leave room with connection
-			nlLoc = data.indexOf('\n');
-			roomid = data.slice(1, nlLoc) as RoomID;
-			room = this.rooms.get(roomid);
-			if (!room) return;
-			socketid = data.slice(nlLoc + 1);
-			room.delete(socketid);
-			roomChannel = this.roomChannels.get(roomid);
-			if (roomChannel) roomChannel.delete(socketid);
-			if (!room.size) {
-				this.rooms.delete(roomid);
-				if (roomChannel) this.roomChannels.delete(roomid);
-			}
-			break;
-
-		case '.':
-			// .roomid, channelid, socketid
-			// move connection to different channel in room
-			nlLoc = data.indexOf('\n');
-			roomid = data.slice(1, nlLoc) as RoomID;
-			const nlLoc2 = data.indexOf('\n', nlLoc + 1);
-			channelid = Number(data.slice(nlLoc + 1, nlLoc2)) as ChannelID;
-			socketid = data.slice(nlLoc2 + 1);
-
-			roomChannel = this.roomChannels.get(roomid);
-			if (!roomChannel) {
-				roomChannel = new Map();
-				this.roomChannels.set(roomid, roomChannel);
-			}
-			if (channelid === 0) {
-				roomChannel.delete(socketid);
-			} else {
-				roomChannel.set(socketid, channelid);
-			}
-			break;
-
-		case ':':
-			// :roomid, message
-			// message to a room, splitting `|split` by channel
-			nlLoc = data.indexOf('\n');
-			roomid = data.slice(1, nlLoc) as RoomID;
-			room = this.rooms.get(roomid);
-			if (!room) return;
-
-			const messages: [string | null, string | null, string | null, string | null, string | null] = [
-				null, null, null, null, null,
-			];
-			message = data.substr(nlLoc + 1);
-			roomChannel = this.roomChannels.get(roomid);
-			for (const [curSocketid, curSocket] of room) {
-				channelid = roomChannel?.get(curSocketid) || 0;
-				if (!messages[channelid]) messages[channelid] = this.extractChannel(message, channelid);
-				curSocket.write(messages[channelid]!);
-			}
-			break;
-		}
+		const receiver = this.receivers[data.charAt(0)];
+		if (receiver) receiver.call(this, data);
 	}
 }
 
@@ -548,7 +536,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
  * Process manager
  *********************************************************/
 
-export const PM = new RawProcessManager({
+export const PM = new ProcessManager.RawProcessManager({
 	module,
 	setupChild: () => new ServerStream(Config),
 	isCluster: true,
@@ -571,7 +559,7 @@ if (!PM.isParentProcess) {
 	if (Config.sockets) {
 		try {
 			require.resolve('node-oom-heapdump');
-		} catch (e) {
+		} catch (e: any) {
 			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 			throw new Error(
 				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofesockets is set to true! ' +

@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../lib';
 
 export interface RoomEvent {
 	eventName: string;
@@ -98,7 +98,7 @@ function getEventID(nameOrAlias: string, room: Room): ID {
 	return id;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	events: 'roomevents',
 	roomevent: 'roomevents',
 	roomevents: {
@@ -316,11 +316,9 @@ export const commands: ChatCommands = {
 			buff += '</table>';
 
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
-			if (!this.broadcasting && user.can('ban', null, room, 'roomevents view') && events.length === 1) {
+			if (!this.broadcasting && user.can('ban', null, room, 'roomevents add') && events.length === 1) {
 				const event = events[0];
-				this.sendReplyBox(
-					Utils.html`<code>/roomevents add ${event.eventName} | ${event.date} | ${event.desc}</code>`
-				);
+				this.sendReplyBox(Utils.html`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomevents add ${event.eventName} | ${event.date} | ${event.desc}</code></details>`.replace(/\n/g, '<br />'));
 			}
 		},
 
@@ -548,7 +546,7 @@ export const commands: ChatCommands = {
 				);
 				break;
 			default:
-				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
+				return this.errorReply(`Invalid column name "${columnName}". Please use one of: date, desc, name.`);
 			}
 
 			// rebuild the room.settings.events object
@@ -559,20 +557,19 @@ export const commands: ChatCommands = {
 			}
 
 			// build communication string
-			const resultString = `sorted by column:` + columnName +
-								 ` in ${multiplier === 1 ? "ascending" : "descending"} order` +
-								 `${delimited.length === 1 ? " (by default)" : ""}`;
+			const resultString = `sorted by column: ${columnName}` +
+				` in ${multiplier === 1 ? "ascending" : "descending"} order` +
+				`${delimited.length === 1 ? " (by default)" : ""}`;
 			this.modlog('ROOMEVENT', null, resultString);
 			return this.sendReply(resultString);
 		},
 	},
 	roomeventshelp() {
 		this.sendReply(
-			`|html|<details class="readmore"><summary>Commands to manage room events.</summary>` +
-			`<code>/roomevents</code>: displays a list of upcoming room-specific events.<br />` +
+			`|html|<details class="readmore"><summary><code>/roomevents</code>: displays a list of upcoming room-specific events.<br />` +
 			`<code>/roomevents add [event name] | [event date/time] | [event description]</code>: adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # &<br />` +
 			`<code>/roomevents start [event name]</code>: declares to the room that the event has started. Requires: @ # &<br />` +
-			`<code>/roomevents remove [event name]</code>: deletes an event. Requires: @ # &<br />` +
+			`<code>/roomevents remove [event name]</code>: deletes an event. Requires: @ # &</summary>` +
 			`<code>/roomevents rename [old event name] | [new name]</code>: renames an event. Requires: @ # &<br />` +
 			`<code>/roomevents addalias [alias] | [event name]</code>: adds an alias for the event. Requires: @ # &<br />` +
 			`<code>/roomevents removealias [alias]</code>: removes an event alias. Requires: @ # &<br />` +

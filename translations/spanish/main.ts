@@ -16,12 +16,14 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Rangos Globales</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Pueden utilizar comandos con ! como !groups",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Lo mismo que arriba y también pueden dar locks y revisar las alts",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Supervisan las salas de una sección en particular",
+		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Como los Voice, y también pueden dar locks y revisar las alts",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Lo mismo que arriba y además pueden expulsar globalmente del servidor",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Igual que un moderador, pero el símbolo identifica que es un Bot",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Pueden hacer cualquier cosa, como cambiar lo que dice este mensaje",
 
 		"<strong>Room ranks</strong>": "<strong>Rangos de Sala</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - No tienen ningún poder más allá del símbolo.",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Pueden utilizar comandos con ! como !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Lo mismo que arriba y además pueden sancionar dando advertencias o silenciando",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Lo mismo que arriba y además pueden expulsar a usuarios de la sala",
@@ -48,6 +50,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Silencia a un usuario (les impide hablar) por 7 minutos.",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Silencia a un usuario por 60 minutos.",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Expulsa a un usuario (les impide entrar a la sala) por 2 d&iacute;as.",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - Expulsa a un usuario por una semana.",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Expulsa a un usuario de la sala por un a&ntilde;o.",
 
 		"<strong>Global punishments</strong>:": "<strong>Sanciones globales</strong>:",
@@ -55,6 +58,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Bloquea a un usuario por una semana.",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Bloquea a un usuario y le impide tener un nombre de usuario por 2 d&iacute;as.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Expulsa globalmente a un usuario (le impide conectarse al servidor y poder jugar) por una semana.",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>Sanciones globales de duración indeterminada</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Aplicado ante múltiples instancias de mal comportamiento, rara vez por una sola acción. ",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': 'Puede apelarse en el <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">foro de apelaciones disciplinarias</a>',
+		" forum after at least 3 months without incident.": " después de mínimo 3 meses sin incidentes.",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - Expulsión global inapelable, generalmente aplicada por ofensas extremadamente graves o inapropiadas.",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Los drivers de la sala (%)</strong> pueden usar:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn O /k <em>nombre de usuario</em>: advierte a un usuario y les muestra las reglas de Pok&eacute;mon Showdown",
@@ -127,6 +136,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "Tu mensaje contiene palabras prohíbidas en esta sala.",
 		"You can't send the same message again so soon.": "No puedes mandar el mismo mensaje tan pronto.",
@@ -142,10 +152,12 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "¡Ya estás bloqueando solicitudes de batalla!",
 		"You are already available for challenges!": "¡Ya estás disponible para recibir solicitudes de batalla!",
 		"You are available for challenges from now on.": "Estás disponible para recibir solicitudes de batalla de ahora en adelante.",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "FAQ del Staff",
 		"You cannot broadcast all FAQs at once.": "No puedes mostrar todos los FAQs a la vez.",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat. However, staff are not obligated to disable modchat": "Un usuario es autoconfirmed cuando ha ganado al menos una batalla puntuada y ha estado registrado durante una semana o más. Con la finalidad de evitar spam o trolls, la mayoría de las salas de chat únicamente admiten usuarios autoconfirmed para conversar. Si tú no eres un usuario autoconfirmed, puedes solicitar amablemente por MP a un miembro del staff (los miembros del staff tienen %, @, o # al inicio de su nombre de usuario) de la sala en la que quieres conversar que deshabilite el modchat. Sin embargo, el staff no está obligado a deshabilitar el modchat.",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "Un usuario es autoconfirmed cuando ha ganado al menos una batalla puntuada y ha estado registrado durante una semana o más. Con la finalidad de evitar spam o trolls, la mayoría de las salas de chat únicamente admiten usuarios autoconfirmed para conversar. Si tú no eres un usuario autoconfirmed, puedes solicitar amablemente por MP a un miembro del staff (los miembros del staff tienen %, @, o # al inicio de su nombre de usuario) de la sala en la que quieres conversar que deshabilite el modchat. Sin embargo, el staff no está obligado a deshabilitar el modchat.",
 		"How the ladder works": "Como funciona la ladder",
 		"Tiering FAQ": "FAQ de Tiers",
 		"Badge FAQ": "FAQ de Badges",
@@ -153,9 +165,14 @@ export const translations: Translations = {
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "Para unirte a un torneo, haz click en el botón <strong>Join!</strong> o escribe el comando <code>/tour join</code> en el chat de la sala. Puedes revisar si tu equipo es legal para el torneo al hacer click en el botón <strong>Validate</strong> una vez te hayas unido y seleccionado un equipo. Para jugar contra tu oponente en el torneo, haz click en el botón <strong>Ready!</strong> cuando aparezca. Hay dos tipos diferentes de torneos de sala: elimination (si un usuario pierde más de cierto número de veces, es eliminado) y round robin (todos los usuarios juegan contra todos, y el usuario con más victorias es el ganador).",
 		"Frequently Asked Questions": "Preguntas Frecuentes",
 
-		"pages/faq": "pages/faq",
+		"pages/faq": "pages/faq-es",
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
-		"pages/staff": "pages/staff",
+		"pages/staff": "pages/staff-es",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '- For more information, you can read our <a href="https://${Config.routes.root}/pages/privacy-es">full privacy policy.</a>',
 	},
 };

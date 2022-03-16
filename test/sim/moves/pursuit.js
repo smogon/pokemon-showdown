@@ -68,6 +68,24 @@ describe(`Pursuit`, function () {
 		]]);
 		const furret = battle.p1.pokemon[2];
 		battle.makeChoices('move Pursuit mega -2, switch 3', 'auto');
-		assert.equal(furret.maxhp - furret.hp, 66);
+		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
+	});
+
+	it(`should deal damage prior to attacker selecting a switch in after u-turn etc`, function () {
+		battle = common.createBattle([[
+			{species: 'parasect', moves: ['pursuit']},
+		], [
+			{species: 'emolga', moves: ['voltswitch']},
+			{species: 'zapdos', moves: ['batonpass']},
+		]]);
+		battle.makeChoices('move Pursuit', 'move voltswitch');
+		assert.false.fullHP(battle.p2.pokemon[0]);
+		battle.choose('p2', 'switch 2');
+		assert.equal(battle.p2.pokemon[0].name, "Zapdos");
+		battle.makeChoices('move Pursuit', 'move batonpass');
+		battle.choose('p2', 'switch 2');
+		assert.fullHP(battle.p2.pokemon[1], 'should not hit Pokemon that has used Baton Pass');
+		assert.equal(battle.p2.pokemon[0].name, "Emolga");
+		battle.makeChoices('move Pursuit', 'move voltswitch');
 	});
 });

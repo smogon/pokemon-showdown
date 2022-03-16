@@ -24,7 +24,7 @@ describe('Ice Face', function () {
 		assert.hurts(eiscue, () => battle.makeChoices());
 	});
 
-	it.skip(`should not trigger if the Pokemon was KOed`, function () {
+	it(`should not trigger if the Pokemon was KOed`, function () {
 		battle = common.createBattle([[
 			{species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk']},
 		], [
@@ -37,5 +37,20 @@ describe('Ice Face', function () {
 		const firstIndex = battleLog.indexOf(activate);
 		const hasMultipleActivates = (firstIndex !== -1) && (firstIndex !== battleLog.lastIndexOf(activate));
 		assert.false(hasMultipleActivates, "Ice Face should not trigger when being KOed. Only one |-activate| should exist in this test.");
+	});
+
+	it.skip(`should reform Ice Face on switchin after all entrance Abilities occur`, function () {
+		battle = common.createBattle([[
+			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk']},
+			{species: 'Abomasnow', ability: 'snowwarning', moves: ['sleeptalk']},
+		], [
+			{species: 'Guzzlord', moves: ['tackle', 'finalgambit']},
+			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
+		]]);
+		const eiscue = battle.p1.active[0];
+		battle.makeChoices();
+		battle.makeChoices('switch 2', 'move finalgambit'); // hail activates
+		battle.makeChoices('switch 2', 'switch 2'); // sun should activate first, even though Torkoal is slower, so Ice Face misses the timing
+		assert.species(eiscue, 'Eiscue-Noice');
 	});
 });

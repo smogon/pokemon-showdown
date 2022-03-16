@@ -26,10 +26,10 @@ describe('Cloud Nine', function () {
 		battle.setPlayer('p1', {team: [{species: 'Groudon', ability: 'drought', moves: ['rest']}]});
 		battle.setPlayer('p2', {team: [{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']}]});
 		battle.makeChoices('move rest', 'move calmmind');
-		move = Dex.getMove('firepledge');
+		move = Dex.moves.get('firepledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.equal(basePower, move.basePower);
-		move = Dex.getMove('waterpledge');
+		move = Dex.moves.get('waterpledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.equal(basePower, move.basePower);
 	});
@@ -40,10 +40,10 @@ describe('Cloud Nine', function () {
 		battle.setPlayer('p1', {team: [{species: 'Kyogre', ability: 'drizzle', moves: ['rest']}]});
 		battle.setPlayer('p2', {team: [{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']}]});
 		battle.makeChoices('move rest', 'move calmmind');
-		move = Dex.getMove('firepledge');
+		move = Dex.moves.get('firepledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.equal(basePower, move.basePower);
-		move = Dex.getMove('waterpledge');
+		move = Dex.moves.get('waterpledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.equal(basePower, move.basePower);
 	});
@@ -94,5 +94,22 @@ describe('Cloud Nine', function () {
 			battle.makeChoices('move calmmind', 'move sunnyday');
 		}
 		assert.equal(battle.log[battle.lastMoveLine + 3], '|-weather|none');
+	});
+
+	it(`should allow Hydration to trigger if the user fainted before Hydration could trigger`, function () {
+		battle = common.createBattle([[
+			{species: 'Toxapex', ability: 'cloudnine', moves: ['toxic', 'raindance', 'finalgambit']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Manaphy', ability: 'hydration', moves: ['sleeptalk']},
+		]]);
+
+		const manaphy = battle.p2.active[0];
+		battle.makeChoices();
+		battle.makeChoices('move raindance', 'auto');
+		assert.equal(manaphy.status, 'tox');
+
+		battle.makeChoices('move finalgambit', 'auto');
+		assert.equal(manaphy.status, '');
 	});
 });

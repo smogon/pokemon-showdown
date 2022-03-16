@@ -18,7 +18,7 @@ describe("Ripen", function () {
 		]]);
 		battle.makeChoices();
 		const ripenWynaut = battle.p1.active[0];
-		assert(ripenWynaut.hp, Math.floor(ripenWynaut.maxhp / 2) + (Math.floor(ripenWynaut.maxhp / 4) * 2));
+		assert.equal(ripenWynaut.hp, Math.floor(ripenWynaut.maxhp / 2) + (Math.floor(ripenWynaut.maxhp / 4) * 2));
 	});
 
 	it('should double stat boosts from Berries', function () {
@@ -33,16 +33,15 @@ describe("Ripen", function () {
 		assert.statStage(ripenWynaut, 'atk', 2);
 	});
 
-	it('should double damage done from Jaboca / Rowap Berries', function () {
+	it(`should double damage done from Jaboca / Rowap Berries`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'jabocaberry', moves: ['sleeptalk']},
 		], [
-			{species: 'wynaut', moves: ['tackle']},
+			{species: 'falinks', moves: ['tackle']},
 		]]);
 		battle.makeChoices();
-		const nonRipenWynaut = battle.p2.active[0];
-		// Should be 249; if it was just 1/8, would be 290
-		assert(nonRipenWynaut.hp, nonRipenWynaut.maxhp - (Math.floor(nonRipenWynaut.maxhp / 8) * 2));
+		const falinks = battle.p2.active[0];
+		assert.equal(falinks.hp, falinks.maxhp - Math.floor(falinks.maxhp / 4), `Falinks should have lost 1/4 of its HP`);
 	});
 
 	it('should allow resist Berries to quarter the damage done', function () {

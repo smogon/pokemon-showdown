@@ -13,8 +13,9 @@ import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
 import {crashlogger} from './crashlogger';
+declare const Config: any;
 
-export const Repl = new class ReplSingleton {
+export const Repl = new class {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
 	 */
@@ -22,7 +23,7 @@ export const Repl = new class ReplSingleton {
 
 	listenersSetup = false;
 
-	setupListeners() {
+	setupListeners(filename: string) {
 		if (Repl.listenersSetup) return;
 		Repl.listenersSetup = true;
 		// Clean up REPL sockets and child processes on forced exit.
@@ -30,7 +31,7 @@ export const Repl = new class ReplSingleton {
 			for (const s of Repl.socketPathnames) {
 				try {
 					fs.unlinkSync(s);
-				} catch (e) {}
+				} catch {}
 			}
 			if (code === 129 || code === 130) {
 				process.exitCode = 0;
@@ -42,6 +43,17 @@ export const Repl = new class ReplSingleton {
 		if (!process.listeners('SIGINT').length) {
 			process.once('SIGINT', () => process.exit(128 + 2));
 		}
+		(global as any).heapdump = (targetPath?: string) => {
+			if (!targetPath) targetPath = `${filename}-${new Date().toISOString()}`;
+			let handler;
+			try {
+				handler = require('node-oom-heapdump')();
+			} catch (e: any) {
+				if (e.code !== 'MODULE_NOT_FOUND') throw e;
+				throw new Error(`node-oom-heapdump is not installed. Run \`npm install --no-save node-oom-heapdump\` and try again.`);
+			}
+			return handler.createHeapSnapshot(targetPath);
+		};
 	}
 
 	/**
@@ -50,27 +62,34 @@ export const Repl = new class ReplSingleton {
 	 * non-global context.
 	 */
 	start(filename: string, evalFunction: (input: string) => any) {
-		if ('repl' in Config && !Config.repl) return;
+		const config = typeof Config !== 'undefined' ? Config : {};
+		if (config.repl !== undefined && !config.repl) return;
 
 		// TODO: Windows does support the REPL when using named pipes. For now,
 		// this only supports UNIX sockets.
 
-		Repl.setupListeners();
+		Repl.setupListeners(filename);
 
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
-			const directory = path.dirname(path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', 'app'));
-			for (const file of fs.readdirSync(directory)) {
-				const pathname = path.resolve(directory, file);
-				const stat = fs.statSync(pathname);
-				if (!stat.isSocket()) continue;
+			const directory = path.dirname(path.resolve(__dirname, '..', config.replsocketprefix || 'logs/repl', 'app'));
+			let files;
+			try {
+				files = fs.readdirSync(directory);
+			} catch {}
+			if (files) {
+				for (const file of files) {
+					const pathname = path.resolve(directory, file);
+					const stat = fs.statSync(pathname);
+					if (!stat.isSocket()) continue;
 
-				const socket = net.connect(pathname, () => {
-					socket.end();
-					socket.destroy();
-				}).on('error', () => {
-					fs.unlink(pathname, () => {});
-				});
+					const socket = net.connect(pathname, () => {
+						socket.end();
+						socket.destroy();
+					}).on('error', () => {
+						fs.unlink(pathname, () => {});
+					});
+				}
 			}
 		}
 
@@ -81,7 +100,7 @@ export const Repl = new class ReplSingleton {
 				eval(cmd, context, unusedFilename, callback) {
 					try {
 						return callback(null, evalFunction(cmd));
-					} catch (e) {
+					} catch (e: any) {
 						return callback(e, undefined);
 					}
 				},

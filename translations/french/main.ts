@@ -13,13 +13,14 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Rangs globaux</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Ils supervisent les rooms d'une section donnée",
+		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir des utilisateurs du site",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Mêmes pouvoirs que les Global Moderators, mais sont des bots",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
 
-		"<strong>Room ranks</strong>": "<strong>Rangs des room</strong>",
-		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Ils n'ont aucun pouvoir, seulement un symbole",
+		"<strong>Room ranks</strong>": "<strong>Rangs des rooms</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Ils n'ont aucun pouvoir, seulement un symbole honorifique",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Comme ci-dessus, en plus de pouvoir mute et warn",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir un utilisateur de la room",
@@ -46,6 +47,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Mute un utilisateur (l'emp&ecirc;che de parler) pendant 7 minutes.",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Mute un utilisateur pendant 60 minutes.",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Bannit un utilisateur (l'emp&ecirc;che de rejoindre la room) pendant 2 jours.",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - Bannit un utilisateur d’une room pour une semaine.",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Bannit un utilisateur pour un an.",
 
 		"<strong>Global punishments</strong>:": "<strong>Punitions générales</strong>",
@@ -53,6 +55,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Lock un utilisateur pendant une semaine.",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Lock un utilisateur et l'emp&ecirc;che d'avoir un pseudo pendant 2 jours.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Bannit complètement (emp&ecirc;che de se connecter et de jouer) pendant une semaine.",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>Punitions globales à durée indéterminée</strong> :",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Infligé pour des cas répétés de mauvais comportement, c’est rarement le résultat d’une seule action. ",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': 'Il est possible de faire appel dans le <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">forum des Appels Disciplinaires</a>',
+		" forum after at least 3 months without incident.": " après au moins 3 mois sans incident.",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - Bannissement global sans possibilité d’appel, infligé généralement pour les cas les plus graves de comportement offensant/inapproprié.",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Les Drivers d'une room (%)</strong> peuvent utiliser :",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn OU /k <em>pseudo</em> : Avertit un utilisateur et affiche les r&egrave;gles de Pok&eacute;mon Showdown",
@@ -128,6 +136,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "Ton message contient des mots bannis dans cette room.",
 		"You can't send the same message again so soon.": "Tu ne peux pas renvoyer le même message si tôt.",
@@ -143,10 +152,12 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "Tu bloques déjà les challenges !",
 		"You are already available for challenges!": "Tu es déjà disponible pour les challenges !",
 		"You are available for challenges from now on.": "Tu es maintenant disponible pour les challenges.",
+		"You are now blocking challenges, except from staff and ${rank}.": "Tu bloques maintenant les challenges, sauf ceux du staff et des ${rank}.",
+		"You are now blocking challenges, except from staff and ${status} users.": "Tu bloques maintenant les challenges, sauf ceux du staff et des utilisateurs ${status}.",
 
 		"Staff FAQ": "",
 		"You cannot broadcast all FAQs at once.": "Tu ne peux pas afficher toutes les FAQ d'un seul coup.",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat. However, staff are not obligated to disable modchat": "Un utilisateur est autoconfirmed quand il a gagné au moins un combat classé et qu'il a enregistré son compte une semaine ou plus auparavant. Afin d'empêcher le spam et le troll, la plupart des chatrooms demandent aux utilisateurs d'être autoconfirmed pour parler. Si ce n'est pas ton cas, tu peux demander poliment à un membre du staff (avec un %, @ ou # devant son pseudo) de retirer ce filtre. Néanmoins, il n'est pas obligé de le faire.",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "Un utilisateur est autoconfirmed quand il a gagné au moins un combat classé et qu'il a enregistré son compte une semaine ou plus auparavant. Afin d'empêcher le spam et le troll, la plupart des chatrooms demandent aux utilisateurs d'être autoconfirmed pour parler. Si ce n'est pas ton cas, tu peux demander poliment à un membre du staff (avec un %, @ ou # devant son pseudo) de retirer ce filtre. Néanmoins, il n'est pas obligé de le faire.",
 		"How the ladder works": "Comment le ladder fonctionne",
 		"Tiering FAQ": "FAQ sur le tiering",
 		"Badge FAQ": "FAQ sur les badges",
@@ -158,5 +169,10 @@ export const translations: Translations = {
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
 	},
 };

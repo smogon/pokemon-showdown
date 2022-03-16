@@ -37,6 +37,10 @@ describe('Chat', function () {
 			`hi <i>spoiler: <span class="spoiler">bye</span></i> hi again (parenthetical spoiler: <span class="spoiler">bye again (or not!!!!)</span>) that was fun`
 		);
 		assert.equal(
+			Chat.formatText(`hi __||bye||__ hi again (parenthetical ||bye again (or not!!!!)||) that was fun`),
+			`hi <i><span class="spoiler">bye</span></i> hi again (parenthetical <span class="spoiler">bye again (or not!!!!)</span>) that was fun`
+		);
+		assert.equal(
 			Chat.formatText(`hi google.com/__a__ bye >w<`),
 			`hi <a href="http://google.com/__a__" rel="noopener" target="_blank">google.com/__a__</a> bye &gt;w&lt;`
 		);

@@ -2,8 +2,8 @@
  * Main file
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is the main Pokemon Showdown app, and the file you should be
- * running to start Pokemon Showdown if you're using it normally.
+ * This is the main Pokemon Showdown app, and the file that the
+ * `pokemon-showdown` script runs if you start Pokemon Showdown normally.
  *
  * This file sets up our SockJS server, which handles communication
  * between users and your server, and also sets up globals. You can
@@ -24,7 +24,7 @@
  *
  *   It exports the global table `Rooms.rooms`.
  *
- * Dex - from .sim-dist/dex.ts
+ * Dex - from sim/dex.ts
  *
  *   Handles getting data about Pokemon, items, etc.
  *
@@ -48,93 +48,83 @@
 // features, so that it doesn't crash old versions of Node.js, so we
 // can successfully print the "We require Node.js 8+" message.
 
-// Check for version and dependencies
-try {
-	// I've gotten enough reports by people who don't use the launch
-	// script that this is worth repeating here
-	[].flatMap(x => x);
-} catch (e) {
-	throw new Error("We require Node.js version 12 or later; you're using " + process.version);
+// Check for version
+const nodeVersion = parseInt(process.versions.node);
+if (isNaN(nodeVersion) || nodeVersion < 14) {
+	throw new Error("We require Node.js version 14 or later; you're using " + process.version);
 }
 
-try {
-	require.resolve('../.sim-dist/index');
-	const sucraseVersion = require('sucrase').getVersion().split('.');
-	if (
-		parseInt(sucraseVersion[0]) < 3 ||
-		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 12)
-	) {
-		throw new Error("Sucrase version too old");
-	}
-} catch (e) {
-	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
-}
-
-import {FS} from '../lib/fs';
-
-/*********************************************************
- * Load configuration
- *********************************************************/
-
-import * as ConfigLoader from './config-loader';
-global.Config = ConfigLoader.Config;
-
-import {Monitor} from './monitor';
-global.Monitor = Monitor;
-global.__version = {head: ''};
-void Monitor.version().then((hash: any) => {
-	global.__version.tree = hash;
-});
-
-if (Config.watchconfig) {
-	FS(require.resolve('../config/config')).onModify(() => {
-		try {
-			global.Config = ConfigLoader.load(true);
-			Monitor.notice('Reloaded ../config/config.js');
-		} catch (e) {
-			Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
-		}
-	});
-}
+import {FS, Repl} from '../lib';
 
 /*********************************************************
  * Set up most of our globals
+ * This is in a function because swc runs `import` before any code,
+ * and many of our imports require the `Config` global to be set up.
  *********************************************************/
+function setupGlobals() {
+	const ConfigLoader = require('./config-loader');
+	global.Config = ConfigLoader.Config;
 
-import {Dex} from '../sim/dex';
-global.Dex = Dex;
-global.toID = Dex.toID;
+	const {Monitor} = require('./monitor');
+	global.Monitor = Monitor;
+	global.__version = {head: ''};
+	void Monitor.version().then((hash: any) => {
+		global.__version.tree = hash;
+	});
 
-import {LoginServer} from './loginserver';
-global.LoginServer = LoginServer;
+	if (Config.watchconfig) {
+		FS(require.resolve('../config/config')).onModify(() => {
+			try {
+				global.Config = ConfigLoader.load(true);
+				// ensure that battle prefixes configured via the chat plugin are not overwritten
+				// by battle prefixes manually specified in config.js
+				Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
+				Monitor.notice('Reloaded ../config/config.js');
+			} catch (e: any) {
+				Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
+			}
+		});
+	}
 
-import {Ladders} from './ladders';
-global.Ladders = Ladders;
+	const {Dex} = require('../sim/dex');
+	global.Dex = Dex;
+	global.toID = Dex.toID;
 
-import {Chat} from './chat';
-global.Chat = Chat;
+	const {Teams} = require('../sim/teams');
+	global.Teams = Teams;
 
-import {Users} from './users';
-global.Users = Users;
+	const {LoginServer} = require('./loginserver');
+	global.LoginServer = LoginServer;
 
-import {Punishments} from './punishments';
-global.Punishments = Punishments;
+	const {Ladders} = require('./ladders');
+	global.Ladders = Ladders;
 
-import {Rooms} from './rooms';
-global.Rooms = Rooms;
-// We initialize the global room here because roomlogs.ts needs the Rooms global
-Rooms.global = new Rooms.GlobalRoomState();
+	const {Chat} = require('./chat');
+	global.Chat = Chat;
 
-import * as Verifier from './verifier';
-global.Verifier = Verifier;
-Verifier.PM.spawn();
+	const {Users} = require('./users');
+	global.Users = Users;
 
-import {Tournaments} from './tournaments';
-global.Tournaments = Tournaments;
+	const {Punishments} = require('./punishments');
+	global.Punishments = Punishments;
 
-import {IPTools} from './ip-tools';
-global.IPTools = IPTools;
-void IPTools.loadHostsAndRanges();
+	const {Rooms} = require('./rooms');
+	global.Rooms = Rooms;
+	// We initialize the global room here because roomlogs.ts needs the Rooms global
+	Rooms.global = new Rooms.GlobalRoomState();
+
+	const Verifier = require('./verifier');
+	global.Verifier = Verifier;
+	Verifier.PM.spawn();
+
+	const {Tournaments} = require('./tournaments');
+	global.Tournaments = Tournaments;
+
+	const {IPTools} = require('./ip-tools');
+	global.IPTools = IPTools;
+	void IPTools.loadHostsAndRanges();
+}
+setupGlobals();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
@@ -163,7 +153,12 @@ if (require.main === module) {
 	// in the case of app.js being imported as a module (e.g. unit tests),
 	// postpone launching until app.listen() is called.
 	let port;
-	if (process.argv[2]) port = parseInt(process.argv[2]);
+	for (const arg of process.argv) {
+		if (/^[0-9]+$/.test(arg)) {
+			port = parseInt(arg);
+			break;
+		}
+	}
 	Sockets.listen(port);
 }
 
@@ -179,7 +174,6 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-import {Repl} from '../lib/repl';
 // eslint-disable-next-line no-eval
 Repl.start('app', cmd => eval(cmd));
 
@@ -194,7 +188,7 @@ if (Config.startuphook) {
 if (Config.ofemain) {
 	try {
 		require.resolve('node-oom-heapdump');
-	} catch (e) {
+	} catch (e: any) {
 		if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 		throw new Error(
 			'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +

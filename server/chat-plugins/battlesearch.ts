@@ -1,11 +1,11 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import {FS} from '../../lib/fs';
-import {Utils} from '../../lib/utils';
-import {QueryProcessManager, exec} from '../../lib/process-manager';
-import {Repl} from '../../lib/repl';
+import {FS, Utils, ProcessManager, Repl} from '../../lib';
+
 import {checkRipgrepAvailability} from '../config-loader';
+
+const BATTLESEARCH_PROCESS_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
 
 interface BattleOutcome {
 	lost: string;
@@ -31,7 +31,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 	let files = [];
 	try {
 		files = await FS(pathString).readdir();
-	} catch (err) {
+	} catch (err: any) {
 		if (err.code === 'ENOENT') {
 			return results;
 		}
@@ -43,11 +43,11 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 	if (useRipgrep) {
 		// Matches non-word (including _ which counts as a word) characters between letters/numbers
 		// in a user's name so the userid can case-insensitively be matched to the name.
-		const regexString = userids.map(id => `(.*("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
+		const regexString = userids.map(id => `(?=.*?("p(1|2)":"${[...id].join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"))`).join('');
 		let output;
 		try {
-			output = await exec(['rg', '-i', regexString, '--no-line-number', '-tjson', ...files]);
-		} catch (error) {
+			output = await ProcessManager.exec(['rg', '-i', regexString, '--no-line-number', '-P', '-tjson', ...files]);
+		} catch {
 			return results;
 		}
 		for (const line of output.stdout.split('\n').reverse()) {
@@ -242,10 +242,11 @@ async function getBattleSearch(
 	connection.send(buildResults(response, userids as ID[], month, tierid, turnLimit));
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
+		if (Config.nobattlesearch) return this.errorReply(`Battlesearch has been temporarily disabled due to load issues.`);
 		const [ids, rawLimit, month, formatid, confirmation] = Utils.splitFirst(this.pageid.slice(18), '--', 5);
 		let turnLimit: number | undefined = parseInt(rawLimit);
 		if (isNaN(turnLimit)) turnLimit = undefined;
@@ -260,12 +261,10 @@ export const pages: PageTable = {
 		}
 		buf += `</p>`;
 
-		const months = (await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
-			const a = aKey.split('-').map(n => parseInt(n));
-			const b = bKey.split('-').map(n => parseInt(n));
-			if (a[0] !== b[0]) return b[0] - a[0];
-			return b[1] - a[1];
-		});
+		const months = Utils.sortBy(
+			(await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')),
+			name => ({reverse: name})
+		);
 		if (!month) {
 			buf += `<p>Please select a month:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const i of months) {
@@ -280,22 +279,14 @@ export const pages: PageTable = {
 		}
 
 		const tierid = toID(formatid);
-		const tiers = (await FS(`logs/${month}/`).readdir()).sort((a, b) => {
+		const tiers = Utils.sortBy(await FS(`logs/${month}/`).readdir(), tier => [
 			// First sort by gen with the latest being first
-			let aGen = 6;
-			let bGen = 6;
-			if (a.startsWith('gen')) aGen = parseInt(a.substring(3, 4));
-			if (b.startsWith('gen')) bGen = parseInt(b.substring(3, 4));
-			if (aGen !== bGen) return bGen - aGen;
-			// Sort alphabetically
-			const aTier = a.substring(4);
-			const bTier = b.substring(4);
-			if (aTier < bTier) return -1;
-			if (aTier > bTier) return 1;
-			return 0;
-		}).map(tier => {
+			tier.startsWith('gen') ? -parseInt(tier.charAt(3)) : -6,
+			// Then sort alphabetically
+			tier,
+		]).map(tier => {
 			// Use the official tier name
-			const format = Dex.getFormat(tier);
+			const format = Dex.formats.get(tier);
 			if (format?.exists) tier = format.name;
 			// Otherwise format as best as possible
 			if (tier.startsWith('gen')) {
@@ -340,7 +331,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	battlesearch(target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');
@@ -358,7 +349,7 @@ export const commands: ChatCommands = {
 	},
 	battlesearchhelp: [
 		'/battlesearch [args] - Searches rated battle history for the provided [args] and returns information on battles between the userids given.',
-		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assuemd to be userids. Requires &`,
+		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assumed to be userids. Requires &`,
 	],
 };
 
@@ -366,10 +357,16 @@ export const commands: ChatCommands = {
  * Process manager
  *********************************************************/
 
-export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async data => {
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
 	const {userids, turnLimit, month, tierid} = data;
+	const start = Date.now();
 	try {
-		return await runBattleSearch(userids, month, tierid, turnLimit);
+		const result = await runBattleSearch(userids, month, tierid, turnLimit);
+		const elapsedTime = Date.now() - start;
+		if (elapsedTime > 10 * 60 * 1000) {
+			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+		}
+		return result;
 	} catch (err) {
 		Monitor.crashlog(err, 'A battle search query', {
 			userids,
@@ -379,6 +376,10 @@ export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async da
 		});
 	}
 	return null;
+}, BATTLESEARCH_PROCESS_TIMEOUT, message => {
+	if (message.startsWith('SLOW\n')) {
+		Monitor.slow(message.slice(5));
+	}
 });
 
 if (!PM.isParentProcess) {
@@ -388,6 +389,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
 	process.on('uncaughtException', err => {

@@ -36,18 +36,13 @@ if (process.argv[2]) {
 	}
 }
 
-const child_process = require('child_process');
-const path = require('path');
-const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: path.resolve(__dirname, '../..')});
-shell('node build');
-
-const Dex = require('../../.sim-dist/dex').Dex;
-global.toID = require('../../.sim-dist/dex').Dex.getId;
+require('ts-node').register({project: './tsconfig.json', files: true, transpileOnly: true, transpiler: 'ts-node/transpilers/swc-experimental'});
+const Dex = require('../../sim/dex').Dex;
 global.Config = {allowrequestingties: false};
 Dex.includeModData();
 
-const {ExhaustiveRunner} = require('../../.sim-dist/tools/exhaustive-runner');
-const {MultiRandomRunner} = require('../../.sim-dist/tools/multi-random-runner');
+const {ExhaustiveRunner} = require('../../sim/tools/exhaustive-runner');
+const {MultiRandomRunner} = require('../../sim/tools/multi-random-runner');
 
 // Tracks whether some promises threw errors that weren't caught so we can log
 // and exit with a non-zero status to fail any tests. This "shouldn't happen"
@@ -133,12 +128,13 @@ case 'exhaustive':
 		}
 		const maxFailures = argv.maxFailures || argv.failures || (formats.length > 1 ? ExhaustiveRunner.MAX_FAILURES : 1);
 		const prng = argv.seed && argv.seed.split(',').map(s => Number(s));
+		const maxGames = argv.maxGames || argv.games;
 		(async () => {
 			let failures = 0;
 			do {
 				for (const format of formats) {
 					failures += await new ExhaustiveRunner({
-						format, cycles, prng, maxFailures, log: true, dual: argv.dual,
+						format, cycles, prng, maxFailures, log: true, dual: argv.dual, maxGames,
 					}).run();
 					process.stdout.write('\n');
 					if (failures >= maxFailures) break;

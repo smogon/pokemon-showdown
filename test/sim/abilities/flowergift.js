@@ -55,7 +55,7 @@ describe('Flower Gift', function () {
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
-	it.skip(`should not trigger if the Pokemon was KOed`, function () {
+	it(`should not trigger if the Pokemon was KOed`, function () {
 		battle = common.createBattle([[
 			{species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk']},
 		], [

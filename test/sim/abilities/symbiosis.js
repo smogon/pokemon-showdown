@@ -30,7 +30,7 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, '');
 	});
 
-	it.skip('should not trigger on an ally losing their Eject Button in Generation 7 or later', function () {
+	it('should not trigger on an ally losing their Eject Button in Generation 7 or later', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 			{species: 'wynaut', item: 'ejectbutton', moves: ['sleeptalk']},
@@ -43,6 +43,21 @@ describe('Symbiosis', function () {
 
 		assert.equal(battle.p1.active[0].item, 'leftovers');
 		assert.equal(battle.p1.active[1].item, '');
+	});
+
+	it('should trigger on an ally losing their Eject Button in Generation 6', function () {
+		battle = common.gen(6).createBattle({gameType: 'doubles'}, [[
+			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
+			{species: 'wynaut', item: 'ejectbutton', moves: ['sleeptalk']},
+			{species: 'corphish', moves: ['sleeptalk']},
+		], [
+			{species: 'wynaut', moves: ['tackle']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('auto', 'move tackle 2, move sleeptalk');
+
+		assert.equal(battle.p1.active[0].item, '');
+		assert.equal(battle.p1.active[1].item, 'leftovers');
 	});
 
 	// See Marty's research for many more examples: https://www.smogon.com/forums/threads/battle-mechanics-research.3489239/post-6401506

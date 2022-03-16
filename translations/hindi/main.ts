@@ -22,8 +22,8 @@ export const translations: Translations = {
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>वैश्विक Administrator</strong> - ये लोग कुछ भी कर सकते हैं, जैसे की इस सन्देश को बदलना",
 
 		"<strong>Room ranks</strong>": "<strong>रूम के पद</strong>",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - ये लोग '!' commands का इस्तेमाल कर सकते हैं, जैसे की !groups",
-
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा mute और warn भी कर सकते हैं",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा room ban भी कर सकते हैं",
 		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Moderator जैसा पर केवल Bots के लिए",
@@ -49,6 +49,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - 7 मिनटों के लिए उपयोगकर्ता को चुप (बातचीत में असमर्थ) करता है.",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - 60 मिनटों के लिए उपयोगकर्ता को चुप करता है.",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - 2 दिन के लिए उपयोगकर्ता को निष्कासित (room से जुड़ने में असमर्थ) करता है.",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - एक सप्ताह के लिए उपयोगकर्ता को निष्कासित (room से जुड़ने में असमर्थ) करता है.",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - साल भर के लिए उपयोगकर्ता को निष्कासित करता है.",
 
 		"<strong>Global punishments</strong>:": "<strong>वैश्विक दंड</strong>:",
@@ -56,6 +57,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - एक सप्ताह के लिए उपयोगकर्ता को lock करता है.",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - उपभोगकर्ता को लॉक करे और 2 दिन के लिए वो नाम रखने से रोकता है.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - एक सप्ताह के लिए वैश्विक तौर पे निष्कासित करता (connect और खेलने होने से रोकता) है.",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>अनिश्चितकालीन वैश्विक दंड</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - लगातार बुरे व्यवहार के लिए मिलने वाला दंड. तीन माह तक किसी भी दुर्व्यवहार से दूर रहने के बाद ही इसे ",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '<a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a> forum पर अपील कर सकते हैं.',
+		" forum after at least 3 months without incident.": "",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - सबसे गंभीर मामलों के लिए मिला हुआ स्थाई निष्काशन. ये दंड अपील के लिए अयोग्य है.",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Room driver (%)</strong> उपयोग कर सकते हैं:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn या /k <em>username</em>: उपयोगकर्ता को चेतावनी दे और Pok&eacute;mon Showdown के नियम दिखाए",
@@ -82,7 +89,7 @@ export const translations: Translations = {
 		"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver": "- /roomdemod, /roomdedriver <em>username</em>: room moderador/driver हटाए",
 		"- /roomdeauth <em>username</em>: remove all room auth from a user": "- /roomdeauth <em>username</em>: उपयोगकर्ता को room के सभी पदों से हटाए",
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>सन्देश</em>: room में एक बड़ा नीला ऐलान करे",
-		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>c&oacute;digo HTML</em>: room में HTML code के एक डब्बे को प्रसारित करे",
+		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>HTML code</em>: room में HTML code के एक डब्बे को प्रसारित करे",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [width], [height]</em>: room में एक चित्र प्रदर्शित करे",
 		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: room के विविध सेटिंग बदले, जैसे की  modchat, capsfilter आदि",
 
@@ -127,6 +134,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "आपके सन्देश में इस room का एक प्रतिबंधित शब्द है.",
 		"You can't send the same message again so soon.": "आप एक ही सन्देश इतनी जल्दी दोबारा नहीं भेज सकते.",
@@ -142,6 +150,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": " आप पहले से ही मुकाबले रोक रहे हैं!",
 		"You are already available for challenges!": "आप पहले से ही मुकाबले के लिए तैयार हैं!",
 		"You are available for challenges from now on.": "अब आप मुकाबलों के लिए तैयार हैं.",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "",
 		"You cannot broadcast all FAQs at once.": "",
@@ -157,5 +167,10 @@ export const translations: Translations = {
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
 	},
 };

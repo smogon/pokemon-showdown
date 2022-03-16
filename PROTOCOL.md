@@ -38,10 +38,9 @@ Messages from the user to the server are in the form:
 
     ROOMID|TEXT
 
-`ROOMID` can optionally be left blank if it's the lobby, or if the room
-is irrelevant (for instance, if `TEXT` is a command like
-`/join lobby` where it doesn't matter what room it's sent from, you can
-just send `|/join lobby`.)
+`ROOMID` can optionally be left blank if unneeded (commands like `/join lobby`
+can be sent anywhere). Responses will be sent to a PM box with no username
+(so `|/command` is equivalent to `|/pm &, /command`).
 
 `TEXT` can contain newlines, in which case it'll be treated the same
 way as if each line were sent to the room separately.
@@ -171,6 +170,16 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` said `MESSAGE`. Note that `MESSAGE` can contain `|` characters,
 > so you can't just split by `|` and take the fourth string.
+>
+> If `MESSAGE` starts with `/`, it is a special message. For instance,
+> `/me TEXT` or `/announce TEXT` or `/uhtml HTML`. A lot of these message
+> types are abused to embed protocol messages in PMs (for instance, `/uhtml`
+> is a stopgap before the client is rewritten to support `|uhtml|` etc in
+> PMs).
+>
+> If the server wants clients to actually render a message starting with
+> `/`, it will send a message starting with `//` (exactly like how users
+> need to send those messages).
 
 `|notify|TITLE|MESSAGE`
 
@@ -407,12 +416,12 @@ Battles
 Battle rooms will have a mix of room messages and battle messages. [Battle
 messages are documented in `SIM-PROTOCOL.md`][sim-protocol].
 
-  [sim-protocol]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
+  [sim-protocol]: ./sim/SIM-PROTOCOL.md
 
 To make decisions in battle, players should use the `/choose` command,
 [also documented in `SIM-PROTOCOL.md`][sending-decisions].
 
-  [sending-decisions]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#sending-decisions
+  [sending-decisions]: ./sim/SIM-PROTOCOL.md#sending-decisions
 
 ### Starting battles through challenges
 
@@ -450,7 +459,7 @@ To accept a challenge you received from someone, send:
     /utm TEAM
     /accept USERNAME
 
-Teams are in packed format (see "Team format" below). `TEAM` can also be
+Teams are in [packed format](./sim/TEAMS.md#packed-format). `TEAM` can also be
 `null`, if the format doesn't require user-built teams, such as Random Battle.
 
 Invalid teams will send a `|popup|` with validation errors, and the `/accept`
@@ -487,68 +496,9 @@ To cancel searching, send:
 
 ### Team format
 
-Pokémon Showdown's main way of representing teams is in packed format. This
-format is implemented in `Dex.packTeam` and `Dex.fastUnpackTeam` in
-`sim/dex.js`.
+Pokémon Showdown always sends teams over the protocol in packed format. For
+details about how to convert and read this format, see [sim/TEAMS.md](./sim/TEAMS.md).
 
 If you're not using JavaScript and don't want to reimplement these conversions,
-[Pokémon Showdown's command-line client][command-line] can convert between packed teams and
-JSON using standard IO.
-
-  [command-line]: https://github.com/smogon/pokemon-showdown/blob/master/COMMANDLINE.md
-
-If you really want to write your own converter, the format looks something like
-this:
-
-```
-Lumineon||focussash|1|defog,scald,icebeam,uturn||85,85,85,85,85,85||||83|]
-Glaceon||lifeorb||toxic,hiddenpowerground,shadowball,icebeam||81,,85,85,85,85||,0,,,,||83|]
-Crabominable||choiceband|1|closecombat,earthquake,stoneedge,icehammer||85,85,85,85,85,85||||83|]
-Toxicroak||lifeorb|1|drainpunch,suckerpunch,gunkshot,substitute||85,85,85,85,85,85||||79|]
-Bouffalant||choiceband||earthquake,megahorn,headcharge,superpower||85,85,85,85,85,85||||83|]
-Qwilfish||blacksludge|H|thunderwave,destinybond,liquidation,painsplit||85,85,85,85,85,85||||83|
-```
-
-(Line breaks added for readability - this is all one line normally.)
-
-The format is a list of pokemon delimited by `]`, where every Pokémon is:
-
-```
-NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE
-```
-
-- `SPECIES` is left blank if it's identical to `NICKNAME`
-
-- `ABILITY` is `0`, `1`, or `H` if it's the ability from the corresponding slot
-  for the Pokémon. It can also be an ability string, for Hackmons etc.
-
-- `MOVES` is a comma-separated list of move IDs.
-
-- `NATURE` left blank means Serious, except in Gen 1-2, where it means no Nature.
-
-- `EVS` and `IVS` are comma-separated in standard order:
-  HP, Atk, Def, SpA, SpD, Spe. EVs left blank are 0, IVs left blank are 31.
-  If all EVs or IVs are blank, the commas can all be left off.
-
-- `EVS` represent AVs in Pokémon Let's Go.
-
-- `IVS` represent DVs in Gen 1-2. The IV will be divided by 2 and rounded down,
-  to become DVs (so the default of 31 IVs is converted to 15 DVs).
-
-- `IVS` is post-hyper-training: pre-hyper-training IVs are represented in
-  `HIDDENPOWERTYPE`
-
-- `SHINY` is `S` for shiny, and blank for non-shiny.
-
-- `LEVEL` is left blank for level 100.
-
-- `HAPPINESS` is left blank for 255.
-
-- `POKEBALL` is left blank if it's a regular Poké Ball.
-
-- `HIDDENPOWERTYPE` is left blank if the Pokémon is not Hyper Trained, if
-  Hyper Training doesn't affect IVs, or if it's represented by a move in
-  the moves list.
-
-- If `POKEBALL` and `HIDDENPOWERTYPE` are both blank, the commas will be left
-  off.
+[Pokémon Showdown's command-line client](./COMMANDLINE.md) can convert between
+packed teams and JSON using standard IO.

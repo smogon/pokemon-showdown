@@ -20,7 +20,6 @@ type Worker = cluster.Worker;
 const ROOT_DIR = path.resolve(__dirname, '..');
 
 export const processManagers: ProcessManager[] = [];
-export const disabled = false;
 
 export function exec(args: string, execOptions?: child_process.ExecOptions): Promise<{stderr: string, stdout: string}>;
 export function exec(
@@ -94,28 +93,32 @@ class RawSubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	}
 }
 
-interface ProcessWrapper {
-	load: number;
+export interface ProcessWrapper {
+	getLoad: () => number;
 	process: ChildProcess | Worker;
 	release: () => Promise<void>;
 	getProcess: () => ChildProcess;
 }
 
 /** Wraps the process object in the PARENT process. */
-export class QueryProcessWrapper implements ProcessWrapper {
+export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 	process: ChildProcess;
 	taskId: number;
-	pendingTasks: Map<number, (resp: string) => void>;
+	pendingTasks: Map<number, (resp: U) => void>;
+	messageCallback: ((message: string) => any) | null;
 	pendingRelease: Promise<void> | null;
 	resolveRelease: (() => void) | null;
 	debug?: string;
+	file: string;
 
-	constructor(file: string) {
-		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
+	constructor(file: string, messageCallback?: (message: string) => any) {
+		this.process = child_process.fork(file, [], {cwd: ROOT_DIR, execArgv: ['-r', 'ts-node/register']});
 		this.taskId = 0;
+		this.file = file;
 		this.pendingTasks = new Map();
 		this.pendingRelease = null;
 		this.resolveRelease = null;
+		this.messageCallback = messageCallback || null;
 
 		this.process.on('message', (message: string) => {
 			if (message.startsWith('THROW\n')) {
@@ -129,27 +132,50 @@ export class QueryProcessWrapper implements ProcessWrapper {
 				return;
 			}
 
+			if (this.messageCallback && message.startsWith(`CALLBACK\n`)) {
+				this.messageCallback(message.slice(9));
+				return;
+			}
+
 			const nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = parseInt(message.slice(0, nlLoc));
 			const resolve = this.pendingTasks.get(taskId);
 			if (!resolve) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 			this.pendingTasks.delete(taskId);
-			resolve(JSON.parse(message.slice(nlLoc + 1)));
+			const resp = this.safeJSON(message.slice(nlLoc + 1));
+			resolve(resp);
 
-			if (this.resolveRelease && !this.load) this.destroy();
+			if (this.resolveRelease && !this.getLoad()) this.destroy();
 		});
+	}
+	safeJSON(obj: string): any {
+		// special cases? undefined should strictly be fine
+		// so let's just return it since we can't parse it
+		if (obj === "undefined") {
+			return undefined;
+		}
+		try {
+			return JSON.parse(obj);
+		} catch (e: any) {
+			// this is in the parent, so it should usually exist, but it's possible
+			// it's also futureproofing in case other external modfules require this
+			// we also specifically do not throw here because this json might be sensitive,
+			// so we only want it to go to emails
+			global.Monitor?.crashlog?.(e, `a ${path.basename(this.file)} process`, {result: obj});
+			return undefined;
+		}
 	}
 
 	getProcess() {
 		return this.process;
 	}
 
-	get load() {
+	getLoad() {
 		return this.pendingTasks.size;
 	}
 
-	query(input: any): Promise<any> {
+	query(input: T): Promise<U> {
 		this.taskId++;
 		const taskId = this.taskId;
 		this.process.send(`${taskId}\n${JSON.stringify(input)}`);
@@ -160,7 +186,7 @@ export class QueryProcessWrapper implements ProcessWrapper {
 
 	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
-		if (!this.load) {
+		if (!this.getLoad()) {
 			this.destroy();
 		} else {
 			this.pendingRelease = new Promise(resolve => {
@@ -178,7 +204,7 @@ export class QueryProcessWrapper implements ProcessWrapper {
 		this.process.disconnect();
 		for (const resolver of this.pendingTasks.values()) {
 			// maybe we should track reject functions too...
-			resolver('');
+			resolver('' as any);
 		}
 		this.pendingTasks.clear();
 		if (this.resolveRelease) {
@@ -202,15 +228,22 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	setDebug(message: string) {
 		this.debug = (this.debug || '').slice(-32768) + '\n=====\n' + message;
 	}
+	messageCallback?: (message: string) => any;
 
-	constructor(file: string) {
-		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
+	constructor(file: string, messageCallback?: (message: string) => any) {
+		this.process = child_process.fork(file, [], {cwd: ROOT_DIR, execArgv: ['-r', 'ts-node/register']});
+		this.messageCallback = messageCallback;
 
 		this.process.on('message', (message: string) => {
 			if (message.startsWith('THROW\n')) {
 				const error = new Error();
 				error.stack = message.slice(6);
 				throw error;
+			}
+
+			if (this.messageCallback && message.startsWith(`CALLBACK\n`)) {
+				this.messageCallback(message.slice(9));
+				return;
 			}
 
 			if (message.startsWith('DEBUG\n')) {
@@ -246,6 +279,10 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		});
 	}
 
+	getLoad() {
+		return this.activeStreams.size;
+	}
+
 	getProcess() {
 		return this.process;
 	}
@@ -253,11 +290,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	deleteStream(taskId: number) {
 		this.activeStreams.delete(taskId);
 		// try to release
-		if (this.resolveRelease && !this.load) void this.destroy();
-	}
-
-	get load() {
-		return this.activeStreams.size;
+		if (this.resolveRelease && !this.getLoad()) void this.destroy();
 	}
 
 	createStream(): SubprocessStream {
@@ -270,7 +303,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 
 	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
-		if (!this.load) {
+		if (!this.getLoad()) {
 			void this.destroy();
 		} else {
 			this.pendingRelease = new Promise(resolve => {
@@ -337,7 +370,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 			this.process = cluster.fork(env);
 			this.workerid = this.process.id;
 		} else {
-			this.process = child_process.fork(file, [], {cwd: ROOT_DIR, env}) as any;
+			this.process = child_process.fork(file, [], {cwd: ROOT_DIR, env, execArgv: ['-r', 'ts-node/register']}) as any;
 		}
 
 		this.process.on('message', (message: string) => {
@@ -347,13 +380,16 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 		this.stream = new RawSubprocessStream(this);
 	}
 
+	getLoad() {
+		return this.load;
+	}
 	getProcess() {
 		return this.process.process ? this.process.process : this.process;
 	}
 
 	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
-		if (!this.load) {
+		if (!this.getLoad()) {
 			void this.destroy();
 		} else {
 			this.pendingRelease = new Promise(resolve => {
@@ -368,7 +404,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 			// already destroyed
 			return;
 		}
-		this.stream.destroy();
+		void this.stream.destroy();
 		this.process.disconnect();
 		return;
 	}
@@ -378,10 +414,11 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
  * A ProcessManager wraps a query function: A function that takes a
  * string and returns a string or Promise<string>.
  */
-export abstract class ProcessManager {
-	processes: ProcessWrapper[] = [];
-	releasingProcesses: ProcessWrapper[] = [];
-	crashedProcesses: ProcessWrapper[] = [];
+export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> {
+	static disabled = false;
+	processes: T[] = [];
+	releasingProcesses: T[] = [];
+	crashedProcesses: T[] = [];
 	readonly module: NodeJS.Module;
 	readonly filename: string;
 	readonly basename: string;
@@ -403,13 +440,13 @@ export abstract class ProcessManager {
 		}
 		let lowestLoad = this.processes[0];
 		for (const process of this.processes) {
-			if (process.load < lowestLoad.load) {
+			if (process.getLoad() < lowestLoad.getLoad()) {
 				lowestLoad = process;
 			}
 		}
 		return lowestLoad;
 	}
-	releaseCrashed(process: ProcessWrapper) {
+	releaseCrashed(process: T) {
 		const index = this.processes.indexOf(process);
 
 		// The process was shut down sanely, not crashed
@@ -445,29 +482,39 @@ export abstract class ProcessManager {
 		}
 	}
 	unspawn() {
-		const released = [];
-		const processes = this.processes;
-		this.processes = [];
-		for (const process of processes) {
-			this.destroyProcess(process);
-			released.push(process.release().then(() => {
-				const index = this.releasingProcesses.indexOf(process);
-				if (index >= 0) {
-					this.releasingProcesses.splice(index, 1);
-				}
-			}));
-		}
-		this.releasingProcesses = this.releasingProcesses.concat(processes);
-		return Promise.all(released);
+		return Promise.all([...this.processes].map(
+			process => this.unspawnOne(process)
+		));
+	}
+	async unspawnOne(process: T | null) {
+		if (!process) return;
+		this.destroyProcess(process);
+		const processIndex = this.processes.indexOf(process);
+		if (processIndex < 0) throw new Error('Process inactive');
+		this.processes.splice(this.processes.indexOf(process), 1);
+		this.releasingProcesses.push(process);
+
+		await process.release();
+
+		const index = this.releasingProcesses.indexOf(process);
+		if (index < 0) return; // can happen if process crashed while releasing
+		this.releasingProcesses.splice(index, 1);
 	}
 	spawn(count = 1, force?: boolean) {
 		if (!this.isParentProcess) return;
-		if (disabled && !force) return;
-		while (this.processes.length < count) {
-			const process = this.createProcess();
-			process.process.on('disconnect', () => this.releaseCrashed(process));
-			this.processes.push(process);
+		if (ProcessManager.disabled && !force) return;
+		const spawnCount = count - this.processes.length;
+		for (let i = 0; i < spawnCount; i++) {
+			this.spawnOne(force);
 		}
+	}
+	spawnOne(force?: boolean) {
+		if (!this.isParentProcess) throw new Error('Must use in parent process');
+		if (ProcessManager.disabled && !force) return null;
+		const process = this.createProcess();
+		process.process.on('disconnect', () => this.releaseCrashed(process));
+		this.processes.push(process);
+		return process;
 	}
 	respawn(count: number | null = null) {
 		if (count === null) count = this.processes.length;
@@ -476,8 +523,8 @@ export abstract class ProcessManager {
 		return unspawned;
 	}
 	abstract listen(): void;
-	abstract createProcess(): ProcessWrapper;
-	destroyProcess(process: ProcessWrapper) {}
+	abstract createProcess(...args: any): T;
+	destroyProcess(process: T) {}
 	destroy() {
 		const index = processManagers.indexOf(this);
 		if (index >= 0) processManagers.splice(index, 1);
@@ -485,23 +532,26 @@ export abstract class ProcessManager {
 	}
 }
 
-export class QueryProcessManager<T = string, U = string> extends ProcessManager {
+export class QueryProcessManager<T = string, U = string> extends ProcessManager<QueryProcessWrapper<T, U>> {
 	_query: (input: T) => U | Promise<U>;
+	messageCallback?: (message: string) => any;
 	timeout: number;
 
 	/**
 	 * @param timeout The number of milliseconds to wait before terminating a query. Defaults to 900000 ms (15 minutes).
 	 */
-	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>, timeout = 15 * 60 * 1000) {
+	constructor(
+		module: NodeJS.Module, query: (input: T) => U | Promise<U>,
+		timeout = 15 * 60 * 1000, debugCallback?: (message: string) => any
+	) {
 		super(module);
 		this._query = query;
 		this.timeout = timeout;
+		this.messageCallback = debugCallback;
 
 		processManagers.push(this);
 	}
-	async query(input: T) {
-		const process = this.acquire() as QueryProcessWrapper;
-
+	async query(input: T, process = this.acquire()) {
 		if (!process) return this._query(input);
 
 		const timeout = setTimeout(() => {
@@ -517,8 +567,14 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 		clearTimeout(timeout);
 		return result;
 	}
+	queryTemporaryProcess(input: T, force?: boolean) {
+		const process = this.spawnOne(force);
+		const result = this.query(input, process);
+		void this.unspawnOne(process);
+		return result;
+	}
 	createProcess() {
-		return new QueryProcessWrapper(this.filename);
+		return new QueryProcessWrapper<T, U>(this.filename, this.messageCallback);
 	}
 	listen() {
 		if (this.isParentProcess) return;
@@ -545,25 +601,31 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager 
 	}
 }
 
-export class StreamProcessManager extends ProcessManager {
+export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 	/* taskid: stream used only in child process */
 	activeStreams: Map<string, Streams.ObjectReadWriteStream<string>>;
 	_createStream: () => Streams.ObjectReadWriteStream<string>;
+	messageCallback?: (message: string) => any;
 
-	constructor(module: NodeJS.Module, createStream: () => Streams.ObjectReadWriteStream<string>) {
+	constructor(
+		module: NodeJS.Module,
+		createStream: () => Streams.ObjectReadWriteStream<string>,
+		messageCallback?: (message: string) => any
+	) {
 		super(module);
 		this.activeStreams = new Map();
 		this._createStream = createStream;
+		this.messageCallback = messageCallback;
 
 		processManagers.push(this);
 	}
 	createStream() {
-		const process = this.acquire() as StreamProcessWrapper;
+		const process = this.acquire();
 		if (!process) return this._createStream();
 		return process.createStream();
 	}
 	createProcess() {
-		return new StreamProcessWrapper(this.filename);
+		return new StreamProcessWrapper(this.filename, this.messageCallback);
 	}
 	async pipeStream(taskId: string, stream: Streams.ObjectReadStream<string>) {
 		let done = false;
@@ -572,7 +634,7 @@ export class StreamProcessManager extends ProcessManager {
 				let value;
 				({value, done} = await stream.next());
 				process.send!(`${taskId}\nPUSH\n${value}`);
-			} catch (err) {
+			} catch (err: any) {
 				process.send!(`${taskId}\nTHROW\n${err.stack}`);
 			}
 		}
@@ -629,7 +691,7 @@ export class StreamProcessManager extends ProcessManager {
 	}
 }
 
-export class RawProcessManager extends ProcessManager {
+export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 	/** full list of processes - parent process only */
 	workers: StreamWorker[] = [];
 	/** if spawning 0 worker processes, the worker is instead stored here in the parent process */
@@ -660,6 +722,7 @@ export class RawProcessManager extends ProcessManager {
 				exec: this.filename,
 				// @ts-ignore TODO: update type definition
 				cwd: ROOT_DIR,
+				execArgv: ['-r', 'ts-node/register'],
 			});
 		}
 
@@ -698,7 +761,7 @@ export class RawProcessManager extends ProcessManager {
 				let value;
 				({value, done} = await stream.next());
 				process.send!(value);
-			} catch (err) {
+			} catch (err: any) {
 				process.send!(`THROW\n${err.stack}`);
 			}
 		}

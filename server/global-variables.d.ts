@@ -15,6 +15,7 @@ import {Punishments as PunishmentsType} from './punishments';
 import {Tournaments as TournamentsType} from './tournaments';
 
 import {Dex as DexType} from '../sim/dex';
+import {Teams as TeamsType} from '../sim/teams';
 
 declare global {
 	namespace NodeJS {
@@ -22,6 +23,7 @@ declare global {
 			Config: any;
 			Chat: any;
 			Dex: any;
+			Teams: any;
 			IPTools: any;
 			Ladders: any;
 			LoginServer: any;
@@ -41,6 +43,7 @@ declare global {
 	const Config: ConfigType;
 	const Chat: typeof ChatType.Chat;
 	const Dex: typeof DexType;
+	const Teams: typeof TeamsType;
 	const IPTools: typeof IPToolsType;
 	const Ladders: typeof LaddersType;
 	const LoginServer: typeof LoginServerType;

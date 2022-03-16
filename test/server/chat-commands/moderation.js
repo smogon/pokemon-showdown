@@ -6,20 +6,11 @@
 'use strict';
 
 const assert = require('assert').strict;
-const moderation = require('../../../.server-dist/chat-commands/moderation');
+const moderation = require('../../../server/chat-commands/moderation');
 
-const userUtils = require('../../users-utils');
-const User = userUtils.User;
-const Connection = userUtils.Connection;
+const {makeUser} = require('../../users-utils');
 
-function makeUser(name, ip) {
-	const user = new User(new Connection(ip));
-	user.forceRename(name, true);
-	Users.users.set(user.id, user);
-	return user;
-}
-
-describe('room promotions', () => {
+describe('room promotions', function () {
 	before(() => {
 		Rooms.global.addChatRoom('Promotion Testing');
 		this.room = Rooms.get('promotiontesting');

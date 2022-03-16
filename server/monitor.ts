@@ -8,8 +8,7 @@
  */
 
 import {exec, ExecException, ExecOptions} from 'child_process';
-import {crashlogger} from "../lib/crashlogger";
-import {FS} from "../lib/fs";
+import {crashlogger, FS} from "../lib";
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
 
@@ -63,29 +62,28 @@ export const Monitor = new class {
 	networkUse: {[k: string]: number} = {};
 	networkCount: {[k: string]: number} = {};
 	hotpatchLock: {[k: string]: {by: string, reason: string}} = {};
-	hotpatchVersions: {[k: string]: string | undefined} = {};
 
 	TimedCounter = TimedCounter;
 
 	updateServerLock = false;
 	cleanInterval: NodeJS.Timeout | null = null;
 	/**
-	 * Inappropriate userid : number of times the name has been forcerenamed
+	 * Inappropriate userid : has the user logged in since the FR
 	 */
-	readonly forceRenames = new Map<ID, number>();
+	readonly forceRenames = new Map<ID, boolean>();
 
 	/*********************************************************
 	 * Logging
 	 *********************************************************/
-	crashlog(error: Error, source = 'The main process', details: AnyObject | null = null) {
-		if (!error) error = {} as any;
+	crashlog(err: any, source = 'The main process', details: AnyObject | null = null) {
+		const error = (err || {}) as Error;
 		if ((error.stack || '').startsWith('@!!@')) {
 			try {
 				const stack = (error.stack || '');
 				const nlIndex = stack.indexOf('\n');
 				[error.name, error.message, source, details] = JSON.parse(stack.slice(4, nlIndex));
 				error.stack = stack.slice(nlIndex + 1);
-			} catch (e) {}
+			} catch {}
 		}
 		const crashType = crashlogger(error, source, details);
 		Rooms.global.reportCrash(error, source);
@@ -136,6 +134,15 @@ export const Monitor = new class {
 		if (Config.loglevel <= 2) console.log(text);
 	}
 
+	slow(text: string) {
+		const logRoom = Rooms.get('slowlog');
+		if (logRoom) {
+			logRoom.add(`|c|&|/log ${text}`).update();
+		} else {
+			this.warn(text);
+		}
+	}
+
 	/*********************************************************
 	 * Resource Monitor
 	 *********************************************************/
@@ -152,7 +159,7 @@ export const Monitor = new class {
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
 	countConnection(ip: string, name = '') {
-		if (Config.noipchecks || Config.nothrotte) return false;
+		if (Config.noipchecks || Config.nothrottle) return false;
 		const [count, duration] = this.connections.increment(ip, 30 * 60 * 1000);
 		if (count === 500) {
 			this.adminlog(`[ResourceMonitor] IP ${ip} banned for cflooding (${count} times in ${Chat.toDurationString(duration)}${name ? ': ' + name : ''})`);
@@ -177,7 +184,7 @@ export const Monitor = new class {
 	 * terminated for abuse.
 	 */
 	countBattle(ip: string, name = '') {
-		if (Config.noipchecks || Config.nothrotte) return false;
+		if (Config.noipchecks || Config.nothrottle) return false;
 		const [count, duration] = this.battles.increment(ip, 30 * 60 * 1000);
 		if (duration < 5 * 60 * 1000 && count % 30 === 0) {
 			this.adminlog(`[ResourceMonitor] IP ${ip} has battled ${count} times in the last ${Chat.toDurationString(duration)}${name ? ': ' + name : ''})`);
@@ -196,10 +203,10 @@ export const Monitor = new class {
 	 * Counts team validations. Returns true if too many.
 	 */
 	countPrepBattle(ip: string, connection: Connection) {
-		if (Config.noipchecks || Config.nothrotte) return false;
+		if (Config.noipchecks || Config.nothrottle) return false;
 		const count = this.battlePreps.increment(ip, 3 * 60 * 1000)[0];
 		if (count <= 12) return false;
-		if (count < 120 && Punishments.sharedIps.has(ip)) return false;
+		if (count < 120 && Punishments.isSharedIp(ip)) return false;
 		connection.popup('Due to high load, you are limited to 12 battles and team validations every 3 minutes.');
 		return true;
 	}
@@ -208,7 +215,7 @@ export const Monitor = new class {
 	 * Counts concurrent battles. Returns true if too many.
 	 */
 	countConcurrentBattle(count: number, connection: Connection) {
-		if (Config.noipchecks || Config.nothrotte) return false;
+		if (Config.noipchecks || Config.nothrottle) return false;
 		if (count <= 5) return false;
 		connection.popup(`Due to high load, you are limited to 5 games at the same time.`);
 		return true;
@@ -226,10 +233,10 @@ export const Monitor = new class {
 	 * Counts commands that use HTTPs requests. Returns true if too many.
 	 */
 	countNetRequests(ip: string) {
-		if (Config.noipchecks || Config.nothrotte) return false;
+		if (Config.noipchecks || Config.nothrottle) return false;
 		const [count] = this.netRequests.increment(ip, 1 * 60 * 1000);
 		if (count <= 10) return false;
-		if (count < 120 && Punishments.sharedIps.has(ip)) return false;
+		if (count < 120 && Punishments.isSharedIp(ip)) return false;
 		return true;
 	}
 
@@ -237,9 +244,9 @@ export const Monitor = new class {
 	 * Counts ticket creation. Returns true if too much.
 	 */
 	countTickets(ip: string) {
-		if (Config.noipchecks || Config.nothrotte) return false;
+		if (Config.noipchecks || Config.nothrottle) return false;
 		const count = this.tickets.increment(ip, 60 * 60 * 1000)[0];
-		if (Punishments.sharedIps.has(ip)) {
+		if (Punishments.isSharedIp(ip)) {
 			return count >= 20;
 		} else {
 			return count >= 5;
@@ -342,7 +349,7 @@ export const Monitor = new class {
 
 			await this.sh(`git reset`, options);
 			await index.unlinkIfExists();
-		} catch (err) {}
+		} catch {}
 		return hash;
 	}
 };

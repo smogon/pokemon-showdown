@@ -7,6 +7,8 @@ interface SpeciesAbility {
 	S?: string;
 }
 
+type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary";
+
 export interface SpeciesData extends Partial<Species> {
 	name: string;
 	/** National Dex number */
@@ -32,25 +34,36 @@ export interface SpeciesFormatsData {
 	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomDoubleBattleLevel?: number;
+	randomBattleNoDynamaxMoves?: readonly string[];
 	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
 export type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
 
+export interface LearnsetData {
+	learnset?: {[moveid: string]: MoveSource[]};
+	eventData?: EventInfo[];
+	eventOnly?: boolean;
+	encounters?: EventInfo[];
+	exists?: boolean;
+}
+
+export type ModdedLearnsetData = LearnsetData & {inherit?: true};
+
 export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
-	readonly effectType: 'Pokemon';
+	declare readonly effectType: 'Pokemon';
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
 	 * 'basculinbluestriped'. To get the base species ID, you need to
 	 * manually read toID(species.baseSpecies).
 	 */
-	readonly id: ID;
+	declare readonly id: ID;
 	/**
 	 * Name. Note that this is the full name with forme,
 	 * e.g. 'Basculin-Blue-Striped'. To get the name without forme, see
 	 * `species.baseSpecies`.
 	 */
-	readonly name: string;
+	declare readonly name: string;
 	/**
 	 * Base species. Species, but without the forme name.
 	 *
@@ -109,7 +122,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly abilities: SpeciesAbility;
 	/** Types. */
 	readonly types: string[];
-	/** Added type (used in OMs). */
+	/** Added type (added by Trick-Or-Treat or Forest's Curse, but only listed in species by OMs). */
 	readonly addedType?: string;
 	/** Pre-evolution. '' if nothing evolves into this Pokemon. */
 	readonly prevo: string;
@@ -117,9 +130,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly evos: string[];
 	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
 	/** Evolution condition. falsy if doesn't evolve. */
-	readonly evoCondition?: string;
+	declare readonly evoCondition?: string;
 	/** Evolution item. falsy if doesn't evolve. */
-	readonly evoItem?: string;
+	declare readonly evoItem?: string;
 	/** Evolution move. falsy if doesn't evolve. */
 	readonly evoMove?: string;
 	/** Evolution level. falsy if doesn't evolve. */
@@ -151,6 +164,10 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly heightm: number;
 	/** Color. */
 	readonly color: string;
+	/**
+	 * Tags, boolean data. Currently just legendary/mythical status.
+	 */
+	readonly tags: SpeciesTag[];
 	/** Does this Pokemon have an unreleased hidden ability? */
 	readonly unreleasedHidden: boolean | 'Past';
 	/**
@@ -161,7 +178,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** True if a pokemon is mega. */
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */
-	readonly isPrimal?: boolean;
+	declare readonly isPrimal?: boolean;
 	/** Name of its Gigantamax move, if a pokemon is capable of gigantamaxing. */
 	readonly canGigantamax?: string;
 	/** If this Pokemon can gigantamax, is its gigantamax released? */
@@ -173,9 +190,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** Required item. Do not use this directly; see requiredItems. */
 	readonly requiredItem?: string;
 	/** Required move. Move required to use this forme in-battle. */
-	readonly requiredMove?: string;
+	declare readonly requiredMove?: string;
 	/** Required ability. Ability required to use this forme in-battle. */
-	readonly requiredAbility?: string;
+	declare readonly requiredAbility?: string;
 	/**
 	 * Required items. Items required to be in this forme, e.g. a mega
 	 * stone, or Griseous Orb. Array because Arceus formes can hold
@@ -196,31 +213,27 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 
 	/**
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.
-	 * Do not use for LC bans (usage tier will override LC Uber).
 	 */
 	readonly tier: TierTypes.Singles | TierTypes.Other;
 	/**
 	 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
-	 * Do not use for LC bans (usage tier will override LC Uber).
 	 */
 	readonly doublesTier: TierTypes.Doubles | TierTypes.Other;
-	readonly randomBattleMoves?: readonly ID[];
-	readonly randomBattleLevel?: number;
-	readonly randomDoubleBattleMoves?: readonly ID[];
-	readonly randomDoubleBattleLevel?: number;
-	readonly exclusiveMoves?: readonly ID[];
-	readonly comboMoves?: readonly ID[];
-	readonly essentialMove?: ID;
-	readonly newmeta?: string;
+	declare readonly randomBattleMoves?: readonly ID[];
+	declare readonly randomBattleLevel?: number;
+	declare readonly randomDoubleBattleMoves?: readonly ID[];
+	declare readonly randomDoubleBattleLevel?: number;
+	declare readonly randomBattleNoDynamaxMoves?: readonly ID[];
+	declare readonly exclusiveMoves?: readonly ID[];
+	declare readonly comboMoves?: readonly ID[];
+	declare readonly essentialMove?: ID;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, ...moreData);
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `pokemon: ${data.name}`;
 		this.effectType = 'Pokemon';
-		this.id = data.id as ID;
-		this.name = data.name;
 		this.baseSpecies = data.baseSpecies || this.name;
 		this.forme = data.forme || '';
 		this.baseForme = data.baseForme || '';
@@ -256,6 +269,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm || 0;
 		this.color = data.color || '';
+		this.tags = data.tags || [];
 		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
@@ -269,7 +283,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
+			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)) {
 				this.gen = 8;
 			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
@@ -291,5 +305,223 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 				this.gen = 1;
 			}
 		}
+	}
+}
+
+export class Learnset {
+	readonly effectType: 'Learnset';
+	/**
+	 * Keeps track of exactly how a pokemon might learn a move, in the
+	 * form moveid:sources[].
+	 */
+	readonly learnset?: {[moveid: string]: MoveSource[]};
+	/** True if the only way to get this Pokemon is from events. */
+	readonly eventOnly: boolean;
+	/** List of event data for each event. */
+	readonly eventData?: EventInfo[];
+	readonly encounters?: EventInfo[];
+	readonly exists: boolean;
+
+	constructor(data: AnyObject) {
+		this.exists = true;
+		this.effectType = 'Learnset';
+		this.learnset = data.learnset || undefined;
+		this.eventOnly = !!data.eventOnly;
+		this.eventData = data.eventData || undefined;
+		this.encounters = data.encounters || undefined;
+	}
+}
+
+export class DexSpecies {
+	readonly dex: ModdedDex;
+	readonly speciesCache = new Map<ID, Species>();
+	readonly learnsetCache = new Map<ID, Learnset>();
+	allCache: readonly Species[] | null = null;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name?: string | Species): Species {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		let id = toID(name);
+		if (id === 'nidoran' && name.endsWith('♀')) {
+			id = 'nidoranf' as ID;
+		} else if (id === 'nidoran' && name.endsWith('♂')) {
+			id = 'nidoranm' as ID;
+		}
+
+		return this.getByID(id);
+	}
+	getByID(id: ID): Species {
+		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
+		if (species) return species;
+
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			if (this.dex.data.FormatsData.hasOwnProperty(id)) {
+				// special event ID, like Rockruff-Dusk
+				const baseId = toID(this.dex.data.Aliases[id]);
+				species = new Species({
+					...this.dex.data.Pokedex[baseId],
+					...this.dex.data.FormatsData[id],
+					name: id,
+				});
+				species.abilities = {0: species.abilities['S']!};
+			} else {
+				species = this.get(this.dex.data.Aliases[id]);
+				if (species.cosmeticFormes) {
+					for (const forme of species.cosmeticFormes) {
+						if (toID(forme) === id) {
+							species = new Species({
+								...species,
+								name: forme,
+								forme: forme.slice(species.name.length + 1),
+								baseForme: "",
+								baseSpecies: species.name,
+								otherFormes: null,
+								cosmeticFormes: null,
+							});
+							break;
+						}
+					}
+				}
+			}
+			this.speciesCache.set(id, species);
+			return species;
+		}
+
+		if (!this.dex.data.Pokedex.hasOwnProperty(id)) {
+			let aliasTo = '';
+			const formeNames: {[k: string]: string[]} = {
+				alola: ['a', 'alola', 'alolan'],
+				galar: ['g', 'galar', 'galarian'],
+				mega: ['m', 'mega'],
+				primal: ['p', 'primal'],
+			};
+			for (const forme in formeNames) {
+				let pokeName = '';
+				for (const i of formeNames[forme]) {
+					if (id.startsWith(i)) {
+						pokeName = id.slice(i.length);
+					} else if (id.endsWith(i)) {
+						pokeName = id.slice(0, -i.length);
+					}
+				}
+				if (this.dex.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.dex.data.Aliases[pokeName]);
+				if (this.dex.data.Pokedex[pokeName + forme]) {
+					aliasTo = pokeName + forme;
+					break;
+				}
+			}
+			if (aliasTo) {
+				species = this.get(aliasTo);
+				if (species.exists) {
+					this.speciesCache.set(id, species);
+					return species;
+				}
+			}
+		}
+		if (id && this.dex.data.Pokedex.hasOwnProperty(id)) {
+			const pokedexData = this.dex.data.Pokedex[id];
+			const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
+			species = new Species({
+				tags: baseSpeciesTags,
+				...pokedexData,
+				...this.dex.data.FormatsData[id],
+			});
+			// Inherit any statuses from the base species (Arceus, Silvally).
+			const baseSpeciesStatuses = this.dex.data.Conditions[toID(species.baseSpecies)];
+			if (baseSpeciesStatuses !== undefined) {
+				let key: keyof EffectData;
+				for (key in baseSpeciesStatuses) {
+					if (!(key in species)) (species as any)[key] = baseSpeciesStatuses[key];
+				}
+			}
+			if (!species.tier && !species.doublesTier && species.baseSpecies !== species.name) {
+				if (species.baseSpecies === 'Mimikyu') {
+					species.tier = this.dex.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
+				} else if (species.id.endsWith('totem')) {
+					species.tier = this.dex.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || 'Illegal';
+				} else if (species.battleOnly) {
+					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)].doublesTier || 'Illegal';
+				} else {
+					const baseFormatsData = this.dex.data.FormatsData[toID(species.baseSpecies)];
+					if (!baseFormatsData) {
+						throw new Error(`${species.baseSpecies} has no formats-data entry`);
+					}
+					species.tier = baseFormatsData.tier || 'Illegal';
+					species.doublesTier = baseFormatsData.doublesTier || 'Illegal';
+				}
+			}
+			if (!species.tier) species.tier = 'Illegal';
+			if (!species.doublesTier) species.doublesTier = species.tier as any;
+			if (species.gen > this.dex.gen) {
+				species.tier = 'Illegal';
+				species.doublesTier = 'Illegal';
+				species.isNonstandard = 'Future';
+			}
+			if (this.dex.currentMod === 'gen7letsgo' && !species.isNonstandard) {
+				const isLetsGo = (
+					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
+					(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
+					species.name !== 'Pikachu-Alola'))
+				);
+				if (!isLetsGo) species.isNonstandard = 'Past';
+			}
+			if (this.dex.currentMod === 'gen8bdsp' &&
+				(!species.isNonstandard || ["Gigantamax", "CAP"].includes(species.isNonstandard))) {
+				if (species.gen > 4 || (species.num < 1 && species.isNonstandard !== 'CAP') ||
+					species.id === 'pichuspikyeared') {
+					species.isNonstandard = 'Future';
+					species.tier = species.doublesTier = 'Illegal';
+				}
+			}
+			species.nfe = species.evos.some(evo => {
+				const evoSpecies = this.get(evo);
+				return !evoSpecies.isNonstandard || evoSpecies.isNonstandard === species?.isNonstandard;
+			});
+			species.canHatch = species.canHatch ||
+				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
+			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
+			if (this.dex.gen < 5) delete species.abilities['H'];
+			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
+		} else {
+			species = new Species({
+				id, name: id,
+				exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
+			});
+		}
+		if (species.exists) this.speciesCache.set(id, species);
+		return species;
+	}
+
+	getLearnset(id: ID): Learnset['learnset'] {
+		return this.getLearnsetData(id).learnset;
+	}
+
+	getLearnsetData(id: ID): Learnset {
+		let learnsetData = this.learnsetCache.get(id);
+		if (learnsetData) return learnsetData;
+		if (!this.dex.data.Learnsets.hasOwnProperty(id)) {
+			return new Learnset({exists: false});
+		}
+		learnsetData = new Learnset(this.dex.data.Learnsets[id]);
+		this.learnsetCache.set(id, learnsetData);
+		return learnsetData;
+	}
+
+	all(): readonly Species[] {
+		if (this.allCache) return this.allCache;
+		const species = [];
+		for (const id in this.dex.data.Pokedex) {
+			species.push(this.getByID(id as ID));
+		}
+		this.allCache = species;
+		return this.allCache;
 	}
 }

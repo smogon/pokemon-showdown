@@ -32,7 +32,7 @@ describe('Electric Terrain', function () {
 		battle.setPlayer('p2', {team: [{species: "Thundurus", ability: 'defiant', moves: ['thunderwave']}]});
 		battle.makeChoices('move electricterrain', 'move thunderwave');
 		let basePower;
-		const move = Dex.getMove('thunderbolt');
+		const move = Dex.moves.get('thunderbolt');
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);
 		assert.equal(basePower, battle.modify(move.basePower, 1.5));
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
@@ -94,5 +94,15 @@ describe('Electric Terrain', function () {
 		battle.makeChoices('move electricterrain', 'move naturepower');
 		const resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.equal(resultMove, 'thunderbolt');
+	});
+
+	it.skip(`should block Sleep before the move would have missed`, function () {
+		battle = common.createBattle({seed: [1, 2, 3, 4]}, [[ // Seed ensures Sleep Powder would miss normally
+			{species: 'tapukoko', ability: 'wonderskin', moves: ['electricterrain']},
+		], [
+			{species: 'venusaur', moves: ['sleeppowder']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.includes('|-activate|p1a: Tapu Koko|move: Electric Terrain')));
 	});
 });

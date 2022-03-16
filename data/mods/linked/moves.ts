@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon, target) {
@@ -25,10 +25,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				];
 				// Mod-specific: Me First copies the first move in the link
 				// @ts-ignore
-				const move = this.dex.getActiveMove(action.linked ? action.linked[0] : action.move);
+				const move = this.dex.getActiveMove(action.linked?.[0] || action.move);
 				if (move.category !== 'Status' && !noMeFirst.includes(move.id)) {
 					pokemon.addVolatile('mefirst');
-					this.useMove(move, pokemon, target);
+					this.actions.useMove(move, pokemon, target);
 					return null;
 				}
 			}
@@ -82,7 +82,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				source.moves.includes(lastMove.id) || lastMove.isZ) return false;
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
-			const move = this.dex.getMove(lastMove);
+			const move = this.dex.moves.get(lastMove);
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
@@ -106,7 +106,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				source.moves.includes(lastMove.id) || lastMove.isZ) return false;
 			const mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
-			const move = this.dex.getMove(lastMove);
+			const move = this.dex.moves.get(lastMove);
 			source.moveSlots[mimicIndex] = {
 				move: move.name,
 				id: move.id,
@@ -129,7 +129,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (!lastMove || target.volatiles['dynamax']) return false;
 			const moveIndex = target.moves.indexOf(lastMove.id);
 			const noInstruct = [
-				'assist', 'beakblast', 'bide', 'celebrate', 'copycat', 'dynamaxcannon', 'focuspunch', 'iceball', 'instruct', 'kingsshield', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'outrage', 'petaldance', 'rollout', 'shelltrap', 'sketch', 'sleeptalk', 'thrash', 'transform',
+				'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'copycat', 'dynamaxcannon', 'focuspunch', 'iceball', 'instruct', 'kingsshield', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'obstruct', 'outrage', 'petaldance', 'rollout', 'shelltrap', 'sketch', 'sleeptalk', 'struggle', 'thrash', 'transform', 'uproar',
 			];
 			if (
 				noInstruct.includes(lastMove.id) || lastMove.isZ || lastMove.isMax ||
@@ -140,8 +140,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
-			// @ts-ignore
-			this.runMove(lastMove.id, target, target.lastMoveTargetLoc);
+			this.actions.runMove(lastMove.id, target, target.lastMoveTargetLoc!);
 		},
 	},
 	mirrormove: {
@@ -151,7 +150,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (!move || !move.flags['mirror'] || move.isZ || move.isMax) {
 				return false;
 			}
-			this.useMove(move.id, pokemon, target);
+			this.actions.useMove(move.id, pokemon, target);
 			return null;
 		},
 	},
@@ -159,7 +158,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	// Disabling effects
 	disable: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 5,
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
@@ -168,7 +167,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.queue.willMove(pokemon) ||
 					(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
 				) {
-					this.effectData.duration--;
+					this.effectState.duration--;
 				}
 				if (!lastMove) {
 					this.debug('pokemon hasn\'t moved yet');
@@ -185,7 +184,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 							} else {
 								this.add('-start', pokemon, 'Disable', moveSlot.move);
 							}
-							this.effectData.move = lastMove.id;
+							this.effectState.move = lastMove.id;
 							return;
 						}
 					}
@@ -198,14 +197,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onBeforeMovePriority: 7,
 			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && move.id === this.effectData.move) {
+				if (!move.isZ && move.id === this.effectState.move) {
 					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === this.effectData.move) {
+					if (moveSlot.id === this.effectState.move) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -214,7 +213,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	encore: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
@@ -223,7 +222,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				];
 				let lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
 				if (!lastMove || target.volatiles['dynamax']) return false;
-				if ((lastMove as ActiveMove).isZOrMaxPowered) lastMove = this.dex.getMove(lastMove.baseMove);
+				if ((lastMove as ActiveMove).isZOrMaxPowered) lastMove = this.dex.moves.get(lastMove.baseMove);
 				// @ts-ignore
 				const linkedMoves: [string, string] = target.getLinkedMoves(true);
 				const moveIndex = target.moves.indexOf(lastMove.id);
@@ -238,41 +237,41 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					delete target.volatiles['encore'];
 					return false;
 				}
-				this.effectData.turnsActivated = {};
-				this.effectData.move = lastMove.id;
+				this.effectState.turnsActivated = {};
+				this.effectState.move = lastMove.id;
 				this.add('-start', target, 'Encore');
 				if (linkedMoves.includes(lastMove.id)) {
-					this.effectData.move = linkedMoves;
+					this.effectState.move = linkedMoves;
 				}
 				if (!this.queue.willMove(target)) {
-					this.effectData.duration++;
+					this.effectState.duration++;
 				}
 			},
 			onOverrideAction(pokemon, target, move) {
-				if (!this.effectData.turnsActivated[this.turn]) {
+				if (!this.effectState.turnsActivated[this.turn]) {
 					// Initialize Encore effect for this turn
-					this.effectData.turnsActivated[this.turn] = 0;
+					this.effectState.turnsActivated[this.turn] = 0;
 				} else if (
-					this.effectData.turnsActivated[this.turn] >= (Array.isArray(this.effectData.move) ?
-						this.effectData.move.length : 1)) {
+					this.effectState.turnsActivated[this.turn] >= (Array.isArray(this.effectState.move) ?
+						this.effectState.move.length : 1)) {
 					// Finish Encore effect for this turn
 					return;
 				}
-				this.effectData.turnsActivated[this.turn]++;
-				if (!Array.isArray(this.effectData.move)) {
+				this.effectState.turnsActivated[this.turn]++;
+				if (!Array.isArray(this.effectState.move)) {
 					this.queue.cancelAction(pokemon);
-					if (move.id !== this.effectData.move) return this.effectData.move;
+					if (move.id !== this.effectState.move) return this.effectState.move;
 					return;
 				}
 
 				// Locked into a link
-				switch (this.effectData.turnsActivated[this.turn]) {
+				switch (this.effectState.turnsActivated[this.turn]) {
 				case 1: {
-					if (this.effectData.move[0] !== move.id) return this.effectData.move[0];
+					if (this.effectState.move[0] !== move.id) return this.effectState.move[0];
 					return;
 				}
 				case 2:
-					if (this.effectData.move[1] !== move.id) return this.effectData.move[1];
+					if (this.effectState.move[1] !== move.id) return this.effectState.move[1];
 					return;
 				}
 			},
@@ -301,18 +300,18 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				this.add('-end', target, 'Encore');
 			},
 			onDisableMove(pokemon) {
-				if (Array.isArray(this.effectData.move)) {
+				if (Array.isArray(this.effectState.move)) {
 					for (const moveSlot of pokemon.moveSlots) {
-						if (moveSlot.id !== this.effectData.move[0] && moveSlot.id !== this.effectData.move[1]) {
+						if (moveSlot.id !== this.effectState.move[0] && moveSlot.id !== this.effectState.move[1]) {
 							pokemon.disableMove(moveSlot.id);
 						}
 					}
 				}
-				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+				if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
 					return;
 				}
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id !== this.effectData.move) {
+					if (moveSlot.id !== this.effectState.move) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -321,7 +320,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	torment: {
 		inherit: true,
-		effect: {
+		condition: {
 			noCopy: true,
 			onStart(pokemon) {
 				if (pokemon.volatiles['dynamax']) {
@@ -351,7 +350,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	// PP-decreasing moves
 	grudge: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Grudge');
 			},
@@ -362,7 +361,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === lastMove.id) {
 							moveSlot.pp = 0;
-							this.add('-activate', source, 'move: Grudge', this.dex.getMove(lastMove.id).name);
+							this.add('-activate', source, 'move: Grudge', this.dex.moves.get(lastMove.id).name);
 						}
 					}
 				}
@@ -412,7 +411,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	destinybond: {
 		inherit: true,
-		effect: {
+		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
@@ -441,16 +440,16 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	iceball: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'iceball',
 			onStart() {
-				this.effectData.hitCount = 1;
+				this.effectState.hitCount = 1;
 			},
 			onRestart() {
-				this.effectData.hitCount++;
-				if (this.effectData.hitCount < 5) {
-					this.effectData.duration = 2;
+				this.effectState.hitCount++;
+				if (this.effectState.hitCount < 5) {
+					this.effectState.duration = 2;
 				}
 			},
 			onResidual(target) {
@@ -464,16 +463,16 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	rollout: {
 		inherit: true,
-		effect: {
+		condition: {
 			duration: 2,
 			onLockMove: 'rollout',
 			onStart() {
-				this.effectData.hitCount = 1;
+				this.effectState.hitCount = 1;
 			},
 			onRestart() {
-				this.effectData.hitCount++;
-				if (this.effectData.hitCount < 5) {
-					this.effectData.duration = 2;
+				this.effectState.hitCount++;
+				if (this.effectState.hitCount < 5) {
+					this.effectState.duration = 2;
 				}
 			},
 			onResidual(target) {
