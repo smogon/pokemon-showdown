@@ -210,6 +210,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * for in-battle formes.
 	 */
 	readonly changesFrom?: string;
+	readonly newmeta?: string;
 
 	/**
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.

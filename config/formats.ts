@@ -156,13 +156,13 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] NU'],
 		banlist: ['NU', 'PUBL'],
 	},
-	// {
-		// name: "[Gen 8] LC",
-		// threads: [
-			// `&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
-			// `&bullet; <a href="https://www.smogon.com/forums/threads/3661419/">LC Sample Teams</a>`,
-			// `&bullet; <a href="https://www.smogon.com/forums/threads/3657374/">LC Viability Rankings</a>`,
-		// ],
+	{
+		name: "[Gen 8] LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3661419/">LC Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3657374/">LC Viability Rankings</a>`,
+		],
 
 		mod: 'gen8',
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
