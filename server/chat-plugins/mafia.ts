@@ -250,6 +250,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	hasPlurality: ID | null;
 
 	enableNL: boolean;
+	votelock: boolean;
+	votingall: boolean;
 	forceVote: boolean;
 	closedSetup: boolean;
 	noReveal: boolean;
@@ -299,6 +301,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.hasPlurality = null;
 
 		this.enableNL = true;
+		this.votelock = false;
+		this.votingall = true;
 		this.forceVote = false;
 		this.closedSetup = false;
 		this.noReveal = true;
@@ -698,8 +702,12 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (!(target in this.playerTable) && target !== 'novote') {
 			return this.sendUser(userid, `|error|${target} is not a valid player.`);
 		}
+		if (!this.votingall) return this.sendUser(userid, `|error|Voting is not allowed.`);
 		if (!this.enableNL && target === 'novote') return this.sendUser(userid, `|error|No Vote is not allowed.`);
 		if (target === player.id && !this.selfEnabled) return this.sendUser(userid, `|error|Self voting is not allowed.`);
+		if (this.votelock) {
+			if (player.voting) return this.sendUser(userid, `|error|You cannot switch your vote because votes are locked.`);
+		}
 		const hammering = this.hammerCount - 1 <= (this.votes[target] ? this.votes[target].count : 0);
 		if (target === player.id && !hammering && this.selfEnabled === 'hammer') {
 			return this.sendUser(userid, `|error|You may only vote yourself when placing the hammer vote.`);
@@ -768,6 +776,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
 		if (!player?.voting) return this.sendUser(userid, `|error|You are not voting for anyone.`);
+		if (this.votelock && player?.voting) {
+			return this.sendUser(userid, `|error|You cannot unvote because votes are locked.`);
+		}
 		if (player.lastVote + 2000 >= Date.now() && !force) {
 			return this.sendUser(
 				userid,
@@ -826,7 +837,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			}
 			const isPlayer = (this.playerTable[userid]);
 			const isSpirit = (this.dead[userid] && this.dead[userid].restless);
-			if (isPlayer || isSpirit) {
+			if (this.votingall && !(this.votelock && (isPlayer?.voting || (isSpirit && this.dead[userid].voting))) &&
+			(isPlayer || isSpirit)) {
 				if (isPlayer && this.playerTable[userid].voting === key || isSpirit && this.dead[userid].voting === key) {
 					buf += `<button class="button" name="send" value="/msgroom ${this.roomid},/mafia unvote">Unvote ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Vote'}</button>`;
 				} else if ((this.selfEnabled && !isSpirit) || userid !== key) {
@@ -1581,6 +1593,26 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.enableNL = setting;
 		this.sendDeclare(`No Vote has been ${setting ? 'enabled' : 'disabled'}.`);
 		if (!setting) this.clearVotes('novote');
+		this.updatePlayers();
+	}
+	setVotelock(user: User, setting: boolean) {
+		if (!this.started) return user.sendTo(this.room, `The game has not started yet.`);
+		if ((this.votelock) === setting) {
+			return user.sendTo(this.room, `|error|Votes are already ${setting ? 'set to lock' : 'set to not lock'}.`);
+		}
+		this.votelock = setting;
+		this.clearVotes();
+		this.sendDeclare(`Votes are cleared and ${setting ? 'set to lock' : 'set to not lock'}.`);
+		this.updatePlayers();
+	}
+	setVoting(user: User, setting: boolean) {
+		if (!this.started) return user.sendTo(this.room, `The game has not started yet.`);
+		if (this.votingall === setting) {
+			return user.sendTo(this.room, `|error|Voting is already ${setting ? 'allowed' : 'disallowed'}.`);
+		}
+		this.votingall = setting;
+		this.clearVotes();
+		this.sendDeclare(`Voting is now ${setting ? 'allowed' : 'disallowed'}.`);
 		this.updatePlayers();
 	}
 	clearVotes(target = '') {
@@ -2807,6 +2839,38 @@ export const commands: Chat.ChatCommands = {
 			`/mafia resethammer - sets the hammer to the default, resetting votes`,
 		],
 
+		votelock: 'vl',
+		vl(target, room, user, connection, cmd) {
+			room = this.requireRoom();
+			const game = this.requireGame(Mafia);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			const action = toID(target);
+			if (!['on', 'off'].includes(action)) return this.parse('/help mafia votelock');
+			if (action === 'on') {
+				game.setVotelock(user, true);
+			} else {
+				game.setVotelock(user, false);
+			}
+			game.logAction(user, `locked votes`);
+		},
+		votelockhelp: [
+			`/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # &`,
+		],
+		voting: 'votesall',
+		votesall(target, room, user, connection, cmd) {
+			room = this.requireRoom();
+			const game = this.requireGame(Mafia);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			const action = toID(target);
+			if (!['on', 'off'].includes(action)) return this.parse('/help mafia voting');
+			if (action === 'on') {
+				game.setVoting(user, true);
+			} else {
+				game.setVoting(user, false);
+			}
+			game.logAction(user, `disabled voting`);
+		},
+
 		enablenv: 'enablenl',
 		disablenv: 'enablenl',
 		disablenl: 'enablenl',
@@ -3795,6 +3859,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # &`,
 			`/mafia selfvote [on|hammer|off] - Allows players to self vote either at hammer or anytime. Requires host % @ # &`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from voting. Requires host % @ # &`,
+			`/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # &`,
+			`/mafia voting [on|off] - Allows or disallows voting. Requires host % @ # &`,
 			`/mafia forcevote [yes/no] - Forces players' votes onto themselves, and prevents unvoting. Requires host % @ # &`,
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # &`,
 			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # &`,
