@@ -590,7 +590,6 @@ export const commands: Chat.ChatCommands = {
 			const punishments: {punishment: PunishmentSettings, desc: string[], index: number}[] = [];
 			for (const [i, p] of settings.punishments.entries()) {
 				const matches = [];
-				let userBased = false;
 				for (const k in response) {
 					const descriptors = [];
 					if (p.type) {
@@ -607,16 +606,8 @@ export const commands: Chat.ChatCommands = {
 						descriptors.push('secondary');
 					}
 					if (!descriptors.length) {
-						userBased = true;
-					} else {
 						matches.push(`${k} (${descriptors.map(f => `${f} match`).join(', ')})`);
-						userBased = false;
 					}
-				}
-				if (userBased && !matches.length) {
-					// userBased should never be true if matches.length but
-					// doing this just to be safe
-					matches.push('user-based (modlog, history) matches');
 				}
 				if (matches.length) {
 					punishments.push({
