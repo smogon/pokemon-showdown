@@ -35,8 +35,7 @@ interface GameMode {
 function toSeconds(time: string) {
 	// hhmmss => ss
 	const parts = time.split(':').reverse();
-	const seconds = parts.map((value: string, index: number) => parseInt(value) * Math.pow(60, index));
-	return seconds.reduce((a, b) => a + b);
+	return parts.map((value, index) => parseInt(value) * Math.pow(60, index)).reduce((a, b) => a + b);
 }
 
 class Leaderboard {
@@ -238,21 +237,20 @@ const TWISTS: {[k: string]: Twist} = {
 			const seconds = toSeconds(time);
 			if (!player.incorrect) return {name: player.name, total: seconds, blitz, time, original_time: time};
 
-			const deduction = 30 * player.incorrect.length;
-			const total = seconds + deduction;
-			const final_time = Chat.toDurationString(total * 1000, {hhmmss: true});
+			const total = seconds + (30 * player.incorrect.length);
+			const finalTime = Chat.toDurationString(total * 1000, {hhmmss: true});
 			if (total > 60) blitz = false;
 
-			return {name: player.name, total, blitz, time: final_time, original_time: time};
+			return {name: player.name, total, blitz, time: finalTime, original_time: time};
 		},
 
 		onConfirmCompletion(player, time, blitz, place, result) {
 			blitz = result.blitz;
 			time = result.time;
-			const deduction_message = player.incorrect?.length ?
-				`${player.incorrect.length} incorrect ${Chat.plural(player.incorrect.length, "guesses", "guess")}` :
+			const deductionMessage = player.incorrect?.length ?
+				Chat.count(player.incorrect, 'incorrect guesses', 'incorrect guess') :
 				"Perfect!";
-			return `<em>${Utils.escapeHTML(player.name)}</em> has finished the hunt! (Final Time: ${time} - ${deduction_message}${(blitz ? " - BLITZ" : "")})`;
+			return `<em>${Utils.escapeHTML(player.name)}</em> has finished the hunt! (Final Time: ${time} - ${deductionMessage}${(blitz ? " - BLITZ" : "")})`;
 		},
 
 		onEnd() {
@@ -580,7 +578,8 @@ const MODES: {[k: string]: GameMode | string} = {
 		name: 'Team Scavs',
 		id: 'teamscavs',
 		/* {
-			[team_name: string]: {
+			[team
+			name: string]: {
 			  name: string[],
 			  players: UserID[],
 			  answers: string[],
