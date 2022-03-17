@@ -1,11 +1,48 @@
-Pokémon Showdown
+New Meta Inc.'s Pokémon Showdown
 ========================================================================
 
-Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex repository][3]
+Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Sprite repository][3]
 
-  [1]: http://pokemonshowdown.com/
-  [2]: https://github.com/smogon/pokemon-showdown-client
-  [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
+  [1]: http://51.210.182.114/?~~51.210.182.114:8000
+  [2]: https://github.com/new-meta-incorporated/pokemon-showdown-client
+  [3]: https://github.com/New-Meta-Incorporated/sprites
+
+
+
+New Meta Inc.
+------------------------------------------------------------------------
+
+New Meta Inc. is a project based on [Pokémon Showdown][12] based off of [Showdown's Repository][13]. The project aims to shake up competitive Pokémon with original
+designs, moves, abilities, and creatures as well as tweaks to the existing mechanics.
+
+[12]: http://pokemonshowdown.com/
+[13]: https://github.com/smogon/pokemon-showdown-client
+
+
+
+**[New Meta Discord Server](https://discord.gg/kyaUYzZh9f)**
+
+
+
+New Meta Inc. Contributers
+------------------------------------------------------------------------
+- Matteo [matteoruscitti] - Server Owner & Operator
+- Bina [Pellevoisin2] - Contributor
+- Bardi [Bardi] - Contributor
+- Eldritch [EldritchEcho] - Contributor
+- kateisprettydamngreat [kateisprettydamngreat] - Contributor
+- dani [dejomasters] - Contributor
+
+
+Smogon's Pokemon Showdown
+========================================================================
+*The following is lifted from the ReadMe on Smogon's repository.*
+
+Navigation: [Website][15] | **Server repository** | [Client repository][16] | [Sprite repository][17]
+
+  [15]: http://pokemonshowdown.com
+  [16]: https://github.com/smogon/pokemon-showdown-client
+  [17]: https://github.com/smogon/sprites
 
 [![Build Status](https://github.com/smogon/pokemon-showdown/workflows/Node.js%20CI/badge.svg)](https://github.com/smogon/pokemon-showdown/actions?query=workflow%3A%22Node.js+CI%22)
 [![Dependency Status](https://david-dm.org/smogon/pokemon-showdown.svg)](https://david-dm.org/smogon/pokemon-showdown)
