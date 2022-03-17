@@ -605,7 +605,7 @@ export const commands: Chat.ChatCommands = {
 						if (!secondaries.every(([sK, sV]) => response![sK] >= sV)) continue;
 						descriptors.push('secondary');
 					}
-					if (!descriptors.length) {
+					if (descriptors.length) { // ignore modlog / flag -only based actions
 						matches.push(`${k} (${descriptors.map(f => `${f} match`).join(', ')})`);
 					}
 				}
