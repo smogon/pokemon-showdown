@@ -2602,7 +2602,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Kangaskhan-Mega"],
 		formeOrder: ["Kangaskhan", "Kangaskhan-Mega"],
 	},
-	/* REMOVED FOR TESTING
+
 	kangaskhanvengeful: {
 		num: 115,
 		name: "Kangaskhan-Vengeful",
@@ -2617,7 +2617,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Monster"],
 		newmeta: "true",
-	},*/
+	},
 	kangaskhanmega: {
 		num: 115,
 		name: "Kangaskhan-Mega",
@@ -3796,7 +3796,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Ampharos-Mega"],
 		formeOrder: ["Ampharos", "Ampharos-Mega"],
 	},
-	/* REMOVED FOR TESTING
+
 	mareepfioren: {
 		num: 179,
 		name: "Mareep-Fioren",
@@ -3844,7 +3844,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 30,
 		eggGroups: ["Monster", "Field"],
 		newmeta: "true",
-	},*/
+	},
 	ampharosmega: {
 		num: 181,
 		name: "Ampharos-Mega",
