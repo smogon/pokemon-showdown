@@ -19276,7 +19276,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		// requiredItem: "Shadow Orb",
 		// changesFrom: "Goranium",
 	// },
-	
+	/*
 	pupavo: {
 		num: 1162,
 		name: "Pupavo",
@@ -19387,7 +19387,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Amorphous"],
 //		newmeta: "true",
-	},
+	},*/
 	solanca:{
 		num: 1171,
 		name: "Solanca",
