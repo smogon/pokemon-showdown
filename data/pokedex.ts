@@ -1092,8 +1092,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	wigglytuffjohto:{
 		num: 40,
-		name: "Wigglytuff",
-		baseSpecies: "Jigglypuff-Johto",
+		name: "Wigglytuff-Johto",
+		baseSpecies: "Wigglytuff",
 		forme: "Johto",
 		types: ["Normal", "Steel"],
 		genderRatio: {M: 0.25, F: 0.75},
