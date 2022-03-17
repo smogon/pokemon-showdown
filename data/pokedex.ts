@@ -4088,7 +4088,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Honchkrow"],
 		eggGroups: ["Flying"],
 	},
-	/* REMOVED FOR TESTING
+
 	murkrowdelorean: {
 		num: 198,
 		name: "Murkrow-Delorean",
@@ -4103,7 +4103,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Honchkrow-Delorean"],
 		eggGroups: ["Flying"],
 		newmeta: "true",
-	},*/
+	},
 	slowking: {
 		num: 199,
 		name: "Slowking",
@@ -4237,7 +4237,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Gliscor"],
 		eggGroups: ["Bug"],
 	},
-	/* REMOVED FOR TESTING
+
 	gligarfioren: {
 		num: 207,
 		name: "Gligar-Fioren",
@@ -4252,7 +4252,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Gliscor-Fioren"],
 		eggGroups: ["Bug"],
 		newmeta: "true",
-	},*/
+	},
 	steelix: {
 		num: 208,
 		name: "Steelix",
@@ -4433,7 +4433,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Sneasler"],
 		eggGroups: ["Field"],
 	},
-	/* REMOVED FOR TESTING
+
 	sneaselalmian: {
 		num: 215,
 		name: "Sneasel-Almian",
@@ -4448,7 +4448,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Weavile-Almian"],
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	teddiursa: {
 		num: 216,
 		name: "Teddiursa",
@@ -5607,7 +5607,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 20,
 		eggGroups: ["Mineral"],
 	},
-	/* REMOVED FOR TESTING
+
 	shedinjagalar: {
 		num: 292,
 		name: "Shedinja-Galar",
@@ -5625,7 +5625,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 20,
 		eggGroups: ["Mineral"],
 		newmeta: "true",
-	},*/
+	},
 	whismur: {
 		num: 293,
 		name: "Whismur",
