@@ -28,9 +28,9 @@ New Meta Inc. Contributers
 ------------------------------------------------------------------------
 - Matteo [matteoruscitti] - Server Owner & Operator
 - Bina [Pellevoisin2] - Contributor
-- Bardi [Bardi] - Contributor
-- Eldritch [EldritchEcho] - Contributor
-- kateisprettydamngreat [kateisprettydamngreat] - Contributor
+- Bardi - Contributor
+- EldritchEcho - Contributor
+- kateisprettydamngreat - Contributor
 - dani [dejomasters] - Contributor
 
 
