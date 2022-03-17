@@ -5855,7 +5855,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Monster"],
 		requiredItem: "Aggronite",
 	},
-	/* REMOVED FOR TESTING
+
 	aronquantum: {
 		num: 304,
 		name: "Aron-Quantum",
@@ -5903,7 +5903,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 42,
 		eggGroups: ["Monster"],
 		newmeta: "true",
-	},*/
+	},
 	meditite: {
 		num: 307,
 		name: "Meditite",
@@ -5931,7 +5931,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Medicham-Mega"],
 		formeOrder: ["Medicham", "Medicham-Mega"],
 	},
-	/* REMOVED FOR TESTING
+
 	medititekalos: {
 		num: 307,
 		name: "Meditite-Kalos",
@@ -5962,7 +5962,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 37,
 		eggGroups: ["Human-Like"],
 		newmeta: "true",
-	},*/
+	},
 	medichammega: {
 		num: 308,
 		name: "Medicham-Mega",
@@ -6756,7 +6756,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
 	},
-	/* REMOVED FOR TESTING
+
 	tropiusorren: {
 		num: 357,
 		name: "Tropius-Orren",
@@ -6770,7 +6770,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
 		newmeta: "true",
-	},*/
+	},
 	chimecho: {
 		num: 358,
 		name: "Chimecho",
@@ -8031,7 +8031,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Dusk Stone",
 		eggGroups: ["Flying"],
 	},
-	/* REMOVED FOR TESTING
+
 	honchkrowdelorean: {
 		num: 430,
 		name: "Honchkrow-Delorean",
@@ -8048,7 +8048,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Dusk Stone",
 		eggGroups: ["Flying"],
 		newmeta: "true",
-	},*/
+	},
 	glameow: {
 		num: 431,
 		name: "Glameow",
