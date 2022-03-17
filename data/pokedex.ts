@@ -18390,7 +18390,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
-	/* REMOVED FOR TESTING
+
 	crawcomb: {
 		num: 10000,
 		name: "Crawcomb",
@@ -18503,7 +18503,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
 		newmeta: "true",
-	},*/
+	},
 	/* DELETED
 	flamake: {
 		num: 10008,
@@ -18546,7 +18546,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
-	/* REMOVED FOR TESTING
+
 	vekurrent: {
 		num: 10011,
 		name: "Vekurrent",
@@ -18716,7 +18716,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	/* DELETED
 	smackafaun: {
 		num: 10023,
@@ -18730,7 +18730,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
-	/* REMOVED FOR TESTING
+
 	cervumis: {
 		num: 10024,
 		name: "Cervumis",
@@ -18742,7 +18742,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Pink",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	/* DELETED
 	kamisparce: {
 		num: 10025,
@@ -18760,7 +18760,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 		canHatch: true,
 	},*/
-	/* REMOVED FOR TESTING
+
 	femori: {
 		num: 10026,
 		name: "Femori",
@@ -18929,7 +18929,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	/* DELETED
 	fortuxin: {
 		num: 10039,
@@ -18943,7 +18943,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
-	/* REMOVED FOR TESTING
+
 	sabrenom: {
 		num: 10040,
 		name: "Sabrenom",
@@ -18955,7 +18955,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	/* DELETED
 	mossedge: {
 		num: 10041,
@@ -18981,7 +18981,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
-	/* REMOVED FOR TESTING
+
 	helmelime: {
 		num: 10043,
 		name: "Helmelime",
@@ -19023,7 +19023,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 30,
 		eggGroups: ["Monster", "Field"],
 		newmeta: "true",
-	},*/
+	},
 	/* DELETED
 	leamyst: {
 		num: 10046,
@@ -19037,7 +19037,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
-	/* REMOVED FOR TESTING
+
 	shamblock: {
 		num: 10047,
 		name: "Shamblock",
@@ -19049,7 +19049,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	/* DELETED
 	pyratrata: {
 		num: 10048,
@@ -19063,7 +19063,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
-	/* REMOVED FOR TESTING
+
 	sapogro: {
 		num: 10049,
 		name: "Sapogro",
@@ -19203,7 +19203,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	/* DELETED
 	wizzard: {
 		num: 10059,
@@ -19228,57 +19228,57 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
-	// goranium: {
-		// num: 10061,
-		// name: "Goranium",
-		// baseForme: "Basemode",
-		// types: ["Psychic", "Dragon"],
-		// gender: "N",
-		// baseStats: {hp: 110, atk: 100, def: 120, spa: 100, spd: 120, spe: 130},
-		// abilities: {0: "Pressure", H: "Magic Guard"},
-		// heightm: 4.5,
-		// weightkg: 750,
-		// color: "Grey",
-		// eggGroups: ["Undiscovered"],
-		// otherFormes: ["Goranium-Lightmode", "Goranium-Darkmode"],
-		// formeOrder: ["Goranium", "Goranium-Lightmode", "Goranium-Darkmode"],
-	// },
-	// goraniumlightmode: {
-		// num: 10061,
-		// name: "Goranium-Lightmode",
-		// baseSpecies: "Goranium",
-		// forme: "Lightmode",
-		// types: ["Light", "Dragon"],
-		// gender: "N",
-		// baseStats: {hp: 95, atk: 100, def: 60, spa: 165, spd: 125, spe: 135},
-		// abilities: {0: "Pressure"},
-		// heightm: 6.9,
-		// weightkg: 650,
-		// color: "White",
-		// eggGroups: ["Undiscovered"],
-		// requiredItem: "Glowing Orb",
-		// changesFrom: "Goranium",
-	// },
-	// goraniumdarkmode: {
-		// num: 10061,
-		// name: "Goranium-Darkmode",
-		// baseSpecies: "Goranium",
-		// forme: "Darkmode",
-		// types: ["Dark", "Dragon"],
-		// gender: "N",
-		// baseStats: {hp: 95, atk: 135, def: 165, spa: 100, spd: 125, spe: 60},
-		// abilities: {0: "Pressure"},
-		// heightm: 6.9,
-		// weightkg: 650,
-		// color: "Black",
-		// eggGroups: ["Undiscovered"],
-		// requiredItem: "Shadow Orb",
-		// changesFrom: "Goranium",
-	// },
+	},
+		goranium: {
+			num: 10061,
+			name: "Goranium",
+			baseForme: "Basemode",
+			types: ["Psychic", "Dragon"],
+			gender: "N",
+			baseStats: {hp: 110, atk: 100, def: 120, spa: 100, spd: 120, spe: 130},
+			abilities: {0: "Pressure", H: "Magic Guard"},
+			heightm: 4.5,
+			weightkg: 750,
+			color: "Grey",
+			eggGroups: ["Undiscovered"],
+			otherFormes: ["Goranium-Lightmode", "Goranium-Darkmode"],
+			formeOrder: ["Goranium", "Goranium-Lightmode", "Goranium-Darkmode"],
+		},
+		goraniumlightmode: {
+			num: 10061,
+			name: "Goranium-Lightmode",
+			baseSpecies: "Goranium",
+			forme: "Lightmode",
+			types: ["Light", "Dragon"],
+			gender: "N",
+			baseStats: {hp: 95, atk: 100, def: 60, spa: 165, spd: 125, spe: 135},
+			abilities: {0: "Pressure"},
+			heightm: 6.9,
+			weightkg: 650,
+			color: "White",
+			eggGroups: ["Undiscovered"],
+			requiredItem: "Glowing Orb",
+			changesFrom: "Goranium",
+		},
+		goraniumdarkmode: {
+			num: 10061,
+			name: "Goranium-Darkmode",
+			baseSpecies: "Goranium",
+			forme: "Darkmode",
+			types: ["Dark", "Dragon"],
+			gender: "N",
+			baseStats: {hp: 95, atk: 135, def: 165, spa: 100, spd: 125, spe: 60},
+			abilities: {0: "Pressure"},
+			heightm: 6.9,
+			weightkg: 650,
+			color: "Black",
+			eggGroups: ["Undiscovered"],
+			requiredItem: "Shadow Orb",
+			changesFrom: "Goranium",
+		},*/
 	
 	pupavo: {
-		num: 1162,
+		num: 10062,
 		name: "Pupavo",
 		types: ["Psychic", "Flying"],
 		baseStats: {hp: 50, atk: 90, def: 40, spa: 110, spd: 110, spe: 110},
@@ -19287,10 +19287,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 380,
 		color: "Blue",
 		eggGroups: ["Field"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	bidree: {
-		num: 1163,
+		num: 10063,
 		name: "Bidree",
 		types: ["Fairy", "Flying"],
 		baseStats: {hp: 70, atk: 50, def: 50, spa: 90, spd: 80, spe: 80},
@@ -19300,10 +19300,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Field"],
 		evos: ["Soarcerer"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	djiarana: {
-		num: 1164,
+		num: 10064,
 		name: "Djiarana",
 		types: ["Water", "Fighting"],
 		baseStats: {hp: 95, atk: 120, def: 60, spa: 85, spd: 135, spe: 30},
@@ -19312,10 +19312,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 106.6,
 		color: "Blue",
 		eggGroups: ["Human-Like"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	mirrorus: {
-		num: 1165,
+		num: 10065,
 		name: "Mirrorus",
 		types: ["Poison", "Steel"],
 		baseStats: {hp: 90, atk: 70, def: 115, spa: 70, spd: 115, spe: 40},
@@ -19324,10 +19324,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 225,
 		color: "Blue",
 		eggGroups: ["Amorphous"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	beemeow: {
-		num: 1166,
+		num: 10066,
 		name: "Beemeow",
 		types: ["Bug", "Normal"],
 		baseStats: {hp: 60, atk: 75, def: 55, spa: 20, spd: 50, spe: 80},
@@ -19337,10 +19337,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Field"],
 		evos: ["Honeline"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	honeline: {
-		num: 1167,
+		num: 10067,
 		name: "Honeline",
 		types: ["Bug", "Normal"],
 		baseStats: {hp: 85, atk: 115, def: 80, spa: 45, spd: 75, spe:100},
@@ -19350,10 +19350,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Field"],
 		prevo: "Beemeow",
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	rampharos:{
-		num: 1168,
+		num: 10068,
 		name: "Rampharos",
 		types: ["Steel"],
 		baseStats: {hp: 110, atk: 115, def: 75, spa: 90, spd: 80, spe: 40},
@@ -19362,10 +19362,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 43.8,
 		color: "Gray",
 		eggGroups: ["Field"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	doubragun:{
-		num: 1169,
+		num: 10069,
 		name: "Doubragon",
 		types: ["Dragon"],
 		baseStats: {hp: 132, atk: 128, def: 72, spa: 98, spd: 72, spe: 48},
@@ -19374,10 +19374,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 152.4,
 		color: "Red",
 		eggGroups: ["Dragon"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	jestrick:{
-		num: 1170,
+		num: 10070,
 		name: "Jestrick",
 		types: ["Fairy", "Ghost"],
 		baseStats: {hp: 110, atk: 80, def: 100, spa: 95, spd: 70, spe: 90},
@@ -19386,10 +19386,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.4,
 		color: "Purple",
 		eggGroups: ["Amorphous"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 	solanca:{
-		num: 1171,
+		num: 10071,
 		name: "Solanca",
 		types: ["Fairy", "Ghost"],
 		baseStats: {hp: 85, atk: 55, def: 60, spa: 75, spd: 110, spe:100},
@@ -19398,6 +19398,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 3.9,
 		color: "Yellow",
 		eggGroups: ["Field"],
-//		newmeta: "true",
+		newmeta: "true",
 	},
 };
