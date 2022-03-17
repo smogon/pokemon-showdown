@@ -436,7 +436,13 @@ export class DexSpecies {
 		}
 		if (id && this.dex.data.Pokedex.hasOwnProperty(id)) {
 			const pokedexData = this.dex.data.Pokedex[id];
-			const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
+			try {
+				const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
+			} catch (err) {
+				console.log(pokedexData.baseSpecies);
+				const baseSpeciesTags = '';
+			}
+			
 			species = new Species({
 				tags: baseSpeciesTags,
 				...pokedexData,
