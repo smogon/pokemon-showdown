@@ -737,6 +737,11 @@ export const commands: Chat.ChatCommands = {
 			const [count, userid] = Utils.splitFirst(target, ',').map(toID);
 			this.parse(`/join view-abusemonitor-logs-${count || '200'}${userid ? `-${userid}` : ""}`);
 		},
+		ul: 'userlogs',
+		userlogs(target) {
+			this.checkCan('lock');
+			return this.parse(`/join view-abusemonitor-userlogs-${toID(target)}`);
+		},
 		stats(target) {
 			checkAccess(this);
 			return this.parse(`/join view-abusemonitor-stats${target ? `-${target}` : ''}`);
@@ -1405,6 +1410,32 @@ export const pages: Chat.PageTable = {
 			buf += `<hr /><strong>Mark resolved:</strong><br />`;
 			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid},success">As accurate flag</button> | `;
 			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid},failure">As inaccurate flag</button>`;
+			return buf;
+		},
+		async userlogs(query, user) {
+			// separate from logs bc logs presents all sorts of data. this only needs time/room/user/message
+			// as so to not overwhelm staff
+			this.checkCan('lock');
+			let buf = `<div class="pad"><h2>Artemis user logs</h2><hr />`;
+			const userid = toID(query.shift());
+			if (!userid || userid.length > 18) {
+				buf += `<p class="message-error">Invalid username.</p>`;
+				return buf;
+			}
+			this.title = `[Artemis Logs] ${userid}`;
+			// hardcoding this limit bc no single user should ever really break it
+			const logs = await Chat.database.all(`SELECT * FROM perspective_logs WHERE userid = ? LIMIT 100`, [userid]);
+			if (!logs.length) {
+				buf += `<p class="message-error">No logs found.</p>`;
+				return buf;
+			}
+			buf += `<div class="ladder pad"><table><tr><th>Date</th><th>Room</th><th>User</th><th>Message</th></tr>`;
+			Utils.sortBy(logs, log => -log.time);
+			for (const log of logs) {
+				buf += `<tr><td>${Chat.toTimestamp(new Date(log.time), {human: true})}</td>`;
+				buf += `<td><a href="/${log.roomid}">${log.roomid}</a></td>`;
+				buf += Utils.html`<td>${log.userid}</td><td>${log.message}</td></tr>`;
+			}
 			return buf;
 		},
 		async logs(query, user) {
