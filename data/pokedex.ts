@@ -2602,6 +2602,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Kangaskhan-Mega"],
 		formeOrder: ["Kangaskhan", "Kangaskhan-Mega"],
 	},
+	/* REMOVED FOR TESTING
 	kangaskhanvengeful: {
 		num: 115,
 		name: "Kangaskhan-Vengeful",
@@ -2616,7 +2617,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Monster"],
 		newmeta: "true",
-	},
+	},*/
 	kangaskhanmega: {
 		num: 115,
 		name: "Kangaskhan-Mega",
@@ -3795,6 +3796,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Ampharos-Mega"],
 		formeOrder: ["Ampharos", "Ampharos-Mega"],
 	},
+	/* REMOVED FOR TESTING
 	mareepfioren: {
 		num: 179,
 		name: "Mareep-Fioren",
@@ -3842,7 +3844,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 30,
 		eggGroups: ["Monster", "Field"],
 		newmeta: "true",
-	},
+	},*/
 	ampharosmega: {
 		num: 181,
 		name: "Ampharos-Mega",
@@ -4086,6 +4088,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Honchkrow"],
 		eggGroups: ["Flying"],
 	},
+	/* REMOVED FOR TESTING
 	murkrowdelorean: {
 		num: 198,
 		name: "Murkrow-Delorean",
@@ -4100,7 +4103,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Honchkrow-Delorean"],
 		eggGroups: ["Flying"],
 		newmeta: "true",
-	},
+	},*/
 	slowking: {
 		num: 199,
 		name: "Slowking",
@@ -4234,6 +4237,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Gliscor"],
 		eggGroups: ["Bug"],
 	},
+	/* REMOVED FOR TESTING
 	gligarfioren: {
 		num: 207,
 		name: "Gligar-Fioren",
@@ -4248,7 +4252,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Gliscor-Fioren"],
 		eggGroups: ["Bug"],
 		newmeta: "true",
-	},
+	},*/
 	steelix: {
 		num: 208,
 		name: "Steelix",
@@ -4429,6 +4433,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Sneasler"],
 		eggGroups: ["Field"],
 	},
+	/* REMOVED FOR TESTING
 	sneaselalmian: {
 		num: 215,
 		name: "Sneasel-Almian",
@@ -4443,7 +4448,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Weavile-Almian"],
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	teddiursa: {
 		num: 216,
 		name: "Teddiursa",
@@ -5602,6 +5607,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 20,
 		eggGroups: ["Mineral"],
 	},
+	/* REMOVED FOR TESTING
 	shedinjagalar: {
 		num: 292,
 		name: "Shedinja-Galar",
@@ -5619,7 +5625,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 20,
 		eggGroups: ["Mineral"],
 		newmeta: "true",
-	},
+	},*/
 	whismur: {
 		num: 293,
 		name: "Whismur",
@@ -5849,6 +5855,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Monster"],
 		requiredItem: "Aggronite",
 	},
+	/* REMOVED FOR TESTING
 	aronquantum: {
 		num: 304,
 		name: "Aron-Quantum",
@@ -5896,7 +5903,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 42,
 		eggGroups: ["Monster"],
 		newmeta: "true",
-	},
+	},*/
 	meditite: {
 		num: 307,
 		name: "Meditite",
@@ -5924,6 +5931,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Medicham-Mega"],
 		formeOrder: ["Medicham", "Medicham-Mega"],
 	},
+	/* REMOVED FOR TESTING
 	medititekalos: {
 		num: 307,
 		name: "Meditite-Kalos",
@@ -5954,7 +5962,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 37,
 		eggGroups: ["Human-Like"],
 		newmeta: "true",
-	},
+	},*/
 	medichammega: {
 		num: 308,
 		name: "Medicham-Mega",
@@ -6748,6 +6756,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
 	},
+	/* REMOVED FOR TESTING
 	tropiusorren: {
 		num: 357,
 		name: "Tropius-Orren",
@@ -6761,7 +6770,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
 		newmeta: "true",
-	},
+	},*/
 	chimecho: {
 		num: 358,
 		name: "Chimecho",
@@ -8022,6 +8031,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Dusk Stone",
 		eggGroups: ["Flying"],
 	},
+	/* REMOVED FOR TESTING
 	honchkrowdelorean: {
 		num: 430,
 		name: "Honchkrow-Delorean",
@@ -8038,7 +8048,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Dusk Stone",
 		eggGroups: ["Flying"],
 		newmeta: "true",
-	},
+	},*/
 	glameow: {
 		num: 431,
 		name: "Glameow",
@@ -8360,6 +8370,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 34,
 		eggGroups: ["Field"],
 	},
+	/* REMOVED FOR TESTING
 	hippopotasorren: {
 		num: 449,
 		name: "Hippopotas-Orren",
@@ -8390,7 +8401,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 34,
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	skorupi: {
 		num: 451,
 		name: "Skorupi",
@@ -8545,6 +8556,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Razor Claw",
 		eggGroups: ["Field"],
 	},
+	/* REMOVED FOR TESTING
 	weavilealmian: {
 		num: 461,
 		name: "Weavile-Almian",
@@ -8561,7 +8573,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Razor Claw",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	magnezone: {
 		num: 462,
 		name: "Magnezone",
@@ -8723,6 +8735,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoCondition: "at night",
 		eggGroups: ["Bug"],
 	},
+	/* REMOVED FOR TESTING
 	gliscorfioren: {
 		num: 472,
 		name: "Gliscor-Fioren",
@@ -8740,7 +8753,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoCondition: "at night",
 		eggGroups: ["Bug"],
 		newmeta: "true",
-	},
+	},*/
 	mamoswine: {
 		num: 473,
 		name: "Mamoswine",
@@ -11107,6 +11120,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Klang"],
 		eggGroups: ["Mineral"],
 	},
+	/* REMOVED FOR TESTING
 	klinklympeian: {
 		num: 599,
 		name: "Klink-Lympeian",
@@ -11122,7 +11136,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Klang-Lympeian"],
 		eggGroups: ["Mineral"],
 		newmeta: "true",
-	},
+	},*/
 	klang: {
 		num: 600,
 		name: "Klang",
@@ -11138,6 +11152,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Klinklang"],
 		eggGroups: ["Mineral"],
 	},
+	/* REMOVED FOR TESTING
 	klanglympeian: {
 		num: 600,
 		name: "Klang-Lympeian",
@@ -11155,7 +11170,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Klinklang-Lympeian"],
 		eggGroups: ["Mineral"],
 		newmeta: "true",
-	},
+	},*/
 	klinklang: {
 		num: 601,
 		name: "Klinklang",
@@ -11170,6 +11185,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 49,
 		eggGroups: ["Mineral"],
 	},
+	/* REMOVED FOR TESTING
 	klinklanglympeian: {
 		num: 601,
 		name: "Klinklang-Lympeian",
@@ -11186,7 +11202,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 49,
 		eggGroups: ["Mineral"],
 		newmeta: "true",
-	},
+	},*/
 	tynamo: {
 		num: 602,
 		name: "Tynamo",
@@ -11331,6 +11347,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 48,
 		eggGroups: ["Monster", "Dragon"],
 	},
+	/* REMOVED FOR TESTING
 	haxoruskanto: {
 		num: 612,
 		name: "Haxorus-Kanto",
@@ -11345,7 +11362,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 48,
 		eggGroups: ["Monster", "Dragon"],
 		newmeta: "true",
-	},
+	},*/
 	cubchoo: {
 		num: 613,
 		name: "Cubchoo",
@@ -11535,6 +11552,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 52,
 		eggGroups: ["Human-Like"],
 	},
+	/* REMOVED FOR TESTING
 	bisharpkalos: {
 		num: 625,
 		name: "Bisharp-Kalos",
@@ -11564,7 +11582,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 52,
 		eggGroups: ["Human-Like"],
 		newmeta: "true",
-	},
+	},*/
 	bouffalant: {
 		num: 626,
 		name: "Bouffalant",
