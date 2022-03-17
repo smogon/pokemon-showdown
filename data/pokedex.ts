@@ -8370,7 +8370,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 34,
 		eggGroups: ["Field"],
 	},
-	/* REMOVED FOR TESTING
+
 	hippopotasorren: {
 		num: 449,
 		name: "Hippopotas-Orren",
@@ -8401,7 +8401,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 34,
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	skorupi: {
 		num: 451,
 		name: "Skorupi",
@@ -8556,7 +8556,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Razor Claw",
 		eggGroups: ["Field"],
 	},
-	/* REMOVED FOR TESTING
+
 	weavilealmian: {
 		num: 461,
 		name: "Weavile-Almian",
@@ -8573,7 +8573,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Razor Claw",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},*/
+	},
 	magnezone: {
 		num: 462,
 		name: "Magnezone",
@@ -8735,7 +8735,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoCondition: "at night",
 		eggGroups: ["Bug"],
 	},
-	/* REMOVED FOR TESTING
+
 	gliscorfioren: {
 		num: 472,
 		name: "Gliscor-Fioren",
@@ -8753,7 +8753,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoCondition: "at night",
 		eggGroups: ["Bug"],
 		newmeta: "true",
-	},*/
+	},
 	mamoswine: {
 		num: 473,
 		name: "Mamoswine",
@@ -11120,7 +11120,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Klang"],
 		eggGroups: ["Mineral"],
 	},
-	/* REMOVED FOR TESTING
+
 	klinklympeian: {
 		num: 599,
 		name: "Klink-Lympeian",
@@ -11136,7 +11136,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Klang-Lympeian"],
 		eggGroups: ["Mineral"],
 		newmeta: "true",
-	},*/
+	},
 	klang: {
 		num: 600,
 		name: "Klang",
@@ -11152,7 +11152,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Klinklang"],
 		eggGroups: ["Mineral"],
 	},
-	/* REMOVED FOR TESTING
+
 	klanglympeian: {
 		num: 600,
 		name: "Klang-Lympeian",
@@ -11170,7 +11170,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Klinklang-Lympeian"],
 		eggGroups: ["Mineral"],
 		newmeta: "true",
-	},*/
+	},
 	klinklang: {
 		num: 601,
 		name: "Klinklang",
@@ -11185,7 +11185,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 49,
 		eggGroups: ["Mineral"],
 	},
-	/* REMOVED FOR TESTING
+
 	klinklanglympeian: {
 		num: 601,
 		name: "Klinklang-Lympeian",
@@ -11202,7 +11202,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 49,
 		eggGroups: ["Mineral"],
 		newmeta: "true",
-	},*/
+	},
 	tynamo: {
 		num: 602,
 		name: "Tynamo",
@@ -11347,12 +11347,12 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 48,
 		eggGroups: ["Monster", "Dragon"],
 	},
-	/* REMOVED FOR TESTING
+
 	haxoruskanto: {
 		num: 612,
 		name: "Haxorus-Kanto",
 		baseSpecies: "Haxorus",
-		forme: "Kantoian",
+		forme: "Kanto",
 		types: ["Steel", "Fire"],
 		baseStats: {hp: 70, atk: 145, def: 100, spa: 65, spd: 70, spe: 90},
 		abilities: {0: "Clear Body", 1: "Mold Breaker", H: "Flame Body"},
@@ -11362,7 +11362,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 48,
 		eggGroups: ["Monster", "Dragon"],
 		newmeta: "true",
-	},*/
+	},
 	cubchoo: {
 		num: 613,
 		name: "Cubchoo",
@@ -11552,7 +11552,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 52,
 		eggGroups: ["Human-Like"],
 	},
-	/* REMOVED FOR TESTING
+
 	bisharpkalos: {
 		num: 625,
 		name: "Bisharp-Kalos",
@@ -11582,7 +11582,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 52,
 		eggGroups: ["Human-Like"],
 		newmeta: "true",
-	},*/
+	},
 	bouffalant: {
 		num: 626,
 		name: "Bouffalant",
