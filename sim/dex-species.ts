@@ -400,6 +400,7 @@ export class DexSpecies {
 				galar: ['g', 'galar', 'galarian'],
 				mega: ['m', 'mega'],
 				primal: ['p', 'primal'],
+				/*
 				fioren: ['f', 'fioren'],
 				delorean: ['d', 'delorean'],
 				almian: ['almian'],
@@ -408,6 +409,7 @@ export class DexSpecies {
 				orren: ['o', 'orren'],
 				lypeian: ['l', 'lypeian'],
 				kanto: ['kanto', 'kantoian'],
+				*/
 			};
 			for (const forme in formeNames) {
 				let pokeName = '';

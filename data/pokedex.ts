@@ -18372,6 +18372,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	/* REMOVED FOR TESTING
 	crawcomb: {
 		num: 10000,
 		name: "Crawcomb",
@@ -18484,7 +18485,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
 		newmeta: "true",
-	},
+	},*/
 	/* DELETED
 	flamake: {
 		num: 10008,
@@ -18527,6 +18528,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
+	/* REMOVED FOR TESTING
 	vekurrent: {
 		num: 10011,
 		name: "Vekurrent",
@@ -18696,7 +18698,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	/* DELETED
 	smackafaun: {
 		num: 10023,
@@ -18710,6 +18712,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
+	/* REMOVED FOR TESTING
 	cervumis: {
 		num: 10024,
 		name: "Cervumis",
@@ -18721,7 +18724,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Pink",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	/* DELETED
 	kamisparce: {
 		num: 10025,
@@ -18739,6 +18742,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 		canHatch: true,
 	},*/
+	/* REMOVED FOR TESTING
 	femori: {
 		num: 10026,
 		name: "Femori",
@@ -18907,7 +18911,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	/* DELETED
 	fortuxin: {
 		num: 10039,
@@ -18921,6 +18925,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
+	/* REMOVED FOR TESTING
 	sabrenom: {
 		num: 10040,
 		name: "Sabrenom",
@@ -18932,7 +18937,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	/* DELETED
 	mossedge: {
 		num: 10041,
@@ -18958,6 +18963,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
+	/* REMOVED FOR TESTING
 	helmelime: {
 		num: 10043,
 		name: "Helmelime",
@@ -18999,7 +19005,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 30,
 		eggGroups: ["Monster", "Field"],
 		newmeta: "true",
-	},
+	},*/
 	/* DELETED
 	leamyst: {
 		num: 10046,
@@ -19013,6 +19019,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
+	/* REMOVED FOR TESTING
 	shamblock: {
 		num: 10047,
 		name: "Shamblock",
@@ -19024,7 +19031,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	/* DELETED
 	pyratrata: {
 		num: 10048,
@@ -19038,6 +19045,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},*/
+	/* REMOVED FOR TESTING
 	sapogro: {
 		num: 10049,
 		name: "Sapogro",
@@ -19177,7 +19185,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Field"],
 		newmeta: "true",
-	},
+	},*/
 	/* DELETED
 	wizzard: {
 		num: 10059,
@@ -19250,6 +19258,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		// requiredItem: "Shadow Orb",
 		// changesFrom: "Goranium",
 	// },
+	/* REMOVED FOR TESTING
 	pupavo: {
 		num: 10062,
 		name: "Pupavo",
@@ -19373,5 +19382,5 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		evos: ["Honeline"],
 		newmeta: "true",
-	},
+	},*/
 };
