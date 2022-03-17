@@ -19278,7 +19278,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	// },
 	
 	pupavo: {
-		num: 1162,
+		num: -1162,
 		name: "Pupavo",
 		types: ["Psychic", "Flying"],
 		baseStats: {hp: 50, atk: 90, def: 40, spa: 110, spd: 110, spe: 110},
@@ -19290,7 +19290,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	bidree: {
-		num: 1163,
+		num: -1163,
 		name: "Bidree",
 		types: ["Fairy", "Flying"],
 		baseStats: {hp: 70, atk: 50, def: 50, spa: 90, spd: 80, spe: 80},
@@ -19303,7 +19303,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	djiarana: {
-		num: 1164,
+		num: -1164,
 		name: "Djiarana",
 		types: ["Water", "Fighting"],
 		baseStats: {hp: 95, atk: 120, def: 60, spa: 85, spd: 135, spe: 30},
@@ -19315,7 +19315,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	mirrorus: {
-		num: 1165,
+		num: -1165,
 		name: "Mirrorus",
 		types: ["Poison", "Steel"],
 		baseStats: {hp: 90, atk: 70, def: 115, spa: 70, spd: 115, spe: 40},
@@ -19327,7 +19327,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	beemeow: {
-		num: 1166,
+		num: -1166,
 		name: "Beemeow",
 		types: ["Bug", "Normal"],
 		baseStats: {hp: 60, atk: 75, def: 55, spa: 20, spd: 50, spe: 80},
@@ -19340,7 +19340,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	honeline: {
-		num: 1167,
+		num: -1167,
 		name: "Honeline",
 		types: ["Bug", "Normal"],
 		baseStats: {hp: 85, atk: 115, def: 80, spa: 45, spd: 75, spe:100},
@@ -19350,10 +19350,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Field"],
 		evos: ["Honeline"],
-			newmeta: "true",
+		newmeta: "true",
 	},
 	rampharos:{
-		num: 1168,
+		num: -1168,
 		name: "Rampharos",
 		types: ["Steel"],
 		baseStats: {hp: 110, atk: 115, def: 75, spa: 90, spd: 80, spe: 40},
@@ -19365,7 +19365,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	doubragun:{
-		num: 1169,
+		num: -1169,
 		name: "Doubragon",
 		types: ["Dragon"],
 		baseStats: {hp: 132, atk: 128, def: 72, spa: 98, spd: 72, spe: 48},
@@ -19377,7 +19377,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	jestrick:{
-		num: 1170,
+		num: -1170,
 		name: "Jestrick",
 		types: ["Fairy", "Ghost"],
 		baseStats: {hp: 110, atk: 80, def: 100, spa: 95, spd: 70, spe: 90},
@@ -19389,7 +19389,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	solanca:{
-		num: 1171,
+		num: -1171,
 		name: "Solanca",
 		types: ["Fairy", "Ghost"],
 		baseStats: {hp: 85, atk: 55, def: 60, spa: 75, spd: 110, spe:100},
