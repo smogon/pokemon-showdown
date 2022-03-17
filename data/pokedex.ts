@@ -19276,7 +19276,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		// requiredItem: "Shadow Orb",
 		// changesFrom: "Goranium",
 	// },
-	/*
+	
 	pupavo: {
 		num: 1162,
 		name: "Pupavo",
@@ -19349,7 +19349,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 43.8,
 		color: "Yellow",
 		eggGroups: ["Field"],
-		evos: ["Honeline"],
+		prevo: "Beemeow",
 //		newmeta: "true",
 	},
 	rampharos:{
@@ -19387,7 +19387,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Amorphous"],
 //		newmeta: "true",
-	},*/
+	},
 	solanca:{
 		num: 1171,
 		name: "Solanca",
@@ -19398,7 +19398,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 3.9,
 		color: "Yellow",
 		eggGroups: ["Field"],
-		evos: ["Honeline"],
 //		newmeta: "true",
 	},
 };
