@@ -1600,12 +1600,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return user.sendTo(this.room, `|error|Votes are already ${setting ? 'set to lock' : 'set to not lock'}.`);
 		}
         this.votelock = setting;
-        this.sendDeclare(`Votes are ${setting ? 'set to lock' : 'set to not lock'}.`);
-        if(setting) {
-        for (const player in this.playerTable){
-        this.canVote[player] = true;
-        	} 
-    	}
+		this.clearVotes();
+        this.sendDeclare(`Votes are cleared and ${setting ? 'set to lock' : 'set to not lock'}.`);
         this.updatePlayers()
     }
 	clearVotes(target = '') {
@@ -1629,6 +1625,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			if (player.restless && (!target || player.voting === target)) player.voting = '';
 		}
 		this.hasPlurality = null;
+		for (const player in this.playerTable){
+			this.canVote[player] = true;
+		}
 	}
 
 	onChatMessage(message: string, user: User) {
