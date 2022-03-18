@@ -13,12 +13,17 @@ ENV SHOWDOWNDIR "/showdown"
 # Create user 
 # Create the app dir we use and have the user own it
 # git clone the latest release into the app dir
+# create a sym link from /config to config/config.js 
+# to simplify the syntax to mount a custom config
+# copy config-example as defualt config to /config and chown it
 RUN useradd -u "${PUID}" -m "${USER}" \
 	&& mkdir -p ${SHOWDOWNDIR} \
 	&& chown ${USER} ${SHOWDOWNDIR} \
 	&& su "${USER}" -c \
 		"git clone https://github.com/smogon/pokemon-showdown.git --branch `git ls-remote --tags https://github.com/smogon/pokemon-showdown | tail -1 | cut -d / -f 3` ${SHOWDOWNDIR} \
-		&& ln -s /config.js ${SHOWDOWNDIR}/config/config.js"
+		&& ln -s /config.js ${SHOWDOWNDIR}/config/config.js" \
+  && cp ${SHOWDOWNDIR}/config/config-example.js /config.js \
+  && chown ${USER} /config.js
 
 # switch to the user
 USER ${USER}
