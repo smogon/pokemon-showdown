@@ -254,7 +254,7 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onEnd() {
-			this.completed.sort((a, b) => a.total - b.total);
+			Utils.sortBy(this.completed, entry => -entry.total);
 		},
 	},
 
