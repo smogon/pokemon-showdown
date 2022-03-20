@@ -461,6 +461,7 @@ export class Battle {
 				if (!handler.state.duration) {
 					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
 					handler.end.call(...endCallArgs as [any, ...any[]]);
+					if (this.ended) return;
 					continue;
 				}
 			}
