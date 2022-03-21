@@ -2487,18 +2487,18 @@ export const commands: Chat.ChatCommands = {
 			let repeat;
 			if (dead) {
 				switch (cmd) {
-					case 'treestump':
-						repeat = dead.treestump && !dead.restless;
-						break;
-					case 'spirit':
-						repeat = !dead.treestump && dead.restless;
-						break;
-					case 'spiritstump':
-						repeat = dead.treestump && dead.restless;
-						break;
-					case 'kill': case 'kick':
-						repeat = !dead.treestump && !dead.restless;
-						break;
+				case 'treestump':
+					repeat = dead.treestump && !dead.restless;
+					break;
+				case 'spirit':
+					repeat = !dead.treestump && dead.restless;
+					break;
+				case 'spiritstump':
+					repeat = dead.treestump && dead.restless;
+					break;
+				case 'kill': case 'kick':
+					repeat = !dead.treestump && !dead.restless;
+					break;
 				}
 			}
 			if (dead && repeat) return this.errorReply(`${dead.safeName} has already been ${cmd}ed.`);
