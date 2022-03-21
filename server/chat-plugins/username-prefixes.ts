@@ -6,58 +6,101 @@
 import {FS} from '../../lib';
 
 const PREFIXES_FILE = 'config/chat-plugins/username-prefixes.json';
+const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
 
 export class PrefixManager {
+	/** prefix:timeout */
+	timeouts = new Map<ID, NodeJS.Timeout>();
 	constructor() {
 		// after a restart/newly using the plugin, load prefixes from config.js
 		if (!Chat.oldPlugins['username-prefixes']) this.refreshConfig(true);
 	}
 
 	save() {
-		FS(PREFIXES_FILE).writeUpdate(() => JSON.stringify(Config.forcedprefixes || {}));
+		FS(PREFIXES_FILE).writeUpdate(() => JSON.stringify(Config.forcedprefixes || []));
 	}
 
 	refreshConfig(configJustLoaded = false) {
-		if (!Config.forcedprefixes) Config.forcedprefixes = {};
+		if (!Config.forcedprefixes) Config.forcedprefixes = [];
+		// ensure everything is in the right format
+		if (!Array.isArray(Config.forcedprefixes)) {
+			const convertedPrefixes = [];
+			for (const type in Config.forcedprefixes) {
+				for (const prefix of Config.forcedprefixes[type].map(toID)) {
+					convertedPrefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
+					this.timeouts.set(prefix, setTimeout(() => {
+						this.removePrefix(prefix, type as 'privacy' | 'modchat');
+					}, PREFIX_DURATION));
+				}
+			}
+			Config.forcedprefixes = convertedPrefixes;
+		}
 		if (configJustLoaded) {
-			// if we just loaded the config file, ensure that all prefixes are IDs
-			if (Config.forcedprefixes.privacy) Config.forcedprefixes.privacy = Config.forcedprefixes.privacy.map(toID);
-			if (Config.forcedprefixes.modchat) Config.forcedprefixes.modchat = Config.forcedprefixes.modchat.map(toID);
+			for (const entry of Config.forcedprefixes) {
+				entry.prefix = toID(entry.prefix);
+				if (!this.timeouts.get(entry.prefix)) {
+					const expireTime = entry.expireAt - Date.now();
+					if (expireTime < 0) {
+						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
+						continue;
+					}
+					this.timeouts.set(entry.prefix, setTimeout(() => {
+						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
+					}, expireTime));
+				}
+			}
 		}
 
-		let data: AnyObject;
+		let data: AnyObject[];
 		try {
 			data = JSON.parse(FS(PREFIXES_FILE).readSync());
 		} catch (e: any) {
 			if (e.code !== 'ENOENT') throw e;
 			return;
 		}
-		for (const [type, prefixes] of Object.entries(data)) {
-			if (!prefixes?.length) continue;
-			if (!Config.forcedprefixes[type]) Config.forcedprefixes[type] = [];
-			for (const prefix of prefixes) {
-				if (Config.forcedprefixes[type].includes(prefix)) continue;
-				Config.forcedprefixes[type].push(prefix);
+		if (data.length) {
+			for (const entry of data) {
+				if (Config.forcedprefixes.includes(entry)) continue;
+				Config.forcedprefixes.push(entry);
+				if (!this.timeouts.get(entry.prefix)) {
+					const expireTime = entry.expireAt - Date.now();
+					if (expireTime < 0) {
+						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
+						continue;
+					}
+					this.timeouts.set(entry.prefix, setTimeout(() => {
+						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
+					}, expireTime));
+				}
 			}
 		}
 	}
 
 	addPrefix(prefix: ID, type: 'privacy' | 'modchat') {
-		if (!Config.forcedprefixes[type]) Config.forcedprefixes[type] = [];
-		if (Config.forcedprefixes[type].includes(prefix)) {
+		if (!Config.forcedprefixes) Config.forcedprefixes = [];
+		const entry = Config.forcedprefixes.find((x: AnyObject) => x.prefix === prefix && x.type === type);
+		if (entry) {
 			throw new Chat.ErrorMessage(`Username prefix '${prefix}' is already configured to force ${type}.`);
 		}
 
-		Config.forcedprefixes[type].push(prefix);
+		Config.forcedprefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
+		this.timeouts.set(prefix, setTimeout(() => {
+			this.removePrefix(prefix, type);
+		}, PREFIX_DURATION));
 		this.save();
 	}
 
 	removePrefix(prefix: ID, type: 'privacy' | 'modchat') {
-		if (!Config.forcedprefixes[type]?.includes(prefix)) {
+		const entry = Config.forcedprefixes.findIndex((x: AnyObject) => x.prefix === prefix && x.type === type);
+		if (entry < 0) {
 			throw new Chat.ErrorMessage(`Username prefix '${prefix}' is not configured to force ${type}!`);
 		}
 
-		Config.forcedprefixes[type] = Config.forcedprefixes[type].filter((curPrefix: ID) => curPrefix !== prefix);
+		Config.forcedprefixes.splice(entry, 1);
+		if (this.timeouts.get(prefix)) {
+			clearTimeout(this.timeouts.get(prefix)!);
+			this.timeouts.delete(prefix);
+		}
 		this.save();
 	}
 
@@ -72,6 +115,7 @@ export class PrefixManager {
 export const prefixManager = new PrefixManager();
 
 export const commands: Chat.ChatCommands = {
+	forceprefix: 'usernameprefix',
 	forcedprefix: 'usernameprefix',
 	forcedprefixes: 'usernameprefix',
 	usernameprefixes: 'usernameprefix',
@@ -109,9 +153,12 @@ export const commands: Chat.ChatCommands = {
 
 			const types = target ? [prefixManager.validateType(toID(target))] : ['privacy', 'modchat'];
 
+			const entries = Config.forcedprefixes.filter((x: any) => types.includes(x.type));
+
 			return this.sendReplyBox(types.map(type => {
-				const info = Config.forcedprefixes[type].length ?
-					`<code>${Config.forcedprefixes[type].join('</code>, <code>')}</code>` : `none`;
+				const prefixes = entries.filter((x: any) => x.type === type).map((x: any) => x.prefix);
+				const info = prefixes.length ?
+					`<code>${prefixes.join('</code>, <code>')}</code>` : `none`;
 				return `Username prefixes that disable <strong>${type}</strong>: ${info}.`;
 			}).join(`<br />`));
 		},

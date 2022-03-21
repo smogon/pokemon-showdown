@@ -123,7 +123,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 			forme = species.battleOnly;
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const types = new Set(species.types);
 
 		const moves = new Set<string>();
@@ -197,6 +197,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		// Minimize confusion damage
 		if (!counter.get('Physical') && !moves.has('transform')) ivs.atk = 0;
 
+		const requiredItem = species.requiredItem || (species.requiredItems ? this.sample(species.requiredItems) : null);
 		return {
 			name: species.baseSpecies,
 			species: forme,
@@ -204,7 +205,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 			gender: species.gender,
 			happiness: 70,
 			shiny: this.randomChance(1, 1024),
-			item: (species.requiredItem || ''),
+			item: (requiredItem || ''),
 			ability: 'No Ability',
 			evs: {hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20},
 			moves: Array.from(moves),
@@ -213,6 +214,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 	}
 
 	randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		const pokemonPool: string[] = [];

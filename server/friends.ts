@@ -146,7 +146,14 @@ export class FriendsDatabase {
 		for (const request of sentResults) {
 			sent.add(request.receiver);
 		}
-		const receivedResults = await this.all('getReceived', [user.id]);
+		const receivedResults = await this.all('getReceived', [user.id]) || [];
+		if (!Array.isArray(receivedResults)) {
+			Monitor.crashlog(new Error("Malformed results received"), 'A friends process', {
+				user: user.id,
+				result: JSON.stringify(receivedResults),
+			});
+			return {received, sent};
+		}
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
@@ -403,7 +410,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 	}
 });
 
-if (!PM.isParentProcess) {
+if (require.main === module) {
 	global.Config = (require as any)('./config-loader').Config;
 	if (Config.usesqlite) {
 		FriendsDatabase.setupDatabase();
@@ -424,6 +431,6 @@ if (!PM.isParentProcess) {
 	});
 	// eslint-disable-next-line no-eval
 	Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
-} else {
+} else if (!process.send) {
 	PM.spawn(Config.friendsprocesses || 1);
 }

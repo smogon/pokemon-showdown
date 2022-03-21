@@ -1472,7 +1472,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (source.species.baseSpecies !== 'Chandelure') return;
 				if (source.set.shiny) return;
 				source.m.nowShiny = true;
-				this.add(`c|${getName('PartMan')}|THE LIGHT! IT BURNS!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PartMan')}|THE LIGHT! IT BURNS!`);
 				changeSet(this, source, ssbSets['PartMan-Shiny']);
 			}
 		},
@@ -1572,7 +1572,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!pokemon.hp) return;
 			const types = pokemon.moveSlots.map(slot => this.dex.moves.get(slot.id).type);
 			const type = types.length ? this.sample(types) : '???';
-			if (pokemon.setType(type)) {
+			if (this.dex.types.isName(type) && pokemon.setType(type)) {
 				this.add('-ability', pokemon, 'Wild Magic Surge');
 				this.add('-start', pokemon, 'typechange', type);
 			}

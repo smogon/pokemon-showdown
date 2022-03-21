@@ -1,10 +1,93 @@
 /**
  * Random Battles chat-plugin
  * Written by Kris with inspiration from sirDonovan and The Immortal
+ *
+ * Set probability code written by Annika
  */
 
-import {FS, Utils} from "../../lib";
-import {SSBSet, ssbSets} from "../../data/mods/ssb/random-teams";
+import {FS, Utils} from '../../lib';
+import {SSBSet, ssbSets} from '../../data/mods/ssb/random-teams';
+
+
+interface SetCriteria {
+	moves: {mustHave: Move[], mustNotHave: Move[]};
+	ability: {mustHave?: Ability, mustNotHave: Ability[]};
+	item: {mustHave?: Item, mustNotHave: Item[]};
+	nature: {mustHave?: Nature, mustNotHave: Nature[]};
+}
+
+
+function getHTMLCriteriaDescription(criteria: SetCriteria) {
+	const format = (list: {name: string}[]) => list.map(m => Utils.html`<strong>${m.name}</strong>`);
+	const parts = [];
+
+	const {moves, ability, item, nature} = criteria;
+
+	if (moves.mustHave.length) {
+		parts.push(`had the move${Chat.plural(moves.mustHave.length)} ${Chat.toListString(format(moves.mustHave))}`);
+	}
+	if (moves.mustNotHave.length) {
+		parts.push(`did not have the move${Chat.plural(moves.mustNotHave.length)} ${Chat.toListString(format(moves.mustNotHave), 'or')}`);
+	}
+
+	if (ability.mustHave) {
+		parts.push(Utils.html`had the ability <strong>${ability.mustHave.name}</strong>`);
+	}
+	if (ability.mustNotHave.length) {
+		parts.push(`did not have the ${Chat.plural(ability.mustNotHave.length, 'abilities', 'ability')} ${Chat.toListString(format(ability.mustNotHave), 'or')}`);
+	}
+
+	if (item.mustHave) {
+		parts.push(Utils.html`had the item <strong>${item.mustHave.name}</strong>`);
+	}
+	if (item.mustNotHave.length) {
+		parts.push(`did not have the item${Chat.plural(item.mustNotHave.length)} ${Chat.toListString(format(item.mustNotHave), 'or')}`);
+	}
+
+	if (nature.mustHave) {
+		parts.push(Utils.html`had the nature <strong>${nature.mustHave.name}</strong>`);
+	}
+	if (nature.mustNotHave.length) {
+		parts.push(`did not have the nature${Chat.plural(nature.mustNotHave.length)} ${Chat.toListString(format(nature.mustNotHave), 'or')}`);
+	}
+
+	return Chat.toListString(parts, 'and');
+}
+
+function setProbability(
+	species: Species,
+	format: Format,
+	criteria: SetCriteria,
+	rounds = 700
+): {rounds: number, matches: number} {
+	const results = {rounds, matches: 0};
+	const generator = Teams.getGenerator(format);
+
+	for (let i = 0; i < rounds; i++) {
+		const set = generator.randomSet(species);
+
+		if (criteria.item.mustHave && set.item !== criteria.item.mustHave.name) continue;
+		if (criteria.item.mustNotHave.some(item => item.name === set.item)) continue;
+
+		if (criteria.ability.mustHave && set.ability !== criteria.ability.mustHave.name) continue;
+		if (criteria.ability.mustNotHave.some(ability => ability.name === set.ability)) continue;
+
+		if (criteria.nature.mustHave && set.nature !== criteria.nature.mustHave.name) continue;
+		if (criteria.nature.mustNotHave.some(nature => nature.name === set.nature)) continue;
+
+		const setHasMove = (move: Move) => {
+			const id = move.id === 'hiddenpower' ? `${move.id}${toID(move.type)}` : move.id;
+			return set.moves.includes(id);
+		};
+		if (!criteria.moves.mustHave.every(setHasMove)) continue;
+		if (criteria.moves.mustNotHave.some(setHasMove)) continue;
+
+		results.matches++;
+	}
+
+	return results;
+}
+
 const GEN_NAMES: {[k: string]: string} = {
 	gen1: '[Gen 1]', gen2: '[Gen 2]', gen3: '[Gen 3]', gen4: '[Gen 4]', gen5: '[Gen 5]', gen6: '[Gen 6]', gen7: '[Gen 7]',
 };
@@ -622,7 +705,8 @@ export const commands: Chat.ChatCommands = {
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		let formatName = dex.formats.get(`gen${dex.gen}${isLetsGo ? 'letsgo' : ''}randombattle`).name;
+		const extraFormatModifier = isLetsGo ? 'letsgo' : (dex.currentMod === 'gen8bdsp' ? 'bdsp' : '');
+		let formatName = dex.formats.get(`gen${dex.gen}${extraFormatModifier}randombattle`).name;
 
 		const movesets = [];
 		if (dex.gen === 1) {
@@ -818,4 +902,158 @@ export const commands: Chat.ChatCommands = {
 	ssbhelp: [
 		`/ssb [staff member] - Displays a staff member's Super Staff Bros. set and custom features.`,
 	],
+
+	setodds: 'randombattlesetprobabilities',
+	randbatsodds: 'randombattlesetprobabilities',
+	randbatsprobabilities: 'randombattlesetprobabilities',
+	randombattlesetprobabilities(target, room, user) {
+		// Restricted to global staff and randbats room staff
+		const randbatsRoom = Rooms.get('randombattles');
+		if (randbatsRoom) {
+			if (!user.can('lock')) this.checkCan('mute', null, randbatsRoom);
+		} else {
+			this.checkCan('lock');
+		}
+
+		if (!target) return this.parse(`/help randombattlesetprobabilities`);
+		this.runBroadcast();
+
+		const args = target.split(',');
+		if (args.length < 2) return this.parse(`/help randombattlesetprobabilities`);
+
+		// Optional format
+		let format = Dex.formats.get('gen8randombattle');
+		let formatOrSpecies = args.shift();
+		const possibleFormat = Dex.formats.get(formatOrSpecies);
+		if (possibleFormat.exists) {
+			if (!possibleFormat.team) {
+				throw new Chat.ErrorMessage(`${possibleFormat.name} does not have randomly-generated teams.`);
+			}
+			format = possibleFormat;
+			formatOrSpecies = args.shift();
+		}
+		const dex = Dex.forFormat(format);
+
+		// Species
+		const species = dex.species.get(formatOrSpecies);
+		if (!species.exists) {
+			throw new Chat.ErrorMessage(`Species ${species.name} does not exist in the specified format.`);
+		}
+		if (!species.randomBattleMoves && !species.randomDoubleBattleMoves && !species.randomBattleNoDynamaxMoves) {
+			const modMessage = dex.currentMod === 'base' ? format.name : dex.currentMod;
+			throw new Chat.ErrorMessage(`${species.name} does not have random battle moves in ${modMessage}.`);
+		}
+
+		// Criteria
+		const criteria: SetCriteria = {
+			moves: {mustHave: [], mustNotHave: []},
+			item: {mustNotHave: []},
+			ability: {mustNotHave: []},
+			nature: {mustNotHave: []},
+		};
+
+		if (args.length < 1) {
+			this.errorReply(`You must specify at least one condition.`);
+			return this.parse(`/help randombattlesetprobabilities`);
+		}
+
+		for (const arg of args) {
+			let [key, value] = arg.split('=');
+			key = toID(key);
+			if (!value || !key) {
+				this.errorReply(`Invalid condition format: ${arg}`);
+				return this.parse(`/help randombattlesetprobabilities`);
+			}
+
+			switch (key) {
+			case 'moves':
+				for (const rawMove of value.split('&')) {
+					const move = dex.moves.get(rawMove);
+					if (!move.exists) {
+						throw new Chat.ErrorMessage(`"${rawMove}" is not a move in the specified format.`);
+					}
+
+					const isNegation = rawMove.trim().startsWith('!');
+					if (isNegation) {
+						criteria.moves.mustNotHave.push(move);
+					} else {
+						criteria.moves.mustHave.push(move);
+					}
+				}
+				break;
+			case 'item':
+				const item = dex.items.get(value);
+				if (!item.exists) {
+					throw new Chat.ErrorMessage(`"${value}" is not an item in the specified format.`);
+				}
+
+				const itemNegation = value.trim().startsWith('!');
+				if (itemNegation) {
+					criteria.item.mustNotHave.push(item);
+				} else {
+					if (criteria.item.mustHave) {
+						throw new Chat.ErrorMessage(`Impossible situation: two items (${criteria.item.mustHave.name} and ${item.name}) are required.`);
+					}
+					criteria.item.mustHave = item;
+				}
+				break;
+			case 'ability':
+				const ability = dex.abilities.get(value);
+				if (!ability.exists) {
+					throw new Chat.ErrorMessage(`"${value}" is not an ability in the specified format.`);
+				}
+
+				const abilityNegation = value.trim().startsWith('!');
+				if (abilityNegation) {
+					criteria.ability.mustNotHave.push(ability);
+				} else {
+					if (criteria.ability.mustHave) {
+						throw new Chat.ErrorMessage(`Impossible situation: two abilities (${criteria.ability.mustHave.name} and ${ability.name}) are required.`);
+					}
+					criteria.ability.mustHave = ability;
+				}
+				break;
+			case 'nature':
+				const nature = dex.natures.get(value);
+				if (!nature.exists) {
+					throw new Chat.ErrorMessage(`"${value}" is not a nature in the specified format.`);
+				}
+
+				const natureNegation = value.trim().startsWith('!');
+				if (natureNegation) {
+					criteria.nature.mustNotHave.push(nature);
+				} else {
+					if (criteria.nature.mustHave) {
+						throw new Chat.ErrorMessage(`Impossible situation: two natures (${criteria.nature.mustHave.name} and ${nature.name}) are required.`);
+					}
+					criteria.nature.mustHave = nature;
+				}
+				break;
+			default:
+				throw new Chat.ErrorMessage(`Invalid criterion: ${key}`);
+			}
+		}
+
+		const results = setProbability(species, format, criteria);
+		const percentage = Math.round((results.matches / results.rounds) * 100);
+		return this.sendReplyBox(
+			Utils.html`Generated ${results.rounds} sets for <strong>${species.name}</strong> in ${format.name}:<br />` +
+			`Approximately <strong>${percentage}%</strong> (${results.matches} sets) ${getHTMLCriteriaDescription(criteria)}.`
+		);
+	},
+	randombattlesetprobabilitieshelp() {
+		return this.sendReplyBox(
+			`<code>/randombattlesetprobabilities [optional format], [species], [conditions]</code>: Gives the probability of a set matching the conditions appearing for the given species.<br />` +
+			`<code>[conditions]</code> is a comma-separated list of conditions of the form <code>[component]=[matching value]</code>, where <code>[component]</code> can be any of the following: ` +
+			`<ul>` +
+			`<li><code>moves</code>: matches all generated sets that contain every move specified. <code>[matching value]</code> should be a list of moves separated with <code>&amp;</code>.` +
+			`<li><code>item</code>: matches all generated sets that have the specified item. <code>[matching value]</code> should be an item name.` +
+			`<li><code>ability</code>: matches all generated sets with the specified ability. <code>[matching value]</code> should be an ability name.` +
+			`<li><code>nature</code>: matches all generated sets with the specified nature. <code>[matching value]</code> should be a nature name.` +
+			`</ul>` +
+			`The given probability is for a set that matches EVERY provided condition. ` +
+			`Conditions can be negated by prefixing the <code>[matching value]</code> with <code>!</code>.<br />` +
+			`Requires: % @ # & (globally or in the Random Battles room)`
+		);
+	},
 };

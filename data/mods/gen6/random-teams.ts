@@ -1,5 +1,5 @@
 import {MoveCounter, TeamData} from '../../random-teams';
-import RandomGen7Teams from '../gen7/random-teams';
+import RandomGen7Teams, {BattleFactorySpecies} from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -350,7 +350,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'endeavor':
 			return {cull: !isLead && !abilities.has('Defeatist')};
 		case 'explosion':
-			return {cull: !!counter.setupType || (abilities.has('Refrigerate') && moves.has('freezedry')) || moves.has('wish')};
+			return {cull: (
+				!!counter.setupType ||
+				(abilities.has('Refrigerate') && (moves.has('freezedry') || movePool.includes('return'))) ||
+				moves.has('wish')
+			)};
 		case 'extremespeed':
 			return {cull: counter.setupType !== 'Physical' && moves.has('vacuumwave')};
 		case 'hiddenpower':
@@ -394,7 +398,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'originpulse': case 'surf':
 			return {cull: moves.has('hydropump') || moves.has('scald')};
 		case 'scald':
-			return {cull: moves.has('waterfall') || moves.has('waterpulse')};
+			return {cull: (
+				moves.has('waterfall') ||
+				moves.has('waterpulse') ||
+				(species.id === 'quagsire' && movePool.includes('recover'))
+			)};
 
 		// Status:
 		case 'glare': case 'headbutt':
@@ -552,7 +560,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Unburden':
 			return (!!species.isMega || abilities.has('Prankster') || !counter.setupType && !moves.has('acrobatics'));
 		case 'Water Absorb':
-			return (moves.has('raindance') || abilities.has('Drizzle') || abilities.has('Volt Absorb'));
+			return (moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(a => abilities.has(a)));
 		case 'Weak Armor':
 			return counter.setupType !== 'Physical';
 		}
@@ -570,6 +578,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		isLead: boolean
 	): string | undefined {
 		if (species.requiredItem) return species.requiredItem;
+		if (species.requiredItems) return this.sample(species.requiredItems);
 
 		// First, the extra high-priority items
 		if (species.name === 'Marowak') return 'Thick Club';
@@ -595,7 +604,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
-		if (species.evos.length) return (ability === 'Technician' && counter.get('Physical') >= 4) ? 'Choice Band' : 'Eviolite';
+		if (species.nfe) return (ability === 'Technician' && counter.get('Physical') >= 4) ? 'Choice Band' : 'Eviolite';
 		if (moves.has('copycat') && counter.get('Physical') >= 3) return 'Choice Band';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 		if (
@@ -770,7 +779,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		let ability = '';
 
@@ -778,9 +787,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = new Set(species.types);
-		const abilities = new Set(Object.values(species.abilities));
+		let abilities = new Set(Object.values(species.abilities));
 		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
-
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
 			if (setMoveid.startsWith('hiddenpower')) availableHP++;
@@ -979,10 +987,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			moves.add('thunder');
 		}
 
-		const battleOnly = species.battleOnly && !species.requiredAbility;
-		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
-
-		const abilityData = Object.values(baseSpecies.abilities).map(a => this.dex.abilities.get(a));
+		if (species.battleOnly && !species.requiredAbility) {
+			abilities = new Set(Object.values(this.dex.species.get(species.battleOnly as string).abilities));
+		}
+		const abilityData = [...abilities].map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
 		if (abilityData.length > 1) {
@@ -1049,7 +1057,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			// Banned Ability
 			Dugtrio: 82, Gothitelle: 82, Ninetales: 84, Politoed: 84, Wobbuffet: 82,
 			// Holistic judgement
-			Castform: 100, Delibird: 100, 'Genesect-Douse': 80, Spinda: 100, Unown: 100,
+			Castform: 100, Delibird: 100, 'Genesect-Douse': 80, Luvdisc: 100, Spinda: 100, Unown: 100,
 		};
 		const tier = toID(species.tier).replace('bl', '');
 		let level = levelScale[tier] || (species.nfe ? 90 : 80);
@@ -1101,7 +1109,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 	}
 
-	randomFactorySets: AnyObject = require('./factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species,
@@ -1191,6 +1199,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	}
 
 	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const forceResult = (depth >= 4);
 
 		// The teams generated depend on the tier choice in such a way that
@@ -1203,7 +1213,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
 		const teamData: TeamData = {
-			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult,
+			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult,
 			weaknesses: {}, resistances: {},
 		};
 		const requiredMoveFamilies = ['hazardSet', 'hazardClear'];

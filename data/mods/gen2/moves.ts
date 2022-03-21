@@ -307,11 +307,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	frustration: {
+		inherit: true,
+		basePowerCallback(pokemon) {
+			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || null;
+		},
+	},
 	healbell: {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-cureteam', source, '[from] move: Heal Bell');
-			for (const pokemon of source.side.pokemon) {
+			for (const pokemon of target.side.pokemon) {
 				pokemon.clearStatus();
 			}
 		},
@@ -459,6 +465,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(lastMove, pokemon);
 		},
 		noSketch: true,
+	},
+	mist: {
+		num: 54,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Mist",
+		pp: 30,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'mist',
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Mist');
+			},
+			onBoost(boost, target, source, effect) {
+				if (source && target !== source) {
+					let showMsg = false;
+					let i: BoostID;
+					for (i in boost) {
+						if (boost[i]! < 0) {
+							delete boost[i];
+							showMsg = true;
+						}
+					}
+					if (showMsg && !(effect as ActiveMove).secondaries) {
+						this.add('-activate', target, 'move: Mist');
+					}
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Ice",
 	},
 	moonlight: {
 		inherit: true,
@@ -639,6 +679,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.heal(target.maxhp);
 		},
 		secondary: null,
+	},
+	return: {
+		inherit: true,
+		basePowerCallback(pokemon) {
+			return Math.floor((pokemon.happiness * 10) / 25) || null;
+		},
 	},
 	reversal: {
 		inherit: true,

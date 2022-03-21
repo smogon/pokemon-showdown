@@ -28,9 +28,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onModifySpe(spe, pokemon) {
+			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
+			spe = this.finalModify(spe);
 			if (!pokemon.hasAbility('quickfeet')) {
-				return this.chainModify(0.5);
+				spe = Math.floor(spe * 50 / 100);
 			}
+			return spe;
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
@@ -101,8 +104,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 				pokemon.setStatus('');
 			}
 		},
-		onHit(target, source, move) {
-			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
+		onAfterMoveSecondary(target, source, move) {
+			if (move.thawsTarget) {
+				target.cureStatus();
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
 		},
@@ -388,6 +396,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
 				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
 			}
+			this.activeMove = null;
 
 			this.checkWin();
 		},
@@ -469,7 +478,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'RainDance');
 			}
@@ -504,7 +513,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect, '[of] ' + source);
+			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect.name, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -539,7 +548,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'SunnyDay');
 			}
@@ -578,7 +587,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect, '[of] ' + source);
+			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect.name, '[of] ' + source);
 		},
 		onImmunity(type, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
@@ -614,7 +623,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Sandstorm');
 			}
@@ -644,7 +653,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'Hail', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Hail');
 			}
@@ -673,7 +682,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
+			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect.name, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {

@@ -2,7 +2,11 @@
     "compilerOptions": {
         "lib": ["es2020"],
         "noEmit": true,
+        "jsx": "react",
+        "jsxFactory": "Chat.h",
+        "jsxFragmentFactory": "Chat.Fragment",
         "target": "es2020",
+        "skipLibCheck": true,
         "module": "CommonJS",
         "moduleResolution": "node",
         "strict": true,
@@ -15,6 +19,7 @@
     "types": ["node"],
     "exclude": [
         "./.*-dist/**/*",
+        "./server/chat-plugins/private/*/*.d.ts"
     ],
     "include": [
         "./config/*.ts",
@@ -24,6 +29,7 @@
         "./dev-tools/*.ts",
         "./lib/*.ts",
         "./server/**/*.ts",
+        "./server/**/*.tsx",
         "./sim/**/*",
         "./tools/set-import/*.ts",
         "./tools/modlog/*.ts",

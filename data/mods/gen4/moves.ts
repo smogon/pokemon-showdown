@@ -27,8 +27,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
-			for (const pokemon of source.side.pokemon) {
-				pokemon.clearStatus();
+			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				ally.clearStatus();
 			}
 		},
 	},
@@ -87,7 +88,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onModifyAtkPriority: -101,
 			onModifyAtk(atk, pokemon, defender, move) {
-				this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
+				// https://www.smogon.com/forums/posts/8992145/
+				// this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
 				this.event.modifier = 1;
 				return move.allies!.shift()!.species.baseStats.atk;
 			},
@@ -697,8 +699,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			for (const pokemon of source.side.pokemon) {
-				if (!pokemon.hasAbility('soundproof')) pokemon.cureStatus(true);
+			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (!ally.hasAbility('soundproof')) ally.cureStatus(true);
 			}
 		},
 	},
@@ -1430,6 +1433,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryHit(pokemon) {
 			return !pokemon.volatiles['choicelock'] && !pokemon.volatiles['encore'];
+		},
+	},
+	snatch: {
+		inherit: true,
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'Snatch');
+			},
+			onAnyPrepareHitPriority: -1,
+			onAnyPrepareHit(source, target, move) {
+				const snatchUser = this.effectState.source;
+				if (snatchUser.isSkyDropped()) return;
+				if (!move || move.isZ || move.isMax || !move.flags['snatch']) {
+					return;
+				}
+				snatchUser.removeVolatile('snatch');
+				this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
+				this.actions.useMove(move.id, snatchUser);
+				return null;
+			},
 		},
 	},
 	spikes: {

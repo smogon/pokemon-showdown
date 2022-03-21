@@ -4,19 +4,28 @@
  * @author Annika
  */
 
-import type {TriviaGame, TriviaHistory, TriviaLeaderboard, TriviaLeaderboardScore, TriviaQuestion} from "./trivia";
+import type {TriviaGame, TriviaHistory, TriviaLeaderboardData, TriviaLeaderboardScore, TriviaQuestion} from "./trivia";
 import {FS} from "../../../lib";
 import {formatSQLArray} from "../../../lib/utils";
 import type {Statement} from "../../../lib/sql";
 
-interface TriviaLeaderboards {
-	allTime: TriviaLeaderboard;
-	notAllTime: TriviaLeaderboard;
-}
+export type Leaderboard = 'alltime' | 'nonAlltime' | 'cycle';
+/**
+ * Keys are different Trivia leaderboards.
+ * Values are the corresponding integer values of the SQLite `leaderboard` column.
+ */
+export const LEADERBOARD_ENUM: Record<Leaderboard, number> = {
+	alltime: 1,
+	nonAlltime: 0,
+	cycle: 2,
+};
+
+type TriviaLeaderboards = Record<Leaderboard, TriviaLeaderboardData>;
+
 export interface TriviaDatabase {
 	updateLeaderboardForUser(
 		userid: ID,
-		additions: {allTime: TriviaLeaderboardScore, notAllTime: TriviaLeaderboardScore}
+		additions: Record<Leaderboard, TriviaLeaderboardScore>
 	): Promise<void> | void;
 	addHistory(history: Iterable<TriviaHistory>): Promise<void> | void;
 	addQuestions(questions: Iterable<TriviaQuestion>): Promise<void> | void;
@@ -28,15 +37,19 @@ export interface TriviaDatabase {
 	moveQuestionToCategory(question: string, newCategory: string): Promise<void> | void;
 	migrateCategory(sourceCategory: string, targetCategory: string): Promise<number> | number;
 	acceptSubmissions(submissions: string[]): Promise<void> | void;
+	editQuestion(oldQuestionText: string, newQuestionText?: string, newAnswers?: string[]): Promise<void>;
 
 	getHistory(numberOfLines: number): Promise<TriviaGame[]> | TriviaGame[];
 	getScoresForLastGame(): Promise<{[k: string]: number}> | {[k: string]: number};
 	getQuestions(
 		categories: string[] | 'all',
 		limit: number,
-		options: {order: 'time' | 'random'}
+		options: {order: 'newestfirst' | 'oldestfirst' | 'random'}
 	): Promise<TriviaQuestion[]> | TriviaQuestion[];
-	getLeaderboardEntry(id: ID, isAllTime: boolean): Promise<TriviaLeaderboard | null> | TriviaLeaderboard | null;
+	getLeaderboardEntry(
+		id: ID,
+		leaderboard: Leaderboard
+	): Promise<TriviaLeaderboardScore | null> | TriviaLeaderboardScore | null;
 	getLeaderboards(): Promise<TriviaLeaderboards> | TriviaLeaderboards;
 
 	checkIfQuestionExists(questionText: string): Promise<boolean> | boolean;
@@ -51,8 +64,9 @@ export interface TriviaDatabase {
 
 	clearSubmissions(): Promise<void> | void;
 	clearCategory(category: string): Promise<void> | void;
+	clearCycleLeaderboard(): Promise<void> | void;
 	deleteQuestion(questionText: string): Promise<void> | void;
-	deleteLeaderboardEntry(userid: ID, isAllTime: boolean): Promise<void> | void;
+	deleteLeaderboardEntry(userid: ID, leaderboard: Leaderboard): Promise<void> | void;
 	deleteSubmissions(submissions: string[]): Promise<void> | void;
 }
 
@@ -78,13 +92,13 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	private historyQuery: Statement | null;
 	private historyScoresQuery: Statement | null;
 	private allQuestionsRandomOrderQuery: Statement | null;
-	private allQuestionsTimeOrderQuery: Statement | null;
+	private allQuestionsNewestFirstQuery: Statement | null;
+	private allQuestionsOldestFirstQuery: Statement | null;
 	private answersQuery: Statement | null;
 	private submissionsQuery: Statement | null;
 	private leaderboardQuery: Statement | null;
 	private leaderboardByUserQuery: Statement | null;
-	private allTimeLeaderboardByUserQuery: Statement | null;
-	private notAllTimeLeaderboardByUserQuery: Statement | null;
+	private scoreAndPointsByUser: Statement | null;
 	private eventQuestionQuery: Statement | null;
 	private categoriesQuery: Statement | null;
 	private questionCountQuery: Statement | null;
@@ -95,6 +109,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	// deleting data
 	private clearAllSubmissionsQuery: Statement | null;
 	private clearCategoryQuery: Statement | null;
+	private clearCycleLeaderboardQuery: Statement | null;
 	private deleteQuestionQuery: Statement | null;
 	private leaderboardDeletionQuery: Statement | null;
 
@@ -115,13 +130,13 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		this.historyQuery = null;
 		this.historyScoresQuery = null;
 		this.allQuestionsRandomOrderQuery = null;
-		this.allQuestionsTimeOrderQuery = null;
+		this.allQuestionsNewestFirstQuery = null;
+		this.allQuestionsOldestFirstQuery = null;
 		this.answersQuery = null;
 		this.submissionsQuery = null;
 		this.leaderboardQuery = null;
 		this.leaderboardByUserQuery = null;
-		this.allTimeLeaderboardByUserQuery = null;
-		this.notAllTimeLeaderboardByUserQuery = null;
+		this.scoreAndPointsByUser = null;
 		this.eventQuestionQuery = null;
 		this.categoriesQuery = null;
 		this.questionCountQuery = null;
@@ -131,6 +146,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 		this.clearAllSubmissionsQuery = null;
 		this.clearCategoryQuery = null;
+		this.clearCycleLeaderboardQuery = null;
 		this.deleteQuestionQuery = null;
 		this.leaderboardDeletionQuery = null;
 
@@ -145,27 +161,23 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	 ***************************/
 	async updateLeaderboardForUser(
 		userid: ID,
-		additions: {allTime: TriviaLeaderboardScore, notAllTime: TriviaLeaderboardScore}
+		additions: Record<Leaderboard, TriviaLeaderboardScore>,
 	): Promise<void> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't update the leaderboard for ${userid} because SQLite is not enabled.`);
 		}
 
-		await this.leaderboardChangeQuery!.run({
-			score: additions.allTime.score,
-			totalPoints: additions.allTime.totalPoints,
-			totalCorrectAnswers: additions.allTime.totalCorrectAnswers,
-			userid,
-			isAllTime: Number(true),
-		});
-		await this.leaderboardChangeQuery!.run({
-			score: additions.notAllTime.score,
-			totalPoints: additions.notAllTime.totalPoints,
-			totalCorrectAnswers: additions.notAllTime.totalCorrectAnswers,
-			userid,
-			isAllTime: Number(false),
-		});
+		for (const [lb, discrim] of Object.entries(LEADERBOARD_ENUM) as [Leaderboard, number][]) {
+			if (!additions[lb]) continue;
+			await this.leaderboardChangeQuery!.run({
+				score: additions[lb]!.score,
+				totalPoints: additions[lb]!.totalPoints,
+				totalCorrectAnswers: additions[lb]!.totalCorrectAnswers,
+				userid,
+				leaderboard: discrim,
+			});
+		}
 	}
 
 	async addHistory(history: Iterable<TriviaHistory>) {
@@ -230,10 +242,17 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			throw new Chat.ErrorMessage(`Can't merge ${from} and ${to}'s Trivia leaderboard entries because SQLite is not enabled.`);
 		}
 
-		for (const isAllTime of [true, false]) {
-			const query = isAllTime ? this.allTimeLeaderboardByUserQuery! : this.notAllTimeLeaderboardByUserQuery!;
-			const fromScores = await query.get([from]);
-			const toScores = await query.get([to]);
+		for (const lbDiscrim of Object.values(LEADERBOARD_ENUM)) {
+			const fromScores = await this.scoreAndPointsByUser!.get([from, lbDiscrim]) || {
+				score: 0,
+				totalCorrectAnswers: 0,
+				totalPoints: 0,
+			};
+			const toScores = (await this.scoreAndPointsByUser!.get([to, lbDiscrim])) || {
+				score: 0,
+				totalCorrectAnswers: 0,
+				totalPoints: 0,
+			};
 
 			toScores.score += fromScores.score;
 			toScores.totalCorrectAnswers += fromScores.totalCorrectAnswers;
@@ -241,9 +260,9 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 			await Chat.database.run(
 				this.leaderboardInsertion!,
-				[to, toScores.score, toScores.totalPoints, toScores.totalCorrectAnswers, Number(isAllTime)]
+				[to, toScores.score, toScores.totalPoints, toScores.totalCorrectAnswers, lbDiscrim]
 			);
-			await this.leaderboardDeletionQuery!.run([from, Number(isAllTime)]);
+			await this.leaderboardDeletionQuery!.run([from, lbDiscrim]);
 		}
 	}
 
@@ -286,6 +305,19 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		);
 	}
 
+	async editQuestion(oldQuestionText: string, newQuestionText?: string, newAnswers?: string[]) {
+		if (this.readyPromise) await this.readyPromise;
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't edit Trivia question because SQLite is not enabled.`);
+		}
+
+		await Chat.database.transaction('editQuestion', {
+			oldQuestionText,
+			newQuestionText,
+			newAnswers,
+		});
+	}
+
 	/*****************************
 	 * Methods for fetching data *
 	 *****************************/
@@ -322,7 +354,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	async getQuestions(
 		categories: string[] | 'all',
 		limit: number,
-		options: {order: 'time' | 'random'}
+		options: {order: 'newestfirst' | 'oldestfirst' | 'random'}
 	): Promise<TriviaQuestion[]> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) throw new Chat.ErrorMessage(`Can't get Trivia questions because SQLite is not enabled.`);
@@ -330,15 +362,17 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		let query;
 		let args;
 		if (categories === 'all') {
-			if (options.order === 'time') {
-				query = this.allQuestionsTimeOrderQuery!;
+			if (options.order === 'newestfirst') {
+				query = this.allQuestionsNewestFirstQuery!;
+			} else if (options.order === 'oldestfirst') {
+				query = this.allQuestionsOldestFirstQuery!;
 			} else {
 				query = this.allQuestionsRandomOrderQuery!;
 			}
 			args = [limit];
 		} else {
 			query = (
-				`SELECT * FROM trivia_questions WHERE category IN (${formatSQLArray(categories)}) AND is_submission = 0 ORDER BY ${options.order === 'time' ? 'added_at DESC' : 'RANDOM()'} LIMIT ?`
+				`SELECT * FROM trivia_questions WHERE category IN (${formatSQLArray(categories)}) AND is_submission = 0 ORDER BY ${options.order === 'random' ? 'RANDOM()' : `added_at ${(options.order === 'oldestfirst' ? 'ASC' : 'DESC')}`} LIMIT ?`
 			);
 			args = [...categories, limit];
 		}
@@ -348,13 +382,13 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
 	}
 
-	async getLeaderboardEntry(id: ID, isAllTime: boolean): Promise<TriviaLeaderboard | null> {
+	async getLeaderboardEntry(id: ID, leaderboard: Leaderboard): Promise<TriviaLeaderboardScore | null> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't find out if user ${id} has a Trivia leaderboard entry because SQLite is not enabled.`);
 		}
 
-		const row = await this.leaderboardByUserQuery!.get([id, Number(isAllTime)]);
+		const row = await this.leaderboardByUserQuery!.get([id, LEADERBOARD_ENUM[leaderboard]]);
 		if (!row) return null;
 		return {
 			score: row.score,
@@ -363,18 +397,16 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		};
 	}
 
-	async getLeaderboards(): Promise<{
-		allTime: TriviaLeaderboard,
-		notAllTime: TriviaLeaderboard,
-	}> {
+	async getLeaderboards(): Promise<TriviaLeaderboards> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't get the Trivia leaderboard scores because SQLite is not enabled.`);
 		}
 
 		const result: TriviaLeaderboards = {
-			allTime: {},
-			notAllTime: {},
+			alltime: {},
+			nonAlltime: {},
+			cycle: {},
 		};
 		const rows = await this.leaderboardQuery!.all([]);
 		for (const row of rows) {
@@ -384,11 +416,13 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 				totalCorrectAnswers: row.total_correct_answers,
 			};
 
-			if (row.is_all_time) {
-				result.allTime[row.userid] = entry;
-			} else {
-				result.notAllTime[row.userid] = entry;
+			let leaderboard: Leaderboard | null = null;
+			for (const [lb, discrim] of Object.entries(LEADERBOARD_ENUM) as [Leaderboard, number][]) {
+				if (discrim === row.leaderboard) leaderboard = lb;
 			}
+			if (leaderboard === null) throw new Error(`Invalid leaderboard value ${row.leaderboard}`);
+
+			result[leaderboard][row.userid] = entry;
 		}
 
 		return result;
@@ -480,6 +514,15 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		await Chat.database.run(this.clearCategoryQuery!, [category]);
 	}
 
+	async clearCycleLeaderboard() {
+		if (this.readyPromise) await this.readyPromise;
+		if (!Config.usesqlite) {
+			throw new Chat.ErrorMessage(`Can't clear the cycle leaderboard because SQLite is not enabled.`);
+		}
+
+		await Chat.database.run(this.clearCycleLeaderboardQuery!);
+	}
+
 	async deleteQuestion(questionText: string) {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
@@ -489,13 +532,13 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		await Chat.database.run(this.deleteQuestionQuery!, [questionText]);
 	}
 
-	async deleteLeaderboardEntry(userid: ID, isAllTime: boolean) {
+	async deleteLeaderboardEntry(userid: ID, leaderboard: Leaderboard) {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't delete leaderboard entries because SQLite is not enabled.`);
 		}
 
-		await this.leaderboardDeletionQuery!.run([userid, Number(isAllTime)]);
+		await this.leaderboardDeletionQuery!.run([userid, LEADERBOARD_ENUM[leaderboard]]);
 	}
 
 	async deleteSubmissions(submissions: string[]) {
@@ -519,7 +562,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		if (Chat.databaseReadyPromise) await Chat.databaseReadyPromise;
 
 		this.leaderboardInsertion = await Chat.database.prepare(
-			`INSERT OR REPLACE INTO trivia_leaderboard (userid, score, total_points, total_correct_answers, is_all_time) VALUES (?, ?, ?, ?, ?) `
+			`INSERT OR REPLACE INTO trivia_leaderboard (userid, score, total_points, total_correct_answers, leaderboard) VALUES (?, ?, ?, ?, ?) `
 		);
 		this.questionInsertion = await Chat.database.prepare(
 			`INSERT OR IGNORE INTO trivia_questions (question, category, added_at, userid, is_submission) VALUES (?, ?, ?, ?, ?)`
@@ -541,10 +584,10 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			`UPDATE trivia_questions SET category = ? WHERE question = ?`
 		);
 		this.leaderboardChangeQuery = await Chat.database.prepare(
-			`INSERT INTO trivia_leaderboard (userid, score, total_points, total_correct_answers, is_all_time) ` +
-			`VALUES ($userid, $score, $totalPoints, $totalCorrectAnswers, $isAllTime) ON CONFLICT DO ` +
+			`INSERT INTO trivia_leaderboard (userid, score, total_points, total_correct_answers, leaderboard) ` +
+			`VALUES ($userid, $score, $totalPoints, $totalCorrectAnswers, $leaderboard) ON CONFLICT DO ` +
 			`UPDATE SET score = score + $score, total_points = total_points + $totalPoints, total_correct_answers = total_correct_answers + $totalCorrectAnswers ` +
-			`WHERE userid = $userid AND is_all_time = $isAllTime`
+			`WHERE userid = $userid AND leaderboard = $leaderboard`
 		);
 		this.migrateCategoryQuery = await Chat.database.prepare(
 			`UPDATE OR REPLACE trivia_questions SET category = ? WHERE category = ?`
@@ -557,8 +600,11 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		this.allQuestionsRandomOrderQuery = await Chat.database.prepare(
 			`SELECT * FROM trivia_questions WHERE category IN ('ae', 'pokemon', 'sg', 'sh') AND is_submission = 0 ORDER BY RANDOM() LIMIT ?`
 		);
-		this.allQuestionsTimeOrderQuery = await Chat.database.prepare(
+		this.allQuestionsNewestFirstQuery = await Chat.database.prepare(
 			`SELECT * FROM trivia_questions WHERE category IN ('ae', 'pokemon', 'sg', 'sh') AND is_submission = 0 ORDER BY added_at DESC LIMIT ?`
+		);
+		this.allQuestionsOldestFirstQuery = await Chat.database.prepare(
+			`SELECT * FROM trivia_questions WHERE category IN ('ae', 'pokemon', 'sg', 'sh') AND is_submission = 0 ORDER BY added_at ASC LIMIT ?`
 		);
 		this.answersQuery = await Chat.database.prepare(
 			`SELECT * FROM trivia_answers WHERE question_id = ?`
@@ -570,13 +616,10 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			`SELECT * FROM trivia_leaderboard`
 		);
 		this.leaderboardByUserQuery = await Chat.database.prepare(
-			`SELECT * FROM trivia_leaderboard WHERE userid = ? AND is_all_time = ?`
+			`SELECT * FROM trivia_leaderboard WHERE userid = ? AND leaderboard = ?`
 		);
-		this.allTimeLeaderboardByUserQuery = await Chat.database.prepare(
-			`SELECT score, total_points as totalPoints, total_correct_answers as totalCorrectAnswers FROM trivia_leaderboard WHERE is_all_time = 1 AND userid = ?`
-		);
-		this.notAllTimeLeaderboardByUserQuery = await Chat.database.prepare(
-			`SELECT score, total_points as totalPoints, total_correct_answers as totalCorrectAnswers FROM trivia_leaderboard WHERE is_all_time = 0 AND userid = ?`
+		this.scoreAndPointsByUser = await Chat.database.prepare(
+			`SELECT score, total_points as totalPoints, total_correct_answers as totalCorrectAnswers FROM trivia_leaderboard WHERE userid = ? AND leaderboard = ?`
 		);
 		this.eventQuestionQuery = await Chat.database.prepare(
 			`SELECT * FROM trivia_settings WHERE key = 'moveEventQuestions'`
@@ -598,13 +641,19 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		);
 
 		this.leaderboardDeletionQuery = await Chat.database.prepare(
-			`DELETE FROM trivia_leaderboard WHERE userid = ? AND is_all_time = ?`
+			`DELETE FROM trivia_leaderboard WHERE userid = ? AND leaderboard = ?`
 		);
 		this.clearAllSubmissionsQuery = await Chat.database.prepare(
 			`DELETE FROM trivia_questions WHERE is_submission = 1`
 		);
 		this.clearCategoryQuery = await Chat.database.prepare(
 			`DELETE FROM trivia_questions WHERE category = ? AND is_submission = 0`
+		);
+		// The leaderboard is hardcoded, because we don't want to accidentally delete any other leaderboards.
+		// If there is a need to reset other leaderboards in the future, this can be changed to accept a parameter.
+		// Not a SQL injection vulnerability because LEADERBOARD_ENUM cannot be altered by the user.
+		this.clearCycleLeaderboardQuery = await Chat.database.prepare(
+			`DELETE FROM trivia_leaderboard WHERE leaderboard = ${LEADERBOARD_ENUM.cycle}`
 		);
 		this.deleteQuestionQuery = await Chat.database.prepare(
 			`DELETE FROM trivia_questions WHERE question = ?`

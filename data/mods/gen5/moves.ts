@@ -19,8 +19,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Aromatherapy');
-			for (const pokemon of source.side.pokemon) {
-				pokemon.cureStatus();
+			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				ally.cureStatus();
 			}
 		},
 	},
@@ -352,8 +353,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {snatch: 1, sound: 1},
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			for (const pokemon of source.side.pokemon) {
-				pokemon.cureStatus();
+			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				ally.cureStatus();
 			}
 		},
 	},

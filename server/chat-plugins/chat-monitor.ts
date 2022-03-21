@@ -426,6 +426,17 @@ export const namefilter: Chat.NameFilter = (name, user) => {
 	const id = toID(name);
 	if (Punishments.namefilterwhitelist.has(id)) return name;
 	if (Monitor.forceRenames.has(id)) {
+		if (typeof Monitor.forceRenames.get(id) === 'number') {
+			// we check this for hotpatching reasons, since on the initial chat patch this will still be a Utils.MultiSet
+			// we're gonna assume no one has seen it since that covers people who _haven't_ actually, and those who have
+			// likely will not be attempting to log into it
+			Monitor.forceRenames.set(id, false);
+		}
+		// false means the user has not seen it yet
+		if (!Monitor.forceRenames.get(id)) {
+			user.trackRename = id;
+			Monitor.forceRenames.set(id, true);
+		}
 		// Don't allow reuse of forcerenamed names
 		return '';
 	}
@@ -464,7 +475,7 @@ export const namefilter: Chat.NameFilter = (name, user) => {
 export const loginfilter: Chat.LoginFilter = user => {
 	if (user.namelocked) return;
 	if (user.trackRename) {
-		const manualForceRename = Monitor.forceRenames.get(toID(user.trackRename));
+		const manualForceRename = Monitor.forceRenames.has(toID(user.trackRename));
 		Rooms.global.notifyRooms(
 			['staff'],
 			Utils.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`
@@ -687,17 +698,11 @@ export const commands: Chat.ChatCommands = {
 		},
 		test(target, room, user) {
 			this.checkCan('lock');
-			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
-			let [monitorName, message] = Utils.splitFirst(target, " ");
-			if (!Chat.monitors[monitorName] && Chat.monitors[monitorName + 'filter']) {
-				monitorName = monitorName + 'filter';
+			if (room && ['staff', 'upperstaff'].includes(room.roomid)) {
+				this.runBroadcast(true, `!filter test ${target}`);
 			}
-			// namefilter doesn't have a monitor function
-			if (!(monitorName && message) || !Chat.monitors[monitorName]?.monitor) {
-				return this.run((Chat.commands.filter as any).testhelp);
-			}
-			const monitor = Chat.monitors[monitorName].monitor!;
-			const lcMessage = Chat.stripFormatting(message
+
+			const lcMessage = Chat.stripFormatting(target
 				.replace(/\u039d/g, 'N')
 				.toLowerCase()
 				// eslint-disable-next-line no-misleading-character-class
@@ -707,22 +712,26 @@ export const commands: Chat.ChatCommands = {
 				.replace(/\u0430/g, 'a')
 				.replace(/\u0435/g, 'e')
 				.replace(/\u039d/g, 'e'));
-			let htmlBoxMessage = ``;
-			for (const line of Chat.filterWords[monitorName]) {
-				const ret = monitor.call(this, line, room, user, message, lcMessage, true);
-				if (typeof ret === 'string') {
-					htmlBoxMessage = ret;
-					break;
-				} else if (ret === false) {
-					htmlBoxMessage = `"${message}" would be blocked from being sent.`;
-					break;
-				 }
+			const buf = [];
+			for (const monitorName in Chat.monitors) {
+				const monitor = Chat.monitors[monitorName];
+				if (!monitor.monitor) continue;
+				for (const line of Chat.filterWords[monitorName]) {
+					const ret = monitor.monitor.call(this, line, room, user, target, lcMessage, true);
+					if (typeof ret === 'string') {
+						buf.push(`${monitorName}: ${ret}`);
+						break;
+					} else if (ret === false) {
+						buf.push(`${monitorName}: "${target}" would be blocked from being sent.`);
+						break;
+					}
+				}
 			}
-			if (htmlBoxMessage) {
-				return this.sendReplyBox(Chat.formatText(htmlBoxMessage, false, true));
+			if (buf.length) {
+				return this.sendReplyBox(Chat.formatText(buf.join('\n'), false, true));
 			} else {
 				throw new Chat.ErrorMessage(
-					`"${message}" doesn't trigger any filters on the ${monitorName}${monitorName.endsWith('filter') ? '' : ' filter'}. Check spelling?`
+					`"${target}" doesn't trigger any filters. Check spelling?`
 				);
 			}
 		},
@@ -754,7 +763,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('forcerename');
 		target = toID(target);
 		if (!target) return this.errorReply(`Syntax: /allowname username`);
-		if (!Punishments.whitelistName(target, user.name)) {
+		if (Punishments.namefilterwhitelist.has(target)) {
 			return this.errorReply(`${target} is already allowed as a username.`);
 		}
 
@@ -765,6 +774,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(msg);
 		}
 		this.globalModlog(`ALLOWNAME`, target);
+		Monitor.forceRenames.delete(target as ID);
 	},
 };
 

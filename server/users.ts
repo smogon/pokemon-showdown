@@ -148,7 +148,7 @@ function getExactUser(name: string | User) {
  */
 function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boolean, includeTrusted?: boolean} = {}) {
 	const matches: User[] = [];
-	if (options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
+	if (options.forPunishment) ips = ips.filter(ip => !Punishments.isSharedIp(ip));
 	const ipMatcher = IPTools.checker(ips);
 	for (const user of users.values()) {
 		if (!options.forPunishment && !user.named && !user.connected) continue;
@@ -177,6 +177,10 @@ function isUsernameKnown(name: string) {
 		if (room.auth.has(userid)) return true;
 	}
 	return false;
+}
+
+function isUsername(name: string) {
+	return /[A-Za-z0-9]/.test(name.charAt(0)) && /[A-Za-z]/.test(name) && !name.includes(',');
 }
 
 function isTrusted(userid: ID) {
@@ -508,17 +512,13 @@ export class User extends Chat.MessageContext {
 	popup(message: string) {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
-	getIdentity(roomid: RoomID = '') {
+	getIdentity(room: BasicRoom | null = null) {
 		const punishgroups = Config.punishgroups || {locked: null, muted: null};
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (punishgroups.locked && punishgroups.locked.symbol || '\u203d');
 			return lockedSymbol + this.name;
 		}
-		if (roomid) {
-			const room = Rooms.get(roomid);
-			if (!room) {
-				throw new Error(`Room doesn't exist: ${roomid}`);
-			}
+		if (room) {
 			if (room.isMuted(this)) {
 				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 				return mutedSymbol + this.name;
@@ -531,8 +531,8 @@ export class User extends Chat.MessageContext {
 		}
 		return this.tempGroup + this.name;
 	}
-	getIdentityWithStatus(roomid: RoomID = '') {
-		const identity = this.getIdentity(roomid);
+	getIdentityWithStatus(room: BasicRoom | null = null) {
+		const identity = this.getIdentity(room);
 		const status = this.statusType === 'online' ? '' : '@!';
 		return `${identity}${status}`;
 	}
@@ -1065,9 +1065,7 @@ export class User extends Chat.MessageContext {
 		this.registered = true;
 		if (!isMerge) this.tempGroup = globalAuth.get(this.id);
 
-		if (Config.customavatars && Config.customavatars[this.id]) {
-			this.avatar = Config.customavatars[this.id];
-		}
+		Users.Avatars?.handleLogin(this);
 
 		const groupInfo = Config.groups[this.tempGroup];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
@@ -1149,7 +1147,7 @@ export class User extends Chat.MessageContext {
 	}
 	markDisconnected() {
 		if (!this.connected) return;
-		Chat.runHandlers('Disconnect', this);
+		Chat.runHandlers('onDisconnect', this);
 		this.connected = false;
 		Users.onlineCount--;
 		this.lastDisconnected = Date.now();
@@ -1705,8 +1703,10 @@ export const Users = {
 	getExact: getExactUser,
 	findUsers,
 	Auth,
+	Avatars: null as typeof import('./chat-commands/avatars').Avatars | null,
 	globalAuth,
 	isUsernameKnown,
+	isUsername,
 	isTrusted,
 	SECTIONLEADER_SYMBOL,
 	PLAYER_SYMBOL,

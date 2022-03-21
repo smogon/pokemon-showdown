@@ -56,6 +56,7 @@ export class Roomlog {
 	 * Scrollback log
 	 */
 	log: string[];
+	visibleMessageCount = 0;
 	broadcastBuffer: string[];
 	/**
 	 * undefined = uninitialized,
@@ -143,6 +144,11 @@ export class Roomlog {
 	}
 	add(message: string) {
 		this.roomlog(message);
+		// |uhtml gets both uhtml and uhtmlchange
+		// which are visible and so should be counted
+		if (['|c|', '|c:|', '|raw|', '|html|', '|uhtml'].some(k => message.startsWith(k))) {
+			this.visibleMessageCount++;
+		}
 		message = this.withTimestamp(message);
 		this.log.push(message);
 		this.broadcastBuffer.push(message);
@@ -212,7 +218,7 @@ export class Roomlog {
 		}
 		this.broadcastBuffer.push(fullMessage);
 	}
-	private parseChatLine(line: string) {
+	parseChatLine(line: string) {
 		const messageStart = !this.noLogTimes ? '|c:|' : '|c|';
 		const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		if (line.startsWith(messageStart)) {
@@ -275,8 +281,8 @@ export class Roomlog {
 	/**
 	 * Returns the total number of lines in the roomlog, including truncated lines.
 	 */
-	getLineCount() {
-		return this.log.length + this.numTruncatedLines;
+	getLineCount(onlyVisible = true) {
+		return (onlyVisible ? this.visibleMessageCount : this.log.length) + this.numTruncatedLines;
 	}
 
 	destroy() {

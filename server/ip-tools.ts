@@ -49,9 +49,7 @@ export const IPTools = new class {
 	readonly hostRegex = /^.+\..{2,}$/;
 
 	async lookup(ip: string) {
-		// known TypeScript bug
-		// https://github.com/microsoft/TypeScript/issues/33752
-		const [dnsbl, host] = await Promise.all<string | null, string>([
+		const [dnsbl, host] = await Promise.all([
 			IPTools.queryDnsbl(ip),
 			IPTools.getHost(ip),
 		]);
@@ -184,6 +182,9 @@ export const IPTools = new class {
 		if (minIP === null || maxIP === null || maxIP < minIP) return null;
 		return {minIP, maxIP};
 	}
+	rangeToString(range: AddressRange, sep = '-') {
+		return `${this.numberToIP(range.minIP)}${sep}${this.numberToIP(range.maxIP)}`;
+	}
 
 	/******************************
 	 * Range management functions *
@@ -295,7 +296,7 @@ export const IPTools = new class {
 		}
 		IPTools.sortRanges();
 		for (const range of IPTools.ranges) {
-			const data = `RANGE,${IPTools.numberToIP(range.minIP)},${IPTools.numberToIP(range.maxIP)}${range.host ? `,${range.host}` : ``}\n`;
+			const data = `RANGE,${IPTools.rangeToString(range, ',')}${range.host ? `,${range.host}` : ``}\n`;
 			if (range.host?.endsWith('/proxy')) {
 				proxiesData += data;
 			} else {
@@ -362,10 +363,19 @@ export const IPTools = new class {
 		return IPTools.saveHostsAndRanges();
 	}
 
+	rangeIntersects(a: AddressRange, b: AddressRange) {
+		try {
+			this.checkRangeConflicts(a, [b]);
+		} catch {
+			return true;
+		}
+		return false;
+	}
+
 	checkRangeConflicts(insertion: AddressRange, sortedRanges: AddressRange[], widen?: boolean) {
 		if (insertion.maxIP < insertion.minIP) {
 			throw new Error(
-				`Invalid data for address range ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})`
+				`Invalid data for address range ${IPTools.rangeToString(insertion)} (${insertion.host})`
 			);
 		}
 
@@ -382,7 +392,7 @@ export const IPTools = new class {
 		if (iMin < sortedRanges.length) {
 			const next = sortedRanges[iMin];
 			if (insertion.minIP === next.minIP && insertion.maxIP === next.maxIP) {
-				throw new Error(`The address range ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host}) already exists`);
+				throw new Error(`The address range ${IPTools.rangeToString(insertion)} (${insertion.host}) already exists`);
 			}
 			if (insertion.minIP <= next.minIP && insertion.maxIP >= next.maxIP) {
 				if (widen) {
@@ -392,14 +402,14 @@ export const IPTools = new class {
 					return iMin;
 				}
 				throw new Error(
-					`Too wide: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
-					`Intersects with: ${IPTools.numberToIP(next.minIP)}-${IPTools.numberToIP(next.maxIP)} (${next.host})`
+					`Too wide: ${IPTools.rangeToString(insertion)} (${insertion.host})\n` +
+					`Intersects with: ${IPTools.rangeToString(next)} (${next.host})`
 				);
 			}
 			if (insertion.maxIP >= next.minIP) {
 				throw new Error(
-					`Could not insert: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} ${insertion.host}\n` +
-					`Intersects with: ${IPTools.numberToIP(next.minIP)}-${IPTools.numberToIP(next.maxIP)} (${next.host})`
+					`Could not insert: ${IPTools.rangeToString(insertion)} ${insertion.host}\n` +
+					`Intersects with: ${IPTools.rangeToString(next)} (${next.host})`
 				);
 			}
 		}
@@ -407,14 +417,14 @@ export const IPTools = new class {
 			const prev = sortedRanges[iMin - 1];
 			if (insertion.minIP >= prev.minIP && insertion.maxIP <= prev.maxIP) {
 				throw new Error(
-					`Too narrow: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
-					`Intersects with: ${IPTools.numberToIP(prev.minIP)}-${IPTools.numberToIP(prev.maxIP)} (${prev.host})`
+					`Too narrow: ${IPTools.rangeToString(insertion)} (${insertion.host})\n` +
+					`Intersects with: ${IPTools.rangeToString(prev)} (${prev.host})`
 				);
 			}
 			if (insertion.minIP <= prev.maxIP) {
 				throw new Error(
-					`Could not insert: ${IPTools.numberToIP(insertion.minIP)}-${IPTools.numberToIP(insertion.maxIP)} (${insertion.host})\n` +
-					`Intersects with: ${IPTools.numberToIP(prev.minIP)}-${IPTools.numberToIP(prev.maxIP)} (${prev.host})`
+					`Could not insert: ${IPTools.rangeToString(insertion)} (${insertion.host})\n` +
+					`Intersects with: ${IPTools.rangeToString(prev)} (${prev.host})`
 				);
 			}
 		}
@@ -568,7 +578,7 @@ export const IPTools = new class {
 	 * - 'unknown' - no rdns entry, treat with suspicion
 	 */
 	getHostType(host: string, ip: string) {
-		if (Punishments.sharedIps.has(ip)) {
+		if (Punishments.isSharedIp(ip)) {
 			return 'shared';
 		}
 		if (this.singleIPOpenProxies.has(ip) || this.torProxyIps.has(ip)) {

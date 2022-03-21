@@ -362,7 +362,7 @@ export const Twitch = new class {
 	}
 };
 
-export class GroupWatch extends Rooms.RoomGame {
+export class GroupWatch extends Rooms.SimpleRoomGame {
 	url: string;
 	info: VideoData;
 	started: number | null = null;
@@ -435,7 +435,7 @@ export class GroupWatch extends Rooms.RoomGame {
 	}
 }
 
-export class TwitchStream extends Rooms.RoomGame {
+export class TwitchStream extends Rooms.SimpleRoomGame {
 	started = false;
 	data: TwitchChannel;
 	constructor(room: Room, data: TwitchChannel) {

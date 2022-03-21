@@ -283,7 +283,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
+			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)) {
 				this.gen = 8;
 			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
@@ -468,15 +468,28 @@ export class DexSpecies {
 			if (this.dex.currentMod === 'gen7letsgo' && !species.isNonstandard) {
 				const isLetsGo = (
 					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
-					(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
+					(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
+					species.name !== 'Pikachu-Alola'))
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
-			species.nfe = !!(species.evos.length && this.get(species.evos[0]).gen <= this.dex.gen);
+			if (this.dex.currentMod === 'gen8bdsp' &&
+				(!species.isNonstandard || ["Gigantamax", "CAP"].includes(species.isNonstandard))) {
+				if (species.gen > 4 || (species.num < 1 && species.isNonstandard !== 'CAP') ||
+					species.id === 'pichuspikyeared') {
+					species.isNonstandard = 'Future';
+					species.tier = species.doublesTier = 'Illegal';
+				}
+			}
+			species.nfe = species.evos.some(evo => {
+				const evoSpecies = this.get(evo);
+				return !evoSpecies.isNonstandard || evoSpecies.isNonstandard === species?.isNonstandard;
+			});
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
 			if (this.dex.gen < 5) delete species.abilities['H'];
+			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
 		} else {
 			species = new Species({
 				id, name: id,

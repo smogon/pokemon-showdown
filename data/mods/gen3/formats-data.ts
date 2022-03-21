@@ -17,7 +17,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	charizard: {
 		randomBattleMoves: ["bellydrum", "dragondance", "earthquake", "fireblast", "hiddenpowerflying", "substitute"],
-		tier: "UUBL",
+		tier: "OU",
 	},
 	squirtle: {
 		tier: "LC",
@@ -215,7 +215,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	arcanine: {
-		randomBattleMoves: ["fireblast", "flamethrower", "extremespeed", "hiddenpowergrass", "rest", "sleeptalk", "toxic"],
+		randomBattleMoves: ["extremespeed", "fireblast", "flamethrower", "hiddenpowergrass", "rest", "sleeptalk", "toxic"],
 		tier: "UUBL",
 	},
 	poliwag: {
@@ -294,14 +294,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	slowking: {
-		randomBattleMoves: ["calmmind", "flamethrower", "icebeam", "psychic", "surf", "rest", "sleeptalk", "thunderwave"],
+		randomBattleMoves: ["calmmind", "flamethrower", "icebeam", "psychic", "rest", "sleeptalk", "surf", "thunderwave"],
 		tier: "UU",
 	},
 	magnemite: {
 		tier: "LC",
 	},
 	magneton: {
-		randomBattleMoves: ["hiddenpowergrass", "hiddenpowerice", "rest", "sleeptalk", "substitute", "thunderbolt", "thunderwave", "toxic"],
+		randomBattleMoves: ["hiddenpowergrass", "hiddenpowerice", "rest", "sleeptalk", "thunderbolt", "toxic"],
 		tier: "OU",
 	},
 	farfetchd: {
@@ -326,14 +326,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	muk: {
-		randomBattleMoves: ["curse", "brickbreak", "explosion", "fireblast", "hiddenpowerghost", "rest", "sludgebomb"],
+		randomBattleMoves: ["brickbreak", "curse", "explosion", "fireblast", "hiddenpowerghost", "rest", "sludgebomb"],
 		tier: "UU",
 	},
 	shellder: {
 		tier: "LC",
 	},
 	cloyster: {
-		randomBattleMoves: ["explosion", "icebeam", "surf", "rapidspin", "spikes", "toxic"],
+		randomBattleMoves: ["explosion", "icebeam", "rapidspin", "spikes", "surf", "toxic"],
 		tier: "OU",
 	},
 	gastly: {
@@ -544,7 +544,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	porygon2: {
 		randomBattleMoves: ["icebeam", "recover", "return", "thunderbolt", "thunderwave", "toxic"],
-		tier: "OU",
+		tier: "UUBL",
 	},
 	omanyte: {
 		tier: "LC",
@@ -565,7 +565,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	snorlax: {
-		randomBattleMoves: ["bodyslam", "curse", "earthquake", "return", "rest", "selfdestruct", "shadowball", "sleeptalk"],
+		randomBattleMoves: ["bodyslam", "curse", "earthquake", "rest", "return", "selfdestruct", "shadowball", "sleeptalk"],
 		tier: "OU",
 	},
 	articuno: {
@@ -764,7 +764,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	dunsparce: {
-		randomBattleMoves: ["bodyslam", "curse", "headbutt", "rockslide", "rest", "shadowball", "thunderwave"],
+		randomBattleMoves: ["bodyslam", "curse", "headbutt", "rest", "rockslide", "shadowball", "thunderwave"],
 		tier: "NU",
 	},
 	gligar: {
@@ -831,11 +831,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	mantine: {
-		randomBattleMoves: ["haze", "hiddenpowergrass", "icebeam", "surf", "raindance", "rest", "sleeptalk", "toxic"],
+		randomBattleMoves: ["haze", "hiddenpowergrass", "icebeam", "raindance", "rest", "sleeptalk", "surf", "toxic"],
 		tier: "UU",
 	},
 	skarmory: {
-		randomBattleMoves: ["drillpeck", "protect", "rest", "roar", "sleeptalk", "spikes", "toxic"],
+		randomBattleMoves: ["doubleedge", "drillpeck", "protect", "rest", "roar", "sleeptalk", "spikes", "toxic"],
 		tier: "OU",
 	},
 	houndour: {
@@ -891,7 +891,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	hooh: {
-		randomBattleMoves: ["calmmind", "earthquake", "sacredfire", "thunderbolt", "recover", "substitute", "toxic"],
+		randomBattleMoves: ["calmmind", "earthquake", "recover", "sacredfire", "substitute", "thunderbolt", "toxic"],
 		tier: "Uber",
 	},
 	celebi: {
@@ -1053,7 +1053,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	hariyama: {
-		randomBattleMoves: ["bulkup", "crosschop", "fakeout", "focuspunch", "hiddenpowerghost", "rockslide", "substitute", "rest", "sleeptalk"],
+		randomBattleMoves: ["bulkup", "crosschop", "fakeout", "hiddenpowerghost", "rest", "rockslide", "sleeptalk"],
 		tier: "UUBL",
 	},
 	nosepass: {
@@ -1206,7 +1206,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	whiscash: {
-		randomBattleMoves: ["earthquake", "hiddenpowerbug", "icebeam", "rockslide", "rest", "sleeptalk", "spark", "surf", "toxic"],
+		randomBattleMoves: ["earthquake", "hiddenpowerbug", "icebeam", "rest", "rockslide", "sleeptalk", "spark", "surf", "toxic"],
 		tier: "NU",
 	},
 	corphish: {
@@ -1241,7 +1241,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	milotic: {
-		randomBattleMoves: ["icebeam", "mirrorcoat", "recover", "rest", "sleeptalk", "surf", "toxic"],
+		randomBattleMoves: ["icebeam", "mirrorcoat", "recover", "surf", "toxic"],
 		tier: "OU",
 	},
 	castform: {
@@ -1352,7 +1352,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	registeel: {
-		randomBattleMoves: ["protect", "rest", "seismictoss", "sleeptalk", "toxic"],
+		randomBattleMoves: ["rest", "seismictoss", "sleeptalk", "toxic"],
 		tier: "UUBL",
 	},
 	latias: {
@@ -1364,7 +1364,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	kyogre: {
-		randomBattleMoves: ["calmmind", "icebeam", "rest", "sleeptalk", "surf", "thunder", "waterspout"],
+		randomBattleMoves: ["calmmind", "icebeam", "rest", "sleeptalk", "surf", "thunder"],
 		tier: "Uber",
 	},
 	groudon: {

@@ -5,6 +5,8 @@
 import {QueryProcessManager} from './process-manager';
 import type * as sqlite from 'better-sqlite3';
 import {FS} from './fs';
+// @ts-ignore in case not installed
+import type {SQLStatement} from 'sql-template-strings';
 
 export const DB_NOT_FOUND = null;
 
@@ -14,9 +16,18 @@ export interface SQLOptions {
 	extension?: string;
 	/** options to be passed to better-sqlite3 */
 	sqliteOptions?: sqlite.Options;
+	/**
+	 * You can choose to return custom error information, or just crashlog and return void.
+	 * doing that will make it reject in main as normal.
+	 * (it only returns a diff result if you do, otherwise it's a default error).
+	 * You can also choose to only handle errors in the parent - see the third param, isParentProcess.
+	 */
+	onError?: ErrorHandler;
 }
 
 type DataType = unknown[] | Record<string, unknown>;
+export type SQLInput = string | number | null;
+export interface ResultRow {[k: string]: SQLInput}
 
 export interface TransactionEnvironment {
 	db: sqlite.Database;
@@ -46,7 +57,7 @@ type DatabaseQuery = {
 	type: 'load-extension', data: string,
 };
 
-type ErrorHandler = (error: Error, data: DatabaseQuery) => void;
+type ErrorHandler = (error: Error, data: DatabaseQuery, isParentProcess: boolean) => any;
 
 function getModule() {
 	try {
@@ -56,21 +67,21 @@ function getModule() {
 	}
 }
 
-export class Statement {
+export class Statement<R extends DataType = DataType, T = any> {
 	private db: SQLDatabaseManager;
 	private statement: string;
 	constructor(statement: string, db: SQLDatabaseManager) {
 		this.db = db;
 		this.statement = statement;
 	}
-	run(data: DataType) {
+	run(data: R) {
 		return this.db.run(this.statement, data);
 	}
-	all(data: DataType) {
-		return this.db.all(this.statement, data);
+	all(data: R) {
+		return this.db.all<T>(this.statement, data);
 	}
-	get(data: DataType) {
-		return this.db.get(this.statement, data);
+	get(data: R) {
+		return this.db.get<T>(this.statement, data);
 	}
 	toString() {
 		return this.statement;
@@ -88,8 +99,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		statements: Map<string, sqlite.Statement>,
 	};
 	private dbReady = false;
-	onError: ErrorHandler;
-	constructor(module: NodeJS.Module, options: SQLOptions, onError?: ErrorHandler) {
+	constructor(module: NodeJS.Module, options: SQLOptions) {
 		super(module, query => {
 			if (!this.dbReady) {
 				this.setupDatabase();
@@ -149,18 +159,24 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		});
 
 		this.options = options;
-		this.onError = onError || ((err, query) => {
-			if (global.Monitor?.crashlog) {
-				Monitor.crashlog(err, `an ${this.basename} SQLite process`, query);
-				return null;
-			}
-			throw new Error(`SQLite error: ${err.message} (${JSON.stringify(query)})`);
-		});
 		this.state = {
 			transactions: new Map(),
 			statements: new Map(),
 		};
 		if (!this.isParentProcess) this.setupDatabase();
+	}
+	private onError(err: Error, query: DatabaseQuery) {
+		if (this.options.onError) {
+			const result = this.options.onError(err, query, false);
+			if (result) return result;
+		}
+		return {
+			queryError: {
+				stack: err.stack,
+				message: err.message,
+				query,
+			},
+		};
 	}
 	private cacheStatement(source: string) {
 		source = source.trim();
@@ -220,6 +236,19 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			onDatabaseStart(this.database);
 		}
 	}
+	async query(input: DatabaseQuery) {
+		const result = await super.query(input);
+		if (result?.queryError) {
+			const err = new Error(result.queryError.message);
+			err.stack = result.queryError.stack;
+			if (this.options.onError) {
+				const errResult = this.options.onError(err, result.queryError.query, true);
+				if (errResult) return errResult;
+			}
+			throw err;
+		}
+		return result;
+	}
 	all<T = any>(
 		statement: string | Statement, data: DataType = [], noPrepare?: boolean
 	): Promise<T[]> {
@@ -259,25 +288,168 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	}
 }
 
-interface SetupOptions {
-	onError: ErrorHandler;
-	processes: number;
+export const tables = new Map<string, DatabaseTable<any>>();
+
+export class DatabaseTable<T> {
+	database: SQLDatabaseManager;
+	name: string;
+	primaryKeyName: string;
+	constructor(
+		name: string,
+		primaryKeyName: string,
+		database: SQLDatabaseManager
+	) {
+		this.name = name;
+		this.database = database;
+		this.primaryKeyName = primaryKeyName;
+		tables.set(this.name, this);
+	}
+	async selectOne<R = T>(
+		entries: string | string[],
+		where?: SQLStatement
+	): Promise<R | null> {
+		const query = where || SQL.SQL``;
+		query.append(' LIMIT 1');
+		const rows = await this.selectAll<R>(entries, query);
+		return rows?.[0] || null;
+	}
+	selectAll<R = T>(
+		entries: string | string[],
+		where?: SQLStatement
+	): Promise<R[]> {
+		const query = SQL.SQL`SELECT `;
+		if (typeof entries === 'string') {
+			query.append(` ${entries} `);
+		} else {
+			for (let i = 0; i < entries.length; i++) {
+				query.append(entries[i]);
+				if (typeof entries[i + 1] !== 'undefined') query.append(', ');
+			}
+			query.append(' ');
+		}
+		query.append(`FROM ${this.name} `);
+		if (where) {
+			query.append(' WHERE ');
+			query.append(where);
+		}
+		return this.all<R>(query);
+	}
+	get(entries: string | string[], keyId: SQLInput) {
+		const query = SQL.SQL``;
+		query.append(this.primaryKeyName);
+		query.append(SQL.SQL` = ${keyId}`);
+		return this.selectOne(entries, query);
+	}
+	updateAll(toParams: Partial<T>, where?: SQLStatement, limit?: number) {
+		const to = Object.entries(toParams);
+		const query = SQL.SQL`UPDATE `;
+		query.append(this.name + ' SET ');
+		for (let i = 0; i < to.length; i++) {
+			const [k, v] = to[i];
+			query.append(`${k} = `);
+			query.append(SQL.SQL`${v}`);
+			if (typeof to[i + 1] !== 'undefined') {
+				query.append(', ');
+			}
+		}
+
+		if (where) {
+			query.append(` WHERE `);
+			query.append(where);
+		}
+		if (limit) query.append(SQL.SQL` LIMIT ${limit}`);
+		return this.run(query);
+	}
+	updateOne(to: Partial<T>, where?: SQLStatement) {
+		return this.updateAll(to, where, 1);
+	}
+	deleteAll(where?: SQLStatement, limit?: number) {
+		const query = SQL.SQL`DELETE FROM `;
+		query.append(this.name);
+		if (where) {
+			query.append(' WHERE ');
+			query.append(where);
+		}
+		if (limit) {
+			query.append(SQL.SQL` LIMIT ${limit}`);
+		}
+		return this.run(query);
+	}
+	delete(keyEntry: SQLInput) {
+		const query = SQL.SQL``;
+		query.append(this.primaryKeyName);
+		query.append(SQL.SQL` = ${keyEntry}`);
+		return this.deleteOne(query);
+	}
+	deleteOne(where: SQLStatement) {
+		return this.deleteAll(where, 1);
+	}
+	insert(colMap: Partial<T>, rest?: SQLStatement, isReplace = false) {
+		const query = SQL.SQL``;
+		query.append(`${isReplace ? 'REPLACE' : 'INSERT'} INTO ${this.name} (`);
+		const keys = Object.keys(colMap);
+		for (let i = 0; i < keys.length; i++) {
+			query.append(keys[i]);
+			if (typeof keys[i + 1] !== 'undefined') query.append(', ');
+		}
+		query.append(') VALUES (');
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			query.append(SQL.SQL`${colMap[key as keyof T]}`);
+			if (typeof keys[i + 1] !== 'undefined') query.append(', ');
+		}
+		query.append(') ');
+		if (rest) query.append(rest);
+		return this.database.run(query.sql, query.values);
+	}
+	replace(cols: Partial<T>, rest?: SQLStatement) {
+		return this.insert(cols, rest, true);
+	}
+	update(primaryKey: SQLInput, data: Partial<T>) {
+		const query = SQL.SQL``;
+		query.append(this.primaryKeyName + ' = ');
+		query.append(SQL.SQL`${primaryKey}`);
+		return this.updateOne(data, query);
+	}
+
+	// catch-alls for "we can't fit this query into any of the wrapper functions"
+	run(sql: SQLStatement) {
+		return this.database.run(sql.sql, sql.values) as Promise<{changes: number}>;
+	}
+	all<R = T>(sql: SQLStatement) {
+		return this.database.all<R>(sql.sql, sql.values);
+	}
 }
 
-export function SQL(
-	module: NodeJS.Module, input: SQLOptions & Partial<SetupOptions>
+function getSQL(
+	module: NodeJS.Module, input: SQLOptions & {processes?: number}
 ) {
-	const {onError, processes} = input;
-	for (const k of ['onError', 'processes'] as const) delete input[k];
-	const PM = new SQLDatabaseManager(module, input, onError);
+	const {processes} = input;
+	const PM = new SQLDatabaseManager(module, input);
 	if (PM.isParentProcess) {
 		if (processes) PM.spawn(processes);
 	}
 	return PM;
 }
 
+export const SQL = Object.assign(getSQL, {
+	DatabaseTable,
+	SQLDatabaseManager,
+	tables,
+	SQL: (() => {
+		try {
+			return require('sql-template-strings');
+		} catch {
+			return () => {
+				throw new Error("Using SQL-template-strings without it installed");
+			};
+		}
+	})() as typeof import('sql-template-strings').SQL,
+});
+
 export namespace SQL {
 	export type DatabaseManager = import('./sql').SQLDatabaseManager;
 	export type Statement = import('./sql').Statement;
 	export type Options = import('./sql').SQLOptions;
+	export type DatabaseTable<T> = import('./sql').DatabaseTable<T>;
 }

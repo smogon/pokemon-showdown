@@ -2598,6 +2598,9 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "Resets the stat stages of both Pokemon to 0 and removes stat reductions due to burn and paralysis. Resets Toxic counters to 0 and removes the effect of confusion, Disable, Focus Energy, Leech Seed, Light Screen, Mist, and Reflect from both Pokemon. Removes the opponent's non-volatile status condition.",
 			shortDesc: "Resets all stat changes. Removes foe's status.",
 		},
+
+		// Only used in Gen 1
+		activate: "  All STATUS changes are eliminated!",
 	},
 	headbutt: {
 		name: "Headbutt",
@@ -3481,27 +3484,27 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	maxairstream: {
 		name: "Max Airstream",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the user's side is raised by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the user's side is raised by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Allies: +1 Speed.",
 	},
 	maxdarkness: {
 		name: "Max Darkness",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Special Defense of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Special Defense of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Foes: -1 Sp. Def.",
 	},
 	maxflare: {
 		name: "Max Flare",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Sunny Day begins.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Sunny Day begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Starts Sunny Day.",
 	},
 	maxflutterby: {
 		name: "Max Flutterby",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Special Attack of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Special Attack of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Foes: -1 Sp. Atk.",
 	},
 	maxgeyser: {
 		name: "Max Geyser",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Rain Dance begins.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Rain Dance begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Starts Rain Dance.",
 	},
 	maxguard: {
@@ -3513,67 +3516,67 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	maxhailstorm: {
 		name: "Max Hailstorm",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Hail begins.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Hail begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Starts Hail.",
 	},
 	maxknuckle: {
 		name: "Max Knuckle",
-		desc: "Boosts the user and its allies' Attack by 1 stage. BP scales with the base move's BP.",
+		desc: "Boosts the user and its allies' Attack by 1 stage. BP scales with the base move's BP. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Allies: +1 Attack.",
 	},
 	maxlightning: {
 		name: "Max Lightning",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Electric Terrain begins.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Electric Terrain begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Starts Electric Terrain.",
 	},
 	maxmindstorm: {
 		name: "Max Mindstorm",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Psychic Terrain begins.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Psychic Terrain begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Starts Psychic Terrain.",
 	},
 	maxooze: {
 		name: "Max Ooze",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Special Attack of each Pokemon on the user's side is raised by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Special Attack of each Pokemon on the user's side is raised by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Allies: +1 Sp. Atk.",
 	},
 	maxovergrowth: {
 		name: "Max Overgrowth",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Grassy Terrain begins.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Grassy Terrain begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Starts Grassy Terrain.",
 	},
 	maxphantasm: {
 		name: "Max Phantasm",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Defense of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Defense of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Foes: -1 Defense.",
 	},
 	maxquake: {
 		name: "Max Quake",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Special Defense of each Pokemon on the user's side is raised by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Special Defense of each Pokemon on the user's side is raised by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Allies: +1 Sp. Def.",
 	},
 	maxrockfall: {
 		name: "Max Rockfall",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Sandstorm begins.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Sandstorm begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Starts Sandstorm.",
 	},
 	maxstarfall: {
 		name: "Max Starfall",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Misty Terrain begins.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Misty Terrain begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Starts Misty Terrain.",
 	},
 	maxsteelspike: {
 		name: "Max Steelspike",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Defense of each Pokemon on the user's side is raised by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Defense of each Pokemon on the user's side is raised by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Allies: +1 Defense.",
 	},
 	maxstrike: {
 		name: "Max Strike",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Foes: -1 Speed.",
 	},
 	maxwyrmwind: {
 		name: "Max Wyrmwind",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Attack of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Attack of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
 		shortDesc: "Base move affects power. Foes: -1 Attack.",
 	},
 	meanlook: {
@@ -3726,7 +3729,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	mimic: {
 		name: "Mimic",
-		desc: "While the user remains active, this move is replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, if the user already knows the move, or if the move is Chatter, Dynamax Cannon, Mimic, Sketch, Struggle, Transform, or any Z-Move.",
+		desc: "While the user remains active, this move is replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, if the user already knows the move, or if the move is Behemoth Bash, Behemoth Blade, Chatter, Dynamax Cannon, Mimic, Sketch, Struggle, Transform, or any Z-Move.",
 		shortDesc: "The last move the target used replaces this one.",
 		gen6: {
 			desc: "While the user remains active, this move is replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, if the user already knows the move, or if the move is Chatter, Mimic, Sketch, Struggle, or Transform.",
@@ -3848,9 +3851,13 @@ export const MovesText: {[k: string]: MoveText} = {
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "While active, user is protected from stat drops.",
+			start: "  [POKEMON]'s shrouded in MIST!",
+			block: "  [POKEMON]'s protected by MIST.",
 		},
 		gen1: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon, unless caused by the secondary effect of a move. Fails if the user already has the effect. If any Pokemon uses Haze, this effect ends.",
+			start: "  [POKEMON]'s shrouded in mist!",
+			block: "  But, it failed!",
 		},
 
 		start: "  [TEAM] became shrouded in mist!",

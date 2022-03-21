@@ -425,7 +425,8 @@ export class BattleActions {
 			target = targets[targets.length - 1]; // in case of redirection
 		}
 
-		if (!sourceEffect || sourceEffect.id === 'pursuit') {
+		const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
+		if (!sourceEffect || callerMoveForPressure || sourceEffect.id === 'pursuit') {
 			let extraPP = 0;
 			for (const source of pressureTargets) {
 				const ppDrop = this.battle.runEvent('DeductPP', source, pokemon, move);
@@ -434,7 +435,7 @@ export class BattleActions {
 				}
 			}
 			if (extraPP > 0) {
-				pokemon.deductPP(moveOrMoveName, extraPP);
+				pokemon.deductPP(callerMoveForPressure || moveOrMoveName, extraPP);
 			}
 		}
 
@@ -536,7 +537,7 @@ export class BattleActions {
 			[moveSteps[2], moveSteps[4]] = [moveSteps[4], moveSteps[2]];
 		}
 
-		if (!notActive) this.battle.setActiveMove(move, pokemon, targets[0]);
+		if (notActive) this.battle.setActiveMove(move, pokemon, targets[0]);
 
 		const hitResult = this.battle.singleEvent('Try', move, null, pokemon, targets[0], move) &&
 			this.battle.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move) &&
@@ -1271,7 +1272,10 @@ export class BattleActions {
 				this.battle.runEvent('ModifySecondaries', target, source, moveData, moveData.secondaries.slice());
 			for (const secondary of secondaries) {
 				const secondaryRoll = this.battle.random(100);
-				if (typeof secondary.chance === 'undefined' || secondaryRoll < secondary.chance) {
+				// User stat boosts or target stat drops can possibly overflow if it goes beyond 256
+				const secondaryOverflow = (secondary.boosts || secondary.self);
+				if (typeof secondary.chance === 'undefined' ||
+					secondaryRoll < (secondaryOverflow ? secondary.chance % 256 : secondary.chance)) {
 					this.moveHit(target, source, move, secondary, true, isSelf);
 				}
 			}
@@ -1434,7 +1438,7 @@ export class BattleActions {
 				this.battle.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;
 			case 'healreplacement':
-				move.self = {slotCondition: 'healreplacement'};
+				pokemon.side.addSlotCondition(pokemon, 'healreplacement', pokemon, move);
 				break;
 			case 'clearnegativeboost':
 				const boosts: SparseBoostsTable = {};
@@ -1492,7 +1496,7 @@ export class BattleActions {
 	 * undefined = success, null = silent failure, false = loud failure
 	 */
 	 getDamage(
-		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
+		source: Pokemon, target: Pokemon, move: string | number | ActiveMove,
 		suppressMessages = false
 	): number | undefined | null | false {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
@@ -1515,25 +1519,24 @@ export class BattleActions {
 		}
 
 		if (move.ohko) return target.maxhp;
-		if (move.damageCallback) return move.damageCallback.call(this.battle, pokemon, target);
+		if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
 		if (move.damage === 'level') {
-			return pokemon.level;
+			return source.level;
 		} else if (move.damage) {
 			return move.damage;
 		}
 
 		const category = this.battle.getCategory(move);
-		const defensiveCategory = move.defensiveCategory || category;
 
 		let basePower: number | false | null = move.basePower;
 		if (move.basePowerCallback) {
-			basePower = move.basePowerCallback.call(this.battle, pokemon, target, move);
+			basePower = move.basePowerCallback.call(this.battle, source, target, move);
 		}
 		if (!basePower) return basePower === 0 ? undefined : basePower;
 		basePower = this.battle.clampIntRange(basePower, 1);
 
 		let critMult;
-		let critRatio = this.battle.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
+		let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 		if (this.battle.gen <= 5) {
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
 			critMult = [0, 16, 8, 4, 3, 2];
@@ -1559,39 +1562,27 @@ export class BattleActions {
 		}
 
 		// happens after crit calculation
-		basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower, true);
+		basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 
 		if (!basePower) return 0;
 		basePower = this.battle.clampIntRange(basePower, 1);
-
-		const level = pokemon.level;
-
-		const attacker = pokemon;
-		const defender = target;
-		let attackStat: StatIDExceptHP = category === 'Physical' ? 'atk' : 'spa';
-		const defenseStat: StatIDExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
-		if (move.useSourceDefensiveAsOffensive) {
-			attackStat = defenseStat;
-			// Body press really wants to use the def stat,
-			// so it switches stats to compensate for Wonder Room.
-			// Of course, the game thus miscalculates the boosts...
-			if ('wonderroom' in this.battle.field.pseudoWeather) {
-				if (attackStat === 'def') {
-					attackStat = 'spd';
-				} else if (attackStat === 'spd') {
-					attackStat = 'def';
-				}
-				if (attacker.boosts['def'] || attacker.boosts['spd']) {
-					this.battle.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
-				}
-			}
+		// Hacked Max Moves have 0 base power, even if you Dynamax
+		if ((!source.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
+			basePower = 0;
 		}
 
-		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
-		let attack;
-		let defense;
+		const level = source.level;
 
-		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+		const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+		const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+
+		const isPhysical = move.category === 'Physical';
+		let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
+		const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
+
+		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+
+		let atkBoosts = attacker.boosts[attackStat];
 		let defBoosts = defender.boosts[defenseStat];
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
@@ -1613,18 +1604,14 @@ export class BattleActions {
 			defBoosts = 0;
 		}
 
-		if (move.useTargetOffensive) {
-			attack = defender.calculateStat(attackStat, atkBoosts);
-		} else {
-			attack = attacker.calculateStat(attackStat, atkBoosts);
-		}
+		let attack = attacker.calculateStat(attackStat, atkBoosts);
+		let defense = defender.calculateStat(defenseStat, defBoosts);
 
 		attackStat = (category === 'Physical' ? 'atk' : 'spa');
-		defense = defender.calculateStat(defenseStat, defBoosts);
 
 		// Apply Stat Modifiers
-		attack = this.battle.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
-		defense = this.battle.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
+		attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
+		defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
 
 		if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
@@ -1636,7 +1623,7 @@ export class BattleActions {
 		const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
 
 		// Calculate damage modifiers separately (order differs between generations)
-		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
+		return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
 	}
 
 	modifyDamage(
@@ -1778,13 +1765,6 @@ export class BattleActions {
 	runMegaEvo(pokemon: Pokemon) {
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!speciesid) return false;
-
-		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of pokemon.foes()) {
-			if (foeActive.volatiles['skydrop']?.source === pokemon) {
-				return false;
-			}
-		}
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
 
