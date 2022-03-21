@@ -195,10 +195,10 @@ export const Tags: {[id: string]: TagData} = {
 	nduubl: {
 		name: "ND UUBL",
 		speciesFilter: species => [
-			'Aerodactyl-Mega', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Gyarados-Mega',
-			'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi', 'Latias', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy',
-			'Medicham-Mega', 'Mew', 'Pinsir-Mega', 'Sableye-Mega', 'Slowbro-Mega', 'Slowking-Galar', 'Thundurus', 'Thundurus-Therian', 'Venusaur-Mega',
-			'Xurkitree', 'Zapdos-Galar',
+			'Aerodactyl-Mega', 'Alakazam', 'Blacephalon', 'Blaziken', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados',
+			'Gyarados-Mega', 'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi', 'Latias', 'Latias-Mega', 'Latios', 'Latios-Mega',
+			'Manaphy', 'Medicham-Mega', 'Mew', 'Pinsir-Mega', 'Sableye-Mega', 'Slowbro-Mega', 'Slowking-Galar', 'Thundurus', 'Thundurus-Therian',
+			'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
 		].includes(species.name),
 	},
 

@@ -26,7 +26,7 @@ export class PrefixManager {
 		if (!Array.isArray(Config.forcedprefixes)) {
 			const convertedPrefixes = [];
 			for (const type in Config.forcedprefixes) {
-				for (const prefix of Config.forcedprefixes[type]) {
+				for (const prefix of Config.forcedprefixes[type].map(toID)) {
 					convertedPrefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
 					this.timeouts.set(prefix, setTimeout(() => {
 						this.removePrefix(prefix, type as 'privacy' | 'modchat');

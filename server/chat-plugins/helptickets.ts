@@ -175,7 +175,7 @@ export function writeStats(line: string) {
 	}
 }
 
-export class HelpTicket extends Rooms.RoomGame {
+export class HelpTicket extends Rooms.SimpleRoomGame {
 	room: ChatRoom;
 	ticket: TicketState;
 	claimQueue: string[];
@@ -922,7 +922,7 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 	return null;
 }
 
-export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
+export async function getBattleLog(battle: string, noReplay = false): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	const seenPokemon = new Set<string>();
 	if (battleRoom && battleRoom.type !== 'chat') {
@@ -974,6 +974,7 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 			pokemon: monTable,
 		};
 	}
+	if (noReplay) return null;
 	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
 	try {
 		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();

@@ -172,8 +172,7 @@ for (const section of tables) {
 }
 writeFile(LOGS_FILE, logs);
 
-class MafiaPlayer extends Rooms.RoomGamePlayer {
-	game: Mafia;
+class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	safeName: string;
 	role: MafiaRole | null;
 	voting: ID;
@@ -190,7 +189,6 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	idle: null | boolean;
 	constructor(user: User, game: Mafia) {
 		super(user, game);
-		this.game = game;
 		this.safeName = Utils.escapeHTML(this.name);
 		this.role = null;
 		this.voting = '';
@@ -230,14 +228,13 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-class Mafia extends Rooms.RoomGame {
+class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	started: boolean;
 	theme: MafiaDataTheme | null;
 	hostid: ID;
 	host: string;
 	cohostids: ID[];
 	cohosts: string[];
-	playerTable: {[userid: string]: MafiaPlayer};
 	dead: {[userid: string]: MafiaPlayer};
 
 	subs: ID[];
@@ -288,7 +285,6 @@ class Mafia extends Rooms.RoomGame {
 		this.cohostids = [];
 		this.cohosts = [];
 
-		this.playerTable = Object.create(null);
 		this.dead = Object.create(null);
 		this.subs = [];
 		this.autoSub = true;
