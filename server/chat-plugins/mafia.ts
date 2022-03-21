@@ -251,7 +251,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	enableNL: boolean;
 	votelock: boolean;
-    canVote:{[userid: string]: boolean};
 	forceVote: boolean;
 	closedSetup: boolean;
 	noReveal: boolean;
@@ -302,7 +301,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		this.enableNL = true;
 		this.votelock = false;
-        this.canVote = Object.create(null);
 		this.forceVote = false;
 		this.closedSetup = false;
 		this.noReveal = true;
@@ -697,13 +695,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	vote(userid: ID, target: ID) {
 		if (this.phase !== 'day') return this.sendUser(userid, `|error|You can only vote during the day.`);
 		let player = this.playerTable[userid];
-		if (this.votelock) {
-			if(!this.canVote[userid]) {
-				return this.sendUser(userid, `|error|You cannot switch your vote,because votes are locked`)
-		} else {
-			this.canVote[userid] = false;
-			}
-		}	
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
 		if (!player) return;
 		if (!(target in this.playerTable) && target !== 'novote') {
@@ -711,6 +702,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 		if (!this.enableNL && target === 'novote') return this.sendUser(userid, `|error|No Vote is not allowed.`);
 		if (target === player.id && !this.selfEnabled) return this.sendUser(userid, `|error|Self voting is not allowed.`);
+		if (this.votelock) {
+			if(player.voting) return this.sendUser(userid, `|error|You cannot switch your vote,because votes are locked.`);
+		}	
 		const hammering = this.hammerCount - 1 <= (this.votes[target] ? this.votes[target].count : 0);
 		if (target === player.id && !hammering && this.selfEnabled === 'hammer') {
 			return this.sendUser(userid, `|error|You may only vote yourself when placing the hammer vote.`);
@@ -773,7 +767,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		let player = this.playerTable[userid];
 
 		// autoselfvote blocking doesn't apply to restless spirits
-		if (this.votelock) return this.sendUser(userid, `|error|You cannot unvote,because votes are locked`)
+		if (this.votelock) {
+			if (!this.dead[userid]) {
+		if (player.voting) return this.sendUser(userid, `|error|You cannot unvote,because votes are locked.`);
+			}
+		}
 		if (player && this.forceVote && !force) {
 			return this.sendUser(userid, `|error|You can only shift your vote, not unvote.`);
 		}
@@ -1596,6 +1594,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.updatePlayers();
 	}
 	setVotelock(user: User, setting: boolean) {
+		if (!this.started) return user.sendTo(this.room, `The game has not started yet`);
         if ((this.votelock) === setting) {
 		return user.sendTo(this.room, `|error|Votes are already ${setting ? 'set to lock' : 'set to not lock'}.`);
 		}
@@ -1625,9 +1624,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			if (player.restless && (!target || player.voting === target)) player.voting = '';
 		}
 		this.hasPlurality = null;
-		for (const player in this.playerTable){
-			this.canVote[player] = true;
-		}
 	}
 
 	onChatMessage(message: string, user: User) {
@@ -2830,16 +2826,15 @@ export const commands: Chat.ChatCommands = {
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting votes`,
 			`/mafia resethammer - sets the hammer to the default, resetting votes`,
 		],
-		enablevl: 'vlenable',
-        enablevotelock: 'vlenable',
-        disablevl: 'vlenable',
-        disablevotelock: 'vlenable',
 
-        vlenable(target,room, user, connection, cmd) {
+		votelock: 'vl',
+      	 vl(target,room, user, connection, cmd) {
             room = this.requireRoom();
             const game = this.requireGame(Mafia);
             if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-            if(cmd == 'enablevotelock' || cmd == 'enablevl') {
+			const action = toID(target)
+			if (!['on', 'off'].includes(action)) return this.parse('/help mafia votelock');
+            if(action === 'on') {
                 game.setVotelock(user, true)
             } else {
                 game.setVotelock(user, false)
@@ -2847,7 +2842,7 @@ export const commands: Chat.ChatCommands = {
             game.logAction(user, `locked votes`);
         },
         votelockhelp: [
-            `/mafia [enablevl|disablevl] - Allows or disallows players to change their vote. Requires host % @ # &`,
+            `/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # &`,
         ],
 
 		enablenv: 'enablenl',
