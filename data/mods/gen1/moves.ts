@@ -200,8 +200,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		target: "normal",
 		onHit(target, source) {
-			source.types = target.types;
-			this.add('-start', source, 'typechange', source.types.join(', '), '[from] move: Conversion', '[of] ' + source);
+			source.setType(target.getTypes(true));
+			this.add('-activate', source, 'move: Conversion', '[of] ' + target);
 		},
 	},
 	counter: {

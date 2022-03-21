@@ -900,6 +900,8 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "Causes the user's types to become the same as the current types of the target.",
 			shortDesc: "User becomes the same type as the target.",
 		},
+
+		activate: "  Converted type to [TARGET]'s!", // gen 1 only
 	},
 	conversion2: {
 		name: "Conversion 2",
