@@ -196,8 +196,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	conversion: {
 		inherit: true,
-		volatileStatus: 'conversion',
-		accuracy: true,
 		target: "normal",
 		onHit(target, source) {
 			source.setType(target.getTypes(true));
