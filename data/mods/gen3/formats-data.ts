@@ -694,7 +694,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	azumarill: {
-		randomBattleMoves: ["encore", "focuspunch", "hiddenpowerghost", "hydropump", "return", "substitute"],
+		randomBattleMoves: ["brickbreak", "encore", "hiddenpowerghost", "hydropump", "return"],
 		tier: "UU",
 	},
 	sudowoodo: {
