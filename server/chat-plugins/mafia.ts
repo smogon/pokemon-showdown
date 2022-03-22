@@ -302,7 +302,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		this.enableNL = true;
 		this.votelock = false;
-		this.votingall = false;
+		this.votingall = true;
 		this.forceVote = false;
 		this.closedSetup = false;
 		this.noReveal = true;
