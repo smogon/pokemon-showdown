@@ -901,7 +901,7 @@ export const MovesText: {[k: string]: MoveText} = {
 			shortDesc: "User becomes the same type as the target.",
 		},
 
-		typeChange: "  Converted type to [TARGET]'s!", // gen 1 only
+		typeChange: "  Converted type to [SOURCE]'s!", // gen 1 only
 	},
 	conversion2: {
 		name: "Conversion 2",
