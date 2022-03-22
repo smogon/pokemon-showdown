@@ -251,6 +251,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	enableNL: boolean;
 	votelock: boolean;
+	votingall:boolean
 	forceVote: boolean;
 	closedSetup: boolean;
 	noReveal: boolean;
@@ -301,6 +302,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		this.enableNL = true;
 		this.votelock = false;
+		this.votingall = false;
 		this.forceVote = false;
 		this.closedSetup = false;
 		this.noReveal = true;
@@ -700,6 +702,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (!(target in this.playerTable) && target !== 'novote') {
 			return this.sendUser(userid, `|error|${target} is not a valid player.`);
 		}
+		if (!this.votingall) return this.sendUser(userid, `|error|Voting is not allowed.`)
 		if (!this.enableNL && target === 'novote') return this.sendUser(userid, `|error|No Vote is not allowed.`);
 		if (target === player.id && !this.selfEnabled) return this.sendUser(userid, `|error|Self voting is not allowed.`);
 		if (this.votelock) {
@@ -1594,7 +1597,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.updatePlayers();
 	}
 	setVotelock(user: User, setting: boolean) {
-		if (!this.started) return user.sendTo(this.room, `The game has not started yet`);
+		if (!this.started) return user.sendTo(this.room, `The game has not started yet.`);
         if ((this.votelock) === setting) {
 		return user.sendTo(this.room, `|error|Votes are already ${setting ? 'set to lock' : 'set to not lock'}.`);
 		}
@@ -1603,6 +1606,16 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
         this.sendDeclare(`Votes are cleared and ${setting ? 'set to lock' : 'set to not lock'}.`);
         this.updatePlayers()
     }
+	setVoting(user: User, setting: boolean) {
+		if (!this.started) return user.sendTo(this.room, `The game has not started yet.`);
+		if (this.votingall === setting) {
+			return user.sendTo(this.room, `|error|Voting is already ${setting ? 'allowed' : 'disallowed'}.`)
+		}
+		this.votingall = setting;
+		this.clearVotes();
+		this.sendDeclare(`Voting is now ${setting ? 'allowed' : 'disallowed'}.`)
+		this.updatePlayers();
+	}
 	clearVotes(target = '') {
 		if (target) delete this.votes[target];
 
@@ -2844,6 +2857,20 @@ export const commands: Chat.ChatCommands = {
         votelockhelp: [
             `/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # &`,
         ],
+		voting: 'votesall',
+		votesall(target,room,user,connection,cmd) {
+			room = this.requireRoom();
+            const game = this.requireGame(Mafia);
+            if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			const action = toID(target);
+				if (!['on', 'off'].includes(action)) return this.parse('/help mafia voting');
+				if(action === 'on') {
+					game.setVoting(user, true)
+				} else {
+					game.setVoting(user, false)
+				}
+				game.logAction(user, `disabled voting`);
+		},
 
 		enablenv: 'enablenl',
 		disablenv: 'enablenl',
@@ -3833,7 +3860,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # &`,
 			`/mafia selfvote [on|hammer|off] - Allows players to self vote either at hammer or anytime. Requires host % @ # &`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from voting. Requires host % @ # &`,
-			`/mafia [enablevl|disablevl] - Allows or disallows players to change their vote. Requires host % @ # &`,
+			`/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # &`,
+			`/mafia voting [on|off] - Allows or disallows voting. Requires host % @ # &`,
 			`/mafia forcevote [yes/no] - Forces players' votes onto themselves, and prevents unvoting. Requires host % @ # &`,
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # &`,
 			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # &`,
