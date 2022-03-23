@@ -986,7 +986,12 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			player.destroy();
 			return;
 		}
-		if (toEliminate in this.playerTable) this.dead[toEliminate] = this.playerTable[toEliminate];
+		if (toEliminate in this.playerTable) {
+			this.dead[toEliminate] = this.playerTable[toEliminate];
+		} else {
+			this.playerCount++; // so that the playercount decrement later isn't unnecessary
+		}
+
 		const player = this.dead[toEliminate];
 		let msg = `${player.safeName}`;
 		switch (ability) {
@@ -2481,11 +2486,29 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help mafia kill');
 			const player = game.playerTable[toID(target)];
 			const dead = game.dead[toID(target)];
+			let repeat;
+			if (dead) {
+				switch (cmd) {
+				case 'treestump':
+					repeat = dead.treestump && !dead.restless;
+					break;
+				case 'spirit':
+					repeat = !dead.treestump && dead.restless;
+					break;
+				case 'spiritstump':
+					repeat = dead.treestump && dead.restless;
+					break;
+				case 'kill': case 'kick':
+					repeat = !dead.treestump && !dead.restless;
+					break;
+				}
+			}
+			if (dead && repeat) return this.errorReply(`${dead.safeName} has already been ${cmd}ed.`);
 			if (player || dead) {
 				game.eliminate(toID(target), cmd);
 				game.logAction(user, `${cmd}ed ${(dead || player).safeName}`);
 			} else {
-				this.errorReply(`${target.trim()} is not a living player.`);
+				this.errorReply(`${target.trim()} is not a player.`);
 			}
 		},
 		killhelp: [
