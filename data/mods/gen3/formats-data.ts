@@ -694,7 +694,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	azumarill: {
-		randomBattleMoves: ["encore", "focuspunch", "hiddenpowerghost", "hydropump", "return", "substitute"],
+		randomBattleMoves: ["brickbreak", "encore", "hiddenpowerghost", "hydropump", "return"],
 		tier: "UU",
 	},
 	sudowoodo: {
@@ -835,7 +835,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	skarmory: {
-		randomBattleMoves: ["drillpeck", "protect", "rest", "roar", "sleeptalk", "spikes", "toxic"],
+		randomBattleMoves: ["doubleedge", "drillpeck", "protect", "rest", "roar", "sleeptalk", "spikes", "toxic"],
 		tier: "OU",
 	},
 	houndour: {

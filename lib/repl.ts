@@ -52,7 +52,7 @@ export const Repl = new class {
 				if (e.code !== 'MODULE_NOT_FOUND') throw e;
 				throw new Error(`node-oom-heapdump is not installed. Run \`npm install --no-save node-oom-heapdump\` and try again.`);
 			}
-			return handler.createHeapSnapshot(path);
+			return handler.createHeapSnapshot(targetPath);
 		};
 	}
 

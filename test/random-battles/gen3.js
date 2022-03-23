@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testSet, testAlwaysHasMove, testHiddenPower} = require('./tools');
+const {testSet, testAlwaysHasMove, testHiddenPower, testNotBothMoves} = require('./tools');
 
 describe('[Gen 3] Random Battle', () => {
 	const options = {format: 'gen3randombattle'};
@@ -48,5 +48,9 @@ describe('[Gen 3] Random Battle', () => {
 				assert(!set.moves.includes('protect'), `Registeel with Sleep Talk + Protect (${set.moves})`);
 			}
 		});
+	});
+
+	it('should not give Skarmory Roar + Sleep Talk', () => {
+		testNotBothMoves('skarmory', options, 'roar', 'sleeptalk');
 	});
 });

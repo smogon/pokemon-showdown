@@ -16,9 +16,9 @@
  */
 
 // globally Rooms.RoomGamePlayer
-export class RoomGamePlayer {
+export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	readonly num: number;
-	readonly game: RoomGame;
+	readonly game: GameClass;
 	/**
 	 * Will be the username of the user playing, but with some exceptions:
 	 *
@@ -34,7 +34,7 @@ export class RoomGamePlayer {
 	 * we explicitly don't hold a direct reference to the user
 	 */
 	id: ID;
-	constructor(user: User | string | null, game: RoomGame, num = 0) {
+	constructor(user: User | string | null, game: GameClass, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;
 		this.game = game;
@@ -74,8 +74,10 @@ export class RoomGamePlayer {
 
 /**
  * globally Rooms.RoomGame
+ *
+ * If you don't want to define your own player class, you should extend SimpleRoomGame.
  */
-export class RoomGame {
+export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlayer> {
 	roomid: RoomID;
 	/**
 	 * The room this roomgame is in. Rooms can have two RoomGames at a time,
@@ -91,8 +93,8 @@ export class RoomGame {
 	 *
 	 * Does not contain userless players: use playerList for the full list.
 	 */
-	playerTable: {[userid: string]: RoomGamePlayer};
-	players: RoomGamePlayer[];
+	playerTable: {[userid: string]: PlayerClass};
+	players: PlayerClass[];
 	playerCount: number;
 	playerCap: number;
 	ended: boolean;
@@ -117,9 +119,9 @@ export class RoomGame {
 		this.ended = false;
 
 		if (this.isSubGame) {
-			this.room.subGame = this as RoomGame;
+			this.room.subGame = this;
 		} else {
-			this.room.game = this as RoomGame;
+			this.room.game = this;
 		}
 	}
 
@@ -140,7 +142,7 @@ export class RoomGame {
 		this.playerTable = null;
 	}
 
-	addPlayer(user: User | string | null = null, ...rest: any[]) {
+	addPlayer(user: User | string | null = null, ...rest: any[]): PlayerClass | null {
 		if (typeof user !== 'string' && user) {
 			if (user.id in this.playerTable) return null;
 		}
@@ -156,7 +158,7 @@ export class RoomGame {
 		return player;
 	}
 
-	updatePlayer(player: RoomGamePlayer, user: User | null) {
+	updatePlayer(player: PlayerClass, user: User | null) {
 		if (!this.allowRenames) return;
 		if (player.id) {
 			delete this.playerTable[player.id];
@@ -171,12 +173,9 @@ export class RoomGame {
 		}
 	}
 
-	makePlayer(user: User | string | null, ...rest: any[]) {
-		const num = this.players.length ? this.players[this.players.length - 1].num : 1;
-		return new RoomGamePlayer(user, this, num);
-	}
+	abstract makePlayer(user: User | string | null, ...rest: any[]): PlayerClass;
 
-	removePlayer(player: RoomGamePlayer | User) {
+	removePlayer(player: PlayerClass | User) {
 		if (player instanceof Users.User) {
 			// API changed
 			// TODO: deprecate
@@ -338,4 +337,16 @@ export class RoomGame {
 	 * Do not try to use this to block messages, use onChatMessage for that.
 	 */
 	onLogMessage(message: string, user: User) {}
+}
+
+/**
+ * globally Rooms.SimpleRoomGame
+ *
+ * A RoomGame without a custom player class. Gives a default implementation for makePlayer.
+ */
+export class SimpleRoomGame extends RoomGame<RoomGamePlayer> {
+	makePlayer(user: User | string | null, ...rest: any[]): RoomGamePlayer {
+		const num = this.players.length ? this.players[this.players.length - 1].num : 1;
+		return new RoomGamePlayer(user, this, num);
+	}
 }

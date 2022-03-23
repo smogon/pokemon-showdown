@@ -82,7 +82,7 @@ export interface TextTicketInfo {
 	getReviewDisplay: (
 		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection, state?: AnyObject
 	) => Promise<string | void> | string | void;
-	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void;
+	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void | Promise<void>;
 	getState?: (ticket: TicketState, user: User) => AnyObject;
 }
 
@@ -175,7 +175,7 @@ export function writeStats(line: string) {
 	}
 }
 
-export class HelpTicket extends Rooms.RoomGame {
+export class HelpTicket extends Rooms.SimpleRoomGame {
 	room: ChatRoom;
 	ticket: TicketState;
 	claimQueue: string[];
@@ -507,6 +507,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			type: ticket.type,
 			claimed: ticket.claimed,
 			state: ticket.state || {},
+			recommended: ticket.recommended,
 		};
 		const date = Chat.toTimestamp(new Date()).split(' ')[0];
 		void FS(`logs/tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
@@ -520,8 +521,13 @@ export class HelpTicket extends Rooms.RoomGame {
 	static async getTextLogs(search: [string, string] | [string], date?: string) {
 		const results = [];
 		if (await checkRipgrepAvailability()) {
+			const searchString = search.length > 1 ?
+				// regex escaped to handle things like searching for arrays or objects
+				// (JSON.stringify accounts for " strings are wrapped in and stuff. generally ensures that searching is easier.)
+				Utils.escapeRegex(JSON.stringify(search[1]).slice(0, -1)) :
+				"";
 			const args = [
-				`-e`, search.length > 1 ? `${search[0]}":"${search[1]}` : `${search[0]}":`,
+				`-e`, search.length > 1 ? `${search[0]}":${searchString}` : `${search[0]}":`,
 				'--no-filename',
 			];
 			let lines;
@@ -916,7 +922,7 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 	return null;
 }
 
-export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
+export async function getBattleLog(battle: string, noReplay = false): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	const seenPokemon = new Set<string>();
 	if (battleRoom && battleRoom.type !== 'chat') {
@@ -968,6 +974,7 @@ export async function getBattleLog(battle: string): Promise<BattleInfo | null> {
 			pokemon: monTable,
 		};
 	}
+	if (noReplay) return null;
 	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
 	try {
 		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
@@ -1924,15 +1931,17 @@ export const pages: Chat.PageTable = {
 			if (ticket.recommended?.length) {
 				if (ticket.recommended.length > 1) {
 					buf += `<details class="readmore"><summary><strong>Recommended from Artemis</strong></summary>`;
-					buf += ticket.recommended.join('<br />');
+					buf += ticket.recommended.map(Utils.escapeHTML).join('<br />');
 					buf += `</details>`;
 				} else {
-					buf += `<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
+					buf += Utils.html`<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
 				}
 				if (!ticket.state?.recommendResult) {
 					buf += `<br />`;
 					buf += `Rate accuracy of result: `;
-					for (const [title, result] of [['Accurate', 'success'], ['Inaccurate', 'failure']]) {
+					for (const [title, result] of [
+						['Accurate (or too lenient)', 'success'], ['Inaccurate (too harsh)', 'failure'],
+					]) {
 						buf += `<button class="button" name="send" value="/aht resolve ${ticket.userid},${result}">${title}</button>`;
 					}
 				}
@@ -2378,7 +2387,7 @@ export const commands: Chat.ChatCommands = {
 				});
 				writeTickets();
 				notifyStaff();
-				textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
+				void textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
 				void runPunishments(ticket as TicketState & {text: [string, string]}, typeId);
 				if (textTicket.getState) {
 					ticket.state = textTicket.getState(ticket, user);
@@ -2525,6 +2534,12 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!ticket.text) {
 				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
+			}
+			if (ticket.recommended?.length && !ticket.state?.recommendResult) {
+				return this.popupReply(
+					`You must rate the accuracy of the Artemis recommendations ` +
+					`(click accurate/inaccurate) before closing the ticket.`
+				);
 			}
 			const {publicReason, privateReason} = this.parseSpoiler(result);
 			ticket.resolved = {

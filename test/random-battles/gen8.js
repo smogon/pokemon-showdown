@@ -260,7 +260,7 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 	});
 
 	it('should give Unown a Choice item', () => {
-		testSet('unown', options, set => assert.match(set.item, /^Choice /));
+		testSet('unown', options, set => assert(set.item.startsWith('Choice')));
 	});
 
 	it('should give Toxic Orb to Gliscor and Zangoose', () => {
@@ -355,6 +355,35 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 			if (set.moves.includes('protect')) {
 				assert.notEqual(set.ability, 'Tinted Lens', `Yanmega has Protect and Tinted Lens (set=${JSON.stringify(set)})`);
 			}
+		});
+	});
+
+	for (const species of ['shaymin', 'shayminsky', 'phione']) {
+		it(`should not give ${species} Chesto Berry`, () => {
+			testSet(species, options, set => {
+				assert.notEqual(set.item, 'Chesto Berry', `${species} has Chesto Berry`);
+			});
+		});
+	}
+
+	it('Ambipom should only get Switcheroo if it has a Choice item', () => {
+		testSet('ambipom', options, set => {
+			if (!set.moves.includes('switcheroo')) return;
+			assert(set.item.startsWith('Choice'), `Ambipom has Switcheroo and no Choice item (set=${JSON.stringify(set)})`);
+		});
+	});
+
+	it('should give Yanmega Tinted Lens when it has Choice Specs', () => {
+		testSet('yanmega', options, set => {
+			if (set.item !== 'Choice Specs') return;
+			assert.equal(set.ability, 'Tinted Lens', `Yanmega has Protect and no Tinted Lens (set=${JSON.stringify(set)})`);
+		});
+	});
+
+	it('should give Yanmega Speed Boost if it has Protect', () => {
+		testSet('yanmega', options, set => {
+			if (!set.moves.includes('protect')) return;
+			assert.equal(set.ability, 'Speed Boost', `Yanmega has Protect and no Speed Boost (set=${JSON.stringify(set)})`);
 		});
 	});
 });

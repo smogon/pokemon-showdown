@@ -1226,7 +1226,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["calmmind", "dazzlinggleam", "morningsun", "protect", "psychic", "shadowball"],
 		randomDoubleBattleLevel: 84,
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	umbreon: {
@@ -4708,7 +4708,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	yveltal: {
-		randomBattleMoves: ["darkpulse", "defog", "heatwave", "knockoff", "oblivionwing", "roost", "suckerpunch", "taunt"],
+		randomBattleMoves: ["defog", "heatwave", "knockoff", "oblivionwing", "roost", "suckerpunch", "taunt"],
 		randomBattleLevel: 69,
 		randomDoubleBattleMoves: ["darkpulse", "heatwave", "knockoff", "oblivionwing", "roost", "suckerpunch", "tailwind", "uturn"],
 		randomDoubleBattleLevel: 71,
@@ -5465,7 +5465,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	magearna: {
 		randomBattleMoves: ["agility", "calmmind", "flashcannon", "fleurcannon"],
-		randomBattleLevel: 75,
+		randomBattleLevel: 76,
 		randomDoubleBattleMoves: ["agility", "aurasphere", "dazzlinggleam", "flashcannon", "fleurcannon", "protect", "trick"],
 		randomDoubleBattleLevel: 72,
 		tier: "Uber",

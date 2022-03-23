@@ -673,17 +673,18 @@ export const handlers: Chat.Handlers = {
 	},
 };
 
-export const loginfilter: Chat.LoginFilter = async user => {
+export const loginfilter: Chat.LoginFilter = user => {
 	if (!Config.usesqlitefriends || !Users.globalAuth.atLeast(user, Config.usesqlitefriends)) {
 		return;
 	}
+
 	// notify users of pending requests
-	await Friends.notifyPending(user);
+	void Friends.notifyPending(user);
 
 	// (quietly) notify their friends (that have opted in) that they are online
-	await Friends.notifyConnection(user);
+	void Friends.notifyConnection(user);
 	// write login time
-	await Chat.Friends.writeLogin(user.id);
+	void Chat.Friends.writeLogin(user.id);
 
-	await Chat.Friends.updateUserCache(user);
+	void Chat.Friends.updateUserCache(user);
 };

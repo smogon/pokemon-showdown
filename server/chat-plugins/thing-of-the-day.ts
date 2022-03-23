@@ -11,7 +11,7 @@ export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENO
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
 export const otds = new Map<string, OtdHandler>();
 
-const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
+const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => Promise<void>} = {
 	cotw: async winner => {
 		const {channel, nominator} = winner;
 		const searchResults = await YouTube.searchChannel(channel, 1);

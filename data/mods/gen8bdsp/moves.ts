@@ -501,7 +501,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	judgment: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	junglehealing: {
 		inherit: true,
@@ -733,7 +733,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	seedflare: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	shadowbone: {
 		inherit: true,

@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	bulbasaur: {
 		learnset: {
@@ -25135,12 +25137,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			gigadrain: ["8M"],
 			gigaimpact: ["8M"],
 			grassknot: ["8M"],
-			growth: ["8L1"],
+			growth: ["8L1", "8S0"],
 			healingwish: ["8L46", "8L91"],
 			hyperbeam: ["8M"],
 			leafstorm: ["8L91"],
-			leechseed: ["8L19"],
-			magicalleaf: ["8L10"],
+			leechseed: ["8L19", "8S0"],
+			magicalleaf: ["8L10", "8S0"],
 			protect: ["8M"],
 			psychic: ["8M"],
 			psychup: ["8M"],
@@ -25156,9 +25158,16 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			sweetkiss: ["8L82"],
 			sweetscent: ["8L37"],
 			swordsdance: ["8M"],
-			synthesis: ["8L28"],
+			synthesis: ["8L28", "8S0"],
 			worryseed: ["8L55"],
 		},
+		eventData: [
+			{generation: 8, level: 30, shiny: 1, perfectIVs: 3, moves: ["growth", "magicalleaf", "leechseed", "synthesis"], pokeball: "pokeball"},
+		],
+		eventOnly: true,
+	},
+	shayminsky: {
+		eventOnly: true,
 	},
 	arceus: {
 		learnset: {
@@ -25192,14 +25201,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			flashcannon: ["8M"],
 			fly: ["8M"],
 			focusblast: ["8M"],
-			futuresight: ["8L60"],
+			futuresight: ["8L60", "8S0"],
 			gigadrain: ["8M"],
 			gigaimpact: ["8M"],
 			grassknot: ["8M"],
 			gravity: ["8L10"],
 			hail: ["8M"],
-			healingwish: ["8L50"],
-			hyperbeam: ["8M", "8L80"],
+			healingwish: ["8L50", "8S0"],
+			hyperbeam: ["8M", "8L80", "8S0"],
 			hypervoice: ["8L30"],
 			icebeam: ["8M"],
 			irontail: ["8M"],
@@ -25213,7 +25222,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			psychic: ["8M"],
 			psychup: ["8M"],
 			raindance: ["8M"],
-			recover: ["8L70"],
+			recover: ["8L70", "8S0"],
 			recycle: ["8M"],
 			reflect: ["8M"],
 			rest: ["8M"],
@@ -25250,6 +25259,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["8M"],
 			xscissor: ["8M"],
 		},
+		eventData: [
+			{generation: 8, level: 80, shiny: 1, perfectIVs: 3, moves: ["healingwish", "futuresight", "recover", "hyperbeam"]},
+		],
+		eventOnly: true,
 	},
 	syclar: {
 		learnset: {
@@ -25431,7 +25444,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			rocktomb: ["8M"],
 			safeguard: ["8M"],
 			seedbomb: ["8L32"],
-			slackoff: ["8L1"],
 			sleeptalk: ["8M"],
 			solarbeam: ["8M"],
 			stealthrock: ["8M"],

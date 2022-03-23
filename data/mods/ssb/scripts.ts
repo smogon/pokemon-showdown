@@ -8,13 +8,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 			if (!speciesid) return false;
 
-			// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-			for (const foeActive of pokemon.foes()) {
-				if (foeActive.volatiles['skydrop']?.source === pokemon) {
-					return false;
-				}
-			}
-
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
 			if (pokemon.canMegaEvo) {
 				pokemon.canMegaEvo = null;
@@ -395,7 +388,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const originalHp = pokemon.hp;
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-				if (pokemon && pokemon !== target && move && move.category !== 'Status') {
+				if (pokemon !== target && move.category !== 'Status') {
 					if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
 						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 					}

@@ -41,27 +41,31 @@ interface LotteryGiveawayData extends GiveawayData {
 }
 
 interface WifiData {
+	whitelist: string[];
 	stats: {[k: string]: number[]};
 	storedGiveaways: {question: QuestionGiveawayData[], lottery: LotteryGiveawayData[]};
 	submittedGiveaways: {question: QuestionGiveawayData[], lottery: LotteryGiveawayData[]};
 }
+
+const defaults: WifiData = {
+	whitelist: [],
+	stats: {},
+	storedGiveaways: {
+		question: [],
+		lottery: [],
+	},
+	submittedGiveaways: {
+		question: [],
+		lottery: [],
+	},
+};
 
 export let wifiData: WifiData = (() => {
 	try {
 		return JSON.parse(FS(DATA_FILE).readSync());
 	} catch (e: any) {
 		if (e.code !== 'ENOENT') throw e;
-		return {
-			stats: {},
-			storedGiveaways: {
-				question: [],
-				lottery: [],
-			},
-			submittedGiveaways: {
-				question: [],
-				lottery: [],
-			},
-		};
+		return defaults;
 	}
 })();
 
@@ -73,9 +77,11 @@ function saveData() {
 if (!wifiData.stats && !wifiData.storedGiveaways && !wifiData.submittedGiveaways) {
 	// we cast under the assumption that it's the old file format
 	const stats = {...wifiData} as unknown as {[k: string]: number[]};
-	wifiData = {stats, storedGiveaways: {question: [], lottery: []}, submittedGiveaways: {question: [], lottery: []}};
+	wifiData = {...defaults, stats};
 	saveData();
 }
+// ensure the whitelist exists for those who might have the conversion above but not the stats
+if (!wifiData.whitelist) wifiData.whitelist = [];
 
 const statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
 
@@ -88,7 +94,7 @@ const gameidToGame: {[k: string]: Game} = {
 	bdsp: 'BDSP',
 };
 
-class Giveaway extends Rooms.RoomGame {
+class Giveaway extends Rooms.SimpleRoomGame {
 	gaNumber: number;
 	host: User;
 	giver: User;
@@ -199,6 +205,23 @@ class Giveaway extends Rooms.RoomGame {
 			!Config.noipchecks && this.giver.ips.includes(user.latestIp) ||
 			this.giver.previousIDs.includes(toID(user))
 		);
+	}
+
+	static checkCanCreate(context: Chat.CommandContext, targetUser: User, type: string) {
+		const user = context.user;
+		const isCreate = type === 'create';
+		const isForSelf = targetUser.id === user.id;
+		if (wifiData.whitelist.includes(user.id) && isCreate && isForSelf) {
+			// it being true doesn't matter here, it's just clearer that the user _is_ allowed
+			// and it ensures execution stops here so the creation can proceed
+			return true;
+		}
+		if (isCreate && !(isForSelf && user.can('show', null, context.room!))) {
+			context.checkCan('warn', null, context.room!);
+		}
+		if (!user.can('warn', null, context.room!) && !isCreate && !isForSelf) {
+			throw new Chat.ErrorMessage(`You can't ${type} giveways for other users.`);
+		}
 	}
 
 	static checkBanned(room: Room, user: User) {
@@ -366,12 +389,9 @@ export class QuestionGiveaway extends Giveaway {
 		}
 		const targetUser = Users.get(giver);
 		if (!targetUser?.connected) throw new Chat.ErrorMessage(`User '${giver}' is not online.`);
-		if (type === 'create' && !(user.id === targetUser.id && user.can('show', null, context.room!))) {
-			context.checkCan('warn', null, context.room!);
-		}
-		if (!user.can('warn', null, context.room!) && type !== 'create' && user.id !== targetUser.id) {
-			throw new Chat.ErrorMessage(`You can't ${type} giveways for other users.`);
-		}
+
+		Giveaway.checkCanCreate(context, targetUser, type);
+
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
 		}
@@ -565,12 +585,9 @@ export class LotteryGiveaway extends Giveaway {
 		}
 		const targetUser = Users.get(giver);
 		if (!targetUser?.connected) throw new Chat.ErrorMessage(`User '${giver}' is not online.`);
-		if (type === 'create' && !(user.id === targetUser.id && user.can('show', null, context.room!))) {
-			context.checkCan('warn', null, context.room!);
-		}
-		if (!user.can('warn', null, context.room!) && type !== 'create' && user.id !== targetUser.id) {
-			throw new Chat.ErrorMessage(`You can't ${type} giveways for other users.`);
-		}
+
+		Giveaway.checkCanCreate(context, user, type);
+
 		if (!!ivs && ivs.split('/').length !== 6) {
 			throw new Chat.ErrorMessage(`If you provide IVs, they must be provided for all stats.`);
 		}
@@ -708,7 +725,7 @@ export class LotteryGiveaway extends Giveaway {
 	}
 }
 
-export class GTS extends Rooms.RoomGame {
+export class GTS extends Rooms.SimpleRoomGame {
 	gtsNumber: number;
 	room: Room;
 	giver: User;
@@ -1328,7 +1345,6 @@ export const commands: Chat.ChatCommands = {
 				this.privateModAction(`${user.name} deleted a ${typedType} giveaway by ${giveaway.targetUserID}.`);
 				this.modlog(`GIVEAWAY DELETE ${typedType.toUpperCase()}`);
 			} else {
-				if (!target) return this.parse(`/help giveaway`);
 				const {targetUser, rest: reason} = this.splitUser(target);
 				if (!targetUser?.connected) {
 					throw new Chat.ErrorMessage(`${targetUser?.name || toID(target)} is offline, so their giveaway can't be run.`);
@@ -1345,6 +1361,46 @@ export const commands: Chat.ChatCommands = {
 				this.modlog(`GIVEAWAY DENY ${hasGiveaway.type.toUpperCase()}`, targetUser, reason || null, {noalts: true, noip: true});
 			}
 			this.refreshPage(del ? `giveaways-stored` : 'giveaways-submitted');
+		},
+		unwhitelist: 'whitelist',
+		whitelist(target, room, user, connection, cmd) {
+			room = this.requireRoom('wifi' as RoomID);
+			this.checkCan('warn', null, room);
+			const targetId = toID(target);
+			if (!targetId) return this.parse(`/help giveaway whitelist`);
+			if (cmd.includes('un')) {
+				const idx = wifiData.whitelist.indexOf(targetId);
+				if (idx < 0) {
+					return this.errorReply(`'${targetId}' is not whitelisted.`);
+				}
+				wifiData.whitelist.splice(idx, 1);
+				this.privateModAction(`${user.name} removed '${targetId}' from the giveaway whitelist.`);
+				this.modlog(`GIVEAWAY UNWHITELIST`, targetId);
+				saveData();
+			} else {
+				if (wifiData.whitelist.includes(targetId)) {
+					return this.errorReply(`'${targetId}' is already whitelisted.`);
+				}
+				wifiData.whitelist.push(targetId);
+				this.privateModAction(`${user.name} added ${targetId} to the giveaway whitelist.`);
+				this.modlog(`GIVEAWAY WHITELIST`, targetId);
+				saveData();
+			}
+		},
+		whitelisthelp: [
+			`/giveaway whitelist [user] - Allow the given [user] to make giveaways without staff help. Requires: % @ # &`,
+			`/giveaway unwhitelist [user] - Remove the given user from the giveaway whitelist. Requires: % @ # &`,
+		],
+		whitelisted(target, room, user) {
+			room = this.requireRoom('wifi' as RoomID);
+			this.checkCan('warn', null, room);
+			const buf = [<strong>Currently whitelisted users</strong>, <br />];
+			if (!wifiData.whitelist.length) {
+				buf.push(<div class="message-error">None.</div>);
+			} else {
+				buf.push(wifiData.whitelist.map(n => <username>{n}</username>));
+			}
+			this.sendReplyBox(<>{buf}</>);
 		},
 		claim(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
@@ -1416,7 +1472,9 @@ export const commands: Chat.ChatCommands = {
 					/giveaway ban [user], [reason]
 				</code> - Temporarily bans [user] from entering giveaways. Requires: % @ # &amp;<br />
 				<code>/giveaway end</code> - Forcibly ends the current giveaway. Requires: % @ # &amp;<br />
-				<code>/giveaway count [pokemon]</code> - Shows how frequently a certain Pok&eacute;mon has been given away.
+				<code>/giveaway count [pokemon]</code> - Shows how frequently a certain Pok&eacute;mon has been given away.<br />
+				<code>/giveaway whitelist [user]</code> - Allow the given [user] to make giveaways. Requires: % @ # &amp;<br />
+				<code>/giveaway unwhitelist [user]</code> - Remove the given user from the giveaway whitelist. Requires: % @ # &amp;
 			</details>);
 		}
 		// Giveaway stuff
@@ -1497,8 +1555,11 @@ export const pages: Chat.PageTable = {
 		},
 		create(args, user) {
 			this.title = `[Create Giveaways]`;
-			if (!Rooms.search('wifi')) return <h1>There is no Wi-Fi room on this server.</h1>;
-			if (!user.can('show', null, Rooms.get('wifi')!)) this.checkCan('warn', null, Rooms.search('wifi')!);
+			const wifi = Rooms.search('wifi');
+			if (!wifi) return <h1>There is no Wi-Fi room on this server.</h1>;
+			if (!(user.can('show', null, wifi) || wifiData.whitelist.includes(user.id))) {
+				this.checkCan('warn', null, wifi);
+			}
 			const [type] = args;
 			return <div class="pad">{makePageHeader(this.user, 'create')}{(() => {
 				if (!type || !['lottery', 'question'].includes(type)) {

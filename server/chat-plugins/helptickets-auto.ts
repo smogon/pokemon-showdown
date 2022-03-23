@@ -10,15 +10,6 @@ import * as Artemis from '../artemis';
 const ORDERED_PUNISHMENTS = ['WARN', 'FORCERENAME', 'LOCK', 'NAMELOCK', 'WEEKLOCK', 'WEEKNAMELOCK'];
 const PMLOG_IGNORE_TIME = 24 * 60 * 60 * 1000;
 const WHITELIST = ['mia'];
-const REASONS: Record<string, string> = {
-	sexual_explicit: 'explicit messages',
-	severe_toxicity: 'extreme harassment',
-	toxicity: 'harassment',
-	obscene: 'obscene messages',
-	identity_attack: 'using identity-based insults',
-	insult: 'insulting others',
-	threat: 'threatening others',
-};
 
 export interface AutoPunishment {
 	modlogCount?: number;
@@ -272,10 +263,21 @@ export const actionHandlers: {
 	},
 };
 
+function shouldNotProcess(message: string) {
+	return (
+		// special 'command', blocks things like /log, /raw, /html
+		// (but not a // message)
+		(message.startsWith('/') && !message.startsWith('//')) ||
+		// broadcasted chat command
+		message.startsWith('!')
+	);
+}
+
 export async function getMessageAverages(messages: string[]) {
 	const counts: Record<string, {count: number, raw: number}> = {};
 	const classified = [];
 	for (const message of messages) {
+		if (shouldNotProcess(message)) continue;
 		const res = await classifier.classify(message);
 		if (!res) continue;
 		classified.push(res);
@@ -381,18 +383,20 @@ export const checkers: {
 			}
 			for (const [id, messageList] of Object.entries(messages)) {
 				const {averages, classified} = await getMessageAverages(messageList);
-				const {action, types} = determinePunishment('battleharassment', averages, []);
-				if (!action) continue;
-				const existingPunishment = actions.get(id);
-				if (!existingPunishment || supersedes(action, existingPunishment.action)) {
-					actions.set(id, {
-						action,
-						user: toID(id),
-						result: averages,
-						reason: `Not following rules in battles (${types.map(r => REASONS[r])})`,
-						proof: urls.join(', '),
-					});
+				const {action} = determinePunishment('battleharassment', averages, []);
+				if (action) {
+					const existingPunishment = actions.get(id);
+					if (!existingPunishment || supersedes(action, existingPunishment.action)) {
+						actions.set(id, {
+							action,
+							user: toID(id),
+							result: averages,
+							reason: `Not following rules in battles (https://${Config.routes.client}/${url})`,
+							proof: urls.join(', '),
+						});
+					}
 				}
+
 				for (const result of classified) {
 					const curPunishment = determinePunishment('battleharassment', result, [], true).action;
 					if (!curPunishment) continue;
@@ -402,7 +406,7 @@ export const checkers: {
 							action: curPunishment,
 							user: toID(id),
 							result: averages,
-							reason: `Not following rules in battles`,
+							reason: `Not following rules in battles (https://${Config.routes.client}/${url})`,
 							proof: urls.join(', '),
 						});
 					}
@@ -444,20 +448,21 @@ export const checkers: {
 			let punishment;
 			const {averages, classified} = await getMessageAverages(messages[id]);
 			const curPunishment = determinePunishment('pmharassment', averages, []).action;
-			if (!curPunishment) continue;
-			if (!punishment || supersedes(curPunishment, punishment)) {
-				punishment = curPunishment;
-			}
-			if (punishment) {
-				actions.set(id, {
-					action: punishment,
-					user: id,
-					result: {},
-					reason: "PM harassment",
-				});
+			if (curPunishment) {
+				if (!punishment || supersedes(curPunishment, punishment)) {
+					punishment = curPunishment;
+				}
+				if (punishment) {
+					actions.set(id, {
+						action: punishment,
+						user: id,
+						result: {},
+						reason: `PM harassment (against ${ticket.userid === id ? targetId : ticket.userid})`,
+					});
+				}
 			}
 			for (const result of classified) {
-				const {action, types} = determinePunishment('pmharassment', result, [], true);
+				const {action} = determinePunishment('pmharassment', result, [], true);
 				if (!action) continue;
 				const exists = actions.get(id);
 				if (!exists || supersedes(action, exists.action)) {
@@ -465,7 +470,7 @@ export const checkers: {
 						action,
 						user: id,
 						result: {},
-						reason: `PM harassment (${types.map(r => REASONS[r])})`,
+						reason: `PM harassment (against ${ticket.userid === id ? targetId : ticket.userid})`,
 					});
 				}
 			}
@@ -513,7 +518,7 @@ export async function runPunishments(ticket: TicketState & {text: [string, strin
 			ticket.recommended = [];
 			for (const res of result.values()) {
 				Rooms.get('abuselog')?.add(
-					`[${ticket.type} Monitor] Recommended: ${res.action}: for ${res.user} (${res.reason})`
+					`|c|&|/log [${ticket.type} Monitor] Recommended: ${res.action}: for ${res.user} (${res.reason})`
 				).update();
 				ticket.recommended.push(`${res.action}: for ${res.user} (${res.reason})`);
 			}
@@ -526,6 +531,18 @@ export const commands: Chat.ChatCommands = {
 	autohelpticket: {
 		''() {
 			return this.parse(`/help autohelpticket`);
+		},
+		async test(target) {
+			checkAccess(this);
+			target = target.trim();
+			const response = await classifier.classify(target) || {};
+			let buf = Utils.html`<strong>Results for "${target}":</strong><br />`;
+			buf += `<strong>Score breakdown:</strong><br />`;
+			for (const k in response) {
+				buf += `&bull; ${k}: ${response[k]}<br />`;
+			}
+			this.runBroadcast();
+			this.sendReplyBox(buf);
 		},
 		ap: 'addpunishment',
 		add: 'addpunishment',
@@ -680,7 +697,11 @@ export const commands: Chat.ChatCommands = {
 		},
 		stats(target) {
 			if (!target) target = Chat.toTimestamp(new Date()).split(' ')[0];
-			return this.parse(`/j view-autohelpticketstats-${target}`);
+			return this.parse(`/j view-autohelpticket-stats-${target}`);
+		},
+		logs(target) {
+			if (!target) target = Chat.toTimestamp(new Date()).split(' ')[0];
+			return this.parse(`/j view-autohelpticket-logs-${target}`);
 		},
 		resolve(target, room, user) {
 			this.checkCan('lock');
@@ -707,76 +728,116 @@ export const commands: Chat.ChatCommands = {
 };
 
 export const pages: Chat.PageTable = {
-	async autohelpticketstats(query, user) {
-		checkAccess(this);
-		let month;
-		if (query.length) {
-			month = /[0-9]{4}-[0-9]{2}/.exec(query.join('-'))?.[0];
-		} else {
-			month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-		}
-		if (!month) {
-			return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
-		}
-
-		this.title = `[Artemis Ticket Stats] ${month}`;
-		this.setHTML(`<div class="pad"><h3>Artemis ticket stats</h3><hr />Searching...`);
-
-		const found = await HelpTicket.getTextLogs(['recommendResult'], month);
-		const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
-
-		let buf = `<div class="pad">`;
-		buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
-		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
-		buf += `<h3>Artemis ticket stats</h3><hr />`;
-		const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
-		const total = {successes: 0, failures: 0, total: 0};
-		for (const ticket of found) {
-			const day = Chat.toTimestamp(new Date(ticket.created)).split(' ')[0];
-			if (!dayStats[day]) dayStats[day] = {successes: 0, failures: 0, total: 0};
-			dayStats[day].total++;
-			total.total++;
-			switch (ticket.state.recommendResult) {
-			case 'success':
-				dayStats[day].successes++;
-				total.successes++;
-				break;
-			case 'failure':
-				dayStats[day].failures++;
-				total.failures++;
-				break;
+	autohelpticket: {
+		async stats(query, user) {
+			checkAccess(this);
+			let month;
+			if (query.length) {
+				month = /[0-9]{4}-[0-9]{2}/.exec(query.join('-'))?.[0];
+			} else {
+				month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 			}
-		}
-		buf += `<strong>Total:</strong> ${total.total}<br />`;
-		buf += `<strong>Success rate:</strong> ${percent(total.successes, total.total)}% (${total.successes})<br />`;
-		buf += `<strong>Failure rate:</strong> ${percent(total.failures, total.total)}% (${total.failures})<br />`;
-		buf += `<strong>Day stats:</strong><br />`;
-		buf += `<div class="ladder pad"><table>`;
-		let header = '';
-		let data = '';
-		const sortedDays = Utils.sortBy(Object.keys(dayStats), d => new Date(d).getTime());
-		for (const [i, day] of sortedDays.entries()) {
-			const cur = dayStats[day];
-			if (!cur.total) continue;
-			header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
-			data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
-			if (cur.failures) {
-				data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
-			} else { // so one cannot confuse dead tickets & false hit tickets
-				data += ' | 0 (0%)';
+			if (!month) {
+				return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
 			}
-			data += '</small></td>';
-			// i + 1 ensures it's above 0 always (0 % 5 === 0)
-			if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
-				buf += `<tr>${header}</tr><tr>${data}</tr>`;
-				buf += `</div></table>`;
-				buf += `<div class="ladder pad"><table>`;
-				header = '';
-				data = '';
+
+			this.title = `[Artemis Ticket Stats] ${month}`;
+			this.setHTML(`<div class="pad"><h3>Artemis ticket stats</h3><hr />Searching...`);
+
+			const found = await HelpTicket.getTextLogs(['recommendResult'], month);
+			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+
+			let buf = `<div class="pad">`;
+			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
+			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
+			buf += `<h3>Artemis ticket stats</h3><hr />`;
+			const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
+			const total = {successes: 0, failures: 0, total: 0};
+			const failed = [];
+			for (const ticket of found) {
+				const day = Chat.toTimestamp(new Date(ticket.created)).split(' ')[0];
+				if (!dayStats[day]) dayStats[day] = {successes: 0, failures: 0, total: 0};
+				dayStats[day].total++;
+				total.total++;
+				switch (ticket.state.recommendResult) {
+				case 'success':
+					dayStats[day].successes++;
+					total.successes++;
+					break;
+				case 'failure':
+					dayStats[day].failures++;
+					total.failures++;
+					failed.push([ticket.userid, ticket.type]);
+					break;
+				}
 			}
-		}
-		buf += `<tr>${header}</tr><tr>${data}</tr>`;
-		buf += `</div></table>`;
-		return buf;
+			buf += `<strong>Total:</strong> ${total.total}<br />`;
+			buf += `<strong>Success rate:</strong> ${percent(total.successes, total.total)}% (${total.successes})<br />`;
+			buf += `<strong>Failure rate:</strong> ${percent(total.failures, total.total)}% (${total.failures})<br />`;
+			buf += `<strong>Day stats:</strong><br />`;
+			buf += `<div class="ladder pad"><table>`;
+			let header = '';
+			let data = '';
+			const sortedDays = Utils.sortBy(Object.keys(dayStats), d => new Date(d).getTime());
+			for (const [i, day] of sortedDays.entries()) {
+				const cur = dayStats[day];
+				if (!cur.total) continue;
+				header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+				data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
+				if (cur.failures) {
+					data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
+				} else { // so one cannot confuse dead tickets & false hit tickets
+					data += ' | 0 (0%)';
+				}
+				data += '</small></td>';
+				// i + 1 ensures it's above 0 always (0 % 5 === 0)
+				if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+					buf += `<tr>${header}</tr><tr>${data}</tr>`;
+					buf += `</div></table>`;
+					buf += `<div class="ladder pad"><table>`;
+					header = '';
+					data = '';
+				}
+			}
+			buf += `<tr>${header}</tr><tr>${data}</tr>`;
+			buf += `</div></table>`;
+			buf += `<br />`;
+			if (failed.length) {
+				buf += `<details class="readmore"><summary>Marked as inaccurate</summary>`;
+				buf += failed.map(([userid, type]) => (
+					`<a href="/view-help-text-${userid}">${userid}</a> (${type})`
+				)).join('<br />');
+				buf += `</details>`;
+			}
+			return buf;
+		},
+		async logs(query, user) {
+			checkAccess(this);
+			let month;
+			if (query.length) {
+				month = /[0-9]{4}-[0-9]{2}/.exec(query.join('-'))?.[0];
+			} else {
+				month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
+			}
+			if (!month) {
+				return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
+			}
+			this.title = `[Artemis Ticket Logs]`;
+			let buf = `<div class="pad"><h3>Artemis ticket logs</h3><hr />`;
+			const allHits = await HelpTicket.getTextLogs(['recommended'], month);
+			Utils.sortBy(allHits, h => -h.created);
+			if (allHits.length) {
+				buf += `<strong>All hits:</strong><hr />`;
+				for (const hit of allHits) {
+					if (!hit.recommended) continue; // ???
+					buf += `<a href="/view-help-text-${hit.userid}">${hit.userid}</a> (${hit.type}) `;
+					buf += `[${Chat.toTimestamp(new Date(hit.created))}]<br />`;
+					buf += Utils.html`&bull; <code><small>${hit.recommended.join(', ')}</small></code><hr />`;
+				}
+			} else {
+				buf += `<div class="message-error">No hits found.</div>`;
+			}
+			return buf;
+		},
 	},
 };
