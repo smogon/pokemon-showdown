@@ -85,6 +85,8 @@ export const translations: Translations = {
 		"You can only add a Player to unrated battles.": "Puoi aggiungere un giocatore solamente nelle lotte senza punteggio.",
 		"Player must be set to \"p1\" or \"p2\", not \"${target}\".": "I giocatori devono essere impostati come \"p1\" o \"p2\", non \"${target}\".",
 		"User ${name} not found.": "Utente ${name} non trovato.",
+		"This room already has a player in slot ${target}.": "Questa room ha già un giocatore nello slot ${target}.",
+ 		"${targetUser.name} is already a player in this battle.": "L'utente ${targetUser.name} è già un giocatore in questa lotta.",
 		"Player 2": "Giocatore 2",
 		"Players could not be restored (maybe this battle already has two players?).": "Non è stato possibile ripristinare i giocatori (forse questa lotta ha già due giocatori?).",
 		"This game doesn't support /joingame": "Questo minigioco non supporta /joingame.",

@@ -85,6 +85,8 @@ export const translations: Translations = {
 		"You can only add a Player to unrated battles.": "",
 		"Player must be set to \"p1\" or \"p2\", not \"${target}\".": "",
 		"User ${name} not found.": "",
+		"This room already has a player in slot ${target}.": "",
+		"${name} was added to the battle as Player ${playerNum} by ${user.name}.": "",
 		"Player 2": "",
 		"Players could not be restored (maybe this battle already has two players?).": "",
 		"This game doesn't support /joingame": "",
