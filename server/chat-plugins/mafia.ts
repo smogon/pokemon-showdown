@@ -770,6 +770,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		let player = this.playerTable[userid];
 
 		// autoselfvote blocking doesn't apply to restless spirits
+		if (this.votelock) {
+			if (!this.dead[userid]) {
+		if (player.voting) return this.sendUser(userid, `|error|You cannot unvote,because votes are locked.`);
+			}
+		}
 		if (player && this.forceVote && !force) {
 			return this.sendUser(userid, `|error|You can only shift your vote, not unvote.`);
 		}
