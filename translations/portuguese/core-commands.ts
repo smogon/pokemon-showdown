@@ -85,7 +85,7 @@ export const translations: Translations = {
 		"You can only add a Player to unrated battles.": "Você só pode adicionar um jogador em batalhas que não valham pontos.",
 		"User ${name} not found.": "Usuário ${name} não encontrado.",
 		"This room already has a player in slot ${target}.": "Esta sala já tem um jogador na posição ${target}.",
- 		"${targetUser.name} is already a player in this battle.": "${targetUser.name} já é um jogador nesta batalha.",
+		"${targetUser.name} is already a player in this battle.": "${targetUser.name} já é um jogador nesta batalha.",
 		"Player 2": "Jogador 2",
 		"Players could not be restored (maybe this battle already has two players?).": "Os jogadores não puderam ser restaurados (talvez esta batalha já tenha dois jogadores?).",
 		"This game doesn't support /joingame": "/joingame não funciona neste jogo",
