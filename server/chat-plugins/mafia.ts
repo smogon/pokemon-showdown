@@ -2430,7 +2430,7 @@ export const commands: Chat.ChatCommands = {
 			for (const player of Object.values(game.playerTable)) {
 				const playerid = Users.get(player.id);
 				if (playerid?.connected && player.action === null) {
-					playerid.send(`>${room.roomid}\n|notify|Send in an action or idle!`);
+					playerid.sendTo(room, `|notify|Send in an action or idle!`);
 					playerid.sendTo(room, `Send in an action or idle, or else you will get subbed out!`);
 				}
 			}
@@ -2584,7 +2584,7 @@ export const commands: Chat.ChatCommands = {
 					player.action = target;
 					try {
 						this.checkBanwords(room, target);
-					} catch (e: any) {
+					} catch {
 						throw new Chat.ErrorMessage(`Your action submission contained a word banned by this room.`);
 					}
 					user.sendTo(room, `You have decided to use an action, with the following details: ${target}`);
