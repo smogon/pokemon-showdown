@@ -705,8 +705,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (!this.votingall) return this.sendUser(userid, `|error|Voting is not allowed.`);
 		if (!this.enableNL && target === 'novote') return this.sendUser(userid, `|error|No Vote is not allowed.`);
 		if (target === player.id && !this.selfEnabled) return this.sendUser(userid, `|error|Self voting is not allowed.`);
-		if (this.votelock) {
-			if (player.voting) return this.sendUser(userid, `|error|You cannot switch your vote because votes are locked.`);
+		if (this.votelock && player.voting) {
+			return this.sendUser(userid, `|error|You cannot switch your vote because votes are locked.`);
 		}
 		const hammering = this.hammerCount - 1 <= (this.votes[target] ? this.votes[target].count : 0);
 		if (target === player.id && !hammering && this.selfEnabled === 'hammer') {
@@ -2862,8 +2862,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia resethammer - sets the hammer to the default, resetting votes`,
 		],
 
-		votelock: 'vl',
-		vl(target, room, user, connection, cmd) {
+		vl: 'votelock',
+		votelock(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
