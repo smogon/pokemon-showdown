@@ -86,7 +86,7 @@ export const translations: Translations = {
 		"Player must be set to \"p1\" or \"p2\", not \"${target}\".": "Spieler müssen zu \"p1\" oder \"p2\" zugeordnet werden, nicht \"${target}\".",
 		"User ${name} not found.": "Nutzer ${name} wurde nicht gefunden.",
 		"This room already has a player in slot ${target}.": "Dieser Raum besitzt bereits einen Spieler in Slot ${target}",
- 		"${targetUser.name} is already a player in this battle.": "${targetUser.name} ist bereits ein Spieler in diesem Kampf.",
+		"${targetUser.name} is already a player in this battle.": "${targetUser.name} ist bereits ein Spieler in diesem Kampf.",
 		"Player 2": "Spieler 2",
 		"Players could not be restored (maybe this battle already has two players?).": "Spieler konnten nicht wiederhergestellt werden (vielleicht hat dieser Kampf bereits zwei Spieler?).",
 		"This game doesn't support /joingame": "Dieses Spiel unterstützt nicht /joingame",
