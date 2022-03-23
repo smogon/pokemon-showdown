@@ -1194,7 +1194,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8bdsp',
-		searchshow: false,
+		searchShow: false,
 		ruleset: ['Flat Rules', 'Min Source Gen = 8'],
 	},
 	{
