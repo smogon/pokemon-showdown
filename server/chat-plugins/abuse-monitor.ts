@@ -12,6 +12,7 @@ import {FS, Utils} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
+import type {GlobalPermission} from '../user-groups';
 
 const WHITELIST = ["mia"];
 const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
@@ -566,8 +567,11 @@ export function notifyStaff() {
 	}
 }
 
-function checkAccess(context: Chat.CommandContext | Chat.PageContext) {
-	if (!WHITELIST.includes(context.user.id)) context.checkCan('bypassall');
+function checkAccess(context: Chat.CommandContext | Chat.PageContext, perm: GlobalPermission = 'bypassall') {
+	const user = context.user;
+	if (!(WHITELIST.includes(user.id) || user.previousIDs.some(id => WHITELIST.includes(id)))) {
+		context.checkCan(perm);
+	}
 }
 
 export const commands: Chat.ChatCommands = {
@@ -739,7 +743,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		ul: 'userlogs',
 		userlogs(target) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			return this.parse(`/join view-abusemonitor-userlogs-${toID(target)}`);
 		},
 		stats(target) {
@@ -1290,7 +1294,7 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	abusemonitor: {
 		flagged(query, user) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			const ids = getFlaggedRooms();
 			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
@@ -1323,7 +1327,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async view(query, user) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			const roomid = query.join('-') as RoomID;
 			if (!toID(roomid)) {
 				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
