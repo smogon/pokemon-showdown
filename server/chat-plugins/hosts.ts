@@ -152,7 +152,7 @@ export const pages: Chat.PageTable = {
 
 	sharedipblacklist(args, user, connection) {
 		this.title = `[Shared IP Blacklist]`;
-		checkCanPerform(this, user, 'globalban');
+		checkCanPerform(this, user, 'lock');
 
 		let buf = `<div class="pad"><h2>IPs blocked from being marked as shared</h2>`;
 		if (!Punishments.sharedIpBlacklist.size) {
