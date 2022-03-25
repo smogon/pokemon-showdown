@@ -199,7 +199,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		onHit(target, source) {
 			source.setType(target.getTypes(true));
-			this.add('-start', source, 'typechange', '[from] move: Conversion', '[of] ' + target);
+			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: Conversion', '[of] ' + target);
 		},
 	},
 	counter: {
