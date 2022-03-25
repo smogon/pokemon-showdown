@@ -1074,6 +1074,7 @@ export const commands: Chat.ChatCommands = {
 			setting = false;
 			break;
 		case 'secretroom':
+			this.checkCan('rangeban');
 			setting = true;
 			break;
 		default:
