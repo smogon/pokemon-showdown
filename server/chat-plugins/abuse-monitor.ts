@@ -884,6 +884,19 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
 		},
+		ex: 'exportpunishment',
+		exportpunishment(target) {
+			checkAccess(this);
+			const num = parseInt(target) - 1;
+			if (isNaN(num)) {
+				return this.errorReply(`Invalid punishment number: ${num + 1}.`);
+			}
+			const punishment = settings.punishments[num];
+			if (!punishment) {
+				return this.errorReply(`Punishment ${num + 1} does not exist.`);
+			}
+			this.sendReply(`Punishment ${num + 1}: <code>${visualizePunishment(punishment)}</code>`);
+		},
 		ep: 'exportpunishments', // exports punishment settings to something easily copy/pastable
 		exportpunishments() {
 			checkAccess(this);
