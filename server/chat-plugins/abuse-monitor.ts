@@ -634,6 +634,40 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.sendReplyBox(buf);
 		},
+		cm: 'compare',
+		async compare(target) {
+			checkAccess(this);
+			const [base, against] = Utils.splitFirst(target, ',').map(f => f.trim());
+			if (!(base && against)) return this.parse(`/help abusemonitor`);
+			const colors: Record<string, string> = {
+				'0': 'Purple',
+				'1': 'DodgerBlue',
+				'2': 'Red',
+			};
+			const baseResponse = await classifier.classify(base) || {};
+			const againstResponse = await new Promise<Record<string, number> | null>(resolve => {
+				// bit of a hack, but this has to be done so rate limits don't get hit
+				setTimeout(() => {
+					resolve(classifier.classify(against));
+				}, 500);
+			}) || {};
+			let buf = Utils.html`<strong>Compared scores for "${base}" `;
+			buf += `(<strong style="color: ${colors['1']}">1</strong>) `;
+			buf += Utils.html`and "${against}" (<strong style="color: ${colors['2']}">2</strong>): </strong><br />`;
+			for (const [k, val] of Object.entries(baseResponse)) {
+				const max = Math.max(val, againstResponse[k]);
+				const num = val === againstResponse[k] ? '0' : max === val ? '1' : '2';
+				buf += `&bull; ${k}: <strong style="color: ${colors[num]}">${num}</strong> `;
+				if (num === '0') {
+					buf += `(${max})`;
+				} else {
+					buf += `(${max} vs ${(max === val ? againstResponse : baseResponse)[k]})`;
+				}
+				buf += `<br />`;
+			}
+			this.runBroadcast();
+			return this.sendReplyBox(buf);
+		},
 		toggle(target) {
 			checkAccess(this);
 			if (this.meansYes(target)) {
