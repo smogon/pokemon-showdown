@@ -708,8 +708,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (['cramorantgulping', 'cramorantgorging'].includes(pokemon.species.id) && !pokemon.transformed) {
 				pokemon.formeChange('cramorant');
 			}
-			this.add('-start', pokemon, 'Dynamax');
-			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name + '-Gmax');
+			this.add('-start', pokemon, 'Dynamax', pokemon.gigantamax ? 'Gmax' : '');
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
@@ -739,7 +738,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onResidualPriority: -100,
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
-			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name);
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;
