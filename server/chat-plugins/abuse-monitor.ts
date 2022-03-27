@@ -155,7 +155,7 @@ function displayResolved(review: ReviewRequest) {
 	const prefix = `|pm|&|${user.getIdentity()}|`;
 	user.send(
 		prefix +
-		`Your Artemis review was resolved by ${resolved.by}, ` +
+		`Your Artemis review for <<${review.room}>> was resolved by ${resolved.by}, ` +
 		`${Chat.toDurationString(Date.now() - resolved.time)} ago.`
 	);
 	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
