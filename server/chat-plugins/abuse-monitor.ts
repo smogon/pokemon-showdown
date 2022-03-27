@@ -12,6 +12,7 @@ import {FS, Utils} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
+import type {GlobalPermission} from '../user-groups';
 
 const WHITELIST = ["mia"];
 const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
@@ -154,7 +155,7 @@ function displayResolved(review: ReviewRequest) {
 	const prefix = `|pm|&|${user.getIdentity()}|`;
 	user.send(
 		prefix +
-		`Your Artemis review was resolved by ${resolved.by}, ` +
+		`Your Artemis review for <<${review.room}>> was resolved by ${resolved.by}, ` +
 		`${Chat.toDurationString(Date.now() - resolved.time)} ago.`
 	);
 	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
@@ -566,8 +567,11 @@ export function notifyStaff() {
 	}
 }
 
-function checkAccess(context: Chat.CommandContext | Chat.PageContext) {
-	if (!WHITELIST.includes(context.user.id)) context.checkCan('bypassall');
+function checkAccess(context: Chat.CommandContext | Chat.PageContext, perm: GlobalPermission = 'bypassall') {
+	const user = context.user;
+	if (!(WHITELIST.includes(user.id) || user.previousIDs.some(id => WHITELIST.includes(id)))) {
+		context.checkCan(perm);
+	}
 }
 
 export const commands: Chat.ChatCommands = {
@@ -629,6 +633,40 @@ export const commands: Chat.ChatCommands = {
 				buf += `&bull; ${k}: ${response[k]}<br />`;
 			}
 			this.sendReplyBox(buf);
+		},
+		cm: 'compare',
+		async compare(target) {
+			checkAccess(this);
+			const [base, against] = Utils.splitFirst(target, ',').map(f => f.trim());
+			if (!(base && against)) return this.parse(`/help abusemonitor`);
+			const colors: Record<string, string> = {
+				'0': 'Purple',
+				'1': 'DodgerBlue',
+				'2': 'Red',
+			};
+			const baseResponse = await classifier.classify(base) || {};
+			const againstResponse = await new Promise<Record<string, number> | null>(resolve => {
+				// bit of a hack, but this has to be done so rate limits don't get hit
+				setTimeout(() => {
+					resolve(classifier.classify(against));
+				}, 500);
+			}) || {};
+			let buf = Utils.html`<strong>Compared scores for "${base}" `;
+			buf += `(<strong style="color: ${colors['1']}">1</strong>) `;
+			buf += Utils.html`and "${against}" (<strong style="color: ${colors['2']}">2</strong>): </strong><br />`;
+			for (const [k, val] of Object.entries(baseResponse)) {
+				const max = Math.max(val, againstResponse[k]);
+				const num = val === againstResponse[k] ? '0' : max === val ? '1' : '2';
+				buf += `&bull; ${k}: <strong style="color: ${colors[num]}">${num}</strong> `;
+				if (num === '0') {
+					buf += `(${max})`;
+				} else {
+					buf += `(${max} vs ${(max === val ? againstResponse : baseResponse)[k]})`;
+				}
+				buf += `<br />`;
+			}
+			this.runBroadcast();
+			return this.sendReplyBox(buf);
 		},
 		toggle(target) {
 			checkAccess(this);
@@ -739,7 +777,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		ul: 'userlogs',
 		userlogs(target) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			return this.parse(`/join view-abusemonitor-userlogs-${toID(target)}`);
 		},
 		stats(target) {
@@ -879,6 +917,19 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
+		},
+		ex: 'exportpunishment',
+		exportpunishment(target) {
+			checkAccess(this);
+			const num = parseInt(target) - 1;
+			if (isNaN(num)) {
+				return this.errorReply(`Invalid punishment number: ${num + 1}.`);
+			}
+			const punishment = settings.punishments[num];
+			if (!punishment) {
+				return this.errorReply(`Punishment ${num + 1} does not exist.`);
+			}
+			this.sendReply(`Punishment ${num + 1}: <code>${visualizePunishment(punishment)}</code>`);
 		},
 		ep: 'exportpunishments', // exports punishment settings to something easily copy/pastable
 		exportpunishments() {
@@ -1290,7 +1341,7 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	abusemonitor: {
 		flagged(query, user) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			const ids = getFlaggedRooms();
 			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
@@ -1323,7 +1374,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async view(query, user) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			const roomid = query.join('-') as RoomID;
 			if (!toID(roomid)) {
 				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
