@@ -196,12 +196,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	conversion: {
 		inherit: true,
-		volatileStatus: 'conversion',
-		accuracy: true,
 		target: "normal",
 		onHit(target, source) {
-			source.types = target.types;
-			this.add('-start', source, 'typechange', source.types.join(', '), '[from] move: Conversion', '[of] ' + source);
+			source.setType(target.getTypes(true));
+			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: Conversion', '[of] ' + target);
 		},
 	},
 	counter: {
