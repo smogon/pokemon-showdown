@@ -186,7 +186,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	revealed: string;
 	IDEA: MafiaIDEAPlayerData | null;
 	/** false - used an action, true - idled, null - no response */
-	idle: null | boolean;
+	action: null | boolean | string;
 	constructor(user: User, game: Mafia) {
 		super(user, game);
 		this.safeName = Utils.escapeHTML(this.name);
@@ -200,7 +200,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 		this.nighttalk = false;
 		this.revealed = '';
 		this.IDEA = null;
-		this.idle = null;
+		this.action = null;
 	}
 
 	getRole(button = false) {
@@ -662,7 +662,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.sendDeclare(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`);
 		}
 		for (const p in this.playerTable) {
-			this.playerTable[p].idle = null;
+			this.playerTable[p].action = null;
 		}
 		this.sendPlayerList();
 		this.updatePlayers();
@@ -675,6 +675,12 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		for (const hostid of [...this.cohostids, this.hostid]) {
 			const host = Users.get(hostid);
 			if (host?.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+		}
+		for (const player of Object.values(this.playerTable)) {
+			const user = Users.get(player.id);
+			if (user?.connected) {
+				user.sendTo(this.room.roomid, `|notify|It's night in the game of Mafia! Send in an action or idle.`);
+			}
 		}
 		if (this.takeIdles) {
 			this.sendDeclare(`Night ${this.dayNum}. Submit whether you are using an action or idle. If you are using an action, DM your action to the host.`);
@@ -1839,37 +1845,41 @@ export const pages: Chat.PageTable = {
 				buf += `<p style="font-weight:bold;">PM the host (${game.host}) the action you want to use tonight, and who you want to use it on. Or PM the host "idle".</p>`;
 			} else {
 				buf += `<b>Night Actions:</b>`;
-				if (game.playerTable[user.id].idle === null) {
-					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">clear</button>`;
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">action</button>`;
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">idle</button>`;
+				if (game.playerTable[user.id].action === null) {
+					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Clear</button>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">Idle</button>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">Action</button><br/>`;
 				} else {
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia noresponse">clear</button>`;
-					if (game.playerTable[user.id].idle === false) {
-						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">action</button>`;
-						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">idle</button>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia noresponse">Clear</button>`;
+					if (game.playerTable[user.id].action) {
+						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">Idle</button>`;
+						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Action</button>`;
+						if (game.playerTable[user.id].action === true) {
+							buf += `<form data-submitsend="/msgroom ${game.room.roomid},/mafia action {submission}"><label><b>Submission:</b> <input name="submission" class="textbox" placeholder="Action Details" /></label> <button class="button">Confirm</button></form>`;
+						} else {
+							buf += `<form data-submitsend="/msgroom ${game.room.roomid},/mafia action"><label><b>Submission:</b> ${game.playerTable[user.id].action} <button class="button">Clear Submission</button></label></form>`;
+						}
 					} else {
-						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">action</button>`;
-						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">idle</button>`;
+						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Idle</button>`;
+						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">Action</button><br/>`;
 					}
 				}
-				buf += `<br/>`;
 			}
 		}
 		if (isHost) {
 			if (game.phase === "night" && isHost && game.takeIdles) {
 				buf += `<h3>Night Responses</h3>`;
-				let actions = ``;
-				let idles = ``;
-				let noResponses = ``;
+				let actions = `<br/>`;
+				let idles = `<br/>`;
+				let noResponses = `<br/>`;
 				for (const p in game.playerTable) {
 					const player = game.playerTable[p];
-					if (player.idle === true) {
-						idles += `${player.safeName}<br/>`;
-					} else if (player.idle === false) {
-						actions += `${player.safeName}<br/>`;
+					if (player.action) {
+						actions += `<b>${player.safeName}</b>${player.action === true ? '' : `: ${player.action}`}<br/>`;
+					} else if (player.action === false) {
+						idles += `<b>${player.safeName}</b><br/>`;
 					} else {
-						noResponses += `${player.safeName}<br/>`;
+						noResponses += `<b>${player.safeName}</b><br/>`;
 					}
 				}
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Idles</summary>${idles}</span></details></p>`;
@@ -2417,6 +2427,24 @@ export const commands: Chat.ChatCommands = {
 			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # &`,
 		],
 
+		prod(target, room, user) {
+			room = this.requireRoom();
+			const game = this.requireGame(Mafia);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			if (game.phase !== 'night') return;
+			for (const player of Object.values(game.playerTable)) {
+				const playerid = Users.get(player.id);
+				if (playerid?.connected && player.action === null) {
+					playerid.sendTo(room, `|notify|Send in an action or idle!`);
+					playerid.sendTo(room, `Send in an action or idle, or else you will get subbed out!`);
+				}
+			}
+			game.sendDeclare(`Unsubmitted players have been reminded to submit an action or idle.`);
+		},
+		prodhelp: [
+			`/mafia prod - Notifies players that they must submit an action or idle if they haven't yet. Requires host % @ # &`,
+		],
+
 		v: 'vote',
 		vote(target, room, user) {
 			room = this.requireRoom();
@@ -2570,26 +2598,35 @@ export const commands: Chat.ChatCommands = {
 			}
 			switch (cmd) {
 			case 'idle':
-				player.idle = true;
+				player.action = false;
 				user.sendTo(room, `You have idled.`);
 				break;
 			case 'action':
-				player.idle = false;
+				player.action = true;
 				if (target) {
-					this.errorReply(`'/mafia action' should be sent alone, not followed by your action or target. Please PM your exact action to the host.`);
+					player.action = target;
+					try {
+						this.checkBanwords(room, target);
+					} catch {
+						throw new Chat.ErrorMessage(`Your action submission contained a word banned by this room.`);
+					}
+					user.sendTo(room, `You have decided to use an action, with the following details: ${target}`);
 				} else {
-					user.sendTo(room, `You have decided to use an action. DM the host your action.`);
+					user.sendTo(room, `You have decided to use an action. Please submit details about your action.`);
 				}
 				break;
 			case 'noresponse': case 'unidle': case 'unaction':
-				player.idle = null;
+				player.action = null;
 				user.sendTo(room, `You are no longer submitting an action or idle.`);
 				break;
 			}
 			player.updateHtmlRoom();
 		},
 		actionhelp: 'idlehelp',
-		idlehelp: [`/mafia [action|idle] - Tells the host if you are using an action or idling.`],
+		idlehelp: [
+			`/mafia idle - Tells the host if you are idling.`,
+			`/mafia action [details] - Tells the host you are using an action with the given submission details.`,
+		],
 
 		forceadd: 'revive',
 		add: 'revive',
