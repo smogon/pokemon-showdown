@@ -679,7 +679,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		for (const player of Object.values(this.playerTable)) {
 			const user = Users.get(player.id);
 			if (user?.connected) {
-				user.send(`>${this.room.roomid}\n|notify|It's night in the game of Mafia! Send in an action or idle.`);
+				user.sendTo(this.room.roomid, `|notify|It's night in the game of Mafia! Send in an action or idle.`);
 			}
 		}
 		if (this.takeIdles) {
