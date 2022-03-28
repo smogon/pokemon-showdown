@@ -3510,7 +3510,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', '! Adjust Level Down', 'Max Level = 50', 'Max Team Size = 4'],
-		banlist: ['Soul Dew', 'Rotom-Heat', 'Rotom-Wash', 'Rotom-Frost', 'Rotom-Fan', 'Rotom-Mow'],
+		banlist: ['Tyranitar', 'Rotom', 'Judgment', 'Soul Dew'],
 	},
 	{
 		name: "[Gen 4] Doubles Custom Game",
