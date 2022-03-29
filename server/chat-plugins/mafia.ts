@@ -2916,6 +2916,7 @@ export const commands: Chat.ChatCommands = {
 		votelockhelp: [
 			`/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # &`,
 		],
+
 		voting: 'votesall',
 		votesall(target, room, user, connection, cmd) {
 			room = this.requireRoom();
@@ -2930,7 +2931,10 @@ export const commands: Chat.ChatCommands = {
 			}
 			game.logAction(user, `changed voting status`);
 		},
-
+		votinghelp: [
+			`/mafia voting [on|off] - Allows or disallows players to vote. Requires host % @ # &`,
+		],
+		
 		enablenv: 'enablenl',
 		disablenv: 'enablenl',
 		disablenl: 'enablenl',
