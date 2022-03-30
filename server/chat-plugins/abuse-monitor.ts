@@ -668,6 +668,36 @@ export const commands: Chat.ChatCommands = {
 			this.runBroadcast();
 			return this.sendReplyBox(buf);
 		},
+		async score(target) {
+			checkAccess(this);
+			target = target.trim();
+			if (!target) return this.parse(`/help abusemonitor`);
+			const [text, scoreText] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const args = Chat.parseArguments(scoreText, ',', '=', false);
+			const scores: Record<string, number> = {};
+			for (let k in args) {
+				const vals = args[k];
+				if (vals.length > 1) {
+					return this.errorReply(`Too many values for ${k}`);
+				}
+				k = k.toUpperCase().replace(/\s/g, '_');
+				if (!(k in Artemis.RemoteClassifier.ATTRIBUTES)) {
+					return this.errorReply(`Invalid attribute: ${k}`);
+				}
+				const val = parseFloat(vals[0]);
+				if (isNaN(val)) {
+					return this.errorReply(`Invalid value for ${k}: ${vals[0]}`);
+				}
+				scores[k] = val;
+			}
+			for (const k in Artemis.RemoteClassifier.ATTRIBUTES) {
+				if (!(k in scores)) scores[k] = 0;
+			}
+			const response = await classifier.suggestScore(text, scores);
+			if (response.error) throw new Chat.ErrorMessage(response.error);
+			this.sendReply(`Recommendation successfully sent.`);
+			Rooms.get('abuselog')?.roomlog(`${this.user.name} used /am score ${target}`);
+		},
 		toggle(target) {
 			checkAccess(this);
 			if (this.meansYes(target)) {

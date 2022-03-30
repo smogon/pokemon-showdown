@@ -160,6 +160,31 @@ export class RemoteClassifier {
 		if (!Config.perspectiveKey) return Promise.resolve(null);
 		return PM.query(text);
 	}
+	async suggestScore(text: string, data: Record<string, number>) {
+		if (!Config.perspectiveKey) return Promise.resolve(null);
+		const body: AnyObject = {
+			comment: {text},
+			attributeScores: {},
+		};
+		for (const k in data) {
+			body.attributeScores[k] = {summaryScore: {value: data[k]}};
+		}
+		try {
+			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:suggestscore`).post({
+				query: {
+					key: Config.perspectiveKey,
+				},
+				body: JSON.stringify(body),
+				headers: {
+					'Content-Type': "application/json",
+				},
+				timeout: 10 * 1000, // 10s
+			});
+			return JSON.parse(raw);
+		} catch (e: any) {
+			return {error: e.message};
+		}
+	}
 	destroy() {
 		return PM.destroy();
 	}
