@@ -257,6 +257,36 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "LC UBER",
+
+		mod: 'gen8',
+		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
+		banlist: [
+			'Tangela', 'Scyther', 'Corsola-Galar', 'Gligar', 'Gligar-Fiore', 'Sneasel', 'Sneasel-Almian',
+			'Chlorophyll', 'Moody', 'Baton Pass', 'Shadow Tag',
+		],
+	},
+	{
+		name: "LC OU",
+
+		mod: 'gen8',
+		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
+		banlist: [
+			'LC UBER',
+			'Chlorophyll', 'Moody', 'Baton Pass', 'Shadow Tag',
+		],
+	},
+	{
+		name: "LC UU",
+
+		mod: 'gen8',
+		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
+		banlist: [
+			'LC OU', 'LC UBER',
+			'Moody', 'Baton Pass', 'Shadow Tag',
+		],
+	},
+	{
 		name: "[Gen 8] CAP",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656824/">CAP Metagame Discussion</a>`,
