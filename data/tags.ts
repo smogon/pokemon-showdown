@@ -172,9 +172,21 @@ export const Tags: {[id: string]: TagData} = {
 		name: "NFE",
 		speciesFilter: species => species.tier === 'NFE',
 	},
-	lc: {
-		name: "LC",
-		speciesFilter: species => species.doublesTier === 'LC',
+	// lc: {
+		// name: "LC",
+		// speciesFilter: species => species.doublesTier === 'LC',
+	// },
+	lcuber: {
+		name: "LC UBER",
+		pokemonFilter: species => species.doublesTier === 'LC UBER',
+    },
+    lcou: {
+        name: "LC OU",
+		pokemonFilter: species => species.doublesTier === 'LC OU',
+    },
+    lcuu: {
+		name: "LC UU",
+		pokemonFilter: species => species.doublesTier === 'LC UU',
 	},
 	captier: {
 		name: "CAP Tier",
