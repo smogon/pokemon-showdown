@@ -238,26 +238,26 @@ export const Formats: FormatList = [
 			'Rotom-Frost', 'Turtonator', 'Vanilluxe', 'Vikavolt', 'Silvally-Dragon', 'Silvally-Ground', 'Sneasel', 'Damp Rock', 'Grassy Seed',
 		],
 	},
-	{
-		name: "[Gen 8] LC UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3660866/">LC UU</a>`,
-		],
+	// {
+	// 	name: "[Gen 8] LC UU",
+	// 	threads: [
+	// 		`&bullet; <a href="https://www.smogon.com/forums/threads/3660866/">LC UU</a>`,
+	// 	],
 
-		mod: 'gen8',
-		searchShow: false,
-		ruleset: ['[Gen 8] LC'],
-		banlist: [
-			// LC OU
-			'Abra', 'Carvanha', 'Croagunk', 'Diglett-Base', 'Dwebble', 'Ferroseed', 'Foongus', 'Frillish', 'Grookey',
-			'Koffing', 'Larvesta', 'Magnemite', 'Mareanie', 'Mienfoo', 'Mudbray', 'Munchlax', 'Natu', 'Onix', 'Pawniard',
-			'Ponyta', 'Ponyta-Galar', 'Porygon', 'Slowpoke-Base', 'Staryu', 'Timburr', 'Trapinch', 'Tyrunt', 'Vulpix',
-			// LC UUBL
-			'Farfetch\u2019d-Galar', 'Scorbunny', 'Shellder', 'Wingull',
-		],
-	},
+	// 	mod: 'gen8',
+	// 	searchShow: false,
+	// 	ruleset: ['[Gen 8] LC'],
+	// 	banlist: [
+	// 		// LC OU
+	// 		'Abra', 'Carvanha', 'Croagunk', 'Diglett-Base', 'Dwebble', 'Ferroseed', 'Foongus', 'Frillish', 'Grookey',
+	// 		'Koffing', 'Larvesta', 'Magnemite', 'Mareanie', 'Mienfoo', 'Mudbray', 'Munchlax', 'Natu', 'Onix', 'Pawniard',
+	// 		'Ponyta', 'Ponyta-Galar', 'Porygon', 'Slowpoke-Base', 'Staryu', 'Timburr', 'Trapinch', 'Tyrunt', 'Vulpix',
+	// 		// LC UUBL
+	// 		'Farfetch\u2019d-Galar', 'Scorbunny', 'Shellder', 'Wingull',
+	// 	],
+	// },
 	{
-		name: "LC UBER",
+		name: "[Gen 8] LC UBER",
 
 		mod: 'gen8',
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
@@ -267,7 +267,7 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "LC OU",
+		name: "[Gen 8] LC OU",
 
 		mod: 'gen8',
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
@@ -277,7 +277,7 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "LC UU",
+		name: "[Gen 8] LC UU",
 
 		mod: 'gen8',
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
