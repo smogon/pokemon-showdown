@@ -696,7 +696,7 @@ export class TeamValidator {
 		}
 
 		let isFromRBYEncounter = false;
-		if (this.gen === 1 && !this.ruleTable.has('allowtradeback')) {
+		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
 			let lowestEncounterLevel;
 			for (const encounter of learnsetSpecies.encounters || []) {
 				if (encounter.generation !== 1) continue;
