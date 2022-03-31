@@ -29,7 +29,7 @@ describe('value rule support', () => {
 			const format = Dex.formats.get(`${formatID}@@@Max Move Count = ${count}`);
 
 			it(`${format.name} should support Max Move Count = ${count}`, () => {
-				testTeam({format, rounds: 100}, team => {
+				testTeam({format, rounds: 50}, team => {
 					for (const set of team) {
 						let species = set.species;
 						// Formes make this test code really complicated, so we skip them
@@ -63,7 +63,7 @@ describe('value rule support', () => {
 
 		for (const level of [1, 99999]) {
 			it(`${format.name} should support Adjust Level = ${level}`, () => {
-				testTeam({format: `${format.id}@@@Adjust Level = ${level}`, rounds: 100}, team => {
+				testTeam({format: `${format.id}@@@Adjust Level = ${level}`, rounds: 50}, team => {
 					for (const set of team) {
 						assert.equal(set.level, level);
 					}
