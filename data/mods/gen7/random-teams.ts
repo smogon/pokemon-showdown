@@ -1458,14 +1458,16 @@ export class RandomGen7Teams extends RandomTeams {
 	}
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		if (hasCustomBans) {
+			this.enforceNoDirectComplexBans();
+		}
 
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
-		const pokemon = [];
+		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
-		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
@@ -1618,7 +1620,7 @@ export class RandomGen7Teams extends RandomTeams {
 				if (set.moves.includes('rapidspin')) teamDetails.rapidSpin = 1;
 			}
 		}
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !hasCustomBans) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 
@@ -1735,7 +1737,7 @@ export class RandomGen7Teams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const forceResult = (depth >= 4);
-		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
 
 		// The teams generated depend on the tier choice in such a way that
 		// no exploitable information is leaked from rolling the tier in getTeam(p1).

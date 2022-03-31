@@ -776,14 +776,16 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	}
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		if (hasCustomBans) {
+			this.enforceNoDirectComplexBans();
+		}
 
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
-		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
@@ -896,7 +898,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// For setting Zoroark's level
 			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !hasCustomBans) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 

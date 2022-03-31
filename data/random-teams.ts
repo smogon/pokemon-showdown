@@ -85,6 +85,7 @@ export class RandomTeams {
 	format: Format;
 	prng: PRNG;
 	noStab: string[];
+	readonly ruleTable: RuleTable;
 	readonly maxTeamSize: number;
 	readonly forceMonotype: string | undefined;
 
@@ -101,9 +102,9 @@ export class RandomTeams {
 		this.gen = this.dex.gen;
 		this.noStab = NoStab;
 
-		const ruleTable = Dex.formats.getRuleTable(format);
-		this.maxTeamSize = ruleTable.maxTeamSize;
-		const forceMonotype = ruleTable.valueRules.get('forcemonotype');
+		this.ruleTable = Dex.formats.getRuleTable(format);
+		this.maxTeamSize = this.ruleTable.maxTeamSize;
+		const forceMonotype = this.ruleTable.valueRules.get('forcemonotype');
 		this.forceMonotype = forceMonotype && this.dex.types.get(forceMonotype).exists ?
 			this.dex.types.get(forceMonotype).name : undefined;
 
@@ -288,7 +289,7 @@ export class RandomTeams {
 	 * Check if user has directly tried to ban/unban/restrict things in a custom battle.
 	 * Doesn't count bans nested inside other formats/rules.
 	 */
-	private hasDirectCustomBanlistChanges() {
+	protected hasDirectCustomBanlistChanges() {
 		if (!this.format.customRules) return false;
 		for (const rule of this.format.customRules) {
 			for (const banlistOperator of ['-', '+', '*']) {
@@ -322,7 +323,7 @@ export class RandomTeams {
 	/**
 	 * Validate set element pool size is sufficient to support size requirements after simple bans.
 	 */
-	private enforceCustomPoolSizeNoComplexBans(
+	protected enforceCustomPoolSizeNoComplexBans(
 		effectTypeName: string,
 		basicEffectPool: BasicEffect[],
 		requiredCount: number,
@@ -610,8 +611,7 @@ export class RandomTeams {
 
 	randomHCTeam(): PokemonSet[] {
 		const hasCustomBans = this.hasDirectCustomBanlistChanges();
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
-		const hasNonexistentBan = hasCustomBans && ruleTable.check('nonexistent');
+		const hasNonexistentBan = hasCustomBans && this.ruleTable.check('nonexistent');
 		const hasNonexistentWhitelist = hasCustomBans && (hasNonexistentBan === '');
 
 		if (hasCustomBans) {
@@ -625,14 +625,14 @@ export class RandomTeams {
 			if (!hasCustomBans) {
 				itemPool = [...this.dex.items.all()].filter(item => (item.gen <= this.gen && !item.isNonstandard));
 			} else {
-				const hasAllItemsBan = ruleTable.check('pokemontag:allitems');
+				const hasAllItemsBan = this.ruleTable.check('pokemontag:allitems');
 				for (const item of this.dex.items.all()) {
-					let banReason = ruleTable.check('item:' + item.id);
+					let banReason = this.ruleTable.check('item:' + item.id);
 					if (banReason) continue;
 					if (banReason !== '' && item.id) {
 						if (hasAllItemsBan) continue;
 						if (item.isNonstandard) {
-							banReason = ruleTable.check('pokemontag:' + toID(item.isNonstandard));
+							banReason = this.ruleTable.check('pokemontag:' + toID(item.isNonstandard));
 							if (banReason) continue;
 							if (banReason !== '' && item.isNonstandard !== 'Unobtainable') {
 								if (hasNonexistentBan) continue;
@@ -642,7 +642,7 @@ export class RandomTeams {
 					}
 					itemPool.push(item);
 				}
-				if (ruleTable.check('item:noitem')) {
+				if (this.ruleTable.check('item:noitem')) {
 					this.enforceCustomPoolSizeNoComplexBans('item', itemPool, this.maxTeamSize, 'Max Team Size');
 				}
 			}
@@ -655,14 +655,14 @@ export class RandomTeams {
 			if (!hasCustomBans) {
 				abilityPool = [...this.dex.abilities.all()].filter(ability => (ability.gen <= this.gen && !ability.isNonstandard));
 			} else {
-				const hasAllAbilitiesBan = ruleTable.check('pokemontag:allabilities');
+				const hasAllAbilitiesBan = this.ruleTable.check('pokemontag:allabilities');
 				for (const ability of this.dex.abilities.all()) {
-					let banReason = ruleTable.check('ability:' + ability.id);
+					let banReason = this.ruleTable.check('ability:' + ability.id);
 					if (banReason) continue;
 					if (banReason !== '') {
 						if (hasAllAbilitiesBan) continue;
 						if (ability.isNonstandard) {
-							banReason = ruleTable.check('pokemontag:' + toID(ability.isNonstandard));
+							banReason = this.ruleTable.check('pokemontag:' + toID(ability.isNonstandard));
 							if (banReason) continue;
 							if (banReason !== '') {
 								if (hasNonexistentBan) continue;
@@ -672,29 +672,29 @@ export class RandomTeams {
 					}
 					abilityPool.push(ability);
 				}
-				if (ruleTable.check('ability:noability')) {
+				if (this.ruleTable.check('ability:noability')) {
 					this.enforceCustomPoolSizeNoComplexBans('ability', abilityPool, this.maxTeamSize, 'Max Team Size');
 				}
 			}
 		}
 
 		// Move Pool
-		const setMoveCount = ruleTable.maxMoveCount;
+		const setMoveCount = this.ruleTable.maxMoveCount;
 		let movePool: Move[] = [];
 		if (!hasCustomBans) {
 			movePool = [...this.dex.moves.all()].filter(move =>
 				(move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')));
 		} else {
-			const hasAllMovesBan = ruleTable.check('pokemontag:allmoves');
+			const hasAllMovesBan = this.ruleTable.check('pokemontag:allmoves');
 			for (const move of this.dex.moves.all()) {
 				// Legality of specific HP types can't be altered in built formats anyway
 				if (move.name.startsWith('Hidden Power ')) continue;
-				let banReason = ruleTable.check('move:' + move.id);
+				let banReason = this.ruleTable.check('move:' + move.id);
 				if (banReason) continue;
 				if (banReason !== '') {
 					if (hasAllMovesBan) continue;
 					if (move.isNonstandard) {
-						banReason = ruleTable.check('pokemontag:' + toID(move.isNonstandard));
+						banReason = this.ruleTable.check('pokemontag:' + toID(move.isNonstandard));
 						if (banReason) continue;
 						if (banReason !== '' && move.isNonstandard !== 'Unobtainable') {
 							if (hasNonexistentBan) continue;
@@ -715,14 +715,14 @@ export class RandomTeams {
 				if (!hasCustomBans) {
 					naturePool = [...this.dex.natures.all()];
 				} else {
-					const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
+					const hasAllNaturesBan = this.ruleTable.check('pokemontag:allnatures');
 					for (const nature of this.dex.natures.all()) {
-						let banReason = ruleTable.check('nature:' + nature.id);
+						let banReason = this.ruleTable.check('nature:' + nature.id);
 						if (banReason) continue;
 						if (banReason !== '' && nature.id) {
 							if (hasAllNaturesBan) continue;
 							if (nature.isNonstandard) {
-								banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+								banReason = this.ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
 								if (banReason) continue;
 								if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
 									if (hasNonexistentBan) continue;
@@ -738,7 +738,7 @@ export class RandomTeams {
 		}
 
 		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined,
-			hasCustomBans ? ruleTable : undefined);
+			hasCustomBans ? this.ruleTable : undefined);
 
 		const team = [];
 		for (const forme of randomN) {
@@ -2326,7 +2326,11 @@ export class RandomTeams {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		for (let species of this.dex.species.all()) {
+			if (this.ruleTable.isBannedSpecies(species)) continue;
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
+			if (this.dex.currentMod === 'gen7letsgo' && (species.num > 151 && ![808, 809].includes(species.num))) {
+				continue;
+			}
 			if (this.dex.currentMod === 'gen8bdsp' && species.gen > 4) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
@@ -2341,19 +2345,21 @@ export class RandomTeams {
 	}
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		if (hasCustomBans) {
+			this.enforceNoDirectComplexBans();
+		}
 
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
-		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff
-		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
+		const usePotD = global.Config && Config.potd && this.ruleTable.has('potd');
 		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
 
 		const baseFormes: {[k: string]: number} = {};
@@ -2450,7 +2456,7 @@ export class RandomTeams {
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0,
-				this.format.gameType !== 'singles', this.dex.formats.getRuleTable(this.format).has('dynamaxclause'));
+				this.format.gameType !== 'singles', this.ruleTable.has('dynamaxclause'));
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2505,7 +2511,8 @@ export class RandomTeams {
 			// For setting Zoroark's level
 			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
+		// large teams sometimes cannot be built
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !hasCustomBans) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 

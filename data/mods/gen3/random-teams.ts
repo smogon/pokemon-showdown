@@ -573,14 +573,16 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	}
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		if (hasCustomBans) {
+			this.enforceNoDirectComplexBans();
+		}
 
 		const seed = this.prng.seed;
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
-		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
@@ -669,7 +671,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			if (species.id === 'ditto') this.battleHasDitto = true;
 		}
 
-		if (pokemon.length < this.maxTeamSize && !isMonotype && !this.forceMonotype && pokemon.length < 12) {
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !isMonotype && !hasCustomBans) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 

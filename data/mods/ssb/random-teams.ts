@@ -867,8 +867,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
-		const ruleTable = this.dex.formats.getRuleTable(this.format);
-		const monotype = ruleTable.has('sametypeclause') ? this.sample([...this.dex.types.names()]) : false;
+		const monotype = this.ruleTable.has('sametypeclause') ? this.sample([...this.dex.types.names()]) : false;
 		let pool = debug.length ? debug : Object.keys(ssbSets);
 		if (monotype && !debug.length) {
 			pool = pool.filter(x => this.dex.species.get(ssbSets[x].species).types.includes(monotype));

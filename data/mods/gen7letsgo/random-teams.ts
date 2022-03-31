@@ -214,49 +214,45 @@ export class RandomLetsGoTeams extends RandomTeams {
 	}
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		if (hasCustomBans) {
+			this.enforceNoDirectComplexBans();
+		}
 
+		const seed = this.prng.seed;
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
-		const pokemonPool: string[] = [];
-		for (const id in this.dex.data.FormatsData) {
-			const species = this.dex.species.get(id);
-			if (
-				species.num < 1 ||
-				(species.num > 151 && ![808, 809].includes(species.num)) ||
-				species.gen > 7 ||
-				species.nfe ||
-				!species.randomBattleMoves?.length ||
-				(this.forceMonotype && !species.types.includes(this.forceMonotype))
-			) {
-				continue;
-			}
-			pokemonPool.push(id);
-		}
+		// For Monotype
+		const isMonotype = !!this.forceMonotype || this.ruleTable.has('sametypeclause');
+		const typePool = this.dex.types.names();
+		const type = this.forceMonotype || this.sample(typePool);
 
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
 		const baseFormes: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists) continue;
+			if (!species.exists || !species.randomBattleMoves) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
 			const types = species.types;
 
-			// Once we have 2 Pokémon of a given type we reject more Pokémon of that type 80% of the time
-			let skip = false;
-			for (const type of species.types) {
-				if (typeCount[type] > 1 && this.randomChance(4, 5)) {
-					skip = true;
-					break;
+			if (!isMonotype && !this.forceMonotype) {
+				// Once we have 2 Pokémon of a given type we reject more Pokémon of that type 80% of the time
+				let skip = false;
+				for (const typeName of species.types) {
+					if (typeCount[typeName] > 1 && this.randomChance(4, 5)) {
+						skip = true;
+						break;
+					}
 				}
+				if (skip) continue;
 			}
-			if (skip) continue;
 
 			// Limit 1 of any type combination
 			const typeCombo = types.slice().sort().join();
@@ -270,11 +266,11 @@ export class RandomLetsGoTeams extends RandomTeams {
 			baseFormes[species.baseSpecies] = 1;
 
 			// Increment type counters
-			for (const type of types) {
-				if (type in typeCount) {
-					typeCount[type]++;
+			for (const typeName of types) {
+				if (typeName in typeCount) {
+					typeCount[typeName]++;
 				} else {
-					typeCount[type] = 1;
+					typeCount[typeName] = 1;
 				}
 			}
 
@@ -288,6 +284,10 @@ export class RandomLetsGoTeams extends RandomTeams {
 			if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
 			if (set.moves.includes('rapidspin')) teamDetails.rapidSpin = 1;
 		}
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !isMonotype && !hasCustomBans) {
+			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		}
+
 		return pokemon;
 	}
 }
