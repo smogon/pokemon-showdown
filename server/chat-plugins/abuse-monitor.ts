@@ -1322,7 +1322,7 @@ export const commands: Chat.ChatCommands = {
 		replace(target, room, user) {
 			checkAccess(this);
 			if (!target) return this.parse(`/help am`);
-			const [old, newWord] = target.split(',').map(val => val.trim());
+			const [old, newWord] = target.split(',');
 			if (!old || !newWord) return this.errorReply(`Invalid arguments - must be [oldWord], [newWord].`);
 			if (toID(old) === toID(newWord)) return this.errorReply(`The old word and the new word are the same.`);
 			if (settings.replacements[old]) {
