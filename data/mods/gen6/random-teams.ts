@@ -805,7 +805,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.size < 4 && movePool.length) {
+			while (moves.size < this.maxMoveCount && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
@@ -815,7 +815,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				moves.add(moveid);
 			}
 
-			while (moves.size < 4 && rejectedPool.length) {
+			while (moves.size < this.maxMoveCount && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) continue;
@@ -959,7 +959,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					break;
 				}
 			}
-		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
+		} while (moves.size < this.maxMoveCount && (movePool.length || rejectedPool.length));
 
 		if (hasHiddenPower) {
 			let hpType;
@@ -1060,8 +1060,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			Castform: 100, Delibird: 100, 'Genesect-Douse': 80, Luvdisc: 100, Spinda: 100, Unown: 100,
 		};
 		const tier = toID(species.tier).replace('bl', '');
-		let level = levelScale[tier] || (species.nfe ? 90 : 80);
-		if (customScale[forme]) level = customScale[forme];
+		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		const srWeakness = this.dex.getEffectiveness('Rock', species);
@@ -1189,7 +1188,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item: setData.set.item || '',
 			ability: setData.set.ability || species.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: 100,
+			level: this.adjustLevel || 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},

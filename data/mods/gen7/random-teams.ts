@@ -1028,7 +1028,7 @@ export class RandomGen7Teams extends RandomTeams {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
 			const allySwitch = movePool.indexOf('allyswitch');
 			if (allySwitch > -1) {
-				if (movePool.length > 4) {
+				if (movePool.length > this.maxMoveCount) {
 					this.fastPop(movePool, allySwitch);
 				} else {
 					// Ideally, we'll never get here, but better to have a move that usually does nothing than one that always does
@@ -1065,7 +1065,7 @@ export class RandomGen7Teams extends RandomTeams {
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.size < 4 && movePool.length) {
+			while (moves.size < this.maxMoveCount && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
@@ -1074,7 +1074,7 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 				moves.add(moveid);
 			}
-			while (moves.size < 4 && rejectedPool.length) {
+			while (moves.size < this.maxMoveCount && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) continue;
@@ -1230,7 +1230,7 @@ export class RandomGen7Teams extends RandomTeams {
 					break;
 				}
 			}
-		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
+		} while (moves.size < this.maxMoveCount && (movePool.length || rejectedPool.length));
 
 		// Moveset modifications
 		if (moves.has('autotomize') && moves.has('heavyslam')) {
@@ -1343,7 +1343,9 @@ export class RandomGen7Teams extends RandomTeams {
 		}
 
 		let level: number;
-		if (!isDoubles) {
+		if (this.adjustLevel) {
+			level = this.adjustLevel;
+		} else if (!isDoubles) {
 			const levelScale: {[k: string]: number} = {uber: 76, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88};
 			const customScale: {[k: string]: number} = {
 				// Banned Ability
@@ -1713,7 +1715,7 @@ export class RandomGen7Teams extends RandomTeams {
 		const item = this.sampleIfArray(setData.set.item);
 		const ability = this.sampleIfArray(setData.set.ability);
 		const nature = this.sampleIfArray(setData.set.nature);
-		const level = setData.set.level || (tier === "LC" ? 5 : 100);
+		const level = this.adjustLevel || setData.set.level || (tier === "LC" ? 5 : 100);
 
 		return {
 			name: setData.set.name || species.baseSpecies,
