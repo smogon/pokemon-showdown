@@ -101,7 +101,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	darkvoid: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	decorate: {
 		inherit: true,
