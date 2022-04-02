@@ -7643,11 +7643,6 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Power is equal to the base move's Z-Power.",
 		newmeta: "true"
 	},
-	candescence: {
-		name: "Candescence",
-		desc: "The user's Attack and Special Attack increase by one stage every turn for 3 turns.",
-		shortDesc: "The user's Attack and Special Attack increase by one stage every turn for 3 turns.",
-	},
 	wildernesswack: {
 		name: "Wilderness WACK",
 		desc: "The pain is insufferable.",
