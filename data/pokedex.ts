@@ -19391,7 +19391,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	solanca:{
 		num: 10071,
 		name: "Solanca",
-		types: ["Fairy", "Ghost"],
+		types: ["Psychic", "Light"],
 		baseStats: {hp: 85, atk: 55, def: 60, spa: 75, spd: 110, spe:100},
 		abilities: {0: "Psychic Surge", 1: "Forewarn"},
 		heightm: 0.5,
