@@ -6661,7 +6661,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 	},
 	doubragon:{
-		tier: "RU",
+		tier: "NU",
 	},
 	jestrick:{
 		tier:"UU",
@@ -6671,6 +6671,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 	},
 	abominamon:{
-		tier: "OU",
+		tier: "AG",
 	},
 };
