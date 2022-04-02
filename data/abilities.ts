@@ -3131,7 +3131,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (attacker.gender === defender.gender) {
 					this.debug('Rivalry boost');
 					return this.chainModify(1.25);
-				} 
+				}
 				// else {
 					// this.debug('Rivalry weaken');
 					// return this.chainModify(0.75);
@@ -5814,7 +5814,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 1076,
 	},
-	backstaber: {
+	backstabber: {
 		onAllyHit(target, source, move) {
 			let hitByAlly = false;
 			if (!target.hp) return;
@@ -5834,7 +5834,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			console.log("hitByAlly: "+hitByAlly)
 			if (hitByAlly && move.target != "allAdjacent") return this.chainModify(1.5);
 		},
-		name: "Backstaber",
+		name: "Backstabber",
 		rating: 1.5,
 		num: 1077,
 	},

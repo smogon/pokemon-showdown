@@ -2138,8 +2138,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Fire moves; Fire immunity.",
 		newmeta: "true",
 	},
-	backstaber: {
-		name: "Backstaber",
+	backstabber: {
+		name: "Backstabber",
 		desc: "This pokemon does 1.5x damage to allied Pokémon. This pokemon heals 50% when it attacks an ally directly.",
 		shortDesc: "This pokemon does 1.5x damage to allied Pokémon, heals 50% when it attacks an ally directly.",
 		newmeta: "true",
