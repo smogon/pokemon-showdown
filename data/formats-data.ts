@@ -6755,4 +6755,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	battaby: {
 		tier: "LC UU",
 	},
+	glaciator: {
+		tier: "OU",
+	},
+	resolucent: {
+		tier: "OU",
+	},
 };
