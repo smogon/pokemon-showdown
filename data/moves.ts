@@ -3443,7 +3443,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	doomdesire: {
 		num: 353,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 140,
 		category: "Special",
 		name: "Doom Desire",
 		pp: 5,
