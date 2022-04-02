@@ -6155,50 +6155,64 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	syclar: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	syclant: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	revenankh: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	embirch: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	flarelm: {
-		tier: "NFE",
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
 	},
 	pyroak: {
-		tier: "RU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	breezi: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	fidgit: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	rebble: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	tactite: {
-		tier: "NFE",
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
 	},
 	stratagem: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	privatyke: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	arghonaut: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	nohface: {
 		isNonstandard: "CAP",
 		tier: "CAP LC",
 	},
 	kitsunoh: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	monohm: {
 		isNonstandard: "CAP",
@@ -6209,154 +6223,200 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CAP NFE",
 	},
 	cyclohm: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	dorsoil: {
 		isNonstandard: "CAP",
 		tier: "CAP LC",
 	},
 	colossoil: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	protowatt: {
 		isNonstandard: "CAP",
 		tier: "CAP LC",
 	},
 	krilowatt: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	voodoll: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	voodoom: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	scratchet: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	tomohawk: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	necturine: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	necturna: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	mollux: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	cupra: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	argalis: {
-		tier: "NFE",
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
 	},
 	aurumoth: {
-		tier: "Uber",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	brattler: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	malaconda: {
-		tier: "NU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	cawdet: {
+		isNonstandard: "CAP",
 		tier: "LC UBER",
 	},
 	cawmodore: {
-		tier: "UU",
-	},
-	volkritter: {
-		tier: "LC OU",
-	},
-	volkraken: {
-		tier: "OU",
-	},
-	snugglow: {
-		tier: "LC OU",
-	},
-	plasmanta: {
-		tier: "UU",
-	},
-	floatoy: {
-		tier: "LC OU",
-	},
-	caimanoe: {
-		tier: "NFE",
-	},
-	naviathan: {
-		tier: "OU",
-	},
-	crucibelle: {
-		tier: "RU",
-	},
-	crucibellemega: {
+		isNonstandard: "CAP",
 		tier: "CAP",
 	},
+	volkritter: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	volkraken: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	snugglow: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	plasmanta: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	floatoy: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	caimanoe: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	naviathan: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	crucibelle: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	crucibellemega: {
+		isNonstandard: "CAP",
+		tier: "Illegal",
+	},
 	pluffle: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	kerfluffle: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	pajantom: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	mumbao: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	jumbao: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	fawnifer: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	electrelk: {
-		tier: "NFE",
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
 	},
 	caribolt: {
-		tier: "RU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	smogecko: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	smoguana: {
-		tier: "NFE",
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
 	},
 	smokomodo: {
-		tier: "RU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	swirlpool: {
-		tier: "LC UU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	coribalis: {
-		tier: "NFE",
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
 	},
 	snaelstrom: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	justyke: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	equilibra: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	solotl: {
-		tier: "LC OU",
+		isNonstandard: "CAP",
+		tier: "CAP LC",
 	},
 	astrolotl: {
-		tier: "OU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	miasmite: {
 		isNonstandard: "CAP",
 		tier: "CAP LC",
 	},
 	miasmaw: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	chromera: {
-		tier: "UU",
+		isNonstandard: "CAP",
+		tier: "CAP",
 	},
 	chromera: {
 		isNonstandard: "CAP",
