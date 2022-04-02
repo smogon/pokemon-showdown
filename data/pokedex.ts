@@ -18721,7 +18721,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Corchi",
 		types: ["Psychic", "Flying"],
 		baseStats: {hp: 80, atk: 65, def: 65, spa: 90, spd: 120, spe: 50},
-		abilities: {0: "Magic Bounce", 1: "Telepathy", H: "Tinted Lense"},
+		abilities: {0: "Magic Bounce", 1: "Telepathy", H: "Tinted Lens"},
 		heightm: 1.6,
 		weightkg: 40,
 		color: "Pink",
