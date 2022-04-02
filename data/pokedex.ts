@@ -19326,9 +19326,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous"],
 		newmeta: "true",
 	},
-	beemeow: {
+	beeow: {
 		num: 10066,
-		name: "Beemeow",
+		name: "Beeow",
 		types: ["Bug", "Normal"],
 		baseStats: {hp: 60, atk: 75, def: 55, spa: 20, spd: 50, spe: 80},
 		abilities: {0: "Fluffy", 1: "Harvest", H: "Speed Boost"},
@@ -19349,7 +19349,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 43.8,
 		color: "Yellow",
 		eggGroups: ["Field"],
-		prevo: "Beemeow",
+		prevo: "Beeow",
 		newmeta: "true",
 	},
 	rampharos:{
@@ -19364,7 +19364,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},
-	doubragun:{
+	doubragon:{
 		num: 10069,
 		name: "Doubragon",
 		types: ["Dragon"],
@@ -19391,6 +19391,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	solanca:{
 		num: 10071,
 		name: "Solanca",
+		types: ["Fairy", "Ghost"],
+		baseStats: {hp: 85, atk: 55, def: 60, spa: 75, spd: 110, spe:100},
+		abilities: {0: "Psychic Surge", 1: "Forewarn"},
+		heightm: 0.5,
+		weightkg: 3.9,
+		color: "Yellow",
+		eggGroups: ["Field"],
+		newmeta: "true",
+	},
+	abominamon:{
+		num: 10072,
+		name: "Abominamon",
 		types: ["Fairy", "Ghost"],
 		baseStats: {hp: 85, atk: 55, def: 60, spa: 75, spd: 110, spe:100},
 		abilities: {0: "Psychic Surge", 1: "Forewarn"},

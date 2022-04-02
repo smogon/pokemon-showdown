@@ -6648,7 +6648,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	mirrorus:{
 		tier: "UU",
 	},
-	beemeow: {
+	beeow: {
 		tier: "NFE",
 	},
 	honeline:{
@@ -6669,5 +6669,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	solanca:{
 		tier: "PU",
+	},
+	abominamon:{
+		tier: "OU",
 	},
 };
