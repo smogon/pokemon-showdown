@@ -95298,7 +95298,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sleeptalk: ["8M", "7M"],
 			return: ["8M", "7M"],
 			frustration: ["8M", "7M"],
-			substitude: ["8M", "7M"],
+			substitute: ["8M", "7M"],
 			toxic: ["8M", "7M"],
 			dualstrike: ["8M", "7M"],
 			endure: ["8M", "7M"],
