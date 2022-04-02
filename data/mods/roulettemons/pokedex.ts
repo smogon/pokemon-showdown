@@ -54,7 +54,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 95, atk: 101, def: 192, spa: 134, spd: 79, spe: 99},
 		abilities: {0: "Dauntless Shield"},
 		weightkg: 150,
-		requiredItem: "Chillyte",
+		requiredItem: "Chillytite",
 		eggGroups: ["Undiscovered"],
 	},
 	eartharoo: {
