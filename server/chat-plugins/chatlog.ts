@@ -583,6 +583,7 @@ export abstract class Searcher {
 	) {
 		let buf = Utils.html`<div class="pad"><h2>Linecounts on `;
 		buf += `${roomid}${user ? ` for the user ${user}` : ` (top ${MAX_TOPUSERS})`}</h2>`;
+		buf += `<strong>Total lines: {total}</strong><br />`;
 		buf += `<strong>Month: ${month}:</strong><br />`;
 		const nextMonth = LogReader.nextMonth(month);
 		const prevMonth = LogReader.prevMonth(month);
@@ -625,10 +626,13 @@ export abstract class Searcher {
 			const sortedResults = Utils.sortBy(resultKeys, userid => (
 				-totalResults[userid]
 			)).slice(0, MAX_TOPUSERS);
+			let total = 0;
 			for (const userid of sortedResults) {
+				total += totalResults[userid];
 				buf += `<li><span class="username"><username>${userid}</username></span>: `;
 				buf += `${Chat.count(totalResults[userid], 'lines')}</li>`;
 			}
+			buf = buf.replace('{total}', `${total}`);
 		}
 		buf += `</div>`;
 		return LogViewer.linkify(buf);
