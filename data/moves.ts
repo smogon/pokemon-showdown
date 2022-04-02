@@ -22820,5 +22820,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 		contestType: "Cool",
-	}
-};
+	},
+	wildernesswack: {
+        num: 981,
+        accuracy: 40,
+        basePower: 0,
+        category: "Physical",
+        name: "Wilderness WACK",
+        pp: 5,
+        priority: 3,
+        flags: {protect: 1, mirror: 1},
+        ohko: true,
+        secondary: null,
+        target: "normal",
+        type: "Grass",
+        zMove: {basePower: 180},
+        maxMove: {basePower: 130},
+        contestType: "Cool",
+    },
