@@ -22846,30 +22846,5 @@ export const Moves: {[moveid: string]: MoveData} = {
     zMove: {basePower: 180},
     maxMove: {basePower: 130},
     contestType: "Cool",
-    },
-	candescence: {
-		num: 981,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Candescence",
-		pp: 10,
-		priority: 0,
-		flags: {snatch: 1},
-		volatileStatus: 'candescence',
-		condition: {
-			duration: 3,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'Candescence');
-			},
-			onResidualOrder: 6,
-			onResidual(pokemon) {
-				this.boost({atk: 1, spa: 1}, target);
-			},
-		},
-		secondary: null,
-		target: "self",
-		type: "Light",
-		contestType: "Beautiful",
-	},
+  },
 };
