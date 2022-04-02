@@ -7090,6 +7090,569 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 2,
 		isNonstandard: "Past",
 	},
+	poisonrock: {
+		name: "Poison Rock",
+		spritenum: 34,
+		fling: {
+			basePower: 60,
+		},
+		num: 10000,
+		gen: 4,
+	},
+	ngunishield: {
+		name: "Nguni Shield",
+		spritenum: 581,
+		fling: {
+			basePower: 80,
+		},
+		onModifyDefPriority: 1,
+		onModifyDef(def) {
+			return this.chainModify(1.5);
+		},
+		onDisableMove(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				if (this.dex.getMove(moveSlot.move).category === 'Status') {
+					pokemon.disableMove(moveSlot.id);
+				}
+			}
+		},
+		num: 10001,
+		gen: 6,
+	},
+	shockorb: {
+		name: "Shock Orb",
+		spritenum: 252,
+		fling: {
+			basePower: 30,
+			status: 'par',
+		},
+		onResidualOrder: 26,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			pokemon.trySetStatus('par', pokemon);
+		},
+		num: 10002,
+		gen: 4,
+	},
+	brassknuckles: {
+		name: "Brass Knuckles",
+		spritenum: 713,
+		fling: {
+			basePower: 30,
+		},
+		onAfterMoveSecondarySelf(target, source, move) {
+			if (move.flags['punch']) {
+				target.useItem();
+			}
+		},
+		boosts: {
+			atk: 1,
+		},
+		num: 10003,
+		gen: 8,
+	},
+	rechargeherb: {
+		name: "Recharge Herb",
+		spritenum: 535,
+		fling: {
+			basePower: 30,
+		},
+		onAfterMoveSecondarySelf(target, source, move) {
+			if (move.flags['recharge']) {
+				target.removeVolatile('mustrecharge');
+				target.useItem();
+			}
+		},
+		num: 10004,
+		gen: 8,
+	},
+	bikehelmet: {
+        name: "Bike Helmet",
+        spritenum: 417,
+        fling: {
+            basePower: 60,
+        },
+        onBasePowerPriority: 16,
+        onBasePower(basePower, user, target, move) {
+            if (move.recoil) return this.chainModify(0.85);
+        },
+        onDamage(damage, target, source, effect) {
+            if (effect.id === 'recoil') {
+                if (!this.activeMove) throw new Error("Battle.activeMove is null");
+                if (this.activeMove.id !== 'struggle') return null;
+            }
+        },
+        num: 10005,
+        gen: 8,
+    },
+	bagofcaltrops: {
+        name: "Bag of Caltrops",
+        spritenum: 2,
+		onFaint(target, source, effect) {
+			target.side.foe.addSideCondition('spikes');
+		},
+        num: 10006,
+        gen: 8,
+    },
+	firewood: {
+        name: "Fire Wood",
+        spritenum: 61,
+        fling: {
+            basePower: 30,
+        },
+        onDamagingHit(damage, target, source, move) {
+            if (move.type === 'Fire') {
+                target.useItem();
+            }
+        },
+        boosts: {
+            atk: 1,
+        },
+        num: 10007,
+        gen: 6,
+    },
+	goodnightpillow: {
+        name: "Good-Night Pillow",
+        spritenum: 456,
+        fling: {
+            basePower: 10,
+        },
+        onResidual(pokemon) {
+            if (pokemon.status === 'slp' || pokemon.ability === 'comatose') {
+                this.heal(pokemon.baseMaxhp / 10);
+            }
+        },
+        num: 10008,
+        gen: 8,
+    },
+	satellitescope: {
+		name: "Satellite Scope",
+		spritenum: 359,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Cosmic') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		num: 10009,
+		gen: 2,
+	},
+	lantern: {
+		name: "Lantern",
+		spritenum: 252,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Light') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		num: 10010,
+		gen: 2,
+	},
+	gravityrock: {
+		name: "Gravity Rock",
+		spritenum: 34,
+		fling: {
+			basePower: 60,
+		},
+		num: 10011,
+		gen: 4,
+	},
+	radiantplate: {
+		name: "Radiant Plate",
+		spritenum: 105,
+		onPlate: 'Light',
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Light') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Arceus-Light",
+		num: 10012,
+		gen: 4,
+		//isNonstandard: "Unobtainable",
+	},
+	spatialplate: {
+		name: "Spatial Plate",
+		spritenum: 105,
+		onPlate: 'Cosmic',
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Cosmic') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Arceus-Cosmic",
+		num: 10013,
+		gen: 4,
+		//isNonstandard: "Unobtainable",
+	},
+	lightmemory: {
+		name: "Light Memory",
+		spritenum: 673,
+		onMemory: 'Light',
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Light",
+		itemUser: ["Silvally-Light"],
+		num: 10014,
+		gen: 7,
+	},
+	cosmicmemory: {
+		name: "Cosmic Memory",
+		spritenum: 673,
+		onMemory: 'Cosmic',
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Cosmic",
+		itemUser: ["Silvally-Cosmic"],
+		num: 10015,
+		gen: 7,
+	},
+	eldurrberry: {
+		name: "Eldurr Berry",
+		spritenum: 71,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Cosmic",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Cosmic' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return this.chainModify(0.5);
+				}
+			}
+		},
+		onEat() { },
+		num: 10016,
+		gen: 4,
+	},
+	keblacberry: {
+		name: "Keblac Berry",
+		spritenum: 71,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Light",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Light' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return this.chainModify(0.5);
+				}
+			}
+		},
+		onEat() { },
+		num: 10017,
+		gen: 4,
+	},
+	lightiumz: {
+		name: "Lightium Z",
+		spritenum: 648,
+		onPlate: 'Light',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Light",
+		forcedForme: "Arceus-Light",
+		num: 10017,
+		gen: 7,
+		isNonstandard: "Past",
+	},
+	cosmiumz: {
+		name: "Cosmium Z",
+		spritenum: 648,
+		onPlate: 'Cosmic',
+		onTakeItem: false,
+		zMove: true,
+		zMoveType: "Cosmic",
+		forcedForme: "Arceus-Cosmic",
+		num: 10018,
+		gen: 7,
+		isNonstandard: "Past",
+	},
+	lightgem: {
+		name: "Light Gem",
+		spritenum: 611,
+		isGem: true,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if (move.type === 'Light' && source.useItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		num: 10019,
+		gen: 6,
+		//isNonstandard: "Past",
+	},
+	cosmicgem: {
+		name: "Cosmic Gem",
+		spritenum: 611,
+		isGem: true,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if (move.type === 'Cosmic' && source.useItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		num: 10019,
+		gen: 6,
+		//isNonstandard: "Past",
+	},
+	solarpanel: {
+		name: "Solar Panel",
+		spritenum: 2,
+		fling: {
+			basePower: 30,
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Light') {
+				target.useItem();
+			}
+		},
+		boosts: {
+			spe: 1,
+		},
+		num: 10020,
+		gen: 5,
+	},
+	flashdrive: {
+		name: "Flash Drive",
+		spritenum: 54,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
+				return false;
+			}
+			return true;
+		},
+		onDrive: 'Light',
+		forcedForme: "Genesect-Flash",
+		itemUser: ["Genesect-Flash"],
+		num: 10021,
+		gen: 5,
+	},
+	sacredash: {
+		name: "Sacred Ash",
+		spritenum: 459,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && (user.baseSpecies.num === 243 || move.type === 'Electric')) {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+			if (move && (user.baseSpecies.num === 244 || move.type === 'Fire')) {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+			if (move && (user.baseSpecies.num === 245 || move.type === 'Water')) {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		itemUser: ["Entei", "Raikou", "Suicune"],
+		num: 10022,
+		gen: 3,
+	},
+	fogmachine: {
+		name: "Fog Machine",
+		spritenum: 459,
+		fling: {
+			basePower: 30,
+		},
+		onCriticalHit(target, source, move) {
+			if (target.useItem(source)) {
+				console.log('crit detected');
+				this.add('-item', target, 'Fog Machine');
+				return false;
+			}
+			return;
+		},
+		num: 10023,
+		gen: 3,
+	},
+	crawshell: {
+		name: "Craw Shell",
+		spritenum: 459,
+		fling: {
+			basePower: 80,
+		},
+		num: 10024,
+		gen: 3,
+	},
+	glitterbomb: {
+		name: "Glitter Bomb",
+		spritenum: 459,
+		fling: {
+			basePower: 80,
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.side === source.side) {
+				if (effect.id === 'stickyweb') {
+					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Glitter Bomb only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostName;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.add('-item', target, 'Glitter Bomb');
+				source.addVolatile('torment');
+				//this.boost({atk: 2}, target, target, null, true);
+			}
+		},
+		num: 10025,
+		gen: 3,
+	},
+	finalite: {
+		name: "Finalite",
+		spritenum: 130,
+		fling: {
+			basePower: 40,
+		},
+		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (!pokemon.baseSpecies.nfe && pokemon.baseSpecies.prevo) {
+				return this.chainModify(0.75);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (!pokemon.baseSpecies.nfe && pokemon.baseSpecies.prevo) {
+				return this.chainModify(0.75);
+			}
+		},
+		num: 10026,
+		gen: 5,
+	},
+	cursedflute: {
+        name: "Cursed Flute",
+        spritenum: 2,
+		onFaint(target, source, effect) {
+			console.log("add confusion");
+			source.addVolatile('confusion');
+		},
+        num: 10027,
+        gen: 8,
+    },
+	fairydust: {
+		name: "Fairy Dust",
+		spritenum: 305,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Fairy') {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		num: 10027,
+		gen: 2,
+	},
+	shamecard: {
+		name: "Shame Card",
+		spritenum: 387,
+		fling: {
+			basePower: 10,
+		},
+		onAfterMoveSecondary(target, source, move) {
+			if (source && source !== target && source.hp && target.hp && move && move.category === 'Status') {
+				if (target.useItem(source)) {
+					source.addVolatile('taunt');
+				}
+			}
+		},
+		num: 10028,
+		gen: 5,
+	},
+	// glowingorb: {
+		// name: "Glowing Orb",
+		// spritenum: 180,
+		// fling: {
+			// basePower: 60,
+		// },
+		// onBasePowerPriority: 15,
+		// onBasePower(basePower, user, target, move) {
+			// if (user.baseSpecies.num === 10061 && move.type === 'Light') {
+				// return this.chainModify(1.2);
+			// }
+		// },
+		// onTakeItem(item, pokemon, source) {
+			// if ((source && source.baseSpecies.num === 10061) || pokemon.baseSpecies.num === 10061) {
+				// return false;
+			// }
+			// return true;
+		// },
+		// forcedForme: "Goranium-Lightmode",
+		// itemUser: ["Goranium-Lightmode"],
+		// num: 10029,
+		// gen: 4,
+	// },
+	// shadoworb: {
+		// name: "Shadow Orb",
+		// spritenum: 180,
+		// fling: {
+			// basePower: 60,
+		// },
+		// onBasePowerPriority: 15,
+		// onBasePower(basePower, user, target, move) {
+			// if (user.baseSpecies.num === 10061 && move.type === 'Dark') {
+				// return this.chainModify(1.2);
+			// }
+		// },
+		// onTakeItem(item, pokemon, source) {
+			// if ((source && source.baseSpecies.num === 10061) || pokemon.baseSpecies.num === 10061) {
+				// return false;
+			// }
+			// return true;
+		// },
+		// forcedForme: "Goranium-Darkmode",
+		// itemUser: ["Goranium-Darkmode"],
+		// num: 10030,
+		// gen: 4,
+	// },
 
 	// CAP items
 
