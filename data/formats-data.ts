@@ -6507,7 +6507,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 	},
 	spiritute: {
-		tier: "UU",
+		tier: "PU",
 	},
 	smackafaun: {
 		tier: "OU",
@@ -6646,7 +6646,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 	},
 	mirrorus:{
-		tier: "UU",
+		tier: "Illegal",
 	},
 	beeow: {
 		tier: "NFE",
