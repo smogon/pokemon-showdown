@@ -3373,8 +3373,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	lusterpurge: {
 		name: "Luster Purge",
-		desc: "Has a 50% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "50% chance to lower the target's Sp. Def by 1.",
+		desc: "Lowers the target's Special Defense by 1 stage.",
+		shortDesc: "Lowers the target's Sp. Def by 1.",
 	},
 	machpunch: {
 		name: "Mach Punch",
@@ -3866,8 +3866,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	mistball: {
 		name: "Mist Ball",
-		desc: "Has a 50% chance to lower the target's Special Attack by 1 stage.",
-		shortDesc: "50% chance to lower the target's Sp. Atk by 1.",
+		desc: "Lowers the target's Special Attack by 1 stage.",
+		shortDesc: "Lowers the target's Sp. Atk by 1.",
 	},
 	mistyexplosion: {
 		name: "Misty Explosion",
@@ -7017,7 +7017,7 @@ export const MovesText: {[k: string]: MoveText} = {
         shortDesc: "Traps the target for 5 turns.",
 		newmeta: "true",
 	},
-	
+
 	crushingice: {
 		name: "Crushing Ice",
 		shortDesc: "Hits adjacent Pokemon.",
@@ -7447,8 +7447,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	mythicarrows: {
 		name: "Mythic Arrows",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "Has a higher chance for a critical hit and a 20% chance to lower the target's Special Defense.",
+		shortDesc: "High critical hit ratio and 20% chance to lower the target's Sp. Def.",
 		newmeta: "true",
 	},
 	planetarywrath: {
