@@ -19403,8 +19403,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	abominamon:{
 		num: 10072,
 		name: "Abominamon",
-		types: ["Fairy", "Ghost"],
-		baseStats: {hp: 85, atk: 55, def: 60, spa: 75, spd: 110, spe:100},
+		types: ["Dragon", "Normal"],
+		baseStats: {hp: 255, atk: 1, def: 255, spa: 1, spd: 255, spe: 1},
 		abilities: {0: "Psychic Surge", 1: "Forewarn"},
 		heightm: 0.5,
 		weightkg: 3.9,
