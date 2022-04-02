@@ -93409,7 +93409,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			nastyplot: ["8M", "7M"],
 			regrowth: ["8M", "7M"],
 			crunch: ["8M", "7M"],
-			grassy glide: ["8M", "7M"],
+			grassyglide: ["8M", "7M"],
 		},
 	},
 	yetitan: {
