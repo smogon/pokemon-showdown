@@ -35727,7 +35727,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			focusup: ["8M", "7M"],
 		},
 	},
-	ninjask: {
+	ninjaskgalar: {
 		learnset: {
 			absorb: ["8L23", "7L1"],
 			acrobatics: ["8M"],
@@ -95423,6 +95423,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			veiloflight:["8M","7M"],
 			lightspeed:["8M","7M"],
 			candescence:["8M","7M"],
+			dazingraze:["8M","7M"],
 		},
 	},
 };
