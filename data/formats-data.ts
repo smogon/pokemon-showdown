@@ -3773,6 +3773,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	joltik: {
 		tier: "LC OU",
 	},
+	joltiksinnoh: {
+		tier: "LC OU",
+	},
 	galvantula: {
 		randomBattleMoves: ["bugbuzz", "gigadrain", "stickyweb", "thunder", "voltswitch"],
 		randomBattleLevel: 82,
@@ -3918,6 +3921,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	mienfoo: {
 		tier: "LC OU",
 	},
+	mienfoogalar: {
+		tier: "LC OU",
+	},
 	mienshao: {
 		randomBattleMoves: ["closecombat", "fakeout", "knockoff", "poisonjab", "stoneedge", "swordsdance", "uturn"],
 		randomBattleLevel: 82,
@@ -3957,7 +3963,13 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	pawniard: {
-		tier: "LC",
+		tier: "LC OU",
+	},
+	pawniardalmian: {
+		tier: "LC OU",
+	},
+	pawniardkalos: {
+		tier: "LC OU",
 	},
 	bisharp: {
 		randomBattleMoves: ["ironhead", "knockoff", "stealthrock", "suckerpunch", "swordsdance"],
@@ -6672,5 +6684,15 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	abominamon:{
 		tier: "AG",
+	},
+	sliplove:{
+		tier: "OU",
+		doublesTier:"DOU",
+	},
+	ninjaskgalar:{
+		tier: "NU",
+	},
+	battaby: {
+		tier: "LC UU",
 	},
 };
