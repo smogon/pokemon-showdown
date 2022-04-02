@@ -23,7 +23,7 @@ export const Formats: FormatList = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "Sw/Sh Singles",
+		section: "New Meta Classic",
 	},
 	{
 		name: "[Gen 8] Random Battle",
@@ -333,7 +333,7 @@ export const Formats: FormatList = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "Sw/Sh Doubles",
+		section: "New Meta Doubles",
 	},
 	{
 		name: "[Gen 8] Random Doubles Battle",
@@ -391,7 +391,7 @@ export const Formats: FormatList = [
 		banlist: ['Corsola-Galar', 'Cutiefly', 'Ponyta-Base', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix', 'Vulpix-Alola'],
 	},
 	{
-		name: "[Gen 8] VGC 2022",
+		name: "[Gen 8] NM VGC2022",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3677186/">VGC 2022 Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3695848/">VGC 2022 Sample Teams</a>`,
@@ -404,7 +404,7 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
-		name: "[Gen 8] VGC 2021",
+		name: "[Gen 8] NM VGC2021",
 
 		mod: 'gen8',
 		gameType: 'doubles',
@@ -412,7 +412,7 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
 	},
 	{
-		name: "[Gen 8] VGC 2020",
+		name: "[Gen 8] NM VGC2020",
 
 		mod: 'gen8dlc1',
 		gameType: 'doubles',
