@@ -1,8 +1,8 @@
 /**
- * Simulator Battle
+ * Dex Data
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * @license MIT license
+ * @license MIT
  */
 import {Utils} from '../lib';
 
@@ -101,9 +101,9 @@ export class BasicEffect implements EffectData {
 	/** ??? */
 	sourceEffect: string;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
+	constructor(data: AnyObject) {
 		this.exists = true;
-		data = combine(this, data, ...moreData);
+		Object.assign(this, data);
 
 		this.name = Utils.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
@@ -128,36 +128,12 @@ export class BasicEffect implements EffectData {
 	}
 }
 
-export class Learnset {
-	readonly effectType: 'Learnset';
-	/**
-	 * Keeps track of exactly how a pokemon might learn a move, in the
-	 * form moveid:sources[].
-	 */
-	readonly learnset?: {[moveid: string]: MoveSource[]};
-	/** True if the only way to get this Pokemon is from events. */
-	readonly eventOnly: boolean;
-	/** List of event data for each event. */
-	readonly eventData?: EventInfo[];
-	readonly encounters?: EventInfo[];
-	readonly exists: boolean;
-
-	constructor(data: AnyObject) {
-		this.exists = true;
-		this.effectType = 'Learnset';
-		this.learnset = data.learnset || undefined;
-		this.eventOnly = !!data.eventOnly;
-		this.eventData = data.eventData || undefined;
-		this.encounters = data.encounters || undefined;
-	}
-}
-
 export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
 	readonly effectType: 'Nature';
-	readonly plus?: StatNameExceptHP;
-	readonly minus?: StatNameExceptHP;
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
-		super(data, moreData);
+	readonly plus?: StatIDExceptHP;
+	readonly minus?: StatIDExceptHP;
+	constructor(data: AnyObject) {
+		super(data);
 		data = this;
 
 		this.fullname = `nature: ${this.name}`;
@@ -165,6 +141,54 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 		this.gen = 3;
 		this.plus = data.plus || undefined;
 		this.minus = data.minus || undefined;
+	}
+}
+
+export class DexNatures {
+	readonly dex: ModdedDex;
+	readonly natureCache = new Map<ID, Nature>();
+	allCache: readonly Nature[] | null = null;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(name: string | Nature): Nature {
+		if (name && typeof name !== 'string') return name;
+
+		return this.getByID(toID(name));
+	}
+	getByID(id: ID): Nature {
+		let nature = this.natureCache.get(id);
+		if (nature) return nature;
+
+		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+			nature = this.get(this.dex.data.Aliases[id]);
+			if (nature.exists) {
+				this.natureCache.set(id, nature);
+			}
+			return nature;
+		}
+		if (id && this.dex.data.Natures.hasOwnProperty(id)) {
+			const natureData = this.dex.data.Natures[id];
+			nature = new Nature(natureData);
+			if (nature.gen > this.dex.gen) nature.isNonstandard = 'Future';
+		} else {
+			nature = new Nature({name: id, exists: false});
+		}
+
+		if (nature.exists) this.natureCache.set(id, nature);
+		return nature;
+	}
+
+	all(): readonly Nature[] {
+		if (this.allCache) return this.allCache;
+		const natures = [];
+		for (const id in this.dex.data.Natures) {
+			natures.push(this.getByID(id as ID));
+		}
+		this.allCache = natures;
+		return this.allCache;
 	}
 }
 
@@ -193,6 +217,11 @@ export class TypeInfo implements Readonly<TypeData> {
 	 */
 	readonly gen: number;
 	/**
+	 * Set to 'Future' for types before they're released (like Fairy
+	 * in Gen 5 or Dark in Gen 1).
+	 */
+	readonly isNonstandard: Nonstandard | null;
+	/**
 	 * Type chart, attackingTypeName:result, effectid:result
 	 * result is: 0 = normal, 1 = weakness, 2 = resistance, 3 = immunity
 	 */
@@ -202,15 +231,16 @@ export class TypeInfo implements Readonly<TypeData> {
 	/** The DVs to get this Type Hidden Power (in gen 2). */
 	readonly HPdvs: SparseStatsTable;
 
-	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
+	constructor(data: AnyObject) {
 		this.exists = true;
-		data = combine(this, data, ...moreData);
+		Object.assign(this, data);
 
-		this.id = data.id || '';
-		this.name = Utils.getString(data.name).trim();
+		this.name = data.name;
+		this.id = data.id;
 		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
 		this.exists = !!(this.exists && this.id);
 		this.gen = data.gen || 0;
+		this.isNonstandard = data.isNonstandard || null;
 		this.damageTaken = data.damageTaken || {};
 		this.HPivs = data.HPivs || {};
 		this.HPdvs = data.HPdvs || {};
@@ -221,121 +251,107 @@ export class TypeInfo implements Readonly<TypeData> {
 	}
 }
 
-export function combine(obj: AnyObject, ...data: (AnyObject | null)[]): AnyObject {
-	for (const d of data) {
-		if (d) Object.assign(obj, d);
+export class DexTypes {
+	readonly dex: ModdedDex;
+	readonly typeCache = new Map<ID, TypeInfo>();
+	allCache: readonly TypeInfo[] | null = null;
+	namesCache: readonly string[] | null = null;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
 	}
-	return obj;
+
+	get(name: string | TypeInfo): TypeInfo {
+		if (name && typeof name !== 'string') return name;
+		return this.getByID(toID(name));
+	}
+
+	getByID(id: ID): TypeInfo {
+		let type = this.typeCache.get(id);
+		if (type) return type;
+
+		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
+		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
+			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
+		} else {
+			type = new TypeInfo({name: typeName, id, exists: false, effectType: 'EffectType'});
+		}
+
+		if (type.exists) this.typeCache.set(id, type);
+		return type;
+	}
+
+	names(): readonly string[] {
+		if (this.namesCache) return this.namesCache;
+
+		this.namesCache = this.all().filter(type => !type.isNonstandard).map(type => type.name);
+
+		return this.namesCache;
+	}
+
+	isName(name: string): boolean {
+		const id = name.toLowerCase();
+		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
+		return name === typeName && this.dex.data.TypeChart.hasOwnProperty(id);
+	}
+
+	all(): readonly TypeInfo[] {
+		if (this.allCache) return this.allCache;
+		const types = [];
+		for (const id in this.dex.data.TypeChart) {
+			types.push(this.getByID(id as ID));
+		}
+		this.allCache = types;
+		return this.allCache;
+	}
 }
 
-// export class PokemonSet {
-// 	/**
-// 	 * The Pokemon's set's nickname, which is identical to its base
-// 	 * species if not specified by the player, e.g. "Minior".
-// 	 */
-// 	name: string;
-// 	/**
-// 	 * The Pokemon's species, e.g. "Minior-Red".
-// 	 * This should always be converted to an id before use.
-// 	 */
-// 	species: string;
-// 	/**
-// 	 * The Pokemon's set's item. This can be an id, e.g. "whiteherb"
-// 	 * or a full name, e.g. "White Herb".
-// 	 * This should always be converted to an id before use.
-// 	 */
-// 	item: string;
-// 	/**
-// 	 * The Pokemon's set's ability. This can be an id, e.g. "shieldsdown"
-// 	 * or a full name, e.g. "Shields Down".
-// 	 * This should always be converted to an id before use.
-// 	 */
-// 	ability: string;
-// 	/**
-// 	 * An array of the Pokemon's set's moves. Each move can be an id,
-// 	 * e.g. "shellsmash" or a full name, e.g. "Shell Smash"
-// 	 * These should always be converted to ids before use.
-// 	 */
-// 	moves: string[];
-// 	/**
-// 	 * The Pokemon's set's nature. This can be an id, e.g. "adamant"
-// 	 * or a full name, e.g. "Adamant".
-// 	 * This should always be converted to an id before use.
-// 	 */
-// 	nature: string;
-// 	/**
-// 	 * The Pokemon's set's gender.
-// 	 */
-// 	gender: GenderName;
-// 	/**
-// 	 * The Pokemon's set's effort values, used in stat calculation.
-// 	 * These must be between 0 and 255, inclusive.
-// 	 */
-// 	evs: StatsTable;
-// 	/**
-// 	 * The Pokemon's individual values, used in stat calculation.
-// 	 * These must be between 0 and 31, inclusive.
-// 	 * These are also used as DVs, or determinant values, in Gens
-// 	 * 1 and 2, which are represented as even numbers from 0 to 30.
-// 	 * From Gen 2 and on, IVs/DVs are used to determine Hidden Power's
-// 	 * type, although in Gen 7 a Pokemon may be legally altered such
-// 	 * that its stats are calculated as if these values were 31 via
-// 	 * Bottlecaps. Currently, PS handles this by considering any
-// 	 * IV of 31 in Gen 7 to count as either even or odd for the purpose
-// 	 * of validating a Hidden Power type, though restrictions on
-// 	 * possible IVs for event-only Pokemon are still considered.
-// 	 */
-// 	ivs: StatsTable;
-// 	/**
-// 	 * The Pokemon's level. This is usually between 1 and 100, inclusive,
-// 	 * but the simulator supports levels up to 9999 for testing purposes.
-// 	 */
-// 	level: number;
-// 	/**
-// 	 * Whether the Pokemon is shiny or not. While having no direct
-// 	 * competitive effect except in a few OMs, certain Pokemon cannot
-// 	 * be legally obtained as shiny, either as a whole or with certain
-// 	 * event-only abilities or moves.
-// 	 */
-// 	shiny?: boolean;
-// 	/**
-// 	 * The Pokemon's set's happiness value. This is used only for
-// 	 * calculating the base power of the moves Return and Frustration.
-// 	 * This value must be between 0 and 255, inclusive.
-// 	 */
-// 	happiness: number;
-// 	/**
-// 	 * The Pokemon's set's Hidden Power type. This value is intended
-// 	 * to be used to manually set a set's HP type in Gen 7 where
-// 	 * its IVs do not necessarily reflect the user's intended type.
-// 	 * TODO: actually support this in the teambuilder.
-// 	 */
-// 	hpType?: string;
-// 	/**
-// 	 * The pokeball this Pokemon is in. Like shininess, this property
-// 	 * has no direct competitive effects, but has implications for
-// 	 * event legality. For example, any Rayquaza that knows V-Create
-// 	 * must be sent out from a Cherish Ball.
-// 	 * TODO: actually support this in the validator, switching animations,
-// 	 * and the teambuilder.
-// 	 */
-// 	pokeball?: string;
-//
-// 	constructor(data: Partial<PokemonSet>) {
-// 		this.name = '';
-// 		this.species = '';
-// 		this.item = '';
-// 		this.ability = 'noability';
-// 		this.moves = [];
-// 		this.nature = '';
-// 		this.gender = '';
-// 		this.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-// 		this.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-// 		this.level = 100;
-// 		this.shiny = undefined;
-// 		this.happiness = 255; // :)
-// 		this.hpType = undefined;
-// 		this.pokeball = undefined;
-// 		Object.assign(this, data);
-// 	}
-// }
+const idsCache: readonly StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+const reverseCache: {readonly [k: string]: StatID} = {
+	__proto: null as any,
+	"hitpoints": 'hp',
+	"attack": 'atk',
+	"defense": 'def',
+	"specialattack": 'spa', "spatk": 'spa', "spattack": 'spa', "specialatk": 'spa',
+	"special": 'spa', "spc": 'spa',
+	"specialdefense": 'spd', "spdef": 'spd', "spdefense": 'spd', "specialdef": 'spd',
+	"speed": 'spe',
+};
+export class DexStats {
+	readonly shortNames: {readonly [k in StatID]: string};
+	readonly mediumNames: {readonly [k in StatID]: string};
+	readonly names: {readonly [k in StatID]: string};
+	constructor(dex: ModdedDex) {
+		if (dex.gen !== 1) {
+			this.shortNames = {
+				__proto__: null, hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
+			} as any;
+			this.mediumNames = {
+				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Sp. Atk", spd: "Sp. Def", spe: "Speed",
+			} as any;
+			this.names = {
+				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special Attack", spd: "Special Defense", spe: "Speed",
+			} as any;
+		} else {
+			this.shortNames = {
+				__proto__: null, hp: "HP", atk: "Atk", def: "Def", spa: "Spc", spd: "[SpD]", spe: "Spe",
+			} as any;
+			this.mediumNames = {
+				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special", spd: "[Sp. Def]", spe: "Speed",
+			} as any;
+			this.names = {
+				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special", spd: "[Special Defense]", spe: "Speed",
+			} as any;
+		}
+	}
+	getID(name: string) {
+		if (name === 'Spd') return 'spe' as StatID;
+		const id = toID(name);
+		if (reverseCache[id]) return reverseCache[id];
+		if (idsCache.includes(id as StatID)) return id as StatID;
+		return null;
+	}
+	ids(): typeof idsCache {
+		return idsCache;
+	}
+}

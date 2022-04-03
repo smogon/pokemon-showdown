@@ -68,9 +68,9 @@ describe('Comatose', function () {
 		});
 
 		battle.makeChoices('move endure', 'move hex');
-		assert.equal(bp, battle.dex.getMove('hex').basePower * 2);
+		assert.equal(bp, battle.dex.moves.get('hex').basePower * 2);
 
 		battle.makeChoices('move endure', 'move wakeupslap');
-		assert.equal(bp, battle.dex.getMove('wakeupslap').basePower * 2);
+		assert.equal(bp, battle.dex.moves.get('wakeupslap').basePower * 2);
 	});
 });

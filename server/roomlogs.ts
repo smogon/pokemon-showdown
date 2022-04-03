@@ -29,7 +29,7 @@ interface RoomlogOptions {
  * The modlog is stored in
  * `logs/modlog/modlog_<ROOMID>.txt`
  * It contains moderator messages, formatted for ease of search.
- * Direct modlog access is handled in modlog.ts; this file is just
+ * Direct modlog access is handled in server/modlog/; this file is just
  * a wrapper to make other code more readable.
  *
  * The roomlog is stored in
@@ -56,6 +56,7 @@ export class Roomlog {
 	 * Scrollback log
 	 */
 	log: string[];
+	visibleMessageCount = 0;
 	broadcastBuffer: string[];
 	/**
 	 * undefined = uninitialized,
@@ -80,7 +81,6 @@ export class Roomlog {
 
 		this.numTruncatedLines = 0;
 
-		Rooms.Modlog.initialize(this.roomid);
 		void this.setupRoomlogStream(true);
 	}
 	getScrollback(channel = 0) {
@@ -139,11 +139,16 @@ export class Roomlog {
 		try {
 			FS(link0).symlinkToSync(relpath); // intentionally a relative link
 			FS(link0).renameSync(basepath + 'today.txt');
-		} catch (e) {} // OS might not support symlinks or atomic rename
+		} catch {} // OS might not support symlinks or atomic rename
 		if (!Roomlogs.rollLogTimer) void Roomlogs.rollLogs();
 	}
 	add(message: string) {
 		this.roomlog(message);
+		// |uhtml gets both uhtml and uhtmlchange
+		// which are visible and so should be counted
+		if (['|c|', '|c:|', '|raw|', '|html|', '|uhtml'].some(k => message.startsWith(k))) {
+			this.visibleMessageCount++;
+		}
 		message = this.withTimestamp(message);
 		this.log.push(message);
 		this.broadcastBuffer.push(message);
@@ -213,7 +218,7 @@ export class Roomlog {
 		}
 		this.broadcastBuffer.push(fullMessage);
 	}
-	private parseChatLine(line: string) {
+	parseChatLine(line: string) {
 		const messageStart = !this.noLogTimes ? '|c:|' : '|c|';
 		const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		if (line.startsWith(messageStart)) {
@@ -233,7 +238,7 @@ export class Roomlog {
 	async rename(newID: RoomID): Promise<true> {
 		const roomlogPath = `logs/chat`;
 		const roomlogStreamExisted = this.roomlogStream !== null;
-		await this.destroy(false); // don't destroy modlog, since it's renamed later
+		await this.destroy();
 		const [roomlogExists, newRoomlogExists] = await Promise.all([
 			FS(roomlogPath + `/${this.roomid}`).exists(),
 			FS(roomlogPath + `/${newID}`).exists(),
@@ -276,17 +281,16 @@ export class Roomlog {
 	/**
 	 * Returns the total number of lines in the roomlog, including truncated lines.
 	 */
-	getLineCount() {
-		return this.log.length + this.numTruncatedLines;
+	getLineCount(onlyVisible = true) {
+		return (onlyVisible ? this.visibleMessageCount : this.log.length) + this.numTruncatedLines;
 	}
 
-	destroy(destroyModlog?: boolean) {
+	destroy() {
 		const promises = [];
 		if (this.roomlogStream) {
 			promises.push(this.roomlogStream.writeEnd());
 			this.roomlogStream = null;
 		}
-		if (destroyModlog) promises.push(Rooms.Modlog.destroy(this.roomid));
 		Roomlogs.roomlogs.delete(this.roomid);
 		return Promise.all(promises);
 	}

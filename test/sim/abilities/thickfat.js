@@ -10,35 +10,42 @@ describe('Thick Fat', function () {
 		battle.destroy();
 	});
 
-	it('should halve damage from Fire- or Ice-type attacks', function () {
-		// calls to resetRNG are to avoid crits
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Hariyama", ability: 'thickfat', moves: ['splash']}]});
-		battle.setPlayer('p2', {team: [{species: "Nidoking", ability: 'sheerforce', moves: ['incinerate', 'icebeam']}]});
-		const target = battle.p1.active[0];
-		// should not crit
-		battle.makeChoices('move splash', 'move incinerate');
-		assert.bounded(target.maxhp - target.hp, [29, 35]);
-		battle.heal(target.maxhp, target, target, battle.format);
-		battle.resetRNG();
-		// should not crit
-		battle.makeChoices('move splash', 'move icebeam');
-		assert.bounded(target.maxhp - target.hp, [56, 66]);
+	it(`should halve damage from Fire- or Ice-type attacks`, function () {
+		battle = common.createBattle([[
+			{species: 'Miltank', ability: 'thickfat', item: 'lumberry', moves: ['luckychant', 'recover']},
+		], [
+			{species: 'Wynaut', moves: ['icebeam', 'flamethrower']},
+		]]);
+		const miltank = battle.p1.active[0];
+		const damageRange = [16, 19];
+		battle.makeChoices('move luckychant', 'move icebeam');
+		assert.bounded(miltank.maxhp - miltank.hp, damageRange);
+		battle.makeChoices('move recover', 'move flamethrower');
+		assert.bounded(miltank.maxhp - miltank.hp, damageRange);
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
-		// calls to resetRNG are to avoid crits
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Hariyama", ability: 'thickfat', moves: ['splash']}]});
-		battle.setPlayer('p2', {team: [{species: "Nidoking", ability: 'moldbreaker', moves: ['incinerate', 'icebeam']}]});
-		const target = battle.p1.active[0];
-		// should not crit
-		battle.makeChoices('move splash', 'move incinerate');
-		assert.bounded(target.maxhp - target.hp, [57, 68]);
-		battle.heal(target.maxhp, target, target, battle.format);
-		battle.resetRNG();
-		// should not crit
-		battle.makeChoices('move splash', 'move icebeam');
-		assert.bounded(target.maxhp - target.hp, [85, 101]);
+	it(`should halve damage from Fire- or Ice-type attacks in past generations, even when holding a type-boosting item`, function () {
+		battle = common.gen(3).createBattle([[
+			{species: 'Miltank', ability: 'thickfat', moves: ['recover']},
+		], [
+			{species: 'Wynaut', item: 'nevermeltice', moves: ['icebeam']},
+		]]);
+		const miltank = battle.p1.active[0];
+		battle.makeChoices();
+		assert.bounded(miltank.maxhp - miltank.hp, [18, 22]);
+	});
+
+	it(`should be suppressed by Mold Breaker`, function () {
+		battle = common.createBattle([[
+			{species: 'Miltank', ability: 'thickfat', item: 'lumberry', moves: ['luckychant', 'recover']},
+		], [
+			{species: 'Wynaut', ability: 'moldbreaker', moves: ['icebeam', 'flamethrower']},
+		]]);
+		const miltank = battle.p1.active[0];
+		const damageRange = [31, 37];
+		battle.makeChoices('move luckychant', 'move icebeam');
+		assert.bounded(miltank.maxhp - miltank.hp, damageRange);
+		battle.makeChoices('move recover', 'move flamethrower');
+		assert.bounded(miltank.maxhp - miltank.hp, damageRange);
 	});
 });

@@ -42,8 +42,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('forecast'));
-					this.field.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.dex.abilities.get('forecast'));
+					this.field.weatherState.duration = 0;
 				};
 				move.target = 'self';
 			}
@@ -171,8 +171,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const weather = move.weather as string;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.dex.getAbility('flowergift'));
-					this.field.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.dex.abilities.get('flowergift'));
+					this.field.weatherState.duration = 0;
 				};
 				move.target = 'self';
 				move.sideCondition = 'flowergift';
@@ -180,13 +180,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onUpdate(pokemon) {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
-				if (pokemon.isActive && pokemon.species.id === 'cherrim' && this.effectData.forme !== 'Sunshine') {
-					this.effectData.forme = 'Sunshine';
+				if (pokemon.isActive && pokemon.species.id === 'cherrim' && this.effectState.forme !== 'Sunshine') {
+					this.effectState.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');
 					this.boost({spd: 1});
 				}
-			} else if (pokemon.isActive && pokemon.species.id === 'cherrim' && this.effectData.forme) {
-				delete this.effectData.forme;
+			} else if (pokemon.isActive && pokemon.species.id === 'cherrim' && this.effectState.forme) {
+				delete this.effectState.forme;
 				this.add('-formechange', pokemon, 'Cherrim', '[msg]');
 			}
 		},
@@ -194,7 +194,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
-					this.boost({spd: 1}, target, target, this.dex.getAbility('flowergift'));
+					this.boost({spd: 1}, target, target, this.dex.abilities.get('flowergift'));
 				}
 				target.side.removeSideCondition('flowergift');
 			},
@@ -291,7 +291,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	clearbody: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -304,7 +304,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	whitesmoke: {
 		inherit: true,
 		onBoost(boost, target, source) {
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -330,8 +330,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			let totaldef = 0;
 			let totalspd = 0;
-			for (const foe of pokemon.side.foe.active) {
-				if (!foe || foe.fainted) continue;
+			for (const foe of pokemon.foes()) {
 				totaldef += foe.storedStats.def;
 				totalspd += foe.storedStats.spd;
 			}
@@ -500,7 +499,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.dex.getItem(pokemon.lastItem).isBerry) {
+			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.dex.items.get(pokemon.lastItem).isBerry) {
 				pokemon.m.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
 				pokemon.lastItem = '';
@@ -578,13 +577,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-start', target, 'move: Imprison');
 		},
 		onFoeDisableMove(pokemon) {
-			for (const moveSlot of this.effectData.target.moveSlots) {
+			for (const moveSlot of this.effectState.target.moveSlots) {
 				pokemon.disableMove(moveSlot.id, 'hidden');
 			}
 			pokemon.maybeDisabled = true;
 		},
 		onFoeBeforeMove(attacker, defender, move) {
-			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id) && !move.isZ) {
+			if (move.id !== 'struggle' && this.effectState.target.hasMove(move.id) && !move.isZ) {
 				this.add('cant', attacker, 'move: Imprison', move);
 				return false;
 			}
@@ -607,7 +606,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
 			if (!target) return;
 			// singles, or single-target move
-			if (target.side.active.length < 2 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
+			if (this.activePerHalf === 1 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
 				move.multihit = 2;
 				move.accuracy = true;
 				pokemon.addVolatile('parentalbond');
@@ -674,8 +673,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.removeVolatile('shadowtag');
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
-			if (!source) source = this.effectData.target;
-			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!source) source = this.effectState.target;
+			if (!source || !pokemon.isAdjacent(source)) return;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles['shadowtag']) {
 				pokemon.maybeTrapped = true;
 			}

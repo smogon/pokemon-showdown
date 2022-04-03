@@ -79,9 +79,7 @@ function createDeck() {
 	]; // 108 cards
 }
 
-export class UNO extends Rooms.RoomGame {
-	playerTable: {[userid: string]: UNOPlayer};
-	players: UNOPlayer[];
+export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	playerCap: number;
 	allowRenames: boolean;
 	maxTime: number;
@@ -102,9 +100,6 @@ export class UNO extends Rooms.RoomGame {
 
 	constructor(room: Room, cap: number, suppressMessages: boolean) {
 		super(room);
-
-		this.playerTable = Object.create(null);
-		this.players = [];
 
 		this.gameNumber = room.nextGameNumber();
 
@@ -182,6 +177,9 @@ export class UNO extends Rooms.RoomGame {
 	}
 
 	joinGame(user: User) {
+		if (user.id in this.playerTable) {
+			throw new Chat.ErrorMessage("You have already joined the game of UNO.");
+		}
 		if (this.state === 'signups' && this.addPlayer(user)) {
 			this.sendToRoom(`${user.name} has joined the game of UNO.`);
 			return true;
@@ -246,6 +244,10 @@ export class UNO extends Rooms.RoomGame {
 				this.sendToRoom(`|raw|${Utils.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
 		}
+		if (this.isPlusFour) {
+			this.isPlusFour = false;
+			this.onNextPlayer();
+		}
 		if (this.awaitUno === userid) this.awaitUno = null;
 		if (!this.topCard) {
 			throw new Chat.ErrorMessage(`Unable to disqualify ${name}.`);
@@ -254,8 +256,9 @@ export class UNO extends Rooms.RoomGame {
 		// put that player's cards into the discard pile to prevent cards from being permanently lost
 		this.discards.push(...this.playerTable[userid].hand);
 
+		this.onNextPlayer();
 		this.removePlayer(this.playerTable[userid]);
-		this.nextTurn();
+		this.nextTurn(true);
 		return name;
 	}
 
@@ -562,15 +565,13 @@ export class UNO extends Rooms.RoomGame {
 	}
 }
 
-class UNOPlayer extends Rooms.RoomGamePlayer {
+class UNOPlayer extends Rooms.RoomGamePlayer<UNO> {
 	hand: Card[];
-	game: UNO;
 	cardLock: string | null;
 
 	constructor(user: User, game: UNO) {
 		super(user, game);
 		this.hand = [];
-		this.game = game;
 		this.cardLock = null;
 	}
 
@@ -599,13 +600,13 @@ class UNOPlayer extends Rooms.RoomGamePlayer {
 	}
 
 	buildHand() {
-		return this.hand.sort((a, b) => a.color.localeCompare(b.color) || a.value.localeCompare(b.value))
-			.map((c, i) => cardHTML(c, i === this.hand.length - 1));
+		return Utils.sortBy(this.hand, card => [card.color, card.value])
+			.map((card, i) => cardHTML(card, i === this.hand.length - 1));
 	}
 
 	sendDisplay() {
 		const hand = this.buildHand().join('');
-		const players = `<p><strong>Players (${this.game.playerCount}):</strong></p>${this.game.getPlayers(true)}`;
+		const players = `<p><strong>Players (${this.game.playerCount}):</strong></p> ${this.game.getPlayers(true)}`;
 		const draw = '<button class="button" style="width: 45%; background: rgba(0, 0, 255, 0.05)" name=send value="/uno draw">Draw a card!</button>';
 		const pass = '<button class="button" style=" width: 45%; background: rgba(255, 0, 0, 0.05)" name=send value="/uno pass">Pass!</button>';
 		const uno = `<button class="button" style=" width: 90%; background: rgba(0, 255, 0, 0.05); height: 60px; margin-top: 2px;" name=send value="/uno uno ${this.game.unoId || '0'}">UNO!</button>`;
@@ -626,7 +627,7 @@ class UNOPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	uno: {
 		// roomowner commands
 		off: 'disable',
@@ -930,7 +931,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const roomSettings: SettingsHandler = room => ({
+export const roomSettings: Chat.SettingsHandler = room => ({
 	label: "UNO",
 	permission: 'editroom',
 	options: [

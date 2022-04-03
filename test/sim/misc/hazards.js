@@ -44,6 +44,29 @@ describe('Hazards', function () {
 		assert(rocksLandorusIndex < abilityLandorusIndex, 'Stealth Rock should damage Landorus before Intimidate activates.');
 	});
 
+	it(`should set up hazards even if there is no target`, function () {
+		battle = common.createBattle([[
+			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
+			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
+			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
+			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
+		], [
+			{species: 'wynaut', item: 'laggingtail', moves: ['stealthrock', 'spikes', 'stickyweb', 'defog']},
+		]]);
+
+		battle.makeChoices('move finalgambit', 'move stealthrock');
+		battle.makeChoices('switch 2');
+		assert.false.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move sleeptalk', 'move defog');
+		battle.makeChoices('move finalgambit', 'move spikes');
+		battle.makeChoices('switch 3');
+		assert.false.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move sleeptalk', 'move defog');
+		battle.makeChoices('move finalgambit', 'move stickyweb');
+		battle.makeChoices('switch 4');
+		assert.statStage(battle.p1.active[0], 'spe', -1);
+	});
+
 	it.skip(`should apply hazards in the order they were set up`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
@@ -81,5 +104,40 @@ describe('Hazards', function () {
 		battle.makeChoices('switch 2');
 		const shedinja = battle.p1.active[0];
 		assert.false.holdsItem(shedinja, 'Shedinja should have lost Lum Berry before fainting to rocks.');
+	});
+
+	it(`should set up hazards to every opponents' side in a Free-for-all battle`, function () {
+		battle = common.createBattle({gameType: 'freeforall'}, [[
+			{species: 'Bronzong', moves: ['sleeptalk', 'stealthrock']},
+		], [
+			{species: 'Cufant', moves: ['sleeptalk']},
+		], [
+			{species: 'Qwilfish', moves: ['sleeptalk']},
+		], [
+			{species: 'Marowak', moves: ['stealthrock']},
+		]]);
+
+		battle.makeChoices();
+		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, true, true, false]);
+		battle.makeChoices('move stealthrock', 'auto', 'auto', 'auto');
+		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, true, true, true]);
+	});
+
+	it(`should set up hazards even if there is no target in a Free-for-all battle`, function () {
+		battle = common.createBattle({gameType: 'freeforall'}, [[
+			{species: 'Bronzong', item: 'laggingtail', moves: ['sleeptalk', 'stealthrock']},
+		], [
+			{species: 'Wynaut', level: 1, moves: ['finalgambit']},
+			{species: 'Cufant', moves: ['sleeptalk']},
+		], [
+			{species: 'Wynaut', level: 1, moves: ['finalgambit']},
+			{species: 'Qwilfish', moves: ['sleeptalk']},
+		], [
+			{species: 'Wynaut', level: 1, moves: ['finalgambit']},
+			{species: 'Marowak', moves: ['stealthrock']},
+		]]);
+
+		battle.makeChoices('move stealthrock', 'move finalgambit 1', 'move finalgambit 1', 'move finalgambit 1');
+		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [false, true, true, true]);
 	});
 });

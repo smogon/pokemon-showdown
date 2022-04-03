@@ -18,7 +18,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// - Counter succeeds if the target used a Counterable move earlier this turn
 
 			const lastMoveThisTurn = target.side.lastMove && target.side.lastMove.id === target.side.lastSelectedMove &&
-				!this.queue.willMove(target) && this.dex.getMove(target.side.lastMove.id);
+				!this.queue.willMove(target) && this.dex.moves.get(target.side.lastMove.id);
 			if (!lastMoveThisTurn) {
 				this.debug("Stadium 1 Counter: last move was not this turn");
 				this.add('-fail', pokemon);
@@ -94,7 +94,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onAfterMoveSelfPriority: 1,
 			onAfterMoveSelf(pokemon) {
-				const leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				const leecher = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
@@ -121,7 +121,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// Rage lock
 			duration: 255,
 			onStart(target, source, effect) {
-				this.effectData.move = 'rage';
+				this.effectState.move = 'rage';
 			},
 			onLockMove: 'rage',
 			onTryHit(target, source, move) {
@@ -153,8 +153,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// max HP and current HP is 0, 255, or 511
 			if (target.hp >= target.maxhp) return false;
 			if (!target.setStatus('slp', source, move)) return false;
-			target.statusData.time = 2;
-			target.statusData.startTime = 2;
+			target.statusState.time = 2;
+			target.statusState.startTime = 2;
 			target.recalculateStats!(); // Stadium Rest removes statdrops given by Major Status Conditions.
 			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
@@ -175,7 +175,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
-				this.effectData.hp = Math.floor(target.maxhp / 4);
+				this.effectState.hp = Math.floor(target.maxhp / 4);
 				delete target.volatiles['partiallytrapped'];
 			},
 			onTryHitPriority: -1,
@@ -197,7 +197,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return;
 				}
 				if (move.volatileStatus && target === source) return;
-				let damage = this.getDamage(source, target, move);
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage) return null;
 				damage = this.runEvent('SubDamage', target, source, move, damage);
 				if (!damage) return damage;
@@ -220,7 +220,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: damage, thisTurn: true});
+					target.attackedBy.push({source: source, move: move.id, damage: damage, slot: source.getSlot(), thisTurn: true});
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = damage;

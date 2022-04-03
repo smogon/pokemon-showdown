@@ -65,7 +65,7 @@ describe('Transform', function () {
 		for (let i = 0; i < p1poke.moves.length; i++) {
 			let move = p1poke.moves[i];
 			assert.equal(move, p2poke.moves[i]);
-			move = battle.dex.getMove(move);
+			move = battle.dex.moves.get(move);
 			const movepp = p1poke.getMoveData(move);
 			assert.equal(movepp.pp, 5);
 		}
@@ -139,7 +139,7 @@ describe('Transform', function () {
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire", "Flying"]);
 	});
 
-	it.skip(`should not announce that its ability was suppressed after Transforming`, function () {
+	it(`should not announce that its ability was suppressed after Transforming`, function () {
 		battle = common.createBattle([[
 			{species: "Mew", ability: 'synchronize', moves: ['transform']},
 		], [

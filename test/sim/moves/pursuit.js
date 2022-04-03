@@ -68,7 +68,7 @@ describe(`Pursuit`, function () {
 		]]);
 		const furret = battle.p1.pokemon[2];
 		battle.makeChoices('move Pursuit mega -2, switch 3', 'auto');
-		assert.equal(furret.maxhp - furret.hp, 66);
+		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
 	});
 
 	it(`should deal damage prior to attacker selecting a switch in after u-turn etc`, function () {

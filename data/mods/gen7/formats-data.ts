@@ -336,7 +336,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dugtrio: {
-		randomBattleMoves: ["earthquake", "memento", "reversal", "stealthrock", "stoneedge", "substitute", "suckerpunch"],
+		randomBattleMoves: ["earthquake", "reversal", "stealthrock", "stoneedge", "substitute", "suckerpunch"],
 		randomDoubleBattleMoves: ["earthquake", "protect", "rockslide", "stoneedge", "suckerpunch"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -378,7 +378,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	primeape: {
-		randomBattleMoves: ["closecombat", "earthquake", "encore", "gunkshot", "icepunch", "stoneedge", "uturn"],
+		randomBattleMoves: ["closecombat", "earthquake", "gunkshot", "icepunch", "stoneedge", "uturn"],
 		randomDoubleBattleMoves: ["closecombat", "icepunch", "poisonjab", "protect", "rockslide", "stompingtantrum", "stoneedge", "taunt", "uturn"],
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -405,7 +405,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	politoed: {
-		randomBattleMoves: ["encore", "hypnosis", "perishsong", "protect", "rest", "scald", "toxic"],
+		randomBattleMoves: ["encore", "icebeam", "protect", "rest", "scald", "toxic"],
 		randomDoubleBattleMoves: ["encore", "helpinghand", "hypnosis", "icywind", "protect", "scald"],
 		tier: "(PU)",
 		doublesTier: "DOU",
@@ -529,7 +529,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	farfetchd: {
-		randomBattleMoves: ["bravebird", "knockoff", "leafblade", "return", "roost", "swordsdance"],
+		randomBattleMoves: ["bravebird", "knockoff", "leafblade", "return", "swordsdance"],
 		randomDoubleBattleMoves: ["bravebird", "knockoff", "leafblade", "protect", "return", "swordsdance"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -678,13 +678,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	hitmonlee: {
-		randomBattleMoves: ["fakeout", "highjumpkick", "knockoff", "machpunch", "poisonjab", "rapidspin", "stoneedge"],
+		randomBattleMoves: ["highjumpkick", "knockoff", "machpunch", "poisonjab", "rapidspin", "stoneedge"],
 		randomDoubleBattleMoves: ["closecombat", "fakeout", "knockoff", "machpunch", "protect", "rockslide"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
 	hitmonchan: {
-		randomBattleMoves: ["bulkup", "drainpunch", "firepunch", "icepunch", "machpunch", "rapidspin"],
+		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "machpunch", "rapidspin", "stoneedge"],
 		randomDoubleBattleMoves: ["drainpunch", "fakeout", "firepunch", "icepunch", "machpunch", "protect"],
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -717,11 +717,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	rhydon: {
+		randomBattleMoves: ["earthquake", "megahorn", "rockblast", "stealthrock", "stoneedge", "toxic"],
 		tier: "NU",
 		doublesTier: "NFE",
 	},
 	rhyperior: {
-		randomBattleMoves: ["dragontail", "earthquake", "icepunch", "megahorn", "rockblast", "rockpolish", "stealthrock", "stoneedge"],
+		randomBattleMoves: ["dragontail", "earthquake", "icepunch", "megahorn", "rockblast", "rockpolish", "stoneedge"],
 		randomDoubleBattleMoves: ["earthquake", "icepunch", "megahorn", "protect", "rockslide", "stealthrock", "stoneedge"],
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -875,7 +876,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gyarados: {
-		randomBattleMoves: ["bounce", "dragondance", "dragontail", "earthquake", "stoneedge", "substitute", "waterfall"],
+		randomBattleMoves: ["bounce", "dragondance", "earthquake", "stoneedge", "substitute", "waterfall"],
 		randomDoubleBattleMoves: ["bounce", "dragondance", "protect", "stoneedge", "thunderwave", "waterfall"],
 		tier: "UUBL",
 		doublesTier: "DUU",
@@ -919,7 +920,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	espeon: {
-		randomBattleMoves: ["calmmind", "dazzlinggleam", "morningsun", "psychic", "psyshock", "shadowball", "substitute"],
+		randomBattleMoves: ["calmmind", "dazzlinggleam", "morningsun", "psychic", "psyshock", "shadowball"],
 		randomDoubleBattleMoves: ["calmmind", "dazzlinggleam", "helpinghand", "protect", "psychic", "shadowball"],
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -991,7 +992,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	snorlax: {
-		randomBattleMoves: ["bodyslam", "crunch", "curse", "earthquake", "firepunch", "pursuit", "rest", "return", "sleeptalk", "whirlwind"],
+		randomBattleMoves: ["bodyslam", "crunch", "curse", "earthquake", "firepunch", "pursuit", "rest", "return", "sleeptalk"],
 		randomDoubleBattleMoves: ["bodyslam", "crunch", "curse", "highhorsepower", "protect", "rest", "return"],
 		tier: "RU",
 		doublesTier: "DUber",
@@ -1003,7 +1004,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	zapdos: {
-		randomBattleMoves: ["defog", "heatwave", "hiddenpowerice", "roost", "thunderbolt", "toxic", "uturn"],
+		randomBattleMoves: ["defog", "discharge", "heatwave", "hiddenpowerice", "roost", "toxic", "uturn"],
 		randomDoubleBattleMoves: ["heatwave", "hiddenpowergrass", "hiddenpowerice", "protect", "roost", "tailwind", "thunderbolt"],
 		tier: "OU",
 		doublesTier: "DOU",
@@ -1039,7 +1040,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	mewtwomegay: {
-		randomBattleMoves: ["aurasphere", "calmmind", "fireblast", "icebeam", "psystrike", "recover", "shadowball", "taunt", "willowisp"],
+		randomBattleMoves: ["aurasphere", "calmmind", "fireblast", "icebeam", "psystrike", "recover", "shadowball"],
 		randomDoubleBattleMoves: ["aurasphere", "calmmind", "fireblast", "icebeam", "psystrike", "taunt", "willowisp"],
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -1235,7 +1236,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	quagsire: {
 		randomBattleMoves: ["earthquake", "encore", "icebeam", "recover", "scald", "toxic"],
 		randomDoubleBattleMoves: ["earthquake", "icywind", "protect", "recover", "scald", "toxic"],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 	},
 	murkrow: {
@@ -2163,7 +2164,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	gorebyss: {
-		randomBattleMoves: ["hiddenpowergrass", "hydropump", "icebeam", "shellsmash", "substitute"],
+		randomBattleMoves: ["hiddenpowergrass", "hydropump", "icebeam", "shellsmash"],
 		randomDoubleBattleMoves: ["hiddenpowergrass", "hydropump", "icebeam", "protect", "shellsmash"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -2253,7 +2254,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	latiosmega: {
-		randomBattleMoves: ["calmmind", "defog", "dracometeor", "hiddenpowerfire", "psyshock", "roost"],
+		randomBattleMoves: ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost"],
 		randomDoubleBattleMoves: ["dracometeor", "dragonpulse", "hiddenpowerfire", "protect", "psyshock", "tailwind"],
 		tier: "UUBL",
 		doublesTier: "(DUU)",
@@ -2277,7 +2278,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	groudonprimal: {
-		randomBattleMoves: ["firepunch", "lavaplume", "precipiceblades", "rockpolish", "stealthrock", "stoneedge", "swordsdance", "toxic"],
+		randomBattleMoves: ["firepunch", "lavaplume", "precipiceblades", "rockpolish", "stealthrock", "stoneedge", "swordsdance"],
 		randomDoubleBattleMoves: ["firepunch", "precipiceblades", "protect", "rockpolish", "rockslide", "stoneedge", "swordsdance"],
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -2300,13 +2301,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	deoxys: {
-		randomBattleMoves: ["extremespeed", "firepunch", "knockoff", "psychoboost", "spikes", "stealthrock", "superpower"],
+		randomBattleMoves: ["extremespeed", "firepunch", "icebeam", "knockoff", "psychoboost", "stealthrock", "superpower"],
 		randomDoubleBattleMoves: ["extremespeed", "firepunch", "icebeam", "knockoff", "protect", "psychoboost", "superpower"],
 		tier: "Uber",
 		doublesTier: "(DUU)",
 	},
 	deoxysattack: {
-		randomBattleMoves: ["extremespeed", "firepunch", "icebeam", "knockoff", "psychoboost", "stealthrock", "superpower"],
+		randomBattleMoves: ["extremespeed", "firepunch", "icebeam", "knockoff", "psychoboost", "superpower"],
 		randomDoubleBattleMoves: ["extremespeed", "firepunch", "icebeam", "knockoff", "protect", "psychoboost", "superpower"],
 		tier: "Uber",
 		doublesTier: "DUU",
@@ -2486,7 +2487,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gastrodon: {
-		randomBattleMoves: ["clearsmog", "earthquake", "icebeam", "recover", "scald", "toxic"],
+		randomBattleMoves: ["earthquake", "icebeam", "recover", "scald", "toxic"],
 		randomDoubleBattleMoves: ["earthpower", "icywind", "muddywater", "protect", "recover", "scald"],
 		tier: "PU",
 		doublesTier: "DOU",
@@ -2705,7 +2706,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	palkia: {
-		randomBattleMoves: ["dracometeor", "dragontail", "fireblast", "hydropump", "spacialrend", "thunderwave"],
+		randomBattleMoves: ["dracometeor", "fireblast", "hydropump", "spacialrend", "thunderwave"],
 		randomDoubleBattleMoves: ["dracometeor", "fireblast", "hydropump", "protect", "spacialrend", "thunderbolt"],
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -3499,7 +3500,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	cobalion: {
-		randomBattleMoves: ["closecombat", "hiddenpowerice", "ironhead", "stealthrock", "stoneedge", "swordsdance", "taunt", "voltswitch"],
+		randomBattleMoves: ["closecombat", "hiddenpowerice", "ironhead", "stealthrock", "stoneedge", "swordsdance", "voltswitch"],
 		randomDoubleBattleMoves: ["closecombat", "ironhead", "protect", "stoneedge", "swordsdance", "thunderwave"],
 		tier: "UU",
 		doublesTier: "(DUU)",
@@ -3978,7 +3979,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	xerneas: {
-		randomBattleMoves: ["closecombat", "focusblast", "geomancy", "hiddenpowerfire", "moonblast", "psyshock", "rockslide", "thunderbolt"],
+		randomBattleMoves: ["focusblast", "geomancy", "hiddenpowerfire", "moonblast", "psyshock", "thunderbolt"],
 		randomDoubleBattleMoves: ["closecombat", "dazzlinggleam", "focusblast", "geomancy", "hiddenpowerfire", "protect", "psyshock", "rockslide", "thunderbolt"],
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -4314,7 +4315,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	pyukumuku: {
-		randomBattleMoves: ["block", "counter", "lightscreen", "recover", "toxic"],
+		randomBattleMoves: ["block", "recover", "soak", "toxic"],
 		randomDoubleBattleMoves: ["counter", "helpinghand", "lightscreen", "memento", "reflect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -4513,7 +4514,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	tapulele: {
-		randomBattleMoves: ["calmmind", "focusblast", "hiddenpowerfire", "moonblast", "psychic", "psyshock", "taunt"],
+		randomBattleMoves: ["calmmind", "focusblast", "hiddenpowerfire", "moonblast", "psychic", "psyshock"],
 		randomDoubleBattleMoves: ["dazzlinggleam", "focusblast", "moonblast", "protect", "psychic", "taunt"],
 		tier: "OU",
 		doublesTier: "DOU",
@@ -4543,7 +4544,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	lunala: {
-		randomBattleMoves: ["calmmind", "focusblast", "moongeistbeam", "psyshock", "roost"],
+		randomBattleMoves: ["calmmind", "focusblast", "moonblast", "moongeistbeam", "psyshock", "roost"],
 		randomDoubleBattleMoves: ["moonblast", "moongeistbeam", "protect", "psychic", "roost", "wideguard"],
 		tier: "Uber",
 		doublesTier: "DUber",

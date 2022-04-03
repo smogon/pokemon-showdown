@@ -82,7 +82,7 @@ export class LastFMInterface {
 					limit: 1, api_key: Config.lastfmkey, format: 'json',
 				},
 			});
-		} catch (e) {
+		} catch {
 			throw new Chat.ErrorMessage(`No scrobble data found.`);
 		}
 		const res = JSON.parse(raw);
@@ -108,7 +108,7 @@ export class LastFMInterface {
 			let videoIDs: string[] | undefined;
 			try {
 				videoIDs = await YouTube.searchVideo(trackName, 1);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
 			}
 			if (!videoIDs?.length) {
@@ -158,7 +158,7 @@ export class LastFMInterface {
 		let raw;
 		try {
 			raw = await Net(API_ROOT).get({query});
-		} catch (e) {
+		} catch {
 			throw new Chat.ErrorMessage(`No track data found.`);
 		}
 		const req = JSON.parse(raw);
@@ -182,7 +182,7 @@ export class LastFMInterface {
 			let videoIDs: string[] | undefined;
 			try {
 				videoIDs = await YouTube.searchVideo(searchName, 1);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
 			}
 			if (!videoIDs?.length) {
@@ -410,7 +410,7 @@ class RecommendationsInterface {
 export const LastFM = new LastFMInterface();
 export const Recs = new RecommendationsInterface();
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	registerlastfm(target, room, user) {
 		if (!target) return this.parse(`/help registerlastfm`);
 		this.checkChat(target);
@@ -430,11 +430,9 @@ export const commands: ChatCommands = {
 		this.checkChat();
 		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
-		this.splitTarget(target, true);
-		const username = LastFM.getAccountName(target ? target : user.name);
-		this.sendReplyBox(
-			await LastFM.getScrobbleData(username, this.targetUsername ? this.targetUsername : user.named ? user.name : undefined)
-		);
+		const targetUsername = this.splitUser(target).targetUsername || (user.named ? user.name : '');
+		const username = LastFM.getAccountName(targetUsername);
+		this.sendReplyBox(await LastFM.getScrobbleData(username, targetUsername));
 	},
 	lastfmhelp: [
 		`/lastfm [username] - Displays the last scrobbled song for the person using the command or for [username] if provided.`,
@@ -567,13 +565,11 @@ export const commands: ChatCommands = {
 			return this.sendReply(`|html|${await Recs.render(Recs.getRandomRecommendation())}`);
 		}
 		const matches: Recommendation[] = [];
-		if (target) {
-			target = target.slice(0, 300);
-			const args = target.split(',');
-			for (const rec of recommendations.saved) {
-				if (!args.every(x => rec.tags.map(toID).includes(toID(x)))) continue;
-				matches.push(rec);
-			}
+		target = target.slice(0, 300);
+		const args = target.split(',');
+		for (const rec of recommendations.saved) {
+			if (!args.every(x => rec.tags.map(toID).includes(toID(x)))) continue;
+			matches.push(rec);
 		}
 		if (!matches.length) {
 			throw new Chat.ErrorMessage(`No matches found.`);
@@ -618,7 +614,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	async recommendations(query, user, connection) {
 		const room = this.requireRoom();
 		this.checkCan('mute', null, room);

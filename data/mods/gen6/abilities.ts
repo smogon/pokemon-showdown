@@ -50,7 +50,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
-			if (move.id !== 'struggle' && this.dex.getMove(move.id).type !== 'Normal') {
+			if (move.id !== 'struggle' && this.dex.moves.get(move.id).type !== 'Normal') {
 				move.type = 'Normal';
 			}
 		},
@@ -58,9 +58,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	parentalbond: {
 		inherit: true,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
-		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
 		rating: 5,
 	},
 	pixilate: {
@@ -99,11 +97,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	symbiosis: {
 		inherit: true,
 		onAllyAfterUseItem(item, pokemon) {
-			const source = this.effectData.target;
+			const source = this.effectState.target;
 			const myItem = source.takeItem();
 			if (!myItem) return;
 			if (
-				!this.singleEvent('TakeItem', myItem, source.itemData, pokemon, source, this.effect, myItem) ||
+				!this.singleEvent('TakeItem', myItem, source.itemState, pokemon, source, this.effect, myItem) ||
 				!pokemon.setItem(myItem)
 			) {
 				source.item = myItem.id;

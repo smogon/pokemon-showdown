@@ -16,13 +16,13 @@ function saveSuspectTests() {
 	FS(SUSPECTS_FILE).writeUpdate(() => JSON.stringify(suspectTests));
 }
 
-function checkPermissions(context: CommandContext) {
+function checkPermissions(context: Chat.CommandContext) {
 	const user = context.user;
 	if (WHITELIST.includes(user.id)) return true;
 	context.checkCan('gdeclare');
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	suspect: 'suspects',
 	suspects: {
 		''(target, room, user) {
@@ -49,7 +49,7 @@ export const commands: ChatCommands = {
 				return this.parse('/help suspects');
 			}
 
-			const format = Dex.getFormat(tier);
+			const format = Dex.formats.get(tier);
 			if (!format.exists) return this.errorReply(`"${tier}" is not a valid tier.`);
 
 			const suspectString = suspect.trim();

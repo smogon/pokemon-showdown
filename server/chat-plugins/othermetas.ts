@@ -8,7 +8,7 @@
 import {Utils} from '../../lib';
 
 interface StoneDeltas {
-	baseStats: {[stat in StatName]: number};
+	baseStats: {[stat in StatID]: number};
 	bst: number;
 	weighthg: number;
 	type?: string;
@@ -19,10 +19,10 @@ type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'NF
 function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 	let dex = Dex;
 	if (mod && toID(mod) in Dex.dexes) dex = Dex.mod(toID(mod));
-	const item = dex.getItem(stone);
+	const item = dex.items.get(stone);
 	if (!item.exists) {
 		if (toID(stone) === 'dragonascent') {
-			const move = dex.getMove(stone);
+			const move = dex.moves.get(stone);
 			return {
 				id: move.id,
 				name: move.name,
@@ -44,37 +44,32 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 	return item;
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	om: 'othermetas',
 	othermetas(target, room, user) {
-		this.runBroadcast();
 		target = toID(target);
-		let buffer = ``;
+		const omLink = `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
 
-		if (target === 'all' && this.broadcasting) {
-			throw new Chat.ErrorMessage(`You cannot broadcast information about all Other Metagames at once.`);
+		if (!target) {
+			this.runBroadcast();
+			return this.sendReplyBox(omLink);
 		}
-
-		if (!target || target === 'all') {
-			buffer += `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
-			if (!target) return this.sendReplyBox(buffer);
-		}
-		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'month');
 
 		if (target === 'all') {
+			this.runBroadcast();
+			if (this.broadcasting) {
+				throw new Chat.ErrorMessage(`"!om all" is too spammy to broadcast.`);
+			}
 			// Display OMotM formats, with forum thread links as caption
 			this.parse(`/formathelp omofthemonth`);
 
 			// Display the rest of OM formats, with OM hub/index forum links as caption
 			this.parse(`/formathelp othermetagames`);
-			return this.sendReply(`|raw|<center>${buffer}</center>`);
+			return this.sendReply(`|raw|<center>${omLink}</center>`);
 		}
-		if (showMonthly) {
-			this.target = 'omofthemonth';
-			this.run('formathelp');
-		} else {
-			this.run('formathelp');
-		}
+
+		if (target === 'month') this.target = 'omofthemonth';
+		this.run('formathelp');
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
@@ -100,26 +95,26 @@ export const commands: ChatCommands = {
 			}
 		}
 		const stone = getMegaStone(stoneName[0], mod);
-		const species = dex.getSpecies(sep[0]);
+		const species = dex.species.get(sep[0]);
 		if (!stone || (dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id))) {
 			throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
 		}
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon not found.`);
-		let baseSpecies = dex.getSpecies(stone.megaEvolves);
-		let megaSpecies = dex.getSpecies(stone.megaStone);
+		let baseSpecies = dex.species.get(stone.megaEvolves);
+		let megaSpecies = dex.species.get(stone.megaStone);
 		if (stone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
-			megaSpecies = dex.getSpecies("Groudon-Primal");
-			baseSpecies = dex.getSpecies("Groudon");
+			megaSpecies = dex.species.get("Groudon-Primal");
+			baseSpecies = dex.species.get("Groudon");
 		} else if (stone.id === 'blueorb') {
-			megaSpecies = dex.getSpecies("Kyogre-Primal");
-			baseSpecies = dex.getSpecies("Kyogre");
+			megaSpecies = dex.species.get("Kyogre-Primal");
+			baseSpecies = dex.species.get("Kyogre");
 		}
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
 			bst: megaSpecies.bst - baseSpecies.bst,
 		};
-		let statId: StatName;
+		let statId: StatID;
 		for (statId in megaSpecies.baseStats) {
 			deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 		}
@@ -139,7 +134,7 @@ export const commands: ChatCommands = {
 		} else if (deltas.type) {
 			mixedSpecies.types = [mixedSpecies.types[0], deltas.type];
 		}
-		let statName: StatName;
+		let statName: StatID;
 		mixedSpecies.bst = 0;
 		for (statName in species.baseStats) { // Add the changed stats and weight
 			mixedSpecies.baseStats[statName] = Utils.clampIntRange(
@@ -171,10 +166,9 @@ export const commands: ChatCommands = {
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedSpecies)}`);
-		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
-		}).join("&nbsp;|&ThickSpace;") + '</font>');
+		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	mixandmegahelp: [
 		`/mnm <pokemon> @ <mega stone>[, generation] - Shows the Mix and Mega evolved Pok\u00e9mon's type and stats.`,
@@ -204,14 +198,14 @@ export const commands: ChatCommands = {
 		}
 		const stones = [];
 		if (!stone) {
-			const species = dex.getSpecies(targetid.replace(/(?:mega[xy]?|primal)$/, ''));
+			const species = dex.species.get(targetid.replace(/(?:mega[xy]?|primal)$/, ''));
 			if (!species.exists) throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
 			if (!species.otherFormes) throw new Chat.ErrorMessage(`Error: Mega Evolution not found.`);
 			for (const poke of species.otherFormes) {
 				if (!/(?:-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
-				const megaPoke = dex.getSpecies(poke);
+				const megaPoke = dex.species.get(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
-				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.getSpecies(targetid))) continue;
+				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.species.get(targetid))) continue;
 				if (!flag) continue;
 				stones.push(getMegaStone(flag, sep[1]));
 			}
@@ -220,24 +214,24 @@ export const commands: ChatCommands = {
 		const toDisplay = (stones.length ? stones : [stone]);
 		for (const aStone of toDisplay) {
 			if (!aStone) return;
-			let baseSpecies = dex.getSpecies(aStone.megaEvolves);
-			let megaSpecies = dex.getSpecies(aStone.megaStone);
+			let baseSpecies = dex.species.get(aStone.megaEvolves);
+			let megaSpecies = dex.species.get(aStone.megaStone);
 			if (dex.gen >= 8 && ['redorb', 'blueorb'].includes(aStone.id)) {
 				throw new Chat.ErrorMessage("The Orbs do not exist in Gen 8 and later.");
 			}
 			if (aStone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
-				megaSpecies = dex.getSpecies("Groudon-Primal");
-				baseSpecies = dex.getSpecies("Groudon");
+				megaSpecies = dex.species.get("Groudon-Primal");
+				baseSpecies = dex.species.get("Groudon");
 			} else if (aStone.id === 'blueorb') {
-				megaSpecies = dex.getSpecies("Kyogre-Primal");
-				baseSpecies = dex.getSpecies("Kyogre");
+				megaSpecies = dex.species.get("Kyogre-Primal");
+				baseSpecies = dex.species.get("Kyogre");
 			}
 			const deltas: StoneDeltas = {
 				baseStats: Object.create(null),
 				weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
 				bst: megaSpecies.bst - baseSpecies.bst,
 			};
-			let statId: StatName;
+			let statId: StatID;
 			for (statId in megaSpecies.baseStats) {
 				deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 			}
@@ -306,10 +300,10 @@ export const commands: ChatCommands = {
 		if (args[1] && toID(args[1]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[1])];
 		} else if (room?.battle) {
-			const format = Dex.getFormat(room.battle.format);
+			const format = Dex.formats.get(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		const species = Utils.deepClone(dex.getSpecies(args[0]));
+		const species = Utils.deepClone(dex.species.get(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -347,10 +341,10 @@ export const commands: ChatCommands = {
 		if (args[1] && toID(args[1]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[1])];
 		} else if (room?.battle) {
-			const format = Dex.getFormat(room.battle.format);
+			const format = Dex.formats.get(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		const species = Utils.deepClone(dex.getSpecies(args[0]));
+		const species = Utils.deepClone(dex.species.get(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -404,10 +398,10 @@ export const commands: ChatCommands = {
 		if (args[1] && toID(args[1]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[1])];
 		} else if (room?.battle) {
-			const format = Dex.getFormat(room.battle.format);
+			const format = Dex.formats.get(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		const species = Utils.deepClone(dex.getSpecies(args[0]));
+		const species = Utils.deepClone(dex.species.get(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -453,7 +447,7 @@ export const commands: ChatCommands = {
 		} else if (room?.battle) {
 			dex = Dex.forFormat(room.battle.format);
 		}
-		const species = Utils.deepClone(dex.getSpecies(mon));
+		const species = Utils.deepClone(dex.species.get(mon));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : mon.trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -502,15 +496,15 @@ export const commands: ChatCommands = {
 		if (args[2] && toID(args[2]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[2])];
 		} else if (room?.battle) {
-			const format = Dex.getFormat(room.battle.format);
+			const format = Dex.formats.get(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
 		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
 		this.runBroadcast();
-		const natureObj = dex.getNature(nature);
+		const natureObj = dex.natures.get(nature);
 		if (dex.gen < 3) throw new Chat.ErrorMessage(`Error: Natures don't exist prior to Generation 3.`);
 		if (!natureObj.exists) throw new Chat.ErrorMessage(`Error: Nature ${nature} not found.`);
-		const species = Utils.deepClone(dex.getSpecies(pokemon));
+		const species = Utils.deepClone(dex.species.get(pokemon));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -533,11 +527,11 @@ export const commands: ChatCommands = {
 	crossevo: 'crossevolve',
 	crossevolve(target, user, room) {
 		if (!this.runBroadcast()) return;
-		if (!target || !target.includes(',')) return this.parse(`/help crossevo`);
+		if (!target?.includes(',')) return this.parse(`/help crossevo`);
 
 		const pokes = target.split(',');
-		const species = Dex.getSpecies(pokes[0]);
-		const crossSpecies = Dex.getSpecies(pokes[1]);
+		const species = Dex.species.get(pokes[0]);
+		const crossSpecies = Dex.species.get(pokes[1]);
 
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${pokes[0]}' not found.`);
 		if (!crossSpecies.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${pokes[1]}' not found.`);
@@ -549,11 +543,11 @@ export const commands: ChatCommands = {
 		let crossStage = 1;
 		if (species.prevo) {
 			setStage++;
-			if (Dex.getSpecies(species.prevo).prevo) {
+			if (Dex.species.get(species.prevo).prevo) {
 				setStage++;
 			}
 		}
-		const prevo = Dex.getSpecies(crossSpecies.prevo);
+		const prevo = Dex.species.get(crossSpecies.prevo);
 		if (crossSpecies.prevo) {
 			crossStage++;
 			if (prevo.prevo) {
@@ -567,7 +561,7 @@ export const commands: ChatCommands = {
 		mixedSpecies.abilities = Utils.deepClone(crossSpecies.abilities);
 		mixedSpecies.baseStats = Utils.deepClone(mixedSpecies.baseStats);
 		mixedSpecies.bst = 0;
-		let statName: StatName;
+		let statName: StatID;
 		for (statName in species.baseStats) {
 			const statChange = crossSpecies.baseStats[statName] - prevo.baseStats[statName];
 			mixedSpecies.baseStats[statName] = Utils.clampIntRange(mixedSpecies.baseStats[statName] + statChange, 1, 255);
@@ -607,10 +601,9 @@ export const commands: ChatCommands = {
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedSpecies)}`);
-		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
-			if (details[detail] === '') return detail;
-			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
-		}).join("&nbsp;|&ThickSpace;") + '</font>');
+		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
+			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	crossevolvehelp: [
 		"/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pok\u00e9mon.",
@@ -620,19 +613,19 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const targetid = toID(target);
 		if (!targetid) return this.parse('/help showevo');
-		const evo = Dex.getSpecies(target);
+		const evo = Dex.species.get(target);
 		if (!evo.exists) {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
 		}
 		if (!evo.prevo) {
 			throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`);
 		}
-		const prevoSpecies = Dex.getSpecies(evo.prevo);
+		const prevoSpecies = Dex.species.get(evo.prevo);
 		const deltas = Utils.deepClone(evo);
 		deltas.tier = 'CE';
 		deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
 		deltas.bst = 0;
-		let i: StatName;
+		let i: StatID;
 		for (i in evo.baseStats) {
 			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
 			deltas.baseStats[i] = statChange;
@@ -654,7 +647,7 @@ export const commands: ChatCommands = {
 		const details = {
 			Gen: evo.gen,
 			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
-			Stage: (Dex.getSpecies(prevoSpecies.prevo).exists ? 3 : 2),
+			Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
 		};
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
 		this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);

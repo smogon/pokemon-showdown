@@ -6,9 +6,9 @@
 'use strict';
 
 const assert = require('assert').strict;
-const Repeats = require('../../../.server-dist/chat-plugins/repeats').Repeats;
+const Repeats = require('../../../server/chat-plugins/repeats').Repeats;
 
-describe("Repeats plugin", () => {
+describe("Repeats plugin", function () {
 	before(() => {
 		this.room = Rooms.createChatRoom('repeatstest');
 	});

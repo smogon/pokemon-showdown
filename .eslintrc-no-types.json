@@ -1,7 +1,7 @@
 {
   "root": true,
   "parserOptions": {
-    "ecmaVersion": 9,
+    "ecmaVersion": 11,
     "sourceType": "script",
     "ecmaFeatures": {
       "globalReturn": true
@@ -185,21 +185,18 @@
   "overrides": [
     {
       "files": [
-        "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts",
+        "./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./server/**/*.tsx", "./sim/**/*.ts",
         "./tools/set-import/*.ts", "./tools/modlog/*.ts", "./translations/**/*.ts"
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        "ecmaVersion": 9,
+        "ecmaVersion": 11,
         "sourceType": "module",
         "tsconfigRootDir": ".",
         "project": ["./tsconfig.json"]
       },
       "extends": [
         "plugin:@typescript-eslint/recommended"
-      ],
-      "plugins": [
-        "import"
       ],
       "rules": {
         // TODO revisit
@@ -217,7 +214,7 @@
         "max-len": ["warn", {
           "code": 120, "tabWidth": 0,
           // see bottom of file for source
-          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9_$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Utils\\.html|(?:this\\.)?(?:room\\.)?tr|\\$\\()?['\"`/]"
+          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const |readonly )?[a-zA-Z0-9_$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Utils\\.html|(?:this\\.)?(?:room\\.)?tr|\\$\\()?['\"`/]"
         }],
         "prefer-const": ["warn", {"destructuring": "all"}], // typescript-eslint/recommended forces this so we need to re-override
 
@@ -236,6 +233,7 @@
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-use-before-define": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
 
         // probably bugs
         "@typescript-eslint/ban-types": ["error", {
@@ -249,7 +247,6 @@
         "@typescript-eslint/no-extra-non-null-assertion": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
-        "import/no-extraneous-dependencies": "error",
         "no-dupe-class-members": "off",
         "no-unused-expressions": "off", // ternary is used to convert callbacks to Promises
         "@typescript-eslint/no-unused-expressions": ["error", {"allowTernary": true}], // ternary is used to convert callbacks to Promises
@@ -315,6 +312,12 @@
       "rules": {
         "no-var": "off"
       }
+    },
+    {
+      "files": ["server/chat-plugins/private/*"],
+      "parserOptions": {
+        "ecmaVersion": 2021
+      }
     }
   ]
 }
@@ -329,7 +332,7 @@ REGEXFREE SOURCE FOR IGNOREPATTERN: https://zarel.github.io/regexfree/
 
   (
     # define a variable, append to a variable, or define a single-arg arrow function
-    (export\ )? (let\ |const\ )? [a-zA-Z0-9_$.]+ (\ \+?=>?\ )
+    (export\ )? (let\ |const\ |readonly\ )? [a-zA-Z0-9_$.]+ (\ \+?=>?\ )
   |
     # define a property (oversize arrays are only allowed in properties)
     [a-zA-Z0-9$]+:\ \[?

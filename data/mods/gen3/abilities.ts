@@ -55,8 +55,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (target && this.isAdjacent(target, pokemon) && !target.volatiles['substitute']) {
+			for (const target of pokemon.adjacentFoes()) {
+				if (!target.volatiles['substitute']) {
 					activated = true;
 					break;
 				}
@@ -68,9 +68,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-
+			for (const target of pokemon.adjacentFoes()) {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
@@ -82,10 +80,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	lightningrod: {
 		onFoeRedirectTarget(target, source, source2, move) {
 			if (move.type !== 'Electric') return;
-			if (this.validTarget(this.effectData.target, source, move.target)) {
-				return this.effectData.target;
+			if (this.validTarget(this.effectState.target, source, move.target)) {
+				return this.effectState.target;
 			}
 		},
+		isBreakable: true,
 		name: "Lightning Rod",
 		rating: 0,
 		num: 32,
@@ -126,6 +125,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.addSplit(pokemon.side.id, ['-ability', pokemon, 'Pressure', '[silent]']);
 		},
 	},
+	raindish: {
+		inherit: true,
+		onWeather() {},
+		onResidualOrder: 10,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				this.heal(pokemon.baseMaxhp / 16);
+			}
+		},
+	},
 	roughskin: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
@@ -154,7 +164,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
-			const target = pokemon.side.foe.randomActive();
+			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
 			const bannedAbilities = ['forecast', 'multitype', 'trace'];
