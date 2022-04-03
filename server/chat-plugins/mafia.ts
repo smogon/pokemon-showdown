@@ -2905,11 +2905,12 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			const action = toID(target);
-			if (!['on', 'off'].includes(action)) return this.parse('/help mafia votelock');
-			if (action === 'on') {
+			if (this.meansYes(action)) {
 				game.setVotelock(user, true);
-			} else {
+			} else if (this.meansNo(action)) {
 				game.setVotelock(user, false);
+			} else {
+				return this.parse('/help mafia votelock');
 			}
 			game.logAction(user, `changed votelock status`);
 		},
@@ -2923,11 +2924,12 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			const action = toID(target);
-			if (!['on', 'off'].includes(action)) return this.parse('/help mafia voting');
-			if (action === 'on') {
+			if (this.meansYes(action)) {
 				game.setVoting(user, true);
-			} else {
+			} else if (this.meansNo(action)) {
 				game.setVoting(user, false);
+			} else {
+				return this.parse('/help mafia voting');
 			}
 			game.logAction(user, `changed voting status`);
 		},
