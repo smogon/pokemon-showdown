@@ -1,5 +1,3 @@
-/* eslint max-len: ["error", 240] */
-
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import RandomTeams from '../../random-teams';
 
@@ -15,18 +13,8 @@ export class RandomRoulettemonsTeams extends RandomTeams {
 		isMonotype = false,
 	) {
 		const pokemonPool = [];
-		const roulettemons = [
-			'koatric', 'aquazelle', 'salamalix', 'brawnkey', 'stuneleon', 'chillyte',
-			'eartharoo', 'crazefly', 'electritar', 'aquatopus', 'scorpita', 'baloon',
-			'kinesel', 'glacida', 'pidgeotine', 'gorilax', 'albatrygon', 'chillvark',
-			'komodith', 'giranium', 'flamyle', 'voltecta', 'ostria', 'ninjoth', 'herbigator',
-			'anteros', 'gladiaster', 'hyperoach', 'barracoth', 'toados', 'voltarak',
-			'mosqung', 'flamepion', 'hyenix', 'rhinolite', 'bellena', 'falcola', 'beanium',
-			'lemotic', 'biceon', 'skeleray', 'specyte', 'ramron', 'panthee', 'blastora',
-			'balar', 'dropacle', 'fluffora', 'dolphena', 'tigire', 'catelax', 'chillytemega',
-		];
-		for (const speciesid of roulettemons) {
-			let species = this.dex.species.get(speciesid);
+		for (let species of this.dex.species.all()) {
+			if (species.heightm) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
 				if (typeof species.battleOnly === 'string') {
@@ -85,14 +73,6 @@ export class RandomRoulettemonsTeams extends RandomTeams {
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
-			if (pokemon.length === this.maxTeamSize) {
-				// Set Zoroark's level to be the same as the last Pokemon
-				const illusion = teamDetails.illusion;
-				if (illusion) pokemon[illusion - 1].level = pokemon[this.maxTeamSize - 1].level;
-
-				// Don't bother tracking details for the last Pokemon
-				break;
-			}
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;
@@ -125,9 +105,6 @@ export class RandomRoulettemonsTeams extends RandomTeams {
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
 			}
-
-			// For setting Zoroark's level
-			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
