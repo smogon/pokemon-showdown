@@ -79,21 +79,23 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	pidgey: {
 		randomBattleMoves: ["agility", "doubleedge", "skyattack"],
-		exclusiveMoves: ["mimic", "mirrormove", "reflect", "sandattack", "substitute", "toxic"],
+		exclusiveMoves: ["mimic", "mirrormove", "reflect", "sandattack", "substitute", "quickattack", "toxic"],
 		tier: "LC",
 	},
 	pidgeotto: {
 		randomBattleMoves: ["agility", "doubleedge", "skyattack"],
-		exclusiveMoves: ["mimic", "mirrormove", "reflect", "sandattack", "substitute", "toxic"],
+		exclusiveMoves: ["mimic", "mirrormove", "reflect", "sandattack", "substitute", "quickattack", "toxic"],
 		tier: "NFE",
 	},
 	pidgeot: {
 		randomBattleMoves: ["agility", "doubleedge", "hyperbeam"],
-		exclusiveMoves: ["mimic", "mirrormove", "reflect", "sandattack", "skyattack", "skyattack", "substitute", "toxic"],
+		exclusiveMoves: ["mimic", "mirrormove", "reflect", "sandattack", "skyattack", "skyattack", "substitute", "quickattack", "toxic"],
 		tier: "NU",
 	},
 	rattata: {
-		randomBattleMoves: ["blizzard", "bodyslam", "thunderbolt"],
+		randomBattleMoves: ["blizzard", "bodyslam"],
+		// The two Thunderbolts are not a mistake, but specifically requested
+		exclusiveMoves: ["thunderbolt", "thunderbolt", "quickattack"],
 		essentialMove: "superfang",
 		tier: "LC",
 	},
