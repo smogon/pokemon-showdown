@@ -192,6 +192,12 @@ describe('[Gen 8] Random Doubles Battle', () => {
 	it('should always give Urshifu Wicked Blow', () => {
 		testAlwaysHasMove('urshifu', options, 'wickedblow');
 	});
+
+	it('should always give Flapple Ripen', () => {
+		testSet('flapple', options, set => {
+			assert.equal(set.ability, 'Ripen');
+		});
+	});
 });
 
 describe('[Gen 8] Random Battle (No Dmax)', () => {

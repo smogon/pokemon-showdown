@@ -60,4 +60,8 @@ describe('[Gen 6] Random Battle', () => {
 	it('should not give Entei Flash Fire', () => {
 		testSet('entei', options, set => assert.notEqual(set.ability, 'Flash Fire'));
 	});
+
+	it('should only give Charizard one of Air Slash and Acrobatics', () => {
+		testNotBothMoves('charizard', options, 'airslash', 'acrobatics');
+	});
 });

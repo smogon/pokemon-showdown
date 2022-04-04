@@ -95,4 +95,15 @@ describe('[Gen 7] Random Battle', () => {
 	});
 
 	it('should always give Mega Glalie Return', () => testAlwaysHasMove('glaliemega', options, 'return'));
+
+	it('should not give Zebstrika Thunderbolt and Wild Charge', () => {
+		testNotBothMoves('zebstrika', options, 'thunderbolt', 'wildcharge');
+	});
+
+	it('should always give Mega Diancie Moonblast if it has Calm Mind', () => {
+		testSet('dianciemega', options, set => {
+			if (!set.moves.includes('calmmind')) return;
+			assert(set.moves.includes('moonblast'), `Diancie: got ${set.moves}`);
+		});
+	});
 });
