@@ -2245,7 +2245,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	infernape: {
-		randomBattleMoves: ["closecombat", "earthquake", "fireblast", "flareblitz", "grassknot", "machpunch", "nastyplot", "stealthrock", "stoneedge", "uturn", "vacuumwave"],
+		randomBattleMoves: ["closecombat", "earthquake", "fireblast", "flareblitz", "grassknot", "machpunch", "stealthrock", "stoneedge", "uturn"],
 		randomDoubleBattleMoves: ["closecombat", "fakeout", "feint", "flareblitz", "grassknot", "heatwave", "machpunch", "protect", "stoneedge", "taunt", "thunderpunch", "uturn"],
 		tier: "UU",
 		doublesTier: "DUU",
@@ -3279,8 +3279,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	haxorus: {
-		randomBattleMoves: ["dragondance", "earthquake", "outrage", "poisonjab", "swordsdance", "taunt"],
-		randomDoubleBattleMoves: ["dragonclaw", "dragondance", "earthquake", "poisonjab", "protect", "substitute", "swordsdance", "taunt"],
+		randomBattleMoves: ["dragondance", "earthquake", "outrage", "poisonjab", "swordsdance"],
+		randomDoubleBattleMoves: ["dragonclaw", "dragondance", "earthquake", "poisonjab", "protect", "substitute", "swordsdance"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
