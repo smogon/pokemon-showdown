@@ -1637,7 +1637,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	gliscor: {
 		tier: "OU",
 	},
-	gligarfioren: {
+	gligarfiore: {
 		tier: "PU",
 	},
 	gliscorfiore: {
