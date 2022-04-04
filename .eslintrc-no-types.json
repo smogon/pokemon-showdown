@@ -268,7 +268,9 @@
           "singleline": {"delimiter": "comma", "requireLast": false}
         }}}],
         "@typescript-eslint/no-parameter-properties": "error",
-        "@typescript-eslint/no-this-alias": "error",
+        // `source` and `target` are frequently used as variables that may point to `this`
+        // or to another `Pokemon` object, depending on how the given method is invoked
+        "@typescript-eslint/no-this-alias": ["error", {"allowedNames": ["source", "target"]}],
         "@typescript-eslint/prefer-as-const": "error",
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",

@@ -454,6 +454,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 
 	constructor(data: AnyObject) {
 		super(data);
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		data = this;
 
 		this.fullname = `move: ${this.name}`;
