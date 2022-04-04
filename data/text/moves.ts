@@ -7017,7 +7017,6 @@ export const MovesText: {[k: string]: MoveText} = {
         shortDesc: "Traps the target for 5 turns.",
 		newmeta: "true",
 	},
-
 	crushingice: {
 		name: "Crushing Ice",
 		shortDesc: "Hits adjacent Pokemon.",
