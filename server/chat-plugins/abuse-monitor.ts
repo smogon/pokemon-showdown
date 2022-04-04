@@ -1690,11 +1690,12 @@ export const pages: Chat.PageTable = {
 			buf += `</div></table>`;
 			buf += `<hr /><p><strong>Punishment stats:</strong></p>`;
 			const punishmentStats = {
-				inaccurate: new Set<string>(),
+				inaccurate: 0,
 				total: 0,
 				byDay: {} as Record<string, {total: number, inaccurate: number}>,
 				types: {} as Record<string, number>,
 			};
+			const inaccurate = new Set();
 			const logPath = FS(`logs/artemis/punishments/${month}.jsonl`);
 			if (await logPath.exists()) {
 				const stream = logPath.createReadStream();
@@ -1717,7 +1718,8 @@ export const pages: Chat.PageTable = {
 					if (!line.trim()) continue;
 					const chunk = JSON.parse(line.trim());
 					if (!chunk.resolved.result) { // inaccurate punishment
-						punishmentStats.inaccurate.add(chunk.room);
+						punishmentStats.inaccurate++;
+						inaccurate.add(chunk.room);
 						const day = Chat.toTimestamp(new Date(chunk.time)).split(' ')[0];
 						if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
 						punishmentStats.byDay[day].inaccurate++;
@@ -1726,11 +1728,11 @@ export const pages: Chat.PageTable = {
 			}
 
 			buf += `<p>Total punishments: ${punishmentStats.total}</p>`;
-			const accurate = punishmentStats.total - punishmentStats.inaccurate.size;
+			const accurate = punishmentStats.total - punishmentStats.inaccurate;
 			buf += `<p>Accurate punishments: ${accurate} (${percent(accurate, punishmentStats.total)}%)</p>`;
-			buf += `<details class="readmore"><summary>Inaccurate punishments: ${punishmentStats.inaccurate.size} `;
-			buf += `(${percent(punishmentStats.inaccurate.size, punishmentStats.total)}%)</summary>`;
-			buf += Array.from(punishmentStats.inaccurate).map(f => `<a href="/${f}">${f}</a>`).join(', ');
+			buf += `<details class="readmore"><summary>Inaccurate punishments: ${punishmentStats.inaccurate} `;
+			buf += `(${percent(punishmentStats.inaccurate, punishmentStats.total)}%)</summary>`;
+			buf += Array.from(inaccurate).map(f => `<a href="/${f}">${f}</a>`).join(', ');
 			buf += `</details>`;
 
 			if (punishmentStats.total) {
