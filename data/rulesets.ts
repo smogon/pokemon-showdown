@@ -1,6 +1,7 @@
 ﻿// Note: These are the rules that formats use
 
 import {Utils} from "../lib";
+import {Pokemon} from "../sim/pokemon";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
@@ -1633,8 +1634,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 			target.m.numSwaps++;
 			if (effect && effect.effectType === 'Move' && source.side.pokemon.length < 24 &&
                 source.side !== target.side && target.m.numSwaps < 4) {
-				const Pokemon: typeof import('../sim/pokemon').Pokemon =
-                    require('../sim/pokemon').Pokemon;
 				const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
 				// Just in case(tm) and for Shedinja
 				if (hpCost === target.baseMaxhp) {
@@ -1654,13 +1653,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 					'fullname', 'side', 'fainted', 'status', 'hp', 'illusion',
 					'transformed', 'position', 'isActive', 'faintQueued',
 					'subFainted', 'getHealth', 'getDetails', 'moveSlots', 'ability',
-					'maxhp',
 				];
 				for (const [key, value] of Object.entries(target)) {
 					if (doNotCarryOver.includes(key)) continue;
 					// @ts-ignore
 					newPoke[key] = value;
 				}
+				newPoke.maxhp = newPoke.baseMaxhp; // for dynamax
 				newPoke.hp = newPoke.baseMaxhp - hpCost;
 				for (const [j, moveSlot] of newPoke.moveSlots.entries()) {
 					moveSlot.pp = Math.floor(
