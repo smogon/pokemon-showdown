@@ -973,7 +973,10 @@ export const commands: Chat.ChatCommands = {
 			if (!punishment) {
 				return this.errorReply(`Punishment ${num + 1} does not exist.`);
 			}
-			this.sendReply(`Punishment ${num + 1}: <code>${visualizePunishment(punishment)}</code>`);
+			this.sendReply(
+				`|html|Punishment ${num + 1}: <code>` +
+				`${visualizePunishment(punishment).replace(/: /g, ' = ')}</code>`
+			);
 		},
 		ep: 'exportpunishments', // exports punishment settings to something easily copy/pastable
 		exportpunishments() {
