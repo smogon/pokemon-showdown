@@ -396,7 +396,7 @@ export class ChessGame extends Rooms.RoomGame {
 		}
 	}
 	addPlayer(user: User) {
-		const player = new ChessPlayer(user, this);
+		const player = this.makePlayer(user);
 		this.players.push(player);
 
 		this.playerTable[user.id] = player;
@@ -627,7 +627,7 @@ export class ChessGame extends Rooms.RoomGame {
 			const piece = this.board.get(cCol, cRow);
 			try {
 				this.checkCanMove(piece, cCol, cRow, nCol, nRow);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Chat.ErrorMessage(`Invalid movement in log line: ${e.message}`);
 			}
 			this.board.move([cCol, cRow], [nCol, nRow]);
@@ -691,7 +691,7 @@ export class ChessGame extends Rooms.RoomGame {
 
 		try {
 			this.checkCanMove(piece, col, row, newCol, newRow, true);
-		} catch (e) {
+		} catch (e: any) {
 			if (!e.name.endsWith('ErrorMessage')) throw e;
 			player.sendError(e.message);
 		}
@@ -915,10 +915,13 @@ export class ChessGame extends Rooms.RoomGame {
 		ChessGame.ladder.save();
 		this.room.update();
 	}
+	makePlayer(user: User) {
+		return new ChessPlayer(user, this);
+	}
 	static start(user: User, targetUser: User, rated = false) {
 		const existingRoom = findExistingRoom(user.id, targetUser.id);
 		const options = {
-			modchat: '+', isPrivate: 'hidden',
+			modchat: '+' as AuthLevel, isPrivate: 'hidden' as const,
 		};
 		const roomid = `chess-${targetUser.id}-${user.id}`;
 		if (existingRoom) existingRoom.log.log = [];
@@ -942,7 +945,7 @@ export function destroy() {
 	clearInterval(ChessLadder.matchInterval);
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	chess: {
 		challenge(target, room, user) {
 			if (this.pmTarget && !toID(target)) target = this.pmTarget.id;
@@ -1095,7 +1098,7 @@ export const commands: ChatCommands = {
 	],
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	chessladder() {
 		if (ChessLadder.settings.disabled) {
 			return this.errorReply(`The chess ladder is currently disabled.`);
