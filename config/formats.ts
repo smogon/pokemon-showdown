@@ -1023,6 +1023,16 @@ export const Formats: FormatList = [
 		banlist: ['RU', 'NUBL', 'Damp Rock', 'Heat Rock'],
 	},
 	{
+		name: "[Gen 8 BDSP] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3700009/">BDSP PU</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		ruleset: ['[Gen 8 BDSP] NU'],
+		banlist: ['NU', 'PUBL'],
+	},
+	{
 		name: "[Gen 8 BDSP] LC",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3696004/">BDSP LC</a>`,
