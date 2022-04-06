@@ -2936,7 +2936,7 @@ export const commands: Chat.ChatCommands = {
 		votinghelp: [
 			`/mafia voting [on|off] - Allows or disallows players to vote. Requires host % @ # &`,
 		],
-		
+
 		enablenv: 'enablenl',
 		disablenv: 'enablenl',
 		disablenl: 'enablenl',
