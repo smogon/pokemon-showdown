@@ -701,6 +701,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	vote(userid: ID, target: ID) {
+		if (!this.votingAll) return this.sendUser(userid, `|error|Voting is not allowed.`);
 		if (this.phase !== 'day') return this.sendUser(userid, `|error|You can only vote during the day.`);
 		let player = this.playerTable[userid];
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
@@ -708,7 +709,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (!(target in this.playerTable) && target !== 'novote') {
 			return this.sendUser(userid, `|error|${target} is not a valid player.`);
 		}
-		if (!this.votingAll) return this.sendUser(userid, `|error|Voting is not allowed.`);
 		if (!this.enableNL && target === 'novote') return this.sendUser(userid, `|error|No Vote is not allowed.`);
 		if (target === player.id && !this.selfEnabled) return this.sendUser(userid, `|error|Self voting is not allowed.`);
 		if (this.voteLock && player.voting) {
