@@ -1438,32 +1438,33 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			const inequality = target.search(/>|<|=/);
 			if (inequality >= 0) {
-				if (isNotSearch) return {error: "You cannot use the negation symbol '!' in quality ranges."};
-				const inequalityString = target.charAt(inequality);
+				let inequalityString;
+				if (isNotSearch) return {error: "You cannot use the negation symbol '!' in stat ranges."};
+				if (target.charAt(inequality + 1) === '=') {
+					inequalityString = target.substr(inequality, 2);
+				} else {
+					inequalityString = target.charAt(inequality);
+				}
 				const targetParts = target.replace(/\s/g, '').split(inequalityString);
-				let numSide: number;
-				let propSide: number;
-				let direction = '';
+				let num;
+				let prop;
+				const directions: Direction[] = [];
 				if (!isNaN(parseFloat(targetParts[0]))) {
-					numSide = 0;
-					propSide = 1;
-					switch (inequalityString) {
-					case '>': direction = 'less'; break;
-					case '<': direction = 'greater'; break;
-					case '=': direction = 'equal'; break;
-					}
+					// e.g. 100 < bp
+					num = parseFloat(targetParts[0]);
+					prop = targetParts[1];
+					if (inequalityString.startsWith('>')) directions.push('less');
+					if (inequalityString.startsWith('<')) directions.push('greater');
 				} else if (!isNaN(parseFloat(targetParts[1]))) {
-					numSide = 1;
-					propSide = 0;
-					switch (inequalityString) {
-					case '<': direction = 'less'; break;
-					case '>': direction = 'greater'; break;
-					case '=': direction = 'equal'; break;
-					}
+					// e.g. bp > 100
+					num = parseFloat(targetParts[1]);
+					prop = targetParts[0];
+					if (inequalityString.startsWith('<')) directions.push('less');
+					if (inequalityString.startsWith('>')) directions.push('greater');
 				} else {
 					return {error: `No value given to compare with '${escapeHTML(target)}'.`};
 				}
-				let prop = targetParts[propSide];
+				if (inequalityString.endsWith('=')) directions.push('equal');
 				switch (toID(targetParts[propSide])) {
 				case 'basepower': prop = 'basePower'; break;
 				case 'bp': prop = 'basePower'; break;
@@ -1471,17 +1472,10 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				case 'acc': prop = 'accuracy'; break;
 				}
 				if (!allProperties.includes(prop)) return {error: `'${escapeHTML(target)}' did not contain a valid property.`};
-				if (direction === 'equal') {
-					if (orGroup.property[prop]) return {error: `Invalid property range for ${prop}.`};
-					orGroup.property[prop] = Object.create(null);
-					orGroup.property[prop]['equal'] = parseFloat(targetParts[numSide]);
-				} else {
-					if (!orGroup.property[prop]) orGroup.property[prop] = Object.create(null);
-					if (orGroup.property[prop][direction as Direction]) {
-						return {error: `Invalid property range for ${prop}.`};
-					} else {
-						orGroup.property[prop][direction as Direction] = parseFloat(targetParts[numSide]);
-					}
+				if (!orGroup.stats[prop]) orGroup.stats[prop] = Object.create(null);
+				for (const direction of directions) {
+					if (orGroup.stats[prop][direction]) return {error: `Invalid stat range for ${stat}.`};
+					orGroup.stats[prop][direction] = num;
 				}
 				continue;
 			}
