@@ -1465,17 +1465,17 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					return {error: `No value given to compare with '${escapeHTML(target)}'.`};
 				}
 				if (inequalityString.endsWith('=')) directions.push('equal');
-				switch (toID(targetParts[propSide])) {
+				switch (toID(prop)) {
 				case 'basepower': prop = 'basePower'; break;
 				case 'bp': prop = 'basePower'; break;
 				case 'power': prop = 'basePower'; break;
 				case 'acc': prop = 'accuracy'; break;
 				}
 				if (!allProperties.includes(prop)) return {error: `'${escapeHTML(target)}' did not contain a valid property.`};
-				if (!orGroup.stats[prop]) orGroup.stats[prop] = Object.create(null);
+				if (!orGroup.property[prop]) orGroup.property[prop] = Object.create(null);
 				for (const direction of directions) {
-					if (orGroup.stats[prop][direction]) return {error: `Invalid stat range for ${stat}.`};
-					orGroup.stats[prop][direction] = num;
+					if (orGroup.property[prop][direction]) return {error: `Invalid stat range for ${prop}.`};
+					orGroup.property[prop][direction] = num;
 				}
 				continue;
 			}
