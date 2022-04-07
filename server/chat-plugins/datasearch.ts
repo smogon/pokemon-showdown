@@ -1474,7 +1474,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (!allProperties.includes(prop)) return {error: `'${escapeHTML(target)}' did not contain a valid property.`};
 				if (!orGroup.property[prop]) orGroup.property[prop] = Object.create(null);
 				for (const direction of directions) {
-					if (orGroup.property[prop][direction]) return {error: `Invalid stat range for ${prop}.`};
+					if (orGroup.property[prop][direction]) return {error: `Invalid property range for ${prop}.`};
 					orGroup.property[prop][direction] = num;
 				}
 				continue;
