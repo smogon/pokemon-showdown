@@ -259,7 +259,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	sandshrewalola: {
 		tier: "NUBL",
-		doublesTier: "LC",
+		doublesTier: "LC UU",
 	},
 	sandslash: {
 		randomBattleMoves: ["earthquake", "knockoff", "rapidspin", "spikes", "stealthrock", "stoneedge", "swordsdance", "toxic"],
@@ -2113,39 +2113,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	makuhita: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-	},
-	hariyama: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-	},
-	nosepass: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-	},
-	probopass: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-	},
-	skitty: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-	},
-	delcatty: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-	},
-	sableye: {
-		randomBattleMoves: ["knockoff", "recover", "taunt", "toxic", "willowisp"],
-		randomBattleLevel: 88,
-		randomDoubleBattleMoves: ["disable", "encore", "fakeout", "foulplay", "knockoff", "quash", "recover", "willowisp"],
-		randomDoubleBattleLevel: 88,
-		randomBattleNoDynamaxMoves: ["encore", "knockoff", "recover", "taunt", "toxic", "willowisp"],
-		tier: "(PU)",
-		doublesTier: "(DUU)",
-	},
-	makuhita: {
 		tier: "LC UU",
 	},
 	hariyama: {
@@ -3930,14 +3897,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["closecombat", "fakeout", "knockoff", "poisonjab", "protect", "uturn"],
 		randomDoubleBattleLevel: 84,
 		tier: "UU",
-		doublesTier: "(DUU)",
-	},
-	druddigon: {
-		randomBattleMoves: ["earthquake", "glare", "outrage", "stealthrock", "suckerpunch", "superpower"],
-		randomBattleLevel: 84,
-		randomDoubleBattleMoves: ["firepunch", "glare", "gunkshot", "protect", "scaleshot", "suckerpunch"],
-		randomDoubleBattleLevel: 87,
-		tier: "NU",
 		doublesTier: "(DUU)",
 	},
 	mienshaogalar: {
@@ -5752,7 +5711,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	sinistea: {
-		tier: "LC",
+		tier: "LC OU",
 	},
 	polteageist: {
 		randomBattleMoves: ["gigadrain", "shadowball", "shellsmash", "storedpower", "strengthsap"],
@@ -6418,10 +6377,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
-	chromera: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
 	venomicon: {
 		isNonstandard: "CAP",
 		tier: "CAP",
@@ -6700,7 +6655,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 	},
 	// goranium: {
-		// tier: "Eat my ass",
+		// tier: "Eat my ass",                                       no u
 	// },
 	// goraniumlightmode: {
 		// tier: "Uber",
