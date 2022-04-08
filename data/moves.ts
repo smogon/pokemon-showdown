@@ -1006,6 +1006,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {},
+		onTry(source) {
+			return source.side.pokemonLeft > 1;
+		},
 		self: {
 			onHit(source) {
 				source.skipBeforeSwitchOutEventFlag = true;
@@ -17945,6 +17948,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: -6,
 		flags: {},
+		onTry(source) {
+			return source.side.pokemonLeft > 1;
+		},
 		selfSwitch: true,
 		onTryHit: true,
 		secondary: null,
