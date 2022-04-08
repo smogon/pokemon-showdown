@@ -18,5 +18,15 @@ describe(`Teleport`, function () {
 		]]);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-fail')));
+
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', moves: ['teleport']},
+			{species: 'pichu', moves: ['swordsdance']},
+		], [
+			{species: 'pichu', moves: ['swordsdance']},
+			{species: 'pichu', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-fail')));
 	});
 });

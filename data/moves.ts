@@ -1007,7 +1007,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		onTry(source) {
-			return source.side.pokemonLeft > 1;
+			return this.canSwitch(source.side) > 0;
 		},
 		self: {
 			onHit(source) {
@@ -17949,7 +17949,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: -6,
 		flags: {},
 		onTry(source) {
-			return source.side.pokemonLeft > 1;
+			return this.canSwitch(source.side) > 0;
 		},
 		selfSwitch: true,
 		secondary: null,

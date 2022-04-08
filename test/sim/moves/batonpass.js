@@ -35,5 +35,15 @@ describe(`Baton Pass`, function () {
 		]]);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-fail')));
+
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', moves: ['batonpass']},
+			{species: 'pichu', moves: ['swordsdance']},
+		], [
+			{species: 'pichu', moves: ['swordsdance']},
+			{species: 'pichu', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-fail')));
 	});
 });

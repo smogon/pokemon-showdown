@@ -83,7 +83,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: -6,
 		selfSwitch: true,
 		onTry(source) {
-			return source.side.pokemonLeft > 1;
+			return this.canSwitch(source.side) > 0;
 		},
 	},
 	zippyzap: {
