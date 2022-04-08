@@ -17952,7 +17952,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return source.side.pokemonLeft > 1;
 		},
 		selfSwitch: true,
-		onTryHit: true,
 		secondary: null,
 		target: "self",
 		type: "Psychic",
