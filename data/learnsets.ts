@@ -45529,7 +45529,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	deoxysattack: {
 		eventOnly: true,
-		shieldbeam: ["8M", "7M"],
+			shieldbeam: ["8M", "7M"],
 			speedstrike: ["8M", "7M"],
 			cometstorm: ["8M", "7M"],
 			implosion: ["8M", "7M"],
@@ -45546,7 +45546,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		},
 	deoxysdefense: {
 		eventOnly: true,
-		shieldbeam: ["8M", "7M"],
+			shieldbeam: ["8M", "7M"],
 			speedstrike: ["8M", "7M"],
 			cometstorm: ["8M", "7M"],
 			implosion: ["8M", "7M"],
@@ -45563,7 +45563,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		},
 	deoxysspeed: {
 		eventOnly: true,
-		shieldbeam: ["8M", "7M"],
+			shieldbeam: ["8M", "7M"],
 			speedstrike: ["8M", "7M"],
 			cometstorm: ["8M", "7M"],
 			implosion: ["8M", "7M"],
@@ -63231,7 +63231,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			brightclaw: ["8M", "7M"],
 			dragonrush: ["8M", "7M"],
 			roost: ["8M"],
-			knockoff: ["8M"]
+			knockoff: ["8M"],
 			defog: ["8M", "7M"],
 		},
 		eventData: [
