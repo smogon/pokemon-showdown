@@ -1002,9 +1002,12 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('lock');
 
 		const userid = toID(target);
-		const punishment = Punishments.userids.getByType(userid, 'LOCK');
+		if (userid.startsWith('guest')) {
+			return this.errorReply(`You cannot unlock the guest userid - provide their original username instead.`);
+		}
+		const punishment = Punishments.userids.getByType(userid, 'LOCK') || Punishments.userids.getByType(userid, 'NAMELOCK');
 		if (!punishment) return this.errorReply("This name isn't locked.");
-		if (punishment.id === userid) {
+		if (punishment.id === userid || Users.get(userid)?.previousIDs.includes(punishment.id as ID)) {
 			return this.errorReply(`"${userid}" was specifically locked by a staff member (check the global modlog). Use /unlock if you really want to unlock this name.`);
 		}
 		Punishments.userids.delete(userid);
