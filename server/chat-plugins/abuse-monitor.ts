@@ -115,7 +115,7 @@ interface ReviewRequest {
 	room: string;
 	details: string;
 	time: number;
-	resolved?: {by: string, time: number, details: string};
+	resolved?: {by: string, time: number, details: string, result: number};
 }
 
 // stolen from chatlog. necessary here, but importing chatlog sucks.
@@ -262,6 +262,12 @@ export async function runActions(user: User, room: GameRoom, response: Record<st
 			}
 			room.mute(user);
 			const result = await punishmentHandlers[toID(punishment)]?.(user, room);
+			writeStats('punishments', {
+				punishment,
+				userid: user.id,
+				roomid: room.roomid,
+				timestamp: Date.now(),
+			});
 			if (result !== false) {
 				// returning false means not to close the 'ticket'
 				const notified = cache[room.roomid].staffNotified;
@@ -536,6 +542,14 @@ function getFlaggedRooms() {
 	return Object.keys(cache).filter(roomid => cache[roomid].staffNotified);
 }
 
+export function writeStats(type: string, entry: AnyObject) {
+	const path = `logs/artemis/${type}/${Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3)}.jsonl`;
+	try {
+		FS(path).parentDir().mkdirpSync();
+	} catch {}
+	void FS(path).append(JSON.stringify(entry) + "\n");
+}
+
 function saveSettings(isBackup = false) {
 	FS(`config/chat-plugins/nf${isBackup ? ".backup" : ""}.json`).writeUpdate(() => JSON.stringify(settings));
 }
@@ -667,6 +681,36 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.runBroadcast();
 			return this.sendReplyBox(buf);
+		},
+		async score(target) {
+			checkAccess(this);
+			target = target.trim();
+			if (!target) return this.parse(`/help abusemonitor`);
+			const [text, scoreText] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const args = Chat.parseArguments(scoreText, ',', '=', false);
+			const scores: Record<string, number> = {};
+			for (let k in args) {
+				const vals = args[k];
+				if (vals.length > 1) {
+					return this.errorReply(`Too many values for ${k}`);
+				}
+				k = k.toUpperCase().replace(/\s/g, '_');
+				if (!(k in Artemis.RemoteClassifier.ATTRIBUTES)) {
+					return this.errorReply(`Invalid attribute: ${k}`);
+				}
+				const val = parseFloat(vals[0]);
+				if (isNaN(val)) {
+					return this.errorReply(`Invalid value for ${k}: ${vals[0]}`);
+				}
+				scores[k] = val;
+			}
+			for (const k in Artemis.RemoteClassifier.ATTRIBUTES) {
+				if (!(k in scores)) scores[k] = 0;
+			}
+			const response = await classifier.suggestScore(text, scores);
+			if (response.error) throw new Chat.ErrorMessage(response.error);
+			this.sendReply(`Recommendation successfully sent.`);
+			Rooms.get('abuselog')?.roomlog(`${this.user.name} used /am score ${target}`);
 		},
 		toggle(target) {
 			checkAccess(this);
@@ -929,7 +973,10 @@ export const commands: Chat.ChatCommands = {
 			if (!punishment) {
 				return this.errorReply(`Punishment ${num + 1} does not exist.`);
 			}
-			this.sendReply(`Punishment ${num + 1}: <code>${visualizePunishment(punishment)}</code>`);
+			this.sendReply(
+				`|html|Punishment ${num + 1}: <code>` +
+				`${visualizePunishment(punishment).replace(/: /g, ' = ')}</code>`
+			);
 		},
 		ep: 'exportpunishments', // exports punishment settings to something easily copy/pastable
 		exportpunishments() {
@@ -1265,10 +1312,10 @@ export const commands: Chat.ChatCommands = {
 		},
 		resolvereview(target, room, user) {
 			checkAccess(this);
-			let [userid, roomid, result] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
+			let [userid, roomid, accurate, result] = Utils.splitFirst(target, ',', 3).map(f => f.trim());
 			userid = toID(userid);
 			roomid = getBattleLinks(roomid)[0] || "";
-			if (!userid || !roomid || !result) {
+			if (!userid || !roomid || !accurate || !result) {
 				return this.parse(`/help abusemonitor resolvereview`);
 			}
 			if (!reviews[userid]) {
@@ -1278,6 +1325,10 @@ export const commands: Chat.ChatCommands = {
 			if (!review) {
 				return this.errorReply(`No reviews found by that user for that room.`);
 			}
+			const isAccurate = Number(accurate);
+			if (isNaN(isAccurate) || isAccurate < 0 || isAccurate > 1) {
+				return this.popupReply(`Invalid accuracy. Must be a number between 0 and 1.`);
+			}
 			if (review.resolved) {
 				return this.errorReply(`That review has already been resolved.`);
 			}
@@ -1285,14 +1336,16 @@ export const commands: Chat.ChatCommands = {
 				by: user.id,
 				time: Date.now(),
 				details: result || "",
+				result: isAccurate,
 			};
 			displayResolved(review);
+			writeStats('reviews', review);
 			Chat.refreshPageFor('abusemonitor-reviews', 'staff');
 		},
 		replace(target, room, user) {
 			checkAccess(this);
 			if (!target) return this.parse(`/help am`);
-			const [old, newWord] = target.split(',').map(val => val.trim());
+			const [old, newWord] = target.split(',');
 			if (!old || !newWord) return this.errorReply(`Invalid arguments - must be [oldWord], [newWord].`);
 			if (toID(old) === toID(newWord)) return this.errorReply(`The old word and the new word are the same.`);
 			if (settings.replacements[old]) {
@@ -1602,7 +1655,7 @@ export const pages: Chat.PageTable = {
 				staffStats[log.staff]++;
 				dayStats[cur].total++;
 			}
-			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100) || 0;
 			buf += `<p><strong>Success rate:</strong> ${percent(successes, successes + failures)}% (${successes})</p>`;
 			buf += `<p><strong>Failure rate:</strong> ${percent(failures, successes + failures)}% (${failures})</p>`;
 			buf += `<p><details class="readmore"><summary><strong>Stats including dead flags</strong></summary>`;
@@ -1638,7 +1691,92 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<tr>${header}</tr><tr>${data}</tr>`;
 			buf += `</div></table>`;
-			buf += `<p><strong>Staff stats:</strong></p>`;
+			buf += `<hr /><p><strong>Punishment stats:</strong></p>`;
+			const punishmentStats = {
+				inaccurate: 0,
+				total: 0,
+				byDay: {} as Record<string, {total: number, inaccurate: number}>,
+				types: {} as Record<string, number>,
+			};
+			const inaccurate = new Set();
+			const logPath = FS(`logs/artemis/punishments/${month}.jsonl`);
+			if (await logPath.exists()) {
+				const stream = logPath.createReadStream();
+				for await (const line of stream.byLine()) {
+					if (!line.trim()) continue;
+					const chunk = JSON.parse(line.trim());
+					punishmentStats.total++;
+					if (!punishmentStats.types[chunk.punishment]) punishmentStats.types[chunk.punishment] = 0;
+					punishmentStats.types[chunk.punishment]++;
+					const day = Chat.toTimestamp(new Date(chunk.timestamp)).split(' ')[0];
+					if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
+					punishmentStats.byDay[day].total++;
+				}
+			}
+
+			const reviewLogPath = FS(`logs/artemis/reviews/${month}.jsonl`);
+			if (await reviewLogPath.exists()) {
+				const stream = reviewLogPath.createReadStream();
+				for await (const line of stream.byLine()) {
+					if (!line.trim()) continue;
+					const chunk = JSON.parse(line.trim());
+					if (!chunk.resolved.result) { // inaccurate punishment
+						punishmentStats.inaccurate++;
+						inaccurate.add(chunk.room);
+						const day = Chat.toTimestamp(new Date(chunk.time)).split(' ')[0];
+						if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
+						punishmentStats.byDay[day].inaccurate++;
+					}
+				}
+			}
+
+			buf += `<p>Total punishments: ${punishmentStats.total}</p>`;
+			const accurate = punishmentStats.total - punishmentStats.inaccurate;
+			buf += `<p>Accurate punishments: ${accurate} (${percent(accurate, punishmentStats.total)}%)</p>`;
+			buf += `<details class="readmore"><summary>Inaccurate punishments: ${punishmentStats.inaccurate} `;
+			buf += `(${percent(punishmentStats.inaccurate, punishmentStats.total)}%)</summary>`;
+			buf += Array.from(inaccurate).map(f => `<a href="/${f}">${f}</a>`).join(', ');
+			buf += `</details>`;
+
+			if (punishmentStats.total) {
+				buf += `<p><strong>Day stats:</strong></p>`;
+				buf += `<div class="ladder pad"><table>`;
+				header = '';
+				data = '';
+				const sortedDayStats = Utils.sortBy(Object.keys(punishmentStats.byDay), d => new Date(d).getTime());
+				for (const [i, day] of sortedDayStats.entries()) {
+					const cur = punishmentStats.byDay[day];
+					if (!cur.total) continue;
+					header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+					const curAccurate = cur.total - cur.inaccurate;
+					data += `<td><small>${curAccurate} (${percent(curAccurate, cur.total)}%)`;
+					if (cur.inaccurate) {
+						data += ` | ${cur.inaccurate} (${percent(cur.inaccurate, cur.total)}%)`;
+					} else { // so one cannot confuse dead tickets & false hit tickets
+						data += ' | 0 (0%)';
+					}
+					data += '</small></td>';
+					// i + 1 ensures it's above 0 always (0 % 5 === 0)
+					if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+						buf += `<tr>${header}</tr><tr>${data}</tr>`;
+						buf += `</div></table>`;
+						buf += `<div class="ladder pad"><table>`;
+						header = '';
+						data = '';
+					}
+				}
+				buf += `<tr>${header}</tr><tr>${data}</tr>`;
+				buf += `</div></table>`;
+				buf += `<br /><strong>Punishment breakdown:</strong><br />`;
+				buf += `<div class="ladder pad"><table>`;
+				buf += `<tr><th>Type</th><th>Count</th><th>Percent</th></tr>`;
+				const sorted = Utils.sortBy(Object.entries(punishmentStats.types), e => e[1]);
+				for (const [type, num] of sorted) {
+					buf += `<tr><td>${type}</td><td>${num}</td><td>${percent(num, punishmentStats.total)}%</td></tr>`;
+				}
+				buf += `</table></div>`;
+			}
+			buf += `<hr /><p><strong>Staff stats:</strong></p>`;
 			buf += `<div class="ladder pad"><table>`;
 			buf += `<tr><th>User</th><th>Total</th><th>Percent total</th></tr>`;
 			for (const id of Utils.sortBy(Object.keys(staffStats), k => -staffStats[k])) {
@@ -1741,8 +1879,12 @@ export const pages: Chat.PageTable = {
 					buf += `<div class="infobox">`;
 					buf += `Battle: <a href="//${Config.routes.client}/${review.room}">${review.room}</a><br />`;
 					buf += Utils.html`<details class="readmore"><summary>Review details:</summary>${review.details}</details>`;
-					buf += `<form data-submitsend="/msgroom staff,/am resolvereview ${review.staff},${review.room},{response}">`;
+					buf += `<form data-submitsend="/msgroom staff,/am resolvereview ${review.staff},${review.room},{result},{response}">`;
 					buf += `Respond: <br /><textarea name="response" rows="3" cols="40"></textarea><br />`;
+					buf += `Mark result: <select name="result">`;
+					buf += `<option value="1">Accurate</option>`;
+					buf += `<option value="0">Inaccurate</option>`;
+					buf += `</select><br />`;
 					buf += `<button class="button notifying" type="submit">Resolve</button>`;
 					buf += `</form></div><br />`;
 					atLeastOne = true;
