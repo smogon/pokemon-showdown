@@ -1009,7 +1009,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(target) {
 			if (!this.canSwitch(target.side)) {
 				this.attrLastMove('[still]');
-				this.add('-fail', target)
+				this.add('-fail', target);
 				return this.NOT_FAIL;
 			}
 		},
@@ -7811,7 +7811,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!this.canSwitch(target.side)) {
 				delete move.selfdestruct;
 				this.attrLastMove('[still]');
-				this.add('-fail', target)
+				this.add('-fail', target);
 				return this.NOT_FAIL;
 			}
 		},
@@ -9907,7 +9907,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!this.canSwitch(target.side)) {
 				delete move.selfdestruct;
 				this.attrLastMove('[still]');
-				this.add('-fail', target)
+				this.add('-fail', target);
 				return this.NOT_FAIL;
 			}
 		},
