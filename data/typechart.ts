@@ -550,7 +550,7 @@ export const TypeChart: {[k: string]: TypeData} = {
 		HPivs: {atk: 30, def: 30, spa: 30},
 		HPdvs: {atk: 14, def: 13},
 	},
-	Neutral: {
+	neutral: {
 		damageTaken: {
 			Bug: 0,
 			Cosmic: 0,
