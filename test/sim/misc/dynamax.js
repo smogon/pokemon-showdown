@@ -69,17 +69,17 @@ describe("Dynamax", function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it.skip('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
+	it('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
 		], [
 			{species: 'weedle', level: 1, moves: ['sleeptalk']},
 			{species: 'weedle', moves: ['sleeptalk']},
 		]]);
-		battle.makeChoices('move sleep talk dynamax');
+		battle.makeChoices('move sleeptalk dynamax', 'auto');
 		const dynamaxedHP = battle.p1.active[0].hp;
 		battle.makeChoices();
-		battle.makeChoices('move psychic');
+		battle.makeChoices('move psychic', 'auto');
 		assert.equal(battle.requestState, 'switch');
 		assert.equal(battle.p1.active[0].hp, dynamaxedHP);
 	});

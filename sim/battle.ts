@@ -1515,6 +1515,15 @@ export class Battle {
 			}
 		}
 
+		this.updateSpeed();
+		const sortedActive = this.getAllActive()
+		this.speedSort(sortedActive);
+		for (const active of sortedActive) {
+			if (active.volatiles['dynamax']?.turns === 3) {
+				active.removeVolatile('dynamax');
+			}
+		}
+
 		this.add('turn', this.turn);
 		if (this.gameType === 'multi') {
 			for (const side of this.sides) {
