@@ -27,13 +27,14 @@ describe(`Baton Pass`, function () {
 		assert('leechseed' in wingull.volatiles);
 	});
 
-	it(`should fail to switch the user out if no Pokemon can be switched in`, function () {
+	it.only(`should fail to switch the user out if no Pokemon can be switched in`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['batonpass']},
 		], [
 			{species: 'pichu', moves: ['swordsdance']},
 		]]);
 		battle.makeChoices();
+		console.log(battle.getDebugLog());
 		assert(battle.log.some(line => line.startsWith('|-fail')));
 
 		battle = common.createBattle({gameType: 'doubles'}, [[
