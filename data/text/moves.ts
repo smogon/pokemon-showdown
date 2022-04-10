@@ -7063,7 +7063,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "OHKO. Do not anger him.",
 		shortDesc: "OHKO. Do not anger him.",
 		newmeta: "true",
-	},dirtydeed: {
+	},
+	dirtydeed: {
 		name: "Dirty Deed",
 		desc: "Damage is calculated using the target's Special Attack stat, including stat stage changes. The user's Ability, item, and burn are used as normal.",
 		shortDesc: "Uses target's Special Attack stat in damage calculation.",
