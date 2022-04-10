@@ -1516,7 +1516,7 @@ export class Battle {
 		}
 
 		this.updateSpeed();
-		const sortedActive = this.getAllActive()
+		const sortedActive = this.getAllActive();
 		this.speedSort(sortedActive);
 		for (const active of sortedActive) {
 			if (active.volatiles['dynamax']?.turns === 3) {
