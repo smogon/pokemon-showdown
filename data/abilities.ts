@@ -4654,11 +4654,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
     // },
 	daunt: {
         onStart(pokemon) {
-			console.log("daunt-pokemon: "+JSON.stringify(pokemon));
             let activated = false;
-            for (const target of pokemon.side.foe.active) {
-				console.log("pokemon.side.foe.active: "+pokemon.side.foe.active);
-                if (!target || !this.isAdjacent(target, pokemon)) continue;
+            for (const target of pokemon.adjacentFoes()) {
                 if (!activated) {
                     this.add('-ability', pokemon, 'Daunt', 'boost');
                     activated = true;
@@ -4684,7 +4681,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
             move.secondaries.push({
                 chance: 30,
                 status: 'brn',
-                ability: this.dex.getAbility('conflagrant'),
+				ability: this.dex.abilities.get('conflagrant'),
             });
         },
         name: "Conflagrant",
@@ -4701,7 +4698,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
             move.secondaries.push({
                 chance: 30,
                 status: 'par',
-                ability: this.dex.getAbility('dynamo'),
+                ability: this.dex.abilities.get('dynamo'),
             });
         },
         name: "Dynamo",
@@ -4908,8 +4905,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	petrify: {
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
+			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Petrify', 'boost');
 					activated = true;
