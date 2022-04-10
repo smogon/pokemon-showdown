@@ -1006,7 +1006,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {},
-		onHit(target, source, move) {
+		onHit(target) {
 			if (!this.canSwitch(target.side)) {
 				return this.NOT_FAIL;
 			}
