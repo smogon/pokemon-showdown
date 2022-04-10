@@ -34,7 +34,6 @@ describe(`Baton Pass`, function () {
 			{species: 'pichu', moves: ['swordsdance']},
 		]]);
 		battle.makeChoices();
-		console.log(battle.getDebugLog());
 		assert(battle.log.some(line => line.startsWith('|-fail')));
 
 		battle = common.createBattle({gameType: 'doubles'}, [[
