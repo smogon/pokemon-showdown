@@ -22115,16 +22115,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyType(move, pokemon) {
-			console.log("onModifyType");
 			if (pokemon.getTypes()[0]) {
 				move.type = pokemon.getTypes()[0];
-				console.log("move.type: "+move.type);
 			} else {
 				return false;
 			}
 		},
-		onHitField(target, source, move) {
-			console.log("onHitField");
+		onHit(target, source, move) {
 			let result = false;
 			let message = false;
 			for (const pokemon of this.getAllActive()) {
@@ -22134,7 +22131,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 				} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
 					result = true;
 				} else if (!pokemon.volatiles['perishsong']) {
-					console.log("addVolatile-perishsong");
 					pokemon.addVolatile('perishsong');
 					this.add('-start', pokemon, 'perish3', '[silent]');
 					result = true;
@@ -22152,13 +22148,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 20,
 			onResidual(pokemon) {
-			console.log("onResidual");
 				const duration = pokemon.volatiles['perishsong'].duration;
 				this.add('-start', pokemon, 'perish' + duration);
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "allAdjacent",
 		type: "???",
 		contestType: "Tough",
 	},
