@@ -1006,8 +1006,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {},
-		onTry(source) {
-			return this.canSwitch(source.side) > 0;
+		onHit(target, source, move) {
+			if (!this.canSwitch(target.side)) {
+				return this.NOT_FAIL;
+			}
 		},
 		self: {
 			onHit(source) {
@@ -7803,10 +7805,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		onTryHit(pokemon, target, move) {
-			if (!this.canSwitch(pokemon.side)) {
+		onHit(target, source, move) {
+			if (!this.canSwitch(target.side)) {
 				delete move.selfdestruct;
-				return false;
+				return this.NOT_FAIL;
 			}
 		},
 		selfdestruct: "ifHit",
@@ -9897,10 +9899,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1, dance: 1},
-		onTryHit(pokemon, target, move) {
-			if (!this.canSwitch(pokemon.side)) {
+		onHit(target, source, move) {
+			if (!this.canSwitch(target.side)) {
 				delete move.selfdestruct;
-				return false;
+				return this.NOT_FAIL;
 			}
 		},
 		selfdestruct: "ifHit",
@@ -17949,7 +17951,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: -6,
 		flags: {},
 		onTry(source) {
-			return this.canSwitch(source.side) > 0;
+			return !!this.canSwitch(source.side);
 		},
 		selfSwitch: true,
 		secondary: null,
