@@ -27,7 +27,7 @@ describe(`Baton Pass`, function () {
 		assert('leechseed' in wingull.volatiles);
 	});
 
-	it.only(`should fail to switch the user out if no Pokemon can be switched in`, function () {
+	it(`should fail to switch the user out if no Pokemon can be switched in`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['batonpass']},
 		], [
