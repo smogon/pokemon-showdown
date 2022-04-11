@@ -76,6 +76,26 @@ describe('Healing Wish', function () {
 		assert.false(battle.p1.slotConditions[0]['healingwish']);
 	});
 
+	it(`should fail to switch the user out if no Pokemon can be switched in`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['healingwish']},
+		], [
+			{species: 'pichu', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-fail')));
+
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', moves: ['healingwish']},
+			{species: 'pichu', moves: ['swordsdance']},
+		], [
+			{species: 'pichu', moves: ['swordsdance']},
+			{species: 'pichu', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-fail')));
+	});
+
 	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {
 		battle = common.gen(4).createBattle();
 		battle.setPlayer('p1', {team: [
