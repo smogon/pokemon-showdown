@@ -1032,9 +1032,12 @@ export class TimerModeTrivia extends Trivia {
 
 		buffer += '</table>';
 		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`}`;
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
 
-		if (winner) return this.win(buffer);
+		if (winner) {
+			return this.win(buffer);
+		} else {
+			broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		}
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -1108,9 +1111,12 @@ export class NumberModeTrivia extends Trivia {
 		}
 
 		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`}`;
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
 
-		if (winner) return this.win(buffer);
+		if (winner) {
+			return this.win(buffer);
+		} else {
+			broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		}
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
