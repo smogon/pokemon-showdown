@@ -6732,6 +6732,15 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	resolucent: {
 		tier: "OU",
 	},
+	xiphuno: {
+		tier: "LC OU",
+	},
+	gladiduo: {
+		tier: "NFE",
+	},
+	gladorda: {
+		tier: "OU",
+	},
 	coleoterra: {
 		tier: "RU",
 	}
