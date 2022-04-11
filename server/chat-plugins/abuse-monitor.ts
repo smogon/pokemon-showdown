@@ -147,7 +147,7 @@ function visualizePunishment(punishment: PunishmentSettings) {
 		.join(', ');
 }
 
-function displayResolved(review: ReviewRequest) {
+function displayResolved(review: ReviewRequest, justSubmitted = false) {
 	const user = Users.get(review.staff);
 	if (!user) return;
 	const resolved = review.resolved;
@@ -155,8 +155,8 @@ function displayResolved(review: ReviewRequest) {
 	const prefix = `|pm|&|${user.getIdentity()}|`;
 	user.send(
 		prefix +
-		`Your Artemis review for <<${review.room}>> was resolved by ${resolved.by}, ` +
-		`${Chat.toDurationString(Date.now() - resolved.time)} ago.`
+		`Your Artemis review for <<${review.room}>> was resolved by ${resolved.by}` +
+		(justSubmitted ? "." : `, ${Chat.toDurationString(Date.now() - resolved.time)} ago.`)
 	);
 	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
 	const idx = reviews[user.id].findIndex(r => r === review); // object references!
@@ -1342,7 +1342,7 @@ export const commands: Chat.ChatCommands = {
 				details: result || "",
 				result: isAccurate,
 			};
-			displayResolved(review);
+			displayResolved(review, true);
 			writeStats('reviews', review);
 			Chat.refreshPageFor('abusemonitor-reviews', 'staff');
 		},
