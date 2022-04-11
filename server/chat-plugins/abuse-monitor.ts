@@ -200,7 +200,7 @@ async function searchModlog(
 
 export const classifier = new Artemis.RemoteClassifier();
 
-export async function runActions(user: User, room: GameRoom, response: Record<string, number>) {
+export async function runActions(user: User, room: GameRoom, message: string, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string][] = [];
 	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
@@ -261,7 +261,7 @@ export async function runActions(user: User, room: GameRoom, response: Record<st
 				return; // we want nothing else to be executed. staff want trusted users to be reviewed manually for now
 			}
 			room.mute(user);
-			const result = await punishmentHandlers[toID(punishment)]?.(user, room);
+			const result = await punishmentHandlers[toID(punishment)]?.(user, room, response, message);
 			writeStats('punishments', {
 				punishment,
 				userid: user.id,
@@ -365,9 +365,13 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 	}
 }
 
-const punishmentHandlers: Record<string, (user: User, room: GameRoom) => void | boolean | Promise<void | boolean>> = {
-	warn(user, room) {
-		const reason = `Not following rules in battle (https://${Config.routes.client}/${room.roomid})`;
+type PunishmentHandler = (
+	user: User, room: GameRoom, response: Record<string, number>, message: string,
+) => void | boolean | Promise<void | boolean>;
+
+const punishmentHandlers: Record<string, PunishmentHandler> = {
+	warn(user, room, response, message) {
+		const reason = `${Users.PLAYER_SYMBOL}${user.name}: ${message}`;
 		if (!user.connected) {
 			Punishments.offlineWarns.set(user.id, reason);
 		} else {
@@ -474,7 +478,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 					// response exists if we got this far
 					[user.id, score, response![main], main, room.roomid, Date.now()]
 				);
-				void runActions(user, room, response || {});
+				void runActions(user, room, message, response || {});
 			}
 			await Chat.database.run(
 				'INSERT INTO perspective_logs (userid, message, score, flags, roomid, time, hit_threshold) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -1351,6 +1355,7 @@ export const commands: Chat.ChatCommands = {
 			if (settings.replacements[old]) {
 				return this.errorReply(`The old word '${old}' is already in use (for '${settings.replacements[old]}').`);
 			}
+			Chat.validateRegex(target);
 			settings.replacements[old] = newWord;
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} added an Artemis replacement for '${old}' to '${newWord}'.`);
