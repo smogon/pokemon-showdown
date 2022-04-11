@@ -45529,6 +45529,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	deoxysattack: {
 		eventOnly: true,
+		learnset: {
 			shieldbeam: ["8M", "7M"],
 			speedstrike: ["8M", "7M"],
 			cometstorm: ["8M", "7M"],
@@ -45543,9 +45544,11 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gammaray: ["8M", "7M"],
 			deathray: ["8M", "7M"],
 			psychocrash: ["8M", "7M"],
+		}
 		},
 	deoxysdefense: {
 		eventOnly: true,
+		learnset: {
 			shieldbeam: ["8M", "7M"],
 			speedstrike: ["8M", "7M"],
 			cometstorm: ["8M", "7M"],
@@ -45560,9 +45563,11 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gammaray: ["8M", "7M"],
 			deathray: ["8M", "7M"],
 			psychocrash: ["8M", "7M"],
+		}
 		},
 	deoxysspeed: {
 		eventOnly: true,
+		learnset: {
 			shieldbeam: ["8M", "7M"],
 			speedstrike: ["8M", "7M"],
 			cometstorm: ["8M", "7M"],
@@ -45577,6 +45582,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gammaray: ["8M", "7M"],
 			deathray: ["8M", "7M"],
 			psychocrash: ["8M", "7M"],
+		}
 		},
 	turtwig: {
 		learnset: {
@@ -52598,8 +52604,10 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	shayminsky: {
 		eventOnly: true,
+		learnset: {
 		pollenhazard: ["8M", "7M"],
 			starpierce: ["8M", "7M"],
+		}
 		},
 	arceus: {
 		learnset: {
@@ -52815,7 +52823,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	arceuscosmic: {
 		eventOnly: true,
+		learnset: {
 		vacuumray: ["8M", "7M"],
+		}
 		},
 	victini: {
 		learnset: {
@@ -65360,7 +65370,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	thundurustherian: {
 		eventOnly: true,
-		electrotail: ["8M", "7M"],
+		learnset: {
+			electrotail: ["8M", "7M"],
+		}
 		},
 	reshiram: {
 		learnset: {
