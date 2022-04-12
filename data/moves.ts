@@ -13468,7 +13468,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 								break;
 							}
 						}
-						this.runMove('pursuit', source, this.getTargetLoc(pokemon, source));
+						this.actions.runMove('pursuit', source, source.getLocOf(pokemon, source));
 					}
 					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
 				}
