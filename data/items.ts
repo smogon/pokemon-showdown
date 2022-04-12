@@ -7530,7 +7530,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				return;
 			}
 			let statsLowered = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					statsLowered = true;
