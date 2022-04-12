@@ -344,6 +344,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const levelScale: {[k: string]: number} = {
 			LC: 88,
 			NFE: 80,
+			PU: 77,
 			NU: 77,
 			NUBL: 76,
 			UU: 74,
