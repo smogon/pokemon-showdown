@@ -20778,23 +20778,23 @@ export const Moves: {[moveid: string]: MoveData} = {
             },
             onStart(pokemon, source) {
                 this.add('-activate', pokemon, 'Rock Seal');
-                this.effectData.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
+                this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
             },
             onResidualOrder: 11,
             onResidual(pokemon) {
-                const source = this.effectData.source;
+                const source = this.effectState.source;
                 // G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
                 if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
                     delete pokemon.volatiles['rockseal'];
-                    this.add('-end', pokemon, this.effectData.sourceEffect, '[rockseal]', '[silent]');
+                    this.add('-end', pokemon, this.effectState.sourceEffect, '[rockseal]', '[silent]');
                     return;
                 }
             },
             onEnd(pokemon) {
-                this.add('-end', pokemon, this.effectData.sourceEffect, '[rockseal]');
+                this.add('-end', pokemon, this.effectState.sourceEffect, '[rockseal]');
             },
             onTrapPokemon(pokemon) {
-                if (this.effectData.source?.isActive) pokemon.tryTrap();
+                if (this.effectState.source?.isActive) pokemon.tryTrap();
             },
         },
         secondary: null,
@@ -21385,12 +21385,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-end', target, 'Abduction', '[interrupt]');
 			}
 		},
+		onTry(source, target) {
+			return !target.fainted;
+		},
 		onTryHit(target, source, move) {
-			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {
 				if (target !== source.volatiles['twoturnmove'].source) return false;
 			} else {
-				if (target.volatiles['substitute'] || target.side === source.side) {
+				if (target.volatiles['substitute'] || target.isAlly(source)) {
 					return false;
 				}
 				if (target.getWeight() >= 2000) {
@@ -21409,16 +21411,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 2,
 			onAnyDragOut(pokemon) {
-				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
+				if (pokemon === this.effectState.target || pokemon === this.effectState.source) return false;
 			},
 			onFoeTrapPokemonPriority: -15,
 			onFoeTrapPokemon(defender) {
-				if (defender !== this.effectData.source) return;
+				if (defender !== this.effectState.source) return;
 				defender.trapped = true;
 			},
 			onFoeBeforeMovePriority: 12,
 			onFoeBeforeMove(attacker, defender, move) {
-				if (attacker === this.effectData.source) {
+				if (attacker === this.effectState.source) {
 					attacker.activeMoveActions--;
 					this.debug('Abduction nullifying.');
 					return null;
@@ -21426,15 +21428,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onRedirectTargetPriority: 99,
 			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectData.target) return;
-				if (this.effectData.source.fainted) return;
-				return this.effectData.source;
+				if (source !== this.effectState.target) return;
+				if (this.effectState.source.fainted) return;
+				return this.effectState.source;
 			},
 			onAnyInvulnerability(target, source, move) {
-				if (target !== this.effectData.target && target !== this.effectData.source) {
+				if (target !== this.effectState.target && target !== this.effectState.source) {
 					return;
 				}
-				if (source === this.effectData.target && target === this.effectData.source) {
+				if (source === this.effectState.target && target === this.effectState.source) {
 					return;
 				}
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
@@ -21443,10 +21445,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			},
 			onAnyBasePower(basePower, target, source, move) {
-				if (target !== this.effectData.target && target !== this.effectData.source) {
+				if (target !== this.effectState.target && target !== this.effectState.source) {
 					return;
 				}
-				if (source === this.effectData.target && target === this.effectData.source) {
+				if (source === this.effectState.target && target === this.effectState.source) {
 					return;
 				}
 				if (move.id === 'gust' || move.id === 'twister') {

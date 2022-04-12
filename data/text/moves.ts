@@ -7267,7 +7267,7 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		prepare: "[POKEMON] took [TARGET] into the sky!",
 		end: "  [POKEMON] was freed from the Abduction!",
-		failSelect: "Sky Drop won't let [POKEMON] go!",
+		failSelect: "Abduction won't let [POKEMON] go!",
 		failTooHeavy: "  [POKEMON] is too heavy to be lifted!",
 	},
 	implosion: {
