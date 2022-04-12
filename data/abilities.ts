@@ -5363,7 +5363,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (typeof accuracy !== 'number') return;
 			if (move.flags['sound']) {
 				this.debug('perfectmelody - enhancing accuracy');
-				return true;
+				return 100;
 			}
 			return accuracy;
 		},
