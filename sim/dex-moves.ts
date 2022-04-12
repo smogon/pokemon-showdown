@@ -323,6 +323,7 @@ export interface ActiveMove extends MutableMove {
 	statusRoll?: string;
 	totalDamage?: number | false;
 	willChangeForme?: boolean;
+	willChangeFormePirouettan?: boolean;
 	infiltrates?: boolean;
 
 	/**
