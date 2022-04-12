@@ -20704,7 +20704,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		useSourceSpeedAsOffensive: true,
+		overrideOffensiveStat: 'spe',
 		secondary: null,
 		target: "normal",
 		type: "Normal",
