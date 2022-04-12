@@ -5260,8 +5260,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.ignoringItem()) return false;
 			const item = pokemon.getItem();
 			if (item.id === 'crawshell') {
-				//add a taunt
-				target.addVolatile('taunt');
+				if(target) {
+					//add a taunt
+					target.addVolatile('taunt');
+				}
 			}
 		},
 		secondary: null,
