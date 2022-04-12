@@ -5610,7 +5610,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 1062,
 	},
 	wonderfield: {
-        onStart(pokemon, move) {
+        onStart(pokemon) {
             this.field.addPseudoWeather('wonderroom', pokemon);
         },
         onSwitchOut(pokemon) {
