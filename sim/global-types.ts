@@ -404,6 +404,7 @@ interface PlayerOptions {
 interface TextObject {
 	desc?: string;
 	shortDesc?: string;
+	newmeta?: string;
 }
 interface Plines {
 	activate?: string;

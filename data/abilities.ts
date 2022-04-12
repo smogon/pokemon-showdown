@@ -5580,7 +5580,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				move.secondaries = [];
 			}
 			let paralyzingvenomMove = false;
-			let parChance = '';
+			let parChance;
 			for (const secondary of move.secondaries) {
 				if ((secondary.status == 'tox' || secondary.status == 'psn') && !target.hasType('Steel')) {
 					paralyzingvenomMove = true;
@@ -5589,14 +5589,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					move.secondaries.push({
 						chance: parChance,
 						status: 'par',
-						ability: this.dex.getAbility('paralyzingvenom'),
+						ability: this.dex.abilities.get('paralyzingvenom'),
 					});
 				}
 			}
 			if (!move.status) return;
 			if ((move.status == 'tox' || move.status == 'psn') && !target.hasType('Steel')) {
 				paralyzingvenomMove = true;
-				move.status = 'par';
+				move.secondaries = [];
+					move.secondaries.push({
+						chance: 100,
+						status: 'par',
+						ability: this.dex.abilities.get('paralyzingvenom'),
+					});
 			}
 		},
 		name: "Paralyzing Venom",
