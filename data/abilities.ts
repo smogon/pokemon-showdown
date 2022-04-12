@@ -5349,7 +5349,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			move.secondaries.push({
 				chance: 30,
 				volatileStatus: 'lovetouch',
-				ability: this.dex.getAbility('lovetouch'),
+				ability: this.dex.abilities.get('lovetouch'),
 			});
 		},
 		name: "Love Touch",
