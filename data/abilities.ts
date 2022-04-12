@@ -4840,7 +4840,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         },
         onModifyMove(move) {
             if (move.type === 'Grass') {
-                move.accuracy *= 1.3;
+				move.accuracy = Number(move.accuracy) * 1.3;
+                //move.accuracy *= 1.3;
             }
         },
         name: "Garden's Gift",
