@@ -5512,7 +5512,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 1057,
 	},
 	negationfield: {
-        onStart(pokemon, move) {
+        onStart(pokemon) {
             this.field.addPseudoWeather('magicroom', pokemon);
         },
         onSwitchOut(pokemon) {
