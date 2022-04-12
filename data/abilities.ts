@@ -4877,7 +4877,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         num: 1013,
     },
 	orbital: {
-        onStart(pokemon, move) {
+        onStart(pokemon) {
             this.field.addPseudoWeather('gravity', pokemon);
         },
         onSwitchOut(pokemon) {
