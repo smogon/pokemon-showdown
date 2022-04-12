@@ -5807,7 +5807,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	stimulating: {
 		onFoeBoost(boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				boost[i]! *= 2;
 			}
@@ -5883,7 +5883,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	vicarious: {
 		onFoeBoost(boost, target, source, effect) {
 			if (effect.id === 'vicarious') return;
-			let b: BoostName;
+			let b: BoostID;
 			for (b in boost) {
 				if (target.boosts[b] === -6) continue;
 				const negativeBoost: SparseBoostsTable = {};
