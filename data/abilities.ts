@@ -4594,7 +4594,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			// if (pokemon.side.faintedThisTurn) {
 				// console.log("ability détecte qu'un pote est KO au tour d'avant");
 			// }
-            this.useMove("lazyencore", pokemon);
+            this.actions.useMove("lazyencore", pokemon);
         },
         name: "Time Reverse",
         rating: 2,
@@ -5255,7 +5255,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	hideandseek: {
         onStart(pokemon) {
-            this.useMove("substitute", pokemon);
+            this.actions.useMove("substitute", pokemon);
         },
         name: "Hide and Seek",
         rating: 2,
@@ -5303,7 +5303,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
-				this.useMove("lazycurse", target);
+				this.actions.useMove("lazycurse", target);
 			}
 		},
 		rating: 2.5,
