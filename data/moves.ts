@@ -20734,7 +20734,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 19,
 			onEnd(target) {
 				this.add('-end', target, 'move: Yawn', '[silent]');
-				target.trySetStatus('slp', this.effectData.source);
+				target.trySetStatus('slp', this.effectState.source);
 			},
 		},
 		secondary: null,
@@ -20779,23 +20779,23 @@ export const Moves: {[moveid: string]: MoveData} = {
             },
             onStart(pokemon, source) {
                 this.add('-activate', pokemon, 'Rock Seal');
-                this.effectData.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
+                this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
             },
             onResidualOrder: 11,
             onResidual(pokemon) {
-                const source = this.effectData.source;
+                const source = this.effectState.source;
                 // G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
                 if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
                     delete pokemon.volatiles['rockseal'];
-                    this.add('-end', pokemon, this.effectData.sourceEffect, '[rockseal]', '[silent]');
+                    this.add('-end', pokemon, this.effectState.sourceEffect, '[rockseal]', '[silent]');
                     return;
                 }
             },
             onEnd(pokemon) {
-                this.add('-end', pokemon, this.effectData.sourceEffect, '[rockseal]');
+                this.add('-end', pokemon, this.effectState.sourceEffect, '[rockseal]');
             },
             onTrapPokemon(pokemon) {
-                if (this.effectData.source?.isActive) pokemon.tryTrap();
+                if (this.effectState.source?.isActive) pokemon.tryTrap();
             },
         },
         secondary: null,
@@ -20824,8 +20824,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			}
 			if (
-				(myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) ||
-				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))
+				(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
+				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
 			) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
@@ -20871,30 +20871,30 @@ export const Moves: {[moveid: string]: MoveData} = {
                 let move: Move | ActiveMove | null = target.lastMove;
                 if (!move || target.volatiles['dynamax']) return false;
 
-                if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
+                if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
                 const moveIndex = target.moves.indexOf(move.id);
                 if (move.isZ || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
                     // it failed
                     return false;
                 }
-                this.effectData.move = move.id;
+                this.effectState.move = move.id;
                 this.add('-start', target, 'Encore');
                 if (!this.queue.willMove(target)) {
 					console.log("ajoute un tour");
-                    this.effectData.duration++;
+                    this.effectState.duration++;
                 }
 				if (pokemon.side.faintedThisTurn) {
 					console.log("retire un tour");
-					this.effectData.duration--;
+					this.effectState.duration--;
 				}
             },
             onOverrideAction(pokemon, target, move) {
-                if (move.id !== this.effectData.move) return this.effectData.move;
+                if (move.id !== this.effectState.move) return this.effectState.move;
             },
 			onResidualOrder: 13,
             onResidual(target) {
-                if (target.moves.includes(this.effectData.move) &&
-                    target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
+                if (target.moves.includes(this.effectState.move) &&
+                    target.moveSlots[target.moves.indexOf(this.effectState.move)].pp <= 0) {
                     // early termination if you run out of PP
                     target.removeVolatile('lazyencore');
                 }
@@ -20903,11 +20903,11 @@ export const Moves: {[moveid: string]: MoveData} = {
                 this.add('-end', target, 'Encore');
             },
             onDisableMove(pokemon) {
-                if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+                if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
                     return;
                 }
                 for (const moveSlot of pokemon.moveSlots) {
-                    if (moveSlot.id !== this.effectData.move) {
+                    if (moveSlot.id !== this.effectState.move) {
                         pokemon.disableMove(moveSlot.id);
                     }
                 }
@@ -20945,7 +20945,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return;
 				}
 				let speedLowered = false;
-				let i: BoostName;
+				let i: BoostID;
 					if (boost['spe']! < 0) {
 						speedLowered = true;
 					}
@@ -21007,10 +21007,10 @@ export const Moves: {[moveid: string]: MoveData} = {
             },
             onFoeRedirectTargetPriority: 1,
             onFoeRedirectTarget(target, source, source2, move) {
-                if (!this.effectData.target.isSkyDropped() && this.validTarget(this.effectData.target, source, move.target)) {
+                if (!this.effectState.target.isSkyDropped() && this.validTarget(this.effectState.target, source, move.target)) {
                     if (move.smartTarget) move.smartTarget = false;
                     this.debug("Callout redirected target of move");
-                    return this.effectData.target;
+                    return this.effectState.target;
                 }
             },
         },
@@ -21410,16 +21410,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 2,
 			onAnyDragOut(pokemon) {
-				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
+				if (pokemon === this.effectState.target || pokemon === this.effectState.source) return false;
 			},
 			onFoeTrapPokemonPriority: -15,
 			onFoeTrapPokemon(defender) {
-				if (defender !== this.effectData.source) return;
+				if (defender !== this.effectState.source) return;
 				defender.trapped = true;
 			},
 			onFoeBeforeMovePriority: 12,
 			onFoeBeforeMove(attacker, defender, move) {
-				if (attacker === this.effectData.source) {
+				if (attacker === this.effectState.source) {
 					attacker.activeMoveActions--;
 					this.debug('Abduction nullifying.');
 					return null;
@@ -21427,15 +21427,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onRedirectTargetPriority: 99,
 			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectData.target) return;
-				if (this.effectData.source.fainted) return;
-				return this.effectData.source;
+				if (source !== this.effectState.target) return;
+				if (this.effectState.source.fainted) return;
+				return this.effectState.source;
 			},
 			onAnyInvulnerability(target, source, move) {
-				if (target !== this.effectData.target && target !== this.effectData.source) {
+				if (target !== this.effectState.target && target !== this.effectState.source) {
 					return;
 				}
-				if (source === this.effectData.target && target === this.effectData.source) {
+				if (source === this.effectState.target && target === this.effectState.source) {
 					return;
 				}
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
@@ -21444,10 +21444,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			},
 			onAnyBasePower(basePower, target, source, move) {
-				if (target !== this.effectData.target && target !== this.effectData.source) {
+				if (target !== this.effectState.target && target !== this.effectState.source) {
 					return;
 				}
-				if (source === this.effectData.target && target === this.effectData.source) {
+				if (source === this.effectState.target && target === this.effectState.source) {
 					return;
 				}
 				if (move.id === 'gust' || move.id === 'twister') {
@@ -21555,20 +21555,20 @@ export const Moves: {[moveid: string]: MoveData} = {
             },
             onResidualOrder: 11,
             onResidual(pokemon) {
-                const source = this.effectData.source;
+                const source = this.effectState.source;
                 // G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
                 if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
                     delete pokemon.volatiles['singletrap'];
-                    this.add('-end', pokemon, this.effectData.sourceEffect, '[trackertrap]', '[silent]');
+                    this.add('-end', pokemon, this.effectState.sourceEffect, '[trackertrap]', '[silent]');
                     return;
                 }
             },
             onEnd(pokemon) {
-                this.add('-end', pokemon, this.effectData.sourceEffect, '[trackertrap]');
+                this.add('-end', pokemon, this.effectState.sourceEffect, '[trackertrap]');
 				pokemon.removeVolatile('partiallytrapped');
             },
             // onTrapPokemon(target, source) {
-                // if (this.effectData.source?.isActive) {
+                // if (this.effectState.source?.isActive) {
 					// target.tryTrap();
 				// }
             // },
@@ -21937,7 +21937,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
-					if (this.dex.getMove(moveSlot.id).flags['heal']) {
+					if (this.dex.moves.get(moveSlot.id).flags['heal']) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
@@ -21954,7 +21954,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-end', pokemon, 'move: Heal Block');
 			},
 			onTryHeal(damage, target, source, effect) {
-				if ((effect?.id === 'zpower') || this.effectData.isZ) return damage;
+				if ((effect?.id === 'zpower') || this.effectState.isZ) return damage;
 				return false;
 			},
 		},
@@ -22059,7 +22059,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		critRatio: 2,
-		secondary: null,
 		target: "normal",
 		type: "Fairy",
 		contestType: "Cool",
@@ -22414,14 +22413,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 				// }
 			},
 			onUpdate(pokemon) {
-				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['lovetouch']) {
+				if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['lovetouch']) {
 					this.debug('Removing Love Touch volatile on ' + pokemon);
 					pokemon.removeVolatile('lovetouch');
 				}
 			},
 			onBeforeMovePriority: 2,
 			onBeforeMove(pokemon, target, move) {
-				this.add('-activate', pokemon, 'move: Love Touch', '[of] ' + this.effectData.source);
+				this.add('-activate', pokemon, 'move: Love Touch', '[of] ' + this.effectState.source);
 				if (this.randomChance(1, 2)) {
 					this.add('cant', pokemon, 'Love Touch');
 					return false;
@@ -22558,7 +22557,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidual(side) {
 				if (!this.field.isWeather('toxiccloud')) {
-					this.effectData.duration = 1;
+					this.effectState.duration = 1;
 					this.add('-sideend', side, 'Antidote');
 				}
 			},
@@ -22591,17 +22590,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 				this.add('-start', target, 'Veil of Light');
-				this.effectData.layers = 1;
+				this.effectState.layers = 1;
 			},
 			onRestart(target) {
 				if (target.hasType('Grass')) return false;
-				if (this.effectData.layers >= 2) return false;
+				if (this.effectState.layers >= 2) return false;
 				if (target.volatiles['dynamax']) {
 					delete target.volatiles['veiloflight'];
 					return false;
 				}
 				this.add('-start', target, 'Veil of Light');
-				this.effectData.layers++;
+				this.effectState.layers++;
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Veil of Light');
@@ -22610,7 +22609,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target.hasItem('heavydutyboots')) return;
 				if (target.hasAbility('solidfooting')) return;
 				const typeMod = this.clampIntRange(target.runEffectiveness(this.dex.getActiveMove('veiloflight')), -6, 6);
-				this.damage(target.maxhp * (Math.pow(2, typeMod) / 8) * this.effectData.layers);
+				this.damage(target.maxhp * (Math.pow(2, typeMod) / 8) * this.effectState.layers);
 			},
 		},
 		secondary: null,
@@ -22630,7 +22629,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.baseMaxhp / 4, source, source, this.dex.getEffect('Nosedive'));
+			this.damage(source.baseMaxhp / 4, source, source, this.dex.conditions.get('Nosedive'));
 		},
 		secondary: null,
 		target: "normal",
