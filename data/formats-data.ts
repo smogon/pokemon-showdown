@@ -1696,6 +1696,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
+	weavilealmian: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
 	teddiursa: {
 		tier: "LC UU",
 	},
@@ -1875,7 +1879,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["earthpower", "energyball", "nastyplot", "protect", "psychic", "recover"],
 		randomDoubleBattleLevel: 84,
-		tier: "RU",
+		tier: "OU",
 		doublesTier: "(DUU)",
 	},
 	treecko: {
@@ -2840,12 +2844,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	drifblim: {
-		randomBattleMoves: ["calmmind", "shadowball", "strengthsap", "thunderbolt"],
-		randomBattleLevel: 84,
-		randomDoubleBattleMoves: ["destinybond", "hex", "tailwind", "thunderwave", "willowisp"],
-		randomDoubleBattleLevel: 84,
 		tier: "UUBL",
-		doublesTier: "(DUU)",
+		doublesTier: "DUU",
 	},
 	buneary: {
 		tier: "LC UU",
