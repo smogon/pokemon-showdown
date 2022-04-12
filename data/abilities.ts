@@ -5243,7 +5243,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			// console.log("lastItem: "+this.dex.getItem(pokemon.lastItem));
 			// console.log("currentItem: "+this.dex.getItem(pokemon.item));
 			if (this.randomChance(1, 2)) {
-				if (pokemon.hp && !pokemon.item && this.dex.getItem(pokemon.lastItem)) {
+				if (pokemon.hp && !pokemon.item && this.dex.items.get(pokemon.lastItem)) {
 					pokemon.setItem(pokemon.lastItem);
 					pokemon.lastItem = '';
 					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Scavenger');
