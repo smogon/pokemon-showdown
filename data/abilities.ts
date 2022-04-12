@@ -5583,6 +5583,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			let paralyzingvenomMove = false;
 			let parChance;
 			for (const secondary of move.secondaries) {
+				if (!target) return; 
 				if ((secondary.status == 'tox' || secondary.status == 'psn') && !target.hasType('Steel')) {
 					paralyzingvenomMove = true;
 					parChance = secondary.chance;
@@ -5595,6 +5596,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 			if (!move.status) return;
+			if (!target) return; 
 			if ((move.status == 'tox' || move.status == 'psn') && !target.hasType('Steel')) {
 				paralyzingvenomMove = true;
 				move.secondaries = [];
@@ -5791,9 +5793,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			for (const target of pokemon.side.foe.active) {
 				if (!target.boosts) return;
 				let isBoosted = false;
-				let i = '';
+				let i: BoostID;
 				for (i in target.boosts) {
-					console.log("target.boosts[i]: "+target.boosts[i]);
 					if(target.boosts[i] > 0) isBoosted = true;
 				}
 				console.log("isBoosted: "+isBoosted);
