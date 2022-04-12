@@ -1092,7 +1092,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries) {
-				const effectHolder = this.effectData.target;
+				const effectHolder = this.effectState.target;
 				this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
 			}
 		},
@@ -1100,7 +1100,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (source && target !== source && effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
-					const effectHolder = this.effectData.target;
+					const effectHolder = this.effectState.target;
 					this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
 				}
 				return null;
@@ -1109,7 +1109,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onTryAddVolatile(status, target) {
 			if (status.id === 'yawn') {
 				this.debug('Flower Veil blocking yawn');
-				const effectHolder = this.effectData.target;
+				const effectHolder = this.effectState.target;
 				this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
 				return null;
 			}
@@ -4617,19 +4617,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
                     ////it failed
                     // return false;
                 // }
-                // this.effectData.move = move.id;
+                // this.effectState.move = move.id;
                 // this.add('-start', target, 'Encore');
                 // if (!this.queue.willMove(target)) {
-                    // this.effectData.duration++;
+                    // this.effectState.duration++;
                 // }
             // },
             // onOverrideAction(pokemon, target, move) {
-                // if (move.id !== this.effectData.move) return this.effectData.move;
+                // if (move.id !== this.effectState.move) return this.effectState.move;
             // },
 			// onResidualOrder: 13,
             // onResidual(target) {
-                // if (target.moves.includes(this.effectData.move) &&
-                    // target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
+                // if (target.moves.includes(this.effectState.move) &&
+                    // target.moveSlots[target.moves.indexOf(this.effectState.move)].pp <= 0) {
                     ////early termination if you run out of PP
                     // target.removeVolatile('lazyencore');
                 // }
@@ -4638,11 +4638,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
                 // this.add('-end', target, 'Encore');
             // },
             // onDisableMove(pokemon) {
-                // if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+                // if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
                     // return;
                 // }
                 // for (const moveSlot of pokemon.moveSlots) {
-                    // if (moveSlot.id !== this.effectData.move) {
+                    // if (moveSlot.id !== this.effectState.move) {
                         // pokemon.disableMove(moveSlot.id);
                     // }
                 // }
@@ -5410,7 +5410,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	blizzardgift: {
 		onStart(pokemon) {
-			delete this.effectData.forme;
+			delete this.effectState.forme;
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Yetitan' || pokemon.transformed) return;
@@ -5426,14 +5426,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
-			if (this.effectData.target.baseSpecies.baseSpecies !== 'Yetitan') return;
+			if (this.effectState.target.baseSpecies.baseSpecies !== 'Yetitan') return;
 			if (['hail'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
 		onAllyModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
-			if (this.effectData.target.baseSpecies.baseSpecies !== 'Yetitan') return;
+			if (this.effectState.target.baseSpecies.baseSpecies !== 'Yetitan') return;
 			if (['hail'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
@@ -5687,8 +5687,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		condition: {
 			onStart(pokemon) {
-				this.effectData.numConsecutive = 0;
-				this.effectData.lastMove = '';
+				this.effectState.numConsecutive = 0;
+				this.effectState.lastMove = '';
 			},
 			onTryMovePriority: -2,
 			onTryMove(pokemon, target, move) {
@@ -5696,16 +5696,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					pokemon.removeVolatile('chainstriker');
 					return;
 				}
-				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
-					this.effectData.numConsecutive++;
+				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
+					this.effectState.numConsecutive++;
 				} else {
-					this.effectData.numConsecutive = 0;
+					this.effectState.numConsecutive = 0;
 				}
-				this.effectData.lastMove = move.id;
+				this.effectState.lastMove = move.id;
 			},
 			onModifyDamage(damage, source, target, move) {
 				const dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
-				const numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
+				const numConsecutive = this.effectState.numConsecutive > 5 ? 5 : this.effectState.numConsecutive;
 				return this.chainModify([dmgMod[numConsecutive], 0x1000]);
 			},
 		},
