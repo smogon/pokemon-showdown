@@ -5496,7 +5496,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				) {
 					let statName = 'atk';
 					let bestStat = 0;
-					let s: StatNameExceptHP;
+					let s: StatIDExceptHP;
 					for (s in source.storedStats) {
 						if (source.storedStats[s] > bestStat) {
 							statName = s;
