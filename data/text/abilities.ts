@@ -2222,4 +2222,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokémon copies the foe's boosts, when the foe is boosting.",
 		newmeta: "true",
 	},
+	innerdragon: {
+		name: "Inner Dragon",
+		desc: "This Pokémon Dragon STAB is 2.25, defensive resistances/weaknesses are doubled.",
+		shortDesc: "This Pokémon Dragon STAB is 2.25, defensive resistances/weaknesses are doubled.",
+		newmeta: "true",
+	},
 };

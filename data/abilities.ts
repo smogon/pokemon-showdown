@@ -5900,4 +5900,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 1082,
 	},
+	innerdragon: {
+		onModifyMove(move) {
+			if(move.type === "Dragon") {
+				move.stab = 2.25;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			console.log("moveValue: "+target.getMoveHitData(move).typeMod);
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('Inner Dragon weaknesses applied');
+				return this.chainModify(2);
+			}
+			if (target.getMoveHitData(move).typeMod < 0) {
+				this.debug('Inner Dragon resistances applied');
+				return this.chainModify(0.5);
+			}
+		},
+		name: "Inner Dragon",
+		rating: 4,
+		num: 1083,
+	},
 };
