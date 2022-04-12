@@ -22592,17 +22592,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 				this.add('-start', target, 'Veil of Light');
-				this.effectData.layers = 1;
+				this.effectState.layers = 1;
 			},
 			onRestart(target) {
 				if (target.hasType('Grass')) return false;
-				if (this.effectData.layers >= 2) return false;
+				if (this.effectState.layers >= 2) return false;
 				if (target.volatiles['dynamax']) {
 					delete target.volatiles['veiloflight'];
 					return false;
 				}
 				this.add('-start', target, 'Veil of Light');
-				this.effectData.layers++;
+				this.effectState.layers++;
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Veil of Light');
@@ -22611,7 +22611,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target.hasItem('heavydutyboots')) return;
 				if (target.hasAbility('solidfooting')) return;
 				const typeMod = this.clampIntRange(target.runEffectiveness(this.dex.getActiveMove('veiloflight')), -6, 6);
-				this.damage(target.maxhp * (Math.pow(2, typeMod) / 8) * this.effectData.layers);
+				this.damage(target.maxhp * (Math.pow(2, typeMod) / 8) * this.effectState.layers);
 			},
 		},
 		secondary: null,
