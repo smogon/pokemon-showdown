@@ -4799,7 +4799,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
         num: 1008,
     },
 	wisepower: {
-        onModifySpAPriorityPriority: 5,
+        onModifySpAPriority: 5,
         onModifySpA(spa) {
             return this.chainModify(2);
         },
