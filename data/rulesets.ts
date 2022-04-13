@@ -1643,12 +1643,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 				source.side.pokemonLeft++;
 				source.side.pokemon.length++;
 
+				// A new Pokemon is created and stuff gets aside akin to a deep clone.
+				// This is because deepClone crashes when side is called recursively.
+				// Until a refactor is made to prevent it, this is the best option to prevent crashes.
 				const newPoke = new Pokemon(target.set, source.side);
 				const newPos = source.side.pokemon.length - 1;
 
-				// This was the best way to make sure everything important gets ported
-				// with nothing that could be detrimental ignored.
-				// If there is a better way to do this, please replace the code.
 				const doNotCarryOver = [
 					'fullname', 'side', 'fainted', 'status', 'hp', 'illusion',
 					'transformed', 'position', 'isActive', 'faintQueued',
@@ -1661,11 +1661,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 				}
 				newPoke.maxhp = newPoke.baseMaxhp; // for dynamax
 				newPoke.hp = newPoke.baseMaxhp - hpCost;
-				for (const [j, moveSlot] of newPoke.moveSlots.entries()) {
-					moveSlot.pp = Math.floor(
-						moveSlot.maxpp * (target.moveSlots[j] ? (target.moveSlots[j].pp / target.moveSlots[j].maxpp) : 1)
-					);
-				}
 				newPoke.clearVolatile();
 				newPoke.position = newPos;
 				source.side.pokemon[newPos] = newPoke;
