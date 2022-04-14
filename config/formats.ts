@@ -1047,11 +1047,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8bdsp',
-		ruleset: ['Standard', 'Same Type Clause'],
-		banlist: [
-			'Arceus', 'Darkrai', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Shaymin-Sky',
-			'Arena Trap', 'Moody', 'Shadow Tag', 'Damp Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
-		],
+		ruleset: ['[Gen 8 BDSP] OU', 'Same Type Clause'],
 	},
 	{
 		name: "[Gen 8 BDSP] CAP",
