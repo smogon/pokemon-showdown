@@ -6732,4 +6732,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	resolucent: {
 		tier: "OU",
 	},
+	coleoterra: {
+		tier: "RU",
+	}
 };
