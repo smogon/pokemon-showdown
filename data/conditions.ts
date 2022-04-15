@@ -539,7 +539,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'RainDance');
 			}
@@ -574,7 +574,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect, '[of] ' + source);
+			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect.name, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -613,7 +613,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'SunnyDay');
 			}
@@ -652,7 +652,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect, '[of] ' + source);
+			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect.name, '[of] ' + source);
 		},
 		onImmunity(type, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
@@ -688,7 +688,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Sandstorm');
 			}
@@ -723,7 +723,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
+				this.add('-weather', 'Hail', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Hail');
 			}
@@ -757,7 +757,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
+			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect.name, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -853,8 +853,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (['cramorantgulping', 'cramorantgorging'].includes(pokemon.species.id) && !pokemon.transformed) {
 				pokemon.formeChange('cramorant');
 			}
-			this.add('-start', pokemon, 'Dynamax');
-			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name + '-Gmax');
+			this.add('-start', pokemon, 'Dynamax', pokemon.gigantamax ? 'Gmax' : '');
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
@@ -884,7 +883,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onResidualPriority: -100,
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
-			if (pokemon.gigantamax) this.add('-formechange', pokemon, pokemon.species.name);
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;

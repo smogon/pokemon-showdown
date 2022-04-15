@@ -461,6 +461,7 @@ export class Battle {
 				if (!handler.state.duration) {
 					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
 					handler.end.call(...endCallArgs as [any, ...any[]]);
+					if (this.ended) return;
 					continue;
 				}
 			}
@@ -1539,8 +1540,9 @@ export class Battle {
 		// These are checked before the 100 turn minimum as the battle cannot progress if they are true
 		if (this.gen <= 1) {
 			const noProgressPossible = this.sides.every(side => {
-				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.types.includes('Ghost'));
+				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.fainted || pokemon.types.includes('Ghost'));
 				const foeAllTransform = side.foe.pokemon.every(pokemon => (
+					pokemon.fainted ||
 					// true if transforming into this pokemon would lead to an endless battle
 					// Transform will fail (depleting PP) if used against Ditto in Stadium 1
 					(this.dex.currentMod !== 'gen1stadium' || pokemon.species.id !== 'ditto') &&
@@ -1549,6 +1551,7 @@ export class Battle {
 					pokemon.moves.every(moveid => moveid === 'transform')
 				));
 				return side.pokemon.every(pokemon => (
+					pokemon.fainted ||
 					// frozen pokemon can't thaw in gen 1 without outside help
 					pokemon.status === 'frz' ||
 					// a pokemon can't lose PP if it Transforms into a pokemon with only Transform
