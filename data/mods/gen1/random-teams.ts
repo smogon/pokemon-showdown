@@ -32,19 +32,24 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			mbst += (stats["spd"] * 2 + 30 + 63 + 100) + 5;
 			mbst += (stats["spe"] * 2 + 30 + 63 + 100) + 5;
 
-			let level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
+			let level;
+			if (this.adjustLevel) {
+				level = this.adjustLevel;
+			} else {
+				level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
 
-			while (level < 100) {
-				mbst = Math.floor((stats["hp"] * 2 + 30 + 63 + 100) * level / 100 + 10);
-				// Since damage is roughly proportional to lvl
-				mbst += Math.floor(((stats["atk"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
-				mbst += Math.floor((stats["def"] * 2 + 30 + 63 + 100) * level / 100 + 5);
-				mbst += Math.floor(((stats["spa"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
-				mbst += Math.floor((stats["spd"] * 2 + 30 + 63 + 100) * level / 100 + 5);
-				mbst += Math.floor((stats["spe"] * 2 + 30 + 63 + 100) * level / 100 + 5);
+				while (level < 100) {
+					mbst = Math.floor((stats["hp"] * 2 + 30 + 63 + 100) * level / 100 + 10);
+					// Since damage is roughly proportional to lvl
+					mbst += Math.floor(((stats["atk"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
+					mbst += Math.floor((stats["def"] * 2 + 30 + 63 + 100) * level / 100 + 5);
+					mbst += Math.floor(((stats["spa"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
+					mbst += Math.floor((stats["spd"] * 2 + 30 + 63 + 100) * level / 100 + 5);
+					mbst += Math.floor((stats["spe"] * 2 + 30 + 63 + 100) * level / 100 + 5);
 
-				if (mbst >= mbstmin) break;
-				level++;
+					if (mbst >= mbstmin) break;
+					level++;
+				}
 			}
 
 			// Random DVs.
@@ -289,24 +294,24 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
-		if (species.comboMoves && this.randomChance(1, 2)) {
+		if (species.comboMoves && species.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
 			for (const m of species.comboMoves) moves.add(m);
 		}
 
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
-		if (moves.size < 4 && species.exclusiveMoves) {
+		if (moves.size < this.maxMoveCount && species.exclusiveMoves) {
 			moves.add(this.sample(species.exclusiveMoves));
 		}
 
 		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
-		if (moves.size < 4 && species.essentialMove) {
+		if (moves.size < this.maxMoveCount && species.essentialMove) {
 			moves.add(species.essentialMove);
 		}
 
-		while (moves.size < 4 && movePool.length) {
+		while (moves.size < this.maxMoveCount && movePool.length) {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.size < 4 && movePool.length) {
+			while (moves.size < this.maxMoveCount && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				moves.add(moveid);
 			}
@@ -352,8 +357,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			Caterpie: 100, Metapod: 100, Weedle: 100, Kakuna: 100, Magikarp: 100,
 			Ditto: 88,
 		};
-		let level = levelScale[species.tier] || 80;
-		if (customScale[species.name]) level = customScale[species.name];
+		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
 
 		return {
 			name: species.name,
@@ -411,7 +415,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
 					moves.push(move.id);
 				}
-			} while (moves.length < 4);
+			} while (moves.length < this.maxMoveCount);
 
 			// Random EVs
 			const evs = {
@@ -454,16 +458,21 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				mbst += calcStat(statName as StatID);
 				if (statName === 'hp') mbst += 5;
 			}
-			let level = Math.floor(100 * mbstmin / mbst);
-			while (level < 100) {
-				for (const statName of Object.keys(baseStats)) {
-					mbst += calcStat(statName as StatID, level);
-					if (statName === 'hp') mbst += 5;
+			let level;
+			if (this.adjustLevel) {
+				level = this.adjustLevel;
+			} else {
+				level = Math.floor(100 * mbstmin / mbst);
+				while (level < 100) {
+					for (const statName of Object.keys(baseStats)) {
+						mbst += calcStat(statName as StatID, level);
+						if (statName === 'hp') mbst += 5;
+					}
+					if (mbst >= mbstmin) break;
+					level++;
 				}
-				if (mbst >= mbstmin) break;
-				level++;
+				if (level > 100) level = 100;
 			}
-			if (level > 100) level = 100;
 
 			team.push({
 				name: species.baseSpecies,

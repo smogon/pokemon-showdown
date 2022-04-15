@@ -18,6 +18,59 @@ describe('value rule support', () => {
 		testTeam({format: 'gen8multirandombattle', rounds: 100}, team => assert.equal(team.length, 3));
 		testTeam({format: 'gen8cap1v1', rounds: 100}, team => assert.equal(team.length, 3));
 	});
+
+	for (let gen = 1; gen <= 8; gen++) {
+		const formatID = `gen${gen}randombattle`;
+		const dex = Dex.forFormat(formatID);
+		for (const count of [1, 3, 24]) {
+			// This is tough to test in Gen 1 because we don't know how many moves a Pokémon ought to have,
+			// so we only test 'Max Move Count = 1' in Gen 1.
+			if (gen === 1 && count !== 1) continue;
+			const format = Dex.formats.get(`${formatID}@@@Max Move Count = ${count}`);
+
+			it(`${format.name} should support Max Move Count = ${count}`, () => {
+				testTeam({format, rounds: 50}, team => {
+					for (const set of team) {
+						let species = set.species;
+						// Formes make this test code really complicated, so we skip them
+						// (This is because info about formes isn't passed through)
+						if (dex.species.get(species).otherFormes?.length || dex.species.get(species).forme) continue;
+						if (set.gigantamax && !set.species.endsWith('max')) species += '-Gmax';
+
+						// If the Pokémon has less than the max in its movepool, we should
+						// just see all those moves
+						let totalMoves = 0;
+						let seenHP = false;
+						for (const move of dex.species.get(species).randomBattleMoves) {
+							if (move.startsWith('hiddenpower')) {
+								if (seenHP) continue;
+								seenHP = true;
+							}
+							totalMoves++;
+						}
+
+						const expected = Math.min(totalMoves, count);
+						assert.equal(set.moves.length, expected, `${species} should have ${expected} moves (moves=${set.moves})`);
+					}
+				});
+			});
+		}
+	}
+
+	for (const format of Dex.formats.all()) {
+		if (!format.team) continue;
+		if (Dex.formats.getRuleTable(format).has('adjustleveldown')) continue; // already adjusts level
+
+		for (const level of [1, 99999]) {
+			it(`${format.name} should support Adjust Level = ${level}`, () => {
+				testTeam({format: `${format.id}@@@Adjust Level = ${level}`, rounds: 50}, team => {
+					for (const set of team) {
+						assert.equal(set.level, level);
+					}
+				});
+			});
+		}
+	}
 });
 
 describe(`randomly generated teams should be valid (slow)`, () => {

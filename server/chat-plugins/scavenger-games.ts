@@ -32,6 +32,12 @@ interface GameMode {
 	[k: string]: any;
 }
 
+function toSeconds(time: string) {
+	// hhmmss => ss
+	const parts = time.split(':').reverse();
+	return parts.map((value, index) => parseInt(value) * Math.pow(60, index)).reduce((a, b) => a + b);
+}
+
 class Leaderboard {
 	data: {[userid: string]: AnyObject};
 
@@ -210,6 +216,45 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onEnd() {
 			this.completed = this.preCompleted || [];
+		},
+	},
+
+	spamfilter: {
+		name: 'Spam Filter',
+		id: 'spamfilter',
+
+		desc: 'Every wrong answer adds 30 seconds to your final time!',
+
+		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+			if (!player.incorrect) player.incorrect = [];
+			const id = `${player.currentQuestion}-${value}`;
+			if (player.incorrect.includes(id)) return;
+
+			player.incorrect.push(id);
+		},
+
+		onComplete(player, time, blitz) {
+			const seconds = toSeconds(time);
+			if (!player.incorrect) return {name: player.name, total: seconds, blitz, time, original_time: time};
+
+			const total = seconds + (30 * player.incorrect.length);
+			const finalTime = Chat.toDurationString(total * 1000, {hhmmss: true});
+			if (total > 60) blitz = false;
+
+			return {name: player.name, total, blitz, time: finalTime, original_time: time};
+		},
+
+		onConfirmCompletion(player, time, blitz, place, result) {
+			blitz = result.blitz;
+			time = result.time;
+			const deductionMessage = player.incorrect?.length ?
+				Chat.count(player.incorrect, 'incorrect guesses', 'incorrect guess') :
+				"Perfect!";
+			return `<em>${Utils.escapeHTML(player.name)}</em> has finished the hunt! (Final Time: ${time} - ${deductionMessage}${(blitz ? " - BLITZ" : "")})`;
+		},
+
+		onEnd() {
+			Utils.sortBy(this.completed, entry => entry.total);
 		},
 	},
 
@@ -533,7 +578,8 @@ const MODES: {[k: string]: GameMode | string} = {
 		name: 'Team Scavs',
 		id: 'teamscavs',
 		/* {
-			[team_name: string]: {
+			[team
+			name: string]: {
 			  name: string[],
 			  players: UserID[],
 			  answers: string[],

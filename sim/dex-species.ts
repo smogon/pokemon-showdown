@@ -231,6 +231,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 
 	constructor(data: AnyObject) {
 		super(data);
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		data = this;
 
 		this.fullname = `pokemon: ${data.name}`;

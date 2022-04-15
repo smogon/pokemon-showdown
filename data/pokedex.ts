@@ -17175,7 +17175,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		prevo: "Basculin-White-Striped",
 		evoType: "other",
-		evoCondition: "Receive 294+ recoil from one move without fainting",
+		evoCondition: "Receive 294+ recoil without fainting",
 		eggGroups: ["Water 2"],
 		otherFormes: ["Basculegion-F"],
 		formeOrder: ["Basculegion", "Basculegion-F"],
@@ -17194,7 +17194,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		prevo: "Basculin-White-Striped",
 		evoType: "other",
-		evoCondition: "Receive 294+ recoil from one move without fainting",
+		evoCondition: "Receive 294+ recoil without fainting",
 		eggGroups: ["Water 2"],
 	},
 	sneasler: {
