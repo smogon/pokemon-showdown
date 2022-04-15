@@ -18550,7 +18550,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 10006,
 		name: "Hydrame",
 		types: ["Dragon", "Fire"],
-		baseStats: {hp: 105, atk: 100, def: 125, spa: 110, spd: 80, spe: 80},
+		baseStats: {hp: 90, atk: 90, def: 110, spa: 100, spd: 70, spe: 70},
 		abilities: {0: "Solid Footing", H: "Flame Body"},
 		heightm: 6.4,
 		weightkg: 300,
@@ -18809,7 +18809,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},
-	/* DELETED
 	kamisparce: {
 		num: 10025,
 		name: "Kamisparce",
@@ -18825,8 +18824,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Mineral"],
 		newmeta: "true",
 		canHatch: true,
-	},*/
-
+	},
 	femori: {
 		num: 10026,
 		name: "Femori",
@@ -19225,7 +19223,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 10055,
 		name: "Drapache",
 		types: ["Dragon", "Steel"],
-		baseStats: {hp: 112, atk: 81, def: 85, spa: 95, spd: 110, spe: 62},
+		baseStats: {hp: 112, atk: 86, def: 70, spa: 95, spd: 110, spe: 62},
 		abilities: {0: "Pressure", 1: "Heatproof", H: "Aerilate"},
 		heightm: 0.5,
 		weightkg: 40,
