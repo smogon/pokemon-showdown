@@ -21386,12 +21386,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-end', target, 'Abduction', '[interrupt]');
 			}
 		},
+		onTry(source, target) {
+			return !target.fainted;
+		},
 		onTryHit(target, source, move) {
-			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {
 				if (target !== source.volatiles['twoturnmove'].source) return false;
 			} else {
-				if (target.volatiles['substitute'] || target.side === source.side) {
+				if (target.volatiles['substitute'] || target.isAlly(source)) {
 					return false;
 				}
 				if (target.getWeight() >= 2000) {
