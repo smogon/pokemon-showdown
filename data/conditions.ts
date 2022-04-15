@@ -229,14 +229,14 @@ export const Conditions: {[k: string]: ConditionData} = {
 				}
 			},
 			onUpdate(pokemon) {
-				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract']) {
+				if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['attract']) {
 					this.debug('Removing Attract volatile on ' + pokemon);
 					pokemon.removeVolatile('attract');
 				}
 			},
 			onBeforeMovePriority: 2,
 			onBeforeMove(pokemon, target, move) {
-				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectData.source);
+				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.source);
 				if (this.randomChance(1, 2)) {
 					this.add('cant', pokemon, 'Attract');
 					return false;
@@ -699,7 +699,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.isWeather('sandstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
-			if (source?.hasAbility('catastrophic') || target?.hasAbility('catastrophic')) {
+			if (target?.hasAbility('catastrophic')) {
 				this.damage(target.baseMaxhp / 8);
 			}
 			else {
@@ -734,7 +734,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather(target, source, effect) {
-			if (source?.hasAbility('catastrophic') || target?.hasAbility('catastrophic')) {
+			if (target?.hasAbility('catastrophic')) {
 				this.damage(target.baseMaxhp / 8);
 			}
 			else {
@@ -787,7 +787,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectData.duration = 0;
+				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'Toxic Cloud', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Toxic Cloud');
@@ -802,7 +802,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (target.side.getSideCondition('antidote')) return;
 			if (target.hasAbility('poisonheal')) return;
 			if (target.hasAbility('immunity')) return;
-			if (source?.hasAbility('catastrophic') || target?.hasAbility('catastrophic')) {
+			if (target?.hasAbility('catastrophic')) {
 				this.damage(target.baseMaxhp / 8);
 			}
 			else {
@@ -823,7 +823,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectData.duration = 0;
+				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'Neutral Weather', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Neutral Weather');

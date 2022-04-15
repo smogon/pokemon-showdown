@@ -758,7 +758,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	magmaarmor: {
 		name: "Magma Armor",
 		shortDesc: "This Pokemon cannot be frozen. Water/Grass-type moves are halved.",
-		shortDesc: "Water/Grass-type moves against this Pokemon deal damage with a halved attacking stat.",
+		desc: "Water/Grass-type moves against this Pokemon deal damage with a halved attacking stat.",
 	},
 	magnetpull: {
 		name: "Magnet Pull",
@@ -2020,7 +2020,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Toxic Intake",
 		desc: "If Toxic Cloud is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its HP does not get restored.",
 		shortDesc: "If Toxic Cloud is active, this Pokemon heals 1/16 of its max HP each turn.",
-		descGen7: "If Toxic Cloud is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
 		newmeta: "true",
 	},
 	sleepyfellow: {
@@ -2044,7 +2043,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	divinity: {
 		name: "Divinity",
 		shortDesc: "If this Pokemon is at half HP or more, its Light-type moves have their priority increased by 1.",
-		shortDescGen6: "If HP >= 50%, this Pokemon's Light-type moves have their priority increased by 1.",
+		desc: "If HP >= 50%, this Pokemon's Light-type moves have their priority increased by 1.",
 		newmeta: "true",
 	},
 	blizzardgift: {

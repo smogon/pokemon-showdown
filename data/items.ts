@@ -7497,7 +7497,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		onCriticalHit(target, source, move) {
-			if (target.useItem(source)) {
+			if (target.useItem()) {
 				console.log('crit detected');
 				this.add('-item', target, 'Fog Machine');
 				return false;
