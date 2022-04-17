@@ -13,10 +13,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
-	beastball: {
-		inherit: true,
-		isNonstandard: "Future",
-	},
 	belueberry: {
 		inherit: true,
 		isNonstandard: null,
