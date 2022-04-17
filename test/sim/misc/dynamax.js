@@ -77,11 +77,12 @@ describe("Dynamax", function () {
 			{species: 'weedle', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices('move sleeptalk dynamax', 'auto');
-		const dynamaxedHP = battle.p1.active[0].hp;
 		battle.makeChoices();
 		battle.makeChoices('move psychic', 'auto');
-		assert.equal(battle.requestState, 'switch');
-		assert.equal(battle.p1.active[0].hp, dynamaxedHP);
+		const wynaut = battle.p1.active[0];
+		assert(wynaut.volatiles['dynamax'], 'End of 3rd turn, Wynaut should still be Dynamaxed.');
+		battle.makeChoices('', 'switch 2');
+		assert.false(wynaut.volatiles['dynamax'], 'Start of 4th turn, Wynaut should not be Dynamaxed.');
 	});
 
 	it('should be impossible to Dynamax when all the base moves are disabled', function () {
