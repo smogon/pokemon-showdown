@@ -83,6 +83,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dreamball: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	earthplate: {
 		inherit: true,
 		isNonstandard: null,
