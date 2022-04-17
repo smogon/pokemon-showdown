@@ -1604,7 +1604,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 715,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	fairymemory: {
 		name: "Fairy Memory",
