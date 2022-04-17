@@ -15,6 +15,7 @@ import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
 import type {GlobalPermission} from '../user-groups';
 
 const WHITELIST = ["mia"];
+const MUTE_DURATION = 7 * 60 * 1000;
 const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
@@ -50,6 +51,8 @@ export const cache: {
 	migrated = true;
 	return plugin.cache;
 })();
+
+export const muted = Chat.oldPlugins['abuse-monitor']?.muted || new WeakMap<Room, WeakMap<User, number>>();
 
 const defaults: FilterSettings = {
 	threshold: 4,
@@ -260,7 +263,11 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 				).update();
 				return; // we want nothing else to be executed. staff want trusted users to be reviewed manually for now
 			}
-			room.mute(user);
+
+			const roomMutes = muted.get(room) || new WeakMap();
+			roomMutes.set(user, Date.now() + MUTE_DURATION);
+			muted.set(room, roomMutes);
+
 			const result = await punishmentHandlers[toID(punishment)]?.(user, room, response, message);
 			writeStats('punishments', {
 				punishment,
@@ -442,6 +449,24 @@ function makeScore(roomid: RoomID, result: Record<string, number>) {
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	// 2 lines to not hit max-len
 	if (!room?.battle || !['rated', 'unrated'].includes(room.battle.challengeType)) return;
+	const mutes = muted.get(room);
+	const muteEntry = mutes?.get(user);
+	if (muteEntry) {
+		if (Date.now() > muteEntry) {
+			mutes.delete(user);
+			if (!mutes.size) {
+				muted.delete(room);
+			}
+		} else {
+			this.sendReply(
+				`|c|&|/raw <div class="message-error">` +
+				`Your behavior in this battle has been automatically identified as breaking ` +
+				`<a href="https://${Config.routes.root}/rules">Pokemon Showdown's global rules.</a> ` +
+				`Repeated instances of misbehavior may incur harsher punishment.</div>`
+			);
+			return false;
+		}
+	}
 	if (settings.disabled) return;
 	// startsWith('!') - broadcasting command, ignore it.
 	if (!Config.perspectiveKey || message.startsWith('!')) return;
