@@ -1516,8 +1516,7 @@ export class Battle {
 		}
 
 		const dynamaxEnding: Pokemon[] = [];
-		const active = this.getAllActive();
-		for (const pokemon of active) {
+		for (const pokemon of this.getAllActive()) {
 			if (pokemon.volatiles['dynamax']?.turns === 3) {
 				dynamaxEnding.push(pokemon);
 			}
