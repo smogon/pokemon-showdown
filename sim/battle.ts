@@ -1515,13 +1515,19 @@ export class Battle {
 			}
 		}
 
-		this.updateSpeed();
-		const sortedActive = this.getAllActive();
-		this.speedSort(sortedActive);
-		for (const active of sortedActive) {
-			if (active.volatiles['dynamax']?.turns === 3) {
-				active.removeVolatile('dynamax');
+		const dynamaxEnding: Pokemon[] = [];
+		const active = this.getAllActive();
+		for (const pokemon of active) {
+			if (pokemon.volatiles['dynamax']?.turns === 3) {
+				dynamaxEnding.push(pokemon);
 			}
+		}
+		if (dynamaxEnding.length > 1) {
+			this.updateSpeed();
+			this.speedSort(dynamaxEnding);
+		}
+		for (const pokemon of dynamaxEnding) {
+			pokemon.removeVolatile('dynamax');
 		}
 
 		this.add('turn', this.turn);
