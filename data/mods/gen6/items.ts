@@ -25,6 +25,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	fastball: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	figyberry: {
 		inherit: true,
 		onUpdate(pokemon) {
@@ -38,6 +42,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.addVolatile('confusion');
 			}
 		},
+	},
+	heavyball: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	iapapaberry: {
 		inherit: true,
@@ -63,6 +71,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	levelball: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	lifeorb: {
 		inherit: true,
 		onAfterMoveSecondarySelf(source, target, move) {
@@ -70,6 +82,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 			}
 		},
+	},
+	loveball: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	lureball: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	machobrace: {
 		inherit: true,
@@ -92,6 +112,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	magostberry: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	moonball: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	nanabberry: {
 		inherit: true,
