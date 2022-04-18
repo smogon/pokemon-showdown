@@ -57,7 +57,7 @@ describe('Dex#getSpecies', function () {
 });
 
 describe('Dex#getItem', function () {
-	it.only(`should correctly mark Gem legality`, function () {
+	it(`should correctly mark Gem legality`, function () {
 		assert.false(Dex.forGen(5).items.get('Normal Gem').isNonstandard);
 		assert.false(Dex.forGen(5).items.get('Rock Gem').isNonstandard);
 
