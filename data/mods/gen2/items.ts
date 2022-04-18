@@ -50,6 +50,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	fastball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	focusband: {
 		inherit: true,
 		onDamage(damage, target, source, effect) {
@@ -67,6 +71,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return damage * 1.1;
 			}
 		},
+	},
+	heavyball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	kingsrock: {
 		inherit: true,
@@ -91,10 +99,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 	},
+	levelball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	lightball: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
 		onModifySpA() {},
+	},
+	loveball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	luckypunch: {
 		inherit: true,
@@ -104,6 +120,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return 3;
 			}
 		},
+	},
+	lureball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	magnet: {
 		inherit: true,
@@ -137,6 +157,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return damage * 1.1;
 			}
 		},
+	},
+	moonball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	mysticwater: {
 		inherit: true,
@@ -200,6 +224,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return damage * 1.1;
 			}
 		},
+	},
+	sportball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	stick: {
 		inherit: true,
