@@ -142,7 +142,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	dreamball: {
 		inherit: true,
-		isNonstandard: "Future",
+		isNonstandard: "Unobtainable",
 	},
 	durinberry: {
 		inherit: true,
@@ -497,7 +497,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	safariball: {
 		inherit: true,
-		isNonstandard: "Future",
+		isNonstandard: "Unobtainable",
 	},
 	sailfossil: {
 		inherit: true,
@@ -553,7 +553,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	sportball: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	steelgem: {
 		inherit: true,

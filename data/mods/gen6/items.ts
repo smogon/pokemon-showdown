@@ -27,7 +27,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	fastball: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	figyberry: {
 		inherit: true,
@@ -45,7 +45,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	heavyball: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	iapapaberry: {
 		inherit: true,
@@ -73,7 +73,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	levelball: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	lifeorb: {
 		inherit: true,
@@ -85,11 +85,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	loveball: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	lureball: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	machobrace: {
 		inherit: true,
@@ -115,7 +115,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	moonball: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	nanabberry: {
 		inherit: true,
