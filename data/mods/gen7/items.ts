@@ -459,6 +459,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	psychicgem: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	psychiumz: {
 		inherit: true,
 		isNonstandard: null,
