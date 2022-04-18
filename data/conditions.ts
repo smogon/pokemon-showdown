@@ -697,8 +697,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 	dynamax: {
 		name: 'Dynamax',
 		noCopy: true,
-		duration: 3,
 		onStart(pokemon) {
+			this.effectState.turns = 0;
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
@@ -736,6 +736,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return null;
 		},
 		onResidualPriority: -100,
+		onResidual() {
+			this.effectState.turns++;
+		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.baseSpecies.name === 'Shedinja') return;

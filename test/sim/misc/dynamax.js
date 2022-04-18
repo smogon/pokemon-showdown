@@ -69,19 +69,20 @@ describe("Dynamax", function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it.skip('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
+	it('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
 		], [
 			{species: 'weedle', level: 1, moves: ['sleeptalk']},
 			{species: 'weedle', moves: ['sleeptalk']},
 		]]);
-		battle.makeChoices('move sleep talk dynamax');
-		const dynamaxedHP = battle.p1.active[0].hp;
+		battle.makeChoices('move sleeptalk dynamax', 'auto');
 		battle.makeChoices();
-		battle.makeChoices('move psychic');
-		assert.equal(battle.requestState, 'switch');
-		assert.equal(battle.p1.active[0].hp, dynamaxedHP);
+		battle.makeChoices('move psychic', 'auto');
+		const wynaut = battle.p1.active[0];
+		assert(wynaut.volatiles['dynamax'], 'End of 3rd turn, Wynaut should still be Dynamaxed.');
+		battle.makeChoices('', 'switch 2');
+		assert.false(wynaut.volatiles['dynamax'], 'Start of 4th turn, Wynaut should not be Dynamaxed.');
 	});
 
 	it('should be impossible to Dynamax when all the base moves are disabled', function () {
