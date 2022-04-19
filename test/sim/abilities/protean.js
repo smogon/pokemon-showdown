@@ -39,7 +39,7 @@ describe('Protean', function () {
 		assert(wynaut.hasType('Flying'));
 	});
 
-	it.skip(`should not change the user's type when using moves that fail earlier than Protean will activate`, function () {
+	it(`should not change the user's type when using moves that fail earlier than Protean will activate`, function () {
 		battle = common.createBattle([[
 			{species: 'Kecleon', ability: 'protean', moves: ['fling', 'suckerpunch', 'steelroller', 'aurawheel']},
 			{species: 'Kecleon', ability: 'protean', moves: ['counter', 'metalburst']},
