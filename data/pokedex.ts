@@ -5868,7 +5868,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Monster"],
 		requiredItem: "Aggronite",
 	},
-
 	aronquantum: {
 		num: 304,
 		name: "Aron-Quantum",
@@ -5907,7 +5906,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		baseSpecies: "Aggron",
 		forme: "Quantum",
 		types: ["Cosmic", "Steel"],
-		baseStats: {hp: 100, atk: 100, def: 120, spa: 60, spd: 120, spe: 30},
+		baseStats: {hp: 80, atk: 100, def: 120, spa: 60, spd: 120, spe: 50},
 		abilities: {0: "Levitate", 1: "Heavy Metal", H: "Adaptability"},
 		heightm: 2.1,
 		weightkg: 360,
