@@ -226,7 +226,8 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+		banlist:
 	},
 	{
 		name: "[Gen 8] 1v1",
