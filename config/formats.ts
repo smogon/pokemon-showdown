@@ -158,7 +158,6 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] ZU",
-		desc: `The unofficial usage-based tier below PU.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3687415/">ZU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3680071/">ZU Sample Teams</a>`,
@@ -167,10 +166,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] PU'],
-		banlist: [
-			'PU', 'Arctovish', 'Aurorus', 'Basculin', 'Centiskorch', 'Drampa', 'Exeggutor-Alola', 'Gallade', 'Haunter', 'Magmortar', 'Magneton', 'Omastar',
-			'Rotom-Frost', 'Turtonator', 'Vanilluxe', 'Vikavolt', 'Silvally-Dragon', 'Silvally-Ground', 'Sneasel', 'Damp Rock', 'Grassy Seed',
-		],
+		banlist: ['PU',	'ZUBL'],
 	},
 	{
 		name: "[Gen 8] LC UBER",
