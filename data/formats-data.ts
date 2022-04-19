@@ -6744,5 +6744,5 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	coleoterra: {
 		tier: "RU",
-	}
+	},
 };
