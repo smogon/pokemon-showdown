@@ -98,10 +98,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: [
-			'Uber', 'AG', 'Arena Trap', 'Moody', 'Power Construct', 'Sand Veil', 'Shadow Tag', 'Snow Cloak',
-			'Bright Powder', 'King\'s Rock', 'Lax Incense', 'Baton Pass',
-		],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Power Construct', 'Sand Veil', 'Shadow Tag', 'Snow Cloak','Baton Pass'],
 	},
 	{
 		name: "[Gen 8] OU (Blitz)",
@@ -119,7 +116,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['OU', 'UUBL', 'Light Clay'],
+		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 8] RU",
@@ -143,7 +140,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] RU'],
-		banlist: ['RU', 'NUBL', 'Drizzle', 'Drought', 'Slush Rush'],
+		banlist: ['RU', 'NUBL'],
 	},
 	{
 		name: "[Gen 8] PU",
@@ -184,8 +181,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'LC UBER',
-			'Chlorophyll', 'Moody', 'Baton Pass', 'Shadow Tag',
+			'LC UBER', 'Moody', 'Baton Pass', 'Shadow Tag',
 		],
 	},
 	{
@@ -501,10 +497,7 @@ export const Formats: FormatList = [
 
 		mod: 'nmmegaz',
 		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: [
-			'Uber', 'AG', 'Arena Trap', 'Moody', 'Power Construct', 'Sand Veil', 'Shadow Tag', 'Snow Cloak',
-			'Bright Powder', 'King\'s Rock', 'Lax Incense', 'Baton Pass',
-		],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Power Construct', 'Sand Veil', 'Shadow Tag', 'Snow Cloak','Baton Pass'],
 	},
 	{
 		name: "[Gen 8] MegaZ UU",
@@ -516,7 +509,7 @@ export const Formats: FormatList = [
 
 		mod: 'nmmegaz',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['OU', 'UUBL', 'Light Clay'],
+		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 8] MegaZ RU",
@@ -540,7 +533,7 @@ export const Formats: FormatList = [
 
 		mod: 'nmmegaz',
 		ruleset: ['[Gen 8] MegaZ RU'],
-		banlist: ['RU', 'NUBL', 'Drizzle', 'Drought', 'Slush Rush'],
+		banlist: ['RU', 'NUBL'],
 	},
 	{
 		name: "[Gen 8] MegaZ PU",
