@@ -1453,7 +1453,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC UU",
 	},
 	ledian: {
-		tier: "Ubers",
+		tier: "Uber",
 	},
 	spinarak: {
 		tier: "LC UU",
