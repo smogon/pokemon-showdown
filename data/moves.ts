@@ -5387,7 +5387,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
