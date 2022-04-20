@@ -6743,6 +6743,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 	},
 	coleoterra: {
-		tier: "Illegal",
+		tier: "RU",
 	},
 };
