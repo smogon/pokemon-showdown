@@ -1515,6 +1515,20 @@ export class Battle {
 			}
 		}
 
+		const dynamaxEnding: Pokemon[] = [];
+		for (const pokemon of this.getAllActive()) {
+			if (pokemon.volatiles['dynamax']?.turns === 3) {
+				dynamaxEnding.push(pokemon);
+			}
+		}
+		if (dynamaxEnding.length > 1) {
+			this.updateSpeed();
+			this.speedSort(dynamaxEnding);
+		}
+		for (const pokemon of dynamaxEnding) {
+			pokemon.removeVolatile('dynamax');
+		}
+
 		this.add('turn', this.turn);
 		if (this.gameType === 'multi') {
 			for (const side of this.sides) {

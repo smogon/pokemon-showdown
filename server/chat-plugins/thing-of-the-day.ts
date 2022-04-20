@@ -694,6 +694,7 @@ export const otdCommands: Chat.ChatCommands = {
 			case 'tagline':
 			case 'match':
 			case 'event':
+			case 'videogame':
 				if (!value.length || value.length > 150) return this.errorReply(`Please enter a valid ${key}.`);
 				break;
 			case 'sport':

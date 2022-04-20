@@ -753,6 +753,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 16,
 		gen: 4,
 		isPokeball: true,
+		isNonstandard: "Unobtainable",
 	},
 	chestoberry: {
 		name: "Chesto Berry",
@@ -3774,6 +3775,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 500,
 		gen: 4,
 		isPokeball: true,
+		isNonstandard: "Unobtainable",
 	},
 	passhoberry: {
 		name: "Passho Berry",

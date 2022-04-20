@@ -1294,7 +1294,7 @@ const commands: Chat.ChatCommands = {
 		const {name, time} = array[0];
 		let buf = `The last tournament ended ${Chat.toDurationString(Date.now() - time)} ago - ${name}`;
 		if (array.length > 1) {
-			buf += `<hr /><strong>Previous tournments:</strong> `;
+			buf += `<hr /><strong>Previous tournaments:</strong> `;
 			buf += array.filter((x, i) => i !== 0).map(x => x.name).join(', ');
 		}
 		this.sendReplyBox(buf);

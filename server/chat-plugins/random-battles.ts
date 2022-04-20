@@ -64,7 +64,13 @@ function setProbability(
 	const generator = Teams.getGenerator(format);
 
 	for (let i = 0; i < rounds; i++) {
-		const set = generator.randomSet(species);
+		const set = generator.randomSet(
+			species,
+			{},
+			false,
+			format.gameType !== 'singles',
+			format.ruleTable?.has('dynamaxclause')
+		);
 
 		if (criteria.item.mustHave && set.item !== criteria.item.mustHave.name) continue;
 		if (criteria.item.mustNotHave.some(item => item.name === set.item)) continue;

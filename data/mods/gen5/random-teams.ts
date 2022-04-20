@@ -479,7 +479,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.size < 4 && movePool.length) {
+			while (moves.size < this.maxMoveCount && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
@@ -489,7 +489,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				moves.add(moveid);
 			}
 
-			while (moves.size < 4 && rejectedPool.length) {
+			while (moves.size < this.maxMoveCount && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) {
@@ -644,7 +644,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					break;
 				}
 			}
-		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
+		} while (moves.size < this.maxMoveCount && (movePool.length || rejectedPool.length));
 
 		if (hasHiddenPower) {
 			let hpType;
@@ -729,8 +729,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const customScale: {[forme: string]: number} = {
 			Delibird: 100, 'Farfetch\u2019d': 100, Luvdisc: 100, Unown: 100,
 		};
-		let level = levelScale[species.tier] || (species.nfe ? 90 : 80);
-		if (customScale[species.name]) level = customScale[species.name];
+		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		const srWeakness = this.dex.getEffectiveness('Rock', species);

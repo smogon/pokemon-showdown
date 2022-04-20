@@ -12,8 +12,10 @@ import {FS, Utils} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
+import type {GlobalPermission} from '../user-groups';
 
 const WHITELIST = ["mia"];
+const MUTE_DURATION = 7 * 60 * 1000;
 const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
@@ -49,6 +51,8 @@ export const cache: {
 	migrated = true;
 	return plugin.cache;
 })();
+
+export const muted = Chat.oldPlugins['abuse-monitor']?.muted || new WeakMap<Room, WeakMap<User, number>>();
 
 const defaults: FilterSettings = {
 	threshold: 4,
@@ -114,7 +118,7 @@ interface ReviewRequest {
 	room: string;
 	details: string;
 	time: number;
-	resolved?: {by: string, time: number, details: string};
+	resolved?: {by: string, time: number, details: string, result: number};
 }
 
 // stolen from chatlog. necessary here, but importing chatlog sucks.
@@ -146,7 +150,7 @@ function visualizePunishment(punishment: PunishmentSettings) {
 		.join(', ');
 }
 
-function displayResolved(review: ReviewRequest) {
+function displayResolved(review: ReviewRequest, justSubmitted = false) {
 	const user = Users.get(review.staff);
 	if (!user) return;
 	const resolved = review.resolved;
@@ -154,8 +158,8 @@ function displayResolved(review: ReviewRequest) {
 	const prefix = `|pm|&|${user.getIdentity()}|`;
 	user.send(
 		prefix +
-		`Your Artemis review was resolved by ${resolved.by}, ` +
-		`${Chat.toDurationString(Date.now() - resolved.time)} ago.`
+		`Your Artemis review for <<${review.room}>> was resolved by ${resolved.by}` +
+		(justSubmitted ? "." : `, ${Chat.toDurationString(Date.now() - resolved.time)} ago.`)
 	);
 	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
 	const idx = reviews[user.id].findIndex(r => r === review); // object references!
@@ -199,7 +203,7 @@ async function searchModlog(
 
 export const classifier = new Artemis.RemoteClassifier();
 
-export async function runActions(user: User, room: GameRoom, response: Record<string, number>) {
+export async function runActions(user: User, room: GameRoom, message: string, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string][] = [];
 	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
@@ -259,8 +263,18 @@ export async function runActions(user: User, room: GameRoom, response: Record<st
 				).update();
 				return; // we want nothing else to be executed. staff want trusted users to be reviewed manually for now
 			}
-			room.mute(user);
-			const result = await punishmentHandlers[toID(punishment)]?.(user, room);
+
+			const roomMutes = muted.get(room) || new WeakMap();
+			roomMutes.set(user, Date.now() + MUTE_DURATION);
+			muted.set(room, roomMutes);
+
+			const result = await punishmentHandlers[toID(punishment)]?.(user, room, response, message);
+			writeStats('punishments', {
+				punishment,
+				userid: user.id,
+				roomid: room.roomid,
+				timestamp: Date.now(),
+			});
 			if (result !== false) {
 				// returning false means not to close the 'ticket'
 				const notified = cache[room.roomid].staffNotified;
@@ -358,9 +372,13 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 	}
 }
 
-const punishmentHandlers: Record<string, (user: User, room: GameRoom) => void | boolean | Promise<void | boolean>> = {
-	warn(user, room) {
-		const reason = `Not following rules in battle (https://${Config.routes.client}/${room.roomid})`;
+type PunishmentHandler = (
+	user: User, room: GameRoom, response: Record<string, number>, message: string,
+) => void | boolean | Promise<void | boolean>;
+
+const punishmentHandlers: Record<string, PunishmentHandler> = {
+	warn(user, room, response, message) {
+		const reason = `${Users.PLAYER_SYMBOL}${user.name}: ${message}`;
 		if (!user.connected) {
 			Punishments.offlineWarns.set(user.id, reason);
 		} else {
@@ -431,6 +449,24 @@ function makeScore(roomid: RoomID, result: Record<string, number>) {
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	// 2 lines to not hit max-len
 	if (!room?.battle || !['rated', 'unrated'].includes(room.battle.challengeType)) return;
+	const mutes = muted.get(room);
+	const muteEntry = mutes?.get(user);
+	if (muteEntry) {
+		if (Date.now() > muteEntry) {
+			mutes.delete(user);
+			if (!mutes.size) {
+				muted.delete(room);
+			}
+		} else {
+			this.sendReply(
+				`|c|&|/raw <div class="message-error">` +
+				`Your behavior in this battle has been automatically identified as breaking ` +
+				`<a href="https://${Config.routes.root}/rules">Pokemon Showdown's global rules.</a> ` +
+				`Repeated instances of misbehavior may incur harsher punishment.</div>`
+			);
+			return false;
+		}
+	}
 	if (settings.disabled) return;
 	// startsWith('!') - broadcasting command, ignore it.
 	if (!Config.perspectiveKey || message.startsWith('!')) return;
@@ -467,7 +503,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 					// response exists if we got this far
 					[user.id, score, response![main], main, room.roomid, Date.now()]
 				);
-				void runActions(user, room, response || {});
+				void runActions(user, room, message, response || {});
 			}
 			await Chat.database.run(
 				'INSERT INTO perspective_logs (userid, message, score, flags, roomid, time, hit_threshold) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -535,6 +571,14 @@ function getFlaggedRooms() {
 	return Object.keys(cache).filter(roomid => cache[roomid].staffNotified);
 }
 
+export function writeStats(type: string, entry: AnyObject) {
+	const path = `logs/artemis/${type}/${Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3)}.jsonl`;
+	try {
+		FS(path).parentDir().mkdirpSync();
+	} catch {}
+	void FS(path).append(JSON.stringify(entry) + "\n");
+}
+
 function saveSettings(isBackup = false) {
 	FS(`config/chat-plugins/nf${isBackup ? ".backup" : ""}.json`).writeUpdate(() => JSON.stringify(settings));
 }
@@ -566,8 +610,11 @@ export function notifyStaff() {
 	}
 }
 
-function checkAccess(context: Chat.CommandContext | Chat.PageContext) {
-	if (!WHITELIST.includes(context.user.id)) context.checkCan('bypassall');
+function checkAccess(context: Chat.CommandContext | Chat.PageContext, perm: GlobalPermission = 'bypassall') {
+	const user = context.user;
+	if (!(WHITELIST.includes(user.id) || user.previousIDs.some(id => WHITELIST.includes(id)))) {
+		context.checkCan(perm);
+	}
 }
 
 export const commands: Chat.ChatCommands = {
@@ -629,6 +676,70 @@ export const commands: Chat.ChatCommands = {
 				buf += `&bull; ${k}: ${response[k]}<br />`;
 			}
 			this.sendReplyBox(buf);
+		},
+		cm: 'compare',
+		async compare(target) {
+			checkAccess(this);
+			const [base, against] = Utils.splitFirst(target, ',').map(f => f.trim());
+			if (!(base && against)) return this.parse(`/help abusemonitor`);
+			const colors: Record<string, string> = {
+				'0': 'Purple',
+				'1': 'DodgerBlue',
+				'2': 'Red',
+			};
+			const baseResponse = await classifier.classify(base) || {};
+			const againstResponse = await new Promise<Record<string, number> | null>(resolve => {
+				// bit of a hack, but this has to be done so rate limits don't get hit
+				setTimeout(() => {
+					resolve(classifier.classify(against));
+				}, 500);
+			}) || {};
+			let buf = Utils.html`<strong>Compared scores for "${base}" `;
+			buf += `(<strong style="color: ${colors['1']}">1</strong>) `;
+			buf += Utils.html`and "${against}" (<strong style="color: ${colors['2']}">2</strong>): </strong><br />`;
+			for (const [k, val] of Object.entries(baseResponse)) {
+				const max = Math.max(val, againstResponse[k]);
+				const num = val === againstResponse[k] ? '0' : max === val ? '1' : '2';
+				buf += `&bull; ${k}: <strong style="color: ${colors[num]}">${num}</strong> `;
+				if (num === '0') {
+					buf += `(${max})`;
+				} else {
+					buf += `(${max} vs ${(max === val ? againstResponse : baseResponse)[k]})`;
+				}
+				buf += `<br />`;
+			}
+			this.runBroadcast();
+			return this.sendReplyBox(buf);
+		},
+		async score(target) {
+			checkAccess(this);
+			target = target.trim();
+			if (!target) return this.parse(`/help abusemonitor`);
+			const [text, scoreText] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const args = Chat.parseArguments(scoreText, ',', '=', false);
+			const scores: Record<string, number> = {};
+			for (let k in args) {
+				const vals = args[k];
+				if (vals.length > 1) {
+					return this.errorReply(`Too many values for ${k}`);
+				}
+				k = k.toUpperCase().replace(/\s/g, '_');
+				if (!(k in Artemis.RemoteClassifier.ATTRIBUTES)) {
+					return this.errorReply(`Invalid attribute: ${k}`);
+				}
+				const val = parseFloat(vals[0]);
+				if (isNaN(val)) {
+					return this.errorReply(`Invalid value for ${k}: ${vals[0]}`);
+				}
+				scores[k] = val;
+			}
+			for (const k in Artemis.RemoteClassifier.ATTRIBUTES) {
+				if (!(k in scores)) scores[k] = 0;
+			}
+			const response = await classifier.suggestScore(text, scores);
+			if (response.error) throw new Chat.ErrorMessage(response.error);
+			this.sendReply(`Recommendation successfully sent.`);
+			Rooms.get('abuselog')?.roomlog(`${this.user.name} used /am score ${target}`);
 		},
 		toggle(target) {
 			checkAccess(this);
@@ -739,7 +850,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		ul: 'userlogs',
 		userlogs(target) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			return this.parse(`/join view-abusemonitor-userlogs-${toID(target)}`);
 		},
 		stats(target) {
@@ -879,6 +990,22 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
+		},
+		ex: 'exportpunishment',
+		exportpunishment(target) {
+			checkAccess(this);
+			const num = parseInt(target) - 1;
+			if (isNaN(num)) {
+				return this.errorReply(`Invalid punishment number: ${num + 1}.`);
+			}
+			const punishment = settings.punishments[num];
+			if (!punishment) {
+				return this.errorReply(`Punishment ${num + 1} does not exist.`);
+			}
+			this.sendReply(
+				`|html|Punishment ${num + 1}: <code>` +
+				`${visualizePunishment(punishment).replace(/: /g, ' = ')}</code>`
+			);
 		},
 		ep: 'exportpunishments', // exports punishment settings to something easily copy/pastable
 		exportpunishments() {
@@ -1214,10 +1341,10 @@ export const commands: Chat.ChatCommands = {
 		},
 		resolvereview(target, room, user) {
 			checkAccess(this);
-			let [userid, roomid, result] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
+			let [userid, roomid, accurate, result] = Utils.splitFirst(target, ',', 3).map(f => f.trim());
 			userid = toID(userid);
 			roomid = getBattleLinks(roomid)[0] || "";
-			if (!userid || !roomid || !result) {
+			if (!userid || !roomid || !accurate || !result) {
 				return this.parse(`/help abusemonitor resolvereview`);
 			}
 			if (!reviews[userid]) {
@@ -1227,6 +1354,10 @@ export const commands: Chat.ChatCommands = {
 			if (!review) {
 				return this.errorReply(`No reviews found by that user for that room.`);
 			}
+			const isAccurate = Number(accurate);
+			if (isNaN(isAccurate) || isAccurate < 0 || isAccurate > 1) {
+				return this.popupReply(`Invalid accuracy. Must be a number between 0 and 1.`);
+			}
 			if (review.resolved) {
 				return this.errorReply(`That review has already been resolved.`);
 			}
@@ -1234,19 +1365,22 @@ export const commands: Chat.ChatCommands = {
 				by: user.id,
 				time: Date.now(),
 				details: result || "",
+				result: isAccurate,
 			};
-			displayResolved(review);
+			displayResolved(review, true);
+			writeStats('reviews', review);
 			Chat.refreshPageFor('abusemonitor-reviews', 'staff');
 		},
 		replace(target, room, user) {
 			checkAccess(this);
 			if (!target) return this.parse(`/help am`);
-			const [old, newWord] = target.split(',').map(val => val.trim());
+			const [old, newWord] = target.split(',');
 			if (!old || !newWord) return this.errorReply(`Invalid arguments - must be [oldWord], [newWord].`);
 			if (toID(old) === toID(newWord)) return this.errorReply(`The old word and the new word are the same.`);
 			if (settings.replacements[old]) {
 				return this.errorReply(`The old word '${old}' is already in use (for '${settings.replacements[old]}').`);
 			}
+			Chat.validateRegex(target);
 			settings.replacements[old] = newWord;
 			saveSettings();
 			this.privateGlobalModAction(`${user.name} added an Artemis replacement for '${old}' to '${newWord}'.`);
@@ -1290,7 +1424,7 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	abusemonitor: {
 		flagged(query, user) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			const ids = getFlaggedRooms();
 			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
@@ -1323,7 +1457,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async view(query, user) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			const roomid = query.join('-') as RoomID;
 			if (!toID(roomid)) {
 				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
@@ -1551,7 +1685,7 @@ export const pages: Chat.PageTable = {
 				staffStats[log.staff]++;
 				dayStats[cur].total++;
 			}
-			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100) || 0;
 			buf += `<p><strong>Success rate:</strong> ${percent(successes, successes + failures)}% (${successes})</p>`;
 			buf += `<p><strong>Failure rate:</strong> ${percent(failures, successes + failures)}% (${failures})</p>`;
 			buf += `<p><details class="readmore"><summary><strong>Stats including dead flags</strong></summary>`;
@@ -1587,7 +1721,92 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<tr>${header}</tr><tr>${data}</tr>`;
 			buf += `</div></table>`;
-			buf += `<p><strong>Staff stats:</strong></p>`;
+			buf += `<hr /><p><strong>Punishment stats:</strong></p>`;
+			const punishmentStats = {
+				inaccurate: 0,
+				total: 0,
+				byDay: {} as Record<string, {total: number, inaccurate: number}>,
+				types: {} as Record<string, number>,
+			};
+			const inaccurate = new Set();
+			const logPath = FS(`logs/artemis/punishments/${month}.jsonl`);
+			if (await logPath.exists()) {
+				const stream = logPath.createReadStream();
+				for await (const line of stream.byLine()) {
+					if (!line.trim()) continue;
+					const chunk = JSON.parse(line.trim());
+					punishmentStats.total++;
+					if (!punishmentStats.types[chunk.punishment]) punishmentStats.types[chunk.punishment] = 0;
+					punishmentStats.types[chunk.punishment]++;
+					const day = Chat.toTimestamp(new Date(chunk.timestamp)).split(' ')[0];
+					if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
+					punishmentStats.byDay[day].total++;
+				}
+			}
+
+			const reviewLogPath = FS(`logs/artemis/reviews/${month}.jsonl`);
+			if (await reviewLogPath.exists()) {
+				const stream = reviewLogPath.createReadStream();
+				for await (const line of stream.byLine()) {
+					if (!line.trim()) continue;
+					const chunk = JSON.parse(line.trim());
+					if (!chunk.resolved.result) { // inaccurate punishment
+						punishmentStats.inaccurate++;
+						inaccurate.add(chunk.room);
+						const day = Chat.toTimestamp(new Date(chunk.time)).split(' ')[0];
+						if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
+						punishmentStats.byDay[day].inaccurate++;
+					}
+				}
+			}
+
+			buf += `<p>Total punishments: ${punishmentStats.total}</p>`;
+			const accurate = punishmentStats.total - punishmentStats.inaccurate;
+			buf += `<p>Accurate punishments: ${accurate} (${percent(accurate, punishmentStats.total)}%)</p>`;
+			buf += `<details class="readmore"><summary>Inaccurate punishments: ${punishmentStats.inaccurate} `;
+			buf += `(${percent(punishmentStats.inaccurate, punishmentStats.total)}%)</summary>`;
+			buf += Array.from(inaccurate).map(f => `<a href="/${f}">${f}</a>`).join(', ');
+			buf += `</details>`;
+
+			if (punishmentStats.total) {
+				buf += `<p><strong>Day stats:</strong></p>`;
+				buf += `<div class="ladder pad"><table>`;
+				header = '';
+				data = '';
+				const sortedDayStats = Utils.sortBy(Object.keys(punishmentStats.byDay), d => new Date(d).getTime());
+				for (const [i, day] of sortedDayStats.entries()) {
+					const cur = punishmentStats.byDay[day];
+					if (!cur.total) continue;
+					header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+					const curAccurate = cur.total - cur.inaccurate;
+					data += `<td><small>${curAccurate} (${percent(curAccurate, cur.total)}%)`;
+					if (cur.inaccurate) {
+						data += ` | ${cur.inaccurate} (${percent(cur.inaccurate, cur.total)}%)`;
+					} else { // so one cannot confuse dead tickets & false hit tickets
+						data += ' | 0 (0%)';
+					}
+					data += '</small></td>';
+					// i + 1 ensures it's above 0 always (0 % 5 === 0)
+					if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+						buf += `<tr>${header}</tr><tr>${data}</tr>`;
+						buf += `</div></table>`;
+						buf += `<div class="ladder pad"><table>`;
+						header = '';
+						data = '';
+					}
+				}
+				buf += `<tr>${header}</tr><tr>${data}</tr>`;
+				buf += `</div></table>`;
+				buf += `<br /><strong>Punishment breakdown:</strong><br />`;
+				buf += `<div class="ladder pad"><table>`;
+				buf += `<tr><th>Type</th><th>Count</th><th>Percent</th></tr>`;
+				const sorted = Utils.sortBy(Object.entries(punishmentStats.types), e => e[1]);
+				for (const [type, num] of sorted) {
+					buf += `<tr><td>${type}</td><td>${num}</td><td>${percent(num, punishmentStats.total)}%</td></tr>`;
+				}
+				buf += `</table></div>`;
+			}
+			buf += `<hr /><p><strong>Staff stats:</strong></p>`;
 			buf += `<div class="ladder pad"><table>`;
 			buf += `<tr><th>User</th><th>Total</th><th>Percent total</th></tr>`;
 			for (const id of Utils.sortBy(Object.keys(staffStats), k => -staffStats[k])) {
@@ -1690,8 +1909,12 @@ export const pages: Chat.PageTable = {
 					buf += `<div class="infobox">`;
 					buf += `Battle: <a href="//${Config.routes.client}/${review.room}">${review.room}</a><br />`;
 					buf += Utils.html`<details class="readmore"><summary>Review details:</summary>${review.details}</details>`;
-					buf += `<form data-submitsend="/msgroom staff,/am resolvereview ${review.staff},${review.room},{response}">`;
+					buf += `<form data-submitsend="/msgroom staff,/am resolvereview ${review.staff},${review.room},{result},{response}">`;
 					buf += `Respond: <br /><textarea name="response" rows="3" cols="40"></textarea><br />`;
+					buf += `Mark result: <select name="result">`;
+					buf += `<option value="1">Accurate</option>`;
+					buf += `<option value="0">Inaccurate</option>`;
+					buf += `</select><br />`;
 					buf += `<button class="button notifying" type="submit">Resolve</button>`;
 					buf += `</form></div><br />`;
 					atLeastOne = true;
