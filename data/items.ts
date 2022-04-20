@@ -1,5 +1,4 @@
 import { PassThrough } from "stream";
-
 export const Items: {[itemid: string]: ItemData} = {
 	abomasite: {
 		name: "Abomasite",
