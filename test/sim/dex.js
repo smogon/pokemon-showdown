@@ -57,13 +57,17 @@ describe('Dex#getSpecies', function () {
 });
 
 describe('Dex#getItem', function () {
-	it('should not mark Gems as as Nonstandard in Gens 5-7', function () {
-		assert(!Dex.forGen(5).items.get('Rock Gem').isNonstandard);
-		assert(!Dex.forGen(5).items.get('Normal Gem').isNonstandard);
+	it(`should correctly mark Gem legality`, function () {
+		assert.false(Dex.forGen(5).items.get('Normal Gem').isNonstandard);
+		assert.false(Dex.forGen(5).items.get('Rock Gem').isNonstandard);
 
-		assert.equal(Dex.forGen(6).items.get('Rock Gem').isNonstandard, 'Unobtainable');
-		assert(!Dex.forGen(6).items.get('Normal Gem').isNonstandard);
+		assert.false(Dex.forGen(6).items.get('Normal Gem').isNonstandard);
+		assert.equal(Dex.forGen(6).items.get('Rock Gem').isNonstandard, "Unobtainable");
 
-		assert.equal(Dex.forGen(8).items.get('Rock Gem').isNonstandard, 'Past');
+		assert.false(Dex.forGen(7).items.get('Normal Gem').isNonstandard);
+		assert.equal(Dex.forGen(7).items.get('Rock Gem').isNonstandard, "Unobtainable");
+
+		assert.false(Dex.forGen(8).items.get('Normal Gem').isNonstandard);
+		assert.equal(Dex.forGen(8).items.get('Rock Gem').isNonstandard, "Past");
 	});
 });

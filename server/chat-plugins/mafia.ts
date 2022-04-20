@@ -186,7 +186,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	revealed: string;
 	IDEA: MafiaIDEAPlayerData | null;
 	/** false - used an action, true - idled, null - no response */
-	idle: null | boolean;
+	action: null | boolean | string;
 	constructor(user: User, game: Mafia) {
 		super(user, game);
 		this.safeName = Utils.escapeHTML(this.name);
@@ -200,7 +200,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 		this.nighttalk = false;
 		this.revealed = '';
 		this.IDEA = null;
-		this.idle = null;
+		this.action = null;
 	}
 
 	getRole(button = false) {
@@ -250,6 +250,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	hasPlurality: ID | null;
 
 	enableNL: boolean;
+	voteLock: boolean;
+	votingAll: boolean;
 	forceVote: boolean;
 	closedSetup: boolean;
 	noReveal: boolean;
@@ -299,6 +301,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.hasPlurality = null;
 
 		this.enableNL = true;
+		this.voteLock = false;
+		this.votingAll = true;
 		this.forceVote = false;
 		this.closedSetup = false;
 		this.noReveal = true;
@@ -662,7 +666,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.sendDeclare(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`);
 		}
 		for (const p in this.playerTable) {
-			this.playerTable[p].idle = null;
+			this.playerTable[p].action = null;
 		}
 		this.sendPlayerList();
 		this.updatePlayers();
@@ -675,6 +679,12 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		for (const hostid of [...this.cohostids, this.hostid]) {
 			const host = Users.get(hostid);
 			if (host?.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+		}
+		for (const player of Object.values(this.playerTable)) {
+			const user = Users.get(player.id);
+			if (user?.connected) {
+				user.sendTo(this.room.roomid, `|notify|It's night in the game of Mafia! Send in an action or idle.`);
+			}
 		}
 		if (this.takeIdles) {
 			this.sendDeclare(`Night ${this.dayNum}. Submit whether you are using an action or idle. If you are using an action, DM your action to the host.`);
@@ -691,6 +701,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	vote(userid: ID, target: ID) {
+		if (!this.votingAll) return this.sendUser(userid, `|error|Voting is not allowed.`);
 		if (this.phase !== 'day') return this.sendUser(userid, `|error|You can only vote during the day.`);
 		let player = this.playerTable[userid];
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
@@ -700,6 +711,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 		if (!this.enableNL && target === 'novote') return this.sendUser(userid, `|error|No Vote is not allowed.`);
 		if (target === player.id && !this.selfEnabled) return this.sendUser(userid, `|error|Self voting is not allowed.`);
+		if (this.voteLock && player.voting) {
+			return this.sendUser(userid, `|error|You cannot switch your vote because votes are locked.`);
+		}
 		const hammering = this.hammerCount - 1 <= (this.votes[target] ? this.votes[target].count : 0);
 		if (target === player.id && !hammering && this.selfEnabled === 'hammer') {
 			return this.sendUser(userid, `|error|You may only vote yourself when placing the hammer vote.`);
@@ -768,6 +782,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
 		if (!player?.voting) return this.sendUser(userid, `|error|You are not voting for anyone.`);
+		if (this.voteLock && player?.voting) {
+			return this.sendUser(userid, `|error|You cannot unvote because votes are locked.`);
+		}
 		if (player.lastVote + 2000 >= Date.now() && !force) {
 			return this.sendUser(
 				userid,
@@ -826,7 +843,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			}
 			const isPlayer = (this.playerTable[userid]);
 			const isSpirit = (this.dead[userid] && this.dead[userid].restless);
-			if (isPlayer || isSpirit) {
+			if (this.votingAll && !(this.voteLock && (isPlayer?.voting || (isSpirit && this.dead[userid].voting))) &&
+			(isPlayer || isSpirit)) {
 				if (isPlayer && this.playerTable[userid].voting === key || isSpirit && this.dead[userid].voting === key) {
 					buf += `<button class="button" name="send" value="/msgroom ${this.roomid},/mafia unvote">Unvote ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Vote'}</button>`;
 				} else if ((this.selfEnabled && !isSpirit) || userid !== key) {
@@ -1588,6 +1606,26 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (!setting) this.clearVotes('novote');
 		this.updatePlayers();
 	}
+	setVotelock(user: User, setting: boolean) {
+		if (!this.started) return user.sendTo(this.room, `The game has not started yet.`);
+		if ((this.voteLock) === setting) {
+			return user.sendTo(this.room, `|error|Votes are already ${setting ? 'set to lock' : 'set to not lock'}.`);
+		}
+		this.voteLock = setting;
+		this.clearVotes();
+		this.sendDeclare(`Votes are cleared and ${setting ? 'set to lock' : 'set to not lock'}.`);
+		this.updatePlayers();
+	}
+	setVoting(user: User, setting: boolean) {
+		if (!this.started) return user.sendTo(this.room, `The game has not started yet.`);
+		if (this.votingAll === setting) {
+			return user.sendTo(this.room, `|error|Voting is already ${setting ? 'allowed' : 'disallowed'}.`);
+		}
+		this.votingAll = setting;
+		this.clearVotes();
+		this.sendDeclare(`Voting is now ${setting ? 'allowed' : 'disallowed'}.`);
+		this.updatePlayers();
+	}
 	clearVotes(target = '') {
 		if (target) delete this.votes[target];
 
@@ -1839,37 +1877,41 @@ export const pages: Chat.PageTable = {
 				buf += `<p style="font-weight:bold;">PM the host (${game.host}) the action you want to use tonight, and who you want to use it on. Or PM the host "idle".</p>`;
 			} else {
 				buf += `<b>Night Actions:</b>`;
-				if (game.playerTable[user.id].idle === null) {
-					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">clear</button>`;
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">action</button>`;
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">idle</button>`;
+				if (game.playerTable[user.id].action === null) {
+					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Clear</button>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">Idle</button>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">Action</button><br/>`;
 				} else {
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia noresponse">clear</button>`;
-					if (game.playerTable[user.id].idle === false) {
-						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">action</button>`;
-						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">idle</button>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia noresponse">Clear</button>`;
+					if (game.playerTable[user.id].action) {
+						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">Idle</button>`;
+						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Action</button>`;
+						if (game.playerTable[user.id].action === true) {
+							buf += `<form data-submitsend="/msgroom ${game.room.roomid},/mafia action {submission}"><label><b>Submission:</b> <input name="submission" class="textbox" placeholder="Action Details" /></label> <button class="button">Confirm</button></form>`;
+						} else {
+							buf += `<form data-submitsend="/msgroom ${game.room.roomid},/mafia action"><label><b>Submission:</b> ${game.playerTable[user.id].action} <button class="button">Clear Submission</button></label></form>`;
+						}
 					} else {
-						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">action</button>`;
-						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">idle</button>`;
+						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Idle</button>`;
+						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">Action</button><br/>`;
 					}
 				}
-				buf += `<br/>`;
 			}
 		}
 		if (isHost) {
 			if (game.phase === "night" && isHost && game.takeIdles) {
 				buf += `<h3>Night Responses</h3>`;
-				let actions = ``;
-				let idles = ``;
-				let noResponses = ``;
+				let actions = `<br/>`;
+				let idles = `<br/>`;
+				let noResponses = `<br/>`;
 				for (const p in game.playerTable) {
 					const player = game.playerTable[p];
-					if (player.idle === true) {
-						idles += `${player.safeName}<br/>`;
-					} else if (player.idle === false) {
-						actions += `${player.safeName}<br/>`;
+					if (player.action) {
+						actions += `<b>${player.safeName}</b>${player.action === true ? '' : `: ${player.action}`}<br/>`;
+					} else if (player.action === false) {
+						idles += `<b>${player.safeName}</b><br/>`;
 					} else {
-						noResponses += `${player.safeName}<br/>`;
+						noResponses += `<b>${player.safeName}</b><br/>`;
 					}
 				}
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Idles</summary>${idles}</span></details></p>`;
@@ -2417,6 +2459,24 @@ export const commands: Chat.ChatCommands = {
 			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # &`,
 		],
 
+		prod(target, room, user) {
+			room = this.requireRoom();
+			const game = this.requireGame(Mafia);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			if (game.phase !== 'night') return;
+			for (const player of Object.values(game.playerTable)) {
+				const playerid = Users.get(player.id);
+				if (playerid?.connected && player.action === null) {
+					playerid.sendTo(room, `|notify|Send in an action or idle!`);
+					playerid.sendTo(room, `Send in an action or idle, or else you will get subbed out!`);
+				}
+			}
+			game.sendDeclare(`Unsubmitted players have been reminded to submit an action or idle.`);
+		},
+		prodhelp: [
+			`/mafia prod - Notifies players that they must submit an action or idle if they haven't yet. Requires host % @ # &`,
+		],
+
 		v: 'vote',
 		vote(target, room, user) {
 			room = this.requireRoom();
@@ -2570,26 +2630,35 @@ export const commands: Chat.ChatCommands = {
 			}
 			switch (cmd) {
 			case 'idle':
-				player.idle = true;
+				player.action = false;
 				user.sendTo(room, `You have idled.`);
 				break;
 			case 'action':
-				player.idle = false;
+				player.action = true;
 				if (target) {
-					this.errorReply(`'/mafia action' should be sent alone, not followed by your action or target. Please PM your exact action to the host.`);
+					player.action = target;
+					try {
+						this.checkBanwords(room, target);
+					} catch {
+						throw new Chat.ErrorMessage(`Your action submission contained a word banned by this room.`);
+					}
+					user.sendTo(room, `You have decided to use an action, with the following details: ${target}`);
 				} else {
-					user.sendTo(room, `You have decided to use an action. DM the host your action.`);
+					user.sendTo(room, `You have decided to use an action. Please submit details about your action.`);
 				}
 				break;
 			case 'noresponse': case 'unidle': case 'unaction':
-				player.idle = null;
+				player.action = null;
 				user.sendTo(room, `You are no longer submitting an action or idle.`);
 				break;
 			}
 			player.updateHtmlRoom();
 		},
 		actionhelp: 'idlehelp',
-		idlehelp: [`/mafia [action|idle] - Tells the host if you are using an action or idling.`],
+		idlehelp: [
+			`/mafia idle - Tells the host if you are idling.`,
+			`/mafia action [details] - Tells the host you are using an action with the given submission details.`,
+		],
 
 		forceadd: 'revive',
 		add: 'revive',
@@ -2828,6 +2897,44 @@ export const commands: Chat.ChatCommands = {
 			`/mafia hammer off - disables hammering`,
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting votes`,
 			`/mafia resethammer - sets the hammer to the default, resetting votes`,
+		],
+
+		vl: 'votelock',
+		votelock(target, room, user, connection, cmd) {
+			room = this.requireRoom();
+			const game = this.requireGame(Mafia);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			const action = toID(target);
+			if (this.meansYes(action)) {
+				game.setVotelock(user, true);
+			} else if (this.meansNo(action)) {
+				game.setVotelock(user, false);
+			} else {
+				return this.parse('/help mafia votelock');
+			}
+			game.logAction(user, `changed votelock status`);
+		},
+		votelockhelp: [
+			`/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # &`,
+		],
+
+		voting: 'votesall',
+		votesall(target, room, user, connection, cmd) {
+			room = this.requireRoom();
+			const game = this.requireGame(Mafia);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			const action = toID(target);
+			if (this.meansYes(action)) {
+				game.setVoting(user, true);
+			} else if (this.meansNo(action)) {
+				game.setVoting(user, false);
+			} else {
+				return this.parse('/help mafia voting');
+			}
+			game.logAction(user, `changed voting status`);
+		},
+		votinghelp: [
+			`/mafia voting [on|off] - Allows or disallows players to vote. Requires host % @ # &`,
 		],
 
 		enablenv: 'enablenl',
@@ -3818,6 +3925,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # &`,
 			`/mafia selfvote [on|hammer|off] - Allows players to self vote either at hammer or anytime. Requires host % @ # &`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from voting. Requires host % @ # &`,
+			`/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # &`,
+			`/mafia voting [on|off] - Allows or disallows voting. Requires host % @ # &`,
 			`/mafia forcevote [yes/no] - Forces players' votes onto themselves, and prevents unvoting. Requires host % @ # &`,
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # &`,
 			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # &`,
