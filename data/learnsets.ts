@@ -61159,7 +61159,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zapcannon: ["8L48", "7L66", "6L1", "5L66"],
 		},
 	},
-	klinklympeian: {
+	klinklympeia: {
 		learnset: {
 			allyswitch: ["8M", "7T"],
 			assurance: ["8M"],
@@ -61209,7 +61209,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gammaray: ["8M", "7M"],
 		},
 	},
-	klanglympeian: {
+	klanglympeia: {
 		learnset: {
 			allyswitch: ["8M", "7T"],
 			assurance: ["8M"],
@@ -61259,7 +61259,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gammaray: ["8M", "7M"],
 		},
 	},
-	klinklanglympeian: {
+	klinklanglympeia: {
 		learnset: {
 			allyswitch: ["8M", "7T"],
 			assurance: ["8M"],

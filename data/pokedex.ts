@@ -5853,6 +5853,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		evos: ["Lairon"],
 		eggGroups: ["Monster"],
+		otherFormes: ["Aron-Quantum"],
+        formeOrder: ["Aron", "Aron-Quantum"],
 	},
 	lairon: {
 		num: 305,
@@ -5867,6 +5869,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 32,
 		evos: ["Aggron"],
 		eggGroups: ["Monster"],
+		otherFormes: ["Lairon-Quantum"],
+        formeOrder: ["Lairon", "Lairon-Quantum"],
 	},
 	aggron: {
 		num: 306,
@@ -5880,8 +5884,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Lairon",
 		evoLevel: 42,
 		eggGroups: ["Monster"],
-		otherFormes: ["Aggron-Mega"],
-		formeOrder: ["Aggron", "Aggron-Mega"],
+		otherFormes: ["Aggron-Mega", "Aggron-Quantum"],
+		formeOrder: ["Aggron", "Aggron-Mega", "Aggron-Quantum"],
 	},
 	aggronmega: {
 		num: 306,

@@ -3778,13 +3778,13 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	klinklympeian: {
+	klinklympeia: {
 		tier: "LC OU",
 	},
-	klanglympeian: {
+	klanglympeia: {
 		tier: "ZU",
 	},
-	klinklanglympeian: {
+	klinklanglympeia: {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
