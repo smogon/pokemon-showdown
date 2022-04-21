@@ -11188,6 +11188,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'minimize',
 		condition: {
 			noCopy: true,
+			onRestart: () => null,
 			onSourceModifyDamage(damage, source, target, move) {
 				const boostedMoves = [
 					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
