@@ -7543,6 +7543,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	staraptorunova: {
 		num: 398,
 		name: "Staraptor-Unova",
+		baseSpecies: "Staraptor",
+        forme: "Unova",
 		types: ["Cosmic", "Flying"],
 		baseStats: {hp: 85, atk: 120, def: 70, spa: 50, spd: 60, spe: 100},
 		abilities: {0: "Daunt", H: "Magic Guard"},
@@ -7563,6 +7565,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Staravia",
 		evoLevel: 34,
 		eggGroups: ["Flying"],
+		otherFormes: ["Staraptor-Unova"],
+        formeOrder: ["Staraptor", "Staraptor-Unova"],
 	},
 	bidoof: {
 		num: 399,
@@ -15376,6 +15380,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	meltanunova: {
 		num: 808,
 		name: "Meltan-Unova",
+		baseSpecies: "Meltan",
+        forme: "Unova",
 		types: ["Grass"],
 		gender: "N",
 		baseStats: {hp: 46, atk: 55, def: 65, spa: 55, spd: 45, spe: 34},
@@ -15397,6 +15403,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
+		otherFormes: ["Meltan-Unova"],
+        formeOrder: ["Meltan", "Meltan-Unova"],
 	},
 	melmetal: {
 		num: 809,
