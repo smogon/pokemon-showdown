@@ -5395,8 +5395,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			// The animation leak target itself isn't "accurate"; the target it reveals is as if Fly weren't a charge movee
 			// (Fly, like all other charge moves, will actually target slots on its charging turn, relevant for things like Follow Me)
 			// We use a generic single-target move to represent this
-			if (this.gameType === 'doubles') {
-				const animatedTarget = attacker.getMoveTargets(this.dex.getActiveMove('tackle'), defender).targets[0];
+			if (this.gameType === 'doubles' || this.gameType === 'multi') {
+				const animatedTarget = attacker.getMoveTargets(this.dex.getActiveMove('aerialace'), defender).targets[0];
 				if (animatedTarget) {
 					this.hint(`${move.name}'s animation targeted ${animatedTarget.name}`);
 				}
