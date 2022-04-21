@@ -11421,6 +11421,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Fraxure",
 		evoLevel: 48,
 		eggGroups: ["Monster", "Dragon"],
+		otherFormes: ["Haxorus-Kanto"],
+        formeOrder: ["Haxorus", "Haxorus-Kanto"],
 	},
 
 	haxoruskanto: {
