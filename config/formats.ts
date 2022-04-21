@@ -171,7 +171,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Tangela', 'Scyther', 'Corsola-Galar', 'Gligar', 'Gligar-Fiore', 'Sneasel', 'Sneasel-Almian',
+			'Tangela', 'Scyther', 'Corsola-Galar', 'Gligar', 'Gligar-Fiore', 'Sneasel', 'Sneasel-Almia',
 			'Chlorophyll', 'Moody', 'Baton Pass', 'Shadow Tag',
 		],
 	},
