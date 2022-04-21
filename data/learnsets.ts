@@ -18485,7 +18485,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 1, level: 20},
 		],
 	},
-	pinsiroblivian: {
+	pinsiroblivia: {
 		learnset: {
 			attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			bide: ["7V"],
@@ -24939,7 +24939,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wish: ["8M", "7M"],
 		},
 	},
-	mareepfioren: {
+	mareepfiore: {
 		learnset: {
 			afteryou: ["7T", "7E", "6T", "6E", "5T", "5E"],
 			agility: ["7E", "6E", "5E"],
@@ -25030,7 +25030,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 6, level: 10, moves: ["holdback", "tackle", "thunderwave", "thundershock"], pokeball: "cherishball"},
 		],
 	},
-	flaaffyfioren: {
+	flaaffyfiore: {
 		learnset: {
 			afteryou: ["7T", "6T", "5T"],
 			attract: ["7M", "7V", "6M", "5M", "4M", "3M"],
@@ -27807,7 +27807,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			windscythe: ["8M", "7M"],
 		},
 	},
-	gligarfioren: {
+	gligarfiore: {
 		learnset: {
 			acrobatics: ["7M", "7L22", "6M", "6L22", "5M", "5L27"],
 			aerialace: ["7M", "6M", "5M", "4M", "3M"],
@@ -28761,7 +28761,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 6, level: 48, gender: "M", perfectIVs: 2, moves: ["nightslash", "icepunch", "brickbreak", "xscissor"], pokeball: "cherishball"},
 		],
 	},
-	sneaselalmian: {
+	sneaselalmia: {
 		learnset: {
 			aerialace: ["7M", "6M", "5M", "4M", "3M"],
 			agility: ["8M", "8L48", "7L20", "7V", "6L20", "5L24", "4L24", "3L36"],
@@ -28886,7 +28886,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 3, level: 10, gender: "M", moves: ["scratch", "leer", "taunt", "quickattack"], pokeball: "pokeball"},
 		],
 	},
-	weavilealmian: {
+	weavilealmia: {
 		learnset: {
 			aerialace: ["7M", "6M", "5M", "4M"],
 			agility: ["8M", "8L1"],
@@ -40919,7 +40919,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 7, level: 10},
 		],
 	},
-	whiscashoblivian: {
+	whiscashoblivia: {
 		learnset: {
 			willowisp: ["8M", "7M"],
 			protect: ["8M", "7M"],
@@ -42622,7 +42622,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 4, level: 53, gender: "F", nature: "Jolly", abilities: ["chlorophyll"], moves: ["airslash", "synthesis", "sunnyday", "solarbeam"], pokeball: "cherishball"},
 		],
 	},
-	tropiusorren: {
+	tropiusorre: {
 		learnset: {
 			aerialace: ["7M", "6M", "5M", "4M", "3M"],
 			aircutter: ["4T"],
@@ -47195,7 +47195,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dunewave: ["8M", "7M"],
 		},
 	},
-	rampardosalmian: {
+	rampardosalmia: {
 		learnset: {
 			ancientpower: ["7L36", "6L36", "5L36", "4T", "4L28"],
 			assurance: ["7L24", "6L24", "5L24", "4L24"],
@@ -49299,7 +49299,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 4, level: 25, gender: "M", nature: "Jolly", abilities: ["keeneye"], moves: ["mirrormove", "furyattack", "chatter", "taunt"]},
 		],
 	},
-	chatotorren: {
+	chatotorre: {
 		learnset: {
 			aerialace: ["7M", "6M", "5M", "4M"],
 			agility: ["7E", "6E", "5E", "4E"],
@@ -50176,7 +50176,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dunewave: ["8M", "7M"],
 		},
 	},
-	hippopotasorren: {
+	hippopotasorre: {
 		learnset: {
 			amnesia: ["8M"],
 			attract: ["8M", "7M", "6M", "5M", "4M"],
@@ -50252,7 +50252,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			nitricstrike: ["8M", "7M"],
 		},
 	},
-	hippowdonorren: {
+	hippowdonorre: {
 		learnset: {
 			amnesia: ["8M"],
 			attract: ["8M", "7M", "6M", "5M", "4M"],
@@ -63459,7 +63459,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			smartstrike: ["8M", "7M"],
 		},
 	},
-	pawniardalmian: {
+	pawniardalmia: {
 		learnset: {
 			aerialace: ["7M", "6M", "5M"],
 			airslash: ["8M"],
@@ -63824,7 +63824,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			smartstrike: ["8M", "7M"],
 		},
 	},
-	bisharpalmian: {
+	bisharpalmia: {
 		learnset: {
 			aerialace: ["7M", "6M", "5M"],
 			airslash: ["8M"],
@@ -82481,7 +82481,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M"],
 		},
 	},
-	falinksoblivian: {
+	falinksoblivia: {
 		learnset: {
 			flashcannon: ["8M", "7M"],
 			fling: ["8M", "7M"],

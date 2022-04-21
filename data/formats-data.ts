@@ -1107,7 +1107,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
-	pinsiroblivian: {
+	pinsiroblivia: {
 		tier: "NU",
 	},
 	pinsirmega: {
@@ -1697,7 +1697,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	weavilealmian: {
+	weavilealmia: {
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -2371,7 +2371,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
-	whiscashoblivian: {
+	whiscashoblivia: {
 		tier: "PU",
 	},
 	corphish: {
@@ -2480,7 +2480,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	tropius: {
 		tier: "ZU",
 	},
-	tropiusorren: {
+	tropiusorre: {
 		tier: "NU",
 	},
 	chingling: {
@@ -2771,7 +2771,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	rampardos: {
 		tier: "PU",
 	},
-	rampardosalmian: {
+	rampardosalmia: {
 		tier: "Illegal",
 	},
 	shieldon: {
@@ -2894,7 +2894,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	chatot: {
 		tier: "RU",
 	},
-	chatotorren: {
+	chatotorre: {
 		tier: "Illegal",
 	},
 	spiritomb: {
@@ -3925,7 +3925,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	pawniard: {
 		tier: "LC OU",
 	},
-	pawniardalmian: {
+	pawniardalmia: {
 		tier: "LC OU",
 	},
 	pawniardkalos: {
@@ -3947,7 +3947,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	bisharpalmian: {
+	bisharpalmia: {
 		randomBattleMoves: ["ironhead", "knockoff", "stealthrock", "suckerpunch", "swordsdance"],
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["brickbreak", "ironhead", "knockoff", "protect", "suckerpunch", "swordsdance"],
@@ -5802,7 +5802,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
-	falinksoblivian: {
+	falinksoblivia: {
 		tier: "NU",
 	},
 	pincurchin: {
