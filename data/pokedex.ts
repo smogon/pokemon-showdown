@@ -11097,6 +11097,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	galvantulasinnoh: {
 		num: 596,
 		name: "Galvantula-Sinnoh",
+		baseSpecies: "Galvantula",
+		forme: "Sinnoh",
 		types: ["Bug", "Steel"],
 		baseStats: {hp: 70, atk: 50, def: 102, spa: 93, spd: 97, spe: 60},
 		abilities: {0: "Tough Claws", 1: "Daunt", H: "Stamina"},
