@@ -1669,6 +1669,7 @@ export class Pokemon {
 
 	setItem(item: string | Item, source?: Pokemon, effect?: Effect) {
 		if (!this.hp || !this.isActive) return false;
+		if (this.itemState.knockedOff) return false;
 		if (typeof item === 'string') item = this.battle.dex.items.get(item);
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';

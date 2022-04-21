@@ -160,6 +160,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		},
 	},
+	frisk: {
+		inherit: true,
+		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (target.item && !target.itemState.knockedOff) {
+					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
+				}
+			}
+		},
+	},
 	hustle: {
 		inherit: true,
 		onSourceModifyAccuracyPriority: 7,
@@ -502,6 +512,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
+		},
+	},
+	unburden: {
+		inherit: true,
+		condition: {
+			onModifySpe(spe, pokemon) {
+				if ((!pokemon.item || pokemon.itemState.knockedOff) && !pokemon.ignoringAbility()) {
+					return this.chainModify(2);
+				}
+			},
 		},
 	},
 	vitalspirit: {
