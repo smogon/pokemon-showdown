@@ -6787,13 +6787,14 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 100,
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
+		otherFormes: ["Tropius-Orre"],
+        formeOrder: ["Tropius", "Tropius-Orre"],
 	},
-
-	tropiusorren: {
+	tropiusorre: {
 		num: 357,
-		name: "Tropius-Orren",
+		name: "Tropius-Orre",
 		baseSpecies: "Tropius",
-		forme: "Orren",
+		forme: "Orre",
 		types: ["Cosmic", "Dragon"],
 		baseStats: {hp: 87, atk: 90, def: 72, spa: 90, spd: 51, spe: 70},
 		abilities: {0: "Supernova", 1: "Adaptability", H: "Mold Breaker"},
