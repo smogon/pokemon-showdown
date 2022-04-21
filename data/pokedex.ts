@@ -19652,7 +19652,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		optikwill: {
 		num: 10081,
 		name: "Optikwill",
-		types: ["Psychic", "Posion"],
+		types: ["Psychic", "Poison"],
 		gender: "N",
 		baseStats: {hp: 71, atk: 97, def: 89, spa: 137, spd: 139, spe: 37},
 		abilities: {0: "Beast Boost", 1: "Levitate"},
@@ -19664,7 +19664,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	larvivid: {
-		num:10082,
+		num: 10082,
 		name: "Larvivid",
 		types: ["Bug", "Light"],
 		baseStats: {hp: 30, atk: 30, def: 45, spa: 57, spd: 59, spe: 39},
@@ -19677,7 +19677,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	shimmerse: {
-		num:10083,
+		num: 10083,
 		name: "Shimmerse",
 		types: ["Bug", "Light"],
 		baseStats: {hp: 50, atk: 35, def: 79, spa: 78, spd: 79, spe: 39},
@@ -19691,7 +19691,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	reflettle: {
-		num:10083,
+		num: 10084,
 		name: "Shimmerse",
 		types: ["Bug", "Light"],
 		baseStats: {hp: 60, atk: 55, def: 89, spa: 122, spd: 89, spe: 70},
