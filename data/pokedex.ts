@@ -19702,7 +19702,7 @@ xiphuno: {
 		name: "Reflettle",
 		types: ["Bug", "Light"],
 		baseStats: {hp: 60, atk: 55, def: 89, spa: 122, spd: 89, spe: 70},
-		abilities: {0: "Analytic", 1: "Mirror Armor", H: "Perserverance"},
+		abilities: {0: "Analytic", 1: "Mirror Armor", H: "Perseverance"},
 		heightm: 1.7,
 		weightkg: 24,
 		color: "White",
