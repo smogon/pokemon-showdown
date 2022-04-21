@@ -1453,7 +1453,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC UU",
 	},
 	ledian: {
-		tier: "ZU",
+		tier: "Ubers",
 	},
 	spinarak: {
 		tier: "LC UU",
@@ -6744,17 +6744,5 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	coleoterra: {
 		tier: "RU",
-	},
-	optikwill:{
-		tier: "UU"
-	},
-	larvivid:{
-		tier: "LC UU"
-	},
-	shimmerse:{
-		tier: "NFE"
-	},
-	reflettle:{
-		tier: "PU"
 	},
 };

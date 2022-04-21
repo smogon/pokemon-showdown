@@ -1497,7 +1497,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyWeight(weighthg) {
 			return weighthg * 2;
 		},
-		isBreakable: true,
+		isBreakable: true, 
+		onModifyDefPriority: 5,
+		onModifyDef(def, attacker, defender, move) {
+			this.debug('Heavy Metal boost');
+			return this.chainModify(1.25);
+		},
+		onModifySpDPriority: 5,
+		onModifySpD(spd, attacker, defender, move) {
+			this.debug('Heavy Metal boost');
+			return this.chainModify(1.25);
+		},
+		onModifySpePriority: 5,
+		onModifySpe(spe, attacker, defender, move) {
+			this.debug('Heavy Metal weaken');
+			return this.chainModify(0.5);
+		},
 		name: "Heavy Metal",
 		rating: 0,
 		num: 134,
@@ -1915,6 +1930,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return this.trunc(weighthg / 2);
 		},
 		isBreakable: true,
+		onModifyDefPriority: 5,
+		onModifyDef(def, attacker, defender, move) {
+			this.debug('Light Metal weaken');
+			return this.chainModify(0.75);
+		},
+		onModifySpDPriority: 5,
+		onModifySpD(spd, attacker, defender, move) {
+			this.debug('Light Metal weaken');
+			return this.chainModify(0.75);
+		},
+		onModifySpePriority: 5,
+		onModifySpe(spe, attacker, defender, move) {
+			this.debug('Light Metal boost');
+			return this.chainModify(1.25);
+		},
 		name: "Light Metal",
 		rating: 1,
 		num: 135,
@@ -5583,7 +5613,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			let paralyzingvenomMove = false;
 			let parChance;
 			for (const secondary of move.secondaries) {
-				if (!target) return; 
+				if (!target) return;
 				if ((secondary.status == 'tox' || secondary.status == 'psn') && !target.hasType('Steel')) {
 					paralyzingvenomMove = true;
 					parChance = secondary.chance;
@@ -5596,7 +5626,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 			if (!move.status) return;
-			if (!target) return; 
+			if (!target) return;
 			if ((move.status == 'tox' || move.status == 'psn') && !target.hasType('Steel')) {
 				paralyzingvenomMove = true;
 				move.secondaries = [];

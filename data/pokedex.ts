@@ -5868,7 +5868,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Monster"],
 		requiredItem: "Aggronite",
 	},
-
 	aronquantum: {
 		num: 304,
 		name: "Aron-Quantum",
@@ -5907,7 +5906,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		baseSpecies: "Aggron",
 		forme: "Quantum",
 		types: ["Cosmic", "Steel"],
-		baseStats: {hp: 100, atk: 100, def: 120, spa: 60, spd: 120, spe: 30},
+		baseStats: {hp: 80, atk: 100, def: 120, spa: 60, spd: 120, spe: 50},
 		abilities: {0: "Levitate", 1: "Heavy Metal", H: "Adaptability"},
 		heightm: 2.1,
 		weightkg: 360,
@@ -19347,8 +19346,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 10062,
 		name: "Pupavo",
 		types: ["Psychic", "Flying"],
-		baseStats: {hp: 50, atk: 90, def: 40, spa: 110, spd: 110, spe: 110},
-		abilities: {0: "Protean", H: "Anger Point"},
+		baseStats: {hp: 50, atk: 120, def: 90, spa: 65, spd: 65, spe: 80},
+		abilities: {0: "Keen Eye", 1: "Vital Spirit", H: "Color Change"},
 		heightm: 8.6,
 		weightkg: 380,
 		color: "Blue",
