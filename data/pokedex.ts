@@ -3778,6 +3778,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		evos: ["Flaaffy"],
 		eggGroups: ["Monster", "Field"],
+		otherFormes: ["Mareep-Fiore"],
+        formeOrder: ["Mareep", "Mareep-Fiore"],
 	},
 	flaaffy: {
 		num: 180,
@@ -3792,6 +3794,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 15,
 		evos: ["Ampharos"],
 		eggGroups: ["Monster", "Field"],
+		otherFormes: ["Flaaffy-Fiore"],
+        formeOrder: ["Flaaffy", "Flaaffy-Fiore"],
 	},
 	ampharos: {
 		num: 181,
@@ -3805,8 +3809,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Flaaffy",
 		evoLevel: 30,
 		eggGroups: ["Monster", "Field"],
-		otherFormes: ["Ampharos-Mega"],
-		formeOrder: ["Ampharos", "Ampharos-Mega"],
+		otherFormes: ["Ampharos-Mega", "Ampharos-Fiore"],
+		formeOrder: ["Ampharos", "Ampharos-Mega", "Ampharos-Fiore"],
 	},
 
 	mareepfiore: {
@@ -4248,6 +4252,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		evos: ["Gliscor"],
 		eggGroups: ["Bug"],
+		otherFormes: ["Gligar-Fiore"],
+        formeOrder: ["Gligar", "Gligar-Fiore"],
 	},
 
 	gligarfiore: {
@@ -8767,6 +8773,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Razor Fang",
 		evoCondition: "at night",
 		eggGroups: ["Bug"],
+		otherFormes: ["Gliscor-Fiore"],
+        formeOrder: ["Gliscor", "Gliscor-Fiore"],
 	},
 
 	gliscorfiore: {
