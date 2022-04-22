@@ -372,6 +372,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
+	crobatmega: {
+		isNonstandard: "PastMEGA",
+		tier: "Illegal",
+	},
 	oddish: {
 		tier: "LC UU",
 	},
@@ -1114,6 +1118,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
+	pinsirobliviamega: {
+		isNonstandard: "PastMEGA",
+		tier: "Illegal",
+	},
 	tauros: {
 		randomBattleMoves: ["bodyslam", "closecombat", "rockslide", "throatchop", "zenheadbutt"],
 		randomBattleLevel: 82,
@@ -1712,6 +1720,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	magcargo: {
 		tier: "ZU",
+	},
+	magcargomega: {
+		isNonstandard: "PastMEGA",
+		tier: "Illegal",
 	},
 	swinub: {
 		tier: "LC UU",
@@ -2317,6 +2329,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
+	flygonmega: {
+		isNonstandard: "PastMEGA",
+		tier: "Illegal",
+	},
 	cacnea: {
 		tier: "LC UU",
 	},
@@ -2523,6 +2539,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleLevel: 88,
 		tier: "NU",
 		doublesTier: "(DUU)",
+	},
+	froslassmega: {
+		isNonstandard: "PastMEGA",
+		tier: "Illegal",
 	},
 	spheal: {
 		tier: "LC UU",
@@ -3044,6 +3064,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["electroweb", "leafstorm", "protect", "thunderbolt", "voltswitch", "willowisp"],
 		randomDoubleBattleLevel: 88,
 		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	rotomglow: {
+		tier: "UU",
 		doublesTier: "(DUU)",
 	},
 	uxie: {
@@ -3654,6 +3678,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
+	gothitellemega: {
+		isNonstandard: "PastMEGA",
+		tier: "Illegal",
+	},
 	solosis: {
 		tier: "LC UU",
 	},
@@ -3751,6 +3779,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleLevel: 85,
 		tier: "PUBL",
 		doublesTier: "(DUU)",
+	},
+	galvantulamega: {
+		isNonstandard: "PastMEGA",
+		tier: "Illegal",
 	},
 	galvantulasinnoh: {
 		tier: "PU",

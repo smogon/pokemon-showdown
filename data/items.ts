@@ -7694,4 +7694,102 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
+	flygonite: {
+		name: "Flygonite",
+		spritenum: 576,
+		megaStone: "Flygon-Mega",
+		megaEvolves: "Flygon",
+		itemUser: ["Flygon"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 753,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	gothitite: {
+		name: "Gothitite",
+		spritenum: 576,
+		megaStone: "Gothitelle-Mega",
+		megaEvolves: "Gothitelle",
+		itemUser: ["Gothitelle"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 754,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	froslasite: {
+		name: "Froslasite",
+		spritenum: 576,
+		megaStone: "Froslass-Mega",
+		megaEvolves: "Froslass",
+		itemUser: ["Froslass"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 755,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	crobatite: {
+		name: "Crobatite",
+		spritenum: 576,
+		megaStone: "Crobat-Mega",
+		megaEvolves: "Crobat",
+		itemUser: ["Crobat"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 756,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	magcargite: {
+		name: "Magcargite",
+		spritenum: 576,
+		megaStone: "Magcargo-Mega",
+		megaEvolves: "Magcargo",
+		itemUser: ["Magcargo"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 757,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	pinsiriteoblivia: {
+		name: "Oblivia Pinsirite",
+		spritenum: 576,
+		megaStone: "Pinsir-Oblivia-Mega",
+		megaEvolves: "Pinsir-Oblivia",
+		itemUser: ["Pinsir-Oblivia"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 758,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	galvantulite: {
+		name: "Galvantulite",
+		spritenum: 576,
+		megaStone: "Galvantula-Mega",
+		megaEvolves: "Galvantula",
+		itemUser: ["Galvantula"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 759,
+		gen: 6,
+		isNonstandard: "Past",
+	},
 };

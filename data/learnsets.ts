@@ -51200,6 +51200,11 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			leafstorm: ["8L1", "7R", "6R", "5R", "4R"],
 		},
 	},
+	rotommow: {
+		learnset: {
+			photondischarge: ["8L1", "7R", "6R", "5R", "4R"],
+		},
+	},
 	uxie: {
 		learnset: {
 			acrobatics: ["8M", "7M", "6M", "5M"],
@@ -95652,7 +95657,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 },
    shimmerse: {
 		learnset: {
-		   tailglow: ["8M", "7M"],	
+		   tailglow: ["8M", "7M"],
 		   tackle: ["8M", "7M"],
 		   mirrorshot: ["8M", "7M"],
 		   lightwave: ["8M", "7M"],
@@ -95749,6 +95754,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		   storedpower: ["8M", "7M"],
 		   },
 	   },
-	 
-	 
+
+
 };
