@@ -444,8 +444,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
-				const details = pokemon.details.replace(', shiny', '')
+				let details = pokemon.details.replace(', shiny', '')
 					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
+				if (this.ruleTable.has('obtainableformes')) {
+					// Crowned formes are revealed in Hackmons, but not in regular play.
+					details = details.replace(/(Zacian|Zamazenta)(-[a-zA-Z?-]+)?/g, '$1-*');
+				}
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			this.makeRequest('teampreview');
