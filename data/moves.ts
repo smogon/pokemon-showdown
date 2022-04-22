@@ -22857,5 +22857,31 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 180},
 		maxMove: {basePower: 130},
 		contestType: "Cool",
-  },
+  	},
+  	misdirect: {
+		num: 982,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Misdirect",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			onHit(target, source) {
+				const result = this.random(3);
+				if (result === 0) {
+					target.addVolatile('torment', source);
+				} else if (result === 1) {
+					target.addVolatile('disable', source);
+				} else {
+					target.addVolatile('encore', source);
+				}
+			},
+		},
+		target: "normal",
+		type: "Psychic",
+		contestType: "Beautiful",
+	},
 };
