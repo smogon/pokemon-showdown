@@ -2681,7 +2681,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {mirror: 1},
 		onHitField(target, source) {
 			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
+				'entryhazard', 'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
 			];
 			let success = false;
 			if (this.gameType === "freeforall") {
@@ -2698,7 +2698,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 						const targetSide = sides[(i + offset) % 4]; // the next side in rotation
 						rotatedSides.push(targetSide.sideConditions[id]);
 						if (sourceSide.sideConditions[id]) {
-							this.add('-sideend', sourceSide, effectName, '[silent]');
+							if (id !== 'entryhazard') this.add('-sideend', sourceSide, effectName, '[silent]');
 							someCondition = true;
 						}
 					}
@@ -2708,14 +2708,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 						sides[2]!.sideConditions[id], sides[3]!.sideConditions[id],
 					] = [...rotatedSides];
 					for (const side of sides) {
-						if (side.sideConditions[id]) {
+						if (side.sideConditions[id] && id !== 'entryhazard') {
 							let layers = side.sideConditions[id].layers || 1;
 							for (; layers > 0; layers--) this.add('-sidestart', side, effectName, '[silent]');
-						} else {
+						} else if (id in side.sideConditions) {
 							delete side.sideConditions[id];
 						}
 					}
-					success = true;
+					if (id !== 'entryhazard') success = true;
 				}
 			} else {
 				const sourceSide = source.side;
@@ -2734,7 +2734,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					} else {
 						continue;
 					}
-					success = true;
+					if (id !== 'entryhazard') success = true;
 				}
 				this.add('-swapsideconditions');
 			}
@@ -3112,10 +3112,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
 			const removeTarget = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'entryhazard', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 			];
 			const removeAll = [
-				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				'entryhazard', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 			];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
@@ -3125,7 +3125,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 			}
 			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
+				if (source.side.removeSideCondition(sideCondition) && sideCondition !== 'entryhazard') {
 					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
@@ -6706,9 +6706,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		condition: {
 			onSideStart(side) {
+				side.addSideCondition('entryhazard');
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
-			onSwitchIn(pokemon) {
+			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
@@ -13722,9 +13723,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['entryhazard', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
-				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+				if (pokemon.hp && pokemon.side.removeSideCondition(condition) && condition !== 'entryhazard') {
 					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
 				}
 			}
@@ -16390,6 +16391,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
+				side.addSideCondition('entryhazard');
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers = 1;
 			},
@@ -16398,7 +16400,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers++;
 			},
-			onSwitchIn(pokemon) {
+			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasItem('heavydutyboots')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
@@ -16681,9 +16683,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
+				side.addSideCondition('entryhazard');
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
-			onSwitchIn(pokemon) {
+			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
@@ -16805,9 +16808,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		sideCondition: 'stickyweb',
 		condition: {
 			onSideStart(side) {
+				side.addSideCondition('entryhazard');
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
-			onSwitchIn(pokemon) {
+			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
@@ -18405,6 +18409,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
+				side.addSideCondition('entryhazard');
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers = 1;
 			},
@@ -18413,7 +18418,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers++;
 			},
-			onSwitchIn(pokemon) {
+			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);

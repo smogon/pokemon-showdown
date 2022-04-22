@@ -693,7 +693,7 @@ export class Battle {
 			}
 		}
 
-		if (eventid === 'Invulnerability' || eventid === 'TryHit' || eventid === 'DamagingHit') {
+		if (['Invulnerability', 'TryHit', 'DamagingHit', 'EntryHazard'].includes(eventid)) {
 			handlers.sort(Battle.compareLeftToRightOrder);
 		} else if (fastExit) {
 			handlers.sort(Battle.compareRedirectOrder);
