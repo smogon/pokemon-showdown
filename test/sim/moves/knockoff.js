@@ -72,7 +72,7 @@ describe.only('Knock Off [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should only make the held item unusable, not actually remove it', function() {
+	it('should only make the held item unusable, not actually remove it', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'Wynaut', moves: ['knockoff']},
 		], [
@@ -83,7 +83,7 @@ describe.only('Knock Off [Gen 4]', function () {
 		assert.false.fullHP(battle.p2.active[0], 'Aggron should not have been healed by leftovers.');
 	});
 
-	it('should make the target unable to gain a new item', function() {
+	it('should make the target unable to gain a new item', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'Wynaut', item: 'pokeball', moves: ['knockoff', 'trick']},
 		], [
