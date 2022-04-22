@@ -95752,8 +95752,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		   stickyweb: ["8M", "7M"],
 		   agility: ["8M", "7M"],
 		   storedpower: ["8M", "7M"],
-		   },
-	   },
-
-
+		   beaconbarrage: ["8M", "7M"],
+		},
+	},
 };

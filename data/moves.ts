@@ -22884,4 +22884,43 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
+	beaconbarrage: {
+		num: 983,
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		name: "Beacon Barrage",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryHit(pokemon) {
+			pokemon.side.addSideCondition('veiloflight');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Tough",
+	},
+	aquaticgift: {
+		num: 984,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Aquatic Gift",
+		pp: 16,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, pivot: 1},
+		selfSwitch: true,
+		condition: {
+			onSwap(target) {
+				if (!target.fainted && (target.hp < target.maxhp)) {
+					target.addVolatile('aquaring')
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+		contestType: "Cute",
+	},
 };
