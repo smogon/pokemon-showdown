@@ -473,6 +473,7 @@ export const Formats: FormatList = [
 	///////////////////////////////////////////////////////////////////
 	{
 		section: "New Meta MegaZ",
+		column: 2,
 	},
 	{
 		name: "[Gen 8] MegaZ Ubers",
@@ -557,6 +558,45 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] MegaZ PU'],
 		banlist: ['PU',	'ZUBL'],
 	},
+	{
+		section: "New Meta Mega Only",
+		column: 2,
+	},
+	{
+		name: "[Gen 8] Mega AG",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
+		],
+
+		mod: 'nmmegadex',
+		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+	},
+	{
+		name: "[Gen 8] Mega OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672210/">OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672556/">OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3674058/">OU Viability Rankings</a>`,
+		],
+
+		mod: 'nmmegadex',
+		ruleset: ['Standard', 'Dynamax Clause'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Power Construct', 'Sand Veil', 'Shadow Tag', 'Snow Cloak','Baton Pass'],
+	},
+	{
+		name: "[Gen 8] Mega UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3681331/">UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3679621/">UU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3674793/">UU Viability Rankings</a>`,
+		],
+
+		mod: 'nmmegadex',
+		ruleset: ['[Gen 8] OU'],
+		banlist: ['OU', 'UUBL'],
+	},
 	// National Dex
 	///////////////////////////////////////////////////////////////////
 
@@ -576,7 +616,7 @@ export const Formats: FormatList = [
 
 	{
 		section: "Other Metagames",
-		column: 2,
+		column: 3,
 	},
 	{
 		name: "[Gen 8] Balanced Hackmons",
@@ -847,7 +887,7 @@ export const Formats: FormatList = [
 	},
 	{
 		section: "Challengeable OMs",
-		column: 2,
+		column: 3,
 	},
 	{
 		name: "[Gen 8] Camomons",
@@ -1854,7 +1894,7 @@ export const Formats: FormatList = [
 
 	{
 		section: "Randomized Metas",
-		column: 2,
+		column: 3,
 	},
 	{
 		name: "[Gen 8] Monotype Random Battle",
