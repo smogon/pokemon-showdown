@@ -2830,7 +2830,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 127,
 		name: "Pinsir-Oblivia",
 		baseSpecies: "Pinsir",
-    forme: "Oblivia",
+    	forme: "Oblivia",
 		types: ["Electric", "Bug"],
 		baseStats: {hp: 55, atk: 120, def: 90, spa: 55, spd: 75, spe: 105},
 		abilities: {0: "Moxie", 1: "Motor Drive", H: "Dynamo"},
@@ -2855,20 +2855,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Bug"],
 		requiredItem: "Pinsirite",
 	},
-	pinsirobliviamega: {
-		num: 127,
-		name: "Pinsir-Oblivia-Mega",
-		baseSpecies: "Pinsir-Oblivia",
-		forme: "OblivaMega",
-		types: ["Electric", "Bug"],
-		baseStats: {hp: 55, atk: 120, def: 90, spa: 55, spd: 75, spe: 105},
-		abilities: {0: "Galvanize"},
-		heightm: 1.5,
-		weightkg: 59,
-		color: "Blue",
-		eggGroups: ["Bug"],
-		requiredItem: "Oblivia Pinsirite",
-	},
+	// pinsirobliviamega: {
+	// 	num: 127,
+	// 	name: "Pinsir-Oblivia-Mega",
+	// 	baseSpecies: "Pinsir-Oblivia",
+	// 	forme: "OblivaMega",
+	// 	types: ["Electric", "Bug"],
+	// 	baseStats: {hp: 55, atk: 120, def: 90, spa: 55, spd: 75, spe: 105},
+	// 	abilities: {0: "Galvanize"},
+	// 	heightm: 1.5,
+	// 	weightkg: 59,
+	// 	color: "Blue",
+	// 	eggGroups: ["Bug"],
+	// 	requiredItem: "Oblivia Pinsirite",
+	// },
 	tauros: {
 		num: 128,
 		name: "Tauros",
@@ -3846,7 +3846,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Ampharos-Mega", "Ampharos-Fiore"],
 		formeOrder: ["Ampharos", "Ampharos-Mega", "Ampharos-Fiore"],
 	},
-
 	mareepfiore: {
 		num: 179,
 		name: "Mareep-Fiore",
@@ -8680,7 +8679,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Weavile-Almia"],
 		formeOrder: ["Weavile", "Weavile-Almia"],
 	},
-
 	weavilealmia: {
 		num: 461,
 		name: "Weavile-Almia",
@@ -8861,7 +8859,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Gliscor-Fiore"],
         formeOrder: ["Gliscor", "Gliscor-Fiore"],
 	},
-
 	gliscorfiore: {
 		num: 472,
 		name: "Gliscor-Fiore",
@@ -11262,20 +11259,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Galvantula-Mega", "Galvantula-Sinnoh"],
 		formeOrder: ["Galvantula", "Galvantula-Mega", "Galvantula-Sinnoh"],
 	},
-	galvantualmega: {
-		num: 596,
-		name: "Galvantula-Mega",
-		baseSpecies: "Galvantuala",
-		forme: "Mega",
-		types: ["Bug", "Electric"],
-		baseStats: {hp: 70, atk: 77, def: 100, spa: 127, spd: 70, spe: 128},
-		abilities: {0: "Daunt"},
-		heightm: 0.8,
-		weightkg: 16.3,
-		color: "Yellow",
-		eggGroups: ["Bug"],
-		requiredItem: "Galvantulite",
-	},
+	// galvantualmega: {
+	// 	num: 596,
+	// 	name: "Galvantula-Mega",
+	// 	baseSpecies: "Galvantuala",
+	// 	forme: "Mega",
+	// 	types: ["Bug", "Electric"],
+	// 	baseStats: {hp: 70, atk: 77, def: 100, spa: 127, spd: 70, spe: 128},
+	// 	abilities: {0: "Daunt"},
+	// 	heightm: 0.8,
+	// 	weightkg: 16.3,
+	// 	color: "Yellow",
+	// 	eggGroups: ["Bug"],
+	// 	requiredItem: "Galvantulite",
+	// },
 	galvantulasinnoh: {
 		num: 596,
 		name: "Galvantula-Sinnoh",
@@ -11332,7 +11329,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Klink-Lympeia"],
         formeOrder: ["Klink", "Klink-Lympeia"],
 	},
-
 	klinklympeia: {
 		num: 599,
 		name: "Klink-Lympeia",
@@ -11366,7 +11362,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Klang-Lympeia"],
         formeOrder: ["Klang", "Klang-Lympeia"],
 	},
-
 	klanglympeia: {
 		num: 600,
 		name: "Klang-Lympeia",
@@ -11401,7 +11396,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Klinklang-Lympeia"],
         formeOrder: ["Klinklang", "Klinklang-Lympeia"],
 	},
-
 	klinklanglympeia: {
 		num: 601,
 		name: "Klinklang-Lympeia",
@@ -11565,7 +11559,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Haxorus-Kanto"],
         formeOrder: ["Haxorus", "Haxorus-Kanto"],
 	},
-
 	haxoruskanto: {
 		num: 612,
 		name: "Haxorus-Kanto",
