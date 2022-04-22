@@ -310,7 +310,7 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [34, 41]); // Shield Forme damage
 	});
 
-	it.skip(`should use the user's most recent Special Attack stat, even if the user is not on the field`, function () {
+	it(`should use the user's most recent Special Attack stat, even if the user is not on the field`, function () {
 		battle = common.createBattle([[
 			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
