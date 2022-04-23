@@ -95300,6 +95300,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		   confide: ["8M", "7M"],
 		   focusblast: ["8M", "7M"],
 		   strength: ["8M", "7M"],
+		   aquaticgift: ["8M", "7M"],
 		},
 	 },
 	 gladiduo: {
@@ -95381,6 +95382,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		   doublehit: ["8M", "7M"],
 		   iciclespear: ["8M", "7M"],
 		   furyswipes: ["8M", "7M"],
+		   aquaticgift: ["8M", "7M"],
 		},
 	 },
 	 gladorda: {
@@ -95467,7 +95469,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		   crystalwave: ["8M", "7M"],
 		   guillotine: ["8M", "7M"],
 		   healbell: ["8M", "7M"],
-		   aquaticgift: ["8M", "7M"]
+		   aquaticgift: ["8M", "7M"],
 		},
 	 },
 	coleoterra: {

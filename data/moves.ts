@@ -22910,16 +22910,30 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 16,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, pivot: 1},
+		onHit(target) {
+			if (!this.canSwitch(target.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', target);
+				return this.NOT_FAIL;
+			}
+		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
 		selfSwitch: true,
+		slotCondition: 'aquaticgift',
 		condition: {
+			duration: 1, //to prevent aquaring being given back on future switches
 			onSwap(target) {
-				if (!target.fainted && (target.hp < target.maxhp)) {
+				if (!target.fainted) {
 					target.addVolatile('aquaring')
 				}
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Water",
 		contestType: "Cute",
 	},
