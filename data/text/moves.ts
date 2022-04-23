@@ -7265,7 +7265,6 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. Pokemon weighing 200 kg or more cannot be lifted. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally, if the target has a substitute, or if the target is using Bounce, Dig, Dive, Fly, Phantom Force, Shadow Force, or Sky Drop.",
 		shortDesc: "User and foe fly up turn 1. Damages on turn 2.",
 		newmeta: "true",
-		descGen5: "This attack takes the target into the air with the user on the first turn and executes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally, if the target has a substitute, or if the target is using Bounce, Dig, Dive, Fly, Shadow Force, or Sky Drop. If the effect of Gravity ends this effect before the second turn, both the user and the target return to the ground, but the target will otherwise remain under this effect until the user leaves the field or successfully executes the second turn of any two-turn move.",
 
 		prepare: "[POKEMON] took [TARGET] into the sky!",
 		end: "  [POKEMON] was freed from the Abduction!",
@@ -7384,8 +7383,6 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
 		shortDesc: "Hits two turns after being used.",
 		newmeta: "true",
-		descGen4: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
-		descGen2: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move is already in effect for the target's position.",
 
 		start: "  [POKEMON] foresaw an attack!",
 		activate: "  [TARGET] took the Vengeful Spirit attack!",
@@ -7415,9 +7412,6 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
 		shortDesc: "For 5 turns, the foe(s) is prevented from healing.",
 		newmeta: "true",
-		descGen7: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected. Relevant Z-Powered moves can still be selected and executed during this effect.",
-		descGen6: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
-		descGen4: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing moves are unusable, move effects that grant healing will not heal, but Abilities and items will continue to heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain under the effect. Pain Split is unaffected.",
 
 		start: "  [POKEMON] was prevented from healing!",
 		end: "  [POKEMON]'s Heal Block wore off!",
@@ -7494,9 +7488,6 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		newmeta: "true",
-		descGen2: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
-		descGen1: "Deals 65535 damage to the target. Fails if the target's Speed is greater than the user's.",
-		shortDescGen1: "Deals 65535 damage. Fails if target is faster.",
 	},
 	brightclaw: {
 		name: "Bright Claw",
@@ -7649,6 +7640,16 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Wilderness WACK",
 		desc: "The pain is insufferable.",
 		shortDesc: "The pain is insufferable.",
+	},
+	misdirect: {
+		name: "Misdirect",
+		desc: "Has a 20% chance to either disable, torment, or encore the target.",
+		shortDesc: "20% chance to disable or torment or encore target.",
+	},
+	beaconbarrage: {
+		name: "Beacon Barrage",
+		desc: "Sets up a Veil of Light on the opposing side of the field, damaging opposing Pokemon that switches out.",
+		shortDesc: "Sets up a Veil of Light on the opposing side of the field, damaging opposing Pokemon that switches out.",
 	},
 	aquaticgift: {
 		name: "Aquatic Gift",

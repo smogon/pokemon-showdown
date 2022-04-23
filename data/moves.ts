@@ -22890,11 +22890,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 100,
 		category: "Special",
 		name: "Beacon Barrage",
-		pp: 10,
+		pp: 16,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryHit(pokemon) {
-			pokemon.side.addSideCondition('veiloflight');
+		onHit(target) {
+			target.addVolatile('veiloflight')
 		},
 		secondary: null,
 		target: "normal",
