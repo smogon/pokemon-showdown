@@ -231,10 +231,14 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 				if (matches < Object.keys(punishment.secondaryTypes).length) continue;
 			}
 			if (punishment.count) {
-				const hits = await Chat.database.all(
+				let hits = await Chat.database.all(
 					`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
 					[user.id, type, num]
 				);
+				// filtering out old hits by request of admins.
+				// don't wanna make this easily configured bc we should never need to do it again
+				// don't wanna delete it bc data is good
+				hits = hits.filter(f => new Date(f.time).getFullYear() > 2021);
 				if (hits.length < punishment.count) continue;
 			}
 			recommended.push([punishment.punishment, type]);
