@@ -1881,18 +1881,15 @@ export class Battle {
 
 			switch (effect.id) {
 			case 'partiallytrapped':
-				if (target.hitSelf) target.hitSelf = false;
 				this.add('-damage', target, target.getHealth, '[from] ' + this.effectState.sourceEffect.fullname, '[partiallytrapped]');
 				break;
 			case 'powder':
-				if (target.hitSelf) target.hitSelf = false;
 				this.add('-damage', target, target.getHealth, '[silent]');
 				break;
 			case 'confused':
 				this.add('-damage', target, target.getHealth, '[from] confusion');
 				break;
 			default:
-				if (target.hitSelf) target.hitSelf = false;
 				if (effect.effectType === 'Move' || !name) {
 					this.add('-damage', target, target.getHealth);
 				} else if (source && (source !== target || effect.effectType === 'Ability')) {
@@ -1919,7 +1916,7 @@ export class Battle {
 					this.heal(amount, source, target, 'drain');
 				}
 			}
-			if (effect.effectType !== 'Move') this.runEvent('TakeDamage', target, source, null, targetDamage);
+			if (effect.effectType !== 'Move') this.runEvent('TakeDamage', target, source, effect, targetDamage);
 		}
 
 		if (instafaint) {
@@ -1949,8 +1946,6 @@ export class Battle {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		// check if damage is caused by a confusion self hit
-		if (target && this.effect.id !== 'confused') target.hitSelf = false;
 
 		return this.spreadDamage([damage], [target], source, effect, instafaint)[0];
 	}
@@ -1988,7 +1983,7 @@ export class Battle {
 		}
 
 		damage = target.damage(damage, source, effect);
-		this.runEvent('TakeDamage', target, source, null, damage);
+		this.runEvent('TakeDamage', target, source, effect, damage);
 		switch (effect.id) {
 		case 'strugglerecoil':
 			this.add('-damage', target, target.getHealth, '[from] recoil');
