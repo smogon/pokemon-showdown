@@ -221,4 +221,16 @@ describe('Transform [Gen 1]', function () {
 
 		assert(battle.log.every(line => !line.startsWith('|-endability|')));
 	});
+
+	it(`should copy the target's boosted stats`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ditto', moves: ['transform']},
+		], [
+			{species: 'Gengar', moves: ['amnesia', 'thunderbolt']},
+			{species: 'Starmie', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move thunderbolt', 'switch 2');
+		assert.fainted(battle.p2.active[0]);
+	});
 });

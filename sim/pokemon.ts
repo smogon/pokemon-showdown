@@ -1174,7 +1174,15 @@ export class Pokemon {
 		}
 		let boostName: BoostID;
 		for (boostName in pokemon.boosts) {
-			this.boosts[boostName] = pokemon.boosts[boostName]!;
+			this.boosts[boostName] = pokemon.boosts[boostName];
+			if (this.battle.gen <= 1) {
+				if (boostName === 'evasion' || boostName === 'accuracy') continue;
+				if (this.boosts[boostName] >= 0) {
+					this.modifyStat!(boostName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[boostName]]);
+				} else {
+					this.modifyStat!(boostName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[boostName]] / 100);
+				}
+			}
 		}
 		if (this.battle.gen >= 6) {
 			const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
