@@ -1605,8 +1605,6 @@ export class Pokemon {
 			this.battle.runEvent('UseItem', this, null, null, item) &&
 			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
 		) {
-			// make sure to only stop berries that restore hp
-			if (source?.hitSelf && RESTORATIVE_BERRIES.has(item.id)) return false;
 			this.battle.add('-enditem', this, item, '[eat]');
 
 			this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
@@ -1632,7 +1630,6 @@ export class Pokemon {
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
 		}
-		if (source) source.hitSelf = false;
 		return false;
 	}
 
