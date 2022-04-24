@@ -19476,7 +19476,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Cuttaroo",
 		types: ["Fighting", "Electric"],
 		baseStats: {hp: 70, atk: 118, def: 75, spa: 45, spd: 75, spe: 127},
-		abilities: {0: "Static", H: "Scrappy"},
+		abilities: {0: "Static", H: "Intimidate"},
 		heightm: 0.5,
 		weightkg: 40,
 		color: "Brown",
