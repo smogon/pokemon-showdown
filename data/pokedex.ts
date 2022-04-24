@@ -18669,7 +18669,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
-
+	scarcane: {
+		num: 1995,
+		name: "Scarcane",
+		types: ["Dark", "Dragon"],
+		baseStats: {hp: 98, atk: 117, def: 97, spa: 50, spd: 81, spe: 97},
+		abilities: {0: "Technician", 1: "Anger Point", H: "Multiscale"},
+		heightm: 1.8,
+		weightkg: 104,
+		color: "Black",
+		eggGroups: ["Monster"],
+		newmeta: "true",
+	},
 	crawcomb: {
 		num: 10000,
 		name: "Crawcomb",
