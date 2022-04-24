@@ -5504,7 +5504,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onHit(pokemon, source, move) {
 				if (move.category !== 'Status') {
-					pokemon.volatiles['focuspunch'].lostFocus = true;
+					this.effectState.lostFocus = true;
 				}
 			},
 			onTryAddVolatile(status, pokemon) {
@@ -15227,7 +15227,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onHit(pokemon, source, move) {
 				if (!pokemon.isAlly(source) && move.category === 'Physical') {
-					pokemon.volatiles['shelltrap'].gotHit = true;
+					this.effectState.gotHit = true;
 					const action = this.queue.willMove(pokemon);
 					if (action) {
 						this.queue.prioritizeAction(action);

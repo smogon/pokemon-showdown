@@ -547,7 +547,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		beforeMoveCallback() {},
 		onTry(pokemon) {
-			if (pokemon.volatiles['focuspunch'] && pokemon.volatiles['focuspunch'].lostFocus) {
+			if (pokemon.volatiles['focuspunch']?.lostFocus) {
 				this.attrLastMove('[still]');
 				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
 				return false;
