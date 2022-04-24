@@ -3949,6 +3949,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia close - Closes signups for the current game. Requires host % @ # &`,
 			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # &`,
 			`/mafia takeidles [on|off] - Sets if idles are accepted by the script or not. Requires host % @ # &`,
+			`/mafia prod - Notifies players that they must submit an action or idle if they haven't yet. Requires host % @ # &`,
 			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # &`,
 			`/mafia selfvote [on|hammer|off] - Allows players to self vote either at hammer or anytime. Requires host % @ # &`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from voting. Requires host % @ # &`,
