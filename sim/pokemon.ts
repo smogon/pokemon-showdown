@@ -218,7 +218,6 @@ export class Pokemon {
 	hurtThisTurn: number | null;
 	lastDamage: number;
 	attackedBy: Attacker[];
-	hitSelf: boolean;
 	isActive: boolean;
 	activeTurns: number;
 	/**
@@ -419,7 +418,6 @@ export class Pokemon {
 		this.hurtThisTurn = null;
 		this.lastDamage = 0;
 		this.attackedBy = [];
-		this.hitSelf = false;
 
 		this.isActive = false;
 		this.activeTurns = 0;
