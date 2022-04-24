@@ -484,6 +484,57 @@ describe('Choices', function () {
 		});
 	});
 
+	describe("Rotation requests", function () {
+		it("should allow rotations in rotation battles", function () {
+			battle = common.gen(5).createBattle({gameType: 'rotation'}, [[
+				{species: 'Bulbasaur', ability: 'overgrow', moves: ['growth']},
+				{species: 'Ivysaur', ability: 'overgrow', moves: ['sludge']},
+				{species: 'Venusaur', ability: 'overgrow', moves: ['razorleaf']},
+			], [
+				{species: 'Squirtle', ability: 'torrent', moves: ['sleeptalk']},
+				{species: 'Wartortle', ability: 'torrent', moves: ['rapidspin']},
+				{species: 'Blastoise', ability: 'torrent', moves: ['tackle']},
+			]]);
+
+			battle.makeChoices('rotate right move sludge', 'rotate left move tackle');
+			assert.species(battle.p1.active[0], "Ivysaur");
+			assert.species(battle.p2.active[0], "Blastoise");
+		});
+
+		it("should not allow rotating to a fainted Pokemon", function () {
+			battle = common.gen(5).createBattle({gameType: 'rotation'}, [[
+				{species: 'Diglett', ability: 'sandveil', moves: ['memento']},
+				{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
+				{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+			], [
+				{species: 'Slugma', ability: 'magmaarmor', moves: ['memento']},
+				{species: 'Charmander', ability: 'blaze', moves: ['tackle']},
+				{species: 'Charmeleon', ability: 'blaze', moves: ['tackle']},
+			]]);
+
+			battle.makeChoices('move memento', 'move memento');
+			assert.throws(() => battle.choose('p1', 'rotate left move memento'));
+			battle.makeChoices('move tackle', 'rotate right move tackle');
+			assert.throws(() => battle.choose('p2', 'rotate right move memento'));
+		});
+
+		it("should not allow rotating out of a locked move", function () {
+			battle = common.gen(5).createBattle({gameType: 'rotation'}, [[
+				{species: 'Bulbasaur', ability: 'overgrow', moves: ['petaldance']},
+				{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+				{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+			], [
+				{species: 'Charizard', ability: 'blaze', moves: ['growl']},
+				{species: 'Charmeleon', ability: 'blaze', moves: ['tackle']},
+				{species: 'Charmander', ability: 'blaze', moves: ['tackle']},
+			]]);
+
+			battle.makeChoices('move petaldance', 'move growl');
+			assert.throws(() => battle.choose('p1', 'rotate right move tackle'));
+			assert.throws(() => battle.choose('p1', 'rotate left move tackle'));
+		});
+	});
+
 	describe('Team Preview requests', function () {
 		it('should allow specifying the team order', function () {
 			const TEAMS = [[

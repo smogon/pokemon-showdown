@@ -183,6 +183,27 @@ export class BattleActions {
 		pokemon.draggedIn = null;
 		return true;
 	}
+	rotateIn(pokemon: Pokemon) {
+		const side = pokemon.side;
+		side.active[0].isActive = false;
+		side.active[0] = pokemon;
+		pokemon.isActive = true;
+		switch (pokemon.position) {
+		case 1:
+			side.pokemon.unshift(...side.pokemon.splice(1, 2));
+			this.battle.add('rotate', 'right', side);
+			break;
+		case 2:
+			side.pokemon.unshift(...side.pokemon.splice(2, 1));
+			this.battle.add('rotate', 'left', side);
+			break;
+		}
+		for (let i = 0; i < side.pokemon.length; i++) {
+			side.pokemon[i].position = i;
+		}
+		// TODO: Primal Reversion, Slow Start, anything else that should trigger
+		// for a Pokemon that started the battle semi-active
+	}
 
 	// #endregion
 

@@ -3150,6 +3150,17 @@ export const Formats: FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
+	{
+		name: "[Gen 6] Rotation Custom Game",
+
+		mod: 'gen6',
+		gameType: 'rotation',
+		searchShow: false,
+		debug: true,
+		battle: {trunc: Math.trunc},
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+	},
 
 	// OR/AS Doubles/Triples
 	///////////////////////////////////////////////////////////////////
@@ -3355,6 +3366,17 @@ export const Formats: FormatList = [
 		name: "[Gen 5] Custom Game",
 
 		mod: 'gen5',
+		searchShow: false,
+		debug: true,
+		battle: {trunc: Math.trunc},
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+	},
+	{
+		name: "[Gen 5] Rotation Custom Game",
+
+		mod: 'gen5',
+		gameType: 'rotation',
 		searchShow: false,
 		debug: true,
 		battle: {trunc: Math.trunc},

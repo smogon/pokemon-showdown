@@ -1220,7 +1220,7 @@ export class Battle {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
 				if (!side.pokemonLeft) continue;
-				const activeData = side.active.map(pokemon => pokemon?.getMoveRequestData());
+				const activeData = side.activeAndSubActives().map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 				if (side.allySide) {
 					requests[i].ally = side.allySide.getRequestData(true);
@@ -1353,7 +1353,7 @@ export class Battle {
 		if (!side.pokemonLeft) return [];
 
 		const canSwitchIn = [];
-		for (let i = side.active.length; i < side.pokemon.length; i++) {
+		for (let i = side.activeAndSubActives().length; i < side.pokemon.length; i++) {
 			const pokemon = side.pokemon[i];
 			if (!pokemon.fainted) {
 				canSwitchIn.push(pokemon);
@@ -2396,6 +2396,14 @@ export class Battle {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
+				for (const pokemon of side.subActives()) {
+					// temporarily flag as active for Illusion, etc
+					// TODO is this actually needed?
+					pokemon.isActive = true;
+					this.runEvent('BeforeSwitchIn', pokemon);
+					this.add('switch', pokemon, pokemon.getDetails);
+					pokemon.isActive = false;
+				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
 				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
@@ -2462,6 +2470,9 @@ export class Battle {
 					break;
 				}
 			}
+			break;
+		case 'rotate':
+			this.actions.rotateIn(action.target);
 			break;
 		case 'runUnnerve':
 			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
@@ -2553,10 +2564,20 @@ export class Battle {
 			side => side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
 		);
 
+		let rotateFirst = false;
+
 		for (let i = 0; i < this.sides.length; i++) {
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
 				for (const pokemon of this.sides[i].active) {
 					pokemon.switchFlag = false;
+					if (pokemon.fainted && this.gameType === 'rotation') {
+						this.queue.insertChoice({
+							choice: 'rotate',
+							pokemon,
+							target: this.sides[i].pokemon[this.sides[i].pokemon[1].fainted ? 2 : 1],
+						});
+						rotateFirst = true;
+					}
 				}
 				switches[i] = false;
 			} else if (switches[i]) {
@@ -2573,6 +2594,8 @@ export class Battle {
 				}
 			}
 		}
+
+		if (rotateFirst) return false;
 
 		for (const playerSwitch of switches) {
 			if (playerSwitch) {
