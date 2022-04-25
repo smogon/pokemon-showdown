@@ -451,12 +451,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return this.chainModify([5325, 4096]);
 		},
 	},
-	entryhazard: {
-		// this is a side condition
-		onSwitchIn(pokemon) {
-			this.runEvent('EntryHazard', pokemon);
-		},
-	},
 
 	// weather is implemented here since it's so important to the game
 
