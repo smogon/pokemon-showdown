@@ -706,7 +706,7 @@ export class LotteryGiveaway extends Giveaway {
 			});
 			this.send(this.generateWindow(<>
 				<p style={{textAlign: 'center', fontSize: '10pt', fontWeight: 'bold'}}>Lottery Draw</p>
-				<p style={{textAlign: 'center'}}>{this.joined.size} users joined the giveaway.<br />
+				<p style={{textAlign: 'center'}}>{Chat.count(this.joined.size, 'users')} joined the giveaway.<br />
 				Our lucky winner{Chat.plural(this.winners)}: <b>{winnerNames}</b>!<br />Congratulations!</p>
 			</>));
 			for (const winner of this.winners) {
