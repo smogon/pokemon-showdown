@@ -2695,17 +2695,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 						if (!sideConditions.includes(id)) continue;
 						temp[side.n][id] = side.sideConditions[id];
 						delete side.sideConditions[id];
+						const effectName = this.dex.conditions.get(id).name;
+						this.add('-sideend', side, effectName, '[silent]');
 						success = true;
 					}
 				}
 				for (let i = 0; i < 4; i++) {
-					const sourceSide = sides[i];
-					const sourceSideConditions = temp[sourceSide.n];
+					const sourceSideConditions = temp[sides[i].n];
 					const targetSide = sides[(i + offset) % 4]; // the next side in rotation
 					for (const id in sourceSideConditions) {
-						const effectName = this.dex.conditions.get(id).name;
-						this.add('-sideend', sourceSide, effectName, '[silent]');
 						targetSide.sideConditions[id] = sourceSideConditions[id];
+						const effectName = this.dex.conditions.get(id).name;
 						let layers = sourceSideConditions[id].layers || 1;
 						for (; layers > 0; layers--) this.add('-sidestart', targetSide, effectName, '[silent]');
 					}
