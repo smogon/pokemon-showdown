@@ -508,7 +508,7 @@ export const Formats: FormatList = [
 			'Magnezone', 'Mawile-Mega', 'Pelipper', 'Rillaboom', 'Scizor-Mega', 'Serperior', 'Slowbro-Base', 'Swampert-Mega', 'Tapu Fini',
 			'Tapu Koko', 'Tapu Lele', 'Toxapex', 'Tyranitar', 'Victini', 'Volcarona', 'Weavile', 'Zapdos-Base',
 			'ND UUBL', // National Dex UUBL
-			'Drizzle', 'Drought',
+			'Drizzle', 'Drought', 'Light Clay',
 			// Slowbronite is banned so it doesn't validate on Galarian Slowbro
 			'Slowbronite',
 		],
