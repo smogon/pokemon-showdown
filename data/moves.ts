@@ -2689,52 +2689,49 @@ export const Moves: {[moveid: string]: MoveData} = {
 				const offset = this.random(3) + 1;
 				// the list of all sides in counterclockwise order
 				const sides = [this.sides[0], this.sides[2]!, this.sides[1], this.sides[3]!];
-				for (const id of sideConditions) {
-					const effectName = this.dex.conditions.get(id).name;
-					const rotatedSides = [];
-					let someCondition = false;
-					for (let i = 0; i < 4; i++) {
-						const sourceSide = sides[i];
-						const targetSide = sides[(i + offset) % 4]; // the next side in rotation
-						rotatedSides.push(targetSide.sideConditions[id]);
-						if (sourceSide.sideConditions[id]) {
-							this.add('-sideend', sourceSide, effectName, '[silent]');
-							someCondition = true;
-						}
+				const temp: {[k: number]: typeof source.side.sideConditions} = {0: {}, 1: {}, 2: {}, 3: {}};
+				for (const side of sides) {
+					for (const id in side.sideConditions) {
+						if (!sideConditions.includes(id)) continue;
+						temp[side.n][id] = side.sideConditions[id];
+						delete side.sideConditions[id];
+						success = true;
 					}
-					if (!someCondition) continue;
-					[
-						sides[0].sideConditions[id], sides[1].sideConditions[id],
-						sides[2]!.sideConditions[id], sides[3]!.sideConditions[id],
-					] = [...rotatedSides];
-					for (const side of sides) {
-						if (side.sideConditions[id]) {
-							let layers = side.sideConditions[id].layers || 1;
-							for (; layers > 0; layers--) this.add('-sidestart', side, effectName, '[silent]');
-						} else if (id in side.sideConditions) {
-							delete side.sideConditions[id];
-						}
+				}
+				for (let i = 0; i < 4; i++) {
+					const sourceSide = sides[i];
+					const sourceSideConditions = temp[sourceSide.n];
+					const targetSide = sides[(i + offset) % 4]; // the next side in rotation
+					for (const id in sourceSideConditions) {
+						const effectName = this.dex.conditions.get(id).name;
+						this.add('-sideend', sourceSide, effectName, '[silent]');
+						targetSide.sideConditions[id] = sourceSideConditions[id];
+						let layers = sourceSideConditions[id].layers || 1;
+						for (; layers > 0; layers--) this.add('-sidestart', targetSide, effectName, '[silent]');
 					}
-					success = true;
 				}
 			} else {
-				const sourceSide = source.side;
-				const targetSide = source.side.foe;
-				for (const id of sideConditions) {
-					if (sourceSide.sideConditions[id] && targetSide.sideConditions[id]) {
-						[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
-							targetSide.sideConditions[id], sourceSide.sideConditions[id],
-						];
-					} else if (sourceSide.sideConditions[id] && !targetSide.sideConditions[id]) {
-						targetSide.sideConditions[id] = sourceSide.sideConditions[id];
-						delete sourceSide.sideConditions[id];
-					} else if (targetSide.sideConditions[id] && !sourceSide.sideConditions[id]) {
-						sourceSide.sideConditions[id] = targetSide.sideConditions[id];
-						delete targetSide.sideConditions[id];
-					} else {
-						continue;
-					}
+				const sourceSideConditions = source.side.sideConditions;
+				const targetSideConditions = source.side.foe.sideConditions;
+				const sourceTemp: typeof sourceSideConditions = {};
+				const targetTemp: typeof targetSideConditions = {};
+				for (const id in sourceSideConditions) {
+					if (!sideConditions.includes(id)) continue;
+					sourceTemp[id] = sourceSideConditions[id];
+					delete sourceSideConditions[id];
 					success = true;
+				}
+				for (const id in targetSideConditions) {
+					if (!sideConditions.includes(id)) continue;
+					targetTemp[id] = targetSideConditions[id];
+					delete targetSideConditions[id];
+					success = true;
+				}
+				for (const id in sourceTemp) {
+					targetSideConditions[id] = sourceTemp[id];
+				}
+				for (const id in targetTemp) {
+					sourceSideConditions[id] = targetTemp[id];
 				}
 				this.add('-swapsideconditions');
 			}
