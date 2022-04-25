@@ -170,9 +170,7 @@ export class BattleActions {
 			this.battle.runEvent('SwitchIn', pokemon);
 		}
 
-		if (!pokemon.hasItem('heavydutyboots')) {
-			this.battle.runEvent('EntryHazard', pokemon);
-		}
+		this.battle.runEvent('EntryHazard', pokemon);
 
 		if (this.battle.gen <= 4) {
 			this.battle.runEvent('SwitchIn', pokemon);
