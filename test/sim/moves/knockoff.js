@@ -67,7 +67,7 @@ describe('Knock Off', function () {
 	});
 });
 
-describe.only('Knock Off [Gen 4]', function () {
+describe('Knock Off [Gen 4]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
