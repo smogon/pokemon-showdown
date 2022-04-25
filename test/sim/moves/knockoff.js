@@ -66,3 +66,34 @@ describe('Knock Off', function () {
 		assert.equal(battle.p2.active[0].item, 'rockyhelmet');
 	});
 });
+
+describe('Knock Off [Gen 4]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should only make the held item unusable, not actually remove it', function () {
+		battle = common.gen(4).createBattle([[
+			{species: 'Wynaut', moves: ['knockoff']},
+		], [
+			{species: 'Aggron', item: 'leftovers', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert(battle.p2.active[0].item, 'Aggron should still be holding leftovers.');
+		assert.false.fullHP(battle.p2.active[0], 'Aggron should not have been healed by leftovers.');
+	});
+
+	it('should make the target unable to gain a new item', function () {
+		battle = common.gen(4).createBattle([[
+			{species: 'Wynaut', item: 'pokeball', moves: ['knockoff', 'trick']},
+		], [
+			{species: 'Blissey', item: 'leftovers', moves: ['sleeptalk', 'thief']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'pokeball');
+		assert.equal(battle.p2.active[0].item, 'leftovers');
+		battle.makeChoices('move trick', 'move thief');
+		assert.equal(battle.p1.active[0].item, 'pokeball');
+		assert.equal(battle.p2.active[0].item, 'leftovers');
+	});
+});
