@@ -833,10 +833,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	knockoff: {
 		inherit: true,
-		onAfterHit(target, source) {
-			const item = target.takeItem();
-			if (item) {
-				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+		onAfterHit(target, source, move) {
+			if (!target.item || target.itemState.knockedOff) return;
+			const item = target.getItem();
+			if (this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) {
+				target.itemState.knockedOff = true;
+				this.add('-enditem', target, item.name, '[from] move: Knock Off');
+				this.hint("In Gens 3-4, Knock Off only makes the target's item unusable; it cannot obtain a new item.", true);
 			}
 		},
 	},
