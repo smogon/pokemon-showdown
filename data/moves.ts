@@ -3092,6 +3092,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'defensecurl',
 		condition: {
 			noCopy: true,
+			onRestart: () => null,
 		},
 		secondary: null,
 		target: "self",
@@ -11187,6 +11188,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'minimize',
 		condition: {
 			noCopy: true,
+			onRestart: () => null,
 			onSourceModifyDamage(damage, source, target, move) {
 				const boostedMoves = [
 					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
@@ -14000,7 +14002,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onHit(target, source, move) {
-			if (!target.setStatus('slp', source, move)) return false;
+			const result = target.setStatus('slp', source, move);
+			if (!result) return result;
 			target.statusState.time = 3;
 			target.statusState.startTime = 3;
 			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
