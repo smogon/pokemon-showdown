@@ -2418,7 +2418,7 @@ export class Battle {
 			action.pokemon.side.dynamaxUsed = true;
 			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
 			break;
-		case 'beforeTurnMove': {
+		case 'beforeTurnMove':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
@@ -2427,7 +2427,13 @@ export class Battle {
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
 			action.move.beforeTurnCallback.call(this, action.pokemon, target);
 			break;
-		}
+		case 'priorityChargeMove':
+			if (!action.pokemon.isActive) return false;
+			if (action.pokemon.fainted) return false;
+			this.debug('priority charge callback: ' + action.move.id);
+			if (!action.move.priorityChargeCallback) throw new Error(`priorityChargeMove has no priorityChargeCallback`);
+			action.move.priorityChargeCallback.call(this, action.pokemon);
+			break;
 
 		case 'event':
 			this.runEvent(action.event!, action.pokemon);

@@ -124,7 +124,7 @@ describe('Focus Punch', function () {
 		assert(tighteningFocusMessage < 0);
 	});
 
-	it.skip(`should tighten focus after switches in Gen 5+`, function () {
+	it(`should tighten focus after switches in Gen 5+`, function () {
 		battle = common.createBattle([[
 			{species: 'salamence', moves: ['focuspunch']},
 		], [
