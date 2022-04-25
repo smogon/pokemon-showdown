@@ -288,7 +288,7 @@
 		"evs": {"hp": 248, "def": 8, "spd": 252},
 		"nature": "Calm",
 		"ivs": {"atk": 0},
-		"moves": ["Amnesia", "Acid Armor", "Lava Plume", ["Synthesis", "Rest"]]
+		"moves": ["Amnesia", "Iron Defense", "Lava Plume", ["Synthesis", "Rest"]]
 	}],
 	"Revenankh": [{
 		"item": "Choice Band",
