@@ -541,12 +541,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	focuspunch: {
 		inherit: true,
-		beforeMoveCallback() { },
+		priorityChargeCallback() {},
+		beforeTurnCallback(pokemon) {
+			pokemon.addVolatile('focuspunch');
+		},
+		beforeMoveCallback() {},
 		onTry(pokemon) {
-			if (pokemon.volatiles['focuspunch'] && pokemon.volatiles['focuspunch'].lostFocus) {
+			if (pokemon.volatiles['focuspunch']?.lostFocus) {
 				this.attrLastMove('[still]');
 				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
-				return false;
+				return null;
 			}
 		},
 	},
