@@ -2233,6 +2233,7 @@ export class Battle {
 				if (adjacentFoes.length) {
 					return this.sample(adjacentFoes);
 				}
+				// no valid target at all, return slot directly across for any possible redirection
 				return pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			}
 		}
