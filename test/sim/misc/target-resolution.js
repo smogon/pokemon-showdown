@@ -43,7 +43,7 @@ describe('Target Resolution', function () {
 			assert(battle.log.includes('|-fail|p1a: Wailord'));
 		});
 
-		it.only(`should support RedirectTarget event for a fainted foe and type 'any' `, function () {
+		it(`should support RedirectTarget event for a fainted foe and type 'any' `, function () {
 			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['waterpulse']}, // Water Pulse over Water Gun due to targeting in triples
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
