@@ -2230,9 +2230,7 @@ export class Battle {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
 				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your ally
 				const adjacentFoes = pokemon.adjacentFoes();
-				if (adjacentFoes.length) {
-					return this.sample(adjacentFoes);
-				}
+				if (adjacentFoes.length) return this.sample(adjacentFoes);
 				// no valid target at all, return slot directly across for any possible redirection
 				return pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			}
