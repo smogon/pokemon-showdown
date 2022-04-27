@@ -10,7 +10,7 @@ describe(`Slow Start`, function () {
 		battle.destroy();
 	});
 
-	it.skip(`should halve the user's Sp. Atk when using a special Z-move`, function () {
+	it(`should halve the user's Sp. Atk when using a special Z-move`, function () {
 		battle = common.createBattle([[
 			{species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['hyperbeam']},
 		], [
