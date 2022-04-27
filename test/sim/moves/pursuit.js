@@ -88,4 +88,20 @@ describe(`Pursuit`, function () {
 		assert.equal(battle.p2.pokemon[0].name, "Emolga");
 		battle.makeChoices('move Pursuit', 'move voltswitch');
 	});
+
+	it(`should only activate before switches on adjacent foes`, function () {
+		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
+			{species: 'Beedrill', moves: ['pursuit']},
+			{species: 'Wynaut', moves: ['swordsdance']},
+			{species: 'Wynaut', moves: ['swordsdance']},
+		], [
+			{species: 'Alakazam', moves: ['swordsdance']},
+			{species: 'Solosis', moves: ['swordsdance']},
+			{species: 'Wynaut', moves: ['swordsdance']},
+			{species: 'Wynaut', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices('move pursuit 2, auto', 'switch 4, auto');
+		assert.false(battle.log.includes('|-activate|p2a: Alakazam|move: Pursuit'));
+		assert.false.fullHP(battle.p2.active[1]);
+	});
 });
