@@ -162,7 +162,7 @@ function displayResolved(review: ReviewRequest, justSubmitted = false) {
 		(justSubmitted ? "." : `, ${Chat.toDurationString(Date.now() - resolved.time)} ago.`)
 	);
 	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
-	const idx = reviews[user.id].findIndex(r => r === review); // object references!
+	const idx = reviews[user.id]?.findIndex(r => r === review) || -1; // object references!
 	if (idx > -1) reviews[user.id].splice(idx, 1);
 	if (!reviews[user.id]?.length) {
 		delete reviews[user.id];
@@ -403,13 +403,29 @@ const punishmentHandlers: Record<string, PunishmentHandler> = {
 	 * */
 	lock(user, room) {
 		// return lock(user, room, `Not following rules in battle (https://${Config.routes.client}/${room.roomid})`);
-		Rooms.get('staff')?.add(`|c|&|/log [Artemis] <<${room.roomid}>> LOCK recommended for ${user.id}`).update();
+		const staff = Rooms.get('staff');
+		if (staff) {
+			staff.add(`|c|&|/log [Artemis] <<${room.roomid}>> LOCK recommended for ${user.id}`);
+			staff.add(
+				`|c|&|/raw <button class="button" name="send" value="/msgroom staff,/gbc ${room.roomid}">` +
+				`View logs</button>`
+			);
+			staff.update();
+		}
 		room.hideText([user.id], undefined, true);
 		return false;
 	},
 	weeklock(user, room) {
 		// return lock(user, room, `Not following rules in battle (https://${Config.routes.client}/${room.roomid})`, true);
-		Rooms.get('staff')?.add(`|c|&|/log [Artemis] <<${room.roomid}>> WEEKLOCK recommended for ${user.id}`).update();
+		const staff = Rooms.get('staff');
+		if (staff) {
+			staff.add(`|c|&|/log [Artemis] <<${room.roomid}>> WEEKLOCK recommended for ${user.id}`);
+			staff.add(
+				`|c|&|/raw <button class="button" name="send" value="/msgroom staff,/gbc ${room.roomid}">` +
+				`View logs</button>`
+			);
+			staff.update();
+		}
 		room.hideText([user.id], undefined, true);
 		return false;
 	},
