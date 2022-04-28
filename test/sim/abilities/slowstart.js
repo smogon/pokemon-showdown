@@ -28,7 +28,7 @@ describe(`Slow Start`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['hyperbeam']},
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices('move hyperbeam zmove', 'auto');
 		const wynaut = battle.p2.active[0];
@@ -37,12 +37,14 @@ describe(`Slow Start`, function () {
 	});
 
 	it(`[Gen 7] should not halve the user's Attack when using physical Photon Geyser`, function () {
+		// We are using Photon Geyser through Assist, because otherwise Photon Geyser would just ignore Slow Start
 		battle = common.gen(7).createBattle([[
-			{species: 'regigigas', ability: 'slowstart', moves: ['photongeyser']},
+			{species: 'regigigas', ability: 'slowstart', moves: ['assist']},
+			{species: 'necrozma', moves: ['photongeyser']},
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
 		]]);
-		battle.makeChoices('move photongeyser', 'auto');
+		battle.makeChoices();
 		const wynaut = battle.p2.active[0];
 		const damage = wynaut.maxhp - wynaut.hp;
 		assert.bounded(damage, [96, 114]);
