@@ -6510,6 +6510,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
+	scarcane: {
+		tier: "UU",
+	},
 	crawcomb: {
 		tier: "RU",
 	},
