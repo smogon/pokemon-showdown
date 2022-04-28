@@ -83,6 +83,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon, target, move) {
+				// Ordinary Z-moves like Breakneck Blitz will halve the user's Special Attack as well
 				if (this.dex.moves.get(move.id).category === 'Physical') {
 					return this.chainModify(0.5);
 				}
