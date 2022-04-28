@@ -1401,6 +1401,20 @@ export class Battle {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
 
+		const dynamaxEnding: Pokemon[] = [];
+		for (const pokemon of this.getAllActive()) {
+			if (pokemon.volatiles['dynamax']?.turns === 3) {
+				dynamaxEnding.push(pokemon);
+			}
+		}
+		if (dynamaxEnding.length > 1) {
+			this.updateSpeed();
+			this.speedSort(dynamaxEnding);
+		}
+		for (const pokemon of dynamaxEnding) {
+			pokemon.removeVolatile('dynamax');
+		}
+
 		const trappedBySide: boolean[] = [];
 		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
 		for (const side of this.sides) {
@@ -1513,20 +1527,6 @@ export class Battle {
 				this.swapPosition(actives[1], 1, '[silent]');
 				this.add('-center');
 			}
-		}
-
-		const dynamaxEnding: Pokemon[] = [];
-		for (const pokemon of this.getAllActive()) {
-			if (pokemon.volatiles['dynamax']?.turns === 3) {
-				dynamaxEnding.push(pokemon);
-			}
-		}
-		if (dynamaxEnding.length > 1) {
-			this.updateSpeed();
-			this.speedSort(dynamaxEnding);
-		}
-		for (const pokemon of dynamaxEnding) {
-			pokemon.removeVolatile('dynamax');
 		}
 
 		this.add('turn', this.turn);
