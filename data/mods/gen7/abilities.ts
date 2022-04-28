@@ -77,6 +77,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon, target, move) {
+				// This is because the game checks the move's category in data, rather than what it is currently, unlike e.g. Huge Power
 				if (this.dex.moves.get(move.id).category === 'Physical') {
 					return this.chainModify(0.5);
 				}
