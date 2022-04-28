@@ -259,6 +259,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return success;
 		},
 	},
+	fly: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+	},
 	foresight: {
 		inherit: true,
 		isNonstandard: null,
