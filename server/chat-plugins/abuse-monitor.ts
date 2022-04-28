@@ -1929,7 +1929,7 @@ export const pages: Chat.PageTable = {
 				}
 				for (const review of curReviews) {
 					buf += `<div class="infobox">`;
-					buf += `Battle: <a href="//${Config.routes.client}/${review.room}">${review.room}</a><br />`;
+					buf += `Battle: <a href="//${Config.routes.client}/${getBattleLinks(review.room)[0]}">${review.room}</a><br />`;
 					buf += Utils.html`<details class="readmore"><summary>Review details:</summary>${review.details}</details>`;
 					buf += `<form data-submitsend="/msgroom staff,/am resolvereview ${review.staff},${review.room},{result},{response}">`;
 					buf += `Respond: <br /><textarea name="response" rows="3" cols="40"></textarea><br />`;
