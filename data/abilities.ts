@@ -3428,11 +3428,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			onModifyAtk(atk, pokemon) {
 				return this.chainModify(0.5);
 			},
-			onModifySpA(spa, pokemon, target, move) {
-				if (move.isZ) {
-					return this.chainModify(0.5);
-				}
-			},
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(0.5);
 			},
