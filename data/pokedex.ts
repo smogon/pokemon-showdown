@@ -19836,7 +19836,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	gyozito: {
-		num: 10081,
+		num: 10085,
 		name: "Gyozito",
 		types: ["Electric", "Grass"],
 		baseStats: {hp: 75, atk: 47, def: 40, spa: 53, spd: 74, spe: 86},
@@ -19848,7 +19848,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	nucleid: {
-		num: 10082,
+		num: 10086,
 		name: "Nucleid",
 		types: ["Water", "Steel"],
 		baseStats: {hp: 31, atk: 36, def: 60, spa: 110, spd: 50, spe: 40},
@@ -19862,7 +19862,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	calamitari: {
-		num: 10083,
+		num: 10087,
 		name: "Calamitari",
 		types: ["Dark", "Steel"],
 		baseStats: {hp: 60, atk: 60, def: 112, spa: 140, spd: 60, spe: 55},
@@ -19875,7 +19875,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	crustocion: {
-		num: 10084,
+		num: 10088,
 		name: "Crustocion",
 		types: ["Ground", "Steel"],
 		baseStats: {hp: 70, atk: 50, def: 117, spa: 103, spd: 90, spe: 55},
@@ -19887,7 +19887,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	novisage: {
-		num: 10085,
+		num: 10089,
 		name: "Novisage",
 		types: ["Fire", "Rock"],
 		baseStats: {hp: 83, atk: 103, def: 113, spa: 89, spd: 109, spe: 73},
@@ -19899,7 +19899,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	mezoped: {
-		num: 10086,
+		num: 10090,
 		name: "Mezoped",
 		types: ["Rock", "Grass"],
 		baseStats: {hp: 67, atk: 74, def: 95, spa: 46, spd: 85, spe: 138},
@@ -19911,7 +19911,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		newmeta: "true",
 	},
 	bulshian: {
-		num: 10087,
+		num: 10091,
 		name: "Bulshian",
 		types: ["Grass"],
 		baseStats: {hp: 135, atk: 135, def: 110, spa: 100, spd: 110, spe: 90},
