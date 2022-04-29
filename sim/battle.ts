@@ -1544,6 +1544,23 @@ export class Battle {
 		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
+		// Crazyhouse Progress checker because sidebars has trouble keeping track of Pokemon.
+		// Please remove me once there is client support.
+		if (this.ruleTable.has('crazyhouserule')) {
+			for (const side of this.sides) {
+				let buf = `raw|${side.name}'s team:<br />`;
+				for (const pokemon of side.pokemon) {
+					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
+					if (pokemon.fainted) {
+						buf += `<span style="white-space:nowrap;"><span style="opacity:.3"><psicon pokemon="${pokemon.species.id}" /></span>`;
+					} else {
+						buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
+					}
+				}
+				this.add(`${buf}</span>`);
+			}
+		}
+
 		this.makeRequest('move');
 	}
 
