@@ -1299,7 +1299,7 @@ export const commands: Chat.ChatCommands = {
 				settings.recommendOnly = true;
 				message = `${user.name} disabled automatic punishments for the Artemis battle monitor`;
 			} else {
-				return this.sendReply(`Automatic punishments are: ${settings.recommendOnly ? 'ON' : 'OFF'}.`)
+				return this.sendReply(`Automatic punishments are: ${!settings.recommendOnly ? 'ON' : 'OFF'}.`);
 			}
 			this.privateGlobalModAction(message);
 			this.globalModlog(`ABUSEMONITOR TOGGLE`, null, settings.recommendOnly ? 'off' : 'on');
