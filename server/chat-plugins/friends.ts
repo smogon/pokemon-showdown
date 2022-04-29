@@ -312,7 +312,10 @@ export const commands: Chat.ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (!target) return this.parse('/help friends');
-			await Friends.removeRequest(user.id, target as ID);
+			const res = await Friends.removeRequest(user.id, target as ID);
+			if (!res.changes) {
+				return this.errorReply(`You do not have a friend request pending from '${target}'.`);
+			}
 			this.refreshPage('friends-received');
 			return sendPM(`You denied a friend request from '${target}'.`, user.id);
 		},
