@@ -1935,25 +1935,6 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>From: ${ticket.userid}</strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
-			if (ticket.recommended?.length) {
-				if (ticket.recommended.length > 1) {
-					buf += `<details class="readmore"><summary><strong>Recommended from Artemis</strong></summary>`;
-					buf += ticket.recommended.map(Utils.escapeHTML).join('<br />');
-					buf += `</details>`;
-				} else {
-					buf += Utils.html`<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
-				}
-				if (!ticket.state?.recommendResult) {
-					buf += `<br />`;
-					buf += `Rate accuracy of result: `;
-					for (const [title, result] of [
-						['Accurate (or too lenient)', 'success'], ['Inaccurate (too harsh)', 'failure'],
-					]) {
-						buf += `<button class="button" name="send" value="/aht resolve ${ticket.userid},${result}">${title}</button>`;
-					}
-				}
-				buf += `<br />`;
-			}
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
