@@ -1,6 +1,7 @@
 ﻿// Note: These are the rules that formats use
 
 import {Utils} from "../lib";
+import {Pokemon} from "../sim/pokemon";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
@@ -1602,6 +1603,72 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
+		},
+	},
+	crazyhouserule: {
+		effectType: 'Rule',
+		name: 'Crazyhouse Rule',
+		desc: "You can use the pokemon you directly KO.",
+		onValidateRule(value) {
+			const ruleTable = this.ruleTable;
+			const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
+			const numPlayers = (this.format.gameType === 'freeforall' || this.format.gameType === 'multi') ? 4 : 2;
+			const potentialMaxTeamSize = maxTeamSize * numPlayers;
+			if (potentialMaxTeamSize > 24) {
+				throw new Error(`Crazyhouse Rule cannot be added because a team can potentially have ${potentialMaxTeamSize} Pokemon on one team, which is more than the server limit of 24.`);
+			}
+		},
+		// In order to prevent a case of the clones, housekeeping is needed.
+		// This is especially needed to make sure one side doesn't end up with too many Pokemon.
+		onBeforeSwitchIn(pokemon) {
+			if (this.turn < 1 || !pokemon.side.faintedThisTurn) return;
+			pokemon.side.pokemon = pokemon.side.pokemon.filter(x => !(x.fainted && !x.m.outofplay));
+			for (let i = 0; i < pokemon.side.pokemon.length && i < 24; i++) {
+				pokemon.side.pokemon[i].position = i;
+			}
+		},
+		onFaint(target, source, effect) {
+			if (!target.m.numSwaps) {
+				target.m.numSwaps = 0;
+			}
+			target.m.numSwaps++;
+			if (effect && effect.effectType === 'Move' && source.side.pokemon.length < 24 &&
+                source.side !== target.side && target.m.numSwaps < 4) {
+				const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
+				// Just in case(tm) and for Shedinja
+				if (hpCost === target.baseMaxhp) {
+					target.m.outofplay = true;
+					return;
+				}
+				source.side.pokemonLeft++;
+				source.side.pokemon.length++;
+
+				// A new Pokemon is created and stuff gets aside akin to a deep clone.
+				// This is because deepClone crashes when side is called recursively.
+				// Until a refactor is made to prevent it, this is the best option to prevent crashes.
+				const newPoke = new Pokemon(target.set, source.side);
+				const newPos = source.side.pokemon.length - 1;
+
+				const doNotCarryOver = [
+					'fullname', 'side', 'fainted', 'status', 'hp', 'illusion',
+					'transformed', 'position', 'isActive', 'faintQueued',
+					'subFainted', 'getHealth', 'getDetails', 'moveSlots', 'ability',
+				];
+				for (const [key, value] of Object.entries(target)) {
+					if (doNotCarryOver.includes(key)) continue;
+					// @ts-ignore
+					newPoke[key] = value;
+				}
+				newPoke.maxhp = newPoke.baseMaxhp; // for dynamax
+				newPoke.hp = newPoke.baseMaxhp - hpCost;
+				newPoke.clearVolatile();
+				newPoke.position = newPos;
+				source.side.pokemon[newPos] = newPoke;
+				this.add('poke', source.side.pokemon[newPos].side.id, source.side.pokemon[newPos].details, '');
+				this.add('-message', `${target.name} was captured by ${newPoke.side.name}!`);
+			} else {
+				target.m.outofplay = true;
+			}
 		},
 	},
 	chimera1v1rule: {
