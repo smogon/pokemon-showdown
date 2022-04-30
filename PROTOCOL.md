@@ -9,7 +9,7 @@ Showdown directly using WebSocket:
 
     ws://sim.smogon.com:8000/showdown/websocket
       or
-    wss://sim.smogon.com/showdown/websocket
+    wss://sim3.psim.us/showdown/websocket
 
 Client implementations you might want to look at for reference include:
 
