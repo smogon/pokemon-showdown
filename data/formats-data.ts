@@ -660,11 +660,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	slowkinggalar: {
-		randomBattleMoves: ["fireblast", "futuresight", "psyshock", "slackoff", "sludgebomb", "trick"],
+		randomBattleMoves: ["teleport", "futuresight", "psyshock", "slackoff", "sludgebomb", "trick"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["fireblast", "protect", "psychic", "sludgebomb", "trick", "trickroom"],
 		randomDoubleBattleLevel: 86,
-		tier: "RU",
+		tier: "OU",
 		doublesTier: "(DUU)",
 	},
 	magnemite: {
@@ -4886,7 +4886,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	salandit: {
-		tier: "LC UU",
+		tier: "LC OU",
 	},
 	salazzle: {
 		randomBattleMoves: ["flamethrower", "protect", "substitute", "toxic"],
@@ -6510,6 +6510,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
+	scarcane: {
+		tier: "UU",
+	},
 	crawcomb: {
 		tier: "RU",
 	},
@@ -6754,7 +6757,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier:"Illegal",
 	},
 	ninjaskgalar:{
-		tier: "PU",
+		tier: "NU",
 	},
 	battaby: {
 		tier: "LC UU",
