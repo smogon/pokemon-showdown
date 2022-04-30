@@ -92940,7 +92940,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
             amnesia: ["8L21"],
             ancientpower: ["8E"],
             attract: ["8M"],
-            bellydrum: ["8S0"],
+            bellydrum: ["8M"],
             bodyslam: ["8E"],
             curse: ["8M"],
             defensecurl: ["8M"],
