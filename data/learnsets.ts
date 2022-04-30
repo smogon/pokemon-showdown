@@ -51214,7 +51214,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			leafstorm: ["8L1", "7R", "6R", "5R", "4R"],
 		},
 	},
-	rotommow: {
+	rotomglow: {
 		learnset: {
 			photondischarge: ["8L1", "7R", "6R", "5R", "4R"],
 		},

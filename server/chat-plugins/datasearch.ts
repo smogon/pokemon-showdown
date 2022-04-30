@@ -483,7 +483,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		nubl: 'NUBL', nu: 'NU',
 		publ: 'PUBL', pu: 'PU', zu: '(PU)',
 		nfe: 'NFE',
-		lc: 'LC',
+		lc: 'LC', lcuber: "LC UBERS", lcou: "LC OU", lcuu: "LC UU",
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
 	});
 	const allDoublesTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
