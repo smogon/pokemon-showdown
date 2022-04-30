@@ -80,7 +80,6 @@ describe("Dynamax", function () {
 		]]);
 		battle.makeChoices('move sleeptalk dynamax, switch 3', 'move sleeptalk dynamax, auto');
 		const log = battle.getDebugLog();
-		console.log(log);
 		const kingdraMaxIndex = log.indexOf('|-start|p1a: Kingdra|Dynamax');
 		const kyogreMaxIndex = log.indexOf('|-start|p2a: Kyogre|Dynamax');
 		assert(kyogreMaxIndex < kingdraMaxIndex, 'Kyogre should have Dynamaxed before Kingdra.');
