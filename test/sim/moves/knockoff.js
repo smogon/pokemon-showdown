@@ -96,4 +96,15 @@ describe('Knock Off [Gen 4]', function () {
 		assert.equal(battle.p1.active[0].item, 'pokeball');
 		assert.equal(battle.p2.active[0].item, 'leftovers');
 	});
+
+	it(`should not knock off the target's item if the target's ability is Sticky Hold`, function () {
+		battle = common.gen(4).createBattle([[
+			{species: 'Wynaut', moves: ['knockoff']},
+		], [
+			{species: 'Aggron', ability: 'stickyhold', item: 'leftovers', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert(battle.p2.active[0].item, 'Aggron should still be holding leftovers.');
+		assert.fullHP(battle.p2.active[0], 'Aggron should have been healed by leftovers.');
+	});
 });
