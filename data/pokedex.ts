@@ -14163,7 +14163,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		baseSpecies: "Lycanroc",
 		forme: "Midnight",
 		types: ["Rock", "Dark"],
-		baseStats: {hp: 85, atk: 120, def: 80, spa: 50, spd: 80, spe: 77},
+		baseStats: {hp: 85, atk: 120, def: 80, spa: 50, spd: 80, spe: 72},
 		abilities: {0: "Keen Eye", 1: "Vital Spirit", H: "No Guard"},
 		heightm: 1.1,
 		weightkg: 25,
