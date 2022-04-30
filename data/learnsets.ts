@@ -95919,6 +95919,7 @@ scarcane: {
       swagger: ["8M", "7M"],
       toxic: ["8M", "7M"],
       frustration: ["8M", "7M"],
+			breakingswipe: ["8M", "7M"],
    },
 },
 gyozito: {

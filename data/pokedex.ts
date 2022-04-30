@@ -18674,7 +18674,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Scarcane",
 		types: ["Dark", "Dragon"],
 		baseStats: {hp: 97, atk: 117, def: 97, spa: 50, spd: 81, spe: 97},
-		abilities: {0: "Technician", 1: "Anger Point", H: "Marvel Scale"},
+		abilities: {0: "Technician", 1: "Anger Point", H: "Multiscale"},
 		heightm: 1.8,
 		weightkg: 104,
 		color: "Black",
