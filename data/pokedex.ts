@@ -11272,7 +11272,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	 	color: "Yellow",
 	 	eggGroups: ["Bug"],
 	 	requiredItem: "Galvantulite",
-	// },
+	},
 	galvantulasinnoh: {
 		num: 596,
 		name: "Galvantula-Sinnoh",
