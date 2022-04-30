@@ -544,16 +544,21 @@ const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 	'adaman', 'agatha-lgpe', 'akari', 'allister', 'archie-gen6', 'arezu', 'avery', 'ballguy', 'bea', 'bede',
 	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'doctor-gen8',
-	'elaine', 'gloria', 'gloria-dojo', 'gordie', 'hop', 'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower',
+	'elaine', 'gloria', 'gordie', 'hop', 'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower',
 	'lian', 'lisia', 'lorelei-lgpe', 'magnolia', 'mai', 'marnie', 'may-contest', 'melony', 'milo', 'mina-lgpe',
 	'mustard', 'mustard-master', 'nessa', 'oleana', 'opal', 'peonia', 'peony', 'pesselle', 'phoebe-gen6', 'piers',
-	'raihan', 'rei', 'rose', 'sabi', 'sanqua', 'shauna', 'shielbert', 'sonia', 'sonia-professor', 'sordward',
+	'raihan', 'rei', 'rose', 'sabi', 'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward',
 	'tateandliza-gen6', 'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu',
+]);
+
+const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
+	'gloria-dojo', 'shauna',
 ]);
 
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_ZACWEAVILE) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -584,6 +589,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (OFFICIAL_AVATARS_BRUMIRAGE.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Brumirage)`);
+			}
+			if (OFFICIAL_AVATARS_ZACWEAVILE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}ZacWeavile)`);
 			}
 		}
 	},
