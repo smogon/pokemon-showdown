@@ -835,6 +835,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onAfterHit(target, source, move) {
 			if (!target.item || target.itemState.knockedOff) return;
+			if (target.ability === 'multitype') return;
 			const item = target.getItem();
 			if (this.runEvent('TakeItem', target, source, move, item)) {
 				target.itemState.knockedOff = true;
