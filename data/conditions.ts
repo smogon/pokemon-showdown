@@ -785,7 +785,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		onStart(battle, source, effect) {
+		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'Toxic Cloud', '[from] ability: ' + effect, '[of] ' + source);
@@ -793,8 +793,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.add('-weather', 'Toxic Cloud');
 			}
 		},
-		onResidualOrder: 1,
-		onResidual() {
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
 			this.add('-weather', 'Toxic Cloud', '[upkeep]');
 			if (this.field.isWeather('toxiccloud')) this.eachEvent('Weather');
 		},
@@ -809,7 +809,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.damage(target.baseMaxhp / 16);
 			}
 		},
-		onEnd(pokemon) {
+		onFieldEnd(pokemon) {
 			this.add('-weather', 'none');
 		},
 	},
