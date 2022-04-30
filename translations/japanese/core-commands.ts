@@ -8,7 +8,7 @@ export const translations: Translations = {
 		"Access denied for custom avatar - make sure you're on the right account?": "このカスタムアバターを使用する権限がありません。許可されているアカウントでログインしてください。",
 		"Invalid avatar.": "アバター名が正しくありません。",
 		"Avatar changed to:": "アバターを次のものに変更しました。",
-		"Artist: ": "作者",
+		"Artist: ": "作者: ",
 		"No one has PMed you yet.": "誰もあなたにPMを送っていません。",
 		"You forgot the comma.": "コンマを忘れていませんか?",
 		"User ${targetUsername} not found. Did you misspell their name?": "ユーザー名:${targetUsername}は見つかりませんでした。名前を間違えていませんか?",
