@@ -321,6 +321,17 @@ function addGlobalModAction(message: string, room: GameRoom) {
 	Rooms.get(`staff`)?.add(`|c|&|/log <<${room.roomid}>> ${message}`).update();
 }
 
+function addLogButton(room: Room) {
+	const staff = Rooms.get('staff');
+	if (staff) {
+		staff.add(
+			`|c|&|/raw <button class="button" name="send" value="/msgroom staff,/gbc ${room.roomid}">` +
+			`View logs</button>`
+		);
+		staff.update();
+	}
+}
+
 const DISCLAIMER = (
 	'<small>This action was done automatically.' +
 	' Want to learn more about the AI? ' +
@@ -329,15 +340,10 @@ const DISCLAIMER = (
 
 export async function lock(user: User, room: GameRoom, reason: string, isWeek?: boolean) {
 	if (settings.recommendOnly) {
-		const staff = Rooms.get('staff');
-		if (staff) {
-			staff.add(`|c|&|/log [Artemis] <<${room.roomid}>> ${isWeek ? "WEEK" : ""}LOCK recommended for ${user.id}`);
-			staff.add(
-				`|c|&|/raw <button class="button" name="send" value="/msgroom staff,/gbc ${room.roomid}">` +
-				`View logs</button>`
-			);
-			staff.update();
-		}
+		Rooms.get('staff')?.add(
+			`|c|&|/log [Artemis] <<${room.roomid}>> ${isWeek ? "WEEK" : ""}LOCK recommended for ${user.id}`
+		).update();
+		addLogButton(room);
 		room.hideText([user.id], undefined, true);
 		return false;
 	}
@@ -358,6 +364,7 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 			`locked alts: ${affected.slice(1).map(curUser => curUser.getLastName()).join(", ")})`
 		);
 	}
+	addLogButton(room);
 	room.add(`|c|&|/raw ${DISCLAIMER}`).update();
 	room.hideText(affected.map(f => f.id), undefined, true);
 	let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users`;
@@ -397,14 +404,7 @@ const punishmentHandlers: Record<string, PunishmentHandler> = {
 		}
 		globalModlog('WARN', user, reason, room);
 		addGlobalModAction(`${user.name} was warned by Artemis (${reason})`, room);
-		const staff = Rooms.get('staff');
-		if (staff) {
-			staff.add(
-				`|c|&|/raw <button class="button" name="send" value="/msgroom staff,/gbc ${room.roomid}">` +
-				`View logs</button>`
-			);
-			staff.update();
-		}
+
 		room.add(`|c|&|/raw ${DISCLAIMER}`).update();
 		room.hideText([user.id], undefined, true);
 	},
