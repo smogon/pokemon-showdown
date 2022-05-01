@@ -85,6 +85,8 @@ export const translations: Translations = {
 		"You can only add a Player to unrated battles.": "プレイヤーを追加できるのはレートが有効でないバトルのみです。",
 		"Player must be set to \"p1\" or \"p2\", not \"${target}\".": "プレイヤーは\"${target}\"ではなく\"p1\"か\"p2\"に設定しなければなりません。",
 		"User ${name} not found.": "ユーザー ${name} は見つかりませんでした。",
+		"User ${name} must be in the battle room already.": "ユーザー\"${name}\"はすでにバトル部屋に入室しています。",
+		"This room already has a player in slot ${target}.": "スロット${name}にはすでにユーザーが割り当てられています。",
 		"Player 2": "プレイヤー2",
 		"Players could not be restored (maybe this battle already has two players?).": "プレイヤーの復元ができませんでした。(このバトルにすでに2人プレイヤーがからかもしれません。)",
 		"This game doesn't support /joingame": "このゲームは /joingame が使えません。",
