@@ -34,13 +34,13 @@
     "build": "node build",
     "tsc": "tsc",
     "fast-lint": "eslint . --config .eslintrc-no-types.json --cache --cache-location .eslintcache-no-types --ext .js,.ts,.tsx",
-    "lint": "eslint . --cache --ext .js,.ts,.tsx",
+    "lint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
     "fix": "eslint . --cache --ext .js,.ts,.tsx --fix",
-    "full-lint": "eslint . --cache --ext .js,.ts --max-warnings 0",
+    "full-lint": "npm run lint",
     "pretest": "npm run lint",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "full-test": "npm run full-lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\""
+    "full-test": "npm run lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\""
   },
   "husky": {
     "hooks": {
