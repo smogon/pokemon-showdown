@@ -846,9 +846,9 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause', 'Sleep Moves Clause'],
 		banlist: [
-			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Dragapult', 'Eternatus', 'Hawlucha', 'Marowak-Alola', 'Melmetal', 'Pikachu',
-			'Toxapex', 'Xerneas', 'Zacian', 'Zacian-Crowned', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power', 'Moody',
-			'Pure Power', 'Shadow Tag', 'Swift Swim', 'Bright Powder', 'Focus Band', 'King\'s Rock', 'Lax Incense', 'Quick Claw',
+			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Crawdaunt', 'Dragapult', 'Eternatus', 'Hawlucha', 'Marowak-Alola', 'Melmetal',
+			'Pikachu', 'Toxapex', 'Xerneas', 'Zacian', 'Zacian-Crowned', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power',
+			'Moody', 'Pure Power', 'Shadow Tag', 'Swift Swim', 'Bright Powder', 'Focus Band', 'King\'s Rock', 'Lax Incense', 'Quick Claw',
 			'Baton Pass',
 		],
 		onValidateTeam(team) {
