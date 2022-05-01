@@ -397,6 +397,14 @@ const punishmentHandlers: Record<string, PunishmentHandler> = {
 		}
 		globalModlog('WARN', user, reason, room);
 		addGlobalModAction(`${user.name} was warned by Artemis (${reason})`, room);
+		const staff = Rooms.get('staff');
+		if (staff) {
+			staff.add(
+				`|c|&|/raw <button class="button" name="send" value="/msgroom staff,/gbc ${room.roomid}">` +
+				`View logs</button>`
+			);
+			staff.update();
+		}
 		room.add(`|c|&|/raw ${DISCLAIMER}`).update();
 		room.hideText([user.id], undefined, true);
 	},
