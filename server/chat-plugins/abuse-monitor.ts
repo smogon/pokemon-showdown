@@ -162,9 +162,9 @@ function displayResolved(review: ReviewRequest, justSubmitted = false) {
 		(justSubmitted ? "." : `, ${Chat.toDurationString(Date.now() - resolved.time)} ago.`)
 	);
 	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
-	const idx = reviews[user.id]?.findIndex(r => r === review) || -1; // object references!
+	const idx = reviews[user.id].findIndex(r => r.room === review.room) || -1;
 	if (idx > -1) reviews[user.id].splice(idx, 1);
-	if (!reviews[user.id]?.length) {
+	if (!reviews[user.id].length) {
 		delete reviews[user.id];
 	}
 	saveReviews();
