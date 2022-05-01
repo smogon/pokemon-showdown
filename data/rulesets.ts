@@ -1608,8 +1608,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 	crazyhouserule: {
 		effectType: 'Rule',
 		name: 'Crazyhouse Rule',
-		desc: "You can use the pokemon you directly KO.",
+		desc: "Pok\u00e9mon you KO are added to your team and removed from the opponent's, and vice versa.",
 		onValidateRule(value) {
+			if (this.format.gameType === 'doubles' || this.format.gameType === 'triples') {
+				throw new Error(`Crazyhouse Rule currently does not support ${this.format.gameType} battles.`);
+			}
 			const ruleTable = this.ruleTable;
 			const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
 			const numPlayers = (this.format.gameType === 'freeforall' || this.format.gameType === 'multi') ? 4 : 2;
