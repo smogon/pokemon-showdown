@@ -652,8 +652,8 @@ export const Formats: FormatList = [
 		],
 		restricted: [
 			'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out',
-			'Intrepid Sword', 'Libero', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Prankster', 'Protean', 'Pure Power', 'Simple', 'Stakeout',
-			'Speed Boost', 'Tinted Lens', 'Unburden', 'Water Bubble',
+			'Intrepid Sword', 'Libero', 'Magnet Pull', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Prankster', 'Protean',
+			'Pure Power', 'Simple', 'Stakeout', 'Speed Boost', 'Tinted Lens', 'Unburden', 'Water Bubble',
 		],
 	},
 
