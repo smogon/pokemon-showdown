@@ -6749,13 +6749,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	solanca:{
 		tier: "PU",
 	},
-	abominamon:{
-		tier: "Illegal",
-	},
-	sliplove:{
-		tier: "Illegal",
-		doublesTier:"Illegal",
-	},
 	ninjaskgalar:{
 		tier: "NU",
 	},
@@ -6783,13 +6776,34 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	optikwill:{
 		tier: "UU"
 	},
-	larvivid:{
+	larvivid: {
 		tier: "LC UU"
 	},
-	shimmerse:{
+	shimmerse: {
 		tier: "NFE"
 	},
-	reflettle:{
+	reflettle: {
 		tier: "PU"
+	},
+	gyozito: {
+		tier: "ZU"
+	},
+	nucleid: {
+		tier: "LC OU"
+	},
+	calamitari: {
+		tier: "NU"
+	},
+	crustocion: {
+		tier: "NU"
+	},
+	novsiage: {
+		tier: "OU"
+	},
+	mezoped: {
+		tier: "RU"
+	},
+	bulshian: {
+		tier: "Uber"
 	},
 };
