@@ -6774,36 +6774,36 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 	},
 	optikwill:{
-		tier: "UU"
+		tier: "UU",
 	},
 	larvivid: {
-		tier: "LC UU"
+		tier: "LC UU",
 	},
 	shimmerse: {
-		tier: "NFE"
+		tier: "NFE",
 	},
 	reflettle: {
-		tier: "PU"
+		tier: "PU",
 	},
 	gyozito: {
-		tier: "ZU"
+		tier: "ZU",
 	},
 	nucleid: {
-		tier: "LC OU"
+		tier: "LC OU",
 	},
 	calamitari: {
-		tier: "NU"
+		tier: "NU",
 	},
 	crustocion: {
-		tier: "NU"
+		tier: "NU",
 	},
 	novsiage: {
-		tier: "OU"
+		tier: "OU",
 	},
 	mezoped: {
-		tier: "RU"
+		tier: "RU",
 	},
-	bulshian: {
-		tier: "Uber"
+	bulshian:{
+		tier: "Uber",
 	},
 };
