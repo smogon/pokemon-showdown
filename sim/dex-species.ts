@@ -442,7 +442,7 @@ export class DexSpecies {
 				throw new Error(`${id} does not exist`);
 			}
 			if(!this.dex.data.Pokedex[toID(pokedexData.baseSpecies)]){
-				throw new Error(`${toID(pokedexData.baseSpecies)} has no Pokedex entry`);
+				throw new Error(`${pokedexData.baseSpecies} has no Pokedex entry`);
 			}
 			const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
 			species = new Species({
