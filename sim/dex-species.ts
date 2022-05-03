@@ -1,3 +1,4 @@
+import { isConstructorDeclaration } from 'typescript';
 import {toID, BasicEffect} from './dex-data';
 
 interface SpeciesAbility {
@@ -437,6 +438,12 @@ export class DexSpecies {
 		}
 		if (id && this.dex.data.Pokedex.hasOwnProperty(id)) {
 			const pokedexData = this.dex.data.Pokedex[id];
+			if(!pokedexData){
+				throw new Error(`${id} does not exist`);
+			}
+			if(!this.dex.data.Pokedex[toID(pokedexData.baseSpecies)]){
+				throw new Error(`${toID(pokedexData.baseSpecies)} has no Pokedex entry`);
+			}
 			const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
 			species = new Species({
 				tags: baseSpeciesTags,
