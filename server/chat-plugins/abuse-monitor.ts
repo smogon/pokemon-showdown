@@ -170,9 +170,24 @@ function displayResolved(review: ReviewRequest, justSubmitted = false) {
 	saveReviews();
 }
 
+export const punishmentCache: WeakMap<User, Record<string, number>> = (
+	Chat.oldPlugins['abuse-monitor']?.punishmentCache || new WeakMap()
+);
+
 async function searchModlog(
-	query: {user?: ID, ip?: string | string[], actions?: string[]}
+	query: {user: ID, ip?: string | string[], actions?: string[]}
 ) {
+	const userObj = Users.get(query.user);
+	if (userObj) {
+		const data = punishmentCache.get(userObj);
+		if (data) {
+			let sum = 0;
+			for (const action of (query.actions || Object.keys(data))) {
+				sum += data[action];
+			}
+			return sum;
+		}
+	}
 	const search: import('../modlog').ModlogSearch = {
 		user: [],
 		ip: [],
@@ -188,7 +203,22 @@ async function searchModlog(
 		}
 	}
 	const modlog = await Rooms.Modlog.search('global', search);
-	if (!modlog) return [];
+	if (!modlog) return 0;
+	if (userObj) {
+		const validTypes = Array.from(Punishments.punishmentTypes.keys());
+		const cacheEntry: Record<string, number> = {};
+		for (const entry of modlog.results) {
+			if (!validTypes.some(k => entry.action.endsWith(k))) continue;
+			if (!cacheEntry[entry.action]) cacheEntry[entry.action] = 0;
+			cacheEntry[entry.action]++;
+		}
+		punishmentCache.set(userObj, cacheEntry);
+		let sum = 0;
+		for (const action of (query.actions || Object.keys(cacheEntry))) {
+			sum += cacheEntry[action];
+		}
+		return sum;
+	}
 	if (query.actions) {
 		// have to do this because using actions in the search treats it like
 		// AND action = foo AND action = bar
@@ -198,7 +228,7 @@ async function searchModlog(
 			}
 		}
 	}
-	return modlog.results;
+	return modlog.results.length;
 }
 
 export const classifier = new Artemis.RemoteClassifier();
@@ -221,7 +251,7 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 					user: user.id,
 					actions: punishment.modlogActions,
 				});
-				if (modlog.length < punishment.modlogCount) continue;
+				if (modlog < punishment.modlogCount) continue;
 			}
 			if (punishment.secondaryTypes) {
 				let matches = 0;
@@ -1954,4 +1984,12 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 	},
+};
+
+export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
+	if (typeof user === 'string') return;
+	if (!Punishments.punishmentTypes.has(punishment.type)) return;
+	const cacheEntry = punishmentCache.get(user) || {};
+	if (!cacheEntry[punishment.type]) cacheEntry[punishment.type] = 0;
+	cacheEntry[punishment.type]++;
 };
