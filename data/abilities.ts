@@ -3541,7 +3541,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
 		condition: {
-			duration: 5,
+			duration:4,
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
 			onStart(target) {
