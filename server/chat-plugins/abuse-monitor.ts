@@ -349,7 +349,7 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 	}
 	const affected = await Punishments.lock(
 		user,
-		isWeek ? 7 * 24 * 60 * 60 * 1000 : null,
+		isWeek ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null,
 		user.id,
 		false,
 		reason,
