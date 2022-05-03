@@ -11259,10 +11259,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Galvantula-Mega", "Galvantula-Sinnoh"],
 		formeOrder: ["Galvantula", "Galvantula-Mega", "Galvantula-Sinnoh"],
 	},
-	galvantualmega: {
+	galvantulamega: {
 	 	num: 596,
 	 	name: "Galvantula-Mega",
-	 	baseSpecies: "Galvantuala",
+	 	baseSpecies: "Galvantula",
 	 	forme: "Mega",
 	 	types: ["Bug", "Electric"],
 	 	baseStats: {hp: 70, atk: 77, def: 100, spa: 127, spd: 70, spe: 128},
