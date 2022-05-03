@@ -84,6 +84,7 @@ describe('Healing Wish', function () {
 		]]);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-fail')));
+		assert.false.fainted(battle.p1.active[0]);
 
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', moves: ['healingwish']},
@@ -94,6 +95,7 @@ describe('Healing Wish', function () {
 		]]);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-fail')));
+		assert.false.fainted(battle.p1.active[0]);
 	});
 
 	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {

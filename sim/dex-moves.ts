@@ -180,7 +180,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	forceSwitch?: boolean;
 	selfSwitch?: string | boolean;
 	selfBoost?: {boosts?: SparseBoostsTable};
-	selfdestruct?: string | boolean;
+	selfdestruct?: 'always' | 'ifHit' | boolean;
 	breaksProtect?: boolean;
 	/**
 	 * Note that this is only "true" recoil. Other self-damage, like Struggle,
