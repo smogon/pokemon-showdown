@@ -936,3 +936,11 @@ export const handlers: Chat.Handlers = {
 		}
 	},
 };
+
+export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
+	user = toID(user);
+	if (!['NAMELOCK', 'BAN'].includes(punishment.type)) return;
+	for (const handler of otds.values()) {
+		handler.removeNomination(user);
+	}
+};
