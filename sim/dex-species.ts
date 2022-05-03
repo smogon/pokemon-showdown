@@ -438,11 +438,8 @@ export class DexSpecies {
 		}
 		if (id && this.dex.data.Pokedex.hasOwnProperty(id)) {
 			const pokedexData = this.dex.data.Pokedex[id];
-			if(!pokedexData){
-				throw new Error(`${id} does not exist`);
-			}
-			if(!this.dex.data.Pokedex[toID(pokedexData.baseSpecies)]){
-				throw new Error(`id: ${id}, pokedexData: ${pokedexData.name} has no Pokedex entry`);
+			if(! (pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags) ){
+				throw new Error(`id: ${id}, pokedexData: ${pokedexData.baseSpecies} has no Pokedex entry`);
 			}
 			const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
 			species = new Species({
