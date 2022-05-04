@@ -79,8 +79,8 @@ describe('Knock Off [Gen 4]', function () {
 			{species: 'Aggron', item: 'leftovers', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
-		assert(battle.p2.active[0].item, 'Aggron should still be holding leftovers.');
-		assert.false.fullHP(battle.p2.active[0], 'Aggron should not have been healed by leftovers.');
+		assert.holdsItem(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[0], 'Aggron should not have been healed by Leftovers.');
 	});
 
 	it('should make the target unable to gain a new item', function () {
@@ -95,5 +95,26 @@ describe('Knock Off [Gen 4]', function () {
 		battle.makeChoices('move trick', 'move thief');
 		assert.equal(battle.p1.active[0].item, 'pokeball');
 		assert.equal(battle.p2.active[0].item, 'leftovers');
+	});
+
+	it(`should not knock off the target's item if the target's ability is Sticky Hold or Multitype`, function () {
+		battle = common.gen(4).createBattle([[
+			{species: 'Wynaut', moves: ['knockoff']},
+		], [
+			{species: 'Aggron', ability: 'stickyhold', item: 'leftovers', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[0], 'Aggron should have been healed by Leftovers.');
+
+		battle.destroy();
+		battle = common.gen(4).createBattle([[
+			{species: 'Wynaut', moves: ['knockoff']},
+		], [
+			{species: 'Arceus', ability: 'multitype', item: 'leftovers', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[0], 'Arceus should have been healed by Leftovers.');
 	});
 });
