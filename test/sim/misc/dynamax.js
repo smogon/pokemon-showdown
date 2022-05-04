@@ -69,6 +69,22 @@ describe("Dynamax", function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
+	it('should execute in order of updated speed when 2 or more Pokemon are Dynamaxing', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'kingdra', ability: 'swiftswim', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'groudon', ability: 'drought', moves: ['sleeptalk']},
+		], [
+			{species: 'kyogre', ability: 'drizzle', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move sleeptalk dynamax, switch 3', 'move sleeptalk dynamax, auto');
+		const log = battle.getDebugLog();
+		const kingdraMaxIndex = log.indexOf('|-start|p1a: Kingdra|Dynamax');
+		const kyogreMaxIndex = log.indexOf('|-start|p2a: Kyogre|Dynamax');
+		assert(kyogreMaxIndex < kingdraMaxIndex, 'Kyogre should have Dynamaxed before Kingdra.');
+	});
+
 	it('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
