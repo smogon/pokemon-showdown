@@ -174,7 +174,7 @@ export const punishmentCache: WeakMap<User, Record<string, number>> = (
 	Chat.oldPlugins['abuse-monitor']?.punishmentCache || new WeakMap()
 );
 
-async function searchModlog(
+export async function searchModlog(
 	query: {user: ID, ip?: string | string[], actions?: string[]}
 ) {
 	const userObj = Users.get(query.user);
@@ -183,7 +183,7 @@ async function searchModlog(
 		if (data) {
 			let sum = 0;
 			for (const action of (query.actions || Object.keys(data))) {
-				sum += data[action];
+				sum += (data[action] || 0);
 			}
 			return sum;
 		}
@@ -215,7 +215,7 @@ async function searchModlog(
 		punishmentCache.set(userObj, cacheEntry);
 		let sum = 0;
 		for (const action of (query.actions || Object.keys(cacheEntry))) {
-			sum += cacheEntry[action];
+			sum += (cacheEntry[action] || 0);
 		}
 		return sum;
 	}
