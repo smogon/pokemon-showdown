@@ -798,6 +798,9 @@ export const Scripts: ModdedBattleScriptsData = {
 						}
 					}
 				}
+				if (moveData.selfdestruct === 'ifHit' && damage[i] !== false) {
+					this.battle.faint(pokemon, pokemon, move);
+				}
 				if (moveData.selfSwitch && !this.battle.getAllActive().some(x => x.hasAbility('skilldrain'))) {
 					if (this.battle.canSwitch(pokemon.side)) {
 						didSomething = true;

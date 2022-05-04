@@ -4799,7 +4799,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		selfdestruct: "ifHit",
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -7820,10 +7819,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(target, source, move) {
-			if (!this.canSwitch(target.side)) {
+			if (!this.canSwitch(source.side)) {
 				delete move.selfdestruct;
 				this.attrLastMove('[still]');
-				this.add('-fail', target);
+				this.add('-fail', source);
 				return this.NOT_FAIL;
 			}
 		},
@@ -9916,10 +9915,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1, dance: 1},
 		onHit(target, source, move) {
-			if (!this.canSwitch(target.side)) {
+			if (!this.canSwitch(source.side)) {
 				delete move.selfdestruct;
 				this.attrLastMove('[still]');
-				this.add('-fail', target);
+				this.add('-fail', source);
 				return this.NOT_FAIL;
 			}
 		},

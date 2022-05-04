@@ -32,6 +32,20 @@ describe(`Memento`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
+	it(`should cause the user to faint after stat drops from Mirror Armor`, function () {
+		battle = common.createBattle([[
+			{species: 'whimsicott', moves: ['memento']},
+			{species: 'landorus', moves: ['sleeptalk']},
+		], [
+			{species: 'corviknight', ability: 'mirrorarmor', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		const atkDrop = battle.log.includes('|-unboost|p1a: Whimsicott|atk|2');
+		const spaDrop = battle.log.includes('|-unboost|p1a: Whimsicott|spa|2');
+		assert(atkDrop && spaDrop, "Whimsicott's stats should have been lowered.");
+		assert.equal(battle.requestState, 'switch');
+	});
+
 	it(`should set the Z-Memento healing flag even if the Memento itself was not successful`, function () {
 		battle = common.createBattle([[
 			{species: 'landorus', moves: ['sleeptalk']},

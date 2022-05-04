@@ -2419,10 +2419,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onTryHit(pokemon, target, move) {
-			if (!this.canSwitch(pokemon.side)) {
+		onHit(target, source, move) {
+			if (!this.canSwitch(source.side)) {
 				delete move.selfdestruct;
-				return false;
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
 			}
 		},
 		selfdestruct: "ifHit",

@@ -1111,9 +1111,6 @@ export class BattleActions {
 				continue;
 			}
 			damage[i] = curDamage;
-			if (move.selfdestruct === 'ifHit') {
-				this.battle.faint(source, source, move);
-			}
 		}
 		return damage;
 	}
@@ -1217,6 +1214,9 @@ export class BattleActions {
 					}
 				}
 			}
+			if (moveData.selfdestruct === 'ifHit' && damage[i] !== false) {
+				this.battle.faint(source, source, move);
+			}
 			if (moveData.selfSwitch) {
 				if (this.battle.canSwitch(source.side)) {
 					didSomething = true;
@@ -1229,7 +1229,6 @@ export class BattleActions {
 			damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
 			didAnything = this.combineResults(didAnything, didSomething);
 		}
-
 
 		if (!didAnything && didAnything !== 0 && !moveData.self && !moveData.selfdestruct) {
 			if (!isSelf && !isSecondary) {
