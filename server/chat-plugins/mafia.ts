@@ -3941,7 +3941,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
 			`/mafia idle - Tells the host if you are idling.`,
-            `/mafia action [details] - Tells the host you are using an action with the given submission details.`,
+         `/mafia action [details] - Tells the host you are using an action with the given submission details.`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">Host Commands</summary>`;
 		buf += [
