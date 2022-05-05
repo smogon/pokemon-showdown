@@ -208,6 +208,9 @@ export async function searchModlog(
 		const validTypes = Array.from(Punishments.punishmentTypes.keys());
 		const cacheEntry: Record<string, number> = {};
 		for (const entry of modlog.results) {
+			if ((new Date().getFullYear() - new Date(entry.time).getFullYear()) > 2) {
+				continue;
+			}
 			if (!validTypes.some(k => entry.action.endsWith(k))) continue;
 			if (!cacheEntry[entry.action]) cacheEntry[entry.action] = 0;
 			cacheEntry[entry.action]++;
