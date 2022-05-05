@@ -694,7 +694,7 @@ export const otdCommands: Chat.ChatCommands = {
 			case 'tagline':
 			case 'match':
 			case 'event':
-			case 'game':
+			case 'videogame':
 				if (!value.length || value.length > 150) return this.errorReply(`Please enter a valid ${key}.`);
 				break;
 			case 'sport':
@@ -935,4 +935,12 @@ export const handlers: Chat.Handlers = {
 			}
 		}
 	},
+};
+
+export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
+	user = toID(user);
+	if (!['NAMELOCK', 'BAN'].includes(punishment.type)) return;
+	for (const handler of otds.values()) {
+		handler.removeNomination(user);
+	}
 };

@@ -2726,16 +2726,15 @@ export const commands: Chat.ChatCommands = {
 			return this.checkChat(`\`\`\`${target}\`\`\``);
 		}
 
+		if (this.room?.settings.isPersonal !== false && this.shouldBroadcast()) {
+			target = this.filter(target)!;
+			if (!target) return this.errorReply(`Invalid code.`);
+		}
+
 		this.checkBroadcast(true, '!code');
 		this.runBroadcast(true);
 
-		const isPMOrPersonalRoom = this.room?.settings.isPersonal !== false;
-
 		if (this.broadcasting) {
-			if (isPMOrPersonalRoom) {
-				target = this.filter(target)!;
-				if (!target) return this.errorReply(`Invalid code.`);
-			}
 			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
 		} else {
 			this.sendReplyBox(Chat.getReadmoreCodeBlock(target));
