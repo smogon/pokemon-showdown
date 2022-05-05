@@ -16,6 +16,8 @@ import type {GlobalPermission} from '../user-groups';
 
 const WHITELIST = ["mia"];
 const MUTE_DURATION = 7 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
+const MAX_MODLOG_TIME = 2 * 365 * DAY;
 const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
@@ -208,9 +210,7 @@ export async function searchModlog(
 		const validTypes = Array.from(Punishments.punishmentTypes.keys());
 		const cacheEntry: Record<string, number> = {};
 		for (const entry of modlog.results) {
-			if ((new Date().getFullYear() - new Date(entry.time).getFullYear()) > 2) {
-				continue;
-			}
+			if ((Date.now() - entry.time) > MAX_MODLOG_TIME) continue;
 			if (!validTypes.some(k => entry.action.endsWith(k))) continue;
 			if (!cacheEntry[entry.action]) cacheEntry[entry.action] = 0;
 			cacheEntry[entry.action]++;
