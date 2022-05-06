@@ -446,7 +446,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Zacian|Zamazenta|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
+					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*')
+					// Zacian and Zamazenta should already be in the correct formes for Team Preview
+					// but we still appened "-*" to the base formes so the client doesn't get confused
+					// when they transform into their Crowned formes before they are sent into battle
+					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			this.makeRequest('teampreview');
@@ -1146,11 +1150,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 									if (prevo.evos.includes(formeName)) continue;
 								}
 								const forme = dex.species.get(formeName);
-								if (
-									forme.changesFrom === originalForme.name && !forme.battleOnly &&
-									// Temporary workaround
-									forme.forme !== 'Crowned'
-								) {
+								if (forme.changesFrom === originalForme.name && !forme.battleOnly) {
 									speciesTypes.push(...forme.types);
 								}
 							}

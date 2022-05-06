@@ -527,6 +527,10 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Kyogre-Primal');
 			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
 				tierSpecies = dex.species.get('Rayquaza-Mega');
+			} else if (item.id === 'rustedsword' && species.id === 'zacian') {
+				tierSpecies = dex.species.get('Zacian-Crowned');
+			} else if (item.id === 'rustedshield' && species.id === 'zamazenta') {
+				tierSpecies = dex.species.get('Zamazenta-Crowned');
 			}
 		}
 
@@ -1299,10 +1303,10 @@ export class TeamValidator {
 		const crowned: {[k: string]: string} = {
 			'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 		};
-		if (set.species in crowned) {
-			const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
-			if (ironHead >= 0) {
-				set.moves[ironHead] = crowned[set.species];
+		if (species.name in crowned) {
+			const behemothMove = set.moves.map(toID).indexOf(crowned[species.name] as ID);
+			if (behemothMove >= 0) {
+				set.moves[behemothMove] = 'ironhead';
 			}
 		}
 		return problems;

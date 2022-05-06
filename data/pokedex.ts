@@ -16034,7 +16034,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rusted Sword",
-		changesFrom: "Zacian",
+		battleOnly: "Zacian",
 		cannotDynamax: true,
 	},
 	zamazenta: {
@@ -16068,7 +16068,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rusted Shield",
-		changesFrom: "Zamazenta",
+		battleOnly: "Zamazenta",
 		cannotDynamax: true,
 	},
 	eternatus: {
