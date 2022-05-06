@@ -14,10 +14,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
 					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*')
-					// Zacian and Zamazenta should already be in the correct forme for Team Preview
-					// but we still appened "-*" to the base formes so the client doesn't get confused
-					// when they are sent into battle in their Crowned forme
-					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*');
+					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
 				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 			this.makeRequest('teampreview');

@@ -2403,7 +2403,6 @@ export class Battle {
 				} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
 					rawSpecies = this.dex.species.get('Zamazenta-Crowned');
 				}
-
 				if (!rawSpecies) continue;
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
