@@ -95866,6 +95866,7 @@ scarcane: {
       protect: ["8M", "7M"],
       psychup: ["8M", "7M"],
       revenge: ["8M", "7M"],
+	  round: ["8M", "7M"],
       smackdown: ["8M", "7M"],
       selfdestruct: ["8M", "7M"],
       shadowpunch: ["8M", "7M"],
