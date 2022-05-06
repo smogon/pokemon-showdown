@@ -192,6 +192,47 @@ export const Tags: {[id: string]: TagData} = {
 		name: "LC UU",
 		speciesFilter: species => species.tier === 'LC UU',
 	},
+	MegaZUber: {
+		name: "MegaZ Uber",
+		speciesFilter: species => species.tier === 'MegaZ Uber',
+	},
+	MegaZOU: {
+		name: "MegaZ OU",
+		speciesFilter: species => species.tier === 'MegaZ OU',
+	},
+	MegaZUU: {
+		name: "MegaZ UU",
+		speciesFilter: species => species.tier === 'MegaZ UU',
+	},
+	MegaZRU: {
+		name: "MegaZ RU",
+		speciesFilter: species => species.tier === 'MegaZ RU',
+	},
+	MegaZNU: {
+		name: "MegaZ NU",
+		speciesFilter: species => species.tier === 'MegaZ NU',
+	},
+	MegaZPU: {
+		name: "MegaZ PU",
+		speciesFilter: species => species.tier === 'MegaZ PU',
+	},
+	MegaZZU: {
+		name: "MegaZ ZU",
+		speciesFilter: species => species.tier === 'MegaZ ZU',
+	},
+	MegaAG: {
+		name: "Mega AG",
+		speciesFilter: species => species.tier === 'Mega AG',
+	},
+	MegaOU: {
+		name: "Mega OU",
+		speciesFilter: species => species.tier === 'Mega OU',
+	},
+	MegaUU: {
+		name: "Mega UU",
+		speciesFilter: species => species.tier === 'Mega UU',
+	},
+
 	captier: {
 		name: "CAP Tier",
 		speciesFilter: species => species.isNonstandard === 'CAP',

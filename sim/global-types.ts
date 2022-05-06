@@ -64,7 +64,8 @@ namespace TierTypes {
 	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
 	"(NU)" | "PUBL" | "PU" | "(PU)" | "ZUBL" | "ZU" | "(ZU)" | "NFE" | "LC UBER" | "LC OU" | "LC UU";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC UBER" | "LC OU" | "LC UU";
-	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
+	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC" | "MegaZ Uber" | "MegaZ OU" |
+	 "MegaZ UU" | "MegaZ RU" | "MegaZ NU" | "MegaZ PU" | "MegaZ ZU" | "Mega AG" | "Mega OU" | "Mega UU";
 }
 
 interface EventInfo {
