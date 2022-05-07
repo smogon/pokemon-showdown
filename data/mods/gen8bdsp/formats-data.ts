@@ -1668,7 +1668,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["calmmind", "dracometeor", "healingwish", "psychic", "roost", "surf"],
 	},
 	latios: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 		randomBattleMoves: ["calmmind", "dracometeor", "psychic", "roost"],
 	},
