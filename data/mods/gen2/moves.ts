@@ -252,7 +252,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onInvulnerability(target, source, move) {
-				if (move.id === 'gust' || move.id === 'spikes' || move.id === 'twister' || move.id === 'thunder' || move.id === 'whirlwind') {
+				if (move.id === 'gust' || move.id === 'spikes' || move.id === 'twister' || move.id === 'thunder' ||
+				move.id === 'whirlwind') {
 					return;
 				}
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure') {
