@@ -13,6 +13,7 @@ import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
 import type {GlobalPermission} from '../user-groups';
+import * as pathModule from 'path';
 
 const WHITELIST = ["mia"];
 const MUTE_DURATION = 7 * 60 * 1000;
@@ -620,8 +621,10 @@ export function writeStats(type: string, entry: AnyObject) {
 	void FS(path).append(JSON.stringify(entry) + "\n");
 }
 
-function saveSettings(isBackup = false) {
-	FS(`config/chat-plugins/nf${isBackup ? ".backup" : ""}.json`).writeUpdate(() => JSON.stringify(settings));
+function saveSettings(path?: string) {
+	let full = `config/chat-plugins/`;
+	if (path) full = pathModule.join(full, path);
+	FS(`${full}.json`).writeUpdate(() => JSON.stringify(settings));
 }
 
 function saveReviews() {
@@ -1308,22 +1311,73 @@ export const commands: Chat.ChatCommands = {
 			);
 		},
 		bs: 'backupsettings',
-		backupsettings(target, room, user) {
+		async backupsettings(target, room, user) {
 			checkAccess(this);
-			saveSettings(true);
+			target = target.replace(/\//g, '-').toLowerCase().trim();
+			let dotIdx = target.lastIndexOf('.');
+			if (dotIdx < 0) {
+				dotIdx = target.length;
+			}
+			target = target.toLowerCase().slice(0, dotIdx);
+			if (target) {
+				target = `/artemis/${target}`;
+				await FS(`config/chat-plugins/artemis/`).mkdirIfNonexistent();
+			} else {
+				target = `/nf.backup`;
+			}
+			saveSettings(target);
 			this.addGlobalModAction(`${user.name} used /abusemonitor backupsettings`);
+			this.stafflog(`Logged to ${target || "default location"}`);
+			if (target) { // named? probably relevant
+				this.globalModlog(`ABUSEMONITOR BACKUP`, null, target);
+			}
 			this.refreshPage('abusemonitor-settings');
 		},
 		lb: 'loadbackup',
 		async loadbackup(target, room, user) {
 			checkAccess(this);
-			const backup = await FS('config/chat-plugins/nf.backup.json').readIfExists();
+			let path = `nf.backup`;
+			if (target) {
+				path = `artemis/${target.toLowerCase().replace(/\//g, '-')}`;
+			}
+			const backup = await FS(`config/chat-plugins/${path}.json`).readIfExists();
 			if (!backup) return this.errorReply(`No backup settings saved.`);
 			const backupSettings = JSON.parse(backup);
 			Object.assign(settings, backupSettings);
 			saveSettings();
 			this.addGlobalModAction(`${user.name} used /abusemonitor loadbackup`);
+			this.stafflog(`Loaded ${path}`);
 			this.refreshPage('abusemonitor-settings');
+		},
+		async deletebackup(target, room, user) {
+			checkAccess(this);
+			target = target.toLowerCase().replace(/\//g, '-');
+			if (!target) return this.errorReply(`Specify a backup file.`);
+			const path = FS(`config/chat-plugins/artemis/${target}.json`);
+			if (!(await path.exists())) {
+				return this.errorReply(`Backup '${target}' not found.`);
+			}
+			await path.unlinkIfExists();
+			this.globalModlog(`ABUSEMONITOR DELETEBACKUP`, null, target);
+			this.sendReply(`Backup '${target}' deleted.`);
+			this.privateGlobalModAction(`${user.name} deleted the abuse-monitor backup '${target}'`);
+		},
+		async backups() {
+			checkAccess(this);
+			let buf = `<strong>Artemis backups:</strong><br />`;
+			const files = await FS(`config/chat-plugins/artemis`).readdirIfExists();
+			if (!files.length) {
+				buf += `No backups found.`;
+			} else {
+				buf += files.map(f => {
+					const fName = f.slice(0, f.lastIndexOf('.'));
+					let line = `&bull; ${fName} `;
+					line += `<button name="send" value="/abusemonitor deletebackup ${fName}">Delete</button> `;
+					line += `<button name="send" value="/abusemonitor loadbackup ${fName}">Load</button>`;
+					return line;
+				}).join('<br />');
+			}
+			this.sendReplyBox(buf);
 		},
 		togglepunishments(target, room, user) {
 			checkAccess(this);
