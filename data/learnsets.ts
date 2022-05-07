@@ -58746,6 +58746,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			venoshock: ["8M", "7M", "6M", "5M"],
 			toxiccloud: ["8M", "7M"],
 			antidote: ["8M", "7M"],
+			vengeance: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 5, level: 31},
