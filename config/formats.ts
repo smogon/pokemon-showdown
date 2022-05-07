@@ -630,7 +630,7 @@ export const Formats: FormatList = [
 			'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa',
 			'Rayquaza', 'Reshiram', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
 			'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Bright Powder',
-			'King\'s Rock', 'Lax Incense', 'Baton Pass', 'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Memento'
+			'King\'s Rock', 'Lax Incense', 'Baton Pass', 'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Memento',
 			'Misty Explosion', 'Self-Destruct',
 		],
 	},
@@ -654,7 +654,7 @@ export const Formats: FormatList = [
 		restricted: [
 			'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out',
 			'Intrepid Sword', 'Libero', 'Magnet Pull', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Prankster', 'Protean',
-			'Pure Power', 'Simple', 'Stakeout', 'Speed Boost', 'Tinted Lens', 'Unburden', 'Water Bubble',
+			'Pure Power', 'Simple', 'Stakeout', 'Stench', 'Speed Boost', 'Tinted Lens', 'Unburden', 'Water Bubble',
 		],
 	},
 
