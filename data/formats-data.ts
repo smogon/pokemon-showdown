@@ -6797,7 +6797,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	crustocion: {
 		tier: "NU",
 	},
-	novsiage: {
+	novisage: {
 		tier: "OU",
 	},
 	mezoped: {
