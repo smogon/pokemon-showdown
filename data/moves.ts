@@ -22942,11 +22942,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
-			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || ally.fainted);
-			var faintedAllies = pokemon.side.pokemon.filter(ally => ally === pokemon && ally.fainted);
-			//move.multihit = move.allies.length;
-			
-			return move.basePower + ((move.allies.length-faintedAllies.length)*20) 
+			return move.basePower + ((pokemon.side.allies.length-pokemon.side.pokemonLeft)*20) 
 		},
 		category: "Special",
 		name: "Vengeance",

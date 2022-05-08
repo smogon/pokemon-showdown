@@ -481,7 +481,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		uubl: 'UUBL', uu: 'UU',
 		rubl: 'RUBL', ru: 'RU',
 		nubl: 'NUBL', nu: 'NU',
-		publ: 'PUBL', pu: 'PU', zu: '(PU)',
+		publ: 'PUBL', pu: 'PU', zu: 'ZU',
 		nfe: 'NFE',
 		lc: 'LC', lcuber: "LC UBERS", lcou: "LC OU", lcuu: "LC UU",
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
