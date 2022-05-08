@@ -213,7 +213,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	setCustomRules(rules: string) {
 		let format;
 		try {
-			let tryFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
+			const tryFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
 			format = Dex.formats.get(this.tryFormat, true);
 
 			// In tours of formats with generated teams, custom rule errors should be checked for here,
