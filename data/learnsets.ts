@@ -76710,7 +76710,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	zaciancrowned: {
 		learnset: {
-			behemothblade: ["8M", "8L33"],
+			behemothblade: ["8R"],
 		},
 		eventOnly: true,
 	},
@@ -76781,7 +76781,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	zamazentacrowned: {
 		learnset: {
-			behemothbash: ["8M", "8L33"],
+			behemothbash: ["8R"],
 		},
 		eventOnly: true,
 	},
