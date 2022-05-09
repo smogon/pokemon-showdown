@@ -220,6 +220,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	sheerforce: {
+		inherit: true,
+		// Activate after abilities that can add a secondary effect
+		onModifyMovePriority: -3,
+	},
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
