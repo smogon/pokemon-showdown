@@ -213,8 +213,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	setCustomRules(rules: string) {
 		let format;
 		try {
-			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
-			format = Dex.formats.get(this.fullFormat, true);
+			const tryFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
+			format = Dex.formats.get(tryFormat, true);
 
 			// In tours of formats with generated teams, custom rule errors should be checked for here,
 			// since users can't edit their teams to avoid them at matching time
@@ -223,6 +223,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				const testTeamGenerator = Teams.getGenerator(format, testTeamSeed);
 				testTeamGenerator.getTeam(); // Throws error if generation fails
 			}
+			this.fullFormat = tryFormat;
 		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
