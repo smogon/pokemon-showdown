@@ -12,7 +12,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	venusaurmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	venusaurgmax: {
@@ -38,11 +38,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	charizardmegax: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	charizardmegay: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	charizardgmax: {
@@ -67,7 +67,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	blastoisemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	blastoisegmax: {
@@ -112,7 +112,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	beedrillmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	pidgey: {
@@ -125,7 +125,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	pidgeotmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	rattata: {
@@ -373,7 +373,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	crobatmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	oddish: {
@@ -543,7 +543,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	alakazammega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	machop: {
@@ -640,7 +640,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	slowbromega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	slowbrogalar: {
@@ -757,7 +757,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	gengarmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	gengargmax: {
@@ -782,7 +782,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	steelixmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	drowzee: {
@@ -977,7 +977,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 	},
 	kangaskhanmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	horsea: {
@@ -1061,7 +1061,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	scizormega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	smoochum: {
@@ -1115,11 +1115,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 	},
 	pinsirmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	pinsirobliviamega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	tauros: {
@@ -1145,7 +1145,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	gyaradosmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	lapras: {
@@ -1296,7 +1296,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	aerodactylmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	munchlax: {
@@ -1392,11 +1392,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	mewtwomegax: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	mewtwomegay: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	mew: {
@@ -1524,7 +1524,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 	},
 	ampharosmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	azurill: {
@@ -1687,7 +1687,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	heracrossmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	sneasel: {
@@ -1722,7 +1722,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	magcargomega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	swinub: {
@@ -1805,7 +1805,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 	},
 	houndoommega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	phanpy: {
@@ -1868,7 +1868,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	tyranitarmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	lugia: {
@@ -1910,7 +1910,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	sceptilemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	torchic: {
@@ -1928,7 +1928,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	blazikenmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	mudkip: {
@@ -1946,7 +1946,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	swampertmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	poochyena: {
@@ -2056,7 +2056,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	gardevoirmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	gallade: {
@@ -2068,7 +2068,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	gallademega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	surskit: {
@@ -2156,7 +2156,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	sableyemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	mawile: {
@@ -2168,7 +2168,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	mawilemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	aron: {
@@ -2186,7 +2186,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	aggronmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	aronquantum: {
@@ -2212,7 +2212,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 	},
 	medichammega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	electrike: {
@@ -2227,7 +2227,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	manectricmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	plusle: {
@@ -2274,7 +2274,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	sharpedomega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	wailmer: {
@@ -2295,7 +2295,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 	},
 	cameruptmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	torkoal: {
@@ -2330,7 +2330,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	flygonmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	cacnea: {
@@ -2351,7 +2351,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	altariamega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	zangoose: {
@@ -2474,7 +2474,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	banettemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	duskull: {
@@ -2514,7 +2514,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	absolmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	snorunt: {
@@ -2529,7 +2529,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	glaliemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	froslass: {
@@ -2541,7 +2541,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	froslassmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	spheal: {
@@ -2593,7 +2593,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	salamencemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	beldum: {
@@ -2611,7 +2611,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	metagrossmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	regirock: {
@@ -2647,7 +2647,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	latiasmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	latios: {
@@ -2659,7 +2659,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	latiosmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	kyogre: {
@@ -2697,7 +2697,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	rayquazamega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	jirachi: {
@@ -2880,7 +2880,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	lopunnymega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	glameow: {
@@ -2943,7 +2943,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	garchompmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	riolu: {
@@ -2958,7 +2958,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	lucariomega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	hippopotas: {
@@ -3015,7 +3015,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	abomasnowmega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	rotom: {
@@ -3379,7 +3379,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	audinomega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	timburr: {
@@ -3679,7 +3679,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	gothitellemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	solosis: {
@@ -3781,7 +3781,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	galvantulamega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	galvantulasinnoh: {
@@ -4653,7 +4653,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	dianciemega: {
-		isNonstandard: "Past",
+		isNonstandard: "PastMEGA",
 		tier: "Illegal",
 	},
 	hoopa: {
