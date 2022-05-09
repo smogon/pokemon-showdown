@@ -748,7 +748,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	haunter: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	gengar: {
 		randomDoubleBattleMoves: ["focusblast", "nastyplot", "protect", "shadowball", "sludgebomb", "thunderbolt", "trick", "willowisp"],
@@ -888,7 +888,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 85,
 		randomDoubleBattleMoves: ["closecombat", "coaching", "fakeout", "helpinghand", "rapidspin", "suckerpunch", "tripleaxel"],
 		randomDoubleBattleLevel: 88,
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	lickitung: {
@@ -3523,7 +3523,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["earthquake", "flareblitz", "rockslide", "superpower", "uturn"],
 		randomDoubleBattleLevel: 82,
-		tier: "UU",
+		tier: "RU",
 		doublesTier: "(DUU)",
 	},
 	darmanitangalar: {
@@ -5563,7 +5563,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 86,
 		randomDoubleBattleMoves: ["faketears", "foulplay", "partingshot", "snarl", "taunt"],
 		randomDoubleBattleLevel: 89,
-		tier: "ZU",
+		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	gossifleur: {
@@ -5687,7 +5687,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["hurricane", "icebeam", "protect", "roost", "surf", "tailwind"],
 		randomDoubleBattleLevel: 88,
-		tier: "ZU",
+		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	arrokuda: {
@@ -5798,7 +5798,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	grimmsnarl: {
 		randomBattleMoves: ["lightscreen", "reflect", "spiritbreak", "taunt", "thunderwave"],
 		randomBattleLevel: 82,
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	grimmsnarlgmax: {
@@ -6300,7 +6300,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	cawdet: {
 		isNonstandard: "CAP",
-		tier: "LC UBER",
+		tier: "CAP LC",
 	},
 	cawmodore: {
 		isNonstandard: "CAP",
@@ -6568,7 +6568,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 	},
 	colburnire: {
-		tier: "Uber",
+		tier: "Illegal",
 	},
 	froschaiser: {
 		tier: "OU",
@@ -6580,7 +6580,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC UU",
 	},
 	caravagon: {
-		tier: "OU",
+		tier: "UU",
 	},
 	immosstor: {
 		tier: "UU",
