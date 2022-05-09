@@ -2395,6 +2395,42 @@ export class Battle {
 
 			this.add('start');
 
+			// Change Zacian/Zamazenta into their Crowned formes
+			for (const pokemon of this.getAllPokemon()) {
+				let rawSpecies: Species | null = null;
+				if (pokemon.species.id === 'zacian' && pokemon.item === 'rustedsword') {
+					rawSpecies = this.dex.species.get('Zacian-Crowned');
+				} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
+					rawSpecies = this.dex.species.get('Zamazenta-Crowned');
+				}
+				if (!rawSpecies) continue;
+				const species = pokemon.setSpecies(rawSpecies);
+				if (!species) continue;
+				pokemon.baseSpecies = rawSpecies;
+				pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				pokemon.setAbility(species.abilities['0'], null, true);
+				pokemon.baseAbility = pokemon.ability;
+
+				const behemothMove: {[k: string]: string} = {
+					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
+				};
+				const ironHead = pokemon.moves.indexOf('ironhead');
+				if (ironHead >= 0) {
+					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
+					pokemon.moveSlots[ironHead] = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						disabledSource: '',
+						used: false,
+					};
+				}
+			}
+
 			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
 			for (const rule of this.ruleTable.keys()) {
 				if ('+*-!'.includes(rule.charAt(0))) continue;
