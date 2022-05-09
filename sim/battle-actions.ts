@@ -120,6 +120,8 @@ export class BattleActions {
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
+			oldActive.statsRaisedThisTurn = false;
+			oldActive.statsLoweredThisTurn = false;
 			oldActive.position = pokemon.position;
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
