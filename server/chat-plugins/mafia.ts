@@ -650,7 +650,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	day(extension: number | null = null, initial = false) {
 		if (this.phase !== 'night' && !initial) return;
-		if (this.dayNum = 0 && extension !== null) return this.sendUser(this.hostid, `|error|You cannot extend on day 0.`);
+		if (this.dayNum == 0 && extension !== null) return this.sendUser(this.hostid, `|error|You cannot extend on day 0.`);
 		if (this.timer) this.setDeadline(0);
 		if (extension === null) {
 			if (!isNaN(this.hammerCount)) this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
@@ -1871,8 +1871,8 @@ export const pages: Chat.PageTable = {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role Details</summary>`;
 				buf += `<table><tr><td style="text-align:center;"><img width="75" height="75" src="//${Config.routes.client}/fx/mafia-${role.image || 'villager'}.png"></td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
 				buf += `</details></p>`;
-				if(game.dayNum > 1) {
-					for (let i = 1; i < game.dayNum; i++){
+				if (game.dayNum > 1) {
+					for (let i = 1; i < game.dayNum; i++) {
 						previousActionsPL += `<b>Night ${i}</b><br/>`;
 						previousActionsPL += `${game.playerTable[user.id].actionArr[i] ? `${game.playerTable[user.id].actionArr[i]}` : ''}<br/>`;
 					}
@@ -1932,13 +1932,13 @@ export const pages: Chat.PageTable = {
 			}
 			let previousActions = `<br/>`;
 			if (game.dayNum > 1) {
-				for(let i = 1; i < game.dayNum; i++) {
+				for (let i = 1; i < game.dayNum; i++) {
 					previousActions += `<b>Night ${i}</b><br/>`;
 					for (const p in game.playerTable) {
 						const player = game.playerTable[p];
 						previousActions += `<b>${player.safeName}</b>:${player.actionArr[i] ? `${player.actionArr[i]}` : ''}<br/>`;
 					}
-					previousActions += `<br/>`
+					previousActions += `<br/>`;
 				}
 			}
 			buf += `<h3>Host options</h3>`;
@@ -3941,7 +3941,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
 			`/mafia idle - Tells the host if you are idling.`,
-         `/mafia action [details] - Tells the host you are using an action with the given submission details.`,
+			`/mafia action [details] - Tells the host you are using an action with the given submission details.`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">Host Commands</summary>`;
 		buf += [
