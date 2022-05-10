@@ -155,6 +155,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	poisontouch: {
+		inherit: true,
+		// Activate after Sheer Force to make interaction determistic. The ordering for this ability is
+		// an arbitary decision, but is modelled on Stench, which is reflective of on-cart behaviour.
+		onModifyMovePriority: -1,
+	},
 	powerofalchemy: {
 		inherit: true,
 		onAllyFaint(ally) {
@@ -219,11 +225,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
 			}
 		},
-	},
-	sheerforce: {
-		inherit: true,
-		// Activate after abilities that can add a secondary effect
-		onModifyMovePriority: -3,
 	},
 	trace: {
 		inherit: true,
