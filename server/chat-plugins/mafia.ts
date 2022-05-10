@@ -650,7 +650,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	day(extension: number | null = null, initial = false) {
 		if (this.phase !== 'night' && !initial) return;
-		if (this.dayNum == 0 && extension !== null) return this.sendUser(this.hostid, `|error|You cannot extend on day 0.`);
+		if (this.dayNum === 0 && extension !== null) return this.sendUser(this.hostid, `|error|You cannot extend on day 0.`);
 		if (this.timer) this.setDeadline(0);
 		if (extension === null) {
 			if (!isNaN(this.hammerCount)) this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
