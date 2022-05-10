@@ -73,9 +73,24 @@ describe('Target Resolution', function () {
 			redirector = battle.p2.active[2];
 			battle.makeChoices('move watergun 2, auto', 'auto');
 			assert.statStage(redirector, 'spa', 1);
+
+			// Test Storm Drain on the user's side
+			battle.destroy();
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
+				{species: 'Shuckle', moves: ['watergun']},
+				{species: 'Gastrodon', ability: 'stormdrain', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+			], [
+				{species: 'Beartic', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+				{species: 'Victini', moves: ['finalgambit']},
+			]]);
+			redirector = battle.p1.active[1];
+			battle.makeChoices('move watergun 3, auto', 'move swordsdance, move swordsdance, move finalgambit -2');
+			assert.statStage(redirector, 'spa', 1);
 		});
 
-		it.skip(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
+		it(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
 			battle = common.gen(6).createBattle({gameType: 'triples'}, [[
 				{species: 'Shuckle', moves: ['watergun']},
 				{species: 'Magikarp', moves: ['swordsdance']},

@@ -620,8 +620,12 @@ export class Condition extends BasicEffect implements
 	declare readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
 	declare readonly onCopy?: (this: Battle, pokemon: Pokemon) => void;
 	declare readonly onEnd?: (this: Battle, target: Pokemon) => void;
-	declare readonly onRestart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
-	declare readonly onStart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	declare readonly onRestart?: (
+		this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect
+	) => boolean | null | void;
+	declare readonly onStart?: (
+		this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect
+	) => boolean | null | void;
 
 	constructor(data: AnyObject) {
 		super(data);

@@ -1401,6 +1401,20 @@ export class Battle {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
 
+		const dynamaxEnding: Pokemon[] = [];
+		for (const pokemon of this.getAllActive()) {
+			if (pokemon.volatiles['dynamax']?.turns === 3) {
+				dynamaxEnding.push(pokemon);
+			}
+		}
+		if (dynamaxEnding.length > 1) {
+			this.updateSpeed();
+			this.speedSort(dynamaxEnding);
+		}
+		for (const pokemon of dynamaxEnding) {
+			pokemon.removeVolatile('dynamax');
+		}
+
 		const trappedBySide: boolean[] = [];
 		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
 		for (const side of this.sides) {
@@ -1529,6 +1543,23 @@ export class Battle {
 		}
 		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
+
+		// Crazyhouse Progress checker because sidebars has trouble keeping track of Pokemon.
+		// Please remove me once there is client support.
+		if (this.ruleTable.has('crazyhouserule')) {
+			for (const side of this.sides) {
+				let buf = `raw|${side.name}'s team:<br />`;
+				for (const pokemon of side.pokemon) {
+					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
+					if (pokemon.fainted) {
+						buf += `<span style="white-space:nowrap;"><span style="opacity:.3"><psicon pokemon="${pokemon.species.id}" /></span>`;
+					} else {
+						buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
+					}
+				}
+				this.add(`${buf}</span>`);
+			}
+		}
 
 		this.makeRequest('move');
 	}
@@ -2214,11 +2245,11 @@ export class Battle {
 		if (this.activePerHalf > 2) {
 			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
-				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your all
+				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your ally
 				const adjacentFoes = pokemon.adjacentFoes();
 				if (adjacentFoes.length) return this.sample(adjacentFoes);
-				// no valid target at all, return a possibly-fainted foe for any possible redirection
-				return pokemon.side.foe.active[0];
+				// no valid target at all, return slot directly across for any possible redirection
+				return pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			}
 		}
 		return pokemon.side.randomFoe() || pokemon.side.foe.active[0];
@@ -2404,7 +2435,7 @@ export class Battle {
 			action.pokemon.side.dynamaxUsed = true;
 			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
 			break;
-		case 'beforeTurnMove': {
+		case 'beforeTurnMove':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
@@ -2413,7 +2444,13 @@ export class Battle {
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
 			action.move.beforeTurnCallback.call(this, action.pokemon, target);
 			break;
-		}
+		case 'priorityChargeMove':
+			if (!action.pokemon.isActive) return false;
+			if (action.pokemon.fainted) return false;
+			this.debug('priority charge callback: ' + action.move.id);
+			if (!action.move.priorityChargeCallback) throw new Error(`priorityChargeMove has no priorityChargeCallback`);
+			action.move.priorityChargeCallback.call(this, action.pokemon);
+			break;
 
 		case 'event':
 			this.runEvent(action.event!, action.pokemon);
@@ -2569,7 +2606,7 @@ export class Battle {
 
 		if (this.gen < 5) this.eachEvent('Update');
 
-		if (this.gen >= 8 && this.queue.peek()?.choice === 'move') {
+		if (this.gen >= 8 && (this.queue.peek()?.choice === 'move' || this.queue.peek()?.choice === 'runDynamax')) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue.list) {

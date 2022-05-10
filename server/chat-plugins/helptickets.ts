@@ -342,17 +342,24 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
 		);
 		const user = Users.get(this.ticket.creator);
-		let namelockedDisplay = '';
+		let details = '';
 		if (user?.namelocked && !this.ticket.state?.namelocked) {
 			if (!this.ticket.state) this.ticket.state = {};
 			this.ticket.state.namelocked = user.namelocked;
 		}
 		if (this.ticket.state?.namelocked) {
-			namelockedDisplay = ` [${this.ticket.state?.namelocked}]`;
+			details += ` [${this.ticket.state?.namelocked}]`;
+		}
+		if (user?.locked) {
+			const punishment = Punishments.userids.getByType(user.locked, 'LOCK');
+			if (punishment?.rest?.length) {
+				// only #artemis uses this rn
+				details += ` [${punishment.rest.join(', ')}]`;
+			}
 		}
 		return (
 			`<a class="button ${color}" href="/help-${this.ticket.userid}"` +
-			` ${this.getPreview()}>Help ${creator}${namelockedDisplay}: ${this.ticket.type}</a> `
+			` ${this.getPreview()}>Help ${creator}${details}: ${this.ticket.type}</a> `
 		);
 	}
 
@@ -1928,25 +1935,6 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>From: ${ticket.userid}</strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
-			if (ticket.recommended?.length) {
-				if (ticket.recommended.length > 1) {
-					buf += `<details class="readmore"><summary><strong>Recommended from Artemis</strong></summary>`;
-					buf += ticket.recommended.map(Utils.escapeHTML).join('<br />');
-					buf += `</details>`;
-				} else {
-					buf += Utils.html`<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
-				}
-				if (!ticket.state?.recommendResult) {
-					buf += `<br />`;
-					buf += `Rate accuracy of result: `;
-					for (const [title, result] of [
-						['Accurate (or too lenient)', 'success'], ['Inaccurate (too harsh)', 'failure'],
-					]) {
-						buf += `<button class="button" name="send" value="/aht resolve ${ticket.userid},${result}">${title}</button>`;
-					}
-				}
-				buf += `<br />`;
-			}
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
@@ -2534,12 +2522,6 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!ticket.text) {
 				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
-			}
-			if (ticket.recommended?.length && !ticket.state?.recommendResult) {
-				return this.popupReply(
-					`You must rate the accuracy of the Artemis recommendations ` +
-					`(click accurate/inaccurate) before closing the ticket.`
-				);
 			}
 			const {publicReason, privateReason} = this.parseSpoiler(result);
 			ticket.resolved = {
