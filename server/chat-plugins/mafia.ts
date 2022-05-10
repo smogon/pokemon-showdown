@@ -650,7 +650,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	day(extension: number | null = null, initial = false) {
 		if (this.phase !== 'night' && !initial) return;
-		if (this.dayNum = 0 && extension!== null) return this.sendUser(this.hostid,`|error|You cannot extend on day 0.`);
+		if (this.dayNum = 0 && extension !== null) return this.sendUser(this.hostid, `|error|You cannot extend on day 0.`);
 		if (this.timer) this.setDeadline(0);
 		if (extension === null) {
 			if (!isNaN(this.hammerCount)) this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
@@ -1214,8 +1214,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			}
 		}
 		if (this.hasPlurality === oldPlayer.id) this.hasPlurality = newPlayer.id;
-		for(let i=1;i < this.dayNum;i++) {
-			newPlayer.actionArr[i] = oldPlayer.actionArr[i]
+		for (let i = 1; i < this.dayNum; i++) {
+			newPlayer.actionArr[i] = oldPlayer.actionArr[i];
 		}
 		if (newUser?.connected) {
 			for (const conn of newUser.connections) {
@@ -1862,7 +1862,7 @@ export const pages: Chat.PageTable = {
 		}
 		if (isPlayer) {
 			const role = game.playerTable[user.id].role;
-			var previousActionsPL = `<br/>`;
+			let previousActionsPL = `<br/>`;
 			if (role) {
 				buf += `<h3>${game.playerTable[user.id].safeName}, you are a ${game.playerTable[user.id].getRole()}</h3>`;
 				if (!['town', 'solo'].includes(role.alignment)) {
@@ -1991,7 +1991,7 @@ export const pages: Chat.PageTable = {
 				buf += `: <button class="button" name="send" value="/msgroom ${room.roomid},/mafia revive ${dead.id}">Revive</button></p>`;
 			}
 			buf += `<hr/></details></p>`;
-			if(game.dayNum > 1) buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Night Actions</summary>${previousActions}</span></details></p>`;
+			if (game.dayNum > 1) buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Night Actions</summary>${previousActions}</span></details></p>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">How to setup roles</summary>`;
 			buf += `<h3>Setting the roles</h3>`;
 			buf += `<p>To set the roles, use /mafia setroles [comma seperated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
