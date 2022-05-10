@@ -151,12 +151,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!source) source = this.battle.effect;
 
 			const rawSpecies = this.battle.dex.species.get(speciesId);
-	
+
 			const species = this.setSpecies(rawSpecies, source);
 			if (!species) return false;
-	
+
 			if (this.battle.gen <= 2) return true;
-	
+
 			// The species the opponent sees
 			const apparentSpecies =
 				this.illusion ? this.illusion.species.name : species.baseSpecies;
