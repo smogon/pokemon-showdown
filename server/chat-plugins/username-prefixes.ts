@@ -97,8 +97,9 @@ export class PrefixManager {
 		}
 
 		Config.forcedprefixes.splice(entry, 1);
-		if (this.timeouts.get(prefix)) {
-			clearTimeout(this.timeouts.get(prefix)!);
+		const timeoutEntry = this.timeouts.get(prefix);
+		if (timeoutEntry) {
+			clearTimeout(timeoutEntry);
 			this.timeouts.delete(prefix);
 		}
 		this.save();
