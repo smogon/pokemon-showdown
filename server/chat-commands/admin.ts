@@ -1549,7 +1549,11 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	bot(args, user, connection) {
-		const [botid, pageid] = args;
+		const [botid, ...pageArgs] = args;
+		const pageid = pageArgs.join('-');
+		if (pageid.length > 300) {
+			return this.errorReply(`The page ID specified is too long.`);
+		}
 		const bot = Users.get(botid);
 		if (!bot) {
 			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
