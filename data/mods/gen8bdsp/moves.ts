@@ -611,6 +611,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	metronome: {
+		inherit: true,
+		noMetronome: [
+			"After You", "Belch", "Body Press", "Chatter", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Dragon Ascent", "Endure", "Feint", "Focus Punch", "Follow Me", "Helping Hand", "Life Dew", "Metronome", "Mimic", "Mirror Coat", "Nature Power", "Origin Pulse", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Sketch", "Sleep Talk", "Snarl", "Snore", "Spiky Shield", "Struggle", "Switcheroo", "Thief", "Transform", "Trick", "Wide Guard",
+		],
+	},
 	mindblown: {
 		inherit: true,
 		isNonstandard: "Past",
