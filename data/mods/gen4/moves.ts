@@ -1013,7 +1013,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				!source.moves.includes(move.id) &&
 				!move.realMove && (!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				!effect.noMetronome!.includes(move.name)
-			);
+			)
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);

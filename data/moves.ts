@@ -11069,7 +11069,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				!move.realMove && !move.isZ && !move.isMax &&
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				!effect.noMetronome!.includes(move.name)
-			);
+			)
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
