@@ -500,19 +500,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		noMetronome: ["Metronome", "Struggle"],
-		onHit(target, source, effect) {
-			const moves = this.dex.moves.all().filter(move => (
-				!move.realMove && (!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				!effect.noMetronome!.includes(move.name)
-			));
-			let randomMove = '';
-			if (moves.length) {
-				moves.sort((a, b) => a.num - b.num);
-				randomMove = this.sample(moves).id;
-			}
-			if (!randomMove) return false;
-			this.actions.useMove(randomMove, target);
-		},
 		secondary: null,
 		target: "self",
 		type: "Normal",

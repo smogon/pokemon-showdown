@@ -1008,20 +1008,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noMetronome: [
 			"Assist", "Chatter", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Endure", "Feint", "Focus Punch", "Follow Me", "Helping Hand", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Protect", "Sketch", "Sleep Talk", "Snatch", "Struggle", "Switcheroo", "Thief", "Trick",
 		],
-		onHit(target, source, effect) {
-			const moves = this.dex.moves.all().filter(move => (
-				!source.moves.includes(move.id) &&
-				!move.realMove && (!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				!effect.noMetronome!.includes(move.name)
-			));
-			let randomMove = '';
-			if (moves.length) {
-				moves.sort((a, b) => a.num - b.num);
-				randomMove = this.sample(moves).id;
-			}
-			if (!randomMove) return false;
-			this.actions.useMove(randomMove, target);
-		},
 	},
 	mimic: {
 		inherit: true,
