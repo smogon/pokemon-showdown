@@ -500,9 +500,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		noMetronome: ["Metronome", "Struggle"],
-		secondary: null,
-		target: "self",
-		type: "Normal",
 	},
 	mimic: {
 		inherit: true,
