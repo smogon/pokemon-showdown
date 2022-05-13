@@ -1316,8 +1316,11 @@ export class TeamValidator {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
-		if ((tierSpecies.id === 'zamazentacrowned' && species.id === 'zamazenta') ||
-        (tierSpecies.id === 'zaciancrowned' && species.id === 'zacian')) {
+		// https://www.smogon.com/forums/posts/8659168
+		if (
+			(tierSpecies.id === 'zamazentacrowned' && species.id === 'zamazenta') ||
+			(tierSpecies.id === 'zaciancrowned' && species.id === 'zacian')
+		) {
 			species = tierSpecies;
 		}
 
