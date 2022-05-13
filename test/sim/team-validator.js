@@ -750,6 +750,20 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it('should tier Zacian and Zamazenta formes seperately', () => {
+		let team = [
+			{species: 'zamazenta-crowned', ability: 'dauntlessshield', item: 'rustedshield', moves: ['howl'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8almostanyability').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = [
+			{species: 'zamazenta', ability: 'dauntlessshield', item: 'lifeorb', moves: ['howl'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8almostanyability').validateTeam(team);
+		assert(illegal);
+	});
+
 	/*********************************************************
  	* Custom rules
  	*********************************************************/
