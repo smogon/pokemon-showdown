@@ -33,6 +33,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water' || move.type === 'Light') {
+				// if (target.battle.effectState.unnerved && false)
 				target.useItem();
 			}
 		},

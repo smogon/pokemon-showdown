@@ -22937,4 +22937,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cute",
 	},
+	vengeance: {
+		num: 985,
+		accuracy: 100,
+		basePower: 30,
+		basePowerCallback(pokemon, target, move) {
+			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || ally.fainted);
+			var monsfainted = (pokemon.side.pokemon.length-pokemon.side.pokemonLeft) 
+			return 30 + (monsfainted*20) 
+		},
+		category: "Special",
+		name: "Vengeance",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1,},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
 };

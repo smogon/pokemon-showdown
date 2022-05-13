@@ -481,10 +481,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		uubl: 'UUBL', uu: 'UU',
 		rubl: 'RUBL', ru: 'RU',
 		nubl: 'NUBL', nu: 'NU',
-		publ: 'PUBL', pu: 'PU', zu: '(PU)',
+		publ: 'PUBL', pu: 'PU', zu: 'ZU',
 		nfe: 'NFE',
 		lc: 'LC', lcuber: "LC UBERS", lcou: "LC OU", lcuu: "LC UU",
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
+		megaZUber: "MegaZ Uber", megaZOU: "MegaZ OU", megaZUU: "MegaZ UU", 
+		megaZRU: "MegaZ RU", megaZPU: "MegaZ PU", megaZZU: "MegaZ ZU",
+		megaAG: "Mega AG", megaOU: "Mega OU", megaUU: "Mega UU"
 	});
 	const allDoublesTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		doublesubers: 'DUber', doublesuber: 'DUber', duber: 'DUber', dubers: 'DUber',

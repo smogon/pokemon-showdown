@@ -43057,7 +43057,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			safeguard: ["8M", "7M", "6M", "5M", "4M", "3M"],
 			secretpower: ["6M", "4M", "3M"],
 			shadowball: ["8M", "7M", "6M", "5M", "4M", "3M"],
-			sing: ["3S0"],
+
 			sleeptalk: ["8M", "7M", "6M", "5T", "4M", "3T"],
 			snore: ["8M", "7T", "6T", "5T", "4T", "3T"],
 			spikes: ["8M", "7E", "6E", "5E", "4E", "3E"],
@@ -43132,6 +43132,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			shadowball: ["8M", "7M", "6M", "5M", "4M", "3M"],
 			sheercold: ["8L1", "7L1", "6L1", "5L59", "4L59", "3L61"],
 			signalbeam: ["7T", "6T", "5T", "4T"],
+			sing: ["3S0"],
 			sleeptalk: ["8M", "7M", "6M", "5T", "4M", "3T"],
 			snore: ["8M", "7T", "6T", "5T", "4T", "3T"],
 			spikes: ["8M"],
@@ -58745,6 +58746,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			venoshock: ["8M", "7M", "6M", "5M"],
 			toxiccloud: ["8M", "7M"],
 			antidote: ["8M", "7M"],
+			vengeance: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 5, level: 31},

@@ -1611,6 +1611,8 @@ export class Pokemon {
 	}
 
 	useItem(source?: Pokemon, sourceEffect?: Effect) {
+		//this.battle.debugError(this.battle.effectState)
+		//if(this && this.battle.effectState.unnerved) {return false}
 		if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
 		if (!this.item) return false;
 
