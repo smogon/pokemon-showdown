@@ -106,7 +106,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["grassknot", "surf", "voltswitch", "volttackle"],
 	},
 	raichu: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DOU",
 		randomBattleMoves: ["focusblast", "grassknot", "nastyplot", "surf", "thunderbolt"],
 	},
@@ -983,7 +983,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["closecombat", "facade", "megahorn", "stoneedge", "throatchop"],
 	},
 	sneasel: {
-		tier: "NFE",
+		tier: "PUBL",
+		doublesTier: "NFE",
 	},
 	weavile: {
 		tier: "OU",
@@ -1070,7 +1071,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["doubleedge", "earthquake", "megahorn", "zenheadbutt"],
 	},
 	smeargle: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUber",
 		randomBattleMoves: ["spikes", "spore", "stealthrock", "stickyweb", "toxicspikes", "whirlwind"],
 	},
@@ -1606,7 +1607,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	huntail: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["crunch", "icebeam", "shellsmash", "waterfall"],
 	},
