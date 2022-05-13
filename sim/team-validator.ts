@@ -1316,6 +1316,14 @@ export class TeamValidator {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
+		// https://www.smogon.com/forums/posts/8659168
+		if (
+			(tierSpecies.id === 'zamazentacrowned' && species.id === 'zamazenta') ||
+			(tierSpecies.id === 'zaciancrowned' && species.id === 'zacian')
+		) {
+			species = tierSpecies;
+		}
+
 		setHas['pokemon:' + species.id] = true;
 		setHas['basepokemon:' + toID(species.baseSpecies)] = true;
 
