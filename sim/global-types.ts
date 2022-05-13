@@ -312,6 +312,9 @@ interface ModdedBattlePokemon {
 	clearBoosts?: (this: Pokemon) => void;
 	calculateStat?: (this: Pokemon, statName: StatIDExceptHP, boost: number, modifier?: number) => number;
 	cureStatus?: (this: Pokemon, silent?: boolean) => boolean;
+	formeChange?: (
+		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, message?: string
+	) => boolean;
 	getAbility?: (this: Pokemon) => Ability;
 	getActionSpeed?: (this: Pokemon) => number;
 	getItem?: (this: Pokemon) => Item;
