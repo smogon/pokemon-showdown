@@ -3575,6 +3575,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
+	garbodormega: {
+		tier: "OU",
+	},
 	garbodorgmax: {
 		randomBattleMoves: ["explosion", "gunkshot", "painsplit", "spikes", "stompingtantrum", "toxicspikes"],
 		randomBattleLevel: 87,

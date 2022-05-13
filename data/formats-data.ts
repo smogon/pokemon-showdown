@@ -3627,6 +3627,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
+	garbodormega: {
+		isNonstandard: "PastMEGA",
+		tier: "Illegal",
+	},
 	garbodorgmax: {
 		randomBattleMoves: ["explosion", "gunkshot", "painsplit", "spikes", "stompingtantrum", "toxicspikes"],
 		randomBattleLevel: 87,
