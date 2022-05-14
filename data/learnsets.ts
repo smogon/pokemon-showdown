@@ -90706,10 +90706,10 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			featherbarrage: ["8M", "7M"],
 			sunnyday: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
-			eventData: [
-				{generation: 8, level: 10, abilities: ["hugepower"], moves: ["present", "happyhour"], pokeball: "cherishball"},
-				],
 		},
+		eventData: [
+			{generation: 8, level: 10, abilities: ["hugepower"], moves: ["present", "happyhour"], pokeball: "cherishball"},
+		],
 	},
 	skulpent: {
 		learnset: {
