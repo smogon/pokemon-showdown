@@ -1977,7 +1977,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["closecombat", "facade", "knockoff", "obstruct", "partingshot", "taunt"],
 		randomDoubleBattleLevel: 86,
-		tier: "RUBL",
+		tier: "RU",
 		doublesTier: "(DUU)",
 	},
 	wurmple: {
@@ -2139,7 +2139,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC UU",
 	},
 	probopass: {
-		tier: "UU",
+		tier: "OU",
 	},
 	skitty: {
 		tier: "LC UU",
@@ -4022,7 +4022,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["foulplay", "roost", "snarl", "tailwind", "taunt"],
 		randomDoubleBattleLevel: 88,
-		tier: "OU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 	},
 	heatmor: {
@@ -6523,7 +6523,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ibroxiz: {
 		tier: "LC OU",
 	},
-	wicketox: {
+	corralloi: {
 		tier: "UU",
 	},
 	delibirdgalar: {
@@ -6802,7 +6802,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NU",
 	},
 	novisage: {
-		tier: "UU",
+		tier: "OU",
 	},
 	mezoped: {
 		tier: "RU",
