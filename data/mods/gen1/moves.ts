@@ -38,7 +38,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			durationCallback(target, source, effect) {
-				return this.random(3, 4);
+				return this.random(3, 5);
 			},
 			onStart(pokemon) {
 				this.effectState.totalDamage = 0;
