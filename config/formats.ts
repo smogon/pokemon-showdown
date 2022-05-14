@@ -1723,7 +1723,7 @@ export const Formats: FormatList = [
 			// handle switch-in ability-to-ability interactions, e.g. Intimidate counters
 			const neededBeforeSwitchInIDs = [
 				'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
-				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke'
+				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
 			];
 			if (pokemon.m.innates) {
 				for (const innate of pokemon.m.innates) {
