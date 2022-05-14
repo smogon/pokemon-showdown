@@ -7743,4 +7743,17 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 759,
 		gen: 6,
 	},
+	garbodorite: {
+		name: "Garbodorite",
+		spritenum: 576,
+		megaStone: "Garbodor-Mega",
+		megaEvolves: "Garbodor",
+		itemUser: ["Garbodor"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 760,
+		gen: 6,
+	},
 };
