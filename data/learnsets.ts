@@ -90708,6 +90708,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dunewave: ["8M", "7M"],
 		},
 		eventData: [
+			{generation: 6, level: 10, abilities: ["hugepower"], moves: ["present", "happyhour"], pokeball: "cherishball"},
 			{generation: 8, level: 10, abilities: ["hugepower"], moves: ["present", "happyhour"], pokeball: "cherishball"},
 		],
 	},
