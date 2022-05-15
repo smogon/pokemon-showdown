@@ -11603,9 +11603,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Diggersby"],
 		eggGroups: ["Field"],
 	},
-	diggersby: {
+	niggersby: {
 		num: 660,
-		name: "Diggersby",
+		name: "Niggersby",
 		types: ["Normal", "Ground"],
 		baseStats: {hp: 85, atk: 56, def: 77, spa: 50, spd: 77, spe: 78},
 		abilities: {0: "Pickup", 1: "Cheek Pouch", H: "Huge Power"},
