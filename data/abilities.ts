@@ -4989,7 +4989,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				//this.useMove("toxicspikes", source);
 			}
 		},
-		name: "Corrupted Intention",
+		name: "Malintent",
 		rating: 0,
 		num: 1021,
 	},

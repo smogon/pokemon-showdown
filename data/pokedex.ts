@@ -18717,13 +18717,13 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.1,
 		weightkg: 142,
 		color: "White",
-		evos: ["Wicketox"],
+		evos: ["wicketox"],
 		eggGroups: ["Field"],
 		newmeta: "true",
 	},
-	Wicketox: {
+	wicketox: {
 		num: 10002,
-		name: "Wicketox",
+		name: "wicketox",
 		types: ["Steel", "Poison"],
 		baseStats: {hp: 85, atk: 60, def: 50, spa: 115, spd: 105, spe: 125},
 		abilities: {0: "Malintent", H: "Aftermath"},

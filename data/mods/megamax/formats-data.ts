@@ -6461,7 +6461,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ibroxiz: {
 		tier: "LC OU",
 	},
-	Wicketox: {
+	wicketox: {
 		tier: "UU",
 	},
 	delibirdgalar: {
