@@ -90558,7 +90558,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			hypnosis: ["8M", "7M"],
 		},
 	},
-	corralloi: {
+	Wicketox: {
 		learnset: {
 			poisonjab: ["8M", "7M"],
 			nitricstrike: ["8M", "7M"],

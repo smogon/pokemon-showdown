@@ -4982,7 +4982,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 0,
 		num: 1020,
 	},
-	corruptedintention: {
+	malintent: {
 		onModifyMove(move, source, target) {
 			if (move.id === 'toxicspikes') {
 				source.side.foe.addSideCondition('toxicspikes');

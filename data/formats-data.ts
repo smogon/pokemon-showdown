@@ -6523,7 +6523,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ibroxiz: {
 		tier: "LC OU",
 	},
-	corralloi: {
+	Wicketox: {
 		tier: "UU",
 	},
 	delibirdgalar: {
