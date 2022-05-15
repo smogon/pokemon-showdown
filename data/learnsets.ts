@@ -91786,6 +91786,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			attract: ["8M", "7M"],
 			batonpass: ["8M", "7M"],
 			bodyslam: ["8M", "7M"],
+			boomburst: ["8M", "7M"],
 			bravebird: ["8M", "7M"],
 			captivate: ["8M", "7M"],
 			confide: ["8M", "7M"],
