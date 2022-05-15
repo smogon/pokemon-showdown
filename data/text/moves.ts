@@ -7656,4 +7656,14 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "If this move is successful and the user has not fainted, the user switches out and sets Aqua Ring on the switching-in Pokémon, even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
 		shortDesc: "User switches out and sets Aqua Ring on incoming Pokémon.",
 	},
+	vengeance: {
+		name: "Vengeance",
+		desc: "The power of this move increases with each ally pokemon that has been knocked out.",
+		shortDesc: "Increases in power based on knocked out ally.",
+	},
+	astroshift: {
+		name: "Astro Shift",
+		desc: "Raises the user's speed by two stages and the user's special defence by one stage.",
+		shortDesc: "Raises the user's Speed by 2 and raises Special Defense by 1.",
+	},
 };
