@@ -555,10 +555,20 @@ const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
 	'gloria-dojo', 'shauna',
 ]);
 
+const OFFICIAL_AVATARS_KYLEDOVE = new Set([
+	'artist-gen8', 'backpacker-gen8', 'beauty-gen8', 'blackbelt-gen8', 'cabbie', 'cafemaster', 'cameraman-gen8',
+	'clerk-gen8', 'clerkf-gen8', 'cook', 'dancer-gen8', 'doctorf-gen8', 'fisher-gen8', 'gentleman-gen8',
+	'hiker-gen8', 'lass-gen8', 'leaguestaff', 'leaguestafff', 'madame-gen8', 'model-gen8', 'musician-gen8',
+	'pokekid-gen8', 'pokekidf-gen8', 'pokemonbreeder-gen8', 'pokemonbreederf-gen8', 'policeman-gen8', 'postman',
+	'railstaff', 'reporter-gen8', 'schoolkid-gen8', 'schoolkidf-gen8', 'swimmer-gen8', 'swimmerf-gen8',
+	'worker-gen8', 'workerf-gen8', 'youngster-gen8',
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_ZACWEAVILE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_KYLEDOVE) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -588,10 +598,13 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Gnomowladny)`);
 			}
 			if (OFFICIAL_AVATARS_BRUMIRAGE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}Brumirage)`);
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Brumirage">Brumirage</a>)`);
 			}
 			if (OFFICIAL_AVATARS_ZACWEAVILE.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}ZacWeavile)`);
+			}
+			if (OFFICIAL_AVATARS_KYLEDOVE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/DoveKyle">Kyledove</a>)`);
 			}
 		}
 	},
