@@ -7187,8 +7187,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	lightspeed: {
 		name: "Light Speed",
-		desc: "No additional effect.",
-		shortDesc: "Usually goes first.",
+		desc: "Nearly always goes first.",
+		shortDesc: "Nearly always goes first.",
 		newmeta: "true",
 	},
 	blindingblast: {
