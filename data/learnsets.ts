@@ -96276,7 +96276,8 @@ novisage: {
       freezingcomet: ["8M", "7M"],
       cometstorm: ["8M", "7M"],
       implosion: ["8M", "7M"],
-      collisionburst: ["8M", "7M"]
+      collisionburst: ["8M", "7M"],
+	  wormhole: ["8M", "7M"],
    	},
 	},
 bulshian: {

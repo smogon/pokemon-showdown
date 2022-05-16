@@ -19906,7 +19906,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Novisage",
 		types: ["Fire", "Rock"],
 		baseStats: {hp: 83, atk: 103, def: 113, spa: 89, spd: 109, spe: 73},
-		abilities: {0: "Beast Boost"},
+		abilities: {0: "Beast Boost", 1: "Flame Body"},
 		heightm: 3.9,
 		weightkg: 134,
 		color: "Red",
