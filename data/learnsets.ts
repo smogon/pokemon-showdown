@@ -17027,6 +17027,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			flashbeam: ["8M", "7M"],
 			brightslap: ["8M", "7M"],
 			swift: ["8M", "7M"],
+			drainingkiss: ["8M", "7M", "6M"],
 		},
 	},
 	mrmime: {
@@ -17164,6 +17165,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			flashbeam: ["8M", "7M"],
 			brightslap: ["8M", "7M"],
 			swift: ["8M", "7M"],
+			drainingkiss: ["8M", "7M", "6M"],			
 		},
 		eventData: [
 			{generation: 3, level: 42, abilities: ["soundproof"], moves: ["followme", "psychic", "encore", "thunderpunch"]},
@@ -17264,6 +17266,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wonderroom: ["8M"],
 			zenheadbutt: ["8M"],
 			brightslap: ["8M", "7M"],
+			drainingkiss: ["8M"],
 		},
 		eventData: [
 			{generation: 8, level: 15, isHidden: true, moves: ["copycat", "encore", "iceshard", "confusion"], pokeball: "cherishball"},
@@ -17361,6 +17364,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wonderroom: ["8M"],
 			zenheadbutt: ["8M"],
 			brightslap: ["8M", "7M"],
+			drainingkiss: ["8M"],
 		},
 	},
 	scyther: {
