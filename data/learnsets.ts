@@ -30153,6 +30153,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			weatherball: ["8M"],
 			featherbarrage: ["8M", "7M"],
 			aquawing: ["8M", "7M"],
+			rockslide: ["8M", "8V", "7M", "6M", "5M", "4M"],
+			hypervoice: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
 			{generation: 3, level: 10, gender: "M", moves: ["present"], pokeball: "pokeball"},
@@ -90736,6 +90738,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			featherbarrage: ["8M", "7M"],
 			sunnyday: ["8M", "7M"],
 			dunewave: ["8M", "7M"],
+			hypervoice: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
 			{generation: 6, level: 10, abilities: ["hugepower"], moves: ["present", "happyhour"], pokeball: "cherishball"},
