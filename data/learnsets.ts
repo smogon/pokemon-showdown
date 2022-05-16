@@ -58838,6 +58838,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			trick: ["8M", "7T", "6T", "5T"],
 			uproar: ["8M", "7T", "6T", "5T"],
 			uturn: ["8M", "7M", "6M", "5M"],
+			bite: ["8M", "7M", "6M", "5M"],
 		},
 	},
 	zoroark: {
@@ -58929,6 +58930,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			meditate: ["8M", "7M"],
 			focusup: ["8M", "7M"],
 			revengeblast: ["8M", "7M"],
+			bite: ["8M", "7M", "6M", "5M"],
 		},
 		eventData: [
 			{generation: 5, level: 50, gender: "M", nature: "Quirky", moves: ["agility", "embargo", "punishment", "snarl"], pokeball: "cherishball"},
