@@ -58767,7 +58767,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			shadowball: ["8M", "7M"],
 			shadowpunch: ["8M", "7M"],
 			darkwhispers: ["8M", "7M"],
-			gammaray: ["8M", "7M"],			
+			gammaray: ["8M", "7M"],
+			shadowclaw: ["8M", "7M"],
+			astonish:  ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 5, level: 31},
