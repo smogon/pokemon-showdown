@@ -6810,4 +6810,34 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	bulshian:{
 		tier: "Uber",
 	},
+	roedrunna : {
+		tier: "NU",
+	},
+	maliceros : {
+		tier: "RU",
+	},
+	breechon : {
+		tier: "LC UU",
+	},
+	nimbichon : {
+		tier: "NU",
+	},
+	leviorca : {
+		tier: "OU",
+	},
+	squimshi : {
+		tier: "LC OU",
+	},
+	gummelid : {
+		tier: "RU",
+	},
+	alivolt : {
+		tier: "UU",
+	},
+	fintricity : {
+		tier: "ZU",
+	},
+	terrator : {
+		tier: "OU",
+		},
 };
