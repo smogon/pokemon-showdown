@@ -10758,6 +10758,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wonderroom: ["8M"],
 			yawn: ["8L9"],
 			zenheadbutt: ["8M", "8L24"],
+			teleport: ["8M"],
 		},
 	},
 	slowbro: {
@@ -11121,6 +11122,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "8L24", "7T", "7L32", "6T", "6L32", "5T", "5L32", "4T", "4L34"],
 			focusup: ["8M", "7M"],
 			tsunami: ["8M", "7M"],
+			teleport: ["8M"],
 		},
 	},
 	slowkinggalar: {
@@ -11213,6 +11215,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wonderroom: ["8M"],
 			yawn: ["8L9"],
 			zenheadbutt: ["8M", "8L24"],
+			teleport: ["8M"],
 		},
 	},
 	magnemite: {
