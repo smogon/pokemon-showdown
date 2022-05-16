@@ -71,6 +71,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wave Cannon',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
+	SunDraco: {
+		species: 'Silvally', ability: 'Oblivious', item: 'Life Orb', gender: 'N',
+		moves: ['Dragon Claw', 'Shadow Claw', 'Fire Punch'],
+		signatureMove: 'Ein Sol',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {
