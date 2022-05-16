@@ -31972,7 +31972,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wonderroom: ["8M", "7T", "6T", "5T"],
 			worryseed: ["7T", "6T", "5T", "4T"],
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
-			voiceoftheforest: ["8M", "7M"],
+			forestsvoice: ["8M", "7M"],
 			thinkfast: ["8M", "7M"],
 			focusup: ["8M", "7M"],
 			magicdust: ["8M", "7M"],

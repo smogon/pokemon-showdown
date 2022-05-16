@@ -20027,12 +20027,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	voiceoftheforest: {
+	forestsvoice: {
 		num: 848,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-		name: "Voice Of The Forest",
+		name: "Forest's Voice",
 		pp: 10,
 		priority: 0,
 		flags: {nonsky: 1, sound: 1, protect: 1, mirror: 1, authentic: 1},

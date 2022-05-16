@@ -6947,8 +6947,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Forces the target to switch to a random ally.",
 		newmeta: "true",
 	},
-	voiceoftheforest: {
-		name: "Voice Of The Forest",
+	forestsvoice: {
+		name: "Forest's Voice",
 		desc: "For 5 turns, the terrain becomes Grassy Terrain. During the effect, the power of Grass-type attacks used by grounded Pokemon is multiplied by 1.3, the power of Bulldoze, Earthquake, and Magnitude used against grounded Pokemon is multiplied by 0.5, and grounded Pokemon have 1/16 of their maximum HP, rounded down, restored at the end of each turn, including the last turn. Camouflage transforms the user into a Grass type, Nature Power becomes Energy Ball, and Secret Power has a 30% chance to cause sleep. Fails if the current terrain is Grassy Terrain.",
 		shortDesc: "5 turns. Grounded: +Grass power, +1/16 max HP.",
 		newmeta: "true",
