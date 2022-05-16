@@ -19095,7 +19095,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Aracnicold",
 		types: ["Ice", "Poison"],
 		baseStats: {hp: 71, atk: 90, def: 80, spa: 135, spd: 74, spe: 81},
-		abilities: {0: "Slush Rush", 1: "Toxic Rush", H: "Merciless"},
+		abilities: {0: "Slush Rush", 1: "Catastrophic", H: "Merciless"},
 		heightm: 1.9,
 		weightkg: 80,
 		color: "Purple",
