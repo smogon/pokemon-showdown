@@ -239,34 +239,4 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Burn Heal",
 		gen: 8,
 	},
-
-	// SunDraco
-	enochian: {
-		desc: "Changes type to the move it will use; highest stat is raised by 1 stage if it attacks and KO's the target.",
-		shortDesc: "Changes type to move; highest stat gains 1 stage if target is KO'd.",
-		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
-			const type = move.type;
-			if (type && type !== '???' && source.getTypes().join() !== type) {
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Enochian');
-			}
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				let statName = 'atk';
-				let bestStat = 0;
-				let s: StatIDExceptHP;
-				for (s in source.storedStats) {
-					if (source.storedStats[s] > bestStat) {
-						statName = s;
-						bestStat = source.storedStats[s];
-					}
-				}
-				this.boost({[statName]: length}, source);
-			}
-		},
-		name: "Enochian",
-		gen: 8,
-	},
 };
