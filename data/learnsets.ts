@@ -50752,6 +50752,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			nitricstrike: ["8M", "7M"],
 			dualstrike: ["8M", "7M"],
 			cometpunch: ["8M", "7M"],
+			closecombat: ["8M", "7M"],
+			partingshot: ["8M", "7M"],
+			poisonhorn: ["8M", "7M"],
 		},
 		encounters: [
 			{generation: 4, level: 22, pokeball: "safariball"},
