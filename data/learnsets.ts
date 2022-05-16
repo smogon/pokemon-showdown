@@ -54547,6 +54547,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			waterpledge: ["7T"],
 			waterpulse: ["7T", "6T"],
 			workup: ["7M", "5M"],
+			tsunami: ["7M", "5M"],
 		},
 	},
 	munna: {
