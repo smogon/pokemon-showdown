@@ -8668,7 +8668,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Weavile",
 		types: ["Dark", "Ice"],
 		baseStats: {hp: 70, atk: 120, def: 65, spa: 45, spd: 85, spe: 125},
-		abilities: {0: "Pressure", 1: "Solid Footing", H: "Pickpocket"},
+		abilities: {0: "Pressure", 1: "Keen Eye", H: "Pickpocket"},
 		heightm: 1.1,
 		weightkg: 34,
 		color: "Black",
