@@ -19070,7 +19070,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 10026,
 		name: "Femori",
 		types: ["Rock", "Ghost"],
-		baseStats: {hp: 81, atk: 100, def: 172, spa: 45, spd: 121, spe: 31},
+		baseStats: {hp: 81, atk: 100, def: 172, spa: 45, spd: 101, spe: 31},
 		abilities: {0: "Rock Head", 1: "Persistent", H: "Aftermath"},
 		heightm: 1.9,
 		weightkg: 80,
