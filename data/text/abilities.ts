@@ -2143,12 +2143,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This pokemon does 1.5x damage to allied Pokémon, heals 50% when it attacks an ally directly.",
 		newmeta: "true",
 	},
-	desperation: {
-		name: "Desperation",
-		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its attacking stat is multiplied by 1.5 while using a Dark-type attack.",
-		shortDesc: "At 1/3 or less of its max HP, this Pokemon's attacking stat is 1.5x with Dark attacks.",
-		newmeta: "true",
-	},
 	chainstriker: {
 		name: "Chain Striker",
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
