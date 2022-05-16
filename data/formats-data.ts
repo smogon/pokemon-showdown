@@ -6839,5 +6839,5 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	terrator : {
 		tier: "OU",
-		},
+	},
 };
