@@ -75248,6 +75248,10 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			clearlight: ["8M", "7M"],
 			lightwave: ["8M", "7M"],
 			flashbeam: ["8M", "7M"],
+			reflect: ["8M", "7M"],
+			solarorb: ["8M", "7M"],
+			photondischarge: ["8M", "7M"],
+			veiloflight: ["8M", "7M"],
 		},
 	},
 	shiinotic: {
@@ -75320,6 +75324,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			photondischarge: ["8M", "7M"],
 			veiloflight: ["8M", "7M"],
 			ragepowder: ["8M", "7M"],
+			reflect: ["8M", "7M"],
 		},
 	},
 	salandit: {
