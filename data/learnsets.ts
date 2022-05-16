@@ -95319,6 +95319,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			lightspeed:["8M","7M"],
 			candescence:["8M","7M"],
 			dazingraze:["8M","7M"],
+			toxic:["8M","7M"],
+			thunderwave:["8M","7M"],
 		},
 	},
 	xiphuno: {
