@@ -58946,6 +58946,12 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			focusup: ["8M", "7M"],
 			revengeblast: ["8M", "7M"],
 			bite: ["8M", "7M", "6M", "5M"],
+			darkestlariat: ["8M", "7M"],
+			poisonjab: ["8M", "7M", "6M", "5M"],
+			thunderpunch: ["8M", "7T", "6T", "5T"],
+			icepunch: ["8M", "7T", "6T", "5T"],
+			firepunch: ["8M", "7T", "6T", "5T"],
+			disable: ["8M"],
 		},
 		eventData: [
 			{generation: 5, level: 50, gender: "M", nature: "Quirky", moves: ["agility", "embargo", "punishment", "snarl"], pokeball: "cherishball"},
