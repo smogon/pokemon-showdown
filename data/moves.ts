@@ -22940,11 +22940,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 	vengeance: {
 		num: 985,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
 			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || ally.fainted);
 			var monsfainted = (pokemon.side.pokemon.length-pokemon.side.pokemonLeft) 
-			return 30 + (monsfainted*20) 
+			return 40 + (monsfainted*20) //using BP in callback was calling issues,
+										// first number should match base power 
 		},
 		category: "Special",
 		name: "Vengeance",
