@@ -22967,14 +22967,47 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		secondary: {
 			chance: 20,
-			boosts: {
-				accuracy: 1,
-			},
+			self: {
+				boosts: {
+					accuracy: 1,
+				}
+			}
 		},
 		target: "normal",
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
+
+
+	// prophecy2: {
+		// num: 987,
+		// accuracy: true,
+		// basePower: 0,
+		// category: "Status",
+		// name: "Prophecy",
+		// pp: 10,
+		// priority: 0,
+		// flags: {future: 1, bypasssub: 1},
+		// ignoreImmunity: true,
+		// isFutureMove: true,
+		// condition: {
+			// duration: 3, //to prevent aquaring being given back on future switches
+			// onHit(target, source){
+				// const stats: BoostID[] = [];
+				// const randomStat = 'accuracy';
+				// const boost: SparseBoostsTable = {};
+				// boost[randomStat] = 2;
+				// this.boost(boost);
+			// },
+		// },
+		// target: "adjacentAllyOrSelf",
+		// type: "Light",
+		// contestType: "Clever",
+	// },
+
+
+
 	prophecy: {
 		num: 987,
 		accuracy: true,
@@ -22983,14 +23016,71 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Prophecy",
 		pp: 10,
 		priority: 0,
-		flags: {future: 2},
+		flags:{snatch: 1},
 		ignoreImmunity: true,
-		isFutureMove: true,
-		boosts: {
-			accuracy: 2,
+		slotCondition: 'prophecy',
+		condition: {
+			duration: 3,
+			onHit(source, target) {
+			if (!target.side.addSlotCondition(target, 'prophecy')) return false;
+				Object.assign(target.side.slotConditions[target.position]['prophecy'], {
+					move: 'prophecy',
+					source: source,
+					moveData: {
+						id: 'prophecy',
+						name: "prophecy",
+						accuracy: true,
+						basePower: 0,
+						category: "Special",
+						priority: 0,
+						flags: {},
+						secondary: {
+							boosts: {
+								accuracy: 2,
+							},
+						},
+						effectType: 'Move',
+						isFutureMove: true,
+						type: 'Light',
+					},
+				});
+			},
 		},
+		// onHit(target, source){
+		// 	if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+		// 	// const stats: BoostID[] = [];
+		// 	// const randomStat = 'accuracy';
+		// 	// const boost: SparseBoostsTable = {};
+		// 	// boost[randomStat] = 2;
+		// 	// this.boost(boost);
+		// 	target.side.addSlotCondition(target, 'futuremove')
+		// 	// target.side.removeSlotCondition(target, 'futuremove')
+		// },
+		// onTry(source, target) {
+		// 	if (!target.side.addSlotCondition(target, 'prophecy')) return false;
+		// 	Object.assign(target.side.slotConditions[target.position]['prophecy'], {
+		// 		duration: 3,
+		// 		move: 'prophecy',
+		// 		source: source,
+		// 		moveData: {
+		// 			id: 'prophecy',
+		// 			name: "prophecy",
+		// 			accuracy: true,
+		// 			basePower: 0,
+		// 			category: "Status",
+		// 			priority: 0,
+		// 			flags: {future: 3},
+
+		// 			ignoreImmunity: true,
+		// 			effectType: 'Move',
+		// 			isFutureMove: true,
+		// 			type: 'Light',
+		// 		},
+		// 	});
+		// },
+
 		secondary: null,
-		target: "normal",
+		target: "self", 
 		type: "Light",
 		contestType: "Clever",
 	},
@@ -23008,4 +23098,60 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+	enlightenment: {
+		num: 989,
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		name: "Enlightenment",
+		pp: 10,
+		priority: 1,
+		flags: {snatch: 1},
+		volatileStatus: 'enlightened',
+		condition: {
+			duration: 5,
+			onModifyCritRatio(critRatio) {
+				return critRatio + 2;
+			},
+			durationCallback(target, source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', effect);
+					return 7;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (!effect || !source) return;
+				if (effect.id === 'yawn') return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if (target !== source) {
+					this.debug('interrupting setStatus');
+					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Safeguard');
+					}
+					return null;
+				}
+			},
+			onTryAddVolatile(status, target, source, effect) {
+
+				if (!effect || !source) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					return null;
+				}
+			},
+			onSideStart(side) {
+				this.add('-sidestart', side, 'Safeguard');
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 3,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'Safeguard');
+			},
+		},
+		target: "self",
+		type: "Light",
+		contestType: "Cool",
+	}
 };

@@ -7680,5 +7680,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Jet Stream",
 		desc: "No additional effect",
 		shortDesc: "Usually goes first",
-	}
+	},
+	enlightenment: {
+		name: "Enlightenment",
+		desc: "Sets safeguard and triggers focus energy",
+		shortDesc: "Sets safeguard and triggers focus energy",
+	},
 };

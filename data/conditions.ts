@@ -452,6 +452,23 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.checkWin();
 		},
 	},
+	prophecy: {
+		name: 'prophecy',
+		duration: 3,
+		onResidualOrder: 3,
+		onStart(target){
+			target.side.addSlotCondition(target, 'prophecy')
+		},
+		onEnd(target){			//results in a stack overflow
+			// if (!target.side.addSlotCondition(target, 'prophecy')) return false; //always exits
+			target.side.removeSlotCondition(target, 'prophecy')
+			const randomStat = 'accuracy';
+			const boost: SparseBoostsTable = {};
+			boost[randomStat] = 2;
+			this.boost(boost);
+			return
+		},
+	},
 	healreplacement: {
 		// this is a slot condition
 		name: 'healreplacement',
