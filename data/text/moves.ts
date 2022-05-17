@@ -7670,5 +7670,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Anima Blast",
 		desc: "The user clears their mind by expelling their negative energy onto the target.",
 		shortDesc: "The user clears their mind by expelling their negative energy onto the target.",
-	}
+	},
+	prophecy: {
+		name: "Prophecy",
+		desc: "After three turns, raises accuracy by 2.",
+		shortDesc: "After three turns, raises accuracy by 2.",
+	},
 };

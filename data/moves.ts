@@ -22975,4 +22975,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+	prophecy: {
+		num: 987,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Prophecy",
+		pp: 10,
+		priority: 0,
+		flags: {future: 2},
+		ignoreImmunity: true,
+		isFutureMove: true,
+		boosts: {
+			accuracy: 2,
+		},
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		contestType: "Clever",
+	},
 };
