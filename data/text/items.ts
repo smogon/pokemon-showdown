@@ -429,6 +429,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	ejectpack: {
 		name: "Eject Pack",
 		desc: "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
+
+		end: "  [POKEMON] is switched out by the Eject Pack!",
 	},
 	electirizer: {
 		name: "Electirizer",
