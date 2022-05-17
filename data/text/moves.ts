@@ -7676,4 +7676,9 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "After three turns, raises accuracy by 2.",
 		shortDesc: "After three turns, raises accuracy by 2.",
 	},
+	jetstream: {
+		name: "Jet Stream",
+		desc: "No additional effect",
+		shortDesc: "Usually goes first",
+	}
 };
