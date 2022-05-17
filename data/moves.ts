@@ -22956,4 +22956,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+	animablast: {
+		num: 986,
+		accuracy: 85,
+		basePower: 100,
+		category: "Special",
+		name: "Anima Blast",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		secondary: {
+			chance: 20,
+			boosts: {
+				accuracy: 1,
+			},
+		},
+		target: "normal",
+		type: "Fighting",
+		contestType: "Cool",
+	},
 };

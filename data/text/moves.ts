@@ -7666,4 +7666,9 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Raises the user's speed by two stages and the user's special defence by one stage.",
 		shortDesc: "Raises the user's Speed by 2 and raises Special Defense by 1.",
 	},
+	animablast: {
+		name: "Anima Blast",
+		desc: "The user clears their mind by expelling their negative energy onto the target.",
+		shortDesc: "The user clears their mind by expelling their negative energy onto the target.",
+	}
 };
