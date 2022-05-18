@@ -7694,5 +7694,9 @@ export const MovesText: {[k: string]: MoveText} = {
 	mercurywave: {
 		name: "Mercury Wave",
 		desc: "No additional effect",
-	}
+	},
+	alternatingcurrent: {
+		name: "Alternating Current",
+		desc: "Hits twice. 30% chance to make the target flinch.",
+	},
 };
