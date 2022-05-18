@@ -1543,11 +1543,11 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	shedshell: {
 		name: "Shed Shell",
-		desc: "Holder may switch out even when trapped by another Pokemon, or by Ingrain.",
+		desc: "Holder may switch out when trapped, ingrained, or pursuited.",
 	},
 	shellbell: {
 		name: "Shell Bell",
-		desc: "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon.",
+		desc: "After an attack, holder gains 1/6 of the damage in HP dealt to other Pokemon.",
 
 		heal: "  [POKEMON] restored a little HP using its Shell Bell!",
 	},
@@ -2453,7 +2453,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	sacredash: {
 		name: "Sacred Ash",
-		desc: "If holder is Suicune,Entei or Raikou, STAB attacks have 1.3x power.",
+		desc: "If holder is Suicune, Entei or Raikou, STAB attacks have 1.3x power.",
 		newmeta: "true",
 	},
 	fogmachine: {
