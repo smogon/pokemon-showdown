@@ -160,9 +160,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Sets up Magic Room, Haze and Fairy Lock on switch-in.",
 		shortDesc: "Magic Room, Haze and Fairy Lock on switch-in.",
 		onStart(pokemon) {
-			this.useMove("magicroom", pokemon);
-			this.useMove("haze", pokemon);
-			this.useMove("fairylock", pokemon);
+			this.actions.useMove("magicroom", pokemon);
+			this.actions.useMove("haze", pokemon);
+			this.actions.useMove("fairylock", pokemon);
 		},
 		name: "Fair Fight",
 		gen: 8,
@@ -170,15 +170,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// LandoriumZ
 	retaliation: {
-		desc: "This Pokemon moves last among Pokemon using the same or greater priority moves; evasiveness is doubled if confused; damage is doubled if not damaged.",
-		shortDesc: "Moves last; 2x evasiveness if confused; 2x damage if not hit.",
+		desc: "This Pokemon moves last among Pokemon using the same or greater priority moves; evasiveness is doubled if confused, 1.25x otherwise; damage is doubled if not damaged.",
+		shortDesc: "Moves last; 2x evasiveness if confused, 1.25x otherwise; 2x damage if not hit.",
 		onFractionalPriority: -0.1,
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, target) {
 			if (typeof accuracy !== 'number') return;
 			if (target?.volatiles['confusion']) {
 				this.debug('Retaliation - decreasing accuracy');
-				return this.chainModify(0.5);
+				return this.chainModify(0.4);
+			} else {
+				return this.chainModify(0.8);
 			}
 		},
 		onBasePowerPriority: 31,
@@ -211,14 +213,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onStart(pokemon) {
-			this.useMove("wish", pokemon);
-			this.useMove("aquaring", pokemon);
+			this.actions.useMove("wish", pokemon);
+			this.actions.useMove("aquaring", pokemon);
 		},
 		onSwitchOut(pokemon) {
-			this.useMove("safeguard", pokemon);
+			this.actions.useMove("safeguard", pokemon);
 		},
 		onFaint(pokemon) {
-			this.useMove("lunardance", pokemon);
+			this.actions.useMove("lunardance", pokemon);
 		},
 		isBreakable: true,
 		name: "Final Prayer",

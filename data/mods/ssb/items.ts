@@ -38,7 +38,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 
 	// Horrific17
-	horrifumz: {
+	horrifiumz: {
 		name: "Horrifium Z",
 		spritenum: 632,
 		onTakeItem: false,
