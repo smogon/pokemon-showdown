@@ -18723,7 +18723,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	wicketox: {
 		num: 10002,
-		name: "wicketox",
+		name: "Wicketox",
 		types: ["Steel", "Poison"],
 		baseStats: {hp: 85, atk: 60, def: 50, spa: 115, spd: 105, spe: 125},
 		abilities: {0: "Malintent", H: "Aftermath"},
