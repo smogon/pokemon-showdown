@@ -60,7 +60,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
 	},
 	Mayie: {
-		species: 'Lanturn', ability: 'Final Prayer', item: 'Lunchbox', gender: 'F',
+		species: 'Lanturn', ability: 'Final Prayer', item: 'Leftovers', gender: 'F',
 		moves: ['Parting Shot', 'Thunder Wave', 'Scald'],
 		signatureMove: 'Sacred Penance',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
