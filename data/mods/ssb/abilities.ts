@@ -170,8 +170,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// LandoriumZ
 	retaliation: {
-		desc: "This Pokemon moves last among Pokemon using the same or greater priority moves; evasiveness is doubled if confused; damage is doubled if not damaged.",
-		shortDesc: "Moves last; 2x evasiveness if confused; 2x damage if not hit.",
+		desc: "This Pokemon moves last among Pokemon using the same or greater priority moves; evasiveness is doubled if confused, 1.25x otherwise; damage is doubled if not damaged.",
+		shortDesc: "Moves last; 2x evasiveness if confused, 1.25x otherwise; 2x damage if not hit.",
 		onFractionalPriority: -0.1,
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, target) {
