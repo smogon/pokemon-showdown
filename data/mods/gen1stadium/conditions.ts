@@ -109,6 +109,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
+	confusion: {
+		inherit: true,
+		onStart(target) {
+			this.add('-start', target, 'confusion');
+			this.effectState.time = this.random(2, 6);
+		},
+	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 2,
