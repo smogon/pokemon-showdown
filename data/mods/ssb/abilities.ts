@@ -198,31 +198,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Mayie
 	finalprayer: {
-		desc: "This Pokemon is immune to status ailments; uses Wish and Aqua Ring when switching in and Safeguard when switching out; Lunar Dance when knocked out.",
-		shortDesc: "Status immunity; Wish and Aqua Ring on switch-in, Safeguard on switch-out; Lunar Dance on KO.",
-		onSetStatus(status, target, source, effect) {
-			if ((effect as Move)?.status) {
-				this.add('-immune', target, '[from] ability: Final Prayer');
-			}
-			return false;
-		},
-		onTryAddVolatile(status, target) {
-			if (status.id === 'yawn') {
-				this.add('-immune', target, '[from] ability: Final Prayer');
-				return null;
-			}
-		},
+		desc: "This Pokemon uses Wish when switching in and Safeguard when switching out.",
+		shortDesc: "Wish on switch-in, Safeguard on switch-out.",
 		onStart(pokemon) {
 			this.actions.useMove("wish", pokemon);
-			this.actions.useMove("aquaring", pokemon);
 		},
 		onSwitchOut(pokemon) {
 			this.actions.useMove("safeguard", pokemon);
 		},
-		onFaint(pokemon) {
-			this.actions.useMove("lunardance", pokemon);
-		},
-		isBreakable: true,
 		name: "Final Prayer",
 		gen: 8,
 	},
