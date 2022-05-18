@@ -1717,8 +1717,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		transform: "Zen Mode triggered!",
 		transformEnd: "Zen Mode ended!",
 	},
-
-	// CAP
 	mountaineer: {
 		name: "Mountaineer",
 		shortDesc: "On switch-in, this Pokemon avoids all Rock-type attacks and Stealth Rock.",
@@ -1730,6 +1728,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		move: "#magiccoat",
 	},
+	
+	// CAP
 	persistent: {
 		name: "Persistent",
 		desc: "The duration of Gravity, Heal Block, Magic Room, Safeguard, Tailwind, Trick Room, and Wonder Room is increased by 2 turns if the effect is started by this Pokemon.",
@@ -1976,8 +1976,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	radioactive: {
 		name: "Radioactive",
-		desc: "Poison and Cosmic moves are x1.2 BP.",
-		shortDesc: "Poison and Cosmic moves are x1.2 BP.",
+		desc: "Poison and Cosmic type moves have their power amplified by 1.2x.",
+		shortDesc: "Poison and Cosmic type moves have their power amplified by 1.2x.",
 		newmeta: "true",
 	},
 	haunted: {
@@ -2127,8 +2127,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	thunderdelight: {
 		name: "Thunder Delight",
-		desc: "This Pokemon's Electric moves heal him 1/10 max hp.",
-		shortDesc: "This Pokemon's Electric moves heal him 1/10 max hp.",
+		desc: "This Pokemon's Electric moves recover 1/10th of their max HP.",
+		shortDesc: "This Pokemon's Electric moves recover 1/10th of their max HP.",
 		newmeta: "true",
 	},
 	ignition: {
