@@ -263,14 +263,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				!effect.noMetronome!.includes(move.name)
 			));
 			let randomMove = '';
+			let randomMove2 = '';
+			let randomMove3 = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
 				randomMove = this.sample(moves).id;
+				randomMove2 = this.sample(moves).id;
+				randomMove3 = this.sample(moves).id;
 			}
-			if (!randomMove) return false;
+			if (!randomMove || !randomMove2 || !randomMove3) return false;
 			this.actions.useMove(randomMove, target);
-			this.actions.useMove(randomMove, target);
-			this.actions.useMove(randomMove, target);
+			this.actions.useMove(randomMove2, target);
+			this.actions.useMove(randomMove3, target);
 		},
 		secondary: null,
 		target: "self",
