@@ -206,7 +206,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Hyper Beam', target);
 		},
 		onHit(target) {
-			this.directDamage(Math.ceil(target.maxhp / 2));
+			this.directDamage(Math.ceil(target.maxhp / 3));
 		},
 		volatileStatus: 'healblock',
 		ignoreAbility: true,
