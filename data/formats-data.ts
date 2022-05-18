@@ -2139,7 +2139,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC UU",
 	},
 	probopass: {
-		tier: "OU",
+		tier: "UU",
 	},
 	skitty: {
 		tier: "LC UU",
