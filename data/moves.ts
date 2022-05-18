@@ -23142,4 +23142,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+	mercurywave: {
+		num: 991,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Mercury Wave",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		contestType: "Cool",
+	},
 };

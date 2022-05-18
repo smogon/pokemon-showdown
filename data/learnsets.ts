@@ -1020,6 +1020,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			blindingflash: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
 			tsunami: ["8M", "7M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 3, level: 70, moves: ["protect", "raindance", "skullbash", "hydropump"], pokeball: "pokeball"},
@@ -16850,6 +16851,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gammaray: ["8M", "7M"],
 			prophecy:["8M"],
 			enlightenment:["8M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 3, level: 50, moves: ["minimize", "lightscreen", "cosmicpower", "hydropump"], pokeball: "pokeball"},
@@ -16964,6 +16966,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gammaray: ["8M", "7M"],
 			prophecy:["8M"],
 			enlightenment:["8M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 3, level: 41, moves: ["refresh", "waterfall", "icebeam", "recover"]},
@@ -44681,6 +44684,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zapcannon: ["8L66", "7L55", "7S6", "6L1", "5L65", "5S3", "4L65", "3L49"],
 			shieldbeam: ["8M", "7M"],
 			gammaray: ["8M", "7M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 3, level: 40, shiny: 1, moves: ["metalclaw", "curse", "superpower", "ancientpower"]},
@@ -46416,6 +46420,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M"],
 			sleepbubble: ["8M", "7M"],
 			tsunami: ["8M", "7M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 5, level: 100, gender: "M", moves: ["hydropump", "icebeam", "aquajet", "grassknot"], pokeball: "cherishball"},
@@ -51806,6 +51811,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			deathray: ["8M", "7M"],
 			dazingpressure: ["8M", "7M"],
 			electrotail: ["8M", "7M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 4, level: 47, shiny: 1, moves: ["metalclaw", "ancientpower", "dragonclaw", "roaroftime"]},
@@ -52863,6 +52869,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			animablast: ["8M"],
 			prophecy:["8M"],
 			jetstream: ["8M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 4, level: 100, moves: ["judgment", "roaroftime", "spacialrend", "shadowforce"], pokeball: "cherishball"},
@@ -76800,6 +76807,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			recover: ["8M", "7M"],
 			windscythe: ["8M", "7M"],
 			animablast: ["8M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 7, level: 100, shiny: true, moves: ["multiattack", "partingshot", "punishment", "scaryface"], pokeball: "cherishball"},
@@ -79914,6 +79922,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			thundershock: ["8L1", "8V", "7L27"],
 			thunderwave: ["8M", "8L24", "8V", "7M", "7L18"],
 			toxic: ["8V", "7M"],
+			workup: ["8M"],
 		},
 	},
 	meltanunova: {
@@ -79992,6 +80001,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			thunderwave: ["8M", "8L24", "8V", "7M", "7L1"],
 			toxic: ["8V", "7M"],
 			radiantpunch: ["8M", "7M"],
+			mercurywave: ["8M"],
 		},
 		eventData: [
 			{generation: 8, level: 100, nature: "Brave", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 0}, moves: ["doubleironbash", "hyperbeam", "dynamicpunch", "thunderpunch"], pokeball: "cherishball"},
@@ -90847,6 +90857,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wrap: ["8M", "7M"],
 			thunderwave: ["8M", "7M"],
 			enlightenment:["8M"],
+			mercurywave: ["8M"],
 		},
 	},
 	delibirdgalar: {
@@ -91035,6 +91046,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			headcharge: ["8M","7M"],
 			surf: ["8M","7M"],
 			horndrill: ["8M","7M"],
+			mercurywave: ["8M"],
 		},
 	},
 	muuthate: {
@@ -95778,6 +95790,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		   guillotine: ["8M", "7M"],
 		   healbell: ["8M", "7M"],
 		   aquaticgift: ["8M", "7M"],
+		   mercurywave: ["8M"],
 		},
 	 },
 	coleoterra: {
@@ -96285,6 +96298,7 @@ nucleid: {
       anticyclone: ["8M", "7M"],
       implosion: ["8M", "7M"],
       gammaray: ["8M", "7M"],
+	  mercurywave: ["8M"],
    },
 },
 
@@ -96416,6 +96430,7 @@ crustocion: {
       muddywater: ["8M", "7M"],
       whirlpool: ["8M", "7M"],
       bubble: ["8M", "7M"],
+	  mercurywave: ["8M"],
    },
 },
 novisage: {

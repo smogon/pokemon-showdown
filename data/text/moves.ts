@@ -7691,4 +7691,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "If the user has no item, it picks up the last used item in a battle.",
 		shortDesc: "If the user has no item, it picks up the last used item in a battle.",
 	},
+	mercurywave: {
+		name: "Mercury Wave",
+		desc: "No additional effect",
+	}
 };
