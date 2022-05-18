@@ -199,7 +199,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Deals 1/3 mHP; prevents healing.",
 		name: "Wave Cannon",
 		gen: 8,
-		pp: 10,
+		pp: 15,
 		priority: 0,
 		flags: {bypasssub: 1, mirror: 1},
 		onPrepareHit(target, source) {
