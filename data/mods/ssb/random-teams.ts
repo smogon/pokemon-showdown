@@ -49,7 +49,7 @@ export const ssbSets: SSBSets = {
 	},
 	Horrific17: {
 		species: 'Arcanine', ability: 'Fair Fight', item: 'Horrifium Z', gender: 'M',
-		moves: ['Morning Sun', 'Dragon Darts', 'Extreme Speed'],
+		moves: ['Morning Sun', 'Solar Blade', 'Extreme Speed'],
 		signatureMove: 'Meteor Charge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
