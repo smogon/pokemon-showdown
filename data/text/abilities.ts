@@ -1728,6 +1728,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		move: "#magiccoat",
 	},
+	
+	// CAP
 	persistent: {
 		name: "Persistent",
 		desc: "The duration of Gravity, Heal Block, Magic Room, Safeguard, Tailwind, Trick Room, and Wonder Room is increased by 2 turns if the effect is started by this Pokemon.",
