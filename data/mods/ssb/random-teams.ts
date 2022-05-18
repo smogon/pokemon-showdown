@@ -77,6 +77,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ein Sol',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
+	Minimind: {
+		species: 'Clefable', ability: 'Unaware', item: 'Leftovers', gender: 'F',
+		moves: ['Calm Mind', 'Draining Kiss', 'Soft-Boiled'],
+		signatureMove: 'Mega Metronome',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {
