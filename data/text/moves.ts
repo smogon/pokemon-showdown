@@ -7699,4 +7699,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Alternating Current",
 		desc: "Hits twice. 30% chance to make the target flinch.",
 	},
+	talentshow: {
+		name: "Talent Show",
+		desc: "For 3 turns, the target can only use moves that share their type.",
+	},
 };

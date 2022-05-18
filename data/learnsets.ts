@@ -17071,6 +17071,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			swift: ["8M", "7M"],
 			drainingkiss: ["8M", "7M", "6M"],
 			enlightenment:["8M"],
+			talentshow: ["8M"],
 		},
 	},
 	mrmime: {
@@ -17210,6 +17211,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			swift: ["8M", "7M"],
 			drainingkiss: ["8M", "7M", "6M"],
 			enlightenment:["8M"],		
+			talentshow: ["8M"],	
 		},
 		eventData: [
 			{generation: 3, level: 42, abilities: ["soundproof"], moves: ["followme", "psychic", "encore", "thunderpunch"]},
@@ -17411,6 +17413,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			brightslap: ["8M", "7M"],
 			drainingkiss: ["8M"],
 			enlightenment:["8M"],
+			talentshow: ["8M"],
 		},
 	},
 	scyther: {
@@ -17840,6 +17843,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			toxiclove: ["8M", "7M"],
 			thinkfast: ["8M", "7M"],
 			brightslap: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 		encounters: [
 			{generation: 1, level: 15},
@@ -34817,6 +34821,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			psykiss: ["8M", "7M"],
 			magicdust: ["8M", "7M"],
 			animablast: ["8M"],
+			talentshow: ["8M"],
 		},
 		encounters: [
 			{generation: 4, level: 6},
@@ -67083,6 +67088,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			revengeblast: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
 			purifyingflame: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 		eventData: [
 			{generation: 6, level: 15, gender: "F", nature: "Hardy", moves: ["scratch", "flamethrower", "hiddenpower"], pokeball: "cherishball"},
@@ -67158,6 +67164,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			revengeblast: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
 			purifyingflame: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 	},
 	delphox: {
@@ -67245,6 +67252,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			burningbarrage: ["8M", "7M"],
 			purifyingflame: ["8M", "7M"],
 			prophecy:["8M"],
+			talentshow: ["8M"],
 		},
 	},
 	froakie: {
@@ -74106,6 +74114,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M"],
 			featherbarrage: ["8M", "7M"],
 			windblast: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 	},
 	cutiefly: {
@@ -80244,6 +80253,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			firejet: ["8M", "7M"],
 			zapkick: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 	},
 	raboot: {
@@ -80297,6 +80307,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			firejet: ["8M", "7M"],
 			zapkick: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 	},
 	cinderace: {
@@ -80368,6 +80379,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zapkick: ["8M", "7M"],
 			cometpunch: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 	},
 	sobble: {
@@ -81964,6 +81976,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wildcharge: ["8M"],
 			darkmelody: ["8M", "7M"],
 			radiantpunch: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 		eventData: [
 			{generation: 8, level: 50, shiny: true, nature: "Rash", abilities: ["punkrock"], moves: ["overdrive", "sludgewave", "boomburst", "risingvoltage"], pokeball: "cherishball"},
@@ -92934,6 +92947,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sleeptalk: ["8M", "7M"],
 			substitute: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 	},
 	symphonix: {
@@ -92998,6 +93012,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			substitute: ["8M", "7M"],
 			nosedive: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
+			talentshow: ["8M"],
 		},
 	},
 	sunbardier: {
@@ -94301,6 +94316,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gigaimpact: ["8M", "7M"],
 			burningbarrage: ["8M", "7M"],
 			enlightenment:["8M"],
+			talentshow: ["8M"],
 		},
 	},
 	delpni: {
@@ -95308,6 +95324,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wish: ["8M"],
 			wonderroom: ["8M"],
 			zapcannon: ["8M"],
+			talentshow: ["8M"],
 		},
 	},
 	solanca:{

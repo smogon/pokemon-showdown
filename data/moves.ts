@@ -23174,4 +23174,44 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	talentshow: {
+		num: 993,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Talent Show",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+		volatileStatus: 'talentshow',
+		condition: {
+			duration: 3,
+			onStart(target) {
+				if (target.activeTurns && !this.queue.willMove(target)) {
+					this.effectState.duration++;
+				}
+				this.add('-start', target, 'move: Talent Show');
+			},
+			onResidualOrder: 15,
+			onEnd(target) {
+				this.add('-end', target, 'move: Talent Show');
+			},
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.id);
+					var typechecks = pokemon.getTypes();
+					for (var typenumber = 0; typenumber <typechecks.length; typenumber++){
+						if (move.type != typechecks[typenumber]) {
+							pokemon.disableMove(moveSlot.id);
+						}
+					}
+
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
+	},
 };
