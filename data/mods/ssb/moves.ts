@@ -114,10 +114,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Horrific17
 	finaltrick: {
 		accuracy: true,
-		basePower: 150,
+		basePower: 50,
 		category: "Physical",
-		desc: "Causes intense sunlight for 5 turns; burns and traps target for 4-5 turn; user cannot switch out after use.",
-		shortDesc: "Sunlight; burns and traps target; user can't switch.",
+		desc: "Causes intense sunlight for 5 turns; burns and traps target for 4-5 turns.",
+		shortDesc: "Sunlight; burns and traps target.",
 		name: "Final Trick",
 		gen: 8,
 		pp: 1,
@@ -126,20 +126,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isZ: "horrifiumz",
 		weather: 'sunnyday',
 		status: 'brn',
-		volatileStatus: 'partiallytrapped',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Extreme Evoboost', source);
 			this.add('-anim', source, 'Flare Boost', target);
-			this.add('-anim', source, 'Magma Storm', target);
-			this.add(`c| Horrific17|See you in the Eternal Flames.`);
 		},
-		condition: {
-			onStartPokemon(pokemon) {
-				this.add('-start', pokemon, 'move: Final Trick');
-			},
-			onTrapPokemon(pokemon) {
-				pokemon.tryTrap();
-			},
+		onHit(target) {
+			this.actions.useMove('Magma Storm', target);
 		},
 		secondary: null,
 		target: "normal",
