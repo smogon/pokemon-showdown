@@ -4169,6 +4169,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		},
 
 		heal: "#memento",
+		switchOut: "#uturn",
 	},
 	payback: {
 		name: "Payback",
