@@ -166,6 +166,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onModifyMove(move) {
 			if (move.id === 'Extreme Speed') move.basePower = 120;
+			if (move.id === 'Magma Storm') move.accuracy = true;
 		},
 		name: "Fair Fight",
 		gen: 8,
