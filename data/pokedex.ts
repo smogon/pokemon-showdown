@@ -15102,7 +15102,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Ghost", "Grass"],
 		gender: "N",
 		baseStats: {hp: 70, atk: 131, def: 100, spa: 86, spd: 90, spe: 40},
-		abilities: {0: "Steelworker"},
+		abilities: {0: "Steelworker", 1: "Heavy Metal"},
 		heightm: 3.9,
 		weightkg: 210,
 		color: "Green",
