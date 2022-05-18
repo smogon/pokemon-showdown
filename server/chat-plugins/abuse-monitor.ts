@@ -275,7 +275,7 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 				// i should never need to do it again
 				hits = hits.filter(f => {
 					const date = new Date(f.time);
-					if (date.getFullYear() < 2021) return false;
+					if (date.getFullYear() < 2022) return false;
 					return !(date.getFullYear() === 2022 && date.getMonth() <= 4 && date.getDate() <= 17);
 				});
 				if (hits.length < punishment.count) continue;
