@@ -7686,4 +7686,9 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Sets safeguard and triggers focus energy",
 		shortDesc: "Sets safeguard and triggers focus energy",
 	},
+	treasurehoard: {
+		name: "Treasure Hoard",
+		desc: "If the user has no item, it picks up the last used item in a battle.",
+		shortDesc: "If the user has no item, it picks up the last used item in a battle.",
+	},
 };

@@ -23122,5 +23122,24 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allySide",
 		type: "Light",
 		contestType: "Cool",
-	}
+	},
+	treasurehoard: {
+		num: 990,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Treasure Hoard",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onHit(pokemon) {
+			if (pokemon.item || !this.lastItemUsed) return false;
+			pokemon.setItem(this.lastItemUsed);
+			this.add('-item', pokemon, this.lastItemUsed, '[from] move: Treasure Hoard');
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		contestType: "Cool",
+	},
 };
