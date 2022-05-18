@@ -1968,8 +1968,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "50% chance of retrieving a used item at the end of a turn.",
 		newmeta: "true",
 	},
-	corruptedintention: {
-		name: "Corrupted Intention",
+	malintent: {
+		name: "Malintent",
 		desc: "This Pokemon sets 2 layers of Toxic Spikes instead of 1.",
 		shortDesc: "This Pokemon sets 2 layers of Toxic Spikes instead of 1.",
 		newmeta: "true",

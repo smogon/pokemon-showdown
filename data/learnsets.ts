@@ -90558,7 +90558,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			hypnosis: ["8M", "7M"],
 		},
 	},
-	corralloi: {
+	wicketox: {
 		learnset: {
 			poisonjab: ["8M", "7M"],
 			nitricstrike: ["8M", "7M"],
@@ -90708,6 +90708,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dunewave: ["8M", "7M"],
 		},
 		eventData: [
+			{generation: 6, level: 10, abilities: ["hugepower"], moves: ["present", "happyhour"], pokeball: "cherishball"},
 			{generation: 8, level: 10, abilities: ["hugepower"], moves: ["present", "happyhour"], pokeball: "cherishball"},
 		],
 	},
@@ -91786,6 +91787,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			attract: ["8M", "7M"],
 			batonpass: ["8M", "7M"],
 			bodyslam: ["8M", "7M"],
+			boomburst: ["8M", "7M"],
 			bravebird: ["8M", "7M"],
 			captivate: ["8M", "7M"],
 			confide: ["8M", "7M"],
