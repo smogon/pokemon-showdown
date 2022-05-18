@@ -22977,37 +22977,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-
-
-
-	// prophecy2: {
-		// num: 987,
-		// accuracy: true,
-		// basePower: 0,
-		// category: "Status",
-		// name: "Prophecy",
-		// pp: 10,
-		// priority: 0,
-		// flags: {future: 1, bypasssub: 1},
-		// ignoreImmunity: true,
-		// isFutureMove: true,
-		// condition: {
-			// duration: 3, //to prevent aquaring being given back on future switches
-			// onHit(target, source){
-				// const stats: BoostID[] = [];
-				// const randomStat = 'accuracy';
-				// const boost: SparseBoostsTable = {};
-				// boost[randomStat] = 2;
-				// this.boost(boost);
-			// },
-		// },
-		// target: "adjacentAllyOrSelf",
-		// type: "Light",
-		// contestType: "Clever",
-	// },
-
-
-
 	prophecy: {
 		num: 987,
 		accuracy: true,
@@ -23107,12 +23076,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 1,
 		flags: {snatch: 1},
-		volatileStatus: 'enlightened',
+		volatileStatus: 'Safeguard',
 		condition: {
 			duration: 5,
-			onModifyCritRatio(critRatio) {
-				return critRatio + 2;
-			},
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', effect);
@@ -23150,7 +23116,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-sideend', side, 'Safeguard');
 			},
 		},
-		target: "self",
+		secondary: {
+			volatileStatus: 'focusenergy',
+		},
+		target: "allySide",
 		type: "Light",
 		contestType: "Cool",
 	}
