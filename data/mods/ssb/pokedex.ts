@@ -11,4 +11,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 55, atk: 50, def: 45, spa: 135, spd: 135, spe: 120},
 	},
+	// Minimind
+	clefable: {
+		inherit: true,
+		baseStats: {hp: 95, atk: 95, def: 73, spa: 95, spd: 90, spe: 60},
+	},
 };
