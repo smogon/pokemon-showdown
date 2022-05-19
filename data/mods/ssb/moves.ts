@@ -136,11 +136,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		isZ: "horrifiumz",
-		weather: 'sunnyday',
 		status: 'brn',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Extreme Evoboost', source);
 			this.add('-anim', source, 'Flare Boost', target);
+		},
+		self: {
+			onHit(source) {
+				this.field.setWeather('desolateland');
+			},
 		},
 		secondary: {
     		volatileStatus: 'partiallytrapped',
