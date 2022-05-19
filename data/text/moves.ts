@@ -6947,8 +6947,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Forces the target to switch to a random ally.",
 		newmeta: "true",
 	},
-	voiceoftheforest: {
-		name: "Voice Of The Forest",
+	forestsvoice: {
+		name: "Forest's Voice",
 		desc: "For 5 turns, the terrain becomes Grassy Terrain. During the effect, the power of Grass-type attacks used by grounded Pokemon is multiplied by 1.3, the power of Bulldoze, Earthquake, and Magnitude used against grounded Pokemon is multiplied by 0.5, and grounded Pokemon have 1/16 of their maximum HP, rounded down, restored at the end of each turn, including the last turn. Camouflage transforms the user into a Grass type, Nature Power becomes Energy Ball, and Secret Power has a 30% chance to cause sleep. Fails if the current terrain is Grassy Terrain.",
 		shortDesc: "5 turns. Grounded: +Grass power, +1/16 max HP.",
 		newmeta: "true",
@@ -7187,8 +7187,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	lightspeed: {
 		name: "Light Speed",
-		desc: "No additional effect.",
-		shortDesc: "Usually goes first.",
+		desc: "Nearly always goes first.",
+		shortDesc: "Nearly always goes first.",
 		newmeta: "true",
 	},
 	blindingblast: {
@@ -7665,5 +7665,42 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Astro Shift",
 		desc: "Raises the user's speed by two stages and the user's special defence by one stage.",
 		shortDesc: "Raises the user's Speed by 2 and raises Special Defense by 1.",
+	},
+	animablast: {
+		name: "Anima Blast",
+		desc: "20% chance to raise Accuracy by 1 stage.",
+		shortDesc: "20% chance to raise Acc by 1 stage.",
+	},
+	// prophecy: {
+	// 	name: "Prophecy",
+	// 	desc: "After three turns, raises accuracy by 2.",
+	// 	shortDesc: "After three turns, raises accuracy by 2.",
+	// },
+	jetstream: {
+		name: "Jet Stream",
+		desc: "No additional effect",
+		shortDesc: "Usually goes first",
+	},
+	enlightenment: {
+		name: "Enlightenment",
+		desc: "Sets safeguard and triggers focus energy",
+		shortDesc: "Sets safeguard and triggers focus energy",
+	},
+	treasurehoard: {
+		name: "Treasure Hoard",
+		desc: "If the user has no item, it picks up the last used item in a battle.",
+		shortDesc: "If the user has no item, it picks up the last used item in a battle.",
+	},
+	mercurywave: {
+		name: "Mercury Wave",
+		desc: "No additional effect",
+	},
+	alternatingcurrent: {
+		name: "Alternating Current",
+		desc: "Hits twice. 30% chance to make the target flinch.",
+	},
+	talentshow: {
+		name: "Talent Show",
+		desc: "For 3 turns, the target can only use moves that share their type.",
 	},
 };

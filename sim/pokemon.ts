@@ -1615,6 +1615,7 @@ export class Pokemon {
 		//if(this && this.battle.effectState.unnerved) {return false}
 		if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
 		if (!this.item) return false;
+		this.battle.lastItemUsed = this.getItem();
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;

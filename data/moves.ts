@@ -20027,12 +20027,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	voiceoftheforest: {
+	forestsvoice: {
 		num: 848,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-		name: "Voice Of The Forest",
+		name: "Forest's Voice",
 		pp: 10,
 		priority: 0,
 		flags: {nonsky: 1, sound: 1, protect: 1, mirror: 1, authentic: 1},
@@ -21125,11 +21125,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 	lightspeed: {
 		num: 901,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 80,
 		category: "Physical",
 		name: "Light Speed",
-		pp: 30,
-		priority: 1,
+		pp: 5,
+		priority: 2,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: null,
 		target: "normal",
@@ -22940,11 +22940,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 	vengeance: {
 		num: 985,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
 			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || ally.fainted);
 			var monsfainted = (pokemon.side.pokemon.length-pokemon.side.pokemonLeft) 
-			return 30 + (monsfainted*20) 
+			return 40 + (monsfainted*20) //using BP in callback was calling issues,
+										// first number should match base power 
 		},
 		category: "Special",
 		name: "Vengeance",
@@ -22954,5 +22955,263 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
+	},
+	animablast: {
+		num: 986,
+		accuracy: 85,
+		basePower: 100,
+		category: "Special",
+		name: "Anima Blast",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: {
+					accuracy: 1,
+				}
+			}
+		},
+		target: "normal",
+		type: "Fighting",
+		contestType: "Cool",
+	},
+	// prophecy: {
+	// 	num: 987,
+	// 	accuracy: true,
+	// 	basePower: 0,
+	// 	category: "Status",
+	// 	name: "Prophecy",
+	// 	pp: 10,
+	// 	priority: 0,
+	// 	flags:{snatch: 1},
+	// 	ignoreImmunity: true,
+	// 	slotCondition: 'prophecy',
+	// 	condition: {
+	// 		duration: 3,
+	// 		onHit(source, target) {
+	// 		if (!target.side.addSlotCondition(target, 'prophecy')) return false;
+	// 			Object.assign(target.side.slotConditions[target.position]['prophecy'], {
+	// 				move: 'prophecy',
+	// 				source: source,
+	// 				moveData: {
+	// 					id: 'prophecy',
+	// 					name: "prophecy",
+	// 					accuracy: true,
+	// 					basePower: 0,
+	// 					category: "Special",
+	// 					priority: 0,
+	// 					flags: {},
+	// 					secondary: {
+	// 						boosts: {
+	// 							accuracy: 2,
+	// 						},
+	// 					},
+	// 					effectType: 'Move',
+	// 					isFutureMove: true,
+	// 					type: 'Light',
+	// 				},
+	// 			});
+	// 		},
+	// 	},
+	// 	// onHit(target, source){
+	// 	// 	if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+	// 	// 	// const stats: BoostID[] = [];
+	// 	// 	// const randomStat = 'accuracy';
+	// 	// 	// const boost: SparseBoostsTable = {};
+	// 	// 	// boost[randomStat] = 2;
+	// 	// 	// this.boost(boost);
+	// 	// 	target.side.addSlotCondition(target, 'futuremove')
+	// 	// 	// target.side.removeSlotCondition(target, 'futuremove')
+	// 	// },
+	// 	// onTry(source, target) {
+	// 	// 	if (!target.side.addSlotCondition(target, 'prophecy')) return false;
+	// 	// 	Object.assign(target.side.slotConditions[target.position]['prophecy'], {
+	// 	// 		duration: 3,
+	// 	// 		move: 'prophecy',
+	// 	// 		source: source,
+	// 	// 		moveData: {
+	// 	// 			id: 'prophecy',
+	// 	// 			name: "prophecy",
+	// 	// 			accuracy: true,
+	// 	// 			basePower: 0,
+	// 	// 			category: "Status",
+	// 	// 			priority: 0,
+	// 	// 			flags: {future: 3},
+
+	// 	// 			ignoreImmunity: true,
+	// 	// 			effectType: 'Move',
+	// 	// 			isFutureMove: true,
+	// 	// 			type: 'Light',
+	// 	// 		},
+	// 	// 	});
+	// 	// },
+
+	// 	secondary: null,
+	// 	target: "self", 
+	// 	type: "Light",
+	// 	contestType: "Clever",
+	// },
+	jetstream: {
+		num: 988,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Jet Stream",
+		pp: 5,
+		priority: 1,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
+	},
+	enlightenment: {
+		num: 989,
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		name: "Enlightenment",
+		pp: 10,
+		priority: 1,
+		flags: {snatch: 1},
+		volatileStatus: 'Safeguard',
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', effect);
+					return 7;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (!effect || !source) return;
+				if (effect.id === 'yawn') return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if (target !== source) {
+					this.debug('interrupting setStatus');
+					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Safeguard');
+					}
+					return null;
+				}
+			},
+			onTryAddVolatile(status, target, source, effect) {
+
+				if (!effect || !source) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					return null;
+				}
+			},
+			onSideStart(side) {
+				this.add('-sidestart', side, 'Safeguard');
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 3,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'Safeguard');
+			},
+		},
+		secondary: {
+			volatileStatus: 'focusenergy',
+		},
+		target: "allySide",
+		type: "Light",
+		contestType: "Cool",
+	},
+	treasurehoard: {
+		num: 990,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Treasure Hoard",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onHit(pokemon) {
+			if (pokemon.item || !this.lastItemUsed) return false;
+			pokemon.setItem(this.lastItemUsed);
+			this.add('-item', pokemon, this.lastItemUsed, '[from] move: Treasure Hoard');
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		contestType: "Cool",
+	},
+	mercurywave: {
+		num: 991,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Mercury Wave",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		contestType: "Cool",
+	},
+	alternatingcurrent: {
+		num: 992,
+		accuracy: 90,
+		basePower: 40,
+		category: "Special",
+		name: "Alternating Current",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, wind: 1},
+		multihit: 2,
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Electric",
+		contestType: "Cool",
+	},
+	talentshow: {
+		num: 993,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Talent Show",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+		volatileStatus: 'talentshow',
+		condition: {
+			duration: 3,
+			onStart(target) {
+				if (target.activeTurns && !this.queue.willMove(target)) {
+					this.effectState.duration++;
+				}
+				this.add('-start', target, 'move: Talent Show');
+			},
+			onResidualOrder: 15,
+			onEnd(target) {
+				this.add('-end', target, 'move: Talent Show');
+			},
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.id);
+					var typechecks = pokemon.getTypes();
+					for (var typenumber = 0; typenumber <typechecks.length; typenumber++){
+						if (move.type != typechecks[typenumber]) {
+							pokemon.disableMove(moveSlot.id);
+						}
+					}
+
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
 	},
 };
