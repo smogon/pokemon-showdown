@@ -52,8 +52,8 @@ export interface TriviaDatabase {
 	): Promise<TriviaLeaderboardScore | null> | TriviaLeaderboardScore | null;
 	getLeaderboards(): Promise<TriviaLeaderboards> | TriviaLeaderboards;
 
-	checkIfQuestionExists(questionText: string): Promise<boolean> | boolean;
-	ensureQuestionExists(questionText: string): Promise<void> | void;
+	getQuestion(questionText: string): Promise<TriviaQuestion | null> | TriviaQuestion | null;
+	ensureQuestionExists(questionText: string): Promise<TriviaQuestion> | TriviaQuestion;
 	ensureQuestionDoesNotExist(questionText: string): Promise<void> | void;
 	getSubmissions(): Promise<TriviaQuestion[]> | TriviaQuestion[];
 	getQuestionCounts(): Promise<{[k: string]: number, total: number}> | {[k: string]: number, total: number};
@@ -428,24 +428,27 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		return result;
 	}
 
-	async checkIfQuestionExists(questionText: string) {
+	async getQuestion(questionText: string): Promise<TriviaQuestion | null> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't check if a Trivia question already exists because SQLite is not enabled.`);
 		}
 
-		const {count} = await this.questionExistsQuery!.get([questionText]);
-		return count > 0;
+		const row = await this.questionExistsQuery!.get([questionText]);
+		if (!row) return null;
+		return this.rowToQuestion(row);
 	}
 
-	async ensureQuestionExists(questionText: string) {
-		if (!(await this.checkIfQuestionExists(questionText))) {
+	async ensureQuestionExists(questionText: string): Promise<TriviaQuestion> {
+		const question = await this.getQuestion(questionText);
+		if (!question) {
 			throw new Chat.ErrorMessage(`Question "${questionText}" is not in the question database.`);
 		}
+		return question;
 	}
 
 	async ensureQuestionDoesNotExist(questionText: string) {
-		if (await this.checkIfQuestionExists(questionText)) {
+		if (await this.getQuestion(questionText)) {
 			throw new Chat.ErrorMessage(`Question "${questionText}" is already in the question database.`);
 		}
 	}
@@ -637,7 +640,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			`SELECT * FROM trivia_questions WHERE question LIKE ? AND is_submission = ? ORDER BY added_at DESC`
 		);
 		this.questionExistsQuery = await Chat.database.prepare(
-			`SELECT count(*) AS count FROM trivia_questions WHERE question = ?`
+			`SELECT * FROM trivia_questions WHERE question = ?`
 		);
 
 		this.leaderboardDeletionQuery = await Chat.database.prepare(
