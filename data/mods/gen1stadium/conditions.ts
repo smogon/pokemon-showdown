@@ -91,24 +91,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
-	tox: {
-		name: 'tox',
-		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'tox');
-		},
-		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		},
-		onAfterSwitchInSelf(pokemon) {
-			// Regular poison status and damage after a switchout -> switchin.
-			pokemon.setStatus('psn');
-			pokemon.addVolatile('residualdmg');
-			pokemon.volatiles['residualdmg'].counter = 1;
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		},
-	},
 	confusion: {
 		inherit: true,
 		onStart(target) {
