@@ -27,15 +27,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onModifyDef(def) {
 			return this.chainModify(1.5);
 		},
-		onDisableMove(pokemon) {
-			for (const moveSlot of pokemon.moveSlots) {
-				if (this.dex.moves.get(moveSlot.move).category === 'Status') {
-					pokemon.disableMove(moveSlot.id);
-				}
-			}
-		},
 		gen: 8,
-		desc: "Holder's Defense is 1.5x, but it can only select damaging moves.",
+		desc: "Holder's Defense is boosted by x1.5.",
 	},
 
 	// Horrific17
