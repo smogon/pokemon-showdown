@@ -13,7 +13,6 @@ import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
 import type {GlobalPermission} from '../user-groups';
-import * as pathModule from 'path';
 
 const WHITELIST = ["mia"];
 const MUTE_DURATION = 7 * 60 * 1000;
@@ -627,9 +626,8 @@ export function writeStats(type: string, entry: AnyObject) {
 }
 
 function saveSettings(path?: string) {
-	let full = `config/chat-plugins/`;
-	if (path) full = pathModule.join(full, path);
-	FS(`${full}.json`).writeUpdate(() => JSON.stringify(settings));
+	if (!path) path = 'nf';
+	FS(`config/chat-plugins/${path}.json`).writeUpdate(() => JSON.stringify(settings));
 }
 
 function saveReviews() {
