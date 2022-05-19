@@ -7820,6 +7820,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onHit(target, source, move) {
 			if (!this.canSwitch(source.side)) {
+				delete source.side.slotConditions[source.position]['healingwish'];
 				delete move.selfdestruct;
 				this.attrLastMove('[still]');
 				this.add('-fail', source);
@@ -9916,6 +9917,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1, dance: 1},
 		onHit(target, source, move) {
 			if (!this.canSwitch(source.side)) {
+				delete source.side.slotConditions[source.position]['lunardance'];
 				delete move.selfdestruct;
 				this.attrLastMove('[still]');
 				this.add('-fail', source);
