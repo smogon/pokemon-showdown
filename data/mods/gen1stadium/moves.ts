@@ -54,12 +54,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.clearBoosts();
 				pokemon.cureStatus(true);
 				for (const id of Object.keys(pokemon.volatiles)) {
-					if (id === 'residualdmg') {
-						pokemon.volatiles[id].counter = 0;
-					} else {
-						pokemon.removeVolatile(id);
-						this.add('-end', pokemon, id, '[silent]');
-					}
+					pokemon.removeVolatile(id);
+					this.add('-end', pokemon, id, '[silent]');
 				}
 				pokemon.recalculateStats!();
 			}
