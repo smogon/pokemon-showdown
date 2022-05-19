@@ -570,6 +570,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'DesolateLand',
 		effectType: 'Weather',
 		duration: 0,
+		durationCallback(source, effect) {
+			if (source?.hasItem('horrifiumz')) {
+				return 5;
+			}
+			return 0;
+		},
 		onTryMovePriority: 1,
 		onTryMove(attacker, defender, move) {
 			if (move.type === 'Water' && move.category !== 'Status') {
