@@ -54,7 +54,7 @@ function isCommon(message: string) {
 }
 
 let throttleTime: number | null = null;
-export const limiter = new Limiter(15);
+export const limiter = new Limiter(10);
 export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
 	if (isCommon(text) || !limiter.shouldRequest()) return null;
 	if (throttleTime && (Date.now() - throttleTime < 10000)) {
