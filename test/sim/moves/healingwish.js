@@ -94,7 +94,7 @@ describe('Healing Wish', function () {
 		assert.false.fainted(battle.p1.active[0]);
 	});
 
-	it(`should not setup the slot condition when it fails`, function () {
+	it(`should not set up the slot condition when it fails`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wobbuffet', moves: ['healingwish', 'swordsdance']},
 			{species: 'wynaut', moves: ['swordsdance', 'allyswitch']},
