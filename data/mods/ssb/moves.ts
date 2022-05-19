@@ -66,6 +66,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+	
+	// flufi
+	cranberrycutter: {
+		accuracy: 90,
+		basePower: 100,
+		category: "Physical",
+		desc: "Always results in a critical hit. 20% chance to confuse target.",
+		shortDesc: "Guaranteed crit; 20% confusion.",
+		name: "Cranberry Cutter",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Topsy Turvy', target);
+			this.add('-anim', source, 'Sky Drop', target);
+		},
+		willCrit: true,
+		secondary: {
+			chance: 20,
+			volatileStatus: 'confusion',
+		},
+		target: "Normal",
+		type: "Fairy",
+	},
 
 	// Genwunner
 	psychicbind: {
@@ -202,11 +230,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(pokemon, source, move) {
-				this.add('-activate', source, 'move: Aromatherapy');
+				this.add('-activate', source, 'move: Sacred Penance');
 				for (const ally of source.side.pokemon) {
-					if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
-						continue;
-					}
 					ally.cureStatus();
 				}
 			},
@@ -214,6 +239,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
+	},
+	
+	// Minimind
+	megametronome: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Mega Metronome",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		noMetronome: [
+			"After You", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Endure", "Eternabeam", "False Surrender", "Feint", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Obstruct", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Struggle", "Switcheroo", "Transform", "Wide Guard",
+		],
+		onHit(target, source, effect) {
+			const moves = this.dex.moves.all().filter(move => (
+				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+				!move.realMove && !move.isZ && !move.isMax &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				!effect.noMetronome!.includes(move.name)
+			));
+			let randomMove = '';
+			let randomMove2 = '';
+			let randomMove3 = '';
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves).id;
+				randomMove2 = this.sample(moves).id;
+				randomMove3 = this.sample(moves).id;
+			}
+			if (!randomMove || !randomMove2 || !randomMove3) return false;
+			this.actions.useMove(randomMove, target);
+			this.actions.useMove(randomMove2, target);
+			this.actions.useMove(randomMove3, target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		contestType: "Cool",
 	},
 
 	// Omega
@@ -273,69 +337,5 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
-	},
-
-	// Minimind
-	megametronome: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Mega Metronome",
-		pp: 10,
-		priority: 0,
-		flags: {},
-		noMetronome: [
-			"After You", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Endure", "Eternabeam", "False Surrender", "Feint", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Obstruct", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Struggle", "Switcheroo", "Transform", "Wide Guard",
-		],
-		onHit(target, source, effect) {
-			const moves = this.dex.moves.all().filter(move => (
-				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
-				!move.realMove && !move.isZ && !move.isMax &&
-				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				!effect.noMetronome!.includes(move.name)
-			));
-			let randomMove = '';
-			let randomMove2 = '';
-			let randomMove3 = '';
-			if (moves.length) {
-				moves.sort((a, b) => a.num - b.num);
-				randomMove = this.sample(moves).id;
-				randomMove2 = this.sample(moves).id;
-				randomMove3 = this.sample(moves).id;
-			}
-			if (!randomMove || !randomMove2 || !randomMove3) return false;
-			this.actions.useMove(randomMove, target);
-			this.actions.useMove(randomMove2, target);
-			this.actions.useMove(randomMove3, target);
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-		contestType: "Cool",
-	},
-
-	// flufi
-	cranberrycutter: {
-		accuracy: 90,
-		basePower: 100,
-		category: "Physical",
-		desc: "Always results in a critical hit. 20% chance to confuse target.",
-		shortDesc: "Guaranteed crit; 20% confusion.",
-		name: "Cranberry Cutter",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Topsy Turvy', target);
-			this.add('-anim', source, 'Sky Drop', target);
-		},
-		willCrit: true,
-		secondary: {
-			chance: 20,
-			volatileStatus: 'confusion',
-		},
-		target: "Normal",
-		type: "Fairy",
 	},
 };
