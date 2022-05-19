@@ -19,6 +19,7 @@ export const ATTRIBUTES = {
 	"FLIRTATION": {},
 };
 
+
 export interface PerspectiveRequest {
 	languages: string[];
 	requestedAttributes: AnyObject;
@@ -29,48 +30,38 @@ function time() {
 	return Math.floor(Date.now() / 1000);
 }
 
-export class RollingCounter {
-	counts: number[] = [0];
-	readonly size: number;
-	constructor(limit: number) {
-		this.size = limit;
-	}
-	increment() {
-		this.counts[this.counts.length - 1]++;
-	}
-	rollOver(amount: number) {
-		if (amount > this.size) {
-			this.counts = Array(this.size).fill(0);
-			return;
-		}
-		for (let i = 0; i < amount; i++) {
-			this.counts.push(0);
-			if (this.counts.length > this.size) this.counts.shift();
-		}
-	}
-	mean() {
-		let total = 0;
-		for (const elem of this.counts) total += elem;
-		return total / this.counts.length;
-	}
-}
-
 export class Limiter {
-	readonly counter: RollingCounter;
 	readonly max: number;
-	lastCounterRoll = time();
+	readonly period: number;
+	lastTick = time();
+	counts: number[] = [];
 	constructor(max: number, period: number) {
 		this.max = max;
-		this.counter = new RollingCounter(period);
+		this.period = period;
 	}
 	shouldRequest() {
 		const now = time();
-		this.counter.rollOver(now - this.lastCounterRoll);
-		this.lastCounterRoll = now;
-
-		if (this.counter.mean() > this.max) return false;
-		this.counter.increment();
-		return true;
+		if (this.lastTick === now) {
+			// don't increment if it's already too much
+			if (this.sum() > this.max) return false;
+		}
+		this.increment(time());
+		return this.sum() < this.max;
+	}
+	sum() {
+		return (this.counts.reduce((a, b) => a + b) / this.counts.length);
+	}
+	increment(now: number) {
+		const last = this.lastTick;
+		this.lastTick = now;
+		const diff = now - last;
+		for (let i = 0; i < diff; i++) this.counts.push(0);
+		if (this.counts.length > this.period) {
+			for (let i = 0; i < (this.counts.length - this.period); i++) {
+				this.counts.shift();
+			}
+		}
+		this.counts[this.counts.length - 1]++;
 	}
 }
 
@@ -80,7 +71,7 @@ function isCommon(message: string) {
 }
 
 let throttleTime: number | null = null;
-export const limiter = new Limiter(15, 10);
+export const limiter = new Limiter(15, 20);
 export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
 	if (isCommon(text) || !limiter.shouldRequest()) return null;
 	if (throttleTime && (Date.now() - throttleTime < 10000)) {
