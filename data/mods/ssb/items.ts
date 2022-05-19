@@ -17,6 +17,27 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "Raises Speed by 1 stage and critical hit ratio by 2 stages. Single use.",
 	},
 
+	// El Capitan
+	assaulthelmet: {
+		name: "Assault Helmet",
+		fling: {
+			basePower: 100,
+		},
+		onModifyDefPriority: 1,
+		onModifyDef(def) {
+			return this.chainModify(1.5);
+		},
+		onDisableMove(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				if (this.dex.moves.get(moveSlot.move).category === 'Status') {
+					pokemon.disableMove(moveSlot.id);
+				}
+			}
+		},
+		gen: 8,
+		desc: "Holder's Defense is 1.5x, but it can only select damaging moves.",
+	},
+
 	// Horrific17
 	horrifiumz: {
 		name: "Horrifium Z",
