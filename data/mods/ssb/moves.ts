@@ -230,11 +230,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(pokemon, source, move) {
-				this.add('-activate', source, 'move: Aromatherapy');
+				this.add('-activate', source, 'move: Sacred Penance');
 				for (const ally of source.side.pokemon) {
-					if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
-						continue;
-					}
 					ally.cureStatus();
 				}
 			},
