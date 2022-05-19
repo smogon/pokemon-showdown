@@ -41,6 +41,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Masochism',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
+	'El Capitan': {
+		species: 'Zygarde-10%', ability: 'Iron Will', item: 'Assault Helmet', gender: 'M',
+		moves: ['No Retreat', 'Thousand Arrows', 'Flare Blitz'],
+		signatureMove: 'Tenacious Rush',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
 	Genwunner: {
 		species: 'Alakazam', ability: 'Best Gen', item: '', gender: 'N',
 		moves: ['Amnesia', 'Hyper Beam', 'Blizzard'],
