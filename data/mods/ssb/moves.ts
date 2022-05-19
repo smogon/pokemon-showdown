@@ -53,6 +53,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onModifyCritRatio(boosts, critRatio) {
 			if (boosts['atk'] >= 2) return critRatio + Math.floor(boosts['atk'] / 2);
 		},
@@ -76,6 +79,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Psychic', target);
 		},
@@ -94,12 +100,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Causes intense sunlight for 5 turns; has 33% recoil.",
-		shortDesc: "Causes Sunny Day; 33% recoil.",
+		shortDesc: "Sunlight; 33% recoil.",
 		name: "Meteor Charge",
 		gen: 8,
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		weather: 'sunnyday',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Flare Blitz', target);
@@ -114,32 +123,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Horrific17
 	finaltrick: {
 		accuracy: true,
-		basePower: 150,
+		basePower: 50,
 		category: "Physical",
-		desc: "Causes Desolate Land; burns and traps target for 4-5 turn; user cannot switch out after use.",
-		shortDesc: "Desolate Land; burns and traps target; user can't switch.",
+		desc: "Causes intense sunlight for 5 turns; burns and traps target for 4-5 turns.",
+		shortDesc: "Sunlight; burns and traps target.",
 		name: "Final Trick",
 		gen: 8,
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		isZ: "horrifiumz",
-		weather: 'desolateland',
+		weather: 'sunnyday',
 		status: 'brn',
-		volatileStatus: 'partiallytrapped',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Extreme Evoboost', source);
 			this.add('-anim', source, 'Flare Boost', target);
-			this.add('-anim', source, 'Magma Storm', target);
-			this.add(`c| Horrific17|See you in the Eternal Flames.`);
 		},
-		condition: {
-			onStartPokemon(pokemon) {
-				this.add('-start', pokemon, 'move: Final Trick');
-			},
-			onTrapPokemon(pokemon) {
-				pokemon.tryTrap();
-			},
+		onHit(target) {
+			this.actions.useMove('Magma Storm', target);
 		},
 		secondary: null,
 		target: "normal",
@@ -157,6 +161,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Cross Poison', target);
 		},
@@ -171,19 +178,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Mayie
 	sacredpenance: {
 		accuracy: true,
-		basePower: 100,
+		basePower: 120,
 		category: "Special",
-		desc: "User heals 75% of max HP.",
-		shortDesc: "+75% mHP.",
+		desc: "User fully restores HP; cures the user's party of all status conditions; badly poisons the target.",
+		shortDesc: "+100% HP; cures party's status; badly poisons.",
 		name: "Sacred Penance",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
-		flags: {heal: 1, protect: 1, mirror: 1},
+		flags: {heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		status: 'tox',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Oblivion Wing', target);
 		},
+		onHit(target, source, move) {
+			this.add('-activate', source, 'move: Sacred Penance');
+			let success = false;
+			const allies = [...source.side.pokemon, ...source.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
+		},
 		onAfterMove(pokemon) {
-			this.heal(pokemon.maxhp * 3 / 4);
+			this.heal(pokemon.maxhp);
 		},
 		secondary: null,
 		target: "normal",
@@ -195,13 +216,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Special",
-		desc: "Deals one third of max HP; prevents healing.",
+		desc: "Deals 1/3 of max HP; prevents healing.",
 		shortDesc: "Deals 1/3 mHP; prevents healing.",
 		name: "Wave Cannon",
 		gen: 8,
 		pp: 15,
 		priority: 0,
 		flags: {bypasssub: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Hyper Beam', target);
 		},
@@ -227,6 +251,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Outrage', target);
 		},

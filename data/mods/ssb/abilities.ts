@@ -134,7 +134,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return critRatio + 1
 		},
 		onModifyMove(move) {
-			if (move.id === 'blizzard') move.accuracy = 90;
+			if (move.id === 'Blizzard') move.accuracy = 90;
 		},
 		onBoost(boost, target, source, effect) {
 			if (boost.spa) {
@@ -157,12 +157,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Horrific17
 	fairfight: {
-		desc: "Sets up Magic Room, Haze and Fairy Lock on switch-in.",
-		shortDesc: "Magic Room, Haze and Fairy Lock on switch-in.",
+		desc: "Sets up Magic Room, Haze and Fairy Lock on switch-in; Extreme Speed is 120 BP.",
+		shortDesc: "Magic Room, Haze and Fairy Lock on switch-in; 120 BP Extreme Speed.",
 		onStart(pokemon) {
-			this.actions.useMove("magicroom", pokemon);
-			this.actions.useMove("haze", pokemon);
-			this.actions.useMove("fairylock", pokemon);
+			this.actions.useMove('Magic Room', pokemon);
+			this.actions.useMove('Haze', pokemon);
+			this.actions.useMove('Fairy Lock', pokemon);
+		},
+		onModifyMove(move) {
+			if (move.id === 'Extreme Speed') move.basePower = 120;
+			if (move.id === 'Magma Storm') move.accuracy = true;
 		},
 		name: "Fair Fight",
 		gen: 8,
@@ -198,31 +202,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Mayie
 	finalprayer: {
-		desc: "This Pokemon is immune to status ailments; uses Wish and Aqua Ring when switching in and Safeguard when switching out; Lunar Dance when knocked out.",
-		shortDesc: "Status immunity; Wish and Aqua Ring on switch-in, Safeguard on switch-out; Lunar Dance on KO.",
-		onSetStatus(status, target, source, effect) {
-			if ((effect as Move)?.status) {
-				this.add('-immune', target, '[from] ability: Final Prayer');
-			}
-			return false;
-		},
-		onTryAddVolatile(status, target) {
-			if (status.id === 'yawn') {
-				this.add('-immune', target, '[from] ability: Final Prayer');
-				return null;
-			}
-		},
+		desc: "This Pokemon uses Wish when switching in and Safeguard when switching out.",
+		shortDesc: "Wish on switch-in, Safeguard on switch-out.",
 		onStart(pokemon) {
 			this.actions.useMove("wish", pokemon);
-			this.actions.useMove("aquaring", pokemon);
 		},
 		onSwitchOut(pokemon) {
 			this.actions.useMove("safeguard", pokemon);
 		},
-		onFaint(pokemon) {
-			this.actions.useMove("lunardance", pokemon);
-		},
-		isBreakable: true,
 		name: "Final Prayer",
 		gen: 8,
 	},
@@ -230,7 +217,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Omega
 	burnheal: {
 		desc: "Heals 1/8 of max HP per turn when burned.",
-		shortDesc: "+1/8 mHP/turn when burned.",
+		shortDesc: "+1/8 HP/turn when burned.",
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'brn') {
