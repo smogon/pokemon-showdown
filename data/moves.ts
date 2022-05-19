@@ -22977,82 +22977,82 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	prophecy: {
-		num: 987,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Prophecy",
-		pp: 10,
-		priority: 0,
-		flags:{snatch: 1},
-		ignoreImmunity: true,
-		slotCondition: 'prophecy',
-		condition: {
-			duration: 3,
-			onHit(source, target) {
-			if (!target.side.addSlotCondition(target, 'prophecy')) return false;
-				Object.assign(target.side.slotConditions[target.position]['prophecy'], {
-					move: 'prophecy',
-					source: source,
-					moveData: {
-						id: 'prophecy',
-						name: "prophecy",
-						accuracy: true,
-						basePower: 0,
-						category: "Special",
-						priority: 0,
-						flags: {},
-						secondary: {
-							boosts: {
-								accuracy: 2,
-							},
-						},
-						effectType: 'Move',
-						isFutureMove: true,
-						type: 'Light',
-					},
-				});
-			},
-		},
-		// onHit(target, source){
-		// 	if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-		// 	// const stats: BoostID[] = [];
-		// 	// const randomStat = 'accuracy';
-		// 	// const boost: SparseBoostsTable = {};
-		// 	// boost[randomStat] = 2;
-		// 	// this.boost(boost);
-		// 	target.side.addSlotCondition(target, 'futuremove')
-		// 	// target.side.removeSlotCondition(target, 'futuremove')
-		// },
-		// onTry(source, target) {
-		// 	if (!target.side.addSlotCondition(target, 'prophecy')) return false;
-		// 	Object.assign(target.side.slotConditions[target.position]['prophecy'], {
-		// 		duration: 3,
-		// 		move: 'prophecy',
-		// 		source: source,
-		// 		moveData: {
-		// 			id: 'prophecy',
-		// 			name: "prophecy",
-		// 			accuracy: true,
-		// 			basePower: 0,
-		// 			category: "Status",
-		// 			priority: 0,
-		// 			flags: {future: 3},
+	// prophecy: {
+	// 	num: 987,
+	// 	accuracy: true,
+	// 	basePower: 0,
+	// 	category: "Status",
+	// 	name: "Prophecy",
+	// 	pp: 10,
+	// 	priority: 0,
+	// 	flags:{snatch: 1},
+	// 	ignoreImmunity: true,
+	// 	slotCondition: 'prophecy',
+	// 	condition: {
+	// 		duration: 3,
+	// 		onHit(source, target) {
+	// 		if (!target.side.addSlotCondition(target, 'prophecy')) return false;
+	// 			Object.assign(target.side.slotConditions[target.position]['prophecy'], {
+	// 				move: 'prophecy',
+	// 				source: source,
+	// 				moveData: {
+	// 					id: 'prophecy',
+	// 					name: "prophecy",
+	// 					accuracy: true,
+	// 					basePower: 0,
+	// 					category: "Special",
+	// 					priority: 0,
+	// 					flags: {},
+	// 					secondary: {
+	// 						boosts: {
+	// 							accuracy: 2,
+	// 						},
+	// 					},
+	// 					effectType: 'Move',
+	// 					isFutureMove: true,
+	// 					type: 'Light',
+	// 				},
+	// 			});
+	// 		},
+	// 	},
+	// 	// onHit(target, source){
+	// 	// 	if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+	// 	// 	// const stats: BoostID[] = [];
+	// 	// 	// const randomStat = 'accuracy';
+	// 	// 	// const boost: SparseBoostsTable = {};
+	// 	// 	// boost[randomStat] = 2;
+	// 	// 	// this.boost(boost);
+	// 	// 	target.side.addSlotCondition(target, 'futuremove')
+	// 	// 	// target.side.removeSlotCondition(target, 'futuremove')
+	// 	// },
+	// 	// onTry(source, target) {
+	// 	// 	if (!target.side.addSlotCondition(target, 'prophecy')) return false;
+	// 	// 	Object.assign(target.side.slotConditions[target.position]['prophecy'], {
+	// 	// 		duration: 3,
+	// 	// 		move: 'prophecy',
+	// 	// 		source: source,
+	// 	// 		moveData: {
+	// 	// 			id: 'prophecy',
+	// 	// 			name: "prophecy",
+	// 	// 			accuracy: true,
+	// 	// 			basePower: 0,
+	// 	// 			category: "Status",
+	// 	// 			priority: 0,
+	// 	// 			flags: {future: 3},
 
-		// 			ignoreImmunity: true,
-		// 			effectType: 'Move',
-		// 			isFutureMove: true,
-		// 			type: 'Light',
-		// 		},
-		// 	});
-		// },
+	// 	// 			ignoreImmunity: true,
+	// 	// 			effectType: 'Move',
+	// 	// 			isFutureMove: true,
+	// 	// 			type: 'Light',
+	// 	// 		},
+	// 	// 	});
+	// 	// },
 
-		secondary: null,
-		target: "self", 
-		type: "Light",
-		contestType: "Clever",
-	},
+	// 	secondary: null,
+	// 	target: "self", 
+	// 	type: "Light",
+	// 	contestType: "Clever",
+	// },
 	jetstream: {
 		num: 988,
 		accuracy: 100,

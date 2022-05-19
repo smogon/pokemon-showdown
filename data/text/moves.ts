@@ -7671,11 +7671,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "The user clears their mind by expelling their negative energy onto the target.",
 		shortDesc: "The user clears their mind by expelling their negative energy onto the target.",
 	},
-	prophecy: {
-		name: "Prophecy",
-		desc: "After three turns, raises accuracy by 2.",
-		shortDesc: "After three turns, raises accuracy by 2.",
-	},
+	// prophecy: {
+	// 	name: "Prophecy",
+	// 	desc: "After three turns, raises accuracy by 2.",
+	// 	shortDesc: "After three turns, raises accuracy by 2.",
+	// },
 	jetstream: {
 		name: "Jet Stream",
 		desc: "No additional effect",
