@@ -53,18 +53,56 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onModifyCritRatio(boosts, critRatio) {
-			if (boosts['atk'] >= 2) return critRatio + Math.floor(boosts['atk'] / 2);
-		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Close Combat', target);
 		},
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
+	},
+
+	// El Capitan
+	tenaciousrush: {
+		accuracy: true,
+		basePower: 0,
+		category: "Physical",
+		desc: "More power the less HP the user has left. Super effective on Fairy.",
+		shortDesc: "Power increases with lower HP. S.E vs. Fairy.",
+		name: "Tenacious Rush",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Draco Meteor', source);
+			this.add('-anim', source, 'Dragon Rush', target);
+		},
+		basePower: 0,
+		basePowerCallback(pokemon, target) {
+			const ratio = pokemon.hp * 48 / pokemon.maxhp;
+			if (ratio < 2) {
+				return 200;
+			}
+			if (ratio < 5) {
+				return 150;
+			}
+			if (ratio < 10) {
+				return 120;
+			}
+			if (ratio < 17) {
+				return 100;
+			}
+			if (ratio < 33) {
+				return 80;
+			}
+			return 40;
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Fairy') return 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
 	},
 	
 	// flufi
