@@ -142,10 +142,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Extreme Evoboost', source);
 			this.add('-anim', source, 'Flare Boost', target);
 		},
-		onHit(target) {
-			this.actions.useMove('Magma Storm', target);
+		secondary: {
+    		volatileStatus: 'partiallytrapped',
 		},
-		secondary: null,
 		target: "normal",
 		type: "Fire",
 	},
@@ -194,17 +193,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Oblivion Wing', target);
 		},
-		onHit(target, source, move) {
-			this.add('-activate', source, 'move: Sacred Penance');
-			let success = false;
-			const allies = [...source.side.pokemon, ...source.side.allySide?.pokemon || []];
-			for (const ally of allies) {
-				if (ally.cureStatus()) success = true;
-			}
-			return success;
-		},
 		onAfterMove(pokemon) {
 			this.heal(pokemon.maxhp);
+		},
+		self: {
+			onHit(pokemon, source, move) {
+				this.add('-activate', source, 'move: Aromatherapy');
+				for (const ally of source.side.pokemon) {
+					if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+						continue;
+					}
+					ally.cureStatus();
+				}
+			},
 		},
 		secondary: null,
 		target: "normal",
