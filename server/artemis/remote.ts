@@ -27,7 +27,7 @@ export interface PerspectiveRequest {
 }
 
 function time() {
-	return Math.floor(Date.now() / 1000);
+	return Math.floor(Math.floor(Date.now() / 1000) / 60);
 }
 
 export class Limiter {
@@ -54,7 +54,7 @@ function isCommon(message: string) {
 }
 
 let throttleTime: number | null = null;
-export const limiter = new Limiter(10);
+export const limiter = new Limiter(800);
 export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
 	if (isCommon(text) || !limiter.shouldRequest()) return null;
 	if (throttleTime && (Date.now() - throttleTime < 10000)) {
