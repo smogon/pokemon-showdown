@@ -123,7 +123,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Horrific17
 	finaltrick: {
 		accuracy: true,
-		basePower: 50,
+		basePower: 150,
 		category: "Physical",
 		desc: "Causes intense sunlight for 5 turns; burns and traps target for 4-5 turns.",
 		shortDesc: "Sunlight; burns and traps target.",
