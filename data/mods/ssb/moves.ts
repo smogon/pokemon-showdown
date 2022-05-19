@@ -53,6 +53,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onModifyCritRatio(boosts, critRatio) {
 			if (boosts['atk'] >= 2) return critRatio + Math.floor(boosts['atk'] / 2);
 		},
@@ -76,6 +79,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Psychic', target);
 		},
@@ -100,6 +106,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		weather: 'sunnyday',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Flare Blitz', target);
@@ -123,6 +132,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		isZ: "horrifiumz",
 		weather: 'sunnyday',
 		status: 'brn',
@@ -149,6 +161,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Cross Poison', target);
 		},
@@ -172,6 +187,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		status: 'tox',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Oblivion Wing', target);
@@ -205,6 +223,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {bypasssub: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Hyper Beam', target);
 		},
@@ -230,6 +251,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Outrage', target);
 		},
