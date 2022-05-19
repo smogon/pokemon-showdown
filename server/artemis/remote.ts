@@ -32,36 +32,19 @@ function time() {
 
 export class Limiter {
 	readonly max: number;
-	readonly period: number;
 	lastTick = time();
-	counts: number[] = [];
-	constructor(max: number, period: number) {
+	count = 0;
+	constructor(max: number) {
 		this.max = max;
-		this.period = period;
 	}
 	shouldRequest() {
 		const now = time();
-		if (this.lastTick === now) {
-			// don't increment if it's already too much
-			if (this.sum() > this.max) return false;
+		if (this.lastTick !== now) {
+			this.count = 0;
+			this.lastTick = now;
 		}
-		this.increment(time());
-		return this.sum() < this.max;
-	}
-	sum() {
-		return (this.counts.reduce((a, b) => a + b) / this.counts.length);
-	}
-	increment(now: number) {
-		const last = this.lastTick;
-		this.lastTick = now;
-		const diff = now - last;
-		for (let i = 0; i < diff; i++) this.counts.push(0);
-		if (this.counts.length > this.period) {
-			for (let i = 0; i < (this.counts.length - this.period); i++) {
-				this.counts.shift();
-			}
-		}
-		this.counts[this.counts.length - 1]++;
+		this.count++;
+		return this.count < this.max;
 	}
 }
 
@@ -71,7 +54,7 @@ function isCommon(message: string) {
 }
 
 let throttleTime: number | null = null;
-export const limiter = new Limiter(10, 5);
+export const limiter = new Limiter(15);
 export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
 	if (isCommon(text) || !limiter.shouldRequest()) return null;
 	if (throttleTime && (Date.now() - throttleTime < 10000)) {
