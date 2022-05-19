@@ -5950,7 +5950,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	geargrind: {
 		num: 544,
-		accuracy: 85,
+		accuracy: 90,
 		basePower: 50,
 		category: "Physical",
 		name: "Gear Grind",
@@ -19807,7 +19807,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 100,
 		category: "Special",
 		name: "Fungal Bomb",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
 		ignoreDefensive: true,
@@ -20981,7 +20981,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	prismbeam: {
         num: 895,
         accuracy: 100,
-        basePower: 100,
+        basePower: 115,
         category: "Special",
         name: "Prism Beam",
         pp: 10,
