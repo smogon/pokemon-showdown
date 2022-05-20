@@ -167,7 +167,17 @@ export class BattleActions {
 	}
 	runSwitch(pokemon: Pokemon) {
 		this.battle.runEvent('Swap', pokemon);
-		this.battle.runEvent('SwitchIn', pokemon);
+
+		if (this.battle.gen >= 5) {
+			this.battle.runEvent('SwitchIn', pokemon);
+		}
+
+		this.battle.runEvent('EntryHazard', pokemon);
+
+		if (this.battle.gen <= 4) {
+			this.battle.runEvent('SwitchIn', pokemon);
+		}
+
 		if (this.battle.gen <= 2 && !pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
 			this.battle.runEvent('AfterSwitchInSelf', pokemon);
 		}
