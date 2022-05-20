@@ -91034,7 +91034,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			headbutt: ["7V", "4T"],
 			helpinghand: ["8M"],
 			hiddenpower: ["7M", "7V", "6M", "5M", "4M", "3M"],
-			hypervoice: ["8M"],
 			megakick: ["8M", "3T"],
 			megapunch: ["8M", "3T"],
 			memento: ["8E"],
@@ -91074,7 +91073,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			hypervoice: ["8M", "7T", "6T", "5T"],
 			eventData: [
 				{generation: 8, level: 10, abilities: ["hugepower"], moves: ["present", "happyhour"], pokeball: "cherishball"},
-		},
+			]
+	},
 	},
 	skulpent: {
 		learnset: {
