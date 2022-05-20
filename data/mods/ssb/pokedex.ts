@@ -9,7 +9,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// El Capitan
 	zygarde10: {
 		inherit: true,
-		baseStats: {hp: 110, atk: 100, def: 95, spa: 80, spd: 85, spe: 115},
+		baseStats: {hp: 100, atk: 100, def: 80, spa: 80, spd: 70, spe: 115},
 	},
 	// Genwunner
 	alakazam: {
