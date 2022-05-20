@@ -16335,8 +16335,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 89,
 		color: "Brown",
 		prevo: "Scyther",
-		evoType: "other",
-		evoCondition: "Black Augurite",
+		evoType: "useItem",
+		evoItem: "Black Augurite",
 		eggGroups: ["Bug"],
 	},
 	ursaluna: {
@@ -16349,8 +16349,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 290,
 		color: "Brown",
 		prevo: "Ursaring",
-		evoType: "other",
-		evoCondition: "Peat Block when there's a full moon",
+		evoType: "useItem",
+		evoItem: "Peat Block",
+		evoCondition: "full moon",
 		eggGroups: ["Field"],
 	},
 	basculegion: {
