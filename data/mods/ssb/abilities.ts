@@ -128,19 +128,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// El Capitan
 	ironwill: {
-		desc: "This Pokemon's attacks have x1.5 power against a target that is switching in. Takes 1/2 damage from attacks on switch-in.",
-		shortDesc: "x1.5 power vs. switching target, x0.5 taken on switch-in.",
+		desc: "This Pokemon's attacks have x1.3 power against a target that is switching in. Takes x0.8 damage from attacks on switch-in.",
+		shortDesc: "x1.3 power vs. switching target, x0.8 taken on switch-in.",
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender) {
 			if (!defender.activeTurns) {
 				this.debug('Iron Will boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (!source.activeTurns) {
 				this.debug('Iron Will neutralize');
-				return this.chainModify(0.5);
+				return this.chainModify(0.8);
 			}
 		},
 		isBreakable: true,
