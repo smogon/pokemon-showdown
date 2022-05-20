@@ -90,7 +90,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
 	},
 	flufi: {
-		species: 'Pikachu-Libre', ability: 'Pure Power', item: 'Heroic Medallion', gender: 'M',
+		species: 'Pikachu-Libre', ability: 'Hero Morale', item: 'Light Ball', gender: 'M',
 		moves: ['Wild Charge', 'Darkest Lariat', 'Extreme Speed'],
 		signatureMove: 'Cranberry Cutter',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
