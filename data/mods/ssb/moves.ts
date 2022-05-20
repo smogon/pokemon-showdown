@@ -111,10 +111,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// flufi
 	cranberrycutter: {
 		accuracy: 90,
-		basePower: 100,
+		basePower: 80,
 		category: "Physical",
-		desc: "Always results in a critical hit. 20% chance to confuse target.",
-		shortDesc: "Guaranteed crit; 20% confusion.",
+		desc: "High critical hit ratio. 20% chance to confuse target.",
+		shortDesc: "High crit ratio; 20% chance to confuse.",
 		name: "Cranberry Cutter",
 		gen: 8,
 		pp: 10,
@@ -125,15 +125,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Topsy Turvy', target);
+			this.add('-anim', source, 'Psychic', target);
 			this.add('-anim', source, 'Sky Drop', target);
 		},
-		willCrit: true,
+		critRatio: 2,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion',
 		},
 		target: "Normal",
-		type: "Fairy",
+		type: "Psychic",
 	},
 
 	// Genwunner
