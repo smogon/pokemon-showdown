@@ -23,12 +23,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 		fling: {
 			basePower: 100,
 		},
-		onModifyDefPriority: 1,
-		onModifyDef(def) {
-			return this.chainModify(1.5);
-		},
+		onCriticalHit: false,
 		gen: 8,
-		desc: "Holder's Defense is boosted by x1.5.",
+		desc: "Holder cannot be struck by a critical hit.",
 	},
 
 	// Horrific17
@@ -41,38 +38,5 @@ export const Items: {[k: string]: ModdedItemData} = {
 		itemUser: ["Arcanine"],
 		gen: 8,
 		desc: "If held by an Arcanine with Meteor Charge, it can use Final Trick.",
-	},
-
-	// Mayie
-	lunchbox: {
-		spritenum: 242,
-		fling: {
-			basePower: 10,
-		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 8);
-		},
-		gen: 8,
-		desc: "At the end of every turn, holder restores 1/16 of its max HP.",
-	},
-
-	// flufi
-	heroicmedallion: {
-		name: "Heroic Medallion",
-		spritenum: 251,
-		fling: {
-			basePower: 80,
-			status: 'par',
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.flags['contact']) {
-				return this.chainModify(2);
-			}
-		},
-		gen: 8,
-		desc: "Holder's contact moves have 3x power.",
 	},
 };
