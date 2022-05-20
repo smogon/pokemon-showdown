@@ -317,6 +317,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(randomMove, target);
 			this.actions.useMove(randomMove2, target);
 			this.actions.useMove(randomMove3, target);
+			this.add(`c| Horrific17|${randomMove3.basePower} BP`);
 		},
 		secondary: null,
 		target: "self",
