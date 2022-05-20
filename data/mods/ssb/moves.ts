@@ -289,6 +289,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Mega Metronome",
+		desc: "Picks and uses three random consecutive moves.",
+		shortDesc: "Uses three random moves.",
 		pp: 10,
 		priority: 0,
 		flags: {},
@@ -318,7 +320,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: null,
 		target: "self",
-		type: "Normal",
+		type: "Fairy",
 		contestType: "Cool",
 	},
 
