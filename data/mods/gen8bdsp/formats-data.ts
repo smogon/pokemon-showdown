@@ -703,7 +703,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["bodyslam", "curse", "rest", "sleeptalk"],
 	},
 	articuno: {
-		tier: "(Uber)",
+		tier: "RU",
 		doublesTier: "DUU",
 		randomBattleMoves: ["defog", "icebeam", "roost", "uturn"],
 	},
@@ -1117,8 +1117,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["earthquake", "roost", "sacredfire", "substitute", "thunderwave"],
 	},
 	celebi: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "OU",
+		doublesTier: "DOU",
 		randomBattleMoves: ["dazzlinggleam", "gigadrain", "leafstorm", "nastyplot", "psychic", "recover", "uturn"],
 	},
 	treecko: {
@@ -1694,23 +1694,23 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["healingwish", "stealthrock", "thunderwave", "uturn", "zenheadbutt"],
 	},
 	deoxys: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "Uber",
+		doublesTier: "DUber",
 		randomBattleMoves: ["superpower", "icebeam", "knockoff", "psychoboost", "stealthrock", "toxicspikes", "extremespeed"],
 	},
 	deoxysattack: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "Uber",
+		doublesTier: "DUber",
 		randomBattleMoves: ["extremespeed", "icebeam", "knockoff", "psychoboost", "superpower"],
 	},
 	deoxysdefense: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "Uber",
+		doublesTier: "DUber",
 		randomBattleMoves: ["knockoff", "nightshade", "recover", "stealthrock", "taunt", "teleport", "toxicspikes"],
 	},
 	deoxysspeed: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "Uber",
+		doublesTier: "DUber",
 		randomBattleMoves: ["knockoff", "psychic", "stealthrock", "taunt", "toxicspikes"],
 	},
 	turtwig: {
