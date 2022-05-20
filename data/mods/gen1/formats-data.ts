@@ -179,7 +179,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["bodyslam", "thunderbolt", "thunderwave"],
 		essentialMove: "blizzard",
 		exclusiveMoves: ["counter", "psychic", "seismictoss", "sing", "sing"],
-		tier: "NFE",
+		tier: "LC",
 	},
 	clefable: {
 		randomBattleMoves: ["bodyslam", "thunderbolt", "thunderwave"],
