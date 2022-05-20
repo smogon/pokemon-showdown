@@ -825,7 +825,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
-			onSwitchIn(pokemon) {
+			onEntryHazard(pokemon) {
 				let factor = 2;
 				if (pokemon.hasType('Flying')) factor = 4;
 				this.damage(pokemon.maxhp * factor / 16);
