@@ -148,6 +148,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// flufi
+	heromorale: {
+		desc: "This Pokemon's contact moves have x1.25 power; User has a 20% chance to survive an attack that would KO it with 1 HP.",
+		shortDesc: "Contact moves x1.25 power; 20% to survive KO attack.",
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return this.chainModify([5448, 4096]);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (this.randomChance(2, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add('-ability', target, 'Hero Morale');
+				return target.hp - 1;
+			}
+		},
+		isBreakable: true,
+		name: "Hero Morale",
+		gen: 8,
+	},
+
 	// Genwunner
 	bestgen: {
 		desc: "This Pokemon has +1 critical hit ratio; Blizzard has 90% accuracy; no recharge on KO; Special stats are combined.",
