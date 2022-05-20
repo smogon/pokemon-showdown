@@ -95,10 +95,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (ratio < 33) {
 				return 80;
 			}
-			return 40;
+			return 60;
 		},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Fairy') return 1;
+		onModifyMove(move, pokemon) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Dragon'] = true;
+			}
 		},
 		secondary: null,
 		target: "normal",
