@@ -2419,9 +2419,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onHit(target, source, move) {
+		onTryHit(source) {
 			if (!this.canSwitch(source.side)) {
-				delete move.selfdestruct;
 				this.attrLastMove('[still]');
 				this.add('-fail', source);
 				return this.NOT_FAIL;
