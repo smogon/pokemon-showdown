@@ -35,6 +35,12 @@ export const ssbSets: SSBSets = {
 	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	'A Resident No-Life': {
+		species: 'Mawile', ability: 'Slow Burn', item: 'Mawilite', gender: 'M',
+		moves: ['Thunder Punch', 'Ice Punch', 'Double Iron Bash'],
+		signatureMove: 'Rising Surge',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
 	Brookeee: {
 		species: 'Primeape', ability: 'Aggression', item: 'Ramen', gender: 'F',
 		moves: ['Ice Punch', 'Stomping Tantrum', 'Endure'],
@@ -46,6 +52,12 @@ export const ssbSets: SSBSets = {
 		moves: ['No Retreat', 'Thousand Arrows', 'Flare Blitz'],
 		signatureMove: 'Tenacious Rush',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
+	flufi: {
+		species: 'Pikachu-Libre', ability: 'Hero Morale', item: 'Light Ball', gender: 'M',
+		moves: ['Wild Charge', 'Darkest Lariat', 'Extreme Speed'],
+		signatureMove: 'Cranberry Cutter',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	Genwunner: {
 		species: 'Alakazam', ability: 'Best Gen', item: '', gender: 'N',
@@ -71,6 +83,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sacred Penance',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
 	},
+	Minimind: {
+		species: 'Clefable', ability: 'Unaware', item: 'Leftovers', gender: 'F',
+		moves: ['Calm Mind', 'Draining Kiss', 'Soft-Boiled'],
+		signatureMove: 'Mega Metronome',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
+	},
+	Nina: {
+		species: 'Chansey', ability: 'Fur Coat', item: 'Eviolite', gender: 'F',
+		moves: ['Will-O-Wisp', 'Aromatherapy', 'Soft-Boiled'],
+		signatureMove: 'Psychic Shield',
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold',
+	},
 	Omega: {
 		species: 'Aegislash', ability: 'Burn Heal', item: 'Flame Orb', gender: 'N',
 		moves: ['Teleport', 'Protect', 'Wish'],
@@ -82,18 +106,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Dragon Claw', 'Shadow Claw', 'Fire Punch'],
 		signatureMove: 'Ein Sol',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
-	},
-	Minimind: {
-		species: 'Clefable', ability: 'Unaware', item: 'Leftovers', gender: 'F',
-		moves: ['Calm Mind', 'Draining Kiss', 'Soft-Boiled'],
-		signatureMove: 'Mega Metronome',
-		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
-	},
-	flufi: {
-		species: 'Pikachu-Libre', ability: 'Hero Morale', item: 'Light Ball', gender: 'M',
-		moves: ['Wild Charge', 'Darkest Lariat', 'Extreme Speed'],
-		signatureMove: 'Cranberry Cutter',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 };
 
