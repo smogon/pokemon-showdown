@@ -214,7 +214,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		weather: 'sunnyday',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Flare Blitz', target);
-			this.add(`c| Horrific17|Pick a God and pray!`);
 		},
 		recoil: [33, 100],
 		secondary: null,
@@ -349,7 +348,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(randomMove, target);
 			this.actions.useMove(randomMove2, target);
 			this.actions.useMove(randomMove3, target);
-			this.add(`c| Horrific17|${randomMove3.basePower} BP`);
 		},
 		secondary: null,
 		target: "self",
