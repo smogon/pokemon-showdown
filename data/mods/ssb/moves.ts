@@ -40,7 +40,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
-	// Please keep sets organized alphabetically based on staff member name!
+	// A Resident No-Life
+	risingsurge: {
+		accuracy: true,
+		basePower: 30,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 40 * pokemon.positiveBoosts();
+		},
+		category: "Physical",
+		desc: "+40 base power for each of the user's stat boosts.",
+		shortDesc: "+40 BP for each of user's boosts.",
+		name: "Rising Surge",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Play Rough', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+	
 	// Brookeee
 	masochism: {
 		accuracy: true,
@@ -53,8 +78,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Close Combat', target);
+		},
+		onModifyCritRatio(boosts, critRatio) {
+			if (boosts['atk'] >= 1) return critRatio + boosts['atk'];
 		},
 		secondary: null,
 		target: "normal",
@@ -66,13 +97,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Physical",
-		desc: "More power the less HP the user has left. Super effective on Fairy.",
-		shortDesc: "Power increases with lower HP. S.E vs. Fairy.",
+		desc: "This move has more base power the less HP the user has left; damages Fairy.",
+		shortDesc: "More BP the less HP the user has left; damages Fairy.",
 		name: "Tenacious Rush",
 		gen: 8,
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Draco Meteor', source);
 			this.add('-anim', source, 'Dragon Rush', target);
@@ -110,11 +144,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	
 	// flufi
 	cranberrycutter: {
-		accuracy: 90,
-		basePower: 80,
+		accuracy: 100,
+		basePower: 100,
 		category: "Physical",
-		desc: "High critical hit ratio. 20% chance to confuse target.",
-		shortDesc: "High crit ratio; 20% chance to confuse.",
+		desc: "This move will critically hit; confuses the target.",
+		shortDesc: "Critical; confuse.",
 		name: "Cranberry Cutter",
 		gen: 8,
 		pp: 10,
@@ -128,19 +162,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Psychic', target);
 			this.add('-anim', source, 'Sky Drop', target);
 		},
-		critRatio: 2,
-		secondary: {
-			chance: 20,
-			volatileStatus: 'confusion',
-		},
+		critRatio: 5,
+		volatileStatus: 'confusion',
+		secondary: null,
 		target: "Normal",
 		type: "Psychic",
 	},
 
 	// Genwunner
 	psychicbind: {
-		accuracy: 70,
-		basePower: 20,
+		accuracy: 85,
+		basePower: 60,
 		category: "Special",
 		desc: "Traps the opponent for 4-5 turns; 100% chance to flinch.",
 		shortDesc: "Traps foe for 4-5 turns; 100% flinch.",
@@ -195,8 +227,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 150,
 		category: "Physical",
-		desc: "Causes intense sunlight for 5 turns; burns and traps target for 4-5 turns.",
-		shortDesc: "Sunlight; burns and traps target.",
+		desc: "Causes Desolate Land permanently; burns and traps target for 4-5 turns.",
+		shortDesc: "Desolate Land; burns and traps target.",
 		name: "Final Trick",
 		gen: 8,
 		pp: 1,
@@ -323,6 +355,60 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Fairy",
 		contestType: "Cool",
+	},
+	
+	// Nina
+	psychicshield: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, damage to allies is halved.",
+		shortDesc: "Halve damage for 5 turns.",
+		name: "Psychic Shield",
+		gen: 8,
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		sideCondition: 'psychicshield',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aurora Veil', target);
+		},
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (source?.hasItem('lightclay')) {
+					return 8;
+				}
+				return 5;
+			},
+			onAnyModifyDamage(damage, source, target, move) {
+				if (target !== source && this.effectState.target.hasAlly(target)) {
+					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
+							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
+						return;
+					}
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+						this.debug('Psychic Shield weaken');
+						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
+						return this.chainModify(0.5);
+					}
+				}
+			},
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Psychic Shield');
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 10,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'move: Psychic Shield');
+			},
+		},
+		secondary: null,
+		target: "allySide",
+		type: "Psychic",
 	},
 
 	// Omega
