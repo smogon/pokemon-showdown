@@ -108,10 +108,57 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// A Resident No-Life
+	slowburn: {
+		desc: "This Pokemon fully heals if it gets KO'd; gains Focus Energy on turn 1, +1 Speed on turn 2, Magnet Rise on turn 3, +2 Attack on turn 4, and fully heals on turn 5.",
+		shortDesc: "Fully heals if KO'd; buffed per turn.",
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns === 1) pokemon.addVolatile('focusenergy');
+			if (pokemon.activeTurns === 2) this.boost({spe: 1});
+			if (pokemon.activeTurns === 3) pokemon.addVolatile('magnetrise');
+			if (pokemon.activeTurns === 4) this.boost({atk: 2});
+			if (pokemon.activeTurns === 5) this.heal(pokemon.maxhp);
+		},
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp && effect && effect.effectType === 'Move' && !this.effectState.slowburn) {
+				this.effectState.slowburn = true;
+				this.add('-ability', target, 'Slow Burn');
+				this.heal(target.maxhp);
+			}
+		},
+		isBreakable: true,
+		name: "Slow Burn",
+		gen: 8,
+	},
+	
+	// A Resident No-Life
+	powerunleashed: {
+		desc: "This Pokemon uses Refresh and Misty Terrain on switch-in; ignores protection, screens and substitutes; contact moves deal 1.25x damage.",
+		shortDesc: "Refresh and Misty Terrain on switch-in; ignores protection, screens and substitutes; 1.25x damage on contact.",
+		onStart(pokemon) {
+			this.actions.useMove('Refresh', pokemon);
+			this.actions.useMove('Misty Terrain', pokemon);
+		},
+		onModifyMove(move) {
+			move.infiltrates = true;
+			delete move.flags['protect'];
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return this.chainModify(1.3);
+			}
+		},
+		name: "Power Unleashed",
+		gen: 8,
+	},
+	
 	// Brookeee
 	aggression: {
 		desc: "This Pokemon's attack is raised by 1 stage after it is damaged by a move; half damage received at full HP.",
-		shortDesc: "+1 Atk whenever hit; half damage taken at full HP.",
+		shortDesc: "+1 Atk whenever hit; 0.5x damage taken at full HP.",
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp >= target.maxhp) {
 				this.debug('Aggression weaken');
@@ -128,19 +175,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// El Capitan
 	ironwill: {
-		desc: "This Pokemon's attacks have x1.3 power against a target that is switching in. Takes x0.8 damage from attacks on switch-in.",
-		shortDesc: "x1.3 power vs. switching target, x0.8 taken on switch-in.",
+		desc: "This Pokemon's attacks deal 1.5x damage to a target that is switching in; takes 0.75x damage from attacks on switch-in.",
+		shortDesc: "1.5x damage to switch; 0.75x taken on switch-in.",
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender) {
 			if (!defender.activeTurns) {
 				this.debug('Iron Will boost');
-				return this.chainModify(1.3);
+				return this.chainModify(1.5);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (!source.activeTurns) {
 				this.debug('Iron Will neutralize');
-				return this.chainModify(0.8);
+				return this.chainModify(0.75);
 			}
 		},
 		isBreakable: true,
@@ -150,16 +197,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// flufi
 	heromorale: {
-		desc: "This Pokemon's contact moves have x1.25 power; User has a 20% chance to survive an attack that would KO it with 1 HP.",
-		shortDesc: "Contact moves x1.25 power; 20% to survive KO attack.",
+		desc: "This Pokemon's contact moves deal 1.25x damage; survives an attack that would KO it with 1 HP.",
+		shortDesc: "1.25x damage on contact; survives KO.",
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['contact']) {
-				return this.chainModify([5448, 4096]);
+				return this.chainModify(1.25);
 			}
 		},
 		onDamage(damage, target, source, effect) {
-			if (this.randomChance(2, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
+			if (damage >= target.hp && effect && effect.effectType === 'Move' && !this.effectState.heromorale) {
+				this.effectState.heromorale = true;
 				this.add('-ability', target, 'Hero Morale');
 				return target.hp - 1;
 			}
@@ -244,8 +292,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Mayie
 	finalprayer: {
-		desc: "This Pokemon uses Wish when switching in and Safeguard when switching out.",
-		shortDesc: "Wish on switch-in, Safeguard on switch-out.",
+		desc: "This Pokemon uses Wish when switching in; Safeguard when switching out.",
+		shortDesc: "Wish on switch-in; Safeguard on switch-out.",
 		onStart(pokemon) {
 			this.actions.useMove("wish", pokemon);
 		},
