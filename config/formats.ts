@@ -649,7 +649,7 @@ export const Formats: FormatList = [
 			'Zapdos-Galar', 'Arena Trap', 'Moody', 'Shadow Tag', 'Wonder Guard', 'Chlorophyll + Desolate Land', 'Chlorophyll + Drought', 'Electric Surge + Surge Surfer',
 			'Regenerator + Emergency Exit', 'Regenerator + Multiscale', 'Regenerator + Shadow Shield', 'Regenerator + Wimp Out', 'Sand Rush + Sand Stream',
 			'Slush Rush + Snow Warning', 'Swift Swim + Drizzle', 'Swift Swim + Primordial Sea', 'Snow Cloak + Snow Warning', 'Sand Veil + Sand Stream',
-			'Regenerator > 2', 'Bright Powder', 'Lax Incense', 'Quick Claw'
+			'Regenerator > 2', 'Bright Powder', 'Lax Incense', 'Quick Claw',
 		],
 		restricted: [
 			'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out',
