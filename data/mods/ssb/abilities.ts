@@ -258,6 +258,66 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "On switch-in and at the end of every turn, this Pokemon changes its type to a random one.",
 		shortDesc: "Random type on switch-in and per turn.",
 		onStart(pokemon) {
+			let r = this.random(17);
+			if (r === 1) {
+				this.add('-start', pokemon, 'typechange', 'Normal');
+				pokemon.types = ['Normal'];
+			} else if (r === 2) {
+				this.add('-start', pokemon, 'typechange', 'Fighting');
+				pokemon.types = ['Fighting'];
+			} else if (r === 3) {
+				this.add('-start', pokemon, 'typechange', 'Flying');
+				pokemon.types = ['Flying'];
+			} else if (r === 4) {
+				this.add('-start', pokemon, 'typechange', 'Poison');
+				pokemon.types = ['Poison'];
+			} else if (r === 5) {
+				this.add('-start', pokemon, 'typechange', 'Ground');
+				pokemon.types = ['Ground'];
+			} else if (r === 6) {
+				this.add('-start', pokemon, 'typechange', 'Rock');
+				pokemon.types = ['Rock'];
+			} else if (r === 7) {
+				this.add('-start', pokemon, 'typechange', 'Bug');
+				pokemon.types = ['Bug'];
+			} else if (r === 8) {
+				this.add('-start', pokemon, 'typechange', 'Ghost');
+				pokemon.types = ['Ghost'];
+			} else if (r === 9) {
+				this.add('-start', pokemon, 'typechange', 'Steel');
+				pokemon.types = ['Steel'];
+			} else if (r === 10) {
+				this.add('-start', pokemon, 'typechange', 'Fire');
+				pokemon.types = ['Fire'];
+			} else if (r === 11) {
+				this.add('-start', pokemon, 'typechange', 'Water');
+				pokemon.types = ['Water'];
+			} else if (r === 12) {
+				this.add('-start', pokemon, 'typechange', 'Grass');
+				pokemon.types = ['Grass'];
+			} else if (r === 13) {
+				this.add('-start', pokemon, 'typechange', 'Electric');
+				pokemon.types = ['Electric'];
+			} else if (r === 14) {
+				this.add('-start', pokemon, 'typechange', 'Psychic');
+				pokemon.types = ['Psychic'];
+			} else if (r === 15) {
+				this.add('-start', pokemon, 'typechange', 'Ice');
+				pokemon.types = ['Ice'];
+			} else if (r === 16) {
+				this.add('-start', pokemon, 'typechange', 'Dragon');
+				pokemon.types = ['Dragon'];
+			} else if (r === 17) {
+				this.add('-start', pokemon, 'typechange', 'Dark');
+				pokemon.types = ['Dark'];
+			} else {
+				this.add('-start', pokemon, 'typechange', 'Fairy');
+				pokemon.types = ['Fairy'];
+			}
+		},
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
 				let r = this.random(17);
 				if (r === 1) {
