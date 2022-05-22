@@ -5028,7 +5028,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		prevo: "Zigzagoon-Galar",
 		evoLevel: 20,
-		evoCondition: "at night",
 		evos: ["Obstagoon"],
 		eggGroups: ["Field"],
 	},
