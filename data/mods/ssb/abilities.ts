@@ -94,16 +94,6 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 }
 
 export const Abilities: {[k: string]: ModdedAbilityData} = {
-	/*
-	// Example
-	"abilityid": {
-		desc: "", // long description
-		shortDesc: "", // short description, shows up in /dt
-		name: "Ability Name",
-		// The bulk of an ability is not easily shown in an example since it varies
-		// For more examples, see https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.js
-	},
-	*/
 	// A Resident No-Life
 	slowburn: {
 		desc: "This Pokemon fully heals if it gets KO'd; gains Focus Energy on turn 1, +1 Speed on turn 2, Magnet Rise on turn 3, +2 Attack on turn 4, and fully heals on turn 5.",
