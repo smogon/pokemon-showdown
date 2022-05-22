@@ -82,7 +82,7 @@ export const ssbSets: SSBSets = {
 		species: 'Chansey', ability: 'Fur Coat', item: 'Eviolite', gender: 'F',
 		moves: ['Will-O-Wisp', 'Aromatherapy', 'Soft-Boiled'],
 		signatureMove: 'Psychic Shield',
-		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
 	},
 	Omega: {
 		species: 'Aegislash', ability: 'Burn Heal', item: 'Flame Orb', gender: 'N',
