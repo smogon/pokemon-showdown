@@ -1690,9 +1690,10 @@ export const Punishments = new class {
 				return;
 			}
 			if (id === 'BAN') {
+				const appealUrl = Config.banappealurl || Config.appealurl;
 				user.popup(
 					`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}` +
-					`${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`
+					`${appealUrl ? `||||Or you can appeal at: ${appealUrl}` : ``}`
 				);
 				user.notified.punishment = true;
 				if (registered) void Punishments.punish(user, punishment, false);
@@ -1792,8 +1793,12 @@ export const Punishments = new class {
 		}
 		if (!banned) return false;
 
-		const appeal = (Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``);
-		connection.send(`|popup||modal|You are banned because you have the same IP (${ip}) as banned user '${banned}'. Your ban will expire in a few days.${appeal}`);
+		const appealUrl = Config.banappealurl || Config.appealurl;
+		connection.send(
+			`|popup||modal|You are banned because you have the same IP (${ip}) as banned user '${banned}'. ` +
+			`Your ban will expire in a few days.` +
+			`${appealUrl ? `||||Or you can appeal at: ${appealUrl}` : ``}`
+		);
 		Monitor.notice(`CONNECT BLOCKED - IP BANNED: ${ip} (${banned})`);
 
 		return banned;
