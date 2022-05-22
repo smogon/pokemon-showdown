@@ -1,9 +1,6 @@
 import {SSBSet, ssbSets} from "./random-teams";
 import {getName} from './conditions';
 
-// Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail', 'turbulence'];
-
 /**
  * Assigns a new set to a Pokémon
  * @param pokemon the Pokemon to assign the set to
@@ -107,7 +104,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		// For more examples, see https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.js
 	},
 	*/
-	// Please keep abilites organized alphabetically based on staff member name!
 	// A Resident No-Life
 	slowburn: {
 		desc: "This Pokemon fully heals if it gets KO'd; gains Focus Energy on turn 1, +1 Speed on turn 2, Magnet Rise on turn 3, +2 Attack on turn 4, and fully heals on turn 5.",
@@ -242,6 +238,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
+		isPermanent: true,
 		name: "Best Gen",
 		gen: 8,
 	},
@@ -259,6 +256,81 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.id === 'Extreme Speed') move.basePower = 120;
 		},
 		name: "Fair Fight",
+		gen: 8,
+	},
+	
+	// Kaiser Dragon
+	elementalshift: {
+		desc: "This Pokemon changes its type to a random one at the end of every turn.",
+		shortDesc: "Random type per turn.",
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typechange', '???');
+			pokemon.types = ['???'];
+		},
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				let r = this.random(17);
+				if (r === 1) {
+					this.add('-start', pokemon, 'typechange', 'Normal');
+					pokemon.types = ['Normal'];
+				} else if (r === 2) {
+					this.add('-start', pokemon, 'typechange', 'Fighting');
+					pokemon.types = ['Fighting'];
+				} else if (r === 3) {
+					this.add('-start', pokemon, 'typechange', 'Flying');
+					pokemon.types = ['Flying'];
+				} else if (r === 4) {
+					this.add('-start', pokemon, 'typechange', 'Poison');
+					pokemon.types = ['Poison'];
+				} else if (r === 5) {
+					this.add('-start', pokemon, 'typechange', 'Ground');
+					pokemon.types = ['Ground'];
+				} else if (r === 6) {
+					this.add('-start', pokemon, 'typechange', 'Rock');
+					pokemon.types = ['Rock'];
+				} else if (r === 7) {
+					this.add('-start', pokemon, 'typechange', 'Bug');
+					pokemon.types = ['Bug'];
+				} else if (r === 8) {
+					this.add('-start', pokemon, 'typechange', 'Ghost');
+					pokemon.types = ['Ghost'];
+				} else if (r === 9) {
+					this.add('-start', pokemon, 'typechange', 'Steel');
+					pokemon.types = ['Steel'];
+				} else if (r === 10) {
+					this.add('-start', pokemon, 'typechange', 'Fire');
+					pokemon.types = ['Fire'];
+				} else if (r === 11) {
+					this.add('-start', pokemon, 'typechange', 'Water');
+					pokemon.types = ['Water'];
+				} else if (r === 12) {
+					this.add('-start', pokemon, 'typechange', 'Grass');
+					pokemon.types = ['Grass'];
+				} else if (r === 13) {
+					this.add('-start', pokemon, 'typechange', 'Electric');
+					pokemon.types = ['Electric'];
+				} else if (r === 14) {
+					this.add('-start', pokemon, 'typechange', 'Psychic');
+					pokemon.types = ['Psychic'];
+				} else if (r === 15) {
+					this.add('-start', pokemon, 'typechange', 'Ice');
+					pokemon.types = ['Ice'];
+				} else if (r === 16) {
+					this.add('-start', pokemon, 'typechange', 'Dragon');
+					pokemon.types = ['Dragon'];
+				} else if (r === 17) {
+					this.add('-start', pokemon, 'typechange', 'Dark');
+					pokemon.types = ['Dark'];
+				} else {
+					this.add('-start', pokemon, 'typechange', 'Fairy');
+					pokemon.types = ['Fairy'];
+				}
+			}
+		},
+		isPermanent: true,
+		name: "Elemental Shift",
 		gen: 8,
 	},
 
@@ -295,10 +367,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon uses Wish when switching in; Safeguard when switching out.",
 		shortDesc: "Wish on switch-in; Safeguard on switch-out.",
 		onStart(pokemon) {
-			this.actions.useMove("wish", pokemon);
+			this.actions.useMove('Wish', pokemon);
 		},
 		onSwitchOut(pokemon) {
-			this.actions.useMove("safeguard", pokemon);
+			this.actions.useMove('Safeguard', pokemon);
 		},
 		name: "Final Prayer",
 		gen: 8,
