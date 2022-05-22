@@ -134,7 +134,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['contact']) {
-				return this.chainModify(1.3);
+				return this.chainModify(1.25);
 			}
 		},
 		name: "Power Unleashed",
