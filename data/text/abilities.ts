@@ -1717,8 +1717,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		transform: "Zen Mode triggered!",
 		transformEnd: "Zen Mode ended!",
 	},
-
-	// CAP
 	mountaineer: {
 		name: "Mountaineer",
 		shortDesc: "On switch-in, this Pokemon avoids all Rock-type attacks and Stealth Rock.",
@@ -1730,6 +1728,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		move: "#magiccoat",
 	},
+	
+	// CAP
 	persistent: {
 		name: "Persistent",
 		desc: "The duration of Gravity, Heal Block, Magic Room, Safeguard, Tailwind, Trick Room, and Wonder Room is increased by 2 turns if the effect is started by this Pokemon.",
@@ -1968,16 +1968,16 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "50% chance of retrieving a used item at the end of a turn.",
 		newmeta: "true",
 	},
-	corruptedintention: {
-		name: "Corrupted Intention",
+	malintent: {
+		name: "Malintent",
 		desc: "This Pokemon sets 2 layers of Toxic Spikes instead of 1.",
 		shortDesc: "This Pokemon sets 2 layers of Toxic Spikes instead of 1.",
 		newmeta: "true",
 	},
 	radioactive: {
 		name: "Radioactive",
-		desc: "Poison and Cosmic moves are x1.2 BP.",
-		shortDesc: "Poison and Cosmic moves are x1.2 BP.",
+		desc: "Poison and Cosmic type moves have their power amplified by 1.2x.",
+		shortDesc: "Poison and Cosmic type moves have their power amplified by 1.2x.",
 		newmeta: "true",
 	},
 	haunted: {
@@ -2127,8 +2127,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	thunderdelight: {
 		name: "Thunder Delight",
-		desc: "This Pokemon's Electric moves heal him 1/10 max hp.",
-		shortDesc: "This Pokemon's Electric moves heal him 1/10 max hp.",
+		desc: "This Pokemon's Electric moves recover 1/10th of their max HP.",
+		shortDesc: "This Pokemon's Electric moves recover 1/10th of their max HP.",
 		newmeta: "true",
 	},
 	ignition: {
@@ -2141,12 +2141,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Backstabber",
 		desc: "This pokemon does 1.5x damage to allied Pokémon. This pokemon heals 50% when it attacks an ally directly.",
 		shortDesc: "This pokemon does 1.5x damage to allied Pokémon, heals 50% when it attacks an ally directly.",
-		newmeta: "true",
-	},
-	desperation: {
-		name: "Desperation",
-		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its attacking stat is multiplied by 1.5 while using a Dark-type attack.",
-		shortDesc: "At 1/3 or less of its max HP, this Pokemon's attacking stat is 1.5x with Dark attacks.",
 		newmeta: "true",
 	},
 	chainstriker: {
