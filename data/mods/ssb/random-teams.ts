@@ -18,23 +18,6 @@ export interface SSBSet {
 interface SSBSets {[k: string]: SSBSet}
 
 export const ssbSets: SSBSets = {
-	/*
-	// Example:
-	Username: {
-		species: 'Species', ability: 'Ability', item: 'Item', gender: '',
-		moves: ['Move Name', ['Move Name', 'Move Name']],
-		signatureMove: 'Move Name',
-		evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', level: 100, shiny: false,
-	},
-	// Species, ability, and item need to be captialized properly ex: Ludicolo, Swift Swim, Life Orb
-	// Gender can be M, F, N, or left as an empty string
-	// each slot in moves needs to be a string (the move name, captialized properly ex: Hydro Pump), or an array of strings (also move names)
-	// signatureMove also needs to be capitalized properly ex: Scripting
-	// You can skip Evs (defaults to 82 all) and/or Ivs (defaults to 31 all), or just skip part of the Evs (skipped evs are 0) and/or Ivs (skipped Ivs are 31)
-	// You can also skip shiny, defaults to false. Level can be skipped (defaults to 100).
-	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
-	*/
-	// Please keep sets organized alphabetically based on staff member name!
 	'A Resident No-Life': {
 		species: 'Mawile', ability: 'Slow Burn', item: 'Mawilite', gender: 'M',
 		moves: ['Thunder Punch', 'Ice Punch', 'Double Iron Bash'],
@@ -70,6 +53,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Morning Sun', 'Solar Blade', 'Extreme Speed'],
 		signatureMove: 'Meteor Charge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
+	'Kaiser Dragon': {
+		species: 'Rayquaza', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
+		moves: ['Protect', 'Refresh', 'Recover'],
+		signatureMove: 'Ultima',
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
 	LandoriumZ: {
 		species: 'Crobat', ability: 'Retaliation', item: 'Bright Powder', gender: 'M',
