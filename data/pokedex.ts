@@ -13212,7 +13212,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Rockruff",
 		evoLevel: 25,
-		evoCondition: "during the night",
+		evoCondition: "at night",
 		eggGroups: ["Field"],
 	},
 	lycanrocdusk: {
