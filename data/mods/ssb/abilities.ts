@@ -121,21 +121,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	
 	// A Resident No-Life
 	powerunleashed: {
-		desc: "This Pokemon uses Refresh and Misty Terrain on switch-in; ignores protection, screens and substitutes; contact moves deal 1.25x damage.",
-		shortDesc: "Refresh and Misty Terrain on switch-in; ignores protection, screens and substitutes; 1.25x damage on contact.",
+		desc: "This Pokemon uses Refresh and Misty Terrain on switch-in; ignores protection, screens and substitutes; moves sacrifice secondary effects to deal 1.25x damage.",
+		shortDesc: "Refresh and Misty Terrain on switch-in; ignores protection, screens and substitutes; no secondary effects for 1.25x damage.",
 		onStart(pokemon) {
 			this.actions.useMove('Refresh', pokemon);
 			this.actions.useMove('Misty Terrain', pokemon);
 		},
-		onModifyMove(move) {
+		onModifyMove(move, pokemon) {
 			move.infiltrates = true;
 			delete move.flags['protect'];
+			if (move.secondaries) {
+				delete move.secondaries;
+				delete move.self;
+				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
+				move.hasPowerUnleashed = true;
+			}
 		},
 		onBasePowerPriority: 21,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['contact']) {
-				return this.chainModify(1.25);
-			}
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.hasPowerUnleashed) return this.chainModify(1.25);
 		},
 		name: "Power Unleashed",
 		gen: 8,
@@ -251,15 +255,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	
 	// Kaiser Dragon
 	elementalshift: {
-		desc: "This Pokemon changes its type to a random one at the end of every turn.",
-		shortDesc: "Random type per turn.",
+		desc: "On switch-in and at the end of every turn, this Pokemon changes its type to a random one.",
+		shortDesc: "Random type on switch-in and per turn.",
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typechange', '???');
-			pokemon.types = ['???'];
-		},
-		onResidualOrder: 26,
-		onResidualSubOrder: 1,
-		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
 				let r = this.random(17);
 				if (r === 1) {
