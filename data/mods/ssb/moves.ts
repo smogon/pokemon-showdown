@@ -252,7 +252,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "???"
 	},
-			
 
 	// LandoriumZ
 	crossdance: {
