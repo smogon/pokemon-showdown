@@ -97515,7 +97515,7 @@ fintricity : {
 		dive: ["8M", "7M"],
 		scald: ["8M", "7M"],
 		flipturn: ["8M", "7M"],
-		hydropum: ["8M", "7M"],
+		hydropump: ["8M", "7M"],
 		raindance: ["8M", "7M"],
 		surf: ["8M", "7M"],
 		watergun: ["8M", "7M"],
