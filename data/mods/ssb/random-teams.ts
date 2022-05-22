@@ -58,7 +58,7 @@ export const ssbSets: SSBSets = {
 		species: 'Rayquaza', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
 		moves: ['Protect', 'Refresh', 'Recover'],
 		signatureMove: 'Ultima',
-		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
 	},
 	LandoriumZ: {
 		species: 'Crobat', ability: 'Retaliation', item: 'Bright Powder', gender: 'M',
