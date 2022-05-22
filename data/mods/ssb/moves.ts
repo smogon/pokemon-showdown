@@ -11,7 +11,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return move.basePower + 40 * pokemon.positiveBoosts();
 		},
 		category: "Physical",
-		desc: "+40 base power for each of the user's stat boosts.",
+		desc: "+40 power for each of the user's stat boosts.",
 		shortDesc: "+40 BP for each of user's boosts.",
 		name: "Rising Surge",
 		gen: 8,
@@ -290,10 +290,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {heal: 1},
+		status: 'tox',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		status: 'tox',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Oblivion Wing', target);
 		},
