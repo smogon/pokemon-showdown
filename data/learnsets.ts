@@ -48358,6 +48358,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	arceuswater: {
 		eventOnly: true,
 	},
+	arceusunknown: {
+		eventOnly: true,
+	},
 	victini: {
 		learnset: {
 			batonpass: ["8M"],

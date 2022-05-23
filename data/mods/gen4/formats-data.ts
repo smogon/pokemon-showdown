@@ -1850,4 +1850,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	arceuswater: {
 		randomBattleMoves: ["calmmind", "icebeam", "judgment", "recover", "refresh", "thunderbolt", "willowisp"],
 	},
+	arceusunknown: {
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
+	},
 };
