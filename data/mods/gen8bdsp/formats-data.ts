@@ -1695,22 +1695,22 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	deoxys: {
 		tier: "Uber",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 		randomBattleMoves: ["superpower", "icebeam", "knockoff", "psychoboost", "stealthrock", "toxicspikes", "extremespeed"],
 	},
 	deoxysattack: {
 		tier: "Uber",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 		randomBattleMoves: ["extremespeed", "icebeam", "knockoff", "psychoboost", "superpower"],
 	},
 	deoxysdefense: {
 		tier: "Uber",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 		randomBattleMoves: ["knockoff", "nightshade", "recover", "stealthrock", "taunt", "teleport", "toxicspikes"],
 	},
 	deoxysspeed: {
 		tier: "Uber",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 		randomBattleMoves: ["knockoff", "psychic", "stealthrock", "taunt", "toxicspikes"],
 	},
 	turtwig: {
