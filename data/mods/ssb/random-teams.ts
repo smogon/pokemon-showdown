@@ -18,23 +18,12 @@ export interface SSBSet {
 interface SSBSets {[k: string]: SSBSet}
 
 export const ssbSets: SSBSets = {
-	/*
-	// Example:
-	Username: {
-		species: 'Species', ability: 'Ability', item: 'Item', gender: '',
-		moves: ['Move Name', ['Move Name', 'Move Name']],
-		signatureMove: 'Move Name',
-		evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', level: 100, shiny: false,
+	'A Resident No-Life': {
+		species: 'Mawile', ability: 'Slow Burn', item: 'Mawilite', gender: 'M',
+		moves: ['Thunder Punch', 'Ice Punch', 'Double Iron Bash'],
+		signatureMove: 'Rising Surge',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
-	// Species, ability, and item need to be captialized properly ex: Ludicolo, Swift Swim, Life Orb
-	// Gender can be M, F, N, or left as an empty string
-	// each slot in moves needs to be a string (the move name, captialized properly ex: Hydro Pump), or an array of strings (also move names)
-	// signatureMove also needs to be capitalized properly ex: Scripting
-	// You can skip Evs (defaults to 82 all) and/or Ivs (defaults to 31 all), or just skip part of the Evs (skipped evs are 0) and/or Ivs (skipped Ivs are 31)
-	// You can also skip shiny, defaults to false. Level can be skipped (defaults to 100).
-	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
-	*/
-	// Please keep sets organized alphabetically based on staff member name!
 	Brookeee: {
 		species: 'Primeape', ability: 'Aggression', item: 'Ramen', gender: 'F',
 		moves: ['Ice Punch', 'Stomping Tantrum', 'Endure'],
@@ -46,6 +35,12 @@ export const ssbSets: SSBSets = {
 		moves: ['No Retreat', 'Thousand Arrows', 'Flare Blitz'],
 		signatureMove: 'Tenacious Rush',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
+	flufi: {
+		species: 'Pikachu-Libre', ability: 'Hero Morale', item: 'Light Ball', gender: 'M',
+		moves: ['Wild Charge', 'Darkest Lariat', 'Extreme Speed'],
+		signatureMove: 'Cranberry Cutter',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	Genwunner: {
 		species: 'Alakazam', ability: 'Best Gen', item: '', gender: 'N',
@@ -59,6 +54,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Meteor Charge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
+	'Kaiser Dragon': {
+		species: 'Rayquaza', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
+		moves: ['Protect', 'Refresh', 'Recover'],
+		signatureMove: 'Ultima',
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
+	},
 	LandoriumZ: {
 		species: 'Crobat', ability: 'Retaliation', item: 'Bright Powder', gender: 'M',
 		moves: ['Fusion Bolt', 'Earthquake', 'Dragon Ascent'],
@@ -71,6 +72,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sacred Penance',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
 	},
+	Minimind: {
+		species: 'Clefable', ability: 'Unaware', item: 'Leftovers', gender: 'F',
+		moves: ['Calm Mind', 'Draining Kiss', 'Soft-Boiled'],
+		signatureMove: 'Mega Metronome',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
+	},
+	Nina: {
+		species: 'Chansey', ability: 'Fur Coat', item: 'Eviolite', gender: 'F',
+		moves: ['Will-O-Wisp', 'Aromatherapy', 'Soft-Boiled'],
+		signatureMove: 'Psychic Shield',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
+	},
 	Omega: {
 		species: 'Aegislash', ability: 'Burn Heal', item: 'Flame Orb', gender: 'N',
 		moves: ['Teleport', 'Protect', 'Wish'],
@@ -82,18 +95,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Dragon Claw', 'Shadow Claw', 'Fire Punch'],
 		signatureMove: 'Ein Sol',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
-	},
-	Minimind: {
-		species: 'Clefable', ability: 'Unaware', item: 'Leftovers', gender: 'F',
-		moves: ['Calm Mind', 'Draining Kiss', 'Soft-Boiled'],
-		signatureMove: 'Mega Metronome',
-		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
-	},
-	flufi: {
-		species: 'Pikachu-Libre', ability: 'Hero Morale', item: 'Light Ball', gender: 'M',
-		moves: ['Wild Charge', 'Darkest Lariat', 'Extreme Speed'],
-		signatureMove: 'Cranberry Cutter',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 };
 

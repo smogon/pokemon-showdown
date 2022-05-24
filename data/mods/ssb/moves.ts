@@ -3,44 +3,32 @@ import {changeSet, changeMoves} from "./abilities";
 import {ssbSets} from "./random-teams";
 
 export const Moves: {[k: string]: ModdedMoveData} = {
-	/*
-	// Example
-	moveid: {
-		accuracy: 100, // a number or true for always hits
-		basePower: 100, // Not used for Status moves, base power of the move, number
-		category: "Physical", // "Physical", "Special", or "Status"
-		desc: "", // long description
-		shortDesc: "", // short description, shows up in /dt
-		name: "Move Name",
+	// A Resident No-Life
+	risingsurge: {
+		accuracy: true,
+		basePower: 30,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 40 * pokemon.positiveBoosts();
+		},
+		category: "Physical",
+		desc: "+40 power for each of the user's stat boosts.",
+		shortDesc: "+40 BP for each of user's boosts.",
+		name: "Rising Surge",
 		gen: 8,
-		pp: 10, // unboosted PP count
-		priority: 0, // move priority, -6 -> 6
-		flags: {}, // Move flags https://github.com/smogon/pokemon-showdown/blob/master/data/moves.js#L1-L27
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
-			this.attrLastMove('[still]'); // For custom animations
+			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Move Name 1', source);
-			this.add('-anim', source, 'Move Name 2', source);
-		}, // For custom animations
-		secondary: {
-			status: "tox",
-			chance: 20,
-		}, // secondary, set to null to not use one. Exact usage varies, check data/moves.js for examples
-		target: "normal", // What does this move hit?
-		// normal = the targeted foe, self = the user, allySide = your side (eg light screen), foeSide = the foe's side (eg spikes), all = the field (eg raindance). More can be found in data/moves.js
-		type: "Water", // The move's type
-		// Other useful things
-		noPPBoosts: true, // add this to not boost the PP of a move, not needed for Z moves, dont include it otherwise
-		isZ: "crystalname", // marks a move as a z move, list the crystal name inside
-		zMove: {effect: ''}, // for status moves, what happens when this is used as a Z move? check data/moves.js for examples
-		zMove: {boost: {atk: 2}}, // for status moves, stat boost given when used as a z move
-		critRatio: 2, // The higher the number (above 1) the higher the ratio, lowering it lowers the crit ratio
-		drain: [1, 2], // recover first num / second num % of the damage dealt
-		heal: [1, 2], // recover first num / second num % of the target's HP
+			this.add('-anim', source, 'Play Rough', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
 	},
-	*/
-	// Please keep sets organized alphabetically based on staff member name!
+	
 	// Brookeee
 	masochism: {
 		accuracy: true,
@@ -53,8 +41,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Close Combat', target);
+		},
+		onModifyCritRatio(boosts, critRatio) {
+			if (boosts['atk'] >= 1) return critRatio + boosts['atk'];
 		},
 		secondary: null,
 		target: "normal",
@@ -64,19 +58,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// El Capitan
 	tenaciousrush: {
 		accuracy: true,
-		basePower: 0,
-		category: "Physical",
-		desc: "More power the less HP the user has left. Super effective on Fairy.",
-		shortDesc: "Power increases with lower HP. S.E vs. Fairy.",
-		name: "Tenacious Rush",
-		gen: 8,
-		pp: 5,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Draco Meteor', source);
-			this.add('-anim', source, 'Dragon Rush', target);
-		},
 		basePower: 0,
 		basePowerCallback(pokemon, target) {
 			const ratio = pokemon.hp * 48 / pokemon.maxhp;
@@ -97,6 +78,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			return 60;
 		},
+		category: "Physical",
+		desc: "This move has more base power the less HP the user has left; damages Fairy.",
+		shortDesc: "More BP the less HP the user has left; damages Fairy.",
+		name: "Tenacious Rush",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Draco Meteor', source);
+			this.add('-anim', source, 'Dragon Rush', target);
+		},
 		onModifyMove(move, pokemon) {
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
@@ -110,11 +106,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	
 	// flufi
 	cranberrycutter: {
-		accuracy: 90,
-		basePower: 80,
+		accuracy: 100,
+		basePower: 100,
 		category: "Physical",
-		desc: "High critical hit ratio. 20% chance to confuse target.",
-		shortDesc: "High crit ratio; 20% chance to confuse.",
+		desc: "This move will critically hit; confuses the target.",
+		shortDesc: "Critical; confuse.",
 		name: "Cranberry Cutter",
 		gen: 8,
 		pp: 10,
@@ -128,19 +124,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Psychic', target);
 			this.add('-anim', source, 'Sky Drop', target);
 		},
-		critRatio: 2,
-		secondary: {
-			chance: 20,
-			volatileStatus: 'confusion',
-		},
+		critRatio: 5,
+		volatileStatus: 'confusion',
+		secondary: null,
 		target: "Normal",
 		type: "Psychic",
 	},
 
 	// Genwunner
 	psychicbind: {
-		accuracy: 70,
-		basePower: 20,
+		accuracy: 85,
+		basePower: 60,
 		category: "Special",
 		desc: "Traps the opponent for 4-5 turns; 100% chance to flinch.",
 		shortDesc: "Traps foe for 4-5 turns; 100% flinch.",
@@ -179,11 +173,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		weather: 'sunnyday',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Flare Blitz', target);
-			this.add(`c| Horrific17|Pick a God and pray!`);
 		},
+		weather: 'sunnyday',
 		recoil: [33, 100],
 		secondary: null,
 		target: "normal",
@@ -195,8 +188,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 150,
 		category: "Physical",
-		desc: "Causes intense sunlight for 5 turns; burns and traps target for 4-5 turns.",
-		shortDesc: "Sunlight; burns and traps target.",
+		desc: "Causes Desolate Land permanently; burns and traps target for 4-5 turns.",
+		shortDesc: "Desolate Land; burns and traps target.",
 		name: "Final Trick",
 		gen: 8,
 		pp: 1,
@@ -205,12 +198,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		isZ: "horrifiumz",
-		status: 'brn',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Extreme Evoboost', source);
 			this.add('-anim', source, 'Flare Boost', target);
 		},
+		isZ: "horrifiumz",
+		status: 'brn',
 		self: {
 			onHit(source) {
 				this.field.setWeather('desolateland');
@@ -221,6 +214,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Fire",
+	},
+	
+	// Kaiser Dragon
+	ultima: {
+		accuracy: true,
+		basePower: 1,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 1 * pokemon.positiveBoosts();
+		},
+		category: "Special",
+		desc: "This move's type is the same as user's; boosts Defense, Special Attack, Special Defense and Speed by 1 stage; +1 power for each boost.",
+		shortDesc: "Same type as user's; boosts Def, SpA, SpD and Spe by 1; +1 BP per boost.",
+		name: "Ultima",
+		gen: 8,
+		pp: 40,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, 'Explosion', target);
+		},
+		onModifyType(move, pokemon, target) {
+			move.type = pokemon.types[0];
+		},
+		self: {
+			boosts: {
+				def: 1,
+				spa: 1,
+				spd: 1,
+				spe: 1,
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "???"
 	},
 
 	// LandoriumZ
@@ -260,10 +290,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {heal: 1},
+		status: 'tox',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		status: 'tox',
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Oblivion Wing', target);
 		},
@@ -317,12 +347,65 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(randomMove, target);
 			this.actions.useMove(randomMove2, target);
 			this.actions.useMove(randomMove3, target);
-			this.add(`c| Horrific17|${randomMove3.basePower} BP`);
 		},
 		secondary: null,
 		target: "self",
 		type: "Fairy",
 		contestType: "Cool",
+	},
+	
+	// Nina
+	psychicshield: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, damage to allies is halved.",
+		shortDesc: "Halve damage for 5 turns.",
+		name: "Psychic Shield",
+		gen: 8,
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		sideCondition: 'psychicshield',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aurora Veil', target);
+		},
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (source?.hasItem('lightclay')) {
+					return 8;
+				}
+				return 5;
+			},
+			onAnyModifyDamage(damage, source, target, move) {
+				if (target !== source && this.effectState.target.hasAlly(target)) {
+					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
+							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
+						return;
+					}
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+						this.debug('Psychic Shield weaken');
+						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
+						return this.chainModify(0.5);
+					}
+				}
+			},
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Psychic Shield');
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 10,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'move: Psychic Shield');
+			},
+		},
+		secondary: null,
+		target: "allySide",
+		type: "Psychic",
 	},
 
 	// Omega
